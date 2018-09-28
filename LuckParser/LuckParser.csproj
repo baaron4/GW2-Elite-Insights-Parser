@@ -152,6 +152,17 @@
     <Compile Include="Models\HtmlModels\GraphDto.cs" />
     <Compile Include="Models\HtmlModels\PlayerDetailsDto.cs" />
     <Compile Include="Models\HtmlModels\PlayerDto.cs" />
+    <Compile Include="Models\JsonModels\JsonMechanic.cs" />
+    <Compile Include="Models\JsonModels\JsonPlayer.cs" />
+    <Compile Include="Models\JsonModels\JsonStats.cs" />
+    <Compile Include="Models\JsonModels\JsonStatsAll.cs" />
+    <Compile Include="Models\JsonModels\JsonBossBuffs.cs" />
+    <Compile Include="Models\JsonModels\JsonBoss.cs" />
+    <Compile Include="Models\JsonModels\JsonDps.cs" />
+    <Compile Include="Models\JsonModels\JsonDefenses.cs" />
+    <Compile Include="Models\JsonModels\JsonPhase.cs" />
+    <Compile Include="Models\JsonModels\JsonBoonUptime.cs" />
+    <Compile Include="Models\JsonModels\JsonSupport.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\Actor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\PieActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\CircleActor.cs" />
