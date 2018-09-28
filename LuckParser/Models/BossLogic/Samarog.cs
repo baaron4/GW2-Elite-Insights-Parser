@@ -136,7 +136,7 @@ namespace LuckParser.Models
             List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (boss.ID)
             {
-                case (ushort)ParseEnum.BossIDS.Cairn:
+                case (ushort)ParseEnum.BossIDS.Samarog:
                     replay.Icon = "https://i.imgur.com/MPQhKfM.png";
                     List<CombatItem> brutalize = log.GetBoonData(38226).Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.Manual).ToList();
                     int brutStart = 0;
