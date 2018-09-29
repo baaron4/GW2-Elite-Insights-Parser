@@ -152,6 +152,7 @@
     <Compile Include="Models\HtmlModels\GraphDto.cs" />
     <Compile Include="Models\HtmlModels\PlayerDetailsDto.cs" />
     <Compile Include="Models\HtmlModels\PlayerDto.cs" />
+    <Compile Include="Models\JsonModels\JsonMinions.cs" />
     <Compile Include="Models\JsonModels\JsonSkill.cs" />
     <Compile Include="Models\JsonModels\JsonMechanic.cs" />
     <Compile Include="Models\JsonModels\JsonPlayer.cs" />

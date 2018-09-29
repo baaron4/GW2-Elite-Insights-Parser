@@ -8,10 +8,19 @@ namespace LuckParser.Models
 {
     public class JsonMechanic
     {
+
+        public class JsonExtraMechanic
+        {
+            public string ShortName;
+            public bool Enemy;
+            public int TargetIndex;
+            public long Skill;
+        }
+
         public long Time;
         public string Player;
-        public string Name;
         public string Description;
-        public long Skill;
+        public JsonExtraMechanic ExtraData;
+
     }
 }

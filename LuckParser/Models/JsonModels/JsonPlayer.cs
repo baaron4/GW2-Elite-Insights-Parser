@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace LuckParser.Models
 {
     public class JsonPlayer
-    {
+    {      
         public string Character;
         public string Account;
         public uint Condition;
@@ -32,5 +32,6 @@ namespace LuckParser.Models
         public Dictionary<string, JsonBuffs> GroupBoons;
         public Dictionary<string, JsonBuffs> OffGroupBoons;
         public Dictionary<string, JsonBuffs> SquadBoons;
+        public List<JsonMinions> Minions;
     }
 }
