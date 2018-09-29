@@ -13,7 +13,6 @@ namespace LuckParser.Models
         {
             public int A;
             public int TS;
-            public int TW;
             public int UQ;
         }
 

@@ -17,11 +17,11 @@ namespace LuckParser.Models.DataModels
 
         public class JsonExtraLog
         {
-            public Dictionary<string, string> BuffIcons;
-            public Dictionary<long, string> SkillIcons;
-            public string FightIcon;
-            public Dictionary<string, string> GeneralIcons;
-            public Dictionary<string, MechanicDesc> MechanicData;
+            public Dictionary<string, string> BuffIcons = null;
+            public Dictionary<long, string> SkillIcons = null;
+            public string FightIcon = null;
+            public Dictionary<string, string> GeneralIcons = null;
+            public Dictionary<string, MechanicDesc> MechanicData = null;
         }
 
         public string EliteInsightsVersion;
@@ -32,7 +32,7 @@ namespace LuckParser.Models.DataModels
         public string TimeStart;
         public string TimeEnd;
         public string Duration;
-        public bool Success;
+        public int Success;
         public List<JsonBoss> Boss;
         public List<JsonPlayer> Players;
         public List<JsonPhase> Phases;
@@ -40,6 +40,6 @@ namespace LuckParser.Models.DataModels
         public string[] UploadLinks;
         public Dictionary<long, string> SkillNames;
         public Dictionary<long, string> BuffNames;
-        public JsonExtraLog ExtraData;
+        public JsonExtraLog ExtraData = null;
     }
 }

@@ -91,7 +91,7 @@ namespace LuckParser.Controllers
             log.TimeStart = _log.LogData.LogStart;
             log.TimeEnd = _log.LogData.LogEnd;
             log.Duration = durationString;
-            log.Success = _log.LogData.Success;
+            log.Success = _log.LogData.Success ? 1 : 0;
             log.SkillNames = _skillNames;
             log.BuffNames = _buffNames;
             if (!_devMode)
@@ -300,11 +300,18 @@ namespace LuckParser.Controllers
                 };
                 if (_devMode)
                 {
+                    int timeGained = 0;
+                    if (cl.EndActivation == ParseEnum.Activation.CancelFire && cl.ActualDuration < cl.ExpectedDuration)
+                    {
+                        timeGained = cl.ExpectedDuration - cl.ActualDuration;
+                    } else if (cl.EndActivation == ParseEnum.Activation.CancelCancel)
+                    {
+                        timeGained = -cl.ActualDuration;
+                    }
                     jSkill.ED = new JsonSkill.JsonExtraSkill()
                     {
                         UQ = cl.StartActivation == ParseEnum.Activation.Quickness ? 1 : 0,
-                        TS = cl.EndActivation == ParseEnum.Activation.CancelFire ? (cl.ActualDuration < cl.ExpectedDuration ? cl.ExpectedDuration - cl.ActualDuration : 0) : 0,
-                        TW = cl.EndActivation == ParseEnum.Activation.CancelCancel ? cl.ActualDuration : 0,
+                        TS = timeGained,
                         A = skill != null && skill.slot == "Weapon_1" ? 1 : 0
                     };
                 }
@@ -335,9 +342,9 @@ namespace LuckParser.Controllers
                     {
                         phaseJson.ED.TI[i++] = _log.FightData.Logic.Targets.IndexOf(target);
                     }
-                    phaseJson.ED.DA = phase.DrawArea;
-                    phaseJson.ED.DE = phase.DrawEnd;
-                    phaseJson.ED.DS = phase.DrawStart;
+                    phaseJson.ED.DA = phase.DrawArea ? 1 : 0;
+                    phaseJson.ED.DE = phase.DrawEnd ? 1 : 0;
+                    phaseJson.ED.DS = phase.DrawStart ? 1 : 0;
                 }
                 log.Phases.Add(phaseJson);
             }

@@ -12,9 +12,9 @@ namespace LuckParser.Models
         public class JsonExtraPhase
         {
             public int[] TI;
-            public bool DS;
-            public bool DE;
-            public bool DA;
+            public int DS;
+            public int DE;
+            public int DA;
         }
 
         public long Start;
