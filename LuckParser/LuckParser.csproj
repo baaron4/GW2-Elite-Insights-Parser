@@ -129,7 +129,6 @@
     <Compile Include="Models\BossLogic\Sabetha.cs" />
     <Compile Include="Models\BossLogic\Gorseval.cs" />
     <Compile Include="Models\BossLogic\ValeGuardian.cs" />
-    <Compile Include="Models\DataModels\JsonLog.cs" />
     <Compile Include="Models\DataModels\ParseEnum.cs" />
     <Compile Include="Models\DataModels\ParsedLog.cs" />
     <Compile Include="Models\DataModels\SettingsContainer.cs" />
@@ -152,6 +151,7 @@
     <Compile Include="Models\HtmlModels\GraphDto.cs" />
     <Compile Include="Models\HtmlModels\PlayerDetailsDto.cs" />
     <Compile Include="Models\HtmlModels\PlayerDto.cs" />
+    <Compile Include="Models\JsonModels\JsonLog.cs" />
     <Compile Include="Models\JsonModels\JsonMinions.cs" />
     <Compile Include="Models\JsonModels\JsonSkill.cs" />
     <Compile Include="Models\JsonModels\JsonMechanic.cs" />

@@ -318,9 +318,9 @@ namespace LuckParser.Controllers
             return res;
         }
 
-        private List<JsonSkill> BuildRotation(List<CastLog> cls)
+        private Dictionary<long, List<JsonSkill>> BuildRotation(List<CastLog> cls)
         {
-            List<JsonSkill> res = new List<JsonSkill>();
+            Dictionary<long, List<JsonSkill>> res = new Dictionary<long, List<JsonSkill>>();
             SkillData skillList = _log.SkillData;
             foreach (CastLog cl in cls)
             {
@@ -333,7 +333,6 @@ namespace LuckParser.Controllers
                 _skillNames[cl.SkillId] = skillName;           
                 JsonSkill jSkill = new JsonSkill
                 {
-                    Skill = cl.SkillId,
                     Time = (int)cl.Time,
                     Duration = cl.ActualDuration
                 };
@@ -385,7 +384,16 @@ namespace LuckParser.Controllers
                         A = skill != null && skill.slot == "Weapon_1" ? 1 : 0
                     };
                 }
-                res.Add(jSkill);
+                if (res.TryGetValue(cl.SkillId, out var list))
+                {
+                    list.Add(jSkill);
+                } else
+                {
+                    res[cl.SkillId] = new List<JsonSkill>()
+                    {
+                        jSkill
+                    };
+                }
             }
 
             return res;

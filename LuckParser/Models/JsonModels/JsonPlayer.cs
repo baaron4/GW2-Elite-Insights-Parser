@@ -27,7 +27,7 @@ namespace LuckParser.Models
         public JsonStats[] StatsBoss;
         public JsonDefenses Defenses;
         public JsonSupport Support;
-        public List<JsonSkill> Rotation;
+        public Dictionary<long, List<JsonSkill>> Rotation;
         public Dictionary<long, JsonBuffs> SelfBoons;
         public Dictionary<long, JsonBuffs> GroupBoons;
         public Dictionary<long, JsonBuffs> OffGroupBoons;

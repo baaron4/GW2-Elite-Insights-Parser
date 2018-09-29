@@ -16,7 +16,6 @@ namespace LuckParser.Models
             public int UQ;
         }
 
-        public long Skill;
         public int Time;
         public int Duration;
         public JsonExtraSkill ED;
