@@ -25,8 +25,12 @@ namespace LuckParser.Controllers
         readonly StreamWriter _sw;
 
         private readonly String[] _uploadLink;
+        //
         private readonly Dictionary<long, string> _skillNames = new Dictionary<long, string>();
         private readonly Dictionary<long, string> _buffNames = new Dictionary<long, string>();
+        private readonly Dictionary<long, string> _buffIcons = new Dictionary<long, string>();
+        private readonly Dictionary<long, string> _skillIcons = new Dictionary<long, string>();
+        private readonly Dictionary<string, MechanicDesc> _mechanicData = new Dictionary<string, MechanicDesc>();
 
         public static void UpdateStatisticSwitches(StatisticsCalculator.Switches switches)
         {
@@ -97,6 +101,15 @@ namespace LuckParser.Controllers
             if (!_devMode)
             {
                 log.UploadLinks = _uploadLink;
+            } else
+            {
+                log.ED = new JsonExtraLog()
+                {
+                    BuffIcons = _buffIcons,
+                    SkillIcons = _skillIcons,
+                    FightIcon = _log.FightData.Logic.IconUrl,
+                    MechanicData = _mechanicData
+                };
             }
         }
 
@@ -111,36 +124,46 @@ namespace LuckParser.Controllers
             mechanicLogs = mechanicLogs.OrderBy(x => x.Time).ToList();
             if (mechanicLogs.Any())
             {
-                log.Mechanics = new List<JsonMechanic>(capacity: mechanicLogs.Count);
-                for (int i = 0; i < mechanicLogs.Count; i++)
+                log.Mechanics = new List<JsonMechanic>();
+                foreach (MechanicLog ml in mechanicLogs)
                 {
                     JsonMechanic mech = new JsonMechanic
                     {
-                        Time = mechanicLogs[i].Time,
-                        Player = mechanicLogs[i].Player.Character,
-                        Name = mechanicLogs[i].InGameName,
+                        Time = ml.Time,
+                        Player = ml.Player.Character,
+                        Name = ml.InGameName,
                     };
                     if (_devMode)
                     {
+                        if (!_mechanicData.ContainsKey(ml.ShortName))
+                        {
+                            _mechanicData[ml.ShortName] = new MechanicDesc()
+                            {
+                                PlotlyShape = ml.PlotlyShape,
+                                Description = ml.Description,
+                                PlotlyName = ml.PlotlyName
+                            };
+                        }
                         mech.ED = new JsonMechanic.JsonExtraMechanic()
                         {
-                            SN = mechanicLogs[i].ShortName,
-                            S = mechanicLogs[i].Skill
+                            SN = ml.ShortName,
+                            S = ml.Skill
                         };
-                        mech.ED.E = mechanicLogs[i].Player.GetType() != typeof(Player) ? 1 : 0;
+                        mech.ED.E = ml.Player.GetType() != typeof(Player) ? 1 : 0;
                         if (mech.ED.E == 1)
                         {
-                            if (mechanicLogs[i].Player.GetType() == typeof(Boss))
+                            if (ml.Player.GetType() == typeof(Boss))
                             {
                                 mech.ED.TI = -1;
-                            } else
+                            }
+                            else
                             {
-                                mech.ED.TI = _log.FightData.Logic.Targets.IndexOf((Boss)mechanicLogs[i].Player);
+                                mech.ED.TI = _log.FightData.Logic.Targets.IndexOf((Boss)ml.Player);
                             }
                         }
                         else
                         {
-                            mech.ED.TI = _log.PlayerList.IndexOf((Player)mechanicLogs[i].Player);
+                            mech.ED.TI = _log.PlayerList.IndexOf((Player)ml.Player);
                         }
                     }
                     log.Mechanics.Add(mech);
@@ -291,7 +314,7 @@ namespace LuckParser.Controllers
                 {
                     skillName = "Weapon Swap";
                 }
-                _skillNames[cl.SkillId] = skillName;
+                _skillNames[cl.SkillId] = skillName;           
                 JsonSkill jSkill = new JsonSkill
                 {
                     Skill = cl.SkillId,
@@ -300,6 +323,34 @@ namespace LuckParser.Controllers
                 };
                 if (_devMode)
                 {
+                    if (!_skillIcons.ContainsKey(cl.SkillId))
+                    {
+                        string skillIcon = "";
+                        if (skill != null && cl.SkillId != -2)
+                        {
+                            skillIcon = skill.icon;
+                        }
+                        else
+                        {
+                            if (skillName == "Dodge")
+                            {
+                                skillIcon = HTMLHelper.GetLink("Dodge");
+                            }
+                            else if (skillName == "Resurrect")
+                            {
+                                skillIcon = HTMLHelper.GetLink("Resurrect");
+                            }
+                            else if (skillName == "Bandage")
+                            {
+                                skillIcon = HTMLHelper.GetLink("Bandage");
+                            }
+                            else if (cl.SkillId == SkillItem.WeaponSwapId)
+                            {
+                                skillIcon = HTMLHelper.GetLink("Swap");
+                            }
+                        }
+                        _skillIcons[cl.SkillId] = skillIcon;
+                    }
                     int timeGained = 0;
                     if (cl.EndActivation == ParseEnum.Activation.CancelFire && cl.ActualDuration < cl.ExpectedDuration)
                     {
@@ -395,6 +446,10 @@ namespace LuckParser.Controllers
                 foreach (var boon in statBoons[phaseIndex])
                 {
                     _buffNames[boon.Key] = Boon.BoonsByIds[boon.Key].Name;
+                    if (_devMode)
+                    {
+                        _buffIcons[boon.Key] = Boon.BoonsByIds[boon.Key].Link;
+                    }
                     if (boonsFound.Contains(boon.Key))
                     {
                         MakePhaseBossBoon(boons[boon.Key], phaseIndex, boon.Value);
@@ -482,6 +537,10 @@ namespace LuckParser.Controllers
                 foreach (var boon in statUptimes[phaseIndex])
                 {
                     _buffNames[boon.Key] = Boon.BoonsByIds[boon.Key].Name;
+                    if (_devMode)
+                    {
+                        _buffIcons[boon.Key] = Boon.BoonsByIds[boon.Key].Link;
+                    }
                     if (boonsFound.Contains(boon.Key))
                     {
                         MakePhaseBoon(uptimes[boon.Key], phaseIndex, boon.Value);

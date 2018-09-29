@@ -7,17 +7,16 @@ namespace LuckParser.Models.DataModels
     class JsonLog
     {
 
-        public struct MechanicDesc
+        public class MechanicDesc
         {
-            public string PlotlyShape { get; }
-            public string Description { get; }
-            public string PlotlyName { get; }
-            public string InGameName { get; }
+            public string PlotlyShape;
+            public string Description;
+            public string PlotlyName;
         }
 
         public class JsonExtraLog
         {
-            public Dictionary<string, string> BuffIcons = null;
+            public Dictionary<long, string> BuffIcons = null;
             public Dictionary<long, string> SkillIcons = null;
             public string FightIcon = null;
             public Dictionary<string, string> GeneralIcons = null;
@@ -40,6 +39,6 @@ namespace LuckParser.Models.DataModels
         public string[] UploadLinks;
         public Dictionary<long, string> SkillNames;
         public Dictionary<long, string> BuffNames;
-        public JsonExtraLog ExtraData = null;
+        public JsonExtraLog ED = null;
     }
 }
