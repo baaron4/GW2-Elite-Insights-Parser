@@ -31,7 +31,7 @@ namespace LuckParser.Models
 
         protected override CombatReplayMap GetCombatMapInternal()
         {
-            return new CombatReplayMap("https://i.imgur.com/Fj1HyM0.png",
+            return new CombatReplayMap("https://i.imgur.com/RZbs21b.png",
                             Tuple.Create(1099, 1114),
                             Tuple.Create(-5467, 8069, -2282, 11297),
                             Tuple.Create(-12288, -27648, 12288, 27648),
@@ -162,6 +162,9 @@ namespace LuckParser.Models
                     break;
                 case (ushort)RetrieverProjection:
                 case (ushort)GreenPhantasm:
+                    int lifetime = 8000;
+                    replay.Actors.Add(new CircleActor(false, start + lifetime, 0, new Tuple<int, int>(start, start + lifetime), "rgba(0,255,0,0.5)"));
+                    replay.Actors.Add(new CircleActor(true, start + lifetime, 210, new Tuple<int, int>(start, start + lifetime), "rgba(0,255,0,0.3)"));
                     replay.Icon = "https://i.imgur.com/xCoypjS.png";
                     break;
                 case (ushort)InsidiousProjection:
