@@ -239,6 +239,45 @@ namespace LuckParser.Controllers
             }
         }
 
+        private Dictionary<long, JsonDamageDist> BuildDamageDist(List<DamageLog> dls)
+        {
+            Dictionary<long, JsonDamageDist> res = new Dictionary<long, JsonDamageDist>();
+            Dictionary<long, List<DamageLog>> dict = dls.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
+            SkillData skillList = _log.SkillData;
+            foreach (KeyValuePair<long, List<DamageLog>> pair in dict)
+            {
+                if (pair.Value.Count == 0)
+                {
+                    continue;
+                }
+                SkillItem skill = skillList.Get(pair.Key);
+                if (pair.Value.First().IsCondi == 0 && skill != null)
+                {
+                    if(!_skillNames.TryGetValue(pair.Key, out var val))
+                    {
+                        _skillNames[pair.Key] = (skill.ID.ToString() == skill.Name) ? skillList.GetName(skill.ID) : skill.Name;
+                    }
+                    if (_devMode && !_skillIcons.TryGetValue(pair.Key, out var aux))
+                    {
+                        _skillIcons[pair.Key] = skill.ApiSkill.icon;
+                    }
+                }
+                res[pair.Key] = new JsonDamageDist()
+                {
+                    Hits = pair.Value.Count,
+                    Damage = pair.Value.Sum(x => x.Damage),
+                    Condi = pair.Value.First().IsCondi,
+                    Min = pair.Value.Min(x => x.Damage),
+                    Max = pair.Value.Max(x => x.Damage),
+                    Flank = pair.Value.Count(x => x.IsFlanking > 0),
+                    Crit = pair.Value.Count(x => x.Result == ParseEnum.Result.Crit),
+                    Glance = pair.Value.Count(x => x.Result == ParseEnum.Result.Glance),
+                };
+        }
+
+            return res;
+        }
+
         private List<JsonMinions> BuildMinions(AbstractMasterPlayer master)
         {
             List<JsonMinions> mins = new List<JsonMinions>();

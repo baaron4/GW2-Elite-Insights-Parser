@@ -23,6 +23,9 @@ namespace LuckParser.Models
         public List<int>[] TargetDps1s;
         public int[] TotalPersonalDamage;
         public int[][] TargetPersonalDamage;
+        public Dictionary<long, JsonDamageDist>[] TotalDamageDist;
+        public Dictionary<long, JsonDamageDist>[][] TargetDamageDist;
+        public Dictionary<long, JsonDamageDist>[] TotalDamageTaken;
         public JsonStatsAll StatsAll;
         public JsonStats[] StatsBoss;
         public JsonDefenses Defenses;
