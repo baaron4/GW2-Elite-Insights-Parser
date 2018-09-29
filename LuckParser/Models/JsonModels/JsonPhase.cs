@@ -11,15 +11,15 @@ namespace LuckParser.Models
 
         public class JsonExtraPhase
         {
-            public int[] TargetIds;
-            public bool DrawStart;
-            public bool DrawEnd;
-            public bool DrawArea;
+            public int[] TI;
+            public bool DS;
+            public bool DE;
+            public bool DA;
         }
 
         public long Start;
         public long End;
         public string Name;
-        public JsonExtraPhase ExtraData;
+        public JsonExtraPhase ED;
     }
 }

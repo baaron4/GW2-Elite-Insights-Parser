@@ -25,8 +25,8 @@ namespace LuckParser.Controllers
         readonly StreamWriter _sw;
 
         private readonly String[] _uploadLink;
-
-        private Dictionary<long, string> _boonDict;
+        private readonly Dictionary<long, string> _skillNames = new Dictionary<long, string>();
+        private readonly Dictionary<long, string> _buffNames = new Dictionary<long, string>();
 
         public static void UpdateStatisticSwitches(StatisticsCalculator.Switches switches)
         {
@@ -48,8 +48,6 @@ namespace LuckParser.Controllers
             GraphHelper.Settings = settings;
 
             _statistics = statistics;
-
-            _boonDict = Boon.GetAll().GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.Select(y => y.Name).First());
             
            _uploadLink = UploadString;
             _devMode = devMode;
@@ -94,6 +92,8 @@ namespace LuckParser.Controllers
             log.TimeEnd = _log.LogData.LogEnd;
             log.Duration = durationString;
             log.Success = _log.LogData.Success;
+            log.SkillNames = _skillNames;
+            log.BuffNames = _buffNames;
             if (!_devMode)
             {
                 log.UploadLinks = _uploadLink;
@@ -118,24 +118,29 @@ namespace LuckParser.Controllers
                     {
                         Time = mechanicLogs[i].Time,
                         Player = mechanicLogs[i].Player.Character,
-                        Description = mechanicLogs[i].Description,
+                        Name = mechanicLogs[i].InGameName,
                     };
                     if (_devMode)
                     {
-                        mech.ExtraData = new JsonMechanic.JsonExtraMechanic()
+                        mech.ED = new JsonMechanic.JsonExtraMechanic()
                         {
-                            ShortName = mechanicLogs[i].ShortName,
-                            Skill = mechanicLogs[i].Skill
+                            SN = mechanicLogs[i].ShortName,
+                            S = mechanicLogs[i].Skill
                         };
-                        int index = _log.PlayerList.IndexOf((Player)mechanicLogs[i].Player);
-                        mech.ExtraData.Enemy = index < 0;
-                        if (mech.ExtraData.Enemy)
+                        mech.ED.E = mechanicLogs[i].Player.GetType() != typeof(Player) ? 1 : 0;
+                        if (mech.ED.E == 1)
                         {
-                            mech.ExtraData.TargetIndex = _log.FightData.Logic.Targets.IndexOf((Boss)mechanicLogs[i].Player);
+                            if (mechanicLogs[i].Player.GetType() == typeof(Boss))
+                            {
+                                mech.ED.TI = -1;
+                            } else
+                            {
+                                mech.ED.TI = _log.FightData.Logic.Targets.IndexOf((Boss)mechanicLogs[i].Player);
+                            }
                         }
                         else
                         {
-                            mech.ExtraData.TargetIndex = index;
+                            mech.ED.TI = _log.PlayerList.IndexOf((Player)mechanicLogs[i].Player);
                         }
                     }
                     log.Mechanics.Add(mech);
@@ -222,7 +227,7 @@ namespace LuckParser.Controllers
                 };
                 if (_devMode)
                 {
-                    min.ExtraData = new JsonMinions.JsonExtraMinions()
+                    min.ED = new JsonMinions.JsonExtraMinions()
                     {
                         ID = minions.MinionID,
                     };
@@ -286,21 +291,21 @@ namespace LuckParser.Controllers
                 {
                     skillName = "Weapon Swap";
                 }
+                _skillNames[cl.SkillId] = skillName;
                 JsonSkill jSkill = new JsonSkill
                 {
-                    Name = skillName,
+                    Skill = cl.SkillId,
                     Time = (int)cl.Time,
                     Duration = cl.ActualDuration
                 };
                 if (_devMode)
                 {
-                    jSkill.ExtraData = new JsonSkill.JsonExtraSkill()
+                    jSkill.ED = new JsonSkill.JsonExtraSkill()
                     {
-                        UnderQuickness = cl.StartActivation == ParseEnum.Activation.Quickness,
-                        TimeSaved = cl.EndActivation == ParseEnum.Activation.CancelFire ? (cl.ActualDuration < cl.ExpectedDuration ? cl.ExpectedDuration - cl.ActualDuration : 0) : 0,
-                        TimeWasted = cl.EndActivation == ParseEnum.Activation.CancelCancel ? cl.ActualDuration : 0,
-                        Auto = skill != null && skill.slot == "Weapon_1",
-                        Skill = skill.id
+                        UQ = cl.StartActivation == ParseEnum.Activation.Quickness ? 1 : 0,
+                        TS = cl.EndActivation == ParseEnum.Activation.CancelFire ? (cl.ActualDuration < cl.ExpectedDuration ? cl.ExpectedDuration - cl.ActualDuration : 0) : 0,
+                        TW = cl.EndActivation == ParseEnum.Activation.CancelCancel ? cl.ActualDuration : 0,
+                        A = skill != null && skill.slot == "Weapon_1" ? 1 : 0
                     };
                 }
                 res.Add(jSkill);
@@ -323,16 +328,16 @@ namespace LuckParser.Controllers
                 };
                 if (_devMode)
                 {
-                    phaseJson.ExtraData = new JsonPhase.JsonExtraPhase();
-                    phaseJson.ExtraData.TargetIds = new int[phase.Targets.Count];
+                    phaseJson.ED = new JsonPhase.JsonExtraPhase();
+                    phaseJson.ED.TI = new int[phase.Targets.Count];
                     int i = 0;
                     foreach (Boss target in phase.Targets)
                     {
-                        phaseJson.ExtraData.TargetIds[i++] = _log.FightData.Logic.Targets.IndexOf(target);
+                        phaseJson.ED.TI[i++] = _log.FightData.Logic.Targets.IndexOf(target);
                     }
-                    phaseJson.ExtraData.DrawArea = phase.DrawArea;
-                    phaseJson.ExtraData.DrawEnd = phase.DrawEnd;
-                    phaseJson.ExtraData.DrawStart = phase.DrawStart;
+                    phaseJson.ED.DA = phase.DrawArea;
+                    phaseJson.ED.DE = phase.DrawEnd;
+                    phaseJson.ED.DS = phase.DrawStart;
                 }
                 log.Phases.Add(phaseJson);
             }
@@ -370,7 +375,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        private Dictionary<string, JsonBossBuffs> BuildBossBuffs(Dictionary<long, Statistics.FinalBossBoon>[] statBoons, Boss boss)
+        private Dictionary<long, JsonBossBuffs> BuildBossBuffs(Dictionary<long, Statistics.FinalBossBoon>[] statBoons, Boss boss)
         {
             int phases = _statistics.Phases.Count;
             var boons = new Dictionary<long, JsonBossBuffs>();
@@ -382,6 +387,7 @@ namespace LuckParser.Controllers
             {
                 foreach (var boon in statBoons[phaseIndex])
                 {
+                    _buffNames[boon.Key] = Boon.BoonsByIds[boon.Key].Name;
                     if (boonsFound.Contains(boon.Key))
                     {
                         MakePhaseBossBoon(boons[boon.Key], phaseIndex, boon.Value);
@@ -398,11 +404,8 @@ namespace LuckParser.Controllers
                             {
                                 foreach (BoonsGraphModel.Segment seg in bgm.BoonChart)
                                 {
-                                    boons[boon.Key].States.Add(new JsonBuffs.SimplifiedSegment
-                                    {
-                                        Time = (int)seg.Start,
-                                        Value = seg.Value
-                                    });
+                                    boons[boon.Key].States.Add((int)seg.Start);
+                                    boons[boon.Key].States.Add(seg.Value);
                                 }
                             }
                         }
@@ -414,19 +417,7 @@ namespace LuckParser.Controllers
                 }
             }
 
-            var namedBoons = new Dictionary<string, JsonBossBuffs>();
-            foreach (var entry in boons)
-            {
-                if (_boonDict.ContainsKey(entry.Key)) {
-                    namedBoons[_boonDict[entry.Key]] = entry.Value;
-                }
-                else
-                {
-                    namedBoons[entry.Key.ToString()] = entry.Value;
-                }
-            }
-
-            return namedBoons;
+            return boons;
         }
 
         private JsonDps BuildDPS(Statistics.FinalDPS[] statDps)
@@ -471,18 +462,19 @@ namespace LuckParser.Controllers
             boon.Presence[phase] = value.Presence;
         }
 
-        private Dictionary<string, JsonBuffs> BuildBuffUptime(Dictionary<long, Statistics.FinalBoonUptime>[] statUptimes, Player player)
+        private Dictionary<long, JsonBuffs> BuildBuffUptime(Dictionary<long, Statistics.FinalBoonUptime>[] statUptimes, Player player)
         {
             var uptimes = new Dictionary<long, JsonBuffs>();
             int phases = _statistics.Phases.Count;
 
-            var boonsFound = new List<long>();
-            var boonsNotFound = new List<long>();
+            var boonsFound = new HashSet<long>();
+            var boonsNotFound = new HashSet<long>();
 
             for (int phaseIndex = 0; phaseIndex < phases; phaseIndex++)
             {
                 foreach (var boon in statUptimes[phaseIndex])
                 {
+                    _buffNames[boon.Key] = Boon.BoonsByIds[boon.Key].Name;
                     if (boonsFound.Contains(boon.Key))
                     {
                         MakePhaseBoon(uptimes[boon.Key], phaseIndex, boon.Value);
@@ -499,11 +491,8 @@ namespace LuckParser.Controllers
                             {
                                 foreach (BoonsGraphModel.Segment seg in bgm.BoonChart)
                                 {
-                                    uptimes[boon.Key].States.Add(new JsonBuffs.SimplifiedSegment
-                                    {
-                                        Time = (int)seg.Start,
-                                        Value = seg.Value
-                                    });
+                                    uptimes[boon.Key].States.Add((int)seg.Start);
+                                    uptimes[boon.Key].States.Add(seg.Value);
                                 }
                             }
                         }
@@ -522,19 +511,7 @@ namespace LuckParser.Controllers
                 RemoveZeroArrays(boon.Value);
             }
 
-            var namedBoons = new Dictionary<string, JsonBuffs>();
-            foreach (var entry in uptimes)
-            {
-                if (_boonDict.ContainsKey(entry.Key)) {
-                    namedBoons[_boonDict[entry.Key]] = entry.Value;
-                }
-                else
-                {
-                    namedBoons[entry.Key.ToString()] = entry.Value;
-                }
-            }
-
-            return namedBoons;
+            return uptimes;
         }
 
         private JsonSupport BuildSupport(Statistics.FinalSupport[] statSupport)

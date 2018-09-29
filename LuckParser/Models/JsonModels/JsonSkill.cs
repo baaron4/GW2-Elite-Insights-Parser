@@ -11,16 +11,15 @@ namespace LuckParser.Models
 
         public class JsonExtraSkill
         {
-            public bool Auto;
-            public int TimeSaved;
-            public int TimeWasted;
-            public bool UnderQuickness;
-            public long Skill;
+            public int A;
+            public int TS;
+            public int TW;
+            public int UQ;
         }
 
-        public string Name;
+        public long Skill;
         public int Time;
         public int Duration;
-        public JsonExtraSkill ExtraData;
+        public JsonExtraSkill ED;
     }
 }

@@ -18,7 +18,7 @@ namespace LuckParser.Models.DataModels
         public class JsonExtraLog
         {
             public Dictionary<string, string> BuffIcons;
-            public Dictionary<string, string> SkillIcons;
+            public Dictionary<long, string> SkillIcons;
             public string FightIcon;
             public Dictionary<string, string> GeneralIcons;
             public Dictionary<string, MechanicDesc> MechanicData;
@@ -38,6 +38,8 @@ namespace LuckParser.Models.DataModels
         public List<JsonPhase> Phases;
         public List<JsonMechanic> Mechanics;
         public string[] UploadLinks;
+        public Dictionary<long, string> SkillNames;
+        public Dictionary<long, string> BuffNames;
         public JsonExtraLog ExtraData;
     }
 }

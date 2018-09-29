@@ -10,6 +10,8 @@
         public string ShortName => _mechanic.ShortName;
         public string Description => _mechanic.Description;
         public string PlotlyShape => _mechanic.PlotlyShape;
+        public string PlotlyName => _mechanic.PlotlyName;
+        public string InGameName => _mechanic.InGameName;
 
         public MechanicLog(long time, Mechanic mechanic,
         AbstractMasterPlayer player)

@@ -15,6 +15,6 @@ namespace LuckParser.Models
 
         public string Name;
         public List<JsonSkill> Rotation;
-        public JsonExtraMinions ExtraData;
+        public JsonExtraMinions ED;
     }
 }

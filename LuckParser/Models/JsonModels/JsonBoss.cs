@@ -24,6 +24,6 @@ namespace LuckParser.Models
         public List<JsonSkill> Rotation;
         public int[] TotalPersonalDamage;
         public List<JsonMinions> Minions;
-        public Dictionary<string, JsonBossBuffs> Conditions;
+        public Dictionary<long, JsonBossBuffs> Conditions;
     }
 }

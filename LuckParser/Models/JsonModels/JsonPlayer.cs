@@ -28,10 +28,10 @@ namespace LuckParser.Models
         public JsonDefenses Defenses;
         public JsonSupport Support;
         public List<JsonSkill> Rotation;
-        public Dictionary<string, JsonBuffs> SelfBoons;
-        public Dictionary<string, JsonBuffs> GroupBoons;
-        public Dictionary<string, JsonBuffs> OffGroupBoons;
-        public Dictionary<string, JsonBuffs> SquadBoons;
+        public Dictionary<long, JsonBuffs> SelfBoons;
+        public Dictionary<long, JsonBuffs> GroupBoons;
+        public Dictionary<long, JsonBuffs> OffGroupBoons;
+        public Dictionary<long, JsonBuffs> SquadBoons;
         public List<JsonMinions> Minions;
     }
 }
