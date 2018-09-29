@@ -7,7 +7,7 @@
         public long Time { get; }
         public AbstractMasterPlayer Player { get; }
         public long Skill => _mechanic.SkillId;
-        public string Name => _mechanic.InGameName;
+        public string ShortName => _mechanic.ShortName;
         public string Description => _mechanic.Description;
         public string PlotlyShape => _mechanic.PlotlyShape;
 
