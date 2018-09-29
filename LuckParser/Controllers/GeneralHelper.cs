@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace LuckParser.Controllers
@@ -18,6 +19,15 @@ namespace LuckParser.Controllers
         {
             return en.Select(t => new Tuple<T, R>(t, evaluate(t)))
                 .Aggregate((max, next) => next.Item2.CompareTo(max.Item2) < 0 ? next : max).Item1;
+        }
+
+
+        public static string FindPattern(string source, string regex)
+        {
+            if (String.IsNullOrEmpty(source)) return null;
+            Match match = Regex.Match(source, regex);
+            if (match.Success) return match.Groups[1].Value;
+            return null;
         }
     }
 }

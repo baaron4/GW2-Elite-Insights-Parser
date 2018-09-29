@@ -217,7 +217,7 @@ namespace LuckParser.Controllers
                         sw.Write("visible:'legendonly',");
                     }
                     sw.Write("type:'scatter'," +
-                            "marker:{" + "size: 15," + mech.PlotlyShape +  "}," +
+                            "marker:{" + "size: 15," + mech.PlotlyString +  "}," +
                             "text:[");
                     foreach (MechanicLog ml in filterdList)
                     {

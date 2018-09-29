@@ -1120,15 +1120,7 @@ namespace LuckParser.Controllers
             }
             return list;
         }
-
-        private string FindPattern(string source, string regex)
-        {
-            if (String.IsNullOrEmpty(source)) return null;
-            Match match = Regex.Match(source, regex);
-            if (match.Success) return match.Groups[1].Value;
-            return null;
-        }
-
+        
         private List<MechanicDto> CreateMechanicGraphData()
         {
             List<MechanicDto> mechanicDtos = new List<MechanicDto>();
@@ -1142,8 +1134,8 @@ namespace LuckParser.Controllers
                     name = mech.PlotlyName,
                     shortName = mech.ShortName,
                     description = mech.Description,
-                    color = FindPattern(mech.PlotlyShape, "color\\s*:\\s*'([^']*)'"),
-                    symbol = FindPattern(mech.PlotlyShape, "symbol\\s*:\\s*'([^']*)'"),
+                    color = mech.PlotlyColor,
+                    symbol = mech.PlotlySymbol,
                     visible = (mech.SkillId == -2 || mech.SkillId == -3),
                     data = BuildMechanicData(mechanicLogs),
                     playerMech = playerMechs.Contains(mech),
@@ -1636,7 +1628,7 @@ namespace LuckParser.Controllers
                 {
                     name = mechanic.ShortName,
                     description = mechanic.Description,
-                    color = mechanic.PlotlyShape
+                    color = mechanic.PlotlyString
                 };
                 dtos.Add(dto);
             }

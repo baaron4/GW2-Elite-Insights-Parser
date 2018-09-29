@@ -9,7 +9,8 @@ namespace LuckParser.Models.DataModels
 
         public class MechanicDesc
         {
-            public string PlotlyShape;
+            public string PlotlySymbol;
+            public string PlotlyColor;
             public string Description;
             public string PlotlyName;
         }

@@ -14,6 +14,8 @@ namespace LuckParser.Models
         }
 
         public string Name;
+        public int[] TotalDamage;
+        public int[][] TotalTargetDamage;
         public List<JsonSkill> Rotation;
         public JsonExtraMinions ED;
     }

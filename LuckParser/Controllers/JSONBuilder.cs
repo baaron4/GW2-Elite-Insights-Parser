@@ -139,7 +139,8 @@ namespace LuckParser.Controllers
                         {
                             _mechanicData[ml.ShortName] = new MechanicDesc()
                             {
-                                PlotlyShape = ml.PlotlyShape,
+                                PlotlySymbol = ml.PlotlySymbol,
+                                PlotlyColor = ml.PlotlyColor,
                                 Description = ml.Description,
                                 PlotlyName = ml.PlotlyName
                             };
@@ -149,7 +150,7 @@ namespace LuckParser.Controllers
                             SN = ml.ShortName,
                             S = ml.Skill
                         };
-                        mech.ED.E = ml.Player.GetType() != typeof(Player) ? 1 : 0;
+                        mech.ED.E = ml.Enemy ? 1 : 0;
                         if (mech.ED.E == 1)
                         {
                             if (ml.Player.GetType() == typeof(Boss))
@@ -246,8 +247,23 @@ namespace LuckParser.Controllers
                 JsonMinions min = new JsonMinions()
                 {
                     Name = minions.Character,
-                    Rotation = BuildRotation(minions.GetCastLogs(_log,0,_log.FightData.FightDuration))
+                    Rotation = BuildRotation(minions.GetCastLogs(_log,0,_log.FightData.FightDuration)),
                 };
+                min.TotalDamage = new int[_statistics.Phases.Count];
+                for (int i = 0; i < _statistics.Phases.Count; i++)
+                {
+                    min.TotalDamage[i] = minions.GetDamageLogs(null, _log, _statistics.Phases[i].Start, _statistics.Phases[i].End).Sum(x => x.Damage);
+                }
+                min.TotalTargetDamage = new int[_log.FightData.Logic.Targets.Count][];
+                for (int j = 0; j < _log.FightData.Logic.Targets.Count; j++)
+                {
+                    Boss target = _log.FightData.Logic.Targets[j];
+                    min.TotalTargetDamage[j] = new int[_statistics.Phases.Count];
+                    for (int i = 0; i < _statistics.Phases.Count; i++)
+                    {
+                        min.TotalDamage[i] = minions.GetDamageLogs(target, _log, _statistics.Phases[i].Start, _statistics.Phases[i].End).Sum(x => x.Damage);
+                    }
+                }
                 if (_devMode)
                 {
                     min.ED = new JsonMinions.JsonExtraMinions()
@@ -349,7 +365,10 @@ namespace LuckParser.Controllers
                                 skillIcon = HTMLHelper.GetLink("Swap");
                             }
                         }
-                        _skillIcons[cl.SkillId] = skillIcon;
+                        if (skillIcon.Length > 0)
+                        {
+                            _skillIcons[cl.SkillId] = skillIcon;
+                        }
                     }
                     int timeGained = 0;
                     if (cl.EndActivation == ParseEnum.Activation.CancelFire && cl.ActualDuration < cl.ExpectedDuration)

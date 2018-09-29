@@ -9,9 +9,11 @@
         public long Skill => _mechanic.SkillId;
         public string ShortName => _mechanic.ShortName;
         public string Description => _mechanic.Description;
-        public string PlotlyShape => _mechanic.PlotlyShape;
+        public string PlotlyColor => _mechanic.PlotlyColor;
+        public string PlotlySymbol => _mechanic.PlotlySymbol;
         public string PlotlyName => _mechanic.PlotlyName;
         public string InGameName => _mechanic.InGameName;
+        public bool Enemy => _mechanic.IsEnemyMechanic;
 
         public MechanicLog(long time, Mechanic mechanic,
         AbstractMasterPlayer player)
