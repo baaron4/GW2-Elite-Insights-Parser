@@ -12,16 +12,16 @@ namespace LuckParser.Models
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(37477, "Vile Spit", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Siax, "symbol:'circle',color:'rgb(70,150,0)',", "Spit","Vile Spit (green goo)", "Poison Spit",0),
-            new Mechanic(37488, "Tail Lash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Siax, "symbol:'triangle-left',color:'rgb(255,200,0)',", "Tail","Tail Lash (half circle Knockback)", "Tail Lash",0),
-            new Mechanic(16911, "Nightmare Hallucination", Mechanic.MechType.Spawn, ParseEnum.BossIDS.Siax, "symbol:'star-open',color:'rgb(0,0,0)',", "NgtmHlc","Nightmare Hallucination Spawn", "Hallucination",0),
-            new Mechanic(37303, "Cascade of Torment", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Siax, "symbol:'circle-open',color:'rgb(255,140,0)',", "Rings","Cascade of Torment (Alternating Rings)", "Rings", 0),
-            new Mechanic(36984, "Cascade of Torment", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Siax, "symbol:'circle-open',color:'rgb(255,140,0)',", "Rings","Cascade of Torment (Alternating Rings)", "Rings", 0),
-            new Mechanic(37320, "Caustic Explosion", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Siax, "symbol:'diamond-tall',color:'rgb(255,200,0)',", "Phase","Phase Start", "Phase", 0),
-            new Mechanic(37320, "Caustic Explosion", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Siax, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "Ph.Fail","Phase Fail (Failed to kill Echos in time)", "Phase Fail", 0, (condition=> condition.CombatItem.Value >=20649)), //
-            new Mechanic(36929, "Caustic Explosion", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Siax, "symbol:'diamond-wide',color:'rgb(0,160,150)',", "CC","Breakbar Start", "Breakbar", 0),
-            new Mechanic(36929, "Caustic Explosion", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Siax, "symbol:'diamond-wide',color:'rgb(255,0,0)',", "CC.Fail","Failed to CC in time", "CC Fail", 0, (condition => condition.CombatItem.Value >=15232)), 
-            new Mechanic(36998, "Fixated", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Siax, "symbol:'star-open',color:'rgb(200,0,200)',", "Fix", "Fixated by Volatile Hallucination", "Fixated",0),
+            new Mechanic(37477, "Vile Spit", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Siax, "symbol:'circle',color:'rgb(70,150,0)'", "Spit","Vile Spit (green goo)", "Poison Spit",0),
+            new Mechanic(37488, "Tail Lash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Siax, "symbol:'triangle-left',color:'rgb(255,200,0)'", "Tail","Tail Lash (half circle Knockback)", "Tail Lash",0),
+            new Mechanic(16911, "Nightmare Hallucination", Mechanic.MechType.Spawn, ParseEnum.BossIDS.Siax, "symbol:'star-open',color:'rgb(0,0,0)'", "NgtmHlc","Nightmare Hallucination Spawn", "Hallucination",0),
+            new Mechanic(37303, "Cascade of Torment", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Siax, "symbol:'circle-open',color:'rgb(255,140,0)'", "Rings","Cascade of Torment (Alternating Rings)", "Rings", 0),
+            new Mechanic(36984, "Cascade of Torment", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Siax, "symbol:'circle-open',color:'rgb(255,140,0)'", "Rings","Cascade of Torment (Alternating Rings)", "Rings", 0),
+            new Mechanic(37320, "Caustic Explosion", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Siax, "symbol:'diamond-tall',color:'rgb(255,200,0)'", "Phase","Phase Start", "Phase", 0),
+            new Mechanic(37320, "Caustic Explosion", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Siax, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "Ph.Fail","Phase Fail (Failed to kill Echos in time)", "Phase Fail", 0, (condition=> condition.CombatItem.Value >=20649)), //
+            new Mechanic(36929, "Caustic Explosion", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Siax, "symbol:'diamond-wide',color:'rgb(0,160,150)'", "CC","Breakbar Start", "Breakbar", 0),
+            new Mechanic(36929, "Caustic Explosion", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Siax, "symbol:'diamond-wide',color:'rgb(255,0,0)'", "CC.Fail","Failed to CC in time", "CC Fail", 0, (condition => condition.CombatItem.Value >=15232)), 
+            new Mechanic(36998, "Fixated", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Siax, "symbol:'star-open',color:'rgb(200,0,200)'", "Fix", "Fixated by Volatile Hallucination", "Fixated",0),
             });
             Extension = "siax";
             IconUrl = "https://wiki.guildwars2.com/images/d/dc/Siax_the_Corrupted.jpg";
