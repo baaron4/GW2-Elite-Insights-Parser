@@ -9,6 +9,8 @@ namespace LuckParser.Models.HtmlModels
     {
         [DataMember] public string name;
         [DataMember] public long duration;
+        [DataMember] public double start;
+        [DataMember] public double end;
         [DataMember] public List<List<Object>> dpsStats;
         [DataMember] public List<List<Object>> dmgStatsBoss;
         [DataMember] public List<List<Object>> dmgStats;
