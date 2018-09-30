@@ -55,7 +55,6 @@ namespace LuckParser.Models
             {
                 case (ushort)ConjuredGreatsword:
                 case (ushort)ConjuredShield:
-                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
@@ -64,18 +63,11 @@ namespace LuckParser.Models
 
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
-            CombatReplay replay = boss.CombatReplay;
-            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.ConjuredAmalgamate:
-                    replay.Icon = "";
-                    break;
                 case (ushort)ParseEnum.BossIDS.CALeftArm:
-                    replay.Icon = "";
-                    break;
                 case (ushort)ParseEnum.BossIDS.CARightArm:
-                    replay.Icon = "";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");

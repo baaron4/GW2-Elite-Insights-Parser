@@ -130,20 +130,16 @@ namespace LuckParser.Models
             {
                 case (ushort)Storm:
                     replay.Actors.Add(new CircleActor(false, 0, 260, lifespan, "rgba(0, 80, 255, 0.5)"));
-                    replay.Icon = "https://i.imgur.com/9XtNPdw.png";
                     break;
                 case (ushort)Spirit:
                 case (ushort)Spirit2:
                     replay.Actors.Add(new CircleActor(true, 0, 180, lifespan, "rgba(255, 0, 0, 0.5)"));
-                    replay.Icon = "https://i.imgur.com/sHmksvO.png";
                     break;
                 case (ushort)IcePatch:
                     replay.Actors.Add(new CircleActor(true, 0, 200, lifespan, "rgba(0, 0, 255, 0.5)"));
-                    replay.Icon = "https://i.imgur.com/yxKJ5Yc.png";
                     break;
                 case (ushort)Tornado:
                     replay.Actors.Add(new CircleActor(true, 0, 90, lifespan, "rgba(255, 0, 0, 0.5)"));
-                    replay.Icon = "https://i.imgur.com/e10lZMa.png";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
@@ -158,7 +154,6 @@ namespace LuckParser.Models
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.Matthias:
-                    replay.Icon = "https://i.imgur.com/3uMMmTS.png";
                     List<CastLog> humanShield = cls.Where(x => x.SkillId == 34468).ToList();
                     List<int> humanShieldRemoval = log.GetBoonData(34518).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All).Select(x => (int)(x.Time - log.FightData.FightStart)).Distinct().ToList();
                     for (var i = 0; i < humanShield.Count; i++)

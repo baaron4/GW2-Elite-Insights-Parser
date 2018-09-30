@@ -143,7 +143,6 @@ namespace LuckParser.Models
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.Dhuum:
-                    replay.Icon = "https://i.imgur.com/RKaDon5.png";
                     List<CastLog> deathmark = cls.Where(x => x.SkillId == 48176).ToList();
                     CastLog majorSplit = cls.Find(x => x.SkillId == 47396);
                     foreach (CastLog c in deathmark)
@@ -209,14 +208,11 @@ namespace LuckParser.Models
             switch (mob.ID)
             {
                 case (ushort)Echo:
-                    replay.Icon = "https://i.imgur.com/kcN9ECn.png";
                     replay.Actors.Add(new CircleActor(true, 0, 120, lifespan, "rgba(255, 0, 0, 0.5)"));
                     break;
                 case (ushort)Enforcer:
-                    replay.Icon = "https://i.imgur.com/elHjamF.png";
                     break;
                 case (ushort)Messenger:
-                    replay.Icon = "https://i.imgur.com/1J2BTFg.png";
                     replay.Actors.Add(new CircleActor(true, 0, 180, lifespan, "rgba(255, 125, 0, 0.5)"));
                     break;
                 default:
