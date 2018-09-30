@@ -456,13 +456,6 @@ namespace LuckParser.Controllers
                     TotalDamageDist = BuildDamageDist(minions, null),
                     TargetDamageDist = BuildDamageDist(minions),
                 };
-                if (_devMode)
-                {
-                    min.ED = new JsonMinions.JsonExtraMinions()
-                    {
-                        ID = minions.MinionID,
-                    };
-                }
                 mins.Add(min);
             }
             return mins;
