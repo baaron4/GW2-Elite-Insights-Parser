@@ -13,17 +13,17 @@ namespace LuckParser.Models
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(34912, "Fixate", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'star',color:'rgb(255,0,255)',", "Fixt","Fixated by Statue", "Fixated",0),
-            new Mechanic(34925, "Fixate", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'star',color:'rgb(255,0,255)',", "Fixt","Fixated by Statue", "Fixated",0),
-            new Mechanic(35077, "Hail of Fury", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'circle-open',color:'rgb(255,0,0)',", "Debris","Hail of Fury (Falling Debris)", "Debris",0),
-            new Mechanic(35096, "Compromised", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'hexagon',color:'rgb(0,0,255)',", "Rift#","Compromised (Pushed Orb through Rifts)", "Compromised",0),
-            new Mechanic(16227, "Insidious Projection", Mechanic.MechType.Spawn, ParseEnum.BossIDS.KeepConstruct, "symbol:'bowtie',color:'rgb(255,0,0)',", "Merge","Insidious Projection spawn (2 Statue merge)", "Merged Statues",0),
-            new Mechanic(35137, "Phantasmal Blades", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'hexagram-open',color:'rgb(255,0,255)',", "PhBlds","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
-            new Mechanic(34971, "Phantasmal Blades", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'hexagram-open',color:'rgb(255,0,255)',", "PhBlds","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
-            new Mechanic(35064, "Phantasmal Blades", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'hexagram-open',color:'rgb(255,0,255)',", "PhBlds","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
-            new Mechanic(35086, "Tower Drop", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'circle',color:'rgb(255,140,0)',", "Jump","Tower Drop (KC Jump)", "Tower Drop",0),
-            new Mechanic(35103, "Xera's Fury", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'circle',color:'rgb(200,140,0)',", "Bmb","Xera's Fury (Large Bombs) application", "Bombs",0),
-            new Mechanic(16261, "Core Hit", Mechanic.MechType.HitOnEnemy, ParseEnum.BossIDS.KeepConstruct, "symbol:'star-open',color:'rgb(255,140,0)',", "C.Hit","Core was Hit by Player", "Core Hit",1000)
+            new Mechanic(34912, "Fixate", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'star',color:'rgb(255,0,255)'", "Fixt","Fixated by Statue", "Fixated",0),
+            new Mechanic(34925, "Fixate", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'star',color:'rgb(255,0,255)'", "Fixt","Fixated by Statue", "Fixated",0),
+            new Mechanic(35077, "Hail of Fury", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'circle-open',color:'rgb(255,0,0)'", "Debris","Hail of Fury (Falling Debris)", "Debris",0),
+            new Mechanic(35096, "Compromised", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'hexagon',color:'rgb(0,0,255)'", "Rift#","Compromised (Pushed Orb through Rifts)", "Compromised",0),
+            new Mechanic(16227, "Insidious Projection", Mechanic.MechType.Spawn, ParseEnum.BossIDS.KeepConstruct, "symbol:'bowtie',color:'rgb(255,0,0)'", "Merge","Insidious Projection spawn (2 Statue merge)", "Merged Statues",0),
+            new Mechanic(35137, "Phantasmal Blades", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'hexagram-open',color:'rgb(255,0,255)'", "PhBlds","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
+            new Mechanic(34971, "Phantasmal Blades", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'hexagram-open',color:'rgb(255,0,255)'", "PhBlds","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
+            new Mechanic(35064, "Phantasmal Blades", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'hexagram-open',color:'rgb(255,0,255)'", "PhBlds","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
+            new Mechanic(35086, "Tower Drop", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'circle',color:'rgb(255,140,0)'", "Jump","Tower Drop (KC Jump)", "Tower Drop",0),
+            new Mechanic(35103, "Xera's Fury", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'circle',color:'rgb(200,140,0)'", "Bmb","Xera's Fury (Large Bombs) application", "Bombs",0),
+            new Mechanic(16261, "Core Hit", Mechanic.MechType.HitOnEnemy, ParseEnum.BossIDS.KeepConstruct, "symbol:'star-open',color:'rgb(255,140,0)'", "C.Hit","Core was Hit by Player", "Core Hit",1000)
             });
             Extension = "kc";
             IconUrl = "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
