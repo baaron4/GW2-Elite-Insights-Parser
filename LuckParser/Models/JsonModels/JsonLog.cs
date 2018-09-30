@@ -24,6 +24,7 @@ namespace LuckParser.Models.DataModels
             public string FightIcon = null;
             public Dictionary<string, string> GeneralIcons = null;
             public Dictionary<string, MechanicDesc> MechanicData = null;
+            public Dictionary<string, List<long>> PersonalBuffs = null;
         }
 
         public string EliteInsightsVersion;

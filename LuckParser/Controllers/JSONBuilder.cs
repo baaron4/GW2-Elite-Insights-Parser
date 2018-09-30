@@ -32,6 +32,7 @@ namespace LuckParser.Controllers
         private readonly Dictionary<long, string> _skillIcons = new Dictionary<long, string>();
         private readonly Dictionary<string, MechanicDesc> _mechanicData = new Dictionary<string, MechanicDesc>();
         private readonly Dictionary<string, string> _actorIconData = new Dictionary<string, string>();
+        private readonly Dictionary<string, List<long>> _personalBuffs = new Dictionary<string, List<long>>();
 
         public static void UpdateStatisticSwitches(StatisticsCalculator.Switches switches)
         {
@@ -110,7 +111,8 @@ namespace LuckParser.Controllers
                     SkillIcons = _skillIcons,
                     FightIcon = _log.FightData.Logic.IconUrl,
                     MechanicData = _mechanicData,
-                    ActorIcons = _actorIconData
+                    ActorIcons = _actorIconData,
+                    PersonalBuffs = _personalBuffs,
                 };
             }
         }
@@ -646,6 +648,20 @@ namespace LuckParser.Controllers
                     if (_devMode)
                     {
                         _buffIcons[boon.Key] = Boon.BoonsByIds[boon.Key].Link;
+                        if (Boon.BoonsByIds[boon.Key].Nature == Boon.BoonNature.GraphOnlyBuff && Boon.BoonsByIds[boon.Key].Source == Boon.ProfToEnum(player.Prof))
+                        {
+                            if (_personalBuffs.TryGetValue(player.Prof, out var list))
+                            {
+                                list.Add(boon.Key);
+                            }
+                            else
+                            {
+                                _personalBuffs[player.Prof] = new List<long>()
+                                {
+                                    boon.Key
+                                };
+                            }
+                        }
                     }
                     if (boonsFound.Contains(boon.Key))
                     {

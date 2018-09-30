@@ -13,7 +13,7 @@ namespace LuckParser.Models.ParseModels
         public enum BoonType { Duration, Intensity };
         private enum Logic { Queue, HealingPower, Override, ForceOverride };
 
-        private static BoonSource ProfToEnum(string prof)
+        public static BoonSource ProfToEnum(string prof)
         {
             switch (prof)
             {
