@@ -568,7 +568,7 @@ namespace LuckParser.Controllers
                 _boss = new Boss(new AgentItem(0, "UNKNOWN"));
             }
             // Dealing with special cases
-            _fightData.Logic.SpecialParse(_fightData, _agentData, _combatItems, _boss);
+            _fightData.Logic.SpecialParse(_fightData, _agentData, _combatItems);
             // Grab values threw combat data
             foreach (CombatItem c in _combatItems)
             {
@@ -583,7 +583,10 @@ namespace LuckParser.Controllers
                         break;
                     case ParseEnum.StateChange.LogStart:
                         _logData.SetLogStart(c.Value);
-                        _fightData.FightStart = c.Time;
+                        if (_fightData.FightStart == 0)
+                        {
+                            _fightData.FightStart = c.Time;
+                        }
                         break;
                     case ParseEnum.StateChange.LogEnd:
                         _logData.SetLogEnd(c.Value);

@@ -90,8 +90,14 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, Boss boss)
+        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
+            Boss boss = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Xera);
+            CombatItem enterCombat = combatData.Find(x => x.SrcInstid == boss.InstID && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
+            if (enterCombat != null)
+            {
+                fightData.FightStart = enterCombat.Time;
+            }
             foreach (AgentItem NPC in agentData.GetAgentByType(AgentItem.AgentType.NPC))
             {
                 if (NPC.ID == 16286)

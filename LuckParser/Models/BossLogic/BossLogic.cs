@@ -447,7 +447,7 @@ namespace LuckParser.Models
             mechData.ComputePresentMechanics(log);
         }
 
-        public virtual void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, Boss boss)
+        public virtual void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
         }
 

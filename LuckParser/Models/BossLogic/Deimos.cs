@@ -53,9 +53,16 @@ namespace LuckParser.Models
             RegroupTargetsByID((ushort)Gambler, agentData, combatItems);
         }
 
-        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, Boss boss)
+        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            List<AgentItem> deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.FirstAware > boss.LastAware && x.Name.Contains("Deimos")).OrderBy(x => x.LastAware).ToList();
+            Boss boss = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Deimos);
+            List<AgentItem> test = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.Name.Contains("Deimos") && x.ID != (ushort)Oil && x.ID != (ushort)Hands).ToList();
+            CombatItem enterCombat = combatData.Find(x => x.SrcInstid == boss.InstID && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
+            if (enterCombat != null)
+            {
+                fightData.FightStart = enterCombat.Time;
+            }
+            List<AgentItem> deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos")).OrderBy(x => x.LastAware).ToList();
             if (deimosGadgets.Count > 0)
             {
                 AgentItem NPC = deimosGadgets.Last();
@@ -120,7 +127,7 @@ namespace LuckParser.Models
                 if (i == 2) phases[i].DrawArea = true;
             }
             int offsetDei = phases.Count;
-            CombatItem teleport = log.GetBoonData(38169).FirstOrDefault();
+            CombatItem teleport = log.GetBoonData(38169).FirstOrDefault(x => x.Time > log.FightData.FightStart);
             int splits = 0;
             while (teleport != null && splits < 3)
             {
