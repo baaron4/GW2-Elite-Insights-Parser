@@ -252,13 +252,39 @@ namespace LuckParser.Controllers
                     TotalDamageDist = BuildDamageDist(player, null),
                     TargetDamageDist = BuildDamageDist(player),
                     TotalDamageTaken = BuildDamageTaken(player),
-                    DeathRecap = BuilDeathRecap(player)
+                    DeathRecap = BuilDeathRecap(player),
+                    Consumables = BuildConsumables(player)
                 });
                 if (_devMode)
                 {
                     _actorIconData[player.Prof] = GeneralHelper.GetProfIcon(player.Prof);
                 }
             }
+        }
+
+        private List<long[]> BuildConsumables(Player player)
+        {
+            List<long[]> res = new List<long[]>();
+            foreach(var food in player.GetConsumablesList(_log,0,_log.FightData.FightDuration))
+            {
+                long[] val = new long[3] {
+                    food.Item1.ID,
+                    food.Item2,
+                    food.Item3
+                };
+                _buffNames[food.Item1.ID] = food.Item1.Name;
+                res.Add(val);
+                if (_devMode)
+                {
+                    _buffData[food.Item1.ID] = new BuffDesc()
+                    {
+                        Stacking = 0,
+                        Table = -1,
+                        Icon = food.Item1.Link
+                    };
+                }
+            }
+            return res.Count > 0 ? res : null;
         }
 
         private List<JsonDeathRecap> BuilDeathRecap(Player player)
