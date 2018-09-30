@@ -52,10 +52,7 @@ namespace LuckParser.Models
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.Nikare:
-                    replay.Icon = "https://i.imgur.com/6yq45Cc.png";
-                    break;
                 case (ushort)ParseEnum.BossIDS.Kenut:
-                    replay.Icon = "https://i.imgur.com/TLykcrJ.png";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");

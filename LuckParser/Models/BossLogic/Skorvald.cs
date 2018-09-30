@@ -64,7 +64,6 @@ namespace LuckParser.Models
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.Skorvald:
-                    replay.Icon = "https://i.imgur.com/IOPAHRE.png";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
@@ -92,7 +91,6 @@ namespace LuckParser.Models
                 case (ushort)FluxAnomaly2:
                 case (ushort)FluxAnomaly1:
                 case (ushort)SolarBloom:
-                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");

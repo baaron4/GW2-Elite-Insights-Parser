@@ -137,7 +137,6 @@ namespace LuckParser.Models
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.Samarog:
-                    replay.Icon = "https://i.imgur.com/MPQhKfM.png";
                     List<CombatItem> brutalize = log.GetBoonData(38226).Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.Manual).ToList();
                     int brutStart = 0;
                     foreach (CombatItem c in brutalize)
@@ -154,10 +153,7 @@ namespace LuckParser.Models
                     }
                     break;
                 case (ushort)Rigom:
-                    replay.Icon = "https://i.imgur.com/REcGMBe.png";
-                    break;
                 case (ushort)Guldhem:
-                    replay.Icon = "https://i.imgur.com/xa7Fefn.png";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");

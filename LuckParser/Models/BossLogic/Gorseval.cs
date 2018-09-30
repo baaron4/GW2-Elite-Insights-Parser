@@ -124,7 +124,6 @@ namespace LuckParser.Models
             {
                 case (ushort)EnragedSpirit:
                 case (ushort)AngeredSpirit:
-                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
@@ -138,7 +137,6 @@ namespace LuckParser.Models
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.Gorseval:
-                    replay.Icon = "https://i.imgur.com/5hmMq12.png";
                     List<CastLog> blooms = cls.Where(x => x.SkillId == 31616).ToList();
                     foreach (CastLog c in blooms)
                     {
@@ -257,7 +255,6 @@ namespace LuckParser.Models
                 case (ushort)ChargedSoul:
                     Tuple<int, int> lifespan = new Tuple<int, int>((int)replay.TimeOffsets.Item1, (int)replay.TimeOffsets.Item2);
                     replay.Actors.Add(new CircleActor(false, 0, 220, lifespan, "rgba(255, 150, 0, 0.5)"));
-                    replay.Icon = "https://i.imgur.com/sHmksvO.png";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
