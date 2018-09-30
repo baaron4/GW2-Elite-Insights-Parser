@@ -138,7 +138,6 @@ namespace LuckParser.Models
             {
                 case (ushort)Seekers:
                     Tuple<int, int> lifespan = new Tuple<int, int>((int)mob.CombatReplay.TimeOffsets.Item1, (int)mob.CombatReplay.TimeOffsets.Item2);
-                    mob.CombatReplay.Icon = "https://i.imgur.com/FrPoluz.png";
                     mob.CombatReplay.Actors.Add(new CircleActor(false, 0, 180, lifespan, "rgba(255, 0, 0, 0.5)"));
                     break;
                 default:
@@ -154,7 +153,6 @@ namespace LuckParser.Models
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.ValeGuardian:
-                    replay.Icon = "https://i.imgur.com/MIpP5pK.png";
                     List<CastLog> magicStorms = cls.Where(x => x.SkillId == 31419).ToList();
                     foreach (CastLog c in magicStorms)
                     {
@@ -163,15 +161,12 @@ namespace LuckParser.Models
                     break;
                 case (ushort)BlueGuardian:
                     replay.Actors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(0, 0, 255, 0.5)"));
-                    replay.Icon = "https://i.imgur.com/6CefnkP.png";
                     break;
                 case (ushort)GreenGuardian:
                     replay.Actors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(0, 255, 0, 0.5)"));
-                    replay.Icon = "https://i.imgur.com/nauDVYP.png";
                     break;
                 case (ushort)RedGuardian:
                     replay.Actors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(255, 0, 0, 0.5)"));
-                    replay.Icon = "https://i.imgur.com/73Uj4lG.png";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");

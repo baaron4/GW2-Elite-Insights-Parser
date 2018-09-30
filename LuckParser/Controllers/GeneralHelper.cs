@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Controllers
 {
@@ -100,69 +101,152 @@ namespace LuckParser.Controllers
             switch(ParseEnum.GetBossIDS(id))
             {
                 case ParseEnum.BossIDS.ValeGuardian:
-                    break;
+                    return "https://i.imgur.com/MIpP5pK.png";
                 case ParseEnum.BossIDS.Gorseval:
-                    break;
+                    return "https://i.imgur.com/5hmMq12.png";
                 case ParseEnum.BossIDS.Sabetha:
-                    break;
+                    return "https://i.imgur.com/UqbFp9S.png";
                 case ParseEnum.BossIDS.Slothasor:
-                    break;
+                    return "https://i.imgur.com/h1xH3ER.png";
                 case ParseEnum.BossIDS.Matthias:
-                    break;
+                    return "https://i.imgur.com/3uMMmTS.png";
                 case ParseEnum.BossIDS.KeepConstruct:
-                    break;
+                    return "https://i.imgur.com/Kq0kL07.png";
                 case ParseEnum.BossIDS.Xera:
-                    break;
+                    return "https://i.imgur.com/lYwJEyV.png";
                 case ParseEnum.BossIDS.Cairn:
-                    break;
+                    return "https://i.imgur.com/gQY37Tf.png";
                 case ParseEnum.BossIDS.MursaatOverseer:
-                    break;
+                    return "https://i.imgur.com/5LNiw4Y.png";
                 case ParseEnum.BossIDS.Samarog:
-                    break;
+                    return "https://i.imgur.com/MPQhKfM.png";
                 case ParseEnum.BossIDS.Deimos:
-                    break;
+                    return "https://i.imgur.com/mWfxBaO.png";
                 case ParseEnum.BossIDS.SoullessHorror:
-                    break;
+                    return "https://i.imgur.com/jAiRplg.png";
                 case ParseEnum.BossIDS.Dhuum:
-                    break;
+                    return "https://i.imgur.com/RKaDon5.png";
                 case ParseEnum.BossIDS.ConjuredAmalgamate:
-                    break;
                 case ParseEnum.BossIDS.CALeftArm:
-                    break;
                 case ParseEnum.BossIDS.CARightArm:
-                    break;
+                    return "https://i.imgur.com/xCoypjS.png";
                 case ParseEnum.BossIDS.Nikare:
-                    break;
+                    return "https://i.imgur.com/6yq45Cc.png";
                 case ParseEnum.BossIDS.Kenut:
-                    break;
+                    return "https://i.imgur.com/TLykcrJ.png";
                 case ParseEnum.BossIDS.Qadim:
-                    break;
+                    return "https://i.imgur.com/IfoHTHT.png";
                 case ParseEnum.BossIDS.MAMA:
-                    break;
+                    return "https://i.imgur.com/1h7HOII.png";
                 case ParseEnum.BossIDS.Siax:
-                    break;
+                    return "https://i.imgur.com/5C60cQb.png";
                 case ParseEnum.BossIDS.Ensolyss:
-                    break;
+                    return "https://i.imgur.com/GUTNuyP.png";
                 case ParseEnum.BossIDS.Skorvald:
-                    break;
+                    return "https://i.imgur.com/IOPAHRE.png";
                 case ParseEnum.BossIDS.Artsariiv:
-                    break;
+                    return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
                 case ParseEnum.BossIDS.Arkk:
-                    break;
+                    return "https://i.imgur.com/u6vv8cW.png";
                 case ParseEnum.BossIDS.LGolem:
-                    break;
+                    return "https://wiki.guildwars2.com/images/4/47/Mini_Baron_von_Scrufflebutt.png";
                 case ParseEnum.BossIDS.AvgGolem:
-                    break;
+                    return "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
                 case ParseEnum.BossIDS.StdGolem:
-                    break;
+                    return "https://wiki.guildwars2.com/images/8/8f/Mini_Professor_Mew.png";
                 case ParseEnum.BossIDS.MassiveGolem:
-                    break;
+                    return "https://wiki.guildwars2.com/images/3/33/Mini_Snuggles.png";
                 case ParseEnum.BossIDS.MedGolem:
-                    break;
+                    return "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
             }
             switch(ParseEnum.GetTrashIDS(id))
             {
-
+                case Spirit:
+                case Spirit2:
+                case ChargedSoul:
+                    return "https://i.imgur.com/sHmksvO.png";
+                case Saul:
+                    return "https://i.imgur.com/ck2IsoS.png";
+                case GamblerClones:
+                    return "https://i.imgur.com/zMsBWEx.png";
+                case GamblerReal:
+                    return "https://i.imgur.com/J6oMITN.png";
+                case Pride:
+                    return "https://i.imgur.com/ePTXx23.png";
+                case Oil:
+                    return "https://i.imgur.com/R26VgEr.png";
+                case Tear:
+                    return "https://i.imgur.com/N9seps0.png";
+                case Gambler:
+                case Drunkard:
+                case Thief:
+                    return "https://i.imgur.com/vINeVU6.png";
+                case TormentedDead:
+                case Messenger:
+                    return "https://i.imgur.com/1J2BTFg.png";
+                case Enforcer:
+                    return "https://i.imgur.com/elHjamF.png";
+                case Echo:
+                    return "https://i.imgur.com/kcN9ECn.png";
+                case Core:
+                    return "https://i.imgur.com/yI34iqw.png";
+                case Jessica:
+                case Olson:
+                case Engul:
+                case Faerla:
+                case Caulle:
+                case Henley:
+                case Galletta:
+                case Ianim:
+                    return "https://i.imgur.com/qeYT1Bf.png";
+                case InsidiousProjection:
+                    return "https://i.imgur.com/9EdItBS.png";
+                case UnstableLeyRift:
+                    return "https://i.imgur.com/YXM3igs.png";
+                case RadiantPhantasm:
+                    return "https://i.imgur.com/O5VWLyY.png";
+                case CrimsonPhantasm:
+                    return "https://i.imgur.com/zP7Bvb4.png";
+                case Storm:
+                    return "https://i.imgur.com/9XtNPdw.png";
+                case IcePatch:
+                    return "https://i.imgur.com/yxKJ5Yc.png";
+                case Tornado:
+                    return "https://i.imgur.com/e10lZMa.png";
+                case Jade:
+                    return "https://i.imgur.com/ivtzbSP.png";
+                case Zommoros:
+                    return "https://i.imgur.com/BxbsRCI.png";
+                case AncientInvokedHydra:
+                    return "https://imgur.com/YABLiBz";
+                case WyvernMatriarch:
+                    return "https://imgur.com/vjjNSpI";
+                case WyvernPatriarch:
+                    return "https://imgur.com/kLKLSfv";
+                case ApocalypseBringer:
+                    return "https://imgur.com/0LGKCn2";
+                case Kernan:
+                    return "https://i.imgur.com/WABRQya.png";
+                case Knuckles:
+                    return "https://i.imgur.com/m1y8nJE.png";
+                case Karde:
+                    return "https://i.imgur.com/3UGyosm.png";
+                case Rigom:
+                    return "https://i.imgur.com/REcGMBe.png";
+                case Guldhem:
+                    return "https://i.imgur.com/xa7Fefn.png";
+                case Scythe:
+                    return "https://i.imgur.com/INCGLIK.png";
+                case SurgingSoul:
+                    return "https://i.imgur.com/k79t7ZA.png";
+                case Seekers:
+                    return "https://i.imgur.com/FrPoluz.png";
+                case BlueGuardian:
+                    return "https://i.imgur.com/6CefnkP.png";
+                case GreenGuardian:
+                    return "https://i.imgur.com/nauDVYP.png";
+                case RedGuardian:
+                    return "https://i.imgur.com/73Uj4lG.png";
             }
             return "https://i.imgur.com/xCoypjS.png";
         }

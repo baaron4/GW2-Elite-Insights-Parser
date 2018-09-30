@@ -139,7 +139,6 @@ namespace LuckParser.Models
                 case (ushort)WhiteMantleKnight:
                 case (ushort)WhiteMantleBattleMage:
                 case (ushort)ExquisiteConjunction:
-                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
@@ -154,7 +153,6 @@ namespace LuckParser.Models
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.Xera:
-                    replay.Icon = "https://i.imgur.com/lYwJEyV.png";
                     List<CastLog> summon = cls.Where(x => x.SkillId == 34887).ToList();
                     foreach (CastLog c in summon)
                     {

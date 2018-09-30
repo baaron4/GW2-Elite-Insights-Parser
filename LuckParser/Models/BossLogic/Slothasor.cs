@@ -61,7 +61,6 @@ namespace LuckParser.Models
                 case (ushort)Slubling2:
                 case (ushort)Slubling3:
                 case (ushort)Slubling4:
-                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
@@ -76,7 +75,6 @@ namespace LuckParser.Models
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.Slothasor:
-                    replay.Icon = "https://i.imgur.com/h1xH3ER.png";
                     List<CastLog> sleepy = cls.Where(x => x.SkillId == 34515).ToList();
                     foreach (CastLog c in sleepy)
                     {

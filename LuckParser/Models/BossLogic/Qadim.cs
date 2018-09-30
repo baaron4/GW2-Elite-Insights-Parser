@@ -79,10 +79,7 @@ namespace LuckParser.Models
                 case (ushort)PyreGuardian:
                 case (ushort)ReaperofFlesh:
                 case (ushort)IceElemental:
-                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
-                    break;
                 case (ushort)Zommoros:
-                    mob.CombatReplay.Icon = "https://i.imgur.com/BxbsRCI.png";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
@@ -91,25 +88,14 @@ namespace LuckParser.Models
 
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
-            CombatReplay replay = boss.CombatReplay;
-            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (boss.ID)
             {
-                // Zommoros: https://imgur.com/BxbsRCI
                 case (ushort)ParseEnum.BossIDS.Qadim:
-                    replay.Icon = "https://i.imgur.com/IfoHTHT.png";
                     break;
                 case (ushort)AncientInvokedHydra:
-                    replay.Icon = "https://imgur.com/YABLiBz";
-                    break;
                 case (ushort)WyvernMatriarch:
-                    replay.Icon = "https://imgur.com/vjjNSpI";
-                    break;
                 case (ushort)WyvernPatriarch:
-                    replay.Icon = "https://imgur.com/kLKLSfv";
-                    break;
                 case (ushort)ApocalypseBringer:
-                    replay.Icon = "https://imgur.com/0LGKCn2";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");

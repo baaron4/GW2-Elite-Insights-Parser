@@ -48,12 +48,9 @@ namespace LuckParser.Models
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
             // TODO: needs doughnuts (wave) and facing information (sword)
-            CombatReplay replay = boss.CombatReplay;
-            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.Cairn:
-                    replay.Icon = "https://i.imgur.com/gQY37Tf.png";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");

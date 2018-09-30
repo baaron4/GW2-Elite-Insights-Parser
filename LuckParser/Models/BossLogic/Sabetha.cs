@@ -144,21 +144,12 @@ namespace LuckParser.Models
 
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
-            CombatReplay replay = boss.CombatReplay;
-            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.Sabetha:
-                    replay.Icon = "https://i.imgur.com/UqbFp9S.png";
-                    break;
                 case (ushort)Kernan:
-                    replay.Icon = "https://i.imgur.com/WABRQya.png";
-                    break;
                 case (ushort)Knuckles:
-                    replay.Icon = "https://i.imgur.com/m1y8nJE.png";
-                    break;
                 case (ushort)Karde:
-                    replay.Icon = "https://i.imgur.com/3UGyosm.png";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
@@ -182,7 +173,6 @@ namespace LuckParser.Models
                 case (ushort)BanditArsonist:
                 case (ushort)BanditThug:
                 case (ushort)BanditSapper:
-                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");

@@ -62,7 +62,6 @@ namespace LuckParser.Models
                 case (ushort)Artsariiv1:
                 case (ushort)Artsariiv2:
                 case (ushort)Artsariiv3:
-                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
@@ -71,12 +70,9 @@ namespace LuckParser.Models
 
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
-            CombatReplay replay = boss.CombatReplay;
-            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.Artsariiv:
-                    replay.Icon = "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");

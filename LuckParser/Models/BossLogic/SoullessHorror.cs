@@ -64,7 +64,6 @@ namespace LuckParser.Models
             {
                 case (ushort)Scythe:
                     replay.Actors.Add(new CircleActor(true, 0, 80, lifespan, "rgba(255, 0, 0, 0.5)"));
-                    replay.Icon = "https://i.imgur.com/INCGLIK.png";
                     break;
                 case (ushort)TormentedDead:
                     if (replay.Positions.Count == 0)
@@ -72,10 +71,8 @@ namespace LuckParser.Models
                         break;
                     }
                     replay.Actors.Add(new CircleActor(true, 0, 400, new Tuple<int, int>(end, end + 60000), "rgba(255, 0, 0, 0.5)", replay.Positions.Last()));
-                    replay.Icon = "https://i.imgur.com/1J2BTFg.png";
                     break;
                 case (ushort)SurgingSoul:
-                    replay.Icon = "https://i.imgur.com/k79t7ZA.png";
                     List<Point3D> positions = replay.Positions;
                     if (positions.Count < 2)
                     {
@@ -104,7 +101,6 @@ namespace LuckParser.Models
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.SoullessHorror:
-                    replay.Icon = "https://i.imgur.com/jAiRplg.png";
                     List<CastLog> howling = cls.Where(x => x.SkillId == 48662).ToList();
                     foreach (CastLog c in howling)
                     {

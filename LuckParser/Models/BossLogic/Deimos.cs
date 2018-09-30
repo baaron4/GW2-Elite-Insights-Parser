@@ -197,28 +197,17 @@ namespace LuckParser.Models
             switch (mob.ID)
             {
                 case (ushort)Saul:
-                    replay.Icon = "https://i.imgur.com/ck2IsoS.png";
-                    break;
                 case (ushort)GamblerClones:
-                    replay.Icon = "https://i.imgur.com/zMsBWEx.png";
-                    break;
                 case (ushort)GamblerReal:
-                    replay.Icon = "https://i.imgur.com/J6oMITN.png";
-                    break;
                 case (ushort)Greed:
-                    replay.Icon = "https://i.imgur.com/xCoypjS.png";
-                    break;
                 case (ushort)Pride:
-                    replay.Icon = "https://i.imgur.com/ePTXx23.png";
                     break;
                 case (ushort)Oil:
                     int delay = 3000;
                     replay.Actors.Add(new CircleActor(true, start + 150, 200, new Tuple<int, int>(start, start + delay + 1000), "rgba(255,100, 0, 0.5)"));
                     replay.Actors.Add(new CircleActor(true, 0, 200, new Tuple<int, int>(start + delay, end), "rgba(0, 0, 0, 0.5)"));
-                    replay.Icon = "https://i.imgur.com/R26VgEr.png";
                     break;
                 case (ushort)Tear:
-                    replay.Icon = "https://i.imgur.com/N9seps0.png";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
@@ -232,7 +221,6 @@ namespace LuckParser.Models
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.Deimos:
-                    replay.Icon = "https://i.imgur.com/mWfxBaO.png";
                     List<CastLog> mindCrush = cls.Where(x => x.SkillId == 37613).ToList();
                     foreach (CastLog c in mindCrush)
                     {
@@ -270,13 +258,8 @@ namespace LuckParser.Models
                     }
                     break;
                 case (ushort)Gambler:
-                    replay.Icon = "https://i.imgur.com/vINeVU6.png";
-                    break;
                 case (ushort)Thief:
-                    replay.Icon = "https://i.imgur.com/vINeVU6.png";
-                    break;
                 case (ushort)Drunkard:
-                    replay.Icon = "https://i.imgur.com/vINeVU6.png";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
