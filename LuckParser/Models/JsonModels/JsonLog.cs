@@ -19,6 +19,7 @@ namespace LuckParser.Models.DataModels
         {
             public Dictionary<long, string> BuffIcons = null;
             public Dictionary<long, string> SkillIcons = null;
+            public Dictionary<string, string> ActorIcons = null;
             public string FightIcon = null;
             public Dictionary<string, string> GeneralIcons = null;
             public Dictionary<string, MechanicDesc> MechanicData = null;
@@ -36,7 +37,7 @@ namespace LuckParser.Models.DataModels
         public List<JsonBoss> Boss;
         public List<JsonPlayer> Players;
         public List<JsonPhase> Phases;
-        public List<JsonMechanic> Mechanics;
+        public Dictionary<string, List<JsonMechanic>> Mechanics;
         public string[] UploadLinks;
         public Dictionary<long, string> SkillNames;
         public Dictionary<long, string> BuffNames;

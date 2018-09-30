@@ -19,7 +19,6 @@ namespace LuckParser.Models
 
         public long Time;
         public string Player;
-        public string Name;
         public JsonExtraMechanic ED;
 
     }
