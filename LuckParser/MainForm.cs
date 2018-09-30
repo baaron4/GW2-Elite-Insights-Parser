@@ -143,8 +143,7 @@ namespace LuckParser
                 {
                     //Process evtc here
                     bg.UpdateProgress(rowData, "10% - Reading Binary...", 10);
-                    parser.ParseLog(rowData, fInfo.FullName);
-                    ParsedLog log = parser.GetParsedLog();
+                    ParsedLog log = parser.ParseLog(rowData, fInfo.FullName);
                     bg.ThrowIfCanceled(rowData);
                     bg.UpdateProgress(rowData, "35% - Data parsed", 35);
                     bool uploadAuthorized = !Properties.Settings.Default.SkipFailedTrys || (Properties.Settings.Default.SkipFailedTrys && log.LogData.Success);
@@ -215,7 +214,7 @@ namespace LuckParser
                     {
                         if (!log.LogData.Success)
                         {
-                            rowData.Cancel();
+                            throw new CancellationException(rowData, new Exception("Failed logs are skipped"));
                         }
                     }
                     //Creating File

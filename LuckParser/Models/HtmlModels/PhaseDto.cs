@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Runtime.Serialization;
 
 namespace LuckParser.Models.HtmlModels
@@ -12,7 +9,6 @@ namespace LuckParser.Models.HtmlModels
     {
         [DataMember] public string name;
         [DataMember] public long duration;
-        [DataMember] public bool redirect;
         [DataMember] public List<List<Object>> dpsStats;
         [DataMember] public List<List<Object>> dmgStatsBoss;
         [DataMember] public List<List<Object>> dmgStats;
@@ -34,6 +30,11 @@ namespace LuckParser.Models.HtmlModels
         [DataMember] public List<BoonData> defBuffGenGroupStats;
         [DataMember] public List<BoonData> defBuffGenOGroupStats;
         [DataMember] public List<BoonData> defBuffGenSquadStats;
+
+        [DataMember] public List<BoonData> bossCondiStats;
+        [DataMember] public BoonData bossCondiTotals;
+        [DataMember] public BoonData bossBoonTotals;
+        [DataMember] public bool bossHasBoons;
 
         [DataMember] public List<long> deaths;
 

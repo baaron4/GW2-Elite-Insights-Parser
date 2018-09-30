@@ -27,7 +27,7 @@
 {{else}}
 <div class="tab-pane fade{{if #getIndex()==0}} show active{{/if}}{{if noTitle && content.tabs}} sub-tabs{{/if}}" id="{{attr:id?id:~idPrefix+#getIndex()}}">
 	{{if !noTitle}}
-	<h{{:~level+1}} align="center" class="phase-title">{{>name}}</h{{:~level+1}}>
+	<h{{:~level+1}} align="center" class="phase-title">{{>caption||name}}</h{{:~level+1}}>
 	{{/if}}
 	{{:~buildContent(content,~idPrefix+#getIndex(),~level+1)}}
 </div>

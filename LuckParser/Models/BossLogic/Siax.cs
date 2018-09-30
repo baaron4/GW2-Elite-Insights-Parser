@@ -2,12 +2,13 @@
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
     public class Siax : FractalLogic
     {
-        public Siax()
+        public Siax(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -26,7 +27,7 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/d/dc/Siax_the_Corrupted.jpg";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/UzaQHW9.png",
                             Tuple.Create(476, 548),
@@ -35,19 +36,40 @@ namespace LuckParser.Models
                             Tuple.Create(11804, 4414, 12444, 5054));
         }
 
-        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
-            // TODO: needs facing information for hadouken
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
-                    {
-                        ParseEnum.TrashIDS.Hallucination
-                    };
-            return ids;
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.Siax:
+                    replay.Icon = "https://i.imgur.com/5C60cQb.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
         }
 
-        public override string GetReplayIcon()
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
-            return "https://i.imgur.com/5C60cQb.png";
+            return new List<ParseEnum.TrashIDS>
+            {
+                Hallucination
+            };
         }
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+            switch (mob.ID)
+            {
+                case (ushort)Hallucination:
+                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
+        }
+
     }
 }

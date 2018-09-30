@@ -8,8 +8,10 @@ namespace LuckParser.Models.ParseModels
     public class FightData
     {
         // Fields
-        public ulong Agent { get; set; }
-        public ushort InstID { get; set; }
+        private List<PhaseData> _phases = new List<PhaseData>();
+        public readonly List<long> PhaseData = new List<long>();
+        public ushort ID { get; }
+        private readonly bool _requirePhases;
         public readonly BossLogic Logic;
         public long FightStart { get; set; }
         public long FightEnd { get; set; } = long.MaxValue;
@@ -20,10 +22,7 @@ namespace LuckParser.Models.ParseModels
                 return FightEnd - FightStart;
             }
         }
-        public readonly ushort ID;
-        public string Name { get; set; } = "UNKNOWN";
-        public int Health { get; set; } = -1;
-        public List<Point> HealthOverTime { get; set; } = new List<Point>();
+        public string Name => Logic.GetFightName() + (_isCM == 1 ? " CM" : "") ;
         private int _isCM = -1;
         public bool IsCM
         {
@@ -33,67 +32,78 @@ namespace LuckParser.Models.ParseModels
             }
         }
         // Constructors
-        public FightData(ushort id)
+        public FightData(ushort id, bool requirePhases)
         {
             ID = id;
+            _requirePhases = requirePhases;
             switch (ParseEnum.GetBossIDS(id))
             {
                 case ParseEnum.BossIDS.ValeGuardian:
-                    Logic = new ValeGuardian();
+                    Logic = new ValeGuardian(id);
                     break;
                 case ParseEnum.BossIDS.Gorseval:
-                    Logic = new Gorseval();
+                    Logic = new Gorseval(id);
                     break;
                 case ParseEnum.BossIDS.Sabetha:
-                    Logic = new Sabetha();
+                    Logic = new Sabetha(id);
                     break;
                 case ParseEnum.BossIDS.Slothasor:
-                    Logic = new Slothasor();
+                    Logic = new Slothasor(id);
                     break;
                 case ParseEnum.BossIDS.Matthias:
-                    Logic = new Matthias();
+                    Logic = new Matthias(id);
                     break;
                 case ParseEnum.BossIDS.KeepConstruct:
-                    Logic = new KeepConstruct();
+                    Logic = new KeepConstruct(id);
                     break;
                 case ParseEnum.BossIDS.Xera:
-                    Logic = new Xera();
+                    Logic = new Xera(id);
                     break;
                 case ParseEnum.BossIDS.Cairn:
-                    Logic = new Cairn();
+                    Logic = new Cairn(id);
                     break;
                 case ParseEnum.BossIDS.MursaatOverseer:
-                    Logic = new MursaatOverseer();
+                    Logic = new MursaatOverseer(id);
                     break;
                 case ParseEnum.BossIDS.Samarog:
-                    Logic = new Samarog();
+                    Logic = new Samarog(id);
                     break;
                 case ParseEnum.BossIDS.Deimos:
-                    Logic = new Deimos();
+                    Logic = new Deimos(id);
                     break;
                 case ParseEnum.BossIDS.SoullessHorror:
-                    Logic = new SoullessHorror();
+                    Logic = new SoullessHorror(id);
                     break;
                 case ParseEnum.BossIDS.Dhuum:
-                    Logic = new Dhuum();
+                    Logic = new Dhuum(id);
+                    break;
+                case ParseEnum.BossIDS.ConjuredAmalgamate:
+                    Logic = new ConjuredAmalgamate(id);
+                    break;
+                case ParseEnum.BossIDS.Kenut:
+                case ParseEnum.BossIDS.Nikare:
+                    Logic = new TwinLargos(id);
+                    break;
+                case ParseEnum.BossIDS.Qadim:
+                    Logic = new Qadim(id);
                     break;
                 case ParseEnum.BossIDS.MAMA:
-                    Logic = new MAMA();
+                    Logic = new MAMA(id);
                     break;
                 case ParseEnum.BossIDS.Siax:
-                    Logic = new Siax();
+                    Logic = new Siax(id);
                     break;
                 case ParseEnum.BossIDS.Ensolyss:
-                    Logic = new Ensolyss();
+                    Logic = new Ensolyss(id);
                     break;
                 case ParseEnum.BossIDS.Skorvald:
-                    Logic = new Skorvald();
+                    Logic = new Skorvald(id);
                     break;
                 case ParseEnum.BossIDS.Artsariiv:
-                    Logic = new Artsariiv();
+                    Logic = new Artsariiv(id);
                     break;
                 case ParseEnum.BossIDS.Arkk:
-                    Logic = new Arkk();
+                    Logic = new Arkk(id);
                     break;
                 case ParseEnum.BossIDS.MassiveGolem:
                 case ParseEnum.BossIDS.AvgGolem:
@@ -104,38 +114,32 @@ namespace LuckParser.Models.ParseModels
                     break;
                 default:
                     // Unknown
-                    Logic = new BossLogic();
+                    Logic = new BossLogic(id);
                     break;
             }
         }
 
-        public String[] ToStringArray()
+        public List<PhaseData> GetPhases(ParsedLog log)
         {
-            String[] array = new String[7];
-            array[0] = Agent.ToString();
-            array[1] = InstID.ToString();
-            array[2] = FightStart.ToString();
-            array[3] = FightEnd.ToString();
-            array[4] = ID.ToString();
-            array[5] = Name;
-            array[6] = Health.ToString();
-            return array;
+
+            if (_phases.Count == 0)
+            {
+                long fightDuration = log.FightData.FightDuration;
+                _phases = log.FightData.Logic.GetPhases(log, _requirePhases);
+            }
+            return _phases;
         }
         // Setters
-        public void SetCM(List<CombatItem> clist)
+        public void SetCM(ParsedLog log)
         {
             if (_isCM == -1)
             {
-                _isCM = Logic.IsCM(clist, Health);
-                if (_isCM == 1)
-                {
-                    Name += " CM";
-                }
+                _isCM = Logic.IsCM(log);
             }
         }
-        public void SetSuccess(CombatData combatData, LogData logData, List<Player> pList)
+        public void SetSuccess(ParsedLog log)
         {
-            Logic.SetSuccess(combatData, logData, this, pList);
+            Logic.SetSuccess(log);
         }
     }
 }

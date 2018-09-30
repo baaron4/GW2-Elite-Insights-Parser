@@ -67,8 +67,7 @@ namespace LuckParser
                     fInfo.Name.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
                 {
                     //Process evtc here
-                    control.ParseLog(row, fInfo.FullName);
-                    ParsedLog log = control.GetParsedLog();
+                    ParsedLog log = control.ParseLog(row, fInfo.FullName);
                     Console.Write("Log Parsed\n");
                     bool uploadAuthorized = !Properties.Settings.Default.SkipFailedTrys || (Properties.Settings.Default.SkipFailedTrys && log.LogData.Success);
                     if (Properties.Settings.Default.UploadToDPSReports && uploadAuthorized)
@@ -138,7 +137,7 @@ namespace LuckParser
                     {
                         if (!log.LogData.Success)
                         {
-                            row.Cancel();
+                            throw new CancellationException(row, new Exception("Failed logs are skipped"));
                         }
                     }
                     //Creating File

@@ -2,12 +2,13 @@
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
     public class MursaatOverseer : RaidLogic
     {
-        public MursaatOverseer()
+        public MursaatOverseer(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
@@ -25,32 +26,59 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/c/c8/Mini_Mursaat_Overseer.png";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/lT1FW2r.png",
                             Tuple.Create(889, 889),
                             Tuple.Create(1360, 2701, 3911, 5258),
                             Tuple.Create(-27648, -9216, 27648, 12288),
                             Tuple.Create(11774, 4480, 14078, 5376));
-        }      
-
-        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
-        {
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
-                    {
-                        ParseEnum.TrashIDS.Jade
-                    };     
-            return ids;
         }
 
-        public override int IsCM(List<CombatItem> clist, int health)
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
-            return (health > 25e6) ? 1 : 0;
+            return new List<ParseEnum.TrashIDS>
+            {
+                Jade
+            };
         }
 
-        public override string GetReplayIcon()
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
         {
-            return "https://i.imgur.com/5LNiw4Y.png";
+            switch(mob.ID)
+            {
+                case (ushort)Jade:
+                    mob.CombatReplay.Icon = "https://i.imgur.com/ivtzbSP.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
+        }
+
+
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        {
+            // TODO: needs doughnuts (wave) and facing information (sword)
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.MursaatOverseer:
+                    replay.Icon = "https://i.imgur.com/5LNiw4Y.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
+        }
+
+        public override int IsCM(ParsedLog log)
+        {
+            Boss target = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.MursaatOverseer);
+            if (target == null)
+            {
+                throw new InvalidOperationException("Target for CM detection not found");
+            }
+            return (target.Health > 25e6) ? 1 : 0;
         }
     }
 }

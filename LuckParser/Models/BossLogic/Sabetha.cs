@@ -3,12 +3,13 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
     public class Sabetha : RaidLogic
     {
-        public Sabetha()
+        public Sabetha(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -26,7 +27,7 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/5/54/Mini_Sabetha.png";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/FwpMbYf.png",
                             Tuple.Create(2790, 2763),
@@ -35,14 +36,24 @@ namespace LuckParser.Models
                             Tuple.Create(3456, 11012, 4736, 14212));
         }
 
-        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             long start = 0;
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
+            Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Sabetha);
+            if (mainTarget == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
+            phases[0].Targets.Add(mainTarget);
+            if (!requirePhases)
+            {
+                return phases;
+            }
             // Invul check
-            List<CombatItem> invulsSab = GetFilteredList(log, 757, boss.InstID);
+            List<CombatItem> invulsSab = GetFilteredList(log, 757, log.Boss.InstID);
             for (int i = 0; i < invulsSab.Count; i++)
             {
                 CombatItem c = invulsSab[i];
@@ -52,14 +63,14 @@ namespace LuckParser.Models
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsSab.Count - 1)
                     {
-                        castLogs.Add(new CastLog(end, -5, (int)(fightDuration - end), ParseEnum.Activation.None, (int)(fightDuration - end), ParseEnum.Activation.None));
+                        log.Boss.AddCustomCastLog(new CastLog(end, -5, (int)(fightDuration - end), ParseEnum.Activation.None, (int)(fightDuration - end), ParseEnum.Activation.None), log);
                     }
                 }
                 else
                 {
                     start = c.Time - log.FightData.FightStart;
                     phases.Add(new PhaseData(end, start));
-                    castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
+                    log.Boss.AddCustomCastLog(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
                 }
             }
             if (fightDuration - start > 5000 && start >= phases.Last().End)
@@ -74,47 +85,114 @@ namespace LuckParser.Models
                 phase.DrawArea = i % 2 == 1;
                 phase.DrawStart = i % 2 == 1 && i > 1;
                 phase.DrawEnd = i % 2 == 1 && i < 7;
+                phase.Targets.Add(mainTarget);
                 if (i == 2 || i == 4 || i == 6)
                 {
-                    List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
+                    List<ushort> ids = new List<ushort>
                     {
-                       ParseEnum.TrashIDS.Kernan,
-                       ParseEnum.TrashIDS.Knuckles,
-                       ParseEnum.TrashIDS.Karde,
+                       (ushort) Kernan,
+                       (ushort) Knuckles,
+                       (ushort) Karde,
                     };
-                    List<AgentItem> champs = log.AgentData.NPCAgentList.Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
-                    foreach (AgentItem a in champs)
+                    AddTargetsToPhase(phase, ids, log);
+                } else
+                {
+                    phase.Targets.Add(mainTarget);
+                    Boss addTarget;
+                    switch (i)
                     {
-                        long agentStart = a.FirstAware - log.FightData.FightStart;
-                        if (phase.InInterval(agentStart))
-                        {
-                            phase.Redirection.Add(a);
-                        }
+                        case 3:
+                            addTarget = Targets.Find(x => x.ID == (ushort)Kernan);
+                            if (addTarget == null)
+                            {
+                                throw new InvalidOperationException("Kernan not found when we should have been able to");
+                            }
+                            phase.Targets.Add(addTarget);
+                            break;
+                        case 5:
+                            addTarget = Targets.Find(x => x.ID == (ushort)Knuckles);
+                            if (addTarget == null)
+                            {
+                                throw new InvalidOperationException("Knuckles not found when we should have been able to");
+                            }
+                            phase.Targets.Add(addTarget);
+                            break;
+                        case 7:
+                            addTarget = Targets.Find(x => x.ID == (ushort)Karde);
+                            if (addTarget == null)
+                            {
+                                throw new InvalidOperationException("Karde not found when we should have been able to");
+                            }
+                            phase.Targets.Add(addTarget);
+                            break;
                     }
-                    phase.OverrideStart(log.FightData.FightStart);
                 }
             }
             return phases;
         }
 
-        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        protected override List<ushort> GetFightTargetsIDs()
         {
-            // TODO:facing information (flame wall)
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
-                    {
-                        ParseEnum.TrashIDS.Kernan,
-                        ParseEnum.TrashIDS.Knuckles,
-                        ParseEnum.TrashIDS.Karde,
-                        ParseEnum.TrashIDS.BanditSapper,
-                        ParseEnum.TrashIDS.BanditThug,
-                        ParseEnum.TrashIDS.BanditArsonist
-                    };
-            return ids;
+            return new List<ushort>
+            {
+                (ushort)ParseEnum.BossIDS.Sabetha,
+                (ushort)Kernan,
+                (ushort)Knuckles,
+                (ushort)Karde,
+            };
         }
 
-        public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        {
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.Sabetha:
+                    replay.Icon = "https://i.imgur.com/UqbFp9S.png";
+                    break;
+                case (ushort)Kernan:
+                    replay.Icon = "https://i.imgur.com/WABRQya.png";
+                    break;
+                case (ushort)Knuckles:
+                    replay.Icon = "https://i.imgur.com/m1y8nJE.png";
+                    break;
+                case (ushort)Karde:
+                    replay.Icon = "https://i.imgur.com/3UGyosm.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
+        }
+
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        {
+            return new List<ParseEnum.TrashIDS>
+            {
+                BanditSapper,
+                BanditThug,
+                BanditArsonist
+            };
+        }
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+            switch (mob.ID)
+            {
+                case (ushort)BanditArsonist:
+                case (ushort)BanditThug:
+                case (ushort)BanditSapper:
+                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
+        }
+
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
             // timed bombs
+            CombatReplay replay = p.CombatReplay;
             List<CombatItem> timedBombs = log.GetBoonData(31485).Where(x => x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
             foreach (CombatItem c in timedBombs)
             {
@@ -138,11 +216,6 @@ namespace LuckParser.Models
                     replay.Actors.Add(new CircleActor(true, sapperStart + 5000, 180, new Tuple<int, int>(sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)"));
                 }
             }
-        }
-
-        public override string GetReplayIcon()
-        {
-            return "https://i.imgur.com/UqbFp9S.png";
         }
     }
 }

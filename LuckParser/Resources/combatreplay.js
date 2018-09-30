@@ -1,12 +1,13 @@
+/*jshint esversion: 6 */
 const deadIcon = new Image();
 deadIcon.src = "https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png";
 const downIcon = new Image();
 downIcon.src = "https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png";
 let time = 0;
-let inch = 0;
+let inch = '${inch}';
 let speed = 1;
 const times = [];
-let boss = null;
+const bossData = new Map();
 const playerData = new Map();
 const trashMobData = new Map();
 const mechanicActorData = new Set();
@@ -22,7 +23,7 @@ let bgLoaded = false;
 let animation = null;
 // 60 fps by default
 const timeOffset = 16;
-let pollingRate = 100;
+let pollingRate = '${pollingRate}';
 
 // canvas
 ctx.imageSmoothingEnabled = true;
@@ -42,8 +43,10 @@ function animateCanvas(noRequest) {
     });
     trashMobData.forEach(function (value, key, map) {
         value.draw(ctx, time);
+    });	
+    bossData.forEach(function (value, key, map) {
+        value.draw(ctx, time);
     });
-    boss.draw(ctx, time);
     if (selectedPlayer !== null) {
         selectedPlayer.draw(ctx, time);
     }
@@ -312,14 +315,7 @@ class PlayerIconDrawable extends IconDrawable {
 
 }
 
-class BossIconDrawable extends IconDrawable {
-    constructor(imgSrc, pixelSize, pos) {
-        super(-1, -1, imgSrc, pixelSize);
-        this.pos = pos;
-    }
-}
-
-class MobIconDrawable extends IconDrawable {
+class EnemyIconDrawable extends IconDrawable {
     constructor(start, end, imgSrc, pixelSize, pos) {
         super(start, end, imgSrc, pixelSize);
         this.pos = pos;
@@ -350,7 +346,7 @@ class MechanicDrawable extends Drawable {
         } else {
             if (this.master === null) {
                 let masterId = this.pos;
-                this.master = playerData.has(masterId) ? playerData.get(masterId) : trashMobData.has(masterId) ? trashMobData.get(masterId) : boss;
+                this.master = playerData.has(masterId) ? playerData.get(masterId) : trashMobData.has(masterId) ? trashMobData.get(masterId) : bossData.get(masterId);
             }
             return this.master.getPosition(currentTime);
         }
@@ -479,8 +475,7 @@ class PieMechanicDrawable extends MechanicDrawable {
     }
 }
 
-let actors = [];
-
+let actors = ['${actors}'];
 
 function createAllActors() {
     for (let i = 0; i < actors.length; i++) {
@@ -495,10 +490,10 @@ function createAllActors() {
                 }
                 break;
             case "Boss":
-                boss = new BossIconDrawable(actor.Img, 40, actor.Positions);
+				bossData.set(actor.ID, new EnemyIconDrawable(actor.Start, actor.End,actor.Img, 40, actor.Positions));
                 break;
             case "Mob":
-                trashMobData.set(actor.ID, new MobIconDrawable(actor.Start, actor.End, actor.Img, 30, actor.Positions));
+                trashMobData.set(actor.ID, new EnemyIconDrawable(actor.Start, actor.End, actor.Img, 30, actor.Positions));
                 break;
             case "Circle":
                 mechanicActorData.add(new CircleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Radius, actor.Position, actor.MinRadius));
@@ -515,3 +510,5 @@ function createAllActors() {
         }
     }
 }
+createAllActors();
+bgImage.src = "'${mapLink}'";

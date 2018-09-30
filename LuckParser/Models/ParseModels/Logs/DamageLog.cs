@@ -7,13 +7,13 @@ namespace LuckParser.Models.ParseModels
         public long Time { get; }
         public int Damage { get; protected set; }
         public long SkillId { get; }
-        public int IsCondi { get; }
+        public byte IsCondi { get; }
         public ParseEnum.Result Result { get; }
-        public ushort IsNinety { get; }
-        public ushort IsMoving { get; }
-        public ushort IsFlanking { get; }
+        public byte IsNinety { get; }
+        public byte IsMoving { get; }
+        public byte IsFlanking { get; }
         public ParseEnum.Activation Activation { get; }
-        public ushort IsShields { get; }
+        public byte IsShields { get; }
         public ulong SrcAgent { get; }
         public ushort SrcInstId { get; }
         public ulong DstAgent { get; }

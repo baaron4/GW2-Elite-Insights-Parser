@@ -3,12 +3,13 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
     public class ConjuredAmalgamate : RaidLogic
     {
-        public ConjuredAmalgamate()
+        public ConjuredAmalgamate(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -20,7 +21,7 @@ namespace LuckParser.Models
             IconUrl = "";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/Dp3SFq6.png",
                             Tuple.Create(2557, 4706),
@@ -28,26 +29,67 @@ namespace LuckParser.Models
                             Tuple.Create(-21504, -21504, 24576, 24576),
                             Tuple.Create(13440, 14336, 15360, 16256));
         }
-        
-        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+
+        protected override List<ushort> GetFightTargetsIDs()
         {
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>();
-            return ids;
+            return new List<ushort>
+            {
+                (ushort)ParseEnum.BossIDS.ConjuredAmalgamate,
+                (ushort)ParseEnum.BossIDS.CARightArm,
+                (ushort)ParseEnum.BossIDS.CALeftArm
+            };
         }
 
-        public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        {
+            return new List<ParseEnum.TrashIDS>()
+            {
+                ConjuredGreatsword,
+                ConjuredShield
+            };
+        }
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+            switch (mob.ID)
+            {
+                case (ushort)ConjuredGreatsword:
+                case (ushort)ConjuredShield:
+                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
+        }
+
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        {
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.ConjuredAmalgamate:
+                    replay.Icon = "";
+                    break;
+                case (ushort)ParseEnum.BossIDS.CALeftArm:
+                    replay.Icon = "";
+                    break;
+                case (ushort)ParseEnum.BossIDS.CARightArm:
+                    replay.Icon = "";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
+        }
+
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
 
         }
 
-        public override int IsCM(List<CombatItem> clist, int health)
+        public override int IsCM(ParsedLog log)
         {
             return 0; //Possibly check if Conjured Scepters show up in the log?
-        }
-
-        public override string GetReplayIcon()
-        {
-            return "";
         }
     }
 }

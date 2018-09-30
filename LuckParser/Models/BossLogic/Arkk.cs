@@ -3,12 +3,13 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
     public class Arkk : FractalLogic
     {
-        public Arkk()
+        public Arkk(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -48,7 +49,7 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/5/5f/Arkk.jpg";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/BIybWJe.png",
                             Tuple.Create(914, 914),
@@ -56,15 +57,72 @@ namespace LuckParser.Models
                             Tuple.Create(-24576, -24576, 24576, 24576),
                             Tuple.Create(11204, 4414, 13252, 6462));
         }
-        
-        public override string GetReplayIcon()
+
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
-            return "https://i.imgur.com/u6vv8cW.png";
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch(boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.Arkk:
+                    replay.Icon = "https://i.imgur.com/u6vv8cW.png";
+                    break;
+                case (ushort)Archdiviner:
+                    replay.Icon = "https://i.imgur.com/xCoypjS.png";
+                    break;
+                case (ushort)BrazenGladiator:
+                    replay.Icon = "https://i.imgur.com/xCoypjS.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
         }
 
-        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData, List<Player> pList)
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
         {
-            SetSuccessOnCombatExit(combatData,logData,fightData,pList, 3, 3000);
+            switch (mob.ID)
+            {
+                case (ushort)TemporalAnomaly2:
+                case (ushort)BLIGHT:
+                case (ushort)Fanatic:
+                case (ushort)SolarBloom2:
+                case (ushort)PLINK:
+                case (ushort)DOC:
+                case (ushort)CHOP:
+                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
+        }
+
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        {
+            return new List<ParseEnum.TrashIDS>
+            {
+                TemporalAnomaly2,
+                BLIGHT,
+                Fanatic,
+                SolarBloom2,
+                PLINK,
+                DOC,
+                CHOP
+            };
+        }
+
+        protected override List<ushort> GetFightTargetsIDs()
+        {
+            return new List<ushort>
+            {
+                (ushort)ParseEnum.BossIDS.Arkk,
+                (ushort)Archdiviner,
+                (ushort)BrazenGladiator
+            };
+        }
+
+        public override void SetSuccess(ParsedLog log)
+        {
+            SetSuccessOnCombatExit(log, 3, 3000);
         }
     }
 }

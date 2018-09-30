@@ -2,13 +2,15 @@
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
     public class Xera : RaidLogic
     {
-        public Xera()
+        public Xera(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -35,7 +37,7 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/4/4b/Mini_Xera.png";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/BoHwwY6.png",
                             Tuple.Create(7112, 6377),
@@ -44,23 +46,33 @@ namespace LuckParser.Models
                             Tuple.Create(1920, 12160, 2944, 14464));
         }
 
-        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             long start = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            // split happened
-            if (boss.PhaseData.Count == 1)
+            Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Xera);
+            if (mainTarget == null)
             {
-                CombatItem invulXera = log.GetBoonData(762).Find(x => x.DstInstid == boss.InstID);
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
+            phases[0].Targets.Add(mainTarget);
+            if (!requirePhases)
+            {
+                return phases;
+            }
+            // split happened
+            if (log.FightData.PhaseData.Count == 1)
+            {
+                CombatItem invulXera = log.GetBoonData(762).Find(x => x.DstInstid == log.Boss.InstID);
                 if (invulXera == null)
                 {
-                    invulXera = log.GetBoonData(34113).Find(x => x.DstInstid == boss.InstID);
+                    invulXera = log.GetBoonData(34113).Find(x => x.DstInstid == log.Boss.InstID);
                 }
                 long end = invulXera.Time - log.FightData.FightStart;
                 phases.Add(new PhaseData(start, end));
-                start = boss.PhaseData[0] - log.FightData.FightStart;
-                castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
+                start = log.FightData.PhaseData[0] - log.FightData.FightStart;
+                log.Boss.AddCustomCastLog(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
             }
             if (fightDuration - start > 5000 && start >= phases.Last().End)
             {
@@ -72,33 +84,86 @@ namespace LuckParser.Models
                 phases[i].DrawArea = true;
                 phases[i].DrawStart = i > 1;
                 phases[i].DrawEnd = i < phases.Count - 1;
+                phases[i].Targets.Add(mainTarget);
 
             }
             return phases;
         }
 
-        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, Boss boss)
         {
-            // TODO: needs facing information for hadouken
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
+            foreach (AgentItem NPC in agentData.GetAgentByType(AgentItem.AgentType.NPC))
             {
-                ParseEnum.TrashIDS.WhiteMantleSeeker1,
-                ParseEnum.TrashIDS.WhiteMantleSeeker2,
-                ParseEnum.TrashIDS.WhiteMantleKnight,
-                ParseEnum.TrashIDS.WhiteMantleBattleMage,
-                ParseEnum.TrashIDS.ExquisiteConjunction
-            };
-            List<CastLog> summon = cls.Where(x => x.SkillId == 34887).ToList();
-            foreach (CastLog c in summon)
-            {
-                replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
+                if (NPC.ID == 16286)
+                {
+                    int xera2Instid = NPC.InstID;
+                    boss.Health = 24085950;
+                    fightData.PhaseData.Add(NPC.FirstAware);
+                    boss.AgentItem.LastAware = NPC.LastAware;
+                    foreach (CombatItem c in combatData)
+                    {
+                        if (c.SrcInstid == xera2Instid)
+                        {
+                            c.SrcInstid = boss.InstID;
+                            c.SrcAgent = boss.Agent;
+                        }
+                        if (c.DstInstid == xera2Instid)
+                        {
+                            c.DstInstid = boss.InstID;
+                            c.DstAgent = boss.Agent;
+                        }
+                    }
+                    break;
+                }
             }
-            return ids;
         }
 
-        public override string GetReplayIcon()
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
-            return "https://i.imgur.com/lYwJEyV.png";
+            return new List<ParseEnum.TrashIDS>
+            {
+                WhiteMantleSeeker1,
+                WhiteMantleSeeker2,
+                WhiteMantleKnight,
+                WhiteMantleBattleMage,
+                ExquisiteConjunction
+            };
+        }
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+            switch (mob.ID)
+            {
+                case (ushort)WhiteMantleSeeker1:
+                case (ushort)WhiteMantleSeeker2:
+                case (ushort)WhiteMantleKnight:
+                case (ushort)WhiteMantleBattleMage:
+                case (ushort)ExquisiteConjunction:
+                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
+        }
+
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        {
+            // TODO: needs facing information for hadouken
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.Xera:
+                    replay.Icon = "https://i.imgur.com/lYwJEyV.png";
+                    List<CastLog> summon = cls.Where(x => x.SkillId == 34887).ToList();
+                    foreach (CastLog c in summon)
+                    {
+                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
+                    }
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
         }
     }
 }

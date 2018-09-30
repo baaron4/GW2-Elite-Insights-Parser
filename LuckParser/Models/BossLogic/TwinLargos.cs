@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class TwinLargos : RaidLogic
     {
-        public TwinLargos()
+        public TwinLargos(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -27,7 +27,7 @@ namespace LuckParser.Models
             IconUrl = "https://i.imgur.com/6O5MT7v.png";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/RMBeXhd.png",
                             Tuple.Create(5760, 7538),
@@ -35,27 +35,51 @@ namespace LuckParser.Models
                             Tuple.Create(-21504, -21504, 24576, 24576),
                             Tuple.Create(13440, 14336, 15360, 16256));
         }
-        
-        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+
+        protected override List<ushort> GetFightTargetsIDs()
         {
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>();
-            return ids;
+            return new List<ushort>
+            {
+                (ushort)ParseEnum.BossIDS.Kenut,
+                (ushort)ParseEnum.BossIDS.Nikare
+            };
         }
 
-        public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        {
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.Nikare:
+                    replay.Icon = "https://i.imgur.com/6yq45Cc.png";
+                    break;
+                case (ushort)ParseEnum.BossIDS.Kenut:
+                    replay.Icon = "https://i.imgur.com/TLykcrJ.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
+        }
+
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
 
         }
 
-        public override int IsCM(List<CombatItem> clist, int health)
+        public override string GetFightName()
         {
-            return (health > 18e6) ? 1 : 0; //Health of Nikare
+            return "Twin Largos";
         }
 
-        public override string GetReplayIcon()
+        public override int IsCM(ParsedLog log)
         {
-            return "https://i.imgur.com/6yq45Cc.png";
-            // For Kenut: https://i.imgur.com/TLykcrJ.png
+            Boss target = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Nikare);
+            if (target == null)
+            {
+                throw new InvalidOperationException("Target for CM detection not found");
+            }
+            return (target.Health > 18e6) ? 1 : 0; //Health of Nikare
         }
     }
 }

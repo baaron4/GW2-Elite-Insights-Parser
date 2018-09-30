@@ -1,14 +1,4 @@
 ﻿Boons Tab
 	Personal Buff Uptimes
-Boss Tab
-	Boss itself
-		Condi Uptime
-		Boon Uptime
-		Condi Generation
-		DPS Graph
-		Skills
-	Minions
-		% of total DPS
-		Skills
 Player Tab
 	Death Recap

@@ -82,6 +82,7 @@
     <Compile Include="CancellationException.cs" />
     <Compile Include="ConsoleProgram.cs" />
     <Compile Include="Controllers\CSVHelper.cs" />
+    <Compile Include="Controllers\GeneralHelper.cs" />
     <Compile Include="Controllers\JSONBuilder.cs" />
     <Compile Include="Controllers\HTMLBuilderNew.cs" />
     <Compile Include="Controllers\Parser.cs" />
@@ -141,6 +142,7 @@
     <Compile Include="Models\HtmlModels\PlayerChartDataDto.cs" />
     <Compile Include="Models\HtmlModels\EnemyDto.cs" />
     <Compile Include="Models\HtmlModels\MinionDto.cs" />
+    <Compile Include="Models\HtmlModels\BossDto.cs" />
     <Compile Include="Models\HtmlModels\SkillDto.cs" />
     <Compile Include="Models\HtmlModels\MechanicDto.cs" />
     <Compile Include="Models\HtmlModels\BoonDto.cs" />
@@ -157,6 +159,7 @@
     <Compile Include="Models\ParseModels\CombatReplay\Actors\RectangleActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\CombatReplay.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\CombatReplayMap.cs" />
+    <Compile Include="Models\ParseModels\Simulator\BoonSimulatorCleanseItem.cs" />
     <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\HealingLogic.cs" />
     <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\ForceOverrideLogic.cs" />
     <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\OverrideLogic.cs" />
@@ -212,6 +215,11 @@
     <Compile Include="Models\ParseModels\SkillItem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Version.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Version.tt</DependentUpon>
+    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="SettingsForm.cs">
       <SubType>Form</SubType>
@@ -267,6 +275,13 @@
     <None Include="Resources\theme-slate.png" />
     <None Include="Resources\combatreplay.js" />
     <None Include="Resources\tmplDmgTakenTable.html" />
+    <Content Include="Properties\Version.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Version.cs</LastGenOutput>
+    </Content>
+    <None Include="Resources\template-combatreplay.html" />
+    <Content Include="Resources\tmplGroupCombatReplay.html" />
+    <Content Include="Resources\tmplPlayerSelectCombatReplay.html" />
     <Content Include="Resources\TODO.txt" />
     <None Include="Resources\tmplCompTable.html" />
     <None Include="Resources\tmplMechanicTable.html" />
@@ -295,6 +310,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

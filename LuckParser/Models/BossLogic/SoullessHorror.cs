@@ -3,12 +3,13 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
     public class SoullessHorror : RaidLogic
     {
-        public SoullessHorror()
+        public SoullessHorror(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -33,7 +34,7 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/A45pVJy.png",
                             Tuple.Create(3657, 3657),
@@ -42,91 +43,148 @@ namespace LuckParser.Models
                             Tuple.Create(19072, 15484, 20992, 16508));
         }
 
-        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
-            // TODO: facing information (slashes) and doughnuts for outer circle attack
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
-                    {
-                        ParseEnum.TrashIDS.Scythe,
-                        ParseEnum.TrashIDS.TormentedDead,
-                        ParseEnum.TrashIDS.SurgingSoul
-                    };
-            List<CastLog> howling = cls.Where(x => x.SkillId == 48662).ToList();
-            foreach (CastLog c in howling)
+            return new List<ParseEnum.TrashIDS>
             {
-                int start = (int)c.Time;
-                int end = start + c.ActualDuration;
-                replay.Actors.Add(new CircleActor(true, (int)c.Time + c.ExpectedDuration, 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
-                replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
-            }
-            List<CastLog> vortex = cls.Where(x => x.SkillId == 47327).ToList();
-            foreach (CastLog c in vortex)
-            {
-                int start = (int)c.Time;
-                int end = start + 4000;
-                Point3D next = replay.Positions.FirstOrDefault(x => x.Time >= start);
-                Point3D prev = replay.Positions.LastOrDefault(x => x.Time <= start);
-                if (next != null || prev != null)
-                {
-                    replay.Actors.Add(new CircleActor(false, 0, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", prev,next,start));
-                    replay.Actors.Add(new CircleActor(true, end, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", prev, next, start));
-                    replay.Actors.Add(new DoughnutActor(true, 0, 380,760, new Tuple<int, int>(end, end+1000), "rgba(255, 150, 0, 0.5)", prev, next, start));
-                }
-            }
-            List<CastLog> deathBloom = cls.Where(x => x.SkillId == 48500).ToList();
-            foreach (CastLog c in deathBloom)
-            {
-                int start = (int)c.Time;
-                int end = start + c.ActualDuration;
-                Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
-                if (facing == null)
-                {
-                    continue;
-                }
-                for (int i = 0; i < 8; i++)
-                {
-                    replay.Actors.Add(new PieActor(true, 0, 3500, (int)(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + i * 360 / 8), 360 / 12, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)"));
-                }
-
-            }
-            List<CastLog> quad1 = cls.Where(x => x.SkillId == 48363).ToList();
-            List<CastLog> quad2 = cls.Where(x => x.SkillId == 47915).ToList();
-            foreach (CastLog c in quad1)
-            {
-                int start = (int)c.Time;
-                int end = start + c.ActualDuration;
-                Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
-                if (facing == null)
-                {
-                    continue;
-                }
-                for (int i = 0; i < 4; i++)
-                {
-                    replay.Actors.Add(new PieActor(true, 0, 3500, (int)(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + i * 360 / 4), 360 / 12, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)"));
-                }
-
-            }
-            foreach (CastLog c in quad2)
-            {
-                int start = (int)c.Time;
-                int end = start + c.ActualDuration;
-                Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
-                if (facing == null)
-                {
-                    continue;
-                }
-                for (int i = 0; i < 4; i++)
-                {
-                    replay.Actors.Add(new PieActor(true, 0, 3500, (int)(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + 45 + i * 360 / 4), 360 / 12, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)"));
-                }
-
-            }
-            return ids;
+                Scythe,
+                TormentedDead,
+                SurgingSoul
+            };
         }
 
-        public override int IsCM(List<CombatItem> clist, int health)
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
         {
-            List<CombatItem> necrosis = clist.Where(x => x.SkillID == 47414 && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
+            CombatReplay replay = mob.CombatReplay;
+            int start = (int)replay.TimeOffsets.Item1;
+            int end = (int)replay.TimeOffsets.Item2;
+            Tuple<int, int> lifespan = new Tuple<int, int>(start, end);
+            switch (mob.ID)
+            {
+                case (ushort)Scythe:
+                    replay.Actors.Add(new CircleActor(true, 0, 80, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    replay.Icon = "https://i.imgur.com/INCGLIK.png";
+                    break;
+                case (ushort)TormentedDead:
+                    if (replay.Positions.Count == 0)
+                    {
+                        break;
+                    }
+                    replay.Actors.Add(new CircleActor(true, 0, 400, new Tuple<int, int>(end, end + 60000), "rgba(255, 0, 0, 0.5)", replay.Positions.Last()));
+                    replay.Icon = "https://i.imgur.com/1J2BTFg.png";
+                    break;
+                case (ushort)SurgingSoul:
+                    replay.Icon = "https://i.imgur.com/k79t7ZA.png";
+                    List<Point3D> positions = replay.Positions;
+                    if (positions.Count < 2)
+                    {
+                        break;
+                    }
+                    if (positions[1].X < -12000 || positions[1].X > -9250)
+                    {
+                        replay.Actors.Add(new RectangleActor(true, 0, 240, 660, lifespan, "rgba(255,100,0,0.5)"));
+                        break;
+                    }
+                    else if (positions[1].Y < -525 || positions[1].Y > 2275)
+                    {
+                        replay.Actors.Add(new RectangleActor(true, 0, 645, 238, lifespan, "rgba(255,100,0,0.5)"));
+                        break;
+                    }
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
+        }
+
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        {
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.SoullessHorror:
+                    replay.Icon = "https://i.imgur.com/jAiRplg.png";
+                    List<CastLog> howling = cls.Where(x => x.SkillId == 48662).ToList();
+                    foreach (CastLog c in howling)
+                    {
+                        int start = (int)c.Time;
+                        int end = start + c.ActualDuration;
+                        replay.Actors.Add(new CircleActor(true, (int)c.Time + c.ExpectedDuration, 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
+                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
+                    }
+                    List<CastLog> vortex = cls.Where(x => x.SkillId == 47327).ToList();
+                    foreach (CastLog c in vortex)
+                    {
+                        int start = (int)c.Time;
+                        int end = start + 4000;
+                        Point3D next = replay.Positions.FirstOrDefault(x => x.Time >= start);
+                        Point3D prev = replay.Positions.LastOrDefault(x => x.Time <= start);
+                        if (next != null || prev != null)
+                        {
+                            replay.Actors.Add(new CircleActor(false, 0, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", prev, next, start));
+                            replay.Actors.Add(new CircleActor(true, end, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", prev, next, start));
+                            replay.Actors.Add(new DoughnutActor(true, 0, 380, 760, new Tuple<int, int>(end, end + 1000), "rgba(255, 150, 0, 0.5)", prev, next, start));
+                        }
+                    }
+                    List<CastLog> deathBloom = cls.Where(x => x.SkillId == 48500).ToList();
+                    foreach (CastLog c in deathBloom)
+                    {
+                        int start = (int)c.Time;
+                        int end = start + c.ActualDuration;
+                        Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                        if (facing == null)
+                        {
+                            continue;
+                        }
+                        for (int i = 0; i < 8; i++)
+                        {
+                            replay.Actors.Add(new PieActor(true, 0, 3500, (int)(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + i * 360 / 8), 360 / 12, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)"));
+                        }
+
+                    }
+                    List<CastLog> quad1 = cls.Where(x => x.SkillId == 48363).ToList();
+                    List<CastLog> quad2 = cls.Where(x => x.SkillId == 47915).ToList();
+                    foreach (CastLog c in quad1)
+                    {
+                        int start = (int)c.Time;
+                        int end = start + c.ActualDuration;
+                        Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                        if (facing == null)
+                        {
+                            continue;
+                        }
+                        for (int i = 0; i < 4; i++)
+                        {
+                            replay.Actors.Add(new PieActor(true, 0, 3500, (int)(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + i * 360 / 4), 360 / 12, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)"));
+                        }
+
+                    }
+                    foreach (CastLog c in quad2)
+                    {
+                        int start = (int)c.Time;
+                        int end = start + c.ActualDuration;
+                        Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                        if (facing == null)
+                        {
+                            continue;
+                        }
+                        for (int i = 0; i < 4; i++)
+                        {
+                            replay.Actors.Add(new PieActor(true, 0, 3500, (int)(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + 45 + i * 360 / 4), 360 / 12, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)"));
+                        }
+
+                    }
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
+            
+        }
+
+        public override int IsCM(ParsedLog log)
+        {
+            List<CombatItem> necrosis = log.CombatData.GetBoonData(47414).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
             if (necrosis.Count == 0)
             {
                 return 0;
@@ -155,11 +213,6 @@ namespace LuckParser.Models
                 }
             }
             return (minDiff < 11000) ? 1 : 0;
-        }
-
-        public override string GetReplayIcon()
-        {
-            return "https://i.imgur.com/jAiRplg.png";
         }
     }
 }

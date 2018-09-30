@@ -6,86 +6,92 @@ namespace LuckParser.Models.ParseModels
 {
     public class AgentData
     {
-        public List<AgentItem> PlayerAgentList { get; } = new List<AgentItem>();
-        public List<AgentItem> NPCAgentList { get; } = new List<AgentItem>();
-        public List<AgentItem> GadgetAgentList { get; } = new List<AgentItem>();
-        public List<AgentItem> AllAgentsList { get; } = new List<AgentItem>();
+        private readonly List<AgentItem> _allAgentsList;
+        private Dictionary<ulong, AgentItem> _allAgentsByAgent;
+        private Dictionary<ushort, List<AgentItem>> _allAgentsByInstID;
+        private Dictionary<ushort, List<AgentItem>> _allAgentsByID;
+        private Dictionary<AgentItem.AgentType, List<AgentItem>> _allAgentsByType;
 
-        public void AddItem(AgentItem item, string prof)
+        public AgentData(List<AgentItem> allAgentsList)
         {
-            if (prof == "NPC")
-            {
-                NPCAgentList.Add(item);
-            }
-            else if (prof == "GDG")
-            {
-                GadgetAgentList.Add(item);
-            }
-            else
-            {
-                PlayerAgentList.Add(item);
-            }
-            AllAgentsList.Add(item);
+            _allAgentsList = allAgentsList;
+            _allAgentsByAgent = allAgentsList.ToDictionary(a => a.Agent);
+            _allAgentsByID = allAgentsList.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
+            _allAgentsByInstID = allAgentsList.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
+            _allAgentsByType = allAgentsList.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
         }
 
         public AgentItem GetAgent(ulong agentAddress)
         {
             if (agentAddress != 0)
             {
-                AgentItem agent = AllAgentsList.FirstOrDefault(x => x.Agent == agentAddress);
-                if (agent != null)
+                if (_allAgentsByAgent.TryGetValue(agentAddress, out AgentItem a))
                 {
-                    return agent;
+                    return a;
                 }
             }
 
-            return new AgentItem(0, "UNKNOWN", "UNKNOWN", 0, 0, 0, 0, 0, 0);
+            return new AgentItem(0, "UNKNOWN");
         }
 
-        public IEnumerable<AgentItem> GetAgents(ushort id)
+        public List<AgentItem> GetAgentsByID(ushort id)
         {
-            return AllAgentsList.Where(x => x.ID == id);
-        }
-
-        public AgentItem GetAgentWInst(ushort instid)
-        {
-            return AllAgentsList.FirstOrDefault(x => x.InstID == instid);
-        }
-
-        public void Clean()
-        {
-            GadgetAgentList.RemoveAll(x => !(x.InstID != 0 && x.LastAware - x.FirstAware >= 0 && x.FirstAware != 0 && x.LastAware != long.MaxValue));
-            NPCAgentList.RemoveAll(x => !(x.InstID != 0 && x.LastAware - x.FirstAware >= 0 && x.FirstAware != 0 && x.LastAware != long.MaxValue));
-            AllAgentsList.RemoveAll(x => !(x.InstID != 0 && x.LastAware - x.FirstAware >= 0 && x.FirstAware != 0 && x.LastAware != long.MaxValue));
-        }
-
-        public void CleanInstid(ushort instid)
-        {
-            List<AgentItem> instances = NPCAgentList.Where(x => x.InstID == instid).ToList();
-            long firstAware = long.MaxValue;
-            long lastAware = 0;
-            if (instances.Count == 0)
+            if (id != 0)
             {
-                return;
+                if (_allAgentsByID.TryGetValue(id, out var list))
+                {
+                    return list;
+                }
             }
-            AgentItem firstInstance = instances[0];
-            string name = firstInstance.Name;
-            string prof = firstInstance.Prof;
-            ulong agent = firstInstance.Agent;
-            ushort inst = firstInstance.InstID;
-            AgentItem toAdd = new AgentItem(agent, name, prof, firstInstance.Toughness, firstInstance.Healing, firstInstance.Condition, firstInstance.Concentration, firstInstance.HitboxWidth, firstInstance.HitboxHeight);
-            foreach (AgentItem a in instances)
+
+            return new List<AgentItem>();
+        }
+
+        public List<AgentItem> GetAgentByInstID(ushort instid)
+        {
+            if (instid != 0)
             {
-                firstAware = Math.Min(firstAware, a.FirstAware);
-                lastAware = Math.Max(lastAware, a.LastAware);
-                AllAgentsList.Remove(a);
-                NPCAgentList.Remove(a);
+                if (_allAgentsByInstID.TryGetValue(instid, out var list))
+                {
+                    return list;
+                }
             }
-            toAdd.InstID = inst;
-            toAdd.FirstAware = firstAware;
-            toAdd.LastAware = lastAware;
-            AllAgentsList.Add(toAdd);
-            NPCAgentList.Add(toAdd);
+
+            return new List<AgentItem>();
+        }
+
+        public AgentItem GetAgentByInstID(ushort instid, long time)
+        {
+            if (instid != 0)
+            {
+                if (_allAgentsByInstID.TryGetValue(instid, out var list))
+                {
+                    return list.FirstOrDefault(x => x.FirstAware <= time && x.LastAware >= time);
+                }
+            }
+            return new AgentItem(0, "UNKNOWN");
+        }
+        
+        public void OverrideID(ushort ID, ushort instid, AgentItem agentItem)
+        {
+            _allAgentsList.RemoveAll(x => x.ID == ID && x.InstID == instid);
+            _allAgentsList.Add(agentItem);
+            _allAgentsByAgent = _allAgentsList.ToDictionary(a => a.Agent);
+            _allAgentsByID = _allAgentsList.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
+            _allAgentsByInstID = _allAgentsList.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
+            _allAgentsByType = _allAgentsList.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
+        }
+
+        public List<AgentItem> GetAgentByType(AgentItem.AgentType type)
+        {
+            if (_allAgentsByType.TryGetValue(type, out var list))
+            {
+                return list;
+            }
+            else
+            {
+                return new List<AgentItem>();
+            }
         }
     }
 }

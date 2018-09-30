@@ -35,23 +35,25 @@ namespace LuckParser.Controllers
             int[] teamStats = { 0, 0, 0 };
             foreach (Player p in log.PlayerList)
             {
-                Statistics.FinalDPS dps = statistics.Dps[p][0];
-                teamStats[0] += dps.BossDps;
-                teamStats[1] += dps.AllDps;
-                teamStats[2] += dps.AllDps - dps.BossDps;
+                Statistics.FinalDPS dps = statistics.DpsAll[p][0];
+                Statistics.FinalDPS dpsBoss = statistics.DpsBoss[log.Boss][p][0];
+                teamStats[0] += dps.Dps;
+                teamStats[1] += dpsBoss.Dps;
+                teamStats[2] += dps.Dps - dpsBoss.Dps;
             }
 
             foreach (Player p in log.PlayerList)
             {
-                Statistics.FinalDPS dps = statistics.Dps[p][0];
+                Statistics.FinalDPS dpsBoss = statistics.DpsBoss[log.Boss][p][0];
+                Statistics.FinalDPS dpsAll = statistics.DpsAll[p][0];
                 sw.Write(p.Group + delimiter + // group
                         p.Prof + delimiter +  // class
                         p.Character + delimiter + // character
                         p.Account.Substring(1) + delimiter + // account
-                        dps.BossDps + delimiter + // dps
-                        dps.BossPowerDps + delimiter + // physical
-                        dps.BossCondiDps + delimiter + // condi
-                        dps.AllDps + delimiter); // all dps
+                        dpsBoss.Dps + delimiter + // dps
+                        dpsBoss.PowerDps + delimiter + // physical
+                        dpsBoss.CondiDps + delimiter + // condi
+                        dpsAll.Dps + delimiter); // all dps
 
                 Dictionary<long, Statistics.FinalBoonUptime> boons = statistics.SelfBoons[p][0];
                 sw.Write(boons[1187].Uptime + delimiter + // Quickness
@@ -61,7 +63,7 @@ namespace LuckParser.Controllers
                 sw.Write(teamStats[0] + delimiter  // boss dps
                         + teamStats[1] + delimiter // all
                         + durationString + delimiter + // duration
-                          (dps.AllDps - dps.BossDps).ToString() + delimiter // cleave
+                          (dpsAll.Dps - dpsBoss.Dps).ToString() + delimiter // cleave
                         + teamStats[2]); // team cleave
                 sw.Write("\r\n");
             }

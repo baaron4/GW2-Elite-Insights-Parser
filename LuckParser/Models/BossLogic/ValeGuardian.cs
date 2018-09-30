@@ -3,12 +3,13 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
     public class ValeGuardian : RaidLogic
     {
-        public ValeGuardian()
+        public ValeGuardian(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -34,7 +35,7 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/W7MocGz.png",
                             Tuple.Create(889, 889),
@@ -43,14 +44,35 @@ namespace LuckParser.Models
                             Tuple.Create(3456, 11012, 4736, 14212));
         }
 
-        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
+        protected override List<ushort> GetFightTargetsIDs()
+        {
+            return new List<ushort>
+            {
+                (ushort)ParseEnum.BossIDS.ValeGuardian,
+                (ushort)RedGuardian,
+                (ushort)BlueGuardian,
+                (ushort)GreenGuardian
+            };
+        }
+
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             long start = 0;
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
+            Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.ValeGuardian);
+            if (mainTarget == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
+            phases[0].Targets.Add(mainTarget);
+            if (!requirePhases)
+            {
+                return phases;
+            }
             // Invul check
-            List<CombatItem> invulsVG = GetFilteredList(log, 757, boss.InstID);
+            List<CombatItem> invulsVG = GetFilteredList(log, 757, log.Boss.InstID);
             for (int i = 0; i < invulsVG.Count; i++)
             {
                 CombatItem c = invulsVG[i];
@@ -60,14 +82,14 @@ namespace LuckParser.Models
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsVG.Count - 1)
                     {
-                        castLogs.Add(new CastLog(end, -5, (int)(fightDuration - end), ParseEnum.Activation.None, (int)(fightDuration - end), ParseEnum.Activation.None));
+                        log.Boss.AddCustomCastLog(new CastLog(end, -5, (int)(fightDuration - end), ParseEnum.Activation.None, (int)(fightDuration - end), ParseEnum.Activation.None), log);
                     }
                 }
                 else
                 {
                     start = c.Time - log.FightData.FightStart;
                     phases.Add(new PhaseData(end, start));
-                    castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
+                    log.Boss.AddCustomCastLog(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
                 }
             }
             if (fightDuration - start > 5000 && start >= phases.Last().End)
@@ -87,47 +109,73 @@ namespace LuckParser.Models
                 phase.DrawArea = drawAreaVG[i - 1];
                 if (i == 2 || i == 4)
                 {
-                    List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
+                    List<ushort> ids = new List<ushort>
                     {
-                       ParseEnum.TrashIDS.BlueGuardian,
-                       ParseEnum.TrashIDS.GreenGuardian,
-                       ParseEnum.TrashIDS.RedGuardian
+                       (ushort) BlueGuardian,
+                       (ushort) GreenGuardian,
+                       (ushort) RedGuardian
                     };
-                    List<AgentItem> guardians = log.AgentData.NPCAgentList.Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
-                    foreach (AgentItem a in guardians)
-                    {
-                        long agentStart = a.FirstAware - log.FightData.FightStart;
-                        if (phase.InInterval(agentStart))
-                        {
-                            phase.Redirection.Add(a);
-                        }
-                    }
-                    phase.OverrideStart(log.FightData.FightStart);
+                    AddTargetsToPhase(phase, ids, log);
+                } else
+                {
+                    phase.Targets.Add(mainTarget);
                 }
             }
             return phases;
         }
 
-        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.TrashIDS>
             {
-               ParseEnum.TrashIDS.Seekers,
-               ParseEnum.TrashIDS.BlueGuardian,
-               ParseEnum.TrashIDS.GreenGuardian,
-               ParseEnum.TrashIDS.RedGuardian
+               Seekers
             };
-            List<CastLog> magicStorms = cls.Where(x => x.SkillId == 31419).ToList();
-            foreach (CastLog c in magicStorms)
-            {
-                replay.Actors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
-            }
-            return ids;
         }
 
-        public override string GetReplayIcon()
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
         {
-            return "https://i.imgur.com/MIpP5pK.png";
+            switch (mob.ID)
+            {
+                case (ushort)Seekers:
+                    Tuple<int, int> lifespan = new Tuple<int, int>((int)mob.CombatReplay.TimeOffsets.Item1, (int)mob.CombatReplay.TimeOffsets.Item2);
+                    mob.CombatReplay.Icon = "https://i.imgur.com/FrPoluz.png";
+                    mob.CombatReplay.Actors.Add(new CircleActor(false, 0, 180, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }       
+        }
+
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        {
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            Tuple<int, int> lifespan = new Tuple<int, int>((int)boss.CombatReplay.TimeOffsets.Item1, (int)boss.CombatReplay.TimeOffsets.Item2);
+            switch (boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.ValeGuardian:
+                    replay.Icon = "https://i.imgur.com/MIpP5pK.png";
+                    List<CastLog> magicStorms = cls.Where(x => x.SkillId == 31419).ToList();
+                    foreach (CastLog c in magicStorms)
+                    {
+                        replay.Actors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
+                    }
+                    break;
+                case (ushort)BlueGuardian:
+                    replay.Actors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(0, 0, 255, 0.5)"));
+                    replay.Icon = "https://i.imgur.com/6CefnkP.png";
+                    break;
+                case (ushort)GreenGuardian:
+                    replay.Actors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(0, 255, 0, 0.5)"));
+                    replay.Icon = "https://i.imgur.com/nauDVYP.png";
+                    break;
+                case (ushort)RedGuardian:
+                    replay.Actors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    replay.Icon = "https://i.imgur.com/73Uj4lG.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
         }
     }
 }
