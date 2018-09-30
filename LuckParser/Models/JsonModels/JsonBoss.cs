@@ -22,7 +22,6 @@ namespace LuckParser.Models
         public uint HitboxHeight;
         public uint HitboxWidth;
         public Dictionary<long, List<JsonSkill>> Rotation;
-        public int[] TotalPersonalDamage;
         public List<JsonMinions> Minions;
         public Dictionary<long, JsonBossBuffs> Conditions;
         public Dictionary<long, JsonDamageDist>[] TotalDamageDist;

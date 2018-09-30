@@ -206,8 +206,8 @@ namespace LuckParser.Controllers
                 boss.Rotation = BuildRotation(target.GetCastLogs(_log, 0, _log.FightData.FightDuration));
                 boss.FirstAware = (int)(target.FirstAware - _log.FightData.FightStart);
                 boss.LastAware = (int)(target.LastAware - _log.FightData.FightStart);
-                boss.TotalPersonalDamage = BuildPersonalDamage(target, null);
                 boss.Minions = BuildMinions(target);
+                boss.TotalDamageDist = BuildDamageDist(target, null);
                 log.Boss.Add(boss);
                 if (_devMode)
                 {
@@ -233,8 +233,6 @@ namespace LuckParser.Controllers
                     Weapons = player.GetWeaponsArray(_log).Where(w => w != null).ToArray(),
                     Group = player.Group,
                     Profession = player.Prof,
-                    TotalPersonalDamage = BuildPersonalDamage(player, null),
-                    TargetPersonalDamage = BuildTargetPersonalDamage(player),
                     Dps1s = Build1SDPS(player, null),
                     TargetDps1s = Build1SDPS(player),
                     DpsAll = BuildDPS(_statistics.DpsAll[player]),
@@ -248,13 +246,71 @@ namespace LuckParser.Controllers
                     GroupBoons = BuildBuffUptime(_statistics.GroupBoons[player], player),
                     OffGroupBoons = BuildBuffUptime(_statistics.OffGroupBoons[player], player),
                     SquadBoons = BuildBuffUptime(_statistics.SquadBoons[player], player),
-                    Minions = BuildMinions(player)
+                    Minions = BuildMinions(player),
+                    TotalDamageDist = BuildDamageDist(player, null),
+                    TargetDamageDist = BuildDamageDist(player),
+                    TotalDamageTaken = BuildDamageTaken(player)
                 });
                 if (_devMode)
                 {
                     _actorIconData[player.Prof] = GeneralHelper.GetProfIcon(player.Prof);
                 }
             }
+        }
+
+        private Dictionary<long, JsonDamageDist>[][] BuildDamageDist(AbstractMasterPlayer p)
+        {
+            Dictionary<long, JsonDamageDist>[][] res = new Dictionary<long, JsonDamageDist>[_log.FightData.Logic.Targets.Count][];
+            for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
+            {
+                Boss target = _log.FightData.Logic.Targets[i];
+                res[i] = BuildDamageDist(p, target);
+            }
+            return res;
+        }
+
+        private Dictionary<long, JsonDamageDist>[][] BuildDamageDist(Minions p)
+        {
+            Dictionary<long, JsonDamageDist>[][] res = new Dictionary<long, JsonDamageDist>[_log.FightData.Logic.Targets.Count][];
+            for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
+            {
+                Boss target = _log.FightData.Logic.Targets[i];
+                res[i] = BuildDamageDist(p, target);
+            }
+            return res;
+        }
+
+        private Dictionary<long, JsonDamageDist>[] BuildDamageDist(AbstractMasterPlayer p, Boss target)
+        {
+            Dictionary<long, JsonDamageDist>[] res = new Dictionary<long, JsonDamageDist>[_statistics.Phases.Count];
+            for (int i = 0; i < _statistics.Phases.Count; i++)
+            {
+                PhaseData phase = _statistics.Phases[i];
+                res[i] = BuildDamageDist(p.GetJustPlayerDamageLogs(target, _log, phase.Start, phase.End));
+            }
+            return res;
+        }
+
+        private Dictionary<long, JsonDamageDist>[] BuildDamageTaken(Player p)
+        {
+            Dictionary<long, JsonDamageDist>[] res = new Dictionary<long, JsonDamageDist>[_statistics.Phases.Count];
+            for (int i = 0; i < _statistics.Phases.Count; i++)
+            {
+                PhaseData phase = _statistics.Phases[i];
+                res[i] = BuildDamageDist(p.GetDamageTakenLogs(_log, phase.Start, phase.End));
+            }
+            return res;
+        }
+
+        private Dictionary<long, JsonDamageDist>[] BuildDamageDist(Minions p, Boss target)
+        {
+            Dictionary<long, JsonDamageDist>[] res = new Dictionary<long, JsonDamageDist>[_statistics.Phases.Count];
+            for (int i = 0; i < _statistics.Phases.Count; i++)
+            {
+                PhaseData phase = _statistics.Phases[i];
+                res[i] = BuildDamageDist(p.GetDamageLogs(target, _log, phase.Start, phase.End));
+            }
+            return res;
         }
 
         private Dictionary<long, JsonDamageDist> BuildDamageDist(List<DamageLog> dls)
@@ -275,7 +331,7 @@ namespace LuckParser.Controllers
                     {
                         _skillNames[pair.Key] = (skill.ID.ToString() == skill.Name) ? skillList.GetName(skill.ID) : skill.Name;
                     }
-                    if (_devMode && !_skillIcons.TryGetValue(pair.Key, out var aux))
+                    if (_devMode && skill.ApiSkill != null && !_skillIcons.TryGetValue(pair.Key, out var aux))
                     {
                         _skillIcons[pair.Key] = skill.ApiSkill.icon;
                     }
@@ -304,23 +360,10 @@ namespace LuckParser.Controllers
                 JsonMinions min = new JsonMinions()
                 {
                     Name = minions.Character,
-                    Rotation = BuildRotation(minions.GetCastLogs(_log,0,_log.FightData.FightDuration)),
+                    Rotation = BuildRotation(minions.GetCastLogs(_log, 0, _log.FightData.FightDuration)),
+                    TotalDamageDist = BuildDamageDist(minions, null),
+                    TargetDamageDist = BuildDamageDist(minions),
                 };
-                min.TotalDamage = new int[_statistics.Phases.Count];
-                for (int i = 0; i < _statistics.Phases.Count; i++)
-                {
-                    min.TotalDamage[i] = minions.GetDamageLogs(null, _log, _statistics.Phases[i].Start, _statistics.Phases[i].End).Sum(x => x.Damage);
-                }
-                min.TotalTargetDamage = new int[_log.FightData.Logic.Targets.Count][];
-                for (int j = 0; j < _log.FightData.Logic.Targets.Count; j++)
-                {
-                    Boss target = _log.FightData.Logic.Targets[j];
-                    min.TotalTargetDamage[j] = new int[_statistics.Phases.Count];
-                    for (int i = 0; i < _statistics.Phases.Count; i++)
-                    {
-                        min.TotalDamage[i] = minions.GetDamageLogs(target, _log, _statistics.Phases[i].Start, _statistics.Phases[i].End).Sum(x => x.Damage);
-                    }
-                }
                 if (_devMode)
                 {
                     min.ED = new JsonMinions.JsonExtraMinions()
@@ -350,27 +393,6 @@ namespace LuckParser.Controllers
             for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
             {
                 res[i] = Build1SDPS(player, _log.FightData.Logic.Targets[i]);
-            }
-            return res;
-        }
-
-        private int[] BuildPersonalDamage(AbstractMasterPlayer player, Boss target)
-        {
-            int[] res = new int[_statistics.Phases.Count];
-            for(int i = 0; i < _statistics.Phases.Count; i++)
-            {
-                PhaseData phase = _statistics.Phases[i];
-                res[i] = player.GetJustPlayerDamageLogs(target, _log, phase.Start, phase.End).Sum(x => x.Damage);
-            }
-            return res;
-        }
-
-        private int[][] BuildTargetPersonalDamage(AbstractMasterPlayer player)
-        {
-            int[][] res = new int[_log.FightData.Logic.Targets.Count][];
-            for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
-            {
-                res[i] = BuildPersonalDamage(player, _log.FightData.Logic.Targets[i]);
             }
             return res;
         }
