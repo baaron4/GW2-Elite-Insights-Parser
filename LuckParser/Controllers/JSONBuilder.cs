@@ -142,7 +142,8 @@ namespace LuckParser.Controllers
                                 PlotlySymbol = ml.PlotlySymbol,
                                 PlotlyColor = ml.PlotlyColor,
                                 Description = ml.Description,
-                                PlotlyName = ml.PlotlyName
+                                PlotlyName = ml.PlotlyName,
+                                Enemy = ml.Enemy ? 1 : 0
                             };
                         }
                         mech.ED = new JsonMechanic.JsonExtraMechanic()
@@ -150,8 +151,7 @@ namespace LuckParser.Controllers
                             SN = ml.ShortName,
                             S = ml.Skill
                         };
-                        mech.ED.E = ml.Enemy ? 1 : 0;
-                        if (mech.ED.E == 1)
+                        if (ml.Enemy)
                         {
                             if (ml.Player.GetType() == typeof(Boss))
                             {

@@ -11,6 +11,7 @@ namespace LuckParser.Models.DataModels
         {
             public string PlotlySymbol;
             public string PlotlyColor;
+            public int Enemy;
             public string Description;
             public string PlotlyName;
         }
