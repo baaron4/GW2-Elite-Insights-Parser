@@ -28,7 +28,7 @@ namespace LuckParser.Controllers
         //
         private readonly Dictionary<long, string> _skillNames = new Dictionary<long, string>();
         private readonly Dictionary<long, string> _buffNames = new Dictionary<long, string>();
-        private readonly Dictionary<long, string> _buffIcons = new Dictionary<long, string>();
+        private readonly Dictionary<long, BuffDesc> _buffData = new Dictionary<long, BuffDesc>();
         private readonly Dictionary<long, string> _skillIcons = new Dictionary<long, string>();
         private readonly Dictionary<string, MechanicDesc> _mechanicData = new Dictionary<string, MechanicDesc>();
         private readonly Dictionary<string, string> _actorIconData = new Dictionary<string, string>();
@@ -107,7 +107,7 @@ namespace LuckParser.Controllers
             {
                 log.ED = new JsonExtraLog()
                 {
-                    BuffIcons = _buffIcons,
+                    BuffData = _buffData,
                     SkillIcons = _skillIcons,
                     FightIcon = _log.FightData.Logic.IconUrl,
                     MechanicData = _mechanicData,
@@ -639,7 +639,12 @@ namespace LuckParser.Controllers
                     _buffNames[boon.Key] = Boon.BoonsByIds[boon.Key].Name;
                     if (_devMode)
                     {
-                        _buffIcons[boon.Key] = Boon.BoonsByIds[boon.Key].Link;
+                        Boon buff = Boon.BoonsByIds[boon.Key];
+                        _buffData[boon.Key] = new BuffDesc() {
+                            Icon = buff.Link,
+                            Stacking = buff.Type == Boon.BoonType.Intensity ? 1 : 0,
+                            Table = buff.Nature == Boon.BoonNature.Boon ? 0 : (buff.Nature == Boon.BoonNature.Condition ? 1 : (buff.Nature == Boon.BoonNature.OffensiveBuffTable ? 2 : (buff.Nature == Boon.BoonNature.DefensiveBuffTable ? 3 : -1)))
+                        };
                     }
                     if (boonsFound.Contains(boon.Key))
                     {
@@ -730,8 +735,14 @@ namespace LuckParser.Controllers
                     _buffNames[boon.Key] = Boon.BoonsByIds[boon.Key].Name;
                     if (_devMode)
                     {
-                        _buffIcons[boon.Key] = Boon.BoonsByIds[boon.Key].Link;
-                        if (Boon.BoonsByIds[boon.Key].Nature == Boon.BoonNature.GraphOnlyBuff && Boon.BoonsByIds[boon.Key].Source == Boon.ProfToEnum(player.Prof))
+                        Boon buff = Boon.BoonsByIds[boon.Key];
+                        _buffData[boon.Key] = new BuffDesc()
+                        {
+                            Icon = buff.Link,
+                            Stacking = buff.Type == Boon.BoonType.Intensity ? 1 : 0,
+                            Table = buff.Nature == Boon.BoonNature.Boon ? 0 : (buff.Nature == Boon.BoonNature.Condition ? 1 : (buff.Nature == Boon.BoonNature.OffensiveBuffTable ? 2 : (buff.Nature == Boon.BoonNature.DefensiveBuffTable ? 3 : -1)))
+                        };
+                        if (buff.Nature == Boon.BoonNature.GraphOnlyBuff && buff.Source == Boon.ProfToEnum(player.Prof))
                         {
                             if (player.GetBoonDistribution(_log, 0).GetUptime(boon.Key) > 0)
                             {

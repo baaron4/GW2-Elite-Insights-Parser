@@ -16,9 +16,16 @@ namespace LuckParser.Models.DataModels
             public string PlotlyName;
         }
 
+        public class BuffDesc
+        {
+            public string Icon;
+            public int Stacking;
+            public int Table;
+        }
+
         public class JsonExtraLog
         {
-            public Dictionary<long, string> BuffIcons = null;
+            public Dictionary<long, BuffDesc> BuffData = null;
             public Dictionary<long, string> SkillIcons = null;
             public Dictionary<string, string> ActorIcons = null;
             public string FightIcon = null;
