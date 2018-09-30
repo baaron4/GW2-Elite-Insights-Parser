@@ -740,16 +740,19 @@ namespace LuckParser.Controllers
                         _buffIcons[boon.Key] = Boon.BoonsByIds[boon.Key].Link;
                         if (Boon.BoonsByIds[boon.Key].Nature == Boon.BoonNature.GraphOnlyBuff && Boon.BoonsByIds[boon.Key].Source == Boon.ProfToEnum(player.Prof))
                         {
-                            if (_personalBuffs.TryGetValue(player.Prof, out var list))
+                            if (player.GetBoonDistribution(_log, 0).GetUptime(boon.Key) > 0)
                             {
-                                list.Add(boon.Key);
-                            }
-                            else
-                            {
-                                _personalBuffs[player.Prof] = new List<long>()
+                                if (_personalBuffs.TryGetValue(player.Prof, out var list) && !list.Contains(boon.Key))
+                                {
+                                    list.Add(boon.Key);
+                                }
+                                else
+                                {
+                                    _personalBuffs[player.Prof] = new List<long>()
                                 {
                                     boon.Key
                                 };
+                                }
                             }
                         }
                     }
