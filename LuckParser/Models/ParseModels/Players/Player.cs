@@ -269,7 +269,7 @@ namespace LuckParser.Models.ParseModels
 
         private void SetCombatReplayIcon(ParsedLog log)
         {
-            CombatReplay.Icon = HTMLHelper.GetLink(Prof);
+            CombatReplay.Icon = GeneralHelper.GetProfIcon(Prof);
         }
 
         //
