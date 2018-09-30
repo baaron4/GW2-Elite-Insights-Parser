@@ -716,134 +716,42 @@ namespace LuckParser.Controllers
 
         public static void WriteCombatReplayInterface(StreamWriter sw, Tuple<int,int> canvasSize, ParsedLog log)
         {
-            sw.Write("<div class=\"d-flex justify-content-around align-items-center justify-content-center\">");
+            string replayHTML = Properties.Resources.template_replay_html;
+            replayHTML = replayHTML.Replace("${canvasX}", canvasSize.Item1.ToString());
+            replayHTML = replayHTML.Replace("${canvasY}", canvasSize.Item2.ToString());
+            replayHTML = replayHTML.Replace("${maxTime}", log.PlayerList.First().CombatReplay.Times.Last().ToString());
+            List<int> groups = log.PlayerList.Select(x => x.Group).Distinct().ToList();
+            string groupsString = "";
+            foreach (int group in groups)
             {
-                sw.Write("<div class=\"d-flex flex-column flex-wrap\">");
+                string replayGroupHTML = Properties.Resources.tmplGroupCombatReplay;
+                replayGroupHTML = replayGroupHTML.Replace("${group}", group.ToString());;
+                string playerString = "";
+                foreach (Player p in log.PlayerList.Where(x => x.Group == group))
                 {
-                    sw.Write("<canvas width=\"" + canvasSize.Item1 + "px\" height=\"" + canvasSize.Item2 + "px\" id=\"replayCanvas\" class=\"replay\">");
-                    sw.Write("</canvas>");
-                    sw.Write("<div class=\"d-flex justify-content-center slidecontainer\">");
-                    {
-                        sw.Write("<input style=\"min-width: 400px;\" oninput=\"updateTime(this.value);\" type=\"range\" min=\"0\" max=\"" + log.PlayerList.First().CombatReplay.Times.Last() + "\" value=\"0\" class=\"slider\" id=\"timeRange\">");
-                        sw.Write("<input style =\"width: 70px; text-align: right; \"class=\"ml-3 mr-1\" type=\"text\" id=\"timeRangeDisplay\" value=\"0\" oninput=\"updateInputTime(this.value);\">");
-                    }
-                    sw.Write("</div>");
-                    sw.Write("<div class=\"d-flex justify-content-center\">");
-                    {
-                        sw.Write("<div onclick=\"startAnimate();\" type=\"button\" class=\"btn btn-dark\">Animate</div>");
-                        sw.Write("<div onclick=\"stopAnimate();\" type=\"button\" class=\"btn btn-dark\">Pause</div>");
-                        sw.Write("<div onclick=\"restartAnimate();\" type=\"button\" class=\"btn btn-dark\">Restart</div>");
-                    }
-                    sw.Write("</div>");
-                    sw.Write("<div class=\"d-flex justify-content-center btn-group btn-group-toggle\" data-toggle=\"buttons\">");
-                    {
-                        sw.Write("<label onclick=\"eighthSpeed()\" class=\"btn btn-dark\">" +
-                                "<input type=\"radio\" autocomplete=\"off\">0.125x" +
-                            "</label>");
-                        sw.Write("<label onclick=\"fourthSpeed()\" class=\"btn btn-dark\">" +
-                                "<input type=\"radio\" autocomplete=\"off\">0.25x" +
-                            "</label>");
-                        sw.Write("<label onclick=\"halfSpeed()\" class=\"btn btn-dark\">" +
-                                "<input type=\"radio\" autocomplete=\"off\">0.5x" +
-                            "</label>");
-                        sw.Write("<label onclick=\"normalSpeed()\" class=\"btn btn-dark active\">" +
-                                "<input type=\"radio\" autocomplete=\"off\" checked>1x" +
-                            "</label>");
-                        sw.Write("<label onclick=\"twoSpeed()\" class=\"btn btn-dark\">" +
-                                 "<input  type=\"radio\" autocomplete=\"off\">2x" +
-                             "</label>");
-                        sw.Write("<label onclick=\"fourSpeed()\" class=\"btn btn-dark\">" +
-                                 "<input  type=\"radio\" autocomplete=\"off\">4x" +
-                             "</label>");
-                        sw.Write("<label onclick=\"eightSpeed()\" class=\"btn btn-dark\">" +
-                                 "<input  type=\"radio\" autocomplete=\"off\">8x" +
-                             "</label>");
-                        sw.Write("<label onclick=\"sixteenSpeed()\" class=\"btn btn-dark\">" +
-                                 "<input  type=\"radio\" autocomplete=\"off\">16x" +
-                             "</label>");
-                    }
-                    sw.Write("</div>");
+                    string replayPlayerHTML = Properties.Resources.tmplPlayerSelectCombatReplay;
+                    replayPlayerHTML = replayPlayerHTML.Replace("${instid}", p.InstID.ToString());
+                    replayPlayerHTML = replayPlayerHTML.Replace("${playerName}", p.Character.Substring(0, Math.Min(10, p.Character.Length)));
+                    replayPlayerHTML = replayPlayerHTML.Replace("${imageURL}", GeneralHelper.GetProfIcon(p.Prof));
+                    replayPlayerHTML = replayPlayerHTML.Replace("${prof}", p.Prof);
+                    playerString += replayPlayerHTML;
                 }
-                sw.Write("</div>");
-
-                sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center\">");
-                {
-                    sw.Write("<h3>Range Selectors</h3>");
-                    sw.Write("<div class=\"d-flex flex-column flex-wrap justify-content-center align-items-center mb-5\" data-toggle=\"buttons\">");
-                    {
-                        sw.Write("<div style=\"width:200px;\" class=\"d-flex flex-row flex-wrap justify-content-center align-items-center btn-group btn-group-toggle\" data-toggle=\"buttons\">");
-                        {
-                            sw.Write("<label style=\"width:60px;\"  onclick=\"toggleRange(180);\" class=\"btn btn-dark\">" +
-                                "<input style=\"display: none;\" type=\"checkbox\" autocomplete=\"off\">" +
-                                "180" +
-                                "</label >");
-                            sw.Write("<label style=\"width:60px;\" onclick=\"toggleRange(240);\" class=\"btn btn-dark\">" +
-                                "<input style=\"display: none;\" type=\"checkbox\" autocomplete=\"off\">" +
-                                "240" +
-                                "</label >");
-                            sw.Write("<label style=\"width:60px;\" onclick=\"toggleRange(300);\" class=\"btn btn-dark\">" +
-                                "<input style=\"display: none;\" type=\"checkbox\" autocomplete=\"off\">" +
-                                "300" +
-                                "</label >");
-                        }
-                        sw.Write("</div>");
-                        sw.Write("<div style=\"width:200px;\" class=\"d-flex flex-row flex-wrap justify-content-center align-items-center btn-group btn-group-toggle\" data-toggle=\"buttons\">");
-                        {
-                            sw.Write("<label style=\"width:60px;\" onclick=\"toggleRange(600);\" class=\"btn btn-dark\">" +
-                            "<input style=\"display: none;\" type=\"checkbox\" autocomplete=\"off\">" +
-                            "600" +
-                            "</label >");
-                            sw.Write("<label style=\"width:60px;\" onclick=\"toggleRange(900);\" class=\"btn btn-dark\">" +
-                                "<input style=\"display: none;\" type=\"checkbox\" autocomplete=\"off\">" +
-                                "900" +
-                                "</label >");
-                            sw.Write("<label style=\"width:60px;\" onclick=\"toggleRange(1200);\" class=\"btn btn-dark\">" +
-                                "<input style=\"display: none;\" type=\"checkbox\" autocomplete=\"off\">" +
-                                "1200" +
-                                "</label >");
-                        }
-                        sw.Write("</div>");
-                    }
-                    sw.Write("</div>");
-                    sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center btn-group btn-group-toggle mb-5\" data-toggle=\"buttons\">");
-                    {
-                        List<int> groups = log.PlayerList.Select(x => x.Group).Distinct().ToList();
-                        foreach (int group in groups)
-                        {
-                            sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center mt-2\">");
-                            {
-                                sw.Write("<h3>Group " + group + "</h3>");
-                                foreach (Player p in log.PlayerList.Where(x => x.Group == group))
-                                {
-                                    sw.Write("<label id=\"id" + p.InstID + "\" style=\"width: 150px;\" onclick=\"selectActor(" + p.InstID + ")\"  class=\"btn btn-dark\">" +
-                                        "<input class=\"invisible\" type=\"radio\" autocomplete=\"off\">" +
-                                        p.Character.Substring(0, Math.Min(10, p.Character.Length))
-                                        + " <img src=\"" + GeneralHelper.GetProfIcon(p.Prof)
-                                            + "\" alt=\"" + p.Prof
-                                            + "\" height=\"18\" width=\"18\" >" +
-                                        "</label >");
-                                }
-                            }
-                            sw.Write("</div>");
-                        }
-                    }
-                    sw.Write("</div>");
-                }
-                sw.Write("</div>");
-
+                replayGroupHTML = replayGroupHTML.Replace("<!--${players}-->", playerString);
+                groupsString += replayGroupHTML;
             }
-            sw.Write("</div>");
+            replayHTML = replayHTML.Replace("<!--${groups}-->", groupsString);
+            sw.Write(replayHTML);
         }
 
         public static void WriteCombatReplayScript(StreamWriter sw, ParsedLog log, Tuple<int,int> canvasSize, CombatReplayMap map, int pollingRate)
         {
-            //TODO add this either here or in the page header, or use a real js file and a <script src=...> tag :)
             sw.WriteLine("<script>");
             {
-                sw.Write(Properties.Resources.combatreplay_js);
-                sw.Write("inch = " + map.GetInch() + ";");
-                sw.Write("pollingRate = " + pollingRate + ";");
-                sw.Write("actors = [");
+                string replayScript = Properties.Resources.combatreplay_js;
+                replayScript = replayScript.Replace("'${inch}'", map.GetInch().ToString());
+                replayScript = replayScript.Replace("'${pollingRate}'", pollingRate.ToString());
+                replayScript = replayScript.Replace("'${mapLink}'", map.Link);
+                string actors = "";
                 CombatReplay replay;
                 int count = 0;
                 foreach (Player p in log.PlayerList)
@@ -854,15 +762,15 @@ namespace LuckParser.Controllers
                     }
                     if (count > 0)
                     {
-                        sw.Write(",");
+                        actors += ",";
                     }
                     count++;
-                    sw.Write(p.GetCombatReplayJSON(map));
+                    actors += p.GetCombatReplayJSON(map);
                     replay = p.CombatReplay;
                     foreach (Actor a in replay.Actors)
                     {
-                        sw.Write(",");
-                        sw.Write(a.GetCombatReplayJSON(map,p));
+                        actors += ",";
+                        actors += a.GetCombatReplayJSON(map, p);
                     }
                 }
                 foreach (Mob m in log.FightData.Logic.TrashMobs)
@@ -871,13 +779,13 @@ namespace LuckParser.Controllers
                     {
                         continue;
                     }
-                    sw.Write(",");
-                    sw.Write(m.GetCombatReplayJSON(map));
+                    actors += ",";
+                    actors += m.GetCombatReplayJSON(map);
                     replay = m.CombatReplay;
                     foreach (Actor a in replay.Actors)
                     {
-                        sw.Write(",");
-                        sw.Write(a.GetCombatReplayJSON(map,m));
+                        actors += ",";
+                        actors += a.GetCombatReplayJSON(map, m);
                     }
                 }
                 foreach (Boss target in log.FightData.Logic.Targets)
@@ -886,18 +794,17 @@ namespace LuckParser.Controllers
                     {
                         continue;
                     }
-                    sw.Write(",");
-                    sw.Write(target.GetCombatReplayJSON(map));
+                    actors += ",";
+                    actors += target.GetCombatReplayJSON(map);
                     replay = target.CombatReplay;
                     foreach (Actor a in replay.Actors)
                     {
-                        sw.Write(",");
-                        sw.Write(a.GetCombatReplayJSON(map, target));
+                        actors += ",";
+                        actors += a.GetCombatReplayJSON(map, target);
                     }
                 }
-                sw.Write("];");
-                sw.Write("createAllActors();");
-                sw.Write("bgImage.src = '" + map.Link + "';");
+                replayScript = replayScript.Replace("'${actors}'", actors);
+                sw.Write(replayScript);
             }
             sw.WriteLine("</script>");
         }

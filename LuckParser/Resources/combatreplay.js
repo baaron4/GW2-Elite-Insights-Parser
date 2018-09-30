@@ -1,9 +1,10 @@
+/*jshint esversion: 6 */
 const deadIcon = new Image();
 deadIcon.src = "https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png";
 const downIcon = new Image();
 downIcon.src = "https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png";
 let time = 0;
-let inch = 0;
+let inch = '${inch}';
 let speed = 1;
 const times = [];
 const bossData = new Map();
@@ -22,7 +23,7 @@ let bgLoaded = false;
 let animation = null;
 // 60 fps by default
 const timeOffset = 16;
-let pollingRate = 100;
+let pollingRate = '${pollingRate}';
 
 // canvas
 ctx.imageSmoothingEnabled = true;
@@ -474,8 +475,7 @@ class PieMechanicDrawable extends MechanicDrawable {
     }
 }
 
-let actors = [];
-
+let actors = ['${actors}'];
 
 function createAllActors() {
     for (let i = 0; i < actors.length; i++) {
@@ -510,3 +510,5 @@ function createAllActors() {
         }
     }
 }
+createAllActors();
+bgImage.src = "'${mapLink}'";
