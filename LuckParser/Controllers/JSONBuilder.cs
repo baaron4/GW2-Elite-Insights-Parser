@@ -251,13 +251,103 @@ namespace LuckParser.Controllers
                     Minions = BuildMinions(player),
                     TotalDamageDist = BuildDamageDist(player, null),
                     TargetDamageDist = BuildDamageDist(player),
-                    TotalDamageTaken = BuildDamageTaken(player)
+                    TotalDamageTaken = BuildDamageTaken(player),
+                    DeathRecap = BuilDeathRecap(player)
                 });
                 if (_devMode)
                 {
                     _actorIconData[player.Prof] = GeneralHelper.GetProfIcon(player.Prof);
                 }
             }
+        }
+
+        private List<JsonDeathRecap> BuilDeathRecap(Player player)
+        {
+            List<JsonDeathRecap> res = new List<JsonDeathRecap>();
+            long start = _log.FightData.FightStart;
+            long end = _log.FightData.FightEnd;
+            List<CombatItem> dead = _log.CombatData.GetStates(player.InstID, ParseEnum.StateChange.ChangeDead, start, end);
+            List<CombatItem> down = _log.CombatData.GetStates(player.InstID, ParseEnum.StateChange.ChangeDown, start, end);
+            long lastTime = start;
+            List<DamageLog> damageLogs = player.GetDamageTakenLogs(_log, 0, _log.FightData.FightDuration);
+            foreach (CombatItem c in dead)
+            {
+                JsonDeathRecap recap = new JsonDeathRecap()
+                {
+                    Time = (int)(c.Time - start)
+                };
+                CombatItem downed = down.LastOrDefault(x => x.Time <= c.Time && x.Time >= lastTime);
+                if (downed != null)
+                {
+                    List<DamageLog> damageToDown = damageLogs.Where(x => x.Time < downed.Time - start && x.Damage > 0 && x.Time > lastTime - start).ToList();
+                    recap.ToDown = damageToDown.Count > 0 ? new List<JsonDeathRecap.DamageItem>() : null;
+                    int damage = 0;
+                    for (int i = damageToDown.Count - 1; i > 0; i--)
+                    {
+                        DamageLog dl = damageToDown[i];
+                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);
+                        JsonDeathRecap.DamageItem item = new JsonDeathRecap.DamageItem()
+                        {
+                            Time = (int)dl.Time,
+                            Condi = dl.IsCondi,
+                            Skill = dl.SkillId,
+                            Damage = dl.Damage,
+                            Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
+                        };
+                        damage += dl.Damage;
+                        recap.ToDown.Add(item);
+                        if (damage > 20000)
+                        {
+                            break;
+                        }
+                    }
+                    List<DamageLog> damageToKill = damageLogs.Where(x => x.Time > downed.Time - start && x.Time < c.Time - start && x.Damage > 0 && x.Time > lastTime - start).ToList();
+                    recap.ToKill = damageToKill.Count > 0 ? new List<JsonDeathRecap.DamageItem>() : null;
+                    for (int i = damageToKill.Count - 1; i > 0; i--)
+                    {
+                        DamageLog dl = damageToKill[i];
+                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);
+                        JsonDeathRecap.DamageItem item = new JsonDeathRecap.DamageItem()
+                        {
+                            Time = (int)dl.Time,
+                            Condi = dl.IsCondi,
+                            Skill = dl.SkillId,
+                            Damage = dl.Damage,
+                            Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
+                        };
+                        recap.ToKill.Add(item);
+                    }
+                }
+                else
+                {
+                    recap.ToDown = null;
+                    List<DamageLog> damageToKill = damageLogs.Where(x => x.Time < c.Time - start && x.Damage > 0 && x.Time > lastTime - start).ToList();
+                    recap.ToKill = damageToKill.Count >0 ? new List<JsonDeathRecap.DamageItem>() : null;
+                    int damage = 0;
+                    for (int i = damageToKill.Count - 1; i > 0; i--)
+                    {
+                        DamageLog dl = damageToKill[i];
+                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);
+                        JsonDeathRecap.DamageItem item = new JsonDeathRecap.DamageItem()
+                        {
+                            Time = (int)dl.Time,
+                            Condi = dl.IsCondi,
+                            Skill = dl.SkillId,
+                            Damage = dl.Damage,
+                            Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
+                        };
+                        damage += dl.Damage;
+                        recap.ToKill.Add(item);
+                        if (damage > 20000)
+                        {
+                            break;
+                        }
+                    }
+                }
+                lastTime = c.Time;
+                res.Add(recap);
+            }
+            return res.Count > 0 ? res : null;
         }
 
         private Dictionary<long, JsonDamageDist>[][] BuildDamageDist(AbstractMasterPlayer p)

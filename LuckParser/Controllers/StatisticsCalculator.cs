@@ -810,7 +810,13 @@ namespace LuckParser.Controllers
             {
                 boss.BoonToTrack.AddRange(_statistics.PresentBoons);
                 boss.BoonToTrack.AddRange(_statistics.PresentConditions);
-                boss.BoonToTrack.AddRange(Boon.GetBossBoonList());
+                foreach (Boon boon in Boon.BoonsBySource[Boon.BoonSource.Boss])
+                {
+                    if (_log.CombatData.BoonData.ContainsKey(boon.ID))
+                    {
+                        boss.BoonToTrack.Add(boon);
+                    }
+                }
             }
         }
     }
