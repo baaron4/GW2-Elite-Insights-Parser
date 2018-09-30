@@ -31,6 +31,7 @@ namespace LuckParser.Controllers
         private readonly Dictionary<long, string> _buffIcons = new Dictionary<long, string>();
         private readonly Dictionary<long, string> _skillIcons = new Dictionary<long, string>();
         private readonly Dictionary<string, MechanicDesc> _mechanicData = new Dictionary<string, MechanicDesc>();
+        private readonly Dictionary<string, string> _actorIconData = new Dictionary<string, string>();
 
         public static void UpdateStatisticSwitches(StatisticsCalculator.Switches switches)
         {
@@ -108,7 +109,8 @@ namespace LuckParser.Controllers
                     BuffIcons = _buffIcons,
                     SkillIcons = _skillIcons,
                     FightIcon = _log.FightData.Logic.IconUrl,
-                    MechanicData = _mechanicData
+                    MechanicData = _mechanicData,
+                    ActorIcons = _actorIconData
                 };
             }
         }
@@ -207,6 +209,10 @@ namespace LuckParser.Controllers
                 boss.TotalPersonalDamage = BuildPersonalDamage(target, null);
                 boss.Minions = BuildMinions(target);
                 log.Boss.Add(boss);
+                if (_devMode)
+                {
+                    _actorIconData[target.Character] = GeneralHelper.GetNPCIcon(target.ID);
+                }
             }
         }
 
@@ -244,6 +250,10 @@ namespace LuckParser.Controllers
                     SquadBoons = BuildBuffUptime(_statistics.SquadBoons[player], player),
                     Minions = BuildMinions(player)
                 });
+                if (_devMode)
+                {
+                    _actorIconData[player.Prof] = GeneralHelper.GetProfIcon(player.Prof);
+                }
             }
         }
 
