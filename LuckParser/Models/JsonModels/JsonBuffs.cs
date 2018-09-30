@@ -14,13 +14,13 @@ namespace LuckParser.Models
             Overstack = new double[phaseCount];
             Presence = new double[phaseCount];
             Uptime = new double[phaseCount];
-            States = new List<int>();
+            States = new List<int[]>();
         }
 
         public double[] Uptime;
         public double[] Presence;
         public double[] Generation;
         public double[] Overstack;
-        public List<int> States;
+        public List<int[]> States;
     }
 }

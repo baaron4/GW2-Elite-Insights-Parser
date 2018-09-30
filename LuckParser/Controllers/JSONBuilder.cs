@@ -688,8 +688,10 @@ namespace LuckParser.Controllers
                             {
                                 foreach (BoonsGraphModel.Segment seg in bgm.BoonChart)
                                 {
-                                    boons[boon.Key].States.Add((int)seg.Start);
-                                    boons[boon.Key].States.Add(seg.Value);
+                                    boons[boon.Key].States.Add(new int[2] {
+                                        (int)seg.Start,
+                                        seg.Value
+                                    });
                                 }
                             }
                         }
@@ -802,8 +804,10 @@ namespace LuckParser.Controllers
                             {
                                 foreach (BoonsGraphModel.Segment seg in bgm.BoonChart)
                                 {
-                                    uptimes[boon.Key].States.Add((int)seg.Start);
-                                    uptimes[boon.Key].States.Add(seg.Value);
+                                    uptimes[boon.Key].States.Add(new int[2] {
+                                        (int)seg.Start,
+                                        seg.Value
+                                    });
                                 }
                             }
                         }
