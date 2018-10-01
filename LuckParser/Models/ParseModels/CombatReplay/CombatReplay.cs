@@ -37,6 +37,11 @@ namespace LuckParser.Models.ParseModels
            
         public void PollingRate(int rate, long fightDuration, bool forceInterpolate)
         {
+            if (forceInterpolate && Positions.Count == 0)
+            {
+                Positions.Add(new Point3D(short.MinValue, short.MinValue, 0, 0));
+                Deads.Add(new Tuple<long, long>(0, fightDuration));
+            }
             if (Positions.Count == 0)
             {
                 _start = -1;
