@@ -147,6 +147,7 @@
             this.logFileWatcher.IncludeSubdirectories = true;
             this.logFileWatcher.SynchronizingObject = this;
             this.logFileWatcher.Created += new System.IO.FileSystemEventHandler(this.LogFileWatcher_Created);
+            this.logFileWatcher.Renamed += new System.IO.RenamedEventHandler(this.LogFileWatcher_Renamed);
             // 
             // VersionLabel
             // 
