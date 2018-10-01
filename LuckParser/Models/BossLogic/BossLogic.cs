@@ -362,9 +362,10 @@ namespace LuckParser.Models
                             AbstractMasterPlayer amp = null;
                             if (mech.MechanicType == Mechanic.MechType.EnemyBoon && c.IsBuffRemove == ParseEnum.BuffRemove.None)
                             {
-                                if (c.DstInstid == log.Boss.InstID)
+                                Boss target = Targets.Find(x => x.InstID == c.DstInstid && x.FirstAware <= c.Time && x.LastAware >= c.Time);
+                                if (target != null)
                                 {
-                                    amp = log.Boss;
+                                    amp = target;
                                 }
                                 else
                                 {
@@ -378,9 +379,10 @@ namespace LuckParser.Models
                             }
                             else if (mech.MechanicType == Mechanic.MechType.EnemyBoonStrip && c.IsBuffRemove == ParseEnum.BuffRemove.Manual)
                             {
-                                if (c.SrcInstid == log.Boss.InstID)
-                                {
-                                    amp = log.Boss;
+                                Boss target = Targets.Find(x => x.InstID == c.SrcInstid && x.FirstAware <= c.Time && x.LastAware >= c.Time);
+                                if (target != null)
+                                { 
+                                    amp = target;
                                 }
                                 else
                                 {
@@ -411,9 +413,10 @@ namespace LuckParser.Models
                             AbstractMasterPlayer amp = null;
                             if ((mech.MechanicType == Mechanic.MechType.EnemyCastStart && c.IsActivation.IsCasting()) || (mech.MechanicType == Mechanic.MechType.EnemyCastEnd && !c.IsActivation.IsCasting()))
                             {
-                                if (c.SrcInstid == log.Boss.InstID)
+                                Boss target = Targets.Find(x => x.InstID == c.SrcInstid && x.FirstAware <= c.Time && x.LastAware >= c.Time);
+                                if (target != null)
                                 {
-                                    amp = log.Boss;
+                                    amp = target;
                                 }
                                 else
                                 {

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
@@ -22,6 +23,15 @@ namespace LuckParser.Controllers
                 .Aggregate((max, next) => next.Item2.CompareTo(max.Item2) < 0 ? next : max).Item1;
         }
 
+
+        public static string FindPattern(string source, string regex)
+        {
+            if (String.IsNullOrEmpty(source)) return null;
+            Match match = Regex.Match(source, regex);
+            if (match.Success) return match.Groups[1].Value;
+            return null;
+        }
+        
         public static string GetProfIcon(string prof)
         {
             switch (prof)
