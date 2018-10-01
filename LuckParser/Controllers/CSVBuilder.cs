@@ -620,7 +620,7 @@ namespace LuckParser.Controllers
                 WriteCell("Name");
                 foreach (Mechanic mech in presMech)
                 {
-                    WriteCell(mech.Description);
+                    WriteCell("\""+mech.Description+"\"");
                 }
                 NewLine();
 
@@ -671,7 +671,7 @@ namespace LuckParser.Controllers
             WriteCell("Mechanic");
             foreach (MechanicLog m in mLogs)
             {
-                WriteCell(m.Description);
+                WriteCell("\"" + m.Description + "\"");
             }
             NewLine();
             count++;
