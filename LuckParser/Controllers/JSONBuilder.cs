@@ -201,7 +201,7 @@ namespace LuckParser.Controllers
                 boss.AvgBoons = _statistics.AvgBossBoons[target];
                 boss.AvgConditions = _statistics.AvgBossConditions[target];
                 boss.Dps = BuildDPS(_statistics.BossDps[target]);
-                boss.Conditions = BuildBossBuffs(_statistics.BossConditions[target], target);
+                boss.Buffs = BuildBossBuffs(_statistics.BossConditions[target], target);
                 boss.HitboxHeight = target.HitboxHeight;
                 boss.HitboxWidth = target.HitboxWidth;
                 boss.Dps1s = Build1SDPS(target, null);
@@ -210,6 +210,8 @@ namespace LuckParser.Controllers
                 boss.LastAware = (int)(target.LastAware - _log.FightData.FightStart);
                 boss.Minions = BuildMinions(target);
                 boss.TotalDamageDist = BuildDamageDist(target, null);
+                boss.AvgBoonsStates = BuildBuffStates(target.GetBoonGraphs(_log)[-2]);
+                boss.AvgConditionsStates = BuildBuffStates(target.GetBoonGraphs(_log)[-3]);
                 log.Boss.Add(boss);
                 if (_devMode)
                 {
@@ -244,16 +246,18 @@ namespace LuckParser.Controllers
                     Defenses = BuildDefenses(_statistics.Defenses[player]),
                     Rotation = BuildRotation(player.GetCastLogs(_log, 0, _log.FightData.FightDuration)),
                     Support = BuildSupport(_statistics.Support[player]),
-                    SelfBoons = BuildBuffUptime(_statistics.SelfBoons[player], player),
-                    GroupBoons = BuildBuffUptime(_statistics.GroupBoons[player], player),
-                    OffGroupBoons = BuildBuffUptime(_statistics.OffGroupBoons[player], player),
-                    SquadBoons = BuildBuffUptime(_statistics.SquadBoons[player], player),
+                    SelfBuffs = BuildBuffUptime(_statistics.SelfBoons[player], player),
+                    GroupBuffs = BuildBuffUptime(_statistics.GroupBoons[player], player),
+                    OffGroupBuffs = BuildBuffUptime(_statistics.OffGroupBoons[player], player),
+                    SquadBuffs = BuildBuffUptime(_statistics.SquadBoons[player], player),
                     Minions = BuildMinions(player),
                     TotalDamageDist = BuildDamageDist(player, null),
                     TargetDamageDist = BuildDamageDist(player),
                     TotalDamageTaken = BuildDamageTaken(player),
                     DeathRecap = BuilDeathRecap(player),
-                    Consumables = BuildConsumables(player)
+                    Consumables = BuildConsumables(player),
+                    AvgBoonsStates = BuildBuffStates(player.GetBoonGraphs(_log)[-2]),
+                    AvgConditionsStates = BuildBuffStates(player.GetBoonGraphs(_log)[-3]),
                 });
                 if (_devMode)
                 {
@@ -283,6 +287,23 @@ namespace LuckParser.Controllers
                         Icon = food.Item1.Link
                     };
                 }
+            }
+            return res.Count > 0 ? res : null;
+        }
+
+        private List<int[]> BuildBuffStates(BoonsGraphModel bgm)
+        {
+            if (bgm == null || bgm.BoonChart.Count == 0)
+            {
+                return null;
+            }
+            List<int[]> res = new List<int[]>();
+            foreach (var seg in bgm.BoonChart)
+            {
+                res.Add(new int[2] {
+                    (int)seg.Start,
+                    seg.Value
+                });
             }
             return res.Count > 0 ? res : null;
         }
