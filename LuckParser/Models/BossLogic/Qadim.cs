@@ -46,6 +46,68 @@ namespace LuckParser.Models
             };
         }
 
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
+        {
+            long start = 0;
+            long end = 0;
+            List<PhaseData> phases = GetInitialPhase(log);
+            Boss qadim = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Qadim);
+            if (qadim == null)
+            {
+                throw new InvalidOperationException("Nikare not found");
+            }
+            phases[0].Targets.Add(qadim);
+            if (!requirePhases)
+            {
+                return phases;
+            }
+            List<long> moltenArmor = log.GetBoonDataByDst(qadim.InstID).Where(x => x.SkillID == 52329).Select(x => x.Time - log.FightData.FightStart).Distinct().ToList();
+            for (int i = 1; i < moltenArmor.Count; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    end = Math.Min(moltenArmor[i], log.FightData.FightDuration);
+                    phases.Add(new PhaseData(start, end));
+                } else
+                {
+                    start = moltenArmor[i];
+                    phases.Add(new PhaseData(end, start));
+                    if (i == moltenArmor.Count - 1)
+                    {
+                        phases.Add(new PhaseData(start, log.FightData.FightDuration));
+                    }
+                }
+            }
+            string[] names = { "Hydra","Qadim P1","Apocalypse", "Qadim P2","Wyvern", "Qadim P3" };
+            for (int i = 1; i < phases.Count; i++)
+            {
+                PhaseData phase = phases[i];
+                phase.Name = names[i - 1];
+                switch (i)
+                {
+                    case 2:
+                    case 4:
+                    case 6:
+                        phase.Targets.Add(qadim);
+                        break;
+                    default:
+                        List<ushort> ids = new List<ushort>
+                        {
+                           (ushort) WyvernMatriarch,
+                           (ushort) WyvernPatriarch,
+                           (ushort) AncientInvokedHydra,
+                           (ushort) ApocalypseBringer
+                        };
+                        AddTargetsToPhase(phase, ids, log);
+                        phase.DrawArea = true;
+                        phase.DrawEnd = true;
+                        phase.DrawStart = true;
+                        break;
+                }
+            }
+            return phases;
+        }
+
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
             return new List<ParseEnum.TrashIDS>()
