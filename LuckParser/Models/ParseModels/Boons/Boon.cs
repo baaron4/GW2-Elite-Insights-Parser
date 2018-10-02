@@ -144,6 +144,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Blood Fueled",34422, BoonSource.Boss, BoonType.Intensity, 20, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Boon("Blood Fueled",34428, BoonSource.Boss, BoonType.Intensity, 20, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Boon("Molten Armor",52568, BoonSource.Boss, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Fiery Surge",52588, BoonSource.Boss, BoonType.Intensity, 20, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 //REVENANT
                 //skills
                 new Boon("Crystal Hibernation", 28262, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/4/4a/Crystal_Hibernation.png"),
