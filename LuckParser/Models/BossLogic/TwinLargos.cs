@@ -29,7 +29,7 @@ namespace LuckParser.Models
         protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/FAMExYD.png",
-                            Tuple.Create(5760, 7538),
+                            Tuple.Create(3205, 4191),
                             Tuple.Create(10846, -3878, 18086, 5622),
                             Tuple.Create(-21504, -21504, 24576, 24576),
                             Tuple.Create(13440, 14336, 15360, 16256));
