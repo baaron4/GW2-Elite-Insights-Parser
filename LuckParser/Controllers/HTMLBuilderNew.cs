@@ -1523,11 +1523,14 @@ namespace LuckParser.Controllers
             data.graphs.Add(new GraphDto("full", "Full"));
             data.graphs.Add(new GraphDto("s10", "10s"));
             data.graphs.Add(new GraphDto("s30", "30s"));
+            data.graphs.Add(new GraphDto("phase", "Phase"));
 
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
                 PhaseData phaseData = _statistics.Phases[i];
                 PhaseDto phaseDto = new PhaseDto(phaseData.Name, phaseData.GetDuration("s"));
+                phaseDto.start = phaseData.Start / 1000.0;
+                phaseDto.end = phaseData.End / 1000.0;
                 data.phases.Add(phaseDto);
                 phaseDto.dpsStats = CreateDPSData(i);
                 phaseDto.dmgStatsBoss = CreateDMGStatsBossData(i);
