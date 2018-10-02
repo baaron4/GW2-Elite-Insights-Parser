@@ -22,16 +22,15 @@ namespace LuckParser.Models
             new Mechanic(53097, "Water Bomb Debuff", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Nikare, "symbol:'diamond',color:'rgb(0,255,255)'", "Psn","Expanding Water Field", "Water Poison",0),
             new Mechanic(52931, "Aquatic Detainment", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Nikare, "symbol:'circle',color:'rgb(0,0,255)'", "Float","Aquatic Detainment (Float Bubble)", "Float Bubble",0),
             });
-            CanCombatReplay = false;
             Extension = "twinlargos";
             IconUrl = "https://i.imgur.com/6O5MT7v.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()
         {
-            return new CombatReplayMap("https://i.imgur.com/RMBeXhd.png",
+            return new CombatReplayMap("https://i.imgur.com/FAMExYD.png",
                             Tuple.Create(5760, 7538),
-                            Tuple.Create(10896, -2448, 18096, 8352),
+                            Tuple.Create(10846, -3878, 18086, 5622),
                             Tuple.Create(-21504, -21504, 24576, 24576),
                             Tuple.Create(13440, 14336, 15360, 16256));
         }

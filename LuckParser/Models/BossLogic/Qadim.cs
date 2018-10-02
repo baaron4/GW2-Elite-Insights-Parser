@@ -21,18 +21,17 @@ namespace LuckParser.Models
             new Mechanic(53051, "Teleport", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle',color:'rgb(150,0,200)'", "H.KB","Teleport Knockback (Hydra)", "Hydra TP KB",0),
 
             });
-            CanCombatReplay = false;
             Extension = "qadim";
             IconUrl = "https://wiki.guildwars2.com/images/f/f2/Mini_Qadim.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()
         {
-            return new CombatReplayMap("https://i.imgur.com/vtVubK8.png",
-                            Tuple.Create(3241, 2814),
-                            Tuple.Create(-10886, -12019, -3950, -5995),
-                            Tuple.Create(-21504,-21504,24576,24576),
-                            Tuple.Create(13440,14336,15360,16256));
+            return new CombatReplayMap("https://i.imgur.com/mlkXYPT.png",
+                            Tuple.Create(3277, 2845),
+                            Tuple.Create(-10801, 8969, -4035, 15145),
+                            Tuple.Create(-21504, -21504, 24576, 24576),
+                            Tuple.Create(13440, 14336, 15360, 16256));
         }
 
         protected override List<ushort> GetFightTargetsIDs()

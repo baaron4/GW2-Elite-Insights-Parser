@@ -16,16 +16,15 @@ namespace LuckParser.Models
             new Mechanic(52173, "Pulverize", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ConjuredAmalgamate, "symbol:'square',color:'rgb(255,140,0)'", "Plvrz","Pulverize", "Pulverize",0),
                 
             });
-            CanCombatReplay = false;
             Extension = "ca";
             IconUrl = "";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()
         {
-            return new CombatReplayMap("https://i.imgur.com/Dp3SFq6.png",
+            return new CombatReplayMap("https://i.imgur.com/9PJB5Ky.png",
                             Tuple.Create(2557, 4706),
-                            Tuple.Create(-5664, 13752, -3264, 18552),
+                            Tuple.Create(-5064, -15030, -2864, -10830),
                             Tuple.Create(-21504, -21504, 24576, 24576),
                             Tuple.Create(13440, 14336, 15360, 16256));
         }

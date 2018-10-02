@@ -218,13 +218,13 @@ namespace LuckParser.Controllers
                 case Zommoros:
                     return "https://i.imgur.com/BxbsRCI.png";
                 case AncientInvokedHydra:
-                    return "https://imgur.com/YABLiBz";
+                    return "https://i.imgur.com/YABLiBz.png";
                 case WyvernMatriarch:
-                    return "https://imgur.com/vjjNSpI";
+                    return "https://i.imgur.com/vjjNSpI.png";
                 case WyvernPatriarch:
-                    return "https://imgur.com/kLKLSfv";
+                    return "https://i.imgur.com/kLKLSfv.png";
                 case ApocalypseBringer:
-                    return "https://imgur.com/0LGKCn2";
+                    return "https://i.imgur.com/0LGKCn2.png";
                 case Kernan:
                     return "https://i.imgur.com/WABRQya.png";
                 case Knuckles:
