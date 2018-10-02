@@ -586,11 +586,17 @@ namespace LuckParser
 
         private void LogFileWatcher_Created(object sender, FileSystemEventArgs e)
         {
-            if (e.FullPath.EndsWith(".zip") || e.FullPath.EndsWith(".evtc"))
+            if ((e.FullPath.EndsWith(".zip") && !e.FullPath.EndsWith(".tmp.zip")) || e.FullPath.EndsWith(".evtc"))
             {
                 AddDelayed(e.FullPath);
             }
         }
 
+        private void LogFileWatcher_Renamed(object sender, RenamedEventArgs e)
+        {
+            if (e.OldFullPath.EndsWith(".tmp.zip") && e.FullPath.EndsWith(".zip")) {
+                AddDelayed(e.FullPath);
+            }
+        }
     }
 }
