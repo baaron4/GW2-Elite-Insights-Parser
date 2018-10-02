@@ -13,12 +13,18 @@ namespace LuckParser.Models
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(52242, "Shattering Impact", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle',color:'rgb(255,200,0)'", "Stun","Shattering Impact (Stunning flame bolt)", "Flame Bolt Stun",0),
-            new Mechanic(52814, "Flame Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle-open',color:'rgb(255,0,0)'", "Shwv","Flame Wave (Knockback)", "Shockwave",0),
-            new Mechanic(52520, "Elemental Breath", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'triangle-left',color:'rgb(255,0,0)'", "H.Brth","Elemental Breath (Hydra Breath)", "Hydra Breath",0),
+            new Mechanic(52242, "Shattering Impact", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle',color:'rgb(255,200,0)',", "Stun","Shattering Impact (Stunning flame bolt)", "Flame Bolt Stun",0),
+            new Mechanic(52814, "Flame Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle-open',color:'rgb(255,0,0)',", "Shwv","Flame Wave (Knockback)", "Shockwave",0),
+            new Mechanic(52814, "Flame Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle-open',color:'rgb(255,0,0)',", "KB","Flame Wave (Knockback Frontal Beam)", "KB Frontal Beam",0),
+            new Mechanic(52520, "Elemental Breath", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'triangle-left',color:'rgb(255,0,0)',", "H.Brth","Elemental Breath (Hydra Breath)", "Hydra Breath",0),
             new Mechanic(53013, "Fireball", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle-open',color:'rgb(255,150,0)',size:10,", "H.Fb","Fireball (Hydra)", "Hydra Fireball",0),
-            new Mechanic(52941, "Fiery Meteor", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle-open',color:'rgb(255,150,0)'", "H.Mtr","Fiery Meteor (Hydra)", "Hydra Meteor",0),
-            new Mechanic(53051, "Teleport", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle',color:'rgb(150,0,200)'", "H.KB","Teleport Knockback (Hydra)", "Hydra TP KB",0),
+            new Mechanic(52941, "Fiery Meteor", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle-open',color:'rgb(255,150,0)',", "H.Mtr","Fiery Meteor (Hydra)", "Hydra Meteor",0),
+            new Mechanic(53051, "Teleport", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle',color:'rgb(150,0,200)',", "H.KB","Teleport Knockback (Hydra)", "Hydra TP KB",0),
+            new Mechanic(52310, "Big Hit", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle',color:'rgb(255,0,0)',", "Mace","Big Hit (Mace Shockwave)", "Mace Shockwave",0),
+            new Mechanic(52955, "Lava Pool Drop", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'square-open',color:'rgb(255,0,0)',", "LvPl","Lava Pool drop (on short platform spikes)", "Lava Pool Drop",0),
+            //new Mechanic(51943, "Breakbar Start", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,150)',", "Breakbar","Start Breakbar", "CC",0),
+            //new Mechanic(51943, "Breakbar End", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.Fail","Breakbar (Failed CC)", "CC Fail",0,(condition => condition.CombatItem.Value > 8000)),
+            //new Mechanic(51943, "Breakbar End", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CCed","Breakbar broken", "CCed",0,(condition => condition.CombatItem.Value < 8000)),
 
             });
             CanCombatReplay = false;
