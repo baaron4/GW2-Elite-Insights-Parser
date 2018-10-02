@@ -13,17 +13,17 @@ namespace LuckParser.Models
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(34912, "Fixate", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'star',color:'rgb(255,0,255)',", "Fixt","Fixated by Statue", "Fixated",0),
-            new Mechanic(34925, "Fixate", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'star',color:'rgb(255,0,255)',", "Fixt","Fixated by Statue", "Fixated",0),
-            new Mechanic(35077, "Hail of Fury", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'circle-open',color:'rgb(255,0,0)',", "Debris","Hail of Fury (Falling Debris)", "Debris",0),
-            new Mechanic(35096, "Compromised", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'hexagon',color:'rgb(0,0,255)',", "Rift#","Compromised (Pushed Orb through Rifts)", "Compromised",0),
-            new Mechanic(16227, "Insidious Projection", Mechanic.MechType.Spawn, ParseEnum.BossIDS.KeepConstruct, "symbol:'bowtie',color:'rgb(255,0,0)',", "Merge","Insidious Projection spawn (2 Statue merge)", "Merged Statues",0),
-            new Mechanic(35137, "Phantasmal Blades", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'hexagram-open',color:'rgb(255,0,255)',", "PhBlds","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
-            new Mechanic(34971, "Phantasmal Blades", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'hexagram-open',color:'rgb(255,0,255)',", "PhBlds","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
-            new Mechanic(35064, "Phantasmal Blades", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'hexagram-open',color:'rgb(255,0,255)',", "PhBlds","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
-            new Mechanic(35086, "Tower Drop", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'circle',color:'rgb(255,140,0)',", "Jump","Tower Drop (KC Jump)", "Tower Drop",0),
-            new Mechanic(35103, "Xera's Fury", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'circle',color:'rgb(200,140,0)',", "Bmb","Xera's Fury (Large Bombs) application", "Bombs",0),
-            new Mechanic(16261, "Core Hit", Mechanic.MechType.HitOnEnemy, ParseEnum.BossIDS.KeepConstruct, "symbol:'star-open',color:'rgb(255,140,0)',", "C.Hit","Core was Hit by Player", "Core Hit",1000)
+            new Mechanic(34912, "Fixate", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'star',color:'rgb(255,0,255)'", "Fixt","Fixated by Statue", "Fixated",0),
+            new Mechanic(34925, "Fixate", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'star',color:'rgb(255,0,255)'", "Fixt","Fixated by Statue", "Fixated",0),
+            new Mechanic(35077, "Hail of Fury", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'circle-open',color:'rgb(255,0,0)'", "Debris","Hail of Fury (Falling Debris)", "Debris",0),
+            new Mechanic(35096, "Compromised", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'hexagon',color:'rgb(0,0,255)'", "Rift#","Compromised (Pushed Orb through Rifts)", "Compromised",0),
+            new Mechanic(16227, "Insidious Projection", Mechanic.MechType.Spawn, ParseEnum.BossIDS.KeepConstruct, "symbol:'bowtie',color:'rgb(255,0,0)'", "Merge","Insidious Projection spawn (2 Statue merge)", "Merged Statues",0),
+            new Mechanic(35137, "Phantasmal Blades", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'hexagram-open',color:'rgb(255,0,255)'", "PhBlds","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
+            new Mechanic(34971, "Phantasmal Blades", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'hexagram-open',color:'rgb(255,0,255)'", "PhBlds","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
+            new Mechanic(35064, "Phantasmal Blades", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'hexagram-open',color:'rgb(255,0,255)'", "PhBlds","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
+            new Mechanic(35086, "Tower Drop", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'circle',color:'rgb(255,140,0)'", "Jump","Tower Drop (KC Jump)", "Tower Drop",0),
+            new Mechanic(35103, "Xera's Fury", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'circle',color:'rgb(200,140,0)'", "Bmb","Xera's Fury (Large Bombs) application", "Bombs",0),
+            new Mechanic(16261, "Core Hit", Mechanic.MechType.HitOnEnemy, ParseEnum.BossIDS.KeepConstruct, "symbol:'star-open',color:'rgb(255,140,0)'", "C.Hit","Core was Hit by Player", "Core Hit",1000)
             });
             Extension = "kc";
             IconUrl = "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
@@ -146,7 +146,6 @@ namespace LuckParser.Models
             switch (mob.ID)
             {
                 case (ushort)Core:
-                    replay.Icon = "https://i.imgur.com/yI34iqw.png";
                     break;
                 case (ushort)Jessica:
                 case (ushort)Olson:
@@ -158,7 +157,6 @@ namespace LuckParser.Models
                 case (ushort)Ianim:
                     replay.Actors.Add(new CircleActor(false, 0, 600, lifespan, "rgba(255, 0, 0, 0.5)"));
                     replay.Actors.Add(new CircleActor(true, 0, 400, lifespan, "rgba(0, 125, 255, 0.5)"));
-                    replay.Icon = "https://i.imgur.com/qeYT1Bf.png";
                     break;
                 case (ushort)RetrieverProjection:
                 case (ushort)GreenPhantasm:
@@ -168,16 +166,9 @@ namespace LuckParser.Models
                     replay.Icon = "https://i.imgur.com/xCoypjS.png";
                     break;
                 case (ushort)InsidiousProjection:
-                    replay.Icon = "https://i.imgur.com/9EdItBS.png";
-                    break;
                 case (ushort)UnstableLeyRift:
-                    replay.Icon = "https://i.imgur.com/YXM3igs.png";
-                    break;
                 case (ushort)RadiantPhantasm:
-                    replay.Icon = "https://i.imgur.com/O5VWLyY.png";
-                    break;
                 case (ushort)CrimsonPhantasm:
-                    replay.Icon = "https://i.imgur.com/zP7Bvb4.png";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
@@ -191,7 +182,6 @@ namespace LuckParser.Models
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.KeepConstruct:
-                    replay.Icon = "https://i.imgur.com/Kq0kL07.png";
                     List<CastLog> magicCharge = cls.Where(x => x.SkillId == 35048).ToList();
                     List<CastLog> magicExplode = cls.Where(x => x.SkillId == 34894).ToList();
                     for (var i = 0; i < magicCharge.Count; i++)

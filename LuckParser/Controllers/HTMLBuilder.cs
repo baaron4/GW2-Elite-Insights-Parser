@@ -217,7 +217,7 @@ namespace LuckParser.Controllers
                         sw.Write("visible:'legendonly',");
                     }
                     sw.Write("type:'scatter'," +
-                            "marker:{" + "size: 15," + mech.PlotlyShape +  "}," +
+                            "marker:{" + "size: 15," + mech.PlotlyString +  "}," +
                             "text:[");
                     foreach (MechanicLog ml in filterdList)
                     {
@@ -412,7 +412,7 @@ namespace LuckParser.Controllers
                             }
                             sw.Write("<td class=\"composition\">");
                             {
-                                sw.Write("<img src=\"" + HTMLHelper.GetLink(gPlay.Prof) + "\" alt=\"" + gPlay.Prof + "\" height=\"18\" width=\"18\" >");
+                                sw.Write("<img src=\"" + GeneralHelper.GetProfIcon(gPlay.Prof) + "\" alt=\"" + gPlay.Prof + "\" height=\"18\" width=\"18\" >");
                                 sw.Write(build);
                                 PrintWeapons(sw, gPlay);
                                 sw.Write(charName);
@@ -489,7 +489,7 @@ namespace LuckParser.Controllers
                 {
                     Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[_log.Boss][player][phaseIndex];
                     Statistics.FinalDPS dpsAll = _statistics.DpsAll[player][phaseIndex];
-                    Statistics.FinalStats statsAll = _statistics.StatsAll[player][phaseIndex];
+                    Statistics.FinalStatsAll statsAll = _statistics.StatsAll[player][phaseIndex];
                     //gather data for footer
                     footerList.Add(new []
                     {
@@ -504,7 +504,7 @@ namespace LuckParser.Controllers
                     sw.Write("<tr>");
                     {
                         sw.Write("<td>" + player.Group + "</td>");
-                        sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.Prof) + " \" alt=\"" + player.Prof + "\" height=\"18\" width=\"18\" >"+"<span style=\"display:none\">"+ player.Prof + "</span>"+"</td>");
+                        sw.Write("<td>" + "<img src=\"" + GeneralHelper.GetProfIcon(player.Prof) + " \" alt=\"" + player.Prof + "\" height=\"18\" width=\"18\" >"+"<span style=\"display:none\">"+ player.Prof + "</span>"+"</td>");
                         sw.Write("<td>" + player.Character + "</td>");
                         sw.Write("<td>" + player.Account.TrimStart(':') + "</td>");
                         //Boss dps
@@ -629,7 +629,7 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in _log.PlayerList)
                     {
-                        Statistics.FinalStats statsAll = _statistics.StatsAll[player][phaseIndex];
+                        Statistics.FinalStatsAll statsAll = _statistics.StatsAll[player][phaseIndex];
                         Statistics.FinalDPS dpsAll = _statistics.DpsAll[player][phaseIndex];
 
                         //gather data for footer
@@ -651,7 +651,7 @@ namespace LuckParser.Controllers
                         sw.Write("<tr>");
                         {
                             sw.Write("<td>" + player.Group.ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.Prof) + "\" alt=\"" 
+                            sw.Write("<td>" + "<img src=\"" + GeneralHelper.GetProfIcon(player.Prof) + "\" alt=\"" 
                                 + player.Prof + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
                             sw.Write("<td>" + player.Character + "</td>");
 
@@ -765,9 +765,9 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in _log.PlayerList)
                     {
-                        Statistics.FinalBossStats statsBoss = _statistics.StatsBoss[_log.Boss][player][phaseIndex];
+                        Statistics.FinalStats statsBoss = _statistics.StatsBoss[_log.Boss][player][phaseIndex];
                         Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[_log.Boss][player][phaseIndex];
-                        Statistics.FinalStats statsAll = _statistics.StatsAll[player][phaseIndex];
+                        Statistics.FinalStatsAll statsAll = _statistics.StatsAll[player][phaseIndex];
 
                         //gather data for footer
                         footerList.Add(new [] {
@@ -788,7 +788,7 @@ namespace LuckParser.Controllers
                         sw.Write("<tr>");
                         {
                             sw.Write("<td>" + player.Group.ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.Prof) + "\" alt=\"" 
+                            sw.Write("<td>" + "<img src=\"" + GeneralHelper.GetProfIcon(player.Prof) + "\" alt=\"" 
                                 + player.Prof+ "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
                             sw.Write("<td>" + player.Character + "</td>");
 
@@ -919,7 +919,7 @@ namespace LuckParser.Controllers
                     foreach (Player player in _log.PlayerList)
                     {
                         Statistics.FinalDefenses defenses = _statistics.Defenses[player][phaseIndex];
-                        Statistics.FinalStats stats = _statistics.StatsAll[player][phaseIndex];
+                        Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
 
                         
 
@@ -936,7 +936,7 @@ namespace LuckParser.Controllers
                         sw.Write("<tr>");
                         {
                             sw.Write("<td>" + player.Group.ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.Prof) + "\" alt=\"" + player.Prof + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + GeneralHelper.GetProfIcon(player.Prof) + "\" alt=\"" + player.Prof + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
                             sw.Write("<td>" + player.Character + "</td>");
                             sw.Write("<td>" + defenses.DamageTaken + "</td>");//dmg taken
                             sw.Write("<td>" + defenses.DamageBarrier + "</td>");//dmgbarrier
@@ -1073,7 +1073,7 @@ namespace LuckParser.Controllers
                         sw.Write("<tr>");
                         {
                             sw.Write("<td>" + player.Group.ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.Prof) + " \" alt=\"" + player.Prof + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + GeneralHelper.GetProfIcon(player.Prof) + " \" alt=\"" + player.Prof + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
                             sw.Write("<td>" + player.Character + "</td>");
                             //sw.Write("<td>" + support.allHeal +"</td>");                                              
                             sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + support.CondiCleanseTime + " seconds \">" + support.CondiCleanse + "</td>");
@@ -1190,7 +1190,7 @@ namespace LuckParser.Controllers
                                 sw.Write("<tr>");
                                 {
                                     sw.Write("<td>" + player.Group.ToString() + "</td>");
-                                    sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.Prof) + "\" alt=\"" + player.Prof + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
+                                    sw.Write("<td>" + "<img src=\"" + GeneralHelper.GetProfIcon(player.Prof) + "\" alt=\"" + player.Prof + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
                                     sw.Write("<td> " + player.Character + "</td>");
 
                                     foreach (Boon boon in listToUse)
@@ -1268,13 +1268,12 @@ namespace LuckParser.Controllers
                             player.Group.ToString()
                         };
                         long fightDuration = phases[phaseIndex].GetDuration();
-                        Dictionary<long, long> boonPresence = player.GetBoonPresence(_log, phaseIndex);
                         int count = 0;
 
                         sw.Write("<tr>");
                         {
                             sw.Write("<td>" + player.Group.ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.Prof) + "\" alt=\"" + player.Prof + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + GeneralHelper.GetProfIcon(player.Prof) + "\" alt=\"" + player.Prof + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
                             if (boonTable)
                             {                        
                                 sw.Write("<td data-toggle=\"tooltip\" title=\"Average number of boons: " + Math.Round(_statistics.StatsAll[player][phaseIndex].AvgBoons, 1) + "\">" + player.Character + " </td>");
@@ -1302,9 +1301,9 @@ namespace LuckParser.Controllers
                                 }
                                 else
                                 {
-                                    if (boonTable && boon.Type == Boon.BoonType.Intensity && boonPresence.TryGetValue(boon.ID, out long presenceValue))
+                                    if (boonTable && boon.Type == Boon.BoonType.Intensity && boons[boon.ID].Presence > 0)
                                     {
-                                        tooltip = "uptime: " + Math.Round(100.0* presenceValue / fightDuration,1) + "%";
+                                        tooltip = "uptime: " + boons[boon.ID].Presence + "%";
                                         sw.Write("<td data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + toWrite + " </td>");
                                     } else
                                     {
@@ -1713,7 +1712,7 @@ namespace LuckParser.Controllers
                 string pid = p.InstID + "_" + phaseIndex;
                 sw.Write("<div class=\"tab-pane fade\" id=\"" + pid + "\">");
                 {
-                    sw.Write("<h1 align=\"center\"> " + charname + "<img src=\"" + HTMLHelper.GetLink(p.Prof) + "\" alt=\"" + p.Prof + "\" height=\"18\" width=\"18\" >" + "</h1>");
+                    sw.Write("<h1 align=\"center\"> " + charname + "<img src=\"" + GeneralHelper.GetProfIcon(p.Prof) + "\" alt=\"" + p.Prof + "\" height=\"18\" width=\"18\" >" + "</h1>");
                     sw.Write("<ul class=\"nav nav-tabs\">");
                     {
                         sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + pid + "\">" + p.Character + "</a></li>");
@@ -3029,7 +3028,6 @@ namespace LuckParser.Controllers
             // Boon table if applicable
             if (hasBoons)
             {
-                Dictionary<long, long> boonPresence = boss.GetBoonPresence(_log, phaseIndex);
                 sw.Write("<h3 align=\"center\"> Boon Uptime </h3>");
                 sw.Write("<script> $(function () { $('#boss_boon_table" + phaseIndex + "').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
                 sw.Write("<table class=\"display table table-striped table-hover compact mb-3\"  cellspacing=\"0\" width=\"100%\" id=\"boss_boon_table" + phaseIndex + "\">");
@@ -3060,9 +3058,9 @@ namespace LuckParser.Controllers
                                 }
                                 else
                                 {
-                                    if (boonPresence.TryGetValue(boon.ID, out long presenceTime))
+                                    if (conditions[boon.ID].Presence > 0)
                                     {
-                                        string tooltip = "uptime: " + Math.Round(100.0 * presenceTime / fightDuration, 1) + "%";
+                                        string tooltip = "uptime: " + conditions[boon.ID].Presence + "%";
                                         sw.Write("<td data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + conditions[boon.ID].Uptime + " </td>");
                                     }
                                     else
@@ -3105,7 +3103,7 @@ namespace LuckParser.Controllers
                         sw.Write("<tr>");
                         {
                             sw.Write("<td>" + player.Group.ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.Prof) + "\" alt=\"" + player.Prof + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + GeneralHelper.GetProfIcon(player.Prof) + "\" alt=\"" + player.Prof + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
                             sw.Write("<td>" + player.Character + " </td>");
                             foreach (Boon boon in _statistics.PresentConditions)
                             {
@@ -3561,7 +3559,7 @@ namespace LuckParser.Controllers
                                     {
                                         string charname = p.Character;
                                         playerDropdown += "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#" + p.InstID + "_" + i + "\">" + charname +
-                                            "<img src=\"" + HTMLHelper.GetLink(p.Prof) + "\" alt=\"" + p.Prof + "\" height=\"18\" width=\"18\" >" + "</a>";
+                                            "<img src=\"" + GeneralHelper.GetProfIcon(p.Prof) + "\" alt=\"" + p.Prof + "\" height=\"18\" width=\"18\" >" + "</a>";
                                     }
                                     sw.Write("<ul class=\"nav nav-tabs\">");
                                     {

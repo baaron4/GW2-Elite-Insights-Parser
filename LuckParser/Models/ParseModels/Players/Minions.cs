@@ -10,13 +10,7 @@ namespace LuckParser.Models.ParseModels
         private readonly List<DamageLog> _damageLogs = new List<DamageLog>();
         private Dictionary<ushort, List<DamageLog>> _damageLogsByDst = new Dictionary<ushort, List<DamageLog>>();
         private readonly List<CastLog> _castLogs = new List<CastLog>();
-        public string Character
-        {
-            get
-            {
-                return Count > 0 ? this[0].Character : "";
-            }
-        }
+        public string Character => Count > 0 ? this[0].Character : "";
 
         public Minions(int id)
         {
