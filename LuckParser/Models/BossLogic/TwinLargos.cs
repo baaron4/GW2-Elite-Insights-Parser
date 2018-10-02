@@ -44,6 +44,67 @@ namespace LuckParser.Models
             };
         }
 
+        private void SetPhases(List<PhaseData> phases, ParsedLog log, Boss target, string[] names)
+        {
+            int offset = phases.Count;
+            long start = 0;
+            long end = 0;
+            long fightDuration = log.FightData.FightDuration;
+            List<CombatItem> states = log.CombatData.GetStatesData(ParseEnum.StateChange.EnterCombat).Where(x => x.SrcInstid == target.InstID).ToList();
+            states.AddRange(log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => x.SrcInstid == target.InstID));
+            states.Sort((x, y) => x.Time < y.Time ? -1 : 1);
+            for (int i = 0; i < states.Count; i++)
+            {
+                CombatItem state = states[i];
+                if (state.IsStateChange == ParseEnum.StateChange.EnterCombat)
+                {
+                    start = state.Time - log.FightData.FightStart;
+                    if (i == states.Count - 1)
+                    {
+                        phases.Add(new PhaseData(start, fightDuration));
+                    }
+                }
+                else
+                {
+                    end = Math.Min(state.Time - log.FightData.FightStart, fightDuration);
+                    phases.Add(new PhaseData(start, end));
+                }
+            }
+            for (int i = offset; i < phases.Count; i++)
+            {
+                PhaseData phase = phases[i];
+                phase.Name = names[i - offset];
+                phase.Targets.Add(target);
+            }
+        }
+
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
+        {
+            List<PhaseData> phases = GetInitialPhase(log);
+            Boss nikare = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Nikare);
+            if (nikare == null)
+            {
+                throw new InvalidOperationException("Nikare not found");
+            }
+            phases[0].Targets.Add(nikare);
+            Boss kenut = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Kenut);
+            if (kenut != null)
+            {
+                phases[0].Targets.Add(kenut);
+            }
+            if (!requirePhases)
+            {
+                return phases;
+            }
+            SetPhases(phases, log, nikare, new string[]{ "Nikare P1", "Nikare P2", "Nikare P3" } );
+            if (kenut != null)
+            {
+                SetPhases(phases, log, kenut, new string[] { "Kenut P1", "Kenut P2", "Kenut P3" });
+            }
+            phases.Sort((x, y) => x.Start < y.Start ? -1 : 1);
+            return phases;
+        }
+
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
             CombatReplay replay = boss.CombatReplay;
