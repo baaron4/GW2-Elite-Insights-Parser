@@ -74,6 +74,12 @@ namespace LuckParser.Models
             {
                 PhaseData phase = phases[i];
                 phase.Name = names[i - offset];
+                if (i-offset == 0)
+                {
+                    phase.DrawEnd = true;
+                    phase.DrawStart = true;
+                    phase.DrawArea = offset > 1;
+                }
                 phase.Targets.Add(target);
             }
         }
