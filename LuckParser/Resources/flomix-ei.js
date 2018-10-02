@@ -796,6 +796,7 @@ function buildWindowLayout(data) {
 		});
 		var dpsGraphTabs = [];
 		$.each(data.graphs, function (g, graph) {
+			if (graph.id == "phase" && i > 0) return;
 			dpsGraphTabs.push({
 				name: graph.name,
 				noTitle: true,
@@ -1006,6 +1007,7 @@ function createGraphs(graphData) {
 }
 
 function createGraph($target, phaseData, phase, type) {
+	if (!$target || !$target.length) return;
 	var lines = [];
 	var xAxis = [];
 	var seconds = phaseData.players[0].boss[type].length;
