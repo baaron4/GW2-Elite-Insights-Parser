@@ -60,6 +60,24 @@ namespace LuckParser.Models
             }
         }
 
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
+        {
+            long start = 0;
+            long end = 0;
+            List<PhaseData> phases = GetInitialPhase(log);
+            Boss ca = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.ConjuredAmalgamate);
+            if (ca == null)
+            {
+                throw new InvalidOperationException("Conjurate Amalgamate not found");
+            }
+            phases[0].Targets.Add(ca);
+            if (!requirePhases)
+            {
+                return phases;
+            }
+            return phases;
+        }
+
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
             switch (boss.ID)
@@ -80,7 +98,12 @@ namespace LuckParser.Models
 
         public override int IsCM(ParsedLog log)
         {
-            return 0; //Possibly check if Conjured Scepters show up in the log?
+            Boss target = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.ConjuredAmalgamate);
+            if (target == null)
+            {
+                throw new InvalidOperationException("Target for CM detection not found");
+            }
+            return 0;
         }
     }
 }
