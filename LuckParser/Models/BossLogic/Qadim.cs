@@ -54,7 +54,7 @@ namespace LuckParser.Models
             Boss qadim = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Qadim);
             if (qadim == null)
             {
-                throw new InvalidOperationException("Nikare not found");
+                throw new InvalidOperationException("Qadim not found");
             }
             phases[0].Targets.Add(qadim);
             if (!requirePhases)
