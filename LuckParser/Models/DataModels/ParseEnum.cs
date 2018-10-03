@@ -30,8 +30,7 @@ namespace LuckParser.Models.DataModels
             None   = 0,
             All    = 1,
             Single = 2,
-            Manual = 3,
-            Custom = 4
+            Manual = 3
         };
 
         public static BuffRemove GetBuffRemove(byte bt)
