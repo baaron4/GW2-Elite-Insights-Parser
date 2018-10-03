@@ -103,7 +103,7 @@ namespace LuckParser.Models
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
-            return 0;
+            return log.CombatData.GetBoonData(53075).Count > 0 ? 1 : 0;
         }
     }
 }
