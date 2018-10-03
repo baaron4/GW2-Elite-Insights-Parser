@@ -234,6 +234,9 @@ namespace LuckParser.Controllers
                 case GreaterMagmaElemental1:
                 case GreaterMagmaElemental2:
                     return "https://i.imgur.com/sr146T6.png";
+                case LavaElemental1:
+                case LavaElemental2:
+                    return "https://i.imgur.com/mydwiYy.png"; 
                 case PyreGuardian:
                     return "https://i.imgur.com/6zNPTUw.png";
                 case ReaperofFlesh:
