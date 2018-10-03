@@ -1114,8 +1114,20 @@ namespace LuckParser.Controllers
                 List<int[]> enemyData = new List<int[]>(presMech.Count);
                 foreach (Mechanic mech in presMech)
                 {
-                    int count = _log.MechanicData[mech].Count(x => x.Player.InstID == p.InstID && phase.InInterval(x.Time));
-                    enemyData.Add(new int[] { count, count });
+                    long timeFilter = 0;
+                    int filterCount = 0;
+                    List<MechanicLog> mls = _log.MechanicData[mech].Where(x => x.Player.InstID == p.InstID && phase.InInterval(x.Time)).ToList();
+                    int count = mls.Count;
+                    foreach (MechanicLog ml in mls)
+                    {
+                        if (mech.InternalCooldown != 0 && ml.Time - timeFilter < mech.SkillId)//ICD check
+                        {
+                            filterCount++;
+                        }
+                        timeFilter = ml.Time;
+
+                    }
+                    enemyData.Add(new int[] { count - filterCount, count });
                 }
                 list.Add(enemyData);
             }
