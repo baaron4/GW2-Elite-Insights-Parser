@@ -252,7 +252,6 @@ namespace LuckParser.Models
                     foreach (CastLog c in blades3)
                     {
                         int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
-                        Console.WriteLine("Ticks: {0} Dura: {1}", ticks, c.ActualDuration);
                         int start = (int)c.Time + bladeDelay;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time < start + 1000);
                         if (facing == null)
