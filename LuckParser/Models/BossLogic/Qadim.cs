@@ -68,6 +68,10 @@ namespace LuckParser.Models
                 {
                     end = Math.Min(moltenArmor[i], log.FightData.FightDuration);
                     phases.Add(new PhaseData(start, end));
+                    if (i == moltenArmor.Count - 1)
+                    {
+                        phases.Add(new PhaseData(end, log.FightData.FightDuration));
+                    }
                 } else
                 {
                     start = moltenArmor[i];
@@ -170,7 +174,12 @@ namespace LuckParser.Models
 
         public override int IsCM(ParsedLog log)
         {
-            return 0; //Check via Hydra HP or (>27e6)
+            Boss target = Targets.Find(x => x.ID == (ushort)AncientInvokedHydra);
+            if (target == null)
+            {
+                throw new InvalidOperationException("Target for CM detection not found");
+            }
+            return (target.Health > 27e6) ? 1 : 0;
         }
         
     }
