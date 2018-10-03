@@ -773,8 +773,8 @@ namespace LuckParser.Controllers
                     playersById.Add(player.InstID, player);
                 }
                 // All class specific boons
-                var remainingBoons = Boon.GetRemainingBuffsList();
-
+                var remainingBoons = new List<Boon>(Boon.GetRemainingBuffsList());
+                remainingBoons.AddRange(Boon.GetConsumableList());
                 var classSpecificBoonsById = new Dictionary<long, Boon>();
                 foreach (var boon in remainingBoons)
                 {
