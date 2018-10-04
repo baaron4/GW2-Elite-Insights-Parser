@@ -149,8 +149,6 @@ namespace LuckParser.Models.ParseModels
             long timeStart = log.FightData.FightStart;
             long agentStart = Math.Max(FirstAware - log.FightData.FightStart,0);
             long agentEnd = Math.Min(LastAware - log.FightData.FightStart, log.FightData.FightDuration);
-            HashSet<long> OneCapacityIds = new HashSet<long> (Boon.BoonsByCapacity[1].Select(x => x.ID));
-            bool needCustomRemove = true;
             foreach (CombatItem c in log.GetBoonDataByDst(InstID))
             {
                 long boonId = c.SkillID;
@@ -160,29 +158,20 @@ namespace LuckParser.Models.ParseModels
                 }
                 long time = c.Time - timeStart;
                 List<BoonLog> loglist = boonMap[boonId];
-                if (c.IsStateChange == ParseEnum.StateChange.BuffInitial && (OneCapacityIds.Contains(boonId) || c.Value > 0))
+                if (c.IsStateChange == ParseEnum.StateChange.BuffInitial && c.Value > 0)
                 {
                     ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
-                    needCustomRemove = needCustomRemove && c.Value == 0;
-                    loglist.Add(new BoonApplicationLog(0, src, c.Value > 0 ? Math.Min(c.Value, int.MaxValue - 1) : int.MaxValue));
+                    loglist.Add(new BoonApplicationLog(0, src, c.Value));
                 }
                 else if (c.IsStateChange != ParseEnum.StateChange.BuffInitial && time >= agentStart && time < agentEnd)
                 {
                     if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                     {
                         ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
-                        if (c.OverstackValue > 0 && needCustomRemove)
-                        {
-                            loglist.Add(new BoonRemovalLog(time, src, c.OverstackValue, ParseEnum.BuffRemove.Custom));
-                        }
                         loglist.Add(new BoonApplicationLog(time, src, c.Value));
                     }
                     else if (c.IsBuffRemove != ParseEnum.BuffRemove.Manual && time < log.FightData.FightDuration - 50)
                     {
-                        if (!needCustomRemove && c.Value == 0)
-                        {
-                            continue;
-                        }
                         loglist.Add(new BoonRemovalLog(time, c.DstInstid, c.Value, c.IsBuffRemove));
                     }
                 }

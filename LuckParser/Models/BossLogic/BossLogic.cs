@@ -234,6 +234,7 @@ namespace LuckParser.Models
             long start = fightData.FightStart;
             long end = fightData.FightEnd;
             Mechanic.CheckSpecialCondition condition;
+            HashSet<ushort> playersIds = new HashSet<ushort>(log.PlayerList.Select(x => x.InstID));
             Dictionary<ushort, AbstractMasterPlayer> regroupedMobs = new Dictionary<ushort, AbstractMasterPlayer>();
             foreach (Mechanic mech in MechanicList)
             {
@@ -370,6 +371,18 @@ namespace LuckParser.Models
                                 else
                                 {
                                     AgentItem a = log.AgentData.GetAgent(c.DstAgent);
+                                    if (playersIds.Contains(a.InstID))
+                                    {
+                                        continue;
+                                    }
+                                    else if (a.MasterAgent != 0)
+                                    {
+                                        AgentItem m = log.AgentData.GetAgent(a.MasterAgent);
+                                        if (playersIds.Contains(m.InstID))
+                                        {
+                                            continue;
+                                        }
+                                    }
                                     if (!regroupedMobs.TryGetValue(a.ID, out amp))
                                     {
                                         amp = new DummyPlayer(a);
@@ -387,6 +400,18 @@ namespace LuckParser.Models
                                 else
                                 {
                                     AgentItem a = log.AgentData.GetAgent(c.SrcAgent);
+                                    if (playersIds.Contains(a.InstID))
+                                    {
+                                        continue;
+                                    }
+                                    else if (a.MasterAgent != 0)
+                                    {
+                                        AgentItem m = log.AgentData.GetAgent(a.MasterAgent);
+                                        if (playersIds.Contains(m.InstID))
+                                        {
+                                            continue;
+                                        }
+                                    }
                                     if (!regroupedMobs.TryGetValue(a.ID, out amp))
                                     {
                                         amp = new DummyPlayer(a);
@@ -421,6 +446,18 @@ namespace LuckParser.Models
                                 else
                                 {
                                     AgentItem a = log.AgentData.GetAgent(c.SrcAgent);
+                                    if (playersIds.Contains(a.InstID))
+                                    {
+                                        continue;
+                                    }
+                                    else if (a.MasterAgent != 0)
+                                    {
+                                        AgentItem m = log.AgentData.GetAgent(a.MasterAgent);
+                                        if (playersIds.Contains(m.InstID))
+                                        {
+                                            continue;
+                                        }
+                                    }
                                     if (!regroupedMobs.TryGetValue(a.ID, out amp))
                                     {
                                         amp = new DummyPlayer(a);
