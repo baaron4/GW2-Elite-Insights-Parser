@@ -161,7 +161,7 @@ namespace LuckParser.Models.ParseModels
                 if (c.IsStateChange == ParseEnum.StateChange.BuffInitial && c.Value > 0)
                 {
                     ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
-                    loglist.Add(new BoonApplicationLog(0, src, c.Value);
+                    loglist.Add(new BoonApplicationLog(0, src, c.Value));
                 }
                 else if (c.IsStateChange != ParseEnum.StateChange.BuffInitial && time >= agentStart && time < agentEnd)
                 {
