@@ -17,7 +17,7 @@ namespace LuckParser.Models
                 
             });
             Extension = "ca";
-            IconUrl = "";
+            IconUrl = "https://i.imgur.com/eLyIWd2.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()

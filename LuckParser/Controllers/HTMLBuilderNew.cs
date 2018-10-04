@@ -1113,8 +1113,20 @@ namespace LuckParser.Controllers
                 List<int[]> enemyData = new List<int[]>(presMech.Count);
                 foreach (Mechanic mech in presMech)
                 {
-                    int count = _log.MechanicData[mech].Count(x => x.Player.InstID == p.InstID && phase.InInterval(x.Time));
-                    enemyData.Add(new int[] { count, count });
+                    long timeFilter = 0;
+                    int filterCount = 0;
+                    List<MechanicLog> mls = _log.MechanicData[mech].Where(x => x.Player.InstID == p.InstID && phase.InInterval(x.Time)).ToList();
+                    int count = mls.Count;
+                    foreach (MechanicLog ml in mls)
+                    {
+                        if (mech.InternalCooldown != 0 && ml.Time - timeFilter < mech.SkillId)//ICD check
+                        {
+                            filterCount++;
+                        }
+                        timeFilter = ml.Time;
+
+                    }
+                    enemyData.Add(new int[] { count - filterCount, count });
                 }
                 list.Add(enemyData);
             }
@@ -1523,11 +1535,14 @@ namespace LuckParser.Controllers
             data.graphs.Add(new GraphDto("full", "Full"));
             data.graphs.Add(new GraphDto("s10", "10s"));
             data.graphs.Add(new GraphDto("s30", "30s"));
+            data.graphs.Add(new GraphDto("phase", "Phase"));
 
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
                 PhaseData phaseData = _statistics.Phases[i];
                 PhaseDto phaseDto = new PhaseDto(phaseData.Name, phaseData.GetDuration("s"));
+                phaseDto.start = phaseData.Start / 1000.0;
+                phaseDto.end = phaseData.End / 1000.0;
                 data.phases.Add(phaseDto);
                 phaseDto.dpsStats = CreateDPSData(i);
                 phaseDto.dmgStatsBoss = CreateDMGStatsBossData(i);

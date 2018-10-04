@@ -13,14 +13,12 @@ namespace LuckParser.Models.ParseModels
             public long Start { get; private set; }
             public long BoonDuration { get; private set; }
             public ushort Src { get; private set; }
-            public bool BuffInitial { get; private set; }
 
             public BoonStackItem(long start, long boonDuration, ushort srcinstid)
             {
                 Start = start;
                 BoonDuration = boonDuration;
                 Src = srcinstid;
-                BuffInitial = boonDuration == int.MaxValue;
             }
 
             public BoonStackItem(BoonStackItem other, long startShift, long durationShift)
@@ -28,7 +26,6 @@ namespace LuckParser.Models.ParseModels
                 Start = Math.Max(other.Start + startShift, 0);
                 BoonDuration = other.BoonDuration - durationShift;
                 Src = other.Src;
-                BuffInitial = other.BuffInitial;
             }
         }
 
@@ -41,7 +38,6 @@ namespace LuckParser.Models.ParseModels
         private readonly int _capacity;
         private readonly ParsedLog _log;
         private readonly StackingLogic _logic;
-        private bool _simulationHasBuffInitial = false;
 
         // Constructor
         protected BoonSimulator(int capacity, ParsedLog log, StackingLogic logic)
@@ -107,7 +103,6 @@ namespace LuckParser.Models.ParseModels
             {
                 BoonStack.Add(toAdd);
                 _logic.Sort(_log, BoonStack);
-                _simulationHasBuffInitial = _simulationHasBuffInitial || toAdd.BuffInitial;
             }
             // Replace lowest value
             else
@@ -118,9 +113,6 @@ namespace LuckParser.Models.ParseModels
                     long overstackValue = boonDuration;
                     ushort srcValue = srcinstid;
                     OverstackSimulationResult.Add(new BoonSimulationOverstackItem(srcinstid, boonDuration,start));                 
-                } else
-                {
-                    _simulationHasBuffInitial = _simulationHasBuffInitial || toAdd.BuffInitial;
                 }
             }
         }
@@ -140,70 +132,30 @@ namespace LuckParser.Models.ParseModels
                 case ParseEnum.BuffRemove.All:
                     foreach (BoonStackItem stackItem in BoonStack)
                     {
-                        OverstackSimulationResult.Add(new BoonSimulationOverstackItem(stackItem.Src, stackItem.BuffInitial? start : stackItem.BoonDuration, start));
-                        CleanseSimulationResult.Add(new BoonSimulationCleanseItem(provokedBy, stackItem.BuffInitial ? start : stackItem.BoonDuration, start));
+                        OverstackSimulationResult.Add(new BoonSimulationOverstackItem(stackItem.Src, stackItem.BoonDuration, start));
+                        CleanseSimulationResult.Add(new BoonSimulationCleanseItem(provokedBy, stackItem.BoonDuration, start));
                     }
                     BoonStack.Clear();
                     break;
-                case ParseEnum.BuffRemove.Custom:
-                    if (!_simulationHasBuffInitial)
-                    {
-                        break;
-                    }
+                case ParseEnum.BuffRemove.Single:
+                case ParseEnum.BuffRemove.Manual:
                     for (int i = 0; i < BoonStack.Count; i++)
                     {
                         BoonStackItem stackItem = BoonStack[i];
-                        if (stackItem.BuffInitial)
+                        if (boonDuration == stackItem.BoonDuration)
                         {
-                            OverstackSimulationResult.Add(new BoonSimulationOverstackItem(stackItem.Src, start, start));
-                            CleanseSimulationResult.Add(new BoonSimulationCleanseItem(provokedBy, start, start));
+                            OverstackSimulationResult.Add(new BoonSimulationOverstackItem(stackItem.Src, stackItem.BoonDuration, start));
+                            CleanseSimulationResult.Add(new BoonSimulationCleanseItem(provokedBy, stackItem.BoonDuration, start));
                             BoonStack.RemoveAt(i);
                             break;
                         }
                     }
-                    _simulationHasBuffInitial = BoonStack.Exists(x => x.BuffInitial == true);
-                    break;
-                case ParseEnum.BuffRemove.Single:
-                case ParseEnum.BuffRemove.Manual:
-                    RemoveSingleStack(provokedBy, boonDuration, start);
                     break;
                 default:
                     break;
             }
             _logic.Sort(_log, BoonStack);
             Update(0);
-        }
-
-        private void RemoveSingleStack(ushort provokedBy, long boonDuration, long start)
-        {
-            bool found = false;
-            for (int i = 0; i < BoonStack.Count; i++)
-            {
-                BoonStackItem stackItem = BoonStack[i];
-                if (!stackItem.BuffInitial && boonDuration == stackItem.BoonDuration)
-                {
-                    OverstackSimulationResult.Add(new BoonSimulationOverstackItem(stackItem.Src, stackItem.BoonDuration, start));
-                    CleanseSimulationResult.Add(new BoonSimulationCleanseItem(provokedBy, stackItem.BoonDuration, start));
-                    BoonStack.RemoveAt(i);
-                    found = true;
-                    break;
-                }
-            }
-            if (!found && _simulationHasBuffInitial)
-            {
-                for (int i = 0; i < BoonStack.Count; i++)
-                {
-                    BoonStackItem stackItem = BoonStack[i];
-                    if (stackItem.BuffInitial)
-                    {
-                        OverstackSimulationResult.Add(new BoonSimulationOverstackItem(stackItem.Src, start, start));
-                        CleanseSimulationResult.Add(new BoonSimulationCleanseItem(provokedBy, start, start));
-                        BoonStack.RemoveAt(i);
-                        _simulationHasBuffInitial = BoonStack.Exists(x => x.BuffInitial == true);
-                        break;
-                    }
-                }
-            }
         }
     }
 }
