@@ -230,11 +230,6 @@
     <Compile Include="Models\ParseModels\SkillItem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Version.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Version.tt</DependentUpon>
-    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="SettingsForm.cs">
       <SubType>Form</SubType>
@@ -290,10 +285,9 @@
     <None Include="Resources\theme-slate.png" />
     <None Include="Resources\combatreplay.js" />
     <None Include="Resources\tmplDmgTakenTable.html" />
-    <Content Include="Properties\Version.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Version.cs</LastGenOutput>
-    </Content>
+    <None Include="Properties\Version.tt.old">
+      <LastGenOutput>Version.tt.cs</LastGenOutput>
+    </None>
     <None Include="Resources\template-combatreplay.html" />
     <Content Include="Resources\tmplGroupCombatReplay.html" />
     <Content Include="Resources\tmplPlayerSelectCombatReplay.html" />
