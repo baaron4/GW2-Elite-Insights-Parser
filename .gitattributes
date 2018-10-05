@@ -61,3 +61,8 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+
+###############################################################################
+# diff behavior for versioning file
+###############################################################################
+AssemblyInfo.cs merge=ours
