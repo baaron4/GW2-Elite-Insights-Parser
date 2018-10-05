@@ -48,6 +48,40 @@ namespace LuckParser.Models
             };
         }
 
+        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            Random rnd = new Random();
+            ulong agent = 1;
+            while (agentData.AgentValues.Contains(agent))
+            {
+                agent = (ulong)rnd.Next(0, Int32.MaxValue);
+            }
+            ushort id = 1;
+            while (agentData.InstIDValues.Contains(id))
+            {
+                id = (ushort)rnd.Next(0, ushort.MaxValue);
+            }
+            AgentItem sword = new AgentItem(agent, "Conjured Sword\0:Conjured Sword\011", "Sword", AgentItem.AgentType.Player, 0, 0, 0, 0, 20, 20)
+            {
+                InstID = id,
+                LastAware = combatData.Last().Time,
+                FirstAware = combatData.First().Time,
+                MasterAgent = 0
+            };
+            agentData.AddCustomAgent(sword);
+            foreach(CombatItem cl in combatData)
+            {
+                if (cl.SkillID == 52370 && cl.IsStateChange == ParseEnum.StateChange.Normal && cl.IsBuffRemove == ParseEnum.BuffRemove.None &&
+                                        ((cl.IsBuff == 1 && cl.BuffDmg >= 0 && cl.Value == 0) ||
+                                        (cl.IsBuff == 0 && cl.Value >= 0)) && cl.DstInstid != 0 && cl.IFF == ParseEnum.IFF.Foe)
+                {
+                    cl.SrcAgent = sword.Agent;
+                    cl.SrcInstid = sword.InstID;
+                    cl.SrcMasterInstid = 0;
+                }
+            }
+        }
+
         public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
         {
             switch (mob.ID)
