@@ -1510,7 +1510,8 @@ namespace LuckParser.Controllers
                     weapons = player.GetWeaponsArray(_log),
                     colBoss = HTMLHelper.GetLink("Color-" + player.Prof),
                     colCleave = HTMLHelper.GetLink("Color-" + player.Prof + "-NonBoss"),
-                    colTotal = HTMLHelper.GetLink("Color-" + player.Prof + "-Total")
+                    colTotal = HTMLHelper.GetLink("Color-" + player.Prof + "-Total"),
+                    isConjure = player.Account == ":Conjured Sword"
                 };
 
                 foreach (KeyValuePair<string, Minions> pair in player.GetMinions(_log))

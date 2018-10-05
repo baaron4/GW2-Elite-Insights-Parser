@@ -71,6 +71,7 @@ function profImg(p) {
 function createCompTable($target) {
 	var groups = [];
 	$.each(window.data.players, function (p, player) {
+		if (player.isConjure) return;
 		if (!groups[player.group]) groups[player.group] = [];
 		groups[player.group].push(player);
 	});
@@ -155,6 +156,7 @@ function createDefStatsTable($target, data) {
 	var groups = [];
 	$.each(data, function (i, def) {
 		var player = window.data.players[i];
+		if (player.isConjure) return;
 		rows.push({ player: player, data: def });
 		if (!groups[player.group]) groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0];
 		for (var j = 0; j < 8; j++) {
@@ -181,6 +183,7 @@ function createSupStatsTable($target, data) {
 	var groups = [];
 	$.each(data, function (i, dps) {
 		var player = window.data.players[i];
+		if (player.isConjure) return;
 		rows.push({ player: player, data: dps });
 		if (!groups[player.group]) groups[player.group] = [0, 0, 0, 0];
 		for (var j = 0; j < 4; j++) {
@@ -210,6 +213,7 @@ function createBoonTable($target, boons, data, generation) {
 
 	$.each(data, function (i, values) {
 		var player = window.data.players[i];
+		if (player.isConjure) return;
 		var g = player.group;
 		rows.push({ player: player, data: values });
 		if (!generation) {
@@ -278,6 +282,7 @@ function createMechanicsTable($target, mechanics, data, boss) {
 	var empty = true;
 	$.each(data, function (i, values) {
 		var player = boss ? window.data.enemies[i] : window.data.players[i];
+		if (player.isConjure) return;
 		rows.push({ player: player, data: values });
 		$.each(values, function (v, value) {
 			if (value[0]) {
