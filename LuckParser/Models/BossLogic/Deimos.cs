@@ -191,7 +191,8 @@ namespace LuckParser.Models
                 Greed,
                 Pride,
                 Oil,
-                Tear
+                Tear,
+                Hands
             };
         }
 
@@ -208,6 +209,7 @@ namespace LuckParser.Models
                 case (ushort)GamblerReal:
                 case (ushort)Greed:
                 case (ushort)Pride:
+                case (ushort)Hands:
                     break;
                 case (ushort)Oil:
                     int delay = 3000;
