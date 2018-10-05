@@ -46,6 +46,13 @@ namespace LuckParser
         [STAThread]
         static int Main(string[] args)
         {
+            // Migrate previous settings if version changed
+            if (Properties.Settings.Default.Outdated)
+            {
+                Properties.Settings.Default.Upgrade();
+                Properties.Settings.Default.Outdated = false;
+            }
+
             Application.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             if (args.Length > 0)
             {
@@ -96,7 +103,7 @@ namespace LuckParser
                         // Do not access settings before this, else this will not work
                         int argPos = Array.IndexOf(args, "-c");
 
-                        AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE", args[argPos + 1]);
+                        CustomSettingsManager.ReadConfig(args[argPos + 1]);
 
                         parserArgOffset += 2;
                     }
