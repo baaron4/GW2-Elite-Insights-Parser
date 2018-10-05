@@ -255,7 +255,8 @@ namespace LuckParser.Controllers
             FinalStatsAll final = new FinalStatsAll();
             HashSet<long> nonCritable = new HashSet<long>
                     {
-                        9292
+                        9292,
+                        52370
                     };
 
             foreach (DamageLog dl in p.GetJustPlayerDamageLogs(null, _log, phase.Start, phase.End))
@@ -307,6 +308,10 @@ namespace LuckParser.Controllers
                         final.CritablePowerLoopCount++;
                     }
                 }
+            }
+            if (p.Group == 11)
+            {
+                return final;
             }
             foreach (CastLog cl in p.GetCastLogs(_log, phase.Start, phase.End))
             {
@@ -389,33 +394,28 @@ namespace LuckParser.Controllers
                         _statistics.StackCenterPositions.Add(new Point3D(x, y, z, _settings.PollingRate * time));
                     }
                 }
-                if (p.Group == 11)
+                List<Point3D> positions = p.CombatReplay.Positions.Where(x => x.Time >= phase.Start && x.Time <= phase.End).ToList();
+                int offset = p.CombatReplay.Positions.Count(x => x.Time < phase.Start);
+                if (positions.Count > 1)
                 {
-                    final.StackDist = 0;
-                } else
-                {
-                    List<Point3D> positions = p.CombatReplay.Positions.Where(x => x.Time >= phase.Start && x.Time <= phase.End).ToList();
-                    int offset = p.CombatReplay.Positions.Count(x => x.Time < phase.Start);
-                    if (positions.Count > 1)
+                    List<float> distances = new List<float>();
+                    for (int time = 0; time < positions.Count; time++)
                     {
-                        List<float> distances = new List<float>();
-                        for (int time = 0; time < positions.Count; time++)
-                        {
 
-                            float deltaX = positions[time].X - _statistics.StackCenterPositions[time + offset].X;
-                            float deltaY = positions[time].Y - _statistics.StackCenterPositions[time + offset].Y;
-                            //float deltaZ = positions[time].Z - StackCenterPositions[time].Z;
+                        float deltaX = positions[time].X - _statistics.StackCenterPositions[time + offset].X;
+                        float deltaY = positions[time].Y - _statistics.StackCenterPositions[time + offset].Y;
+                        //float deltaZ = positions[time].Z - StackCenterPositions[time].Z;
 
 
-                            distances.Add((float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY));
-                        }
-                        final.StackDist = distances.Sum() / distances.Count;
+                        distances.Add((float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY));
                     }
-                    else
-                    {
-                        final.StackDist = -1;
-                    }
+                    final.StackDist = distances.Sum() / distances.Count;
                 }
+                else
+                {
+                    final.StackDist = -1;
+                }
+
             }
 
             List<CombatItem> dead = combatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDead, start, end);
@@ -670,6 +670,8 @@ namespace LuckParser.Controllers
                 var otherPlayers = _log.PlayerList.Where(p => p.InstID != player.InstID).ToList();
                 _statistics.SquadBoons[player] = GetBoonsForPlayers(otherPlayers, player);
             }
+            // a little hack to remove the contribution on boon average
+            // to remove once we switch to new html builder
             Player CASword = _log.PlayerList.Find(x => x.Account == ":Conjured Sword");
             if (CASword != null)
             {
