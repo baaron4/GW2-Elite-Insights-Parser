@@ -286,7 +286,6 @@
     <None Include="Resources\combatreplay.js" />
     <None Include="Resources\tmplDmgTakenTable.html" />
     <None Include="Properties\Version.tt.old">
-      <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Version.tt.cs</LastGenOutput>
     </None>
     <None Include="Resources\template-combatreplay.html" />
