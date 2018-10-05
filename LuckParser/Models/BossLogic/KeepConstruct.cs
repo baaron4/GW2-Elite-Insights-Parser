@@ -158,13 +158,12 @@ namespace LuckParser.Models
                     replay.Actors.Add(new CircleActor(false, 0, 600, lifespan, "rgba(255, 0, 0, 0.5)"));
                     replay.Actors.Add(new CircleActor(true, 0, 400, lifespan, "rgba(0, 125, 255, 0.5)"));
                     break;
-                case (ushort)RetrieverProjection:
                 case (ushort)GreenPhantasm:
                     int lifetime = 8000;
                     replay.Actors.Add(new CircleActor(false, start + lifetime, 0, new Tuple<int, int>(start, start + lifetime), "rgba(0,255,0,0.5)"));
                     replay.Actors.Add(new CircleActor(true, start + lifetime, 210, new Tuple<int, int>(start, start + lifetime), "rgba(0,255,0,0.3)"));
-                    replay.Icon = "https://i.imgur.com/xCoypjS.png";
                     break;
+                case (ushort)RetrieverProjection:
                 case (ushort)InsidiousProjection:
                 case (ushort)UnstableLeyRift:
                 case (ushort)RadiantPhantasm:
