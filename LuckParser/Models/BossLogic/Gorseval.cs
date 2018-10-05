@@ -13,15 +13,15 @@ namespace LuckParser.Models
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(31875, "Spectral Impact", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Gorseval, "symbol:'hexagram',color:'rgb(255,0,0)',", "Slam","Spectral Impact (KB Slam)", "Slam",4000),
-            new Mechanic(31623, "Ghastly Prison", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Gorseval, "symbol:'circle',color:'rgb(255,140,0)',", "Egg","Ghastly Prison (Egged)", "Egged",500),
-            new Mechanic(31498, "Spectral Darkness", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Gorseval, "symbol:'circle',color:'rgb(0,0,255)',", "OrbDbf","Spectral Darkness (Stood in Orb AoE)", "Orb Debuff",100),
-            new Mechanic(31722, "Spirited Fusion", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Gorseval, "symbol:'square',color:'rgb(255,140,0)',", "SprtBf","Spirited Fusion (Consumed a Spirit)", "Ate Spirit",0),
-            new Mechanic(31720, "Kick", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Gorseval, "symbol:'triangle-right',color:'rgb(255,0,255)',", "Kick","Kicked by small add", "Spirit Kick",0),
-            new Mechanic(738, "Ghastly Rampage Black Goo Hit", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Gorseval, "symbol:'circle',color:'rgb(0,0,0)',", "Black","Hit by Black Goo","Black Goo",3000,(condition => condition.CombatItem.Value == 10000)),
-            new Mechanic(31834, "Ghastly Rampage", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Gorseval, "symbol:'diamond-tall',color:'rgb(0,160,150)',", "CC","Ghastly Rampage (Breakbar)", "Breakbar",0),
-            new Mechanic(31834, "Ghastly Rampage", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Gorseval, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.End","Ghastly Rampage (Full duration)", "CC ran out",0,(condition => condition.CombatItem.Value > 21985)),
-            new Mechanic(31834, "Ghastly Rampage", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Gorseval, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CCed","Ghastly Rampage (Breakbar broken)", "CCed",0,(condition => condition.CombatItem.Value <= 21985)),
+            new Mechanic(31875, "Spectral Impact", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Gorseval, "symbol:'hexagram',color:'rgb(255,0,0)'", "Slam","Spectral Impact (KB Slam)", "Slam",4000),
+            new Mechanic(31623, "Ghastly Prison", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Gorseval, "symbol:'circle',color:'rgb(255,140,0)'", "Egg","Ghastly Prison (Egged)", "Egged",500),
+            new Mechanic(31498, "Spectral Darkness", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Gorseval, "symbol:'circle',color:'rgb(0,0,255)'", "OrbDbf","Spectral Darkness (Stood in Orb AoE)", "Orb Debuff",100),
+            new Mechanic(31722, "Spirited Fusion", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Gorseval, "symbol:'square',color:'rgb(255,140,0)'", "SprtBf","Spirited Fusion (Consumed a Spirit)", "Ate Spirit",0),
+            new Mechanic(31720, "Kick", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Gorseval, "symbol:'triangle-right',color:'rgb(255,0,255)'", "Kick","Kicked by small add", "Spirit Kick",0),
+            new Mechanic(738, "Ghastly Rampage Black Goo Hit", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Gorseval, "symbol:'circle',color:'rgb(0,0,0)'", "Black","Hit by Black Goo","Black Goo",3000,(condition => condition.CombatItem.Value == 10000)),
+            new Mechanic(31834, "Ghastly Rampage", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Gorseval, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "CC","Ghastly Rampage (Breakbar)", "Breakbar",0),
+            new Mechanic(31834, "Ghastly Rampage", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Gorseval, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "CC.End","Ghastly Rampage (Full duration)", "CC ran out",0,(condition => condition.CombatItem.Value > 21985)),
+            new Mechanic(31834, "Ghastly Rampage", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Gorseval, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "CCed","Ghastly Rampage (Breakbar broken)", "CCed",0,(condition => condition.CombatItem.Value <= 21985)),
             });
             Extension = "gors";
             IconUrl = "https://wiki.guildwars2.com/images/d/d1/Mini_Gorseval_the_Multifarious.png";
@@ -124,7 +124,6 @@ namespace LuckParser.Models
             {
                 case (ushort)EnragedSpirit:
                 case (ushort)AngeredSpirit:
-                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
@@ -138,7 +137,6 @@ namespace LuckParser.Models
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.Gorseval:
-                    replay.Icon = "https://i.imgur.com/5hmMq12.png";
                     List<CastLog> blooms = cls.Where(x => x.SkillId == 31616).ToList();
                     foreach (CastLog c in blooms)
                     {
@@ -257,7 +255,6 @@ namespace LuckParser.Models
                 case (ushort)ChargedSoul:
                     Tuple<int, int> lifespan = new Tuple<int, int>((int)replay.TimeOffsets.Item1, (int)replay.TimeOffsets.Item2);
                     replay.Actors.Add(new CircleActor(false, 0, 220, lifespan, "rgba(255, 150, 0, 0.5)"));
-                    replay.Icon = "https://i.imgur.com/sHmksvO.png";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");

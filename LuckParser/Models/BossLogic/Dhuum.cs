@@ -13,21 +13,21 @@ namespace LuckParser.Models
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(48172, "Hateful Ephemera", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'square',color:'rgb(255,140,0)',", "Glm.dmg","Hateful Ephemera (Golem AoE dmg)", "Golem Dmg",0), 
-            new Mechanic(48121, "Arcing Affliction", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'circle-open',color:'rgb(255,0,0)',", "B.dmg","Arcing Affliction (Bomb) hit", "Bomb dmg",0), 
-            new Mechanic(47646, "Arcing Affliction", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Dhuum, "symbol:'circle',color:'rgb(255,0,0)',", "Bmb","Arcing Affliction (Bomb) application", "Bomb",0),
-            //new Mechanic(47476, "Residual Affliction", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Dhuum, "symbol:'star-diamond',color:'rgb(255,200,0)',", "Bomb",0), //not needed, imho, applied at the same time as Arcing Affliction
-            new Mechanic(47335, "Soul Shackle", Mechanic.MechType.PlayerOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'diamond',color:'rgb(0,255,255)',", "Shckl","Soul Shackle (Tether) application", "Shackles",0),//  //also used for removal.
-            new Mechanic(47164, "Soul Shackle", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'diamond-open',color:'rgb(0,255,255)',", "Sh.Dmg","Soul Shackle (Tether) dmg ticks", "Shackles Dmg",0, (item => item.DamageLog.Damage > 0)),
-            new Mechanic(47561, "Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'triangle',color:'rgb(0,128,0)',", "Cone","Boon ripping Cone Attack", "Cone",0),
-            new Mechanic(48752, "Cull", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'asterisk-open',color:'rgb(0,255,255)',", "Crk","Cull (Fearing Fissures)", "Cracks",0),
-            new Mechanic(48760, "Putrid Bomb", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'circle',color:'rgb(0,128,0)',", "Mrk","Necro Marks during Scythe attack", "Necro Marks",0), 
-            new Mechanic(48398, "Cataclysmic Cycle", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'circle-open',color:'rgb(255,140,0)',", "Sck.Dmg","Damage when sucked to close to middle", "Suck dmg",0),
-            new Mechanic(48176, "Death Mark", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'hexagon',color:'rgb(255,140,0)',", "Dip","Lesser Death Mark hit (Dip into ground)", "Dip AoE",0), 
-            new Mechanic(48210, "Greater Death Mark", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'circle',color:'rgb(255,140,0)',", "KB.Dmg","Knockback damage during Greater Deathmark (mid port)", "Knockback dmg",0),
-          //  new Mechanic(48281, "Mortal Coil", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Dhuum, "symbol:'circle',color:'rgb(0,128,0)',", "Green Orbs",
-            new Mechanic(46950, "Fractured Spirit", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Dhuum, "symbol:'square',color:'rgb(0,255,0)',", "Orb CD","Applied when taking green", "Green port",0), 
-            new Mechanic(47076 , "Echo's Damage", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'square',color:'rgb(255,0,0)',", "Echo","Damaged by Ender's Echo (pick up)", "Ender's Echo",5000),
+            new Mechanic(48172, "Hateful Ephemera", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'square',color:'rgb(255,140,0)'", "Glm.dmg","Hateful Ephemera (Golem AoE dmg)", "Golem Dmg",0), 
+            new Mechanic(48121, "Arcing Affliction", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'circle-open',color:'rgb(255,0,0)'", "B.dmg","Arcing Affliction (Bomb) hit", "Bomb dmg",0), 
+            new Mechanic(47646, "Arcing Affliction", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Dhuum, "symbol:'circle',color:'rgb(255,0,0)'", "Bmb","Arcing Affliction (Bomb) application", "Bomb",0),
+            //new Mechanic(47476, "Residual Affliction", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Dhuum, "symbol:'star-diamond',color:'rgb(255,200,0)'", "Bomb",0), //not needed, imho, applied at the same time as Arcing Affliction
+            new Mechanic(47335, "Soul Shackle", Mechanic.MechType.PlayerOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'diamond',color:'rgb(0,255,255)'", "Shckl","Soul Shackle (Tether) application", "Shackles",0),//  //also used for removal.
+            new Mechanic(47164, "Soul Shackle", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'diamond-open',color:'rgb(0,255,255)'", "Sh.Dmg","Soul Shackle (Tether) dmg ticks", "Shackles Dmg",0, (item => item.DamageLog.Damage > 0)),
+            new Mechanic(47561, "Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'triangle',color:'rgb(0,128,0)'", "Cone","Boon ripping Cone Attack", "Cone",0),
+            new Mechanic(48752, "Cull", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'asterisk-open',color:'rgb(0,255,255)'", "Crk","Cull (Fearing Fissures)", "Cracks",0),
+            new Mechanic(48760, "Putrid Bomb", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'circle',color:'rgb(0,128,0)'", "Mrk","Necro Marks during Scythe attack", "Necro Marks",0), 
+            new Mechanic(48398, "Cataclysmic Cycle", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'circle-open',color:'rgb(255,140,0)'", "Sck.Dmg","Damage when sucked to close to middle", "Suck dmg",0),
+            new Mechanic(48176, "Death Mark", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'hexagon',color:'rgb(255,140,0)'", "Dip","Lesser Death Mark hit (Dip into ground)", "Dip AoE",0), 
+            new Mechanic(48210, "Greater Death Mark", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'circle',color:'rgb(255,140,0)'", "KB.Dmg","Knockback damage during Greater Deathmark (mid port)", "Knockback dmg",0),
+          //  new Mechanic(48281, "Mortal Coil", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Dhuum, "symbol:'circle',color:'rgb(0,128,0)'", "Green Orbs",
+            new Mechanic(46950, "Fractured Spirit", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Dhuum, "symbol:'square',color:'rgb(0,255,0)'", "Orb CD","Applied when taking green", "Green port",0), 
+            new Mechanic(47076 , "Echo's Damage", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'square',color:'rgb(255,0,0)'", "Echo","Damaged by Ender's Echo (pick up)", "Ender's Echo",5000),
             });
             Extension = "dhuum";
             IconUrl = "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
@@ -131,7 +131,9 @@ namespace LuckParser.Models
             {
                 Echo,
                 Enforcer,
-                Messenger
+                Messenger,
+                Deathling,
+                UnderworldReaper
             };
         }
 
@@ -143,7 +145,6 @@ namespace LuckParser.Models
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.Dhuum:
-                    replay.Icon = "https://i.imgur.com/RKaDon5.png";
                     List<CastLog> deathmark = cls.Where(x => x.SkillId == 48176).ToList();
                     CastLog majorSplit = cls.Find(x => x.SkillId == 47396);
                     foreach (CastLog c in deathmark)
@@ -209,16 +210,16 @@ namespace LuckParser.Models
             switch (mob.ID)
             {
                 case (ushort)Echo:
-                    replay.Icon = "https://i.imgur.com/kcN9ECn.png";
                     replay.Actors.Add(new CircleActor(true, 0, 120, lifespan, "rgba(255, 0, 0, 0.5)"));
                     break;
                 case (ushort)Enforcer:
-                    replay.Icon = "https://i.imgur.com/elHjamF.png";
                     break;
                 case (ushort)Messenger:
-                    replay.Icon = "https://i.imgur.com/1J2BTFg.png";
                     replay.Actors.Add(new CircleActor(true, 0, 180, lifespan, "rgba(255, 125, 0, 0.5)"));
                     break;
+                case (ushort)Deathling:
+                case (ushort)UnderworldReaper:
+                    break; 
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
 

@@ -41,8 +41,9 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, Boss boss)
+        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
+            Boss boss = Targets.Find(x => x.ID == TriggerID);
             foreach (CombatItem c in combatData)
             {
                 // redirect all attacks to the main golem

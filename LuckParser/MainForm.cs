@@ -302,9 +302,9 @@ namespace LuckParser
                         if (rowData.LogLocation != null) { splitString = ","; }
                         rowData.LogLocation += splitString + outputFile;
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
-                        using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
+                        using (var sw = new StreamWriter(fs, Encoding.UTF8))
                         {
-                            var builder = new JSONBuilder(sw, log, settings, statistics,uploadresult);
+                            var builder = new JSONBuilder(sw, log, settings, statistics, false, uploadresult);
                             builder.CreateJSON();
                         }
                     }
@@ -586,11 +586,17 @@ namespace LuckParser
 
         private void LogFileWatcher_Created(object sender, FileSystemEventArgs e)
         {
-            if (e.FullPath.EndsWith(".zip") || e.FullPath.EndsWith(".evtc"))
+            if ((e.FullPath.EndsWith(".zip") && !e.FullPath.EndsWith(".tmp.zip")) || e.FullPath.EndsWith(".evtc"))
             {
                 AddDelayed(e.FullPath);
             }
         }
 
+        private void LogFileWatcher_Renamed(object sender, RenamedEventArgs e)
+        {
+            if (e.OldFullPath.EndsWith(".tmp.zip") && e.FullPath.EndsWith(".zip")) {
+                AddDelayed(e.FullPath);
+            }
+        }
     }
 }

@@ -30,8 +30,7 @@ namespace LuckParser.Models.DataModels
             None   = 0,
             All    = 1,
             Single = 2,
-            Manual = 3,
-            Custom = 4
+            Manual = 3
         };
 
         public static BuffRemove GetBuffRemove(byte bt)
@@ -319,7 +318,7 @@ namespace LuckParser.Models.DataModels
     {
         public static bool IsSpawn(this ParseEnum.StateChange state)
         {
-            return state == ParseEnum.StateChange.Normal || state == ParseEnum.StateChange.Position || state == ParseEnum.StateChange.Velocity || state == ParseEnum.StateChange.Rotation || state == ParseEnum.StateChange.MaxHealthUpdate || state == ParseEnum.StateChange.Spawn;
+            return state == ParseEnum.StateChange.Normal || state == ParseEnum.StateChange.Position || state == ParseEnum.StateChange.Velocity || state == ParseEnum.StateChange.Rotation || state == ParseEnum.StateChange.MaxHealthUpdate || state == ParseEnum.StateChange.Spawn || state == ParseEnum.StateChange.TeamChange;
         }
 
         public static bool IsDead(this ParseEnum.StateChange state)

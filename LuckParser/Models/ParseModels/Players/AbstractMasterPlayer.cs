@@ -8,6 +8,20 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class AbstractMasterPlayer : AbstractPlayer
     {
+        public class ExtraBoonData
+        {
+            public int HitCount { get; }
+            public int TotalHitCount { get; }
+            public int DamageGain { get; }
+            public double Percent { get; }
+            public ExtraBoonData (int hitCount, int totalHitCount, int damageGain, double percent)
+            {
+                HitCount = hitCount;
+                TotalHitCount = totalHitCount;
+                DamageGain = damageGain;
+                Percent = percent;
+            }
+        };
         // Boons
         public List<Boon> BoonToTrack { get; } = new List<Boon>();
         private readonly List<BoonDistribution> _boonDistribution = new List<BoonDistribution>();
@@ -15,7 +29,8 @@ namespace LuckParser.Models.ParseModels
         private readonly List<Dictionary<long, long>> _condiPresence = new List<Dictionary<long, long>>();
         private readonly List<Dictionary<ushort, Dictionary<long,List<long>>>> _condiCleanse = new List<Dictionary<ushort, Dictionary<long, List<long>>>>();
         private readonly Dictionary<long, BoonsGraphModel> _boonPoints = new Dictionary<long, BoonsGraphModel>();
-        private readonly Dictionary<long, Dictionary<int, string[]>> _boonExtra = new Dictionary<long, Dictionary<int, string[]>>();
+        private readonly Dictionary<long, List<ExtraBoonData>> _boonExtra = new Dictionary<long, List<ExtraBoonData>>();
+        private readonly Dictionary<Boss, Dictionary<long, List<ExtraBoonData>>> _boonTargetExtra = new Dictionary<Boss, Dictionary<long, List<ExtraBoonData>>>();
         // dps graphs
         public Dictionary<int, List<Point>> DpsGraph { get; } = new Dictionary<int, List<Point>>();
         // Minions
@@ -83,11 +98,22 @@ namespace LuckParser.Models.ParseModels
             return new Dictionary<long, List<long>>();
         }
 
-        public Dictionary<long, Dictionary<int, string[]>> GetExtraBoonData(ParsedLog log)
+        public Dictionary<long, List<ExtraBoonData>> GetExtraBoonData(ParsedLog log, Boss target)
         {
             if (_boonDistribution.Count == 0)
             {
                 SetBoonDistribution(log);
+            }
+            if (target != null)
+            {
+                if (_boonTargetExtra.TryGetValue(target, out var res))
+                {
+                    return res;
+                }
+                else
+                {
+                    throw new ArgumentException("Invalid target given");
+                }
             }
             return _boonExtra;
         }
@@ -149,8 +175,6 @@ namespace LuckParser.Models.ParseModels
             long timeStart = log.FightData.FightStart;
             long agentStart = Math.Max(FirstAware - log.FightData.FightStart,0);
             long agentEnd = Math.Min(LastAware - log.FightData.FightStart, log.FightData.FightDuration);
-            HashSet<long> OneCapacityIds = new HashSet<long> (Boon.BoonsByCapacity[1].Select(x => x.ID));
-            bool needCustomRemove = true;
             foreach (CombatItem c in log.GetBoonDataByDst(InstID))
             {
                 long boonId = c.SkillID;
@@ -160,29 +184,20 @@ namespace LuckParser.Models.ParseModels
                 }
                 long time = c.Time - timeStart;
                 List<BoonLog> loglist = boonMap[boonId];
-                if (c.IsStateChange == ParseEnum.StateChange.BuffInitial && (OneCapacityIds.Contains(boonId) || c.Value > 0))
+                if (c.IsStateChange == ParseEnum.StateChange.BuffInitial && c.Value > 0)
                 {
                     ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
-                    needCustomRemove = needCustomRemove && c.Value == 0;
-                    loglist.Add(new BoonApplicationLog(0, src, c.Value > 0 ? Math.Min(c.Value, int.MaxValue - 1) : int.MaxValue));
+                    loglist.Add(new BoonApplicationLog(0, src, c.Value));
                 }
                 else if (c.IsStateChange != ParseEnum.StateChange.BuffInitial && time >= agentStart && time < agentEnd)
                 {
                     if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                     {
                         ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
-                        if (c.OverstackValue > 0 && needCustomRemove)
-                        {
-                            loglist.Add(new BoonRemovalLog(time, src, c.OverstackValue, ParseEnum.BuffRemove.Custom));
-                        }
                         loglist.Add(new BoonApplicationLog(time, src, c.Value));
                     }
                     else if (c.IsBuffRemove != ParseEnum.BuffRemove.Manual && time < log.FightData.FightDuration - 50)
                     {
-                        if (!needCustomRemove && c.Value == 0)
-                        {
-                            continue;
-                        }
                         loglist.Add(new BoonRemovalLog(time, c.DstInstid, c.Value, c.IsBuffRemove));
                     }
                 }
@@ -220,70 +235,77 @@ namespace LuckParser.Models.ParseModels
         }
         private void GenerateExtraBoonData(ParsedLog log, long boonid, GenerationSimulationResult buffSimulationGeneration, List<PhaseData> phases)
         {
-
             switch (boonid)
             {
                 // Frost Spirit
                 case 50421:
-                    _boonExtra[boonid] = new Dictionary<int, string[]>();
-                    for (int i = 0; i < phases.Count; i++)
+                    foreach (Boss target in log.FightData.Logic.Targets)
                     {
-                        List<DamageLog> dmLogs = GetJustPlayerDamageLogs(null, log, phases[i].Start, phases[i].End);
-                        int totalDamage = Math.Max(dmLogs.Sum(x => x.Damage), 1);
-                        int totalBossDamage = Math.Max(dmLogs.Where(x => x.DstInstId == log.Boss.InstID).Sum(x => x.Damage), 1);
-                        List<DamageLog> effect = dmLogs.Where(x => buffSimulationGeneration.GetStackCount((int)x.Time) > 0 && x.IsCondi == 0).ToList();
-                        List<DamageLog> effectBoss = effect.Where(x => x.DstInstId == log.Boss.InstID).ToList();
-                        int damage = (int)(effect.Sum(x => x.Damage) / 21.0);
-                        int bossDamage = (int)(effectBoss.Sum(x => x.Damage) / 21.0);
-                        double gain = Math.Round(100.0 * ((double)totalDamage / (totalDamage - damage) - 1.0), 2);
-                        double gainBoss = Math.Round(100.0 * ((double)totalBossDamage / (totalBossDamage - bossDamage) - 1.0), 2);
-                        string gainText = effect.Count + " out of " + dmLogs.Count(x => x.IsCondi == 0) + " hits <br> Pure Frost Spirit Damage: "
-                                + damage + "<br> Effective Damage Increase: " + gain + "%";
-                        string gainBossText = effectBoss.Count + " out of " + dmLogs.Count(x => x.DstInstId == log.Boss.InstID && x.IsCondi == 0) + " hits <br> Pure Frost Spirit Damage: "
-                                + bossDamage + "<br> Effective Damage Increase: " + gainBoss + "%";
-                        _boonExtra[boonid][i] = new [] { gainText, gainBossText };
+                        if (!_boonTargetExtra.TryGetValue(target, out var extra))
+                        {
+                            _boonTargetExtra[target] = new Dictionary<long, List<ExtraBoonData>>();
+                        }
+                        Dictionary<long, List<ExtraBoonData>> dict = _boonTargetExtra[target];
+                        if (!dict.TryGetValue(boonid, out var list))
+                        {
+                            List<ExtraBoonData> extraDataList = new List<ExtraBoonData>();
+                            for (int i = 0; i < phases.Count; i++)
+                            {
+                                List<DamageLog> dmLogs = GetJustPlayerDamageLogs(target, log, phases[i].Start, phases[i].End);
+                                int totalDamage = Math.Max(dmLogs.Sum(x => x.Damage), 1);
+                                List<DamageLog> effect = dmLogs.Where(x => buffSimulationGeneration.GetStackCount((int)x.Time) > 0 && x.IsCondi == 0).ToList();
+                                int damage = (int)(effect.Sum(x => x.Damage) / 21.0);
+                                double gain = Math.Round(100.0 * ((double)totalDamage / (totalDamage - damage) - 1.0), 2);
+                                extraDataList.Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => x.IsCondi == 0), damage, gain));
+                            }
+                            dict[boonid] = extraDataList;
+                        }                
                     }
-                    break;
-                // Kalla Elite
-                case 45026:
-                    _boonExtra[boonid] = new Dictionary<int, string[]>();
+                    _boonExtra[boonid] = new List<ExtraBoonData>();
                     for (int i = 0; i < phases.Count; i++)
                     {
                         List<DamageLog> dmLogs = GetJustPlayerDamageLogs(null, log, phases[i].Start, phases[i].End);
                         int totalDamage = Math.Max(dmLogs.Sum(x => x.Damage), 1);
-                        int totalBossDamage = Math.Max(dmLogs.Where(x => x.DstInstId == log.Boss.InstID).Sum(x => x.Damage), 1);
-                        int effectCount = dmLogs.Count(x => buffSimulationGeneration.GetStackCount((int)x.Time) > 0 && x.IsCondi == 0);
-                        int effectBossCount = dmLogs.Count(x => buffSimulationGeneration.GetStackCount((int)x.Time) > 0 && x.IsCondi == 0 && x.DstInstId == log.Boss.InstID);
-                        int damage = (int)(effectCount * (325 + 3000 * 0.04));
-                        int bossDamage = (int)(effectBossCount * (325 + 3000 * 0.04));
-                        double gain = Math.Round(100.0 * ((double)(totalDamage + damage) / totalDamage - 1.0), 2);
-                        double gainBoss = Math.Round(100.0 * ((double)(totalBossDamage + bossDamage) / totalBossDamage - 1.0), 2);
-                        string gainText = effectCount + " out of " + dmLogs.Count(x => x.IsCondi == 0) + " hits <br> Estimated Soulcleave Damage: "
-                                + damage + "<br> Estimated Damage Increase: " + gain + "%";
-                        string gainBossText = effectBossCount + " out of " + dmLogs.Count(x => x.DstInstId == log.Boss.InstID && x.IsCondi == 0) + " hits <br> Estimated Soulcleave Damage: "
-                                + bossDamage + "<br> Estimated Damage Increase: " + gainBoss + "%";
-                        _boonExtra[boonid][i] = new [] { gainText, gainBossText };
+                        List<DamageLog> effect = dmLogs.Where(x => buffSimulationGeneration.GetStackCount((int)x.Time) > 0 && x.IsCondi == 0).ToList();
+                        int damage = (int)(effect.Sum(x => x.Damage) / 21.0);
+                        double gain = Math.Round(100.0 * ((double)totalDamage / (totalDamage - damage) - 1.0), 2);
+                        _boonExtra[boonid].Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => x.IsCondi == 0), damage, gain));
                     }
                     break;
                 // GoE
                 case 31803:
-                    _boonExtra[boonid] = new Dictionary<int, string[]>();
+                    foreach (Boss target in log.FightData.Logic.Targets)
+                    {
+                        if (!_boonTargetExtra.TryGetValue(target, out var extra))
+                        {
+                            _boonTargetExtra[target] = new Dictionary<long, List<ExtraBoonData>>();
+                        }
+                        Dictionary<long, List<ExtraBoonData>> dict = _boonTargetExtra[target];
+                        if (!dict.TryGetValue(boonid, out var list))
+                        {
+                            List<ExtraBoonData> extraDataList = new List<ExtraBoonData>();
+                            for (int i = 0; i < phases.Count; i++)
+                            {
+                                List<DamageLog> dmLogs = GetJustPlayerDamageLogs(target, log, phases[i].Start, phases[i].End);
+                                int totalDamage = Math.Max(dmLogs.Sum(x => x.Damage), 1);
+                                List<DamageLog> effect = dmLogs.Where(x => buffSimulationGeneration.GetStackCount((int)x.Time) > 0 && x.IsCondi == 0).ToList();
+                                int damage = (int)(effect.Sum(x => x.Damage) / 11.0);
+                                double gain = Math.Round(100.0 * ((double)totalDamage / (totalDamage - damage) - 1.0), 2);
+                                extraDataList.Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => x.IsCondi == 0), damage, gain));
+                            }
+                            dict[boonid] = extraDataList;
+                        }
+
+                    }
+                    _boonExtra[boonid] = new List<ExtraBoonData>();
                     for (int i = 0; i < phases.Count; i++)
                     {
                         List<DamageLog> dmLogs = GetJustPlayerDamageLogs(null, log, phases[i].Start, phases[i].End);
                         int totalDamage = Math.Max(dmLogs.Sum(x => x.Damage), 1);
-                        int totalBossDamage = Math.Max(dmLogs.Where(x => x.DstInstId == log.Boss.InstID).Sum(x => x.Damage), 1);
                         List<DamageLog> effect = dmLogs.Where(x => buffSimulationGeneration.GetStackCount((int)x.Time) > 0 && x.IsCondi == 0).ToList();
-                        List<DamageLog> effectBoss = effect.Where(x => x.DstInstId == log.Boss.InstID).ToList();
                         int damage = (int)(effect.Sum(x => x.Damage) / 11.0);
-                        int bossDamage = (int)(effectBoss.Sum(x => x.Damage) / 11.0);
                         double gain = Math.Round(100.0 * ((double)totalDamage / (totalDamage - damage) - 1.0), 2);
-                        double gainBoss = Math.Round(100.0 * ((double)totalBossDamage / (totalBossDamage - bossDamage) - 1.0), 2);
-                        string gainText = effect.Count + " out of " + dmLogs.Count(x => x.IsCondi == 0) + " hits <br> Pure GoE Damage: "
-                                + damage + "<br> Effective Damage Increase: " + gain + "%";
-                        string gainBossText = effectBoss.Count + " out of " + dmLogs.Count(x => x.DstInstId == log.Boss.InstID && x.IsCondi == 0) + " hits <br> Pure GoE Damage: "
-                                + bossDamage + "<br> Effective Damage Increase: " + gainBoss + "%";
-                        _boonExtra[boonid][i] = new [] { gainText, gainBossText };
+                        _boonExtra[boonid].Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => x.IsCondi == 0), damage, gain));
                     }
                     break;
             }
@@ -297,7 +319,6 @@ namespace LuckParser.Models.ParseModels
             HashSet<long> extraDataID = new HashSet<long>
             {
                 50421,
-                45026,
                 31803
             };
             BoonsGraphModel boonPresenceGraph = new BoonsGraphModel("Number of Boons");

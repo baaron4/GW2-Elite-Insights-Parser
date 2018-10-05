@@ -476,7 +476,7 @@ namespace LuckParser.Controllers
                     }
                 }
             }
-            _allAgentsList.RemoveAll(x => !(x.InstID != 0 && x.LastAware - x.FirstAware >= 0 && x.FirstAware != 0 && x.LastAware != long.MaxValue));
+            _allAgentsList.RemoveAll(x => !(x.InstID != 0 && x.LastAware - x.FirstAware >= 0 && x.FirstAware != 0 && x.LastAware != long.MaxValue) && x.Type != AgentItem.AgentType.Player);
             _agentData = new AgentData(_allAgentsList);
         }
         private void CompletePlayers()
@@ -492,12 +492,18 @@ namespace LuckParser.Controllers
                     if (tst == null)
                     {
                         tst = _combatItems.Find(x => x.DstAgent == playerAgent.Agent);
-                        playerAgent.InstID = tst == null ? ushort.MaxValue : tst.DstInstid;
+                        if (tst == null)
+                        {
+                            continue;
+                        }
+                        playerAgent.InstID = tst.DstInstid;
                     }
                     else
                     {
                         playerAgent.InstID = tst.SrcInstid;
                     }
+                    playerAgent.FirstAware = _fightData.FightStart;
+                    playerAgent.LastAware = _fightData.FightEnd;
                 }
                 List<CombatItem> lp = _combatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.Despawn && x.SrcInstid == playerAgent.InstID && x.Time <= _fightData.FightEnd && x.Time >= _fightData.FightStart).ToList();
                 Player player = new Player(playerAgent, _fightData.Logic.Mode == BossLogic.ParseMode.Fractal);
@@ -562,7 +568,7 @@ namespace LuckParser.Controllers
                 _boss = new Boss(new AgentItem(0, "UNKNOWN"));
             }
             // Dealing with special cases
-            _fightData.Logic.SpecialParse(_fightData, _agentData, _combatItems, _boss);
+            _fightData.Logic.SpecialParse(_fightData, _agentData, _combatItems);
             // Grab values threw combat data
             foreach (CombatItem c in _combatItems)
             {
@@ -577,7 +583,10 @@ namespace LuckParser.Controllers
                         break;
                     case ParseEnum.StateChange.LogStart:
                         _logData.SetLogStart(c.Value);
-                        _fightData.FightStart = c.Time;
+                        if (_fightData.FightStart == 0)
+                        {
+                            _fightData.FightStart = c.Time;
+                        }
                         break;
                     case ParseEnum.StateChange.LogEnd:
                         _logData.SetLogEnd(c.Value);

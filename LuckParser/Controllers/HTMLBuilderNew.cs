@@ -116,7 +116,7 @@ namespace LuckParser.Controllers
             {
                 Statistics.FinalDPS dpsAll = _statistics.DpsAll[player][phaseIndex];
                 Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[_log.Boss][player][phaseIndex];
-                Statistics.FinalStats stats = _statistics.StatsAll[player][phaseIndex];
+                Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
 
                 List<Object> playerData = new List<Object>
                 {
@@ -172,7 +172,7 @@ namespace LuckParser.Controllers
 
             foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalStats stats = _statistics.StatsAll[player][phaseIndex];
+                Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
                 Statistics.FinalDPS dps = _statistics.DpsAll[player][phaseIndex];
 
                 List<Object> playerData = new List<Object>
@@ -250,8 +250,8 @@ namespace LuckParser.Controllers
 
             foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalStats stats = _statistics.StatsAll[player][phaseIndex];
-                Statistics.FinalBossStats statsBoss = _statistics.StatsBoss[_log.Boss][player][phaseIndex];
+                Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
+                Statistics.FinalStats statsBoss = _statistics.StatsBoss[_log.Boss][player][phaseIndex];
                 Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[_log.Boss][player][phaseIndex];
 
                 List<Object> playerData = new List<object>
@@ -330,7 +330,7 @@ namespace LuckParser.Controllers
             foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalDefenses defenses = _statistics.Defenses[player][phaseIndex];
-                Statistics.FinalStats stats = _statistics.StatsAll[player][phaseIndex];
+                Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
 
                 List<Object> playerData = new List<object>
                 {
@@ -414,13 +414,12 @@ namespace LuckParser.Controllers
                 BoonData boonData = new BoonData();
 
                 Dictionary<long, Statistics.FinalBoonUptime> boons = _statistics.SelfBoons[player][phaseIndex];
-                Dictionary<long, Dictionary<int, string[]>> extraBoonData = player.GetExtraBoonData(_log);
+                Dictionary<long,List<AbstractMasterPlayer.ExtraBoonData>> extraBoonData = player.GetExtraBoonData(_log, null); Dictionary<long, List<AbstractMasterPlayer.ExtraBoonData>> extraBoonDataBoss = player.GetExtraBoonData(_log, _log.Boss);
                 List<string> boonArrayToList = new List<string>
                 {
                     player.Group.ToString()
                 };
                 long fightDuration = phases[phaseIndex].GetDuration();
-                Dictionary<long, long> boonPresence = player.GetBoonPresence(_log, phaseIndex);
                 int count = 0;
                        
                 if (boonTable)
@@ -438,19 +437,26 @@ namespace LuckParser.Controllers
                     {
                         intensityBoon.Add(count);
                     }
-                    string tooltip = "";
-                    if (extraBoonData.TryGetValue(boon.ID, out var myDict))
+
+                    if (extraBoonData.TryGetValue(boon.ID, out var list1))
                     {
-                        string[] tooltips = myDict[phaseIndex];
-                        tooltip = "<big><b>Boss</b></big><br>" + tooltips[1] + "<br><big><b>All</b></big><br>" + tooltips[0];
+                        var extraData = list1[phaseIndex];
+                        string text = extraData.HitCount + " out of " + extraData.TotalHitCount + " hits<br>Pure Damage: " + extraData.DamageGain + "<br>Effective Damage Increase: " + extraData.Percent + "%";
+                        string tooltip = "<big><b>All</b></big><br>" + text;
+                        if (extraBoonDataBoss.TryGetValue(boon.ID, out var list2))
+                        {
+                            extraData = list2[phaseIndex];
+                            text = extraData.HitCount + " out of " + extraData.TotalHitCount + " hits<br>Pure Damage: " + extraData.DamageGain + "<br>Effective Damage Increase: " + extraData.Percent + "%";
+                            tooltip += "<br><big><b>Boss</b></big><br>" + text;
+                        }
                         boonVals.Add(0);
                         boonVals.Add(tooltip);
                     }
                     else
                     {
-                        if (boonTable && boon.Type == Boon.BoonType.Intensity && boonPresence.TryGetValue(boon.ID, out long presenceValue))
+                        if (boonTable && boon.Type == Boon.BoonType.Intensity && boons[boon.ID].Presence > 0)
                         {
-                            boonVals.Add(Math.Round(100.0 * presenceValue / fightDuration, 1));
+                            boonVals.Add(boons[boon.ID].Presence);
                         }
                     }                                
                     boonArrayToList.Add(boons[boon.ID].Uptime.ToString());                        
@@ -1114,22 +1120,26 @@ namespace LuckParser.Controllers
                 List<int[]> enemyData = new List<int[]>(presMech.Count);
                 foreach (Mechanic mech in presMech)
                 {
-                    int count = _log.MechanicData[mech].Count(x => x.Player.InstID == p.InstID && phase.InInterval(x.Time));
-                    enemyData.Add(new int[] { count, count });
+                    long timeFilter = 0;
+                    int filterCount = 0;
+                    List<MechanicLog> mls = _log.MechanicData[mech].Where(x => x.Player.InstID == p.InstID && phase.InInterval(x.Time)).ToList();
+                    int count = mls.Count;
+                    foreach (MechanicLog ml in mls)
+                    {
+                        if (mech.InternalCooldown != 0 && ml.Time - timeFilter < mech.SkillId)//ICD check
+                        {
+                            filterCount++;
+                        }
+                        timeFilter = ml.Time;
+
+                    }
+                    enemyData.Add(new int[] { count - filterCount, count });
                 }
                 list.Add(enemyData);
             }
             return list;
         }
-
-        private string FindPattern(string source, string regex)
-        {
-            if (String.IsNullOrEmpty(source)) return null;
-            Match match = Regex.Match(source, regex);
-            if (match.Success) return match.Groups[1].Value;
-            return null;
-        }
-
+        
         private List<MechanicDto> CreateMechanicGraphData()
         {
             List<MechanicDto> mechanicDtos = new List<MechanicDto>();
@@ -1143,8 +1153,8 @@ namespace LuckParser.Controllers
                     name = mech.PlotlyName,
                     shortName = mech.ShortName,
                     description = mech.Description,
-                    color = FindPattern(mech.PlotlyShape, "color\\s*:\\s*'([^']*)'"),
-                    symbol = FindPattern(mech.PlotlyShape, "symbol\\s*:\\s*'([^']*)'"),
+                    color = mech.PlotlyColor,
+                    symbol = mech.PlotlySymbol,
                     visible = (mech.SkillId == -2 || mech.SkillId == -3),
                     data = BuildMechanicData(mechanicLogs),
                     playerMech = playerMechs.Contains(mech),
@@ -1268,7 +1278,6 @@ namespace LuckParser.Controllers
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
             Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[_log.Boss][phaseIndex];
-            Dictionary<long, long> boonPresence = _log.Boss.GetBoonPresence(_log, phaseIndex);
             long fightDuration = phase.GetDuration();
             BoonData bossData = new BoonData
             {
@@ -1282,9 +1291,9 @@ namespace LuckParser.Controllers
                     conditions[boon.ID].Uptime
                 };
 
-                if (boon.Type != Boon.BoonType.Duration && boonPresence.TryGetValue(boon.ID, out long presenceTime))
+                if (boon.Type != Boon.BoonType.Duration && conditions[boon.ID].Presence > 0)
                 {
-                    boonData.Add(Math.Round(100.0 * presenceTime / fightDuration, 1));
+                    boonData.Add(conditions[boon.ID].Presence);
                 }
 
                 bossData.val.Add(boonData);
@@ -1533,11 +1542,14 @@ namespace LuckParser.Controllers
             data.graphs.Add(new GraphDto("full", "Full"));
             data.graphs.Add(new GraphDto("s10", "10s"));
             data.graphs.Add(new GraphDto("s30", "30s"));
+            data.graphs.Add(new GraphDto("phase", "Phase"));
 
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
                 PhaseData phaseData = _statistics.Phases[i];
                 PhaseDto phaseDto = new PhaseDto(phaseData.Name, phaseData.GetDuration("s"));
+                phaseDto.start = phaseData.Start / 1000.0;
+                phaseDto.end = phaseData.End / 1000.0;
                 data.phases.Add(phaseDto);
                 phaseDto.dpsStats = CreateDPSData(i);
                 phaseDto.dmgStatsBoss = CreateDMGStatsBossData(i);
@@ -1638,7 +1650,7 @@ namespace LuckParser.Controllers
                 {
                     name = mechanic.ShortName,
                     description = mechanic.Description,
-                    color = mechanic.PlotlyShape
+                    color = mechanic.PlotlyString
                 };
                 dtos.Add(dto);
             }
