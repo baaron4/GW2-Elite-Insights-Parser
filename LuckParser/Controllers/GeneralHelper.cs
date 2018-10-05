@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
@@ -22,6 +23,15 @@ namespace LuckParser.Controllers
                 .Aggregate((max, next) => next.Item2.CompareTo(max.Item2) < 0 ? next : max).Item1;
         }
 
+
+        public static string FindPattern(string source, string regex)
+        {
+            if (String.IsNullOrEmpty(source)) return null;
+            Match match = Regex.Match(source, regex);
+            if (match.Success) return match.Groups[1].Value;
+            return null;
+        }
+        
         public static string GetProfIcon(string prof)
         {
             switch (prof)
@@ -117,9 +127,11 @@ namespace LuckParser.Controllers
                 case ParseEnum.BossIDS.Dhuum:
                     return "https://i.imgur.com/RKaDon5.png";
                 case ParseEnum.BossIDS.ConjuredAmalgamate:
+                    return "https://i.imgur.com/C23rYTl.png";
                 case ParseEnum.BossIDS.CALeftArm:
+                    return "https://i.imgur.com/qrkQvEY.png";
                 case ParseEnum.BossIDS.CARightArm:
-                    return "https://i.imgur.com/xCoypjS.png";
+                    return "https://i.imgur.com/MVwjtH7.png";
                 case ParseEnum.BossIDS.Nikare:
                     return "https://i.imgur.com/6yq45Cc.png";
                 case ParseEnum.BossIDS.Kenut:
@@ -208,13 +220,27 @@ namespace LuckParser.Controllers
                 case Zommoros:
                     return "https://i.imgur.com/BxbsRCI.png";
                 case AncientInvokedHydra:
-                    return "https://imgur.com/YABLiBz";
+                    return "https://i.imgur.com/YABLiBz.png";
                 case WyvernMatriarch:
-                    return "https://imgur.com/vjjNSpI";
+                    return "https://i.imgur.com/vjjNSpI.png";
                 case WyvernPatriarch:
-                    return "https://imgur.com/kLKLSfv";
+                    return "https://i.imgur.com/kLKLSfv.png";
                 case ApocalypseBringer:
-                    return "https://imgur.com/0LGKCn2";
+                    return "https://i.imgur.com/0LGKCn2.png";
+                case ConjuredGreatsword:
+                    return "https://i.imgur.com/vHka0QN.png";
+                case ConjuredShield:
+                    return "https://i.imgur.com/wUiI19S.png";
+                case GreaterMagmaElemental1:
+                case GreaterMagmaElemental2:
+                    return "https://i.imgur.com/sr146T6.png";
+                case LavaElemental1:
+                case LavaElemental2:
+                    return "https://i.imgur.com/mydwiYy.png"; 
+                case PyreGuardian:
+                    return "https://i.imgur.com/6zNPTUw.png";
+                case ReaperofFlesh:
+                    return "https://i.imgur.com/Notctbt.png";
                 case Kernan:
                     return "https://i.imgur.com/WABRQya.png";
                 case Knuckles:
@@ -238,7 +264,7 @@ namespace LuckParser.Controllers
                 case RedGuardian:
                     return "https://i.imgur.com/73Uj4lG.png";
             }
-            return "https://i.imgur.com/xCoypjS.png";
+            return "https://i.imgur.com/Hkzttdz.png";
         }
     }
 }

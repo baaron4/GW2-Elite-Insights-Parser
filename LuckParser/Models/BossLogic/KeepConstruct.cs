@@ -31,7 +31,7 @@ namespace LuckParser.Models
 
         protected override CombatReplayMap GetCombatMapInternal()
         {
-            return new CombatReplayMap("https://i.imgur.com/Fj1HyM0.png",
+            return new CombatReplayMap("https://i.imgur.com/RZbs21b.png",
                             Tuple.Create(1099, 1114),
                             Tuple.Create(-5467, 8069, -2282, 11297),
                             Tuple.Create(-12288, -27648, 12288, 27648),
@@ -158,9 +158,12 @@ namespace LuckParser.Models
                     replay.Actors.Add(new CircleActor(false, 0, 600, lifespan, "rgba(255, 0, 0, 0.5)"));
                     replay.Actors.Add(new CircleActor(true, 0, 400, lifespan, "rgba(0, 125, 255, 0.5)"));
                     break;
-                case (ushort)RetrieverProjection:
                 case (ushort)GreenPhantasm:
+                    int lifetime = 8000;
+                    replay.Actors.Add(new CircleActor(false, start + lifetime, 0, new Tuple<int, int>(start, start + lifetime), "rgba(0,255,0,0.5)"));
+                    replay.Actors.Add(new CircleActor(true, start + lifetime, 210, new Tuple<int, int>(start, start + lifetime), "rgba(0,255,0,0.3)"));
                     break;
+                case (ushort)RetrieverProjection:
                 case (ushort)InsidiousProjection:
                 case (ushort)UnstableLeyRift:
                 case (ushort)RadiantPhantasm:
@@ -248,7 +251,6 @@ namespace LuckParser.Models
                     foreach (CastLog c in blades3)
                     {
                         int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
-                        Console.WriteLine("Ticks: {0} Dura: {1}", ticks, c.ActualDuration);
                         int start = (int)c.Time + bladeDelay;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time < start + 1000);
                         if (facing == null)

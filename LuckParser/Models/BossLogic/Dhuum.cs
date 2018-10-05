@@ -131,7 +131,9 @@ namespace LuckParser.Models
             {
                 Echo,
                 Enforcer,
-                Messenger
+                Messenger,
+                Deathling,
+                UnderworldReaper
             };
         }
 
@@ -215,6 +217,9 @@ namespace LuckParser.Models
                 case (ushort)Messenger:
                     replay.Actors.Add(new CircleActor(true, 0, 180, lifespan, "rgba(255, 125, 0, 0.5)"));
                     break;
+                case (ushort)Deathling:
+                case (ushort)UnderworldReaper:
+                    break; 
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
 

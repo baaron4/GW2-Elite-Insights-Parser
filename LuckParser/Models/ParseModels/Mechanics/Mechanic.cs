@@ -1,4 +1,5 @@
-﻿using LuckParser.Models.DataModels;
+﻿using LuckParser.Controllers;
+using LuckParser.Models.DataModels;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -48,7 +49,9 @@ namespace LuckParser.Models.ParseModels
         public int InternalCooldown { get; }
         public CheckSpecialCondition SpecialCondition { get; }
 
-        public string PlotlyShape { get; }
+        public string PlotlyString { get; }
+        public string PlotlySymbol { get; }
+        public string PlotlyColor { get; }
         public string Description { get; }
         public string PlotlyName { get; }
         public string InGameName { get; }
@@ -56,20 +59,22 @@ namespace LuckParser.Models.ParseModels
         public bool IsEnemyMechanic { get; }
 
         public Mechanic(long skillId, string inGameName, MechType mechType, ParseEnum.BossIDS bossId,
-            string plotlyShape, string shortName, int internalCoolDown, CheckSpecialCondition condition = null) :
-            this(skillId, inGameName, mechType, bossId, plotlyShape, shortName, null, null, internalCoolDown, condition)
+            string plotlyString, string shortName, int internalCoolDown, CheckSpecialCondition condition = null) :
+            this(skillId, inGameName, mechType, bossId, plotlyString, shortName, null, null, internalCoolDown, condition)
         {
         }
 
         public Mechanic(long skillId, string inGameName, MechType mechType, ParseEnum.BossIDS bossId,
-            string plotlyShape, string shortName, string description, string plotlyName, int internalCoolDown,
+            string plotlyString, string shortName, string description, string plotlyName, int internalCoolDown,
             CheckSpecialCondition condition = null)
         {
             InGameName = inGameName;
             SkillId = skillId;
             MechanicType = mechType;
             BossID = bossId;
-            PlotlyShape = plotlyShape;
+            PlotlyString = plotlyString;
+            PlotlySymbol = GeneralHelper.FindPattern(PlotlyString, "symbol\\s*:\\s*'([^']*)'");
+            PlotlyColor= GeneralHelper.FindPattern(PlotlyString, "color\\s*:\\s*'([^']*)'");
             ShortName = shortName;
             Description = description ?? InGameName;
             PlotlyName = plotlyName ?? InGameName;

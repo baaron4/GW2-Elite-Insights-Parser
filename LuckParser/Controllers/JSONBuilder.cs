@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using LuckParser.Models;
 using LuckParser.Models.DataModels;
 using LuckParser.Models.ParseModels;
 using Newtonsoft.Json;
@@ -18,12 +19,20 @@ namespace LuckParser.Controllers
 
         readonly ParsedLog _log;
 
+        readonly bool _devMode;
+
         readonly Statistics _statistics;
         readonly StreamWriter _sw;
 
         private readonly String[] _uploadLink;
-
-        private Dictionary<long, string> _boonDict;
+        //
+        private readonly Dictionary<long, string> _skillNames = new Dictionary<long, string>();
+        private readonly Dictionary<long, string> _buffNames = new Dictionary<long, string>();
+        private readonly Dictionary<long, BuffDesc> _buffData = new Dictionary<long, BuffDesc>();
+        private readonly Dictionary<long, string> _skillIcons = new Dictionary<long, string>();
+        private readonly Dictionary<string, MechanicDesc> _mechanicData = new Dictionary<string, MechanicDesc>();
+        private readonly Dictionary<string, string> _actorIconData = new Dictionary<string, string>();
+        private readonly Dictionary<string, List<long>> _personalBuffs = new Dictionary<string, List<long>>();
 
         public static void UpdateStatisticSwitches(StatisticsCalculator.Switches switches)
         {
@@ -37,17 +46,17 @@ namespace LuckParser.Controllers
             switches.CalculateMechanics = true;
         }
 
-        public JSONBuilder(StreamWriter sw, ParsedLog log, SettingsContainer settings, Statistics statistics, string[] UploadString)
+        public JSONBuilder(StreamWriter sw, ParsedLog log, SettingsContainer settings, Statistics statistics, bool devMode, string[] UploadString)
         {
             _log = log;
             _sw = sw;
             _settings = settings;
+            GraphHelper.Settings = settings;
 
             _statistics = statistics;
-
-            _boonDict = Boon.GetAll().GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.Select(y => y.Name).First());
             
            _uploadLink = UploadString;
+            _devMode = devMode;
         }
 
         public void CreateJSON()
@@ -66,7 +75,7 @@ namespace LuckParser.Controllers
             };
             var writer = new JsonTextWriter(_sw)
             {
-                Formatting = _settings.IndentJSON ? Formatting.Indented : Formatting.None
+                Formatting = _settings.IndentJSON && !_devMode ? Formatting.Indented : Formatting.None
             };
             serializer.Serialize(writer, log);
         }
@@ -88,8 +97,24 @@ namespace LuckParser.Controllers
             log.TimeStart = _log.LogData.LogStart;
             log.TimeEnd = _log.LogData.LogEnd;
             log.Duration = durationString;
-            log.Success = _log.LogData.Success;
-            log.UploadLinks = _uploadLink;
+            log.Success = _log.LogData.Success ? 1 : 0;
+            log.SkillNames = _skillNames;
+            log.BuffNames = _buffNames;
+            if (!_devMode)
+            {
+                log.UploadLinks = _uploadLink;
+            } else
+            {
+                log.ED = new JsonExtraLog()
+                {
+                    BuffData = _buffData,
+                    SkillIcons = _skillIcons,
+                    FightIcon = _log.FightData.Logic.IconUrl,
+                    MechanicData = _mechanicData,
+                    ActorIcons = _actorIconData,
+                    PersonalBuffs = _personalBuffs,
+                };
+            }
         }
 
         private void SetMechanics(JsonLog log)
@@ -100,19 +125,61 @@ namespace LuckParser.Controllers
             {
                 mechanicLogs.AddRange(mLog);
             }
-            mechanicLogs = mechanicLogs.OrderBy(x => x.Time).ToList();
             if (mechanicLogs.Any())
             {
-                log.Mechanics = new JsonMechanic[mechanicLogs.Count];
-                for (int i = 0; i < mechanicLogs.Count; i++)
+                log.Mechanics = new Dictionary<string, List<JsonMechanic>>();
+                foreach (MechanicLog ml in mechanicLogs)
                 {
-                    log.Mechanics[i] = new JsonMechanic
+                    JsonMechanic mech = new JsonMechanic
                     {
-                        Time = mechanicLogs[i].Time,
-                        Player = mechanicLogs[i].Player.Character,
-                        Description = mechanicLogs[i].Description,
-                        Skill = mechanicLogs[i].Skill
+                        Time = ml.Time,
+                        Player = ml.Player.Character
                     };
+                    if (_devMode)
+                    {
+                        if (!_mechanicData.ContainsKey(ml.ShortName))
+                        {
+                            _mechanicData[ml.ShortName] = new MechanicDesc()
+                            {
+                                PlotlySymbol = ml.PlotlySymbol,
+                                PlotlyColor = ml.PlotlyColor,
+                                Description = ml.Description,
+                                PlotlyName = ml.PlotlyName,
+                                Enemy = ml.Enemy ? 1 : 0
+                            };
+                        }
+                        mech.ED = new JsonMechanic.JsonExtraMechanic()
+                        {
+                            SN = ml.ShortName,
+                            S = ml.Skill
+                        };
+                        if (ml.Enemy)
+                        {
+                            if (ml.Player.GetType() == typeof(Boss))
+                            {
+                                mech.ED.TI = -1;
+                            }
+                            else
+                            {
+                                mech.ED.TI = _log.FightData.Logic.Targets.IndexOf((Boss)ml.Player);
+                            }
+                        }
+                        else
+                        {
+                            mech.ED.TI = _log.PlayerList.IndexOf((Player)ml.Player);
+                        }
+                    }
+                    if (log.Mechanics.TryGetValue(ml.InGameName, out var list))
+                    {
+                        list.Add(mech);
+                    }
+                    else
+                    {
+                        log.Mechanics[ml.InGameName] = new List<JsonMechanic>()
+                        {
+                            mech
+                        };
+                    }
                 }
             }
         }
@@ -134,10 +201,22 @@ namespace LuckParser.Controllers
                 boss.AvgBoons = _statistics.AvgBossBoons[target];
                 boss.AvgConditions = _statistics.AvgBossConditions[target];
                 boss.Dps = BuildDPS(_statistics.BossDps[target]);
-                boss.Conditions = BuildBossBoons(_statistics.BossConditions[target]);
+                boss.Buffs = BuildBossBuffs(_statistics.BossConditions[target], target);
                 boss.HitboxHeight = target.HitboxHeight;
                 boss.HitboxWidth = target.HitboxWidth;
+                boss.Dps1s = Build1SDPS(target, null);
+                boss.Rotation = BuildRotation(target.GetCastLogs(_log, 0, _log.FightData.FightDuration));
+                boss.FirstAware = (int)(target.FirstAware - _log.FightData.FightStart);
+                boss.LastAware = (int)(target.LastAware - _log.FightData.FightStart);
+                boss.Minions = BuildMinions(target);
+                boss.TotalDamageDist = BuildDamageDist(target, null);
+                boss.AvgBoonsStates = BuildBuffStates(target.GetBoonGraphs(_log)[-2]);
+                boss.AvgConditionsStates = BuildBuffStates(target.GetBoonGraphs(_log)[-3]);
                 log.Boss.Add(boss);
+                if (_devMode)
+                {
+                    _actorIconData[target.Character] = GeneralHelper.GetNPCIcon(target.ID);
+                }
             }
         }
 
@@ -158,18 +237,377 @@ namespace LuckParser.Controllers
                     Weapons = player.GetWeaponsArray(_log).Where(w => w != null).ToArray(),
                     Group = player.Group,
                     Profession = player.Prof,
+                    Dps1s = Build1SDPS(player, null),
+                    TargetDps1s = Build1SDPS(player),
                     DpsAll = BuildDPS(_statistics.DpsAll[player]),
                     DpsBoss = BuildDPSBoss(_statistics.DpsBoss, player),
                     StatsAll = BuildStatsAll(_statistics.StatsAll[player]),
                     StatsBoss = BuildStatsBoss(_statistics.StatsBoss, player),
                     Defenses = BuildDefenses(_statistics.Defenses[player]),
+                    Rotation = BuildRotation(player.GetCastLogs(_log, 0, _log.FightData.FightDuration)),
                     Support = BuildSupport(_statistics.Support[player]),
-                    SelfBoons = BuildBoonUptime(_statistics.SelfBoons[player]),
-                    GroupBoons = BuildBoonUptime(_statistics.GroupBoons[player]),
-                    OffGroupBoons = BuildBoonUptime(_statistics.OffGroupBoons[player]),
-                    SquadBoons = BuildBoonUptime(_statistics.SquadBoons[player])
+                    SelfBuffs = BuildBuffUptime(_statistics.SelfBoons[player], player),
+                    GroupBuffs = BuildBuffUptime(_statistics.GroupBoons[player], player),
+                    OffGroupBuffs = BuildBuffUptime(_statistics.OffGroupBoons[player], player),
+                    SquadBuffs = BuildBuffUptime(_statistics.SquadBoons[player], player),
+                    Minions = BuildMinions(player),
+                    TotalDamageDist = BuildDamageDist(player, null),
+                    TargetDamageDist = BuildDamageDist(player),
+                    TotalDamageTaken = BuildDamageTaken(player),
+                    DeathRecap = BuilDeathRecap(player),
+                    Consumables = BuildConsumables(player),
+                    AvgBoonsStates = BuildBuffStates(player.GetBoonGraphs(_log)[-2]),
+                    AvgConditionsStates = BuildBuffStates(player.GetBoonGraphs(_log)[-3]),
+                });
+                if (_devMode)
+                {
+                    _actorIconData[player.Prof] = GeneralHelper.GetProfIcon(player.Prof);
+                }
+            }
+        }
+
+        private List<long[]> BuildConsumables(Player player)
+        {
+            List<long[]> res = new List<long[]>();
+            foreach(var food in player.GetConsumablesList(_log,0,_log.FightData.FightDuration))
+            {
+                long[] val = new long[3] {
+                    food.Item1.ID,
+                    food.Item2,
+                    food.Item3
+                };
+                _buffNames[food.Item1.ID] = food.Item1.Name;
+                res.Add(val);
+                if (_devMode)
+                {
+                    _buffData[food.Item1.ID] = new BuffDesc()
+                    {
+                        Stacking = 0,
+                        Table = -1,
+                        Icon = food.Item1.Link
+                    };
+                }
+            }
+            return res.Count > 0 ? res : null;
+        }
+
+        private List<int[]> BuildBuffStates(BoonsGraphModel bgm)
+        {
+            if (bgm == null || bgm.BoonChart.Count == 0)
+            {
+                return null;
+            }
+            List<int[]> res = new List<int[]>();
+            foreach (var seg in bgm.BoonChart)
+            {
+                res.Add(new int[2] {
+                    (int)seg.Start,
+                    seg.Value
                 });
             }
+            return res.Count > 0 ? res : null;
+        }
+
+        private List<JsonDeathRecap> BuilDeathRecap(Player player)
+        {
+            List<JsonDeathRecap> res = new List<JsonDeathRecap>();
+            long start = _log.FightData.FightStart;
+            long end = _log.FightData.FightEnd;
+            List<CombatItem> dead = _log.CombatData.GetStates(player.InstID, ParseEnum.StateChange.ChangeDead, start, end);
+            List<CombatItem> down = _log.CombatData.GetStates(player.InstID, ParseEnum.StateChange.ChangeDown, start, end);
+            long lastTime = start;
+            List<DamageLog> damageLogs = player.GetDamageTakenLogs(_log, 0, _log.FightData.FightDuration);
+            foreach (CombatItem c in dead)
+            {
+                JsonDeathRecap recap = new JsonDeathRecap()
+                {
+                    Time = (int)(c.Time - start)
+                };
+                CombatItem downed = down.LastOrDefault(x => x.Time <= c.Time && x.Time >= lastTime);
+                if (downed != null)
+                {
+                    List<DamageLog> damageToDown = damageLogs.Where(x => x.Time < downed.Time - start && x.Damage > 0 && x.Time > lastTime - start).ToList();
+                    recap.ToDown = damageToDown.Count > 0 ? new List<JsonDeathRecap.DamageItem>() : null;
+                    int damage = 0;
+                    for (int i = damageToDown.Count - 1; i > 0; i--)
+                    {
+                        DamageLog dl = damageToDown[i];
+                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);
+                        JsonDeathRecap.DamageItem item = new JsonDeathRecap.DamageItem()
+                        {
+                            Time = (int)dl.Time,
+                            Condi = dl.IsCondi,
+                            Skill = dl.SkillId,
+                            Damage = dl.Damage,
+                            Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
+                        };
+                        damage += dl.Damage;
+                        recap.ToDown.Add(item);
+                        if (damage > 20000)
+                        {
+                            break;
+                        }
+                    }
+                    List<DamageLog> damageToKill = damageLogs.Where(x => x.Time > downed.Time - start && x.Time < c.Time - start && x.Damage > 0 && x.Time > lastTime - start).ToList();
+                    recap.ToKill = damageToKill.Count > 0 ? new List<JsonDeathRecap.DamageItem>() : null;
+                    for (int i = damageToKill.Count - 1; i > 0; i--)
+                    {
+                        DamageLog dl = damageToKill[i];
+                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);
+                        JsonDeathRecap.DamageItem item = new JsonDeathRecap.DamageItem()
+                        {
+                            Time = (int)dl.Time,
+                            Condi = dl.IsCondi,
+                            Skill = dl.SkillId,
+                            Damage = dl.Damage,
+                            Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
+                        };
+                        recap.ToKill.Add(item);
+                    }
+                }
+                else
+                {
+                    recap.ToDown = null;
+                    List<DamageLog> damageToKill = damageLogs.Where(x => x.Time < c.Time - start && x.Damage > 0 && x.Time > lastTime - start).ToList();
+                    recap.ToKill = damageToKill.Count >0 ? new List<JsonDeathRecap.DamageItem>() : null;
+                    int damage = 0;
+                    for (int i = damageToKill.Count - 1; i > 0; i--)
+                    {
+                        DamageLog dl = damageToKill[i];
+                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);
+                        JsonDeathRecap.DamageItem item = new JsonDeathRecap.DamageItem()
+                        {
+                            Time = (int)dl.Time,
+                            Condi = dl.IsCondi,
+                            Skill = dl.SkillId,
+                            Damage = dl.Damage,
+                            Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
+                        };
+                        damage += dl.Damage;
+                        recap.ToKill.Add(item);
+                        if (damage > 20000)
+                        {
+                            break;
+                        }
+                    }
+                }
+                lastTime = c.Time;
+                res.Add(recap);
+            }
+            return res.Count > 0 ? res : null;
+        }
+
+        private Dictionary<long, JsonDamageDist>[][] BuildDamageDist(AbstractMasterPlayer p)
+        {
+            Dictionary<long, JsonDamageDist>[][] res = new Dictionary<long, JsonDamageDist>[_log.FightData.Logic.Targets.Count][];
+            for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
+            {
+                Boss target = _log.FightData.Logic.Targets[i];
+                res[i] = BuildDamageDist(p, target);
+            }
+            return res;
+        }
+
+        private Dictionary<long, JsonDamageDist>[][] BuildDamageDist(Minions p)
+        {
+            Dictionary<long, JsonDamageDist>[][] res = new Dictionary<long, JsonDamageDist>[_log.FightData.Logic.Targets.Count][];
+            for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
+            {
+                Boss target = _log.FightData.Logic.Targets[i];
+                res[i] = BuildDamageDist(p, target);
+            }
+            return res;
+        }
+
+        private Dictionary<long, JsonDamageDist>[] BuildDamageDist(AbstractMasterPlayer p, Boss target)
+        {
+            Dictionary<long, JsonDamageDist>[] res = new Dictionary<long, JsonDamageDist>[_statistics.Phases.Count];
+            for (int i = 0; i < _statistics.Phases.Count; i++)
+            {
+                PhaseData phase = _statistics.Phases[i];
+                res[i] = BuildDamageDist(p.GetJustPlayerDamageLogs(target, _log, phase.Start, phase.End));
+            }
+            return res;
+        }
+
+        private Dictionary<long, JsonDamageDist>[] BuildDamageTaken(Player p)
+        {
+            Dictionary<long, JsonDamageDist>[] res = new Dictionary<long, JsonDamageDist>[_statistics.Phases.Count];
+            for (int i = 0; i < _statistics.Phases.Count; i++)
+            {
+                PhaseData phase = _statistics.Phases[i];
+                res[i] = BuildDamageDist(p.GetDamageTakenLogs(_log, phase.Start, phase.End));
+            }
+            return res;
+        }
+
+        private Dictionary<long, JsonDamageDist>[] BuildDamageDist(Minions p, Boss target)
+        {
+            Dictionary<long, JsonDamageDist>[] res = new Dictionary<long, JsonDamageDist>[_statistics.Phases.Count];
+            for (int i = 0; i < _statistics.Phases.Count; i++)
+            {
+                PhaseData phase = _statistics.Phases[i];
+                res[i] = BuildDamageDist(p.GetDamageLogs(target, _log, phase.Start, phase.End));
+            }
+            return res;
+        }
+
+        private Dictionary<long, JsonDamageDist> BuildDamageDist(List<DamageLog> dls)
+        {
+            Dictionary<long, JsonDamageDist> res = new Dictionary<long, JsonDamageDist>();
+            Dictionary<long, List<DamageLog>> dict = dls.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
+            SkillData skillList = _log.SkillData;
+            foreach (KeyValuePair<long, List<DamageLog>> pair in dict)
+            {
+                if (pair.Value.Count == 0)
+                {
+                    continue;
+                }
+                SkillItem skill = skillList.Get(pair.Key);
+                if (pair.Value.First().IsCondi == 0 && skill != null)
+                {
+                    if(!_skillNames.TryGetValue(pair.Key, out var val))
+                    {
+                        _skillNames[pair.Key] = (skill.ID.ToString() == skill.Name) ? skillList.GetName(skill.ID) : skill.Name;
+                    }
+                    if (_devMode && skill.ApiSkill != null && !_skillIcons.TryGetValue(pair.Key, out var aux))
+                    {
+                        _skillIcons[pair.Key] = skill.ApiSkill.icon;
+                    }
+                }
+                res[pair.Key] = new JsonDamageDist()
+                {
+                    Hits = pair.Value.Count,
+                    Damage = pair.Value.Sum(x => x.Damage),
+                    Condi = pair.Value.First().IsCondi,
+                    Min = pair.Value.Min(x => x.Damage),
+                    Max = pair.Value.Max(x => x.Damage),
+                    Flank = pair.Value.Count(x => x.IsFlanking > 0),
+                    Crit = pair.Value.Count(x => x.Result == ParseEnum.Result.Crit),
+                    Glance = pair.Value.Count(x => x.Result == ParseEnum.Result.Glance),
+                };
+        }
+
+            return res;
+        }
+
+        private List<JsonMinions> BuildMinions(AbstractMasterPlayer master)
+        {
+            List<JsonMinions> mins = new List<JsonMinions>();
+            foreach (Minions minions in master.GetMinions(_log).Values)
+            {
+                JsonMinions min = new JsonMinions()
+                {
+                    Name = minions.Character,
+                    Rotation = BuildRotation(minions.GetCastLogs(_log, 0, _log.FightData.FightDuration)),
+                    TotalDamageDist = BuildDamageDist(minions, null),
+                    TargetDamageDist = BuildDamageDist(minions),
+                };
+                mins.Add(min);
+            }
+            return mins;
+        }
+
+
+        private List<int> Build1SDPS(AbstractMasterPlayer player, Boss target)
+        {
+            List<int> res = new List<int>();
+            foreach (var pt in GraphHelper.GetBossDPSGraph(_log, player, 0, _statistics.Phases[0], GraphHelper.GraphMode.S1, target))
+            {
+                res.Add(pt.Y);
+            }
+            return res;
+        }
+
+        private List<int>[] Build1SDPS(AbstractMasterPlayer player)
+        {
+            List<int>[] res = new List<int>[_log.FightData.Logic.Targets.Count];
+            for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
+            {
+                res[i] = Build1SDPS(player, _log.FightData.Logic.Targets[i]);
+            }
+            return res;
+        }
+
+        private Dictionary<long, List<JsonSkill>> BuildRotation(List<CastLog> cls)
+        {
+            Dictionary<long, List<JsonSkill>> res = new Dictionary<long, List<JsonSkill>>();
+            SkillData skillList = _log.SkillData;
+            foreach (CastLog cl in cls)
+            {
+                GW2APISkill skill = skillList.Get(cl.SkillId)?.ApiSkill;
+                string skillName = skill == null ? skillList.GetName(cl.SkillId) : skill.name;
+                if (cl.SkillId == SkillItem.WeaponSwapId)
+                {
+                    skillName = "Weapon Swap";
+                }
+                _skillNames[cl.SkillId] = skillName;           
+                JsonSkill jSkill = new JsonSkill
+                {
+                    Time = (int)cl.Time,
+                    Duration = cl.ActualDuration
+                };
+                if (_devMode)
+                {
+                    if (!_skillIcons.ContainsKey(cl.SkillId))
+                    {
+                        string skillIcon = "";
+                        if (skill != null && cl.SkillId != -2)
+                        {
+                            skillIcon = skill.icon;
+                        }
+                        else
+                        {
+                            if (skillName == "Dodge")
+                            {
+                                skillIcon = HTMLHelper.GetLink("Dodge");
+                            }
+                            else if (skillName == "Resurrect")
+                            {
+                                skillIcon = HTMLHelper.GetLink("Resurrect");
+                            }
+                            else if (skillName == "Bandage")
+                            {
+                                skillIcon = HTMLHelper.GetLink("Bandage");
+                            }
+                            else if (cl.SkillId == SkillItem.WeaponSwapId)
+                            {
+                                skillIcon = HTMLHelper.GetLink("Swap");
+                            }
+                        }
+                        if (skillIcon.Length > 0)
+                        {
+                            _skillIcons[cl.SkillId] = skillIcon;
+                        }
+                    }
+                    int timeGained = 0;
+                    if (cl.EndActivation == ParseEnum.Activation.CancelFire && cl.ActualDuration < cl.ExpectedDuration)
+                    {
+                        timeGained = cl.ExpectedDuration - cl.ActualDuration;
+                    } else if (cl.EndActivation == ParseEnum.Activation.CancelCancel)
+                    {
+                        timeGained = -cl.ActualDuration;
+                    }
+                    jSkill.ED = new JsonSkill.JsonExtraSkill()
+                    {
+                        UQ = cl.StartActivation == ParseEnum.Activation.Quickness ? 1 : 0,
+                        TS = timeGained,
+                        A = skill != null && skill.slot == "Weapon_1" ? 1 : 0
+                    };
+                }
+                if (res.TryGetValue(cl.SkillId, out var list))
+                {
+                    list.Add(jSkill);
+                } else
+                {
+                    res[cl.SkillId] = new List<JsonSkill>()
+                    {
+                        jSkill
+                    };
+                }
+            }
+
+            return res;
         }
 
         private void SetPhases(JsonLog log)
@@ -184,11 +622,18 @@ namespace LuckParser.Controllers
                     End = phase.End,
                     Name = phase.Name
                 };
-                phaseJson.TargetIds = new int[phase.Targets.Count];
-                int i = 0;
-                foreach (Boss target in phase.Targets)
+                if (_devMode)
                 {
-                    phaseJson.TargetIds[i++] = _log.FightData.Logic.Targets.IndexOf(target);
+                    phaseJson.ED = new JsonPhase.JsonExtraPhase();
+                    phaseJson.ED.TI = new int[phase.Targets.Count];
+                    int i = 0;
+                    foreach (Boss target in phase.Targets)
+                    {
+                        phaseJson.ED.TI[i++] = _log.FightData.Logic.Targets.IndexOf(target);
+                    }
+                    phaseJson.ED.DA = phase.DrawArea ? 1 : 0;
+                    phaseJson.ED.DE = phase.DrawEnd ? 1 : 0;
+                    phaseJson.ED.DS = phase.DrawStart ? 1 : 0;
                 }
                 log.Phases.Add(phaseJson);
             }
@@ -208,9 +653,10 @@ namespace LuckParser.Controllers
             return false;
         }
 
-        private void MakePhaseBossBoon(JsonBossBoon boon, int phase, Statistics.FinalBossBoon value)
+        private void MakePhaseBossBoon(JsonBossBuffs boon, int phase, Statistics.FinalBossBoon value)
         {
             boon.Uptime[phase] = value.Uptime;
+            boon.Presence[phase] = value.Presence;
             boon.Generated[phase] = boon.Generated[phase] ?? new Dictionary<string, double>();
             boon.Overstacked[phase] = boon.Overstacked[phase] ?? new Dictionary<string, double>();
 
@@ -225,10 +671,10 @@ namespace LuckParser.Controllers
             }
         }
 
-        private Dictionary<string, JsonBossBoon> BuildBossBoons(Dictionary<long, Statistics.FinalBossBoon>[] statBoons)
+        private Dictionary<long, JsonBossBuffs> BuildBossBuffs(Dictionary<long, Statistics.FinalBossBoon>[] statBoons, Boss boss)
         {
             int phases = _statistics.Phases.Count;
-            var boons = new Dictionary<long, JsonBossBoon>();
+            var boons = new Dictionary<long, JsonBossBuffs>();
 
             var boonsFound = new List<long>();
             var boonsNotFound = new List<long>();
@@ -237,6 +683,16 @@ namespace LuckParser.Controllers
             {
                 foreach (var boon in statBoons[phaseIndex])
                 {
+                    _buffNames[boon.Key] = Boon.BoonsByIds[boon.Key].Name;
+                    if (_devMode)
+                    {
+                        Boon buff = Boon.BoonsByIds[boon.Key];
+                        _buffData[boon.Key] = new BuffDesc() {
+                            Icon = buff.Link,
+                            Stacking = buff.Type == Boon.BoonType.Intensity ? 1 : 0,
+                            Table = buff.Nature == Boon.BoonNature.Boon ? 0 : (buff.Nature == Boon.BoonNature.Condition ? 1 : (buff.Nature == Boon.BoonNature.OffensiveBuffTable ? 2 : (buff.Nature == Boon.BoonNature.DefensiveBuffTable ? 3 : -1)))
+                        };
+                    }
                     if (boonsFound.Contains(boon.Key))
                     {
                         MakePhaseBossBoon(boons[boon.Key], phaseIndex, boon.Value);
@@ -247,8 +703,18 @@ namespace LuckParser.Controllers
                         {
                             boonsFound.Add(boon.Key);
 
-                            boons[boon.Key] = new JsonBossBoon(phases);
+                            boons[boon.Key] = new JsonBossBuffs(phases);
                             MakePhaseBossBoon(boons[boon.Key], phaseIndex, boon.Value);
+                            if (boss.GetBoonGraphs(_log).TryGetValue(boon.Key, out var bgm))
+                            {
+                                foreach (BoonsGraphModel.Segment seg in bgm.BoonChart)
+                                {
+                                    boons[boon.Key].States.Add(new int[2] {
+                                        (int)seg.Start,
+                                        seg.Value
+                                    });
+                                }
+                            }
                         }
                         else
                         {
@@ -258,19 +724,7 @@ namespace LuckParser.Controllers
                 }
             }
 
-            var namedBoons = new Dictionary<string, JsonBossBoon>();
-            foreach (var entry in boons)
-            {
-                if (_boonDict.ContainsKey(entry.Key)) {
-                    namedBoons[_boonDict[entry.Key]] = entry.Value;
-                }
-                else
-                {
-                    namedBoons[entry.Key.ToString()] = entry.Value;
-                }
-            }
-
-            return namedBoons;
+            return boons;
         }
 
         private JsonDps BuildDPS(Statistics.FinalDPS[] statDps)
@@ -307,25 +761,54 @@ namespace LuckParser.Controllers
             return false;
         }
 
-        private void MakePhaseBoon(JsonBoonUptime boon, int phase, Statistics.FinalBoonUptime value)
+        private void MakePhaseBoon(JsonBuffs boon, int phase, Statistics.FinalBoonUptime value)
         {
             boon.Overstack[phase] = value.Overstack;
             boon.Generation[phase] = value.Generation;
             boon.Uptime[phase] = value.Uptime;
+            boon.Presence[phase] = value.Presence;
         }
 
-        private Dictionary<string, JsonBoonUptime> BuildBoonUptime(Dictionary<long, Statistics.FinalBoonUptime>[] statUptimes)
+        private Dictionary<long, JsonBuffs> BuildBuffUptime(Dictionary<long, Statistics.FinalBoonUptime>[] statUptimes, Player player)
         {
-            var uptimes = new Dictionary<long, JsonBoonUptime>();
+            var uptimes = new Dictionary<long, JsonBuffs>();
             int phases = _statistics.Phases.Count;
 
-            var boonsFound = new List<long>();
-            var boonsNotFound = new List<long>();
+            var boonsFound = new HashSet<long>();
+            var boonsNotFound = new HashSet<long>();
 
             for (int phaseIndex = 0; phaseIndex < phases; phaseIndex++)
             {
                 foreach (var boon in statUptimes[phaseIndex])
                 {
+                    _buffNames[boon.Key] = Boon.BoonsByIds[boon.Key].Name;
+                    if (_devMode)
+                    {
+                        Boon buff = Boon.BoonsByIds[boon.Key];
+                        _buffData[boon.Key] = new BuffDesc()
+                        {
+                            Icon = buff.Link,
+                            Stacking = buff.Type == Boon.BoonType.Intensity ? 1 : 0,
+                            Table = buff.Nature == Boon.BoonNature.Boon ? 0 : (buff.Nature == Boon.BoonNature.Condition ? 1 : (buff.Nature == Boon.BoonNature.OffensiveBuffTable ? 2 : (buff.Nature == Boon.BoonNature.DefensiveBuffTable ? 3 : -1)))
+                        };
+                        if (buff.Nature == Boon.BoonNature.GraphOnlyBuff && buff.Source == Boon.ProfToEnum(player.Prof))
+                        {
+                            if (player.GetBoonDistribution(_log, 0).GetUptime(boon.Key) > 0)
+                            {
+                                if (_personalBuffs.TryGetValue(player.Prof, out var list) && !list.Contains(boon.Key))
+                                {
+                                    list.Add(boon.Key);
+                                }
+                                else
+                                {
+                                    _personalBuffs[player.Prof] = new List<long>()
+                                {
+                                    boon.Key
+                                };
+                                }
+                            }
+                        }
+                    }
                     if (boonsFound.Contains(boon.Key))
                     {
                         MakePhaseBoon(uptimes[boon.Key], phaseIndex, boon.Value);
@@ -336,8 +819,18 @@ namespace LuckParser.Controllers
                         {
                             boonsFound.Add(boon.Key);
 
-                            uptimes[boon.Key] = new JsonBoonUptime(phases);
+                            uptimes[boon.Key] = new JsonBuffs(phases);
                             MakePhaseBoon(uptimes[boon.Key], phaseIndex, boon.Value);
+                            if (player.GetBoonGraphs(_log).TryGetValue(boon.Key, out var bgm))
+                            {
+                                foreach (BoonsGraphModel.Segment seg in bgm.BoonChart)
+                                {
+                                    uptimes[boon.Key].States.Add(new int[2] {
+                                        (int)seg.Start,
+                                        seg.Value
+                                    });
+                                }
+                            }
                         }
                         else
                         {
@@ -354,19 +847,7 @@ namespace LuckParser.Controllers
                 RemoveZeroArrays(boon.Value);
             }
 
-            var namedBoons = new Dictionary<string, JsonBoonUptime>();
-            foreach (var entry in uptimes)
-            {
-                if (_boonDict.ContainsKey(entry.Key)) {
-                    namedBoons[_boonDict[entry.Key]] = entry.Value;
-                }
-                else
-                {
-                    namedBoons[entry.Key.ToString()] = entry.Value;
-                }
-            }
-
-            return namedBoons;
+            return uptimes;
         }
 
         private JsonSupport BuildSupport(Statistics.FinalSupport[] statSupport)
@@ -389,7 +870,7 @@ namespace LuckParser.Controllers
             return defense;
         }
 
-        private JsonStatsAll BuildStatsAll(Statistics.FinalStats[] statStat)
+        private JsonStatsAll BuildStatsAll(Statistics.FinalStatsAll[] statStat)
         {
             var stats = new JsonStatsAll(_statistics.Phases.Count);
 
@@ -399,9 +880,9 @@ namespace LuckParser.Controllers
             return stats;
         }
 
-        private JsonStatsBoss BuildStatsBoss(Statistics.FinalBossStats[] statStat)
+        private JsonStats BuildStatsBoss(Statistics.FinalStats[] statStat)
         {
-            var stats = new JsonStatsBoss(_statistics.Phases.Count);
+            var stats = new JsonStats(_statistics.Phases.Count);
 
             MoveArrayLevel(stats, _statistics.Phases.Count, statStat);
             RemoveZeroArrays(stats);
@@ -409,9 +890,9 @@ namespace LuckParser.Controllers
             return stats;
         }
 
-        private JsonStatsBoss[] BuildStatsBoss(Dictionary<Boss, Dictionary<Player,Statistics.FinalBossStats[]>> statStat, Player player)
+        private JsonStats[] BuildStatsBoss(Dictionary<Boss, Dictionary<Player,Statistics.FinalStats[]>> statStat, Player player)
         {
-            var finalStats = new JsonStatsBoss[_log.FightData.Logic.Targets.Count];
+            var finalStats = new JsonStats[_log.FightData.Logic.Targets.Count];
             int i = 0;
             foreach (Boss target in _log.FightData.Logic.Targets)
             {
