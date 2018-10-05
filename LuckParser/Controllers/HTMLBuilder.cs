@@ -1262,7 +1262,8 @@ namespace LuckParser.Controllers
                     {
 
                         Dictionary<long, Statistics.FinalBoonUptime> boons = _statistics.SelfBoons[player][phaseIndex];
-                        Dictionary<long, Dictionary<int, string[]>> extraBoonData = player.GetExtraBoonData(_log);
+                        Dictionary<long, List<AbstractMasterPlayer.ExtraBoonData>> extraBoonData = player.GetExtraBoonData(_log, null);
+                        Dictionary<long, List<AbstractMasterPlayer.ExtraBoonData>> extraBoonDataBoss = player.GetExtraBoonData(_log, _log.Boss);
                         List<string> boonArrayToList = new List<string>
                         {
                             player.Group.ToString()
@@ -1289,10 +1290,17 @@ namespace LuckParser.Controllers
                                     intensityBoon.Add(count);
                                 }
                                 string tooltip = "";
-                                if (extraBoonData.TryGetValue(boon.ID, out var myDict))
+                                if (extraBoonData.TryGetValue(boon.ID, out var list))
                                 {
-                                    string[] tooltips = myDict[phaseIndex];
-                                    tooltip = " <br> <big><b>Boss</b></big> </br> " + tooltips[1] + " <br> <big><b>All</b></big> </br> " + tooltips[0];
+                                    var extraData = list[phaseIndex];
+                                    string text = extraData.HitCount + " out of " + extraData.TotalHitCount + " hits<br>Pure Damage: " + extraData.DamageGain + "<br>Effective Damage Increase: " + extraData.Percent + "%";
+                                    tooltip = "<big><b>All</b></big><br>" + text;
+                                    if (extraBoonDataBoss.TryGetValue(boon.ID, out var list2))
+                                    {
+                                        extraData = list2[phaseIndex];
+                                        text = extraData.HitCount + " out of " + extraData.TotalHitCount + " hits<br>Pure Damage: " + extraData.DamageGain + "<br>Effective Damage Increase: " + extraData.Percent + "%";
+                                        tooltip += "<br><big><b>Boss</b></big><br> " + text;
+                                    }
                                 }
                                 string toWrite = boons[boon.ID].Uptime + (boon.Type == Boon.BoonType.Intensity ? "" : "%");
                                 if (tooltip.Length > 0)
