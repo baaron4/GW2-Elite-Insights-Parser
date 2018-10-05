@@ -264,7 +264,7 @@ namespace LuckParser.Controllers
                 case RedGuardian:
                     return "https://i.imgur.com/73Uj4lG.png";
             }
-            return "https://i.imgur.com/xCoypjS.png";
+            return "https://i.imgur.com/Hkzttdz.png";
         }
     }
 }
