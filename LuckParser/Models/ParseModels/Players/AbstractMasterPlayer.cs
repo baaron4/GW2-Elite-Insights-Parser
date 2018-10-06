@@ -112,7 +112,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 else
                 {
-                    return new Dictionary<long,List<ExtraBoonData>>();
+                    return new Dictionary<long, List<ExtraBoonData>>();
                 }
             }
             return _boonExtra;
