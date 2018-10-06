@@ -111,7 +111,16 @@ namespace LuckParser.Models
                 {
                     case 2:
                     case 4:
+                        phase.Targets.Add(qadim);
+                        break;
                     case 6:
+                        List<long> pyresLastAware = log.AgentData.GetAgentsByID((ushort)PyreGuardian).Where(x => x.FirstAware - log.FightData.FightStart > phase.Start).Select(x => x.LastAware - log.FightData.FightStart - phase.Start).ToList();
+                        if (pyresLastAware.Count > 0)
+                        {
+                            phases[i] = new PhaseData(phase.Start + pyresLastAware.Max(), phase.End);
+                            phase = phases[i];
+                            phase.Name = names[i - 1];
+                        }
                         phase.Targets.Add(qadim);
                         break;
                     default:
@@ -129,6 +138,7 @@ namespace LuckParser.Models
                         break;
                 }
             }
+            phases.RemoveAll(x => x.Start >= x.End);
             return phases;
         }
 
@@ -194,12 +204,12 @@ namespace LuckParser.Models
 
         public override int IsCM(ParsedLog log)
         {
-            Boss target = Targets.Find(x => x.ID == (ushort)AncientInvokedHydra);
+            Boss target = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Qadim);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
-            return (target.Health > 27e6) ? 1 : 0;
+            return (target.Health > 21e6) ? 1 : 0;
         }
         
     }
