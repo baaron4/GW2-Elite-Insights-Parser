@@ -13,8 +13,8 @@ namespace LuckParser.Models.ParseModels
         public long SkillID { get; }
         public ushort SrcInstid { get; set; }
         public ushort DstInstid { get; set; }
-        public ushort SrcMasterInstid { get; }
-        public ushort DstMasterInstid { get; }
+        public ushort SrcMasterInstid { get; set; }
+        public ushort DstMasterInstid { get; set; }
         public ParseEnum.IFF IFF { get; }
         public byte IsBuff { get; }
         public ParseEnum.Result Result { get; }

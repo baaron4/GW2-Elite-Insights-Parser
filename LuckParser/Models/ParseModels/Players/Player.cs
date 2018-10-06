@@ -75,6 +75,17 @@ namespace LuckParser.Models.ParseModels
         // Private Methods
         private void EstimateWeapons(ParsedLog log)
         {
+            if (Prof == "Sword")
+            {
+                _weaponsArray = new string[]
+                {
+                    "Sword",
+                    "2Hand",
+                    null,
+                    null
+                };
+                return;
+            }
             string[] weapons = new string[4];//first 2 for first set next 2 for second set
             SkillData skillList = log.SkillData;
             List<CastLog> casting = GetCastLogs(log, 0, log.FightData.FightDuration);      
