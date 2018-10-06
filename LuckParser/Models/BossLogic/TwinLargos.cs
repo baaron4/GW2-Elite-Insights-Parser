@@ -78,7 +78,7 @@ namespace LuckParser.Models
                 {
                     phase.DrawEnd = true;
                     phase.DrawStart = true;
-                    phase.DrawArea = offset > 1;
+                    phase.DrawArea = true;
                 }
                 phase.Targets.Add(target);
             }
