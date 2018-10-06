@@ -112,7 +112,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 else
                 {
-                    throw new ArgumentException("Invalid target given");
+                    return new Dictionary<long, List<ExtraBoonData>>();
                 }
             }
             return _boonExtra;
