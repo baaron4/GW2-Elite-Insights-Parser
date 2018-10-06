@@ -1012,7 +1012,7 @@ namespace LuckParser.Controllers
                 }
                 boonGraphData = _log.Boss.GetBoonGraphs(_log);
                 //TODO add to used boon list?
-                foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName == "Compromised" || x.BoonName == "Unnatural Signet"))
+                foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName == "Compromised" || x.BoonName == "Unnatural Signet" || x.BoonName == "Fractured - Enemy"))
                 {
                     BoonChartDataDto graph = CreatePlayerTabBoonGraph(bgm, phase.Start, phase.End);
                     if (graph != null) list.Add(graph);
