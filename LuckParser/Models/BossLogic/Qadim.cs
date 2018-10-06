@@ -81,7 +81,7 @@ namespace LuckParser.Models
             {
                 return phases;
             }
-            List<long> moltenArmor = log.GetBoonDataByDst(qadim.InstID).Where(x => x.SkillID == 52329).Select(x => x.Time - log.FightData.FightStart).Distinct().ToList();
+            List<long> moltenArmor = GetFilteredList(log,52329,qadim.InstID).Select(x => x.Time - log.FightData.FightStart).Distinct().ToList();
             for (int i = 1; i < moltenArmor.Count; i++)
             {
                 if (i % 2 == 0)
@@ -94,7 +94,7 @@ namespace LuckParser.Models
                     }
                 } else
                 {
-                    start = moltenArmor[i];
+                    start = Math.Min(moltenArmor[i], log.FightData.FightDuration);
                     phases.Add(new PhaseData(end, start));
                     if (i == moltenArmor.Count - 1)
                     {
