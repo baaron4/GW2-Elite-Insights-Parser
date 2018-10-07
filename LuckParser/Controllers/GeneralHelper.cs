@@ -270,6 +270,8 @@ namespace LuckParser.Controllers
                     return "https://i.imgur.com/0koP4xB.png";
                 case FleshWurm:
                     return "https://i.imgur.com/o3vX9Zc.png";
+                case Hands:
+                    return "https://i.imgur.com/reGQHhr.png";
             }
             return "https://i.imgur.com/Hkzttdz.png";
         }

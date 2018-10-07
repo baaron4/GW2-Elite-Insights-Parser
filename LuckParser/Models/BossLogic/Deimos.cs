@@ -210,6 +210,7 @@ namespace LuckParser.Models
                 case (ushort)Greed:
                 case (ushort)Pride:
                 case (ushort)Hands:
+                    replay.Actors.Add(new CircleActor(true, 0, 90, lifespan, "rgba(255, 0, 0, 0.2)"));
                     break;
                 case (ushort)Oil:
                     int delay = 3000;
