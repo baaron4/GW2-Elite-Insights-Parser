@@ -223,6 +223,36 @@ namespace LuckParser.Models
             }
         }
 
+        public override void SetMaxHealth(ushort instid, long time, int health)
+        {
+            foreach (Boss boss in Targets)
+            {
+                // Additional check because the arm has a max health update of 14940 now
+                if (boss.Health == -1 && boss.InstID == instid && boss.FirstAware <= time && boss.LastAware >= time)
+                {
+                    boss.Health = health;
+                    break;
+                }
+            }
+        }
+
+        public override void AddHealthUpdate(ushort instid, long time, int healthTime, int health)
+        {
+            foreach (Boss boss in Targets)
+            {
+                if (boss.InstID == instid && boss.FirstAware <= time && boss.LastAware >= time)
+                {
+                    // Additional check because the arm gives a health update of 100%
+                    if (boss.HealthOverTime.Count > 0 && boss.HealthOverTime.Last().Y < 10000 && health > 9900)
+                    {
+                        break;
+                    }
+                    boss.HealthOverTime.Add(new System.Drawing.Point(healthTime, health));
+                    break;
+                }
+            }
+        }
+
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
             CombatReplay replay = boss.CombatReplay;
