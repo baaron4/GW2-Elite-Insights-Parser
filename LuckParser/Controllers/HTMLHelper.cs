@@ -724,6 +724,10 @@ namespace LuckParser.Controllers
             string groupsString = "";
             foreach (int group in groups)
             {
+                if (group == 11)
+                {
+                    continue;
+                }
                 string replayGroupHTML = Properties.Resources.tmplGroupCombatReplay;
                 replayGroupHTML = replayGroupHTML.Replace("${group}", group.ToString());;
                 string playerString = "";
@@ -756,6 +760,10 @@ namespace LuckParser.Controllers
                 int count = 0;
                 foreach (Player p in log.PlayerList)
                 {
+                    if (p.Group == 11)
+                    {
+                        continue;
+                    }
                     if (p.CombatReplay.Positions.Count == 0)
                     {
                         continue;

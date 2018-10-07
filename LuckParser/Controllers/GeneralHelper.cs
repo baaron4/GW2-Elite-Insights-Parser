@@ -92,6 +92,8 @@ namespace LuckParser.Controllers
                     return "https://wiki.guildwars2.com/images/1/11/Reaper_tango_icon_20px.png";
                 case "Scourge":
                     return "https://wiki.guildwars2.com/images/0/06/Scourge_tango_icon_20px.png";
+                case "Sword":
+                    return "https://wiki.guildwars2.com/images/0/07/Crimson_Antique_Blade.png";
             }
             return "";
         }

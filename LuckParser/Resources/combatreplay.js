@@ -490,7 +490,7 @@ function createAllActors() {
                 }
                 break;
             case "Boss":
-				bossData.set(actor.ID, new EnemyIconDrawable(actor.Start, actor.End,actor.Img, 40, actor.Positions));
+				bossData.set(actor.ID, new EnemyIconDrawable(actor.Start, actor.End,actor.Img, 30, actor.Positions));
                 break;
             case "Mob":
                 trashMobData.set(actor.ID, new EnemyIconDrawable(actor.Start, actor.End, actor.Img, 30, actor.Positions));

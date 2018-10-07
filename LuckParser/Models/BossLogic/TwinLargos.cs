@@ -22,16 +22,15 @@ namespace LuckParser.Models
             new Mechanic(53097, "Water Bomb Debuff", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Nikare, "symbol:'diamond',color:'rgb(0,255,255)'", "Psn","Expanding Water Field", "Water Poison",0),
             new Mechanic(52931, "Aquatic Detainment", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Nikare, "symbol:'circle',color:'rgb(0,0,255)'", "Float","Aquatic Detainment (Float Bubble)", "Float Bubble",0),
             });
-            CanCombatReplay = false;
             Extension = "twinlargos";
             IconUrl = "https://i.imgur.com/6O5MT7v.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()
         {
-            return new CombatReplayMap("https://i.imgur.com/RMBeXhd.png",
-                            Tuple.Create(5760, 7538),
-                            Tuple.Create(10896, -2448, 18096, 8352),
+            return new CombatReplayMap("https://i.imgur.com/FAMExYD.png",
+                            Tuple.Create(3205, 4191),
+                            Tuple.Create(10846, -3878, 18086, 5622),
                             Tuple.Create(-21504, -21504, 24576, 24576),
                             Tuple.Create(13440, 14336, 15360, 16256));
         }
@@ -43,6 +42,73 @@ namespace LuckParser.Models
                 (ushort)ParseEnum.BossIDS.Kenut,
                 (ushort)ParseEnum.BossIDS.Nikare
             };
+        }
+
+        private void SetPhases(List<PhaseData> phases, ParsedLog log, Boss target, string[] names)
+        {
+            int offset = phases.Count;
+            long start = 0;
+            long end = 0;
+            long fightDuration = log.FightData.FightDuration;
+            List<CombatItem> states = log.CombatData.GetStatesData(ParseEnum.StateChange.EnterCombat).Where(x => x.SrcInstid == target.InstID).ToList();
+            states.AddRange(log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => x.SrcInstid == target.InstID));
+            states.Sort((x, y) => x.Time < y.Time ? -1 : 1);
+            for (int i = 0; i < states.Count; i++)
+            {
+                CombatItem state = states[i];
+                if (state.IsStateChange == ParseEnum.StateChange.EnterCombat)
+                {
+                    start = state.Time - log.FightData.FightStart;
+                    if (i == states.Count - 1)
+                    {
+                        phases.Add(new PhaseData(start, fightDuration));
+                    }
+                }
+                else
+                {
+                    end = Math.Min(state.Time - log.FightData.FightStart, fightDuration);
+                    phases.Add(new PhaseData(start, end));
+                }
+            }
+            for (int i = offset; i < phases.Count; i++)
+            {
+                PhaseData phase = phases[i];
+                phase.Name = names[i - offset];
+                if (i-offset == 0)
+                {
+                    phase.DrawEnd = true;
+                    phase.DrawStart = true;
+                    phase.DrawArea = true;
+                }
+                phase.Targets.Add(target);
+            }
+        }
+
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
+        {
+            List<PhaseData> phases = GetInitialPhase(log);
+            Boss nikare = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Nikare);
+            if (nikare == null)
+            {
+                throw new InvalidOperationException("Nikare not found");
+            }
+            phases[0].Targets.Add(nikare);
+            Boss kenut = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Kenut);
+            if (kenut != null)
+            {
+                phases[0].Targets.Add(kenut);
+            }
+            if (!requirePhases)
+            {
+                return phases;
+            }
+            SetPhases(phases, log, nikare, new string[]{ "Nikare P1", "Nikare P2", "Nikare P3" } );
+            if (kenut != null)
+            {
+                SetPhases(phases, log, kenut, new string[] { "Kenut P1", "Kenut P2", "Kenut P3" });
+            }
+            phases.Sort((x, y) => x.Start < y.Start ? -1 : 1);
+            return phases;
         }
 
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
