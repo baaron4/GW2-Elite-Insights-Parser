@@ -263,6 +263,9 @@ namespace LuckParser.Controllers
                     return "https://i.imgur.com/nauDVYP.png";
                 case RedGuardian:
                     return "https://i.imgur.com/73Uj4lG.png";
+                case UnderworldReaper:
+                case BanditSapper:
+                    return "https://i.imgur.com/0koP4xB.png";
             }
             return "https://i.imgur.com/Hkzttdz.png";
         }
