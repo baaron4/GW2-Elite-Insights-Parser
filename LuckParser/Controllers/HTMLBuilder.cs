@@ -1791,7 +1791,7 @@ namespace LuckParser.Controllers
                                         {
                                             foreach (CastLog cl in casting)
                                             {
-                                                HTMLHelper.WriteCastingItem(sw, cl, _log.SkillData, phase.Start, phase.End);
+                                                HTMLHelper.WriteCastingItem(sw, cl, _log.SkillData, phase);
                                             }
                                         }
                                         if (_statistics.PresentBoons.Count > 0)
@@ -1801,7 +1801,7 @@ namespace LuckParser.Controllers
                                             {
                                                 sw.Write("{");
                                                 {
-                                                    HTMLHelper.WritePlayerTabBoonGraph(sw, bgm, phase.Start, phase.End);
+                                                    HTMLHelper.WritePlayerTabBoonGraph(sw, bgm, phase);
                                                 }
                                                 sw.Write(" },");
 
@@ -1811,7 +1811,7 @@ namespace LuckParser.Controllers
                                             {
                                                 sw.Write("{");
                                                 {
-                                                    HTMLHelper.WritePlayerTabBoonGraph(sw, bgm, phase.Start, phase.End);
+                                                    HTMLHelper.WritePlayerTabBoonGraph(sw, bgm, phase);
                                                 }
                                                 sw.Write(" },");
 
@@ -1899,7 +1899,7 @@ namespace LuckParser.Controllers
                                                 int castCount = 0;
                                                 foreach (CastLog cl in casting)
                                                 {
-                                                    HTMLHelper.WriteCastingItemIcon(sw, cl, _log.SkillData, phase.Start, castCount == casting.Count - 1);
+                                                    HTMLHelper.WriteCastingItemIcon(sw, cl, _log.SkillData, phase, castCount == casting.Count - 1);
                                                     castCount++;
                                                 }
                                             }
@@ -3205,7 +3205,7 @@ namespace LuckParser.Controllers
 
                                 foreach (CastLog cl in casting)
                                 {
-                                    HTMLHelper.WriteCastingItem(sw, cl, _log.SkillData, phase.Start, phase.End);
+                                    HTMLHelper.WriteCastingItem(sw, cl, _log.SkillData, phase);
                                 }
                             }
                             //============================================
@@ -3214,7 +3214,7 @@ namespace LuckParser.Controllers
                             {
                                 sw.Write("{");
                                 {
-                                    HTMLHelper.WritePlayerTabBoonGraph(sw, bgm, phase.Start, phase.End);
+                                    HTMLHelper.WritePlayerTabBoonGraph(sw, bgm, phase);
                                 }
                                 sw.Write(" },");
 
@@ -3254,7 +3254,7 @@ namespace LuckParser.Controllers
                                     int castCount = 0;
                                     foreach (CastLog cl in casting)
                                     {
-                                        HTMLHelper.WriteCastingItemIcon(sw, cl, _log.SkillData, phase.Start, castCount == casting.Count - 1);
+                                        HTMLHelper.WriteCastingItemIcon(sw, cl, _log.SkillData, phase, castCount == casting.Count - 1);
                                         castCount++;
                                     }
                                 }
