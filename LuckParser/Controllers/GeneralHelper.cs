@@ -271,7 +271,7 @@ namespace LuckParser.Controllers
                 case FleshWurm:
                     return "https://i.imgur.com/o3vX9Zc.png";
                 case Hands:
-                    return "https://i.imgur.com/reGQHhr.png";
+                    return "https://i.imgur.com/8JRPEoo.png";
             }
             return "https://i.imgur.com/Hkzttdz.png";
         }

@@ -209,6 +209,8 @@ namespace LuckParser.Models
                 case (ushort)GamblerReal:
                 case (ushort)Greed:
                 case (ushort)Pride:
+                case (ushort)Tear:
+                    break;
                 case (ushort)Hands:
                     replay.Actors.Add(new CircleActor(true, 0, 90, lifespan, "rgba(255, 0, 0, 0.2)"));
                     break;
@@ -216,8 +218,6 @@ namespace LuckParser.Models
                     int delay = 3000;
                     replay.Actors.Add(new CircleActor(true, start + 150, 200, new Tuple<int, int>(start, start + delay + 1000), "rgba(255,100, 0, 0.5)"));
                     replay.Actors.Add(new CircleActor(true, 0, 200, new Tuple<int, int>(start + delay, end), "rgba(0, 0, 0, 0.5)"));
-                    break;
-                case (ushort)Tear:
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
