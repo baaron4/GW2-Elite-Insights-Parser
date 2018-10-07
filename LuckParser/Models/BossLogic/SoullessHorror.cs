@@ -49,7 +49,8 @@ namespace LuckParser.Models
             {
                 Scythe,
                 TormentedDead,
-                SurgingSoul
+                SurgingSoul,
+                FleshWurm
             };
         }
 
@@ -88,6 +89,8 @@ namespace LuckParser.Models
                         replay.Actors.Add(new RectangleActor(true, 0, 645, 238, lifespan, "rgba(255,100,0,0.5)"));
                         break;
                     }
+                    break;
+                case (ushort)FleshWurm:
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
