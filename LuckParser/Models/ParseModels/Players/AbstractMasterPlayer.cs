@@ -112,7 +112,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 else
                 {
-                    throw new ArgumentException("Invalid target given");
+                    return new Dictionary<long, List<ExtraBoonData>>();
                 }
             }
             return _boonExtra;
@@ -207,15 +207,13 @@ namespace LuckParser.Models.ParseModels
         // private setters
         private void SetMovements(ParsedLog log)
         {
-            long agentStart = Math.Max(FirstAware - log.FightData.FightStart, 0);
-            long agentEnd = Math.Min(LastAware - log.FightData.FightStart, log.FightData.FightDuration);
             foreach (CombatItem c in log.GetMovementData(AgentItem.InstID))
             {
-                long time = c.Time - log.FightData.FightStart;
-                if (time < agentStart || time > agentEnd)
+                if (c.Time < FirstAware || c.Time > LastAware)
                 {
                     continue;
                 }
+                long time = c.Time - log.FightData.FightStart;
                 byte[] xy = BitConverter.GetBytes(c.DstAgent);
                 float x = BitConverter.ToSingle(xy, 0);
                 float y = BitConverter.ToSingle(xy, 4);

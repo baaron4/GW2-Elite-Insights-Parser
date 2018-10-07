@@ -1012,7 +1012,7 @@ namespace LuckParser.Controllers
                 }
                 boonGraphData = _log.Boss.GetBoonGraphs(_log);
                 //TODO add to used boon list?
-                foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName == "Compromised" || x.BoonName == "Unnatural Signet"))
+                foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName == "Compromised" || x.BoonName == "Unnatural Signet" || x.BoonName == "Fractured - Enemy"))
                 {
                     BoonChartDataDto graph = CreatePlayerTabBoonGraph(bgm, phase.Start, phase.End);
                     if (graph != null) list.Add(graph);
@@ -1510,7 +1510,8 @@ namespace LuckParser.Controllers
                     weapons = player.GetWeaponsArray(_log),
                     colBoss = HTMLHelper.GetLink("Color-" + player.Prof),
                     colCleave = HTMLHelper.GetLink("Color-" + player.Prof + "-NonBoss"),
-                    colTotal = HTMLHelper.GetLink("Color-" + player.Prof + "-Total")
+                    colTotal = HTMLHelper.GetLink("Color-" + player.Prof + "-Total"),
+                    isConjure = player.Account == ":Conjured Sword"
                 };
 
                 foreach (KeyValuePair<string, Minions> pair in player.GetMinions(_log))
@@ -1629,10 +1630,6 @@ namespace LuckParser.Controllers
             Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[_log.Boss][phaseIndex];
             foreach (Boon boon in _statistics.PresentBoons)
             {
-                if (boon.Name == "Retaliation")
-                {
-                    continue;
-                }
                 if (conditions[boon.ID].Uptime > 0.0)
                 {
                     return true;
