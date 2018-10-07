@@ -946,7 +946,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + defenses.EvadedCount + "</td>");// evades
                             sw.Write("<td>" + stats.DodgeCount + "</td>");//dodges
                             sw.Write("<td>" + stats.DownCount + "</td>");//downs
-                            long fightDuration = phase.GetDuration("s");
+                            long fightDuration = phase.GetDuration();
                             if (timedead > TimeSpan.Zero)
                             {
                                 sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + Math.Round((timedead.TotalMilliseconds / fightDuration) * 100,1) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</td>");
