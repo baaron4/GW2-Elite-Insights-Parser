@@ -273,7 +273,7 @@ namespace LuckParser.Controllers
                 case Hands:
                     return "https://i.imgur.com/8JRPEoo.png";
             }
-            return "https://i.imgur.com/Hkzttdz.png";
+            return "https://i.imgur.com/HuJHqRZ.png";
         }
     }
 }
