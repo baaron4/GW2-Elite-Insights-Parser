@@ -1007,26 +1007,25 @@ namespace LuckParser.Controllers
                 Dictionary<long, BoonsGraphModel> boonGraphData = p.GetBoonGraphs(_log);
                 foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
                 {
-                    BoonChartDataDto graph = CreatePlayerTabBoonGraph(bgm, phase.Start, phase.End);
+                    BoonChartDataDto graph = CreatePlayerTabBoonGraph(bgm, phase);
                     if (graph != null) list.Add(graph);
                 }
                 boonGraphData = _log.Boss.GetBoonGraphs(_log);
                 //TODO add to used boon list?
                 foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName == "Compromised" || x.BoonName == "Unnatural Signet" || x.BoonName == "Fractured - Enemy"))
                 {
-                    BoonChartDataDto graph = CreatePlayerTabBoonGraph(bgm, phase.Start, phase.End);
+                    BoonChartDataDto graph = CreatePlayerTabBoonGraph(bgm, phase);
                     if (graph != null) list.Add(graph);
                 }
             }
             return list;
         }
 
-        private BoonChartDataDto CreatePlayerTabBoonGraph(BoonsGraphModel bgm, long start, long end)
+        private BoonChartDataDto CreatePlayerTabBoonGraph(BoonsGraphModel bgm, PhaseData phase)
         {
             //TODO line: {shape: 'hv'}
-            long roundedStart = 1000 * (start / 1000);
-            long roundedEnd = 1000 * (end / 1000);
-            List<BoonsGraphModel.Segment> bChart = bgm.BoonChart.Where(x => x.End >= roundedStart && x.Start <= roundedEnd).ToList();
+            long roundedEnd = phase.Start + 1000*phase.GetDuration("s");
+            List<BoonsGraphModel.Segment> bChart = bgm.BoonChart.Where(x => x.End >= phase.Start && x.Start <= roundedEnd).ToList();
             if (bChart.Count == 0 || (bChart.Count == 1 && bChart.First().Value == 0))
             {
                 return null;
@@ -1041,11 +1040,11 @@ namespace LuckParser.Controllers
 
             foreach (BoonsGraphModel.Segment seg in bChart)
             {
-                double segStart = Math.Round(Math.Max(seg.Start - roundedStart, 0) / 1000.0, 3);
+                double segStart = Math.Round(Math.Max(seg.Start - phase.Start, 0) / 1000.0, 3);
                 dto.data.Add(new double[] { segStart, seg.Value });
             }
             BoonsGraphModel.Segment lastSeg = bChart.Last();
-            double segEnd = Math.Round(Math.Min(lastSeg.End - roundedStart, roundedEnd - roundedStart) / 1000.0, 3);
+            double segEnd = Math.Round(Math.Min(lastSeg.End - phase.Start, roundedEnd - phase.Start) / 1000.0, 3);
             dto.data.Add(new double[] { segEnd, lastSeg.Value });
 
             return dto;
