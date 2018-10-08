@@ -10,6 +10,8 @@ namespace LuckParser.Models.HtmlModels
         [DataMember] public string name;
         [DataMember] public string icon;
         [DataMember] public long health;
+        [DataMember] public long hbWidth;
+        [DataMember] public long hbHeight;
         [DataMember] public readonly List<MinionDto> minions = new List<MinionDto>();
 
         public BossDto() { }

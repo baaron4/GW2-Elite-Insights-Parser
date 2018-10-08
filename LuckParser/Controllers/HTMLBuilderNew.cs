@@ -115,26 +115,29 @@ namespace LuckParser.Controllers
             foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalDPS dpsAll = _statistics.DpsAll[player][phaseIndex];
-                Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[_log.Boss][player][phaseIndex];
                 Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
 
-                List<Object> playerData = new List<Object>
-                {
-                    dpsBoss.Damage,
-                    dpsBoss.Dps,
-                    dpsBoss.PowerDamage,
-                    dpsBoss.PowerDps,
-                    dpsBoss.CondiDamage,
-                    dpsBoss.CondiDps,
+                List<Object> playerData = new List<Object>();
 
-                    dpsAll.Damage,
-                    dpsAll.Dps,
-                    dpsAll.PowerDamage,
-                    dpsAll.PowerDps,
-                    dpsAll.CondiDamage,
-                    dpsAll.CondiDps,
-                    stats.DownCount
-                };
+                foreach (Boss target in phase.Targets)
+                {
+                    Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[target][player][phaseIndex];
+                    playerData.Add(dpsBoss.Damage);
+                    playerData.Add(dpsBoss.Dps);
+                    playerData.Add(dpsBoss.PowerDamage);
+                    playerData.Add(dpsBoss.PowerDps);
+                    playerData.Add(dpsBoss.CondiDamage);
+                    playerData.Add(dpsBoss.CondiDps);
+                }
+
+                playerData.Add(dpsAll.Damage);
+                playerData.Add(dpsAll.Dps);
+                playerData.Add(dpsAll.PowerDamage);
+                playerData.Add(dpsAll.PowerDps);
+                playerData.Add(dpsAll.CondiDamage);
+                playerData.Add(dpsAll.CondiDps);
+                playerData.Add(stats.DownCount);
+
 
                 if (stats.Died != 0.0)
                 {
@@ -250,67 +253,38 @@ namespace LuckParser.Controllers
 
             foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
-                Statistics.FinalStats statsBoss = _statistics.StatsBoss[_log.Boss][player][phaseIndex];
-                Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[_log.Boss][player][phaseIndex];
-
-                List<Object> playerData = new List<object>
+                List<Object> playerData = new List<object>();
+                foreach (Boss target in phase.Targets)
                 {
-                    statsBoss.PowerLoopCount, //0
-                    statsBoss.CritablePowerLoopCount, //1
-                    Math.Round((Double)(statsBoss.CriticalRate) / statsBoss.CritablePowerLoopCount * 100, 1), //2
-                    statsBoss.CriticalRate, //3
-                    statsBoss.CriticalDmg, //4
+                    Statistics.FinalStats statsBoss = _statistics.StatsBoss[target][player][phaseIndex];
+                    Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[target][player][phaseIndex];
+                    playerData.AddRange(new List<object>(){
+                        statsBoss.PowerLoopCount, //0
+                        statsBoss.CritablePowerLoopCount, //1
+                        Math.Round((Double)(statsBoss.CriticalRate) / statsBoss.CritablePowerLoopCount * 100, 1), //2
+                        statsBoss.CriticalRate, //3
+                        statsBoss.CriticalDmg, //4
 
-                    Math.Round((Double)(statsBoss.ScholarRate) / statsBoss.PowerLoopCount * 100, 1), //5
-                    statsBoss.ScholarRate, //6
-                    statsBoss.ScholarDmg, //7
-                    Math.Round(100.0 * (dpsBoss.PlayerPowerDamage / (Double)(dpsBoss.PlayerPowerDamage - statsBoss.ScholarDmg) - 1.0), 3), //8
+                        Math.Round((Double)(statsBoss.ScholarRate) / statsBoss.PowerLoopCount * 100, 1), //5
+                        statsBoss.ScholarRate, //6
+                        statsBoss.ScholarDmg, //7
+                        Math.Round(100.0 * (dpsBoss.PlayerPowerDamage / (Double)(dpsBoss.PlayerPowerDamage - statsBoss.ScholarDmg) - 1.0), 3), //8
 
-                    Math.Round((Double)(statsBoss.MovingRate) / statsBoss.PowerLoopCount * 100, 1), //9
-                    statsBoss.MovingRate, //10
-                    statsBoss.MovingDamage, //11
-                    Math.Round(100.0 * (dpsBoss.PlayerPowerDamage / (Double)(dpsBoss.PlayerPowerDamage - statsBoss.MovingDamage) - 1.0), 3), //12
+                        Math.Round((Double)(statsBoss.MovingRate) / statsBoss.PowerLoopCount * 100, 1), //9
+                        statsBoss.MovingRate, //10
+                        statsBoss.MovingDamage, //11
+                        Math.Round(100.0 * (dpsBoss.PlayerPowerDamage / (Double)(dpsBoss.PlayerPowerDamage - statsBoss.MovingDamage) - 1.0), 3), //12
 
-                    Math.Round(statsBoss.FlankingRate / (Double)statsBoss.PowerLoopCount * 100, 1), //13
-                    statsBoss.FlankingRate, //14
+                        Math.Round(statsBoss.FlankingRate / (Double)statsBoss.PowerLoopCount * 100, 1), //13
+                        statsBoss.FlankingRate, //14
 
-                    Math.Round(statsBoss.GlanceRate / (Double)statsBoss.PowerLoopCount * 100, 1), //15
-                    statsBoss.GlanceRate, //16
+                        Math.Round(statsBoss.GlanceRate / (Double)statsBoss.PowerLoopCount * 100, 1), //15
+                        statsBoss.GlanceRate, //16
 
-                    statsBoss.Missed, //17
-                    statsBoss.Interrupts, //18
-                    statsBoss.Invulned, //19
-
-                    stats.TimeWasted, //20
-                    stats.Wasted, //21
-
-                    stats.TimeSaved, //22
-                    stats.Saved, //23
-
-                    stats.SwapCount, //24
-                    Math.Round(stats.StackDist, 2), //25
-                    stats.DownCount //26
-                };
-
-                if (stats.Died != 0.0)
-                {
-                    if (stats.Died < 0)
-                    {
-                        playerData.Add(-stats.Died + " time(s)"); //27
-                        playerData.Add(""); //28
-                    }
-                    else
-                    {
-                        TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
-                        playerData.Add(timedead.Minutes + " m " + timedead.Seconds + " s"); //27
-                        playerData.Add(timedead + "(" + Math.Round((timedead.TotalMilliseconds / phase.GetDuration()) * 100, 1) + "% Alive)"); //28
-                    }
-                }
-                else
-                {
-                    playerData.Add(""); //27
-                    playerData.Add("Never died"); //28
+                        statsBoss.Missed, //17
+                        statsBoss.Interrupts, //18
+                        statsBoss.Invulned //19
+                    });
                 }
                 list.Add(playerData);
             }
@@ -1526,13 +1500,19 @@ namespace LuckParser.Controllers
                 data.enemies.Add(new EnemyDto(enemy.Character));
             }
 
-            data.boss = new BossDto(_log.FightData.ID, _log.FightData.Name, _log.FightData.Logic.IconUrl)
+            foreach (Boss target in _log.FightData.Logic.Targets)
             {
-                health = _log.Boss.Health
-            };
-            foreach (KeyValuePair<string, Minions> pair in _log.Boss.GetMinions(_log))
-            {
-                data.boss.minions.Add(new MinionDto(pair.Value.MinionID, pair.Key.TrimEnd(" \0".ToArray())));
+                BossDto tar = new BossDto(target.ID, target.Character, GeneralHelper.GetNPCIcon(target.ID))
+                {
+                    health = target.Health,
+                    hbHeight = target.HitboxHeight,
+                    hbWidth = target.HitboxWidth
+                };
+                foreach (KeyValuePair<string, Minions> pair in target.GetMinions(_log))
+                {
+                    tar.minions.Add(new MinionDto(pair.Value.MinionID, pair.Key.TrimEnd(" \0".ToArray())));
+                }
+                data.targets.Add(tar);
             }
 
             data.flags.simpleRotation = _settings.SimpleRotation;
@@ -1556,6 +1536,7 @@ namespace LuckParser.Controllers
                 phaseDto.dmgStats = CreateDMGStatsData(i);
                 phaseDto.defStats = CreateDefData(i);
                 phaseDto.healStats = CreateSupData(i);
+
                 phaseDto.boonStats = CreateUptimeData(_statistics.PresentBoons, i);
                 phaseDto.offBuffStats = CreateUptimeData(_statistics.PresentOffbuffs, i);
                 phaseDto.defBuffStats = CreateUptimeData(_statistics.PresentDefbuffs, i);
