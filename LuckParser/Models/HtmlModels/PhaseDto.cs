@@ -11,6 +11,7 @@ namespace LuckParser.Models.HtmlModels
         [DataMember] public long duration;
         [DataMember] public double start;
         [DataMember] public double end;
+        [DataMember] public List<int> targets;
 
         [DataMember] public List<List<Object>> dpsStats;
         [DataMember] public List<List<Object>> dmgStatsBoss;
@@ -35,10 +36,10 @@ namespace LuckParser.Models.HtmlModels
         [DataMember] public List<BoonData> defBuffGenOGroupStats;
         [DataMember] public List<BoonData> defBuffGenSquadStats;
 
-        [DataMember] public List<BoonData> bossCondiStats;
-        [DataMember] public BoonData bossCondiTotals;
-        [DataMember] public BoonData bossBoonTotals;
-        [DataMember] public bool bossHasBoons;
+        [DataMember] public List<List<BoonData>> bossCondiStats;
+        [DataMember] public List<BoonData> bossCondiTotals;
+        [DataMember] public List<BoonData> bossBoonTotals;
+        [DataMember] public List<bool> bossHasBoons;
 
         [DataMember] public List<long> deaths;
 

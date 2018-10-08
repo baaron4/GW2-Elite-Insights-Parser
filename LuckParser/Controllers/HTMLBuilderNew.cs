@@ -1135,7 +1135,6 @@ namespace LuckParser.Controllers
                 };
                 mechanicDtos.Add(dto);
             }
-            //TODO add DOWN and DEAD data
             return mechanicDtos;
         }
 
@@ -1193,10 +1192,10 @@ namespace LuckParser.Controllers
             return list;
         }
 
-        private List<BoonData> CreateBossCondiData(int phaseIndex)
+        private List<BoonData> CreateBossCondiData(int phaseIndex, Boss target)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
-            Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[_log.Boss][phaseIndex];
+            Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[target][phaseIndex];
             List<BoonData> list = new List<BoonData>();
 
             foreach (Player player in _log.PlayerList)
@@ -1219,17 +1218,17 @@ namespace LuckParser.Controllers
             return list;
         }
 
-        private BoonData CreateBossCondiUptimeData(int phaseIndex)
+        private BoonData CreateBossCondiUptimeData(int phaseIndex, Boss target)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
-            Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[_log.Boss][phaseIndex];
-            Dictionary<long, long> condiPresence = _log.Boss.GetCondiPresence(_log, phaseIndex);
+            Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[target][phaseIndex];
+            Dictionary<long, long> condiPresence = target.GetCondiPresence(_log, phaseIndex);
             long fightDuration = phase.GetDuration();
             BoonData bossData = new BoonData
             {
                 val = new List<List<object>>()
             };
-            bossData.avg = Math.Round(_statistics.AvgBossConditions[_log.Boss][phaseIndex], 1);
+            bossData.avg = Math.Round(_statistics.AvgBossConditions[target][phaseIndex], 1);
             foreach (Boon boon in _statistics.PresentConditions)
             {
                 List<object> boonData = new List<object>
@@ -1247,16 +1246,16 @@ namespace LuckParser.Controllers
             return bossData;
         }
 
-        private BoonData CreateBossBoonData(int phaseIndex)
+        private BoonData CreateBossBoonData(int phaseIndex, Boss target)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
-            Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[_log.Boss][phaseIndex];
+            Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[target][phaseIndex];
             long fightDuration = phase.GetDuration();
             BoonData bossData = new BoonData
             {
                 val = new List<List<object>>()
             };
-            bossData.avg = Math.Round(_statistics.AvgBossBoons[_log.Boss][phaseIndex], 1);
+            bossData.avg = Math.Round(_statistics.AvgBossBoons[target][phaseIndex], 1);
             foreach (Boon boon in _statistics.PresentBoons)
             {
                 List<object> boonData = new List<object>
@@ -1530,6 +1529,10 @@ namespace LuckParser.Controllers
                 PhaseDto phaseDto = new PhaseDto(phaseData.Name, phaseData.GetDuration("s"));
                 phaseDto.start = phaseData.Start / 1000.0;
                 phaseDto.end = phaseData.End / 1000.0;
+                foreach (Boss target in phaseData.Targets)
+                {
+                    phaseDto.targets.Add(_log.FightData.Logic.Targets.IndexOf(target));
+                }
                 data.phases.Add(phaseDto);
                 phaseDto.dpsStats = CreateDPSData(i);
                 phaseDto.dmgStatsBoss = CreateDMGStatsBossData(i);
@@ -1556,10 +1559,17 @@ namespace LuckParser.Controllers
                 phaseDto.defBuffGenOGroupStats = CreateGenData(_statistics.PresentDefbuffs, i, "off");
                 phaseDto.defBuffGenSquadStats = CreateGenData(_statistics.PresentDefbuffs, i, "squad");
 
-                phaseDto.bossCondiStats = CreateBossCondiData(i);
-                phaseDto.bossCondiTotals = CreateBossCondiUptimeData(i);
-                phaseDto.bossBoonTotals = CreateBossBoonData(i);
-                phaseDto.bossHasBoons = HasBoons(i);
+                phaseDto.bossCondiStats = new List<List<BoonData>>();
+                phaseDto.bossCondiTotals = new List<BoonData>();
+                phaseDto.bossBoonTotals = new List<BoonData>();
+                phaseDto.bossHasBoons = new List<bool>();
+                foreach (Boss target in phaseData.Targets)
+                {
+                    phaseDto.bossCondiStats.Add(CreateBossCondiData(i, target));
+                    phaseDto.bossCondiTotals.Add(CreateBossCondiUptimeData(i, target));
+                    phaseDto.bossBoonTotals.Add(CreateBossBoonData(i, target));
+                    phaseDto.bossHasBoons.Add(HasBoons(i, target));
+                }
 
                 phaseDto.mechanicStats = CreateMechanicData(i);
                 phaseDto.enemyMechanicStats = CreateBossMechanicData(i);
@@ -1605,9 +1615,9 @@ namespace LuckParser.Controllers
             return ToJson(data, typeof(LogDataDto));
         }
 
-        private bool HasBoons(int phaseIndex)
+        private bool HasBoons(int phaseIndex, Boss target)
         {
-            Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[_log.Boss][phaseIndex];
+            Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[target][phaseIndex];
             foreach (Boon boon in _statistics.PresentBoons)
             {
                 if (conditions[boon.ID].Uptime > 0.0)
@@ -1616,22 +1626,6 @@ namespace LuckParser.Controllers
                 }
             }
             return false;
-        }
-
-        private List<MechanicDto> AssembleMechanics(HashSet<Mechanic> mechanics)
-        {
-            List<MechanicDto> dtos = new List<MechanicDto>(mechanics.Count);
-            foreach(Mechanic mechanic in mechanics)
-            {
-                MechanicDto dto = new MechanicDto
-                {
-                    name = mechanic.ShortName,
-                    description = mechanic.Description,
-                    color = mechanic.PlotlyString
-                };
-                dtos.Add(dto);
-            }
-            return dtos;
         }
 
         private string BuildPlayerData()
@@ -1746,18 +1740,15 @@ namespace LuckParser.Controllers
             List<BoonDto> dtos = new List<BoonDto>();
             foreach (Boon boon in boons)
             {
-                dtos.Add(AssembleBoon(boon));
+                dtos.Add(new BoonDto(
+                                boon.ID,
+                                boon.Name,
+                                boon.Link,
+                                boon.Type == Boon.BoonType.Intensity
+                                )
+                        );
             }
             return dtos;
-        }
-
-        private BoonDto AssembleBoon(Boon boon)
-        {
-            return new BoonDto(
-                    boon.ID,
-                    boon.Name,
-                    boon.Link,
-                    boon.Type == Boon.BoonType.Intensity);
         }
 
         private List<SkillDto> AssembleSkills(ICollection<SkillItem> skills)
