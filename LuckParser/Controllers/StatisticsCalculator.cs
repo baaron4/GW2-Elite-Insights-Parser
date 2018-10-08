@@ -54,6 +54,10 @@ namespace LuckParser.Controllers
             {
                 foreach (Player p in log.PlayerList)
                 {
+                    if (p.Group == 11)
+                    {
+                        continue;
+                    }
                     p.InitCombatReplay(log, _settings.PollingRate, false, true);
                 }
                 foreach (Boss target in log.FightData.Logic.Targets)
@@ -251,7 +255,8 @@ namespace LuckParser.Controllers
             FinalStatsAll final = new FinalStatsAll();
             HashSet<long> nonCritable = new HashSet<long>
                     {
-                        9292
+                        9292,
+                        52370
                     };
 
             foreach (DamageLog dl in p.GetJustPlayerDamageLogs(null, _log, phase.Start, phase.End))
@@ -304,6 +309,10 @@ namespace LuckParser.Controllers
                     }
                 }
             }
+            if (p.Group == 11)
+            {
+                return final;
+            }
             foreach (CastLog cl in p.GetCastLogs(_log, phase.Start, phase.End))
             {
                 if (cl.EndActivation == ParseEnum.Activation.CancelCancel)
@@ -352,6 +361,10 @@ namespace LuckParser.Controllers
                     List<List<Point3D>> GroupsPosList = new List<List<Point3D>>();
                     foreach (Player player in _log.PlayerList)
                     {
+                        if (player.Group == 11)
+                        {
+                            continue;
+                        }
                         GroupsPosList.Add(player.CombatReplay.GetActivePositions());
                     }
                     for (int time = 0; time < GroupsPosList[0].Count; time++)
@@ -402,6 +415,7 @@ namespace LuckParser.Controllers
                 {
                     final.StackDist = -1;
                 }
+
             }
 
             List<CombatItem> dead = combatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDead, start, end);
@@ -656,6 +670,41 @@ namespace LuckParser.Controllers
                 var otherPlayers = _log.PlayerList.Where(p => p.InstID != player.InstID).ToList();
                 _statistics.SquadBoons[player] = GetBoonsForPlayers(otherPlayers, player);
             }
+            // a little hack to remove the contribution on boon average
+            // to remove once we switch to new html builder
+            Player CASword = _log.PlayerList.Find(x => x.Account == ":Conjured Sword");
+            if (CASword != null)
+            {
+                var caBoons = _statistics.SelfBoons[CASword];
+                List<Player> swordlessPList = _log.PlayerList.Where(x => x.Account != ":Conjured Sword").ToList();
+                for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
+                {
+                    var caPhaseBoons = caBoons[phaseIndex];
+                    foreach (Player p in swordlessPList)
+                    {
+                        var phaseBoons = _statistics.SelfBoons[p][phaseIndex];
+                        foreach (long boonId in phaseBoons.Keys)
+                        {
+                            var uptime = phaseBoons[boonId];
+                            if (caPhaseBoons.TryGetValue(boonId, out var caUptime))
+                            {
+                                caUptime.Uptime += uptime.Uptime;
+                            }
+                            else
+                            {
+                                caPhaseBoons[boonId] = new FinalBoonUptime()
+                                {
+                                    Uptime = uptime.Uptime
+                                };
+                            }
+                        }
+                    }
+                    foreach (var uptime in caPhaseBoons.Values)
+                    {
+                        uptime.Uptime = Math.Round(uptime.Uptime/swordlessPList.Count,1);
+                    }
+                }
+            }
         }
 
         private void CalculateConditions()
@@ -773,8 +822,8 @@ namespace LuckParser.Controllers
                     playersById.Add(player.InstID, player);
                 }
                 // All class specific boons
-                var remainingBoons = Boon.GetRemainingBuffsList();
-
+                var remainingBoons = new List<Boon>(Boon.GetRemainingBuffsList());
+                remainingBoons.AddRange(Boon.GetConsumableList());
                 var classSpecificBoonsById = new Dictionary<long, Boon>();
                 foreach (var boon in remainingBoons)
                 {

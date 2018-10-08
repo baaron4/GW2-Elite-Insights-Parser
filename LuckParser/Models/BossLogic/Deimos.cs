@@ -209,17 +209,48 @@ namespace LuckParser.Models
                 case (ushort)GamblerReal:
                 case (ushort)Greed:
                 case (ushort)Pride:
+                case (ushort)Tear:
+                    break;
                 case (ushort)Hands:
+                    replay.Actors.Add(new CircleActor(true, 0, 90, lifespan, "rgba(255, 0, 0, 0.2)"));
                     break;
                 case (ushort)Oil:
                     int delay = 3000;
                     replay.Actors.Add(new CircleActor(true, start + 150, 200, new Tuple<int, int>(start, start + delay + 1000), "rgba(255,100, 0, 0.5)"));
                     replay.Actors.Add(new CircleActor(true, 0, 200, new Tuple<int, int>(start + delay, end), "rgba(0, 0, 0, 0.5)"));
                     break;
-                case (ushort)Tear:
-                    break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
+        }
+
+        public override void SetMaxHealth(ushort instid, long time, int health)
+        {
+            foreach (Boss boss in Targets)
+            {
+                // Additional check because the arm has a max health update of 14940 now
+                if (boss.Health == -1 && boss.InstID == instid && boss.FirstAware <= time && boss.LastAware >= time)
+                {
+                    boss.Health = health;
+                    break;
+                }
+            }
+        }
+
+        public override void AddHealthUpdate(ushort instid, long time, int healthTime, int health)
+        {
+            foreach (Boss boss in Targets)
+            {
+                if (boss.InstID == instid && boss.FirstAware <= time && boss.LastAware >= time)
+                {
+                    // Additional check because the arm gives a health update of 100%
+                    if (boss.HealthOverTime.Count > 0 && boss.HealthOverTime.Last().Y < 10000 && health > 9900)
+                    {
+                        break;
+                    }
+                    boss.HealthOverTime.Add(new System.Drawing.Point(healthTime, health));
+                    break;
+                }
             }
         }
 

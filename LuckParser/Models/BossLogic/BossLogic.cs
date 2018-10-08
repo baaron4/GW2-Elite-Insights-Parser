@@ -117,7 +117,7 @@ namespace LuckParser.Models
             RegroupTargets(agentData, combatItems);
         }
 
-        public void SetMaxHealth(ushort instid, long time, int health)
+        public virtual void SetMaxHealth(ushort instid, long time, int health)
         {
             foreach (Boss boss in Targets)
             {
@@ -129,7 +129,7 @@ namespace LuckParser.Models
             }
         }
 
-        public void AddHealthUpdate(ushort instid, long time, int healthTime, int health)
+        public virtual void AddHealthUpdate(ushort instid, long time, int healthTime, int health)
         {
             foreach (Boss boss in Targets)
             {

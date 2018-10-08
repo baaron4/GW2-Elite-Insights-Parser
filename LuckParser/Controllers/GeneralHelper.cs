@@ -92,6 +92,8 @@ namespace LuckParser.Controllers
                     return "https://wiki.guildwars2.com/images/1/11/Reaper_tango_icon_20px.png";
                 case "Scourge":
                     return "https://wiki.guildwars2.com/images/0/06/Scourge_tango_icon_20px.png";
+                case "Sword":
+                    return "https://wiki.guildwars2.com/images/0/07/Crimson_Antique_Blade.png";
             }
             return "";
         }
@@ -263,8 +265,15 @@ namespace LuckParser.Controllers
                     return "https://i.imgur.com/nauDVYP.png";
                 case RedGuardian:
                     return "https://i.imgur.com/73Uj4lG.png";
+                case UnderworldReaper:
+                case BanditSapper:
+                    return "https://i.imgur.com/0koP4xB.png";
+                case FleshWurm:
+                    return "https://i.imgur.com/o3vX9Zc.png";
+                case Hands:
+                    return "https://i.imgur.com/8JRPEoo.png";
             }
-            return "https://i.imgur.com/Hkzttdz.png";
+            return "https://i.imgur.com/HuJHqRZ.png";
         }
     }
 }

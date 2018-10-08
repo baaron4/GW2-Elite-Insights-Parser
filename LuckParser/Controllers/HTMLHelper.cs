@@ -12,7 +12,7 @@ namespace LuckParser.Controllers
     {
         public static SettingsContainer Settings;
 
-        public static void WriteCastingItem(StreamWriter sw, CastLog cl, SkillData skillList, long start, long end)
+        public static void WriteCastingItem(StreamWriter sw, CastLog cl, SkillData skillList, PhaseData phase)
         {
             GW2APISkill skill = skillList.Get(cl.SkillId)?.ApiSkill;
             string skillName = skill == null ? skillList.GetName(cl.SkillId) : skill.name;
@@ -31,13 +31,13 @@ namespace LuckParser.Controllers
                 dur = cl.ActualDuration / 1000f;
             }
             skillName = skillName.Replace("\"", "");
-            float offset = (cl.Time - start) / 1000f;
+            float offset = (cl.Time - phase.Start) / 1000f;
             float xVal = dur;
             if (offset < 0.0f)
             {
                 xVal += offset;
             }
-            xVal = Math.Min(xVal, (end - cl.Time) / 1000f);
+            xVal = Math.Min(xVal, (phase.End - cl.Time) / 1000f);
             sw.Write("{");
             {
                 sw.Write(cl.SkillId == -5 ? "y: ['1']," : "y: ['1.5'],");
@@ -99,13 +99,13 @@ namespace LuckParser.Controllers
             sw.Write(" },");
         }
 
-        public static void WriteCastingItemIcon(StreamWriter sw, CastLog cl, SkillData skillList, long start, bool last)
+        public static void WriteCastingItemIcon(StreamWriter sw, CastLog cl, SkillData skillList, PhaseData phase, bool last)
         {
             string skillIcon = "";
             GW2APISkill skill = skillList.Get(cl.SkillId)?.ApiSkill;
             if (skill != null && cl.SkillId != -2)
             {
-                float offset = (cl.Time - start) / 1000f;
+                float offset = (cl.Time - phase.Start) / 1000f;
                 if (skill.slot != "Weapon_1")
                 {
                     skillIcon = skill.icon;
@@ -146,7 +146,7 @@ namespace LuckParser.Controllers
                               "source: '" + skillIcon + "'," +
                               "xref: 'x'," +
                               "yref: 'y'," +
-                              "x: " + (cl.Time - start) / 1000f + "," +
+                              "x: " + (cl.Time - phase.Start) / 1000f + "," +
                               "y: 0," +
                               "sizex: 1.1," +
                               "sizey: 1.1," +
@@ -480,11 +480,10 @@ namespace LuckParser.Controllers
             
         }
 
-        public static void WritePlayerTabBoonGraph(StreamWriter sw, BoonsGraphModel bgm, long start, long end)
+        public static void WritePlayerTabBoonGraph(StreamWriter sw, BoonsGraphModel bgm, PhaseData phase)
         {
-            long roundedStart = 1000 * (start / 1000);
-            long roundedEnd = 1000 * (end / 1000);
-            List<BoonsGraphModel.Segment> bChart = bgm.BoonChart.Where(x => x.End >= roundedStart && x.Start <= roundedEnd).ToList();
+            long roundedEnd = phase.Start + 1000 * phase.GetDuration("s");
+            List<BoonsGraphModel.Segment> bChart = bgm.BoonChart.Where(x => x.End >= phase.Start && x.Start <= roundedEnd).ToList();
             if (bChart.Count == 0 || (bChart.Count == 1 && bChart.First().Value == 0))
             {
                 return;
@@ -502,10 +501,10 @@ namespace LuckParser.Controllers
             {
                 foreach (BoonsGraphModel.Segment seg in bChart)
                 {
-                    double segStart = Math.Round(Math.Max(seg.Start - roundedStart, 0) / 1000.0,3);
+                    double segStart = Math.Round(Math.Max(seg.Start - phase.Start, 0) / 1000.0,3);
                     sw.Write("'" + segStart + "',");
                 }
-                sw.Write("'" + Math.Round(Math.Min(bChart.Last().End - roundedStart, roundedEnd - roundedStart) / 1000.0, 3) + "'");
+                sw.Write("'" + Math.Round(Math.Min(bChart.Last().End - phase.Start, roundedEnd - phase.Start) / 1000.0, 3) + "'");
             }
             sw.Write("],");
             sw.Write(" yaxis: 'y2'," +
@@ -724,6 +723,10 @@ namespace LuckParser.Controllers
             string groupsString = "";
             foreach (int group in groups)
             {
+                if (group == 11)
+                {
+                    continue;
+                }
                 string replayGroupHTML = Properties.Resources.tmplGroupCombatReplay;
                 replayGroupHTML = replayGroupHTML.Replace("${group}", group.ToString());;
                 string playerString = "";
@@ -756,6 +759,10 @@ namespace LuckParser.Controllers
                 int count = 0;
                 foreach (Player p in log.PlayerList)
                 {
+                    if (p.Group == 11)
+                    {
+                        continue;
+                    }
                     if (p.CombatReplay.Positions.Count == 0)
                     {
                         continue;

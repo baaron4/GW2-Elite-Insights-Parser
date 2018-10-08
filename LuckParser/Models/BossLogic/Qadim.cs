@@ -41,18 +41,17 @@ namespace LuckParser.Models
             //new Mechanic(51943, "Breakbar End", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.Fail","Breakbar (Failed CC)", "CC Fail",0,(condition => condition.CombatItem.Value > 8000)),
             //new Mechanic(51943, "Breakbar End", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CCed","Breakbar broken", "CCed",0,(condition => condition.CombatItem.Value < 8000)),
             });
-            CanCombatReplay = false;
             Extension = "qadim";
             IconUrl = "https://wiki.guildwars2.com/images/f/f2/Mini_Qadim.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()
         {
-            return new CombatReplayMap("https://i.imgur.com/vtVubK8.png",
-                            Tuple.Create(3241, 2814),
-                            Tuple.Create(-10886, -12019, -3950, -5995),
-                            Tuple.Create(-21504,-21504,24576,24576),
-                            Tuple.Create(13440,14336,15360,16256));
+            return new CombatReplayMap("https://i.imgur.com/nGaCj1L.png",
+                            Tuple.Create(3437, 2978),
+                            Tuple.Create(-10966, 8825, -3870, 15289),
+                            Tuple.Create(-21504, -21504, 24576, 24576),
+                            Tuple.Create(13440, 14336, 15360, 16256));
         }
 
         protected override List<ushort> GetFightTargetsIDs()
@@ -65,6 +64,82 @@ namespace LuckParser.Models
                 (ushort)WyvernPatriarch,
                 (ushort)ApocalypseBringer,
             };
+        }
+
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
+        {
+            long start = 0;
+            long end = 0;
+            List<PhaseData> phases = GetInitialPhase(log);
+            Boss qadim = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Qadim);
+            if (qadim == null)
+            {
+                throw new InvalidOperationException("Qadim not found");
+            }
+            phases[0].Targets.Add(qadim);
+            if (!requirePhases)
+            {
+                return phases;
+            }
+            List<long> moltenArmor = GetFilteredList(log,52329,qadim.InstID).Select(x => x.Time - log.FightData.FightStart).Distinct().ToList();
+            for (int i = 1; i < moltenArmor.Count; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    end = Math.Min(moltenArmor[i], log.FightData.FightDuration);
+                    phases.Add(new PhaseData(start, end));
+                    if (i == moltenArmor.Count - 1)
+                    {
+                        phases.Add(new PhaseData(end, log.FightData.FightDuration));
+                    }
+                } else
+                {
+                    start = Math.Min(moltenArmor[i], log.FightData.FightDuration);
+                    phases.Add(new PhaseData(end, start));
+                    if (i == moltenArmor.Count - 1)
+                    {
+                        phases.Add(new PhaseData(start, log.FightData.FightDuration));
+                    }
+                }
+            }
+            string[] names = { "Hydra","Qadim P1","Apocalypse", "Qadim P2","Wyvern", "Qadim P3" };
+            for (int i = 1; i < phases.Count; i++)
+            {
+                PhaseData phase = phases[i];
+                phase.Name = names[i - 1];
+                switch (i)
+                {
+                    case 2:
+                    case 4:
+                        phase.Targets.Add(qadim);
+                        break;
+                    case 6:
+                        List<long> pyresLastAware = log.AgentData.GetAgentsByID((ushort)PyreGuardian).Where(x => x.FirstAware - log.FightData.FightStart > phase.Start).Select(x => x.LastAware - log.FightData.FightStart - phase.Start).ToList();
+                        if (pyresLastAware.Count > 0)
+                        {
+                            phases[i] = new PhaseData(phase.Start + pyresLastAware.Max(), phase.End);
+                            phase = phases[i];
+                            phase.Name = names[i - 1];
+                        }
+                        phase.Targets.Add(qadim);
+                        break;
+                    default:
+                        List<ushort> ids = new List<ushort>
+                        {
+                           (ushort) WyvernMatriarch,
+                           (ushort) WyvernPatriarch,
+                           (ushort) AncientInvokedHydra,
+                           (ushort) ApocalypseBringer
+                        };
+                        AddTargetsToPhase(phase, ids, log);
+                        phase.DrawArea = true;
+                        phase.DrawEnd = true;
+                        phase.DrawStart = true;
+                        break;
+                }
+            }
+            phases.RemoveAll(x => x.Start >= x.End);
+            return phases;
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
@@ -129,7 +204,12 @@ namespace LuckParser.Models
 
         public override int IsCM(ParsedLog log)
         {
-            return 0; //Check via Hydra HP or (>27e6)
+            Boss target = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Qadim);
+            if (target == null)
+            {
+                throw new InvalidOperationException("Target for CM detection not found");
+            }
+            return (target.Health > 21e6) ? 1 : 0;
         }
         
     }

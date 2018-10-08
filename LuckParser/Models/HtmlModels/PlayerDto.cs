@@ -23,6 +23,7 @@ namespace LuckParser.Models.HtmlModels
         [DataMember] public string colBoss;
         [DataMember] public string colCleave;
         [DataMember] public string colTotal;
+        [DataMember(EmitDefaultValue = false)] public bool isConjure;
 
         public PlayerDto() { }
 
