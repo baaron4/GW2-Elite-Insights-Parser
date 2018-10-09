@@ -7,7 +7,7 @@ namespace LuckParser.Models.HtmlModels
     public class LogDataDto
     {
         [DataMember]
-        public List<BossDto> targets;
+        public List<BossDto> bosses;
         [DataMember(Order = 0)]
         public readonly List<PlayerDto> players = new List<PlayerDto>();
         [DataMember(Order = 1)]
