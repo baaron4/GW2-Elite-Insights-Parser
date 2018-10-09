@@ -58,7 +58,7 @@ namespace LuckParser.Controllers
             return graph;
         }
 
-        private PlayerChartDataDto CreateBossGraphData(int phaseIndex)
+        private PlayerChartDataDto BuildBossGraphData(int phaseIndex)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
             return new PlayerChartDataDto
@@ -72,7 +72,7 @@ namespace LuckParser.Controllers
         /// <summary>
         /// Creates the dps graph
         /// </summary>
-        private List<PlayerChartDataDto> CreateDPSGraphData(int phaseIndex)
+        private List<PlayerChartDataDto> BuildDPSGraphData(int phaseIndex)
         {
             List<PlayerChartDataDto> list = new List<PlayerChartDataDto>();
             PhaseData phase = _statistics.Phases[phaseIndex];
@@ -88,7 +88,7 @@ namespace LuckParser.Controllers
             return list;
         }
 
-        private double[] CreateBossHealthData(int phaseIndex)
+        private double[] BuildBossHealthData(int phaseIndex)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
             int duration = (int)phase.GetDuration("s");
@@ -106,7 +106,7 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw"></param>
         /// <param name="phaseIndex"></param>
-        private List<List<Object>> CreateDPSData(int phaseIndex)
+        private List<List<Object>> BuildDPSData(int phaseIndex)
         {
             List<List<Object>> list = new List<List<Object>>(_log.PlayerList.Count);
             PhaseData phase = _statistics.Phases[phaseIndex];
@@ -168,7 +168,7 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw"></param>
         /// <param name="phaseIndex"></param>
-        private List<List<Object>> CreateDMGStatsData(int phaseIndex)
+        private List<List<Object>> BuildDMGStatsData(int phaseIndex)
         {
             List<List<Object>> list = new List<List<Object>>();
             PhaseData phase = _statistics.Phases[phaseIndex];
@@ -245,7 +245,7 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw"></param>
         /// <param name="phaseIndex"></param>
-        private List<List<Object>> CreateDMGStatsBossData(int phaseIndex)
+        private List<List<Object>> BuildDMGStatsBossData(int phaseIndex)
         {
             List<List<Object>> list = new List<List<Object>>();
 
@@ -295,7 +295,7 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw"></param>
         /// <param name="phaseIndex"></param>
-        private List<List<Object>> CreateDefData(int phaseIndex)
+        private List<List<Object>> BuildDefenseData(int phaseIndex)
         {
             List<List<Object>> list = new List<List<Object>>();
 
@@ -348,7 +348,7 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw"></param>
         /// <param name="phaseIndex"></param>
-        private List<List<Object>> CreateSupData(int phaseIndex)
+        private List<List<Object>> BuildSupportData(int phaseIndex)
         {
             List<List<Object>> list = new List<List<Object>>();
 
@@ -373,7 +373,7 @@ namespace LuckParser.Controllers
         /// <param name="listToUse"></param>
         /// <param name="tableId"></param>
         /// <param name="phaseIndex"></param>
-        private List<BoonData> CreateUptimeData(List<Boon> listToUse, int phaseIndex)
+        private List<BoonData> BuildBuffUptimeData(List<Boon> listToUse, int phaseIndex)
         {
             List<PhaseData> phases = _statistics.Phases;
             List<BoonData> list = new List<BoonData>();
@@ -450,7 +450,7 @@ namespace LuckParser.Controllers
         /// <param name="listToUse"></param>
         /// <param name="tableId"></param>
         /// <param name="phaseIndex"></param>
-        private List<BoonData> CreateGenData(List<Boon> listToUse, int phaseIndex, string target)
+        private List<BoonData> BuildBuffGenerationData(List<Boon> listToUse, int phaseIndex, string target)
         {
             List<BoonData> list = new List<BoonData>();
 
@@ -712,7 +712,7 @@ namespace LuckParser.Controllers
             sw.Write("</script>");
         }
 
-        private List<double[]> CreateDMGDistBodyData(List<CastLog> casting, List<DamageLog> damageLogs, long finalTotalDamage,
+        private List<double[]> BuildDMGDistBodyData(List<CastLog> casting, List<DamageLog> damageLogs, long finalTotalDamage,
             Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons)
         {
             List<double[]> list = new List<double[]>();
@@ -795,7 +795,7 @@ namespace LuckParser.Controllers
             return list;
         }
 
-        private DmgDistributionDto _CreateDMGDistData(Statistics.FinalDPS dps, AbstractMasterPlayer p, Boss boss, int phaseIndex,
+        private DmgDistributionDto _BuildDMGDistData(Statistics.FinalDPS dps, AbstractMasterPlayer p, Boss boss, int phaseIndex,
             Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons)
         {
             DmgDistributionDto dto = new DmgDistributionDto();
@@ -808,7 +808,7 @@ namespace LuckParser.Controllers
                 dto.contribution = Math.Round(100.0 * dto.totalDamage / totalDamage,3);
             }
 
-            dto.data = CreateDMGDistBodyData(casting, damageLogs, dto.totalDamage, usedSkills, usedBoons);
+            dto.data = BuildDMGDistBodyData(casting, damageLogs, dto.totalDamage, usedSkills, usedBoons);
 
             return dto;
         }
@@ -824,7 +824,7 @@ namespace LuckParser.Controllers
             Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons)
         {
             Statistics.FinalDPS dps = boss != null ? _statistics.DpsBoss[boss][p][phaseIndex] : _statistics.DpsAll[p][phaseIndex];
-            return _CreateDMGDistData(dps, p, boss, phaseIndex, usedSkills, usedBoons);
+            return _BuildDMGDistData(dps, p, boss, phaseIndex, usedSkills, usedBoons);
         }
 
         /// <summary>
@@ -833,7 +833,7 @@ namespace LuckParser.Controllers
         private DmgDistributionDto BuildBossDMGDistData(Boss p, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons)
         {
             Statistics.FinalDPS dps = _statistics.BossDps[_log.Boss][phaseIndex];
-            return _CreateDMGDistData(dps, p, null, phaseIndex, usedSkills, usedBoons);
+            return _BuildDMGDistData(dps, p, null, phaseIndex, usedSkills, usedBoons);
         }
 
         private DmgDistributionDto _BuildDMGDistData(Statistics.FinalDPS dps, AbstractMasterPlayer p, Minions minions, Boss boss, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons)
@@ -849,7 +849,7 @@ namespace LuckParser.Controllers
             {
                 dto.contribution = Math.Round(100.0 * finalTotalDamage / totalDamage, 2);
             }
-            dto.data = CreateDMGDistBodyData(casting, damageLogs, finalTotalDamage, usedSkills, usedBoons);
+            dto.data = BuildDMGDistBodyData(casting, damageLogs, finalTotalDamage, usedSkills, usedBoons);
             return dto;
         }
 
@@ -1430,9 +1430,9 @@ namespace LuckParser.Controllers
             {
                 PhaseChartDataDto phaseData = new PhaseChartDataDto
                 {
-                    bossHealth = CreateBossHealthData(i),
-                    players = CreateDPSGraphData(i),
-                    boss = CreateBossGraphData(i)
+                    bossHealth = BuildBossHealthData(i),
+                    players = BuildDPSGraphData(i),
+                    boss = BuildBossGraphData(i)
                 };
                 chartData.Add(phaseData);
              }
@@ -1509,30 +1509,30 @@ namespace LuckParser.Controllers
                     phaseDto.bosses.Add(_log.FightData.Logic.Targets.IndexOf(target));
                 }
                 data.phases.Add(phaseDto);
-                phaseDto.dpsStats = CreateDPSData(i);
-                phaseDto.dmgStatsBoss = CreateDMGStatsBossData(i);
-                phaseDto.dmgStats = CreateDMGStatsData(i);
-                phaseDto.defStats = CreateDefData(i);
-                phaseDto.healStats = CreateSupData(i);
+                phaseDto.dpsStats = BuildDPSData(i);
+                phaseDto.dmgStatsBoss = BuildDMGStatsBossData(i);
+                phaseDto.dmgStats = BuildDMGStatsData(i);
+                phaseDto.defStats = BuildDefenseData(i);
+                phaseDto.healStats = BuildSupportData(i);
 
-                phaseDto.boonStats = CreateUptimeData(_statistics.PresentBoons, i);
-                phaseDto.offBuffStats = CreateUptimeData(_statistics.PresentOffbuffs, i);
-                phaseDto.defBuffStats = CreateUptimeData(_statistics.PresentDefbuffs, i);
+                phaseDto.boonStats = BuildBuffUptimeData(_statistics.PresentBoons, i);
+                phaseDto.offBuffStats = BuildBuffUptimeData(_statistics.PresentOffbuffs, i);
+                phaseDto.defBuffStats = BuildBuffUptimeData(_statistics.PresentDefbuffs, i);
 
-                phaseDto.boonGenSelfStats = CreateGenData(_statistics.PresentBoons, i, "self");
-                phaseDto.boonGenGroupStats = CreateGenData(_statistics.PresentBoons, i, "group");
-                phaseDto.boonGenOGroupStats = CreateGenData(_statistics.PresentBoons, i, "off");
-                phaseDto.boonGenSquadStats = CreateGenData(_statistics.PresentBoons, i, "squad");
+                phaseDto.boonGenSelfStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "self");
+                phaseDto.boonGenGroupStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "group");
+                phaseDto.boonGenOGroupStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "off");
+                phaseDto.boonGenSquadStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "squad");
 
-                phaseDto.offBuffGenSelfStats = CreateGenData(_statistics.PresentOffbuffs, i, "self");
-                phaseDto.offBuffGenGroupStats = CreateGenData(_statistics.PresentOffbuffs, i, "group");
-                phaseDto.offBuffGenOGroupStats = CreateGenData(_statistics.PresentOffbuffs, i, "off");
-                phaseDto.offBuffGenSquadStats = CreateGenData(_statistics.PresentOffbuffs, i, "squad");
+                phaseDto.offBuffGenSelfStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, "self");
+                phaseDto.offBuffGenGroupStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, "group");
+                phaseDto.offBuffGenOGroupStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, "off");
+                phaseDto.offBuffGenSquadStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, "squad");
 
-                phaseDto.defBuffGenSelfStats = CreateGenData(_statistics.PresentDefbuffs, i, "self");
-                phaseDto.defBuffGenGroupStats = CreateGenData(_statistics.PresentDefbuffs, i, "group");
-                phaseDto.defBuffGenOGroupStats = CreateGenData(_statistics.PresentDefbuffs, i, "off");
-                phaseDto.defBuffGenSquadStats = CreateGenData(_statistics.PresentDefbuffs, i, "squad");
+                phaseDto.defBuffGenSelfStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, "self");
+                phaseDto.defBuffGenGroupStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, "group");
+                phaseDto.defBuffGenOGroupStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, "off");
+                phaseDto.defBuffGenSquadStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, "squad");
 
                 phaseDto.bossCondiStats = new List<List<BoonData>>();
                 phaseDto.bossCondiTotals = new List<BoonData>();
