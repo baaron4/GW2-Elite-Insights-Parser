@@ -50,41 +50,30 @@ namespace LuckParser.Models.ParseModels
 
         public override string GetCombatReplayJSON(CombatReplayMap map, AbstractMasterPlayer master)
         {
+            CircleSerializable aux = new CircleSerializable
+            {
+                Type = "Circle",
+                Radius = Radius,
+                MinRadius = MinRadius,
+                Fill = Filled,
+                Color = Color,
+                Growing = Growing,
+                Start = Lifespan.Item1,
+                End = Lifespan.Item2
+            };
             if (ConnectedTo != null)
             {
                 Tuple<int, int> mapPos = map.GetMapCoord(ConnectedTo.X, ConnectedTo.Y);
-                CircleSerializable aux = new CircleSerializable
-                {
-                    Type = "Circle",
-                    Radius = Radius,
-                    MinRadius = MinRadius,
-                    Fill = Filled,
-                    Color = Color,
-                    Growing = Growing,
-                    Start = Lifespan.Item1,
-                    End = Lifespan.Item2,
-                    ConnectedTo = new int[2]
-                    {
+                aux.ConnectedTo = new int[2]
+                       {
                         mapPos.Item1,
                         mapPos.Item2
-                    }
-                };
+                       };
                 return JsonConvert.SerializeObject(aux);
-            } else
+            }
+            else
             {
-
-                CircleSerializable aux = new CircleSerializable()
-                {
-                    Type = "Circle",
-                    Radius = Radius,
-                    MinRadius = MinRadius,
-                    Fill = Filled,
-                    Color = Color,
-                    Growing = Growing,
-                    Start = Lifespan.Item1,
-                    End = Lifespan.Item2,
-                    ConnectedTo = master.GetCombatReplayID()
-                };
+                aux.ConnectedTo = master.GetCombatReplayID();
                 return JsonConvert.SerializeObject(aux);
             }
         }

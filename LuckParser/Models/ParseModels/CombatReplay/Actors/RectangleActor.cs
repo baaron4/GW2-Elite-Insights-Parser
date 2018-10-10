@@ -36,42 +36,30 @@ namespace LuckParser.Models.ParseModels
 
         public override string GetCombatReplayJSON(CombatReplayMap map, AbstractMasterPlayer master)
         {
+            RectangleSerializable aux = new RectangleSerializable
+            {
+                Type = "Rectangle",
+                Width = Width,
+                Height = Height,
+                Fill = Filled,
+                Color = Color,
+                Growing = Growing,
+                Start = Lifespan.Item1,
+                End = Lifespan.Item2
+            };
             if (ConnectedTo != null)
             {
                 Tuple<int, int> mapPos = map.GetMapCoord(ConnectedTo.X, ConnectedTo.Y);
-                RectangleSerializable aux = new RectangleSerializable
+                aux.ConnectedTo = new int[2]
                 {
-                    Type = "Rectangle",
-                    Width = Width,
-                    Height = Height,
-                    Fill = Filled,
-                    Color = Color,
-                    Growing = Growing,
-                    Start = Lifespan.Item1,
-                    End = Lifespan.Item2,
-                    ConnectedTo = new int[2]
-                    {
                         mapPos.Item1,
                         mapPos.Item2
-                    }
                 };
                 return JsonConvert.SerializeObject(aux);
             }
             else
             {
-
-                RectangleSerializable aux = new RectangleSerializable()
-                {
-                    Type = "Rectangle",
-                    Width = Width,
-                    Height = Height,
-                    Fill = Filled,
-                    Color = Color,
-                    Growing = Growing,
-                    Start = Lifespan.Item1,
-                    End = Lifespan.Item2,
-                    ConnectedTo = master.GetCombatReplayID()
-                };
+                aux.ConnectedTo = master.GetCombatReplayID();
                 return JsonConvert.SerializeObject(aux);
             }
         }
