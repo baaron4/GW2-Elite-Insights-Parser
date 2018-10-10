@@ -27,7 +27,7 @@ namespace LuckParser.Models.ParseModels
         }
         //
 
-        private class DoughnutSerializable<T> : Serializable<T>
+        private class DoughnutSerializable : Serializable
         {
             public int InnerRadius { get; set; }
             public int OuterRadius { get; set; }
@@ -35,9 +35,10 @@ namespace LuckParser.Models.ParseModels
 
         public override string GetCombatReplayJSON(CombatReplayMap map, AbstractMasterPlayer master)
         {
-            if (Type == PositionType.Array)
+            if (ConnectedTo != null)
             {
-                DoughnutSerializable<int[]> aux = new DoughnutSerializable<int[]>
+                Tuple<int, int> mapPos = map.GetMapCoord(ConnectedTo.X, ConnectedTo.Y);
+                DoughnutSerializable aux = new DoughnutSerializable
                 {
                     Type = "Doughnut",
                     OuterRadius = OuterRadius,
@@ -47,17 +48,18 @@ namespace LuckParser.Models.ParseModels
                     Growing = Growing,
                     Start = Lifespan.Item1,
                     End = Lifespan.Item2,
-                    Position = new int[2]
+                    ConnectedTo = new int[2]
+                    {
+                        mapPos.Item1,
+                        mapPos.Item2
+                    }
                 };
-                Tuple<int, int> mapPos = map.GetMapCoord(Position.X, Position.Y);
-                aux.Position[0] = mapPos.Item1;
-                aux.Position[1] = mapPos.Item2;
                 return JsonConvert.SerializeObject(aux);
             }
             else
             {
 
-                DoughnutSerializable<int> aux = new DoughnutSerializable<int>()
+                DoughnutSerializable aux = new DoughnutSerializable()
                 {
                     Type = "Doughnut",
                     OuterRadius = OuterRadius,
@@ -67,7 +69,7 @@ namespace LuckParser.Models.ParseModels
                     Growing = Growing,
                     Start = Lifespan.Item1,
                     End = Lifespan.Item2,
-                    Position = master.GetCombatReplayID()
+                    ConnectedTo = master.GetCombatReplayID()
                 };
                 return JsonConvert.SerializeObject(aux);
             }

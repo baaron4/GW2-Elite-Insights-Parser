@@ -54,7 +54,7 @@ function animateCanvas(noRequest) {
 		stopAnimate();
 	}
 	timeSlider.value = time.toString();
-	if (noRequest != -2) {
+	if (noRequest !== -2) {
 		updateTextInput(time);
 	}
 	if (noRequest > -1 && animation !== null && bgLoaded) {
@@ -176,11 +176,15 @@ function selectActor(pId) {
 }
 
 // Drawables
-class Drawable {
-	constructor(start, end) {
+
+class IconDrawable {
+	constructor(start, end, imgSrc, pixelSize) {
 		this.pos = null;
 		this.start = start;
 		this.end = end;
+		this.img = new Image();
+		this.img.src = imgSrc;
+		this.pixelSize = pixelSize;
 	}
 
 	getInterpolatedPosition(startIndex, currentIndex, currentTime) {
@@ -221,15 +225,6 @@ class Drawable {
 		const startIndex = Math.ceil((times.length - 1) * Math.max(this.start, 0) / lastTime);
 		const currentIndex = Math.floor((times.length - 1) * currentTime / lastTime);
 		return this.getInterpolatedPosition(startIndex, Math.max(currentIndex, startIndex), currentTime);
-	}
-}
-
-class IconDrawable extends Drawable {
-	constructor(start, end, imgSrc, pixelSize) {
-		super(start, end);
-		this.img = new Image();
-		this.img.src = imgSrc;
-		this.pixelSize = pixelSize;
 	}
 
 	draw(ctx, currentTime) {
@@ -328,9 +323,11 @@ class EnemyIconDrawable extends IconDrawable {
 	}
 }
 
-class MechanicDrawable extends Drawable {
-	constructor(start, end, fill, growing, color) {
-		super(start, end);
+class MechanicDrawable {
+	constructor(start, end, fill, growing, color, connectedTo) {
+		this.start = start;
+		this.end = end;
+		this.connectedTo = connectedTo;
 		this.fill = fill;
 		this.growing = growing;
 		this.color = color;
@@ -338,20 +335,20 @@ class MechanicDrawable extends Drawable {
 	}
 
 	getPosition(currentTime) {
-		if (this.pos === null) {
+		if (this.connectedTo === null) {
 			return null;
 		}
 		if (this.start !== -1 && (this.start >= currentTime || this.end <= currentTime)) {
 			return null;
 		}
-		if (this.pos instanceof Array) {
+		if (this.connectedTo instanceof Array) {
 			return {
-				x: this.pos[0],
-				y: this.pos[1]
+				x: this.connectedTo[0],
+				y: this.connectedTo[1]
 			};
 		} else {
 			if (this.master === null) {
-				let masterId = this.pos;
+				let masterId = this.connectedTo;
 				this.master = playerData.has(masterId) ? playerData.get(masterId) : trashMobData.has(masterId) ? trashMobData.get(masterId) : bossData.get(masterId);
 			}
 			return this.master.getPosition(currentTime);
@@ -367,11 +364,10 @@ class MechanicDrawable extends Drawable {
 }
 
 class CircleMechanicDrawable extends MechanicDrawable {
-	constructor(start, end, fill, growing, color, radius, pos, minRadius) {
-		super(start, end, fill, growing, color);
+	constructor(start, end, fill, growing, color, radius, connectedTo, minRadius) {
+		super(start, end, fill, growing, color, connectedTo);
 		this.radius = inch * radius;
 		this.minRadius = inch * minRadius;
-		this.pos = pos;
 	}
 
 	draw(ctx, currentTime) {
@@ -393,11 +389,10 @@ class CircleMechanicDrawable extends MechanicDrawable {
 }
 
 class DoughnutMechanicDrawable extends MechanicDrawable {
-	constructor(start, end, fill, growing, color, innerRadius, outerRadius, pos) {
-		super(start, end, fill, growing, color);
+	constructor(start, end, fill, growing, color, innerRadius, outerRadius, connectedTo) {
+		super(start, end, fill, growing, color, connectedTo);
 		this.outerRadius = inch * outerRadius;
 		this.innerRadius = inch * innerRadius;
-		this.pos = pos;
 	}
 
 	draw(ctx, currentTime) {
@@ -422,11 +417,10 @@ class DoughnutMechanicDrawable extends MechanicDrawable {
 }
 
 class RectangleMechanicDrawable extends MechanicDrawable {
-	constructor(start, end, fill, growing, color, width, height, pos) {
-		super(start, end, fill, growing, color);
+	constructor(start, end, fill, growing, color, width, height, connectedTo) {
+		super(start, end, fill, growing, color, connectedTo);
 		this.height = height * inch;
 		this.width = width * inch;
-		this.pos = pos;
 	}
 
 	draw(ctx, currentTime) {
@@ -449,14 +443,13 @@ class RectangleMechanicDrawable extends MechanicDrawable {
 }
 
 class PieMechanicDrawable extends MechanicDrawable {
-	constructor(start, end, fill, growing, color, direction, openingAngle, radius, pos) {
-		super(start, end, fill, growing, color);
+	constructor(start, end, fill, growing, color, direction, openingAngle, radius, connectedTo) {
+		super(start, end, fill, growing, color, connectedTo);
 		this.direction = direction * Math.PI / 180;
 		this.openingAngle = 0.5 * openingAngle * Math.PI / 180;
 		this.radius = inch * radius;
 		this.dx = Math.cos(this.direction - this.openingAngle) * this.radius;
 		this.dy = Math.sin(this.direction - this.openingAngle) * this.radius;
-		this.pos = pos;
 	}
 
 	draw(ctx, currentTime) {
@@ -502,16 +495,16 @@ function createAllActors() {
 				trashMobData.set(actor.ID, new EnemyIconDrawable(actor.Start, actor.End, actor.Img, 30, actor.Positions));
 				break;
 			case "Circle":
-				mechanicActorData.add(new CircleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Radius, actor.Position, actor.MinRadius));
+				mechanicActorData.add(new CircleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Radius, actor.ConnectedTo, actor.MinRadius));
 				break;
 			case "Rectangle":
-				mechanicActorData.add(new RectangleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Width, actor.Height, actor.Position));
+				mechanicActorData.add(new RectangleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Width, actor.Height, actor.ConnectedTo));
 				break;
 			case "Doughnut":
-				mechanicActorData.add(new DoughnutMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.InnerRadius, actor.OuterRadius, actor.Position));
+				mechanicActorData.add(new DoughnutMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.InnerRadius, actor.OuterRadius, actor.ConnectedTo));
 				break;
 			case "Pie":
-				mechanicActorData.add(new PieMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Direction, actor.OpeningAngle, actor.Radius, actor.Position));
+				mechanicActorData.add(new PieMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Direction, actor.OpeningAngle, actor.Radius, actor.ConnectedTo));
 				break;
 		}
 	}

@@ -42,7 +42,7 @@ namespace LuckParser.Models.ParseModels
         }
 
         //
-        protected class CircleSerializable<T> : Serializable<T>
+        protected class CircleSerializable : Serializable
         {
             public int Radius { get; set; }
             public int MinRadius { get; set; }
@@ -50,9 +50,10 @@ namespace LuckParser.Models.ParseModels
 
         public override string GetCombatReplayJSON(CombatReplayMap map, AbstractMasterPlayer master)
         {
-            if (Type == PositionType.Array)
+            if (ConnectedTo != null)
             {
-                CircleSerializable<int[]> aux = new CircleSerializable<int[]>
+                Tuple<int, int> mapPos = map.GetMapCoord(ConnectedTo.X, ConnectedTo.Y);
+                CircleSerializable aux = new CircleSerializable
                 {
                     Type = "Circle",
                     Radius = Radius,
@@ -62,16 +63,17 @@ namespace LuckParser.Models.ParseModels
                     Growing = Growing,
                     Start = Lifespan.Item1,
                     End = Lifespan.Item2,
-                    Position = new int[2]
+                    ConnectedTo = new int[2]
+                    {
+                        mapPos.Item1,
+                        mapPos.Item2
+                    }
                 };
-                Tuple<int, int> mapPos = map.GetMapCoord(Position.X, Position.Y);
-                aux.Position[0] = mapPos.Item1;
-                aux.Position[1] = mapPos.Item2;
                 return JsonConvert.SerializeObject(aux);
             } else
             {
 
-                CircleSerializable<int> aux = new CircleSerializable<int>()
+                CircleSerializable aux = new CircleSerializable()
                 {
                     Type = "Circle",
                     Radius = Radius,
@@ -81,7 +83,7 @@ namespace LuckParser.Models.ParseModels
                     Growing = Growing,
                     Start = Lifespan.Item1,
                     End = Lifespan.Item2,
-                    Position = master.GetCombatReplayID()
+                    ConnectedTo = master.GetCombatReplayID()
                 };
                 return JsonConvert.SerializeObject(aux);
             }

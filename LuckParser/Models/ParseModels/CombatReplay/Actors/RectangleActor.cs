@@ -28,7 +28,7 @@ namespace LuckParser.Models.ParseModels
         //
 
 
-        private class RectangleSerializable<T> : Serializable<T>
+        private class RectangleSerializable : Serializable
         {
             public int Height { get; set; }
             public int Width { get; set; }
@@ -36,9 +36,10 @@ namespace LuckParser.Models.ParseModels
 
         public override string GetCombatReplayJSON(CombatReplayMap map, AbstractMasterPlayer master)
         {
-            if (Type == PositionType.Array)
+            if (ConnectedTo != null)
             {
-                RectangleSerializable<int[]> aux = new RectangleSerializable<int[]>
+                Tuple<int, int> mapPos = map.GetMapCoord(ConnectedTo.X, ConnectedTo.Y);
+                RectangleSerializable aux = new RectangleSerializable
                 {
                     Type = "Rectangle",
                     Width = Width,
@@ -48,17 +49,18 @@ namespace LuckParser.Models.ParseModels
                     Growing = Growing,
                     Start = Lifespan.Item1,
                     End = Lifespan.Item2,
-                    Position = new int[2]
+                    ConnectedTo = new int[2]
+                    {
+                        mapPos.Item1,
+                        mapPos.Item2
+                    }
                 };
-                Tuple<int, int> mapPos = map.GetMapCoord(Position.X, Position.Y);
-                aux.Position[0] = mapPos.Item1;
-                aux.Position[1] = mapPos.Item2;
                 return JsonConvert.SerializeObject(aux);
             }
             else
             {
 
-                RectangleSerializable<int> aux = new RectangleSerializable<int>()
+                RectangleSerializable aux = new RectangleSerializable()
                 {
                     Type = "Rectangle",
                     Width = Width,
@@ -68,7 +70,7 @@ namespace LuckParser.Models.ParseModels
                     Growing = Growing,
                     Start = Lifespan.Item1,
                     End = Lifespan.Item2,
-                    Position = master.GetCombatReplayID()
+                    ConnectedTo = master.GetCombatReplayID()
                 };
                 return JsonConvert.SerializeObject(aux);
             }
