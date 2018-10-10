@@ -135,7 +135,7 @@ function updateTime(value) {
 }
 
 function updateTextInput(val) {
-	timeSliderDisplay.value = (val / 1000.0).toString();
+	timeSliderDisplay.value = (val / 1000.0).toFixed(3);
 }
 function updateInputTime(value) {
 	try {
