@@ -46,9 +46,9 @@ namespace LuckParser.Models.ParseModels
                 Start = Lifespan.Item1,
                 End = Lifespan.Item2
             };
-            if (ConnectedTo != null)
+            if (Position != null)
             {
-                Tuple<int, int> mapPos = map.GetMapCoord(ConnectedTo.X, ConnectedTo.Y);
+                Tuple<int, int> mapPos = map.GetMapCoord(Position.X, Position.Y);
                 aux.ConnectedTo = new int[2]
                 {
                         mapPos.Item1,

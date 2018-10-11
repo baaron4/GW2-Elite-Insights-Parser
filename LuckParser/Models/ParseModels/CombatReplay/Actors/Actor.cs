@@ -9,7 +9,7 @@ namespace LuckParser.Models.ParseModels
         public Tuple<int, int> Lifespan { get; }
         public string Color { get; }
         public int Growing { get; }
-        protected Point3D ConnectedTo;
+        protected Point3D Position;
 
         protected Actor(bool fill, int growing, Tuple<int, int> lifespan, string color)
         {
@@ -24,7 +24,7 @@ namespace LuckParser.Models.ParseModels
             Color = color;
             Filled = fill;
             Growing = growing;
-            ConnectedTo = position;
+            Position = position;
         }
         protected Actor(bool fill, int growing, Tuple<int, int> lifespan, string color, Point3D prev, Point3D next, int time)
         {
@@ -37,15 +37,15 @@ namespace LuckParser.Models.ParseModels
                 long denom = next.Time - prev.Time;
                 if (denom == 0)
                 {
-                    ConnectedTo = prev;
+                    Position = prev;
                 } else
                 {
                     float ratio = (float)(time - prev.Time) / denom;
-                    ConnectedTo = new Point3D(prev, next, ratio, time);
+                    Position = new Point3D(prev, next, ratio, time);
                 }
             } else
             {
-                ConnectedTo = prev ?? next;
+                Position = prev ?? next;
             }
         }
         //
