@@ -114,7 +114,7 @@ namespace LuckParser.Models
 
         public override void SetSuccess(ParsedLog log)
         {
-            SetSuccessOnCombatExit(log, 3, 2000);
+            SetSuccessOnCombatExit(log, 3, 1000);
         }
     }
 }
