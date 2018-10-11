@@ -134,6 +134,7 @@
     <Compile Include="Models\DataModels\SettingsContainer.cs" />
     <Compile Include="Models\DataModels\Statistics.cs" />
     <Compile Include="Models\HtmlModels\AreaLabelDto.cs" />
+    <Compile Include="Models\HtmlModels\DeathRecapDto.cs" />
     <Compile Include="Models\HtmlModels\FoodDto.cs" />
     <Compile Include="Models\HtmlModels\DmgDistributionDto.cs" />
     <Compile Include="Models\HtmlModels\PhaseChartDataDto.cs" />

@@ -529,191 +529,87 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw">Stream writer</param>
         /// <param name="p">The player</param>
-        private void CreateDeathRecap(StreamWriter sw, Player p)
+        private List<DeathRecapDto> BuildDeathRecap(Player p)
         {
-            List<DamageLog> damageLogs = p.GetDamageTakenLogs(_log, 0, _log.FightData.FightDuration);
+            List<DeathRecapDto> res = new List<DeathRecapDto>();
             long start = _log.FightData.FightStart;
             long end = _log.FightData.FightEnd;
-            List<CombatItem> down = _log.CombatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDown, start, end);
-            if (down.Count > 0)
+            List<CombatItem> deads = _log.CombatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDead, start, end);
+            List<CombatItem> downs = _log.CombatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDown, start, end);
+            long lastTime = start;
+            List<DamageLog> damageLogs = p.GetDamageTakenLogs(_log, 0, _log.FightData.FightDuration);
+            foreach (CombatItem dead in deads)
             {
-                List<CombatItem> ups = _log.CombatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeUp, start, end);
-                // Surely a consumable in fractals
-                down = ups.Count > down.Count ? new List<CombatItem>() : down.GetRange(ups.Count, down.Count - ups.Count);
-            }
-            List<CombatItem> dead = _log.CombatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDead, start, end);
-            List<DamageLog> damageToDown = new List<DamageLog>();
-            List<DamageLog> damageToKill = new List<DamageLog>();
-            if (down.Count > 0)
-            {//went to down state before death
-                damageToDown = damageLogs.Where(x => x.Time < down.Last().Time - start && x.Damage > 0).ToList();
-                damageToKill = damageLogs.Where(x => x.Time > down.Last().Time - start && x.Time < dead.Last().Time - start && x.Damage > 0).ToList();
-                //Filter last 30k dmg taken
-                int totaldmg = 0;
-                for (int i = damageToDown.Count - 1; i > 0; i--)
+                DeathRecapDto recap = new DeathRecapDto()
                 {
-                    totaldmg += damageToDown[i].Damage;
-                    if (totaldmg > 30000)
+                    time = (int)(dead.Time - start)
+                };
+                CombatItem down = downs.LastOrDefault(x => x.Time <= dead.Time && x.Time >= lastTime);
+                if (down != null)
+                {
+                    List<DamageLog> damageToDown = damageLogs.Where(x => x.Time < down.Time - start && x.Damage > 0 && x.Time > lastTime - start).ToList();
+                    recap.toDown = damageToDown.Count > 0 ? new List<object[]>() : null;
+                    int damage = 0;
+                    for (int i = damageToDown.Count - 1; i > 0; i--)
                     {
-                        damageToDown = damageToDown.GetRange(i, damageToDown.Count - i);
-                        break;
-                    }
-                }
-                if (totaldmg == 0)
-                {
-                    sw.Write("<center>");
-                    sw.Write("<p>Something strange happened</p>");
-                    sw.Write("</center>");
-                    return;
-                }
-                sw.Write("<center>");
-                sw.Write("<p>Took " + damageToDown.Sum(x => x.Damage) + " damage in " +
-                ((damageToDown.Last().Time - damageToDown.First().Time) / 1000f).ToString() + " seconds to enter downstate");
-                if (damageToKill.Count > 0)
-                {
-                    sw.Write("<p>Took " + damageToKill.Sum(x => x.Damage) + " damage in " +
-                       ((damageToKill.Last().Time - damageToKill.First().Time) / 1000f).ToString() + " seconds to die</p>");
-                }
-                else
-                {
-                    sw.Write("<p>Instant death after a down</p>");
-                }
-                sw.Write("</center>");
-            }
-            else
-            {
-                damageToKill = damageLogs.Where(x => x.Time < dead.Last().Time && x.Damage > 0).ToList();
-                //Filter last 30k dmg taken
-                int totaldmg = 0;
-                for (int i = damageToKill.Count - 1; i > 0; i--)
-                {
-                    totaldmg += damageToKill[i].Damage;
-                    if (totaldmg > 30000)
-                    {
-                        damageToKill = damageToKill.GetRange(i, damageToKill.Count - 1 - i);
-                        break;
-                    }
-                }
-                sw.Write("<center><h3>Player was insta killed by a mechanic, fall damage or by /gg</h3></center>");
-            }
-            string pid = p.InstID.ToString();
-            sw.Write("<center><div id=\"BarDeathRecap" + pid + "\"></div> </center>");
-            sw.Write("<script>");
-            {
-                sw.Write("var data = [{");
-                //Time on X
-                sw.Write("x : [");
-                if (damageToDown.Count != 0)
-                {
-                    foreach (DamageLog dl in damageToDown)
-                    {
-                        sw.Write("'" + dl.Time / 1000f + "s',");
-                    }
-                }
-                for (int d = 0; d < damageToKill.Count; d++)
-                {
-                    sw.Write("'" + damageToKill[d].Time / 1000f + "s'");
-
-                    if (d != damageToKill.Count - 1)
-                    {
-                        sw.Write(",");
-                    }
-                }
-                sw.Write("],");
-                //damage on Y
-                sw.Write("y : [");
-                if (damageToDown.Count != 0)
-                {
-                    foreach (DamageLog dl in damageToDown)
-                    {
-                        sw.Write("'" + dl.Damage + "',");
-                    }
-                }
-                for (int d = 0; d < damageToKill.Count; d++)
-                {
-                    sw.Write("'" + damageToKill[d].Damage + "'");
-
-                    if (d != damageToKill.Count - 1)
-                    {
-                        sw.Write(",");
-                    }
-                }
-                sw.Write("],");
-                //Color 
-                sw.Write("marker : {color:[");
-                if (damageToDown.Count != 0)
-                {
-                    for (int d = 0; d < damageToDown.Count; d++)
-                    {
-                        sw.Write("'rgb(0,255,0,1)',");
-                    }
-                }
-                for (int d = 0; d < damageToKill.Count; d++)
-                {
-                    sw.Write(down.Count == 0 ? "'rgb(0,255,0,1)'" : "'rgb(255,0,0,1)'");
-
-                    if (d != damageToKill.Count - 1)
-                    {
-                        sw.Write(",");
-                    }
-                }
-                sw.Write("]},");
-                //text
-                sw.Write("text : [");
-                if (damageToDown.Count != 0)
-                {
-                    foreach (DamageLog dl in damageToDown)
-                    {
+                        DamageLog dl = damageToDown[i];
                         AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);
-                        string name = "UNKNOWN";
-                        if (ag != null)
+                        object[] item = new object[] {
+                            dl.Time,
+                            dl.SkillId,
+                            dl.Damage,
+                            ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
+                        };
+                        damage += dl.Damage;
+                        recap.toDown.Add(item);
+                        if (damage > 20000)
                         {
-                            name = ag.Name.Replace("\0", "").Replace("\'", "\\'");
+                            break;
                         }
-                        string skillname = _log.SkillData.GetName(dl.SkillId).Replace("\'", "\\'");
-                        sw.Write("'" + name + "<br>" + skillname + " hit you for " + dl.Damage + "',");
                     }
-                }
-                for (int d = 0; d < damageToKill.Count; d++)
-                {
-                    AgentItem ag = _log.AgentData.GetAgentByInstID(damageToKill[d].SrcInstId, damageToKill[d].Time + start);
-                    string name = "UNKNOWN";
-                    if (ag != null )
+                    List<DamageLog> damageToKill = damageLogs.Where(x => x.Time > down.Time - start && x.Time < dead.Time - start && x.Damage > 0 && x.Time > lastTime - start).ToList();
+                    recap.toKill = damageToKill.Count > 0 ? new List<object[]>() : null;
+                    for (int i = damageToKill.Count - 1; i > 0; i--)
                     {
-                        name = ag.Name.Replace("\0", "").Replace("\'", "\\'");
+                        DamageLog dl = damageToKill[i];
+                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);
+                        object[] item = new object[] {
+                            dl.Time,
+                            dl.SkillId,
+                            dl.Damage,
+                            ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
+                        };
+                        recap.toKill.Add(item);
                     }
-                    string skillname = _log.SkillData.GetName(damageToKill[d].SkillId).Replace("\'", "\\'");
-                    sw.Write("'" + name + "<br>" +
-                           "hit you with <b>" + skillname + "</b> for " + damageToKill[d].Damage + "'");
-
-                    if (d != damageToKill.Count - 1)
-                    {
-                        sw.Write(",");
-                    }
-                }
-                sw.Write("],");
-                sw.Write("type:'bar',");
-
-                sw.Write("}];");
-
-                if (!_settings.LightTheme)
-                {
-                    sw.Write(
-                        "var layout = { title: 'Last 30k Damage Taken before death', font: { color: '#ffffff' },width: 1100," +
-                        "paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',showlegend: false,bargap :0.05,yaxis:{title:'Damage'},xaxis:{title:'Time(seconds)',type:'catagory'}};");
                 }
                 else
                 {
-                    sw.Write(
-                        "var layout = { title: 'Last 30k Damage Taken before death', font: { color: '#000000' },width: 1100," +
-                        "paper_bgcolor: 'rgba(255,255,255,0)', plot_bgcolor: 'rgba(255,255,255,0)',showlegend: false,bargap :0.05,yaxis:{title:'Damage'},xaxis:{title:'Time(seconds)',type:'catagory'}};");
-
+                    recap.toDown = null;
+                    List<DamageLog> damageToKill = damageLogs.Where(x => x.Time < dead.Time - start && x.Damage > 0 && x.Time > lastTime - start).ToList();
+                    recap.toKill = damageToKill.Count > 0 ? new List<object[]>() : null;
+                    int damage = 0;
+                    for (int i = damageToKill.Count - 1; i > 0; i--)
+                    {
+                        DamageLog dl = damageToKill[i];
+                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);
+                        object[] item = new object[] {
+                            dl.Time,
+                            dl.SkillId,
+                            dl.Damage,
+                            ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
+                        };
+                        damage += dl.Damage;
+                        recap.toKill.Add(item);
+                        if (damage > 20000)
+                        {
+                            break;
+                        }
+                    }
                 }
-
-                sw.Write("Plotly.newPlot('BarDeathRecap" + pid + "', data, layout);");
-
+                lastTime = dead.Time;
+                res.Add(recap);
             }
-            sw.Write("</script>");
+            return res.Count > 0 ? res : null;
         }
 
         private List<double[]> BuildDMGDistBodyData(List<CastLog> casting, List<DamageLog> damageLogs, long finalTotalDamage,
@@ -1465,7 +1361,8 @@ namespace LuckParser.Controllers
                     colBoss = HTMLHelper.GetLink("Color-" + player.Prof),
                     colCleave = HTMLHelper.GetLink("Color-" + player.Prof + "-NonBoss"),
                     colTotal = HTMLHelper.GetLink("Color-" + player.Prof + "-Total"),
-                    isConjure = player.Account == ":Conjured Sword"
+                    isConjure = player.Account == ":Conjured Sword",
+                    deathRecap = BuildDeathRecap(player)
                 };
 
                 foreach (KeyValuePair<string, Minions> pair in player.GetMinions(_log))
