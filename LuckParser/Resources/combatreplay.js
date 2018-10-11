@@ -487,6 +487,50 @@ class PieMechanicDrawable extends MechanicDrawable {
     }
 }
 
+class LineMechanicDrawable extends MechanicDrawable {
+    constructor(start, end, fill, growing, color, width, target, connectedTo) {
+        super(start, end, fill, growing, color, connectedTo);
+        this.target = target;
+        this.width = width*inch;
+        this.endmaster = null
+    }
+
+    getTargetPosition(currentTime) {
+        if (this.target === null) {
+            return null;
+        }
+        if (this.start !== -1 && (this.start >= currentTime || this.end <= currentTime)) {
+            return null;
+        }
+        if (this.target instanceof Array) {
+            return {
+                x: this.target[0],
+                y: this.target[1]
+            };
+        } else {
+            if (this.endmaster === null) {
+                let endMasterID = this.target;
+                this.endmaster = playerData.has(endMasterID) ? playerData.get(endMasterID) : trashMobData.has(endMasterID) ? trashMobData.get(endMasterID) : bossData.get(endMasterID);
+            }
+            return this.endmaster.getPosition(currentTime);
+        }
+    }
+
+    draw(ctx, currentTime) {
+        const pos = this.getPosition(currentTime);
+        if (pos === null || endpos === null) {
+            return;
+        }
+        const percent = this.getPercent(currentTime);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+        ctx.lineTo(pos.x + percent * (target.x - pos.x), percent * (target.y - pos.y));
+        ctx.lineWidth = width;
+        ctx.strokeStyle = this.color;
+        ctx.stroke();
+    }
+}
+
 let actors = ['${actors}'];
 
 function createAllActors() {
@@ -518,6 +562,9 @@ function createAllActors() {
                 break;
             case "Pie":
                 mechanicActorData.add(new PieMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Direction, actor.OpeningAngle, actor.Radius, actor.ConnectedTo));
+                break;
+            case "Line":
+                mechanicActorData.add(new LineMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Width, actor.Target, actor.ConnectedTo));
                 break;
         }
     }
