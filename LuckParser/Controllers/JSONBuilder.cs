@@ -24,7 +24,7 @@ namespace LuckParser.Controllers
         readonly Statistics _statistics;
         readonly StreamWriter _sw;
 
-        private readonly String[] _uploadLink;
+        private readonly string[] _uploadLink;
         //
         private readonly Dictionary<long, string> _skillNames = new Dictionary<long, string>();
         private readonly Dictionary<long, string> _buffNames = new Dictionary<long, string>();

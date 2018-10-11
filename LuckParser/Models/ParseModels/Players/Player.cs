@@ -23,7 +23,7 @@ namespace LuckParser.Models.ParseModels
         // Constructors
         public Player(AgentItem agent, bool noSquad) : base(agent)
         {
-            String[] name = agent.Name.Split('\0');
+            string[] name = agent.Name.Split('\0');
             Account = name[1];
             Group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
         }

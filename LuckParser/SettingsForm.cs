@@ -285,8 +285,8 @@ namespace LuckParser
         {
             if (chkAutoAdd.Checked && !Properties.Settings.Default.AutoAdd)
             {
-                String path = Properties.Settings.Default.AutoAddPath;
-                if (String.IsNullOrEmpty(path) || !Directory.Exists(path))
+                string path = Properties.Settings.Default.AutoAddPath;
+                if (string.IsNullOrEmpty(path) || !Directory.Exists(path))
                 {
                     try
                     {

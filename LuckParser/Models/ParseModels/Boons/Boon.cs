@@ -620,7 +620,7 @@ namespace LuckParser.Models.ParseModels
         {
             return BoonsBySource[source].Where(x => x.Nature == BoonNature.GraphOnlyBuff).ToList();
         }
-        public static List<Boon> GetRemainingBuffsList(String source)
+        public static List<Boon> GetRemainingBuffsList(string source)
         {
             return GetRemainingBuffsList(ProfToEnum(source));
         }

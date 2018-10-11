@@ -26,7 +26,7 @@ namespace LuckParser.Controllers
 
         public static string FindPattern(string source, string regex)
         {
-            if (String.IsNullOrEmpty(source)) return null;
+            if (string.IsNullOrEmpty(source)) return null;
             Match match = Regex.Match(source, regex);
             if (match.Success) return match.Groups[1].Value;
             return null;

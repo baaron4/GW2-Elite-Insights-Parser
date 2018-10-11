@@ -68,7 +68,7 @@ namespace LuckParser.Models.ParseModels
             _skills.Add(skillItem.ID, skillItem);
         }
 
-        public String GetName(long ID)
+        public string GetName(long ID)
         {
             // Custom
             if (_apiMissingID.ContainsKey(ID))

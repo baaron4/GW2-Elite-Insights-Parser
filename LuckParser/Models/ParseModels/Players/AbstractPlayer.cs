@@ -8,7 +8,7 @@ namespace LuckParser.Models.ParseModels
     public abstract class AbstractPlayer
     {
         public readonly AgentItem AgentItem;
-        public readonly String Character;
+        public readonly string Character;
         protected readonly List<DamageLog> DamageLogs = new List<DamageLog>();
         protected Dictionary<ushort,List<DamageLog>> DamageLogsByDst = new Dictionary<ushort, List<DamageLog>>();
         //protected List<DamageLog> HealingLogs = new List<DamageLog>();
@@ -31,7 +31,7 @@ namespace LuckParser.Models.ParseModels
 
         protected AbstractPlayer(AgentItem agent)
         {
-            String[] name = agent.Name.Split('\0');
+            string[] name = agent.Name.Split('\0');
             Character = name[0];
             AgentItem = agent;
         }

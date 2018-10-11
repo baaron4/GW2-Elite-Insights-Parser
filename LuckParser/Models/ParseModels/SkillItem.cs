@@ -12,8 +12,8 @@ namespace LuckParser.Models.ParseModels
 
         // Fields
         public readonly int ID;
-        private String _name;
-        public String Name
+        private string _name;
+        public string Name
         {
             get
             {
@@ -24,7 +24,7 @@ namespace LuckParser.Models.ParseModels
         public int CC { get; private set; }
 
         // Constructor
-        public SkillItem(int ID, String name)
+        public SkillItem(int ID, string name)
         {
             name = name.Replace("\0", "");
             this.ID = ID;
@@ -32,9 +32,9 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Public Methods
-        public String[] ToStringArray()
+        public string[] ToStringArray()
         {
-            String[] array = new String[2];
+            string[] array = new string[2];
             array[0] = ID.ToString();
             array[1] = _name;
             return array;

@@ -13,7 +13,7 @@ namespace LuckParser.Controllers
         {
             double fightDuration = (log.FightData.FightDuration) / 1000.0;
             TimeSpan duration = TimeSpan.FromSeconds(fightDuration);
-            String durationString = duration.ToString("mm") + ":" + duration.ToString("ss");
+            string durationString = duration.ToString("mm") + ":" + duration.ToString("ss");
             sw.Write("Group" + delimiter +
                     "Class" + delimiter +
                     "Character" + delimiter +

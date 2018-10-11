@@ -17,7 +17,7 @@ namespace LuckParser.Controllers
 
         private readonly Statistics _statistics;
 
-        private readonly String[] _uploadLink;
+        private readonly string[] _uploadLink;
 
         public static void UpdateStatisticSwitches(StatisticsCalculator.Switches switches)
         {
@@ -55,7 +55,7 @@ namespace LuckParser.Controllers
             _uploadLink = UploadString;
         }
 
-        private static String FilterStringChars(string str)
+        private static string FilterStringChars(string str)
         {
             string filtered = "";
             string filter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ";
@@ -658,24 +658,24 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + statsAll.CriticalRate + " out of " + statsAll.CritablePowerLoopCount
                                 + " critable hits<br> Total Damage Effected by Crits: " + statsAll.CriticalDmg 
-                                + " \">" + Math.Round((Double)(statsAll.CriticalRate) / statsAll.CritablePowerLoopCount * 100,1) 
+                                + " \">" + Math.Round((double)(statsAll.CriticalRate) / statsAll.CritablePowerLoopCount * 100,1) 
                                 + "%</span>" + "</td>");//crit
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + statsAll.ScholarRate+ " out of " + statsAll.PowerLoopCount + " hits <br> Pure Scholar Damage: " 
                                 + statsAll.ScholarDmg + "<br> Effective Physical Damage Increase: " 
-                                + Math.Round(100.0 * (dpsAll.PlayerPowerDamage / (Double)(dpsAll.PlayerPowerDamage - statsAll.ScholarDmg) - 1.0) , 3) 
-                                + "% \">" + Math.Round((Double)(statsAll.ScholarRate) / statsAll.PowerLoopCount * 100,1) + "%</span>" + "</td>");//scholar
+                                + Math.Round(100.0 * (dpsAll.PlayerPowerDamage / (double)(dpsAll.PlayerPowerDamage - statsAll.ScholarDmg) - 1.0) , 3) 
+                                + "% \">" + Math.Round((double)(statsAll.ScholarRate) / statsAll.PowerLoopCount * 100,1) + "%</span>" + "</td>");//scholar
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\""
                                 + statsAll.MovingRate + " out of " + statsAll.PowerLoopCount + " hits <br> Pure Seaweed Damage: "
                                 + statsAll.MovingDamage + "<br> Effective Physical Damage Increase: "
-                                + Math.Round(100.0 * (dpsAll.PlayerPowerDamage / (Double)(dpsAll.PlayerPowerDamage - statsAll.MovingDamage) - 1.0), 3)
-                                + "% \">" + Math.Round((Double)(statsAll.MovingRate) / statsAll.PowerLoopCount * 100, 1) + "%</span>" + "</td>");//sws
+                                + Math.Round(100.0 * (dpsAll.PlayerPowerDamage / (double)(dpsAll.PlayerPowerDamage - statsAll.MovingDamage) - 1.0), 3)
+                                + "% \">" + Math.Round((double)(statsAll.MovingRate) / statsAll.PowerLoopCount * 100, 1) + "%</span>" + "</td>");//sws
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\""
                                 + statsAll.FlankingRate + " out of " + statsAll.PowerLoopCount + " hits \">" 
-                                + Math.Round(statsAll.FlankingRate / (Double)statsAll.PowerLoopCount * 100,1) + "%</span>" + "</td>");//flank
+                                + Math.Round(statsAll.FlankingRate / (double)statsAll.PowerLoopCount * 100,1) + "%</span>" + "</td>");//flank
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + statsAll.GlanceRate + " out of " + statsAll.PowerLoopCount + " hits \">" 
-                                + Math.Round(statsAll.GlanceRate / (Double)statsAll.PowerLoopCount * 100,1) + "%</span>" + "</td>");//glance
+                                + Math.Round(statsAll.GlanceRate / (double)statsAll.PowerLoopCount * 100,1) + "%</span>" + "</td>");//glance
                             sw.Write("<td>" + statsAll.Missed + "</td>");//misses
                             sw.Write("<td>" + statsAll.Interrupts + "</td>");//interrupts
                             sw.Write("<td>" + statsAll.Invulned + "</td>");//dmg invulned
@@ -795,24 +795,24 @@ namespace LuckParser.Controllers
                             sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + statsBoss.CriticalRate + " out of " + statsBoss.CritablePowerLoopCount 
                                 + " critable hits<br> Total Damage Effected by Crits: " + statsBoss.CriticalDmg 
-                                + " \">" + Math.Round((Double)(statsBoss.CriticalRate) / statsBoss.CritablePowerLoopCount * 100,1) 
+                                + " \">" + Math.Round((double)(statsBoss.CriticalRate) / statsBoss.CritablePowerLoopCount * 100,1) 
                                 + "%</td>");//crit
                             sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + statsBoss.ScholarRate + " out of " + statsBoss.PowerLoopCount + " hits <br> Pure Scholar Damage: " 
                                 + statsBoss.ScholarDmg + "<br> Effective Physical Damage Increase: " 
-                                + Math.Round(100.0* (dpsBoss.PlayerPowerDamage / (Double)(dpsBoss.PlayerPowerDamage - statsBoss.ScholarDmg) - 1.0), 3) 
-                                + "% \">" + Math.Round((Double)(statsBoss.ScholarRate) / statsBoss.PowerLoopCount * 100,1) + "%</td>");//scholar
+                                + Math.Round(100.0* (dpsBoss.PlayerPowerDamage / (double)(dpsBoss.PlayerPowerDamage - statsBoss.ScholarDmg) - 1.0), 3) 
+                                + "% \">" + Math.Round((double)(statsBoss.ScholarRate) / statsBoss.PowerLoopCount * 100,1) + "%</td>");//scholar
                             sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\""
                                 + statsBoss.MovingRate + " out of " + statsBoss.PowerLoopCount + " hits <br> Pure Seaweed Damage: "
                                 + statsBoss.MovingDamage + "<br> Effective Physical Damage Increase: "
-                                + Math.Round(100.0 * (dpsBoss.PlayerPowerDamage / (Double)(dpsBoss.PlayerPowerDamage - statsBoss.MovingDamage) - 1.0), 3)
-                                + "% \">" + Math.Round((Double)(statsBoss.MovingRate) / statsBoss.PowerLoopCount * 100, 1) + "%</td>");//sws
+                                + Math.Round(100.0 * (dpsBoss.PlayerPowerDamage / (double)(dpsBoss.PlayerPowerDamage - statsBoss.MovingDamage) - 1.0), 3)
+                                + "% \">" + Math.Round((double)(statsBoss.MovingRate) / statsBoss.PowerLoopCount * 100, 1) + "%</td>");//sws
                             sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + statsBoss.FlankingRate + " out of " + statsBoss.PowerLoopCount + " hits \">" 
-                                + Math.Round(statsBoss.FlankingRate / (Double)statsBoss.PowerLoopCount * 100,1) + "%</td>");//flank
+                                + Math.Round(statsBoss.FlankingRate / (double)statsBoss.PowerLoopCount * 100,1) + "%</td>");//flank
                             sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + statsBoss.GlanceRate + " out of " + statsBoss.PowerLoopCount + " hits \">" 
-                                + Math.Round(statsBoss.GlanceRate / (Double)statsBoss.PowerLoopCount * 100,1) + "%</td>");//glance
+                                + Math.Round(statsBoss.GlanceRate / (double)statsBoss.PowerLoopCount * 100,1) + "%</td>");//glance
                             sw.Write("<td>" + statsBoss.Missed + "</td>");//misses
                             sw.Write("<td>" + statsBoss.Interrupts + "</td>");//interrupts
                             sw.Write("<td>" + statsBoss.Invulned + "</td>");//dmg invulned
@@ -1096,8 +1096,8 @@ namespace LuckParser.Controllers
                                 sw.Write("<td></td>");
                                 sw.Write("<td>Group " + groupNum + "</td>");
                                 //sw.Write("<td>" + groupList.Sum(c => int.Parse(c[5])).ToString() + "</td>");
-                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Double.Parse(c[1])).ToString() + " seconds \">" + groupList.Sum(c => int.Parse(c[2])).ToString() + " condis</td>");
-                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Double.Parse(c[3])).ToString() + " seconds \">" + groupList.Sum(c => int.Parse(c[4])) + "</td>");
+                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => double.Parse(c[1])).ToString() + " seconds \">" + groupList.Sum(c => int.Parse(c[2])).ToString() + " condis</td>");
+                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => double.Parse(c[3])).ToString() + " seconds \">" + groupList.Sum(c => int.Parse(c[4])) + "</td>");
                             }
                             sw.Write("</tr>");
                         }
@@ -1107,8 +1107,8 @@ namespace LuckParser.Controllers
                             sw.Write("<td></td>");
                             sw.Write("<td>Total</td>");
                             //sw.Write("<td>" + footerList.Sum(c => int.Parse(c[5])).ToString() + "</td>");
-                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Double.Parse(c[1])).ToString() + " seconds \">" + footerList.Sum(c => int.Parse(c[2])).ToString() + " condis</td>");
-                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Double.Parse(c[3])).ToString() + " seconds \">" + footerList.Sum(c => int.Parse(c[4])).ToString() + "</td>");
+                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => double.Parse(c[1])).ToString() + " seconds \">" + footerList.Sum(c => int.Parse(c[2])).ToString() + " condis</td>");
+                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => double.Parse(c[3])).ToString() + " seconds \">" + footerList.Sum(c => int.Parse(c[4])).ToString() + "</td>");
                         }
                         sw.Write("</tr>");
                     }
@@ -1344,11 +1344,11 @@ namespace LuckParser.Controllers
                                 {
                                     if (intensityBoon.Contains(i - 1))
                                     {
-                                        sw.Write("<td>" + Math.Round(groupList.Sum(c => Double.Parse(c[i])) / groupList.Count, 1) + "</td>");
+                                        sw.Write("<td>" + Math.Round(groupList.Sum(c => double.Parse(c[i])) / groupList.Count, 1) + "</td>");
                                     }
                                     else
                                     {
-                                        sw.Write("<td>" + Math.Round(groupList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / groupList.Count, 1) + "%</td>");
+                                        sw.Write("<td>" + Math.Round(groupList.Sum(c => double.Parse(c[i].TrimEnd('%'))) / groupList.Count, 1) + "%</td>");
                                     }
 
                                 }
@@ -1364,11 +1364,11 @@ namespace LuckParser.Controllers
                             {
                                 if (intensityBoon.Contains(i - 1))
                                 {
-                                    sw.Write("<td>" + Math.Round(footList.Sum(c => Double.Parse(c[i])) / footList.Count, 1) + "</td>");
+                                    sw.Write("<td>" + Math.Round(footList.Sum(c => double.Parse(c[i])) / footList.Count, 1) + "</td>");
                                 }
                                 else
                                 {
-                                    sw.Write("<td>" + Math.Round(footList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / footList.Count, 1) + "%</td>");
+                                    sw.Write("<td>" + Math.Round(footList.Sum(c => double.Parse(c[i].TrimEnd('%'))) / footList.Count, 1) + "%</td>");
                                 }
                             }
                         }

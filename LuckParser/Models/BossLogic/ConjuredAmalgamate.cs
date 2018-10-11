@@ -54,7 +54,7 @@ namespace LuckParser.Models
             ulong agent = 1;
             while (agentData.AgentValues.Contains(agent))
             {
-                agent = (ulong)rnd.Next(0, Int32.MaxValue);
+                agent = (ulong)rnd.Next(0, int.MaxValue);
             }
             ushort id = 1;
             while (agentData.InstIDValues.Contains(id))
