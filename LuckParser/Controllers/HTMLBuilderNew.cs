@@ -99,12 +99,6 @@ namespace LuckParser.Controllers
             }
             return list;
         }
-
-        private void GetRoles()
-        {
-            //tags: tank,healer,dps(power/condi)
-            //Roles:greenteam,green split,cacnoneers,flakkiter,eater,KCpusher,agony,epi,handkiter,golemkiter,orbs
-        }
         /// <summary>
         /// Creates the dps table
         /// </summary>
@@ -1147,46 +1141,11 @@ namespace LuckParser.Controllers
             }
             return bossData;
         }
-
-        private void CreateEstimateTabs(StreamWriter sw, int phaseIndex)
-        {
-            sw.Write("<ul class=\"nav nav-tabs\">");
-            {
-                sw.Write("<li class=\"nav-item\">" +
-                            "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#est_role" + phaseIndex + "\">Roles</a>" +
-                        "</li>" +
-
-                        "<li class=\"nav-item\">" +
-                            "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#est_cc" + phaseIndex + "\">CC</a>" +
-                        "</li>" +
-                         "<li class=\"nav-item\">" +
-                            "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#est" + phaseIndex + "\">Maybe more</a>" +
-                        "</li>");
-            }
-            sw.Write("</ul>");
-            sw.Write("<div id=\"myTabContent\" class=\"tab-content\">");
-            {
-                sw.Write("<div class=\"tab-pane fade show active\" id=\"est_role" + phaseIndex + "\">");
-                {
-                    //Use cards
-                }
-                sw.Write("</div>");
-                sw.Write("<div class=\"tab-pane fade show active\" id=\"est_cc" + phaseIndex + "\">");
-                {
-                }
-                sw.Write("</div>");
-                sw.Write("<div class=\"tab-pane fade show active\" id=\"est" + phaseIndex + "\">");
-                {
-                }
-                sw.Write("</div>");
-            }
-            sw.Write("</div>");
-        }
         /// <summary>
         /// Creates the combat replay tab
         /// </summary>
         /// <param name="sw">Stream writer</param>
-        private void CreateReplayTable(StreamWriter sw)
+        private void CreateReplayTab(StreamWriter sw)
         {
             CombatReplayMap map = _log.FightData.Logic.GetCombatMap();
             Tuple<int, int> canvasSize = map.GetPixelMapSize();
@@ -1276,7 +1235,7 @@ namespace LuckParser.Controllers
                 using (StreamWriter sw = new StreamWriter(ms))
                 {
                     sw.Write("<div id=\"replay_template\">");
-                    CreateReplayTable(sw);
+                    CreateReplayTab(sw);
                     sw.Write("</div>");
                 }
                 return Encoding.UTF8.GetString(ms.ToArray());
