@@ -138,6 +138,7 @@
     <Compile Include="Models\HtmlModels\DmgDistributionDto.cs" />
     <Compile Include="Models\HtmlModels\PhaseChartDataDto.cs" />
     <Compile Include="Models\HtmlModels\BoonChartDataDto.cs" />
+    <Compile Include="Models\HtmlModels\BossChartDataDto.cs" />
     <Compile Include="Models\HtmlModels\PlayerChartDataDto.cs" />
     <Compile Include="Models\HtmlModels\EnemyDto.cs" />
     <Compile Include="Models\HtmlModels\MinionDto.cs" />

@@ -11,19 +11,19 @@ namespace LuckParser.Models.HtmlModels
     public class MechanicDto
     {
         [DataMember]
-        public String name;
+        public string name;
 
         [DataMember]
-        public String shortName;
+        public string shortName;
 
         [DataMember]
-        public String description;
+        public string description;
 
         [DataMember]
-        public String symbol;
+        public string symbol;
 
         [DataMember]
-        public String color;
+        public string color;
 
         [DataMember]
         public bool playerMech;

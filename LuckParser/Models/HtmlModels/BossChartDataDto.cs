@@ -4,11 +4,11 @@ using System.Runtime.Serialization;
 namespace LuckParser.Models.HtmlModels
 {
     [DataContract]
-    public class PlayerChartDataDto
+    public class BossChartDataDto
     {
         [DataMember]
-        public List<List<int>> bosses;
-        [DataMember]
         public List<int> total;
+        [DataMember]
+        public double[] health;
     }
 }

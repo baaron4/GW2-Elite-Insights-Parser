@@ -34,7 +34,7 @@ namespace LuckParser.Controllers
             _statistics = statistics;
         }
 
-        private static String FilterStringChars(string str)
+        private static string FilterStringChars(string str)
         {
             string filtered = "";
             string filter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ";
@@ -58,42 +58,46 @@ namespace LuckParser.Controllers
             return graph;
         }
 
-        private PlayerChartDataDto BuildBossGraphData(int phaseIndex)
+        private double[] BuildBossHealthData(int phaseIndex, Boss target)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
-            return new PlayerChartDataDto
-            {
-                boss = ConvertGraph(GraphHelper.GetTotalDPSGraph(_log, _log.Boss, phaseIndex, phase, GraphHelper.GraphMode.S1))
-            };
+            int duration = (int)phase.GetDuration("s");
+            double[] chart = _statistics.BossHealth[target].Skip((int)phase.Start / 1000).Take(duration + 1).ToArray();
+            return chart;
         }
 
-        //Generate HTML---------------------------------------------------------------------------------------------------------------------------------------------------------
-        //Methods that make it easier to create Javascript graphs      
+        private BossChartDataDto BuildBossGraphData(int phaseIndex, Boss target)
+        {
+            PhaseData phase = _statistics.Phases[phaseIndex];
+            return new BossChartDataDto
+            {
+                total = ConvertGraph(GraphHelper.GetTotalDPSGraph(_log, target, phaseIndex, phase, GraphHelper.GraphMode.S1)),
+                health = BuildBossHealthData(phaseIndex, target)
+            };
+        }
+        
         /// <summary>
         /// Creates the dps graph
         /// </summary>
-        private List<PlayerChartDataDto> BuildDPSGraphData(int phaseIndex)
+        private List<PlayerChartDataDto> BuildPlayerGraphData(int phaseIndex)
         {
             List<PlayerChartDataDto> list = new List<PlayerChartDataDto>();
             PhaseData phase = _statistics.Phases[phaseIndex];
 
             foreach (Player p in _log.PlayerList)
             {
-                list.Add(new PlayerChartDataDto
+                PlayerChartDataDto pChar = new PlayerChartDataDto()
                 {
-                    boss = ConvertGraph(GraphHelper.GetBossDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S1, _log.Boss)),
-                    cleave = ConvertGraph(GraphHelper.GetCleaveDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S1, _log.Boss))
-                });
+                    total = ConvertGraph(GraphHelper.GetTotalDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S1)),
+                    bosses = new List<List<int>>()
+                };
+                foreach (Boss target in phase.Targets)
+                {
+                    pChar.bosses.Add(ConvertGraph(GraphHelper.GetBossDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S1, target)));
+                }
+                list.Add(pChar);
             }
             return list;
-        }
-
-        private double[] BuildBossHealthData(int phaseIndex)
-        {
-            PhaseData phase = _statistics.Phases[phaseIndex];
-            int duration = (int)phase.GetDuration("s");
-            double[] chart = _statistics.BossHealth[_log.Boss].Skip((int)phase.Start / 1000).Take(duration+1).ToArray();
-            return chart;
         }
 
         private void GetRoles()
@@ -106,9 +110,9 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw"></param>
         /// <param name="phaseIndex"></param>
-        private List<List<Object>> BuildDPSData(int phaseIndex)
+        private List<List<object>> BuildDPSData(int phaseIndex)
         {
-            List<List<Object>> list = new List<List<Object>>(_log.PlayerList.Count);
+            List<List<object>> list = new List<List<object>>(_log.PlayerList.Count);
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<string[]> footerList = new List<string[]>();
 
@@ -117,7 +121,7 @@ namespace LuckParser.Controllers
                 Statistics.FinalDPS dpsAll = _statistics.DpsAll[player][phaseIndex];
                 Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
 
-                List<Object> playerData = new List<Object>();
+                List<object> playerData = new List<object>();
 
                 foreach (Boss target in phase.Targets)
                 {
@@ -168,9 +172,9 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw"></param>
         /// <param name="phaseIndex"></param>
-        private List<List<Object>> BuildDMGStatsData(int phaseIndex)
+        private List<List<object>> BuildDMGStatsData(int phaseIndex)
         {
-            List<List<Object>> list = new List<List<Object>>();
+            List<List<object>> list = new List<List<object>>();
             PhaseData phase = _statistics.Phases[phaseIndex];
 
             foreach (Player player in _log.PlayerList)
@@ -178,28 +182,28 @@ namespace LuckParser.Controllers
                 Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
                 Statistics.FinalDPS dps = _statistics.DpsAll[player][phaseIndex];
 
-                List<Object> playerData = new List<Object>
+                List<object> playerData = new List<object>
                 {
                     stats.PowerLoopCount, //0
                     stats.CritablePowerLoopCount, //1
-                    Math.Round((Double)(stats.CriticalRate) / stats.CritablePowerLoopCount * 100, 1), //2
+                    Math.Round((double)(stats.CriticalRate) / stats.CritablePowerLoopCount * 100, 1), //2
                     stats.CriticalRate, //3
                     stats.CriticalDmg, //4
 
-                    Math.Round((Double)(stats.ScholarRate) / stats.PowerLoopCount * 100, 1), //5
+                    Math.Round((double)(stats.ScholarRate) / stats.PowerLoopCount * 100, 1), //5
                     stats.ScholarRate, //6
                     stats.ScholarDmg, //7
-                    Math.Round(100.0 * (dps.PlayerPowerDamage / (Double)(dps.PlayerPowerDamage - stats.ScholarDmg) - 1.0), 3), //8
+                    Math.Round(100.0 * (dps.PlayerPowerDamage / (double)(dps.PlayerPowerDamage - stats.ScholarDmg) - 1.0), 3), //8
 
-                    Math.Round((Double)(stats.MovingRate) / stats.PowerLoopCount * 100, 1), //9
+                    Math.Round((double)(stats.MovingRate) / stats.PowerLoopCount * 100, 1), //9
                     stats.MovingRate, //10
                     stats.MovingDamage, //11
-                    Math.Round(100.0 * (dps.PlayerPowerDamage / (Double)(dps.PlayerPowerDamage - stats.MovingDamage) - 1.0), 3), //12
+                    Math.Round(100.0 * (dps.PlayerPowerDamage / (double)(dps.PlayerPowerDamage - stats.MovingDamage) - 1.0), 3), //12
 
-                    Math.Round(stats.FlankingRate / (Double)stats.PowerLoopCount * 100, 1), //13
+                    Math.Round(stats.FlankingRate / (double)stats.PowerLoopCount * 100, 1), //13
                     stats.FlankingRate, //14
 
-                    Math.Round(stats.GlanceRate / (Double)stats.PowerLoopCount * 100, 1), //15
+                    Math.Round(stats.GlanceRate / (double)stats.PowerLoopCount * 100, 1), //15
                     stats.GlanceRate, //16
 
                     stats.Missed, //17
@@ -245,15 +249,15 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw"></param>
         /// <param name="phaseIndex"></param>
-        private List<List<Object>> BuildDMGStatsBossData(int phaseIndex)
+        private List<List<object>> BuildDMGStatsBossData(int phaseIndex)
         {
-            List<List<Object>> list = new List<List<Object>>();
+            List<List<object>> list = new List<List<object>>();
 
             PhaseData phase = _statistics.Phases[phaseIndex];
 
             foreach (Player player in _log.PlayerList)
             {
-                List<Object> playerData = new List<object>();
+                List<object> playerData = new List<object>();
                 foreach (Boss target in phase.Targets)
                 {
                     Statistics.FinalStats statsBoss = _statistics.StatsBoss[target][player][phaseIndex];
@@ -261,24 +265,24 @@ namespace LuckParser.Controllers
                     playerData.AddRange(new List<object>(){
                         statsBoss.PowerLoopCount, //0
                         statsBoss.CritablePowerLoopCount, //1
-                        Math.Round((Double)(statsBoss.CriticalRate) / statsBoss.CritablePowerLoopCount * 100, 1), //2
+                        Math.Round((double)(statsBoss.CriticalRate) / statsBoss.CritablePowerLoopCount * 100, 1), //2
                         statsBoss.CriticalRate, //3
                         statsBoss.CriticalDmg, //4
 
-                        Math.Round((Double)(statsBoss.ScholarRate) / statsBoss.PowerLoopCount * 100, 1), //5
+                        Math.Round((double)(statsBoss.ScholarRate) / statsBoss.PowerLoopCount * 100, 1), //5
                         statsBoss.ScholarRate, //6
                         statsBoss.ScholarDmg, //7
-                        Math.Round(100.0 * (dpsBoss.PlayerPowerDamage / (Double)(dpsBoss.PlayerPowerDamage - statsBoss.ScholarDmg) - 1.0), 3), //8
+                        Math.Round(100.0 * (dpsBoss.PlayerPowerDamage / (double)(dpsBoss.PlayerPowerDamage - statsBoss.ScholarDmg) - 1.0), 3), //8
 
-                        Math.Round((Double)(statsBoss.MovingRate) / statsBoss.PowerLoopCount * 100, 1), //9
+                        Math.Round((double)(statsBoss.MovingRate) / statsBoss.PowerLoopCount * 100, 1), //9
                         statsBoss.MovingRate, //10
                         statsBoss.MovingDamage, //11
-                        Math.Round(100.0 * (dpsBoss.PlayerPowerDamage / (Double)(dpsBoss.PlayerPowerDamage - statsBoss.MovingDamage) - 1.0), 3), //12
+                        Math.Round(100.0 * (dpsBoss.PlayerPowerDamage / (double)(dpsBoss.PlayerPowerDamage - statsBoss.MovingDamage) - 1.0), 3), //12
 
-                        Math.Round(statsBoss.FlankingRate / (Double)statsBoss.PowerLoopCount * 100, 1), //13
+                        Math.Round(statsBoss.FlankingRate / (double)statsBoss.PowerLoopCount * 100, 1), //13
                         statsBoss.FlankingRate, //14
 
-                        Math.Round(statsBoss.GlanceRate / (Double)statsBoss.PowerLoopCount * 100, 1), //15
+                        Math.Round(statsBoss.GlanceRate / (double)statsBoss.PowerLoopCount * 100, 1), //15
                         statsBoss.GlanceRate, //16
 
                         statsBoss.Missed, //17
@@ -295,9 +299,9 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw"></param>
         /// <param name="phaseIndex"></param>
-        private List<List<Object>> BuildDefenseData(int phaseIndex)
+        private List<List<object>> BuildDefenseData(int phaseIndex)
         {
-            List<List<Object>> list = new List<List<Object>>();
+            List<List<object>> list = new List<List<object>>();
 
             PhaseData phase = _statistics.Phases[phaseIndex];
 
@@ -306,7 +310,7 @@ namespace LuckParser.Controllers
                 Statistics.FinalDefenses defenses = _statistics.Defenses[player][phaseIndex];
                 Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
 
-                List<Object> playerData = new List<object>
+                List<object> playerData = new List<object>
                 {
                     defenses.DamageTaken,
                     defenses.DamageBarrier,
@@ -348,14 +352,14 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw"></param>
         /// <param name="phaseIndex"></param>
-        private List<List<Object>> BuildSupportData(int phaseIndex)
+        private List<List<object>> BuildSupportData(int phaseIndex)
         {
-            List<List<Object>> list = new List<List<Object>>();
+            List<List<object>> list = new List<List<object>>();
 
             foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalSupport support = _statistics.Support[player][phaseIndex];
-                List<Object> playerData = new List<Object>(4)
+                List<object> playerData = new List<object>(4)
                 {
                     support.CondiCleanse,
                     support.CondiCleanseTime,
@@ -402,7 +406,7 @@ namespace LuckParser.Controllers
                 }
                 foreach (Boon boon in listToUse)
                 {
-                    List<Object> boonVals = new List<Object>();
+                    List<object> boonVals = new List<object>();
                     boonData.val.Add(boonVals);
 
                     boonVals.Add(boons[boon.ID].Uptime);
@@ -469,7 +473,7 @@ namespace LuckParser.Controllers
                 foreach (Boon boon in listToUse)
                 {
                     Statistics.FinalBoonUptime uptime = uptimes[boon.ID];
-                    List<Object> val = new List<Object>(2)
+                    List<object> val = new List<object>(2)
                     {
                         uptime.Generation,
                         uptime.Overstack
@@ -1294,7 +1298,7 @@ namespace LuckParser.Controllers
             HTMLHelper.WriteCombatReplayScript(sw, _log, canvasSize, map, _settings.PollingRate);
         }
 
-        private String ReplaceVariables(String html)
+        private string ReplaceVariables(string html)
         {
             double fightDuration = _log.FightData.FightDuration / 1000.0;
             TimeSpan duration = TimeSpan.FromSeconds(fightDuration);
@@ -1345,7 +1349,7 @@ namespace LuckParser.Controllers
         /// Creates the whole html
         /// </summary>
         /// <param name="sw">Stream writer</param>
-        public void CreateHTML(StreamWriter sw, String path)
+        public void CreateHTML(StreamWriter sw, string path)
         {
             string html = Properties.Resources.template_html;
             html = ReplaceVariables(html);
@@ -1355,7 +1359,7 @@ namespace LuckParser.Controllers
 
             html = html.Replace("${logDataJson}", BuildLogData());
 
-            html = html.Replace("<!--${playerData}-->", BuildPlayerData());
+            html = html.Replace("<!--${playerData}-->", BuildDetails());
 
             html = html.Replace("${graphDataJson}", BuildGraphJson());
 
@@ -1405,7 +1409,7 @@ namespace LuckParser.Controllers
 
         private string BuildFlomixJs(string path)
         {
-            String scriptContent = BuildJavascript();
+            string scriptContent = BuildJavascript();
             string scriptFilename = "flomix-ei-" + _scriptVersion + ".js";
             if (Properties.Settings.Default.NewHtmlExternalScripts)
             {
@@ -1428,12 +1432,15 @@ namespace LuckParser.Controllers
             List<PhaseChartDataDto> chartData = new List<PhaseChartDataDto>();
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
-                PhaseChartDataDto phaseData = new PhaseChartDataDto
+                PhaseChartDataDto phaseData = new PhaseChartDataDto()
                 {
-                    bossHealth = BuildBossHealthData(i),
-                    players = BuildDPSGraphData(i),
-                    boss = BuildBossGraphData(i)
+                    players = BuildPlayerGraphData(i)
                 };
+                foreach(Boss target in _statistics.Phases[i].Targets)
+                {
+                    phaseData.bosses.Add(BuildBossGraphData(i, target));
+                }
+
                 chartData.Add(phaseData);
              }
             return ToJson(chartData, typeof(List<PhaseChartDataDto>));
@@ -1603,14 +1610,14 @@ namespace LuckParser.Controllers
             return false;
         }
 
-        private string BuildPlayerData()
+        private string BuildDetails()
         {
             Dictionary<long, SkillItem> usedSkills = new Dictionary<long, SkillItem>();
             Dictionary<long, Boon> usedBoons = new Dictionary<long, Boon>();
-            String scripts = "";
+            string scripts = "";
             for (var i = 0; i < _log.PlayerList.Count; i++) {
                 Player player = _log.PlayerList[i];
-                String playerScript = "data.players[" + i + "].details = " + ToJson(BuildPlayerData(player, usedSkills, usedBoons), typeof(PlayerDetailsDto)) + ";\r\n";
+                string playerScript = "data.players[" + i + "].details = " + ToJson(BuildPlayerData(player, usedSkills, usedBoons), typeof(PlayerDetailsDto)) + ";\r\n";
                 scripts += playerScript;
             }
             for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
@@ -1769,7 +1776,7 @@ namespace LuckParser.Controllers
             return dtos;
         }
  
-        private string ToJson(Object value, Type type)
+        private string ToJson(object value, Type type)
         {
             DataContractJsonSerializer ser = new DataContractJsonSerializer(type);
             MemoryStream memoryStream = new MemoryStream();
@@ -1780,7 +1787,7 @@ namespace LuckParser.Controllers
         private string EscapeJsrender(string template)
         {
             // escape single quotation marks
-            String escaped = template.Replace(@"\", @"\\");
+            string escaped = template.Replace(@"\", @"\\");
             escaped = template.Replace("'", @"\'");
             // remove line breaks
             escaped = Regex.Replace(escaped, @"\s*\r?\n\s*", "");
