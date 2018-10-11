@@ -167,26 +167,26 @@ function updateInputTime(value) {
 
 // selection
 function selectActor(pId) {
-	let actor = playerData.get(pId);
-	selectedPlayer = null;
-	let oldSelect = actor.selected;
-	playerData.forEach(function (value, key, map) {
-		value.selected = false;
-	});
-	actor.selected = !oldSelect;
-	selectedGroup = actor.selected ? actor.group : -1;
-	if (actor.selected) {
-		selectedPlayer = actor;
-	}
-	playerData.forEach(function (value, key, map) {
-		let hasActive = document.getElementById('id' + key).classList.contains('active') && !value.selected;
-		if (hasActive) {
-			setTimeout(function () {
-				document.getElementById('id' + key).classList.remove('active');
-			}, 50);
-		}
-	});
-	animateCanvas(-1);
+    let actor = playerData.get(pId);
+    selectedPlayer = null;
+    let oldSelect = actor.selected;
+    playerData.forEach(function (value, key, map) {
+        value.selected = false;
+    });
+    actor.selected = !oldSelect;
+    selectedGroup = actor.selected ? actor.group : -1;
+    if (actor.selected) {
+        selectedPlayer = actor;
+    }
+    playerData.forEach(function (value, key, map) {
+        let hasActive = document.getElementById('id' + key).classList.contains('active') && !value.selected;
+        if (hasActive) {
+            setTimeout(function () {
+                document.getElementById('id' + key).classList.remove('active');
+            }, 50);
+        }
+    });
+    animateCanvas(-1);
 }
 
 // Drawables
