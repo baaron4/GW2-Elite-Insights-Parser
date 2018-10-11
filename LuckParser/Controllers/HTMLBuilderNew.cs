@@ -386,7 +386,6 @@ namespace LuckParser.Controllers
                 BoonData boonData = new BoonData();
 
                 Dictionary<long, Statistics.FinalBoonUptime> boons = _statistics.SelfBoons[player][phaseIndex];
-                Dictionary<long,List<AbstractMasterPlayer.ExtraBoonData>> extraBoonData = player.GetExtraBoonData(_log, null); Dictionary<long, List<AbstractMasterPlayer.ExtraBoonData>> extraBoonDataBoss = player.GetExtraBoonData(_log, _log.Boss);
                 List<string> boonArrayToList = new List<string>
                 {
                     player.Group.ToString()
@@ -409,29 +408,12 @@ namespace LuckParser.Controllers
                     {
                         intensityBoon.Add(count);
                     }
-
-                    if (extraBoonData.TryGetValue(boon.ID, out var list1))
+                    if (boonTable && boon.Type == Boon.BoonType.Intensity && boons[boon.ID].Presence > 0)
                     {
-                        var extraData = list1[phaseIndex];
-                        string text = extraData.HitCount + " out of " + extraData.TotalHitCount + " hits<br>Pure Damage: " + extraData.DamageGain + "<br>Effective Damage Increase: " + extraData.Percent + "%";
-                        string tooltip = "<big><b>All</b></big><br>" + text;
-                        if (extraBoonDataBoss.TryGetValue(boon.ID, out var list2))
-                        {
-                            extraData = list2[phaseIndex];
-                            text = extraData.HitCount + " out of " + extraData.TotalHitCount + " hits<br>Pure Damage: " + extraData.DamageGain + "<br>Effective Damage Increase: " + extraData.Percent + "%";
-                            tooltip += "<br><big><b>Boss</b></big><br>" + text;
-                        }
-                        boonVals.Add(0);
-                        boonVals.Add(tooltip);
+                        boonVals.Add(boons[boon.ID].Presence);
                     }
-                    else
-                    {
-                        if (boonTable && boon.Type == Boon.BoonType.Intensity && boons[boon.ID].Presence > 0)
-                        {
-                            boonVals.Add(boons[boon.ID].Presence);
-                        }
-                    }                                
-                    boonArrayToList.Add(boons[boon.ID].Uptime.ToString());                        
+
+                    boonArrayToList.Add(boons[boon.ID].Uptime.ToString());
                     count++;
                 }
                         
@@ -441,6 +423,54 @@ namespace LuckParser.Controllers
             }
             return list;
         }
+
+        private List<List<object>> BuildExtraBuffData(int phaseIndex)
+        {
+            List<List<object>> data = new List<List<object>>();
+            PhaseData phase = _statistics.Phases[phaseIndex];
+
+            foreach (Player player in _log.PlayerList)
+            {
+                List<object> pData = new List<object>();
+                int count = 0;
+                data.Add(pData);
+                pData.Add(count++);
+                Dictionary<long, List<AbstractMasterPlayer.ExtraBoonData>> extraBoonDataAll = player.GetExtraBoonData(_log, null);
+                foreach (var pair in extraBoonDataAll)
+                {
+                    var extraData = pair.Value[phaseIndex];
+                    pData.Add(new object[]
+                        {
+                            pair.Key,
+                            extraData.HitCount,
+                            extraData.TotalHitCount,
+                            extraData.DamageGain,
+                            extraData.Percent
+                        }
+                    );
+                }
+                foreach (Boss target in phase.Targets)
+                {
+                    pData.Add(count++);
+                    Dictionary<long, List<AbstractMasterPlayer.ExtraBoonData>> extraBoonDataBoss = player.GetExtraBoonData(_log, target);
+                    foreach (var pair in extraBoonDataBoss)
+                    {
+                        var extraData = pair.Value[phaseIndex]; pData.Add(new object[]
+                         {
+                            pair.Key,
+                            extraData.HitCount,
+                            extraData.TotalHitCount,
+                            extraData.DamageGain,
+                            extraData.Percent
+                         }
+                     );
+                    }
+                }
+            }
+
+            return data;
+        }
+
         /// <summary>
         /// Create the self buff generation table
         /// </summary>
@@ -1381,6 +1411,8 @@ namespace LuckParser.Controllers
                 phaseDto.boonStats = BuildBuffUptimeData(_statistics.PresentBoons, i);
                 phaseDto.offBuffStats = BuildBuffUptimeData(_statistics.PresentOffbuffs, i);
                 phaseDto.defBuffStats = BuildBuffUptimeData(_statistics.PresentDefbuffs, i);
+
+                phaseDto.extraBuffStats = BuildExtraBuffData(i);
 
                 phaseDto.boonGenSelfStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "self");
                 phaseDto.boonGenGroupStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "group");
