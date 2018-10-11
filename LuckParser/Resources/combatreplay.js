@@ -162,16 +162,17 @@ function selectActor(pId) {
 	});
 	actor.selected = !oldSelect;
 	selectedGroup = actor.selected ? actor.group : -1;
-	if (!actor.selected) {
-		let hasActive = document.getElementById('id' + pId).classList.contains('active');
-		if (hasActive) {
-			setTimeout(function () {
-				document.getElementById('id' + pId).classList.remove('active');
-			}, 50);
-		}
-	} else {
+	if (actor.selected) {
 		selectedPlayer = actor;
 	}
+	playerData.forEach(function (value, key, map) {
+		let hasActive = document.getElementById('id' + key).classList.contains('active') && !value.selected;
+		if (hasActive) {
+			setTimeout(function () {
+				document.getElementById('id' + key).classList.remove('active');
+			}, 50);
+		}
+	});
 	animateCanvas(-1);
 }
 
