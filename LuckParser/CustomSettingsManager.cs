@@ -14,7 +14,7 @@ namespace LuckParser
                 Console.WriteLine("Warning: settings file \"" + filename + "\" not found");
                 return;
             }
-            if (f.Extension == "conf")
+            if (f.Extension == ".conf")
             {
                 ReadConfFile(filename);
                 return;
