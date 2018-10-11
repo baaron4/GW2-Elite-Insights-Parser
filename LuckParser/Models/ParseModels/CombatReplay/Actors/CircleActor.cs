@@ -42,7 +42,7 @@ namespace LuckParser.Models.ParseModels
         }
 
         //
-        protected class CircleSerializable<T> : Serializable<T>
+        protected class CircleSerializable : Serializable
         {
             public int Radius { get; set; }
             public int MinRadius { get; set; }
@@ -50,39 +50,30 @@ namespace LuckParser.Models.ParseModels
 
         public override string GetCombatReplayJSON(CombatReplayMap map, AbstractMasterPlayer master)
         {
-            if (Type == PositionType.Array)
+            CircleSerializable aux = new CircleSerializable
             {
-                CircleSerializable<int[]> aux = new CircleSerializable<int[]>
-                {
-                    Type = "Circle",
-                    Radius = Radius,
-                    MinRadius = MinRadius,
-                    Fill = Filled,
-                    Color = Color,
-                    Growing = Growing,
-                    Start = Lifespan.Item1,
-                    End = Lifespan.Item2,
-                    Position = new int[2]
-                };
+                Type = "Circle",
+                Radius = Radius,
+                MinRadius = MinRadius,
+                Fill = Filled,
+                Color = Color,
+                Growing = Growing,
+                Start = Lifespan.Item1,
+                End = Lifespan.Item2
+            };
+            if (Position != null)
+            {
                 Tuple<int, int> mapPos = map.GetMapCoord(Position.X, Position.Y);
-                aux.Position[0] = mapPos.Item1;
-                aux.Position[1] = mapPos.Item2;
+                aux.ConnectedTo = new int[2]
+                       {
+                        mapPos.Item1,
+                        mapPos.Item2
+                       };
                 return JsonConvert.SerializeObject(aux);
-            } else
+            }
+            else
             {
-
-                CircleSerializable<int> aux = new CircleSerializable<int>()
-                {
-                    Type = "Circle",
-                    Radius = Radius,
-                    MinRadius = MinRadius,
-                    Fill = Filled,
-                    Color = Color,
-                    Growing = Growing,
-                    Start = Lifespan.Item1,
-                    End = Lifespan.Item2,
-                    Position = master.GetCombatReplayID()
-                };
+                aux.ConnectedTo = master.GetCombatReplayID();
                 return JsonConvert.SerializeObject(aux);
             }
         }
