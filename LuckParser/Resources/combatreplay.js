@@ -518,14 +518,16 @@ class LineMechanicDrawable extends MechanicDrawable {
 
     draw(ctx, currentTime) {
         const pos = this.getPosition(currentTime);
-        if (pos === null || endpos === null) {
+        const target = this.getTargetPosition(currentTime);
+
+        if (pos === null || target === null) {
             return;
         }
         const percent = this.getPercent(currentTime);
         ctx.beginPath();
         ctx.moveTo(pos.x, pos.y);
-        ctx.lineTo(pos.x + percent * (target.x - pos.x), percent * (target.y - pos.y));
-        ctx.lineWidth = width;
+        ctx.lineTo(pos.x + percent * (target.x - pos.x), pos.y + percent * (target.y - pos.y));
+        ctx.lineWidth = this.width;
         ctx.strokeStyle = this.color;
         ctx.stroke();
     }
