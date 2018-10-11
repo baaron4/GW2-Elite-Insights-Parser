@@ -11,13 +11,13 @@ namespace LuckParser.Models.HtmlModels
         [DataMember] public long duration;
         [DataMember] public double start;
         [DataMember] public double end;
-        [DataMember] public List<int> bosses;
+        [DataMember] public List<int> bosses = new List<int>();
 
-        [DataMember] public List<List<Object>> dpsStats;
-        [DataMember] public List<List<Object>> dmgStatsBoss;
-        [DataMember] public List<List<Object>> dmgStats;
-        [DataMember] public List<List<Object>> defStats;
-        [DataMember] public List<List<Object>> healStats;
+        [DataMember] public List<List<object>> dpsStats;
+        [DataMember] public List<List<object>> dmgStatsBoss;
+        [DataMember] public List<List<object>> dmgStats;
+        [DataMember] public List<List<object>> defStats;
+        [DataMember] public List<List<object>> healStats;
 
         [DataMember] public List<BoonData> boonStats;
         [DataMember] public List<BoonData> offBuffStats;
