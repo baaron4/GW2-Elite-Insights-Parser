@@ -8,43 +8,23 @@ namespace LuckParser.Models.ParseModels
         public Object Target { get; }
         public int Width { get; }
 
-        // using startpoint and endpoint
-        public LineActor(int growing, int width, Point3D endPoint, Tuple<int, int> lifespan, string color) : base(false, growing, lifespan, color)
+        public LineActor(int growing, int width, Object targetAgent, Tuple<int, int> lifespan, string color) : base(false, growing, lifespan, color)
         {
-            Target = endPoint;
+            Target = targetAgent;
             Width = width;
         }
 
-        public LineActor(int growing, int width, Point3D endPoint, Tuple<int, int> lifespan, string color, Point3D position) : base(false, growing, lifespan, color, position)
+        public LineActor(int growing, int width, Object targetAgent, Tuple<int, int> lifespan, string color, Point3D position) : base(false, growing, lifespan, color, position)
         {
-            Target = endPoint;
+            Target = targetAgent;
             Width = width;
         }
 
-        public LineActor(int growing, int width, Point3D endPoint, Tuple<int, int> lifespan, string color, Point3D prev, Point3D next, int time) : base(false, growing, lifespan, color, prev, next, time)
+        public LineActor(int growing, int width, Object targetAgent, Tuple<int, int> lifespan, string color, Point3D prev, Point3D next, int time) : base(false, growing, lifespan, color, prev, next, time)
         {
-            Target = endPoint;
+            Target = targetAgent;
             Width = width;
         }
-
-        public LineActor(int growing, int width, int targetID, Tuple<int, int> lifespan, string color) : base(false, growing, lifespan, color)
-        {
-            Target = targetID;
-            Width = width;
-        }
-
-        public LineActor(int growing, int width, int targetID, Tuple<int, int> lifespan, string color, Point3D position) : base(false, growing, lifespan, color, position)
-        {
-            Target = targetID;
-            Width = width;
-        }
-
-        public LineActor(int growing, int width, int targetID, Tuple<int, int> lifespan, string color, Point3D prev, Point3D next, int time) : base(false, growing, lifespan, color, prev, next, time)
-        {
-            Target = targetID;
-            Width = width;
-        }
-        //
 
         private class LineSerializable : Serializable
         {
@@ -74,9 +54,24 @@ namespace LuckParser.Models.ParseModels
                         mapPos.Item2
                 };
             }
-            else
+            else if (Target is int)
             {
                 aux.Target = (int)Target;
+            }
+            else if (Target is AbstractMasterPlayer)
+            {
+                if (((AbstractMasterPlayer)Target).CombatReplay != null)
+                {
+                    aux.Target = Target.GetType().GetMethod("GetCombatReplayID").Invoke(Target, null);
+                }
+                else
+                {
+                    aux.Target = master.GetCombatReplayID(); // Line Actor with zero length: same origin and destination
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("Target object is neihter a 3DPoint, nor AbstractMasterPlayer (or one of its children) nor an agent ID");
             }
             if (Position != null)
             {
