@@ -335,10 +335,10 @@ namespace LuckParser.Controllers
             // 4 bytes: buff_dmg
             int buffDmg = reader.ReadInt32();
 
-            // 2 bytes: overstack_value
+            // 4 bytes: overstack_value
             uint overstackValue = reader.ReadUInt32();
 
-            // 2 bytes: skill_id
+            // 4 bytes: skill_id
             uint skillId = reader.ReadUInt32();
 
             // 2 bytes: src_instid
