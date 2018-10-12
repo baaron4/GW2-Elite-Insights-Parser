@@ -47,10 +47,26 @@ namespace LuckParser.Models
         
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
-            // TODO: needs doughnuts (wave) and facing information (sword)
+            // TODO: needs doughnuts (wave)
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.Cairn:
+                    List<CastLog> swordSweep = cls.Where(x => x.SkillId == 37631).ToList();
+                    foreach (CastLog c in swordSweep)
+                    {
+                        int start = (int)c.Time;
+                        int preCastTime = 1400;
+                        int initialHitDuration = 850;
+                        int sweepDuration = 1100;
+                        int width = 1400; int height = 80;
+                        Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                        int initialDirection = (int)(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI);
+                        replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, initialDirection, width / 2, new Tuple<int, int>(start, start + preCastTime), "rgba(200, 0, 255, 0.1)"));
+                        replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, initialDirection, width / 2, new Tuple<int, int>(start + preCastTime, start + preCastTime + initialHitDuration), "rgba(150, 0, 180, 0.5)"));
+                        replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, initialDirection, width / 2, 360, new Tuple<int, int>(start + preCastTime + initialHitDuration, start + preCastTime + initialHitDuration + sweepDuration), "rgba(150, 0, 180, 0.5)"));
+                    }
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");

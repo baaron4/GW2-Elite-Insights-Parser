@@ -192,7 +192,19 @@ namespace LuckParser.Models
                         replay.Actors.Add(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
                         replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
                     }
-                    break;
+                    List<CastLog> hadouken = cls.Where(x => x.SkillId == 34371 || x.SkillId == 34380).ToList();
+                    foreach (CastLog c in hadouken)
+                    {
+                        int start = (int)c.Time;
+                        int preCastTime = 1000;
+                        int duration = 750;
+                        int width = 4000; int height = 130;
+                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start+1000);
+                        int direction = (int)(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI);
+                        replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, direction, width / 2, new Tuple<int, int>(start, start + preCastTime), "rgba(255, 0, 0, 0.1)"));
+                        replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, direction, width / 2, new Tuple<int, int>(start + preCastTime, start + preCastTime + duration), "rgba(255, 0, 0, 0.7)"));
+                    }
+                        break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
