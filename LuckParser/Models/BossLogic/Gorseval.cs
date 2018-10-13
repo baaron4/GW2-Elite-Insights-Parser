@@ -63,14 +63,14 @@ namespace LuckParser.Models
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsGorse.Count - 1)
                     {
-                        log.Boss.AddCustomCastLog(new CastLog(end, -5, (int)(fightDuration - end), ParseEnum.Activation.None, (int)(fightDuration - end), ParseEnum.Activation.None), log);
+                        mainTarget.AddCustomCastLog(new CastLog(end, -5, (int)(fightDuration - end), ParseEnum.Activation.None, (int)(fightDuration - end), ParseEnum.Activation.None), log);
                     }
                 }
                 else
                 {
                     start = c.Time - log.FightData.FightStart;
                     phases.Add(new PhaseData(end, start));
-                    log.Boss.AddCustomCastLog(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
+                    mainTarget.AddCustomCastLog(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
                 }
             }
             if (fightDuration - start > 5000 && start >= phases.Last().End)
@@ -138,6 +138,11 @@ namespace LuckParser.Models
             {
                 case (ushort)ParseEnum.BossIDS.Gorseval:
                     List<CastLog> blooms = cls.Where(x => x.SkillId == 31616).ToList();
+                    Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Gorseval);
+                    if (mainTarget == null)
+                    {
+                        throw new InvalidOperationException("Main target of the fight not found");
+                    }
                     foreach (CastLog c in blooms)
                     {
                         int start = (int)c.Time;
@@ -149,7 +154,7 @@ namespace LuckParser.Models
                     if (phases.Count > 1)
                     {
                         List<CastLog> rampage = cls.Where(x => x.SkillId == 31834).ToList();
-                        Point3D pos = log.Boss.CombatReplay.Positions.First();
+                        Point3D pos = mainTarget.CombatReplay.Positions.First();
                         foreach (CastLog c in rampage)
                         {
                             int start = (int)c.Time;
