@@ -85,7 +85,7 @@ namespace LuckParser.Controllers
                 double[] health = new double[seconds + 1];
                 int i = 0;
                 double curHealth = 100.0;
-                foreach (Point p in log.Boss.HealthOverTime)
+                foreach (Point p in boss.HealthOverTime)
                 {
                     double hp = p.Y / 100.0;
                     int timeInPhase = 1 + (p.X - (int)_statistics.Phases[0].Start) / 1000;

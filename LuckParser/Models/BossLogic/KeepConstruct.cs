@@ -55,7 +55,7 @@ namespace LuckParser.Models
                 return phases;
             }
             // Main phases
-            List<CastLog> castLogs = log.Boss.GetCastLogs(log, 0, log.FightData.FightEnd);
+            List<CastLog> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
             List<CastLog> clsKC = castLogs.Where(x => x.SkillId == 35048).ToList();
             foreach (CastLog cl in clsKC)
             {
@@ -75,7 +75,7 @@ namespace LuckParser.Models
             }
             // add burn phases
             int offset = phases.Count;
-            List<CombatItem> orbItems = log.GetBoonData(35096).Where(x => x.DstInstid == log.Boss.InstID).ToList();
+            List<CombatItem> orbItems = log.GetBoonData(35096).Where(x => x.DstInstid == mainTarget.InstID).ToList();
             // Get number of orbs and filter the list
             start = 0;
             int orbCount = 0;

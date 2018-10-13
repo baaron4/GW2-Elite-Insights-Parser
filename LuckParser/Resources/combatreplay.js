@@ -21,8 +21,7 @@ const ctx = canvas.getContext('2d');
 const bgImage = new Image();
 let bgLoaded = false;
 let animation = null;
-// 60 fps by default
-const timeOffset = 16;
+let prevTime = 0;
 let pollingRate = '${pollingRate}';
 
 // canvas
@@ -43,7 +42,7 @@ function animateCanvas(noRequest) {
     });
     trashMobData.forEach(function (value, key, map) {
         value.draw(ctx, time);
-    });	
+    });
     bossData.forEach(function (value, key, map) {
         value.draw(ctx, time);
     });
@@ -55,11 +54,14 @@ function animateCanvas(noRequest) {
         stopAnimate();
     }
     timeSlider.value = time.toString();
-	if (noRequest != -2) {	
-		updateTextInput(time);
-	}
+    if (noRequest !== -2) {
+        updateTextInput(time);
+    }
     if (noRequest > -1 && animation !== null && bgLoaded) {
-        time = Math.min(time + speed * timeOffset, lastTime);
+        let curTime = new Date().getTime();
+        let timeOffset = curTime - prevTime;
+        prevTime = curTime;
+        time = Math.round(Math.min(time + speed * timeOffset, lastTime));
         animation = requestAnimationFrame(animateCanvas);
     }
 }
@@ -67,44 +69,59 @@ bgImage.onload = function () {
     animateCanvas();
     bgLoaded = true;
 };
+
 function startAnimate() {
     if (animation === null && times.length > 0) {
         if (time >= times[times.length - 1]) {
             time = 0;
         }
+        prevTime = new Date().getTime();
         animation = requestAnimationFrame(animateCanvas);
     }
 }
+
 function stopAnimate() {
     if (animation !== null) {
         window.cancelAnimationFrame(animation);
         animation = null;
     }
 }
+
 function restartAnimate() {
     time = 0;
+    if (animation === null) {
+        animateCanvas(-1);
+    }
 }
+
 function eighthSpeed() {
     speed = 0.125;
 }
+
 function fourthSpeed() {
     speed = 0.25;
 }
+
 function halfSpeed() {
     speed = 0.5;
 }
+
 function normalSpeed() {
     speed = 1;
 }
+
 function twoSpeed() {
     speed = 2;
 }
+
 function fourSpeed() {
     speed = 4;
 }
+
 function eightSpeed() {
     speed = 8;
 }
+
 function sixteenSpeed() {
     speed = 16;
 }
@@ -116,6 +133,7 @@ rangeControl.set(300, false);
 rangeControl.set(600, false);
 rangeControl.set(900, false);
 rangeControl.set(1200, false);
+
 function toggleRange(radius) {
     rangeControl.set(radius, !rangeControl.get(radius));
     animateCanvas(-1);
@@ -129,21 +147,22 @@ function updateTime(value) {
 }
 
 function updateTextInput(val) {
-    timeSliderDisplay.value = (val / 1000.0).toString() ;
+    timeSliderDisplay.value = (val / 1000.0).toFixed(3);
 }
+
 function updateInputTime(value) {
-	try {
-		const cleanedString = value.replace(",",".");
-		const parsedTime = parseFloat(cleanedString);
-		if (isNaN(parsedTime)) {
-			return;
-		}
-		const ms = Math.round(parsedTime * 1000.0);
-		time = Math.min(Math.max(ms ,0), times[times.length - 1]);
-		animateCanvas(-2);
-	} catch (error) {
-		console.error(error);
-	}
+    try {
+        const cleanedString = value.replace(",", ".");
+        const parsedTime = parseFloat(cleanedString);
+        if (isNaN(parsedTime)) {
+            return;
+        }
+        const ms = Math.round(parsedTime * 1000.0);
+        time = Math.min(Math.max(ms, 0), times[times.length - 1]);
+        animateCanvas(-2);
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 // selection
@@ -156,25 +175,30 @@ function selectActor(pId) {
     });
     actor.selected = !oldSelect;
     selectedGroup = actor.selected ? actor.group : -1;
-    if (!actor.selected) {
-        let hasActive = document.getElementById('id' + pId).classList.contains('active');
-        if (hasActive) {
-            setTimeout(function () {
-                document.getElementById('id' + pId).classList.remove('active');
-            }, 50);
-        }
-    } else {
+    if (actor.selected) {
         selectedPlayer = actor;
     }
+    playerData.forEach(function (value, key, map) {
+        let hasActive = document.getElementById('id' + key).classList.contains('active') && !value.selected;
+        if (hasActive) {
+            setTimeout(function () {
+                document.getElementById('id' + key).classList.remove('active');
+            }, 50);
+        }
+    });
     animateCanvas(-1);
 }
 
 // Drawables
-class Drawable {
-    constructor(start, end) {
+
+class IconDrawable {
+    constructor(start, end, imgSrc, pixelSize) {
         this.pos = null;
         this.start = start;
         this.end = end;
+        this.img = new Image();
+        this.img.src = imgSrc;
+        this.pixelSize = pixelSize;
     }
 
     getInterpolatedPosition(startIndex, currentIndex, currentTime) {
@@ -182,13 +206,13 @@ class Drawable {
         const positionX = this.pos[2 * offsetedIndex];
         const positionY = this.pos[2 * offsetedIndex + 1];
         const timeValue = times[currentIndex];
-        if (currentTime - timeValue > 0 && offsetedIndex < 0.5*this.pos.length - 1) {
+        if (currentTime - timeValue > 0 && offsetedIndex < 0.5 * this.pos.length - 1) {
             const nextTimeValue = times[currentIndex + 1];
             const nextPositionX = this.pos[2 * offsetedIndex + 2];
             const nextPositionY = this.pos[2 * offsetedIndex + 3];
             return {
                 x: Math.round(positionX + (currentTime - timeValue) / (nextTimeValue - timeValue) * (nextPositionX - positionX)),
-                    y: Math.round(positionY + (currentTime - timeValue) / (nextTimeValue - timeValue) * (nextPositionY - positionY))
+                y: Math.round(positionY + (currentTime - timeValue) / (nextTimeValue - timeValue) * (nextPositionY - positionY))
             };
         } else {
             return {
@@ -216,15 +240,6 @@ class Drawable {
         const currentIndex = Math.floor((times.length - 1) * currentTime / lastTime);
         return this.getInterpolatedPosition(startIndex, Math.max(currentIndex, startIndex), currentTime);
     }
-}
-
-class IconDrawable extends Drawable {
-    constructor(start, end, imgSrc, pixelSize) {
-        super(start, end);
-        this.img = new Image();
-        this.img.src = imgSrc;
-        this.pixelSize = pixelSize;
-    }
 
     draw(ctx, currentTime) {
         const pos = this.getPosition(currentTime);
@@ -239,7 +254,7 @@ class IconDrawable extends Drawable {
 }
 
 class PlayerIconDrawable extends IconDrawable {
-    constructor(imgSrc, pixelSize, group, pos, dead,down) {
+    constructor(imgSrc, pixelSize, group, pos, dead, down) {
         super(-1, -1, imgSrc, pixelSize);
         this.pos = pos;
         this.dead = dead;
@@ -322,9 +337,11 @@ class EnemyIconDrawable extends IconDrawable {
     }
 }
 
-class MechanicDrawable extends Drawable {
-    constructor(start, end, fill, growing, color) {
-        super(start, end);
+class MechanicDrawable {
+    constructor(start, end, fill, growing, color, connectedTo) {
+        this.start = start;
+        this.end = end;
+        this.connectedTo = connectedTo;
         this.fill = fill;
         this.growing = growing;
         this.color = color;
@@ -332,20 +349,20 @@ class MechanicDrawable extends Drawable {
     }
 
     getPosition(currentTime) {
-        if (this.pos === null) {
+        if (this.connectedTo === null) {
             return null;
         }
         if (this.start !== -1 && (this.start >= currentTime || this.end <= currentTime)) {
             return null;
         }
-        if (this.pos instanceof Array) {
+        if (this.connectedTo instanceof Array) {
             return {
-                x: this.pos[0],
-                y: this.pos[1]
+                x: this.connectedTo[0],
+                y: this.connectedTo[1]
             };
         } else {
             if (this.master === null) {
-                let masterId = this.pos;
+                let masterId = this.connectedTo;
                 this.master = playerData.has(masterId) ? playerData.get(masterId) : trashMobData.has(masterId) ? trashMobData.get(masterId) : bossData.get(masterId);
             }
             return this.master.getPosition(currentTime);
@@ -361,11 +378,10 @@ class MechanicDrawable extends Drawable {
 }
 
 class CircleMechanicDrawable extends MechanicDrawable {
-    constructor(start, end, fill, growing, color, radius, pos, minRadius) {
-        super(start, end, fill, growing, color);
+    constructor(start, end, fill, growing, color, radius, connectedTo, minRadius) {
+        super(start, end, fill, growing, color, connectedTo);
         this.radius = inch * radius;
         this.minRadius = inch * minRadius;
-        this.pos = pos;
     }
 
     draw(ctx, currentTime) {
@@ -387,11 +403,10 @@ class CircleMechanicDrawable extends MechanicDrawable {
 }
 
 class DoughnutMechanicDrawable extends MechanicDrawable {
-    constructor(start, end, fill, growing, color, innerRadius, outerRadius, pos) {
-        super(start, end, fill, growing, color);
+    constructor(start, end, fill, growing, color, innerRadius, outerRadius, connectedTo) {
+        super(start, end, fill, growing, color, connectedTo);
         this.outerRadius = inch * outerRadius;
         this.innerRadius = inch * innerRadius;
-        this.pos = pos;
     }
 
     draw(ctx, currentTime) {
@@ -404,7 +419,7 @@ class DoughnutMechanicDrawable extends MechanicDrawable {
         ctx.arc(pos.x, pos.y, this.innerRadius + percent * (this.outerRadius - this.innerRadius), 2 * Math.PI, 0, false);
         ctx.arc(pos.x, pos.y, this.innerRadius, 0, 2 * Math.PI, true);
         ctx.closePath();
-		if (this.fill) {
+        if (this.fill) {
             ctx.fillStyle = this.color;
             ctx.fill();
         } else {
@@ -416,11 +431,10 @@ class DoughnutMechanicDrawable extends MechanicDrawable {
 }
 
 class RectangleMechanicDrawable extends MechanicDrawable {
-    constructor(start, end, fill, growing, color, width, height, pos) {
-        super(start, end, fill, growing, color);
+    constructor(start, end, fill, growing, color, width, height, connectedTo) {
+        super(start, end, fill, growing, color, connectedTo);
         this.height = height * inch;
         this.width = width * inch;
-        this.pos = pos;
     }
 
     draw(ctx, currentTime) {
@@ -443,14 +457,13 @@ class RectangleMechanicDrawable extends MechanicDrawable {
 }
 
 class PieMechanicDrawable extends MechanicDrawable {
-    constructor(start, end, fill, growing, color, direction, openingAngle, radius, pos) {
-        super(start, end, fill, growing, color);
+    constructor(start, end, fill, growing, color, direction, openingAngle, radius, connectedTo) {
+        super(start, end, fill, growing, color, connectedTo);
         this.direction = direction * Math.PI / 180;
         this.openingAngle = 0.5 * openingAngle * Math.PI / 180;
         this.radius = inch * radius;
         this.dx = Math.cos(this.direction - this.openingAngle) * this.radius;
         this.dy = Math.sin(this.direction - this.openingAngle) * this.radius;
-        this.pos = pos;
     }
 
     draw(ctx, currentTime) {
@@ -490,22 +503,22 @@ function createAllActors() {
                 }
                 break;
             case "Boss":
-				bossData.set(actor.ID, new EnemyIconDrawable(actor.Start, actor.End,actor.Img, 30, actor.Positions));
+                bossData.set(actor.ID, new EnemyIconDrawable(actor.Start, actor.End, actor.Img, 30, actor.Positions));
                 break;
             case "Mob":
                 trashMobData.set(actor.ID, new EnemyIconDrawable(actor.Start, actor.End, actor.Img, 30, actor.Positions));
                 break;
             case "Circle":
-                mechanicActorData.add(new CircleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Radius, actor.Position, actor.MinRadius));
+                mechanicActorData.add(new CircleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Radius, actor.ConnectedTo, actor.MinRadius));
                 break;
             case "Rectangle":
-                mechanicActorData.add(new RectangleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Width, actor.Height, actor.Position));
+                mechanicActorData.add(new RectangleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Width, actor.Height, actor.ConnectedTo));
                 break;
             case "Doughnut":
-                mechanicActorData.add(new DoughnutMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.InnerRadius, actor.OuterRadius, actor.Position));
+                mechanicActorData.add(new DoughnutMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.InnerRadius, actor.OuterRadius, actor.ConnectedTo));
                 break;
             case "Pie":
-                mechanicActorData.add(new PieMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Direction, actor.OpeningAngle, actor.Radius, actor.Position));
+                mechanicActorData.add(new PieMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Direction, actor.OpeningAngle, actor.Radius, actor.ConnectedTo));
                 break;
         }
     }

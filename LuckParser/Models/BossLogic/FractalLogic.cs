@@ -38,7 +38,7 @@ namespace LuckParser.Models
             {
                 return phases;
             }
-            List<CombatItem> invulsBoss = GetFilteredList(log,762,log.Boss.InstID);        
+            List<CombatItem> invulsBoss = GetFilteredList(log,762,mainTarget.InstID);        
             for (int i = 0; i < invulsBoss.Count; i++)
             {
                 CombatItem c = invulsBoss[i];
@@ -48,13 +48,13 @@ namespace LuckParser.Models
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsBoss.Count - 1)
                     {
-                        log.Boss.AddCustomCastLog(new CastLog(end, -5, (int)(fightDuration - end), ParseEnum.Activation.None, (int)(fightDuration - end), ParseEnum.Activation.None), log);
+                        mainTarget.AddCustomCastLog(new CastLog(end, -5, (int)(fightDuration - end), ParseEnum.Activation.None, (int)(fightDuration - end), ParseEnum.Activation.None), log);
                     }
                 }
                 else
                 {
                     start = c.Time - log.FightData.FightStart;
-                    log.Boss.AddCustomCastLog(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
+                    mainTarget.AddCustomCastLog(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
                 }
             }
             if (fightDuration - start > 5000 && start >= phases.Last().End)
@@ -71,13 +71,18 @@ namespace LuckParser.Models
 
         protected void SetSuccessOnCombatExit(ParsedLog log, int combatExitCount, int delay)
         {
-            int combatExits = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Count(x => x.SrcInstid == log.Boss.InstID);
-            CombatItem lastDamageTaken = log.CombatData.GetDamageTakenData(log.Boss.InstID).LastOrDefault(x => x.Value > 0);
+            Boss mainTarget = Targets.Find(x => x.ID == TriggerID);
+            if (mainTarget == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
+            int combatExits = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Count(x => x.SrcInstid == mainTarget.InstID);
+            CombatItem lastDamageTaken = log.CombatData.GetDamageTakenData(mainTarget.InstID).LastOrDefault(x => x.Value > 0);
             if (combatExits == combatExitCount && lastDamageTaken != null)
             {
                 HashSet<ushort> pIds = new HashSet<ushort>(log.PlayerList.Select(x => x.InstID));
                 CombatItem lastPlayerExit = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => pIds.Contains(x.SrcInstid)).LastOrDefault();
-                CombatItem lastBossExit = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).LastOrDefault(x => x.SrcInstid == log.Boss.InstID);
+                CombatItem lastBossExit = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).LastOrDefault(x => x.SrcInstid == mainTarget.InstID);
                 log.LogData.Success = lastPlayerExit != null && lastBossExit != null && lastPlayerExit.Time - lastBossExit.Time > delay ? true : false;
                 log.FightData.FightEnd = lastDamageTaken.Time;
             }
@@ -86,8 +91,13 @@ namespace LuckParser.Models
         public override void SetSuccess(ParsedLog log)
         {
             // check reward
+            Boss mainTarget = Targets.Find(x => x.ID == TriggerID);
+            if (mainTarget == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
             CombatItem reward = log.CombatData.GetStatesData(ParseEnum.StateChange.Reward).LastOrDefault();
-            CombatItem lastDamageTaken = log.CombatData.GetDamageTakenData(log.Boss.InstID).LastOrDefault(x => x.Value > 0);
+            CombatItem lastDamageTaken = log.CombatData.GetDamageTakenData(mainTarget.InstID).LastOrDefault(x => x.Value > 0);
             if (lastDamageTaken != null)
             {
                 if (reward != null && lastDamageTaken.Time - reward.Time < 100)

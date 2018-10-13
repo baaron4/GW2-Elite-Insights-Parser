@@ -1,5 +1,6 @@
 ﻿using LuckParser.Models.DataModels;
 using LuckParser.Models.ParseModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -57,6 +58,11 @@ namespace LuckParser.Models
 
         public override void SetSuccess(ParsedLog log)
         {
+            Boss mainTarget = Targets.Find(x => x.ID == TriggerID);
+            if (mainTarget == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
             CombatItem pov = log.CombatData.AllCombatItems.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.PointOfView);
             if (pov != null)
             {
@@ -67,14 +73,14 @@ namespace LuckParser.Models
                     log.FightData.FightStart = enterCombat.Time;
                 }
             }
-            CombatItem lastDamageTaken = log.CombatData.GetDamageTakenData(log.Boss.InstID).LastOrDefault(x => x.Value > 0 || x.BuffDmg > 0);
+            CombatItem lastDamageTaken = log.CombatData.GetDamageTakenData(mainTarget.InstID).LastOrDefault(x => x.Value > 0 || x.BuffDmg > 0);
             if (lastDamageTaken != null)
             {
                 log.FightData.FightEnd = lastDamageTaken.Time;
             }
-            if (log.Boss.HealthOverTime.Count > 0)
+            if (mainTarget.HealthOverTime.Count > 0)
             {
-                log.LogData.Success = log.Boss.HealthOverTime.Last().Y < 200;
+                log.LogData.Success = mainTarget.HealthOverTime.Last().Y < 200;
             }
         }
     }
