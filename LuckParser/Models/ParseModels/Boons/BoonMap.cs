@@ -42,6 +42,52 @@ namespace LuckParser.Models.ParseModels
             }
             this[boon.ID] = new List<BoonLog>();
         }
+
+        private int CompareApplicationType(BoonLog x, BoonLog y)
+        {
+            if (x.Time < y.Time)
+            {
+                return -1;
+            }
+            else if (x.Time > y.Time)
+            {
+                return 1;
+            }
+            else
+            {
+                if (x.GetType() == typeof(BoonRemovalLog))
+                {
+                    if (y.GetType() == typeof(BoonRemovalLog))
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        return 1;
+                    }
+                }
+                else
+                {
+                    if (y.GetType() == typeof(BoonRemovalLog))
+                    {
+                        return -1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+            }
+        }
+
+
+        public void Sort()
+        {
+            foreach (var pair in this)
+            {
+                pair.Value.Sort(CompareApplicationType);
+            }
+        }
         
     }
 
