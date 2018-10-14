@@ -144,9 +144,27 @@ namespace LuckParser.Models
 
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.Sabetha:
+                    List<CastLog> flameWall = cls.Where(x => x.SkillId == 31332).ToList();
+                    foreach (CastLog c in flameWall)
+                    {
+                        int start = (int)c.Time;
+                        int preCastTime = 2800;
+                        int duration = 10000;
+                        int width = 1300; int height = 60;
+                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start);
+                        int initialDirection = (int)(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI);
+                        if (facing != null)
+                        {
+                            replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, initialDirection, width / 2, new Tuple<int, int>(start, start + preCastTime), "rgba(255, 100, 0, 0.2)"));
+                            replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, initialDirection, width / 2, 360, new Tuple<int, int>(start + preCastTime, start + preCastTime + duration), "rgba(255, 50, 0, 0.5)"));
+                        }
+                    }
+                    break;
                 case (ushort)Kernan:
                 case (ushort)Knuckles:
                 case (ushort)Karde:

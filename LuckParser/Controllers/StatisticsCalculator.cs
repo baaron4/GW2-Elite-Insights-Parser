@@ -64,7 +64,28 @@ namespace LuckParser.Controllers
                 {
                     target.InitCombatReplay(log, _settings.PollingRate, true, false);
                 }
-                log.FightData.Logic.ComputeTrashMobsData(log, _settings.PollingRate);
+                log.FightData.Logic.InitTrashMobCombatReplay(log, _settings.PollingRate);
+
+                // Ensuring all combat replays are initialized before extra data (and agent interaction) is computed
+                foreach (Player p in log.PlayerList)
+                {
+                    if (p.Group == 11)
+                    {
+                        continue;
+                    }
+                    p.ComputeAdditionalCombatReplayData(log);
+                }
+                foreach (Boss target in log.FightData.Logic.Targets)
+                {
+                    target.ComputeAdditionalCombatReplayData(log);
+                }
+
+                foreach (Mob mob in log.FightData.Logic.TrashMobs)
+                {
+                    mob.ComputeAdditionalCombatReplayData(log);
+                }
+
+
             }
             if (switches.CalculateDPS) CalculateDPS();
             if (switches.CalculateBoons) CalculateBoons();

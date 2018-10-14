@@ -150,6 +150,14 @@ namespace LuckParser.Models.ParseModels
                         CombatReplay.Trim(AgentItem.FirstAware - log.FightData.FightStart, AgentItem.LastAware - log.FightData.FightStart);
                     }
                 }
+                //SetAdditionalCombatReplayData(log);
+            }
+        }
+
+        public void ComputeAdditionalCombatReplayData(ParsedLog log)
+        {
+            if (CombatReplay != null && CombatReplay.Actors.Count == 0)
+            {
                 SetAdditionalCombatReplayData(log);
             }
         }

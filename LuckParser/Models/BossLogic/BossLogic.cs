@@ -198,7 +198,7 @@ namespace LuckParser.Models
         {
         }
 
-        public void ComputeTrashMobsData(ParsedLog log, int pollingRate)
+        public void InitTrashMobCombatReplay(ParsedLog log, int pollingRate)
         {
             List<ParseEnum.TrashIDS> ids = GetTrashMobsIDS();
             List<AgentItem> aList = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();

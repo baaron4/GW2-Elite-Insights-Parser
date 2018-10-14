@@ -28,7 +28,7 @@ namespace LuckParser.Models.ParseModels
         //
 
 
-        private class RectangleSerializable : Serializable
+        protected class RectangleSerializable : Serializable
         {
             public int Height { get; set; }
             public int Width { get; set; }

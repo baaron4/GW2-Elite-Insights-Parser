@@ -160,7 +160,7 @@ namespace LuckParser.Models
                     break;
                 case (ushort)GreenPhantasm:
                     int lifetime = 8000;
-                    replay.Actors.Add(new CircleActor(false, start + lifetime, 0, new Tuple<int, int>(start, start + lifetime), "rgba(0,255,0,0.5)"));
+                    replay.Actors.Add(new CircleActor(true, 0, 210, new Tuple<int, int>(start, start + lifetime), "rgba(0,255,0,0.2)"));
                     replay.Actors.Add(new CircleActor(true, start + lifetime, 210, new Tuple<int, int>(start, start + lifetime), "rgba(0,255,0,0.3)"));
                     break;
                 case (ushort)RetrieverProjection:
@@ -294,6 +294,27 @@ namespace LuckParser.Models
                     replay.Actors.Add(new CircleActor(true, xeraFuryEnd, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.4)"));
                 }
 
+            }
+            //fixated Statue
+            List<CombatItem> fixatedStatue = GetFilteredList(log, 34912, p.InstID).Concat(GetFilteredList(log, 34925, p.InstID)).ToList();
+            int fixationStatueStart = 0;
+            Mob statue = null;
+            foreach (CombatItem c in fixatedStatue)
+            {
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                {
+                    fixationStatueStart = (int)(c.Time - log.FightData.FightStart);
+                    statue = TrashMobs.FirstOrDefault(x => x.Agent == c.SrcAgent);
+                }
+                else
+                {
+                    int fixationStatueEnd = (int)(c.Time - log.FightData.FightStart);
+                    Tuple<int, int> duration = new Tuple<int, int>(fixationStatueStart, fixationStatueEnd);
+                    if (statue != null)
+                    {
+                        replay.Actors.Add(new LineActor(0, 10, statue, duration, "rgba(255, 0, 255, 0.5)"));
+                    }
+                }
             }
         }
     }

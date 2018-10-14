@@ -309,8 +309,9 @@ namespace LuckParser.Models
                 else
                 {
                     int tpEnd = (int)(c.Time - log.FightData.FightStart);
-                    replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(tpStart, tpEnd), "rgba(0, 150, 0, 0.3)"));
-                    replay.Actors.Add(new CircleActor(true, tpEnd, 180, new Tuple<int, int>(tpStart, tpEnd), "rgba(0, 150, 0, 0.3)"));
+                    Tuple<int, int> lifespan = new Tuple<int, int>(tpStart, tpEnd);
+                    replay.Actors.Add(new CircleActor(true, 0, 180, lifespan, "rgba(0, 150, 0, 0.3)"));
+                    replay.Actors.Add(new CircleActor(true, tpEnd, 180, lifespan, "rgba(0, 150, 0, 0.3)"));
                 }
             }
         }

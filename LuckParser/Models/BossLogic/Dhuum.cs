@@ -269,6 +269,47 @@ namespace LuckParser.Models
                     replay.Actors.Add(new CircleActor(true, bombDhuumStart + 13000, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.5)"));
                 }
             }
+            // shackles connection
+            List<CombatItem> shackles = GetFilteredList(log, 47335, p.InstID).Concat(GetFilteredList(log, 48591, p.InstID)).ToList();
+            int shacklesStart = 0;
+            Player shacklesTarget = null;
+            foreach (CombatItem c in shackles)
+            {
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                {
+                    shacklesStart = (int)(c.Time - log.FightData.FightStart);
+                    shacklesTarget = log.PlayerList.FirstOrDefault(x => x.Agent == c.SrcAgent);
+                }
+                else
+                {
+                    int shacklesEnd = (int)(c.Time - log.FightData.FightStart);
+                    Tuple<int, int> duration = new Tuple<int, int>(shacklesStart, shacklesEnd);
+                    if (shacklesTarget != null)
+                    {
+                        replay.Actors.Add(new LineActor(0, 10, shacklesTarget, duration, "rgba(0, 255, 255, 0.5)"));
+                    }
+                }
+            }
+            // shackles damage (identical to the connection for now, not yet properly distinguishable from the pure connection, further investigation needed due to inconsistent behavior (triggering too early, not triggering the damaging skill though)
+            // shackles start with buff 47335 applied from one player to the other, this is switched over to buff 48591 after mostly 2 seconds, sometimes later. This is switched to 48042 usually 4 seconds after initial application and the damaging skill 47164 starts to deal damage from that point on.
+            // Before that point, 47164 is only logged when evaded/blocked, but doesn't deal damage. Further investigation needed.
+            List<CombatItem> shacklesDmg = GetFilteredList(log, 48042, p.InstID);
+            int shacklesDmgStart = 0;
+            Player shacklesDmgTarget = null;
+            foreach (CombatItem c in shacklesDmg)
+            {
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                {
+                    shacklesDmgStart = (int)(c.Time - log.FightData.FightStart);
+                    shacklesDmgTarget = log.PlayerList.FirstOrDefault(x => x.Agent == c.SrcAgent);
+                }
+                else
+                {
+                    int shacklesDmgEnd = (int)(c.Time - log.FightData.FightStart);
+                    Tuple<int, int> duration = new Tuple<int, int>(shacklesDmgStart, shacklesDmgEnd);
+                    replay.Actors.Add(new LineActor(0, 10, shacklesDmgTarget, duration, "rgba(0, 255, 255, 0.5)"));
+                }
+            }
         }
 
         public override int IsCM(ParsedLog log)
