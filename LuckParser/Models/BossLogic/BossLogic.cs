@@ -117,11 +117,11 @@ namespace LuckParser.Models
             RegroupTargets(agentData, combatItems);
         }
 
-        public virtual void SetMaxHealth(ushort instid, long time, int health)
+        public void SetMaxHealth(ushort instid, long time, int health)
         {
             foreach (Boss boss in Targets)
             {
-                if (boss.InstID == instid && boss.FirstAware <= time && boss.LastAware >= time)
+                if (boss.Health == -1 && boss.InstID == instid && boss.FirstAware <= time && boss.LastAware >= time)
                 {
                     boss.Health = health;
                     break;
