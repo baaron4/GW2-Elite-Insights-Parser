@@ -11,11 +11,11 @@ namespace LuckParser
 {
     public class ConsoleProgram
     {
-        public ConsoleProgram(string[] args)
+        public ConsoleProgram(IEnumerable<string> logFiles)
         {
             if (Properties.Settings.Default.ParseOneAtATime)
             {
-                foreach (string file in args)
+                foreach (string file in logFiles)
                 {
                     ParseLog(file);
                 }
@@ -24,7 +24,7 @@ namespace LuckParser
             {
                 List<Task> tasks = new List<Task>();
 
-                foreach (string file in args)
+                foreach (string file in logFiles)
                 {
                     tasks.Add(Task.Factory.StartNew(ParseLog, file));
                 }
