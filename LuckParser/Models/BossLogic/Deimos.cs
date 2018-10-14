@@ -108,13 +108,13 @@ namespace LuckParser.Models
                 return phases;
             }
             // Determined + additional data on inst change
-            CombatItem invulDei = log.GetBoonData(762).Find(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && x.DstInstid == log.Boss.InstID);
+            CombatItem invulDei = log.GetBoonData(762).Find(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && x.DstInstid == mainTarget.InstID);
             if (invulDei != null)
             {
                 end = invulDei.Time - log.FightData.FightStart;
                 phases.Add(new PhaseData(start, end));
                 start = (log.FightData.PhaseData.Count == 1 ? log.FightData.PhaseData[0] - log.FightData.FightStart : fightDuration);
-                log.Boss.AddCustomCastLog(new CastLog(end, -6, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
+                mainTarget.AddCustomCastLog(new CastLog(end, -6, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
             }
             if (fightDuration - start > 5000 && start >= phases.Last().End)
             {
@@ -221,19 +221,6 @@ namespace LuckParser.Models
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-        }
-
-        public override void SetMaxHealth(ushort instid, long time, int health)
-        {
-            foreach (Boss boss in Targets)
-            {
-                // Additional check because the arm has a max health update of 14940 now
-                if (boss.Health == -1 && boss.InstID == instid && boss.FirstAware <= time && boss.LastAware >= time)
-                {
-                    boss.Health = health;
-                    break;
-                }
             }
         }
 

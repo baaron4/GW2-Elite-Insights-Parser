@@ -308,14 +308,16 @@ namespace LuckParser.Controllers
 
             // 1 byte: is_flanking
             byte isShields = reader.ReadByte();
-            // 2 bytes: garbage
-            ParseHelper.SafeSkip(reader.BaseStream, 2);
+            // 1 byte: is_flanking
+            byte isOffcycle = reader.ReadByte();
+            // 1 bytes: garbage
+            ParseHelper.SafeSkip(reader.BaseStream, 1);
 
             //save
             // Add combat
             return new CombatItem(time, srcAgent, dstAgent, value, buffDmg, overstackValue, skillId,
                 srcInstid, dstInstid, srcMasterInstid,0, iff, buff, result, isActivation, isBuffRemove,
-                isNinety, isFifty, isMoving, isStateChange, isFlanking, isShields);
+                isNinety, isFifty, isMoving, isStateChange, isFlanking, isShields, isOffcycle);
         }
 
         private static CombatItem ReadCombatItemRev1(BinaryReader reader)
@@ -335,10 +337,10 @@ namespace LuckParser.Controllers
             // 4 bytes: buff_dmg
             int buffDmg = reader.ReadInt32();
 
-            // 2 bytes: overstack_value
+            // 4 bytes: overstack_value
             uint overstackValue = reader.ReadUInt32();
 
-            // 2 bytes: skill_id
+            // 4 bytes: skill_id
             uint skillId = reader.ReadUInt32();
 
             // 2 bytes: src_instid
@@ -383,15 +385,17 @@ namespace LuckParser.Controllers
             byte isFlanking = reader.ReadByte();
 
             // 1 byte: is_flanking
-            byte IsShields = reader.ReadByte();
+            byte isShields = reader.ReadByte();
+            // 1 byte: is_flanking
+            byte isOffcycle = reader.ReadByte();
             // 5 bytes: offcycle (?) + garbage
-            ParseHelper.SafeSkip(reader.BaseStream, 5);
+            ParseHelper.SafeSkip(reader.BaseStream, 4);
 
             //save
             // Add combat
             return new CombatItem(time, srcAgent, dstAgent, value, buffDmg, overstackValue, skillId,
                 srcInstid, dstInstid, srcMasterInstid, dstmasterInstid, iff, buff, result, isActivation, isBuffRemove,
-                isNinety, isFifty, isMoving, isStateChange, isFlanking, IsShields);
+                isNinety, isFifty, isMoving, isStateChange, isFlanking, isShields, isOffcycle);
         }
 
         /// <summary>

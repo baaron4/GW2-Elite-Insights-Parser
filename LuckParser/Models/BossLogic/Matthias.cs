@@ -75,11 +75,11 @@ namespace LuckParser.Models
             if (heatWave != null)
             {
                 phaseStarts.Add(heatWave.Time - log.FightData.FightStart);
-                CombatItem downPour = log.GetDamageData(log.Boss.InstID).Find(x => x.SkillID == 34554);
+                CombatItem downPour = log.GetDamageData(mainTarget.InstID).Find(x => x.SkillID == 34554);
                 if (downPour != null)
                 {
                     phaseStarts.Add(downPour.Time - log.FightData.FightStart);
-                    List<CastLog> castLogs = log.Boss.GetCastLogs(log, 0, log.FightData.FightEnd);
+                    List<CastLog> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
                     CastLog abo = castLogs.Find(x => x.SkillId == 34427);
                     if (abo != null)
                     {

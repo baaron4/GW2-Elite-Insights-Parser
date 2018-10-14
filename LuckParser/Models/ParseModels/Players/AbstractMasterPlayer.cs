@@ -201,7 +201,8 @@ namespace LuckParser.Models.ParseModels
                         loglist.Add(new BoonRemovalLog(time, c.DstInstid, c.Value, c.IsBuffRemove));
                     }
                 }
-            }   
+            }
+            boonMap.Sort();
             return boonMap;
         }
         // private setters

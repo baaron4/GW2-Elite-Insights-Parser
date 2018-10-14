@@ -64,15 +64,15 @@ namespace LuckParser.Models
             // split happened
             if (log.FightData.PhaseData.Count == 1)
             {
-                CombatItem invulXera = log.GetBoonData(762).Find(x => x.DstInstid == log.Boss.InstID);
+                CombatItem invulXera = log.GetBoonData(762).Find(x => x.DstInstid == mainTarget.InstID);
                 if (invulXera == null)
                 {
-                    invulXera = log.GetBoonData(34113).Find(x => x.DstInstid == log.Boss.InstID);
+                    invulXera = log.GetBoonData(34113).Find(x => x.DstInstid == mainTarget.InstID);
                 }
                 long end = invulXera.Time - log.FightData.FightStart;
                 phases.Add(new PhaseData(start, end));
                 start = log.FightData.PhaseData[0] - log.FightData.FightStart;
-                log.Boss.AddCustomCastLog(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
+                mainTarget.AddCustomCastLog(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
             }
             if (fightDuration - start > 5000 && start >= phases.Last().End)
             {

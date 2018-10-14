@@ -28,7 +28,7 @@ namespace LuckParser.Models.ParseModels
         //
 
 
-        private class RectangleSerializable<T> : Serializable<T>
+        private class RectangleSerializable : Serializable
         {
             public int Height { get; set; }
             public int Width { get; set; }
@@ -36,40 +36,30 @@ namespace LuckParser.Models.ParseModels
 
         public override string GetCombatReplayJSON(CombatReplayMap map, AbstractMasterPlayer master)
         {
-            if (Type == PositionType.Array)
+            RectangleSerializable aux = new RectangleSerializable
             {
-                RectangleSerializable<int[]> aux = new RectangleSerializable<int[]>
-                {
-                    Type = "Rectangle",
-                    Width = Width,
-                    Height = Height,
-                    Fill = Filled,
-                    Color = Color,
-                    Growing = Growing,
-                    Start = Lifespan.Item1,
-                    End = Lifespan.Item2,
-                    Position = new int[2]
-                };
+                Type = "Rectangle",
+                Width = Width,
+                Height = Height,
+                Fill = Filled,
+                Color = Color,
+                Growing = Growing,
+                Start = Lifespan.Item1,
+                End = Lifespan.Item2
+            };
+            if (Position != null)
+            {
                 Tuple<int, int> mapPos = map.GetMapCoord(Position.X, Position.Y);
-                aux.Position[0] = mapPos.Item1;
-                aux.Position[1] = mapPos.Item2;
+                aux.ConnectedTo = new int[2]
+                {
+                        mapPos.Item1,
+                        mapPos.Item2
+                };
                 return JsonConvert.SerializeObject(aux);
             }
             else
             {
-
-                RectangleSerializable<int> aux = new RectangleSerializable<int>()
-                {
-                    Type = "Rectangle",
-                    Width = Width,
-                    Height = Height,
-                    Fill = Filled,
-                    Color = Color,
-                    Growing = Growing,
-                    Start = Lifespan.Item1,
-                    End = Lifespan.Item2,
-                    Position = master.GetCombatReplayID()
-                };
+                aux.ConnectedTo = master.GetCombatReplayID();
                 return JsonConvert.SerializeObject(aux);
             }
         }

@@ -26,12 +26,13 @@ namespace LuckParser.Models.ParseModels
         public ParseEnum.StateChange IsStateChange { get; }
         public byte IsFlanking { get; }
         public byte IsShields { get; }
+        public byte IsOffcycle { get; }
 
         // Constructor
         public CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
                long skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid, ushort dstMasterInstid, ParseEnum.IFF iff, byte isBuff, ParseEnum.Result result,
                ParseEnum.Activation isActivation, ParseEnum.BuffRemove isBuffRemove, byte isNinety, byte isFifty, byte isMoving,
-               ParseEnum.StateChange isStateChange, byte isFlanking, byte isShields)
+               ParseEnum.StateChange isStateChange, byte isFlanking, byte isShields, byte isOffcycle)
         {
             Time = time;
             SrcAgent = srcAgent;
@@ -55,6 +56,7 @@ namespace LuckParser.Models.ParseModels
             IsStateChange = isStateChange;
             IsFlanking = isFlanking;
             IsShields = isShields;
+            IsOffcycle = isOffcycle;
         }
     }
 }

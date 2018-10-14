@@ -4,13 +4,11 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class Actor
     {
-        protected enum PositionType { ID, Array };
 
         public bool Filled { get; }
         public Tuple<int, int> Lifespan { get; }
         public string Color { get; }
         public int Growing { get; }
-        protected PositionType Type;
         protected Point3D Position;
 
         protected Actor(bool fill, int growing, Tuple<int, int> lifespan, string color)
@@ -19,7 +17,6 @@ namespace LuckParser.Models.ParseModels
             Color = color;
             Filled = fill;
             Growing = growing;
-            Type = PositionType.ID;
         }
         protected Actor(bool fill, int growing, Tuple<int, int> lifespan, string color, Point3D position)
         {
@@ -28,7 +25,6 @@ namespace LuckParser.Models.ParseModels
             Filled = fill;
             Growing = growing;
             Position = position;
-            Type = PositionType.Array;
         }
         protected Actor(bool fill, int growing, Tuple<int, int> lifespan, string color, Point3D prev, Point3D next, int time)
         {
@@ -36,7 +32,6 @@ namespace LuckParser.Models.ParseModels
             Color = color;
             Filled = fill;
             Growing = growing;
-            Type = PositionType.Array;
             if (prev != null && next != null)
             {
                 long denom = next.Time - prev.Time;
@@ -54,7 +49,7 @@ namespace LuckParser.Models.ParseModels
             }
         }
         //
-        protected class Serializable<T>
+        protected class Serializable
         {
 
             public bool Fill { get; set; }
@@ -63,7 +58,7 @@ namespace LuckParser.Models.ParseModels
             public string Type { get; set; }
             public long Start { get; set; }
             public long End { get; set; }
-            public T Position { get; set; }
+            public Object ConnectedTo { get; set; }
         }
 
         public abstract string GetCombatReplayJSON(CombatReplayMap map, AbstractMasterPlayer master);
