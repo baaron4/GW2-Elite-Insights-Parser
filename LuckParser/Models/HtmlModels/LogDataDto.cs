@@ -22,6 +22,8 @@ namespace LuckParser.Models.HtmlModels
         public List<BoonDto> offBuffs;
         [DataMember(Order = 6)]
         public List<BoonDto> defBuffs;
+        [DataMember(Order = 10)]
+        public Dictionary<string, List<BoonDto>> persBuffs;
         [DataMember]
         public List<BoonDto> bossCondis;
         [DataMember]

@@ -375,10 +375,6 @@ namespace LuckParser.Controllers
         {
             List<PhaseData> phases = _statistics.Phases;
             List<BoonData> list = new List<BoonData>();
-
-            List<List<string>> footList = new List<List<string>>();
-            
-            HashSet<int> intensityBoon = new HashSet<int>();
             bool boonTable = listToUse.Select(x => x.ID).Contains(740);
                 
             foreach (Player player in _log.PlayerList)
@@ -386,12 +382,7 @@ namespace LuckParser.Controllers
                 BoonData boonData = new BoonData();
 
                 Dictionary<long, Statistics.FinalBoonUptime> boons = _statistics.SelfBoons[player][phaseIndex];
-                List<string> boonArrayToList = new List<string>
-                {
-                    player.Group.ToString()
-                };
                 long fightDuration = phases[phaseIndex].GetDuration();
-                int count = 0;
                        
                 if (boonTable)
                 {
@@ -403,22 +394,70 @@ namespace LuckParser.Controllers
                     boonData.val.Add(boonVals);
 
                     boonVals.Add(boons[boon.ID].Uptime);
-
-                    if (boon.Type == Boon.BoonType.Intensity)
-                    {
-                        intensityBoon.Add(count);
-                    }
                     if (boonTable && boon.Type == Boon.BoonType.Intensity && boons[boon.ID].Presence > 0)
                     {
                         boonVals.Add(boons[boon.ID].Presence);
                     }
-
-                    boonArrayToList.Add(boons[boon.ID].Uptime.ToString());
-                    count++;
                 }
-                        
-                //gather data for footer
-                footList.Add(boonArrayToList);
+                list.Add(boonData);
+            }
+            return list;
+        }
+
+        private Dictionary<string, List<Boon>> BuildPersonalBoonData(Dictionary<string, List<BoonDto>> dict)
+        {
+            Dictionary<string, List<Boon>> boonsBySpec = new Dictionary<string, List<Boon>>();
+            // Collect all personal buffs by spec
+            foreach (var pair in _log.PlayerListBySpec)
+            {
+                List<Player> players = pair.Value;
+                HashSet<long> specBoonIds = new HashSet<long>(Boon.GetRemainingBuffsList(pair.Key).Select(x => x.ID));
+                HashSet<Boon> boonToUse = new HashSet<Boon>();
+                foreach (Player player in players)
+                {
+                    for (int i = 0; i < _statistics.Phases.Count; i++)
+                    {
+                        Dictionary<long, Statistics.FinalBoonUptime> boons = _statistics.SelfBoons[player][i];
+                        foreach (Boon boon in _statistics.PresentPersonalBuffs[player.InstID])
+                        {
+                            if (boons[boon.ID].Uptime > 0 && specBoonIds.Contains(boon.ID))
+                            {
+                                boonToUse.Add(boon);
+                            }
+                        }
+                    }
+                }
+                boonsBySpec[pair.Key] = boonToUse.ToList();
+            }
+            foreach (var pair in boonsBySpec)
+            {
+                dict[pair.Key] = AssembleBoons(pair.Value);
+            }
+            return boonsBySpec;
+        }
+
+        private List<BoonData> BuildPersonalBuffUptimeData(Dictionary<string, List<Boon>> boonsBySpec, int phaseIndex)
+        {
+            List<BoonData> list = new List<BoonData>();
+            foreach (Player player in _log.PlayerList)
+            {
+                BoonData boonData = new BoonData();
+
+                Dictionary<long, Statistics.FinalBoonUptime> boons = _statistics.SelfBoons[player][phaseIndex];
+                long fightDuration = _statistics.Phases[phaseIndex].GetDuration();
+                
+                foreach (Boon boon in boonsBySpec[player.Prof])
+                {
+                    List<object> boonVals = new List<object>();
+                    boonData.val.Add(boonVals);
+                    if (boons.TryGetValue(boon.ID, out var uptime))
+                    {
+                        boonVals.Add(uptime.Uptime);
+                    } else
+                    {
+                        boonVals.Add(0);
+                    }
+                }
                 list.Add(boonData);
             }
             return list;
@@ -455,7 +494,8 @@ namespace LuckParser.Controllers
                     Dictionary<long, List<AbstractMasterPlayer.ExtraBoonData>> extraBoonDataBoss = player.GetExtraBoonData(_log, target);
                     foreach (var pair in extraBoonDataBoss)
                     {
-                        var extraData = pair.Value[phaseIndex]; pData.Add(new object[]
+                        var extraData = pair.Value[phaseIndex];
+                        pData.Add(new object[]
                          {
                             pair.Key,
                             extraData.HitCount,
@@ -1121,7 +1161,6 @@ namespace LuckParser.Controllers
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
             Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[target][phaseIndex];
-            Dictionary<long, long> condiPresence = target.GetCondiPresence(_log, phaseIndex);
             long fightDuration = phase.GetDuration();
             BoonData bossData = new BoonData
             {
@@ -1135,9 +1174,9 @@ namespace LuckParser.Controllers
                     conditions[boon.ID].Uptime
                 };
 
-                if (boon.Type != Boon.BoonType.Duration && condiPresence.TryGetValue(boon.ID, out long presenceTime))
+                if (boon.Type != Boon.BoonType.Duration && conditions[boon.ID].Presence > 0)
                 {
-                    boonData.Add(Math.Round(100.0 * presenceTime / fightDuration, 1));
+                    boonData.Add(conditions[boon.ID].Presence);
                 }
 
                 bossData.val.Add(boonData);
@@ -1391,6 +1430,8 @@ namespace LuckParser.Controllers
             data.graphs.Add(new GraphDto("s30", "30s"));
             data.graphs.Add(new GraphDto("phase", "Phase"));
 
+            Dictionary<string, List<BoonDto>> persBuffs = new Dictionary<string, List<BoonDto>>();
+            Dictionary<string, List<Boon>> persBuffDict = BuildPersonalBoonData(persBuffs);
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
                 PhaseData phaseData = _statistics.Phases[i];
@@ -1411,6 +1452,7 @@ namespace LuckParser.Controllers
                 phaseDto.boonStats = BuildBuffUptimeData(_statistics.PresentBoons, i);
                 phaseDto.offBuffStats = BuildBuffUptimeData(_statistics.PresentOffbuffs, i);
                 phaseDto.defBuffStats = BuildBuffUptimeData(_statistics.PresentDefbuffs, i);
+                phaseDto.persBuffStats = BuildPersonalBuffUptimeData(persBuffDict, i);
 
                 phaseDto.extraBuffStats = BuildExtraBuffData(i);
 
@@ -1477,6 +1519,7 @@ namespace LuckParser.Controllers
             data.boons = AssembleBoons(_statistics.PresentBoons);
             data.offBuffs = AssembleBoons(_statistics.PresentOffbuffs);
             data.defBuffs = AssembleBoons(_statistics.PresentDefbuffs);
+            data.persBuffs = persBuffs;
             data.mechanics = BuildMechanicGraphData();
 
             data.bossCondis = AssembleBoons(_statistics.PresentConditions);

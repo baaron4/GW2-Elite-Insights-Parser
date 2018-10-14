@@ -22,6 +22,7 @@ namespace LuckParser.Models.HtmlModels
         [DataMember] public List<BoonData> boonStats;
         [DataMember] public List<BoonData> offBuffStats;
         [DataMember] public List<BoonData> defBuffStats;
+        [DataMember] public List<BoonData> persBuffStats;
 
         [DataMember] public List<List<object>> extraBuffStats;
 
