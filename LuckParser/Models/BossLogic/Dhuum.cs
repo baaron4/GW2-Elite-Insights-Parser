@@ -307,7 +307,10 @@ namespace LuckParser.Models
                 {
                     int shacklesDmgEnd = (int)(c.Time - log.FightData.FightStart);
                     Tuple<int, int> duration = new Tuple<int, int>(shacklesDmgStart, shacklesDmgEnd);
-                    replay.Actors.Add(new LineActor(0, 10, shacklesDmgTarget, duration, "rgba(0, 255, 255, 0.5)"));
+                    if (shacklesDmgTarget != null)
+                    {
+                        replay.Actors.Add(new LineActor(0, 10, shacklesDmgTarget, duration, "rgba(0, 255, 255, 0.5)"));
+                    }
                 }
             }
         }
