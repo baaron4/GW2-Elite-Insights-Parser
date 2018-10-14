@@ -162,9 +162,9 @@ namespace LuckParser.Models
                         Point3D prev = replay.Positions.LastOrDefault(x => x.Time <= castEnd);
                         if (next != null || prev != null)
                         {
-                            replay.Actors.Add(new CircleActor(true, zoneActive, 450, new Tuple<int, int>(start, zoneActive), "rgba(200, 255, 100, 0.5)", prev, next, castEnd));
-                            replay.Actors.Add(new CircleActor(false, 0, 450, new Tuple<int, int>(start, zoneActive), "rgba(200, 255, 100, 0.5)", prev, next, castEnd));
-                            replay.Actors.Add(new CircleActor(true, 0, 450, new Tuple<int, int>(zoneActive, zoneEnd), "rgba(200, 255, 100, 0.5)", prev, next, castEnd));
+                            replay.Actors.Add(new CircleActor(true, zoneActive, 450, new Tuple<int, int>(start, zoneActive), "rgba(200, 255, 100, 0.5)", new InterpolatedPositionConnector(prev, next, castEnd)));
+                            replay.Actors.Add(new CircleActor(false, 0, 450, new Tuple<int, int>(start, zoneActive), "rgba(200, 255, 100, 0.5)", new InterpolatedPositionConnector(prev, next, castEnd)));
+                            replay.Actors.Add(new CircleActor(true, 0, 450, new Tuple<int, int>(zoneActive, zoneEnd), "rgba(200, 255, 100, 0.5)", new InterpolatedPositionConnector(prev, next, castEnd)));
                         }
                     }
                     List<CastLog> cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
@@ -172,8 +172,8 @@ namespace LuckParser.Models
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
-                        replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.7)"));
-                        replay.Actors.Add(new CircleActor(true, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
+                        replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.7)", new AgentConnector(boss)));
+                        replay.Actors.Add(new CircleActor(true, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(boss)));
                     }
                     List<CastLog> slash = cls.Where(x => x.SkillId == 47561).ToList();
                     foreach (CastLog c in slash)
@@ -185,14 +185,14 @@ namespace LuckParser.Models
                         {
                             continue;
                         }
-                        replay.Actors.Add(new PieActor(false, 0, 850, facing, 60, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
+                        replay.Actors.Add(new PieActor(false, 0, 850, facing, 60, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(boss)));
                     }
 
                     if (majorSplit != null)
                     {
                         int start = (int)majorSplit.Time;
                         int end = (int)log.FightData.FightDuration;
-                        replay.Actors.Add(new CircleActor(true, 0, 320, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.2)"));
+                        replay.Actors.Add(new CircleActor(true, 0, 320, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.2)", new AgentConnector(boss)));
                     }
                     break;
                 default:
@@ -210,12 +210,12 @@ namespace LuckParser.Models
             switch (mob.ID)
             {
                 case (ushort)Echo:
-                    replay.Actors.Add(new CircleActor(true, 0, 120, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    replay.Actors.Add(new CircleActor(true, 0, 120, lifespan, "rgba(255, 0, 0, 0.5)", new AgentConnector(mob)));
                     break;
                 case (ushort)Enforcer:
                     break;
                 case (ushort)Messenger:
-                    replay.Actors.Add(new CircleActor(true, 0, 180, lifespan, "rgba(255, 125, 0, 0.5)"));
+                    replay.Actors.Add(new CircleActor(true, 0, 180, lifespan, "rgba(255, 125, 0, 0.5)", new AgentConnector(mob)));
                     break;
                 case (ushort)Deathling:
                 case (ushort)UnderworldReaper:
@@ -250,8 +250,8 @@ namespace LuckParser.Models
                 {
                     end = (int)(removedBuff.Time - log.FightData.FightStart);
                 }
-                replay.Actors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.3)"));
-                replay.Actors.Add(new CircleActor(true, start + duration, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.5)"));
+                replay.Actors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.3)", new AgentConnector(p)));
+                replay.Actors.Add(new CircleActor(true, start + duration, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.5)", new AgentConnector(p)));
             }
             // bomb
             List<CombatItem> bombDhuum = GetFilteredList(log, 47646, p.InstID);
@@ -265,8 +265,8 @@ namespace LuckParser.Models
                 else
                 {
                     int bombDhuumEnd = (int)(c.Time - log.FightData.FightStart);
-                    replay.Actors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.3)"));
-                    replay.Actors.Add(new CircleActor(true, bombDhuumStart + 13000, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.5)"));
+                    replay.Actors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.3)", new AgentConnector(p)));
+                    replay.Actors.Add(new CircleActor(true, bombDhuumStart + 13000, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.5)", new AgentConnector(p)));
                 }
             }
             // shackles connection
@@ -286,7 +286,7 @@ namespace LuckParser.Models
                     Tuple<int, int> duration = new Tuple<int, int>(shacklesStart, shacklesEnd);
                     if (shacklesTarget != null)
                     {
-                        replay.Actors.Add(new LineActor(0, 10, shacklesTarget, duration, "rgba(0, 255, 255, 0.5)"));
+                        replay.Actors.Add(new LineActor(0, 10, duration, "rgba(0, 255, 255, 0.5)", new AgentConnector(p), new AgentConnector(shacklesTarget)));
                     }
                 }
             }
@@ -309,7 +309,7 @@ namespace LuckParser.Models
                     Tuple<int, int> duration = new Tuple<int, int>(shacklesDmgStart, shacklesDmgEnd);
                     if (shacklesDmgTarget != null)
                     {
-                        replay.Actors.Add(new LineActor(0, 10, shacklesDmgTarget, duration, "rgba(0, 255, 255, 0.5)"));
+                        replay.Actors.Add(new LineActor(0, 10, duration, "rgba(0, 255, 255, 0.5)", new AgentConnector(p), new AgentConnector(shacklesDmgTarget)));
                     }
                 }
             }

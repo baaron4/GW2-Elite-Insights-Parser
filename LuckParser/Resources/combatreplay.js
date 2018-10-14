@@ -480,8 +480,8 @@ class RotatedRectangleMechanicDrawable extends RectangleMechanicDrawable {
         const spinPercent = this.getSpinPercent(currentTime);
         const offset = {
             x: pos.x,// - 0.5 * percent * this.width,
-            y: pos.y,// - 0.5 * percent * this.height
-        }
+            y: pos.y// - 0.5 * percent * this.height
+        };
         const angle = this.rotation + spinPercent * this.spinangle;
         ctx.save();
         ctx.translate(offset.x, offset.y);
@@ -533,28 +533,28 @@ class PieMechanicDrawable extends MechanicDrawable {
 }
 
 class LineMechanicDrawable extends MechanicDrawable {
-    constructor(start, end, fill, growing, color, width, target, connectedTo) {
+    constructor(start, end, fill, growing, color, width, connectedFrom, connectedTo) {
         super(start, end, fill, growing, color, connectedTo);
-        this.target = target;
+        this.connectedFrom = connectedFrom;
         this.width = width*inch;
-        this.endmaster = null
+        this.endmaster = null;
     }
 
     getTargetPosition(currentTime) {
-        if (this.target === null) {
+        if (this.connectedFrom === null) {
             return null;
         }
         if (this.start !== -1 && (this.start >= currentTime || this.end <= currentTime)) {
             return null;
         }
-        if (this.target instanceof Array) {
+        if (this.connectedFrom instanceof Array) {
             return {
                 x: this.target[0],
                 y: this.target[1]
             };
         } else {
             if (this.endmaster === null) {
-                let endMasterID = this.target;
+                let endMasterID = this.connectedFrom;
                 this.endmaster = playerData.has(endMasterID) ? playerData.get(endMasterID) : trashMobData.has(endMasterID) ? trashMobData.get(endMasterID) : bossData.get(endMasterID);
             }
             return this.endmaster.getPosition(currentTime);
@@ -614,7 +614,7 @@ function createAllActors() {
                 mechanicActorData.add(new PieMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Direction, actor.OpeningAngle, actor.Radius, actor.ConnectedTo));
                 break;
             case "Line":
-                mechanicActorData.add(new LineMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Width, actor.Target, actor.ConnectedTo));
+                mechanicActorData.add(new LineMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Width, actor.ConnectedFrom, actor.ConnectedTo));
                 break;
         }
     }
