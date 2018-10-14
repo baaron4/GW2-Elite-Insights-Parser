@@ -310,7 +310,10 @@ namespace LuckParser.Models
                 {
                     int fixationStatueEnd = (int)(c.Time - log.FightData.FightStart);
                     Tuple<int, int> duration = new Tuple<int, int>(fixationStatueStart, fixationStatueEnd);
-                    replay.Actors.Add(new LineActor(0, 10, statue, duration, "rgba(255, 0, 255, 0.5)"));
+                    if (statue != null)
+                    {
+                        replay.Actors.Add(new LineActor(0, 10, statue, duration, "rgba(255, 0, 255, 0.5)"));
+                    }
                 }
             }
         }

@@ -210,7 +210,10 @@ namespace LuckParser.Models
                 {
                     int fixationGuldhemEnd = (int)(c.Time - log.FightData.FightStart);
                     Tuple<int, int> duration = new Tuple<int, int>(fixationGuldhemStart, fixationGuldhemEnd);
-                    replay.Actors.Add(new LineActor(0, 10, guldhem, duration, "rgba(255, 100, 0, 0.3)"));
+                    if (guldhem != null)
+                    {
+                        replay.Actors.Add(new LineActor(0, 10, guldhem, duration, "rgba(255, 100, 0, 0.3)"));
+                    }
                 }
             }
             //fixated Rigom
@@ -228,7 +231,10 @@ namespace LuckParser.Models
                 {
                     int fixationRigomEnd = (int)(c.Time - log.FightData.FightStart);
                     Tuple<int, int> duration = new Tuple<int, int>(fixationRigomStart, fixationRigomEnd);
-                    replay.Actors.Add(new LineActor(0, 10, rigom, duration, "rgba(255, 0, 0, 0.3)"));
+                    if (rigom != null)
+                    {
+                        replay.Actors.Add(new LineActor(0, 10, rigom, duration, "rgba(255, 0, 0, 0.3)"));
+                    }
                 }
             }
         }

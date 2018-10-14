@@ -201,8 +201,11 @@ namespace LuckParser.Models
                         int width = 4000; int height = 130;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start+1000);
                         int direction = (int)(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI);
-                        replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, direction, width / 2, new Tuple<int, int>(start, start + preCastTime), "rgba(255, 0, 0, 0.1)"));
-                        replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, direction, width / 2, new Tuple<int, int>(start + preCastTime, start + preCastTime + duration), "rgba(255, 0, 0, 0.7)"));
+                        if (facing != null)
+                        {
+                            replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, direction, width / 2, new Tuple<int, int>(start, start + preCastTime), "rgba(255, 0, 0, 0.1)"));
+                            replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, direction, width / 2, new Tuple<int, int>(start + preCastTime, start + preCastTime + duration), "rgba(255, 0, 0, 0.7)"));
+                        }
                     }
                         break;
                 default:

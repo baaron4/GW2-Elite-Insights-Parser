@@ -279,7 +279,10 @@ namespace LuckParser.Models
                 {
                     int shacklesEnd = (int)(c.Time - log.FightData.FightStart);
                     Tuple<int, int> duration = new Tuple<int, int>(shacklesStart, shacklesEnd);
-                    replay.Actors.Add(new LineActor(0, 10, shacklesTarget, duration, "rgba(0, 255, 255, 0.5)"));
+                    if (shacklesTarget != null)
+                    {
+                        replay.Actors.Add(new LineActor(0, 10, shacklesTarget, duration, "rgba(0, 255, 255, 0.5)"));
+                    }
                 }
             }
             // shackles damage (identical to the connection for now, not yet properly distinguishable from the pure connection, further investigation needed due to inconsistent behavior (triggering too early, not triggering the damaging skill though)
