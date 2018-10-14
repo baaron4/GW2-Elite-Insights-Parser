@@ -19,7 +19,7 @@ namespace LuckParser.Models
             new Mechanic(37797, "Trampling Rush", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'triangle-right',color:'rgb(255,0,0)'", "Trmpl","Trampling Rush (hit by stampede towards home)", "Trampling Rush",0),
             new Mechanic(38305, "Bludgeon", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'triangle-down',color:'rgb(0,0,255)'", "Slm","Bludgeon (vertical Slam)", "Slam",0),
             new Mechanic(37868, "Fixate: Samarog", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'star',color:'rgb(255,0,255)'", "S.Fix","Fixated by Samarog", "Fixate: Samarog",0),
-            new Mechanic(38223, "Fixate: Guldhem", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'star-open',color:'rgb(255,200,0)'", "G.Fix","Fixated by Guldhem", "Fixate: Guldhem",0),
+            new Mechanic(38223, "Fixate: Guldhem", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'star-open',color:'rgb(255,100,0)'", "G.Fix","Fixated by Guldhem", "Fixate: Guldhem",0),
             new Mechanic(37693, "Fixate: Rigom", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'star-open',color:'rgb(255,0,0)'", "R.Fix","Fixated by Rigom", "Fixate: Rigom",0),
             new Mechanic(37966, "Big Hug", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'circle',color:'rgb(0,128,0)'", "BgGrn","Big Green (friends mechanic)", "Big Green",0), 
             new Mechanic(38247, "Small Hug", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'circle-open',color:'rgb(0,128,0)'", "SmGrn","Small Green (friends mechanic)", "Small Green",0),
@@ -187,12 +187,48 @@ namespace LuckParser.Models
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    fixatedSamStart = (int)(c.Time - log.FightData.FightStart);
+                    fixatedSamStart = Math.Max((int)(c.Time - log.FightData.FightStart), 0);
                 }
                 else
                 {
                     int fixatedSamEnd = (int)(c.Time - log.FightData.FightStart);
                     replay.Actors.Add(new CircleActor(true, 0, 80, new Tuple<int, int>(fixatedSamStart, fixatedSamEnd), "rgba(255, 80, 255, 0.3)"));
+                }
+            }
+            //fixated Ghuldem
+            List<CombatItem> fixatedGuldhem = GetFilteredList(log, 38223, p.InstID);
+            int fixationGuldhemStart = 0;
+            Boss guldhem = null;
+            foreach (CombatItem c in fixatedGuldhem)
+            {
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                {
+                    fixationGuldhemStart = (int)(c.Time - log.FightData.FightStart);
+                    guldhem = Targets.FirstOrDefault(x => x.ID == (ushort)ParseEnum.TrashIDS.Guldhem && c.Time >= x.FirstAware && c.Time <= x.LastAware);
+                }
+                else
+                {
+                    int fixationGuldhemEnd = (int)(c.Time - log.FightData.FightStart);
+                    Tuple<int, int> duration = new Tuple<int, int>(fixationGuldhemStart, fixationGuldhemEnd);
+                    replay.Actors.Add(new LineActor(0, 10, guldhem, duration, "rgba(255, 100, 0, 0.3)"));
+                }
+            }
+            //fixated Rigom
+            List<CombatItem> fixatedRigom = GetFilteredList(log, 37693, p.InstID);
+            int fixationRigomStart = 0;
+            Boss rigom = null;
+            foreach (CombatItem c in fixatedRigom)
+            {
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                {
+                    fixationRigomStart = (int)(c.Time - log.FightData.FightStart);
+                    rigom = Targets.FirstOrDefault(x => x.ID == (ushort)ParseEnum.TrashIDS.Rigom && c.Time >= x.FirstAware && c.Time <= x.LastAware);
+                }
+                else
+                {
+                    int fixationRigomEnd = (int)(c.Time - log.FightData.FightStart);
+                    Tuple<int, int> duration = new Tuple<int, int>(fixationRigomStart, fixationRigomEnd);
+                    replay.Actors.Add(new LineActor(0, 10, rigom, duration, "rgba(255, 0, 0, 0.3)"));
                 }
             }
         }
