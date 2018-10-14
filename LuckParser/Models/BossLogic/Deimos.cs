@@ -216,7 +216,7 @@ namespace LuckParser.Models
                     break;
                 case (ushort)Oil:
                     int delay = 3000;
-                    replay.Actors.Add(new CircleActor(true, start + 150, 200, new Tuple<int, int>(start, start + delay + 1000), "rgba(255,100, 0, 0.5)", new AgentConnector(mob)));
+                    replay.Actors.Add(new CircleActor(true, start + delay, 200, new Tuple<int, int>(start, start + delay), "rgba(255,100, 0, 0.5)", new AgentConnector(mob)));
                     replay.Actors.Add(new CircleActor(true, 0, 200, new Tuple<int, int>(start + delay, end), "rgba(0, 0, 0, 0.5)", new AgentConnector(mob)));
                     break;
                 default:
