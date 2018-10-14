@@ -78,7 +78,7 @@ namespace LuckParser.Models
                     List<CastLog> sleepy = cls.Where(x => x.SkillId == 34515).ToList();
                     foreach (CastLog c in sleepy)
                     {
-                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
+                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(boss)));
                     }
 
                     List<CastLog> tantrum = cls.Where(x => x.SkillId == 34547).ToList();
@@ -86,16 +86,16 @@ namespace LuckParser.Models
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
-                        replay.Actors.Add(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.4)"));
-                        replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.4)"));
+                        replay.Actors.Add(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(boss)));
+                        replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(boss)));
                     }
                     List<CastLog> shakes = cls.Where(x => x.SkillId == 34482).ToList();
                     foreach (CastLog c in shakes)
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
-                        replay.Actors.Add(new CircleActor(false, 0, 700, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.4)"));
-                        replay.Actors.Add(new CircleActor(true, end, 700, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.4)"));
+                        replay.Actors.Add(new CircleActor(false, 0, 700, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.4)", new AgentConnector(boss)));
+                        replay.Actors.Add(new CircleActor(true, end, 700, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.4)", new AgentConnector(boss)));
                     }
                     break;
                 default:
@@ -118,13 +118,13 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    int toDropEnd = (int)(c.Time - log.FightData.FightStart); replay.Actors.Add(new CircleActor(false, 0, 180, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)"));
-                    replay.Actors.Add(new CircleActor(true, toDropStart + 8000, 180, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)"));
+                    int toDropEnd = (int)(c.Time - log.FightData.FightStart); replay.Actors.Add(new CircleActor(false, 0, 180, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)", new AgentConnector(p)));
+                    replay.Actors.Add(new CircleActor(true, toDropStart + 8000, 180, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)", new AgentConnector(p)));
                     Point3D poisonNextPos = replay.Positions.FirstOrDefault(x => x.Time >= toDropEnd);
                     Point3D poisonPrevPos = replay.Positions.LastOrDefault(x => x.Time <= toDropEnd);
                     if (poisonNextPos != null || poisonPrevPos != null)
                     {
-                        replay.Actors.Add(new CircleActor(true, toDropStart + 90000, 900, new Tuple<int, int>(toDropEnd, toDropEnd + 90000), "rgba(255, 0, 0, 0.3)", poisonPrevPos, poisonNextPos, toDropEnd, 180));
+                        replay.Actors.Add(new CircleActor(true, toDropStart + 90000, 900, new Tuple<int, int>(toDropEnd, toDropEnd + 90000), "rgba(255, 0, 0, 0.3)", new InterpolatedPositionConnector(poisonPrevPos, poisonNextPos, toDropEnd), 180));
                     }
                 }
             }
@@ -140,7 +140,7 @@ namespace LuckParser.Models
                 else
                 {
                     int transfoEnd = (int)(c.Time - log.FightData.FightStart);
-                    replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(transfoStart, transfoEnd), "rgba(0, 80, 255, 0.3)"));
+                    replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(transfoStart, transfoEnd), "rgba(0, 80, 255, 0.3)", new AgentConnector(p)));
                 }
             }
             // fixated
@@ -155,7 +155,7 @@ namespace LuckParser.Models
                 else
                 {
                     int fixatedSlothEnd = (int)(c.Time - log.FightData.FightStart);
-                    replay.Actors.Add(new CircleActor(true, 0, 120, new Tuple<int, int>(fixatedSlothStart, fixatedSlothEnd), "rgba(255, 80, 255, 0.3)"));
+                    replay.Actors.Add(new CircleActor(true, 0, 120, new Tuple<int, int>(fixatedSlothStart, fixatedSlothEnd), "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
                 }
             }
         }

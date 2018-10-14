@@ -153,11 +153,11 @@ namespace LuckParser.Models
             Boss leftArm = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.CALeftArm);
             if (leftArm != null)
             {
-                List<CombatItem> leftArmDown = log.GetBoonData(52430).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All && x.SrcInstid == leftArm.InstID).ToList();
+                List<long> leftArmDown = log.GetBoonData(52430).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All && x.SrcInstid == leftArm.InstID).Select(x => x.Time - log.FightData.FightStart).ToList();
                 for (int i = 1; i < phases.Count; i += 2)
                 {
                     PhaseData phase = phases[i];
-                    if (leftArmDown.Exists(x => phase.InInterval(x.Time - log.FightData.FightStart)))
+                    if (leftArmDown.Exists(x => phase.InInterval(x)))
                     {
                         phase.Name = "Left " + phase.Name;
                     }
@@ -166,11 +166,11 @@ namespace LuckParser.Models
             Boss rightArm = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.CARightArm);
             if (rightArm != null)
             {
-                List<CombatItem> rightArmDown = log.GetBoonData(52430).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All && x.SrcInstid == rightArm.InstID).ToList();
+                List<long> rightArmDown = log.GetBoonData(52430).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All && x.SrcInstid == rightArm.InstID).Select(x => x.Time - log.FightData.FightStart).ToList();
                 for (int i = 1; i < phases.Count; i += 2)
                 {
                     PhaseData phase = phases[i];
-                    if (rightArmDown.Exists(x => phase.InInterval(x.Time - log.FightData.FightStart)))
+                    if (rightArmDown.Exists(x => phase.InInterval(x)))
                     {
                         if (phase.Name.Contains("Left"))
                         {

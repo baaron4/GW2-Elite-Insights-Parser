@@ -138,7 +138,7 @@ namespace LuckParser.Models
             {
                 case (ushort)Seekers:
                     Tuple<int, int> lifespan = new Tuple<int, int>((int)mob.CombatReplay.TimeOffsets.Item1, (int)mob.CombatReplay.TimeOffsets.Item2);
-                    mob.CombatReplay.Actors.Add(new CircleActor(false, 0, 180, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    mob.CombatReplay.Actors.Add(new CircleActor(false, 0, 180, lifespan, "rgba(255, 0, 0, 0.5)", new AgentConnector(mob)));
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
@@ -156,17 +156,17 @@ namespace LuckParser.Models
                     List<CastLog> magicStorms = cls.Where(x => x.SkillId == 31419).ToList();
                     foreach (CastLog c in magicStorms)
                     {
-                        replay.Actors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
+                        replay.Actors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(boss)));
                     }
                     break;
                 case (ushort)BlueGuardian:
-                    replay.Actors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(0, 0, 255, 0.5)"));
+                    replay.Actors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(0, 0, 255, 0.5)", new AgentConnector(boss)));
                     break;
                 case (ushort)GreenGuardian:
-                    replay.Actors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(0, 255, 0, 0.5)"));
+                    replay.Actors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(0, 255, 0, 0.5)", new AgentConnector(boss)));
                     break;
                 case (ushort)RedGuardian:
-                    replay.Actors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    replay.Actors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(255, 0, 0, 0.5)", new AgentConnector(boss)));
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
