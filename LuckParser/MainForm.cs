@@ -146,7 +146,7 @@ namespace LuckParser
                     ParsedLog log = parser.ParseLog(rowData, fInfo.FullName);
                     bg.ThrowIfCanceled(rowData);
                     bg.UpdateProgress(rowData, "35% - Data parsed", 35);
-                    bool uploadAuthorized = !Properties.Settings.Default.SkipFailedTrys || (Properties.Settings.Default.SkipFailedTrys && log.LogData.Success);
+                    bool uploadAuthorized = !Properties.Settings.Default.SkipFailedTries || (Properties.Settings.Default.SkipFailedTries && log.LogData.Success);
                     if (Properties.Settings.Default.UploadToDPSReports && uploadAuthorized)
                     {
                         bg.UpdateProgress(rowData, " 40% - Uploading to DPSReports using EI...", 40);
@@ -210,7 +210,7 @@ namespace LuckParser
                             uploadresult[2] = "Failed to Define Upload Task";
                         }
                     }
-                    if (Properties.Settings.Default.SkipFailedTrys)
+                    if (Properties.Settings.Default.SkipFailedTries)
                     {
                         if (!log.LogData.Success)
                         {
