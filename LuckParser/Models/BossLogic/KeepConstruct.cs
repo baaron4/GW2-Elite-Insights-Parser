@@ -305,14 +305,11 @@ namespace LuckParser.Models
                 {
                     fixationStatueStart = (int)(c.Time - log.FightData.FightStart);
                     statue = TrashMobs.FirstOrDefault(x => x.Agent == c.SrcAgent);
-                    
-                    //statue = Targets.FirstOrDefault(x => x.ID == (ushort)ParseEnum.TrashIDS.Rigom && c.Time >= x.FirstAware && c.Time <= x.LastAware);
                 }
                 else
                 {
                     int fixationStatueEnd = (int)(c.Time - log.FightData.FightStart);
                     Tuple<int, int> duration = new Tuple<int, int>(fixationStatueStart, fixationStatueEnd);
-                    //replay.Actors.Add(new CircleActor(true, 0, 200, duration, "rgba(255, 80, 255, 0.3)"));
                     replay.Actors.Add(new LineActor(0, 10, statue, duration, "rgba(255, 0, 255, 0.5)"));
                 }
             }
