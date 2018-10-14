@@ -8,19 +8,7 @@ namespace LuckParser.Models.ParseModels
         public int OuterRadius { get; }
         public int InnerRadius { get; }
 
-        public DoughnutActor(bool fill, int growing, int innerRadius, int outerRadius, Tuple<int, int> lifespan, string color) : base(fill, growing, lifespan, color)
-        {
-            InnerRadius = innerRadius;
-            OuterRadius = outerRadius;
-        }
-
-        public DoughnutActor(bool fill, int growing, int innerRadius, int outerRadius, Tuple<int, int> lifespan, string color, Point3D position) : base(fill, growing, lifespan, color, position)
-        {
-            InnerRadius = innerRadius;
-            OuterRadius = outerRadius;
-        }
-
-        public DoughnutActor(bool fill, int growing, int innerRadius, int outerRadius, Tuple<int, int> lifespan, string color, Point3D prev, Point3D next, int time) : base(fill, growing, lifespan, color, prev, next, time)
+        public DoughnutActor(bool fill, int growing, int innerRadius, int outerRadius, Tuple<int, int> lifespan, string color, Connector connector) : base(fill, growing, lifespan, color, connector)
         {
             InnerRadius = innerRadius;
             OuterRadius = outerRadius;
@@ -33,7 +21,7 @@ namespace LuckParser.Models.ParseModels
             public int OuterRadius { get; set; }
         }
 
-        public override string GetCombatReplayJSON(CombatReplayMap map, AbstractMasterPlayer master)
+        public override string GetCombatReplayJSON(CombatReplayMap map)
         {
             DoughnutSerializable aux = new DoughnutSerializable
             {
@@ -44,23 +32,10 @@ namespace LuckParser.Models.ParseModels
                 Color = Color,
                 Growing = Growing,
                 Start = Lifespan.Item1,
-                End = Lifespan.Item2
+                End = Lifespan.Item2,
+                ConnectedTo = ConnectedTo.GetConnectedTo(map)
             };
-            if (Position != null)
-            {
-                Tuple<int, int> mapPos = map.GetMapCoord(Position.X, Position.Y);
-                aux.ConnectedTo = new int[2]
-                {
-                        mapPos.Item1,
-                        mapPos.Item2
-                };
-                return JsonConvert.SerializeObject(aux);
-            }
-            else
-            {
-                aux.ConnectedTo = master.GetCombatReplayID();
-                return JsonConvert.SerializeObject(aux);
-            }
+            return JsonConvert.SerializeObject(aux);
         }
 
     }

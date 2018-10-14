@@ -94,7 +94,7 @@ namespace LuckParser
             UploadDPSReports_checkbox.Checked = Properties.Settings.Default.UploadToDPSReports;
             UploadDRRH_check.Checked = Properties.Settings.Default.UploadToDPSReportsRH;
             UploadRaidar_check.Checked = Properties.Settings.Default.UploadToRaidar;
-            chkB_SkipFailedTrys.Checked = Properties.Settings.Default.SkipFailedTrys;
+            chkB_SkipFailedTries.Checked = Properties.Settings.Default.SkipFailedTries;
             chkAutoAdd.Checked = Properties.Settings.Default.AutoAdd;
             chkAutoParse.Checked = Properties.Settings.Default.AutoParse;
 
@@ -238,9 +238,9 @@ namespace LuckParser
             Properties.Settings.Default.UploadToDPSReportsRH = UploadDRRH_check.Checked;
         }
 
-        private void chkB_SkipFailedTrys_CheckedChanged(object sender, EventArgs e)
+        private void chkB_SkipFailedTries_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.SkipFailedTrys = chkB_SkipFailedTrys.Checked;
+            Properties.Settings.Default.SkipFailedTries = chkB_SkipFailedTries.Checked;
         }
         private void OutputJSONCheckedChanged(object sender, EventArgs e)
         {
