@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -46,6 +47,15 @@ namespace LuckParser
         [STAThread]
         static int Main(string[] args)
         {
+            // Migrate previous settings if version changed
+            if (Properties.Settings.Default.Outdated)
+            {
+                Properties.Settings.Default.Upgrade();
+                Properties.Settings.Default.Outdated = false;
+            }
+
+            List<string> logFiles = new List<string>();
+
             Application.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             if (args.Length > 0)
             {
@@ -91,12 +101,12 @@ namespace LuckParser
 
                 if (args.Contains("-c"))
                 {
-                    if (args.Length - parserArgOffset > 2)
+                    if (args.Length - parserArgOffset >= 2)
                     {
                         // Do not access settings before this, else this will not work
                         int argPos = Array.IndexOf(args, "-c");
 
-                        AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE", args[argPos + 1]);
+                        CustomSettingsManager.ReadConfig(args[argPos + 1]);
 
                         parserArgOffset += 2;
                     }
@@ -108,13 +118,15 @@ namespace LuckParser
                     }
                 }
 
-                string[] parserArgs = new string[args.Length-parserArgOffset];
                 for (int i = parserArgOffset; i < args.Length; i++)
                 {
-                    parserArgs[i - parserArgOffset] = args[i];
+                    logFiles.Add(args[i]);
                 }
+            }
+            if (logFiles.Count > 0)
+            {
                 // Use the application through console 
-                new ConsoleProgram(parserArgs);
+                new ConsoleProgram(logFiles);
                 return 0;
             }
 

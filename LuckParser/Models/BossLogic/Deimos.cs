@@ -224,19 +224,6 @@ namespace LuckParser.Models
             }
         }
 
-        public override void SetMaxHealth(ushort instid, long time, int health)
-        {
-            foreach (Boss boss in Targets)
-            {
-                // Additional check because the arm has a max health update of 14940 now
-                if (boss.Health == -1 && boss.InstID == instid && boss.FirstAware <= time && boss.LastAware >= time)
-                {
-                    boss.Health = health;
-                    break;
-                }
-            }
-        }
-
         public override void AddHealthUpdate(ushort instid, long time, int healthTime, int health)
         {
             foreach (Boss boss in Targets)
