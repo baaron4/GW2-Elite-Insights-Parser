@@ -117,11 +117,11 @@ namespace LuckParser.Models
             RegroupTargets(agentData, combatItems);
         }
 
-        public virtual void SetMaxHealth(ushort instid, long time, int health)
+        public void SetMaxHealth(ushort instid, long time, int health)
         {
             foreach (Boss boss in Targets)
             {
-                if (boss.InstID == instid && boss.FirstAware <= time && boss.LastAware >= time)
+                if (boss.Health == -1 && boss.InstID == instid && boss.FirstAware <= time && boss.LastAware >= time)
                 {
                     boss.Health = health;
                     break;
@@ -212,7 +212,12 @@ namespace LuckParser.Models
 
         protected void SetSuccessByDeath(ParsedLog log)
         {
-            CombatItem killed = log.CombatData.GetStatesData(ParseEnum.StateChange.ChangeDead).LastOrDefault(x => x.SrcInstid == log.Boss.InstID);
+            Boss mainTarget = Targets.Find(x => x.ID == TriggerID);
+            if (mainTarget == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
+            CombatItem killed = log.CombatData.GetStatesData(ParseEnum.StateChange.ChangeDead).LastOrDefault(x => x.SrcInstid == mainTarget.InstID);
             if (killed != null)
             {
                 log.LogData.Success = true;

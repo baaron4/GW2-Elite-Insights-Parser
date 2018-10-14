@@ -59,8 +59,8 @@ namespace LuckParser.Models
                 return phases;
             }
             // Sometimes the preevent is not in the evtc
-            List<CastLog> castLogs = log.Boss.GetCastLogs(log, 0, log.FightData.FightEnd);
-            List<CastLog> dhuumCast = log.Boss.GetCastLogs(log, 0, 20000);
+            List<CastLog> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
+            List<CastLog> dhuumCast = mainTarget.GetCastLogs(log, 0, 20000);
             if (dhuumCast.Count > 0)
             {
                 CastLog shield = castLogs.Find(x => x.SkillId == 47396);
@@ -90,7 +90,7 @@ namespace LuckParser.Models
             }
             else
             {
-                CombatItem invulDhuum = log.GetBoonData(762).FirstOrDefault(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SrcInstid == log.Boss.InstID && x.Time > 115000 + log.FightData.FightStart);
+                CombatItem invulDhuum = log.GetBoonData(762).FirstOrDefault(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SrcInstid == mainTarget.InstID && x.Time > 115000 + log.FightData.FightStart);
                 if (invulDhuum != null)
                 {
                     end = invulDhuum.Time - log.FightData.FightStart;
@@ -231,11 +231,16 @@ namespace LuckParser.Models
             // spirit transform
             CombatReplay replay = p.CombatReplay;
             List<CombatItem> spiritTransform = log.GetBoonData(46950).Where(x => x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
+            Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Dhuum);
+            if (mainTarget == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
             foreach (CombatItem c in spiritTransform)
             {
                 int duration = 15000;
                 int start = (int)(c.Time - log.FightData.FightStart);
-                if (log.Boss.HealthOverTime.FirstOrDefault(x => x.X > start).Y < 1050)
+                if (mainTarget.HealthOverTime.FirstOrDefault(x => x.X > start).Y < 1050)
                 {
                     duration = 30000;
                 }

@@ -2855,7 +2855,6 @@ namespace LuckParser.Controllers
                                     {
                                         sw.Write("<td>" + count + "</td>");
                                     }
-                                    sw.Write("<td>" + count + "</td>");
                                 }
                             }
                             sw.Write(" </tr>");

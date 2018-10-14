@@ -90,7 +90,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Protection", 717, BoonSource.Mixed, BoonType.Duration, 5, BoonNature.Boon, Logic.Queue, "https://wiki.guildwars2.com/images/6/6c/Protection.png"),
                 new Boon("Regeneration", 718, BoonSource.Mixed, BoonType.Duration, 5, BoonNature.Boon, Logic.HealingPower, "https://wiki.guildwars2.com/images/5/53/Regeneration.png"),
                 new Boon("Vigor", 726, BoonSource.Mixed, BoonType.Duration, 5, BoonNature.Boon, Logic.Queue, "https://wiki.guildwars2.com/images/f/f4/Vigor.png"),
-                new Boon("Aegis", 743, BoonSource.Mixed, BoonType.Duration, 5, BoonNature.Boon, Logic.Queue, "https://wiki.guildwars2.com/images/e/e5/Aegis.png"),
+                new Boon("Aegis", 743, BoonSource.Mixed, BoonType.Duration, 9, BoonNature.Boon, Logic.Queue, "https://wiki.guildwars2.com/images/e/e5/Aegis.png"),
                 new Boon("Stability", 1122, BoonSource.Mixed, BoonType.Intensity, 25, BoonNature.Boon, Logic.Override, "https://wiki.guildwars2.com/images/a/ae/Stability.png"),
                 new Boon("Swiftness", 719, BoonSource.Mixed, BoonType.Duration, 9, BoonNature.Boon, Logic.Queue, "https://wiki.guildwars2.com/images/a/af/Swiftness.png"),
                 new Boon("Retaliation", 873, BoonSource.Mixed, BoonType.Duration, 5, BoonNature.Boon, Logic.Queue, "https://wiki.guildwars2.com/images/5/53/Retaliation.png"),

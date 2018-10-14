@@ -142,7 +142,7 @@ namespace LuckParser.Models.ParseModels
                     for (int i = 0; i < BoonStack.Count; i++)
                     {
                         BoonStackItem stackItem = BoonStack[i];
-                        if (boonDuration == stackItem.BoonDuration)
+                        if (Math.Abs(boonDuration-stackItem.BoonDuration) < 10)
                         {
                             OverstackSimulationResult.Add(new BoonSimulationOverstackItem(stackItem.Src, stackItem.BoonDuration, start));
                             CleanseSimulationResult.Add(new BoonSimulationCleanseItem(provokedBy, stackItem.BoonDuration, start));
