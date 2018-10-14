@@ -91,7 +91,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.cmdClose = new System.Windows.Forms.Button();
-            this.chkB_SkipFailedTrys = new System.Windows.Forms.CheckBox();
+            this.chkB_SkipFailedTries = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -536,7 +536,7 @@
             // 
             this.tabPage1.Controls.Add(this.chkAutoAdd);
             this.tabPage1.Controls.Add(this.chkAutoParse);
-            this.tabPage1.Controls.Add(this.chkB_SkipFailedTrys);
+            this.tabPage1.Controls.Add(this.chkB_SkipFailedTries);
             this.tabPage1.Controls.Add(this.groupBox3);
             this.tabPage1.Controls.Add(this.groupBox2);
             this.tabPage1.Controls.Add(this.groupBox1);
@@ -807,16 +807,16 @@
             this.cmdClose.UseVisualStyleBackColor = true;
             this.cmdClose.Click += new System.EventHandler(this.cmdClose_Click);
             // 
-            // chkB_SkipFailedTrys
+            // chkB_SkipFailedTries
             // 
-            this.chkB_SkipFailedTrys.AutoSize = true;
-            this.chkB_SkipFailedTrys.Location = new System.Drawing.Point(24, 275);
-            this.chkB_SkipFailedTrys.Name = "chkB_SkipFailedTrys";
-            this.chkB_SkipFailedTrys.Size = new System.Drawing.Size(141, 17);
-            this.chkB_SkipFailedTrys.TabIndex = 38;
-            this.chkB_SkipFailedTrys.Text = "Skip generating log if fail";
-            this.chkB_SkipFailedTrys.UseVisualStyleBackColor = true;
-            this.chkB_SkipFailedTrys.CheckedChanged += new System.EventHandler(this.chkB_SkipFailedTrys_CheckedChanged);
+            this.chkB_SkipFailedTries.AutoSize = true;
+            this.chkB_SkipFailedTries.Location = new System.Drawing.Point(24, 275);
+            this.chkB_SkipFailedTries.Name = "chkB_SkipFailedTries";
+            this.chkB_SkipFailedTries.Size = new System.Drawing.Size(141, 17);
+            this.chkB_SkipFailedTries.TabIndex = 38;
+            this.chkB_SkipFailedTries.Text = "Skip generating log if fail";
+            this.chkB_SkipFailedTries.UseVisualStyleBackColor = true;
+            this.chkB_SkipFailedTries.CheckedChanged += new System.EventHandler(this.chkB_SkipFailedTries_CheckedChanged);
             // 
             // SettingsForm
             // 
@@ -933,7 +933,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panelJson;
         private System.Windows.Forms.PictureBox imgTheme;
-        private System.Windows.Forms.CheckBox chkB_SkipFailedTrys;
+        private System.Windows.Forms.CheckBox chkB_SkipFailedTries;
         private System.Windows.Forms.CheckBox chkAutoAdd;
         private System.Windows.Forms.CheckBox chkAutoParse;
     }
