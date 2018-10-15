@@ -12,7 +12,7 @@ namespace LuckParser.Models
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(51935, "Waterlogged", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Nikare, "symbol:'circle-open',color:'rgb(0,140,255)'", "Wtlg","Waterlogged (stacking water debuff)", "Waterlogged",0),
+            new Mechanic(51935, "Waterlogged", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Nikare, "symbol:'hexagon-open',color:'rgb(0,140,255)'", "Wtlg","Waterlogged (stacking water debuff)", "Waterlogged",0),
             new Mechanic(52876, "Vapor Rush", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Nikare, "symbol:'triangle-left-open',color:'rgb(0,140,255)'", "Chrg","Vapor Rush (Triple Charge)", "Vapor Rush Charge",0),
             new Mechanic(52812, "Tidal Pool", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Nikare, "symbol:'circle',color:'rgb(0,140,255)'", "Pool","Tidal Pool", "Tidal Pool",0),
             new Mechanic(51977, "Aquatic Barrage Start", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Nikare, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "CC","Breakbar", "Breakbar",0),
@@ -20,7 +20,8 @@ namespace LuckParser.Models
             new Mechanic(53018, "Sea Swell", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Nikare, "symbol:'circle-open',color:'rgb(30,30,80)'", "Shkwv","Sea Swell (Shockwave)", "Shockwave",0),
             new Mechanic(53130, "Geyser", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Nikare, "symbol:'hexagon',color:'rgb(0,255,255)'", "Gysr","Geyser", "Geyser",0),
             new Mechanic(53097, "Water Bomb Debuff", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Nikare, "symbol:'diamond',color:'rgb(0,255,255)'", "Psn","Expanding Water Field", "Water Poison",0),
-            new Mechanic(52931, "Aquatic Detainment", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Nikare, "symbol:'circle',color:'rgb(0,0,255)'", "Float","Aquatic Detainment (Float Bubble)", "Float Bubble",0),
+            new Mechanic(52931, "Aquatic Detainment", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Nikare, "symbol:'circle-open',color:'rgb(0,0,255)'", "Float","Aquatic Detainment (Float Bubble)", "Float Bubble",0),
+            new Mechanic(52130, "Aquatic Vortex", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Nikare, "symbol:'star-square-open-dot',color:'rgb(0,200,255)'", "Tndo","Aquatic Vortex (Water Tornados)", "Tornado",0),
             });
             Extension = "twinlargos";
             IconUrl = "https://i.imgur.com/6O5MT7v.png";
@@ -118,7 +119,65 @@ namespace LuckParser.Models
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.Nikare:
+                    //CC
+                    List<CastLog> barrageN = cls.Where(x => x.SkillId == 51977).ToList();
+                    foreach (CastLog c in barrageN)
+                    {
+                        replay.Actors.Add(new CircleActor(true, 0, 250, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(boss)));
+                    }
+                    //Platform wipe (CM only)
+                    List<CastLog> aquaticDomainN = cls.Where(x => x.SkillId == 52374).ToList();
+                    foreach (CastLog c in aquaticDomainN)
+                    {
+                        int start = (int)c.Time;
+                        int duration = c.ActualDuration;
+                        int end = start + duration;
+                        int radius = 800;
+                        replay.Actors.Add(new CircleActor(true, end, radius, new Tuple<int, int>(start,end), "rgba(255, 255, 0, 0.3)", new AgentConnector(boss)));
+                    }
+                    break;
                 case (ushort)ParseEnum.BossIDS.Kenut:
+                    //CC
+                    List<CastLog> barrageK = cls.Where(x => x.SkillId == 51977).ToList();
+                    foreach (CastLog c in barrageK)
+                    {
+                        replay.Actors.Add(new CircleActor(true, 0, 250, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(boss)));
+                    }
+                    //Platform wipe (CM only)
+                    List<CastLog> aquaticDomainK = cls.Where(x => x.SkillId == 52374).ToList();
+                    foreach (CastLog c in aquaticDomainK)
+                    {
+                        int start = (int)c.Time;
+                        int duration = c.ActualDuration;
+                        int end = start + duration;
+                        int radius = 800;
+                        replay.Actors.Add(new CircleActor(true, end, radius, new Tuple<int, int>(start, end), "rgba(255, 255, 0, 0.3)", new AgentConnector(boss)));
+                    }
+                    List<CastLog> shockwave = cls.Where(x => x.SkillId == 53018).ToList();
+                    foreach (CastLog c in shockwave)
+                    {
+                        int start = (int)c.Time;
+                        int delay = 960;
+                        int duration = 3000;
+                        int radius = 1200;
+                        replay.Actors.Add(new CircleActor(false, start + delay + duration, radius, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(100, 200, 255, 0.5)", new AgentConnector(boss)));
+                    }
+                    List<CastLog> boonSteal = cls.Where(x => x.SkillId == 51965).ToList();
+                    foreach (CastLog c in boonSteal)
+                    {
+                        int start = (int)c.Time;
+                        int delay = 1000;
+                        int duration = 500;
+                        int width = 500;
+                        int height = 250;
+                        Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                        if (facing != null)
+                        {
+                            int rotation = getRotationFromFacing(facing);
+                            replay.Actors.Add(new RotatedRectangleActor(false, 0, width, height, rotation, width / 2, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 175, 0, 0.8)", new AgentConnector(boss)));
+                            replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, rotation, width / 2, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 175, 0, 0.2)", new AgentConnector(boss)));
+                        }
+                    }
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
@@ -127,7 +186,50 @@ namespace LuckParser.Models
 
         public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
-
+            // Water "Poison Bomb"
+            CombatReplay replay = p.CombatReplay;
+            List<CombatItem> waterToDrop = GetFilteredList(log, 53097, p.InstID);
+            int toDropStart = 0;
+            foreach (CombatItem c in waterToDrop)
+            {
+                int timer = 5000;
+                int duration = 83000;
+                int debuffRadius = 100;
+                int radius = 500;
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                {
+                    toDropStart = (int)(c.Time - log.FightData.FightStart);
+                }
+                else
+                {
+                    int toDropEnd = (int)(c.Time - log.FightData.FightStart);
+                    replay.Actors.Add(new CircleActor(false, 0, debuffRadius, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 100, 0, 0.4)", new AgentConnector(p)));
+                    replay.Actors.Add(new CircleActor(true, toDropStart + timer, debuffRadius, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 100, 0, 0.4)", new AgentConnector(p)));
+                    Point3D poisonNextPos = replay.Positions.FirstOrDefault(x => x.Time >= toDropEnd);
+                    Point3D poisonPrevPos = replay.Positions.LastOrDefault(x => x.Time <= toDropEnd);
+                    if (poisonNextPos != null || poisonPrevPos != null)
+                    {
+                        replay.Actors.Add(new CircleActor(true, toDropStart + duration, radius, new Tuple<int, int>(toDropEnd, toDropEnd + duration), "rgba(100, 100, 100, 0.3)", new InterpolatedPositionConnector(poisonPrevPos, poisonNextPos, toDropEnd), debuffRadius));
+                        replay.Actors.Add(new CircleActor(false, toDropStart + duration, radius, new Tuple<int, int>(toDropEnd, toDropEnd + duration), "rgba(230, 230, 230, 0.4)", new InterpolatedPositionConnector(poisonPrevPos, poisonNextPos, toDropEnd), debuffRadius));
+                    }
+                }
+            }
+            // Bubble (Aquatic Detainment)
+            List<CombatItem> bubble = GetFilteredList(log, 51755, p.InstID);
+            int bubbleStart = 0;
+            foreach (CombatItem c in bubble)
+            {
+                int radius = 100;
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                {
+                    bubbleStart = Math.Max((int)(c.Time - log.FightData.FightStart), 0);
+                }
+                else
+                {
+                    int bubbleEnd = (int)(c.Time - log.FightData.FightStart);
+                    replay.Actors.Add(new CircleActor(true, 0, radius, new Tuple<int, int>(bubbleStart, bubbleEnd), "rgba(0, 200, 255, 0.3)", new AgentConnector(p)));
+                }
+            }
         }
 
         public override string GetFightName()
