@@ -87,7 +87,25 @@ namespace LuckParser.Models
             switch (mob.ID)
             {
                 case (ushort)ConjuredGreatsword:
+                    break;
                 case (ushort)ConjuredShield:
+                    CombatReplay replay = mob.CombatReplay;
+                    List<CombatItem> shield = GetFilteredList(log, 53003, mob.InstID);
+                    int shieldStart = 0;
+                    foreach (CombatItem c in shield)
+                    {
+                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                        {
+                            shieldStart = (int)(c.Time - log.FightData.FightStart);
+                        }
+                        else
+                        {
+                            int shieldEnd = (int)(c.Time - log.FightData.FightStart);
+                            Tuple<int, int> lifespan = new Tuple<int, int>(shieldStart, shieldEnd);
+                            int radius = 100;
+                            replay.Actors.Add(new CircleActor(true, 0, radius, lifespan, "rgba(0, 150, 255, 0.3)", new AgentConnector(mob)));
+                        }
+                    }
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
@@ -188,9 +206,29 @@ namespace LuckParser.Models
 
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.ConjuredAmalgamate:
+                    List<CombatItem> shield = GetFilteredList(log, 53003, boss.InstID);
+                    int shieldStart = 0;
+                    foreach (CombatItem c in shield)
+                    {
+                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                        {
+                            shieldStart = (int)(c.Time - log.FightData.FightStart);
+                        }
+                        else
+                        {
+                            int shieldEnd = (int)(c.Time - log.FightData.FightStart);
+                            Tuple<int, int> lifespan = new Tuple<int, int>(shieldStart, shieldEnd);
+                            int radius = 500;
+                            replay.Actors.Add(new CircleActor(true, 0, radius, lifespan, "rgba(0, 150, 255, 0.3)", new AgentConnector(boss)));
+                        }
+                    }
+                    break;
                 case (ushort)ParseEnum.BossIDS.CALeftArm:
                 case (ushort)ParseEnum.BossIDS.CARightArm:
                     break;
@@ -201,7 +239,23 @@ namespace LuckParser.Models
 
         public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
-
+            CombatReplay replay = p.CombatReplay;
+            List<CastLog> cls = p.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<CastLog> shieldCast = cls.Where(x => x.SkillId == 52780).ToList();
+            foreach (CastLog c in shieldCast)
+            {
+                int start = (int)c.Time;
+                int duration = 10000;
+                Tuple<int, int> lifespan = new Tuple<int, int>(start, start + duration);
+                int radius = 300;
+                Point3D shieldNextPos = replay.Positions.FirstOrDefault(x => x.Time >= start);
+                Point3D shieldPrevPos = replay.Positions.LastOrDefault(x => x.Time <= start);
+                if (shieldNextPos != null || shieldPrevPos != null)
+                {
+                    replay.Actors.Add(new CircleActor(true, 0, radius, lifespan, "rgba(255, 0, 255, 0.1)", new InterpolatedPositionConnector(shieldPrevPos, shieldNextPos, start)));
+                    replay.Actors.Add(new CircleActor(false, 0, radius, lifespan, "rgba(255, 0, 255, 0.3)", new InterpolatedPositionConnector(shieldPrevPos, shieldNextPos, start)));
+                }
+            }
         }
 
         public override int IsCM(ParsedLog log)
