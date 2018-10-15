@@ -35,7 +35,6 @@ namespace LuckParser.Models
             return null;
         }
 
-
         public CombatReplayMap GetCombatMap()
         {
             if (_map == null)
@@ -521,6 +520,12 @@ namespace LuckParser.Models
                 }
             }
             return filtered;
+        }
+
+        public static int getRotationFromFacing(Point3D facing)
+        {
+            int rotation = (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI);
+            return rotation;
         }
     }
 }
