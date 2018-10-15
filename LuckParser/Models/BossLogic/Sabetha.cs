@@ -20,7 +20,10 @@ namespace LuckParser.Models
             new Mechanic(31544, "Flak Shot", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Sabetha, "symbol:'hexagram-open',color:'rgb(255,140,0)'", "Flak","Flak Shot (Fire Patches)", "Flak Shot",0),
             new Mechanic(31643, "Cannon Barrage", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Sabetha, "symbol:'circle',color:'rgb(255,200,0)'", "Cannon","Cannon Barrage (stood in AoE)", "Cannon Shot",0),
             new Mechanic(31761, "Flame Blast", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Sabetha, "symbol:'triangle-left-open',color:'rgb(255,200,0)'", "Flmthrwr","Flame Blast (Karde's Flamethrower)", "Flamethrower (Karde)",0),
-            new Mechanic(31408, "Kick", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Sabetha, "symbol:'triangle-right',color:'rgb(255,0,255)'", "Kick","Kicked by Bandit", "Bandit Kick",0) 
+            new Mechanic(31408, "Kick", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Sabetha, "symbol:'triangle-right',color:'rgb(255,0,255)'", "Kick","Kicked by Bandit", "Bandit Kick",0),
+            new Mechanic(31763, "Platform Quake", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Sabetha, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "CC","Platform Quake (Breakbar)","Breakbar",0),
+            new Mechanic(31763, "Platform Quake", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Sabetha, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "CCed","Platform Quake (Breakbar broken) ", "CCed",0,(condition => condition.CombatItem.Value <=4400)),
+            new Mechanic(31763, "Platform Quake", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Sabetha, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "CC.Fail","Platform Quake (Breakbar failed) ", "CC Fail",0,(condition => condition.CombatItem.Value >4400)),
             // Hit by Time Bomb could be implemented by checking if a person is affected by ID 31324 (1st Time Bomb) or 34152 (2nd Time Bomb, only below 50% boss HP) without being attributed a bomb (ID: 31485) 3000ms before (+-50ms). I think the actual heavy hit isn't logged because it may be percentage based. Nothing can be found in the logs.
             });
             Extension = "sab";
@@ -166,8 +169,46 @@ namespace LuckParser.Models
                     }
                     break;
                 case (ushort)Kernan:
+                    List<CastLog> bulletHail = cls.Where(x => x.SkillId == 31721).ToList();
+                    foreach (CastLog c in bulletHail)
+                    {
+                        int start = (int)c.Time;
+                        int firstConeStart = start;
+                        int secondConeStart = start + 800;
+                        int thirdConeStart = start + 1600;
+                        int firstConeEnd = firstConeStart + 400;
+                        int secondConeEnd = secondConeStart + 400;
+                        int thirdConeEnd = thirdConeStart + 400;
+                        int radius = 1500;
+                        Point3D facing = Targets.FirstOrDefault(x => x.ID == (ushort)Kernan).CombatReplay.Rotations.LastOrDefault(x => x.Time <= start);
+                        if (facing != null)
+                        {
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 28, new Tuple<int, int>(firstConeStart, firstConeEnd), "rgba(255,200,0,0.3)"));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 54, new Tuple<int, int>(secondConeStart, secondConeEnd), "rgba(255,200,0,0.3)"));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 81, new Tuple<int, int>(thirdConeStart, thirdConeEnd), "rgba(255,200,0,0.3)"));
+                        }
+                    }
+                    break;
                 case (ushort)Knuckles:
+                    List<CastLog> breakbar = cls.Where(x => x.SkillId == 31763).ToList();
+                    foreach (CastLog c in breakbar)
+                    {
+                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
+                    }
+                    break;
                 case (ushort)Karde:
+                    List<CastLog> flameBlast = cls.Where(x => x.SkillId == 31761).ToList();
+                    foreach (CastLog c in flameBlast)
+                    {
+                        int start = (int)c.Time;
+                        int end = start + 4000;
+                        int radius = 600;
+                        Point3D facing = Targets.FirstOrDefault(x => x.ID == (ushort)Kernan).CombatReplay.Rotations.LastOrDefault(x => x.Time <= start);
+                        if (facing != null)
+                        {
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 60, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)"));
+                        }
+                    }
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
