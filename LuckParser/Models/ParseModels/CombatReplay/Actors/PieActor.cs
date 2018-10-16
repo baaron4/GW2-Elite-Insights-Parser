@@ -15,7 +15,7 @@ namespace LuckParser.Models.ParseModels
 
         public PieActor(bool fill, int growing, int radius, Point3D rotation, int openingAngle, Tuple<int, int> lifespan, string color, Connector connector) : base(fill, growing, radius, lifespan, color, connector)
         {
-            Direction = (int)Math.Round(Math.Atan2(-rotation.Y, rotation.X) * 180 / Math.PI);
+            Direction = (int)Math.Round(Math.Atan2(rotation.Y, rotation.X) * 180 / Math.PI);
             OpeningAngle = openingAngle;
         }
 

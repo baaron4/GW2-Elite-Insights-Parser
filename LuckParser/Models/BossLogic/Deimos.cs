@@ -274,12 +274,12 @@ namespace LuckParser.Models
                         }
                         for (int i = 0; i < 6; i++)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * duration), "rgba(255, 200, 0, 0.5)", new AgentConnector(boss)));
-                            replay.Actors.Add(new PieActor(false, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", new AgentConnector(boss)));
+                            replay.Actors.Add(new PieActor(true, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * duration), "rgba(255, 200, 0, 0.5)", new AgentConnector(boss)));
+                            replay.Actors.Add(new PieActor(false, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", new AgentConnector(boss)));
                             if (i % 5 != 0)
                             {
-                                replay.Actors.Add(new PieActor(true, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * 120), "rgba(255, 200, 0, 0.5)", new AgentConnector(boss)));
-                                replay.Actors.Add(new PieActor(false, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", new AgentConnector(boss)));
+                                replay.Actors.Add(new PieActor(true, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * 120), "rgba(255, 200, 0, 0.5)", new AgentConnector(boss)));
+                                replay.Actors.Add(new PieActor(false, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", new AgentConnector(boss)));
                             }
                         }
                     }
