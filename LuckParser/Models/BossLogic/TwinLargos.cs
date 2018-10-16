@@ -44,12 +44,12 @@ namespace LuckParser.Models
             };
         }
 
-        private void SetPhases(List<PhaseData> phases, ParsedLog log, Boss target, string[] names)
+        private List<PhaseData> GetTargetPhases(ParsedLog log, Boss target, string[] names)
         {
-            int offset = phases.Count;
             long start = 0;
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
+            List<PhaseData> targetPhases = new List<PhaseData>();
             List<CombatItem> states = log.CombatData.GetStatesData(ParseEnum.StateChange.EnterCombat).Where(x => x.SrcInstid == target.InstID).ToList();
             states.AddRange(GetFilteredList(log, 762, target.InstID).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None));
             states.AddRange(log.CombatData.GetStatesData(ParseEnum.StateChange.ChangeDead).Where(x => x.SrcAgent == target.Agent));
@@ -62,20 +62,24 @@ namespace LuckParser.Models
                     start = state.Time - log.FightData.FightStart;
                     if (i == states.Count - 1)
                     {
-                        phases.Add(new PhaseData(start, fightDuration));
+                        targetPhases.Add(new PhaseData(start, fightDuration));
                     }
                 }
                 else
                 {
                     end = Math.Min(state.Time - log.FightData.FightStart, fightDuration);
-                    phases.Add(new PhaseData(start, end));
+                    targetPhases.Add(new PhaseData(start, end));
+                    if (i == states.Count - 1 && targetPhases.Count < 3)
+                    {
+                        targetPhases.Add(new PhaseData(end, fightDuration));
+                    }
                 }
             }
-            for (int i = offset; i < phases.Count; i++)
+            for (int i = 0; i < targetPhases.Count; i++)
             {
-                PhaseData phase = phases[i];
-                phase.Name = names[i - offset];
-                if (i-offset == 0)
+                PhaseData phase = targetPhases[i];
+                phase.Name = names[i];
+                if (i == 0)
                 {
                     phase.DrawEnd = true;
                     phase.DrawStart = true;
@@ -83,6 +87,7 @@ namespace LuckParser.Models
                 }
                 phase.Targets.Add(target);
             }
+            return targetPhases;
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
@@ -103,12 +108,64 @@ namespace LuckParser.Models
             {
                 return phases;
             }
-            SetPhases(phases, log, nikare, new string[]{ "Nikare P1", "Nikare P2", "Nikare P3" } );
+            List<PhaseData> nikPhases = GetTargetPhases(log, nikare, new string[]{ "Nikare P1", "Nikare P2", "Nikare P3" } );
             if (kenut != null)
             {
-                SetPhases(phases, log, kenut, new string[] { "Kenut P1", "Kenut P2", "Kenut P3" });
+                phases.AddRange(GetTargetPhases(log, kenut, new string[] { "Kenut P1", "Kenut P2", "Kenut P3" }));
+                // clean Nikare related bugs
+                switch (nikPhases.Count)
+                {
+                    case 2:
+                        {
+                            PhaseData p1 = nikPhases[0];
+                            PhaseData p2 = nikPhases[1];
+                            // P1 and P2 merged
+                            if (p1.Start == p2.Start)
+                            {
+                                CombatItem combatItem = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => x.SrcInstid == kenut.InstID).FirstOrDefault();
+                                if (combatItem != null)
+                                {
+                                    p2.OverrideStart(combatItem.Time - log.FightData.FightStart);
+                                }
+                                else
+                                {
+                                    nikPhases.Remove(p2);
+                                }
+                            }
+                        }
+                        break;
+                    case 3:
+                        {
+                            PhaseData p1 = nikPhases[0];
+                            PhaseData p2 = nikPhases[1];
+                            PhaseData p3 = nikPhases[2];
+                            // P1 and P2 merged
+                            if (p1.Start == p2.Start)
+                            {
+                                CombatItem combatItem = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => x.SrcInstid == kenut.InstID).FirstOrDefault();
+                                if (combatItem != null)
+                                {
+                                    p2.OverrideStart(combatItem.Time - log.FightData.FightStart);
+                                }
+                                // P1 and P3 are merged
+                                if (p1.Start == p3.Start)
+                                {
+                                    p3.OverrideStart(p2.End);
+                                }
+                            }
+                            // p2 and p3 are merged
+                            else if (p2.Start == p3.Start)
+                            {
+                                p3.OverrideStart(p2.End);
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
-            phases.Sort((x, y) => x.Start < y.Start ? -1 : 1);
+            phases.AddRange(nikPhases);
+            phases.Sort((x, y) => x.Start < y.Start ? -1 : 1);          
             return phases;
         }
 
