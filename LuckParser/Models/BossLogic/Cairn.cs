@@ -70,6 +70,20 @@ namespace LuckParser.Models
                             replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, initialDirection, width / 2, 360, new Tuple<int, int>(start + preCastTime + initialHitDuration, start + preCastTime + initialHitDuration + sweepDuration), "rgba(150, 0, 180, 0.5)", new AgentConnector(boss)));
                         }
                     }
+                    List<CastLog> wave = cls.Where(x => x.SkillId == 37910).ToList();
+                    foreach (CastLog c in wave)
+                    {
+                        int start = (int)c.Time;
+                        int preCastTime = 1200;
+                        int duration = 600;
+                        int firstRadius = 400;
+                        int secondRadius = 700;
+                        int thirdRadius = 1000;
+                        int fourthRadius = 1300;
+                        replay.Actors.Add(new DoughnutActor(true, 0, firstRadius, secondRadius, new Tuple<int, int>(start + preCastTime, start + preCastTime + duration), "rgba(100,0,155,0.3)", new AgentConnector(boss)));
+                        replay.Actors.Add(new DoughnutActor(true, 0, secondRadius, thirdRadius, new Tuple<int, int>(start + preCastTime + 2*duration, start + preCastTime + 3*duration), "rgba(100,0,155,0.3)", new AgentConnector(boss)));
+                        replay.Actors.Add(new DoughnutActor(true, 0, thirdRadius, fourthRadius, new Tuple<int, int>(start + preCastTime + 5*duration, start + preCastTime + 6*duration), "rgba(100,0,155,0.3)", new AgentConnector(boss)));
+                    }
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
