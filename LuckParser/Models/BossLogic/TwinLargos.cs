@@ -51,7 +51,8 @@ namespace LuckParser.Models
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<CombatItem> states = log.CombatData.GetStatesData(ParseEnum.StateChange.EnterCombat).Where(x => x.SrcInstid == target.InstID).ToList();
-            states.AddRange(log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => x.SrcInstid == target.InstID));
+            states.AddRange(GetFilteredList(log, 762, target.InstID).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None));
+            states.AddRange(log.CombatData.GetStatesData(ParseEnum.StateChange.ChangeDead).Where(x => x.SrcAgent == target.Agent));
             states.Sort((x, y) => x.Time < y.Time ? -1 : 1);
             for (int i = 0; i < states.Count; i++)
             {
