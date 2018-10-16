@@ -80,7 +80,22 @@ namespace LuckParser.Models
                     {
                         replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(boss)));
                     }
-
+                    List<CastLog> breath = cls.Where(x => x.SkillId == 34515).ToList();
+                    foreach (CastLog c in breath)
+                    {
+                        int start = (int)c.Time;
+                        int preCastTime = 1000;
+                        int duration = 2000;
+                        int range = 600;
+                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start+1000);
+                        if (facing != null)
+                        {
+                            int direction = getRotationFromFacing(facing);
+                            int angle = 60;
+                            replay.Actors.Add(new PieActor(true, 0, range, direction, angle, new Tuple<int, int>(start, start + preCastTime), "rgba(255,200,0,0.1)", new AgentConnector(boss)));
+                            replay.Actors.Add(new PieActor(true, 0, range, direction, angle, new Tuple<int, int>(start + preCastTime, start + preCastTime + duration), "rgba(255,200,0,0.4)", new AgentConnector(boss)));
+                        }
+                    }
                     List<CastLog> tantrum = cls.Where(x => x.SkillId == 34547).ToList();
                     foreach (CastLog c in tantrum)
                     {
