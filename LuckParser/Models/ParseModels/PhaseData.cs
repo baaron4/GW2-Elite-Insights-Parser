@@ -44,6 +44,11 @@ namespace LuckParser.Models.ParseModels
             Start = start;
         }
 
+        public void OverrideEnd(long end)
+        {
+            End = end;
+        }
+
         public void OverrideTimes(long offset)
         {
             if (Targets.Count > 0)

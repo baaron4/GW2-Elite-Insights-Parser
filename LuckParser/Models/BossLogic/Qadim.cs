@@ -111,15 +111,11 @@ namespace LuckParser.Models
                 {
                     case 2:
                     case 4:
-                        phase.Targets.Add(qadim);
-                        break;
                     case 6:
-                        List<long> pyresLastAware = log.AgentData.GetAgentsByID((ushort)PyreGuardian).Where(x => x.FirstAware - log.FightData.FightStart > phase.Start).Select(x => x.LastAware - log.FightData.FightStart - phase.Start).ToList();
-                        if (pyresLastAware.Count > 0)
+                        List<long> pyresFirstAware = log.AgentData.GetAgentsByID((ushort)PyreGuardian).Where(x => phase.InInterval(x.FirstAware - log.FightData.FightStart)).Select(x => x.FirstAware - log.FightData.FightStart).ToList();
+                        if (pyresFirstAware.Count > 0 && pyresFirstAware.Max() > phase.Start)
                         {
-                            phases[i] = new PhaseData(phase.Start + pyresLastAware.Max(), phase.End);
-                            phase = phases[i];
-                            phase.Name = names[i - 1];
+                            phase.OverrideStart(pyresFirstAware.Max());
                         }
                         phase.Targets.Add(qadim);
                         break;
