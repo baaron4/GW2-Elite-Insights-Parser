@@ -140,15 +140,26 @@ namespace LuckParser.Models.ParseModels
                 CombatReplay.PollingRate(pollingRate, log.FightData.FightDuration, forceInterpolate);
                 if (trim)
                 {
-                    CombatItem despawnCheck = log.CombatData.AllCombatItems.FirstOrDefault(x => x.SrcAgent == AgentItem.Agent && (x.IsStateChange.IsDead() || x.IsStateChange.IsDespawn()));
-                    if (despawnCheck != null)
+                    CombatItem spawnCheck = log.CombatData.GetStates(InstID, ParseEnum.StateChange.Spawn, FirstAware, LastAware).LastOrDefault();
+                    if (spawnCheck != null)
                     {
-                        CombatReplay.Trim(AgentItem.FirstAware - log.FightData.FightStart, despawnCheck.Time - log.FightData.FightStart);
+                        CombatItem despawnCheck = log.CombatData.AllCombatItems.FirstOrDefault(x => x.SrcAgent == AgentItem.Agent && (x.IsStateChange.IsDead() || x.IsStateChange.IsDespawn()) && x.Time > spawnCheck.Time);
+                        if (despawnCheck != null)
+                        {
+                            CombatReplay.Trim(AgentItem.FirstAware - log.FightData.FightStart, despawnCheck.Time - log.FightData.FightStart);
+                            return;
+                        }
                     }
                     else
                     {
-                        CombatReplay.Trim(AgentItem.FirstAware - log.FightData.FightStart, AgentItem.LastAware - log.FightData.FightStart);
+                        CombatItem despawnCheck = log.CombatData.AllCombatItems.FirstOrDefault(x => x.SrcAgent == AgentItem.Agent && (x.IsStateChange.IsDead() || x.IsStateChange.IsDespawn()));
+                        if (despawnCheck != null)
+                        {
+                            CombatReplay.Trim(AgentItem.FirstAware - log.FightData.FightStart, despawnCheck.Time - log.FightData.FightStart);
+                            return;
+                        }
                     }
+                    CombatReplay.Trim(AgentItem.FirstAware - log.FightData.FightStart, AgentItem.LastAware - log.FightData.FightStart);
                 }
                 //SetAdditionalCombatReplayData(log);
             }
