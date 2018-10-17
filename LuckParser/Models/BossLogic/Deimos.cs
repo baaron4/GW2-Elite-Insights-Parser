@@ -306,7 +306,7 @@ namespace LuckParser.Models
         {
             // teleport zone
             CombatReplay replay = p.CombatReplay;
-            List<CombatItem> tpDeimos = GetFilteredList(log, 37730, p.InstID);
+            List<CombatItem> tpDeimos = GetFilteredList(log, 37730, p);
             int tpStart = 0;
             foreach (CombatItem c in tpDeimos)
             {
