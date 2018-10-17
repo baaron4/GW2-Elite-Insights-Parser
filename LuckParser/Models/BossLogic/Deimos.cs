@@ -60,7 +60,7 @@ namespace LuckParser.Models
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
-            CombatItem enterCombat = combatData.Find(x => x.SrcInstid == boss.InstID && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
+            CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcInstid == boss.InstID && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
             if (enterCombat != null)
             {
                 fightData.FightStart = enterCombat.Time;
@@ -68,10 +68,15 @@ namespace LuckParser.Models
             List<AgentItem> deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos")).OrderBy(x => x.LastAware).ToList();
             if (deimosGadgets.Count > 0)
             {
-                AgentItem NPC = deimosGadgets.Last();
+                long firstAware = deimosGadgets.Max(x => x.FirstAware);
                 HashSet<ulong> deimos2Agents = new HashSet<ulong>(deimosGadgets.Select(x => x.Agent));
+                CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.Time > combatData.First().Time && x.DstAgent > 0);
+                if (targetable != null)
+                {
+                    firstAware = targetable.Time;
+                }
                 long oldAware = boss.LastAware;
-                fightData.PhaseData.Add(NPC.FirstAware >= oldAware ? NPC.FirstAware : oldAware);
+                fightData.PhaseData.Add(firstAware >= oldAware ? firstAware : oldAware);
                 boss.AgentItem.LastAware = deimosGadgets.Max(x => x.LastAware);
                 foreach (CombatItem c in combatData)
                 {
