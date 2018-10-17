@@ -56,7 +56,10 @@ namespace LuckParser.Models
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             Boss boss = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Deimos);
-            List<AgentItem> test = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.Name.Contains("Deimos") && x.ID != (ushort)Oil && x.ID != (ushort)Hands).ToList();
+            if (boss == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
             CombatItem enterCombat = combatData.Find(x => x.SrcInstid == boss.InstID && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
             if (enterCombat != null)
             {
