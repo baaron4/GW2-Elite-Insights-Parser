@@ -2,6 +2,7 @@
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
@@ -45,9 +46,36 @@ namespace LuckParser.Models
 
         public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
         {
-            switch(mob.ID)
+            CombatReplay replay = mob.CombatReplay;
+            List<CastLog> cls = mob.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (mob.ID)
             {
                 case (ushort)Jade:
+                    List<CombatItem> shield = GetFilteredList(log, 38155, mob.InstID);
+                    int shieldStart = 0;
+                    int shieldRadius = 100;
+                    foreach (CombatItem c in shield)
+                    {
+                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                        {
+                            shieldStart = (int)(c.Time - log.FightData.FightStart);
+                        }
+                        else
+                        {
+                            int shieldEnd = (int)(c.Time - log.FightData.FightStart);
+                            replay.Actors.Add(new CircleActor(true, 0, shieldRadius, new Tuple<int, int>(shieldStart, shieldEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(mob)));
+                        }
+                    }
+                    List<CastLog> explosion = cls.Where(x => x.SkillId == 37788).ToList();
+                    foreach (CastLog c in explosion)
+                    {
+                        int start = (int)c.Time;
+                        int precast = 1350;
+                        int duration = 100;
+                        int radius = 1200;
+                        replay.Actors.Add(new CircleActor(true, 0, radius, new Tuple<int, int>(start, start + precast + duration), "rgba(255, 0, 0, 0.05)", new AgentConnector(mob)));
+                        replay.Actors.Add(new CircleActor(true, 0, radius, new Tuple<int, int>(start + precast -10, start + precast + duration), "rgba(255, 0, 0, 0.25)", new AgentConnector(mob)));
+                    }
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
