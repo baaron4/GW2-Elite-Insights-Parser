@@ -264,8 +264,19 @@ namespace LuckParser.Models
                     List<CastLog> matCC = cls.Where(x => x.SkillId == 52734).ToList();
                     foreach (CastLog c in matCC)
                     {
+                        int start = (int)c.Time;
+                        int duration = Math.Min(6500,c.ActualDuration);
+                        Tuple<int, int> lifespan = new Tuple<int, int>(start, start + duration);
                         int radius = ccRadius;
-                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(boss)));
+                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, lifespan, "rgba(0, 180, 255, 0.3)", new AgentConnector(boss)));
+                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
+                        int range = 2800;
+                        int span = 2400;
+                        if (facing != null)
+                        {
+                            int rotation = getRotationFromFacing(facing);
+                            replay.Actors.Add(new RotatedRectangleActor(true, 0, range, span, rotation, range/2, lifespan, "rgba(0,100,255,0.4)", new AgentConnector(boss)));
+                        }
                     }
                     //Breath
                     List<CastLog> matBreath = cls.Where(x => x.SkillId == 52726).ToList();
