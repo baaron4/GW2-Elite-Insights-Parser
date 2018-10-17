@@ -273,7 +273,7 @@ namespace LuckParser.Models
                     {
                         int start = (int)c.Time;
                         int radius = 1000;
-                        int delay = 2000;
+                        int delay = 1600;
                         int duration = 3000;
                         int openingAngle = 70;
                         int fieldDuration = 10000;
@@ -300,7 +300,7 @@ namespace LuckParser.Models
                     {
                         int start = (int)c.Time;
                         int radius = 1000;
-                        int delay = 2000;
+                        int delay = 1600;
                         int duration = 3000;
                         int openingAngle = 60;
                         int fieldDuration = 10000;
