@@ -46,7 +46,7 @@ namespace LuckParser.Models
             new Mechanic(51984, "Patriarch CC (Jump into air)", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Qadim, "symbol:'diamond-wide',color:'rgb(255,0,0)'", "P.CC.Fail","Wing Buffet (Patriarch Breakbar failed)", "Patriarch CC Fail",0),
             new Mechanic(52330, "Seismic Stomp", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'star-open',color:'rgb(255,255,0)'", "D.Stmp","Seismic Stomp (Destroyer Stomp)", "Seismic Stomp (Destroyer)",0),
             new Mechanic(51923, "Shattered Earth", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'hexagram-open',color:'rgb(255,0,0)'", "D.Slm","Shattered Earth (Destroyer Jump Slam)", "Jump Slam (Destroyer)",0),
-            new Mechanic(51759, "Wave of Force", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'diamond-open',color:'rgb(255,200,0)'", "D.Pza","Wave of Force (Detsroyer Pizza)", "Destroyer Auto",0),
+            new Mechanic(51759, "Wave of Force", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'diamond-open',color:'rgb(255,200,0)'", "D.Pza","Wave of Force (Destroyer Pizza)", "Destroyer Auto",0),
             new Mechanic(52054, "Summon", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "D.BB","Summon (Destroyer Breakbar)", "Destroyer CC",0),
             new Mechanic(52054, "Summon", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "D.CCed","Summon (Destroyer Breakbar broken)", "Destroyer CCed",0, (condition => condition.CombatItem.Value < 8332)),
             new Mechanic(52054, "Summon", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "D.CC.Fail","Summon (Destroyer Breakbar failed)", "Destroyer CC Fail",0, (condition => condition.CombatItem.Value >= 8332)),
@@ -59,12 +59,16 @@ namespace LuckParser.Models
 
         protected override CombatReplayMap GetCombatMapInternal()
         {
-            return new CombatReplayMap("https://i.imgur.com/nGaCj1L.png",
-                            Tuple.Create(3437, 2978),
-                            Tuple.Create(-10966, 8825, -3870, 15289),
+            //return new CombatReplayMap("https://i.imgur.com/nGaCj1L.png",
+            //                Tuple.Create(3437, 2978),
+            //                Tuple.Create(-10966, 8825, -3870, 15289),
+            return new CombatReplayMap("https://i.imgur.com/qvF3ClM.png",
+                            Tuple.Create(3785, 3570),
+                            Tuple.Create(-11676, 8825, -3870, 16582),
                             Tuple.Create(-21504, -21504, 24576, 24576),
                             Tuple.Create(13440, 14336, 15360, 16256));
         }
+        
 
         protected override List<ushort> GetFightTargetsIDs()
         {
@@ -296,6 +300,29 @@ namespace LuckParser.Models
                             replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, new Tuple<int, int>(start + delay + duration, start + delay + fieldDuration), "rgba(255, 50, 0, 0.3)", new PositionConnector(pos)));
                         }
                     }
+                    //Tail Swipe
+                    List<CastLog> matSwipe = cls.Where(x => x.SkillId == 52705).ToList();
+                    foreach (CastLog c in matSwipe)
+                    {
+                        int start = (int)c.Time;
+                        int maxRadius = 700;
+                        int radiusDecrement = 100;
+                        int delay = 1435;
+                        int openingAngle = 59;
+                        int angleIncrement = 60;
+                        int coneAmount = 4;
+                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
+                        if (facing != null)
+                        {
+                            for (int i = 0; i < coneAmount; i++)
+                            {
+                                int rotation = getRotationFromFacing(facing);
+                                replay.Actors.Add(new PieActor(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(boss)));
+                                replay.Actors.Add(new PieActor(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(boss)));
+
+                            }
+                        }
+                    }
                     break;
                 case (ushort)WyvernPatriarch:
                     //CC
@@ -321,6 +348,28 @@ namespace LuckParser.Models
                         {
                             replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 200, 0, 0.3)", new AgentConnector(boss)));
                             replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, new Tuple<int, int>(start + delay + duration, start + delay + fieldDuration), "rgba(255, 50, 0, 0.3)", new PositionConnector(pos)));
+                        }
+                    }
+                    //Tail Swipe
+                    List<CastLog> patSwipe = cls.Where(x => x.SkillId == 52705).ToList();
+                    foreach (CastLog c in patSwipe)
+                    {
+                        int start = (int)c.Time;
+                        int maxRadius = 700;
+                        int radiusDecrement = 100;
+                        int delay = 1435;
+                        int openingAngle = 59;
+                        int angleIncrement = 60;
+                        int coneAmount = 4;
+                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
+                        if (facing != null)
+                        {
+                            for (int i = 0; i < coneAmount; i++)
+                            {
+                                int rotation = getRotationFromFacing(facing);
+                                replay.Actors.Add(new PieActor(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(boss)));
+                                replay.Actors.Add(new PieActor(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(boss)));
+                            }
                         }
                     }
                     break;
@@ -359,6 +408,28 @@ namespace LuckParser.Models
                     {
                         int radius = ccRadius;
                         replay.Actors.Add(new CircleActor(true, 0, ccRadius, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(boss)));
+                    }
+                    //Pizza
+                    List<CastLog> forceWave = cls.Where(x => x.SkillId == 51759).ToList();
+                    foreach (CastLog c in forceWave)
+                    {
+                        int start = (int)c.Time;
+                        int maxRadius = 1000;
+                        int radiusDecrement = 200;
+                        int delay = 1560;
+                        int openingAngle = 44;
+                        int angleIncrement = 45;
+                        int coneAmount = 3;
+                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
+                        if (facing != null)
+                        {
+                            for (int i = 0; i < coneAmount; i++)
+                            {
+                                int rotation = getRotationFromFacing(facing);
+                                replay.Actors.Add(new PieActor(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(boss)));
+                                replay.Actors.Add(new PieActor(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(boss)));
+                            }
+                        }
                     }
                     break;
                 default:
