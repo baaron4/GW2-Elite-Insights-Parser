@@ -1017,7 +1017,7 @@ namespace LuckParser.Controllers
         private List<List<int[]>> BuildPlayerMechanicData(int phaseIndex)
         {
             List<List<int[]>> list = new List<List<int[]>>();
-            HashSet<Mechanic> presMech = _log.MechanicData.GetPresentMechanics(0);
+            HashSet<Mechanic> presMech = _log.MechanicData.GetPresentPlayerMechs(0);
             PhaseData phase = _statistics.Phases[phaseIndex];
 
             foreach (Player p in _log.PlayerList)
@@ -1092,8 +1092,7 @@ namespace LuckParser.Controllers
                     color = mech.PlotlyColor,
                     symbol = mech.PlotlySymbol,
                     visible = (mech.SkillId == -2 || mech.SkillId == -3),
-                    data = BuildMechanicData(mechanicLogs),
-                    playerMech = playerMechs.Contains(mech),
+                    data = BuildMechanicGraphPointData(mechanicLogs, mech.IsEnemyMechanic),
                     enemyMech = enemyMechs.Contains(mech)
                 };
                 mechanicDtos.Add(dto);
@@ -1101,7 +1100,7 @@ namespace LuckParser.Controllers
             return mechanicDtos;
         }
 
-        private List<List<List<double>>> BuildMechanicData(List<MechanicLog> mechanicLogs)
+        private List<List<List<double>>> BuildMechanicGraphPointData(List<MechanicLog> mechanicLogs, bool enemyMechanic)
         {
             List<List<List<double>>> list = new List<List<List<double>>>();
             foreach (PhaseData phase in _statistics.Phases)
@@ -1278,8 +1277,8 @@ namespace LuckParser.Controllers
             string html = Properties.Resources.template_html;
             html = ReplaceVariables(html);
 
-            html = html.Replace("<!--${flomixCss}-->", BuildFlomixCss(path));
-            html = html.Replace("<!--${flomixJs}-->", BuildFlomixJs(path));
+            html = html.Replace("<!--${Css}-->", BuildCss(path));
+            html = html.Replace("<!--${Js}-->", BuildEIJs(path));
 
             html = html.Replace("${logDataJson}", BuildLogData());
 
@@ -1311,10 +1310,10 @@ namespace LuckParser.Controllers
             }
         }
 
-        private string BuildFlomixCss(string path)
+        private string BuildCss(string path)
         {
-            string scriptContent = Properties.Resources.flomix_ei_css;
-            string cssFilename = "flomix-ei-" + _scriptVersion + ".css";
+            string scriptContent = Properties.Resources.ei_css;
+            string cssFilename = "ei-" + _scriptVersion + ".css";
             if (Properties.Settings.Default.NewHtmlExternalScripts)
             {
                 string cssPath = Path.Combine(path, cssFilename);
@@ -1331,10 +1330,10 @@ namespace LuckParser.Controllers
             }
         }
 
-        private string BuildFlomixJs(string path)
+        private string BuildEIJs(string path)
         {
             string scriptContent = BuildJavascript();
-            string scriptFilename = "flomix-ei-" + _scriptVersion + ".js";
+            string scriptFilename = "ei-" + _scriptVersion + ".js";
             if (Properties.Settings.Default.NewHtmlExternalScripts)
             {
                 string scriptPath = Path.Combine(path, scriptFilename);
@@ -1474,24 +1473,15 @@ namespace LuckParser.Controllers
                 phaseDto.bossCondiStats = new List<List<BoonData>>();
                 phaseDto.bossCondiTotals = new List<BoonData>();
                 phaseDto.bossBoonTotals = new List<BoonData>();
-                phaseDto.bossHasBoons = new List<bool>();
                 foreach (Boss target in phaseData.Targets)
                 {
                     phaseDto.bossCondiStats.Add(BuildBossCondiData(i, target));
                     phaseDto.bossCondiTotals.Add(BuildBossCondiUptimeData(i, target));
-                    phaseDto.bossBoonTotals.Add(BuildBossBoonData(i, target));
-                    phaseDto.bossHasBoons.Add(HasBoons(i, target));
+                    phaseDto.bossBoonTotals.Add(HasBoons(i, target) ? BuildBossBoonData(i, target) : null);
                 }
 
                 phaseDto.mechanicStats = BuildPlayerMechanicData(i);
                 phaseDto.enemyMechanicStats = BuildEnemyMechanicData(i);
-
-                phaseDto.deaths = new List<long>();
-
-                foreach (Player player in _log.PlayerList)
-                {
-                    phaseDto.deaths.Add(player.GetDeath(_log, phaseData.Start, phaseData.End));
-                }
 
                 // add phase markup to full fight graph
                 if (i == 0)
@@ -1517,13 +1507,12 @@ namespace LuckParser.Controllers
 
 
             data.boons = AssembleBoons(_statistics.PresentBoons);
+            data.conditions = AssembleBoons(_statistics.PresentConditions);
             data.offBuffs = AssembleBoons(_statistics.PresentOffbuffs);
             data.defBuffs = AssembleBoons(_statistics.PresentDefbuffs);
             data.persBuffs = persBuffs;
-            data.mechanics = BuildMechanicGraphData();
+            data.mechanicGraphs = BuildMechanicGraphData();
 
-            data.bossCondis = AssembleBoons(_statistics.PresentConditions);
-            data.bossBoons = AssembleBoons(_statistics.PresentBoons);
 
             return ToJson(data, typeof(LogDataDto));
         }
@@ -1732,7 +1721,7 @@ namespace LuckParser.Controllers
 
         private string BuildJavascript()
         {
-            string javascript = Properties.Resources.flomix_ei_js;
+            string javascript = Properties.Resources.ei_js;
             javascript+= BuildTemplateJS("tmplTabs", Properties.Resources.tmplTabs);
             javascript += BuildTemplateJS("tmplPlayerCells", Properties.Resources.tmplPlayerCells);
             javascript += BuildTemplateJS("tmplDpsTable", Properties.Resources.tmplDpsTable);

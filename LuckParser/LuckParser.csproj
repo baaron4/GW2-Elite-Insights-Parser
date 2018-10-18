@@ -301,6 +301,8 @@
       <LastGenOutput>Version.tt.cs</LastGenOutput>
     </None>
     <None Include="Resources\template-combatreplay.html" />
+    <Content Include="Resources\ei.css" />
+    <Content Include="Resources\ei.js" />
     <Content Include="Resources\tmplGroupCombatReplay.html" />
     <Content Include="Resources\tmplPlayerSelectCombatReplay.html" />
     <Content Include="Resources\TODO.txt" />
@@ -311,8 +313,6 @@
     <None Include="Resources\tmplDpsTable.html" />
     <None Include="Resources\tmplDefTable.html" />
     <None Include="Resources\tmplBoonTable.html" />
-    <None Include="Resources\flomix-ei.js" />
-    <None Include="Resources\flomix-ei.css" />
     <None Include="Resources\tmplTabs.html" />
     <None Include="Resources\tmplPlayerCells.html" />
     <None Include="Resources\tmplDmgTable.html">

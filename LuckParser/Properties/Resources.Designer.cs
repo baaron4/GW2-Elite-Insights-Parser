@@ -118,9 +118,9 @@ namespace LuckParser.Properties {
         ///
         ///i [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string flomix_ei_css {
+        internal static string ei_css {
             get {
-                return ResourceManager.GetString("flomix_ei_css", resourceCulture);
+                return ResourceManager.GetString("ei_css", resourceCulture);
             }
         }
         
@@ -142,9 +142,9 @@ namespace LuckParser.Properties {
         ///	&apos;Berserker&apos;: &apos;https://wiki.guildwars2.com/images/d/da/Berserker_tango_icon_20px.png&apos;,
         ///	&apos;Spellbreaker&apos;: &apos;https://wiki.guildwars2.com/ima [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string flomix_ei_js {
+        internal static string ei_js {
             get {
-                return ResourceManager.GetString("flomix_ei_js", resourceCulture);
+                return ResourceManager.GetString("ei_js", resourceCulture);
             }
         }
         
@@ -156,7 +156,7 @@ namespace LuckParser.Properties {
         ///&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/${bootstrapTheme}/bootstrap.min.css&quot;  crossorigin=&quot;anonymous&quot;&gt;
         ///&lt;link href=&quot;https://fonts.googleapis.com/css?family=Open+Sans&quot; rel=&quot;stylesheet&quot;&gt;
         ///&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css&quot;&gt;
-        ///&lt;!--${flomixCss}--&gt;
+        ///&lt;!--${Css}--&gt;
         ///&lt;script src=&quot;https://code.jquery.com/jquery-3.3.1.js&quot;&gt;&lt;/script&gt;
         ///&lt;script src [rest of string was truncated]&quot;;.
         /// </summary>

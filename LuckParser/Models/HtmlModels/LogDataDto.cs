@@ -25,14 +25,10 @@ namespace LuckParser.Models.HtmlModels
         [DataMember(Order = 10)]
         public Dictionary<string, List<BoonDto>> persBuffs;
         [DataMember]
-        public List<BoonDto> bossCondis;
-        [DataMember]
-        public List<BoonDto> bossBoons;
+        public List<BoonDto> conditions;
         [DataMember(Order = 7)]
-        public List<MechanicDto> mechanics;
+        public List<MechanicDto> mechanicGraphs;
         [DataMember(Order = 8)]
-        public List<SkillDto> skills;
-        [DataMember(Order = 9)]
         public LogFlags flags = new LogFlags();
     }
 

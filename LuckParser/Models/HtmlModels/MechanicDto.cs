@@ -25,10 +25,7 @@ namespace LuckParser.Models.HtmlModels
         [DataMember]
         public string color;
 
-        [DataMember]
-        public bool playerMech;
-
-        [DataMember]
+        [DataMember(EmitDefaultValue = false)]
         public bool enemyMech;
 
         [DataMember(EmitDefaultValue = false)]

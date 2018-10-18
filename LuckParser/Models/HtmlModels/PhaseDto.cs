@@ -42,15 +42,12 @@ namespace LuckParser.Models.HtmlModels
         [DataMember] public List<List<BoonData>> bossCondiStats;
         [DataMember] public List<BoonData> bossCondiTotals;
         [DataMember] public List<BoonData> bossBoonTotals;
-        [DataMember] public List<bool> bossHasBoons;
-
-        [DataMember] public List<long> deaths;
 
         [DataMember] public List<List<int[]>> mechanicStats;
         [DataMember] public List<List<int[]>> enemyMechanicStats;
 
-        [DataMember] public List<double> markupLines;
-        [DataMember] public List<AreaLabelDto> markupAreas;
+        [DataMember(EmitDefaultValue = false)] public List<double> markupLines;
+        [DataMember(EmitDefaultValue = false)] public List<AreaLabelDto> markupAreas;
 
         public PhaseDto() { }
 
