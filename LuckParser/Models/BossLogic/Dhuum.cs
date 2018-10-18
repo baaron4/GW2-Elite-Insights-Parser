@@ -150,7 +150,6 @@ namespace LuckParser.Models
                     foreach (CastLog c in deathmark)
                     {
                         int start = (int)c.Time;
-                        //int preCast = 1550;
                         int zoneActive = start + 1550;
                         int zoneDeadly = zoneActive + 6000; //point where the zone becomes impossible to walk through unscathed
                         int zoneEnd = zoneActive + 120000;
