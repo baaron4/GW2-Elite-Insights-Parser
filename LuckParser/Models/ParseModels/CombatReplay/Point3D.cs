@@ -40,5 +40,11 @@ namespace LuckParser.Models.ParseModels
             Z = Mix(a.Z, b.Z, ratio);
             Time = time;
         }
+
+        public static int GetRotationFromFacing(Point3D facing)
+        {
+            int rotation = (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI);
+            return rotation;
+        }
     }
 }

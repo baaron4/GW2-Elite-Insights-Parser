@@ -90,7 +90,7 @@ namespace LuckParser.Models
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start+1000);
                         if (facing != null)
                         {
-                            int direction = getRotationFromFacing(facing);
+                            int direction = Point3D.GetRotationFromFacing(facing);
                             int angle = 60;
                             replay.Actors.Add(new PieActor(true, 0, range, direction, angle, new Tuple<int, int>(start, start + preCastTime), "rgba(255,200,0,0.1)", new AgentConnector(boss)));
                             replay.Actors.Add(new PieActor(true, 0, range, direction, angle, new Tuple<int, int>(start + preCastTime, start + preCastTime + duration), "rgba(255,200,0,0.4)", new AgentConnector(boss)));

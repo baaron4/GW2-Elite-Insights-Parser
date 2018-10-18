@@ -170,7 +170,6 @@ namespace LuckParser.Models
                     break;
                 case (ushort)Kernan:
                     List<CastLog> bulletHail = cls.Where(x => x.SkillId == 31721).ToList();
-                    Boss kernan = Targets.FirstOrDefault(x => x.ID == (ushort)Kernan);
                     foreach (CastLog c in bulletHail)
                     {
                         int start = (int)c.Time;
@@ -181,35 +180,33 @@ namespace LuckParser.Models
                         int secondConeEnd = secondConeStart + 400;
                         int thirdConeEnd = thirdConeStart + 400;
                         int radius = 1500;
-                        Point3D facing = kernan.CombatReplay.Rotations.LastOrDefault(x => x.Time <= start);
+                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start);
                         if (facing != null)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 28, new Tuple<int, int>(firstConeStart, firstConeEnd), "rgba(255,200,0,0.3)",new AgentConnector(kernan)));
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 54, new Tuple<int, int>(secondConeStart, secondConeEnd), "rgba(255,200,0,0.3)", new AgentConnector(kernan)));
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 81, new Tuple<int, int>(thirdConeStart, thirdConeEnd), "rgba(255,200,0,0.3)", new AgentConnector(kernan)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 28, new Tuple<int, int>(firstConeStart, firstConeEnd), "rgba(255,200,0,0.3)",new AgentConnector(boss)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 54, new Tuple<int, int>(secondConeStart, secondConeEnd), "rgba(255,200,0,0.3)", new AgentConnector(boss)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 81, new Tuple<int, int>(thirdConeStart, thirdConeEnd), "rgba(255,200,0,0.3)", new AgentConnector(boss)));
                         }
                     }
                     break;
                 case (ushort)Knuckles:
                     List<CastLog> breakbar = cls.Where(x => x.SkillId == 31763).ToList();
-                    Boss knuckles = Targets.FirstOrDefault(x => x.ID == (ushort)Knuckles);
                     foreach (CastLog c in breakbar)
                     {
-                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(knuckles)));
+                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(boss)));
                     }
                     break;
                 case (ushort)Karde:
                     List<CastLog> flameBlast = cls.Where(x => x.SkillId == 31761).ToList();
-                    Boss karde = Targets.FirstOrDefault(x => x.ID == (ushort)Karde);
                     foreach (CastLog c in flameBlast)
                     {
                         int start = (int)c.Time;
                         int end = start + 4000;
                         int radius = 600;
-                        Point3D facing = Targets.FirstOrDefault(x => x.ID == (ushort)Kernan).CombatReplay.Rotations.LastOrDefault(x => x.Time <= start);
+                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start);
                         if (facing != null)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 60, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)", new AgentConnector(karde)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 60, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)", new AgentConnector(boss)));
                         }
                     }
                     break;

@@ -228,12 +228,12 @@ namespace LuckParser.Models
                         int duration = 2680;
                         int radius = 2000;
                         int impactRadius = 40;
+                        int spellCenterDistance = 120; //hitbox radius
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
                         Point3D bossPosition = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
-                        int spellCenterDistance = 120; //hitbox radius
-                        Point3D position = new Point3D(bossPosition.X + facing.X * spellCenterDistance, bossPosition.Y + facing.Y * spellCenterDistance, bossPosition.Z, bossPosition.Time);
-                        if (facing != null && position != null)
+                        if (facing != null && bossPosition != null)
                         {
+                            Point3D position = new Point3D(bossPosition.X + (facing.X * spellCenterDistance), bossPosition.Y + (facing.Y * spellCenterDistance), bossPosition.Z, bossPosition.Time);
                             replay.Actors.Add(new CircleActor(true, 0, impactRadius, new Tuple<int, int>(start, start + delay), "rgba(255, 100, 0, 0.2)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleActor(true, 0, impactRadius, new Tuple<int, int>(start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.7)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleActor(false, start + delay + duration, radius, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 200, 0, 0.7)", new PositionConnector(position)));
@@ -278,7 +278,7 @@ namespace LuckParser.Models
                         int span = 2400;
                         if (facing != null)
                         {
-                            int rotation = getRotationFromFacing(facing);
+                            int rotation = Point3D.GetRotationFromFacing(facing);
                             replay.Actors.Add(new RotatedRectangleActor(true, 0, range, span, rotation, range/2, lifespan, "rgba(0,100,255,0.4)", new AgentConnector(boss)));
                         }
                     }
@@ -316,7 +316,7 @@ namespace LuckParser.Models
                         {
                             for (int i = 0; i < coneAmount; i++)
                             {
-                                int rotation = getRotationFromFacing(facing);
+                                int rotation = Point3D.GetRotationFromFacing(facing);
                                 replay.Actors.Add(new PieActor(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(boss)));
                                 replay.Actors.Add(new PieActor(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(boss)));
 
@@ -366,7 +366,7 @@ namespace LuckParser.Models
                         {
                             for (int i = 0; i < coneAmount; i++)
                             {
-                                int rotation = getRotationFromFacing(facing);
+                                int rotation = Point3D.GetRotationFromFacing(facing);
                                 replay.Actors.Add(new PieActor(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(boss)));
                                 replay.Actors.Add(new PieActor(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(boss)));
                             }
@@ -391,12 +391,12 @@ namespace LuckParser.Models
                         int duration = 3500;
                         int maxRadius = 2000;
                         int impactRadius = 500;
+                        int spellCenterDistance = 270; //hitbox radius
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
                         Point3D bossPosition = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
-                        int spellCenterDistance = 270; //hitbox radius
-                        Point3D position = new Point3D(bossPosition.X + facing.X * spellCenterDistance, bossPosition.Y + facing.Y * spellCenterDistance, bossPosition.Z, bossPosition.Time);
-                        if (facing != null && position != null)
+                        if (facing != null && bossPosition != null)
                         {
+                            Point3D position = new Point3D(bossPosition.X + facing.X * spellCenterDistance, bossPosition.Y + facing.Y * spellCenterDistance, bossPosition.Z, bossPosition.Time);
                             replay.Actors.Add(new CircleActor(true, 0, impactRadius, new Tuple<int, int>(start, start + delay), "rgba(255, 100, 0, 0.1)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleActor(true, 0, impactRadius, new Tuple<int, int>(start+delay-10, start + delay+100), "rgba(255, 100, 0, 0.5)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleActor(false, start + delay + duration, maxRadius, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 200, 0, 0.5)", new PositionConnector(position)));
@@ -425,7 +425,7 @@ namespace LuckParser.Models
                         {
                             for (int i = 0; i < coneAmount; i++)
                             {
-                                int rotation = getRotationFromFacing(facing);
+                                int rotation = Point3D.GetRotationFromFacing(facing);
                                 replay.Actors.Add(new PieActor(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(boss)));
                                 replay.Actors.Add(new PieActor(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(boss)));
                             }

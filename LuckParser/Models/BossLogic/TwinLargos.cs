@@ -173,7 +173,7 @@ namespace LuckParser.Models
                         Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
                         if (facing != null)
                         {
-                            int rotation = getRotationFromFacing(facing);
+                            int rotation = Point3D.GetRotationFromFacing(facing);
                             replay.Actors.Add(new RotatedRectangleActor(false, 0, width, height, rotation, width / 2, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 175, 0, 0.8)", new AgentConnector(boss)));
                             replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, rotation, width / 2, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 175, 0, 0.2)", new AgentConnector(boss)));
                         }
