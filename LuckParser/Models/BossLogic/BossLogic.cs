@@ -198,7 +198,7 @@ namespace LuckParser.Models
         {
         }
 
-        public void ComputeTrashMobsData(ParsedLog log, int pollingRate)
+        public void InitTrashMobCombatReplay(ParsedLog log, int pollingRate)
         {
             List<ParseEnum.TrashIDS> ids = GetTrashMobsIDS();
             List<AgentItem> aList = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
@@ -497,10 +497,10 @@ namespace LuckParser.Models
         }
 
         //
-        protected static List<CombatItem> GetFilteredList(ParsedLog log, long skillID, ushort instid)
+        protected static List<CombatItem> GetFilteredList(ParsedLog log, long skillID, AbstractMasterPlayer target)
         {
             bool needStart = true;
-            List<CombatItem> main = log.GetBoonData(skillID).Where(x => ((x.DstInstid == instid && x.IsBuffRemove == ParseEnum.BuffRemove.None) || (x.SrcInstid == instid && x.IsBuffRemove != ParseEnum.BuffRemove.None))).ToList();
+            List<CombatItem> main = log.GetBoonData(skillID).Where(x => ((x.DstInstid == target.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None) || (x.SrcInstid == target.InstID && x.IsBuffRemove != ParseEnum.BuffRemove.None)) && x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
             List<CombatItem> filtered = new List<CombatItem>();
             for (int i = 0; i < main.Count; i++)
             {

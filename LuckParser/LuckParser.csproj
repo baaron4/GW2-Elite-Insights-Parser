@@ -171,9 +171,15 @@
     <Compile Include="Models\JsonModels\JsonBuffs.cs" />
     <Compile Include="Models\JsonModels\JsonSupport.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\Actor.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\Actors\Connector\AgentConnector.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\Actors\Connector\Connector.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\Actors\Connector\InterpolatedPositionConnector.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\Actors\Connector\PositionConnector.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\Actors\LineActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\PieActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\CircleActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\DoughnutActor.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\Actors\RotatedRectangleActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\RectangleActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\CombatReplay.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\CombatReplayMap.cs" />

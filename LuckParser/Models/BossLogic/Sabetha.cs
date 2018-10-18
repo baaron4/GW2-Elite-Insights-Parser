@@ -53,7 +53,7 @@ namespace LuckParser.Models
                 return phases;
             }
             // Invul check
-            List<CombatItem> invulsSab = GetFilteredList(log, 757, mainTarget.InstID);
+            List<CombatItem> invulsSab = GetFilteredList(log, 757, mainTarget);
             for (int i = 0; i < invulsSab.Count; i++)
             {
                 CombatItem c = invulsSab[i];
@@ -144,9 +144,27 @@ namespace LuckParser.Models
 
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.Sabetha:
+                    List<CastLog> flameWall = cls.Where(x => x.SkillId == 31332).ToList();
+                    foreach (CastLog c in flameWall)
+                    {
+                        int start = (int)c.Time;
+                        int preCastTime = 2800;
+                        int duration = 10000;
+                        int width = 1300; int height = 60;
+                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start);
+                        if (facing != null)
+                        {
+                            int initialDirection = (int)(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI);
+                            replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, initialDirection, width / 2, new Tuple<int, int>(start, start + preCastTime), "rgba(255, 100, 0, 0.2)", new AgentConnector(boss)));
+                            replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, initialDirection, width / 2, 360, new Tuple<int, int>(start + preCastTime, start + preCastTime + duration), "rgba(255, 50, 0, 0.5)", new AgentConnector(boss)));
+                        }
+                    }
+                    break;
                 case (ushort)Kernan:
                 case (ushort)Knuckles:
                 case (ushort)Karde:
@@ -188,11 +206,11 @@ namespace LuckParser.Models
             {
                 int start = (int)(c.Time - log.FightData.FightStart);
                 int end = start + 3000;
-                replay.Actors.Add(new CircleActor(false, 0, 280, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
-                replay.Actors.Add(new CircleActor(true, end, 280, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
+                replay.Actors.Add(new CircleActor(false, 0, 280, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(p)));
+                replay.Actors.Add(new CircleActor(true, end, 280, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(p)));
             }
             // Sapper bombs
-            List<CombatItem> sapperBombs = GetFilteredList(log, 31473, p.InstID);
+            List<CombatItem> sapperBombs = GetFilteredList(log, 31473, p);
             int sapperStart = 0;
             foreach (CombatItem c in sapperBombs)
             {
@@ -202,8 +220,8 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    int sapperEnd = (int)(c.Time - log.FightData.FightStart); replay.Actors.Add(new CircleActor(false, 0, 180, new Tuple<int, int>(sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)"));
-                    replay.Actors.Add(new CircleActor(true, sapperStart + 5000, 180, new Tuple<int, int>(sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)"));
+                    int sapperEnd = (int)(c.Time - log.FightData.FightStart); replay.Actors.Add(new CircleActor(false, 0, 180, new Tuple<int, int>(sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)", new AgentConnector(p)));
+                    replay.Actors.Add(new CircleActor(true, sapperStart + 5000, 180, new Tuple<int, int>(sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)", new AgentConnector(p)));
                 }
             }
         }

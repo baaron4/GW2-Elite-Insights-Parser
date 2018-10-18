@@ -447,7 +447,7 @@ namespace LuckParser.Controllers
             {
                 if (agentsLookup.TryGetValue(c.SrcAgent, out var a))
                 {
-                    if (a.InstID == 0 && c.IsStateChange.IsSpawn())
+                    if (a.InstID == 0)
                     {
                         a.InstID = c.SrcInstid;
                     }

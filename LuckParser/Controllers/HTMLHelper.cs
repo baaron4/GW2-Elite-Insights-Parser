@@ -777,7 +777,7 @@ namespace LuckParser.Controllers
                     foreach (Actor a in replay.Actors)
                     {
                         actors += ",";
-                        actors += a.GetCombatReplayJSON(map, p);
+                        actors += a.GetCombatReplayJSON(map);
                     }
                 }
                 foreach (Mob m in log.FightData.Logic.TrashMobs)
@@ -792,7 +792,7 @@ namespace LuckParser.Controllers
                     foreach (Actor a in replay.Actors)
                     {
                         actors += ",";
-                        actors += a.GetCombatReplayJSON(map, m);
+                        actors += a.GetCombatReplayJSON(map);
                     }
                 }
                 foreach (Boss target in log.FightData.Logic.Targets)
@@ -807,7 +807,7 @@ namespace LuckParser.Controllers
                     foreach (Actor a in replay.Actors)
                     {
                         actors += ",";
-                        actors += a.GetCombatReplayJSON(map, target);
+                        actors += a.GetCombatReplayJSON(map);
                     }
                 }
                 replayScript = replayScript.Replace("'${actors}'", actors);
