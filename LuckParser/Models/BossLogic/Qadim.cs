@@ -228,7 +228,7 @@ namespace LuckParser.Models
                         int duration = 2680;
                         int radius = 2000;
                         int impactRadius = 40;
-                        int spellCenterDistance = 120; //hitbox radius
+                        int spellCenterDistance = 300; 
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
                         Point3D bossPosition = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && bossPosition != null)
