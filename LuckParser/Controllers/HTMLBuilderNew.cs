@@ -1258,7 +1258,7 @@ namespace LuckParser.Controllers
             html = html.Replace("${encounterResultCss}", _log.LogData.Success ? "text-success" : "text-warning");
             html = html.Replace("${encounterPercent}", encounterPercent.ToString());
             html = html.Replace("${evtcVersion}", _log.LogData.BuildVersion);
-            html = html.Replace("${bossID}", _log.FightData.ID.ToString());
+            html = html.Replace("${fightID}", _log.FightData.ID.ToString());
             html = html.Replace("${fightName}", FilterStringChars(_log.FightData.Name));
             html = html.Replace("${bossHealth}", _log.Boss.Health.ToString());
             html = html.Replace("${bossHealthLeft}", healthLeft.ToString());
