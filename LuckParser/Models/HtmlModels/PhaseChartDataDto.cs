@@ -9,6 +9,6 @@ namespace LuckParser.Models.HtmlModels
         [DataMember]
         public List<PlayerChartDataDto> players = new List<PlayerChartDataDto>();
         [DataMember]
-        public List<BossChartDataDto> bosses = new List<BossChartDataDto>();
+        public List<TargetChartDataDto> targets = new List<TargetChartDataDto>();
     }
 }

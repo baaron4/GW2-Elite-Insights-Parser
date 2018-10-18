@@ -35,6 +35,6 @@ namespace LuckParser.Models.HtmlModels
         public bool visible;
 
         [DataMember]
-        public List<List<List<double>>> data;
+        public List<List<List<double>>> points;
     }
 }

@@ -14,6 +14,6 @@ namespace LuckParser.Models.HtmlModels
         public double avg;
 
         [DataMember]
-        public List<List<object>> val = new List<List<object>>();
+        public List<List<object>> data = new List<List<object>>();
     }
 }

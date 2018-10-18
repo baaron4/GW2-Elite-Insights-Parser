@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace LuckParser.Models.HtmlModels
 {
     [DataContract]
-    public class BossChartDataDto
+    public class TargetChartDataDto
     {
         [DataMember]
         public List<int> total;

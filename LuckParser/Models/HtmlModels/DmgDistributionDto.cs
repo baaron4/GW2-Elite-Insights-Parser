@@ -15,6 +15,6 @@ namespace LuckParser.Models.HtmlModels
         [DataMember]
         public double contribution;
         [DataMember]
-        public List<double[]> data;
+        public List<double[]> distribution;
     }
 }

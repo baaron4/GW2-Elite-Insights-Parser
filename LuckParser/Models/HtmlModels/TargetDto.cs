@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace LuckParser.Models.HtmlModels
 {
     [DataContract]
-    public class BossDto
+    public class TargetDto
     {
         [DataMember] public long id;
         [DataMember] public string name;
@@ -14,9 +14,9 @@ namespace LuckParser.Models.HtmlModels
         [DataMember] public long hbHeight;
         [DataMember] public readonly List<MinionDto> minions = new List<MinionDto>();
 
-        public BossDto() { }
+        public TargetDto() { }
 
-        public BossDto(long id, string name, string icon)
+        public TargetDto(long id, string name, string icon)
         {
             this.id = id;
             this.name = name;
