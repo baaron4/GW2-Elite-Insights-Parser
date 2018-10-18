@@ -70,7 +70,7 @@ namespace LuckParser.Models
                 return phases;
             }
             // Determined check
-            List<CombatItem> invulsSam = GetFilteredList(log, 762, mainTarget.InstID);         
+            List<CombatItem> invulsSam = GetFilteredList(log, 762, mainTarget);         
             for (int i = 0; i < invulsSam.Count; i++)
             {
                 CombatItem c = invulsSam[i];
@@ -181,7 +181,7 @@ namespace LuckParser.Models
                 replay.Actors.Add(new CircleActor(true, 0, 80, new Tuple<int, int>(smallStart, smallEnd), "rgba(80, 150, 0, 0.3)", new AgentConnector(p)));
             }
             // fixated
-            List<CombatItem> fixatedSam = GetFilteredList(log, 37868, p.InstID);
+            List<CombatItem> fixatedSam = GetFilteredList(log, 37868, p);
             int fixatedSamStart = 0;
             foreach (CombatItem c in fixatedSam)
             {
@@ -196,7 +196,7 @@ namespace LuckParser.Models
                 }
             }
             //fixated Ghuldem
-            List<CombatItem> fixatedGuldhem = GetFilteredList(log, 38223, p.InstID);
+            List<CombatItem> fixatedGuldhem = GetFilteredList(log, 38223, p);
             int fixationGuldhemStart = 0;
             Boss guldhem = null;
             foreach (CombatItem c in fixatedGuldhem)
@@ -217,7 +217,7 @@ namespace LuckParser.Models
                 }
             }
             //fixated Rigom
-            List<CombatItem> fixatedRigom = GetFilteredList(log, 37693, p.InstID);
+            List<CombatItem> fixatedRigom = GetFilteredList(log, 37693, p);
             int fixationRigomStart = 0;
             Boss rigom = null;
             foreach (CombatItem c in fixatedRigom)

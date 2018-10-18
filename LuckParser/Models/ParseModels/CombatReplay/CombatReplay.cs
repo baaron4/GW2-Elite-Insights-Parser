@@ -25,8 +25,8 @@ namespace LuckParser.Models.ParseModels
         public void Trim(long start, long end)
         {
             Positions.RemoveAll(x => x.Time < start || x.Time > end);
-            _start = start;
-            _end = end;
+            _start = Math.Max(start,1);
+            _end = Math.Max(_start,end);
             if (Positions.Count == 0)
             {
                 _start = -1;

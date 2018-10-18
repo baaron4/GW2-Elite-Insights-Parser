@@ -98,7 +98,7 @@ namespace LuckParser.Models
             {
                 return phases;
             }
-            List<long> moltenArmor = GetFilteredList(log,52329,qadim.InstID).Select(x => x.Time - log.FightData.FightStart).Distinct().ToList();
+            List<long> moltenArmor = GetFilteredList(log,52329,qadim).Select(x => x.Time - log.FightData.FightStart).Distinct().ToList();
             for (int i = 1; i < moltenArmor.Count; i++)
             {
                 if (i % 2 == 0)
@@ -128,15 +128,11 @@ namespace LuckParser.Models
                 {
                     case 2:
                     case 4:
-                        phase.Targets.Add(qadim);
-                        break;
                     case 6:
-                        List<long> pyresLastAware = log.AgentData.GetAgentsByID((ushort)PyreGuardian).Where(x => x.FirstAware - log.FightData.FightStart > phase.Start).Select(x => x.LastAware - log.FightData.FightStart - phase.Start).ToList();
-                        if (pyresLastAware.Count > 0)
+                        List<long> pyresFirstAware = log.AgentData.GetAgentsByID((ushort)PyreGuardian).Where(x => phase.InInterval(x.FirstAware - log.FightData.FightStart)).Select(x => x.FirstAware - log.FightData.FightStart).ToList();
+                        if (pyresFirstAware.Count > 0 && pyresFirstAware.Max() > phase.Start)
                         {
-                            phases[i] = new PhaseData(phase.Start + pyresLastAware.Max(), phase.End);
-                            phase = phases[i];
-                            phase.Name = names[i - 1];
+                            phase.OverrideStart(pyresFirstAware.Max());
                         }
                         phase.Targets.Add(qadim);
                         break;
