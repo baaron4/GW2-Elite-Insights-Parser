@@ -1094,7 +1094,7 @@ namespace LuckParser.Controllers
                     int count = mls.Count;
                     foreach (MechanicLog ml in mls)
                     {
-                        if (mech.InternalCooldown != 0 && ml.Time - timeFilter < mech.SkillId)//ICD check
+                        if (mech.InternalCooldown != 0 && ml.Time - timeFilter < mech.InternalCooldown)//ICD check
                         {
                             filterCount++;
                         }
@@ -1125,7 +1125,7 @@ namespace LuckParser.Controllers
                     int count = mls.Count;
                     foreach (MechanicLog ml in mls)
                     {
-                        if (mech.InternalCooldown != 0 && ml.Time - timeFilter < mech.SkillId)//ICD check
+                        if (mech.InternalCooldown != 0 && ml.Time - timeFilter < mech.InternalCooldown)//ICD check
                         {
                             filterCount++;
                         }

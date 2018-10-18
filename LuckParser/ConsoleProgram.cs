@@ -69,7 +69,7 @@ namespace LuckParser
                     //Process evtc here
                     ParsedLog log = control.ParseLog(row, fInfo.FullName);
                     Console.Write("Log Parsed\n");
-                    bool uploadAuthorized = !Properties.Settings.Default.SkipFailedTrys || (Properties.Settings.Default.SkipFailedTrys && log.LogData.Success);
+                    bool uploadAuthorized = !Properties.Settings.Default.SkipFailedTries || (Properties.Settings.Default.SkipFailedTries && log.LogData.Success);
                     if (Properties.Settings.Default.UploadToDPSReports && uploadAuthorized)
                     {
                         Console.Write("Uploading to DPSReports using EI\n");
@@ -133,7 +133,7 @@ namespace LuckParser
                             uploadresult[2] = "Failed to Define Upload Task";
                         }
                     }
-                    if (Properties.Settings.Default.SkipFailedTrys)
+                    if (Properties.Settings.Default.SkipFailedTries)
                     {
                         if (!log.LogData.Success)
                         {

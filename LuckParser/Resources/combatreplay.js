@@ -444,7 +444,7 @@ class RectangleMechanicDrawable extends MechanicDrawable {
         }
         const percent = this.getPercent(currentTime);
         ctx.beginPath();
-        ctx.rect(pos.x - 0.5 * this.width, pos.y - 0.5 * this.height, percent * this.width, percent * this.height);
+        ctx.rect(pos.x - 0.5 * percent * this.width, pos.y - 0.5 * percent * this.height, percent * this.width, percent * this.height);
         if (this.fill) {
             ctx.fillStyle = this.color;
             ctx.fill();
@@ -453,6 +453,50 @@ class RectangleMechanicDrawable extends MechanicDrawable {
             ctx.strokeStyle = this.color;
             ctx.stroke();
         }
+    }
+}
+
+class RotatedRectangleMechanicDrawable extends RectangleMechanicDrawable {
+    constructor(start, end, fill, growing, color, width, height, rotation, translation, spinangle, connectedTo) {
+        super(start, end, fill, growing, color, width, height, connectedTo);
+        this.rotation = -rotation * Math.PI / 180; // positive mathematical direction, reversed since JS has downwards increasing y axis
+        this.translation = translation * inch;
+        this.spinangle = -spinangle * Math.PI / 180; // positive mathematical direction, reversed since JS has downwards increasing y axis
+    }
+
+    getSpinPercent(currentTime) {
+        if (this.spinangle === 0) {
+            return 1.0;
+        }
+        return Math.min((currentTime - this.start) / (this.end - this.start), 1.0);
+    }
+
+    draw(ctx, currentTime) {
+        const pos = this.getPosition(currentTime);
+        if (pos === null) {
+            return;
+        }
+        const percent = this.getPercent(currentTime);
+        const spinPercent = this.getSpinPercent(currentTime);
+        const offset = {
+            x: pos.x,// - 0.5 * percent * this.width,
+            y: pos.y// - 0.5 * percent * this.height
+        };
+        const angle = this.rotation + spinPercent * this.spinangle;
+        ctx.save();
+        ctx.translate(offset.x, offset.y);
+        ctx.rotate(angle % 360);
+        ctx.beginPath();
+        ctx.rect((- 0.5 * this.width + this.translation) * percent, - 0.5 * percent * this.height, percent * this.width, percent * this.height);
+        if (this.fill) {
+            ctx.fillStyle = this.color;
+            ctx.fill();
+        } else {
+            ctx.lineWidth = '2';
+            ctx.strokeStyle = this.color;
+            ctx.stroke();
+        }
+        ctx.restore();
     }
 }
 
@@ -488,6 +532,52 @@ class PieMechanicDrawable extends MechanicDrawable {
     }
 }
 
+class LineMechanicDrawable extends MechanicDrawable {
+    constructor(start, end, fill, growing, color, width, connectedFrom, connectedTo) {
+        super(start, end, fill, growing, color, connectedTo);
+        this.connectedFrom = connectedFrom;
+        this.width = width*inch;
+        this.endmaster = null;
+    }
+
+    getTargetPosition(currentTime) {
+        if (this.connectedFrom === null) {
+            return null;
+        }
+        if (this.start !== -1 && (this.start >= currentTime || this.end <= currentTime)) {
+            return null;
+        }
+        if (this.connectedFrom instanceof Array) {
+            return {
+                x: this.target[0],
+                y: this.target[1]
+            };
+        } else {
+            if (this.endmaster === null) {
+                let endMasterID = this.connectedFrom;
+                this.endmaster = playerData.has(endMasterID) ? playerData.get(endMasterID) : trashMobData.has(endMasterID) ? trashMobData.get(endMasterID) : bossData.get(endMasterID);
+            }
+            return this.endmaster.getPosition(currentTime);
+        }
+    }
+
+    draw(ctx, currentTime) {
+        const pos = this.getPosition(currentTime);
+        const target = this.getTargetPosition(currentTime);
+
+        if (pos === null || target === null) {
+            return;
+        }
+        const percent = this.getPercent(currentTime);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+        ctx.lineTo(pos.x + percent * (target.x - pos.x), pos.y + percent * (target.y - pos.y));
+        ctx.lineWidth = this.width;
+        ctx.strokeStyle = this.color;
+        ctx.stroke();
+    }
+}
+
 let actors = ['${actors}'];
 
 function createAllActors() {
@@ -514,11 +604,17 @@ function createAllActors() {
             case "Rectangle":
                 mechanicActorData.add(new RectangleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Width, actor.Height, actor.ConnectedTo));
                 break;
+            case "RotatedRectangle":
+                mechanicActorData.add(new RotatedRectangleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Width, actor.Height, actor.Rotation, actor.RadialTranslation, actor.SpinAngle, actor.ConnectedTo));
+                break;
             case "Doughnut":
                 mechanicActorData.add(new DoughnutMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.InnerRadius, actor.OuterRadius, actor.ConnectedTo));
                 break;
             case "Pie":
                 mechanicActorData.add(new PieMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Direction, actor.OpeningAngle, actor.Radius, actor.ConnectedTo));
+                break;
+            case "Line":
+                mechanicActorData.add(new LineMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Width, actor.ConnectedFrom, actor.ConnectedTo));
                 break;
         }
     }

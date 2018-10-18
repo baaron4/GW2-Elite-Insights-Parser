@@ -9,44 +9,15 @@ namespace LuckParser.Models.ParseModels
         public Tuple<int, int> Lifespan { get; }
         public string Color { get; }
         public int Growing { get; }
-        protected Point3D Position;
-
-        protected Actor(bool fill, int growing, Tuple<int, int> lifespan, string color)
+        protected Connector ConnectedTo;
+        
+        protected Actor(bool fill, int growing, Tuple<int, int> lifespan, string color, Connector connector)
         {
             Lifespan = lifespan;
             Color = color;
             Filled = fill;
             Growing = growing;
-        }
-        protected Actor(bool fill, int growing, Tuple<int, int> lifespan, string color, Point3D position)
-        {
-            Lifespan = lifespan;
-            Color = color;
-            Filled = fill;
-            Growing = growing;
-            Position = position;
-        }
-        protected Actor(bool fill, int growing, Tuple<int, int> lifespan, string color, Point3D prev, Point3D next, int time)
-        {
-            Lifespan = lifespan;
-            Color = color;
-            Filled = fill;
-            Growing = growing;
-            if (prev != null && next != null)
-            {
-                long denom = next.Time - prev.Time;
-                if (denom == 0)
-                {
-                    Position = prev;
-                } else
-                {
-                    float ratio = (float)(time - prev.Time) / denom;
-                    Position = new Point3D(prev, next, ratio, time);
-                }
-            } else
-            {
-                Position = prev ?? next;
-            }
+            ConnectedTo = connector;
         }
         //
         protected class Serializable
@@ -61,7 +32,7 @@ namespace LuckParser.Models.ParseModels
             public Object ConnectedTo { get; set; }
         }
 
-        public abstract string GetCombatReplayJSON(CombatReplayMap map, AbstractMasterPlayer master);
+        public abstract string GetCombatReplayJSON(CombatReplayMap map);
 
     }
 }

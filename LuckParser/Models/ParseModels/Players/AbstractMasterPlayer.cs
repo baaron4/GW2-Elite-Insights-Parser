@@ -140,16 +140,35 @@ namespace LuckParser.Models.ParseModels
                 CombatReplay.PollingRate(pollingRate, log.FightData.FightDuration, forceInterpolate);
                 if (trim)
                 {
-                    CombatItem despawnCheck = log.CombatData.AllCombatItems.FirstOrDefault(x => x.SrcAgent == AgentItem.Agent && (x.IsStateChange.IsDead() || x.IsStateChange.IsDespawn()));
-                    if (despawnCheck != null)
+                    CombatItem spawnCheck = log.CombatData.GetStates(InstID, ParseEnum.StateChange.Spawn, FirstAware, LastAware).LastOrDefault();
+                    if (spawnCheck != null)
                     {
-                        CombatReplay.Trim(AgentItem.FirstAware - log.FightData.FightStart, despawnCheck.Time - log.FightData.FightStart);
+                        CombatItem despawnCheck = log.CombatData.AllCombatItems.FirstOrDefault(x => x.SrcAgent == AgentItem.Agent && (x.IsStateChange.IsDead() || x.IsStateChange.IsDespawn()) && x.Time > spawnCheck.Time);
+                        if (despawnCheck != null)
+                        {
+                            CombatReplay.Trim(AgentItem.FirstAware - log.FightData.FightStart, despawnCheck.Time - log.FightData.FightStart);
+                            return;
+                        }
                     }
                     else
                     {
-                        CombatReplay.Trim(AgentItem.FirstAware - log.FightData.FightStart, AgentItem.LastAware - log.FightData.FightStart);
+                        CombatItem despawnCheck = log.CombatData.AllCombatItems.FirstOrDefault(x => x.SrcAgent == AgentItem.Agent && (x.IsStateChange.IsDead() || x.IsStateChange.IsDespawn()));
+                        if (despawnCheck != null)
+                        {
+                            CombatReplay.Trim(AgentItem.FirstAware - log.FightData.FightStart, despawnCheck.Time - log.FightData.FightStart);
+                            return;
+                        }
                     }
+                    CombatReplay.Trim(AgentItem.FirstAware - log.FightData.FightStart, AgentItem.LastAware - log.FightData.FightStart);
                 }
+                //SetAdditionalCombatReplayData(log);
+            }
+        }
+
+        public void ComputeAdditionalCombatReplayData(ParsedLog log)
+        {
+            if (CombatReplay != null && CombatReplay.Actors.Count == 0)
+            {
                 SetAdditionalCombatReplayData(log);
             }
         }
@@ -598,14 +617,10 @@ namespace LuckParser.Models.ParseModels
 
                 }
                 else if (state == ParseEnum.StateChange.WeaponSwap && c.Time < agentEnd)
-                {//Weapon swap
-                    if ((int)c.DstAgent == 4 || (int)c.DstAgent == 5)
-                    {
-                        long time = c.Time - timeStart;
-                        CastLog swapLog = new CastLog(time, SkillItem.WeaponSwapId, (int)c.DstAgent, c.IsActivation);
-                        CastLogs.Add(swapLog);
-                    }
-
+                {
+                    long time = c.Time - timeStart;
+                    CastLog swapLog = new CastLog(time, SkillItem.WeaponSwapId, (int)c.DstAgent, c.IsActivation);
+                    CastLogs.Add(swapLog);
                 }
             }
         }
