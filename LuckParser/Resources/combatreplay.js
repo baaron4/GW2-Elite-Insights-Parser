@@ -3,8 +3,13 @@ const deadIcon = new Image();
 deadIcon.src = "https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png";
 const downIcon = new Image();
 downIcon.src = "https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png";
+const bgImage = new Image();
+bgImage.onload = function () {
+    animateCanvas();
+    bgLoaded = true;
+};
 let time = 0;
-let inch = '${inch}';
+let inch = 10;
 let speed = 1;
 const times = [];
 const bossData = new Map();
@@ -14,19 +19,38 @@ const mechanicActorData = new Set();
 const rangeControl = new Map();
 let selectedGroup = -1;
 let selectedPlayer = null;
-const timeSlider = document.getElementById('timeRange');
-const timeSliderDisplay = document.getElementById('timeRangeDisplay');
-const canvas = document.getElementById('replayCanvas');
-const ctx = canvas.getContext('2d');
-const bgImage = new Image();
 let bgLoaded = false;
 let animation = null;
 let prevTime = 0;
-let pollingRate = '${pollingRate}';
+let pollingRate = 150;
+let timeSlider = null;
+let timeSliderDisplay = null;
+let canvas = null;
+let ctx = null;
 
-// canvas
-ctx.imageSmoothingEnabled = true;
-ctx.imageSmoothingQuality = 'high';
+
+function initCombatReplay(actors, options) {
+	time = 0;
+	if (options) {
+		if (options.inch) inch = options.inch;
+		if (options.pollingRate) pollingRate = options.pollingRate;
+		if (options.mapLink) bgImage.src = options.mapLink;
+	}
+	speed = 1;
+	timeSlider = document.getElementById('timeRange');
+	timeSliderDisplay = document.getElementById('timeRangeDisplay');
+	canvas = document.getElementById('replayCanvas');
+	ctx = canvas.getContext('2d');
+	bgLoaded = false;
+	animation = null;
+	prevTime = 0;
+
+	// canvas
+	ctx.imageSmoothingEnabled = true;
+	ctx.imageSmoothingQuality = 'high';
+
+	createAllActors(actors);
+}
 
 // Animation methods
 function animateCanvas(noRequest) {
@@ -65,10 +89,6 @@ function animateCanvas(noRequest) {
         animation = requestAnimationFrame(animateCanvas);
     }
 }
-bgImage.onload = function () {
-    animateCanvas();
-    bgLoaded = true;
-};
 
 function startAnimate() {
     if (animation === null && times.length > 0) {
@@ -578,9 +598,7 @@ class LineMechanicDrawable extends MechanicDrawable {
     }
 }
 
-let actors = ['${actors}'];
-
-function createAllActors() {
+function createAllActors(actors) {
     for (let i = 0; i < actors.length; i++) {
         const actor = actors[i];
         switch (actor.Type) {
@@ -619,5 +637,3 @@ function createAllActors() {
         }
     }
 }
-createAllActors();
-bgImage.src = "'${mapLink}'";
