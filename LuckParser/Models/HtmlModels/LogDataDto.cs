@@ -17,15 +17,15 @@ namespace LuckParser.Models.HtmlModels
         [DataMember(Order = 3)]
         public readonly List<PhaseDto> phases = new List<PhaseDto>();
         [DataMember(Order = 4)]
-        public List<BoonDto> boons;
+        public List<long> boons;
         [DataMember(Order = 5)]
-        public List<BoonDto> offBuffs;
+        public List<long> offBuffs;
         [DataMember(Order = 6)]
-        public List<BoonDto> defBuffs;
+        public List<long> defBuffs;
         [DataMember(Order = 10)]
-        public Dictionary<string, List<BoonDto>> persBuffs;
+        public Dictionary<string, List<long>> persBuffs;
         [DataMember]
-        public List<BoonDto> conditions;
+        public List<long> conditions;
         [DataMember(Order = 7)]
         public List<MechanicDto> mechanicGraphs;
         [DataMember(Order = 8)]

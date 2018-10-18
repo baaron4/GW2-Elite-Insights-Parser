@@ -22,6 +22,7 @@ namespace LuckParser.Controllers
         private readonly ParsedLog _log;
 
         private readonly Statistics _statistics;
+        private Dictionary<long, Boon> _usedBoons = new Dictionary<long, Boon>();
 
         public HTMLBuilderNew(ParsedLog log, SettingsContainer settings, Statistics statistics)
         {
@@ -404,7 +405,7 @@ namespace LuckParser.Controllers
             return list;
         }
 
-        private Dictionary<string, List<Boon>> BuildPersonalBoonData(Dictionary<string, List<BoonDto>> dict)
+        private Dictionary<string, List<Boon>> BuildPersonalBoonData(Dictionary<string, List<long>> dict)
         {
             Dictionary<string, List<Boon>> boonsBySpec = new Dictionary<string, List<Boon>>();
             // Collect all personal buffs by spec
@@ -431,7 +432,12 @@ namespace LuckParser.Controllers
             }
             foreach (var pair in boonsBySpec)
             {
-                dict[pair.Key] = AssembleBoons(pair.Value);
+                dict[pair.Key] = new List<long>();
+                foreach(Boon boon in pair.Value)
+                {
+                    dict[pair.Key].Add(boon.ID);
+                    _usedBoons[boon.ID] = boon;
+                }
             }
             return boonsBySpec;
         }
@@ -463,47 +469,76 @@ namespace LuckParser.Controllers
             return list;
         }
 
-        private List<List<object>> BuildExtraBuffData(int phaseIndex)
+        private List<Dictionary<long, List<object[]>>> BuildExtraBuffData(int phaseIndex)
         {
-            List<List<object>> data = new List<List<object>>();
+            List<Dictionary<long,List<object[]>>> data = new List<Dictionary<long, List<object[]>>>();
             PhaseData phase = _statistics.Phases[phaseIndex];
 
             foreach (Player player in _log.PlayerList)
             {
-                List<object> pData = new List<object>();
-                int count = 0;
+                Dictionary<long, List<object[]>> pData = new Dictionary<long, List<object[]>>();
                 data.Add(pData);
-                pData.Add(count++);
                 Dictionary<long, List<AbstractMasterPlayer.ExtraBoonData>> extraBoonDataAll = player.GetExtraBoonData(_log, null);
                 foreach (var pair in extraBoonDataAll)
                 {
                     var extraData = pair.Value[phaseIndex];
-                    pData.Add(new object[]
+                    if (pData.TryGetValue(pair.Key, out var list))
+                    {
+                        list.Add(
+                                new object[]
+                                {
+                                    extraData.HitCount,
+                                    extraData.TotalHitCount,
+                                    extraData.DamageGain,
+                                    extraData.Percent
+                                }
+                            );
+                    }
+                    else
+                    {
+                        pData[pair.Key] = new List<object[]>()
                         {
-                            pair.Key,
-                            extraData.HitCount,
-                            extraData.TotalHitCount,
-                            extraData.DamageGain,
-                            extraData.Percent
-                        }
-                    );
+                            new object[]
+                            {
+                                extraData.HitCount,
+                                extraData.TotalHitCount,
+                                extraData.DamageGain,
+                                extraData.Percent
+                            }
+                        };
+                    }
                 }
                 foreach (Boss target in phase.Targets)
                 {
-                    pData.Add(count++);
                     Dictionary<long, List<AbstractMasterPlayer.ExtraBoonData>> extraBoonDataBoss = player.GetExtraBoonData(_log, target);
                     foreach (var pair in extraBoonDataBoss)
                     {
                         var extraData = pair.Value[phaseIndex];
-                        pData.Add(new object[]
-                         {
-                            pair.Key,
-                            extraData.HitCount,
-                            extraData.TotalHitCount,
-                            extraData.DamageGain,
-                            extraData.Percent
-                         }
-                     );
+                        if (pData.TryGetValue(pair.Key, out var list))
+                        {
+                            list.Add(
+                                    new object[]
+                                    {
+                                    extraData.HitCount,
+                                    extraData.TotalHitCount,
+                                    extraData.DamageGain,
+                                    extraData.Percent
+                                    }
+                                );
+                        }
+                        else
+                        {
+                            pData[pair.Key] = new List<object[]>()
+                            {
+                                new object[]
+                                {
+                                    extraData.HitCount,
+                                    extraData.TotalHitCount,
+                                    extraData.DamageGain,
+                                    extraData.Percent
+                                }
+                            };
+                        }
                     }
                 }
             }
@@ -1429,7 +1464,7 @@ namespace LuckParser.Controllers
             data.graphs.Add(new GraphDto("s30", "30s"));
             data.graphs.Add(new GraphDto("phase", "Phase"));
 
-            Dictionary<string, List<BoonDto>> persBuffs = new Dictionary<string, List<BoonDto>>();
+            Dictionary<string, List<long>> persBuffs = new Dictionary<string, List<long>>();
             Dictionary<string, List<Boon>> persBuffDict = BuildPersonalBoonData(persBuffs);
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
@@ -1506,10 +1541,30 @@ namespace LuckParser.Controllers
             }
 
 
-            data.boons = AssembleBoons(_statistics.PresentBoons);
-            data.conditions = AssembleBoons(_statistics.PresentConditions);
-            data.offBuffs = AssembleBoons(_statistics.PresentOffbuffs);
-            data.defBuffs = AssembleBoons(_statistics.PresentDefbuffs);
+            data.boons = new List<long>();
+            foreach (Boon boon in _statistics.PresentBoons)
+            {
+                data.boons.Add(boon.ID);
+                _usedBoons[boon.ID] = boon;
+            }
+            data.conditions = new List<long>();
+            foreach (Boon boon in _statistics.PresentConditions)
+            {
+                data.conditions.Add(boon.ID);
+                _usedBoons[boon.ID] = boon;
+            }
+            data.offBuffs = new List<long>();
+            foreach (Boon boon in _statistics.PresentOffbuffs)
+            {
+                data.offBuffs.Add(boon.ID);
+                _usedBoons[boon.ID] = boon;
+            }
+            data.defBuffs = new List<long>();
+            foreach (Boon boon in _statistics.PresentDefbuffs)
+            {
+                data.defBuffs.Add(boon.ID);
+                _usedBoons[boon.ID] = boon;
+            }
             data.persBuffs = persBuffs;
             data.mechanicGraphs = BuildMechanicGraphData();
 
@@ -1533,17 +1588,16 @@ namespace LuckParser.Controllers
         private string BuildDetails()
         {
             Dictionary<long, SkillItem> usedSkills = new Dictionary<long, SkillItem>();
-            Dictionary<long, Boon> usedBoons = new Dictionary<long, Boon>();
             string scripts = "";
             for (var i = 0; i < _log.PlayerList.Count; i++) {
                 Player player = _log.PlayerList[i];
-                string playerScript = "data.players[" + i + "].details = " + ToJson(BuildPlayerData(player, usedSkills, usedBoons), typeof(PlayerDetailsDto)) + ";\r\n";
+                string playerScript = "data.players[" + i + "].details = " + ToJson(BuildPlayerData(player, usedSkills, _usedBoons), typeof(PlayerDetailsDto)) + ";\r\n";
                 scripts += playerScript;
             }
             for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
             {
                 Boss boss = _log.FightData.Logic.Targets[i];
-                string bossScript = "data.bosses[" + i + "].details = " + ToJson(BuildBossData(boss, usedSkills, usedBoons), typeof(PlayerDetailsDto)) + ";\r\n";
+                string bossScript = "data.bosses[" + i + "].details = " + ToJson(BuildBossData(boss, usedSkills, _usedBoons), typeof(PlayerDetailsDto)) + ";\r\n";
                 scripts += bossScript;
             }
             string skillsScript = "var usedSkills = " + ToJson(AssembleSkills(usedSkills.Values), typeof(ICollection<SkillDto>)) + ";" +
@@ -1551,7 +1605,7 @@ namespace LuckParser.Controllers
                 "$.each(usedSkills, function(i, skill) {" +
                 "data.skillMap['s'+skill.id]=skill;" +
                 "});";
-            string boonsScript = "var usedBoons = " + ToJson(AssembleBoons(usedBoons.Values), typeof(ICollection<BoonDto>)) + ";" +
+            string boonsScript = "var usedBoons = " + ToJson(AssembleBoons(_usedBoons.Values), typeof(ICollection<BoonDto>)) + ";" +
                 "data.boonMap = {};" +
                 "$.each(usedBoons, function(i, boon) {" +
                 "data.boonMap['b'+boon.id]=boon;" +
