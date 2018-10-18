@@ -217,7 +217,7 @@ namespace LuckParser.Models
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.ConjuredAmalgamate:
-                    List<CombatItem> shield = GetFilteredList(log, 53003, boss.InstID);
+                    List<CombatItem> shield = GetFilteredList(log, 53003, boss);
                     int shieldStart = 0;
                     foreach (CombatItem c in shield)
                     {
