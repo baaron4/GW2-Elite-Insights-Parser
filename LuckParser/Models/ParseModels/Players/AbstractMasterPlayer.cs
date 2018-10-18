@@ -617,14 +617,10 @@ namespace LuckParser.Models.ParseModels
 
                 }
                 else if (state == ParseEnum.StateChange.WeaponSwap && c.Time < agentEnd)
-                {//Weapon swap
-                    if ((int)c.DstAgent == 4 || (int)c.DstAgent == 5)
-                    {
-                        long time = c.Time - timeStart;
-                        CastLog swapLog = new CastLog(time, SkillItem.WeaponSwapId, (int)c.DstAgent, c.IsActivation);
-                        CastLogs.Add(swapLog);
-                    }
-
+                {
+                    long time = c.Time - timeStart;
+                    CastLog swapLog = new CastLog(time, SkillItem.WeaponSwapId, (int)c.DstAgent, c.IsActivation);
+                    CastLogs.Add(swapLog);
                 }
             }
         }
