@@ -51,7 +51,7 @@ namespace LuckParser.Models
             switch (mob.ID)
             {
                 case (ushort)Jade:
-                    List<CombatItem> shield = GetFilteredList(log, 38155, mob.InstID);
+                    List<CombatItem> shield = GetFilteredList(log, 38155, mob);
                     int shieldStart = 0;
                     int shieldRadius = 100;
                     foreach (CombatItem c in shield)
