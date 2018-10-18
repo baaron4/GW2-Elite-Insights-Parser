@@ -95,7 +95,7 @@ namespace LuckParser.Models
                     break;
                 case (ushort)ConjuredShield:
                     CombatReplay replay = mob.CombatReplay;
-                    List<CombatItem> shield = GetFilteredList(log, 53003, mob.InstID);
+                    List<CombatItem> shield = GetFilteredList(log, 53003, mob);
                     int shieldStart = 0;
                     foreach (CombatItem c in shield)
                     {
