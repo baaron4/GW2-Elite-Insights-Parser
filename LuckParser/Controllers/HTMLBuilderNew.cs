@@ -982,13 +982,15 @@ namespace LuckParser.Controllers
                     BoonChartDataDto graph = BuildPlayerTabBoonGraph(bgm, phase);
                     if (graph != null) list.Add(graph);
                 }
-                boonGraphData = _log.Boss.GetBoonGraphs(_log);
-                //TODO add to used boon list?
-                foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName == "Compromised" || x.BoonName == "Unnatural Signet" || x.BoonName == "Fractured - Enemy"))
+                if (p.GetType() == typeof(Player))
                 {
-                    BoonChartDataDto graph = BuildPlayerTabBoonGraph(bgm, phase);
-                    if (graph != null) list.Add(graph);
-                }
+                    boonGraphData = _log.Boss.GetBoonGraphs(_log);
+                    foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName == "Compromised" || x.BoonName == "Unnatural Signet" || x.BoonName == "Fractured - Enemy"))
+                    {
+                        BoonChartDataDto graph = BuildPlayerTabBoonGraph(bgm, phase);
+                        if (graph != null) list.Add(graph);
+                    }
+                }               
             }
             return list;
         }
@@ -1034,10 +1036,10 @@ namespace LuckParser.Controllers
                 {
                     time = entry.Item2 / 1000.0,
                     duration = entry.Item3 / 1000.0,
-                    name = entry.Item1.Name,
-                    icon = entry.Item1.Link,
+                    id = entry.Item1.ID,
                     dimished = entry.Item1.ID == 46587 || entry.Item1.ID == 46668
                 };
+                _usedBoons[entry.Item1.ID] = entry.Item1;
                 list.Add(dto);
             }
 
@@ -1084,7 +1086,7 @@ namespace LuckParser.Controllers
         private List<List<int[]>> BuildEnemyMechanicData(int phaseIndex)
         {
             List<List<int[]>> list = new List<List<int[]>>();
-            HashSet<Mechanic> presMech = _log.MechanicData.GetPresentMechanics(0);
+            HashSet<Mechanic> presMech = _log.MechanicData.GetPresentEnemyMechs(0);
             PhaseData phase = _statistics.Phases[phaseIndex];
             foreach (AbstractMasterPlayer p in _log.MechanicData.GetEnemyList(0))
             {
@@ -1142,23 +1144,42 @@ namespace LuckParser.Controllers
             {
                 List<List<double>> phaseData = new List<List<double>>();
                 list.Add(phaseData);
-                Dictionary<long, int> playerIndexByInstId = new Dictionary<long, int>();
-                for (var p = 0; p < _log.PlayerList.Count; p++)
+                if (!enemyMechanic)
                 {
-                    playerIndexByInstId.Add(_log.PlayerList[p].InstID, p);
+                    Dictionary<AbstractMasterPlayer, int> playerIndex = new Dictionary<AbstractMasterPlayer, int>();
+                    for (var p = 0; p < _log.PlayerList.Count; p++)
+                    {
+                        playerIndex.Add(_log.PlayerList[p], p);
+                        phaseData.Add(new List<double>());
+                    }
+                    foreach (MechanicLog ml in mechanicLogs.Where(x => phase.InInterval(x.Time)))
+                    {
+                        double time = (ml.Time - phase.Start) / 1000.0;
+                        if (playerIndex.TryGetValue(ml.Player, out int p))
+                        {
+                            phaseData[p].Add(time);
+                        }
+                    }
+                } else
+                {
+                    Dictionary<AbstractMasterPlayer, int> targetIndex = new Dictionary<AbstractMasterPlayer, int>();
+                    for (var p = 0; p < phase.Targets.Count; p++)
+                    {
+                        targetIndex.Add(phase.Targets[p], p);
+                        phaseData.Add(new List<double>());
+                    }
                     phaseData.Add(new List<double>());
-                }
-                playerIndexByInstId.Add(_log.Boss.InstID, _log.PlayerList.Count);
-                phaseData.Add(new List<double>());
-                foreach (MechanicLog ml in mechanicLogs.Where(x => phase.InInterval(x.Time)))
-                {
-                    double time = (ml.Time - phase.Start) / 1000.0;
-                    if (playerIndexByInstId.TryGetValue(ml.Player.InstID, out int p))
+                    foreach (MechanicLog ml in mechanicLogs.Where(x => phase.InInterval(x.Time)))
                     {
-                        phaseData[p].Add(time);
-                    } else
-                    {
-                        phaseData[phaseData.Count - 1].Add(time);
+                        double time = (ml.Time - phase.Start) / 1000.0;
+                        if (targetIndex.TryGetValue(ml.Player, out int p))
+                        {
+                            phaseData[p].Add(time);
+                        }
+                        else
+                        {
+                            phaseData[phaseData.Count - 1].Add(time);
+                        }
                     }
                 }
             }
