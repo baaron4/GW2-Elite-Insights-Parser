@@ -223,10 +223,14 @@ namespace LuckParser.Controllers
                     return "https://i.imgur.com/BxbsRCI.png";
                 case AncientInvokedHydra:
                     return "https://i.imgur.com/YABLiBz.png";
+                case IcebornHydra:
+                    return "https://i.imgur.com/LoYMBRU.png";
+                case IceElemental:
+                    return "https://i.imgur.com/pEkBeNp.png";
                 case WyvernMatriarch:
-                    return "https://i.imgur.com/vjjNSpI.png";
-                case WyvernPatriarch:
                     return "https://i.imgur.com/kLKLSfv.png";
+                case WyvernPatriarch:
+                    return "https://i.imgur.com/vjjNSpI.png"; 
                 case ApocalypseBringer:
                     return "https://i.imgur.com/0LGKCn2.png";
                 case ConjuredGreatsword:

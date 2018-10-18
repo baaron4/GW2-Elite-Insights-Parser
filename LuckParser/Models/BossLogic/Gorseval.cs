@@ -251,6 +251,17 @@ namespace LuckParser.Models
                             }
                         }
                     }
+                    List<CastLog> slam = cls.Where(x => x.SkillId == 31875).ToList();
+                    foreach (CastLog c in slam)
+                    {
+                        int start = (int)c.Time;
+                        int impactPoint = 1185;
+                        int impactTime = start + impactPoint;
+                        int end = (int)Math.Min(start + c.ActualDuration, impactTime);
+                        int radius = 320;
+                        replay.Actors.Add(new CircleActor(true, 0, radius, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(boss)));
+                        replay.Actors.Add(new CircleActor(true, 0, radius, new Tuple<int, int>(impactTime - 10, impactTime + 100), "rgba(255, 0, 0, 0.4)", new AgentConnector(boss)));
+                    }
                     break;
                 case (ushort)ChargedSoul:
                     Tuple<int, int> lifespan = new Tuple<int, int>((int)replay.TimeOffsets.Item1, (int)replay.TimeOffsets.Item2);

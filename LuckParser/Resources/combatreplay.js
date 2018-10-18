@@ -503,7 +503,7 @@ class RotatedRectangleMechanicDrawable extends RectangleMechanicDrawable {
 class PieMechanicDrawable extends MechanicDrawable {
     constructor(start, end, fill, growing, color, direction, openingAngle, radius, connectedTo) {
         super(start, end, fill, growing, color, connectedTo);
-        this.direction = direction * Math.PI / 180;
+        this.direction = -direction * Math.PI / 180; // positive mathematical direction, reversed since JS has downwards increasing y axis
         this.openingAngle = 0.5 * openingAngle * Math.PI / 180;
         this.radius = inch * radius;
         this.dx = Math.cos(this.direction - this.openingAngle) * this.radius;
