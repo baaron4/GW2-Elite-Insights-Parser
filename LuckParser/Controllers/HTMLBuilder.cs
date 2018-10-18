@@ -102,7 +102,7 @@ namespace LuckParser.Controllers
                                 "name: '" + p.Character + " TDPS'" + "},");
                     }
                     sw.Write("{");
-                    maxDPS = Math.Max(maxDPS, HTMLHelper.WriteDPSPlots(sw, GraphHelper.GetBossDPSGraph(_log, p, phaseIndex, phase, mode, _log.Boss), totalDpsAllPlayers));
+                    maxDPS = Math.Max(maxDPS, HTMLHelper.WriteDPSPlots(sw, GraphHelper.GetTargetDPSGraph(_log, p, phaseIndex, phase, mode, _log.Boss), totalDpsAllPlayers));
                     sw.Write("mode: 'lines'," +
                             "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.Prof) + "'}," +
                             "name: '" + p.Character + " DPS'" +
@@ -139,15 +139,15 @@ namespace LuckParser.Controllers
                         if (playersIds.Contains(ml.Player.InstID))
                         {
                             double time = (ml.Time - phase.Start) / 1000.0;
-                            Point check = GraphHelper.GetBossDPSGraph(_log, ml.Player, phaseIndex, phase, mode, _log.Boss).LastOrDefault(x => x.X <= time);
+                            Point check = GraphHelper.GetTargetDPSGraph(_log, ml.Player, phaseIndex, phase, mode, _log.Boss).LastOrDefault(x => x.X <= time);
                             if (check == Point.Empty)
                             {
-                                check = new Point(0, GraphHelper.GetBossDPSGraph(_log, ml.Player, phaseIndex, phase, mode, _log.Boss).Last().Y);
+                                check = new Point(0, GraphHelper.GetTargetDPSGraph(_log, ml.Player, phaseIndex, phase, mode, _log.Boss).Last().Y);
                             } else
                             {
                                 int time1 = check.X;
                                 int y1 = check.Y;
-                                check = GraphHelper.GetBossDPSGraph(_log, ml.Player, phaseIndex, phase, mode, _log.Boss).FirstOrDefault(x => x.X >= time);
+                                check = GraphHelper.GetTargetDPSGraph(_log, ml.Player, phaseIndex, phase, mode, _log.Boss).FirstOrDefault(x => x.X >= time);
                                 if (check == Point.Empty)
                                 {
                                     check.Y = y1;
@@ -166,15 +166,15 @@ namespace LuckParser.Controllers
                         else
                         {
                             int timeInS = (int)(ml.Time / 1000);
-                            if (timeInS >= _statistics.BossHealth[_log.Boss].Length)
+                            if (timeInS >= _statistics.TargetHealth[_log.Boss].Length)
                             {
                                 yValue = 0;
                             } else
                             {
-                                yValue = (_statistics.BossHealth[_log.Boss][timeInS] / 100.0) * maxDPS;
-                                if (timeInS < _statistics.BossHealth[_log.Boss].Length - 1)
+                                yValue = (_statistics.TargetHealth[_log.Boss][timeInS] / 100.0) * maxDPS;
+                                if (timeInS < _statistics.TargetHealth[_log.Boss].Length - 1)
                                 {
-                                    double nextY = (_statistics.BossHealth[_log.Boss][timeInS + 1] / 100.0) * maxDPS;
+                                    double nextY = (_statistics.TargetHealth[_log.Boss][timeInS + 1] / 100.0) * maxDPS;
                                     yValue = ((ml.Time / 1000.0) - timeInS) * (nextY - yValue) + yValue;
                                 }
                             }
@@ -241,7 +241,7 @@ namespace LuckParser.Controllers
                 if (maxDPS > 0)
                 {
                     sw.Write("{");
-                    HTMLHelper.WriteBossHealthGraph(sw, maxDPS, phase, _statistics.BossHealth[_log.Boss]);
+                    HTMLHelper.WriteBossHealthGraph(sw, maxDPS, phase, _statistics.TargetHealth[_log.Boss]);
                     sw.Write("}");
                 }
                 else
@@ -487,7 +487,7 @@ namespace LuckParser.Controllers
                 sw.Write("<tbody>");
                 foreach (Player player in _log.PlayerList)
                 {
-                    Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[_log.Boss][player][phaseIndex];
+                    Statistics.FinalDPS dpsBoss = _statistics.DpsTarget[_log.Boss][player][phaseIndex];
                     Statistics.FinalDPS dpsAll = _statistics.DpsAll[player][phaseIndex];
                     Statistics.FinalStatsAll statsAll = _statistics.StatsAll[player][phaseIndex];
                     //gather data for footer
@@ -765,8 +765,8 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in _log.PlayerList)
                     {
-                        Statistics.FinalStats statsBoss = _statistics.StatsBoss[_log.Boss][player][phaseIndex];
-                        Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[_log.Boss][player][phaseIndex];
+                        Statistics.FinalStats statsBoss = _statistics.StatsTarget[_log.Boss][player][phaseIndex];
+                        Statistics.FinalDPS dpsBoss = _statistics.DpsTarget[_log.Boss][player][phaseIndex];
                         Statistics.FinalStatsAll statsAll = _statistics.StatsAll[player][phaseIndex];
 
                         //gather data for footer
@@ -1840,19 +1840,19 @@ namespace LuckParser.Controllers
                                          //Adding dps axis
                                             sw.Write("{");
                                             {
-                                                HTMLHelper.WritePlayerTabDPSGraph(sw, "Boss DPS", GraphHelper.GetBossDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.Full, _log.Boss), p);
+                                                HTMLHelper.WritePlayerTabDPSGraph(sw, "Boss DPS", GraphHelper.GetTargetDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.Full, _log.Boss), p);
                                             }
                                             sw.Write("},");
                                             if (_settings.Show10s)
                                             {
                                                 sw.Write("{");
-                                                HTMLHelper.WritePlayerTabDPSGraph(sw, "Boss DPS - 10s", GraphHelper.GetBossDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S10, _log.Boss), p);
+                                                HTMLHelper.WritePlayerTabDPSGraph(sw, "Boss DPS - 10s", GraphHelper.GetTargetDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S10, _log.Boss), p);
                                                 sw.Write("},");
                                             }
                                             if (_settings.Show30s)
                                             {
                                                 sw.Write("{");
-                                                HTMLHelper.WritePlayerTabDPSGraph(sw, "Boss DPS - 30s", GraphHelper.GetBossDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S30, _log.Boss), p);
+                                                HTMLHelper.WritePlayerTabDPSGraph(sw, "Boss DPS - 30s", GraphHelper.GetTargetDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S30, _log.Boss), p);
                                                 sw.Write("},");
                                             }
 
@@ -2422,7 +2422,7 @@ namespace LuckParser.Controllers
         /// <param name="phaseIndex"></param>
         private void CreateDMGDistTable(StreamWriter sw, Player p, bool toBoss, int phaseIndex)
         {
-            Statistics.FinalDPS dps = toBoss ? _statistics.DpsBoss[_log.Boss][p][phaseIndex] : _statistics.DpsAll[p][phaseIndex];
+            Statistics.FinalDPS dps = toBoss ? _statistics.DpsTarget[_log.Boss][p][phaseIndex] : _statistics.DpsAll[p][phaseIndex];
             _CreateDMGDistTable(dps, sw, p, toBoss, phaseIndex);
         }
 
@@ -2434,7 +2434,7 @@ namespace LuckParser.Controllers
         /// <param name="phaseIndex"></param>
         private void CreateDMGBossDistTable(StreamWriter sw, Boss p, int phaseIndex)
         {
-            Statistics.FinalDPS dps = _statistics.BossDps[_log.Boss][phaseIndex];
+            Statistics.FinalDPS dps = _statistics.TargetDps[_log.Boss][phaseIndex];
             _CreateDMGDistTable(dps, sw, p, false, phaseIndex);
         }
 
@@ -2498,7 +2498,7 @@ namespace LuckParser.Controllers
         /// <param name="phaseIndex"></param>
         private void CreateDMGDistTable(StreamWriter sw, Player p, Minions minions, bool toBoss, int phaseIndex)
         {
-            Statistics.FinalDPS dps = toBoss ? _statistics.DpsBoss[_log.Boss][p][phaseIndex] : _statistics.DpsAll[p][phaseIndex];
+            Statistics.FinalDPS dps = toBoss ? _statistics.DpsTarget[_log.Boss][p][phaseIndex] : _statistics.DpsAll[p][phaseIndex];
 
             _CreateDMGDistTable(dps, sw, p, minions, toBoss, phaseIndex);
         }
@@ -2512,7 +2512,7 @@ namespace LuckParser.Controllers
         /// <param name="phaseIndex"></param>
         private void CreateDMGBossDistTable(StreamWriter sw, Boss p, Minions minions, int phaseIndex)
         {
-            Statistics.FinalDPS dps = _statistics.BossDps[_log.Boss][phaseIndex];
+            Statistics.FinalDPS dps = _statistics.TargetDps[_log.Boss][phaseIndex];
             _CreateDMGDistTable(dps, sw, p, minions, false, phaseIndex);
         }
 
@@ -2995,7 +2995,7 @@ namespace LuckParser.Controllers
         {
             List<PhaseData> phases = _statistics.Phases;
             long fightDuration = phases[phaseIndex].GetDuration();
-            Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[_log.Boss][phaseIndex];
+            Dictionary<long, Statistics.FinalTargetBoon> conditions = _statistics.TargetConditions[_log.Boss][phaseIndex];
             bool hasBoons = false;
             foreach (Boon boon in _statistics.PresentBoons)
             {
@@ -3029,7 +3029,7 @@ namespace LuckParser.Controllers
                     sw.Write("<tr>");
                     {
                         
-                        sw.Write("<td style=\"width: 275px;\" data-toggle=\"tooltip\" title=\"Average number of conditions: " + Math.Round(_statistics.AvgBossConditions[_log.Boss][phaseIndex], 1) + "\">" + boss.Character + " </td>");
+                        sw.Write("<td style=\"width: 275px;\" data-toggle=\"tooltip\" title=\"Average number of conditions: " + Math.Round(_statistics.AvgTargetConditions[_log.Boss][phaseIndex], 1) + "\">" + boss.Character + " </td>");
                         foreach (Boon boon in _statistics.PresentConditions)
                         {
                             if (boon.Type == Boon.BoonType.Duration)
@@ -3137,7 +3137,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + player.Character + " </td>");
                             foreach (Boon boon in _statistics.PresentConditions)
                             {
-                                Statistics.FinalBossBoon toUse = conditions[boon.ID];
+                                Statistics.FinalTargetBoon toUse = conditions[boon.ID];
                                 if (boon.Type == Boon.BoonType.Duration)
                                 {
                                     sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
@@ -3230,7 +3230,7 @@ namespace LuckParser.Controllers
                                 sw.Write("},");
                             }
                             sw.Write("{");
-                            HTMLHelper.WriteBossHealthGraph(sw, GraphHelper.GetTotalDPSGraph(_log, _log.Boss, phaseIndex, phase, GraphHelper.GraphMode.Full).Max(x => x.Y), phase, _statistics.BossHealth[_log.Boss], "y3");
+                            HTMLHelper.WriteBossHealthGraph(sw, GraphHelper.GetTotalDPSGraph(_log, _log.Boss, phaseIndex, phase, GraphHelper.GraphMode.Full).Max(x => x.Y), phase, _statistics.TargetHealth[_log.Boss], "y3");
                             sw.Write("}");
                         }
                         sw.Write("];");

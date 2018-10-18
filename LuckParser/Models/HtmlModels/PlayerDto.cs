@@ -20,7 +20,7 @@ namespace LuckParser.Models.HtmlModels
         [DataMember] public uint tough;
         [DataMember] public readonly List<MinionDto> minions = new List<MinionDto>();
         [DataMember] public string[] weapons;
-        [DataMember] public string colBoss;
+        [DataMember] public string colTarget;
         [DataMember] public string colCleave;
         [DataMember] public string colTotal;
         [DataMember(EmitDefaultValue = false)] public List<DeathRecapDto> deathRecap;

@@ -115,7 +115,7 @@ namespace LuckParser.Controllers
         /// <param name="phase"></param>
         /// <param name="mode"></param>
         /// <returns></returns>
-        public static List<Point> GetBossDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phaseIndex, PhaseData phase, GraphMode mode, Boss boss)
+        public static List<Point> GetTargetDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phaseIndex, PhaseData phase, GraphMode mode, Boss boss)
         {
             return GetDPSGraph(log, p, phaseIndex, phase, boss, mode);
         }
@@ -151,7 +151,7 @@ namespace LuckParser.Controllers
                 return p.GetDPSGraph(askedId);
             }
             List<Point> totalPoints = GetTotalDPSGraph(log, p, phaseIndex, phase, mode);
-            List<Point> bossPoints = GetBossDPSGraph(log, p, phaseIndex, phase, mode, boss);
+            List<Point> bossPoints = GetTargetDPSGraph(log, p, phaseIndex, phase, mode, boss);
             List<Point> cleavePoints = new List<Point>();
             for (int i = 0; i < bossPoints.Count; i++)
             {

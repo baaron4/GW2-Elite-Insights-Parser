@@ -198,10 +198,10 @@ namespace LuckParser.Controllers
                     : 10000;
                 boss.FinalHealth = target.Health * (finalBossHealth * 0.01);
                 boss.HealthPercentBurned = 100.0 - finalBossHealth * 0.01;
-                boss.AvgBoons = _statistics.AvgBossBoons[target];
-                boss.AvgConditions = _statistics.AvgBossConditions[target];
-                boss.Dps = BuildDPS(_statistics.BossDps[target]);
-                boss.Buffs = BuildBossBuffs(_statistics.BossConditions[target], target);
+                boss.AvgBoons = _statistics.AvgTargetBoons[target];
+                boss.AvgConditions = _statistics.AvgTargetConditions[target];
+                boss.Dps = BuildDPS(_statistics.TargetDps[target]);
+                boss.Buffs = BuildBossBuffs(_statistics.TargetConditions[target], target);
                 boss.HitboxHeight = target.HitboxHeight;
                 boss.HitboxWidth = target.HitboxWidth;
                 boss.Dps1s = Build1SDPS(target, null);
@@ -240,9 +240,9 @@ namespace LuckParser.Controllers
                     Dps1s = Build1SDPS(player, null),
                     TargetDps1s = Build1SDPS(player),
                     DpsAll = BuildDPS(_statistics.DpsAll[player]),
-                    DpsBoss = BuildDPSBoss(_statistics.DpsBoss, player),
+                    DpsBoss = BuildDPSBoss(_statistics.DpsTarget, player),
                     StatsAll = BuildStatsAll(_statistics.StatsAll[player]),
-                    StatsBoss = BuildStatsBoss(_statistics.StatsBoss, player),
+                    StatsBoss = BuildStatsBoss(_statistics.StatsTarget, player),
                     Defenses = BuildDefenses(_statistics.Defenses[player]),
                     Rotation = BuildRotation(player.GetCastLogs(_log, 0, _log.FightData.FightDuration)),
                     Support = BuildSupport(_statistics.Support[player]),
@@ -512,7 +512,7 @@ namespace LuckParser.Controllers
         private List<int> Build1SDPS(AbstractMasterPlayer player, Boss target)
         {
             List<int> res = new List<int>();
-            foreach (var pt in GraphHelper.GetBossDPSGraph(_log, player, 0, _statistics.Phases[0], GraphHelper.GraphMode.S1, target))
+            foreach (var pt in GraphHelper.GetTargetDPSGraph(_log, player, 0, _statistics.Phases[0], GraphHelper.GraphMode.S1, target))
             {
                 res.Add(pt.Y);
             }
@@ -641,7 +641,7 @@ namespace LuckParser.Controllers
 
         // Statistics to Json Converters ////////////////////////////////////////////////////
 
-        private bool ContainsBossBoon(long boon, Dictionary<long, Statistics.FinalBossBoon>[] statBoons)
+        private bool ContainsBossBoon(long boon, Dictionary<long, Statistics.FinalTargetBoon>[] statBoons)
         {
             for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
             {
@@ -653,7 +653,7 @@ namespace LuckParser.Controllers
             return false;
         }
 
-        private void MakePhaseBossBoon(JsonBossBuffs boon, int phase, Statistics.FinalBossBoon value)
+        private void MakePhaseBossBoon(JsonBossBuffs boon, int phase, Statistics.FinalTargetBoon value)
         {
             boon.Uptime[phase] = value.Uptime;
             boon.Presence[phase] = value.Presence;
@@ -671,7 +671,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        private Dictionary<long, JsonBossBuffs> BuildBossBuffs(Dictionary<long, Statistics.FinalBossBoon>[] statBoons, Boss boss)
+        private Dictionary<long, JsonBossBuffs> BuildBossBuffs(Dictionary<long, Statistics.FinalTargetBoon>[] statBoons, Boss boss)
         {
             int phases = _statistics.Phases.Count;
             var boons = new Dictionary<long, JsonBossBuffs>();

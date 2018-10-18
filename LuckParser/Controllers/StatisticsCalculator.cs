@@ -100,7 +100,7 @@ namespace LuckParser.Controllers
             }
             // boss health
             int seconds = (int)_statistics.Phases[0].GetDuration("s");
-            _statistics.BossHealth = new Dictionary<Boss, double[]>();
+            _statistics.TargetHealth = new Dictionary<Boss, double[]>();
             foreach (Boss boss in _log.FightData.Logic.Targets)
             {
                 double[] health = new double[seconds + 1];
@@ -125,7 +125,7 @@ namespace LuckParser.Controllers
                     }
                 }
                 for (; i <= seconds; i++) health[i] = curHealth;
-                _statistics.BossHealth[boss] = health;
+                _statistics.TargetHealth[boss] = health;
             }
             //
 
@@ -195,13 +195,13 @@ namespace LuckParser.Controllers
                     }
                     stats[player] = phaseDpsBoss;
                 }
-                _statistics.DpsBoss[target] = stats;
+                _statistics.DpsTarget[target] = stats;
                 FinalDPS[] phaseBossDps = new FinalDPS[_statistics.Phases.Count];
                 for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
                 {
                     phaseBossDps[phaseIndex] = GetFinalDPS(target, phaseIndex, null);
                 }
-                _statistics.BossDps[target] = phaseBossDps;
+                _statistics.TargetDps[target] = phaseBossDps;
             }
         }
 
@@ -470,7 +470,7 @@ namespace LuckParser.Controllers
                     }
                     phaseBossStats[player] = stats;
                 }
-                _statistics.StatsBoss[target] = phaseBossStats;
+                _statistics.StatsTarget[target] = phaseBossStats;
 
 
                 double[] avgBoons = new double[_statistics.Phases.Count];
@@ -493,8 +493,8 @@ namespace LuckParser.Controllers
                     avgCondi /= _statistics.Phases[phaseIndex].GetDuration();
                     avgCondis[phaseIndex] = avgCondi;
                 }
-                _statistics.AvgBossBoons[target] = avgBoons;
-                _statistics.AvgBossConditions[target] = avgCondis;
+                _statistics.AvgTargetBoons[target] = avgBoons;
+                _statistics.AvgTargetConditions[target] = avgCondis;
             }
             foreach (Player player in _log.PlayerList)
             {
@@ -732,11 +732,11 @@ namespace LuckParser.Controllers
         {
             foreach (Boss target in _log.FightData.Logic.Targets)
             {
-                Dictionary<long, FinalBossBoon>[] stats = new Dictionary<long, FinalBossBoon>[_statistics.Phases.Count];
+                Dictionary<long, FinalTargetBoon>[] stats = new Dictionary<long, FinalTargetBoon>[_statistics.Phases.Count];
                 for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
                 {
                     BoonDistribution boonDistribution = target.GetBoonDistribution(_log, phaseIndex);
-                    Dictionary<long, FinalBossBoon> rates = new Dictionary<long, FinalBossBoon>();
+                    Dictionary<long, FinalTargetBoon> rates = new Dictionary<long, FinalTargetBoon>();
                     Dictionary<long, long> boonPresence = target.GetBoonPresence(_log, phaseIndex);
                     Dictionary<long, long> condiPresence = target.GetCondiPresence(_log, phaseIndex);
 
@@ -745,7 +745,7 @@ namespace LuckParser.Controllers
 
                     foreach (Boon boon in target.BoonToTrack)
                     {
-                        FinalBossBoon condition = new FinalBossBoon(_log.PlayerList);
+                        FinalTargetBoon condition = new FinalTargetBoon(_log.PlayerList);
                         rates[boon.ID] = condition;
                         if (boonDistribution.ContainsKey(boon.ID))
                         {
@@ -783,7 +783,7 @@ namespace LuckParser.Controllers
                     }
                     stats[phaseIndex] = rates;
                 }
-                _statistics.BossConditions[target] = stats;
+                _statistics.TargetConditions[target] = stats;
             }         
         }
         /// <summary>
