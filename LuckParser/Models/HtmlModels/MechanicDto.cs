@@ -29,6 +29,9 @@ namespace LuckParser.Models.HtmlModels
         public bool enemyMech;
 
         [DataMember(EmitDefaultValue = false)]
+        public bool playerMech;
+
+        [DataMember(EmitDefaultValue = false)]
         public bool visible;
 
         [DataMember]

@@ -1113,7 +1113,7 @@ namespace LuckParser.Controllers
             return list;
         }
         
-        private List<MechanicDto> BuildMechanicGraphData()
+        private List<MechanicDto> BuildMechanics()
         {
             List<MechanicDto> mechanicDtos = new List<MechanicDto>();
             HashSet<Mechanic> playerMechs = _log.MechanicData.GetPresentPlayerMechs(0);
@@ -1130,6 +1130,7 @@ namespace LuckParser.Controllers
                     symbol = mech.PlotlySymbol,
                     visible = (mech.SkillId == -2 || mech.SkillId == -3),
                     data = BuildMechanicGraphPointData(mechanicLogs, mech.IsEnemyMechanic),
+                    playerMech = playerMechs.Contains(mech),
                     enemyMech = enemyMechs.Contains(mech)
                 };
                 mechanicDtos.Add(dto);
@@ -1587,7 +1588,7 @@ namespace LuckParser.Controllers
                 _usedBoons[boon.ID] = boon;
             }
             data.persBuffs = persBuffs;
-            data.mechanicGraphs = BuildMechanicGraphData();
+            data.mechanics = BuildMechanics();
 
 
             return ToJson(data, typeof(LogDataDto));

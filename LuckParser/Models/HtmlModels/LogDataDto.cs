@@ -27,7 +27,7 @@ namespace LuckParser.Models.HtmlModels
         [DataMember]
         public List<long> conditions;
         [DataMember(Order = 7)]
-        public List<MechanicDto> mechanicGraphs;
+        public List<MechanicDto> mechanics;
         [DataMember(Order = 8)]
         public LogFlags flags = new LogFlags();
     }
