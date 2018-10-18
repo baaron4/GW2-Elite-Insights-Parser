@@ -52,7 +52,8 @@ namespace LuckParser.Models
             new Mechanic(52054, "Summon", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "D.CC.Fail","Summon (Destroyer Breakbar failed)", "Destroyer CC Fail",0, (condition => condition.CombatItem.Value >= 8332)),
             new Mechanic(20944, "Summon (Spawn)", Mechanic.MechType.Spawn, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(150,0,0)'", "D.Spwn","Summon (Destroyer Trolls summoned)", "Destroyer Summoned",0),
             new Mechanic(52461, "Sea of Flame", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle-open',color:'rgb(255,0,0)'", "Q.Hbx","Sea of Flame (Stood in Qadim Hitbox)", "Qadim Hitbox AoE",0),
-            });
+            new Mechanic(52035, "Power of the Lamp", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Qadim, "symbol:'triangle-up',color:'rgb(100,150,255)',size:10", "Lmp","Power of the Lamp (Returned from the Lamp)", "Lamp Return",0),
+            }); 
             Extension = "qadim";
             IconUrl = "https://wiki.guildwars2.com/images/f/f2/Mini_Qadim.png";
         }
