@@ -166,25 +166,12 @@ namespace LuckParser.Models
                         if (facing != null && bossPosition != null)
                         {
                             Point3D position = new Point3D(bossPosition.X + (facing.X * spellCenterDistance), bossPosition.Y + (facing.Y * spellCenterDistance), bossPosition.Z, bossPosition.Time);
-                            //replay.Actors.Add(new CircleActor(true, 0, impactRadius, new Tuple<int, int>(start, start + delay), "rgba(255, 100, 0, 0.2)", new PositionConnector(position)));
-                            //replay.Actors.Add(new CircleActor(true, 0, impactRadius, new Tuple<int, int>(start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.7)", new PositionConnector(position)));
-                            //replay.Actors.Add(new CircleActor(false, start + delay + duration, radius, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 200, 0, 0.7)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleActor(true, zoneActive, radius, new Tuple<int, int>(start, zoneActive), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleActor(false, 0, radius, new Tuple<int, int>(start, zoneActive), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleActor(true, 0, radius, new Tuple<int, int>(zoneActive, zoneDeadly), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleActor(true, 0, radius, new Tuple<int, int>(zoneDeadly, zoneEnd), "rgba(255, 100, 0, 0.5)", new PositionConnector(position)));
 
                         }
-
-                        //Point3D next = replay.Positions.FirstOrDefault(x => x.Time >= castEnd);
-                        //Point3D prev = replay.Positions.LastOrDefault(x => x.Time <= castEnd);
-                        //if (next != null || prev != null)
-                        //{
-                        //    replay.Actors.Add(new CircleActor(true, zoneActive, 450, new Tuple<int, int>(start, zoneActive), "rgba(200, 255, 100, 0.5)", new InterpolatedPositionConnector(prev, next, castEnd)));
-                        //    replay.Actors.Add(new CircleActor(false, 0, 450, new Tuple<int, int>(start, zoneActive), "rgba(200, 255, 100, 0.5)", new InterpolatedPositionConnector(prev, next, castEnd)));
-                        //    replay.Actors.Add(new CircleActor(true, 0, 450, new Tuple<int, int>(zoneActive, zoneDeadly), "rgba(200, 255, 100, 0.5)", new InterpolatedPositionConnector(prev, next, castEnd)));
-                        //    replay.Actors.Add(new CircleActor(true, 0, 450, new Tuple<int, int>(zoneDeadly, zoneEnd), "rgba(255, 100, 0, 0.5)", new InterpolatedPositionConnector(prev, next, castEnd)));
-                        //}
                     }
                     List<CastLog> cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
                     foreach (CastLog c in cataCycle)
