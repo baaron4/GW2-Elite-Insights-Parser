@@ -6,7 +6,6 @@ namespace LuckParser.Models.HtmlModels
     [DataContract]
     public class BoonChartDataDto
     {
-        [DataMember] public int id;
         [DataMember] public string name;
         [DataMember] public string color;
         [DataMember(EmitDefaultValue = false)] public bool visible;
