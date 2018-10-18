@@ -218,8 +218,8 @@ namespace LuckParser.Models
         {
             // Corruption
             CombatReplay replay = p.CombatReplay;
-            List<CombatItem> corruptedMatthias = GetFilteredList(log, 34416, p.InstID);
-            corruptedMatthias.AddRange(GetFilteredList(log, 34473, p.InstID));
+            List<CombatItem> corruptedMatthias = GetFilteredList(log, 34416, p);
+            corruptedMatthias.AddRange(GetFilteredList(log, 34473, p));
             int corruptedMatthiasStart = 0;
             foreach (CombatItem c in corruptedMatthias)
             {
@@ -241,7 +241,7 @@ namespace LuckParser.Models
                 }
             }
             // Well of profane
-            List<CombatItem> wellMatthias = GetFilteredList(log, 34450, p.InstID);
+            List<CombatItem> wellMatthias = GetFilteredList(log, 34450, p);
             int wellMatthiasStart = 0;
             foreach (CombatItem c in wellMatthias)
             {
@@ -263,7 +263,7 @@ namespace LuckParser.Models
                 }
             }
             // Sacrifice
-            List<CombatItem> sacrificeMatthias = GetFilteredList(log, 34442, p.InstID);
+            List<CombatItem> sacrificeMatthias = GetFilteredList(log, 34442, p);
             int sacrificeMatthiasStart = 0;
             foreach (CombatItem c in sacrificeMatthias)
             {

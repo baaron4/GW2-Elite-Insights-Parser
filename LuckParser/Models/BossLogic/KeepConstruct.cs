@@ -279,7 +279,7 @@ namespace LuckParser.Models
         {
             // Bombs
             CombatReplay replay = p.CombatReplay;
-            List<CombatItem> xeraFury = GetFilteredList(log, 35103, p.InstID);
+            List<CombatItem> xeraFury = GetFilteredList(log, 35103, p);
             int xeraFuryStart = 0;
             foreach (CombatItem c in xeraFury)
             {
@@ -296,7 +296,7 @@ namespace LuckParser.Models
 
             }
             //fixated Statue
-            List<CombatItem> fixatedStatue = GetFilteredList(log, 34912, p.InstID).Concat(GetFilteredList(log, 34925, p.InstID)).ToList();
+            List<CombatItem> fixatedStatue = GetFilteredList(log, 34912, p).Concat(GetFilteredList(log, 34925, p)).ToList();
             int fixationStatueStart = 0;
             Mob statue = null;
             foreach (CombatItem c in fixatedStatue)

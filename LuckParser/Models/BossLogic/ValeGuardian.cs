@@ -72,7 +72,7 @@ namespace LuckParser.Models
                 return phases;
             }
             // Invul check
-            List<CombatItem> invulsVG = GetFilteredList(log, 757, mainTarget.InstID);
+            List<CombatItem> invulsVG = GetFilteredList(log, 757, mainTarget);
             for (int i = 0; i < invulsVG.Count; i++)
             {
                 CombatItem c = invulsVG[i];

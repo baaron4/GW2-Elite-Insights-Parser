@@ -53,7 +53,7 @@ namespace LuckParser.Models
                 return phases;
             }
             // Invul check
-            List<CombatItem> invulsSab = GetFilteredList(log, 757, mainTarget.InstID);
+            List<CombatItem> invulsSab = GetFilteredList(log, 757, mainTarget);
             for (int i = 0; i < invulsSab.Count; i++)
             {
                 CombatItem c = invulsSab[i];
@@ -210,7 +210,7 @@ namespace LuckParser.Models
                 replay.Actors.Add(new CircleActor(true, end, 280, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(p)));
             }
             // Sapper bombs
-            List<CombatItem> sapperBombs = GetFilteredList(log, 31473, p.InstID);
+            List<CombatItem> sapperBombs = GetFilteredList(log, 31473, p);
             int sapperStart = 0;
             foreach (CombatItem c in sapperBombs)
             {

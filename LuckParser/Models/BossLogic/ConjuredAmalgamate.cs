@@ -109,7 +109,7 @@ namespace LuckParser.Models
             {
                 return phases;
             }
-            List<CombatItem> CAInvul = GetFilteredList(log, 52255, ca.InstID);
+            List<CombatItem> CAInvul = GetFilteredList(log, 52255, ca);
             CAInvul.RemoveAll(x => x.IsStateChange == ParseEnum.StateChange.BuffInitial);
             for (int i = 0; i < CAInvul.Count; i++)
             {
