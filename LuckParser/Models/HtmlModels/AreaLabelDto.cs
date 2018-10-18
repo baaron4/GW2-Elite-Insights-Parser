@@ -8,6 +8,6 @@ namespace LuckParser.Models.HtmlModels
         [DataMember] public double start;
         [DataMember] public double end;
         [DataMember] public string label;
-        [DataMember] public bool highlight;
+        [DataMember(EmitDefaultValue = false)] public bool highlight;
     }
 }

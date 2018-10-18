@@ -9,7 +9,7 @@ namespace LuckParser.Models.HtmlModels
         [DataMember] public int id;
         [DataMember] public string name;
         [DataMember] public string color;
-        [DataMember] public bool visible;
+        [DataMember(EmitDefaultValue = false)] public bool visible;
         [DataMember] public List<double[]> data;
     }
 }

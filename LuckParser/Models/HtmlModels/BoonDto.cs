@@ -16,7 +16,7 @@ namespace LuckParser.Models.HtmlModels
         public string name;
         [DataMember(EmitDefaultValue = false)]
         public string icon;
-        [DataMember]
+        [DataMember(EmitDefaultValue = false)]
         public bool stacking;
 
         public BoonDto(long id, string name, string icon, bool stacking)
