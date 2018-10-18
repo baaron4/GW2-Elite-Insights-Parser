@@ -246,7 +246,7 @@ namespace LuckParser.Models
         {
             // Water "Poison Bomb"
             CombatReplay replay = p.CombatReplay;
-            List<CombatItem> waterToDrop = GetFilteredList(log, 53097, p.InstID);
+            List<CombatItem> waterToDrop = GetFilteredList(log, 53097, p);
             int toDropStart = 0;
             foreach (CombatItem c in waterToDrop)
             {
@@ -273,7 +273,7 @@ namespace LuckParser.Models
                 }
             }
             // Bubble (Aquatic Detainment)
-            List<CombatItem> bubble = GetFilteredList(log, 51755, p.InstID);
+            List<CombatItem> bubble = GetFilteredList(log, 51755, p);
             int bubbleStart = 0;
             foreach (CombatItem c in bubble)
             {
