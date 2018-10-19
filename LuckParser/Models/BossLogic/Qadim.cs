@@ -11,7 +11,7 @@ namespace LuckParser.Models
     {
         public Qadim(ushort triggerID) : base(triggerID)
         {
-            MechanicList.AddRange(new List<Mechanic>    
+            MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(51943, "Qadim CC", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "Q.BB","Qadim CC", "Qadim CC",0),
             new Mechanic(51943, "Qadim CC", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "Q.CCed","Quadim Breakbar broken", "Quadim CCed",0, (condition => condition.CombatItem.Value < 6500)),
@@ -56,7 +56,7 @@ namespace LuckParser.Models
             new Mechanic(52221, "Claw", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'triangle-left-open',color:'rgb(0,150,150)',size:10", "Claw","Claw (Reaper of Flesh attack)", "Reaper Claw",0),
             new Mechanic(52281, "Swap", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle-cross-open',color:'rgb(170,0,170)'", "Port","Swap (Ported from below Legendary Creature to Qadim)", "Port to Qadim",0),
             new Mechanic(52035, "Power of the Lamp", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Qadim, "symbol:'triangle-up',color:'rgb(100,150,255)',size:10", "Lmp","Power of the Lamp (Returned from the Lamp)", "Lamp Return",0),
-            }); 
+            });
             Extension = "qadim";
             IconUrl = "https://wiki.guildwars2.com/images/f/f2/Mini_Qadim.png";
         }
@@ -72,7 +72,7 @@ namespace LuckParser.Models
                             Tuple.Create(-21504, -21504, 24576, 24576),
                             Tuple.Create(13440, 14336, 15360, 16256));
         }
-        
+
 
         protected override List<ushort> GetFightTargetsIDs()
         {
@@ -101,7 +101,7 @@ namespace LuckParser.Models
             {
                 return phases;
             }
-            List<long> moltenArmor = GetFilteredList(log,52329,qadim).Select(x => x.Time - log.FightData.FightStart).Distinct().ToList();
+            List<long> moltenArmor = GetFilteredList(log, 52329, qadim).Select(x => x.Time - log.FightData.FightStart).Distinct().ToList();
             for (int i = 1; i < moltenArmor.Count; i++)
             {
                 if (i % 2 == 0)
@@ -112,7 +112,8 @@ namespace LuckParser.Models
                     {
                         phases.Add(new PhaseData(end, log.FightData.FightDuration));
                     }
-                } else
+                }
+                else
                 {
                     start = Math.Min(moltenArmor[i], log.FightData.FightDuration);
                     phases.Add(new PhaseData(end, start));
@@ -122,7 +123,7 @@ namespace LuckParser.Models
                     }
                 }
             }
-            string[] names = { "Hydra","Qadim P1","Apocalypse", "Qadim P2","Wyvern", "Qadim P3" };
+            string[] names = { "Hydra", "Qadim P1", "Apocalypse", "Qadim P2", "Wyvern", "Qadim P3" };
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
@@ -228,7 +229,7 @@ namespace LuckParser.Models
                         int duration = 2680;
                         int radius = 2000;
                         int impactRadius = 40;
-                        int spellCenterDistance = 300; 
+                        int spellCenterDistance = 300;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
                         Point3D bossPosition = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && bossPosition != null)
@@ -269,17 +270,18 @@ namespace LuckParser.Models
                     foreach (CastLog c in matCC)
                     {
                         int start = (int)c.Time;
-                        int duration = Math.Min(6500,c.ActualDuration);
-                        Tuple<int, int> lifespan = new Tuple<int, int>(start, start + duration);
+                        int preCast = Math.Min(3500, c.ActualDuration);
+                        int duration = Math.Min(6500, c.ActualDuration);
                         int radius = ccRadius;
-                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, lifespan, "rgba(0, 180, 255, 0.3)", new AgentConnector(boss)));
+                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, new Tuple<int, int>(start, start + duration), "rgba(0, 180, 255, 0.3)", new AgentConnector(boss)));
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
                         int range = 2800;
                         int span = 2400;
                         if (facing != null)
                         {
                             int rotation = Point3D.GetRotationFromFacing(facing);
-                            replay.Actors.Add(new RotatedRectangleActor(true, 0, range, span, rotation, range/2, lifespan, "rgba(0,100,255,0.4)", new AgentConnector(boss)));
+                            replay.Actors.Add(new RotatedRectangleActor(true, 0, range, span, rotation, range / 2, new Tuple<int, int>(start, start + preCast), "rgba(0,100,255,0.2)", new AgentConnector(boss)));
+                            replay.Actors.Add(new RotatedRectangleActor(true, 0, range, span, rotation, range / 2, new Tuple<int, int>(start + preCast, start + duration), "rgba(0,100,255,0.5)", new AgentConnector(boss)));
                         }
                     }
                     //Breath
@@ -398,7 +400,7 @@ namespace LuckParser.Models
                         {
                             Point3D position = new Point3D(bossPosition.X + facing.X * spellCenterDistance, bossPosition.Y + facing.Y * spellCenterDistance, bossPosition.Z, bossPosition.Time);
                             replay.Actors.Add(new CircleActor(true, 0, impactRadius, new Tuple<int, int>(start, start + delay), "rgba(255, 100, 0, 0.1)", new PositionConnector(position)));
-                            replay.Actors.Add(new CircleActor(true, 0, impactRadius, new Tuple<int, int>(start+delay-10, start + delay+100), "rgba(255, 100, 0, 0.5)", new PositionConnector(position)));
+                            replay.Actors.Add(new CircleActor(true, 0, impactRadius, new Tuple<int, int>(start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.5)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleActor(false, start + delay + duration, maxRadius, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 200, 0, 0.5)", new PositionConnector(position)));
                         }
                     }
@@ -451,6 +453,6 @@ namespace LuckParser.Models
             }
             return (target.Health > 21e6) ? 1 : 0;
         }
-        
+
     }
 }
