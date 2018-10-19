@@ -12,43 +12,35 @@
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/plug-ins/1.10.13/sorting/alt-string.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrender/0.9.90/jsrender.min.js"></script>
-    <!--${Js}-->
+    <!--${Vue}-->
     <script>
-        var data = ${logDataJson};
+        var logData = '${logDataJson}';
+    </script>
+    <script>
+        var playerGraphData = '${graphDataJson}';
     </script>
     <!--${playerData}-->
+    <!--${Js}-->
 </head>
 <body class="theme-${bootstrapTheme}">
     <div class="header">
         <div>Time Start: ${encounterStart} | Time End: ${encounterEnd}</div>
     </div>
     <div class="container">
-        <div class="row">
-            <div class="col-lg-5">
-                <div class="card boss-summary mb-3">
-                    <h3 class="card-header text-center">${fightName}</h3>
-                    <div class="card-body container">
-                        <div class="row">
-                            <div class="col-5">
-                                <img src="${fightIcon}" alt="${fightName}" class="icon-xl">
-                            </div>
-                            <div class="col-7">
-                                <div class="mb-2">
-                                    <div class="progress" style="width: 100%; height: 20px;" title="${bossHealthLeft}% left">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width:${encounterPercent}%;" aria-valuenow="${encounterPercent}" aria-valuemin="0" aria-valuemax="100">
-                                        </div>
-                                    </div>
-                                    <div class="small" style="text-align:center;">${bossHealth} Health</div>
-                                </div>
-                                <div class='mb-2 text ${encounterResultCss}'>Result: ${encounterResult}</div>
-                                <div class="mb-2">Duration: ${encounterDuration}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="d-flex flex-row justify-content-center">
+            <div class="card boss-summary" id="encounter">
+                <encounter-component></encounter-component>
             </div>
-            <div class="col-lg-7" id="groupComp">
+        </div>
+        <div class="d-flex flex-row justify-content-center" id="phase">
+            <phase-component></phase-component>
+        </div>
+        <div class="d-flex flex-row justify-content-center" id="actors">
+            <div id="targets">
+                <target-component></target-component>
+            </div>
+            <div id="players">
+                <player-component></player-component>
             </div>
         </div>
         <div id="content">
@@ -64,25 +56,6 @@
         <div>ARC: ${evtcVersion} | Boss ID: ${fightID} | EI Version: ${eiVersion}</div>
         <div>File recorded by: ${recordedBy}</div>
     </div>
-
-    <script>
-        //generateWindow(buildWindowLayout(data));
-    </script>
-
-    <script>
-        //var playerGraphData = ${graphDataJson};
-    </script>
-    <script>
-        //createGraphs(playerGraphData);
-    </script>
-
-    <div style="display:none;">
-        <!--${combatReplay}-->
-    </div>
-    <script>
-        $('#replay_template').appendTo('#replay');
-    </script>
-
 
     <script>$(function () { $('[title]').tooltip({ html: true }); });</script>
 </body>

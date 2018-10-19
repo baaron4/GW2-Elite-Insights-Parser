@@ -155,3 +155,18 @@ td, th {text-align: center; white-space: nowrap;}
 .rot-noaa .rot-aa {
 	display: none;
 }
+
+.player-cell.active{
+    background-color: rgba(50,120,0,0.5);
+}
+.player-cell:hover:not(.active) {
+    background-color: rgba(25,80,0,0.5);
+}
+
+.target-cell.active {
+    background-color: rgba(50,120,0,0.5);
+}
+
+.target-cell:hover:not(.active) {
+    background-color: rgba(25,80,0,0.5);
+}

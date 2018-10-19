@@ -1295,45 +1295,12 @@ namespace LuckParser.Controllers
 
         private string ReplaceVariables(string html)
         {
-            double fightDuration = _log.FightData.FightDuration / 1000.0;
-            TimeSpan duration = TimeSpan.FromSeconds(fightDuration);
-            string durationString = duration.Minutes + "m " + duration.Seconds + "s " + duration.Milliseconds + "ms";
-            if (duration.Hours > 0)
-            {
-                durationString = duration.Hours + "h " + durationString;
-            }
-
-            int encounterPercent = 0;
-            double healthLeft = 100;
-            
-            if (_log.LogData.Success)
-            {
-                encounterPercent = 100;
-                healthLeft = 0;
-            }
-            else
-            {
-                if (_log.Boss.HealthOverTime.Count > 0)
-                {
-                    healthLeft = Math.Round(_log.Boss.HealthOverTime[_log.Boss.HealthOverTime.Count - 1].Y * 0.01, 2);
-                    encounterPercent = (int)Math.Floor(100.0 - _log.Boss.HealthOverTime[_log.Boss.HealthOverTime.Count - 1].Y * 0.01);
-                }
-            }
-
             html = html.Replace("${bootstrapTheme}", !_settings.LightTheme ? "slate" : "cosmo");
 
             html = html.Replace("${encounterStart}", _log.LogData.LogStart);
             html = html.Replace("${encounterEnd}", _log.LogData.LogEnd);
-            html = html.Replace("${encounterDuration}", durationString);
-            html = html.Replace("${encounterResult}", _log.LogData.Success ? "Success": "Fail");
-            html = html.Replace("${encounterResultCss}", _log.LogData.Success ? "text-success" : "text-warning");
-            html = html.Replace("${encounterPercent}", encounterPercent.ToString());
             html = html.Replace("${evtcVersion}", _log.LogData.BuildVersion);
             html = html.Replace("${fightID}", _log.FightData.ID.ToString());
-            html = html.Replace("${fightName}", FilterStringChars(_log.FightData.Name));
-            html = html.Replace("${bossHealth}", _log.Boss.Health.ToString());
-            html = html.Replace("${bossHealthLeft}", healthLeft.ToString());
-            html = html.Replace("${fightIcon}", _log.FightData.Logic.IconUrl);
             html = html.Replace("${eiVersion}", Application.ProductVersion);
             html = html.Replace("${recordedBy}", _log.LogData.PoV.Split(':')[0]);
 
@@ -1352,11 +1319,16 @@ namespace LuckParser.Controllers
             html = html.Replace("<!--${Css}-->", BuildCss(path));
             html = html.Replace("<!--${Js}-->", BuildEIJs(path));
 
-            html = html.Replace("${logDataJson}", BuildLogData());
+            html = html.Replace("'${logDataJson}'", BuildLogData());
 
             html = html.Replace("<!--${playerData}-->", BuildDetails());
+#if DEBUG
+            html = html.Replace("<!--${Vue}-->", "<script src=\"https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js\"></script>");
+#else
+            html = html.Replace("<!--${Vue}-->", "<script src=\"https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.min.js\"></script>");
+#endif
 
-            html = html.Replace("${graphDataJson}", BuildGraphJson());
+            html = html.Replace("'${graphDataJson}'", BuildGraphJson());
 
             html = html.Replace("<!--${combatReplay}-->", BuildCombatReplayContent());
 
@@ -1404,7 +1376,7 @@ namespace LuckParser.Controllers
 
         private string BuildEIJs(string path)
         {
-            string scriptContent = BuildJavascript();
+            string scriptContent = Properties.Resources.ei_js;
             string scriptFilename = "ei-" + _scriptVersion + ".js";
             if (Properties.Settings.Default.NewHtmlExternalScripts)
             {
@@ -1443,7 +1415,7 @@ namespace LuckParser.Controllers
 
         private string BuildLogData()
         {
-            LogDataDto data = new LogDataDto();
+            LogDataDto logData = new LogDataDto();
             foreach(Player player in _log.PlayerList)
             {
                 PlayerDto playerDto = new PlayerDto(
@@ -1469,12 +1441,12 @@ namespace LuckParser.Controllers
                     playerDto.minions.Add(new MinionDto(pair.Value.MinionID, pair.Key.TrimEnd(" \0".ToArray())));
                 }
 
-                data.players.Add(playerDto);
+                logData.players.Add(playerDto);
             }
 
             foreach(AbstractMasterPlayer enemy in _log.MechanicData.GetEnemyList(0))
             {
-                data.enemies.Add(new EnemyDto(enemy.Character));
+                logData.enemies.Add(new EnemyDto(enemy.Character));
             }
 
             foreach (Boss target in _log.FightData.Logic.Targets)
@@ -1483,23 +1455,37 @@ namespace LuckParser.Controllers
                 {
                     health = target.Health,
                     hbHeight = target.HitboxHeight,
-                    hbWidth = target.HitboxWidth
+                    hbWidth = target.HitboxWidth,
+                    tough = target.Toughness
                 };
+                if (_log.LogData.Success)
+                {
+                    tar.percent = 100;
+                    tar.hpLeft = 0;
+                }
+                else
+                {
+                    if (_log.Boss.HealthOverTime.Count > 0)
+                    {
+                        tar.percent = Math.Round(target.HealthOverTime[target.HealthOverTime.Count - 1].Y * 0.01, 2);
+                        tar.hpLeft = (int)Math.Floor(100.0 - target.HealthOverTime[target.HealthOverTime.Count - 1].Y * 0.01);
+                    }
+                }
                 foreach (KeyValuePair<string, Minions> pair in target.GetMinions(_log))
                 {
                     tar.minions.Add(new MinionDto(pair.Value.MinionID, pair.Key.TrimEnd(" \0".ToArray())));
                 }
-                data.targets.Add(tar);
+                logData.targets.Add(tar);
             }
 
-            data.flags.simpleRotation = _settings.SimpleRotation;
-            data.flags.dark = !_settings.LightTheme;
-            data.flags.combatReplay = _settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay;
+            logData.flags.simpleRotation = _settings.SimpleRotation;
+            logData.flags.dark = !_settings.LightTheme;
+            logData.flags.combatReplay = _settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay;
 
-            data.graphs.Add(new GraphDto("full", "Full"));
-            data.graphs.Add(new GraphDto("s10", "10s"));
-            data.graphs.Add(new GraphDto("s30", "30s"));
-            data.graphs.Add(new GraphDto("phase", "Phase"));
+            logData.graphs.Add(new GraphDto("full", "Full"));
+            logData.graphs.Add(new GraphDto("s10", "10s"));
+            logData.graphs.Add(new GraphDto("s30", "30s"));
+            logData.graphs.Add(new GraphDto("phase", "Phase"));
 
             Dictionary<string, List<long>> persBuffs = new Dictionary<string, List<long>>();
             Dictionary<string, List<Boon>> persBuffDict = BuildPersonalBoonData(persBuffs);
@@ -1513,7 +1499,7 @@ namespace LuckParser.Controllers
                 {
                     phaseDto.targets.Add(_log.FightData.Logic.Targets.IndexOf(target));
                 }
-                data.phases.Add(phaseDto);
+                logData.phases.Add(phaseDto);
                 phaseDto.dpsStats = BuildDPSData(i);
                 phaseDto.dpsStatsTargets = BuildDPSTargetsData(i);
                 phaseDto.dmgStatsTargets = BuildDMGStatsTargetsData(i);
@@ -1579,35 +1565,46 @@ namespace LuckParser.Controllers
             }
 
 
-            data.boons = new List<long>();
+            logData.boons = new List<long>();
             foreach (Boon boon in _statistics.PresentBoons)
             {
-                data.boons.Add(boon.ID);
+                logData.boons.Add(boon.ID);
                 _usedBoons[boon.ID] = boon;
             }
-            data.conditions = new List<long>();
+            logData.conditions = new List<long>();
             foreach (Boon boon in _statistics.PresentConditions)
             {
-                data.conditions.Add(boon.ID);
+                logData.conditions.Add(boon.ID);
                 _usedBoons[boon.ID] = boon;
             }
-            data.offBuffs = new List<long>();
+            logData.offBuffs = new List<long>();
             foreach (Boon boon in _statistics.PresentOffbuffs)
             {
-                data.offBuffs.Add(boon.ID);
+                logData.offBuffs.Add(boon.ID);
                 _usedBoons[boon.ID] = boon;
             }
-            data.defBuffs = new List<long>();
+            logData.defBuffs = new List<long>();
             foreach (Boon boon in _statistics.PresentDefbuffs)
             {
-                data.defBuffs.Add(boon.ID);
+                logData.defBuffs.Add(boon.ID);
                 _usedBoons[boon.ID] = boon;
             }
-            data.persBuffs = persBuffs;
-            data.mechanics = BuildMechanics();
+            logData.persBuffs = persBuffs;
+            logData.mechanics = BuildMechanics();
+            //
+            double fightDuration = _log.FightData.FightDuration / 1000.0;
+            TimeSpan duration = TimeSpan.FromSeconds(fightDuration);
+            string durationString = duration.Minutes + "m " + duration.Seconds + "s " + duration.Milliseconds + "ms";
+            if (duration.Hours > 0)
+            {
+                durationString = duration.Hours + "h " + durationString;
+            }
+            logData.encounterDuration = durationString;
+            logData.success = _log.LogData.Success;
+            logData.fightName = FilterStringChars(_log.FightData.Name);
+            logData.fightIcon = _log.FightData.Logic.IconUrl;
 
-
-            return ToJson(data, typeof(LogDataDto));
+            return ToJson(logData, typeof(LogDataDto));
         }
 
         private bool HasBoons(int phaseIndex, Boss target)
@@ -1629,24 +1626,24 @@ namespace LuckParser.Controllers
             string scripts = "";
             for (var i = 0; i < _log.PlayerList.Count; i++) {
                 Player player = _log.PlayerList[i];
-                string playerScript = "data.players[" + i + "].details = " + ToJson(BuildPlayerData(player, usedSkills, _usedBoons), typeof(PlayerDetailsDto)) + ";\r\n";
+                string playerScript = "logData.players[" + i + "].details = " + ToJson(BuildPlayerData(player, usedSkills, _usedBoons), typeof(PlayerDetailsDto)) + ";\r\n";
                 scripts += playerScript;
             }
             for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
             {
                 Boss target = _log.FightData.Logic.Targets[i];
-                string targetScript = "data.targets[" + i + "].details = " + ToJson(BuildTargetData(target, usedSkills, _usedBoons), typeof(PlayerDetailsDto)) + ";\r\n";
+                string targetScript = "logData.targets[" + i + "].details = " + ToJson(BuildTargetData(target, usedSkills, _usedBoons), typeof(PlayerDetailsDto)) + ";\r\n";
                 scripts += targetScript;
             }
             string skillsScript = "var usedSkills = " + ToJson(AssembleSkills(usedSkills.Values), typeof(ICollection<SkillDto>)) + ";" +
-                "data.skillMap = {};" +
+                "logData.skillMap = {};" +
                 "$.each(usedSkills, function(i, skill) {" +
-                "data.skillMap['s'+skill.id]=skill;" +
+                "logData.skillMap['s'+skill.id]=skill;" +
                 "});";
             string boonsScript = "var usedBoons = " + ToJson(AssembleBoons(_usedBoons.Values), typeof(ICollection<BoonDto>)) + ";" +
-                "data.boonMap = {};" +
+                "logData.boonMap = {};" +
                 "$.each(usedBoons, function(i, boon) {" +
-                "data.boonMap['b'+boon.id]=boon;" +
+                "logData.boonMap['b'+boon.id]=boon;" +
                 "});";
             return "<script>\r\n"+ skillsScript+"\r\n"+boonsScript+"\r\n"+scripts + "\r\n</script>";
         }
@@ -1805,30 +1802,6 @@ namespace LuckParser.Controllers
             // remove line breaks
             escaped = Regex.Replace(escaped, @"\s*\r?\n\s*", "");
             return escaped;
-        }
-
-        private string BuildTemplateJS(string name, string code)
-        {
-            return "\r\nvar "+ name + " = $.templates('"+name+"', '"+EscapeJsrender(code)+"');";
-        }
-
-        private string BuildJavascript()
-        {
-            string javascript = Properties.Resources.ei_js;
-            javascript+= BuildTemplateJS("tmplTabs", Properties.Resources.tmplTabs);
-            javascript += BuildTemplateJS("tmplPlayerCells", Properties.Resources.tmplPlayerCells);
-            javascript += BuildTemplateJS("tmplDpsTable", Properties.Resources.tmplDpsTable);
-            javascript += BuildTemplateJS("tmplBoonTable", Properties.Resources.tmplBoonTable);
-            javascript += BuildTemplateJS("tmplSupTable", Properties.Resources.tmplSupTable);
-            javascript += BuildTemplateJS("tmplDefTable", Properties.Resources.tmplDefTable);
-
-            javascript += BuildTemplateJS("tmplDmgTable", Properties.Resources.tmplDmgTable);
-            javascript += BuildTemplateJS("tmplDmgDistTable", Properties.Resources.tmplDmgDistTable);
-            javascript += BuildTemplateJS("tmplDmgTakenTable", Properties.Resources.tmplDmgTakenTable);
-            javascript += BuildTemplateJS("tmplMechanicTable", Properties.Resources.tmplMechanicTable);
-            javascript += BuildTemplateJS("tmplCompTable", Properties.Resources.tmplCompTable);
-
-            return javascript;
         }
     }
 }

@@ -30,6 +30,10 @@ namespace LuckParser.Models.HtmlModels
         public List<MechanicDto> mechanics;
         [DataMember(Order = 8)]
         public LogFlags flags = new LogFlags();
+        [DataMember] public string encounterDuration;
+        [DataMember] public bool success;
+        [DataMember] public string fightName;
+        [DataMember] public string fightIcon;
     }
 
     [DataContract]

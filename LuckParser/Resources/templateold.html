@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/${bootstrapTheme}/bootstrap.min.css" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+    <!--${Css}-->
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.13/sorting/alt-string.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrender/0.9.90/jsrender.min.js"></script>
+    <!--${Js}-->
+    <script>
+        var data = ${logDataJson};
+    </script>
+    <!--${playerData}-->
+</head>
+<body class="theme-${bootstrapTheme}">
+    <div class="header">
+        <div>Time Start: ${encounterStart} | Time End: ${encounterEnd}</div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="card boss-summary mb-3">
+                    <h3 class="card-header text-center">${fightName}</h3>
+                    <div class="card-body container">
+                        <div class="row">
+                            <div class="col-5">
+                                <img src="${fightIcon}" alt="${fightName}" class="icon-xl">
+                            </div>
+                            <div class="col-7">
+                                <div class="mb-2">
+                                    <div class="progress" style="width: 100%; height: 20px;" title="${bossHealthLeft}% left">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width:${encounterPercent}%;" aria-valuenow="${encounterPercent}" aria-valuemin="0" aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                    <div class="small" style="text-align:center;">${bossHealth} Health</div>
+                                </div>
+                                <div class='mb-2 text ${encounterResultCss}'>Result: ${encounterResult}</div>
+                                <div class="mb-2">Duration: ${encounterDuration}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7" id="groupComp">
+            </div>
+        </div>
+        <div id="content">
+            <div class="card">
+                <div class="card-body" style="margin: 100px; text-align: center;">
+                    Loading data...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div>ARC: ${evtcVersion} | Boss ID: ${fightID} | EI Version: ${eiVersion}</div>
+        <div>File recorded by: ${recordedBy}</div>
+    </div>
+
+    <script>
+        //generateWindow(buildWindowLayout(data));
+    </script>
+
+    <script>
+        //var playerGraphData = ${graphDataJson};
+    </script>
+    <script>
+        //createGraphs(playerGraphData);
+    </script>
+
+    <div style="display:none;">
+        <!--${combatReplay}-->
+    </div>
+    <script>
+        $('#replay_template').appendTo('#replay');
+    </script>
+
+
+    <script>$(function () { $('[title]').tooltip({ html: true }); });</script>
+</body>
+</html>
