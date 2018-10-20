@@ -63,6 +63,7 @@ Layout.prototype.addTab = function (tab) {
 
 var Tab = function (name, options) {
     this.name = name;
+    options = options ? options : {};
     this.layout = null;
     this.desc = options.desc ? options.desc : null;
     this.active = options.active ? options.active : false;
