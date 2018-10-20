@@ -137,7 +137,7 @@ namespace LuckParser
                     {
                         if (!log.LogData.Success)
                         {
-                            throw new CancellationException(row, new Exception("Failed logs are skipped"));
+                            throw new SkipException();
                         }
                     }
                     //Creating File
@@ -245,6 +245,10 @@ namespace LuckParser
                     Console.Error.Write("Not EVTC");
                     throw new CancellationException(row, new InvalidDataException("Not EVTC"));
                 }
+            }
+            catch (SkipException s)
+            {
+                Console.Write(s.Message);
             }
             catch (Exception ex) when (!System.Diagnostics.Debugger.IsAttached)
             {
