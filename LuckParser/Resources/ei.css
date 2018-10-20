@@ -39,6 +39,12 @@ img.icon-xl {
 	height: 128px;
 }
 
+img.icon-xxl {
+    width: 196px;
+    height: 196px;
+}
+
+
 img.icon-lg {
 	width: 64px;
 	height: 64px;

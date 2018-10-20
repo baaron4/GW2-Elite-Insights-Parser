@@ -53,16 +53,40 @@ var focusedPlayer = { id: -1 };
 var focusedTargets = [];
 var focusedPhase = { id: 0 };
 
-var Component = Vue.component;
-
-Component('encounter-component', {
+Vue.component('encounter-component', {
     props: ['encounter'],
     template: `
-        
-    `
+    <div>
+        <h3 class="card-header text-center">{{ encounter.name }}</h3>
+        <div class ="card-body container">
+            <div class="d-flex flex justify-content-center">
+                <img class="mr-3" :src="encounter.icon" :alt="encounter.name" class="icon-xxl">
+                <div class="ml-3">
+                    <div class="mb-2" v-for="target in encounter.targets">
+                        <div class="small" style="text-align:center;">{{ target.name }}</div>
+                        <div class="progress" style="width: 100%; height: 20px;" :title="target.left + '% left'">
+                            <div class="progress-bar bg-success" :style="{width: target.percent + '%'}" role="progressbar" :aria-valuenow="target.percent" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="small" style="text-align:center;">{{ target.health }} Health</div>
+                    </div>
+                    <div class="mb-2 text" :class="getResultClass(encounter.success)">Result: {{ getResultText(encounter.success) }}</div>
+                    <div class="mb-2">Duration: {{ encounter.duration }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    `,
+    methods: {
+        getResultText: function (success) {
+            return success ? "Success" : "Failure";
+        },
+        getResultClass: function (success) {
+            return success ? ["text-success"] : ["text-warning"];
+        }
+    }
 });
 
-Component('phase-component', {
+Vue.component('phase-component', {
     props: ['phases', 'focusedPhase'],
     template: `
         
@@ -79,7 +103,7 @@ Component('phase-component', {
     }
 });
 
-Component('target-component', {
+Vue.component('target-component', {
     props: ['targets', 'focusedtargets'],
     template: `
         
@@ -94,7 +118,7 @@ Component('target-component', {
     }
 });
 
-Component('player-component', {
+Vue.component('player-component', {
     props: ['groups', 'focusedplayer'],
     template: `
         
@@ -112,6 +136,34 @@ Component('player-component', {
 });
 
 
-window.onload = function () {
+var createHeaderComponent = function () {
+    var targets = [];
+    for (var i = 0; i < logData.phases[0].targets.length; i++) {
+        var targetData = logData.targets[logData.phases[0].targets[i]];
+        targets.push({
+            name: targetData.name,
+            left: targetData.hpLeft,
+            percent: targetData.percent,
+            health: targetData.health
+        });
+    }
 
+    var encounter = {
+        name: logData.fightName,
+        success: logData.success,
+        icon: logData.fightIcon,
+        duration: logData.encounterDuration,
+        targets: targets
+    }
+
+    return new Vue({
+        el: "#encounter",
+        data: {
+            encounter: encounter
+        }
+    })
+}
+
+window.onload = function () {
+    var header = createHeaderComponent();
 };
