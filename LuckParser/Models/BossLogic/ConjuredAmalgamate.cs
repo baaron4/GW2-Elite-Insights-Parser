@@ -168,6 +168,7 @@ namespace LuckParser.Models
                 {
                     phase.DrawArea = true;
                     name = "Burn Phase";
+                    phase.Targets.Add(ca);
                 }
                 phase.Name = name;
                 phase.DrawEnd = true;
@@ -183,6 +184,7 @@ namespace LuckParser.Models
                     if (leftArmDown.Exists(x => phase.InInterval(x)))
                     {
                         phase.Name = "Left " + phase.Name;
+                        phase.Targets.Add(leftArm);
                     }
                 }
             }
@@ -203,6 +205,7 @@ namespace LuckParser.Models
                         {
                             phase.Name = "Right " + phase.Name;
                         }
+                        phase.Targets.Add(rightArm);
                     }
                 }
             }

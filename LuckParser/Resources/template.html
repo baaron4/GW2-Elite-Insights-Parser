@@ -32,15 +32,15 @@
                 <encounter-component :encounter="encounter"></encounter-component>
             </div>
         </div>
-        <div class="d-flex flex-row justify-content-center" id="phase">
+        <div class="d-flex flex-row justify-content-center mt-2" id="phase">
             <phase-component :phases="phases" :focusedphase="focusedphase"></phase-component>
         </div>
         <div class="d-flex flex-row justify-content-center mb-3 mt-3" id="actors">
-            <div id="targets" style="min-width: 50%;">
+            <div id="targets" class="d-flex flex-row justify-content-center align-items-center flex-wrap mr-5">
                 <target-component :targets="targets" :phasetargets="phasetargets" :focusedphase="focusedphase"></target-component>
             </div>
-            <div id="players" style="min-width: 50%;">
-                <player-component></player-component>
+            <div id="players" class="ml-5">
+                <player-component :groups="groups" :focusedplayer="focusedplayer"></player-component>
             </div>
         </div>
         <div id="content">

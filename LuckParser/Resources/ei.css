@@ -50,22 +50,9 @@ img.icon-lg {
 	height: 64px;
 }
 
-.boss-summary {
-	border:1px solid #EE5F5B;
-}
-
 table.composition td {
-	border: 1px solid #EE5F5B;
     max-width: 120px;
     width: 120px;
-}
-
-.theme-slate .boss-summary {
-	border-color: #9B0000;
-}
-
-.theme-slate table.composition td {
-	border-color: #9B0000;
 }
 
 table.composition .shorten {
