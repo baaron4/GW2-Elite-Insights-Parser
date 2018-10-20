@@ -1394,6 +1394,58 @@ namespace LuckParser.Controllers
             }
         }
 
+        private void BuildWeaponSets(PlayerDto playerDto, Player player)
+        {
+            string[] weps = player.GetWeaponsArray(_log);
+            List<string> firstSet = new List<string>();
+            List<string> secondSet = new List<string>();
+            for (int j = 0; j < weps.Length; j++)
+            {
+                var wep = weps[j];
+                if (wep != null)
+                {
+                    if (wep != "2Hand")
+                    {
+                        if (j > 1)
+                        {
+                            secondSet.Add(wep);
+                        }
+                        else
+                        {
+                            firstSet.Add(wep);
+                        }
+                    }
+                }
+                else
+                {
+                    if (j > 1)
+                    {
+                        secondSet.Add("Unknown");
+                    }
+                    else
+                    {
+                        firstSet.Add("Unknown");
+                    }
+                }
+            }
+            if (firstSet[0] == "Unknown" && firstSet[1] == "Unknown")
+            {
+                playerDto.firstSet = new List<string>();
+            }
+            else
+            {
+                playerDto.firstSet = firstSet;
+            }
+            if (secondSet[0] == "Unknown" && secondSet[1] == "Unknown")
+            {
+                playerDto.secondSet = new List<string>();
+            }
+            else
+            {
+                playerDto.secondSet = secondSet;
+            }
+        }
+
         private string BuildGraphJson()
         {
             List<PhaseChartDataDto> chartData = new List<PhaseChartDataDto>();
@@ -1428,14 +1480,13 @@ namespace LuckParser.Controllers
                     conc = player.Concentration,
                     heal = player.Healing,
                     tough = player.Toughness,
-                    weapons = player.GetWeaponsArray(_log),
                     colTarget = HTMLHelper.GetLink("Color-" + player.Prof),
                     colCleave = HTMLHelper.GetLink("Color-" + player.Prof + "-NonBoss"),
                     colTotal = HTMLHelper.GetLink("Color-" + player.Prof + "-Total"),
                     isConjure = player.Account == ":Conjured Sword",
                     deathRecap = BuildDeathRecap(player)
                 };
-
+                BuildWeaponSets(playerDto, player);
                 foreach (KeyValuePair<string, Minions> pair in player.GetMinions(_log))
                 {
                     playerDto.minions.Add(new MinionDto(pair.Value.MinionID, pair.Key.TrimEnd(" \0".ToArray())));

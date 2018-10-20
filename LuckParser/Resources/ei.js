@@ -49,9 +49,24 @@ var urls = {
     'Staff': 'https://wiki.guildwars2.com/images/5/5f/Crimson_Antique_Spire.png'
 };
 
-var focusedPlayer = { id: -1 };
-var focusedTargets = [];
-var focusedPhase = { id: 0 };
+var Layout = function (desc) {
+    this.desc = desc;
+    this.tabs = null;
+}
+
+Layout.prototype.addTab = function (tab) {
+    if (this.tabs === null) {
+        this.tabs = [];
+    }
+    this.tabs.push(tab);
+}
+
+var Tab = function (name, options) {
+    this.name = name;
+    this.layout = null;
+    this.desc = options.desc ? options.desc : null;
+    this.active = options.active ? options.active : false;
+}
 
 Vue.component('encounter-component', {
     props: ['encounter'],
@@ -64,7 +79,7 @@ Vue.component('encounter-component', {
                 <div class="ml-3 d-flex flex-column justify-content-center align-item-center">
                     <div class="mb-2" v-for="target in encounter.targets">
                         <div v-if="encounter.targets.length > 1" class="small" style="text-align:center;">{{ target.name }}</div>
-                        <div class="progress" style="width: 100%; height: 20px;" :title="target.left + '% left'">
+                        <div class="progress" style="width: 100%; height: 20px;" :title="target.hpLeft + '% left'">
                             <div class="progress-bar bg-success" :style="{width: target.percent + '%'}" role="progressbar" :aria-valuenow="target.percent" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                         <div class="small" style="text-align:center;">{{ target.health }} Health</div>
@@ -87,47 +102,63 @@ Vue.component('encounter-component', {
 });
 
 Vue.component('phase-component', {
-    props: ['phases', 'focusedphase'],
+    props: ['phases'],
     template: `
         <ul class="nav nav-pills">
           <li class="nav-item" v-for="phase in phases" :title="phase.duration / 1000.0 + ' seconds'" >
-            <a class="nav-link" @click="focusedphase.id = phase.id" :class="{active: focusedphase.id === phase.id}" >{{phase.name}}</a>
+            <a class="nav-link" @click="select(phase,phases)" :class="{active: phase.active}" >{{phase.name}}</a>
           </li>
         </ul>
-    `
-});
-
-Vue.component('target-component', {
-    props: ['targets','phasetargets', 'focusedphase'],
-    template: `
-        <div class="d-flex flex-row justify-content-center flex-wrap">
-            <img class="icon-lg mr-2 ml-2 target-cell" v-for="target in targets" v-show="phasetargets[focusedphase.id].indexOf(target.id) !== -1" 
-                    :src="target.icon" 
-                    :alt="target.name" 
-                    :title="target.name" 
-                    :class="{active: target.active}"
-                    @click="select(target)"
-            >
-        </div>
     `,
     methods: {
-        select: function (target) {
-            focusedTargets[target.id] = !focusedTargets[target.id];
-            target.active = !target.active;
+        select: function (phase, phases) {
+            var oldStatus = phase.active;
+            for (var i = 0; i < phases.length; i++) {
+                phases[i].active = false;
+            }
+            phase.active = !oldStatus;
         }
     }
 });
 
+Vue.component('target-component', {
+    props: ['targets','phases'],
+    template: `
+        <div class="d-flex flex-row justify-content-center flex-wrap">
+            <img class="icon-lg mr-2 ml-2 target-cell" v-for="target in targets" v-show="show(target, targets, phases)" 
+                    :src="target.icon" 
+                    :alt="target.name" 
+                    :title="target.name" 
+                    :class="{active: target.active}"
+                    @click="target.active = !target.active"
+            >
+        </div>
+    `,
+    methods: {
+        show: function (target, targets, phases) {
+            var index = targets.indexOf(target);
+            var activePhase = null;
+            for (var i = 0; i < phases.length; i++) {
+                if (phases[i].active) {
+                    activePhase = phases[i];
+                    break;
+                }
+            }
+            return activePhase.targets.indexOf(index) !== -1;
+        },
+    }
+});
+
 Vue.component('player-component', {
-    props: ['groups', 'focusedplayer'],
+    props: ['groups'],
     template: `
         <div>
             <table class="table composition">
                 <tbody>
                     <tr v-for="group in groups">
-                        <td class="player-cell" v-for="player in group" :class="{active: player.id === focusedplayer.id}" @click="focusedplayer.id = player.id">
+                        <td class="player-cell" v-for="player in group" :class="{active: player.active}" @click="select(player,groups)">
                             <div>
-                                <img :src="getIcon(player.prof)" :alt="player.prof" class="icon" :title="player.prof">
+                                <img :src="getIcon(player.profession)" :alt="player.profession" class="icon" :title="player.prof">
                                 <img v-if="player.condi > 0" src="https://wiki.guildwars2.com/images/5/54/Condition_Damage.png" alt="Condition Damage" class="icon" :title="'Condition Damage - ' + player.condi">
                                 <img v-if="player.conc > 0" src="https://wiki.guildwars2.com/images/4/44/Boon_Duration.png" alt="Concentration" class="icon" :title="'Concentration - ' + player.conc">
                                 <img v-if="player.heal > 0" src="https://wiki.guildwars2.com/images/8/81/Healing_Power.png" alt="Healing Power" class="icon" :title="'HealingPower - ' + player.heal">
@@ -150,21 +181,84 @@ Vue.component('player-component', {
     methods: {
         getIcon: function (path) {
             return urls[path];
+        },
+        select: function (player, groups) {
+            var oldStatus = player.active;
+            for (var i = 0; i < groups.length; i++) {
+                var group = groups[i];
+                for (var j = 0; j < group.length; j++) {
+                    group[j].active = false;
+                }
+            }
+            player.active = !oldStatus;
+        }
+    }
+});
+
+Vue.component('general-layout-component', {
+    name: "general-layout-component",
+    props: ['layout', "phases"],
+    template: `
+        <div>
+            <h2 v-if="layout.desc" :class="{'text-center': !!phases}">{{ layoutName }}</h2>
+            <ul class="nav nav-tabs">
+                <li v-for="tab in layout.tabs">
+                    <a class="nav-link" :class="{active: tab.active}" @click="select(tab, layout.tabs)"> {{ tab.name }} </a>
+                </li>
+            </ul>
+            <div v-for="tab in layout.tabs" v-show="tab.active">
+                <div v-if="tab.desc">{{ tab.desc }}</div>
+                <div v-if="tab.layout">
+                    <general-layout-component :layout="tab.layout"></general-layout-component>
+                </div>
+            </div>
+        </div>
+    `,
+    methods: {
+        select: function (tab, tabs) {
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].active = false;
+            }
+            tab.active = true;
+        }
+    },
+    computed: {
+        layoutName: function () {
+            if (!this.phases) {
+                return this.layout.desc;
+            }
+            var phaseName = "";
+            for (var i = 0; i < this.phases.length; i++) {
+                if (this.phases[i].active) {
+                    phaseName = this.phases[i].name;
+                    break;
+                }
+            }
+            return this.layout.desc ? phaseName + " " + this.layout.desc : phaseName;
         }
     }
 });
 
 
+var processData = function () {
+    for (var i = 0; i < logData.phases.length; i++) {
+        logData.phases[i].active = i === 0;
+    }
+    for (var i = 0; i < logData.targets.length; i++) {
+        var targetData = logData.targets[i];
+        targetData.active = true;
+    }
+    for (var i = 0; i < logData.players.length; i++) {
+        var playerData = logData.players[i];
+        playerData.active = false;
+    } 
+}
+
 var createHeaderComponent = function () {
     var targets = [];
     for (var i = 0; i < logData.phases[0].targets.length; i++) {
         var targetData = logData.targets[logData.phases[0].targets[i]];
-        targets.push({
-            name: targetData.name,
-            left: targetData.hpLeft,
-            percent: targetData.percent,
-            health: targetData.health
-        });
+        targets.push(targetData);
     }
 
     var encounter = {
@@ -183,54 +277,22 @@ var createHeaderComponent = function () {
     })
 }
 
-var createPhaseNavigationComponent = function () {
-    var phases = [];
-
-    for (var i = 0; i < logData.phases.length; i++) {
-        var phaseData = logData.phases[i];
-        phases.push({
-            id: i,
-            name: phaseData.name,
-            duration: phaseData.duration
-        })
-    }
+var createPhaseNavigationComponent = function () {   
     return new Vue({
         el: "#phase",
         data: {
-            phases: phases,
-            focusedphase: focusedPhase
+            phases: logData.phases,
         }
     })
 }
 
 var createTargetNavitationComponent = function () {
-    var targets = [];
-    for (var i = 0; i < logData.targets.length; i++) {
-        if (!focusedTargets[i]) {
-            focusedTargets[i] = true;
-        }
-        var targetData = logData.targets[i];
-        targets.push({
-            id: i,
-            name: targetData.name,
-            health: targetData.health,
-            icon: targetData.icon,
-            hitbox: targetData.hbWidth,
-            tough: targetData.tough,
-            active: true
-        });
-    }
-    var phaseTargets = [];
-    for (var i = 0; i < logData.phases.length; i++) {
-        var phaseData = logData.phases[i];
-        phaseTargets.push(phaseData.targets);
-    }
+    
     return new Vue({
         el: "#targets",
         data: {
-            targets: targets,
-            phasetargets: phaseTargets,
-            focusedphase: focusedPhase
+            targets: logData.targets,
+            phases: logData.phases
         }
     })
 }
@@ -246,39 +308,7 @@ var createPlayerCompositionComponent = function () {
         if (!groups[playerData.group]) {
             groups[playerData.group] = [];
         }
-        var weps = playerData.weapons;
-        var firstSet = [];
-        var secondSet = [];
-        for (var j = 0; j < weps.length; j++) {
-            var wep = weps[j];
-            if (wep ) {
-                if (wep != "2Hand") {
-                    j > 1 ? secondSet.push(wep) : firstSet.push(wep);
-                }
-            }
-            else {
-                j > 1 ? secondSet.push("Unknown") : firstSet.push("Unknown");
-            }
-        }
-        if (firstSet[0] === "Unknown" && firstSet[1] === "Unknown") {
-            firstSet = [];
-        }
-        if (secondSet[0] === "Unknown" && secondSet[1] === "Unknown") {
-            secondSet = [];
-        }
-        var player = {
-            id: i,
-            name: playerData.name,
-            acc: playerData.acc,
-            prof: playerData.profession,
-            tough: playerData.tough,
-            conc: playerData.conc,
-            heal: playerData.heal,
-            condi: playerData.condi,
-            firstSet: firstSet,
-            secondSet: secondSet
-        }
-        groups[playerData.group].push(player);
+        groups[playerData.group].push(playerData);
     } 
 
     var noUndefinedGroups = [];
@@ -291,16 +321,62 @@ var createPlayerCompositionComponent = function () {
     return new Vue({
         el: "#players",
         data: {
-            groups: noUndefinedGroups,
-            focusedplayer: focusedPlayer
+            groups: noUndefinedGroups
         }
     })
 }
 
+var createGeneralStatsComponent = function () {
+    var layout = new Layout("Summary");
+    // general stats
+    var stats = new Tab("General Stats", { active: true })
+    var statsLayout = new Layout(null);
+    statsLayout.addTab(new Tab("Damage Stats", { active: true }));
+    statsLayout.addTab(new Tab("Gameplay Stats"));
+    statsLayout.addTab(new Tab("Defensive Stats"));
+    statsLayout.addTab(new Tab("Support Stats"));
+    stats.layout = statsLayout;
+    layout.addTab(stats);
+    // buffs
+    var buffs = new Tab("Buffs");
+    var buffLayout = new Layout(null);
+    buffLayout.addTab(new Tab("Boons", { active: true }));
+    buffLayout.addTab(new Tab("Offensive Buffs"));
+    buffLayout.addTab(new Tab("Defensive Buffs"));
+    buffLayout.addTab(new Tab("Personal Buffs"));
+    buffs.layout = buffLayout;
+    layout.addTab(buffs);
+    // mechanics
+    var mechanics = new Tab("Mechanics");
+    layout.addTab(mechanics);
+    // graphs
+    var graphs = new Tab("Graph");
+    layout.addTab(graphs);
+    // targets
+    var targets = new Tab("Targets");
+    layout.addTab(targets);
+    // player
+    var player = new Tab("Selected Player");
+    layout.addTab(player);
+
+    new Vue({
+        el: "#content",
+        data: {
+            layout: layout,
+            phases: logData.phases
+        }
+    })
+    return layout;
+}
+
 window.onload = function () {
+    processData();
     createHeaderComponent();
     createPhaseNavigationComponent();
     createTargetNavitationComponent();
     createPlayerCompositionComponent();
+    createGeneralStatsComponent();
+    var element = document.getElementById("loading");
+    element.parentNode.removeChild(element);
     $(function () { $('[title]').tooltip({ html: true }); });
 };

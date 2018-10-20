@@ -33,22 +33,23 @@
             </div>
         </div>
         <div class="d-flex flex-row justify-content-center mt-2" id="phase">
-            <phase-component :phases="phases" :focusedphase="focusedphase"></phase-component>
+            <phase-component :phases="phases"></phase-component>
         </div>
         <div class="d-flex flex-row justify-content-center mb-3 mt-3" id="actors">
             <div id="targets" class="d-flex flex-row justify-content-center align-items-center flex-wrap mr-5">
-                <target-component :targets="targets" :phasetargets="phasetargets" :focusedphase="focusedphase"></target-component>
+                <target-component :targets="targets" :phases="phases"></target-component>
             </div>
             <div id="players" class="ml-5">
-                <player-component :groups="groups" :focusedplayer="focusedplayer"></player-component>
+                <player-component :groups="groups"></player-component>
             </div>
         </div>
         <div id="content">
-            <div class="card">
+            <div class="card" id="loading">
                 <div class="card-body" style="margin: 100px; text-align: center;">
                     Loading data...
                 </div>
             </div>
+            <general-layout-component :layout="layout" :phases="phases"></general-layout-component>
         </div>
     </div>
 
