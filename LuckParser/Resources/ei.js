@@ -60,7 +60,7 @@ Vue.component('encounter-component', {
         <h3 class="card-header text-center">{{ encounter.name }}</h3>
         <div class ="card-body container">
             <div class="d-flex flex justify-content-center">
-                <img class="mr-3" :src="encounter.icon" :alt="encounter.name" class="icon-xxl">
+                <img class="mr-3 icon-xxl" :src="encounter.icon" :alt="encounter.name">
                 <div class="ml-3">
                     <div class="mb-2" v-for="target in encounter.targets">
                         <div class="small" style="text-align:center;">{{ target.name }}</div>
@@ -87,33 +87,33 @@ Vue.component('encounter-component', {
 });
 
 Vue.component('phase-component', {
-    props: ['phases', 'focusedPhase'],
+    props: ['phases', 'focusedphase'],
     template: `
-        
-    `,
-    methods: {
-        select: function (id) {
-            if (focusedPhase.id !== id) {
-                focusedPhase.id = id;
-            }
-        },
-        isActive: function (id) {
-            return focusedPhase.id === id;
-        }        
-    }
+        <ul class="nav nav-pills">
+          <li class="nav-item" v-for="phase in phases" :title="phase.duration / 1000.0 + ' seconds'" >
+            <a class="nav-link" @click="focusedphase.id = phase.id" :class="{active: focusedphase.id === phase.id}" >{{phase.name}}</a>
+          </li>
+        </ul>
+    `
 });
 
 Vue.component('target-component', {
-    props: ['targets', 'focusedtargets'],
+    props: ['targets','phasetargets', 'focusedphase'],
     template: `
-        
+        <div class="d-flex flex-row justify-content-center align-items-center flex-wrap">
+            <img class="icon-lg mr-2 ml-2 target-cell" v-for="target in targets" v-show="phasetargets[focusedphase.id].indexOf(target.id) !== -1" 
+                    :src="target.icon" 
+                    :alt="target.name" 
+                    :title="target.name" 
+                    :class="{active: target.active}"
+                    @click="select(target)"
+            >
+        </div>
     `,
     methods: {
-        select: function (id) {
-            focusedTargets[id] = !focusedTargets[id];
-        },
-        isActive: function (id) {
-            return focusedTargets[id];
+        select: function (target) {
+            focusedTargets[target.id] = !focusedTargets[target.id];
+            target.active = !target.active;
         }
     }
 });
@@ -164,6 +164,62 @@ var createHeaderComponent = function () {
     })
 }
 
+var createPhaseNavigationComponent = function () {
+    var phases = [];
+
+    for (var i = 0; i < logData.phases.length; i++) {
+        var phaseData = logData.phases[i];
+        phases.push({
+            id: i,
+            name: phaseData.name,
+            duration: phaseData.duration
+        })
+    }
+    return new Vue({
+        el: "#phase",
+        data: {
+            phases: phases,
+            focusedphase: focusedPhase
+        }
+    })
+}
+
+var createTargetNavitationComponent = function () {
+    var targets = [];
+    for (var i = 0; i < logData.targets.length; i++) {
+        if (!focusedTargets[i]) {
+            focusedTargets[i] = true;
+        }
+        var targetData = logData.targets[i];
+        targets.push({
+            id: i,
+            name: targetData.name,
+            health: targetData.health,
+            icon: targetData.icon,
+            hitbox: targetData.hbWidth,
+            tough: targetData.tough,
+            active: true
+        });
+    }
+    var phaseTargets = [];
+    for (var i = 0; i < logData.phases.length; i++) {
+        var phaseData = logData.phases[i];
+        phaseTargets.push(phaseData.targets);
+    }
+    return new Vue({
+        el: "#targets",
+        data: {
+            targets: targets,
+            phasetargets: phaseTargets,
+            focusedphase: focusedPhase
+        }
+    })
+}
+
 window.onload = function () {
-    var header = createHeaderComponent();
+    createHeaderComponent();
+    createPhaseNavigationComponent();
+    createTargetNavitationComponent();
+
+    $(function () { $('[title]').tooltip({ html: true }); });
 };

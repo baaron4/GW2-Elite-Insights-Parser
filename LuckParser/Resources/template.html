@@ -28,18 +28,18 @@
     </div>
     <div class="container">
         <div class="d-flex flex-row justify-content-center">
-            <div class="card boss-summary" id="encounter">
-                <encounter-component v-bind:encounter="encounter"></encounter-component>
+            <div class="card boss-summary" id="encounter" style="min-width: 350px;">
+                <encounter-component :encounter="encounter"></encounter-component>
             </div>
         </div>
         <div class="d-flex flex-row justify-content-center" id="phase">
-            <phase-component></phase-component>
+            <phase-component :phases="phases" :focusedphase="focusedphase"></phase-component>
         </div>
-        <div class="d-flex flex-row justify-content-center" id="actors">
-            <div id="targets">
-                <target-component></target-component>
+        <div class="d-flex flex-row justify-content-center mb-3 mt-3" id="actors">
+            <div id="targets" style="min-width: 50%;">
+                <target-component :targets="targets" :phasetargets="phasetargets" :focusedphase="focusedphase"></target-component>
             </div>
-            <div id="players">
+            <div id="players" style="min-width: 50%;">
                 <player-component></player-component>
             </div>
         </div>
@@ -56,7 +56,5 @@
         <div>ARC: ${evtcVersion} | Boss ID: ${fightID} | EI Version: ${eiVersion}</div>
         <div>File recorded by: ${recordedBy}</div>
     </div>
-
-    <script>$(function () { $('[title]').tooltip({ html: true }); });</script>
 </body>
 </html>

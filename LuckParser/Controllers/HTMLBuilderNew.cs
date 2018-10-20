@@ -1492,7 +1492,7 @@ namespace LuckParser.Controllers
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
                 PhaseData phaseData = _statistics.Phases[i];
-                PhaseDto phaseDto = new PhaseDto(phaseData.Name, phaseData.GetDuration("s"));
+                PhaseDto phaseDto = new PhaseDto(phaseData.Name, phaseData.GetDuration());
                 phaseDto.start = phaseData.Start / 1000.0;
                 phaseDto.end = phaseData.End / 1000.0;
                 foreach (Boss target in phaseData.Targets)
