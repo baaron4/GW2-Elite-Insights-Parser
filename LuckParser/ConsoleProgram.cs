@@ -248,7 +248,7 @@ namespace LuckParser
             }
             catch (SkipException s)
             {
-                Console.Write(s.Message);
+                Console.Error.Write(s.Message);
             }
             catch (Exception ex) when (!System.Diagnostics.Debugger.IsAttached)
             {

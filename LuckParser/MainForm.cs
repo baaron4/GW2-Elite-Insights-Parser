@@ -323,6 +323,7 @@ namespace LuckParser
             catch (SkipException s)
             {
                 Console.Write(s.Message);
+                throw new CancellationException(rowData, s);
             }
             catch (Exception ex) when (!System.Diagnostics.Debugger.IsAttached)	
             {	
