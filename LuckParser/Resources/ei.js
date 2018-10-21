@@ -908,5 +908,5 @@ window.onload = function () {
     createGeneralStatsComponent();
     var element = document.getElementById("loading");
     element.parentNode.removeChild(element);
-    $('[data-original-title]').tooltip({ html: true });
+    $('body').tooltip({ selector: '[data-original-title]',html: true });
 };
