@@ -76,7 +76,7 @@ Vue.component('encounter-component', {
         <h3 class="card-header text-center">{{ encounter.name }}</h3>
         <div class ="card-body container">
             <div class="d-flex flex-row justify-content-center align-item-center">
-                <img class="mr-3 icon-xxl" :src="encounter.icon" :alt="encounter.name">
+                <img class="mr-3 icon-xl" :src="encounter.icon" :alt="encounter.name">
                 <div class="ml-3 d-flex flex-column justify-content-center align-item-center">
                     <div class="mb-2" v-for="target in encounter.targets">
                         <div v-if="encounter.targets.length > 1" class="small" style="text-align:center;">{{ target.name }}</div>
@@ -159,7 +159,7 @@ Vue.component('player-component', {
                     <tr v-for="group in groups">
                         <td class="player-cell" v-for="player in group" :class="{active: player.active}" @click="select(player,groups)">
                             <div>
-                                <img :src="getIcon(player.profession)" :alt="player.profession" class="icon" :title="player.prof">
+                                <img :src="player.icon" :alt="player.profession" class="icon" :title="player.prof">
                                 <img v-if="player.condi > 0" src="https://wiki.guildwars2.com/images/5/54/Condition_Damage.png" alt="Condition Damage" class="icon" :title="'Condition Damage - ' + player.condi">
                                 <img v-if="player.conc > 0" src="https://wiki.guildwars2.com/images/4/44/Boon_Duration.png" alt="Concentration" class="icon" :title="'Concentration - ' + player.conc">
                                 <img v-if="player.heal > 0" src="https://wiki.guildwars2.com/images/8/81/Healing_Power.png" alt="Healing Power" class="icon" :title="'HealingPower - ' + player.heal">
@@ -240,6 +240,123 @@ Vue.component('general-layout-component', {
     }
 });
 
+Vue.component('damage-stats-component', {
+    props: ['layout', 'phases', 'targets', 'players'],
+    template: `
+        <div v-show="show">
+            <table class="table table-sm table-striped table-hover"  cellspacing="0" width="100%" id="dps-table">
+                <thead>
+		            <tr>
+			            <th>Sub</th>
+			            <th></th>
+			            <th class="text-left">Name</th>
+			            <th>Account</th>
+			            <th>Target DPS</th>
+			            <th>Power</th>
+			            <th>Condi</th>
+			            <th>All DPS</th>
+			            <th>Power</th>
+			            <th>Condi</th>
+		            </tr>
+	            </thead>
+                <tbody>
+                    <tr v-for="row in tableData.rows">                   
+                        <td>{{row.player.group}}</td>
+                        <td :title="row.player.profession"><img :src="row.player.icon" :alt="row.player.profession" class="icon"><span style="display:none">{{row.player.profession}}</span></td>
+                        <td class="text-left">{{row.player.name}}</td>
+	                    <td>{{row.player.acc}}</td>
+			            <td :title="row.dps[0] + ' dmg'" :data-original-title="row.dps[0] + ' dmg'">{{row.dps[1]}}</td>
+			            <td :title="row.dps[2] + ' dmg'" :data-original-title="row.dps[2] + ' dmg'">{{row.dps[3]}}</td>
+			            <td :title="row.dps[4] + ' dmg'" :data-original-title="row.dps[4] + ' dmg'">{{row.dps[5]}}</td>
+			            <td :title="row.dps[6] + ' dmg'">{{row.dps[7]}}</td>
+			            <td :title="row.dps[8] + ' dmg'">{{row.dps[9]}}</td>
+			            <td :title="row.dps[10] + ' dmg'">{{row.dps[11]}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr v-for="sum in tableData.sums">
+                        <td></td>
+			            <td></td>
+			            <td class="text-left">{{sum.name}}</td>
+			            <td></td>
+			            <td :title="sum.dps[0] + ' dmg'" :data-original-title="sum.dps[0] + ' dmg'">{{sum.dps[1]}}</td>
+			            <td :title="sum.dps[2] + ' dmg'" :data-original-title="sum.dps[2] + ' dmg'">{{sum.dps[3]}}</td>
+			            <td :title="sum.dps[4] + ' dmg'" :data-original-title="sum.dps[4] + ' dmg'">{{sum.dps[5]}}</td>
+			            <td :title="sum.dps[6] + ' dmg'">{{sum.dps[7]}}</td>
+			            <td :title="sum.dps[8] + ' dmg'">{{sum.dps[9]}}</td>
+			            <td :title="sum.dps[10] + ' dmg'">{{sum.dps[11]}}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    `,
+    mounted() {
+        $(function () { $('[title]').tooltip({ html: true }) });
+        $(function () { $('#dps-table').DataTable({ 'order': [[4, 'desc']] }) });
+    },
+    updated() {
+        var order = $('#dps-table').DataTable().order();
+        $('#dps-table').DataTable().destroy();
+        $('#dps-table').DataTable().order(order);
+        $('#dps-table').DataTable().draw();
+    },
+    computed: {
+        tableData: function () {
+            var rows = [];
+            var sums = [];
+            var total = [];
+            var groups = [];
+            var phase = null;
+            for (var i = 0; i < this.phases.length; i++) {
+                if (this.phases[i].active) {
+                    phase = this.phases[i];
+                    break;
+                }
+            }
+            for (var i = 0; i < phase.dpsStats.length; i++) {
+                var dpsStat = phase.dpsStats[i];
+                var dpsTargetStat = [0, 0, 0, 0, 0, 0];
+                for (var j = 0; j < phase.targets.length; j++) {
+                    if (this.targets[phase.targets[j]].active) {
+                        var tar = phase.dpsStatsTargets[i][j];
+                        for (var k = 0; k < dpsTargetStat.length; k++) {
+                            dpsTargetStat[k] += tar[k];
+                        }
+                    }
+                }
+                var player = this.players[i];
+                if (!groups[player.group])
+                    groups[player.group] = [];
+                var dps = dpsTargetStat.concat(dpsStat);
+                for (var j = 0; j < dps.length; j++) {
+                    total[j] = (total[j] || 0) + dps[j];
+                    groups[player.group][j] = (groups[player.group][j] || 0) + dps[j];
+                }
+                rows.push({ player: player, dps: dps });
+            }
+            for (var i = 0; i < groups.length; i++) {
+                if (groups[i])
+                    sums.push({ name: 'Group ' + i, dps: groups[i] });
+            }
+            sums.push({ name: 'Total', dps: total });
+            return {
+                rows: rows,
+                sums: sums
+            };
+        },
+        show: function () {
+            var path = [0, 0];
+            var cur = this.layout;
+            for (var i = 0; i < path.length; i++) {
+                if (!cur || !cur.tabs || !cur.tabs[path[i]] || !cur.tabs[path[i]].active) {
+                    return false;
+                }
+                cur = cur.tabs[path[i]].layout;
+            }
+            return true;
+        }
+    }
+});
 
 var processData = function () {
     for (var i = 0; i < logData.phases.length; i++) {
@@ -252,6 +369,7 @@ var processData = function () {
     for (var i = 0; i < logData.players.length; i++) {
         var playerData = logData.players[i];
         playerData.active = false;
+        playerData.icon = urls[playerData.profession];
     } 
 }
 
@@ -364,7 +482,9 @@ var createGeneralStatsComponent = function () {
         el: "#content",
         data: {
             layout: layout,
-            phases: logData.phases
+            phases: logData.phases,
+            targets: logData.targets,
+            players: logData.players
         }
     })
     return layout;

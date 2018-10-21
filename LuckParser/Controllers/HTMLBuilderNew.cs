@@ -123,27 +123,6 @@ namespace LuckParser.Controllers
                 playerData.Add(dpsAll.PowerDps);
                 playerData.Add(dpsAll.CondiDamage);
                 playerData.Add(dpsAll.CondiDps);
-                playerData.Add(stats.DownCount);
-
-                if (stats.Died != 0.0)
-                {
-                    if (stats.Died < 0)
-                    {
-                        playerData.Add("");
-                        playerData.Add(-stats.Died + " time(s)");
-                    }
-                    else
-                    {
-                        TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
-                        playerData.Add(timedead + "(" + Math.Round((timedead.TotalMilliseconds / phase.GetDuration()) * 100, 1) + "% Alive)"); //28
-                        playerData.Add(timedead.Minutes + " m " + timedead.Seconds + " s");
-                    }
-                }
-                else
-                {
-                    playerData.Add("Never died");
-                    playerData.Add("");
-                }
 
                 list.Add(playerData);
             }
