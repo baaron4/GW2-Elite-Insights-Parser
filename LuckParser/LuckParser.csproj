@@ -79,7 +79,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CancellationException.cs" />
+    <Compile Include="Controllers\Exceptions\SkipException.cs" />
+    <Compile Include="Controllers\Exceptions\CancellationException.cs" />
     <Compile Include="ConsoleProgram.cs" />
     <Compile Include="Controllers\CSVHelper.cs" />
     <Compile Include="Controllers\GeneralHelper.cs" />
