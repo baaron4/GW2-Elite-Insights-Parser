@@ -91,7 +91,7 @@ var Tab = function (name, options) {
 }
 
 Vue.component('encounter-component', {
-    props: ['encounter'],
+    props: ['logdata'],
     template: `
     <div>
         <h3 class="card-header text-center">{{ encounter.name }}</h3>
@@ -119,6 +119,25 @@ Vue.component('encounter-component', {
         },
         getResultClass: function (success) {
             return success ? ["text-success"] : ["text-warning"];
+        }
+    },
+    computed: {
+        encounter: function () {
+            var logData = this.logdata;
+            var targets = [];
+            for (var i = 0; i < logData.phases[0].targets.length; i++) {
+                var targetData = logData.targets[logData.phases[0].targets[i]];
+                targets.push(targetData);
+            }
+
+            var encounter = {
+                name: logData.fightName,
+                success: logData.success,
+                icon: logData.fightIcon,
+                duration: logData.encounterDuration,
+                targets: targets
+            }
+            return encounter;
         }
     }
 });
@@ -790,30 +809,7 @@ Vue.component('gameplay-stats-component', {
     }
 });
 
-var createHeaderComponent = function () {
-    var targets = [];
-    for (var i = 0; i < logData.phases[0].targets.length; i++) {
-        var targetData = logData.targets[logData.phases[0].targets[i]];
-        targets.push(targetData);
-    }
-
-    var encounter = {
-        name: logData.fightName,
-        success: logData.success,
-        icon: logData.fightIcon,
-        duration: logData.encounterDuration,
-        targets: targets
-    }
-
-    return new Vue({
-        el: "#encounter",
-        data: {
-            encounter: encounter
-        }
-    })
-}
-
-var createGeneralStatsComponent = function () {
+var createLayout = function () {
     var layout = new Layout("Summary");
     // general stats
     var stats = new Tab("General Stats", { active: true })
@@ -845,25 +841,28 @@ var createGeneralStatsComponent = function () {
     // player
     var player = new Tab("Selected Player");
     layout.addTab(player);
+    return layout;
+}
 
+window.onload = function () {
+    var layout = createLayout();
     new Vue({
-        el: "#content",
+        el: '#content',
         data: {
+            logdata: logData,
             layout: layout,
-            phases: logData.phases,
-            targets: logData.targets,
-            players: logData.players,
             datatypes: DataTypes
         },
         computed: {
             phase: function () {
-                for (var i = 0; i < this.phases.length; i++) {
-                    if (this.phases[i].active)
-                        return this.phases[i];
+                var phases = this.logdata.phases;
+                for (var i = 0; i < phases.length; i++) {
+                    if (phases[i].active)
+                        return phases[i];
                 }
             },
             dataType: function () {
-                var cur = layout.tabs;
+                var cur = this.layout.tabs;
                 while (cur !== null) {
                     for (var i = 0; i < cur.length; i++) {
                         var tab = cur[i];
@@ -880,32 +879,7 @@ var createGeneralStatsComponent = function () {
                 return -1;
             }
         }
-    })
-    return layout;
-}
-
-window.onload = function () {
-    createHeaderComponent();
-    new Vue({
-        el: "#phase",
-        data: {
-            phases: logData.phases,
-        }
     });
-    new Vue({
-        el: "#targets",
-        data: {
-            targets: logData.targets,
-            phases: logData.phases
-        }
-    });
-    new Vue({
-        el: "#players",
-        data: {
-            players: logData.players
-        }
-    });
-    createGeneralStatsComponent();
     var element = document.getElementById("loading");
     element.parentNode.removeChild(element);
     $('body').tooltip({ selector: '[data-original-title]',html: true });

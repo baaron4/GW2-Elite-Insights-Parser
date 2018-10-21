@@ -26,37 +26,36 @@
     <div class="header">
         <div>Time Start: ${encounterStart} | Time End: ${encounterEnd}</div>
     </div>
-    <div class="container">
+    <div class="card" id="loading">
+        <div class="card-body" style="margin: 100px; text-align: center;">
+            Loading data...
+        </div>
+    </div>
+    <div class="container" id="content">
         <div class="d-flex flex-row justify-content-center">
             <div class="card boss-summary" id="encounter" style="min-width: 350px;">
-                <encounter-component :encounter="encounter"></encounter-component>
+                <encounter-component :logdata="logdata"></encounter-component>
             </div>
         </div>
         <div class="d-flex flex-row justify-content-center mt-2" id="phase">
-            <phase-component :phases="phases"></phase-component>
+            <phase-component :phases="logdata.phases"></phase-component>
         </div>
         <div class="d-flex flex-row justify-content-center mb-3 mt-3" id="actors">
             <div id="targets" class="d-flex flex-row justify-content-center align-items-center flex-wrap mr-5">
-                <target-component :targets="targets" :phases="phases"></target-component>
+                <target-component :targets="logdata.targets" :phases="logdata.phases"></target-component>
             </div>
             <div id="players" class="ml-5">
-                <player-component :players="players"></player-component>
+                <player-component :players="logdata.players"></player-component>
             </div>
         </div>
-        <div id="content">
-            <div class="card" id="loading">
-                <div class="card-body" style="margin: 100px; text-align: center;">
-                    Loading data...
-                </div>
-            </div>
-            <general-layout-component :layout="layout" :phase="phase"></general-layout-component>
-            <div id="general-stats">
-                <damage-stats-component v-show="dataType === datatypes.damageTable" :layout="layout" :phase="phase" :players="players" :targets="targets"></damage-stats-component>
-                <gameplay-stats-component v-show="dataType === datatypes.gameplayTable" :layout="layout" :phase="phase" :players="players" :targets="targets"></gameplay-stats-component>
-                <support-stats-component v-show="dataType === datatypes.supTable" :layout="layout" :phase="phase" :players="players"></support-stats-component>
-                <defense-stats-component v-show="dataType === datatypes.defTable" :layout="layout" :phase="phase" :players="players"></defense-stats-component>
-            </div>           
+        <general-layout-component :layout="layout" :phase="phase"></general-layout-component>
+        <div id="general-stats">
+            <damage-stats-component v-show="dataType === datatypes.damageTable" :layout="layout" :phase="phase" :players="logdata.players" :targets="logdata.targets"></damage-stats-component>
+            <gameplay-stats-component v-show="dataType === datatypes.gameplayTable" :layout="layout" :phase="phase" :players="logdata.players" :targets="logdata.targets"></gameplay-stats-component>
+            <support-stats-component v-show="dataType === datatypes.supTable" :layout="layout" :phase="phase" :players="logdata.players"></support-stats-component>
+            <defense-stats-component v-show="dataType === datatypes.defTable" :layout="layout" :phase="phase" :players="logdata.players"></defense-stats-component>
         </div>
+
     </div>
 
     <div class="footer">
