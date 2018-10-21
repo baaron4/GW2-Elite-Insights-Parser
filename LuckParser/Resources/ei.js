@@ -53,7 +53,8 @@ var DataTypes = {
     damageTable: 0,
     defTable: 1,
     supTable: 2,
-    gameplayTable: 3
+    gameplayTable: 3,
+    mechanicTable: 4
 };
 
 for (var i = 0; i < logData.phases.length; i++) {
@@ -809,6 +810,61 @@ Vue.component('gameplay-stats-component', {
     }
 });
 
+Vue.component('mechanic-stats-component', {
+    props: ['phase', 'players', 'enemies' ],
+    template: `
+        <table v-show="playerMech.header.length > 0" class="table table-sm table-striped table-hover" cellspacing="0">
+            <thead>
+                <tr>              
+			        <th width="30px">Sub</th>
+			        <th width="30px"></th>
+			        <th class="text-left">Player</th>
+                    <th v-for="mech in playerMech.header" :data-original-title="mech.description">{{ mech.shortName }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="row in playerMech.rows">                  
+			        <td>{{row.player.group}}</td>
+			        <td :data-original-title="row.player.profession">
+                            <img :src="row.player.icon" :alt="row.player.profession" class="icon">
+                            <span style="display:none">{{row.player.profession}}</span>
+                    </td>
+			        <td class="text-left">{{row.player.name}}</td>
+                    <td v-for="mech in row.mechs" :data-original-title="mech[1] ? mech[1] + ' times (multi hits)' : false">{{ mech[0] }}<td>
+                </tr>
+            </tbody>
+        </table>
+        <table v-show="enemyMech.header.length > 0" class="table table-sm table-striped table-hover" cellspacing="0">
+            <thead>
+                <tr>              
+			        <th class="text-left">Enemy</th>
+                    <th v-for="mechs in enemyMech.header" :data-original-title="mech.description">{{ mech.shortName }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="row in enemyMech.rows">
+			        <td class="text-left">{{row.enemy.name}}</td>
+                    <td v-for="mech in row.mechs" :data-original-title="mech[1] ? mech[1] + ' times (multi hits)' : false">{{ mech[0] ? mech[0] : '-' }}<td>
+                </tr>
+            </tbody>
+        </table>
+    `,
+    computed: {
+        playerMech: function() {
+            return {
+                header: [],
+                rows: []
+            };
+        },
+        enemyMech: function () {
+            return {
+                header: [],
+                rows: []
+            };
+        }
+    }
+});
+
 var createLayout = function () {
     var layout = new Layout("Summary");
     // general stats
@@ -830,7 +886,7 @@ var createLayout = function () {
     buffs.layout = buffLayout;
     layout.addTab(buffs);
     // mechanics
-    var mechanics = new Tab("Mechanics");
+    var mechanics = new Tab("Mechanics", { dataType: DataTypes.mechanicTable });
     layout.addTab(mechanics);
     // graphs
     var graphs = new Tab("Graph");

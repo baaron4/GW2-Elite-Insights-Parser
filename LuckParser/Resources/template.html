@@ -55,7 +55,9 @@
             <support-stats-component v-show="dataType === datatypes.supTable" :layout="layout" :phase="phase" :players="logdata.players"></support-stats-component>
             <defense-stats-component v-show="dataType === datatypes.defTable" :layout="layout" :phase="phase" :players="logdata.players"></defense-stats-component>
         </div>
-
+        <div id="mechanics-stats">
+            <mechanics-stats-component v-show="dataType === datatypes.mechanicTable"></mechanics-stats-component>
+        </div>
     </div>
 
     <div class="footer">
