@@ -83,31 +83,6 @@ function createProfessionCell($cell, profession) {
 	$cell.empty().attr('data-sort', profession).append(profImg(profession));
 }
 
-function createDpsTable($target, data) {
-	if (!$target.length) return;
-	var rows = [];
-	var sums = [];
-	var total = [];
-	var groups = [];
-
-	$.each(data, function (i, dps) {
-		var p = window.data.players[i];
-		rows.push({ player: p, dps: dps });
-		if (!groups[p.group]) groups[p.group] = [];
-		for (var j = 0; j < 13; j++) {
-			total[j] = (total[j] || 0) + dps[j];
-			groups[p.group][j] = (groups[p.group][j] || 0) + dps[j];
-		}
-	});
-	for (var i = 0; i < groups.length; i++) {
-		if (groups[i]) sums.push({ name: 'Group ' + i, dps: groups[i] });
-	}
-	sums.push({ name: 'Total', dps: total });
-
-	var html = tmplDpsTable.render({ rows: rows, sums: sums });
-	lazyTable2($target, html, { 'order': [[4, 'desc']] })
-}
-
 function createDamageStatsTable($target, data) {
 	if (!$target.length) return;
 	var rows = [];
@@ -146,59 +121,6 @@ function calcAverages(data, avgCols, count) {
 	$.each(avgCols, function (ai, a) {
 		data[a] = Math.round(data[a] * 10.0 / count) / 10.0;
 	});
-}
-
-function createDefStatsTable($target, data) {
-	if (!$target.length) return;
-	var rows = [];
-	var sums = [];
-	var total = [0, 0, 0, 0, 0, 0, 0, 0];
-	var groups = [];
-	$.each(data, function (i, def) {
-		var player = window.data.players[i];
-		if (player.isConjure) return;
-		rows.push({ player: player, data: def });
-		if (!groups[player.group]) groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0];
-		for (var j = 0; j < 8; j++) {
-			total[j] += def[j];
-			groups[player.group][j] += def[j];
-		}
-	});
-
-	for (var i = 0; i < groups.length; i++) {
-		if (groups[i]) sums.push({ name: 'Group ' + i, data: groups[i] });
-	}
-	sums.push({ name: 'Total', data: total });
-
-	var html = tmplDefTable.render({ rows: rows, sums: sums });
-	lazyTable2($target, html, { 'order': [[3, 'desc']] });
-}
-
-
-function createSupStatsTable($target, data) {
-	if (!$target.length) return;
-	var rows = [];
-	var sums = [];
-	var total = [0, 0, 0, 0];
-	var groups = [];
-	$.each(data, function (i, dps) {
-		var player = window.data.players[i];
-		if (player.isConjure) return;
-		rows.push({ player: player, data: dps });
-		if (!groups[player.group]) groups[player.group] = [0, 0, 0, 0];
-		for (var j = 0; j < 4; j++) {
-			total[j] += dps[j];
-			groups[player.group][j] += dps[j];
-		}
-	});
-
-	for (var i = 0; i < groups.length; i++) {
-		if (groups[i]) sums.push({ name: 'Group ' + i, data: groups[i] });
-	}
-	sums.push({ name: 'Total', data: total });
-
-	var html = tmplSupTable.render({ rows: rows, sums: sums });
-	lazyTable2($target, html, { 'order': [[3, 'desc']] });
 }
 
 function createBoonTable($target, boons, data, generation) {

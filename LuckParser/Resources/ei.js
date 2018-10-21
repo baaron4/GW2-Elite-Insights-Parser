@@ -49,6 +49,13 @@ var urls = {
     'Staff': 'https://wiki.guildwars2.com/images/5/5f/Crimson_Antique_Spire.png'
 };
 
+var DataTypes = {
+    damageTable: 0,
+    defTable: 1,
+    supTable: 2,
+    gameplayTable: 3
+};
+
 var Layout = function (desc) {
     this.desc = desc;
     this.tabs = null;
@@ -67,6 +74,7 @@ var Tab = function (name, options) {
     this.layout = null;
     this.desc = options.desc ? options.desc : null;
     this.active = options.active ? options.active : false;
+    this.dataType = typeof(options.dataType) !== "undefined" ? options.dataType : -1;
 }
 
 Vue.component('encounter-component', {
@@ -198,10 +206,10 @@ Vue.component('player-component', {
 
 Vue.component('general-layout-component', {
     name: "general-layout-component",
-    props: ['layout', "phases"],
+    props: ['layout', "phase"],
     template: `
         <div>
-            <h2 v-if="layout.desc" :class="{'text-center': !!phases}">{{ layoutName }}</h2>
+            <h2 v-if="layout.desc" :class="{'text-center': !!phase}">{{ layoutName }}</h2>
             <ul class="nav nav-tabs">
                 <li v-for="tab in layout.tabs">
                     <a class="nav-link" :class="{active: tab.active}" @click="select(tab, layout.tabs)"> {{ tab.name }} </a>
@@ -225,25 +233,18 @@ Vue.component('general-layout-component', {
     },
     computed: {
         layoutName: function () {
-            if (!this.phases) {
+            if (!this.phase) {
                 return this.layout.desc;
             }
-            var phaseName = "";
-            for (var i = 0; i < this.phases.length; i++) {
-                if (this.phases[i].active) {
-                    phaseName = this.phases[i].name;
-                    break;
-                }
-            }
-            return this.layout.desc ? phaseName + " " + this.layout.desc : phaseName;
+            return this.layout.desc ? this.phase.name + " " + this.layout.desc : this.phase.name;
         }
     }
 });
 
 Vue.component('damage-stats-component', {
-    props: ['layout', 'phases', 'targets', 'players'],
+    props: ['layout', 'phase', 'targets', 'players'],
     template: `
-        <div v-show="show">
+        <div>
             <table class="table table-sm table-striped table-hover"  cellspacing="0" width="100%" id="dps-table">
                 <thead>
 		            <tr>
@@ -265,9 +266,9 @@ Vue.component('damage-stats-component', {
                         <td :title="row.player.profession"><img :src="row.player.icon" :alt="row.player.profession" class="icon"><span style="display:none">{{row.player.profession}}</span></td>
                         <td class="text-left">{{row.player.name}}</td>
 	                    <td>{{row.player.acc}}</td>
-			            <td :title="row.dps[0] + ' dmg'" :data-original-title="row.dps[0] + ' dmg'">{{row.dps[1]}}</td>
-			            <td :title="row.dps[2] + ' dmg'" :data-original-title="row.dps[2] + ' dmg'">{{row.dps[3]}}</td>
-			            <td :title="row.dps[4] + ' dmg'" :data-original-title="row.dps[4] + ' dmg'">{{row.dps[5]}}</td>
+			            <td :title="row.dps[0] + ' dmg'">{{row.dps[1]}}</td>
+			            <td :title="row.dps[2] + ' dmg'">{{row.dps[3]}}</td>
+			            <td :title="row.dps[4] + ' dmg'">{{row.dps[5]}}</td>
 			            <td :title="row.dps[6] + ' dmg'">{{row.dps[7]}}</td>
 			            <td :title="row.dps[8] + ' dmg'">{{row.dps[9]}}</td>
 			            <td :title="row.dps[10] + ' dmg'">{{row.dps[11]}}</td>
@@ -279,9 +280,9 @@ Vue.component('damage-stats-component', {
 			            <td></td>
 			            <td class="text-left">{{sum.name}}</td>
 			            <td></td>
-			            <td :title="sum.dps[0] + ' dmg'" :data-original-title="sum.dps[0] + ' dmg'">{{sum.dps[1]}}</td>
-			            <td :title="sum.dps[2] + ' dmg'" :data-original-title="sum.dps[2] + ' dmg'">{{sum.dps[3]}}</td>
-			            <td :title="sum.dps[4] + ' dmg'" :data-original-title="sum.dps[4] + ' dmg'">{{sum.dps[5]}}</td>
+			            <td :title="sum.dps[0] + ' dmg'">{{sum.dps[1]}}</td>
+			            <td :title="sum.dps[2] + ' dmg'">{{sum.dps[3]}}</td>
+			            <td :title="sum.dps[4] + ' dmg'">{{sum.dps[5]}}</td>
 			            <td :title="sum.dps[6] + ' dmg'">{{sum.dps[7]}}</td>
 			            <td :title="sum.dps[8] + ' dmg'">{{sum.dps[9]}}</td>
 			            <td :title="sum.dps[10] + ' dmg'">{{sum.dps[11]}}</td>
@@ -291,10 +292,11 @@ Vue.component('damage-stats-component', {
         </div>
     `,
     mounted() {
-        $(function () { $('[title]').tooltip({ html: true }) });
         $(function () { $('#dps-table').DataTable({ 'order': [[4, 'desc']] }) });
     },
     updated() {
+        $(function () { $('[title]').tooltip('dispose'); });
+        $(function () { $('[title]').tooltip({ html: true }) });
         var order = $('#dps-table').DataTable().order();
         $('#dps-table').DataTable().destroy();
         $('#dps-table').DataTable().order(order);
@@ -304,15 +306,9 @@ Vue.component('damage-stats-component', {
         tableData: function () {
             var rows = [];
             var sums = [];
-            var total = [];
+            var total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             var groups = [];
-            var phase = null;
-            for (var i = 0; i < this.phases.length; i++) {
-                if (this.phases[i].active) {
-                    phase = this.phases[i];
-                    break;
-                }
-            }
+            var phase = this.phase;
             for (var i = 0; i < phase.dpsStats.length; i++) {
                 var dpsStat = phase.dpsStats[i];
                 var dpsTargetStat = [0, 0, 0, 0, 0, 0];
@@ -326,11 +322,11 @@ Vue.component('damage-stats-component', {
                 }
                 var player = this.players[i];
                 if (!groups[player.group])
-                    groups[player.group] = [];
+                    groups[player.group] = [0,0,0,0,0,0,0,0,0,0,0,0];
                 var dps = dpsTargetStat.concat(dpsStat);
                 for (var j = 0; j < dps.length; j++) {
-                    total[j] = (total[j] || 0) + dps[j];
-                    groups[player.group][j] = (groups[player.group][j] || 0) + dps[j];
+                    total[j] += dps[j];
+                    groups[player.group][j] += dps[j];
                 }
                 rows.push({ player: player, dps: dps });
             }
@@ -343,17 +339,329 @@ Vue.component('damage-stats-component', {
                 rows: rows,
                 sums: sums
             };
-        },
-        show: function () {
-            var path = [0, 0];
-            var cur = this.layout;
-            for (var i = 0; i < path.length; i++) {
-                if (!cur || !cur.tabs || !cur.tabs[path[i]] || !cur.tabs[path[i]].active) {
-                    return false;
+        }
+    }
+});
+
+Vue.component('defense-stats-component', {
+    props: ['layout', 'phase', 'players'],
+    template: `
+        <div>
+            <table class="table table-sm table-striped table-hover"  cellspacing="0" width="100%" id="def-table">
+                <thead>
+		            <tr>
+			            <th>Sub</th>
+			            <th></th>
+			            <th class="text-left">Name</th>
+			            <th>Account</th><th>Dmg Taken</th>
+			            <th>Dmg Barrier</th>
+			            <th>Blocked</th>
+			            <th>Invulned</th>
+			            <th>Evaded</th>
+			            <th><span data-toggle="tooltip" data-html="true" data-placement="top" title="Dodges or Mirage Cloak ">Dodges</span></th>
+			            <th><img src="https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png" alt="Downs" title="Times downed" class="icon icon-hover"></th>
+			            <th><img src="https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png" alt="Dead" title="Time died" class="icon icon-hover"></th>
+		            </tr>
+	            </thead>
+                <tbody>
+                    <tr v-for="row in tableData.rows">                   
+                        <td>{{row.player.group}}</td>
+                        <td :title="row.player.profession"><img :src="row.player.icon" :alt="row.player.profession" class="icon"><span style="display:none">{{row.player.profession}}</span></td>
+                        <td class="text-left">{{row.player.name}}</td>
+	                    <td>{{row.player.acc}}</td>
+		                <td>{{row.def[0]}}</td>
+		                <td>{{row.def[1]}}</td>
+		                <td>{{row.def[2]}}</td>
+		                <td>{{row.def[3]}}</td>
+		                <td>{{row.def[4]}}</td>
+		                <td>{{row.def[5]}}</td>
+		                <td>{{row.def[6]}}</td>
+		                <td :title="row.def[8]">{{row.def[7]}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr v-for="sum in tableData.sums">
+                        <td></td>
+			            <td></td>
+			            <td class="text-left">{{sum.name}}</td>
+			            <td></td>
+			            <td>{{sum.def[0]}}</td>
+			            <td>{{sum.def[1]}}</td>
+			            <td>{{sum.def[2]}}</td>
+			            <td>{{sum.def[3]}}</td>
+			            <td>{{sum.def[4]}}</td>
+			            <td>{{sum.def[5]}}</td>
+			            <td>{{sum.def[6]}}</td>
+			            <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    `,
+    mounted() {
+        $(function () { $('#def-table').DataTable({ 'order': [[4, 'desc']] }) });
+    },
+    updated() {
+        $(function () { $('[title]').tooltip('dispose'); });
+        $(function () { $('[title]').tooltip({ html: true }) });
+        var order = $('#def-table').DataTable().order();
+        $('#def-table').DataTable().destroy();
+        $('#def-table').DataTable().order(order);
+        $('#def-table').DataTable().draw();
+    },
+    computed: {
+        tableData: function () {
+            var rows = [];
+            var sums = [];
+            var total = [0, 0, 0, 0, 0, 0,0];
+            var groups = [];
+            for (var i = 0; i < this.phase.defStats.length; i++) {
+                var def = this.phase.defStats[i];
+                var player = this.players[i];
+                if (player.isConjure) {
+                    continue;
                 }
-                cur = cur.tabs[path[i]].layout;
+                rows.push({ player: player, def: def });
+                if (!groups[player.group])
+                    groups[player.group] = [0, 0, 0, 0, 0, 0,0];
+                for (var j = 0; j < total.length; j++) {
+                    total[j] += def[j];
+                    groups[player.group][j] += def[j];
+                }
             }
-            return true;
+            for (var i = 0; i < groups.length; i++) {
+                if (groups[i])
+                    sums.push({ name: 'Group ' + i, def: groups[i] });
+            }
+            sums.push({ name: 'Total', def: total });
+            return {
+                rows: rows,
+                sums: sums
+            };
+        }
+    }
+});
+
+Vue.component('support-stats-component', {
+    props: ['layout', 'phase', 'players'],
+    template: `
+        <div>
+            <table class="table table-sm table-striped table-hover"  cellspacing="0" width="100%" id="sup-table">
+                <thead>
+		            <tr>
+			            <th>Sub</th>
+			            <th></th>
+			            <th class="text-left">Name</th>
+			            <th>Account</th>	            
+			            <th>Condi Cleanse</th>
+			            <th>Resurrects</th>
+                </tr>
+	            </thead>
+                <tbody>
+                    <tr v-for="row in tableData.rows">                   
+                        <td>{{row.player.group}}</td>
+                        <td :title="row.player.profession"><img :src="row.player.icon" :alt="row.player.profession" class="icon"><span style="display:none">{{row.player.profession}}</span></td>
+                        <td class="text-left">{{row.player.name}}</td>
+	                    <td>{{row.player.acc}}</td>
+		                <td :title="row.sup[1] + ' seconds'">{{row.sup[0]}}</td>
+		                <td :title="row.sup[3] + ' seconds'">{{row.sup[2]}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr v-for="sum in tableData.sums">
+                        <td></td>
+			            <td></td>
+			            <td class="text-left">{{sum.name}}</td>
+			            <td></td>
+		                <td :title="sum.sup[1] + ' seconds'">{{sum.sup[0]}}</td>
+		                <td :title="sum.sup[3] + ' seconds'">{{sum.sup[2]}}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    `,
+    mounted() {
+        $(function () { $('#sup-table').DataTable({ 'order': [[4, 'desc']] }) });
+    },
+    updated() {
+        $(function () { $('[title]').tooltip('dispose'); });
+        $(function () { $('[title]').tooltip({ html: true }) });
+        var order = $('#sup-table').DataTable().order();
+        $('#sup-table').DataTable().destroy();
+        $('#sup-table').DataTable().order(order);
+        $('#sup-table').DataTable().draw();
+    },
+    computed: {
+        tableData: function () {
+            var rows = [];
+            var sums = [];
+            var total = [0, 0, 0, 0];
+            var groups = [];
+            for (var i = 0; i < this.phase.healStats.length; i++) {
+                var sup = this.phase.healStats[i];
+                var player = this.players[i];
+                if (player.isConjure) {
+                    continue;
+                }
+                rows.push({ player: player, sup: sup });
+                if (!groups[player.group])
+                    groups[player.group] = [0, 0, 0, 0];
+                for (var j = 0; j < sup.length; j++) {
+                    total[j] += sup[j];
+                    groups[player.group][j] += sup[j];
+                }
+            }
+            for (var i = 0; i < groups.length; i++) {
+                if (groups[i])
+                    sums.push({ name: 'Group ' + i, sup: groups[i] });
+            }
+            sums.push({ name: 'Total', sup: total });
+            return {
+                rows: rows,
+                sums: sums
+            };
+        }
+    }
+});
+
+Vue.component('gameplay-stats-component', {
+    props: ['layout', 'phase', 'targets', 'players'],
+    data: function () {
+        return {
+            mode: 0
+        }
+    },
+    template: `
+        <div>
+            <div class="d-flex flex-row justify-content-center mt-1 mb-1">
+                <ul class="nav nav-pills">
+                  <li class="nav-item">
+                    <a class="nav-link" @click="mode = 1" :class="{active: mode}">Target</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" @click="mode = 0" :class="{active: !mode }">All</a>
+                  </li>
+                </ul>
+            </div>
+            <table class="table table-sm table-striped table-hover"  cellspacing="0" width="100%" id="dmg-table">
+                <thead>
+		            <tr>
+			            <th>Sub</th>
+			            <th></th>
+			            <th class="text-left">Name</th>
+			            <th>Account</th>
+                        <th><img src="https://wiki.guildwars2.com/images/9/95/Critical_Chance.png" alt="Crits" title="Percent time hits critical" class="icon icon-hover"></th>
+			            <th><img src="https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png" alt="Scholar" title="Percent time hits while above 90% health" class="icon icon-hover"></th>
+			            <th><img src="https://wiki.guildwars2.com/images/1/1c/Bowl_of_Seaweed_Salad.png" alt="SwS" title="Percent time hits while moveing" class="icon icon-hover"></th>
+			            <th><img src="https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png" alt="Flank" title="Percent time hits while flanking" class="icon icon-hover"></th>
+			            <th><img src="https://wiki.guildwars2.com/images/f/f9/Weakness.png" alt="Glance" title="Percent time hits while glanceing" class="icon icon-hover"></th>
+			            <th><img src="https://wiki.guildwars2.com/images/3/33/Blinded.png" alt="Miss" title="Number of hits while blinded" class="icon icon-hover"></th>
+			            <th><img src="https://wiki.guildwars2.com/images/7/79/Daze.png" alt="Interupts" title="Number of hits interupted?/hits used to interupt" class="icon icon-hover"></th>
+			            <th><img src="https://wiki.guildwars2.com/images/e/eb/Determined.png" alt="Ivuln" title="times the enemy was invulnerable to attacks" class="icon icon-hover"></th>
+			            <th><img src="https://wiki.guildwars2.com/images/b/b3/Out_Of_Health_Potions.png" alt="Wasted" title="Time wasted(in seconds) interupting skill casts" class="icon icon-hover"></th>
+			            <th><img src="https://wiki.guildwars2.com/images/e/eb/Ready.png" alt="Saved" title="Time saved(in seconds) interupting skill casts" class="icon icon-hover"></th>
+			            <th><img src="https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png" alt="Swap" title="Times weapon swapped" class="icon icon-hover"></th>
+			            <th><img src="https://wiki.guildwars2.com/images/e/ef/Commander_arrow_marker.png" alt="Stack" title="Average Distance from center of group stack" class="icon icon-hover"></th>			
+                </tr>
+	            </thead>
+                <tbody>
+                    <tr v-for="row in tableData.rows">                   
+                        <td>{{row.player.group}}</td>
+                        <td :title="row.player.profession"><img :src="row.player.icon" :alt="row.player.profession" class="icon"><span style="display:none">{{row.player.profession}}</span></td>
+                        <td class="text-left">{{row.player.name}}</td>
+	                    <td>{{row.player.acc}}</td>                       
+			            <td :title="row.data[2] + ' out of ' + row.data[1] + ' critable hits<br>Total Damage Critical Damage: ' + row.data[3]">
+                            {{round2(100*row.data[2] / row.data[1])}}%
+                        </td>
+			            <td :title="row.data[4] + ' out of ' + row.data[0] + ' hits<br>Pure Scholar Damage: ' + row.data[5] + '<br>Effective Physical Damage Increase: ' + round3(100*(row.data[6]/(row.data[6]-row.data[5]) - 1.0)) + '%'">
+                            {{round2(100*row.data[4] / row.data[0])}}%
+                        </td>
+			            <td :title="row.data[7] + ' out of ' + row.data[0] + ' hits<br>Pure Seaweed Damage: ' + row.data[8] + '<br>Effective Physical Damage Increase: ' +  round3(100*(row.data[6]/(row.data[6]-row.data[8]) - 1.0)) + '%'">
+                            {{round2(100*row.data[7]/ row.data[0])}}%
+                        </td>
+			            <td :title="row.data[9] + ' out of ' + row.data[0] + ' hits'">
+                            {{round2(100*row.data[9]/ row.data[0])}}%
+                        </td>
+			            <td :title="row.data[10] + ' out of ' + row.data[0] + ' hits'">
+                            {{round2(100*row.data[10]/ row.data[0])}}%
+                        </td>
+			            <td>{{row.data[11]}}</td>
+			            <td>{{row.data[12]}}</td>
+			            <td>{{row.data[13]}}</td>
+			            <td :title="row.commons[1] + ' cancels'">{{row.commons[0]}}</td>
+			            <td :title="row.commons[3] + ' cancels'">{{row.commons[2]}}</td>
+			            <td>{{row.commons[4]}}</td>
+			            <td>{{row.commons[5]}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    `,
+    mounted() {
+        $(function () { $('#dmg-table').DataTable({ 'order': [[4, 'desc']] }) });
+    },
+    updated() {
+        $(function () { $('[title]').tooltip('dispose'); });
+        $(function () { $('[title]').tooltip({ html: true }) });
+        var order = $('#dmg-table').DataTable().order();
+        $('#dmg-table').DataTable().destroy();
+        $('#dmg-table').DataTable().order(order);
+        $('#dmg-table').DataTable().draw();
+    },
+    methods: {
+        round2: function (value) {
+            if (isNaN(value)) {
+                return 0;
+            }
+            var mul = 100;
+            return Math.round(mul * value) / mul;
+        },
+        round3: function (value) {
+            if (isNaN(value)) {
+                return 0;
+            }
+            var mul = 1000;
+            return Math.round(mul * value) / mul;
+        }
+    },
+    computed: {
+        tableData: function () {
+            var rows = [];
+            var activeTargets = null;
+            if (this.mode) {
+                activeTargets = [];
+                for (var j = 0; j < this.phase.targets.length; j++) {
+                    if (this.targets[this.phase.targets[j]].active) {
+                        activeTargets.push(this.phase.targets[j]);
+                    }
+                }
+            }
+            for (var i = 0; i < this.phase.dmgStats.length; i++) {
+                var commons = [];
+                var data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                var player = this.players[i];
+                if (player.isConjure)
+                    continue;
+                var stats = this.phase.dmgStats[i];
+                for (var j = 0; j < stats.length; j++) {
+                    if (j >= 14) {
+                        commons[j - 14] = stats[j];
+                    } else {
+                        if (!this.mode) {
+                            data[j] = stats[j];
+                        } else {
+                            for (var k = 0; k < activeTargets.length; k++) {
+                                var tar = this.phase.dmgStatsTargets[i][k];
+                                data[j] += tar[j];
+                            }
+                        }
+                    }
+                }
+                rows.push({ player: player, commons: commons, data: data });
+            }
+            return {
+                rows: rows
+            };
         }
     }
 });
@@ -450,10 +758,10 @@ var createGeneralStatsComponent = function () {
     // general stats
     var stats = new Tab("General Stats", { active: true })
     var statsLayout = new Layout(null);
-    statsLayout.addTab(new Tab("Damage Stats", { active: true }));
-    statsLayout.addTab(new Tab("Gameplay Stats"));
-    statsLayout.addTab(new Tab("Defensive Stats"));
-    statsLayout.addTab(new Tab("Support Stats"));
+    statsLayout.addTab(new Tab("Damage Stats", { active: true , dataType: DataTypes.damageTable }));
+    statsLayout.addTab(new Tab("Gameplay Stats", { dataType: DataTypes.gameplayTable }));
+    statsLayout.addTab(new Tab("Defensive Stats", { dataType: DataTypes.defTable }));
+    statsLayout.addTab(new Tab("Support Stats", { dataType: DataTypes.supTable }));
     stats.layout = statsLayout;
     layout.addTab(stats);
     // buffs
@@ -484,7 +792,33 @@ var createGeneralStatsComponent = function () {
             layout: layout,
             phases: logData.phases,
             targets: logData.targets,
-            players: logData.players
+            players: logData.players,
+            datatypes: DataTypes
+        },
+        computed: {
+            phase: function () {
+                for (var i = 0; i < this.phases.length; i++) {
+                    if (this.phases[i].active)
+                        return this.phases[i];
+                }
+            },
+            dataType: function () {
+                var cur = layout.tabs;
+                while (cur !== null) {
+                    for (var i = 0; i < cur.length; i++) {
+                        var tab = cur[i];
+                        if (tab.active) {
+                            if (tab.layout === null) {
+                                return tab.dataType;
+                            } else {
+                                cur = tab.layout.tabs;
+                                break;
+                            }
+                        }
+                    }
+                }
+                return -1;
+            }
         }
     })
     return layout;

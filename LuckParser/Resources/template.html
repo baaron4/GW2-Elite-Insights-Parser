@@ -49,8 +49,13 @@
                     Loading data...
                 </div>
             </div>
-            <general-layout-component :layout="layout" :phases="phases"></general-layout-component>
-            <damage-stats-component :layout="layout" :phases="phases" :players="players" :targets="targets"></damage-stats-component>
+            <general-layout-component :layout="layout" :phase="phase"></general-layout-component>
+            <div id="general-stats">
+                <damage-stats-component v-show="dataType === datatypes.damageTable" :layout="layout" :phase="phase" :players="players" :targets="targets"></damage-stats-component>
+                <gameplay-stats-component v-show="dataType === datatypes.gameplayTable" :layout="layout" :phase="phase" :players="players" :targets="targets"></gameplay-stats-component>
+                <support-stats-component v-show="dataType === datatypes.supTable" :layout="layout" :phase="phase" :players="players"></support-stats-component>
+                <defense-stats-component v-show="dataType === datatypes.defTable" :layout="layout" :phase="phase" :players="players"></defense-stats-component>
+            </div>           
         </div>
     </div>
 

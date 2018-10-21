@@ -151,14 +151,8 @@
   <data name="tmplCompTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tmplCompTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="tmplDefTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplDefTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
   <data name="tmplDmgDistTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tmplDmgDistTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="tmplDmgTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplDmgTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="tmplDmgTakenTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tmplDmgTakenTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
@@ -168,9 +162,6 @@
   </data>
   <data name="tmplPlayerCells" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tmplPlayerCells.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="tmplSupTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplSupTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="tmplTabs" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tmplTabs.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>

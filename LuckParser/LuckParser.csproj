@@ -239,6 +239,11 @@
     <Compile Include="Models\ParseModels\SkillItem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="SettingsForm.cs">
       <SubType>Form</SubType>
@@ -251,14 +256,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -311,14 +311,9 @@
     <None Include="Resources\tmplCompTable.html" />
     <None Include="Resources\tmplMechanicTable.html" />
     <None Include="Resources\tmplDmgDistTable.html" />
-    <None Include="Resources\tmplSupTable.html" />
-    <None Include="Resources\tmplDefTable.html" />
     <None Include="Resources\tmplBoonTable.html" />
     <None Include="Resources\tmplTabs.html" />
     <None Include="Resources\tmplPlayerCells.html" />
-    <None Include="Resources\tmplDmgTable.html">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Resources\template.html" />
   </ItemGroup>
   <ItemGroup>

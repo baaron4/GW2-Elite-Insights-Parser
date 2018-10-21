@@ -234,27 +234,6 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
-        ///	&lt;thead&gt;
-        ///		&lt;tr&gt;
-        ///			&lt;th&gt;Sub&lt;/th&gt;
-        ///			&lt;th&gt;&lt;/th&gt;
-        ///			&lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
-        ///			&lt;th&gt;Dmg Taken&lt;/th&gt;
-        ///			&lt;th&gt;Dmg Barrier&lt;/th&gt;
-        ///			&lt;th&gt;Blocked&lt;/th&gt;
-        ///			&lt;th&gt;Invulned&lt;/th&gt;
-        ///			&lt;th&gt;Evaded&lt;/th&gt;
-        ///			&lt;th&gt;&lt;span data-toggle=&quot;tooltip&quot; data-html=&quot;true&quot; data-placement=&quot;top&quot; title=&quot;Dodges or Mirage Cloak &quot;&gt;Dodges&lt;/span&gt;&lt;/th&gt;
-        ///			&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png&quot; alt=&quot;Downs&quot; title=&quot;Times down [le reste de la chaîne a été tronqué]&quot;;.
-        /// </summary>
-        internal static string tmplDefTable {
-            get {
-                return ResourceManager.GetString("tmplDefTable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Recherche une chaîne localisée semblable à {{if minion}}
         ///&lt;div&gt;{{&gt;minion.name}} did {{:contribution}}% of {{&gt;player.name}}&apos;s total{{if toBoss}} Boss{{/if}} dps&lt;/div&gt;
         ///{{else player}}
@@ -275,22 +254,6 @@ namespace LuckParser.Properties {
         internal static string tmplDmgDistTable {
             get {
                 return ResourceManager.GetString("tmplDmgDistTable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
-        ///	&lt;thead&gt;
-        ///		&lt;tr&gt;
-        ///			&lt;th&gt;Sub&lt;/th&gt;
-        ///			&lt;th&gt;&lt;/th&gt;
-        ///      &lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
-        ///			&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars2.com/images/9/95/Critical_Chance.png&quot; alt=&quot;Crits&quot; title=&quot;Percent time hits critical&quot; class=&quot;icon icon-hover&quot;&gt;&lt;/th&gt;
-        ///			&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png&quot; alt=&quot;Scholar&quot; title=&quot;Percent time hits while above 90% health&quot; class=&quot;icon icon-hover&quot;&gt;&lt;/t [le reste de la chaîne a été tronqué]&quot;;.
-        /// </summary>
-        internal static string tmplDmgTable {
-            get {
-                return ResourceManager.GetString("tmplDmgTable", resourceCulture);
             }
         }
         
@@ -381,39 +344,6 @@ namespace LuckParser.Properties {
         internal static string tmplPlayerSelectCombatReplay {
             get {
                 return ResourceManager.GetString("tmplPlayerSelectCombatReplay", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à &lt;table class=&quot;table table-sm table-striped table-hover&quot;  cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
-        ///	&lt;thead&gt;
-        ///		&lt;tr&gt;
-        ///			&lt;th&gt;Sub&lt;/th&gt;
-        ///			&lt;th&gt;&lt;/th&gt;
-        ///			&lt;th&gt;Name&lt;/th&gt;
-        ///			&lt;th&gt;Condi Cleanse&lt;/th&gt;
-        ///			&lt;th&gt;Resurrects&lt;/th&gt;
-        ///		&lt;/tr&gt;
-        ///	&lt;/thead&gt;
-        ///	&lt;tbody&gt;
-        ///		{{for rows}}
-        ///		&lt;tr&gt;
-        ///			{{include tmpl=&quot;tmplPlayerCells&quot;/}}
-        ///			&lt;td title=&quot;{{:data[1]}} seconds&quot;&gt;{{:data[0]}}&lt;/td&gt;
-        ///			&lt;td title=&quot;{{:data[3]}} seconds&quot;&gt;{{:data[2]}}&lt;/td&gt;
-        ///		&lt;/tr&gt;
-        ///		{{/for}}
-        ///	&lt;/tbody&gt;
-        ///	&lt;tfoot&gt;
-        ///		{{for sums}}
-        ///		&lt;tr&gt;
-        ///			&lt;td&gt;&lt;/td&gt;
-        ///			&lt;td&gt;&lt;/td&gt;
-        ///			&lt;td c [le reste de la chaîne a été tronqué]&quot;;.
-        /// </summary>
-        internal static string tmplSupTable {
-            get {
-                return ResourceManager.GetString("tmplSupTable", resourceCulture);
             }
         }
         

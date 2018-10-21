@@ -172,60 +172,33 @@ namespace LuckParser.Controllers
                 {
                     stats.PowerLoopCount, //0
                     stats.CritablePowerLoopCount, //1
-                    Math.Round((double)(stats.CriticalRate) / stats.CritablePowerLoopCount * 100, 1), //2
-                    stats.CriticalRate, //3
-                    stats.CriticalDmg, //4
+                    stats.CriticalRate, //2
+                    stats.CriticalDmg, //3
+                    
+                    stats.ScholarRate, //4
+                    stats.ScholarDmg, //5
+                    dps.PlayerPowerDamage,//6
+                    
+                    stats.MovingRate, //7
+                    stats.MovingDamage, //8
+                    
+                    stats.FlankingRate, //9
+                    
+                    stats.GlanceRate, //10
 
-                    Math.Round((double)(stats.ScholarRate) / stats.PowerLoopCount * 100, 1), //5
-                    stats.ScholarRate, //6
-                    stats.ScholarDmg, //7
-                    Math.Round(100.0 * (dps.PlayerPowerDamage / (double)(dps.PlayerPowerDamage - stats.ScholarDmg) - 1.0), 3), //8
+                    stats.Missed, //11
+                    stats.Interrupts, //12
+                    stats.Invulned, //13
 
-                    Math.Round((double)(stats.MovingRate) / stats.PowerLoopCount * 100, 1), //9
-                    stats.MovingRate, //10
-                    stats.MovingDamage, //11
-                    Math.Round(100.0 * (dps.PlayerPowerDamage / (double)(dps.PlayerPowerDamage - stats.MovingDamage) - 1.0), 3), //12
+                    stats.TimeWasted, //14
+                    stats.Wasted, //15
 
-                    Math.Round(stats.FlankingRate / (double)stats.PowerLoopCount * 100, 1), //13
-                    stats.FlankingRate, //14
+                    stats.TimeSaved, //16
+                    stats.Saved, //17
 
-                    Math.Round(stats.GlanceRate / (double)stats.PowerLoopCount * 100, 1), //15
-                    stats.GlanceRate, //16
-
-                    stats.Missed, //17
-                    stats.Interrupts, //18
-                    stats.Invulned, //19
-
-                    stats.TimeWasted, //20
-                    stats.Wasted, //21
-
-                    stats.TimeSaved, //22
-                    stats.Saved, //23
-
-                    stats.SwapCount, //24
-                    Math.Round(stats.StackDist, 2), //25
-                    stats.DownCount //26
+                    stats.SwapCount, //18
+                    Math.Round(stats.StackDist, 2) //19
                 };
-
-                if (stats.Died != 0.0)
-                {
-                    if (stats.Died < 0)
-                    {
-                        playerData.Add(-stats.Died + " time(s)"); //27
-                        playerData.Add(""); //28
-                    }
-                    else
-                    {
-                        TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
-                        playerData.Add(timedead.Minutes + " m " + timedead.Seconds + " s"); //27
-                        playerData.Add(timedead + "(" + Math.Round((timedead.TotalMilliseconds / phase.GetDuration()) * 100, 1) + "% Alive)"); //28
-                    }
-                }
-                else
-                {
-                    playerData.Add(""); //27
-                    playerData.Add("Never died"); //28
-                }
                 list.Add(playerData);
             }
             return list;
@@ -250,30 +223,25 @@ namespace LuckParser.Controllers
                     Statistics.FinalDPS dpsTarget = _statistics.DpsTarget[target][player][phaseIndex];
                     playerData.Add(new List<object>(){
                         statsTarget.PowerLoopCount, //0
+
                         statsTarget.CritablePowerLoopCount, //1
-                        Math.Round((double)(statsTarget.CriticalRate) / statsTarget.CritablePowerLoopCount * 100, 1), //2
-                        statsTarget.CriticalRate, //3
-                        statsTarget.CriticalDmg, //4
+                        statsTarget.CriticalRate, //2
+                        statsTarget.CriticalDmg, //3
+                        
+                        statsTarget.ScholarRate, //4
+                        statsTarget.ScholarDmg, //5
+                        dpsTarget.PlayerPowerDamage,//6
+                        
+                        statsTarget.MovingRate, //7
+                        statsTarget.MovingDamage, //8
+                        
+                        statsTarget.FlankingRate, //9
+                        
+                        statsTarget.GlanceRate, //10
 
-                        Math.Round((double)(statsTarget.ScholarRate) / statsTarget.PowerLoopCount * 100, 1), //5
-                        statsTarget.ScholarRate, //6
-                        statsTarget.ScholarDmg, //7
-                        Math.Round(100.0 * (dpsTarget.PlayerPowerDamage / (double)(dpsTarget.PlayerPowerDamage - statsTarget.ScholarDmg) - 1.0), 3), //8
-
-                        Math.Round((double)(statsTarget.MovingRate) / statsTarget.PowerLoopCount * 100, 1), //9
-                        statsTarget.MovingRate, //10
-                        statsTarget.MovingDamage, //11
-                        Math.Round(100.0 * (dpsTarget.PlayerPowerDamage / (double)(dpsTarget.PlayerPowerDamage - statsTarget.MovingDamage) - 1.0), 3), //12
-
-                        Math.Round(statsTarget.FlankingRate / (double)statsTarget.PowerLoopCount * 100, 1), //13
-                        statsTarget.FlankingRate, //14
-
-                        Math.Round(statsTarget.GlanceRate / (double)statsTarget.PowerLoopCount * 100, 1), //15
-                        statsTarget.GlanceRate, //16
-
-                        statsTarget.Missed, //17
-                        statsTarget.Interrupts, //18
-                        statsTarget.Invulned //19
+                        statsTarget.Missed, //11
+                        statsTarget.Interrupts, //12
+                        statsTarget.Invulned //13
                     });
                 }
                 list.Add(playerData);
@@ -301,7 +269,6 @@ namespace LuckParser.Controllers
                     defenses.DamageTaken,
                     defenses.DamageBarrier,
                     defenses.BlockedCount,
-                    0,
                     defenses.InvulnedCount,
                     defenses.EvadedCount,
                     stats.DodgeCount,
