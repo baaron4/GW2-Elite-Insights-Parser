@@ -291,7 +291,7 @@ namespace LuckParser.Controllers
                 }
                 else
                 {
-                    playerData.Add("");
+                    playerData.Add(0);
                     playerData.Add("Never died");
                 }
 
