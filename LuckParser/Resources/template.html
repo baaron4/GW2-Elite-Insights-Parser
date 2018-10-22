@@ -1,8 +1,10 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/${bootstrapTheme}/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/${bootstrapTheme}/bootstrap.min.css"
+        crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
     <!--${Css}-->
@@ -22,6 +24,7 @@
     <!--${playerData}-->
     <!--${Js}-->
 </head>
+
 <body class="theme-${bootstrapTheme}">
     <div class="header">
         <div>Time Start: ${encounterStart} | Time End: ${encounterEnd}</div>
@@ -50,8 +53,10 @@
         </div>
         <general-layout-component :layout="layout" :phase="phase"></general-layout-component>
         <div id="general-stats">
-            <damage-stats-component v-show="dataType === datatypes.damageTable" :layout="layout" :phase="phase" :players="logdata.players" :targets="logdata.targets"></damage-stats-component>
-            <gameplay-stats-component v-show="dataType === datatypes.gameplayTable" :layout="layout" :phase="phase" :players="logdata.players" :targets="logdata.targets"></gameplay-stats-component>
+            <damage-stats-component v-show="dataType === datatypes.damageTable" :layout="layout" :phase="phase"
+                :players="logdata.players" :targets="logdata.targets"></damage-stats-component>
+            <gameplay-stats-component v-show="dataType === datatypes.gameplayTable" :layout="layout" :phase="phase"
+                :players="logdata.players" :targets="logdata.targets"></gameplay-stats-component>
             <support-stats-component v-show="dataType === datatypes.supTable" :layout="layout" :phase="phase" :players="logdata.players"></support-stats-component>
             <defense-stats-component v-show="dataType === datatypes.defTable" :layout="layout" :phase="phase" :players="logdata.players"></defense-stats-component>
         </div>
@@ -65,4 +70,5 @@
         <div>File recorded by: ${recordedBy}</div>
     </div>
 </body>
+
 </html>

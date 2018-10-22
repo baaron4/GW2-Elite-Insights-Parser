@@ -1,4 +1,9 @@
-$.extend($.fn.dataTable.defaults, { searching: false, ordering: true, paging: false, dom: "t" });
+$.extend($.fn.dataTable.defaults, {
+    searching: false,
+    ordering: true,
+    paging: false,
+    dom: "t"
+});
 
 var urls = {
     'Warrior': 'https://wiki.guildwars2.com/images/4/43/Warrior_tango_icon_20px.png',
@@ -29,7 +34,7 @@ var urls = {
     'Necromancer': 'https://wiki.guildwars2.com/images/4/43/Necromancer_tango_icon_20px.png',
     'Reaper': 'https://wiki.guildwars2.com/images/1/11/Reaper_tango_icon_20px.png',
     'Scourge': 'https://wiki.guildwars2.com/images/0/06/Scourge_tango_icon_20px.png',
-    
+
     'Unknown': 'https://wiki.guildwars2.com/images/thumb/d/de/Sword_slot.png/40px-Sword_slot.png',
     'Sword': 'https://wiki.guildwars2.com/images/0/07/Crimson_Antique_Blade.png',
     'Axe': 'https://wiki.guildwars2.com/images/d/d4/Crimson_Antique_Reaver.png',
@@ -68,19 +73,19 @@ for (var i = 0; i < logData.players.length; i++) {
     var playerData = logData.players[i];
     playerData.active = false;
     playerData.icon = urls[playerData.profession];
-} 
+}
 
 var Layout = function (desc) {
     this.desc = desc;
     this.tabs = null;
-}
+};
 
 Layout.prototype.addTab = function (tab) {
     if (this.tabs === null) {
         this.tabs = [];
     }
     this.tabs.push(tab);
-}
+};
 
 var Tab = function (name, options) {
     this.name = name;
@@ -88,8 +93,8 @@ var Tab = function (name, options) {
     this.layout = null;
     this.desc = options.desc ? options.desc : null;
     this.active = options.active ? options.active : false;
-    this.dataType = typeof(options.dataType) !== "undefined" ? options.dataType : -1;
-}
+    this.dataType = typeof (options.dataType) !== "undefined" ? options.dataType : -1;
+};
 
 Vue.component('encounter-component', {
     props: ['logdata'],
@@ -137,7 +142,7 @@ Vue.component('encounter-component', {
                 icon: logData.fightIcon,
                 duration: logData.encounterDuration,
                 targets: targets
-            }
+            };
             return encounter;
         }
     }
@@ -163,7 +168,7 @@ Vue.component('phase-component', {
 });
 
 Vue.component('target-component', {
-    props: ['targets','phases'],
+    props: ['targets', 'phases'],
     template: `
         <div class="d-flex flex-row justify-content-center flex-wrap">
             <img class="icon-lg mr-2 ml-2 target-cell" v-for="target in targets" v-show="show(target, targets, phases)" 
@@ -237,8 +242,8 @@ Vue.component('player-component', {
     computed: {
         groups: function () {
             var aux = [];
-
-            for (var i = 0; i < this.players.length; i++) {
+            var i = 0;
+            for (i = 0; i < this.players.length; i++) {
                 var playerData = this.players[i];
                 if (playerData.isConjure) {
                     continue;
@@ -250,7 +255,7 @@ Vue.component('player-component', {
             }
 
             var noUndefinedGroups = [];
-            for (var i = 0; i < aux.length; i++) {
+            for (i = 0; i < aux.length; i++) {
                 if (aux[i]) {
                     noUndefinedGroups.push(aux[i]);
                 }
@@ -353,7 +358,13 @@ Vue.component('damage-stats-component', {
         </div>
     `,
     mounted() {
-        $(function () { $('#dps-table').DataTable({ 'order': [[4, 'desc']] }) });
+        $(function () {
+            $('#dps-table').DataTable({
+                'order': [
+                    [4, 'desc']
+                ]
+            });
+        });
     },
     updated() {
         var table = $('#dps-table');
@@ -387,10 +398,11 @@ Vue.component('damage-stats-component', {
             var sums = [];
             var total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             var groups = [];
-            for (var i = 0; i < phase.dpsStats.length; i++) {
+            var i, j;
+            for (i = 0; i < phase.dpsStats.length; i++) {
                 var dpsStat = phase.dpsStats[i];
                 var dpsTargetStat = [0, 0, 0, 0, 0, 0];
-                for (var j = 0; j < phase.targets.length; j++) {
+                for (j = 0; j < phase.targets.length; j++) {
                     if (this.targets[phase.targets[j]].active) {
                         var tar = phase.dpsStatsTargets[i][j];
                         for (var k = 0; k < dpsTargetStat.length; k++) {
@@ -400,19 +412,28 @@ Vue.component('damage-stats-component', {
                 }
                 var player = this.players[i];
                 if (!groups[player.group])
-                    groups[player.group] = [0,0,0,0,0,0,0,0,0,0,0,0];
+                    groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                 var dps = dpsTargetStat.concat(dpsStat);
-                for (var j = 0; j < dps.length; j++) {
+                for (j = 0; j < dps.length; j++) {
                     total[j] += dps[j];
                     groups[player.group][j] += dps[j];
                 }
-                rows.push({ player: player, dps: dps });
+                rows.push({
+                    player: player,
+                    dps: dps
+                });
             }
-            for (var i = 0; i < groups.length; i++) {
+            for (i = 0; i < groups.length; i++) {
                 if (groups[i])
-                    sums.push({ name: 'Group ' + i, dps: groups[i] });
+                    sums.push({
+                        name: 'Group ' + i,
+                        dps: groups[i]
+                    });
             }
-            sums.push({ name: 'Total', dps: total });
+            sums.push({
+                name: 'Total',
+                dps: total
+            });
             var res = {
                 rows: rows,
                 sums: sums
@@ -489,7 +510,13 @@ Vue.component('defense-stats-component', {
         </div>
     `,
     mounted() {
-        $(function () { $('#def-table').DataTable({ 'order': [[4, 'desc']] }) });
+        $(function () {
+            $('#def-table').DataTable({
+                'order': [
+                    [4, 'desc']
+                ]
+            });
+        });
     },
     updated() {
         var table = $('#def-table');
@@ -507,31 +534,41 @@ Vue.component('defense-stats-component', {
             //
             var rows = [];
             var sums = [];
-            var total = [0, 0, 0, 0, 0, 0,0];
+            var total = [0, 0, 0, 0, 0, 0, 0];
             var groups = [];
-            for (var i = 0; i < this.phase.defStats.length; i++) {
+            var i;
+            for (i = 0; i < this.phase.defStats.length; i++) {
                 var def = this.phase.defStats[i];
                 var player = this.players[i];
                 if (player.isConjure) {
                     continue;
                 }
-                rows.push({ player: player, def: def });
+                rows.push({
+                    player: player,
+                    def: def
+                });
                 if (!groups[player.group])
-                    groups[player.group] = [0, 0, 0, 0, 0, 0,0];
+                    groups[player.group] = [0, 0, 0, 0, 0, 0, 0];
                 for (var j = 0; j < total.length; j++) {
                     total[j] += def[j];
                     groups[player.group][j] += def[j];
                 }
             }
-            for (var i = 0; i < groups.length; i++) {
+            for (i = 0; i < groups.length; i++) {
                 if (groups[i])
-                    sums.push({ name: 'Group ' + i, def: groups[i] });
+                    sums.push({
+                        name: 'Group ' + i,
+                        def: groups[i]
+                    });
             }
-            sums.push({ name: 'Total', def: total });
+            sums.push({
+                name: 'Total',
+                def: total
+            });
             var res = {
                 rows: rows,
                 sums: sums
-            }
+            };
             //
             //this.cache.set(this.phase, res);
             //
@@ -584,7 +621,13 @@ Vue.component('support-stats-component', {
         </div>
     `,
     mounted() {
-        $(function () { $('#sup-table').DataTable({ 'order': [[4, 'desc']] }) });
+        $(function () {
+            $('#sup-table').DataTable({
+                'order': [
+                    [4, 'desc']
+                ]
+            });
+        });
     },
     updated() {
         var table = $('#sup-table');
@@ -610,7 +653,10 @@ Vue.component('support-stats-component', {
                 if (player.isConjure) {
                     continue;
                 }
-                rows.push({ player: player, sup: sup });
+                rows.push({
+                    player: player,
+                    sup: sup
+                });
                 if (!groups[player.group])
                     groups[player.group] = [0, 0, 0, 0];
                 for (var j = 0; j < sup.length; j++) {
@@ -620,9 +666,15 @@ Vue.component('support-stats-component', {
             }
             for (var i = 0; i < groups.length; i++) {
                 if (groups[i])
-                    sums.push({ name: 'Group ' + i, sup: groups[i] });
+                    sums.push({
+                        name: 'Group ' + i,
+                        sup: groups[i]
+                    });
             }
-            sums.push({ name: 'Total', sup: total });
+            sums.push({
+                name: 'Total',
+                sup: total
+            });
             var res = {
                 rows: rows,
                 sums: sums
@@ -710,7 +762,13 @@ Vue.component('gameplay-stats-component', {
         </div>
     `,
     mounted() {
-        $(function () { $('#dmg-table').DataTable({ 'order': [[4, 'desc']] }) });
+        $(function () {
+            $('#dmg-table').DataTable({
+                'order': [
+                    [4, 'desc']
+                ]
+            })
+        });
     },
     updated() {
         var table = $('#dmg-table');
@@ -788,7 +846,11 @@ Vue.component('gameplay-stats-component', {
                         }
                     }
                 }
-                rows.push({ player: player, commons: commons, data: data });
+                rows.push({
+                    player: player,
+                    commons: commons,
+                    data: data
+                });
             }
             var res = {
                 rows: rows
@@ -811,7 +873,7 @@ Vue.component('gameplay-stats-component', {
 });
 
 Vue.component('mechanic-stats-component', {
-    props: ['phase', 'players', 'enemies' ],
+    props: ['phase', 'players', 'enemies'],
     template: `
         <table v-show="playerMech.header.length > 0" class="table table-sm table-striped table-hover" cellspacing="0">
             <thead>
@@ -850,7 +912,7 @@ Vue.component('mechanic-stats-component', {
         </table>
     `,
     computed: {
-        playerMech: function() {
+        playerMech: function () {
             return {
                 header: [],
                 rows: []
@@ -868,25 +930,40 @@ Vue.component('mechanic-stats-component', {
 var createLayout = function () {
     var layout = new Layout("Summary");
     // general stats
-    var stats = new Tab("General Stats", { active: true })
+    var stats = new Tab("General Stats", {
+        active: true
+    })
     var statsLayout = new Layout(null);
-    statsLayout.addTab(new Tab("Damage Stats", { active: true , dataType: DataTypes.damageTable }));
-    statsLayout.addTab(new Tab("Gameplay Stats", { dataType: DataTypes.gameplayTable }));
-    statsLayout.addTab(new Tab("Defensive Stats", { dataType: DataTypes.defTable }));
-    statsLayout.addTab(new Tab("Support Stats", { dataType: DataTypes.supTable }));
+    statsLayout.addTab(new Tab("Damage Stats", {
+        active: true,
+        dataType: DataTypes.damageTable
+    }));
+    statsLayout.addTab(new Tab("Gameplay Stats", {
+        dataType: DataTypes.gameplayTable
+    }));
+    statsLayout.addTab(new Tab("Defensive Stats", {
+        dataType: DataTypes.defTable
+    }));
+    statsLayout.addTab(new Tab("Support Stats", {
+        dataType: DataTypes.supTable
+    }));
     stats.layout = statsLayout;
     layout.addTab(stats);
     // buffs
     var buffs = new Tab("Buffs");
     var buffLayout = new Layout(null);
-    buffLayout.addTab(new Tab("Boons", { active: true }));
+    buffLayout.addTab(new Tab("Boons", {
+        active: true
+    }));
     buffLayout.addTab(new Tab("Offensive Buffs"));
     buffLayout.addTab(new Tab("Defensive Buffs"));
     buffLayout.addTab(new Tab("Personal Buffs"));
     buffs.layout = buffLayout;
     layout.addTab(buffs);
     // mechanics
-    var mechanics = new Tab("Mechanics", { dataType: DataTypes.mechanicTable });
+    var mechanics = new Tab("Mechanics", {
+        dataType: DataTypes.mechanicTable
+    });
     layout.addTab(mechanics);
     // graphs
     var graphs = new Tab("Graph");
@@ -938,5 +1015,8 @@ window.onload = function () {
     });
     var element = document.getElementById("loading");
     element.parentNode.removeChild(element);
-    $('body').tooltip({ selector: '[data-original-title]',html: true });
+    $('body').tooltip({
+        selector: '[data-original-title]',
+        html: true
+    });
 };
