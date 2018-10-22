@@ -313,7 +313,6 @@
     <None Include="Resources\tmplCompTable.html" />
     <None Include="Resources\tmplMechanicTable.html" />
     <None Include="Resources\tmplDmgDistTable.html" />
-    <None Include="Resources\tmplBoonTable.html" />
     <None Include="Resources\tmplTabs.html" />
     <None Include="Resources\tmplPlayerCells.html" />
     <None Include="Resources\template.html" />

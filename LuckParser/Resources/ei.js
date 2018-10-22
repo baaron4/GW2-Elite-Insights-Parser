@@ -735,7 +735,7 @@ Vue.component("buff-table-component", {
                         </td>
                     </tr>
                 </tbody>
-                <tfoot>
+                <tfoot v-if="players.length > 0">
                     <tr v-for="sum in sums">                                   
                         <td></td>
                         <td></td>
