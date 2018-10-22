@@ -186,7 +186,6 @@ namespace LuckParser.Models
                         phase.Name = "Left " + phase.Name;
                         phase.Targets.Add(leftArm);
                     }
-                    phase.Targets.Add(leftArm);
                 }
             }
             Boss rightArm = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.CARightArm);
