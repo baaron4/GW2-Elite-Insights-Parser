@@ -1,46 +1,7 @@
 <table class="table table-sm table-striped table-hover" cellspacing="0">
-	<thead>
-		<tr>
-			<th width="30px">Sub</th>
-			<th width="30px"></th>
-			<th class="text-left">Name</th>
-			{{for boons}}
-			<th title="{{:name}}"><img src="{{:icon}}" alt="{{:name}}" class="icon icon-hover"></th>
-			{{/for}}
-		</tr>
-	</thead>
-	<tbody>
-		{{for rows ~boons=boons}}
-		<tr>
-			<td>{{:player.group}}</td>
-			<td title="{{:player.profession}}"><img src="{{:player.icon}}" alt="{{:player.profession}}" class="icon"><span style="display:none">{{:player.profession}}</span></td>
-			<td class="text-left"{{if !~generation}} title="Average number of {{if ~condition}}conditions{{else}}boons{{/if}}: {{:data.avg}}"{{/if}}>{{:player.name}}</td>
-			{{for ~boons ~data=data}}
-			{{if ~generation}}
-			{{if ~data.val[#getIndex()][0]}}
-			<td title="{{:~data.val[#getIndex()][1]}}{{if !stacking}}%{{/if}} with overstack">{{:~data.val[#getIndex()][0]}}{{if !stacking}}%{{/if}}</td>
-			{{else}}
-			<td>-</td>
-			{{/if}}
-			{{else}}
-			{{if  ~data.val[#getIndex()][2]}}
-			<td title="{{:~data.val[#getIndex()][2]}}">{{:~data.val[#getIndex()][0]}}{{if !stacking}}%{{/if}}</td>
-			{{else stacking}}
-			<td title="Uptime: {{if !~data.val[#getIndex()][1]}}0{{else}}{{:~data.val[#getIndex()][1]}}{{/if}}%">{{:~data.val[#getIndex()][0]}}</td>
-			{{else}}
-			<td>{{:~data.val[#getIndex()][0]}}%</td>
-			{{/if}}
-			{{/if}}
-			{{/for}}
-		</tr>
-		{{/for}}
-	</tbody>
 	<tfoot>
 		{{for sums ~boons=boons}}
         <tr>
-            <td></td>
-            <td></td>
-            <td class="text-left" {{if data.avg}} title="Average number of {{if ~condition}}conditions{{else}}boons{{/if}}: {{:data.avg}}" {{/if}}>{{:name}}</td>
             {{for ~boons ~data=data}}
             {{if ~data.val}}
             <td {{if ~data.val[#getIndex()][1]}}title="Uptime: {{:~data.val[#getIndex()][1]}}%"{{/if}}>{{dec:~data.val[#getIndex()][0]}}{{if !stacking}}%{{/if}}</td>
