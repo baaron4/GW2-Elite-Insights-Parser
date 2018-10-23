@@ -62,7 +62,7 @@ namespace LuckParser.Controllers
                 }
                 foreach (Boss target in log.FightData.Logic.Targets)
                 {
-                    target.InitCombatReplay(log, _settings.PollingRate, true, false);
+                    target.InitCombatReplay(log, _settings.PollingRate, true, log.FightData.GetMainTargets(log).Contains(target));
                 }
                 log.FightData.Logic.InitTrashMobCombatReplay(log, _settings.PollingRate);
 
