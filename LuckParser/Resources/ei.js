@@ -428,7 +428,7 @@ Vue.component("support-stats-component", {
         $(function () {
             $("#sup-table").DataTable({
                 order: [
-                    [4, "desc"]
+                    [1, "asc"]
                 ]
             });
         });
@@ -519,7 +519,7 @@ Vue.component("gameplay-stats-component", {
         $(function () {
             $("#dmg-table").DataTable({
                 order: [
-                    [4, "desc"]
+                    [1, "asc"]
                 ]
             });
         });
@@ -629,14 +629,14 @@ Vue.component("mechanics-stats-component", {
     mounted() {
         $("#playermechs").DataTable({
             order: [
-                [3, "desc"]
+                [1, "asc"]
             ]
         });
         var enemyTable = $("#enemymechs");
         if (enemyTable.length > 0) {
             enemyTable.DataTable({
                 order: [
-                    [0, "desc"]
+                    [0, "asc"]
                 ]
             });
         }
@@ -747,7 +747,7 @@ Vue.component("buff-table-component", {
         var table = $("#" + this.id);
         table.DataTable({
             order: [
-                [1, "asc"]
+                [0, "asc"]
             ]
         });
     },
