@@ -760,7 +760,107 @@ Vue.component("buff-table-component", {
     },
 });
 
-Vue.component("personal-buff-table-component", {});
+Vue.component("personal-buff-table-component", {
+    props: ['phase', 'persbuffs', 'players', 'buffmap'],
+    data: function () {
+        return {
+            specs: [
+                "Warrior", "Berserker", "Spellbreaker", "Revenant", "Herald", "Renegade", "Guardian", "Dragonhunter", "Firebrand",
+                "Ranger", "Druid", "Soulbeast", "Engineer", "Scrapper", "Holosmith", "Thief", "Daredevil", "Deadeye",
+                "Mesmer", "Chronomancer", "Mirage", "Necromancer", "Reaper", "Scourge", "Elementalist", "Tempest", "Weaver"
+            ],
+            bases: [
+            ],
+            specToBase: {
+                Warrior: 'Warrior',
+                Berserker: 'Warrior',
+                Spellbreaker: 'Warrior',
+                Revenant: "Revenant",
+                Herald: "Revenant",
+                Renegade: "Revenant",
+                Guardian: "Guardian",
+                Dragonhunter: "Guardian",
+                Firebrand: "Guardian",
+                Ranger: "Ranger",
+                Druid: "Ranger",
+                Soulbeast: "Ranger",
+                Engineer: "Engineer",
+                Scrapper: "Engineer",
+                Holosmith: "Engineer",
+                Thief: "Thief",
+                Daredevil: "Thief",
+                Deadeye: "Thief",
+                Mesmer: "Mesmer",
+                Chronomancer: "Mesmer",
+                Mirage: "Mesmer",
+                Necromancer: "Necromancer",
+                Reaper: "Necromancer",
+                Scourge: "Necromancer",
+                Elementalist: "Elementalist",
+                Tempest: "Elementalist",
+                Weaver: "Elementalist"
+            },
+            mode: "Warrior"
+        };
+    },
+    computed: {
+        orderedSpecs: function () {
+            var res = [];
+            var aux = new Set();
+            for (var i = 0; i < this.specs.length; i++) {
+                var spec = this.specs[i];
+                var pBySpec = [];
+                for (var j = 0; j < this.players.length; j++) {
+                    if (this.players[j].profession === spec) {
+                        pBySpec.push(j);
+                    }
+                }
+                if (pBySpec.length) {
+                    aux.add(this.specToBase[spec]);
+                    res.push({
+                        ids: pBySpec,
+                        name: spec
+                    });
+                }
+            }
+            this.bases = [];
+            var _this = this;
+            aux.forEach(function(value, value2, set) {
+                _this.bases.push(value);
+            });
+            this.mode = this.bases[0];
+            return res;
+        },
+        data: function () {
+            var res = [];
+            for (var i = 0; i < this.orderedSpecs.length; i++) {
+                var spec = this.orderedSpecs[i];
+                var dataBySpec = [];
+                for (var j = 0; j < spec.ids.length; j++) {
+                    dataBySpec.push({
+                        player: this.players[spec.ids[j]],
+                        data: this.phase.persBuffStats[spec.ids[j]]
+                    });
+                }
+                res.push(dataBySpec);
+            }
+            return res;
+        },
+        buffs: function () {
+            var res = [];
+            for (var i = 0; i < this.orderedSpecs.length; i++) {
+                var spec = this.orderedSpecs[i];
+                var data = [];
+                for (var j = 0; j < this.persbuffs[spec.name].length; j++) {
+                    var boonid = 'b' + this.persbuffs[spec.name][j];
+                    data.push(this.buffmap[boonid]);
+                }
+                res.push(data);
+            }
+            return res;
+        }
+    }
+});
 
 Vue.component("buff-stats-component", {
     props: ['datatypes', 'datatype', 'phase', 'players', 'presentbuffs', 'buffmap'],
@@ -846,16 +946,16 @@ Vue.component("buff-stats-component", {
                 for (var i = 0; i < gravg.length; i++) {
                     if (gravg[i]) {
                         for (var k = 0; k < gravg[i].length; k++) {
-                            gravg[i][k] = Math.round(100 * gravg[i][k] / grcount[i])/100;
+                            gravg[i][k] = Math.round(100 * gravg[i][k] / grcount[i]) / 100;
                         }
                         avg.push({
                             name: "Group " + i,
-                            data:  gravg[i],
+                            data: gravg[i],
                         });
                     }
                 }
                 for (var k = 0; k < totalavg.length; k++) {
-                    totalavg[k] = Math.round(100*totalavg[k] / totalcount)/100;
+                    totalavg[k] = Math.round(100 * totalavg[k] / totalcount) / 100;
                 }
                 avg.push({
                     name: "Total",
@@ -864,7 +964,7 @@ Vue.component("buff-stats-component", {
                 return [uptimes, gens, gengr, genoff, gensq, avg];
             };
             return {
-                boonsData: getData(this.phase.boonStats, this.phase.boonGenSelfStats, 
+                boonsData: getData(this.phase.boonStats, this.phase.boonGenSelfStats,
                     this.phase.boonGenGroupStats, this.phase.boonGenOGroupStats, this.phase.boonGenSquadStats),
                 offsData: getData(this.phase.offBuffStats, this.phase.offBuffGenSelfStats,
                     this.phase.offBuffGenGroupStats, this.phase.offBuffGenOGroupStats, this.phase.offBuffGenSquadStats),
