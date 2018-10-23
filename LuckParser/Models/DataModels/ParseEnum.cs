@@ -166,11 +166,15 @@ namespace LuckParser.Models.DataModels
             CrimsonPhantasm = 16257,
             RetrieverProjection = 16249,
             // Xera
+            ChargedBloodstone = 8267,
+            BloodstoneFragment = 40724,
             XerasPhantasm = 16225,
             WhiteMantleSeeker1 = 16238,
             WhiteMantleSeeker2 = 16283,
-            WhiteMantleKnight = 16251,
-            WhiteMantleBattleMage = 16221,
+            WhiteMantleKnight1 = 16251,
+            WhiteMantleKnight2 = 16287,
+            WhiteMantleBattleMage1 = 16221,
+            WhiteMantleBattleMage2 = 16226,
             ExquisiteConjunction = 16232,
             //BloodStone Shard (Gadget)     = 13864,
             // MO

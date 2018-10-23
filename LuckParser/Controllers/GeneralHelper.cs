@@ -193,6 +193,7 @@ namespace LuckParser.Controllers
                 case Echo:
                     return "https://i.imgur.com/kcN9ECn.png";
                 case Core:
+                case ExquisiteConjunction:
                     return "https://i.imgur.com/yI34iqw.png";
                 case Jessica:
                 case Olson:
