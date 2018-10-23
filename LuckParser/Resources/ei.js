@@ -60,7 +60,11 @@ var DataTypes = {
     defTable: 1,
     supTable: 2,
     gameplayTable: 3,
-    mechanicTable: 4
+    mechanicTable: 4,
+    boonTable: 5,
+    offensiveBuffTable: 6,
+    defensiveBuffTable: 7,
+    personalBuffTable: 8
 };
 
 for (var i = 0; i < logData.phases.length; i++) {
@@ -695,7 +699,7 @@ Vue.component("mechanics-stats-component", {
             for (var i = 0; i < enemies.length; i++) {
                 var enemy = enemies[i];
                 rows.push({
-                    player: enemy.name,
+                    enemy: enemy.name,
                     mechs: phase.enemyMechanicStats[i]
                 });
             }
@@ -705,49 +709,8 @@ Vue.component("mechanics-stats-component", {
 });
 
 Vue.component("buff-table-component", {
-    props: ["buffs", "playerdata" , "players", "generation", "condition", "target"],
-    template: `
-        <div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Sub</th>
-                        <th></th>
-                        <th>Name</th>
-                        <th v-for="buff in buffs" :data-original-title="buff.name">
-                            <img :src="buff.icon" :alt="buff.name" class="icon icon-hover">
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>                
-                    <tr v-for="row in rows">
-                        <td>{{ row.player.group }}</td>
-                        <td :data-original-title="row.player.profession"><img :src="row.player.icon" :alt="row.player.profession" class="icon">
-                            <span style="display:none">
-                                {{ row.player.profession }}
-                            </span>
-                        </td>
-                        <td class="text-left" :data-original-title="getAvgTooltip(row.data.avg)">
-                            {{ row.player.name }}
-                        </td>           
-                        <td v-for=" {buff, index} in buffs" :data-original-title="getCellTooltip(buff, row.data.val[index])">
-                            {{ getCellValue(row.data.val[index], buff) }}
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot v-if="players.length > 0">
-                    <tr v-for="sum in sums">                                   
-                        <td></td>
-                        <td></td>
-                        <td :data-original-title="getAvgTooltip(sum.data.avg)">{{sum.data.name}}</td>                       
-                        <td v-for=" {buff, index} in buffs" :data-original-title="getCellTooltip(buff, row.data.val[index])">
-                            {{ getCellValue(row.data.val[index], buff) }}
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-    `,
+    props: ["buffs", "playerdata", "generation", "condition", "sums", "id"],
+    template: "#buff-table-template",
     methods: {
         getAvgTooltip: function (avg) {
             if (avg) {
@@ -760,26 +723,157 @@ Vue.component("buff-table-component", {
             return false;
         },
         getCellTooltip: function (buff, val) {
-            if (this.generation && val[0] > 0) {
-                return val[1] + (buff.stacking ? "%" : " ") + " with overstack";
-            } else if (buff.stacking && val[1] > 0){
-                return "Uptime: " + val[1] + "%";
+            if (val instanceof Array) {
+                if (this.generation && val[0] > 0) {
+                    return val[1] + (buff.stacking ? "" : "%") + " with overstack";
+                } else if (buff.stacking && val[1] > 0) {
+                    return "Uptime: " + val[1] + "%";
+                }
             }
             return false;
         },
         getCellValue: function (buff, val) {
-            if (val[0] > 0) {
-                var res = val[0];
-                return buff.stacking ? res : res + "%";
+            var value = val;
+            if (val instanceof Array) {
+                value = val[0];
+            }
+            if (value > 0) {
+                return buff.stacking ? value : value + "%";
             }
             return "-";
         }
-    }
+    },
+    mounted() {
+        var table = $("#" + this.id);
+        table.DataTable({
+            order: [
+                [1, "asc"]
+            ]
+        });
+    },
+    updated() {
+        var table = $("#" + this.id);
+        var order = table.DataTable().order();
+        table.DataTable().destroy();
+        table.DataTable().order(order);
+        table.DataTable().draw();
+    },
 });
 
 Vue.component("personal-buff-table-component", {});
 
-Vue.component("buff-stats-component", {});
+Vue.component("buff-stats-component", {
+    props: ['datatypes', 'datatype', 'phase', 'players', 'presentbuffs', 'buffmap'],
+    data: function () {
+        return {
+            mode: 0,
+        };
+    },
+    computed: {
+        boons: function () {
+            var data = [];
+            for (var i = 0; i < this.presentbuffs.boons.length; i++) {
+                var boonid = 'b' + this.presentbuffs.boons[i];
+                data[i] = this.buffmap[boonid];
+            }
+            return data;
+        },
+        offs: function () {
+            var data = [];
+            for (var i = 0; i < this.presentbuffs.offs.length; i++) {
+                var boonid = 'b' + this.presentbuffs.offs[i];
+                data[i] = this.buffmap[boonid];
+            }
+            return data;
+        },
+        defs: function () {
+            var data = [];
+            for (var i = 0; i < this.presentbuffs.defs.length; i++) {
+                var boonid = 'b' + this.presentbuffs.defs[i];
+                data[i] = this.buffmap[boonid];
+            }
+            return data;
+        },
+        buffData: function () {
+            var _this = this;
+            var getData = function (stats, genself, gengroup, genoffgr, gensquad) {
+                var uptimes = [],
+                    gens = [],
+                    gengr = [],
+                    genoff = [],
+                    gensq = [];
+                var avg = [],
+                    gravg = [],
+                    totalavg = [];
+                var grcount = [],
+                    totalcount = 0;
+                for (var i = 0; i < _this.players.length; i++) {
+                    var player = _this.players[i];
+                    if (player.isConjure) {
+                        continue;
+                    }
+                    uptimes.push({
+                        player: player,
+                        data: stats[i]
+                    });
+                    gens.push({
+                        player: player,
+                        data: genself[i]
+                    });
+                    gengr.push({
+                        player: player,
+                        data: gengroup[i]
+                    });
+                    genoff.push({
+                        player: player,
+                        data: genoffgr[i]
+                    });
+                    gensq.push({
+                        player: player,
+                        data: gensquad[i]
+                    });
+                    if (!gravg[player.group]) {
+                        gravg[player.group] = [];
+                        grcount[player.group] = 0;
+                    }
+                    totalcount++;
+                    grcount[player.group]++;
+                    for (var j = 0; j < stats[i].data.length; j++) {
+                        totalavg[j] = (totalavg[j] || 0) + stats[i].data[j][0];
+                        gravg[player.group][j] = (gravg[player.group][j] || 0) + stats[i].data[j][0];
+                    }
+                }
+                for (var i = 0; i < gravg.length; i++) {
+                    if (gravg[i]) {
+                        for (var k = 0; k < gravg[i].length; k++) {
+                            gravg[i][k] = Math.round(100 * gravg[i][k] / grcount[i])/100;
+                        }
+                        avg.push({
+                            name: "Group " + i,
+                            data:  gravg[i],
+                        });
+                    }
+                }
+                for (var k = 0; k < totalavg.length; k++) {
+                    totalavg[k] = Math.round(100*totalavg[k] / totalcount)/100;
+                }
+                avg.push({
+                    name: "Total",
+                    data: totalavg
+                });
+                return [uptimes, gens, gengr, genoff, gensq, avg];
+            };
+            return {
+                boonsData: getData(this.phase.boonStats, this.phase.boonGenSelfStats, 
+                    this.phase.boonGenGroupStats, this.phase.boonGenOGroupStats, this.phase.boonGenSquadStats),
+                offsData: getData(this.phase.offBuffStats, this.phase.offBuffGenSelfStats,
+                    this.phase.offBuffGenGroupStats, this.phase.offBuffGenOGroupStats, this.phase.offBuffGenSquadStats),
+                defsData: getData(this.phase.defBuffStats, this.phase.defBuffGenSelfStats,
+                    this.phase.defBuffGenGroupStats, this.phase.defBuffGenOGroupStats, this.phase.defBuffGenSquadStats)
+            };
+        }
+    },
+});
 
 var createLayout = function () {
     var layout = new Layout("Summary");
@@ -816,12 +910,19 @@ var createLayout = function () {
     var buffLayout = new Layout(null);
     buffLayout.addTab(
         new Tab("Boons", {
-            active: true
+            active: true,
+            dataType: DataTypes.boonTable
         })
     );
-    buffLayout.addTab(new Tab("Offensive Buffs"));
-    buffLayout.addTab(new Tab("Defensive Buffs"));
-    buffLayout.addTab(new Tab("Personal Buffs"));
+    buffLayout.addTab(new Tab("Offensive Buffs", {
+        dataType: DataTypes.offensiveBuffTable
+    }));
+    buffLayout.addTab(new Tab("Defensive Buffs", {
+        dataType: DataTypes.defensiveBuffTable
+    }));
+    buffLayout.addTab(new Tab("Personal Buffs", {
+        dataType: DataTypes.personalBuffTable
+    }));
     buffs.layout = buffLayout;
     layout.addTab(buffs);
     // mechanics

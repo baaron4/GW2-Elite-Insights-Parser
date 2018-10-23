@@ -310,8 +310,6 @@
     <Content Include="Resources\tmplGroupCombatReplay.html" />
     <Content Include="Resources\tmplPlayerSelectCombatReplay.html" />
     <Content Include="Resources\TODO.txt" />
-    <None Include="Resources\tmplCompTable.html" />
-    <None Include="Resources\tmplMechanicTable.html" />
     <None Include="Resources\tmplDmgDistTable.html" />
     <None Include="Resources\tmplTabs.html" />
     <None Include="Resources\tmplPlayerCells.html" />

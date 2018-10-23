@@ -21,24 +21,26 @@ namespace LuckParser.Models.HtmlModels
         [DataMember] public List<List<object>> healStats;
 
         [DataMember] public List<BoonData> boonStats;
-        [DataMember] public List<BoonData> offBuffStats;
-        [DataMember] public List<BoonData> defBuffStats;
-        [DataMember] public List<BoonData> persBuffStats;
-
-        [DataMember] public List<Dictionary<long, List<object[]>>> extraBuffStats;
-
         [DataMember] public List<BoonData> boonGenSelfStats;
         [DataMember] public List<BoonData> boonGenGroupStats;
         [DataMember] public List<BoonData> boonGenOGroupStats;
         [DataMember] public List<BoonData> boonGenSquadStats;
+
+        [DataMember] public List<BoonData> offBuffStats;
         [DataMember] public List<BoonData> offBuffGenSelfStats;
         [DataMember] public List<BoonData> offBuffGenGroupStats;
         [DataMember] public List<BoonData> offBuffGenOGroupStats;
         [DataMember] public List<BoonData> offBuffGenSquadStats;
+
+        [DataMember] public List<BoonData> defBuffStats;
         [DataMember] public List<BoonData> defBuffGenSelfStats;
         [DataMember] public List<BoonData> defBuffGenGroupStats;
         [DataMember] public List<BoonData> defBuffGenOGroupStats;
         [DataMember] public List<BoonData> defBuffGenSquadStats;
+
+        [DataMember] public List<BoonData> persBuffStats;
+
+        [DataMember] public List<Dictionary<long, List<object[]>>> extraBuffStats;
 
         [DataMember] public List<List<BoonData>> targetsCondiStats;
         [DataMember] public List<BoonData> targetsCondiTotals;

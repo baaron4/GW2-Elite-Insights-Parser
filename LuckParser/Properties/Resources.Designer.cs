@@ -204,25 +204,6 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;table class=&quot;table composition&quot;&gt;
-        ///&lt;tbody&gt;
-        ///	{{for groups}}
-        ///	{{if #data}}
-        ///	&lt;tr&gt;
-        ///		{{for #data}}
-        ///		&lt;td&gt;
-        ///			&lt;div&gt;
-        ///				&lt;img src=&quot;{{:icon}}&quot; alt=&quot;{{:profession}}&quot; class=&quot;icon&quot; title=&quot;{{:profession}}&quot;&gt;
-        ///				{{if condi}}&lt;img src=&quot;https://wiki.guildwars2.com/images/5/54/Condition_Damage.png&quot; alt=&quot;Condition Damage&quot; title=&quot;Condition Damage -{{:condi}}&quot; class=&quot;icon&quot;&gt;{{/if}}
-        ///				{{if conc}}&lt;img src=&quot;https://wiki.guildwars2.com/images/4/44/Boon_Duration.png&quot; alt =&quot;Concentration&quot; title=&quot;Concentration -{{:conc}}&quot;  [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string tmplCompTable {
-            get {
-                return ResourceManager.GetString("tmplCompTable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {{if minion}}
         ///&lt;div&gt;{{&gt;minion.name}} did {{:contribution}}% of {{&gt;player.name}}&apos;s total{{if toBoss}} Boss{{/if}} dps&lt;/div&gt;
         ///{{else player}}
@@ -282,34 +263,6 @@ namespace LuckParser.Properties {
         internal static string tmplGroupCombatReplay {
             get {
                 return ResourceManager.GetString("tmplGroupCombatReplay", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot;&gt;
-        ///	&lt;thead&gt;
-        ///		&lt;tr&gt;
-        ///			{{if ~playerMech}}
-        ///			&lt;th width=&quot;30px&quot;&gt;Sub&lt;/th&gt;
-        ///			&lt;th width=&quot;30px&quot;&gt;&lt;/th&gt;
-        ///			&lt;th class=&quot;text-left&quot;&gt;Player&lt;/th&gt;
-        ///			{{else}}
-        ///			&lt;th class=&quot;text-left&quot;&gt;Enemy&lt;/th&gt;
-        ///			{{/if}}
-        ///			{{for mechanics}}
-        ///			{{if playerMech &amp;&amp; ~playerMech || enemyMech &amp;&amp; !~playerMech}}
-        ///				&lt;th title=&quot;{{:description}}&quot;&gt;{{:shortName}}&lt;/th&gt;
-        ///			{{/if}}
-        ///			{{/for}}
-        ///		&lt;/tr&gt;
-        ///	&lt;/thead&gt;
-        ///	&lt;tbody&gt;
-        ///		{{for rows ~mechanics=mechanics}}
-        ///		&lt;tr&gt; [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string tmplMechanicTable {
-            get {
-                return ResourceManager.GetString("tmplMechanicTable", resourceCulture);
             }
         }
         
