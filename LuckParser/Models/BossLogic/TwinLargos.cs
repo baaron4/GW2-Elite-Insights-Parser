@@ -23,6 +23,8 @@ namespace LuckParser.Models
             new Mechanic(52931, "Aquatic Detainment", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Nikare, "symbol:'circle-open',color:'rgb(0,0,255)'", "Float","Aquatic Detainment (Float Bubble)", "Float Bubble",0),
             new Mechanic(52130, "Aquatic Vortex", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Nikare, "symbol:'star-square-open-dot',color:'rgb(0,200,255)'", "Tndo","Aquatic Vortex (Water Tornados)", "Tornado",0),
             new Mechanic(51965, "Vapor Jet", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Nikare, "symbol:'square',color:'rgb(255,150,0)'", "Steal","Vapor Jet (Boon Steal)", "Boon Steal",0),
+            new Mechanic(52626, "Enraged (Nikare)", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Nikare, "symbol:'star-diamond',color:'rgb(255,0,0)'", "N.Enrg","Enraged (Kenut Dead)", "Nikare Enrage",0,(condition => condition.CombatItem.SrcInstid == Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Nikare).InstID)),
+            new Mechanic(52626, "Enraged (Kenut)", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Nikare, "symbol:'star-diamond',color:'rgb(255,0,0)'", "K.Enrg","Enraged (Nikare Dead)", "Kenut Enrage",0,(condition => condition.CombatItem.SrcInstid == Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Kenut).InstID)),
             }); 
             Extension = "twinlargos";
             IconUrl = "https://i.imgur.com/6O5MT7v.png";
