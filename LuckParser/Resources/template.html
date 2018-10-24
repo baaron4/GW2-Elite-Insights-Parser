@@ -489,7 +489,7 @@
             <personal-buff-table-component inline-template v-show="dataType === datatypes.personalBuffTable" :phase="phase" :persbuffs="logdata.persBuffs"
                 :players="logdata.players" :buffmap="logdata.boonMap">
                 <div>
-                    <ul class="nav nav-pills d-flex flex-row justify-content-center">
+                    <ul class="nav nav-pills d-flex flex-row justify-content-center mt-2 mb-2">
                         <li v-for="base in bases" class="nav-item">
                             <a class="nav-link" @click="mode = base" :class="{active: mode === base}">{{ base }}</a>
                         </li>
