@@ -22,7 +22,8 @@ namespace LuckParser.Models
             new Mechanic(53097, "Water Bomb Debuff", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Nikare, "symbol:'diamond',color:'rgb(0,255,255)'", "Psn","Expanding Water Field", "Water Poison",0),
             new Mechanic(52931, "Aquatic Detainment", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Nikare, "symbol:'circle-open',color:'rgb(0,0,255)'", "Float","Aquatic Detainment (Float Bubble)", "Float Bubble",0),
             new Mechanic(52130, "Aquatic Vortex", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Nikare, "symbol:'star-square-open-dot',color:'rgb(0,200,255)'", "Tndo","Aquatic Vortex (Water Tornados)", "Tornado",0),
-            });
+            new Mechanic(51965, "Vapor Jet", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Nikare, "symbol:'square',color:'rgb(255,150,0)'", "Steal","Vapor Jet (Boon Steal)", "Boon Steal",0),
+            }); 
             Extension = "twinlargos";
             IconUrl = "https://i.imgur.com/6O5MT7v.png";
         }
