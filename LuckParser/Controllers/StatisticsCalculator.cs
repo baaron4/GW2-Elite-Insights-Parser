@@ -382,7 +382,7 @@ namespace LuckParser.Controllers
                     List<List<Point3D>> GroupsPosList = new List<List<Point3D>>();
                     foreach (Player player in _log.PlayerList)
                     {
-                        if (p.Account == ":Conjured Sword")
+                        if (player.Account == ":Conjured Sword")
                         {
                             continue;
                         }
