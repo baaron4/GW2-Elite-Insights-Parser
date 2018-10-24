@@ -427,81 +427,48 @@ namespace LuckParser.Controllers
             return list;
         }
 
-        private List<Dictionary<long, List<object[]>>> BuildDmgModifiersData(int phaseIndex)
+        private void BuildDmgModifiersData(int phaseIndex, List<List<object[]>> data, List<List<List<object[]>>> dataTargets)
         {
-            List<Dictionary<long,List<object[]>>> data = new List<Dictionary<long, List<object[]>>>();
             PhaseData phase = _statistics.Phases[phaseIndex];
 
             foreach (Player player in _log.PlayerList)
             {
-                Dictionary<long, List<object[]>> pData = new Dictionary<long, List<object[]>>();
+                List<object[]> pData = new List<object[]>();
+                List<List<object[]>> pDataTargets = new List<List<object[]>>();
                 data.Add(pData);
+                dataTargets.Add(pDataTargets);
                 Dictionary<long, List<AbstractMasterPlayer.ExtraBoonData>> extraBoonDataAll = player.GetExtraBoonData(_log, null);
                 foreach (var pair in extraBoonDataAll)
                 {
                     var extraData = pair.Value[phaseIndex];
-                    if (pData.TryGetValue(pair.Key, out var list))
-                    {
-                        list.Add(
-                                new object[]
+                    pData.Add(new object[]
                                 {
+                                    pair.Key,
                                     extraData.HitCount,
                                     extraData.TotalHitCount,
                                     extraData.DamageGain,
                                     extraData.TotalDamage
-                                }
-                            );
-                    }
-                    else
-                    {
-                        pData[pair.Key] = new List<object[]>()
-                        {
-                            new object[]
-                            {
-                                extraData.HitCount,
-                                extraData.TotalHitCount,
-                                extraData.DamageGain,
-                                extraData.TotalDamage
-                            }
-                        };
-                    }
+                                });
                 }
                 foreach (Boss target in phase.Targets)
                 {
+                    List<object[]> pTarget = new List<object[]>();
+                    pDataTargets.Add(pTarget);
                     Dictionary<long, List<AbstractMasterPlayer.ExtraBoonData>> extraBoonDataTarget = player.GetExtraBoonData(_log, target);
                     foreach (var pair in extraBoonDataTarget)
                     {
                         var extraData = pair.Value[phaseIndex];
-                        if (pData.TryGetValue(pair.Key, out var list))
-                        {
-                            list.Add(
-                                    new object[]
+                        pTarget.Add(new object[]
                                     {
+                                        pair.Key,
                                     extraData.HitCount,
                                     extraData.TotalHitCount,
                                     extraData.DamageGain,
                                     extraData.TotalDamage
-                                    }
-                                );
-                        }
-                        else
-                        {
-                            pData[pair.Key] = new List<object[]>()
-                            {
-                                new object[]
-                                {
-                                    extraData.HitCount,
-                                    extraData.TotalHitCount,
-                                    extraData.DamageGain,
-                                    extraData.TotalDamage
-                                }
-                            };
-                        }
+                                    });
                     }
                 }
             }
-
-            return data;
         }
 
         /// <summary>
@@ -1322,7 +1289,12 @@ namespace LuckParser.Controllers
 
         private string BuildEIJs(string path)
         {
+#if DEBUG
             string scriptContent = Properties.Resources.ei_js;
+#else
+            string scriptContent = Properties.Resources.ei_js.Replace(System.Environment.NewLine,"");
+            scriptContent = Properties.Resources.ei_js.Replace(" ","");
+#endif
             string scriptFilename = "ei-" + _scriptVersion + ".js";
             if (Properties.Settings.Default.NewHtmlExternalScripts)
             {
@@ -1509,7 +1481,7 @@ namespace LuckParser.Controllers
                 phaseDto.defBuffStats = BuildBuffUptimeData(_statistics.PresentDefbuffs, i);
                 phaseDto.persBuffStats = BuildPersonalBuffUptimeData(persBuffDict, i);
 
-                phaseDto.dmgModifiers = BuildDmgModifiersData(i);
+                BuildDmgModifiersData(i, phaseDto.dmgModifiersCommon, phaseDto.dmgModifiersTargetsCommon);
 
                 phaseDto.boonGenSelfStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "self");
                 phaseDto.boonGenGroupStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "group");
