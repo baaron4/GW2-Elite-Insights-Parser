@@ -427,7 +427,7 @@ namespace LuckParser.Controllers
             return list;
         }
 
-        private List<Dictionary<long, List<object[]>>> BuildExtraBuffData(int phaseIndex)
+        private List<Dictionary<long, List<object[]>>> BuildDmgModifiersData(int phaseIndex)
         {
             List<Dictionary<long,List<object[]>>> data = new List<Dictionary<long, List<object[]>>>();
             PhaseData phase = _statistics.Phases[phaseIndex];
@@ -448,7 +448,7 @@ namespace LuckParser.Controllers
                                     extraData.HitCount,
                                     extraData.TotalHitCount,
                                     extraData.DamageGain,
-                                    extraData.Percent
+                                    extraData.TotalDamage
                                 }
                             );
                     }
@@ -461,7 +461,7 @@ namespace LuckParser.Controllers
                                 extraData.HitCount,
                                 extraData.TotalHitCount,
                                 extraData.DamageGain,
-                                extraData.Percent
+                                extraData.TotalDamage
                             }
                         };
                     }
@@ -480,7 +480,7 @@ namespace LuckParser.Controllers
                                     extraData.HitCount,
                                     extraData.TotalHitCount,
                                     extraData.DamageGain,
-                                    extraData.Percent
+                                    extraData.TotalDamage
                                     }
                                 );
                         }
@@ -493,7 +493,7 @@ namespace LuckParser.Controllers
                                     extraData.HitCount,
                                     extraData.TotalHitCount,
                                     extraData.DamageGain,
-                                    extraData.Percent
+                                    extraData.TotalDamage
                                 }
                             };
                         }
@@ -1509,7 +1509,7 @@ namespace LuckParser.Controllers
                 phaseDto.defBuffStats = BuildBuffUptimeData(_statistics.PresentDefbuffs, i);
                 phaseDto.persBuffStats = BuildPersonalBuffUptimeData(persBuffDict, i);
 
-                phaseDto.extraBuffStats = BuildExtraBuffData(i);
+                phaseDto.dmgModifiers = BuildDmgModifiersData(i);
 
                 phaseDto.boonGenSelfStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "self");
                 phaseDto.boonGenGroupStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "group");

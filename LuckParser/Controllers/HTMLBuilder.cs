@@ -1293,12 +1293,12 @@ namespace LuckParser.Controllers
                                 if (extraBoonData.TryGetValue(boon.ID, out var list))
                                 {
                                     var extraData = list[phaseIndex];
-                                    string text = extraData.HitCount + " out of " + extraData.TotalHitCount + " hits<br>Pure Damage: " + extraData.DamageGain + "<br>Effective Damage Increase: " + extraData.Percent + "%";
+                                    string text = extraData.HitCount + " out of " + extraData.TotalHitCount + " hits<br>Pure Damage: " + extraData.DamageGain + "<br>Effective Damage Increase: " + extraData.TotalDamage + "%";
                                     tooltip = "<big><b>All</b></big><br>" + text;
                                     if (extraBoonDataBoss.TryGetValue(boon.ID, out var list2))
                                     {
                                         extraData = list2[phaseIndex];
-                                        text = extraData.HitCount + " out of " + extraData.TotalHitCount + " hits<br>Pure Damage: " + extraData.DamageGain + "<br>Effective Damage Increase: " + extraData.Percent + "%";
+                                        text = extraData.HitCount + " out of " + extraData.TotalHitCount + " hits<br>Pure Damage: " + extraData.DamageGain + "<br>Effective Damage Increase: " + extraData.TotalDamage + "%";
                                         tooltip += "<br><big><b>Boss</b></big><br> " + text;
                                     }
                                 }
