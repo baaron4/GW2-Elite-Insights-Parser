@@ -54,7 +54,7 @@ namespace LuckParser.Controllers
             {
                 foreach (Player p in log.PlayerList)
                 {
-                    if (p.Group == 11)
+                    if (p.Account == ":Conjured Sword")
                     {
                         continue;
                     }
@@ -69,7 +69,7 @@ namespace LuckParser.Controllers
                 // Ensuring all combat replays are initialized before extra data (and agent interaction) is computed
                 foreach (Player p in log.PlayerList)
                 {
-                    if (p.Group == 11)
+                    if (p.Account == ":Conjured Sword")
                     {
                         continue;
                     }
@@ -330,7 +330,7 @@ namespace LuckParser.Controllers
                     }
                 }
             }
-            if (p.Group == 11)
+            if (p.Account == ":Conjured Sword")
             {
                 return final;
             }
@@ -382,7 +382,7 @@ namespace LuckParser.Controllers
                     List<List<Point3D>> GroupsPosList = new List<List<Point3D>>();
                     foreach (Player player in _log.PlayerList)
                     {
-                        if (player.Group == 11)
+                        if (p.Account == ":Conjured Sword")
                         {
                             continue;
                         }
