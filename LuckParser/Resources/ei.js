@@ -6,6 +6,42 @@ $.extend($.fn.dataTable.defaults, {
     dom: "t"
 });
 
+var specs = [
+    "Warrior", "Berserker", "Spellbreaker", "Revenant", "Herald", "Renegade", "Guardian", "Dragonhunter", "Firebrand",
+    "Ranger", "Druid", "Soulbeast", "Engineer", "Scrapper", "Holosmith", "Thief", "Daredevil", "Deadeye",
+    "Mesmer", "Chronomancer", "Mirage", "Necromancer", "Reaper", "Scourge", "Elementalist", "Tempest", "Weaver"
+];
+
+var specToBase = {
+    Warrior: 'Warrior',
+    Berserker: 'Warrior',
+    Spellbreaker: 'Warrior',
+    Revenant: "Revenant",
+    Herald: "Revenant",
+    Renegade: "Revenant",
+    Guardian: "Guardian",
+    Dragonhunter: "Guardian",
+    Firebrand: "Guardian",
+    Ranger: "Ranger",
+    Druid: "Ranger",
+    Soulbeast: "Ranger",
+    Engineer: "Engineer",
+    Scrapper: "Engineer",
+    Holosmith: "Engineer",
+    Thief: "Thief",
+    Daredevil: "Thief",
+    Deadeye: "Thief",
+    Mesmer: "Mesmer",
+    Chronomancer: "Mesmer",
+    Mirage: "Mesmer",
+    Necromancer: "Necromancer",
+    Reaper: "Necromancer",
+    Scourge: "Necromancer",
+    Elementalist: "Elementalist",
+    Tempest: "Elementalist",
+    Weaver: "Elementalist"
+};
+
 var urls = {
     Warrior: "https://wiki.guildwars2.com/images/4/43/Warrior_tango_icon_20px.png",
     Berserker: "https://wiki.guildwars2.com/images/d/da/Berserker_tango_icon_20px.png",
@@ -64,7 +100,8 @@ var DataTypes = {
     boonTable: 5,
     offensiveBuffTable: 6,
     defensiveBuffTable: 7,
-    personalBuffTable: 8
+    personalBuffTable: 8,
+    dmgModifiersTable: 9,
 };
 
 for (var i = 0; i < logData.phases.length; i++) {
@@ -245,12 +282,7 @@ Vue.component("general-layout-component", {
 });
 
 Vue.component("damage-stats-component", {
-    props: ["layout", "phase", "targets", "players"],
-    data: function () {
-        return {
-            cache: new Map()
-        };
-    },
+    props: ["phase", "targets", "players"],
     mounted() {
         $(function () {
             $("#dps-table").DataTable({
@@ -270,24 +302,6 @@ Vue.component("damage-stats-component", {
     computed: {
         tableData: function () {
             var phase = this.phase;
-            //
-            /*var activeTargets = [];
-                        var id = 0;
-                        for (var j = 0; j < phase.targets.length; j++) {
-                            if (this.targets[phase.targets[j]].active) {
-                                activeTargets.push(phase.targets[j]);
-                            }
-                        }
-                        for (var i = 0; i < activeTargets.length; i++) {
-                            id += Math.pow(2, activeTargets[i]);
-                        }
-                        if (this.cache.has(phase)) {
-                            var res = this.cache.get(phase);
-                            if (res.has(id)) {
-                                return res.get(id);
-                            }
-                        }*/
-            //
             var rows = [];
             var sums = [];
             var total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -305,8 +319,9 @@ Vue.component("damage-stats-component", {
                     }
                 }
                 var player = this.players[i];
-                if (!groups[player.group])
+                if (!groups[player.group]) {
                     groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                }
                 var dps = dpsTargetStat.concat(dpsStat);
                 for (j = 0; j < dps.length; j++) {
                     total[j] += dps[j];
@@ -318,11 +333,12 @@ Vue.component("damage-stats-component", {
                 });
             }
             for (i = 0; i < groups.length; i++) {
-                if (groups[i])
+                if (groups[i]) {
                     sums.push({
                         name: "Group " + i,
                         dps: groups[i]
                     });
+                }
             }
             sums.push({
                 name: "Total",
@@ -332,24 +348,13 @@ Vue.component("damage-stats-component", {
                 rows: rows,
                 sums: sums
             };
-            //
-            /*if (!this.cache.has(phase)) {
-                            this.cache.set(phase, new Map());
-                        }
-                        this.cache.get(phase).set(id, res);*/
-            //
             return res;
         }
     }
 });
 
 Vue.component("defense-stats-component", {
-    props: ["layout", "phase", "players"],
-    data: function () {
-        return {
-            cache: new Map()
-        };
-    },
+    props: ["phase", "players"],
     mounted() {
         $(function () {
             $("#def-table").DataTable({
@@ -368,11 +373,6 @@ Vue.component("defense-stats-component", {
     },
     computed: {
         tableData: function () {
-            //
-            /*if (this.cache.has(this.phase)) {
-                            return this.cache.get(this.phase);
-                        }*/
-            //
             var rows = [];
             var sums = [];
             var total = [0, 0, 0, 0, 0, 0, 0];
@@ -388,18 +388,21 @@ Vue.component("defense-stats-component", {
                     player: player,
                     def: def
                 });
-                if (!groups[player.group]) groups[player.group] = [0, 0, 0, 0, 0, 0, 0];
+                if (!groups[player.group]) {
+                    groups[player.group] = [0, 0, 0, 0, 0, 0, 0];
+                }
                 for (var j = 0; j < total.length; j++) {
                     total[j] += def[j];
                     groups[player.group][j] += def[j];
                 }
             }
             for (i = 0; i < groups.length; i++) {
-                if (groups[i])
+                if (groups[i]) {
                     sums.push({
                         name: "Group " + i,
                         def: groups[i]
                     });
+                }
             }
             sums.push({
                 name: "Total",
@@ -409,21 +412,13 @@ Vue.component("defense-stats-component", {
                 rows: rows,
                 sums: sums
             };
-            //
-            //this.cache.set(this.phase, res);
-            //
             return res;
         }
     }
 });
 
 Vue.component("support-stats-component", {
-    props: ["layout", "phase", "players"],
-    data: function () {
-        return {
-            cache: new Map()
-        };
-    },
+    props: ["phase", "players"],
     mounted() {
         $(function () {
             $("#sup-table").DataTable({
@@ -458,11 +453,6 @@ Vue.component("support-stats-component", {
     },
     computed: {
         tableData: function () {
-            //
-            /*if (this.cache.has(this.phase)) {
-                            return this.cache.get(this.phase);
-                        }*/
-            //
             var rows = [];
             var sums = [];
             var total = [0, 0, 0, 0];
@@ -478,18 +468,22 @@ Vue.component("support-stats-component", {
                     player: player,
                     sup: sup
                 });
-                if (!groups[player.group]) groups[player.group] = [0, 0, 0, 0];
+                if (!groups[player.group]) {
+                    groups[player.group] = [0, 0, 0, 0];
+                }
                 for (var j = 0; j < sup.length; j++) {
                     total[j] += sup[j];
                     groups[player.group][j] += sup[j];
                 }
             }
             for (i = 0; i < groups.length; i++) {
-                if (groups[i])
+                if (groups[i]) {
                     sums.push({
                         name: "Group " + i,
                         sup: groups[i]
                     });
+                }
+
             }
             sums.push({
                 name: "Total",
@@ -499,20 +493,16 @@ Vue.component("support-stats-component", {
                 rows: rows,
                 sums: sums
             };
-            //
-            //this.cache.set(this.phase, res);
-            //
             return res;
         }
     }
 });
 
 Vue.component("gameplay-stats-component", {
-    props: ["layout", "phase", "targets", "players"],
+    props: ["phase", "targets", "players"],
     data: function () {
         return {
             mode: 0,
-            cache: new Map()
         };
     },
     mounted() {
@@ -550,38 +540,14 @@ Vue.component("gameplay-stats-component", {
     computed: {
         tableData: function () {
             var phase = this.phase;
-            //
-            /*var activeTargets = null;
-                        var id = 0;
-                        if (this.mode) {
-                            activeTargets = [];
-                            for (var j = 0; j < phase.targets.length; j++) {
-                                if (this.targets[phase.targets[j]].active) {
-                                    activeTargets.push(phase.targets[j]);
-                                }
-                            }
-                        }
-                        if (activeTargets) {
-                            for (var i = 0; i < activeTargets.length; i++) {
-                                id += Math.pow(2, activeTargets[i]);
-                            }
-                        }
-                        if (this.cache.has(phase)) {
-                            var res = this.cache.get(phase);
-                            if (res.has(this.mode)) {
-                                res = res.get(this.mode);
-                                if (res.has(id)) {
-                                    return res.get(id);
-                                }
-                            }
-                        }*/
-            //
             var rows = [];
             for (var i = 0; i < phase.dmgStats.length; i++) {
                 var commons = [];
                 var data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                 var player = this.players[i];
-                if (player.isConjure) continue;
+                if (player.isConjure) {
+                    continue;
+                }
                 var stats = phase.dmgStats[i];
                 for (var j = 0; j < stats.length; j++) {
                     if (j >= 14) {
@@ -608,18 +574,6 @@ Vue.component("gameplay-stats-component", {
             var res = {
                 rows: rows
             };
-            //
-            /*var cache = this.cache;
-                        if (!cache.has(phase)) {
-                            cache.set(phase, new Map());
-                        }
-                        cache = cache.get(phase);
-                        if (!cache.has(this.mode)) {
-                            cache.set(this.mode, new Map());
-                        }
-                        cache = cache.get(this.mode);
-                        cache.set(id, res);*/
-            //
             return res;
         }
     }
@@ -764,43 +718,10 @@ Vue.component("personal-buff-table-component", {
     props: ['phase', 'persbuffs', 'players', 'buffmap'],
     data: function () {
         return {
-            specs: [
-                "Warrior", "Berserker", "Spellbreaker", "Revenant", "Herald", "Renegade", "Guardian", "Dragonhunter", "Firebrand",
-                "Ranger", "Druid", "Soulbeast", "Engineer", "Scrapper", "Holosmith", "Thief", "Daredevil", "Deadeye",
-                "Mesmer", "Chronomancer", "Mirage", "Necromancer", "Reaper", "Scourge", "Elementalist", "Tempest", "Weaver"
-            ],
-            bases: [
-            ],
-            specToBase: {
-                Warrior: 'Warrior',
-                Berserker: 'Warrior',
-                Spellbreaker: 'Warrior',
-                Revenant: "Revenant",
-                Herald: "Revenant",
-                Renegade: "Revenant",
-                Guardian: "Guardian",
-                Dragonhunter: "Guardian",
-                Firebrand: "Guardian",
-                Ranger: "Ranger",
-                Druid: "Ranger",
-                Soulbeast: "Ranger",
-                Engineer: "Engineer",
-                Scrapper: "Engineer",
-                Holosmith: "Engineer",
-                Thief: "Thief",
-                Daredevil: "Thief",
-                Deadeye: "Thief",
-                Mesmer: "Mesmer",
-                Chronomancer: "Mesmer",
-                Mirage: "Mesmer",
-                Necromancer: "Necromancer",
-                Reaper: "Necromancer",
-                Scourge: "Necromancer",
-                Elementalist: "Elementalist",
-                Tempest: "Elementalist",
-                Weaver: "Elementalist"
-            },
-            mode: "Warrior"
+            specs: specs,
+            bases: [],
+            specToBase: specToBase,
+            mode: "Warrior",
         };
     },
     computed: {
@@ -825,7 +746,7 @@ Vue.component("personal-buff-table-component", {
             }
             this.bases = [];
             var _this = this;
-            aux.forEach(function(value, value2, set) {
+            aux.forEach(function (value, value2, set) {
                 _this.bases.push(value);
             });
             this.mode = this.bases[0];
@@ -963,7 +884,7 @@ Vue.component("buff-stats-component", {
                 });
                 return [uptimes, gens, gengr, genoff, gensq, avg];
             };
-            return {
+            var res = {
                 boonsData: getData(this.phase.boonStats, this.phase.boonGenSelfStats,
                     this.phase.boonGenGroupStats, this.phase.boonGenOGroupStats, this.phase.boonGenSquadStats),
                 offsData: getData(this.phase.offBuffStats, this.phase.offBuffGenSelfStats,
@@ -971,7 +892,103 @@ Vue.component("buff-stats-component", {
                 defsData: getData(this.phase.defBuffStats, this.phase.defBuffGenSelfStats,
                     this.phase.defBuffGenGroupStats, this.phase.defBuffGenOGroupStats, this.phase.defBuffGenSquadStats)
             };
+            return res;
         }
+    },
+});
+
+Vue.component("dmgmodifier-stats-component", {
+    props: ['phases',
+        'phase', 'players', 'targets', 'buffmap'
+    ],
+    data: function () {
+        return {
+            mode: 0
+        };
+    },
+    computed: {
+        modifiers: function () {
+            var dmgModifiersCommon = this.phases[0].dmgModifiersCommon;
+            if (!dmgModifiersCommon.length) {
+                return [];
+            }
+            var dmgModifier = dmgModifiersCommon[0];
+            var buffs = [];
+            for (var i = 0; i < dmgModifier.length; i++) {
+                var modifier = dmgModifier[i];
+                var boonid = 'b' + modifier[0];
+                if (this.buffmap[boonid]) {
+                    buffs.push(this.buffmap[boonid]);
+                }
+            }
+            return buffs;
+        },
+        rows: function () {
+            var rows = [];
+            for (var i = 0; i < this.players.length; i++) {
+                var player = this.players[i];
+                if (player.isConjure) {
+                    continue;
+                }
+                var dmgModifier = this.mode === 0 ? this.phase.dmgModifiersCommon[i] : this.phase.dmgModifiersTargetsCommon[i];
+                var data = [];
+                for (var j = 0; j < this.modifiers.length; j++) {
+                    data.push([0, 0, 0, 0]);
+                }
+                if (this.mode === 0) {
+                    for (var j = 0; j < dmgModifier.length; j++) {
+                        data[j] = dmgModifier[j].slice(1);
+                    }
+                } else {
+                    for (var j = 0; j < this.phase.targets.length; j++) {
+                        if (this.targets[this.phase.targets[j]].active) {
+                            var modifier = dmgModifier[j];
+                            for (var k = 0; k < modifier.length; k++) {
+                                var target = modifier[k].slice(1);
+                                var curData = data[k];
+                                for (var l = 0; l < target.length; l++) {
+                                    curData[l] += target[l];
+                                }
+                                data[k] = curData;
+                            }
+                        }
+                    }
+                }
+                rows.push({
+                    player: player,
+                    data: data
+                });
+            }
+            return rows;
+        }
+    },
+    methods: {
+        getTooltip: function (item) {
+            var hits = item[0] + " out of " + item[1] + " hits";
+            var gain = "Pure Damage: " + item[2];
+            var damageIncrease = Math.round(100 * 100 * (item[3] / (item[3] - item[2]) - 1.0)) / 100;
+            var increase = "Damage Gain: " + (isNaN(damageIncrease) ? "0" : damageIncrease) + "%";
+            return hits + "<br>" + gain + "<br>" + increase;
+        },
+        getCellValue: function (item) {
+            var res = Math.round(100 * 100 * item[0] / Math.max(item[1], 1)) / 100;
+            return isNaN(res) ? 0 : res;
+        }
+    },
+    mounted() {
+        var table = $("#dmgmodifier-table");
+        table.DataTable({
+            order: [
+                [1, "asc"]
+            ]
+        });
+    },
+    updated() {
+        var table = $("#dmgmodifier-table");
+        var order = table.DataTable().order();
+        table.DataTable().destroy();
+        table.DataTable().order(order);
+        table.DataTable().draw();
     },
 });
 
@@ -991,6 +1008,11 @@ var createLayout = function () {
     statsLayout.addTab(
         new Tab("Gameplay Stats", {
             dataType: DataTypes.gameplayTable
+        })
+    );
+    statsLayout.addTab(
+        new Tab("Damage Modifiers Stats", {
+            dataType: DataTypes.dmgModifiersTable
         })
     );
     statsLayout.addTab(
@@ -1055,7 +1077,9 @@ window.onload = function () {
             phase: function () {
                 var phases = this.logdata.phases;
                 for (var i = 0; i < phases.length; i++) {
-                    if (phases[i].active) return phases[i];
+                    if (phases[i].active) {
+                        return phases[i];
+                    }
                 }
             },
             dataType: function () {

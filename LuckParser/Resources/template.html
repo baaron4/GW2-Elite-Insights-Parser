@@ -166,9 +166,10 @@
                 </player-component>
             </div>
         </div>
-        <general-layout-component :layout="layout" :phase="phase"></general-layout-component>
+        <general-layout-component :layout="layout" :phase="phase">
+        </general-layout-component>
         <div id="general-stats">
-            <damage-stats-component inline-template v-show="dataType === datatypes.damageTable" :layout="layout" :phase="phase"
+            <damage-stats-component inline-template v-show="dataType === datatypes.damageTable" :phase="phase"
                 :players="logdata.players" :targets="logdata.targets">
                 <div>
                     <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" id="dps-table">
@@ -218,7 +219,7 @@
                     </table>
                 </div>
             </damage-stats-component>
-            <gameplay-stats-component inline-template v-show="dataType === datatypes.gameplayTable" :layout="layout"
+            <gameplay-stats-component inline-template v-show="dataType === datatypes.gameplayTable"
                 :phase="phase" :players="logdata.players" :targets="logdata.targets">
                 <div>
                     <div class="d-flex flex-row justify-content-center mt-1 mb-1">
@@ -299,7 +300,49 @@
                     </table>
                 </div>
             </gameplay-stats-component>
-            <support-stats-component inline-template v-show="dataType === datatypes.supTable" :layout="layout" :phase="phase"
+            <dmgmodifier-stats-component inline-template v-show="dataType === datatypes.dmgModifiersTable" :phase="phase"
+                                         :players="logdata.players" :targets="logdata.targets" :buffmap="logdata.boonMap" :phases="logdata.phases">
+                <div v-if="modifiers.length > 0">
+                    <div class="d-flex flex-row justify-content-center mt-1 mb-1">
+                        <ul class="nav nav-pills">
+                            <li class="nav-item">
+                                <a class="nav-link" @click="mode = 1" :class="{active: mode}">Target</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" @click="mode = 0" :class="{active: !mode }">All</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" id="dmgmodifier-table">
+                        <thead>
+                            <tr>
+                                <th>Sub</th>
+                                <th></th>
+                                <th class="text-left">Name</th>
+                                <th>Account</th>
+                                <th v-for="modifier in modifiers" :data-original-title="modifier.name">
+                                    <img :src="modifier.icon" :alt="modifier.name" class="icon icon-hover">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="row in rows">
+                                <td>{{row.player.group}}</td>
+                                <td :data-original-title="row.player.profession">
+                                    <img :src="row.player.icon" :alt="row.player.profession"
+                                         class="icon"><span style="display:none">{{row.player.profession}}</span>
+                                </td>
+                                <td class="text-left">{{row.player.name}}</td>
+                                <td>{{row.player.acc}}</td>
+                                <td v-for="(modifier, index) in modifiers" :data-original-title="getTooltip(row.data[index])">
+                                    {{getCellValue(row.data[index])}}%
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </dmgmodifier-stats-component>
+            <support-stats-component inline-template v-show="dataType === datatypes.supTable" :phase="phase"
                 :players="logdata.players">
                 <div>
                     <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" id="sup-table">
@@ -337,7 +380,7 @@
                     </table>
                 </div>
             </support-stats-component>
-            <defense-stats-component inline-template v-show="dataType === datatypes.defTable" :layout="layout" :phase="phase"
+            <defense-stats-component inline-template v-show="dataType === datatypes.defTable" :phase="phase"
                 :players="logdata.players">
                 <div>
                     <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" id="def-table">
