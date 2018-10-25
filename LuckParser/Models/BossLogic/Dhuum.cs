@@ -150,21 +150,26 @@ namespace LuckParser.Models
                     foreach (CastLog c in deathmark)
                     {
                         int start = (int)c.Time;
-                        int castEnd = start + c.ActualDuration;
-                        int zoneActive = castEnd - 1000;
+                        int zoneActive = start + 1550;
+                        int zoneDeadly = zoneActive + 6000; //point where the zone becomes impossible to walk through unscathed
                         int zoneEnd = zoneActive + 120000;
+                        int radius = 450;
                         if (majorSplit != null)
                         {
-                            castEnd = Math.Min(castEnd, (int)majorSplit.Time);
                             zoneEnd = Math.Min(zoneEnd, (int)majorSplit.Time);
+                            zoneDeadly = Math.Min(zoneDeadly, (int)majorSplit.Time);
                         }
-                        Point3D next = replay.Positions.FirstOrDefault(x => x.Time >= castEnd);
-                        Point3D prev = replay.Positions.LastOrDefault(x => x.Time <= castEnd);
-                        if (next != null || prev != null)
+                        int spellCenterDistance = 200; //hitbox radius
+                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 3000);
+                        Point3D bossPosition = replay.Positions.LastOrDefault(x => x.Time <= start + 3000);
+                        if (facing != null && bossPosition != null)
                         {
-                            replay.Actors.Add(new CircleActor(true, zoneActive, 450, new Tuple<int, int>(start, zoneActive), "rgba(200, 255, 100, 0.5)", new InterpolatedPositionConnector(prev, next, castEnd)));
-                            replay.Actors.Add(new CircleActor(false, 0, 450, new Tuple<int, int>(start, zoneActive), "rgba(200, 255, 100, 0.5)", new InterpolatedPositionConnector(prev, next, castEnd)));
-                            replay.Actors.Add(new CircleActor(true, 0, 450, new Tuple<int, int>(zoneActive, zoneEnd), "rgba(200, 255, 100, 0.5)", new InterpolatedPositionConnector(prev, next, castEnd)));
+                            Point3D position = new Point3D(bossPosition.X + (facing.X * spellCenterDistance), bossPosition.Y + (facing.Y * spellCenterDistance), bossPosition.Z, bossPosition.Time);
+                            replay.Actors.Add(new CircleActor(true, zoneActive, radius, new Tuple<int, int>(start, zoneActive), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
+                            replay.Actors.Add(new CircleActor(false, 0, radius, new Tuple<int, int>(start, zoneActive), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
+                            replay.Actors.Add(new CircleActor(true, 0, radius, new Tuple<int, int>(zoneActive, zoneDeadly), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
+                            replay.Actors.Add(new CircleActor(true, 0, radius, new Tuple<int, int>(zoneDeadly, zoneEnd), "rgba(255, 100, 0, 0.5)", new PositionConnector(position)));
+
                         }
                     }
                     List<CastLog> cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
@@ -254,7 +259,7 @@ namespace LuckParser.Models
                 replay.Actors.Add(new CircleActor(true, start + duration, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.5)", new AgentConnector(p)));
             }
             // bomb
-            List<CombatItem> bombDhuum = GetFilteredList(log, 47646, p.InstID);
+            List<CombatItem> bombDhuum = GetFilteredList(log, 47646, p);
             int bombDhuumStart = 0;
             foreach (CombatItem c in bombDhuum)
             {
@@ -270,7 +275,7 @@ namespace LuckParser.Models
                 }
             }
             // shackles connection
-            List<CombatItem> shackles = GetFilteredList(log, 47335, p.InstID).Concat(GetFilteredList(log, 48591, p.InstID)).ToList();
+            List<CombatItem> shackles = GetFilteredList(log, 47335, p).Concat(GetFilteredList(log, 48591, p)).ToList();
             int shacklesStart = 0;
             Player shacklesTarget = null;
             foreach (CombatItem c in shackles)
@@ -293,7 +298,7 @@ namespace LuckParser.Models
             // shackles damage (identical to the connection for now, not yet properly distinguishable from the pure connection, further investigation needed due to inconsistent behavior (triggering too early, not triggering the damaging skill though)
             // shackles start with buff 47335 applied from one player to the other, this is switched over to buff 48591 after mostly 2 seconds, sometimes later. This is switched to 48042 usually 4 seconds after initial application and the damaging skill 47164 starts to deal damage from that point on.
             // Before that point, 47164 is only logged when evaded/blocked, but doesn't deal damage. Further investigation needed.
-            List<CombatItem> shacklesDmg = GetFilteredList(log, 48042, p.InstID);
+            List<CombatItem> shacklesDmg = GetFilteredList(log, 48042, p);
             int shacklesDmgStart = 0;
             Player shacklesDmgTarget = null;
             foreach (CombatItem c in shacklesDmg)

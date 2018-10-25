@@ -130,9 +130,14 @@ namespace LuckParser.Models
             {
                 WhiteMantleSeeker1,
                 WhiteMantleSeeker2,
-                WhiteMantleKnight,
-                WhiteMantleBattleMage,
-                ExquisiteConjunction
+                WhiteMantleKnight1,
+                WhiteMantleKnight2,
+                WhiteMantleBattleMage1,
+                WhiteMantleBattleMage2,
+                ExquisiteConjunction,
+                ChargedBloodstone,
+                BloodstoneFragment,
+                XerasPhantasm,
             };
         }
 
@@ -142,9 +147,14 @@ namespace LuckParser.Models
             {
                 case (ushort)WhiteMantleSeeker1:
                 case (ushort)WhiteMantleSeeker2:
-                case (ushort)WhiteMantleKnight:
-                case (ushort)WhiteMantleBattleMage:
+                case (ushort)WhiteMantleKnight1:
+                case (ushort)WhiteMantleKnight2:
+                case (ushort)WhiteMantleBattleMage1:
+                case (ushort)WhiteMantleBattleMage2:
                 case (ushort)ExquisiteConjunction:
+                case (ushort)ChargedBloodstone:
+                case (ushort)BloodstoneFragment:
+                case (ushort)XerasPhantasm:
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");

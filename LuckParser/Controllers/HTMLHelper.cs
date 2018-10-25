@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using LuckParser.Models.DataModels;
+using Newtonsoft.Json;
 
 namespace LuckParser.Controllers
 {
@@ -719,14 +720,10 @@ namespace LuckParser.Controllers
             replayHTML = replayHTML.Replace("${canvasX}", canvasSize.Item1.ToString());
             replayHTML = replayHTML.Replace("${canvasY}", canvasSize.Item2.ToString());
             replayHTML = replayHTML.Replace("${maxTime}", log.PlayerList.First().CombatReplay.Times.Last().ToString());
-            List<int> groups = log.PlayerList.Select(x => x.Group).Distinct().ToList();
+            List<int> groups = log.PlayerList.Where(x => x.Account != ":Conjured Sword").Select(x => x.Group).Distinct().ToList();
             string groupsString = "";
             foreach (int group in groups)
             {
-                if (group == 11)
-                {
-                    continue;
-                }
                 string replayGroupHTML = Properties.Resources.tmplGroupCombatReplay;
                 replayGroupHTML = replayGroupHTML.Replace("${group}", group.ToString());;
                 string playerString = "";
@@ -749,69 +746,74 @@ namespace LuckParser.Controllers
         public static void WriteCombatReplayScript(StreamWriter sw, ParsedLog log, Tuple<int,int> canvasSize, CombatReplayMap map, int pollingRate)
         {
             sw.WriteLine("<script>");
+            sw.WriteLine(Properties.Resources.combatreplay_js);
+            sw.WriteLine("</script>");
+
+            Dictionary<string, object> options = new Dictionary<string, object>
             {
-                string replayScript = Properties.Resources.combatreplay_js;
-                replayScript = replayScript.Replace("'${inch}'", map.GetInch().ToString());
-                replayScript = replayScript.Replace("'${pollingRate}'", pollingRate.ToString());
-                replayScript = replayScript.Replace("'${mapLink}'", map.Link);
-                string actors = "";
-                CombatReplay replay;
-                int count = 0;
-                foreach (Player p in log.PlayerList)
+                { "inch", map.GetInch() },
+                { "pollingRate", pollingRate },
+                { "mapLink", map.Link }
+            };
+
+            string actors = "";
+            int count = 0;
+            foreach (Player p in log.PlayerList)
+            {
+                if (p.Account == ":Conjured Sword")
                 {
-                    if (p.Group == 11)
-                    {
-                        continue;
-                    }
-                    if (p.CombatReplay.Positions.Count == 0)
-                    {
-                        continue;
-                    }
-                    if (count > 0)
-                    {
-                        actors += ",";
-                    }
-                    count++;
-                    actors += p.GetCombatReplayJSON(map);
-                    replay = p.CombatReplay;
-                    foreach (Actor a in replay.Actors)
-                    {
-                        actors += ",";
-                        actors += a.GetCombatReplayJSON(map);
-                    }
+                    continue;
                 }
-                foreach (Mob m in log.FightData.Logic.TrashMobs)
+                if (p.CombatReplay.Positions.Count == 0)
                 {
-                    if (m.CombatReplay.Positions.Count == 0)
-                    {
-                        continue;
-                    }
+                    continue;
+                }
+                if (count > 0)
+                {
                     actors += ",";
-                    actors += m.GetCombatReplayJSON(map);
-                    replay = m.CombatReplay;
-                    foreach (Actor a in replay.Actors)
-                    {
-                        actors += ",";
-                        actors += a.GetCombatReplayJSON(map);
-                    }
                 }
-                foreach (Boss target in log.FightData.Logic.Targets)
+                count++;
+                actors += p.GetCombatReplayJSON(map);
+                foreach (Actor a in p.CombatReplay.Actors)
                 {
-                    if (target.CombatReplay.Positions.Count == 0)
-                    {
-                        continue;
-                    }
                     actors += ",";
-                    actors += target.GetCombatReplayJSON(map);
-                    replay = target.CombatReplay;
-                    foreach (Actor a in replay.Actors)
-                    {
-                        actors += ",";
-                        actors += a.GetCombatReplayJSON(map);
-                    }
+                    actors += a.GetCombatReplayJSON(map);
                 }
-                replayScript = replayScript.Replace("'${actors}'", actors);
-                sw.Write(replayScript);
+            }
+            foreach (Mob m in log.FightData.Logic.TrashMobs)
+            {
+                if (m.CombatReplay.Positions.Count == 0)
+                {
+                    continue;
+                }
+                actors += ",";
+                actors += m.GetCombatReplayJSON(map);
+                foreach (Actor a in m.CombatReplay.Actors)
+                {
+                    actors += ",";
+                    actors += a.GetCombatReplayJSON(map);
+                }
+            }
+            foreach (Boss target in log.FightData.Logic.Targets)
+            {
+                if (target.CombatReplay.Positions.Count == 0)
+                {
+                    continue;
+                }
+                actors += ",";
+                actors += target.GetCombatReplayJSON(map);
+                foreach (Actor a in target.CombatReplay.Actors)
+                {
+                    actors += ",";
+                    actors += a.GetCombatReplayJSON(map);
+                }
+            }
+
+            sw.WriteLine("<script>");
+            {
+                sw.WriteLine("var options = " + JsonConvert.SerializeObject(options) + ";");
+                sw.WriteLine("var actors = [" + actors + "];");
+                sw.WriteLine("initCombatReplay(actors, options);");
             }
             sw.WriteLine("</script>");
         }

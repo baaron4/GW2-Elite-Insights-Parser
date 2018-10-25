@@ -144,10 +144,10 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Blood Fueled",34422, BoonSource.Boss, BoonType.Intensity, 20, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Boon("Blood Fueled",34428, BoonSource.Boss, BoonType.Intensity, 20, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Boon("Flame Armor",52568, BoonSource.Boss, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Fiery Surge",52588, BoonSource.Boss, BoonType.Intensity, 20, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Fiery Surge",52588, BoonSource.Boss, BoonType.Intensity, 99, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Boon("Fractured - Enemy",53030, BoonSource.Boss, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Boon("Fractured - Allied",52213, BoonSource.Boss, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Conjured Protection",52973 , BoonSource.Boss, BoonType.Intensity, 20, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Conjured Protection",52973 , BoonSource.Boss, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Boon("Conjured Shield",52754 , BoonSource.Boss, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Boon("Greatsword Power",52667 , BoonSource.Boss, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Boon("Conjured Barrier",53003 , BoonSource.Boss, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
@@ -511,6 +511,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Karka Egg Omelet",9756, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/9/9e/Karka_Egg_Omelet.png"),
                 new Boon("Steamed Red Dumpling",26536, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/8/8c/Steamed_Red_Dumpling.png"),
                 new Boon("Saffron Stuffed Mushroom",-1, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/e/e2/Saffron_Stuffed_Mushroom.png"), //same as Karka Egg Omelet
+                new Boon("Soul Pastry",53222, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/2/2c/Soul_Pastry.png"),
                 // UTILITIES 
                 // 1h versions have the same ID as 30 min versions 
                 new Boon("Diminished",46668, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/7/71/Diminished.png"),

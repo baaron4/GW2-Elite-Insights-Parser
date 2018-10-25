@@ -38,7 +38,7 @@ namespace LuckParser.Models
             {
                 return phases;
             }
-            List<CombatItem> invulsBoss = GetFilteredList(log,762,mainTarget.InstID);        
+            List<CombatItem> invulsBoss = GetFilteredList(log,762,mainTarget);        
             for (int i = 0; i < invulsBoss.Count; i++)
             {
                 CombatItem c = invulsBoss[i];
@@ -66,6 +66,7 @@ namespace LuckParser.Models
                 phases[i].Name = "Phase " + i;
                 phases[i].Targets.Add(mainTarget);
             }
+            phases.RemoveAll(x => x.GetDuration() < 1000);
             return phases;
         }
 
