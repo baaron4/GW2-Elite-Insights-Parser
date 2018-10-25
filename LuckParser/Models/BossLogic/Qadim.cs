@@ -11,7 +11,7 @@ namespace LuckParser.Models
     {
         public Qadim(ushort triggerID) : base(triggerID)
         {
-            MechanicList.AddRange(new List<Mechanic>    
+            MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(51943, "Qadim CC", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "Q.BB","Qadim CC", "Qadim CC",0),
             new Mechanic(51943, "Qadim CC", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "Q.CCed","Quadim Breakbar broken", "Quadim CCed",0, (condition => condition.CombatItem.Value < 6500)),
@@ -38,12 +38,9 @@ namespace LuckParser.Models
             new Mechanic(52705, "Tail Swipe", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'diamond-open',color:'rgb(255,200,0)'", "W.Pza","Wyvern Tail Swipe (Pizza attack)", "Tail Swipe",0),
             new Mechanic(52726, "Fire Breath", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'triangle-right-open',color:'rgb(255,100,0)'", "W.Brth","Fire Breath (Wyvern)", "Fire Breath",0),
             new Mechanic(52734, "Wing Buffet", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'star-diamond-open',color:'rgb(0,125,125)'", "W.WBft","Wing Buffet (Wyvern Launching Wing Storm)", "Wing Buffet",0),
-            new Mechanic(52734, "Wing Buffet", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "M.BB","Wing Buffet (Matriarch CC)", "Matriarch CC",0),
-            new Mechanic(52734, "Wing Buffet", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "M.CCed","Wing Buffet (Matriarch Breakbar broken)", "Matriarch CCed",0, (condition => condition.CombatItem.Value < 6500)),
-            new Mechanic(52734, "Wing Buffet", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "M.CC.Fail","Wing Buffet (Matriarch Breakbar failed)", "Matriarch CC Fail",0, (condition => condition.CombatItem.Value >= 6500)),
-            new Mechanic(53132, "Patriarch CC", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Qadim, "symbol:'diamond-wide',color:'rgb(0,160,150)'", "P.BB","Wing Buffet (Patriarch CC)", "Patriarch CC",0),
-            new Mechanic(53132, "Patriarch CC", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-wide',color:'rgb(0,160,0)'", "P.CCed","Wing Buffet (Patriarch Breakbar broken)", "Patriarch CCed",0, (condition => condition.CombatItem.Value < 6500)),
-            new Mechanic(51984, "Patriarch CC (Jump into air)", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Qadim, "symbol:'diamond-wide',color:'rgb(255,0,0)'", "P.CC.Fail","Wing Buffet (Patriarch Breakbar failed)", "Patriarch CC Fail",0),
+            new Mechanic(53132, "Patriarch CC", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "P.BB","Platform Destruction (Patriarch CC)", "Patriarch CC",0),
+            new Mechanic(53132, "Patriarch CC", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "P.CCed","Platform Destruction (Patriarch Breakbar broken)", "Patriarch CCed",0, (condition => condition.CombatItem.Value < 6500)),
+            new Mechanic(51984, "Patriarch CC (Jump into air)", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "P.CC.Fail","Platform Destruction (Patriarch Breakbar failed)", "Patriarch CC Fail",0),
             new Mechanic(52330, "Seismic Stomp", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'star-open',color:'rgb(255,255,0)'", "D.Stmp","Seismic Stomp (Destroyer Stomp)", "Seismic Stomp (Destroyer)",0),
             new Mechanic(51923, "Shattered Earth", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'hexagram-open',color:'rgb(255,0,0)'", "D.Slm","Shattered Earth (Destroyer Jump Slam)", "Jump Slam (Destroyer)",0),
             new Mechanic(51759, "Wave of Force", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'diamond-open',color:'rgb(255,200,0)'", "D.Pza","Wave of Force (Destroyer Pizza)", "Destroyer Auto",0),
@@ -51,9 +48,12 @@ namespace LuckParser.Models
             new Mechanic(52054, "Summon", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "D.CCed","Summon (Destroyer Breakbar broken)", "Destroyer CCed",0, (condition => condition.CombatItem.Value < 8332)),
             new Mechanic(52054, "Summon", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "D.CC.Fail","Summon (Destroyer Breakbar failed)", "Destroyer CC Fail",0, (condition => condition.CombatItem.Value >= 8332)),
             new Mechanic(20944, "Summon (Spawn)", Mechanic.MechType.Spawn, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(150,0,0)'", "D.Spwn","Summon (Destroyer Trolls summoned)", "Destroyer Summoned",0),
+            new Mechanic(51879, "Body of Flame", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'star-open',color:'rgb(255,150,0)',size:10", "Pyr.AoE","Body of Flame (Pyre Ground AoE (CM))", "Pyre Hitbox AoE",0),
             new Mechanic(52461, "Sea of Flame", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle-open',color:'rgb(255,0,0)'", "Q.Hbx","Sea of Flame (Stood in Qadim Hitbox)", "Qadim Hitbox AoE",0),
+            new Mechanic(52221, "Claw", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'triangle-left-open',color:'rgb(0,150,150)',size:10", "Claw","Claw (Reaper of Flesh attack)", "Reaper Claw",0),
+            new Mechanic(52281, "Swap", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle-cross-open',color:'rgb(170,0,170)'", "Port","Swap (Ported from below Legendary Creature to Qadim)", "Port to Qadim",0),
             new Mechanic(52035, "Power of the Lamp", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Qadim, "symbol:'triangle-up',color:'rgb(100,150,255)',size:10", "Lmp","Power of the Lamp (Returned from the Lamp)", "Lamp Return",0),
-            }); 
+            });
             Extension = "qadim";
             IconUrl = "https://wiki.guildwars2.com/images/f/f2/Mini_Qadim.png";
         }
@@ -69,7 +69,7 @@ namespace LuckParser.Models
                             Tuple.Create(-21504, -21504, 24576, 24576),
                             Tuple.Create(13440, 14336, 15360, 16256));
         }
-        
+
 
         protected override List<ushort> GetFightTargetsIDs()
         {
@@ -98,7 +98,7 @@ namespace LuckParser.Models
             {
                 return phases;
             }
-            List<long> moltenArmor = GetFilteredList(log,52329,qadim).Select(x => x.Time - log.FightData.FightStart).Distinct().ToList();
+            List<long> moltenArmor = GetFilteredList(log, 52329, qadim).Select(x => x.Time - log.FightData.FightStart).Distinct().ToList();
             for (int i = 1; i < moltenArmor.Count; i++)
             {
                 if (i % 2 == 0)
@@ -109,7 +109,8 @@ namespace LuckParser.Models
                     {
                         phases.Add(new PhaseData(end, log.FightData.FightDuration));
                     }
-                } else
+                }
+                else
                 {
                     start = Math.Min(moltenArmor[i], log.FightData.FightDuration);
                     phases.Add(new PhaseData(end, start));
@@ -119,7 +120,7 @@ namespace LuckParser.Models
                     }
                 }
             }
-            string[] names = { "Hydra","Qadim P1","Apocalypse", "Qadim P2","Wyvern", "Qadim P3" };
+            string[] names = { "Hydra", "Qadim P1", "Apocalypse", "Qadim P2", "Wyvern", "Qadim P3" };
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
@@ -225,7 +226,7 @@ namespace LuckParser.Models
                         int duration = 2680;
                         int radius = 2000;
                         int impactRadius = 40;
-                        int spellCenterDistance = 300; 
+                        int spellCenterDistance = 300;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
                         Point3D bossPosition = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && bossPosition != null)
@@ -261,22 +262,21 @@ namespace LuckParser.Models
                     }
                     break;
                 case (ushort)WyvernMatriarch:
-                    //CC
-                    List<CastLog> matCC = cls.Where(x => x.SkillId == 52734).ToList();
-                    foreach (CastLog c in matCC)
+                    //Wing Buffet
+                    List<CastLog> wingBuffet = cls.Where(x => x.SkillId == 52734).ToList();
+                    foreach (CastLog c in wingBuffet)
                     {
                         int start = (int)c.Time;
-                        int duration = Math.Min(6500,c.ActualDuration);
-                        Tuple<int, int> lifespan = new Tuple<int, int>(start, start + duration);
-                        int radius = ccRadius;
-                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, lifespan, "rgba(0, 180, 255, 0.3)", new AgentConnector(boss)));
+                        int preCast = Math.Min(3500, c.ActualDuration);
+                        int duration = Math.Min(6500, c.ActualDuration);
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
                         int range = 2800;
                         int span = 2400;
                         if (facing != null)
                         {
                             int rotation = Point3D.GetRotationFromFacing(facing);
-                            replay.Actors.Add(new RotatedRectangleActor(true, 0, range, span, rotation, range/2, lifespan, "rgba(0,100,255,0.4)", new AgentConnector(boss)));
+                            replay.Actors.Add(new RotatedRectangleActor(true, 0, range, span, rotation, range / 2, new Tuple<int, int>(start, start + preCast), "rgba(0,100,255,0.2)", new AgentConnector(boss)));
+                            replay.Actors.Add(new RotatedRectangleActor(true, 0, range, span, rotation, range / 2, new Tuple<int, int>(start + preCast, start + duration), "rgba(0,100,255,0.5)", new AgentConnector(boss)));
                         }
                     }
                     //Breath
@@ -395,7 +395,7 @@ namespace LuckParser.Models
                         {
                             Point3D position = new Point3D(bossPosition.X + facing.X * spellCenterDistance, bossPosition.Y + facing.Y * spellCenterDistance, bossPosition.Z, bossPosition.Time);
                             replay.Actors.Add(new CircleActor(true, 0, impactRadius, new Tuple<int, int>(start, start + delay), "rgba(255, 100, 0, 0.1)", new PositionConnector(position)));
-                            replay.Actors.Add(new CircleActor(true, 0, impactRadius, new Tuple<int, int>(start+delay-10, start + delay+100), "rgba(255, 100, 0, 0.5)", new PositionConnector(position)));
+                            replay.Actors.Add(new CircleActor(true, 0, impactRadius, new Tuple<int, int>(start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.5)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleActor(false, start + delay + duration, maxRadius, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 200, 0, 0.5)", new PositionConnector(position)));
                         }
                     }
@@ -448,6 +448,6 @@ namespace LuckParser.Models
             }
             return (target.Health > 21e6) ? 1 : 0;
         }
-        
+
     }
 }
