@@ -189,29 +189,31 @@ namespace LuckParser.Controllers
             log.Boss = new List<JsonBoss>();
             foreach (Boss target in _log.FightData.Logic.Targets)
             {
-                JsonBoss boss = new JsonBoss();
-                boss.Id = target.ID;
-                boss.Name = target.Character;
-                boss.TotalHealth = target.Health;
+                JsonBoss boss = new JsonBoss
+                {
+                    Id = target.ID,
+                    Name = target.Character,
+                    TotalHealth = target.Health,
+                    AvgBoons = _statistics.AvgBossBoons[target],
+                    AvgConditions = _statistics.AvgBossConditions[target],
+                    Dps = BuildDPS(_statistics.BossDps[target]),
+                    Buffs = BuildBossBuffs(_statistics.BossConditions[target], target),
+                    HitboxHeight = target.HitboxHeight,
+                    HitboxWidth = target.HitboxWidth,
+                    Dps1s = Build1SDPS(target, null),
+                    Rotation = BuildRotation(target.GetCastLogs(_log, 0, _log.FightData.FightDuration)),
+                    FirstAware = (int)(target.FirstAware - _log.FightData.FightStart),
+                    LastAware = (int)(target.LastAware - _log.FightData.FightStart),
+                    Minions = BuildMinions(target),
+                    TotalDamageDist = BuildDamageDist(target, null),
+                    AvgBoonsStates = BuildBuffStates(target.GetBoonGraphs(_log)[-2]),
+                    AvgConditionsStates = BuildBuffStates(target.GetBoonGraphs(_log)[-3])
+                };
                 int finalBossHealth = target.HealthOverTime.Count > 0
                     ? target.HealthOverTime.Last().Y
                     : 10000;
                 boss.FinalHealth = target.Health * (finalBossHealth * 0.01);
                 boss.HealthPercentBurned = 100.0 - finalBossHealth * 0.01;
-                boss.AvgBoons = _statistics.AvgBossBoons[target];
-                boss.AvgConditions = _statistics.AvgBossConditions[target];
-                boss.Dps = BuildDPS(_statistics.BossDps[target]);
-                boss.Buffs = BuildBossBuffs(_statistics.BossConditions[target], target);
-                boss.HitboxHeight = target.HitboxHeight;
-                boss.HitboxWidth = target.HitboxWidth;
-                boss.Dps1s = Build1SDPS(target, null);
-                boss.Rotation = BuildRotation(target.GetCastLogs(_log, 0, _log.FightData.FightDuration));
-                boss.FirstAware = (int)(target.FirstAware - _log.FightData.FightStart);
-                boss.LastAware = (int)(target.LastAware - _log.FightData.FightStart);
-                boss.Minions = BuildMinions(target);
-                boss.TotalDamageDist = BuildDamageDist(target, null);
-                boss.AvgBoonsStates = BuildBuffStates(target.GetBoonGraphs(_log)[-2]);
-                boss.AvgConditionsStates = BuildBuffStates(target.GetBoonGraphs(_log)[-3]);
                 log.Boss.Add(boss);
                 if (_devMode)
                 {
@@ -466,13 +468,13 @@ namespace LuckParser.Controllers
                 SkillItem skill = skillList.Get(pair.Key);
                 if (pair.Value.First().IsCondi == 0 && skill != null)
                 {
-                    if(!_skillNames.TryGetValue(pair.Key, out var val))
+                    if(!_skillNames.ContainsKey(pair.Key))
                     {
-                        _skillNames[pair.Key] = (skill.ID.ToString() == skill.Name) ? skillList.GetName(skill.ID) : skill.Name;
+                        _skillNames[pair.Key] = skill.Name;
                     }
-                    if (_devMode && skill.ApiSkill != null && !_skillIcons.TryGetValue(pair.Key, out var aux))
+                    if (_devMode && !_skillIcons.ContainsKey(pair.Key))
                     {
-                        _skillIcons[pair.Key] = skill.ApiSkill.icon;
+                        _skillIcons[pair.Key] = skill.Icon;
                     }
                 }
                 res[pair.Key] = new JsonDamageDist()
@@ -535,12 +537,9 @@ namespace LuckParser.Controllers
             SkillData skillList = _log.SkillData;
             foreach (CastLog cl in cls)
             {
-                GW2APISkill skill = skillList.Get(cl.SkillId)?.ApiSkill;
-                string skillName = skill == null ? skillList.GetName(cl.SkillId) : skill.name;
-                if (cl.SkillId == SkillItem.WeaponSwapId)
-                {
-                    skillName = "Weapon Swap";
-                }
+                SkillItem skill = skillList.Get(cl.SkillId);
+                GW2APISkill skillApi = skill?.ApiSkill;
+                string skillName = skill.Name;
                 _skillNames[cl.SkillId] = skillName;           
                 JsonSkill jSkill = new JsonSkill
                 {
@@ -551,30 +550,7 @@ namespace LuckParser.Controllers
                 {
                     if (!_skillIcons.ContainsKey(cl.SkillId))
                     {
-                        string skillIcon = "";
-                        if (skill != null && cl.SkillId != -2)
-                        {
-                            skillIcon = skill.icon;
-                        }
-                        else
-                        {
-                            if (skillName == "Dodge")
-                            {
-                                skillIcon = HTMLHelper.GetLink("Dodge");
-                            }
-                            else if (skillName == "Resurrect")
-                            {
-                                skillIcon = HTMLHelper.GetLink("Resurrect");
-                            }
-                            else if (skillName == "Bandage")
-                            {
-                                skillIcon = HTMLHelper.GetLink("Bandage");
-                            }
-                            else if (cl.SkillId == SkillItem.WeaponSwapId)
-                            {
-                                skillIcon = HTMLHelper.GetLink("Swap");
-                            }
-                        }
+                        string skillIcon = skill.Icon;
                         if (skillIcon.Length > 0)
                         {
                             _skillIcons[cl.SkillId] = skillIcon;
@@ -592,7 +568,7 @@ namespace LuckParser.Controllers
                     {
                         UQ = cl.StartActivation == ParseEnum.Activation.Quickness ? 1 : 0,
                         TS = timeGained,
-                        A = skill != null && skill.slot == "Weapon_1" ? 1 : 0
+                        A = skillApi != null && skillApi.slot == "Weapon_1" ? 1 : 0
                     };
                 }
                 if (res.TryGetValue(cl.SkillId, out var list))
@@ -624,16 +600,18 @@ namespace LuckParser.Controllers
                 };
                 if (_devMode)
                 {
-                    phaseJson.ED = new JsonPhase.JsonExtraPhase();
-                    phaseJson.ED.TI = new int[phase.Targets.Count];
+                    phaseJson.ED = new JsonPhase.JsonExtraPhase
+                    {
+                        TI = new int[phase.Targets.Count],
+                        DA = phase.DrawArea ? 1 : 0,
+                        DE = phase.DrawEnd ? 1 : 0,
+                        DS = phase.DrawStart ? 1 : 0
+                    };
                     int i = 0;
                     foreach (Boss target in phase.Targets)
                     {
                         phaseJson.ED.TI[i++] = _log.FightData.Logic.Targets.IndexOf(target);
                     }
-                    phaseJson.ED.DA = phase.DrawArea ? 1 : 0;
-                    phaseJson.ED.DE = phase.DrawEnd ? 1 : 0;
-                    phaseJson.ED.DS = phase.DrawStart ? 1 : 0;
                 }
                 log.Phases.Add(phaseJson);
             }

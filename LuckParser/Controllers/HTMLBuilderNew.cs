@@ -692,7 +692,7 @@ namespace LuckParser.Controllers
                         {
                             name = ag.Name.Replace("\0", "").Replace("\'", "\\'");
                         }
-                        string skillname = _log.SkillData.GetName(dl.SkillId).Replace("\'", "\\'");
+                        string skillname = _log.SkillData.GetOrDummy(dl.SkillId).Name.Replace("\'", "\\'");
                         sw.Write("'" + name + "<br>" + skillname + " hit you for " + dl.Damage + "',");
                     }
                 }
@@ -704,7 +704,7 @@ namespace LuckParser.Controllers
                     {
                         name = ag.Name.Replace("\0", "").Replace("\'", "\\'");
                     }
-                    string skillname = _log.SkillData.GetName(damageToKill[d].SkillId).Replace("\'", "\\'");
+                    string skillname = _log.SkillData.GetOrDummy(damageToKill[d].SkillId).Name.Replace("\'", "\\'");
                     sw.Write("'" + name + "<br>" +
                            "hit you with <b>" + skillname + "</b> for " + damageToKill[d].Damage + "'");
 
@@ -1154,7 +1154,7 @@ namespace LuckParser.Controllers
                     description = mech.Description,
                     color = mech.PlotlyColor,
                     symbol = mech.PlotlySymbol,
-                    visible = (mech.SkillId == -2 || mech.SkillId == -3),
+                    visible = (mech.SkillId == SkillItem.DeathId|| mech.SkillId == SkillItem.DownId),
                     data = BuildMechanicData(mechanicLogs),
                     playerMech = playerMechs.Contains(mech),
                     enemyMech = enemyMechs.Contains(mech)
@@ -1785,11 +1785,7 @@ namespace LuckParser.Controllers
             foreach (SkillItem skill in skills)
             {
                 GW2APISkill apiSkill = skill.ApiSkill;
-                SkillDto dto = new SkillDto(skill.ID, skill.Name, apiSkill?.icon, apiSkill?.slot == "Weapon_1");
-                if (skill.ID == SkillItem.WeaponSwapId) dto.icon = "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png";
-                else if (skill.ID == SkillItem.ResurrectId) dto.icon = "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png";
-                else if (skill.ID == SkillItem.BandageId) dto.icon = "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
-                else if (skill.ID == SkillItem.DodgeId) dto.icon = "https://wiki.guildwars2.com/images/b/b2/Dodge.png";
+                SkillDto dto = new SkillDto(skill.ID, skill.Name, skill.Icon, apiSkill?.slot == "Weapon_1");
                 dtos.Add(dto);
             }
             return dtos;
