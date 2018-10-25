@@ -13,9 +13,14 @@ namespace LuckParser.Models
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(52173, "Pulverize", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ConjuredAmalgamate, "symbol:'square',color:'rgb(255,140,0)'", "Plvrz","Pulverize", "Pulverize",0),
-                
-            });
+            new Mechanic(52173, "Pulverize", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ConjuredAmalgamate, "symbol:'square',color:'rgb(255,140,0)'", "A.Slam","Pulverize (Arm Slam)", "Arm Slam",0),
+            new Mechanic(52086, "Junk Absorption", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ConjuredAmalgamate, "symbol:'circle-open',color:'rgb(150,0,150)'", "Balls","Junk Absorption (Purple Balls during collect)", "Purple Balls",0),
+            new Mechanic(52878, "Junk Fall", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ConjuredAmalgamate, "symbol:'circle-open',color:'rgb(255,150,0)'", "Junk","Junk Fall (Falling Debris)", "Junk Fall",0),
+            new Mechanic(52120, "Junk Fall", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ConjuredAmalgamate, "symbol:'circle-open',color:'rgb(255,150,0)'", "Junk","Junk Fall (Falling Debris)", "Junk Fall",0),
+            new Mechanic(52161, "Ruptured Ground", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ConjuredAmalgamate, "symbol:'square-open',color:'rgb(0,255,255)'", "Grnd","Ruptured Ground (Relics after Junk Wall)", "Ruptured Ground",0,(condition => condition.DamageLog.Damage > 0)),
+            new Mechanic(52656, "Tremor", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ConjuredAmalgamate, "symbol:'circle-open',color:'rgb(255,0,0)'", "Trmr","Tremor (Field adjacent to Arm Slam)", "Near Arm Slam",0,(condition => condition.DamageLog.Damage > 0)),
+            new Mechanic(52150, "Junk Torrent", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ConjuredAmalgamate, "symbol:'square-open',color:'rgb(255,0,0)'", "Wall","Junk Torrent (Moving Wall)", "Junk Torrent (Wall)",0,(condition => condition.DamageLog.Damage > 0)),
+            }); 
             Extension = "ca";
             IconUrl = "https://i.imgur.com/eLyIWd2.png";
         }
@@ -61,7 +66,7 @@ namespace LuckParser.Models
             {
                 id = (ushort)rnd.Next(0, ushort.MaxValue);
             }
-            AgentItem sword = new AgentItem(agent, "Conjured Sword\0:Conjured Sword\011", "Sword", AgentItem.AgentType.Player, 0, 0, 0, 0, 20, 20)
+            AgentItem sword = new AgentItem(agent, "Conjured Sword\0:Conjured Sword\050", "Sword", AgentItem.AgentType.Player, 0, 0, 0, 0, 20, 20)
             {
                 InstID = id,
                 LastAware = combatData.Last().Time,
@@ -87,7 +92,25 @@ namespace LuckParser.Models
             switch (mob.ID)
             {
                 case (ushort)ConjuredGreatsword:
+                    break;
                 case (ushort)ConjuredShield:
+                    CombatReplay replay = mob.CombatReplay;
+                    List<CombatItem> shield = GetFilteredList(log, 53003, mob);
+                    int shieldStart = 0;
+                    foreach (CombatItem c in shield)
+                    {
+                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                        {
+                            shieldStart = (int)(c.Time - log.FightData.FightStart);
+                        }
+                        else
+                        {
+                            int shieldEnd = (int)(c.Time - log.FightData.FightStart);
+                            Tuple<int, int> lifespan = new Tuple<int, int>(shieldStart, shieldEnd);
+                            int radius = 100;
+                            replay.Actors.Add(new CircleActor(true, 0, radius, lifespan, "rgba(0, 150, 255, 0.3)", new AgentConnector(mob)));
+                        }
+                    }
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
@@ -145,6 +168,7 @@ namespace LuckParser.Models
                 {
                     phase.DrawArea = true;
                     name = "Burn Phase";
+                    phase.Targets.Add(ca);
                 }
                 phase.Name = name;
                 phase.DrawEnd = true;
@@ -161,6 +185,7 @@ namespace LuckParser.Models
                     {
                         phase.Name = "Left " + phase.Name;
                     }
+                    phase.Targets.Add(leftArm);
                 }
             }
             Boss rightArm = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.CARightArm);
@@ -180,6 +205,7 @@ namespace LuckParser.Models
                         {
                             phase.Name = "Right " + phase.Name;
                         }
+                        phase.Targets.Add(rightArm);
                     }
                 }
             }
@@ -188,9 +214,29 @@ namespace LuckParser.Models
 
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.ConjuredAmalgamate:
+                    List<CombatItem> shield = GetFilteredList(log, 53003, boss);
+                    int shieldStart = 0;
+                    foreach (CombatItem c in shield)
+                    {
+                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                        {
+                            shieldStart = (int)(c.Time - log.FightData.FightStart);
+                        }
+                        else
+                        {
+                            int shieldEnd = (int)(c.Time - log.FightData.FightStart);
+                            Tuple<int, int> lifespan = new Tuple<int, int>(shieldStart, shieldEnd);
+                            int radius = 500;
+                            replay.Actors.Add(new CircleActor(true, 0, radius, lifespan, "rgba(0, 150, 255, 0.3)", new AgentConnector(boss)));
+                        }
+                    }
+                    break;
                 case (ushort)ParseEnum.BossIDS.CALeftArm:
                 case (ushort)ParseEnum.BossIDS.CARightArm:
                     break;
@@ -201,7 +247,23 @@ namespace LuckParser.Models
 
         public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
-
+            CombatReplay replay = p.CombatReplay;
+            List<CastLog> cls = p.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<CastLog> shieldCast = cls.Where(x => x.SkillId == 52780).ToList();
+            foreach (CastLog c in shieldCast)
+            {
+                int start = (int)c.Time;
+                int duration = 10000;
+                Tuple<int, int> lifespan = new Tuple<int, int>(start, start + duration);
+                int radius = 300;
+                Point3D shieldNextPos = replay.Positions.FirstOrDefault(x => x.Time >= start);
+                Point3D shieldPrevPos = replay.Positions.LastOrDefault(x => x.Time <= start);
+                if (shieldNextPos != null || shieldPrevPos != null)
+                {
+                    replay.Actors.Add(new CircleActor(true, 0, radius, lifespan, "rgba(255, 0, 255, 0.1)", new InterpolatedPositionConnector(shieldPrevPos, shieldNextPos, start)));
+                    replay.Actors.Add(new CircleActor(false, 0, radius, lifespan, "rgba(255, 0, 255, 0.3)", new InterpolatedPositionConnector(shieldPrevPos, shieldNextPos, start)));
+                }
+            }
         }
 
         public override int IsCM(ParsedLog log)

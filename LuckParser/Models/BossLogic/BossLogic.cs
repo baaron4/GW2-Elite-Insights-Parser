@@ -35,7 +35,6 @@ namespace LuckParser.Models
             return null;
         }
 
-
         public CombatReplayMap GetCombatMap()
         {
             if (_map == null)
@@ -522,5 +521,6 @@ namespace LuckParser.Models
             }
             return filtered;
         }
+
     }
 }

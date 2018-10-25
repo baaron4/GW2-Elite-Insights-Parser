@@ -18,12 +18,12 @@ namespace LuckParser.Models
 
         public override void SetSuccess(ParsedLog log)
         {
-            // Put non reward stuff in this as we find them
-            HashSet<int> notRaidRewardsIds = new HashSet<int>
+            HashSet<int> raidRewardsIds = new HashSet<int>
                 {
-                    13
+                    55821,
+                    60685
                 };
-            CombatItem reward = log.CombatData.GetStatesData(ParseEnum.StateChange.Reward).LastOrDefault(x =>!notRaidRewardsIds.Contains(x.Value));
+            CombatItem reward = log.CombatData.GetStatesData(ParseEnum.StateChange.Reward).FirstOrDefault(x => raidRewardsIds.Contains(x.Value));
             if (reward != null)
             {
                 log.LogData.Success = true;
