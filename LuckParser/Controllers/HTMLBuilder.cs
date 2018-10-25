@@ -366,7 +366,7 @@ namespace LuckParser.Controllers
         private void CreateCompTable(StreamWriter sw)
         {
             int groupCount = 0;
-            int firstGroup = 11;
+            int firstGroup = 50;
             foreach (Player play in _log.PlayerList)
             {
                 int playerGroup = play.Group;

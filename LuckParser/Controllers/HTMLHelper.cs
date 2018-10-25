@@ -720,14 +720,10 @@ namespace LuckParser.Controllers
             replayHTML = replayHTML.Replace("${canvasX}", canvasSize.Item1.ToString());
             replayHTML = replayHTML.Replace("${canvasY}", canvasSize.Item2.ToString());
             replayHTML = replayHTML.Replace("${maxTime}", log.PlayerList.First().CombatReplay.Times.Last().ToString());
-            List<int> groups = log.PlayerList.Select(x => x.Group).Distinct().ToList();
+            List<int> groups = log.PlayerList.Where(x => x.Account != ":Conjured Sword").Select(x => x.Group).Distinct().ToList();
             string groupsString = "";
             foreach (int group in groups)
             {
-                if (group == 11)
-                {
-                    continue;
-                }
                 string replayGroupHTML = Properties.Resources.tmplGroupCombatReplay;
                 replayGroupHTML = replayGroupHTML.Replace("${group}", group.ToString());;
                 string playerString = "";
@@ -764,7 +760,7 @@ namespace LuckParser.Controllers
             int count = 0;
             foreach (Player p in log.PlayerList)
             {
-                if (p.Group == 11)
+                if (p.Account == ":Conjured Sword")
                 {
                     continue;
                 }
