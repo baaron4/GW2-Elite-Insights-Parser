@@ -443,7 +443,9 @@
         <div id="buff-stats">
             <buff-stats-component inline-template v-show="dataType <= datatypes.defensiveBuffTable && dataType>= datatypes.boonTable" :datatypes="datatypes" :datatype="dataType" 
                                 :phase="phase" :players="logdata.players"
-                                :presentbuffs="{boons: logdata.boons, offs: logdata.offBuffs, defs: logdata.defBuffs}"
+                                :presentboons="logdata.boons"
+                                :presentoffs="logdata.offBuffs"
+                                :presentdefs="logdata.defBuffs"
                                 :buffmap="logdata.boonMap"
                                 >              
                     <div>
