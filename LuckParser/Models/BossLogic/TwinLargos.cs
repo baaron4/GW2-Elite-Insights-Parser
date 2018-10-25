@@ -25,6 +25,9 @@ namespace LuckParser.Models
             new Mechanic(51965, "Vapor Jet", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Nikare, "symbol:'square',color:'rgb(255,150,0)'", "Steal","Vapor Jet (Boon Steal)", "Boon Steal",0),
             new Mechanic(52626, "Enraged (Nikare)", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Nikare, "symbol:'star-diamond',color:'rgb(255,0,0)'", "N.Enrg","Enraged (Kenut Dead)", "Nikare Enrage",0,(condition => condition.CombatItem.SrcInstid == Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Nikare).InstID)),
             new Mechanic(52626, "Enraged (Kenut)", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Nikare, "symbol:'star-diamond',color:'rgb(255,0,0)'", "K.Enrg","Enraged (Nikare Dead)", "Kenut Enrage",0,(condition => condition.CombatItem.SrcInstid == Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Kenut).InstID)),
+            new Mechanic(52211, "Aquatic Aura Kenut", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Nikare, "symbol:'square-open',color:'rgb(0,255,255)'", "K.Aura","Increasing Damage Debuff on Kenut's Last Platform", "Kenut Aura Debuff",0),
+            new Mechanic(52929, "Aquatic Aura Nikare", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Nikare, "symbol:'diamond-open',color:'rgb(0,255,255)'", "N.Aura","Increasing Damage Debuff on Nikare's Last Platform", "Nikare Aura Debuff",0),
+            new Mechanic(51999, "Cyclone Burst", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Nikare, "symbol:'y-up-open',color:'rgb(255,150,0)'", "Y-Fld","Cyclone Burst (triangular rotating fields)", "Cyclone Burst",0),
             }); 
             Extension = "twinlargos";
             IconUrl = "https://i.imgur.com/6O5MT7v.png";
