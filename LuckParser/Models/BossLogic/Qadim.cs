@@ -38,12 +38,9 @@ namespace LuckParser.Models
             new Mechanic(52705, "Tail Swipe", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'diamond-open',color:'rgb(255,200,0)'", "W.Pza","Wyvern Tail Swipe (Pizza attack)", "Tail Swipe",0),
             new Mechanic(52726, "Fire Breath", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'triangle-right-open',color:'rgb(255,100,0)'", "W.Brth","Fire Breath (Wyvern)", "Fire Breath",0),
             new Mechanic(52734, "Wing Buffet", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'star-diamond-open',color:'rgb(0,125,125)'", "W.WBft","Wing Buffet (Wyvern Launching Wing Storm)", "Wing Buffet",0),
-            new Mechanic(52734, "Wing Buffet", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "M.BB","Wing Buffet (Matriarch CC)", "Matriarch CC",0),
-            new Mechanic(52734, "Wing Buffet", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "M.CCed","Wing Buffet (Matriarch Breakbar broken)", "Matriarch CCed",0, (condition => condition.CombatItem.Value < 6500)),
-            new Mechanic(52734, "Wing Buffet", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "M.CC.Fail","Wing Buffet (Matriarch Breakbar failed)", "Matriarch CC Fail",0, (condition => condition.CombatItem.Value >= 6500)),
-            new Mechanic(53132, "Patriarch CC", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Qadim, "symbol:'diamond-wide',color:'rgb(0,160,150)'", "P.BB","Platform Destruction (Patriarch CC)", "Patriarch CC",0),
-            new Mechanic(53132, "Patriarch CC", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-wide',color:'rgb(0,160,0)'", "P.CCed","Platform Destruction (Patriarch Breakbar broken)", "Patriarch CCed",0, (condition => condition.CombatItem.Value < 6500)),
-            new Mechanic(51984, "Patriarch CC (Jump into air)", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Qadim, "symbol:'diamond-wide',color:'rgb(255,0,0)'", "P.CC.Fail","Platform Destruction (Patriarch Breakbar failed)", "Patriarch CC Fail",0),
+            new Mechanic(53132, "Patriarch CC", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "P.BB","Platform Destruction (Patriarch CC)", "Patriarch CC",0),
+            new Mechanic(53132, "Patriarch CC", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "P.CCed","Platform Destruction (Patriarch Breakbar broken)", "Patriarch CCed",0, (condition => condition.CombatItem.Value < 6500)),
+            new Mechanic(51984, "Patriarch CC (Jump into air)", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "P.CC.Fail","Platform Destruction (Patriarch Breakbar failed)", "Patriarch CC Fail",0),
             new Mechanic(52330, "Seismic Stomp", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'star-open',color:'rgb(255,255,0)'", "D.Stmp","Seismic Stomp (Destroyer Stomp)", "Seismic Stomp (Destroyer)",0),
             new Mechanic(51923, "Shattered Earth", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'hexagram-open',color:'rgb(255,0,0)'", "D.Slm","Shattered Earth (Destroyer Jump Slam)", "Jump Slam (Destroyer)",0),
             new Mechanic(51759, "Wave of Force", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'diamond-open',color:'rgb(255,200,0)'", "D.Pza","Wave of Force (Destroyer Pizza)", "Destroyer Auto",0),
@@ -265,15 +262,13 @@ namespace LuckParser.Models
                     }
                     break;
                 case (ushort)WyvernMatriarch:
-                    //CC
-                    List<CastLog> matCC = cls.Where(x => x.SkillId == 52734).ToList();
-                    foreach (CastLog c in matCC)
+                    //Wing Buffet
+                    List<CastLog> wingBuffet = cls.Where(x => x.SkillId == 52734).ToList();
+                    foreach (CastLog c in wingBuffet)
                     {
                         int start = (int)c.Time;
                         int preCast = Math.Min(3500, c.ActualDuration);
                         int duration = Math.Min(6500, c.ActualDuration);
-                        int radius = ccRadius;
-                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, new Tuple<int, int>(start, start + duration), "rgba(0, 180, 255, 0.3)", new AgentConnector(boss)));
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
                         int range = 2800;
                         int span = 2400;
