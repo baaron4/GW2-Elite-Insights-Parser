@@ -24,16 +24,9 @@ namespace LuckParser.Models.ParseModels
             {
                 return value;
             }
-            return null;
-        }
-
-        public SkillItem GetOrDummy(long ID)
-        {
-            if (_skills.TryGetValue(ID, out SkillItem value))
-            {
-                return value;
-            }
-            return new SkillItem(ID, "UNKNOWN");
+            SkillItem item = new SkillItem(ID, "UNKNOWN");
+            Add(item);
+            return item;
         }
 
         public void Add(SkillItem skillItem)

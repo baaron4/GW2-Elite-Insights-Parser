@@ -224,6 +224,7 @@ namespace LuckParser.Controllers
                     var name = ParseHelper.GetString(stream, 64);
                     //Save
                     var skill = new SkillItem(skillId, name, apiController);
+                    _skillData.Add(skill);
                 }
             }
         }
