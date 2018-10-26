@@ -533,8 +533,8 @@ namespace LuckParser.Models.ParseModels
                     
                 }
             }
-            _boonPoints[-2] = boonPresenceGraph;
-            _boonPoints[-3] = condiPresenceGraph;
+            _boonPoints[Boon.NumberOfBoonsID] = boonPresenceGraph;
+            _boonPoints[Boon.NumberOfConditionsID] = condiPresenceGraph;
         }
         private void SetMinions(ParsedLog log)
         {

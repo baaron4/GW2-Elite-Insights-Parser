@@ -13,6 +13,9 @@ namespace LuckParser.Models.ParseModels
         public enum BoonType { Duration, Intensity };
         private enum Logic { Queue, HealingPower, Override, ForceOverride };
 
+        public const long NumberOfConditionsID = -3;
+        public const long NumberOfBoonsID = -2;
+
         public static BoonSource ProfToEnum(string prof)
         {
             switch (prof)
@@ -67,7 +70,7 @@ namespace LuckParser.Models.ParseModels
         public readonly string Link;
         private readonly Logic _logic;
 
-        private Boon(string name, int id, BoonSource source, BoonType type, int capacity, BoonNature nature, Logic logic, string link)
+        private Boon(string name, long id, BoonSource source, BoonType type, int capacity, BoonNature nature, Logic logic, string link)
         {
             Name = name;
             ID = id;
@@ -82,6 +85,9 @@ namespace LuckParser.Models.ParseModels
 
         private static List<Boon> _allBoons = new List<Boon>
             {
+                // Custom Boons
+                new Boon("Number of Conditions", NumberOfConditionsID, BoonSource.Mixed, BoonType.Intensity, 0, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/38/Condition_Duration.png"),
+                new Boon("Number of Boons", NumberOfBoonsID, BoonSource.Mixed, BoonType.Intensity, 0, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/44/Boon_Duration.png"),
                 //Base boons
                 new Boon("Might", 740, BoonSource.Mixed, BoonType.Intensity, 25, BoonNature.Boon, Logic.Override, "https://wiki.guildwars2.com/images/7/7c/Might.png"),
                 new Boon("Fury", 725, BoonSource.Mixed, BoonType.Duration, 9, BoonNature.Boon, Logic.Queue, "https://wiki.guildwars2.com/images/4/46/Fury.png"),//or 3m and 30s

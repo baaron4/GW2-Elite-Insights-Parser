@@ -13,7 +13,7 @@ namespace LuckParser.Models.ParseModels
         public const long DeathId = -4;
         public const long DownId = -3;
 
-        readonly static Dictionary<long, string> _missingNames = new Dictionary<long, string>()
+        readonly static Dictionary<long, string> _overrideNames = new Dictionary<long, string>()
         {
             {ResurrectId, "Resurrect"},
             {BandageId, "Bandage" },
@@ -43,7 +43,7 @@ namespace LuckParser.Models.ParseModels
             {35048, "Magic Blast Charge" }
         };
 
-        readonly static Dictionary<long, string> _missingIcons = new Dictionary<long, string>()
+        readonly static Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
         {
             {ResurrectId, "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png"},
             {BandageId, "https://wiki.guildwars2.com/images/0/0c/Bandage.png" },
@@ -56,29 +56,8 @@ namespace LuckParser.Models.ParseModels
 
         // Fields
         public readonly long ID;
-        private readonly string _name;
-        public string Name
-        {
-            get
-            {
-                if (_missingNames.TryGetValue(ID, out string name))
-                {
-                    return name;
-                }
-                return  _name;
-            }
-        }
-        public string Icon
-        {
-            get
-            {
-                if (_missingIcons.TryGetValue(ID, out string icon))
-                {
-                    return icon;
-                }
-                return ApiSkill != null ? ApiSkill.icon : _defaultIcon;
-            }
-        }
+        public string Name { get; private set; }
+        public string Icon { get; private set; }
         public GW2APISkill ApiSkill { get; private set; }
         public int CC { get; private set; }
 
@@ -86,17 +65,34 @@ namespace LuckParser.Models.ParseModels
         public SkillItem(long ID, string name)
         {
             this.ID = ID;
-            _name = name.Replace("\0", "");
+            Name = name.Replace("\0", "");
+            CompleteItem();
         }
 
         public SkillItem(long ID, string name, GW2APIController apiController)
         {
             this.ID = ID;
-            _name = name.Replace("\0", "");
+            Name = name.Replace("\0", "");
             ApiSkill = apiController.GetSkill(ID);
             if (ApiSkill != null)
             {
-                _name = ApiSkill.name;
+                Name = ApiSkill.name;
+            }
+            CompleteItem();
+        }
+
+        private void CompleteItem()
+        {
+            if (_overrideNames.TryGetValue(ID,out string name))
+            {
+                Name = name;
+            }
+            if (_overrideIcons.TryGetValue(ID, out string icon))
+            {
+                Icon = icon;
+            } else
+            {
+                Icon = ApiSkill != null ? ApiSkill.icon : _defaultIcon;
             }
         }
 

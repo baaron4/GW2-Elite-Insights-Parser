@@ -206,8 +206,8 @@ namespace LuckParser.Controllers
                     LastAware = (int)(target.LastAware - _log.FightData.FightStart),
                     Minions = BuildMinions(target),
                     TotalDamageDist = BuildDamageDist(target, null),
-                    AvgBoonsStates = BuildBuffStates(target.GetBoonGraphs(_log)[-2]),
-                    AvgConditionsStates = BuildBuffStates(target.GetBoonGraphs(_log)[-3])
+                    AvgBoonsStates = BuildBuffStates(target.GetBoonGraphs(_log)[Boon.NumberOfBoonsID]),
+                    AvgConditionsStates = BuildBuffStates(target.GetBoonGraphs(_log)[Boon.NumberOfConditionsID])
                 };
                 int finalBossHealth = target.HealthOverTime.Count > 0
                     ? target.HealthOverTime.Last().Y
@@ -258,8 +258,8 @@ namespace LuckParser.Controllers
                     TotalDamageTaken = BuildDamageTaken(player),
                     DeathRecap = BuilDeathRecap(player),
                     Consumables = BuildConsumables(player),
-                    AvgBoonsStates = BuildBuffStates(player.GetBoonGraphs(_log)[-2]),
-                    AvgConditionsStates = BuildBuffStates(player.GetBoonGraphs(_log)[-3]),
+                    AvgBoonsStates = BuildBuffStates(player.GetBoonGraphs(_log)[Boon.NumberOfBoonsID]),
+                    AvgConditionsStates = BuildBuffStates(player.GetBoonGraphs(_log)[Boon.NumberOfConditionsID]),
                 });
                 if (_devMode)
                 {

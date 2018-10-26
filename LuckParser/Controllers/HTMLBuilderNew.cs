@@ -525,7 +525,7 @@ namespace LuckParser.Controllers
             SkillData skillList = _log.SkillData;
             foreach (CastLog cl in casting)
             {
-                if (!usedSkills.ContainsKey(cl.SkillId)) usedSkills.Add(cl.SkillId, skillList.GetOrDummy(cl.SkillId));
+                if (!usedSkills.ContainsKey(cl.SkillId)) usedSkills.Add(cl.SkillId, skillList.Get(cl.SkillId));
                 double[] rotEntry = new double[5];
                 list.Add(rotEntry);
                 rotEntry[0] = (cl.Time - phase.Start) / 1000.0;
@@ -667,7 +667,7 @@ namespace LuckParser.Controllers
                 }
                 else
                 {
-                    if (!usedSkills.ContainsKey(entry.Key)) usedSkills.Add(entry.Key, skillList.GetOrDummy(entry.Key));
+                    if (!usedSkills.ContainsKey(entry.Key)) usedSkills.Add(entry.Key, skillList.Get(entry.Key));
                 }
 
                 if (!isCondi && castLogsBySkill.TryGetValue(entry.Key, out List<CastLog> clList))
@@ -699,7 +699,7 @@ namespace LuckParser.Controllers
             {
                 if (damageLogsBySkill.ContainsKey(entry.Key)) continue;
 
-                if (!usedSkills.ContainsKey(entry.Key)) usedSkills.Add(entry.Key, skillList.GetOrDummy(entry.Key));
+                if (!usedSkills.ContainsKey(entry.Key)) usedSkills.Add(entry.Key, skillList.Get(entry.Key));
 
                 int casts = entry.Value.Count;
                 int timeswasted = 0, timessaved = 0;

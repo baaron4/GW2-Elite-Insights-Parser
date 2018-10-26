@@ -1797,7 +1797,7 @@ namespace LuckParser.Controllers
                                         if (_statistics.PresentBoons.Count > 0)
                                         {
                                             Dictionary<long, BoonsGraphModel> boonGraphData = p.GetBoonGraphs(_log);
-                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName != "Number of Conditions"))
+                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
                                             {
                                                 sw.Write("{");
                                                 {
@@ -2217,7 +2217,7 @@ namespace LuckParser.Controllers
                         {
                             name = ag.Name.Replace("\0", "").Replace("\'", "\\'");
                         }
-                        string skillname = _log.SkillData.GetOrDummy(dl.SkillId).Name.Replace("\'", "\\'");
+                        string skillname = _log.SkillData.Get(dl.SkillId).Name.Replace("\'", "\\'");
                         sw.Write("'" + name + "<br>" + skillname + " hit you for " + dl.Damage + "',");
                     }
                 }
@@ -2229,7 +2229,7 @@ namespace LuckParser.Controllers
                     {
                         name = ag.Name.Replace("\0", "").Replace("\'", "\\'");
                     }
-                    string skillname = _log.SkillData.GetOrDummy(damageToKill[d].SkillId).Name.Replace("\'", "\\'");
+                    string skillname = _log.SkillData.Get(damageToKill[d].SkillId).Name.Replace("\'", "\\'");
                     sw.Write("'" + name + "<br>" +
                            "hit you with <b>" + skillname + "</b> for " + damageToKill[d].Damage + "'");
 
@@ -3156,7 +3156,7 @@ namespace LuckParser.Controllers
                             }
                             //============================================
                             Dictionary<long, BoonsGraphModel> boonGraphData = _log.Boss.GetBoonGraphs(_log);
-                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName != "Number of Boons"))
+                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
                             {
                                 sw.Write("{");
                                 {
