@@ -1797,7 +1797,7 @@ namespace LuckParser.Controllers
                                         if (_statistics.PresentBoons.Count > 0)
                                         {
                                             Dictionary<long, BoonsGraphModel> boonGraphData = p.GetBoonGraphs(_log);
-                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName != "Number of Conditions"))
+                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
                                             {
                                                 sw.Write("{");
                                                 {
@@ -3156,7 +3156,7 @@ namespace LuckParser.Controllers
                             }
                             //============================================
                             Dictionary<long, BoonsGraphModel> boonGraphData = _log.Boss.GetBoonGraphs(_log);
-                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName != "Number of Boons"))
+                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
                             {
                                 sw.Write("{");
                                 {
