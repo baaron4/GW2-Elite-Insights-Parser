@@ -115,14 +115,15 @@ namespace LuckParser.Controllers
                 Statistics.FinalDPS dpsAll = _statistics.DpsAll[player][phaseIndex];
                 Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
 
-                List<object> playerData = new List<object>();
-
-                playerData.Add(dpsAll.Damage);
-                playerData.Add(dpsAll.Dps);
-                playerData.Add(dpsAll.PowerDamage);
-                playerData.Add(dpsAll.PowerDps);
-                playerData.Add(dpsAll.CondiDamage);
-                playerData.Add(dpsAll.CondiDps);
+                List<object> playerData = new List<object>
+                {
+                    dpsAll.Damage,
+                    dpsAll.Dps,
+                    dpsAll.PowerDamage,
+                    dpsAll.PowerDps,
+                    dpsAll.CondiDamage,
+                    dpsAll.CondiDps
+                };
 
                 list.Add(playerData);
             }
@@ -767,13 +768,12 @@ namespace LuckParser.Controllers
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<CastLog> casting = minions.GetCastLogs(_log, phase.Start, phase.End);
             List<DamageLog> damageLogs = minions.GetDamageLogs(target, _log, phase.Start, phase.End);
-            int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
-
+            dto.totalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
             if (totalDamage > 0)
             {
-                dto.contribution = Math.Round(100.0 * finalTotalDamage / totalDamage, 2);
+                dto.contribution = Math.Round(100.0 * dto.totalDamage / totalDamage, 2);
             }
-            dto.distribution = BuildDMGDistBodyData(casting, damageLogs, finalTotalDamage, usedSkills, usedBoons);
+            dto.distribution = BuildDMGDistBodyData(casting, damageLogs, dto.totalDamage, usedSkills, usedBoons);
             return dto;
         }
 
@@ -1402,7 +1402,6 @@ namespace LuckParser.Controllers
                     colCleave = HTMLHelper.GetLink("Color-" + player.Prof + "-NonBoss"),
                     colTotal = HTMLHelper.GetLink("Color-" + player.Prof + "-Total"),
                     isConjure = player.Account == ":Conjured Sword",
-                    deathRecap = BuildDeathRecap(player)
                 };
                 BuildWeaponSets(playerDto, player);
                 foreach (KeyValuePair<string, Minions> pair in player.GetMinions(_log))
@@ -1451,66 +1450,54 @@ namespace LuckParser.Controllers
             logData.flags.dark = !_settings.LightTheme;
             logData.flags.combatReplay = _settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay;
 
-            logData.graphs.Add(new GraphDto("full", "Full"));
-            logData.graphs.Add(new GraphDto("s10", "10s"));
-            logData.graphs.Add(new GraphDto("s30", "30s"));
-            logData.graphs.Add(new GraphDto("phase", "Phase"));
-
             Dictionary<string, List<long>> persBuffs = new Dictionary<string, List<long>>();
             Dictionary<string, List<Boon>> persBuffDict = BuildPersonalBoonData(persBuffs);
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
                 PhaseData phaseData = _statistics.Phases[i];
-                PhaseDto phaseDto = new PhaseDto(phaseData.Name, phaseData.GetDuration());
-                phaseDto.start = phaseData.Start / 1000.0;
-                phaseDto.end = phaseData.End / 1000.0;
+                PhaseDto phaseDto = new PhaseDto(phaseData.Name, phaseData.GetDuration())
+                {
+                    start = phaseData.Start / 1000.0,
+                    end = phaseData.End / 1000.0,
+                    dpsStats = BuildDPSData(i),
+                    dpsStatsTargets = BuildDPSTargetsData(i),
+                    dmgStatsTargets = BuildDMGStatsTargetsData(i),
+                    dmgStats = BuildDMGStatsData(i),
+                    defStats = BuildDefenseData(i),
+                    healStats = BuildSupportData(i),
+                    boonStats = BuildBuffUptimeData(_statistics.PresentBoons, i),
+                    offBuffStats = BuildBuffUptimeData(_statistics.PresentOffbuffs, i),
+                    defBuffStats = BuildBuffUptimeData(_statistics.PresentDefbuffs, i),
+                    persBuffStats = BuildPersonalBuffUptimeData(persBuffDict, i),
+                    boonGenSelfStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "self"),
+                    boonGenGroupStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "group"),
+                    boonGenOGroupStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "off"),
+                    boonGenSquadStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "squad"),
+                    offBuffGenSelfStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, "self"),
+                    offBuffGenGroupStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, "group"),
+                    offBuffGenOGroupStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, "off"),
+                    offBuffGenSquadStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, "squad"),
+                    defBuffGenSelfStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, "self"),
+                    defBuffGenGroupStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, "group"),
+                    defBuffGenOGroupStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, "off"),
+                    defBuffGenSquadStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, "squad"),
+                    targetsCondiStats = new List<List<BoonData>>(),
+                    targetsCondiTotals = new List<BoonData>(),
+                    targetsBoonTotals = new List<BoonData>(),
+                    mechanicStats = BuildPlayerMechanicData(i),
+                    enemyMechanicStats = BuildEnemyMechanicData(i)
+                };
                 foreach (Boss target in phaseData.Targets)
                 {
                     phaseDto.targets.Add(_log.FightData.Logic.Targets.IndexOf(target));
                 }
-                logData.phases.Add(phaseDto);
-                phaseDto.dpsStats = BuildDPSData(i);
-                phaseDto.dpsStatsTargets = BuildDPSTargetsData(i);
-                phaseDto.dmgStatsTargets = BuildDMGStatsTargetsData(i);
-                phaseDto.dmgStats = BuildDMGStatsData(i);
-                phaseDto.defStats = BuildDefenseData(i);
-                phaseDto.healStats = BuildSupportData(i);
-
-                phaseDto.boonStats = BuildBuffUptimeData(_statistics.PresentBoons, i);
-                phaseDto.offBuffStats = BuildBuffUptimeData(_statistics.PresentOffbuffs, i);
-                phaseDto.defBuffStats = BuildBuffUptimeData(_statistics.PresentDefbuffs, i);
-                phaseDto.persBuffStats = BuildPersonalBuffUptimeData(persBuffDict, i);
-
                 BuildDmgModifiersData(i, phaseDto.dmgModifiersCommon, phaseDto.dmgModifiersTargetsCommon);
-
-                phaseDto.boonGenSelfStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "self");
-                phaseDto.boonGenGroupStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "group");
-                phaseDto.boonGenOGroupStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "off");
-                phaseDto.boonGenSquadStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "squad");
-
-                phaseDto.offBuffGenSelfStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, "self");
-                phaseDto.offBuffGenGroupStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, "group");
-                phaseDto.offBuffGenOGroupStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, "off");
-                phaseDto.offBuffGenSquadStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, "squad");
-
-                phaseDto.defBuffGenSelfStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, "self");
-                phaseDto.defBuffGenGroupStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, "group");
-                phaseDto.defBuffGenOGroupStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, "off");
-                phaseDto.defBuffGenSquadStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, "squad");
-
-                phaseDto.targetsCondiStats = new List<List<BoonData>>();
-                phaseDto.targetsCondiTotals = new List<BoonData>();
-                phaseDto.targetsBoonTotals = new List<BoonData>();
                 foreach (Boss target in phaseData.Targets)
                 {
                     phaseDto.targetsCondiStats.Add(BuildTargetCondiData(i, target));
                     phaseDto.targetsCondiTotals.Add(BuildTargetCondiUptimeData(i, target));
                     phaseDto.targetsBoonTotals.Add(HasBoons(i, target) ? BuildTargetBoonData(i, target) : null);
                 }
-
-                phaseDto.mechanicStats = BuildPlayerMechanicData(i);
-                phaseDto.enemyMechanicStats = BuildEnemyMechanicData(i);
-
                 // add phase markup to full fight graph
                 if (i == 0)
                 {
@@ -1531,6 +1518,7 @@ namespace LuckParser.Controllers
                         phaseDto.markupAreas.Add(phaseArea);
                     }
                 }
+                logData.phases.Add(phaseDto);
             }
 
 
@@ -1627,7 +1615,8 @@ namespace LuckParser.Controllers
                 boonGraph = new List<List<BoonChartDataDto>>(),
                 rotation = new List<List<double[]>>(),
                 food = new List<List<FoodDto>>(),
-                minions = new List<PlayerDetailsDto>()
+                minions = new List<PlayerDetailsDto>(),
+                deathRecap = BuildDeathRecap(player)
             };
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {

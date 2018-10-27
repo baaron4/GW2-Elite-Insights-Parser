@@ -24,7 +24,6 @@ namespace LuckParser.Models.HtmlModels
         [DataMember] public string colTarget;
         [DataMember] public string colCleave;
         [DataMember] public string colTotal;
-        [DataMember(EmitDefaultValue = false)] public List<DeathRecapDto> deathRecap;
         [DataMember(EmitDefaultValue = false)] public bool isConjure;
 
         public PlayerDto() { }

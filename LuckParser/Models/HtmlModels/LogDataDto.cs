@@ -12,8 +12,6 @@ namespace LuckParser.Models.HtmlModels
         public readonly List<PlayerDto> players = new List<PlayerDto>();
         [DataMember(Order = 1)]
         public readonly List<EnemyDto> enemies = new List<EnemyDto>();
-        [DataMember(Order = 2)]
-        public readonly List<GraphDto> graphs = new List<GraphDto>();
         [DataMember(Order = 3)]
         public readonly List<PhaseDto> phases = new List<PhaseDto>();
         [DataMember(Order = 4)]
