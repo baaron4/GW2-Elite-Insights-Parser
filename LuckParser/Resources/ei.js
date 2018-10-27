@@ -3,6 +3,7 @@ $.extend($.fn.dataTable.defaults, {
     searching: false,
     ordering: true,
     paging: false,
+    retrieve: true,
     dom: "t"
 });
 
@@ -11,6 +12,26 @@ var specs = [
     "Ranger", "Druid", "Soulbeast", "Engineer", "Scrapper", "Holosmith", "Thief", "Daredevil", "Deadeye",
     "Mesmer", "Chronomancer", "Mirage", "Necromancer", "Reaper", "Scourge", "Elementalist", "Tempest", "Weaver"
 ];
+
+var lazyTableUpdater = null;
+
+if ('IntersectionObserver' in window) {
+    lazyTableUpdater = new IntersectionObserver(function (entries, observer) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                var id = entry.target.id;
+                var table = $("#" + id);
+                if ($.fn.dataTable.isDataTable(table)) {
+                    var order = table.DataTable().order();
+                    table.DataTable().destroy();
+                    table.DataTable().order(order);
+                    table.DataTable().draw();
+                }
+                observer.unobserve(entry.target);
+            }
+        });
+    });
+}
 
 var specToBase = {
     Warrior: 'Warrior',
@@ -90,6 +111,40 @@ var urls = {
     Rifle: "https://wiki.guildwars2.com/images/1/19/Crimson_Antique_Musket.png",
     Staff: "https://wiki.guildwars2.com/images/5/5f/Crimson_Antique_Spire.png"
 };
+
+var initTable = function (id, cell, order) {
+    var table = $(id);
+    if (lazyTableUpdater) {
+        var lazyTable = document.querySelector(id);
+        var lazyTableObserver = new IntersectionObserver(function (entries, observer) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    table.DataTable({ order: [[cell, order]] });
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+        lazyTableObserver.observe(lazyTable);
+    } else {
+        table.DataTable({ order: [[cell, order]] });
+    }
+};
+
+var updateTable = function(id) {   
+    if (lazyTableUpdater) {
+        var lazyTable = document.querySelector(id);
+        lazyTableUpdater.unobserve(lazyTable);
+        lazyTableUpdater.observe(lazyTable);
+    } else {
+        var table = $(id);
+        if ($.fn.dataTable.isDataTable(id)) {
+            var order = table.DataTable().order();
+            table.DataTable().destroy();
+            table.DataTable().order(order);
+            table.DataTable().draw();
+        }
+    }
+}
 
 var DataTypes = {
     damageTable: 0,
@@ -284,31 +339,10 @@ Vue.component("general-layout-component", {
 Vue.component("damage-stats-component", {
     props: ["phase", "targets", "players"],
     mounted() {
-        var table = $("#dps-table");
-        table.DataTable({ order: [[4, "desc"]] });
-
+        initTable("#dps-table", 4, "desc");
     },
     updated() {
-        var table = $("#dps-table");
-        var order = table.DataTable().order();
-        var lazyTable = document.querySelector('#dps-table');
-        if ('IntersectionObserver' in window) {
-            var lazyTableObserver = new IntersectionObserver(function (entries, observer) {
-                entries.forEach(function (entry) {
-                    if (entry.isIntersecting) {
-                        table.DataTable().destroy();
-                        table.DataTable().order(order);
-                        table.DataTable().draw();
-                        lazyTableObserver.unobserve(entry.target);
-                    }
-                });
-            });
-            lazyTableObserver.observe(lazyTable);
-        } else {
-            table.DataTable().destroy();
-            table.DataTable().order(order);
-            table.DataTable().draw();
-        }
+        updateTable("#dps-table");
     },
     computed: {
         tableData: function () {
@@ -367,34 +401,10 @@ Vue.component("damage-stats-component", {
 Vue.component("defense-stats-component", {
     props: ["phase", "players"],
     mounted() {
-        var table = $("#def-table");
-        table.DataTable({ order: [[4, "desc"]] });
-
+        initTable("#def-table", 4, "desc");
     },
     updated() {
-        var lazyTable = document.querySelector("#def-table");
-        var table = $("#def-table");
-        var order = table.DataTable().order();
-        if ("IntersectionObserver" in window) {
-            var lazyTableObserver = new IntersectionObserver(function (
-                entries,
-                observer
-            ) {
-                entries.forEach(function (entry) {
-                    if (entry.isIntersecting) {
-                        table.DataTable().destroy();
-                        table.DataTable().order(order);
-                        table.DataTable().draw();
-                        lazyTableObserver.unobserve(entry.target);
-                    }
-                });
-            });
-            lazyTableObserver.observe(lazyTable);
-        } else {
-            table.DataTable().destroy();
-            table.DataTable().order(order);
-            table.DataTable().draw();
-        }
+        updateTable("#def-table");
     },
     computed: {
         tableData: function () {
@@ -445,50 +455,10 @@ Vue.component("defense-stats-component", {
 Vue.component("support-stats-component", {
     props: ["phase", "players"],
     mounted() {
-        var table = $("#sup-table");
-        table.DataTable({ order: [[4, "desc"]] });
-
+        initTable("#sup-table", 4, "desc");
     },
     updated() {
-        var lazyTable = document.querySelector("#sup-table");
-        var table = $("#sup-table");
-        var order = table.DataTable().order();
-        if ("IntersectionObserver" in window) {
-            var lazyTableObserver = new IntersectionObserver(function (
-                entries,
-                observer
-            ) {
-                entries.forEach(function (entry) {
-                    if (entry.isIntersecting) {
-                        table.DataTable().destroy();
-                        table.DataTable().order(order);
-                        table.DataTable().draw();
-                        lazyTableObserver.unobserve(entry.target);
-                    }
-                });
-            });
-            lazyTableObserver.observe(lazyTable);
-        } else {
-            table.DataTable().destroy();
-            table.DataTable().order(order);
-            table.DataTable().draw();
-        }
-    },
-    methods: {
-        round2: function (value) {
-            if (isNaN(value)) {
-                return 0;
-            }
-            var mul = 100;
-            return Math.round(mul * value) / mul;
-        },
-        round3: function (value) {
-            if (isNaN(value)) {
-                return 0;
-            }
-            var mul = 1000;
-            return Math.round(mul * value) / mul;
-        }
+        updateTable("#sup-table");
     },
     computed: {
         tableData: function () {
@@ -545,34 +515,10 @@ Vue.component("gameplay-stats-component", {
         };
     },
     mounted() {
-        var table = $("#dmg-table");
-        table.DataTable({ order: [[4, "desc"]] });
-
+        initTable("#dmg-table", 4, "desc");
     },
     updated() {
-        var lazyTable = document.querySelector("#dmg-table");
-        var table = $("#dmg-table");
-        var order = table.DataTable().order();
-        if ("IntersectionObserver" in window) {
-            var lazyTableObserver = new IntersectionObserver(function (
-                entries,
-                observer
-            ) {
-                entries.forEach(function (entry) {
-                    if (entry.isIntersecting) {
-                        table.DataTable().destroy();
-                        table.DataTable().order(order);
-                        table.DataTable().draw();
-                        lazyTableObserver.unobserve(entry.target);
-                    }
-                });
-            });
-            lazyTableObserver.observe(lazyTable);
-        } else {
-            table.DataTable().destroy();
-            table.DataTable().order(order);
-            table.DataTable().draw();
-        }
+        updateTable("#dmg-table");
     },
     methods: {
         round2: function (value) {
@@ -634,64 +580,17 @@ Vue.component("gameplay-stats-component", {
 Vue.component("mechanics-stats-component", {
     props: ["phase", "players", "enemies", "mechanics"],
     mounted() {
-        var table = $("#playermechs");
-        table.DataTable({ order: [[0, "asc"]] });
+        initTable("#playermechs", 0, "asc");
         //
-        var table2 = $("#enemymechs");
-        if (table2.length > 0) {
-            table2.DataTable({ order: [[0, "asc"]] });
+        if (this.enemyMechHeader.length) {           
+            initTable("#enemymechs", 0, "asc");
         }
     },
-    updated() {
-        var lazyTable = document.querySelector("#playermechs");
-        var table = $("#playermechs");
-        var order = table.DataTable().order();
-        if ("IntersectionObserver" in window) {
-            var lazyTableObserver = new IntersectionObserver(function (
-                entries,
-                observer
-            ) {
-                entries.forEach(function (entry) {
-                    if (entry.isIntersecting) {
-                        table.DataTable().destroy();
-                        table.DataTable().order(order);
-                        table.DataTable().draw();
-                        lazyTableObserver.unobserve(entry.target);
-                    }
-                });
-            });
-            lazyTableObserver.observe(lazyTable);
-        } else {
-            table.DataTable().destroy();
-            table.DataTable().order(order);
-            table.DataTable().draw();
-        }
+    updated() {        
+        updateTable("#playermechs");
         //
-        var lazyTable2 = document.querySelector("#enemymechs");
-        var table2 = $("#enemymechs");
-        if (table2.length > 0) {
-            var order2 = table.DataTable().order();
-            if ("IntersectionObserver" in window) {
-                var lazyTableObserver2 = new IntersectionObserver(function (
-                    entries,
-                    observer
-                ) {
-                    entries.forEach(function (entry) {
-                        if (entry.isIntersecting) {
-
-                            table2.DataTable().destroy();
-                            table2.DataTable().order(order2);
-                            table2.DataTable().draw();
-                            lazyTableObserver2.unobserve(entry.target);
-                        }
-                    });
-                });
-                lazyTableObserver2.observe(lazyTable2);
-            } else {
-                table2.DataTable().destroy();
-                table2.DataTable().order(order2);
-                table2.DataTable().draw();
-            }
+        if (this.enemyMechHeader.length) {           
+            updateTable("#enemymechs");
         }
     },
     computed: {
@@ -783,33 +682,10 @@ Vue.component("buff-table-component", {
         }
     },
     mounted() {
-        var table = $("#" + this.id);
-        table.DataTable({ order: [[0, "asc"]] });
+        initTable('#'+this.id, 0, "asc");
     },
-    updated() {
-        var lazyTable = document.querySelector("#" + this.id);
-        var table = $("#" + this.id);
-        var order = table.DataTable().order();
-        if ("IntersectionObserver" in window) {
-            var lazyTableObserver = new IntersectionObserver(function (
-                entries,
-                observer
-            ) {
-                entries.forEach(function (entry) {
-                    if (entry.isIntersecting) {
-                        table.DataTable().destroy();
-                        table.DataTable().order(order);
-                        table.DataTable().draw();
-                        lazyTableObserver.unobserve(entry.target);
-                    }
-                });
-            });
-            lazyTableObserver.observe(lazyTable);
-        } else {
-            table.DataTable().destroy();
-            table.DataTable().order(order);
-            table.DataTable().draw();
-        }
+    updated() {       
+        updateTable('#'+this.id);
     },
 });
 
@@ -1075,33 +951,10 @@ Vue.component("dmgmodifier-stats-component", {
         }
     },
     mounted() {
-        var table = $("#dmgmodifier-table");
-        table.DataTable({ order: [[0, "asc"]] });
+        initTable("#dmgmodifier-table", 1, "asc");
     },
     updated() {
-        var lazyTable = document.querySelector("#dmgmodifier-table");
-        var table = $("#dmgmodifier-table");
-        var order = table.DataTable().order();
-        if ("IntersectionObserver" in window) {
-            var lazyTableObserver = new IntersectionObserver(function (
-                entries,
-                observer
-            ) {
-                entries.forEach(function (entry) {
-                    if (entry.isIntersecting) {
-                        table.DataTable().destroy();
-                        table.DataTable().order(order);
-                        table.DataTable().draw();
-                        lazyTableObserver.unobserve(entry.target);
-                    }
-                });
-            });
-            lazyTableObserver.observe(lazyTable);
-        } else {
-            table.DataTable().destroy();
-            table.DataTable().order(order);
-            table.DataTable().draw();
-        }
+        updateTable('#dmgmodifier-table');
     },
 });
 

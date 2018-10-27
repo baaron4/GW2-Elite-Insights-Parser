@@ -373,8 +373,8 @@
                                 <td></td>
                                 <td class="text-left">{{sum.name}}</td>
                                 <td></td>
-                                <td :data-original-title="round3(sum.sup[1]) + ' seconds'">{{sum.sup[0]}}</td>
-                                <td :data-original-title="round3(sum.sup[3]) + ' seconds'">{{sum.sup[2]}}</td>
+                                <td :data-original-title="Math.round(1000*sum.sup[1])/1000 + ' seconds'">{{sum.sup[0]}}</td>
+                                <td :data-original-title="Math.round(1000*sum.sup[3])/1000  + ' seconds'">{{sum.sup[2]}}</td>
                             </tr>
                         </tfoot>
                     </table>
