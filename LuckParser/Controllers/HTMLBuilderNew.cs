@@ -688,7 +688,6 @@ namespace LuckParser.Controllers
                 double[] skillData = {
                     isCondi?1:0,
                     entry.Key,
-                    finalTotalDamage > 0 ? Math.Round(100.0 * totaldamage / finalTotalDamage,3) : 0,
                     totaldamage, mindamage, maxdamage,
                     casts, hits, crit, flank, glance,
                     timeswasted / 1000.0,
@@ -713,7 +712,7 @@ namespace LuckParser.Controllers
                     }
                 }
 
-                double[] skillData = { 0, entry.Key, 0, 0, 0, 0, casts,
+                double[] skillData = { 0, entry.Key, 0, 0, 0, casts,
                     0, 0, 0, 0, timeswasted / 1000.0, -timessaved / 1000.0 };
                 list.Add(skillData);
             }
@@ -727,13 +726,9 @@ namespace LuckParser.Controllers
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<CastLog> casting = p.GetCastLogs(_log, phase.Start, phase.End);
             List<DamageLog> damageLogs = p.GetJustPlayerDamageLogs(target, _log, phase.Start, phase.End);
-            int totalDamage = dps.Damage;
-            dto.totalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
-            if (totalDamage > 0){
-                dto.contribution = Math.Round(100.0 * dto.totalDamage / totalDamage,3);
-            }
-
-            dto.distribution = BuildDMGDistBodyData(casting, damageLogs, dto.totalDamage, usedSkills, usedBoons);
+            dto.totalDamage = dps.Damage;
+            dto.contributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
+            dto.distribution = BuildDMGDistBodyData(casting, damageLogs, dto.contributedDamage, usedSkills, usedBoons);
 
             return dto;
         }
@@ -764,16 +759,12 @@ namespace LuckParser.Controllers
         private DmgDistributionDto _BuildDMGDistData(Statistics.FinalDPS dps, AbstractMasterPlayer p, Minions minions, Boss target, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons)
         {
             DmgDistributionDto dto = new DmgDistributionDto();
-            int totalDamage = dps.Damage;
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<CastLog> casting = minions.GetCastLogs(_log, phase.Start, phase.End);
             List<DamageLog> damageLogs = minions.GetDamageLogs(target, _log, phase.Start, phase.End);
-            dto.totalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
-            if (totalDamage > 0)
-            {
-                dto.contribution = Math.Round(100.0 * dto.totalDamage / totalDamage, 2);
-            }
-            dto.distribution = BuildDMGDistBodyData(casting, damageLogs, dto.totalDamage, usedSkills, usedBoons);
+            dto.contributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
+            dto.totalDamage = dps.Damage;
+            dto.distribution = BuildDMGDistBodyData(casting, damageLogs, dto.contributedDamage, usedSkills, usedBoons);
             return dto;
         }
 
@@ -810,7 +801,7 @@ namespace LuckParser.Controllers
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<DamageLog> damageLogs = p.GetDamageTakenLogs(_log, phase.Start, phase.End);
             SkillData skillList = _log.SkillData;
-            dto.totalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.Damage) : 0;
+            dto.contributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.Damage) : 0;
 
             HashSet<long> usedIDs = new HashSet<long>();
             List<Boon> condiRetal = new List<Boon>(_statistics.PresentConditions)
@@ -840,7 +831,7 @@ namespace LuckParser.Controllers
                     double[] row = new double[13] {
                         1, // isCondi
                         condi.ID,
-                        Math.Round(100 * (double)totaldamage / dto.totalDamage, 2),
+                        Math.Round(100 * (double)totaldamage / dto.contributedDamage, 2),
                         totaldamage,
                         mindamage, maxdamage,
                         hits, hits,
@@ -881,7 +872,7 @@ namespace LuckParser.Controllers
                     double[] row = new double[13] {
                         0, // isCondi
                         skill.ID,
-                        Math.Round(100 * (double)totaldamage / dto.totalDamage, 2),
+                        Math.Round(100 * (double)totaldamage / dto.contributedDamage, 2),
                         totaldamage,
                         mindamage, maxdamage,
                         hits, hits,
