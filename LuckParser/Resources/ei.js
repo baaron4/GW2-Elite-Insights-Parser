@@ -157,6 +157,8 @@ var DataTypes = {
     defensiveBuffTable: 7,
     personalBuffTable: 8,
     dmgModifiersTable: 9,
+    playerTab: 10,
+    targetTab: 11,
 };
 
 for (var i = 0; i < logData.phases.length; i++) {
@@ -238,18 +240,11 @@ Vue.component("phase-component", {
 });
 
 Vue.component("target-component", {
-    props: ["targets", "phases"],
+    props: ["targets", "phase"],
     methods: {
         show: function (target) {
             var index = this.targets.indexOf(target);
-            var activePhase = null;
-            for (var i = 0; i < this.phases.length; i++) {
-                if (this.phases[i].active) {
-                    activePhase = this.phases[i];
-                    break;
-                }
-            }
-            return activePhase.targets.indexOf(index) !== -1;
+            return this.phase.targets.indexOf(index) !== -1;
         }
     }
 });
@@ -958,6 +953,46 @@ Vue.component("dmgmodifier-stats-component", {
     },
 });
 
+Vue.component("damagedist-table-component",{
+    props: ['dmgdist', 'buffmap', 'skillmap', 'tableid' ],
+    template: "#damagedist-table-template",
+    mounted() {
+        initTable('#'+this.tableid, 2, "desc");
+    },
+    updated() {       
+        updateTable('#'+this.tableid);
+    },
+    methods: {
+        round3: function (value) {
+            if (isNaN(value)) {
+                return 0;
+            }
+            var mul = 1000;
+            return Math.round(mul * value) / mul;
+        }
+    },
+    computed: {
+        rows: function() {
+            var res = [];
+            var distrib = this.dmgdist.distribution;
+            for (var i = 0; i< distrib.length; i++) {
+                var data = distrib[i];
+                var skill;
+                var id = data[1]
+                if (data[0] === 1) {
+                    id = 'b'+id;
+                    skill = this.buffmap[id];
+                } else {
+                    id = 's'+id;
+                    skill = this.skillmap[id];
+                }
+                res.push({data: data, skill: skill});
+            }
+            return res;
+        }
+    }
+});
+
 var createLayout = function () {
     var layout = new Layout("Summary");
     // general stats
@@ -1022,10 +1057,14 @@ var createLayout = function () {
     var graphs = new Tab("Graph");
     layout.addTab(graphs);
     // targets
-    var targets = new Tab("Targets");
+    var targets = new Tab("Targets Summary", {
+        dataType: DataTypes.targetTab
+    });
     layout.addTab(targets);
     // player
-    var player = new Tab("Selected Player");
+    var player = new Tab("Player Summary", {
+        dataType: DataTypes.playerTab
+    });
     layout.addTab(player);
     return layout;
 };
@@ -1040,11 +1079,11 @@ window.onload = function () {
             datatypes: DataTypes
         },
         computed: {
-            phase: function () {
+            phaseData: function () {
                 var phases = this.logdata.phases;
                 for (var i = 0; i < phases.length; i++) {
                     if (phases[i].active) {
-                        return phases[i];
+                        return {phase:phases[i], index: i};
                     }
                 }
             },
@@ -1064,11 +1103,22 @@ window.onload = function () {
                     }
                 }
                 return -1;
+            },
+            activePlayer: function() {
+                var players = this.logdata.players;
+                for (var i = 0; i < players.length; i++) {
+                    if (players[i].active) {
+                        return players[i];
+                    }
+                }
+                return null;
             }
+        },
+        beforeMount() {
+            var element = document.getElementById("loading");
+            element.parentNode.removeChild(element);
         }
     });
-    var element = document.getElementById("loading");
-    element.parentNode.removeChild(element);
     $("body").tooltip({
         selector: "[data-original-title]",
         html: true

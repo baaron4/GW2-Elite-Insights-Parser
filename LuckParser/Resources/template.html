@@ -58,6 +58,66 @@
             </table>
         </div>
     </script>
+    <script type="text/x-template" id="damagedist-table-template">
+        <table class="table table-sm table-striped table-hover"  cellspacing="0" width="100%" :id="tableid">
+            <thead>
+                <tr>
+                    <th class="text-left">Skill</th>
+                    <th></th>
+                    <th>Damage</th>
+                    <th>Min</th>
+                    <th>Avg</th>
+                    <th>Max</th>
+                    <th>Casts</th>
+                    <th>Hits</th>
+                    <th>Hits per Cast</th>
+                    <th>Crit</th>
+                    <th>Flank</th>
+                    <th>Glance</th>
+                    <th>Wasted</th>
+                    <th>Saved</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="row in rows" :class="{condi: row.skill.condi, power: !row.skill.condi}">
+                    <td class="text-left" :data-original-title="{{row.skill.id}}">
+                        <img :src="{{row.skill.icon}}" class="icon icon-hover"> {{row.skill.name}}
+                    </td>
+                    <td>{{ row.data[2] }}%</td>
+                    <td>{{ row.data[3] }}</td>
+                    <td>{{ row.data[4] }}</td>
+                    <td>{{ round3(row.data[3]/row.data[7]) }}</td>
+                    <td>{{ row.data[5] }}</td>
+                    <td>{{ !row.skill.condi ? row.data[6] : ''}}</td>
+                    <td>{{ row.data[7] }}</td>
+                    <td>{{(!row.skill.condi && row.data[7]) ? round3(row.data[7]/row.data[6]) : ''}}</td>
+                    <td>{{(!row.skill.condi && row.data[7]) ? round3(row.data[8]*100/row.data[7]) + '%' : ''}}</td>
+                    <td>{{(!row.skill.condi && row.data[7]) ? round3(row.data[9]*100/row.data[7]) + '%' : ''}}</td>
+                    <td>{{(!row.skill.condi && row.data[7]) ? round3(row.data[10]*100/row.data[7]) + '%' : ''}}</td>
+                    <td>{{ row.data[11] ? row.data[11] + 's' : ''}}</td>
+                    <td>{{ row.data[12] ? row.data[12] + 's' : ''}}</td>
+                </tr>
+            </tbody>
+            <tfoot class="text-dark">
+                <tr>
+                    <td class="text-left">Total</td>
+                    <td></td>
+                    <td>{{dmgdist.totaldamage}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </script>
     <script>
         var logData = '${logDataJson}';
     </script>
@@ -109,7 +169,7 @@
                 </encounter-component>
             </div>
         </div>
-        <div class="d-flex flex-row justify-content-center mt-2" id="phase">
+        <div class="d-flex flex-row justify-content-center mt-2" id="phase-nav">
             <phase-component inline-template :phases="logdata.phases">
                 <ul class="nav nav-pills d-flex flex-row justify-content-center">
                     <li class="nav-item" v-for="phase in phases" :data-original-title="phase.duration / 1000.0 + ' seconds'">
@@ -120,10 +180,10 @@
         </div>
         <div class="d-flex flex-row justify-content-center mb-3 mt-3" id="actors">
             <div id="targets" class="d-flex flex-row justify-content-center align-items-center flex-wrap mr-5">
-                <target-component inline-template :targets="logdata.targets" :phases="logdata.phases">
+                <target-component inline-template :targets="logdata.targets" :phase="phaseData.phase">
                     <div class="d-flex flex-row justify-content-center flex-wrap">
-                        <img class="icon-lg mr-2 ml-2 target-cell" v-for="target in targets" v-show="show(target, targets, phases)"
-                            :src="target.icon" :alt="target.name" :data-original-title="target.name" :class="{active: target.active}"
+                        <img class="icon-lg mr-2 ml-2 target-cell" v-for="target in targets" v-show="show(target)" :src="target.icon"
+                            :alt="target.name" :data-original-title="target.name" :class="{active: target.active}"
                             @click="target.active = !target.active">
                     </div>
                 </target-component>
@@ -166,10 +226,10 @@
                 </player-component>
             </div>
         </div>
-        <general-layout-component :layout="layout" :phase="phase">
+        <general-layout-component :layout="layout" :phase="phaseData.phase">
         </general-layout-component>
         <div id="general-stats">
-            <damage-stats-component inline-template v-show="dataType === datatypes.damageTable" :phase="phase"
+            <damage-stats-component inline-template v-show="dataType === datatypes.damageTable" :phase="phaseData.phase"
                 :players="logdata.players" :targets="logdata.targets">
                 <div>
                     <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" id="dps-table">
@@ -219,8 +279,8 @@
                     </table>
                 </div>
             </damage-stats-component>
-            <gameplay-stats-component inline-template v-show="dataType === datatypes.gameplayTable"
-                :phase="phase" :players="logdata.players" :targets="logdata.targets">
+            <gameplay-stats-component inline-template v-show="dataType === datatypes.gameplayTable" :phase="phaseData.phase"
+                :players="logdata.players" :targets="logdata.targets">
                 <div>
                     <div class="d-flex flex-row justify-content-center mt-1 mb-1">
                         <ul class="nav nav-pills">
@@ -300,8 +360,8 @@
                     </table>
                 </div>
             </gameplay-stats-component>
-            <dmgmodifier-stats-component inline-template v-show="dataType === datatypes.dmgModifiersTable" :phase="phase"
-                                         :players="logdata.players" :targets="logdata.targets" :buffmap="logdata.boonMap" :phases="logdata.phases">
+            <dmgmodifier-stats-component inline-template v-show="dataType === datatypes.dmgModifiersTable" :phase="phaseData.phase"
+                :players="logdata.players" :targets="logdata.targets" :buffmap="logdata.boonMap" :phases="logdata.phases">
                 <div v-if="modifiers.length > 0">
                     <div class="d-flex flex-row justify-content-center mt-1 mb-1">
                         <ul class="nav nav-pills">
@@ -329,8 +389,7 @@
                             <tr v-for="row in rows">
                                 <td>{{row.player.group}}</td>
                                 <td :data-original-title="row.player.profession">
-                                    <img :src="row.player.icon" :alt="row.player.profession"
-                                         class="icon"><span style="display:none">{{row.player.profession}}</span>
+                                    <img :src="row.player.icon" :alt="row.player.profession" class="icon"><span style="display:none">{{row.player.profession}}</span>
                                 </td>
                                 <td class="text-left">{{row.player.name}}</td>
                                 <td>{{row.player.acc}}</td>
@@ -342,7 +401,7 @@
                     </table>
                 </div>
             </dmgmodifier-stats-component>
-            <support-stats-component inline-template v-show="dataType === datatypes.supTable" :phase="phase"
+            <support-stats-component inline-template v-show="dataType === datatypes.supTable" :phase="phaseData.phase"
                 :players="logdata.players">
                 <div>
                     <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" id="sup-table">
@@ -380,7 +439,7 @@
                     </table>
                 </div>
             </support-stats-component>
-            <defense-stats-component inline-template v-show="dataType === datatypes.defTable" :phase="phase"
+            <defense-stats-component inline-template v-show="dataType === datatypes.defTable" :phase="phaseData.phase"
                 :players="logdata.players">
                 <div>
                     <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" id="def-table">
@@ -441,55 +500,46 @@
             </defense-stats-component>
         </div>
         <div id="buff-stats">
-            <buff-stats-component inline-template v-show="dataType <= datatypes.defensiveBuffTable && dataType>= datatypes.boonTable" :datatypes="datatypes" :datatype="dataType" 
-                                :phase="phase" :players="logdata.players"
-                                :presentboons="logdata.boons"
-                                :presentoffs="logdata.offBuffs"
-                                :presentdefs="logdata.defBuffs"
-                                :buffmap="logdata.boonMap"
-                                >              
-                    <div>
-                        <div class="d-flex flex-row justify-content-center mt-2 mb-2">
-                            <ul class="nav nav-pills d-flex flex-row justify-content-center">
-                                <li class="nav-item">
-                                    <a class="nav-link" @click="mode = 0" :class="{active: mode === 0}">Uptime</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" @click="mode = 1" :class="{active: mode === 1 }">Generation Self</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" @click="mode = 2" :class="{active: mode === 2 }">Generation Group</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" @click="mode = 3" :class="{active: mode === 3 }">Generation Off-Group</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" @click="mode = 4" :class="{active: mode === 4 }">Generation Squad</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <buff-table-component v-show="datatype === datatypes.boonTable" 
-                                    :target="null" :condition="false" 
-                                    :generation="mode > 0" :id="'boon-stats-table'" 
-                                    :buffs="boons" :playerdata="buffData.boonsData[mode]"
-                                    :sums="mode === 0 ? buffData.boonsData[5] : []">
-                        </buff-table-component>
-                        <buff-table-component v-show="datatype === datatypes.offensiveBuffTable" 
-                                    :target="null" :condition="false" 
-                                    :generation="mode > 0" :id="'offensivebuff-stats-table'" 
-                                    :buffs="offs" :playerdata="buffData.offsData[mode]"
-                                    :sums="mode === 0 ? buffData.offsData[5] : []">
-                        </buff-table-component>
-                        <buff-table-component v-show="datatype === datatypes.defensiveBuffTable" 
-                                    :target="null" :condition="false" 
-                                    :generation="mode > 0" :id="'defensivebuff-stats-table'" 
-                                    :buffs="defs" :playerdata="buffData.defsData[mode]"
-                                    :sums="mode === 0 ? buffData.defsData[5] : []">
-                        </buff-table-component>
-                    </div>               
+            <buff-stats-component inline-template v-show="dataType <= datatypes.defensiveBuffTable && dataType>= datatypes.boonTable"
+                :datatypes="datatypes" :datatype="dataType" :phase="phaseData.phase" :players="logdata.players"
+                :presentboons="logdata.boons" :presentoffs="logdata.offBuffs" :presentdefs="logdata.defBuffs" :buffmap="logdata.boonMap">
+                <div>
+                    <div class="d-flex flex-row justify-content-center mt-2 mb-2">
+                        <ul class="nav nav-pills d-flex flex-row justify-content-center">
+                            <li class="nav-item">
+                                <a class="nav-link" @click="mode = 0" :class="{active: mode === 0}">Uptime</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" @click="mode = 1" :class="{active: mode === 1 }">Generation Self</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" @click="mode = 2" :class="{active: mode === 2 }">Generation Group</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" @click="mode = 3" :class="{active: mode === 3 }">Generation
+                                    Off-Group</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" @click="mode = 4" :class="{active: mode === 4 }">Generation Squad</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <buff-table-component v-show="datatype === datatypes.boonTable" :target="null" :condition="false"
+                        :generation="mode > 0" :id="'boon-stats-table'" :buffs="boons" :playerdata="buffData.boonsData[mode]"
+                        :sums="mode === 0 ? buffData.boonsData[5] : []">
+                    </buff-table-component>
+                    <buff-table-component v-show="datatype === datatypes.offensiveBuffTable" :target="null" :condition="false"
+                        :generation="mode > 0" :id="'offensivebuff-stats-table'" :buffs="offs" :playerdata="buffData.offsData[mode]"
+                        :sums="mode === 0 ? buffData.offsData[5] : []">
+                    </buff-table-component>
+                    <buff-table-component v-show="datatype === datatypes.defensiveBuffTable" :target="null" :condition="false"
+                        :generation="mode > 0" :id="'defensivebuff-stats-table'" :buffs="defs" :playerdata="buffData.defsData[mode]"
+                        :sums="mode === 0 ? buffData.defsData[5] : []">
+                    </buff-table-component>
+                </div>
             </buff-stats-component>
-            <personal-buff-table-component inline-template v-show="dataType === datatypes.personalBuffTable" :phase="phase" :persbuffs="logdata.persBuffs"
-                :players="logdata.players" :buffmap="logdata.boonMap">
+            <personal-buff-table-component inline-template v-show="dataType === datatypes.personalBuffTable" :phase="phaseData.phase"
+                :persbuffs="logdata.persBuffs" :players="logdata.players" :buffmap="logdata.boonMap">
                 <div>
                     <ul class="nav nav-pills d-flex flex-row justify-content-center mt-2 mb-2">
                         <li v-for="base in bases" class="nav-item">
@@ -507,7 +557,7 @@
             </personal-buff-table-component>
         </div>
         <div id="mechanics-stats">
-            <mechanics-stats-component inline-template v-show="dataType === datatypes.mechanicTable" :phase="phase"
+            <mechanics-stats-component inline-template v-show="dataType === datatypes.mechanicTable" :phase="phaseData.phase"
                 :players="logdata.players" :enemies="logdata.enemies" :mechanics="logdata.mechanics">
                 <div>
                     <table v-if="playerMechHeader.length > 0" class="table table-sm table-striped table-hover"
@@ -553,6 +603,74 @@
                     </table>
                 </div>
             </mechanics-stats-component>
+        </div>
+        <div id="player-stats">
+            <div v-show="dataType === datatypes.playerTab">
+                <h3 class="text-center" v-show="!activePlayer">No player selected</h3>
+                <div v-show="activePlayer">
+                    <div v-for="(player, pindex) in logdata.players" v-show="player.active">
+                        <div v-if="!player.isConjure">
+                            <h3 class="text-center"><img :alt="player.profession" :src="player.icon">{{player.name}}</h3>
+                            <player-tab-component inline-template :player="player" :playerindex="pindex" :phases="logdata.phases"
+                                :phaseindex="phaseData.index" :targets="logdata.targets" :buffmap="logdata.boonMap"
+                                :skillmap="logdata.skillMap">
+                                <div>
+                                    <ul class="nav nav-tabs">
+                                        <li>
+                                            <a class="nav-link" :class="{active: mode === 0}" @click="mode = 0">Damage
+                                                Distribution</a>
+                                        </li>
+                                        <li>
+                                            <a class="nav-link" :class="{active: mode === 1}" @click="mode = 1">Damage
+                                                Taken</a>
+                                        </li>
+                                        <li>
+                                            <a class="nav-link" :class="{active: mode === 2}" @click="mode = 2">Food</a>
+                                        </li>
+                                        <li>
+                                            <a class="nav-link" :class="{active: mode === 3}" @click="mode = 3">Simple
+                                                Rotation</a>
+                                        </li>
+                                        <li v-if="player.details.deathRecap">
+                                            <a class="nav-link" :class="{active: mode === 4}" @click="mode = 4">Death
+                                                Recap</a>
+                                        </li>
+                                    </ul>
+                                    <dmgdist-component inline-template v-show="mode === 0" :player="player"
+                                        :playerindex="playerindex" :phaseindex="phaseindex" :buffmap="buffmap"
+                                        :skillmap="skillmap">
+                                        <div>
+                                            <div v-if="player.minions.length > 0">
+                                                <ul class="nav nav-tabs">
+                                                    <li>
+                                                        <a class="nav-link" :class="{active: distmode === -1}" @click="distmode = -1">{{player.name}}</a>
+                                                    </li>
+                                                    <li v-for="(minion, mindex) in player.minions">
+                                                        <a class="nav-link" :class="{active: distmode === mindex}"
+                                                            @click="distmode = mindex">{{minion.name}}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="d-flex flex-row justify-content-center mt-1 mb-1">
+                                                <ul class="nav nav-pills">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" @click="targetmode = 1" :class="{active: targetmode}">Target</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" @click="targetmode = 0" :class="{active: !targetmode }">All</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <damagedist-table-component :dmgdist="dmgdist[playerindex]" :tableid="'dmgdist-' + playerindex"
+                                                :buffmap="buffmap" :skillmap="skillmap"></damagedist-table-component>
+                                        </div>
+                                    </dmgdist-component>
+                                </div>
+                            </player-tab-component>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
