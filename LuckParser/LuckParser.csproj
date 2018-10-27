@@ -152,7 +152,6 @@
     <Compile Include="Models\HtmlModels\BoonData.cs" />
     <Compile Include="Models\HtmlModels\PhaseDto.cs" />
     <Compile Include="Models\HtmlModels\LogDataDto.cs" />
-    <Compile Include="Models\HtmlModels\GraphDto.cs" />
     <Compile Include="Models\HtmlModels\PlayerDetailsDto.cs" />
     <Compile Include="Models\HtmlModels\PlayerDto.cs" />
     <Compile Include="Models\JsonModels\JsonDamageDist.cs" />
@@ -310,8 +309,6 @@
     <Content Include="Resources\tmplGroupCombatReplay.html" />
     <Content Include="Resources\tmplPlayerSelectCombatReplay.html" />
     <Content Include="Resources\TODO.txt" />
-    <None Include="Resources\tmplDmgDistTable.html" />
-    <None Include="Resources\tmplTabs.html" />
     <None Include="Resources\tmplPlayerCells.html" />
     <None Include="Resources\template.html" />
   </ItemGroup>

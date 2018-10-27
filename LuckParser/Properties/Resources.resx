@@ -145,16 +145,10 @@
   <data name="theme_slate" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\theme-slate.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="tmplDmgDistTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplDmgDistTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
   <data name="tmplDmgTakenTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tmplDmgTakenTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="tmplPlayerCells" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tmplPlayerCells.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="tmplTabs" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplTabs.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>
