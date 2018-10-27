@@ -470,7 +470,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Conjure Fiery Greatsword", 15792, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/e/e2/Conjure_Fiery_Greatsword.png"),
                 //skills
                 new Boon("Arcane Power",5582, BoonSource.Elementalist, BoonType.Intensity, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/72/Arcane_Power.png"),
-                new Boon("Arcane Shield",5640, BoonSource.Elementalist, BoonType.Intensity, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/wiki/File:Arcane_Shield.png"),
+                new Boon("Arcane Shield",5640, BoonSource.Elementalist, BoonType.Intensity, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/9d/Arcane_Shield.png"),
                 new Boon("Renewal of Fire",5764, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/63/Renewal_of_Fire.png"),
                 new Boon("Glyph of Elemental Power (Fire)",5739, BoonSource.Elementalist, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/f/f2/Glyph_of_Elemental_Power_%28fire%29.png"),
                 new Boon("Glyph of Elemental Power (Water)",5741, BoonSource.Elementalist, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/bf/Glyph_of_Elemental_Power_%28water%29.png"),
