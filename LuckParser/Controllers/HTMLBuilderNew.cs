@@ -725,7 +725,7 @@ namespace LuckParser.Controllers
             DmgDistributionDto dto = new DmgDistributionDto();
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<CastLog> casting = p.GetCastLogs(_log, phase.Start, phase.End);
-            List<DamageLog> damageLogs = p.GetJustPlayerDamageLogs(target, _log, phase.Start, phase.End);
+            List<DamageLog> damageLogs = p.GetJustPlayerDamageLogs(null, _log, phase.Start, phase.End);
             dto.totalDamage = dps.Damage;
             dto.contributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
             dto.distribution = BuildDMGDistBodyData(casting, damageLogs, dto.contributedDamage, usedSkills, usedBoons);

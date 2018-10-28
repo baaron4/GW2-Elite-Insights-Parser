@@ -15,109 +15,6 @@
     <script src="https://cdn.datatables.net/plug-ins/1.10.13/sorting/alt-string.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <!--${Vue}-->
-    <script type="text/x-template" id="buff-table-template">
-        <div v-if="buffs.length > 0">
-            <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="id">
-                <thead>
-                    <tr>
-                        <th>Sub</th>
-                        <th></th>
-                        <th>Name</th>
-                        <th v-for="buff in buffs" :data-original-title="buff.name">
-                            <img :src="buff.icon" :alt="buff.name" class="icon icon-hover">
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="row in playerdata">
-                        <td>{{ row.player.group }}</td>
-                        <td :data-original-title="row.player.profession"><img :src="row.player.icon" :alt="row.player.profession"
-                                class="icon">
-                            <span style="display:none">
-                                {{ row.player.profession }}
-                            </span>
-                        </td>
-                        <td class="text-left" :data-original-title="getAvgTooltip(row.data.avg)">
-                            {{ row.player.name }}
-                        </td>
-                        <td v-for=" (buff, index) in buffs" :data-original-title="getCellTooltip(buff, row.data.data[index])">
-                            {{ getCellValue(buff, row.data.data[index]) }}
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot v-show="sums.length > 0">
-                    <tr v-for="sum in sums">
-                        <td></td>
-                        <td></td>
-                        <td :data-original-title="getAvgTooltip(sum.avg)">{{sum.name}}</td>
-                        <td v-for=" (buff, index) in buffs" :data-original-title="getCellTooltip(buff, sum.data[index])">
-                            {{ getCellValue(buff, sum.data[index]) }}
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-    </script>
-    <script type="text/x-template" id="damagedist-table-template">
-        <table class="table table-sm table-striped table-hover"  cellspacing="0" width="100%" :id="tableid">
-            <thead>
-                <tr>
-                    <th class="text-left">Skill</th>
-                    <th></th>
-                    <th>Damage</th>
-                    <th>Min</th>
-                    <th>Avg</th>
-                    <th>Max</th>
-                    <th>Casts</th>
-                    <th>Hits</th>
-                    <th>Hits per Cast</th>
-                    <th>Crit</th>
-                    <th>Flank</th>
-                    <th>Glance</th>
-                    <th>Wasted</th>
-                    <th>Saved</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="row in rows" :class="{condi: row.skill.condi, power: !row.skill.condi}">
-                    <td class="text-left" :data-original-title="{{row.skill.id}}">
-                        <img :src="{{row.skill.icon}}" class="icon icon-hover"> {{row.skill.name}}
-                    </td>
-                    <td>{{ row.data[2] }}%</td>
-                    <td>{{ row.data[3] }}</td>
-                    <td>{{ row.data[4] }}</td>
-                    <td>{{ round3(row.data[3]/row.data[7]) }}</td>
-                    <td>{{ row.data[5] }}</td>
-                    <td>{{ !row.skill.condi ? row.data[6] : ''}}</td>
-                    <td>{{ row.data[7] }}</td>
-                    <td>{{(!row.skill.condi && row.data[7]) ? round3(row.data[7]/row.data[6]) : ''}}</td>
-                    <td>{{(!row.skill.condi && row.data[7]) ? round3(row.data[8]*100/row.data[7]) + '%' : ''}}</td>
-                    <td>{{(!row.skill.condi && row.data[7]) ? round3(row.data[9]*100/row.data[7]) + '%' : ''}}</td>
-                    <td>{{(!row.skill.condi && row.data[7]) ? round3(row.data[10]*100/row.data[7]) + '%' : ''}}</td>
-                    <td>{{ row.data[11] ? row.data[11] + 's' : ''}}</td>
-                    <td>{{ row.data[12] ? row.data[12] + 's' : ''}}</td>
-                </tr>
-            </tbody>
-            <tfoot class="text-dark">
-                <tr>
-                    <td class="text-left">Total</td>
-                    <td></td>
-                    <td>{{dmgdist.totaldamage}}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </tfoot>
-        </table>
-    </script>
     <script>
         var logData = '${logDataJson}';
     </script>
@@ -327,7 +224,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="row in tableData.rows">
+                            <tr v-for="row in (mode ? tableDataTarget : tableData)">
                                 <td>{{row.player.group}}</td>
                                 <td :data-original-title="row.player.profession"><img :src="row.player.icon" :alt="row.player.profession"
                                         class="icon"><span style="display:none">{{row.player.profession}}</span></td>
@@ -386,7 +283,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="row in rows">
+                            <tr v-for="row in (mode ? rowsTarget : rows)">
                                 <td>{{row.player.group}}</td>
                                 <td :data-original-title="row.player.profession">
                                     <img :src="row.player.icon" :alt="row.player.profession" class="icon"><span style="display:none">{{row.player.profession}}</span>
@@ -605,15 +502,17 @@
             </mechanics-stats-component>
         </div>
         <div id="player-stats">
-            <div v-show="dataType === datatypes.playerTab">
-                <h3 class="text-center" v-show="!activePlayer">No player selected</h3>
-                <div v-show="activePlayer">
-                    <div v-for="(player, pindex) in logdata.players" v-show="player.active">
+            <h3 class="text-center" v-show="!activePlayer">No player selected</h3>
+            <player-stats-component inline-template v-show="dataType === datatypes.playerTab" v-show="activePlayer"
+                :players="logdata.players" :phaseindex="phaseData.index" :phase="phaseData.phase" :targets="logdata.targets"
+                :buffmap="logdata.boonMap" :skillmap="logdata.skillMap">
+                <div>
+                    <div v-for="(player, pindex) in players" v-show="player.active">
                         <div v-if="!player.isConjure">
                             <h3 class="text-center"><img :alt="player.profession" :src="player.icon">{{player.name}}</h3>
-                            <player-tab-component inline-template :player="player" :playerindex="pindex" :phases="logdata.phases"
-                                :phaseindex="phaseData.index" :targets="logdata.targets" :buffmap="logdata.boonMap"
-                                :skillmap="logdata.skillMap">
+                            <player-tab-component inline-template :player="player" :playerindex="pindex" :phase="phase"
+                                :phaseindex="phaseindex" :targets="targets" :buffmap="buffmap" :skillmap="skillmap"
+                                :sortdata="sortdata">
                                 <div>
                                     <ul class="nav nav-tabs">
                                         <li>
@@ -638,7 +537,7 @@
                                     </ul>
                                     <dmgdist-component inline-template v-show="mode === 0" :player="player"
                                         :playerindex="playerindex" :phaseindex="phaseindex" :buffmap="buffmap"
-                                        :skillmap="skillmap">
+                                        :skillmap="skillmap" :targets="targets" :sortdata="sortdata.dmgdist">
                                         <div>
                                             <div v-if="player.minions.length > 0">
                                                 <ul class="nav nav-tabs">
@@ -661,8 +560,10 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                            <damagedist-table-component :dmgdist="dmgdist[playerindex]" :tableid="'dmgdist-' + playerindex"
-                                                :buffmap="buffmap" :skillmap="skillmap"></damagedist-table-component>
+                                            <damagedist-table-component v-if="player.active" :dmgdist="targetmode === 0 ? dmgdist : dmgdisttarget"
+                                                :tableid="'dmgdist-' + playerindex" :buffmap="buffmap" :skillmap="skillmap"
+                                                :actor="actor" :isminion="distmode>=0" :istarget="targetmode === 1"
+                                                :sortdata="sortdata"></damagedist-table-component>
                                         </div>
                                     </dmgdist-component>
                                 </div>
@@ -670,7 +571,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </player-stats-component>
         </div>
     </div>
 

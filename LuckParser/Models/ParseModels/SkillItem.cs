@@ -50,6 +50,7 @@ namespace LuckParser.Models.ParseModels
             {DodgeId, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
             {WeaponSwapId, "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png" },
             {49112, "https://wiki.guildwars2.com/images/e/e7/Throw_Magnetic_Bomb.png" },
+            {31686, "https://wiki.guildwars2.com/images/4/4b/Overload_Air.png" },
         };
 
         private const string _defaultIcon = "https://render.guildwars2.com/file/1D55D34FB4EE20B1962E315245E40CA5E1042D0E/62248.png";

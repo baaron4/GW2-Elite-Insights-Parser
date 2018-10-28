@@ -14,7 +14,6 @@ var specs = [
 ];
 
 var lazyTableUpdater = null;
-
 if ('IntersectionObserver' in window) {
     lazyTableUpdater = new IntersectionObserver(function (entries, observer) {
         entries.forEach(function (entry) {
@@ -22,10 +21,7 @@ if ('IntersectionObserver' in window) {
                 var id = entry.target.id;
                 var table = $("#" + id);
                 if ($.fn.dataTable.isDataTable(table)) {
-                    var order = table.DataTable().order();
-                    table.DataTable().destroy();
-                    table.DataTable().order(order);
-                    table.DataTable().draw();
+                    table.DataTable().rows().invalidate('dom').draw();
                 }
                 observer.unobserve(entry.target);
             }
@@ -112,25 +108,39 @@ var urls = {
     Staff: "https://wiki.guildwars2.com/images/5/5f/Crimson_Antique_Spire.png"
 };
 
-var initTable = function (id, cell, order) {
+var initTable = function (id, cell, order, orderCallBack) {
     var table = $(id);
     if (lazyTableUpdater) {
         var lazyTable = document.querySelector(id);
         var lazyTableObserver = new IntersectionObserver(function (entries, observer) {
             entries.forEach(function (entry) {
                 if (entry.isIntersecting) {
-                    table.DataTable({ order: [[cell, order]] });
+                    table.DataTable({
+                        order: [
+                            [cell, order]
+                        ]
+                    });
+                    if (orderCallBack) {
+                        table.DataTable().on('order.dt', orderCallBack);
+                    }
                     observer.unobserve(entry.target);
                 }
             });
         });
         lazyTableObserver.observe(lazyTable);
     } else {
-        table.DataTable({ order: [[cell, order]] });
+        table.DataTable({
+            order: [
+                [cell, order]
+            ]
+        });
+        if (orderCallBack) {
+            table.DataTable().on('order.dt', orderCallBack);
+        }
     }
 };
 
-var updateTable = function(id) {   
+var updateTable = function (id) {
     if (lazyTableUpdater) {
         var lazyTable = document.querySelector(id);
         lazyTableUpdater.unobserve(lazyTable);
@@ -138,13 +148,11 @@ var updateTable = function(id) {
     } else {
         var table = $(id);
         if ($.fn.dataTable.isDataTable(id)) {
-            var order = table.DataTable().order();
-            table.DataTable().destroy();
-            table.DataTable().order(order);
+            table.DataTable().rows().invalidate('dom');
             table.DataTable().draw();
         }
     }
-}
+};
 
 var DataTypes = {
     damageTable: 0,
@@ -547,14 +555,36 @@ Vue.component("gameplay-stats-component", {
                     if (j >= 14) {
                         commons[j - 14] = stats[j];
                     } else {
-                        if (!this.mode) {
-                            data[j] = stats[j];
-                        } else {
-                            for (var k = 0; k < phase.targets.length; k++) {
-                                if (this.targets[phase.targets[k]].active) {
-                                    var tar = phase.dmgStatsTargets[i][k];
-                                    data[j] += tar[j];
-                                }
+                        data[j] = stats[j];
+                    }
+                }
+                rows.push({
+                    player: player,
+                    commons: commons,
+                    data: data
+                });
+            }
+            return rows;
+        },
+        tableDataTarget: function () {
+            var phase = this.phase;
+            var rows = [];
+            for (var i = 0; i < phase.dmgStats.length; i++) {
+                var commons = [];
+                var data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                var player = this.players[i];
+                if (player.isConjure) {
+                    continue;
+                }
+                var stats = phase.dmgStats[i];
+                for (var j = 0; j < stats.length; j++) {
+                    if (j >= 14) {
+                        commons[j - 14] = stats[j];
+                    } else {
+                        for (var k = 0; k < phase.targets.length; k++) {
+                            if (this.targets[phase.targets[k]].active) {
+                                var tar = phase.dmgStatsTargets[i][k];
+                                data[j] += tar[j];
                             }
                         }
                     }
@@ -565,10 +595,7 @@ Vue.component("gameplay-stats-component", {
                     data: data
                 });
             }
-            var res = {
-                rows: rows
-            };
-            return res;
+            return rows;
         }
     }
 });
@@ -577,14 +604,14 @@ Vue.component("mechanics-stats-component", {
     mounted() {
         initTable("#playermechs", 0, "asc");
         //
-        if (this.enemyMechHeader.length) {           
+        if (this.enemyMechHeader.length) {
             initTable("#enemymechs", 0, "asc");
         }
     },
-    updated() {        
+    updated() {
         updateTable("#playermechs");
         //
-        if (this.enemyMechHeader.length) {           
+        if (this.enemyMechHeader.length) {
             updateTable("#enemymechs");
         }
     },
@@ -643,7 +670,49 @@ Vue.component("mechanics-stats-component", {
 
 Vue.component("buff-table-component", {
     props: ["buffs", "playerdata", "generation", "condition", "sums", "id"],
-    template: "#buff-table-template",
+    template: `
+    <div v-if="buffs.length > 0">
+        <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="id">
+            <thead>
+                <tr>
+                    <th>Sub</th>
+                    <th></th>
+                    <th>Name</th>
+                    <th v-for="buff in buffs" :data-original-title="buff.name">
+                        <img :src="buff.icon" :alt="buff.name" class="icon icon-hover">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="row in playerdata">
+                    <td>{{ row.player.group }}</td>
+                    <td :data-original-title="row.player.profession"><img :src="row.player.icon" :alt="row.player.profession"
+                            class="icon">
+                        <span style="display:none">
+                            {{ row.player.profession }}
+                        </span>
+                    </td>
+                    <td class="text-left" :data-original-title="getAvgTooltip(row.data.avg)">
+                        {{ row.player.name }}
+                    </td>
+                    <td v-for=" (buff, index) in buffs" :data-original-title="getCellTooltip(buff, row.data.data[index])">
+                        {{ getCellValue(buff, row.data.data[index]) }}
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot v-show="sums.length > 0">
+                <tr v-for="sum in sums">
+                    <td></td>
+                    <td></td>
+                    <td :data-original-title="getAvgTooltip(sum.avg)">{{sum.name}}</td>
+                    <td v-for=" (buff, index) in buffs" :data-original-title="getCellTooltip(buff, sum.data[index])">
+                        {{ getCellValue(buff, sum.data[index]) }}
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    `,
     methods: {
         getAvgTooltip: function (avg) {
             if (avg) {
@@ -677,10 +746,10 @@ Vue.component("buff-table-component", {
         }
     },
     mounted() {
-        initTable('#'+this.id, 0, "asc");
+        initTable('#' + this.id, 0, "asc");
     },
-    updated() {       
-        updateTable('#'+this.id);
+    updated() {
+        updateTable('#' + this.id);
     },
 });
 
@@ -905,22 +974,38 @@ Vue.component("dmgmodifier-stats-component", {
                 for (var j = 0; j < this.modifiers.length; j++) {
                     data.push([0, 0, 0, 0]);
                 }
-                if (this.mode === 0) {
-                    for (var j = 0; j < dmgModifier.length; j++) {
-                        data[j] = dmgModifier[j].slice(1);
-                    }
-                } else {
-                    for (var j = 0; j < this.phase.targets.length; j++) {
-                        if (this.targets[this.phase.targets[j]].active) {
-                            var modifier = dmgModifier[j];
-                            for (var k = 0; k < modifier.length; k++) {
-                                var target = modifier[k].slice(1);
-                                var curData = data[k];
-                                for (var l = 0; l < target.length; l++) {
-                                    curData[l] += target[l];
-                                }
-                                data[k] = curData;
+                for (var j = 0; j < dmgModifier.length; j++) {
+                    data[j] = dmgModifier[j].slice(1);
+                }
+                rows.push({
+                    player: player,
+                    data: data
+                });
+            }
+            return rows;
+        },
+        rowsTarget: function () {
+            var rows = [];
+            for (var i = 0; i < this.players.length; i++) {
+                var player = this.players[i];
+                if (player.isConjure) {
+                    continue;
+                }
+                var dmgModifier = this.mode === 0 ? this.phase.dmgModifiersCommon[i] : this.phase.dmgModifiersTargetsCommon[i];
+                var data = [];
+                for (var j = 0; j < this.modifiers.length; j++) {
+                    data.push([0, 0, 0, 0]);
+                }
+                for (var j = 0; j < this.phase.targets.length; j++) {
+                    if (this.targets[this.phase.targets[j]].active) {
+                        var modifier = dmgModifier[j];
+                        for (var k = 0; k < modifier.length; k++) {
+                            var target = modifier[k].slice(1);
+                            var curData = data[k];
+                            for (var l = 0; l < target.length; l++) {
+                                curData[l] += target[l];
                             }
+                            data[k] = curData;
                         }
                     }
                 }
@@ -953,14 +1038,97 @@ Vue.component("dmgmodifier-stats-component", {
     },
 });
 
-Vue.component("damagedist-table-component",{
-    props: ['dmgdist', 'buffmap', 'skillmap', 'tableid' ],
-    template: "#damagedist-table-template",
+Vue.component("damagedist-table-component", {
+    props: ['dmgdist', 'buffmap', 'skillmap', 'tableid', 'actor', 'isminion', 'istarget', 'sortdata'],
+    template: `
+    <div>
+        <div v-if="isminion">
+            {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its master's total {{istarget ? 'Target' :''}} dps
+        </div>
+        <div v-else>
+            {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its total {{istarget ? 'Target' :''}} dps
+        </div>
+        <table class="table table-sm table-striped table-hover"  cellspacing="0" width="100%" :id="tableid">
+            <thead>
+                <tr>
+                    <th class="text-left">Skill</th>
+                    <th></th>
+                    <th>Damage</th>
+                    <th>Min</th>
+                    <th>Avg</th>
+                    <th>Max</th>
+                    <th>Casts</th>
+                    <th>Hits</th>
+                    <th>Hits per Cast</th>
+                    <th>Crit</th>
+                    <th>Flank</th>
+                    <th>Glance</th>
+                    <th>Wasted</th>
+                    <th>Saved</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="row in rows" :class="{condi: row.skill.condi, power: !row.skill.condi}">
+                    <td class="text-left" :data-original-title="row.skill.id">
+                        <img :src="row.skill.icon" class="icon icon-hover"> {{row.skill.name}}
+                    </td>
+                    <td>{{ round3(100*row.data[2]/dmgdist.contributedDamage) }}%</td>
+                    <td>{{ row.data[2] }}</td>
+                    <td>{{ row.data[3] }}</td>
+                    <td>{{ round3(row.data[2]/row.data[6]) }}</td>
+                    <td>{{ row.data[4] }}</td>
+                    <td>{{ !row.skill.condi ? row.data[5] : ''}}</td>
+                    <td>{{ row.data[6] }}</td>
+                    <td>{{(!row.skill.condi && row.data[6] && row.data[5]) ? round3(row.data[6]/row.data[5]) : ''}}</td>
+                    <td>{{(!row.skill.condi && row.data[6]) ? round3(row.data[7]*100/row.data[6]) + '%' : ''}}</td>
+                    <td>{{(!row.skill.condi && row.data[6]) ? round3(row.data[8]*100/row.data[6]) + '%' : ''}}</td>
+                    <td>{{(!row.skill.condi && row.data[6]) ? round3(row.data[9]*100/row.data[6]) + '%' : ''}}</td>
+                    <td>{{ row.data[10] ? row.data[10] + 's' : ''}}</td>
+                    <td>{{ row.data[11] ? row.data[11] + 's' : ''}}</td>
+                </tr>
+            </tbody>
+            <tfoot class="text-dark">
+                <tr>
+                    <td class="text-left">Total</td>
+                    <td></td>
+                    <td>{{dmgdist.contributedDamage}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div> 
+    `,
     mounted() {
-        initTable('#'+this.tableid, 2, "desc");
+        var _this = this;
+        initTable('#' + this.tableid, this.sortdata.index, this.sortdata.order, function () {
+            var order = $('#' + _this.tableid).DataTable().order();
+            _this.sortdata.order = order[0][1];
+            _this.sortdata.index = order[0][0];
+        });
     },
-    updated() {       
-        updateTable('#'+this.tableid);
+    beforeUpdate() {
+        $('#' + this.tableid).DataTable().destroy();
+    },
+    updated() {
+        var _this = this;
+        initTable('#' + this.tableid, this.sortdata.index, this.sortdata.order, function () {
+            var order = $('#' + _this.tableid).DataTable().order();
+            _this.sortdata.order = order[0][1];
+            _this.sortdata.index = order[0][0];
+        });
+    },
+    beforeDestroy() {
+        $('#' + this.tableid).DataTable().destroy();
     },
     methods: {
         round3: function (value) {
@@ -972,25 +1140,89 @@ Vue.component("damagedist-table-component",{
         }
     },
     computed: {
-        rows: function() {
+        rows: function () {
             var res = [];
             var distrib = this.dmgdist.distribution;
-            for (var i = 0; i< distrib.length; i++) {
+            for (var i = 0; i < distrib.length; i++) {
                 var data = distrib[i];
                 var skill;
-                var id = data[1]
+                var id = data[1];
                 if (data[0] === 1) {
-                    id = 'b'+id;
+                    id = 'b' + id;
                     skill = this.buffmap[id];
+                    skill.condi = true;
                 } else {
-                    id = 's'+id;
+                    id = 's' + id;
                     skill = this.skillmap[id];
+                    skill.condi = false;
                 }
-                res.push({data: data, skill: skill});
+                res.push({
+                    data: data,
+                    skill: skill
+                });
             }
             return res;
         }
     }
+});
+
+Vue.component('player-tab-component', {
+    props: ['player', 'playerindex', 'phase',
+        'phaseindex', 'targets', 'buffmap', 'skillmap', 'sortdata'
+    ],
+    data: function () {
+        return {
+            mode: 0
+        };
+    },
+});
+
+Vue.component('dmgdist-component', {
+    props: ['player', 'playerindex',
+        'phaseindex', 'targets', 'buffmap', 'skillmap', 'sortdata'
+    ],
+    data: function () {
+        return {
+            distmode: -1,
+            targetmode: 0
+        };
+    },
+    computed: {
+        actor: function () {
+            if (this.distmode === -1) {
+                return this.player;
+            }
+            return this.player.minions[this.distmode];
+        },
+        dmgdist: function () {
+            if (this.distmode === -1) {
+                return this.player.details.dmgDistributions[this.phaseindex];
+            }
+            return this.player.details.minions[this.distmode].dmgDistributions[this.phaseindex];
+        },
+        dmgdisttarget: function () {
+            var dist = {
+                contributedDamage: 1,
+                totalDamage: 1,
+                distribution: [],
+            };
+            return dist;
+        }
+    },
+});
+
+Vue.component('player-stats-component', {
+    props: ['players', 'phaseindex', 'phase', 'targets', 'buffmap', 'skillmap'],
+    data: function () {
+        return {
+            sortdata: {
+                dmgdist: {
+                    order: "desc",
+                    index: 2
+                }
+            }
+        };
+    },
 });
 
 var createLayout = function () {
@@ -1083,7 +1315,10 @@ window.onload = function () {
                 var phases = this.logdata.phases;
                 for (var i = 0; i < phases.length; i++) {
                     if (phases[i].active) {
-                        return {phase:phases[i], index: i};
+                        return {
+                            phase: phases[i],
+                            index: i
+                        };
                     }
                 }
             },
@@ -1104,7 +1339,7 @@ window.onload = function () {
                 }
                 return -1;
             },
-            activePlayer: function() {
+            activePlayer: function () {
                 var players = this.logdata.players;
                 for (var i = 0; i < players.length; i++) {
                     if (players[i].active) {
