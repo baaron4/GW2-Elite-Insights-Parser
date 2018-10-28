@@ -1042,11 +1042,13 @@ Vue.component("damagedist-table-component", {
     props: ['dmgdist', 'buffmap', 'skillmap', 'tableid', 'actor', 'isminion', 'istarget', 'sortdata'],
     template: `
     <div>
-        <div v-if="isminion">
-            {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its master's total {{istarget ? 'Target' :''}} dps
-        </div>
-        <div v-else>
-            {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its total {{istarget ? 'Target' :''}} dps
+        <div v-if="actor !== null">       
+            <div v-if="isminion">
+                {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its master's total {{istarget ? 'Target' :''}} dps
+            </div>
+            <div v-else>
+                {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its total {{istarget ? 'Target' :''}} dps
+            </div>
         </div>
         <table class="table table-sm table-striped table-hover"  cellspacing="0" width="100%" :id="tableid">
             <thead>
@@ -1074,10 +1076,10 @@ Vue.component("damagedist-table-component", {
                     </td>
                     <td>{{ round3(100*row.data[2]/dmgdist.contributedDamage) }}%</td>
                     <td>{{ row.data[2] }}</td>
-                    <td>{{ row.data[3] }}</td>
-                    <td>{{ Math.round(row.data[2]/row.data[6]) }}</td>
+                    <td>{{ Math.max(row.data[3],0) }}</td>
+                    <td>{{ round(row.data[2]/row.data[6]) }}</td>
                     <td>{{ row.data[4] }}</td>
-                    <td>{{ !row.skill.condi ? row.data[5] : ''}}</td>
+                    <td>{{ !row.skill.condi && row.data[5] ? row.data[5] : ''}}</td>
                     <td>{{ row.data[6] }}</td>
                     <td>{{(!row.skill.condi && row.data[6] && row.data[5]) ? round3(row.data[6]/row.data[5]) : ''}}</td>
                     <td :data-original-title="(!row.skill.condi && row.data[6]) ? row.data[7] +' out of ' + row.data[6] + ' hits': false">
@@ -1137,6 +1139,12 @@ Vue.component("damagedist-table-component", {
         $('#' + this.tableid).DataTable().destroy();
     },
     methods: {
+        round: function (value) {
+            if (isNaN(value)) {
+                return 0;
+            }
+            return Math.round(value);
+        },
         round3: function (value) {
             if (isNaN(value)) {
                 return 0;
@@ -1184,7 +1192,7 @@ Vue.component('player-tab-component', {
 });
 
 Vue.component('dmgdist-component', {
-    props: ['player', 'playerindex',
+    props: ['player', 'playerindex', 'phase',
         'phaseindex', 'targets', 'buffmap', 'skillmap', 'sortdata'
     ],
     data: function () {
@@ -1208,11 +1216,58 @@ Vue.component('dmgdist-component', {
         },
         dmgdisttarget: function () {
             var dist = {
-                contributedDamage: 1,
-                totalDamage: 1,
+                contributedDamage: 0,
+                totalDamage: 0,
                 distribution: [],
             };
+            var rows = new Map();
+            for (var i = 0; i < this.phase.targets.length; i++) {
+                var target = this.targets[this.phase.targets[i]];
+                if (target.active) {
+                    var targetDist = this.distmode === -1 ? 
+                                    this.player.details.dmgDistributionsTargets[this.phaseindex][i] :
+                                    this.player.details.minions[this.distmode].dmgDistributionsTargets[this.phaseindex][i];
+                    dist.contributedDamage += targetDist.contributedDamage;
+                    dist.totalDamage += targetDist.totalDamage;
+                    var distribution = targetDist.distribution;
+                    for (var k = 0; k < distribution.length; k++) {
+                        var targetDistribution = distribution[k];
+                        if (rows.has(targetDistribution[1])) {
+                            var row = rows.get(targetDistribution[1]);
+                            row[2] += targetDistribution[2];
+                            if (row[3] < 0) {
+                                row[3] = targetDistribution[3];
+                            } else if (targetDistribution[3] >= 0) {
+                                row[3] = Math.min(targetDistribution[3], row[3]);  
+                            }       
+                            row[4] = Math.max(targetDistribution[4], row[4]); 
+                            row[6] += targetDistribution[6];       
+                            row[7] += targetDistribution[7];       
+                            row[8] += targetDistribution[8];       
+                            row[9] += targetDistribution[9];                          
+                        } else {
+                            rows.set(targetDistribution[1], targetDistribution.slice(0));
+                        }
+                    }
+                }
+            }
+            rows.forEach(function(value,key,map) {
+                dist.distribution.push(value);
+            });
+            dist.contributedDamage = Math.max(dist.contributedDamage, 0);
+            dist.totalDamage = Math.max(dist.totalDamage, 0);
             return dist;
+        }
+    },
+});
+
+Vue.component('dmgtaken-component', {
+    props: ['player', 'playerindex',
+        'phaseindex', 'buffmap', 'skillmap', 'sortdata'
+    ],
+    computed: {
+        dmgtaken: function () {
+            return this.player.details.dmgDistributionsTaken[this.phaseindex];
         }
     },
 });
@@ -1223,6 +1278,10 @@ Vue.component('player-stats-component', {
         return {
             sortdata: {
                 dmgdist: {
+                    order: "desc",
+                    index: 2
+                },
+                dmgtaken: {                  
                     order: "desc",
                     index: 2
                 }

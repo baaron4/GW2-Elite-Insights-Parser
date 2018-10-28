@@ -712,7 +712,7 @@ namespace LuckParser.Controllers
                     }
                 }
 
-                double[] skillData = { 0, entry.Key, 0, 0, 0, casts,
+                double[] skillData = { 0, entry.Key, 0, -1, 0, casts,
                     0, 0, 0, 0, timeswasted / 1000.0, -timessaved / 1000.0 };
                 list.Add(skillData);
             }
@@ -725,7 +725,7 @@ namespace LuckParser.Controllers
             DmgDistributionDto dto = new DmgDistributionDto();
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<CastLog> casting = p.GetCastLogs(_log, phase.Start, phase.End);
-            List<DamageLog> damageLogs = p.GetJustPlayerDamageLogs(null, _log, phase.Start, phase.End);
+            List<DamageLog> damageLogs = p.GetJustPlayerDamageLogs(target, _log, phase.Start, phase.End);
             dto.totalDamage = dps.Damage;
             dto.contributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
             dto.distribution = BuildDMGDistBodyData(casting, damageLogs, dto.contributedDamage, usedSkills, usedBoons);
@@ -800,87 +800,52 @@ namespace LuckParser.Controllers
             };
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<DamageLog> damageLogs = p.GetDamageTakenLogs(_log, phase.Start, phase.End);
+            Dictionary<long, List<DamageLog>> damageLogsBySkill = damageLogs.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             SkillData skillList = _log.SkillData;
             dto.contributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.Damage) : 0;
-
-            HashSet<long> usedIDs = new HashSet<long>();
-            List<Boon> condiRetal = new List<Boon>(_statistics.PresentConditions)
+            Dictionary<long, Boon> conditionsById = _statistics.PresentConditions.ToDictionary(x => x.ID);
+            foreach (var entry in damageLogsBySkill)
             {
-                Boon.BoonsByIds[873]
-            };
-            foreach (Boon condi in condiRetal)
-            {
-                long condiID = condi.ID;
                 int totaldamage = 0;
                 int mindamage = 0;
                 int hits = 0;
                 int maxdamage = 0;
-                usedIDs.Add(condiID);
-                foreach (DamageLog dl in damageLogs.Where(x => x.SkillId == condiID))
+                int crit = 0;
+                int flank = 0;
+                int glance = 0;
+
+                foreach (DamageLog dl in entry.Value)
                 {
                     int curdmg = dl.Damage;
                     totaldamage += curdmg;
                     if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
                     if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
-                    hits++;
-
+                    if (curdmg >= 0) { hits++; };
+                    ParseEnum.Result result = dl.Result;
+                    if (result == ParseEnum.Result.Crit) { crit++; } else if (result == ParseEnum.Result.Glance) { glance++; }
+                    if (dl.IsFlanking == 1) { flank++; }
                 }
-                int avgdamage = (int)(totaldamage / (double)hits);
-                if (totaldamage > 0)
+
+                bool isCondi = conditionsById.ContainsKey(entry.Key) || entry.Key == 873;
+                if (isCondi)
                 {
-                    double[] row = new double[13] {
-                        1, // isCondi
-                        condi.ID,
-                        Math.Round(100 * (double)totaldamage / dto.contributedDamage, 2),
-                        totaldamage,
-                        mindamage, maxdamage,
-                        hits, hits,
-                        0, 0, 0, 0, 0 //crit, flank, glance, timeswasted, timessaved
-                    };
-                    dto.distribution.Add(row);
+                    Boon condi = entry.Key == 873 ? Boon.BoonsByIds[873] : conditionsById[entry.Key];
                     if (!usedBoons.ContainsKey(condi.ID)) usedBoons.Add(condi.ID, condi);
                 }
-            }
-
-            foreach (int id in damageLogs.Where(x => !usedIDs.Contains(x.SkillId)).Select(x => (int)x.SkillId).Distinct())
-            {//foreach casted skill
-                SkillItem skill = skillList.Get(id);
-
-                if (skill != null)
+                else
                 {
-                    if (!usedSkills.ContainsKey(id)) usedSkills.Add(id, skill);
-
-                    int totaldamage = 0;
-                    int mindamage = 0;
-                    int hits = 0;
-                    int maxdamage = 0;
-                    int crit = 0;
-                    int flank = 0;
-                    int glance = 0;
-                    foreach (DamageLog dl in damageLogs.Where(x => x.SkillId == id))
-                    {
-                        int curdmg = dl.Damage;
-                        totaldamage += curdmg;
-                        if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
-                        if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
-                        if (curdmg >= 0) { hits++; };
-                        ParseEnum.Result result = dl.Result;
-                        if (result == ParseEnum.Result.Crit) { crit++; } else if (result == ParseEnum.Result.Glance) { glance++; }
-                        if (dl.IsFlanking == 1) { flank++; }
-                    }
-
-                    double[] row = new double[13] {
-                        0, // isCondi
-                        skill.ID,
-                        Math.Round(100 * (double)totaldamage / dto.contributedDamage, 2),
+                    if (!usedSkills.ContainsKey(entry.Key)) usedSkills.Add(entry.Key, skillList.Get(entry.Key));
+                }
+                double[] row = new double[12] {
+                        isCondi ? 1 : 0, // isCondi
+                        entry.Key,
                         totaldamage,
                         mindamage, maxdamage,
-                        hits, hits,
+                        0, hits,
                         crit, flank, glance,
                         0, 0
                     };
-                    dto.distribution.Add(row);
-                }
+                dto.distribution.Add(row);
             }
 
             return dto;

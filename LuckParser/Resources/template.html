@@ -537,7 +537,7 @@
                                     </ul>
                                     <dmgdist-component inline-template v-show="mode === 0" :player="player"
                                         :playerindex="playerindex" :phaseindex="phaseindex" :buffmap="buffmap"
-                                        :skillmap="skillmap" :targets="targets" :sortdata="sortdata.dmgdist">
+                                        :skillmap="skillmap" :targets="targets" :phase="phase" :sortdata="sortdata.dmgdist">
                                         <div>
                                             <div v-if="player.minions.length > 0">
                                                 <ul class="nav nav-tabs">
@@ -566,6 +566,15 @@
                                                 :sortdata="sortdata"></damagedist-table-component>
                                         </div>
                                     </dmgdist-component>
+                                    <dmgtaken-component inline-template v-show="mode ===1" :player="player" :playerindex="playerindex" 
+                                        :phaseindex="phaseindex" :buffmap="buffmap"
+                                        :skillmap="skillmap":sortdata="sortdata.dmgtaken">
+                                        <damagedist-table-component v-if="player.active" :dmgdist="dmgtaken" 
+                                                    :tableid="'dmgtaken-' + playerindex" :buffmap="buffmap" :skillmap="skillmap" 
+                                                    :actor="null" :isminion="false" :istarget="false" 
+                                                    :sortdata="sortdata" >
+                                        </damagedist-table-component>
+                                    </dmgtaken-component>
                                 </div>
                             </player-tab-component>
                         </div>
