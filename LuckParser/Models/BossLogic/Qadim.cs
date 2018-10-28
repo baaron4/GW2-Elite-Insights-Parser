@@ -35,7 +35,6 @@ namespace LuckParser.Models
             new Mechanic(53051, "Teleport", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle',color:'rgb(150,0,200)'", "H.KB","Teleport Knockback (Hydra)", "Hydra TP KB",0),
             new Mechanic(52310, "Big Hit", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle',color:'rgb(255,0,0)'", "Mace","Big Hit (Mace Impact)", "Mace Impact",0),
             new Mechanic(52955, "Lava Pool Drop", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'square-open',color:'rgb(255,0,0)'", "LvPl","Lava Pool drop (on long platform spokes)", "Lava Pool Drop",0),
-            //new Mechanic(52791, "Lava Pool Drop2", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'square-open',color:'rgb(0,0,0)'", "LvPl2","Lava Pool drop2 (on long platform spokes)", "Lava Pool Drop2",0),
             new Mechanic(51958, "Slash (Wyvern)", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'triangle-down-open',color:'rgb(255,200,0)'", "Slsh","Wyvern Slash (Double attack: knock into pin down)", "KB/Pin down",0),
             new Mechanic(52705, "Tail Swipe", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'diamond-open',color:'rgb(255,200,0)'", "W.Pza","Wyvern Tail Swipe (Pizza attack)", "Tail Swipe",0),
             new Mechanic(52726, "Fire Breath", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'triangle-right-open',color:'rgb(255,100,0)'", "W.Brth","Fire Breath (Wyvern)", "Fire Breath",0),
@@ -171,6 +170,7 @@ namespace LuckParser.Models
                 FireImp,
                 PyreGuardian,
                 ReaperofFlesh,
+                DestroyerTroll,
                 IceElemental,
                 Zommoros
             };
@@ -188,6 +188,7 @@ namespace LuckParser.Models
                 case (ushort)FireElemental:
                 case (ushort)FireImp:
                 case (ushort)PyreGuardian:
+                case (ushort)DestroyerTroll:
                 case (ushort)ReaperofFlesh:
                 case (ushort)IceElemental:
                 case (ushort)Zommoros:
