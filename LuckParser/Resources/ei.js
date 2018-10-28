@@ -1075,14 +1075,20 @@ Vue.component("damagedist-table-component", {
                     <td>{{ round3(100*row.data[2]/dmgdist.contributedDamage) }}%</td>
                     <td>{{ row.data[2] }}</td>
                     <td>{{ row.data[3] }}</td>
-                    <td>{{ round3(row.data[2]/row.data[6]) }}</td>
+                    <td>{{ Math.round(row.data[2]/row.data[6]) }}</td>
                     <td>{{ row.data[4] }}</td>
                     <td>{{ !row.skill.condi ? row.data[5] : ''}}</td>
                     <td>{{ row.data[6] }}</td>
                     <td>{{(!row.skill.condi && row.data[6] && row.data[5]) ? round3(row.data[6]/row.data[5]) : ''}}</td>
-                    <td>{{(!row.skill.condi && row.data[6]) ? round3(row.data[7]*100/row.data[6]) + '%' : ''}}</td>
-                    <td>{{(!row.skill.condi && row.data[6]) ? round3(row.data[8]*100/row.data[6]) + '%' : ''}}</td>
-                    <td>{{(!row.skill.condi && row.data[6]) ? round3(row.data[9]*100/row.data[6]) + '%' : ''}}</td>
+                    <td :data-original-title="(!row.skill.condi && row.data[6]) ? row.data[7] +' out of ' + row.data[6] + ' hits': false">
+                        {{(!row.skill.condi && row.data[6]) ? round3(row.data[7]*100/row.data[6]) + '%' : ''}}
+                    </td>
+                    <td :data-original-title="(!row.skill.condi && row.data[6]) ? row.data[8] +' out of ' + row.data[6] + ' hits': false">
+                        {{(!row.skill.condi && row.data[6]) ? round3(row.data[8]*100/row.data[6]) + '%' : ''}}
+                    </td>
+                    <td :data-original-title="(!row.skill.condi && row.data[6]) ? row.data[9] +' out of ' + row.data[6] + ' hits': false">
+                        {{(!row.skill.condi && row.data[6]) ? round3(row.data[9]*100/row.data[6]) + '%' : ''}}
+                    </td>
                     <td>{{ row.data[10] ? row.data[10] + 's' : ''}}</td>
                     <td>{{ row.data[11] ? row.data[11] + 's' : ''}}</td>
                 </tr>
