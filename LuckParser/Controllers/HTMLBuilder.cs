@@ -212,7 +212,7 @@ namespace LuckParser.Controllers
 
                     sw.Write("],");
                     sw.Write(" mode: 'markers',");
-                    if (!(mech.SkillId == -2 || mech.SkillId == -3))
+                    if (!(mech.SkillId == SkillItem.DeathId || mech.SkillId == SkillItem.DownId))
                     {
                         sw.Write("visible:'legendonly',");
                     }
@@ -366,7 +366,7 @@ namespace LuckParser.Controllers
         private void CreateCompTable(StreamWriter sw)
         {
             int groupCount = 0;
-            int firstGroup = 11;
+            int firstGroup = 50;
             foreach (Player play in _log.PlayerList)
             {
                 int playerGroup = play.Group;
@@ -1797,7 +1797,7 @@ namespace LuckParser.Controllers
                                         if (_statistics.PresentBoons.Count > 0)
                                         {
                                             Dictionary<long, BoonsGraphModel> boonGraphData = p.GetBoonGraphs(_log);
-                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName != "Number of Conditions"))
+                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
                                             {
                                                 sw.Write("{");
                                                 {
@@ -2055,52 +2055,18 @@ namespace LuckParser.Controllers
                 //int autosCount = 0;
                 foreach (CastLog cl in casting)
                 {
-                    GW2APISkill apiskill = _log.SkillData.Get(cl.SkillId)?.ApiSkill;
+                    SkillItem skill = _log.SkillData.Get(cl.SkillId);
+                    GW2APISkill apiskill = skill?.ApiSkill;
 
-                    if (apiskill != null)
+                    // we must split the autos if we want to show interrupted skills
+                    if (apiskill != null && apiskill.slot == "Weapon_1" && !_settings.ShowAutos)
                     {
-                        // we must split the autos if we want to show interrupted skills
-                        if (apiskill.slot == "Weapon_1" && !_settings.ShowAutos)
-                        {
-                            continue;
-                        }
-                        string borderSize = simpleRotSize == 30 ? "3px" : "1px";
-                        string style = cl.EndActivation == ParseEnum.Activation.CancelCancel ? "style=\"outline: "+ borderSize + " solid red\"" : "";
-                        int imageSize = simpleRotSize - (style.Length > 0 ? (simpleRotSize == 30 ? 3 : 1) : 0);
-                        sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img " + style + "src=\"" + apiskill.icon + "\" data-toggle=\"tooltip\" title= \"" + apiskill.name + " Time: " + cl.Time + "ms " + "Dur: " + cl.ActualDuration + "ms \" height=\"" + imageSize + "\" width=\"" + imageSize + "\"></div></span>");
+                        continue;
                     }
-                    else
-                    {
-                        if (cl.SkillId == SkillItem.WeaponSwapId)
-                        {//wepswap
-                            string skillName = "Weapon Swap";
-                            string skillLink = HTMLHelper.GetLink("Swap");
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.Time + "ms " + "Dur: " + cl.ActualDuration + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
-                            sw.Write("<br>");
-                        }
-                        else if (cl.SkillId == SkillItem.ResurrectId)
-                        {
-                            string skillName = "Resurrect";
-                            string skillLink = HTMLHelper.GetLink("Downs");
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.Time + "ms " + "Dur: " + cl.ActualDuration + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
-                        }
-                        else if (cl.SkillId == SkillItem.BandageId)
-                        {
-                            string skillName = "Bandage";
-                            string skillLink = HTMLHelper.GetLink("Bandage");
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.Time + "ms " + "Dur: " + cl.ActualDuration + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
-
-                        }
-                        else if (cl.SkillId == SkillItem.DodgeId)
-                        {
-                            string skillName = "Dodge";
-                            string skillLink = HTMLHelper.GetLink("Dodge");
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.Time + "ms " + "Dur: " + cl.ActualDuration + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
-
-                        }
-
-                    }
-
+                    string borderSize = simpleRotSize == 30 ? "3px" : "1px";
+                    string style = cl.EndActivation == ParseEnum.Activation.CancelCancel ? "style=\"outline: " + borderSize + " solid red\"" : "";
+                    int imageSize = simpleRotSize - (style.Length > 0 ? (simpleRotSize == 30 ? 3 : 1) : 0);
+                    sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img " + style + "src=\"" + skill.Icon + "\" data-toggle=\"tooltip\" title= \"" + skill.Name + " Time: " + cl.Time + "ms " + "Dur: " + cl.ActualDuration + "ms \" height=\"" + imageSize + "\" width=\"" + imageSize + "\"></div></span>");
                 }
             }
 
@@ -2251,7 +2217,7 @@ namespace LuckParser.Controllers
                         {
                             name = ag.Name.Replace("\0", "").Replace("\'", "\\'");
                         }
-                        string skillname = _log.SkillData.GetName(dl.SkillId).Replace("\'", "\\'");
+                        string skillname = _log.SkillData.Get(dl.SkillId).Name.Replace("\'", "\\'");
                         sw.Write("'" + name + "<br>" + skillname + " hit you for " + dl.Damage + "',");
                     }
                 }
@@ -2263,7 +2229,7 @@ namespace LuckParser.Controllers
                     {
                         name = ag.Name.Replace("\0", "").Replace("\'", "\\'");
                     }
-                    string skillname = _log.SkillData.GetName(damageToKill[d].SkillId).Replace("\'", "\\'");
+                    string skillname = _log.SkillData.Get(damageToKill[d].SkillId).Name.Replace("\'", "\\'");
                     sw.Write("'" + name + "<br>" +
                            "hit you with <b>" + skillname + "</b> for " + damageToKill[d].Damage + "'");
 
@@ -2331,7 +2297,7 @@ namespace LuckParser.Controllers
                             }
                         }
                     }
-                    HTMLHelper.WriteDamageDistTableSkill(sw, skill, _log.SkillData, listToUse, finalTotalDamage, casts, timeswasted / 1000.0, -timessaved / 1000.0);
+                    HTMLHelper.WriteDamageDistTableSkill(sw, skill, listToUse, finalTotalDamage, casts, timeswasted / 1000.0, -timessaved / 1000.0);
                 }
             }
             foreach (int id in casting.Where(x => !usedIDs.Contains(x.SkillId)).Select(x => (int)x.SkillId).Distinct())
@@ -2357,7 +2323,7 @@ namespace LuckParser.Controllers
                             }
                         }
                     }
-                    HTMLHelper.WriteDamageDistTableSkill(sw, skill, _log.SkillData, new List<DamageLog>(), finalTotalDamage, casts, timeswasted / 1000.0, -timessaved / 1000.0);
+                    HTMLHelper.WriteDamageDistTableSkill(sw, skill, new List<DamageLog>(), finalTotalDamage, casts, timeswasted / 1000.0, -timessaved / 1000.0);
                 }
             }
 
@@ -2643,40 +2609,21 @@ namespace LuckParser.Controllers
                             }
                             int avgdamage = (int)(totaldamage / (double)hits);
 
-                            if (skill.ApiSkill != null)
+                            sw.Write("<tr>");
                             {
-                                sw.Write("<tr>");
-                                {
-                                    sw.Write("<td align=\"left\"><img src=\"" + skill.ApiSkill.icon + "\" alt=\"" + skill.Name + "\" title=\"" + skill.ID + "\" height=\"18\" width=\"18\">" + skill.Name + "</td>");
-                                    sw.Write("<td>" + totaldamage + "</td>");
-                                    sw.Write("<td>" + Math.Round(100 * (double)totaldamage / finalTotalDamage,2) + "%</td>");
-                                    sw.Write("<td>" + hits + "</td>");
-                                    sw.Write("<td>" + mindamage + "</td>");
-                                    sw.Write("<td>" + avgdamage + "</td>");
-                                    sw.Write("<td>" + maxdamage + "</td>");
-                                    sw.Write("<td>" + Math.Round(100 * (double)crit / hits,2) + "%</td>");
-                                    sw.Write("<td>" + Math.Round(100 * (double)flank / hits,2) + "%</td>");
-                                    sw.Write("<td>" + Math.Round(100 * (double)glance / hits,2) + "%</td>");
-                                }
-                                sw.Write("</tr>");
+                                sw.Write("<td align=\"left\"><img src=\"" + skill.Icon + "\" alt=\"" + skill.Name + "\" title=\"" + skill.ID + "\" height=\"18\" width=\"18\">" + skill.Name + "</td>");
+                                sw.Write("<td>" + totaldamage + "</td>");
+                                sw.Write("<td>" + Math.Round(100 * (double)totaldamage / finalTotalDamage, 2) + "%</td>");
+                                sw.Write("<td>" + hits + "</td>");
+                                sw.Write("<td>" + mindamage + "</td>");
+                                sw.Write("<td>" + avgdamage + "</td>");
+                                sw.Write("<td>" + maxdamage + "</td>");
+                                sw.Write("<td>" + Math.Round(100 * (double)crit / hits, 2) + "%</td>");
+                                sw.Write("<td>" + Math.Round(100 * (double)flank / hits, 2) + "%</td>");
+                                sw.Write("<td>" + Math.Round(100 * (double)glance / hits, 2) + "%</td>");
                             }
-                            else
-                            {
-                                sw.Write("<tr>");
-                                {
-                                    sw.Write("<td align=\"left\">" + skill.Name + "</td>");
-                                    sw.Write("<td>" + totaldamage + "</td>");
-                                    sw.Write("<td>" + Math.Round(100 * (double)totaldamage / finalTotalDamage,2) + "%</td>");
-                                    sw.Write("<td>" + hits + "</td>");
-                                    sw.Write("<td>" + mindamage + "</td>");
-                                    sw.Write("<td>" + avgdamage + "</td>");
-                                    sw.Write("<td>" + maxdamage + "</td>");
-                                    sw.Write("<td>" + Math.Round(100 * (double)crit / hits,2) + "%</td>");
-                                    sw.Write("<td>" + Math.Round(100 * (double)flank / hits,2) + "%</td>");
-                                    sw.Write("<td>" + Math.Round(100 * (double)glance / hits,2) + "%</td>");
-                                }
-                                sw.Write("</tr>");
-                            }
+                            sw.Write("</tr>");
+
                         }
                     }
                 }
@@ -3209,7 +3156,7 @@ namespace LuckParser.Controllers
                             }
                             //============================================
                             Dictionary<long, BoonsGraphModel> boonGraphData = _log.Boss.GetBoonGraphs(_log);
-                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName != "Number of Boons"))
+                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
                             {
                                 sw.Write("{");
                                 {

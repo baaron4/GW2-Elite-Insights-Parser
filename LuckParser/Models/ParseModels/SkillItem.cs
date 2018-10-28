@@ -1,59 +1,102 @@
 ﻿using LuckParser.Controllers;
 using System;
+using System.Collections.Generic;
 
 namespace LuckParser.Models.ParseModels
 {
     public class SkillItem
     {
-        public const int ResurrectId = 1066;
-        public const int BandageId = 1175;
-        public const int DodgeId = 65001;
-        public const int WeaponSwapId = -2;
+        public const long DodgeId = 65001;
+        public const long ResurrectId = 1066;
+        public const long BandageId = 1175;
+        public const long WeaponSwapId = -2;
+        public const long DeathId = -4;
+        public const long DownId = -3;
+
+        readonly static Dictionary<long, string> _overrideNames = new Dictionary<long, string>()
+        {
+            {ResurrectId, "Resurrect"},
+            {BandageId, "Bandage" },
+            {DodgeId, "Dodge" },
+            {WeaponSwapId, "Weapon Swap" },
+            // Gorseval
+            {31834,"Ghastly Rampage" },
+            {31759,"Protective Shadow" },
+            {31466,"Ghastly Rampage (Begin)" },
+            // Sabetha
+            {31372, "Shadow Step" },
+            // Slothasor
+            {34547, "Tantrum Start" },
+            {34515, "Sleeping" },
+            {34340, "Fear Me!" },
+            // Matthias
+            { 34468, "Shield (Human)"},
+            { 34427, "Abomination Transformation"},
+            { 34510, "Shield (Abomination)"},
+            // Generic
+            {-5, "Phase out" },
+            // Deimos
+            {-6, "Roleplay" },
+            // Dhuum
+            {47396, "Major Soul Split" },
+            // Keep Construct
+            {35048, "Magic Blast Charge" }
+        };
+
+        readonly static Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
+        {
+            {ResurrectId, "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png"},
+            {BandageId, "https://wiki.guildwars2.com/images/0/0c/Bandage.png" },
+            {DodgeId, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
+            {WeaponSwapId, "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png" },
+            {49112, "https://wiki.guildwars2.com/images/e/e7/Throw_Magnetic_Bomb.png" },
+        };
+
+        private const string _defaultIcon = "https://render.guildwars2.com/file/1D55D34FB4EE20B1962E315245E40CA5E1042D0E/62248.png";
 
         // Fields
-        public readonly int ID;
-        private String _name;
-        public String Name
-        {
-            get
-            {
-                return ID == ResurrectId ? "Resurrect" : _name;
-            }
-        }
+        public readonly long ID;
+        public string Name { get; private set; }
+        public string Icon { get; private set; }
         public GW2APISkill ApiSkill { get; private set; }
         public int CC { get; private set; }
 
         // Constructor
-        public SkillItem(int ID, String name)
+        public SkillItem(long ID, String name)
         {
-            name = name.Replace("\0", "");
             this.ID = ID;
-            _name = name;
+            Name = name.Replace("\0", "");
+            CompleteItem();
+        }
+
+        public SkillItem(long ID, String name, GW2APIController apiController)
+        {
+            this.ID = ID;
+            Name = name.Replace("\0", "");
+            ApiSkill = apiController.GetSkill(ID);
+            if (ApiSkill != null)
+            {
+                Name = ApiSkill.name;
+            }
+            CompleteItem();
+        }
+
+        private void CompleteItem()
+        {
+            if (_overrideNames.TryGetValue(ID,out string name))
+            {
+                Name = name;
+            }
+            if (_overrideIcons.TryGetValue(ID, out string icon))
+            {
+                Icon = icon;
+            } else
+            {
+                Icon = ApiSkill != null ? ApiSkill.icon : _defaultIcon;
+            }
         }
 
         // Public Methods
-        public String[] ToStringArray()
-        {
-            String[] array = new String[2];
-            array[0] = ID.ToString();
-            array[1] = _name;
-            return array;
-        }
-        //setter
-        public void SetGW2APISkill(GW2APIController apiController)
-        {
-            if (ApiSkill == null)
-            {
-                GW2APISkill skillAPI = apiController.GetSkill(ID);
-
-                if (skillAPI != null) {
-                    ApiSkill = skillAPI;
-                    _name = skillAPI.name;
-                }
-                
-            }
-            
-        }
 
         public void SetCCAPI()//this is 100% off the GW2 API is not a reliable source of finding skill CC
         {
