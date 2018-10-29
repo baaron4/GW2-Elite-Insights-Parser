@@ -1183,11 +1183,7 @@ namespace LuckParser.Controllers
         /// <param name="sw">Stream writer</param>
         public void CreateHTML(StreamWriter sw, string path)
         {
-#if DEBUG
             string html = Properties.Resources.template_html;
-#else
-            string html = Uglify.Html(Properties.Resources.template_html).code;
-#endif
 
             html = ReplaceVariables(html);
 
