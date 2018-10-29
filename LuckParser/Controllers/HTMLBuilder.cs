@@ -1771,11 +1771,11 @@ namespace LuckParser.Controllers
                                 foreach (Tuple<Boon, long, int> buff in refreshed)
                                     if (buff.Item1.ID == 46587 || buff.Item1.ID == 46668) // Malnourished and Diminshed
                                     {
-                                        sw.Write("<li> suffered " + buff.Item1.Name + "<img src=\"" + buff.Item1.Link + "\" alt=\"" + buff.Item1.Name + "\" height=\"18\" width=\"18\" > at " + Math.Round(buff.Item2 / 1000.0, 3) + "s</li>");
+                                        sw.Write("<li> suffered " + buff.Item1.Name + "<img src=\"" + buff.Item1.Link + "\" alt=\"" + buff.Item1.Name + "\" height=\"18\" width=\"18\" > at " + Math.Round((buff.Item2 - phase.Start) / 1000.0, 3) + "s</li>");
                                     }
                                     else
                                     {
-                                        sw.Write("<li> consumed " + buff.Item1.Name + "<img src=\"" + buff.Item1.Link + "\" alt=\"" + buff.Item1.Name + "\" height=\"18\" width=\"18\" > at " + Math.Round(buff.Item2 / 1000.0, 3) + "s, (" + (int)(buff.Item3 / 60000) + " min duration)</li>");
+                                        sw.Write("<li> consumed " + buff.Item1.Name + "<img src=\"" + buff.Item1.Link + "\" alt=\"" + buff.Item1.Name + "\" height=\"18\" width=\"18\" > at " + Math.Round((buff.Item2 - phase.Start) / 1000.0, 3) + "s, (" + (int)(buff.Item3 / 60000) + " min duration)</li>");
                                     }
                                 sw.Write("</ul>");
                                 sw.Write("</p>");

@@ -26,34 +26,6 @@ function createBossBoonTable($target, boons, data) {
 	lazyTable2($target, html, { 'order': [[3, 'desc']] });
 }
 
-function createDistTable($target, data, toBoss, player, minion) {
-	if (!$target.length) return;
-	var rows = [];
-	$.each(data.data, function (i, values) {
-		var skill = findSkill(values[0], values[1]);
-		rows.push({ skill: skill, data: values });
-	});
-	var html = tmplDmgDistTable.render({
-		rows: rows,
-		contribution: data.contribution,
-		totalDamage: data.totalDamage,
-		player: player,
-		minion: minion,
-		toBoss: toBoss
-	});
-	lazyTable2($target, html, { 'order': [[2, 'desc']] });
-}
-
-function createDmgTakenTable($target, data) {
-	if (!$target.length) return;
-	var rows = [];
-	$.each(data.data, function (i, values) {
-		var skill = findSkill(values[0], values[1]);
-		rows.push({ skill: skill, data: values });
-	});
-	var html = tmplDmgTakenTable.render({ rows: rows, contribution: data.contribution, totalDamage: data.totalDamage });
-	lazyTable2($target, html, { 'order': [[2, 'desc']] });
-}
 
 function findSkill(isBoon, id) {
 	var skill;
@@ -314,39 +286,6 @@ function createPlayerGraph($element, player, phaseIndex, playerIndex) {
 	lazy($element, callback);
 }
 
-function createPlayerFood($element, player, phaseIndex, playerIndex) {
-	var foodData = player.details.food[phaseIndex];
-	var updates = [];
-	var first = true;
-	var initHtml = '';
-	$.each(foodData, function (i, item) {
-		if (item.time == 0) {
-			if (first) {
-				initHtml += 'Started with ';
-				first = false;
-			} else {
-				initHtml += ' and ';
-			}
-			initHtml += item.name + ' <img src="' + item.icon + '" class="icon">';
-		} else {
-			var $li = $('<li></li>');
-			var text = item.dimished ? 'suffered ' : 'consumed ';
-			text += item.name + ' <img src="' + item.icon + '" class="icon"> at ' + item.time + 's (' + item.duration + ' seconds)';
-			$li.html(text);
-			updates.push($li);
-		}
-	});
-
-	if (initHtml) {
-		$element.append($('<p></p>').html(initHtml));
-	}
-
-	if (updates.length) {
-		$element.append('<p>In-fight food updates:</p>');
-		$element.append($('<ul></ul>').append(updates));
-	}
-}
-
 function lazy($owner, callback) {
 	if ('IntersectionObserver' in window) {
 		let lazyTableObserver = new IntersectionObserver(function (entries, observer) {
@@ -493,7 +432,6 @@ function createGraphs(graphData) {
 
 		$.each(data.players, function (p, player) {
 			createPlayerGraph($('#pgraph_' + p + '_' + i), player, i, p);
-			createPlayerFood($('#pfood_' + p + '_' + i), player, i, p);
 		});
 		createPlayerGraph($('#boss_graph' + i), data.boss, i, -1);
 	}

@@ -918,7 +918,7 @@ namespace LuckParser.Controllers
             {
                 FoodDto dto = new FoodDto
                 {
-                    time = entry.Item2 / 1000.0,
+                    time = (entry.Item2 - phase.Start) / 1000.0,
                     duration = entry.Item3 / 1000.0,
                     id = entry.Item1.ID,
                     dimished = entry.Item1.ID == 46587 || entry.Item1.ID == 46668
