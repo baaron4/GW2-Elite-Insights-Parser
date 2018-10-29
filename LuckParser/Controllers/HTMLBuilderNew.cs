@@ -1202,7 +1202,9 @@ namespace LuckParser.Controllers
             html = html.Replace("'${graphDataJson}'", BuildGraphJson());
 
             html = html.Replace("<!--${combatReplay}-->", BuildCombatReplayContent());
-
+#if !DEBUG
+            html = Uglify.Html(html).Code;
+#endif
             sw.Write(html);
             return;       
         }

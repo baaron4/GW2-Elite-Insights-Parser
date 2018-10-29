@@ -895,7 +895,6 @@ Vue.component("dmgmodifier-stats-component", {
             var buffs = [];
             for (var i = 0; i < dmgModifier.length; i++) {
                 var modifier = dmgModifier[i];
-                var boonid = 'b' + modifier[0];
                 buffs.push(findSkill(true, modifier[0]))
             }
             return buffs;
@@ -1167,10 +1166,66 @@ Vue.component("food-component", {
             };
             for (var k = 0; k < this.food.length; k++) {
                 var foodData = this.food[k];
+                if (!foodData.name) {
+                    var skill = findSkill(true, foodData.id);
+                    foodData.name = skill.name;
+                    foodData.icon = skill.icon;
+                }
                 if (foodData.time === 0) {
                     res.start.push(foodData);
                 } else {
                     res.refreshed.push(foodData);
+                }
+            }
+            return res;
+        }
+    }
+});
+
+Vue.component("simplerotation-component", {
+    props: ["rotation"],
+    data: function () {
+        return {
+            autoattack: true,
+            small: false
+        };
+    },
+    methods: {
+        getSkill: function(id) {
+            return findSkill(false, id);
+        }
+    }
+});
+
+Vue.component("deathrecap-component", {
+    props: ["recaps", "playerindex", "phase"],
+    computed: {
+        data: function() {
+            var res = {
+                totalSeconds: { down: [], kill: [] },
+                totalDamage: {down: [], kill: []},
+                data: [],
+                layout: {}
+            };
+            for (var i = 0; i< this.recaps.length; i++ ) {
+                var recap = this.recaps[i];
+                if (recap.toDown !== null) {
+                    var totalSec = (recap.toDown[0][0] - recap.toDown[recap.toDown.length - 1][0])/1000;
+                    var totalDamage = 0;
+                    for (var j = 0; j < recap.toDown.length; j++) {
+                        totalDamage += recap.toDown[j][2];
+                    }
+                    res.totalSeconds.down[i] = totalSec;
+                    res.totalDamage.down[i] = totalDamage;
+                }
+                if (recap.toKill !== null) {
+                    var totalSec = (recap.toKill[0][0] - recap.toKill[recap.toKill.length - 1][0]) / 1000;
+                    var totalDamage = 0;
+                    for (var j = 0; j < recap.toKill.length; j++) {
+                        totalDamage += recap.toKill[j][2];
+                    }
+                    res.totalSeconds.kill[i] = totalSec;
+                    res.totalDamage.kill[i] = totalDamage;
                 }
             }
             return res;
@@ -1267,15 +1322,6 @@ window.onload = function () {
         var playerData = logData.players[i];
         playerData.active = false;
         playerData.icon = urls[playerData.profession];
-        for (var j = 0; j < playerData.details.food.length; j++) {
-            var food = playerData.details.food[j];
-            for (var k = 0; k < food.length; k++) {
-                var foodData = food[k];
-                var skill = findSkill(true, foodData.id);
-                foodData.name = skill.name;
-                foodData.icon = skill.icon;
-            }
-        }
     }
 
     var layout = createLayout();

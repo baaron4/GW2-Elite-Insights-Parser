@@ -141,8 +141,8 @@ th {
 }
 
 .rot-icon {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
 }
 
 .rot-icon.rot-cancelled {
@@ -150,16 +150,17 @@ th {
 }
 
 .rot-small .rot-icon {
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
 }
 
 .rot-small .rot-icon.rot-cancelled {
     border: 1px solid #ff0000;
 }
 
-.rot-noaa .rot-aa {
-    display: none;
+.rot-swap:after {
+    content: '\A';
+    white-space: pre;
 }
 
 .player-cell.active {
