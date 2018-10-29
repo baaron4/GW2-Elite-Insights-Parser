@@ -108,8 +108,22 @@ var urls = {
     Staff: "https://wiki.guildwars2.com/images/5/5f/Crimson_Antique_Spire.png"
 };
 
+function findSkill(isBoon, id) {
+    var skill;
+    if (isBoon) {
+        skill = logData.boonMap['b' + id] || {};
+    } else {
+        skill = logData.skillMap["s" + id] || {};
+    }
+    skill.condi = isBoon;
+    return skill;
+}
+
 var initTable = function (id, cell, order, orderCallBack) {
     var table = $(id);
+    if (!table.length) {
+        return;
+    }
     if (lazyTableUpdater) {
         var lazyTable = document.querySelector(id);
         var lazyTableObserver = new IntersectionObserver(function (entries, observer) {
@@ -168,19 +182,6 @@ var DataTypes = {
     playerTab: 10,
     targetTab: 11,
 };
-
-for (var i = 0; i < logData.phases.length; i++) {
-    logData.phases[i].active = i === 0;
-}
-for (var i = 0; i < logData.targets.length; i++) {
-    var targetData = logData.targets[i];
-    targetData.active = true;
-}
-for (var i = 0; i < logData.players.length; i++) {
-    var playerData = logData.players[i];
-    playerData.active = false;
-    playerData.icon = urls[playerData.profession];
-}
 
 var Layout = function (desc) {
     this.desc = desc;
@@ -303,22 +304,7 @@ Vue.component("player-component", {
 Vue.component("general-layout-component", {
     name: "general-layout-component",
     props: ["layout", "phase"],
-    template: `
-        <div>
-            <h2 v-if="layout.desc" :class="{'text-center': !!phase}">{{ layoutName }}</h2>
-            <ul class="nav nav-tabs">
-                <li v-for="tab in layout.tabs">
-                    <a class="nav-link" :class="{active: tab.active}" @click="select(tab, layout.tabs)"> {{ tab.name }} </a>
-                </li>
-            </ul>
-            <div v-for="tab in layout.tabs" v-show="tab.active">
-                <div v-if="tab.desc">{{ tab.desc }}</div>
-                <div v-if="tab.layout">
-                    <general-layout-component :layout="tab.layout"></general-layout-component>
-                </div>
-            </div>
-        </div>
-    `,
+    template: "#general-layout-template",
     methods: {
         select: function (tab, tabs) {
             for (var i = 0; i < tabs.length; i++) {
@@ -332,9 +318,9 @@ Vue.component("general-layout-component", {
             if (!this.phase) {
                 return this.layout.desc;
             }
-            return this.layout.desc ?
-                this.phase.name + " " + this.layout.desc :
-                this.phase.name;
+            return this.layout.desc
+                ? this.phase.name + " " + this.layout.desc
+                : this.phase.name;
         }
     }
 });
@@ -670,49 +656,7 @@ Vue.component("mechanics-stats-component", {
 
 Vue.component("buff-table-component", {
     props: ["buffs", "playerdata", "generation", "condition", "sums", "id"],
-    template: `
-    <div v-if="buffs.length > 0">
-        <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="id">
-            <thead>
-                <tr>
-                    <th>Sub</th>
-                    <th></th>
-                    <th>Name</th>
-                    <th v-for="buff in buffs" :data-original-title="buff.name">
-                        <img :src="buff.icon" :alt="buff.name" class="icon icon-hover">
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="row in playerdata">
-                    <td>{{ row.player.group }}</td>
-                    <td :data-original-title="row.player.profession"><img :src="row.player.icon" :alt="row.player.profession"
-                            class="icon">
-                        <span style="display:none">
-                            {{ row.player.profession }}
-                        </span>
-                    </td>
-                    <td class="text-left" :data-original-title="getAvgTooltip(row.data.avg)">
-                        {{ row.player.name }}
-                    </td>
-                    <td v-for=" (buff, index) in buffs" :data-original-title="getCellTooltip(buff, row.data.data[index])">
-                        {{ getCellValue(buff, row.data.data[index]) }}
-                    </td>
-                </tr>
-            </tbody>
-            <tfoot v-show="sums.length > 0">
-                <tr v-for="sum in sums">
-                    <td></td>
-                    <td></td>
-                    <td :data-original-title="getAvgTooltip(sum.avg)">{{sum.name}}</td>
-                    <td v-for=" (buff, index) in buffs" :data-original-title="getCellTooltip(buff, sum.data[index])">
-                        {{ getCellValue(buff, sum.data[index]) }}
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
-    `,
+    template: "#bufftable-template",
     methods: {
         getAvgTooltip: function (avg) {
             if (avg) {
@@ -746,15 +690,15 @@ Vue.component("buff-table-component", {
         }
     },
     mounted() {
-        initTable('#' + this.id, 0, "asc");
+        initTable("#" + this.id, 0, "asc");
     },
     updated() {
-        updateTable('#' + this.id);
-    },
+        updateTable("#" + this.id);
+    }
 });
 
 Vue.component("personal-buff-table-component", {
-    props: ['phase', 'persbuffs', 'players', 'buffmap'],
+    props: ['phase', 'persbuffs', 'players'],
     data: function () {
         return {
             specs: specs,
@@ -812,8 +756,7 @@ Vue.component("personal-buff-table-component", {
                 var spec = this.orderedSpecs[i];
                 var data = [];
                 for (var j = 0; j < this.persbuffs[spec.name].length; j++) {
-                    var boonid = 'b' + this.persbuffs[spec.name][j];
-                    data.push(this.buffmap[boonid]);
+                    data.push(findSkill(true, this.persbuffs[spec.name][j]));
                 }
                 res.push(data);
             }
@@ -823,7 +766,7 @@ Vue.component("personal-buff-table-component", {
 });
 
 Vue.component("buff-stats-component", {
-    props: ['datatypes', 'datatype', 'phase', 'players', 'presentboons', 'presentoffs', 'presentdefs', 'buffmap'],
+    props: ['datatypes', 'datatype', 'phase', 'players', 'presentboons', 'presentoffs', 'presentdefs'],
     data: function () {
         return {
             mode: 0,
@@ -833,24 +776,21 @@ Vue.component("buff-stats-component", {
         boons: function () {
             var data = [];
             for (var i = 0; i < this.presentboons.length; i++) {
-                var boonid = "b" + this.presentboons[i];
-                data[i] = this.buffmap[boonid];
+                data[i] = findSkill(true, this.presentboons[i]);
             }
             return data;
         },
         offs: function () {
             var data = [];
             for (var i = 0; i < this.presentoffs.length; i++) {
-                var boonid = "b" + this.presentoffs[i];
-                data[i] = this.buffmap[boonid];
+                data[i] = findSkill(true, this.presentoffs[i]);
             }
             return data;
         },
         defs: function () {
             var data = [];
             for (var i = 0; i < this.presentdefs.length; i++) {
-                var boonid = "b" + this.presentdefs[i];
-                data[i] = this.buffmap[boonid];
+                data[i] = findSkill(true, this.presentdefs[i]);
             }
             return data;
         },
@@ -938,7 +878,7 @@ Vue.component("buff-stats-component", {
 
 Vue.component("dmgmodifier-stats-component", {
     props: ['phases',
-        'phase', 'players', 'targets', 'buffmap'
+        'phase', 'players', 'targets'
     ],
     data: function () {
         return {
@@ -956,9 +896,7 @@ Vue.component("dmgmodifier-stats-component", {
             for (var i = 0; i < dmgModifier.length; i++) {
                 var modifier = dmgModifier[i];
                 var boonid = 'b' + modifier[0];
-                if (this.buffmap[boonid]) {
-                    buffs.push(this.buffmap[boonid]);
-                }
+                buffs.push(findSkill(true, modifier[0]))
             }
             return buffs;
         },
@@ -1039,104 +977,47 @@ Vue.component("dmgmodifier-stats-component", {
 });
 
 Vue.component("damagedist-table-component", {
-    props: ['dmgdist', 'buffmap', 'skillmap', 'tableid', 'actor', 'isminion', 'istarget', 'sortdata'],
-    template: `
-    <div>
-        <div v-if="actor !== null">       
-            <div v-if="isminion">
-                {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its master's total {{istarget ? 'Target' :''}} dps
-            </div>
-            <div v-else>
-                {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its total {{istarget ? 'Target' :''}} dps
-            </div>
-        </div>
-        <table class="table table-sm table-striped table-hover"  cellspacing="0" width="100%" :id="tableid">
-            <thead>
-                <tr>
-                    <th class="text-left">Skill</th>
-                    <th></th>
-                    <th>Damage</th>
-                    <th>Min</th>
-                    <th>Avg</th>
-                    <th>Max</th>
-                    <th>Casts</th>
-                    <th>Hits</th>
-                    <th>Hits per Cast</th>
-                    <th>Crit</th>
-                    <th>Flank</th>
-                    <th>Glance</th>
-                    <th>Wasted</th>
-                    <th>Saved</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="row in rows" :class="{condi: row.skill.condi, power: !row.skill.condi}">
-                    <td class="text-left" :data-original-title="row.skill.id">
-                        <img :src="row.skill.icon" class="icon icon-hover"> {{row.skill.name}}
-                    </td>
-                    <td>{{ round3(100*row.data[2]/dmgdist.contributedDamage) }}%</td>
-                    <td>{{ row.data[2] }}</td>
-                    <td>{{ Math.max(row.data[3],0) }}</td>
-                    <td>{{ round(row.data[2]/row.data[6]) }}</td>
-                    <td>{{ row.data[4] }}</td>
-                    <td>{{ !row.skill.condi && row.data[5] ? row.data[5] : ''}}</td>
-                    <td>{{ row.data[6] }}</td>
-                    <td>{{(!row.skill.condi && row.data[6] && row.data[5]) ? round3(row.data[6]/row.data[5]) : ''}}</td>
-                    <td :data-original-title="(!row.skill.condi && row.data[6]) ? row.data[7] +' out of ' + row.data[6] + ' hits': false">
-                        {{(!row.skill.condi && row.data[6]) ? round3(row.data[7]*100/row.data[6]) + '%' : ''}}
-                    </td>
-                    <td :data-original-title="(!row.skill.condi && row.data[6]) ? row.data[8] +' out of ' + row.data[6] + ' hits': false">
-                        {{(!row.skill.condi && row.data[6]) ? round3(row.data[8]*100/row.data[6]) + '%' : ''}}
-                    </td>
-                    <td :data-original-title="(!row.skill.condi && row.data[6]) ? row.data[9] +' out of ' + row.data[6] + ' hits': false">
-                        {{(!row.skill.condi && row.data[6]) ? round3(row.data[9]*100/row.data[6]) + '%' : ''}}
-                    </td>
-                    <td>{{ row.data[10] ? row.data[10] + 's' : ''}}</td>
-                    <td>{{ row.data[11] ? row.data[11] + 's' : ''}}</td>
-                </tr>
-            </tbody>
-            <tfoot class="text-dark">
-                <tr>
-                    <td class="text-left">Total</td>
-                    <td></td>
-                    <td>{{dmgdist.contributedDamage}}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </tfoot>
-        </table>
-    </div> 
-    `,
+    props: ["dmgdist", "tableid", "actor", "isminion", "istarget", "sortdata"],
+    template: "#dmgdisttable-template",
     mounted() {
         var _this = this;
-        initTable('#' + this.tableid, this.sortdata.index, this.sortdata.order, function () {
-            var order = $('#' + _this.tableid).DataTable().order();
-            _this.sortdata.order = order[0][1];
-            _this.sortdata.index = order[0][0];
-        });
+        initTable(
+            "#" + this.tableid,
+            this.sortdata.index,
+            this.sortdata.order,
+            function () {
+                var order = $("#" + _this.tableid)
+                    .DataTable()
+                    .order();
+                _this.sortdata.order = order[0][1];
+                _this.sortdata.index = order[0][0];
+            }
+        );
     },
     beforeUpdate() {
-        $('#' + this.tableid).DataTable().destroy();
+        $("#" + this.tableid)
+            .DataTable()
+            .destroy();
     },
     updated() {
         var _this = this;
-        initTable('#' + this.tableid, this.sortdata.index, this.sortdata.order, function () {
-            var order = $('#' + _this.tableid).DataTable().order();
-            _this.sortdata.order = order[0][1];
-            _this.sortdata.index = order[0][0];
-        });
+        initTable(
+            "#" + this.tableid,
+            this.sortdata.index,
+            this.sortdata.order,
+            function () {
+                var order = $("#" + _this.tableid)
+                    .DataTable()
+                    .order();
+                _this.sortdata.order = order[0][1];
+                _this.sortdata.index = order[0][0];
+            }
+        );
     },
     beforeDestroy() {
-        $('#' + this.tableid).DataTable().destroy();
+        $("#" + this.tableid)
+            .DataTable()
+            .destroy();
     },
     methods: {
         round: function (value) {
@@ -1159,20 +1040,9 @@ Vue.component("damagedist-table-component", {
             var distrib = this.dmgdist.distribution;
             for (var i = 0; i < distrib.length; i++) {
                 var data = distrib[i];
-                var skill;
-                var id = data[1];
-                if (data[0] === 1) {
-                    id = 'b' + id;
-                    skill = this.buffmap[id];
-                    skill.condi = true;
-                } else {
-                    id = 's' + id;
-                    skill = this.skillmap[id];
-                    skill.condi = false;
-                }
                 res.push({
                     data: data,
-                    skill: skill
+                    skill: findSkill(data[0], data[1])
                 });
             }
             return res;
@@ -1182,18 +1052,29 @@ Vue.component("damagedist-table-component", {
 
 Vue.component('player-tab-component', {
     props: ['player', 'playerindex', 'phase',
-        'phaseindex', 'targets', 'buffmap', 'skillmap', 'sortdata'
+        'phaseindex', 'targets'
     ],
     data: function () {
         return {
-            mode: 0
+            mode: 0,
+            sortdata: {
+                dmgdist: {
+                    order: "desc",
+                    index: 2
+                },
+                dmgtaken: {
+                    order: "desc",
+                    index: 2
+                }
+            }
+
         };
     },
 });
 
 Vue.component('dmgdist-component', {
     props: ['player', 'playerindex', 'phase',
-        'phaseindex', 'targets', 'buffmap', 'skillmap', 'sortdata'
+        'phaseindex', 'targets', 'sortdata'
     ],
     data: function () {
         return {
@@ -1224,9 +1105,9 @@ Vue.component('dmgdist-component', {
             for (var i = 0; i < this.phase.targets.length; i++) {
                 var target = this.targets[this.phase.targets[i]];
                 if (target.active) {
-                    var targetDist = this.distmode === -1 ? 
-                                    this.player.details.dmgDistributionsTargets[this.phaseindex][i] :
-                                    this.player.details.minions[this.distmode].dmgDistributionsTargets[this.phaseindex][i];
+                    var targetDist = this.distmode === -1 ?
+                        this.player.details.dmgDistributionsTargets[this.phaseindex][i] :
+                        this.player.details.minions[this.distmode].dmgDistributionsTargets[this.phaseindex][i];
                     dist.contributedDamage += targetDist.contributedDamage;
                     dist.totalDamage += targetDist.totalDamage;
                     var distribution = targetDist.distribution;
@@ -1238,20 +1119,20 @@ Vue.component('dmgdist-component', {
                             if (row[3] < 0) {
                                 row[3] = targetDistribution[3];
                             } else if (targetDistribution[3] >= 0) {
-                                row[3] = Math.min(targetDistribution[3], row[3]);  
-                            }       
-                            row[4] = Math.max(targetDistribution[4], row[4]); 
-                            row[6] += targetDistribution[6];       
-                            row[7] += targetDistribution[7];       
-                            row[8] += targetDistribution[8];       
-                            row[9] += targetDistribution[9];                          
+                                row[3] = Math.min(targetDistribution[3], row[3]);
+                            }
+                            row[4] = Math.max(targetDistribution[4], row[4]);
+                            row[6] += targetDistribution[6];
+                            row[7] += targetDistribution[7];
+                            row[8] += targetDistribution[8];
+                            row[9] += targetDistribution[9];
                         } else {
                             rows.set(targetDistribution[1], targetDistribution.slice(0));
                         }
                     }
                 }
             }
-            rows.forEach(function(value,key,map) {
+            rows.forEach(function (value, key, map) {
                 dist.distribution.push(value);
             });
             dist.contributedDamage = Math.max(dist.contributedDamage, 0);
@@ -1263,7 +1144,7 @@ Vue.component('dmgdist-component', {
 
 Vue.component('dmgtaken-component', {
     props: ['player', 'playerindex',
-        'phaseindex', 'buffmap', 'skillmap', 'sortdata'
+        'phaseindex', 'sortdata'
     ],
     computed: {
         dmgtaken: function () {
@@ -1272,22 +1153,29 @@ Vue.component('dmgtaken-component', {
     },
 });
 
-Vue.component('player-stats-component', {
-    props: ['players', 'phaseindex', 'phase', 'targets', 'buffmap', 'skillmap'],
-    data: function () {
-        return {
-            sortdata: {
-                dmgdist: {
-                    order: "desc",
-                    index: 2
-                },
-                dmgtaken: {                  
-                    order: "desc",
-                    index: 2
+Vue.component("player-stats-component", {
+    props: ["players", "phaseindex", "phase", 'targets'],
+});
+
+Vue.component("food-component", {
+    props: ["food"],
+    computed: {
+        data: function () {
+            var res = {
+                start: [],
+                refreshed: []
+            };
+            for (var k = 0; k < this.food.length; k++) {
+                var foodData = this.food[k];
+                if (foodData.time === 0) {
+                    res.start.push(foodData);
+                } else {
+                    res.refreshed.push(foodData);
                 }
             }
-        };
-    },
+            return res;
+        }
+    }
 });
 
 var createLayout = function () {
@@ -1367,6 +1255,29 @@ var createLayout = function () {
 };
 
 window.onload = function () {
+    var i;
+    for (i = 0; i < logData.phases.length; i++) {
+        logData.phases[i].active = i === 0;
+    }
+    for (i = 0; i < logData.targets.length; i++) {
+        var targetData = logData.targets[i];
+        targetData.active = true;
+    }
+    for (i = 0; i < logData.players.length; i++) {
+        var playerData = logData.players[i];
+        playerData.active = false;
+        playerData.icon = urls[playerData.profession];
+        for (var j = 0; j < playerData.details.food.length; j++) {
+            var food = playerData.details.food[j];
+            for (var k = 0; k < food.length; k++) {
+                var foodData = food[k];
+                var skill = findSkill(true, foodData.id);
+                foodData.name = skill.name;
+                foodData.icon = skill.icon;
+            }
+        }
+    }
+
     var layout = createLayout();
     new Vue({
         el: "#content",
