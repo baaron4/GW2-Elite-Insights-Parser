@@ -1,6 +1,7 @@
 ﻿using LuckParser.Models.DataModels;
 using LuckParser.Models.HtmlModels;
 using LuckParser.Models.ParseModels;
+using NUglify;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -1182,7 +1183,12 @@ namespace LuckParser.Controllers
         /// <param name="sw">Stream writer</param>
         public void CreateHTML(StreamWriter sw, string path)
         {
+#if DEBUG
             string html = Properties.Resources.template_html;
+#else
+            string html = Uglify.Html(Properties.Resources.template_html).code;
+#endif
+
             html = ReplaceVariables(html);
 
             html = html.Replace("<!--${Css}-->", BuildCss(path));
@@ -1225,7 +1231,11 @@ namespace LuckParser.Controllers
 
         private string BuildCss(string path)
         {
+#if DEBUG
             string scriptContent = Properties.Resources.ei_css;
+#else
+            string scriptContent = Uglify.Css(Properties.Resources.ei_css).Code;
+#endif
             string cssFilename = "ei-" + _scriptVersion + ".css";
             if (Properties.Settings.Default.NewHtmlExternalScripts)
             {
@@ -1248,8 +1258,7 @@ namespace LuckParser.Controllers
 #if DEBUG
             string scriptContent = Properties.Resources.ei_js;
 #else
-            string scriptContent = Properties.Resources.ei_js.Replace(System.Environment.NewLine,"");
-            scriptContent = Properties.Resources.ei_js.Replace(" ","");
+            string scriptContent = Uglify.Js(Properties.Resources.ei_js).Code;
 #endif
             string scriptFilename = "ei-" + _scriptVersion + ".js";
             if (Properties.Settings.Default.NewHtmlExternalScripts)
