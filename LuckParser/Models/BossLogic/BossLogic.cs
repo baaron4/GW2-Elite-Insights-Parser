@@ -136,7 +136,10 @@ namespace LuckParser.Models
                 foreach (Boss tar in Targets)
                 {
                     List<CombatItem> subList = maxHUs.Where(x => x.SrcInstid == tar.InstID && x.Time >= tar.FirstAware && x.Time <= tar.LastAware).ToList();
-                    tar.Health = subList.Max(x => (int)x.DstAgent);
+                    if (subList.Count > 0)
+                    {
+                        tar.Health = subList.Max(x => (int)x.DstAgent);
+                    }
                 }
             }
         }
