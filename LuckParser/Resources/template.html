@@ -636,19 +636,20 @@
                 </div>
             </mechanics-stats-component>
         </div>
-        <div id="targets-stats" v-show="dataType === datatypes.targetTab">
-            <target-stats-component inline-template :players="logdata.players" :targets="logdata.targets" :phase="phaseData.phase"
-                :phaseindex="phaseData.index">
+        <div id="targets-stats">
+            <target-stats-component inline-template  v-show="dataType === datatypes.targetTab" :players="logdata.players" 
+                                    :targets="logdata.targets" :phase="phaseData.phase"
+                                    :phaseindex="phaseData.index">
                 <div>
                     <ul class="nav nav-tabs">
                         <li v-for="target in phaseTargets">
-                            <a class="nav-link" :class="{active: focus[phaseindex] === target}" @click="focus[phaseindex] = target">
+                            <a class="nav-link" :class="{active: phase.focus === target}" @click="phase.focus = target">
                                 {{target.name}}</a>
                         </li>
                     </ul>
-                    <div v-for="target in targets" v-show="focus[phaseindex] === target">
-                        <h3 class="text-center"><img :alt="target.name" :src="target.icon">{{target.name}}</h3>
-                        <target-tab-component inline-template :focus="focus[phaseindex]" :target="target" :phaseindex="phaseindex">
+                    <div v-for="target in targets" v-show="phase.focus === target">
+                        <h3 class="text-center"><img :alt="target.name" class="icon-lg" :src="target.icon">{{target.name}}</h3>
+                        <target-tab-component inline-template :focus="phase.focus" :target="target" :phaseindex="phaseindex">
                             <div>
                                 <ul class="nav nav-tabs">
                                     <li>
@@ -691,7 +692,7 @@
                 <div>
                     <div v-for="(player, pindex) in players" v-show="player.active">
                         <div v-if="!player.isConjure">
-                            <h3 class="text-center"><img :alt="player.profession" :src="player.icon">{{player.name}}</h3>
+                            <h3 class="text-center"><img :alt="player.profession" class="icon" :src="player.icon">{{player.name}}</h3>
                             <player-tab-component inline-template :player="player" :playerindex="pindex" :phase="phase"
                                 :phaseindex="phaseindex" :targets="targets">
                                 <div>

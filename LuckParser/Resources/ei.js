@@ -1197,6 +1197,63 @@ Vue.component("simplerotation-component", {
     }
 });
 
+Vue.component("target-stats-component", {
+    props: ["players", "targets", "phase", "phaseindex"],
+    computed: {
+        phaseTargets: function() {
+            var res = [];
+            for (var i = 0; i < this.phase.targets.length; i++) {
+                var tar = this.targets[this.phase.targets[i]];
+                res.push(tar);
+            }
+            if (!this.phase.focus) {
+                this.phase.focus = res[0] || null;
+            }
+            return res;
+        }
+    }
+});
+
+Vue.component("target-tab-component", {
+    props: ["focus", "target", "phaseindex"],
+    data: function () {
+        return {
+            mode: 0,
+            sortdata: {
+                dmgdist: {
+                    order: "desc",
+                    index: 2
+                }
+            }
+        };
+    }
+});
+
+Vue.component('dmgdist-target-component', {
+    props: ['focus', 'target',
+        'phaseindex', 'sortdata'
+    ],
+    data: function () {
+        return {
+            distmode: -1
+        };
+    },
+    computed: {
+        actor: function () {
+            if (this.distmode === -1) {
+                return this.target;
+            }
+            return this.target.minions[this.distmode];
+        },
+        dmgdist: function () {
+            if (this.distmode === -1) {
+                return this.target.details.dmgDistributions[this.phaseindex];
+            }
+            return this.target.details.minions[this.distmode].dmgDistributions[this.phaseindex];
+        }
+    },
+});
+
 Vue.component("deathrecap-component", {
     props: ["recaps", "playerindex", "phase"],
     computed: {
@@ -1313,6 +1370,7 @@ window.onload = function () {
     var i;
     for (i = 0; i < logData.phases.length; i++) {
         logData.phases[i].active = i === 0;
+        logData.phases[i].focus = null;
     }
     for (i = 0; i < logData.targets.length; i++) {
         var targetData = logData.targets[i];
