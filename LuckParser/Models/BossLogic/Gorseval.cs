@@ -53,7 +53,7 @@ namespace LuckParser.Models
                 return phases;
             }
             // Ghostly protection check
-            List<CombatItem> invulsGorse = log.GetBoonData(31790).Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.Manual).ToList();
+            List<CombatItem> invulsGorse = log.GetBoonData(31877).Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.Manual).ToList();
             for (int i = 0; i < invulsGorse.Count; i++)
             {
                 CombatItem c = invulsGorse[i];
