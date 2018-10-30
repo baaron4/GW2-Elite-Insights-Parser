@@ -128,6 +128,19 @@ namespace LuckParser.Models
             }
         }
 
+        protected void OverrideMaxHealths(ParsedLog log)
+        {
+            List<CombatItem> maxHUs = log.CombatData.GetStatesData(ParseEnum.StateChange.MaxHealthUpdate);
+            if (maxHUs.Count > 0)
+            {
+                foreach (Boss tar in Targets)
+                {
+                    List<CombatItem> subList = maxHUs.Where(x => x.SrcInstid == tar.InstID && x.Time >= tar.FirstAware && x.Time <= tar.LastAware).ToList();
+                    tar.Health = subList.Max(x => (int)x.DstAgent);
+                }
+            }
+        }
+
         public virtual void AddHealthUpdate(ushort instid, long time, int healthTime, int health)
         {
             foreach (Boss boss in Targets)
