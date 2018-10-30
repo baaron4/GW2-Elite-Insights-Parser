@@ -14,7 +14,7 @@
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/plug-ins/1.10.13/sorting/alt-string.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script type="text/x-template" id="general-layout-template">   
+    <script type="text/x-template" id="general-layout-template">
         <div>
             <h2 v-if="layout.desc" :class="{'text-center': !!phase}">{{ layoutName }}</h2>
             <ul class="nav nav-tabs">
@@ -30,7 +30,7 @@
             </div>
         </div>
     </script>
-    <script type="text/x-template" id="bufftable-template"> 
+    <script type="text/x-template" id="bufftable-template">
         <div v-if="buffs.length > 0">
             <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="id">
                 <thead>
@@ -73,7 +73,7 @@
             </table>
         </div>
     </script>
-    <script type="text/x-template" id="dmgdisttable-template">       
+    <script type="text/x-template" id="dmgdisttable-template">
         <div>
             <div v-if="actor !== null">       
                 <div v-if="isminion">
@@ -636,10 +636,58 @@
                 </div>
             </mechanics-stats-component>
         </div>
+        <div id="targets-stats" v-show="dataType === datatypes.targetTab">
+            <target-stats-component inline-template :players="logdata.players" :targets="logdata.targets" :phase="phaseData.phase"
+                :phaseindex="phaseData.index">
+                <div>
+                    <ul class="nav nav-tabs">
+                        <li v-for="target in phaseTargets">
+                            <a class="nav-link" :class="{active: focus[phaseindex] === target}" @click="focus[phaseindex] = target">
+                                {{target.name}}</a>
+                        </li>
+                    </ul>
+                    <div v-for="target in targets" v-show="focus[phaseindex] === target">
+                        <h3 class="text-center"><img :alt="target.name" :src="target.icon">{{target.name}}</h3>
+                        <target-tab-component inline-template :focus="focus[phaseindex]" :target="target" :phaseindex="phaseindex">
+                            <div>
+                                <ul class="nav nav-tabs">
+                                    <li>
+                                        <a class="nav-link" :class="{active: mode === 0}" @click="mode = 0">Damage
+                                            Distribution</a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link" :class="{active: mode === 1}" @click="mode = 1">Graph</a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link" :class="{active: mode === 2}" @click="mode = 2">Buff Status</a>
+                                    </li>
+                                </ul>
+                                <dmgdist-target-component inline-template v-show="mode === 0" :target="target" :focus="focus" :phaseindex="phaseindex" :sortdata="sortdata.dmgdist">
+                                    <div>
+                                        <div v-if="target.minions.length > 0">
+                                            <ul class="nav nav-tabs">
+                                                <li>
+                                                    <a class="nav-link" :class="{active: distmode === -1}" @click="distmode = -1">{{target.name}}</a>
+                                                </li>
+                                                <li v-for="(minion, mindex) in target.minions">
+                                                    <a class="nav-link" :class="{active: distmode === mindex}" @click="distmode = mindex">{{minion.name}}</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <damagedist-table-component v-if="focus === target" :dmgdist="dmgdist" :tableid="'dmgdist-target-' + phaseindex"
+                                            :actor="actor" :isminion="distmode>=0" :sortdata="sortdata"></damagedist-table-component>
+                                    </div>
+                                </dmgdist-component>
+                            </div>
+                        </target-tab-component>
+                    </div>
+                </div>
+            </target-stats-component>
+        </div>
         <div id="player-stats" v-show="dataType === datatypes.playerTab">
             <h3 class="text-center" v-show="!activePlayer">No player selected</h3>
-            <player-stats-component inline-template v-show="activePlayer" :players="logdata.players"
-                :phaseindex="phaseData.index" :phase="phaseData.phase" :targets="logdata.targets">
+            <player-stats-component inline-template v-show="activePlayer" :players="logdata.players" :phaseindex="phaseData.index"
+                :phase="phaseData.phase" :targets="logdata.targets">
                 <div>
                     <div v-for="(player, pindex) in players" v-show="player.active">
                         <div v-if="!player.isConjure">
@@ -714,13 +762,16 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                            <ul v-if="data.refreshed.length">
-                                                <li v-for="refresh in data.refreshed">
-                                                    {{refresh.dimished ? 'suffered' : 'consumed'}} {{refresh.name}}
-                                                    <img class="icon" :alt="refresh.name" :src="refresh.icon">
-                                                    at {{refresh.time}}s ({{refresh.duration}} seconds)
-                                                </li>
-                                            </ul>
+                                            <div v-if="data.refreshed.length">
+                                                During phase
+                                                <ul>
+                                                    <li v-for="refresh in data.refreshed">
+                                                        {{refresh.dimished ? 'suffered' : 'consumed'}} {{refresh.name}}
+                                                        <img class="icon" :alt="refresh.name" :src="refresh.icon">
+                                                        at {{refresh.time}}s ({{refresh.duration}} seconds)
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </food-component>
                                     <simplerotation-component inline-template v-if="mode === 3" :rotation="player.details.rotation[phaseindex]">
@@ -728,34 +779,45 @@
                                             <div class="d-flex flex-row justify-content-center mt-1 mb-1">
                                                 <ul class="nav nav-pills">
                                                     <li class="nav-item">
-                                                        <a class="nav-link" @click="autoattack = !autoattack" :class="{active: autoattack}">Show auto attacks</a>
-                                                    </li><li class="nav-item">
-                                                        <a class="nav-link" @click="small = !small" :class="{active: small}">Small icons</a>
+                                                        <a class="nav-link" @click="autoattack = !autoattack" :class="{active: autoattack}">Show
+                                                            auto attacks</a>
                                                     </li>
-                                                </ul>                                       
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" @click="small = !small" :class="{active: small}">Small
+                                                            icons</a>
+                                                    </li>
+                                                </ul>
                                             </div>
-                                            <span class="rot-skill" v-for="rota in rotation" :class="{'rot-swap': rota[1] === -2 ,'mb-1': rota[1] === -2, 'rot-small': small}" v-show="!getSkill(rota[1]).aa || (getSkill(rota[1]).aa && autoattack)">
-                                                <img class="rot-icon" 
-                                                        :class="{'rot-cancelled': rota[3] === 2}" 
-                                                        :src="getSkill(rota[1]).icon" 
-                                                        :data-original-title="getSkill(rota[1]).name + ', Time: ' + rota[0] + 's, Dur: ' + rota[2] + 'ms'">
+                                            <span class="rot-skill" v-for="rota in rotation" :class="{'rot-swap': rota[1] === -2 ,'mb-1': rota[1] === -2, 'rot-small': small}"
+                                                v-show="!getSkill(rota[1]).aa || (getSkill(rota[1]).aa && autoattack)">
+                                                <img class="rot-icon" :class="{'rot-cancelled': rota[3] === 2}" :src="getSkill(rota[1]).icon"
+                                                    :data-original-title="getSkill(rota[1]).name + ', Time: ' + rota[0] + 's, Dur: ' + rota[2] + 'ms'">
                                             </span>
                                         </div>
                                     </simplerotation-component>
-                                    <deathrecap-component inline-template v-if="player.details.deathRecap" v-show="mode === 4" :playerindex="playerindex" :phase="phase" :recaps="player.details.deathRecap">
+                                    <deathrecap-component inline-template v-if="player.details.deathRecap" v-show="mode === 4"
+                                        :playerindex="playerindex" :phase="phase" :recaps="player.details.deathRecap">
                                         <div>
                                             <div v-for="(recap, index) in recaps" v-show="phase.start <= recap.time/1000 && phase.end >= recap.time/1000">
                                                 <div v-if="recap.toKill === null">
                                                     <h3 class="text-center">Player was instantly killed after down</h3>
-                                                    <div class="text-center">Took {{data.totalDamage.down[index]}} damage to go into downstate in {{data.totalSeconds.down[index]}} seconds</div>
+                                                    <div class="text-center">Took {{data.totalDamage.down[index]}}
+                                                        damage to go into downstate in
+                                                        {{data.totalSeconds.down[index]}} seconds</div>
                                                 </div>
                                                 <div v-else-if="recap.toDown === null">
                                                     <h3 class="text-center">Player was instantly killed</h3>
-                                                    <div class="text-center">Took {{data.totalDamage.kill[index]}} damage in {{data.totalSeconds.kill[index]}} seconds before dying</div>
-                                                </div>                                               
+                                                    <div class="text-center">Took {{data.totalDamage.kill[index]}}
+                                                        damage in {{data.totalSeconds.kill[index]}} seconds before
+                                                        dying</div>
+                                                </div>
                                                 <div v-else>
-                                                    <div class="text-center">Took {{data.totalDamage.down[index]}} damage to go into downstate in {{data.totalSeconds.down[index]}} seconds</div>
-                                                    <div class="text-center">Took {{data.totalDamage.kill[index]}} damage in {{data.totalSeconds.kill[index]}} seconds before dying afterwards</div>
+                                                    <div class="text-center">Took {{data.totalDamage.down[index]}}
+                                                        damage to go into downstate in
+                                                        {{data.totalSeconds.down[index]}} seconds</div>
+                                                    <div class="text-center">Took {{data.totalDamage.kill[index]}}
+                                                        damage in {{data.totalSeconds.kill[index]}} seconds before
+                                                        dying afterwards</div>
                                                 </div>
                                                 <div :id="'deathrecap-' + playerindex + '-' + index"></div>
                                             </div>

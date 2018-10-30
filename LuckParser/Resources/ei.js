@@ -895,7 +895,7 @@ Vue.component("dmgmodifier-stats-component", {
             var buffs = [];
             for (var i = 0; i < dmgModifier.length; i++) {
                 var modifier = dmgModifier[i];
-                buffs.push(findSkill(true, modifier[0]))
+                buffs.push(findSkill(true, modifier[0]));
             }
             return buffs;
         },
