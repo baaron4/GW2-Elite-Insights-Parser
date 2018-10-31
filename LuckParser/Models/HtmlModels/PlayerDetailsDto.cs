@@ -15,7 +15,7 @@ namespace LuckParser.Models.HtmlModels
         [DataMember(EmitDefaultValue = false)] public List<DmgDistributionDto> dmgDistributionsTaken;
         [DataMember(EmitDefaultValue = false)] public List<List<double[]>> rotation;
         [DataMember(EmitDefaultValue = false)] public List<List<BoonChartDataDto>> boonGraph;
-        [DataMember(EmitDefaultValue = false)] public List<List<FoodDto>> food;
+        [DataMember(EmitDefaultValue = false)] public List<FoodDto> food;
         [DataMember(EmitDefaultValue = false)] public List<PlayerDetailsDto> minions;
         [DataMember(EmitDefaultValue = false)] public List<DeathRecapDto> deathRecap;
     }

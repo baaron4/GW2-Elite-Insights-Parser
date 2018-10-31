@@ -1157,7 +1157,7 @@ Vue.component("player-stats-component", {
 });
 
 Vue.component("food-component", {
-    props: ["food"],
+    props: ["food", "phase"],
     computed: {
         data: function () {
             var res = {

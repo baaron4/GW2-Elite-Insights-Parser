@@ -767,23 +767,25 @@
                                             :actor="null" :isminion="false" :istarget="false" :sortdata="sortdata">
                                         </damagedist-table-component>
                                     </dmgtaken-component>
-                                    <food-component inline-template v-show="mode === 2" :food="player.details.food[phaseindex]">
+                                    <food-component inline-template v-show="mode === 2" :food="player.details.food[phaseindex]" :phase="phase">
                                         <div>
                                             <div v-if="data.start.length">
-                                                Started with
+                                                Started with:
                                                 <ul>
                                                     <li v-for="initial in data.start">
-                                                        {{initial.name}} <img class="icon" :alt="initial.name" :src="initial.icon">
+                                                        {{initial.name}} <img class="icon" :alt="initial.name" :src="initial.icon"> 
+                                                        {{initial.stack > 1 ? "("+initial.stack+")" : ""}}
                                                     </li>
                                                 </ul>
                                             </div>
                                             <div v-if="data.refreshed.length">
-                                                During phase
+                                                In phase consumable updates:
                                                 <ul>
                                                     <li v-for="refresh in data.refreshed">
                                                         {{refresh.dimished ? 'suffered' : 'consumed'}} {{refresh.name}}
                                                         <img class="icon" :alt="refresh.name" :src="refresh.icon">
-                                                        at {{refresh.time}}s ({{refresh.duration}} seconds)
+                                                        {{refresh.stack > 1 ? "("+refresh.stack+")" : ""}}
+                                                        at {{refresh.time - phase.start}}s ({{refresh.duration}} seconds)
                                                     </li>
                                                 </ul>
                                             </div>

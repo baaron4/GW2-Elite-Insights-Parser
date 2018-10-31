@@ -909,17 +909,16 @@ namespace LuckParser.Controllers
             return dto;
         }
 
-        private List<FoodDto> BuildPlayerFoodData(Player p, int phaseIndex)
+        private List<FoodDto> BuildPlayerFoodData(Player p)
         {
-            PhaseData phase = _statistics.Phases[phaseIndex];
             List<FoodDto> list = new List<FoodDto>();
-            List<Player.Consumable> consume = p.GetConsumablesList(_log, phase.Start, phase.End);
+            List<Player.Consumable> consume = p.GetConsumablesList(_log, 0, _log.FightData.FightDuration);
 
             foreach(Player.Consumable entry in consume)
             {
                 FoodDto dto = new FoodDto
                 {
-                    time = (entry.Time - phase.Start) / 1000.0,
+                    time = entry.Time / 1000.0,
                     duration = entry.Duration / 1000.0,
                     stack = entry.Stack,
                     id = entry.Item.ID,
@@ -1578,7 +1577,7 @@ namespace LuckParser.Controllers
                 dmgDistributionsTaken = new List<DmgDistributionDto>(),
                 boonGraph = new List<List<BoonChartDataDto>>(),
                 rotation = new List<List<double[]>>(),
-                food = new List<List<FoodDto>>(),
+                food = BuildPlayerFoodData(player),
                 minions = new List<PlayerDetailsDto>(),
                 deathRecap = BuildDeathRecap(player)
             };
@@ -1594,7 +1593,6 @@ namespace LuckParser.Controllers
                 dto.dmgDistributionsTargets.Add(dmgTargetsDto);
                 dto.dmgDistributionsTaken.Add(BuildDMGTakenDistData(player, i, usedSkills, usedBoons));
                 dto.boonGraph.Add(BuildPlayerBoonGraphData(player, i));
-                dto.food.Add(BuildPlayerFoodData(player, i));
             }
             foreach (KeyValuePair<string, Minions> pair in player.GetMinions(_log))
             {
