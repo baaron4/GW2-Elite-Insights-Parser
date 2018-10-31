@@ -642,7 +642,7 @@
                 :targets="logdata.targets" :phase="phaseData.phase" :phaseindex="phaseData.index" :presentboons="logdata.boons"
                 :presentconditions="logdata.conditions">
                 <div>
-                    <ul v-if="phaseTargets.length > 0" class=" nav nav-tabs">
+                    <ul v-if="phaseTargets.length > 1" class=" nav nav-tabs">
                         <li v-for="target in phaseTargets">
                             <a class="nav-link" :class="{active: phase.focus === target}" @click="phase.focus = target">
                                 {{target.name}}</a>
