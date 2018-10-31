@@ -1167,10 +1167,12 @@ Vue.component("food-component", {
                     foodData.name = skill.name;
                     foodData.icon = skill.icon;
                 }
-                if (foodData.time === 0) {
-                    res.start.push(foodData);
-                } else {
-                    res.refreshed.push(foodData);
+                if (foodData.time >= this.phase.start && foodData.time <= this.phase.end) {
+                    if (foodData.time === 0) {
+                        res.start.push(foodData);
+                    } else {
+                        res.refreshed.push(foodData);
+                    }
                 }
             }
             return res;
