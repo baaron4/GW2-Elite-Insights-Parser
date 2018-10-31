@@ -273,20 +273,21 @@ namespace LuckParser.Controllers
             List<long[]> res = new List<long[]>();
             foreach(var food in player.GetConsumablesList(_log,0,_log.FightData.FightDuration))
             {
-                long[] val = new long[3] {
-                    food.Item1.ID,
-                    food.Item2,
-                    food.Item3
+                long[] val = new long[4] {
+                    food.Item.ID,
+                    food.Time,
+                    food.Duration,
+                    food.Stack
                 };
-                _buffNames[food.Item1.ID] = food.Item1.Name;
+                _buffNames[food.Item.ID] = food.Item.Name;
                 res.Add(val);
                 if (_devMode)
                 {
-                    _buffData[food.Item1.ID] = new BuffDesc()
+                    _buffData[food.Item.ID] = new BuffDesc()
                     {
                         Stacking = 0,
                         Table = -1,
-                        Icon = food.Item1.Link
+                        Icon = food.Item.Link
                     };
                 }
             }
