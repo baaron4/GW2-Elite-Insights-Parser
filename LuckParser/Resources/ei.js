@@ -232,6 +232,7 @@ var Tab = function (name, options) {
 
 Vue.component("encounter-component", {
     props: ["logdata"],
+    template: "#tmplEncounter",
     methods: {
         getResultText: function (success) {
             return success ? "Success" : "Failure";
@@ -263,6 +264,7 @@ Vue.component("encounter-component", {
 
 Vue.component("phase-component", {
     props: ["phases"],
+    template: "#tmplPhase",
     methods: {
         select: function (phase) {
             for (var i = 0; i < this.phases.length; i++) {
@@ -275,6 +277,7 @@ Vue.component("phase-component", {
 
 Vue.component("target-component", {
     props: ["targets", "phase"],
+    template: "#tmplTargets",
     methods: {
         show: function (target) {
             var index = this.targets.indexOf(target);
@@ -285,6 +288,7 @@ Vue.component("target-component", {
 
 Vue.component("player-component", {
     props: ["players"],
+    template: "#tmplPlayers",
     methods: {
         getIcon: function (path) {
             return urls[path];
@@ -328,8 +332,8 @@ Vue.component("player-component", {
 
 Vue.component("general-layout-component", {
     name: "general-layout-component",
+    template: "#tmplGeneralLayout",
     props: ["layout", "phase"],
-    template: "#general-layout-template",
     methods: {
         select: function (tab, tabs) {
             for (var i = 0; i < tabs.length; i++) {
@@ -352,6 +356,7 @@ Vue.component("general-layout-component", {
 
 Vue.component("damage-stats-component", {
     props: ["phase", "targets", "players"],
+    template: "#tmplDamageTable",
     mounted() {
         initTable("#dps-table", 4, "desc");
     },
@@ -414,6 +419,7 @@ Vue.component("damage-stats-component", {
 
 Vue.component("defense-stats-component", {
     props: ["phase", "players"],
+    template: "#tmplDefenseTable",
     mounted() {
         initTable("#def-table", 4, "desc");
     },
@@ -468,6 +474,7 @@ Vue.component("defense-stats-component", {
 
 Vue.component("support-stats-component", {
     props: ["phase", "players"],
+    template: "#tmplSupportTable",
     mixins: [roundingComponent],
     mounted() {
         initTable("#sup-table", 4, "desc");
@@ -523,6 +530,7 @@ Vue.component("support-stats-component", {
 
 Vue.component("gameplay-stats-component", {
     props: ["phase", "targets", "players"],
+    template: "#tmplGameplayTable",
     mixins: [roundingComponent],
     data: function () {
         return {
@@ -597,6 +605,7 @@ Vue.component("gameplay-stats-component", {
 });
 Vue.component("mechanics-stats-component", {
     props: ["phase", "players", "enemies", "mechanics"],
+    template: "#tmplMechanicsTable",
     mounted() {
         initTable("#playermechs", 0, "asc");
         //
@@ -666,7 +675,7 @@ Vue.component("mechanics-stats-component", {
 
 Vue.component("buff-table-component", {
     props: ["buffs", "playerdata", "generation", "condition", "sums", "id"],
-    template: "#bufftable-template",
+    template: "#tmplBuffTable",
     methods: {
         getAvgTooltip: function (avg) {
             if (avg) {
@@ -709,6 +718,7 @@ Vue.component("buff-table-component", {
 
 Vue.component("personal-buff-table-component", {
     props: ['phase', 'persbuffs', 'players'],
+    template: "#tmplPersonalBuffTable",
     data: function () {
         return {
             specs: specs,
@@ -777,6 +787,7 @@ Vue.component("personal-buff-table-component", {
 
 Vue.component("buff-stats-component", {
     props: ['datatypes', 'datatype', 'phase', 'players', 'presentboons', 'presentoffs', 'presentdefs'],
+    template: "#tmplBuffStats",
     data: function () {
         return {
             mode: 0,
@@ -890,6 +901,7 @@ Vue.component("dmgmodifier-stats-component", {
     props: ['phases',
         'phase', 'players', 'targets'
     ],
+    template: "#tmplDamageModifierTable",
     data: function () {
         return {
             mode: 0
@@ -987,7 +999,7 @@ Vue.component("dmgmodifier-stats-component", {
 
 Vue.component("damagedist-table-component", {
     props: ["dmgdist", "tableid", "actor", "isminion", "istarget", "sortdata"],
-    template: "#dmgdisttable-template",
+    template: "#tmplDamageDistTable",
     mixins: [roundingComponent],
     mounted() {
         var _this = this;
@@ -1049,6 +1061,7 @@ Vue.component('player-tab-component', {
     props: ['player', 'playerindex', 'phase',
         'phaseindex', 'targets'
     ],
+    template: "#tmplPlayerTab",
     data: function () {
         return {
             mode: 0,
@@ -1067,10 +1080,11 @@ Vue.component('player-tab-component', {
     },
 });
 
-Vue.component('dmgdist-component', {
+Vue.component('dmgdist-player-component', {
     props: ['player', 'playerindex', 'phase',
         'phaseindex', 'targets', 'sortdata'
     ],
+    template: "#tmplDamageDistPlayer",
     data: function () {
         return {
             distmode: -1,
@@ -1137,10 +1151,11 @@ Vue.component('dmgdist-component', {
     },
 });
 
-Vue.component('dmgtaken-component', {
+Vue.component('dmgtaken-player-component', {
     props: ['player', 'playerindex',
         'phaseindex', 'sortdata'
     ],
+    template: "#tmplDamageTakenPlayer",
     computed: {
         dmgtaken: function () {
             return this.player.details.dmgDistributionsTaken[this.phaseindex];
@@ -1150,10 +1165,12 @@ Vue.component('dmgtaken-component', {
 
 Vue.component("player-stats-component", {
     props: ["players", "phaseindex", "phase", 'targets'],
+    template: "#tmplPlayerStats",
 });
 
 Vue.component("food-component", {
     props: ["food", "phase"],
+    template: "#tmplFood",
     computed: {
         data: function () {
             var res = {
@@ -1182,6 +1199,7 @@ Vue.component("food-component", {
 
 Vue.component("simplerotation-component", {
     props: ["rotation"],
+    template: "#tmplSimpleRotation",
     data: function () {
         return {
             autoattack: true,
@@ -1197,6 +1215,7 @@ Vue.component("simplerotation-component", {
 
 Vue.component("target-stats-component", {
     props: ["players", "targets", "phase", "phaseindex", "presentboons", "presentconditions"],
+    template: "#tmplTargetStats",
     computed: {
         phaseTargets: function () {
             var res = [];
@@ -1228,6 +1247,7 @@ Vue.component("target-stats-component", {
 
 Vue.component("target-tab-component", {
     props: ["focus", "target", "phaseindex", "players", "phase", "boons", "conditions", 'targetindex'],
+    template: "#tmplTargetTab",
     data: function () {
         return {
             mode: 0,
@@ -1243,6 +1263,7 @@ Vue.component("target-tab-component", {
 
 Vue.component("buff-stats-target-component", {
     props: ['target', 'phase', 'players', 'boons', 'conditions', 'targetindex'],
+    template: "#tmplBuffStatsTarget",
     computed: {
         targetPhaseIndex: function () {
             return this.phase.targets.indexOf(this.targetindex);
@@ -1312,6 +1333,7 @@ Vue.component('dmgdist-target-component', {
     props: ['focus', 'target',
         'phaseindex', 'sortdata'
     ],
+    template: "#tmplDamageDistTarget",
     data: function () {
         return {
             distmode: -1
@@ -1335,6 +1357,7 @@ Vue.component('dmgdist-target-component', {
 
 Vue.component("deathrecap-component", {
     props: ["recaps", "playerindex", "phase"],
+    template: "#tmplDeathRecap",
     computed: {
         data: function () {
             var res = {

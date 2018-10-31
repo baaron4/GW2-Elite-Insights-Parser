@@ -1,0 +1,15 @@
+
+<div>
+    <div v-if="target.minions.length > 0">
+        <ul class="nav nav-tabs">
+            <li>
+                <a class="nav-link" :class="{active: distmode === -1}" @click="distmode = -1">{{target.name}}</a>
+            </li>
+            <li v-for="(minion, mindex) in target.minions">
+                <a class="nav-link" :class="{active: distmode === mindex}" @click="distmode = mindex">{{minion.name}}</a>
+            </li>
+        </ul>
+    </div>
+    <damagedist-table-component v-if="focus === target" :dmgdist="dmgdist" :tableid="'dmgdist-target-' + phaseindex"
+                                :actor="actor" :isminion="distmode>=0" :sortdata="sortdata"></damagedist-table-component>
+</div>

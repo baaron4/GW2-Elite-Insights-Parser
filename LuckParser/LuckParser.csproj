@@ -299,7 +299,6 @@
     <None Include="Resources\theme-cosmo.png" />
     <None Include="Resources\theme-slate.png" />
     <None Include="Resources\combatreplay.js" />
-    <None Include="Resources\tmplDmgTakenTable.html" />
     <None Include="Properties\Version.tt.old">
       <LastGenOutput>Version.tt.cs</LastGenOutput>
     </None>
@@ -308,9 +307,34 @@
     <Content Include="Resources\eiold.js" />
     <Content Include="Resources\ei.css" />
     <Content Include="Resources\ei.js" />
-    <None Include="Resources\templateold.html" />
+    <None Include="Resources\tmplGeneralLayout.html" />
+    <None Include="Resources\tmplBuffTable.html" />
+    <None Include="Resources\tmplDamageDistTable.html" />
+    <None Include="Resources\tmplEncounter.html" />
+    <None Include="Resources\tmplPhase.html" />
+    <None Include="Resources\tmplGameplayTable.html" />
+    <None Include="Resources\tmplMechanicsTable.html" />
+    <None Include="Resources\tmplDefenseTable.html" />
+    <None Include="Resources\tmplSupportTable.html" />
+    <None Include="Resources\tmplBuffStats.html" />
+    <None Include="Resources\tmplPersonalBuffTable.html" />
+    <None Include="Resources\tmplBuffStatsTarget.html" />
+    <None Include="Resources\tmplDamageDistTarget.html" />
+    <None Include="Resources\tmplTargetTab.html" />
+    <None Include="Resources\tmplTargetStats.html" />
+    <None Include="Resources\tmplDeathRecap.html" />
+    <None Include="Resources\tmplSimpleRotation.html" />
+    <None Include="Resources\tmplFood.html" />
+    <None Include="Resources\tmplDamageTakenPlayer.html" />
+    <None Include="Resources\tmplDamageDistPlayer.html" />
+    <None Include="Resources\tmplPlayerTab.html" />
+    <None Include="Resources\tmplPlayerStats.html" />
     <Content Include="Resources\tmplGroupCombatReplay.html" />
+    <None Include="Resources\tmplTargets.html" />
+    <None Include="Resources\tmplDamageTable.html" />
     <Content Include="Resources\tmplPlayerSelectCombatReplay.html" />
+    <None Include="Resources\tmplPlayers.html" />
+    <None Include="Resources\tmplDamageModifierTable.html" />
     <Content Include="Resources\TODO.txt" />
     <None Include="Resources\tmplPlayerCells.html" />
     <None Include="Resources\template.html" />

@@ -1190,6 +1190,7 @@ namespace LuckParser.Controllers
             html = html.Replace("<!--${Css}-->", BuildCss(path));
             html = html.Replace("<!--${Js}-->", BuildEIJs(path));
 
+            html = html.Replace("<!--${Templates}-->", BuildTemplates());
             html = html.Replace("'${logDataJson}'", BuildLogData());
 
             html = html.Replace("<!--${playerData}-->", BuildDetails());
@@ -1202,9 +1203,6 @@ namespace LuckParser.Controllers
             html = html.Replace("'${graphDataJson}'", BuildGraphJson());
 
             html = html.Replace("<!--${combatReplay}-->", BuildCombatReplayContent());
-#if !DEBUG
-            html = Uglify.Html(html).Code;
-#endif
             sw.Write(html);
             return;       
         }
@@ -1225,6 +1223,48 @@ namespace LuckParser.Controllers
                 }
                 return Encoding.UTF8.GetString(ms.ToArray());
             }
+        }
+
+        private string BuildTemplates()
+        {
+            string templatesScript = "";
+            Dictionary<string, string> templates = new Dictionary<string, string>()
+            {
+                {"tmplBuffStats",Properties.Resources.tmplBuffStats },
+                {"tmplBuffStatsTarget",Properties.Resources.tmplBuffStatsTarget },
+                {"tmplBuffTable",Properties.Resources.tmplBuffTable },
+                {"tmplDamageDistPlayer",Properties.Resources.tmplDamageDistPlayer },
+                {"tmplDamageDistTable",Properties.Resources.tmplDamageDistTable },
+                {"tmplDamageDistTarget",Properties.Resources.tmplDamageDistTarget },
+                {"tmplDamageModifierTable",Properties.Resources.tmplDamageModifierTable },
+                {"tmplDamageTable",Properties.Resources.tmplDamageTable },
+                {"tmplDamageTakenPlayer",Properties.Resources.tmplDamageTakenPlayer },
+                {"tmplDeathRecap",Properties.Resources.tmplDeathRecap },
+                {"tmplDefenseTable",Properties.Resources.tmplDefenseTable },
+                {"tmplEncounter",Properties.Resources.tmplEncounter },
+                {"tmplFood",Properties.Resources.tmplFood },
+                {"tmplGameplayTable",Properties.Resources.tmplGameplayTable },
+                {"tmplGeneralLayout",Properties.Resources.tmplGeneralLayout },
+                {"tmplMechanicsTable",Properties.Resources.tmplMechanicsTable },
+                {"tmplPersonalBuffTable",Properties.Resources.tmplPersonalBuffTable },
+                {"tmplPhase",Properties.Resources.tmplPhase },
+                {"tmplPlayers",Properties.Resources.tmplPlayers },
+                {"tmplPlayerStats",Properties.Resources.tmplPlayerStats },
+                {"tmplPlayerTab",Properties.Resources.tmplPlayerTab },
+                {"tmplSimpleRotation",Properties.Resources.tmplSimpleRotation },
+                {"tmplSupportTable",Properties.Resources.tmplSupportTable },
+                {"tmplTargets",Properties.Resources.tmplTargets },
+                {"tmplTargetStats",Properties.Resources.tmplTargetStats },
+                {"tmplTargetTab",Properties.Resources.tmplTargetTab },
+            };
+            foreach (var entry in templates)
+            {
+                string template = "<script type=\"text/x-template\" id=\"" + entry.Key + "\">\r\n";
+                template += entry.Value;
+                template += "\r\n</script>\r\n";
+                templatesScript += template;
+            }
+            return templatesScript;
         }
 
         private string BuildCss(string path)

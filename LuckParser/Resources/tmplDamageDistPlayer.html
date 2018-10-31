@@ -1,0 +1,27 @@
+
+<div>
+    <div v-if="player.minions.length > 0">
+        <ul class="nav nav-tabs">
+            <li>
+                <a class="nav-link" :class="{active: distmode === -1}" @click="distmode = -1">{{player.name}}</a>
+            </li>
+            <li v-for="(minion, mindex) in player.minions">
+                <a class="nav-link" :class="{active: distmode === mindex}"
+                   @click="distmode = mindex">{{minion.name}}</a>
+            </li>
+        </ul>
+    </div>
+    <div class="d-flex flex-row justify-content-center mt-1 mb-1">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link" @click="targetmode = 1" :class="{active: targetmode}">Target</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" @click="targetmode = 0" :class="{active: !targetmode }">All</a>
+            </li>
+        </ul>
+    </div>
+    <damagedist-table-component v-if="player.active" :dmgdist="targetmode === 0 ? dmgdist : dmgdisttarget"
+                                :tableid="'dmgdist-' + playerindex" :actor="actor" :isminion="distmode>=0"
+                                :istarget="targetmode === 1" :sortdata="sortdata"></damagedist-table-component>
+</div>

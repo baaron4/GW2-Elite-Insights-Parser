@@ -1,0 +1,22 @@
+
+<div>
+    <ul class="nav nav-tabs">
+        <li>
+            <a class="nav-link" :class="{active: mode === 0}" @click="mode = 0">
+                Damage
+                Distribution
+            </a>
+        </li>
+        <li>
+            <a class="nav-link" :class="{active: mode === 1}" @click="mode = 1">Graph</a>
+        </li>
+        <li>
+            <a class="nav-link" :class="{active: mode === 2}" @click="mode = 2">Buff Status</a>
+        </li>
+    </ul>
+    <dmgdist-target-component v-show="mode === 0" :target="target" :focus="focus"
+                              :phaseindex="phaseindex" :sortdata="sortdata.dmgdist"></dmgdist-target-component>
+    <buff-stats-target-component v-show="mode === 2" :target="target"
+                                 :targetindex="targetindex" :phase="phase" :players="players" :boons="boons"
+                                 :conditions="conditions"></buff-stats-target-component>
+</div>

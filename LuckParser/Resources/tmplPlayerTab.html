@@ -1,0 +1,43 @@
+
+<div>
+    <ul class="nav nav-tabs">
+        <li>
+            <a class="nav-link" :class="{active: mode === 0}" @click="mode = 0">
+                Damage
+                Distribution
+            </a>
+        </li>
+        <li>
+            <a class="nav-link" :class="{active: mode === 1}" @click="mode = 1">
+                Damage
+                Taken
+            </a>
+        </li>
+        <li>
+            <a class="nav-link" :class="{active: mode === 2}" @click="mode = 2">Food</a>
+        </li>
+        <li>
+            <a class="nav-link" :class="{active: mode === 3}" @click="mode = 3">
+                Simple
+                Rotation
+            </a>
+        </li>
+        <li v-if="player.details.deathRecap">
+            <a class="nav-link" :class="{active: mode === 4}" @click="mode = 4">
+                Death
+                Recap
+            </a>
+        </li>
+    </ul>
+    <dmgdist-player-component v-show="mode === 0" :player="player"
+                       :playerindex="playerindex" :phaseindex="phaseindex" :targets="targets" :phase="phase"
+                       :sortdata="sortdata.dmgdist"></dmgdist-player-component>
+    <dmgtaken-player-component v-show="mode ===1" :player="player"
+                        :playerindex="playerindex" :phaseindex="phaseindex"
+                        :sortdata="sortdata.dmgtaken"></dmgtaken-player-component>
+    <food-component v-show="mode === 2" :food="player.details.food"
+                    :phase="phase"></food-component>
+    <simplerotation-component v-if="mode === 3" :rotation="player.details.rotation[phaseindex]"></simplerotation-component>
+    <deathrecap-component v-if="player.details.deathRecap" v-show="mode === 4"
+                          :playerindex="playerindex" :phase="phase" :recaps="player.details.deathRecap"></deathrecap-component>
+</div>

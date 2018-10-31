@@ -1,0 +1,15 @@
+
+<div>
+    <ul v-if="phaseTargets.length > 1" class=" nav nav-tabs">
+        <li v-for="target in phaseTargets">
+            <a class="nav-link" :class="{active: phase.focus === target}" @click="phase.focus = target">
+                {{target.name}}
+            </a>
+        </li>
+    </ul>
+    <div v-for="(target, targetid) in targets" v-show="phase.focus === target">
+        <h3 class="text-center"><img :alt="target.name" class="icon-lg" :src="target.icon">{{target.name}}</h3>
+        <target-tab-component :focus="phase.focus" :target="target" :targetindex="targetid"
+                              :phaseindex="phaseindex" :phase="phase" :players="players" :boons="boons" :conditions="conditions"></target-tab-component>
+    </div>
+</div>

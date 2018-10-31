@@ -157,11 +157,11 @@ namespace LuckParser.Properties {
         ///&lt;head&gt;
         ///    &lt;meta charset=&quot;utf-8&quot;&gt;
         ///    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/${bootstrapTheme}/bootstrap.min.css&quot;
-        ///        crossorigin=&quot;anonymous&quot;&gt;
+        ///          crossorigin=&quot;anonymous&quot;&gt;
         ///    &lt;link href=&quot;https://fonts.googleapis.com/css?family=Open+Sans&quot; rel=&quot;stylesheet&quot;&gt;
         ///    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css&quot;&gt;
         ///    &lt;!--${Css}--&gt;
-        ///    &lt;script src=&quot;https://code.jquery.com/jquery-3.3. [le reste de la chaîne a été tronqué]&quot;;.
+        ///    &lt;script src=&quot;https://code.jquery.com/jquery-3. [le reste de la chaîne a été tronqué]&quot;;.
         /// </summary>
         internal static string template_html {
             get {
@@ -204,29 +204,304 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
-        ///	&lt;thead&gt;
-        ///		&lt;tr&gt;
-        ///			&lt;th class=&quot;text-left&quot;&gt;Skill&lt;/th&gt;
-        ///			&lt;th&gt;Damage&lt;/th&gt;
-        ///			&lt;th&gt;Percent&lt;/th&gt;
-        ///			&lt;th&gt;Hits&lt;/th&gt;
-        ///			&lt;th&gt;Min&lt;/th&gt;
-        ///			&lt;th&gt;Avg&lt;/th&gt;
-        ///			&lt;th&gt;Max&lt;/th&gt;
-        ///			&lt;th&gt;Crit&lt;/th&gt;
-        ///			&lt;th&gt;Flank&lt;/th&gt;
-        ///			&lt;th&gt;Glance&lt;/th&gt;
-        ///		&lt;/tr&gt;
-        ///	&lt;/thead&gt;
-        ///	&lt;tbody&gt;
-        ///		{{for rows ~totalDamage=totalDamage}}
-        ///		&lt;tr class=&quot;{{if skill.condi}}condi{{else}}power{{/if}}&quot;&gt;
-        ///			&lt;td class=&quot;text-left&quot; title=&quot;{{:skill.id}}&quot;&gt;{{if skill.icon}}&lt;img src [le reste de la chaîne a été tronqué]&quot;;.
+        ///   Recherche une chaîne localisée semblable à 
+        ///&lt;div&gt;
+        ///    &lt;div class=&quot;d-flex flex-row justify-content-center mt-2 mb-2&quot;&gt;
+        ///        &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center&quot;&gt;
+        ///            &lt;li class=&quot;nav-item&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;mode = 0&quot; :class=&quot;{active: mode === 0}&quot;&gt;Uptime&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li class=&quot;nav-item&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;mode = 1&quot; :class=&quot;{active: mode === 1 }&quot;&gt;Generation Self&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li class=&quot;nav-item&quot;&gt;
+        ///                [le reste de la chaîne a été tronqué]&quot;;.
         /// </summary>
-        internal static string tmplDmgTakenTable {
+        internal static string tmplBuffStats {
             get {
-                return ResourceManager.GetString("tmplDmgTakenTable", resourceCulture);
+                return ResourceManager.GetString("tmplBuffStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à 
+        ///&lt;div&gt;
+        ///    &lt;div&gt;
+        ///        &lt;h3 class=&quot;text-center&quot;&gt;Conditions&lt;/h3&gt;
+        ///        &lt;buff-table-component :condition=&quot;true&quot; :generation=&quot;true&quot; :id=&quot;&apos;condition-stats-table-&apos; + target.id&quot;
+        ///                              :buffs=&quot;conditions&quot; :playerdata=&quot;condiData&quot; :sums=&quot;condiSums&quot;&gt;&lt;/buff-table-component&gt;
+        ///    &lt;/div&gt;
+        ///    &lt;div v-show=&quot;hasBoons&quot; class=&quot;mt-2&quot;&gt;
+        ///        &lt;h3 class=&quot;text-center&quot;&gt;Boons&lt;/h3&gt;
+        ///        &lt;buff-table-component :condition=&quot;false&quot; :generation=&quot;false&quot; :id=&quot;&apos;buff-stats-table-&apos; + target.id&quot;
+        ///          [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplBuffStatsTarget {
+            get {
+                return ResourceManager.GetString("tmplBuffStatsTarget", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;div v-if=&quot;buffs.length &gt; 0&quot;&gt;
+        ///    &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot; :id=&quot;id&quot;&gt;
+        ///        &lt;thead&gt;
+        ///            &lt;tr&gt;
+        ///                &lt;th&gt;Sub&lt;/th&gt;
+        ///                &lt;th&gt;&lt;/th&gt;
+        ///                &lt;th&gt;Name&lt;/th&gt;
+        ///                &lt;th v-for=&quot;buff in buffs&quot; :data-original-title=&quot;buff.name&quot;&gt;
+        ///                    &lt;img :src=&quot;buff.icon&quot; :alt=&quot;buff.name&quot; class=&quot;icon icon-hover&quot;&gt;
+        ///                &lt;/th&gt;
+        ///            &lt;/tr&gt;
+        ///        &lt;/thead&gt;
+        ///        &lt;tbody&gt;
+        ///            &lt;tr v-f [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplBuffTable {
+            get {
+                return ResourceManager.GetString("tmplBuffTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à 
+        ///&lt;div&gt;
+        ///    &lt;div v-if=&quot;player.minions.length &gt; 0&quot;&gt;
+        ///        &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///            &lt;li&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === -1}&quot; @click=&quot;distmode = -1&quot;&gt;{{player.name}}&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li v-for=&quot;(minion, mindex) in player.minions&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === mindex}&quot;
+        ///                   @click=&quot;distmode = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///        &lt;/ul&gt;
+        ///    &lt;/div&gt;
+        ///    &lt;div class=&quot;d-flex [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplDamageDistPlayer {
+            get {
+                return ResourceManager.GetString("tmplDamageDistPlayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;div&gt;
+        ///    &lt;div v-if=&quot;actor !== null&quot;&gt;
+        ///        &lt;div v-if=&quot;isminion&quot;&gt;
+        ///            {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its master&apos;s total {{istarget ? &apos;Target&apos; :&apos;&apos;}} dps
+        ///        &lt;/div&gt;
+        ///        &lt;div v-else&gt;
+        ///            {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its total {{istarget ? &apos;Target&apos; :&apos;&apos;}} dps
+        ///        &lt;/div&gt;
+        ///    &lt;/div&gt;
+        ///    &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100 [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplDamageDistTable {
+            get {
+                return ResourceManager.GetString("tmplDamageDistTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à 
+        ///&lt;div&gt;
+        ///    &lt;div v-if=&quot;target.minions.length &gt; 0&quot;&gt;
+        ///        &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///            &lt;li&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === -1}&quot; @click=&quot;distmode = -1&quot;&gt;{{target.name}}&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li v-for=&quot;(minion, mindex) in target.minions&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === mindex}&quot; @click=&quot;distmode = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///        &lt;/ul&gt;
+        ///    &lt;/div&gt;
+        ///    &lt;damagedist-table-component v-if=&quot;focu [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplDamageDistTarget {
+            get {
+                return ResourceManager.GetString("tmplDamageDistTarget", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à 
+        ///&lt;div v-if=&quot;modifiers.length &gt; 0&quot;&gt;
+        ///    &lt;div class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;
+        ///        &lt;ul class=&quot;nav nav-pills&quot;&gt;
+        ///            &lt;li class=&quot;nav-item&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;mode = 1&quot; :class=&quot;{active: mode}&quot;&gt;Target&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li class=&quot;nav-item&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;mode = 0&quot; :class=&quot;{active: !mode }&quot;&gt;All&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///        &lt;/ul&gt;
+        ///    &lt;/div&gt;
+        ///    &lt;table class=&quot;table table-sm table-striped table-hove [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplDamageModifierTable {
+            get {
+                return ResourceManager.GetString("tmplDamageModifierTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;div&gt;
+        ///    &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot; id=&quot;dps-table&quot;&gt;
+        ///        &lt;thead&gt;
+        ///            &lt;tr&gt;
+        ///                &lt;th&gt;Sub&lt;/th&gt;
+        ///                &lt;th&gt;&lt;/th&gt;
+        ///                &lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
+        ///                &lt;th&gt;Account&lt;/th&gt;
+        ///                &lt;th&gt;Target DPS&lt;/th&gt;
+        ///                &lt;th&gt;Power&lt;/th&gt;
+        ///                &lt;th&gt;Condi&lt;/th&gt;
+        ///                &lt;th&gt;All DPS&lt;/th&gt;
+        ///                &lt;th&gt;Power&lt;/th&gt;
+        ///                &lt;th&gt;Condi&lt;/th&gt;
+        ///            &lt;/tr&gt;
+        ///       [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplDamageTable {
+            get {
+                return ResourceManager.GetString("tmplDamageTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à 
+        ///&lt;damagedist-table-component v-if=&quot;player.active&quot; :dmgdist=&quot;dmgtaken&quot; :tableid=&quot;&apos;dmgtaken-&apos; + playerindex&quot;
+        ///                            :actor=&quot;null&quot; :isminion=&quot;false&quot; :istarget=&quot;false&quot; :sortdata=&quot;sortdata&quot;&gt;
+        ///&lt;/damagedist-table-component&gt;.
+        /// </summary>
+        internal static string tmplDamageTakenPlayer {
+            get {
+                return ResourceManager.GetString("tmplDamageTakenPlayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à 
+        ///&lt;div&gt;
+        ///    &lt;div v-for=&quot;(recap, index) in recaps&quot; v-show=&quot;phase.start &lt;= recap.time/1000 &amp;&amp; phase.end &gt;= recap.time/1000&quot;&gt;
+        ///        &lt;div v-if=&quot;recap.toKill === null&quot;&gt;
+        ///            &lt;h3 class=&quot;text-center&quot;&gt;Player was instantly killed after down&lt;/h3&gt;
+        ///            &lt;div class=&quot;text-center&quot;&gt;
+        ///                Took {{data.totalDamage.down[index]}}
+        ///                damage to go into downstate in
+        ///                {{data.totalSeconds.down[index]}} seconds
+        ///            &lt;/div&gt;
+        ///        &lt;/div&gt;
+        ///        &lt;div v-else-if=&quot;r [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplDeathRecap {
+            get {
+                return ResourceManager.GetString("tmplDeathRecap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à 
+        ///&lt;div&gt;
+        ///    &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot; id=&quot;def-table&quot;&gt;
+        ///        &lt;thead&gt;
+        ///            &lt;tr&gt;
+        ///                &lt;th&gt;Sub&lt;/th&gt;
+        ///                &lt;th&gt;&lt;/th&gt;
+        ///                &lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
+        ///                &lt;th&gt;Account&lt;/th&gt;
+        ///                &lt;th&gt;Dmg Taken&lt;/th&gt;
+        ///                &lt;th&gt;Dmg Barrier&lt;/th&gt;
+        ///                &lt;th&gt;Blocked&lt;/th&gt;
+        ///                &lt;th&gt;Invulned&lt;/th&gt;
+        ///                &lt;th&gt;Evaded&lt;/th&gt;
+        ///                &lt;th&gt;
+        ///                    &lt;spa [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplDefenseTable {
+            get {
+                return ResourceManager.GetString("tmplDefenseTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;div&gt;
+        ///    &lt;h3 class=&quot;card-header text-center&quot;&gt;{{ encounter.name }}&lt;/h3&gt;
+        ///    &lt;div class=&quot;card-body container&quot;&gt;
+        ///        &lt;div class=&quot;d-flex flex-row justify-content-center align-item-center&quot;&gt;
+        ///            &lt;img class=&quot;mr-3 icon-xl&quot; :src=&quot;encounter.icon&quot; :alt=&quot;encounter.name&quot;&gt;
+        ///            &lt;div class=&quot;ml-3 d-flex flex-column justify-content-center align-item-center&quot;&gt;
+        ///                &lt;div class=&quot;mb-2&quot; v-for=&quot;target in encounter.targets&quot;&gt;
+        ///                    &lt;div v-if=&quot;encounter.targets.length &gt; 1&quot; class=&quot;sma [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplEncounter {
+            get {
+                return ResourceManager.GetString("tmplEncounter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à 
+        ///&lt;div&gt;
+        ///    &lt;div v-if=&quot;data.start.length&quot;&gt;
+        ///        Started with:
+        ///        &lt;ul&gt;
+        ///            &lt;li v-for=&quot;initial in data.start&quot;&gt;
+        ///                {{initial.name}} &lt;img class=&quot;icon&quot; :alt=&quot;initial.name&quot; :src=&quot;initial.icon&quot;&gt;
+        ///                {{initial.stack &gt; 1 ? &quot;(&quot;+initial.stack+&quot;)&quot; : &quot;&quot;}}
+        ///            &lt;/li&gt;
+        ///        &lt;/ul&gt;
+        ///    &lt;/div&gt;
+        ///    &lt;div v-if=&quot;data.refreshed.length&quot;&gt;
+        ///        In phase consumable updates:
+        ///        &lt;ul&gt;
+        ///            &lt;li v-for=&quot;refresh in data.refreshed&quot;&gt;
+        ///                {{refresh.dimis [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplFood {
+            get {
+                return ResourceManager.GetString("tmplFood", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;div&gt;
+        ///    &lt;div class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;
+        ///        &lt;ul class=&quot;nav nav-pills&quot;&gt;
+        ///            &lt;li class=&quot;nav-item&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;mode = 1&quot; :class=&quot;{active: mode}&quot;&gt;Target&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li class=&quot;nav-item&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;mode = 0&quot; :class=&quot;{active: !mode }&quot;&gt;All&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///        &lt;/ul&gt;
+        ///    &lt;/div&gt;
+        ///    &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100% [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplGameplayTable {
+            get {
+                return ResourceManager.GetString("tmplGameplayTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;div&gt;
+        ///    &lt;h2 v-if=&quot;layout.desc&quot; :class=&quot;{&apos;text-center&apos;: !!phase}&quot;&gt;{{ layoutName }}&lt;/h2&gt;
+        ///    &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///        &lt;li v-for=&quot;tab in layout.tabs&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tab.active}&quot; @click=&quot;select(tab, layout.tabs)&quot;&gt; {{ tab.name }} &lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///    &lt;/ul&gt;
+        ///    &lt;div v-for=&quot;tab in layout.tabs&quot; v-show=&quot;tab.active&quot;&gt;
+        ///        &lt;div v-if=&quot;tab.desc&quot;&gt;{{ tab.desc }}&lt;/div&gt;
+        ///        &lt;div v-if=&quot;tab.layout&quot;&gt;
+        ///            &lt;general-layout-component :layout=&quot;tab.layout&quot;&gt;&lt;/ge [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplGeneralLayout {
+            get {
+                return ResourceManager.GetString("tmplGeneralLayout", resourceCulture);
             }
         }
         
@@ -243,6 +518,59 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;div&gt;
+        ///    &lt;table v-if=&quot;playerMechHeader.length &gt; 0&quot; class=&quot;table table-sm table-striped table-hover&quot;
+        ///           cellspacing=&quot;0&quot; id=&quot;playermechs&quot;&gt;
+        ///        &lt;thead&gt;
+        ///            &lt;tr&gt;
+        ///                &lt;th width=&quot;30px&quot;&gt;Sub&lt;/th&gt;
+        ///                &lt;th width=&quot;30px&quot;&gt;&lt;/th&gt;
+        ///                &lt;th class=&quot;text-left&quot;&gt;Player&lt;/th&gt;
+        ///                &lt;th v-for=&quot;mech in playerMechHeader&quot; :data-original-title=&quot;mech.description&quot;&gt;
+        ///                    {{ mech.shortName}}
+        ///                &lt;/th&gt;
+        ///            &lt;/tr&gt;
+        ///        &lt;/thead&gt; [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplMechanicsTable {
+            get {
+                return ResourceManager.GetString("tmplMechanicsTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à 
+        ///&lt;div&gt;
+        ///    &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mt-2 mb-2&quot;&gt;
+        ///        &lt;li v-for=&quot;base in bases&quot; class=&quot;nav-item&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; @click=&quot;mode = base&quot; :class=&quot;{active: mode === base}&quot;&gt;{{ base }}&lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///    &lt;/ul&gt;
+        ///    &lt;div v-for=&quot;(spec, id) in orderedSpecs&quot; class=&quot;mt-3 mb-3&quot;&gt;
+        ///        &lt;div v-show=&quot;specToBase[spec.name] === mode&quot;&gt;
+        ///            &lt;h3 class=&quot;text-center&quot;&gt;{{ spec.name }}&lt;/h3&gt;
+        ///            &lt;buff-table-component :target=&quot;null&quot; :condition=&quot;fal [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplPersonalBuffTable {
+            get {
+                return ResourceManager.GetString("tmplPersonalBuffTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center&quot;&gt;
+        ///    &lt;li class=&quot;nav-item&quot; v-for=&quot;phase in phases&quot; :data-original-title=&quot;phase.duration / 1000.0 + &apos; seconds&apos;&quot;&gt;
+        ///        &lt;a class=&quot;nav-link&quot; @click=&quot;select(phase)&quot; :class=&quot;{active: phase.active}&quot;&gt;{{phase.name}}&lt;/a&gt;
+        ///    &lt;/li&gt;
+        ///&lt;/ul&gt;.
+        /// </summary>
+        internal static string tmplPhase {
+            get {
+                return ResourceManager.GetString("tmplPhase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à &lt;td&gt;{{:player.group}}&lt;/td&gt;
         ///&lt;td title=&quot;{{:player.profession}}&quot;&gt;&lt;img src=&quot;{{:player.icon}}&quot; alt=&quot;{{:player.profession}}&quot; class=&quot;icon&quot;&gt;&lt;span style=&quot;display:none&quot;&gt;{{:player.profession}}&lt;/span&gt;&lt;/td&gt;
         ///&lt;td class=&quot;text-left&quot;&gt;{{:player.name}}&lt;/td&gt;.
@@ -250,6 +578,24 @@ namespace LuckParser.Properties {
         internal static string tmplPlayerCells {
             get {
                 return ResourceManager.GetString("tmplPlayerCells", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;div&gt;
+        ///    &lt;table class=&quot;table composition&quot;&gt;
+        ///        &lt;tbody&gt;
+        ///            &lt;tr v-for=&quot;group in groups&quot;&gt;
+        ///                &lt;td class=&quot;player-cell&quot; v-for=&quot;player in group&quot; :class=&quot;{active: player.active}&quot;
+        ///                    @click=&quot;select(player,groups)&quot;&gt;
+        ///                    &lt;div&gt;
+        ///                        &lt;img :src=&quot;player.icon&quot; :alt=&quot;player.profession&quot; class=&quot;icon&quot;
+        ///                             :data-original-title=&quot;player.prof&quot;&gt;
+        ///                        &lt;img v-if=&quot;player.condi &gt; 0&quot; src=&quot;https://wiki.guild [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplPlayers {
+            get {
+                return ResourceManager.GetString("tmplPlayers", resourceCulture);
             }
         }
         
@@ -262,6 +608,152 @@ namespace LuckParser.Properties {
         internal static string tmplPlayerSelectCombatReplay {
             get {
                 return ResourceManager.GetString("tmplPlayerSelectCombatReplay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à 
+        ///&lt;div&gt;
+        ///    &lt;div v-for=&quot;(player, pindex) in players&quot; v-show=&quot;player.active&quot;&gt;
+        ///        &lt;div v-if=&quot;!player.isConjure&quot;&gt;
+        ///            &lt;h3 class=&quot;text-center&quot;&gt;&lt;img :alt=&quot;player.profession&quot; class=&quot;icon&quot; :src=&quot;player.icon&quot;&gt;{{player.name}}&lt;/h3&gt;
+        ///            &lt;player-tab-component :player=&quot;player&quot; :playerindex=&quot;pindex&quot; :phase=&quot;phase&quot;
+        ///                                  :phaseindex=&quot;phaseindex&quot; :targets=&quot;targets&quot;&gt;&lt;/player-tab-component&gt;
+        ///        &lt;/div&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/div&gt;.
+        /// </summary>
+        internal static string tmplPlayerStats {
+            get {
+                return ResourceManager.GetString("tmplPlayerStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à 
+        ///&lt;div&gt;
+        ///    &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///        &lt;li&gt;
+        ///            &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 0}&quot; @click=&quot;mode = 0&quot;&gt;
+        ///                Damage
+        ///                Distribution
+        ///            &lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///        &lt;li&gt;
+        ///            &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 1}&quot; @click=&quot;mode = 1&quot;&gt;
+        ///                Damage
+        ///                Taken
+        ///            &lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///        &lt;li&gt;
+        ///            &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 2}&quot; @click=&quot;mode = 2&quot;&gt;Food&lt;/a&gt;
+        ///        &lt; [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplPlayerTab {
+            get {
+                return ResourceManager.GetString("tmplPlayerTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;div&gt;
+        ///    &lt;div class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;
+        ///        &lt;ul class=&quot;nav nav-pills&quot;&gt;
+        ///            &lt;li class=&quot;nav-item&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;autoattack = !autoattack&quot; :class=&quot;{active: autoattack}&quot;&gt;Show auto attacks&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li class=&quot;nav-item&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;small = !small&quot; :class=&quot;{active: small}&quot;&gt;Small icons&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///        &lt;/ul&gt;
+        ///    &lt;/div&gt;
+        ///    &lt;span class=&quot;rot-skill&quot; v-for=&quot;rota i [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplSimpleRotation {
+            get {
+                return ResourceManager.GetString("tmplSimpleRotation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à 
+        ///&lt;div&gt;
+        ///    &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot; id=&quot;sup-table&quot;&gt;
+        ///        &lt;thead&gt;
+        ///            &lt;tr&gt;
+        ///                &lt;th&gt;Sub&lt;/th&gt;
+        ///                &lt;th&gt;&lt;/th&gt;
+        ///                &lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
+        ///                &lt;th&gt;Account&lt;/th&gt;
+        ///                &lt;th&gt;Condi Cleanse&lt;/th&gt;
+        ///                &lt;th&gt;Resurrects&lt;/th&gt;
+        ///            &lt;/tr&gt;
+        ///        &lt;/thead&gt;
+        ///        &lt;tbody&gt;
+        ///            &lt;tr v-for=&quot;row in tableData.rows&quot;&gt;
+        ///                &lt;td&gt;{{row.player.group}}&lt;/t [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplSupportTable {
+            get {
+                return ResourceManager.GetString("tmplSupportTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;div class=&quot;d-flex flex-row justify-content-center flex-wrap&quot;&gt;
+        ///    &lt;img class=&quot;icon-lg mr-2 ml-2 target-cell&quot; v-for=&quot;target in targets&quot; v-show=&quot;show(target)&quot; :src=&quot;target.icon&quot;
+        ///         :alt=&quot;target.name&quot; :data-original-title=&quot;target.name&quot; :class=&quot;{active: target.active}&quot;
+        ///         @click=&quot;target.active = !target.active&quot;&gt;
+        ///&lt;/div&gt;.
+        /// </summary>
+        internal static string tmplTargets {
+            get {
+                return ResourceManager.GetString("tmplTargets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à 
+        ///&lt;div&gt;
+        ///    &lt;ul v-if=&quot;phaseTargets.length &gt; 1&quot; class=&quot; nav nav-tabs&quot;&gt;
+        ///        &lt;li v-for=&quot;target in phaseTargets&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; :class=&quot;{active: phase.focus === target}&quot; @click=&quot;phase.focus = target&quot;&gt;
+        ///                {{target.name}}
+        ///            &lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///    &lt;/ul&gt;
+        ///    &lt;div v-for=&quot;(target, targetid) in targets&quot; v-show=&quot;phase.focus === target&quot;&gt;
+        ///        &lt;h3 class=&quot;text-center&quot;&gt;&lt;img :alt=&quot;target.name&quot; class=&quot;icon-lg&quot; :src=&quot;target.icon&quot;&gt;{{target.name}}&lt;/h3&gt;
+        ///        &lt;target-ta [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplTargetStats {
+            get {
+                return ResourceManager.GetString("tmplTargetStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à 
+        ///&lt;div&gt;
+        ///    &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///        &lt;li&gt;
+        ///            &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 0}&quot; @click=&quot;mode = 0&quot;&gt;
+        ///                Damage
+        ///                Distribution
+        ///            &lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///        &lt;li&gt;
+        ///            &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 1}&quot; @click=&quot;mode = 1&quot;&gt;Graph&lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///        &lt;li&gt;
+        ///            &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 2}&quot; @click=&quot;mode = 2&quot;&gt;Buff Status&lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///    &lt;/ul&gt;
+        ///    &lt;dmgdist-target-component v- [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplTargetTab {
+            get {
+                return ResourceManager.GetString("tmplTargetTab", resourceCulture);
             }
         }
     }
