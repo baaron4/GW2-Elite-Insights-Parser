@@ -35,7 +35,7 @@ namespace LuckParser.Models
 
         protected override CombatReplayMap GetCombatMapInternal()
         {
-            return new CombatReplayMap("https://i.imgur.com/FAMExYD.png",
+            return new CombatReplayMap("https://i.imgur.com/JOoJRXM.png",
                             Tuple.Create(3205, 4191),
                             Tuple.Create(10846, -3878, 18086, 5622),
                             Tuple.Create(-21504, -21504, 24576, 24576),
