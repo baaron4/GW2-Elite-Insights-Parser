@@ -154,6 +154,31 @@ var initTable = function (id, cell, order, orderCallBack) {
     }
 };
 
+var roundingComponent = {
+    methods: {
+        round: function (value) {
+            if (isNaN(value)) {
+                return 0;
+            }
+            return Math.round(value);
+        },
+        round2: function (value) {
+            if (isNaN(value)) {
+                return 0;
+            }
+            var mul = 100;
+            return Math.round(mul * value) / mul;
+        },
+        round3: function (value) {
+            if (isNaN(value)) {
+                return 0;
+            }
+            var mul = 1000;
+            return Math.round(mul * value) / mul;
+        }
+    }
+};
+
 var updateTable = function (id) {
     if (lazyTableUpdater) {
         var lazyTable = document.querySelector(id);
@@ -443,6 +468,7 @@ Vue.component("defense-stats-component", {
 
 Vue.component("support-stats-component", {
     props: ["phase", "players"],
+    mixins: [roundingComponent],
     mounted() {
         initTable("#sup-table", 4, "desc");
     },
@@ -481,7 +507,6 @@ Vue.component("support-stats-component", {
                         sup: groups[i]
                     });
                 }
-
             }
             sums.push({
                 name: "Total",
@@ -498,9 +523,10 @@ Vue.component("support-stats-component", {
 
 Vue.component("gameplay-stats-component", {
     props: ["phase", "targets", "players"],
+    mixins: [roundingComponent],
     data: function () {
         return {
-            mode: 0,
+            mode: 0
         };
     },
     mounted() {
@@ -508,22 +534,6 @@ Vue.component("gameplay-stats-component", {
     },
     updated() {
         updateTable("#dmg-table");
-    },
-    methods: {
-        round2: function (value) {
-            if (isNaN(value)) {
-                return 0;
-            }
-            var mul = 100;
-            return Math.round(mul * value) / mul;
-        },
-        round3: function (value) {
-            if (isNaN(value)) {
-                return 0;
-            }
-            var mul = 1000;
-            return Math.round(mul * value) / mul;
-        }
     },
     computed: {
         tableData: function () {
@@ -671,9 +681,9 @@ Vue.component("buff-table-component", {
         getCellTooltip: function (buff, val, uptime) {
             if (val instanceof Array) {
                 if (!uptime && this.generation && val[0] > 0) {
-                  return val[1] + (buff.stacking ? "" : "%") + " with overstack";
+                    return val[1] + (buff.stacking ? "" : "%") + " with overstack";
                 } else if (buff.stacking && val[1] > 0) {
-                  return "Uptime: " + val[1] + "%";
+                    return "Uptime: " + val[1] + "%";
                 }
             }
             return false;
@@ -978,6 +988,7 @@ Vue.component("dmgmodifier-stats-component", {
 Vue.component("damagedist-table-component", {
     props: ["dmgdist", "tableid", "actor", "isminion", "istarget", "sortdata"],
     template: "#dmgdisttable-template",
+    mixins: [roundingComponent],
     mounted() {
         var _this = this;
         initTable(
@@ -1017,21 +1028,6 @@ Vue.component("damagedist-table-component", {
         $("#" + this.tableid)
             .DataTable()
             .destroy();
-    },
-    methods: {
-        round: function (value) {
-            if (isNaN(value)) {
-                return 0;
-            }
-            return Math.round(value);
-        },
-        round3: function (value) {
-            if (isNaN(value)) {
-                return 0;
-            }
-            var mul = 1000;
-            return Math.round(mul * value) / mul;
-        }
     },
     computed: {
         rows: function () {
@@ -1191,7 +1187,7 @@ Vue.component("simplerotation-component", {
         };
     },
     methods: {
-        getSkill: function(id) {
+        getSkill: function (id) {
             return findSkill(false, id);
         }
     }
@@ -1200,7 +1196,7 @@ Vue.component("simplerotation-component", {
 Vue.component("target-stats-component", {
     props: ["players", "targets", "phase", "phaseindex", "presentboons", "presentconditions"],
     computed: {
-        phaseTargets: function() {
+        phaseTargets: function () {
             var res = [];
             for (var i = 0; i < this.phase.targets.length; i++) {
                 var tar = this.targets[this.phase.targets[i]];
@@ -1217,11 +1213,11 @@ Vue.component("target-stats-component", {
                 data[i] = findSkill(true, this.presentboons[i]);
             }
             return data;
-        }, 
+        },
         conditions: function () {
             var data = [];
             for (var i = 0; i < this.presentconditions.length; i++) {
-              data[i] = findSkill(true, this.presentconditions[i]);
+                data[i] = findSkill(true, this.presentconditions[i]);
             }
             return data;
         }
@@ -1246,13 +1242,13 @@ Vue.component("target-tab-component", {
 Vue.component("buff-stats-target-component", {
     props: ['target', 'phase', 'players', 'boons', 'conditions', 'targetindex'],
     computed: {
-        targetPhaseIndex: function() {
+        targetPhaseIndex: function () {
             return this.phase.targets.indexOf(this.targetindex);
         },
-        hasBoons: function() {
+        hasBoons: function () {
             return this.phase.targetsBoonTotals[this.targetPhaseIndex];
         },
-        condiData: function() {
+        condiData: function () {
             var res = [];
             if (this.targetPhaseIndex === -1) {
                 for (var i = 0; i < this.players.length; i++) {
@@ -1265,13 +1261,13 @@ Vue.component("buff-stats-target-component", {
             }
             for (var i = 0; i < this.players.length; i++) {
                 res.push({
-                  player: this.players[i],
-                  data: this.phase.targetsCondiStats[this.targetPhaseIndex][i]
+                    player: this.players[i],
+                    data: this.phase.targetsCondiStats[this.targetPhaseIndex][i]
                 });
             }
             return res;
         },
-        condiSums: function() {
+        condiSums: function () {
             var res = [];
             if (this.targetPhaseIndex === -1) {
                 res.push({
@@ -1291,12 +1287,12 @@ Vue.component("buff-stats-target-component", {
             });
             return res;
         },
-        buffData: function() {
+        buffData: function () {
             var res = [];
             if (this.targetPhaseIndex === -1 || !this.hasBoons) {
                 res.push({
                     player: this.target,
-                    data: {avg: 0.0, data: []}
+                    data: { avg: 0.0, data: [] }
                 });
                 return res;
             }
@@ -1338,17 +1334,17 @@ Vue.component('dmgdist-target-component', {
 Vue.component("deathrecap-component", {
     props: ["recaps", "playerindex", "phase"],
     computed: {
-        data: function() {
+        data: function () {
             var res = {
                 totalSeconds: { down: [], kill: [] },
-                totalDamage: {down: [], kill: []},
+                totalDamage: { down: [], kill: [] },
                 data: [],
                 layout: {}
             };
-            for (var i = 0; i< this.recaps.length; i++ ) {
+            for (var i = 0; i < this.recaps.length; i++) {
                 var recap = this.recaps[i];
                 if (recap.toDown !== null) {
-                    var totalSec = (recap.toDown[0][0] - recap.toDown[recap.toDown.length - 1][0])/1000;
+                    var totalSec = (recap.toDown[0][0] - recap.toDown[recap.toDown.length - 1][0]) / 1000;
                     var totalDamage = 0;
                     for (var j = 0; j < recap.toDown.length; j++) {
                         totalDamage += recap.toDown[j][2];
