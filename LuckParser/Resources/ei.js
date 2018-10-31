@@ -668,12 +668,12 @@ Vue.component("buff-table-component", {
             }
             return false;
         },
-        getCellTooltip: function (buff, val) {
+        getCellTooltip: function (buff, val, uptime) {
             if (val instanceof Array) {
-                if (this.generation && val[0] > 0) {
-                    return val[1] + (buff.stacking ? "" : "%") + " with overstack";
+                if (!uptime && this.generation && val[0] > 0) {
+                  return val[1] + (buff.stacking ? "" : "%") + " with overstack";
                 } else if (buff.stacking && val[1] > 0) {
-                    return "Uptime: " + val[1] + "%";
+                  return "Uptime: " + val[1] + "%";
                 }
             }
             return false;
@@ -1198,7 +1198,7 @@ Vue.component("simplerotation-component", {
 });
 
 Vue.component("target-stats-component", {
-    props: ["players", "targets", "phase", "phaseindex"],
+    props: ["players", "targets", "phase", "phaseindex", "presentboons", "presentconditions"],
     computed: {
         phaseTargets: function() {
             var res = [];
@@ -1210,12 +1210,26 @@ Vue.component("target-stats-component", {
                 this.phase.focus = res[0] || null;
             }
             return res;
+        },
+        boons: function () {
+            var data = [];
+            for (var i = 0; i < this.presentboons.length; i++) {
+                data[i] = findSkill(true, this.presentboons[i]);
+            }
+            return data;
+        }, 
+        conditions: function () {
+            var data = [];
+            for (var i = 0; i < this.presentconditions.length; i++) {
+              data[i] = findSkill(true, this.presentconditions[i]);
+            }
+            return data;
         }
     }
 });
 
 Vue.component("target-tab-component", {
-    props: ["focus", "target", "phaseindex", "players", "phase"],
+    props: ["focus", "target", "phaseindex", "players", "phase", "boons", "conditions", 'targetindex'],
     data: function () {
         return {
             mode: 0,
@@ -1226,6 +1240,73 @@ Vue.component("target-tab-component", {
                 }
             }
         };
+    }
+});
+
+Vue.component("buff-stats-target-component", {
+    props: ['target', 'phase', 'players', 'boons', 'conditions', 'targetindex'],
+    computed: {
+        targetPhaseIndex: function() {
+            return this.phase.targets.indexOf(this.targetindex);
+        },
+        hasBoons: function() {
+            return this.phase.targetsBoonTotals[this.targetPhaseIndex];
+        },
+        condiData: function() {
+            var res = [];
+            if (this.targetPhaseIndex === -1) {
+                for (var i = 0; i < this.players.length; i++) {
+                    res.push({
+                        player: this.players[i],
+                        data: { avg: 0.0, data: [] }
+                    });
+                }
+                return res;
+            }
+            for (var i = 0; i < this.players.length; i++) {
+                res.push({
+                  player: this.players[i],
+                  data: this.phase.targetsCondiStats[this.targetPhaseIndex][i]
+                });
+            }
+            return res;
+        },
+        condiSums: function() {
+            var res = [];
+            if (this.targetPhaseIndex === -1) {
+                res.push({
+                    icon: this.target.icon,
+                    name: this.target.name,
+                    avg: 0,
+                    data: []
+                });
+                return res;
+            }
+            var targetData = this.phase.targetsCondiTotals[this.targetPhaseIndex];
+            res.push({
+                icon: this.target.icon,
+                name: this.target.name,
+                avg: targetData.avg,
+                data: targetData.data
+            });
+            return res;
+        },
+        buffData: function() {
+            var res = [];
+            if (this.targetPhaseIndex === -1 || !this.hasBoons) {
+                res.push({
+                    player: this.target,
+                    data: {avg: 0.0, data: []}
+                });
+                return res;
+            }
+            var targetData = this.phase.targetsBoonTotals[this.targetPhaseIndex];
+            res.push({
+                player: this.target,
+                data: targetData
+            });
+            return res;
+        }
     }
 });
 

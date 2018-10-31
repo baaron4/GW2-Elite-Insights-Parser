@@ -45,11 +45,12 @@
                 </thead>
                 <tbody>
                     <tr v-for="row in playerdata">
-                        <td>{{ row.player.group }}</td>
-                        <td :data-original-title="row.player.profession"><img :src="row.player.icon" :alt="row.player.profession"
+                        <td>{{ row.player.group ? row.player.group : '-' }}</td>
+                        <td :data-original-title="row.player.profession ? row.player.profession : row.player.name"><img :src="row.player.icon"
+                                :alt="row.player.profession ? row.player.profession : row.player.name"
                                 class="icon">
                             <span style="display:none">
-                                {{ row.player.profession }}
+                                {{ row.player.profession ? row.player.profession : row.player.name}}
                             </span>
                         </td>
                         <td class="text-left" :data-original-title="getAvgTooltip(row.data.avg)">
@@ -63,9 +64,10 @@
                 <tfoot v-show="sums.length > 0">
                     <tr v-for="sum in sums">
                         <td></td>
-                        <td></td>
-                        <td :data-original-title="getAvgTooltip(sum.avg)">{{sum.name}}</td>
-                        <td v-for=" (buff, index) in buffs" :data-original-title="getCellTooltip(buff, sum.data[index])">
+                        <td v-if="sum.icon" :data-original-title="sum.name"><img :src="sum.icon" :alt="sum.name" class="icon"></td>
+                        <td v-else></td>
+                        <td :class="{'text-left' : !!sum.icon}" :data-original-title="getAvgTooltip(sum.avg)">{{sum.name}}</td>
+                        <td v-for=" (buff, index) in buffs" :data-original-title="getCellTooltip(buff, sum.data[index], !!sum.icon)">
                             {{ getCellValue(buff, sum.data[index]) }}
                         </td>
                     </tr>
@@ -556,9 +558,8 @@
                             </li>
                         </ul>
                     </div>
-                    <buff-table-component v-show="datatype === datatypes.boonTable" :condition="false"
-                        :generation="mode > 0" :id="'boon-stats-table'" :buffs="boons" :playerdata="buffData.boonsData[mode]"
-                        :sums="mode === 0 ? buffData.boonsData[5] : []">
+                    <buff-table-component v-show="datatype === datatypes.boonTable" :condition="false" :generation="mode > 0"
+                        :id="'boon-stats-table'" :buffs="boons" :playerdata="buffData.boonsData[mode]" :sums="mode === 0 ? buffData.boonsData[5] : []">
                     </buff-table-component>
                     <buff-table-component v-show="datatype === datatypes.offensiveBuffTable" :condition="false"
                         :generation="mode > 0" :id="'offensivebuff-stats-table'" :buffs="offs" :playerdata="buffData.offsData[mode]"
@@ -637,19 +638,20 @@
             </mechanics-stats-component>
         </div>
         <div id="targets-stats">
-            <target-stats-component inline-template  v-show="dataType === datatypes.targetTab" :players="logdata.players" 
-                                    :targets="logdata.targets" :phase="phaseData.phase"
-                                    :phaseindex="phaseData.index">
+            <target-stats-component inline-template v-show="dataType === datatypes.targetTab" :players="logdata.players"
+                :targets="logdata.targets" :phase="phaseData.phase" :phaseindex="phaseData.index" :presentboons="logdata.boons"
+                :presentconditions="logdata.conditions">
                 <div>
-                    <ul class="nav nav-tabs">
+                    <ul v-if="phaseTargets.length > 0" class=" nav nav-tabs">
                         <li v-for="target in phaseTargets">
                             <a class="nav-link" :class="{active: phase.focus === target}" @click="phase.focus = target">
                                 {{target.name}}</a>
                         </li>
                     </ul>
-                    <div v-for="target in targets" v-show="phase.focus === target">
+                    <div v-for="(target, targetid) in targets" v-show="phase.focus === target">
                         <h3 class="text-center"><img :alt="target.name" class="icon-lg" :src="target.icon">{{target.name}}</h3>
-                        <target-tab-component inline-template :focus="phase.focus" :target="target" :phaseindex="phaseindex" :phase="phase" :players="players">
+                        <target-tab-component inline-template :focus="phase.focus" :target="target" :targetindex="targetid"
+                            :phaseindex="phaseindex" :phase="phase" :players="players" :boons="boons" :conditions="conditions">
                             <div>
                                 <ul class="nav nav-tabs">
                                     <li>
@@ -663,7 +665,8 @@
                                         <a class="nav-link" :class="{active: mode === 2}" @click="mode = 2">Buff Status</a>
                                     </li>
                                 </ul>
-                                <dmgdist-target-component inline-template v-show="mode === 0" :target="target" :focus="focus" :phaseindex="phaseindex" :sortdata="sortdata.dmgdist">
+                                <dmgdist-target-component inline-template v-show="mode === 0" :target="target" :focus="focus"
+                                    :phaseindex="phaseindex" :sortdata="sortdata.dmgdist">
                                     <div>
                                         <div v-if="target.minions.length > 0">
                                             <ul class="nav nav-tabs">
@@ -679,20 +682,22 @@
                                             :actor="actor" :isminion="distmode>=0" :sortdata="sortdata"></damagedist-table-component>
                                     </div>
                                 </dmgdist-target-component>
-                                <buffstats-target-component inline-template v-show="mode === 2" :target="target" :phase="phase" :players="players">
+                                <buff-stats-target-component inline-template v-show="mode === 2" :target="target"
+                                    :targetindex="targetindex" :phase="phase" :players="players" :boons="boons"
+                                    :conditions="conditions">
                                     <div>
                                         <div>
                                             <h3 class="text-center">Conditions</h3>
-                                            <buff-table-component :condition="true" :generation="true" :id="'condition-stats-table-' + target.id" :buffs="conditions"
-                                                :playerdata="condiData" :sums="sums"></buff-table-component>
+                                            <buff-table-component :condition="true" :generation="true" :id="'condition-stats-table-' + target.id"
+                                                :buffs="conditions" :playerdata="condiData" :sums="condiSums"></buff-table-component>
                                         </div>
                                         <div v-show="hasBoons" class="mt-2">
                                             <h3 class="text-center">Boons</h3>
-                                            <buff-table-component :condition="false" :generation="false" :id="'buff-stats-table-' + target.id" :buffs="boons"
-                                                :playerdata="buffData" :sums="sums"></buff-table-component>
+                                            <buff-table-component :condition="false" :generation="false" :id="'buff-stats-table-' + target.id"
+                                                :buffs="boons" :playerdata="buffData" :sums="[]"></buff-table-component>
                                         </div>
                                     </div>
-                                </buffstats-target-component>
+                                </buff-stats-target-component>
                             </div>
                         </target-tab-component>
                     </div>
@@ -767,13 +772,14 @@
                                             :actor="null" :isminion="false" :istarget="false" :sortdata="sortdata">
                                         </damagedist-table-component>
                                     </dmgtaken-component>
-                                    <food-component inline-template v-show="mode === 2" :food="player.details.food[phaseindex]" :phase="phase">
+                                    <food-component inline-template v-show="mode === 2" :food="player.details.food"
+                                        :phase="phase">
                                         <div>
                                             <div v-if="data.start.length">
                                                 Started with:
                                                 <ul>
                                                     <li v-for="initial in data.start">
-                                                        {{initial.name}} <img class="icon" :alt="initial.name" :src="initial.icon"> 
+                                                        {{initial.name}} <img class="icon" :alt="initial.name" :src="initial.icon">
                                                         {{initial.stack > 1 ? "("+initial.stack+")" : ""}}
                                                     </li>
                                                 </ul>
@@ -785,7 +791,8 @@
                                                         {{refresh.dimished ? 'suffered' : 'consumed'}} {{refresh.name}}
                                                         <img class="icon" :alt="refresh.name" :src="refresh.icon">
                                                         {{refresh.stack > 1 ? "("+refresh.stack+")" : ""}}
-                                                        at {{refresh.time - phase.start}}s ({{refresh.duration}} seconds)
+                                                        at {{refresh.time - phase.start}}s ({{refresh.duration}}
+                                                        seconds)
                                                     </li>
                                                 </ul>
                                             </div>
