@@ -1215,7 +1215,7 @@ Vue.component("target-stats-component", {
 });
 
 Vue.component("target-tab-component", {
-    props: ["focus", "target", "phaseindex"],
+    props: ["focus", "target", "phaseindex", "players", "phase"],
     data: function () {
         return {
             mode: 0,

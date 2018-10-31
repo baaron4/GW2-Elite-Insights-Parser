@@ -556,15 +556,15 @@
                             </li>
                         </ul>
                     </div>
-                    <buff-table-component v-show="datatype === datatypes.boonTable" :target="null" :condition="false"
+                    <buff-table-component v-show="datatype === datatypes.boonTable" :condition="false"
                         :generation="mode > 0" :id="'boon-stats-table'" :buffs="boons" :playerdata="buffData.boonsData[mode]"
                         :sums="mode === 0 ? buffData.boonsData[5] : []">
                     </buff-table-component>
-                    <buff-table-component v-show="datatype === datatypes.offensiveBuffTable" :target="null" :condition="false"
+                    <buff-table-component v-show="datatype === datatypes.offensiveBuffTable" :condition="false"
                         :generation="mode > 0" :id="'offensivebuff-stats-table'" :buffs="offs" :playerdata="buffData.offsData[mode]"
                         :sums="mode === 0 ? buffData.offsData[5] : []">
                     </buff-table-component>
-                    <buff-table-component v-show="datatype === datatypes.defensiveBuffTable" :target="null" :condition="false"
+                    <buff-table-component v-show="datatype === datatypes.defensiveBuffTable" :condition="false"
                         :generation="mode > 0" :id="'defensivebuff-stats-table'" :buffs="defs" :playerdata="buffData.defsData[mode]"
                         :sums="mode === 0 ? buffData.defsData[5] : []">
                     </buff-table-component>
@@ -649,7 +649,7 @@
                     </ul>
                     <div v-for="target in targets" v-show="phase.focus === target">
                         <h3 class="text-center"><img :alt="target.name" class="icon-lg" :src="target.icon">{{target.name}}</h3>
-                        <target-tab-component inline-template :focus="phase.focus" :target="target" :phaseindex="phaseindex">
+                        <target-tab-component inline-template :focus="phase.focus" :target="target" :phaseindex="phaseindex" :phase="phase" :players="players">
                             <div>
                                 <ul class="nav nav-tabs">
                                     <li>
@@ -678,7 +678,21 @@
                                         <damagedist-table-component v-if="focus === target" :dmgdist="dmgdist" :tableid="'dmgdist-target-' + phaseindex"
                                             :actor="actor" :isminion="distmode>=0" :sortdata="sortdata"></damagedist-table-component>
                                     </div>
-                                </dmgdist-component>
+                                </dmgdist-target-component>
+                                <buffstats-target-component inline-template v-show="mode === 2" :target="target" :phase="phase" :players="players">
+                                    <div>
+                                        <div>
+                                            <h3 class="text-center">Conditions</h3>
+                                            <buff-table-component :condition="true" :generation="true" :id="'condition-stats-table-' + target.id" :buffs="conditions"
+                                                :playerdata="condiData" :sums="sums"></buff-table-component>
+                                        </div>
+                                        <div v-show="hasBoons" class="mt-2">
+                                            <h3 class="text-center">Boons</h3>
+                                            <buff-table-component :condition="false" :generation="false" :id="'buff-stats-table-' + target.id" :buffs="boons"
+                                                :playerdata="buffData" :sums="sums"></buff-table-component>
+                                        </div>
+                                    </div>
+                                </buffstats-target-component>
                             </div>
                         </target-tab-component>
                     </div>
