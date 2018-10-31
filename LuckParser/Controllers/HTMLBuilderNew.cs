@@ -1054,17 +1054,18 @@ namespace LuckParser.Controllers
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<FoodDto> list = new List<FoodDto>();
-            List<Tuple<Boon, long, int>> consume = p.GetConsumablesList(_log, phase.Start, phase.End);
+            List<Player.Consumable> consume = p.GetConsumablesList(_log, phase.Start, phase.End);
 
-            foreach(Tuple<Boon, long, int> entry in consume)
+            foreach(Player.Consumable entry in consume)
             {
                 FoodDto dto = new FoodDto
                 {
-                    time = entry.Item2 / 1000.0,
-                    duration = entry.Item3 / 1000.0,
-                    name = entry.Item1.Name,
-                    icon = entry.Item1.Link,
-                    dimished = entry.Item1.ID == 46587 || entry.Item1.ID == 46668
+                    time = entry.Time / 1000.0,
+                    duration = entry.Duration / 1000.0,
+                    name = entry.Item.Name,
+                    icon = entry.Item.Link,
+                    stack = entry.Stack,
+                    dimished = entry.Item.ID == 46587 || entry.Item.ID == 46668
                 };
                 list.Add(dto);
             }

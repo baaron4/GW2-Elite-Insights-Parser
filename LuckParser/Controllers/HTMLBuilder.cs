@@ -1747,20 +1747,20 @@ namespace LuckParser.Controllers
                     {
                         sw.Write("<div class=\"tab-pane fade show active\" id=\"home" + pid + "\">");
                         {
-                            List<Tuple<Boon, long, int>> consume = p.GetConsumablesList(_log, phase.Start, phase.End);
-                            List<Tuple<Boon, long, int>> initial = consume.Where(x => x.Item2 == 0).ToList();
-                            List<Tuple<Boon, long, int>> refreshed = consume.Where(x => x.Item2 > 0).ToList();
+                            List<Player.Consumable> consume = p.GetConsumablesList(_log, phase.Start, phase.End);
+                            List<Player.Consumable> initial = consume.Where(x => x.Time == 0).ToList();
+                            List<Player.Consumable> refreshed = consume.Where(x => x.Time > 0).ToList();
                             if (initial.Count > 0)
                             {
                                 sw.Write("<p>Started with ");
                                 for (int i = 0; i < initial.Count;i++)
                                 if (i == 0)
                                 {
-                                    sw.Write(initial[i].Item1.Name + "<img src=\"" + initial[i].Item1.Link + "\" alt=\"" + initial[i].Item1.Name + "\" height=\"18\" width=\"18\" >");
+                                    sw.Write(initial[i].Item.Name  + "<img src=\"" + initial[i].Item.Link + "\" alt=\"" + initial[i].Item.Name + "\" height=\"18\" width=\"18\" >" + (initial[i].Stack > 1 ? " (" + initial[i].Stack + ")" : ""));
                                 }
                                 else
                                 {
-                                    sw.Write(", " + initial[i].Item1.Name + "<img src=\"" + initial[i].Item1.Link + "\" alt=\"" + initial[i].Item1.Name + "\" height=\"18\" width=\"18\" >");
+                                    sw.Write(", " + initial[i].Item.Name + "<img src=\"" + initial[i].Item.Link + "\" alt=\"" + initial[i].Item.Name + "\" height=\"18\" width=\"18\" >" + (initial[i].Stack > 1 ? " (" + initial[i].Stack + ")" : ""));
                                 }
                                 sw.Write("</p>");
                             }
@@ -1768,14 +1768,14 @@ namespace LuckParser.Controllers
                             {
                                 sw.Write("<p>In-fight food updates: ");
                                 sw.Write("<ul>");
-                                foreach (Tuple<Boon, long, int> buff in refreshed)
-                                    if (buff.Item1.ID == 46587 || buff.Item1.ID == 46668) // Malnourished and Diminshed
+                                foreach (Player.Consumable buff in refreshed)
+                                    if (buff.Item.ID == 46587 || buff.Item.ID == 46668) // Malnourished and Diminshed
                                     {
-                                        sw.Write("<li> suffered " + buff.Item1.Name + "<img src=\"" + buff.Item1.Link + "\" alt=\"" + buff.Item1.Name + "\" height=\"18\" width=\"18\" > at " + Math.Round(buff.Item2 / 1000.0, 3) + "s</li>");
+                                        sw.Write("<li> suffered " + buff.Item.Name  + "<img src=\"" + buff.Item.Link + "\" alt=\"" + buff.Item.Name + "\" height=\"18\" width=\"18\" >" + (buff.Stack > 1 ? " (" + buff.Stack + ")" : "") +" at " + Math.Round(buff.Time / 1000.0, 3) + "s</li>");
                                     }
                                     else
                                     {
-                                        sw.Write("<li> consumed " + buff.Item1.Name + "<img src=\"" + buff.Item1.Link + "\" alt=\"" + buff.Item1.Name + "\" height=\"18\" width=\"18\" > at " + Math.Round(buff.Item2 / 1000.0, 3) + "s, (" + (int)(buff.Item3 / 60000) + " min duration)</li>");
+                                        sw.Write("<li> consumed " + buff.Item.Name + "<img src=\"" + buff.Item.Link + "\" alt=\"" + buff.Item.Name + "\" height=\"18\" width=\"18\" >" + (buff.Stack > 1 ? " (" + buff.Stack + ")" : "")+" at " + Math.Round(buff.Time / 1000.0, 3) + "s, (" + (int)(buff.Duration / 60000) + " min duration)</li>");
                                     }
                                 sw.Write("</ul>");
                                 sw.Write("</p>");

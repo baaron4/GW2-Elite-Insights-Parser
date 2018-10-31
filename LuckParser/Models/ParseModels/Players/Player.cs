@@ -11,12 +11,27 @@ namespace LuckParser.Models.ParseModels
 {
     public class Player : AbstractMasterPlayer
     {
+        public class Consumable
+        {
+            public Boon Item { get; }
+            public long Time { get; }
+            public int Duration { get; }
+            public int Stack { get; set; }
+
+            public Consumable(Boon item, long time, int duration)
+            {
+                Item = item;
+                Time = time;
+                Duration = duration;
+                Stack = 1;
+            }
+        }
         // Fields
         public readonly string Account;
         public readonly int Group;
         public long Disconnected { get; set; }//time in ms the player dcd
        
-        private readonly List<Tuple<Boon,long,int>> _consumeList = new List<Tuple<Boon, long,int>>();
+        private readonly List<Consumable> _consumeList = new List<Consumable>();
         //weaponslist
         private string[] _weaponsArray;
 
@@ -63,13 +78,13 @@ namespace LuckParser.Models.ParseModels
             return _weaponsArray;
         }
 
-        public List<Tuple<Boon, long, int>> GetConsumablesList(ParsedLog log, long start, long end)
+        public List<Consumable> GetConsumablesList(ParsedLog log, long start, long end)
         {
             if (_consumeList.Count == 0)
             {
                 SetConsumablesList(log);
             }
-            return _consumeList.Where(x => x.Item2 >= start && x.Item2 <= end).ToList() ;
+            return _consumeList.Where(x => x.Time >= start && x.Time <= end).ToList() ;
         }
         
         // Private Methods
@@ -221,11 +236,18 @@ namespace LuckParser.Models.ParseModels
                     }
                     if (time <= fightDuration)
                     {
-                        _consumeList.Add(new Tuple<Boon, long, int>(consumable, time, c.Value));
+                        Consumable existing = _consumeList.Find(x => x.Time == time && x.Item.ID == consumable.ID);
+                        if (existing != null)
+                        {
+                            existing.Stack++;
+                        } else
+                        {
+                            _consumeList.Add(new Consumable(consumable, time, c.Value));
+                        }
                     }
                 }
             }
-            _consumeList.Sort((x, y) => x.Item2.CompareTo(y.Item2));
+            _consumeList.Sort((x, y) => x.Time.CompareTo(y.Time));
 
         }
 
