@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/${bootstrapTheme}/bootstrap.min.css"
-          crossorigin="anonymous">
+        crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
     <!--${Css}-->
@@ -57,16 +57,14 @@
         <general-layout-component :layout="layout" :phase="phaseData.phase">
         </general-layout-component>
         <div id="general-stats">
-            <damage-stats-component v-show="dataType === datatypes.damageTable" :phase="phaseData.phase" :phaseindex:"phaseData.index"
-                :players="logdata.players" :targets="logdata.targets"></damage-stats-component>
-            <gameplay-stats-component v-show="dataType === datatypes.gameplayTable" :phase="phaseData.phase" :phaseindex:"phaseData.index"
-                :players="logdata.players" :targets="logdata.targets"></gameplay-stats-component>
-            <dmgmodifier-stats-component v-show="dataType === datatypes.dmgModifiersTable" :phase="phaseData.phase" :phaseindex:"phaseData.index"
-                :players="logdata.players" :targets="logdata.targets" :phases="logdata.phases"></dmgmodifier-stats-component>
-            <support-stats-component v-show="dataType === datatypes.supTable" :phase="phaseData.phase"
-                :players="logdata.players"></support-stats-component>
-            <defense-stats-component v-show="dataType === datatypes.defTable" :phase="phaseData.phase"
-                :players="logdata.players"></defense-stats-component>
+            <damage-stats-component v-show="dataType === datatypes.damageTable" :phase="phaseData.phase"
+                :phaseindex="phaseData.index" :players="logdata.players" :targets="logdata.targets"></damage-stats-component>
+            <gameplay-stats-component v-show="dataType === datatypes.gameplayTable" :phase="phaseData.phase"
+                :phaseindex="phaseData.index" :players="logdata.players" :targets="logdata.targets"></gameplay-stats-component>
+            <dmgmodifier-stats-component v-show="dataType === datatypes.dmgModifiersTable" :phase="phaseData.phase"
+                :phaseindex="phaseData.index" :players="logdata.players" :targets="logdata.targets" :phases="logdata.phases"></dmgmodifier-stats-component>
+            <support-stats-component v-show="dataType === datatypes.supTable" :phase="phaseData.phase" :players="logdata.players"></support-stats-component>
+            <defense-stats-component v-show="dataType === datatypes.defTable" :phase="phaseData.phase" :players="logdata.players"></defense-stats-component>
         </div>
         <div id="buff-stats">
             <buff-stats-component v-show="dataType <= datatypes.defensiveBuffTable && dataType>= datatypes.boonTable"
@@ -76,13 +74,12 @@
                 :persbuffs="logdata.persBuffs" :players="logdata.players"></personal-buff-table-component>
         </div>
         <div id="mechanics-stats">
-            <mechanics-stats-component v-show="dataType === datatypes.mechanicTable" :phase="phaseData.phase"
-                :players="logdata.players" :enemies="logdata.enemies" :mechanics="logdata.mechanics"></mechanics-stats-component>
+            <mechanics-stats-component v-show="dataType === datatypes.mechanicTable" :phase="phaseData.phase" :players="logdata.players"
+                :enemies="logdata.enemies" :mechanics="logdata.mechanics"></mechanics-stats-component>
         </div>
         <div id="targets-stats">
-            <target-stats-component v-show="dataType === datatypes.targetTab" :players="logdata.players"
-                :targets="logdata.targets" :phase="phaseData.phase" :phaseindex="phaseData.index" :presentboons="logdata.boons"
-                :presentconditions="logdata.conditions"></target-stats-component>
+            <target-stats-component v-show="dataType === datatypes.targetTab" :players="logdata.players" :targets="logdata.targets"
+                :phase="phaseData.phase" :phaseindex="phaseData.index" :presentboons="logdata.boons" :presentconditions="logdata.conditions"></target-stats-component>
         </div>
         <div id="player-stats" v-show="dataType === datatypes.playerTab">
             <h3 class="text-center" v-show="!activePlayer">No player selected</h3>

@@ -446,16 +446,16 @@ var compileGeneralStats = function () {
         computed: {
             tableData: function () {
                 var cacheID = this.phaseindex + '-';
-                var targetsID = 0;
+                var targetsID = 1;
                 for (var i = 0; i < this.phase.targets.length; i++) {
                     var target = this.targets[this.phase.targets[i]];
                     if (target.active) {
-                        targetsID = targetsID << this.phase.targets[i];
+                        targetsID = targetsID << (this.phase.targets[i] + 1);
                     }
                 }
                 cacheID += targetsID;
                 if (this.cacheTarget.has(cacheID)) {
-                    return this.cache.get(cacheID);
+                    return this.cacheTarget.get(cacheID);
                 }
                 var phase = this.phase;
                 var rows = [];
@@ -504,7 +504,7 @@ var compileGeneralStats = function () {
                     rows: rows,
                     sums: sums
                 };
-                this.cache.set(this.phase, res);
+                this.cacheTarget.set(cacheID, res);
                 return res;
             }
         }
@@ -689,16 +689,16 @@ var compileGeneralStats = function () {
             },
             tableDataTarget: function () {
                 var cacheID = this.phaseindex + '-';
-                var targetsID = 0;
+                var targetsID = 1;
                 for (var i = 0; i < this.phase.targets.length; i++) {
                     var target = this.targets[this.phase.targets[i]];
                     if (target.active) {
-                        targetsID = targetsID << this.phase.targets[i];
+                        targetsID = targetsID << (this.phase.targets[i] + 1);
                     }
                 }
                 cacheID += targetsID;
                 if (this.cacheTarget.has(cacheID)) {
-                    return this.cache.get(cacheID);
+                    return this.cacheTarget.get(cacheID);
                 }
                 var phase = this.phase;
                 var rows = [];
@@ -787,16 +787,16 @@ var compileGeneralStats = function () {
             },
             rowsTarget: function () {
                 var cacheID = this.phaseindex + '-';
-                var targetsID = 0;
+                var targetsID = 1;
                 for (var i = 0; i < this.phase.targets.length; i++) {
                     var target = this.targets[this.phase.targets[i]];
                     if (target.active) {
-                        targetsID = targetsID << this.phase.targets[i];
+                        targetsID = targetsID << (this.phase.targets[i] + 1);
                     }
                 }
                 cacheID += targetsID;
                 if (this.cacheTarget.has(cacheID)) {
-                    return this.cache.get(cacheID);
+                    return this.cacheTarget.get(cacheID);
                 }
                 var rows = [];
                 for (var i = 0; i < this.players.length; i++) {
@@ -845,7 +845,7 @@ var compileGeneralStats = function () {
             }
         },
         mounted() {
-            initTable("#dmgmodifier-table", 1, "asc");
+            initTable("#dmgmodifier-table", 0, "asc");
         },
         updated() {
             updateTable('#dmgmodifier-table');
@@ -1076,16 +1076,16 @@ var compilePlayerTab = function () {
             },
             dmgdisttarget: function () {
                 var cacheID = this.phaseindex + '-';
-                var targetsID = 0;
+                var targetsID = 1;
                 for (var i = 0; i < this.phase.targets.length; i++) {
                     var target = this.targets[this.phase.targets[i]];
                     if (target.active) {
-                        targetsID = targetsID << this.phase.targets[i];
+                        targetsID = targetsID << (this.phase.targets[i] + 1);
                     }
                 }
                 cacheID += targetsID;
                 if (this.cacheTarget.has(cacheID)) {
-                    return this.cache.get(cacheID);
+                    return this.cacheTarget.get(cacheID);
                 }
                 var dist = {
                     contributedDamage: 0,
