@@ -8,6 +8,6 @@
     <div v-show="hasBoons" class="mt-2">
         <h3 class="text-center">Boons</h3>
         <buff-table-component :condition="false" :generation="false" :id="'buff-stats-table-' + target.id"
-                              :buffs="boons" :playerdata="buffData" :sums="[]"></buff-table-component>
+                              :buffs="boons" :playerdata="boonData" :sums="[]"></buff-table-component>
     </div>
 </div>

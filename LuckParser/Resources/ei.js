@@ -319,7 +319,7 @@ var compileCommons = function () {
                 .destroy();
         },
         methods: {
-            getSkill: function(isBoon, id) {
+            getSkill: function (isBoon, id) {
                 return findSkill(isBoon, id);
             }
         }
@@ -430,8 +430,13 @@ var compileHeader = function () {
 
 var compileGeneralStats = function () {
     Vue.component("damage-stats-component", {
-        props: ["phase", "targets", "players"],
+        props: ["phase", "targets", "players", "phaseindex"],
         template: "#tmplDamageTable",
+        data: function () {
+            return {
+                cacheTarget: new Map()
+            };
+        },
         mounted() {
             initTable("#dps-table", 4, "desc");
         },
@@ -440,6 +445,18 @@ var compileGeneralStats = function () {
         },
         computed: {
             tableData: function () {
+                var cacheID = this.phaseindex + '-';
+                var targetsID = 0;
+                for (var i = 0; i < this.phase.targets.length; i++) {
+                    var target = this.targets[this.phase.targets[i]];
+                    if (target.active) {
+                        targetsID = targetsID << this.phase.targets[i];
+                    }
+                }
+                cacheID += targetsID;
+                if (this.cacheTarget.has(cacheID)) {
+                    return this.cache.get(cacheID);
+                }
                 var phase = this.phase;
                 var rows = [];
                 var sums = [];
@@ -487,6 +504,7 @@ var compileGeneralStats = function () {
                     rows: rows,
                     sums: sums
                 };
+                this.cache.set(this.phase, res);
                 return res;
             }
         }
@@ -495,7 +513,7 @@ var compileGeneralStats = function () {
     Vue.component("defense-stats-component", {
         props: ["phase", "players"],
         template: "#tmplDefenseTable",
-        data: function() {
+        data: function () {
             return {
                 cache: new Map()
             };
@@ -559,7 +577,7 @@ var compileGeneralStats = function () {
     Vue.component("support-stats-component", {
         props: ["phase", "players"],
         template: "#tmplSupportTable",
-        data: function() {
+        data: function () {
             return {
                 cache: new Map()
             };
@@ -622,13 +640,14 @@ var compileGeneralStats = function () {
     });
 
     Vue.component("gameplay-stats-component", {
-        props: ["phase", "targets", "players"],
+        props: ["phase", "targets", "players", "phaseindex"],
         template: "#tmplGameplayTable",
         mixins: [roundingComponent],
         data: function () {
             return {
                 mode: 0,
-                cache: new Map()
+                cache: new Map(),
+                cacheTarget: new Map()
             };
         },
         mounted() {
@@ -669,6 +688,18 @@ var compileGeneralStats = function () {
                 return rows;
             },
             tableDataTarget: function () {
+                var cacheID = this.phaseindex + '-';
+                var targetsID = 0;
+                for (var i = 0; i < this.phase.targets.length; i++) {
+                    var target = this.targets[this.phase.targets[i]];
+                    if (target.active) {
+                        targetsID = targetsID << this.phase.targets[i];
+                    }
+                }
+                cacheID += targetsID;
+                if (this.cacheTarget.has(cacheID)) {
+                    return this.cache.get(cacheID);
+                }
                 var phase = this.phase;
                 var rows = [];
                 for (var i = 0; i < phase.dmgStats.length; i++) {
@@ -697,19 +728,21 @@ var compileGeneralStats = function () {
                         data: data
                     });
                 }
+                this.cacheTarget.set(cacheID, rows);
                 return rows;
             }
         }
     });
     Vue.component("dmgmodifier-stats-component", {
-        props: ['phases',
+        props: ['phases', 'phaseindex',
             'phase', 'players', 'targets'
         ],
         template: "#tmplDamageModifierTable",
         data: function () {
             return {
                 mode: 0,
-                cache: new Map()
+                cache: new Map(),
+                cacheTarget: new Map()
             };
         },
         computed: {
@@ -736,7 +769,7 @@ var compileGeneralStats = function () {
                     if (player.isConjure) {
                         continue;
                     }
-                    var dmgModifier = this.mode === 0 ? this.phase.dmgModifiersCommon[i] : this.phase.dmgModifiersTargetsCommon[i];
+                    var dmgModifier = this.phase.dmgModifiersCommon[i];
                     var data = [];
                     for (var j = 0; j < this.modifiers.length; j++) {
                         data.push([0, 0, 0, 0]);
@@ -753,13 +786,25 @@ var compileGeneralStats = function () {
                 return rows;
             },
             rowsTarget: function () {
+                var cacheID = this.phaseindex + '-';
+                var targetsID = 0;
+                for (var i = 0; i < this.phase.targets.length; i++) {
+                    var target = this.targets[this.phase.targets[i]];
+                    if (target.active) {
+                        targetsID = targetsID << this.phase.targets[i];
+                    }
+                }
+                cacheID += targetsID;
+                if (this.cacheTarget.has(cacheID)) {
+                    return this.cache.get(cacheID);
+                }
                 var rows = [];
                 for (var i = 0; i < this.players.length; i++) {
                     var player = this.players[i];
                     if (player.isConjure) {
                         continue;
                     }
-                    var dmgModifier = this.mode === 0 ? this.phase.dmgModifiersCommon[i] : this.phase.dmgModifiersTargetsCommon[i];
+                    var dmgModifier = this.phase.dmgModifiersTargetsCommon[i];
                     var data = [];
                     for (var j = 0; j < this.modifiers.length; j++) {
                         data.push([0, 0, 0, 0]);
@@ -782,6 +827,7 @@ var compileGeneralStats = function () {
                         data: data
                     });
                 }
+                this.cacheTarget.set(cacheID, rows);
                 return rows;
             }
         },
@@ -993,7 +1039,7 @@ var compileBuffStats = function () {
                     defsData: getData(this.phase.defBuffStats, this.phase.defBuffGenSelfStats,
                         this.phase.defBuffGenGroupStats, this.phase.defBuffGenOGroupStats, this.phase.defBuffGenSquadStats)
                 };
-                this.cache.set(this.phase,res);
+                this.cache.set(this.phase, res);
                 return res;
             }
         },
@@ -1011,7 +1057,8 @@ var compilePlayerTab = function () {
         data: function () {
             return {
                 distmode: -1,
-                targetmode: 0
+                targetmode: 0,
+                cacheTarget: new Map()
             };
         },
         computed: {
@@ -1028,6 +1075,18 @@ var compilePlayerTab = function () {
                 return this.player.details.minions[this.distmode].dmgDistributions[this.phaseindex];
             },
             dmgdisttarget: function () {
+                var cacheID = this.phaseindex + '-';
+                var targetsID = 0;
+                for (var i = 0; i < this.phase.targets.length; i++) {
+                    var target = this.targets[this.phase.targets[i]];
+                    if (target.active) {
+                        targetsID = targetsID << this.phase.targets[i];
+                    }
+                }
+                cacheID += targetsID;
+                if (this.cacheTarget.has(cacheID)) {
+                    return this.cache.get(cacheID);
+                }
                 var dist = {
                     contributedDamage: 0,
                     totalDamage: 0,
@@ -1069,6 +1128,7 @@ var compilePlayerTab = function () {
                 });
                 dist.contributedDamage = Math.max(dist.contributedDamage, 0);
                 dist.totalDamage = Math.max(dist.totalDamage, 0);
+                this.cacheTarget.set(cacheID, dist);
                 return dist;
             }
         },
@@ -1089,7 +1149,7 @@ var compilePlayerTab = function () {
     Vue.component("food-component", {
         props: ["food", "phase"],
         template: "#tmplFood",
-        data: function() {
+        data: function () {
             return {
                 cache: new Map()
             };
@@ -1118,7 +1178,7 @@ var compilePlayerTab = function () {
                         }
                     }
                 }
-                this.cache.set(this.phase,res);
+                this.cache.set(this.phase, res);
                 return res;
             }
         }
@@ -1139,7 +1199,6 @@ var compilePlayerTab = function () {
             }
         }
     });
-
 
     Vue.component("deathrecap-component", {
         props: ["recaps", "playerindex", "phase"],
@@ -1218,6 +1277,13 @@ var compileTargetTab = function () {
     Vue.component("buff-stats-target-component", {
         props: ['target', 'phase', 'players', 'boons', 'conditions', 'targetindex'],
         template: "#tmplBuffStatsTarget",
+        data: function () {
+            return {
+                cacheCondi: new Map(),
+                cacheCondiSums: new Map(),
+                cacheBoon: new Map()
+            };
+        },
         computed: {
             targetPhaseIndex: function () {
                 return this.phase.targets.indexOf(this.targetindex);
@@ -1226,6 +1292,9 @@ var compileTargetTab = function () {
                 return this.phase.targetsBoonTotals[this.targetPhaseIndex];
             },
             condiData: function () {
+                if (this.cacheCondi.has(this.phase)) {
+                    return this.cacheCondi.get(this.phase);
+                }
                 var res = [];
                 if (this.targetPhaseIndex === -1) {
                     for (var i = 0; i < this.players.length; i++) {
@@ -1237,17 +1306,21 @@ var compileTargetTab = function () {
                             }
                         });
                     }
-                    return res;
+                } else {
+                    for (var i = 0; i < this.players.length; i++) {
+                        res.push({
+                            player: this.players[i],
+                            data: this.phase.targetsCondiStats[this.targetPhaseIndex][i]
+                        });
+                    }
                 }
-                for (var i = 0; i < this.players.length; i++) {
-                    res.push({
-                        player: this.players[i],
-                        data: this.phase.targetsCondiStats[this.targetPhaseIndex][i]
-                    });
-                }
+                this.cacheCondi.set(this.phase, res);
                 return res;
             },
             condiSums: function () {
+                if (this.cacheCondiSums.has(this.phase)) {
+                    return this.cacheCondiSums.get(this.phase);
+                }
                 var res = [];
                 if (this.targetPhaseIndex === -1) {
                     res.push({
@@ -1256,18 +1329,22 @@ var compileTargetTab = function () {
                         avg: 0,
                         data: []
                     });
-                    return res;
+                } else {
+                    var targetData = this.phase.targetsCondiTotals[this.targetPhaseIndex];
+                    res.push({
+                        icon: this.target.icon,
+                        name: this.target.name,
+                        avg: targetData.avg,
+                        data: targetData.data
+                    });
                 }
-                var targetData = this.phase.targetsCondiTotals[this.targetPhaseIndex];
-                res.push({
-                    icon: this.target.icon,
-                    name: this.target.name,
-                    avg: targetData.avg,
-                    data: targetData.data
-                });
+                this.cacheCondiSums.set(this.phase, res);
                 return res;
             },
-            buffData: function () {
+            boonData: function () {
+                if (this.cacheBoon.has(this.phase)) {
+                    return this.cacheBoon.get(this.phase);
+                }
                 var res = [];
                 if (this.targetPhaseIndex === -1 || !this.hasBoons) {
                     res.push({
@@ -1277,13 +1354,14 @@ var compileTargetTab = function () {
                             data: []
                         }
                     });
-                    return res;
+                } else {
+                    var targetData = this.phase.targetsBoonTotals[this.targetPhaseIndex];
+                    res.push({
+                        player: this.target,
+                        data: targetData
+                    });
                 }
-                var targetData = this.phase.targetsBoonTotals[this.targetPhaseIndex];
-                res.push({
-                    player: this.target,
-                    data: targetData
-                });
+                this.cacheBoon.set(this.phase, res);
                 return res;
             }
         }
@@ -1315,8 +1393,6 @@ var compileTargetTab = function () {
         },
     });
     // tab
-
-
     Vue.component("target-tab-component", {
         props: ["focus", "target", "phaseindex", "players", "phase", "boons", "conditions", 'targetindex'],
         template: "#tmplTargetTab",
@@ -1370,7 +1446,7 @@ var compileMechanics = function () {
     Vue.component("mechanics-stats-component", {
         props: ["phase", "players", "enemies", "mechanics"],
         template: "#tmplMechanicsTable",
-        data: function() {
+        data: function () {
             return {
                 cacheP: new Map(),
                 cacheE: new Map()
@@ -1418,7 +1494,7 @@ var compileMechanics = function () {
                         mechs: phase.mechanicStats[i]
                     });
                 }
-                this.cacheP.set(this.phase,rows);
+                this.cacheP.set(this.phase, rows);
                 return rows;
             },
             enemyMechHeader: function () {
@@ -1445,7 +1521,7 @@ var compileMechanics = function () {
                         mechs: phase.enemyMechanicStats[i]
                     });
                 }
-                this.cacheE.set(this.phase,rows);
+                this.cacheE.set(this.phase, rows);
                 return rows;
             }
         }

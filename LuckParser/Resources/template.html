@@ -57,11 +57,11 @@
         <general-layout-component :layout="layout" :phase="phaseData.phase">
         </general-layout-component>
         <div id="general-stats">
-            <damage-stats-component v-show="dataType === datatypes.damageTable" :phase="phaseData.phase"
+            <damage-stats-component v-show="dataType === datatypes.damageTable" :phase="phaseData.phase" :phaseindex:"phaseData.index"
                 :players="logdata.players" :targets="logdata.targets"></damage-stats-component>
-            <gameplay-stats-component v-show="dataType === datatypes.gameplayTable" :phase="phaseData.phase"
+            <gameplay-stats-component v-show="dataType === datatypes.gameplayTable" :phase="phaseData.phase" :phaseindex:"phaseData.index"
                 :players="logdata.players" :targets="logdata.targets"></gameplay-stats-component>
-            <dmgmodifier-stats-component v-show="dataType === datatypes.dmgModifiersTable" :phase="phaseData.phase"
+            <dmgmodifier-stats-component v-show="dataType === datatypes.dmgModifiersTable" :phase="phaseData.phase" :phaseindex:"phaseData.index"
                 :players="logdata.players" :targets="logdata.targets" :phases="logdata.phases"></dmgmodifier-stats-component>
             <support-stats-component v-show="dataType === datatypes.supTable" :phase="phaseData.phase"
                 :players="logdata.players"></support-stats-component>
