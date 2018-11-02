@@ -15,7 +15,7 @@
         </li>
     </ul>
     <dmgdist-target-component v-show="mode === 0" :target="target" :focus="focus"
-                              :phaseindex="phaseindex" :sortdata="sortdata.dmgdist"></dmgdist-target-component>
+                              :phaseindex="phaseindex" :sortdata="sortdata.dmgdist" :targetindex="targetindex"></dmgdist-target-component>
     <buff-stats-target-component v-show="mode === 2" :target="target"
                                  :targetindex="targetindex" :phase="phase" :players="players" :boons="boons"
                                  :conditions="conditions"></buff-stats-target-component>

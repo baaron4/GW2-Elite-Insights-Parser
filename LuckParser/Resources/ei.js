@@ -1368,7 +1368,7 @@ var compileTargetTab = function () {
     });
 
     Vue.component('dmgdist-target-component', {
-        props: ['focus', 'target',
+        props: ['focus', 'target', 'targetindex',
             'phaseindex', 'sortdata'
         ],
         template: "#tmplDamageDistTarget",
