@@ -84,7 +84,7 @@
         <div id="player-stats" v-show="dataType === datatypes.playerTab">
             <h3 class="text-center" v-show="!activePlayer">No player selected</h3>
             <player-stats-component v-show="activePlayer" :players="logdata.players" :phaseindex="phaseData.index"
-                :phase="phaseData.phase" :targets="logdata.targets"></player-stats-component>
+                :phase="phaseData.phase" :targets="logdata.targets" :datatype="dataType"></player-stats-component>
         </div>
     </div>
 

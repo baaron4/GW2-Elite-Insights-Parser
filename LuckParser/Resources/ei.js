@@ -1051,7 +1051,7 @@ var compilePlayerTab = function () {
     // Base stuff
     Vue.component('dmgdist-player-component', {
         props: ['player', 'playerindex', 'phase',
-            'phaseindex', 'targets', 'sortdata'
+            'phaseindex', 'targets', 'sortdata', 'datatype'
         ],
         template: "#tmplDamageDistPlayer",
         data: function () {
@@ -1060,6 +1060,11 @@ var compilePlayerTab = function () {
                 targetmode: 0,
                 cacheTarget: new Map()
             };
+        },
+        methods: {
+            show: function() {
+                return this.datatype === DataTypes.playerTab && this.player.active;
+            }
         },
         computed: {
             actor: function () {
@@ -1135,9 +1140,14 @@ var compilePlayerTab = function () {
     });
 
     Vue.component('dmgtaken-player-component', {
-        props: ['player', 'playerindex',
+        props: ['player', 'playerindex', 'datatype',
             'phaseindex', 'sortdata'
         ],
+        methods: {
+            show: function() {
+                return this.datatype === DataTypes.playerTab && this.player.active;
+            }
+        },
         template: "#tmplDamageTakenPlayer",
         computed: {
             dmgtaken: function () {
@@ -1245,7 +1255,7 @@ var compilePlayerTab = function () {
     // tab
     Vue.component('player-tab-component', {
         props: ['player', 'playerindex', 'phase',
-            'phaseindex', 'targets'
+            'phaseindex', 'targets', 'datatype'
         ],
         template: "#tmplPlayerTab",
         data: function () {
@@ -1267,7 +1277,7 @@ var compilePlayerTab = function () {
     });
     // stats
     Vue.component("player-stats-component", {
-        props: ["players", "phaseindex", "phase", 'targets'],
+        props: ["players", "phaseindex", "phase", 'targets', 'datatype'],
         template: "#tmplPlayerStats",
     });
 };

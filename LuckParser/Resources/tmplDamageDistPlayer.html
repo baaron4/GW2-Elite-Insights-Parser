@@ -21,7 +21,7 @@
             </li>
         </ul>
     </div>
-    <damagedist-table-component v-if="player.active" :dmgdist="targetmode === 0 ? dmgdist : dmgdisttarget"
+    <damagedist-table-component v-if="show()" :dmgdist="targetmode === 0 ? dmgdist : dmgdisttarget"
                                 :tableid="'dmgdist-' + playerindex" :actor="actor" :isminion="distmode>=0"
                                 :istarget="targetmode === 1" :sortdata="sortdata"></damagedist-table-component>
 </div>
