@@ -27,29 +27,29 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="row in rows" :class="{condi: row.skill.condi, power: !row.skill.condi}">
-                <td class="text-left" :data-original-title="row.skill.id">
-                    <img :src="row.skill.icon" class="icon icon-hover"> {{row.skill.name}}
+            <tr v-for="row in dmgdist.distribution" :class="{condi: getSkill(row[0], row[1]).condi}">
+                <td class="text-left" :data-original-title="getSkill(row[0], row[1]).id">
+                    <img :src="getSkill(row[0], row[1]).icon" class="icon icon-hover"> {{getSkill(row[0], row[1]).name}}
                 </td>
-                <td>{{ round3(100*row.data[2]/dmgdist.contributedDamage) }}%</td>
-                <td>{{ row.data[2] }}</td>
-                <td>{{ Math.max(row.data[3],0) }}</td>
-                <td>{{ round(row.data[2]/row.data[6]) }}</td>
-                <td>{{ row.data[4] }}</td>
-                <td>{{ !row.skill.condi && row.data[5] ? row.data[5] : ''}}</td>
-                <td>{{ row.data[6] }}</td>
-                <td>{{(!row.skill.condi && row.data[6] && row.data[5]) ? round3(row.data[6]/row.data[5]) : ''}}</td>
-                <td :data-original-title="(!row.skill.condi && row.data[6]) ? row.data[7] +' out of ' + row.data[6] + ' hits': false">
-                    {{(!row.skill.condi && row.data[6]) ? round3(row.data[7]*100/row.data[6]) + '%' : ''}}
+                <td>{{ round3(100*row[2]/dmgdist.contributedDamage) }}%</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ Math.max(row[3],0) }}</td>
+                <td>{{ round(row[2]/row[6]) }}</td>
+                <td>{{ row[4] }}</td>
+                <td>{{ !getSkill(row[0], row[1]).condi && row[5] ? row[5] : ''}}</td>
+                <td>{{ row[6] }}</td>
+                <td>{{(!getSkill(row[0], row[1]).condi && row[6] && row[5]) ? round3(row[6]/row[5]) : ''}}</td>
+                <td :data-original-title="(!getSkill(row[0], row[1]).condi && row[6]) ? row[7] +' out of ' + row[6] + ' hits': false">
+                    {{(!getSkill(row[0], row[1]).condi && row[6]) ? round3(row[7]*100/row[6]) + '%' : ''}}
                 </td>
-                <td :data-original-title="(!row.skill.condi && row.data[6]) ? row.data[8] +' out of ' + row.data[6] + ' hits': false">
-                    {{(!row.skill.condi && row.data[6]) ? round3(row.data[8]*100/row.data[6]) + '%' : ''}}
+                <td :data-original-title="(!getSkill(row[0], row[1]).condi && row[6]) ? row[8] +' out of ' + row[6] + ' hits': false">
+                    {{(!getSkill(row[0], row[1]).condi && row[6]) ? round3(row[8]*100/row[6]) + '%' : ''}}
                 </td>
-                <td :data-original-title="(!row.skill.condi && row.data[6]) ? row.data[9] +' out of ' + row.data[6] + ' hits': false">
-                    {{(!row.skill.condi && row.data[6]) ? round3(row.data[9]*100/row.data[6]) + '%' : ''}}
+                <td :data-original-title="(!getSkill(row[0], row[1]).condi && row[6]) ? row[9] +' out of ' + row[6] + ' hits': false">
+                    {{(!getSkill(row[0], row[1]).condi && row[6]) ? round3(row[9]*100/row[6]) + '%' : ''}}
                 </td>
-                <td>{{ row.data[10] ? row.data[10] + 's' : ''}}</td>
-                <td>{{ row.data[11] ? row.data[11] + 's' : ''}}</td>
+                <td>{{ row[10] ? row[10] + 's' : ''}}</td>
+                <td>{{ row[11] ? row[11] + 's' : ''}}</td>
             </tr>
         </tbody>
         <tfoot class="text-dark">

@@ -230,1169 +230,1254 @@ var Tab = function (name, options) {
         typeof options.dataType !== "undefined" ? options.dataType : -1;
 };
 
-Vue.component("encounter-component", {
-    props: ["logdata"],
-    template: "#tmplEncounter",
-    methods: {
-        getResultText: function (success) {
-            return success ? "Success" : "Failure";
-        },
-        getResultClass: function (success) {
-            return success ? ["text-success"] : ["text-warning"];
-        }
-    },
-    computed: {
-        encounter: function () {
-            var logData = this.logdata;
-            var targets = [];
-            for (var i = 0; i < logData.phases[0].targets.length; i++) {
-                var targetData = logData.targets[logData.phases[0].targets[i]];
-                targets.push(targetData);
-            }
-
-            var encounter = {
-                name: logData.fightName,
-                success: logData.success,
-                icon: logData.fightIcon,
-                duration: logData.encounterDuration,
-                targets: targets
-            };
-            return encounter;
-        }
-    }
-});
-
-Vue.component("phase-component", {
-    props: ["phases"],
-    template: "#tmplPhase",
-    methods: {
-        select: function (phase) {
-            for (var i = 0; i < this.phases.length; i++) {
-                this.phases[i].active = false;
-            }
-            phase.active = true;
-        }
-    }
-});
-
-Vue.component("target-component", {
-    props: ["targets", "phase"],
-    template: "#tmplTargets",
-    methods: {
-        show: function (target) {
-            var index = this.targets.indexOf(target);
-            return this.phase.targets.indexOf(index) !== -1;
-        }
-    }
-});
-
-Vue.component("player-component", {
-    props: ["players"],
-    template: "#tmplPlayers",
-    methods: {
-        getIcon: function (path) {
-            return urls[path];
-        },
-        select: function (player, groups) {
-            var oldStatus = player.active;
-            for (var i = 0; i < groups.length; i++) {
-                var group = groups[i];
-                for (var j = 0; j < group.length; j++) {
-                    group[j].active = false;
+var compileCommons = function () {
+    Vue.component("buff-table-component", {
+        props: ["buffs", "playerdata", "generation", "condition", "sums", "id"],
+        template: "#tmplBuffTable",
+        methods: {
+            getAvgTooltip: function (avg) {
+                if (avg) {
+                    return (
+                        "Average number of " +
+                        (this.condition ? "conditions: " : "boons: ") +
+                        avg
+                    );
                 }
-            }
-            player.active = !oldStatus;
-        }
-    },
-    computed: {
-        groups: function () {
-            var aux = [];
-            var i = 0;
-            for (i = 0; i < this.players.length; i++) {
-                var playerData = this.players[i];
-                if (playerData.isConjure) {
-                    continue;
-                }
-                if (!aux[playerData.group]) {
-                    aux[playerData.group] = [];
-                }
-                aux[playerData.group].push(playerData);
-            }
-
-            var noUndefinedGroups = [];
-            for (i = 0; i < aux.length; i++) {
-                if (aux[i]) {
-                    noUndefinedGroups.push(aux[i]);
-                }
-            }
-            return noUndefinedGroups;
-        }
-    }
-});
-
-Vue.component("general-layout-component", {
-    name: "general-layout-component",
-    template: "#tmplGeneralLayout",
-    props: ["layout", "phase"],
-    methods: {
-        select: function (tab, tabs) {
-            for (var i = 0; i < tabs.length; i++) {
-                tabs[i].active = false;
-            }
-            tab.active = true;
-        }
-    },
-    computed: {
-        layoutName: function () {
-            if (!this.phase) {
-                return this.layout.desc;
-            }
-            return this.layout.desc
-                ? this.phase.name + " " + this.layout.desc
-                : this.phase.name;
-        }
-    }
-});
-
-Vue.component("damage-stats-component", {
-    props: ["phase", "targets", "players"],
-    template: "#tmplDamageTable",
-    mounted() {
-        initTable("#dps-table", 4, "desc");
-    },
-    updated() {
-        updateTable("#dps-table");
-    },
-    computed: {
-        tableData: function () {
-            var phase = this.phase;
-            var rows = [];
-            var sums = [];
-            var total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-            var groups = [];
-            var i, j;
-            for (i = 0; i < phase.dpsStats.length; i++) {
-                var dpsStat = phase.dpsStats[i];
-                var dpsTargetStat = [0, 0, 0, 0, 0, 0];
-                for (j = 0; j < phase.targets.length; j++) {
-                    if (this.targets[phase.targets[j]].active) {
-                        var tar = phase.dpsStatsTargets[i][j];
-                        for (var k = 0; k < dpsTargetStat.length; k++) {
-                            dpsTargetStat[k] += tar[k];
-                        }
+                return false;
+            },
+            getCellTooltip: function (buff, val, uptime) {
+                if (val instanceof Array) {
+                    if (!uptime && this.generation && val[0] > 0) {
+                        return val[1] + (buff.stacking ? "" : "%") + " with overstack";
+                    } else if (buff.stacking && val[1] > 0) {
+                        return "Uptime: " + val[1] + "%";
                     }
                 }
-                var player = this.players[i];
-                if (!groups[player.group]) {
-                    groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                return false;
+            },
+            getCellValue: function (buff, val) {
+                var value = val;
+                if (val instanceof Array) {
+                    value = val[0];
                 }
-                var dps = dpsTargetStat.concat(dpsStat);
-                for (j = 0; j < dps.length; j++) {
-                    total[j] += dps[j];
-                    groups[player.group][j] += dps[j];
+                if (value > 0) {
+                    return buff.stacking ? value : value + "%";
                 }
-                rows.push({
-                    player: player,
-                    dps: dps
-                });
+                return "-";
             }
-            for (i = 0; i < groups.length; i++) {
-                if (groups[i]) {
-                    sums.push({
-                        name: "Group " + i,
-                        dps: groups[i]
-                    });
-                }
-            }
-            sums.push({
-                name: "Total",
-                dps: total
-            });
-            var res = {
-                rows: rows,
-                sums: sums
-            };
-            return res;
+        },
+        mounted() {
+            initTable("#" + this.id, 0, "asc");
+        },
+        updated() {
+            updateTable("#" + this.id);
         }
-    }
-});
+    });
 
-Vue.component("defense-stats-component", {
-    props: ["phase", "players"],
-    template: "#tmplDefenseTable",
-    mounted() {
-        initTable("#def-table", 4, "desc");
-    },
-    updated() {
-        updateTable("#def-table");
-    },
-    computed: {
-        tableData: function () {
-            var rows = [];
-            var sums = [];
-            var total = [0, 0, 0, 0, 0, 0, 0];
-            var groups = [];
-            var i;
-            for (i = 0; i < this.phase.defStats.length; i++) {
-                var def = this.phase.defStats[i];
-                var player = this.players[i];
-                if (player.isConjure) {
-                    continue;
+    Vue.component("damagedist-table-component", {
+        props: ["dmgdist", "tableid", "actor", "isminion", "istarget", "sortdata"],
+        template: "#tmplDamageDistTable",
+        mixins: [roundingComponent],
+        mounted() {
+            var _this = this;
+            initTable(
+                "#" + this.tableid,
+                this.sortdata.index,
+                this.sortdata.order,
+                function () {
+                    var order = $("#" + _this.tableid)
+                        .DataTable()
+                        .order();
+                    _this.sortdata.order = order[0][1];
+                    _this.sortdata.index = order[0][0];
                 }
-                rows.push({
-                    player: player,
-                    def: def
-                });
-                if (!groups[player.group]) {
-                    groups[player.group] = [0, 0, 0, 0, 0, 0, 0];
+            );
+        },
+        beforeUpdate() {
+            $("#" + this.tableid)
+                .DataTable()
+                .destroy();
+        },
+        updated() {
+            var _this = this;
+            initTable(
+                "#" + this.tableid,
+                this.sortdata.index,
+                this.sortdata.order,
+                function () {
+                    var order = $("#" + _this.tableid)
+                        .DataTable()
+                        .order();
+                    _this.sortdata.order = order[0][1];
+                    _this.sortdata.index = order[0][0];
                 }
-                for (var j = 0; j < total.length; j++) {
-                    total[j] += def[j];
-                    groups[player.group][j] += def[j];
-                }
+            );
+        },
+        beforeDestroy() {
+            $("#" + this.tableid)
+                .DataTable()
+                .destroy();
+        },
+        methods: {
+            getSkill: function(isBoon, id) {
+                return findSkill(isBoon, id);
             }
-            for (i = 0; i < groups.length; i++) {
-                if (groups[i]) {
-                    sums.push({
-                        name: "Group " + i,
-                        def: groups[i]
-                    });
-                }
-            }
-            sums.push({
-                name: "Total",
-                def: total
-            });
-            var res = {
-                rows: rows,
-                sums: sums
-            };
-            return res;
         }
-    }
-});
+    });
+};
 
-Vue.component("support-stats-component", {
-    props: ["phase", "players"],
-    template: "#tmplSupportTable",
-    mixins: [roundingComponent],
-    mounted() {
-        initTable("#sup-table", 4, "desc");
-    },
-    updated() {
-        updateTable("#sup-table");
-    },
-    computed: {
-        tableData: function () {
-            var rows = [];
-            var sums = [];
-            var total = [0, 0, 0, 0];
-            var groups = [];
-            var i;
-            for (i = 0; i < this.phase.healStats.length; i++) {
-                var sup = this.phase.healStats[i];
-                var player = this.players[i];
-                if (player.isConjure) {
-                    continue;
-                }
-                rows.push({
-                    player: player,
-                    sup: sup
-                });
-                if (!groups[player.group]) {
-                    groups[player.group] = [0, 0, 0, 0];
-                }
-                for (var j = 0; j < sup.length; j++) {
-                    total[j] += sup[j];
-                    groups[player.group][j] += sup[j];
-                }
+var compileHeader = function () {
+    Vue.component("encounter-component", {
+        props: ["logdata"],
+        template: "#tmplEncounter",
+        methods: {
+            getResultText: function (success) {
+                return success ? "Success" : "Failure";
+            },
+            getResultClass: function (success) {
+                return success ? ["text-success"] : ["text-warning"];
             }
-            for (i = 0; i < groups.length; i++) {
-                if (groups[i]) {
-                    sums.push({
-                        name: "Group " + i,
-                        sup: groups[i]
-                    });
+        },
+        computed: {
+            encounter: function () {
+                var logData = this.logdata;
+                var targets = [];
+                for (var i = 0; i < logData.phases[0].targets.length; i++) {
+                    var targetData = logData.targets[logData.phases[0].targets[i]];
+                    targets.push(targetData);
                 }
+
+                var encounter = {
+                    name: logData.fightName,
+                    success: logData.success,
+                    icon: logData.fightIcon,
+                    duration: logData.encounterDuration,
+                    targets: targets
+                };
+                return encounter;
             }
-            sums.push({
-                name: "Total",
-                sup: total
-            });
-            var res = {
-                rows: rows,
-                sums: sums
-            };
-            return res;
         }
-    }
-});
+    });
 
-Vue.component("gameplay-stats-component", {
-    props: ["phase", "targets", "players"],
-    template: "#tmplGameplayTable",
-    mixins: [roundingComponent],
-    data: function () {
-        return {
-            mode: 0
-        };
-    },
-    mounted() {
-        initTable("#dmg-table", 4, "desc");
-    },
-    updated() {
-        updateTable("#dmg-table");
-    },
-    computed: {
-        tableData: function () {
-            var phase = this.phase;
-            var rows = [];
-            for (var i = 0; i < phase.dmgStats.length; i++) {
-                var commons = [];
-                var data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-                var player = this.players[i];
-                if (player.isConjure) {
-                    continue;
+    Vue.component("phase-component", {
+        props: ["phases"],
+        template: "#tmplPhase",
+        methods: {
+            select: function (phase) {
+                for (var i = 0; i < this.phases.length; i++) {
+                    this.phases[i].active = false;
                 }
-                var stats = phase.dmgStats[i];
-                for (var j = 0; j < stats.length; j++) {
-                    if (j >= 14) {
-                        commons[j - 14] = stats[j];
-                    } else {
-                        data[j] = stats[j];
+                phase.active = true;
+            }
+        }
+    });
+
+    Vue.component("target-component", {
+        props: ["targets", "phase"],
+        template: "#tmplTargets",
+        methods: {
+            show: function (target) {
+                var index = this.targets.indexOf(target);
+                return this.phase.targets.indexOf(index) !== -1;
+            }
+        }
+    });
+
+    Vue.component("player-component", {
+        props: ["players"],
+        template: "#tmplPlayers",
+        methods: {
+            getIcon: function (path) {
+                return urls[path];
+            },
+            select: function (player, groups) {
+                var oldStatus = player.active;
+                for (var i = 0; i < groups.length; i++) {
+                    var group = groups[i];
+                    for (var j = 0; j < group.length; j++) {
+                        group[j].active = false;
                     }
                 }
-                rows.push({
-                    player: player,
-                    commons: commons,
-                    data: data
-                });
+                player.active = !oldStatus;
             }
-            return rows;
         },
-        tableDataTarget: function () {
-            var phase = this.phase;
-            var rows = [];
-            for (var i = 0; i < phase.dmgStats.length; i++) {
-                var commons = [];
-                var data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-                var player = this.players[i];
-                if (player.isConjure) {
-                    continue;
+        computed: {
+            groups: function () {
+                var aux = [];
+                var i = 0;
+                for (i = 0; i < this.players.length; i++) {
+                    var playerData = this.players[i];
+                    if (playerData.isConjure) {
+                        continue;
+                    }
+                    if (!aux[playerData.group]) {
+                        aux[playerData.group] = [];
+                    }
+                    aux[playerData.group].push(playerData);
                 }
-                var stats = phase.dmgStats[i];
-                for (var j = 0; j < stats.length; j++) {
-                    if (j >= 14) {
-                        commons[j - 14] = stats[j];
-                    } else {
-                        for (var k = 0; k < phase.targets.length; k++) {
-                            if (this.targets[phase.targets[k]].active) {
-                                var tar = phase.dmgStatsTargets[i][k];
-                                data[j] += tar[j];
+
+                var noUndefinedGroups = [];
+                for (i = 0; i < aux.length; i++) {
+                    if (aux[i]) {
+                        noUndefinedGroups.push(aux[i]);
+                    }
+                }
+                return noUndefinedGroups;
+            }
+        }
+    });
+};
+
+var compileGeneralStats = function () {
+    Vue.component("damage-stats-component", {
+        props: ["phase", "targets", "players"],
+        template: "#tmplDamageTable",
+        mounted() {
+            initTable("#dps-table", 4, "desc");
+        },
+        updated() {
+            updateTable("#dps-table");
+        },
+        computed: {
+            tableData: function () {
+                var phase = this.phase;
+                var rows = [];
+                var sums = [];
+                var total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                var groups = [];
+                var i, j;
+                for (i = 0; i < phase.dpsStats.length; i++) {
+                    var dpsStat = phase.dpsStats[i];
+                    var dpsTargetStat = [0, 0, 0, 0, 0, 0];
+                    for (j = 0; j < phase.targets.length; j++) {
+                        if (this.targets[phase.targets[j]].active) {
+                            var tar = phase.dpsStatsTargets[i][j];
+                            for (var k = 0; k < dpsTargetStat.length; k++) {
+                                dpsTargetStat[k] += tar[k];
                             }
                         }
                     }
-                }
-                rows.push({
-                    player: player,
-                    commons: commons,
-                    data: data
-                });
-            }
-            return rows;
-        }
-    }
-});
-Vue.component("mechanics-stats-component", {
-    props: ["phase", "players", "enemies", "mechanics"],
-    template: "#tmplMechanicsTable",
-    mounted() {
-        initTable("#playermechs", 0, "asc");
-        //
-        if (this.enemyMechHeader.length) {
-            initTable("#enemymechs", 0, "asc");
-        }
-    },
-    updated() {
-        updateTable("#playermechs");
-        //
-        if (this.enemyMechHeader.length) {
-            updateTable("#enemymechs");
-        }
-    },
-    computed: {
-        playerMechHeader: function () {
-            var mechanics = this.mechanics;
-            var playerMechanics = [];
-            for (var i = 0; i < mechanics.length; i++) {
-                if (mechanics[i].playerMech) {
-                    playerMechanics.push(mechanics[i]);
-                }
-            }
-            return playerMechanics;
-        },
-        playerMechRows: function () {
-            var phase = this.phase;
-            var players = this.players;
-            var rows = [];
-            for (var i = 0; i < players.length; i++) {
-                var player = players[i];
-                if (player.isConjure) {
-                    continue;
-                }
-                rows.push({
-                    player: player,
-                    mechs: phase.mechanicStats[i]
-                });
-            }
-            return rows;
-        },
-        enemyMechHeader: function () {
-            var mechanics = this.mechanics;
-            var enemyMechanics = [];
-            for (var i = 0; i < mechanics.length; i++) {
-                if (mechanics[i].enemyMech) {
-                    enemyMechanics.push(mechanics[i]);
-                }
-            }
-            return enemyMechanics;
-        },
-        enemyMechRows: function () {
-            var phase = this.phase;
-            var enemies = this.enemies;
-            var rows = [];
-            for (var i = 0; i < enemies.length; i++) {
-                var enemy = enemies[i];
-                rows.push({
-                    enemy: enemy.name,
-                    mechs: phase.enemyMechanicStats[i]
-                });
-            }
-            return rows;
-        }
-    }
-});
-
-Vue.component("buff-table-component", {
-    props: ["buffs", "playerdata", "generation", "condition", "sums", "id"],
-    template: "#tmplBuffTable",
-    methods: {
-        getAvgTooltip: function (avg) {
-            if (avg) {
-                return (
-                    "Average number of " +
-                    (this.condition ? "conditions: " : "boons: ") +
-                    avg
-                );
-            }
-            return false;
-        },
-        getCellTooltip: function (buff, val, uptime) {
-            if (val instanceof Array) {
-                if (!uptime && this.generation && val[0] > 0) {
-                    return val[1] + (buff.stacking ? "" : "%") + " with overstack";
-                } else if (buff.stacking && val[1] > 0) {
-                    return "Uptime: " + val[1] + "%";
-                }
-            }
-            return false;
-        },
-        getCellValue: function (buff, val) {
-            var value = val;
-            if (val instanceof Array) {
-                value = val[0];
-            }
-            if (value > 0) {
-                return buff.stacking ? value : value + "%";
-            }
-            return "-";
-        }
-    },
-    mounted() {
-        initTable("#" + this.id, 0, "asc");
-    },
-    updated() {
-        updateTable("#" + this.id);
-    }
-});
-
-Vue.component("personal-buff-table-component", {
-    props: ['phase', 'persbuffs', 'players'],
-    template: "#tmplPersonalBuffTable",
-    data: function () {
-        return {
-            specs: specs,
-            bases: [],
-            specToBase: specToBase,
-            mode: "Warrior",
-        };
-    },
-    computed: {
-        orderedSpecs: function () {
-            var res = [];
-            var aux = new Set();
-            for (var i = 0; i < this.specs.length; i++) {
-                var spec = this.specs[i];
-                var pBySpec = [];
-                for (var j = 0; j < this.players.length; j++) {
-                    if (this.players[j].profession === spec) {
-                        pBySpec.push(j);
+                    var player = this.players[i];
+                    if (!groups[player.group]) {
+                        groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                     }
-                }
-                if (pBySpec.length) {
-                    aux.add(this.specToBase[spec]);
-                    res.push({
-                        ids: pBySpec,
-                        name: spec
-                    });
-                }
-            }
-            this.bases = [];
-            var _this = this;
-            aux.forEach(function (value, value2, set) {
-                _this.bases.push(value);
-            });
-            this.mode = this.bases[0];
-            return res;
-        },
-        data: function () {
-            var res = [];
-            for (var i = 0; i < this.orderedSpecs.length; i++) {
-                var spec = this.orderedSpecs[i];
-                var dataBySpec = [];
-                for (var j = 0; j < spec.ids.length; j++) {
-                    dataBySpec.push({
-                        player: this.players[spec.ids[j]],
-                        data: this.phase.persBuffStats[spec.ids[j]]
-                    });
-                }
-                res.push(dataBySpec);
-            }
-            return res;
-        },
-        buffs: function () {
-            var res = [];
-            for (var i = 0; i < this.orderedSpecs.length; i++) {
-                var spec = this.orderedSpecs[i];
-                var data = [];
-                for (var j = 0; j < this.persbuffs[spec.name].length; j++) {
-                    data.push(findSkill(true, this.persbuffs[spec.name][j]));
-                }
-                res.push(data);
-            }
-            return res;
-        }
-    }
-});
-
-Vue.component("buff-stats-component", {
-    props: ['datatypes', 'datatype', 'phase', 'players', 'presentboons', 'presentoffs', 'presentdefs'],
-    template: "#tmplBuffStats",
-    data: function () {
-        return {
-            mode: 0,
-        };
-    },
-    computed: {
-        boons: function () {
-            var data = [];
-            for (var i = 0; i < this.presentboons.length; i++) {
-                data[i] = findSkill(true, this.presentboons[i]);
-            }
-            return data;
-        },
-        offs: function () {
-            var data = [];
-            for (var i = 0; i < this.presentoffs.length; i++) {
-                data[i] = findSkill(true, this.presentoffs[i]);
-            }
-            return data;
-        },
-        defs: function () {
-            var data = [];
-            for (var i = 0; i < this.presentdefs.length; i++) {
-                data[i] = findSkill(true, this.presentdefs[i]);
-            }
-            return data;
-        },
-        buffData: function () {
-            var _this = this;
-            var getData = function (stats, genself, gengroup, genoffgr, gensquad) {
-                var uptimes = [],
-                    gens = [],
-                    gengr = [],
-                    genoff = [],
-                    gensq = [];
-                var avg = [],
-                    gravg = [],
-                    totalavg = [];
-                var grcount = [],
-                    totalcount = 0;
-                for (var i = 0; i < _this.players.length; i++) {
-                    var player = _this.players[i];
-                    if (player.isConjure) {
-                        continue;
+                    var dps = dpsTargetStat.concat(dpsStat);
+                    for (j = 0; j < dps.length; j++) {
+                        total[j] += dps[j];
+                        groups[player.group][j] += dps[j];
                     }
-                    uptimes.push({
+                    rows.push({
                         player: player,
-                        data: stats[i]
+                        dps: dps
                     });
-                    gens.push({
-                        player: player,
-                        data: genself[i]
-                    });
-                    gengr.push({
-                        player: player,
-                        data: gengroup[i]
-                    });
-                    genoff.push({
-                        player: player,
-                        data: genoffgr[i]
-                    });
-                    gensq.push({
-                        player: player,
-                        data: gensquad[i]
-                    });
-                    if (!gravg[player.group]) {
-                        gravg[player.group] = [];
-                        grcount[player.group] = 0;
-                    }
-                    totalcount++;
-                    grcount[player.group]++;
-                    for (var j = 0; j < stats[i].data.length; j++) {
-                        totalavg[j] = (totalavg[j] || 0) + stats[i].data[j][0];
-                        gravg[player.group][j] = (gravg[player.group][j] || 0) + stats[i].data[j][0];
-                    }
                 }
-                for (var i = 0; i < gravg.length; i++) {
-                    if (gravg[i]) {
-                        for (var k = 0; k < gravg[i].length; k++) {
-                            gravg[i][k] = Math.round(100 * gravg[i][k] / grcount[i]) / 100;
-                        }
-                        avg.push({
+                for (i = 0; i < groups.length; i++) {
+                    if (groups[i]) {
+                        sums.push({
                             name: "Group " + i,
-                            data: gravg[i],
+                            dps: groups[i]
                         });
                     }
                 }
-                for (var k = 0; k < totalavg.length; k++) {
-                    totalavg[k] = Math.round(100 * totalavg[k] / totalcount) / 100;
-                }
-                avg.push({
+                sums.push({
                     name: "Total",
-                    data: totalavg
+                    dps: total
                 });
-                return [uptimes, gens, gengr, genoff, gensq, avg];
-            };
-            var res = {
-                boonsData: getData(this.phase.boonStats, this.phase.boonGenSelfStats,
-                    this.phase.boonGenGroupStats, this.phase.boonGenOGroupStats, this.phase.boonGenSquadStats),
-                offsData: getData(this.phase.offBuffStats, this.phase.offBuffGenSelfStats,
-                    this.phase.offBuffGenGroupStats, this.phase.offBuffGenOGroupStats, this.phase.offBuffGenSquadStats),
-                defsData: getData(this.phase.defBuffStats, this.phase.defBuffGenSelfStats,
-                    this.phase.defBuffGenGroupStats, this.phase.defBuffGenOGroupStats, this.phase.defBuffGenSquadStats)
-            };
-            return res;
+                var res = {
+                    rows: rows,
+                    sums: sums
+                };
+                return res;
+            }
         }
-    },
-});
+    });
 
-Vue.component("dmgmodifier-stats-component", {
-    props: ['phases',
-        'phase', 'players', 'targets'
-    ],
-    template: "#tmplDamageModifierTable",
-    data: function () {
-        return {
-            mode: 0
-        };
-    },
-    computed: {
-        modifiers: function () {
-            var dmgModifiersCommon = this.phases[0].dmgModifiersCommon;
-            if (!dmgModifiersCommon.length) {
-                return [];
-            }
-            var dmgModifier = dmgModifiersCommon[0];
-            var buffs = [];
-            for (var i = 0; i < dmgModifier.length; i++) {
-                var modifier = dmgModifier[i];
-                buffs.push(findSkill(true, modifier[0]));
-            }
-            return buffs;
+    Vue.component("defense-stats-component", {
+        props: ["phase", "players"],
+        template: "#tmplDefenseTable",
+        data: function() {
+            return {
+                cache: new Map()
+            };
         },
-        rows: function () {
-            var rows = [];
-            for (var i = 0; i < this.players.length; i++) {
-                var player = this.players[i];
-                if (player.isConjure) {
-                    continue;
-                }
-                var dmgModifier = this.mode === 0 ? this.phase.dmgModifiersCommon[i] : this.phase.dmgModifiersTargetsCommon[i];
-                var data = [];
-                for (var j = 0; j < this.modifiers.length; j++) {
-                    data.push([0, 0, 0, 0]);
-                }
-                for (var j = 0; j < dmgModifier.length; j++) {
-                    data[j] = dmgModifier[j].slice(1);
-                }
-                rows.push({
-                    player: player,
-                    data: data
-                });
-            }
-            return rows;
+        mounted() {
+            initTable("#def-table", 4, "desc");
         },
-        rowsTarget: function () {
-            var rows = [];
-            for (var i = 0; i < this.players.length; i++) {
-                var player = this.players[i];
-                if (player.isConjure) {
-                    continue;
+        updated() {
+            updateTable("#def-table");
+        },
+        computed: {
+            tableData: function () {
+                if (this.cache.has(this.phase)) {
+                    return this.cache.get(this.phase);
                 }
-                var dmgModifier = this.mode === 0 ? this.phase.dmgModifiersCommon[i] : this.phase.dmgModifiersTargetsCommon[i];
-                var data = [];
-                for (var j = 0; j < this.modifiers.length; j++) {
-                    data.push([0, 0, 0, 0]);
-                }
-                for (var j = 0; j < this.phase.targets.length; j++) {
-                    if (this.targets[this.phase.targets[j]].active) {
-                        var modifier = dmgModifier[j];
-                        for (var k = 0; k < modifier.length; k++) {
-                            var target = modifier[k].slice(1);
-                            var curData = data[k];
-                            for (var l = 0; l < target.length; l++) {
-                                curData[l] += target[l];
-                            }
-                            data[k] = curData;
-                        }
+                var rows = [];
+                var sums = [];
+                var total = [0, 0, 0, 0, 0, 0, 0];
+                var groups = [];
+                var i;
+                for (i = 0; i < this.phase.defStats.length; i++) {
+                    var def = this.phase.defStats[i];
+                    var player = this.players[i];
+                    if (player.isConjure) {
+                        continue;
+                    }
+                    rows.push({
+                        player: player,
+                        def: def
+                    });
+                    if (!groups[player.group]) {
+                        groups[player.group] = [0, 0, 0, 0, 0, 0, 0];
+                    }
+                    for (var j = 0; j < total.length; j++) {
+                        total[j] += def[j];
+                        groups[player.group][j] += def[j];
                     }
                 }
-                rows.push({
-                    player: player,
-                    data: data
-                });
-            }
-            return rows;
-        }
-    },
-    methods: {
-        getTooltip: function (item) {
-            var hits = item[0] + " out of " + item[1] + " hits";
-            var gain = "Pure Damage: " + item[2];
-            var damageIncrease = Math.round(100 * 100 * (item[3] / (item[3] - item[2]) - 1.0)) / 100;
-            var increase = "Damage Gain: " + (isNaN(damageIncrease) ? "0" : damageIncrease) + "%";
-            return hits + "<br>" + gain + "<br>" + increase;
-        },
-        getCellValue: function (item) {
-            var res = Math.round(100 * 100 * item[0] / Math.max(item[1], 1)) / 100;
-            return isNaN(res) ? 0 : res;
-        }
-    },
-    mounted() {
-        initTable("#dmgmodifier-table", 1, "asc");
-    },
-    updated() {
-        updateTable('#dmgmodifier-table');
-    },
-});
-
-Vue.component("damagedist-table-component", {
-    props: ["dmgdist", "tableid", "actor", "isminion", "istarget", "sortdata"],
-    template: "#tmplDamageDistTable",
-    mixins: [roundingComponent],
-    mounted() {
-        var _this = this;
-        initTable(
-            "#" + this.tableid,
-            this.sortdata.index,
-            this.sortdata.order,
-            function () {
-                var order = $("#" + _this.tableid)
-                    .DataTable()
-                    .order();
-                _this.sortdata.order = order[0][1];
-                _this.sortdata.index = order[0][0];
-            }
-        );
-    },
-    beforeUpdate() {
-        $("#" + this.tableid)
-            .DataTable()
-            .destroy();
-    },
-    updated() {
-        var _this = this;
-        initTable(
-            "#" + this.tableid,
-            this.sortdata.index,
-            this.sortdata.order,
-            function () {
-                var order = $("#" + _this.tableid)
-                    .DataTable()
-                    .order();
-                _this.sortdata.order = order[0][1];
-                _this.sortdata.index = order[0][0];
-            }
-        );
-    },
-    beforeDestroy() {
-        $("#" + this.tableid)
-            .DataTable()
-            .destroy();
-    },
-    computed: {
-        rows: function () {
-            var res = [];
-            var distrib = this.dmgdist.distribution;
-            for (var i = 0; i < distrib.length; i++) {
-                var data = distrib[i];
-                res.push({
-                    data: data,
-                    skill: findSkill(data[0], data[1])
-                });
-            }
-            return res;
-        }
-    }
-});
-
-Vue.component('player-tab-component', {
-    props: ['player', 'playerindex', 'phase',
-        'phaseindex', 'targets'
-    ],
-    template: "#tmplPlayerTab",
-    data: function () {
-        return {
-            mode: 0,
-            sortdata: {
-                dmgdist: {
-                    order: "desc",
-                    index: 2
-                },
-                dmgtaken: {
-                    order: "desc",
-                    index: 2
-                }
-            }
-
-        };
-    },
-});
-
-Vue.component('dmgdist-player-component', {
-    props: ['player', 'playerindex', 'phase',
-        'phaseindex', 'targets', 'sortdata'
-    ],
-    template: "#tmplDamageDistPlayer",
-    data: function () {
-        return {
-            distmode: -1,
-            targetmode: 0
-        };
-    },
-    computed: {
-        actor: function () {
-            if (this.distmode === -1) {
-                return this.player;
-            }
-            return this.player.minions[this.distmode];
-        },
-        dmgdist: function () {
-            if (this.distmode === -1) {
-                return this.player.details.dmgDistributions[this.phaseindex];
-            }
-            return this.player.details.minions[this.distmode].dmgDistributions[this.phaseindex];
-        },
-        dmgdisttarget: function () {
-            var dist = {
-                contributedDamage: 0,
-                totalDamage: 0,
-                distribution: [],
-            };
-            var rows = new Map();
-            for (var i = 0; i < this.phase.targets.length; i++) {
-                var target = this.targets[this.phase.targets[i]];
-                if (target.active) {
-                    var targetDist = this.distmode === -1 ?
-                        this.player.details.dmgDistributionsTargets[this.phaseindex][i] :
-                        this.player.details.minions[this.distmode].dmgDistributionsTargets[this.phaseindex][i];
-                    dist.contributedDamage += targetDist.contributedDamage;
-                    dist.totalDamage += targetDist.totalDamage;
-                    var distribution = targetDist.distribution;
-                    for (var k = 0; k < distribution.length; k++) {
-                        var targetDistribution = distribution[k];
-                        if (rows.has(targetDistribution[1])) {
-                            var row = rows.get(targetDistribution[1]);
-                            row[2] += targetDistribution[2];
-                            if (row[3] < 0) {
-                                row[3] = targetDistribution[3];
-                            } else if (targetDistribution[3] >= 0) {
-                                row[3] = Math.min(targetDistribution[3], row[3]);
-                            }
-                            row[4] = Math.max(targetDistribution[4], row[4]);
-                            row[6] += targetDistribution[6];
-                            row[7] += targetDistribution[7];
-                            row[8] += targetDistribution[8];
-                            row[9] += targetDistribution[9];
-                        } else {
-                            rows.set(targetDistribution[1], targetDistribution.slice(0));
-                        }
+                for (i = 0; i < groups.length; i++) {
+                    if (groups[i]) {
+                        sums.push({
+                            name: "Group " + i,
+                            def: groups[i]
+                        });
                     }
                 }
+                sums.push({
+                    name: "Total",
+                    def: total
+                });
+                var res = {
+                    rows: rows,
+                    sums: sums
+                };
+                this.cache.set(this.phase, res);
+                return res;
             }
-            rows.forEach(function (value, key, map) {
-                dist.distribution.push(value);
-            });
-            dist.contributedDamage = Math.max(dist.contributedDamage, 0);
-            dist.totalDamage = Math.max(dist.totalDamage, 0);
-            return dist;
         }
-    },
-});
+    });
 
-Vue.component('dmgtaken-player-component', {
-    props: ['player', 'playerindex',
-        'phaseindex', 'sortdata'
-    ],
-    template: "#tmplDamageTakenPlayer",
-    computed: {
-        dmgtaken: function () {
-            return this.player.details.dmgDistributionsTaken[this.phaseindex];
+    Vue.component("support-stats-component", {
+        props: ["phase", "players"],
+        template: "#tmplSupportTable",
+        data: function() {
+            return {
+                cache: new Map()
+            };
+        },
+        mixins: [roundingComponent],
+        mounted() {
+            initTable("#sup-table", 4, "desc");
+        },
+        updated() {
+            updateTable("#sup-table");
+        },
+        computed: {
+            tableData: function () {
+                if (this.cache.has(this.phase)) {
+                    return this.cache.get(this.phase);
+                }
+                var rows = [];
+                var sums = [];
+                var total = [0, 0, 0, 0];
+                var groups = [];
+                var i;
+                for (i = 0; i < this.phase.healStats.length; i++) {
+                    var sup = this.phase.healStats[i];
+                    var player = this.players[i];
+                    if (player.isConjure) {
+                        continue;
+                    }
+                    rows.push({
+                        player: player,
+                        sup: sup
+                    });
+                    if (!groups[player.group]) {
+                        groups[player.group] = [0, 0, 0, 0];
+                    }
+                    for (var j = 0; j < sup.length; j++) {
+                        total[j] += sup[j];
+                        groups[player.group][j] += sup[j];
+                    }
+                }
+                for (i = 0; i < groups.length; i++) {
+                    if (groups[i]) {
+                        sums.push({
+                            name: "Group " + i,
+                            sup: groups[i]
+                        });
+                    }
+                }
+                sums.push({
+                    name: "Total",
+                    sup: total
+                });
+                var res = {
+                    rows: rows,
+                    sums: sums
+                };
+                this.cache.set(this.phase, res);
+                return res;
+            }
         }
-    },
-});
+    });
 
-Vue.component("player-stats-component", {
-    props: ["players", "phaseindex", "phase", 'targets'],
-    template: "#tmplPlayerStats",
-});
-
-Vue.component("food-component", {
-    props: ["food", "phase"],
-    template: "#tmplFood",
-    computed: {
+    Vue.component("gameplay-stats-component", {
+        props: ["phase", "targets", "players"],
+        template: "#tmplGameplayTable",
+        mixins: [roundingComponent],
         data: function () {
-            var res = {
-                start: [],
-                refreshed: []
+            return {
+                mode: 0,
+                cache: new Map()
             };
-            for (var k = 0; k < this.food.length; k++) {
-                var foodData = this.food[k];
-                if (!foodData.name) {
-                    var skill = findSkill(true, foodData.id);
-                    foodData.name = skill.name;
-                    foodData.icon = skill.icon;
+        },
+        mounted() {
+            initTable("#dmg-table", 4, "desc");
+        },
+        updated() {
+            updateTable("#dmg-table");
+        },
+        computed: {
+            tableData: function () {
+                if (this.cache.has(this.phase)) {
+                    return this.cache.get(this.phase);
                 }
-                if (foodData.time >= this.phase.start && foodData.time <= this.phase.end) {
-                    if (foodData.time === 0) {
-                        res.start.push(foodData);
-                    } else {
-                        res.refreshed.push(foodData);
+                var phase = this.phase;
+                var rows = [];
+                for (var i = 0; i < phase.dmgStats.length; i++) {
+                    var commons = [];
+                    var data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                    var player = this.players[i];
+                    if (player.isConjure) {
+                        continue;
+                    }
+                    var stats = phase.dmgStats[i];
+                    for (var j = 0; j < stats.length; j++) {
+                        if (j >= 14) {
+                            commons[j - 14] = stats[j];
+                        } else {
+                            data[j] = stats[j];
+                        }
+                    }
+                    rows.push({
+                        player: player,
+                        commons: commons,
+                        data: data
+                    });
+                }
+                this.cache.set(this.phase, rows);
+                return rows;
+            },
+            tableDataTarget: function () {
+                var phase = this.phase;
+                var rows = [];
+                for (var i = 0; i < phase.dmgStats.length; i++) {
+                    var commons = [];
+                    var data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                    var player = this.players[i];
+                    if (player.isConjure) {
+                        continue;
+                    }
+                    var stats = phase.dmgStats[i];
+                    for (var j = 0; j < stats.length; j++) {
+                        if (j >= 14) {
+                            commons[j - 14] = stats[j];
+                        } else {
+                            for (var k = 0; k < phase.targets.length; k++) {
+                                if (this.targets[phase.targets[k]].active) {
+                                    var tar = phase.dmgStatsTargets[i][k];
+                                    data[j] += tar[j];
+                                }
+                            }
+                        }
+                    }
+                    rows.push({
+                        player: player,
+                        commons: commons,
+                        data: data
+                    });
+                }
+                return rows;
+            }
+        }
+    });
+    Vue.component("dmgmodifier-stats-component", {
+        props: ['phases',
+            'phase', 'players', 'targets'
+        ],
+        template: "#tmplDamageModifierTable",
+        data: function () {
+            return {
+                mode: 0,
+                cache: new Map()
+            };
+        },
+        computed: {
+            modifiers: function () {
+                var dmgModifiersCommon = this.phases[0].dmgModifiersCommon;
+                if (!dmgModifiersCommon.length) {
+                    return [];
+                }
+                var dmgModifier = dmgModifiersCommon[0];
+                var buffs = [];
+                for (var i = 0; i < dmgModifier.length; i++) {
+                    var modifier = dmgModifier[i];
+                    buffs.push(findSkill(true, modifier[0]));
+                }
+                return buffs;
+            },
+            rows: function () {
+                if (this.cache.has(this.phase)) {
+                    return this.cache.get(this.phase);
+                }
+                var rows = [];
+                for (var i = 0; i < this.players.length; i++) {
+                    var player = this.players[i];
+                    if (player.isConjure) {
+                        continue;
+                    }
+                    var dmgModifier = this.mode === 0 ? this.phase.dmgModifiersCommon[i] : this.phase.dmgModifiersTargetsCommon[i];
+                    var data = [];
+                    for (var j = 0; j < this.modifiers.length; j++) {
+                        data.push([0, 0, 0, 0]);
+                    }
+                    for (var j = 0; j < dmgModifier.length; j++) {
+                        data[j] = dmgModifier[j].slice(1);
+                    }
+                    rows.push({
+                        player: player,
+                        data: data
+                    });
+                }
+                this.cache.set(this.phase, rows);
+                return rows;
+            },
+            rowsTarget: function () {
+                var rows = [];
+                for (var i = 0; i < this.players.length; i++) {
+                    var player = this.players[i];
+                    if (player.isConjure) {
+                        continue;
+                    }
+                    var dmgModifier = this.mode === 0 ? this.phase.dmgModifiersCommon[i] : this.phase.dmgModifiersTargetsCommon[i];
+                    var data = [];
+                    for (var j = 0; j < this.modifiers.length; j++) {
+                        data.push([0, 0, 0, 0]);
+                    }
+                    for (var j = 0; j < this.phase.targets.length; j++) {
+                        if (this.targets[this.phase.targets[j]].active) {
+                            var modifier = dmgModifier[j];
+                            for (var k = 0; k < modifier.length; k++) {
+                                var target = modifier[k].slice(1);
+                                var curData = data[k];
+                                for (var l = 0; l < target.length; l++) {
+                                    curData[l] += target[l];
+                                }
+                                data[k] = curData;
+                            }
+                        }
+                    }
+                    rows.push({
+                        player: player,
+                        data: data
+                    });
+                }
+                return rows;
+            }
+        },
+        methods: {
+            getTooltip: function (item) {
+                var hits = item[0] + " out of " + item[1] + " hits";
+                var gain = "Pure Damage: " + item[2];
+                var damageIncrease = Math.round(100 * 100 * (item[3] / (item[3] - item[2]) - 1.0)) / 100;
+                var increase = "Damage Gain: " + (isNaN(damageIncrease) ? "0" : damageIncrease) + "%";
+                return hits + "<br>" + gain + "<br>" + increase;
+            },
+            getCellValue: function (item) {
+                var res = Math.round(100 * 100 * item[0] / Math.max(item[1], 1)) / 100;
+                return isNaN(res) ? 0 : res;
+            }
+        },
+        mounted() {
+            initTable("#dmgmodifier-table", 1, "asc");
+        },
+        updated() {
+            updateTable('#dmgmodifier-table');
+        },
+    });
+};
+
+var compileBuffStats = function () {
+    Vue.component("personal-buff-table-component", {
+        props: ['phase', 'persbuffs', 'players'],
+        template: "#tmplPersonalBuffTable",
+        data: function () {
+            return {
+                specs: specs,
+                bases: [],
+                specToBase: specToBase,
+                mode: "Warrior",
+                cache: new Map()
+            };
+        },
+        computed: {
+            orderedSpecs: function () {
+                var res = [];
+                var aux = new Set();
+                for (var i = 0; i < this.specs.length; i++) {
+                    var spec = this.specs[i];
+                    var pBySpec = [];
+                    for (var j = 0; j < this.players.length; j++) {
+                        if (this.players[j].profession === spec) {
+                            pBySpec.push(j);
+                        }
+                    }
+                    if (pBySpec.length) {
+                        aux.add(this.specToBase[spec]);
+                        res.push({
+                            ids: pBySpec,
+                            name: spec
+                        });
                     }
                 }
-            }
-            return res;
-        }
-    }
-});
-
-Vue.component("simplerotation-component", {
-    props: ["rotation"],
-    template: "#tmplSimpleRotation",
-    data: function () {
-        return {
-            autoattack: true,
-            small: false
-        };
-    },
-    methods: {
-        getSkill: function (id) {
-            return findSkill(false, id);
-        }
-    }
-});
-
-Vue.component("target-stats-component", {
-    props: ["players", "targets", "phase", "phaseindex", "presentboons", "presentconditions"],
-    template: "#tmplTargetStats",
-    computed: {
-        phaseTargets: function () {
-            var res = [];
-            for (var i = 0; i < this.phase.targets.length; i++) {
-                var tar = this.targets[this.phase.targets[i]];
-                res.push(tar);
-            }
-            if (!this.phase.focus) {
-                this.phase.focus = res[0] || null;
-            }
-            return res;
-        },
-        boons: function () {
-            var data = [];
-            for (var i = 0; i < this.presentboons.length; i++) {
-                data[i] = findSkill(true, this.presentboons[i]);
-            }
-            return data;
-        },
-        conditions: function () {
-            var data = [];
-            for (var i = 0; i < this.presentconditions.length; i++) {
-                data[i] = findSkill(true, this.presentconditions[i]);
-            }
-            return data;
-        }
-    }
-});
-
-Vue.component("target-tab-component", {
-    props: ["focus", "target", "phaseindex", "players", "phase", "boons", "conditions", 'targetindex'],
-    template: "#tmplTargetTab",
-    data: function () {
-        return {
-            mode: 0,
-            sortdata: {
-                dmgdist: {
-                    order: "desc",
-                    index: 2
+                this.bases = [];
+                var _this = this;
+                aux.forEach(function (value, value2, set) {
+                    _this.bases.push(value);
+                });
+                this.mode = this.bases[0];
+                return res;
+            },
+            data: function () {
+                if (this.cache.has(this.phase)) {
+                    return this.cache.get(this.phase);
                 }
+                var res = [];
+                for (var i = 0; i < this.orderedSpecs.length; i++) {
+                    var spec = this.orderedSpecs[i];
+                    var dataBySpec = [];
+                    for (var j = 0; j < spec.ids.length; j++) {
+                        dataBySpec.push({
+                            player: this.players[spec.ids[j]],
+                            data: this.phase.persBuffStats[spec.ids[j]]
+                        });
+                    }
+                    res.push(dataBySpec);
+                }
+                this.cache.set(this.phase, res);
+                return res;
+            },
+            buffs: function () {
+                var res = [];
+                for (var i = 0; i < this.orderedSpecs.length; i++) {
+                    var spec = this.orderedSpecs[i];
+                    var data = [];
+                    for (var j = 0; j < this.persbuffs[spec.name].length; j++) {
+                        data.push(findSkill(true, this.persbuffs[spec.name][j]));
+                    }
+                    res.push(data);
+                }
+                return res;
             }
-        };
-    }
-});
+        }
+    });
 
-Vue.component("buff-stats-target-component", {
-    props: ['target', 'phase', 'players', 'boons', 'conditions', 'targetindex'],
-    template: "#tmplBuffStatsTarget",
-    computed: {
-        targetPhaseIndex: function () {
-            return this.phase.targets.indexOf(this.targetindex);
+    Vue.component("buff-stats-component", {
+        props: ['datatypes', 'datatype', 'phase', 'players', 'presentboons', 'presentoffs', 'presentdefs'],
+        template: "#tmplBuffStats",
+        data: function () {
+            return {
+                mode: 0,
+                cache: new Map()
+            };
         },
-        hasBoons: function () {
-            return this.phase.targetsBoonTotals[this.targetPhaseIndex];
+        computed: {
+            boons: function () {
+                var data = [];
+                for (var i = 0; i < this.presentboons.length; i++) {
+                    data[i] = findSkill(true, this.presentboons[i]);
+                }
+                return data;
+            },
+            offs: function () {
+                var data = [];
+                for (var i = 0; i < this.presentoffs.length; i++) {
+                    data[i] = findSkill(true, this.presentoffs[i]);
+                }
+                return data;
+            },
+            defs: function () {
+                var data = [];
+                for (var i = 0; i < this.presentdefs.length; i++) {
+                    data[i] = findSkill(true, this.presentdefs[i]);
+                }
+                return data;
+            },
+            buffData: function () {
+                if (this.cache.has(this.phase)) {
+                    return this.cache.get(this.phase);
+                }
+                var _this = this;
+                var getData = function (stats, genself, gengroup, genoffgr, gensquad) {
+                    var uptimes = [],
+                        gens = [],
+                        gengr = [],
+                        genoff = [],
+                        gensq = [];
+                    var avg = [],
+                        gravg = [],
+                        totalavg = [];
+                    var grcount = [],
+                        totalcount = 0;
+                    for (var i = 0; i < _this.players.length; i++) {
+                        var player = _this.players[i];
+                        if (player.isConjure) {
+                            continue;
+                        }
+                        uptimes.push({
+                            player: player,
+                            data: stats[i]
+                        });
+                        gens.push({
+                            player: player,
+                            data: genself[i]
+                        });
+                        gengr.push({
+                            player: player,
+                            data: gengroup[i]
+                        });
+                        genoff.push({
+                            player: player,
+                            data: genoffgr[i]
+                        });
+                        gensq.push({
+                            player: player,
+                            data: gensquad[i]
+                        });
+                        if (!gravg[player.group]) {
+                            gravg[player.group] = [];
+                            grcount[player.group] = 0;
+                        }
+                        totalcount++;
+                        grcount[player.group]++;
+                        for (var j = 0; j < stats[i].data.length; j++) {
+                            totalavg[j] = (totalavg[j] || 0) + stats[i].data[j][0];
+                            gravg[player.group][j] = (gravg[player.group][j] || 0) + stats[i].data[j][0];
+                        }
+                    }
+                    for (var i = 0; i < gravg.length; i++) {
+                        if (gravg[i]) {
+                            for (var k = 0; k < gravg[i].length; k++) {
+                                gravg[i][k] = Math.round(100 * gravg[i][k] / grcount[i]) / 100;
+                            }
+                            avg.push({
+                                name: "Group " + i,
+                                data: gravg[i],
+                            });
+                        }
+                    }
+                    for (var k = 0; k < totalavg.length; k++) {
+                        totalavg[k] = Math.round(100 * totalavg[k] / totalcount) / 100;
+                    }
+                    avg.push({
+                        name: "Total",
+                        data: totalavg
+                    });
+                    return [uptimes, gens, gengr, genoff, gensq, avg];
+                };
+                var res = {
+                    boonsData: getData(this.phase.boonStats, this.phase.boonGenSelfStats,
+                        this.phase.boonGenGroupStats, this.phase.boonGenOGroupStats, this.phase.boonGenSquadStats),
+                    offsData: getData(this.phase.offBuffStats, this.phase.offBuffGenSelfStats,
+                        this.phase.offBuffGenGroupStats, this.phase.offBuffGenOGroupStats, this.phase.offBuffGenSquadStats),
+                    defsData: getData(this.phase.defBuffStats, this.phase.defBuffGenSelfStats,
+                        this.phase.defBuffGenGroupStats, this.phase.defBuffGenOGroupStats, this.phase.defBuffGenSquadStats)
+                };
+                this.cache.set(this.phase,res);
+                return res;
+            }
         },
-        condiData: function () {
-            var res = [];
-            if (this.targetPhaseIndex === -1) {
+    });
+};
+
+var compilePlayerTab = function () {
+
+    // Base stuff
+    Vue.component('dmgdist-player-component', {
+        props: ['player', 'playerindex', 'phase',
+            'phaseindex', 'targets', 'sortdata'
+        ],
+        template: "#tmplDamageDistPlayer",
+        data: function () {
+            return {
+                distmode: -1,
+                targetmode: 0
+            };
+        },
+        computed: {
+            actor: function () {
+                if (this.distmode === -1) {
+                    return this.player;
+                }
+                return this.player.minions[this.distmode];
+            },
+            dmgdist: function () {
+                if (this.distmode === -1) {
+                    return this.player.details.dmgDistributions[this.phaseindex];
+                }
+                return this.player.details.minions[this.distmode].dmgDistributions[this.phaseindex];
+            },
+            dmgdisttarget: function () {
+                var dist = {
+                    contributedDamage: 0,
+                    totalDamage: 0,
+                    distribution: [],
+                };
+                var rows = new Map();
+                for (var i = 0; i < this.phase.targets.length; i++) {
+                    var target = this.targets[this.phase.targets[i]];
+                    if (target.active) {
+                        var targetDist = this.distmode === -1 ?
+                            this.player.details.dmgDistributionsTargets[this.phaseindex][i] :
+                            this.player.details.minions[this.distmode].dmgDistributionsTargets[this.phaseindex][i];
+                        dist.contributedDamage += targetDist.contributedDamage;
+                        dist.totalDamage += targetDist.totalDamage;
+                        var distribution = targetDist.distribution;
+                        for (var k = 0; k < distribution.length; k++) {
+                            var targetDistribution = distribution[k];
+                            if (rows.has(targetDistribution[1])) {
+                                var row = rows.get(targetDistribution[1]);
+                                row[2] += targetDistribution[2];
+                                if (row[3] < 0) {
+                                    row[3] = targetDistribution[3];
+                                } else if (targetDistribution[3] >= 0) {
+                                    row[3] = Math.min(targetDistribution[3], row[3]);
+                                }
+                                row[4] = Math.max(targetDistribution[4], row[4]);
+                                row[6] += targetDistribution[6];
+                                row[7] += targetDistribution[7];
+                                row[8] += targetDistribution[8];
+                                row[9] += targetDistribution[9];
+                            } else {
+                                rows.set(targetDistribution[1], targetDistribution.slice(0));
+                            }
+                        }
+                    }
+                }
+                rows.forEach(function (value, key, map) {
+                    dist.distribution.push(value);
+                });
+                dist.contributedDamage = Math.max(dist.contributedDamage, 0);
+                dist.totalDamage = Math.max(dist.totalDamage, 0);
+                return dist;
+            }
+        },
+    });
+
+    Vue.component('dmgtaken-player-component', {
+        props: ['player', 'playerindex',
+            'phaseindex', 'sortdata'
+        ],
+        template: "#tmplDamageTakenPlayer",
+        computed: {
+            dmgtaken: function () {
+                return this.player.details.dmgDistributionsTaken[this.phaseindex];
+            }
+        },
+    });
+
+    Vue.component("food-component", {
+        props: ["food", "phase"],
+        template: "#tmplFood",
+        data: function() {
+            return {
+                cache: new Map()
+            };
+        },
+        computed: {
+            data: function () {
+                if (this.cache.has(this.phase)) {
+                    return this.cache.get(this.phase);
+                }
+                var res = {
+                    start: [],
+                    refreshed: []
+                };
+                for (var k = 0; k < this.food.length; k++) {
+                    var foodData = this.food[k];
+                    if (!foodData.name) {
+                        var skill = findSkill(true, foodData.id);
+                        foodData.name = skill.name;
+                        foodData.icon = skill.icon;
+                    }
+                    if (foodData.time >= this.phase.start && foodData.time <= this.phase.end) {
+                        if (foodData.time === 0) {
+                            res.start.push(foodData);
+                        } else {
+                            res.refreshed.push(foodData);
+                        }
+                    }
+                }
+                this.cache.set(this.phase,res);
+                return res;
+            }
+        }
+    });
+
+    Vue.component("simplerotation-component", {
+        props: ["rotation"],
+        template: "#tmplSimpleRotation",
+        data: function () {
+            return {
+                autoattack: true,
+                small: false
+            };
+        },
+        methods: {
+            getSkill: function (id) {
+                return findSkill(false, id);
+            }
+        }
+    });
+
+
+    Vue.component("deathrecap-component", {
+        props: ["recaps", "playerindex", "phase"],
+        template: "#tmplDeathRecap",
+        computed: {
+            data: function () {
+                var res = {
+                    totalSeconds: {
+                        down: [],
+                        kill: []
+                    },
+                    totalDamage: {
+                        down: [],
+                        kill: []
+                    },
+                    data: [],
+                    layout: {}
+                };
+                for (var i = 0; i < this.recaps.length; i++) {
+                    var recap = this.recaps[i];
+                    if (recap.toDown !== null) {
+                        var totalSec = (recap.toDown[0][0] - recap.toDown[recap.toDown.length - 1][0]) / 1000;
+                        var totalDamage = 0;
+                        for (var j = 0; j < recap.toDown.length; j++) {
+                            totalDamage += recap.toDown[j][2];
+                        }
+                        res.totalSeconds.down[i] = totalSec;
+                        res.totalDamage.down[i] = totalDamage;
+                    }
+                    if (recap.toKill !== null) {
+                        var totalSec = (recap.toKill[0][0] - recap.toKill[recap.toKill.length - 1][0]) / 1000;
+                        var totalDamage = 0;
+                        for (var j = 0; j < recap.toKill.length; j++) {
+                            totalDamage += recap.toKill[j][2];
+                        }
+                        res.totalSeconds.kill[i] = totalSec;
+                        res.totalDamage.kill[i] = totalDamage;
+                    }
+                }
+                return res;
+            }
+        }
+    });
+    // tab
+    Vue.component('player-tab-component', {
+        props: ['player', 'playerindex', 'phase',
+            'phaseindex', 'targets'
+        ],
+        template: "#tmplPlayerTab",
+        data: function () {
+            return {
+                mode: 0,
+                sortdata: {
+                    dmgdist: {
+                        order: "desc",
+                        index: 2
+                    },
+                    dmgtaken: {
+                        order: "desc",
+                        index: 2
+                    }
+                }
+
+            };
+        },
+    });
+    // stats
+    Vue.component("player-stats-component", {
+        props: ["players", "phaseindex", "phase", 'targets'],
+        template: "#tmplPlayerStats",
+    });
+};
+
+var compileTargetTab = function () {
+    // base
+    Vue.component("buff-stats-target-component", {
+        props: ['target', 'phase', 'players', 'boons', 'conditions', 'targetindex'],
+        template: "#tmplBuffStatsTarget",
+        computed: {
+            targetPhaseIndex: function () {
+                return this.phase.targets.indexOf(this.targetindex);
+            },
+            hasBoons: function () {
+                return this.phase.targetsBoonTotals[this.targetPhaseIndex];
+            },
+            condiData: function () {
+                var res = [];
+                if (this.targetPhaseIndex === -1) {
+                    for (var i = 0; i < this.players.length; i++) {
+                        res.push({
+                            player: this.players[i],
+                            data: {
+                                avg: 0.0,
+                                data: []
+                            }
+                        });
+                    }
+                    return res;
+                }
                 for (var i = 0; i < this.players.length; i++) {
                     res.push({
                         player: this.players[i],
-                        data: { avg: 0.0, data: [] }
+                        data: this.phase.targetsCondiStats[this.targetPhaseIndex][i]
                     });
                 }
                 return res;
-            }
-            for (var i = 0; i < this.players.length; i++) {
-                res.push({
-                    player: this.players[i],
-                    data: this.phase.targetsCondiStats[this.targetPhaseIndex][i]
-                });
-            }
-            return res;
-        },
-        condiSums: function () {
-            var res = [];
-            if (this.targetPhaseIndex === -1) {
+            },
+            condiSums: function () {
+                var res = [];
+                if (this.targetPhaseIndex === -1) {
+                    res.push({
+                        icon: this.target.icon,
+                        name: this.target.name,
+                        avg: 0,
+                        data: []
+                    });
+                    return res;
+                }
+                var targetData = this.phase.targetsCondiTotals[this.targetPhaseIndex];
                 res.push({
                     icon: this.target.icon,
                     name: this.target.name,
-                    avg: 0,
-                    data: []
+                    avg: targetData.avg,
+                    data: targetData.data
                 });
                 return res;
-            }
-            var targetData = this.phase.targetsCondiTotals[this.targetPhaseIndex];
-            res.push({
-                icon: this.target.icon,
-                name: this.target.name,
-                avg: targetData.avg,
-                data: targetData.data
-            });
-            return res;
-        },
-        buffData: function () {
-            var res = [];
-            if (this.targetPhaseIndex === -1 || !this.hasBoons) {
+            },
+            buffData: function () {
+                var res = [];
+                if (this.targetPhaseIndex === -1 || !this.hasBoons) {
+                    res.push({
+                        player: this.target,
+                        data: {
+                            avg: 0.0,
+                            data: []
+                        }
+                    });
+                    return res;
+                }
+                var targetData = this.phase.targetsBoonTotals[this.targetPhaseIndex];
                 res.push({
                     player: this.target,
-                    data: { avg: 0.0, data: [] }
+                    data: targetData
                 });
                 return res;
             }
-            var targetData = this.phase.targetsBoonTotals[this.targetPhaseIndex];
-            res.push({
-                player: this.target,
-                data: targetData
-            });
-            return res;
         }
-    }
-});
+    });
 
-Vue.component('dmgdist-target-component', {
-    props: ['focus', 'target',
-        'phaseindex', 'sortdata'
-    ],
-    template: "#tmplDamageDistTarget",
-    data: function () {
-        return {
-            distmode: -1
-        };
-    },
-    computed: {
-        actor: function () {
-            if (this.distmode === -1) {
-                return this.target;
-            }
-            return this.target.minions[this.distmode];
-        },
-        dmgdist: function () {
-            if (this.distmode === -1) {
-                return this.target.details.dmgDistributions[this.phaseindex];
-            }
-            return this.target.details.minions[this.distmode].dmgDistributions[this.phaseindex];
-        }
-    },
-});
-
-Vue.component("deathrecap-component", {
-    props: ["recaps", "playerindex", "phase"],
-    template: "#tmplDeathRecap",
-    computed: {
+    Vue.component('dmgdist-target-component', {
+        props: ['focus', 'target',
+            'phaseindex', 'sortdata'
+        ],
+        template: "#tmplDamageDistTarget",
         data: function () {
-            var res = {
-                totalSeconds: { down: [], kill: [] },
-                totalDamage: { down: [], kill: [] },
-                data: [],
-                layout: {}
+            return {
+                distmode: -1
             };
-            for (var i = 0; i < this.recaps.length; i++) {
-                var recap = this.recaps[i];
-                if (recap.toDown !== null) {
-                    var totalSec = (recap.toDown[0][0] - recap.toDown[recap.toDown.length - 1][0]) / 1000;
-                    var totalDamage = 0;
-                    for (var j = 0; j < recap.toDown.length; j++) {
-                        totalDamage += recap.toDown[j][2];
-                    }
-                    res.totalSeconds.down[i] = totalSec;
-                    res.totalDamage.down[i] = totalDamage;
+        },
+        computed: {
+            actor: function () {
+                if (this.distmode === -1) {
+                    return this.target;
                 }
-                if (recap.toKill !== null) {
-                    var totalSec = (recap.toKill[0][0] - recap.toKill[recap.toKill.length - 1][0]) / 1000;
-                    var totalDamage = 0;
-                    for (var j = 0; j < recap.toKill.length; j++) {
-                        totalDamage += recap.toKill[j][2];
-                    }
-                    res.totalSeconds.kill[i] = totalSec;
-                    res.totalDamage.kill[i] = totalDamage;
+                return this.target.minions[this.distmode];
+            },
+            dmgdist: function () {
+                if (this.distmode === -1) {
+                    return this.target.details.dmgDistributions[this.phaseindex];
                 }
+                return this.target.details.minions[this.distmode].dmgDistributions[this.phaseindex];
             }
-            return res;
+        },
+    });
+    // tab
+
+
+    Vue.component("target-tab-component", {
+        props: ["focus", "target", "phaseindex", "players", "phase", "boons", "conditions", 'targetindex'],
+        template: "#tmplTargetTab",
+        data: function () {
+            return {
+                mode: 0,
+                sortdata: {
+                    dmgdist: {
+                        order: "desc",
+                        index: 2
+                    }
+                }
+            };
         }
-    }
-});
+    });
+    // stats
+    Vue.component("target-stats-component", {
+        props: ["players", "targets", "phase", "phaseindex", "presentboons", "presentconditions"],
+        template: "#tmplTargetStats",
+        computed: {
+            phaseTargets: function () {
+                var res = [];
+                for (var i = 0; i < this.phase.targets.length; i++) {
+                    var tar = this.targets[this.phase.targets[i]];
+                    res.push(tar);
+                }
+                if (!this.phase.focus) {
+                    this.phase.focus = res[0] || null;
+                }
+                return res;
+            },
+            boons: function () {
+                var data = [];
+                for (var i = 0; i < this.presentboons.length; i++) {
+                    data[i] = findSkill(true, this.presentboons[i]);
+                }
+                return data;
+            },
+            conditions: function () {
+                var data = [];
+                for (var i = 0; i < this.presentconditions.length; i++) {
+                    data[i] = findSkill(true, this.presentconditions[i]);
+                }
+                return data;
+            }
+        }
+    });
+};
+
+var compileMechanics = function () {
+    Vue.component("mechanics-stats-component", {
+        props: ["phase", "players", "enemies", "mechanics"],
+        template: "#tmplMechanicsTable",
+        data: function() {
+            return {
+                cacheP: new Map(),
+                cacheE: new Map()
+            };
+        },
+        mounted() {
+            initTable("#playermechs", 0, "asc");
+            //
+            if (this.enemyMechHeader.length) {
+                initTable("#enemymechs", 0, "asc");
+            }
+        },
+        updated() {
+            updateTable("#playermechs");
+            //
+            if (this.enemyMechHeader.length) {
+                updateTable("#enemymechs");
+            }
+        },
+        computed: {
+            playerMechHeader: function () {
+                var mechanics = this.mechanics;
+                var playerMechanics = [];
+                for (var i = 0; i < mechanics.length; i++) {
+                    if (mechanics[i].playerMech) {
+                        playerMechanics.push(mechanics[i]);
+                    }
+                }
+                return playerMechanics;
+            },
+            playerMechRows: function () {
+                if (this.cacheP.has(this.phase)) {
+                    return this.cacheP.get(this.phase);
+                }
+                var phase = this.phase;
+                var players = this.players;
+                var rows = [];
+                for (var i = 0; i < players.length; i++) {
+                    var player = players[i];
+                    if (player.isConjure) {
+                        continue;
+                    }
+                    rows.push({
+                        player: player,
+                        mechs: phase.mechanicStats[i]
+                    });
+                }
+                this.cacheP.set(this.phase,rows);
+                return rows;
+            },
+            enemyMechHeader: function () {
+                var mechanics = this.mechanics;
+                var enemyMechanics = [];
+                for (var i = 0; i < mechanics.length; i++) {
+                    if (mechanics[i].enemyMech) {
+                        enemyMechanics.push(mechanics[i]);
+                    }
+                }
+                return enemyMechanics;
+            },
+            enemyMechRows: function () {
+                if (this.cacheE.has(this.phase)) {
+                    return this.cacheE.get(this.phase);
+                }
+                var phase = this.phase;
+                var enemies = this.enemies;
+                var rows = [];
+                for (var i = 0; i < enemies.length; i++) {
+                    var enemy = enemies[i];
+                    rows.push({
+                        enemy: enemy.name,
+                        mechs: phase.enemyMechanicStats[i]
+                    });
+                }
+                this.cacheE.set(this.phase,rows);
+                return rows;
+            }
+        }
+    });
+};
 
 var createLayout = function () {
+    // Compile
+    Vue.component("general-layout-component", {
+        name: "general-layout-component",
+        template: "#tmplGeneralLayout",
+        props: ["layout", "phase"],
+        methods: {
+            select: function (tab, tabs) {
+                for (var i = 0; i < tabs.length; i++) {
+                    tabs[i].active = false;
+                }
+                tab.active = true;
+            }
+        },
+        computed: {
+            layoutName: function () {
+                if (!this.phase) {
+                    return this.layout.desc;
+                }
+                return this.layout.desc ?
+                    this.phase.name + " " + this.layout.desc :
+                    this.phase.name;
+            }
+        }
+    });
+    //
     var layout = new Layout("Summary");
     // general stats
     var stats = new Tab("General Stats", {
@@ -1485,6 +1570,13 @@ window.onload = function () {
     }
 
     var layout = createLayout();
+    compileCommons();
+    compileHeader();
+    compileGeneralStats();
+    compileBuffStats();
+    compileMechanics();
+    compilePlayerTab();
+    compileTargetTab();
     new Vue({
         el: "#content",
         data: {
