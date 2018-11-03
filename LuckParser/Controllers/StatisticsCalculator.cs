@@ -205,7 +205,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        private FinalStats GetFinalBossStats(Player p, int phaseIndex, Boss target)
+        private FinalStats GetFinalTargetStats(Player p, int phaseIndex, Boss target)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
             long start = phase.Start + _log.FightData.FightStart;
@@ -466,7 +466,7 @@ namespace LuckParser.Controllers
                     FinalStats[] stats = new FinalStats[_statistics.Phases.Count];
                     for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
                     {
-                        stats[phaseIndex] = GetFinalBossStats(player, phaseIndex, target);
+                        stats[phaseIndex] = GetFinalTargetStats(player, phaseIndex, target);
                     }
                     phaseBossStats[player] = stats;
                 }
