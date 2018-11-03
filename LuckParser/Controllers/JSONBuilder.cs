@@ -19,8 +19,6 @@ namespace LuckParser.Controllers
 
         readonly ParsedLog _log;
 
-        readonly bool _devMode;
-
         readonly Statistics _statistics;
         readonly StreamWriter _sw;
 
@@ -28,10 +26,6 @@ namespace LuckParser.Controllers
         //
         private readonly Dictionary<long, string> _skillNames = new Dictionary<long, string>();
         private readonly Dictionary<long, string> _buffNames = new Dictionary<long, string>();
-        private readonly Dictionary<long, BuffDesc> _buffData = new Dictionary<long, BuffDesc>();
-        private readonly Dictionary<long, string> _skillIcons = new Dictionary<long, string>();
-        private readonly Dictionary<string, MechanicDesc> _mechanicData = new Dictionary<string, MechanicDesc>();
-        private readonly Dictionary<string, string> _actorIconData = new Dictionary<string, string>();
         private readonly Dictionary<string, List<long>> _personalBuffs = new Dictionary<string, List<long>>();
 
         public static void UpdateStatisticSwitches(StatisticsCalculator.Switches switches)
@@ -46,7 +40,7 @@ namespace LuckParser.Controllers
             switches.CalculateMechanics = true;
         }
 
-        public JSONBuilder(StreamWriter sw, ParsedLog log, SettingsContainer settings, Statistics statistics, bool devMode, string[] UploadString)
+        public JSONBuilder(StreamWriter sw, ParsedLog log, SettingsContainer settings, Statistics statistics, string[] UploadString)
         {
             _log = log;
             _sw = sw;
@@ -56,7 +50,6 @@ namespace LuckParser.Controllers
             _statistics = statistics;
             
            _uploadLink = UploadString;
-            _devMode = devMode;
         }
 
         public void CreateJSON()
@@ -75,7 +68,7 @@ namespace LuckParser.Controllers
             };
             var writer = new JsonTextWriter(_sw)
             {
-                Formatting = _settings.IndentJSON && !_devMode ? Formatting.Indented : Formatting.None
+                Formatting = _settings.IndentJSON ? Formatting.Indented : Formatting.None
             };
             serializer.Serialize(writer, log);
         }
@@ -100,21 +93,8 @@ namespace LuckParser.Controllers
             log.Success = _log.LogData.Success ? 1 : 0;
             log.SkillNames = _skillNames;
             log.BuffNames = _buffNames;
-            if (!_devMode)
-            {
-                log.UploadLinks = _uploadLink;
-            } else
-            {
-                log.ExtraData = new JsonExtraLog()
-                {
-                    BuffData = _buffData,
-                    SkillIcons = _skillIcons,
-                    FightIcon = _log.FightData.Logic.IconUrl,
-                    MechanicData = _mechanicData,
-                    ActorIcons = _actorIconData,
-                    PersonalBuffs = _personalBuffs,
-                };
-            }
+            log.PersonalBuffs = _personalBuffs;
+            log.UploadLinks = _uploadLink;
         }
 
         private void SetMechanics(JsonLog log)
@@ -135,41 +115,6 @@ namespace LuckParser.Controllers
                         Time = ml.Time,
                         Player = ml.Player.Character
                     };
-                    if (_devMode)
-                    {
-                        if (!_mechanicData.ContainsKey(ml.ShortName))
-                        {
-                            _mechanicData[ml.ShortName] = new MechanicDesc()
-                            {
-                                PlotlySymbol = ml.PlotlySymbol,
-                                PlotlyColor = ml.PlotlyColor,
-                                PlotlySize = ml.PlotlySize,
-                                Description = ml.Description,
-                                PlotlyName = ml.PlotlyName,
-                                Enemy = ml.Enemy ? 1 : 0
-                            };
-                        }
-                        mech.ED = new JsonMechanic.JsonExtraMechanic()
-                        {
-                            SN = ml.ShortName,
-                            S = ml.Skill
-                        };
-                        if (ml.Enemy)
-                        {
-                            if (ml.Player.GetType() == typeof(Boss))
-                            {
-                                mech.ED.TI = -1;
-                            }
-                            else
-                            {
-                                mech.ED.TI = _log.FightData.Logic.Targets.IndexOf((Boss)ml.Player);
-                            }
-                        }
-                        else
-                        {
-                            mech.ED.TI = _log.PlayerList.IndexOf((Player)ml.Player);
-                        }
-                    }
                     if (log.Mechanics.TryGetValue(ml.InGameName, out var list))
                     {
                         list.Add(mech);
@@ -216,10 +161,6 @@ namespace LuckParser.Controllers
                 boss.FinalHealth = target.Health * (finalBossHealth * 0.01);
                 boss.HealthPercentBurned = 100.0 - finalBossHealth * 0.01;
                 log.Boss.Add(boss);
-                if (_devMode)
-                {
-                    _actorIconData[target.Character] = GeneralHelper.GetNPCIcon(target.ID);
-                }
             }
         }
 
@@ -262,35 +203,22 @@ namespace LuckParser.Controllers
                     AvgBoonsStates = BuildBuffStates(player.GetBoonGraphs(_log)[Boon.NumberOfBoonsID]),
                     AvgConditionsStates = BuildBuffStates(player.GetBoonGraphs(_log)[Boon.NumberOfConditionsID]),
                 });
-                if (_devMode)
-                {
-                    _actorIconData[player.Prof] = GeneralHelper.GetProfIcon(player.Prof);
-                }
             }
         }
 
-        private List<long[]> BuildConsumables(Player player)
+        private List<JsonConsumable> BuildConsumables(Player player)
         {
-            List<long[]> res = new List<long[]>();
+            List<JsonConsumable> res = new List<JsonConsumable>();
             foreach(var food in player.GetConsumablesList(_log,0,_log.FightData.FightDuration))
             {
-                long[] val = new long[4] {
-                    food.Item.ID,
-                    food.Time,
-                    food.Duration,
-                    food.Stack
+                JsonConsumable val = new JsonConsumable() {
+                    ID = food.Item.ID,
+                    Time = food.Time,
+                    Duration = food.Duration,
+                    Stack = food.Stack
                 };
                 _buffNames[food.Item.ID] = food.Item.Name;
                 res.Add(val);
-                if (_devMode)
-                {
-                    _buffData[food.Item.ID] = new BuffDesc()
-                    {
-                        Stacking = 0,
-                        Table = -1,
-                        Icon = food.Item.Link
-                    };
-                }
             }
             return res.Count > 0 ? res : null;
         }
@@ -474,10 +402,6 @@ namespace LuckParser.Controllers
                     {
                         _skillNames[pair.Key] = skill.Name;
                     }
-                    if (_devMode && !_skillIcons.ContainsKey(pair.Key))
-                    {
-                        _skillIcons[pair.Key] = skill.Icon;
-                    }
                 }
                 res[pair.Key] = new JsonDamageDist()
                 {
@@ -542,37 +466,24 @@ namespace LuckParser.Controllers
                 SkillItem skill = skillList.Get(cl.SkillId);
                 GW2APISkill skillApi = skill?.ApiSkill;
                 string skillName = skill.Name;
-                _skillNames[cl.SkillId] = skillName;           
+                _skillNames[cl.SkillId] = skillName;
+                int timeGained = 0;
+                if (cl.EndActivation == ParseEnum.Activation.CancelFire && cl.ActualDuration < cl.ExpectedDuration)
+                {
+                    timeGained = cl.ExpectedDuration - cl.ActualDuration;
+                }
+                else if (cl.EndActivation == ParseEnum.Activation.CancelCancel)
+                {
+                    timeGained = -cl.ActualDuration;
+                }
                 JsonSkill jSkill = new JsonSkill
                 {
                     Time = (int)cl.Time,
-                    Duration = cl.ActualDuration
+                    Duration = cl.ActualDuration,
+                    TimeGained = timeGained,
+                    AutoAttack = skillApi != null && skillApi.slot == "Weapon_1" ? 1 : 0,
+                    Quickness = cl.StartActivation == ParseEnum.Activation.Quickness ? 1 : 0
                 };
-                if (_devMode)
-                {
-                    if (!_skillIcons.ContainsKey(cl.SkillId))
-                    {
-                        string skillIcon = skill.Icon;
-                        if (skillIcon.Length > 0)
-                        {
-                            _skillIcons[cl.SkillId] = skillIcon;
-                        }
-                    }
-                    int timeGained = 0;
-                    if (cl.EndActivation == ParseEnum.Activation.CancelFire && cl.ActualDuration < cl.ExpectedDuration)
-                    {
-                        timeGained = cl.ExpectedDuration - cl.ActualDuration;
-                    } else if (cl.EndActivation == ParseEnum.Activation.CancelCancel)
-                    {
-                        timeGained = -cl.ActualDuration;
-                    }
-                    jSkill.ED = new JsonSkill.JsonExtraSkill()
-                    {
-                        UQ = cl.StartActivation == ParseEnum.Activation.Quickness ? 1 : 0,
-                        TS = timeGained,
-                        A = skillApi != null && skillApi.slot == "Weapon_1" ? 1 : 0
-                    };
-                }
                 if (res.TryGetValue(cl.SkillId, out var list))
                 {
                     list.Add(jSkill);
@@ -600,21 +511,6 @@ namespace LuckParser.Controllers
                     End = phase.End,
                     Name = phase.Name
                 };
-                if (_devMode)
-                {
-                    phaseJson.ED = new JsonPhase.JsonExtraPhase
-                    {
-                        TI = new int[phase.Targets.Count],
-                        DA = phase.DrawArea ? 1 : 0,
-                        DE = phase.DrawEnd ? 1 : 0,
-                        DS = phase.DrawStart ? 1 : 0
-                    };
-                    int i = 0;
-                    foreach (Boss target in phase.Targets)
-                    {
-                        phaseJson.ED.TI[i++] = _log.FightData.Logic.Targets.IndexOf(target);
-                    }
-                }
                 log.Phases.Add(phaseJson);
             }
         }
@@ -664,15 +560,6 @@ namespace LuckParser.Controllers
                 foreach (var boon in statBoons[phaseIndex])
                 {
                     _buffNames[boon.Key] = Boon.BoonsByIds[boon.Key].Name;
-                    if (_devMode)
-                    {
-                        Boon buff = Boon.BoonsByIds[boon.Key];
-                        _buffData[boon.Key] = new BuffDesc() {
-                            Icon = buff.Link,
-                            Stacking = buff.Type == Boon.BoonType.Intensity ? 1 : 0,
-                            Table = buff.Nature == Boon.BoonNature.Boon ? 0 : (buff.Nature == Boon.BoonNature.Condition ? 1 : (buff.Nature == Boon.BoonNature.OffensiveBuffTable ? 2 : (buff.Nature == Boon.BoonNature.DefensiveBuffTable ? 3 : -1)))
-                        };
-                    }
                     if (boonsFound.Contains(boon.Key))
                     {
                         MakePhaseBossBoon(boons[boon.Key], phaseIndex, boon.Value);
@@ -761,31 +648,22 @@ namespace LuckParser.Controllers
             {
                 foreach (var boon in statUptimes[phaseIndex])
                 {
-                    _buffNames[boon.Key] = Boon.BoonsByIds[boon.Key].Name;
-                    if (_devMode)
+                    Boon buff = Boon.BoonsByIds[boon.Key];
+                    _buffNames[boon.Key] = buff.Name;
+                    if (buff.Nature == Boon.BoonNature.GraphOnlyBuff && buff.Source == Boon.ProfToEnum(player.Prof))
                     {
-                        Boon buff = Boon.BoonsByIds[boon.Key];
-                        _buffData[boon.Key] = new BuffDesc()
+                        if (player.GetBoonDistribution(_log, 0).GetUptime(boon.Key) > 0)
                         {
-                            Icon = buff.Link,
-                            Stacking = buff.Type == Boon.BoonType.Intensity ? 1 : 0,
-                            Table = buff.Nature == Boon.BoonNature.Boon ? 0 : (buff.Nature == Boon.BoonNature.Condition ? 1 : (buff.Nature == Boon.BoonNature.OffensiveBuffTable ? 2 : (buff.Nature == Boon.BoonNature.DefensiveBuffTable ? 3 : -1)))
-                        };
-                        if (buff.Nature == Boon.BoonNature.GraphOnlyBuff && buff.Source == Boon.ProfToEnum(player.Prof))
-                        {
-                            if (player.GetBoonDistribution(_log, 0).GetUptime(boon.Key) > 0)
+                            if (_personalBuffs.TryGetValue(player.Prof, out var list) && !list.Contains(boon.Key))
                             {
-                                if (_personalBuffs.TryGetValue(player.Prof, out var list) && !list.Contains(boon.Key))
-                                {
-                                    list.Add(boon.Key);
-                                }
-                                else
-                                {
-                                    _personalBuffs[player.Prof] = new List<long>()
+                                list.Add(boon.Key);
+                            }
+                            else
+                            {
+                                _personalBuffs[player.Prof] = new List<long>()
                                 {
                                     boon.Key
                                 };
-                                }
                             }
                         }
                     }

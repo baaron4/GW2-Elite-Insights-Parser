@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class JsonMechanic
+    public class JsonConsumable
     {
+        public int Stack;
+        public int Duration;
         public long Time;
-        public string Player;
+        public long ID;
     }
 }
