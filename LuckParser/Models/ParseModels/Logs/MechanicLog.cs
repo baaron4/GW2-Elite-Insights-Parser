@@ -11,6 +11,7 @@
         public string Description => _mechanic.Description;
         public string PlotlyColor => _mechanic.PlotlyColor;
         public string PlotlySymbol => _mechanic.PlotlySymbol;
+        public string PlotlySize => _mechanic.PlotlySize;
         public string PlotlyName => _mechanic.PlotlyName;
         public string InGameName => _mechanic.InGameName;
         public bool Enemy => _mechanic.IsEnemyMechanic;

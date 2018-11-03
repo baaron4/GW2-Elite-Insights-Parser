@@ -1013,6 +1013,7 @@ namespace LuckParser.Controllers
                     description = mech.Description,
                     color = mech.PlotlyColor,
                     symbol = mech.PlotlySymbol,
+                    size = mech.PlotlySize,
                     visible = (mech.SkillId == SkillItem.DeathId|| mech.SkillId == SkillItem.DownId),
                     points = BuildMechanicGraphPointData(mechanicLogs, mech.IsEnemyMechanic),
                     playerMech = playerMechs.Contains(mech),

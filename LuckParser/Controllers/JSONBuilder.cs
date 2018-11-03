@@ -105,7 +105,7 @@ namespace LuckParser.Controllers
                 log.UploadLinks = _uploadLink;
             } else
             {
-                log.ED = new JsonExtraLog()
+                log.ExtraData = new JsonExtraLog()
                 {
                     BuffData = _buffData,
                     SkillIcons = _skillIcons,
@@ -143,6 +143,7 @@ namespace LuckParser.Controllers
                             {
                                 PlotlySymbol = ml.PlotlySymbol,
                                 PlotlyColor = ml.PlotlyColor,
+                                PlotlySize = ml.PlotlySize,
                                 Description = ml.Description,
                                 PlotlyName = ml.PlotlyName,
                                 Enemy = ml.Enemy ? 1 : 0

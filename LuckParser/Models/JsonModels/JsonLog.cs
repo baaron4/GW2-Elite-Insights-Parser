@@ -11,6 +11,7 @@ namespace LuckParser.Models.DataModels
         {
             public string PlotlySymbol;
             public string PlotlyColor;
+            public string PlotlySize;
             public int Enemy;
             public string Description;
             public string PlotlyName;
@@ -50,6 +51,6 @@ namespace LuckParser.Models.DataModels
         public string[] UploadLinks;
         public Dictionary<long, string> SkillNames;
         public Dictionary<long, string> BuffNames;
-        public JsonExtraLog ED = null;
+        public JsonExtraLog ExtraData = null;
     }
 }
