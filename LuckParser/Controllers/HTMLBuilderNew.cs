@@ -1622,7 +1622,7 @@ namespace LuckParser.Controllers
                 "$.each(usedBoons, function(i, boon) {" +
                     "logData.buffMap['b'+boon.id]=boon;" +
                 "});";
-            string mechanicsScript = "logData.mechanicsArray = " + ToJson(BuildMechanics(), typeof(List<MechanicDto>)) + ";";
+            string mechanicsScript = "logData.mechanics = " + ToJson(BuildMechanics(), typeof(List<MechanicDto>)) + ";";
             return "<script>\r\n" + skillsScript + "\r\n" + boonsScript + "\r\n" + mechanicsScript + "\r\n</script>";
         }
 

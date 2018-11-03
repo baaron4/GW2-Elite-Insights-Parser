@@ -120,7 +120,7 @@ function findSkill(isBuff, id) {
 }
 
 function getMechanics() {
-    return logData.mechanicsArray;
+    return logData.mechanics;
 }
 
 var initTable = function (id, cell, order, orderCallBack) {
