@@ -108,15 +108,19 @@ var urls = {
     Staff: "https://wiki.guildwars2.com/images/5/5f/Crimson_Antique_Spire.png"
 };
 
-function findSkill(isBoon, id) {
+function findSkill(isBuff, id) {
     var skill;
-    if (isBoon) {
-        skill = logData.boonMap['b' + id] || {};
+    if (isBuff) {
+        skill = logData.buffMap['b' + id] || {};
     } else {
         skill = logData.skillMap["s" + id] || {};
     }
-    skill.condi = isBoon;
+    skill.condi = isBuff;
     return skill;
+}
+
+function getMechanics() {
+    return logData.mechanicsArray;
 }
 
 var initTable = function (id, cell, order, orderCallBack) {
@@ -154,6 +158,20 @@ var initTable = function (id, cell, order, orderCallBack) {
     }
 };
 
+var updateTable = function (id) {
+    if (lazyTableUpdater) {
+        var lazyTable = document.querySelector(id);
+        lazyTableUpdater.unobserve(lazyTable);
+        lazyTableUpdater.observe(lazyTable);
+    } else {
+        var table = $(id);
+        if ($.fn.dataTable.isDataTable(id)) {
+            table.DataTable().rows().invalidate('dom');
+            table.DataTable().draw();
+        }
+    }
+};
+
 var roundingComponent = {
     methods: {
         round: function (value) {
@@ -175,20 +193,6 @@ var roundingComponent = {
             }
             var mul = 1000;
             return Math.round(mul * value) / mul;
-        }
-    }
-};
-
-var updateTable = function (id) {
-    if (lazyTableUpdater) {
-        var lazyTable = document.querySelector(id);
-        lazyTableUpdater.unobserve(lazyTable);
-        lazyTableUpdater.observe(lazyTable);
-    } else {
-        var table = $(id);
-        if ($.fn.dataTable.isDataTable(id)) {
-            table.DataTable().rows().invalidate('dom');
-            table.DataTable().draw();
         }
     }
 };
@@ -1454,7 +1458,7 @@ var compileTargetTab = function () {
 
 var compileMechanics = function () {
     Vue.component("mechanics-stats-component", {
-        props: ["phase", "players", "enemies", "mechanics"],
+        props: ["phase", "players", "enemies"],
         template: "#tmplMechanicsTable",
         data: function () {
             return {
@@ -1478,7 +1482,7 @@ var compileMechanics = function () {
         },
         computed: {
             playerMechHeader: function () {
-                var mechanics = this.mechanics;
+                var mechanics = getMechanics();
                 var playerMechanics = [];
                 for (var i = 0; i < mechanics.length; i++) {
                     if (mechanics[i].playerMech) {
@@ -1508,7 +1512,7 @@ var compileMechanics = function () {
                 return rows;
             },
             enemyMechHeader: function () {
-                var mechanics = this.mechanics;
+                var mechanics = getMechanics();
                 var enemyMechanics = [];
                 for (var i = 0; i < mechanics.length; i++) {
                     if (mechanics[i].enemyMech) {

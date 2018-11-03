@@ -142,6 +142,8 @@
     <Compile Include="Models\HtmlModels\DeathRecapDto.cs" />
     <Compile Include="Models\HtmlModels\FoodDto.cs" />
     <Compile Include="Models\HtmlModels\DmgDistributionDto.cs" />
+    <Compile Include="Models\HtmlModels\MechanicChartDataDto.cs" />
+    <Compile Include="Models\HtmlModels\ChartDataDto.cs" />
     <Compile Include="Models\HtmlModels\PhaseChartDataDto.cs" />
     <Compile Include="Models\HtmlModels\BoonChartDataDto.cs" />
     <Compile Include="Models\HtmlModels\TargetChartDataDto.cs" />

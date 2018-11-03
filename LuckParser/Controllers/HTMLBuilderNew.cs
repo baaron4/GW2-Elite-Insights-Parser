@@ -1011,17 +1011,33 @@ namespace LuckParser.Controllers
                     name = mech.PlotlyName,
                     shortName = mech.ShortName,
                     description = mech.Description,
-                    color = mech.PlotlyColor,
-                    symbol = mech.PlotlySymbol,
-                    size = mech.PlotlySize,
-                    visible = (mech.SkillId == SkillItem.DeathId|| mech.SkillId == SkillItem.DownId),
-                    points = BuildMechanicGraphPointData(mechanicLogs, mech.IsEnemyMechanic),
                     playerMech = playerMechs.Contains(mech),
                     enemyMech = enemyMechs.Contains(mech)
                 };
                 mechanicDtos.Add(dto);
             }
             return mechanicDtos;
+        }
+
+        private List<MechanicChartDataDto> BuildMechanicsChartData()
+        {
+            List<MechanicChartDataDto> mechanicsChart = new List<MechanicChartDataDto>();
+            HashSet<Mechanic> playerMechs = _log.MechanicData.GetPresentPlayerMechs(0);
+            HashSet<Mechanic> enemyMechs = _log.MechanicData.GetPresentEnemyMechs(0);
+            foreach (Mechanic mech in _log.MechanicData.GetPresentMechanics(0))
+            {
+                List<MechanicLog> mechanicLogs = _log.MechanicData[mech];
+                MechanicChartDataDto dto = new MechanicChartDataDto
+                {
+                    color = mech.PlotlyColor,
+                    symbol = mech.PlotlySymbol,
+                    size = mech.PlotlySize,
+                    visible = (mech.SkillId == SkillItem.DeathId || mech.SkillId == SkillItem.DownId),
+                    points = BuildMechanicGraphPointData(mechanicLogs, mech.IsEnemyMechanic)
+                };
+                mechanicsChart.Add(dto);
+            }
+            return mechanicsChart;
         }
 
         private List<List<List<double>>> BuildMechanicGraphPointData(List<MechanicLog> mechanicLogs, bool enemyMechanic)
@@ -1194,7 +1210,8 @@ namespace LuckParser.Controllers
             html = html.Replace("<!--${Templates}-->", BuildTemplates());
             html = html.Replace("'${logDataJson}'", BuildLogData());
 
-            html = html.Replace("<!--${playerData}-->", BuildDetails());
+            html = html.Replace("<!--${Details}-->", BuildDetails());
+            html = html.Replace("<!--${Maps}-->", BuildMaps());
 #if DEBUG
             html = html.Replace("<!--${Vue}-->", "<script src=\"https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js\"></script>");
 #else
@@ -1370,7 +1387,8 @@ namespace LuckParser.Controllers
 
         private string BuildGraphJson()
         {
-            List<PhaseChartDataDto> chartData = new List<PhaseChartDataDto>();
+            ChartDataDto chartData = new ChartDataDto();
+            List<PhaseChartDataDto> phaseChartData = new List<PhaseChartDataDto>();
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
                 PhaseChartDataDto phaseData = new PhaseChartDataDto()
@@ -1382,9 +1400,11 @@ namespace LuckParser.Controllers
                     phaseData.targets.Add(BuildTargetGraphData(i, target));
                 }
 
-                chartData.Add(phaseData);
+                phaseChartData.Add(phaseData);
              }
-            return ToJson(chartData, typeof(List<PhaseChartDataDto>));
+            chartData.phases = phaseChartData;
+            chartData.mechanics = BuildMechanicsChartData();
+            return ToJson(chartData, typeof(ChartDataDto));
         }
 
         private string BuildLogData()
@@ -1525,7 +1545,6 @@ namespace LuckParser.Controllers
                 logData.phases.Add(phaseDto);
             }
 
-
             logData.boons = new List<long>();
             foreach (Boon boon in _statistics.PresentBoons)
             {
@@ -1551,7 +1570,6 @@ namespace LuckParser.Controllers
                 _usedBoons[boon.ID] = boon;
             }
             logData.persBuffs = persBuffs;
-            logData.mechanics = BuildMechanics();
             //
             double fightDuration = _log.FightData.FightDuration / 1000.0;
             TimeSpan duration = TimeSpan.FromSeconds(fightDuration);
@@ -1596,17 +1614,24 @@ namespace LuckParser.Controllers
                 string targetScript = "logData.targets[" + i + "].details = " + ToJson(BuildTargetData(target, usedSkills, _usedBoons), typeof(PlayerDetailsDto)) + ";\r\n";
                 scripts += targetScript;
             }
+            return "<script>\r\n"+scripts + "\r\n</script>";
+        }
+
+        private string BuildMaps()
+        {
+            Dictionary<long, SkillItem> usedSkills = new Dictionary<long, SkillItem>();
             string skillsScript = "var usedSkills = " + ToJson(AssembleSkills(usedSkills.Values), typeof(ICollection<SkillDto>)) + ";" +
                 "logData.skillMap = {};" +
                 "$.each(usedSkills, function(i, skill) {" +
-                "logData.skillMap['s'+skill.id]=skill;" +
+                    "logData.skillMap['s'+skill.id]=skill;" +
                 "});";
             string boonsScript = "var usedBoons = " + ToJson(AssembleBoons(_usedBoons.Values), typeof(ICollection<BoonDto>)) + ";" +
-                "logData.boonMap = {};" +
+                "logData.buffMap = {};" +
                 "$.each(usedBoons, function(i, boon) {" +
-                "logData.boonMap['b'+boon.id]=boon;" +
+                    "logData.buffMap['b'+boon.id]=boon;" +
                 "});";
-            return "<script>\r\n"+ skillsScript+"\r\n"+boonsScript+"\r\n"+scripts + "\r\n</script>";
+            string mechanicsScript = "logData.mechanicsArray = " + ToJson(BuildMechanics(), typeof(List<MechanicDto>)) + ";";
+            return "<script>\r\n" + skillsScript + "\r\n" + boonsScript + "\r\n" + mechanicsScript + "\r\n</script>";
         }
 
         private PlayerDetailsDto BuildPlayerData(Player player, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons)

@@ -19,25 +19,10 @@ namespace LuckParser.Models.HtmlModels
         [DataMember]
         public string description;
 
-        [DataMember]
-        public string symbol;
-
-        [DataMember]
-        public string size;
-
-        [DataMember]
-        public string color;
-
         [DataMember(EmitDefaultValue = false)]
         public bool enemyMech;
 
         [DataMember(EmitDefaultValue = false)]
         public bool playerMech;
-
-        [DataMember(EmitDefaultValue = false)]
-        public bool visible;
-
-        [DataMember]
-        public List<List<List<double>>> points;
     }
 }

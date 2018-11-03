@@ -22,7 +22,8 @@
     <script>
         logData.graphData = '${graphDataJson}';
     </script>
-    <!--${playerData}-->
+    <!--${Details}-->
+    <!--${Maps}-->
     <!--${Js}-->
 </head>
 
@@ -75,7 +76,7 @@
         </div>
         <div id="mechanics-stats">
             <mechanics-stats-component v-show="dataType === datatypes.mechanicTable" :phase="phaseData.phase" :players="logdata.players"
-                :enemies="logdata.enemies" :mechanics="logdata.mechanics"></mechanics-stats-component>
+                :enemies="logdata.enemies"></mechanics-stats-component>
         </div>
         <div id="targets-stats">
             <target-stats-component v-show="dataType === datatypes.targetTab" :players="logdata.players" :targets="logdata.targets"
