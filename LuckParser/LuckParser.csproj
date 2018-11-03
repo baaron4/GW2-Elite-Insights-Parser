@@ -332,6 +332,8 @@
     <None Include="Resources\tmplDamageDistPlayer.html" />
     <None Include="Resources\tmplPlayerTab.html" />
     <None Include="Resources\tmplPlayerStats.html" />
+    <None Include="Resources\tmplGraphStats.html" />
+    <None Include="Resources\tmplDPSGraph.html" />
     <Content Include="Resources\tmplGroupCombatReplay.html" />
     <None Include="Resources\tmplTargets.html" />
     <None Include="Resources\tmplDamageTable.html" />

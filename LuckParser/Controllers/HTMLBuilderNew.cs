@@ -1272,6 +1272,8 @@ namespace LuckParser.Controllers
                 {"tmplTargets",Properties.Resources.tmplTargets },
                 {"tmplTargetStats",Properties.Resources.tmplTargetStats },
                 {"tmplTargetTab",Properties.Resources.tmplTargetTab },
+                {"tmplDPSGraph",Properties.Resources.tmplDPSGraph },
+                {"tmplGraphStats",Properties.Resources.tmplGraphStats },
             };
             foreach (var entry in templates)
             {
@@ -1777,16 +1779,6 @@ namespace LuckParser.Controllers
             MemoryStream memoryStream = new MemoryStream();
             ser.WriteObject(memoryStream, value);
             return Encoding.UTF8.GetString(memoryStream.ToArray());
-        }
-
-        private string EscapeJsrender(string template)
-        {
-            // escape single quotation marks
-            string escaped = template.Replace(@"\", @"\\");
-            escaped = template.Replace("'", @"\'");
-            // remove line breaks
-            escaped = Regex.Replace(escaped, @"\s*\r?\n\s*", "");
-            return escaped;
         }
     }
 }

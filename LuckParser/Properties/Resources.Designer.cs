@@ -157,11 +157,11 @@ namespace LuckParser.Properties {
         ///&lt;head&gt;
         ///    &lt;meta charset=&quot;utf-8&quot;&gt;
         ///    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/${bootstrapTheme}/bootstrap.min.css&quot;
-        ///          crossorigin=&quot;anonymous&quot;&gt;
+        ///        crossorigin=&quot;anonymous&quot;&gt;
         ///    &lt;link href=&quot;https://fonts.googleapis.com/css?family=Open+Sans&quot; rel=&quot;stylesheet&quot;&gt;
         ///    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css&quot;&gt;
         ///    &lt;!--${Css}--&gt;
-        ///    &lt;script src=&quot;https://code.jquery.com/jquery-3. [le reste de la chaîne a été tronqué]&quot;;.
+        ///    &lt;script src=&quot;https://code.jquery.com/jquery-3.3. [le reste de la chaîne a été tronqué]&quot;;.
         /// </summary>
         internal static string template_html {
             get {
@@ -372,7 +372,7 @@ namespace LuckParser.Properties {
         
         /// <summary>
         ///   Recherche une chaîne localisée semblable à 
-        ///&lt;damagedist-table-component v-if=&quot;player.active&quot; :dmgdist=&quot;dmgtaken&quot; :tableid=&quot;&apos;dmgtaken-&apos; + playerindex&quot;
+        ///&lt;damagedist-table-component v-if=&quot;show()&quot; :dmgdist=&quot;dmgtaken&quot; :tableid=&quot;&apos;dmgtaken-&apos; + playerindex&quot;
         ///                            :actor=&quot;null&quot; :isminion=&quot;false&quot; :istarget=&quot;false&quot; :sortdata=&quot;sortdata&quot;&gt;
         ///&lt;/damagedist-table-component&gt;.
         /// </summary>
@@ -423,6 +423,24 @@ namespace LuckParser.Properties {
         internal static string tmplDefenseTable {
             get {
                 return ResourceManager.GetString("tmplDefenseTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;div&gt;
+        ///        &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mt-2 mb-2&quot;&gt;
+        ///            &lt;li class=&quot;nav-item&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;dpsmode = 0&quot; :class=&quot;{active: dpsmode === 0}&quot;&gt;Full&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li class=&quot;nav-item&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;dpsmode = 1&quot; :class=&quot;{active: dpsmode === 1}&quot;&gt;10s&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li class=&quot;nav-item&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;dpsmode = 2&quot; :class=&quot;{active: dpsm [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplDPSGraph {
+            get {
+                return ResourceManager.GetString("tmplDPSGraph", resourceCulture);
             }
         }
         
@@ -506,6 +524,30 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;div&gt;
+        ///
+        ///    &lt;div&gt;
+        ///        &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///            &lt;li&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 0}&quot; @click=&quot;mode = 0&quot;&gt;Total&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 1}&quot; @click=&quot;mode = 1&quot;&gt;Target&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 2}&quot; @click=&quot;mode = 2&quot;&gt;Cleave&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///        &lt;/ul&gt;
+        ///    &lt;/div&gt;
+        ///    &lt;div v-for=&quot;(phase, id) in p [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplGraphStats {
+            get {
+                return ResourceManager.GetString("tmplGraphStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à &lt;div class=&quot;d-flex flex-column justify-content-center align-items-center mt-2&quot;&gt;
         ///        &lt;h3&gt;Group ${group}&lt;/h3&gt;
         ///        &lt;!--${players}--&gt;
@@ -558,11 +600,13 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center&quot;&gt;
-        ///    &lt;li class=&quot;nav-item&quot; v-for=&quot;phase in phases&quot; :data-original-title=&quot;phase.duration / 1000.0 + &apos; seconds&apos;&quot;&gt;
-        ///        &lt;a class=&quot;nav-link&quot; @click=&quot;select(phase)&quot; :class=&quot;{active: phase.active}&quot;&gt;{{phase.name}}&lt;/a&gt;
-        ///    &lt;/li&gt;
-        ///&lt;/ul&gt;.
+        ///   Recherche une chaîne localisée semblable à &lt;div v-if=&quot;phases.length &gt;0&quot;&gt;
+        ///    &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center&quot;&gt;
+        ///        &lt;li class=&quot;nav-item&quot; v-for=&quot;phase in phases&quot; :data-original-title=&quot;phase.duration / 1000.0 + &apos; seconds&apos;&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; @click=&quot;select(phase)&quot; :class=&quot;{active: phase.active}&quot;&gt;{{phase.name}}&lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///    &lt;/ul&gt;
+        ///&lt;/div&gt;.
         /// </summary>
         internal static string tmplPhase {
             get {
@@ -618,7 +662,7 @@ namespace LuckParser.Properties {
         ///        &lt;div v-if=&quot;!player.isConjure&quot;&gt;
         ///            &lt;h3 class=&quot;text-center&quot;&gt;&lt;img :alt=&quot;player.profession&quot; class=&quot;icon&quot; :src=&quot;player.icon&quot;&gt;{{player.name}}&lt;/h3&gt;
         ///            &lt;player-tab-component :player=&quot;player&quot; :playerindex=&quot;pindex&quot; :phase=&quot;phase&quot;
-        ///                                  :phaseindex=&quot;phaseindex&quot; :targets=&quot;targets&quot;&gt;&lt;/player-tab-component&gt;
+        ///                                  :phaseindex=&quot;phaseindex&quot; :targets=&quot;targets&quot; :datatype=&quot;datatype&quot;&gt;&lt;/player-tab-component&gt;
         ///        &lt;/div&gt;
         ///    &lt;/div&gt;
         ///&lt;/div&gt;.

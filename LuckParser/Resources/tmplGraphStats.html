@@ -1,0 +1,20 @@
+<div>
+    <div>
+        <ul class="nav nav-tabs">
+            <li>
+                <a class="nav-link" :class="{active: mode === 0}" @click="mode = 0">Total</a>
+            </li>
+            <li>
+                <a class="nav-link" :class="{active: mode === 1}" @click="mode = 1">Target</a>
+            </li>
+            <li>
+                <a class="nav-link" :class="{active: mode === 2}" @click="mode = 2">Cleave</a>
+            </li>
+        </ul>
+    </div>
+    <div v-for="(phase, id) in phases" v-show="phase.active">
+        <dps-graph-component :players="players" :phases="phases" :targets="targets" :mechanics="graphdata.mechanics" :graph="graphdata.phases[id]"
+            :mode="mode" :phase="phase" :phaseid="id">
+        </dps-graph-component>
+    </div>
+</div>
