@@ -1029,7 +1029,7 @@ namespace LuckParser.Controllers
                 {
                     color = mech.PlotlyColor,
                     symbol = mech.PlotlySymbol,
-                    size = mech.PlotlySize,
+                    size = mech.PlotlySize != null ? int.Parse(mech.PlotlySize) : 0,
                     visible = (mech.SkillId == SkillItem.DeathId || mech.SkillId == SkillItem.DownId),
                     points = BuildMechanicGraphPointData(mechanicLogs, mech.IsEnemyMechanic)
                 };

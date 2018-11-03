@@ -169,21 +169,6 @@ function createPlayerGraph($element, player, phaseIndex, playerIndex) {
 		name: 'Boss health'
 	});
 
-
-	$.each(data.boonData, function (i, item) {
-		var visible = item.name == "Might" || item.name == "Quickness" ? null : 'legendonly';
-		plotData.push({
-			x: allX,
-			y: item.data,
-			yaxis: 'y2',
-			type: 'scatter',
-			visible: visible,
-			line: { color: item.color },
-			fill: 'tozeroy',
-			name: item.name
-		});
-	});
-
 	var layout = {
 		barmode: 'stack',
 		yaxis: {
@@ -224,49 +209,6 @@ function lazy($owner, callback) {
 	} else {
 		$(callback);
 	}
-}
-
-function lazyTable($table, options) {
-	lazy($table, function () {
-		$table.DataTable(options);
-	});
-}
-
-function createTable($target, tableHtml, options) {
-	var $table = $(tableHtml);
-	$target.append($table);
-	$table.filter('table').DataTable(options);
-
-	$target.find('[title]').tooltip({ html: true });
-}
-
-function lazyTable2($target, tableHtml, options) {
-	lazy($target, function () {
-		createTable($target, tableHtml, options);
-	});
-}
-
-
-// Window generation
-
-function buildTabs(tabLayout, parentId, level) {
-	if (tabLayout.tabs.length == 1) {
-		return buildContent(tabLayout.tabs[0].content, parentId, level);
-	}
-	var idPrefix = parentId ? parentId + '-' : 'tab';
-	return tmplTabs.render(tabLayout, {
-		idPrefix: idPrefix,
-		level: level,
-		buildContent: buildContent
-	});
-}
-
-function buildTable(layout, parentId, level) {
-	html = '<div id="' + layout.table + '"></div>';
-	if (layout.caption) {
-		html = '<h3>' + layout.caption + '</h3>' + html;
-	}
-	return html;
 }
 
 function extractDpsData(dmg, phaseBreaks) {
@@ -364,133 +306,31 @@ function createGraphs(graphData) {
 function createGraph($target, phaseData, phase, type) {
 	if (!$target || !$target.length) return;
 	var lines = [];
-	var xAxis = [];
-	var seconds = phaseData.players[0].boss[type].length;
-	var maxDps = 0;
-	var allPlayerDps = [];
-	for (var i = 0; i < seconds; i++) xAxis[i] = i;
-	for (var p = 0; p < window.data.players.length; p++) {
-		var refPoints = phaseData.players[p].boss[type];
-		for (var h = 0; h < refPoints.length; h++) {
-			if (refPoints[h] > maxDps) maxDps = refPoints[h];
-			allPlayerDps[h] = (allPlayerDps[h] || 0) + refPoints[h];
-		}
-
-		var player = window.data.players[p];
-		lines.push({ y: phaseData.players[p].boss[type], x: xAxis, mode: 'lines', line: { shape: 'spline', color: player.colBoss }, name: player.name + ' DPS' });
-		lines.push({ y: phaseData.players[p].total[type], x: xAxis, mode: 'lines', line: { shape: 'spline', color: player.colTotal }, visible: 'legendonly', name: player.name + ' TDPS' });
-		lines.push({ y: phaseData.players[p].cleave[type], x: xAxis, mode: 'lines', line: { shape: 'spline', color: player.colCleave }, visible: 'legendonly', name: player.name + ' Cleave DPS' });
-	}
-
-	var layout = {
-		yaxis: {
-			title: 'DPS',
-			fixedrange: false,
-			rangemode: 'tozero',
-			color: window.data.flags.dark ? '#cccccc' : '#000000'
-		},
-		xaxis: {
-			title: 'Time(sec)',
-			color: window.data.flags.dark ? '#cccccc' : '#000000',
-			xrangeslider: {}
-		},
-		hovermode: 'compare',
-		legend: { orientation: 'h', font: { size: 15 } },
-		font: { color: window.data.flags.dark ? '#cccccc' : '#000000' },
-		paper_bgcolor: 'rgba(0,0,0,0)',
-		plot_bgcolor: 'rgba(0,0,0,0)',
-		staticPlot: true,
-		displayModeBar: false,
-		shapes: [],
-		annotations: []
-	};
 
 	var hpPoints = [];
-	var hpTexts = [];
 	for (var i = 0; i < phaseData.bossHealth.length; i++) {
 		hpPoints[i] = phaseData.bossHealth[i] * maxDps / 100.0;
-		hpTexts[i] = phaseData.bossHealth[i] + "%";
 	}
 
-	lines.push({ x: xAxis, y: allPlayerDps, mode: 'lines', line: { shape: 'spline' }, visible: 'legendonly', name: 'All Player Dps' });
 	$.each(window.data.mechanics, function (i, mechanic) {
-		var chart = { x: [], y: [], mode: 'markers', visible: mechanic.visible ? null : 'legendonly', type: 'scatter', marker: { symbol: mechanic.symbol, color: mechanic.color, size: 15 }, text: [], name: mechanic.name, hoverinfo: 'text' };
+		var chart = { y: [],};
 		if (mechanic.enemyMech) {
 			var l = mechanic.data[phase].length;
 			$.each(mechanic.data[phase][l - 1], function (pd, time) {
-				chart.x.push(time);
 				var y = hpPoints[Math.floor(time)];
 				if (!y) y = 0;
 				chart.y.push(y);
-				chart.text.push(time + 's: ' + window.data.boss.name);
 			});
 		} else {
 			$.each(mechanic.data[phase], function (p, pdata) {
 				$.each(pdata, function (pd, time) {
-					chart.x.push(time);
 					var y = phaseData.players[p].boss[type][Math.floor(time)];
 					if (!y) y = 0;
 					chart.y.push(y);
-					chart.text.push(time + 's: ' + window.data.players[p].name);
 				});
 			});
 		}
 		lines.push(chart);
-	});
-
-	lines.push({
-		y: hpPoints,
-		x: xAxis,
-		text: hpTexts,
-		mode: 'lines',
-		line: { shape: 'spline', dash: 'dashdot', color: '#808080' },
-		hoverinfo: 'text+x+name',
-		name: 'Boss health',
-		_yaxis: 'y2'
-	});
-
-
-	$.each(data.phases[phase].markupAreas, function (i, area) {
-		if (area.label) {
-			layout.annotations.push({
-				x: (area.end + area.start) / 2,
-				y: 1,
-				xref: 'x',
-				yref: 'paper',
-				xanchor: 'center',
-				yanchor: 'bottom',
-				text: area.label + '<br>' + '(' + Math.round(area.end - area.start) + ' s)',
-				showarrow: false
-			});
-		}
-		if (area.highlight) {
-			layout.shapes.push({
-				type: 'rect',
-				xref: 'x',
-				yref: 'paper',
-				x0: area.start,
-				y0: 0,
-				x1: area.end,
-				y1: 1,
-				fillcolor: '#808080',
-				opacity: 0.125,
-				line: { width: 0 }
-			});
-		}
-	});
-
-	$.each(data.phases[phase].markupLines, function (i, x) {
-		layout.shapes.push({
-			type: 'line',
-			xref: 'x',
-			yref: 'paper',
-			x0: x,
-			y0: 0,
-			x1: x,
-			y1: 1,
-			opacity: 0.35,
-			line: { color: '#00c0ff', width: 2, dash: 'dash' }
-		});
 	});
 
 	var callback = function () {

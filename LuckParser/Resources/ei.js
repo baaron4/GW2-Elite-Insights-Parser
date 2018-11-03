@@ -210,6 +210,7 @@ var DataTypes = {
     dmgModifiersTable: 9,
     playerTab: 10,
     targetTab: 11,
+    dpsGraph: 12
 };
 
 var Layout = function (desc) {
@@ -1066,7 +1067,7 @@ var compilePlayerTab = function () {
             };
         },
         methods: {
-            show: function() {
+            show: function () {
                 return this.datatype === DataTypes.playerTab && this.player.active;
             }
         },
@@ -1148,7 +1149,7 @@ var compilePlayerTab = function () {
             'phaseindex', 'sortdata'
         ],
         methods: {
-            show: function() {
+            show: function () {
                 return this.datatype === DataTypes.playerTab && this.player.active;
             }
         },
@@ -1542,6 +1543,318 @@ var compileMechanics = function () {
     });
 };
 
+var compileGraphs = function () {
+    Vue.component("graph-stats-component", {
+        props: ["phases", "targets", "players", 'graphdata'],
+        template: "#tmplGraphStats",
+        data: function () {
+            return {
+                mode: 0
+            };
+        }
+    });
+    Vue.component("dps-graph-component", {
+        props: ["phases", "targets", "players", 'mechanics', 'graph', 'mode', 'phase', 'phaseid'],
+        template: "#tmplDPSGraph",
+        data: function () {
+            return {
+                dpsmode: 0,
+                layout: {},
+                data: [],
+                DPSCache: new Map(),
+            };
+        },
+        created: function () {
+            // layout - constant during whole lifetime
+            this.layout = {
+                yaxis: {
+                    title: 'DPS',
+                    fixedrange: false,
+                    rangemode: 'tozero',
+                    color: '#cccccc'
+                },
+                xaxis: {
+                    title: 'Time(sec)',
+                    color: '#cccccc',
+                    xrangeslider: {}
+                },
+                hovermode: 'compare',
+                legend: {
+                    orientation: 'h',
+                    font: {
+                        size: 15
+                    }
+                },
+                font: {
+                    color: '#cccccc'
+                },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                staticPlot: true,
+                displayModeBar: false,
+                shapes: [],
+                annotations: []
+            };
+            if (this.phase.markupAreas) {
+                for (var i = 0; i < this.phase.markupAreas.length; i++) {
+                    var area = this.phase.markupAreas[i];
+                    if (area.label) {
+                        this.layout.annotations.push({
+                            x: (area.end + area.start) / 2,
+                            y: 1,
+                            xref: 'x',
+                            yref: 'paper',
+                            xanchor: 'center',
+                            yanchor: 'bottom',
+                            text: area.label + '<br>' + '(' + (area.end - area.start) + ' s)',
+                            showarrow: false
+                        });
+                    }
+                    if (area.highlight) {
+                        this.layout.shapes.push({
+                            type: 'rect',
+                            xref: 'x',
+                            yref: 'paper',
+                            x0: area.start,
+                            y0: 0,
+                            x1: area.end,
+                            y1: 1,
+                            fillcolor: '#808080',
+                            opacity: 0.125,
+                            line: {
+                                width: 0
+                            }
+                        });
+                    }
+                }
+            }
+            if (this.phase.markupLines) {
+                for (var i = 0; i < this.phase.markupLines.length; i++) {
+                    var x = this.phase.markupLines[i];
+                    this.layout.shapes.push({
+                        type: 'line',
+                        xref: 'x',
+                        yref: 'paper',
+                        x0: x,
+                        y0: 0,
+                        x1: x,
+                        y1: 1,
+                        opacity: 0.35,
+                        line: {
+                            color: '#00c0ff',
+                            width: 2,
+                            dash: 'dash'
+                        }
+                    });
+                }
+            }
+            // constant part of data
+            // dps
+            var data = this.data;
+            for (var i = 0; i < this.players.length; i++) {
+                var player = this.players[i];
+                data.push({
+                    y: [],
+                    mode: 'lines',
+                    line: {
+                        shape: 'spline',
+                        color: player.colBoss
+                    },
+                    name: player.name + ' DPS'
+                });
+            }
+            data.push({
+                mode: 'lines',
+                line: {
+                    shape: 'spline'
+                },
+                visible: 'legendonly',
+                name: 'All Player Dps'
+            });
+            // targets health
+            for (var i = 0; i < this.graph.targets.length; i++) {
+                var health = this.graph.targets[i].health;
+                var hpTexts = [];
+                for (var j = 0; j < health.length; j++) {
+                    hpTexts[j] = health[j] + "%";
+                }
+                var target = this.targets[this.phase.targets[i]];
+                data.push({
+                    text: hpTexts,
+                    mode: 'lines',
+                    line: {
+                        shape: 'spline',
+                        dash: 'dashdot'
+                    },
+                    hoverinfo: 'text+x+name',
+                    name: target.name + ' health',
+                    _yaxis: 'y2'
+                });
+            }
+            // mechanics
+            var mechArray = getMechanics();
+            for (var i = 0; i < this.mechanics.length; i++) {
+                var mech = this.mechanics[i];
+                var mechData = mechArray[i];
+                var chart = {
+                    x: [],
+                    mode: 'markers',
+                    visible: mech.visible ? null : 'legendonly',
+                    type: 'scatter',
+                    marker: {
+                        symbol: mech.symbol,
+                        color: mech.color,
+                        size: mech.size ? mech.size : 15
+                    },
+                    text: [],
+                    name: mechData.name,
+                    hoverinfo: 'text'
+                };
+                if (mechData.enemyMech) {
+                    for (var j = 0; j < mech.points[this.phaseid].length; j++) {
+                        var pts = mech.points[this.phaseid][j];
+                        var tarId = this.phase.targets[j];
+                        if (tarId >= 0) {
+                            var target = this.targets[tarId];
+                            for (var k = 0; k < pts.length; k++) {
+                                var time = pts[k];
+                                chart.x.push(time);
+                                chart.text.push(time + 's: ' + target.name);
+                            }
+                        } else {
+                            for (var k = 0; k < pts.length; k++) {
+                                var time = pts[k];
+                                chart.x.push(time);
+                                chart.text.push(time + 's');
+                            }
+                        }
+                    }
+                } else {
+                    for (var j = 0; j < mech.points[this.phaseid].length; j++) {
+                        var pts = mech.points[this.phaseid][j];
+                        var player = this.players[j];
+                        for (var k = 0; k < pts.length; k++) {
+                            var time = pts[k];
+                            chart.x.push(time);
+                            chart.text.push(time + 's: ' + player.name);
+                        }
+                    }
+                }
+                data.push(chart);
+            }
+            var aa = this.computeDPSData;
+        },
+        computed: {
+            graphid: function () {
+                return 'dpsgraph-' + this.phaseid;
+            },
+            playeroffset: function () {
+                return 0;
+            },
+            targetsoffset: function () {
+                return this.players.length + 1;
+            },
+            mechanicsoffset: function () {
+                return this.targetsoffset + this.graph.targets.length;
+            },
+            computePhaseBreaks: function() {
+                var res = [];
+                if (this.phase.subPhases) {
+                    for (var i = 0; i < this.phase.subPhases.length; i++) {
+                        var subPhase = this.phases[this.phase.subPhases[i]];
+                        res[Math.floor(subPhase.start - this.phase.start)] = true;
+                        res[Math.floor(subPhase.end - this.phase.start)] = true;
+                    }
+                }
+                return res;
+            },
+            computeDPSData: function() {
+                var cacheID = this.dpsmode + '-';
+                var targetsID = 1;
+                for (var i = 0; i < this.phase.targets.length; i++) {
+                    var target = this.targets[this.phase.targets[i]];
+                    if (target.active) {
+                        targetsID = targetsID << (this.phase.targets[i] + 1);
+                    }
+                }
+                cacheID += targetsID;
+                if (this.DPSCache.has(cacheID)) {
+                    return this.DPSCache.get(cacheID);
+                }
+                var res;
+                if (this.dpsmode < 3) {
+                    var lim = (this.dpsmode === 0 ? 0 : (this.dpsmode === 1 ? 10 : 30));
+                    res = this.computeDPS(lim, null);
+                } else {
+                    res = this.computeDPS(0, this.computePhaseBreaks());
+                }
+                this.DPSCache.set(cacheID, res);
+                return res;
+            }
+        },
+        methods: {
+            computeDPS: function(lim, phasebreaks) {
+                var maxDPS = {
+                    total: 0,
+                    target: 0,
+                    cleave: 0
+                };
+                var allDPS = {
+                    total : [0],
+                    target: [0],
+                    cleave: [0]
+                };
+                var playerDPS = [];
+                for (var i = 0; i < this.players.length; i++) {
+                    var totalDamage = 0;
+                    var targetDamage = 0;
+                    var totalDPS = [0];
+                    var cleaveDPS = [0];
+                    var targetDPS = [0];
+                    var dpsData = this.graph.players[i];
+                    for (var j = 1; j < dpsData.total.length; j++) {
+                        var limID = 0;
+                        if (lim > 0) {
+                            limID = Math.max(j - lim, 0);
+                        }
+                        totalDamage += dpsData.total[j] - dpsData.total[limID];
+                        for (var k = 0; k < dpsData.targets.length; k++) {
+                            var target = this.targets[this.phase.targets[k]];
+                            if (target.active) {
+                                targetDamage += dpsData.targets[k][j] - dpsData.targets[k][limID];
+                            }
+                        }
+                        if (phasebreaks && phasebreaks[j-1]) {
+                            limID = j-1;
+                            totalDamage = 0;
+                            targetDamage = 0;
+                        }
+                        totalDPS[j] = Math.round(totalDamage/(j-limID));
+                        targetDPS[j] = Math.round(targetDamage/(j-limID));
+                        cleaveDPS[j] = Math.round((totalDamage - targetDamage)/(j-limID));
+                        allDPS.total[j] = totalDPS[j] + (allDPS.total[j] || 0);
+                        allDPS.target[j] = targetDPS[j] + (allDPS.target[j] || 0);
+                        allDPS.cleave[j] = cleaveDPS[j] + (allDPS.cleave[j] || 0);
+                        maxDPS.total = Math.max(maxDPS.total, totalDPS[j]);
+                        maxDPS.target = Math.max(maxDPS.target, targetDPS[j]);
+                        maxDPS.cleave = Math.max(maxDPS.cleave, cleaveDPS[j]);
+                    }
+                    playerDPS.push({
+                        total : totalDPS,
+                        target: targetDPS,
+                        cleaveDPS: cleaveDPS
+                    });
+                }
+                return {
+                    allDPS: allDPS,
+                    playerDPS: playerDPS,
+                    maxDPS: maxDPS,
+                };
+            }
+        }
+    });
+};
+
 var createLayout = function () {
     // Compile
     Vue.component("general-layout-component", {
@@ -1628,7 +1941,9 @@ var createLayout = function () {
     });
     layout.addTab(mechanics);
     // graphs
-    var graphs = new Tab("Graph");
+    var graphs = new Tab("Graph", {
+        dataType: DataTypes.dpsGraph
+    });
     layout.addTab(graphs);
     // targets
     var targets = new Tab("Targets Summary", {
@@ -1665,6 +1980,7 @@ window.onload = function () {
     compileGeneralStats();
     compileBuffStats();
     compileMechanics();
+    compileGraphs();
     compilePlayerTab();
     compileTargetTab();
     new Vue({
@@ -1713,7 +2029,7 @@ window.onload = function () {
                 return null;
             }
         },
-        beforeMount() {
+        mounted() {
             var element = document.getElementById("loading");
             element.parentNode.removeChild(element);
         }

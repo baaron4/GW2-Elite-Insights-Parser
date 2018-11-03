@@ -9,8 +9,8 @@ namespace LuckParser.Models.HtmlModels
         [DataMember]
         public string symbol;
 
-        [DataMember]
-        public string size;
+        [DataMember(EmitDefaultValue = false)]
+        public int size;
 
         [DataMember]
         public string color;
