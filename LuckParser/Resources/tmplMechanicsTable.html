@@ -20,7 +20,7 @@
                 </td>
                 <td class="text-left">{{row.player.name}}</td>
                 <td v-for="mech in row.mechs" :data-original-title="mech[1] !== mech[0] ? mech[1] + ' times (multi hits)' : false">
-                    {{ mech[0] }}
+                    {{ mech[0] ? mech[0] : '-'}}
                 </td>
             </tr>
         </tbody>

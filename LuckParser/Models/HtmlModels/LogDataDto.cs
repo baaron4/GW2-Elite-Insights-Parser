@@ -24,22 +24,9 @@ namespace LuckParser.Models.HtmlModels
         public Dictionary<string, List<long>> persBuffs;
         [DataMember]
         public List<long> conditions;
-        [DataMember(Order = 8)]
-        public LogFlags flags = new LogFlags();
         [DataMember] public string encounterDuration;
         [DataMember] public bool success;
         [DataMember] public string fightName;
         [DataMember] public string fightIcon;
-    }
-
-    [DataContract]
-    public class LogFlags
-    {
-        [DataMember]
-        public bool simpleRotation;
-        [DataMember]
-        public bool dark;
-        [DataMember]
-        public bool combatReplay;
     }
 }

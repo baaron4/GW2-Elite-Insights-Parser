@@ -1470,10 +1470,6 @@ namespace LuckParser.Controllers
                 logData.targets.Add(tar);
             }
 
-            logData.flags.simpleRotation = _settings.SimpleRotation;
-            logData.flags.dark = !_settings.LightTheme;
-            logData.flags.combatReplay = _settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay;
-
             Dictionary<string, List<long>> persBuffs = new Dictionary<string, List<long>>();
             Dictionary<string, List<Boon>> persBuffDict = BuildPersonalBoonData(persBuffs);
             for (int i = 0; i < _statistics.Phases.Count; i++)
