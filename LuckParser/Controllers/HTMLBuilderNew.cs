@@ -1517,25 +1517,31 @@ namespace LuckParser.Controllers
                     phaseDto.targetsBoonTotals.Add(HasBoons(i, target) ? BuildTargetBoonData(i, target) : null);
                 }
                 // add phase markup to full fight graph
-                if (i == 0)
+                phaseDto.markupLines = new List<double>();
+                phaseDto.markupAreas = new List<AreaLabelDto>();
+                for (int j = 1; j < _statistics.Phases.Count; j++)
                 {
-                    phaseDto.markupLines = new List<double>();
-                    phaseDto.markupAreas = new List<AreaLabelDto>();
-                    for(int j = 1; j < _statistics.Phases.Count; j++)
+                    PhaseData curPhase = _statistics.Phases[j];
+                    if (curPhase.Start < phaseData.Start || curPhase.End > phaseData.End || 
+                        (curPhase.Start == phaseData.Start && curPhase.End == phaseData.End ))
                     {
-                        PhaseData curPhase = _statistics.Phases[j];
-                        if (curPhase.DrawStart) phaseDto.markupLines.Add(curPhase.Start/1000.0);
-                        if (curPhase.DrawEnd) phaseDto.markupLines.Add(curPhase.End / 1000.0);
-                        AreaLabelDto phaseArea = new AreaLabelDto
-                        {
-                            start = curPhase.Start / 1000.0,
-                            end = curPhase.End / 1000.0,
-                            label = curPhase.Name,
-                            highlight = curPhase.DrawArea
-                        };
-                        phaseDto.markupAreas.Add(phaseArea);
+                        continue;
                     }
+                    long start = curPhase.Start - phaseData.Start;
+                    long end = curPhase.End - phaseData.Start;
+                    if (curPhase.DrawStart) phaseDto.markupLines.Add(start / 1000.0);
+                    if (curPhase.DrawEnd) phaseDto.markupLines.Add(end / 1000.0);
+                    AreaLabelDto phaseArea = new AreaLabelDto
+                    {
+                        start = start / 1000.0,
+                        end = end / 1000.0,
+                        label = curPhase.Name,
+                        highlight = curPhase.DrawArea
+                    };
+                    phaseDto.markupAreas.Add(phaseArea);
                 }
+                if (phaseDto.markupAreas.Count == 0) phaseDto.markupAreas = null;
+                if (phaseDto.markupLines.Count == 0) phaseDto.markupLines = null;
                 logData.phases.Add(phaseDto);
             }
 
