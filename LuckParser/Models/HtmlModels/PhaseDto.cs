@@ -52,6 +52,7 @@ namespace LuckParser.Models.HtmlModels
 
         [DataMember(EmitDefaultValue = false)] public List<double> markupLines;
         [DataMember(EmitDefaultValue = false)] public List<AreaLabelDto> markupAreas;
+        [DataMember(EmitDefaultValue = false)] public List<int> subPhases;
 
         public PhaseDto() { }
 

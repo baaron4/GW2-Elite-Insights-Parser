@@ -1527,6 +1527,11 @@ namespace LuckParser.Controllers
                     {
                         continue;
                     }
+                    if (phaseDto.subPhases == null)
+                    {
+                        phaseDto.subPhases = new List<int>();
+                    }
+                    phaseDto.subPhases.Add(i); 
                     long start = curPhase.Start - phaseData.Start;
                     long end = curPhase.End - phaseData.Start;
                     if (curPhase.DrawStart) phaseDto.markupLines.Add(start / 1000.0);
