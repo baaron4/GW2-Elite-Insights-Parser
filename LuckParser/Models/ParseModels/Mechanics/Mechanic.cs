@@ -52,6 +52,7 @@ namespace LuckParser.Models.ParseModels
         public string PlotlyString { get; }
         public string PlotlySymbol { get; }
         public string PlotlyColor { get; }
+        public string PlotlySize { get; }
         public string Description { get; }
         public string PlotlyName { get; }
         public string InGameName { get; }
@@ -75,6 +76,7 @@ namespace LuckParser.Models.ParseModels
             PlotlyString = plotlyString;
             PlotlySymbol = GeneralHelper.FindPattern(PlotlyString, "symbol\\s*:\\s*'([^']*)'");
             PlotlyColor= GeneralHelper.FindPattern(PlotlyString, "color\\s*:\\s*'([^']*)'");
+            PlotlySize = GeneralHelper.FindPattern(PlotlyString, "size\\s*:\\s*'([^']*)'");
             ShortName = shortName;
             Description = description ?? InGameName;
             PlotlyName = plotlyName ?? InGameName;
