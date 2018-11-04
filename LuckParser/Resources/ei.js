@@ -1135,7 +1135,7 @@ var compilePlayerTab = function () {
                 return this.player.details.minions[this.distmode].dmgDistributions[this.phaseindex];
             },
             dmgdisttarget: function () {
-                var cacheID = this.phaseindex + '-';
+                var cacheID = this.phaseindex + '-' + this.distmode + '-';
                 var targetsID = 1;
                 var i;
                 for (i = 0; i < this.activetargets.length; i++) {
