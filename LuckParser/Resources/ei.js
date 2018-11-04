@@ -12,32 +12,32 @@ $.extend($.fn.dataTable.defaults, {
 if (typeof Object.assign != 'function') {
     // Must be writable: true, enumerable: false, configurable: true
     Object.defineProperty(Object, "assign", {
-      value: function assign(target, varArgs) { // .length of function is 2
-        'use strict';
-        if (target == null) { // TypeError if undefined or null
-          throw new TypeError('Cannot convert undefined or null to object');
-        }
-  
-        var to = Object(target);
-  
-        for (var index = 1; index < arguments.length; index++) {
-          var nextSource = arguments[index];
-  
-          if (nextSource != null) { // Skip over if undefined or null
-            for (var nextKey in nextSource) {
-              // Avoid bugs when hasOwnProperty is shadowed
-              if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
-                to[nextKey] = nextSource[nextKey];
-              }
+        value: function assign(target, varArgs) { // .length of function is 2
+            'use strict';
+            if (target == null) { // TypeError if undefined or null
+                throw new TypeError('Cannot convert undefined or null to object');
             }
-          }
-        }
-        return to;
-      },
-      writable: true,
-      configurable: true
+
+            var to = Object(target);
+
+            for (var index = 1; index < arguments.length; index++) {
+                var nextSource = arguments[index];
+
+                if (nextSource != null) { // Skip over if undefined or null
+                    for (var nextKey in nextSource) {
+                        // Avoid bugs when hasOwnProperty is shadowed
+                        if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+                            to[nextKey] = nextSource[nextKey];
+                        }
+                    }
+                }
+            }
+            return to;
+        },
+        writable: true,
+        configurable: true
     });
-  }
+}
 
 var specs = [
     "Warrior", "Berserker", "Spellbreaker", "Revenant", "Herald", "Renegade", "Guardian", "Dragonhunter", "Firebrand",
@@ -179,14 +179,14 @@ var initTable = function (id, cell, order, orderCallBack) {
         });
         lazyTableObserver.observe(lazyTable);
     } else {*/
-        table.DataTable({
-            order: [
-                [cell, order]
-            ]
-        });
-        if (orderCallBack) {
-            table.DataTable().on('order.dt', orderCallBack);
-        }
+    table.DataTable({
+        order: [
+            [cell, order]
+        ]
+    });
+    if (orderCallBack) {
+        table.DataTable().on('order.dt', orderCallBack);
+    }
     //}
 };
 
@@ -196,11 +196,11 @@ var updateTable = function (id) {
         lazyTableUpdater.unobserve(lazyTable);
         lazyTableUpdater.observe(lazyTable);
     } else {*/
-        var table = $(id);
-        if ($.fn.dataTable.isDataTable(id)) {
-            table.DataTable().rows().invalidate('dom');
-            table.DataTable().draw();
-        }
+    var table = $(id);
+    if ($.fn.dataTable.isDataTable(id)) {
+        table.DataTable().rows().invalidate('dom');
+        table.DataTable().draw();
+    }
     //}
 };
 
@@ -271,18 +271,26 @@ var compileCommons = function () {
     Vue.component("graph-component", {
         props: ['id', 'layout', 'data'],
         template: '<div :id="id"></div>',
-        mounted: function() {
-            var div = document.querySelector(this.queryID);
-            Plotly.react(div, this.data, this.layout);
-        },
-        updated: function() {
-            this.layout.datarevision = new Date().getTime();          
+        mounted: function () {
             var div = document.querySelector(this.queryID);
             Plotly.react(div, this.data, this.layout);
         },
         computed: {
-            queryID: function() {
-                return "#"+this.id;
+            queryID: function () {
+                return "#" + this.id;
+            }
+        },
+        watch: {
+            layout: {
+                handler: function () {
+                    var div = document.querySelector(this.queryID);
+                    Plotly.react(
+                        div,
+                        this.data,
+                        this.layout
+                    );
+                },
+                deep: true
             }
         }
     });
@@ -1587,7 +1595,7 @@ var compileGraphs = function () {
         },
         created: function () {
             // layout - constant during whole lifetime
-            var i,j;
+            var i, j;
             this.layout = {
                 yaxis: {
                     title: 'DPS',
@@ -1616,8 +1624,9 @@ var compileGraphs = function () {
                 shapes: [],
                 annotations: [],
                 autosize: false,
-                width: 1300,
+                width: 1100,
                 height: 1000,
+                datarevision: new Date().getTime(),
             };
             if (this.phase.markupAreas) {
                 for (i = 0; i < this.phase.markupAreas.length; i++) {
@@ -1630,7 +1639,7 @@ var compileGraphs = function () {
                             yref: 'paper',
                             xanchor: 'center',
                             yanchor: 'bottom',
-                            text: area.label + '<br>' + '(' + Math.round(1000*(area.end - area.start))/1000 + ' s)',
+                            text: area.label + '<br>' + '(' + Math.round(1000 * (area.end - area.start)) / 1000 + ' s)',
                             showarrow: false
                         });
                     }
@@ -1806,7 +1815,7 @@ var compileGraphs = function () {
                 this.dpsCache.set(cacheID, res);
                 return res;
             },
-            computeData: function() {
+            computeDPSRelatedData: function() {
                 var cacheID = this.dpsmode + '-' + this.mode + '-';
                 var targetsID = 1;
                 var i, j;
@@ -1819,17 +1828,15 @@ var compileGraphs = function () {
                 if (this.dataCache.has(cacheID)) {
                     return this.dataCache.get(cacheID);
                 }
-                var res= [];
-                for (i = 0; i < this.data.length; i++) {
-                    res[i] = Object.assign({}, this.data[i]);
-                }
+
+                var res = [];
                 var dpsData = this.computeDPSData;
                 var offset = 0;
                 for (i = 0; i < this.players.length; i++) {
                     var pDPS = dpsData.playerDPS[i];
-                    res[offset++].y = (this.mode === 0 ? pDPS.total : (this.mode === 1 ? pDPS.target : pDPS.cleave));
+                    res[offset++] = (this.mode === 0 ? pDPS.total : (this.mode === 1 ? pDPS.target : pDPS.cleave));
                 }
-                res[offset++].y = (this.mode === 0 ? dpsData.allDPS.total : (this.mode === 1 ? dpsData.allDPS.target : dpsData.allDPS.cleave));
+                res[offset++] = (this.mode === 0 ? dpsData.allDPS.total : (this.mode === 1 ? dpsData.allDPS.target : dpsData.allDPS.cleave));
                 var maxDPS = (this.mode === 0 ? dpsData.maxDPS.total : (this.mode === 1 ? dpsData.maxDPS.target : dpsData.maxDPS.cleave));
                 var hps = [];
                 for (i = 0; i < this.graph.targets.length; i++) {
@@ -1839,14 +1846,14 @@ var compileGraphs = function () {
                         hpPoints[j] = health[j] * maxDPS / 100.0;
                     }
                     hps[i] = hpPoints;
-                    res[offset++].y = hpPoints;
+                    res[offset++] = hpPoints;
                 }
                 var mechArray = getMechanics();
                 for (i = 0; i < this.mechanics.length; i++) {
                     var mech = this.mechanics[i];
                     var mechData = mechArray[i];
-                    var chart = res[offset++];
-                    chart.y = [];
+                    chart = [];
+                    res[offset++] = chart;
                     var time, pts, k;
                     if (mechData.enemyMech) {
                         for (j = 0; j < mech.points[this.phaseid].length; j++) {
@@ -1856,11 +1863,11 @@ var compileGraphs = function () {
                                 target = this.targets[tarId];
                                 for (k = 0; k < pts.length; k++) {
                                     time = pts[k];
-                                    chart.y.push(hps[j][Math.floor(time)]);
+                                    chart.push(hps[j][Math.floor(time)]);
                                 }
                             } else {
                                 for (k = 0; k < pts.length; k++) {
-                                    chart.y.push(maxDPS * 0.5);
+                                    chart.push(maxDPS * 0.5);
                                 }
                             }
                         }
@@ -1869,12 +1876,21 @@ var compileGraphs = function () {
                             pts = mech.points[this.phaseid][j];
                             for (k = 0; k < pts.length; k++) {
                                 time = pts[k];
-                                chart.y.push(res[j].y[Math.floor(time)]);
+                                chart.push(res[j][Math.floor(time)]);
                             }
                         }
                     }
                 }
                 this.dataCache.set(cacheID, res);
+                return res;
+            },
+            computeData: function () {
+                this.layout.datarevision = new Date().getTime();
+                var points = this.computeDPSRelatedData;
+                var res = this.data;
+                for (var i = 0; i < points.length; i++) {
+                    res[i].y = points[i];
+                }
                 return res;
             }
         },
