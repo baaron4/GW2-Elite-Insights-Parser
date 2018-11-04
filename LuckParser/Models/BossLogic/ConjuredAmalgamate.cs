@@ -59,12 +59,12 @@ namespace LuckParser.Models
             ulong agent = 1;
             while (agentData.AgentValues.Contains(agent))
             {
-                agent = (ulong)rnd.Next(0, Int32.MaxValue);
+                agent = (ulong)rnd.Next(1, Int32.MaxValue);
             }
             ushort id = 1;
             while (agentData.InstIDValues.Contains(id))
             {
-                id = (ushort)rnd.Next(0, ushort.MaxValue);
+                id = (ushort)rnd.Next(1, ushort.MaxValue);
             }
             AgentItem sword = new AgentItem(agent, "Conjured Sword\0:Conjured Sword\050", "Sword", AgentItem.AgentType.Player, 0, 0, 0, 0, 20, 20)
             {

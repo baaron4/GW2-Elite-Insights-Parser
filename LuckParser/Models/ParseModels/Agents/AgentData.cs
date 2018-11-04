@@ -17,19 +17,13 @@ namespace LuckParser.Models.ParseModels
         public AgentData(List<AgentItem> allAgentsList)
         {
             _allAgentsList = allAgentsList;
-            _allAgentsByAgent = allAgentsList.ToDictionary(a => a.Agent);
-            _allAgentsByID = allAgentsList.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-            _allAgentsByInstID = allAgentsList.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
-            _allAgentsByType = allAgentsList.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
+            Refresh();
         }
 
         public void AddCustomAgent(AgentItem agent)
         {
             _allAgentsList.Add(agent);
-            _allAgentsByAgent = _allAgentsList.ToDictionary(a => a.Agent);
-            _allAgentsByID = _allAgentsList.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-            _allAgentsByInstID = _allAgentsList.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
-            _allAgentsByType = _allAgentsList.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
+            Refresh();
         }
 
         public AgentItem GetAgent(ulong agentAddress)
@@ -87,6 +81,11 @@ namespace LuckParser.Models.ParseModels
         {
             _allAgentsList.RemoveAll(x => x.ID == ID && x.InstID == instid);
             _allAgentsList.Add(agentItem);
+            Refresh();
+        }
+
+        public void Refresh()
+        {
             _allAgentsByAgent = _allAgentsList.ToDictionary(a => a.Agent);
             _allAgentsByID = _allAgentsList.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
             _allAgentsByInstID = _allAgentsList.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
