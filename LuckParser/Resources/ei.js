@@ -280,8 +280,16 @@ var compileCommons = function () {
     });
 
     Vue.component("damagedist-table-component", {
-        props: ["dmgdist", "tableid", "actor", "isminion", "istarget", "sortdata"],
+        props: ["dmgdist", "tableid", "actor", "isminion", "istarget"],
         template: "#tmplDamageDistTable",
+        data: function() {
+            return {
+                sortdata: {
+                    order:"desc",
+                    index:2
+                }
+            };
+        },
         mixins: [roundingComponent],
         mounted() {
             var _this = this;
@@ -1056,7 +1064,7 @@ var compilePlayerTab = function () {
     // Base stuff
     Vue.component('dmgdist-player-component', {
         props: ['player', 'playerindex', 'phase',
-            'phaseindex', 'targets', 'sortdata', 'datatype'
+            'phaseindex', 'targets', 'datatype'
         ],
         template: "#tmplDamageDistPlayer",
         data: function () {
@@ -1065,11 +1073,6 @@ var compilePlayerTab = function () {
                 targetmode: 0,
                 cacheTarget: new Map()
             };
-        },
-        methods: {
-            show: function () {
-                return this.datatype === DataTypes.playerTab && this.player.active;
-            }
         },
         computed: {
             actor: function () {
@@ -1146,13 +1149,8 @@ var compilePlayerTab = function () {
 
     Vue.component('dmgtaken-player-component', {
         props: ['player', 'playerindex', 'datatype',
-            'phaseindex', 'sortdata'
+            'phaseindex'
         ],
-        methods: {
-            show: function () {
-                return this.datatype === DataTypes.playerTab && this.player.active;
-            }
-        },
         template: "#tmplDamageTakenPlayer",
         computed: {
             dmgtaken: function () {
@@ -1265,24 +1263,13 @@ var compilePlayerTab = function () {
         template: "#tmplPlayerTab",
         data: function () {
             return {
-                mode: 0,
-                sortdata: {
-                    dmgdist: {
-                        order: "desc",
-                        index: 2
-                    },
-                    dmgtaken: {
-                        order: "desc",
-                        index: 2
-                    }
-                }
-
+                mode: 0
             };
         },
     });
     // stats
     Vue.component("player-stats-component", {
-        props: ["players", "phaseindex", "phase", 'targets', 'datatype'],
+        props: ["players", "phaseindex", "phase", 'targets', 'datatype', 'activeplayer'],
         template: "#tmplPlayerStats",
     });
 };
@@ -1383,8 +1370,8 @@ var compileTargetTab = function () {
     });
 
     Vue.component('dmgdist-target-component', {
-        props: ['focus', 'target', 'targetindex',
-            'phaseindex', 'sortdata'
+        props: ['target', 'targetindex',
+            'phaseindex'
         ],
         template: "#tmplDamageDistTarget",
         data: function () {
@@ -1409,17 +1396,11 @@ var compileTargetTab = function () {
     });
     // tab
     Vue.component("target-tab-component", {
-        props: ["focus", "target", "phaseindex", "players", "phase", "boons", "conditions", 'targetindex'],
+        props: ["target", "phaseindex", "players", "phase", "boons", "conditions", 'targetindex'],
         template: "#tmplTargetTab",
         data: function () {
             return {
-                mode: 0,
-                sortdata: {
-                    dmgdist: {
-                        order: "desc",
-                        index: 2
-                    }
-                }
+                mode: 0
             };
         }
     });
