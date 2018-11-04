@@ -125,6 +125,9 @@ namespace LuckParser.Models
             {
                 PhaseData phase = phases[i];
                 phase.Name = names[i - 1];
+                phase.DrawArea = true;
+                phase.DrawEnd = true;
+                phase.DrawStart = true;
                 switch (i)
                 {
                     case 2:
@@ -146,9 +149,6 @@ namespace LuckParser.Models
                            (ushort) ApocalypseBringer
                         };
                         AddTargetsToPhase(phase, ids, log);
-                        phase.DrawArea = true;
-                        phase.DrawEnd = true;
-                        phase.DrawStart = true;
                         break;
                 }
             }

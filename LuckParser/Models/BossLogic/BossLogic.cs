@@ -186,7 +186,7 @@ namespace LuckParser.Models
                     phase.Targets.Add(target);
                 }
             }
-            phase.OverrideTimes(log.FightData.FightStart);
+            phase.OverrideTimes(log.FightData.FightStart, log.CombatData);
         }
 
         public virtual void ComputeAdditionalBossData(Boss boss, ParsedLog log)
