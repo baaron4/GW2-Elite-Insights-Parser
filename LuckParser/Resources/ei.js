@@ -1692,7 +1692,7 @@ var compileGraphs = function () {
                     mode: 'lines',
                     line: {
                         shape: 'spline',
-                        color: player.colBoss
+                        color: player.colTarget
                     },
                     name: player.name + ' DPS'
                 });
