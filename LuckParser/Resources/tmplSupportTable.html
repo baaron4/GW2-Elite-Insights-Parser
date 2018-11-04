@@ -1,4 +1,3 @@
-
 <div>
     <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" id="sup-table">
         <thead>
@@ -15,8 +14,7 @@
             <tr v-for="row in tableData.rows">
                 <td>{{row.player.group}}</td>
                 <td :data-original-title="row.player.profession">
-                    <img :src="row.player.icon" :alt="row.player.profession"
-                         class="icon"><span style="display:none">{{row.player.profession}}</span>
+                    <img :src="row.player.icon" :alt="row.player.profession" class="icon"><span style="display:none">{{row.player.profession}}</span>
                 </td>
                 <td class="text-left">{{row.player.name}}</td>
                 <td>{{row.player.acc}}</td>

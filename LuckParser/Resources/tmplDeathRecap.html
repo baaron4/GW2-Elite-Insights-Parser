@@ -1,4 +1,3 @@
-
 <div>
     <div v-for="(recap, index) in recaps" v-show="phase.start <= recap.time/1000 && phase.end >= recap.time/1000">
         <div v-if="recap.toKill === null">

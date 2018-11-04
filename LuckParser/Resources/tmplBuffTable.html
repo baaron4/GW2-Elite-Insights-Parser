@@ -14,9 +14,8 @@
             <tr v-for="row in playerdata">
                 <td>{{ row.player.group ? row.player.group : '-' }}</td>
                 <td :data-original-title="row.player.profession ? row.player.profession : row.player.name">
-                    <img :src="row.player.icon"
-                         :alt="row.player.profession ? row.player.profession : row.player.name"
-                         class="icon">
+                    <img :src="row.player.icon" :alt="row.player.profession ? row.player.profession : row.player.name"
+                        class="icon">
                     <span style="display:none">
                         {{ row.player.profession ? row.player.profession : row.player.name}}
                     </span>

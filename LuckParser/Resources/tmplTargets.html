@@ -1,5 +1,4 @@
 <div class="d-flex flex-row justify-content-center flex-wrap">
-    <img class="icon-lg mr-2 ml-2 target-cell" v-for="target in targets" v-show="show(target)" :src="target.icon"
-         :alt="target.name" :data-original-title="target.name" :class="{active: target.active}"
-         @click="target.active = !target.active">
+    <img class="icon-lg mr-2 ml-2 target-cell" v-for="target in targets" v-show="show(target)" :src="target.icon" :alt="target.name"
+        :data-original-title="target.name" :class="{active: target.active}" @click="target.active = !target.active">
 </div>

@@ -18,52 +18,51 @@
                 <th>Account</th>
                 <th>
                     <img src="https://wiki.guildwars2.com/images/9/95/Critical_Chance.png" alt="Crits"
-                         data-original-title="Percent time hits critical" class="icon icon-hover">
+                        data-original-title="Percent time hits critical" class="icon icon-hover">
                 </th>
                 <th>
-                    <img src="https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png"
-                         alt="Scholar" data-original-title="Percent time hits while above 90% health"
-                         class="icon icon-hover">
+                    <img src="https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png" alt="Scholar"
+                        data-original-title="Percent time hits while above 90% health" class="icon icon-hover">
                 </th>
                 <th>
                     <img src="https://wiki.guildwars2.com/images/1/1c/Bowl_of_Seaweed_Salad.png" alt="SwS"
-                         data-original-title="Percent time hits while moveing" class="icon icon-hover">
+                        data-original-title="Percent time hits while moveing" class="icon icon-hover">
                 </th>
                 <th>
                     <img src="https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png" alt="Flank"
-                         data-original-title="Percent time hits while flanking" class="icon icon-hover">
+                        data-original-title="Percent time hits while flanking" class="icon icon-hover">
                 </th>
                 <th>
-                    <img src="https://wiki.guildwars2.com/images/f/f9/Weakness.png" alt="Glance"
-                         data-original-title="Percent time hits while glanceing" class="icon icon-hover">
+                    <img src="https://wiki.guildwars2.com/images/f/f9/Weakness.png" alt="Glance" data-original-title="Percent time hits while glanceing"
+                        class="icon icon-hover">
                 </th>
                 <th>
-                    <img src="https://wiki.guildwars2.com/images/3/33/Blinded.png" alt="Miss"
-                         data-original-title="Number of hits while blinded" class="icon icon-hover">
+                    <img src="https://wiki.guildwars2.com/images/3/33/Blinded.png" alt="Miss" data-original-title="Number of hits while blinded"
+                        class="icon icon-hover">
                 </th>
                 <th>
-                    <img src="https://wiki.guildwars2.com/images/7/79/Daze.png" alt="Interupts"
-                         data-original-title="Number of hits interupted?/hits used to interupt" class="icon icon-hover">
+                    <img src="https://wiki.guildwars2.com/images/7/79/Daze.png" alt="Interupts" data-original-title="Number of hits interupted?/hits used to interupt"
+                        class="icon icon-hover">
                 </th>
                 <th>
-                    <img src="https://wiki.guildwars2.com/images/e/eb/Determined.png" alt="Ivuln"
-                         data-original-title="times the enemy was invulnerable to attacks" class="icon icon-hover">
+                    <img src="https://wiki.guildwars2.com/images/e/eb/Determined.png" alt="Ivuln" data-original-title="times the enemy was invulnerable to attacks"
+                        class="icon icon-hover">
                 </th>
                 <th>
                     <img src="https://wiki.guildwars2.com/images/b/b3/Out_Of_Health_Potions.png" alt="Wasted"
-                         data-original-title="Time wasted(in seconds) interupting skill casts" class="icon icon-hover">
+                        data-original-title="Time wasted(in seconds) interupting skill casts" class="icon icon-hover">
                 </th>
                 <th>
-                    <img src="https://wiki.guildwars2.com/images/e/eb/Ready.png" alt="Saved"
-                         data-original-title="Time saved(in seconds) interupting skill casts" class="icon icon-hover">
+                    <img src="https://wiki.guildwars2.com/images/e/eb/Ready.png" alt="Saved" data-original-title="Time saved(in seconds) interupting skill casts"
+                        class="icon icon-hover">
                 </th>
                 <th>
                     <img src="https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png" alt="Swap"
-                         data-original-title="Times weapon swapped" class="icon icon-hover">
+                        data-original-title="Times weapon swapped" class="icon icon-hover">
                 </th>
                 <th>
                     <img src="https://wiki.guildwars2.com/images/e/ef/Commander_arrow_marker.png" alt="Stack"
-                         data-original-title="Average Distance from center of group stack" class="icon icon-hover">
+                        data-original-title="Average Distance from center of group stack" class="icon icon-hover">
                 </th>
             </tr>
         </thead>
@@ -71,8 +70,7 @@
             <tr v-for="row in (mode ? tableDataTarget : tableData)">
                 <td>{{row.player.group}}</td>
                 <td :data-original-title="row.player.profession">
-                    <img :src="row.player.icon" :alt="row.player.profession"
-                         class="icon"><span style="display:none">{{row.player.profession}}</span>
+                    <img :src="row.player.icon" :alt="row.player.profession" class="icon"><span style="display:none">{{row.player.profession}}</span>
                 </td>
                 <td class="text-left">{{row.player.name}}</td>
                 <td>{{row.player.acc}}</td>

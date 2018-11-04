@@ -1,10 +1,10 @@
-
 <div>
     <keep-alive>
-        <player-tab-component v-for="(player, pindex) in players" :key="pindex" v-if="player.active && !player.isConjure" :player="player" :playerindex="pindex" :phase="phase"
-                    :phaseindex="phaseindex" :targets="targets" :datatype="datatype"></player-tab-component>
-    </keep-alive>    
-    <div v-show="!activeplayer">       
-        <h3 class="text-center">No player selected</h3>
-    </div>
+        <player-tab-component v-for="(player, pindex) in players" :key="pindex" v-if="player.active && !player.isConjure"
+            :player="player" :playerindex="pindex" :phase="phase" :phaseindex="phaseindex" :activetargets="activetargets"
+            :datatype="datatype"></player-tab-component>
+        <div v-if="!activeplayer">
+            <h3 class="text-center">No player selected</h3>
+        </div>
+    </keep-alive>
 </div>

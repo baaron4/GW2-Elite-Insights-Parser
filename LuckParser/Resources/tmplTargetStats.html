@@ -1,4 +1,3 @@
-
 <div>
     <ul v-if="phaseTargets.length > 1" class=" nav nav-tabs">
         <li v-for="target in phaseTargets">
@@ -8,7 +7,8 @@
         </li>
     </ul>
     <keep-alive>
-        <target-tab-component  v-for="(target, targetid) in targets" :key="targetid" v-if="phase.focus === target":target="target" :targetindex="targetid"
-                              :phaseindex="phaseindex" :phase="phase" :players="players" :boons="boons" :conditions="conditions"></target-tab-component>
+        <target-tab-component v-for="(target, targetid) in targets" :key="targetid" v-if="phase.focus === target"
+            :target="target" :targetindex="targetid" :phaseindex="phaseindex" :phase="phase" :players="players" :boons="boons"
+            :conditions="conditions"></target-tab-component>
     </keep-alive>
 </div>

@@ -1,4 +1,3 @@
-
 <div>
     <div v-if="target.minions.length > 0">
         <ul class="nav nav-tabs">
@@ -10,6 +9,5 @@
             </li>
         </ul>
     </div>
-    <damagedist-table-component :dmgdist="dmgdist" :tableid="'dmgdist-target-' + targetindex"
-                                :actor="actor" :isminion="distmode>=0"></damagedist-table-component>
+    <damagedist-table-component :dmgdist="dmgdist" :tableid="'dmgdist-target-' + targetindex" :actor="actor" :isminion="distmode>=0"></damagedist-table-component>
 </div>

@@ -1,5 +1,4 @@
-
-<div> 
+<div>
     <h3 class="text-center"><img :alt="target.name" class="icon-lg" :src="target.icon">{{target.name}}</h3>
     <ul class="nav nav-tabs">
         <li>
@@ -16,10 +15,8 @@
         </li>
     </ul>
     <keep-alive>
-            <dmgdist-target-component v-if="mode === 0" :target="target"
-                                      :phaseindex="phaseindex" :targetindex="targetindex"></dmgdist-target-component>
-            <buff-stats-target-component v-if="mode === 2" :target="target"
-                                         :targetindex="targetindex" :phase="phase" :players="players" :boons="boons"
-                                         :conditions="conditions"></buff-stats-target-component>
+        <dmgdist-target-component v-if="mode === 0" :target="target" :phaseindex="phaseindex" :targetindex="targetindex"></dmgdist-target-component>
+        <buff-stats-target-component v-if="mode === 2" :target="target" :targetindex="targetindex" :phase="phase"
+            :players="players" :boons="boons" :conditions="conditions"></buff-stats-target-component>
     </keep-alive>
 </div>

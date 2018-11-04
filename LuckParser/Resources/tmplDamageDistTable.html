@@ -1,10 +1,12 @@
 <div>
     <div v-if="actor !== null">
         <div v-if="isminion">
-            {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its master's total {{istarget ? 'Target' :''}} dps
+            {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its master's total
+            {{istarget ? 'Target' :''}} dps
         </div>
         <div v-else>
-            {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its total {{istarget ? 'Target' :''}} dps
+            {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its total {{istarget ?
+            'Target' :''}} dps
         </div>
     </div>
     <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
@@ -29,7 +31,8 @@
         <tbody>
             <tr v-for="row in dmgdist.distribution" :class="{condi: getSkill(row[0], row[1]).condi}">
                 <td class="text-left" :data-original-title="getSkill(row[0], row[1]).id">
-                    <img :src="getSkill(row[0], row[1]).icon" class="icon icon-hover"> {{getSkill(row[0], row[1]).name}}
+                    <img :src="getSkill(row[0], row[1]).icon" class="icon icon-hover"> {{getSkill(row[0],
+                    row[1]).name}}
                 </td>
                 <td>{{ round3(100*row[2]/dmgdist.contributedDamage) }}%</td>
                 <td>{{ row[2] }}</td>
@@ -71,4 +74,4 @@
             </tr>
         </tfoot>
     </table>
-</div> 
+</div>
