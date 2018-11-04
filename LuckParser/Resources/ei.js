@@ -326,11 +326,6 @@ var compileCommons = function () {
                 }
             );
         },
-        beforeDestroy() {
-            $("#" + this.tableid)
-                .DataTable()
-                .destroy();
-        },
         methods: {
             getSkill: function (isBoon, id) {
                 return findSkill(isBoon, id);
