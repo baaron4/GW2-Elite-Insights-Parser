@@ -1783,6 +1783,12 @@ var compileGraphs = function () {
             graphid: function () {
                 return 'dpsgraph-' + this.phaseid;
             },
+            graphname: function() {
+                var name = "DPS graph";
+                name = (this.dpsmode === 0 ? "Full " : (this.dpsmode === 1 ? "10s " : (this.dpsmode === 2 ? "30s " : "Phase "))) + name;
+                name = (this.mode === 0 ? "Total " : (this.mode === 1 ? "Target " : "Cleave " )) + name;
+                return name;
+            },
             computePhaseBreaks: function () {
                 var res = [];
                 if (this.phase.subPhases) {
