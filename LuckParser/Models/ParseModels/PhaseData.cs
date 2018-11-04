@@ -10,6 +10,7 @@ namespace LuckParser.Models.ParseModels
         public long End { get; private set; }
         public string Name { get; set; }
         public bool DrawStart { get; set; }
+        public bool DrawLabel { get; set; }
         public bool DrawEnd { get; set; }
         public bool DrawArea { get; set; }
         public List<Boss> Targets { get; } = new List<Boss>();
@@ -18,6 +19,7 @@ namespace LuckParser.Models.ParseModels
         {
             Start = start;
             End = end;
+            DrawLabel = true;
         }
         
         public long GetDuration(string format = "ms")
