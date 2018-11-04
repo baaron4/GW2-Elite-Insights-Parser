@@ -92,28 +92,52 @@ namespace LuckParser.Models
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
+            // find target
             Boss boss = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Xera);
+            if (boss == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
+            // enter combat
             CombatItem enterCombat = combatData.Find(x => x.SrcInstid == boss.InstID && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
             if (enterCombat != null)
             {
                 fightData.FightStart = enterCombat.Time;
             }
+            // find split
             foreach (AgentItem NPC in agentData.GetAgentByType(AgentItem.AgentType.NPC))
             {
                 if (NPC.ID == 16286)
                 {
-                    int xera2Instid = NPC.InstID;
                     boss.Health = 24085950;
-                    fightData.PhaseData.Add(NPC.FirstAware);
+                    CombatItem enterCombat2 = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.EnterCombat && x.SrcInstid == NPC.InstID && x.Time <= NPC.FirstAware && x.Time >= NPC.LastAware);
+                    if (enterCombat2 != null)
+                    {
+                        fightData.PhaseData.Add(enterCombat2.Time);
+                    } else
+                    {
+                        fightData.PhaseData.Add(NPC.FirstAware);
+                    }
                     boss.AgentItem.LastAware = NPC.LastAware;
+                    // get unique id for the fusion
+                    ushort instID = 1;
+                    Random rnd = new Random();
+                    while (agentData.InstIDValues.Contains(instID))
+                    {
+                        instID = (ushort)rnd.Next(1, ushort.MaxValue);
+                    }
+                    boss.AgentItem.InstID = instID;
+                    agentData.Refresh();
+                    HashSet<ulong> agents = new HashSet<ulong>() { NPC.Agent, boss.Agent };
+                    // update combat data
                     foreach (CombatItem c in combatData)
                     {
-                        if (c.SrcInstid == xera2Instid)
+                        if (agents.Contains(c.SrcAgent))
                         {
                             c.SrcInstid = boss.InstID;
                             c.SrcAgent = boss.Agent;
                         }
-                        if (c.DstInstid == xera2Instid)
+                        if (agents.Contains(c.DstAgent))
                         {
                             c.DstInstid = boss.InstID;
                             c.DstAgent = boss.Agent;
