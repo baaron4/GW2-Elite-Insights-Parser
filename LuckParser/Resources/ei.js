@@ -7,13 +7,45 @@ $.extend($.fn.dataTable.defaults, {
     dom: "t"
 });
 
+// polyfill for shallow copies
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
+if (typeof Object.assign != 'function') {
+    // Must be writable: true, enumerable: false, configurable: true
+    Object.defineProperty(Object, "assign", {
+      value: function assign(target, varArgs) { // .length of function is 2
+        'use strict';
+        if (target == null) { // TypeError if undefined or null
+          throw new TypeError('Cannot convert undefined or null to object');
+        }
+  
+        var to = Object(target);
+  
+        for (var index = 1; index < arguments.length; index++) {
+          var nextSource = arguments[index];
+  
+          if (nextSource != null) { // Skip over if undefined or null
+            for (var nextKey in nextSource) {
+              // Avoid bugs when hasOwnProperty is shadowed
+              if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+                to[nextKey] = nextSource[nextKey];
+              }
+            }
+          }
+        }
+        return to;
+      },
+      writable: true,
+      configurable: true
+    });
+  }
+
 var specs = [
     "Warrior", "Berserker", "Spellbreaker", "Revenant", "Herald", "Renegade", "Guardian", "Dragonhunter", "Firebrand",
     "Ranger", "Druid", "Soulbeast", "Engineer", "Scrapper", "Holosmith", "Thief", "Daredevil", "Deadeye",
     "Mesmer", "Chronomancer", "Mirage", "Necromancer", "Reaper", "Scourge", "Elementalist", "Tempest", "Weaver"
 ];
 
-var lazyTableUpdater = null;
+/*var lazyTableUpdater = null;
 if ('IntersectionObserver' in window) {
     lazyTableUpdater = new IntersectionObserver(function (entries, observer) {
         entries.forEach(function (entry) {
@@ -27,7 +59,7 @@ if ('IntersectionObserver' in window) {
             }
         });
     });
-}
+}*/
 
 var specToBase = {
     Warrior: 'Warrior',
@@ -128,7 +160,7 @@ var initTable = function (id, cell, order, orderCallBack) {
     if (!table.length) {
         return;
     }
-    if (lazyTableUpdater) {
+    /*if (lazyTableUpdater) {
         var lazyTable = document.querySelector(id);
         var lazyTableObserver = new IntersectionObserver(function (entries, observer) {
             entries.forEach(function (entry) {
@@ -146,7 +178,7 @@ var initTable = function (id, cell, order, orderCallBack) {
             });
         });
         lazyTableObserver.observe(lazyTable);
-    } else {
+    } else {*/
         table.DataTable({
             order: [
                 [cell, order]
@@ -155,21 +187,21 @@ var initTable = function (id, cell, order, orderCallBack) {
         if (orderCallBack) {
             table.DataTable().on('order.dt', orderCallBack);
         }
-    }
+    //}
 };
 
 var updateTable = function (id) {
-    if (lazyTableUpdater) {
+    /*if (lazyTableUpdater) {
         var lazyTable = document.querySelector(id);
         lazyTableUpdater.unobserve(lazyTable);
         lazyTableUpdater.observe(lazyTable);
-    } else {
+    } else {*/
         var table = $(id);
         if ($.fn.dataTable.isDataTable(id)) {
             table.DataTable().rows().invalidate('dom');
             table.DataTable().draw();
         }
-    }
+    //}
 };
 
 var roundingComponent = {
@@ -236,6 +268,24 @@ var Tab = function (name, options) {
 };
 
 var compileCommons = function () {
+    Vue.component("graph-component", {
+        props: ['id', 'layout', 'data'],
+        template: '<div :id="id"></div>',
+        mounted: function() {
+            var div = document.querySelector(this.queryID);
+            Plotly.react(div, this.data, this.layout);
+        },
+        updated: function() {
+            this.layout.datarevision = new Date().getTime();          
+            var div = document.querySelector(this.queryID);
+            Plotly.react(div, this.data, this.layout);
+        },
+        computed: {
+            queryID: function() {
+                return "#"+this.id;
+            }
+        }
+    });
     Vue.component("buff-table-component", {
         props: ["buffs", "playerdata", "generation", "condition", "sums", "id"],
         template: "#tmplBuffTable",
@@ -1531,7 +1581,8 @@ var compileGraphs = function () {
                 dpsmode: 0,
                 layout: {},
                 data: [],
-                DPSCache: new Map(),
+                dpsCache: new Map(),
+                dataCache: new Map(),
             };
         },
         created: function () {
@@ -1561,10 +1612,12 @@ var compileGraphs = function () {
                 },
                 paper_bgcolor: 'rgba(0,0,0,0)',
                 plot_bgcolor: 'rgba(0,0,0,0)',
-                staticPlot: true,
                 displayModeBar: false,
                 shapes: [],
-                annotations: []
+                annotations: [],
+                autosize: false,
+                width: 1300,
+                height: 1000,
             };
             if (this.phase.markupAreas) {
                 for (i = 0; i < this.phase.markupAreas.length; i++) {
@@ -1577,7 +1630,7 @@ var compileGraphs = function () {
                             yref: 'paper',
                             xanchor: 'center',
                             yanchor: 'bottom',
-                            text: area.label + '<br>' + '(' + (area.end - area.start) + ' s)',
+                            text: area.label + '<br>' + '(' + Math.round(1000*(area.end - area.start))/1000 + ' s)',
                             showarrow: false
                         });
                     }
@@ -1716,20 +1769,10 @@ var compileGraphs = function () {
                 }
                 data.push(chart);
             }
-            var aa = this.computeDPSData;
         },
         computed: {
             graphid: function () {
                 return 'dpsgraph-' + this.phaseid;
-            },
-            playeroffset: function () {
-                return 0;
-            },
-            targetsoffset: function () {
-                return this.players.length + 1;
-            },
-            mechanicsoffset: function () {
-                return this.targetsoffset + this.graph.targets.length;
             },
             computePhaseBreaks: function () {
                 var res = [];
@@ -1750,17 +1793,88 @@ var compileGraphs = function () {
                     targetsID = targetsID << (target.id + 1);
                 }
                 cacheID += targetsID;
-                if (this.DPSCache.has(cacheID)) {
-                    return this.DPSCache.get(cacheID);
+                if (this.dpsCache.has(cacheID)) {
+                    return this.dpsCache.get(cacheID);
                 }
                 var res;
                 if (this.dpsmode < 3) {
                     var lim = (this.dpsmode === 0 ? 0 : (this.dpsmode === 1 ? 10 : 30));
                     res = this.computeDPS(lim, null);
                 } else {
-                    res = this.computeDPS(0, this.computePhaseBreaks());
+                    res = this.computeDPS(0, this.computePhaseBreaks);
                 }
-                this.DPSCache.set(cacheID, res);
+                this.dpsCache.set(cacheID, res);
+                return res;
+            },
+            computeData: function() {
+                var cacheID = this.dpsmode + '-' + this.mode + '-';
+                var targetsID = 1;
+                var i, j;
+                var target;
+                for (i = 0; i < this.activetargets.length; i++) {
+                    target = this.activetargets[i];
+                    targetsID = targetsID << (target.id + 1);
+                }
+                cacheID += targetsID;
+                if (this.dataCache.has(cacheID)) {
+                    return this.dataCache.get(cacheID);
+                }
+                var res= [];
+                for (i = 0; i < this.data.length; i++) {
+                    res[i] = Object.assign({}, this.data[i]);
+                }
+                var dpsData = this.computeDPSData;
+                var offset = 0;
+                for (i = 0; i < this.players.length; i++) {
+                    var pDPS = dpsData.playerDPS[i];
+                    res[offset++].y = (this.mode === 0 ? pDPS.total : (this.mode === 1 ? pDPS.target : pDPS.cleave));
+                }
+                res[offset++].y = (this.mode === 0 ? dpsData.allDPS.total : (this.mode === 1 ? dpsData.allDPS.target : dpsData.allDPS.cleave));
+                var maxDPS = (this.mode === 0 ? dpsData.maxDPS.total : (this.mode === 1 ? dpsData.maxDPS.target : dpsData.maxDPS.cleave));
+                var hps = [];
+                for (i = 0; i < this.graph.targets.length; i++) {
+                    var health = this.graph.targets[i].health;
+                    var hpPoints = [];
+                    for (j = 0; j < health.length; j++) {
+                        hpPoints[j] = health[j] * maxDPS / 100.0;
+                    }
+                    hps[i] = hpPoints;
+                    res[offset++].y = hpPoints;
+                }
+                var mechArray = getMechanics();
+                for (i = 0; i < this.mechanics.length; i++) {
+                    var mech = this.mechanics[i];
+                    var mechData = mechArray[i];
+                    var chart = res[offset++];
+                    chart.y = [];
+                    var time, pts, k;
+                    if (mechData.enemyMech) {
+                        for (j = 0; j < mech.points[this.phaseid].length; j++) {
+                            pts = mech.points[this.phaseid][j];
+                            var tarId = this.phase.targets[j];
+                            if (tarId >= 0) {
+                                target = this.targets[tarId];
+                                for (k = 0; k < pts.length; k++) {
+                                    time = pts[k];
+                                    chart.y.push(hps[j][Math.floor(time)]);
+                                }
+                            } else {
+                                for (k = 0; k < pts.length; k++) {
+                                    chart.y.push(maxDPS * 0.5);
+                                }
+                            }
+                        }
+                    } else {
+                        for (j = 0; j < mech.points[this.phaseid].length; j++) {
+                            pts = mech.points[this.phaseid][j];
+                            for (k = 0; k < pts.length; k++) {
+                                time = pts[k];
+                                chart.y.push(res[j].y[Math.floor(time)]);
+                            }
+                        }
+                    }
+                }
+                this.dataCache.set(cacheID, res);
                 return res;
             }
         },
@@ -1812,7 +1926,7 @@ var compileGraphs = function () {
                     playerDPS.push({
                         total: totalDPS,
                         target: targetDPS,
-                        cleaveDPS: cleaveDPS
+                        cleave: cleaveDPS
                     });
                 }
                 return {

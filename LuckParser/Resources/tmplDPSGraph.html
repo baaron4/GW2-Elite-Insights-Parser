@@ -13,5 +13,5 @@
             <a class="nav-link" @click="dpsmode = 3" :class="{active: dpsmode === 3}">Phase</a>
         </li>
     </ul>
-    <div :id="graphid"></div>
+    <graph-component :id="graphid" :layout="layout" :data="computeData"></graph-component>
 </div>

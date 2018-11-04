@@ -211,82 +211,6 @@ function lazy($owner, callback) {
 	}
 }
 
-function extractDpsData(dmg, phaseBreaks) {
-	var ret = { full: [0], s10: [0], s30: [0], phase: [0] };
-
-	var count = dmg.length;
-	var dmg_tot = 0;
-	var dmg_10 = 0;
-	var dmg_30 = 0;
-	var dmg_phase = 0;
-	var phaseBreak = 0;
-	for (var i = 1; i < count; i++) {
-		var lim10 = Math.max(i - 10, 0);
-		var lim30 = Math.max(i - 30, 0);
-		dmg_tot += dmg[i];
-		dmg_10 += dmg[i];
-		dmg_30 += dmg[i];
-		dmg_phase += dmg[i];
-		dmg_10 -= dmg[lim10];
-		dmg_30 -= dmg[lim30];
-		if (phaseBreaks && phaseBreaks[i-1]) {
-			phaseBreak = i-1;
-			dmg_phase = 0;
-		}
-		ret.full[i] = Math.round(dmg_tot / i);
-		ret.s10[i] = Math.round(dmg_10 / (i - lim10));
-		ret.s30[i] = Math.round(dmg_30 / (i - lim30));
-		ret.phase[i] = Math.round(dmg_phase/(i-phaseBreak));
-	}
-
-	return ret;
-}
-
-function arrayAdd(a, b) {
-	var c = [];
-	var count = a.length;
-	for (var i = 0; i < count; i++) {
-		c[i] = a[i] + b[i];
-	}
-	return c;
-}
-
-function extractGraphData(graphData) {
-	data.graphData = [];
-	for (var i = 0; i < graphData.length; i++) {
-		var phaseBreaks = [];
-		if (i == 0) {
-			for (var p = 1; p < window.data.phases.length; p++) {
-				var phase = window.data.phases[p];
-				phaseBreaks[Math.floor(phase.start)] = true;
-				phaseBreaks[Math.floor(phase.end)] = true;
-			}
-		}
-
-		data.graphData[i] = { bossHealth: graphData[i].bossHealth, players: [] };
-
-		data.phases[i].graphFull = [];
-		data.phases[i].graphS10 = [];
-		data.phases[i].graphS30 = [];
-		for (var p = 0; p < data.players.length; p++) {
-			var graph = graphData[i].players[p]; // graph data for player p in phase i
-
-			var bossDps = extractDpsData(graph.boss, phaseBreaks);
-			var cleaveDps = extractDpsData(graph.cleave, phaseBreaks);
-			var totDps = {
-				full: arrayAdd(bossDps.full, cleaveDps.full),
-				s10: arrayAdd(bossDps.s10, cleaveDps.s10),
-				s30: arrayAdd(bossDps.s30, cleaveDps.s30),
-				phase:arrayAdd(bossDps.phase,cleaveDps.phase)
-			};
-
-			data.graphData[i].players[p] = { boss: bossDps, cleave: cleaveDps, total: totDps };
-		}
-		var bossDps = extractDpsData(graphData[i].boss.boss);
-		data.graphData[i].boss = { boss: bossDps };
-	}
-}
-
 function createGraphs(graphData) {
 	extractGraphData(graphData);
 
@@ -306,11 +230,6 @@ function createGraphs(graphData) {
 function createGraph($target, phaseData, phase, type) {
 	if (!$target || !$target.length) return;
 	var lines = [];
-
-	var hpPoints = [];
-	for (var i = 0; i < phaseData.bossHealth.length; i++) {
-		hpPoints[i] = phaseData.bossHealth[i] * maxDps / 100.0;
-	}
 
 	$.each(window.data.mechanics, function (i, mechanic) {
 		var chart = { y: [],};
