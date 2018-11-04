@@ -455,7 +455,8 @@ var compileGeneralStats = function () {
             tableData: function () {
                 var cacheID = this.phaseindex + '-';
                 var targetsID = 1;
-                for (var i = 0; i < this.activetargets.length; i++) {
+                var i;
+                for (i = 0; i < this.activetargets.length; i++) {
                     var target = this.activetargets[i];
                     targetsID = targetsID << (target.id + 1);
                 }
@@ -468,7 +469,7 @@ var compileGeneralStats = function () {
                 var sums = [];
                 var total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                 var groups = [];
-                var i, j;
+                var j;
                 for (i = 0; i < phase.dpsStats.length; i++) {
                     var dpsStat = phase.dpsStats[i];
                     var dpsTargetStat = [0, 0, 0, 0, 0, 0];
@@ -694,7 +695,8 @@ var compileGeneralStats = function () {
             tableDataTarget: function () {
                 var cacheID = this.phaseindex + '-';
                 var targetsID = 1;
-                for (var i = 0; i < this.activetargets.length; i++) {
+                var i;
+                for (i = 0; i < this.activetargets.length; i++) {
                     var target = this.activetargets[i];
                     targetsID = targetsID << (target.id + 1);
                 }
@@ -704,7 +706,7 @@ var compileGeneralStats = function () {
                 }
                 var phase = this.phase;
                 var rows = [];
-                for (var i = 0; i < phase.dmgStats.length; i++) {
+                for (i = 0; i < phase.dmgStats.length; i++) {
                     var commons = [];
                     var data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                     var player = this.players[i];
@@ -764,6 +766,7 @@ var compileGeneralStats = function () {
                     return this.cache.get(this.phase);
                 }
                 var rows = [];
+                var j;
                 for (var i = 0; i < this.players.length; i++) {
                     var player = this.players[i];
                     if (player.isConjure) {
@@ -771,10 +774,10 @@ var compileGeneralStats = function () {
                     }
                     var dmgModifier = this.phase.dmgModifiersCommon[i];
                     var data = [];
-                    for (var j = 0; j < this.modifiers.length; j++) {
+                    for (j = 0; j < this.modifiers.length; j++) {
                         data.push([0, 0, 0, 0]);
                     }
-                    for (var j = 0; j < dmgModifier.length; j++) {
+                    for (j = 0; j < dmgModifier.length; j++) {
                         data[j] = dmgModifier[j].slice(1);
                     }
                     rows.push({
@@ -788,7 +791,8 @@ var compileGeneralStats = function () {
             rowsTarget: function () {
                 var cacheID = this.phaseindex + '-';
                 var targetsID = 1;
-                for (var i = 0; i < this.activetargets.length; i++) {
+                var i;
+                for (i = 0; i < this.activetargets.length; i++) {
                     var target = this.activetargets[i];
                     targetsID = targetsID << (target.id + 1);
                 }
@@ -797,23 +801,24 @@ var compileGeneralStats = function () {
                     return this.cacheTarget.get(cacheID);
                 }
                 var rows = [];
-                for (var i = 0; i < this.players.length; i++) {
+                var j;
+                for (i = 0; i < this.players.length; i++) {
                     var player = this.players[i];
                     if (player.isConjure) {
                         continue;
                     }
                     var dmgModifier = this.phase.dmgModifiersTargetsCommon[i];
                     var data = [];
-                    for (var j = 0; j < this.modifiers.length; j++) {
+                    for (j = 0; j < this.modifiers.length; j++) {
                         data.push([0, 0, 0, 0]);
                     }
-                    for (var j = 0; j < this.activetargets.length; j++) {
+                    for (j = 0; j < this.activetargets.length; j++) {
                         var modifier = dmgModifier[this.activetargets[j].id];
                         for (var k = 0; k < modifier.length; k++) {
-                            var target = modifier[k].slice(1);
+                            var targetData = modifier[k].slice(1);
                             var curData = data[k];
-                            for (var l = 0; l < target.length; l++) {
-                                curData[l] += target[l];
+                            for (var l = 0; l < targetData.length; l++) {
+                                curData[l] += targetData[l];
                             }
                             data[k] = curData;
                         }
@@ -971,7 +976,8 @@ var compileBuffStats = function () {
                         totalavg = [];
                     var grcount = [],
                         totalcount = 0;
-                    for (var i = 0; i < _this.players.length; i++) {
+                    var i, k;
+                    for (i = 0; i < _this.players.length; i++) {
                         var player = _this.players[i];
                         if (player.isConjure) {
                             continue;
@@ -1007,9 +1013,9 @@ var compileBuffStats = function () {
                             gravg[player.group][j] = (gravg[player.group][j] || 0) + stats[i].data[j][0];
                         }
                     }
-                    for (var i = 0; i < gravg.length; i++) {
+                    for (i = 0; i < gravg.length; i++) {
                         if (gravg[i]) {
-                            for (var k = 0; k < gravg[i].length; k++) {
+                            for (k = 0; k < gravg[i].length; k++) {
                                 gravg[i][k] = Math.round(100 * gravg[i][k] / grcount[i]) / 100;
                             }
                             avg.push({
@@ -1018,7 +1024,7 @@ var compileBuffStats = function () {
                             });
                         }
                     }
-                    for (var k = 0; k < totalavg.length; k++) {
+                    for (k = 0; k < totalavg.length; k++) {
                         totalavg[k] = Math.round(100 * totalavg[k] / totalcount) / 100;
                     }
                     avg.push({
@@ -1073,7 +1079,8 @@ var compilePlayerTab = function () {
             dmgdisttarget: function () {
                 var cacheID = this.phaseindex + '-';
                 var targetsID = 1;
-                for (var i = 0; i < this.activetargets.length; i++) {
+                var i;
+                for (i = 0; i < this.activetargets.length; i++) {
                     var target = this.activetargets[i];
                     targetsID = targetsID << (target.id + 1);
                 }
@@ -1087,7 +1094,7 @@ var compilePlayerTab = function () {
                     distribution: [],
                 };
                 var rows = new Map();
-                for (var i = 0; i < this.activetargets.length; i++) {
+                for (i = 0; i < this.activetargets.length; i++) {
                     var targetid = this.activetargets[i].id;
                     var targetDist = this.distmode === -1 ?
                         this.player.details.dmgDistributionsTargets[this.phaseindex][targetid] :
@@ -1212,19 +1219,20 @@ var compilePlayerTab = function () {
                 };
                 for (var i = 0; i < this.recaps.length; i++) {
                     var recap = this.recaps[i];
+                    var j, totalSec, totalDamage;
                     if (recap.toDown !== null) {
-                        var totalSec = (recap.toDown[0][0] - recap.toDown[recap.toDown.length - 1][0]) / 1000;
-                        var totalDamage = 0;
-                        for (var j = 0; j < recap.toDown.length; j++) {
+                        totalSec = (recap.toDown[0][0] - recap.toDown[recap.toDown.length - 1][0]) / 1000;
+                        totalDamage = 0;
+                        for (j = 0; j < recap.toDown.length; j++) {
                             totalDamage += recap.toDown[j][2];
                         }
                         res.totalSeconds.down[i] = totalSec;
                         res.totalDamage.down[i] = totalDamage;
                     }
                     if (recap.toKill !== null) {
-                        var totalSec = (recap.toKill[0][0] - recap.toKill[recap.toKill.length - 1][0]) / 1000;
-                        var totalDamage = 0;
-                        for (var j = 0; j < recap.toKill.length; j++) {
+                        totalSec = (recap.toKill[0][0] - recap.toKill[recap.toKill.length - 1][0]) / 1000;
+                        totalDamage = 0;
+                        for (j = 0; j < recap.toKill.length; j++) {
                             totalDamage += recap.toKill[j][2];
                         }
                         res.totalSeconds.kill[i] = totalSec;
@@ -1278,8 +1286,9 @@ var compileTargetTab = function () {
                     return this.cacheCondi.get(this.phase);
                 }
                 var res = [];
+                var i;
                 if (this.targetPhaseIndex === -1) {
-                    for (var i = 0; i < this.players.length; i++) {
+                    for (i = 0; i < this.players.length; i++) {
                         res.push({
                             player: this.players[i],
                             data: {
@@ -1289,7 +1298,7 @@ var compileTargetTab = function () {
                         });
                     }
                 } else {
-                    for (var i = 0; i < this.players.length; i++) {
+                    for (i = 0; i < this.players.length; i++) {
                         res.push({
                             player: this.players[i],
                             data: this.phase.targetsCondiStats[this.targetPhaseIndex][i]
@@ -1527,6 +1536,7 @@ var compileGraphs = function () {
         },
         created: function () {
             // layout - constant during whole lifetime
+            var i,j;
             this.layout = {
                 yaxis: {
                     title: 'DPS',
@@ -1557,7 +1567,7 @@ var compileGraphs = function () {
                 annotations: []
             };
             if (this.phase.markupAreas) {
-                for (var i = 0; i < this.phase.markupAreas.length; i++) {
+                for (i = 0; i < this.phase.markupAreas.length; i++) {
                     var area = this.phase.markupAreas[i];
                     if (area.label) {
                         this.layout.annotations.push({
@@ -1590,7 +1600,7 @@ var compileGraphs = function () {
                 }
             }
             if (this.phase.markupLines) {
-                for (var i = 0; i < this.phase.markupLines.length; i++) {
+                for (i = 0; i < this.phase.markupLines.length; i++) {
                     var x = this.phase.markupLines[i];
                     this.layout.shapes.push({
                         type: 'line',
@@ -1612,8 +1622,9 @@ var compileGraphs = function () {
             // constant part of data
             // dps
             var data = this.data;
-            for (var i = 0; i < this.players.length; i++) {
-                var player = this.players[i];
+            var player;
+            for (i = 0; i < this.players.length; i++) {
+                player = this.players[i];
                 data.push({
                     y: [],
                     mode: 'lines',
@@ -1633,13 +1644,14 @@ var compileGraphs = function () {
                 name: 'All Player Dps'
             });
             // targets health
-            for (var i = 0; i < this.graph.targets.length; i++) {
+            var target;
+            for (i = 0; i < this.graph.targets.length; i++) {
                 var health = this.graph.targets[i].health;
                 var hpTexts = [];
-                for (var j = 0; j < health.length; j++) {
+                for (j = 0; j < health.length; j++) {
                     hpTexts[j] = health[j] + "%";
                 }
-                var target = this.targets[this.phase.targets[i]];
+                target = this.targets[this.phase.targets[i]];
                 data.push({
                     text: hpTexts,
                     mode: 'lines',
@@ -1654,7 +1666,7 @@ var compileGraphs = function () {
             }
             // mechanics
             var mechArray = getMechanics();
-            for (var i = 0; i < this.mechanics.length; i++) {
+            for (i = 0; i < this.mechanics.length; i++) {
                 var mech = this.mechanics[i];
                 var mechData = mechArray[i];
                 var chart = {
@@ -1671,31 +1683,32 @@ var compileGraphs = function () {
                     name: mechData.name,
                     hoverinfo: 'text'
                 };
+                var time, pts, k;
                 if (mechData.enemyMech) {
-                    for (var j = 0; j < mech.points[this.phaseid].length; j++) {
-                        var pts = mech.points[this.phaseid][j];
+                    for (j = 0; j < mech.points[this.phaseid].length; j++) {
+                        pts = mech.points[this.phaseid][j];
                         var tarId = this.phase.targets[j];
                         if (tarId >= 0) {
-                            var target = this.targets[tarId];
-                            for (var k = 0; k < pts.length; k++) {
-                                var time = pts[k];
+                            target = this.targets[tarId];
+                            for (k = 0; k < pts.length; k++) {
+                                time = pts[k];
                                 chart.x.push(time);
                                 chart.text.push(time + 's: ' + target.name);
                             }
                         } else {
-                            for (var k = 0; k < pts.length; k++) {
-                                var time = pts[k];
+                            for (k = 0; k < pts.length; k++) {
+                                time = pts[k];
                                 chart.x.push(time);
                                 chart.text.push(time + 's');
                             }
                         }
                     }
                 } else {
-                    for (var j = 0; j < mech.points[this.phaseid].length; j++) {
-                        var pts = mech.points[this.phaseid][j];
-                        var player = this.players[j];
-                        for (var k = 0; k < pts.length; k++) {
-                            var time = pts[k];
+                    for (j = 0; j < mech.points[this.phaseid].length; j++) {
+                        pts = mech.points[this.phaseid][j];
+                        player = this.players[j];
+                        for (k = 0; k < pts.length; k++) {
+                            time = pts[k];
                             chart.x.push(time);
                             chart.text.push(time + 's: ' + player.name);
                         }
