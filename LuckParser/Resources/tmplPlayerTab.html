@@ -1,5 +1,6 @@
 
-<div>
+<div>   
+    <h3 class="text-center"><img :alt="player.profession" class="icon" :src="player.icon">{{player.name}}</h3>
     <ul class="nav nav-tabs">
         <li>
             <a class="nav-link" :class="{active: mode === 0}" @click="mode = 0">
@@ -29,15 +30,18 @@
             </a>
         </li>
     </ul>
-    <dmgdist-player-component v-show="mode === 0" :player="player"
-                       :playerindex="playerindex" :phaseindex="phaseindex" :targets="targets" :phase="phase"
-                       :sortdata="sortdata.dmgdist" :datatype="datatype"></dmgdist-player-component>
-    <dmgtaken-player-component v-show="mode ===1" :player="player"
-                        :playerindex="playerindex" :phaseindex="phaseindex"
-                        :sortdata="sortdata.dmgtaken" :datatype="datatype"></dmgtaken-player-component>
-    <food-component v-show="mode === 2" :food="player.details.food"
-                    :phase="phase"></food-component>
-    <simplerotation-component v-if="mode === 3" :rotation="player.details.rotation[phaseindex]"></simplerotation-component>
-    <deathrecap-component v-if="player.details.deathRecap" v-show="mode === 4"
-                          :playerindex="playerindex" :phase="phase" :recaps="player.details.deathRecap"></deathrecap-component>
+    <keep-alive>
+            <dmgdist-player-component v-if="mode === 0" :player="player"
+                               :playerindex="playerindex" :phaseindex="phaseindex" :targets="targets" :phase="phase"
+                               :datatype="datatype"></dmgdist-player-component>
+            <dmgtaken-player-component v-if="mode ===1" :player="player"
+                                :playerindex="playerindex" :phaseindex="phaseindex"
+                                :datatype="datatype"></dmgtaken-player-component>
+            <food-component v-if="mode === 2" :food="player.details.food"
+                            :phase="phase"></food-component>
+            <simplerotation-component v-if="mode === 3" :rotation="player.details.rotation[phaseindex]"></simplerotation-component>
+            <deathrecap-component v-if="player.details.deathRecap" v-show="mode === 4"
+                                  :playerindex="playerindex" :phase="phase" :recaps="player.details.deathRecap"></deathrecap-component>
+    </keep-alive>
+    
 </div>

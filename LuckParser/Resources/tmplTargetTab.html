@@ -1,5 +1,6 @@
 
-<div>
+<div> 
+    <h3 class="text-center"><img :alt="target.name" class="icon-lg" :src="target.icon">{{target.name}}</h3>
     <ul class="nav nav-tabs">
         <li>
             <a class="nav-link" :class="{active: mode === 0}" @click="mode = 0">
@@ -14,9 +15,11 @@
             <a class="nav-link" :class="{active: mode === 2}" @click="mode = 2">Buff Status</a>
         </li>
     </ul>
-    <dmgdist-target-component v-show="mode === 0" :target="target" :focus="focus"
-                              :phaseindex="phaseindex" :sortdata="sortdata.dmgdist" :targetindex="targetindex"></dmgdist-target-component>
-    <buff-stats-target-component v-show="mode === 2" :target="target"
-                                 :targetindex="targetindex" :phase="phase" :players="players" :boons="boons"
-                                 :conditions="conditions"></buff-stats-target-component>
+    <keep-alive>
+            <dmgdist-target-component v-if="mode === 0" :target="target"
+                                      :phaseindex="phaseindex" :targetindex="targetindex"></dmgdist-target-component>
+            <buff-stats-target-component v-if="mode === 2" :target="target"
+                                         :targetindex="targetindex" :phase="phase" :players="players" :boons="boons"
+                                         :conditions="conditions"></buff-stats-target-component>
+    </keep-alive>
 </div>

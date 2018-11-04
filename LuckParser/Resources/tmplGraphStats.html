@@ -12,9 +12,10 @@
             </li>
         </ul>
     </div>
-    <div v-for="(phase, id) in phases" v-show="phase.active">
-        <dps-graph-component :players="players" :phases="phases" :targets="targets" :mechanics="graphdata.mechanics" :graph="graphdata.phases[id]"
-            :mode="mode" :phase="phase" :phaseid="id">
-        </dps-graph-component>
-    </div>
+    <keep-alive>
+            <dps-graph-component v-for="(phase, id) in phases" :key="id" v-if="phase.active" :players="players" 
+            :phases="phases" :targets="targets" :mechanics="graphdata.mechanics" :graph="graphdata.phases[id]"
+                :mode="mode" :phase="phase" :phaseid="id">
+            </dps-graph-component>
+    </keep-alive>
 </div>

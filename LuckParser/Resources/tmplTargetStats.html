@@ -7,9 +7,8 @@
             </a>
         </li>
     </ul>
-    <div v-for="(target, targetid) in targets" v-show="phase.focus === target">
-        <h3 class="text-center"><img :alt="target.name" class="icon-lg" :src="target.icon">{{target.name}}</h3>
-        <target-tab-component :focus="phase.focus" :target="target" :targetindex="targetid"
+    <keep-alive>
+        <target-tab-component  v-for="(target, targetid) in targets" :key="targetid" v-if="phase.focus === target":target="target" :targetindex="targetid"
                               :phaseindex="phaseindex" :phase="phase" :players="players" :boons="boons" :conditions="conditions"></target-tab-component>
-    </div>
+    </keep-alive>
 </div>

@@ -10,6 +10,6 @@
             </li>
         </ul>
     </div>
-    <damagedist-table-component v-if="focus === target" :dmgdist="dmgdist" :tableid="'dmgdist-target-' + targetindex"
-                                :actor="actor" :isminion="distmode>=0" :sortdata="sortdata"></damagedist-table-component>
+    <damagedist-table-component :dmgdist="dmgdist" :tableid="'dmgdist-target-' + targetindex"
+                                :actor="actor" :isminion="distmode>=0"></damagedist-table-component>
 </div>
