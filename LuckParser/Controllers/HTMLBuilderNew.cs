@@ -1542,7 +1542,7 @@ namespace LuckParser.Controllers
                     {
                         start = start / 1000.0,
                         end = end / 1000.0,
-                        label = curPhase.DrawLabel ? curPhase.Name : null,
+                        label = curPhase.Name,
                         highlight = curPhase.DrawArea
                     };
                     phaseDto.markupAreas.Add(phaseArea);

@@ -1635,21 +1635,32 @@ var compileGraphs = function () {
                 height: 1000,
                 datarevision: new Date().getTime(),
             };
+            var duration = this.phase.end - this.phase.start;
             if (this.phase.markupAreas) {
                 for (i = 0; i < this.phase.markupAreas.length; i++) {
                     var area = this.phase.markupAreas[i];
-                    if (area.label) {
-                        this.layout.annotations.push({
-                            x: (area.end + area.start) / 2,
-                            y: 1,
-                            xref: 'x',
-                            yref: 'paper',
-                            xanchor: 'center',
-                            yanchor: 'bottom',
-                            text: area.label + '<br>' + '(' + Math.round(1000 * (area.end - area.start)) / 1000 + ' s)',
-                            showarrow: false
-                        });
+                    var y = 1;
+                    var x = (area.end + area.start) / 2;
+                    if (i > 0) {
+                        var prev = this.layout.annotations[i - 1];
+                        if (prev.y === 1 && (x - prev.x) / duration < 0.2) {
+                            y = 1.06;
+                        }
                     }
+                    this.layout.annotations.push({
+                        x: x,
+                        y: y,
+                        xref: 'x',
+                        yref: 'paper',
+                        xanchor: 'center',
+                        yanchor: 'bottom',
+                        text: area.label + '<br>' + '(' + Math.round(1000 * (area.end - area.start)) / 1000 + ' s)',
+                        showarrow: false,                    
+                        bordercolor: '#c7c7c7',
+                        borderwidth: 2,
+                        bgcolor: '#555555',
+                        opacity: 0.8
+                    });
                     if (area.highlight) {
                         this.layout.shapes.push({
                             type: 'rect',
