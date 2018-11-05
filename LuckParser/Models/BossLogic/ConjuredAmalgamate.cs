@@ -209,6 +209,7 @@ namespace LuckParser.Models
                     }
                 }
             }
+            phases.RemoveAll(x => x.GetDuration() < 1000);
             return phases;
         }
 
