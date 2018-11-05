@@ -1573,7 +1573,7 @@ var compileMechanics = function () {
 
 var compileGraphs = function () {
     Vue.component("graph-stats-component", {
-        props: ["phases", "activetargets", "targets", "players", 'graphdata'],
+        props: ["phases", "activetargets", "targets", "players", 'graphdata', "phaseid"],
         template: "#tmplGraphStats",
         data: function () {
             return {

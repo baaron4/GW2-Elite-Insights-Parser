@@ -69,7 +69,7 @@
                 <support-stats-component v-if="dataType === datatypes.supTable" :phase="phaseData.phase" :players="logdata.players"></support-stats-component>
                 <defense-stats-component v-if="dataType === datatypes.defTable" :phase="phaseData.phase" :players="logdata.players"></defense-stats-component>
                 <graph-stats-component v-if="dataType === datatypes.dpsGraph" :phases="logdata.phases" :players="logdata.players"
-                    :targets="logdata.targets" :activetargets="activePhaseTargets" :graphdata="logdata.graphData"></graph-stats-component>
+                    :targets="logdata.targets" :activetargets="activePhaseTargets" :phaseid="phaseData.index" :graphdata="logdata.graphData"></graph-stats-component>
                 <buff-stats-component v-if="dataType <= datatypes.defensiveBuffTable && dataType>= datatypes.boonTable"
                     :datatypes="datatypes" :datatype="dataType" :phase="phaseData.phase" :players="logdata.players"
                     :presentboons="logdata.boons" :presentoffs="logdata.offBuffs" :presentdefs="logdata.defBuffs"></buff-stats-component>
