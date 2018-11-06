@@ -3559,12 +3559,10 @@ namespace LuckParser.Controllers
                                                         playerDropdown +
                                                     "</div>" +
                                                 "</li>");
-                                        if (_settings.BossSummary)
-                                        {
-                                            sw.Write("<li class=\"nav-item\">" +
-                                                            "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#bossSummary" + i + "\">Boss</a>" +
-                                                        "</li>");
-                                        }
+                                        sw.Write("<li class=\"nav-item\">" +
+                                                        "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#bossSummary" + i + "\">Boss</a>" +
+                                                    "</li>");
+
                                         if (_settings.EventList)
                                         {
                                             sw.Write("<li class=\"nav-item\">" +
@@ -3868,15 +3866,12 @@ namespace LuckParser.Controllers
                                             CreateMechanicTable(sw, i);
                                         }
                                         sw.Write("</div>");
-                                        //boss summary
-                                        if (_settings.BossSummary)
+                                        sw.Write("<div class=\"tab-pane fade\" id=\"bossSummary" + i + "\">");
                                         {
-                                            sw.Write("<div class=\"tab-pane fade\" id=\"bossSummary" + i + "\">");
-                                            {
-                                                CreateBossSummary(sw, i);
-                                            }
-                                            sw.Write("</div>");
+                                            CreateBossSummary(sw, i);
                                         }
+                                        sw.Write("</div>");
+
                                         //event list
                                         if (_settings.EventList && i == 0)
                                         {

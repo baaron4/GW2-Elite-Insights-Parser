@@ -43,7 +43,6 @@
             this.btnFolderSelect = new System.Windows.Forms.Button();
             this.lblCustomSaveLoc = new System.Windows.Forms.Label();
             this.chkEventListDbg = new System.Windows.Forms.CheckBox();
-            this.checkBossSummary = new System.Windows.Forms.CheckBox();
             this.chkSimpleRotationTab = new System.Windows.Forms.CheckBox();
             this.chkShowAutos = new System.Windows.Forms.CheckBox();
             this.chkLargeSkillIcons = new System.Windows.Forms.CheckBox();
@@ -70,6 +69,7 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.chkAutoAdd = new System.Windows.Forms.CheckBox();
             this.chkAutoParse = new System.Windows.Forms.CheckBox();
+            this.chkB_SkipFailedTries = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -91,7 +91,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.cmdClose = new System.Windows.Forms.Button();
-            this.chkB_SkipFailedTries = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -130,7 +129,7 @@
             this.chkUniversalBoons.AutoSize = true;
             this.chkUniversalBoons.Checked = true;
             this.chkUniversalBoons.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkUniversalBoons.Location = new System.Drawing.Point(12, 24);
+            this.chkUniversalBoons.Location = new System.Drawing.Point(6, 24);
             this.chkUniversalBoons.Name = "chkUniversalBoons";
             this.chkUniversalBoons.Size = new System.Drawing.Size(148, 17);
             this.chkUniversalBoons.TabIndex = 5;
@@ -143,7 +142,7 @@
             this.chkImpProfSpecBoons.AutoSize = true;
             this.chkImpProfSpecBoons.Checked = true;
             this.chkImpProfSpecBoons.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkImpProfSpecBoons.Location = new System.Drawing.Point(12, 48);
+            this.chkImpProfSpecBoons.Location = new System.Drawing.Point(6, 47);
             this.chkImpProfSpecBoons.Name = "chkImpProfSpecBoons";
             this.chkImpProfSpecBoons.Size = new System.Drawing.Size(188, 17);
             this.chkImpProfSpecBoons.TabIndex = 7;
@@ -154,7 +153,7 @@
             // chkAllProfSpecBoons
             // 
             this.chkAllProfSpecBoons.AutoSize = true;
-            this.chkAllProfSpecBoons.Location = new System.Drawing.Point(12, 72);
+            this.chkAllProfSpecBoons.Location = new System.Drawing.Point(6, 70);
             this.chkAllProfSpecBoons.Name = "chkAllProfSpecBoons";
             this.chkAllProfSpecBoons.Size = new System.Drawing.Size(148, 17);
             this.chkAllProfSpecBoons.TabIndex = 8;
@@ -250,19 +249,6 @@
             this.chkEventListDbg.Text = "Show Event List (for debugging)";
             this.chkEventListDbg.UseVisualStyleBackColor = true;
             this.chkEventListDbg.CheckedChanged += new System.EventHandler(this.EventListDebugCheckedChanged);
-            // 
-            // checkBossSummary
-            // 
-            this.checkBossSummary.AutoSize = true;
-            this.checkBossSummary.Checked = true;
-            this.checkBossSummary.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBossSummary.Location = new System.Drawing.Point(12, 24);
-            this.checkBossSummary.Name = "checkBossSummary";
-            this.checkBossSummary.Size = new System.Drawing.Size(120, 17);
-            this.checkBossSummary.TabIndex = 20;
-            this.checkBossSummary.Text = "Compute Boss Data";
-            this.checkBossSummary.UseVisualStyleBackColor = true;
-            this.checkBossSummary.CheckedChanged += new System.EventHandler(this.BossSummaryCheckedChanged);
             // 
             // chkSimpleRotationTab
             // 
@@ -363,7 +349,7 @@
             this.chkPhaseParsing.AutoSize = true;
             this.chkPhaseParsing.Checked = true;
             this.chkPhaseParsing.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkPhaseParsing.Location = new System.Drawing.Point(12, 48);
+            this.chkPhaseParsing.Location = new System.Drawing.Point(6, 24);
             this.chkPhaseParsing.Name = "chkPhaseParsing";
             this.chkPhaseParsing.Size = new System.Drawing.Size(91, 17);
             this.chkPhaseParsing.TabIndex = 30;
@@ -413,7 +399,7 @@
             this.chkCombatReplay.AutoSize = true;
             this.chkCombatReplay.Checked = true;
             this.chkCombatReplay.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkCombatReplay.Location = new System.Drawing.Point(12, 72);
+            this.chkCombatReplay.Location = new System.Drawing.Point(6, 47);
             this.chkCombatReplay.Name = "chkCombatReplay";
             this.chkCombatReplay.Size = new System.Drawing.Size(143, 17);
             this.chkCombatReplay.TabIndex = 40;
@@ -571,6 +557,17 @@
             this.chkAutoParse.UseVisualStyleBackColor = true;
             this.chkAutoParse.CheckedChanged += new System.EventHandler(this.ChkAutoParse_CheckedChanged);
             // 
+            // chkB_SkipFailedTries
+            // 
+            this.chkB_SkipFailedTries.AutoSize = true;
+            this.chkB_SkipFailedTries.Location = new System.Drawing.Point(24, 275);
+            this.chkB_SkipFailedTries.Name = "chkB_SkipFailedTries";
+            this.chkB_SkipFailedTries.Size = new System.Drawing.Size(141, 17);
+            this.chkB_SkipFailedTries.TabIndex = 38;
+            this.chkB_SkipFailedTries.Text = "Skip generating log if fail";
+            this.chkB_SkipFailedTries.UseVisualStyleBackColor = true;
+            this.chkB_SkipFailedTries.CheckedChanged += new System.EventHandler(this.chkB_SkipFailedTries_CheckedChanged);
+            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.chkDefaultOutputLoc);
@@ -586,14 +583,14 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.checkBossSummary);
             this.groupBox2.Controls.Add(this.chkPhaseParsing);
+            this.groupBox2.Controls.Add(this.chkCombatReplay);
             this.groupBox2.Location = new System.Drawing.Point(240, 12);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(216, 108);
             this.groupBox2.TabIndex = 36;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Boss";
+            this.groupBox2.Text = "Encounter";
             // 
             // groupBox1
             // 
@@ -698,7 +695,7 @@
             this.grpGraphs.Size = new System.Drawing.Size(216, 132);
             this.grpGraphs.TabIndex = 49;
             this.grpGraphs.TabStop = false;
-            this.grpGraphs.Text = "Damage Graphs";
+            this.grpGraphs.Text = "Damage Graphs (Legacy)";
             // 
             // groupBox6
             // 
@@ -710,19 +707,18 @@
             this.groupBox6.Size = new System.Drawing.Size(216, 108);
             this.groupBox6.TabIndex = 51;
             this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Simple Rotation Tab";
+            this.groupBox6.Text = "Simple Rotation Tab (Legacy)";
             // 
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.chkRotation);
             this.groupBox5.Controls.Add(this.chkSkillIcons);
-            this.groupBox5.Controls.Add(this.chkCombatReplay);
             this.groupBox5.Location = new System.Drawing.Point(12, 216);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(216, 108);
             this.groupBox5.TabIndex = 50;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Player Rotation";
+            this.groupBox5.Text = "Player Rotation (Legacy)";
             // 
             // tabPage3
             // 
@@ -807,17 +803,6 @@
             this.cmdClose.UseVisualStyleBackColor = true;
             this.cmdClose.Click += new System.EventHandler(this.cmdClose_Click);
             // 
-            // chkB_SkipFailedTries
-            // 
-            this.chkB_SkipFailedTries.AutoSize = true;
-            this.chkB_SkipFailedTries.Location = new System.Drawing.Point(24, 275);
-            this.chkB_SkipFailedTries.Name = "chkB_SkipFailedTries";
-            this.chkB_SkipFailedTries.Size = new System.Drawing.Size(141, 17);
-            this.chkB_SkipFailedTries.TabIndex = 38;
-            this.chkB_SkipFailedTries.Text = "Skip generating log if fail";
-            this.chkB_SkipFailedTries.UseVisualStyleBackColor = true;
-            this.chkB_SkipFailedTries.CheckedChanged += new System.EventHandler(this.chkB_SkipFailedTries_CheckedChanged);
-            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -887,7 +872,6 @@
         private System.Windows.Forms.Button btnFolderSelect;
         private System.Windows.Forms.Label lblCustomSaveLoc;
         private System.Windows.Forms.CheckBox chkEventListDbg;
-        private System.Windows.Forms.CheckBox checkBossSummary;
         private System.Windows.Forms.CheckBox chkSimpleRotationTab;
         private System.Windows.Forms.CheckBox chkShowAutos;
         private System.Windows.Forms.CheckBox chkLargeSkillIcons;

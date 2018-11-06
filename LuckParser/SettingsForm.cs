@@ -72,7 +72,6 @@ namespace LuckParser
             chkDefaultOutputLoc.Checked =Properties.Settings.Default.SaveAtOut;
             chkEventListDbg.Checked = Properties.Settings.Default.EventList ;
             txtCustomSaveLoc.Text = Properties.Settings.Default.OutLocation;
-            checkBossSummary.Checked = Properties.Settings.Default.BossSummary;
             chkShowAutos.Checked = Properties.Settings.Default.ShowAutos;
             chkShowAutos.Enabled = Properties.Settings.Default.SimpleRotation;
             chkLargeSkillIcons.Checked = Properties.Settings.Default.LargeRotIcons;
@@ -139,11 +138,6 @@ namespace LuckParser
         private void CustomSaveLocationTextChanged(object sender, EventArgs e)
         {
 
-        }
-
-        private void BossSummaryCheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.BossSummary = checkBossSummary.Checked;
         }
 
         private void SimpleRotationTabCheckedChanged(object sender, EventArgs e)
@@ -325,6 +319,11 @@ namespace LuckParser
         private void ChkAutoParse_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.AutoParse = chkAutoParse.Checked;
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }

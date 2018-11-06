@@ -12,7 +12,6 @@ namespace LuckParser.Models.DataModels
         public readonly bool PlayerRot;
         public readonly bool PlayerRotIcons;
         public readonly bool EventList;
-        public readonly bool BossSummary;
         public readonly bool SimpleRotation;
         public readonly bool ShowAutos;
         public readonly bool LargeRotIcons;
@@ -38,7 +37,6 @@ namespace LuckParser.Models.DataModels
             PlayerRot = settings.PlayerRot;
             PlayerRotIcons = settings.PlayerRotIcons;
             EventList = settings.EventList;
-            BossSummary = settings.BossSummary;
             SimpleRotation = settings.SimpleRotation;
             ShowAutos = settings.ShowAutos;
             LargeRotIcons = settings.LargeRotIcons;
