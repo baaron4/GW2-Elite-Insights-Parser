@@ -533,7 +533,7 @@ namespace LuckParser.Controllers
                 list.Add(rotEntry);
                 rotEntry[0] = (cl.Time - phase.Start) / 1000.0;
                 rotEntry[1] = cl.SkillId;
-                rotEntry[2] = cl.ActualDuration;
+                rotEntry[2] = cl.SkillId == SkillItem.DodgeId ? 750 : cl.SkillId == SkillItem.WeaponSwapId ? 100 : cl.ActualDuration;
                 rotEntry[3] = EncodeEndActivation(cl.EndActivation);
                 rotEntry[4] = cl.StartActivation == ParseEnum.Activation.Quickness ? 1 : 0;
             }
