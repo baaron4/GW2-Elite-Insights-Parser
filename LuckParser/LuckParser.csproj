@@ -307,7 +307,6 @@
     </None>
     <None Include="Resources\template-combatreplay.html" />
     <Content Include="Resources\combatreplayold.js" />
-    <Content Include="Resources\eiold.js" />
     <Content Include="Resources\ei.css" />
     <Content Include="Resources\ei.js" />
     <None Include="Resources\tmplGeneralLayout.html" />
