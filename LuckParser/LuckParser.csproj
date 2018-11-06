@@ -340,6 +340,7 @@
     <Content Include="Resources\tmplPlayerSelectCombatReplay.html" />
     <None Include="Resources\tmplPlayers.html" />
     <None Include="Resources\tmplDamageModifierTable.html" />
+    <None Include="Resources\tmplPlayerTabGraph.html" />
     <Content Include="Resources\TODO.txt" />
     <None Include="Resources\tmplPlayerCells.html" />
     <None Include="Resources\template.html" />

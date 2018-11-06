@@ -14,7 +14,7 @@
             </a>
         </li>
         <li>
-            <a class="nav-link" :class="{active: mode === 2}" @click="mode = 2">Food</a>
+            <a class="nav-link" :class="{active: mode === 2}" @click="mode = 2">Graph</a>
         </li>
         <li>
             <a class="nav-link" :class="{active: mode === 3}" @click="mode = 3">
@@ -31,10 +31,13 @@
     </ul>
     <keep-alive>
         <dmgdist-player-component v-if="mode === 0" :player="player" :playerindex="playerindex" :phaseindex="phaseindex"
-            :activetargets="activetargets" :phase="phase" :datatype="datatype"></dmgdist-player-component>
+            :activetargets="activetargets" :phase="phase"></dmgdist-player-component>
         <dmgtaken-player-component v-if="mode ===1" :player="player" :playerindex="playerindex" :phaseindex="phaseindex"
-            :datatype="datatype"></dmgtaken-player-component>
-        <food-component v-if="mode === 2" :food="player.details.food" :phase="phase"></food-component>
+        ></dmgtaken-player-component>
+        <player-graph-tab-component v-if="mode === 2" :players="players" :player="player" :playerindex="playerindex" 
+                            :phases="phases" :phase="phase" :phaseid="phaseindex"
+                            :activetargets="activetargets" :targets="targets" 
+                            :graph="graphdata.phases[phaseindex]" ></player-graph-tab-component>
         <simplerotation-component v-if="mode === 3" :rotation="player.details.rotation[phaseindex]"></simplerotation-component>
         <deathrecap-component v-if="player.details.deathRecap" v-show="mode === 4" :playerindex="playerindex" :phase="phase"
             :recaps="player.details.deathRecap"></deathrecap-component>

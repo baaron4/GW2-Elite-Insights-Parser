@@ -81,8 +81,8 @@
                     :phase="phaseData.phase" :phaseindex="phaseData.index" :presentboons="logdata.boons"
                     :presentconditions="logdata.conditions"></target-stats-component>
                 <player-stats-component v-if="dataType === datatypes.playerTab" :players="logdata.players"
-                    :activeplayer="activePlayer" :phaseindex="phaseData.index" :phase="phaseData.phase" :activetargets="activePhaseTargets"
-                    :datatype="dataType"></player-stats-component>
+                    :activeplayer="activePlayer" :phaseindex="phaseData.index" :phase="phaseData.phase" :phases="logdata.phases" 
+                    :graphdata="logdata.graphData" :targets="logdata.targets" :activetargets="activePhaseTargets"></player-stats-component>
             </keep-alive>
         </div>
     </div>

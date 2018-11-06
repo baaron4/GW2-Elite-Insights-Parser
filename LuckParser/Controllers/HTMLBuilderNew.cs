@@ -1274,6 +1274,7 @@ namespace LuckParser.Controllers
                 {"tmplTargetTab",Properties.Resources.tmplTargetTab },
                 {"tmplDPSGraph",Properties.Resources.tmplDPSGraph },
                 {"tmplGraphStats",Properties.Resources.tmplGraphStats },
+                {"tmplPlayerTabGraph",Properties.Resources.tmplPlayerTabGraph },
             };
             foreach (var entry in templates)
             {

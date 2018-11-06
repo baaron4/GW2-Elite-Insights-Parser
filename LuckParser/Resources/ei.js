@@ -1118,7 +1118,7 @@ var compilePlayerTab = function () {
     // Base stuff
     Vue.component('dmgdist-player-component', {
         props: ['player', 'playerindex', 'phase',
-            'phaseindex', 'activetargets', 'datatype'
+            'phaseindex', 'activetargets'
         ],
         template: "#tmplDamageDistPlayer",
         data: function () {
@@ -1200,7 +1200,7 @@ var compilePlayerTab = function () {
     });
 
     Vue.component('dmgtaken-player-component', {
-        props: ['player', 'playerindex', 'datatype',
+        props: ['player', 'playerindex',
             'phaseindex'
         ],
         template: "#tmplDamageTakenPlayer",
@@ -1209,6 +1209,16 @@ var compilePlayerTab = function () {
                 return this.player.details.dmgDistributionsTaken[this.phaseindex];
             }
         },
+    });
+
+    Vue.component("player-graph-tab-component", {
+        props: ["players", "playerindex", "player", "phase", "phaseindex", "phases", "activetargets", "targets", "graph"],
+        data: function() {
+            return {
+                dpsmode: 0
+            };
+        },
+        template: "#tmplPlayerTabGraph"
     });
 
     Vue.component("food-component", {
@@ -1311,7 +1321,7 @@ var compilePlayerTab = function () {
     // tab
     Vue.component('player-tab-component', {
         props: ['player', 'playerindex', 'phase',
-            'phaseindex', 'activetargets', 'datatype'
+            'phaseindex', 'activetargets', 'targets', 'phases', 'graphdata'
         ],
         template: "#tmplPlayerTab",
         data: function () {
@@ -1322,7 +1332,7 @@ var compilePlayerTab = function () {
     });
     // stats
     Vue.component("player-stats-component", {
-        props: ["players", "phaseindex", "phase", 'activetargets', 'datatype', 'activeplayer'],
+        props: ["players", "phaseindex", "phase", 'activetargets', 'activeplayer', 'targets', 'phases', 'graphdata'],
         template: "#tmplPlayerStats",
     });
 };
@@ -1643,7 +1653,7 @@ var compileGraphs = function () {
                     var x = (area.end + area.start) / 2;
                     if (i > 0) {
                         var prev = this.layout.annotations[i - 1];
-                        if (prev.y === 1 && (x - prev.x) / duration < 0.2) {
+                        if (prev.y === 1 && (x - prev.x) / duration < 0.1) {
                             y = 1.06;
                         }
                     }
