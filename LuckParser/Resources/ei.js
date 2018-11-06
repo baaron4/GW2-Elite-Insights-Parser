@@ -155,6 +155,269 @@ function getMechanics() {
     return logData.mechanics;
 }
 
+function computeRotationData(rotationData, images, data) {   
+    if (rotationData) {
+        for (var i = 0; i < rotationData.length; i++) {
+            var item = rotationData[i];
+            var x = item[0];
+            var skillId = item[1];
+            var duration = item[2] / 1000.0;
+            var endType = item[3];
+            var quick = item[4];
+            var skill = findSkill(false, skillId);
+            var aa = false;
+            var icon;
+            var name = '???';
+            if (skill) {
+                aa = skill.aa;
+                icon = skill.icon;
+                name = skill.name;
+            }
+
+            if (!aa && icon) {
+                images.push({
+                    source: icon,
+                    xref: 'x',
+                    yref: 'y',
+                    x: x,
+                    y: 0.0,
+                    sizex: 1.1,
+                    sizey: 1.1,
+                    xanchor: 'middle',
+                    yanchor: 'bottom'
+                });
+            }
+
+            var fillColor;
+            if (endType == 1) fillColor = 'rgb(40,40,220)';
+            else if (endType == 2) fillColor = 'rgb(220,40,40)';
+            else if (endType == 3) fillColor = 'rgb(40,220,40)';
+            else fillColor = 'rgb(220,220,0)';
+
+            data.push({
+                x: [duration],
+                base: x,
+                y: [1.2],
+                name: name +': ' + duration + 's',
+                orientation: 'h',
+                mode: 'markers',
+                type: 'bar',
+                width: aa ? 0.5 : 1,
+                hoverinfo: 'name',
+                hoverlabel: { namelength: '-1' },
+                marker: {
+                    color: fillColor,
+                    width: '5',
+                    line: {
+                        color: quick ? 'rgb(220,40,220)' : 'rgb(20,20,20)',
+                        width: '1'
+                    }
+                },
+                showlegend: false
+            });
+        }
+        return rotationData.length;
+    }
+    return 0;
+};
+
+function computePhaseMarkups(shapes, annotations, phase) {
+
+    var duration = phase.end - phase.start;
+    if (phase.markupAreas) {
+        for (i = 0; i < phase.markupAreas.length; i++) {
+            var area = phase.markupAreas[i];
+            var y = 1;
+            var x = (area.end + area.start) / 2;
+            if (i > 0) {
+                var prev = annotations[i - 1];
+                if (prev.y === 1 && (x - prev.x) / duration < 0.1) {
+                    y = 1.06;
+                }
+            }
+            annotations.push({
+                x: x,
+                y: y,
+                xref: 'x',
+                yref: 'paper',
+                xanchor: 'center',
+                yanchor: 'bottom',
+                text: area.label + '<br>' + '(' + Math.round(1000 * (area.end - area.start)) / 1000 + ' s)',
+                showarrow: false,                    
+                bordercolor: '#c7c7c7',
+                borderwidth: 2,
+                bgcolor: '#555555',
+                opacity: 0.8
+            });
+            if (area.highlight) {
+                shapes.push({
+                    type: 'rect',
+                    xref: 'x',
+                    yref: 'paper',
+                    x0: area.start,
+                    y0: 0,
+                    x1: area.end,
+                    y1: 1,
+                    fillcolor: '#808080',
+                    opacity: 0.125,
+                    line: {
+                        width: 0
+                    }
+                });
+            }
+        }
+    }
+    if (phase.markupLines) {
+        for (i = 0; i < phase.markupLines.length; i++) {
+            var x = phase.markupLines[i];
+            shapes.push({
+                type: 'line',
+                xref: 'x',
+                yref: 'paper',
+                x0: x,
+                y0: 0,
+                x1: x,
+                y1: 1,
+                opacity: 0.35,
+                line: {
+                    color: '#00c0ff',
+                    width: 2,
+                    dash: 'dash'
+                }
+            });
+        }
+    }
+}
+
+function computePlayerDPS(playerid, graph, playerDPS, maxDPS, allDPS, lim, phasebreaks, activetargets) {
+    var totalDamage = 0;
+    var targetDamage = 0;
+    var totalDPS = [0];
+    var cleaveDPS = [0];
+    var targetDPS = [0];
+    var dpsData = graph.players[playerid];
+
+    for (var j = 1; j < dpsData.total.length; j++) {
+        var limID = 0;
+        if (lim > 0) {
+            limID = Math.max(j - lim, 0);
+        }
+        totalDamage += dpsData.total[j] - dpsData.total[limID];
+        for (var k = 0; k < activetargets.length; k++) {
+            var targetid = activetargets[k].id;
+            targetDamage += dpsData.targets[targetid][j] - dpsData.targets[targetid][limID];
+        }
+        if (phasebreaks && phasebreaks[j - 1]) {
+            limID = j - 1;
+            totalDamage = 0;
+            targetDamage = 0;
+        }
+        totalDPS[j] = Math.round(totalDamage / (j - limID));
+        targetDPS[j] = Math.round(targetDamage / (j - limID));
+        cleaveDPS[j] = Math.round((totalDamage - targetDamage) / (j - limID));
+        allDPS.total[j] = totalDPS[j] + (allDPS.total[j] || 0);
+        allDPS.target[j] = targetDPS[j] + (allDPS.target[j] || 0);
+        allDPS.cleave[j] = cleaveDPS[j] + (allDPS.cleave[j] || 0);
+        maxDPS.total = Math.max(maxDPS.total, totalDPS[j]);
+        maxDPS.target = Math.max(maxDPS.target, targetDPS[j]);
+        maxDPS.cleave = Math.max(maxDPS.cleave, cleaveDPS[j]);
+    }
+    playerDPS.push({
+        total: totalDPS,
+        target: targetDPS,
+        cleave: cleaveDPS
+    });
+}
+
+function getActorGraphLayout(images) {
+
+    return {
+        barmode: 'stack',
+        yaxis: {
+            title: 'Rotation',
+            domain: [0, 0.09],
+            fixedrange: true,
+            showgrid: false,
+            range: [0, 2]
+        },
+        legend: {
+            traceorder: 'reversed'
+        },
+        hovermode: 'compare',
+        yaxis2: {
+            title: 'Buffs',
+            domain: [0.11, 0.50],
+            fixedrange: true
+        },
+        yaxis3: {
+            title: 'DPS',
+            domain: [0.51, 1]
+        },
+        images: images,
+        font: {
+            color: '#ffffff'
+        },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        shapes: [],
+        annotations: [],
+        autosize: false,
+        width: 1100,
+        height: 1000,
+        datarevision: new Date().getTime(),
+    };
+}
+
+function computeTargetHealthData(graph, targets, phase, data) {
+    for (i = 0; i < graph.targets.length; i++) {
+        var health = graph.targets[i].health;
+        var hpTexts = [];
+        for (j = 0; j < health.length; j++) {
+            hpTexts[j] = health[j] + "%";
+        }
+        var target = targets[phase.targets[i]];
+        data.push({
+            text: hpTexts,
+            mode: 'lines',
+            line: {
+                shape: 'spline',
+                dash: 'dashdot'
+            },
+            hoverinfo: 'text+x+name',
+            name: target.name + ' health',
+        });
+    }
+    return graph.targets.length;
+}
+
+function computeBuffData(buffData, data) {
+	if (buffData) {
+        for (var i = 0; i < buffData.length; i++) {
+            var boonItem = buffData[i];
+			var line = {
+			    x: [],
+			    y: [],
+			    yaxis: 'y2',
+			    type: 'scatter',
+			    visible: boonItem.visible ? null : 'legendonly',
+			    line: {
+			        color: boonItem.color,
+			        shape: 'hv'
+			    },
+			    fill: 'tozeroy',
+			    name: boonItem.name
+			}
+			for (var p = 0; p < boonItem.states.length; p++) {
+				line.x[p] = boonItem.states[p][0];
+				line.y[p] = boonItem.states[p][1];
+			}
+			data.push(line);
+        }
+        return buffData.length;
+    }
+    return 0;
+}
+
 var initTable = function (id, cell, order, orderCallBack) {
     var table = $(id);
     if (!table.length) {
@@ -1212,11 +1475,83 @@ var compilePlayerTab = function () {
     });
 
     Vue.component("player-graph-tab-component", {
-        props: ["players", "playerindex", "player", "phase", "phaseindex", "phases", "activetargets", "targets", "graph"],
+        props: ["playerindex", "player", "phase", "phaseindex", "activetargets", "targets", "graph"],
         data: function() {
             return {
-                dpsmode: 0
+                dpsmode: 0,
+                layout: {},
+                data: [],
+                dpsCache: new Map(),
+                dataCache: new Map(),
+                playerOffset: 0
             };
+        },
+        created: function () {
+            var images = [];
+            this.playerOffset += computeRotationData(this.player.details.rotation[this.phaseindex], images, this.data);
+            this.playerOffset += computeBuffData(this.player.details.boonGraph[this.phaseindex], this.data);
+            this.playerOffset += computeTargetHealthData(this.graph, this.targets, this.phase, this.data);
+            this.data.push({
+                y: [],
+                mode: 'lines',
+                line: {
+                    shape: 'spline',
+                    color: this.player.totalCol,
+                },
+                yaxis: 'y3',
+                showlegend: false,
+                name: this.player.name + ' Total DPS'
+            });
+            this.data.push({
+                y: [],
+                mode: 'lines',
+                line: {
+                    shape: 'spline',
+                    color: this.player.targetCol,
+                },
+                yaxis: 'y3',
+                showlegend: false,
+                name: this.player.name+ ' Target DPS'
+            });
+            this.data.push({
+                y: [],
+                mode: 'lines',
+                line: {
+                    shape: 'spline',
+                    color: this.player.cleaveCol,
+                },
+                yaxis: 'y3',
+                showlegend: false,
+                name: this.player.name+ ' Cleave DPS'
+            });
+            this.layout = getActorGraphLayout(images);
+            computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase);
+        },
+        computed: {
+            graphid: function() {
+                return "playergraph-" + this.playerindex + '-' + this.phaseindex;
+            },
+            graphname: function () {
+                var name = "DPS graph";
+                name = (this.dpsmode === 0 ? "Full " : (this.dpsmode === 1 ? "10s " : (this.dpsmode === 2 ? "30s " : "Phase "))) + name;
+                return name;
+            },
+            computePhaseBreaks: function () {
+                var res = [];
+                if (this.phase.subPhases) {
+                    for (var i = 0; i < this.phase.subPhases.length; i++) {
+                        var subPhase = this.phases[this.phase.subPhases[i]];
+                        res[Math.floor(subPhase.start - this.phase.start)] = true;
+                        res[Math.floor(subPhase.end - this.phase.start)] = true;
+                    }
+                }
+                return res;
+            },
+            computeData: function () {
+                this.layout.datarevision = new Date().getTime();
+                var res = this.data;
+                return res;
+            }
         },
         template: "#tmplPlayerTabGraph"
     });
@@ -1645,70 +1980,7 @@ var compileGraphs = function () {
                 height: 1000,
                 datarevision: new Date().getTime(),
             };
-            var duration = this.phase.end - this.phase.start;
-            if (this.phase.markupAreas) {
-                for (i = 0; i < this.phase.markupAreas.length; i++) {
-                    var area = this.phase.markupAreas[i];
-                    var y = 1;
-                    var x = (area.end + area.start) / 2;
-                    if (i > 0) {
-                        var prev = this.layout.annotations[i - 1];
-                        if (prev.y === 1 && (x - prev.x) / duration < 0.1) {
-                            y = 1.06;
-                        }
-                    }
-                    this.layout.annotations.push({
-                        x: x,
-                        y: y,
-                        xref: 'x',
-                        yref: 'paper',
-                        xanchor: 'center',
-                        yanchor: 'bottom',
-                        text: area.label + '<br>' + '(' + Math.round(1000 * (area.end - area.start)) / 1000 + ' s)',
-                        showarrow: false,                    
-                        bordercolor: '#c7c7c7',
-                        borderwidth: 2,
-                        bgcolor: '#555555',
-                        opacity: 0.8
-                    });
-                    if (area.highlight) {
-                        this.layout.shapes.push({
-                            type: 'rect',
-                            xref: 'x',
-                            yref: 'paper',
-                            x0: area.start,
-                            y0: 0,
-                            x1: area.end,
-                            y1: 1,
-                            fillcolor: '#808080',
-                            opacity: 0.125,
-                            line: {
-                                width: 0
-                            }
-                        });
-                    }
-                }
-            }
-            if (this.phase.markupLines) {
-                for (i = 0; i < this.phase.markupLines.length; i++) {
-                    var x = this.phase.markupLines[i];
-                    this.layout.shapes.push({
-                        type: 'line',
-                        xref: 'x',
-                        yref: 'paper',
-                        x0: x,
-                        y0: 0,
-                        x1: x,
-                        y1: 1,
-                        opacity: 0.35,
-                        line: {
-                            color: '#00c0ff',
-                            width: 2,
-                            dash: 'dash'
-                        }
-                    });
-                }
-            }
+            computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase);
             // constant part of data
             // dps
             var data = this.data;
@@ -1734,26 +2006,7 @@ var compileGraphs = function () {
                 name: 'All Player Dps'
             });
             // targets health
-            var target;
-            for (i = 0; i < this.graph.targets.length; i++) {
-                var health = this.graph.targets[i].health;
-                var hpTexts = [];
-                for (j = 0; j < health.length; j++) {
-                    hpTexts[j] = health[j] + "%";
-                }
-                target = this.targets[this.phase.targets[i]];
-                data.push({
-                    text: hpTexts,
-                    mode: 'lines',
-                    line: {
-                        shape: 'spline',
-                        dash: 'dashdot'
-                    },
-                    hoverinfo: 'text+x+name',
-                    name: target.name + ' health',
-                    _yaxis: 'y2'
-                });
-            }
+            computeTargetHealthData(this.graph, this.targets, this.phase, this.data)
             // mechanics
             var mechArray = getMechanics();
             for (i = 0; i < this.mechanics.length; i++) {
@@ -1853,42 +2106,7 @@ var compileGraphs = function () {
                 //var before = performance.now();
                 var playerDPS = [];
                 for (var i = 0; i < this.players.length; i++) {
-                    var totalDamage = 0;
-                    var targetDamage = 0;
-                    var totalDPS = [0];
-                    var cleaveDPS = [0];
-                    var targetDPS = [0];
-                    var dpsData = this.graph.players[i];
-                    for (var j = 1; j < dpsData.total.length; j++) {
-                        var limID = 0;
-                        if (lim > 0) {
-                            limID = Math.max(j - lim, 0);
-                        }
-                        totalDamage += dpsData.total[j] - dpsData.total[limID];
-                        for (var k = 0; k < this.activetargets.length; k++) {
-                            var targetid = this.activetargets[k].id;
-                            targetDamage += dpsData.targets[targetid][j] - dpsData.targets[targetid][limID];
-                        }
-                        if (phasebreaks && phasebreaks[j - 1]) {
-                            limID = j - 1;
-                            totalDamage = 0;
-                            targetDamage = 0;
-                        }
-                        totalDPS[j] = Math.round(totalDamage / (j - limID));
-                        targetDPS[j] = Math.round(targetDamage / (j - limID));
-                        cleaveDPS[j] = Math.round((totalDamage - targetDamage) / (j - limID));
-                        allDPS.total[j] = totalDPS[j] + (allDPS.total[j] || 0);
-                        allDPS.target[j] = targetDPS[j] + (allDPS.target[j] || 0);
-                        allDPS.cleave[j] = cleaveDPS[j] + (allDPS.cleave[j] || 0);
-                        maxDPS.total = Math.max(maxDPS.total, totalDPS[j]);
-                        maxDPS.target = Math.max(maxDPS.target, targetDPS[j]);
-                        maxDPS.cleave = Math.max(maxDPS.cleave, cleaveDPS[j]);
-                    }
-                    playerDPS.push({
-                        total: totalDPS,
-                        target: targetDPS,
-                        cleave: cleaveDPS
-                    });
+                    computePlayerDPS(i,this.graph,playerDPS, maxDPS, allDPS, lim, phasebreaks, this.activetargets);
                 }
                 //var after = performance.now();
                 //console.log("DPS Data " + (after - before));
