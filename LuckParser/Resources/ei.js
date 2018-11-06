@@ -7,37 +7,23 @@ $.extend($.fn.dataTable.defaults, {
     dom: "t"
 });
 
-// polyfill for shallow copies
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
-if (typeof Object.assign != 'function') {
-    // Must be writable: true, enumerable: false, configurable: true
-    Object.defineProperty(Object, "assign", {
-        value: function assign(target, varArgs) { // .length of function is 2
-            'use strict';
-            if (target == null) { // TypeError if undefined or null
-                throw new TypeError('Cannot convert undefined or null to object');
-            }
-
-            var to = Object(target);
-
-            for (var index = 1; index < arguments.length; index++) {
-                var nextSource = arguments[index];
-
-                if (nextSource != null) { // Skip over if undefined or null
-                    for (var nextKey in nextSource) {
-                        // Avoid bugs when hasOwnProperty is shadowed
-                        if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
-                            to[nextKey] = nextSource[nextKey];
-                        }
-                    }
-                }
-            }
-            return to;
-        },
-        writable: true,
-        configurable: true
-    });
-}
+// polyfill for string include
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes
+if ( !String.prototype.includes ) {
+    Object.defineProperty(String.prototype, "includes", {
+      value : function(search, start) {
+        if (typeof start !== 'number') {
+          start = 0;
+        } 
+  
+        if (start + search.length > this.length) {
+          return false;
+        } else {
+          return this.indexOf(search,start) !== -1;
+        }
+      }
+    })
+  }
 
 var specs = [
     "Warrior", "Berserker", "Spellbreaker", "Revenant", "Herald", "Renegade", "Guardian", "Dragonhunter", "Firebrand",
@@ -172,6 +158,10 @@ function computeRotationData(rotationData, images, data) {
                 aa = skill.aa;
                 icon = skill.icon;
                 name = skill.name;
+            }
+
+            if (!icon.includes("render")) {
+                icon = null;
             }
 
             if (!aa && icon) {
@@ -531,6 +521,10 @@ var Tab = function (name, options) {
 };
 
 var compileCommons = function () {
+    Vue.component('rotation-legend-component', {
+        template: "#tmplRotationLegend"
+    });
+
     Vue.component("graph-component", {
         props: ['id', 'layout', 'data'],
         template: '<div :id="id"></div>',

@@ -139,12 +139,14 @@ namespace LuckParser.Properties {
         ///    dom: &quot;t&quot;
         ///});
         ///
-        ///// polyfill for shallow copies
-        ///// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
-        ///if (typeof Object.assign != &apos;function&apos;) {
-        ///    // Must be writable: true, enumerable: false, configurable: true
-        ///    Object.defineProperty(Object, &quot;assign&quot;, {
-        ///        value: function assign(target, varArgs) { // [le reste de la chaîne a été tronqué]&quot;;.
+        ///// polyfill for string include
+        ///// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes
+        ///if ( !String.prototype.includes ) {
+        ///    Object.defineProperty(String.prototype, &quot;includes&quot;, {
+        ///      value : function(search, start) {
+        ///        if (typeof start !== &apos;number&apos;) {
+        ///          start = 0;
+        ///        } [le reste de la chaîne a été tronqué]&quot;;.
         /// </summary>
         internal static string ei_js {
             get {
@@ -651,8 +653,8 @@ namespace LuckParser.Properties {
         ///   Recherche une chaîne localisée semblable à &lt;div&gt;
         ///    &lt;keep-alive&gt;
         ///        &lt;player-tab-component v-for=&quot;(player, pindex) in players&quot; :key=&quot;pindex&quot; v-if=&quot;player.active &amp;&amp; !player.isConjure&quot;
-        ///            :player=&quot;player&quot; :playerindex=&quot;pindex&quot; :phase=&quot;phase&quot; :phaseindex=&quot;phaseindex&quot; :activetargets=&quot;activetargets&quot;
-        ///            :datatype=&quot;datatype&quot;&gt;&lt;/player-tab-component&gt;
+        ///            :player=&quot;player&quot; :playerindex=&quot;pindex&quot; :phase=&quot;phase&quot; 
+        ///            :phaseindex=&quot;phaseindex&quot; :phases=&quot;phases&quot; :graphdata=&quot;graphdata&quot; :targets=&quot;targets&quot; :activetargets=&quot;activetargets&quot;&gt;&lt;/player-tab-component&gt;
         ///    &lt;/keep-alive&gt;
         ///    &lt;div v-if=&quot;!activeplayer&quot;&gt;
         ///        &lt;h3 class=&quot;text-center&quot;&gt;No player selected&lt;/h3&gt;
@@ -691,12 +693,35 @@ namespace LuckParser.Properties {
         
         /// <summary>
         ///   Recherche une chaîne localisée semblable à &lt;div&gt;
-        ///    &lt;food-component :food=&quot;food&quot; :phase=&quot;phase&quot;&gt;&lt;/food-component&gt;
-        ///&lt;/div&gt;.
+        ///    &lt;food-component :food=&quot;player.details.food&quot; :phase=&quot;phase&quot;&gt;&lt;/food-component&gt;
+        ///    &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mt-5 mb-2&quot;&gt;
+        ///        &lt;li class=&quot;nav-item&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; @click=&quot;dpsmode = 0&quot; :class=&quot;{active: dpsmode === 0}&quot;&gt;Full&lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///        &lt;li v-if=&quot;phase.end - phase.start &gt; 10&quot; class=&quot;nav-item&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; @click=&quot;dpsmode = 1&quot; :class=&quot;{active: dpsmode === 1}&quot;&gt;10s&lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///        &lt;li v-if=&quot;phase [le reste de la chaîne a été tronqué]&quot;;.
         /// </summary>
         internal static string tmplPlayerTabGraph {
             get {
                 return ResourceManager.GetString("tmplPlayerTabGraph", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;div class=&quot;alert alert-light&quot;&gt;
+        ///    &lt;p&gt;&lt;u&gt;Fill&lt;/u&gt;&lt;/p&gt;
+        ///    &lt;span style=&quot;padding: 2px; background-color:#0000FF; border-style:solid; border-width: 1px; border-color:#000000; color:#FFFFFF&quot;&gt;
+        ///        Hit without aftercast
+        ///    &lt;/span&gt;
+        ///    &lt;span style=&quot;padding: 2px; background-color:#00FF00; border-style:solid; border-width: 1px; border-color:#000000; color:#000000&quot;&gt;Hit
+        ///        with full aftercast&lt;/span&gt;
+        ///    &lt;span style=&quot;padding: 2px; background-color:#FF0000; border-style:solid; border-width: 1px; border [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplRotationLegend {
+            get {
+                return ResourceManager.GetString("tmplRotationLegend", resourceCulture);
             }
         }
         
