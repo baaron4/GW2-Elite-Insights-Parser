@@ -1638,7 +1638,7 @@ var compilePlayerTab = function () {
                         totalDamage = 0;
                         for (j = 0; j < recap.toDown.length; j++) {
                             totalDamage += recap.toDown[j][2];
-                            data.x.push(recap.toDown[j][0]);
+                            data.x.push(recap.toDown[j][0]/ 1000);
                             data.y.push(recap.toDown[j][2]);
                             data.text.push(recap.toDown[j][3] +' - ' + findSkill(recap.toDown[j][4],recap.toDown[j][1]).name);
                             data.marker.color.push('rgb(0,255,0,1)');
@@ -1651,7 +1651,7 @@ var compilePlayerTab = function () {
                         totalDamage = 0;
                         for (j = 0; j < recap.toKill.length; j++) {
                             totalDamage += recap.toKill[j][2];
-                            data.x.push(recap.toKill[j][0]);
+                            data.x.push(recap.toKill[j][0]/ 1000);
                             data.y.push(recap.toKill[j][2]);
                             data.text.push(recap.toKill[j][3] +' - ' + findSkill(recap.toKill[j][4], recap.toKill[j][1]).name);
                             data.marker.color.push(recap.toDown ? 'rgb(255,0,0,1)' : 'rgb(0,255,0,1)');
