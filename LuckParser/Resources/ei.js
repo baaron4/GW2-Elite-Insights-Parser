@@ -2496,10 +2496,10 @@ window.onload = function () {
                 var players = this.logdata.players;
                 for (var i = 0; i < players.length; i++) {
                     if (players[i].active) {
-                        return true;
+                        return i;
                     }
                 }
-                return false;
+                return -1;
             },
             activePhaseTargets: function () {
                 var res = [];
