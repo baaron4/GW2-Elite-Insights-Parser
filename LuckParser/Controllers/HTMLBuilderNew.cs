@@ -585,7 +585,8 @@ namespace LuckParser.Controllers
                             dl.Time,
                             dl.SkillId,
                             dl.Damage,
-                            ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
+                            ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : "",
+                            dl.IsCondi
                         };
                         damage += dl.Damage;
                         recap.toDown.Add(item);
