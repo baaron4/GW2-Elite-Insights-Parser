@@ -591,9 +591,15 @@ namespace LuckParser.Models.ParseModels
                 }
                 ParseEnum.StateChange state = c.IsStateChange;
                 if (state == ParseEnum.StateChange.Normal)
-                {
+                {                  
                     if (c.IsActivation.IsCasting() && c.Time < agentEnd)
                     {
+                        // Missing end activation
+                        if (curCastLog != null)
+                        {
+                            curCastLog.SetEndStatus(curCastLog.ExpectedDuration, ParseEnum.Activation.Unknown);
+                            curCastLog = null;
+                        }
                         long time = c.Time - timeStart;
                         curCastLog = new CastLog(time, c.SkillID, c.Value, c.IsActivation);
                         CastLogs.Add(curCastLog);
