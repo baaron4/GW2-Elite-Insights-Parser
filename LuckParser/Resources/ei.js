@@ -358,7 +358,7 @@ function getActorGraphLayout(images) {
     };
 }
 
-function computeTargetHealthData(graph, targets, phase, data) {
+function computeTargetHealthData(graph, targets, phase, data, yaxis) {
     for (i = 0; i < graph.targets.length; i++) {
         var health = graph.targets[i].health;
         var hpTexts = [];
@@ -366,7 +366,7 @@ function computeTargetHealthData(graph, targets, phase, data) {
             hpTexts[j] = health[j] + "%";
         }
         var target = targets[phase.targets[i]];
-        data.push({
+        var res = {
             text: hpTexts,
             mode: 'lines',
             line: {
@@ -375,7 +375,11 @@ function computeTargetHealthData(graph, targets, phase, data) {
             },
             hoverinfo: 'text+x+name',
             name: target.name + ' health',
-        });
+        };
+        if (yaxis) {
+            res.yaxis = yaxis;
+        }
+        data.push(res);
     }
     return graph.targets.length;
 }
@@ -531,6 +535,8 @@ var compileCommons = function () {
         mounted: function () {
             var div = document.querySelector(this.queryID);
             Plotly.react(div, this.data, this.layout);
+            var _this = this;
+            div.on('plotly_animated', function() {Plotly.relayout(div, _this.layout);});
         },
         computed: {
             queryID: function () {
@@ -541,18 +547,16 @@ var compileCommons = function () {
             layout: {
                 handler: function () {
                     var div = document.querySelector(this.queryID);
-                    var duration = 500;
+                    var duration = 1000;
                     Plotly.animate(div, { data: this.data }, {
                         transition: {
                             duration: duration,
                             easing: 'cubic-in-out'
                         },
                         frame: {
-                            duration: duration
+                            duration: 1.5*duration
                         }
                     });
-                    var _this = this;
-                    setTimeout(function () { Plotly.relayout(div, _this.layout); }, 1.5 * duration);
                 },
                 deep: true
             }
@@ -1469,7 +1473,7 @@ var compilePlayerTab = function () {
     });
 
     Vue.component("player-graph-tab-component", {
-        props: ["playerindex", "player", "phase", "phaseindex", "activetargets", "targets", "graph"],
+        props: ["playerindex", "player", "phase", "phases", "phaseindex", "activetargets", "targets", "graph"],
         data: function() {
             return {
                 dpsmode: 0,
@@ -1484,39 +1488,36 @@ var compilePlayerTab = function () {
             var images = [];
             this.playerOffset += computeRotationData(this.player.details.rotation[this.phaseindex], images, this.data);
             this.playerOffset += computeBuffData(this.player.details.boonGraph[this.phaseindex], this.data);
-            this.playerOffset += computeTargetHealthData(this.graph, this.targets, this.phase, this.data);
+            this.playerOffset += computeTargetHealthData(this.graph, this.targets, this.phase, this.data, 'y3');
             this.data.push({
                 y: [],
                 mode: 'lines',
                 line: {
                     shape: 'spline',
-                    color: this.player.totalCol,
+                    color: this.player.colTotal,
                 },
                 yaxis: 'y3',
-                showlegend: false,
-                name: this.player.name + ' Total DPS'
+                name: 'Total DPS'
             });
             this.data.push({
                 y: [],
                 mode: 'lines',
                 line: {
                     shape: 'spline',
-                    color: this.player.targetCol,
+                    color: this.player.colTarget,
                 },
                 yaxis: 'y3',
-                showlegend: false,
-                name: this.player.name+ ' Target DPS'
+                name: 'Target DPS'
             });
             this.data.push({
                 y: [],
                 mode: 'lines',
                 line: {
                     shape: 'spline',
-                    color: this.player.cleaveCol,
+                    color: this.player.colCleave,
                 },
                 yaxis: 'y3',
-                showlegend: false,
-                name: this.player.name+ ' Cleave DPS'
+                name: 'Cleave DPS'
             });
             this.layout = getActorGraphLayout(images);
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase);
@@ -1544,8 +1545,82 @@ var compilePlayerTab = function () {
             computeData: function () {
                 this.layout.datarevision = new Date().getTime();
                 var res = this.data;
+                var data = this.computeDPSRelatedData();
+                this.data[this.playerOffset].y = data[0];
+                this.data[this.playerOffset + 1].y = data[1];
+                this.data[this.playerOffset + 2].y = data[2];
+                var offset = 3;
+                for (var i = this.playerOffset - this.graph.targets.length; i < this.playerOffset; i++) {
+                    this.data[i].y = data[offset++];
+                }
                 return res;
             }
+        },
+        methods: {
+            computeDPSData: function () {
+                var cacheID = this.dpsmode + '-';
+                var targetsID = 1;
+                for (var i = 0; i < this.activetargets.length; i++) {
+                    var target = this.activetargets[i];
+                    targetsID = targetsID << (target.id + 1);
+                }
+                cacheID += targetsID;
+                if (this.dpsCache.has(cacheID)) {
+                    return this.dpsCache.get(cacheID);
+                }
+                var maxDPS = {
+                    total: 0,
+                    target: 0,
+                    cleave: 0
+                };
+                var allDPS = {
+                    total: [0],
+                    target: [0],
+                    cleave: [0]
+                };
+                //var before = performance.now();
+                var playerDPS = [];
+                if (this.dpsmode < 3) {
+                    var lim = (this.dpsmode === 0 ? 0 : (this.dpsmode === 1 ? 10 : 30));
+                    computePlayerDPS(this.playerindex, this.graph, playerDPS, maxDPS, allDPS, lim, null,this.activetargets);
+                } else {
+                    computePlayerDPS(this.playerindex, this.graph, playerDPS, maxDPS, allDPS,0, this.computePhaseBreaks,this.activetargets);
+                }
+                var res = {
+                    maxDPS: maxDPS.total,
+                    playerDPS : playerDPS[0]
+                };
+                this.dpsCache.set(cacheID, res);
+                return res;
+            },
+            computeDPSRelatedData: function() {
+                var cacheID = this.dpsmode + '-';
+                var targetsID = 1;
+                for (var i = 0; i < this.activetargets.length; i++) {
+                    var target = this.activetargets[i];
+                    targetsID = targetsID << (target.id + 1);
+                }
+                cacheID += targetsID;
+                if (this.dataCache.has(cacheID)) {
+                    return this.dataCache.get(cacheID);
+                }
+                var offset = 0;
+                var dpsData = this.computeDPSData();
+                var res = [];
+                res[offset++] = dpsData.playerDPS.total;
+                res[offset++] = dpsData.playerDPS.target;
+                res[offset++] = dpsData.playerDPS.cleave;
+                for (i = 0; i < this.graph.targets.length; i++) {
+                    var health = this.graph.targets[i].health;
+                    var hpPoints = [];
+                    for (j = 0; j < health.length; j++) {
+                        hpPoints[j] = health[j] * dpsData.maxDPS / 100.0;
+                    }
+                    res[offset++] = hpPoints;
+                }
+                this.dataCache.set(cacheID, res);
+                return res;
+            },
         },
         template: "#tmplPlayerTabGraph"
     });
