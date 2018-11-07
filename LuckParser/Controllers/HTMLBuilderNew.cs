@@ -577,7 +577,7 @@ namespace LuckParser.Controllers
                     List<DamageLog> damageToDown = damageLogs.Where(x => x.Time < down.Time - start && x.Damage > 0 && x.Time > lastTime - start).ToList();
                     recap.toDown = damageToDown.Count > 0 ? new List<object[]>() : null;
                     int damage = 0;
-                    for (int i = damageToDown.Count - 1; i > 0; i--)
+                    for (int i = damageToDown.Count - 1; i >= 0; i--)
                     {
                         DamageLog dl = damageToDown[i];
                         AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);
@@ -597,7 +597,7 @@ namespace LuckParser.Controllers
                     }
                     List<DamageLog> damageToKill = damageLogs.Where(x => x.Time > down.Time - start && x.Time < dead.Time - start && x.Damage > 0 && x.Time > lastTime - start).ToList();
                     recap.toKill = damageToKill.Count > 0 ? new List<object[]>() : null;
-                    for (int i = damageToKill.Count - 1; i > 0; i--)
+                    for (int i = damageToKill.Count - 1; i >= 0; i--)
                     {
                         DamageLog dl = damageToKill[i];
                         AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);
@@ -616,7 +616,7 @@ namespace LuckParser.Controllers
                     List<DamageLog> damageToKill = damageLogs.Where(x => x.Time < dead.Time - start && x.Damage > 0 && x.Time > lastTime - start).ToList();
                     recap.toKill = damageToKill.Count > 0 ? new List<object[]>() : null;
                     int damage = 0;
-                    for (int i = damageToKill.Count - 1; i > 0; i--)
+                    for (int i = damageToKill.Count - 1; i >= 0; i--)
                     {
                         DamageLog dl = damageToKill[i];
                         AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);

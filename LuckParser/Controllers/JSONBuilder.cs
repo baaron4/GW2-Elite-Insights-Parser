@@ -261,7 +261,7 @@ namespace LuckParser.Controllers
                     List<DamageLog> damageToDown = damageLogs.Where(x => x.Time < downed.Time - start && x.Damage > 0 && x.Time > lastTime - start).ToList();
                     recap.ToDown = damageToDown.Count > 0 ? new List<JsonDeathRecap.DamageItem>() : null;
                     int damage = 0;
-                    for (int i = damageToDown.Count - 1; i > 0; i--)
+                    for (int i = damageToDown.Count - 1; i >= 0; i--)
                     {
                         DamageLog dl = damageToDown[i];
                         AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);
@@ -282,7 +282,7 @@ namespace LuckParser.Controllers
                     }
                     List<DamageLog> damageToKill = damageLogs.Where(x => x.Time > downed.Time - start && x.Time < dead.Time - start && x.Damage > 0 && x.Time > lastTime - start).ToList();
                     recap.ToKill = damageToKill.Count > 0 ? new List<JsonDeathRecap.DamageItem>() : null;
-                    for (int i = damageToKill.Count - 1; i > 0; i--)
+                    for (int i = damageToKill.Count - 1; i >= 0; i--)
                     {
                         DamageLog dl = damageToKill[i];
                         AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);
@@ -303,7 +303,7 @@ namespace LuckParser.Controllers
                     List<DamageLog> damageToKill = damageLogs.Where(x => x.Time < dead.Time - start && x.Damage > 0 && x.Time > lastTime - start).ToList();
                     recap.ToKill = damageToKill.Count >0 ? new List<JsonDeathRecap.DamageItem>() : null;
                     int damage = 0;
-                    for (int i = damageToKill.Count - 1; i > 0; i--)
+                    for (int i = damageToKill.Count - 1; i >= 0; i--)
                     {
                         DamageLog dl = damageToKill[i];
                         AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);
