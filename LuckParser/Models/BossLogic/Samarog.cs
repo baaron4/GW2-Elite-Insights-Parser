@@ -246,6 +246,7 @@ namespace LuckParser.Models
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
+            OverrideMaxHealths(log);
             return (target.Health > 30e6) ? 1 : 0;
         }
     }

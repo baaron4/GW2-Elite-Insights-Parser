@@ -14,8 +14,8 @@ namespace LuckParser.Models
 
         private CombatReplayMap _map;
         public readonly List<Mechanic> MechanicList = new List<Mechanic> {
-            new Mechanic(-2, "Dead", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'x',color:'rgb(0,0,0)'", "Dead",0),
-            new Mechanic(-3, "Downed", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'cross',color:'rgb(255,0,0)'", "Downed",0),
+            new Mechanic(SkillItem.DeathId, "Dead", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'x',color:'rgb(0,0,0)'", "Dead",0),
+            new Mechanic(SkillItem.DownId, "Downed", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'cross',color:'rgb(255,0,0)'", "Downed",0),
             new Mechanic(SkillItem.ResurrectId, "Resurrect", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'cross-open',color:'rgb(0,255,255)'", "Res",0)}; //Resurrects (start), Resurrect
         public ParseMode Mode { get; protected set; } = ParseMode.Unknown;
         public bool CanCombatReplay { get; set; } = false;
@@ -124,6 +124,22 @@ namespace LuckParser.Models
                 {
                     boss.Health = health;
                     break;
+                }
+            }
+        }
+
+        protected void OverrideMaxHealths(ParsedLog log)
+        {
+            List<CombatItem> maxHUs = log.CombatData.GetStatesData(ParseEnum.StateChange.MaxHealthUpdate);
+            if (maxHUs.Count > 0)
+            {
+                foreach (Boss tar in Targets)
+                {
+                    List<CombatItem> subList = maxHUs.Where(x => x.SrcInstid == tar.InstID && x.Time >= tar.FirstAware && x.Time <= tar.LastAware).ToList();
+                    if (subList.Count > 0)
+                    {
+                        tar.Health = subList.Max(x => (int)x.DstAgent);
+                    }
                 }
             }
         }
@@ -250,10 +266,10 @@ namespace LuckParser.Models
                             List<CombatItem> cList = new List<CombatItem>();
                             switch (mech.SkillId)
                             {
-                                case -2:
+                                case SkillItem.DeathId:
                                     cList = combatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDead, start, end);
                                     break;
-                                case -3:
+                                case SkillItem.DownId:
                                     cList = combatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDown, start, end);
                                     break;
                                 case SkillItem.ResurrectId:

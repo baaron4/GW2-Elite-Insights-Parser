@@ -13,7 +13,7 @@ namespace LuckParser.Models
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(34479, "Tantrum", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'circle-open',color:'rgb(255,200,0)'", "Tntrm","Tantrum (Triple Circles after Ground slamming)", "Tantrum",0), 
+            new Mechanic(34479, "Tantrum", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'circle-open',color:'rgb(255,200,0)'", "Tntrm","Tantrum (Triple Circles after Ground slamming)", "Tantrum",5000), 
             new Mechanic(34387, "Volatile Poison", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'circle',color:'rgb(255,0,0)'", "Psn","Volatile Poison Application (Special Action Key)", "Poison (Action Key)",0),
             new Mechanic(34481, "Volatile Poison", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'circle-open',color:'rgb(255,0,0)'", "P.dmg","Stood in Volatile Poison", "Poison dmg",0),
             new Mechanic(34516, "Halitosis", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'triangle-right-open',color:'rgb(255,140,0)'", "FlmBrth","Halitosis (Flame Breath)", "Flame Breath",0),

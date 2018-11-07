@@ -600,11 +600,11 @@ function createPlayerFood($element, player, phaseIndex, playerIndex) {
 			} else {
 				initHtml += ' and ';
 			}
-			initHtml += item.name + ' <img src="' + item.icon + '" class="icon">';
+            initHtml += item.name + ' <img src="' + item.icon + '" class="icon">' + (item.stack > 1 ? ' (' + item.stack + ')' : '');
 		} else {
 			var $li = $('<li></li>');
 			var text = item.dimished ? 'suffered ' : 'consumed ';
-			text += item.name + ' <img src="' + item.icon + '" class="icon"> at ' + item.time + 's (' + item.duration + ' seconds)';
+            text += item.name + ' <img src="' + item.icon + '" class="icon">' + (item.stack > 1 ? ' (' + item.stack + ')' : '')+ ' at ' + item.time + 's (' + item.duration + ' seconds)';
 			$li.html(text);
 			updates.push($li);
 		}

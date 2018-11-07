@@ -140,26 +140,15 @@ namespace LuckParser.Models.ParseModels
                 CombatReplay.PollingRate(pollingRate, log.FightData.FightDuration, forceInterpolate);
                 if (trim)
                 {
-                    CombatItem spawnCheck = log.CombatData.GetStates(InstID, ParseEnum.StateChange.Spawn, FirstAware, LastAware).LastOrDefault();
-                    if (spawnCheck != null)
+                    CombatItem despawnCheck = log.CombatData.AllCombatItems.FirstOrDefault(x => x.SrcAgent == AgentItem.Agent && (x.IsStateChange.IsDead() || x.IsStateChange.IsDespawn()));
+                    if (despawnCheck != null)
                     {
-                        CombatItem despawnCheck = log.CombatData.AllCombatItems.FirstOrDefault(x => x.SrcAgent == AgentItem.Agent && (x.IsStateChange.IsDead() || x.IsStateChange.IsDespawn()) && x.Time > spawnCheck.Time);
-                        if (despawnCheck != null)
-                        {
-                            CombatReplay.Trim(AgentItem.FirstAware - log.FightData.FightStart, despawnCheck.Time - log.FightData.FightStart);
-                            return;
-                        }
+                        CombatReplay.Trim(AgentItem.FirstAware - log.FightData.FightStart, despawnCheck.Time - log.FightData.FightStart);
                     }
                     else
                     {
-                        CombatItem despawnCheck = log.CombatData.AllCombatItems.FirstOrDefault(x => x.SrcAgent == AgentItem.Agent && (x.IsStateChange.IsDead() || x.IsStateChange.IsDespawn()));
-                        if (despawnCheck != null)
-                        {
-                            CombatReplay.Trim(AgentItem.FirstAware - log.FightData.FightStart, despawnCheck.Time - log.FightData.FightStart);
-                            return;
-                        }
+                        CombatReplay.Trim(AgentItem.FirstAware - log.FightData.FightStart, AgentItem.LastAware - log.FightData.FightStart);
                     }
-                    CombatReplay.Trim(AgentItem.FirstAware - log.FightData.FightStart, AgentItem.LastAware - log.FightData.FightStart);
                 }
                 //SetAdditionalCombatReplayData(log);
             }
@@ -537,8 +526,8 @@ namespace LuckParser.Models.ParseModels
                     
                 }
             }
-            _boonPoints[-2] = boonPresenceGraph;
-            _boonPoints[-3] = condiPresenceGraph;
+            _boonPoints[Boon.NumberOfBoonsID] = boonPresenceGraph;
+            _boonPoints[Boon.NumberOfConditionsID] = condiPresenceGraph;
         }
         private void SetMinions(ParsedLog log)
         {
