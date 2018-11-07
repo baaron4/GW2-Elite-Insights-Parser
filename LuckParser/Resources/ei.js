@@ -22,7 +22,7 @@ if ( !String.prototype.includes ) {
           return this.indexOf(search,start) !== -1;
         }
       }
-    })
+    });
   }
 
 var specs = [
@@ -209,7 +209,7 @@ function computeRotationData(rotationData, images, data) {
         return rotationData.length;
     }
     return 0;
-};
+}
 
 function computePhaseMarkups(shapes, annotations, phase) {
 
@@ -400,7 +400,7 @@ function computeBuffData(buffData, data) {
 			    },
 			    fill: 'tozeroy',
 			    name: boonItem.name
-			}
+			};
 			for (var p = 0; p < boonItem.states.length; p++) {
 				line.x[p] = boonItem.states[p][0];
 				line.y[p] = boonItem.states[p][1];
@@ -1684,6 +1684,9 @@ var compilePlayerTab = function () {
         template: "#tmplDeathRecap",
         computed: {
             data: function () {
+                if (!this.recaps) {
+                    return null;
+                }
                 var res = {
                     totalSeconds: {
                         down: [],
@@ -1707,11 +1710,11 @@ var compilePlayerTab = function () {
                             color: []
                         }
                     };
-                    var j, totalSec, totalDamage;
+                    var j, totalSec, totalDamage;        
                     if (recap.toDown !== null) {
                         totalSec = (recap.toDown[0][0] - recap.toDown[recap.toDown.length - 1][0]) / 1000;
                         totalDamage = 0;
-                        for (j = 0; j < recap.toDown.length; j++) {
+                        for (j = recap.toDown.length - 1; j >= 0 ; j--) {
                             totalDamage += recap.toDown[j][2];
                             data.x.push(recap.toDown[j][0]/ 1000);
                             data.y.push(recap.toDown[j][2]);
@@ -1720,11 +1723,11 @@ var compilePlayerTab = function () {
                         }
                         res.totalSeconds.down[i] = totalSec;
                         res.totalDamage.down[i] = totalDamage;
-                    }
+                    }        
                     if (recap.toKill !== null) {
                         totalSec = (recap.toKill[0][0] - recap.toKill[recap.toKill.length - 1][0]) / 1000;
                         totalDamage = 0;
-                        for (j = 0; j < recap.toKill.length; j++) {
+                        for (j = recap.toKill.length - 1; j >= 0 ; j--) {
                             totalDamage += recap.toKill[j][2];
                             data.x.push(recap.toKill[j][0]/ 1000);
                             data.y.push(recap.toKill[j][2]);
@@ -1755,25 +1758,38 @@ var compilePlayerTab = function () {
                     }
                 };
                 return res;
+            },
+            phaseRecaps: function() {
+                if (!this.recaps) {
+                    return null;
+                }
+                var res = [];
+                for (var i = 0; i < this.recaps.length; i++) {
+                    var time = this.recaps[i].time / 1000.0;
+                    if (this.phase.start <= time && this.phase.end >= time) {
+                        res.push(i);
+                    }
+                }
+                return res;
             }
         }
     });
     // tab
     Vue.component('player-tab-component', {
-        props: ['player', 'playerindex', 'phase',
+        props: ['player', 'playerindex', 'phase', 'tabmode', 
             'phaseindex', 'activetargets', 'targets', 'phases', 'graphdata'
         ],
         template: "#tmplPlayerTab",
-        data: function () {
-            return {
-                mode: 0
-            };
-        },
     });
     // stats
     Vue.component("player-stats-component", {
         props: ["players", "phaseindex", "phase", 'activetargets', 'activeplayer', 'targets', 'phases', 'graphdata'],
         template: "#tmplPlayerStats",
+        data: function () {
+            return {
+                tabmode: 0
+            };
+        },
     });
 };
 
@@ -2111,7 +2127,7 @@ var compileGraphs = function () {
                 name: 'All Player Dps'
             });
             // targets health
-            computeTargetHealthData(this.graph, this.targets, this.phase, this.data)
+            computeTargetHealthData(this.graph, this.targets, this.phase, this.data);
             // mechanics
             var mechArray = getMechanics();
             for (i = 0; i < this.mechanics.length; i++) {
