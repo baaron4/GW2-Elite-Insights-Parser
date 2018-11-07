@@ -9,6 +9,7 @@ namespace LuckParser.Models.ParseModels
         public String PoV { get; private set; } = "N/A";
         public String LogStart { get; private set; } = "yyyy-MM-dd HH:mm:ss z";
         public String LogEnd { get; private set; } = "yyyy-MM-dd HH:mm:ss z";
+        public long EncounterLength { get; set; } = 0;
         public bool Success { get; set; }
        // private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 
