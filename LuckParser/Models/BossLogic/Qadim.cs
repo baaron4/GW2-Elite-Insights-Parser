@@ -99,10 +99,10 @@ namespace LuckParser.Models
             {
                 return phases;
             }
-            List<long> moltenArmor = GetFilteredList(log, 52329, qadim).Select(x => x.Time - log.FightData.FightStart).Distinct().ToList();
-            for (int i = 1; i < moltenArmor.Count; i++)
+            List<long> moltenArmor = GetFilteredList(log, 52329, qadim, false).Select(x => x.Time - log.FightData.FightStart).Distinct().ToList();
+            for (int i = 0; i < moltenArmor.Count; i++)
             {
-                if (i % 2 == 0)
+                if (i % 2 == 1)
                 {
                     end = Math.Min(moltenArmor[i], log.FightData.FightDuration);
                     phases.Add(new PhaseData(start, end));
@@ -126,6 +126,9 @@ namespace LuckParser.Models
             {
                 PhaseData phase = phases[i];
                 phase.Name = names[i - 1];
+                phase.DrawArea = true;
+                phase.DrawEnd = true;
+                phase.DrawStart = true;
                 switch (i)
                 {
                     case 2:
@@ -147,9 +150,6 @@ namespace LuckParser.Models
                            (ushort) ApocalypseBringer
                         };
                         AddTargetsToPhase(phase, ids, log);
-                        phase.DrawArea = true;
-                        phase.DrawEnd = true;
-                        phase.DrawStart = true;
                         break;
                 }
             }
