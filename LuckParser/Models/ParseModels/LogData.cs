@@ -5,34 +5,21 @@ namespace LuckParser.Models.ParseModels
     public class LogData
     {
         // Fields
-        public readonly String BuildVersion;
-        public String PoV { get; private set; } = "N/A";
-        public String LogStart { get; private set; } = "yyyy-MM-dd HH:mm:ss z";
-        public String LogEnd { get; private set; } = "yyyy-MM-dd HH:mm:ss z";
-        public long EncounterLength { get; set; } = 0;
-        public bool Success { get; set; }
+        public readonly string BuildVersion;
+        public string PoV { get; private set; } = "N/A";
+        public string LogStart { get; private set; } = "yyyy-MM-dd HH:mm:ss z";
+        public string LogEnd { get; private set; } = "yyyy-MM-dd HH:mm:ss z";
        // private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 
         // Constructors
-        public LogData(String buildVersion)
+        public LogData(string buildVersion)
         {
             BuildVersion = buildVersion;
            // this.sdf.setTimeZone(TimeZone.getDefault());
         }
-
-        // Public Methods
-        public String[] ToStringArray()
-        {
-            String[] array = new String[4];
-            array[0] = BuildVersion;
-            array[1] = PoV;
-            array[2] = LogStart;
-            array[3] = LogEnd;
-            return array;
-        }
         
         // Setters
-        public void SetPOV(String pov)
+        public void SetPOV(string pov)
         {
             PoV = pov.Substring(0, pov.LastIndexOf('\0'));
         }
