@@ -235,7 +235,7 @@ namespace LuckParser.Models
             CombatItem killed = log.CombatData.GetStatesData(ParseEnum.StateChange.ChangeDead).LastOrDefault(x => x.SrcInstid == mainTarget.InstID);
             if (killed != null)
             {
-                log.LogData.Success = true;
+                log.FightData.Success = true;
                 log.FightData.FightEnd = killed.Time;
             }
         }

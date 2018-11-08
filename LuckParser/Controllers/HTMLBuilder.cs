@@ -3445,7 +3445,7 @@ namespace LuckParser.Controllers
                                                 {
                                                     sw.Write("<div class=\"progress\" style=\"width: 100 %; height: 20px;\">");
                                                     {
-                                                        if (_log.LogData.Success)
+                                                        if (_log.FightData.Success)
                                                         {
                                                             string tp = _log.Boss.Health.ToString() + " Health";
                                                             sw.Write("<div class=\"progress-bar bg-success\" data-toggle=\"tooltip\" title=\"" + tp + "\" role=\"progressbar\" style=\"width:100%; ;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>");
@@ -3466,7 +3466,7 @@ namespace LuckParser.Controllers
                                                     }
                                                     sw.Write("</div>");
                                                     sw.Write("<p class=\"small\" style=\"text-align:center; color: "+ (_settings.LightTheme ? "#000" : "#FFF") +";\">" + _log.Boss.Health.ToString() + " Health</p>");
-                                                    sw.Write(_log.LogData.Success ? "<p class='text text-success'> Result: Success</p>" : "<p class='text text-warning'> Result: Fail</p>");
+                                                    sw.Write(_log.FightData.Success ? "<p class='text text-success'> Result: Success</p>" : "<p class='text text-warning'> Result: Fail</p>");
                                                     sw.Write("<p>Duration: " + durationString + " </p> ");
                                                 }
                                                 sw.Write("</div>");
