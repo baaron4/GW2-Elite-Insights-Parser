@@ -84,7 +84,7 @@ namespace LuckParser.Models
                 HashSet<ushort> pIds = new HashSet<ushort>(log.PlayerList.Select(x => x.InstID));
                 CombatItem lastPlayerExit = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => pIds.Contains(x.SrcInstid)).LastOrDefault();
                 CombatItem lastBossExit = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).LastOrDefault(x => x.SrcInstid == mainTarget.InstID);
-                log.LogData.Success = lastPlayerExit != null && lastBossExit != null && lastPlayerExit.Time - lastBossExit.Time > delay ? true : false;
+                log.FightData.Success = lastPlayerExit != null && lastBossExit != null && lastPlayerExit.Time - lastBossExit.Time > delay ? true : false;
                 log.FightData.FightEnd = lastDamageTaken.Time;
             }
         }
@@ -103,7 +103,7 @@ namespace LuckParser.Models
             {
                 if (reward != null && lastDamageTaken.Time - reward.Time < 100)
                 {
-                    log.LogData.Success = true;
+                    log.FightData.Success = true;
                     log.FightData.FightEnd = reward.Time;
                 }
                 else

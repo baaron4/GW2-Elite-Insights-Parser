@@ -112,13 +112,13 @@ namespace LuckParser.Models
             {
                 if (reward != null && lastDamageTaken.Time - reward.Time < 100)
                 {
-                    log.LogData.Success = true;
+                    log.FightData.Success = true;
                     log.FightData.FightEnd = Math.Min(lastDamageTaken.Time, reward.Time);
                 }
                 else
                 {
                     SetSuccessByDeath(log);
-                    if (log.LogData.Success)
+                    if (log.FightData.Success)
                     {
                         log.FightData.FightEnd = Math.Min(log.FightData.FightEnd, lastDamageTaken.Time);
                     }
