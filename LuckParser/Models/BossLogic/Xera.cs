@@ -110,10 +110,10 @@ namespace LuckParser.Models
                 if (NPC.ID == 16286)
                 {
                     boss.Health = 24085950;
-                    CombatItem enterCombat2 = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.EnterCombat && x.SrcInstid == NPC.InstID && x.Time <= NPC.FirstAware && x.Time >= NPC.LastAware);
-                    if (enterCombat2 != null)
+                    CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position && x.SrcInstid == NPC.InstID && x.Time >= NPC.FirstAware + 500 && x.Time <= NPC.LastAware);
+                    if (move != null)
                     {
-                        fightData.PhaseData.Add(enterCombat2.Time);
+                        fightData.PhaseData.Add(move.Time);
                     } else
                     {
                         fightData.PhaseData.Add(NPC.FirstAware);
