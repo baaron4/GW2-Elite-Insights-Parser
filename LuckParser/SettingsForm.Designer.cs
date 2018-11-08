@@ -91,6 +91,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.cmdClose = new System.Windows.Forms.Button();
+            this.chkAddPoVProf = new System.Windows.Forms.CheckBox();
+            this.chkAddDuration = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -386,7 +388,7 @@
             // chkOneAtATime
             // 
             this.chkOneAtATime.AutoSize = true;
-            this.chkOneAtATime.Location = new System.Drawing.Point(24, 252);
+            this.chkOneAtATime.Location = new System.Drawing.Point(24, 263);
             this.chkOneAtATime.Name = "chkOneAtATime";
             this.chkOneAtATime.Size = new System.Drawing.Size(287, 17);
             this.chkOneAtATime.TabIndex = 29;
@@ -538,7 +540,7 @@
             // chkAutoAdd
             // 
             this.chkAutoAdd.AutoSize = true;
-            this.chkAutoAdd.Location = new System.Drawing.Point(24, 300);
+            this.chkAutoAdd.Location = new System.Drawing.Point(24, 311);
             this.chkAutoAdd.Name = "chkAutoAdd";
             this.chkAutoAdd.Size = new System.Drawing.Size(154, 17);
             this.chkAutoAdd.TabIndex = 40;
@@ -549,7 +551,7 @@
             // chkAutoParse
             // 
             this.chkAutoParse.AutoSize = true;
-            this.chkAutoParse.Location = new System.Drawing.Point(24, 324);
+            this.chkAutoParse.Location = new System.Drawing.Point(24, 335);
             this.chkAutoParse.Name = "chkAutoParse";
             this.chkAutoParse.Size = new System.Drawing.Size(171, 17);
             this.chkAutoParse.TabIndex = 39;
@@ -560,7 +562,7 @@
             // chkB_SkipFailedTries
             // 
             this.chkB_SkipFailedTries.AutoSize = true;
-            this.chkB_SkipFailedTries.Location = new System.Drawing.Point(24, 275);
+            this.chkB_SkipFailedTries.Location = new System.Drawing.Point(24, 287);
             this.chkB_SkipFailedTries.Name = "chkB_SkipFailedTries";
             this.chkB_SkipFailedTries.Size = new System.Drawing.Size(141, 17);
             this.chkB_SkipFailedTries.TabIndex = 38;
@@ -570,13 +572,15 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.chkAddDuration);
+            this.groupBox3.Controls.Add(this.chkAddPoVProf);
             this.groupBox3.Controls.Add(this.chkDefaultOutputLoc);
             this.groupBox3.Controls.Add(this.btnFolderSelect);
             this.groupBox3.Controls.Add(this.txtCustomSaveLoc);
             this.groupBox3.Controls.Add(this.lblCustomSaveLoc);
             this.groupBox3.Location = new System.Drawing.Point(12, 132);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(444, 108);
+            this.groupBox3.Size = new System.Drawing.Size(444, 123);
             this.groupBox3.TabIndex = 37;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Output";
@@ -803,6 +807,28 @@
             this.cmdClose.UseVisualStyleBackColor = true;
             this.cmdClose.Click += new System.EventHandler(this.cmdClose_Click);
             // 
+            // chkAddPoVProf
+            // 
+            this.chkAddPoVProf.AutoSize = true;
+            this.chkAddPoVProf.Location = new System.Drawing.Point(12, 98);
+            this.chkAddPoVProf.Name = "chkAddPoVProf";
+            this.chkAddPoVProf.Size = new System.Drawing.Size(176, 17);
+            this.chkAddPoVProf.TabIndex = 18;
+            this.chkAddPoVProf.Text = "Add PoV profession to file name";
+            this.chkAddPoVProf.UseVisualStyleBackColor = true;
+            this.chkAddPoVProf.CheckedChanged += new System.EventHandler(this.chkAddPoVProf_CheckedChanged);
+            // 
+            // chkAddDuration
+            // 
+            this.chkAddDuration.AutoSize = true;
+            this.chkAddDuration.Location = new System.Drawing.Point(240, 98);
+            this.chkAddDuration.Name = "chkAddDuration";
+            this.chkAddDuration.Size = new System.Drawing.Size(194, 17);
+            this.chkAddDuration.TabIndex = 19;
+            this.chkAddDuration.Text = "Add encounter duration to file name";
+            this.chkAddDuration.UseVisualStyleBackColor = true;
+            this.chkAddDuration.CheckedChanged += new System.EventHandler(this.chkAddDuration_CheckedChanged);
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -920,5 +946,7 @@
         private System.Windows.Forms.CheckBox chkB_SkipFailedTries;
         private System.Windows.Forms.CheckBox chkAutoAdd;
         private System.Windows.Forms.CheckBox chkAutoParse;
+        private System.Windows.Forms.CheckBox chkAddPoVProf;
+        private System.Windows.Forms.CheckBox chkAddDuration;
     }
 }

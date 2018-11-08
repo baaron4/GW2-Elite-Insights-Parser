@@ -46,10 +46,12 @@ namespace LuckParser.Models.ParseModels
         readonly static Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
         {
             {ResurrectId, "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png"},
-            {BandageId, "https://wiki.guildwars2.com/images/0/0c/Bandage.png" },
-            {DodgeId, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
-            {WeaponSwapId, "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png" },
-            {49112, "https://wiki.guildwars2.com/images/e/e7/Throw_Magnetic_Bomb.png" },
+            {BandageId, "https://wiki.guildwars2.com/images/0/0c/Bandage.png"},
+            {DodgeId, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png"},
+            {WeaponSwapId, "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png"},
+            {49112, "https://wiki.guildwars2.com/images/e/e7/Throw_Magnetic_Bomb.png"},
+            {49063, "https://wiki.guildwars2.com/images/3/3d/Detonate_Plasma.png"},
+            {49123, "https://wiki.guildwars2.com/images/d/dd/Unstable_Artifact.png"},
             {31686, "https://wiki.guildwars2.com/images/4/4b/Overload_Air.png" },
         };
 

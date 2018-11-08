@@ -235,6 +235,8 @@ namespace LuckParser
                         throw new CancellationException(rowData, new Exception("Invalid save directory"));
                     }
                     string result = log.LogData.Success ? "kill" : "fail";
+                    string encounterLengthTerm = Properties.Settings.Default.AddDuration ? "_"+(log.LogData.EncounterLength/1000).ToString()+"s" : "";
+                    string PoVClassTerm = Properties.Settings.Default.AddPoVProf ? "_"+log.PlayerList.Find(x => x.AgentItem.Name.Split(':')[0] == log.LogData.PoV.Split(':')[0]).Prof.ToLower() : "";
                     
                     StatisticsCalculator statisticsCalculator = new StatisticsCalculator(settings);
                     StatisticsCalculator.Switches switches = new StatisticsCalculator.Switches();
@@ -258,7 +260,7 @@ namespace LuckParser
                     {
                         string outputFile = Path.Combine(
                         saveDirectory.FullName,
-                        $"{fName}_{log.FightData.Logic.Extension}_{result}.html"
+                        $"{fName}{PoVClassTerm}_{log.FightData.Logic.Extension}{encounterLengthTerm}_{result}.html"
                         );
                         rowData.LogLocation = outputFile;
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
