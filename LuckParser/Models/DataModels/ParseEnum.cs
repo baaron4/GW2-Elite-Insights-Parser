@@ -218,6 +218,7 @@ namespace LuckParser.Models.DataModels
             FireImp = 21100,
             PyreGuardian = 21050,
             ReaperofFlesh = 21218,
+            DestroyerTroll = 20944,
             IceElemental = 21049,
             AncientInvokedHydra = 21285,
             ApocalypseBringer = 21073,

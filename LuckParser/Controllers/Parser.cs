@@ -593,6 +593,7 @@ namespace LuckParser.Controllers
                         break;
                 }
             }
+            _logData.EncounterLength = _fightData.FightDuration;
 
             //players
             if (_playerList.Count == 0)
