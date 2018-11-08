@@ -20,16 +20,22 @@ namespace LuckParser.Models
             new Mechanic(53018, "Sea Swell", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Nikare, "symbol:'circle-open',color:'rgb(30,30,80)'", "Shkwv","Sea Swell (Shockwave)", "Shockwave",0),
             new Mechanic(53130, "Geyser", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Nikare, "symbol:'hexagon',color:'rgb(0,255,255)'", "Gysr","Geyser (Launching Aoes)", "Launch Field",0),
             new Mechanic(53097, "Water Bomb Debuff", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Nikare, "symbol:'diamond',color:'rgb(0,255,255)'", "Psn","Expanding Water Field", "Water Poison",0),
-            new Mechanic(52931, "Aquatic Detainment", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Nikare, "symbol:'circle-open',color:'rgb(0,0,255)'", "Float","Aquatic Detainment (Float Bubble)", "Float Bubble",0),
+            new Mechanic(52931, "Aquatic Detainment", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Nikare, "symbol:'circle-open',color:'rgb(0,0,255)'", "Float","Aquatic Detainment (Float Bubble)", "Float Bubble",6000),
             new Mechanic(52130, "Aquatic Vortex", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Nikare, "symbol:'star-square-open-dot',color:'rgb(0,200,255)'", "Tndo","Aquatic Vortex (Water Tornados)", "Tornado",0),
-            });
+            new Mechanic(51965, "Vapor Jet", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Nikare, "symbol:'square',color:'rgb(255,150,0)'", "Steal","Vapor Jet (Boon Steal)", "Boon Steal",0),
+            new Mechanic(52626, "Enraged (Nikare)", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Nikare, "symbol:'star-diamond',color:'rgb(255,0,0)'", "N.Enrg","Enraged (Kenut Dead)", "Nikare Enrage",0,(condition => condition.CombatItem.SrcInstid == Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Nikare).InstID)),
+            new Mechanic(52626, "Enraged (Kenut)", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Nikare, "symbol:'star-diamond',color:'rgb(255,0,0)'", "K.Enrg","Enraged (Nikare Dead)", "Kenut Enrage",0,(condition => condition.CombatItem.SrcInstid == Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Kenut).InstID)),
+            new Mechanic(52211, "Aquatic Aura Kenut", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Nikare, "symbol:'square-open',color:'rgb(0,255,255)'", "K.Aura","Increasing Damage Debuff on Kenut's Last Platform", "Kenut Aura Debuff",0),
+            new Mechanic(52929, "Aquatic Aura Nikare", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Nikare, "symbol:'diamond-open',color:'rgb(0,255,255)'", "N.Aura","Increasing Damage Debuff on Nikare's Last Platform", "Nikare Aura Debuff",0),
+            new Mechanic(51999, "Cyclone Burst", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Nikare, "symbol:'y-up-open',color:'rgb(255,150,0)'", "Y-Fld","Cyclone Burst (triangular rotating fields)", "Cyclone Burst",0),
+            }); 
             Extension = "twinlargos";
             IconUrl = "https://i.imgur.com/6O5MT7v.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()
         {
-            return new CombatReplayMap("https://i.imgur.com/FAMExYD.png",
+            return new CombatReplayMap("https://i.imgur.com/JOoJRXM.png",
                             Tuple.Create(3205, 4191),
                             Tuple.Create(10846, -3878, 18086, 5622),
                             Tuple.Create(-21504, -21504, 24576, 24576),
@@ -109,7 +115,7 @@ namespace LuckParser.Models
             {
                 return phases;
             }
-            List<PhaseData> nikPhases = GetTargetPhases(log, nikare, new string[]{ "Nikare P1", "Nikare P2", "Nikare P3" } );
+            List<PhaseData> nikPhases = GetTargetPhases(log, nikare, new string[] { "Nikare P1", "Nikare P2", "Nikare P3" });
             if (kenut != null)
             {
                 phases.AddRange(GetTargetPhases(log, kenut, new string[] { "Kenut P1", "Kenut P2", "Kenut P3" }));
@@ -123,14 +129,18 @@ namespace LuckParser.Models
                             // P1 and P2 merged
                             if (p1.Start == p2.Start)
                             {
-                                CombatItem combatItem = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => x.SrcInstid == kenut.InstID).FirstOrDefault();
-                                if (combatItem != null)
+                                CombatItem auraHit = log.CombatData.GetDamageData(nikare.InstID).FirstOrDefault(x => x.SkillID == 52779 && x.Time > p1.End + log.FightData.FightStart);
+                                if (auraHit != null)
                                 {
-                                    p2.OverrideStart(combatItem.Time - log.FightData.FightStart);
+                                    p2.OverrideStart(auraHit.Time - log.FightData.FightStart);
                                 }
                                 else
                                 {
-                                    nikPhases.Remove(p2);
+                                    CombatItem combatItem = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => x.SrcInstid == kenut.InstID).FirstOrDefault();
+                                    if (combatItem != null)
+                                    {
+                                        p2.OverrideStart(combatItem.Time - log.FightData.FightStart);
+                                    }
                                 }
                             }
                         }
@@ -143,21 +153,32 @@ namespace LuckParser.Models
                             // P1 and P2 merged
                             if (p1.Start == p2.Start)
                             {
-                                CombatItem combatItem = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => x.SrcInstid == kenut.InstID).FirstOrDefault();
-                                if (combatItem != null)
+                                CombatItem auraHit = log.CombatData.GetDamageData(nikare.InstID).FirstOrDefault(x => x.SkillID == 52779 && x.Time > p1.End + log.FightData.FightStart);
+                                if (auraHit != null)
                                 {
-                                    p2.OverrideStart(combatItem.Time - log.FightData.FightStart);
+                                    p2.OverrideStart(auraHit.Time - log.FightData.FightStart);
                                 }
-                                // P1 and P3 are merged
-                                if (p1.Start == p3.Start)
+                                else
+                                {
+                                    CombatItem combatItem = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => x.SrcInstid == kenut.InstID).FirstOrDefault();
+                                    if (combatItem != null)
+                                    {
+                                        p2.OverrideStart(combatItem.Time - log.FightData.FightStart);
+                                    }
+                                }
+                            }
+                            // P1/P2 and P3 are merged
+                            if (p1.Start == p3.Start || p2.Start == p3.Start)
+                            {
+                                CombatItem auraHit = log.CombatData.GetDamageData(nikare.InstID).FirstOrDefault(x => x.SkillID == 52779 && x.Time > p2.End + log.FightData.FightStart);
+                                if (auraHit != null)
+                                {
+                                    p3.OverrideStart(auraHit.Time - log.FightData.FightStart);
+                                }
+                                else
                                 {
                                     p3.OverrideStart(p2.End);
                                 }
-                            }
-                            // p2 and p3 are merged
-                            else if (p2.Start == p3.Start)
-                            {
-                                p3.OverrideStart(p2.End);
                             }
                         }
                         break;
@@ -166,7 +187,7 @@ namespace LuckParser.Models
                 }
             }
             phases.AddRange(nikPhases);
-            phases.Sort((x, y) => x.Start < y.Start ? -1 : 1);          
+            phases.Sort((x, y) => x.Start < y.Start ? -1 : 1);
             return phases;
         }
 
@@ -191,7 +212,7 @@ namespace LuckParser.Models
                         int duration = c.ActualDuration;
                         int end = start + duration;
                         int radius = 800;
-                        replay.Actors.Add(new CircleActor(true, end, radius, new Tuple<int, int>(start,end), "rgba(255, 255, 0, 0.3)", new AgentConnector(boss)));
+                        replay.Actors.Add(new CircleActor(true, end, radius, new Tuple<int, int>(start, end), "rgba(255, 255, 0, 0.3)", new AgentConnector(boss)));
                     }
                     break;
                 case (ushort)ParseEnum.BossIDS.Kenut:
@@ -302,6 +323,7 @@ namespace LuckParser.Models
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
+            OverrideMaxHealths(log);
             return (target.Health > 18e6) ? 1 : 0; //Health of Nikare
         }
     }

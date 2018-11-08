@@ -54,14 +54,23 @@ namespace LuckParser.Models
             {
                 return phases;
             }
-            // Main phases
+            // Main phases 34894
             List<CastLog> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
-            List<CastLog> clsKC = castLogs.Where(x => x.SkillId == 35048).ToList();
-            foreach (CastLog cl in clsKC)
+            List<CastLog> magicCharge = castLogs.Where(x => x.SkillId == 35048).ToList();
+            List<CastLog> magicBlast = castLogs.Where(x => x.SkillId == 34894).ToList();
+            foreach (CastLog cl in magicCharge)
             {
                 end = cl.Time;
                 phases.Add(new PhaseData(start, end));
-                start = end + cl.ActualDuration;
+                CastLog blast = magicBlast.FirstOrDefault(x => x.Time >= cl.Time);
+                if (blast != null)
+                {
+                    start = blast.Time + blast.ActualDuration;
+                }
+                else
+                {
+                    start = end + cl.ActualDuration;
+                }
             }
             if (fightDuration - start > 5000 && start >= phases.Last().End)
             {
@@ -72,6 +81,8 @@ namespace LuckParser.Models
             {
                 phases[i].Name = "Phase " + i;
                 phases[i].Targets.Add(mainTarget);
+                phases[i].DrawStart = true;
+                phases[i].DrawEnd = true;
             }
             // add burn phases
             int offset = phases.Count;
@@ -111,7 +122,6 @@ namespace LuckParser.Models
                 phases.Add(phase);
             }
             phases.Sort((x, y) => (x.Start < y.Start) ? -1 : 1);
-            phases.Last().DrawEnd = false;
             return phases;
         }
 

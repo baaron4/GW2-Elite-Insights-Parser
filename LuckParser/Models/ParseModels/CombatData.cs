@@ -72,7 +72,7 @@ namespace LuckParser.Models.ParseModels
             return new List<CombatItem>();
         }
 
-        public int GetSkillCount(int srcInstid, int skillId, long start, long end)
+        public int GetSkillCount(int srcInstid, long skillId, long start, long end)
         {
             if (CastDataById.TryGetValue(skillId, out List<CombatItem> data))
             {
@@ -81,7 +81,7 @@ namespace LuckParser.Models.ParseModels
             return 0;
         }
 
-        public int GetBuffCount(int srcInstid, int skillId, long start, long end)
+        public int GetBuffCount(int srcInstid, long skillId, long start, long end)
         {
             if (BoonData.TryGetValue(skillId, out List<CombatItem> data))
             {

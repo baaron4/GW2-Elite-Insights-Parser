@@ -105,7 +105,7 @@ namespace LuckParser.Controllers
             NewLine();
             //Boss card
             WriteLine(new [] { "Boss", bossname });
-            WriteLine(new [] { "Success", _log.LogData.Success.ToString() });
+            WriteLine(new [] { "Success", _log.FightData.Success.ToString() });
             WriteLine(new [] { "Total Boss Health", _log.Boss.Health.ToString() });
             int finalBossHealth = _log.Boss.HealthOverTime.Count > 0 ? _log.Boss.HealthOverTime.Last().Y : 10000;
             WriteLine(new [] { "Final Boss Health", (_log.Boss.Health * (100.0 - finalBossHealth * 0.01)).ToString() });

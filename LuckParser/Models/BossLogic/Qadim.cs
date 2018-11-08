@@ -12,7 +12,7 @@ namespace LuckParser.Models
         public Qadim(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
-            {
+            { 
             new Mechanic(51943, "Qadim CC", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "Q.BB","Qadim CC", "Qadim CC",0),
             new Mechanic(51943, "Qadim CC", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "Q.CCed","Quadim Breakbar broken", "Quadim CCed",0, (condition => condition.CombatItem.Value < 6500)),
             new Mechanic(52265, "Riposte", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "Q.CC.Fail","Qadim Breakbar failed", "Quadim CC Fail",0),
@@ -22,18 +22,19 @@ namespace LuckParser.Models
             new Mechanic(53153, "Fiery Dance", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'asterisk-open',color:'rgb(255,100,0)'", "FrDnc", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
             new Mechanic(52383, "Fiery Dance", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'asterisk-open',color:'rgb(255,100,0)'", "FrDnc", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
             new Mechanic(52242, "Shattering Impact", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle',color:'rgb(255,200,0)'", "Stun","Shattering Impact (Stunning flame bolt)", "Flame Bolt Stun",0),
-            new Mechanic(52814, "Flame Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'star-triangle-up-open',color:'rgb(255,150,0)'", "KB","Flame Wave (Knockback Frontal Beam (burning))", "KB Burning Push",0),
-            new Mechanic(52820, "Fire Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'star-triangle-down-open',color:'rgb(255,150,0)'", "KB2","Fire Wave (Knockback Frontal Beam (vulnerability))", "KB Vuln Push",0),
+            new Mechanic(52814, "Flame Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'star-triangle-up-open',color:'rgb(255,150,0)'", "KB","Flame Wave (Knockback Frontal Beam)", "KB Push",0),
+            new Mechanic(52820, "Fire Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle-open',color:'rgb(255,100,0)'", "Q.ShWv","Fire Wave (Shockwave after Qadim's Mace attack)", "Mace Shockwave",0),
+            new Mechanic(52224, "Fire Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle-open',color:'rgb(255,100,0)'", "D.ShWv","Fire Wave (Shockwave after Destroyer's Jump or Stomp)", "Destroyer Shockwave",0),
             new Mechanic(52520, "Elemental Breath", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'triangle-left',color:'rgb(255,0,0)'", "H.Brth","Elemental Breath (Hydra Breath)", "Hydra Breath",0),
-            new Mechanic(53013, "Fireball", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle-open',color:'rgb(255,150,0)',size:10", "H.Fb","Fireball (Hydra)", "Hydra Fireball",0),
+            new Mechanic(53013, "Fireball", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle-open',color:'rgb(255,200,0)',size:10", "H.Fb","Fireball (Hydra)", "Hydra Fireball",0),
             new Mechanic(52941, "Fiery Meteor", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle-open',color:'rgb(255,150,0)'", "H.Mtr","Fiery Meteor (Hydra)", "Hydra Meteor",0),
             new Mechanic(52941, "Fiery Meteor", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "H.BB","Fiery Meteor (Hydra Breakbar)", "Hydra CC",0),
             //new Mechanic(718, "Fiery Meteor (Spawn)", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(150,0,0)'", "H.CC.Fail","Fiery Meteor Spawned (Hydra Breakbar)", "Hydra CC Fail",0,(condition =>  condition.CombatItem.IFF == ParseEnum.IFF.Foe)),
             new Mechanic(52941, "Fiery Meteor", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "H.CCed","Fiery Meteor (Hydra Breakbar broken)", "Hydra CCed",0,(condition => condition.CombatItem.Value < 12364)),
             new Mechanic(52941, "Fiery Meteor", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "H.CC.Fail","Fiery Meteor (Hydra Breakbar not broken)", "Hydra CC Failed",0,(condition => condition.CombatItem.Value >= 12364)),
             new Mechanic(53051, "Teleport", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle',color:'rgb(150,0,200)'", "H.KB","Teleport Knockback (Hydra)", "Hydra TP KB",0),
-            new Mechanic(52310, "Big Hit", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle',color:'rgb(255,0,0)'", "Mace","Big Hit (Mace Shockwave)", "Mace Shockwave",0),
-            new Mechanic(52955, "Lava Pool Drop", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'square-open',color:'rgb(255,0,0)'", "LvPl","Lava Pool drop (on long platform spokes)", "Lava Pool Drop",0),
+            new Mechanic(52310, "Big Hit", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle',color:'rgb(255,0,0)'", "Mace","Big Hit (Mace Impact)", "Mace Impact",0),
+            new Mechanic(52587, "Inferno", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'triangle-down-open',color:'rgb(255,0,0)'", "Inf","Inferno (Lava Pool drop  on long platform spokes)", "Inferno Pool",0),
             new Mechanic(51958, "Slash (Wyvern)", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'triangle-down-open',color:'rgb(255,200,0)'", "Slsh","Wyvern Slash (Double attack: knock into pin down)", "KB/Pin down",0),
             new Mechanic(52705, "Tail Swipe", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'diamond-open',color:'rgb(255,200,0)'", "W.Pza","Wyvern Tail Swipe (Pizza attack)", "Tail Swipe",0),
             new Mechanic(52726, "Fire Breath", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'triangle-right-open',color:'rgb(255,100,0)'", "W.Brth","Fire Breath (Wyvern)", "Fire Breath",0),
@@ -98,10 +99,10 @@ namespace LuckParser.Models
             {
                 return phases;
             }
-            List<long> moltenArmor = GetFilteredList(log, 52329, qadim).Select(x => x.Time - log.FightData.FightStart).Distinct().ToList();
-            for (int i = 1; i < moltenArmor.Count; i++)
+            List<long> moltenArmor = GetFilteredList(log, 52329, qadim, false).Select(x => x.Time - log.FightData.FightStart).Distinct().ToList();
+            for (int i = 0; i < moltenArmor.Count; i++)
             {
-                if (i % 2 == 0)
+                if (i % 2 == 1)
                 {
                     end = Math.Min(moltenArmor[i], log.FightData.FightDuration);
                     phases.Add(new PhaseData(start, end));
@@ -125,6 +126,9 @@ namespace LuckParser.Models
             {
                 PhaseData phase = phases[i];
                 phase.Name = names[i - 1];
+                phase.DrawArea = true;
+                phase.DrawEnd = true;
+                phase.DrawStart = true;
                 switch (i)
                 {
                     case 2:
@@ -146,9 +150,6 @@ namespace LuckParser.Models
                            (ushort) ApocalypseBringer
                         };
                         AddTargetsToPhase(phase, ids, log);
-                        phase.DrawArea = true;
-                        phase.DrawEnd = true;
-                        phase.DrawStart = true;
                         break;
                 }
             }
@@ -169,6 +170,7 @@ namespace LuckParser.Models
                 FireImp,
                 PyreGuardian,
                 ReaperofFlesh,
+                DestroyerTroll,
                 IceElemental,
                 Zommoros
             };
@@ -186,6 +188,7 @@ namespace LuckParser.Models
                 case (ushort)FireElemental:
                 case (ushort)FireImp:
                 case (ushort)PyreGuardian:
+                case (ushort)DestroyerTroll:
                 case (ushort)ReaperofFlesh:
                 case (ushort)IceElemental:
                 case (ushort)Zommoros:
@@ -446,6 +449,7 @@ namespace LuckParser.Models
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
+            OverrideMaxHealths(log);
             return (target.Health > 21e6) ? 1 : 0;
         }
 

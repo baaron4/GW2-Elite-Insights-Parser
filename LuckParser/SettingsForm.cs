@@ -97,6 +97,8 @@ namespace LuckParser
             chkB_SkipFailedTries.Checked = Properties.Settings.Default.SkipFailedTries;
             chkAutoAdd.Checked = Properties.Settings.Default.AutoAdd;
             chkAutoParse.Checked = Properties.Settings.Default.AutoParse;
+            chkAddPoVProf.Checked = Properties.Settings.Default.AddPoVProf;
+            chkAddDuration.Checked = Properties.Settings.Default.AddDuration;
 
             chkHtmlExperimental.Checked = Properties.Settings.Default.NewHtmlMode;
             toolTip1.SetToolTip(chkHtmlExperimental, "Alternative method to build the HTML page.\nThe page is much smaller, and some static CSS and JS scripts are written in an external file.");
@@ -325,6 +327,16 @@ namespace LuckParser
         private void ChkAutoParse_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.AutoParse = chkAutoParse.Checked;
+        }
+
+        private void chkAddPoVProf_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.AddPoVProf = chkAddPoVProf.Checked;
+        }
+
+        private void chkAddDuration_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.AddDuration = chkAddDuration.Checked;
         }
     }
 }

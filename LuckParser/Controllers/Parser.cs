@@ -213,29 +213,17 @@ namespace LuckParser.Controllers
             using (var reader = CreateReader(stream))
             {
                 // 4 bytes: player count
-                int skillCount = reader.ReadInt32();
+                uint skillCount = reader.ReadUInt32();
                 //TempData["Debug"] += "Skill Count:" + skill_count.ToString();
                 // 68 bytes: each skill
                 for(int i = 0; i < skillCount; i++)
                 {
                     // 4 bytes: skill ID
                     int skillId = reader.ReadInt32();
-
                     // 64 bytes: name
                     var name = ParseHelper.GetString(stream, 64);
-                    if(skillId != 0 && int.TryParse(name, out int n) && n == skillId)
-                    {
-                        //was it a known buff?
-                        if (Boon.BoonsByIds.TryGetValue(skillId, out Boon boon))
-                        {
-                            name = boon.Name;
-                        }
-                    }
                     //Save
-
-                    var skill = new SkillItem(skillId, name);
-
-                    skill.SetGW2APISkill(apiController);
+                    var skill = new SkillItem(skillId, name, apiController);
                     _skillData.Add(skill);
                 }
             }
@@ -587,10 +575,7 @@ namespace LuckParser.Controllers
                         break;
                     case ParseEnum.StateChange.LogStart:
                         _logData.SetLogStart(c.Value);
-                        if (_fightData.FightStart == 0)
-                        {
-                            _fightData.FightStart = c.Time;
-                        }
+                        _fightData.FightStart = c.Time;
                         break;
                     case ParseEnum.StateChange.LogEnd:
                         _logData.SetLogEnd(c.Value);

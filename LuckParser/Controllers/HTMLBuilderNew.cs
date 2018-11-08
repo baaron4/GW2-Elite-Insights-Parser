@@ -523,7 +523,7 @@ namespace LuckParser.Controllers
             SkillData skillList = _log.SkillData;
             foreach (CastLog cl in casting)
             {
-                if (!usedSkills.ContainsKey(cl.SkillId)) usedSkills.Add(cl.SkillId, skillList.GetOrDummy(cl.SkillId));
+                if (!usedSkills.ContainsKey(cl.SkillId)) usedSkills.Add(cl.SkillId, skillList.Get(cl.SkillId));
                 double[] rotEntry = new double[5];
                 list.Add(rotEntry);
                 rotEntry[0] = (cl.Time - phase.Start) / 1000.0;
@@ -692,7 +692,7 @@ namespace LuckParser.Controllers
                         {
                             name = ag.Name.Replace("\0", "").Replace("\'", "\\'");
                         }
-                        string skillname = _log.SkillData.GetName(dl.SkillId).Replace("\'", "\\'");
+                        string skillname = _log.SkillData.Get(dl.SkillId).Name.Replace("\'", "\\'");
                         sw.Write("'" + name + "<br>" + skillname + " hit you for " + dl.Damage + "',");
                     }
                 }
@@ -704,7 +704,7 @@ namespace LuckParser.Controllers
                     {
                         name = ag.Name.Replace("\0", "").Replace("\'", "\\'");
                     }
-                    string skillname = _log.SkillData.GetName(damageToKill[d].SkillId).Replace("\'", "\\'");
+                    string skillname = _log.SkillData.Get(damageToKill[d].SkillId).Name.Replace("\'", "\\'");
                     sw.Write("'" + name + "<br>" +
                            "hit you with <b>" + skillname + "</b> for " + damageToKill[d].Damage + "'");
 
@@ -769,7 +769,7 @@ namespace LuckParser.Controllers
                 }
                 else
                 {
-                    if (!usedSkills.ContainsKey(entry.Key)) usedSkills.Add(entry.Key, skillList.GetOrDummy(entry.Key));
+                    if (!usedSkills.ContainsKey(entry.Key)) usedSkills.Add(entry.Key, skillList.Get(entry.Key));
                 }
 
                 if (!isCondi && castLogsBySkill.TryGetValue(entry.Key, out List<CastLog> clList))
@@ -801,7 +801,7 @@ namespace LuckParser.Controllers
             {
                 if (damageLogsBySkill.ContainsKey(entry.Key)) continue;
 
-                if (!usedSkills.ContainsKey(entry.Key)) usedSkills.Add(entry.Key, skillList.GetOrDummy(entry.Key));
+                if (!usedSkills.ContainsKey(entry.Key)) usedSkills.Add(entry.Key, skillList.Get(entry.Key));
 
                 int casts = entry.Value.Count;
                 int timeswasted = 0, timessaved = 0;
@@ -1054,17 +1054,18 @@ namespace LuckParser.Controllers
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<FoodDto> list = new List<FoodDto>();
-            List<Tuple<Boon, long, int>> consume = p.GetConsumablesList(_log, phase.Start, phase.End);
+            List<Player.Consumable> consume = p.GetConsumablesList(_log, phase.Start, phase.End);
 
-            foreach(Tuple<Boon, long, int> entry in consume)
+            foreach(Player.Consumable entry in consume)
             {
                 FoodDto dto = new FoodDto
                 {
-                    time = entry.Item2 / 1000.0,
-                    duration = entry.Item3 / 1000.0,
-                    name = entry.Item1.Name,
-                    icon = entry.Item1.Link,
-                    dimished = entry.Item1.ID == 46587 || entry.Item1.ID == 46668
+                    time = entry.Time / 1000.0,
+                    duration = entry.Duration / 1000.0,
+                    name = entry.Item.Name,
+                    icon = entry.Item.Link,
+                    stack = entry.Stack,
+                    dimished = entry.Item.ID == 46587 || entry.Item.ID == 46668
                 };
                 list.Add(dto);
             }
@@ -1154,7 +1155,7 @@ namespace LuckParser.Controllers
                     description = mech.Description,
                     color = mech.PlotlyColor,
                     symbol = mech.PlotlySymbol,
-                    visible = (mech.SkillId == -2 || mech.SkillId == -3),
+                    visible = (mech.SkillId == SkillItem.DeathId|| mech.SkillId == SkillItem.DownId),
                     data = BuildMechanicData(mechanicLogs),
                     playerMech = playerMechs.Contains(mech),
                     enemyMech = enemyMechs.Contains(mech)
@@ -1359,7 +1360,7 @@ namespace LuckParser.Controllers
             int encounterPercent = 0;
             double healthLeft = 100;
             
-            if (_log.LogData.Success)
+            if (_log.FightData.Success)
             {
                 encounterPercent = 100;
                 healthLeft = 0;
@@ -1378,8 +1379,8 @@ namespace LuckParser.Controllers
             html = html.Replace("${encounterStart}", _log.LogData.LogStart);
             html = html.Replace("${encounterEnd}", _log.LogData.LogEnd);
             html = html.Replace("${encounterDuration}", durationString);
-            html = html.Replace("${encounterResult}", _log.LogData.Success ? "Success": "Fail");
-            html = html.Replace("${encounterResultCss}", _log.LogData.Success ? "text-success" : "text-warning");
+            html = html.Replace("${encounterResult}", _log.FightData.Success ? "Success": "Fail");
+            html = html.Replace("${encounterResultCss}", _log.FightData.Success ? "text-success" : "text-warning");
             html = html.Replace("${encounterPercent}", encounterPercent.ToString());
             html = html.Replace("${evtcVersion}", _log.LogData.BuildVersion);
             html = html.Replace("${bossID}", _log.FightData.ID.ToString());
@@ -1785,11 +1786,7 @@ namespace LuckParser.Controllers
             foreach (SkillItem skill in skills)
             {
                 GW2APISkill apiSkill = skill.ApiSkill;
-                SkillDto dto = new SkillDto(skill.ID, skill.Name, apiSkill?.icon, apiSkill?.slot == "Weapon_1");
-                if (skill.ID == SkillItem.WeaponSwapId) dto.icon = "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png";
-                else if (skill.ID == SkillItem.ResurrectId) dto.icon = "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png";
-                else if (skill.ID == SkillItem.BandageId) dto.icon = "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
-                else if (skill.ID == SkillItem.DodgeId) dto.icon = "https://wiki.guildwars2.com/images/b/b2/Dodge.png";
+                SkillDto dto = new SkillDto(skill.ID, skill.Name, skill.Icon, apiSkill?.slot == "Weapon_1");
                 dtos.Add(dto);
             }
             return dtos;

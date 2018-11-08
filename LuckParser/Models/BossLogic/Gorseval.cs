@@ -53,7 +53,7 @@ namespace LuckParser.Models
                 return phases;
             }
             // Ghostly protection check
-            List<CombatItem> invulsGorse = log.GetBoonData(31790).Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.Manual).ToList();
+            List<CombatItem> invulsGorse = log.GetBoonData(31877).Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.Manual).ToList();
             for (int i = 0; i < invulsGorse.Count; i++)
             {
                 CombatItem c = invulsGorse[i];
@@ -261,6 +261,20 @@ namespace LuckParser.Models
                         int radius = 320;
                         replay.Actors.Add(new CircleActor(true, 0, radius, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(boss)));
                         replay.Actors.Add(new CircleActor(true, 0, radius, new Tuple<int, int>(impactTime - 10, impactTime + 100), "rgba(255, 0, 0, 0.4)", new AgentConnector(boss)));
+                    }
+                    List<CombatItem> protection = log.GetBoonData(31877).Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.Manual).ToList();
+                    int protectionStart = 0;
+                    foreach (CombatItem c in protection)
+                    {
+                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                        {
+                            protectionStart = (int)(c.Time - log.FightData.FightStart);
+                        }
+                        else
+                        {
+                            int protectionEnd = (int)(c.Time - log.FightData.FightStart);
+                            replay.Actors.Add(new CircleActor(true, 0, 300, new Tuple<int, int>(protectionStart, protectionEnd), "rgba(0, 180, 255, 0.5)", new AgentConnector(boss)));
+                        }
                     }
                     break;
                 case (ushort)ChargedSoul:

@@ -146,7 +146,7 @@ namespace LuckParser
                     ParsedLog log = parser.ParseLog(rowData, fInfo.FullName);
                     bg.ThrowIfCanceled(rowData);
                     bg.UpdateProgress(rowData, "35% - Data parsed", 35);
-                    bool uploadAuthorized = !Properties.Settings.Default.SkipFailedTries || (Properties.Settings.Default.SkipFailedTries && log.LogData.Success);
+                    bool uploadAuthorized = !Properties.Settings.Default.SkipFailedTries || (Properties.Settings.Default.SkipFailedTries && log.FightData.Success);
                     if (Properties.Settings.Default.UploadToDPSReports && uploadAuthorized)
                     {
                         bg.UpdateProgress(rowData, " 40% - Uploading to DPSReports using EI...", 40);
@@ -212,7 +212,7 @@ namespace LuckParser
                     }
                     if (Properties.Settings.Default.SkipFailedTries)
                     {
-                        if (!log.LogData.Success)
+                        if (!log.FightData.Success)
                         {
                             throw new SkipException();
                         }
@@ -234,8 +234,12 @@ namespace LuckParser
                     {
                         throw new CancellationException(rowData, new Exception("Invalid save directory"));
                     }
-                    string result = log.LogData.Success ? "kill" : "fail";
-                    
+                    string result = log.FightData.Success ? "kill" : "fail";
+                    string encounterLengthTerm = Properties.Settings.Default.AddDuration ? "_"+(log.FightData.FightDuration/1000).ToString()+"s" : "";
+                    string PoVClassTerm = Properties.Settings.Default.AddPoVProf ? "_"+log.PlayerList.Find(x => x.AgentItem.Name.Split(':')[0] == log.LogData.PoV.Split(':')[0]).Prof.ToLower() : "";
+
+
+
                     StatisticsCalculator statisticsCalculator = new StatisticsCalculator(settings);
                     StatisticsCalculator.Switches switches = new StatisticsCalculator.Switches();
                     if (Properties.Settings.Default.SaveOutHTML)
@@ -253,12 +257,13 @@ namespace LuckParser
                     Statistics statistics = statisticsCalculator.CalculateStatistics(log, switches);
                     bg.UpdateProgress(rowData, "85% - Statistics computed", 85);
                     string fName = fInfo.Name.Split('.')[0];
+                    fName = $"{fName}{PoVClassTerm}_{log.FightData.Logic.Extension}{encounterLengthTerm}_{result}";
                     bg.UpdateProgress(rowData, "90% - Creating File...", 90);
                     if (Properties.Settings.Default.SaveOutHTML)
                     {
                         string outputFile = Path.Combine(
                         saveDirectory.FullName,
-                        $"{fName}_{log.FightData.Logic.Extension}_{result}.html"
+                        $"{fName}.html"
                         );
                         rowData.LogLocation = outputFile;
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
@@ -280,7 +285,7 @@ namespace LuckParser
                     {
                         string outputFile = Path.Combine(
                         saveDirectory.FullName,
-                        $"{fName}_{log.FightData.Logic.Extension}_{result}.csv"
+                        $"{fName}.csv"
                         );
                         string splitString = "";
                         if (rowData.LogLocation != null) { splitString = ","; }
@@ -296,7 +301,7 @@ namespace LuckParser
                     {
                         string outputFile = Path.Combine(
                             saveDirectory.FullName,
-                            $"{fName}_{log.FightData.Logic.Extension}_{result}.json"
+                            $"{fName}.json"
                         );
                         string splitString = "";
                         if (rowData.LogLocation != null) { splitString = ","; }

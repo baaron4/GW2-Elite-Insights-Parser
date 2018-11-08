@@ -326,7 +326,7 @@ namespace LuckParser.Controllers
         [XmlArrayItem("GW2APISkillDetailed", typeof(GW2APISkillDetailed))]
         static SkillList _listOfSkills = new SkillList();
 
-        public GW2APISkill GetSkill(int id)
+        public GW2APISkill GetSkill(long id)
         {
             GW2APISkill skill = GetSkillList().Items.FirstOrDefault(x => x.id == id);
             //if (skill == null) {
