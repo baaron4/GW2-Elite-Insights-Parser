@@ -80,7 +80,7 @@ namespace LuckParser.Models
                     {
                         replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(boss)));
                     }
-                    List<CastLog> breath = cls.Where(x => x.SkillId == 34515).ToList();
+                    List<CastLog> breath = cls.Where(x => x.SkillId == 34516).ToList();
                     foreach (CastLog c in breath)
                     {
                         int start = (int)c.Time;
