@@ -306,7 +306,6 @@
       <LastGenOutput>Version.tt.cs</LastGenOutput>
     </None>
     <None Include="Resources\tmplCombatReplay.html" />
-    <Content Include="Resources\combatreplayold.js" />
     <Content Include="Resources\ei.css" />
     <Content Include="Resources\ei.js" />
     <None Include="Resources\tmplGeneralLayout.html" />
