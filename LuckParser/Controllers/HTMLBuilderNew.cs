@@ -1453,7 +1453,7 @@ namespace LuckParser.Controllers
                     hbWidth = target.HitboxWidth,
                     tough = target.Toughness
                 };
-                if (_log.LogData.Success)
+                if (_log.FightData.Success)
                 {
                     tar.percent = 100;
                     tar.hpLeft = 0;
@@ -1589,7 +1589,7 @@ namespace LuckParser.Controllers
                 durationString = duration.Hours + "h " + durationString;
             }
             logData.encounterDuration = durationString;
-            logData.success = _log.LogData.Success;
+            logData.success = _log.FightData.Success;
             logData.fightName = FilterStringChars(_log.FightData.Name);
             logData.fightIcon = _log.FightData.Logic.IconUrl;
 
