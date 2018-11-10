@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/${bootstrapTheme}/bootstrap.min.css"
+    <link id="theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/${bootstrapTheme}/bootstrap.min.css"
         crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
@@ -47,7 +47,7 @@
                     <a class="nav-link" @click="switchTheme(true)" :class="{active: light}">Light Theme</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" @click="switchTheme(true)" :class="{active: !light }">Dark Theme</a>
+                    <a class="nav-link" @click="switchTheme(false)" :class="{active: !light }">Dark Theme</a>
                 </li>
             </ul>
         </div>

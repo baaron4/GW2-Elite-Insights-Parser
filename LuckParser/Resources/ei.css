@@ -130,13 +130,28 @@ th {
     background-repeat: no-repeat;
     border-bottom-color: transparent;
 }
-
 .theme-slate .nav-tabs .nav-link,
 .nav-tabs .nav-link:hover {
     color: #aaa;
 }
-
 .theme-slate .nav-tabs .nav-link:hover {
+    color: #fff;
+}
+
+.theme-cosmo .nav-pills .nav-link:not(.active) {
+    background-color: rgba(0,0,0,0.03);
+}
+.theme-cosmo .nav-tabs .nav-link:not(.active) {
+    background-color: rgba(0,0,0,0.03);
+}
+.theme-cosmo .nav-pills .nav-link {
+    border: 1px solid transparent;  
+}
+.theme-cosmo .nav-pills .nav-link:hover, .nav-pills .nav-link:focus {
+    border-color: #e9ecef #e9ecef #dee2e6;    
+}
+.theme-cosmo .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+    background-color: #2780E3;
     color: #fff;
 }
 
@@ -163,12 +178,20 @@ th {
     white-space: pre;
 }
 
-.player-cell.active {
+.theme-slate .player-cell.active {
     background-color: rgba(50, 120, 0, 0.5);
 }
 
-.player-cell:hover:not(.active) {
+.theme-slate .player-cell:hover:not(.active) {
     background-color: rgba(25, 80, 0, 0.5);
+}
+
+.theme-cosmo .player-cell.active {
+    background-color: rgba(125, 220, 0, 0.5);
+}
+
+.theme-cosmo .player-cell:hover:not(.active) {
+    background-color: rgba(75, 150, 0, 0.5);
 }
 
 .target-cell.active {

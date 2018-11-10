@@ -77,6 +77,11 @@ var specToBase = {
     Weaver: "Elementalist"
 };
 
+var themes = {
+    "cosmo": "https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/cosmo/bootstrap.min.css",
+    "slate": "https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/slate/bootstrap.min.css"
+};
+
 var urls = {
     Warrior: "https://wiki.guildwars2.com/images/4/43/Warrior_tango_icon_20px.png",
     Berserker: "https://wiki.guildwars2.com/images/d/da/Berserker_tango_icon_20px.png",
@@ -2490,6 +2495,28 @@ window.onload = function () {
             light: logData.lightTheme,
             mode: 0
         },
+        methods: {
+            switchCombatReplayButtons: function(from, to) {          
+                var combatReplay = $('#combat-replay');
+                if (combatReplay) {
+                    var buttons = combatReplay.find('.'+from);
+                    buttons.addClass(to).removeClass(from);
+                }
+            },
+            switchTheme: function(state) {
+                if (state === this.light) {
+                    return;
+                }
+                var style = this.light ? 'cosmo' : 'slate';
+                this.light = state;
+                var newStyle = this.light ? 'cosmo' : 'slate';
+                document.body.classList.remove("theme-"+style);
+                document.body.classList.add("theme-"+newStyle);
+                var theme = document.getElementById('theme');
+                theme.href = themes[newStyle];              
+                this.switchCombatReplayButtons(this.light ? 'btn-dark' : 'btn-light', this.light ? 'btn-light' : 'btn-dark');
+            }
+        },
         computed: {
             phaseData: function () {
                 var phases = this.logdata.phases;
@@ -2547,6 +2574,9 @@ window.onload = function () {
         mounted() {
             var element = document.getElementById("loading");
             element.parentNode.removeChild(element);
+            if (this.light) {
+                this.switchCombatReplayButtons('btn-dark', 'btn-light');
+            }
         }
     });
     $("body").tooltip({
