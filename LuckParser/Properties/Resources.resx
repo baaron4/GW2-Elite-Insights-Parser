@@ -220,22 +220,19 @@
   <data name="template_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\template.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="template_replay_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\template-combatreplay.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="tmplCombatReplay" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tmplCombatReplay.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="tmplGroupCombatReplay" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplGroupCombatReplay.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="tmplCombatReplayGroup" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tmplCombatReplayGroup.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="tmplPlayerSelectCombatReplay" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplPlayerSelectCombatReplay.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="tmplCombatReplayPlayer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tmplCombatReplayPlayer.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="theme_cosmo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\theme-cosmo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="theme_slate" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\theme-slate.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="tmplPlayerCells" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplPlayerCells.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>

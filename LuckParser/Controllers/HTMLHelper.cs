@@ -637,7 +637,7 @@ namespace LuckParser.Controllers
 
         public static void WriteCombatReplayInterface(StreamWriter sw, Tuple<int,int> canvasSize, ParsedLog log)
         {
-            string replayHTML = Properties.Resources.template_replay_html;
+            string replayHTML = Properties.Resources.tmplCombatReplay;
             replayHTML = replayHTML.Replace("${canvasX}", canvasSize.Item1.ToString());
             replayHTML = replayHTML.Replace("${canvasY}", canvasSize.Item2.ToString());
             replayHTML = replayHTML.Replace("${maxTime}", log.PlayerList.First().CombatReplay.Times.Last().ToString());
@@ -645,12 +645,12 @@ namespace LuckParser.Controllers
             string groupsString = "";
             foreach (int group in groups)
             {
-                string replayGroupHTML = Properties.Resources.tmplGroupCombatReplay;
+                string replayGroupHTML = Properties.Resources.tmplCombatReplayGroup;
                 replayGroupHTML = replayGroupHTML.Replace("${group}", group.ToString());;
                 string playerString = "";
                 foreach (Player p in log.PlayerList.Where(x => x.Group == group))
                 {
-                    string replayPlayerHTML = Properties.Resources.tmplPlayerSelectCombatReplay;
+                    string replayPlayerHTML = Properties.Resources.tmplCombatReplayPlayer;
                     replayPlayerHTML = replayPlayerHTML.Replace("${instid}", p.InstID.ToString());
                     replayPlayerHTML = replayPlayerHTML.Replace("${playerName}", p.Character.Substring(0, Math.Min(10, p.Character.Length)));
                     replayPlayerHTML = replayPlayerHTML.Replace("${imageURL}", GeneralHelper.GetProfIcon(p.Prof));

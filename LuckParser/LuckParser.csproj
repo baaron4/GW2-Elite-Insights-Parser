@@ -305,7 +305,7 @@
     <None Include="Properties\Version.tt.old">
       <LastGenOutput>Version.tt.cs</LastGenOutput>
     </None>
-    <None Include="Resources\template-combatreplay.html" />
+    <None Include="Resources\tmplCombatReplay.html" />
     <Content Include="Resources\combatreplayold.js" />
     <Content Include="Resources\ei.css" />
     <Content Include="Resources\ei.js" />
@@ -333,16 +333,15 @@
     <None Include="Resources\tmplPlayerStats.html" />
     <None Include="Resources\tmplGraphStats.html" />
     <None Include="Resources\tmplDPSGraph.html" />
-    <Content Include="Resources\tmplGroupCombatReplay.html" />
+    <Content Include="Resources\tmplCombatReplayGroup.html" />
     <None Include="Resources\tmplTargets.html" />
     <None Include="Resources\tmplDamageTable.html" />
-    <Content Include="Resources\tmplPlayerSelectCombatReplay.html" />
+    <Content Include="Resources\tmplCombatReplayPlayer.html" />
     <None Include="Resources\tmplPlayers.html" />
     <None Include="Resources\tmplDamageModifierTable.html" />
     <None Include="Resources\tmplPlayerTabGraph.html" />
     <None Include="Resources\tmplRotationLegend.html" />
     <Content Include="Resources\TODO.txt" />
-    <None Include="Resources\tmplPlayerCells.html" />
     <None Include="Resources\template.html" />
   </ItemGroup>
   <ItemGroup>

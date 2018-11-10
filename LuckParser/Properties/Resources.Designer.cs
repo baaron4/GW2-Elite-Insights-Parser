@@ -174,20 +174,6 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à &lt;div class=&quot;d-flex justify-content-around align-items-center justify-content-center&quot;&gt;
-        ///    &lt;div class=&quot;d-flex flex-column flex-wrap&quot;&gt;
-        ///        &lt;canvas width=&quot;${canvasX}px&quot; height=&quot;${canvasY}px&quot; id=&quot;replayCanvas&quot; class=&quot;replay&quot;&gt;&lt;/canvas&gt;
-        ///        &lt;div class=&quot;d-flex justify-content-center slidecontainer&quot;&gt;
-        ///            &lt;input style=&quot;min-width: 400px;&quot; oninput=&quot;updateTime(this.value)&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;${maxTime}&quot; value=&quot;0&quot; class=&quot;slider&quot; id=&quot;timeRange&quot;&gt;
-        ///            &lt;input style=&quot;width: 70px; text-alig [le reste de la chaîne a été tronqué]&quot;;.
-        /// </summary>
-        internal static string template_replay_html {
-            get {
-                return ResourceManager.GetString("template_replay_html", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap theme_cosmo {
@@ -263,6 +249,44 @@ namespace LuckParser.Properties {
         internal static string tmplBuffTable {
             get {
                 return ResourceManager.GetString("tmplBuffTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;div class=&quot;d-flex justify-content-around align-items-center justify-content-center&quot;&gt;
+        ///    &lt;div class=&quot;d-flex flex-column flex-wrap&quot;&gt;
+        ///        &lt;canvas width=&quot;${canvasX}px&quot; height=&quot;${canvasY}px&quot; id=&quot;replayCanvas&quot; class=&quot;replay&quot;&gt;&lt;/canvas&gt;
+        ///        &lt;div class=&quot;d-flex justify-content-center slidecontainer&quot;&gt;
+        ///            &lt;input style=&quot;min-width: 400px;&quot; oninput=&quot;updateTime(this.value)&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;${maxTime}&quot; value=&quot;0&quot; class=&quot;slider&quot; id=&quot;timeRange&quot;&gt;
+        ///            &lt;input style=&quot;width: 70px; text-alig [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string tmplCombatReplay {
+            get {
+                return ResourceManager.GetString("tmplCombatReplay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;div class=&quot;d-flex flex-column justify-content-center align-items-center mt-2&quot;&gt;
+        ///        &lt;h3&gt;Group ${group}&lt;/h3&gt;
+        ///        &lt;!--${players}--&gt;
+        ///&lt;/div&gt;.
+        /// </summary>
+        internal static string tmplCombatReplayGroup {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;label id=&quot;id${instid}&quot; style=&quot;width: 150px;&quot; onclick=&quot;selectActor(${instid});&quot; class=&quot;btn btn-dark&quot;&gt;
+        ///    ${playerName}
+        ///    &lt;img src=&quot;${imageURL}&quot; alt=&quot;${prof}&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;
+        ///&lt;/label&gt;.
+        /// </summary>
+        internal static string tmplCombatReplayPlayer {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayPlayer", resourceCulture);
             }
         }
         
@@ -383,16 +407,16 @@ namespace LuckParser.Properties {
         
         /// <summary>
         ///   Recherche une chaîne localisée semblable à &lt;div&gt;
-        ///    &lt;div v-for=&quot;(recap, index) in recaps&quot; v-show=&quot;phase.start &lt;= recap.time/1000 &amp;&amp; phase.end &gt;= recap.time/1000&quot;&gt;
-        ///        &lt;div v-if=&quot;recap.toKill === null&quot;&gt;
-        ///            &lt;h3 class=&quot;text-center&quot;&gt;Player was instantly killed after down&lt;/h3&gt;
-        ///            &lt;div class=&quot;text-center&quot;&gt;
-        ///                Took {{data.totalDamage.down[index]}}
-        ///                damage to go into downstate in
-        ///                {{data.totalSeconds.down[index]}} seconds
-        ///            &lt;/div&gt;
-        ///        &lt;/div&gt;
-        ///        &lt;div v-else-if=&quot;rec [le reste de la chaîne a été tronqué]&quot;;.
+        ///    &lt;div v-if=&quot;recaps&quot;&gt;
+        ///            &lt;div v-for=&quot;index in phaseRecaps&quot;&gt;
+        ///                &lt;h3 v-if=&quot;phaseRecaps.length &gt; 1&quot; class=&quot;text-center&quot;&gt;
+        ///                    Death #{{index + 1}}
+        ///                &lt;/h3&gt;
+        ///                &lt;div v-if=&quot;recaps[index].toKill === null&quot;&gt;
+        ///                    &lt;h3 class=&quot;text-center&quot;&gt;Player was instantly killed after down&lt;/h3&gt;
+        ///                    &lt;div class=&quot;text-center&quot;&gt;
+        ///                        Took {{data.totalDamage.down[index]}}
+        ///                        damage to go [le reste de la chaîne a été tronqué]&quot;;.
         /// </summary>
         internal static string tmplDeathRecap {
             get {
@@ -544,18 +568,6 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à &lt;div class=&quot;d-flex flex-column justify-content-center align-items-center mt-2&quot;&gt;
-        ///        &lt;h3&gt;Group ${group}&lt;/h3&gt;
-        ///        &lt;!--${players}--&gt;
-        ///&lt;/div&gt;.
-        /// </summary>
-        internal static string tmplGroupCombatReplay {
-            get {
-                return ResourceManager.GetString("tmplGroupCombatReplay", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Recherche une chaîne localisée semblable à &lt;div&gt;
         ///    &lt;table v-if=&quot;playerMechHeader.length &gt; 0&quot; class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; id=&quot;playermechs&quot;&gt;
         ///        &lt;thead&gt;
@@ -610,17 +622,6 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à &lt;td&gt;{{:player.group}}&lt;/td&gt;
-        ///&lt;td title=&quot;{{:player.profession}}&quot;&gt;&lt;img src=&quot;{{:player.icon}}&quot; alt=&quot;{{:player.profession}}&quot; class=&quot;icon&quot;&gt;&lt;span style=&quot;display:none&quot;&gt;{{:player.profession}}&lt;/span&gt;&lt;/td&gt;
-        ///&lt;td class=&quot;text-left&quot;&gt;{{:player.name}}&lt;/td&gt;.
-        /// </summary>
-        internal static string tmplPlayerCells {
-            get {
-                return ResourceManager.GetString("tmplPlayerCells", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Recherche une chaîne localisée semblable à &lt;div&gt;
         ///    &lt;table class=&quot;table composition&quot;&gt;
         ///        &lt;tbody&gt;
@@ -638,28 +639,18 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à &lt;label id=&quot;id${instid}&quot; style=&quot;width: 150px;&quot; onclick=&quot;selectActor(${instid});&quot; class=&quot;btn btn-dark&quot;&gt;
-        ///    ${playerName}
-        ///    &lt;img src=&quot;${imageURL}&quot; alt=&quot;${prof}&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;
-        ///&lt;/label&gt;.
-        /// </summary>
-        internal static string tmplPlayerSelectCombatReplay {
-            get {
-                return ResourceManager.GetString("tmplPlayerSelectCombatReplay", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Recherche une chaîne localisée semblable à &lt;div&gt;
-        ///    &lt;keep-alive&gt;
-        ///        &lt;player-tab-component v-for=&quot;(player, pindex) in players&quot; :key=&quot;pindex&quot; v-if=&quot;player.active &amp;&amp; !player.isConjure&quot;
-        ///            :player=&quot;player&quot; :playerindex=&quot;pindex&quot; :phase=&quot;phase&quot; 
-        ///            :phaseindex=&quot;phaseindex&quot; :phases=&quot;phases&quot; :graphdata=&quot;graphdata&quot; :targets=&quot;targets&quot; :activetargets=&quot;activetargets&quot;&gt;&lt;/player-tab-component&gt;
-        ///    &lt;/keep-alive&gt;
-        ///    &lt;div v-if=&quot;!activeplayer&quot;&gt;
-        ///        &lt;h3 class=&quot;text-center&quot;&gt;No player selected&lt;/h3&gt;
-        ///    &lt;/div&gt;
-        ///&lt;/div&gt;.
+        ///    
+        ///        &lt;h3 v-for=&quot;(player, pindex) in players&quot; :key=&quot;pindex&quot; v-if=&quot;!player.isConjure&quot; v-show=&quot;pindex === activeplayer&quot; class=&quot;text-center&quot;&gt;&lt;img :alt=&quot;player.profession&quot; class=&quot;icon&quot; :src=&quot;player.icon&quot;&gt;{{player.name}}&lt;/h3&gt;
+        ///        &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///            &lt;li&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tabmode === 0}&quot; @click=&quot;tabmode = 0&quot;&gt;
+        ///                    Damage
+        ///                    Distribution
+        ///                &lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li&gt;
+        ///          [le reste de la chaîne a été tronqué]&quot;;.
         /// </summary>
         internal static string tmplPlayerStats {
             get {
@@ -669,21 +660,12 @@ namespace LuckParser.Properties {
         
         /// <summary>
         ///   Recherche une chaîne localisée semblable à &lt;div&gt;
-        ///    &lt;h3 class=&quot;text-center&quot;&gt;&lt;img :alt=&quot;player.profession&quot; class=&quot;icon&quot; :src=&quot;player.icon&quot;&gt;{{player.name}}&lt;/h3&gt;
-        ///    &lt;ul class=&quot;nav nav-tabs&quot;&gt;
-        ///        &lt;li&gt;
-        ///            &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 0}&quot; @click=&quot;mode = 0&quot;&gt;
-        ///                Damage
-        ///                Distribution
-        ///            &lt;/a&gt;
-        ///        &lt;/li&gt;
-        ///        &lt;li&gt;
-        ///            &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 1}&quot; @click=&quot;mode = 1&quot;&gt;
-        ///                Damage
-        ///                Taken
-        ///            &lt;/a&gt;
-        ///        &lt;/li&gt;
-        ///    [le reste de la chaîne a été tronqué]&quot;;.
+        ///    &lt;keep-alive&gt;
+        ///        &lt;dmgdist-player-component v-if=&quot;tabmode === 0&quot; :player=&quot;player&quot; :playerindex=&quot;playerindex&quot; :phaseindex=&quot;phaseindex&quot;
+        ///            :activetargets=&quot;activetargets&quot; :phase=&quot;phase&quot;&gt;&lt;/dmgdist-player-component&gt;
+        ///        &lt;dmgtaken-player-component v-if=&quot;tabmode ===1&quot; :player=&quot;player&quot; :playerindex=&quot;playerindex&quot; :phaseindex=&quot;phaseindex&quot;
+        ///        &gt;&lt;/dmgtaken-player-component&gt;
+        ///        &lt;player-graph-tab-component v-for=&quot;(ph, id) in phases&quot; v-if=&quot;tabmode === 2 &amp;&amp; id === phaseindex&quot; :key=&quot; [le reste de la chaîne a été tronqué]&quot;;.
         /// </summary>
         internal static string tmplPlayerTab {
             get {
@@ -710,14 +692,14 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à &lt;div class=&quot;alert alert-light&quot;&gt;
-        ///    &lt;p&gt;&lt;u&gt;Fill&lt;/u&gt;&lt;/p&gt;
-        ///    &lt;span style=&quot;padding: 2px; background-color:#0000FF; border-style:solid; border-width: 1px; border-color:#000000; color:#FFFFFF&quot;&gt;
-        ///        Hit without aftercast
-        ///    &lt;/span&gt;
-        ///    &lt;span style=&quot;padding: 2px; background-color:#00FF00; border-style:solid; border-width: 1px; border-color:#000000; color:#000000&quot;&gt;Hit
-        ///        with full aftercast&lt;/span&gt;
-        ///    &lt;span style=&quot;padding: 2px; background-color:#FF0000; border-style:solid; border-width: 1px; border [le reste de la chaîne a été tronqué]&quot;;.
+        ///   Recherche une chaîne localisée semblable à &lt;div class=&quot;card&quot;&gt;
+        ///    &lt;div class=&quot;card-body container&quot;&gt;
+        ///        &lt;p&gt;&lt;u&gt;Fill&lt;/u&gt;&lt;/p&gt;
+        ///        &lt;span style=&quot;padding: 2px; background-color:#0000FF; border-style:solid; border-width: 1px; border-color:#000000; color:#FFFFFF&quot;&gt;Hit
+        ///            without aftercast&lt;/span&gt;
+        ///        &lt;span style=&quot;padding: 2px; background-color:#00FF00; border-style:solid; border-width: 1px; border-color:#000000; color:#000000&quot;&gt;Hit
+        ///            with full aftercast&lt;/span&gt;
+        ///        &lt;span style=&quot;padding: 2px; background-color:#FF0000; bo [le reste de la chaîne a été tronqué]&quot;;.
         /// </summary>
         internal static string tmplRotationLegend {
             get {
