@@ -1,6 +1,6 @@
 <div>
     
-        <h3 v-for="(player, pindex) in players" :key="pindex" v-if="!player.isConjure" v-show="pindex === activeplayer" class="text-center"><img :alt="player.profession" class="icon" :src="player.icon">{{player.name}}</h3>
+        <h3 v-for="(player, pindex) in players" :key="pindex" v-if="!player.isConjure" v-show="pindex === activeplayer" class="text-center mt-2"><img :alt="player.profession" class="icon" :src="player.icon">{{player.name}}</h3>
         <ul class="nav nav-tabs">
             <li>
                 <a class="nav-link" :class="{active: tabmode === 0}" @click="tabmode = 0">

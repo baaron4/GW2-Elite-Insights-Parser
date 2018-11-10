@@ -1393,7 +1393,7 @@ var compilePlayerTab = function () {
         data: function () {
             return {
                 distmode: -1,
-                targetmode: 0,
+                targetmode: 1,
                 cacheTarget: new Map()
             };
         },
