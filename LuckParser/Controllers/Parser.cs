@@ -169,11 +169,11 @@ namespace LuckParser.Controllers
                     // 2 bytes: healing
                     uint healing = reader.ReadUInt16();
                     // 2 bytes: hitbox width
-                    uint hbWidth = reader.ReadUInt16();
+                    uint hbWidth = (uint) 2 * reader.ReadUInt16();
                     // 2 bytes: condition
                     uint condition = reader.ReadUInt16();
                     // 2 bytes: hitbox height
-                    uint hbHeight = reader.ReadUInt16();
+                    uint hbHeight = (uint)2 * reader.ReadUInt16();
                     // 68 bytes: name
                     string name = ParseHelper.GetString(stream, 68, false);
                     //Save
