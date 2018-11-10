@@ -236,3 +236,11 @@ th {
     background: #4CAF50;
     cursor: pointer;
 }
+
+
+.theme-cosmo table tbody tr.active {
+    background-color: rgba(125, 220, 0, 0.5);
+}
+.theme-slate table tbody tr.active {
+    background-color: rgba(50, 120, 0, 0.5);
+}

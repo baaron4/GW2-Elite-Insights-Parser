@@ -2054,7 +2054,7 @@ var compileMechanics = function () {
 
 var compileGraphs = function () {
     Vue.component("graph-stats-component", {
-        props: ["phases", "activetargets", "targets", "players", 'graphdata', "phaseid"],
+        props: ["phases", "activetargets", "targets", "players", 'graphdata', "phaseid", 'selectedplayerindex'],
         template: "#tmplGraphStats",
         data: function () {
             return {
@@ -2063,7 +2063,7 @@ var compileGraphs = function () {
         }
     });
     Vue.component("dps-graph-component", {
-        props: ["phases", "activetargets", "targets", "players", 'mechanics', 'graph', 'mode', 'phase', 'phaseid'],
+        props: ["phases", "activetargets", "targets", "players", 'mechanics', 'graph', 'mode', 'phase', 'phaseid', 'selectedplayerindex'],
         template: "#tmplDPSGraph",
         data: function () {
             return {
@@ -2121,9 +2121,10 @@ var compileGraphs = function () {
                     mode: 'lines',
                     line: {
                         shape: 'spline',
-                        color: player.colTarget
+                        color: player.colTarget,
+                        width: i === this.selectedplayerindex ? 6 : 2
                     },
-                    name: player.name + ' DPS'
+                    name: player.name + ' DPS',
                 });
             }
             data.push({
@@ -2187,6 +2188,17 @@ var compileGraphs = function () {
                     }
                 }
                 data.push(chart);
+            }
+        },
+        watch: {
+            selectedplayerindex: {
+                handler: function () {
+                    for (var i = 0; i < this.players.length; i++) {
+                        this.data[i].line.width = i === this.selectedplayerindex ? 6 : 2;
+                    }
+                    this.layout.datarevision = new Date().getTime();
+                },
+                deep: true
             }
         },
         computed: {
