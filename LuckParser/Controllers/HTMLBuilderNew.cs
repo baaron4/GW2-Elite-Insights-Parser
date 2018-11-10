@@ -649,13 +649,17 @@ namespace LuckParser.Controllers
             SkillData skillList = _log.SkillData;
             foreach (KeyValuePair<long, List<DamageLog>> entry in damageLogsBySkill)
             {
-                int totaldamage = 0, mindamage = 0, maxdamage = 0, casts = 0, hits = 0, crit = 0, flank = 0, glance = 0, timeswasted = 0, timessaved = 0;
+                int totaldamage = 0, mindamage = int.MaxValue, maxdamage = int.MinValue, casts = 0, hits = 0, crit = 0, flank = 0, glance = 0, timeswasted = 0, timessaved = 0;
                 foreach (DamageLog dl in entry.Value)
                 {
+                    if (dl.Result == ParseEnum.Result.Downed)
+                    {
+                        continue;
+                    }
                     int curdmg = dl.Damage;
                     totaldamage += curdmg;
-                    if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
-                    if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
+                    if (curdmg < mindamage) { mindamage = curdmg; }
+                    if (curdmg > maxdamage) { maxdamage = curdmg; }
                     hits++;
                     if (dl.Result == ParseEnum.Result.Crit) crit++;
                     if (dl.Result == ParseEnum.Result.Glance) glance++;
@@ -807,19 +811,23 @@ namespace LuckParser.Controllers
             foreach (var entry in damageLogsBySkill)
             {
                 int totaldamage = 0;
-                int mindamage = 0;
+                int mindamage = int.MaxValue;
                 int hits = 0;
-                int maxdamage = 0;
+                int maxdamage = int.MinValue;
                 int crit = 0;
                 int flank = 0;
                 int glance = 0;
 
                 foreach (DamageLog dl in entry.Value)
                 {
+                    if (dl.Result == ParseEnum.Result.Downed)
+                    {
+                        continue;
+                    }
                     int curdmg = dl.Damage;
                     totaldamage += curdmg;
-                    if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
-                    if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
+                    if (curdmg < mindamage) { mindamage = curdmg; }
+                    if (curdmg > maxdamage) { maxdamage = curdmg; }
                     if (curdmg >= 0) { hits++; };
                     ParseEnum.Result result = dl.Result;
                     if (result == ParseEnum.Result.Crit) { crit++; } else if (result == ParseEnum.Result.Glance) { glance++; }
