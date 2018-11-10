@@ -1219,9 +1219,29 @@ namespace LuckParser.Controllers
 
             html = html.Replace("'${graphDataJson}'", BuildGraphJson());
 
-            html = html.Replace("<!--${combatReplay}-->", BuildCombatReplayContent());
+            html = html.Replace("<!--${CombatReplayScript}-->", BuildCombatReplayScript());
+            html = html.Replace("<!--${CombatReplayBody}-->", BuildCombatReplayContent());
             sw.Write(html);
             return;       
+        }
+
+
+        private string BuildCombatReplayScript()
+        {
+            if (!_settings.ParseCombatReplay || !_log.FightData.Logic.CanCombatReplay)
+            {
+                return "";
+            }
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (StreamWriter sw = new StreamWriter(ms))
+                {
+                    CombatReplayMap map = _log.FightData.Logic.GetCombatMap();
+                    Tuple<int, int> canvasSize = map.GetPixelMapSize();
+                    HTMLHelper.WriteCombatReplayScript(sw, _log, canvasSize, map, _settings.PollingRate);
+                }
+                return Encoding.UTF8.GetString(ms.ToArray());
+            }
         }
 
         private string BuildCombatReplayContent()
@@ -1234,9 +1254,9 @@ namespace LuckParser.Controllers
             {
                 using (StreamWriter sw = new StreamWriter(ms))
                 {
-                    sw.Write("<div id=\"replay_template\">");
-                    CreateReplayTab(sw);
-                    sw.Write("</div>");
+                    CombatReplayMap map = _log.FightData.Logic.GetCombatMap();
+                    Tuple<int, int> canvasSize = map.GetPixelMapSize();
+                    HTMLHelper.WriteCombatReplayInterface(sw, canvasSize, _log);
                 }
                 return Encoding.UTF8.GetString(ms.ToArray());
             }
@@ -1592,7 +1612,8 @@ namespace LuckParser.Controllers
             logData.success = _log.FightData.Success;
             logData.fightName = FilterStringChars(_log.FightData.Name);
             logData.fightIcon = _log.FightData.Logic.IconUrl;
-
+            logData.combatReplay = _settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay;
+            logData.lightTheme = _settings.LightTheme;
             return ToJson(logData, typeof(LogDataDto));
         }
 

@@ -28,5 +28,7 @@ namespace LuckParser.Models.HtmlModels
         [DataMember] public bool success;
         [DataMember] public string fightName;
         [DataMember] public string fightIcon;
+        [DataMember] public bool combatReplay;
+        [DataMember] public bool lightTheme;
     }
 }

@@ -25,6 +25,7 @@
     <!--${Details}-->
     <!--${Maps}-->
     <!--${Js}-->
+    <!--${CombatReplayScript}-->
 </head>
 
 <body class="theme-${bootstrapTheme}">
@@ -39,25 +40,46 @@
         </div>
     </div>
     <div class="container" v-cloak id="content">
-        <div class="d-flex flex-row justify-content-center">
+
+        <div class="d-flex flex-row justify-content-center mt-1 mb-1">
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link" @click="switchTheme(true)" :class="{active: light}">Light Theme</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" @click="switchTheme(true)" :class="{active: !light }">Dark Theme</a>
+                </li>
+            </ul>
+        </div>
+        <div class="d-flex flex-row justify-content-center align-items-center">
             <div class="card boss-summary" id="encounter" style="min-width: 350px;">
                 <encounter-component :logdata="logdata"></encounter-component>
             </div>
+            <div v-if="logdata.combatReplay" class="ml-5">
+                <ul class="nav nav-pills flex-column justify-content-center d-flex align-items-center">
+                    <li class="nav-item mb-1">
+                        <a class="nav-link" @click="mode = 0" :class="{active: !mode}">Statistics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" @click="mode = 1" :class="{active: mode }">Combat Replay</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class="d-flex flex-row justify-content-center mt-2" id="phase-nav">
+        <div v-show="mode === 0" :class="{'d-flex': !mode}" class="flex-row justify-content-center mt-2" id="phase-nav">
             <phase-component :phases="logdata.phases"></phase-component>
         </div>
         <div class="d-flex flex-row justify-content-center mb-3 mt-3" id="actors">
-            <div id="targets" class="d-flex flex-row justify-content-center align-items-center flex-wrap mr-5">
+            <div v-show="mode === 0" :class="{'d-flex': !mode}" id="targets" class="flex-row justify-content-center align-items-center flex-wrap mr-5">
                 <target-component :targets="logdata.targets" :phase="phaseData.phase"></target-component>
             </div>
             <div id="players" class="ml-5">
-                <player-component :players="logdata.players"></player-component>
+                <player-component :players="logdata.players" :crmode="mode === 1"></player-component>
             </div>
         </div>
-        <general-layout-component :layout="layout" :phase="phaseData.phase">
+        <general-layout-component v-show="mode === 0" :layout="layout" :phase="phaseData.phase">
         </general-layout-component>
-        <div id="stats">
+        <div id="stats" v-show="mode === 0">
             <keep-alive>
                 <damage-stats-component v-if="dataType === datatypes.damageTable" :phase="phaseData.phase" :phaseindex="phaseData.index"
                     :players="logdata.players" :activetargets="activePhaseTargets"></damage-stats-component>
@@ -69,7 +91,8 @@
                 <support-stats-component v-if="dataType === datatypes.supTable" :phase="phaseData.phase" :players="logdata.players"></support-stats-component>
                 <defense-stats-component v-if="dataType === datatypes.defTable" :phase="phaseData.phase" :players="logdata.players"></defense-stats-component>
                 <graph-stats-component v-if="dataType === datatypes.dpsGraph" :phases="logdata.phases" :players="logdata.players"
-                    :targets="logdata.targets" :activetargets="activePhaseTargets" :phaseid="phaseData.index" :graphdata="logdata.graphData"></graph-stats-component>
+                    :targets="logdata.targets" :activetargets="activePhaseTargets" :phaseid="phaseData.index"
+                    :graphdata="logdata.graphData"></graph-stats-component>
                 <buff-stats-component v-if="dataType <= datatypes.defensiveBuffTable && dataType>= datatypes.boonTable"
                     :datatypes="datatypes" :datatype="dataType" :phase="phaseData.phase" :players="logdata.players"
                     :presentboons="logdata.boons" :presentoffs="logdata.offBuffs" :presentdefs="logdata.defBuffs"></buff-stats-component>
@@ -81,9 +104,12 @@
                     :phase="phaseData.phase" :phaseindex="phaseData.index" :presentboons="logdata.boons"
                     :presentconditions="logdata.conditions"></target-stats-component>
                 <player-stats-component v-if="dataType === datatypes.playerTab" :players="logdata.players"
-                    :activeplayer="activePlayer" :phaseindex="phaseData.index" :phase="phaseData.phase" :phases="logdata.phases" 
+                    :activeplayer="activePlayer" :phaseindex="phaseData.index" :phase="phaseData.phase" :phases="logdata.phases"
                     :graphdata="logdata.graphData" :targets="logdata.targets" :activetargets="activePhaseTargets"></player-stats-component>
             </keep-alive>
+        </div>
+        <div id="combat-replay" v-show="mode === 1">
+            <!--${CombatReplayBody}-->
         </div>
     </div>
 

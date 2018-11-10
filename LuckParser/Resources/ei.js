@@ -718,13 +718,16 @@ var compileHeader = function () {
     });
 
     Vue.component("player-component", {
-        props: ["players"],
+        props: ["players", "crmode"],
         template: "#tmplPlayers",
         methods: {
             getIcon: function (path) {
                 return urls[path];
             },
             select: function (player, groups) {
+                if (this.crmode) {
+                    return;
+                }
                 var oldStatus = player.active;
                 for (var i = 0; i < groups.length; i++) {
                     var group = groups[i];
@@ -2446,7 +2449,12 @@ var createLayout = function () {
     return layout;
 };
 
+var onLoad = window.onload;
+
 window.onload = function () {
+    if (onLoad) {
+        onLoad();
+    }
     Vue.config.performance = true;
     var i;
     for (i = 0; i < logData.phases.length; i++) {
@@ -2477,7 +2485,10 @@ window.onload = function () {
         data: {
             logdata: logData,
             layout: layout,
-            datatypes: DataTypes
+            datatypes: DataTypes,
+            combatreplay: logData.combatReplay,
+            light: logData.lightTheme,
+            mode: 0
         },
         computed: {
             phaseData: function () {

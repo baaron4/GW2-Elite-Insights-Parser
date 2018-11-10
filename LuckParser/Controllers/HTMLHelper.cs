@@ -734,7 +734,8 @@ namespace LuckParser.Controllers
             {
                 sw.WriteLine("var options = " + JsonConvert.SerializeObject(options) + ";");
                 sw.WriteLine("var actors = [" + actors + "];");
-                sw.WriteLine("initCombatReplay(actors, options);");
+                sw.WriteLine("var initialOnLoad = window.onload;");
+                sw.WriteLine("window.onload = function () { if (initialOnLoad) {initialOnLoad();} initCombatReplay(actors, options);};");
             }
             sw.WriteLine("</script>");
         }

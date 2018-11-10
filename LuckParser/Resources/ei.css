@@ -178,3 +178,38 @@ th {
 .target-cell:hover:not(.active) {
     filter: drop-shadow(0px 0px 6px #290);
 }
+
+.slidecontainer {
+    width: 100%;
+}
+
+.slider {
+    width: 100%;
+    appearance: none;
+    height: 25px;
+    background: #F3F3F3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #4CAF50;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #4CAF50;
+    cursor: pointer;
+}
