@@ -1360,7 +1360,7 @@ namespace LuckParser.Controllers
             int encounterPercent = 0;
             double healthLeft = 100;
             
-            if (_log.LogData.Success)
+            if (_log.FightData.Success)
             {
                 encounterPercent = 100;
                 healthLeft = 0;
@@ -1379,8 +1379,8 @@ namespace LuckParser.Controllers
             html = html.Replace("${encounterStart}", _log.LogData.LogStart);
             html = html.Replace("${encounterEnd}", _log.LogData.LogEnd);
             html = html.Replace("${encounterDuration}", durationString);
-            html = html.Replace("${encounterResult}", _log.LogData.Success ? "Success": "Fail");
-            html = html.Replace("${encounterResultCss}", _log.LogData.Success ? "text-success" : "text-warning");
+            html = html.Replace("${encounterResult}", _log.FightData.Success ? "Success": "Fail");
+            html = html.Replace("${encounterResultCss}", _log.FightData.Success ? "text-success" : "text-warning");
             html = html.Replace("${encounterPercent}", encounterPercent.ToString());
             html = html.Replace("${evtcVersion}", _log.LogData.BuildVersion);
             html = html.Replace("${bossID}", _log.FightData.ID.ToString());

@@ -55,22 +55,24 @@ namespace LuckParser.Models
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
+            // Find target
             Boss boss = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Deimos);
             if (boss == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
+            // enter combat
             CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcInstid == boss.InstID && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
             if (enterCombat != null)
             {
                 fightData.FightStart = enterCombat.Time;
             }
+            // Deimos gadgets
             List<AgentItem> deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos")).OrderBy(x => x.LastAware).ToList();
             if (deimosGadgets.Count > 0)
             {
-                long firstAware = deimosGadgets.Max(x => x.FirstAware);
-                HashSet<ulong> deimos2Agents = new HashSet<ulong>(deimosGadgets.Select(x => x.Agent));
                 CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.Time > combatData.First().Time && x.DstAgent > 0);
+                long firstAware = deimosGadgets.Max(x => x.FirstAware);
                 if (targetable != null)
                 {
                     firstAware = targetable.Time;
@@ -78,23 +80,31 @@ namespace LuckParser.Models
                 long oldAware = boss.LastAware;
                 fightData.PhaseData.Add(firstAware >= oldAware ? firstAware : oldAware);
                 boss.AgentItem.LastAware = deimosGadgets.Max(x => x.LastAware);
+                // get unique id for the fusion
+                ushort instID = 1;
+                Random rnd = new Random();
+                while (agentData.InstIDValues.Contains(instID))
+                {
+                    instID = (ushort)rnd.Next(1, ushort.MaxValue);
+                }
+                boss.AgentItem.InstID = instID;
+                agentData.Refresh();
+                // update combat data
+                HashSet<ulong> agents = new HashSet<ulong>(deimosGadgets.Select(x => x.Agent));
+                agents.Add(boss.Agent);
                 foreach (CombatItem c in combatData)
                 {
-                    if (c.Time > oldAware)
+                    if (agents.Contains(c.SrcAgent))
                     {
-                        if (deimos2Agents.Contains(c.SrcAgent))
-                        {
-                            c.SrcInstid = boss.InstID;
-                            c.SrcAgent = boss.Agent;
+                        c.SrcInstid = boss.InstID;
+                        c.SrcAgent = boss.Agent;
 
-                        }
-                        if (deimos2Agents.Contains(c.DstAgent))
-                        {
-                            c.DstInstid = boss.InstID;
-                            c.DstAgent = boss.Agent;
-                        }
                     }
-
+                    if (agents.Contains(c.DstAgent))
+                    {
+                        c.DstInstid = boss.InstID;
+                        c.DstAgent = boss.Agent;
+                    }
                 }
             }
         }

@@ -115,7 +115,7 @@ namespace LuckParser.Models
             {
                 return phases;
             }
-            List<PhaseData> nikPhases = GetTargetPhases(log, nikare, new string[]{ "Nikare P1", "Nikare P2", "Nikare P3" } );
+            List<PhaseData> nikPhases = GetTargetPhases(log, nikare, new string[] { "Nikare P1", "Nikare P2", "Nikare P3" });
             if (kenut != null)
             {
                 phases.AddRange(GetTargetPhases(log, kenut, new string[] { "Kenut P1", "Kenut P2", "Kenut P3" }));
@@ -129,14 +129,18 @@ namespace LuckParser.Models
                             // P1 and P2 merged
                             if (p1.Start == p2.Start)
                             {
-                                CombatItem combatItem = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => x.SrcInstid == kenut.InstID).FirstOrDefault();
-                                if (combatItem != null)
+                                CombatItem auraHit = log.CombatData.GetDamageData(nikare.InstID).FirstOrDefault(x => x.SkillID == 52779 && x.Time > p1.End + log.FightData.FightStart);
+                                if (auraHit != null)
                                 {
-                                    p2.OverrideStart(combatItem.Time - log.FightData.FightStart);
+                                    p2.OverrideStart(auraHit.Time - log.FightData.FightStart);
                                 }
                                 else
                                 {
-                                    nikPhases.Remove(p2);
+                                    CombatItem combatItem = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => x.SrcInstid == kenut.InstID).FirstOrDefault();
+                                    if (combatItem != null)
+                                    {
+                                        p2.OverrideStart(combatItem.Time - log.FightData.FightStart);
+                                    }
                                 }
                             }
                         }
@@ -149,21 +153,32 @@ namespace LuckParser.Models
                             // P1 and P2 merged
                             if (p1.Start == p2.Start)
                             {
-                                CombatItem combatItem = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => x.SrcInstid == kenut.InstID).FirstOrDefault();
-                                if (combatItem != null)
+                                CombatItem auraHit = log.CombatData.GetDamageData(nikare.InstID).FirstOrDefault(x => x.SkillID == 52779 && x.Time > p1.End + log.FightData.FightStart);
+                                if (auraHit != null)
                                 {
-                                    p2.OverrideStart(combatItem.Time - log.FightData.FightStart);
+                                    p2.OverrideStart(auraHit.Time - log.FightData.FightStart);
                                 }
-                                // P1 and P3 are merged
-                                if (p1.Start == p3.Start)
+                                else
+                                {
+                                    CombatItem combatItem = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => x.SrcInstid == kenut.InstID).FirstOrDefault();
+                                    if (combatItem != null)
+                                    {
+                                        p2.OverrideStart(combatItem.Time - log.FightData.FightStart);
+                                    }
+                                }
+                            }
+                            // P1/P2 and P3 are merged
+                            if (p1.Start == p3.Start || p2.Start == p3.Start)
+                            {
+                                CombatItem auraHit = log.CombatData.GetDamageData(nikare.InstID).FirstOrDefault(x => x.SkillID == 52779 && x.Time > p2.End + log.FightData.FightStart);
+                                if (auraHit != null)
+                                {
+                                    p3.OverrideStart(auraHit.Time - log.FightData.FightStart);
+                                }
+                                else
                                 {
                                     p3.OverrideStart(p2.End);
                                 }
-                            }
-                            // p2 and p3 are merged
-                            else if (p2.Start == p3.Start)
-                            {
-                                p3.OverrideStart(p2.End);
                             }
                         }
                         break;
@@ -172,7 +187,7 @@ namespace LuckParser.Models
                 }
             }
             phases.AddRange(nikPhases);
-            phases.Sort((x, y) => x.Start < y.Start ? -1 : 1);          
+            phases.Sort((x, y) => x.Start < y.Start ? -1 : 1);
             return phases;
         }
 
@@ -197,7 +212,7 @@ namespace LuckParser.Models
                         int duration = c.ActualDuration;
                         int end = start + duration;
                         int radius = 800;
-                        replay.Actors.Add(new CircleActor(true, end, radius, new Tuple<int, int>(start,end), "rgba(255, 255, 0, 0.3)", new AgentConnector(boss)));
+                        replay.Actors.Add(new CircleActor(true, end, radius, new Tuple<int, int>(start, end), "rgba(255, 255, 0, 0.3)", new AgentConnector(boss)));
                     }
                     break;
                 case (ushort)ParseEnum.BossIDS.Kenut:

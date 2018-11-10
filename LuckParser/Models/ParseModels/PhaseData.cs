@@ -49,12 +49,24 @@ namespace LuckParser.Models.ParseModels
             End = end;
         }
 
-        public void OverrideTimes(long offset)
+        public void OverrideTimes(long offset, CombatData combatData)
         {
             if (Targets.Count > 0)
             {
+                List<CombatItem> deathEvents = combatData.GetStatesData(DataModels.ParseEnum.StateChange.ChangeDead);
                 Start = Math.Max(Start, Targets.Min(x => x.FirstAware)- offset);
-                End = Math.Min(End, Targets.Max(x => x.LastAware) - offset);
+                long end = long.MinValue;
+                foreach (Boss target in Targets)
+                {
+                    long dead = target.LastAware;
+                    CombatItem died = deathEvents.FirstOrDefault(x => x.SrcInstid == target.InstID && x.Time >= target.FirstAware && x.Time <= target.LastAware);
+                    if (died != null)
+                    {
+                        dead = died.Time;
+                    }
+                    end = Math.Max(end, dead);
+                }
+                End = Math.Min(End, end - offset);
             }
         }
     }

@@ -97,7 +97,7 @@ namespace LuckParser.Controllers
             log.TimeStart = _log.LogData.LogStart;
             log.TimeEnd = _log.LogData.LogEnd;
             log.Duration = durationString;
-            log.Success = _log.LogData.Success ? 1 : 0;
+            log.Success = _log.FightData.Success ? 1 : 0;
             log.SkillNames = _skillNames;
             log.BuffNames = _buffNames;
             if (!_devMode)
