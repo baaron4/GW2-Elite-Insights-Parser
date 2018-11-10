@@ -575,10 +575,7 @@ namespace LuckParser.Controllers
                         break;
                     case ParseEnum.StateChange.LogStart:
                         _logData.SetLogStart(c.Value);
-                        if (_fightData.FightStart == 0)
-                        {
-                            _fightData.FightStart = c.Time;
-                        }
+                        _fightData.FightStart = c.Time;
                         break;
                     case ParseEnum.StateChange.LogEnd:
                         _logData.SetLogEnd(c.Value);
@@ -593,7 +590,6 @@ namespace LuckParser.Controllers
                         break;
                 }
             }
-            _logData.EncounterLength = _fightData.FightDuration;
 
             //players
             if (_playerList.Count == 0)

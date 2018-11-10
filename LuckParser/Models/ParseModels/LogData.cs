@@ -9,8 +9,6 @@ namespace LuckParser.Models.ParseModels
         public string PoV { get; private set; } = "N/A";
         public string LogStart { get; private set; } = "yyyy-MM-dd HH:mm:ss z";
         public string LogEnd { get; private set; } = "yyyy-MM-dd HH:mm:ss z";
-        public long EncounterLength { get; set; } = 0;
-        public bool Success { get; set; }
        // private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 
         // Constructors
@@ -18,17 +16,6 @@ namespace LuckParser.Models.ParseModels
         {
             BuildVersion = buildVersion;
            // this.sdf.setTimeZone(TimeZone.getDefault());
-        }
-
-        // Public Methods
-        public string[] ToStringArray()
-        {
-            string[] array = new string[4];
-            array[0] = BuildVersion;
-            array[1] = PoV;
-            array[2] = LogStart;
-            array[3] = LogEnd;
-            return array;
         }
         
         // Setters
