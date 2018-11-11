@@ -8,7 +8,7 @@
     </ul>
     <keep-alive>
         <target-tab-component v-for="(target, targetid) in targets" :key="targetid" v-if="phase.focus === target"
-            :target="target" :targetindex="targetid" :phaseindex="phaseindex" :phase="phase" :players="players" :boons="boons"
+            :target="target" :targetindex="targetid" :phaseindex="phaseindex" :phase="phase" :phases="phases" :players="players" :boons="boons"
             :conditions="conditions"></target-tab-component>
     </keep-alive>
 </div>

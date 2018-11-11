@@ -102,7 +102,7 @@
                     :players="logdata.players" :enemies="logdata.enemies"></mechanics-stats-component>
                 <target-stats-component v-if="dataType === datatypes.targetTab" :players="logdata.players" :targets="logdata.targets"
                     :phase="phaseData.phase" :phaseindex="phaseData.index" :presentboons="logdata.boons"
-                    :presentconditions="logdata.conditions"></target-stats-component>
+                    :presentconditions="logdata.conditions" :phases="logdata.phases"></target-stats-component>
                 <player-stats-component v-if="dataType === datatypes.playerTab" :players="logdata.players"
                     :activeplayer="activePlayer" :phaseindex="phaseData.index" :phase="phaseData.phase" :phases="logdata.phases"
                     :graphdata="logdata.graphData" :targets="logdata.targets" :activetargets="activePhaseTargets"></player-stats-component>

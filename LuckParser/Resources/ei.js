@@ -324,6 +324,31 @@ function computePlayerDPS(playerid, graph, playerDPS, maxDPS, allDPS, lim, phase
     });
 }
 
+function computeTargetDPS(targetid, graph, lim, phasebreaks) {
+    var totalDamage = 0;
+    var maxDPS = 0;
+    var totalDPS = [0];
+    var dpsData = graph.targets[targetid];
+
+    for (var j = 1; j < dpsData.total.length; j++) {
+        var limID = 0;
+        if (lim > 0) {
+            limID = Math.max(j - lim, 0);
+        }
+        totalDamage += dpsData.total[j] - dpsData.total[limID];
+        if (phasebreaks && phasebreaks[j - 1]) {
+            limID = j - 1;
+            totalDamage = 0;
+        }
+        totalDPS[j] = Math.round(totalDamage / (j - limID));
+        maxDPS = Math.max(maxDPS, totalDPS[j]);
+    }
+    return {
+        dps: totalDPS,
+        maxDPS: maxDPS
+    };
+}
+
 function getActorGraphLayout(images) {
 
     return {
@@ -1924,7 +1949,7 @@ var compileTargetTab = function () {
     });
     // tab
     Vue.component("target-tab-component", {
-        props: ["target", "phaseindex", "players", "phase", "boons", "conditions", 'targetindex'],
+        props: ["target", "phaseindex", "players", "phase", "boons", "conditions", 'targetindex', 'phases'],
         template: "#tmplTargetTab",
         data: function () {
             return {
@@ -1934,7 +1959,7 @@ var compileTargetTab = function () {
     });
     // stats
     Vue.component("target-stats-component", {
-        props: ["players", "targets", "phase", "phaseindex", "presentboons", "presentconditions"],
+        props: ["players", "targets", "phase", "phaseindex", "presentboons", "presentconditions", 'phases'],
         template: "#tmplTargetStats",
         computed: {
             phaseTargets: function () {
@@ -1963,6 +1988,89 @@ var compileTargetTab = function () {
                 return data;
             }
         }
+    });
+    
+    Vue.component("target-graph-tab-component", {
+        props: ["targetindex", "target", "phase", "phases", "phaseindex", "graph"],
+        data: function() {
+            return {
+                dpsmode: 0,
+                layout: {},
+                data: [],
+                dpsCache: new Map(),
+                dataCache: new Map(),
+                targetOffset: 0
+            };
+        },
+        created: function () {
+            var images = [];
+            this.targetOffset += computeRotationData(this.target.details.rotation[this.phaseindex], images, this.data);
+            this.targetOffset += computeBuffData(this.target.details.boonGraph[this.phaseindex], this.data);
+            {
+                var health = this.graph.targets[this.targetindex].health;
+                var hpTexts = [];
+                for (j = 0; j < health.length; j++) {
+                    hpTexts[j] = health[j] + "%";
+                }
+                var target = targets[phase.targets[i]];
+                var res = {
+                    text: hpTexts,
+                    mode: 'lines',
+                    line: {
+                        shape: 'spline',
+                        dash: 'dashdot'
+                    },
+                    hoverinfo: 'text+x+name',
+                    name: target.name + ' health',
+                };
+                if (yaxis) {
+                    res.yaxis = yaxis;
+                }
+                this.data.push(res);
+            }
+            this.targetOffset++;
+            this.data.push({
+                y: [],
+                mode: 'lines',
+                line: {
+                    shape: 'spline'
+                },
+                yaxis: 'y3',
+                name: 'Total DPS'
+            });
+            this.layout = getActorGraphLayout(images);
+            computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase);
+        },
+        computed: {
+            graphid: function() {
+                return "targetgraph-" + this.targetindex + '-' + this.phaseindex;
+            },
+            graphname: function () {
+                var name = "DPS graph";
+                name = (this.dpsmode === 0 ? "Full " : (this.dpsmode === 1 ? "10s " : (this.dpsmode === 2 ? "30s " : "Phase "))) + name;
+                return name;
+            },
+            computePhaseBreaks: function () {
+                var res = [];
+                if (this.phase.subPhases) {
+                    for (var i = 0; i < this.phase.subPhases.length; i++) {
+                        var subPhase = this.phases[this.phase.subPhases[i]];
+                        res[Math.floor(subPhase.start - this.phase.start)] = true;
+                        res[Math.floor(subPhase.end - this.phase.start)] = true;
+                    }
+                }
+                return res;
+            },
+            computeData: function () {
+            }
+        },
+        methods: {
+            computeDPSData: function () {
+            },
+            computeDPSRelatedData: function() {
+            },
+        },
+        template: "#tmplTargetTabGraph"
     });
 };
 

@@ -340,6 +340,7 @@
     <None Include="Resources\tmplDamageModifierTable.html" />
     <None Include="Resources\tmplPlayerTabGraph.html" />
     <None Include="Resources\tmplRotationLegend.html" />
+    <None Include="Resources\tmplTargetTabGraph.html" />
     <Content Include="Resources\TODO.txt" />
     <None Include="Resources\template.html" />
   </ItemGroup>

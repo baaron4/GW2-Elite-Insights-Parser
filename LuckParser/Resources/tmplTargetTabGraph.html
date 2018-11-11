@@ -1,0 +1,20 @@
+<div>
+    <!--Add hitbox/ health stuff here-->
+    <ul class="nav nav-pills d-flex flex-row justify-content-center mt-5 mb-2">
+        <li class="nav-item">
+            <a class="nav-link" @click="dpsmode = 0" :class="{active: dpsmode === 0}">Full</a>
+        </li>
+        <li v-if="phase.end - phase.start > 10" class="nav-item">
+            <a class="nav-link" @click="dpsmode = 1" :class="{active: dpsmode === 1}">10s</a>
+        </li>
+        <li v-if="phase.end - phase.start > 30" class="nav-item">
+            <a class="nav-link" @click="dpsmode = 2" :class="{active: dpsmode === 2}">30s</a>
+        </li>
+        <li v-if="phase.subPhases" class="nav-item">
+            <a class="nav-link" @click="dpsmode = 3" :class="{active: dpsmode === 3}">Phase</a>
+        </li>
+    </ul>
+    <h3 class="text-center mt-2 mb-2">{{graphname}}</h3>
+    <graph-component :id="graphid" :layout="layout" :data="computeData"></graph-component>
+    <rotation-legend-component></rotation-legend-component>
+</div>

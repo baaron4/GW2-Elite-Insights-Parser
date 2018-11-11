@@ -214,6 +214,9 @@
   <data name="tmplPlayerTabGraph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tmplPlayerTabGraph.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="tmplTargetTabGraph" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tmplTargetTabGraph.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="tmplRotationLegend" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tmplRotationLegend.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>

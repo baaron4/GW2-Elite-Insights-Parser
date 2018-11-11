@@ -15,7 +15,9 @@
         </li>
     </ul>
     <keep-alive>
-        <dmgdist-target-component v-if="mode === 0" :target="target" :phaseindex="phaseindex" :targetindex="targetindex"></dmgdist-target-component>
+        <dmgdist-target-component v-if="mode === 0" :target="target" :phaseindex="phaseindex" :targetindex="targetindex"></dmgdist-target-component>     
+        <target-graph-tab-component v-for="(ph, id) in phases" v-if="mode === 1 && id === phaseindex" :key="id" :target="target" :targetindex="targetindex" 
+                            :phase="ph" :phaseindex="id" :phases="phases" :graph="graphdata.phases[id]" ></target-graph-tab-component>
         <buff-stats-target-component v-if="mode === 2" :target="target" :targetindex="targetindex" :phase="phase"
             :players="players" :boons="boons" :conditions="conditions"></buff-stats-target-component>
     </keep-alive>
