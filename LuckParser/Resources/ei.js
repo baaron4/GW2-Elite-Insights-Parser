@@ -328,14 +328,14 @@ function computeTargetDPS(targetid, graph, lim, phasebreaks) {
     var totalDamage = 0;
     var maxDPS = 0;
     var totalDPS = [0];
-    var dpsData = graph.targets[targetid];
+    var dpsData = graph.targets[targetid].total;
 
-    for (var j = 1; j < dpsData.total.length; j++) {
+    for (var j = 1; j < dpsData.length; j++) {
         var limID = 0;
         if (lim > 0) {
             limID = Math.max(j - lim, 0);
         }
-        totalDamage += dpsData.total[j] - dpsData.total[limID];
+        totalDamage += dpsData[j] - dpsData[limID];
         if (phasebreaks && phasebreaks[j - 1]) {
             limID = j - 1;
             totalDamage = 0;
@@ -1949,18 +1949,18 @@ var compileTargetTab = function () {
     });
     // tab
     Vue.component("target-tab-component", {
-        props: ["target", "phaseindex", "players", "phase", "boons", "conditions", 'targetindex', 'phases'],
+        props: ["target", "phaseindex", "players", "phase","graphdata", "boons", "conditions", 'targetindex', 'phases', 'mode'],
         template: "#tmplTargetTab",
+    });
+    // stats
+    Vue.component("target-stats-component", {
+        props: ["players", "targets", "phase", "phaseindex","graphdata", "presentboons", "presentconditions", 'phases'],
+        template: "#tmplTargetStats",
         data: function () {
             return {
                 mode: 0
             };
-        }
-    });
-    // stats
-    Vue.component("target-stats-component", {
-        props: ["players", "targets", "phase", "phaseindex", "presentboons", "presentconditions", 'phases'],
-        template: "#tmplTargetStats",
+        },
         computed: {
             phaseTargets: function () {
                 var res = [];
@@ -2007,12 +2007,11 @@ var compileTargetTab = function () {
             this.targetOffset += computeRotationData(this.target.details.rotation[this.phaseindex], images, this.data);
             this.targetOffset += computeBuffData(this.target.details.boonGraph[this.phaseindex], this.data);
             {
-                var health = this.graph.targets[this.targetindex].health;
+                var health = this.graph.targets[this.phaseTargetIndex].health;
                 var hpTexts = [];
                 for (j = 0; j < health.length; j++) {
                     hpTexts[j] = health[j] + "%";
                 }
-                var target = targets[phase.targets[i]];
                 var res = {
                     text: hpTexts,
                     mode: 'lines',
@@ -2021,11 +2020,9 @@ var compileTargetTab = function () {
                         dash: 'dashdot'
                     },
                     hoverinfo: 'text+x+name',
-                    name: target.name + ' health',
+                    name: this.target.name + ' health',
+                    yaxis: 'y3'
                 };
-                if (yaxis) {
-                    res.yaxis = yaxis;
-                }
                 this.data.push(res);
             }
             this.targetOffset++;
@@ -2042,8 +2039,11 @@ var compileTargetTab = function () {
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase);
         },
         computed: {
+            phaseTargetIndex: function() {
+                return this.phase.targets.indexOf(this.targetindex);
+            },
             graphid: function() {
-                return "targetgraph-" + this.targetindex + '-' + this.phaseindex;
+                return "targetgraph-" + this.phaseTargetIndex + '-' + this.phaseindex;
             },
             graphname: function () {
                 var name = "DPS graph";
@@ -2062,12 +2062,49 @@ var compileTargetTab = function () {
                 return res;
             },
             computeData: function () {
+                this.layout.datarevision = new Date().getTime();
+                var res = this.data;
+                var data = this.computeDPSRelatedData();
+                this.data[this.targetOffset].y = data[0];
+                this.data[this.targetOffset-1].y = data[1];
+                return res;
             }
         },
         methods: {
-            computeDPSData: function () {
+            computeDPSData: function () {             
+                var cacheID = this.dpsmode;
+                if (this.dpsCache.has(cacheID)) {
+                    return this.dpsCache.get(cacheID);
+                }
+                //var before = performance.now();
+                var res;
+                if (this.dpsmode < 3) {
+                    var lim = (this.dpsmode === 0 ? 0 : (this.dpsmode === 1 ? 10 : 30));
+                    res = computeTargetDPS(this.phaseTargetIndex, this.graph, lim, null);
+                } else {
+                    res = computeTargetDPS(this.phaseTargetIndex, this.graph,0, this.computePhaseBreaks);
+                }
+                this.dpsCache.set(cacheID, res);
+                return res;
             },
-            computeDPSRelatedData: function() {
+            computeDPSRelatedData: function() {               
+                var cacheID = this.dpsmode;
+                if (this.dataCache.has(cacheID)) {
+                    return this.dataCache.get(cacheID);
+                }
+                var dpsData = this.computeDPSData();
+                var res = [];
+                res[0] = dpsData.dps;
+                {
+                    var health = this.graph.targets[this.phaseTargetIndex].health;
+                    var hpPoints = [];
+                    for (j = 0; j < health.length; j++) {
+                        hpPoints[j] = health[j] * dpsData.maxDPS / 100.0;
+                    }
+                    res[1] = hpPoints;
+                }
+                this.dataCache.set(cacheID, res);
+                return res;
             },
         },
         template: "#tmplTargetTabGraph"

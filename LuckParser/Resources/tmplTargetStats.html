@@ -6,9 +6,24 @@
             </a>
         </li>
     </ul>
+    <h3 v-for="(target, targetid) in targets" :key="targetid" v-show="phase.focus === target" class="text-center mt-2"><img :alt="target.name" class="icon-lg mt-2" :src="target.icon">{{target.name}}</h3>
+    <ul class="nav nav-tabs">
+        <li>
+            <a class="nav-link" :class="{active: mode === 0}" @click="mode = 0">
+                Damage
+                Distribution
+            </a>
+        </li>
+        <li>
+            <a class="nav-link" :class="{active: mode === 1}" @click="mode = 1">Graph</a>
+        </li>
+        <li>
+            <a class="nav-link" :class="{active: mode === 2}" @click="mode = 2">Buff Status</a>
+        </li>
+    </ul>
     <keep-alive>
         <target-tab-component v-for="(target, targetid) in targets" :key="targetid" v-if="phase.focus === target"
-            :target="target" :targetindex="targetid" :phaseindex="phaseindex" :phase="phase" :phases="phases" :players="players" :boons="boons"
-            :conditions="conditions"></target-tab-component>
+            :target="target" :targetindex="targetid" :graphdata="graphdata" :phaseindex="phaseindex" :phase="phase" :phases="phases" :players="players" :boons="boons"
+            :conditions="conditions" :mode="mode"></target-tab-component>
     </keep-alive>
 </div>
