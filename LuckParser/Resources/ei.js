@@ -341,12 +341,12 @@ function getActorGraphLayout(images) {
         hovermode: 'compare',
         yaxis2: {
             title: 'Buffs',
-            domain: [0.11, 0.50],
+            domain: [0.11, 0.55],
             fixedrange: true
         },
         yaxis3: {
             title: 'DPS',
-            domain: [0.51, 1]
+            domain: [0.56, 1]
         },
         images: images,
         font: {
@@ -356,9 +356,9 @@ function getActorGraphLayout(images) {
         plot_bgcolor: 'rgba(0,0,0,0)',
         shapes: [],
         annotations: [],
-        autosize: false,
+        autosize: true,
         width: 1100,
-        height: 1000,
+        height: 800,
         datarevision: new Date().getTime(),
     };
 }
@@ -2058,7 +2058,7 @@ var compileGraphs = function () {
         template: "#tmplGraphStats",
         data: function () {
             return {
-                mode: 0
+                mode: 1
             };
         }
     });
@@ -2094,7 +2094,8 @@ var compileGraphs = function () {
                     orientation: 'h',
                     font: {
                         size: 15
-                    }
+                    },
+                    y: -0.1
                 },
                 font: {
                     color: '#cccccc'
@@ -2104,9 +2105,9 @@ var compileGraphs = function () {
                 displayModeBar: false,
                 shapes: [],
                 annotations: [],
-                autosize: false,
+                autosize: true,
                 width: 1100,
-                height: 1000,
+                height: 800,
                 datarevision: new Date().getTime(),
             };
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase);
