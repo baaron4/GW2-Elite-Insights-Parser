@@ -139,10 +139,10 @@ th {
 }
 
 .theme-cosmo .nav-pills .nav-link:not(.active) {
-    background-color: rgba(0,0,0,0.03);
+    background-color: rgba(245,245,245,1);
 }
 .theme-cosmo .nav-tabs .nav-link:not(.active) {
-    background-color: rgba(0,0,0,0.03);
+    background-color: rgba(245,245,245,1);
 }
 .theme-cosmo .nav-pills .nav-link {
     border: 1px solid transparent;  
