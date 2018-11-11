@@ -478,16 +478,17 @@ namespace LuckParser.Controllers
                         _skillIcons[pair.Key] = skill.Icon;
                     }
                 }
+                List<DamageLog> filteredList = pair.Value.Where(x => x.Result != ParseEnum.Result.Downed).ToList();
                 res[pair.Key] = new JsonDamageDist()
                 {
-                    Hits = pair.Value.Count,
-                    Damage = pair.Value.Sum(x => x.Damage),
-                    Condi = pair.Value.First().IsCondi,
-                    Min = pair.Value.Min(x => x.Damage),
-                    Max = pair.Value.Max(x => x.Damage),
-                    Flank = pair.Value.Count(x => x.IsFlanking > 0),
-                    Crit = pair.Value.Count(x => x.Result == ParseEnum.Result.Crit),
-                    Glance = pair.Value.Count(x => x.Result == ParseEnum.Result.Glance),
+                    Hits = filteredList.Count,
+                    Damage = filteredList.Sum(x => x.Damage),
+                    Condi = filteredList.First().IsCondi,
+                    Min = filteredList.Min(x => x.Damage),
+                    Max = filteredList.Max(x => x.Damage),
+                    Flank = filteredList.Count(x => x.IsFlanking > 0),
+                    Crit = filteredList.Count(x => x.Result == ParseEnum.Result.Crit),
+                    Glance = filteredList.Count(x => x.Result == ParseEnum.Result.Glance),
                 };
         }
 
