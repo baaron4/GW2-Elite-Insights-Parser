@@ -210,8 +210,7 @@ var compileGraphs = function () {
                 var cacheID = this.dpsmode + '-';
                 var targetsID = 1;
                 for (var i = 0; i < this.activetargets.length; i++) {
-                    var target = this.activetargets[i];
-                    targetsID = targetsID << (target.id + 1);
+                    targetsID = targetsID << (this.activetargets[i] + 1);
                 }
                 cacheID += targetsID;
                 if (this.dpsCache.has(cacheID)) {
@@ -233,8 +232,7 @@ var compileGraphs = function () {
                 var i, j;
                 var target;
                 for (i = 0; i < this.activetargets.length; i++) {
-                    target = this.activetargets[i];
-                    targetsID = targetsID << (target.id + 1);
+                    targetsID = targetsID << (this.activetargets[i] + 1);
                 }
                 cacheID += targetsID;
                 if (this.dataCache.has(cacheID)) {

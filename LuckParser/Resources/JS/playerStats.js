@@ -32,8 +32,7 @@ var compilePlayerTab = function () {
                 var targetsID = 1;
                 var i;
                 for (i = 0; i < this.activetargets.length; i++) {
-                    var target = this.activetargets[i];
-                    targetsID = targetsID << (target.id + 1);
+                    targetsID = targetsID << (this.activetargets[i] + 1);
                 }
                 cacheID += targetsID;
                 if (this.cacheTarget.has(cacheID)) {
@@ -46,7 +45,7 @@ var compilePlayerTab = function () {
                 };
                 var rows = new Map();
                 for (i = 0; i < this.activetargets.length; i++) {
-                    var targetid = this.activetargets[i].id;
+                    var targetid = this.activetargets[i];
                     var targetDist = this.distmode === -1 ?
                         this.player.details.dmgDistributionsTargets[this.phaseindex][targetid] :
                         this.player.details.minions[this.distmode].dmgDistributionsTargets[this.phaseindex][targetid];
@@ -186,8 +185,7 @@ var compilePlayerTab = function () {
                 var cacheID = this.dpsmode + '-';
                 var targetsID = 1;
                 for (var i = 0; i < this.activetargets.length; i++) {
-                    var target = this.activetargets[i];
-                    targetsID = targetsID << (target.id + 1);
+                    targetsID = targetsID << (this.activetargets[i] + 1);
                 }
                 cacheID += targetsID;
                 if (this.dpsCache.has(cacheID)) {
@@ -222,8 +220,7 @@ var compilePlayerTab = function () {
                 var cacheID = this.dpsmode + '-';
                 var targetsID = 1;
                 for (var i = 0; i < this.activetargets.length; i++) {
-                    var target = this.activetargets[i];
-                    targetsID = targetsID << (target.id + 1);
+                    targetsID = targetsID << (this.activetargets[i] + 1);
                 }
                 cacheID += targetsID;
                 if (this.dataCache.has(cacheID)) {

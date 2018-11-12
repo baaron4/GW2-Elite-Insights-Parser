@@ -70,41 +70,44 @@
             <phase-component :phases="logdata.phases"></phase-component>
         </div>
         <div class="d-flex flex-row justify-content-center mb-3 mt-3" id="actors">
-            <div v-show="mode === 0 && dataType !== datatypes.targetTab" :class="{'d-flex':mode === 0 && dataType !== datatypes.targetTab}" id="targets" class="flex-row justify-content-center align-items-center flex-wrap mr-5">
-                <target-component :targets="logdata.targets" :phase="phaseData.phase"></target-component>
+            <div v-show="mode === 0 && dataType !== datatypes.targetTab" :class="{'d-flex':mode === 0 && dataType !== datatypes.targetTab}"
+                id="targets" class="flex-row justify-content-center align-items-center flex-wrap mr-5">
+                <target-component :targets="logdata.targets" :phase="logdata.phases[activePhase]"></target-component>
             </div>
             <div id="players" class="ml-5">
                 <player-component :players="logdata.players" :crmode="mode === 1"></player-component>
             </div>
         </div>
-        <general-layout-component v-show="mode === 0" :layout="layout" :phase="phaseData.phase">
+        <general-layout-component v-show="mode === 0" :layout="layout" :phase="logdata.phases[activePhase]">
         </general-layout-component>
         <div id="stats" v-show="mode === 0">
             <keep-alive>
-                <damage-stats-component v-if="dataType === datatypes.damageTable" :phase="phaseData.phase" :phaseindex="phaseData.index"
-                    :players="logdata.players" :activetargets="activePhaseTargets"></damage-stats-component>
-                <gameplay-stats-component v-if="dataType === datatypes.gameplayTable" :phase="phaseData.phase"
-                    :phaseindex="phaseData.index" :players="logdata.players" :activetargets="activePhaseTargets"></gameplay-stats-component>
-                <dmgmodifier-stats-component v-if="dataType === datatypes.dmgModifiersTable" :phase="phaseData.phase"
-                    :phaseindex="phaseData.index" :players="logdata.players" :activetargets="activePhaseTargets"
+                <damage-stats-component v-if="dataType === datatypes.damageTable" :phase="logdata.phases[activePhase]"
+                    :phaseindex="activePhase" :players="logdata.players" :activetargets="activePhaseTargets"></damage-stats-component>
+                <gameplay-stats-component v-if="dataType === datatypes.gameplayTable" :phase="logdata.phases[activePhase]"
+                    :phaseindex="activePhase" :players="logdata.players" :activetargets="activePhaseTargets"></gameplay-stats-component>
+                <dmgmodifier-stats-component v-if="dataType === datatypes.dmgModifiersTable" :phase="logdata.phases[activePhase]"
+                    :phaseindex="activePhase" :players="logdata.players" :activetargets="activePhaseTargets"
                     :phases="logdata.phases"></dmgmodifier-stats-component>
-                <support-stats-component v-if="dataType === datatypes.supTable" :phase="phaseData.phase" :players="logdata.players"></support-stats-component>
-                <defense-stats-component v-if="dataType === datatypes.defTable" :phase="phaseData.phase" :players="logdata.players"></defense-stats-component>
+                <support-stats-component v-if="dataType === datatypes.supTable" :phase="logdata.phases[activePhase]"
+                    :players="logdata.players"></support-stats-component>
+                <defense-stats-component v-if="dataType === datatypes.defTable" :phase="logdata.phases[activePhase]"
+                    :players="logdata.players"></defense-stats-component>
                 <graph-stats-component v-if="dataType === datatypes.dpsGraph" :phases="logdata.phases" :players="logdata.players"
-                    :targets="logdata.targets" :activetargets="activePhaseTargets" :phaseid="phaseData.index"
-                    :graphdata="logdata.graphData" :selectedplayerindex="activePlayer"></graph-stats-component>
+                    :targets="logdata.targets" :activetargets="activePhaseTargets" :phaseid="activePhase" :graphdata="logdata.graphData"
+                    :selectedplayerindex="activePlayer"></graph-stats-component>
                 <buff-stats-component v-if="dataType <= datatypes.defensiveBuffTable && dataType>= datatypes.boonTable"
-                    :datatypes="datatypes" :datatype="dataType" :phase="phaseData.phase" :players="logdata.players"
+                    :datatypes="datatypes" :datatype="dataType" :phase="logdata.phases[activePhase]" :players="logdata.players"
                     :presentboons="logdata.boons" :presentoffs="logdata.offBuffs" :presentdefs="logdata.defBuffs"></buff-stats-component>
-                <personal-buff-table-component v-if="dataType === datatypes.personalBuffTable" :phase="phaseData.phase"
+                <personal-buff-table-component v-if="dataType === datatypes.personalBuffTable" :phase="logdata.phases[activePhase]"
                     :persbuffs="logdata.persBuffs" :players="logdata.players"></personal-buff-table-component>
-                <mechanics-stats-component v-if="dataType === datatypes.mechanicTable" :phase="phaseData.phase"
+                <mechanics-stats-component v-if="dataType === datatypes.mechanicTable" :phase="logdata.phases[activePhase]"
                     :players="logdata.players" :enemies="logdata.enemies"></mechanics-stats-component>
                 <target-stats-component v-if="dataType === datatypes.targetTab" :players="logdata.players" :targets="logdata.targets"
-                    :phase="phaseData.phase" :phaseindex="phaseData.index" :presentboons="logdata.boons"
+                    :phase="logdata.phases[activePhase]" :phaseindex="activePhase" :presentboons="logdata.boons"
                     :presentconditions="logdata.conditions" :phases="logdata.phases" :graphdata="logdata.graphData"></target-stats-component>
                 <player-stats-component v-if="dataType === datatypes.playerTab" :players="logdata.players"
-                    :activeplayer="activePlayer" :phaseindex="phaseData.index" :phase="phaseData.phase" :phases="logdata.phases"
+                    :activeplayer="activePlayer" :phaseindex="activePhase" :phase="logdata.phases[activePhase]" :phases="logdata.phases"
                     :graphdata="logdata.graphData" :targets="logdata.targets" :activetargets="activePhaseTargets"></player-stats-component>
             </keep-alive>
         </div>

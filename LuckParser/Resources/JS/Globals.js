@@ -262,7 +262,7 @@ function computePlayerDPS(playerid, graph, playerDPS, maxDPS, allDPS, lim, phase
         }
         totalDamage += dpsData.total[j] - dpsData.total[limID];
         for (var k = 0; k < activetargets.length; k++) {
-            var targetid = activetargets[k].id;
+            var targetid = activetargets[k];
             targetDamage += dpsData.targets[targetid][j] - dpsData.targets[targetid][limID];
         }
         if (phasebreaks && phasebreaks[j - 1]) {

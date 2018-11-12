@@ -63,14 +63,11 @@ window.onload = function () {
             }
         },
         computed: {
-            phaseData: function () {
+            activePhase: function () {
                 var phases = this.logdata.phases;
                 for (var i = 0; i < phases.length; i++) {
                     if (phases[i].active) {
-                        return {
-                            phase: phases[i],
-                            index: i
-                        };
+                        return i;
                     }
                 }
             },
@@ -103,14 +100,11 @@ window.onload = function () {
             activePhaseTargets: function () {
                 var res = [];
                 var targets = this.logdata.targets;
-                var activePhase = this.phaseData.phase;
+                var activePhase = this.logdata.phases[this.activePhase];
                 for (var i = 0; i < activePhase.targets.length; i++) {
                     var target = targets[activePhase.targets[i]];
                     if (target.active) {
-                        res.push({
-                            target: target,
-                            id: i
-                        });
+                        res.push(i);
                     }
                 }
                 return res;

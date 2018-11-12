@@ -21,8 +21,7 @@ var compileGeneralStats = function () {
                 var targetsID = 1;
                 var i;
                 for (i = 0; i < this.activetargets.length; i++) {
-                    var target = this.activetargets[i];
-                    targetsID = targetsID << (target.id + 1);
+                    targetsID = targetsID << (this.activetargets[i] + 1);
                 }
                 cacheID += targetsID;
                 if (this.cacheTarget.has(cacheID)) {
@@ -38,7 +37,7 @@ var compileGeneralStats = function () {
                     var dpsStat = phase.dpsStats[i];
                     var dpsTargetStat = [0, 0, 0, 0, 0, 0];
                     for (j = 0; j < this.activetargets.length; j++) {
-                        var tar = phase.dpsStatsTargets[i][this.activetargets[j].id];
+                        var tar = phase.dpsStatsTargets[i][this.activetargets[j]];
                         for (var k = 0; k < dpsTargetStat.length; k++) {
                             dpsTargetStat[k] += tar[k];
                         }
@@ -261,8 +260,7 @@ var compileGeneralStats = function () {
                 var targetsID = 1;
                 var i;
                 for (i = 0; i < this.activetargets.length; i++) {
-                    var target = this.activetargets[i];
-                    targetsID = targetsID << (target.id + 1);
+                    targetsID = targetsID << (this.activetargets[i] + 1);
                 }
                 cacheID += targetsID;
                 if (this.cacheTarget.has(cacheID)) {
@@ -283,7 +281,7 @@ var compileGeneralStats = function () {
                             commons[j - 14] = stats[j];
                         } else {
                             for (var k = 0; k < this.activetargets.length; k++) {
-                                var tar = phase.dmgStatsTargets[i][this.activetargets[k].id];
+                                var tar = phase.dmgStatsTargets[i][this.activetargets[k]];
                                 data[j] += tar[j];
                             }
                         }
@@ -357,8 +355,7 @@ var compileGeneralStats = function () {
                 var targetsID = 1;
                 var i;
                 for (i = 0; i < this.activetargets.length; i++) {
-                    var target = this.activetargets[i];
-                    targetsID = targetsID << (target.id + 1);
+                    targetsID = targetsID << (this.activetargets[i] + 1);
                 }
                 cacheID += targetsID;
                 if (this.cacheTarget.has(cacheID)) {
@@ -377,7 +374,7 @@ var compileGeneralStats = function () {
                         data.push([0, 0, 0, 0]);
                     }
                     for (j = 0; j < this.activetargets.length; j++) {
-                        var modifier = dmgModifier[this.activetargets[j].id];
+                        var modifier = dmgModifier[this.activetargets[j]];
                         for (var k = 0; k < modifier.length; k++) {
                             var targetData = modifier[k].slice(1);
                             var curData = data[k];
