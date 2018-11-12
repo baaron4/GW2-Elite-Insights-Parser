@@ -127,110 +127,140 @@
   <data name="ei_js" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ei.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+   <data name="commonsJS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+      <value>..\Resources\JS\commons.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+   </data>
+   <data name="globalsJS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+      <value>..\Resources\JS\globals.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+   </data>
+   <data name="generalStatsJS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+      <value>..\Resources\JS\generalStats.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+   </data>
+   <data name="buffStatsJS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+      <value>..\Resources\JS\buffStats.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+   </data>
+   <data name="graphsJS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+      <value>..\Resources\JS\graphs.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+   </data>
+   <data name="layoutJS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+      <value>..\Resources\JS\layout.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+   </data>
+   <data name="mechanicsJS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+      <value>..\Resources\JS\mechanics.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+   </data>
+   <data name="headerJS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+      <value>..\Resources\JS\header.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+   </data>
+   <data name="playerStatsJS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+      <value>..\Resources\JS\playerStats.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+   </data>
+   <data name="targetStatsJS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+      <value>..\Resources\JS\targetStats.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+   </data>
   <data name="tmplBuffStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplBuffStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplBuffStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplBuffStatsTarget" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplBuffStatsTarget.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplBuffStatsTarget.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplBuffTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplBuffTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplBuffTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplDamageDistPlayer" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplDamageDistPlayer.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplDamageDistPlayer.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplDamageDistTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplDamageDistTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplDamageDistTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplDamageDistTarget" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplDamageDistTarget.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplDamageDistTarget.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplDamageModifierTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplDamageModifierTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplDamageModifierTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplDamageTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplDamageTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplDamageTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplDamageTakenPlayer" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplDamageTakenPlayer.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplDamageTakenPlayer.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplDeathRecap" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplDeathRecap.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplDeathRecap.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplDefenseTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplDefenseTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplDefenseTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplEncounter" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplEncounter.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplEncounter.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplFood" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplFood.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplFood.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplGameplayTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplGameplayTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplGameplayTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplGeneralLayout" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplGeneralLayout.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplGeneralLayout.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplMechanicsTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplMechanicsTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplMechanicsTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplPersonalBuffTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplPersonalBuffTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplPersonalBuffTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplPhase" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplPhase.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplPhase.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplPlayers" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplPlayers.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplPlayers.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplPlayerStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplPlayerStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplPlayerStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplPlayerTab" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplPlayerTab.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplPlayerTab.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplSimpleRotation" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplSimpleRotation.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplSimpleRotation.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplSupportTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplSupportTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplSupportTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplTargets" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplTargets.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplTargets.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplTargetStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplTargetStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplTargetStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplTargetTab" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplTargetTab.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplTargetTab.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
    <data name="tmplDPSGraph" type="System.Resources.ResXFileRef, System.Windows.Forms">
-      <value>..\Resources\tmplDPSGraph.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+      <value>..\Resources\htmlTemplates\tmplDPSGraph.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
    </data>
    <data name="tmplGraphStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
-      <value>..\Resources\tmplGraphStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+      <value>..\Resources\htmlTemplates\tmplGraphStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
    </data>
   <data name="tmplPlayerTabGraph" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplPlayerTabGraph.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplPlayerTabGraph.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplTargetTabGraph" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplTargetTabGraph.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplTargetTabGraph.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplRotationLegend" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplRotationLegend.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\htmlTemplates\tmplRotationLegend.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="template_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\template.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplCombatReplay" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplCombatReplay.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\combatReplayTemplates\tmplCombatReplay.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplCombatReplayGroup" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplCombatReplayGroup.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\combatReplayTemplates\tmplCombatReplayGroup.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplCombatReplayPlayer" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tmplCombatReplayPlayer.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Resources\combatReplayTemplates\tmplCombatReplayPlayer.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="theme_cosmo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\theme-cosmo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

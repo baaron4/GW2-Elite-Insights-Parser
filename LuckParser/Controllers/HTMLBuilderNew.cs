@@ -1343,10 +1343,27 @@ namespace LuckParser.Controllers
 
         private string BuildEIJs(string path)
         {
-#if DEBUG
-            string scriptContent = Properties.Resources.ei_js;
-#else
-            string scriptContent = Uglify.Js(Properties.Resources.ei_js).Code;
+            var orderedScripts = new string[]
+            {
+                Properties.Resources.globalsJS,
+                Properties.Resources.commonsJS,
+                Properties.Resources.headerJS,
+                Properties.Resources.layoutJS,
+                Properties.Resources.generalStatsJS,
+                Properties.Resources.buffStatsJS,
+                Properties.Resources.graphsJS,
+                Properties.Resources.mechanicsJS,
+                Properties.Resources.targetStatsJS,
+                Properties.Resources.playerStatsJS,
+                Properties.Resources.ei_js
+            };
+            string scriptContent = orderedScripts[0];
+            for (int i = 1; i < orderedScripts.Length; i++)
+            {
+                scriptContent += orderedScripts[i];
+            }
+#if !DEBUG
+            scriptContent = Uglify.Js(scriptContent).Code;
 #endif
             string scriptFilename = "ei-" + _scriptVersion + ".js";
             if (Properties.Settings.Default.NewHtmlExternalScripts)
