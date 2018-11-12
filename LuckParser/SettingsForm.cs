@@ -99,11 +99,11 @@ namespace LuckParser
             chkAddPoVProf.Checked = Properties.Settings.Default.AddPoVProf;
             chkAddDuration.Checked = Properties.Settings.Default.AddDuration;
 
-            chkHtmlExperimental.Checked = Properties.Settings.Default.NewHtmlMode;
-            toolTip1.SetToolTip(chkHtmlExperimental, "Alternative method to build the HTML page.\nThe page is much smaller, and some static CSS and JS scripts are written in an external file.");
+            chkHtmlLegacy.Checked = Properties.Settings.Default.LegacyHtmlMode;
+            toolTip1.SetToolTip(chkHtmlLegacy, "Old method to build the HTML page.");
 
-            chkHtmlExternalScripts.Checked = Properties.Settings.Default.NewHtmlExternalScripts;
-            chkHtmlExternalScripts.Enabled = Properties.Settings.Default.NewHtmlMode;
+            chkHtmlExternalScripts.Checked = Properties.Settings.Default.HtmlExternalScripts;
+            chkHtmlExternalScripts.Enabled = !Properties.Settings.Default.LegacyHtmlMode;
             toolTip1.SetToolTip(chkHtmlExternalScripts, "Writes static css and js scripts in own files, which are shared between all logs. Log file size decreases, but the script files have to be kept along with the html.");
 
             panelHtml.Enabled = Properties.Settings.Default.SaveOutHTML;
@@ -251,13 +251,13 @@ namespace LuckParser
 
         private void chkHtmlExperimental_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.NewHtmlMode = chkHtmlExperimental.Checked;
-            chkHtmlExternalScripts.Enabled = Properties.Settings.Default.NewHtmlMode;
+            Properties.Settings.Default.LegacyHtmlMode = chkHtmlLegacy.Checked;
+            chkHtmlExternalScripts.Enabled = !Properties.Settings.Default.LegacyHtmlMode;
         }
 
         private void chkHtmlExternalScripts_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.NewHtmlExternalScripts = chkHtmlExternalScripts.Checked;
+            Properties.Settings.Default.HtmlExternalScripts = chkHtmlExternalScripts.Checked;
         }
 
         private void radioThemeLight_CheckedChanged(object sender, EventArgs e)
