@@ -27,5 +27,6 @@ namespace LuckParser.Models
         public List<JsonMinions> Minions;
         public Dictionary<long, JsonBossBuffs> Buffs;
         public Dictionary<long, JsonDamageDist>[] TotalDamageDist;
+        public Dictionary<long, JsonDamageDist>[] TotalDamageTaken;
     }
 }

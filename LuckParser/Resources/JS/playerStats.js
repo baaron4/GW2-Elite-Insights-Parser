@@ -84,18 +84,6 @@ var compilePlayerTab = function () {
         },
     });
 
-    Vue.component('dmgtaken-player-component', {
-        props: ['player', 'playerindex',
-            'phaseindex'
-        ],
-        template: "#tmplDamageTakenPlayer",
-        computed: {
-            dmgtaken: function () {
-                return this.player.details.dmgDistributionsTaken[this.phaseindex];
-            }
-        },
-    });
-
     Vue.component("player-graph-tab-component", {
         props: ["playerindex", "player", "phase", "phases", "phaseindex", "activetargets", "targets", "graph"],
         data: function () {

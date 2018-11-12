@@ -566,6 +566,18 @@ namespace LuckParser.Models.ParseModels
             }
             DamageLogs.Sort((x, y) => x.Time < y.Time ? -1 : 1);
         }
+        protected override void SetDamageTakenLogs(ParsedLog log)
+        {
+            long timeStart = log.FightData.FightStart;
+            foreach (CombatItem c in log.GetDamageTakenData(AgentItem.InstID))
+            {
+                if (c.Time > log.FightData.FightStart && c.Time < log.FightData.FightEnd && c.Time >= FirstAware && c.Time <= LastAware)
+                {
+                    long time = c.Time - timeStart;
+                    AddDamageTakenLog(time, c);
+                }
+            }
+        }
         protected override void SetCastLogs(ParsedLog log)
         {
             long agentStart = Math.Max(FirstAware, log.FightData.FightStart);

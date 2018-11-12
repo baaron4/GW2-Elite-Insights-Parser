@@ -206,16 +206,6 @@ namespace LuckParser.Models.ParseModels
             _weaponsArray = weapons;
         }    
         
-        protected override void SetDamageTakenLogs(ParsedLog log)
-        {
-            long timeStart = log.FightData.FightStart;               
-            foreach (CombatItem c in log.GetDamageTakenData(AgentItem.InstID)) {
-                if (c.Time > log.FightData.FightStart && c.Time < log.FightData.FightEnd) {//selecting player as target
-                    long time = c.Time - timeStart;
-                    AddDamageTakenLog(time, c);
-                }
-            }
-        }  
         private void SetConsumablesList(ParsedLog log)
         {
             List<Boon> consumableList = Boon.GetConsumableList();

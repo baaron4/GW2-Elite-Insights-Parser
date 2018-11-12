@@ -152,6 +152,7 @@ namespace LuckParser.Controllers
                     LastAware = (int)(target.LastAware - _log.FightData.FightStart),
                     Minions = BuildMinions(target),
                     TotalDamageDist = BuildDamageDist(target, null),
+                    TotalDamageTaken = BuildDamageTaken(target),
                     AvgBoonsStates = BuildBuffStates(target.GetBoonGraphs(_log)[Boon.NumberOfBoonsID]),
                     AvgConditionsStates = BuildBuffStates(target.GetBoonGraphs(_log)[Boon.NumberOfConditionsID])
                 };
@@ -362,7 +363,7 @@ namespace LuckParser.Controllers
             return res;
         }
 
-        private Dictionary<long, JsonDamageDist>[] BuildDamageTaken(Player p)
+        private Dictionary<long, JsonDamageDist>[] BuildDamageTaken(AbstractMasterPlayer p)
         {
             Dictionary<long, JsonDamageDist>[] res = new Dictionary<long, JsonDamageDist>[_statistics.Phases.Count];
             for (int i = 0; i < _statistics.Phases.Count; i++)

@@ -29,23 +29,6 @@ namespace LuckParser.Models.ParseModels
 
         // Private Methods
 
-        protected override void SetDamageTakenLogs(ParsedLog log)
-        {
-            // nothing to do
-            /*long time_start = log.getBossData().getFirstAware();
-            foreach (CombatItem c in log.getDamageTakenData())
-            {
-                if (agent.getInstid() == c.getDstInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())
-                {//selecting player as target
-                    long time = c.getTime() - time_start;
-                    foreach (AgentItem item in log.AgentData.getAllAgentsList())
-                    {//selecting all
-                        addDamageTakenLog(time, item.getInstid(), c);
-                    }
-                }
-            }*/
-        }
-
         protected override void SetAdditionalCombatReplayData(ParsedLog log)
         {
             CombatReplay.Icon = GeneralHelper.GetNPCIcon(ID);

@@ -797,7 +797,7 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="p"></param>
         /// <param name="phaseIndex"></param>
-        private DmgDistributionDto BuildDMGTakenDistData(Player p, int phaseIndex)
+        private DmgDistributionDto BuildDMGTakenDistData(AbstractMasterPlayer p, int phaseIndex)
         {
             DmgDistributionDto dto = new DmgDistributionDto
             {
@@ -1284,7 +1284,7 @@ namespace LuckParser.Controllers
                 {"tmplDamageDistTarget",Properties.Resources.tmplDamageDistTarget },
                 {"tmplDamageModifierTable",Properties.Resources.tmplDamageModifierTable },
                 {"tmplDamageTable",Properties.Resources.tmplDamageTable },
-                {"tmplDamageTakenPlayer",Properties.Resources.tmplDamageTakenPlayer },
+                {"tmplDamageTaken",Properties.Resources.tmplDamageTaken },
                 {"tmplDeathRecap",Properties.Resources.tmplDeathRecap },
                 {"tmplDefenseTable",Properties.Resources.tmplDefenseTable },
                 {"tmplEncounter",Properties.Resources.tmplEncounter },
@@ -1749,6 +1749,7 @@ namespace LuckParser.Controllers
             PlayerDetailsDto dto = new PlayerDetailsDto
             {
                 dmgDistributions = new List<DmgDistributionDto>(),
+                dmgDistributionsTaken = new List<DmgDistributionDto>(),
                 boonGraph = new List<List<BoonChartDataDto>>(),
                 rotation = new List<List<double[]>>()
             };
@@ -1757,11 +1758,13 @@ namespace LuckParser.Controllers
                 if (_statistics.Phases[i].Targets.Contains(target))
                 {
                     dto.dmgDistributions.Add(BuildTargetDMGDistData(target, i));
+                    dto.dmgDistributionsTaken.Add(BuildDMGTakenDistData(target, i));
                     dto.rotation.Add(BuildSimpleRotationTabData(target, i));
                     dto.boonGraph.Add(BuildPlayerBoonGraphData(target, i));
                 } else
                 {
                     dto.dmgDistributions.Add(new DmgDistributionDto());
+                    dto.dmgDistributionsTaken.Add(new DmgDistributionDto());
                     dto.rotation.Add(new List<double[]>());
                     dto.boonGraph.Add(new List<BoonChartDataDto>());
                 }

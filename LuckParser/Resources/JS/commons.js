@@ -30,6 +30,18 @@ var compileCommons = function () {
         template: "#tmplRotationLegend"
     });
 
+    Vue.component('dmgtaken-component', {
+        props: ['actor', 'tableid',
+            'phaseindex'
+        ],
+        template: "#tmplDamageTaken",
+        computed: {
+            dmgtaken: function () {
+                return this.actor.details.dmgDistributionsTaken[this.phaseindex];
+            }
+        },
+    });
+
     Vue.component("graph-component", {
         props: ['id', 'layout', 'data'],
         template: '<div :id="id"></div>',
