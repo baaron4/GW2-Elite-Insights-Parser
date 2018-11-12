@@ -901,7 +901,7 @@ namespace LuckParser.Controllers
             {
                 name = bgm.BoonName,
                 visible = bgm.BoonName == "Might" || bgm.BoonName == "Quickness",
-                color = LegacyHTMLHelper.GetLink("Color-" + bgm.BoonName),
+                color = GeneralHelper.GetLink("Color-" + bgm.BoonName),
                 states = new List<double[]>(bChart.Count + 1)
             };
 
@@ -1472,9 +1472,9 @@ namespace LuckParser.Controllers
                     conc = player.Concentration,
                     heal = player.Healing,
                     tough = player.Toughness,
-                    colTarget = LegacyHTMLHelper.GetLink("Color-" + player.Prof),
-                    colCleave = LegacyHTMLHelper.GetLink("Color-" + player.Prof + "-NonBoss"),
-                    colTotal = LegacyHTMLHelper.GetLink("Color-" + player.Prof + "-Total"),
+                    colTarget = GeneralHelper.GetLink("Color-" + player.Prof),
+                    colCleave = GeneralHelper.GetLink("Color-" + player.Prof + "-NonBoss"),
+                    colTotal = GeneralHelper.GetLink("Color-" + player.Prof + "-Total"),
                     isConjure = player.Account == ":Conjured Sword",
                 };
                 BuildWeaponSets(playerDto, player);

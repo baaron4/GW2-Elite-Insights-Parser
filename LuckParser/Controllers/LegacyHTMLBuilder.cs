@@ -98,14 +98,14 @@ namespace LuckParser.Controllers
                         sw.Write("{");
                         LegacyHTMLHelper.WriteDPSPlots(sw, GraphHelper.GetTotalDPSGraph(_log, p, phaseIndex, phase, mode));
                         sw.Write("mode: 'lines'," +
-                                "line: {shape: 'spline',color:'" + LegacyHTMLHelper.GetLink("Color-" + p.Prof + "-Total") + "'}," +
+                                "line: {shape: 'spline',color:'" + GeneralHelper.GetLink("Color-" + p.Prof + "-Total") + "'}," +
                                 "visible:'legendonly'," +
                                 "name: '" + p.Character + " TDPS'" + "},");
                     }
                     sw.Write("{");
                     maxDPS = Math.Max(maxDPS, LegacyHTMLHelper.WriteDPSPlots(sw, GraphHelper.GetTargetDPSGraph(_log, p, phaseIndex, phase, mode, _log.Boss), totalDpsAllPlayers));
                     sw.Write("mode: 'lines'," +
-                            "line: {shape: 'spline',color:'" + LegacyHTMLHelper.GetLink("Color-" + p.Prof) + "'}," +
+                            "line: {shape: 'spline',color:'" + GeneralHelper.GetLink("Color-" + p.Prof) + "'}," +
                             "name: '" + p.Character + " DPS'" +
                             "},");
                     if (_settings.ClDPSGraphTotals)
@@ -113,7 +113,7 @@ namespace LuckParser.Controllers
                         sw.Write("{");
                         LegacyHTMLHelper.WriteDPSPlots(sw, GraphHelper.GetCleaveDPSGraph(_log, p, phaseIndex, phase, mode, _log.Boss));
                         sw.Write("mode: 'lines'," +
-                                "line: {shape: 'spline',color:'" + LegacyHTMLHelper.GetLink("Color-" + p.Prof + "-NonBoss") + "'}," +
+                                "line: {shape: 'spline',color:'" + GeneralHelper.GetLink("Color-" + p.Prof + "-NonBoss") + "'}," +
                                 "visible:'legendonly'," +
                                 "name: '" + p.Character + " CleaveDPS'" + "},");
                     }
@@ -311,22 +311,22 @@ namespace LuckParser.Controllers
             sw.Write("<div>");
             if (wep[0] != null)
             {
-                sw.Write("<img src=\"" + LegacyHTMLHelper.GetLink(wep[0]) + "\" alt=\"" + wep[0] + "\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" + wep[0] + "\">");
+                sw.Write("<img src=\"" + GeneralHelper.GetLink(wep[0]) + "\" alt=\"" + wep[0] + "\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" + wep[0] + "\">");
             }
             else if (wep[1] != null)
             {
-                sw.Write("<img src=\"" + LegacyHTMLHelper.GetLink("Question") + "\" alt=\"Unknown\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Unknown\">");
+                sw.Write("<img src=\"" + GeneralHelper.GetLink("Question") + "\" alt=\"Unknown\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Unknown\">");
             }
             if (wep[1] != null)
             {
                 if (wep[1] != "2Hand")
                 {
-                    sw.Write("<img src=\"" + LegacyHTMLHelper.GetLink(wep[1]) + "\" alt=\"" + wep[1] + "\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" + wep[1] + "\">");
+                    sw.Write("<img src=\"" + GeneralHelper.GetLink(wep[1]) + "\" alt=\"" + wep[1] + "\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" + wep[1] + "\">");
                 }
             }
             else
             {
-                sw.Write("<img src=\"" + LegacyHTMLHelper.GetLink("Question") + "\" alt=\"Unknown\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Unknown\">");
+                sw.Write("<img src=\"" + GeneralHelper.GetLink("Question") + "\" alt=\"Unknown\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Unknown\">");
             }
             if (wep[2] == null && wep[3] == null)
             {
@@ -339,17 +339,17 @@ namespace LuckParser.Controllers
 
             if (wep[2] != null)
             {
-                sw.Write("<img src=\"" + LegacyHTMLHelper.GetLink(wep[2]) + "\" alt=\"" + wep[2] + "\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" + wep[2] + "\">");
+                sw.Write("<img src=\"" + GeneralHelper.GetLink(wep[2]) + "\" alt=\"" + wep[2] + "\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" + wep[2] + "\">");
             }
             else if (wep[3] != null)
             {
-                sw.Write("<img src=\"" + LegacyHTMLHelper.GetLink("Question") + "\" alt=\"Unknown\" height=\"18\" width=\"18\" >");
+                sw.Write("<img src=\"" + GeneralHelper.GetLink("Question") + "\" alt=\"Unknown\" height=\"18\" width=\"18\" >");
             }
             if (wep[3] != null)
             {
                 if (wep[3] != "2Hand")
                 {
-                    sw.Write("<img src=\"" + LegacyHTMLHelper.GetLink(wep[3]) + "\" alt=\"" + wep[3] + "\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" + wep[3] + "\">");
+                    sw.Write("<img src=\"" + GeneralHelper.GetLink(wep[3]) + "\" alt=\"" + wep[3] + "\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" + wep[3] + "\">");
                 }
             }
             else
@@ -477,8 +477,8 @@ namespace LuckParser.Controllers
                         sw.Write("<th>All DPS</th>");
                         sw.Write("<th>Power</th>");
                         sw.Write("<th>Condi</th>");
-                        sw.Write("<th><img src=\"" + LegacyHTMLHelper.GetLink("Downs") + "\" alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=\"" + LegacyHTMLHelper.GetLink("Dead") + "\" alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=\"" + GeneralHelper.GetLink("Downs") + "\" alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=\"" + GeneralHelper.GetLink("Dead") + "\" alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\"></th>");
                     }
                     sw.Write("</tr>");
                 }
@@ -907,8 +907,8 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Invulned</th>");
                         sw.Write("<th>Evaded</th>");
                         sw.Write("<th data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Dodges or Mirage Cloak \">Dodges</th>");
-                        sw.Write("<th><img src=\"" + LegacyHTMLHelper.GetLink("Downs") + "\" alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=\"" + LegacyHTMLHelper.GetLink("Dead") + "\" alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\">" + "</th>");
+                        sw.Write("<th><img src=\"" + GeneralHelper.GetLink("Downs") + "\" alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=\"" + GeneralHelper.GetLink("Dead") + "\" alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\">" + "</th>");
                     }
                     sw.Write("</tr>");
                 }
