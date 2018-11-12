@@ -1,5 +1,30 @@
 /*jshint esversion: 6 */
 
+function computeTargetDPS(targetid, graph, lim, phasebreaks) {
+    var totalDamage = 0;
+    var maxDPS = 0;
+    var totalDPS = [0];
+    var dpsData = graph.targets[targetid].total;
+
+    for (var j = 1; j < dpsData.length; j++) {
+        var limID = 0;
+        if (lim > 0) {
+            limID = Math.max(j - lim, 0);
+        }
+        totalDamage += dpsData[j] - dpsData[limID];
+        if (phasebreaks && phasebreaks[j - 1]) {
+            limID = j - 1;
+            totalDamage = 0;
+        }
+        totalDPS[j] = Math.round(totalDamage / (j - limID));
+        maxDPS = Math.max(maxDPS, totalDPS[j]);
+    }
+    return {
+        dps: totalDPS,
+        maxDPS: maxDPS
+    };
+}
+
 var compileTargetTab = function () {
     // base
     Vue.component("buff-stats-target-component", {

@@ -15,7 +15,6 @@ if (!String.prototype.includes) {
             if (typeof start !== 'number') {
                 start = 0;
             }
-
             if (start + search.length > this.length) {
                 return false;
             } else {
@@ -182,11 +181,12 @@ function computeRotationData(rotationData, images, data) {
 function computePhaseMarkups(shapes, annotations, phase) {
 
     var duration = phase.end - phase.start;
+    var x;
     if (phase.markupAreas) {
         for (i = 0; i < phase.markupAreas.length; i++) {
             var area = phase.markupAreas[i];
             var y = 1;
-            var x = (area.end + area.start) / 2;
+            x = (area.end + area.start) / 2;
             if (i > 0) {
                 var prev = annotations[i - 1];
                 if (prev.y === 1 && (x - prev.x) / duration < 0.1) {
@@ -227,7 +227,7 @@ function computePhaseMarkups(shapes, annotations, phase) {
     }
     if (phase.markupLines) {
         for (i = 0; i < phase.markupLines.length; i++) {
-            var x = phase.markupLines[i];
+            x = phase.markupLines[i];
             shapes.push({
                 type: 'line',
                 xref: 'x',
@@ -273,9 +273,11 @@ function computePlayerDPS(playerid, graph, playerDPS, maxDPS, allDPS, lim, phase
         totalDPS[j] = Math.round(totalDamage / (j - limID));
         targetDPS[j] = Math.round(targetDamage / (j - limID));
         cleaveDPS[j] = Math.round((totalDamage - targetDamage) / (j - limID));
-        allDPS.total[j] = totalDPS[j] + (allDPS.total[j] || 0);
-        allDPS.target[j] = targetDPS[j] + (allDPS.target[j] || 0);
-        allDPS.cleave[j] = cleaveDPS[j] + (allDPS.cleave[j] || 0);
+        if (allDPS) {
+            allDPS.total[j] = totalDPS[j] + (allDPS.total[j] || 0);
+            allDPS.target[j] = targetDPS[j] + (allDPS.target[j] || 0);
+            allDPS.cleave[j] = cleaveDPS[j] + (allDPS.cleave[j] || 0);
+        }
         maxDPS.total = Math.max(maxDPS.total, totalDPS[j]);
         maxDPS.target = Math.max(maxDPS.target, targetDPS[j]);
         maxDPS.cleave = Math.max(maxDPS.cleave, cleaveDPS[j]);
@@ -285,31 +287,6 @@ function computePlayerDPS(playerid, graph, playerDPS, maxDPS, allDPS, lim, phase
         target: targetDPS,
         cleave: cleaveDPS
     });
-}
-
-function computeTargetDPS(targetid, graph, lim, phasebreaks) {
-    var totalDamage = 0;
-    var maxDPS = 0;
-    var totalDPS = [0];
-    var dpsData = graph.targets[targetid].total;
-
-    for (var j = 1; j < dpsData.length; j++) {
-        var limID = 0;
-        if (lim > 0) {
-            limID = Math.max(j - lim, 0);
-        }
-        totalDamage += dpsData[j] - dpsData[limID];
-        if (phasebreaks && phasebreaks[j - 1]) {
-            limID = j - 1;
-            totalDamage = 0;
-        }
-        totalDPS[j] = Math.round(totalDamage / (j - limID));
-        maxDPS = Math.max(maxDPS, totalDPS[j]);
-    }
-    return {
-        dps: totalDPS,
-        maxDPS: maxDPS
-    };
 }
 
 function getActorGraphLayout(images) {

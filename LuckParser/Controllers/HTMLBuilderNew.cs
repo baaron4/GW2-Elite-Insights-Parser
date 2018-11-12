@@ -1345,7 +1345,7 @@ namespace LuckParser.Controllers
         {
             var orderedScripts = new string[]
             {
-                Properties.Resources.globalsJS,
+                Properties.Resources.globalJS,
                 Properties.Resources.commonsJS,
                 Properties.Resources.headerJS,
                 Properties.Resources.layoutJS,

@@ -179,20 +179,23 @@ namespace LuckParser.Properties {
         /// <summary>
         ///   Looks up a localized string similar to /*jshint esversion: 6 */
         ///
-        ///var compileTargetTab = function () {
-        ///    // base
-        ///    Vue.component(&quot;buff-stats-target-component&quot;, {
-        ///        props: [&apos;target&apos;, &apos;phase&apos;, &apos;players&apos;, &apos;boons&apos;, &apos;conditions&apos;, &apos;targetindex&apos;],
-        ///        template: &quot;#tmplBuffStatsTarget&quot;,
-        ///        data: function () {
-        ///            return {
-        ///                cacheCondi: new Map(),
-        ///                cacheCondiSums: new Map(),
-        ///                cacheBoon: new Map()
-        ///            };
-        ///        },
-        ///        computed: {
-        ///            targetPhaseIndex:  [rest of string was truncated]&quot;;.
+        ///var onLoad = window.onload;
+        ///
+        ///window.onload = function () {
+        ///    if (onLoad) {
+        ///        onLoad();
+        ///    }
+        ///    // make some additional variables reactive
+        ///    var i;
+        ///    for (i = 0; i &lt; logData.phases.length; i++) {
+        ///        logData.phases[i].active = i === 0;
+        ///        logData.phases[i].focus = null;
+        ///    }
+        ///    for (i = 0; i &lt; logData.targets.length; i++) {
+        ///        logData.targets[i].active = true;
+        ///    }
+        ///    for (i = 0; i &lt; logData.players.length; i++) {
+        ///        var playerD [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ei_js {
             get {
@@ -244,9 +247,9 @@ namespace LuckParser.Properties {
         ///            if (typeof start !== &apos;number&apos;) {
         ///                start = 0;        /// [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string globalsJS {
+        internal static string globalJS {
             get {
-                return ResourceManager.GetString("globalsJS", resourceCulture);
+                return ResourceManager.GetString("globalJS", resourceCulture);
             }
         }
         

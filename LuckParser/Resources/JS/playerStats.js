@@ -196,18 +196,12 @@ var compilePlayerTab = function () {
                     target: 0,
                     cleave: 0
                 };
-                var allDPS = {
-                    total: [0],
-                    target: [0],
-                    cleave: [0]
-                };
-                //var before = performance.now();
                 var playerDPS = [];
                 if (this.dpsmode < 3) {
                     var lim = (this.dpsmode === 0 ? 0 : (this.dpsmode === 1 ? 10 : 30));
-                    computePlayerDPS(this.playerindex, this.graph, playerDPS, maxDPS, allDPS, lim, null, this.activetargets);
+                    computePlayerDPS(this.playerindex, this.graph, playerDPS, maxDPS, null, lim, null, this.activetargets);
                 } else {
-                    computePlayerDPS(this.playerindex, this.graph, playerDPS, maxDPS, allDPS, 0, this.computePhaseBreaks, this.activetargets);
+                    computePlayerDPS(this.playerindex, this.graph, playerDPS, maxDPS, null, 0, this.computePhaseBreaks, this.activetargets);
                 }
                 var res = {
                     maxDPS: maxDPS.total,

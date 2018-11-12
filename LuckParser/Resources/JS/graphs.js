@@ -193,13 +193,10 @@ var compileGraphs = function () {
                     target: [0],
                     cleave: [0]
                 };
-                //var before = performance.now();
                 var playerDPS = [];
                 for (var i = 0; i < this.players.length; i++) {
                     computePlayerDPS(i, this.graph, playerDPS, maxDPS, allDPS, lim, phasebreaks, this.activetargets);
                 }
-                //var after = performance.now();
-                //console.log("DPS Data " + (after - before));
                 return {
                     allDPS: allDPS,
                     playerDPS: playerDPS,
@@ -230,7 +227,6 @@ var compileGraphs = function () {
                 var cacheID = this.dpsmode + '-' + this.mode + '-';
                 var targetsID = 1;
                 var i, j;
-                var target;
                 for (i = 0; i < this.activetargets.length; i++) {
                     targetsID = targetsID << (this.activetargets[i] + 1);
                 }
@@ -246,7 +242,6 @@ var compileGraphs = function () {
                     res[offset++] = (this.mode === 0 ? pDPS.total : (this.mode === 1 ? pDPS.target : pDPS.cleave));
                 }
                 res[offset++] = (this.mode === 0 ? dpsData.allDPS.total : (this.mode === 1 ? dpsData.allDPS.target : dpsData.allDPS.cleave));
-                var maxDPS = (this.mode === 0 ? dpsData.maxDPS.total : (this.mode === 1 ? dpsData.maxDPS.target : dpsData.maxDPS.cleave));
                 var hps = [];
                 for (i = 0; i < this.graph.targets.length; i++) {
                     var health = this.graph.targets[i].health;
@@ -263,7 +258,7 @@ var compileGraphs = function () {
                     var mechData = mechArray[i];
                     chart = [];
                     res[offset++] = chart;
-                    var time, pts, k;
+                    var time, pts, k, ftime, y, yp1;
                     if (mechData.enemyMech) {
                         for (j = 0; j < mech.points[this.phaseid].length; j++) {
                             pts = mech.points[this.phaseid][j];
@@ -272,9 +267,9 @@ var compileGraphs = function () {
                                 target = this.targets[tarId];
                                 for (k = 0; k < pts.length; k++) {
                                     time = pts[k];
-                                    var ftime = Math.floor(time);
-                                    var y = hps[j][ftime];
-                                    var yp1 = hps[j][ftime + 1];
+                                    ftime = Math.floor(time);
+                                    y = hps[j][ftime];
+                                    yp1 = hps[j][ftime + 1];
                                     chart.push(this.interpolatePoint(ftime, ftime + 1, y, yp1, time));
                                 }
                             } else {
@@ -288,9 +283,9 @@ var compileGraphs = function () {
                             pts = mech.points[this.phaseid][j];
                             for (k = 0; k < pts.length; k++) {
                                 time = pts[k];
-                                var ftime = Math.floor(time);
-                                var y = res[j][ftime];
-                                var yp1 = res[j][ftime + 1];
+                                ftime = Math.floor(time);
+                                y = res[j][ftime];
+                                yp1 = res[j][ftime + 1];
                                 chart.push(this.interpolatePoint(ftime, ftime + 1, y, yp1, time));
                             }
                         }

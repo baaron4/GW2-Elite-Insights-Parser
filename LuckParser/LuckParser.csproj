@@ -350,7 +350,7 @@
     <Content Include="Resources\JS\header.js" />
     <Content Include="Resources\JS\layout.js" />
     <Content Include="Resources\JS\commons.js" />
-    <Content Include="Resources\JS\globals.js" />
+    <Content Include="Resources\JS\global.js" />
     <Content Include="Resources\TODO.txt" />
     <None Include="Resources\template.html" />
   </ItemGroup>
