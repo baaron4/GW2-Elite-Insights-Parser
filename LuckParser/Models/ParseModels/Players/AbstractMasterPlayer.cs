@@ -587,6 +587,12 @@ namespace LuckParser.Models.ParseModels
                 {
                     if (c.IsActivation.IsCasting() && c.Time < agentEnd)
                     {
+                        // Missing end activation
+                        if (curCastLog != null)
+                        {
+                            curCastLog.SetEndStatus(curCastLog.ExpectedDuration, ParseEnum.Activation.Unknown);
+                            curCastLog = null;
+                        }
                         long time = c.Time - timeStart;
                         curCastLog = new CastLog(time, c.SkillID, c.Value, c.IsActivation);
                         CastLogs.Add(curCastLog);
@@ -609,7 +615,14 @@ namespace LuckParser.Models.ParseModels
                 {
                     long time = c.Time - timeStart;
                     CastLog swapLog = new CastLog(time, SkillItem.WeaponSwapId, (int)c.DstAgent, c.IsActivation);
-                    CastLogs.Add(swapLog);
+                    if (CastLogs.Count > 0 && CastLogs.Last().Time == time && CastLogs.Last().SkillId == SkillItem.WeaponSwapId)
+                    {
+                        CastLogs[CastLogs.Count - 1] = swapLog;
+                    }
+                    else
+                    {
+                        CastLogs.Add(swapLog);
+                    }
                 }
             }
         }
