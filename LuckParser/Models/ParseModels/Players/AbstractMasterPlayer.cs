@@ -623,7 +623,14 @@ namespace LuckParser.Models.ParseModels
                 {
                     long time = c.Time - timeStart;
                     CastLog swapLog = new CastLog(time, SkillItem.WeaponSwapId, (int)c.DstAgent, c.IsActivation);
-                    CastLogs.Add(swapLog);
+                    if (CastLogs.Count > 0 && CastLogs.Last().Time == time && CastLogs.Last().SkillId == SkillItem.WeaponSwapId)
+                    {
+                        CastLogs[CastLogs.Count - 1] = swapLog;
+                    }
+                    else
+                    {
+                        CastLogs.Add(swapLog);
+                    }
                 }
             }
         }
