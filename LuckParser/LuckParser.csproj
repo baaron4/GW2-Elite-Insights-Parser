@@ -327,7 +327,6 @@
     <None Include="Resources\htmlTemplates\tmplDeathRecap.html" />
     <None Include="Resources\htmlTemplates\tmplSimpleRotation.html" />
     <None Include="Resources\htmlTemplates\tmplFood.html" />
-    <None Include="Resources\htmlTemplates\tmplDamageTakenPlayer.html" />
     <None Include="Resources\htmlTemplates\tmplDamageDistPlayer.html" />
     <None Include="Resources\htmlTemplates\tmplPlayerTab.html" />
     <None Include="Resources\htmlTemplates\tmplPlayerStats.html" />
@@ -342,6 +341,7 @@
     <None Include="Resources\htmlTemplates\tmplPlayerTabGraph.html" />
     <None Include="Resources\htmlTemplates\tmplRotationLegend.html" />
     <None Include="Resources\htmlTemplates\tmplTargetTabGraph.html" />
+    <Content Include="Resources\htmlTemplates\tmplDamageTaken.html" />
     <Content Include="Resources\JS\generalStats.js" />
     <Content Include="Resources\JS\buffStats.js" />
     <Content Include="Resources\JS\graphs.js" />
