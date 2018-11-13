@@ -13,20 +13,20 @@ namespace LuckParser.Models
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(34479, "Tantrum", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'circle-open',color:'rgb(255,200,0)'", "Tntrm","Tantrum (Triple Circles after Ground slamming)", "Tantrum",5000), 
-            new Mechanic(34387, "Volatile Poison", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'circle',color:'rgb(255,0,0)'", "Psn","Volatile Poison Application (Special Action Key)", "Poison (Action Key)",0),
-            new Mechanic(34481, "Volatile Poison", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'circle-open',color:'rgb(255,0,0)'", "P.dmg","Stood in Volatile Poison", "Poison dmg",0),
-            new Mechanic(34516, "Halitosis", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'triangle-right-open',color:'rgb(255,140,0)'", "FlmBrth","Halitosis (Flame Breath)", "Flame Breath",0),
-            new Mechanic(34482, "Spore Release", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'pentagon',color:'rgb(255,0,0)'", "Shake","Spore Release (Coconut Shake)", "Shake",0),
-            new Mechanic(34362, "Magic Transformation", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'hexagram',color:'rgb(0,255,255)'", "Slub","Magic Transformation (Ate Magic Mushroom)", "Slub Transform",0), 
+            new Mechanic(34479, "Tantrum", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Slothasor, "symbol:'circle-open',color:'rgb(255,200,0)'", "Tntrm","Tantrum (Triple Circles after Ground slamming)", "Tantrum",5000), 
+            new Mechanic(34387, "Volatile Poison", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Slothasor, "symbol:'circle',color:'rgb(255,0,0)'", "Psn","Volatile Poison Application (Special Action Key)", "Poison (Action Key)",0),
+            new Mechanic(34481, "Volatile Poison", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Slothasor, "symbol:'circle-open',color:'rgb(255,0,0)'", "P.dmg","Stood in Volatile Poison", "Poison dmg",0),
+            new Mechanic(34516, "Halitosis", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Slothasor, "symbol:'triangle-right-open',color:'rgb(255,140,0)'", "FlmBrth","Halitosis (Flame Breath)", "Flame Breath",0),
+            new Mechanic(34482, "Spore Release", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Slothasor, "symbol:'pentagon',color:'rgb(255,0,0)'", "Shake","Spore Release (Coconut Shake)", "Shake",0),
+            new Mechanic(34362, "Magic Transformation", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Slothasor, "symbol:'hexagram',color:'rgb(0,255,255)'", "Slub","Magic Transformation (Ate Magic Mushroom)", "Slub Transform",0), 
             //new Mechanic(34496, "Nauseated", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'diamond-tall-open',color:'rgb(200,140,255)'", "Slub CD",0), //can be skipped imho, identical person and timestamp as Slub Transform
-            new Mechanic(34508, "Fixated", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'star',color:'rgb(255,0,255)'", "Fix","Fixated by Slothasor", "Fixated",0),
-            new Mechanic(34565, "Toxic Cloud", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'pentagon-open',color:'rgb(0,128,0)'", "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0), 
-            new Mechanic(34537, "Toxic Cloud", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'pentagon-open',color:'rgb(0,128,0)'", "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0),
-            new Mechanic(791, "Fear", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'square-open',color:'rgb(255,0,0)'", "Fear","Hit by fear after breakbar", "Feared",0,(condition=> condition.CombatItem.Value == 8000)),
-            new Mechanic(34467, "Narcolepsy", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Slothasor, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "CC","Narcolepsy (Breakbar)", "Breakbar",0),
-            new Mechanic(34467, "Narcolepsy", Mechanic.MechType.EnemyBoonStrip, ParseEnum.BossIDS.Slothasor, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "CC.Fail","Narcolepsy (Failed CC)", "CC Fail",0,(condition => condition.CombatItem.Value > 120000)),
-            new Mechanic(34467, "Narcolepsy", Mechanic.MechType.EnemyBoonStrip, ParseEnum.BossIDS.Slothasor, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "CCed","Narcolepsy (Breakbar broken)", "CCed",0,(condition => condition.CombatItem.Value <= 120000))
+            new Mechanic(34508, "Fixated", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Slothasor, "symbol:'star',color:'rgb(255,0,255)'", "Fix","Fixated by Slothasor", "Fixated",0),
+            new Mechanic(34565, "Toxic Cloud", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Slothasor, "symbol:'pentagon-open',color:'rgb(0,128,0)'", "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0), 
+            new Mechanic(34537, "Toxic Cloud", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Slothasor, "symbol:'pentagon-open',color:'rgb(0,128,0)'", "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0),
+            new Mechanic(791, "Fear", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Slothasor, "symbol:'square-open',color:'rgb(255,0,0)'", "Fear","Hit by fear after breakbar", "Feared",0,(condition=> condition.CombatItem.Value == 8000)),
+            new Mechanic(34467, "Narcolepsy", Mechanic.MechType.EnemyBoon, ParseEnum.TargetIDS.Slothasor, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "CC","Narcolepsy (Breakbar)", "Breakbar",0),
+            new Mechanic(34467, "Narcolepsy", Mechanic.MechType.EnemyBoonStrip, ParseEnum.TargetIDS.Slothasor, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "CC.Fail","Narcolepsy (Failed CC)", "CC Fail",0,(condition => condition.CombatItem.Value > 120000)),
+            new Mechanic(34467, "Narcolepsy", Mechanic.MechType.EnemyBoonStrip, ParseEnum.TargetIDS.Slothasor, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "CCed","Narcolepsy (Breakbar broken)", "CCed",0,(condition => condition.CombatItem.Value <= 120000))
             });
             Extension = "sloth";
             IconUrl = "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";
@@ -67,18 +67,18 @@ namespace LuckParser.Models
             }
         }
 
-        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
         {
             // TODO:facing information (breath)
-            CombatReplay replay = boss.CombatReplay;
-            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
-            switch (boss.ID)
+            CombatReplay replay = target.CombatReplay;
+            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (target.ID)
             {
-                case (ushort)ParseEnum.BossIDS.Slothasor:
+                case (ushort)ParseEnum.TargetIDS.Slothasor:
                     List<CastLog> sleepy = cls.Where(x => x.SkillId == 34515).ToList();
                     foreach (CastLog c in sleepy)
                     {
-                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(boss)));
+                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     List<CastLog> breath = cls.Where(x => x.SkillId == 34516).ToList();
                     foreach (CastLog c in breath)
@@ -92,8 +92,8 @@ namespace LuckParser.Models
                         {
                             int direction = Point3D.GetRotationFromFacing(facing);
                             int angle = 60;
-                            replay.Actors.Add(new PieActor(true, 0, range, direction, angle, new Tuple<int, int>(start, start + preCastTime), "rgba(255,200,0,0.1)", new AgentConnector(boss)));
-                            replay.Actors.Add(new PieActor(true, 0, range, direction, angle, new Tuple<int, int>(start + preCastTime, start + preCastTime + duration), "rgba(255,200,0,0.4)", new AgentConnector(boss)));
+                            replay.Actors.Add(new PieActor(true, 0, range, direction, angle, new Tuple<int, int>(start, start + preCastTime), "rgba(255,200,0,0.1)", new AgentConnector(target)));
+                            replay.Actors.Add(new PieActor(true, 0, range, direction, angle, new Tuple<int, int>(start + preCastTime, start + preCastTime + duration), "rgba(255,200,0,0.4)", new AgentConnector(target)));
                         }
                     }
                     List<CastLog> tantrum = cls.Where(x => x.SkillId == 34547).ToList();
@@ -101,16 +101,16 @@ namespace LuckParser.Models
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
-                        replay.Actors.Add(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(boss)));
-                        replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(boss)));
+                        replay.Actors.Add(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                     }
                     List<CastLog> shakes = cls.Where(x => x.SkillId == 34482).ToList();
                     foreach (CastLog c in shakes)
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
-                        replay.Actors.Add(new CircleActor(false, 0, 700, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.4)", new AgentConnector(boss)));
-                        replay.Actors.Add(new CircleActor(true, end, 700, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.4)", new AgentConnector(boss)));
+                        replay.Actors.Add(new CircleActor(false, 0, 700, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleActor(true, end, 700, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));
                     }
                     break;
                 default:

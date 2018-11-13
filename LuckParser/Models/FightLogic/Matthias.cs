@@ -14,31 +14,31 @@ namespace LuckParser.Models
             MechanicList.AddRange(new List<Mechanic>
             {
 
-            new Mechanic(34380, "Oppressive Gaze", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'hexagram',color:'rgb(255,0,0)'", "Ball","Oppressive Gaze (Hadouken projectile)", "Hadouken",0),//human
-            new Mechanic(34371, "Oppressive Gaze", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'hexagram',color:'rgb(255,0,0)'", "Ball","Oppressive Gaze (Hadouken projectile)", "Hadouken",0),//abom
-            new Mechanic(34480, "Blood Shards", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'diamond-wide-open',color:'rgb(255,0,255)'", "RpFire","Blood Shard projectiles during bubble", "Rapid Fire",0),// //human
-            new Mechanic(34440, "Blood Shards", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'diamond-wide-open',color:'rgb(255,0,255)'", "RpFire","Blood Shard projectiles during bubble", "Rapid Fire", 0),// //abom
-            new Mechanic(34404, "Shards of Rage", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'star-diamond',color:'rgb(255,0,0)'", "Shrds","Shards of Rage (Jump)", "Jump Shards",1000),//human
-            new Mechanic(34411, "Shards of Rage", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'star-diamond',color:'rgb(255,0,0)'", "Shrds","Shards of Rage (Jump)", "Jump Shards",1000),//abom
-            new Mechanic(34466, "Fiery Vortex", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'triangle-down-open',color:'rgb(255,200,0)'", "Torndo","Fiery Vortex (Tornado)", "Tornado",250),
-            new Mechanic(34543, "Thunder", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'triangle-up-open',color:'rgb(0,255,255)'", "Storm","Thunder Storm hit (air phase)", "Storm cloud",0),
-            new Mechanic(34450, "Unstable Blood Magic", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'diamond',color:'rgb(255,0,0)'", "Well","Unstable Blood Magic application", "Well",0),
-            new Mechanic(34336, "Well of the Profane", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'diamond-open',color:'rgb(255,0,0)'", "W.dmg","Unstable Blood Magic AoE hit", "Stood in Well",0),
-            new Mechanic(34416, "Corruption", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'circle',color:'rgb(255,140,0)'", "Crptn","Corruption Application", "Corruption",0),
-            new Mechanic(34473, "Corruption", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'circle-open',color:'rgb(255,140,0)'", "C.dmg","Hit by Corruption AoE", "Corruption dmg",0),
-            new Mechanic(34442, "Sacrifice", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "Scrfc","Sacrifice (Breakbar)", "Sacrifice",0),
-            new Mechanic(34442, "Sacrifice", Mechanic.MechType.PlayerBoonRemove, ParseEnum.BossIDS.Matthias, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "CC.End","Sacrifice (Breakbar) ended", "Sacrifice End",0,(condition => condition.CombatItem.Value>25)),
-            new Mechanic(34442, "Sacrificed", Mechanic.MechType.PlayerBoonRemove, ParseEnum.BossIDS.Matthias, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "CC.Fail","Sacrifice time ran out", "Sacrificed",0,(condition => condition.CombatItem.Value<=25)),
-            new Mechanic(34367, "Unbalanced", Mechanic.MechType.PlayerBoonRemove, ParseEnum.BossIDS.Matthias, "symbol:'square',color:'rgb(200,140,255)'", "KD","Unbalanced (triggered Storm phase Debuff)", "Knockdown",0,(condition => condition.CombatItem.Value > 0)),
+            new Mechanic(34380, "Oppressive Gaze", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Matthias, "symbol:'hexagram',color:'rgb(255,0,0)'", "Ball","Oppressive Gaze (Hadouken projectile)", "Hadouken",0),//human
+            new Mechanic(34371, "Oppressive Gaze", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Matthias, "symbol:'hexagram',color:'rgb(255,0,0)'", "Ball","Oppressive Gaze (Hadouken projectile)", "Hadouken",0),//abom
+            new Mechanic(34480, "Blood Shards", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Matthias, "symbol:'diamond-wide-open',color:'rgb(255,0,255)'", "RpFire","Blood Shard projectiles during bubble", "Rapid Fire",0),// //human
+            new Mechanic(34440, "Blood Shards", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Matthias, "symbol:'diamond-wide-open',color:'rgb(255,0,255)'", "RpFire","Blood Shard projectiles during bubble", "Rapid Fire", 0),// //abom
+            new Mechanic(34404, "Shards of Rage", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Matthias, "symbol:'star-diamond',color:'rgb(255,0,0)'", "Shrds","Shards of Rage (Jump)", "Jump Shards",1000),//human
+            new Mechanic(34411, "Shards of Rage", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Matthias, "symbol:'star-diamond',color:'rgb(255,0,0)'", "Shrds","Shards of Rage (Jump)", "Jump Shards",1000),//abom
+            new Mechanic(34466, "Fiery Vortex", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Matthias, "symbol:'triangle-down-open',color:'rgb(255,200,0)'", "Torndo","Fiery Vortex (Tornado)", "Tornado",250),
+            new Mechanic(34543, "Thunder", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Matthias, "symbol:'triangle-up-open',color:'rgb(0,255,255)'", "Storm","Thunder Storm hit (air phase)", "Storm cloud",0),
+            new Mechanic(34450, "Unstable Blood Magic", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Matthias, "symbol:'diamond',color:'rgb(255,0,0)'", "Well","Unstable Blood Magic application", "Well",0),
+            new Mechanic(34336, "Well of the Profane", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Matthias, "symbol:'diamond-open',color:'rgb(255,0,0)'", "W.dmg","Unstable Blood Magic AoE hit", "Stood in Well",0),
+            new Mechanic(34416, "Corruption", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Matthias, "symbol:'circle',color:'rgb(255,140,0)'", "Crptn","Corruption Application", "Corruption",0),
+            new Mechanic(34473, "Corruption", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Matthias, "symbol:'circle-open',color:'rgb(255,140,0)'", "C.dmg","Hit by Corruption AoE", "Corruption dmg",0),
+            new Mechanic(34442, "Sacrifice", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Matthias, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "Scrfc","Sacrifice (Breakbar)", "Sacrifice",0),
+            new Mechanic(34442, "Sacrifice", Mechanic.MechType.PlayerBoonRemove, ParseEnum.TargetIDS.Matthias, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "CC.End","Sacrifice (Breakbar) ended", "Sacrifice End",0,(condition => condition.CombatItem.Value>25)),
+            new Mechanic(34442, "Sacrificed", Mechanic.MechType.PlayerBoonRemove, ParseEnum.TargetIDS.Matthias, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "CC.Fail","Sacrifice time ran out", "Sacrificed",0,(condition => condition.CombatItem.Value<=25)),
+            new Mechanic(34367, "Unbalanced", Mechanic.MechType.PlayerBoonRemove, ParseEnum.TargetIDS.Matthias, "symbol:'square',color:'rgb(200,140,255)'", "KD","Unbalanced (triggered Storm phase Debuff)", "Knockdown",0,(condition => condition.CombatItem.Value > 0)),
             //new Mechanic(34367, "Unbalanced", Mechanic.MechType.PlayerOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'square',color:'rgb(0,140,0)'", "KD","Unbalanced (triggered Storm phase Debuff) only on successful interrupt", "Knockdown (interrupt)",0,(condition => condition.getCombatItem().Result == ParseEnum.Result.Interrupt)),
             //new Mechanic(34367, "Unbalanced", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'square',color:'rgb(0,140,0)'", "KD","Unbalanced (triggered Storm phase Debuff) only on successful interrupt", "Knockdown (interrupt)",0,(condition => condition.getDLog().GetResult() == ParseEnum.Result.Interrupt)),
             //new Mechanic(34422, "Blood Fueled", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'square',color:'rgb(255,0,0)'", "Ate Reflects(good)",0),//human //Applied at the same time as Backflip Shards since it is the buff applied by them, can be omitted imho
             //new Mechanic(34428, "Blood Fueled", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'square',color:'rgb(255,0,0)'", "Ate Reflects(good)",0),//abom
-            new Mechanic(34376, "Blood Shield", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Matthias, "symbol:'octagon',color:'rgb(255,0,0)'", "Bble","Blood Shield (protective bubble)", "Bubble",0),//human
-            new Mechanic(34518, "Blood Shield", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Matthias, "symbol:'octagon',color:'rgb(255,0,0)'", "Bble","Blood Shield (protective bubble)", "Bubble",0),//abom
-            new Mechanic(34511, "Zealous Benediction", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'circle',color:'rgb(255,200,0)'", "Bombs",0),
-            new Mechanic(26766, "Icy Patch", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'circle-open',color:'rgb(0,0,255)'", "Icy KD","Knockdown by Icy Patch", "Icy Patch KD",0,(condition => condition.CombatItem.Value == 10000)),
-            new Mechanic(34413, "Surrender", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'circle-open',color:'rgb(0,0,0)'", "Sprt","Surrender (hit by walking Spirit)", "Spirit hit",0)
+            new Mechanic(34376, "Blood Shield", Mechanic.MechType.EnemyBoon, ParseEnum.TargetIDS.Matthias, "symbol:'octagon',color:'rgb(255,0,0)'", "Bble","Blood Shield (protective bubble)", "Bubble",0),//human
+            new Mechanic(34518, "Blood Shield", Mechanic.MechType.EnemyBoon, ParseEnum.TargetIDS.Matthias, "symbol:'octagon',color:'rgb(255,0,0)'", "Bble","Blood Shield (protective bubble)", "Bubble",0),//abom
+            new Mechanic(34511, "Zealous Benediction", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Matthias, "symbol:'circle',color:'rgb(255,200,0)'", "Bombs",0),
+            new Mechanic(26766, "Icy Patch", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Matthias, "symbol:'circle-open',color:'rgb(0,0,255)'", "Icy KD","Knockdown by Icy Patch", "Icy Patch KD",0,(condition => condition.CombatItem.Value == 10000)),
+            new Mechanic(34413, "Surrender", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Matthias, "symbol:'circle-open',color:'rgb(0,0,0)'", "Sprt","Surrender (hit by walking Spirit)", "Spirit hit",0)
             });
             Extension = "matt";
             IconUrl = "https://wiki.guildwars2.com/images/5/5d/Mini_Matthias_Abomination.png";
@@ -59,7 +59,7 @@ namespace LuckParser.Models
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Matthias);
+            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Matthias);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -146,14 +146,14 @@ namespace LuckParser.Models
             }
         }
 
-        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
         {
             // TODO: needs facing information for hadouken
-            CombatReplay replay = boss.CombatReplay;
-            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
-            switch (boss.ID)
+            CombatReplay replay = target.CombatReplay;
+            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (target.ID)
             {
-                case (ushort)ParseEnum.BossIDS.Matthias:
+                case (ushort)ParseEnum.TargetIDS.Matthias:
                     List<CastLog> humanShield = cls.Where(x => x.SkillId == 34468).ToList();
                     List<int> humanShieldRemoval = log.GetBoonData(34518).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All).Select(x => (int)(x.Time - log.FightData.FightStart)).Distinct().ToList();
                     for (var i = 0; i < humanShield.Count; i++)
@@ -162,11 +162,11 @@ namespace LuckParser.Models
                         if (i < humanShieldRemoval.Count)
                         {
                             int removal = humanShieldRemoval[i];
-                            replay.Actors.Add(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.Time, removal), "rgba(255, 0, 255, 0.5)", new AgentConnector(boss)));
+                            replay.Actors.Add(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.Time, removal), "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
                         }
                         else
                         {
-                            replay.Actors.Add(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)", new AgentConnector(boss)));
+                            replay.Actors.Add(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
                         }
                     }
                     List<CastLog> aboShield = cls.Where(x => x.SkillId == 34510).ToList();
@@ -177,11 +177,11 @@ namespace LuckParser.Models
                         if (i < aboShieldRemoval.Count)
                         {
                             int removal = aboShieldRemoval[i];
-                            replay.Actors.Add(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.Time, removal), "rgba(255, 0, 255, 0.5)", new AgentConnector(boss)));
+                            replay.Actors.Add(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.Time, removal), "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
                         }
                         else
                         {
-                            replay.Actors.Add(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)", new AgentConnector(boss)));
+                            replay.Actors.Add(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
                         }
                     }
                     List<CastLog> rageShards = cls.Where(x => x.SkillId == 34404 || x.SkillId == 34411).ToList();
@@ -189,8 +189,8 @@ namespace LuckParser.Models
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
-                        replay.Actors.Add(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(boss)));
-                        replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(boss)));
+                        replay.Actors.Add(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     }
                     List<CastLog> hadouken = cls.Where(x => x.SkillId == 34371 || x.SkillId == 34380).ToList();
                     foreach (CastLog c in hadouken)
@@ -203,8 +203,8 @@ namespace LuckParser.Models
                         if (facing != null)
                         {
                             int direction = (int)(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI);
-                            replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, direction, width / 2, new Tuple<int, int>(start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new AgentConnector(boss)));
-                            replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, direction, width / 2, new Tuple<int, int>(start + preCastTime, start + preCastTime + duration), "rgba(255, 0, 0, 0.7)", new AgentConnector(boss)));
+                            replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, direction, width / 2, new Tuple<int, int>(start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new AgentConnector(target)));
+                            replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, direction, width / 2, new Tuple<int, int>(start + preCastTime, start + preCastTime + duration), "rgba(255, 0, 0, 0.7)", new AgentConnector(target)));
                         }
                     }
                         break;

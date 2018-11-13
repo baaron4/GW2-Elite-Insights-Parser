@@ -14,8 +14,8 @@ namespace LuckParser.Models.ParseModels
 
         public MechanicData(FightData fightData)
         {
-            List<Mechanic> bossMechanics = fightData.Logic.MechanicList;
-            foreach(Mechanic m in bossMechanics)
+            List<Mechanic> fightMechanics = fightData.Logic.MechanicList;
+            foreach(Mechanic m in fightMechanics)
             {
                 Add(m, new List<MechanicLog>());
             }

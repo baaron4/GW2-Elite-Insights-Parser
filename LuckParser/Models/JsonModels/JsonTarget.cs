@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class JsonBoss
+    public class JsonTarget
     {
         public string Name;
         public ushort Id;
@@ -25,7 +25,7 @@ namespace LuckParser.Models
         public uint HitboxWidth;
         public Dictionary<long, List<JsonSkill>> Rotation;
         public List<JsonMinions> Minions;
-        public Dictionary<long, JsonBossBuffs> Buffs;
+        public Dictionary<long, JsonTargetBuffs> Buffs;
         public Dictionary<long, JsonDamageDist>[] TotalDamageDist;
         public Dictionary<long, JsonDamageDist>[] TotalDamageTaken;
     }

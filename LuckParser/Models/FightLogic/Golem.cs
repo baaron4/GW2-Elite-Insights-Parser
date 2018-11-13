@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace LuckParser.Models
 {
-    public class Golem : BossLogic
+    public class Golem : FightLogic
     {
         public Golem(ushort id) : base(id)
         {
@@ -44,21 +44,21 @@ namespace LuckParser.Models
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            Boss boss = Targets.Find(x => x.ID == TriggerID);
+            Target target = Targets.Find(x => x.ID == TriggerID);
             foreach (CombatItem c in combatData)
             {
                 // redirect all attacks to the main golem
                 if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsStateChange == ParseEnum.StateChange.Normal && c.IFF == ParseEnum.IFF.Foe && c.IsActivation == ParseEnum.Activation.None)
                 {
-                    c.DstAgent = boss.Agent;
-                    c.DstInstid = boss.InstID;
+                    c.DstAgent = target.Agent;
+                    c.DstInstid = target.InstID;
                 }
             }
         }
 
         public override void SetSuccess(ParsedLog log)
         {
-            Boss mainTarget = Targets.Find(x => x.ID == TriggerID);
+            Target mainTarget = Targets.Find(x => x.ID == TriggerID);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");

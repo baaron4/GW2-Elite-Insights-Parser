@@ -13,13 +13,13 @@ namespace LuckParser.Models
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(52173, "Pulverize", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ConjuredAmalgamate, "symbol:'square',color:'rgb(255,140,0)'", "A.Slam","Pulverize (Arm Slam)", "Arm Slam",0),
-            new Mechanic(52086, "Junk Absorption", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ConjuredAmalgamate, "symbol:'circle-open',color:'rgb(150,0,150)'", "Balls","Junk Absorption (Purple Balls during collect)", "Purple Balls",0),
-            new Mechanic(52878, "Junk Fall", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ConjuredAmalgamate, "symbol:'circle-open',color:'rgb(255,150,0)'", "Junk","Junk Fall (Falling Debris)", "Junk Fall",0),
-            new Mechanic(52120, "Junk Fall", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ConjuredAmalgamate, "symbol:'circle-open',color:'rgb(255,150,0)'", "Junk","Junk Fall (Falling Debris)", "Junk Fall",0),
-            new Mechanic(52161, "Ruptured Ground", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ConjuredAmalgamate, "symbol:'square-open',color:'rgb(0,255,255)'", "Grnd","Ruptured Ground (Relics after Junk Wall)", "Ruptured Ground",0,(condition => condition.DamageLog.Damage > 0)),
-            new Mechanic(52656, "Tremor", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ConjuredAmalgamate, "symbol:'circle-open',color:'rgb(255,0,0)'", "Trmr","Tremor (Field adjacent to Arm Slam)", "Near Arm Slam",0,(condition => condition.DamageLog.Damage > 0)),
-            new Mechanic(52150, "Junk Torrent", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ConjuredAmalgamate, "symbol:'square-open',color:'rgb(255,0,0)'", "Wall","Junk Torrent (Moving Wall)", "Junk Torrent (Wall)",0,(condition => condition.DamageLog.Damage > 0)),
+            new Mechanic(52173, "Pulverize", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.ConjuredAmalgamate, "symbol:'square',color:'rgb(255,140,0)'", "A.Slam","Pulverize (Arm Slam)", "Arm Slam",0),
+            new Mechanic(52086, "Junk Absorption", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.ConjuredAmalgamate, "symbol:'circle-open',color:'rgb(150,0,150)'", "Balls","Junk Absorption (Purple Balls during collect)", "Purple Balls",0),
+            new Mechanic(52878, "Junk Fall", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.ConjuredAmalgamate, "symbol:'circle-open',color:'rgb(255,150,0)'", "Junk","Junk Fall (Falling Debris)", "Junk Fall",0),
+            new Mechanic(52120, "Junk Fall", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.ConjuredAmalgamate, "symbol:'circle-open',color:'rgb(255,150,0)'", "Junk","Junk Fall (Falling Debris)", "Junk Fall",0),
+            new Mechanic(52161, "Ruptured Ground", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.ConjuredAmalgamate, "symbol:'square-open',color:'rgb(0,255,255)'", "Grnd","Ruptured Ground (Relics after Junk Wall)", "Ruptured Ground",0,(condition => condition.DamageLog.Damage > 0)),
+            new Mechanic(52656, "Tremor", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.ConjuredAmalgamate, "symbol:'circle-open',color:'rgb(255,0,0)'", "Trmr","Tremor (Field adjacent to Arm Slam)", "Near Arm Slam",0,(condition => condition.DamageLog.Damage > 0)),
+            new Mechanic(52150, "Junk Torrent", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.ConjuredAmalgamate, "symbol:'square-open',color:'rgb(255,0,0)'", "Wall","Junk Torrent (Moving Wall)", "Junk Torrent (Wall)",0,(condition => condition.DamageLog.Damage > 0)),
             }); 
             Extension = "ca";
             IconUrl = "https://i.imgur.com/eLyIWd2.png";
@@ -38,9 +38,9 @@ namespace LuckParser.Models
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.BossIDS.ConjuredAmalgamate,
-                (ushort)ParseEnum.BossIDS.CARightArm,
-                (ushort)ParseEnum.BossIDS.CALeftArm
+                (ushort)ParseEnum.TargetIDS.ConjuredAmalgamate,
+                (ushort)ParseEnum.TargetIDS.CARightArm,
+                (ushort)ParseEnum.TargetIDS.CALeftArm
             };
         }
 
@@ -122,7 +122,7 @@ namespace LuckParser.Models
             long start = 0;
             long end = 0;
             List<PhaseData> phases = GetInitialPhase(log);
-            Boss ca = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.ConjuredAmalgamate);
+            Target ca = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.ConjuredAmalgamate);
             if (ca == null)
             {
                 throw new InvalidOperationException("Conjurate Amalgamate not found");
@@ -173,7 +173,7 @@ namespace LuckParser.Models
                 phase.DrawEnd = true;
                 phase.DrawStart = true;
             }
-            Boss leftArm = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.CALeftArm);
+            Target leftArm = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.CALeftArm);
             if (leftArm != null)
             {
                 List<long> leftArmDown = log.GetBoonData(52430).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All && x.SrcInstid == leftArm.InstID).Select(x => x.Time - log.FightData.FightStart).ToList();
@@ -187,7 +187,7 @@ namespace LuckParser.Models
                     }
                 }
             }
-            Boss rightArm = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.CARightArm);
+            Target rightArm = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.CARightArm);
             if (rightArm != null)
             {
                 List<long> rightArmDown = log.GetBoonData(52430).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All && x.SrcInstid == rightArm.InstID).Select(x => x.Time - log.FightData.FightStart).ToList();
@@ -212,15 +212,15 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
         {
-            CombatReplay replay = boss.CombatReplay;
-            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            CombatReplay replay = target.CombatReplay;
+            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
 
-            switch (boss.ID)
+            switch (target.ID)
             {
-                case (ushort)ParseEnum.BossIDS.ConjuredAmalgamate:
-                    List<CombatItem> shield = GetFilteredList(log, 53003, boss);
+                case (ushort)ParseEnum.TargetIDS.ConjuredAmalgamate:
+                    List<CombatItem> shield = GetFilteredList(log, 53003, target);
                     int shieldStart = 0;
                     foreach (CombatItem c in shield)
                     {
@@ -233,12 +233,12 @@ namespace LuckParser.Models
                             int shieldEnd = (int)(c.Time - log.FightData.FightStart);
                             Tuple<int, int> lifespan = new Tuple<int, int>(shieldStart, shieldEnd);
                             int radius = 500;
-                            replay.Actors.Add(new CircleActor(true, 0, radius, lifespan, "rgba(0, 150, 255, 0.3)", new AgentConnector(boss)));
+                            replay.Actors.Add(new CircleActor(true, 0, radius, lifespan, "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
                         }
                     }
                     break;
-                case (ushort)ParseEnum.BossIDS.CALeftArm:
-                case (ushort)ParseEnum.BossIDS.CARightArm:
+                case (ushort)ParseEnum.TargetIDS.CALeftArm:
+                case (ushort)ParseEnum.TargetIDS.CARightArm:
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
@@ -268,7 +268,7 @@ namespace LuckParser.Models
 
         public override int IsCM(ParsedLog log)
         {
-            Boss target = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.ConjuredAmalgamate);
+            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.ConjuredAmalgamate);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");

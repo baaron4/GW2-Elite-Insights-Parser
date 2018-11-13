@@ -9,7 +9,7 @@ namespace LuckParser.Models.ParseModels
     {
         // Boon
         public enum BoonNature { Condition, Boon, OffensiveBuffTable, DefensiveBuffTable, GraphOnlyBuff, Food, Utility, Consumable };
-        public enum BoonSource { Mixed, Necromancer, Elementalist, Mesmer, Warrior, Revenant, Guardian, Thief, Ranger, Engineer, Item, Boss };
+        public enum BoonSource { Mixed, Necromancer, Elementalist, Mesmer, Warrior, Revenant, Guardian, Thief, Ranger, Engineer, Item, Enemy };
         public enum BoonType { Duration, Intensity };
         private enum Logic { Queue, HealingPower, Override, ForceOverride };
 
@@ -144,30 +144,30 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Power Suit",12326, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/89/Summon_Power_Suit.png"),
                 new Boon("Reaper of Grenth", 12366, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/0/07/Reaper_of_Grenth.png"),
                 new Boon("Charrzooka",43503, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/1/17/Charrzooka.png"),
-                // BOSS
-                new Boon("Unnatural Signet",38224, BoonSource.Boss, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png"),
-                new Boon("Compromised",35096, BoonSource.Boss, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/48/Compromised.png"),
-                new Boon("Spirited Fusion",31722, BoonSource.Boss, BoonType.Intensity, 500, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/eb/Spirited_Fusion.png"),
-                new Boon("Blood Shield",34376, BoonSource.Boss, BoonType.Intensity, 18, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
-                new Boon("Blood Shield",34518, BoonSource.Boss, BoonType.Intensity, 18, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
-                new Boon("Blood Fueled",34422, BoonSource.Boss, BoonType.Intensity, 20, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Blood Fueled",34428, BoonSource.Boss, BoonType.Intensity, 20, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Flame Armor",52568, BoonSource.Boss, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Fiery Surge",52588, BoonSource.Boss, BoonType.Intensity, 99, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Fractured - Enemy",53030, BoonSource.Boss, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Fractured - Allied",52213, BoonSource.Boss, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Conjured Protection",52973 , BoonSource.Boss, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Conjured Shield",52754 , BoonSource.Boss, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Greatsword Power",52667 , BoonSource.Boss, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Conjured Barrier",53003 , BoonSource.Boss, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Scepter Lock-on",53075  , BoonSource.Boss, BoonType.Intensity, 4, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Augmented Power",52074  , BoonSource.Boss, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("CA Invul",52255 , BoonSource.Boss, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Arm Up",52430 , BoonSource.Boss, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Aquatic Detainment",52931 , BoonSource.Boss, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Aquatic Aura (Kenut)",52211 , BoonSource.Boss, BoonType.Intensity, 80, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Aquatic Aura (Nikare)",52929 , BoonSource.Boss, BoonType.Intensity, 80, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Waterlogged",51935 , BoonSource.Boss, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                // ENEMY
+                new Boon("Unnatural Signet",38224, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png"),
+                new Boon("Compromised",35096, BoonSource.Enemy, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/48/Compromised.png"),
+                new Boon("Spirited Fusion",31722, BoonSource.Enemy, BoonType.Intensity, 500, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/eb/Spirited_Fusion.png"),
+                new Boon("Blood Shield",34376, BoonSource.Enemy, BoonType.Intensity, 18, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
+                new Boon("Blood Shield",34518, BoonSource.Enemy, BoonType.Intensity, 18, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
+                new Boon("Blood Fueled",34422, BoonSource.Enemy, BoonType.Intensity, 20, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Blood Fueled",34428, BoonSource.Enemy, BoonType.Intensity, 20, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Flame Armor",52568, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Fiery Surge",52588, BoonSource.Enemy, BoonType.Intensity, 99, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Fractured - Enemy",53030, BoonSource.Enemy, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Fractured - Allied",52213, BoonSource.Enemy, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Conjured Protection",52973 , BoonSource.Enemy, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Conjured Shield",52754 , BoonSource.Enemy, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Greatsword Power",52667 , BoonSource.Enemy, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Conjured Barrier",53003 , BoonSource.Enemy, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Scepter Lock-on",53075  , BoonSource.Enemy, BoonType.Intensity, 4, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Augmented Power",52074  , BoonSource.Enemy, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("CA Invul",52255 , BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Arm Up",52430 , BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Aquatic Detainment",52931 , BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Aquatic Aura (Kenut)",52211 , BoonSource.Enemy, BoonType.Intensity, 80, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Aquatic Aura (Nikare)",52929 , BoonSource.Enemy, BoonType.Intensity, 80, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Waterlogged",51935 , BoonSource.Enemy, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 //REVENANT
                 //skills
                 new Boon("Crystal Hibernation", 28262, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/4/4a/Crystal_Hibernation.png"),
@@ -607,10 +607,10 @@ namespace LuckParser.Models.ParseModels
         {
             return BoonsByNature[BoonNature.Consumable];
         }
-        // Boss
-        public static List<Boon> GetBossBoonList()
+        // Enemy
+        public static List<Boon> GetEnemyBoonList()
         {
-            return BoonsBySource[BoonSource.Boss];
+            return BoonsBySource[BoonSource.Enemy];
         }
         // All buffs
         public static List<Boon> GetAllBuffList()

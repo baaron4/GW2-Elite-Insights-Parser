@@ -57,7 +57,7 @@ namespace LuckParser.Controllers
             var log = new JsonLog();
 
             SetGeneral(log);
-            SetBoss(log);
+            SetTargets(log);
             SetPlayers(log);
             SetPhases(log);
             SetMechanics(log);
@@ -130,12 +130,12 @@ namespace LuckParser.Controllers
             }
         }
 
-        private void SetBoss(JsonLog log)
+        private void SetTargets(JsonLog log)
         {
-            log.Boss = new List<JsonBoss>();
-            foreach (Boss target in _log.FightData.Logic.Targets)
+            log.Targets = new List<JsonTarget>();
+            foreach (Target target in _log.FightData.Logic.Targets)
             {
-                JsonBoss boss = new JsonBoss
+                JsonTarget jsTarget = new JsonTarget
                 {
                     Id = target.ID,
                     Name = target.Character,
@@ -143,7 +143,7 @@ namespace LuckParser.Controllers
                     AvgBoons = _statistics.AvgTargetBoons[target],
                     AvgConditions = _statistics.AvgTargetConditions[target],
                     Dps = BuildDPS(_statistics.TargetDps[target]),
-                    Buffs = BuildBossBuffs(_statistics.TargetConditions[target], target),
+                    Buffs = BuildTargetBuffs(_statistics.TargetConditions[target], target),
                     HitboxHeight = target.HitboxHeight,
                     HitboxWidth = target.HitboxWidth,
                     Dps1s = Build1SDPS(target, null),
@@ -156,12 +156,12 @@ namespace LuckParser.Controllers
                     AvgBoonsStates = BuildBuffStates(target.GetBoonGraphs(_log)[Boon.NumberOfBoonsID]),
                     AvgConditionsStates = BuildBuffStates(target.GetBoonGraphs(_log)[Boon.NumberOfConditionsID])
                 };
-                int finalBossHealth = target.HealthOverTime.Count > 0
+                int finalTargetHealth = target.HealthOverTime.Count > 0
                     ? target.HealthOverTime.Last().Y
                     : 10000;
-                boss.FinalHealth = target.Health * (finalBossHealth * 0.01);
-                boss.HealthPercentBurned = 100.0 - finalBossHealth * 0.01;
-                log.Boss.Add(boss);
+                jsTarget.FinalHealth = target.Health * (finalTargetHealth * 0.01);
+                jsTarget.HealthPercentBurned = 100.0 - finalTargetHealth * 0.01;
+                log.Targets.Add(jsTarget);
             }
         }
 
@@ -185,9 +185,9 @@ namespace LuckParser.Controllers
                     Dps1s = Build1SDPS(player, null),
                     TargetDps1s = Build1SDPS(player),
                     DpsAll = BuildDPS(_statistics.DpsAll[player]),
-                    DpsBoss = BuildDPSBoss(_statistics.DpsTarget, player),
+                    DpsTargets = BuildDPSTarget(_statistics.DpsTarget, player),
                     StatsAll = BuildStatsAll(_statistics.StatsAll[player]),
-                    StatsBoss = BuildStatsBoss(_statistics.StatsTarget, player),
+                    StatsTargets = BuildStatsTarget(_statistics.StatsTarget, player),
                     Defenses = BuildDefenses(_statistics.Defenses[player]),
                     Rotation = BuildRotation(player.GetCastLogs(_log, 0, _log.FightData.FightDuration)),
                     Support = BuildSupport(_statistics.Support[player]),
@@ -335,7 +335,7 @@ namespace LuckParser.Controllers
             Dictionary<long, JsonDamageDist>[][] res = new Dictionary<long, JsonDamageDist>[_log.FightData.Logic.Targets.Count][];
             for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
             {
-                Boss target = _log.FightData.Logic.Targets[i];
+                Target target = _log.FightData.Logic.Targets[i];
                 res[i] = BuildDamageDist(p, target);
             }
             return res;
@@ -346,13 +346,13 @@ namespace LuckParser.Controllers
             Dictionary<long, JsonDamageDist>[][] res = new Dictionary<long, JsonDamageDist>[_log.FightData.Logic.Targets.Count][];
             for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
             {
-                Boss target = _log.FightData.Logic.Targets[i];
+                Target target = _log.FightData.Logic.Targets[i];
                 res[i] = BuildDamageDist(p, target);
             }
             return res;
         }
 
-        private Dictionary<long, JsonDamageDist>[] BuildDamageDist(AbstractMasterPlayer p, Boss target)
+        private Dictionary<long, JsonDamageDist>[] BuildDamageDist(AbstractMasterPlayer p, Target target)
         {
             Dictionary<long, JsonDamageDist>[] res = new Dictionary<long, JsonDamageDist>[_statistics.Phases.Count];
             for (int i = 0; i < _statistics.Phases.Count; i++)
@@ -374,7 +374,7 @@ namespace LuckParser.Controllers
             return res;
         }
 
-        private Dictionary<long, JsonDamageDist>[] BuildDamageDist(Minions p, Boss target)
+        private Dictionary<long, JsonDamageDist>[] BuildDamageDist(Minions p, Target target)
         {
             Dictionary<long, JsonDamageDist>[] res = new Dictionary<long, JsonDamageDist>[_statistics.Phases.Count];
             for (int i = 0; i < _statistics.Phases.Count; i++)
@@ -439,7 +439,7 @@ namespace LuckParser.Controllers
         }
 
 
-        private List<int> Build1SDPS(AbstractMasterPlayer player, Boss target)
+        private List<int> Build1SDPS(AbstractMasterPlayer player, Target target)
         {
             List<int> res = new List<int>();
             foreach (var pt in GraphHelper.GetTargetDPSGraph(_log, player, 0, _statistics.Phases[0], GraphHelper.GraphMode.S1, target))
@@ -519,7 +519,7 @@ namespace LuckParser.Controllers
 
         // Statistics to Json Converters ////////////////////////////////////////////////////
 
-        private bool ContainsBossBoon(long boon, Dictionary<long, Statistics.FinalTargetBoon>[] statBoons)
+        private bool ContainsTargetBoon(long boon, Dictionary<long, Statistics.FinalTargetBoon>[] statBoons)
         {
             for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
             {
@@ -531,7 +531,7 @@ namespace LuckParser.Controllers
             return false;
         }
 
-        private void MakePhaseBossBoon(JsonBossBuffs boon, int phase, Statistics.FinalTargetBoon value)
+        private void MakePhaseTargetBoon(JsonTargetBuffs boon, int phase, Statistics.FinalTargetBoon value)
         {
             boon.Uptime[phase] = value.Uptime;
             boon.Presence[phase] = value.Presence;
@@ -549,10 +549,10 @@ namespace LuckParser.Controllers
             }
         }
 
-        private Dictionary<long, JsonBossBuffs> BuildBossBuffs(Dictionary<long, Statistics.FinalTargetBoon>[] statBoons, Boss boss)
+        private Dictionary<long, JsonTargetBuffs> BuildTargetBuffs(Dictionary<long, Statistics.FinalTargetBoon>[] statBoons, Target target)
         {
             int phases = _statistics.Phases.Count;
-            var boons = new Dictionary<long, JsonBossBuffs>();
+            var boons = new Dictionary<long, JsonTargetBuffs>();
 
             var boonsFound = new List<long>();
             var boonsNotFound = new List<long>();
@@ -564,17 +564,17 @@ namespace LuckParser.Controllers
                     _buffNames[boon.Key] = Boon.BoonsByIds[boon.Key].Name;
                     if (boonsFound.Contains(boon.Key))
                     {
-                        MakePhaseBossBoon(boons[boon.Key], phaseIndex, boon.Value);
+                        MakePhaseTargetBoon(boons[boon.Key], phaseIndex, boon.Value);
                     }
                     else if (!boonsNotFound.Contains(boon.Key))
                     {
-                        if (ContainsBossBoon(boon.Key, statBoons))
+                        if (ContainsTargetBoon(boon.Key, statBoons))
                         {
                             boonsFound.Add(boon.Key);
 
-                            boons[boon.Key] = new JsonBossBuffs(phases);
-                            MakePhaseBossBoon(boons[boon.Key], phaseIndex, boon.Value);
-                            if (boss.GetBoonGraphs(_log).TryGetValue(boon.Key, out var bgm))
+                            boons[boon.Key] = new JsonTargetBuffs(phases);
+                            MakePhaseTargetBoon(boons[boon.Key], phaseIndex, boon.Value);
+                            if (target.GetBoonGraphs(_log).TryGetValue(boon.Key, out var bgm))
                             {
                                 foreach (BoonsGraphModel.Segment seg in bgm.BoonChart)
                                 {
@@ -606,11 +606,11 @@ namespace LuckParser.Controllers
             return dps;
         }
 
-        private JsonDps[] BuildDPSBoss(Dictionary<Boss, Dictionary<Player, Statistics.FinalDPS[]>> statDps, Player player)
+        private JsonDps[] BuildDPSTarget(Dictionary<Target, Dictionary<Player, Statistics.FinalDPS[]>> statDps, Player player)
         {
             var finalDps = new JsonDps[_log.FightData.Logic.Targets.Count];
             int i = 0;
-            foreach (Boss target in _log.FightData.Logic.Targets)
+            foreach (Target target in _log.FightData.Logic.Targets)
             {
                 finalDps[i++] = BuildDPS(statDps[target][player]);
             }
@@ -740,7 +740,7 @@ namespace LuckParser.Controllers
             return stats;
         }
 
-        private JsonStats BuildStatsBoss(Statistics.FinalStats[] statStat)
+        private JsonStats BuildStatsTarget(Statistics.FinalStats[] statStat)
         {
             var stats = new JsonStats(_statistics.Phases.Count);
 
@@ -750,13 +750,13 @@ namespace LuckParser.Controllers
             return stats;
         }
 
-        private JsonStats[] BuildStatsBoss(Dictionary<Boss, Dictionary<Player,Statistics.FinalStats[]>> statStat, Player player)
+        private JsonStats[] BuildStatsTarget(Dictionary<Target, Dictionary<Player,Statistics.FinalStats[]>> statStat, Player player)
         {
             var finalStats = new JsonStats[_log.FightData.Logic.Targets.Count];
             int i = 0;
-            foreach (Boss target in _log.FightData.Logic.Targets)
+            foreach (Target target in _log.FightData.Logic.Targets)
             {
-                finalStats[i++] = BuildStatsBoss(statStat[target][player]);
+                finalStats[i++] = BuildStatsTarget(statStat[target][player]);
             }
             return finalStats;
         }

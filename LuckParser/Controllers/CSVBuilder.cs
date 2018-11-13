@@ -84,11 +84,11 @@ namespace LuckParser.Controllers
             {
                 durationString = duration.ToString("hh") + "h " + durationString;
             }
-            string bossname = _log.FightData.Name;
+            string fightName = _log.FightData.Name;
             //header
             WriteLine(new [] { "Elite Insights Version", Application.ProductVersion });
             WriteLine(new [] { "ARC Version", _log.LogData.BuildVersion});
-            WriteLine(new [] { "Boss ID", _log.FightData.ID.ToString() });
+            WriteLine(new [] { "Fight ID", _log.FightData.ID.ToString() });
             WriteLine(new [] { "Recorded By", _log.LogData.PoV.Split(':')[0] });
             WriteLine(new [] { "Time Start", _log.LogData.LogStart });
             WriteLine(new [] { "Time End", _log.LogData.LogEnd });
@@ -104,11 +104,11 @@ namespace LuckParser.Controllers
             NewLine();
             NewLine();
             //Boss card
-            WriteLine(new [] { "Boss", bossname });
+            WriteLine(new [] { "Boss", fightName });
             WriteLine(new [] { "Success", _log.FightData.Success.ToString() });
-            WriteLine(new [] { "Total Boss Health", _log.Boss.Health.ToString() });
-            int finalBossHealth = _log.Boss.HealthOverTime.Count > 0 ? _log.Boss.HealthOverTime.Last().Y : 10000;
-            WriteLine(new [] { "Final Boss Health", (_log.Boss.Health * (100.0 - finalBossHealth * 0.01)).ToString() });
+            WriteLine(new [] { "Total Boss Health", _log.LegacyTarget.Health.ToString() });
+            int finalBossHealth = _log.LegacyTarget.HealthOverTime.Count > 0 ? _log.LegacyTarget.HealthOverTime.Last().Y : 10000;
+            WriteLine(new [] { "Final Boss Health", (_log.LegacyTarget.Health * (100.0 - finalBossHealth * 0.01)).ToString() });
             WriteLine(new [] { "Boss Health Burned %", (100.0 - finalBossHealth * 0.01).ToString() });
             WriteLine(new [] { "Duration", durationString });
 
@@ -199,9 +199,9 @@ namespace LuckParser.Controllers
             foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalDPS dps = _statistics.DpsAll[player][phaseIndex];
-                Statistics.FinalDPS dpsBoss = _statistics.DpsTarget[_log.Boss][player][phaseIndex];
+                Statistics.FinalDPS dpsBoss = _statistics.DpsTarget[_log.LegacyTarget][player][phaseIndex];
                 Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
-                Statistics.FinalStats statsBoss = _statistics.StatsTarget[_log.Boss][player][phaseIndex];
+                Statistics.FinalStats statsBoss = _statistics.StatsTarget[_log.LegacyTarget][player][phaseIndex];
                 string deathString = "";
                 string deadthTooltip = "";
                 if (stats.Died != 0.0)
@@ -266,9 +266,9 @@ namespace LuckParser.Controllers
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalDPS dpsBoss = _statistics.DpsTarget[_log.Boss][player][phaseIndex];
+                Statistics.FinalDPS dpsBoss = _statistics.DpsTarget[_log.LegacyTarget][player][phaseIndex];
                 Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
-                Statistics.FinalStats statsBoss = _statistics.StatsTarget[_log.Boss][player][phaseIndex];
+                Statistics.FinalStats statsBoss = _statistics.StatsTarget[_log.LegacyTarget][player][phaseIndex];
 
                 WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
                 Math.Round((double)(statsBoss.CriticalRate) / statsBoss.CritablePowerLoopCount * 100,1).ToString(), statsBoss.CriticalRate.ToString(),statsBoss.CriticalDmg.ToString(),
@@ -683,10 +683,10 @@ namespace LuckParser.Controllers
         }
         private void CreateCondiUptime(int phaseIndex)
         {
-            Boss boss = _log.Boss;
+            Target boss = _log.LegacyTarget;
             List<PhaseData> phases = _statistics.Phases;
             long fightDuration = phases[phaseIndex].GetDuration();
-            Dictionary<long, Statistics.FinalTargetBoon> conditions = _statistics.TargetConditions[_log.Boss][phaseIndex];
+            Dictionary<long, Statistics.FinalTargetBoon> conditions = _statistics.TargetConditions[_log.LegacyTarget][phaseIndex];
 
             WriteCell("Name");
             WriteCell("Avg");
@@ -698,7 +698,7 @@ namespace LuckParser.Controllers
             NewLine();
             int count = 0;
             WriteCell(boss.Character);
-            WriteCell(Math.Round(_statistics.AvgTargetConditions[_log.Boss][phaseIndex], 1).ToString());
+            WriteCell(Math.Round(_statistics.AvgTargetConditions[_log.LegacyTarget][phaseIndex], 1).ToString());
             foreach (Boon boon in _statistics.PresentConditions)
             {
                 if (boon.Type == Boon.BoonType.Duration)
@@ -720,9 +720,9 @@ namespace LuckParser.Controllers
         }
         private void CreateBossBoonUptime(int phaseIndex)
         {
-            Boss boss = _log.Boss;
+            Target boss = _log.LegacyTarget;
             List<PhaseData> phases = _statistics.Phases;
-            Dictionary<long, Statistics.FinalTargetBoon> conditions = _statistics.TargetConditions[_log.Boss][phaseIndex];
+            Dictionary<long, Statistics.FinalTargetBoon> conditions = _statistics.TargetConditions[_log.LegacyTarget][phaseIndex];
             WriteCell("Name");
             WriteCell("Avg");
             foreach (Boon boon in _statistics.PresentBoons)
@@ -755,7 +755,7 @@ namespace LuckParser.Controllers
         private void CreateCondiGen(int phaseIndex)
         {
             List<PhaseData> phases = _statistics.Phases;
-            Dictionary<long, Statistics.FinalTargetBoon> conditions = _statistics.TargetConditions[_log.Boss][phaseIndex];
+            Dictionary<long, Statistics.FinalTargetBoon> conditions = _statistics.TargetConditions[_log.LegacyTarget][phaseIndex];
             //bool hasBoons = false;
             int count = 0;
             WriteCell("Name");

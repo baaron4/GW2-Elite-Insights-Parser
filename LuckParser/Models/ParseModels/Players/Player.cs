@@ -286,7 +286,7 @@ namespace LuckParser.Models.ParseModels
                     dc.Add(new Tuple<long, long>(cur.Time - log.FightData.FightStart, log.FightData.FightDuration));
                 }
             }
-            // Boss related stuff
+            // Fight related stuff
             log.FightData.Logic.ComputeAdditionalPlayerData(this, log);
         }
 

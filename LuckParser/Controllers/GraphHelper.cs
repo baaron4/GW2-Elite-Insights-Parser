@@ -107,7 +107,7 @@ namespace LuckParser.Controllers
             return p.GetDPSGraph(askedId);
         }
         /// <summary>
-        /// Gets the points for the boss dps graph for a given player
+        /// Gets the points for the target dps graph for a given player
         /// </summary>
         /// <param name="log"></param>
         /// <param name="p"></param>
@@ -115,9 +115,9 @@ namespace LuckParser.Controllers
         /// <param name="phase"></param>
         /// <param name="mode"></param>
         /// <returns></returns>
-        public static List<Point> GetTargetDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phaseIndex, PhaseData phase, GraphMode mode, Boss boss)
+        public static List<Point> GetTargetDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phaseIndex, PhaseData phase, GraphMode mode, Target target)
         {
-            return GetDPSGraph(log, p, phaseIndex, phase, boss, mode);
+            return GetDPSGraph(log, p, phaseIndex, phase, target, mode);
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace LuckParser.Controllers
         /// <param name="phase"></param>
         /// <param name="mode"></param>
         /// <returns></returns>
-        public static List<Point> GetCleaveDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phaseIndex, PhaseData phase, GraphMode mode, Boss boss)
+        public static List<Point> GetCleaveDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phaseIndex, PhaseData phase, GraphMode mode, Target target)
         {           
             int askedId = (phaseIndex + "_" + (-1) + "_" + mode).GetHashCode();
             if (p.GetDPSGraph(askedId).Count > 0)
@@ -151,11 +151,11 @@ namespace LuckParser.Controllers
                 return p.GetDPSGraph(askedId);
             }
             List<Point> totalPoints = GetTotalDPSGraph(log, p, phaseIndex, phase, mode);
-            List<Point> bossPoints = GetTargetDPSGraph(log, p, phaseIndex, phase, mode, boss);
+            List<Point> targetPoints = GetTargetDPSGraph(log, p, phaseIndex, phase, mode, target);
             List<Point> cleavePoints = new List<Point>();
-            for (int i = 0; i < bossPoints.Count; i++)
+            for (int i = 0; i < targetPoints.Count; i++)
             {
-                cleavePoints.Add(new Point(bossPoints[i].X, totalPoints[i].Y - bossPoints[i].Y));
+                cleavePoints.Add(new Point(targetPoints[i].X, totalPoints[i].Y - targetPoints[i].Y));
             }
             p.DpsGraph[askedId] = cleavePoints;
             return cleavePoints;

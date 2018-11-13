@@ -13,21 +13,21 @@ namespace LuckParser.Models
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(48172, "Hateful Ephemera", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'square',color:'rgb(255,140,0)'", "Glm.dmg","Hateful Ephemera (Golem AoE dmg)", "Golem Dmg",0), 
-            new Mechanic(48121, "Arcing Affliction", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'circle-open',color:'rgb(255,0,0)'", "B.dmg","Arcing Affliction (Bomb) hit", "Bomb dmg",0), 
-            new Mechanic(47646, "Arcing Affliction", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Dhuum, "symbol:'circle',color:'rgb(255,0,0)'", "Bmb","Arcing Affliction (Bomb) application", "Bomb",0),
+            new Mechanic(48172, "Hateful Ephemera", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'square',color:'rgb(255,140,0)'", "Glm.dmg","Hateful Ephemera (Golem AoE dmg)", "Golem Dmg",0), 
+            new Mechanic(48121, "Arcing Affliction", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'circle-open',color:'rgb(255,0,0)'", "B.dmg","Arcing Affliction (Bomb) hit", "Bomb dmg",0), 
+            new Mechanic(47646, "Arcing Affliction", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Dhuum, "symbol:'circle',color:'rgb(255,0,0)'", "Bmb","Arcing Affliction (Bomb) application", "Bomb",0),
             //new Mechanic(47476, "Residual Affliction", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Dhuum, "symbol:'star-diamond',color:'rgb(255,200,0)'", "Bomb",0), //not needed, imho, applied at the same time as Arcing Affliction
-            new Mechanic(47335, "Soul Shackle", Mechanic.MechType.PlayerOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'diamond',color:'rgb(0,255,255)'", "Shckl","Soul Shackle (Tether) application", "Shackles",0),//  //also used for removal.
-            new Mechanic(47164, "Soul Shackle", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'diamond-open',color:'rgb(0,255,255)'", "Sh.Dmg","Soul Shackle (Tether) dmg ticks", "Shackles Dmg",0, (item => item.DamageLog.Damage > 0)),
-            new Mechanic(47561, "Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'triangle',color:'rgb(0,128,0)'", "Cone","Boon ripping Cone Attack", "Cone",0),
-            new Mechanic(48752, "Cull", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'asterisk-open',color:'rgb(0,255,255)'", "Crk","Cull (Fearing Fissures)", "Cracks",0),
-            new Mechanic(48760, "Putrid Bomb", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'circle',color:'rgb(0,128,0)'", "Mrk","Necro Marks during Scythe attack", "Necro Marks",0), 
-            new Mechanic(48398, "Cataclysmic Cycle", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'circle-open',color:'rgb(255,140,0)'", "Sck.Dmg","Damage when sucked to close to middle", "Suck dmg",0),
-            new Mechanic(48176, "Death Mark", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'hexagon',color:'rgb(255,140,0)'", "Dip","Lesser Death Mark hit (Dip into ground)", "Dip AoE",0), 
-            new Mechanic(48210, "Greater Death Mark", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'circle',color:'rgb(255,140,0)'", "KB.Dmg","Knockback damage during Greater Deathmark (mid port)", "Knockback dmg",0),
+            new Mechanic(47335, "Soul Shackle", Mechanic.MechType.PlayerOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'diamond',color:'rgb(0,255,255)'", "Shckl","Soul Shackle (Tether) application", "Shackles",0),//  //also used for removal.
+            new Mechanic(47164, "Soul Shackle", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'diamond-open',color:'rgb(0,255,255)'", "Sh.Dmg","Soul Shackle (Tether) dmg ticks", "Shackles Dmg",0, (item => item.DamageLog.Damage > 0)),
+            new Mechanic(47561, "Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'triangle',color:'rgb(0,128,0)'", "Cone","Boon ripping Cone Attack", "Cone",0),
+            new Mechanic(48752, "Cull", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'asterisk-open',color:'rgb(0,255,255)'", "Crk","Cull (Fearing Fissures)", "Cracks",0),
+            new Mechanic(48760, "Putrid Bomb", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'circle',color:'rgb(0,128,0)'", "Mrk","Necro Marks during Scythe attack", "Necro Marks",0), 
+            new Mechanic(48398, "Cataclysmic Cycle", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'circle-open',color:'rgb(255,140,0)'", "Sck.Dmg","Damage when sucked to close to middle", "Suck dmg",0),
+            new Mechanic(48176, "Death Mark", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'hexagon',color:'rgb(255,140,0)'", "Dip","Lesser Death Mark hit (Dip into ground)", "Dip AoE",0), 
+            new Mechanic(48210, "Greater Death Mark", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'circle',color:'rgb(255,140,0)'", "KB.Dmg","Knockback damage during Greater Deathmark (mid port)", "Knockback dmg",0),
           //  new Mechanic(48281, "Mortal Coil", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Dhuum, "symbol:'circle',color:'rgb(0,128,0)'", "Green Orbs",
-            new Mechanic(46950, "Fractured Spirit", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Dhuum, "symbol:'square',color:'rgb(0,255,0)'", "Orb CD","Applied when taking green", "Green port",0), 
-            new Mechanic(47076 , "Echo's Damage", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'square',color:'rgb(255,0,0)'", "Echo","Damaged by Ender's Echo (pick up)", "Ender's Echo",5000),
+            new Mechanic(46950, "Fractured Spirit", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Dhuum, "symbol:'square',color:'rgb(0,255,0)'", "Orb CD","Applied when taking green", "Green port",0), 
+            new Mechanic(47076 , "Echo's Damage", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'square',color:'rgb(255,0,0)'", "Echo","Damaged by Ender's Echo (pick up)", "Ender's Echo",5000),
             });
             Extension = "dhuum";
             IconUrl = "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
@@ -48,7 +48,7 @@ namespace LuckParser.Models
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Dhuum);
+            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -137,14 +137,14 @@ namespace LuckParser.Models
             };
         }
 
-        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
         {
             // TODO: correct position
-            CombatReplay replay = boss.CombatReplay;
-            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
-            switch (boss.ID)
+            CombatReplay replay = target.CombatReplay;
+            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (target.ID)
             {
-                case (ushort)ParseEnum.BossIDS.Dhuum:
+                case (ushort)ParseEnum.TargetIDS.Dhuum:
                     List<CastLog> deathmark = cls.Where(x => x.SkillId == 48176).ToList();
                     CastLog majorSplit = cls.Find(x => x.SkillId == 47396);
                     foreach (CastLog c in deathmark)
@@ -161,10 +161,10 @@ namespace LuckParser.Models
                         }
                         int spellCenterDistance = 200; //hitbox radius
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 3000);
-                        Point3D bossPosition = replay.Positions.LastOrDefault(x => x.Time <= start + 3000);
-                        if (facing != null && bossPosition != null)
+                        Point3D targetPosition = replay.Positions.LastOrDefault(x => x.Time <= start + 3000);
+                        if (facing != null && targetPosition != null)
                         {
-                            Point3D position = new Point3D(bossPosition.X + (facing.X * spellCenterDistance), bossPosition.Y + (facing.Y * spellCenterDistance), bossPosition.Z, bossPosition.Time);
+                            Point3D position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z, targetPosition.Time);
                             replay.Actors.Add(new CircleActor(true, zoneActive, radius, new Tuple<int, int>(start, zoneActive), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleActor(false, 0, radius, new Tuple<int, int>(start, zoneActive), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleActor(true, 0, radius, new Tuple<int, int>(zoneActive, zoneDeadly), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
@@ -177,8 +177,8 @@ namespace LuckParser.Models
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
-                        replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.7)", new AgentConnector(boss)));
-                        replay.Actors.Add(new CircleActor(true, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(boss)));
+                        replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.7)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleActor(true, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
                     }
                     List<CastLog> slash = cls.Where(x => x.SkillId == 47561).ToList();
                     foreach (CastLog c in slash)
@@ -190,14 +190,14 @@ namespace LuckParser.Models
                         {
                             continue;
                         }
-                        replay.Actors.Add(new PieActor(false, 0, 850, facing, 60, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(boss)));
+                        replay.Actors.Add(new PieActor(false, 0, 850, facing, 60, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
                     }
 
                     if (majorSplit != null)
                     {
                         int start = (int)majorSplit.Time;
                         int end = (int)log.FightData.FightDuration;
-                        replay.Actors.Add(new CircleActor(true, 0, 320, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.2)", new AgentConnector(boss)));
+                        replay.Actors.Add(new CircleActor(true, 0, 320, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.2)", new AgentConnector(target)));
                     }
                     break;
                 default:
@@ -236,7 +236,7 @@ namespace LuckParser.Models
             // spirit transform
             CombatReplay replay = p.CombatReplay;
             List<CombatItem> spiritTransform = log.GetBoonData(46950).Where(x => x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
-            Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Dhuum);
+            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -322,7 +322,7 @@ namespace LuckParser.Models
 
         public override int IsCM(ParsedLog log)
         {
-            Boss target = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Dhuum);
+            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");

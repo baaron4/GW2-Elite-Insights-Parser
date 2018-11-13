@@ -13,24 +13,24 @@ namespace LuckParser.Models
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(37716, "Rapid Decay", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'circle-open',color:'rgb(0,0,0)'", "Oil","Rapid Decay (Black expanding oil)", "Black Oil",0),
-            new Mechanic(37846, "Off Balance", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Deimos, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "TP.CC","Off Balance (Saul TP Breakbar)", "Saul TP Start",0),
-            new Mechanic(37846, "Off Balance", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Deimos, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "TP.CC.Fail","Failed Saul TP CC", "Failed CC (TP)",0, (condition => condition.CombatItem.Value >= 2200)),
-            new Mechanic(37846, "Off Balance", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Deimos, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "TP.CCed","Saul TP CCed", "CCed (TP)",0, (condition => condition.CombatItem.Value < 2200)),
-            new Mechanic(38272, "Boon Thief", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Deimos, "symbol:'diamond-wide',color:'rgb(0,160,150)'", "Thief.CC","Boon Thief (Saul Breakbar)", "Boon Thief Start",0),
-            new Mechanic(38272, "Boon Thief", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Deimos, "symbol:'diamond-wide',color:'rgb(255,0,0)'", "Thief.CC.Fail","Failed Boon Thief CC", "Failed CC (Thief)",0, (condition => condition.CombatItem.Value >= 4400)),
-            new Mechanic(38272, "Boon Thief", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Deimos, "symbol:'diamond-wide',color:'rgb(0,160,0)'", "Thief.CCed","Boon Thief CCed", "CCed (Thief)",0, (condition => condition.CombatItem.Value < 4400)),
-            new Mechanic(38208, "Annihilate", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'hexagon',color:'rgb(255,200,0)'", "Smash","Annihilate (Cascading Pizza attack)", "Boss Smash",0),
-            new Mechanic(37929, "Annihilate", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'hexagon',color:'rgb(255,200,0)'", "Smash","Annihilate (Cascading Pizza attack)", "Boss Smash",0),
-            new Mechanic(37980, "Demonic Shock Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'triangle-right-open',color:'rgb(255,0,0)'", "10%RSmsh","Knockback (right hand) in 10% Phase", "10% Right Smash",0),
-            new Mechanic(38046, "Demonic Shock Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'triangle-left-open',color:'rgb(255,0,0)'", "10%LSmash","Knockback (left hand) in 10% Phase", "10% Left Smash",0),
-            new Mechanic(37982, "Demonic Shock Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'bowtie',color:'rgb(255,0,0)'", "10%DSmsh","Knockback (both hands) in 10% Phase", "10% Double Smash",0),
-            new Mechanic(37733, "Tear Instability", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Deimos, "symbol:'diamond',color:'rgb(0,128,128)'", "Tear","Collected a Demonic Tear", "Tear",0),
-            new Mechanic(37613, "Mind Crush", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'square',color:'rgb(0,0,255)'", "MCrsh","Hit by Mind Crush without Bubble Protection", "Mind Crush",0,(condition => condition.DamageLog.Damage > 0)),
-            new Mechanic(38187, "Weak Minded", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Deimos, "symbol:'square-open',color:'rgb(200,140,255)'", "WkMind","Weak Minded (Debuff after Mind Crush)", "Weak Minded",0),
-            new Mechanic(37730, "Chosen by Eye of Janthir", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Deimos, "symbol:'circle',color:'rgb(0,255,0)'", "Grn","Chosen by the Eye of Janthir", "Chosen (Green)",0), 
-            new Mechanic(38169, "Teleported", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Deimos, "symbol:'circle-open',color:'rgb(0,255,0)'", "TP","Teleport to/from Demonic Realm", "Teleport",0),
-            new Mechanic(38224, "Unnatural Signet", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Deimos, "symbol:'square-open',color:'rgb(0,255,255)'", "DMGDbf","Double Damage Debuff on Deimos", "+100% Dmg Buff",0)
+            new Mechanic(37716, "Rapid Decay", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Deimos, "symbol:'circle-open',color:'rgb(0,0,0)'", "Oil","Rapid Decay (Black expanding oil)", "Black Oil",0),
+            new Mechanic(37846, "Off Balance", Mechanic.MechType.EnemyCastStart, ParseEnum.TargetIDS.Deimos, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "TP.CC","Off Balance (Saul TP Breakbar)", "Saul TP Start",0),
+            new Mechanic(37846, "Off Balance", Mechanic.MechType.EnemyCastEnd, ParseEnum.TargetIDS.Deimos, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "TP.CC.Fail","Failed Saul TP CC", "Failed CC (TP)",0, (condition => condition.CombatItem.Value >= 2200)),
+            new Mechanic(37846, "Off Balance", Mechanic.MechType.EnemyCastEnd, ParseEnum.TargetIDS.Deimos, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "TP.CCed","Saul TP CCed", "CCed (TP)",0, (condition => condition.CombatItem.Value < 2200)),
+            new Mechanic(38272, "Boon Thief", Mechanic.MechType.EnemyCastStart, ParseEnum.TargetIDS.Deimos, "symbol:'diamond-wide',color:'rgb(0,160,150)'", "Thief.CC","Boon Thief (Saul Breakbar)", "Boon Thief Start",0),
+            new Mechanic(38272, "Boon Thief", Mechanic.MechType.EnemyCastEnd, ParseEnum.TargetIDS.Deimos, "symbol:'diamond-wide',color:'rgb(255,0,0)'", "Thief.CC.Fail","Failed Boon Thief CC", "Failed CC (Thief)",0, (condition => condition.CombatItem.Value >= 4400)),
+            new Mechanic(38272, "Boon Thief", Mechanic.MechType.EnemyCastEnd, ParseEnum.TargetIDS.Deimos, "symbol:'diamond-wide',color:'rgb(0,160,0)'", "Thief.CCed","Boon Thief CCed", "CCed (Thief)",0, (condition => condition.CombatItem.Value < 4400)),
+            new Mechanic(38208, "Annihilate", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Deimos, "symbol:'hexagon',color:'rgb(255,200,0)'", "Smash","Annihilate (Cascading Pizza attack)", "Boss Smash",0),
+            new Mechanic(37929, "Annihilate", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Deimos, "symbol:'hexagon',color:'rgb(255,200,0)'", "Smash","Annihilate (Cascading Pizza attack)", "Boss Smash",0),
+            new Mechanic(37980, "Demonic Shock Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Deimos, "symbol:'triangle-right-open',color:'rgb(255,0,0)'", "10%RSmsh","Knockback (right hand) in 10% Phase", "10% Right Smash",0),
+            new Mechanic(38046, "Demonic Shock Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Deimos, "symbol:'triangle-left-open',color:'rgb(255,0,0)'", "10%LSmash","Knockback (left hand) in 10% Phase", "10% Left Smash",0),
+            new Mechanic(37982, "Demonic Shock Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Deimos, "symbol:'bowtie',color:'rgb(255,0,0)'", "10%DSmsh","Knockback (both hands) in 10% Phase", "10% Double Smash",0),
+            new Mechanic(37733, "Tear Instability", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Deimos, "symbol:'diamond',color:'rgb(0,128,128)'", "Tear","Collected a Demonic Tear", "Tear",0),
+            new Mechanic(37613, "Mind Crush", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Deimos, "symbol:'square',color:'rgb(0,0,255)'", "MCrsh","Hit by Mind Crush without Bubble Protection", "Mind Crush",0,(condition => condition.DamageLog.Damage > 0)),
+            new Mechanic(38187, "Weak Minded", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Deimos, "symbol:'square-open',color:'rgb(200,140,255)'", "WkMind","Weak Minded (Debuff after Mind Crush)", "Weak Minded",0),
+            new Mechanic(37730, "Chosen by Eye of Janthir", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Deimos, "symbol:'circle',color:'rgb(0,255,0)'", "Grn","Chosen by the Eye of Janthir", "Chosen (Green)",0), 
+            new Mechanic(38169, "Teleported", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Deimos, "symbol:'circle-open',color:'rgb(0,255,0)'", "TP","Teleport to/from Demonic Realm", "Teleport",0),
+            new Mechanic(38224, "Unnatural Signet", Mechanic.MechType.EnemyBoon, ParseEnum.TargetIDS.Deimos, "symbol:'square-open',color:'rgb(0,255,255)'", "DMGDbf","Double Damage Debuff on Deimos", "+100% Dmg Buff",0)
             });
             Extension = "dei";
             IconUrl = "https://wiki.guildwars2.com/images/e/e0/Mini_Ragged_White_Mantle_Figurehead.png";
@@ -47,7 +47,7 @@ namespace LuckParser.Models
 
         protected override void RegroupTargets(AgentData agentData, List<CombatItem> combatItems)
         {
-            RegroupTargetsByID((ushort)ParseEnum.BossIDS.Deimos, agentData, combatItems);
+            RegroupTargetsByID((ushort)ParseEnum.TargetIDS.Deimos, agentData, combatItems);
             RegroupTargetsByID((ushort)Thief, agentData, combatItems);
             RegroupTargetsByID((ushort)Drunkard, agentData, combatItems);
             RegroupTargetsByID((ushort)Gambler, agentData, combatItems);
@@ -56,13 +56,13 @@ namespace LuckParser.Models
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // Find target
-            Boss boss = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Deimos);
-            if (boss == null)
+            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Deimos);
+            if (target == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
             // enter combat
-            CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcInstid == boss.InstID && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
+            CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcInstid == target.InstID && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
             if (enterCombat != null)
             {
                 fightData.FightStart = enterCombat.Time;
@@ -77,9 +77,9 @@ namespace LuckParser.Models
                 {
                     firstAware = targetable.Time;
                 }
-                long oldAware = boss.LastAware;
+                long oldAware = target.LastAware;
                 fightData.PhaseData.Add(firstAware >= oldAware ? firstAware : oldAware);
-                boss.AgentItem.LastAware = deimosGadgets.Max(x => x.LastAware);
+                target.AgentItem.LastAware = deimosGadgets.Max(x => x.LastAware);
                 // get unique id for the fusion
                 ushort instID = 1;
                 Random rnd = new Random();
@@ -87,23 +87,23 @@ namespace LuckParser.Models
                 {
                     instID = (ushort)rnd.Next(1, ushort.MaxValue);
                 }
-                boss.AgentItem.InstID = instID;
+                target.AgentItem.InstID = instID;
                 agentData.Refresh();
                 // update combat data
                 HashSet<ulong> agents = new HashSet<ulong>(deimosGadgets.Select(x => x.Agent));
-                agents.Add(boss.Agent);
+                agents.Add(target.Agent);
                 foreach (CombatItem c in combatData)
                 {
                     if (agents.Contains(c.SrcAgent))
                     {
-                        c.SrcInstid = boss.InstID;
-                        c.SrcAgent = boss.Agent;
+                        c.SrcInstid = target.InstID;
+                        c.SrcAgent = target.Agent;
 
                     }
                     if (agents.Contains(c.DstAgent))
                     {
-                        c.DstInstid = boss.InstID;
-                        c.DstAgent = boss.Agent;
+                        c.DstInstid = target.InstID;
+                        c.DstAgent = target.Agent;
                     }
                 }
             }
@@ -115,7 +115,7 @@ namespace LuckParser.Models
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Deimos);
+            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Deimos);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -192,7 +192,7 @@ namespace LuckParser.Models
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.BossIDS.Deimos,
+                (ushort)ParseEnum.TargetIDS.Deimos,
                 (ushort)Thief,
                 (ushort)Drunkard,
                 (ushort)Gambler
@@ -244,35 +244,35 @@ namespace LuckParser.Models
 
         public override void AddHealthUpdate(ushort instid, long time, int healthTime, int health)
         {
-            foreach (Boss boss in Targets)
+            foreach (Target target in Targets)
             {
-                if (boss.InstID == instid && boss.FirstAware <= time && boss.LastAware >= time)
+                if (target.InstID == instid && target.FirstAware <= time && target.LastAware >= time)
                 {
                     // Additional check because the arm gives a health update of 100%
-                    if (boss.HealthOverTime.Count > 0 && boss.HealthOverTime.Last().Y < 10000 && health > 9900)
+                    if (target.HealthOverTime.Count > 0 && target.HealthOverTime.Last().Y < 10000 && health > 9900)
                     {
                         break;
                     }
-                    boss.HealthOverTime.Add(new System.Drawing.Point(healthTime, health));
+                    target.HealthOverTime.Add(new System.Drawing.Point(healthTime, health));
                     break;
                 }
             }
         }
 
-        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
         {
-            CombatReplay replay = boss.CombatReplay;
-            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
-            switch (boss.ID)
+            CombatReplay replay = target.CombatReplay;
+            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (target.ID)
             {
-                case (ushort)ParseEnum.BossIDS.Deimos:
+                case (ushort)ParseEnum.TargetIDS.Deimos:
                     List<CastLog> mindCrush = cls.Where(x => x.SkillId == 37613).ToList();
                     foreach (CastLog c in mindCrush)
                     {
                         int start = (int)c.Time;
                         int end = start + 5000;
-                        replay.Actors.Add(new CircleActor(true, end, 180, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(boss)));
-                        replay.Actors.Add(new CircleActor(false, 0, 180, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(boss)));
+                        replay.Actors.Add(new CircleActor(true, end, 180, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleActor(false, 0, 180, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                         if (!log.FightData.IsCM)
                         {
                             replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 0, 255, 0.3)",new PositionConnector(new Point3D(-8421.818f, 3091.72949f, -9.818082e8f, 216))));
@@ -292,12 +292,12 @@ namespace LuckParser.Models
                         }
                         for (int i = 0; i < 6; i++)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * duration), "rgba(255, 200, 0, 0.5)", new AgentConnector(boss)));
-                            replay.Actors.Add(new PieActor(false, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", new AgentConnector(boss)));
+                            replay.Actors.Add(new PieActor(true, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * duration), "rgba(255, 200, 0, 0.5)", new AgentConnector(target)));
+                            replay.Actors.Add(new PieActor(false, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
                             if (i % 5 != 0)
                             {
-                                replay.Actors.Add(new PieActor(true, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * 120), "rgba(255, 200, 0, 0.5)", new AgentConnector(boss)));
-                                replay.Actors.Add(new PieActor(false, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", new AgentConnector(boss)));
+                                replay.Actors.Add(new PieActor(true, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * 120), "rgba(255, 200, 0, 0.5)", new AgentConnector(target)));
+                                replay.Actors.Add(new PieActor(false, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
                             }
                         }
                     }
@@ -336,7 +336,7 @@ namespace LuckParser.Models
 
         public override int IsCM(ParsedLog log)
         {
-            Boss target = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Deimos);
+            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Deimos);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");

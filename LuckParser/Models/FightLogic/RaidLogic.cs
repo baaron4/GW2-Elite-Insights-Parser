@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public abstract class RaidLogic : BossLogic
+    public abstract class RaidLogic : FightLogic
     {
         protected RaidLogic(ushort triggerID) : base(triggerID)
         {

@@ -13,47 +13,47 @@ namespace LuckParser.Models
         {
             MechanicList.AddRange(new List<Mechanic>
             { 
-            new Mechanic(51943, "Qadim CC", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "Q.BB","Qadim CC", "Qadim CC",0),
-            new Mechanic(51943, "Qadim CC", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "Q.CCed","Quadim Breakbar broken", "Quadim CCed",0, (condition => condition.CombatItem.Value < 6500)),
-            new Mechanic(52265, "Riposte", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "Q.CC.Fail","Qadim Breakbar failed", "Quadim CC Fail",0),
-            new Mechanic(52265, "Riposte", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle',color:'rgb(255,0,255)'", "NoCCAtk", "Riposte (Attack if CC on Qadim failed)", "Riposte (No CC)", 0),
-            new Mechanic(52614, "Fiery Dance", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'asterisk-open',color:'rgb(255,100,0)'", "FrDnc", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
-            new Mechanic(52864, "Fiery Dance", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'asterisk-open',color:'rgb(255,100,0)'", "FrDnc", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
-            new Mechanic(53153, "Fiery Dance", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'asterisk-open',color:'rgb(255,100,0)'", "FrDnc", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
-            new Mechanic(52383, "Fiery Dance", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'asterisk-open',color:'rgb(255,100,0)'", "FrDnc", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
-            new Mechanic(52242, "Shattering Impact", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle',color:'rgb(255,200,0)'", "Stun","Shattering Impact (Stunning flame bolt)", "Flame Bolt Stun",0),
-            new Mechanic(52814, "Flame Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'star-triangle-up-open',color:'rgb(255,150,0)'", "KB","Flame Wave (Knockback Frontal Beam)", "KB Push",0),
-            new Mechanic(52820, "Fire Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle-open',color:'rgb(255,100,0)'", "Q.ShWv","Fire Wave (Shockwave after Qadim's Mace attack)", "Mace Shockwave",0),
-            new Mechanic(52224, "Fire Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle-open',color:'rgb(255,100,0)'", "D.ShWv","Fire Wave (Shockwave after Destroyer's Jump or Stomp)", "Destroyer Shockwave",0),
-            new Mechanic(52520, "Elemental Breath", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'triangle-left',color:'rgb(255,0,0)'", "H.Brth","Elemental Breath (Hydra Breath)", "Hydra Breath",0),
-            new Mechanic(53013, "Fireball", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle-open',color:'rgb(255,200,0)',size:10", "H.Fb","Fireball (Hydra)", "Hydra Fireball",0),
-            new Mechanic(52941, "Fiery Meteor", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle-open',color:'rgb(255,150,0)'", "H.Mtr","Fiery Meteor (Hydra)", "Hydra Meteor",0),
-            new Mechanic(52941, "Fiery Meteor", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "H.BB","Fiery Meteor (Hydra Breakbar)", "Hydra CC",0),
+            new Mechanic(51943, "Qadim CC", Mechanic.MechType.EnemyCastStart, ParseEnum.TargetIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "Q.BB","Qadim CC", "Qadim CC",0),
+            new Mechanic(51943, "Qadim CC", Mechanic.MechType.EnemyCastEnd, ParseEnum.TargetIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "Q.CCed","Quadim Breakbar broken", "Quadim CCed",0, (condition => condition.CombatItem.Value < 6500)),
+            new Mechanic(52265, "Riposte", Mechanic.MechType.EnemyCastStart, ParseEnum.TargetIDS.Qadim, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "Q.CC.Fail","Qadim Breakbar failed", "Quadim CC Fail",0),
+            new Mechanic(52265, "Riposte", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'circle',color:'rgb(255,0,255)'", "NoCCAtk", "Riposte (Attack if CC on Qadim failed)", "Riposte (No CC)", 0),
+            new Mechanic(52614, "Fiery Dance", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'asterisk-open',color:'rgb(255,100,0)'", "FrDnc", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
+            new Mechanic(52864, "Fiery Dance", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'asterisk-open',color:'rgb(255,100,0)'", "FrDnc", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
+            new Mechanic(53153, "Fiery Dance", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'asterisk-open',color:'rgb(255,100,0)'", "FrDnc", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
+            new Mechanic(52383, "Fiery Dance", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'asterisk-open',color:'rgb(255,100,0)'", "FrDnc", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
+            new Mechanic(52242, "Shattering Impact", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'circle',color:'rgb(255,200,0)'", "Stun","Shattering Impact (Stunning flame bolt)", "Flame Bolt Stun",0),
+            new Mechanic(52814, "Flame Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'star-triangle-up-open',color:'rgb(255,150,0)'", "KB","Flame Wave (Knockback Frontal Beam)", "KB Push",0),
+            new Mechanic(52820, "Fire Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'circle-open',color:'rgb(255,100,0)'", "Q.ShWv","Fire Wave (Shockwave after Qadim's Mace attack)", "Mace Shockwave",0),
+            new Mechanic(52224, "Fire Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'circle-open',color:'rgb(255,100,0)'", "D.ShWv","Fire Wave (Shockwave after Destroyer's Jump or Stomp)", "Destroyer Shockwave",0),
+            new Mechanic(52520, "Elemental Breath", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'triangle-left',color:'rgb(255,0,0)'", "H.Brth","Elemental Breath (Hydra Breath)", "Hydra Breath",0),
+            new Mechanic(53013, "Fireball", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'circle-open',color:'rgb(255,200,0)',size:10", "H.Fb","Fireball (Hydra)", "Hydra Fireball",0),
+            new Mechanic(52941, "Fiery Meteor", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'circle-open',color:'rgb(255,150,0)'", "H.Mtr","Fiery Meteor (Hydra)", "Hydra Meteor",0),
+            new Mechanic(52941, "Fiery Meteor", Mechanic.MechType.EnemyCastStart, ParseEnum.TargetIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "H.BB","Fiery Meteor (Hydra Breakbar)", "Hydra CC",0),
             //new Mechanic(718, "Fiery Meteor (Spawn)", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(150,0,0)'", "H.CC.Fail","Fiery Meteor Spawned (Hydra Breakbar)", "Hydra CC Fail",0,(condition =>  condition.CombatItem.IFF == ParseEnum.IFF.Foe)),
-            new Mechanic(52941, "Fiery Meteor", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "H.CCed","Fiery Meteor (Hydra Breakbar broken)", "Hydra CCed",0,(condition => condition.CombatItem.Value < 12364)),
-            new Mechanic(52941, "Fiery Meteor", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "H.CC.Fail","Fiery Meteor (Hydra Breakbar not broken)", "Hydra CC Failed",0,(condition => condition.CombatItem.Value >= 12364)),
-            new Mechanic(53051, "Teleport", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle',color:'rgb(150,0,200)'", "H.KB","Teleport Knockback (Hydra)", "Hydra TP KB",0),
-            new Mechanic(52310, "Big Hit", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle',color:'rgb(255,0,0)'", "Mace","Big Hit (Mace Impact)", "Mace Impact",0),
-            new Mechanic(52587, "Inferno", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'triangle-down-open',color:'rgb(255,0,0)'", "Inf","Inferno (Lava Pool drop  on long platform spokes)", "Inferno Pool",0),
-            new Mechanic(51958, "Slash (Wyvern)", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'triangle-down-open',color:'rgb(255,200,0)'", "Slsh","Wyvern Slash (Double attack: knock into pin down)", "KB/Pin down",0),
-            new Mechanic(52705, "Tail Swipe", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'diamond-open',color:'rgb(255,200,0)'", "W.Pza","Wyvern Tail Swipe (Pizza attack)", "Tail Swipe",0),
-            new Mechanic(52726, "Fire Breath", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'triangle-right-open',color:'rgb(255,100,0)'", "W.Brth","Fire Breath (Wyvern)", "Fire Breath",0),
-            new Mechanic(52734, "Wing Buffet", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'star-diamond-open',color:'rgb(0,125,125)'", "W.WBft","Wing Buffet (Wyvern Launching Wing Storm)", "Wing Buffet",0),
-            new Mechanic(53132, "Patriarch CC", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "P.BB","Platform Destruction (Patriarch CC)", "Patriarch CC",0),
-            new Mechanic(53132, "Patriarch CC", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "P.CCed","Platform Destruction (Patriarch Breakbar broken)", "Patriarch CCed",0, (condition => condition.CombatItem.Value < 6500)),
-            new Mechanic(51984, "Patriarch CC (Jump into air)", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "P.CC.Fail","Platform Destruction (Patriarch Breakbar failed)", "Patriarch CC Fail",0),
-            new Mechanic(52330, "Seismic Stomp", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'star-open',color:'rgb(255,255,0)'", "D.Stmp","Seismic Stomp (Destroyer Stomp)", "Seismic Stomp (Destroyer)",0),
-            new Mechanic(51923, "Shattered Earth", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'hexagram-open',color:'rgb(255,0,0)'", "D.Slm","Shattered Earth (Destroyer Jump Slam)", "Jump Slam (Destroyer)",0),
-            new Mechanic(51759, "Wave of Force", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'diamond-open',color:'rgb(255,200,0)'", "D.Pza","Wave of Force (Destroyer Pizza)", "Destroyer Auto",0),
-            new Mechanic(52054, "Summon", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "D.BB","Summon (Destroyer Breakbar)", "Destroyer CC",0),
-            new Mechanic(52054, "Summon", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "D.CCed","Summon (Destroyer Breakbar broken)", "Destroyer CCed",0, (condition => condition.CombatItem.Value < 8332)),
-            new Mechanic(52054, "Summon", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "D.CC.Fail","Summon (Destroyer Breakbar failed)", "Destroyer CC Fail",0, (condition => condition.CombatItem.Value >= 8332)),
-            new Mechanic(20944, "Summon (Spawn)", Mechanic.MechType.Spawn, ParseEnum.BossIDS.Qadim, "symbol:'diamond-tall',color:'rgb(150,0,0)'", "D.Spwn","Summon (Destroyer Trolls summoned)", "Destroyer Summoned",0),
-            new Mechanic(51879, "Body of Flame", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'star-open',color:'rgb(255,150,0)',size:10", "Pyr.AoE","Body of Flame (Pyre Ground AoE (CM))", "Pyre Hitbox AoE",0),
-            new Mechanic(52461, "Sea of Flame", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle-open',color:'rgb(255,0,0)'", "Q.Hbx","Sea of Flame (Stood in Qadim Hitbox)", "Qadim Hitbox AoE",0),
-            new Mechanic(52221, "Claw", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'triangle-left-open',color:'rgb(0,150,150)',size:10", "Claw","Claw (Reaper of Flesh attack)", "Reaper Claw",0),
-            new Mechanic(52281, "Swap", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Qadim, "symbol:'circle-cross-open',color:'rgb(170,0,170)'", "Port","Swap (Ported from below Legendary Creature to Qadim)", "Port to Qadim",0),
-            new Mechanic(52035, "Power of the Lamp", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Qadim, "symbol:'triangle-up',color:'rgb(100,150,255)',size:10", "Lmp","Power of the Lamp (Returned from the Lamp)", "Lamp Return",0),
+            new Mechanic(52941, "Fiery Meteor", Mechanic.MechType.EnemyCastEnd, ParseEnum.TargetIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "H.CCed","Fiery Meteor (Hydra Breakbar broken)", "Hydra CCed",0,(condition => condition.CombatItem.Value < 12364)),
+            new Mechanic(52941, "Fiery Meteor", Mechanic.MechType.EnemyCastEnd, ParseEnum.TargetIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "H.CC.Fail","Fiery Meteor (Hydra Breakbar not broken)", "Hydra CC Failed",0,(condition => condition.CombatItem.Value >= 12364)),
+            new Mechanic(53051, "Teleport", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'circle',color:'rgb(150,0,200)'", "H.KB","Teleport Knockback (Hydra)", "Hydra TP KB",0),
+            new Mechanic(52310, "Big Hit", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'circle',color:'rgb(255,0,0)'", "Mace","Big Hit (Mace Impact)", "Mace Impact",0),
+            new Mechanic(52587, "Inferno", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'triangle-down-open',color:'rgb(255,0,0)'", "Inf","Inferno (Lava Pool drop  on long platform spokes)", "Inferno Pool",0),
+            new Mechanic(51958, "Slash (Wyvern)", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'triangle-down-open',color:'rgb(255,200,0)'", "Slsh","Wyvern Slash (Double attack: knock into pin down)", "KB/Pin down",0),
+            new Mechanic(52705, "Tail Swipe", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'diamond-open',color:'rgb(255,200,0)'", "W.Pza","Wyvern Tail Swipe (Pizza attack)", "Tail Swipe",0),
+            new Mechanic(52726, "Fire Breath", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'triangle-right-open',color:'rgb(255,100,0)'", "W.Brth","Fire Breath (Wyvern)", "Fire Breath",0),
+            new Mechanic(52734, "Wing Buffet", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'star-diamond-open',color:'rgb(0,125,125)'", "W.WBft","Wing Buffet (Wyvern Launching Wing Storm)", "Wing Buffet",0),
+            new Mechanic(53132, "Patriarch CC", Mechanic.MechType.EnemyCastStart, ParseEnum.TargetIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "P.BB","Platform Destruction (Patriarch CC)", "Patriarch CC",0),
+            new Mechanic(53132, "Patriarch CC", Mechanic.MechType.EnemyCastEnd, ParseEnum.TargetIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "P.CCed","Platform Destruction (Patriarch Breakbar broken)", "Patriarch CCed",0, (condition => condition.CombatItem.Value < 6500)),
+            new Mechanic(51984, "Patriarch CC (Jump into air)", Mechanic.MechType.EnemyCastStart, ParseEnum.TargetIDS.Qadim, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "P.CC.Fail","Platform Destruction (Patriarch Breakbar failed)", "Patriarch CC Fail",0),
+            new Mechanic(52330, "Seismic Stomp", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'star-open',color:'rgb(255,255,0)'", "D.Stmp","Seismic Stomp (Destroyer Stomp)", "Seismic Stomp (Destroyer)",0),
+            new Mechanic(51923, "Shattered Earth", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'hexagram-open',color:'rgb(255,0,0)'", "D.Slm","Shattered Earth (Destroyer Jump Slam)", "Jump Slam (Destroyer)",0),
+            new Mechanic(51759, "Wave of Force", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'diamond-open',color:'rgb(255,200,0)'", "D.Pza","Wave of Force (Destroyer Pizza)", "Destroyer Auto",0),
+            new Mechanic(52054, "Summon", Mechanic.MechType.EnemyCastStart, ParseEnum.TargetIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "D.BB","Summon (Destroyer Breakbar)", "Destroyer CC",0),
+            new Mechanic(52054, "Summon", Mechanic.MechType.EnemyCastEnd, ParseEnum.TargetIDS.Qadim, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "D.CCed","Summon (Destroyer Breakbar broken)", "Destroyer CCed",0, (condition => condition.CombatItem.Value < 8332)),
+            new Mechanic(52054, "Summon", Mechanic.MechType.EnemyCastEnd, ParseEnum.TargetIDS.Qadim, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "D.CC.Fail","Summon (Destroyer Breakbar failed)", "Destroyer CC Fail",0, (condition => condition.CombatItem.Value >= 8332)),
+            new Mechanic(20944, "Summon (Spawn)", Mechanic.MechType.Spawn, ParseEnum.TargetIDS.Qadim, "symbol:'diamond-tall',color:'rgb(150,0,0)'", "D.Spwn","Summon (Destroyer Trolls summoned)", "Destroyer Summoned",0),
+            new Mechanic(51879, "Body of Flame", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'star-open',color:'rgb(255,150,0)',size:10", "Pyr.AoE","Body of Flame (Pyre Ground AoE (CM))", "Pyre Hitbox AoE",0),
+            new Mechanic(52461, "Sea of Flame", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'circle-open',color:'rgb(255,0,0)'", "Q.Hbx","Sea of Flame (Stood in Qadim Hitbox)", "Qadim Hitbox AoE",0),
+            new Mechanic(52221, "Claw", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'triangle-left-open',color:'rgb(0,150,150)',size:10", "Claw","Claw (Reaper of Flesh attack)", "Reaper Claw",0),
+            new Mechanic(52281, "Swap", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Qadim, "symbol:'circle-cross-open',color:'rgb(170,0,170)'", "Port","Swap (Ported from below Legendary Creature to Qadim)", "Port to Qadim",0),
+            new Mechanic(52035, "Power of the Lamp", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Qadim, "symbol:'triangle-up',color:'rgb(100,150,255)',size:10", "Lmp","Power of the Lamp (Returned from the Lamp)", "Lamp Return",0),
             });
             Extension = "qadim";
             IconUrl = "https://wiki.guildwars2.com/images/f/f2/Mini_Qadim.png";
@@ -76,7 +76,7 @@ namespace LuckParser.Models
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.BossIDS.Qadim,
+                (ushort)ParseEnum.TargetIDS.Qadim,
                 (ushort)AncientInvokedHydra,
                 (ushort)WyvernMatriarch,
                 (ushort)WyvernPatriarch,
@@ -89,7 +89,7 @@ namespace LuckParser.Models
             long start = 0;
             long end = 0;
             List<PhaseData> phases = GetInitialPhase(log);
-            Boss qadim = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Qadim);
+            Target qadim = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Qadim);
             if (qadim == null)
             {
                 throw new InvalidOperationException("Qadim not found");
@@ -198,27 +198,27 @@ namespace LuckParser.Models
             }
         }
 
-        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
         {
-            CombatReplay replay = boss.CombatReplay;
-            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            CombatReplay replay = target.CombatReplay;
+            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             int ccRadius = 200;
-            switch (boss.ID)
+            switch (target.ID)
             {
-                case (ushort)ParseEnum.BossIDS.Qadim:
+                case (ushort)ParseEnum.TargetIDS.Qadim:
                     //CC
                     List<CastLog> breakbar = cls.Where(x => x.SkillId == 51943).ToList();
                     foreach (CastLog c in breakbar)
                     {
                         int radius = ccRadius;
-                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(boss)));
+                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Riposte
                     List<CastLog> riposte = cls.Where(x => x.SkillId == 52265).ToList();
                     foreach (CastLog c in riposte)
                     {
                         int radius = 2200;
-                        replay.Actors.Add(new CircleActor(true, 0, radius, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(255, 0, 0, 0.5)", new AgentConnector(boss)));
+                        replay.Actors.Add(new CircleActor(true, 0, radius, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     }
                     //Big Hit
                     List<CastLog> maceShockwave = cls.Where(x => x.SkillId == 52310).ToList();
@@ -231,10 +231,10 @@ namespace LuckParser.Models
                         int impactRadius = 40;
                         int spellCenterDistance = 300;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
-                        Point3D bossPosition = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
-                        if (facing != null && bossPosition != null)
+                        Point3D targetPosition = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
+                        if (facing != null && targetPosition != null)
                         {
-                            Point3D position = new Point3D(bossPosition.X + (facing.X * spellCenterDistance), bossPosition.Y + (facing.Y * spellCenterDistance), bossPosition.Z, bossPosition.Time);
+                            Point3D position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z, targetPosition.Time);
                             replay.Actors.Add(new CircleActor(true, 0, impactRadius, new Tuple<int, int>(start, start + delay), "rgba(255, 100, 0, 0.2)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleActor(true, 0, impactRadius, new Tuple<int, int>(start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.7)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleActor(false, start + delay + duration, radius, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 200, 0, 0.7)", new PositionConnector(position)));
@@ -247,7 +247,7 @@ namespace LuckParser.Models
                     foreach (CastLog c in fieryMeteor)
                     {
                         int radius = ccRadius;
-                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(boss)));
+                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     List<CastLog> eleBreath = cls.Where(x => x.SkillId == 52520).ToList();
                     foreach (CastLog c in eleBreath)
@@ -260,7 +260,7 @@ namespace LuckParser.Models
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 180, 0, 0.3)", new AgentConnector(boss)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
                         }
                     }
                     break;
@@ -278,8 +278,8 @@ namespace LuckParser.Models
                         if (facing != null)
                         {
                             int rotation = Point3D.GetRotationFromFacing(facing);
-                            replay.Actors.Add(new RotatedRectangleActor(true, 0, range, span, rotation, range / 2, new Tuple<int, int>(start, start + preCast), "rgba(0,100,255,0.2)", new AgentConnector(boss)));
-                            replay.Actors.Add(new RotatedRectangleActor(true, 0, range, span, rotation, range / 2, new Tuple<int, int>(start + preCast, start + duration), "rgba(0,100,255,0.5)", new AgentConnector(boss)));
+                            replay.Actors.Add(new RotatedRectangleActor(true, 0, range, span, rotation, range / 2, new Tuple<int, int>(start, start + preCast), "rgba(0,100,255,0.2)", new AgentConnector(target)));
+                            replay.Actors.Add(new RotatedRectangleActor(true, 0, range, span, rotation, range / 2, new Tuple<int, int>(start + preCast, start + duration), "rgba(0,100,255,0.5)", new AgentConnector(target)));
                         }
                     }
                     //Breath
@@ -296,7 +296,7 @@ namespace LuckParser.Models
                         Point3D pos = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && pos != null)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 200, 0, 0.3)", new AgentConnector(boss)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
                             replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, new Tuple<int, int>(start + delay + duration, start + delay + fieldDuration), "rgba(255, 50, 0, 0.3)", new PositionConnector(pos)));
                         }
                     }
@@ -317,8 +317,8 @@ namespace LuckParser.Models
                             for (int i = 0; i < coneAmount; i++)
                             {
                                 int rotation = Point3D.GetRotationFromFacing(facing);
-                                replay.Actors.Add(new PieActor(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(boss)));
-                                replay.Actors.Add(new PieActor(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(boss)));
+                                replay.Actors.Add(new PieActor(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(target)));
+                                replay.Actors.Add(new PieActor(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
 
                             }
                         }
@@ -330,7 +330,7 @@ namespace LuckParser.Models
                     foreach (CastLog c in patCC)
                     {
                         int radius = ccRadius;
-                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(boss)));
+                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Breath
                     List<CastLog> patBreath = cls.Where(x => x.SkillId == 52726).ToList();
@@ -346,7 +346,7 @@ namespace LuckParser.Models
                         Point3D pos = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && pos != null)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 200, 0, 0.3)", new AgentConnector(boss)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
                             replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, new Tuple<int, int>(start + delay + duration, start + delay + fieldDuration), "rgba(255, 50, 0, 0.3)", new PositionConnector(pos)));
                         }
                     }
@@ -367,8 +367,8 @@ namespace LuckParser.Models
                             for (int i = 0; i < coneAmount; i++)
                             {
                                 int rotation = Point3D.GetRotationFromFacing(facing);
-                                replay.Actors.Add(new PieActor(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(boss)));
-                                replay.Actors.Add(new PieActor(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(boss)));
+                                replay.Actors.Add(new PieActor(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(target)));
+                                replay.Actors.Add(new PieActor(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
                             }
                         }
                     }
@@ -381,7 +381,7 @@ namespace LuckParser.Models
                         int delay = 1800;
                         int duration = 3000;
                         int maxRadius = 2000;
-                        replay.Actors.Add(new CircleActor(false, start + delay + duration, maxRadius, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 200, 0, 0.5)", new AgentConnector(boss)));
+                        replay.Actors.Add(new CircleActor(false, start + delay + duration, maxRadius, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 200, 0, 0.5)", new AgentConnector(target)));
                     }
                     List<CastLog> stompShockwave = cls.Where(x => x.SkillId == 52330).ToList();
                     foreach (CastLog c in stompShockwave)
@@ -393,10 +393,10 @@ namespace LuckParser.Models
                         int impactRadius = 500;
                         int spellCenterDistance = 270; //hitbox radius
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
-                        Point3D bossPosition = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
-                        if (facing != null && bossPosition != null)
+                        Point3D targetPosition = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
+                        if (facing != null && targetPosition != null)
                         {
-                            Point3D position = new Point3D(bossPosition.X + facing.X * spellCenterDistance, bossPosition.Y + facing.Y * spellCenterDistance, bossPosition.Z, bossPosition.Time);
+                            Point3D position = new Point3D(targetPosition.X + facing.X * spellCenterDistance, targetPosition.Y + facing.Y * spellCenterDistance, targetPosition.Z, targetPosition.Time);
                             replay.Actors.Add(new CircleActor(true, 0, impactRadius, new Tuple<int, int>(start, start + delay), "rgba(255, 100, 0, 0.1)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleActor(true, 0, impactRadius, new Tuple<int, int>(start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.5)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleActor(false, start + delay + duration, maxRadius, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 200, 0, 0.5)", new PositionConnector(position)));
@@ -407,7 +407,7 @@ namespace LuckParser.Models
                     foreach (CastLog c in summon)
                     {
                         int radius = ccRadius;
-                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(boss)));
+                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Pizza
                     List<CastLog> forceWave = cls.Where(x => x.SkillId == 51759).ToList();
@@ -426,8 +426,8 @@ namespace LuckParser.Models
                             for (int i = 0; i < coneAmount; i++)
                             {
                                 int rotation = Point3D.GetRotationFromFacing(facing);
-                                replay.Actors.Add(new PieActor(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(boss)));
-                                replay.Actors.Add(new PieActor(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(boss)));
+                                replay.Actors.Add(new PieActor(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(target)));
+                                replay.Actors.Add(new PieActor(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
                             }
                         }
                     }
@@ -444,7 +444,7 @@ namespace LuckParser.Models
 
         public override int IsCM(ParsedLog log)
         {
-            Boss target = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Qadim);
+            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Qadim);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");

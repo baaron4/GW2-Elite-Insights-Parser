@@ -103,7 +103,7 @@ namespace LuckParser.Controllers
                                 "name: '" + p.Character + " TDPS'" + "},");
                     }
                     sw.Write("{");
-                    maxDPS = Math.Max(maxDPS, LegacyHTMLHelper.WriteDPSPlots(sw, GraphHelper.GetTargetDPSGraph(_log, p, phaseIndex, phase, mode, _log.Boss), totalDpsAllPlayers));
+                    maxDPS = Math.Max(maxDPS, LegacyHTMLHelper.WriteDPSPlots(sw, GraphHelper.GetTargetDPSGraph(_log, p, phaseIndex, phase, mode, _log.LegacyTarget), totalDpsAllPlayers));
                     sw.Write("mode: 'lines'," +
                             "line: {shape: 'spline',color:'" + GeneralHelper.GetLink("Color-" + p.Prof) + "'}," +
                             "name: '" + p.Character + " DPS'" +
@@ -111,7 +111,7 @@ namespace LuckParser.Controllers
                     if (_settings.ClDPSGraphTotals)
                     {//Turns display on or off
                         sw.Write("{");
-                        LegacyHTMLHelper.WriteDPSPlots(sw, GraphHelper.GetCleaveDPSGraph(_log, p, phaseIndex, phase, mode, _log.Boss));
+                        LegacyHTMLHelper.WriteDPSPlots(sw, GraphHelper.GetCleaveDPSGraph(_log, p, phaseIndex, phase, mode, _log.LegacyTarget));
                         sw.Write("mode: 'lines'," +
                                 "line: {shape: 'spline',color:'" + GeneralHelper.GetLink("Color-" + p.Prof + "-NonBoss") + "'}," +
                                 "visible:'legendonly'," +
@@ -140,15 +140,15 @@ namespace LuckParser.Controllers
                         if (playersIds.Contains(ml.Player.InstID))
                         {
                             double time = (ml.Time - phase.Start) / 1000.0;
-                            Point check = GraphHelper.GetTargetDPSGraph(_log, ml.Player, phaseIndex, phase, mode, _log.Boss).LastOrDefault(x => x.X <= time);
+                            Point check = GraphHelper.GetTargetDPSGraph(_log, ml.Player, phaseIndex, phase, mode, _log.LegacyTarget).LastOrDefault(x => x.X <= time);
                             if (check == Point.Empty)
                             {
-                                check = new Point(0, GraphHelper.GetTargetDPSGraph(_log, ml.Player, phaseIndex, phase, mode, _log.Boss).Last().Y);
+                                check = new Point(0, GraphHelper.GetTargetDPSGraph(_log, ml.Player, phaseIndex, phase, mode, _log.LegacyTarget).Last().Y);
                             } else
                             {
                                 int time1 = check.X;
                                 int y1 = check.Y;
-                                check = GraphHelper.GetTargetDPSGraph(_log, ml.Player, phaseIndex, phase, mode, _log.Boss).FirstOrDefault(x => x.X >= time);
+                                check = GraphHelper.GetTargetDPSGraph(_log, ml.Player, phaseIndex, phase, mode, _log.LegacyTarget).FirstOrDefault(x => x.X >= time);
                                 if (check == Point.Empty)
                                 {
                                     check.Y = y1;
@@ -167,15 +167,15 @@ namespace LuckParser.Controllers
                         else
                         {
                             int timeInS = (int)(ml.Time / 1000);
-                            if (timeInS >= _statistics.TargetHealth[_log.Boss].Length)
+                            if (timeInS >= _statistics.TargetHealth[_log.LegacyTarget].Length)
                             {
                                 yValue = 0;
                             } else
                             {
-                                yValue = (_statistics.TargetHealth[_log.Boss][timeInS] / 100.0) * maxDPS;
-                                if (timeInS < _statistics.TargetHealth[_log.Boss].Length - 1)
+                                yValue = (_statistics.TargetHealth[_log.LegacyTarget][timeInS] / 100.0) * maxDPS;
+                                if (timeInS < _statistics.TargetHealth[_log.LegacyTarget].Length - 1)
                                 {
-                                    double nextY = (_statistics.TargetHealth[_log.Boss][timeInS + 1] / 100.0) * maxDPS;
+                                    double nextY = (_statistics.TargetHealth[_log.LegacyTarget][timeInS + 1] / 100.0) * maxDPS;
                                     yValue = ((ml.Time / 1000.0) - timeInS) * (nextY - yValue) + yValue;
                                 }
                             }
@@ -242,7 +242,7 @@ namespace LuckParser.Controllers
                 if (maxDPS > 0)
                 {
                     sw.Write("{");
-                    LegacyHTMLHelper.WriteBossHealthGraph(sw, maxDPS, phase, _statistics.TargetHealth[_log.Boss]);
+                    LegacyHTMLHelper.WriteBossHealthGraph(sw, maxDPS, phase, _statistics.TargetHealth[_log.LegacyTarget]);
                     sw.Write("}");
                 }
                 else
@@ -488,7 +488,7 @@ namespace LuckParser.Controllers
                 sw.Write("<tbody>");
                 foreach (Player player in _log.PlayerList)
                 {
-                    Statistics.FinalDPS dpsBoss = _statistics.DpsTarget[_log.Boss][player][phaseIndex];
+                    Statistics.FinalDPS dpsBoss = _statistics.DpsTarget[_log.LegacyTarget][player][phaseIndex];
                     Statistics.FinalDPS dpsAll = _statistics.DpsAll[player][phaseIndex];
                     Statistics.FinalStatsAll statsAll = _statistics.StatsAll[player][phaseIndex];
                     //gather data for footer
@@ -766,8 +766,8 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in _log.PlayerList)
                     {
-                        Statistics.FinalStats statsBoss = _statistics.StatsTarget[_log.Boss][player][phaseIndex];
-                        Statistics.FinalDPS dpsBoss = _statistics.DpsTarget[_log.Boss][player][phaseIndex];
+                        Statistics.FinalStats statsBoss = _statistics.StatsTarget[_log.LegacyTarget][player][phaseIndex];
+                        Statistics.FinalDPS dpsBoss = _statistics.DpsTarget[_log.LegacyTarget][player][phaseIndex];
                         Statistics.FinalStatsAll statsAll = _statistics.StatsAll[player][phaseIndex];
 
                         //gather data for footer
@@ -1264,7 +1264,7 @@ namespace LuckParser.Controllers
 
                         Dictionary<long, Statistics.FinalBoonUptime> boons = _statistics.SelfBoons[player][phaseIndex];
                         Dictionary<long, List<AbstractMasterPlayer.ExtraBoonData>> extraBoonData = player.GetExtraBoonData(_log, null);
-                        Dictionary<long, List<AbstractMasterPlayer.ExtraBoonData>> extraBoonDataBoss = player.GetExtraBoonData(_log, _log.Boss);
+                        Dictionary<long, List<AbstractMasterPlayer.ExtraBoonData>> extraBoonDataBoss = player.GetExtraBoonData(_log, _log.LegacyTarget);
                         List<string> boonArrayToList = new List<string>
                         {
                             player.Group.ToString()
@@ -1807,7 +1807,7 @@ namespace LuckParser.Controllers
                                                 sw.Write(" },");
 
                                             }
-                                            boonGraphData = _log.Boss.GetBoonGraphs(_log);
+                                            boonGraphData = _log.LegacyTarget.GetBoonGraphs(_log);
                                             foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName == "Compromised" || x.BoonName == "Unnatural Signet" || x.BoonName == "Fractured - Enemy"))
                                             {
                                                 sw.Write("{");
@@ -1841,19 +1841,19 @@ namespace LuckParser.Controllers
                                          //Adding dps axis
                                             sw.Write("{");
                                             {
-                                                LegacyHTMLHelper.WritePlayerTabDPSGraph(sw, "Boss DPS", GraphHelper.GetTargetDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.Full, _log.Boss), p);
+                                                LegacyHTMLHelper.WritePlayerTabDPSGraph(sw, "Boss DPS", GraphHelper.GetTargetDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.Full, _log.LegacyTarget), p);
                                             }
                                             sw.Write("},");
                                             if (_settings.Show10s)
                                             {
                                                 sw.Write("{");
-                                                LegacyHTMLHelper.WritePlayerTabDPSGraph(sw, "Boss DPS - 10s", GraphHelper.GetTargetDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S10, _log.Boss), p);
+                                                LegacyHTMLHelper.WritePlayerTabDPSGraph(sw, "Boss DPS - 10s", GraphHelper.GetTargetDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S10, _log.LegacyTarget), p);
                                                 sw.Write("},");
                                             }
                                             if (_settings.Show30s)
                                             {
                                                 sw.Write("{");
-                                                LegacyHTMLHelper.WritePlayerTabDPSGraph(sw, "Boss DPS - 30s", GraphHelper.GetTargetDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S30, _log.Boss), p);
+                                                LegacyHTMLHelper.WritePlayerTabDPSGraph(sw, "Boss DPS - 30s", GraphHelper.GetTargetDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S30, _log.LegacyTarget), p);
                                                 sw.Write("},");
                                             }
 
@@ -1862,19 +1862,19 @@ namespace LuckParser.Controllers
                                         {//show total dps plot
                                             sw.Write("{");
                                             { //Adding dps axis
-                                                LegacyHTMLHelper.WritePlayerTabDPSGraph(sw, "Cleave DPS", GraphHelper.GetCleaveDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.Full, _log.Boss), p);
+                                                LegacyHTMLHelper.WritePlayerTabDPSGraph(sw, "Cleave DPS", GraphHelper.GetCleaveDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.Full, _log.LegacyTarget), p);
                                             }
                                             sw.Write("},");
                                             if (_settings.Show10s)
                                             {
                                                 sw.Write("{");
-                                                LegacyHTMLHelper.WritePlayerTabDPSGraph(sw, "Cleave DPS - 10s", GraphHelper.GetCleaveDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S10, _log.Boss), p);
+                                                LegacyHTMLHelper.WritePlayerTabDPSGraph(sw, "Cleave DPS - 10s", GraphHelper.GetCleaveDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S10, _log.LegacyTarget), p);
                                                 sw.Write("},");
                                             }
                                             if (_settings.Show30s)
                                             {
                                                 sw.Write("{");
-                                                LegacyHTMLHelper.WritePlayerTabDPSGraph(sw, "Cleave DPS - 30s", GraphHelper.GetCleaveDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S30, _log.Boss), p);
+                                                LegacyHTMLHelper.WritePlayerTabDPSGraph(sw, "Cleave DPS - 30s", GraphHelper.GetCleaveDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S30, _log.LegacyTarget), p);
                                                 sw.Write("},");
                                             }
                                         }
@@ -2338,7 +2338,7 @@ namespace LuckParser.Controllers
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<CastLog> casting = p.GetCastLogs(_log, phase.Start, phase.End);
-            List<DamageLog> damageLogs = p.GetJustPlayerDamageLogs(toBoss ? _log.Boss : null, _log, phase.Start, phase.End);       
+            List<DamageLog> damageLogs = p.GetJustPlayerDamageLogs(toBoss ? _log.LegacyTarget : null, _log, phase.Start, phase.End);       
             int totalDamage = dps.Damage;
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
             if (totalDamage > 0)
@@ -2393,7 +2393,7 @@ namespace LuckParser.Controllers
         /// <param name="phaseIndex"></param>
         private void CreateDMGDistTable(StreamWriter sw, Player p, bool toBoss, int phaseIndex)
         {
-            Statistics.FinalDPS dps = toBoss ? _statistics.DpsTarget[_log.Boss][p][phaseIndex] : _statistics.DpsAll[p][phaseIndex];
+            Statistics.FinalDPS dps = toBoss ? _statistics.DpsTarget[_log.LegacyTarget][p][phaseIndex] : _statistics.DpsAll[p][phaseIndex];
             _CreateDMGDistTable(dps, sw, p, toBoss, phaseIndex);
         }
 
@@ -2403,9 +2403,9 @@ namespace LuckParser.Controllers
         /// <param name="sw"></param>
         /// <param name="p"></param>
         /// <param name="phaseIndex"></param>
-        private void CreateDMGBossDistTable(StreamWriter sw, Boss p, int phaseIndex)
+        private void CreateDMGBossDistTable(StreamWriter sw, Target p, int phaseIndex)
         {
-            Statistics.FinalDPS dps = _statistics.TargetDps[_log.Boss][phaseIndex];
+            Statistics.FinalDPS dps = _statistics.TargetDps[_log.LegacyTarget][phaseIndex];
             _CreateDMGDistTable(dps, sw, p, false, phaseIndex);
         }
 
@@ -2415,7 +2415,7 @@ namespace LuckParser.Controllers
             string tabid = p.InstID + "_" + phaseIndex + "_" + minions.MinionID + (toBoss ? "_boss" : "");
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<CastLog> casting = minions.GetCastLogs(_log, phase.Start, phase.End);
-            List<DamageLog> damageLogs = minions.GetDamageLogs(toBoss ? _log.Boss : null, _log, phase.Start, phase.End);
+            List<DamageLog> damageLogs = minions.GetDamageLogs(toBoss ? _log.LegacyTarget : null, _log, phase.Start, phase.End);
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
             if (totalDamage > 0)
             {
@@ -2469,7 +2469,7 @@ namespace LuckParser.Controllers
         /// <param name="phaseIndex"></param>
         private void CreateDMGDistTable(StreamWriter sw, Player p, Minions minions, bool toBoss, int phaseIndex)
         {
-            Statistics.FinalDPS dps = toBoss ? _statistics.DpsTarget[_log.Boss][p][phaseIndex] : _statistics.DpsAll[p][phaseIndex];
+            Statistics.FinalDPS dps = toBoss ? _statistics.DpsTarget[_log.LegacyTarget][p][phaseIndex] : _statistics.DpsAll[p][phaseIndex];
 
             _CreateDMGDistTable(dps, sw, p, minions, toBoss, phaseIndex);
         }
@@ -2481,9 +2481,9 @@ namespace LuckParser.Controllers
         /// <param name="p"></param>
         /// <param name="minions"></param>
         /// <param name="phaseIndex"></param>
-        private void CreateDMGBossDistTable(StreamWriter sw, Boss p, Minions minions, int phaseIndex)
+        private void CreateDMGBossDistTable(StreamWriter sw, Target p, Minions minions, int phaseIndex)
         {
-            Statistics.FinalDPS dps = _statistics.TargetDps[_log.Boss][phaseIndex];
+            Statistics.FinalDPS dps = _statistics.TargetDps[_log.LegacyTarget][phaseIndex];
             _CreateDMGDistTable(dps, sw, p, minions, false, phaseIndex);
         }
 
@@ -2951,11 +2951,11 @@ namespace LuckParser.Controllers
         /// <param name="sw"></param>
         /// <param name="boss"></param>
         /// <param name="phaseIndex"></param>
-        private void CreateCondiUptimeTable(StreamWriter sw, Boss boss, int phaseIndex)
+        private void CreateCondiUptimeTable(StreamWriter sw, Target boss, int phaseIndex)
         {
             List<PhaseData> phases = _statistics.Phases;
             long fightDuration = phases[phaseIndex].GetDuration();
-            Dictionary<long, Statistics.FinalTargetBoon> conditions = _statistics.TargetConditions[_log.Boss][phaseIndex];
+            Dictionary<long, Statistics.FinalTargetBoon> conditions = _statistics.TargetConditions[_log.LegacyTarget][phaseIndex];
             bool hasBoons = false;
             foreach (Boon boon in _statistics.PresentBoons)
             {
@@ -2989,7 +2989,7 @@ namespace LuckParser.Controllers
                     sw.Write("<tr>");
                     {
                         
-                        sw.Write("<td style=\"width: 275px;\" data-toggle=\"tooltip\" title=\"Average number of conditions: " + Math.Round(_statistics.AvgTargetConditions[_log.Boss][phaseIndex], 1) + "\">" + boss.Character + " </td>");
+                        sw.Write("<td style=\"width: 275px;\" data-toggle=\"tooltip\" title=\"Average number of conditions: " + Math.Round(_statistics.AvgTargetConditions[_log.LegacyTarget][phaseIndex], 1) + "\">" + boss.Character + " </td>");
                         foreach (Boon boon in _statistics.PresentConditions)
                         {
                             if (boon.Type == Boon.BoonType.Duration)
@@ -3134,15 +3134,15 @@ namespace LuckParser.Controllers
             //generate Player list Graphs
             List<PhaseData> phases = _statistics.Phases;
             PhaseData phase = phases[phaseIndex];
-            List<CastLog> casting = _log.Boss.GetCastLogsActDur(_log, phase.Start, phase.End);
-            string charname = _log.Boss.Character;
-            string pid = _log.Boss.InstID + "_" + phaseIndex;
+            List<CastLog> casting = _log.LegacyTarget.GetCastLogsActDur(_log, phase.Start, phase.End);
+            string charname = _log.LegacyTarget.Character;
+            string pid = _log.LegacyTarget.InstID + "_" + phaseIndex;
             sw.Write("<h1 align=\"center\"> " + charname + "</h1>");
             sw.Write("<ul class=\"nav nav-tabs\">");
             {
-                sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + pid + "\">" + _log.Boss.Character + "</a></li>");
+                sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + pid + "\">" + _log.LegacyTarget.Character + "</a></li>");
                 //foreach pet loop here
-                foreach (KeyValuePair<string, Minions> pair in _log.Boss.GetMinions(_log))
+                foreach (KeyValuePair<string, Minions> pair in _log.LegacyTarget.GetMinions(_log))
                 {
                     sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + pid + "_" + pair.Value.MinionID + "\">" + pair.Key + "</a></li>");
                 }
@@ -3151,7 +3151,7 @@ namespace LuckParser.Controllers
             //condi stats tab
             sw.Write("<div id=\"myTabContent\" class=\"tab-content\"><div class=\"tab-pane fade show active\" id=\"home" + pid + "\">");
             {
-                CreateCondiUptimeTable(sw, _log.Boss, phaseIndex);
+                CreateCondiUptimeTable(sw, _log.LegacyTarget, phaseIndex);
                 sw.Write("<div id=\"Graph" + pid + "\" style=\"height: 800px;width:1000px; display:inline-block \"></div>");
                 sw.Write("<script>");
                 {
@@ -3168,7 +3168,7 @@ namespace LuckParser.Controllers
                                 }
                             }
                             //============================================
-                            Dictionary<long, BoonsGraphModel> boonGraphData = _log.Boss.GetBoonGraphs(_log);
+                            Dictionary<long, BoonsGraphModel> boonGraphData = _log.LegacyTarget.GetBoonGraphs(_log);
                             foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
                             {
                                 sw.Write("{");
@@ -3181,16 +3181,16 @@ namespace LuckParser.Controllers
                             //int maxDPS = 0;
                             if (_settings.DPSGraphTotals)
                             {//show total dps plot
-                                List<Point> playertotaldpsgraphdata = GraphHelper.GetTotalDPSGraph(_log, _log.Boss, phaseIndex, phase, GraphHelper.GraphMode.Full);
+                                List<Point> playertotaldpsgraphdata = GraphHelper.GetTotalDPSGraph(_log, _log.LegacyTarget, phaseIndex, phase, GraphHelper.GraphMode.Full);
                                 sw.Write("{");
                                 {
                                     //Adding dps axis
-                                    LegacyHTMLHelper.WritePlayerTabDPSGraph(sw, "Total DPS", playertotaldpsgraphdata, _log.Boss);
+                                    LegacyHTMLHelper.WritePlayerTabDPSGraph(sw, "Total DPS", playertotaldpsgraphdata, _log.LegacyTarget);
                                 }
                                 sw.Write("},");
                             }
                             sw.Write("{");
-                            LegacyHTMLHelper.WriteBossHealthGraph(sw, GraphHelper.GetTotalDPSGraph(_log, _log.Boss, phaseIndex, phase, GraphHelper.GraphMode.Full).Max(x => x.Y), phase, _statistics.TargetHealth[_log.Boss], "y3");
+                            LegacyHTMLHelper.WriteBossHealthGraph(sw, GraphHelper.GetTotalDPSGraph(_log, _log.LegacyTarget, phaseIndex, phase, GraphHelper.GraphMode.Full).Max(x => x.Y), phase, _statistics.TargetHealth[_log.LegacyTarget], "y3");
                             sw.Write("}");
                         }
                         sw.Write("];");
@@ -3254,13 +3254,13 @@ namespace LuckParser.Controllers
                     sw.Write("});");
                 }
                 sw.Write("</script> ");
-                CreateDMGBossDistTable(sw, _log.Boss, phaseIndex);
+                CreateDMGBossDistTable(sw, _log.LegacyTarget, phaseIndex);
                 sw.Write("</div>");
-                foreach (KeyValuePair<string, Minions> pair in _log.Boss.GetMinions(_log))
+                foreach (KeyValuePair<string, Minions> pair in _log.LegacyTarget.GetMinions(_log))
                 {
                     sw.Write("<div class=\"tab-pane fade \" id=\"minion" + pid + "_" + pair.Value.MinionID + "\">");
                     {
-                        CreateDMGBossDistTable(sw, _log.Boss, pair.Value, phaseIndex);
+                        CreateDMGBossDistTable(sw, _log.LegacyTarget, pair.Value, phaseIndex);
                     }
                     sw.Write("</div>");
                 }
@@ -3460,25 +3460,25 @@ namespace LuckParser.Controllers
                                                     {
                                                         if (_log.FightData.Success)
                                                         {
-                                                            string tp = _log.Boss.Health.ToString() + " Health";
+                                                            string tp = _log.LegacyTarget.Health.ToString() + " Health";
                                                             sw.Write("<div class=\"progress-bar bg-success\" data-toggle=\"tooltip\" title=\"" + tp + "\" role=\"progressbar\" style=\"width:100%; ;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>");
                                                         }
                                                         else
                                                         {
                                                             double finalPercent = 0;
-                                                            if (_log.Boss.HealthOverTime.Count > 0)
+                                                            if (_log.LegacyTarget.HealthOverTime.Count > 0)
                                                             {
-                                                                finalPercent = 100.0 - _log.Boss.HealthOverTime[_log.Boss.HealthOverTime.Count - 1].Y * 0.01;
+                                                                finalPercent = 100.0 - _log.LegacyTarget.HealthOverTime[_log.LegacyTarget.HealthOverTime.Count - 1].Y * 0.01;
                                                             }
-                                                            string tp = Math.Round(_log.Boss.Health * finalPercent / 100.0) + " Health";
+                                                            string tp = Math.Round(_log.LegacyTarget.Health * finalPercent / 100.0) + " Health";
                                                             sw.Write("<div class=\"progress-bar bg-success\" data-toggle=\"tooltip\" title=\"" + tp + "\" role=\"progressbar\" style=\"width:" + finalPercent + "%;\" aria-valuenow=\"" + finalPercent + "\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>");
-                                                            tp = Math.Round(_log.Boss.Health * (100.0 - finalPercent) / 100.0) + " Health";
+                                                            tp = Math.Round(_log.LegacyTarget.Health * (100.0 - finalPercent) / 100.0) + " Health";
                                                             sw.Write("<div class=\"progress-bar bg-danger\" data-toggle=\"tooltip\" title=\"" + tp + "\" role=\"progressbar\" style=\"width:" + (100.0 - finalPercent) + "%;\" aria-valuenow=\"" + (100.0 - finalPercent) + "\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>");
 
                                                         }
                                                     }
                                                     sw.Write("</div>");
-                                                    sw.Write("<p class=\"small\" style=\"text-align:center; color: "+ (_settings.LightTheme ? "#000" : "#FFF") +";\">" + _log.Boss.Health.ToString() + " Health</p>");
+                                                    sw.Write("<p class=\"small\" style=\"text-align:center; color: "+ (_settings.LightTheme ? "#000" : "#FFF") +";\">" + _log.LegacyTarget.Health.ToString() + " Health</p>");
                                                     sw.Write(_log.FightData.Success ? "<p class='text text-success'> Result: Success</p>" : "<p class='text text-warning'> Result: Fail</p>");
                                                     sw.Write("<p>Duration: " + durationString + " </p> ");
                                                 }

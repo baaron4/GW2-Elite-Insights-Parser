@@ -14,12 +14,12 @@ namespace LuckParser.Models.DataModels
         public readonly MechanicData MechanicData;
         public readonly List<Player> PlayerList;
         public readonly Dictionary<string, List<Player>> PlayerListBySpec;
-        public readonly Boss Boss;
+        public readonly Target LegacyTarget;
 
         
 
         public ParsedLog(LogData logData, FightData fightData, AgentData agentData, SkillData skillData, 
-                CombatData combatData, List<Player> playerList, Boss boss)
+                CombatData combatData, List<Player> playerList, Target target)
         {
             LogData = logData;
             FightData = fightData;
@@ -27,7 +27,7 @@ namespace LuckParser.Models.DataModels
             SkillData = skillData;
             CombatData = combatData;
             PlayerList = playerList;
-            Boss = boss;
+            LegacyTarget = target;
             MechanicData = new MechanicData(fightData);
             PlayerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
 
@@ -96,7 +96,7 @@ namespace LuckParser.Models.DataModels
 
         public bool IsBenchmarkMode()
         {
-            return FightData.Logic.Mode == BossLogic.ParseMode.Golem;
+            return FightData.Logic.Mode == FightLogic.ParseMode.Golem;
         }
 
 

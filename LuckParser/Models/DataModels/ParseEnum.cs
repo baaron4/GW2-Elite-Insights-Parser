@@ -269,7 +269,7 @@ namespace LuckParser.Models.DataModels
             return Enum.IsDefined(typeof(TrashIDS), id) ? (TrashIDS)id : TrashIDS.Unknown;
         }
 
-        public enum BossIDS : ushort
+        public enum TargetIDS : ushort
         {
             ValeGuardian            = 15438,
             Gorseval                = 15429,
@@ -304,9 +304,9 @@ namespace LuckParser.Models.DataModels
             //
             Unknown
         };
-        public static BossIDS GetBossIDS(ushort id)
+        public static TargetIDS GetTargetIDS(ushort id)
         {
-            return Enum.IsDefined(typeof(BossIDS), id) ? (BossIDS)id : BossIDS.Unknown;
+            return Enum.IsDefined(typeof(TargetIDS), id) ? (TargetIDS)id : TargetIDS.Unknown;
         }
 
     }

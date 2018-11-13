@@ -15,20 +15,20 @@ namespace LuckParser.Models
             MechanicList.AddRange(new List<Mechanic>
             {
 
-            new Mechanic(35128, "Temporal Shred", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Xera, "symbol:'circle',color:'rgb(255,0,0)'", "Orb","Temporal Shred (Hit by Red Orb)", "Red Orb",0),
-            new Mechanic(34913, "Temporal Shred", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Xera, "symbol:'circle-open',color:'rgb(255,0,0)'", "O.Aoe","Temporal Shred (Stood in Orb Aoe)", "Orb AoE",0),
-            new Mechanic(35168, "Bloodstone Protection", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'hourglass-open',color:'rgb(128,0,128)'", "InBble","Bloodstone Protection (Stood in Bubble)", "Inside Bubble",0),
-            new Mechanic(34887, "Summon Fragment Start", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Xera, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "CC","Summon Fragment (Xera Breakbar)", "Breakbar",0),
-            new Mechanic(34887, "Summon Fragment End", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Xera, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "CC.Fail","Summon Fragment (Failed CC)", "CC Fail",0,(condition => condition.CombatItem.Value > 11940)),
-            new Mechanic(34887, "Summon Fragment End", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Xera, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "CCed","Summon Fragment (Breakbar broken)", "CCed",0,(condition => condition.CombatItem.Value <= 11940)),
-            new Mechanic(34965, "Derangement", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'square-open',color:'rgb(200,140,255)'", "Drgmnt","Derangement (Stacking Debuff)", "Derangement",0), 
-            new Mechanic(35084, "Bending Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'triangle-down-open',color:'rgb(255,200,0)'", "Btn1","Bending Chaos (Stood on 1st Button)", "Button 1",0),
-            new Mechanic(35162, "Shifting Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'triangle-ne-open',color:'rgb(255,200,0)'", "Btn2","Bending Chaos (Stood on 2nd Button)", "Button 2",0),
-            new Mechanic(35032, "Twisting Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'triangle-nw-open',color:'rgb(255,200,0)'", "Btn3","Bending Chaos (Stood on 3rd Button)", "Button 3",0),
-            new Mechanic(34956, "Intervention", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'square',color:'rgb(0,0,255)'", "Shld","Intervention (got Special Action Key)", "Shield",0),
-            new Mechanic(34921, "Gravity Well", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'circle-x-open',color:'rgb(255,0,255)'", "GrWell","Half-platform Gravity Well", "Gravity Well",4000),
-            new Mechanic(34997, "Teleport Out", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'circle',color:'rgb(0,128,0)'", "TP.Out","Teleport Out (Teleport to Platform)","TP",0),
-            new Mechanic(35076, "Hero's Return", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'circle',color:'rgb(0,200,0)'", "TP.Back","Hero's Return (Teleport back)", "TP back",0),
+            new Mechanic(35128, "Temporal Shred", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Xera, "symbol:'circle',color:'rgb(255,0,0)'", "Orb","Temporal Shred (Hit by Red Orb)", "Red Orb",0),
+            new Mechanic(34913, "Temporal Shred", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Xera, "symbol:'circle-open',color:'rgb(255,0,0)'", "O.Aoe","Temporal Shred (Stood in Orb Aoe)", "Orb AoE",0),
+            new Mechanic(35168, "Bloodstone Protection", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Xera, "symbol:'hourglass-open',color:'rgb(128,0,128)'", "InBble","Bloodstone Protection (Stood in Bubble)", "Inside Bubble",0),
+            new Mechanic(34887, "Summon Fragment Start", Mechanic.MechType.EnemyCastStart, ParseEnum.TargetIDS.Xera, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "CC","Summon Fragment (Xera Breakbar)", "Breakbar",0),
+            new Mechanic(34887, "Summon Fragment End", Mechanic.MechType.EnemyCastEnd, ParseEnum.TargetIDS.Xera, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "CC.Fail","Summon Fragment (Failed CC)", "CC Fail",0,(condition => condition.CombatItem.Value > 11940)),
+            new Mechanic(34887, "Summon Fragment End", Mechanic.MechType.EnemyCastEnd, ParseEnum.TargetIDS.Xera, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "CCed","Summon Fragment (Breakbar broken)", "CCed",0,(condition => condition.CombatItem.Value <= 11940)),
+            new Mechanic(34965, "Derangement", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Xera, "symbol:'square-open',color:'rgb(200,140,255)'", "Drgmnt","Derangement (Stacking Debuff)", "Derangement",0), 
+            new Mechanic(35084, "Bending Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Xera, "symbol:'triangle-down-open',color:'rgb(255,200,0)'", "Btn1","Bending Chaos (Stood on 1st Button)", "Button 1",0),
+            new Mechanic(35162, "Shifting Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Xera, "symbol:'triangle-ne-open',color:'rgb(255,200,0)'", "Btn2","Bending Chaos (Stood on 2nd Button)", "Button 2",0),
+            new Mechanic(35032, "Twisting Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Xera, "symbol:'triangle-nw-open',color:'rgb(255,200,0)'", "Btn3","Bending Chaos (Stood on 3rd Button)", "Button 3",0),
+            new Mechanic(34956, "Intervention", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Xera, "symbol:'square',color:'rgb(0,0,255)'", "Shld","Intervention (got Special Action Key)", "Shield",0),
+            new Mechanic(34921, "Gravity Well", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Xera, "symbol:'circle-x-open',color:'rgb(255,0,255)'", "GrWell","Half-platform Gravity Well", "Gravity Well",4000),
+            new Mechanic(34997, "Teleport Out", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Xera, "symbol:'circle',color:'rgb(0,128,0)'", "TP.Out","Teleport Out (Teleport to Platform)","TP",0),
+            new Mechanic(35076, "Hero's Return", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Xera, "symbol:'circle',color:'rgb(0,200,0)'", "TP.Back","Hero's Return (Teleport back)", "TP back",0),
             /*new Mechanic(35000, "Intervention", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'hourglass',color:'rgb(128,0,128)'", "Bubble",0),*/
             //new Mechanic(35034, "Disruption", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Xera, "symbol:'square',color:'rgb(0,128,0)'", "TP",0), 
             //Not sure what this (ID 350342,"Disruption") is. Looks like it is the pulsing "orb removal" from the orange circles on the 40% platform. Would fit the name although it's weird it can hit players. 
@@ -51,7 +51,7 @@ namespace LuckParser.Models
             long start = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Xera);
+            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Xera);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -93,13 +93,13 @@ namespace LuckParser.Models
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // find target
-            Boss boss = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Xera);
-            if (boss == null)
+            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Xera);
+            if (target == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
             // enter combat
-            CombatItem enterCombat = combatData.Find(x => x.SrcInstid == boss.InstID && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
+            CombatItem enterCombat = combatData.Find(x => x.SrcInstid == target.InstID && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
             if (enterCombat != null)
             {
                 fightData.FightStart = enterCombat.Time;
@@ -109,7 +109,7 @@ namespace LuckParser.Models
             {
                 if (NPC.ID == 16286)
                 {
-                    boss.Health = 24085950;
+                    target.Health = 24085950;
                     CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position && x.SrcInstid == NPC.InstID && x.Time >= NPC.FirstAware + 500 && x.Time <= NPC.LastAware);
                     if (move != null)
                     {
@@ -118,7 +118,7 @@ namespace LuckParser.Models
                     {
                         fightData.PhaseData.Add(NPC.FirstAware);
                     }
-                    boss.AgentItem.LastAware = NPC.LastAware;
+                    target.AgentItem.LastAware = NPC.LastAware;
                     // get unique id for the fusion
                     ushort instID = 1;
                     Random rnd = new Random();
@@ -126,21 +126,21 @@ namespace LuckParser.Models
                     {
                         instID = (ushort)rnd.Next(1, ushort.MaxValue);
                     }
-                    boss.AgentItem.InstID = instID;
+                    target.AgentItem.InstID = instID;
                     agentData.Refresh();
-                    HashSet<ulong> agents = new HashSet<ulong>() { NPC.Agent, boss.Agent };
+                    HashSet<ulong> agents = new HashSet<ulong>() { NPC.Agent, target.Agent };
                     // update combat data
                     foreach (CombatItem c in combatData)
                     {
                         if (agents.Contains(c.SrcAgent))
                         {
-                            c.SrcInstid = boss.InstID;
-                            c.SrcAgent = boss.Agent;
+                            c.SrcInstid = target.InstID;
+                            c.SrcAgent = target.Agent;
                         }
                         if (agents.Contains(c.DstAgent))
                         {
-                            c.DstInstid = boss.InstID;
-                            c.DstAgent = boss.Agent;
+                            c.DstInstid = target.InstID;
+                            c.DstAgent = target.Agent;
                         }
                     }
                     break;
@@ -185,18 +185,18 @@ namespace LuckParser.Models
             }
         }
 
-        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
         {
             // TODO: needs facing information for hadouken
-            CombatReplay replay = boss.CombatReplay;
-            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
-            switch (boss.ID)
+            CombatReplay replay = target.CombatReplay;
+            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (target.ID)
             {
-                case (ushort)ParseEnum.BossIDS.Xera:
+                case (ushort)ParseEnum.TargetIDS.Xera:
                     List<CastLog> summon = cls.Where(x => x.SkillId == 34887).ToList();
                     foreach (CastLog c in summon)
                     {
-                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(boss)));
+                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 default:
