@@ -889,7 +889,7 @@ namespace LuckParser.Controllers
         private BoonChartDataDto BuildPlayerTabBoonGraph(BoonsGraphModel bgm, PhaseData phase)
         {
             //TODO line: {shape: 'hv'}
-            long roundedEnd = phase.Start + 1000*phase.GetDuration("s");
+            long roundedEnd = phase.Start + 1000 * phase.GetDuration("s");
             List<BoonsGraphModel.Segment> bChart = bgm.BoonChart.Where(x => x.End >= phase.Start && x.Start <= roundedEnd).ToList();
             if (bChart.Count == 0 || (bChart.Count == 1 && bChart.First().Value == 0))
             {
@@ -902,7 +902,7 @@ namespace LuckParser.Controllers
                 color = GeneralHelper.GetLink("Color-" + bgm.Boon.Name),
                 states = new List<double[]>(bChart.Count + 1)
             };
-            _usedBoons.Add(bgm.Boon.ID, bgm.Boon);
+            _usedBoons[bgm.Boon.ID] = bgm.Boon;
             foreach (BoonsGraphModel.Segment seg in bChart)
             {
                 double segStart = Math.Round(Math.Max(seg.Start - phase.Start, 0) / 1000.0, 3);
