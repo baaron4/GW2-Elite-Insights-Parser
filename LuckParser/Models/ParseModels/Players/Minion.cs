@@ -52,7 +52,7 @@ namespace LuckParser.Models.ParseModels
                         {
                             if (curCastLog.SkillId == c.SkillID)
                             {
-                                curCastLog.SetEndStatus(c.Value, c.IsActivation);
+                                curCastLog.SetEndStatus(c.Value, c.IsActivation, log.FightData.FightDuration);
                                 curCastLog = null;
                             }
                         }
