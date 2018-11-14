@@ -29,9 +29,13 @@ namespace LuckParser.Models.ParseModels
             StartActivation = startActivation;
         }
 
-        public void SetEndStatus(int actDuration, ParseEnum.Activation endActivation)
+        public void SetEndStatus(int actDuration, ParseEnum.Activation endActivation, long end)
         {
             ActualDuration = actDuration;
+            if (Time + ActualDuration > end)
+            {
+                ActualDuration = (int)end - actDuration;
+            }
             EndActivation = endActivation;
         }
     }

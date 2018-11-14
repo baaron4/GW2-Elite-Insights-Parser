@@ -598,7 +598,7 @@ namespace LuckParser.Models.ParseModels
                         // Missing end activation
                         if (curCastLog != null)
                         {
-                            curCastLog.SetEndStatus(curCastLog.ExpectedDuration, ParseEnum.Activation.Unknown);
+                            curCastLog.SetEndStatus(curCastLog.ExpectedDuration, ParseEnum.Activation.Unknown, log.FightData.FightDuration);
                             curCastLog = null;
                         }
                         long time = c.Time - timeStart;
@@ -611,7 +611,7 @@ namespace LuckParser.Models.ParseModels
                         {
                             if (curCastLog.SkillId == c.SkillID)
                             {
-                                curCastLog.SetEndStatus(c.Value, c.IsActivation);
+                                curCastLog.SetEndStatus(c.Value, c.IsActivation, log.FightData.FightDuration);
                                 curCastLog = null;
                             }
                         }
