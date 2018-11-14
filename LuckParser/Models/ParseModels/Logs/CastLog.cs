@@ -34,7 +34,7 @@ namespace LuckParser.Models.ParseModels
             ActualDuration = actDuration;
             if (Time + ActualDuration > end)
             {
-                ActualDuration = (int)end - actDuration;
+                ActualDuration = (int)(end - Time);
             }
             EndActivation = endActivation;
         }
