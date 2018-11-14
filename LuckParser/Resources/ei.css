@@ -138,21 +138,36 @@ th {
     color: #fff;
 }
 
-.theme-cosmo .nav-pills .nav-link:not(.active) {
-    background-color: rgba(245,245,245,1);
+.theme-cosmo .nav-tabs .nav-link:hover {
+    color: rgba(0, 0, 0, 1);
 }
-.theme-cosmo .nav-tabs .nav-link:not(.active) {
-    background-color: rgba(245,245,245,1);
+.theme-cosmo .nav-tabs .nav-link.active,
+.nav-tabs .nav-item.show .nav-link {
+    background-color: rgba(245, 245, 245, 1);
+}
+
+.theme-cosmo .nav-pills .nav-link:not(.active) {
+    background-color: rgba(245, 245, 245, 1);
+}
+.theme-cosmo .nav-pills .nav-link.active {
+    color: rgba(255, 255, 255, 1);
+}
+.theme-cosmo .nav-pills .nav-link.active:hover {
+    color: #373a3c;
 }
 .theme-cosmo .nav-pills .nav-link {
     border: 1px solid transparent;  
 }
 .theme-cosmo .nav-pills .nav-link:hover, .nav-pills .nav-link:focus {
-    border-color: #e9ecef #e9ecef #dee2e6;    
-}
-.theme-cosmo .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
     background-color: #2780E3;
-    color: #fff;
+}
+
+.theme-cosmo .card {
+    background-color:rgba(245, 245, 245, 1);
+}
+
+.theme-cosmo .card-header {
+    background-color:rgba(235, 235, 235, 1);
 }
 
 .rot-icon {
