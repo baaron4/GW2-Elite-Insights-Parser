@@ -229,7 +229,13 @@ namespace LuckParser.Controllers
                     if (dl.IsNinety > 0)
                     {
                         final.ScholarRate++;
-                        final.ScholarDmg += (int)(dl.Damage / 11.0); //regular+10% damage
+                        final.ScholarDmg += (int)(dl.Damage / 21.0); //regular+5% damage
+                    }
+
+                    if (dl.IsFifty > 0)
+                    {
+                        final.EagleRate++;
+                        final.EagleDmg += (int)(dl.Damage / 11.0); //regular+10% damage
                     }
 
                     if (dl.IsMoving > 0)
@@ -293,7 +299,13 @@ namespace LuckParser.Controllers
                     if (dl.IsNinety > 0)
                     {
                         final.ScholarRate++;
-                        final.ScholarDmg += (int)(dl.Damage / 11.0); //regular+10% damage
+                        final.ScholarDmg += (int)(dl.Damage / 21.0); //regular+5% damage
+                    }
+
+                    if (dl.IsFifty > 0)
+                    {
+                        final.EagleRate++;
+                        final.EagleDmg += (int)(dl.Damage / 11.0); //regular+10% damage
                     }
 
                     if (dl.IsMoving > 0)

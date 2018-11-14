@@ -10,6 +10,7 @@ namespace LuckParser.Models.ParseModels
         public byte IsCondi { get; }
         public ParseEnum.Result Result { get; }
         public byte IsNinety { get; }
+        public byte IsFifty { get; }
         public byte IsMoving { get; }
         public byte IsFlanking { get; }
         public ParseEnum.Activation Activation { get; }
@@ -26,6 +27,7 @@ namespace LuckParser.Models.ParseModels
             IsCondi = c.IsBuff;
             Result = c.Result;
             IsNinety = c.IsNinety;
+            IsFifty = c.IsFifty;
             IsMoving = c.IsMoving;
             IsFlanking = c.IsFlanking;
             Activation = c.IsActivation;
