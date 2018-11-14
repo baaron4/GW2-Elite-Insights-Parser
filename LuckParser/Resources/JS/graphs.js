@@ -30,11 +30,13 @@ var compileGraphs = function () {
                     title: 'DPS',
                     fixedrange: false,
                     rangemode: 'tozero',
+                    gridcolor: '#cccccc',
                     color: '#cccccc'
                 },
                 xaxis: {
                     title: 'Time(sec)',
                     color: '#cccccc',
+                    gridcolor: '#cccccc',
                     xrangeslider: {}
                 },
                 hovermode: 'compare',
@@ -71,7 +73,7 @@ var compileGraphs = function () {
                     line: {
                         shape: 'spline',
                         color: player.colTarget,
-                        width: i === this.selectedplayerindex ? 6 : 2
+                        width: i === this.selectedplayerindex ? 5 : 2
                     },
                     name: player.name + ' DPS',
                 });
@@ -143,7 +145,7 @@ var compileGraphs = function () {
             selectedplayerindex: {
                 handler: function () {
                     for (var i = 0; i < this.players.length; i++) {
-                        this.data[i].line.width = i === this.selectedplayerindex ? 6 : 2;
+                        this.data[i].line.width = i === this.selectedplayerindex ? 5 : 2;
                     }
                     this.layout.datarevision = new Date().getTime();
                 },

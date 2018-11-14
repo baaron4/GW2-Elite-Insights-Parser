@@ -161,7 +161,9 @@ function computeRotationData(rotationData, images, data) {
                 type: 'bar',
                 width: aa ? 0.5 : 1,
                 hoverinfo: 'name',
-                hoverlabel: { namelength: '-1' },
+                hoverlabel: {
+                    namelength: '-1'
+                },
                 marker: {
                     color: fillColor,
                     width: '5',
@@ -178,33 +180,49 @@ function computeRotationData(rotationData, images, data) {
     return 0;
 }
 
-function computePhaseMarkups(shapes, annotations, phase) {
+function computePhaseMarkupSettings(currentArea, areas, annotations) {
+    var y = 1;
+    var textbg = '#0000FF';
+    var x = (currentArea.end + currentArea.start) / 2;
+    for (var i = annotations.length - 1; i >= 0; i--) {
+        var annotation = annotations[i];
+        var area = areas[i];
+        if ((area.start <= currentArea.start && area.end >= currentArea.end) || area.end >= currentArea.start) {
+            // current area included in area OR current area intersects area
+            if (annotation.bgcolor === textbg) {
+                textbg = '#FF0000';
+            }
+            y = annotation.y === y ? 1.09 : y;
+            break;
+        }
+    }
+    return {
+        y: y,
+        x: x,
+        textbg: textbg
+    };
+}
 
-    var duration = phase.end - phase.start;
-    var x;
+function computePhaseMarkups(shapes, annotations, phase) {
     if (phase.markupAreas) {
         for (i = 0; i < phase.markupAreas.length; i++) {
             var area = phase.markupAreas[i];
-            var y = 1;
-            x = (area.end + area.start) / 2;
-            if (i > 0) {
-                var prev = annotations[i - 1];
-                if (prev.y === 1 && (x - prev.x) / duration < 0.1) {
-                    y = 1.06;
-                }
-            }
+            var setting = computePhaseMarkupSettings(area, phase.markupAreas, annotations);
             annotations.push({
-                x: x,
-                y: y,
+                x: setting.x,
+                y: setting.y,
                 xref: 'x',
                 yref: 'paper',
                 xanchor: 'center',
                 yanchor: 'bottom',
                 text: area.label + '<br>' + '(' + Math.round(1000 * (area.end - area.start)) / 1000 + ' s)',
+                font: {
+                    color: '#ffffff'
+                },
                 showarrow: false,
-                bordercolor: '#c7c7c7',
+                bordercolor: '#A0A0A0',
                 borderwidth: 2,
-                bgcolor: '#555555',
+                bgcolor: setting.textbg,
                 opacity: 0.8
             });
             if (area.highlight) {
@@ -216,18 +234,19 @@ function computePhaseMarkups(shapes, annotations, phase) {
                     y0: 0,
                     x1: area.end,
                     y1: 1,
-                    fillcolor: '#808080',
-                    opacity: 0.125,
+                    fillcolor: setting.textbg,
+                    opacity: 0.2,
                     line: {
                         width: 0
-                    }
+                    },
+                    layer: 'below'
                 });
             }
         }
     }
     if (phase.markupLines) {
         for (i = 0; i < phase.markupLines.length; i++) {
-            x = phase.markupLines[i];
+            var x = phase.markupLines[i];
             shapes.push({
                 type: 'line',
                 xref: 'x',
@@ -236,7 +255,6 @@ function computePhaseMarkups(shapes, annotations, phase) {
                 y0: 0,
                 x1: x,
                 y1: 1,
-                opacity: 0.35,
                 line: {
                     color: '#00c0ff',
                     width: 2,
@@ -289,8 +307,7 @@ function computePlayerDPS(playerid, graph, playerDPS, maxDPS, allDPS, lim, phase
     });
 }
 
-function getActorGraphLayout(images) {
-
+function getActorGraphLayout(images, boonYs) {
     return {
         barmode: 'stack',
         yaxis: {
@@ -298,6 +315,7 @@ function getActorGraphLayout(images) {
             domain: [0, 0.09],
             fixedrange: true,
             showgrid: false,
+            color: '#cccccc',
             range: [0, 2]
         },
         legend: {
@@ -307,15 +325,25 @@ function getActorGraphLayout(images) {
         yaxis2: {
             title: 'Buffs',
             domain: [0.11, 0.55],
+            color: '#cccccc',
+            gridcolor: '#cccccc',
             fixedrange: true
         },
         yaxis3: {
             title: 'DPS',
+            color: '#cccccc',
+            gridcolor: '#cccccc',
             domain: [0.56, 1]
         },
         images: images,
         font: {
-            color: '#ffffff'
+            color: '#cccccc'
+        },
+        xaxis: {
+            title: 'Time(sec)',
+            color: '#cccccc',
+            gridcolor: '#cccccc',
+            xrangeslider: {}
         },
         paper_bgcolor: 'rgba(0,0,0,0)',
         plot_bgcolor: 'rgba(0,0,0,0)',
@@ -355,9 +383,11 @@ function computeTargetHealthData(graph, targets, phase, data, yaxis) {
 }
 
 function computeBuffData(buffData, data) {
+    var ystart = -1;
     if (buffData) {
         for (var i = 0; i < buffData.length; i++) {
             var boonItem = buffData[i];
+            var boon = findSkill(true, boonItem.id);
             var line = {
                 x: [],
                 y: [],
@@ -369,7 +399,7 @@ function computeBuffData(buffData, data) {
                     shape: 'hv'
                 },
                 fill: 'tozeroy',
-                name: boonItem.name
+                name: boon.name
             };
             for (var p = 0; p < boonItem.states.length; p++) {
                 line.x[p] = boonItem.states[p][0];
@@ -377,9 +407,15 @@ function computeBuffData(buffData, data) {
             }
             data.push(line);
         }
-        return buffData.length;
+        return {
+            actorOffset: buffData.length,
+            y: 1
+        };
     }
-    return 0;
+    return {
+        actorOffset: 0,
+        y: ystart++
+    };
 }
 
 var initTable = function (id, cell, order, orderCallBack) {

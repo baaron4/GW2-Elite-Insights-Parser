@@ -99,8 +99,10 @@ var compilePlayerTab = function () {
         created: function () {
             var images = [];
             this.playerOffset += computeRotationData(this.player.details.rotation[this.phaseindex], images, this.data);
-            this.playerOffset += computeBuffData(this.player.details.boonGraph[this.phaseindex], this.data);
-            this.playerOffset += computeTargetHealthData(this.graph, this.targets, this.phase, this.data, 'y3');
+            var offsets = computeBuffData(this.player.details.boonGraph[this.phaseindex], this.data);
+            this.playerOffset += offsets.actorOffset;
+            var dpsY = 'y' + (2+offsets.y);
+            this.playerOffset += computeTargetHealthData(this.graph, this.targets, this.phase, this.data, dpsY);
             this.data.push({
                 y: [],
                 mode: 'lines',
@@ -108,7 +110,7 @@ var compilePlayerTab = function () {
                     shape: 'spline',
                     color: this.player.colTotal,
                 },
-                yaxis: 'y3',
+                yaxis: dpsY,
                 name: 'Total DPS'
             });
             this.data.push({
@@ -118,7 +120,7 @@ var compilePlayerTab = function () {
                     shape: 'spline',
                     color: this.player.colTarget,
                 },
-                yaxis: 'y3',
+                yaxis: dpsY,
                 name: 'Target DPS'
             });
             this.data.push({
@@ -128,10 +130,10 @@ var compilePlayerTab = function () {
                     shape: 'spline',
                     color: this.player.colCleave,
                 },
-                yaxis: 'y3',
+                yaxis: dpsY,
                 name: 'Cleave DPS'
             });
-            this.layout = getActorGraphLayout(images);
+            this.layout = getActorGraphLayout(images, offsets.y);
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase);
         },
         computed: {

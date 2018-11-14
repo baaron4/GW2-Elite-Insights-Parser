@@ -204,7 +204,9 @@ var compileTargetTab = function () {
         created: function () {
             var images = [];
             this.targetOffset += computeRotationData(this.target.details.rotation[this.phaseindex], images, this.data);
-            this.targetOffset += computeBuffData(this.target.details.boonGraph[this.phaseindex], this.data);
+            var offsets = computeBuffData(this.target.details.boonGraph[this.phaseindex], this.data);
+            this.targetOffset += offsets.actorOffset;
+            var dpsY = 'y' + (2 + offsets.y);
             {
                 var health = this.graph.targets[this.phaseTargetIndex].health;
                 var hpTexts = [];
@@ -220,7 +222,7 @@ var compileTargetTab = function () {
                     },
                     hoverinfo: 'text+x+name',
                     name: this.target.name + ' health',
-                    yaxis: 'y3'
+                    yaxis: dpsY
                 };
                 this.data.push(res);
             }
@@ -231,10 +233,10 @@ var compileTargetTab = function () {
                 line: {
                     shape: 'spline'
                 },
-                yaxis: 'y3',
+                yaxis: dpsY,
                 name: 'Total DPS'
             });
-            this.layout = getActorGraphLayout(images);
+            this.layout = getActorGraphLayout(images, offsets.y);
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase);
         },
         computed: {
