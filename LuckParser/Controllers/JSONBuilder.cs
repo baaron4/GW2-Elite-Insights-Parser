@@ -576,13 +576,7 @@ namespace LuckParser.Controllers
                             MakePhaseTargetBoon(boons[boon.Key], phaseIndex, boon.Value);
                             if (target.GetBoonGraphs(_log).TryGetValue(boon.Key, out var bgm))
                             {
-                                foreach (BoonsGraphModel.Segment seg in bgm.BoonChart)
-                                {
-                                    boons[boon.Key].States.Add(new int[2] {
-                                        (int)seg.Start,
-                                        seg.Value
-                                    });
-                                }
+                                boons[boon.Key].States = BuildBuffStates(bgm);
                             }
                         }
                         else
@@ -683,13 +677,7 @@ namespace LuckParser.Controllers
                             MakePhaseBoon(uptimes[boon.Key], phaseIndex, boon.Value);
                             if (player.GetBoonGraphs(_log).TryGetValue(boon.Key, out var bgm))
                             {
-                                foreach (BoonsGraphModel.Segment seg in bgm.BoonChart)
-                                {
-                                    uptimes[boon.Key].States.Add(new int[2] {
-                                        (int)seg.Start,
-                                        seg.Value
-                                    });
-                                }
+                                uptimes[boon.Key].States = BuildBuffStates(bgm);
                             }
                         }
                         else

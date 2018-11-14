@@ -875,7 +875,7 @@ namespace LuckParser.Controllers
                     foreach (Target mainTarget in _log.FightData.GetMainTargets(_log))
                     {
                         boonGraphData = mainTarget.GetBoonGraphs(_log);
-                        foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName == "Compromised" || x.BoonName == "Unnatural Signet" || x.BoonName == "Fractured - Enemy"))
+                        foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.Boon.Name == "Compromised" || x.Boon.Name == "Unnatural Signet" || x.Boon.Name == "Fractured - Enemy"))
                         {
                             BoonChartDataDto graph = BuildPlayerTabBoonGraph(bgm, phase);
                             if (graph != null) list.Add(graph);
@@ -897,12 +897,12 @@ namespace LuckParser.Controllers
             }
             BoonChartDataDto dto = new BoonChartDataDto
             {
-                name = bgm.BoonName,
-                visible = bgm.BoonName == "Might" || bgm.BoonName == "Quickness",
-                color = GeneralHelper.GetLink("Color-" + bgm.BoonName),
+                id = bgm.Boon.ID,
+                visible = bgm.Boon.Name == "Might" || bgm.Boon.Name == "Quickness",
+                color = GeneralHelper.GetLink("Color-" + bgm.Boon.Name),
                 states = new List<double[]>(bChart.Count + 1)
             };
-
+            _usedBoons.Add(bgm.Boon.ID, bgm.Boon);
             foreach (BoonsGraphModel.Segment seg in bChart)
             {
                 double segStart = Math.Round(Math.Max(seg.Start - phase.Start, 0) / 1000.0, 3);

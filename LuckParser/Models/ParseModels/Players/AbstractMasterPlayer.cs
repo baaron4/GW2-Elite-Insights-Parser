@@ -324,8 +324,8 @@ namespace LuckParser.Models.ParseModels
                 50421,
                 31803
             };
-            BoonsGraphModel boonPresenceGraph = new BoonsGraphModel("Number of Boons");
-            BoonsGraphModel condiPresenceGraph = new BoonsGraphModel("Number of Conditions");
+            BoonsGraphModel boonPresenceGraph = new BoonsGraphModel(Boon.BoonsByIds[Boon.NumberOfBoonsID]);
+            BoonsGraphModel condiPresenceGraph = new BoonsGraphModel(Boon.BoonsByIds[Boon.NumberOfConditionsID]);
             HashSet<long> boonIds = new HashSet<long>(Boon.GetBoonList().Select(x => x.ID));
             HashSet<long> condiIds = new HashSet<long>(Boon.GetCondiBoonList().Select(x => x.ID));
             for (int i = 0; i < phases.Count; i++)
@@ -463,7 +463,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         graphSegments.Add(new BoonsGraphModel.Segment(0, dur, 0));
                     }
-                    _boonPoints[boonid] = new BoonsGraphModel(boon.Name, graphSegments);
+                    _boonPoints[boonid] = new BoonsGraphModel(boon, graphSegments);
                     if (updateBoonPresence || updateCondiPresence)
                     {
                         List<BoonsGraphModel.Segment> segmentsToFill = updateBoonPresence ? boonPresenceGraph.BoonChart : condiPresenceGraph.BoonChart;

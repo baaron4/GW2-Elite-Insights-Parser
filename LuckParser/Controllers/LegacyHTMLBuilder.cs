@@ -1808,7 +1808,7 @@ namespace LuckParser.Controllers
 
                                             }
                                             boonGraphData = _log.LegacyTarget.GetBoonGraphs(_log);
-                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName == "Compromised" || x.BoonName == "Unnatural Signet" || x.BoonName == "Fractured - Enemy"))
+                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.Boon.Name == "Compromised" || x.Boon.Name == "Unnatural Signet" || x.Boon.Name == "Fractured - Enemy"))
                                             {
                                                 sw.Write("{");
                                                 {

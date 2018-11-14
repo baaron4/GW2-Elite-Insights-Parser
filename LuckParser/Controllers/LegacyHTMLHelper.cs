@@ -440,13 +440,13 @@ namespace LuckParser.Controllers
             sw.Write(" yaxis: 'y2'," +
                  " type: 'scatter',");
             //  "legendgroup: '"+Boon.getEnum(bgm.getBoonName()).getPloltyGroup()+"',";
-            if (!(bgm.BoonName == "Might" || bgm.BoonName == "Quickness"))
+            if (!(bgm.Boon.Name == "Might" || bgm.Boon.Name == "Quickness"))
             {
                 sw.Write(" visible: 'legendonly',");
             }
-            sw.Write(" line: {color:'" + GeneralHelper.GetLink("Color-" + bgm.BoonName) + "', shape: 'hv'},");
+            sw.Write(" line: {color:'" + GeneralHelper.GetLink("Color-" + bgm.Boon.Name) + "', shape: 'hv'},");
             sw.Write(" fill: 'tozeroy'," +
-                 " name: \"" + bgm.BoonName + "\"");
+                 " name: \"" + bgm.Boon.Name + "\"");
         }
 
         public static void WritePlayerTabDPSGraph(StreamWriter sw, string name, List<Point> playerdpsgraphdata, AbstractPlayer p)
