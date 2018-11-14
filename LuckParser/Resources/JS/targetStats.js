@@ -204,9 +204,9 @@ var compileTargetTab = function () {
         created: function () {
             var images = [];
             this.targetOffset += computeRotationData(this.target.details.rotation[this.phaseindex], images, this.data);
-            var offsets = computeBuffData(this.target.details.boonGraph[this.phaseindex], this.data);
-            this.targetOffset += offsets.actorOffset;
-            var dpsY = 'y' + (2 + offsets.y);
+            var oldOffset = this.targetOffset;
+            this.targetOffset += computeBuffData(this.target.details.boonGraph[this.phaseindex], this.data);
+            var dpsY = oldOffset === this.targetOffset ? 'y2' : 'y3';
             {
                 var health = this.graph.targets[this.phaseTargetIndex].health;
                 var hpTexts = [];
@@ -236,7 +236,7 @@ var compileTargetTab = function () {
                 yaxis: dpsY,
                 name: 'Total DPS'
             });
-            this.layout = getActorGraphLayout(images, offsets.y);
+            this.layout = getActorGraphLayout(images);
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase);
         },
         computed: {

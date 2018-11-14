@@ -307,7 +307,7 @@ function computePlayerDPS(playerid, graph, playerDPS, maxDPS, allDPS, lim, phase
     });
 }
 
-function getActorGraphLayout(images, boonYs) {
+function getActorGraphLayout(images) {
     return {
         barmode: 'stack',
         yaxis: {
@@ -315,6 +315,7 @@ function getActorGraphLayout(images, boonYs) {
             domain: [0, 0.09],
             fixedrange: true,
             showgrid: false,
+            showticklabels: false,
             color: '#cccccc',
             range: [0, 2]
         },
@@ -324,7 +325,7 @@ function getActorGraphLayout(images, boonYs) {
         hovermode: 'compare',
         yaxis2: {
             title: 'Buffs',
-            domain: [0.11, 0.55],
+            domain: [0.11, 0.67],
             color: '#cccccc',
             gridcolor: '#cccccc',
             fixedrange: true
@@ -333,7 +334,7 @@ function getActorGraphLayout(images, boonYs) {
             title: 'DPS',
             color: '#cccccc',
             gridcolor: '#cccccc',
-            domain: [0.56, 1]
+            domain: [0.68, 1]
         },
         images: images,
         font: {
@@ -383,7 +384,6 @@ function computeTargetHealthData(graph, targets, phase, data, yaxis) {
 }
 
 function computeBuffData(buffData, data) {
-    var ystart = -1;
     if (buffData) {
         for (var i = 0; i < buffData.length; i++) {
             var boonItem = buffData[i];
@@ -407,15 +407,9 @@ function computeBuffData(buffData, data) {
             }
             data.push(line);
         }
-        return {
-            actorOffset: buffData.length,
-            y: 1
-        };
+        return buffData.length;
     }
-    return {
-        actorOffset: 0,
-        y: ystart++
-    };
+    return 0;
 }
 
 var initTable = function (id, cell, order, orderCallBack) {
@@ -482,3 +476,119 @@ var DataTypes = {
     targetTab: 11,
     dpsGraph: 12
 };
+
+/*function getActorGraphLayout(images, boonYs, stackingBoons) {
+    var layout = {
+        barmode: 'stack',
+        yaxis: {
+            title: 'Rotation',
+            domain: [0, 0.1],
+            fixedrange: true,
+            showgrid: false,
+            showticklabels: false,
+            color: '#cccccc',
+            range: [0, 2]
+        },
+        legend: {
+            traceorder: 'reversed'
+        },
+        hovermode: 'compare',
+        images: images,
+        font: {
+            color: '#cccccc'
+        },
+        xaxis: {
+            title: 'Time(sec)',
+            color: '#cccccc',
+            gridcolor: '#cccccc',
+            xrangeslider: {}
+        },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        shapes: [],
+        annotations: [],
+        autosize: true,
+        width: 1100,
+        height: 1100,
+        datarevision: new Date().getTime(),
+    };
+    layout['yaxis' + (2 + boonYs)] = {
+        title: 'DPS',
+        color: '#cccccc',
+        gridcolor: '#cccccc',
+        domain: [0.75, 1]
+    };
+    var perBoon = 0.65 / boonYs;
+    var singleBuffs = boonYs;
+    if (stackingBoons) {
+        layout['yaxis' + (2 + boonYs - 1)] = {
+            title: 'Stacking Buffs',
+            color: '#cccccc',
+            gridcolor: '#cccccc',
+            domain: [0.70, 0.75]
+        };
+        perBoon = 0.6 / (boonYs - 1);
+        singleBuffs--;
+    }
+    for (var i = 0; i < singleBuffs; i++) {
+        layout['yaxis' + (2 + i)] = {
+            title: '',
+            color: '#cccccc',
+            showgrid: false,
+            showticklabels: false,
+            domain: [0.1 + i * perBoon, 0.1 + (i + 1) * perBoon]
+        };
+    }
+    return layout;
+}*/
+
+/*
+function computeBuffData(buffData, data) {
+    var ystart = 0;
+    if (buffData) {
+        var stackings = [];
+        var i;
+        for (i = buffData.length - 1; i >= 0; i--) {
+            var boonItem = buffData[i];
+            var boon = findSkill(true, boonItem.id);
+            var line = {
+                x: [],
+                y: [],
+                yaxis: boon.stacking ? 'stacking' : 'y' + (2 + ystart++),
+                type: 'scatter',
+                visible: boonItem.visible || !boon.stacking ? null : 'legendonly',
+                line: {
+                    color: boonItem.color,
+                    shape: 'hv'
+                },
+                fill: boon.stacking ? 'tozeroy' : 'toself',
+                name: boon.name,
+                showlegend: boon.stacking ? true : false,
+            };
+            for (var p = 0; p < boonItem.states.length; p++) {
+                line.x[p] = boonItem.states[p][0];
+                line.y[p] = boonItem.states[p][1];
+            }
+            if (boon.stacking) {
+                stackings.push(line);
+            }
+            data.push(line);
+        }
+        if (stackings.length) {
+            var axis = 'y' + (2 + ystart++);
+            for (i = 0; i < stackings.length; i++) {
+                stackings[i].yaxis = axis;
+            }
+        }
+        return {
+            actorOffset: buffData.length,
+            y: ystart,
+            stacking: stackings.length > 0
+        };
+    }
+    return {
+        actorOffset: 0,
+        y: 0,
+        stacking: false
+    };
+}*/

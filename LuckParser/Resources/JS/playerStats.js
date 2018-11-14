@@ -99,9 +99,9 @@ var compilePlayerTab = function () {
         created: function () {
             var images = [];
             this.playerOffset += computeRotationData(this.player.details.rotation[this.phaseindex], images, this.data);
-            var offsets = computeBuffData(this.player.details.boonGraph[this.phaseindex], this.data);
-            this.playerOffset += offsets.actorOffset;
-            var dpsY = 'y' + (2+offsets.y);
+            var oldOffset = this.playerOffset;
+            this.playerOffset += computeBuffData(this.player.details.boonGraph[this.phaseindex], this.data);
+            var dpsY = oldOffset === this.playerOffset ? 'y2' : 'y3';
             this.playerOffset += computeTargetHealthData(this.graph, this.targets, this.phase, this.data, dpsY);
             this.data.push({
                 y: [],
@@ -133,7 +133,7 @@ var compilePlayerTab = function () {
                 yaxis: dpsY,
                 name: 'Cleave DPS'
             });
-            this.layout = getActorGraphLayout(images, offsets.y);
+            this.layout = getActorGraphLayout(images);
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase);
         },
         computed: {
