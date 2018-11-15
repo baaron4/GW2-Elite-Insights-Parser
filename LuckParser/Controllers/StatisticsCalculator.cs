@@ -205,18 +205,17 @@ namespace LuckParser.Controllers
             }
         }
 
-        private FinalStats GetFinalTargetStats(Player p, int phaseIndex, Boss target)
+        private void FillFinalStats(List<DamageLog> dls, FinalStats final)
         {
-            PhaseData phase = _statistics.Phases[phaseIndex];
-            long start = phase.Start + _log.FightData.FightStart;
-            long end = phase.End + _log.FightData.FightStart;
-            FinalStats final = new FinalStats();
             HashSet<long> nonCritable = new HashSet<long>
                     {
-                        9292
+                        9292,
+                        52370
                     };
 
-            foreach (DamageLog dl in p.GetJustPlayerDamageLogs(target,_log, phase.Start, phase.End))
+            double scholarGain = 1.0462962963;
+            double eagleGain = 1.09259259259;
+            foreach ( DamageLog dl in dls)
             {
                 if (dl.IsCondi == 0)
                 {
@@ -229,13 +228,13 @@ namespace LuckParser.Controllers
                     if (dl.IsNinety > 0)
                     {
                         final.ScholarRate++;
-                        final.ScholarDmg += (int)(dl.Damage / 21.0); //regular+5% damage
+                        final.ScholarDmg += (int)((scholarGain - 1.0)/scholarGain * dl.Damage); 
                     }
 
                     if (dl.IsFifty > 0)
                     {
                         final.EagleRate++;
-                        final.EagleDmg += (int)(dl.Damage / 11.0); //regular+10% damage
+                        final.EagleDmg += (int)((eagleGain - 1.0) / eagleGain * dl.Damage);
                     }
 
                     if (dl.IsMoving > 0)
@@ -271,6 +270,15 @@ namespace LuckParser.Controllers
                     }
                 }
             }
+        }
+
+        private FinalStats GetFinalTargetStats(Player p, int phaseIndex, Boss target)
+        {
+            PhaseData phase = _statistics.Phases[phaseIndex];
+            long start = phase.Start + _log.FightData.FightStart;
+            long end = phase.End + _log.FightData.FightStart;
+            FinalStats final = new FinalStats();
+            FillFinalStats(p.GetJustPlayerDamageLogs(target, _log, phase.Start, phase.End), final);
             return final;
         }
 
@@ -280,68 +288,7 @@ namespace LuckParser.Controllers
             long start = phase.Start + _log.FightData.FightStart;
             long end = phase.End + _log.FightData.FightStart;
             FinalStatsAll final = new FinalStatsAll();
-            HashSet<long> nonCritable = new HashSet<long>
-                    {
-                        9292,
-                        52370
-                    };
-
-            foreach (DamageLog dl in p.GetJustPlayerDamageLogs(null, _log, phase.Start, phase.End))
-            {
-                if (dl.IsCondi == 0)
-                {
-                    if (dl.Result == ParseEnum.Result.Crit)
-                    {
-                        final.CriticalRate++;
-                        final.CriticalDmg += dl.Damage;
-                    }
-
-                    if (dl.IsNinety > 0)
-                    {
-                        final.ScholarRate++;
-                        final.ScholarDmg += (int)(dl.Damage / 21.0); //regular+5% damage
-                    }
-
-                    if (dl.IsFifty > 0)
-                    {
-                        final.EagleRate++;
-                        final.EagleDmg += (int)(dl.Damage / 11.0); //regular+10% damage
-                    }
-
-                    if (dl.IsMoving > 0)
-                    {
-                        final.MovingRate++;
-                        final.MovingDamage += (int)(dl.Damage / 21.0);
-                    }
-
-                    final.FlankingRate += dl.IsFlanking;
-
-                    if (dl.Result == ParseEnum.Result.Glance)
-                    {
-                        final.GlanceRate++;
-                    }
-
-                    if (dl.Result == ParseEnum.Result.Blind)
-                    {
-                        final.Missed++;
-                    }
-
-                    if (dl.Result == ParseEnum.Result.Interrupt)
-                    {
-                        final.Interrupts++;
-                    }
-
-                    if (dl.Result == ParseEnum.Result.Absorb)
-                    {
-                        final.Invulned++;
-                    }
-                    final.PowerLoopCount++;
-                    if (!nonCritable.Contains(dl.SkillId))
-                    {
-                        final.CritablePowerLoopCount++;
-                    }
-                }
-            }
+            FillFinalStats(p.GetJustPlayerDamageLogs(null, _log, phase.Start, phase.End), final);
             if (p.Account == ":Conjured Sword")
             {
                 return final;
