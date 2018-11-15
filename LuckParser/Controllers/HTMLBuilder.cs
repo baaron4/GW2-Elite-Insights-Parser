@@ -174,34 +174,37 @@ namespace LuckParser.Controllers
 
                 List<object> playerData = new List<object>
                 {
-                    stats.PowerLoopCount, //0
-                    stats.CritablePowerLoopCount, //1
-                    stats.CriticalRate, //2
-                    stats.CriticalDmg, //3
+                    stats.PowerLoopCount,
+                    stats.CritablePowerLoopCount, 
+                    stats.CriticalRate, 
+                    stats.CriticalDmg, 
                     
-                    stats.ScholarRate, //4
-                    stats.ScholarDmg, //5
-                    dps.PlayerPowerDamage,//6
+                    stats.ScholarRate, 
+                    stats.ScholarDmg, 
+                    dps.PlayerPowerDamage,
                     
-                    stats.MovingRate, //7
-                    stats.MovingDamage, //8
+                    stats.MovingRate, 
+                    stats.MovingDamage, 
                     
-                    stats.FlankingRate, //9
+                    stats.FlankingRate, 
                     
-                    stats.GlanceRate, //10
+                    stats.GlanceRate, 
 
-                    stats.Missed, //11
-                    stats.Interrupts, //12
-                    stats.Invulned, //13
+                    stats.Missed, 
+                    stats.Interrupts, 
+                    stats.Invulned,
 
-                    stats.TimeWasted, //14
-                    stats.Wasted, //15
+                    stats.EagleRate,
+                    stats.EagleDmg, 
+                    // commons
+                    stats.TimeWasted, 
+                    stats.Wasted, 
 
-                    stats.TimeSaved, //16
-                    stats.Saved, //17
+                    stats.TimeSaved, 
+                    stats.Saved, 
 
-                    stats.SwapCount, //18
-                    Math.Round(stats.StackDist, 2) //19
+                    stats.SwapCount, 
+                    Math.Round(stats.StackDist, 2) 
                 };
                 list.Add(playerData);
             }
@@ -226,26 +229,29 @@ namespace LuckParser.Controllers
                     Statistics.FinalStats statsTarget = _statistics.StatsTarget[target][player][phaseIndex];
                     Statistics.FinalDPS dpsTarget = _statistics.DpsTarget[target][player][phaseIndex];
                     playerData.Add(new List<object>(){
-                        statsTarget.PowerLoopCount, //0
+                        statsTarget.PowerLoopCount,
 
-                        statsTarget.CritablePowerLoopCount, //1
-                        statsTarget.CriticalRate, //2
-                        statsTarget.CriticalDmg, //3
+                        statsTarget.CritablePowerLoopCount, 
+                        statsTarget.CriticalRate,
+                        statsTarget.CriticalDmg, 
                         
-                        statsTarget.ScholarRate, //4
-                        statsTarget.ScholarDmg, //5
-                        dpsTarget.PlayerPowerDamage,//6
+                        statsTarget.ScholarRate,
+                        statsTarget.ScholarDmg,
+                        dpsTarget.PlayerPowerDamage,
                         
-                        statsTarget.MovingRate, //7
-                        statsTarget.MovingDamage, //8
+                        statsTarget.MovingRate,
+                        statsTarget.MovingDamage,
                         
-                        statsTarget.FlankingRate, //9
+                        statsTarget.FlankingRate,
                         
-                        statsTarget.GlanceRate, //10
+                        statsTarget.GlanceRate,
 
-                        statsTarget.Missed, //11
-                        statsTarget.Interrupts, //12
-                        statsTarget.Invulned //13
+                        statsTarget.Missed,
+                        statsTarget.Interrupts,
+                        statsTarget.Invulned,
+
+                        statsTarget.EagleRate,
+                        statsTarget.EagleDmg,
                     });
                 }
                 list.Add(playerData);
