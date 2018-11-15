@@ -68,7 +68,7 @@ namespace LuckParser.Models
                 fightData.FightStart = enterCombat.Time;
             }
             // Deimos gadgets
-            List<AgentItem> deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos")).OrderBy(x => x.LastAware).ToList();
+            List<AgentItem> deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos") && x.LastAware > target.LastAware).ToList();
             if (deimosGadgets.Count > 0)
             {
                 CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.Time > combatData.First().Time && x.DstAgent > 0);
@@ -90,17 +90,22 @@ namespace LuckParser.Models
                 target.AgentItem.InstID = instID;
                 agentData.Refresh();
                 // update combat data
-                HashSet<ulong> agents = new HashSet<ulong>(deimosGadgets.Select(x => x.Agent));
-                agents.Add(target.Agent);
+                HashSet<ulong> gadgetAgents = new HashSet<ulong>(deimosGadgets.Select(x => x.Agent));
+                HashSet<ulong> allAgents = new HashSet<ulong>(gadgetAgents);
+                allAgents.Add(target.Agent);
                 foreach (CombatItem c in combatData)
                 {
-                    if (agents.Contains(c.SrcAgent))
+                    if (gadgetAgents.Contains(c.SrcAgent) && c.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate)
+                    {
+                        continue;
+                    }
+                    if (allAgents.Contains(c.SrcAgent))
                     {
                         c.SrcInstid = target.InstID;
                         c.SrcAgent = target.Agent;
 
                     }
-                    if (agents.Contains(c.DstAgent))
+                    if (allAgents.Contains(c.DstAgent))
                     {
                         c.DstInstid = target.InstID;
                         c.DstAgent = target.Agent;
@@ -145,7 +150,7 @@ namespace LuckParser.Models
                 if (i == 2) phases[i].DrawArea = true;
             }
             int offsetDei = phases.Count;
-            CombatItem teleport = log.GetBoonData(38169).FirstOrDefault(x => x.Time > log.FightData.FightStart);
+            CombatItem teleport = log.GetBoonData(38169).FirstOrDefault(x => x.Time > log.FightData.FightStart + 5000);
             int splits = 0;
             while (teleport != null && splits < 3)
             {

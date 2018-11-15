@@ -54,6 +54,8 @@ namespace LuckParser.Models.DataModels
             public int CriticalDmg;
             public int ScholarRate;
             public int ScholarDmg;
+            public int EagleRate;
+            public int EagleDmg;
             public int MovingRate;
             public int MovingDamage;
             public int FlankingRate;
