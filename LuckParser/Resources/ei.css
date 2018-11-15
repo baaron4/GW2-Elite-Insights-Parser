@@ -2,6 +2,39 @@
     border-top: 0;
 }
 
+body {
+    font-family: -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        "Helvetica Neue",
+        Arial,
+        sans-serif,
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Segoe UI Symbol";
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+    margin-bottom: 0.5rem;
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.2;
+    color: inherit;
+}
+
 .header {
     text-align: center;
     width: 100%;
@@ -146,6 +179,11 @@ th {
     background-color: rgba(245, 245, 245, 1);
 }
 
+
+.theme-cosmo .nav-pills .nav-link {
+    border: 1px solid #2780E3;
+    border-radius: 0.25rem;
+}
 .theme-cosmo .nav-pills .nav-link:not(.active) {
     background-color: rgba(245, 245, 245, 1);
 }
@@ -155,11 +193,24 @@ th {
 .theme-cosmo .nav-pills .nav-link.active:hover {
     color: #373a3c;
 }
-.theme-cosmo .nav-pills .nav-link {
-    border: 1px solid transparent;  
-}
 .theme-cosmo .nav-pills .nav-link:hover, .nav-pills .nav-link:focus {
     background-color: #2780E3;
+}
+
+.theme-cosmo .nav-tabs .nav-link {
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+}
+.theme-cosmo .nav-tabs .nav-link.active {
+    border: 1px solid #2780E3;
+    border-bottom-color: transparent;
+}
+.theme-cosmo .nav-tabs .nav-link.active:hover {
+    border: 1px solid #2780E3;
+    border-bottom-color: transparent;
+}
+.theme-cosmo .nav-tabs .nav-link:hover {
+    border: 1px solid #2780E3;
 }
 
 .theme-cosmo .card {
@@ -198,23 +249,39 @@ th {
 }
 
 .theme-slate .player-cell:hover:not(.active) {
-    background-color: rgba(25, 80, 0, 0.5);
+    background-color: rgba(40, 75, 0, 0.5);
 }
 
 .theme-cosmo .player-cell.active {
-    background-color: rgba(125, 220, 0, 0.5);
+    background-color: rgba(100, 200, 0, 0.5);
 }
 
 .theme-cosmo .player-cell:hover:not(.active) {
-    background-color: rgba(75, 150, 0, 0.5);
+    background-color: rgba(120, 240, 0, 0.5);
 }
 
-.target-cell.active {
-    filter: drop-shadow(0px 0px 6px #3D0);
+.theme-slate .target-cell.active {
+    border: 2px solid rgba(50, 120, 0, 0.5);
+    border-radius: 50%;
+    filter: drop-shadow(0px 0px 6px rgba(50, 120, 0, 1.0));
 }
 
-.target-cell:hover:not(.active) {
-    filter: drop-shadow(0px 0px 6px #290);
+.theme-slate .target-cell:hover:not(.active) {
+    border: 2px solid rgba(40, 75, 0, 0.5);
+    border-radius: 50%;
+    filter: drop-shadow(0px 0px 6px rgba(40, 75, 0, 1.0));
+}
+
+.theme-cosmo .target-cell.active {
+    border: 2px solid rgba(100, 200, 0, 0.5);
+    border-radius: 50%;
+    filter: drop-shadow(0px 0px 6px rgba(100, 200, 0, 1.0));
+}
+
+.theme-cosmo .target-cell:hover:not(.active) {
+    border: 2px solid rgba(120, 240, 0, 0.5);
+    border-radius: 50%;
+    filter: drop-shadow(0px 0px 6px rgba(120, 240, 0, 1.0));
 }
 
 .slidecontainer {
@@ -254,7 +321,7 @@ th {
 
 
 .theme-cosmo table tbody tr.active {
-    background-color: rgba(125, 220, 0, 0.5);
+    background-color: rgba(100, 200, 0, 0.5);
 }
 .theme-slate table tbody tr.active {
     background-color: rgba(50, 120, 0, 0.5);
