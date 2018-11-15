@@ -219,7 +219,7 @@ var compileGeneralStats = function () {
             };
         },
         mounted() {
-            initTable("#dmg-table", 4, "desc");
+            initTable("#dmg-table", 1, "desc");
         },
         updated() {
             updateTable("#dmg-table");
@@ -407,7 +407,7 @@ var compileGeneralStats = function () {
             }
         },
         mounted() {
-            initTable("#dmgmodifier-table", 0, "asc");
+            initTable("#dmgmodifier-table", 1, "asc");
         },
         updated() {
             updateTable('#dmgmodifier-table');
