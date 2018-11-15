@@ -1511,10 +1511,10 @@ namespace LuckParser.Controllers
                 }
                 else
                 {
-                    if (_log.LegacyTarget.HealthOverTime.Count > 0)
+                    if (target.HealthOverTime.Count > 0)
                     {
-                        tar.percent = Math.Round(target.HealthOverTime[target.HealthOverTime.Count - 1].Y * 0.01, 2);
-                        tar.hpLeft = (int)Math.Floor(100.0 - target.HealthOverTime[target.HealthOverTime.Count - 1].Y * 0.01);
+                        tar.percent = Math.Round(100.0 - target.HealthOverTime[target.HealthOverTime.Count - 1].Y * 0.01, 2);
+                        tar.hpLeft = (int)Math.Floor(target.HealthOverTime[target.HealthOverTime.Count - 1].Y * 0.01);
                     }
                 }
                 foreach (KeyValuePair<string, Minions> pair in target.GetMinions(_log))
