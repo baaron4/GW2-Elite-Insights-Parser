@@ -233,15 +233,15 @@ var compileGeneralStats = function () {
                 var rows = [];
                 for (var i = 0; i < phase.dmgStats.length; i++) {
                     var commons = [];
-                    var data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                    var data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                     var player = this.players[i];
                     if (player.isConjure) {
                         continue;
                     }
                     var stats = phase.dmgStats[i];
                     for (var j = 0; j < stats.length; j++) {
-                        if (j >= 14) {
-                            commons[j - 14] = stats[j];
+                        if (j >= 16) {
+                            commons[j - 16] = stats[j];
                         } else {
                             data[j] = stats[j];
                         }
@@ -270,15 +270,15 @@ var compileGeneralStats = function () {
                 var rows = [];
                 for (i = 0; i < phase.dmgStats.length; i++) {
                     var commons = [];
-                    var data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                    var data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                     var player = this.players[i];
                     if (player.isConjure) {
                         continue;
                     }
                     var stats = phase.dmgStats[i];
                     for (var j = 0; j < stats.length; j++) {
-                        if (j >= 14) {
-                            commons[j - 14] = stats[j];
+                        if (j >= 16) {
+                            commons[j - 16] = stats[j];
                         } else {
                             for (var k = 0; k < this.activetargets.length; k++) {
                                 var tar = phase.dmgStatsTargets[i][this.activetargets[k]];
