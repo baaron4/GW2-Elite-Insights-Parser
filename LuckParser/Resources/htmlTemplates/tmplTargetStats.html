@@ -30,6 +30,6 @@
     <keep-alive>
         <target-tab-component v-for="(target, targetid) in targets" :key="targetid" v-if="phase.focus === target"
             :target="target" :targetindex="targetid" :graphdata="graphdata" :phaseindex="phaseindex" :phase="phase" :phases="phases" :players="players" :boons="boons"
-            :conditions="conditions" :mode="mode"></target-tab-component>
+            :conditions="conditions" :mode="mode" :light="light"></target-tab-component>
     </keep-alive>
 </div>

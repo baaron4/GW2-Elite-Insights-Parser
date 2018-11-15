@@ -2,7 +2,7 @@
 
 var compileGraphs = function () {
     Vue.component("graph-stats-component", {
-        props: ["phases", "activetargets", "targets", "players", 'graphdata', "phaseid", 'selectedplayerindex'],
+        props: ["phases", "activetargets", "targets", "players", 'graphdata', "phaseid", 'selectedplayerindex', 'light'],
         template: "#tmplGraphStats",
         data: function () {
             return {
@@ -11,7 +11,7 @@ var compileGraphs = function () {
         }
     });
     Vue.component("dps-graph-component", {
-        props: ["phases", "activetargets", "targets", "players", 'mechanics', 'graph', 'mode', 'phase', 'phaseid', 'selectedplayerindex'],
+        props: ["phases", "activetargets", "targets", "players", 'mechanics', 'graph', 'mode', 'phase', 'phaseid', 'selectedplayerindex', 'light'],
         template: "#tmplDPSGraph",
         data: function () {
             return {
@@ -25,18 +25,19 @@ var compileGraphs = function () {
         created: function () {
             // layout - constant during whole lifetime
             var i, j;
+            var textColor = this.light ? '#495057' : '#cccccc';
             this.layout = {
                 yaxis: {
                     title: 'DPS',
                     fixedrange: false,
                     rangemode: 'tozero',
-                    gridcolor: '#cccccc',
-                    color: '#cccccc'
+                    gridcolor: textColor,
+                    color: textColor
                 },
                 xaxis: {
                     title: 'Time(sec)',
-                    color: '#cccccc',
-                    gridcolor: '#cccccc',
+                    color: textColor,
+                    gridcolor: textColor,
                     xrangeslider: {}
                 },
                 hovermode: 'compare',
@@ -48,7 +49,7 @@ var compileGraphs = function () {
                     y: -0.1
                 },
                 font: {
-                    color: '#cccccc'
+                    color: textColor
                 },
                 paper_bgcolor: 'rgba(0,0,0,0)',
                 plot_bgcolor: 'rgba(0,0,0,0)',
@@ -150,6 +151,17 @@ var compileGraphs = function () {
                     this.layout.datarevision = new Date().getTime();
                 },
                 deep: true
+            },
+            light: {
+                handler: function () {
+                    var textColor = this.light ? '#495057' : '#cccccc';
+                    this.layout.yaxis.gridcolor = textColor;
+                    this.layout.yaxis.color = textColor;
+                    this.layout.xaxis.gridcolor = textColor;
+                    this.layout.xaxis.color = textColor;
+                    this.layout.font.color = textColor;
+                    this.layout.datarevision = new Date().getTime();
+                }
             }
         },
         computed: {

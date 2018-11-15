@@ -307,7 +307,7 @@ function computePlayerDPS(playerid, graph, playerDPS, maxDPS, allDPS, lim, phase
     });
 }
 
-function getActorGraphLayout(images) {
+function getActorGraphLayout(images, color) {
     return {
         barmode: 'stack',
         yaxis: {
@@ -316,7 +316,7 @@ function getActorGraphLayout(images) {
             fixedrange: true,
             showgrid: false,
             showticklabels: false,
-            color: '#cccccc',
+            color: color,
             range: [0, 2]
         },
         legend: {
@@ -326,24 +326,24 @@ function getActorGraphLayout(images) {
         yaxis2: {
             title: 'Buffs',
             domain: [0.11, 0.67],
-            color: '#cccccc',
-            gridcolor: '#cccccc',
+            color: color,
+            gridcolor: color,
             fixedrange: true
         },
         yaxis3: {
             title: 'DPS',
-            color: '#cccccc',
-            gridcolor: '#cccccc',
+            color: color,
+            gridcolor: color,
             domain: [0.68, 1]
         },
         images: images,
         font: {
-            color: '#cccccc'
+            color: color
         },
         xaxis: {
             title: 'Time(sec)',
-            color: '#cccccc',
-            gridcolor: '#cccccc',
+            color: color,
+            gridcolor: color,
             xrangeslider: {}
         },
         paper_bgcolor: 'rgba(0,0,0,0)',

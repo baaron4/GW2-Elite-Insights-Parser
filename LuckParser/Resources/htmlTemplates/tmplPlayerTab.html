@@ -7,7 +7,7 @@
         <player-graph-tab-component v-for="(ph, id) in phases" v-if="tabmode === 2 && id === phaseindex" :key="id" :player="player" :playerindex="playerindex" 
                             :phase="ph" :phaseindex="id" :phases="phases"
                             :activetargets="activetargets" :targets="targets" 
-                            :graph="graphdata.phases[id]" ></player-graph-tab-component>
+                            :graph="graphdata.phases[id]" :light="light" ></player-graph-tab-component>
         <simplerotation-component v-if="tabmode === 3" :rotation="player.details.rotation[phaseindex]"></simplerotation-component>
         <deathrecap-component v-if="tabmode === 4" :playerindex="playerindex" :phase="phase"
             :recaps="player.details.deathRecap"></deathrecap-component>

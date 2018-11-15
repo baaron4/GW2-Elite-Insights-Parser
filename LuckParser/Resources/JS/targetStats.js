@@ -148,12 +148,12 @@ var compileTargetTab = function () {
     });
     // tab
     Vue.component("target-tab-component", {
-        props: ["target", "phaseindex", "players", "phase", "graphdata", "boons", "conditions", 'targetindex', 'phases', 'mode'],
+        props: ["target", "phaseindex", "players", "phase", "graphdata", "boons", "conditions", 'targetindex', 'phases', 'mode', 'light'],
         template: "#tmplTargetTab",
     });
     // stats
     Vue.component("target-stats-component", {
-        props: ["players", "targets", "phase", "phaseindex", "graphdata", "presentboons", "presentconditions", 'phases'],
+        props: ["players", "targets", "phase", "phaseindex", "graphdata", "presentboons", "presentconditions", 'phases', 'light'],
         template: "#tmplTargetStats",
         data: function () {
             return {
@@ -190,7 +190,7 @@ var compileTargetTab = function () {
     });
 
     Vue.component("target-graph-tab-component", {
-        props: ["targetindex", "target", "phase", "phases", "phaseindex", "graph"],
+        props: ["targetindex", "target", "phase", "phases", "phaseindex", "graph", 'light'],
         data: function () {
             return {
                 dpsmode: 0,
@@ -200,6 +200,23 @@ var compileTargetTab = function () {
                 dataCache: new Map(),
                 targetOffset: 0
             };
+        },
+        watch: {
+            light: {
+                handler: function () {
+                    var textColor = this.light ? '#495057' : '#cccccc';
+                    this.layout.yaxis.gridcolor = textColor;
+                    this.layout.yaxis.color = textColor;
+                    this.layout.yaxis2.gridcolor = textColor;
+                    this.layout.yaxis2.color = textColor;
+                    this.layout.yaxis3.gridcolor = textColor;
+                    this.layout.yaxis3.color = textColor;
+                    this.layout.xaxis.gridcolor = textColor;
+                    this.layout.xaxis.color = textColor;
+                    this.layout.font.color = textColor;
+                    this.layout.datarevision = new Date().getTime();
+                }
+            }
         },
         created: function () {
             var images = [];
@@ -236,7 +253,7 @@ var compileTargetTab = function () {
                 yaxis: dpsY,
                 name: 'Total DPS'
             });
-            this.layout = getActorGraphLayout(images);
+            this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc');
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase);
         },
         computed: {

@@ -85,7 +85,7 @@ var compilePlayerTab = function () {
     });
 
     Vue.component("player-graph-tab-component", {
-        props: ["playerindex", "player", "phase", "phases", "phaseindex", "activetargets", "targets", "graph"],
+        props: ["playerindex", "player", "phase", "phases", "phaseindex", "activetargets", "targets", "graph", "light"],
         data: function () {
             return {
                 dpsmode: 0,
@@ -95,6 +95,23 @@ var compilePlayerTab = function () {
                 dataCache: new Map(),
                 playerOffset: 0
             };
+        },
+        watch: {
+            light: {
+                handler: function() {
+                    var textColor = this.light ? '#495057' : '#cccccc';
+                    this.layout.yaxis.gridcolor = textColor;
+                    this.layout.yaxis.color = textColor;
+                    this.layout.yaxis2.gridcolor = textColor;
+                    this.layout.yaxis2.color = textColor;
+                    this.layout.yaxis3.gridcolor = textColor;
+                    this.layout.yaxis3.color = textColor;
+                    this.layout.xaxis.gridcolor = textColor;
+                    this.layout.xaxis.color = textColor;
+                    this.layout.font.color = textColor;
+                    this.layout.datarevision = new Date().getTime();
+                }
+            }
         },
         created: function () {
             var images = [];
@@ -133,7 +150,7 @@ var compilePlayerTab = function () {
                 yaxis: dpsY,
                 name: 'Cleave DPS'
             });
-            this.layout = getActorGraphLayout(images);
+            this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc');
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase);
         },
         computed: {
@@ -383,13 +400,13 @@ var compilePlayerTab = function () {
     // tab
     Vue.component('player-tab-component', {
         props: ['player', 'playerindex', 'phase', 'tabmode',
-            'phaseindex', 'activetargets', 'targets', 'phases', 'graphdata'
+            'phaseindex', 'activetargets', 'targets', 'phases', 'graphdata', 'light'
         ],
         template: "#tmplPlayerTab",
     });
     // stats
     Vue.component("player-stats-component", {
-        props: ["players", "phaseindex", "phase", 'activetargets', 'activeplayer', 'targets', 'phases', 'graphdata'],
+        props: ["players", "phaseindex", "phase", 'activetargets', 'activeplayer', 'targets', 'phases', 'graphdata', 'light'],
         template: "#tmplPlayerStats",
         data: function () {
             return {

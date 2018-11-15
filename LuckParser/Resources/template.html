@@ -95,7 +95,7 @@
                     :players="logdata.players"></defense-stats-component>
                 <graph-stats-component v-if="dataType === datatypes.dpsGraph" :phases="logdata.phases" :players="logdata.players"
                     :targets="logdata.targets" :activetargets="activePhaseTargets" :phaseid="activePhase" :graphdata="logdata.graphData"
-                    :selectedplayerindex="activePlayer"></graph-stats-component>
+                    :selectedplayerindex="activePlayer" :light="light"></graph-stats-component>
                 <buff-stats-component v-if="dataType <= datatypes.defensiveBuffTable && dataType>= datatypes.boonTable"
                     :datatypes="datatypes" :datatype="dataType" :phase="logdata.phases[activePhase]" :players="logdata.players"
                     :presentboons="logdata.boons" :presentoffs="logdata.offBuffs" :presentdefs="logdata.defBuffs"></buff-stats-component>
@@ -105,10 +105,10 @@
                     :players="logdata.players" :enemies="logdata.enemies"></mechanics-stats-component>
                 <target-stats-component v-if="dataType === datatypes.targetTab" :players="logdata.players" :targets="logdata.targets"
                     :phase="logdata.phases[activePhase]" :phaseindex="activePhase" :presentboons="logdata.boons"
-                    :presentconditions="logdata.conditions" :phases="logdata.phases" :graphdata="logdata.graphData"></target-stats-component>
+                    :presentconditions="logdata.conditions" :phases="logdata.phases" :graphdata="logdata.graphData" :light="light"></target-stats-component>
                 <player-stats-component v-if="dataType === datatypes.playerTab" :players="logdata.players"
                     :activeplayer="activePlayer" :phaseindex="activePhase" :phase="logdata.phases[activePhase]" :phases="logdata.phases"
-                    :graphdata="logdata.graphData" :targets="logdata.targets" :activetargets="activePhaseTargets"></player-stats-component>
+                    :graphdata="logdata.graphData" :targets="logdata.targets" :activetargets="activePhaseTargets" :light="light"></player-stats-component>
             </keep-alive>
         </div>
         <div id="combat-replay" v-show="mode === 1">
