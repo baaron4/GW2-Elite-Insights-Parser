@@ -13,17 +13,17 @@ namespace LuckParser.Models
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(34108, "Shell-Shocked", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Sabetha, "symbol:'circle-open',color:'rgb(0,128,0)'", "Lnchd","Shell-Shocked (launched up to cannons)", "Shell-Shocked",0),
-            new Mechanic(31473, "Sapper Bomb", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Sabetha, "symbol:'circle',color:'rgb(0,128,0)'", "SBmb","Got a Sapper Bomb", "Sapper Bomb",0),
-            new Mechanic(31485, "Time Bomb", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Sabetha, "symbol:'circle-open',color:'rgb(255,0,0)'", "TBmb","Got a Timed Bomb (Expanding circle)", "Timed Bomb",0),
-            new Mechanic(31332, "Firestorm", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Sabetha, "symbol:'square',color:'rgb(255,0,0)'", "Flmwll","Firestorm (killed by Flamewall)", "Flamewall",0),
-            new Mechanic(31544, "Flak Shot", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Sabetha, "symbol:'hexagram-open',color:'rgb(255,140,0)'", "Flak","Flak Shot (Fire Patches)", "Flak Shot",0),
-            new Mechanic(31643, "Cannon Barrage", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Sabetha, "symbol:'circle',color:'rgb(255,200,0)'", "Cannon","Cannon Barrage (stood in AoE)", "Cannon Shot",0),
-            new Mechanic(31761, "Flame Blast", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Sabetha, "symbol:'triangle-left-open',color:'rgb(255,200,0)'", "Flmthrwr","Flame Blast (Karde's Flamethrower)", "Flamethrower (Karde)",0),
-            new Mechanic(31408, "Kick", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Sabetha, "symbol:'triangle-right',color:'rgb(255,0,255)'", "Kick","Kicked by Bandit", "Bandit Kick",0),
-            new Mechanic(31763, "Platform Quake", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Sabetha, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "CC","Platform Quake (Breakbar)","Breakbar",0),
-            new Mechanic(31763, "Platform Quake", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Sabetha, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "CCed","Platform Quake (Breakbar broken) ", "CCed",0,(condition => condition.CombatItem.Value <=4400)),
-            new Mechanic(31763, "Platform Quake", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Sabetha, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "CC.Fail","Platform Quake (Breakbar failed) ", "CC Fail",0,(condition => condition.CombatItem.Value >4400)),
+            new Mechanic(34108, "Shell-Shocked", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Sabetha, "symbol:'circle-open',color:'rgb(0,128,0)'", "Lnchd","Shell-Shocked (launched up to cannons)", "Shell-Shocked",0),
+            new Mechanic(31473, "Sapper Bomb", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Sabetha, "symbol:'circle',color:'rgb(0,128,0)'", "SBmb","Got a Sapper Bomb", "Sapper Bomb",0),
+            new Mechanic(31485, "Time Bomb", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Sabetha, "symbol:'circle-open',color:'rgb(255,0,0)'", "TBmb","Got a Timed Bomb (Expanding circle)", "Timed Bomb",0),
+            new Mechanic(31332, "Firestorm", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Sabetha, "symbol:'square',color:'rgb(255,0,0)'", "Flmwll","Firestorm (killed by Flamewall)", "Flamewall",0),
+            new Mechanic(31544, "Flak Shot", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Sabetha, "symbol:'hexagram-open',color:'rgb(255,140,0)'", "Flak","Flak Shot (Fire Patches)", "Flak Shot",0),
+            new Mechanic(31643, "Cannon Barrage", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Sabetha, "symbol:'circle',color:'rgb(255,200,0)'", "Cannon","Cannon Barrage (stood in AoE)", "Cannon Shot",0),
+            new Mechanic(31761, "Flame Blast", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Sabetha, "symbol:'triangle-left-open',color:'rgb(255,200,0)'", "Flmthrwr","Flame Blast (Karde's Flamethrower)", "Flamethrower (Karde)",0),
+            new Mechanic(31408, "Kick", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Sabetha, "symbol:'triangle-right',color:'rgb(255,0,255)'", "Kick","Kicked by Bandit", "Bandit Kick",0),
+            new Mechanic(31763, "Platform Quake", Mechanic.MechType.EnemyCastStart, ParseEnum.TargetIDS.Sabetha, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "CC","Platform Quake (Breakbar)","Breakbar",0),
+            new Mechanic(31763, "Platform Quake", Mechanic.MechType.EnemyCastEnd, ParseEnum.TargetIDS.Sabetha, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "CCed","Platform Quake (Breakbar broken) ", "CCed",0,(condition => condition.CombatItem.Value <=4400)),
+            new Mechanic(31763, "Platform Quake", Mechanic.MechType.EnemyCastEnd, ParseEnum.TargetIDS.Sabetha, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "CC.Fail","Platform Quake (Breakbar failed) ", "CC Fail",0,(condition => condition.CombatItem.Value >4400)),
             // Hit by Time Bomb could be implemented by checking if a person is affected by ID 31324 (1st Time Bomb) or 34152 (2nd Time Bomb, only below 50% boss HP) without being attributed a bomb (ID: 31485) 3000ms before (+-50ms). I think the actual heavy hit isn't logged because it may be percentage based. Nothing can be found in the logs.
             });
             Extension = "sab";
@@ -45,7 +45,7 @@ namespace LuckParser.Models
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Sabetha);
+            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Sabetha);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -100,7 +100,7 @@ namespace LuckParser.Models
                 } else
                 {
                     phase.Targets.Add(mainTarget);
-                    Boss addTarget;
+                    Target addTarget;
                     switch (i)
                     {
                         case 3:
@@ -137,20 +137,20 @@ namespace LuckParser.Models
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.BossIDS.Sabetha,
+                (ushort)ParseEnum.TargetIDS.Sabetha,
                 (ushort)Kernan,
                 (ushort)Knuckles,
                 (ushort)Karde,
             };
         }
 
-        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
         {
-            CombatReplay replay = boss.CombatReplay;
-            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
-            switch (boss.ID)
+            CombatReplay replay = target.CombatReplay;
+            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (target.ID)
             {
-                case (ushort)ParseEnum.BossIDS.Sabetha:
+                case (ushort)ParseEnum.TargetIDS.Sabetha:
                     List<CastLog> flameWall = cls.Where(x => x.SkillId == 31332).ToList();
                     foreach (CastLog c in flameWall)
                     {
@@ -162,8 +162,8 @@ namespace LuckParser.Models
                         if (facing != null)
                         {
                             int initialDirection = (int)(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI);
-                            replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, initialDirection, width / 2, new Tuple<int, int>(start, start + preCastTime), "rgba(255, 100, 0, 0.2)", new AgentConnector(boss)));
-                            replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, initialDirection, width / 2, 360, new Tuple<int, int>(start + preCastTime, start + preCastTime + duration), "rgba(255, 50, 0, 0.5)", new AgentConnector(boss)));
+                            replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, initialDirection, width / 2, new Tuple<int, int>(start, start + preCastTime), "rgba(255, 100, 0, 0.2)", new AgentConnector(target)));
+                            replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, initialDirection, width / 2, 360, new Tuple<int, int>(start + preCastTime, start + preCastTime + duration), "rgba(255, 50, 0, 0.5)", new AgentConnector(target)));
                         }
                     }
                     break;
@@ -182,9 +182,9 @@ namespace LuckParser.Models
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start);
                         if (facing != null)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 28, new Tuple<int, int>(firstConeStart, firstConeEnd), "rgba(255,200,0,0.3)",new AgentConnector(boss)));
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 54, new Tuple<int, int>(secondConeStart, secondConeEnd), "rgba(255,200,0,0.3)", new AgentConnector(boss)));
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 81, new Tuple<int, int>(thirdConeStart, thirdConeEnd), "rgba(255,200,0,0.3)", new AgentConnector(boss)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 28, new Tuple<int, int>(firstConeStart, firstConeEnd), "rgba(255,200,0,0.3)",new AgentConnector(target)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 54, new Tuple<int, int>(secondConeStart, secondConeEnd), "rgba(255,200,0,0.3)", new AgentConnector(target)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 81, new Tuple<int, int>(thirdConeStart, thirdConeEnd), "rgba(255,200,0,0.3)", new AgentConnector(target)));
                         }
                     }
                     break;
@@ -192,7 +192,7 @@ namespace LuckParser.Models
                     List<CastLog> breakbar = cls.Where(x => x.SkillId == 31763).ToList();
                     foreach (CastLog c in breakbar)
                     {
-                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(boss)));
+                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 case (ushort)Karde:
@@ -205,7 +205,7 @@ namespace LuckParser.Models
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start);
                         if (facing != null)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 60, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)", new AgentConnector(boss)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 60, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)));
                         }
                     }
                     break;

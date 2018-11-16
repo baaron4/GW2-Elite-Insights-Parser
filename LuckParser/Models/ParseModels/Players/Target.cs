@@ -8,10 +8,10 @@ using System.Linq;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class Boss : AbstractMasterPlayer
+    public class Target : AbstractMasterPlayer
     {
         // Constructors
-        public Boss(AgentItem agent) : base(agent)
+        public Target(AgentItem agent) : base(agent)
         {
         }
 
@@ -32,7 +32,7 @@ namespace LuckParser.Models.ParseModels
         protected override void SetAdditionalCombatReplayData(ParsedLog log)
         {
             CombatReplay.Icon = GeneralHelper.GetNPCIcon(ID);
-            log.FightData.Logic.ComputeAdditionalBossData(this, log);
+            log.FightData.Logic.ComputeAdditionalTargetData(this, log);
         }
         
 
@@ -52,7 +52,7 @@ namespace LuckParser.Models.ParseModels
             Serializable aux = new Serializable
             {
                 Img = CombatReplay.Icon,
-                Type = "Boss",
+                Type = "Target",
                 ID = GetCombatReplayID(),
                 Start = CombatReplay.TimeOffsets.Item1,
                 End = CombatReplay.TimeOffsets.Item2,

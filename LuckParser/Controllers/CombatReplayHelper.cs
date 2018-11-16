@@ -93,7 +93,7 @@ namespace LuckParser.Controllers
                     actors += a.GetCombatReplayJSON(map);
                 }
             }
-            foreach (Boss target in log.FightData.Logic.Targets)
+            foreach (Target target in log.FightData.Logic.Targets)
             {
                 if (target.CombatReplay.Positions.Count == 0)
                 {

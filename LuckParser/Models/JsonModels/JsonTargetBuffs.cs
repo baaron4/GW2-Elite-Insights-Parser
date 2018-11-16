@@ -7,9 +7,9 @@ using static LuckParser.Models.JsonBuffs;
 
 namespace LuckParser.Models
 {
-    public class JsonBossBuffs
+    public class JsonTargetBuffs
     {
-        public JsonBossBuffs(int phaseCount)
+        public JsonTargetBuffs(int phaseCount)
         {
             Uptime = new double[phaseCount];
             Presence = new double[phaseCount];

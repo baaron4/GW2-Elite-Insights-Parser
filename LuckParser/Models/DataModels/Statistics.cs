@@ -10,20 +10,20 @@ namespace LuckParser.Models.DataModels
     {
         public Statistics()
         {
-            DpsTarget = new Dictionary<Boss, Dictionary<Player, FinalDPS[]>>();
+            DpsTarget = new Dictionary<Target, Dictionary<Player, FinalDPS[]>>();
             DpsAll = new Dictionary<Player, FinalDPS[]>();
             Defenses = new Dictionary<Player, FinalDefenses[]>();
-            StatsTarget = new Dictionary<Boss, Dictionary<Player, FinalStats[]>>();
+            StatsTarget = new Dictionary<Target, Dictionary<Player, FinalStats[]>>();
             StatsAll = new Dictionary<Player, FinalStatsAll[]>();
             Support = new Dictionary<Player, FinalSupport[]>();
             SelfBoons = new Dictionary<Player, Dictionary<long, FinalBoonUptime>[]>();
             GroupBoons = new Dictionary<Player, Dictionary<long, FinalBoonUptime>[]>();
             OffGroupBoons = new Dictionary<Player, Dictionary<long, FinalBoonUptime>[]>();
             SquadBoons = new Dictionary<Player, Dictionary<long, FinalBoonUptime>[]>();
-            TargetConditions = new Dictionary<Boss, Dictionary<long, FinalTargetBoon>[]>();
-            TargetDps = new Dictionary<Boss, FinalDPS[]>();
-            AvgTargetConditions = new Dictionary<Boss, double[]>();
-            AvgTargetBoons = new Dictionary<Boss, double[]>();
+            TargetConditions = new Dictionary<Target, Dictionary<long, FinalTargetBoon>[]>();
+            TargetDps = new Dictionary<Target, FinalDPS[]>();
+            AvgTargetConditions = new Dictionary<Target, double[]>();
+            AvgTargetBoons = new Dictionary<Target, double[]>();
             Phases = new List<PhaseData>();
         }
 
@@ -42,9 +42,9 @@ namespace LuckParser.Models.DataModels
             public int PlayerPowerDamage;
         }
 
-        public readonly Dictionary<Boss, Dictionary<Player, FinalDPS[]>> DpsTarget;
+        public readonly Dictionary<Target, Dictionary<Player, FinalDPS[]>> DpsTarget;
         public readonly Dictionary<Player, FinalDPS[]> DpsAll;
-        public Dictionary<Boss, FinalDPS[]> TargetDps;
+        public Dictionary<Target, FinalDPS[]> TargetDps;
 
         public class FinalStats
         {
@@ -88,10 +88,10 @@ namespace LuckParser.Models.DataModels
             public double Dcd;
         }
 
-        public readonly Dictionary<Boss, Dictionary<Player, FinalStats[]>> StatsTarget;
+        public readonly Dictionary<Target, Dictionary<Player, FinalStats[]>> StatsTarget;
         public readonly Dictionary<Player, FinalStatsAll[]> StatsAll;
-        public readonly Dictionary<Boss, double[]> AvgTargetConditions;
-        public readonly Dictionary<Boss, double[]> AvgTargetBoons;
+        public readonly Dictionary<Target, double[]> AvgTargetConditions;
+        public readonly Dictionary<Target, double[]> AvgTargetBoons;
 
         public class FinalDefenses
         {
@@ -151,9 +151,9 @@ namespace LuckParser.Models.DataModels
             public readonly Dictionary<Player, double> Overstacked;
         }
 
-        public readonly Dictionary<Boss,Dictionary<long, FinalTargetBoon>[]> TargetConditions;
+        public readonly Dictionary<Target,Dictionary<long, FinalTargetBoon>[]> TargetConditions;
 
-        public Dictionary<Boss, double[]> TargetHealth { get; set; }
+        public Dictionary<Target, double[]> TargetHealth { get; set; }
 
         // present buff
         public readonly List<Boon> PresentBoons = new List<Boon>();//Used only for Boon tables

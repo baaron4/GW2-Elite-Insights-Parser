@@ -14,20 +14,20 @@ namespace LuckParser.Models
             MechanicList.AddRange(new List<Mechanic>
             {
 
-            new Mechanic(47327, "Vortex Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'circle',color:'rgb(255,140,0)'", "D.In","Vortex Slash (Inner Donut hit)", "Inner Donut",0),
-            new Mechanic(48432, "Vortex Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'circle-open',color:'rgb(255,140,0)'", "D.Out","Vortex Slash (Outer Donut hit)", "Outer Donut", 0),
-            new Mechanic(47430, "Soul Rift", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'circle-open',color:'rgb(255,0,0)'", "Golem","Soul Rift (stood in Golem Aoe)", "Golem Aoe",0),
-            new Mechanic(48363, "Quad Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'star-diamond-open',color:'rgb(255,140,0)'", "Slcs1","Quad Slash (4 Slices, First hit)", "4 Slices 1",0),
-            new Mechanic(47915, "Quad Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'star-square-open',color:'rgb(255,140,0)'", "Slcs2","Quad Slash (4 Slices, Second hit)", "4 Slices 2",0),
-            new Mechanic(47363, "Spinning Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'star-triangle-up-open',color:'rgb(128,0,0)'", "Scth","Spinning Slash (hit by Scythe)", "Scythe",0),
-            new Mechanic(48500, "Death Bloom", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'octagon',color:'rgb(255,140,0)'", "8Slcs","Death Bloom (8 Slices)", "8 Slices",0),
-            new Mechanic(47434, "Fixated", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.SoullessHorror, "symbol:'star',color:'rgb(255,0,255)'", "Fix","Fixated (Special Action Key)", "Fixated",0),
-            new Mechanic(47414, "Necrosis", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.SoullessHorror, "symbol:'star-open',color:'rgb(255,0,255)'", "Necr","Necrosis (Tanking Debuff)", "Necrosis Debuff",0),
-            new Mechanic(48327, "Corrupt the Living", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'circle',color:'rgb(255,0,0)'", "Spin","Corrupt the Living (Torment+Poisen Spin)", "Torment+Poisen Spin",0),
-            new Mechanic(47756, "Wurm Spit", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'diamond-open',color:'rgb(0,128,128)'", "Spit","Wurm Spit", "Wurm Spit",0),
-            new Mechanic(48662, "Howling Death", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.SoullessHorror, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "CC","Howling Death (Breakbar)", "Breakbar",0),
-            new Mechanic(48662, "Howling Death", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.SoullessHorror, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "CCed","Howling Death (Breakbar) broken", "CCed",0,(condition => condition.CombatItem.Value <=6800)),
-            new Mechanic(48662, "Howling Death", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.SoullessHorror, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "CC.Fail","Howling Death (Breakbar failed) ", "CC Fail",0,(condition => condition.CombatItem.Value >6800)),
+            new Mechanic(47327, "Vortex Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.SoullessHorror, "symbol:'circle',color:'rgb(255,140,0)'", "D.In","Vortex Slash (Inner Donut hit)", "Inner Donut",0),
+            new Mechanic(48432, "Vortex Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.SoullessHorror, "symbol:'circle-open',color:'rgb(255,140,0)'", "D.Out","Vortex Slash (Outer Donut hit)", "Outer Donut", 0),
+            new Mechanic(47430, "Soul Rift", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.SoullessHorror, "symbol:'circle-open',color:'rgb(255,0,0)'", "Golem","Soul Rift (stood in Golem Aoe)", "Golem Aoe",0),
+            new Mechanic(48363, "Quad Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.SoullessHorror, "symbol:'star-diamond-open',color:'rgb(255,140,0)'", "Slcs1","Quad Slash (4 Slices, First hit)", "4 Slices 1",0),
+            new Mechanic(47915, "Quad Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.SoullessHorror, "symbol:'star-square-open',color:'rgb(255,140,0)'", "Slcs2","Quad Slash (4 Slices, Second hit)", "4 Slices 2",0),
+            new Mechanic(47363, "Spinning Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.SoullessHorror, "symbol:'star-triangle-up-open',color:'rgb(128,0,0)'", "Scth","Spinning Slash (hit by Scythe)", "Scythe",0),
+            new Mechanic(48500, "Death Bloom", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.SoullessHorror, "symbol:'octagon',color:'rgb(255,140,0)'", "8Slcs","Death Bloom (8 Slices)", "8 Slices",0),
+            new Mechanic(47434, "Fixated", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.SoullessHorror, "symbol:'star',color:'rgb(255,0,255)'", "Fix","Fixated (Special Action Key)", "Fixated",0),
+            new Mechanic(47414, "Necrosis", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.SoullessHorror, "symbol:'star-open',color:'rgb(255,0,255)'", "Necr","Necrosis (Tanking Debuff)", "Necrosis Debuff",0),
+            new Mechanic(48327, "Corrupt the Living", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.SoullessHorror, "symbol:'circle',color:'rgb(255,0,0)'", "Spin","Corrupt the Living (Torment+Poisen Spin)", "Torment+Poisen Spin",0),
+            new Mechanic(47756, "Wurm Spit", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.SoullessHorror, "symbol:'diamond-open',color:'rgb(0,128,128)'", "Spit","Wurm Spit", "Wurm Spit",0),
+            new Mechanic(48662, "Howling Death", Mechanic.MechType.EnemyCastStart, ParseEnum.TargetIDS.SoullessHorror, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "CC","Howling Death (Breakbar)", "Breakbar",0),
+            new Mechanic(48662, "Howling Death", Mechanic.MechType.EnemyCastEnd, ParseEnum.TargetIDS.SoullessHorror, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "CCed","Howling Death (Breakbar) broken", "CCed",0,(condition => condition.CombatItem.Value <=6800)),
+            new Mechanic(48662, "Howling Death", Mechanic.MechType.EnemyCastEnd, ParseEnum.TargetIDS.SoullessHorror, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "CC.Fail","Howling Death (Breakbar failed) ", "CC Fail",0,(condition => condition.CombatItem.Value >6800)),
 
             });
             Extension = "sh";
@@ -97,20 +97,20 @@ namespace LuckParser.Models
             }
         }
 
-        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
         {
-            CombatReplay replay = boss.CombatReplay;
-            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
-            switch (boss.ID)
+            CombatReplay replay = target.CombatReplay;
+            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (target.ID)
             {
-                case (ushort)ParseEnum.BossIDS.SoullessHorror:
+                case (ushort)ParseEnum.TargetIDS.SoullessHorror:
                     List<CastLog> howling = cls.Where(x => x.SkillId == 48662).ToList();
                     foreach (CastLog c in howling)
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
-                        replay.Actors.Add(new CircleActor(true, (int)c.Time + c.ExpectedDuration, 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(boss)));
-                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(boss)));
+                        replay.Actors.Add(new CircleActor(true, (int)c.Time + c.ExpectedDuration, 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     List<CastLog> vortex = cls.Where(x => x.SkillId == 47327).ToList();
                     foreach (CastLog c in vortex)
@@ -138,7 +138,7 @@ namespace LuckParser.Models
                         }
                         for (int i = 0; i < 8; i++)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + (i * 360 / 8), 360 / 12, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)", new AgentConnector(boss)));
+                            replay.Actors.Add(new PieActor(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + (i * 360 / 8), 360 / 12, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)));
                         }
 
                     }
@@ -155,7 +155,7 @@ namespace LuckParser.Models
                         }
                         for (int i = 0; i < 4; i++)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + (i * 360 / 4), 360 / 12, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)", new AgentConnector(boss)));
+                            replay.Actors.Add(new PieActor(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + (i * 360 / 4), 360 / 12, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)));
                         }
 
                     }
@@ -170,7 +170,7 @@ namespace LuckParser.Models
                         }
                         for (int i = 0; i < 4; i++)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + 45 + (i * 360 / 4), 360 / 12, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)", new AgentConnector(boss)));
+                            replay.Actors.Add(new PieActor(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + 45 + (i * 360 / 4), 360 / 12, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)));
                         }
 
                     }

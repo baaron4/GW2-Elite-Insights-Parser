@@ -30,7 +30,7 @@ namespace LuckParser.Models.ParseModels
         private readonly List<Dictionary<ushort, Dictionary<long,List<long>>>> _condiCleanse = new List<Dictionary<ushort, Dictionary<long, List<long>>>>();
         private readonly Dictionary<long, BoonsGraphModel> _boonPoints = new Dictionary<long, BoonsGraphModel>();
         private readonly Dictionary<long, List<ExtraBoonData>> _boonExtra = new Dictionary<long, List<ExtraBoonData>>();
-        private readonly Dictionary<Boss, Dictionary<long, List<ExtraBoonData>>> _boonTargetExtra = new Dictionary<Boss, Dictionary<long, List<ExtraBoonData>>>();
+        private readonly Dictionary<Target, Dictionary<long, List<ExtraBoonData>>> _boonTargetExtra = new Dictionary<Target, Dictionary<long, List<ExtraBoonData>>>();
         // dps graphs
         public Dictionary<int, List<Point>> DpsGraph { get; } = new Dictionary<int, List<Point>>();
         // Minions
@@ -98,7 +98,7 @@ namespace LuckParser.Models.ParseModels
             return new Dictionary<long, List<long>>();
         }
 
-        public Dictionary<long, List<ExtraBoonData>> GetExtraBoonData(ParsedLog log, Boss target)
+        public Dictionary<long, List<ExtraBoonData>> GetExtraBoonData(ParsedLog log, Target target)
         {
             if (_boonDistribution.Count == 0)
             {
@@ -130,7 +130,7 @@ namespace LuckParser.Models.ParseModels
         {
             if (!log.FightData.Logic.CanCombatReplay)
             {
-                // no combat replay support on boss
+                // no combat replay support on fight
                 return;
             }
             if (CombatReplay == null)
@@ -246,7 +246,7 @@ namespace LuckParser.Models.ParseModels
             {
                 // Frost Spirit
                 case 50421:
-                    foreach (Boss target in log.FightData.Logic.Targets)
+                    foreach (Target target in log.FightData.Logic.Targets)
                     {
                         if (!_boonTargetExtra.TryGetValue(target, out var extra))
                         {
@@ -279,7 +279,7 @@ namespace LuckParser.Models.ParseModels
                     break;
                 // GoE
                 case 31803:
-                    foreach (Boss target in log.FightData.Logic.Targets)
+                    foreach (Target target in log.FightData.Logic.Targets)
                     {
                         if (!_boonTargetExtra.TryGetValue(target, out var extra))
                         {

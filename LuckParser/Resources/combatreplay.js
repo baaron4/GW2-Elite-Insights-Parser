@@ -12,7 +12,7 @@ let time = 0;
 let inch = 10;
 let speed = 1;
 const times = [];
-const bossData = new Map();
+const targetData = new Map();
 const playerData = new Map();
 const trashMobData = new Map();
 const mechanicActorData = new Set();
@@ -67,7 +67,7 @@ function animateCanvas(noRequest) {
     trashMobData.forEach(function (value, key, map) {
         value.draw(ctx, time);
     });
-    bossData.forEach(function (value, key, map) {
+    targetData.forEach(function (value, key, map) {
         value.draw(ctx, time);
     });
     if (selectedPlayer !== null) {
@@ -383,7 +383,7 @@ class MechanicDrawable {
         } else {
             if (this.master === null) {
                 let masterId = this.connectedTo;
-                this.master = playerData.has(masterId) ? playerData.get(masterId) : trashMobData.has(masterId) ? trashMobData.get(masterId) : bossData.get(masterId);
+                this.master = playerData.has(masterId) ? playerData.get(masterId) : trashMobData.has(masterId) ? trashMobData.get(masterId) : targetData.get(masterId);
             }
             return this.master.getPosition(currentTime);
         }
@@ -575,7 +575,7 @@ class LineMechanicDrawable extends MechanicDrawable {
         } else {
             if (this.endmaster === null) {
                 let endMasterID = this.connectedFrom;
-                this.endmaster = playerData.has(endMasterID) ? playerData.get(endMasterID) : trashMobData.has(endMasterID) ? trashMobData.get(endMasterID) : bossData.get(endMasterID);
+                this.endmaster = playerData.has(endMasterID) ? playerData.get(endMasterID) : trashMobData.has(endMasterID) ? trashMobData.get(endMasterID) : targetData.get(endMasterID);
             }
             return this.endmaster.getPosition(currentTime);
         }
@@ -610,8 +610,8 @@ function createAllActors(actors) {
                     }
                 }
                 break;
-            case "Boss":
-                bossData.set(actor.ID, new EnemyIconDrawable(actor.Start, actor.End, actor.Img, 30, actor.Positions));
+            case "Target":
+                targetData.set(actor.ID, new EnemyIconDrawable(actor.Start, actor.End, actor.Img, 30, actor.Positions));
                 break;
             case "Mob":
                 trashMobData.set(actor.ID, new EnemyIconDrawable(actor.Start, actor.End, actor.Img, 30, actor.Positions));

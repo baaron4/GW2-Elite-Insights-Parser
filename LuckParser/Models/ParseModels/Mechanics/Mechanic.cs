@@ -26,12 +26,12 @@ namespace LuckParser.Models.ParseModels
     {
         /// <summary>
         /// PlayerBoon 
-        /// BossBoon 
+        /// TargetBoon 
         /// PlayerSkill
         /// SkillOnPlayer
         /// EnemyBoonStrip
         /// Spawn
-        /// BossCast
+        /// TargetCast
         /// PlayerOnPlayer
         /// HitOnEnemy
         /// PlayerStatus
@@ -44,7 +44,7 @@ namespace LuckParser.Models.ParseModels
 
         public long SkillId { get; }
         public MechType MechanicType { get; }
-        public ParseEnum.BossIDS BossID { get; }
+        public ParseEnum.TargetIDS TargetID { get; }
 
         public int InternalCooldown { get; }
         public CheckSpecialCondition SpecialCondition { get; }
@@ -59,20 +59,20 @@ namespace LuckParser.Models.ParseModels
         public string ShortName { get; }
         public bool IsEnemyMechanic { get; }
 
-        public Mechanic(long skillId, string inGameName, MechType mechType, ParseEnum.BossIDS bossId,
+        public Mechanic(long skillId, string inGameName, MechType mechType, ParseEnum.TargetIDS targetID,
             string plotlyString, string shortName, int internalCoolDown, CheckSpecialCondition condition = null) :
-            this(skillId, inGameName, mechType, bossId, plotlyString, shortName, null, null, internalCoolDown, condition)
+            this(skillId, inGameName, mechType, targetID, plotlyString, shortName, null, null, internalCoolDown, condition)
         {
         }
 
-        public Mechanic(long skillId, string inGameName, MechType mechType, ParseEnum.BossIDS bossId,
+        public Mechanic(long skillId, string inGameName, MechType mechType, ParseEnum.TargetIDS targetID,
             string plotlyString, string shortName, string description, string plotlyName, int internalCoolDown,
             CheckSpecialCondition condition = null)
         {
             InGameName = inGameName;
             SkillId = skillId;
             MechanicType = mechType;
-            BossID = bossId;
+            TargetID = targetID;
             PlotlyString = plotlyString;
             PlotlySymbol = GeneralHelper.FindPattern(PlotlyString, "symbol\\s*:\\s*'([^']*)'");
             PlotlyColor= GeneralHelper.FindPattern(PlotlyString, "color\\s*:\\s*'([^']*)'");

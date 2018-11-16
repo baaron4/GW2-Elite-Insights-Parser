@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace LuckParser.Models
 {
-    public abstract class FractalLogic : BossLogic
+    public abstract class FractalLogic : FightLogic
     {
         protected FractalLogic(ushort triggerID) : base (triggerID)
         { 
@@ -15,9 +15,9 @@ namespace LuckParser.Models
             CanCombatReplay = true;
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(37695, "Flux Bomb", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Unknown, "symbol:'circle',color:'rgb(150,0,255)',size:10,", "FBmb","Flux Bomb application", "Flux Bomb",0),
-            new Mechanic(36393, "Flux Bomb", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Unknown, "symbol:'circle-open',color:'rgb(150,0,255)',size:10,", "FB.dmg","Flux Bomb hit", "Flux Bomb dmg",0),
-            new Mechanic(19684, "Fractal Vindicator", Mechanic.MechType.Spawn, ParseEnum.BossIDS.Unknown, "symbol:'star-diamond-open',color:'rgb(0,0,0)',size:10,", "FV.spwn","Fractal Vindicator spawned", "Vindicator spawn",0),
+            new Mechanic(37695, "Flux Bomb", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Unknown, "symbol:'circle',color:'rgb(150,0,255)',size:10,", "FBmb","Flux Bomb application", "Flux Bomb",0),
+            new Mechanic(36393, "Flux Bomb", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Unknown, "symbol:'circle-open',color:'rgb(150,0,255)',size:10,", "FB.dmg","Flux Bomb hit", "Flux Bomb dmg",0),
+            new Mechanic(19684, "Fractal Vindicator", Mechanic.MechType.Spawn, ParseEnum.TargetIDS.Unknown, "symbol:'star-diamond-open',color:'rgb(0,0,0)',size:10,", "FV.spwn","Fractal Vindicator spawned", "Vindicator spawn",0),
             });
         }
 
@@ -28,7 +28,7 @@ namespace LuckParser.Models
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            Boss mainTarget = Targets.Find(x => x.ID == TriggerID);
+            Target mainTarget = Targets.Find(x => x.ID == TriggerID);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -38,15 +38,15 @@ namespace LuckParser.Models
             {
                 return phases;
             }
-            List<CombatItem> invulsBoss = GetFilteredList(log,762,mainTarget);        
-            for (int i = 0; i < invulsBoss.Count; i++)
+            List<CombatItem> invulsTarget = GetFilteredList(log,762,mainTarget);        
+            for (int i = 0; i < invulsTarget.Count; i++)
             {
-                CombatItem c = invulsBoss[i];
+                CombatItem c = invulsTarget[i];
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
                     end = c.Time - log.FightData.FightStart;
                     phases.Add(new PhaseData(start, end));
-                    if (i == invulsBoss.Count - 1)
+                    if (i == invulsTarget.Count - 1)
                     {
                         mainTarget.AddCustomCastLog(new CastLog(end, -5, (int)(fightDuration - end), ParseEnum.Activation.None, (int)(fightDuration - end), ParseEnum.Activation.None), log);
                     }
@@ -75,7 +75,7 @@ namespace LuckParser.Models
 
         protected void SetSuccessOnCombatExit(ParsedLog log, int combatExitCount, int delay)
         {
-            Boss mainTarget = Targets.Find(x => x.ID == TriggerID);
+            Target mainTarget = Targets.Find(x => x.ID == TriggerID);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -86,8 +86,8 @@ namespace LuckParser.Models
             {
                 HashSet<ushort> pIds = new HashSet<ushort>(log.PlayerList.Select(x => x.InstID));
                 CombatItem lastPlayerExit = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => pIds.Contains(x.SrcInstid)).LastOrDefault();
-                CombatItem lastBossExit = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).LastOrDefault(x => x.SrcInstid == mainTarget.InstID);
-                log.FightData.Success = lastPlayerExit != null && lastBossExit != null && lastPlayerExit.Time - lastBossExit.Time > delay ? true : false;
+                CombatItem lastTargetExit = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).LastOrDefault(x => x.SrcInstid == mainTarget.InstID);
+                log.FightData.Success = lastPlayerExit != null && lastTargetExit != null && lastPlayerExit.Time - lastTargetExit.Time > delay ? true : false;
                 log.FightData.FightEnd = lastDamageTaken.Time;
             }
         }
@@ -95,7 +95,7 @@ namespace LuckParser.Models
         public override void SetSuccess(ParsedLog log)
         {
             // check reward
-            Boss mainTarget = Targets.Find(x => x.ID == TriggerID);
+            Target mainTarget = Targets.Find(x => x.ID == TriggerID);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");

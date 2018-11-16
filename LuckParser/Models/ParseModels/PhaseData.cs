@@ -12,7 +12,7 @@ namespace LuckParser.Models.ParseModels
         public bool DrawStart { get; set; }
         public bool DrawEnd { get; set; }
         public bool DrawArea { get; set; }
-        public List<Boss> Targets { get; } = new List<Boss>();
+        public List<Target> Targets { get; } = new List<Target>();
 
         public PhaseData(long start, long end)
         {
@@ -56,7 +56,7 @@ namespace LuckParser.Models.ParseModels
                 List<CombatItem> deathEvents = combatData.GetStatesData(DataModels.ParseEnum.StateChange.ChangeDead);
                 Start = Math.Max(Start, Targets.Min(x => x.FirstAware)- offset);
                 long end = long.MinValue;
-                foreach (Boss target in Targets)
+                foreach (Target target in Targets)
                 {
                     long dead = target.LastAware;
                     CombatItem died = deathEvents.FirstOrDefault(x => x.SrcInstid == target.InstID && x.Time >= target.FirstAware && x.Time <= target.LastAware);

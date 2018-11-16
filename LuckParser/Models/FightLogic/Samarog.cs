@@ -14,29 +14,29 @@ namespace LuckParser.Models
             MechanicList.AddRange(new List<Mechanic>
             {
 
-            new Mechanic(37996, "Shockwave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'circle',color:'rgb(0,0,255)'", "Shkwv","Shockwave from Spears", "Shockwave",0),
-            new Mechanic(38168, "Prisoner Sweep", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'hexagon',color:'rgb(0,0,255)'", "Swp","Prisoner Sweep (horizontal)", "Sweep",0),
-            new Mechanic(37797, "Trampling Rush", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'triangle-right',color:'rgb(255,0,0)'", "Trmpl","Trampling Rush (hit by stampede towards home)", "Trampling Rush",0),
-            new Mechanic(38305, "Bludgeon", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'triangle-down',color:'rgb(0,0,255)'", "Slm","Bludgeon (vertical Slam)", "Slam",0),
-            new Mechanic(37868, "Fixate: Samarog", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'star',color:'rgb(255,0,255)'", "S.Fix","Fixated by Samarog", "Fixate: Samarog",0),
-            new Mechanic(38223, "Fixate: Guldhem", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'star-open',color:'rgb(255,100,0)'", "G.Fix","Fixated by Guldhem", "Fixate: Guldhem",0),
-            new Mechanic(37693, "Fixate: Rigom", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'star-open',color:'rgb(255,0,0)'", "R.Fix","Fixated by Rigom", "Fixate: Rigom",0),
-            new Mechanic(37966, "Big Hug", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'circle',color:'rgb(0,128,0)'", "BgGrn","Big Green (friends mechanic)", "Big Green",0), 
-            new Mechanic(38247, "Small Hug", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'circle-open',color:'rgb(0,128,0)'", "SmGrn","Small Green (friends mechanic)", "Small Green",0),
-            new Mechanic(38180, "Spear Return", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'triangle-left',color:'rgb(255,0,0)'", "SprRtn","Hit by Spear Return", "Spear Return",0),
-            new Mechanic(38260, "Inevitable Betrayal", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'circle',color:'rgb(255,0,0)'", "G.Fail","Inevitable Betrayal (failed Green)", "Failed Green",0),
-            new Mechanic(37851, "Inevitable Betrayal", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'circle',color:'rgb(255,0,0)'", "G.Fail","Inevitable Betrayal (failed Green)", "Failed Green",0),
-            new Mechanic(37901, "Effigy Pulse", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'triangle-down-open',color:'rgb(255,0,0)'", "S.Pls","Effigy Pulse (Stood in Spear AoE)", "Spear Aoe",0),
-            new Mechanic(37816, "Spear Impact", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'triangle-down',color:'rgb(255,0,0)'", "S.Spwn","Spear Impact (hit by spawning Spear)", "Spear Spawned",0),
-            new Mechanic(38199, "Brutalize", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'diamond-tall',color:'rgb(255,0,255)'","Brtlz","Brutalize (jumped upon by Samarog->Breakbar)", "Brutalize",0),
-            new Mechanic(38136, "Brutalize (Jump End)", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Samarog, "symbol:'diamond-tall',color:'rgb(0,160,150)'","CC","Brutalize (Breakbar)", "Breakbar",0),
-            new Mechanic(38013, "Brutalize", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "CC.Fail","Brutalize (Failed CC)", "CC Fail",0,(condition => condition.DamageLog.Result == ParseEnum.Result.KillingBlow)),
-            new Mechanic(38013, "Brutalize", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Samarog, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "CC.End","Ended Brutalize", "CC Ended",0,(condition => (condition.CombatItem.IsActivation == ParseEnum.Activation.CancelCancel || condition.CombatItem.IsActivation == ParseEnum.Activation.CancelFire))),
+            new Mechanic(37996, "Shockwave", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Samarog, "symbol:'circle',color:'rgb(0,0,255)'", "Shkwv","Shockwave from Spears", "Shockwave",0),
+            new Mechanic(38168, "Prisoner Sweep", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Samarog, "symbol:'hexagon',color:'rgb(0,0,255)'", "Swp","Prisoner Sweep (horizontal)", "Sweep",0),
+            new Mechanic(37797, "Trampling Rush", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Samarog, "symbol:'triangle-right',color:'rgb(255,0,0)'", "Trmpl","Trampling Rush (hit by stampede towards home)", "Trampling Rush",0),
+            new Mechanic(38305, "Bludgeon", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Samarog, "symbol:'triangle-down',color:'rgb(0,0,255)'", "Slm","Bludgeon (vertical Slam)", "Slam",0),
+            new Mechanic(37868, "Fixate: Samarog", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Samarog, "symbol:'star',color:'rgb(255,0,255)'", "S.Fix","Fixated by Samarog", "Fixate: Samarog",0),
+            new Mechanic(38223, "Fixate: Guldhem", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Samarog, "symbol:'star-open',color:'rgb(255,100,0)'", "G.Fix","Fixated by Guldhem", "Fixate: Guldhem",0),
+            new Mechanic(37693, "Fixate: Rigom", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Samarog, "symbol:'star-open',color:'rgb(255,0,0)'", "R.Fix","Fixated by Rigom", "Fixate: Rigom",0),
+            new Mechanic(37966, "Big Hug", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Samarog, "symbol:'circle',color:'rgb(0,128,0)'", "BgGrn","Big Green (friends mechanic)", "Big Green",0), 
+            new Mechanic(38247, "Small Hug", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Samarog, "symbol:'circle-open',color:'rgb(0,128,0)'", "SmGrn","Small Green (friends mechanic)", "Small Green",0),
+            new Mechanic(38180, "Spear Return", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Samarog, "symbol:'triangle-left',color:'rgb(255,0,0)'", "SprRtn","Hit by Spear Return", "Spear Return",0),
+            new Mechanic(38260, "Inevitable Betrayal", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Samarog, "symbol:'circle',color:'rgb(255,0,0)'", "G.Fail","Inevitable Betrayal (failed Green)", "Failed Green",0),
+            new Mechanic(37851, "Inevitable Betrayal", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Samarog, "symbol:'circle',color:'rgb(255,0,0)'", "G.Fail","Inevitable Betrayal (failed Green)", "Failed Green",0),
+            new Mechanic(37901, "Effigy Pulse", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Samarog, "symbol:'triangle-down-open',color:'rgb(255,0,0)'", "S.Pls","Effigy Pulse (Stood in Spear AoE)", "Spear Aoe",0),
+            new Mechanic(37816, "Spear Impact", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Samarog, "symbol:'triangle-down',color:'rgb(255,0,0)'", "S.Spwn","Spear Impact (hit by spawning Spear)", "Spear Spawned",0),
+            new Mechanic(38199, "Brutalize", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Samarog, "symbol:'diamond-tall',color:'rgb(255,0,255)'","Brtlz","Brutalize (jumped upon by Samarog->Breakbar)", "Brutalize",0),
+            new Mechanic(38136, "Brutalize (Jump End)", Mechanic.MechType.EnemyCastEnd, ParseEnum.TargetIDS.Samarog, "symbol:'diamond-tall',color:'rgb(0,160,150)'","CC","Brutalize (Breakbar)", "Breakbar",0),
+            new Mechanic(38013, "Brutalize", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Samarog, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "CC.Fail","Brutalize (Failed CC)", "CC Fail",0,(condition => condition.DamageLog.Result == ParseEnum.Result.KillingBlow)),
+            new Mechanic(38013, "Brutalize", Mechanic.MechType.EnemyCastEnd, ParseEnum.TargetIDS.Samarog, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "CC.End","Ended Brutalize", "CC Ended",0,(condition => (condition.CombatItem.IsActivation == ParseEnum.Activation.CancelCancel || condition.CombatItem.IsActivation == ParseEnum.Activation.CancelFire))),
             //new Mechanic(38199, "Brutalize", Mechanic.MechType.PlayerBoonRemove, ParseEnum.BossIDS.Samarog, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "CCed","Ended Brutalize (Breakbar broken)", "CCEnded",0),//(condition => condition.getCombatItem().IsBuffRemove == ParseEnum.BuffRemove.Manual)),
             //new Mechanic(38199, "Brutalize", Mechanic.MechType.EnemyBoonStrip, ParseEnum.BossIDS.Samarog, "symbol:'diamond-tall',color:'rgb(110,160,0)'", "CCed1","Ended Brutalize (Breakbar broken)", "CCed1",0),//(condition => condition.getCombatItem().IsBuffRemove == ParseEnum.BuffRemove.All)),
-            new Mechanic(37892, "Soul Swarm", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'x-thin-open',color:'rgb(0,255,255)'","Wall","Soul Swarm (stood in or beyond Spear Wall)", "Spear Wall",0),
-            new Mechanic(38231, "Impaling Stab", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'hourglass',color:'rgb(0,0,255)'","ShWv.Ctr","Impaling Stab (hit by Spears causing Shockwave)", "Shockwave Center",0),
-            new Mechanic(38314, "Anguished Bolt", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'circle',color:'rgb(255,140,0)'","Stun","Anguished Bolt (AoE Stun Circle by Guldhem)", "Guldhem's Stun",0),
+            new Mechanic(37892, "Soul Swarm", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Samarog, "symbol:'x-thin-open',color:'rgb(0,255,255)'","Wall","Soul Swarm (stood in or beyond Spear Wall)", "Spear Wall",0),
+            new Mechanic(38231, "Impaling Stab", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Samarog, "symbol:'hourglass',color:'rgb(0,0,255)'","ShWv.Ctr","Impaling Stab (hit by Spears causing Shockwave)", "Shockwave Center",0),
+            new Mechanic(38314, "Anguished Bolt", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Samarog, "symbol:'circle',color:'rgb(255,140,0)'","Stun","Anguished Bolt (AoE Stun Circle by Guldhem)", "Guldhem's Stun",0),
             
             //  new Mechanic(37816, "Brutalize", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'star-square',color:'rgb(255,0,0)'", "CC Target", casted without dmg odd
             });
@@ -59,7 +59,7 @@ namespace LuckParser.Models
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Samarog);
+            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Samarog);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -122,21 +122,21 @@ namespace LuckParser.Models
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.BossIDS.Samarog,
+                (ushort)ParseEnum.TargetIDS.Samarog,
                 (ushort)Rigom,
                 (ushort)Guldhem,
             };
         }
         
 
-        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
         {
             // TODO: facing information (shock wave)
-            CombatReplay replay = boss.CombatReplay;
-            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
-            switch (boss.ID)
+            CombatReplay replay = target.CombatReplay;
+            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (target.ID)
             {
-                case (ushort)ParseEnum.BossIDS.Samarog:
+                case (ushort)ParseEnum.TargetIDS.Samarog:
                     List<CombatItem> brutalize = log.GetBoonData(38226).Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.Manual).ToList();
                     int brutStart = 0;
                     foreach (CombatItem c in brutalize)
@@ -148,7 +148,7 @@ namespace LuckParser.Models
                         else
                         {
                             int brutEnd = (int)(c.Time - log.FightData.FightStart);
-                            replay.Actors.Add(new CircleActor(true, 0, 120, new Tuple<int, int>(brutStart, brutEnd), "rgba(0, 180, 255, 0.3)", new AgentConnector(boss)));
+                            replay.Actors.Add(new CircleActor(true, 0, 120, new Tuple<int, int>(brutStart, brutEnd), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                         }
                     }
                     break;
@@ -198,7 +198,7 @@ namespace LuckParser.Models
             //fixated Ghuldem
             List<CombatItem> fixatedGuldhem = GetFilteredList(log, 38223, p);
             int fixationGuldhemStart = 0;
-            Boss guldhem = null;
+            Target guldhem = null;
             foreach (CombatItem c in fixatedGuldhem)
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
@@ -219,7 +219,7 @@ namespace LuckParser.Models
             //fixated Rigom
             List<CombatItem> fixatedRigom = GetFilteredList(log, 37693, p);
             int fixationRigomStart = 0;
-            Boss rigom = null;
+            Target rigom = null;
             foreach (CombatItem c in fixatedRigom)
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
@@ -241,7 +241,7 @@ namespace LuckParser.Models
 
         public override int IsCM(ParsedLog log)
         {
-            Boss target = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Samarog);
+            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Samarog);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");

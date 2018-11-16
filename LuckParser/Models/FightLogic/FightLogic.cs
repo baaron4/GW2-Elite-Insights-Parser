@@ -7,25 +7,25 @@ using System.Linq;
 
 namespace LuckParser.Models
 {
-    public class BossLogic
+    public class FightLogic
     {
 
         public enum ParseMode { Raid, Fractal, Golem, Unknown };
 
         private CombatReplayMap _map;
         public readonly List<Mechanic> MechanicList = new List<Mechanic> {
-            new Mechanic(SkillItem.DeathId, "Dead", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'x',color:'rgb(0,0,0)'", "Dead",0),
-            new Mechanic(SkillItem.DownId, "Downed", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'cross',color:'rgb(255,0,0)'", "Downed",0),
-            new Mechanic(SkillItem.ResurrectId, "Resurrect", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'cross-open',color:'rgb(0,255,255)'", "Res",0)}; //Resurrects (start), Resurrect
+            new Mechanic(SkillItem.DeathId, "Dead", Mechanic.MechType.PlayerStatus, ParseEnum.TargetIDS.Unknown, "symbol:'x',color:'rgb(0,0,0)'", "Dead",0),
+            new Mechanic(SkillItem.DownId, "Downed", Mechanic.MechType.PlayerStatus, ParseEnum.TargetIDS.Unknown, "symbol:'cross',color:'rgb(255,0,0)'", "Downed",0),
+            new Mechanic(SkillItem.ResurrectId, "Resurrect", Mechanic.MechType.PlayerStatus, ParseEnum.TargetIDS.Unknown, "symbol:'cross-open',color:'rgb(0,255,255)'", "Res",0)}; //Resurrects (start), Resurrect
         public ParseMode Mode { get; protected set; } = ParseMode.Unknown;
         public bool CanCombatReplay { get; set; } = false;
         public string Extension { get; protected set; } = "boss";
         public string IconUrl { get; protected set; } = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
         public List<Mob> TrashMobs { get; } = new List<Mob>();
-        public List<Boss> Targets { get; } = new List<Boss>();
+        public List<Target> Targets { get; } = new List<Target>();
         protected readonly ushort TriggerID;
 
-        public BossLogic(ushort triggerID)
+        public FightLogic(ushort triggerID)
         {
             TriggerID = triggerID;
         }
@@ -54,7 +54,7 @@ namespace LuckParser.Models
 
         public virtual string GetFightName()
         {
-            Boss target = Targets.Find(x => x.ID == TriggerID);
+            Target target = Targets.Find(x => x.ID == TriggerID);
             if (target == null)
             {
                 return "UNKNOWN";
@@ -65,7 +65,7 @@ namespace LuckParser.Models
         protected void RegroupTargetsByID(ushort id, AgentData agentData, List<CombatItem> combatItems)
         {
             List<AgentItem> agents = agentData.GetAgentsByID(id);
-            List<Boss> toRegroup = Targets.Where(x => x.ID == id).ToList();
+            List<Target> toRegroup = Targets.Where(x => x.ID == id).ToList();
             if (agents.Count > 0 && toRegroup.Count > 0)
             {
                 Targets.RemoveAll(x => x.ID == id);
@@ -79,7 +79,7 @@ namespace LuckParser.Models
                     LastAware = agents.Max(x => x.LastAware)
                 };
                 agentData.OverrideID(id, firstItem.InstID, newTargetAgent);
-                Targets.Add(new Boss(newTargetAgent));
+                Targets.Add(new Target(newTargetAgent));
                 if (agentValues.Count == 0)
                 {
                     return;
@@ -110,7 +110,7 @@ namespace LuckParser.Models
                 List<AgentItem> agents = agentData.GetAgentsByID(id);
                 foreach (AgentItem agentItem in agents)
                 {
-                    Targets.Add(new Boss(agentItem));
+                    Targets.Add(new Target(agentItem));
                 }
             }
             RegroupTargets(agentData, combatItems);
@@ -118,11 +118,11 @@ namespace LuckParser.Models
 
         public void SetMaxHealth(ushort instid, long time, int health)
         {
-            foreach (Boss boss in Targets)
+            foreach (Target target in Targets)
             {
-                if (boss.Health == -1 && boss.InstID == instid && boss.FirstAware <= time && boss.LastAware >= time)
+                if (target.Health == -1 && target.InstID == instid && target.FirstAware <= time && target.LastAware >= time)
                 {
-                    boss.Health = health;
+                    target.Health = health;
                     break;
                 }
             }
@@ -133,7 +133,7 @@ namespace LuckParser.Models
             List<CombatItem> maxHUs = log.CombatData.GetStatesData(ParseEnum.StateChange.MaxHealthUpdate);
             if (maxHUs.Count > 0)
             {
-                foreach (Boss tar in Targets)
+                foreach (Target tar in Targets)
                 {
                     List<CombatItem> subList = maxHUs.Where(x => x.SrcInstid == tar.InstID && x.Time >= tar.FirstAware && x.Time <= tar.LastAware).ToList();
                     if (subList.Count > 0)
@@ -146,11 +146,11 @@ namespace LuckParser.Models
 
         public virtual void AddHealthUpdate(ushort instid, long time, int healthTime, int health)
         {
-            foreach (Boss boss in Targets)
+            foreach (Target target in Targets)
             {
-                if (boss.InstID == instid && boss.FirstAware <= time && boss.LastAware >= time)
+                if (target.InstID == instid && target.FirstAware <= time && target.LastAware >= time)
                 {
-                    boss.HealthOverTime.Add(new Point(healthTime, health));
+                    target.HealthOverTime.Add(new Point(healthTime, health));
                     break;
                 }
             }
@@ -168,7 +168,7 @@ namespace LuckParser.Models
         public virtual List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            Boss mainTarget = Targets.Find(x => x.ID == TriggerID);
+            Target mainTarget = Targets.Find(x => x.ID == TriggerID);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -179,7 +179,7 @@ namespace LuckParser.Models
 
         protected void AddTargetsToPhase(PhaseData phase, List<ushort> ids, ParsedLog log)
         {
-            foreach (Boss target in Targets)
+            foreach (Target target in Targets)
             {
                 if (ids.Contains(target.ID) && phase.InInterval(target.FirstAware, log.FightData.FightStart))
                 {
@@ -189,7 +189,7 @@ namespace LuckParser.Models
             phase.OverrideTimes(log.FightData.FightStart, log.CombatData);
         }
 
-        public virtual void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        public virtual void ComputeAdditionalTargetData(Target target, ParsedLog log)
         {
 
         }
@@ -227,7 +227,7 @@ namespace LuckParser.Models
 
         protected void SetSuccessByDeath(ParsedLog log)
         {
-            Boss mainTarget = Targets.Find(x => x.ID == TriggerID);
+            Target mainTarget = Targets.Find(x => x.ID == TriggerID);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -383,7 +383,7 @@ namespace LuckParser.Models
                             AbstractMasterPlayer amp = null;
                             if (mech.MechanicType == Mechanic.MechType.EnemyBoon && c.IsBuffRemove == ParseEnum.BuffRemove.None)
                             {
-                                Boss target = Targets.Find(x => x.InstID == c.DstInstid && x.FirstAware <= c.Time && x.LastAware >= c.Time);
+                                Target target = Targets.Find(x => x.InstID == c.DstInstid && x.FirstAware <= c.Time && x.LastAware >= c.Time);
                                 if (target != null)
                                 {
                                     amp = target;
@@ -412,7 +412,7 @@ namespace LuckParser.Models
                             }
                             else if (mech.MechanicType == Mechanic.MechType.EnemyBoonStrip && c.IsBuffRemove == ParseEnum.BuffRemove.Manual)
                             {
-                                Boss target = Targets.Find(x => x.InstID == c.SrcInstid && x.FirstAware <= c.Time && x.LastAware >= c.Time);
+                                Target target = Targets.Find(x => x.InstID == c.SrcInstid && x.FirstAware <= c.Time && x.LastAware >= c.Time);
                                 if (target != null)
                                 { 
                                     amp = target;
@@ -458,7 +458,7 @@ namespace LuckParser.Models
                             AbstractMasterPlayer amp = null;
                             if ((mech.MechanicType == Mechanic.MechType.EnemyCastStart && c.IsActivation.IsCasting()) || (mech.MechanicType == Mechanic.MechType.EnemyCastEnd && !c.IsActivation.IsCasting()))
                             {
-                                Boss target = Targets.Find(x => x.InstID == c.SrcInstid && x.FirstAware <= c.Time && x.LastAware >= c.Time);
+                                Target target = Targets.Find(x => x.InstID == c.SrcInstid && x.FirstAware <= c.Time && x.LastAware >= c.Time);
                                 if (target != null)
                                 {
                                     amp = target;
