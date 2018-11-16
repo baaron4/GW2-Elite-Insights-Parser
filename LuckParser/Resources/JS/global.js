@@ -183,7 +183,7 @@ function computePhaseMarkupSettings(currentArea, areas, annotations) {
     for (var i = annotations.length - 1; i >= 0; i--) {
         var annotation = annotations[i];
         var area = areas[i];
-        if ((area.start <= currentArea.start && area.end >= currentArea.end) || area.end >= currentArea.start) {
+        if ((area.start <= currentArea.start && area.end >= currentArea.end) || area.end > currentArea.start) {
             // current area included in area OR current area intersects area
             if (annotation.bgcolor === textbg) {
                 textbg = '#FF0000';
