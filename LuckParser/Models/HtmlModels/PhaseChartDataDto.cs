@@ -7,10 +7,8 @@ namespace LuckParser.Models.HtmlModels
     public class PhaseChartDataDto
     {
         [DataMember]
-        public List<PlayerChartDataDto> players;
+        public List<PlayerChartDataDto> players = new List<PlayerChartDataDto>();
         [DataMember]
-        public PlayerChartDataDto boss;
-        [DataMember]
-        public double[] bossHealth;
+        public List<TargetChartDataDto> targets = new List<TargetChartDataDto>();
     }
 }

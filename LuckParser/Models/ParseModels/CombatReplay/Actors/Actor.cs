@@ -29,7 +29,7 @@ namespace LuckParser.Models.ParseModels
             public string Type { get; set; }
             public long Start { get; set; }
             public long End { get; set; }
-            public Object ConnectedTo { get; set; }
+            public object ConnectedTo { get; set; }
         }
 
         public abstract string GetCombatReplayJSON(CombatReplayMap map);

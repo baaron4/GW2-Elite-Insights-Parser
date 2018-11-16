@@ -1,0 +1,109 @@
+<div>
+    <div class="d-flex flex-row justify-content-center mt-1 mb-1">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link" @click="mode = 1" :class="{active: mode}">Target</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" @click="mode = 0" :class="{active: !mode }">All</a>
+            </li>
+        </ul>
+    </div>
+    <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" id="dmg-table">
+        <thead>
+            <tr>
+                <th>Sub</th>
+                <th></th>
+                <th class="text-left">Name</th>
+                <th>Account</th>
+                <th>
+                    <img src="https://wiki.guildwars2.com/images/9/95/Critical_Chance.png" alt="Crits"
+                        data-original-title="Percent time hits critical" class="icon icon-hover">
+                </th>
+                <th>
+                    <img src="https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png" alt="Scholar"
+                        data-original-title="Percent time hits while above 90% health" class="icon icon-hover">
+                </th>
+                <th>
+                <img src="https://wiki.guildwars2.com/images/9/9b/Superior_Rune_of_the_Eagle.png" alt="Eagle"
+                        data-original-title="Percent time hits while target below 50% health" class="icon icon-hover">
+                </th>
+                <th>
+                    <img src="https://wiki.guildwars2.com/images/1/1c/Bowl_of_Seaweed_Salad.png" alt="SwS"
+                        data-original-title="Percent time hits while moveing" class="icon icon-hover">
+                </th>
+                <th>
+                    <img src="https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png" alt="Flank"
+                        data-original-title="Percent time hits while flanking" class="icon icon-hover">
+                </th>
+                <th>
+                    <img src="https://wiki.guildwars2.com/images/f/f9/Weakness.png" alt="Glance" data-original-title="Percent time hits while glanceing"
+                        class="icon icon-hover">
+                </th>
+                <th>
+                    <img src="https://wiki.guildwars2.com/images/3/33/Blinded.png" alt="Miss" data-original-title="Number of hits while blinded"
+                        class="icon icon-hover">
+                </th>
+                <th>
+                    <img src="https://wiki.guildwars2.com/images/7/79/Daze.png" alt="Interupts" data-original-title="Number of hits interupted?/hits used to interupt"
+                        class="icon icon-hover">
+                </th>
+                <th>
+                    <img src="https://wiki.guildwars2.com/images/e/eb/Determined.png" alt="Ivuln" data-original-title="times the enemy was invulnerable to attacks"
+                        class="icon icon-hover">
+                </th>
+                <th>
+                    <img src="https://wiki.guildwars2.com/images/b/b3/Out_Of_Health_Potions.png" alt="Wasted"
+                        data-original-title="Time wasted(in seconds) interupting skill casts" class="icon icon-hover">
+                </th>
+                <th>
+                    <img src="https://wiki.guildwars2.com/images/e/eb/Ready.png" alt="Saved" data-original-title="Time saved(in seconds) interupting skill casts"
+                        class="icon icon-hover">
+                </th>
+                <th>
+                    <img src="https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png" alt="Swap"
+                        data-original-title="Times weapon swapped" class="icon icon-hover">
+                </th>
+                <th>
+                    <img src="https://wiki.guildwars2.com/images/e/ef/Commander_arrow_marker.png" alt="Stack"
+                        data-original-title="Average Distance from center of group stack" class="icon icon-hover">
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="row in (mode ? tableDataTarget : tableData)" :class="{active: row.player.active}">
+                <td>{{row.player.group}}</td>
+                <td :data-original-title="row.player.profession">
+                    <img :src="row.player.icon" :alt="row.player.profession" class="icon"><span style="display:none">{{row.player.profession}}</span>
+                </td>
+                <td class="text-left">{{row.player.name}}</td>
+                <td>{{row.player.acc}}</td>
+                <td :data-original-title="row.data[2] + ' out of ' + row.data[1] + ' critable hits<br>Total Damage Critical Damage: ' + row.data[3]">
+                    {{round2(100*row.data[2] / row.data[1])}}%
+                </td>
+                <td :data-original-title="row.data[4] + ' out of ' + row.data[0] + ' hits<br>Pure Scholar Damage: ' + row.data[5] + '<br>Effective Physical Damage Increase: ' + round3(100*(row.data[6]/(row.data[6]-row.data[5]) - 1.0)) + '%'">
+                    {{round2(100*row.data[4] / row.data[0])}}%
+                </td>
+                <td :data-original-title="row.data[14] + ' out of ' + row.data[0] + ' hits<br>Pure Eagle Damage: ' + row.data[15] + '<br>Effective Physical Damage Increase: ' + round3(100*(row.data[6]/(row.data[6]-row.data[15]) - 1.0)) + '%'">
+                    {{round2(100*row.data[14] / row.data[0])}}%
+                </td>
+                <td :data-original-title="row.data[7] + ' out of ' + row.data[0] + ' hits<br>Pure Seaweed Damage: ' + row.data[8] + '<br>Effective Physical Damage Increase: ' +  round3(100*(row.data[6]/(row.data[6]-row.data[8]) - 1.0)) + '%'">
+                    {{round2(100*row.data[7]/ row.data[0])}}%
+                </td>
+                <td :data-original-title="row.data[9] + ' out of ' + row.data[0] + ' hits'">
+                    {{round2(100*row.data[9]/ row.data[0])}}%
+                </td>
+                <td :data-original-title="row.data[10] + ' out of ' + row.data[0] + ' hits'">
+                    {{round2(100*row.data[10]/ row.data[0])}}%
+                </td>
+                <td>{{row.data[11]}}</td>
+                <td>{{row.data[12]}}</td>
+                <td>{{row.data[13]}}</td>
+                <td :data-original-title="row.commons[1] + ' cancels'">{{row.commons[0]}}</td>
+                <td :data-original-title="row.commons[3] + ' cancels'">{{row.commons[2]}}</td>
+                <td>{{row.commons[4]}}</td>
+                <td>{{row.commons[5]}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

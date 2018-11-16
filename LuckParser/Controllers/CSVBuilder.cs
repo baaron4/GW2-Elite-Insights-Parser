@@ -33,7 +33,7 @@ namespace LuckParser.Controllers
             switches.CalculateMechanics = true;
         }
        
-        public CSVBuilder(StreamWriter sw, String delimiter,ParsedLog log, SettingsContainer settings, Statistics statistics,string[] uploadresult)
+        public CSVBuilder(StreamWriter sw, string delimiter,ParsedLog log, SettingsContainer settings, Statistics statistics,string[] uploadresult)
         {
             _log = log;
             _sw = sw;
@@ -199,9 +199,9 @@ namespace LuckParser.Controllers
             foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalDPS dps = _statistics.DpsAll[player][phaseIndex];
-                Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[_log.Boss][player][phaseIndex];
+                Statistics.FinalDPS dpsBoss = _statistics.DpsTarget[_log.Boss][player][phaseIndex];
                 Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
-                Statistics.FinalStats statsBoss = _statistics.StatsBoss[_log.Boss][player][phaseIndex];
+                Statistics.FinalStats statsBoss = _statistics.StatsTarget[_log.Boss][player][phaseIndex];
                 string deathString = "";
                 string deadthTooltip = "";
                 if (stats.Died != 0.0)
@@ -266,17 +266,17 @@ namespace LuckParser.Controllers
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[_log.Boss][player][phaseIndex];
+                Statistics.FinalDPS dpsBoss = _statistics.DpsTarget[_log.Boss][player][phaseIndex];
                 Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
-                Statistics.FinalStats statsBoss = _statistics.StatsBoss[_log.Boss][player][phaseIndex];
+                Statistics.FinalStats statsBoss = _statistics.StatsTarget[_log.Boss][player][phaseIndex];
 
                 WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
-                Math.Round((Double)(statsBoss.CriticalRate) / statsBoss.CritablePowerLoopCount * 100,1).ToString(), statsBoss.CriticalRate.ToString(),statsBoss.CriticalDmg.ToString(),
-                Math.Round((Double)(statsBoss.ScholarRate) / statsBoss.PowerLoopCount * 100,1).ToString(),statsBoss.ScholarRate.ToString(),statsBoss.ScholarDmg.ToString(),Math.Round(100.0 * (dpsBoss.PlayerPowerDamage / (Double)(dpsBoss.PlayerPowerDamage - statsBoss.ScholarDmg) - 1.0), 3).ToString(),
-                Math.Round((Double)(statsBoss.MovingRate) / statsBoss.PowerLoopCount * 100,1).ToString(),statsBoss.MovingRate.ToString(),statsBoss.MovingDamage.ToString(),Math.Round(100.0 * (dpsBoss.PlayerPowerDamage / (Double)(dpsBoss.PlayerPowerDamage - statsBoss.MovingDamage) - 1.0), 3).ToString(),
-                Math.Round(statsBoss.FlankingRate / (Double)statsBoss.PowerLoopCount * 100,1).ToString(),statsBoss.FlankingRate.ToString(),
-                Math.Round(statsBoss.GlanceRate / (Double)statsBoss.PowerLoopCount * 100,1).ToString(),statsBoss.GlanceRate.ToString(),
-                Math.Round(statsBoss.Missed / (Double)statsBoss.PowerLoopCount * 100,1).ToString(),statsBoss.Missed.ToString(),
+                Math.Round((double)(statsBoss.CriticalRate) / statsBoss.CritablePowerLoopCount * 100,1).ToString(), statsBoss.CriticalRate.ToString(),statsBoss.CriticalDmg.ToString(),
+                Math.Round((double)(statsBoss.ScholarRate) / statsBoss.PowerLoopCount * 100,1).ToString(),statsBoss.ScholarRate.ToString(),statsBoss.ScholarDmg.ToString(),Math.Round(100.0 * (dpsBoss.PlayerPowerDamage / (double)(dpsBoss.PlayerPowerDamage - statsBoss.ScholarDmg) - 1.0), 3).ToString(),
+                Math.Round((double)(statsBoss.MovingRate) / statsBoss.PowerLoopCount * 100,1).ToString(),statsBoss.MovingRate.ToString(),statsBoss.MovingDamage.ToString(),Math.Round(100.0 * (dpsBoss.PlayerPowerDamage / (double)(dpsBoss.PlayerPowerDamage - statsBoss.MovingDamage) - 1.0), 3).ToString(),
+                Math.Round(statsBoss.FlankingRate / (double)statsBoss.PowerLoopCount * 100,1).ToString(),statsBoss.FlankingRate.ToString(),
+                Math.Round(statsBoss.GlanceRate / (double)statsBoss.PowerLoopCount * 100,1).ToString(),statsBoss.GlanceRate.ToString(),
+                Math.Round(statsBoss.Missed / (double)statsBoss.PowerLoopCount * 100,1).ToString(),statsBoss.Missed.ToString(),
                 statsBoss.PowerLoopCount.ToString(),
                 statsBoss.Interrupts.ToString(),statsBoss.Invulned.ToString(),stats.TimeWasted.ToString(),stats.TimeSaved.ToString(),stats.SwapCount.ToString() });
                 count++;
@@ -306,12 +306,12 @@ namespace LuckParser.Controllers
                 Statistics.FinalDPS dps = _statistics.DpsAll[player][phaseIndex];
 
                 WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
-                Math.Round((Double)(stats.CriticalRate) / stats.CritablePowerLoopCount * 100,1).ToString(), stats.CriticalRate.ToString(),stats.CriticalDmg.ToString(),
-                Math.Round((Double)(stats.ScholarRate) / stats.PowerLoopCount * 100,1).ToString(),stats.ScholarRate.ToString(),stats.ScholarDmg.ToString(),Math.Round(100.0 * (dps.PlayerPowerDamage / (Double)(dps.PlayerPowerDamage - stats.ScholarDmg) - 1.0), 3).ToString(),
-                Math.Round((Double)(stats.MovingRate) / stats.PowerLoopCount * 100,1).ToString(),stats.MovingRate.ToString(),stats.MovingDamage.ToString(),Math.Round(100.0 * (dps.PlayerPowerDamage / (Double)(dps.PlayerPowerDamage - stats.MovingDamage) - 1.0), 3).ToString(),
-                Math.Round(stats.FlankingRate / (Double)stats.PowerLoopCount * 100,1).ToString(),stats.FlankingRate.ToString(),
-                Math.Round(stats.GlanceRate / (Double)stats.PowerLoopCount * 100,1).ToString(),stats.GlanceRate.ToString(),
-                Math.Round(stats.Missed / (Double)stats.PowerLoopCount * 100,1).ToString(),stats.Missed.ToString(),
+                Math.Round((double)(stats.CriticalRate) / stats.CritablePowerLoopCount * 100,1).ToString(), stats.CriticalRate.ToString(),stats.CriticalDmg.ToString(),
+                Math.Round((double)(stats.ScholarRate) / stats.PowerLoopCount * 100,1).ToString(),stats.ScholarRate.ToString(),stats.ScholarDmg.ToString(),Math.Round(100.0 * (dps.PlayerPowerDamage / (double)(dps.PlayerPowerDamage - stats.ScholarDmg) - 1.0), 3).ToString(),
+                Math.Round((double)(stats.MovingRate) / stats.PowerLoopCount * 100,1).ToString(),stats.MovingRate.ToString(),stats.MovingDamage.ToString(),Math.Round(100.0 * (dps.PlayerPowerDamage / (double)(dps.PlayerPowerDamage - stats.MovingDamage) - 1.0), 3).ToString(),
+                Math.Round(stats.FlankingRate / (double)stats.PowerLoopCount * 100,1).ToString(),stats.FlankingRate.ToString(),
+                Math.Round(stats.GlanceRate / (double)stats.PowerLoopCount * 100,1).ToString(),stats.GlanceRate.ToString(),
+                Math.Round(stats.Missed / (double)stats.PowerLoopCount * 100,1).ToString(),stats.Missed.ToString(),
                 stats.PowerLoopCount.ToString(),
                 stats.Interrupts.ToString(),stats.Invulned.ToString(),stats.TimeWasted.ToString(),stats.TimeSaved.ToString(),stats.SwapCount.ToString() });
                 count++;
@@ -686,7 +686,7 @@ namespace LuckParser.Controllers
             Boss boss = _log.Boss;
             List<PhaseData> phases = _statistics.Phases;
             long fightDuration = phases[phaseIndex].GetDuration();
-            Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[_log.Boss][phaseIndex];
+            Dictionary<long, Statistics.FinalTargetBoon> conditions = _statistics.TargetConditions[_log.Boss][phaseIndex];
 
             WriteCell("Name");
             WriteCell("Avg");
@@ -698,7 +698,7 @@ namespace LuckParser.Controllers
             NewLine();
             int count = 0;
             WriteCell(boss.Character);
-            WriteCell(Math.Round(_statistics.AvgBossConditions[_log.Boss][phaseIndex], 1).ToString());
+            WriteCell(Math.Round(_statistics.AvgTargetConditions[_log.Boss][phaseIndex], 1).ToString());
             foreach (Boon boon in _statistics.PresentConditions)
             {
                 if (boon.Type == Boon.BoonType.Duration)
@@ -722,7 +722,7 @@ namespace LuckParser.Controllers
         {
             Boss boss = _log.Boss;
             List<PhaseData> phases = _statistics.Phases;
-            Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[_log.Boss][phaseIndex];
+            Dictionary<long, Statistics.FinalTargetBoon> conditions = _statistics.TargetConditions[_log.Boss][phaseIndex];
             WriteCell("Name");
             WriteCell("Avg");
             foreach (Boon boon in _statistics.PresentBoons)
@@ -755,7 +755,7 @@ namespace LuckParser.Controllers
         private void CreateCondiGen(int phaseIndex)
         {
             List<PhaseData> phases = _statistics.Phases;
-            Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[_log.Boss][phaseIndex];
+            Dictionary<long, Statistics.FinalTargetBoon> conditions = _statistics.TargetConditions[_log.Boss][phaseIndex];
             //bool hasBoons = false;
             int count = 0;
             WriteCell("Name");

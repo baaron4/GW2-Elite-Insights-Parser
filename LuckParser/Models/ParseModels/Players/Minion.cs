@@ -63,6 +63,7 @@ namespace LuckParser.Models.ParseModels
 
         protected override void SetDamageTakenLogs(ParsedLog log)
         {
+            throw new InvalidOperationException();
         }
 
         /*protected override void setHealingLogs(ParsedLog log)

@@ -35,7 +35,7 @@ namespace LuckParser.Models.ParseModels
                 var splitted = Prof.Split(':');
                 try
                 {
-                    ID = UInt16.Parse(splitted[splitted.Length - 1]);
+                    ID = ushort.Parse(splitted[splitted.Length - 1]);
                 }
                 catch(FormatException)
                 {
@@ -61,7 +61,7 @@ namespace LuckParser.Models.ParseModels
                 var splitted = Prof.Split(':');
                 try
                 {
-                    ID = UInt16.Parse(splitted[splitted.Length - 1]);
+                    ID = ushort.Parse(splitted[splitted.Length - 1]);
                 }
                 catch (FormatException)
                 {

@@ -181,21 +181,20 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Facet of Light",27336, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/18/Facet_of_Light.png"),
                 new Boon("Facet of Light (Traited)",51690, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/18/Facet_of_Light.png"), //Lingering buff with Draconic Echo trait
                 new Boon("Infuse Light",27737, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/6/60/Infuse_Light.png"),
-                new Boon("Facet of Darkness",28036, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override,"https://wiki.guildwars2.com/images/e/e4/Facet_of_Darkness.png"),
-                new Boon("Facet of Darkness (Traited)",51695, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override,"https://wiki.guildwars2.com/images/e/e4/Facet_of_Darkness.png"),//Lingering buff with Draconic Echo trait
-                new Boon("Facet of Elements",28243, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/c/ce/Facet_of_Elements.png"),
-                new Boon("Facet of Elements (Traited)",51706, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/c/ce/Facet_of_Elements.png"),//Lingering buff with Draconic Echo trait
-                new Boon("Facet of Strength",27376, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/a/a8/Facet_of_Strength.png"),
-                new Boon("Facet of Strength (Traited)",51700, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/a/a8/Facet_of_Strength.png"),//Lingering buff with Draconic Echo trait
-                new Boon("Facet of Chaos",27983, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/c/c7/Facet_of_Chaos.png"),
-                new Boon("Facet of Chaos (Traited)",51658, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/c/c7/Facet_of_Chaos.png"),//Lingering buff with Draconic Echo trait
+                new Boon("Facet of Darkness",28036, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/e4/Facet_of_Darkness.png"),
+                new Boon("Facet of Darkness (Traited)",51695, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/e4/Facet_of_Darkness.png"),//Lingering buff with Draconic Echo trait
+                new Boon("Facet of Elements",28243, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/ce/Facet_of_Elements.png"),
+                new Boon("Facet of Elements (Traited)",51706, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/ce/Facet_of_Elements.png"),//Lingering buff with Draconic Echo trait
+                new Boon("Facet of Strength",27376, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a8/Facet_of_Strength.png"),
+                new Boon("Facet of Strength (Traited)",51700, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a8/Facet_of_Strength.png"),//Lingering buff with Draconic Echo trait
+                new Boon("Facet of Chaos",27983, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/c7/Facet_of_Chaos.png"),
                 new Boon("Facet of Nature",29275, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e9/Facet_of_Nature.png"),
                 new Boon("Facet of Nature (Traited)",51681, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e9/Facet_of_Nature.png"),//Lingering buff with Draconic Echo trait
-                new Boon("Facet of Nature-Assassin",51692, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/cd/Facet_of_Nature%E2%80%95Assassin.png"),
-                new Boon("Facet of Nature-Dragon",51674, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/47/Facet_of_Nature%E2%80%95Dragon.png"),
-                new Boon("Facet of Nature-Demon",51704, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/f/ff/Facet_of_Nature%E2%80%95Demon.png"),
-                new Boon("Facet of Nature-Dwarf",51677, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4c/Facet_of_Nature%E2%80%95Dwarf.png"),
-                new Boon("Facet of Nature-Centaur",51699, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/74/Facet_of_Nature%E2%80%95Centaur.png"),
+                new Boon("Facet of Nature-Assassin",51692, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/c/cd/Facet_of_Nature%E2%80%95Assassin.png"),
+                new Boon("Facet of Nature-Dragon",51674, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/4/47/Facet_of_Nature%E2%80%95Dragon.png"),
+                new Boon("Facet of Nature-Demon",51704, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/f/ff/Facet_of_Nature%E2%80%95Demon.png"),
+                new Boon("Facet of Nature-Dwarf",51677, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/4/4c/Facet_of_Nature%E2%80%95Dwarf.png"),
+                new Boon("Facet of Nature-Centaur",51699, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/7/74/Facet_of_Nature%E2%80%95Centaur.png"),
                 new Boon("Naturalistic Resonance", 29379, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/e/e9/Facet_of_Nature.png"),
                 //legends
                 new Boon("Legendary Centaur Stance",27972, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8a/Legendary_Centaur_Stance.png"),
@@ -476,7 +475,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Conjure Fiery Greatsword", 15792, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/e/e2/Conjure_Fiery_Greatsword.png"),
                 //skills
                 new Boon("Arcane Power",5582, BoonSource.Elementalist, BoonType.Intensity, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/72/Arcane_Power.png"),
-                new Boon("Arcane Shield",5640, BoonSource.Elementalist, BoonType.Intensity, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/wiki/File:Arcane_Shield.png"),
+                new Boon("Arcane Shield",5640, BoonSource.Elementalist, BoonType.Intensity, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/9d/Arcane_Shield.png"),
                 new Boon("Renewal of Fire",5764, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/63/Renewal_of_Fire.png"),
                 new Boon("Glyph of Elemental Power (Fire)",5739, BoonSource.Elementalist, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/f/f2/Glyph_of_Elemental_Power_%28fire%29.png"),
                 new Boon("Glyph of Elemental Power (Water)",5741, BoonSource.Elementalist, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/bf/Glyph_of_Elemental_Power_%28water%29.png"),
@@ -487,6 +486,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Magnetic Wave",15794, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/32/Magnetic_Wave.png"),
                 new Boon("Obsidian Flesh",5667, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/c1/Obsidian_Flesh.png"),
                 new Boon("Grinding Stones",51658, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/3d/Grinding_Stones.png"),
+                new Boon("Static Charge",31487, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/4/4b/Overload_Air.png"),
                 //traits
                 new Boon("Harmonious Conduit",31353, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b3/Harmonious_Conduit.png"),
                 new Boon("Fresh Air",34241, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d8/Fresh_Air.png"),
@@ -632,7 +632,7 @@ namespace LuckParser.Models.ParseModels
         {
             return BoonsBySource[source].Where(x => x.Nature == BoonNature.GraphOnlyBuff).ToList();
         }
-        public static List<Boon> GetRemainingBuffsList(String source)
+        public static List<Boon> GetRemainingBuffsList(string source)
         {
             return GetRemainingBuffsList(ProfToEnum(source));
         }

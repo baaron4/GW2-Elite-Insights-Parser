@@ -11,30 +11,18 @@ namespace LuckParser.Models.HtmlModels
     public class MechanicDto
     {
         [DataMember]
-        public String name;
+        public string name;
 
         [DataMember]
-        public String shortName;
+        public string shortName;
 
         [DataMember]
-        public String description;
+        public string description;
 
-        [DataMember]
-        public String symbol;
-
-        [DataMember]
-        public String color;
-
-        [DataMember]
-        public bool playerMech;
-
-        [DataMember]
+        [DataMember(EmitDefaultValue = false)]
         public bool enemyMech;
 
         [DataMember(EmitDefaultValue = false)]
-        public bool visible;
-
-        [DataMember]
-        public List<List<List<double>>> data;
+        public bool playerMech;
     }
 }

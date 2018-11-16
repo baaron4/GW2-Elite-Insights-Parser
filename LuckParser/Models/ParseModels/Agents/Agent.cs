@@ -36,7 +36,7 @@ namespace LuckParser.Models.ParseModels
         private readonly uint _prof;
 
         // Constructor
-        public Agent(ulong ID, String name, uint prof, uint elite)
+        public Agent(ulong ID, string name, uint prof, uint elite)
         {
             Name = name;
             this.ID = ID;

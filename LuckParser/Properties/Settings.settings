@@ -32,9 +32,6 @@
     <Setting Name="EventList" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="BossSummary" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
     <Setting Name="SimpleRotation" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
@@ -86,10 +83,10 @@
     <Setting Name="IndentJSON" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="NewHtmlMode" Type="System.Boolean" Scope="User">
+    <Setting Name="LegacyHtmlMode" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="NewHtmlExternalScripts" Type="System.Boolean" Scope="User">
+    <Setting Name="HtmlExternalScripts" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="SkipFailedTries" Type="System.Boolean" Scope="User">

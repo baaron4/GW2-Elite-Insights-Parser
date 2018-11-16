@@ -58,14 +58,17 @@
     <ApplicationManifest>App.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NUglify, Version=1.5.12.0, Culture=neutral, PublicKeyToken=15bc7810aec21b5e, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUglify.1.5.12\lib\net40\NUglify.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
-    <Reference Include="System.Net.Http.Formatting, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.4\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.6\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
@@ -85,14 +88,15 @@
     <Compile Include="Controllers\CSVHelper.cs" />
     <Compile Include="Controllers\GeneralHelper.cs" />
     <Compile Include="Controllers\JSONBuilder.cs" />
-    <Compile Include="Controllers\HTMLBuilderNew.cs" />
+    <Compile Include="Controllers\HTMLBuilder.cs" />
+    <Compile Include="Controllers\CombatReplayHelper.cs" />
     <Compile Include="Controllers\Parser.cs" />
     <Compile Include="Controllers\CSVBuilder.cs" />
     <Compile Include="Controllers\FlashWindow.cs" />
     <Compile Include="Controllers\GraphHelper.cs" />
     <Compile Include="Controllers\GW2APIController.cs" />
-    <Compile Include="Controllers\HTMLBuilder.cs" />
-    <Compile Include="Controllers\HTMLHelper.cs" />
+    <Compile Include="Controllers\LegacyHTMLBuilder.cs" />
+    <Compile Include="Controllers\LegacyHTMLHelper.cs" />
     <Compile Include="Controllers\ParseHelper.cs" />
     <Compile Include="Controllers\StatisticsCalculator.cs" />
     <Compile Include="Controllers\UploadController.cs" />
@@ -136,23 +140,27 @@
     <Compile Include="Models\DataModels\SettingsContainer.cs" />
     <Compile Include="Models\DataModels\Statistics.cs" />
     <Compile Include="Models\HtmlModels\AreaLabelDto.cs" />
+    <Compile Include="Models\HtmlModels\DeathRecapDto.cs" />
     <Compile Include="Models\HtmlModels\FoodDto.cs" />
     <Compile Include="Models\HtmlModels\DmgDistributionDto.cs" />
+    <Compile Include="Models\HtmlModels\MechanicChartDataDto.cs" />
+    <Compile Include="Models\HtmlModels\ChartDataDto.cs" />
     <Compile Include="Models\HtmlModels\PhaseChartDataDto.cs" />
     <Compile Include="Models\HtmlModels\BoonChartDataDto.cs" />
+    <Compile Include="Models\HtmlModels\TargetChartDataDto.cs" />
     <Compile Include="Models\HtmlModels\PlayerChartDataDto.cs" />
     <Compile Include="Models\HtmlModels\EnemyDto.cs" />
     <Compile Include="Models\HtmlModels\MinionDto.cs" />
-    <Compile Include="Models\HtmlModels\BossDto.cs" />
+    <Compile Include="Models\HtmlModels\TargetDto.cs" />
     <Compile Include="Models\HtmlModels\SkillDto.cs" />
     <Compile Include="Models\HtmlModels\MechanicDto.cs" />
     <Compile Include="Models\HtmlModels\BoonDto.cs" />
     <Compile Include="Models\HtmlModels\BoonData.cs" />
     <Compile Include="Models\HtmlModels\PhaseDto.cs" />
     <Compile Include="Models\HtmlModels\LogDataDto.cs" />
-    <Compile Include="Models\HtmlModels\GraphDto.cs" />
     <Compile Include="Models\HtmlModels\PlayerDetailsDto.cs" />
     <Compile Include="Models\HtmlModels\PlayerDto.cs" />
+    <Compile Include="Models\JsonModels\JsonConsumable.cs" />
     <Compile Include="Models\JsonModels\JsonDamageDist.cs" />
     <Compile Include="Models\JsonModels\JsonDeathRecap.cs" />
     <Compile Include="Models\JsonModels\JsonLog.cs" />
@@ -238,6 +246,11 @@
     <Compile Include="Models\ParseModels\SkillItem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="SettingsForm.cs">
       <SubType>Form</SubType>
@@ -250,14 +263,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -295,28 +303,56 @@
     <None Include="Resources\theme-cosmo.png" />
     <None Include="Resources\theme-slate.png" />
     <None Include="Resources\combatreplay.js" />
-    <None Include="Resources\tmplDmgTakenTable.html" />
     <None Include="Properties\Version.tt.old">
       <LastGenOutput>Version.tt.cs</LastGenOutput>
     </None>
-    <None Include="Resources\template-combatreplay.html" />
-    <Content Include="Resources\tmplGroupCombatReplay.html" />
-    <Content Include="Resources\tmplPlayerSelectCombatReplay.html" />
+    <None Include="Resources\combatReplayTemplates\tmplCombatReplay.html" />
+    <Content Include="Resources\ei.css" />
+    <Content Include="Resources\ei.js" />
+    <None Include="Resources\htmlTemplates\tmplGeneralLayout.html" />
+    <None Include="Resources\htmlTemplates\tmplBuffTable.html" />
+    <None Include="Resources\htmlTemplates\tmplDamageDistTable.html" />
+    <None Include="Resources\htmlTemplates\tmplEncounter.html" />
+    <None Include="Resources\htmlTemplates\tmplPhase.html" />
+    <None Include="Resources\htmlTemplates\tmplGameplayTable.html" />
+    <None Include="Resources\htmlTemplates\tmplMechanicsTable.html" />
+    <None Include="Resources\htmlTemplates\tmplDefenseTable.html" />
+    <None Include="Resources\htmlTemplates\tmplSupportTable.html" />
+    <None Include="Resources\htmlTemplates\tmplBuffStats.html" />
+    <None Include="Resources\htmlTemplates\tmplPersonalBuffTable.html" />
+    <None Include="Resources\htmlTemplates\tmplBuffStatsTarget.html" />
+    <None Include="Resources\htmlTemplates\tmplDamageDistTarget.html" />
+    <None Include="Resources\htmlTemplates\tmplTargetTab.html" />
+    <None Include="Resources\htmlTemplates\tmplTargetStats.html" />
+    <None Include="Resources\htmlTemplates\tmplDeathRecap.html" />
+    <None Include="Resources\htmlTemplates\tmplSimpleRotation.html" />
+    <None Include="Resources\htmlTemplates\tmplFood.html" />
+    <None Include="Resources\htmlTemplates\tmplDamageDistPlayer.html" />
+    <None Include="Resources\htmlTemplates\tmplPlayerTab.html" />
+    <None Include="Resources\htmlTemplates\tmplPlayerStats.html" />
+    <None Include="Resources\htmlTemplates\tmplGraphStats.html" />
+    <None Include="Resources\htmlTemplates\tmplDPSGraph.html" />
+    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayGroup.html" />
+    <None Include="Resources\htmlTemplates\tmplTargets.html" />
+    <None Include="Resources\htmlTemplates\tmplDamageTable.html" />
+    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayPlayer.html" />
+    <None Include="Resources\htmlTemplates\tmplPlayers.html" />
+    <None Include="Resources\htmlTemplates\tmplDamageModifierTable.html" />
+    <None Include="Resources\htmlTemplates\tmplPlayerTabGraph.html" />
+    <None Include="Resources\htmlTemplates\tmplRotationLegend.html" />
+    <None Include="Resources\htmlTemplates\tmplTargetTabGraph.html" />
+    <Content Include="Resources\htmlTemplates\tmplDamageTaken.html" />
+    <Content Include="Resources\JS\generalStats.js" />
+    <Content Include="Resources\JS\buffStats.js" />
+    <Content Include="Resources\JS\graphs.js" />
+    <Content Include="Resources\JS\targetStats.js" />
+    <Content Include="Resources\JS\mechanics.js" />
+    <Content Include="Resources\JS\playerStats.js" />
+    <Content Include="Resources\JS\header.js" />
+    <Content Include="Resources\JS\layout.js" />
+    <Content Include="Resources\JS\commons.js" />
+    <Content Include="Resources\JS\global.js" />
     <Content Include="Resources\TODO.txt" />
-    <None Include="Resources\tmplCompTable.html" />
-    <None Include="Resources\tmplMechanicTable.html" />
-    <None Include="Resources\tmplDmgDistTable.html" />
-    <None Include="Resources\tmplSupTable.html" />
-    <None Include="Resources\tmplDpsTable.html" />
-    <None Include="Resources\tmplDefTable.html" />
-    <None Include="Resources\tmplBoonTable.html" />
-    <None Include="Resources\flomix-ei.js" />
-    <None Include="Resources\flomix-ei.css" />
-    <None Include="Resources\tmplTabs.html" />
-    <None Include="Resources\tmplPlayerCells.html" />
-    <None Include="Resources\tmplDmgTable.html">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Resources\template.html" />
   </ItemGroup>
   <ItemGroup>

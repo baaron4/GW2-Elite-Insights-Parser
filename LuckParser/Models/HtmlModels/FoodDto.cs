@@ -7,9 +7,8 @@ namespace LuckParser.Models.HtmlModels
     {
         [DataMember] public double time;
         [DataMember] public double duration;
-        [DataMember] public string icon;
-        [DataMember] public string name;
+        [DataMember] public long id;
         [DataMember] public int stack;
-        [DataMember] public bool dimished;
+        [DataMember(EmitDefaultValue = false)] public bool dimished;
     }
 }

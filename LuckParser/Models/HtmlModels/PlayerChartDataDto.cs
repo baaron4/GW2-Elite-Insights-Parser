@@ -7,8 +7,8 @@ namespace LuckParser.Models.HtmlModels
     public class PlayerChartDataDto
     {
         [DataMember]
-        public List<int> boss;
+        public List<List<int>> targets;
         [DataMember]
-        public List<int> cleave;
+        public List<int> total;
     }
 }

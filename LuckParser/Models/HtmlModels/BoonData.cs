@@ -11,9 +11,9 @@ namespace LuckParser.Models.HtmlModels
     public class BoonData
     {
         [DataMember]
-        public Double avg;
+        public double avg;
 
         [DataMember]
-        public List<List<Object>> val = new List<List<Object>>();
+        public List<List<object>> data = new List<List<object>>();
     }
 }

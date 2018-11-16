@@ -1,90 +1,125 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/${bootstrapTheme}/bootstrap.min.css"  crossorigin="anonymous">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
-<!--${flomixCss}-->
-<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/plug-ins/1.10.13/sorting/alt-string.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jsrender/0.9.90/jsrender.min.js"></script>
-<!--${flomixJs}-->
-<script>
-var data = ${logDataJson};
-</script>
-<!--${playerData}-->
+    <meta charset="utf-8">
+    <link id="theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/${bootstrapTheme}/bootstrap.min.css"
+        crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+    <!--${Css}-->
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.13/sorting/alt-string.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <!--${Templates}-->
+    <!--${Vue}-->
+    <script>
+        var logData = '${logDataJson}';
+    </script>
+    <script>
+        logData.graphData = '${graphDataJson}';
+    </script>
+    <!--${Details}-->
+    <!--${Maps}-->
+    <!--${Js}-->
+    <!--${CombatReplayScript}-->
 </head>
+
 <body class="theme-${bootstrapTheme}">
-	<div class="header">
-		<div>Time Start: ${encounterStart} | Time End: ${encounterEnd}</div>
-	</div>
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-5">
-				<div class="card boss-summary mb-3">
-					<h3 class="card-header text-center">${fightName}</h3>
-					<div class="card-body container">
-						<div class="row">
-							<div class="col-5">
-								<img src="${fightIcon}" alt="${fightName}" class="icon-xl">
-							</div>
-							<div class="col-7">
-									<div class="mb-2">
-									<div class="progress" style="width: 100%; height: 20px;" title="${bossHealthLeft}% left">
-										<div class="progress-bar bg-success" role="progressbar" style="width:${encounterPercent}%;" aria-valuenow="${encounterPercent}" aria-valuemin="0" aria-valuemax="100">
-										</div>
-									</div>
-									<div class="small" style="text-align:center;">${bossHealth} Health</div>
-									</div>
-									<div class='mb-2 text ${encounterResultCss}'>Result: ${encounterResult}</div>
-									<div class="mb-2">Duration: ${encounterDuration}</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-7" id="groupComp">
-			</div>
-		</div>
-		<div id="content">
-			<div class="card">
-			  <div class="card-body" style="margin: 100px; text-align: center;">
-				Loading data...
-			  </div>
-			</div>
-		</div>
-	</div>
+    <div class="header">
+        <div>Time Start: ${encounterStart} | Time End: ${encounterEnd}</div>
+    </div>
+    <div class="d-flex justify-content-center align-item-center" id="loading">
+        <div class="card" style="width: 75%;">
+            <div class="card-body" style="margin: 100px; text-align: center;">
+                Loading data...
+            </div>
+        </div>
+    </div>
+    <div class="container" v-cloak id="content">
 
-		<div class="footer">
-			<div>ARC: ${evtcVersion} | Boss ID: ${bossID} | EI Version: ${eiVersion}</div>
-			<div>File recorded by: ${recordedBy}</div>
-		</div>
-	</div>
+        <div class="sticky-top d-flex flex-row justify-content-center mt-1 mb-1">
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link" @click="switchTheme(true)" :class="{active: light}">Light Theme</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" @click="switchTheme(false)" :class="{active: !light }">Dark Theme</a>
+                </li>
+            </ul>
+        </div>
+        <div class="d-flex flex-row justify-content-center align-items-center">
+            <div class="card boss-summary" id="encounter" style="min-width: 350px;">
+                <encounter-component :logdata="logdata"></encounter-component>
+            </div>
+            <div v-if="logdata.combatReplay" class="ml-5">
+                <ul class="nav nav-pills flex-column justify-content-center d-flex align-items-center">
+                    <li class="nav-item mb-1">
+                        <a class="nav-link" @click="mode = 0" :class="{active: !mode}">Statistics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" @click="mode = 1" :class="{active: mode }">Combat Replay</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div v-show="mode === 0" :class="{'d-flex': !mode}" class="flex-row justify-content-center mt-2" id="phase-nav">
+            <phase-component :phases="logdata.phases"></phase-component>
+        </div>
+        <div class="d-flex flex-row justify-content-center mb-3 mt-3" id="actors">
+            <div v-show="mode === 0 && dataType !== datatypes.targetTab" :class="{'d-flex':mode === 0 && dataType !== datatypes.targetTab}"
+                id="targets" class="flex-row justify-content-center align-items-center flex-wrap mr-5">
+                <target-component :targets="logdata.targets" :phase="logdata.phases[activePhase]"></target-component>
+            </div>
+            <div id="players" class="ml-5">
+                <player-component :players="logdata.players" :crmode="mode === 1"></player-component>
+            </div>
+        </div>
+        <general-layout-component v-show="mode === 0" :layout="layout" :phase="logdata.phases[activePhase]">
+        </general-layout-component>
+        <div id="stats" v-show="mode === 0">
+            <keep-alive>
+                <damage-stats-component v-if="dataType === datatypes.damageTable" :phase="logdata.phases[activePhase]"
+                    :phaseindex="activePhase" :players="logdata.players" :activetargets="activePhaseTargets"></damage-stats-component>
+                <gameplay-stats-component v-if="dataType === datatypes.gameplayTable" :phase="logdata.phases[activePhase]"
+                    :phaseindex="activePhase" :players="logdata.players" :activetargets="activePhaseTargets"></gameplay-stats-component>
+                <dmgmodifier-stats-component v-if="dataType === datatypes.dmgModifiersTable" :phase="logdata.phases[activePhase]"
+                    :phaseindex="activePhase" :players="logdata.players" :activetargets="activePhaseTargets"
+                    :phases="logdata.phases"></dmgmodifier-stats-component>
+                <support-stats-component v-if="dataType === datatypes.supTable" :phase="logdata.phases[activePhase]"
+                    :players="logdata.players"></support-stats-component>
+                <defense-stats-component v-if="dataType === datatypes.defTable" :phase="logdata.phases[activePhase]"
+                    :players="logdata.players"></defense-stats-component>
+                <graph-stats-component v-if="dataType === datatypes.dpsGraph" :phases="logdata.phases" :players="logdata.players"
+                    :targets="logdata.targets" :activetargets="activePhaseTargets" :phaseid="activePhase" :graphdata="logdata.graphData"
+                    :selectedplayerindex="activePlayer"></graph-stats-component>
+                <buff-stats-component v-if="dataType <= datatypes.defensiveBuffTable && dataType>= datatypes.boonTable"
+                    :datatypes="datatypes" :datatype="dataType" :phase="logdata.phases[activePhase]" :players="logdata.players"
+                    :presentboons="logdata.boons" :presentoffs="logdata.offBuffs" :presentdefs="logdata.defBuffs"></buff-stats-component>
+                <personal-buff-table-component v-if="dataType === datatypes.personalBuffTable" :phase="logdata.phases[activePhase]"
+                    :persbuffs="logdata.persBuffs" :players="logdata.players"></personal-buff-table-component>
+                <mechanics-stats-component v-if="dataType === datatypes.mechanicTable" :phase="logdata.phases[activePhase]"
+                    :players="logdata.players" :enemies="logdata.enemies"></mechanics-stats-component>
+                <target-stats-component v-if="dataType === datatypes.targetTab" :players="logdata.players" :targets="logdata.targets"
+                    :phase="logdata.phases[activePhase]" :phaseindex="activePhase" :presentboons="logdata.boons"
+                    :presentconditions="logdata.conditions" :phases="logdata.phases" :graphdata="logdata.graphData"></target-stats-component>
+                <player-stats-component v-if="dataType === datatypes.playerTab" :players="logdata.players"
+                    :activeplayer="activePlayer" :phaseindex="activePhase" :phase="logdata.phases[activePhase]" :phases="logdata.phases"
+                    :graphdata="logdata.graphData" :targets="logdata.targets" :activetargets="activePhaseTargets"></player-stats-component>
+            </keep-alive>
+        </div>
+        <div id="combat-replay" v-show="mode === 1">
+            <!--${CombatReplayBody}-->
+        </div>
+    </div>
 
-	<script>
-		generateWindow(buildWindowLayout(data));
-	</script>
-
-	<script>
-		var playerGraphData = ${graphDataJson};
-	</script>
-	<script>
-		createGraphs(playerGraphData);
-	</script>
-
-	<div style="display:none;">
-	<!--${combatReplay}-->
-	</div>
-	<script>
-		$('#replay_template').appendTo('#replay');
-	</script>
-
-
-	<script> $(function(){$('[title]').tooltip({html:true}); });</script >
+    <div class="footer">
+        <div>ARC: ${evtcVersion} | Boss ID: ${fightID} | EI Version: ${eiVersion}</div>
+        <div>File recorded by: ${recordedBy}</div>
+    </div>
 </body>
+
 </html>

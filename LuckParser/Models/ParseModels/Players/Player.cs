@@ -38,7 +38,7 @@ namespace LuckParser.Models.ParseModels
         // Constructors
         public Player(AgentItem agent, bool noSquad) : base(agent)
         {
-            String[] name = agent.Name.Split('\0');
+            string[] name = agent.Name.Split('\0');
             Account = name[1];
             Group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
         }
@@ -206,16 +206,6 @@ namespace LuckParser.Models.ParseModels
             _weaponsArray = weapons;
         }    
         
-        protected override void SetDamageTakenLogs(ParsedLog log)
-        {
-            long timeStart = log.FightData.FightStart;               
-            foreach (CombatItem c in log.GetDamageTakenData(AgentItem.InstID)) {
-                if (c.Time > log.FightData.FightStart && c.Time < log.FightData.FightEnd) {//selecting player as target
-                    long time = c.Time - timeStart;
-                    AddDamageTakenLog(time, c);
-                }
-            }
-        }  
         private void SetConsumablesList(ParsedLog log)
         {
             List<Boon> consumableList = Boon.GetConsumableList();

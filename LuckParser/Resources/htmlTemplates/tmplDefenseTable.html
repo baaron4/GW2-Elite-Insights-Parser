@@ -1,0 +1,62 @@
+<div>
+    <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" id="def-table">
+        <thead>
+            <tr>
+                <th>Sub</th>
+                <th></th>
+                <th class="text-left">Name</th>
+                <th>Account</th>
+                <th>Dmg Taken</th>
+                <th>Dmg Barrier</th>
+                <th>Blocked</th>
+                <th>Invulned</th>
+                <th>Evaded</th>
+                <th>
+                    <span data-toggle="tooltip" data-html="true" data-placement="top" data-original-title="Dodges or Mirage Cloak ">Dodges</span>
+                </th>
+                <th>
+                    <img src="https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png" alt="Downs" data-original-title="Times downed"
+                        class="icon icon-hover">
+                </th>
+                <th>
+                    <img src="https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png" alt="Dead"
+                        data-original-title="Time died" class="icon icon-hover">
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="row in tableData.rows" :class="{active: row.player.active}">
+                <td>{{row.player.group}}</td>
+                <td :data-original-title="row.player.profession">
+                    <img :src="row.player.icon" :alt="row.player.profession" class="icon"><span style="display:none">{{row.player.profession}}</span>
+                </td>
+                <td class="text-left">{{row.player.name}}</td>
+                <td>{{row.player.acc}}</td>
+                <td>{{row.def[0]}}</td>
+                <td>{{row.def[1]}}</td>
+                <td>{{row.def[2]}}</td>
+                <td>{{row.def[3]}}</td>
+                <td>{{row.def[4]}}</td>
+                <td>{{row.def[5]}}</td>
+                <td>{{row.def[6]}}</td>
+                <td :data-original-title="row.def[8]">{{row.def[7]}}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr v-for="sum in tableData.sums">
+                <td></td>
+                <td></td>
+                <td class="text-left">{{sum.name}}</td>
+                <td></td>
+                <td>{{sum.def[0]}}</td>
+                <td>{{sum.def[1]}}</td>
+                <td>{{sum.def[2]}}</td>
+                <td>{{sum.def[3]}}</td>
+                <td>{{sum.def[4]}}</td>
+                <td>{{sum.def[5]}}</td>
+                <td>{{sum.def[6]}}</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

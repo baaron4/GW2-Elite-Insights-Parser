@@ -52,6 +52,7 @@ namespace LuckParser.Models.ParseModels
             {49112, "https://wiki.guildwars2.com/images/e/e7/Throw_Magnetic_Bomb.png"},
             {49063, "https://wiki.guildwars2.com/images/3/3d/Detonate_Plasma.png"},
             {49123, "https://wiki.guildwars2.com/images/d/dd/Unstable_Artifact.png"},
+            {31686, "https://wiki.guildwars2.com/images/4/4b/Overload_Air.png" },
         };
 
         private const string _defaultIcon = "https://render.guildwars2.com/file/1D55D34FB4EE20B1962E315245E40CA5E1042D0E/62248.png";
@@ -64,14 +65,14 @@ namespace LuckParser.Models.ParseModels
         public int CC { get; private set; }
 
         // Constructor
-        public SkillItem(long ID, String name)
+        public SkillItem(long ID, string name)
         {
             this.ID = ID;
             Name = name.Replace("\0", "");
             CompleteItem();
         }
 
-        public SkillItem(long ID, String name, GW2APIController apiController)
+        public SkillItem(long ID, string name, GW2APIController apiController)
         {
             this.ID = ID;
             Name = name.Replace("\0", "");
