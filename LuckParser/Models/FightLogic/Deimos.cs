@@ -147,7 +147,6 @@ namespace LuckParser.Models
             {
                 phases[i].Name = "Phase " + i;
                 phases[i].Targets.Add(mainTarget);
-                if (i == 2) phases[i].DrawArea = true;
             }
             int offsetDei = phases.Count;
             CombatItem teleport = log.GetBoonData(38169).FirstOrDefault(x => x.Time > log.FightData.FightStart + 5000);
@@ -174,7 +173,6 @@ namespace LuckParser.Models
             {
                 PhaseData phase = phases[i];
                 phase.Name = namesDeiSplit[i - offsetDei];
-                phase.DrawArea = true;
                 List<ushort> ids = new List<ushort>
                     {
                         (ushort) Thief,
@@ -184,11 +182,6 @@ namespace LuckParser.Models
                 AddTargetsToPhase(phase, ids, log);
             }
             phases.Sort((x, y) => (x.Start < y.Start) ? -1 : 1);
-            foreach (PhaseData phase in phases)
-            {
-                phase.DrawStart = true;
-                phase.DrawEnd = true;
-            }
             phases.RemoveAll(x => x.Targets.Count == 0);
             return phases;
         }

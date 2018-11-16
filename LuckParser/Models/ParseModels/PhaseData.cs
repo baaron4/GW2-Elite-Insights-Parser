@@ -9,9 +9,9 @@ namespace LuckParser.Models.ParseModels
         public long Start { get; private set; }
         public long End { get; private set; }
         public string Name { get; set; }
-        public bool DrawStart { get; set; }
-        public bool DrawEnd { get; set; }
-        public bool DrawArea { get; set; }
+        public bool DrawStart { get; set; } = true;
+        public bool DrawEnd { get; set; } = true;
+        public bool DrawArea { get; set; } = true;
         public List<Target> Targets { get; } = new List<Target>();
 
         public PhaseData(long start, long end)

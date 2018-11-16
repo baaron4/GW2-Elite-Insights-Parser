@@ -81,8 +81,6 @@ namespace LuckParser.Models
             {
                 phases[i].Name = "Phase " + i;
                 phases[i].Targets.Add(mainTarget);
-                phases[i].DrawStart = true;
-                phases[i].DrawEnd = true;
             }
             // add burn phases
             int offset = phases.Count;
@@ -114,9 +112,6 @@ namespace LuckParser.Models
                 var phase = new PhaseData(seg.Start, seg.End)
                 {
                     Name = "Burn " + burnCount++ + " (" + seg.Value + " orbs)",
-                    DrawArea = true,
-                    DrawStart = true,
-                    DrawEnd = true
                 };
                 phase.Targets.Add(mainTarget);
                 phases.Add(phase);

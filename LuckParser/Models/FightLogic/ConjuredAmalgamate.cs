@@ -165,13 +165,10 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    phase.DrawArea = true;
                     name = "Burn Phase";
                     phase.Targets.Add(ca);
                 }
                 phase.Name = name;
-                phase.DrawEnd = true;
-                phase.DrawStart = true;
             }
             Target leftArm = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.CALeftArm);
             if (leftArm != null)

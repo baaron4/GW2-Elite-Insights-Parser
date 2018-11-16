@@ -85,10 +85,7 @@ namespace LuckParser.Models
             for (int i = 0; i < targetPhases.Count; i++)
             {
                 PhaseData phase = targetPhases[i];
-                phase.Name = names[i];
-                phase.DrawEnd = true;
-                phase.DrawStart = true;
-                phase.DrawArea = true;             
+                phase.Name = names[i];          
                 phase.Targets.Add(target);
             }
             return targetPhases;
