@@ -1681,16 +1681,16 @@ namespace LuckParser.Controllers
         private string BuildMaps()
         {
             string skillsScript = "var usedSkills = " + ToJson(AssembleSkills(_usedSkills.Values), typeof(ICollection<SkillDto>)) + ";" +
-                "logData.skillMap = {};" +
+                "var skillMap = {};" +
                 "$.each(usedSkills, function(i, skill) {" +
-                    "logData.skillMap['s'+skill.id]=skill;" +
+                    "skillMap['s'+skill.id]=skill;" +
                 "});";
             string boonsScript = "var usedBoons = " + ToJson(AssembleBoons(_usedBoons.Values), typeof(ICollection<BoonDto>)) + ";" +
-                "logData.buffMap = {};" +
+                "var buffMap = {};" +
                 "$.each(usedBoons, function(i, boon) {" +
-                    "logData.buffMap['b'+boon.id]=boon;" +
+                    "buffMap['b'+boon.id]=boon;" +
                 "});";
-            string mechanicsScript = "logData.mechanics = " + ToJson(BuildMechanics(), typeof(List<MechanicDto>)) + ";";
+            string mechanicsScript = "var mechanicMap = " + ToJson(BuildMechanics(), typeof(List<MechanicDto>)) + ";";
             return "<script>\r\n" + skillsScript + "\r\n" + boonsScript + "\r\n" + mechanicsScript + "\r\n</script>";
         }
 

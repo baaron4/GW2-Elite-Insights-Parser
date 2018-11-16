@@ -7,7 +7,8 @@ var compileMechanics = function () {
         data: function () {
             return {
                 cacheP: new Map(),
-                cacheE: new Map()
+                cacheE: new Map(),
+                mechanicsData: mechanicMap,
             };
         },
         mounted() {
@@ -26,11 +27,10 @@ var compileMechanics = function () {
         },
         computed: {
             playerMechHeader: function () {
-                var mechanics = getMechanics();
                 var playerMechanics = [];
-                for (var i = 0; i < mechanics.length; i++) {
-                    if (mechanics[i].playerMech) {
-                        playerMechanics.push(mechanics[i]);
+                for (var i = 0; i < this.mechanicsData.length; i++) {
+                    if (this.mechanicsData[i].playerMech) {
+                        playerMechanics.push(this.mechanicsData[i]);
                     }
                 }
                 return playerMechanics;
@@ -56,11 +56,10 @@ var compileMechanics = function () {
                 return rows;
             },
             enemyMechHeader: function () {
-                var mechanics = getMechanics();
                 var enemyMechanics = [];
-                for (var i = 0; i < mechanics.length; i++) {
-                    if (mechanics[i].enemyMech) {
-                        enemyMechanics.push(mechanics[i]);
+                for (var i = 0; i < this.mechanicsData.length; i++) {
+                    if (this.mechanicsData[i].enemyMech) {
+                        enemyMechanics.push(this.mechanicsData[i]);
                     }
                 }
                 return enemyMechanics;

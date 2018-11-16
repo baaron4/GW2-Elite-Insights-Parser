@@ -400,13 +400,18 @@ var compilePlayerTab = function () {
     // tab
     Vue.component('player-tab-component', {
         props: ['player', 'playerindex', 'phase', 'tabmode',
-            'phaseindex', 'activetargets', 'targets', 'phases', 'graphdata', 'light'
+            'phaseindex', 'activetargets', 'targets', 'phases', 'light'
         ],
+        data: function () {
+            return {
+                graphdata: graphData
+            };
+        },
         template: "#tmplPlayerTab",
     });
     // stats
     Vue.component("player-stats-component", {
-        props: ["players", "phaseindex", "phase", 'activetargets', 'activeplayer', 'targets', 'phases', 'graphdata', 'light'],
+        props: ["players", "phaseindex", "phase", 'activetargets', 'activeplayer', 'targets', 'phases', 'light'],
         template: "#tmplPlayerStats",
         data: function () {
             return {

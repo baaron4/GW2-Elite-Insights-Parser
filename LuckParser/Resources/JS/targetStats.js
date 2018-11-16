@@ -148,12 +148,17 @@ var compileTargetTab = function () {
     });
     // tab
     Vue.component("target-tab-component", {
-        props: ["target", "phaseindex", "players", "phase", "graphdata", "boons", "conditions", 'targetindex', 'phases', 'mode', 'light'],
+        props: ["target", "phaseindex", "players", "phase", "boons", "conditions", 'targetindex', 'phases', 'mode', 'light'],
         template: "#tmplTargetTab",
+        data: function () {
+            return {
+                graphdata: graphData
+            };
+        }
     });
     // stats
     Vue.component("target-stats-component", {
-        props: ["players", "targets", "phase", "phaseindex", "graphdata", "presentboons", "presentconditions", 'phases', 'light'],
+        props: ["players", "targets", "phase", "phaseindex", "presentboons", "presentconditions", 'phases', 'light'],
         template: "#tmplTargetStats",
         data: function () {
             return {

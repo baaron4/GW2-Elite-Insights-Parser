@@ -96,16 +96,12 @@ var urls = {
 function findSkill(isBuff, id) {
     var skill;
     if (isBuff) {
-        skill = logData.buffMap['b' + id] || {};
+        skill = buffMap['b' + id] || {};
     } else {
-        skill = logData.skillMap["s" + id] || {};
+        skill = skillMap["s" + id] || {};
     }
     skill.condi = isBuff;
     return skill;
-}
-
-function getMechanics() {
-    return logData.mechanics;
 }
 
 function computeRotationData(rotationData, images, data) {

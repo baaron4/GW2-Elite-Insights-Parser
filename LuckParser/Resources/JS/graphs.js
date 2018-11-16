@@ -2,11 +2,12 @@
 
 var compileGraphs = function () {
     Vue.component("graph-stats-component", {
-        props: ["phases", "activetargets", "targets", "players", 'graphdata', "phaseid", 'selectedplayerindex', 'light'],
+        props: ["phases", "activetargets", "targets", "players", "phaseid", 'selectedplayerindex', 'light'],
         template: "#tmplGraphStats",
         data: function () {
             return {
-                mode: 1
+                mode: 1,
+                graphdata: graphData
             };
         }
     });
@@ -20,6 +21,7 @@ var compileGraphs = function () {
                 data: [],
                 dpsCache: new Map(),
                 dataCache: new Map(),
+                mechanicsData: mechanicMap,
             };
         },
         created: function () {
@@ -90,10 +92,9 @@ var compileGraphs = function () {
             // targets health
             computeTargetHealthData(this.graph, this.targets, this.phase, this.data);
             // mechanics
-            var mechArray = getMechanics();
             for (i = 0; i < this.mechanics.length; i++) {
                 var mech = this.mechanics[i];
-                var mechData = mechArray[i];
+                var mechData = this.mechanicsData[i];
                 var chart = {
                     x: [],
                     mode: 'markers',
@@ -267,10 +268,9 @@ var compileGraphs = function () {
                     hps[i] = hpPoints;
                     res[offset++] = hpPoints;
                 }
-                var mechArray = getMechanics();
                 for (i = 0; i < this.mechanics.length; i++) {
                     var mech = this.mechanics[i];
-                    var mechData = mechArray[i];
+                    var mechData = this.mechanicsData[i];
                     chart = [];
                     res[offset++] = chart;
                     var time, pts, k, ftime, y, yp1;
