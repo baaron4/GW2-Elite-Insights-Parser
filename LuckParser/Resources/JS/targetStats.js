@@ -5,18 +5,20 @@ function computeTargetDPS(targetid, graph, lim, phasebreaks) {
     var maxDPS = 0;
     var totalDPS = [0];
     var dpsData = graph.targets[targetid].total;
+    var start = 0;
 
     for (var j = 1; j < dpsData.length; j++) {
         var limID = 0;
         if (lim > 0) {
             limID = Math.max(j - lim, 0);
+            start = limID;
         }
         totalDamage += dpsData[j] - dpsData[limID];
         if (phasebreaks && phasebreaks[j - 1]) {
-            limID = j - 1;
+            start = j - 1;
             totalDamage = 0;
         }
-        totalDPS[j] = Math.round(totalDamage / (j - limID));
+        totalDPS[j] = Math.round(totalDamage / (j - start));
         maxDPS = Math.max(maxDPS, totalDPS[j]);
     }
     return {
@@ -219,6 +221,9 @@ var compileTargetTab = function () {
                     this.layout.xaxis.gridcolor = textColor;
                     this.layout.xaxis.color = textColor;
                     this.layout.font.color = textColor;
+                    for (var i = 0; i < this.layout.shapes.length; i++) {
+                        this.layout.shapes[i].line.color = textColor;
+                    }
                     this.layout.datarevision = new Date().getTime();
                 }
             }
@@ -259,7 +264,7 @@ var compileTargetTab = function () {
                 name: 'Total DPS'
             });
             this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc');
-            computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase);
+            computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
         },
         computed: {
             phaseTargetIndex: function () {

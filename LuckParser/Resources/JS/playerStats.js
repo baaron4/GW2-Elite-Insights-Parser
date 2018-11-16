@@ -109,6 +109,9 @@ var compilePlayerTab = function () {
                     this.layout.xaxis.gridcolor = textColor;
                     this.layout.xaxis.color = textColor;
                     this.layout.font.color = textColor;
+                    for (var i = 0; i < this.layout.shapes.length; i++) {
+                        this.layout.shapes[i].line.color = textColor;
+                    }
                     this.layout.datarevision = new Date().getTime();
                 }
             }
@@ -151,7 +154,7 @@ var compilePlayerTab = function () {
                 name: 'Cleave DPS'
             });
             this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc');
-            computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase);
+            computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
         },
         computed: {
             graphid: function () {

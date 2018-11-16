@@ -63,7 +63,7 @@ var compileGraphs = function () {
                 height: 800,
                 datarevision: new Date().getTime(),
             };
-            computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase);
+            computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, textColor);
             // constant part of data
             // dps
             var data = this.data;
@@ -161,6 +161,9 @@ var compileGraphs = function () {
                     this.layout.xaxis.gridcolor = textColor;
                     this.layout.xaxis.color = textColor;
                     this.layout.font.color = textColor;
+                    for (var i = 0; i < this.layout.shapes.length; i++) {
+                        this.layout.shapes[i].line.color = textColor;
+                    }
                     this.layout.datarevision = new Date().getTime();
                 }
             }

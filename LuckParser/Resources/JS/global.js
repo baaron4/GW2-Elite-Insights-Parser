@@ -183,12 +183,12 @@ function computePhaseMarkupSettings(currentArea, areas, annotations) {
     for (var i = annotations.length - 1; i >= 0; i--) {
         var annotation = annotations[i];
         var area = areas[i];
-        if ((area.start <= currentArea.start && area.end >= currentArea.end) || area.end > currentArea.start) {
+        if ((area.start <= currentArea.start && area.end >= currentArea.end) || area.end >= currentArea.start - 2) {
             // current area included in area OR current area intersects area
             if (annotation.bgcolor === textbg) {
                 textbg = '#FF0000';
             }
-            y = annotation.y === y ? 1.09 : y;
+            y = annotation.y === y && area.end > currentArea.start ? 1.09 : y;
             break;
         }
     }
@@ -199,7 +199,7 @@ function computePhaseMarkupSettings(currentArea, areas, annotations) {
     };
 }
 
-function computePhaseMarkups(shapes, annotations, phase) {
+function computePhaseMarkups(shapes, annotations, phase, linecolor) {
     if (phase.markupAreas) {
         for (i = 0; i < phase.markupAreas.length; i++) {
             var area = phase.markupAreas[i];
@@ -252,10 +252,11 @@ function computePhaseMarkups(shapes, annotations, phase) {
                 x1: x,
                 y1: 1,
                 line: {
-                    color: '#00c0ff',
+                    color: linecolor,
                     width: 2,
                     dash: 'dash'
-                }
+                },
+                opacity: 0.6,
             });
         }
     }
@@ -268,11 +269,13 @@ function computePlayerDPS(playerid, graph, playerDPS, maxDPS, allDPS, lim, phase
     var cleaveDPS = [0];
     var targetDPS = [0];
     var dpsData = graph.players[playerid];
+    var start = 0;
 
     for (var j = 1; j < dpsData.total.length; j++) {
         var limID = 0;
         if (lim > 0) {
             limID = Math.max(j - lim, 0);
+            start = limID;
         }
         totalDamage += dpsData.total[j] - dpsData.total[limID];
         for (var k = 0; k < activetargets.length; k++) {
@@ -280,13 +283,13 @@ function computePlayerDPS(playerid, graph, playerDPS, maxDPS, allDPS, lim, phase
             targetDamage += dpsData.targets[targetid][j] - dpsData.targets[targetid][limID];
         }
         if (phasebreaks && phasebreaks[j - 1]) {
-            limID = j - 1;
+            start = j - 1;
             totalDamage = 0;
             targetDamage = 0;
         }
-        totalDPS[j] = Math.round(totalDamage / (j - limID));
-        targetDPS[j] = Math.round(targetDamage / (j - limID));
-        cleaveDPS[j] = Math.round((totalDamage - targetDamage) / (j - limID));
+        totalDPS[j] = Math.round(totalDamage / (j - start));
+        targetDPS[j] = Math.round(targetDamage / (j - start));
+        cleaveDPS[j] = Math.round((totalDamage - targetDamage) / (j - start));
         if (allDPS) {
             allDPS.total[j] = totalDPS[j] + (allDPS.total[j] || 0);
             allDPS.target[j] = targetDPS[j] + (allDPS.target[j] || 0);
@@ -321,7 +324,7 @@ function getActorGraphLayout(images, color) {
         hovermode: 'compare',
         yaxis2: {
             title: 'Buffs',
-            domain: [0.11, 0.67],
+            domain: [0.11, 0.6],
             color: color,
             gridcolor: color,
             fixedrange: true
@@ -330,7 +333,7 @@ function getActorGraphLayout(images, color) {
             title: 'DPS',
             color: color,
             gridcolor: color,
-            domain: [0.68, 1]
+            domain: [0.61, 1]
         },
         images: images,
         font: {
