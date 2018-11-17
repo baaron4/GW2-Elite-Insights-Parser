@@ -215,11 +215,12 @@ namespace LuckParser.Controllers
             double tenGain = 1.09259259259;
             bool afterFlank = false;
             long prevTime = -1;
+            long prevSkill = long.MinValue;
             foreach ( DamageLog dl in dls)
             {
                 if (dl.IsCondi == 0)
                 {
-                    afterFlank = (afterFlank || (dl.Time - prevTime) == 0);
+                    afterFlank = (afterFlank || ((dl.Time - prevTime) <= 1 && dl.SkillId == prevSkill));
                     foreach(var pair in targetsFinal)
                     {
                         Target target = pair.Key;
@@ -310,11 +311,14 @@ namespace LuckParser.Controllers
                     if (afterFlank)
                     {
                         final.FlankingDmg += (int)((tenGain - 1.0) / tenGain * dl.Damage);
+                        //check if bonus consumed
+                        afterFlank = ((dl.Time - prevTime) <= 1 && dl.SkillId == prevSkill);
                         prevTime = dl.Time;
+                        prevSkill = dl.SkillId;
                     }
                     if (dl.IsFlanking > 0)
                     {
-                        afterFlank = (dl.Time - prevTime) > 0;
+                        afterFlank = true;
                         final.FlankingRate++;
                     }
 
