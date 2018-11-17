@@ -170,7 +170,6 @@ namespace LuckParser.Controllers
             foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
-                Statistics.FinalDPS dps = _statistics.DpsAll[player][phaseIndex];
 
                 List<object> playerData = new List<object>
                 {
@@ -180,8 +179,8 @@ namespace LuckParser.Controllers
                     stats.CriticalDmg, 
                     
                     stats.ScholarRate, 
-                    stats.ScholarDmg, 
-                    dps.PlayerPowerDamage,
+                    stats.ScholarDmg,
+                    stats.PlayerPowerDamage,
                     
                     stats.MovingRate, 
                     stats.MovingDamage, 
@@ -195,7 +194,8 @@ namespace LuckParser.Controllers
                     stats.Invulned,
 
                     stats.EagleRate,
-                    stats.EagleDmg, 
+                    stats.EagleDmg,
+                    stats.FlankingDmg, 
                     // commons
                     stats.TimeWasted, 
                     stats.Wasted, 
@@ -226,7 +226,6 @@ namespace LuckParser.Controllers
                 foreach (Target target in phase.Targets)
                 {
                     Statistics.FinalStats statsTarget = _statistics.StatsTarget[target][player][phaseIndex];
-                    Statistics.FinalDPS dpsTarget = _statistics.DpsTarget[target][player][phaseIndex];
                     playerData.Add(new List<object>(){
                         statsTarget.PowerLoopCount,
 
@@ -236,7 +235,7 @@ namespace LuckParser.Controllers
                         
                         statsTarget.ScholarRate,
                         statsTarget.ScholarDmg,
-                        dpsTarget.PlayerPowerDamage,
+                        statsTarget.PlayerPowerDamage,
                         
                         statsTarget.MovingRate,
                         statsTarget.MovingDamage,
@@ -251,6 +250,7 @@ namespace LuckParser.Controllers
 
                         statsTarget.EagleRate,
                         statsTarget.EagleDmg,
+                        statsTarget.FlankingDmg,
                     });
                 }
                 list.Add(playerData);

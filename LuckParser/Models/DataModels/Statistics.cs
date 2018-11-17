@@ -38,8 +38,6 @@ namespace LuckParser.Models.DataModels
             public int CondiDamage;
             public int PowerDps;
             public int PowerDamage;
-            // Player only
-            public int PlayerPowerDamage;
         }
 
         public readonly Dictionary<Target, Dictionary<Player, FinalDPS[]>> DpsTarget;
@@ -58,11 +56,13 @@ namespace LuckParser.Models.DataModels
             public int EagleDmg;
             public int MovingRate;
             public int MovingDamage;
+            public int FlankingDmg;
             public int FlankingRate;
             public int GlanceRate;
             public int Missed;
             public int Interrupts;
             public int Invulned;
+            public int PlayerPowerDamage;
         }
 
         public class FinalStatsAll : FinalStats
