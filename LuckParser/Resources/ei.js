@@ -52,9 +52,9 @@ window.onload = function () {
                 if (state === this.light) {
                     return;
                 }
-                var style = this.light ? 'cosmo' : 'slate';
+                var style = this.light ? 'yeti' : 'slate';
                 this.light = state;
-                var newStyle = this.light ? 'cosmo' : 'slate';
+                var newStyle = this.light ? 'yeti' : 'slate';
                 document.body.classList.remove("theme-"+style);
                 document.body.classList.add("theme-"+newStyle);
                 var theme = document.getElementById('theme');

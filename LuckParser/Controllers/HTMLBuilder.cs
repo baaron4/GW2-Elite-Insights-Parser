@@ -1194,7 +1194,7 @@ namespace LuckParser.Controllers
 
         private string ReplaceVariables(string html)
         {
-            html = html.Replace("${bootstrapTheme}", !_settings.LightTheme ? "slate" : "cosmo");
+            html = html.Replace("${bootstrapTheme}", !_settings.LightTheme ? "slate" : "yeti");
 
             html = html.Replace("${encounterStart}", _log.LogData.LogStart);
             html = html.Replace("${encounterEnd}", _log.LogData.LogEnd);
