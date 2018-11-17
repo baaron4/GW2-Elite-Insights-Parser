@@ -17,15 +17,12 @@ namespace LuckParser.Models.ParseModels
         //setters
         protected override void SetDamageLogs(ParsedLog log)
         {
-            throw new InvalidOperationException();
         }
         protected override void SetDamageTakenLogs(ParsedLog log)
         {
-            throw new InvalidOperationException();
         }
         protected override void SetCastLogs(ParsedLog log)
         {
-            throw new InvalidOperationException();
         }
 
         protected override void SetAdditionalCombatReplayData(ParsedLog log)
