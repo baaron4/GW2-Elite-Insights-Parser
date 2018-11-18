@@ -28,17 +28,17 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public readonly string BoonName;
+        public readonly Boon Boon;
         public List<Segment> BoonChart { get; private set; } = new List<Segment>();
 
         // Constructor
-        public BoonsGraphModel(string boonName)
+        public BoonsGraphModel(Boon boon)
         {
-            BoonName = boonName;
+            Boon = boon;
         }
-        public BoonsGraphModel(string boonName, List<Segment> boonChart)
+        public BoonsGraphModel(Boon boon, List<Segment> boonChart)
         {
-            BoonName = boonName;
+            Boon = boon;
             BoonChart = boonChart;
             FuseSegments();
         }

@@ -40,7 +40,7 @@ if ('IntersectionObserver' in window) {
     });
 }*/
 var themes = {
-    "cosmo": "https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/cosmo/bootstrap.min.css",
+    "yeti": "https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/yeti/bootstrap.min.css",
     "slate": "https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/slate/bootstrap.min.css"
 };
 
@@ -96,16 +96,12 @@ var urls = {
 function findSkill(isBuff, id) {
     var skill;
     if (isBuff) {
-        skill = logData.buffMap['b' + id] || {};
+        skill = buffMap['b' + id] || {};
     } else {
-        skill = logData.skillMap["s" + id] || {};
+        skill = skillMap["s" + id] || {};
     }
     skill.condi = isBuff;
     return skill;
-}
-
-function getMechanics() {
-    return logData.mechanics;
 }
 
 function computeRotationData(rotationData, images, data) {
@@ -161,7 +157,9 @@ function computeRotationData(rotationData, images, data) {
                 type: 'bar',
                 width: aa ? 0.5 : 1,
                 hoverinfo: 'name',
-                hoverlabel: { namelength: '-1' },
+                hoverlabel: {
+                    namelength: '-1'
+                },
                 marker: {
                     color: fillColor,
                     width: '5',
@@ -178,33 +176,49 @@ function computeRotationData(rotationData, images, data) {
     return 0;
 }
 
-function computePhaseMarkups(shapes, annotations, phase) {
+function computePhaseMarkupSettings(currentArea, areas, annotations) {
+    var y = 1;
+    var textbg = '#0000FF';
+    var x = (currentArea.end + currentArea.start) / 2;
+    for (var i = annotations.length - 1; i >= 0; i--) {
+        var annotation = annotations[i];
+        var area = areas[i];
+        if ((area.start <= currentArea.start && area.end >= currentArea.end) || area.end >= currentArea.start - 2) {
+            // current area included in area OR current area intersects area
+            if (annotation.bgcolor === textbg) {
+                textbg = '#FF0000';
+            }
+            y = annotation.y === y && area.end > currentArea.start ? 1.09 : y;
+            break;
+        }
+    }
+    return {
+        y: y,
+        x: x,
+        textbg: textbg
+    };
+}
 
-    var duration = phase.end - phase.start;
-    var x;
+function computePhaseMarkups(shapes, annotations, phase, linecolor) {
     if (phase.markupAreas) {
         for (i = 0; i < phase.markupAreas.length; i++) {
             var area = phase.markupAreas[i];
-            var y = 1;
-            x = (area.end + area.start) / 2;
-            if (i > 0) {
-                var prev = annotations[i - 1];
-                if (prev.y === 1 && (x - prev.x) / duration < 0.1) {
-                    y = 1.06;
-                }
-            }
+            var setting = computePhaseMarkupSettings(area, phase.markupAreas, annotations);
             annotations.push({
-                x: x,
-                y: y,
+                x: setting.x,
+                y: setting.y,
                 xref: 'x',
                 yref: 'paper',
                 xanchor: 'center',
                 yanchor: 'bottom',
                 text: area.label + '<br>' + '(' + Math.round(1000 * (area.end - area.start)) / 1000 + ' s)',
+                font: {
+                    color: '#ffffff'
+                },
                 showarrow: false,
-                bordercolor: '#c7c7c7',
+                bordercolor: '#A0A0A0',
                 borderwidth: 2,
-                bgcolor: '#555555',
+                bgcolor: setting.textbg,
                 opacity: 0.8
             });
             if (area.highlight) {
@@ -216,18 +230,19 @@ function computePhaseMarkups(shapes, annotations, phase) {
                     y0: 0,
                     x1: area.end,
                     y1: 1,
-                    fillcolor: '#808080',
-                    opacity: 0.125,
+                    fillcolor: setting.textbg,
+                    opacity: 0.2,
                     line: {
                         width: 0
-                    }
+                    },
+                    layer: 'below'
                 });
             }
         }
     }
     if (phase.markupLines) {
         for (i = 0; i < phase.markupLines.length; i++) {
-            x = phase.markupLines[i];
+            var x = phase.markupLines[i];
             shapes.push({
                 type: 'line',
                 xref: 'x',
@@ -236,12 +251,12 @@ function computePhaseMarkups(shapes, annotations, phase) {
                 y0: 0,
                 x1: x,
                 y1: 1,
-                opacity: 0.35,
                 line: {
-                    color: '#00c0ff',
+                    color: linecolor,
                     width: 2,
                     dash: 'dash'
-                }
+                },
+                opacity: 0.6,
             });
         }
     }
@@ -254,11 +269,13 @@ function computePlayerDPS(playerid, graph, playerDPS, maxDPS, allDPS, lim, phase
     var cleaveDPS = [0];
     var targetDPS = [0];
     var dpsData = graph.players[playerid];
+    var start = 0;
 
     for (var j = 1; j < dpsData.total.length; j++) {
         var limID = 0;
         if (lim > 0) {
             limID = Math.max(j - lim, 0);
+            start = limID;
         }
         totalDamage += dpsData.total[j] - dpsData.total[limID];
         for (var k = 0; k < activetargets.length; k++) {
@@ -266,13 +283,13 @@ function computePlayerDPS(playerid, graph, playerDPS, maxDPS, allDPS, lim, phase
             targetDamage += dpsData.targets[targetid][j] - dpsData.targets[targetid][limID];
         }
         if (phasebreaks && phasebreaks[j - 1]) {
-            limID = j - 1;
+            start = j - 1;
             totalDamage = 0;
             targetDamage = 0;
         }
-        totalDPS[j] = Math.round(totalDamage / (j - limID));
-        targetDPS[j] = Math.round(targetDamage / (j - limID));
-        cleaveDPS[j] = Math.round((totalDamage - targetDamage) / (j - limID));
+        totalDPS[j] = Math.round(totalDamage / (j - start));
+        targetDPS[j] = Math.round(targetDamage / (j - start));
+        cleaveDPS[j] = Math.round((totalDamage - targetDamage) / (j - start));
         if (allDPS) {
             allDPS.total[j] = totalDPS[j] + (allDPS.total[j] || 0);
             allDPS.target[j] = targetDPS[j] + (allDPS.target[j] || 0);
@@ -289,8 +306,7 @@ function computePlayerDPS(playerid, graph, playerDPS, maxDPS, allDPS, lim, phase
     });
 }
 
-function getActorGraphLayout(images) {
-
+function getActorGraphLayout(images, color) {
     return {
         barmode: 'stack',
         yaxis: {
@@ -298,6 +314,8 @@ function getActorGraphLayout(images) {
             domain: [0, 0.09],
             fixedrange: true,
             showgrid: false,
+            showticklabels: false,
+            color: color,
             range: [0, 2]
         },
         legend: {
@@ -306,16 +324,26 @@ function getActorGraphLayout(images) {
         hovermode: 'compare',
         yaxis2: {
             title: 'Buffs',
-            domain: [0.11, 0.55],
+            domain: [0.11, 0.6],
+            color: color,
+            gridcolor: color,
             fixedrange: true
         },
         yaxis3: {
             title: 'DPS',
-            domain: [0.56, 1]
+            color: color,
+            gridcolor: color,
+            domain: [0.61, 1]
         },
         images: images,
         font: {
-            color: '#ffffff'
+            color: color
+        },
+        xaxis: {
+            title: 'Time(sec)',
+            color: color,
+            gridcolor: color,
+            xrangeslider: {}
         },
         paper_bgcolor: 'rgba(0,0,0,0)',
         plot_bgcolor: 'rgba(0,0,0,0)',
@@ -358,6 +386,7 @@ function computeBuffData(buffData, data) {
     if (buffData) {
         for (var i = 0; i < buffData.length; i++) {
             var boonItem = buffData[i];
+            var boon = findSkill(true, boonItem.id);
             var line = {
                 x: [],
                 y: [],
@@ -369,7 +398,7 @@ function computeBuffData(buffData, data) {
                     shape: 'hv'
                 },
                 fill: 'tozeroy',
-                name: boonItem.name
+                name: boon.name
             };
             for (var p = 0; p < boonItem.states.length; p++) {
                 line.x[p] = boonItem.states[p][0];
@@ -446,3 +475,119 @@ var DataTypes = {
     targetTab: 11,
     dpsGraph: 12
 };
+
+/*function getActorGraphLayout(images, boonYs, stackingBoons) {
+    var layout = {
+        barmode: 'stack',
+        yaxis: {
+            title: 'Rotation',
+            domain: [0, 0.1],
+            fixedrange: true,
+            showgrid: false,
+            showticklabels: false,
+            color: '#cccccc',
+            range: [0, 2]
+        },
+        legend: {
+            traceorder: 'reversed'
+        },
+        hovermode: 'compare',
+        images: images,
+        font: {
+            color: '#cccccc'
+        },
+        xaxis: {
+            title: 'Time(sec)',
+            color: '#cccccc',
+            gridcolor: '#cccccc',
+            xrangeslider: {}
+        },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        shapes: [],
+        annotations: [],
+        autosize: true,
+        width: 1100,
+        height: 1100,
+        datarevision: new Date().getTime(),
+    };
+    layout['yaxis' + (2 + boonYs)] = {
+        title: 'DPS',
+        color: '#cccccc',
+        gridcolor: '#cccccc',
+        domain: [0.75, 1]
+    };
+    var perBoon = 0.65 / boonYs;
+    var singleBuffs = boonYs;
+    if (stackingBoons) {
+        layout['yaxis' + (2 + boonYs - 1)] = {
+            title: 'Stacking Buffs',
+            color: '#cccccc',
+            gridcolor: '#cccccc',
+            domain: [0.70, 0.75]
+        };
+        perBoon = 0.6 / (boonYs - 1);
+        singleBuffs--;
+    }
+    for (var i = 0; i < singleBuffs; i++) {
+        layout['yaxis' + (2 + i)] = {
+            title: '',
+            color: '#cccccc',
+            showgrid: false,
+            showticklabels: false,
+            domain: [0.1 + i * perBoon, 0.1 + (i + 1) * perBoon]
+        };
+    }
+    return layout;
+}*/
+
+/*
+function computeBuffData(buffData, data) {
+    var ystart = 0;
+    if (buffData) {
+        var stackings = [];
+        var i;
+        for (i = buffData.length - 1; i >= 0; i--) {
+            var boonItem = buffData[i];
+            var boon = findSkill(true, boonItem.id);
+            var line = {
+                x: [],
+                y: [],
+                yaxis: boon.stacking ? 'stacking' : 'y' + (2 + ystart++),
+                type: 'scatter',
+                visible: boonItem.visible || !boon.stacking ? null : 'legendonly',
+                line: {
+                    color: boonItem.color,
+                    shape: 'hv'
+                },
+                fill: boon.stacking ? 'tozeroy' : 'toself',
+                name: boon.name,
+                showlegend: boon.stacking ? true : false,
+            };
+            for (var p = 0; p < boonItem.states.length; p++) {
+                line.x[p] = boonItem.states[p][0];
+                line.y[p] = boonItem.states[p][1];
+            }
+            if (boon.stacking) {
+                stackings.push(line);
+            }
+            data.push(line);
+        }
+        if (stackings.length) {
+            var axis = 'y' + (2 + ystart++);
+            for (i = 0; i < stackings.length; i++) {
+                stackings[i].yaxis = axis;
+            }
+        }
+        return {
+            actorOffset: buffData.length,
+            y: ystart,
+            stacking: stackings.length > 0
+        };
+    }
+    return {
+        actorOffset: 0,
+        y: 0,
+        stacking: false
+    };
+}*/

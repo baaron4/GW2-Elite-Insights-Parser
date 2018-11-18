@@ -85,7 +85,7 @@ var compilePlayerTab = function () {
     });
 
     Vue.component("player-graph-tab-component", {
-        props: ["playerindex", "player", "phase", "phases", "phaseindex", "activetargets", "targets", "graph"],
+        props: ["playerindex", "player", "phase", "phases", "phaseindex", "activetargets", "targets", "graph", "light"],
         data: function () {
             return {
                 dpsmode: 0,
@@ -96,11 +96,33 @@ var compilePlayerTab = function () {
                 playerOffset: 0
             };
         },
+        watch: {
+            light: {
+                handler: function() {
+                    var textColor = this.light ? '#495057' : '#cccccc';
+                    this.layout.yaxis.gridcolor = textColor;
+                    this.layout.yaxis.color = textColor;
+                    this.layout.yaxis2.gridcolor = textColor;
+                    this.layout.yaxis2.color = textColor;
+                    this.layout.yaxis3.gridcolor = textColor;
+                    this.layout.yaxis3.color = textColor;
+                    this.layout.xaxis.gridcolor = textColor;
+                    this.layout.xaxis.color = textColor;
+                    this.layout.font.color = textColor;
+                    for (var i = 0; i < this.layout.shapes.length; i++) {
+                        this.layout.shapes[i].line.color = textColor;
+                    }
+                    this.layout.datarevision = new Date().getTime();
+                }
+            }
+        },
         created: function () {
             var images = [];
             this.playerOffset += computeRotationData(this.player.details.rotation[this.phaseindex], images, this.data);
+            var oldOffset = this.playerOffset;
             this.playerOffset += computeBuffData(this.player.details.boonGraph[this.phaseindex], this.data);
-            this.playerOffset += computeTargetHealthData(this.graph, this.targets, this.phase, this.data, 'y3');
+            var dpsY = oldOffset === this.playerOffset ? 'y2' : 'y3';
+            this.playerOffset += computeTargetHealthData(this.graph, this.targets, this.phase, this.data, dpsY);
             this.data.push({
                 y: [],
                 mode: 'lines',
@@ -108,7 +130,7 @@ var compilePlayerTab = function () {
                     shape: 'spline',
                     color: this.player.colTotal,
                 },
-                yaxis: 'y3',
+                yaxis: dpsY,
                 name: 'Total DPS'
             });
             this.data.push({
@@ -118,7 +140,7 @@ var compilePlayerTab = function () {
                     shape: 'spline',
                     color: this.player.colTarget,
                 },
-                yaxis: 'y3',
+                yaxis: dpsY,
                 name: 'Target DPS'
             });
             this.data.push({
@@ -128,11 +150,11 @@ var compilePlayerTab = function () {
                     shape: 'spline',
                     color: this.player.colCleave,
                 },
-                yaxis: 'y3',
+                yaxis: dpsY,
                 name: 'Cleave DPS'
             });
-            this.layout = getActorGraphLayout(images);
-            computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase);
+            this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc');
+            computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
         },
         computed: {
             graphid: function () {
@@ -381,13 +403,18 @@ var compilePlayerTab = function () {
     // tab
     Vue.component('player-tab-component', {
         props: ['player', 'playerindex', 'phase', 'tabmode',
-            'phaseindex', 'activetargets', 'targets', 'phases', 'graphdata'
+            'phaseindex', 'activetargets', 'targets', 'phases', 'light'
         ],
+        data: function () {
+            return {
+                graphdata: graphData
+            };
+        },
         template: "#tmplPlayerTab",
     });
     // stats
     Vue.component("player-stats-component", {
-        props: ["players", "phaseindex", "phase", 'activetargets', 'activeplayer', 'targets', 'phases', 'graphdata'],
+        props: ["players", "phaseindex", "phase", 'activetargets', 'activeplayer', 'targets', 'phases', 'light'],
         template: "#tmplPlayerStats",
         data: function () {
             return {

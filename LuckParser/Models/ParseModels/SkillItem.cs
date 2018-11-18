@@ -77,20 +77,21 @@ namespace LuckParser.Models.ParseModels
             this.ID = ID;
             Name = name.Replace("\0", "");
             ApiSkill = apiController.GetSkill(ID);
-            if (ApiSkill != null)
-            {
-                Name = ApiSkill.name;
-            }
             CompleteItem();
         }
 
         private void CompleteItem()
         {
-            if (_overrideNames.TryGetValue(ID,out string name))
+            if (ApiSkill == null && _overrideNames.TryGetValue(ID,out string name))
             {
                 Name = name;
             }
-            if (_overrideIcons.TryGetValue(ID, out string icon))
+            else if (ApiSkill != null)
+            {
+                Name = ApiSkill.name;
+
+            }
+            if (ApiSkill == null && _overrideIcons.TryGetValue(ID, out string icon))
             {
                 Icon = icon;
             } else

@@ -170,7 +170,6 @@ namespace LuckParser.Controllers
             foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
-                Statistics.FinalDPS dps = _statistics.DpsAll[player][phaseIndex];
 
                 List<object> playerData = new List<object>
                 {
@@ -180,8 +179,8 @@ namespace LuckParser.Controllers
                     stats.CriticalDmg, 
                     
                     stats.ScholarRate, 
-                    stats.ScholarDmg, 
-                    dps.PlayerPowerDamage,
+                    stats.ScholarDmg,
+                    stats.PlayerPowerDamage,
                     
                     stats.MovingRate, 
                     stats.MovingDamage, 
@@ -195,7 +194,8 @@ namespace LuckParser.Controllers
                     stats.Invulned,
 
                     stats.EagleRate,
-                    stats.EagleDmg, 
+                    stats.EagleDmg,
+                    stats.FlankingDmg, 
                     // commons
                     stats.TimeWasted, 
                     stats.Wasted, 
@@ -226,7 +226,6 @@ namespace LuckParser.Controllers
                 foreach (Target target in phase.Targets)
                 {
                     Statistics.FinalStats statsTarget = _statistics.StatsTarget[target][player][phaseIndex];
-                    Statistics.FinalDPS dpsTarget = _statistics.DpsTarget[target][player][phaseIndex];
                     playerData.Add(new List<object>(){
                         statsTarget.PowerLoopCount,
 
@@ -236,7 +235,7 @@ namespace LuckParser.Controllers
                         
                         statsTarget.ScholarRate,
                         statsTarget.ScholarDmg,
-                        dpsTarget.PlayerPowerDamage,
+                        statsTarget.PlayerPowerDamage,
                         
                         statsTarget.MovingRate,
                         statsTarget.MovingDamage,
@@ -251,6 +250,7 @@ namespace LuckParser.Controllers
 
                         statsTarget.EagleRate,
                         statsTarget.EagleDmg,
+                        statsTarget.FlankingDmg,
                     });
                 }
                 list.Add(playerData);
@@ -881,7 +881,7 @@ namespace LuckParser.Controllers
                     foreach (Target mainTarget in _log.FightData.GetMainTargets(_log))
                     {
                         boonGraphData = mainTarget.GetBoonGraphs(_log);
-                        foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName == "Compromised" || x.BoonName == "Unnatural Signet" || x.BoonName == "Fractured - Enemy"))
+                        foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.Boon.Name == "Compromised" || x.Boon.Name == "Unnatural Signet" || x.Boon.Name == "Fractured - Enemy"))
                         {
                             BoonChartDataDto graph = BuildPlayerTabBoonGraph(bgm, phase);
                             if (graph != null) list.Add(graph);
@@ -895,7 +895,7 @@ namespace LuckParser.Controllers
         private BoonChartDataDto BuildPlayerTabBoonGraph(BoonsGraphModel bgm, PhaseData phase)
         {
             //TODO line: {shape: 'hv'}
-            long roundedEnd = phase.Start + 1000*phase.GetDuration("s");
+            long roundedEnd = phase.Start + 1000 * phase.GetDuration("s");
             List<BoonsGraphModel.Segment> bChart = bgm.BoonChart.Where(x => x.End >= phase.Start && x.Start <= roundedEnd).ToList();
             if (bChart.Count == 0 || (bChart.Count == 1 && bChart.First().Value == 0))
             {
@@ -903,12 +903,12 @@ namespace LuckParser.Controllers
             }
             BoonChartDataDto dto = new BoonChartDataDto
             {
-                name = bgm.BoonName,
-                visible = bgm.BoonName == "Might" || bgm.BoonName == "Quickness",
-                color = GeneralHelper.GetLink("Color-" + bgm.BoonName),
+                id = bgm.Boon.ID,
+                visible = bgm.Boon.Name == "Might" || bgm.Boon.Name == "Quickness",
+                color = GeneralHelper.GetLink("Color-" + bgm.Boon.Name),
                 states = new List<double[]>(bChart.Count + 1)
             };
-
+            _usedBoons[bgm.Boon.ID] = bgm.Boon;
             foreach (BoonsGraphModel.Segment seg in bChart)
             {
                 double segStart = Math.Round(Math.Max(seg.Start - phase.Start, 0) / 1000.0, 3);
@@ -1194,7 +1194,7 @@ namespace LuckParser.Controllers
 
         private string ReplaceVariables(string html)
         {
-            html = html.Replace("${bootstrapTheme}", !_settings.LightTheme ? "slate" : "cosmo");
+            html = html.Replace("${bootstrapTheme}", !_settings.LightTheme ? "slate" : "yeti");
 
             html = html.Replace("${encounterStart}", _log.LogData.LogStart);
             html = html.Replace("${encounterEnd}", _log.LogData.LogEnd);
@@ -1511,10 +1511,10 @@ namespace LuckParser.Controllers
                 }
                 else
                 {
-                    if (_log.LegacyTarget.HealthOverTime.Count > 0)
+                    if (target.HealthOverTime.Count > 0)
                     {
-                        tar.percent = Math.Round(target.HealthOverTime[target.HealthOverTime.Count - 1].Y * 0.01, 2);
-                        tar.hpLeft = (int)Math.Floor(100.0 - target.HealthOverTime[target.HealthOverTime.Count - 1].Y * 0.01);
+                        tar.percent = Math.Round(100.0 - target.HealthOverTime[target.HealthOverTime.Count - 1].Y * 0.01, 2);
+                        tar.hpLeft = (int)Math.Floor(target.HealthOverTime[target.HealthOverTime.Count - 1].Y * 0.01);
                     }
                 }
                 foreach (KeyValuePair<string, Minions> pair in target.GetMinions(_log))
@@ -1681,16 +1681,16 @@ namespace LuckParser.Controllers
         private string BuildMaps()
         {
             string skillsScript = "var usedSkills = " + ToJson(AssembleSkills(_usedSkills.Values), typeof(ICollection<SkillDto>)) + ";" +
-                "logData.skillMap = {};" +
+                "var skillMap = {};" +
                 "$.each(usedSkills, function(i, skill) {" +
-                    "logData.skillMap['s'+skill.id]=skill;" +
+                    "skillMap['s'+skill.id]=skill;" +
                 "});";
             string boonsScript = "var usedBoons = " + ToJson(AssembleBoons(_usedBoons.Values), typeof(ICollection<BoonDto>)) + ";" +
-                "logData.buffMap = {};" +
+                "var buffMap = {};" +
                 "$.each(usedBoons, function(i, boon) {" +
-                    "logData.buffMap['b'+boon.id]=boon;" +
+                    "buffMap['b'+boon.id]=boon;" +
                 "});";
-            string mechanicsScript = "logData.mechanics = " + ToJson(BuildMechanics(), typeof(List<MechanicDto>)) + ";";
+            string mechanicsScript = "var mechanicMap = " + ToJson(BuildMechanics(), typeof(List<MechanicDto>)) + ";";
             return "<script>\r\n" + skillsScript + "\r\n" + boonsScript + "\r\n" + mechanicsScript + "\r\n</script>";
         }
 

@@ -2,16 +2,17 @@
 
 var compileGraphs = function () {
     Vue.component("graph-stats-component", {
-        props: ["phases", "activetargets", "targets", "players", 'graphdata', "phaseid", 'selectedplayerindex'],
+        props: ["phases", "activetargets", "targets", "players", "phaseid", 'selectedplayerindex', 'light'],
         template: "#tmplGraphStats",
         data: function () {
             return {
-                mode: 1
+                mode: 1,
+                graphdata: graphData
             };
         }
     });
     Vue.component("dps-graph-component", {
-        props: ["phases", "activetargets", "targets", "players", 'mechanics', 'graph', 'mode', 'phase', 'phaseid', 'selectedplayerindex'],
+        props: ["phases", "activetargets", "targets", "players", 'mechanics', 'graph', 'mode', 'phase', 'phaseid', 'selectedplayerindex', 'light'],
         template: "#tmplDPSGraph",
         data: function () {
             return {
@@ -20,21 +21,25 @@ var compileGraphs = function () {
                 data: [],
                 dpsCache: new Map(),
                 dataCache: new Map(),
+                mechanicsData: mechanicMap,
             };
         },
         created: function () {
             // layout - constant during whole lifetime
             var i, j;
+            var textColor = this.light ? '#495057' : '#cccccc';
             this.layout = {
                 yaxis: {
                     title: 'DPS',
                     fixedrange: false,
                     rangemode: 'tozero',
-                    color: '#cccccc'
+                    gridcolor: textColor,
+                    color: textColor
                 },
                 xaxis: {
                     title: 'Time(sec)',
-                    color: '#cccccc',
+                    color: textColor,
+                    gridcolor: textColor,
                     xrangeslider: {}
                 },
                 hovermode: 'compare',
@@ -46,7 +51,7 @@ var compileGraphs = function () {
                     y: -0.1
                 },
                 font: {
-                    color: '#cccccc'
+                    color: textColor
                 },
                 paper_bgcolor: 'rgba(0,0,0,0)',
                 plot_bgcolor: 'rgba(0,0,0,0)',
@@ -58,7 +63,7 @@ var compileGraphs = function () {
                 height: 800,
                 datarevision: new Date().getTime(),
             };
-            computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase);
+            computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, textColor);
             // constant part of data
             // dps
             var data = this.data;
@@ -71,7 +76,7 @@ var compileGraphs = function () {
                     line: {
                         shape: 'spline',
                         color: player.colTarget,
-                        width: i === this.selectedplayerindex ? 6 : 2
+                        width: i === this.selectedplayerindex ? 5 : 2
                     },
                     name: player.name + ' DPS',
                 });
@@ -87,10 +92,9 @@ var compileGraphs = function () {
             // targets health
             computeTargetHealthData(this.graph, this.targets, this.phase, this.data);
             // mechanics
-            var mechArray = getMechanics();
             for (i = 0; i < this.mechanics.length; i++) {
                 var mech = this.mechanics[i];
-                var mechData = mechArray[i];
+                var mechData = this.mechanicsData[i];
                 var chart = {
                     x: [],
                     mode: 'markers',
@@ -143,11 +147,25 @@ var compileGraphs = function () {
             selectedplayerindex: {
                 handler: function () {
                     for (var i = 0; i < this.players.length; i++) {
-                        this.data[i].line.width = i === this.selectedplayerindex ? 6 : 2;
+                        this.data[i].line.width = i === this.selectedplayerindex ? 5 : 2;
                     }
                     this.layout.datarevision = new Date().getTime();
                 },
                 deep: true
+            },
+            light: {
+                handler: function () {
+                    var textColor = this.light ? '#495057' : '#cccccc';
+                    this.layout.yaxis.gridcolor = textColor;
+                    this.layout.yaxis.color = textColor;
+                    this.layout.xaxis.gridcolor = textColor;
+                    this.layout.xaxis.color = textColor;
+                    this.layout.font.color = textColor;
+                    for (var i = 0; i < this.layout.shapes.length; i++) {
+                        this.layout.shapes[i].line.color = textColor;
+                    }
+                    this.layout.datarevision = new Date().getTime();
+                }
             }
         },
         computed: {
@@ -253,10 +271,9 @@ var compileGraphs = function () {
                     hps[i] = hpPoints;
                     res[offset++] = hpPoints;
                 }
-                var mechArray = getMechanics();
                 for (i = 0; i < this.mechanics.length; i++) {
                     var mech = this.mechanics[i];
-                    var mechData = mechArray[i];
+                    var mechData = this.mechanicsData[i];
                     chart = [];
                     res[offset++] = chart;
                     var time, pts, k, ftime, y, yp1;

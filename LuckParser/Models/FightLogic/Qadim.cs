@@ -126,9 +126,6 @@ namespace LuckParser.Models
             {
                 PhaseData phase = phases[i];
                 phase.Name = names[i - 1];
-                phase.DrawArea = true;
-                phase.DrawEnd = true;
-                phase.DrawStart = true;
                 switch (i)
                 {
                     case 2:

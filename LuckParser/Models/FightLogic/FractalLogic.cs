@@ -65,9 +65,6 @@ namespace LuckParser.Models
             {
                 phases[i].Name = "Phase " + i;
                 phases[i].Targets.Add(mainTarget);
-                phases[i].DrawArea = true;
-                phases[i].DrawEnd = true;
-                phases[i].DrawStart = true;
             }
             phases.RemoveAll(x => x.GetDuration() < 1000);
             return phases;

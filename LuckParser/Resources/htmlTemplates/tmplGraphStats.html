@@ -15,7 +15,7 @@
     <keep-alive>
         <dps-graph-component v-for="(phase, id) in phases" :key="id" v-if="id === phaseid" :players="players" :phases="phases"
             :activetargets="activetargets" :targets="targets" :mechanics="graphdata.mechanics" :graph="graphdata.phases[id]"
-            :mode="mode" :phase="phase" :phaseid="id" :selectedplayerindex="selectedplayerindex">
+            :mode="mode" :phase="phase" :phaseid="id" :selectedplayerindex="selectedplayerindex" :light="light">
         </dps-graph-component>
     </keep-alive>
 </div>

@@ -82,9 +82,6 @@ namespace LuckParser.Models
                 for (int i = 1; i < phases.Count; i++)
                 {
                     phases[i].Name = namesDh[i - 1];
-                    phases[i].DrawArea = true;
-                    phases[i].DrawStart = i > 1;
-                    phases[i].DrawEnd = i < phases.Count - 1;
                     phases[i].Targets.Add(mainTarget);
                 }
             }
@@ -116,9 +113,6 @@ namespace LuckParser.Models
                 for (int i = 1; i < phases.Count; i++)
                 {
                     phases[i].Name = namesDh[i - 1];
-                    phases[i].DrawArea = i > 1;
-                    phases[i].DrawStart = i > 1;
-                    phases[i].DrawEnd = i == 2;
                     phases[i].Targets.Add(mainTarget);
                 }
             }

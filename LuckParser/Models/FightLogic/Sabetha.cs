@@ -85,9 +85,6 @@ namespace LuckParser.Models
             {
                 PhaseData phase = phases[i];
                 phase.Name = namesSab[i - 1];
-                phase.DrawArea = i % 2 == 1;
-                phase.DrawStart = i % 2 == 1 && i > 1;
-                phase.DrawEnd = i % 2 == 1 && i < 7;
                 if (i == 2 || i == 4 || i == 6)
                 {
                     List<ushort> ids = new List<ushort>

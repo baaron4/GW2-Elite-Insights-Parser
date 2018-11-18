@@ -5,18 +5,20 @@ function computeTargetDPS(targetid, graph, lim, phasebreaks) {
     var maxDPS = 0;
     var totalDPS = [0];
     var dpsData = graph.targets[targetid].total;
+    var start = 0;
 
     for (var j = 1; j < dpsData.length; j++) {
         var limID = 0;
         if (lim > 0) {
             limID = Math.max(j - lim, 0);
+            start = limID;
         }
         totalDamage += dpsData[j] - dpsData[limID];
         if (phasebreaks && phasebreaks[j - 1]) {
-            limID = j - 1;
+            start = j - 1;
             totalDamage = 0;
         }
-        totalDPS[j] = Math.round(totalDamage / (j - limID));
+        totalDPS[j] = Math.round(totalDamage / (j - start));
         maxDPS = Math.max(maxDPS, totalDPS[j]);
     }
     return {
@@ -148,12 +150,17 @@ var compileTargetTab = function () {
     });
     // tab
     Vue.component("target-tab-component", {
-        props: ["target", "phaseindex", "players", "phase", "graphdata", "boons", "conditions", 'targetindex', 'phases', 'mode'],
+        props: ["target", "phaseindex", "players", "phase", "boons", "conditions", 'targetindex', 'phases', 'mode', 'light'],
         template: "#tmplTargetTab",
+        data: function () {
+            return {
+                graphdata: graphData
+            };
+        }
     });
     // stats
     Vue.component("target-stats-component", {
-        props: ["players", "targets", "phase", "phaseindex", "graphdata", "presentboons", "presentconditions", 'phases'],
+        props: ["players", "targets", "phase", "phaseindex", "presentboons", "presentconditions", 'phases', 'light'],
         template: "#tmplTargetStats",
         data: function () {
             return {
@@ -190,7 +197,7 @@ var compileTargetTab = function () {
     });
 
     Vue.component("target-graph-tab-component", {
-        props: ["targetindex", "target", "phase", "phases", "phaseindex", "graph"],
+        props: ["targetindex", "target", "phase", "phases", "phaseindex", "graph", 'light'],
         data: function () {
             return {
                 dpsmode: 0,
@@ -201,10 +208,32 @@ var compileTargetTab = function () {
                 targetOffset: 0
             };
         },
+        watch: {
+            light: {
+                handler: function () {
+                    var textColor = this.light ? '#495057' : '#cccccc';
+                    this.layout.yaxis.gridcolor = textColor;
+                    this.layout.yaxis.color = textColor;
+                    this.layout.yaxis2.gridcolor = textColor;
+                    this.layout.yaxis2.color = textColor;
+                    this.layout.yaxis3.gridcolor = textColor;
+                    this.layout.yaxis3.color = textColor;
+                    this.layout.xaxis.gridcolor = textColor;
+                    this.layout.xaxis.color = textColor;
+                    this.layout.font.color = textColor;
+                    for (var i = 0; i < this.layout.shapes.length; i++) {
+                        this.layout.shapes[i].line.color = textColor;
+                    }
+                    this.layout.datarevision = new Date().getTime();
+                }
+            }
+        },
         created: function () {
             var images = [];
             this.targetOffset += computeRotationData(this.target.details.rotation[this.phaseindex], images, this.data);
+            var oldOffset = this.targetOffset;
             this.targetOffset += computeBuffData(this.target.details.boonGraph[this.phaseindex], this.data);
+            var dpsY = oldOffset === this.targetOffset ? 'y2' : 'y3';
             {
                 var health = this.graph.targets[this.phaseTargetIndex].health;
                 var hpTexts = [];
@@ -220,7 +249,7 @@ var compileTargetTab = function () {
                     },
                     hoverinfo: 'text+x+name',
                     name: this.target.name + ' health',
-                    yaxis: 'y3'
+                    yaxis: dpsY
                 };
                 this.data.push(res);
             }
@@ -231,11 +260,11 @@ var compileTargetTab = function () {
                 line: {
                     shape: 'spline'
                 },
-                yaxis: 'y3',
+                yaxis: dpsY,
                 name: 'Total DPS'
             });
-            this.layout = getActorGraphLayout(images);
-            computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase);
+            this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc');
+            computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
         },
         computed: {
             phaseTargetIndex: function () {

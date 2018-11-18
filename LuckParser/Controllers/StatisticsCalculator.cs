@@ -151,7 +151,7 @@ namespace LuckParser.Controllers
             final.Damage = (int)damage;
             //Condi DPS
             damage = player.GetDamageLogs(target, _log,
-                    phase.Start, phase.End).Where(x => x.IsCondi > 0).Sum(x => x.Damage);
+                    phase.Start, phase.End).Sum(x => x.IsCondi > 0 ? x.Damage : 0);
 
             if (phaseDuration > 0)
             {
@@ -167,8 +167,6 @@ namespace LuckParser.Controllers
             }
             final.PowerDps = (int)dps;
             final.PowerDamage = (int)damage;
-            final.PlayerPowerDamage = player.GetJustPlayerDamageLogs(target, _log,
-                    phase.Start, phase.End).Where(x => x.IsCondi == 0).Sum(x => x.Damage);
             return final;
         }
 
@@ -205,7 +203,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        private void FillFinalStats(List<DamageLog> dls, FinalStats final)
+        private void FillFinalStats(List<DamageLog> dls, FinalStats final, Dictionary<Target, FinalStats> targetsFinal)
         {
             HashSet<long> nonCritable = new HashSet<long>
                     {
@@ -213,12 +211,80 @@ namespace LuckParser.Controllers
                         52370
                     };
 
-            double scholarGain = 1.0462962963;
-            double eagleGain = 1.09259259259;
+            double fiveGain = 1.05;
+            double tenGain = 1.1;
+            bool afterFlank = false;
+            long prevTime = -1;
+            long prevSkill = long.MinValue;
             foreach ( DamageLog dl in dls)
             {
                 if (dl.IsCondi == 0)
                 {
+                    afterFlank = (afterFlank || ((dl.Time - prevTime) <= 1 && dl.SkillId == prevSkill));
+                    foreach(var pair in targetsFinal)
+                    {
+                        Target target = pair.Key;
+                        if (dl.DstInstId == target.InstID && dl.Time <= target.LastAware - _log.FightData.FightStart && dl.Time >= target.FirstAware - _log.FightData.FightStart)
+                        {
+                            FinalStats targetFinal = pair.Value;
+                            if (dl.Result == ParseEnum.Result.Crit)
+                            {
+                                targetFinal.CriticalRate++;
+                                targetFinal.CriticalDmg += dl.Damage;
+                            }
+
+                            if (dl.IsNinety > 0)
+                            {
+                                targetFinal.ScholarRate++;
+                                targetFinal.ScholarDmg += (int)((fiveGain - 1.0) / fiveGain * dl.Damage);
+                            }
+
+                            if (dl.IsFifty > 0)
+                            {
+                                targetFinal.EagleRate++;
+                                targetFinal.EagleDmg += (int)((tenGain - 1.0) / tenGain * dl.Damage);
+                            }
+
+                            if (dl.IsMoving > 0)
+                            {
+                                targetFinal.MovingRate++;
+                                targetFinal.MovingDamage += (int)(dl.Damage / 21.0);
+                            }
+                            if (afterFlank)
+                            {
+                                targetFinal.FlankingDmg += (int)((tenGain - 1.0) / tenGain * dl.Damage);
+                            }
+                            if (dl.IsFlanking > 0)
+                            {
+                                targetFinal.FlankingRate++;
+                            }
+
+                            if (dl.Result == ParseEnum.Result.Glance)
+                            {
+                                targetFinal.GlanceRate++;
+                            }
+
+                            if (dl.Result == ParseEnum.Result.Blind)
+                            {
+                                targetFinal.Missed++;
+                            }
+                            if (dl.Result == ParseEnum.Result.Interrupt)
+                            {
+                                targetFinal.Interrupts++;
+                            }
+
+                            if (dl.Result == ParseEnum.Result.Absorb)
+                            {
+                                targetFinal.Invulned++;
+                            }
+                            targetFinal.PowerLoopCount++;
+                            targetFinal.PlayerPowerDamage += dl.Damage;
+                            if (!nonCritable.Contains(dl.SkillId))
+                            {
+                                targetFinal.CritablePowerLoopCount++;
+                            }
+                        }
+                    }
                     if (dl.Result == ParseEnum.Result.Crit)
                     {
                         final.CriticalRate++;
@@ -228,13 +294,13 @@ namespace LuckParser.Controllers
                     if (dl.IsNinety > 0)
                     {
                         final.ScholarRate++;
-                        final.ScholarDmg += (int)((scholarGain - 1.0)/scholarGain * dl.Damage); 
+                        final.ScholarDmg += (int)((fiveGain - 1.0)/fiveGain * dl.Damage); 
                     }
 
                     if (dl.IsFifty > 0)
                     {
                         final.EagleRate++;
-                        final.EagleDmg += (int)((eagleGain - 1.0) / eagleGain * dl.Damage);
+                        final.EagleDmg += (int)((tenGain - 1.0) / tenGain * dl.Damage);
                     }
 
                     if (dl.IsMoving > 0)
@@ -242,8 +308,19 @@ namespace LuckParser.Controllers
                         final.MovingRate++;
                         final.MovingDamage += (int)(dl.Damage / 21.0);
                     }
-
-                    final.FlankingRate += dl.IsFlanking;
+                    if (afterFlank)
+                    {
+                        final.FlankingDmg += (int)((tenGain - 1.0) / tenGain * dl.Damage);
+                        //check if bonus consumed
+                        afterFlank = ((dl.Time - prevTime) <= 1 && dl.SkillId == prevSkill);
+                        prevTime = dl.Time;
+                        prevSkill = dl.SkillId;
+                    }
+                    if (dl.IsFlanking > 0)
+                    {
+                        afterFlank = true;
+                        final.FlankingRate++;
+                    }
 
                     if (dl.Result == ParseEnum.Result.Glance)
                     {
@@ -264,6 +341,7 @@ namespace LuckParser.Controllers
                         final.Invulned++;
                     }
                     final.PowerLoopCount++;
+                    final.PlayerPowerDamage += dl.Damage;
                     if (!nonCritable.Contains(dl.SkillId))
                     {
                         final.CritablePowerLoopCount++;
@@ -272,23 +350,28 @@ namespace LuckParser.Controllers
             }
         }
 
-        private FinalStats GetFinalTargetStats(Player p, int phaseIndex, Target target)
-        {
-            PhaseData phase = _statistics.Phases[phaseIndex];
-            long start = phase.Start + _log.FightData.FightStart;
-            long end = phase.End + _log.FightData.FightStart;
-            FinalStats final = new FinalStats();
-            FillFinalStats(p.GetJustPlayerDamageLogs(target, _log, phase.Start, phase.End), final);
-            return final;
-        }
-
         private FinalStatsAll GetFinalStats(Player p, int phaseIndex)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
             long start = phase.Start + _log.FightData.FightStart;
             long end = phase.End + _log.FightData.FightStart;
+            Dictionary<Target, FinalStats> targetDict = new Dictionary<Target, FinalStats>();
+            foreach (Target target in _log.FightData.Logic.Targets)
+            {
+                if (!_statistics.StatsTarget.ContainsKey(target))
+                {
+                    _statistics.StatsTarget[target] = new Dictionary<Player, FinalStats[]>();
+                }
+                Dictionary<Player, FinalStats[]> targetStats = _statistics.StatsTarget[target];
+                if (!targetStats.ContainsKey(p))
+                {
+                    targetStats[p] = new FinalStats[_statistics.Phases.Count];
+                }
+                targetStats[p][phaseIndex] = new FinalStats();
+                targetDict[target] = targetStats[p][phaseIndex];
+            }
             FinalStatsAll final = new FinalStatsAll();
-            FillFinalStats(p.GetJustPlayerDamageLogs(null, _log, phase.Start, phase.End), final);
+            FillFinalStats(p.GetJustPlayerDamageLogs(null, _log, phase.Start, phase.End), final, targetDict);
             if (p.Account == ":Conjured Sword")
             {
                 return final;
@@ -419,19 +502,6 @@ namespace LuckParser.Controllers
         {
             foreach (Target target in _log.FightData.Logic.Targets)
             {
-                Dictionary<Player, FinalStats[]> phaseTargetStats = new Dictionary<Player, FinalStats[]>();
-                foreach (Player player in _log.PlayerList)
-                {
-                    FinalStats[] stats = new FinalStats[_statistics.Phases.Count];
-                    for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
-                    {
-                        stats[phaseIndex] = GetFinalTargetStats(player, phaseIndex, target);
-                    }
-                    phaseTargetStats[player] = stats;
-                }
-                _statistics.StatsTarget[target] = phaseTargetStats;
-
-
                 double[] avgBoons = new double[_statistics.Phases.Count];
                 double[] avgCondis = new double[_statistics.Phases.Count];
                 for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
@@ -499,7 +569,6 @@ namespace LuckParser.Controllers
             }
         }
 
-       
         private void CalculateSupport()
         {
             foreach (Player player in _log.PlayerList)
