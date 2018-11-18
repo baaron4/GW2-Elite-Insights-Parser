@@ -396,10 +396,15 @@ var compileGeneralStats = function () {
         methods: {
             getTooltip: function (item) {
                 var hits = item[0] + " out of " + item[1] + " hits";
-                var gain = "Pure Damage: " + item[2];
-                var damageIncrease = Math.round(100 * 100 * (item[3] / (item[3] - item[2]) - 1.0)) / 100;
-                var increase = "Damage Gain: " + (isNaN(damageIncrease) ? "0" : damageIncrease) + "%";
-                return hits + "<br>" + gain + "<br>" + increase;
+                if (item[3] > 0) {
+                    var gain = "Pure Damage: " + item[2];
+                    var damageIncrease = Math.round(100 * 100 * (item[3] / (item[3] - item[2]) - 1.0)) / 100;
+                    var increase = "Damage Gain: " + (isNaN(damageIncrease) ? "0" : damageIncrease) + "%";
+                    return hits + "<br>" + gain + "<br>" + increase;
+                } else {
+                    var done = "Damage Done: " + item[2];
+                    return hits + "<br>" + done;
+                }
             },
             getCellValue: function (item) {
                 var res = Math.round(100 * 100 * item[0] / Math.max(item[1], 1)) / 100;
