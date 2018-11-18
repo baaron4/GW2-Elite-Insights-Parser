@@ -211,8 +211,8 @@ namespace LuckParser.Controllers
                         52370
                     };
 
-            double fiveGain = 1.0462962963;
-            double tenGain = 1.09259259259;
+            double fiveGain = 1.05;
+            double tenGain = 1.1;
             bool afterFlank = false;
             long prevTime = -1;
             long prevSkill = long.MinValue;
