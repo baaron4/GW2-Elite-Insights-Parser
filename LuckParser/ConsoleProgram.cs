@@ -194,7 +194,7 @@ namespace LuckParser
                             {
                                 if (!Properties.Settings.Default.LegacyHtmlMode)
                                 {
-                                    var builder = new HTMLBuilder(log, settings, statistics);
+                                    var builder = new HTMLBuilder(log, settings, statistics, uploadresult);
                                     builder.CreateHTML(sw, saveDirectory.FullName);
                                 } else
                                 {

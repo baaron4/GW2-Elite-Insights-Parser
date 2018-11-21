@@ -22,11 +22,13 @@ namespace LuckParser.Controllers
 
         private readonly ParsedLog _log;
 
+        private readonly string[] _uploadLink;
+
         private readonly Statistics _statistics;
         private Dictionary<long, Boon> _usedBoons = new Dictionary<long, Boon>();
         private Dictionary<long, SkillItem> _usedSkills = new Dictionary<long, SkillItem>();
 
-        public HTMLBuilder(ParsedLog log, SettingsContainer settings, Statistics statistics)
+        public HTMLBuilder(ParsedLog log, SettingsContainer settings, Statistics statistics, string[] uploadString)
         {
             _log = log;
 
@@ -36,6 +38,8 @@ namespace LuckParser.Controllers
             GraphHelper.Settings = settings;
 
             _statistics = statistics;
+
+            _uploadLink = uploadString;
         }
 
         private static string FilterStringChars(string str)
@@ -1202,6 +1206,21 @@ namespace LuckParser.Controllers
             html = html.Replace("${fightID}", _log.FightData.ID.ToString());
             html = html.Replace("${eiVersion}", Application.ProductVersion);
             html = html.Replace("${recordedBy}", _log.LogData.PoV.Split(':')[0]);
+
+            string uploadString = "";
+            if (_settings.UploadToDPSReports)
+            {
+                uploadString += "<p>DPS Reports Link (EI): <a href=\"" + _uploadLink[0] + "\">" + _uploadLink[0] + "</a></p>";
+            }
+            if (_settings.UploadToDPSReportsRH)
+            {
+                uploadString += "<p>DPS Reports Link (RH): <a href=\"" + _uploadLink[1] + "\">" + _uploadLink[1] + "</a></p>";
+            }
+            if (_settings.UploadToRaidar)
+            {
+                uploadString += "<p>Raidar Link: <a href=\"" + _uploadLink[2] + "\">" + _uploadLink[2] + "</a></p>";
+            }
+            html = html.Replace("<!--${UploadLinks}-->", uploadString);
 
             return html;
         }
