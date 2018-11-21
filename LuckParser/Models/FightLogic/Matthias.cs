@@ -55,8 +55,6 @@ namespace LuckParser.Models
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
-            long start = 0;
-            long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
             Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Matthias);
@@ -71,32 +69,37 @@ namespace LuckParser.Models
             }
             // Special buff cast check
             CombatItem heatWave = log.GetBoonData(34526).FirstOrDefault();
-            List<long> phaseStarts = new List<long>();
             if (heatWave != null)
             {
-                phaseStarts.Add(heatWave.Time - log.FightData.FightStart);
+                phases.Add(new PhaseData(0, heatWave.Time - log.FightData.FightStart - 1));
                 CombatItem downPour = log.GetDamageData(mainTarget.InstID).Find(x => x.SkillID == 34554);
                 if (downPour != null)
                 {
-                    phaseStarts.Add(downPour.Time - log.FightData.FightStart);
+                    phases.Add(new PhaseData(heatWave.Time - log.FightData.FightStart, downPour.Time - log.FightData.FightStart - 1));
                     List<CastLog> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
                     CastLog abo = castLogs.Find(x => x.SkillId == 34427);
                     if (abo != null)
                     {
-                        phaseStarts.Add(abo.Time);
+                        phases.Add(new PhaseData(downPour.Time - log.FightData.FightStart, abo.Time - 1));
+                        CombatItem invulRemove = log.GetBoonDataByDst(mainTarget.InstID).FirstOrDefault(x => x.Time >= abo.Time + log.FightData.FightStart && x.Time <= abo.Time + log.FightData.FightStart + 10000 && x.SkillID == 757 && x.IsBuffRemove != ParseEnum.BuffRemove.None);
+                        if (invulRemove != null)
+                        {
+                            phases.Add(new PhaseData(invulRemove.Time - log.FightData.FightStart, fightDuration));
+                        }
+                    }
+                    else
+                    {
+                        phases.Add(new PhaseData(downPour.Time - log.FightData.FightStart, fightDuration));
                     }
                 }
+                else
+                {
+                    phases.Add(new PhaseData(heatWave.Time - log.FightData.FightStart, fightDuration));
+                }
             }
-            foreach (long t in phaseStarts)
+            else
             {
-                end = t;
-                phases.Add(new PhaseData(start, end));
-                // make sure stuff from the precedent phase mix witch each other
-                start = t + 1;
-            }
-            if (fightDuration - start > 5000 && start >= phases.Last().End)
-            {
-                phases.Add(new PhaseData(start, fightDuration));
+                phases.Add(new PhaseData(0, fightDuration));
             }
             string[] namesMat = new [] { "Ice Phase", "Fire Phase", "Storm Phase", "Abomination Phase" };
             for (int i = 1; i < phases.Count; i++)
