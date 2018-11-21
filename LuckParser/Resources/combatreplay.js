@@ -605,8 +605,8 @@ function createAllActors(actors) {
             case "Player":
                 playerData.set(actor.ID, new PlayerIconDrawable(actor.Img, 20, actor.Group, actor.Positions, actor.Dead, actor.Down));
                 if (times.length === 0) {
-                    for (let i = 0; i < actor.Positions.length / 2; i++) {
-                        times.push(i * pollingRate);
+                    for (let j = 0; j < actor.Positions.length / 2; j++) {
+                        times.push(j * pollingRate);
                     }
                 }
                 break;
