@@ -215,12 +215,11 @@ namespace LuckParser.Controllers
             double tenGain = 1.1;
             bool afterFlank = false;
             long prevTime = -1;
-            long prevSkill = long.MinValue;
             foreach ( DamageLog dl in dls)
             {
                 if (dl.IsCondi == 0)
                 {
-                    afterFlank = (afterFlank || ((dl.Time - prevTime) <= 1 && dl.SkillId == prevSkill));
+                    bool consumeFlankBonus = afterFlank && (dl.Time - prevTime) > 10;
                     foreach(var pair in targetsFinal)
                     {
                         Target target = pair.Key;
@@ -250,7 +249,7 @@ namespace LuckParser.Controllers
                                 targetFinal.MovingRate++;
                                 targetFinal.MovingDamage += (int)(dl.Damage / 21.0);
                             }
-                            if (afterFlank)
+                            if (consumeFlankBonus)
                             {
                                 targetFinal.FlankingDmg += (int)((tenGain - 1.0) / tenGain * dl.Damage);
                             }
@@ -308,17 +307,16 @@ namespace LuckParser.Controllers
                         final.MovingRate++;
                         final.MovingDamage += (int)(dl.Damage / 21.0);
                     }
-                    if (afterFlank)
+                    if (consumeFlankBonus)
                     {
                         final.FlankingDmg += (int)((tenGain - 1.0) / tenGain * dl.Damage);
-                        //check if bonus consumed
-                        afterFlank = ((dl.Time - prevTime) <= 1 && dl.SkillId == prevSkill);
-                        prevTime = dl.Time;
-                        prevSkill = dl.SkillId;
+                        // flank bonus consumed
+                        afterFlank = false;
                     }
                     if (dl.IsFlanking > 0)
                     {
                         afterFlank = true;
+                        prevTime = dl.Time;
                         final.FlankingRate++;
                     }
 
