@@ -104,6 +104,14 @@ function findSkill(isBuff, id) {
     return skill;
 }
 
+function getTargetCacheID(activetargets) {
+    var id = 0;
+    for (var i = 0; i < activetargets.length; i++) {
+        id = id | Math.pow(2,activetargets[i]);
+    }
+    return id;
+}
+
 function computeRotationData(rotationData, images, data) {
     if (rotationData) {
         for (var i = 0; i < rotationData.length; i++) {

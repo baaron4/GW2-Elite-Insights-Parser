@@ -223,11 +223,7 @@ var compileGraphs = function () {
             },
             computeDPSData: function () {
                 var cacheID = this.dpsmode + '-';
-                var targetsID = 1;
-                for (var i = 0; i < this.activetargets.length; i++) {
-                    targetsID = targetsID << (this.activetargets[i] + 1);
-                }
-                cacheID += targetsID;
+                cacheID += getTargetCacheID(this.activetargets);
                 if (this.dpsCache.has(cacheID)) {
                     return this.dpsCache.get(cacheID);
                 }
@@ -243,12 +239,8 @@ var compileGraphs = function () {
             },
             computeDPSRelatedData: function () {
                 var cacheID = this.dpsmode + '-' + this.mode + '-';
-                var targetsID = 1;
                 var i, j;
-                for (i = 0; i < this.activetargets.length; i++) {
-                    targetsID = targetsID << (this.activetargets[i] + 1);
-                }
-                cacheID += targetsID;
+                cacheID += getTargetCacheID(this.activetargets);
                 if (this.dataCache.has(cacheID)) {
                     return this.dataCache.get(cacheID);
                 }
