@@ -18,12 +18,7 @@ var compileGeneralStats = function () {
         computed: {
             tableData: function () {
                 var cacheID = this.phaseindex + '-';
-                var targetsID = 1;
-                var i;
-                for (i = 0; i < this.activetargets.length; i++) {
-                    targetsID = targetsID << (this.activetargets[i] + 1);
-                }
-                cacheID += targetsID;
+                cacheID += getTargetCacheID(this.activetargets);
                 if (this.cacheTarget.has(cacheID)) {
                     return this.cacheTarget.get(cacheID);
                 }
@@ -32,7 +27,7 @@ var compileGeneralStats = function () {
                 var sums = [];
                 var total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                 var groups = [];
-                var j;
+                var i, j;
                 for (i = 0; i < phase.dpsStats.length; i++) {
                     var dpsStat = phase.dpsStats[i];
                     var dpsTargetStat = [0, 0, 0, 0, 0, 0];
@@ -257,18 +252,13 @@ var compileGeneralStats = function () {
             },
             tableDataTarget: function () {
                 var cacheID = this.phaseindex + '-';
-                var targetsID = 1;
-                var i;
-                for (i = 0; i < this.activetargets.length; i++) {
-                    targetsID = targetsID << (this.activetargets[i] + 1);
-                }
-                cacheID += targetsID;
+                cacheID += getTargetCacheID(this.activetargets);
                 if (this.cacheTarget.has(cacheID)) {
                     return this.cacheTarget.get(cacheID);
                 }
                 var phase = this.phase;
                 var rows = [];
-                for (i = 0; i < phase.dmgStats.length; i++) {
+                for (var i = 0; i < phase.dmgStats.length; i++) {
                     var commons = [];
                     var data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                     var player = this.players[i];
@@ -352,18 +342,13 @@ var compileGeneralStats = function () {
             },
             rowsTarget: function () {
                 var cacheID = this.phaseindex + '-';
-                var targetsID = 1;
-                var i;
-                for (i = 0; i < this.activetargets.length; i++) {
-                    targetsID = targetsID << (this.activetargets[i] + 1);
-                }
-                cacheID += targetsID;
+                cacheID += getTargetCacheID(this.activetargets);
                 if (this.cacheTarget.has(cacheID)) {
                     return this.cacheTarget.get(cacheID);
                 }
                 var rows = [];
                 var j;
-                for (i = 0; i < this.players.length; i++) {
+                for (var i = 0; i < this.players.length; i++) {
                     var player = this.players[i];
                     if (player.isConjure) {
                         continue;

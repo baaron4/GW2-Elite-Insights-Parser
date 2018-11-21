@@ -29,12 +29,7 @@ var compilePlayerTab = function () {
             },
             dmgdisttarget: function () {
                 var cacheID = this.phaseindex + '-' + this.distmode + '-';
-                var targetsID = 1;
-                var i;
-                for (i = 0; i < this.activetargets.length; i++) {
-                    targetsID = targetsID << (this.activetargets[i] + 1);
-                }
-                cacheID += targetsID;
+                cacheID += getTargetCacheID(this.activetargets);
                 if (this.cacheTarget.has(cacheID)) {
                     return this.cacheTarget.get(cacheID);
                 }
@@ -44,7 +39,7 @@ var compilePlayerTab = function () {
                     distribution: [],
                 };
                 var rows = new Map();
-                for (i = 0; i < this.activetargets.length; i++) {
+                for (var i = 0; i < this.activetargets.length; i++) {
                     var targetid = this.activetargets[i];
                     var targetDist = this.distmode === -1 ?
                         this.player.details.dmgDistributionsTargets[this.phaseindex][targetid] :
@@ -193,11 +188,7 @@ var compilePlayerTab = function () {
         methods: {
             computeDPSData: function () {
                 var cacheID = this.dpsmode + '-';
-                var targetsID = 1;
-                for (var i = 0; i < this.activetargets.length; i++) {
-                    targetsID = targetsID << (this.activetargets[i] + 1);
-                }
-                cacheID += targetsID;
+                cacheID += getTargetCacheID(this.activetargets);
                 if (this.dpsCache.has(cacheID)) {
                     return this.dpsCache.get(cacheID);
                 }
@@ -222,11 +213,7 @@ var compilePlayerTab = function () {
             },
             computeDPSRelatedData: function () {
                 var cacheID = this.dpsmode + '-';
-                var targetsID = 1;
-                for (var i = 0; i < this.activetargets.length; i++) {
-                    targetsID = targetsID << (this.activetargets[i] + 1);
-                }
-                cacheID += targetsID;
+                cacheID += getTargetCacheID(this.activetargets);
                 if (this.dataCache.has(cacheID)) {
                     return this.dataCache.get(cacheID);
                 }
