@@ -42,7 +42,7 @@ namespace LuckParser.Controllers
 
             
         //}
-        public LegacyHTMLBuilder(ParsedLog log, SettingsContainer settings, Statistics statistics,string[] UploadString)
+        public LegacyHTMLBuilder(ParsedLog log, SettingsContainer settings, Statistics statistics, string[] uploadString)
         {
             _log = log;
 
@@ -53,7 +53,7 @@ namespace LuckParser.Controllers
 
             _statistics = statistics;
 
-            _uploadLink = UploadString;
+            _uploadLink = uploadString;
         }
 
         private static string FilterStringChars(string str)
