@@ -118,7 +118,7 @@ function computeRotationData(rotationData, images, data) {
             var item = rotationData[i];
             var x = item[0];
             var skillId = item[1];
-            var duration = item[2] / 1000.0;
+            var duration = item[2];
             var endType = item[3];
             var quick = item[4];
             var skill = findSkill(false, skillId);
@@ -159,7 +159,7 @@ function computeRotationData(rotationData, images, data) {
                 x: [duration],
                 base: x,
                 y: [1.2],
-                name: name + ': ' + duration + 's',
+                name: name + ': ' + duration + 'ms',
                 orientation: 'h',
                 mode: 'markers',
                 type: 'bar',
