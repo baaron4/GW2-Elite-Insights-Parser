@@ -34,7 +34,7 @@
                 </div>
                 <graph-component :id="'deathrecap-' + playerindex + '-' + index" :layout="data.layout" :data="[data.data[index]]"></graph-component>
             </div>
-            <div v-show="phaseRecaps">                
+            <div v-show="phaseRecaps === null || phaseRecaps.length === 0">                
                 <h3 class="text-center">Player has never died during this phase</h3>
             </div>
     </div>
