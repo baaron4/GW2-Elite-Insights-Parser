@@ -534,16 +534,22 @@ namespace LuckParser.Controllers
             List<double[]> list = new List<double[]>();
 
             PhaseData phase = _statistics.Phases[phaseIndex];
-            List<CastLog> casting = p.GetCastLogs(_log, phase.Start, phase.End);
+            List<CastLog> casting = p.GetCastLogsActDur(_log, phase.Start, phase.End);
             SkillData skillList = _log.SkillData;
             foreach (CastLog cl in casting)
             {
                 if (!_usedSkills.ContainsKey(cl.SkillId)) _usedSkills.Add(cl.SkillId, skillList.Get(cl.SkillId));
                 double[] rotEntry = new double[5];
                 list.Add(rotEntry);
+                double offset = 0.0;
                 rotEntry[0] = (cl.Time - phase.Start) / 1000.0;
+                if (rotEntry[0] < 0.0)
+                {
+                    offset = -1000.0*rotEntry[0];
+                    rotEntry[0] = 0.0;
+                }
                 rotEntry[1] = cl.SkillId;
-                rotEntry[2] = cl.SkillId == SkillItem.DodgeId ? 750 : cl.SkillId == SkillItem.WeaponSwapId ? 100 : cl.ActualDuration;
+                rotEntry[2] = (cl.SkillId == SkillItem.DodgeId ? 750 : cl.SkillId == SkillItem.WeaponSwapId ? 50 : cl.ActualDuration) - offset; ;
                 rotEntry[3] = EncodeEndActivation(cl.EndActivation);
                 rotEntry[4] = cl.StartActivation == ParseEnum.Activation.Quickness ? 1 : 0;
             }
