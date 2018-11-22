@@ -13,20 +13,20 @@ namespace LuckParser.Models
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(48172, "Hateful Ephemera", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'square',color:'rgb(255,140,0)'", "Glm.dmg","Hateful Ephemera (Golem AoE dmg)", "Golem Dmg",0), 
-            new Mechanic(48121, "Arcing Affliction", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'circle-open',color:'rgb(255,0,0)'", "B.dmg","Arcing Affliction (Bomb) hit", "Bomb dmg",0), 
+            new Mechanic(48172, "Hateful Ephemera", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'square',color:'rgb(255,140,0)'", "Glm.dmg","Hateful Ephemera (Golem AoE dmg)", "Golem Dmg",0),
+            new Mechanic(48121, "Arcing Affliction", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'circle-open',color:'rgb(255,0,0)'", "B.dmg","Arcing Affliction (Bomb) hit", "Bomb dmg",0),
             new Mechanic(47646, "Arcing Affliction", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Dhuum, "symbol:'circle',color:'rgb(255,0,0)'", "Bmb","Arcing Affliction (Bomb) application", "Bomb",0),
             //new Mechanic(47476, "Residual Affliction", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Dhuum, "symbol:'star-diamond',color:'rgb(255,200,0)'", "Bomb",0), //not needed, imho, applied at the same time as Arcing Affliction
             new Mechanic(47335, "Soul Shackle", Mechanic.MechType.PlayerOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'diamond',color:'rgb(0,255,255)'", "Shckl","Soul Shackle (Tether) application", "Shackles",0),//  //also used for removal.
             new Mechanic(47164, "Soul Shackle", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'diamond-open',color:'rgb(0,255,255)'", "Sh.Dmg","Soul Shackle (Tether) dmg ticks", "Shackles Dmg",0, (item => item.DamageLog.Damage > 0)),
             new Mechanic(47561, "Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'triangle',color:'rgb(0,128,0)'", "Cone","Boon ripping Cone Attack", "Cone",0),
             new Mechanic(48752, "Cull", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'asterisk-open',color:'rgb(0,255,255)'", "Crk","Cull (Fearing Fissures)", "Cracks",0),
-            new Mechanic(48760, "Putrid Bomb", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'circle',color:'rgb(0,128,0)'", "Mrk","Necro Marks during Scythe attack", "Necro Marks",0), 
+            new Mechanic(48760, "Putrid Bomb", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'circle',color:'rgb(0,128,0)'", "Mrk","Necro Marks during Scythe attack", "Necro Marks",0),
             new Mechanic(48398, "Cataclysmic Cycle", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'circle-open',color:'rgb(255,140,0)'", "Sck.Dmg","Damage when sucked to close to middle", "Suck dmg",0),
-            new Mechanic(48176, "Death Mark", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'hexagon',color:'rgb(255,140,0)'", "Dip","Lesser Death Mark hit (Dip into ground)", "Dip AoE",0), 
+            new Mechanic(48176, "Death Mark", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'hexagon',color:'rgb(255,140,0)'", "Dip","Lesser Death Mark hit (Dip into ground)", "Dip AoE",0),
             new Mechanic(48210, "Greater Death Mark", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'circle',color:'rgb(255,140,0)'", "KB.Dmg","Knockback damage during Greater Deathmark (mid port)", "Knockback dmg",0),
           //  new Mechanic(48281, "Mortal Coil", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Dhuum, "symbol:'circle',color:'rgb(0,128,0)'", "Green Orbs",
-            new Mechanic(46950, "Fractured Spirit", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Dhuum, "symbol:'square',color:'rgb(0,255,0)'", "Orb CD","Applied when taking green", "Green port",0), 
+            new Mechanic(46950, "Fractured Spirit", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Dhuum, "symbol:'square',color:'rgb(0,255,0)'", "Orb CD","Applied when taking green", "Green port",0),
             new Mechanic(47076 , "Echo's Damage", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Dhuum, "symbol:'square',color:'rgb(255,0,0)'", "Echo","Damaged by Ender's Echo (pick up)", "Ender's Echo",5000),
             });
             Extension = "dhuum";
@@ -42,10 +42,27 @@ namespace LuckParser.Models
                             Tuple.Create(19072, 15484, 20992, 16508));
         }
 
+        private void ComputeFightPhases(Target mainTarget, List<PhaseData> phases, ParsedLog log, List<CastLog> castLogs, long fightDuration, long start)
+        {
+            CastLog shield = castLogs.Find(x => x.SkillId == 47396);
+            if (shield != null)
+            {
+                long end = shield.Time;
+                phases.Add(new PhaseData(start, end));
+                CastLog firstDamage = castLogs.FirstOrDefault(x => x.SkillId == 47304 && x.Time >= end);
+                if (firstDamage != null)
+                {
+                    phases.Add(new PhaseData(firstDamage.Time, fightDuration));
+                }
+            }
+            else
+            {
+                phases.Add(new PhaseData(start, fightDuration));
+            }
+        }
+
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
-            long start = 0;
-            long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
             Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
@@ -61,60 +78,31 @@ namespace LuckParser.Models
             // Sometimes the preevent is not in the evtc
             List<CastLog> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
             List<CastLog> dhuumCast = mainTarget.GetCastLogs(log, 0, 20000);
+            string[] namesDh;
             if (dhuumCast.Count > 0)
             {
-                CastLog shield = castLogs.Find(x => x.SkillId == 47396);
-                if (shield != null)
-                {
-                    end = shield.Time;
-                    phases.Add(new PhaseData(start, end));
-                    start = shield.Time + shield.ActualDuration;
-                    if (start < fightDuration - 5000)
-                    {
-                        phases.Add(new PhaseData(start, fightDuration));
-                    }
-                }
-                if (fightDuration - start > 5000 && start >= phases.Last().End)
-                {
-                    phases.Add(new PhaseData(start, fightDuration));
-                }
-                string[] namesDh = new [] { "Main Fight", "Ritual" };
-                for (int i = 1; i < phases.Count; i++)
-                {
-                    phases[i].Name = namesDh[i - 1];
-                    phases[i].Targets.Add(mainTarget);
-                }
+                namesDh = new[] { "Main Fight", "Ritual" };
+                ComputeFightPhases(mainTarget, phases, log, castLogs, fightDuration, 0);
             }
             else
             {
                 CombatItem invulDhuum = log.GetBoonData(762).FirstOrDefault(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SrcInstid == mainTarget.InstID && x.Time > 115000 + log.FightData.FightStart);
                 if (invulDhuum != null)
                 {
-                    end = invulDhuum.Time - log.FightData.FightStart;
-                    phases.Add(new PhaseData(start, end));
-                    start = end + 1;
-                    CastLog shield = castLogs.Find(x => x.SkillId == 47396);
-                    if (shield != null)
-                    {
-                        end = shield.Time;
-                        phases.Add(new PhaseData(start, end));
-                        start = shield.Time + shield.ActualDuration;
-                        if (start < fightDuration - 5000)
-                        {
-                            phases.Add(new PhaseData(start, fightDuration));
-                        }
-                    }
+                    long end = invulDhuum.Time - log.FightData.FightStart;
+                    phases.Add(new PhaseData(0, end));
+                    ComputeFightPhases(mainTarget, phases, log, castLogs, fightDuration, end + 1);
                 }
-                if (fightDuration - start > 5000 && start >= phases.Last().End)
+                else
                 {
-                    phases.Add(new PhaseData(start, fightDuration));
+                    phases.Add(new PhaseData(0, fightDuration));
                 }
-                string[] namesDh = new [] { "Roleplay", "Main Fight", "Ritual" };
-                for (int i = 1; i < phases.Count; i++)
-                {
-                    phases[i].Name = namesDh[i - 1];
-                    phases[i].Targets.Add(mainTarget);
-                }
+                namesDh = new[] { "Roleplay", "Main Fight", "Ritual" };
+            }
+            for (int i = 1; i < phases.Count; i++)
+            {
+                phases[i].Name = namesDh[i - 1];
+                phases[i].Targets.Add(mainTarget);
             }
             return phases;
         }
@@ -197,7 +185,7 @@ namespace LuckParser.Models
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
-           
+
         }
 
         public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
@@ -218,7 +206,7 @@ namespace LuckParser.Models
                     break;
                 case (ushort)Deathling:
                 case (ushort)UnderworldReaper:
-                    break; 
+                    break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
 
