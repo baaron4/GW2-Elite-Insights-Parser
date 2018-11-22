@@ -307,6 +307,15 @@ function computePlayerDPS(playerid, graph, playerDPS, maxDPS, allDPS, lim, phase
         maxDPS.target = Math.max(maxDPS.target, targetDPS[j]);
         maxDPS.cleave = Math.max(maxDPS.cleave, cleaveDPS[j]);
     }
+    if (maxDPS.total < 1e-6) {
+        maxDPS.total = 10;
+    }
+    if (maxDPS.target < 1e-6) {
+        maxDPS.target = 10;
+    }
+    if (maxDPS.cleave < 1e-6) {
+        maxDPS.cleave = 10;
+    }
     playerDPS.push({
         total: totalDPS,
         target: targetDPS,
