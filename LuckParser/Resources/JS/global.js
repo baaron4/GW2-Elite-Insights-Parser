@@ -118,7 +118,7 @@ function computeRotationData(rotationData, images, data) {
             var item = rotationData[i];
             var x = item[0];
             var skillId = item[1];
-            var duration = item[2] / 1000.0;
+            var duration = item[2];
             var endType = item[3];
             var quick = item[4];
             var skill = findSkill(false, skillId);
@@ -156,10 +156,10 @@ function computeRotationData(rotationData, images, data) {
             else fillColor = 'rgb(220,220,0)';
 
             data.push({
-                x: [duration],
+                x: [duration/1000.0],
                 base: x,
                 y: [1.2],
-                name: name + ': ' + duration + 's',
+                name: name + ': ' + duration + 'ms',
                 orientation: 'h',
                 mode: 'markers',
                 type: 'bar',
@@ -306,6 +306,15 @@ function computePlayerDPS(playerid, graph, playerDPS, maxDPS, allDPS, lim, phase
         maxDPS.total = Math.max(maxDPS.total, totalDPS[j]);
         maxDPS.target = Math.max(maxDPS.target, targetDPS[j]);
         maxDPS.cleave = Math.max(maxDPS.cleave, cleaveDPS[j]);
+    }
+    if (maxDPS.total < 1e-6) {
+        maxDPS.total = 10;
+    }
+    if (maxDPS.target < 1e-6) {
+        maxDPS.target = 10;
+    }
+    if (maxDPS.cleave < 1e-6) {
+        maxDPS.cleave = 10;
     }
     playerDPS.push({
         total: totalDPS,

@@ -21,6 +21,9 @@ function computeTargetDPS(targetid, graph, lim, phasebreaks) {
         totalDPS[j] = Math.round(totalDamage / (j - start));
         maxDPS = Math.max(maxDPS, totalDPS[j]);
     }
+    if (maxDPS < 1e-6) {
+        maxDPS = 10;
+    }
     return {
         dps: totalDPS,
         maxDPS: maxDPS
