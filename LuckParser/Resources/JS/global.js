@@ -156,7 +156,7 @@ function computeRotationData(rotationData, images, data) {
             else fillColor = 'rgb(220,220,0)';
 
             data.push({
-                x: [duration],
+                x: [duration/1000.0],
                 base: x,
                 y: [1.2],
                 name: name + ': ' + duration + 'ms',
