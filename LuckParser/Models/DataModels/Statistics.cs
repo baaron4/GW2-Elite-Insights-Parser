@@ -102,6 +102,7 @@ namespace LuckParser.Models.DataModels
             public int InvulnedCount;
             public int DamageInvulned;
             public int DamageBarrier;
+            public int InterruptedCount;
         }
 
         public readonly Dictionary<Player, FinalDefenses[]> Defenses;

@@ -283,6 +283,7 @@ namespace LuckParser.Controllers
                     defenses.DamageBarrier,
                     defenses.BlockedCount,
                     defenses.InvulnedCount,
+                    defenses.InterruptedCount,
                     defenses.EvadedCount,
                     stats.DodgeCount,
                     stats.DownCount
@@ -580,7 +581,7 @@ namespace LuckParser.Controllers
             List<CombatItem> deads = _log.CombatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDead, start, end);
             List<CombatItem> downs = _log.CombatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDown, start, end);
             long lastTime = start;
-            List<DamageLog> damageLogs = p.GetDamageTakenLogs(_log, 0, _log.FightData.FightDuration);
+            List<DamageLog> damageLogs = p.GetDamageTakenLogs(null, _log, 0, _log.FightData.FightDuration);
             foreach (CombatItem dead in deads)
             {
                 DeathRecapDto recap = new DeathRecapDto()
@@ -818,7 +819,7 @@ namespace LuckParser.Controllers
                 distribution = new List<double[]>()
             };
             PhaseData phase = _statistics.Phases[phaseIndex];
-            List<DamageLog> damageLogs = p.GetDamageTakenLogs(_log, phase.Start, phase.End);
+            List<DamageLog> damageLogs = p.GetDamageTakenLogs(null, _log, phase.Start, phase.End);
             Dictionary<long, List<DamageLog>> damageLogsBySkill = damageLogs.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             SkillData skillList = _log.SkillData;
             dto.contributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.Damage) : 0;

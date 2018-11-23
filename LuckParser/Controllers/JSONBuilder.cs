@@ -249,7 +249,7 @@ namespace LuckParser.Controllers
             List<CombatItem> deads = _log.CombatData.GetStates(player.InstID, ParseEnum.StateChange.ChangeDead, start, end);
             List<CombatItem> downs = _log.CombatData.GetStates(player.InstID, ParseEnum.StateChange.ChangeDown, start, end);
             long lastTime = start;
-            List<DamageLog> damageLogs = player.GetDamageTakenLogs(_log, 0, _log.FightData.FightDuration);
+            List<DamageLog> damageLogs = player.GetDamageTakenLogs(null, _log, 0, _log.FightData.FightDuration);
             foreach (CombatItem dead in deads)
             {
                 JsonDeathRecap recap = new JsonDeathRecap()
@@ -369,7 +369,7 @@ namespace LuckParser.Controllers
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
                 PhaseData phase = _statistics.Phases[i];
-                res[i] = BuildDamageDist(p.GetDamageTakenLogs(_log, phase.Start, phase.End));
+                res[i] = BuildDamageDist(p.GetDamageTakenLogs(null, _log, phase.Start, phase.End));
             }
             return res;
         }

@@ -94,7 +94,7 @@ var compileGeneralStats = function () {
                 }
                 var rows = [];
                 var sums = [];
-                var total = [0, 0, 0, 0, 0, 0, 0];
+                var total = [0, 0, 0, 0, 0, 0, 0, 0];
                 var groups = [];
                 var i;
                 for (i = 0; i < this.phase.defStats.length; i++) {
@@ -108,7 +108,7 @@ var compileGeneralStats = function () {
                         def: def
                     });
                     if (!groups[player.group]) {
-                        groups[player.group] = [0, 0, 0, 0, 0, 0, 0];
+                        groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0];
                     }
                     for (var j = 0; j < total.length; j++) {
                         total[j] += def[j];

@@ -14,6 +14,7 @@ namespace LuckParser.Models.ParseModels
         //protected List<DamageLog> HealingLogs = new List<DamageLog>();
         //protected List<DamageLog> HealingReceivedLogs = new List<DamageLog>();
         private readonly List<DamageLog> _damageTakenlogs = new List<DamageLog>();
+        protected Dictionary<ushort, List<DamageLog>> _damageTakenLogsBySrc = new Dictionary<ushort, List<DamageLog>>();
         protected readonly List<CastLog> CastLogs = new List<CastLog>();
 
         public uint Toughness => AgentItem.Toughness;
@@ -57,11 +58,25 @@ namespace LuckParser.Models.ParseModels
             }
             return DamageLogs.Where( x => x.Time >= start && x.Time <= end).ToList();
         }
-        public List<DamageLog> GetDamageTakenLogs(ParsedLog log, long start, long end)
+        public List<DamageLog> GetDamageTakenLogs(AbstractPlayer target, ParsedLog log, long start, long end)
         {
             if (_damageTakenlogs.Count == 0)
             {
                 SetDamageTakenLogs(log);
+                _damageTakenLogsBySrc = _damageTakenlogs.GroupBy(x => x.SrcInstId).ToDictionary(x => x.Key, x => x.ToList());
+            }
+            if (target != null)
+            {
+                if (_damageTakenLogsBySrc.TryGetValue(target.InstID, out var list))
+                {
+                    long targetStart = target.FirstAware - log.FightData.FightStart;
+                    long targetEnd = target.LastAware - log.FightData.FightStart;
+                    return list.Where(x => x.Time >= start && x.Time > targetStart && x.Time <= end && x.Time < targetEnd).ToList();
+                }
+                else
+                {
+                    return new List<DamageLog>();
+                }
             }
             return _damageTakenlogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }

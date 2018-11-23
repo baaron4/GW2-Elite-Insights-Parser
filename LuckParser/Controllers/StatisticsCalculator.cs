@@ -534,7 +534,7 @@ namespace LuckParser.Controllers
 
                     PhaseData phase = _statistics.Phases[phaseIndex];
 
-                    List<DamageLog> damageLogs = player.GetDamageTakenLogs(_log, phase.Start, phase.End);
+                    List<DamageLog> damageLogs = player.GetDamageTakenLogs(null, _log, phase.Start, phase.End);
                     //List<DamageLog> healingLogs = player.getHealingReceivedLogs(log, phase.getStart(), phase.getEnd());
 
                     final.DamageTaken = damageLogs.Sum(x => (long)x.Damage);
@@ -544,6 +544,7 @@ namespace LuckParser.Controllers
                     final.DamageInvulned = 0;
                     final.EvadedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Evade);
                     final.DamageBarrier = (int)damageLogs.Sum(x => x.ShieldDamage);
+                    final.InterruptedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Interrupt);
                     foreach (DamageLog log in damageLogs.Where(x => x.Result == ParseEnum.Result.Absorb))
                     {
                         final.InvulnedCount++;
