@@ -199,27 +199,14 @@ namespace LuckParser.Controllers
             foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalDPS dps = _statistics.DpsAll[player][phaseIndex];
+                Statistics.FinalDefenses defense = _statistics.Defenses[player][phaseIndex];
                 Statistics.FinalDPS dpsBoss = _statistics.DpsTarget[_log.LegacyTarget][player][phaseIndex];
-                Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
-                Statistics.FinalStats statsBoss = _statistics.StatsTarget[_log.LegacyTarget][player][phaseIndex];
-                string deathString = "";
+                string deathString = defense.DeadCount.ToString();
                 string deadthTooltip = "";
-                if (stats.Died != 0.0)
+                if (defense.DeadCount > 0)
                 {
-                    if (stats.Died < 0)
-                    {
-                        deathString = -stats.Died + " time(s)";
-                    }
-                    else
-                    {
-                        TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
-                        deathString = timedead.Minutes + " m " + timedead.Seconds + " s";
-                        deadthTooltip = Math.Round((timedead.TotalMilliseconds / phase.GetDuration()) * 100, 1) + "%";
-                    }
-                }
-                else
-                {
-                    deadthTooltip = "Never died";
+                    TimeSpan deathDuration = TimeSpan.FromMilliseconds(defense.DeadDuration);
+                    deadthTooltip = deathDuration.TotalSeconds + " seconds dead, " + (100.0 - Math.Round((deathDuration.TotalMilliseconds / phase.GetDuration()) * 100, 1)) + "% Alive";
                 }
                 string[] wep = player.GetWeaponsArray(_log);
                 string build = "";
@@ -242,7 +229,7 @@ namespace LuckParser.Controllers
                 WriteLine(new [] { player.Group.ToString(), player.Prof,build,player.Character, player.Account.TrimStart(':') ,wep[0],wep[1],wep[2],wep[3],
                 dpsBoss.Dps.ToString(),dpsBoss.Damage.ToString(),dpsBoss.PowerDps.ToString(),dpsBoss.PowerDamage.ToString(),dpsBoss.CondiDps.ToString(),dpsBoss.CondiDamage.ToString(),
                 dps.Dps.ToString(),dps.Damage.ToString(),dps.PowerDps.ToString(),dps.PowerDamage.ToString(),dps.CondiDps.ToString(),dps.CondiDamage.ToString(),
-                stats.DownCount.ToString(), deathString, deadthTooltip});
+                defense.DownCount.ToString(), deathString, deadthTooltip});
                 count++;
             }
             while (count < 15)//so each graph has equal spacing
@@ -329,10 +316,9 @@ namespace LuckParser.Controllers
             foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalDefenses defenses = _statistics.Defenses[player][phaseIndex];
-                Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
 
                 WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
-                defenses.DamageTaken.ToString(),defenses.DamageBarrier.ToString(),defenses.BlockedCount.ToString(),defenses.InvulnedCount.ToString(),defenses.EvadedCount.ToString(),stats.DodgeCount.ToString() });
+                defenses.DamageTaken.ToString(),defenses.DamageBarrier.ToString(),defenses.BlockedCount.ToString(),defenses.InvulnedCount.ToString(),defenses.EvadedCount.ToString(),defenses.DodgeCount.ToString() });
                 count++;
             }
             while (count < 15)//so each graph has equal spacing

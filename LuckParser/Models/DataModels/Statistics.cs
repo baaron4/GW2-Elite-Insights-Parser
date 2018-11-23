@@ -80,12 +80,6 @@ namespace LuckParser.Models.DataModels
 
             // Counts
             public int SwapCount;
-            public int DownCount;
-            public int DodgeCount;
-
-            // Misc
-            public double Died;
-            public double Dcd;
         }
 
         public readonly Dictionary<Target, Dictionary<Player, FinalStats[]>> StatsTarget;
@@ -99,10 +93,17 @@ namespace LuckParser.Models.DataModels
             public long DamageTaken;
             public int BlockedCount;
             public int EvadedCount;
+            public int DodgeCount;
             public int InvulnedCount;
             public int DamageInvulned;
             public int DamageBarrier;
             public int InterruptedCount;
+            public int DownCount;
+            public int DownDuration;
+            public int DeadCount;
+            public int DeadDuration;
+            public int DCCount;
+            public int DCDuration;
         }
 
         public readonly Dictionary<Player, FinalDefenses[]> Defenses;

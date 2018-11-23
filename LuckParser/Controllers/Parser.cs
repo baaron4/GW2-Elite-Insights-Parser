@@ -533,18 +533,8 @@ namespace LuckParser.Controllers
                             break;
                         }
                     }
-
-                    player.Disconnected = lp[0].Time;
-                    _playerList.Add(player);
                 }
-                else//didn't dc
-                {
-                    if (player.Disconnected == 0)
-                    {
-                        _playerList.Add(player);
-                    }
-
-                }
+                _playerList.Add(player);
             }
         }
         /// <summary>

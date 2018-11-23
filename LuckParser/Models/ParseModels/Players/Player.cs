@@ -29,7 +29,6 @@ namespace LuckParser.Models.ParseModels
         // Fields
         public readonly string Account;
         public readonly int Group;
-        public long Disconnected { get; set; }//time in ms the player dcd
        
         private readonly List<Consumable> _consumeList = new List<Consumable>();
         //weaponslist
@@ -245,47 +244,10 @@ namespace LuckParser.Models.ParseModels
         {
             CombatReplay.Icon = GeneralHelper.GetProfIcon(Prof);
             // Down and deads
-            List<CombatItem> status = log.CombatData.GetStates(InstID, ParseEnum.StateChange.ChangeDown, log.FightData.FightStart, log.FightData.FightEnd);
-            status.AddRange(log.CombatData.GetStates(InstID, ParseEnum.StateChange.ChangeUp, log.FightData.FightStart, log.FightData.FightEnd));
-            status.AddRange(log.CombatData.GetStates(InstID, ParseEnum.StateChange.ChangeDead, log.FightData.FightStart, log.FightData.FightEnd));
-            status.AddRange(log.CombatData.GetStates(InstID, ParseEnum.StateChange.Spawn, log.FightData.FightStart, log.FightData.FightEnd));
-            status.AddRange(log.CombatData.GetStates(InstID, ParseEnum.StateChange.Despawn, log.FightData.FightStart, log.FightData.FightEnd));
-            status = status.OrderBy(x => x.Time).ToList();
             List<Tuple<long, long>> dead = CombatReplay.Deads;
             List<Tuple<long, long>> down = CombatReplay.Downs;
             List<Tuple<long, long>> dc = CombatReplay.DCs;
-            for (var i = 0; i < status.Count -1;i++)
-            {
-                CombatItem cur = status[i];
-                CombatItem next = status[i + 1];
-                if (cur.IsStateChange.IsDown())
-                {
-                    down.Add(new Tuple<long, long>(cur.Time - log.FightData.FightStart, next.Time - log.FightData.FightStart));
-                } else if (cur.IsStateChange.IsDead())
-                {
-                    dead.Add(new Tuple<long, long>(cur.Time - log.FightData.FightStart, next.Time - log.FightData.FightStart));
-                } else if (cur.IsStateChange.IsDespawn())
-                {
-                    dc.Add(new Tuple<long, long>(cur.Time - log.FightData.FightStart, next.Time - log.FightData.FightStart));
-                }
-            }
-            // check last value
-            if (status.Count > 0)
-            {
-                CombatItem cur = status.Last();
-                if (cur.IsStateChange.IsDown())
-                {
-                    down.Add(new Tuple<long, long>(cur.Time - log.FightData.FightStart, log.FightData.FightDuration));
-                }
-                else if (cur.IsStateChange.IsDead())
-                {
-                    dead.Add(new Tuple<long, long>(cur.Time - log.FightData.FightStart, log.FightData.FightDuration));
-                }
-                else if (cur.IsStateChange.IsDespawn())
-                {
-                    dc.Add(new Tuple<long, long>(cur.Time - log.FightData.FightStart, log.FightData.FightDuration));
-                }
-            }
+            log.CombatData.GetAgentStatus(log.FightData.FightStart, log.FightData.FightEnd, InstID, dead, down, dc);
             // Fight related stuff
             log.FightData.Logic.ComputeAdditionalPlayerData(this, log);
         }

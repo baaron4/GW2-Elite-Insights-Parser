@@ -275,7 +275,6 @@ namespace LuckParser.Controllers
             foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalDefenses defenses = _statistics.Defenses[player][phaseIndex];
-                Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
 
                 List<object> playerData = new List<object>
                 {
@@ -285,28 +284,31 @@ namespace LuckParser.Controllers
                     defenses.InvulnedCount,
                     defenses.InterruptedCount,
                     defenses.EvadedCount,
-                    stats.DodgeCount,
-                    stats.DownCount
+                    defenses.DodgeCount
                 };
 
-                if (stats.Died != 0.0)
+                if (defenses.DownCount > 0)
                 {
-                    if (stats.Died < 0)
-                    {
-                        playerData.Add(-stats.Died + " time(s)");
-                        playerData.Add("");
-                    }
-                    else
-                    {
-                        TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
-                        playerData.Add(timedead.Minutes + " m " + timedead.Seconds + " s");
-                        playerData.Add(timedead + "(" + Math.Round((timedead.TotalMilliseconds / phase.GetDuration()) * 100, 1) + "% Alive)");
-                    }
+                    TimeSpan downDuration = TimeSpan.FromMilliseconds(defenses.DownDuration);
+                    playerData.Add(defenses.DownCount);
+                    playerData.Add(downDuration.TotalSeconds + " seconds downed, " +Math.Round((downDuration.TotalMilliseconds / phase.GetDuration()) * 100, 1) + "% Downed");
                 }
                 else
                 {
                     playerData.Add(0);
-                    playerData.Add("Never died");
+                    playerData.Add("0% downed");
+                }
+
+                if (defenses.DeadCount > 0)
+                {
+                    TimeSpan deathDuration = TimeSpan.FromMilliseconds(defenses.DeadDuration);
+                    playerData.Add(defenses.DeadCount);
+                    playerData.Add(deathDuration.TotalSeconds + " seconds dead, " + (100.0 - Math.Round((deathDuration.TotalMilliseconds / phase.GetDuration()) * 100, 1)) + "% Alive");
+                }
+                else
+                {
+                    playerData.Add(0);
+                    playerData.Add("100% Alive");
                 }
 
                 list.Add(playerData);

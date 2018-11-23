@@ -1,4 +1,5 @@
 ﻿using LuckParser.Models.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -175,5 +176,51 @@ namespace LuckParser.Models.ParseModels
             }
             return new List<CombatItem>();
         }
+
+
+        public void GetAgentStatus(long start, long end, ushort instid, List<Tuple<long, long>> dead, List<Tuple<long, long>> down, List<Tuple<long, long>> dc)
+        {
+            List<CombatItem> status = GetStates(instid, ParseEnum.StateChange.ChangeDown, start, end);
+            status.AddRange(GetStates(instid, ParseEnum.StateChange.ChangeUp, start, end));
+            status.AddRange(GetStates(instid, ParseEnum.StateChange.ChangeDead, start, end));
+            status.AddRange(GetStates(instid, ParseEnum.StateChange.Spawn, start, end));
+            status.AddRange(GetStates(instid, ParseEnum.StateChange.Despawn, start, end));
+            status = status.OrderBy(x => x.Time).ToList();
+            for (var i = 0; i < status.Count - 1; i++)
+            {
+                CombatItem cur = status[i];
+                CombatItem next = status[i + 1];
+                if (cur.IsStateChange.IsDown())
+                {
+                    down.Add(new Tuple<long, long>(cur.Time - start, next.Time - start));
+                }
+                else if (cur.IsStateChange.IsDead())
+                {
+                    dead.Add(new Tuple<long, long>(cur.Time - start, next.Time - start));
+                }
+                else if (cur.IsStateChange.IsDespawn())
+                {
+                    dc.Add(new Tuple<long, long>(cur.Time - start, next.Time - start));
+                }
+            }
+            // check last value
+            if (status.Count > 0)
+            {
+                CombatItem cur = status.Last();
+                if (cur.IsStateChange.IsDown())
+                {
+                    down.Add(new Tuple<long, long>(cur.Time - start, end));
+                }
+                else if (cur.IsStateChange.IsDead())
+                {
+                    dead.Add(new Tuple<long, long>(cur.Time - start, end));
+                }
+                else if (cur.IsStateChange.IsDespawn())
+                {
+                    dc.Add(new Tuple<long, long>(cur.Time - start, end));
+                }
+            }
+        }
+
     }
 }
