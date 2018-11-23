@@ -82,6 +82,8 @@
             this.radioThemeLight = new System.Windows.Forms.RadioButton();
             this.radioThemeDark = new System.Windows.Forms.RadioButton();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.panelJson = new System.Windows.Forms.Panel();
@@ -90,8 +92,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.cmdClose = new System.Windows.Forms.Button();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -102,13 +102,13 @@
             this.panelHtml.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBox7.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.panelJson.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.tabPage6.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // chkPlayerDpsPlot
@@ -362,7 +362,7 @@
             this.chkShow10s.AutoSize = true;
             this.chkShow10s.Checked = true;
             this.chkShow10s.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkShow10s.Location = new System.Drawing.Point(6, 39);
+            this.chkShow10s.Location = new System.Drawing.Point(6, 42);
             this.chkShow10s.Name = "chkShow10s";
             this.chkShow10s.Size = new System.Drawing.Size(130, 17);
             this.chkShow10s.TabIndex = 31;
@@ -375,7 +375,7 @@
             this.chkShow30s.AutoSize = true;
             this.chkShow30s.Checked = true;
             this.chkShow30s.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkShow30s.Location = new System.Drawing.Point(6, 62);
+            this.chkShow30s.Location = new System.Drawing.Point(6, 65);
             this.chkShow30s.Name = "chkShow30s";
             this.chkShow30s.Size = new System.Drawing.Size(130, 17);
             this.chkShow30s.TabIndex = 32;
@@ -411,7 +411,7 @@
             // 
             this.chkShowCl.AutoSize = true;
             this.chkShowCl.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.chkShowCl.Location = new System.Drawing.Point(6, 85);
+            this.chkShowCl.Location = new System.Drawing.Point(6, 88);
             this.chkShowCl.Name = "chkShowCl";
             this.chkShowCl.Size = new System.Drawing.Size(145, 17);
             this.chkShowCl.TabIndex = 41;
@@ -707,6 +707,33 @@
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Legacy";
             // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.chkSimpleRotationTab);
+            this.groupBox5.Controls.Add(this.chkRotation);
+            this.groupBox5.Controls.Add(this.chkSkillIcons);
+            this.groupBox5.Controls.Add(this.chkLargeSkillIcons);
+            this.groupBox5.Controls.Add(this.chkShowAutos);
+            this.groupBox5.Location = new System.Drawing.Point(18, 57);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(162, 134);
+            this.groupBox5.TabIndex = 54;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Rotation";
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.chkShowCl);
+            this.groupBox4.Controls.Add(this.chkPlayerDpsPlot);
+            this.groupBox4.Controls.Add(this.chkShow10s);
+            this.groupBox4.Controls.Add(this.chkShow30s);
+            this.groupBox4.Location = new System.Drawing.Point(209, 57);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(162, 134);
+            this.groupBox4.TabIndex = 53;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Graph";
+            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.chkOutputCsv);
@@ -790,33 +817,6 @@
             this.cmdClose.UseVisualStyleBackColor = true;
             this.cmdClose.Click += new System.EventHandler(this.cmdClose_Click);
             // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.chkShowCl);
-            this.groupBox4.Controls.Add(this.chkPlayerDpsPlot);
-            this.groupBox4.Controls.Add(this.chkShow10s);
-            this.groupBox4.Controls.Add(this.chkShow30s);
-            this.groupBox4.Location = new System.Drawing.Point(209, 57);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(162, 134);
-            this.groupBox4.TabIndex = 53;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Graph";
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.chkSimpleRotationTab);
-            this.groupBox5.Controls.Add(this.chkRotation);
-            this.groupBox5.Controls.Add(this.chkSkillIcons);
-            this.groupBox5.Controls.Add(this.chkLargeSkillIcons);
-            this.groupBox5.Controls.Add(this.chkShowAutos);
-            this.groupBox5.Location = new System.Drawing.Point(18, 57);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(162, 134);
-            this.groupBox5.TabIndex = 54;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Rotation";
-            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -851,6 +851,10 @@
             this.panel1.PerformLayout();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             this.tabPage4.ResumeLayout(false);
@@ -861,10 +865,6 @@
             this.tabPage5.PerformLayout();
             this.tabPage6.ResumeLayout(false);
             this.tabPage6.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
