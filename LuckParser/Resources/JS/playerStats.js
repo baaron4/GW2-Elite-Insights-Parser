@@ -196,9 +196,9 @@ var compilePlayerTab = function () {
                 var graphData = this.graph.players[this.playerindex];
                 if (this.dpsmode < 3) {
                     var lim = (this.dpsmode === 0 ? 0 : (this.dpsmode === 1 ? 10 : 30));
-                    data = computePlayerDPS(this.player, graphData, lim, null, this.activetargets, cacheID);
+                    data = computePlayerDPS(this.player, graphData, lim, null, this.activetargets, cacheID + '-' + this.phaseindex);
                 } else {
-                    data = computePlayerDPS(this.player, graphData, 0, this.computePhaseBreaks, this.activetargets, cacheID);
+                    data = computePlayerDPS(this.player, graphData, 0, this.computePhaseBreaks, this.activetargets, cacheID + '-' + this.phaseindex);
                 }
                 var res = {
                     maxDPS: data.maxDPS.total,

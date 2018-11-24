@@ -3,7 +3,7 @@
 
 function computeTargetDPS(target, dpsData,lim, phasebreaks, cacheID) {
     if (!target.dpsGraphCache) {
-        player.dpsGraphCache = new Map();
+        target.dpsGraphCache = new Map();
     }
     if (target.dpsGraphCache.has(cacheID)) {
         return target.dpsGraphCache.get(cacheID);
@@ -18,7 +18,7 @@ function computeTargetDPS(target, dpsData,lim, phasebreaks, cacheID) {
             limID = Math.max(j - lim, 0);
             start = limID;
         }
-        totalDamage += dpsData.total[j] - dpsData.total[limID];
+        totalDamage += dpsData[j] - dpsData[limID];
         if (phasebreaks && phasebreaks[j - 1]) {
             start = j - 1;
             totalDamage = 0;
@@ -316,12 +316,12 @@ var compileTargetTab = function () {
                 }
                 //var before = performance.now();
                 var res;
-                var dpsData = this.graph.targets[this.targetindex].dps;
+                var dpsData = this.graph.targets[this.phaseTargetIndex].dps;
                 if (this.dpsmode < 3) {
                     var lim = (this.dpsmode === 0 ? 0 : (this.dpsmode === 1 ? 10 : 30));
-                    res = computeTargetDPS(this.target, dpsData, lim, null, cacheID);
+                    res = computeTargetDPS(this.target, dpsData, lim, null, cacheID + '-' + this.phaseindex);
                 } else {
-                    res = computeTargetDPS(this.target, dpsData, 0, this.computePhaseBreaks, cacheID);
+                    res = computeTargetDPS(this.target, dpsData, 0, this.computePhaseBreaks, cacheID + '-' + this.phaseindex);
                 }
                 this.dpsCache.set(cacheID, res);
                 return res;

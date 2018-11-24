@@ -213,7 +213,7 @@ var compileGraphs = function () {
                 };
                 var playerDPS = [];
                 for (var i = 0; i < this.players.length; i++) {
-                    var data = computePlayerDPS(this.players[i], this.graph.players[i], lim, phasebreaks, this.activetargets, cacheID);
+                    var data = computePlayerDPS(this.players[i], this.graph.players[i], lim, phasebreaks, this.activetargets, cacheID + '-' + this.phaseid);
                     playerDPS.push(data.dps);
                     maxDPS.total = Math.max(maxDPS.total, data.maxDPS.total);
                     maxDPS.cleave = Math.max(maxDPS.cleave, data.maxDPS.cleave);
