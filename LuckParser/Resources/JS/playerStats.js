@@ -192,21 +192,17 @@ var compilePlayerTab = function () {
                 if (this.dpsCache.has(cacheID)) {
                     return this.dpsCache.get(cacheID);
                 }
-                var maxDPS = {
-                    total: 0,
-                    target: 0,
-                    cleave: 0
-                };
-                var playerDPS = [];
+                var data;
+                var graphData = this.graph.players[this.playerindex];
                 if (this.dpsmode < 3) {
                     var lim = (this.dpsmode === 0 ? 0 : (this.dpsmode === 1 ? 10 : 30));
-                    computePlayerDPS(this.playerindex, this.graph, playerDPS, maxDPS, null, lim, null, this.activetargets);
+                    data = computePlayerDPS(this.player, graphData, lim, null, this.activetargets, cacheID);
                 } else {
-                    computePlayerDPS(this.playerindex, this.graph, playerDPS, maxDPS, null, 0, this.computePhaseBreaks, this.activetargets);
+                    data = computePlayerDPS(this.player, graphData, 0, this.computePhaseBreaks, this.activetargets, cacheID);
                 }
                 var res = {
-                    maxDPS: maxDPS.total,
-                    playerDPS: playerDPS[0]
+                    maxDPS: data.maxDPS.total,
+                    playerDPS: data.dps
                 };
                 this.dpsCache.set(cacheID, res);
                 return res;

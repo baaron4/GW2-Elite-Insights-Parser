@@ -200,21 +200,31 @@ var compileGraphs = function () {
             }
         },
         methods: {
-            computeDPS: function (lim, phasebreaks) {
+            computeDPS: function (lim, phasebreaks, cacheID) {
                 var maxDPS = {
                     total: 0,
-                    target: 0,
-                    cleave: 0
+                    cleave: 0,
+                    target: 0
                 };
-                var allDPS = {
-                    total: [0],
-                    target: [0],
-                    cleave: [0]
+                var allDPS = {                   
+                    total: [],
+                    cleave: [],
+                    target: []
                 };
                 var playerDPS = [];
                 for (var i = 0; i < this.players.length; i++) {
-                    computePlayerDPS(i, this.graph, playerDPS, maxDPS, allDPS, lim, phasebreaks, this.activetargets);
+                    var data = computePlayerDPS(this.players[i], this.graph.players[i], lim, phasebreaks, this.activetargets, cacheID);
+                    playerDPS.push(data.dps);
+                    maxDPS.total = Math.max(maxDPS.total, data.maxDPS.total);
+                    maxDPS.cleave = Math.max(maxDPS.cleave, data.maxDPS.cleave);
+                    maxDPS.target = Math.max(maxDPS.target, data.maxDPS.target);
+                    for (var j = 0; j < data.dps.total.length; j++) {
+                        allDPS.total[j] = (allDPS.total[j] || 0) + data.dps.total[j];
+                        allDPS.cleave[j] = (allDPS.cleave[j] || 0) + data.dps.cleave[j];
+                        allDPS.target[j] = (allDPS.target[j] || 0) + data.dps.target[j];
+                    }
                 }
+                
                 return {
                     allDPS: allDPS,
                     playerDPS: playerDPS,
@@ -230,9 +240,9 @@ var compileGraphs = function () {
                 var res;
                 if (this.dpsmode < 3) {
                     var lim = (this.dpsmode === 0 ? 0 : (this.dpsmode === 1 ? 10 : 30));
-                    res = this.computeDPS(lim, null);
+                    res = this.computeDPS(lim, null, cacheID);
                 } else {
-                    res = this.computeDPS(0, this.computePhaseBreaks);
+                    res = this.computeDPS(0, this.computePhaseBreaks, cacheID);
                 }
                 this.dpsCache.set(cacheID, res);
                 return res;

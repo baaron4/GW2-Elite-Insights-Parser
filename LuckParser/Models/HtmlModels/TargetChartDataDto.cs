@@ -7,7 +7,7 @@ namespace LuckParser.Models.HtmlModels
     public class TargetChartDataDto
     {
         [DataMember]
-        public List<int> total;
+        public List<int> dps;
         [DataMember]
         public double[] health;
     }
