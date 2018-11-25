@@ -1,12 +1,17 @@
 /*jshint esversion: 6 */
 
-function computeTargetDPS(targetid, graph, lim, phasebreaks) {
-    var totalDamage = 0;
-    var maxDPS = 0;
-    var totalDPS = [0];
-    var dpsData = graph.targets[targetid].total;
-    var start = 0;
 
+function computeTargetDPS(target, dpsData,lim, phasebreaks, cacheID) {
+    if (!target.dpsGraphCache) {
+        target.dpsGraphCache = new Map();
+    }
+    if (target.dpsGraphCache.has(cacheID)) {
+        return target.dpsGraphCache.get(cacheID);
+    }
+    var totalDamage = 0;
+    var totalDPS = [0];
+    var maxDPS = 0;
+    var start = 0;
     for (var j = 1; j < dpsData.length; j++) {
         var limID = 0;
         if (lim > 0) {
@@ -20,14 +25,16 @@ function computeTargetDPS(targetid, graph, lim, phasebreaks) {
         }
         totalDPS[j] = Math.round(totalDamage / (j - start));
         maxDPS = Math.max(maxDPS, totalDPS[j]);
-    }
+    }   
     if (maxDPS < 1e-6) {
         maxDPS = 10;
     }
-    return {
+    var res = {
         dps: totalDPS,
         maxDPS: maxDPS
     };
+    target.dpsGraphCache.set(cacheID, res);
+    return res;
 }
 
 var compileTargetTab = function () {
@@ -309,11 +316,12 @@ var compileTargetTab = function () {
                 }
                 //var before = performance.now();
                 var res;
+                var dpsData = this.graph.targets[this.phaseTargetIndex].dps;
                 if (this.dpsmode < 3) {
                     var lim = (this.dpsmode === 0 ? 0 : (this.dpsmode === 1 ? 10 : 30));
-                    res = computeTargetDPS(this.phaseTargetIndex, this.graph, lim, null);
+                    res = computeTargetDPS(this.target, dpsData, lim, null, cacheID + '-' + this.phaseindex);
                 } else {
-                    res = computeTargetDPS(this.phaseTargetIndex, this.graph, 0, this.computePhaseBreaks);
+                    res = computeTargetDPS(this.target, dpsData, 0, this.computePhaseBreaks, cacheID + '-' + this.phaseindex);
                 }
                 this.dpsCache.set(cacheID, res);
                 return res;
