@@ -79,7 +79,7 @@ namespace LuckParser.Controllers
             PhaseData phase = _statistics.Phases[phaseIndex];
             return new TargetChartDataDto
             {
-                total = ConvertGraph(GraphHelper.GetTotalDPSGraph(_log, target, phaseIndex, phase, GraphHelper.GraphMode.S1)),
+                dps = ConvertGraph(GraphHelper.GetTotalDPSGraph(_log, target, phaseIndex, phase, GraphHelper.GraphMode.S1)),
                 health = BuildTargetHealthData(phaseIndex, target)
             };
         }

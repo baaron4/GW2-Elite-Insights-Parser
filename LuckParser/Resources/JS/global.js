@@ -270,15 +270,25 @@ function computePhaseMarkups(shapes, annotations, phase, linecolor) {
     }
 }
 
-function computePlayerDPS(playerid, graph, playerDPS, maxDPS, allDPS, lim, phasebreaks, activetargets) {
+
+function computePlayerDPS(player, dpsData,lim, phasebreaks, activetargets, cacheID) {
+    if (!player.dpsGraphCache) {
+        player.dpsGraphCache = new Map();
+    }
+    if (player.dpsGraphCache.has(cacheID)) {
+        return player.dpsGraphCache.get(cacheID);
+    }
     var totalDamage = 0;
     var targetDamage = 0;
     var totalDPS = [0];
     var cleaveDPS = [0];
     var targetDPS = [0];
-    var dpsData = graph.players[playerid];
+    var maxDPS = {
+        total: 0,
+        cleave: 0,
+        target: 0
+    };
     var start = 0;
-
     for (var j = 1; j < dpsData.total.length; j++) {
         var limID = 0;
         if (lim > 0) {
@@ -298,15 +308,10 @@ function computePlayerDPS(playerid, graph, playerDPS, maxDPS, allDPS, lim, phase
         totalDPS[j] = Math.round(totalDamage / (j - start));
         targetDPS[j] = Math.round(targetDamage / (j - start));
         cleaveDPS[j] = Math.round((totalDamage - targetDamage) / (j - start));
-        if (allDPS) {
-            allDPS.total[j] = totalDPS[j] + (allDPS.total[j] || 0);
-            allDPS.target[j] = targetDPS[j] + (allDPS.target[j] || 0);
-            allDPS.cleave[j] = cleaveDPS[j] + (allDPS.cleave[j] || 0);
-        }
         maxDPS.total = Math.max(maxDPS.total, totalDPS[j]);
         maxDPS.target = Math.max(maxDPS.target, targetDPS[j]);
         maxDPS.cleave = Math.max(maxDPS.cleave, cleaveDPS[j]);
-    }
+    }   
     if (maxDPS.total < 1e-6) {
         maxDPS.total = 10;
     }
@@ -316,11 +321,16 @@ function computePlayerDPS(playerid, graph, playerDPS, maxDPS, allDPS, lim, phase
     if (maxDPS.cleave < 1e-6) {
         maxDPS.cleave = 10;
     }
-    playerDPS.push({
-        total: totalDPS,
-        target: targetDPS,
-        cleave: cleaveDPS
-    });
+    var res = {
+        dps: {
+            total: totalDPS,
+            target: targetDPS,
+            cleave: cleaveDPS
+        },
+        maxDPS: maxDPS
+    };
+    player.dpsGraphCache.set(cacheID, res);
+    return res;
 }
 
 function getActorGraphLayout(images, color) {
