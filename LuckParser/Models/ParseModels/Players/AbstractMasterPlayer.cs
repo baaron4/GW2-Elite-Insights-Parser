@@ -197,7 +197,7 @@ namespace LuckParser.Models.ParseModels
                     ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
                     loglist.Add(new BoonApplicationLog(0, src, c.Value));
                 }
-                else if (c.IsStateChange != ParseEnum.StateChange.BuffInitial && time >= agentStart && time < agentEnd)
+                else if (c.IsStateChange != ParseEnum.StateChange.BuffInitial && time >= agentStart && time <= agentEnd)
                 {
                     if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                     {
@@ -551,7 +551,7 @@ namespace LuckParser.Models.ParseModels
             long timeStart = log.FightData.FightStart;
             foreach (CombatItem c in log.GetDamageData(AgentItem.InstID))
             {
-                if (c.Time > agentStart && c.Time < agentEnd)//selecting player or minion as caster
+                if (c.Time >= agentStart && c.Time <= agentEnd)//selecting player or minion as caster
                 {
                     long time = c.Time - timeStart;
                     AddDamageLog(time, c);
@@ -569,7 +569,7 @@ namespace LuckParser.Models.ParseModels
             long timeStart = log.FightData.FightStart;
             foreach (CombatItem c in log.GetDamageTakenData(AgentItem.InstID))
             {
-                if (c.Time > log.FightData.FightStart && c.Time < log.FightData.FightEnd && c.Time >= FirstAware && c.Time <= LastAware)
+                if (c.Time >= log.FightData.FightStart && c.Time <= log.FightData.FightEnd && c.Time >= FirstAware && c.Time <= LastAware)
                 {
                     long time = c.Time - timeStart;
                     AddDamageTakenLog(time, c);
@@ -584,14 +584,14 @@ namespace LuckParser.Models.ParseModels
             CastLog curCastLog = null;
             foreach (CombatItem c in log.GetCastData(AgentItem.InstID))
             {
-                if (!(c.Time > agentStart))
+                if (!(c.Time >= agentStart))
                 {
                     continue;
                 }
                 ParseEnum.StateChange state = c.IsStateChange;
                 if (state == ParseEnum.StateChange.Normal)
                 {                  
-                    if (c.IsActivation.IsCasting() && c.Time < agentEnd)
+                    if (c.IsActivation.IsCasting() && c.Time <= agentEnd)
                     {
                         // Missing end activation
                         if (curCastLog != null)
@@ -617,7 +617,7 @@ namespace LuckParser.Models.ParseModels
 
 
                 }
-                else if (state == ParseEnum.StateChange.WeaponSwap && c.Time < agentEnd)
+                else if (state == ParseEnum.StateChange.WeaponSwap && c.Time <= agentEnd)
                 {
                     long time = c.Time - timeStart;
                     CastLog swapLog = new CastLog(time, SkillItem.WeaponSwapId, (int)c.DstAgent, c.IsActivation);

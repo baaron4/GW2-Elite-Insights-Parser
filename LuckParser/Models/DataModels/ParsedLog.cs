@@ -33,6 +33,7 @@ namespace LuckParser.Models.DataModels
 
             FightData.SetSuccess(this);
             FightData.SetCM(this);
+            CombatData.Update(FightData.FightEnd);
         }
 
         public Dictionary<long, List<CombatItem>> GetBoonData()
