@@ -491,6 +491,7 @@ namespace LuckParser.Controllers
                     Statistics.FinalDPS dpsBoss = _statistics.DpsTarget[_log.LegacyTarget][player][phaseIndex];
                     Statistics.FinalDPS dpsAll = _statistics.DpsAll[player][phaseIndex];
                     Statistics.FinalStatsAll statsAll = _statistics.StatsAll[player][phaseIndex];
+                    Statistics.FinalDefenses defense = _statistics.Defenses[player][phaseIndex];
                     //gather data for footer
                     footerList.Add(new []
                     {
@@ -516,19 +517,12 @@ namespace LuckParser.Controllers
                         sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dpsAll.Damage + " dmg \">" + dpsAll.Dps + "</td>");
                         sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dpsAll.PowerDamage + " dmg \">" + dpsAll.PowerDps + "</td>");
                         sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dpsAll.CondiDamage + " dmg \">" + dpsAll.CondiDps + "</td>");
-                        sw.Write("<td>" + statsAll.DownCount + "</td>");
-                        if (statsAll.Died != 0.0)
+                        sw.Write("<td>" + defense.DownCount + "</td>");
+                        if (defense.DeadCount > 0)
                         {
-                            if (statsAll.Died < 0)
-                            {
-                                sw.Write("<td>" + -statsAll.Died + " time(s)</td>");
-                            }
-                            else
-                            {
-                                TimeSpan timedead = TimeSpan.FromMilliseconds(statsAll.Died);
-                                long fightDuration = phase.GetDuration();
-                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + " (" + Math.Round((timedead.TotalMilliseconds / fightDuration) * 100, 1) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</td>");
-                            }
+                            TimeSpan deathDuration = TimeSpan.FromMilliseconds(defense.DeadDuration);
+                            long fightDuration = phase.GetDuration();
+                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + deathDuration.TotalSeconds + " seconds dead, " + " (" + (100.0 - Math.Round((deathDuration.TotalMilliseconds / fightDuration) * 100, 1)) + "% Alive) \">" + defense.DeadCount + "</td>");
                         }
                         else
                         {
@@ -631,6 +625,7 @@ namespace LuckParser.Controllers
                     foreach (Player player in _log.PlayerList)
                     {
                         Statistics.FinalStatsAll statsAll = _statistics.StatsAll[player][phaseIndex];
+                        Statistics.FinalDefenses defense = _statistics.Defenses[player][phaseIndex];
 
                         //gather data for footer
                         footerList.Add(new [] {
@@ -645,7 +640,7 @@ namespace LuckParser.Controllers
                             statsAll.Interrupts.ToString(),
                             statsAll.Invulned.ToString(),
                             statsAll.SwapCount.ToString(),
-                            statsAll.DownCount.ToString(),
+                            defense.DownCount.ToString(),
                             statsAll.CritablePowerLoopCount.ToString()
                         });
                         sw.Write("<tr>");
@@ -685,19 +680,12 @@ namespace LuckParser.Controllers
                                 + statsAll.Saved + "cancels \">" + statsAll.TimeSaved + "</span>" + "</td>");//timesaved
                             sw.Write("<td>" + statsAll.SwapCount + "</td>");//w swaps
                             sw.Write("<td>" + Math.Round(statsAll.StackDist, 2) + "</td>");//stack dist
-                            sw.Write("<td>" + statsAll.DownCount + "</td>");//downs
-                            if (statsAll.Died != 0.0)
+                            sw.Write("<td>" + defense.DownCount + "</td>");//downs
+                            if (defense.DeadCount > 0)
                             {
-                                if (statsAll.Died < 0)
-                                {
-                                    sw.Write("<td>" + -statsAll.Died + " time(s)</td>");
-                                }
-                                else
-                                {
-                                    TimeSpan timedead = TimeSpan.FromMilliseconds(statsAll.Died);
-                                    long fightDuration = phase.GetDuration();
-                                    sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + " (" + Math.Round((timedead.TotalMilliseconds / fightDuration) * 100, 1) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</td>");
-                                }
+                                TimeSpan deathDuration = TimeSpan.FromMilliseconds(defense.DeadDuration);
+                                long fightDuration = phase.GetDuration();
+                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + deathDuration.TotalSeconds + " seconds dead, " + " (" + (100.0 - Math.Round((deathDuration.TotalMilliseconds / fightDuration) * 100, 1)) + "% Alive) \">" + defense.DeadCount + "</td>");
                             }
                             else
                             {
@@ -767,6 +755,7 @@ namespace LuckParser.Controllers
                     {
                         Statistics.FinalStats statsBoss = _statistics.StatsTarget[_log.LegacyTarget][player][phaseIndex];
                         Statistics.FinalStatsAll statsAll = _statistics.StatsAll[player][phaseIndex];
+                        Statistics.FinalDefenses defense = _statistics.Defenses[player][phaseIndex];
 
                         //gather data for footer
                         footerList.Add(new [] {
@@ -781,7 +770,7 @@ namespace LuckParser.Controllers
                             statsBoss.Interrupts.ToString(),
                             statsBoss.Invulned.ToString(),
                             statsAll.SwapCount.ToString(),
-                            statsAll.DownCount.ToString(),
+                            defense.DownCount.ToString(),
                             statsBoss.CritablePowerLoopCount.ToString()
                         });
                         sw.Write("<tr>");
@@ -821,19 +810,12 @@ namespace LuckParser.Controllers
                                 + statsAll.Saved + "cancels \">" + statsAll.TimeSaved + "</td>");//timesaved
                             sw.Write("<td>" + statsAll.SwapCount + "</td>");//w swaps
                             sw.Write("<td>" + Math.Round(statsAll.StackDist,2) + "</td>");//stack dist
-                            sw.Write("<td>" + statsAll.DownCount + "</td>");//downs
-                            if (statsAll.Died != 0.0)
+                            sw.Write("<td>" + defense.DownCount + "</td>");//downs
+                            if (defense.DeadCount > 0)
                             {
-                                if (statsAll.Died < 0)
-                                {
-                                    sw.Write("<td>" + -statsAll.Died + " time(s)</td>");
-                                }
-                                else
-                                {
-                                    TimeSpan timedead = TimeSpan.FromMilliseconds(statsAll.Died);
-                                    long fightDuration = phase.GetDuration();
-                                    sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + " (" + Math.Round((timedead.TotalMilliseconds / fightDuration) * 100, 1) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</td>");
-                                }
+                                TimeSpan deathDuration = TimeSpan.FromMilliseconds(defense.DeadDuration);
+                                long fightDuration = phase.GetDuration();
+                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + deathDuration.TotalSeconds + " seconds dead, " + " (" + (100.0 - Math.Round((deathDuration.TotalMilliseconds / fightDuration) * 100, 1)) + "% Alive) \">" + defense.DeadCount + "</td>");
                             }
                             else
                             {
@@ -918,19 +900,16 @@ namespace LuckParser.Controllers
                     foreach (Player player in _log.PlayerList)
                     {
                         Statistics.FinalDefenses defenses = _statistics.Defenses[player][phaseIndex];
-                        Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
-
-                        
-
-                        TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);//dead
+                    
+                        TimeSpan deathDuration = TimeSpan.FromMilliseconds(defenses.DeadDuration);//dead
                                                                                               //gather data for footer
                         footerList.Add(new []
                         {
                             player.Group.ToString(),
                             defenses.DamageTaken.ToString(), defenses.DamageBarrier.ToString(),
                             defenses.BlockedCount.ToString(), defenses.InvulnedCount.ToString(),
-                            defenses.EvadedCount.ToString(), stats.DodgeCount.ToString(),
-                            stats.DownCount.ToString()//, defenses.allHealReceived.ToString()
+                            defenses.EvadedCount.ToString(), defenses.DodgeCount.ToString(),
+                            defenses.DownCount.ToString()//, defenses.allHealReceived.ToString()
                         });
                         sw.Write("<tr>");
                         {
@@ -943,12 +922,12 @@ namespace LuckParser.Controllers
                             sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + 0 + "Damage \">" + defenses.BlockedCount + "</td>");//Blocks  
                             sw.Write("<td>" + defenses.InvulnedCount + "</td>");//invulns
                             sw.Write("<td>" + defenses.EvadedCount + "</td>");// evades
-                            sw.Write("<td>" + stats.DodgeCount + "</td>");//dodges
-                            sw.Write("<td>" + stats.DownCount + "</td>");//downs
+                            sw.Write("<td>" + defenses.DodgeCount + "</td>");//dodges
+                            sw.Write("<td>" + defenses.DownCount + "</td>");//downs
                             long fightDuration = phase.GetDuration();
-                            if (timedead > TimeSpan.Zero)
+                            if (deathDuration > TimeSpan.Zero)
                             {
-                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + Math.Round((timedead.TotalMilliseconds / fightDuration) * 100,1) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</td>");
+                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + deathDuration.TotalSeconds + " seconds dead, " + "(" + (100.0 - Math.Round((deathDuration.TotalMilliseconds / fightDuration) * 100,1)) + "% Alive) \">" + defenses.DeadCount + "</td>");
                             }
                             else
                             {
@@ -2081,7 +2060,7 @@ namespace LuckParser.Controllers
         /// <param name="p">The player</param>
         private void CreateDeathRecap(StreamWriter sw, Player p)
         {
-            List<DamageLog> damageLogs = p.GetDamageTakenLogs(_log, 0, _log.FightData.FightDuration);
+            List<DamageLog> damageLogs = p.GetDamageTakenLogs(null, _log, 0, _log.FightData.FightDuration);
             long start = _log.FightData.FightStart;
             long end = _log.FightData.FightEnd;
             List<CombatItem> down = _log.CombatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDown, start, end);
@@ -2494,7 +2473,7 @@ namespace LuckParser.Controllers
         private void CreateDMGTakenDistTable(StreamWriter sw, Player p, int phaseIndex)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
-            List<DamageLog> damageLogs = p.GetDamageTakenLogs(_log, phase.Start, phase.End);
+            List<DamageLog> damageLogs = p.GetDamageTakenLogs(null, _log, phase.Start, phase.End);
             SkillData skillList = _log.SkillData;
             long finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.Damage) : 0;
             string pid = p.InstID + "_" + phaseIndex;

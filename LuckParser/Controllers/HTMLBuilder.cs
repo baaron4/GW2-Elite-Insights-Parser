@@ -79,7 +79,7 @@ namespace LuckParser.Controllers
             PhaseData phase = _statistics.Phases[phaseIndex];
             return new TargetChartDataDto
             {
-                total = ConvertGraph(GraphHelper.GetTotalDPSGraph(_log, target, phaseIndex, phase, GraphHelper.GraphMode.S1)),
+                dps = ConvertGraph(GraphHelper.GetTotalDPSGraph(_log, target, phaseIndex, phase, GraphHelper.GraphMode.S1)),
                 health = BuildTargetHealthData(phaseIndex, target)
             };
         }
@@ -275,7 +275,6 @@ namespace LuckParser.Controllers
             foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalDefenses defenses = _statistics.Defenses[player][phaseIndex];
-                Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
 
                 List<object> playerData = new List<object>
                 {
@@ -283,29 +282,33 @@ namespace LuckParser.Controllers
                     defenses.DamageBarrier,
                     defenses.BlockedCount,
                     defenses.InvulnedCount,
+                    defenses.InterruptedCount,
                     defenses.EvadedCount,
-                    stats.DodgeCount,
-                    stats.DownCount
+                    defenses.DodgeCount
                 };
 
-                if (stats.Died != 0.0)
+                if (defenses.DownCount > 0)
                 {
-                    if (stats.Died < 0)
-                    {
-                        playerData.Add(-stats.Died + " time(s)");
-                        playerData.Add("");
-                    }
-                    else
-                    {
-                        TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
-                        playerData.Add(timedead.Minutes + " m " + timedead.Seconds + " s");
-                        playerData.Add(timedead + "(" + Math.Round((timedead.TotalMilliseconds / phase.GetDuration()) * 100, 1) + "% Alive)");
-                    }
+                    TimeSpan downDuration = TimeSpan.FromMilliseconds(defenses.DownDuration);
+                    playerData.Add(defenses.DownCount);
+                    playerData.Add(downDuration.TotalSeconds + " seconds downed, " +Math.Round((downDuration.TotalMilliseconds / phase.GetDuration()) * 100, 1) + "% Downed");
                 }
                 else
                 {
                     playerData.Add(0);
-                    playerData.Add("Never died");
+                    playerData.Add("0% downed");
+                }
+
+                if (defenses.DeadCount > 0)
+                {
+                    TimeSpan deathDuration = TimeSpan.FromMilliseconds(defenses.DeadDuration);
+                    playerData.Add(defenses.DeadCount);
+                    playerData.Add(deathDuration.TotalSeconds + " seconds dead, " + (100.0 - Math.Round((deathDuration.TotalMilliseconds / phase.GetDuration()) * 100, 1)) + "% Alive");
+                }
+                else
+                {
+                    playerData.Add(0);
+                    playerData.Add("100% Alive");
                 }
 
                 list.Add(playerData);
@@ -580,7 +583,7 @@ namespace LuckParser.Controllers
             List<CombatItem> deads = _log.CombatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDead, start, end);
             List<CombatItem> downs = _log.CombatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDown, start, end);
             long lastTime = start;
-            List<DamageLog> damageLogs = p.GetDamageTakenLogs(_log, 0, _log.FightData.FightDuration);
+            List<DamageLog> damageLogs = p.GetDamageTakenLogs(null, _log, 0, _log.FightData.FightDuration);
             foreach (CombatItem dead in deads)
             {
                 DeathRecapDto recap = new DeathRecapDto()
@@ -818,7 +821,7 @@ namespace LuckParser.Controllers
                 distribution = new List<double[]>()
             };
             PhaseData phase = _statistics.Phases[phaseIndex];
-            List<DamageLog> damageLogs = p.GetDamageTakenLogs(_log, phase.Start, phase.End);
+            List<DamageLog> damageLogs = p.GetDamageTakenLogs(null, _log, phase.Start, phase.End);
             Dictionary<long, List<DamageLog>> damageLogsBySkill = damageLogs.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             SkillData skillList = _log.SkillData;
             dto.contributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.Damage) : 0;

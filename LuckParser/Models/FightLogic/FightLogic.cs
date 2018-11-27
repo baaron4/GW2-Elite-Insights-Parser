@@ -285,7 +285,7 @@ namespace LuckParser.Models
                     case Mechanic.MechType.SkillOnPlayer:
                         foreach (Player p in log.PlayerList)
                         {
-                            List<DamageLog> dls = p.GetDamageTakenLogs(log, 0, fightData.FightDuration);
+                            List<DamageLog> dls = p.GetDamageTakenLogs(null, log, 0, fightData.FightDuration);
                             condition = mech.SpecialCondition;
                             foreach (DamageLog dLog in dls)
                             {

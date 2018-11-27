@@ -400,8 +400,6 @@ namespace LuckParser.Controllers
             // Counts
             CombatData combatData = _log.CombatData;
             final.SwapCount = combatData.GetStates(p.InstID, ParseEnum.StateChange.WeaponSwap, start, end).Count;
-            final.DownCount = combatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDown, start, end).Count;
-            final.DodgeCount = combatData.GetSkillCount(p.InstID, SkillItem.DodgeId, start, end) + combatData.GetBuffCount(p.InstID, 40408, start, end);//dodge = 65001 mirage cloak =40408
 
             if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay)
             {
@@ -467,21 +465,6 @@ namespace LuckParser.Controllers
                 }
 
             }
-
-            List<CombatItem> dead = combatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDead, start, end);
-            List<CombatItem> up = combatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeUp, start, end);
-            final.Died = 0.0;
-            if (dead.Count > 0)
-            {
-                final.Died = up.Count > 0 && up.Last().Time > dead.Last().Time ? -dead.Count : dead.Last().Time - start;
-            }
-
-            List<CombatItem> disconnect = combatData.GetStates(p.InstID, ParseEnum.StateChange.Despawn, start, end);
-            final.Dcd = 0.0;
-            if (disconnect.Count > 0)
-            {
-                final.Dcd = disconnect.Last().Time - start;
-            }
             return final;
         }
 
@@ -525,6 +508,7 @@ namespace LuckParser.Controllers
 
         private void CalculateDefenses()
         {
+            CombatData combatData = _log.CombatData;
             foreach (Player player in _log.PlayerList)
             {
                 FinalDefenses[] phaseDefense = new FinalDefenses[_statistics.Phases.Count];
@@ -533,8 +517,10 @@ namespace LuckParser.Controllers
                     FinalDefenses final = new FinalDefenses();
 
                     PhaseData phase = _statistics.Phases[phaseIndex];
+                    long start = phase.Start + _log.FightData.FightStart;
+                    long end = phase.End + _log.FightData.FightStart;
 
-                    List<DamageLog> damageLogs = player.GetDamageTakenLogs(_log, phase.Start, phase.End);
+                    List<DamageLog> damageLogs = player.GetDamageTakenLogs(null, _log, phase.Start, phase.End);
                     //List<DamageLog> healingLogs = player.getHealingReceivedLogs(log, phase.getStart(), phase.getEnd());
 
                     final.DamageTaken = damageLogs.Sum(x => (long)x.Damage);
@@ -543,15 +529,39 @@ namespace LuckParser.Controllers
                     final.InvulnedCount = 0;
                     final.DamageInvulned = 0;
                     final.EvadedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Evade);
+                    final.DodgeCount = combatData.GetSkillCount(player.InstID, SkillItem.DodgeId, start, end) + combatData.GetBuffCount(player.InstID, 40408, start, end);//dodge = 65001 mirage cloak =40408
                     final.DamageBarrier = (int)damageLogs.Sum(x => x.ShieldDamage);
+                    final.InterruptedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Interrupt);
                     foreach (DamageLog log in damageLogs.Where(x => x.Result == ParseEnum.Result.Absorb))
                     {
                         final.InvulnedCount++;
                         final.DamageInvulned += log.Damage;
                     }
+                    List<CombatItem> deads = combatData.GetStates(player.InstID, ParseEnum.StateChange.ChangeDead, start, end);
+                    List<CombatItem> downs = combatData.GetStates(player.InstID, ParseEnum.StateChange.ChangeDown, start, end);
+                    List<CombatItem> dcs = combatData.GetStates(player.InstID, ParseEnum.StateChange.Despawn, start, end);
+                    final.DownCount = downs.Count;
+                    final.DeadCount = deads.Count;
+                    final.DCCount = dcs.Count;
 
                     phaseDefense[phaseIndex] = final;
                 }
+                List<Tuple<long, long>> dead = new List<Tuple<long, long>>();
+                List<Tuple<long, long>> down = new List<Tuple<long, long>>();
+                List<Tuple<long, long>> dc = new List<Tuple<long, long>>();
+                combatData.GetAgentStatus(_log.FightData.FightStart, _log.FightData.FightEnd, player.InstID, dead, down, dc);
+
+                for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
+                {
+                    FinalDefenses defenses = phaseDefense[phaseIndex];
+                    PhaseData phase = _statistics.Phases[phaseIndex];
+                    long start = phase.Start;
+                    long end = phase.End;
+                    defenses.DownDuration = (int)down.Where(x => x.Item2 >= start && x.Item1 <= end).Sum(x => Math.Min(end, x.Item2) - Math.Max(x.Item1, start));
+                    defenses.DeadDuration = (int)dead.Where(x => x.Item2 >= start && x.Item1 <= end).Sum(x => Math.Min(end, x.Item2) - Math.Max(x.Item1, start));
+                    defenses.DCDuration = (int)dc.Where(x => x.Item2 >= start && x.Item1 <= end).Sum(x => Math.Min(end, x.Item2) - Math.Max(x.Item1, start));
+                }
+
                 _statistics.Defenses[player] = phaseDefense;
             }
         }
