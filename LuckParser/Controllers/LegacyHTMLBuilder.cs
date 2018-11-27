@@ -3287,12 +3287,12 @@ namespace LuckParser.Controllers
         /// Creates the combat replay tab
         /// </summary>
         /// <param name="sw">Stream writer</param>
-        private void CreateReplayTable(StreamWriter sw)
+        private void CreateReplayTab(StreamWriter sw)
         {
             CombatReplayMap map = _log.FightData.Logic.GetCombatMap();
             Tuple<int, int> canvasSize = map.GetPixelMapSize();
-            CombatReplayHelper.WriteCombatReplayInterface(sw, canvasSize, _log);
-            CombatReplayHelper.WriteCombatReplayScript(sw, _log, canvasSize, map, _settings.PollingRate);
+            sw.WriteLine(CombatReplayHelper.CreateCombatReplayInterface(canvasSize, _log));
+            sw.WriteLine(CombatReplayHelper.CreateCombatReplayScript(_log, map, _settings.PollingRate));
         }
         /// <summary>
         /// Creates custom css'
@@ -3894,7 +3894,7 @@ namespace LuckParser.Controllers
                             {
                                 sw.Write("<div class=\"tab-pane fade\" id=\"replay\">");
                                 {
-                                    CreateReplayTable(sw);
+                                    CreateReplayTab(sw);
                                 }
                             }
                         }

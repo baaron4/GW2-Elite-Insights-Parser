@@ -1,13 +1,13 @@
 ﻿using LuckParser.Models.DataModels;
 using LuckParser.Models.HtmlModels;
 using LuckParser.Models.ParseModels;
+using Newtonsoft.Json;
 using NUglify;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -16,7 +16,7 @@ namespace LuckParser.Controllers
 {
     class HTMLBuilder
     {
-        private const string _scriptVersion = "1.0";
+        private const string _scriptVersion = "1.1";
         private const int _scriptVersionRev = 0;
         private readonly SettingsContainer _settings;
 
@@ -1193,17 +1193,6 @@ namespace LuckParser.Controllers
             }
             return targetData;
         }
-        /// <summary>
-        /// Creates the combat replay tab
-        /// </summary>
-        /// <param name="sw">Stream writer</param>
-        private void CreateReplayTab(StreamWriter sw)
-        {
-            CombatReplayMap map = _log.FightData.Logic.GetCombatMap();
-            Tuple<int, int> canvasSize = map.GetPixelMapSize();
-            CombatReplayHelper.WriteCombatReplayInterface(sw, canvasSize, _log);
-            CombatReplayHelper.WriteCombatReplayScript(sw, _log, canvasSize, map, _settings.PollingRate);
-        }
 
         private string ReplaceVariables(string html)
         {
@@ -1260,28 +1249,35 @@ namespace LuckParser.Controllers
 
             html = html.Replace("'${graphDataJson}'", BuildGraphJson());
 
-            html = html.Replace("<!--${CombatReplayScript}-->", BuildCombatReplayScript());
+            html = html.Replace("<!--${CombatReplayScript}-->", BuildCombatReplayScript(path));
             html = html.Replace("<!--${CombatReplayBody}-->", BuildCombatReplayContent());
             sw.Write(html);
             return;       
         }
 
-
-        private string BuildCombatReplayScript()
+        private string BuildCombatReplayScript(string path)
         {
             if (!_settings.ParseCombatReplay || !_log.FightData.Logic.CanCombatReplay)
             {
                 return "";
             }
-            using (MemoryStream ms = new MemoryStream())
+            CombatReplayMap map = _log.FightData.Logic.GetCombatMap();
+            if (Properties.Settings.Default.HtmlExternalScripts)
             {
-                using (StreamWriter sw = new StreamWriter(ms))
+                string jsFileName = "EliteInsights-CR-" + _scriptVersion + ".js";
+                string jsPath = Path.Combine(path, jsFileName);
+                using (var fs = new FileStream(jsPath, FileMode.Create, FileAccess.Write))
+                using (var scriptWriter = new StreamWriter(fs, Encoding.UTF8))
                 {
-                    CombatReplayMap map = _log.FightData.Logic.GetCombatMap();
-                    Tuple<int, int> canvasSize = map.GetPixelMapSize();
-                    CombatReplayHelper.WriteCombatReplayScript(sw, _log, canvasSize, map, _settings.PollingRate);
+                    scriptWriter.Write(Properties.Resources.combatreplay_js);
                 }
-                return Encoding.UTF8.GetString(ms.ToArray());
+                string content = "<script src=\"./" + jsFileName + "?version=" + _scriptVersionRev + "\"></script>\n";
+                content += "<script>"+ CombatReplayHelper.GetDynamicCombatReplayScript(_log, _settings.PollingRate, map)+ "</script>";
+                return content;
+            }
+            else
+            {
+                return CombatReplayHelper.CreateCombatReplayScript(_log, map, _settings.PollingRate);
             }
         }
 
@@ -1291,16 +1287,9 @@ namespace LuckParser.Controllers
             {
                 return "";
             }
-            using (MemoryStream ms = new MemoryStream())
-            {
-                using (StreamWriter sw = new StreamWriter(ms))
-                {
-                    CombatReplayMap map = _log.FightData.Logic.GetCombatMap();
-                    Tuple<int, int> canvasSize = map.GetPixelMapSize();
-                    CombatReplayHelper.WriteCombatReplayInterface(sw, canvasSize, _log);
-                }
-                return Encoding.UTF8.GetString(ms.ToArray());
-            }
+            CombatReplayMap map = _log.FightData.Logic.GetCombatMap();
+            Tuple<int, int> canvasSize = map.GetPixelMapSize();
+            return CombatReplayHelper.CreateCombatReplayInterface(canvasSize, _log);
         }
 
         private string BuildTemplates()
@@ -1357,12 +1346,12 @@ namespace LuckParser.Controllers
 #else
             string scriptContent = Uglify.Css(Properties.Resources.ei_css).Code;
 #endif
-            string cssFilename = "EliteInsights-" + _scriptVersion + ".css";
             if (Properties.Settings.Default.HtmlExternalScripts)
             {
+                string cssFilename = "EliteInsights-" + _scriptVersion + ".css";
                 string cssPath = Path.Combine(path, cssFilename);
                 using (var fs = new FileStream(cssPath, FileMode.Create, FileAccess.Write))
-                using (var scriptWriter = new StreamWriter(fs))
+                using (var scriptWriter = new StreamWriter(fs, Encoding.UTF8))
                 {
                     scriptWriter.Write(scriptContent);
                 }
@@ -1398,12 +1387,12 @@ namespace LuckParser.Controllers
 #if !DEBUG
             scriptContent = Uglify.Js(scriptContent).Code;
 #endif
-            string scriptFilename = "EliteInsights-" + _scriptVersion + ".js";
             if (Properties.Settings.Default.HtmlExternalScripts)
             {
+                string scriptFilename = "EliteInsights-" + _scriptVersion + ".js";
                 string scriptPath = Path.Combine(path, scriptFilename);
                 using (var fs = new FileStream(scriptPath, FileMode.Create, FileAccess.Write))
-                using (var scriptWriter = new StreamWriter(fs))
+                using (var scriptWriter = new StreamWriter(fs, Encoding.UTF8))
                 {
                     scriptWriter.Write(scriptContent);
                 }
@@ -1486,7 +1475,7 @@ namespace LuckParser.Controllers
              }
             chartData.phases = phaseChartData;
             chartData.mechanics = BuildMechanicsChartData();
-            return ToJson(chartData, typeof(ChartDataDto));
+            return ToJson(chartData);
         }
 
         private string BuildLogData()
@@ -1494,12 +1483,12 @@ namespace LuckParser.Controllers
             LogDataDto logData = new LogDataDto();
             foreach(Player player in _log.PlayerList)
             {
-                PlayerDto playerDto = new PlayerDto(
-                    player.Group,
-                    player.Character,
-                    player.Account.TrimStart(':'),
-                    player.Prof)
+                PlayerDto playerDto = new PlayerDto()
                 {
+                    group = player.Group,
+                    name = player.Character,
+                    acc = player.Account.TrimStart(':'),
+                    profession = player.Prof,
                     condi = player.Condition,
                     conc = player.Concentration,
                     heal = player.Healing,
@@ -1512,7 +1501,11 @@ namespace LuckParser.Controllers
                 BuildWeaponSets(playerDto, player);
                 foreach (KeyValuePair<string, Minions> pair in player.GetMinions(_log))
                 {
-                    playerDto.minions.Add(new MinionDto(pair.Value.MinionID, pair.Key.TrimEnd(" \0".ToArray())));
+                    playerDto.minions.Add(new MinionDto()
+                    {
+                        id = pair.Value.MinionID,
+                        name = pair.Key.TrimEnd(" \0".ToArray())
+                    });
                 }
 
                 logData.players.Add(playerDto);
@@ -1520,13 +1513,16 @@ namespace LuckParser.Controllers
 
             foreach(AbstractMasterPlayer enemy in _log.MechanicData.GetEnemyList(0))
             {
-                logData.enemies.Add(new EnemyDto(enemy.Character));
+                logData.enemies.Add(new EnemyDto() { name = enemy.Character });
             }
 
             foreach (Target target in _log.FightData.Logic.Targets)
             {
-                TargetDto tar = new TargetDto(target.ID, target.Character, GeneralHelper.GetNPCIcon(target.ID))
+                TargetDto tar = new TargetDto()
                 {
+                    id = target.ID,
+                    name = target.Character,
+                    icon = GeneralHelper.GetNPCIcon(target.ID),
                     health = target.Health,
                     hbHeight = target.HitboxHeight,
                     hbWidth = target.HitboxWidth,
@@ -1547,7 +1543,7 @@ namespace LuckParser.Controllers
                 }
                 foreach (KeyValuePair<string, Minions> pair in target.GetMinions(_log))
                 {
-                    tar.minions.Add(new MinionDto(pair.Value.MinionID, pair.Key.TrimEnd(" \0".ToArray())));
+                    tar.minions.Add(new MinionDto() { id = pair.Value.MinionID, name = pair.Key.TrimEnd(" \0".ToArray()) });
                 }
                 logData.targets.Add(tar);
             }
@@ -1557,8 +1553,10 @@ namespace LuckParser.Controllers
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
                 PhaseData phaseData = _statistics.Phases[i];
-                PhaseDto phaseDto = new PhaseDto(phaseData.Name, phaseData.GetDuration())
+                PhaseDto phaseDto = new PhaseDto()
                 {
+                    name = phaseData.Name,
+                    duration = phaseData.GetDuration(),
                     start = phaseData.Start / 1000.0,
                     end = phaseData.End / 1000.0,
                     dpsStats = BuildDPSData(i),
@@ -1673,7 +1671,7 @@ namespace LuckParser.Controllers
             logData.fightIcon = _log.FightData.Logic.IconUrl;
             logData.combatReplay = _settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay;
             logData.lightTheme = _settings.LightTheme;
-            return ToJson(logData, typeof(LogDataDto));
+            return ToJson(logData);
         }
 
         private bool HasBoons(int phaseIndex, Target target)
@@ -1694,13 +1692,13 @@ namespace LuckParser.Controllers
             string scripts = "";
             for (var i = 0; i < _log.PlayerList.Count; i++) {
                 Player player = _log.PlayerList[i];
-                string playerScript = "logData.players[" + i + "].details = " + ToJson(BuildPlayerData(player), typeof(PlayerDetailsDto)) + ";\r\n";
+                string playerScript = "logData.players[" + i + "].details = " + ToJson(BuildPlayerData(player)) + ";\r\n";
                 scripts += playerScript;
             }
             for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
             {
                 Target target = _log.FightData.Logic.Targets[i];
-                string targetScript = "logData.targets[" + i + "].details = " + ToJson(BuildTargetData(target), typeof(PlayerDetailsDto)) + ";\r\n";
+                string targetScript = "logData.targets[" + i + "].details = " + ToJson(BuildTargetData(target)) + ";\r\n";
                 scripts += targetScript;
             }
             return "<script>\r\n"+scripts + "\r\n</script>";
@@ -1708,17 +1706,17 @@ namespace LuckParser.Controllers
 
         private string BuildMaps()
         {
-            string skillsScript = "var usedSkills = " + ToJson(AssembleSkills(_usedSkills.Values), typeof(ICollection<SkillDto>)) + ";" +
+            string skillsScript = "var usedSkills = " + ToJson(AssembleSkills(_usedSkills.Values)) + ";" +
                 "var skillMap = {};" +
                 "$.each(usedSkills, function(i, skill) {" +
                     "skillMap['s'+skill.id]=skill;" +
                 "});";
-            string boonsScript = "var usedBoons = " + ToJson(AssembleBoons(_usedBoons.Values), typeof(ICollection<BoonDto>)) + ";" +
+            string boonsScript = "var usedBoons = " + ToJson(AssembleBoons(_usedBoons.Values)) + ";" +
                 "var buffMap = {};" +
                 "$.each(usedBoons, function(i, boon) {" +
                     "buffMap['b'+boon.id]=boon;" +
                 "});";
-            string mechanicsScript = "var mechanicMap = " + ToJson(BuildMechanics(), typeof(List<MechanicDto>)) + ";";
+            string mechanicsScript = "var mechanicMap = " + ToJson(BuildMechanics()) + ";";
             return "<script>\r\n" + skillsScript + "\r\n" + boonsScript + "\r\n" + mechanicsScript + "\r\n</script>";
         }
 
@@ -1835,13 +1833,13 @@ namespace LuckParser.Controllers
             List<BoonDto> dtos = new List<BoonDto>();
             foreach (Boon boon in boons)
             {
-                dtos.Add(new BoonDto(
-                                boon.ID,
-                                boon.Name,
-                                boon.Link,
-                                boon.Type == Boon.BoonType.Intensity
-                                )
-                        );
+                dtos.Add(new BoonDto()
+                {
+                    id = boon.ID,
+                    name = boon.Name,
+                    icon = boon.Link,
+                    stacking = boon.Type == Boon.BoonType.Intensity
+                });
             }
             return dtos;
         }
@@ -1852,19 +1850,25 @@ namespace LuckParser.Controllers
             foreach (SkillItem skill in skills)
             {
                 GW2APISkill apiSkill = skill.ApiSkill;
-                SkillDto dto = new SkillDto(skill.ID, skill.Name, skill.Icon, apiSkill?.slot == "Weapon_1");
+                SkillDto dto = new SkillDto() {
+                    id = skill.ID,
+                    name = skill.Name,
+                    icon = skill.Icon,
+                    aa = apiSkill?.slot == "Weapon_1"
+                };
                 dtos.Add(dto);
             }
             return dtos;
         }
  
-        private string ToJson(object value, Type type)
+        private string ToJson(object value)
         {
-            DataContractJsonSerializerSettings settings = new DataContractJsonSerializerSettings { UseSimpleDictionaryFormat = true };
-            DataContractJsonSerializer ser = new DataContractJsonSerializer(type, settings);
-            MemoryStream memoryStream = new MemoryStream();
-            ser.WriteObject(memoryStream, value);
-            return Encoding.UTF8.GetString(memoryStream.ToArray());
+            JsonSerializerSettings settings = new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                DefaultValueHandling = DefaultValueHandling.Ignore
+            };
+            return JsonConvert.SerializeObject(value, settings);
         }
     }
 }
