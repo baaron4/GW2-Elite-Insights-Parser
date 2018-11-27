@@ -532,9 +532,9 @@ namespace LuckParser.Controllers
         /// <param name="p"></param>
         /// <param name="simpleRotSize"></param>
         /// <param name="phaseIndex"></param>
-        private List<double[]> BuildSimpleRotationTabData(AbstractPlayer p, int phaseIndex)
+        private List<object[]> BuildSimpleRotationTabData(AbstractPlayer p, int phaseIndex)
         {
-            List<double[]> list = new List<double[]>();
+            List<object[]> list = new List<object[]>();
 
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<CastLog> casting = p.GetCastLogsActDur(_log, phase.Start, phase.End);
@@ -542,14 +542,15 @@ namespace LuckParser.Controllers
             foreach (CastLog cl in casting)
             {
                 if (!_usedSkills.ContainsKey(cl.SkillId)) _usedSkills.Add(cl.SkillId, skillList.Get(cl.SkillId));
-                double[] rotEntry = new double[5];
+                object[] rotEntry = new object[5];
                 list.Add(rotEntry);
                 double offset = 0.0;
-                rotEntry[0] = (cl.Time - phase.Start) / 1000.0;
-                if (rotEntry[0] < 0.0)
+                double start = (cl.Time - phase.Start) / 1000.0;
+                rotEntry[0] = start;
+                if (start < 0.0)
                 {
-                    offset = -1000.0*rotEntry[0];
-                    rotEntry[0] = 0.0;
+                    offset = -1000.0 * start;
+                    rotEntry[0] = 0;
                 }
                 rotEntry[1] = cl.SkillId;
                 rotEntry[2] = (cl.SkillId == SkillItem.DodgeId ? 750 : cl.SkillId == SkillItem.WeaponSwapId ? 50 : cl.ActualDuration) - offset; ;
@@ -659,9 +660,9 @@ namespace LuckParser.Controllers
             return res.Count > 0 ? res : null;
         }
 
-        private List<double[]> BuildDMGDistBodyData(List<CastLog> casting, List<DamageLog> damageLogs, long finalTotalDamage)
+        private List<object[]> BuildDMGDistBodyData(List<CastLog> casting, List<DamageLog> damageLogs, long finalTotalDamage)
         {
-            List<double[]> list = new List<double[]>();
+            List<object[]> list = new List<object[]>();
             Dictionary<long, List<CastLog>> castLogsBySkill = casting.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             Dictionary<long, List<DamageLog>> damageLogsBySkill = damageLogs.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             Dictionary<long, Boon> conditionsById = _statistics.PresentConditions.ToDictionary(x => x.ID);
@@ -710,7 +711,7 @@ namespace LuckParser.Controllers
                     }
                 }
 
-                double[] skillData = {
+                object[] skillData = {
                     isCondi?1:0,
                     entry.Key,
                     totaldamage, mindamage, maxdamage,
@@ -737,7 +738,7 @@ namespace LuckParser.Controllers
                     }
                 }
 
-                double[] skillData = { 0, entry.Key, 0, -1, 0, casts,
+                object[] skillData = { 0, entry.Key, 0, -1, 0, casts,
                     0, 0, 0, 0, timeswasted / 1000.0, -timessaved / 1000.0 };
                 list.Add(skillData);
             }
@@ -818,7 +819,7 @@ namespace LuckParser.Controllers
         {
             DmgDistributionDto dto = new DmgDistributionDto
             {
-                distribution = new List<double[]>()
+                distribution = new List<object[]>()
             };
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<DamageLog> damageLogs = p.GetDamageTakenLogs(null, _log, phase.Start, phase.End);
@@ -862,7 +863,7 @@ namespace LuckParser.Controllers
                 {
                     if (!_usedSkills.ContainsKey(entry.Key)) _usedSkills.Add(entry.Key, skillList.Get(entry.Key));
                 }
-                double[] row = new double[12] {
+                object[] row = new object[12] {
                         isCondi ? 1 : 0, // isCondi
                         entry.Key,
                         totaldamage,
@@ -919,17 +920,17 @@ namespace LuckParser.Controllers
                 id = bgm.Boon.ID,
                 visible = bgm.Boon.Name == "Might" || bgm.Boon.Name == "Quickness",
                 color = GeneralHelper.GetLink("Color-" + bgm.Boon.Name),
-                states = new List<double[]>(bChart.Count + 1)
+                states = new List<object[]>(bChart.Count + 1)
             };
             _usedBoons[bgm.Boon.ID] = bgm.Boon;
             foreach (BoonsGraphModel.Segment seg in bChart)
             {
                 double segStart = Math.Round(Math.Max(seg.Start - phase.Start, 0) / 1000.0, 3);
-                dto.states.Add(new double[] { segStart, seg.Value });
+                dto.states.Add(new object[] { segStart, seg.Value });
             }
             BoonsGraphModel.Segment lastSeg = bChart.Last();
             double segEnd = Math.Round(Math.Min(lastSeg.End - phase.Start, roundedEnd - phase.Start) / 1000.0, 3);
-            dto.states.Add(new double[] { segEnd, lastSeg.Value });
+            dto.states.Add(new object[] { segEnd, lastSeg.Value });
 
             return dto;
         }
@@ -1728,7 +1729,7 @@ namespace LuckParser.Controllers
                 dmgDistributionsTargets = new List<List<DmgDistributionDto>>(),
                 dmgDistributionsTaken = new List<DmgDistributionDto>(),
                 boonGraph = new List<List<BoonChartDataDto>>(),
-                rotation = new List<List<double[]>>(),
+                rotation = new List<List<object[]>>(),
                 food = BuildPlayerFoodData(player),
                 minions = new List<PlayerDetailsDto>(),
                 deathRecap = BuildDeathRecap(player)
@@ -1781,7 +1782,7 @@ namespace LuckParser.Controllers
                 dmgDistributions = new List<DmgDistributionDto>(),
                 dmgDistributionsTaken = new List<DmgDistributionDto>(),
                 boonGraph = new List<List<BoonChartDataDto>>(),
-                rotation = new List<List<double[]>>()
+                rotation = new List<List<object[]>>()
             };
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
@@ -1795,7 +1796,7 @@ namespace LuckParser.Controllers
                 {
                     dto.dmgDistributions.Add(new DmgDistributionDto());
                     dto.dmgDistributionsTaken.Add(new DmgDistributionDto());
-                    dto.rotation.Add(new List<double[]>());
+                    dto.rotation.Add(new List<object[]>());
                     dto.boonGraph.Add(new List<BoonChartDataDto>());
                 }
             }

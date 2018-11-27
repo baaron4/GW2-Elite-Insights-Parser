@@ -6,6 +6,6 @@ namespace LuckParser.Models.HtmlModels
     {     
         public long contributedDamage;     
         public long totalDamage;      
-        public List<double[]> distribution;
+        public List<object[]> distribution;
     }
 }
