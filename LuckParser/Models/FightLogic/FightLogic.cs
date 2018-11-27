@@ -14,9 +14,9 @@ namespace LuckParser.Models
 
         private CombatReplayMap _map;
         public readonly List<Mechanic> MechanicList = new List<Mechanic> {
-            new Mechanic(SkillItem.DeathId, "Dead", Mechanic.MechType.PlayerStatus, ParseEnum.TargetIDS.Unknown, "symbol:'x',color:'rgb(0,0,0)'", "Dead",0),
-            new Mechanic(SkillItem.DownId, "Downed", Mechanic.MechType.PlayerStatus, ParseEnum.TargetIDS.Unknown, "symbol:'cross',color:'rgb(255,0,0)'", "Downed",0),
-            new Mechanic(SkillItem.ResurrectId, "Resurrect", Mechanic.MechType.PlayerStatus, ParseEnum.TargetIDS.Unknown, "symbol:'cross-open',color:'rgb(0,255,255)'", "Res",0)}; //Resurrects (start), Resurrect
+            new Mechanic(SkillItem.DeathId, "Dead", Mechanic.MechType.PlayerStatus, new MechanicPlotlySetting("x","rgb(0,0,0)"), "Dead",0),
+            new Mechanic(SkillItem.DownId, "Downed", Mechanic.MechType.PlayerStatus, new MechanicPlotlySetting("cross","rgb(255,0,0)"), "Downed",0),
+            new Mechanic(SkillItem.ResurrectId, "Resurrect", Mechanic.MechType.PlayerStatus, new MechanicPlotlySetting("cross-open","rgb(0,255,255)"), "Res",0)}; //Resurrects (start), Resurrect
         public ParseMode Mode { get; protected set; } = ParseMode.Unknown;
         public bool CanCombatReplay { get; set; } = false;
         public string Extension { get; protected set; } = "boss";
