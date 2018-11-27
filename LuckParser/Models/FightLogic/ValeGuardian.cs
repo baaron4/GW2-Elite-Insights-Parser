@@ -16,9 +16,12 @@ namespace LuckParser.Models
             new Mechanic(31860, "Unstable Magic Spike", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle","rgb(0,0,255)"), "G.TP","Unstable Magic Spike (Green Guard Teleport)","Green Guard TP",500),
             new Mechanic(31392, "Unstable Magic Spike", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle","rgb(0,0,255)"), "B.TP","Unstable Magic Spike (Boss Teleport)", "Boss TP",500),
             new Mechanic(31340, "Distributed Magic", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle","rgb(0,128,0)"), "Grn","Distributed Magic (Stood in Green)", "Green Team",0),
+            new Mechanic(31340, "Distributed Magic", Mechanic.MechType.EnemyCastStart, new MechanicPlotlySetting("circle-open","rgb(0,128,255)") , "GrnCst.B","Distributed Magic (Green Field appeared in Blue Sector)", "Green in Blue",0),
             new Mechanic(31391, "Distributed Magic", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle","rgb(0,128,0)"), "Grn","Distributed Magic (Stood in Green)", "Green Team",0),
+            new Mechanic(31391, "Distributed Magic", Mechanic.MechType.EnemyCastStart, new MechanicPlotlySetting("circle-open","rgb(255,128,0)"), "GrnCst.R","Distributed Magic (Green Field appeared in Red Sector)", "Green in Red",0),
             new Mechanic(31529, "Distributed Magic", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle","rgb(0,128,0)"), "Grn","Distributed Magic (Stood in Green)", "Green Team", 0),
-            new Mechanic(31750, "Distributed Magic", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle","rgb(0,128,0)"), "Grn","Distributed Magic (Stood in Green)", "Green Team",0), 
+            new Mechanic(31750, "Distributed Magic", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle","rgb(0,128,0)"), "Grn","Distributed Magic (Stood in Green)", "Green Team",0),
+            new Mechanic(31750, "Distributed Magic", Mechanic.MechType.EnemyCastStart, new MechanicPlotlySetting("circle-open","rgb(0,255,0)"), "GrnCst.G","Distributed Magic (Green Field appeared in Green Sector)", "Green in Green",0),
             new Mechanic(31886, "Magic Pulse", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Skr","Magic Pulse (Hit by Seeker)", "Seeker",0),
             new Mechanic(31695, "Pylon Attunement: Red", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("square","rgb(255,0,0)"), "Att.R","Pylon Attunement: Red", "Red Attuned",0),
             new Mechanic(31317, "Pylon Attunement: Blue", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("square","rgb(0,0,255)"), "Att.B","Pylon Attunement: Blue", "Blue Attuned",0),
@@ -96,7 +99,7 @@ namespace LuckParser.Models
             {
                 phases.Add(new PhaseData(start, fightDuration));
             }
-            string[] namesVG = new [] { "Phase 1", "Split 1", "Phase 2", "Split 2", "Phase 3" };
+            string[] namesVG = new[] { "Phase 1", "Split 1", "Phase 2", "Split 2", "Phase 3" };
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
@@ -110,7 +113,8 @@ namespace LuckParser.Models
                        (ushort) RedGuardian
                     };
                     AddTargetsToPhase(phase, ids, log);
-                } else
+                }
+                else
                 {
                     phase.Targets.Add(mainTarget);
                 }
@@ -136,7 +140,7 @@ namespace LuckParser.Models
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }       
+            }
         }
 
         public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
@@ -151,6 +155,36 @@ namespace LuckParser.Models
                     foreach (CastLog c in magicStorms)
                     {
                         replay.Actors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                    }
+                    int distributedMagicDuration = 6700;
+                    int arenaRadius = 1600;
+                    int impactDuration = 110;
+                    List<CastLog> distributedMagicGreen = cls.Where(x => x.SkillId == 31750).ToList();
+                    foreach (CastLog c in distributedMagicGreen)
+                    {
+                        int start = (int)c.Time;
+                        int end = start + distributedMagicDuration;
+                        replay.Actors.Add(new PieActor(true, start + distributedMagicDuration, arenaRadius, 151, 120, new Tuple<int, int>(start, end), "rgba(0,255,0,0.1)", new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f, 0))));
+                        replay.Actors.Add(new PieActor(true, 0, arenaRadius, 151, 120, new Tuple<int, int>(end, end + impactDuration), "rgba(0,255,0,0.3)", new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f, 0))));
+                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0,255,0,0.2)", new PositionConnector(new Point3D(-5449.0f, -20219.0f, 0.0f, 0))));
+                    }
+                    List<CastLog> distributedMagicBlue = cls.Where(x => x.SkillId == 31340).ToList();
+                    foreach (CastLog c in distributedMagicBlue)
+                    {
+                        int start = (int)c.Time;
+                        int end = start + distributedMagicDuration;
+                        replay.Actors.Add(new PieActor(true, start + distributedMagicDuration, arenaRadius, 31, 120, new Tuple<int, int>(start, end), "rgba(0,255,0,0.1)", new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f, 0))));
+                        replay.Actors.Add(new PieActor(true, 0, arenaRadius, 31, 120, new Tuple<int, int>(end, end + impactDuration), "rgba(0,255,0,0.3)", new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f, 0))));
+                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0,255,0,0.2)", new PositionConnector(new Point3D(-4063.0f, -20195.0f, 0.0f, 0))));
+                    }
+                    List<CastLog> distributedMagicRed = cls.Where(x => x.SkillId == 31391).ToList();
+                    foreach (CastLog c in distributedMagicRed)
+                    {
+                        int start = (int)c.Time;
+                        int end = start + distributedMagicDuration;
+                        replay.Actors.Add(new PieActor(true, start + distributedMagicDuration, arenaRadius, 271, 120, new Tuple<int, int>(start, end), "rgba(0,255,0,0.1)", new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f, 0))));
+                        replay.Actors.Add(new PieActor(true, 0, arenaRadius, 271, 120, new Tuple<int, int>(end, end + impactDuration), "rgba(0,255,0,0.3)", new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f, 0))));
+                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0,255,0,0.2)", new PositionConnector(new Point3D(-4735.0f, -21407.0f, 0.0f, 0))));
                     }
                     break;
                 case (ushort)BlueGuardian:
