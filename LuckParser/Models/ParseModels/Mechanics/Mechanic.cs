@@ -1,5 +1,6 @@
 ﻿using LuckParser.Controllers;
 using LuckParser.Models.DataModels;
+using Newtonsoft.Json;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -20,6 +21,26 @@ namespace LuckParser.Models.ParseModels
             DamageLog = null;
             CombatItem = combatItem;
         }
+    }
+
+    public class MechanicPlotlySetting
+    {
+        public string color { get; }
+        public int size { get; }
+        public string symbol { get; }
+
+        public MechanicPlotlySetting(string symbol, string color, int size = 15)
+        {
+            this.color = color;
+            this.symbol = symbol;
+            this.size = size;
+        }
+
+        public string ToJson()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
+
     }
 
     public class Mechanic
@@ -44,42 +65,29 @@ namespace LuckParser.Models.ParseModels
 
         public long SkillId { get; }
         public MechType MechanicType { get; }
-        public ParseEnum.TargetIDS TargetID { get; }
 
         public int InternalCooldown { get; }
         public CheckSpecialCondition SpecialCondition { get; }
-
-        public string PlotlyString { get; }
-        public string PlotlySymbol { get; }
-        public string PlotlyColor { get; }
-        public string PlotlySize { get; }
+        public MechanicPlotlySetting PlotlySetting { get; }
+        public string PlotlyJson => PlotlySetting.ToJson();
         public string Description { get; }
-        public string PlotlyName { get; }
         public string InGameName { get; }
         public string ShortName { get; }
+        public string FullName { get; }
         public bool IsEnemyMechanic { get; }
 
-        public Mechanic(long skillId, string inGameName, MechType mechType, ParseEnum.TargetIDS targetID,
-            string plotlyString, string shortName, int internalCoolDown, CheckSpecialCondition condition = null) :
-            this(skillId, inGameName, mechType, targetID, plotlyString, shortName, null, null, internalCoolDown, condition)
+        public Mechanic(long skillId, string inGameName, MechType mechType, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, CheckSpecialCondition condition = null) : this(skillId, inGameName, mechType, plotlySetting, shortName, shortName, shortName, internalCoolDown, null)
         {
         }
 
-        public Mechanic(long skillId, string inGameName, MechType mechType, ParseEnum.TargetIDS targetID,
-            string plotlyString, string shortName, string description, string plotlyName, int internalCoolDown,
-            CheckSpecialCondition condition = null)
+        public Mechanic(long skillId, string inGameName, MechType mechType, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, CheckSpecialCondition condition = null)
         {
             InGameName = inGameName;
             SkillId = skillId;
             MechanicType = mechType;
-            TargetID = targetID;
-            PlotlyString = plotlyString;
-            PlotlySymbol = GeneralHelper.FindPattern(PlotlyString, "symbol\\s*:\\s*'([^']*)'");
-            PlotlyColor= GeneralHelper.FindPattern(PlotlyString, "color\\s*:\\s*'([^']*)'");
-            PlotlySize = GeneralHelper.FindPattern(PlotlyString, "size\\s*:\\s*'([^']*)'");
+            PlotlySetting = plotlySetting;
             ShortName = shortName;
-            Description = description ?? InGameName;
-            PlotlyName = plotlyName ?? InGameName;
+            FullName = fullName;
             InternalCooldown = internalCoolDown;
             SpecialCondition = condition;
             IsEnemyMechanic = MechanicType == MechType.EnemyBoon || MechanicType == MechType.EnemyBoonStrip ||

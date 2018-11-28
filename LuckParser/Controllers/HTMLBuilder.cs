@@ -1033,7 +1033,7 @@ namespace LuckParser.Controllers
                 List<MechanicLog> mechanicLogs = _log.MechanicData[mech];
                 MechanicDto dto = new MechanicDto
                 {
-                    name = mech.PlotlyName,
+                    name = mech.FullName,
                     shortName = mech.ShortName,
                     description = mech.Description,
                     playerMech = playerMechs.Contains(mech),
@@ -1054,9 +1054,9 @@ namespace LuckParser.Controllers
                 List<MechanicLog> mechanicLogs = _log.MechanicData[mech];
                 MechanicChartDataDto dto = new MechanicChartDataDto
                 {
-                    color = mech.PlotlyColor,
-                    symbol = mech.PlotlySymbol,
-                    size = mech.PlotlySize != null ? int.Parse(mech.PlotlySize) : 0,
+                    color = mech.PlotlySetting.color,
+                    symbol = mech.PlotlySetting.symbol,
+                    size = mech.PlotlySetting.size,
                     visible = (mech.SkillId == SkillItem.DeathId || mech.SkillId == SkillItem.DownId),
                     points = BuildMechanicGraphPointData(mechanicLogs, mech.IsEnemyMechanic)
                 };
