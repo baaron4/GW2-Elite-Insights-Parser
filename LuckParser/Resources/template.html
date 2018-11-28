@@ -58,37 +58,36 @@
             <div v-if="logdata.combatReplay" class="ml-5">
                 <ul class="nav nav-pills flex-column justify-content-center d-flex align-items-center">
                     <li class="nav-item mb-1">
-                        <a class="nav-link" @click="mode = 0" :class="{active: !mode}">Statistics</a>
+                        <a class="nav-link" @click="changeMode(0)" :class="{active: !mode}">Statistics</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" @click="mode = 1" :class="{active: mode }">Combat Replay</a>
+                        <a class="nav-link" @click="changeMode(1)" :class="{active: mode }">Combat Replay</a>
                     </li>
                 </ul>
             </div>
         </div>
-        <div v-show="mode === 0" :class="{'d-flex': !mode}" class="flex-row justify-content-center mt-2" id="phase-nav">
-            <phase-component :phases="logdata.phases"></phase-component>
-        </div>
-        <div class="d-flex flex-row justify-content-center mb-3 mt-3" id="actors">
-            <div v-show="mode === 0 && dataType !== datatypes.targetTab" :class="{'d-flex':mode === 0 && dataType !== datatypes.targetTab}"
-                id="targets" class="flex-row justify-content-center align-items-center flex-wrap mr-5">
-                <target-component :targets="logdata.targets" :phase="logdata.phases[activePhase]"></target-component>
-            </div>
-            <div id="players" class="ml-5">
-                <player-component :players="logdata.players" :crmode="mode === 1"></player-component>
-            </div>
-        </div>
-        <general-layout-component v-show="mode === 0" :layout="layout" :phase="logdata.phases[activePhase]">
-        </general-layout-component>
         <div id="stats" v-show="mode === 0">
+            <div class="d-flex flex-row justify-content-center mt-2" id="phase-nav">
+                <phase-component :phases="logdata.phases"></phase-component>
+            </div>
+            <div class="d-flex flex-row justify-content-center mb-3 mt-3" id="actors">
+                <div v-show="dataType !== datatypes.targetTab" :class="{'d-flex':dataType !== datatypes.targetTab}" id="targets"
+                    class="flex-row justify-content-center align-items-center flex-wrap mr-5">
+                    <target-component :targets="logdata.targets" :phase="logdata.phases[activePhase]"></target-component>
+                </div>
+                <div id="players" class="ml-5">
+                    <player-component :players="logdata.players"></player-component>
+                </div>
+            </div>
+            <general-layout-component :layout="layout" :phase="logdata.phases[activePhase]">
+            </general-layout-component>
             <keep-alive>
                 <damage-stats-component v-if="dataType === datatypes.damageTable" :phase="logdata.phases[activePhase]"
                     :phaseindex="activePhase" :players="logdata.players" :activetargets="activePhaseTargets"></damage-stats-component>
                 <gameplay-stats-component v-if="dataType === datatypes.gameplayTable" :phase="logdata.phases[activePhase]"
                     :phaseindex="activePhase" :players="logdata.players" :activetargets="activePhaseTargets"></gameplay-stats-component>
                 <dmgmodifier-stats-component v-if="dataType === datatypes.dmgModifiersTable" :phase="logdata.phases[activePhase]"
-                    :phaseindex="activePhase" :players="logdata.players" :activetargets="activePhaseTargets"
-                    :phases="logdata.phases"></dmgmodifier-stats-component>
+                    :phaseindex="activePhase" :players="logdata.players" :activetargets="activePhaseTargets" :phases="logdata.phases"></dmgmodifier-stats-component>
                 <support-stats-component v-if="dataType === datatypes.supTable" :phase="logdata.phases[activePhase]"
                     :players="logdata.players"></support-stats-component>
                 <defense-stats-component v-if="dataType === datatypes.defTable" :phase="logdata.phases[activePhase]"
