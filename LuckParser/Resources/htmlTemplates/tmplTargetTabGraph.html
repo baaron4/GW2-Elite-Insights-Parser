@@ -1,20 +1,4 @@
 <div>
-    <div class="mt-2">
-        <ul>
-            <li v-show="target.health > 0">
-                Health: {{target.health}}
-            </li>
-            <li v-show="target.tough > 0">
-                Toughness: {{target.tough}}
-            </li>
-            <li v-show="target.hbWidth > 0">
-                Hitbox width: {{target.hbWidth}}
-            </li>
-            <li v-show="target.hbHeight > 0">
-                Hitbox height: {{target.hbHeight}}
-            </li>
-        </ul>
-    </div>
     <ul class="nav nav-pills d-flex flex-row justify-content-center mt-5 mb-2">
         <li class="nav-item">
             <a class="nav-link" @click="dpsmode = 0" :class="{active: dpsmode === 0}">Full</a>
