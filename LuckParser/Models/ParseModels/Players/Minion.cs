@@ -17,7 +17,7 @@ namespace LuckParser.Models.ParseModels
             long maxTime = Math.Min(log.FightData.FightEnd, AgentItem.LastAware);
             foreach (CombatItem c in log.GetDamageData(AgentItem.InstID))
             {
-                if (c.Time > minTime && c.Time < maxTime)//selecting minion as caster
+                if (c.Time >= minTime && c.Time <= maxTime)//selecting minion as caster
                 {
                     long time = c.Time - timeStart;
                     AddDamageLog(time, c);
@@ -33,14 +33,14 @@ namespace LuckParser.Models.ParseModels
             long maxTime = Math.Min(log.FightData.FightEnd, AgentItem.LastAware);
             foreach (CombatItem c in log.GetCastData(AgentItem.InstID))
             {
-                if (!(c.Time > minTime))
+                if (!(c.Time >= minTime))
                 {
                     continue;
                 }
                 ParseEnum.StateChange state = c.IsStateChange;
                 if (state == ParseEnum.StateChange.Normal)
                 {
-                    if (c.IsActivation.IsCasting() && c.Time < maxTime)
+                    if (c.IsActivation.IsCasting() && c.Time <= maxTime)
                     {
                         long time = c.Time - timeStart;
                         curCastLog = new CastLog(time, c.SkillID, c.Value, c.IsActivation);

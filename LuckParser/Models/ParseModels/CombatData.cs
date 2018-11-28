@@ -90,6 +90,25 @@ namespace LuckParser.Models.ParseModels
             }
             return 0;
         }
+
+        public void Update(long end)
+        {
+            List<CombatItem> damageData = DamageData.SelectMany(x => x.Value).ToList();
+            damageData.Sort((x, y) => x.Time < y.Time ? -1 : 1);
+            damageData.Reverse();
+            foreach (CombatItem c in damageData)
+            {
+                if (c.Time <= end)
+                {
+                    break;
+                }
+                else if (c.Time <= end + 1000)
+                {
+                    c.Time = end;
+                }
+            }
+        }
+
         // getters
 
         public List<CombatItem> GetBoonData(long key)
