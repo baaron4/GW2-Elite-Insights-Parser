@@ -518,7 +518,7 @@ namespace LuckParser.Controllers
 
                     PhaseData phase = _statistics.Phases[phaseIndex];
                     long start = _log.FightData.ToLogSpace(phase.Start);
-                    long end = _log.FightData.ToFightSpace(phase.End);
+                    long end = _log.FightData.ToLogSpace(phase.End);
 
                     List<DamageLog> damageLogs = player.GetDamageTakenLogs(null, _log, phase.Start, phase.End);
                     //List<DamageLog> healingLogs = player.getHealingReceivedLogs(log, phase.getStart(), phase.getEnd());
@@ -529,7 +529,7 @@ namespace LuckParser.Controllers
                     final.InvulnedCount = 0;
                     final.DamageInvulned = 0;
                     final.EvadedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Evade);
-                    final.DodgeCount = combatData.GetSkillCount(player.InstID, SkillItem.DodgeId, start, end) + combatData.GetBuffCount(player.InstID, 40408, start, end);//dodge = 65001 mirage cloak =40408
+                    final.DodgeCount = combatData.GetSkills(player.InstID, SkillItem.DodgeId, start, end).Count + combatData.GetBuffs(player.InstID, 40408, start, end).Select(x => Math.Floor(x.Time / 10.0)).Distinct().Count();//dodge = 65001 mirage cloak =40408
                     final.DamageBarrier = (int)damageLogs.Sum(x => x.ShieldDamage);
                     final.InterruptedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Interrupt);
                     foreach (DamageLog log in damageLogs.Where(x => x.Result == ParseEnum.Result.Absorb))
