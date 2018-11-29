@@ -76,7 +76,7 @@ namespace LuckParser.Models
                 CombatItem c = invulsSam[i];
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    end = c.Time - log.FightData.FightStart;
+                    end = log.FightData.ToFightSpace(c.Time);
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsSam.Count - 1)
                     {
@@ -85,7 +85,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    start = c.Time - log.FightData.FightStart;
+                    start = log.FightData.ToFightSpace(c.Time);
                     phases.Add(new PhaseData(end, start));
                     mainTarget.AddCustomCastLog(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
                 }
@@ -140,11 +140,11 @@ namespace LuckParser.Models
                     {
                         if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                         {
-                            brutStart = (int)(c.Time - log.FightData.FightStart);
+                            brutStart = (int)(log.FightData.ToFightSpace(c.Time));
                         }
                         else
                         {
-                            int brutEnd = (int)(c.Time - log.FightData.FightStart);
+                            int brutEnd = (int)(log.FightData.ToFightSpace(c.Time));
                             replay.Actors.Add(new CircleActor(true, 0, 120, new Tuple<int, int>(brutStart, brutEnd), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                         }
                     }
@@ -164,7 +164,7 @@ namespace LuckParser.Models
             List<CombatItem> bigbomb = log.GetBoonData(37966).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
             foreach (CombatItem c in bigbomb)
             {
-                int bigStart = (int)(c.Time - log.FightData.FightStart);
+                int bigStart = (int)(log.FightData.ToFightSpace(c.Time));
                 int bigEnd = bigStart + 6000;
                 replay.Actors.Add(new CircleActor(true, 0, 300, new Tuple<int, int>(bigStart, bigEnd), "rgba(150, 80, 0, 0.2)", new AgentConnector(p)));
                 replay.Actors.Add(new CircleActor(true, bigEnd, 300, new Tuple<int, int>(bigStart, bigEnd), "rgba(150, 80, 0, 0.2)", new AgentConnector(p)));
@@ -173,7 +173,7 @@ namespace LuckParser.Models
             List<CombatItem> smallbomb = log.GetBoonData(38247).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
             foreach (CombatItem c in smallbomb)
             {
-                int smallStart = (int)(c.Time - log.FightData.FightStart);
+                int smallStart = (int)(log.FightData.ToFightSpace(c.Time));
                 int smallEnd = smallStart + 6000;
                 replay.Actors.Add(new CircleActor(true, 0, 80, new Tuple<int, int>(smallStart, smallEnd), "rgba(80, 150, 0, 0.3)", new AgentConnector(p)));
             }
@@ -184,11 +184,11 @@ namespace LuckParser.Models
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    fixatedSamStart = Math.Max((int)(c.Time - log.FightData.FightStart), 0);
+                    fixatedSamStart = Math.Max((int)(log.FightData.ToFightSpace(c.Time)), 0);
                 }
                 else
                 {
-                    int fixatedSamEnd = (int)(c.Time - log.FightData.FightStart);
+                    int fixatedSamEnd = (int)(log.FightData.ToFightSpace(c.Time));
                     replay.Actors.Add(new CircleActor(true, 0, 80, new Tuple<int, int>(fixatedSamStart, fixatedSamEnd), "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
                 }
             }
@@ -200,12 +200,12 @@ namespace LuckParser.Models
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    fixationGuldhemStart = (int)(c.Time - log.FightData.FightStart);
+                    fixationGuldhemStart = (int)(log.FightData.ToFightSpace(c.Time));
                     guldhem = Targets.FirstOrDefault(x => x.ID == (ushort)ParseEnum.TrashIDS.Guldhem && c.Time >= x.FirstAware && c.Time <= x.LastAware);
                 }
                 else
                 {
-                    int fixationGuldhemEnd = (int)(c.Time - log.FightData.FightStart);
+                    int fixationGuldhemEnd = (int)(log.FightData.ToFightSpace(c.Time));
                     Tuple<int, int> duration = new Tuple<int, int>(fixationGuldhemStart, fixationGuldhemEnd);
                     if (guldhem != null)
                     {
@@ -221,12 +221,12 @@ namespace LuckParser.Models
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    fixationRigomStart = (int)(c.Time - log.FightData.FightStart);
+                    fixationRigomStart = (int)(log.FightData.ToFightSpace(c.Time));
                     rigom = Targets.FirstOrDefault(x => x.ID == (ushort)ParseEnum.TrashIDS.Rigom && c.Time >= x.FirstAware && c.Time <= x.LastAware);
                 }
                 else
                 {
-                    int fixationRigomEnd = (int)(c.Time - log.FightData.FightStart);
+                    int fixationRigomEnd = (int)(log.FightData.ToFightSpace(c.Time));
                     Tuple<int, int> duration = new Tuple<int, int>(fixationRigomStart, fixationRigomEnd);
                     if (rigom != null)
                     {

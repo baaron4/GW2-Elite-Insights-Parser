@@ -73,8 +73,9 @@ namespace LuckParser.Models.ParseModels
 
         public void Simulate(List<BoonLog> logs, long fightDuration)
         {
-            long timeCur = 0;
-            long timePrev = 0;
+            long firstTimeValue = logs.Count > 0 ? Math.Min(logs.First().Time, 0) : 0;
+            long timeCur = firstTimeValue;
+            long timePrev = firstTimeValue;
             foreach (BoonLog log in logs)
             {
                 timeCur = log.Time;

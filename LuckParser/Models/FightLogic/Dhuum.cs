@@ -89,7 +89,7 @@ namespace LuckParser.Models
                 CombatItem invulDhuum = log.GetBoonData(762).FirstOrDefault(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SrcInstid == mainTarget.InstID && x.Time > 115000 + log.FightData.FightStart);
                 if (invulDhuum != null)
                 {
-                    long end = invulDhuum.Time - log.FightData.FightStart;
+                    long end = log.FightData.ToFightSpace(invulDhuum.Time);
                     phases.Add(new PhaseData(0, end));
                     ComputeFightPhases(mainTarget, phases, log, castLogs, fightDuration, end + 1);
                 }
@@ -226,7 +226,7 @@ namespace LuckParser.Models
             foreach (CombatItem c in spiritTransform)
             {
                 int duration = 15000;
-                int start = (int)(c.Time - log.FightData.FightStart);
+                int start = (int)(log.FightData.ToFightSpace(c.Time));
                 if (mainTarget.HealthOverTime.FirstOrDefault(x => x.X > start).Y < 1050)
                 {
                     duration = 30000;
@@ -235,7 +235,7 @@ namespace LuckParser.Models
                 int end = start + duration;
                 if (removedBuff != null)
                 {
-                    end = (int)(removedBuff.Time - log.FightData.FightStart);
+                    end = (int)(log.FightData.ToFightSpace(removedBuff.Time));
                 }
                 replay.Actors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.3)", new AgentConnector(p)));
                 replay.Actors.Add(new CircleActor(true, start + duration, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.5)", new AgentConnector(p)));
@@ -247,11 +247,11 @@ namespace LuckParser.Models
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    bombDhuumStart = (int)(c.Time - log.FightData.FightStart);
+                    bombDhuumStart = (int)(log.FightData.ToFightSpace(c.Time));
                 }
                 else
                 {
-                    int bombDhuumEnd = (int)(c.Time - log.FightData.FightStart);
+                    int bombDhuumEnd = (int)(log.FightData.ToFightSpace(c.Time));
                     replay.Actors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.3)", new AgentConnector(p)));
                     replay.Actors.Add(new CircleActor(true, bombDhuumStart + 13000, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.5)", new AgentConnector(p)));
                 }
@@ -264,12 +264,12 @@ namespace LuckParser.Models
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    shacklesStart = (int)(c.Time - log.FightData.FightStart);
+                    shacklesStart = (int)(log.FightData.ToFightSpace(c.Time));
                     shacklesTarget = log.PlayerList.FirstOrDefault(x => x.Agent == c.SrcAgent);
                 }
                 else
                 {
-                    int shacklesEnd = (int)(c.Time - log.FightData.FightStart);
+                    int shacklesEnd = (int)(log.FightData.ToFightSpace(c.Time));
                     Tuple<int, int> duration = new Tuple<int, int>(shacklesStart, shacklesEnd);
                     if (shacklesTarget != null)
                     {
@@ -287,12 +287,12 @@ namespace LuckParser.Models
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    shacklesDmgStart = (int)(c.Time - log.FightData.FightStart);
+                    shacklesDmgStart = (int)(log.FightData.ToFightSpace(c.Time));
                     shacklesDmgTarget = log.PlayerList.FirstOrDefault(x => x.Agent == c.SrcAgent);
                 }
                 else
                 {
-                    int shacklesDmgEnd = (int)(c.Time - log.FightData.FightStart);
+                    int shacklesDmgEnd = (int)(log.FightData.ToFightSpace(c.Time));
                     Tuple<int, int> duration = new Tuple<int, int>(shacklesDmgStart, shacklesDmgEnd);
                     if (shacklesDmgTarget != null)
                     {

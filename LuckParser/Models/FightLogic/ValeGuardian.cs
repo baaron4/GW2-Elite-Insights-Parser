@@ -81,7 +81,7 @@ namespace LuckParser.Models
                 CombatItem c = invulsVG[i];
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    end = c.Time - log.FightData.FightStart;
+                    end = log.FightData.ToFightSpace(c.Time);
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsVG.Count - 1)
                     {
@@ -90,7 +90,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    start = c.Time - log.FightData.FightStart;
+                    start = log.FightData.ToFightSpace(c.Time);
                     phases.Add(new PhaseData(end, start));
                     mainTarget.AddCustomCastLog(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
                 }

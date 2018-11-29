@@ -220,7 +220,7 @@ namespace LuckParser.Controllers
                     foreach (var pair in targetsFinal)
                     {
                         Target target = pair.Key;
-                        if (dl.DstInstId == target.InstID && dl.Time <= target.LastAware - _log.FightData.FightStart && dl.Time >= target.FirstAware - _log.FightData.FightStart)
+                        if (dl.DstInstId == target.InstID && dl.Time <= _log.FightData.ToFightSpace(target.LastAware) && dl.Time >= _log.FightData.ToFightSpace(target.FirstAware))
                         {
                             FinalStats targetFinal = pair.Value;
                             if (dl.Result == ParseEnum.Result.Crit)
@@ -340,8 +340,8 @@ namespace LuckParser.Controllers
         private FinalStatsAll GetFinalStats(Player p, int phaseIndex)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
-            long start = phase.Start + _log.FightData.FightStart;
-            long end = phase.End + _log.FightData.FightStart;
+            long start = _log.FightData.ToLogSpace(phase.Start);
+            long end = _log.FightData.ToFightSpace(phase.End);
             Dictionary<Target, FinalStats> targetDict = new Dictionary<Target, FinalStats>();
             foreach (Target target in _log.FightData.Logic.Targets)
             {
@@ -517,8 +517,8 @@ namespace LuckParser.Controllers
                     FinalDefenses final = new FinalDefenses();
 
                     PhaseData phase = _statistics.Phases[phaseIndex];
-                    long start = phase.Start + _log.FightData.FightStart;
-                    long end = phase.End + _log.FightData.FightStart;
+                    long start = _log.FightData.ToLogSpace(phase.Start);
+                    long end = _log.FightData.ToFightSpace(phase.End);
 
                     List<DamageLog> damageLogs = player.GetDamageTakenLogs(null, _log, phase.Start, phase.End);
                     //List<DamageLog> healingLogs = player.getHealingReceivedLogs(log, phase.getStart(), phase.getEnd());
@@ -549,7 +549,7 @@ namespace LuckParser.Controllers
                 List<Tuple<long, long>> dead = new List<Tuple<long, long>>();
                 List<Tuple<long, long>> down = new List<Tuple<long, long>>();
                 List<Tuple<long, long>> dc = new List<Tuple<long, long>>();
-                combatData.GetAgentStatus(_log.FightData.FightStart, _log.FightData.FightEnd, player.InstID, dead, down, dc);
+                combatData.GetAgentStatus(player.FirstAware, player.LastAware, player.InstID, dead, down, dc);
 
                 for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
                 {

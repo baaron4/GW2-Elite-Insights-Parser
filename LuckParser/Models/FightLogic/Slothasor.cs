@@ -129,11 +129,11 @@ namespace LuckParser.Models
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    toDropStart = (int)(c.Time - log.FightData.FightStart);
+                    toDropStart = (int)(log.FightData.ToFightSpace(c.Time));
                 }
                 else
                 {
-                    int toDropEnd = (int)(c.Time - log.FightData.FightStart); replay.Actors.Add(new CircleActor(false, 0, 180, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)", new AgentConnector(p)));
+                    int toDropEnd = (int)(log.FightData.ToFightSpace(c.Time)); replay.Actors.Add(new CircleActor(false, 0, 180, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)", new AgentConnector(p)));
                     replay.Actors.Add(new CircleActor(true, toDropStart + 8000, 180, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)", new AgentConnector(p)));
                     Point3D poisonNextPos = replay.Positions.FirstOrDefault(x => x.Time >= toDropEnd);
                     Point3D poisonPrevPos = replay.Positions.LastOrDefault(x => x.Time <= toDropEnd);
@@ -150,11 +150,11 @@ namespace LuckParser.Models
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    transfoStart = (int)(c.Time - log.FightData.FightStart);
+                    transfoStart = (int)(log.FightData.ToFightSpace(c.Time));
                 }
                 else
                 {
-                    int transfoEnd = (int)(c.Time - log.FightData.FightStart);
+                    int transfoEnd = (int)(log.FightData.ToFightSpace(c.Time));
                     replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(transfoStart, transfoEnd), "rgba(0, 80, 255, 0.3)", new AgentConnector(p)));
                 }
             }
@@ -165,11 +165,11 @@ namespace LuckParser.Models
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    fixatedSlothStart = (int)(c.Time - log.FightData.FightStart);
+                    fixatedSlothStart = (int)(log.FightData.ToFightSpace(c.Time));
                 }
                 else
                 {
-                    int fixatedSlothEnd = (int)(c.Time - log.FightData.FightStart);
+                    int fixatedSlothEnd = (int)(log.FightData.ToFightSpace(c.Time));
                     replay.Actors.Add(new CircleActor(true, 0, 120, new Tuple<int, int>(fixatedSlothStart, fixatedSlothEnd), "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
                 }
             }

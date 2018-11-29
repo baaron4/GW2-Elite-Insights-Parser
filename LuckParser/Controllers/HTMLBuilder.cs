@@ -579,28 +579,26 @@ namespace LuckParser.Controllers
         private List<DeathRecapDto> BuildDeathRecap(Player p)
         {
             List<DeathRecapDto> res = new List<DeathRecapDto>();
-            long start = _log.FightData.FightStart;
-            long end = _log.FightData.FightEnd;
-            List<CombatItem> deads = _log.CombatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDead, start, end);
-            List<CombatItem> downs = _log.CombatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDown, start, end);
-            long lastTime = start;
+            List<CombatItem> deads = _log.CombatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDead, _log.FightData.FightStart, _log.FightData.FightEnd);
+            List<CombatItem> downs = _log.CombatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDown, _log.FightData.FightStart, _log.FightData.FightEnd);
+            long lastTime = _log.FightData.FightStart;
             List<DamageLog> damageLogs = p.GetDamageTakenLogs(null, _log, 0, _log.FightData.FightDuration);
             foreach (CombatItem dead in deads)
             {
                 DeathRecapDto recap = new DeathRecapDto()
                 {
-                    time = (int)(dead.Time - start)
+                    time = (int)(_log.FightData.ToFightSpace(dead.Time))
                 };
                 CombatItem down = downs.LastOrDefault(x => x.Time <= dead.Time && x.Time >= lastTime);
                 if (down != null)
                 {
-                    List<DamageLog> damageToDown = damageLogs.Where(x => x.Time < down.Time - start && x.Damage > 0 && x.Time > lastTime - start).ToList();
+                    List<DamageLog> damageToDown = damageLogs.Where(x => x.Time < _log.FightData.ToFightSpace(down.Time) && x.Damage > 0 && x.Time > _log.FightData.ToFightSpace(lastTime)).ToList();
                     recap.toDown = damageToDown.Count > 0 ? new List<object[]>() : null;
                     int damage = 0;
                     for (int i = damageToDown.Count - 1; i >= 0; i--)
                     {
                         DamageLog dl = damageToDown[i];
-                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);
+                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, _log.FightData.ToLogSpace(dl.Time));
                         object[] item = new object[] {
                             dl.Time,
                             dl.SkillId,
@@ -615,12 +613,12 @@ namespace LuckParser.Controllers
                             break;
                         }
                     }
-                    List<DamageLog> damageToKill = damageLogs.Where(x => x.Time > down.Time - start && x.Time < dead.Time - start && x.Damage > 0 && x.Time > lastTime - start).ToList();
+                    List<DamageLog> damageToKill = damageLogs.Where(x => x.Time > _log.FightData.ToFightSpace(down.Time) && x.Time < _log.FightData.ToFightSpace(dead.Time) && x.Damage > 0 && x.Time > _log.FightData.ToFightSpace(lastTime)).ToList();
                     recap.toKill = damageToKill.Count > 0 ? new List<object[]>() : null;
                     for (int i = damageToKill.Count - 1; i >= 0; i--)
                     {
                         DamageLog dl = damageToKill[i];
-                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);
+                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, _log.FightData.ToLogSpace(dl.Time));
                         object[] item = new object[] {
                             dl.Time,
                             dl.SkillId,
@@ -633,13 +631,13 @@ namespace LuckParser.Controllers
                 else
                 {
                     recap.toDown = null;
-                    List<DamageLog> damageToKill = damageLogs.Where(x => x.Time < dead.Time - start && x.Damage > 0 && x.Time > lastTime - start).ToList();
+                    List<DamageLog> damageToKill = damageLogs.Where(x => x.Time < _log.FightData.ToFightSpace(dead.Time) && x.Damage > 0 && x.Time > _log.FightData.ToFightSpace(lastTime)).ToList();
                     recap.toKill = damageToKill.Count > 0 ? new List<object[]>() : null;
                     int damage = 0;
                     for (int i = damageToKill.Count - 1; i >= 0; i--)
                     {
                         DamageLog dl = damageToKill[i];
-                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);
+                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, _log.FightData.ToLogSpace(dl.Time));
                         object[] item = new object[] {
                             dl.Time,
                             dl.SkillId,

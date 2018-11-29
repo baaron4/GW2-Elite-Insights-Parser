@@ -135,6 +135,16 @@ namespace LuckParser.Models.ParseModels
             return _phases[0].Targets;
         }
 
+        public long ToFightSpace(long time)
+        {
+            return time - FightStart;
+        }
+
+        public long ToLogSpace(long time)
+        {
+            return time + FightStart;
+        }
+
         // Setters
         public void SetCM(ParsedLog log)
         {

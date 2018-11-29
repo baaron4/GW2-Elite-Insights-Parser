@@ -54,6 +54,16 @@ namespace LuckParser.Models
                     c.DstInstid = target.InstID;
                 }
             }
+            CombatItem pov = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.PointOfView);
+            if (pov != null)
+            {
+                // to make sure that the logging starts when the PoV starts attacking (in case there is a slave with them)
+                CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcAgent == pov.SrcAgent && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
+                if (enterCombat != null)
+                {
+                    fightData.FightStart = enterCombat.Time;
+                }
+            }
         }
 
         public override void SetSuccess(ParsedLog log)
@@ -62,16 +72,6 @@ namespace LuckParser.Models
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
-            }
-            CombatItem pov = log.CombatData.AllCombatItems.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.PointOfView);
-            if (pov != null)
-            {
-                // to make sure that the logging starts when the PoV starts attacking (in case there is a slave with them)
-                CombatItem enterCombat = log.CombatData.AllCombatItems.FirstOrDefault(x => x.SrcAgent == pov.SrcAgent && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
-                if (enterCombat != null)
-                {
-                    log.FightData.FightStart = enterCombat.Time;
-                }
             }
             CombatItem lastDamageTaken = log.CombatData.GetDamageTakenData(mainTarget.InstID).LastOrDefault(x => x.Value > 0 || x.BuffDmg > 0);
             if (lastDamageTaken != null)

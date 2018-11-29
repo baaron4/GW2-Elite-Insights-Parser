@@ -208,8 +208,7 @@ namespace LuckParser.Models.ParseModels
         private void SetConsumablesList(ParsedLog log)
         {
             List<Boon> consumableList = Boon.GetConsumableList();
-            long timeStart = log.FightData.FightStart;
-            long fightDuration = log.FightData.FightEnd - timeStart;
+            long fightDuration = log.FightData.FightDuration;
             foreach (Boon consumable in consumableList)
             {
                 foreach (CombatItem c in log.GetBoonData(consumable.ID))
@@ -221,7 +220,7 @@ namespace LuckParser.Models.ParseModels
                     long time = 0;
                     if (c.IsBuff != 18)
                     {
-                        time = c.Time - timeStart;
+                        time = log.FightData.ToFightSpace(c.Time);
                     }
                     if (time <= fightDuration)
                     {
@@ -247,7 +246,7 @@ namespace LuckParser.Models.ParseModels
             List<Tuple<long, long>> dead = CombatReplay.Deads;
             List<Tuple<long, long>> down = CombatReplay.Downs;
             List<Tuple<long, long>> dc = CombatReplay.DCs;
-            log.CombatData.GetAgentStatus(log.FightData.FightStart, log.FightData.FightEnd, InstID, dead, down, dc);
+            log.CombatData.GetAgentStatus(FirstAware, LastAware, InstID, dead, down, dc);
             // Fight related stuff
             log.FightData.Logic.ComputeAdditionalPlayerData(this, log);
         }

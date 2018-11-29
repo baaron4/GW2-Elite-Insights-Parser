@@ -29,8 +29,8 @@ namespace LuckParser.Models.ParseModels
             }
             if (target != null && _damageLogsByDst.TryGetValue(target.InstID, out var list))
             {
-                long targetStart = target.FirstAware - log.FightData.FightStart;
-                long targetEnd = target.LastAware - log.FightData.FightStart;
+                long targetStart = log.FightData.ToFightSpace(target.FirstAware);
+                long targetEnd = log.FightData.ToFightSpace(target.LastAware);
                 return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd).ToList();
             }
             return _damageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();

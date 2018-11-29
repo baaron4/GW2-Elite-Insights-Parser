@@ -134,9 +134,9 @@ namespace LuckParser.Models
             CombatItem invulDei = log.GetBoonData(762).Find(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && x.DstInstid == mainTarget.InstID);
             if (invulDei != null)
             {
-                end = invulDei.Time - log.FightData.FightStart;
+                end = log.FightData.ToFightSpace(invulDei.Time);
                 phases.Add(new PhaseData(start, end));
-                start = (log.FightData.PhaseData.Count == 1 ? log.FightData.PhaseData[0] - log.FightData.FightStart : fightDuration);
+                start = (log.FightData.PhaseData.Count == 1 ? log.FightData.ToFightSpace(log.FightData.PhaseData[0]) : fightDuration);
                 mainTarget.AddCustomCastLog(new CastLog(end, -6, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
             }
             if (fightDuration - start > 5000 && start >= phases.Last().End)
@@ -153,11 +153,11 @@ namespace LuckParser.Models
             int splits = 0;
             while (teleport != null && splits < 3)
             {
-                start = teleport.Time - log.FightData.FightStart;
-                CombatItem teleportBack = log.GetBoonData(38169).FirstOrDefault(x => x.Time - log.FightData.FightStart > start + 10000);
+                start = log.FightData.ToFightSpace(teleport.Time);
+                CombatItem teleportBack = log.GetBoonData(38169).FirstOrDefault(x => log.FightData.ToFightSpace(x.Time) > start + 10000);
                 if (teleportBack != null)
                 {
-                    end = Math.Min(teleportBack.Time - log.FightData.FightStart, fightDuration);
+                    end = Math.Min(log.FightData.ToFightSpace(teleportBack.Time), fightDuration);
                 }
                 else
                 {
@@ -165,7 +165,7 @@ namespace LuckParser.Models
                 }
                 phases.Add(new PhaseData(start, end));
                 splits++;
-                teleport = log.GetBoonData(38169).FirstOrDefault(x => x.Time - log.FightData.FightStart > end + 10000);
+                teleport = log.GetBoonData(38169).FirstOrDefault(x => log.FightData.ToFightSpace(x.Time) > end + 10000);
             }
 
             string[] namesDeiSplit = new [] { "Thief", "Gambler", "Drunkard" };
@@ -320,11 +320,11 @@ namespace LuckParser.Models
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    tpStart = (int)(c.Time - log.FightData.FightStart);
+                    tpStart = (int)(log.FightData.ToFightSpace(c.Time));
                 }
                 else
                 {
-                    int tpEnd = (int)(c.Time - log.FightData.FightStart);
+                    int tpEnd = (int)(log.FightData.ToFightSpace(c.Time));
                     Tuple<int, int> lifespan = new Tuple<int, int>(tpStart, tpEnd);
                     replay.Actors.Add(new CircleActor(true, 0, 180, lifespan, "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));
                     replay.Actors.Add(new CircleActor(true, tpEnd, 180, lifespan, "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));

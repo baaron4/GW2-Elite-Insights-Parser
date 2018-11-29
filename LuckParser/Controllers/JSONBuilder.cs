@@ -148,8 +148,8 @@ namespace LuckParser.Controllers
                     HitboxWidth = target.HitboxWidth,
                     Dps1s = Build1SDPS(target, null),
                     Rotation = BuildRotation(target.GetCastLogs(_log, 0, _log.FightData.FightDuration)),
-                    FirstAware = (int)(target.FirstAware - _log.FightData.FightStart),
-                    LastAware = (int)(target.LastAware - _log.FightData.FightStart),
+                    FirstAware = (int)(_log.FightData.ToFightSpace(target.FirstAware)),
+                    LastAware = (int)(_log.FightData.ToFightSpace(target.LastAware)),
                     Minions = BuildMinions(target),
                     TotalDamageDist = BuildDamageDist(target, null),
                     TotalDamageTaken = BuildDamageTaken(target),
@@ -244,28 +244,26 @@ namespace LuckParser.Controllers
         private List<JsonDeathRecap> BuilDeathRecap(Player player)
         {
             List<JsonDeathRecap> res = new List<JsonDeathRecap>();
-            long start = _log.FightData.FightStart;
-            long end = _log.FightData.FightEnd;
-            List<CombatItem> deads = _log.CombatData.GetStates(player.InstID, ParseEnum.StateChange.ChangeDead, start, end);
-            List<CombatItem> downs = _log.CombatData.GetStates(player.InstID, ParseEnum.StateChange.ChangeDown, start, end);
-            long lastTime = start;
+            List<CombatItem> deads = _log.CombatData.GetStates(player.InstID, ParseEnum.StateChange.ChangeDead, _log.FightData.FightStart, _log.FightData.FightEnd);
+            List<CombatItem> downs = _log.CombatData.GetStates(player.InstID, ParseEnum.StateChange.ChangeDown, _log.FightData.FightStart, _log.FightData.FightEnd);
+            long lastTime = _log.FightData.FightStart;
             List<DamageLog> damageLogs = player.GetDamageTakenLogs(null, _log, 0, _log.FightData.FightDuration);
             foreach (CombatItem dead in deads)
             {
                 JsonDeathRecap recap = new JsonDeathRecap()
                 {
-                    Time = (int)(dead.Time - start)
+                    Time = (int)(_log.FightData.ToFightSpace(dead.Time))
                 };
                 CombatItem downed = downs.LastOrDefault(x => x.Time <= dead.Time && x.Time >= lastTime);
                 if (downed != null)
                 {
-                    List<DamageLog> damageToDown = damageLogs.Where(x => x.Time < downed.Time - start && x.Damage > 0 && x.Time > lastTime - start).ToList();
+                    List<DamageLog> damageToDown = damageLogs.Where(x => x.Time < _log.FightData.ToFightSpace(downed.Time) && x.Damage > 0 && x.Time > _log.FightData.ToFightSpace(lastTime)).ToList();
                     recap.ToDown = damageToDown.Count > 0 ? new List<JsonDeathRecap.DamageItem>() : null;
                     int damage = 0;
                     for (int i = damageToDown.Count - 1; i >= 0; i--)
                     {
                         DamageLog dl = damageToDown[i];
-                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);
+                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, _log.FightData.ToLogSpace(dl.Time));
                         JsonDeathRecap.DamageItem item = new JsonDeathRecap.DamageItem()
                         {
                             Time = (int)dl.Time,
@@ -281,12 +279,12 @@ namespace LuckParser.Controllers
                             break;
                         }
                     }
-                    List<DamageLog> damageToKill = damageLogs.Where(x => x.Time > downed.Time - start && x.Time < dead.Time - start && x.Damage > 0 && x.Time > lastTime - start).ToList();
+                    List<DamageLog> damageToKill = damageLogs.Where(x => x.Time > _log.FightData.ToFightSpace(downed.Time) && x.Time < _log.FightData.ToFightSpace(dead.Time) && x.Damage > 0 && x.Time > _log.FightData.ToFightSpace(lastTime)).ToList();
                     recap.ToKill = damageToKill.Count > 0 ? new List<JsonDeathRecap.DamageItem>() : null;
                     for (int i = damageToKill.Count - 1; i >= 0; i--)
                     {
                         DamageLog dl = damageToKill[i];
-                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);
+                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, _log.FightData.ToLogSpace(dl.Time));
                         JsonDeathRecap.DamageItem item = new JsonDeathRecap.DamageItem()
                         {
                             Time = (int)dl.Time,
@@ -301,13 +299,13 @@ namespace LuckParser.Controllers
                 else
                 {
                     recap.ToDown = null;
-                    List<DamageLog> damageToKill = damageLogs.Where(x => x.Time < dead.Time - start && x.Damage > 0 && x.Time > lastTime - start).ToList();
+                    List<DamageLog> damageToKill = damageLogs.Where(x => x.Time < _log.FightData.ToFightSpace(dead.Time) && x.Damage > 0 && x.Time > _log.FightData.ToFightSpace(lastTime)).ToList();
                     recap.ToKill = damageToKill.Count >0 ? new List<JsonDeathRecap.DamageItem>() : null;
                     int damage = 0;
                     for (int i = damageToKill.Count - 1; i >= 0; i--)
                     {
                         DamageLog dl = damageToKill[i];
-                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);
+                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, _log.FightData.ToLogSpace(dl.Time));
                         JsonDeathRecap.DamageItem item = new JsonDeathRecap.DamageItem()
                         {
                             Time = (int)dl.Time,
