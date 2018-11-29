@@ -50,8 +50,9 @@ namespace LuckParser.Models.ParseModels
                 {
                     long targetStart = target.FirstAware - log.FightData.FightStart;
                     long targetEnd = target.LastAware - log.FightData.FightStart;
-                    return list.Where(x => x.Time >= start && x.Time > targetStart && x.Time <= end && x.Time < targetEnd).ToList();
-                } else
+                    return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd).ToList();
+                }
+                else
                 {
                     return new List<DamageLog>();
                 }
@@ -71,7 +72,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     long targetStart = target.FirstAware - log.FightData.FightStart;
                     long targetEnd = target.LastAware - log.FightData.FightStart;
-                    return list.Where(x => x.Time >= start && x.Time > targetStart && x.Time <= end && x.Time < targetEnd).ToList();
+                    return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd).ToList();
                 }
                 else
                 {

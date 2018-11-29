@@ -13,7 +13,7 @@ namespace LuckParser.Controllers
     {
         public static SettingsContainer Settings;
   
-        public static void WriteCombatReplayInterface(StreamWriter sw, Tuple<int,int> canvasSize, ParsedLog log)
+        public static string CreateCombatReplayInterface(Tuple<int,int> canvasSize, ParsedLog log)
         {
             string replayHTML = Properties.Resources.tmplCombatReplay;
             replayHTML = replayHTML.Replace("${canvasX}", canvasSize.Item1.ToString());
@@ -39,14 +39,11 @@ namespace LuckParser.Controllers
                 groupsString += replayGroupHTML;
             }
             replayHTML = replayHTML.Replace("<!--${groups}-->", groupsString);
-            sw.Write(replayHTML);
+            return replayHTML;
         }
 
-        public static void WriteCombatReplayScript(StreamWriter sw, ParsedLog log, Tuple<int,int> canvasSize, CombatReplayMap map, int pollingRate)
+        public static string GetDynamicCombatReplayScript(ParsedLog log, int pollingRate, CombatReplayMap map)
         {
-            sw.WriteLine("<script>");
-            sw.WriteLine(Properties.Resources.combatreplay_js);
-            sw.WriteLine("</script>");
 
             Dictionary<string, object> options = new Dictionary<string, object>
             {
@@ -107,15 +104,26 @@ namespace LuckParser.Controllers
                     actors += a.GetCombatReplayJSON(map);
                 }
             }
+            string script = "var options = " + JsonConvert.SerializeObject(options) + ";";
+            script += "var actors = [" + actors + "];";
+            script += "var initialOnLoad = window.onload;";
+            script += "window.onload = function () { if (initialOnLoad) {initialOnLoad();} initCombatReplay(actors, options);};";
+            return script;
+        }
 
-            sw.WriteLine("<script>");
+        public static string CreateCombatReplayScript(ParsedLog log, CombatReplayMap map, int pollingRate)
+        {
+            string script = "";
+            script += "<script>";
+            script += Properties.Resources.combatreplay_js;
+            script += "</script>";
+
+            script += "<script>";
             {
-                sw.WriteLine("var options = " + JsonConvert.SerializeObject(options) + ";");
-                sw.WriteLine("var actors = [" + actors + "];");
-                sw.WriteLine("var initialOnLoad = window.onload;");
-                sw.WriteLine("window.onload = function () { if (initialOnLoad) {initialOnLoad();} initCombatReplay(actors, options);};");
+                script += GetDynamicCombatReplayScript(log, pollingRate, map);
             }
-            sw.WriteLine("</script>");
+            script += "</script>";
+            return script;
         }
     }
 }

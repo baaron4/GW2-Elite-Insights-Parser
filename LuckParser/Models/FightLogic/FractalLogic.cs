@@ -15,9 +15,9 @@ namespace LuckParser.Models
             CanCombatReplay = true;
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(37695, "Flux Bomb", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Unknown, "symbol:'circle',color:'rgb(150,0,255)',size:10,", "FBmb","Flux Bomb application", "Flux Bomb",0),
-            new Mechanic(36393, "Flux Bomb", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Unknown, "symbol:'circle-open',color:'rgb(150,0,255)',size:10,", "FB.dmg","Flux Bomb hit", "Flux Bomb dmg",0),
-            new Mechanic(19684, "Fractal Vindicator", Mechanic.MechType.Spawn, ParseEnum.TargetIDS.Unknown, "symbol:'star-diamond-open',color:'rgb(0,0,0)',size:10,", "FV.spwn","Fractal Vindicator spawned", "Vindicator spawn",0),
+            new Mechanic(37695, "Flux Bomb", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle","rgb(150,0,255)",10), "FBmb","Flux Bomb application", "Flux Bomb",0),
+            new Mechanic(36393, "Flux Bomb", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle-open","rgb(150,0,255)",10), "FB.dmg","Flux Bomb hit", "Flux Bomb dmg",0),
+            new Mechanic(19684, "Fractal Vindicator", Mechanic.MechType.Spawn, new MechanicPlotlySetting("star-diamond-open","rgb(0,0,0)",10), "FV.spwn","Fractal Vindicator spawned", "Vindicator spawn",0),
             });
         }
 

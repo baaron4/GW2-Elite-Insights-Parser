@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace LuckParser.Models.HtmlModels
-{
-    [DataContract]
+{  
     public class DeathRecapDto
     {
-        [DataMember] public long id;
-        [DataMember] public long time;
-        [DataMember] public List<object[]> toDown;
-        [DataMember] public List<object[]> toKill;
+        public long id;
+        [DefaultValue(null)]
+        public long time;
+        public List<object[]> toDown;
+        public List<object[]> toKill;
     }
 }

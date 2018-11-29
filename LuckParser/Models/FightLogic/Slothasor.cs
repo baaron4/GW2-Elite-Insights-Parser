@@ -13,20 +13,20 @@ namespace LuckParser.Models
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(34479, "Tantrum", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Slothasor, "symbol:'circle-open',color:'rgb(255,200,0)'", "Tntrm","Tantrum (Triple Circles after Ground slamming)", "Tantrum",5000), 
-            new Mechanic(34387, "Volatile Poison", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Slothasor, "symbol:'circle',color:'rgb(255,0,0)'", "Psn","Volatile Poison Application (Special Action Key)", "Poison (Action Key)",0),
-            new Mechanic(34481, "Volatile Poison", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Slothasor, "symbol:'circle-open',color:'rgb(255,0,0)'", "P.dmg","Stood in Volatile Poison", "Poison dmg",0),
-            new Mechanic(34516, "Halitosis", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Slothasor, "symbol:'triangle-right-open',color:'rgb(255,140,0)'", "FlmBrth","Halitosis (Flame Breath)", "Flame Breath",0),
-            new Mechanic(34482, "Spore Release", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Slothasor, "symbol:'pentagon',color:'rgb(255,0,0)'", "Shake","Spore Release (Coconut Shake)", "Shake",0),
-            new Mechanic(34362, "Magic Transformation", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Slothasor, "symbol:'hexagram',color:'rgb(0,255,255)'", "Slub","Magic Transformation (Ate Magic Mushroom)", "Slub Transform",0), 
-            //new Mechanic(34496, "Nauseated", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'diamond-tall-open',color:'rgb(200,140,255)'", "Slub CD",0), //can be skipped imho, identical person and timestamp as Slub Transform
-            new Mechanic(34508, "Fixated", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Slothasor, "symbol:'star',color:'rgb(255,0,255)'", "Fix","Fixated by Slothasor", "Fixated",0),
-            new Mechanic(34565, "Toxic Cloud", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Slothasor, "symbol:'pentagon-open',color:'rgb(0,128,0)'", "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0), 
-            new Mechanic(34537, "Toxic Cloud", Mechanic.MechType.SkillOnPlayer, ParseEnum.TargetIDS.Slothasor, "symbol:'pentagon-open',color:'rgb(0,128,0)'", "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0),
-            new Mechanic(791, "Fear", Mechanic.MechType.PlayerBoon, ParseEnum.TargetIDS.Slothasor, "symbol:'square-open',color:'rgb(255,0,0)'", "Fear","Hit by fear after breakbar", "Feared",0,(condition=> condition.CombatItem.Value == 8000)),
-            new Mechanic(34467, "Narcolepsy", Mechanic.MechType.EnemyBoon, ParseEnum.TargetIDS.Slothasor, "symbol:'diamond-tall',color:'rgb(0,160,150)'", "CC","Narcolepsy (Breakbar)", "Breakbar",0),
-            new Mechanic(34467, "Narcolepsy", Mechanic.MechType.EnemyBoonStrip, ParseEnum.TargetIDS.Slothasor, "symbol:'diamond-tall',color:'rgb(255,0,0)'", "CC.Fail","Narcolepsy (Failed CC)", "CC Fail",0,(condition => condition.CombatItem.Value > 120000)),
-            new Mechanic(34467, "Narcolepsy", Mechanic.MechType.EnemyBoonStrip, ParseEnum.TargetIDS.Slothasor, "symbol:'diamond-tall',color:'rgb(0,160,0)'", "CCed","Narcolepsy (Breakbar broken)", "CCed",0,(condition => condition.CombatItem.Value <= 120000))
+            new Mechanic(34479, "Tantrum", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle-open","rgb(255,200,0)"), "Tntrm","Tantrum (Triple Circles after Ground slamming)", "Tantrum",5000), 
+            new Mechanic(34387, "Volatile Poison", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Psn","Volatile Poison Application (Special Action Key)", "Poison (Action Key)",0),
+            new Mechanic(34481, "Volatile Poison", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "P.dmg","Stood in Volatile Poison", "Poison dmg",0),
+            new Mechanic(34516, "Halitosis", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("triangle-right-open","rgb(255,140,0)"), "FlmBrth","Halitosis (Flame Breath)", "Flame Breath",0),
+            new Mechanic(34482, "Spore Release", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("pentagon","rgb(255,0,0)"), "Shake","Spore Release (Coconut Shake)", "Shake",0),
+            new Mechanic(34362, "Magic Transformation", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("hexagram","rgb(0,255,255)"), "Slub","Magic Transformation (Ate Magic Mushroom)", "Slub Transform",0), 
+            //new Mechanic(34496, "Nauseated", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, new MechanicPlotlySetting("diamond-tall-open","rgb(200,140,255)"), "Slub CD",0), //can be skipped imho, identical person and timestamp as Slub Transform
+            new Mechanic(34508, "Fixated", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("star","rgb(255,0,255)"), "Fix","Fixated by Slothasor", "Fixated",0),
+            new Mechanic(34565, "Toxic Cloud", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("pentagon-open","rgb(0,128,0)"), "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0), 
+            new Mechanic(34537, "Toxic Cloud", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("pentagon-open","rgb(0,128,0)"), "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0),
+            new Mechanic(791, "Fear", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("square-open","rgb(255,0,0)"), "Fear","Hit by fear after breakbar", "Feared",0,(condition=> condition.CombatItem.Value == 8000)),
+            new Mechanic(34467, "Narcolepsy", Mechanic.MechType.EnemyBoon, new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Narcolepsy (Breakbar)", "Breakbar",0),
+            new Mechanic(34467, "Narcolepsy", Mechanic.MechType.EnemyBoonStrip, new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC.Fail","Narcolepsy (Failed CC)", "CC Fail",0,(condition => condition.CombatItem.Value > 120000)),
+            new Mechanic(34467, "Narcolepsy", Mechanic.MechType.EnemyBoonStrip, new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Narcolepsy (Breakbar broken)", "CCed",0,(condition => condition.CombatItem.Value <= 120000))
             });
             Extension = "sloth";
             IconUrl = "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";

@@ -1,14 +1,14 @@
-﻿using System.Runtime.Serialization;
+﻿using System.ComponentModel;
 
 namespace LuckParser.Models.HtmlModels
-{
-    [DataContract]
+{   
     public class FoodDto
     {
-        [DataMember] public double time;
-        [DataMember] public double duration;
-        [DataMember] public long id;
-        [DataMember] public int stack;
-        [DataMember(EmitDefaultValue = false)] public bool dimished;
+        [DefaultValue(null)]
+        public double time;
+        public double duration;
+        public long id;
+        public int stack;
+        public bool dimished;
     }
 }

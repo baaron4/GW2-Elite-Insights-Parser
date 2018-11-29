@@ -4,7 +4,7 @@ namespace LuckParser.Models.ParseModels
 {
     public class CombatItem
     {
-        public long Time { get; }
+        public long Time { get; set; }
         public ulong SrcAgent { get; set; }
         public ulong DstAgent { get; set; }
         public int Value { get; }
