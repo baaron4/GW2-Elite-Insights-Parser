@@ -341,7 +341,7 @@ namespace LuckParser.Controllers
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
             long start = _log.FightData.ToLogSpace(phase.Start);
-            long end = _log.FightData.ToFightSpace(phase.End);
+            long end = _log.FightData.ToLogSpace(phase.End);
             Dictionary<Target, FinalStats> targetDict = new Dictionary<Target, FinalStats>();
             foreach (Target target in _log.FightData.Logic.Targets)
             {

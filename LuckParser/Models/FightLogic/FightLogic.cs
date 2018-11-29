@@ -362,7 +362,7 @@ namespace LuckParser.Models
                                 }
                                 if (c.IsActivation.IsCasting() && c.SrcInstid == p.InstID)
                                 {
-                                    mechData[mech].Add(new MechanicLog(log.FightData.ToLogSpace(c.Time), mech, p));
+                                    mechData[mech].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), mech, p));
 
                                 }
                             }
@@ -438,7 +438,7 @@ namespace LuckParser.Models
                             }
                             if (amp != null)
                             {
-                                mechData[mech].Add(new MechanicLog(log.FightData.ToLogSpace(c.Time), mech, amp));
+                                mechData[mech].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), mech, amp));
                             }
 
                         }
@@ -484,7 +484,7 @@ namespace LuckParser.Models
                             }
                             if (amp != null)
                             {
-                                mechData[mech].Add(new MechanicLog(log.FightData.ToLogSpace(c.Time), mech, amp));
+                                mechData[mech].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), mech, amp));
                             }
                         }
                         break;
