@@ -155,6 +155,7 @@ namespace LuckParser.Models
                     }
                 }
             }
+            phases.RemoveAll(x => x.GetDuration() < 1000);
             for (int i = 1; i < phases.Count; i++)
             {
                 string name;
@@ -205,7 +206,6 @@ namespace LuckParser.Models
                     }
                 }
             }
-            phases.RemoveAll(x => x.GetDuration() < 1000);
             return phases;
         }
 

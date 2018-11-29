@@ -61,12 +61,12 @@ namespace LuckParser.Models
             {
                 phases.Add(new PhaseData(start, fightDuration));
             }
+            phases.RemoveAll(x => x.GetDuration() < 1000);
             for (int i = 1; i < phases.Count; i++)
             {
                 phases[i].Name = "Phase " + i;
                 phases[i].Targets.Add(mainTarget);
             }
-            phases.RemoveAll(x => x.GetDuration() < 1000);
             return phases;
         }
 
