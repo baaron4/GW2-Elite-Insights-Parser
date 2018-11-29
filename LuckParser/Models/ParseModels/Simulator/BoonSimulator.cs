@@ -23,7 +23,7 @@ namespace LuckParser.Models.ParseModels
 
             public BoonStackItem(BoonStackItem other, long startShift, long durationShift)
             {
-                Start = Math.Max(other.Start + startShift, 0);
+                Start = other.Start + startShift;
                 BoonDuration = other.BoonDuration - durationShift;
                 Src = other.Src;
             }
