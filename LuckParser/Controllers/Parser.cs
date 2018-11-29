@@ -565,11 +565,9 @@ namespace LuckParser.Controllers
                         break;
                     case ParseEnum.StateChange.LogStart:
                         _logData.SetLogStart(c.Value);
-                        _fightData.FightStart = c.Time;
                         break;
                     case ParseEnum.StateChange.LogEnd:
                         _logData.SetLogEnd(c.Value);
-                        _fightData.FightEnd = c.Time;
                         break;
                     case ParseEnum.StateChange.MaxHealthUpdate:
                         _fightData.Logic.SetMaxHealth(c.SrcInstid, c.Time, (int)c.DstAgent);
