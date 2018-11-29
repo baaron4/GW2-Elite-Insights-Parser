@@ -15,13 +15,7 @@ namespace LuckParser.Models.ParseModels
         public readonly FightLogic Logic;
         public long FightStart { get; set; }
         public long FightEnd { get; set; } = long.MaxValue;
-        public long FightDuration
-        {
-            get
-            {
-                return FightEnd - FightStart;
-            }
-        }
+        public long FightDuration => FightEnd - FightStart;
         public bool Success { get; set; }
         public string Name => Logic.GetFightName() + (_isCM == 1 ? " CM" : "") ;
         private int _isCM = -1;
