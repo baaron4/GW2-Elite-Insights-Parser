@@ -372,9 +372,9 @@ namespace LuckParser.Controllers
                 }
                 if (cl.EndActivation == ParseEnum.Activation.CancelFire)
                 {
-                    final.Saved++;
                     if (cl.ActualDuration < cl.ExpectedDuration)
                     {
+                        final.Saved++;
                         final.TimeSaved += cl.ExpectedDuration - cl.ActualDuration;
                     }
                 }
