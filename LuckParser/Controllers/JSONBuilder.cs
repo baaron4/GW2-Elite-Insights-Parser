@@ -26,7 +26,7 @@ namespace LuckParser.Controllers
         //
         private readonly Dictionary<long, string> _skillNames = new Dictionary<long, string>();
         private readonly Dictionary<long, string> _buffNames = new Dictionary<long, string>();
-        private readonly Dictionary<string, List<long>> _personalBuffs = new Dictionary<string, List<long>>();
+        private readonly Dictionary<string, HashSet<long>> _personalBuffs = new Dictionary<string, HashSet<long>>();
 
         public static void UpdateStatisticSwitches(StatisticsCalculator.Switches switches)
         {
@@ -552,8 +552,8 @@ namespace LuckParser.Controllers
             int phases = _statistics.Phases.Count;
             var boons = new Dictionary<long, JsonTargetBuffs>();
 
-            var boonsFound = new List<long>();
-            var boonsNotFound = new List<long>();
+            var boonsFound = new HashSet<long>();
+            var boonsNotFound = new HashSet<long>();
 
             for (int phaseIndex = 0; phaseIndex < phases; phaseIndex++)
             {
@@ -654,7 +654,7 @@ namespace LuckParser.Controllers
                             }
                             else
                             {
-                                _personalBuffs[player.Prof] = new List<long>()
+                                _personalBuffs[player.Prof] = new HashSet<long>()
                                 {
                                     boon.Key
                                 };
