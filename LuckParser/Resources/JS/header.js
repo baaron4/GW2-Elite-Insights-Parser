@@ -58,16 +58,13 @@ var compileHeader = function () {
     });
 
     Vue.component("player-component", {
-        props: ["players", "crmode"],
+        props: ["players"],
         template: "#tmplPlayers",
         methods: {
             getIcon: function (path) {
                 return urls[path];
             },
             select: function (player, groups) {
-                if (this.crmode) {
-                    return;
-                }
                 var oldStatus = player.active;
                 for (var i = 0; i < groups.length; i++) {
                     var group = groups[i];

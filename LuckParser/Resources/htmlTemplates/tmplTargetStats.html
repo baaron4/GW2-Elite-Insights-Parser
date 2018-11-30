@@ -6,7 +6,15 @@
             </a>
         </li>
     </ul>
-    <h3 v-for="(target, targetid) in targets" :key="targetid" v-show="phase.focus === target" class="text-center mt-2"><img :alt="target.name" class="icon-lg mt-2" :src="target.icon">{{target.name}}</h3>
+    <div v-for="(target, targetid) in targets" :key="targetid" v-show="phase.focus === target">
+        <div class="d-flex flex-row justify-content-center align-items-center">
+            <div class="d-flex flex-column justify-content-center align-items-center">
+                <img :alt="target.name" class="icon-lg mt-2" :src="target.icon">
+                <target-data-component :target="target"></target-data-component>
+            </div>
+            <h3 class="text-center mt-2">{{target.name}}</h3>
+        </div>
+    </div>
     <ul class="nav nav-tabs">
         <li>
             <a class="nav-link" :class="{active: mode === 0}" @click="mode = 0">
@@ -29,7 +37,7 @@
     </ul>
     <keep-alive>
         <target-tab-component v-for="(target, targetid) in targets" :key="targetid" v-if="phase.focus === target"
-            :target="target" :targetindex="targetid" :phaseindex="phaseindex" :phase="phase" :phases="phases" :players="players" :boons="boons"
-            :conditions="conditions" :mode="mode" :light="light"></target-tab-component>
+            :target="target" :targetindex="targetid" :phaseindex="phaseindex" :phase="phase" :phases="phases" :players="players"
+            :boons="boons" :conditions="conditions" :mode="mode" :light="light"></target-tab-component>
     </keep-alive>
 </div>
