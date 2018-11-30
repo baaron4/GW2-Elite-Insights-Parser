@@ -302,9 +302,6 @@
     <None Include="Resources\theme-cosmo.png" />
     <None Include="Resources\theme-slate.png" />
     <None Include="Resources\combatreplay.js" />
-    <None Include="Properties\Version.tt.old">
-      <LastGenOutput>Version.tt.cs</LastGenOutput>
-    </None>
     <None Include="Resources\combatReplayTemplates\tmplCombatReplay.html" />
     <Content Include="Resources\ei.css" />
     <Content Include="Resources\ei.js" />
