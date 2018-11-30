@@ -38,7 +38,8 @@ window.onload = function () {
             datatypes: DataTypes,
             combatreplay: logData.combatReplay,
             light: logData.lightTheme,
-            mode: 0
+            mode: 0,
+            animate: false
         },
         methods: {
             switchCombatReplayButtons: function(from, to) {          
@@ -60,7 +61,20 @@ window.onload = function () {
                 var theme = document.getElementById('theme');
                 theme.href = themes[newStyle];              
                 this.switchCombatReplayButtons(this.light ? 'btn-dark' : 'btn-light', this.light ? 'btn-light' : 'btn-dark');
-            }
+            },
+            changeMode: function(iMode) {
+                if (this.mode === iMode) {
+                    return;
+                }
+                var oldMode = this.mode;
+                this.mode = iMode;
+                if (this.mode !== 1 && oldMode === 1) {
+                    this.animate = animation !== null;
+                    stopAnimate();
+                } else if (this.mode === 1 && this.animate) {
+                    startAnimate();
+                }
+            },
         },
         computed: {
             activePhase: function () {
