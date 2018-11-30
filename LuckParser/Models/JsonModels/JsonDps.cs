@@ -16,7 +16,6 @@ namespace LuckParser.Models
             Dps = new int[phaseCount];
             PowerDamage = new int[phaseCount];
             PowerDps = new int[phaseCount];
-            PlayerPowerDamage = new int[phaseCount];
         }
 
         public int[] Dps;
@@ -25,6 +24,5 @@ namespace LuckParser.Models
         public int[] CondiDamage;
         public int[] PowerDps;
         public int[] PowerDamage;
-        public int[] PlayerPowerDamage;
     }
 }

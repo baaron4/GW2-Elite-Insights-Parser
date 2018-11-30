@@ -23,7 +23,7 @@ namespace LuckParser.Models.ParseModels
 
             public BoonStackItem(BoonStackItem other, long startShift, long durationShift)
             {
-                Start = Math.Max(other.Start + startShift, 0);
+                Start = other.Start + startShift;
                 BoonDuration = other.BoonDuration - durationShift;
                 Src = other.Src;
             }
@@ -73,11 +73,16 @@ namespace LuckParser.Models.ParseModels
 
         public void Simulate(List<BoonLog> logs, long fightDuration)
         {
-            long timeCur = 0;
-            long timePrev = 0;
+            long firstTimeValue = logs.Count > 0 ? Math.Min(logs.First().Time, 0) : 0;
+            long timeCur = firstTimeValue;
+            long timePrev = firstTimeValue;
             foreach (BoonLog log in logs)
             {
                 timeCur = log.Time;
+                if (timeCur - timePrev < 0)
+                {
+                    throw new InvalidOperationException("Negative passed time in boon simulation");
+                }
                 Update(timeCur - timePrev);
                 if (log.GetRemoveType() == ParseEnum.BuffRemove.None)
                 {
@@ -110,8 +115,6 @@ namespace LuckParser.Models.ParseModels
                 bool found = _logic.StackEffect(_log, toAdd, BoonStack, OverstackSimulationResult);
                 if (!found)
                 {
-                    long overstackValue = boonDuration;
-                    ushort srcValue = srcinstid;
                     OverstackSimulationResult.Add(new BoonSimulationOverstackItem(srcinstid, boonDuration,start));                 
                 }
             }

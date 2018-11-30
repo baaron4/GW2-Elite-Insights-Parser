@@ -95,13 +95,13 @@ namespace LuckParser.Models
                 {
                     if (start == 0)
                     {
-                        start = c.Time - log.FightData.FightStart;
+                        start = log.FightData.ToFightSpace(c.Time);
                     }
                     orbCount++;
                 }
                 else if (start != 0)
                 {
-                    segments.Add(new BoonsGraphModel.Segment(start, Math.Min(c.Time - log.FightData.FightStart, fightDuration), orbCount));
+                    segments.Add(new BoonsGraphModel.Segment(start, Math.Min(log.FightData.ToFightSpace(c.Time), fightDuration), orbCount));
                     orbCount = 0;
                     start = 0;
                 }
@@ -290,11 +290,11 @@ namespace LuckParser.Models
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    xeraFuryStart = (int)(c.Time - log.FightData.FightStart);
+                    xeraFuryStart = (int)(log.FightData.ToFightSpace(c.Time));
                 }
                 else
                 {
-                    int xeraFuryEnd = (int)(c.Time - log.FightData.FightStart);
+                    int xeraFuryEnd = (int)(log.FightData.ToFightSpace(c.Time));
                     replay.Actors.Add(new CircleActor(true, 0, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.2)", new AgentConnector(p)));
                     replay.Actors.Add(new CircleActor(true, xeraFuryEnd, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.4)", new AgentConnector(p)));
                 }
@@ -308,12 +308,12 @@ namespace LuckParser.Models
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    fixationStatueStart = (int)(c.Time - log.FightData.FightStart);
+                    fixationStatueStart = (int)(log.FightData.ToFightSpace(c.Time));
                     statue = TrashMobs.FirstOrDefault(x => x.Agent == c.SrcAgent);
                 }
                 else
                 {
-                    int fixationStatueEnd = (int)(c.Time - log.FightData.FightStart);
+                    int fixationStatueEnd = (int)(log.FightData.ToFightSpace(c.Time));
                     Tuple<int, int> duration = new Tuple<int, int>(fixationStatueStart, fixationStatueEnd);
                     if (statue != null)
                     {

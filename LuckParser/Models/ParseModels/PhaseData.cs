@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Models.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,7 +20,7 @@ namespace LuckParser.Models.ParseModels
             Start = start;
             End = end;
         }
-        
+
         public long GetDuration(string format = "ms")
         {
             switch (format)
@@ -34,9 +35,9 @@ namespace LuckParser.Models.ParseModels
 
         }
 
-        public bool InInterval(long time, long offset = 0)
+        public bool InInterval(long time)
         {
-            return Start <= time - offset && time - offset <= End;
+            return Start <= time && time <= End;
         }
 
         public void OverrideStart(long start)
@@ -49,12 +50,12 @@ namespace LuckParser.Models.ParseModels
             End = end;
         }
 
-        public void OverrideTimes(long offset, CombatData combatData)
+        public void OverrideTimes(ParsedLog log)
         {
             if (Targets.Count > 0)
             {
-                List<CombatItem> deathEvents = combatData.GetStatesData(DataModels.ParseEnum.StateChange.ChangeDead);
-                Start = Math.Max(Start, Targets.Min(x => x.FirstAware)- offset);
+                List<CombatItem> deathEvents = log.CombatData.GetStatesData(DataModels.ParseEnum.StateChange.ChangeDead);
+                Start = Math.Max(Start, log.FightData.ToFightSpace(Targets.Min(x => x.FirstAware)));
                 long end = long.MinValue;
                 foreach (Target target in Targets)
                 {
@@ -66,7 +67,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     end = Math.Max(end, dead);
                 }
-                End = Math.Min(End, end - offset);
+                End = Math.Min(End, log.FightData.ToFightSpace(end));
             }
         }
     }

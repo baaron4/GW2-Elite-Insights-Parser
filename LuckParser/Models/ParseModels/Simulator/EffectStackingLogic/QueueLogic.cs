@@ -24,6 +24,7 @@ namespace LuckParser.Models.ParseModels
             BoonStackItem minItem = stacks.MinBy(x => x.BoonDuration);
             if (minItem.BoonDuration >= stackItem.BoonDuration)
             {
+                stacks.Insert(0, first);
                 return false;
             }
             overstacks.Add(new BoonSimulationOverstackItem(minItem.Src, minItem.BoonDuration, minItem.Start));

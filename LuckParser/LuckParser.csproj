@@ -162,7 +162,6 @@
     <Compile Include="Models\HtmlModels\PlayerDto.cs" />
     <Compile Include="Models\JsonModels\JsonConsumable.cs" />
     <Compile Include="Models\JsonModels\JsonDamageDist.cs" />
-    <Compile Include="Models\JsonModels\JsonDeathRecap.cs" />
     <Compile Include="Models\JsonModels\JsonLog.cs" />
     <Compile Include="Models\JsonModels\JsonMinions.cs" />
     <Compile Include="Models\JsonModels\JsonSkill.cs" />

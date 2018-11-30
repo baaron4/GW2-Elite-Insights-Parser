@@ -62,7 +62,7 @@ namespace LuckParser.Models
                 CombatItem c = invulsSab[i];
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    end = c.Time - log.FightData.FightStart;
+                    end = log.FightData.ToFightSpace(c.Time);
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsSab.Count - 1)
                     {
@@ -71,7 +71,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    start = c.Time - log.FightData.FightStart;
+                    start = log.FightData.ToFightSpace(c.Time);
                     phases.Add(new PhaseData(end, start));
                     mainTarget.AddCustomCastLog(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
                 }
@@ -241,7 +241,7 @@ namespace LuckParser.Models
             List<CombatItem> timedBombs = log.GetBoonData(31485).Where(x => x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
             foreach (CombatItem c in timedBombs)
             {
-                int start = (int)(c.Time - log.FightData.FightStart);
+                int start = (int)(log.FightData.ToFightSpace(c.Time));
                 int end = start + 3000;
                 replay.Actors.Add(new CircleActor(false, 0, 280, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(p)));
                 replay.Actors.Add(new CircleActor(true, end, 280, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(p)));
@@ -253,11 +253,11 @@ namespace LuckParser.Models
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    sapperStart = (int)(c.Time - log.FightData.FightStart);
+                    sapperStart = (int)(log.FightData.ToFightSpace(c.Time));
                 }
                 else
                 {
-                    int sapperEnd = (int)(c.Time - log.FightData.FightStart); replay.Actors.Add(new CircleActor(false, 0, 180, new Tuple<int, int>(sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)", new AgentConnector(p)));
+                    int sapperEnd = (int)(log.FightData.ToFightSpace(c.Time)); replay.Actors.Add(new CircleActor(false, 0, 180, new Tuple<int, int>(sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)", new AgentConnector(p)));
                     replay.Actors.Add(new CircleActor(true, sapperStart + 5000, 180, new Tuple<int, int>(sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)", new AgentConnector(p)));
                 }
             }

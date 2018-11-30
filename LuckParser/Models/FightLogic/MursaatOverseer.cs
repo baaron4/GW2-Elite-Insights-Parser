@@ -58,11 +58,11 @@ namespace LuckParser.Models
                     {
                         if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                         {
-                            shieldStart = (int)(c.Time - log.FightData.FightStart);
+                            shieldStart = (int)(log.FightData.ToFightSpace(c.Time));
                         }
                         else
                         {
-                            int shieldEnd = (int)(c.Time - log.FightData.FightStart);
+                            int shieldEnd = (int)(log.FightData.ToFightSpace(c.Time));
                             replay.Actors.Add(new CircleActor(true, 0, shieldRadius, new Tuple<int, int>(shieldStart, shieldEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(mob)));
                         }
                     }

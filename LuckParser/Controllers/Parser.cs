@@ -497,7 +497,7 @@ namespace LuckParser.Controllers
                     playerAgent.FirstAware = _fightData.FightStart;
                     playerAgent.LastAware = _fightData.FightEnd;
                 }
-                List<CombatItem> lp = _combatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.Despawn && x.SrcInstid == playerAgent.InstID && x.Time <= _fightData.FightEnd && x.Time >= _fightData.FightStart).ToList();
+                List<CombatItem> lp = _combatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.Despawn && x.SrcInstid == playerAgent.InstID).ToList();
                 Player player = new Player(playerAgent, _fightData.Logic.Mode == FightLogic.ParseMode.Fractal);
                 bool skip = false;
                 foreach (Player p in _playerList)
@@ -549,6 +549,11 @@ namespace LuckParser.Controllers
             {
                 _target = new Target(new AgentItem(0, "UNKNOWN"));
             }
+            if (_combatItems.Count > 0)
+            {
+                _fightData.FightStart = _combatItems.First().Time;
+                _fightData.FightEnd = _combatItems.Last().Time;
+            }
             // Dealing with special cases
             _fightData.Logic.SpecialParse(_fightData, _agentData, _combatItems);
             // Grab values threw combat data
@@ -565,18 +570,16 @@ namespace LuckParser.Controllers
                         break;
                     case ParseEnum.StateChange.LogStart:
                         _logData.SetLogStart(c.Value);
-                        _fightData.FightStart = c.Time;
                         break;
                     case ParseEnum.StateChange.LogEnd:
                         _logData.SetLogEnd(c.Value);
-                        _fightData.FightEnd = c.Time;
                         break;
                     case ParseEnum.StateChange.MaxHealthUpdate:
                         _fightData.Logic.SetMaxHealth(c.SrcInstid, c.Time, (int)c.DstAgent);
                         break;
                     case ParseEnum.StateChange.HealthUpdate:
                         //set health update
-                        _fightData.Logic.AddHealthUpdate(c.SrcInstid,c.Time, (int)(c.Time - _fightData.FightStart), (int)c.DstAgent);
+                        _fightData.Logic.AddHealthUpdate(c.SrcInstid,c.Time, (int)(_fightData.ToFightSpace(c.Time)), (int)c.DstAgent);
                         break;
                 }
             }
@@ -585,14 +588,6 @@ namespace LuckParser.Controllers
             if (_playerList.Count == 0)
             {
                 CompletePlayers();               
-            }
-            if (_fightData.FightStart == 0 && _combatItems.Count > 0)
-            {
-                _fightData.FightStart = _combatItems.First().Time;
-            }
-            if (_fightData.FightEnd== long.MaxValue && _combatItems.Count > 0)
-            {
-                _fightData.FightEnd = _combatItems.Last().Time;
             }
             _playerList = _playerList.OrderBy(a => a.Group).ToList();
             

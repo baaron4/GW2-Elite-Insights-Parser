@@ -59,7 +59,7 @@ namespace LuckParser.Models
                 CombatItem c = invulsGorse[i];
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    end = c.Time - log.FightData.FightStart;
+                    end = log.FightData.ToFightSpace(c.Time);
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsGorse.Count - 1)
                     {
@@ -68,7 +68,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    start = c.Time - log.FightData.FightStart;
+                    start = log.FightData.ToFightSpace(c.Time);
                     phases.Add(new PhaseData(end, start));
                     mainTarget.AddCustomCastLog(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
                 }
@@ -266,11 +266,11 @@ namespace LuckParser.Models
                     {
                         if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                         {
-                            protectionStart = (int)(c.Time - log.FightData.FightStart);
+                            protectionStart = (int)(log.FightData.ToFightSpace(c.Time));
                         }
                         else
                         {
-                            int protectionEnd = (int)(c.Time - log.FightData.FightStart);
+                            int protectionEnd = (int)(log.FightData.ToFightSpace(c.Time));
                             replay.Actors.Add(new CircleActor(true, 0, 300, new Tuple<int, int>(protectionStart, protectionEnd), "rgba(0, 180, 255, 0.5)", new AgentConnector(target)));
                         }
                     }

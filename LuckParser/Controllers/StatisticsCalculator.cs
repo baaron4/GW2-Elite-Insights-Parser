@@ -220,7 +220,7 @@ namespace LuckParser.Controllers
                     foreach (var pair in targetsFinal)
                     {
                         Target target = pair.Key;
-                        if (dl.DstInstId == target.InstID && dl.Time <= target.LastAware - _log.FightData.FightStart && dl.Time >= target.FirstAware - _log.FightData.FightStart)
+                        if (dl.DstInstId == target.InstID && dl.Time <= _log.FightData.ToFightSpace(target.LastAware) && dl.Time >= _log.FightData.ToFightSpace(target.FirstAware))
                         {
                             FinalStats targetFinal = pair.Value;
                             if (dl.Result == ParseEnum.Result.Crit)
@@ -340,8 +340,8 @@ namespace LuckParser.Controllers
         private FinalStatsAll GetFinalStats(Player p, int phaseIndex)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
-            long start = phase.Start + _log.FightData.FightStart;
-            long end = phase.End + _log.FightData.FightStart;
+            long start = _log.FightData.ToLogSpace(phase.Start);
+            long end = _log.FightData.ToLogSpace(phase.End);
             Dictionary<Target, FinalStats> targetDict = new Dictionary<Target, FinalStats>();
             foreach (Target target in _log.FightData.Logic.Targets)
             {
@@ -372,9 +372,9 @@ namespace LuckParser.Controllers
                 }
                 if (cl.EndActivation == ParseEnum.Activation.CancelFire)
                 {
-                    final.Saved++;
                     if (cl.ActualDuration < cl.ExpectedDuration)
                     {
+                        final.Saved++;
                         final.TimeSaved += cl.ExpectedDuration - cl.ActualDuration;
                     }
                 }
@@ -399,7 +399,7 @@ namespace LuckParser.Controllers
 
             // Counts
             CombatData combatData = _log.CombatData;
-            final.SwapCount = combatData.GetStates(p.InstID, ParseEnum.StateChange.WeaponSwap, start, end).Count;
+            final.SwapCount = p.GetCastLogs(_log,0, _log.FightData.FightDuration).Count(x => x.SkillId == SkillItem.WeaponSwapId);
 
             if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay)
             {
@@ -517,8 +517,8 @@ namespace LuckParser.Controllers
                     FinalDefenses final = new FinalDefenses();
 
                     PhaseData phase = _statistics.Phases[phaseIndex];
-                    long start = phase.Start + _log.FightData.FightStart;
-                    long end = phase.End + _log.FightData.FightStart;
+                    long start = _log.FightData.ToLogSpace(phase.Start);
+                    long end = _log.FightData.ToLogSpace(phase.End);
 
                     List<DamageLog> damageLogs = player.GetDamageTakenLogs(null, _log, phase.Start, phase.End);
                     //List<DamageLog> healingLogs = player.getHealingReceivedLogs(log, phase.getStart(), phase.getEnd());
@@ -529,7 +529,7 @@ namespace LuckParser.Controllers
                     final.InvulnedCount = 0;
                     final.DamageInvulned = 0;
                     final.EvadedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Evade);
-                    final.DodgeCount = combatData.GetSkillCount(player.InstID, SkillItem.DodgeId, start, end) + combatData.GetBuffCount(player.InstID, 40408, start, end);//dodge = 65001 mirage cloak =40408
+                    final.DodgeCount = player.GetCastLogs(_log, 0, _log.FightData.FightDuration).Count(x => x.SkillId == SkillItem.DodgeId);
                     final.DamageBarrier = (int)damageLogs.Sum(x => x.ShieldDamage);
                     final.InterruptedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Interrupt);
                     foreach (DamageLog log in damageLogs.Where(x => x.Result == ParseEnum.Result.Absorb))
@@ -549,7 +549,7 @@ namespace LuckParser.Controllers
                 List<Tuple<long, long>> dead = new List<Tuple<long, long>>();
                 List<Tuple<long, long>> down = new List<Tuple<long, long>>();
                 List<Tuple<long, long>> dc = new List<Tuple<long, long>>();
-                combatData.GetAgentStatus(_log.FightData.FightStart, _log.FightData.FightEnd, player.InstID, dead, down, dc);
+                combatData.GetAgentStatus(player.FirstAware, player.LastAware, player.InstID, dead, down, dc);
 
                 for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
                 {

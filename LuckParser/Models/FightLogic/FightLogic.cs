@@ -181,12 +181,12 @@ namespace LuckParser.Models
         {
             foreach (Target target in Targets)
             {
-                if (ids.Contains(target.ID) && phase.InInterval(target.FirstAware, log.FightData.FightStart))
+                if (ids.Contains(target.ID) && phase.InInterval(Math.Max(log.FightData.ToFightSpace(target.FirstAware),0)))
                 {
                     phase.Targets.Add(target);
                 }
             }
-            phase.OverrideTimes(log.FightData.FightStart, log.CombatData);
+            phase.OverrideTimes(log);
         }
 
         public virtual void ComputeAdditionalTargetData(Target target, ParsedLog log)
@@ -249,10 +249,7 @@ namespace LuckParser.Models
         public void ComputeMechanics(ParsedLog log)
         {
             MechanicData mechData = log.MechanicData;
-            FightData fightData = log.FightData;
             CombatData combatData = log.CombatData;
-            long start = fightData.FightStart;
-            long end = fightData.FightEnd;
             Mechanic.CheckSpecialCondition condition;
             HashSet<ushort> playersIds = new HashSet<ushort>(log.PlayerList.Select(x => x.InstID));
             Dictionary<ushort, AbstractMasterPlayer> regroupedMobs = new Dictionary<ushort, AbstractMasterPlayer>();
@@ -267,10 +264,10 @@ namespace LuckParser.Models
                             switch (mech.SkillId)
                             {
                                 case SkillItem.DeathId:
-                                    cList = combatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDead, start, end);
+                                    cList = combatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDead, log.FightData.FightStart, log.FightData.FightEnd);
                                     break;
                                 case SkillItem.DownId:
-                                    cList = combatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDown, start, end);
+                                    cList = combatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDown, log.FightData.FightStart, log.FightData.FightEnd);
                                     break;
                                 case SkillItem.ResurrectId:
                                     cList = log.GetCastData(p.InstID).Where(x => x.SkillID == SkillItem.ResurrectId && x.IsActivation.IsCasting()).ToList();
@@ -278,14 +275,14 @@ namespace LuckParser.Models
                             }
                             foreach (CombatItem mechItem in cList)
                             {
-                                mechData[mech].Add(new MechanicLog(mechItem.Time - start, mech, p));
+                                mechData[mech].Add(new MechanicLog(log.FightData.ToFightSpace(mechItem.Time), mech, p));
                             }
                         }
                         break;
                     case Mechanic.MechType.SkillOnPlayer:
                         foreach (Player p in log.PlayerList)
                         {
-                            List<DamageLog> dls = p.GetDamageTakenLogs(null, log, 0, fightData.FightDuration);
+                            List<DamageLog> dls = p.GetDamageTakenLogs(null, log, 0, log.FightData.FightDuration);
                             condition = mech.SpecialCondition;
                             foreach (DamageLog dLog in dls)
                             {
@@ -317,7 +314,7 @@ namespace LuckParser.Models
                                 {
                                     if (c.IsBuffRemove == ParseEnum.BuffRemove.Manual && p.InstID == c.SrcInstid)
                                     {
-                                        mechData[mech].Add(new MechanicLog(c.Time - start, mech, p));
+                                        mechData[mech].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), mech, p));
                                     }
                                 }
                                 else
@@ -325,10 +322,10 @@ namespace LuckParser.Models
 
                                     if (c.IsBuffRemove == ParseEnum.BuffRemove.None && p.InstID == c.DstInstid)
                                     {
-                                        mechData[mech].Add(new MechanicLog(c.Time - start, mech, p));
+                                        mechData[mech].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), mech, p));
                                         if (mech.MechanicType == Mechanic.MechType.PlayerOnPlayer)
                                         {
-                                            mechData[mech].Add(new MechanicLog(c.Time - start, mech, log.PlayerList.FirstOrDefault(x => x.InstID == c.SrcInstid)));
+                                            mechData[mech].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), mech, log.PlayerList.FirstOrDefault(x => x.InstID == c.SrcInstid)));
                                         }
                                     }
                                 }
@@ -344,7 +341,7 @@ namespace LuckParser.Models
                             {
                                 foreach (DamageLog dl in p.GetDamageLogs(null, log, 0, log.FightData.FightDuration))
                                 {
-                                    if (dl.DstInstId != a.InstID || dl.IsCondi > 0 || dl.Time < a.FirstAware - start || dl.Time > a.LastAware - start || (condition != null && !condition(new SpecialConditionItem(dl))))
+                                    if (dl.DstInstId != a.InstID || dl.IsCondi > 0 || dl.Time < log.FightData.ToFightSpace(a.FirstAware) || dl.Time > log.FightData.ToFightSpace(a.LastAware) || (condition != null && !condition(new SpecialConditionItem(dl))))
                                     {
                                         continue;
                                     }
@@ -365,7 +362,7 @@ namespace LuckParser.Models
                                 }
                                 if (c.IsActivation.IsCasting() && c.SrcInstid == p.InstID)
                                 {
-                                    mechData[mech].Add(new MechanicLog(c.Time - fightData.FightStart, mech, p));
+                                    mechData[mech].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), mech, p));
 
                                 }
                             }
@@ -441,7 +438,7 @@ namespace LuckParser.Models
                             }
                             if (amp != null)
                             {
-                                mechData[mech].Add(new MechanicLog(c.Time - fightData.FightStart, mech, amp));
+                                mechData[mech].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), mech, amp));
                             }
 
                         }
@@ -487,7 +484,7 @@ namespace LuckParser.Models
                             }
                             if (amp != null)
                             {
-                                mechData[mech].Add(new MechanicLog(c.Time - fightData.FightStart, mech, amp));
+                                mechData[mech].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), mech, amp));
                             }
                         }
                         break;
@@ -499,7 +496,7 @@ namespace LuckParser.Models
                                 amp = new DummyPlayer(a);
                                 regroupedMobs.Add(a.ID, amp);
                             }
-                            mechData[mech].Add(new MechanicLog(a.FirstAware - fightData.FightStart, mech, amp));
+                            mechData[mech].Add(new MechanicLog(log.FightData.ToFightSpace(a.FirstAware), mech, amp));
                         }
                         break;
                 }

@@ -99,7 +99,7 @@ namespace LuckParser.Models
             {
                 return phases;
             }
-            List<long> moltenArmor = GetFilteredList(log, 52329, qadim, false).Select(x => x.Time - log.FightData.FightStart).Distinct().ToList();
+            List<long> moltenArmor = GetFilteredList(log, 52329, qadim, false).Select(x => log.FightData.ToFightSpace(x.Time)).Distinct().ToList();
             for (int i = 0; i < moltenArmor.Count; i++)
             {
                 if (i % 2 == 1)
@@ -131,7 +131,7 @@ namespace LuckParser.Models
                     case 2:
                     case 4:
                     case 6:
-                        List<long> pyresFirstAware = log.AgentData.GetAgentsByID((ushort)PyreGuardian).Where(x => phase.InInterval(x.FirstAware - log.FightData.FightStart)).Select(x => x.FirstAware - log.FightData.FightStart).ToList();
+                        List<long> pyresFirstAware = log.AgentData.GetAgentsByID((ushort)PyreGuardian).Where(x => phase.InInterval(log.FightData.ToFightSpace(x.FirstAware))).Select(x => log.FightData.ToFightSpace(x.FirstAware)).ToList();
                         if (pyresFirstAware.Count > 0 && pyresFirstAware.Max() > phase.Start)
                         {
                             phase.OverrideStart(pyresFirstAware.Max());

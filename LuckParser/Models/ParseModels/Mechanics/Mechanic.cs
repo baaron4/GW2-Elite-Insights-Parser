@@ -88,6 +88,7 @@ namespace LuckParser.Models.ParseModels
             PlotlySetting = plotlySetting;
             ShortName = shortName;
             FullName = fullName;
+            Description = description;
             InternalCooldown = internalCoolDown;
             SpecialCondition = condition;
             IsEnemyMechanic = MechanicType == MechType.EnemyBoon || MechanicType == MechType.EnemyBoonStrip ||

@@ -97,7 +97,7 @@ namespace LuckParser.Models
             CombatReplay replay = p.CombatReplay;
             foreach (CombatItem c in agony)
             {
-                int agonyStart = (int)(c.Time - log.FightData.FightStart);
+                int agonyStart = (int)log.FightData.ToFightSpace(c.Time);
                 int agonyEnd = agonyStart + 62000;
                 replay.Actors.Add(new CircleActor(false, 0, 220, new Tuple<int, int>(agonyStart, agonyEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(p)));
             }

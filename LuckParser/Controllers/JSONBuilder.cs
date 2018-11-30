@@ -26,7 +26,7 @@ namespace LuckParser.Controllers
         //
         private readonly Dictionary<long, string> _skillNames = new Dictionary<long, string>();
         private readonly Dictionary<long, string> _buffNames = new Dictionary<long, string>();
-        private readonly Dictionary<string, List<long>> _personalBuffs = new Dictionary<string, List<long>>();
+        private readonly Dictionary<string, HashSet<long>> _personalBuffs = new Dictionary<string, HashSet<long>>();
 
         public static void UpdateStatisticSwitches(StatisticsCalculator.Switches switches)
         {
@@ -148,8 +148,8 @@ namespace LuckParser.Controllers
                     HitboxWidth = target.HitboxWidth,
                     Dps1s = Build1SDPS(target, null),
                     Rotation = BuildRotation(target.GetCastLogs(_log, 0, _log.FightData.FightDuration)),
-                    FirstAware = (int)(target.FirstAware - _log.FightData.FightStart),
-                    LastAware = (int)(target.LastAware - _log.FightData.FightStart),
+                    FirstAware = (int)(_log.FightData.ToFightSpace(target.FirstAware)),
+                    LastAware = (int)(_log.FightData.ToFightSpace(target.LastAware)),
                     Minions = BuildMinions(target),
                     TotalDamageDist = BuildDamageDist(target, null),
                     TotalDamageTaken = BuildDamageTaken(target),
@@ -199,7 +199,7 @@ namespace LuckParser.Controllers
                     TotalDamageDist = BuildDamageDist(player, null),
                     TargetDamageDist = BuildDamageDist(player),
                     TotalDamageTaken = BuildDamageTaken(player),
-                    DeathRecap = BuilDeathRecap(player),
+                    DeathRecap = player.GetDeathRecaps(_log),
                     Consumables = BuildConsumables(player),
                     AvgBoonsStates = BuildBuffStates(player.GetBoonGraphs(_log)[Boon.NumberOfBoonsID]),
                     AvgConditionsStates = BuildBuffStates(player.GetBoonGraphs(_log)[Boon.NumberOfConditionsID]),
@@ -237,95 +237,6 @@ namespace LuckParser.Controllers
                     (int)seg.Start,
                     seg.Value
                 });
-            }
-            return res.Count > 0 ? res : null;
-        }
-
-        private List<JsonDeathRecap> BuilDeathRecap(Player player)
-        {
-            List<JsonDeathRecap> res = new List<JsonDeathRecap>();
-            long start = _log.FightData.FightStart;
-            long end = _log.FightData.FightEnd;
-            List<CombatItem> deads = _log.CombatData.GetStates(player.InstID, ParseEnum.StateChange.ChangeDead, start, end);
-            List<CombatItem> downs = _log.CombatData.GetStates(player.InstID, ParseEnum.StateChange.ChangeDown, start, end);
-            long lastTime = start;
-            List<DamageLog> damageLogs = player.GetDamageTakenLogs(null, _log, 0, _log.FightData.FightDuration);
-            foreach (CombatItem dead in deads)
-            {
-                JsonDeathRecap recap = new JsonDeathRecap()
-                {
-                    Time = (int)(dead.Time - start)
-                };
-                CombatItem downed = downs.LastOrDefault(x => x.Time <= dead.Time && x.Time >= lastTime);
-                if (downed != null)
-                {
-                    List<DamageLog> damageToDown = damageLogs.Where(x => x.Time < downed.Time - start && x.Damage > 0 && x.Time > lastTime - start).ToList();
-                    recap.ToDown = damageToDown.Count > 0 ? new List<JsonDeathRecap.DamageItem>() : null;
-                    int damage = 0;
-                    for (int i = damageToDown.Count - 1; i >= 0; i--)
-                    {
-                        DamageLog dl = damageToDown[i];
-                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);
-                        JsonDeathRecap.DamageItem item = new JsonDeathRecap.DamageItem()
-                        {
-                            Time = (int)dl.Time,
-                            Condi = dl.IsCondi,
-                            Skill = dl.SkillId,
-                            Damage = dl.Damage,
-                            Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
-                        };
-                        damage += dl.Damage;
-                        recap.ToDown.Add(item);
-                        if (damage > 20000)
-                        {
-                            break;
-                        }
-                    }
-                    List<DamageLog> damageToKill = damageLogs.Where(x => x.Time > downed.Time - start && x.Time < dead.Time - start && x.Damage > 0 && x.Time > lastTime - start).ToList();
-                    recap.ToKill = damageToKill.Count > 0 ? new List<JsonDeathRecap.DamageItem>() : null;
-                    for (int i = damageToKill.Count - 1; i >= 0; i--)
-                    {
-                        DamageLog dl = damageToKill[i];
-                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);
-                        JsonDeathRecap.DamageItem item = new JsonDeathRecap.DamageItem()
-                        {
-                            Time = (int)dl.Time,
-                            Condi = dl.IsCondi,
-                            Skill = dl.SkillId,
-                            Damage = dl.Damage,
-                            Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
-                        };
-                        recap.ToKill.Add(item);
-                    }
-                }
-                else
-                {
-                    recap.ToDown = null;
-                    List<DamageLog> damageToKill = damageLogs.Where(x => x.Time < dead.Time - start && x.Damage > 0 && x.Time > lastTime - start).ToList();
-                    recap.ToKill = damageToKill.Count >0 ? new List<JsonDeathRecap.DamageItem>() : null;
-                    int damage = 0;
-                    for (int i = damageToKill.Count - 1; i >= 0; i--)
-                    {
-                        DamageLog dl = damageToKill[i];
-                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);
-                        JsonDeathRecap.DamageItem item = new JsonDeathRecap.DamageItem()
-                        {
-                            Time = (int)dl.Time,
-                            Condi = dl.IsCondi,
-                            Skill = dl.SkillId,
-                            Damage = dl.Damage,
-                            Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
-                        };
-                        damage += dl.Damage;
-                        recap.ToKill.Add(item);
-                        if (damage > 20000)
-                        {
-                            break;
-                        }
-                    }
-                }
-                lastTime = dead.Time;
-                res.Add(recap);
             }
             return res.Count > 0 ? res : null;
         }
@@ -405,6 +316,10 @@ namespace LuckParser.Controllers
                     }
                 }
                 List<DamageLog> filteredList = pair.Value.Where(x => x.Result != ParseEnum.Result.Downed).ToList();
+                if (filteredList.Count == 0)
+                {
+                    continue;
+                }
                 res[pair.Key] = new JsonDamageDist()
                 {
                     Hits = filteredList.Count,
@@ -554,8 +469,8 @@ namespace LuckParser.Controllers
             int phases = _statistics.Phases.Count;
             var boons = new Dictionary<long, JsonTargetBuffs>();
 
-            var boonsFound = new List<long>();
-            var boonsNotFound = new List<long>();
+            var boonsFound = new HashSet<long>();
+            var boonsNotFound = new HashSet<long>();
 
             for (int phaseIndex = 0; phaseIndex < phases; phaseIndex++)
             {
@@ -656,7 +571,7 @@ namespace LuckParser.Controllers
                             }
                             else
                             {
-                                _personalBuffs[player.Prof] = new List<long>()
+                                _personalBuffs[player.Prof] = new HashSet<long>()
                                 {
                                     boon.Key
                                 };

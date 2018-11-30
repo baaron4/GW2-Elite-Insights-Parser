@@ -69,9 +69,9 @@ namespace LuckParser.Models
                 {
                     invulXera = log.GetBoonData(34113).Find(x => x.DstInstid == mainTarget.InstID);
                 }
-                long end = invulXera.Time - log.FightData.FightStart;
+                long end = log.FightData.ToFightSpace(invulXera.Time);
                 phases.Add(new PhaseData(start, end));
-                start = log.FightData.PhaseData[0] - log.FightData.FightStart;
+                start = log.FightData.ToFightSpace(log.FightData.PhaseData[0]);
                 mainTarget.AddCustomCastLog(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
             }
             if (fightDuration - start > 5000 && start >= phases.Last().End)

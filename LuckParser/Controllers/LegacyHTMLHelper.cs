@@ -18,19 +18,7 @@ namespace LuckParser.Controllers
             SkillItem skill = skillList.Get(cl.SkillId);
             GW2APISkill skillApi = skill?.ApiSkill;
             string skillName = skill.Name;
-            float dur;
-            if (cl.SkillId == SkillItem.DodgeId)
-            {
-                dur = 0.5f;
-            }
-            else if (cl.SkillId == SkillItem.WeaponSwapId)
-            {
-                dur = 0.1f;
-            }
-            else
-            {
-                dur = cl.ActualDuration / 1000f;
-            }
+            float dur = cl.ActualDuration / 1000f;
             skillName = skillName.Replace("\"", "");
             float offset = (cl.Time - phase.Start) / 1000f;
             float xVal = dur;

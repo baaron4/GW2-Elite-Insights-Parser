@@ -73,22 +73,22 @@ namespace LuckParser.Models.ParseModels
             return new List<CombatItem>();
         }
 
-        public int GetSkillCount(int srcInstid, long skillId, long start, long end)
+        public List<CombatItem> GetSkills(int srcInstid, long skillId, long start, long end)
         {
             if (CastDataById.TryGetValue(skillId, out List<CombatItem> data))
             {
-                return data.Count(x => x.SrcInstid == srcInstid && x.Time >= start && x.Time <= end && x.IsActivation.IsCasting());
+                return data.Where(x => x.SrcInstid == srcInstid && x.Time >= start && x.Time <= end && x.IsActivation.IsCasting()).ToList();
             }
-            return 0;
+            return new List<CombatItem>();
         }
 
-        public int GetBuffCount(int srcInstid, long skillId, long start, long end)
+        public List<CombatItem> GetBuffs(int srcInstid, long skillId, long start, long end)
         {
             if (BoonData.TryGetValue(skillId, out List<CombatItem> data))
             {
-                return data.Count(x => x.SrcInstid == srcInstid && x.Time >= start && x.Time <= end && x.IsBuffRemove == ParseEnum.BuffRemove.None);
+                return data.Where(x => x.SrcInstid == srcInstid && x.Time >= start && x.Time <= end && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
             }
-            return 0;
+            return new List<CombatItem>();
         }
 
         public void Update(long end)

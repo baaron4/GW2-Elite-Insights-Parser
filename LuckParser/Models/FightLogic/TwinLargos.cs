@@ -66,7 +66,7 @@ namespace LuckParser.Models
                 CombatItem state = states[i];
                 if (state.IsStateChange == ParseEnum.StateChange.EnterCombat)
                 {
-                    start = state.Time - log.FightData.FightStart;
+                    start = log.FightData.ToFightSpace(state.Time);
                     if (i == states.Count - 1)
                     {
                         targetPhases.Add(new PhaseData(start, fightDuration));
@@ -74,7 +74,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    end = Math.Min(state.Time - log.FightData.FightStart, fightDuration);
+                    end = Math.Min(log.FightData.ToFightSpace(state.Time), fightDuration);
                     targetPhases.Add(new PhaseData(start, end));
                     if (i == states.Count - 1 && targetPhases.Count < 3)
                     {
@@ -123,17 +123,17 @@ namespace LuckParser.Models
                             // P1 and P2 merged
                             if (p1.Start == p2.Start)
                             {
-                                CombatItem auraHit = log.CombatData.GetDamageData(nikare.InstID).FirstOrDefault(x => x.SkillID == 52779 && x.Time > p1.End + log.FightData.FightStart);
+                                CombatItem auraHit = log.CombatData.GetDamageData(nikare.InstID).FirstOrDefault(x => x.SkillID == 52779 && x.Time > log.FightData.ToLogSpace(p1.End));
                                 if (auraHit != null)
                                 {
-                                    p2.OverrideStart(auraHit.Time - log.FightData.FightStart);
+                                    p2.OverrideStart(log.FightData.ToFightSpace(auraHit.Time));
                                 }
                                 else
                                 {
                                     CombatItem combatItem = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => x.SrcInstid == kenut.InstID).FirstOrDefault();
                                     if (combatItem != null)
                                     {
-                                        p2.OverrideStart(combatItem.Time - log.FightData.FightStart);
+                                        p2.OverrideStart(log.FightData.ToFightSpace(combatItem.Time));
                                     }
                                 }
                             }
@@ -147,27 +147,27 @@ namespace LuckParser.Models
                             // P1 and P2 merged
                             if (p1.Start == p2.Start)
                             {
-                                CombatItem auraHit = log.CombatData.GetDamageData(nikare.InstID).FirstOrDefault(x => x.SkillID == 52779 && x.Time > p1.End + log.FightData.FightStart);
+                                CombatItem auraHit = log.CombatData.GetDamageData(nikare.InstID).FirstOrDefault(x => x.SkillID == 52779 && x.Time > log.FightData.ToLogSpace(p1.End));
                                 if (auraHit != null)
                                 {
-                                    p2.OverrideStart(auraHit.Time - log.FightData.FightStart);
+                                    p2.OverrideStart(log.FightData.ToFightSpace(auraHit.Time));
                                 }
                                 else
                                 {
                                     CombatItem combatItem = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => x.SrcInstid == kenut.InstID).FirstOrDefault();
                                     if (combatItem != null)
                                     {
-                                        p2.OverrideStart(combatItem.Time - log.FightData.FightStart);
+                                        p2.OverrideStart(log.FightData.ToFightSpace(combatItem.Time));
                                     }
                                 }
                             }
                             // P1/P2 and P3 are merged
                             if (p1.Start == p3.Start || p2.Start == p3.Start)
                             {
-                                CombatItem auraHit = log.CombatData.GetDamageData(nikare.InstID).FirstOrDefault(x => x.SkillID == 52779 && x.Time > p2.End + log.FightData.FightStart);
+                                CombatItem auraHit = log.CombatData.GetDamageData(nikare.InstID).FirstOrDefault(x => x.SkillID == 52779 && x.Time > log.FightData.ToLogSpace(p2.End));
                                 if (auraHit != null)
                                 {
-                                    p3.OverrideStart(auraHit.Time - log.FightData.FightStart);
+                                    p3.OverrideStart(log.FightData.ToFightSpace(auraHit.Time));
                                 }
                                 else
                                 {
@@ -271,11 +271,11 @@ namespace LuckParser.Models
                 int radius = 500;
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    toDropStart = (int)(c.Time - log.FightData.FightStart);
+                    toDropStart = (int)(log.FightData.ToFightSpace(c.Time));
                 }
                 else
                 {
-                    int toDropEnd = (int)(c.Time - log.FightData.FightStart);
+                    int toDropEnd = (int)(log.FightData.ToFightSpace(c.Time));
                     replay.Actors.Add(new CircleActor(false, 0, debuffRadius, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 100, 0, 0.4)", new AgentConnector(p)));
                     replay.Actors.Add(new CircleActor(true, toDropStart + timer, debuffRadius, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 100, 0, 0.4)", new AgentConnector(p)));
                     Point3D poisonNextPos = replay.Positions.FirstOrDefault(x => x.Time >= toDropEnd);
@@ -295,11 +295,11 @@ namespace LuckParser.Models
                 int radius = 100;
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    bubbleStart = Math.Max((int)(c.Time - log.FightData.FightStart), 0);
+                    bubbleStart = Math.Max((int)(log.FightData.ToFightSpace(c.Time)), 0);
                 }
                 else
                 {
-                    int bubbleEnd = (int)(c.Time - log.FightData.FightStart);
+                    int bubbleEnd = (int)(log.FightData.ToFightSpace(c.Time));
                     replay.Actors.Add(new CircleActor(true, 0, radius, new Tuple<int, int>(bubbleStart, bubbleEnd), "rgba(0, 200, 255, 0.3)", new AgentConnector(p)));
                 }
             }

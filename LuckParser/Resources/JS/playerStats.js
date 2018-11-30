@@ -320,7 +320,7 @@ var compilePlayerTab = function () {
                         }
                     };
                     var j, totalSec, totalDamage;
-                    if (recap.toDown !== null) {
+                    if (recap.toDown) {
                         totalSec = (recap.toDown[0][0] - recap.toDown[recap.toDown.length - 1][0]) / 1000;
                         totalDamage = 0;
                         for (j = recap.toDown.length - 1; j >= 0; j--) {
@@ -333,7 +333,7 @@ var compilePlayerTab = function () {
                         res.totalSeconds.down[i] = totalSec;
                         res.totalDamage.down[i] = totalDamage;
                     }
-                    if (recap.toKill !== null) {
+                    if (recap.toKill) {
                         totalSec = (recap.toKill[0][0] - recap.toKill[recap.toKill.length - 1][0]) / 1000;
                         totalDamage = 0;
                         for (j = recap.toKill.length - 1; j >= 0; j--) {
