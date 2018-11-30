@@ -2,6 +2,7 @@
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
@@ -52,6 +53,22 @@ namespace LuckParser.Models
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
+        }
+
+        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            // Find target
+            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Ensolyss);
+            if (target == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
+            // enter combat
+            CombatItem invulLost = combatData.FirstOrDefault(x => x.DstInstid == target.InstID && x.IsStateChange == ParseEnum.StateChange.Normal && x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SkillID == 762);
+            if (invulLost != null)
+            {
+                fightData.FightStart = invulLost.Time;
             }
         }
 
