@@ -111,8 +111,6 @@ namespace LuckParser.Models.ParseModels
                 bool found = _logic.StackEffect(_log, toAdd, BoonStack, OverstackSimulationResult);
                 if (!found)
                 {
-                    long overstackValue = boonDuration;
-                    ushort srcValue = srcinstid;
                     OverstackSimulationResult.Add(new BoonSimulationOverstackItem(srcinstid, boonDuration,start));                 
                 }
             }
