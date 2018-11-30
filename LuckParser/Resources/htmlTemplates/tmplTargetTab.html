@@ -1,11 +1,13 @@
 <div>
     <keep-alive>
-        <dmgdist-target-component v-if="mode === 0" :target="target" :phaseindex="phaseindex" :targetindex="targetindex"></dmgdist-target-component>     
-        <dmgtaken-component v-if="mode === 1" :actor="target" :tableid="'dmgtaken-target-'+targetindex" :phaseindex="phaseindex"
-        ></dmgtaken-component>
-        <target-graph-tab-component v-for="(ph, id) in phases" v-if="mode === 2 && id === phaseindex" :key="id" :target="target" :targetindex="targetindex" 
-                            :phase="ph" :phaseindex="id" :phases="phases" :graph="graphdata.phases[id]" :light="light" ></target-graph-tab-component>
-        <buff-stats-target-component v-if="mode === 3" :target="target" :targetindex="targetindex" :phase="phase"
-            :players="players" :boons="boons" :conditions="conditions"></buff-stats-target-component>
+        <dmgdist-target-component v-if="mode === 0" :target="target" :key="'dist' + targetindex" :phaseindex="phaseindex"
+            :targetindex="targetindex"></dmgdist-target-component>
+        <dmgtaken-component v-if="mode === 1" :actor="target" :key="'taken' + targetindex" :tableid="'dmgtaken-target-'+targetindex"
+            :phaseindex="phaseindex"></dmgtaken-component>
+        <target-graph-tab-component v-for="(ph, id) in phases" v-if="mode === 2 && id === phaseindex" :key="id" :target="target"
+            :targetindex="targetindex" :phase="ph" :phaseindex="id" :phases="phases" :graph="graphdata.phases[id]"
+            :light="light"></target-graph-tab-component>
+        <buff-stats-target-component v-if="mode === 3" :key="'buffs' + targetindex" :target="target" :targetindex="targetindex"
+            :phase="phase" :players="players" :boons="boons" :conditions="conditions"></buff-stats-target-component>
     </keep-alive>
 </div>

@@ -114,7 +114,28 @@ namespace LuckParser.Models
 
         public override void SetSuccess(ParsedLog log)
         {
-            SetSuccessOnCombatExit(log, 3, 1000);
+            Target mainTarget = Targets.Find(x => x.ID == TriggerID);
+            if (mainTarget == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
+            List<CombatItem> invulsTarget = GetFilteredList(log, 762, mainTarget);
+            if (invulsTarget.Count > 0)
+            {
+                CombatItem last = invulsTarget.Last();
+                if (last.IsBuffRemove != ParseEnum.BuffRemove.None)
+                {
+                    HashSet<ushort> pIds = new HashSet<ushort>(log.PlayerList.Select(x => x.InstID));
+                    CombatItem lastPlayerExit = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => pIds.Contains(x.SrcInstid)).LastOrDefault();
+                    CombatItem lastTargetExit = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).LastOrDefault(x => x.SrcInstid == mainTarget.InstID);
+                    CombatItem lastDamageTaken = log.CombatData.GetDamageTakenData(mainTarget.InstID).LastOrDefault(x => (x.Value > 0 || x.BuffDmg > 0) && pIds.Contains(x.SrcInstid));
+                    if (lastTargetExit != null && lastDamageTaken != null && lastPlayerExit != null)
+                    {
+                        log.FightData.FightEnd = lastDamageTaken.Time;
+                        log.FightData.Success = lastPlayerExit.Time > lastTargetExit.Time + 1000;
+                    }
+                }
+            }
         }
     }
 }

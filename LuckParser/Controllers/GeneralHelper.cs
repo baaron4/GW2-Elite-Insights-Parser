@@ -277,6 +277,14 @@ namespace LuckParser.Controllers
                     return "https://i.imgur.com/o3vX9Zc.png";
                 case Hands:
                     return "https://i.imgur.com/8JRPEoo.png";
+                case TemporalAnomaly:
+                case TemporalAnomaly2:
+                    return "https://i.imgur.com/MIpP5pK.png";
+                case DOC:
+                case BLIGHT:
+                case PLINK:
+                case CHOP:
+                    return "https://wiki.guildwars2.com/images/4/47/Mini_Baron_von_Scrufflebutt.png";
             }
             return "https://i.imgur.com/HuJHqRZ.png";
         }
