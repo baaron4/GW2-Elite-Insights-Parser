@@ -22,6 +22,6 @@ namespace LuckParser.Models.DataModels
         public string[] UploadLinks;
         public Dictionary<long, string> SkillNames;
         public Dictionary<long, string> BuffNames;
-        public Dictionary<string, HashSet<long>> PersonalBuffs;
+        public Dictionary<string, List<long>> PersonalBuffs;
     }
 }

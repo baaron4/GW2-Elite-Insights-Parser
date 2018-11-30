@@ -79,6 +79,10 @@ namespace LuckParser.Models.ParseModels
             foreach (BoonLog log in logs)
             {
                 timeCur = log.Time;
+                if (timeCur - timePrev < 0)
+                {
+                    throw new InvalidOperationException("Negative passed time in boon simulation");
+                }
                 Update(timeCur - timePrev);
                 if (log.GetRemoveType() == ParseEnum.BuffRemove.None)
                 {
