@@ -66,7 +66,7 @@ namespace LuckParser.Models
             }
             // enter combat
             CombatItem invulLost = combatData.FirstOrDefault(x => x.DstInstid == target.InstID && x.IsStateChange == ParseEnum.StateChange.Normal && x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SkillID == 762);
-            if (invulLost != null)
+            if (invulLost != null && invulLost.Time - fightData.FightStart < 5000)
             {
                 fightData.FightStart = invulLost.Time;
             }
