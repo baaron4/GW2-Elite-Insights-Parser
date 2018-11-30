@@ -26,11 +26,28 @@ namespace LuckParser.Models.ParseModels
                 Stack = 1;
             }
         }
+
+        public class DeathRecap
+        {
+            public class DeathRecapDamageItem
+            {
+                public long Skill;
+                public int Condi;
+                public string Src;
+                public int Damage;
+                public int Time;
+            }
+
+            public int Time;
+            public List<DeathRecapDamageItem> ToDown;
+            public List<DeathRecapDamageItem> ToKill;
+        }
         // Fields
         public readonly string Account;
         public readonly int Group;
        
         private readonly List<Consumable> _consumeList = new List<Consumable>();
+        private List<DeathRecap> _deathRecaps = new List<DeathRecap>();
         //weaponslist
         private string[] _weaponsArray;
 
@@ -68,6 +85,20 @@ namespace LuckParser.Models.ParseModels
             }
             return reses;
         }
+
+        public List<DeathRecap> GetDeathRecaps(ParsedLog log)
+        {
+            if(_deathRecaps == null)
+            {
+                return null;
+            }
+            if (_deathRecaps.Count == 0)
+            {
+                SetDeathRecaps(log);
+            }
+            return _deathRecaps;
+        }
+
         public string[] GetWeaponsArray(ParsedLog log)
         {
             if (_weaponsArray == null)
@@ -87,6 +118,97 @@ namespace LuckParser.Models.ParseModels
         }
         
         // Private Methods
+
+        private void SetDeathRecaps(ParsedLog log)
+        {
+            List<DeathRecap> res = _deathRecaps;
+            List<CombatItem> deads = log.CombatData.GetStates(InstID, ParseEnum.StateChange.ChangeDead, log.FightData.FightStart, log.FightData.FightEnd);
+            List<CombatItem> downs = log.CombatData.GetStates(InstID, ParseEnum.StateChange.ChangeDown, log.FightData.FightStart, log.FightData.FightEnd);
+            long lastTime = log.FightData.FightStart;
+            List<DamageLog> damageLogs = GetDamageTakenLogs(null, log, 0, log.FightData.FightDuration);
+            foreach (CombatItem dead in deads)
+            {
+                DeathRecap recap = new DeathRecap()
+                {
+                    Time = (int)(log.FightData.ToFightSpace(dead.Time))
+                };
+                CombatItem downed = downs.LastOrDefault(x => x.Time <= dead.Time && x.Time >= lastTime);
+                if (downed != null)
+                {
+                    List<DamageLog> damageToDown = damageLogs.Where(x => x.Time < log.FightData.ToFightSpace(downed.Time) && x.Damage > 0 && x.Time > log.FightData.ToFightSpace(lastTime)).ToList();
+                    recap.ToDown = damageToDown.Count > 0 ? new List<DeathRecap.DeathRecapDamageItem>() : null;
+                    int damage = 0;
+                    for (int i = damageToDown.Count - 1; i >= 0; i--)
+                    {
+                        DamageLog dl = damageToDown[i];
+                        AgentItem ag = log.AgentData.GetAgentByInstID(dl.SrcInstId, log.FightData.ToLogSpace(dl.Time));
+                        DeathRecap.DeathRecapDamageItem item = new DeathRecap.DeathRecapDamageItem()
+                        {
+                            Time = (int)dl.Time,
+                            Condi = dl.IsCondi,
+                            Skill = dl.SkillId,
+                            Damage = dl.Damage,
+                            Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
+                        };
+                        damage += dl.Damage;
+                        recap.ToDown.Add(item);
+                        if (damage > 20000)
+                        {
+                            break;
+                        }
+                    }
+                    List<DamageLog> damageToKill = damageLogs.Where(x => x.Time > log.FightData.ToFightSpace(downed.Time) && x.Time < log.FightData.ToFightSpace(dead.Time) && x.Damage > 0 && x.Time > log.FightData.ToFightSpace(lastTime)).ToList();
+                    recap.ToKill = damageToKill.Count > 0 ? new List<DeathRecap.DeathRecapDamageItem>() : null;
+                    for (int i = damageToKill.Count - 1; i >= 0; i--)
+                    {
+                        DamageLog dl = damageToKill[i];
+                        AgentItem ag = log.AgentData.GetAgentByInstID(dl.SrcInstId, log.FightData.ToLogSpace(dl.Time));
+                        DeathRecap.DeathRecapDamageItem item = new DeathRecap.DeathRecapDamageItem()
+                        {
+                            Time = (int)dl.Time,
+                            Condi = dl.IsCondi,
+                            Skill = dl.SkillId,
+                            Damage = dl.Damage,
+                            Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
+                        };
+                        recap.ToKill.Add(item);
+                    }
+                }
+                else
+                {
+                    recap.ToDown = null;
+                    List<DamageLog> damageToKill = damageLogs.Where(x => x.Time < log.FightData.ToFightSpace(dead.Time) && x.Damage > 0 && x.Time > log.FightData.ToFightSpace(lastTime)).ToList();
+                    recap.ToKill = damageToKill.Count > 0 ? new List<DeathRecap.DeathRecapDamageItem>() : null;
+                    int damage = 0;
+                    for (int i = damageToKill.Count - 1; i >= 0; i--)
+                    {
+                        DamageLog dl = damageToKill[i];
+                        AgentItem ag = log.AgentData.GetAgentByInstID(dl.SrcInstId, log.FightData.ToLogSpace(dl.Time));
+                        DeathRecap.DeathRecapDamageItem item = new DeathRecap.DeathRecapDamageItem()
+                        {
+                            Time = (int)dl.Time,
+                            Condi = dl.IsCondi,
+                            Skill = dl.SkillId,
+                            Damage = dl.Damage,
+                            Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
+                        };
+                        damage += dl.Damage;
+                        recap.ToKill.Add(item);
+                        if (damage > 20000)
+                        {
+                            break;
+                        }
+                    }
+                }
+                lastTime = dead.Time;
+                res.Add(recap);
+            }
+            if (_deathRecaps.Count == 0)
+            {
+                _deathRecaps = null;
+            }
+        }
+
         private void EstimateWeapons(ParsedLog log)
         {
             if (Prof == "Sword")

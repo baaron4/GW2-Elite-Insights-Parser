@@ -579,83 +579,51 @@ namespace LuckParser.Controllers
         private List<DeathRecapDto> BuildDeathRecap(Player p)
         {
             List<DeathRecapDto> res = new List<DeathRecapDto>();
-            List<CombatItem> deads = _log.CombatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDead, _log.FightData.FightStart, _log.FightData.FightEnd);
-            List<CombatItem> downs = _log.CombatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDown, _log.FightData.FightStart, _log.FightData.FightEnd);
-            long lastTime = _log.FightData.FightStart;
-            List<DamageLog> damageLogs = p.GetDamageTakenLogs(null, _log, 0, _log.FightData.FightDuration);
-            foreach (CombatItem dead in deads)
+            List<Player.DeathRecap> recaps = p.GetDeathRecaps(_log);
+            if (recaps == null)
+            {
+                return null;
+            }
+            foreach (Player.DeathRecap deathRecap in recaps)
             {
                 DeathRecapDto recap = new DeathRecapDto()
                 {
-                    time = (int)(_log.FightData.ToFightSpace(dead.Time))
+                    time = deathRecap.Time
                 };
-                CombatItem down = downs.LastOrDefault(x => x.Time <= dead.Time && x.Time >= lastTime);
-                if (down != null)
-                {
-                    List<DamageLog> damageToDown = damageLogs.Where(x => x.Time < _log.FightData.ToFightSpace(down.Time) && x.Damage > 0 && x.Time > _log.FightData.ToFightSpace(lastTime)).ToList();
-                    recap.toDown = damageToDown.Count > 0 ? new List<object[]>() : null;
-                    int damage = 0;
-                    for (int i = damageToDown.Count - 1; i >= 0; i--)
-                    {
-                        DamageLog dl = damageToDown[i];
-                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, _log.FightData.ToLogSpace(dl.Time));
-                        object[] item = new object[] {
-                            dl.Time,
-                            dl.SkillId,
-                            dl.Damage,
-                            ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : "",
-                            dl.IsCondi
-                        };
-                        damage += dl.Damage;
-                        recap.toDown.Add(item);
-                        if (damage > 20000)
-                        {
-                            break;
-                        }
-                    }
-                    List<DamageLog> damageToKill = damageLogs.Where(x => x.Time > _log.FightData.ToFightSpace(down.Time) && x.Time < _log.FightData.ToFightSpace(dead.Time) && x.Damage > 0 && x.Time > _log.FightData.ToFightSpace(lastTime)).ToList();
-                    recap.toKill = damageToKill.Count > 0 ? new List<object[]>() : null;
-                    for (int i = damageToKill.Count - 1; i >= 0; i--)
-                    {
-                        DamageLog dl = damageToKill[i];
-                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, _log.FightData.ToLogSpace(dl.Time));
-                        object[] item = new object[] {
-                            dl.Time,
-                            dl.SkillId,
-                            dl.Damage,
-                            ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
-                        };
-                        recap.toKill.Add(item);
-                    }
-                }
-                else
-                {
-                    recap.toDown = null;
-                    List<DamageLog> damageToKill = damageLogs.Where(x => x.Time < _log.FightData.ToFightSpace(dead.Time) && x.Damage > 0 && x.Time > _log.FightData.ToFightSpace(lastTime)).ToList();
-                    recap.toKill = damageToKill.Count > 0 ? new List<object[]>() : null;
-                    int damage = 0;
-                    for (int i = damageToKill.Count - 1; i >= 0; i--)
-                    {
-                        DamageLog dl = damageToKill[i];
-                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, _log.FightData.ToLogSpace(dl.Time));
-                        object[] item = new object[] {
-                            dl.Time,
-                            dl.SkillId,
-                            dl.Damage,
-                            ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
-                        };
-                        damage += dl.Damage;
-                        recap.toKill.Add(item);
-                        if (damage > 20000)
-                        {
-                            break;
-                        }
-                    }
-                }
-                lastTime = dead.Time;
                 res.Add(recap);
+                if (deathRecap.ToKill != null)
+                {
+                    recap.toKill = new List<object[]>();
+                    foreach (Player.DeathRecap.DeathRecapDamageItem item in deathRecap.ToKill)
+                    {
+                        recap.toKill.Add(new object[]
+                        {
+                            item.Time,
+                            item.Skill,
+                            item.Damage,
+                            item.Src,
+                            item.Condi
+                        });
+                    }
+                }
+                if (deathRecap.ToDown != null)
+                {
+                    recap.toDown = new List<object[]>();
+                    foreach (Player.DeathRecap.DeathRecapDamageItem item in deathRecap.ToDown)
+                    {
+                        recap.toDown.Add(new object[]
+                        {
+                            item.Time,
+                            item.Skill,
+                            item.Damage,
+                            item.Src,
+                            item.Condi
+                        });
+                    }
+                }
+                
             }
-            return res.Count > 0 ? res : null;
+            return res;
         }
 
         private List<object[]> BuildDMGDistBodyData(List<CastLog> casting, List<DamageLog> damageLogs, long finalTotalDamage)

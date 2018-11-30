@@ -4,7 +4,7 @@
                 <h3 v-if="phaseRecaps.length > 1" class="text-center">
                     Death #{{index + 1}}
                 </h3>
-                <div v-if="recaps[index].toKill === null">
+                <div v-if="!recaps[index].toKill">
                     <h3 class="text-center">Player was instantly killed after down</h3>
                     <div class="text-center">
                         Took {{data.totalDamage.down[index]}}
@@ -12,7 +12,7 @@
                         {{data.totalSeconds.down[index]}} seconds
                     </div>
                 </div>
-                <div v-else-if="recaps[index].toDown === null">
+                <div v-else-if="!recaps[index].toDown">
                     <h3 class="text-center">Player was instantly killed</h3>
                     <div class="text-center">
                         Took {{data.totalDamage.kill[index]}}
