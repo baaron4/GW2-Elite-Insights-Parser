@@ -70,25 +70,6 @@ namespace LuckParser.Models
             return phases;
         }
 
-        protected void SetSuccessOnCombatExit(ParsedLog log, int combatExitCount, int delay)
-        {
-            Target mainTarget = Targets.Find(x => x.ID == TriggerID);
-            if (mainTarget == null)
-            {
-                throw new InvalidOperationException("Main target of the fight not found");
-            }
-            int combatExits = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Count(x => x.SrcInstid == mainTarget.InstID);
-            CombatItem lastDamageTaken = log.CombatData.GetDamageTakenData(mainTarget.InstID).LastOrDefault(x => x.Value > 0);
-            if (combatExits == combatExitCount && lastDamageTaken != null)
-            {
-                HashSet<ushort> pIds = new HashSet<ushort>(log.PlayerList.Select(x => x.InstID));
-                CombatItem lastPlayerExit = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => pIds.Contains(x.SrcInstid)).LastOrDefault();
-                CombatItem lastTargetExit = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).LastOrDefault(x => x.SrcInstid == mainTarget.InstID);
-                log.FightData.Success = lastPlayerExit != null && lastTargetExit != null && lastPlayerExit.Time - lastTargetExit.Time > delay ? true : false;
-                log.FightData.FightEnd = lastDamageTaken.Time;
-            }
-        }
-
         public override void SetSuccess(ParsedLog log)
         {
             // check reward
