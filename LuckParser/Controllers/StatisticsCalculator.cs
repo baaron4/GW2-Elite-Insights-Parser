@@ -399,7 +399,7 @@ namespace LuckParser.Controllers
 
             // Counts
             CombatData combatData = _log.CombatData;
-            final.SwapCount = combatData.GetStates(p.InstID, ParseEnum.StateChange.WeaponSwap, start, end).Count;
+            final.SwapCount = p.GetCastLogs(_log,0, _log.FightData.FightDuration).Count(x => x.SkillId == SkillItem.WeaponSwapId);
 
             if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay)
             {
@@ -529,7 +529,7 @@ namespace LuckParser.Controllers
                     final.InvulnedCount = 0;
                     final.DamageInvulned = 0;
                     final.EvadedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Evade);
-                    final.DodgeCount = combatData.GetSkills(player.InstID, SkillItem.DodgeId, start, end).Count + combatData.GetBuffs(player.InstID, 40408, start, end).Select(x => Math.Floor(x.Time / 10.0)).Distinct().Count();//dodge = 65001 mirage cloak =40408
+                    final.DodgeCount = player.GetCastLogs(_log, 0, _log.FightData.FightDuration).Count(x => x.SkillId == SkillItem.DodgeId);
                     final.DamageBarrier = (int)damageLogs.Sum(x => x.ShieldDamage);
                     final.InterruptedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Interrupt);
                     foreach (DamageLog log in damageLogs.Where(x => x.Result == ParseEnum.Result.Absorb))

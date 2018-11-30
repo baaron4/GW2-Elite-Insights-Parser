@@ -587,7 +587,8 @@ namespace LuckParser.Models.ParseModels
                         // Missing end activation
                         if (curCastLog != null)
                         {
-                            curCastLog.SetEndStatus(curCastLog.ExpectedDuration, ParseEnum.Activation.Unknown, log.FightData.FightDuration);
+                            int actDur = curCastLog.SkillId == SkillItem.DodgeId ? 750 : curCastLog.SkillId == SkillItem.WeaponSwapId ? 50 : curCastLog.ExpectedDuration;
+                            curCastLog.SetEndStatus(actDur, ParseEnum.Activation.Unknown, log.FightData.FightDuration);
                             curCastLog = null;
                         }
                         long time = log.FightData.ToFightSpace(c.Time);
@@ -600,7 +601,8 @@ namespace LuckParser.Models.ParseModels
                         {
                             if (curCastLog.SkillId == c.SkillID)
                             {
-                                curCastLog.SetEndStatus(c.Value, c.IsActivation, log.FightData.FightDuration);
+                                int actDur = curCastLog.SkillId == SkillItem.DodgeId ? 750 : curCastLog.SkillId == SkillItem.WeaponSwapId ? 50 : c.Value;
+                                curCastLog.SetEndStatus(actDur, c.IsActivation, log.FightData.FightDuration);
                                 curCastLog = null;
                             }
                         }
@@ -612,7 +614,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     long time = log.FightData.ToFightSpace(c.Time);
                     CastLog swapLog = new CastLog(time, SkillItem.WeaponSwapId, (int)c.DstAgent, c.IsActivation);
-                    if (CastLogs.Count > 0 && CastLogs.Last().Time == time && CastLogs.Last().SkillId == SkillItem.WeaponSwapId)
+                    if (CastLogs.Count > 0 && (time - CastLogs.Last().Time) < 10 && CastLogs.Last().SkillId == SkillItem.WeaponSwapId)
                     {
                         CastLogs[CastLogs.Count - 1] = swapLog;
                     }
@@ -622,6 +624,18 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
             }
+            long cloakStart = 0;
+            foreach (long time in log.CombatData.GetBuffs(InstID, 40408, FirstAware, LastAware).Select(x => log.FightData.ToFightSpace(x.Time)))
+            {
+                if (time - cloakStart > 10)
+                {
+                    CastLog dodgeLog = new CastLog(time, SkillItem.DodgeId, 0, ParseEnum.Activation.Unknown);
+                    dodgeLog.SetEndStatus(50, ParseEnum.Activation.Unknown, log.FightData.FightDuration);
+                    CastLogs.Add(dodgeLog);
+                }
+                cloakStart = time;
+            }
+            CastLogs.Sort((x, y) => x.Time < y.Time ? -1 : 1);
         }
         private static void Add<T>(Dictionary<T, long> dictionary, T key, long value)
         {

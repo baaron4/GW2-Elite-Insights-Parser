@@ -553,7 +553,7 @@ namespace LuckParser.Controllers
                     rotEntry[0] = 0;
                 }
                 rotEntry[1] = cl.SkillId;
-                rotEntry[2] = (cl.SkillId == SkillItem.DodgeId ? 750 : cl.SkillId == SkillItem.WeaponSwapId ? 50 : cl.ActualDuration) - offset; ;
+                rotEntry[2] = cl.ActualDuration - offset; ;
                 rotEntry[3] = EncodeEndActivation(cl.EndActivation);
                 rotEntry[4] = cl.StartActivation == ParseEnum.Activation.Quickness ? 1 : 0;
             }
