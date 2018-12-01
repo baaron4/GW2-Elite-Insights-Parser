@@ -2,7 +2,7 @@
 
 var compileHeader = function () {
     Vue.component("encounter-component", {
-        props: ["logdata"],
+        props: [],
         template: "#tmplEncounter",
         methods: {
             getResultText: function (success) {
@@ -14,7 +14,6 @@ var compileHeader = function () {
         },
         computed: {
             encounter: function () {
-                var logData = this.logdata;
                 var targets = [];
                 for (var i = 0; i < logData.phases[0].targets.length; i++) {
                     var targetData = logData.targets[logData.phases[0].targets[i]];
@@ -42,45 +41,48 @@ var compileHeader = function () {
                     this.phases[i].active = false;
                 }
                 phase.active = true;
+            },
+            getPhaseData: function(id) {
+                return logData.phases[id];
             }
         }
     });
 
     Vue.component("target-component", {
-        props: ["targets", "phase"],
+        props: ["targets", "phaseindex"],
         template: "#tmplTargets",
         methods: {
-            show: function (target) {
-                var index = this.targets.indexOf(target);
-                return this.phase.targets.indexOf(index) !== -1;
+            show: function (index) {
+                var phase = logData.phases[this.phaseindex];
+                return phase.targets.indexOf(index) !== -1;
+            },
+            getTargetData: function(id) {
+                return logData.targets[id];
             }
         }
     });
 
     Vue.component("player-component", {
-        props: ["players"],
+        props: ["playerindex", "players"],
         template: "#tmplPlayers",
         methods: {
             getIcon: function (path) {
                 return urls[path];
             },
-            select: function (player, groups) {
-                var oldStatus = player.active;
-                for (var i = 0; i < groups.length; i++) {
-                    var group = groups[i];
-                    for (var j = 0; j < group.length; j++) {
-                        group[j].active = false;
-                    }
+            select: function (id) {
+                var oldStatus = this.players[id].active;
+                for (var i = 0; i < this.players.length; i++) {
+                    this.players[i].active = false;
                 }
-                player.active = !oldStatus;
+                this.players[id].active = !oldStatus;
             }
         },
         computed: {
             groups: function () {
                 var aux = [];
                 var i = 0;
-                for (i = 0; i < this.players.length; i++) {
-                    var playerData = this.players[i];
+                for (i = 0; i < logData.players.length; i++) {
+                    var playerData = logData.players[i];
                     if (playerData.isConjure) {
                         continue;
                     }

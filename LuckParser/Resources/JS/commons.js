@@ -31,8 +31,13 @@ var compileCommons = function () {
     });
     
     Vue.component('target-data-component', {
-        props: ['target'],
-        template: "#tmplTargetData"
+        props: ['targetid'],
+        template: "#tmplTargetData",
+        computed: {
+            target: function() {
+                return logData.targets[this.targetid];
+            }
+        }
     });
 
     Vue.component('dmgtaken-component', {
