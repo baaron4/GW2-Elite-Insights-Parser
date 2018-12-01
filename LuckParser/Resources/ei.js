@@ -23,6 +23,7 @@ window.onload = function () {
         simpleLogData.targets.push({
             active: true
         });
+        logData.targets[i].id = i;
     }
     for (i = 0; i < logData.players.length; i++) {
         simpleLogData.players.push({
