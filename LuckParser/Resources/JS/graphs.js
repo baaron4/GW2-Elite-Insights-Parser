@@ -66,8 +66,7 @@ var compileGraphs = function () {
                 height: 800,
                 datarevision: new Date().getTime(),
             };
-            var phase = logData.phases[this.phaseindex];
-            computePhaseMarkups(this.layout.shapes, this.layout.annotations, phase, textColor);
+            computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, textColor);
             // constant part of data
             // dps
             var data = this.data;
@@ -94,7 +93,7 @@ var compileGraphs = function () {
                 name: 'All Player Dps'
             });
             // targets health
-            computeTargetHealthData(graphData.phases[this.phaseindex], logData.targets, phase, this.data);
+            computeTargetHealthData(this.graph, logData.targets, this.phase, this.data);
             // mechanics
             for (i = 0; i < graphData.mechanics.length; i++) {
                 var mech = graphData.mechanics[i];
@@ -117,7 +116,7 @@ var compileGraphs = function () {
                 if (mechData.enemyMech) {
                     for (j = 0; j < mech.points[this.phaseindex].length; j++) {
                         pts = mech.points[this.phaseindex][j];
-                        var tarId = phase.targets[j];
+                        var tarId = this.phase.targets[j];
                         if (tarId >= 0) {
                             target = logData.targets[tarId];
                             for (k = 0; k < pts.length; k++) {
@@ -179,6 +178,9 @@ var compileGraphs = function () {
             phase: function() {
                 return logData.phases[this.phaseindex];
             },
+            graph: function() {
+                return graphData.phases[this.phaseindex];
+            },
             graphname: function () {
                 var name = "DPS graph";
                 name = (this.dpsmode === 0 ? "Full " : (this.dpsmode === 1 ? "10s " : (this.dpsmode === 2 ? "30s " : "Phase "))) + name;
@@ -219,9 +221,8 @@ var compileGraphs = function () {
                     target: []
                 };
                 var playerDPS = [];
-                var graph = graphData.phases[this.phaseindex];
                 for (var i = 0; i < logData.players.length; i++) {
-                    var data = computePlayerDPS(logData.players[i], graph.players[i], lim, phasebreaks, this.activetargets, cacheID + '-' + this.phaseindex);
+                    var data = computePlayerDPS(logData.players[i], this.graph.players[i], lim, phasebreaks, this.activetargets, cacheID + '-' + this.phaseindex);
                     playerDPS.push(data.dps);
                     maxDPS.total = Math.max(maxDPS.total, data.maxDPS.total);
                     maxDPS.cleave = Math.max(maxDPS.cleave, data.maxDPS.cleave);
@@ -272,8 +273,8 @@ var compileGraphs = function () {
                 res[offset++] = (this.mode === 0 ? dpsData.allDPS.total : (this.mode === 1 ? dpsData.allDPS.target : dpsData.allDPS.cleave));
                 var maxDPS = (this.mode === 0 ? dpsData.maxDPS.total : (this.mode === 1 ? dpsData.maxDPS.target : dpsData.maxDPS.cleave));
                 var hps = [];
-                for (i = 0; i < graphData.phases[this.phaseindex].targets.length; i++) {
-                    var health = graphData.phases[this.phaseindex].targets[i].health;
+                for (i = 0; i < this.graph.targets.length; i++) {
+                    var health = this.graph.targets[i].health;
                     var hpPoints = [];
                     for (j = 0; j < health.length; j++) {
                         hpPoints[j] = health[j] * maxDPS / 100.0;

@@ -530,7 +530,7 @@ namespace LuckParser.Controllers
                     final.DamageInvulned = 0;
                     final.EvadedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Evade);
                     final.DodgeCount = player.GetCastLogs(_log, 0, _log.FightData.FightDuration).Count(x => x.SkillId == SkillItem.DodgeId);
-                    final.DamageBarrier = (int)damageLogs.Sum(x => x.ShieldDamage);
+                    final.DamageBarrier = damageLogs.Sum(x => x.ShieldDamage);
                     final.InterruptedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Interrupt);
                     foreach (DamageLog log in damageLogs.Where(x => x.Result == ParseEnum.Result.Absorb))
                     {

@@ -16,23 +16,25 @@ var compileGeneralStats = function () {
             updateTable("#dps-table");
         },
         computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
             tableData: function () {
                 var cacheID = this.phaseindex + '-';
                 cacheID += getTargetCacheID(this.activetargets);
                 if (this.cacheTarget.has(cacheID)) {
                     return this.cacheTarget.get(cacheID);
                 }
-                var phase = logData.phases[this.phaseindex];
                 var rows = [];
                 var sums = [];
                 var total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                 var groups = [];
                 var i, j;
-                for (i = 0; i < phase.dpsStats.length; i++) {
-                    var dpsStat = phase.dpsStats[i];
+                for (i = 0; i < this.phase.dpsStats.length; i++) {
+                    var dpsStat = this.phase.dpsStats[i];
                     var dpsTargetStat = [0, 0, 0, 0, 0, 0];
                     for (j = 0; j < this.activetargets.length; j++) {
-                        var tar = phase.dpsStatsTargets[i][this.activetargets[j]];
+                        var tar = this.phase.dpsStatsTargets[i][this.activetargets[j]];
                         for (var k = 0; k < dpsTargetStat.length; k++) {
                             dpsTargetStat[k] += tar[k];
                         }
@@ -88,18 +90,20 @@ var compileGeneralStats = function () {
             updateTable("#def-table");
         },
         computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
             tableData: function () {
                 if (this.cache.has(this.phaseindex)) {
                     return this.cache.get(this.phaseindex);
                 }
-                var phase = logData.phases[this.phaseindex];
                 var rows = [];
                 var sums = [];
                 var total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                 var groups = [];
                 var i;
-                for (i = 0; i < phase.defStats.length; i++) {
-                    var def = phase.defStats[i];
+                for (i = 0; i < this.phase.defStats.length; i++) {
+                    var def = this.phase.defStats[i];
                     var player = logData.players[i];
                     if (player.isConjure) {
                         continue;
@@ -154,18 +158,20 @@ var compileGeneralStats = function () {
             updateTable("#sup-table");
         },
         computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
             tableData: function () {
                 if (this.cache.has(this.phaseindex)) {
                     return this.cache.get(this.phaseindex);
                 }
-                var phase = logData.phases[this.phaseindex];
                 var rows = [];
                 var sums = [];
                 var total = [0, 0, 0, 0];
                 var groups = [];
                 var i;
-                for (i = 0; i < phase.healStats.length; i++) {
-                    var sup = phase.healStats[i];
+                for (i = 0; i < this.phase.healStats.length; i++) {
+                    var sup = this.phase.healStats[i];
                     var player = logData.players[i];
                     if (player.isConjure) {
                         continue;
@@ -222,20 +228,22 @@ var compileGeneralStats = function () {
             updateTable("#dmg-table");
         },
         computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
             tableData: function () {
                 if (this.cache.has(this.phaseindex)) {
                     return this.cache.get(this.phaseindex);
                 }
-                var phase = logData.phases[this.phaseindex];
                 var rows = [];
-                for (var i = 0; i < phase.dmgStats.length; i++) {
+                for (var i = 0; i < this.phase.dmgStats.length; i++) {
                     var commons = [];
                     var data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                     var player = logData.players[i];
                     if (player.isConjure) {
                         continue;
                     }
-                    var stats = phase.dmgStats[i];
+                    var stats = this.phase.dmgStats[i];
                     for (var j = 0; j < stats.length; j++) {
                         if (j >= 17) {
                             commons[j - 17] = stats[j];
@@ -258,22 +266,21 @@ var compileGeneralStats = function () {
                 if (this.cacheTarget.has(cacheID)) {
                     return this.cacheTarget.get(cacheID);
                 }
-                var phase = logData.phases[this.phaseindex];
                 var rows = [];
-                for (var i = 0; i < phase.dmgStats.length; i++) {
+                for (var i = 0; i < this.phase.dmgStats.length; i++) {
                     var commons = [];
                     var data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                     var player = logData.players[i];
                     if (player.isConjure) {
                         continue;
                     }
-                    var stats = phase.dmgStats[i];
+                    var stats = this.phase.dmgStats[i];
                     for (var j = 0; j < stats.length; j++) {
                         if (j >= 17) {
                             commons[j - 17] = stats[j];
                         } else {
                             for (var k = 0; k < this.activetargets.length; k++) {
-                                var tar = phase.dmgStatsTargets[i][this.activetargets[k]];
+                                var tar = this.phase.dmgStatsTargets[i][this.activetargets[k]];
                                 data[j] += tar[j];
                             }
                         }
@@ -302,6 +309,9 @@ var compileGeneralStats = function () {
             };
         },
         computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
             modifiers: function () {
                 var dmgModifiersCommon = logData.phases[0].dmgModifiersCommon;
                 if (!dmgModifiersCommon.length) {
@@ -319,7 +329,6 @@ var compileGeneralStats = function () {
                 if (this.cache.has(this.phaseindex)) {
                     return this.cache.get(this.phaseindex);
                 }
-                var phase = logData.phases[this.phaseindex];
                 var rows = [];
                 var j;
                 for (var i = 0; i < logData.players.length; i++) {
@@ -327,7 +336,7 @@ var compileGeneralStats = function () {
                     if (player.isConjure) {
                         continue;
                     }
-                    var dmgModifier = phase.dmgModifiersCommon[i];
+                    var dmgModifier = this.phase.dmgModifiersCommon[i];
                     var data = [];
                     for (j = 0; j < this.modifiers.length; j++) {
                         data.push([0, 0, 0, 0]);
@@ -349,7 +358,6 @@ var compileGeneralStats = function () {
                 if (this.cacheTarget.has(cacheID)) {
                     return this.cacheTarget.get(cacheID);
                 }
-                var phase = logData.phases[this.phaseindex];
                 var rows = [];
                 var j;
                 for (var i = 0; i < logData.players.length; i++) {
@@ -357,7 +365,7 @@ var compileGeneralStats = function () {
                     if (player.isConjure) {
                         continue;
                     }
-                    var dmgModifier = phase.dmgModifiersTargetsCommon[i];
+                    var dmgModifier = this.phase.dmgModifiersTargetsCommon[i];
                     var data = [];
                     for (j = 0; j < this.modifiers.length; j++) {
                         data.push([0, 0, 0, 0]);

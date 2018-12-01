@@ -46,6 +46,9 @@ var compileBuffStats = function () {
             };
         },
         computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
             orderedSpecs: function () {
                 var res = [];
                 var aux = new Set();
@@ -77,7 +80,6 @@ var compileBuffStats = function () {
                 if (this.cache.has(this.phaseindex)) {
                     return this.cache.get(this.phaseindex);
                 }
-                var phase = logData.phases[this.phaseindex];
                 var res = [];
                 for (var i = 0; i < this.orderedSpecs.length; i++) {
                     var spec = this.orderedSpecs[i];
@@ -85,7 +87,7 @@ var compileBuffStats = function () {
                     for (var j = 0; j < spec.ids.length; j++) {
                         dataBySpec.push({
                             player: logData.players[spec.ids[j]],
-                            data: phase.persBuffStats[spec.ids[j]]
+                            data: this.phase.persBuffStats[spec.ids[j]]
                         });
                     }
                     res.push(dataBySpec);
@@ -118,6 +120,9 @@ var compileBuffStats = function () {
             };
         },
         computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
             boons: function () {
                 var data = [];
                 for (var i = 0; i < logData.boons.length; i++) {
@@ -211,14 +216,13 @@ var compileBuffStats = function () {
                     });
                     return [uptimes, gens, gengr, genoff, gensq, avg];
                 };
-                var phase = logData.phases[this.phaseindex];
                 var res = {
-                    boonsData: getData(phase.boonStats, phase.boonGenSelfStats,
-                        phase.boonGenGroupStats, phase.boonGenOGroupStats, phase.boonGenSquadStats),
-                    offsData: getData(phase.offBuffStats, phase.offBuffGenSelfStats,
-                        phase.offBuffGenGroupStats, phase.offBuffGenOGroupStats, phase.offBuffGenSquadStats),
-                    defsData: getData(phase.defBuffStats, phase.defBuffGenSelfStats,
-                        phase.defBuffGenGroupStats, phase.defBuffGenOGroupStats, phase.defBuffGenSquadStats)
+                    boonsData: getData(this.phase.boonStats, this.phase.boonGenSelfStats,
+                        this.phase.boonGenGroupStats, this.phase.boonGenOGroupStats, this.phase.boonGenSquadStats),
+                    offsData: getData(this.phase.offBuffStats, this.phase.offBuffGenSelfStats,
+                        this.phase.offBuffGenGroupStats, this.phase.offBuffGenOGroupStats, this.phase.offBuffGenSquadStats),
+                    defsData: getData(this.phase.defBuffStats, this.phase.defBuffGenSelfStats,
+                        this.phase.defBuffGenGroupStats, this.phase.defBuffGenOGroupStats, this.phase.defBuffGenSquadStats)
                 };
                 this.cache.set(this.phaseindex, res);
                 return res;

@@ -36,14 +36,16 @@ var compileLayout = function () {
             }
         },
         computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
             layoutName: function () {
                 if (this.phaseindex < 0) {
                     return this.layout.desc;
                 }
-                var phase = logData.phases[this.phaseindex];
                 return this.layout.desc ?
-                    phase.name + " " + this.layout.desc :
-                    phase.name;
+                    this.phase.name + " " + this.layout.desc :
+                    this.phase.name;
             }
         }
     });

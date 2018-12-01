@@ -18,7 +18,7 @@ namespace LuckParser.Models.ParseModels
         public ushort SrcInstId { get; }
         public ulong DstAgent { get; }
         public ushort DstInstId { get; }
-        public uint ShieldDamage { get; }
+        public int ShieldDamage { get; }
 
         protected DamageLog(long time, CombatItem c)
         {
@@ -35,7 +35,7 @@ namespace LuckParser.Models.ParseModels
             SrcInstId = c.SrcInstid;
             DstAgent = c.DstAgent;
             DstInstId = c.DstInstid;
-            ShieldDamage = c.IsShields > 0 ? c.OverstackValue : 0;
+            ShieldDamage = c.IsShields > 0 ? c.OverstackValue > 0 ? (int)c.OverstackValue : c.Value : 0;
         }
     }
 }

@@ -51,10 +51,14 @@ var compileHeader = function () {
     Vue.component("target-component", {
         props: ["targets", "phaseindex"],
         template: "#tmplTargets",
+        computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            }
+        },
         methods: {
             show: function (index) {
-                var phase = logData.phases[this.phaseindex];
-                return phase.targets.indexOf(index) !== -1;
+                return this.phase.targets.indexOf(index) !== -1;
             },
             getTargetData: function(id) {
                 return logData.targets[id];
