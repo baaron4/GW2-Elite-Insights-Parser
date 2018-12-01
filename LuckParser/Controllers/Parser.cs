@@ -44,7 +44,7 @@ namespace LuckParser.Controllers
         {
             using(var fs = new FileStream(evtc, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                if(evtc.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
+                if(GeneralHelper.IsCompressedFormat(evtc))
                 {
                     using(var arch = new ZipArchive(fs, ZipArchiveMode.Read))
                     {

@@ -63,8 +63,7 @@ namespace LuckParser
                 SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
                 Parser control = new Parser(settings);
 
-                if (fInfo.Extension.Equals(".evtc", StringComparison.OrdinalIgnoreCase) ||
-                    fInfo.Name.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
+                if (GeneralHelper.IsSupportedFormat(fInfo.Name))
                 {
                     //Process evtc here
                     ParsedLog log = control.ParseLog(row, fInfo.FullName);

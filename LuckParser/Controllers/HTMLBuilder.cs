@@ -1233,10 +1233,15 @@ namespace LuckParser.Controllers
             {
                 string jsFileName = "EliteInsights-CR-" + _scriptVersion + ".js";
                 string jsPath = Path.Combine(path, jsFileName);
-                using (var fs = new FileStream(jsPath, FileMode.Create, FileAccess.Write))
-                using (var scriptWriter = new StreamWriter(fs, Encoding.UTF8))
+                try
                 {
-                    scriptWriter.Write(Properties.Resources.combatreplay_js);
+                    using (var fs = new FileStream(jsPath, FileMode.Create, FileAccess.Write))
+                    using (var scriptWriter = new StreamWriter(fs, Encoding.UTF8))
+                    {
+                        scriptWriter.Write(Properties.Resources.combatreplay_js);
+                    }
+                } catch (IOException)
+                {
                 }
                 string content = "<script src=\"./" + jsFileName + "?version=" + _scriptVersionRev + "\"></script>\n";
                 content += "<script>"+ CombatReplayHelper.GetDynamicCombatReplayScript(_log, _settings.PollingRate, map)+ "</script>";
@@ -1318,10 +1323,16 @@ namespace LuckParser.Controllers
             {
                 string cssFilename = "EliteInsights-" + _scriptVersion + ".css";
                 string cssPath = Path.Combine(path, cssFilename);
-                using (var fs = new FileStream(cssPath, FileMode.Create, FileAccess.Write))
-                using (var scriptWriter = new StreamWriter(fs, Encoding.UTF8))
+                try
                 {
-                    scriptWriter.Write(scriptContent);
+                    using (var fs = new FileStream(cssPath, FileMode.Create, FileAccess.Write))
+                    using (var scriptWriter = new StreamWriter(fs, Encoding.UTF8))
+                    {
+                        scriptWriter.Write(scriptContent);
+                    }
+                }
+                catch (IOException)
+                {
                 }
                 return "<link rel=\"stylesheet\" type=\"text/css\" href=\"./"+ cssFilename + "?version="+_scriptVersionRev+"\">";
             }
@@ -1359,10 +1370,16 @@ namespace LuckParser.Controllers
             {
                 string scriptFilename = "EliteInsights-" + _scriptVersion + ".js";
                 string scriptPath = Path.Combine(path, scriptFilename);
-                using (var fs = new FileStream(scriptPath, FileMode.Create, FileAccess.Write))
-                using (var scriptWriter = new StreamWriter(fs, Encoding.UTF8))
+                try
                 {
-                    scriptWriter.Write(scriptContent);
+                    using (var fs = new FileStream(scriptPath, FileMode.Create, FileAccess.Write))
+                    using (var scriptWriter = new StreamWriter(fs, Encoding.UTF8))
+                    {
+                        scriptWriter.Write(scriptContent);
+                    }
+                }
+                catch (IOException)
+                {
                 }
                 return "<script src=\"./" + scriptFilename + "?version=" + _scriptVersionRev + "\"></script>";
             }
