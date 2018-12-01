@@ -8,7 +8,7 @@
         <div v-show="specToBase[spec.name] === mode">
             <h3 class="text-center">{{ spec.name }}</h3>
             <buff-table-component :target="null" :condition="false" :generation="false" :id="'persbuffs-stats-table' + '_' + spec.name"
-                :buffs="buffs[id]" :playerdata="data[id]" :sums="[]"></buff-table-component>
+                :buffs="buffs[id]" :playerdata="data[id]" :sums="[]" :playerindex="playerindex"></buff-table-component>
         </div>
     </div>
 </div>

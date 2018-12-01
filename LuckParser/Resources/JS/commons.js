@@ -90,7 +90,7 @@ var compileCommons = function () {
         }
     });
     Vue.component("buff-table-component", {
-        props: ["buffs", "playerdata", "generation", "condition", "sums", "id"],
+        props: ["buffs", "playerdata", "generation", "condition", "sums", "id", "playerindex"],
         template: "#tmplBuffTable",
         methods: {
             getAvgTooltip: function (avg) {

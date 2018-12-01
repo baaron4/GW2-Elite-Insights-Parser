@@ -2,7 +2,7 @@
 
 var compileBuffStats = function () {
     Vue.component("personal-buff-table-component", {
-        props: ['phase', 'persbuffs', 'players'],
+        props: ['phaseindex', 'playerindex'],
         template: "#tmplPersonalBuffTable",
         data: function () {
             return {
@@ -52,8 +52,8 @@ var compileBuffStats = function () {
                 for (var i = 0; i < this.specs.length; i++) {
                     var spec = this.specs[i];
                     var pBySpec = [];
-                    for (var j = 0; j < this.players.length; j++) {
-                        if (this.players[j].profession === spec) {
+                    for (var j = 0; j < logData.players.length; j++) {
+                        if (logData.players[j].profession === spec) {
                             pBySpec.push(j);
                         }
                     }
@@ -74,22 +74,23 @@ var compileBuffStats = function () {
                 return res;
             },
             data: function () {
-                if (this.cache.has(this.phase)) {
-                    return this.cache.get(this.phase);
+                if (this.cache.has(this.phaseindex)) {
+                    return this.cache.get(this.phaseindex);
                 }
+                var phase = logData.phases[this.phaseindex];
                 var res = [];
                 for (var i = 0; i < this.orderedSpecs.length; i++) {
                     var spec = this.orderedSpecs[i];
                     var dataBySpec = [];
                     for (var j = 0; j < spec.ids.length; j++) {
                         dataBySpec.push({
-                            player: this.players[spec.ids[j]],
-                            data: this.phase.persBuffStats[spec.ids[j]]
+                            player: logData.players[spec.ids[j]],
+                            data: phase.persBuffStats[spec.ids[j]]
                         });
                     }
                     res.push(dataBySpec);
                 }
-                this.cache.set(this.phase, res);
+                this.cache.set(this.phaseindex, res);
                 return res;
             },
             buffs: function () {
@@ -97,8 +98,8 @@ var compileBuffStats = function () {
                 for (var i = 0; i < this.orderedSpecs.length; i++) {
                     var spec = this.orderedSpecs[i];
                     var data = [];
-                    for (var j = 0; j < this.persbuffs[spec.name].length; j++) {
-                        data.push(findSkill(true, this.persbuffs[spec.name][j]));
+                    for (var j = 0; j < logData.persBuffs[spec.name].length; j++) {
+                        data.push(findSkill(true, logData.persBuffs[spec.name][j]));
                     }
                     res.push(data);
                 }
@@ -108,7 +109,7 @@ var compileBuffStats = function () {
     });
 
     Vue.component("buff-stats-component", {
-        props: ['datatypes', 'datatype', 'phase', 'players', 'presentboons', 'presentoffs', 'presentdefs'],
+        props: ['datatypes', 'datatype', 'phaseindex', 'playerindex'],
         template: "#tmplBuffStats",
         data: function () {
             return {
@@ -119,30 +120,29 @@ var compileBuffStats = function () {
         computed: {
             boons: function () {
                 var data = [];
-                for (var i = 0; i < this.presentboons.length; i++) {
-                    data[i] = findSkill(true, this.presentboons[i]);
+                for (var i = 0; i < logData.boons.length; i++) {
+                    data[i] = findSkill(true, logData.boons[i]);
                 }
                 return data;
             },
             offs: function () {
                 var data = [];
-                for (var i = 0; i < this.presentoffs.length; i++) {
-                    data[i] = findSkill(true, this.presentoffs[i]);
+                for (var i = 0; i < logData.offBuffs.length; i++) {
+                    data[i] = findSkill(true, logData.offBuffs[i]);
                 }
                 return data;
             },
             defs: function () {
                 var data = [];
-                for (var i = 0; i < this.presentdefs.length; i++) {
-                    data[i] = findSkill(true, this.presentdefs[i]);
+                for (var i = 0; i < logData.defBuffs.length; i++) {
+                    data[i] = findSkill(true, logData.defBuffs[i]);
                 }
                 return data;
             },
             buffData: function () {
-                if (this.cache.has(this.phase)) {
-                    return this.cache.get(this.phase);
+                if (this.cache.has(this.phaseindex)) {
+                    return this.cache.get(this.phaseindex);
                 }
-                var _this = this;
                 var getData = function (stats, genself, gengroup, genoffgr, gensquad) {
                     var uptimes = [],
                         gens = [],
@@ -155,8 +155,8 @@ var compileBuffStats = function () {
                     var grcount = [],
                         totalcount = 0;
                     var i, k;
-                    for (i = 0; i < _this.players.length; i++) {
-                        var player = _this.players[i];
+                    for (i = 0; i < logData.players.length; i++) {
+                        var player = logData.players[i];
                         if (player.isConjure) {
                             continue;
                         }
@@ -211,15 +211,16 @@ var compileBuffStats = function () {
                     });
                     return [uptimes, gens, gengr, genoff, gensq, avg];
                 };
+                var phase = logData.phases[this.phaseindex];
                 var res = {
-                    boonsData: getData(this.phase.boonStats, this.phase.boonGenSelfStats,
-                        this.phase.boonGenGroupStats, this.phase.boonGenOGroupStats, this.phase.boonGenSquadStats),
-                    offsData: getData(this.phase.offBuffStats, this.phase.offBuffGenSelfStats,
-                        this.phase.offBuffGenGroupStats, this.phase.offBuffGenOGroupStats, this.phase.offBuffGenSquadStats),
-                    defsData: getData(this.phase.defBuffStats, this.phase.defBuffGenSelfStats,
-                        this.phase.defBuffGenGroupStats, this.phase.defBuffGenOGroupStats, this.phase.defBuffGenSquadStats)
+                    boonsData: getData(phase.boonStats, phase.boonGenSelfStats,
+                        phase.boonGenGroupStats, phase.boonGenOGroupStats, phase.boonGenSquadStats),
+                    offsData: getData(phase.offBuffStats, phase.offBuffGenSelfStats,
+                        phase.offBuffGenGroupStats, phase.offBuffGenOGroupStats, phase.offBuffGenSquadStats),
+                    defsData: getData(phase.defBuffStats, phase.defBuffGenSelfStats,
+                        phase.defBuffGenGroupStats, phase.defBuffGenOGroupStats, phase.defBuffGenSquadStats)
                 };
-                this.cache.set(this.phase, res);
+                this.cache.set(this.phaseindex, res);
                 return res;
             }
         },
