@@ -100,8 +100,8 @@
                     :playerindex="activePlayer"></buff-stats-component>
                 <personal-buff-table-component v-if="dataType === datatypes.personalBuffTable" :key="'persbuffs'"
                     :phaseindex="activePhase" :persbuffs="logdata.persBuffs" :playerindex="activePlayer"></personal-buff-table-component>
-                <mechanics-stats-component v-if="dataType === datatypes.mechanicTable" :key="'mechanics'" :phase="logdata.phases[activePhase]"
-                    :players="logdata.players" :enemies="logdata.enemies"></mechanics-stats-component>
+                <mechanics-stats-component v-if="dataType === datatypes.mechanicTable" :key="'mechanics'" :phaseindex="activePhase"
+                    :playerindex="activePlayer"></mechanics-stats-component>
                 <target-stats-component v-if="dataType === datatypes.targetTab" :key="'targets'" :players="logdata.players"
                     :targets="logdata.targets" :phase="logdata.phases[activePhase]" :phaseindex="activePhase"
                     :presentboons="logdata.boons" :presentconditions="logdata.conditions" :phases="logdata.phases"

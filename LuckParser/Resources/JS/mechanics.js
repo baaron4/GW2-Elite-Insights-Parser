@@ -2,13 +2,12 @@
 
 var compileMechanics = function () {
     Vue.component("mechanics-stats-component", {
-        props: ["phase", "players", "enemies"],
+        props: ["phaseindex", "playerindex", "enemies"],
         template: "#tmplMechanicsTable",
         data: function () {
             return {
                 cacheP: new Map(),
-                cacheE: new Map(),
-                mechanicsData: mechanicMap,
+                cacheE: new Map()
             };
         },
         mounted() {
@@ -28,19 +27,19 @@ var compileMechanics = function () {
         computed: {
             playerMechHeader: function () {
                 var playerMechanics = [];
-                for (var i = 0; i < this.mechanicsData.length; i++) {
-                    if (this.mechanicsData[i].playerMech) {
-                        playerMechanics.push(this.mechanicsData[i]);
+                for (var i = 0; i < mechanicMap.length; i++) {
+                    if (mechanicMap[i].playerMech) {
+                        playerMechanics.push(mechanicMap[i]);
                     }
                 }
                 return playerMechanics;
             },
             playerMechRows: function () {
-                if (this.cacheP.has(this.phase)) {
-                    return this.cacheP.get(this.phase);
+                if (this.cacheP.has(this.phaseindex)) {
+                    return this.cacheP.get(this.phaseindex);
                 }
-                var phase = this.phase;
-                var players = this.players;
+                var phase = logData.phases[this.phaseindex];
+                var players = logData.players;
                 var rows = [];
                 for (var i = 0; i < players.length; i++) {
                     var player = players[i];
@@ -52,24 +51,24 @@ var compileMechanics = function () {
                         mechs: phase.mechanicStats[i]
                     });
                 }
-                this.cacheP.set(this.phase, rows);
+                this.cacheP.set(this.phaseindex, rows);
                 return rows;
             },
             enemyMechHeader: function () {
                 var enemyMechanics = [];
-                for (var i = 0; i < this.mechanicsData.length; i++) {
-                    if (this.mechanicsData[i].enemyMech) {
-                        enemyMechanics.push(this.mechanicsData[i]);
+                for (var i = 0; i < mechanicMap.length; i++) {
+                    if (mechanicMap[i].enemyMech) {
+                        enemyMechanics.push(mechanicMap[i]);
                     }
                 }
                 return enemyMechanics;
             },
             enemyMechRows: function () {
-                if (this.cacheE.has(this.phase)) {
-                    return this.cacheE.get(this.phase);
+                if (this.cacheE.has(this.phaseindex)) {
+                    return this.cacheE.get(this.phaseindex);
                 }
-                var phase = this.phase;
-                var enemies = this.enemies;
+                var phase = logData.phases[this.phaseindex];
+                var enemies = logData.enemies;
                 var rows = [];
                 for (var i = 0; i < enemies.length; i++) {
                     var enemy = enemies[i];
@@ -78,7 +77,7 @@ var compileMechanics = function () {
                         mechs: phase.enemyMechanicStats[i]
                     });
                 }
-                this.cacheE.set(this.phase, rows);
+                this.cacheE.set(this.phaseindex, rows);
                 return rows;
             }
         }
