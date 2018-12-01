@@ -105,9 +105,8 @@
                 <target-stats-component v-if="dataType === datatypes.targetTab" :key="'targets'" :playerindex="activePlayer" 
                     :simplephase="logdata.phases[activePhase]" :phaseindex="activePhase"
                     :light="light"></target-stats-component>
-                <player-stats-component v-if="dataType === datatypes.playerTab" :key="'players'" :players="logdata.players"
-                    :activeplayer="activePlayer" :phaseindex="activePhase" :phase="logdata.phases[activePhase]" :phases="logdata.phases"
-                    :targets="logdata.targets" :activetargets="activePhaseTargets" :light="light"></player-stats-component>
+                <player-stats-component v-if="dataType === datatypes.playerTab" :key="'players'" :activeplayer="activePlayer" 
+                    :phaseindex="activePhase" :activetargets="activePhaseTargets" :light="light"></player-stats-component>
             </keep-alive>
         </div>
         <div id="combat-replay" v-show="mode === 1">

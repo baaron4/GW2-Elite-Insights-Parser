@@ -3,7 +3,7 @@
 var compilePlayerTab = function () {
     // Base stuff
     Vue.component('dmgdist-player-component', {
-        props: ['player', 'playerindex', 'phase',
+        props: ['playerindex', 
             'phaseindex', 'activetargets'
         ],
         template: "#tmplDamageDistPlayer",
@@ -15,6 +15,12 @@ var compilePlayerTab = function () {
             };
         },
         computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
+            player : function() {
+                return logData.players[this.playerindex];
+            },
             actor: function () {
                 if (this.distmode === -1) {
                     return this.player;
@@ -80,7 +86,7 @@ var compilePlayerTab = function () {
     });
 
     Vue.component("player-graph-tab-component", {
-        props: ["playerindex", "player", "phase", "phases", "phaseindex", "activetargets", "targets", "graph", "light"],
+        props: ["playerindex", "phaseindex", "activetargets", "light"],
         data: function () {
             return {
                 dpsmode: 0,
@@ -117,7 +123,7 @@ var compilePlayerTab = function () {
             var oldOffset = this.playerOffset;
             this.playerOffset += computeBuffData(this.player.details.boonGraph[this.phaseindex], this.data);
             var dpsY = oldOffset === this.playerOffset ? 'y2' : 'y3';
-            this.playerOffset += computeTargetHealthData(this.graph, this.targets, this.phase, this.data, dpsY);
+            this.playerOffset += computeTargetHealthData(this.graph, logData.targets, this.phase, this.data, dpsY);
             this.data.push({
                 y: [],
                 mode: 'lines',
@@ -152,6 +158,15 @@ var compilePlayerTab = function () {
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
         },
         computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
+            player : function() {
+                return logData.players[this.playerindex];
+            },
+            graph: function() {
+                return graphData.phases[this.phaseindex];
+            },
             graphid: function () {
                 return "playergraph-" + this.playerindex + '-' + this.phaseindex;
             },
@@ -164,7 +179,7 @@ var compilePlayerTab = function () {
                 var res = [];
                 if (this.phase.subPhases) {
                     for (var i = 0; i < this.phase.subPhases.length; i++) {
-                        var subPhase = this.phases[this.phase.subPhases[i]];
+                        var subPhase = logData.phases[this.phase.subPhases[i]];
                         res[Math.floor(subPhase.start - this.phase.start)] = true;
                         res[Math.floor(subPhase.end - this.phase.start)] = true;
                     }
@@ -235,14 +250,21 @@ var compilePlayerTab = function () {
     });
 
     Vue.component("food-component", {
-        props: ["food", "phase"],
+        props: ["phaseindex", "playerindex"],
         template: "#tmplFood",
         data: function () {
             return {
                 cache: new Map()
             };
         },
+        mixins: [roundingComponent],
         computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
+            food: function() {
+                return logData.players[this.playerindex].details.food;
+            },
             data: function () {
                 if (this.cache.has(this.phase)) {
                     return this.cache.get(this.phase);
@@ -273,13 +295,18 @@ var compilePlayerTab = function () {
     });
 
     Vue.component("simplerotation-component", {
-        props: ["rotation"],
+        props: ["playerindex", "phaseindex"],
         template: "#tmplSimpleRotation",
         data: function () {
             return {
                 autoattack: true,
                 small: false
             };
+        },
+        computed: {
+            rotation: function() {
+                return logData.players[this.playerindex].details.rotation[this.phaseindex];
+            }
         },
         methods: {
             getSkill: function (id) {
@@ -289,9 +316,15 @@ var compilePlayerTab = function () {
     });
 
     Vue.component("deathrecap-component", {
-        props: ["recaps", "playerindex", "phase"],
+        props: ["playerindex", "phaseindex"],
         template: "#tmplDeathRecap",
         computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
+            recaps: function() {
+                return logData.players[this.playerindex].details.deathRecap;
+            },
             data: function () {
                 if (!this.recaps) {
                     return null;
@@ -385,9 +418,17 @@ var compilePlayerTab = function () {
     });
     // tab
     Vue.component('player-tab-component', {
-        props: ['player', 'playerindex', 'phase', 'tabmode',
-            'phaseindex', 'activetargets', 'targets', 'phases', 'light'
+        props: ['playerindex', 'tabmode',
+            'phaseindex', 'activetargets', 'light'
         ],
+        computed: {    
+            phases: function() {
+                return logData.phases;
+            },          
+            player: function() {
+                return logData.players[this.playerindex];
+            }
+        },
         data: function () {
             return {
                 graphdata: graphData
@@ -397,12 +438,17 @@ var compilePlayerTab = function () {
     });
     // stats
     Vue.component("player-stats-component", {
-        props: ["players", "phaseindex", "phase", 'activetargets', 'activeplayer', 'targets', 'phases', 'light'],
+        props: ["phaseindex", 'activetargets', 'activeplayer', 'light'],
         template: "#tmplPlayerStats",
         data: function () {
             return {
                 tabmode: 0
             };
         },
+        computed: {
+            players: function() {
+                return logData.players;
+            }
+        }
     });
 };

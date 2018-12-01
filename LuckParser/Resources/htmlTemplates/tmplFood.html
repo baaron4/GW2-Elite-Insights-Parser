@@ -15,7 +15,7 @@
                 {{refresh.dimished ? 'suffered' : 'consumed'}} {{refresh.name}}
                 <img class="icon" :alt="refresh.name" :src="refresh.icon">
                 {{refresh.stack > 1 ? "("+refresh.stack+")" : ""}}
-                at {{refresh.time - phase.start}}s ({{refresh.duration}}
+                at {{round3(refresh.time - phase.start)}}s ({{refresh.duration}}
                 seconds)
             </li>
         </ul>
