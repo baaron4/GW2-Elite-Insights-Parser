@@ -1,14 +1,12 @@
 <div>
     <keep-alive>
-        <dmgdist-player-component v-if="tabmode === 0" :key="'dist' + playerindex" :player="player" :playerindex="playerindex"
-            :phaseindex="phaseindex" :activetargets="activetargets" :phase="phase"></dmgdist-player-component>
+        <dmgdist-player-component v-if="tabmode === 0" :key="'dist' + playerindex" :playerindex="playerindex"
+            :phaseindex="phaseindex" :activetargets="activetargets"></dmgdist-player-component>
         <dmgtaken-component v-if="tabmode ===1" :key="'taken' + playerindex" :actor="player" :tableid="'dmgtaken-player-'+playerindex"
             :phaseindex="phaseindex"></dmgtaken-component>
         <player-graph-tab-component v-for="(ph, id) in phases" v-if="tabmode === 2 && id === phaseindex" :key="id"
-            :player="player" :playerindex="playerindex" :phase="ph" :phaseindex="id" :phases="phases" :activetargets="activetargets"
-            :targets="targets" :graph="graphdata.phases[id]" :light="light"></player-graph-tab-component>
-        <simplerotation-component v-if="tabmode === 3" :key="'rot' + playerindex" :rotation="player.details.rotation[phaseindex]"></simplerotation-component>
-        <deathrecap-component v-if="tabmode === 4" :key="'recap' + playerindex" :playerindex="playerindex" :phase="phase"
-            :recaps="player.details.deathRecap"></deathrecap-component>
+            :playerindex="playerindex" :phaseindex="id" :activetargets="activetargets" :light="light"></player-graph-tab-component>
+        <simplerotation-component v-if="tabmode === 3" :key="'rot' + playerindex" :playerindex="playerindex" :phaseindex="phaseindex"></simplerotation-component>
+        <deathrecap-component v-if="tabmode === 4" :key="'recap' + playerindex" :playerindex="playerindex" :phaseindex="phaseindex"></deathrecap-component>
     </keep-alive>
 </div>

@@ -11,7 +11,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="row in tableData.rows" :class="{active: row.player.active}">
+            <tr v-for="row in tableData.rows" :class="{active: row.player.id === playerindex}">
                 <td>{{row.player.group}}</td>
                 <td :data-original-title="row.player.profession">
                     <img :src="row.player.icon" :alt="row.player.profession" class="icon"><span style="display:none">{{row.player.profession}}</span>

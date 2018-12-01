@@ -1,16 +1,16 @@
 <div>
     <ul v-if="phaseTargets.length > 1" class=" nav nav-tabs">
         <li v-for="target in phaseTargets">
-            <a class="nav-link" :class="{active: phase.focus === target}" @click="phase.focus = target">
+            <a class="nav-link" :class="{active: simplephase.focus === target.id}" @click="simplephase.focus = target.id">
                 {{target.name}}
             </a>
         </li>
     </ul>
-    <div v-for="(target, targetid) in targets" :key="targetid" v-show="phase.focus === target">
+    <div v-for="target in phaseTargets" v-show="simplephase.focus === target.id">
         <div class="d-flex flex-row justify-content-center align-items-center">
             <div class="d-flex flex-column justify-content-center align-items-center">
                 <img :alt="target.name" class="icon-lg mt-2" :src="target.icon">
-                <target-data-component :target="target"></target-data-component>
+                <target-data-component :targetid="target.id"></target-data-component>
             </div>
             <h3 class="text-center mt-2">{{target.name}}</h3>
         </div>
@@ -36,8 +36,8 @@
         </li>
     </ul>
     <keep-alive>
-        <target-tab-component v-for="(target, targetid) in targets" :key="targetid" v-if="phase.focus === target"
-            :target="target" :targetindex="targetid" :phaseindex="phaseindex" :phase="phase" :phases="phases" :players="players"
-            :boons="boons" :conditions="conditions" :mode="mode" :light="light"></target-tab-component>
+        <target-tab-component v-for="target in targets" :key="target.id" v-if="simplephase.focus === target.id"
+            :targetindex="target.id" :phaseindex="phaseindex" :playerindex="playerindex"
+             :mode="mode" :light="light"></target-tab-component>
     </keep-alive>
 </div>

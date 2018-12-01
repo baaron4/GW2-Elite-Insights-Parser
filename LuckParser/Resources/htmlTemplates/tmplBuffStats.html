@@ -20,15 +20,16 @@
     </div>
     <keep-alive>
         <buff-table-component v-if="datatype === datatypes.boonTable" :key="'boon-stats-table'" :condition="false"
-            :generation="mode > 0" :id="'boon-stats-table'" :buffs="boons" :playerdata="buffData.boonsData[mode]" :sums="mode === 0 ? buffData.boonsData[5] : []">
+            :generation="mode > 0" :id="'boon-stats-table'" :buffs="boons" :playerdata="buffData.boonsData[mode]" 
+            :sums="mode === 0 ? buffData.boonsData[5] : []":playerindex="playerindex">
         </buff-table-component>
         <buff-table-component v-if="datatype === datatypes.offensiveBuffTable" :key="'offensivebuff-stats-table'"
             :condition="false" :generation="mode > 0" :id="'offensivebuff-stats-table'" :buffs="offs" :playerdata="buffData.offsData[mode]"
-            :sums="mode === 0 ? buffData.offsData[5] : []">
+            :sums="mode === 0 ? buffData.offsData[5] : []" :playerindex="playerindex">
         </buff-table-component>
         <buff-table-component v-if="datatype === datatypes.defensiveBuffTable" :key="'defensivebuff-stats-table'"
             :condition="false" :generation="mode > 0" :id="'defensivebuff-stats-table'" :buffs="defs" :playerdata="buffData.defsData[mode]"
-            :sums="mode === 0 ? buffData.defsData[5] : []">
+            :sums="mode === 0 ? buffData.defsData[5] : []" :playerindex="playerindex">
         </buff-table-component>
     </keep-alive>
 </div>

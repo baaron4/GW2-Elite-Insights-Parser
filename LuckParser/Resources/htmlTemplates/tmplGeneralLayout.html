@@ -1,5 +1,5 @@
 <div>
-    <h2 v-if="layout.desc" :class="{'text-center': !!phase}">{{ layoutName }}</h2>
+    <h2 v-if="layout.desc" :class="{'text-center': phaseindex >= 0}">{{ layoutName }}</h2>
     <ul class="nav nav-tabs">
         <li v-for="tab in layout.tabs">
             <a class="nav-link" :class="{active: tab.active}" @click="select(tab, layout.tabs)"> {{ tab.name }} </a>
@@ -8,7 +8,7 @@
     <div v-for="tab in layout.tabs" v-show="tab.active">
         <div v-if="tab.desc">{{ tab.desc }}</div>
         <div v-if="tab.layout">
-            <general-layout-component :layout="tab.layout"></general-layout-component>
+            <general-layout-component :layout="tab.layout" :phaseindex="-1"></general-layout-component>
         </div>
     </div>
 </div>

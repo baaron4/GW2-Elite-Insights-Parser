@@ -26,7 +26,7 @@ var compileLayout = function () {
     Vue.component("general-layout-component", {
         name: "general-layout-component",
         template: "#tmplGeneralLayout",
-        props: ["layout", "phase"],
+        props: ["layout", "phaseindex"],
         methods: {
             select: function (tab, tabs) {
                 for (var i = 0; i < tabs.length; i++) {
@@ -36,8 +36,11 @@ var compileLayout = function () {
             }
         },
         computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
             layoutName: function () {
-                if (!this.phase) {
+                if (this.phaseindex < 0) {
                     return this.layout.desc;
                 }
                 return this.layout.desc ?

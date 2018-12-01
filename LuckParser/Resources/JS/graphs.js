@@ -2,17 +2,21 @@
 
 var compileGraphs = function () {
     Vue.component("graph-stats-component", {
-        props: ["phases", "activetargets", "targets", "players", "phaseid", 'selectedplayerindex', 'light'],
+        props: ["activetargets", "phaseindex", 'playerindex', 'light'],
         template: "#tmplGraphStats",
         data: function () {
             return {
-                mode: 1,
-                graphdata: graphData
+                mode: 1
             };
+        },
+        computed: {
+            phases: function() {
+                return logData.phases;
+            }
         }
     });
     Vue.component("dps-graph-component", {
-        props: ["phases", "activetargets", "targets", "players", 'mechanics', 'graph', 'mode', 'phase', 'phaseid', 'selectedplayerindex', 'light'],
+        props: ["activetargets", 'mode', 'phaseindex', 'playerindex', 'light'],
         template: "#tmplDPSGraph",
         data: function () {
             return {
@@ -20,8 +24,7 @@ var compileGraphs = function () {
                 layout: {},
                 data: [],
                 dpsCache: new Map(),
-                dataCache: new Map(),
-                mechanicsData: mechanicMap,
+                dataCache: new Map()
             };
         },
         created: function () {
@@ -68,15 +71,15 @@ var compileGraphs = function () {
             // dps
             var data = this.data;
             var player;
-            for (i = 0; i < this.players.length; i++) {
-                player = this.players[i];
+            for (i = 0; i < logData.players.length; i++) {
+                player = logData.players[i];
                 data.push({
                     y: [],
                     mode: 'lines',
                     line: {
                         shape: 'spline',
                         color: player.colTarget,
-                        width: i === this.selectedplayerindex ? 5 : 2
+                        width: i === this.playerindex ? 5 : 2
                     },
                     name: player.name + ' DPS',
                 });
@@ -90,11 +93,11 @@ var compileGraphs = function () {
                 name: 'All Player Dps'
             });
             // targets health
-            computeTargetHealthData(this.graph, this.targets, this.phase, this.data);
+            computeTargetHealthData(this.graph, logData.targets, this.phase, this.data);
             // mechanics
-            for (i = 0; i < this.mechanics.length; i++) {
-                var mech = this.mechanics[i];
-                var mechData = this.mechanicsData[i];
+            for (i = 0; i < graphData.mechanics.length; i++) {
+                var mech = graphData.mechanics[i];
+                var mechData = mechanicMap[i];
                 var chart = {
                     x: [],
                     mode: 'markers',
@@ -111,11 +114,11 @@ var compileGraphs = function () {
                 };
                 var time, pts, k;
                 if (mechData.enemyMech) {
-                    for (j = 0; j < mech.points[this.phaseid].length; j++) {
-                        pts = mech.points[this.phaseid][j];
+                    for (j = 0; j < mech.points[this.phaseindex].length; j++) {
+                        pts = mech.points[this.phaseindex][j];
                         var tarId = this.phase.targets[j];
                         if (tarId >= 0) {
-                            target = this.targets[tarId];
+                            target = logData.targets[tarId];
                             for (k = 0; k < pts.length; k++) {
                                 time = pts[k];
                                 chart.x.push(time);
@@ -130,9 +133,9 @@ var compileGraphs = function () {
                         }
                     }
                 } else {
-                    for (j = 0; j < mech.points[this.phaseid].length; j++) {
-                        pts = mech.points[this.phaseid][j];
-                        player = this.players[j];
+                    for (j = 0; j < mech.points[this.phaseindex].length; j++) {
+                        pts = mech.points[this.phaseindex][j];
+                        player = logData.players[j];
                         for (k = 0; k < pts.length; k++) {
                             time = pts[k];
                             chart.x.push(time);
@@ -144,10 +147,10 @@ var compileGraphs = function () {
             }
         },
         watch: {
-            selectedplayerindex: {
+            playerindex: {
                 handler: function () {
-                    for (var i = 0; i < this.players.length; i++) {
-                        this.data[i].line.width = i === this.selectedplayerindex ? 5 : 2;
+                    for (var i = 0; i < logData.players.length; i++) {
+                        this.data[i].line.width = i === this.playerindex ? 5 : 2;
                     }
                     this.layout.datarevision = new Date().getTime();
                 },
@@ -170,7 +173,13 @@ var compileGraphs = function () {
         },
         computed: {
             graphid: function () {
-                return 'dpsgraph-' + this.phaseid;
+                return 'dpsgraph-' + this.phaseindex;
+            },
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
+            graph: function() {
+                return graphData.phases[this.phaseindex];
             },
             graphname: function () {
                 var name = "DPS graph";
@@ -182,7 +191,7 @@ var compileGraphs = function () {
                 var res = [];
                 if (this.phase.subPhases) {
                     for (var i = 0; i < this.phase.subPhases.length; i++) {
-                        var subPhase = this.phases[this.phase.subPhases[i]];
+                        var subPhase = logData.phases[this.phase.subPhases[i]];
                         res[Math.floor(subPhase.start - this.phase.start)] = true;
                         res[Math.floor(subPhase.end - this.phase.start)] = true;
                     }
@@ -212,8 +221,8 @@ var compileGraphs = function () {
                     target: []
                 };
                 var playerDPS = [];
-                for (var i = 0; i < this.players.length; i++) {
-                    var data = computePlayerDPS(this.players[i], this.graph.players[i], lim, phasebreaks, this.activetargets, cacheID + '-' + this.phaseid);
+                for (var i = 0; i < logData.players.length; i++) {
+                    var data = computePlayerDPS(logData.players[i], this.graph.players[i], lim, phasebreaks, this.activetargets, cacheID + '-' + this.phaseindex);
                     playerDPS.push(data.dps);
                     maxDPS.total = Math.max(maxDPS.total, data.maxDPS.total);
                     maxDPS.cleave = Math.max(maxDPS.cleave, data.maxDPS.cleave);
@@ -257,7 +266,7 @@ var compileGraphs = function () {
                 var res = [];
                 var dpsData = this.computeDPSData();
                 var offset = 0;
-                for (i = 0; i < this.players.length; i++) {
+                for (i = 0; i < logData.players.length; i++) {
                     var pDPS = dpsData.playerDPS[i];
                     res[offset++] = (this.mode === 0 ? pDPS.total : (this.mode === 1 ? pDPS.target : pDPS.cleave));
                 }
@@ -273,18 +282,18 @@ var compileGraphs = function () {
                     hps[i] = hpPoints;
                     res[offset++] = hpPoints;
                 }
-                for (i = 0; i < this.mechanics.length; i++) {
-                    var mech = this.mechanics[i];
-                    var mechData = this.mechanicsData[i];
+                for (i = 0; i < graphData.mechanics.length; i++) {
+                    var mech = graphData.mechanics[i];
+                    var mechData = mechanicMap[i];
                     chart = [];
                     res[offset++] = chart;
                     var time, pts, k, ftime, y, yp1;
                     if (mechData.enemyMech) {
-                        for (j = 0; j < mech.points[this.phaseid].length; j++) {
-                            pts = mech.points[this.phaseid][j];
+                        for (j = 0; j < mech.points[this.phaseindex].length; j++) {
+                            pts = mech.points[this.phaseindex][j];
                             var tarId = this.phase.targets[j];
                             if (tarId >= 0) {
-                                target = this.targets[tarId];
+                                target = logData.targets[tarId];
                                 for (k = 0; k < pts.length; k++) {
                                     time = pts[k];
                                     ftime = Math.floor(time);
@@ -299,8 +308,8 @@ var compileGraphs = function () {
                             }
                         }
                     } else {
-                        for (j = 0; j < mech.points[this.phaseid].length; j++) {
-                            pts = mech.points[this.phaseid][j];
+                        for (j = 0; j < mech.points[this.phaseindex].length; j++) {
+                            pts = mech.points[this.phaseindex][j];
                             for (k = 0; k < pts.length; k++) {
                                 time = pts[k];
                                 ftime = Math.floor(time);

@@ -2,7 +2,7 @@
 
 var compileGeneralStats = function () {
     Vue.component("damage-stats-component", {
-        props: ["phase", "activetargets", "players", "phaseindex"],
+        props: ["activetargets", "playerindex", "phaseindex"],
         template: "#tmplDamageTable",
         data: function () {
             return {
@@ -16,28 +16,30 @@ var compileGeneralStats = function () {
             updateTable("#dps-table");
         },
         computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
             tableData: function () {
                 var cacheID = this.phaseindex + '-';
                 cacheID += getTargetCacheID(this.activetargets);
                 if (this.cacheTarget.has(cacheID)) {
                     return this.cacheTarget.get(cacheID);
                 }
-                var phase = this.phase;
                 var rows = [];
                 var sums = [];
                 var total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                 var groups = [];
                 var i, j;
-                for (i = 0; i < phase.dpsStats.length; i++) {
-                    var dpsStat = phase.dpsStats[i];
+                for (i = 0; i < this.phase.dpsStats.length; i++) {
+                    var dpsStat = this.phase.dpsStats[i];
                     var dpsTargetStat = [0, 0, 0, 0, 0, 0];
                     for (j = 0; j < this.activetargets.length; j++) {
-                        var tar = phase.dpsStatsTargets[i][this.activetargets[j]];
+                        var tar = this.phase.dpsStatsTargets[i][this.activetargets[j]];
                         for (var k = 0; k < dpsTargetStat.length; k++) {
                             dpsTargetStat[k] += tar[k];
                         }
                     }
-                    var player = this.players[i];
+                    var player = logData.players[i];
                     if (!groups[player.group]) {
                         groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                     }
@@ -74,7 +76,7 @@ var compileGeneralStats = function () {
     });
 
     Vue.component("defense-stats-component", {
-        props: ["phase", "players"],
+        props: ["phaseindex", "playerindex"],
         template: "#tmplDefenseTable",
         data: function () {
             return {
@@ -88,9 +90,12 @@ var compileGeneralStats = function () {
             updateTable("#def-table");
         },
         computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
             tableData: function () {
-                if (this.cache.has(this.phase)) {
-                    return this.cache.get(this.phase);
+                if (this.cache.has(this.phaseindex)) {
+                    return this.cache.get(this.phaseindex);
                 }
                 var rows = [];
                 var sums = [];
@@ -99,7 +104,7 @@ var compileGeneralStats = function () {
                 var i;
                 for (i = 0; i < this.phase.defStats.length; i++) {
                     var def = this.phase.defStats[i];
-                    var player = this.players[i];
+                    var player = logData.players[i];
                     if (player.isConjure) {
                         continue;
                     }
@@ -131,14 +136,14 @@ var compileGeneralStats = function () {
                     rows: rows,
                     sums: sums
                 };
-                this.cache.set(this.phase, res);
+                this.cache.set(this.phaseindex, res);
                 return res;
             }
         }
     });
 
     Vue.component("support-stats-component", {
-        props: ["phase", "players"],
+        props: ["phaseindex", "playerindex"],
         template: "#tmplSupportTable",
         data: function () {
             return {
@@ -153,9 +158,12 @@ var compileGeneralStats = function () {
             updateTable("#sup-table");
         },
         computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
             tableData: function () {
-                if (this.cache.has(this.phase)) {
-                    return this.cache.get(this.phase);
+                if (this.cache.has(this.phaseindex)) {
+                    return this.cache.get(this.phaseindex);
                 }
                 var rows = [];
                 var sums = [];
@@ -164,7 +172,7 @@ var compileGeneralStats = function () {
                 var i;
                 for (i = 0; i < this.phase.healStats.length; i++) {
                     var sup = this.phase.healStats[i];
-                    var player = this.players[i];
+                    var player = logData.players[i];
                     if (player.isConjure) {
                         continue;
                     }
@@ -196,14 +204,14 @@ var compileGeneralStats = function () {
                     rows: rows,
                     sums: sums
                 };
-                this.cache.set(this.phase, res);
+                this.cache.set(this.phaseindex, res);
                 return res;
             }
         }
     });
 
     Vue.component("gameplay-stats-component", {
-        props: ["phase", "activetargets", "players", "phaseindex"],
+        props: ["activetargets", "playerindex", "phaseindex"],
         template: "#tmplGameplayTable",
         mixins: [roundingComponent],
         data: function () {
@@ -220,20 +228,22 @@ var compileGeneralStats = function () {
             updateTable("#dmg-table");
         },
         computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
             tableData: function () {
-                if (this.cache.has(this.phase)) {
-                    return this.cache.get(this.phase);
+                if (this.cache.has(this.phaseindex)) {
+                    return this.cache.get(this.phaseindex);
                 }
-                var phase = this.phase;
                 var rows = [];
-                for (var i = 0; i < phase.dmgStats.length; i++) {
+                for (var i = 0; i < this.phase.dmgStats.length; i++) {
                     var commons = [];
                     var data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-                    var player = this.players[i];
+                    var player = logData.players[i];
                     if (player.isConjure) {
                         continue;
                     }
-                    var stats = phase.dmgStats[i];
+                    var stats = this.phase.dmgStats[i];
                     for (var j = 0; j < stats.length; j++) {
                         if (j >= 17) {
                             commons[j - 17] = stats[j];
@@ -247,7 +257,7 @@ var compileGeneralStats = function () {
                         data: data
                     });
                 }
-                this.cache.set(this.phase, rows);
+                this.cache.set(this.phaseindex, rows);
                 return rows;
             },
             tableDataTarget: function () {
@@ -256,22 +266,21 @@ var compileGeneralStats = function () {
                 if (this.cacheTarget.has(cacheID)) {
                     return this.cacheTarget.get(cacheID);
                 }
-                var phase = this.phase;
                 var rows = [];
-                for (var i = 0; i < phase.dmgStats.length; i++) {
+                for (var i = 0; i < this.phase.dmgStats.length; i++) {
                     var commons = [];
                     var data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-                    var player = this.players[i];
+                    var player = logData.players[i];
                     if (player.isConjure) {
                         continue;
                     }
-                    var stats = phase.dmgStats[i];
+                    var stats = this.phase.dmgStats[i];
                     for (var j = 0; j < stats.length; j++) {
                         if (j >= 17) {
                             commons[j - 17] = stats[j];
                         } else {
                             for (var k = 0; k < this.activetargets.length; k++) {
-                                var tar = phase.dmgStatsTargets[i][this.activetargets[k]];
+                                var tar = this.phase.dmgStatsTargets[i][this.activetargets[k]];
                                 data[j] += tar[j];
                             }
                         }
@@ -287,9 +296,9 @@ var compileGeneralStats = function () {
             }
         }
     });
+
     Vue.component("dmgmodifier-stats-component", {
-        props: ['phases', 'phaseindex',
-            'phase', 'players', 'activetargets'
+        props: ['phaseindex', 'playerindex', 'activetargets'
         ],
         template: "#tmplDamageModifierTable",
         data: function () {
@@ -300,8 +309,11 @@ var compileGeneralStats = function () {
             };
         },
         computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
             modifiers: function () {
-                var dmgModifiersCommon = this.phases[0].dmgModifiersCommon;
+                var dmgModifiersCommon = logData.phases[0].dmgModifiersCommon;
                 if (!dmgModifiersCommon.length) {
                     return [];
                 }
@@ -314,13 +326,13 @@ var compileGeneralStats = function () {
                 return buffs;
             },
             rows: function () {
-                if (this.cache.has(this.phase)) {
-                    return this.cache.get(this.phase);
+                if (this.cache.has(this.phaseindex)) {
+                    return this.cache.get(this.phaseindex);
                 }
                 var rows = [];
                 var j;
-                for (var i = 0; i < this.players.length; i++) {
-                    var player = this.players[i];
+                for (var i = 0; i < logData.players.length; i++) {
+                    var player = logData.players[i];
                     if (player.isConjure) {
                         continue;
                     }
@@ -337,7 +349,7 @@ var compileGeneralStats = function () {
                         data: data
                     });
                 }
-                this.cache.set(this.phase, rows);
+                this.cache.set(this.phaseindex, rows);
                 return rows;
             },
             rowsTarget: function () {
@@ -348,8 +360,8 @@ var compileGeneralStats = function () {
                 }
                 var rows = [];
                 var j;
-                for (var i = 0; i < this.players.length; i++) {
-                    var player = this.players[i];
+                for (var i = 0; i < logData.players.length; i++) {
+                    var player = logData.players[i];
                     if (player.isConjure) {
                         continue;
                     }

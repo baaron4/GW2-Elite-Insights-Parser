@@ -31,8 +31,13 @@ var compileCommons = function () {
     });
     
     Vue.component('target-data-component', {
-        props: ['target'],
-        template: "#tmplTargetData"
+        props: ['targetid'],
+        template: "#tmplTargetData",
+        computed: {
+            target: function() {
+                return logData.targets[this.targetid];
+            }
+        }
     });
 
     Vue.component('dmgtaken-component', {
@@ -85,7 +90,7 @@ var compileCommons = function () {
         }
     });
     Vue.component("buff-table-component", {
-        props: ["buffs", "playerdata", "generation", "condition", "sums", "id"],
+        props: ["buffs", "playerdata", "generation", "condition", "sums", "id", "playerindex"],
         template: "#tmplBuffTable",
         methods: {
             getAvgTooltip: function (avg) {

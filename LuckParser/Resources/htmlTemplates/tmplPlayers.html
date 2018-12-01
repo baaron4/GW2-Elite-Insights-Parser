@@ -2,7 +2,7 @@
     <table class="table composition">
         <tbody>
             <tr v-for="group in groups">
-                <td v-for="player in group" class="player-cell" :class="{active: player.active}" @click="select(player,groups)">
+                <td v-for="player in group" class="player-cell" :class="{active: player.id === playerindex}" @click="select(player.id)">
                     <div>
                         <img :src="player.icon" :alt="player.profession" class="icon" :data-original-title="player.profession">
                         <img v-if="player.condi > 0" src="https://wiki.guildwars2.com/images/5/54/Condition_Damage.png"
