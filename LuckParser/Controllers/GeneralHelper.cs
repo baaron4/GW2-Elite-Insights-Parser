@@ -39,7 +39,7 @@ namespace LuckParser.Controllers
             return false;
         }
 
-        public static bool IsTemporalFormat(string fileName)
+        public static bool IsTemporaryFormat(string fileName)
         {
             foreach (string format in _tmpFiles)
             {

@@ -603,7 +603,7 @@ namespace LuckParser
 
         private void LogFileWatcher_Renamed(object sender, RenamedEventArgs e)
         {
-            if (GeneralHelper.IsTemporalFormat(e.OldFullPath) && GeneralHelper.IsCompressedFormat(e.FullPath)) {
+            if (GeneralHelper.IsTemporaryFormat(e.OldFullPath) && GeneralHelper.IsCompressedFormat(e.FullPath)) {
                 AddDelayed(e.FullPath);
             }
         }
