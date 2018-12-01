@@ -138,8 +138,7 @@ namespace LuckParser
                 SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
                 Parser parser = new Parser(settings);
 
-                if (fInfo.Extension.Equals(".evtc", StringComparison.OrdinalIgnoreCase) ||
-                    fInfo.Name.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
+                if (GeneralHelper.IsSupportedFormat(fInfo.Name))
                 {
                     //Process evtc here
                     bg.UpdateProgress(rowData, "10% - Reading Binary...", 10);
@@ -596,7 +595,7 @@ namespace LuckParser
 
         private void LogFileWatcher_Created(object sender, FileSystemEventArgs e)
         {
-            if ((e.FullPath.EndsWith(".zip") && !e.FullPath.EndsWith(".tmp.zip")) || e.FullPath.EndsWith(".evtc"))
+            if (GeneralHelper.IsSupportedFormat(e.FullPath))
             {
                 AddDelayed(e.FullPath);
             }
@@ -604,7 +603,7 @@ namespace LuckParser
 
         private void LogFileWatcher_Renamed(object sender, RenamedEventArgs e)
         {
-            if (e.OldFullPath.EndsWith(".tmp.zip") && e.FullPath.EndsWith(".zip")) {
+            if (GeneralHelper.IsTemporalFormat(e.OldFullPath) && GeneralHelper.IsCompressedFormat(e.FullPath)) {
                 AddDelayed(e.FullPath);
             }
         }

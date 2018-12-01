@@ -11,6 +11,58 @@ namespace LuckParser.Controllers
 {
     public static class GeneralHelper
     {
+        private static HashSet<string> _compressedFiles = new HashSet<string>()
+        {
+            ".zevtc",
+            ".evtc.zip",
+        };
+
+        private static HashSet<string> _tmpFiles = new HashSet<string>()
+        {
+            ".tmp.zip"
+        };
+
+        private static HashSet<string> _supportedFiles = new HashSet<string>(_compressedFiles)
+        {
+            ".evtc"
+        };
+
+        public static bool IsCompressedFormat(string fileName)
+        {
+            foreach (string format in _compressedFiles)
+            {
+                if (fileName.EndsWith(format, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool IsTemporalFormat(string fileName)
+        {
+            foreach (string format in _tmpFiles)
+            {
+                if (fileName.EndsWith(format, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool IsSupportedFormat(string fileName)
+        {
+            foreach (string format in _supportedFiles)
+            {
+                if (fileName.EndsWith(format, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public static T MaxBy<T, R>(this IEnumerable<T> en, Func<T, R> evaluate) where R : IComparable<R>
         {
             return en.Select(t => new Tuple<T, R>(t, evaluate(t)))
