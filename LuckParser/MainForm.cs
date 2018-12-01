@@ -56,7 +56,7 @@ namespace LuckParser
 
                 if (Properties.Settings.Default.AutoParse)
                 {
-                    gRow.Run();
+                    QueueOrRunWorker(gRow);
                 }
             }
 
@@ -400,7 +400,7 @@ namespace LuckParser
             btnParse.Enabled = true;
             dgvFiles.Invalidate();
 
-            if (Properties.Settings.Default.ParseOneAtATime)
+            if (_logQueue.Count > 0)
             {
                 RunNextWorker();
             }
