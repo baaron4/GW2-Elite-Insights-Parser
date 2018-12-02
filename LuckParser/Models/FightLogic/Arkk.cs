@@ -120,7 +120,7 @@ namespace LuckParser.Models
                 throw new InvalidOperationException("Main target of the fight not found");
             }
             List<CombatItem> invulsTarget = GetFilteredList(log, 762, mainTarget);
-            if (invulsTarget.Count > 0)
+            if (invulsTarget.Count == 10)
             {
                 CombatItem last = invulsTarget.Last();
                 if (last.IsBuffRemove != ParseEnum.BuffRemove.None)
