@@ -57,7 +57,7 @@
             <div class="card fight-summary" id="encounter" style="min-width: 350px;">
                 <encounter-component></encounter-component>
             </div>
-            <div v-if="logdata.combatReplay" class="ml-5">
+            <div v-if="combatreplay" class="ml-5">
                 <ul class="nav nav-pills flex-column justify-content-center d-flex align-items-center">
                     <li class="nav-item mb-1">
                         <a class="nav-link" @click="changeMode(0)" :class="{active: !mode}">Statistics</a>
