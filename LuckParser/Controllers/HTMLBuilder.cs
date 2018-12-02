@@ -1231,7 +1231,11 @@ namespace LuckParser.Controllers
             CombatReplayMap map = _log.FightData.Logic.GetCombatMap();
             if (Properties.Settings.Default.HtmlExternalScripts)
             {
+#if DEBUG
                 string jsFileName = "EliteInsights-CR-" + _scriptVersion + ".js";
+#else
+                string jsFileName = "EliteInsights-CR-" + _scriptVersion + ".min.js";
+#endif
                 string jsPath = Path.Combine(path, jsFileName);
                 try
                 {
@@ -1321,7 +1325,11 @@ namespace LuckParser.Controllers
 #endif
             if (Properties.Settings.Default.HtmlExternalScripts)
             {
+#if DEBUG
                 string cssFilename = "EliteInsights-" + _scriptVersion + ".css";
+#else
+                string cssFilename = "EliteInsights-" + _scriptVersion + ".min.css";
+#endif
                 string cssPath = Path.Combine(path, cssFilename);
                 try
                 {
@@ -1368,7 +1376,11 @@ namespace LuckParser.Controllers
 #endif
             if (Properties.Settings.Default.HtmlExternalScripts)
             {
+#if DEBUG
                 string scriptFilename = "EliteInsights-" + _scriptVersion + ".js";
+#else
+                string scriptFilename = "EliteInsights-" + _scriptVersion + ".min.js";
+#endif
                 string scriptPath = Path.Combine(path, scriptFilename);
                 try
                 {
