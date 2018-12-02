@@ -31,7 +31,10 @@ namespace LuckParser.Models.ParseModels
 
         public void Add(SkillItem skillItem)
         {
-            _skills.Add(skillItem.ID, skillItem);
+            if (!_skills.ContainsKey(skillItem.ID))
+            {
+                _skills.Add(skillItem.ID, skillItem);
+            }
         }
     }
 }
