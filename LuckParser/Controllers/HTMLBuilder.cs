@@ -1242,7 +1242,11 @@ namespace LuckParser.Controllers
                     using (var fs = new FileStream(jsPath, FileMode.Create, FileAccess.Write))
                     using (var scriptWriter = new StreamWriter(fs, Encoding.UTF8))
                     {
+#if DEBUG
                         scriptWriter.Write(Properties.Resources.combatreplay_js);
+#else
+                        scriptWriter.Write(Uglify.Js(Properties.Resources.combatreplay_js).Code);
+#endif
                     }
                 } catch (IOException)
                 {

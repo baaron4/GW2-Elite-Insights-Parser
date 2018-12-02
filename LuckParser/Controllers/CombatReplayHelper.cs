@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using LuckParser.Models.DataModels;
 using Newtonsoft.Json;
+using NUglify;
 
 namespace LuckParser.Controllers
 {
@@ -108,6 +109,9 @@ namespace LuckParser.Controllers
             script += "var actors = [" + actors + "];";
             script += "var initialOnLoad = window.onload;";
             script += "window.onload = function () { if (initialOnLoad) {initialOnLoad();} initCombatReplay(actors, options);};";
+#if DEBUG
+            script = Uglify.Js(script).Code;
+#endif
             return script;
         }
 
@@ -115,7 +119,11 @@ namespace LuckParser.Controllers
         {
             string script = "";
             script += "<script>";
+#if DEBUG
             script += Properties.Resources.combatreplay_js;
+#else          
+            script += Uglify.Js(Properties.Resources.combatreplay_js).Code;
+#endif
             script += "</script>";
 
             script += "<script>";
