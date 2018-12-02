@@ -90,6 +90,8 @@ namespace LuckParser
             chkCombatReplay.Checked = Properties.Settings.Default.ParseCombatReplay;
             chkOutputJson.Checked = Properties.Settings.Default.SaveOutJSON;
             chkIndentJSON.Checked = Properties.Settings.Default.IndentJSON;
+            chkOutputXml.Checked = Properties.Settings.Default.SaveOutXML;
+            chkIndentXML.Checked = Properties.Settings.Default.IndentXML;
             UploadDPSReports_checkbox.Checked = Properties.Settings.Default.UploadToDPSReports;
             UploadDRRH_check.Checked = Properties.Settings.Default.UploadToDPSReportsRH;
             UploadRaidar_check.Checked = Properties.Settings.Default.UploadToRaidar;
@@ -104,10 +106,12 @@ namespace LuckParser
 
             chkHtmlExternalScripts.Checked = Properties.Settings.Default.HtmlExternalScripts;
             chkHtmlExternalScripts.Enabled = !Properties.Settings.Default.LegacyHtmlMode;
+            legacyBox.Enabled = Properties.Settings.Default.LegacyHtmlMode;
             toolTip1.SetToolTip(chkHtmlExternalScripts, "Writes static css and js scripts in own files, which are shared between all logs. Log file size decreases, but the script files have to be kept along with the html.");
 
             panelHtml.Enabled = Properties.Settings.Default.SaveOutHTML;
             panelJson.Enabled = Properties.Settings.Default.SaveOutJSON;
+            panelXML.Enabled = Properties.Settings.Default.SaveOutXML;
         }
 
         private void DefaultOutputLocationCheckedChanged(object sender, EventArgs e)
@@ -244,15 +248,27 @@ namespace LuckParser
             panelJson.Enabled = Properties.Settings.Default.SaveOutJSON;
         }
 
+        private void OutputXMLCheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.SaveOutXML = chkOutputXml.Checked;
+            panelXML.Enabled = Properties.Settings.Default.SaveOutXML;
+        }
+
         private void chkIndentJSONCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.IndentJSON = chkIndentJSON.Checked;
+        }
+
+        private void chkIndentXMLCheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.IndentXML = chkIndentXML.Checked;
         }
 
         private void chkHtmlExperimental_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.LegacyHtmlMode = chkHtmlLegacy.Checked;
             chkHtmlExternalScripts.Enabled = !Properties.Settings.Default.LegacyHtmlMode;
+            legacyBox.Enabled = Properties.Settings.Default.LegacyHtmlMode;
         }
 
         private void chkHtmlExternalScripts_CheckedChanged(object sender, EventArgs e)

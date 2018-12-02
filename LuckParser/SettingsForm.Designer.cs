@@ -81,11 +81,14 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.radioThemeLight = new System.Windows.Forms.RadioButton();
             this.radioThemeDark = new System.Windows.Forms.RadioButton();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.legacyBox = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.panelXML = new System.Windows.Forms.Panel();
+            this.chkIndentXML = new System.Windows.Forms.CheckBox();
+            this.chkOutputXml = new System.Windows.Forms.CheckBox();
             this.panelJson = new System.Windows.Forms.Panel();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.tabPage6 = new System.Windows.Forms.TabPage();
@@ -101,11 +104,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.imgTheme)).BeginInit();
             this.panelHtml.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.groupBox7.SuspendLayout();
+            this.legacyBox.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            this.panelXML.SuspendLayout();
             this.panelJson.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -466,7 +470,7 @@
             // chkIndentJSON
             // 
             this.chkIndentJSON.AutoSize = true;
-            this.chkIndentJSON.Location = new System.Drawing.Point(12, 12);
+            this.chkIndentJSON.Location = new System.Drawing.Point(3, 3);
             this.chkIndentJSON.Name = "chkIndentJSON";
             this.chkIndentJSON.Size = new System.Drawing.Size(87, 17);
             this.chkIndentJSON.TabIndex = 44;
@@ -513,6 +517,7 @@
             this.tabControl1.Controls.Add(this.tabPage6);
             this.tabControl1.HotTrack = true;
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
+            this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(479, 398);
@@ -654,7 +659,7 @@
             // 
             this.panelHtml.Controls.Add(this.panel1);
             this.panelHtml.Controls.Add(this.chkShowEstimates);
-            this.panelHtml.Controls.Add(this.groupBox7);
+            this.panelHtml.Controls.Add(this.legacyBox);
             this.panelHtml.Controls.Add(this.chkHtmlLegacy);
             this.panelHtml.Controls.Add(this.chkHtmlExternalScripts);
             this.panelHtml.Location = new System.Drawing.Point(0, 36);
@@ -695,17 +700,17 @@
             this.radioThemeDark.UseVisualStyleBackColor = true;
             this.radioThemeDark.CheckedChanged += new System.EventHandler(this.radioThemeDark_CheckedChanged);
             // 
-            // groupBox7
+            // legacyBox
             // 
-            this.groupBox7.Controls.Add(this.groupBox5);
-            this.groupBox7.Controls.Add(this.groupBox4);
-            this.groupBox7.Controls.Add(this.chkEventListDbg);
-            this.groupBox7.Location = new System.Drawing.Point(12, 105);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(377, 212);
-            this.groupBox7.TabIndex = 52;
-            this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "Legacy";
+            this.legacyBox.Controls.Add(this.groupBox5);
+            this.legacyBox.Controls.Add(this.groupBox4);
+            this.legacyBox.Controls.Add(this.chkEventListDbg);
+            this.legacyBox.Location = new System.Drawing.Point(12, 105);
+            this.legacyBox.Name = "legacyBox";
+            this.legacyBox.Size = new System.Drawing.Size(377, 212);
+            this.legacyBox.TabIndex = 52;
+            this.legacyBox.TabStop = false;
+            this.legacyBox.Text = "Legacy";
             // 
             // groupBox5
             // 
@@ -746,21 +751,53 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.panelXML);
+            this.tabPage4.Controls.Add(this.chkOutputXml);
             this.tabPage4.Controls.Add(this.panelJson);
             this.tabPage4.Controls.Add(this.chkOutputJson);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Size = new System.Drawing.Size(471, 372);
             this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "JSON";
+            this.tabPage4.Text = "Raw formats";
             this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // panelXML
+            // 
+            this.panelXML.Controls.Add(this.chkIndentXML);
+            this.panelXML.Location = new System.Drawing.Point(147, 35);
+            this.panelXML.Name = "panelXML";
+            this.panelXML.Size = new System.Drawing.Size(127, 35);
+            this.panelXML.TabIndex = 47;
+            // 
+            // chkIndentXML
+            // 
+            this.chkIndentXML.AutoSize = true;
+            this.chkIndentXML.Location = new System.Drawing.Point(3, 3);
+            this.chkIndentXML.Name = "chkIndentXML";
+            this.chkIndentXML.Size = new System.Drawing.Size(81, 17);
+            this.chkIndentXML.TabIndex = 44;
+            this.chkIndentXML.Text = "Indent XML";
+            this.chkIndentXML.UseVisualStyleBackColor = true;
+            this.chkIndentXML.CheckedChanged += new System.EventHandler(this.chkIndentXMLCheckedChanged);
+            // 
+            // chkOutputXml
+            // 
+            this.chkOutputXml.AutoSize = true;
+            this.chkOutputXml.Location = new System.Drawing.Point(147, 12);
+            this.chkOutputXml.Name = "chkOutputXml";
+            this.chkOutputXml.Size = new System.Drawing.Size(127, 17);
+            this.chkOutputXml.TabIndex = 46;
+            this.chkOutputXml.Text = "Output as XML (WIP)";
+            this.chkOutputXml.UseVisualStyleBackColor = true;
+            this.chkOutputXml.CheckedChanged += new System.EventHandler(this.OutputXMLCheckedChanged);
             // 
             // panelJson
             // 
             this.panelJson.Controls.Add(this.chkIndentJSON);
-            this.panelJson.Location = new System.Drawing.Point(0, 36);
+            this.panelJson.Location = new System.Drawing.Point(14, 35);
             this.panelJson.Name = "panelJson";
-            this.panelJson.Size = new System.Drawing.Size(468, 144);
+            this.panelJson.Size = new System.Drawing.Size(127, 35);
             this.panelJson.TabIndex = 45;
             // 
             // tabPage5
@@ -849,8 +886,8 @@
             this.panelHtml.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.groupBox7.ResumeLayout(false);
-            this.groupBox7.PerformLayout();
+            this.legacyBox.ResumeLayout(false);
+            this.legacyBox.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox4.ResumeLayout(false);
@@ -859,6 +896,8 @@
             this.tabPage3.PerformLayout();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
+            this.panelXML.ResumeLayout(false);
+            this.panelXML.PerformLayout();
             this.panelJson.ResumeLayout(false);
             this.panelJson.PerformLayout();
             this.tabPage5.ResumeLayout(false);
@@ -920,11 +959,10 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.RadioButton radioThemeLight;
         private System.Windows.Forms.RadioButton radioThemeDark;
-        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.GroupBox legacyBox;
         private System.Windows.Forms.Panel panelHtml;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Panel panelJson;
         private System.Windows.Forms.PictureBox imgTheme;
         private System.Windows.Forms.CheckBox chkB_SkipFailedTries;
         private System.Windows.Forms.CheckBox chkAutoAdd;
@@ -933,5 +971,9 @@
         private System.Windows.Forms.CheckBox chkAddDuration;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Panel panelJson;
+        private System.Windows.Forms.CheckBox chkOutputXml;
+        private System.Windows.Forms.Panel panelXML;
+        private System.Windows.Forms.CheckBox chkIndentXML;
     }
 }

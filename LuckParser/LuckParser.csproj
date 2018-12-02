@@ -87,7 +87,7 @@
     <Compile Include="ConsoleProgram.cs" />
     <Compile Include="Controllers\CSVHelper.cs" />
     <Compile Include="Controllers\GeneralHelper.cs" />
-    <Compile Include="Controllers\JSONBuilder.cs" />
+    <Compile Include="Controllers\RawFormatBuilder.cs" />
     <Compile Include="Controllers\HTMLBuilder.cs" />
     <Compile Include="Controllers\CombatReplayHelper.cs" />
     <Compile Include="Controllers\Parser.cs" />

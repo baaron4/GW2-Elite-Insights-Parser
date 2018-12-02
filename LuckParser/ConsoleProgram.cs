@@ -172,9 +172,9 @@ namespace LuckParser
                     {
                         CSVBuilder.UpdateStatisticSwitches(switches);
                     }
-                    if (Properties.Settings.Default.SaveOutJSON)
+                    if (Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML)
                     {
-                        JSONBuilder.UpdateStatisticSwitches(switches);
+                        RawFormatBuilder.UpdateStatisticSwitches(switches);
                     }
                     Statistics statistics = statisticsCalculator.CalculateStatistics(log, switches);
                     Console.Write("Statistics Computed\n");
@@ -229,8 +229,24 @@ namespace LuckParser
                         {
                             using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
                             {
-                                var builder = new JSONBuilder(sw, log, settings, statistics, uploadresult);
+                                var builder = new RawFormatBuilder(sw, log, settings, statistics, uploadresult);
                                 builder.CreateJSON();
+                            }
+                        }
+                    }
+
+                    if (Properties.Settings.Default.SaveOutXML)
+                    {
+                        string outputFile = Path.Combine(
+                            saveDirectory.FullName,
+                            $"{fName}.xml"
+                        );
+                        using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+                        {
+                            using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
+                            {
+                                var builder = new RawFormatBuilder(sw, log, settings, statistics, uploadresult);
+                                builder.CreateXML();
                             }
                         }
                     }

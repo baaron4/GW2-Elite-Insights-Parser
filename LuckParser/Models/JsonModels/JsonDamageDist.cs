@@ -12,9 +12,8 @@ namespace LuckParser.Models
         public int Min;
         public int Max;
         public int Hits;
-        public double Crit;
-        public double Glance;
-        public double Flank;
-        public int Condi;
+        public int Crit;
+        public int Glance;
+        public int Flank;
     }
 }

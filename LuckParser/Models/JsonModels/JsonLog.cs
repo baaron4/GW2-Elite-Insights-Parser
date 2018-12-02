@@ -20,8 +20,8 @@ namespace LuckParser.Models.DataModels
         public List<JsonPhase> Phases;
         public Dictionary<string, List<JsonMechanic>> Mechanics;
         public string[] UploadLinks;
-        public Dictionary<long, string> SkillNames;
-        public Dictionary<long, string> BuffNames;
+        public Dictionary<string, string> SkillNames;
+        public Dictionary<string, string> BuffNames;
         public Dictionary<string, HashSet<long>> PersonalBuffs;
     }
 }

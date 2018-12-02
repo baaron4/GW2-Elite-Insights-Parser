@@ -249,9 +249,9 @@ namespace LuckParser
                     {
                         CSVBuilder.UpdateStatisticSwitches(switches);
                     }
-                    if (Properties.Settings.Default.SaveOutJSON)
+                    if (Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML)
                     {
-                        JSONBuilder.UpdateStatisticSwitches(switches);
+                        RawFormatBuilder.UpdateStatisticSwitches(switches);
                     }
                     Statistics statistics = statisticsCalculator.CalculateStatistics(log, switches);
                     bg.UpdateProgress(rowData, "85% - Statistics computed", 85);
@@ -308,8 +308,25 @@ namespace LuckParser
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         using (var sw = new StreamWriter(fs, Encoding.UTF8))
                         {
-                            var builder = new JSONBuilder(sw, log, settings, statistics, uploadresult);
+                            var builder = new RawFormatBuilder(sw, log, settings, statistics, uploadresult);
                             builder.CreateJSON();
+                        }
+                    }
+
+                    if (Properties.Settings.Default.SaveOutXML)
+                    {
+                        string outputFile = Path.Combine(
+                            saveDirectory.FullName,
+                            $"{fName}.xml"
+                        );
+                        string splitString = "";
+                        if (rowData.LogLocation != null) { splitString = ","; }
+                        rowData.LogLocation += splitString + outputFile;
+                        using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+                        using (var sw = new StreamWriter(fs, Encoding.UTF8))
+                        {
+                            var builder = new RawFormatBuilder(sw, log, settings, statistics, uploadresult);
+                            builder.CreateXML();
                         }
                     }
 

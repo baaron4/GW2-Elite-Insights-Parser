@@ -26,6 +26,7 @@ namespace LuckParser.Models.DataModels
         public readonly bool UploadToDPSReportsRH;
         public readonly bool UploadToRaidar;
         public readonly bool IndentJSON;
+        public readonly bool IndentXML;
 
         public SettingsContainer(Settings settings)
         {
@@ -51,6 +52,7 @@ namespace LuckParser.Models.DataModels
             UploadToRaidar = settings.UploadToRaidar;
 
             IndentJSON = settings.IndentJSON;
+            IndentXML = settings.IndentXML;
         }
     }
 }

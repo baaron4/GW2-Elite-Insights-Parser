@@ -11,14 +11,14 @@ namespace LuckParser.Models
         public JsonSupport(int phaseCount)
         {
             CondiCleanse = new int[phaseCount];
-            CondiCleanseTime = new float[phaseCount];
-            ResurrectTime = new float[phaseCount];
+            CondiCleanseTime = new double[phaseCount];
+            ResurrectTime = new double[phaseCount];
             Resurrects = new int[phaseCount];
         }
 
         public int[] Resurrects;
-        public float[] ResurrectTime;
+        public double[] ResurrectTime;
         public int[] CondiCleanse;
-        public float[] CondiCleanseTime;
+        public double[] CondiCleanseTime;
     }
 }
