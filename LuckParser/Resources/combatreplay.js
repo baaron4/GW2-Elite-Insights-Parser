@@ -27,6 +27,14 @@ let timeSlider = null;
 let timeSliderDisplay = null;
 let canvas = null;
 let ctx = null;
+let drag = false;
+let dragX = 0;
+let dragY = 0;
+let posX = 0;
+let posY = 0;
+let zoomX = 0;
+let zoomY = 0;
+let zoomScale = 1;
 
 
 function initCombatReplay(actors, options) {
@@ -43,7 +51,54 @@ function initCombatReplay(actors, options) {
 	ctx = canvas.getContext('2d');
 	bgLoaded = false;
 	animation = null;
-	prevTime = 0;
+    prevTime = 0;
+    
+    // manipulation events
+    canvas.addEventListener('mousedown', function (evt) {
+        dragX = (evt.pageX - canvas.offsetLeft);
+        dragY = (evt.pageY - canvas.offsetTop);
+        drag = true;
+    }, false);
+
+    canvas.addEventListener('dblclick', function (evt) {
+        resetViewpoint();
+    }, false);
+
+    canvas.addEventListener('mousemove', function (evt) {
+        if (drag) {
+            let lastX = (evt.pageX - canvas.offsetLeft);
+            let lastY = (evt.pageY - canvas.offsetTop);
+            posX += (lastX - dragX);
+            posY += (lastY - dragY);
+            dragX = lastX;
+            dragY = lastY;
+            animateCanvas(-1);
+        }
+    }, false);
+
+    document.body.addEventListener('mouseup', function (evt) {     
+        drag = false;
+    }, false);
+
+    var zoom = function(evt) {
+        var delta = evt.wheelDelta ? evt.wheelDelta / 40 : evt.detail ? -evt.detail : 0;
+        if (delta) {
+            zoomX = (evt.pageX - canvas.offsetLeft) - posX ;
+            zoomY = (evt.pageY - canvas.offsetTop) - posY;
+            console.log(zoomX);
+            console.log(zoomY);
+            console.log("");
+            zoomScale *= Math.pow(1.1, delta);
+            zoomScale = Math.min(Math.max(0.2, zoomScale), 5.0);
+            console.log(zoomScale);
+            console.log("");
+            animateCanvas(-1);
+        }
+        return evt.preventDefault() && false;
+    };
+
+    canvas.addEventListener('DOMMouseScroll', zoom, false);
+    canvas.addEventListener('mousewheel', zoom, false);
 
 	// canvas
 	ctx.imageSmoothingEnabled = true;
@@ -55,6 +110,13 @@ function initCombatReplay(actors, options) {
 // Animation methods
 function animateCanvas(noRequest) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // pan
+    ctx.translate(posX, posY);
+    // zoom
+    ctx.translate(zoomX, zoomY);
+    ctx.scale(zoomScale, zoomScale);
+    ctx.translate(-zoomX, -zoomY);
+    //
     ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
     mechanicActorData.forEach(function (value, key, map) {
         value.draw(ctx, time);
@@ -73,6 +135,12 @@ function animateCanvas(noRequest) {
     if (selectedPlayer !== null) {
         selectedPlayer.draw(ctx, time);
     }
+    // un zoom
+    ctx.translate(zoomX, zoomY);
+    ctx.scale(1.0 / zoomScale, 1.0 / zoomScale);
+    ctx.translate(-zoomX, -zoomY);
+    // un pan
+    ctx.translate(-posX, -posY);
     let lastTime = times[times.length - 1];
     if (time === lastTime) {
         stopAnimate();
@@ -98,6 +166,15 @@ function startAnimate() {
         prevTime = new Date().getTime();
         animation = requestAnimationFrame(animateCanvas);
     }
+}
+
+function resetViewpoint() {
+    posX = 0;
+    posY = 0;
+    zoomX = 0;
+    zoomY = 0;
+    zoomScale = 1.0;
+    animateCanvas(-1);
 }
 
 function stopAnimate() {
@@ -266,9 +343,9 @@ class IconDrawable {
         if (pos === null) {
             return;
         }
-        const halfSize = this.pixelSize / 2;
+        const halfSize = this.pixelSize / 2 / zoomScale;
         ctx.drawImage(this.img,
-            pos.x - halfSize, pos.y - halfSize, this.pixelSize, this.pixelSize);
+            pos.x - halfSize, pos.y - halfSize, this.pixelSize / zoomScale, this.pixelSize / zoomScale);
     }
 
 }
@@ -288,30 +365,30 @@ class PlayerIconDrawable extends IconDrawable {
         if (pos === null) {
             return;
         }
-        const halfSize = this.pixelSize / 2;
+        const halfSize = this.pixelSize / 2 / zoomScale;
         if (!this.selected && this.group === selectedGroup) {
             ctx.beginPath();
-            ctx.lineWidth = '2';
+            ctx.lineWidth = (2 / zoomScale).toString();
             ctx.strokeStyle = 'blue';
-            ctx.rect(pos.x - halfSize, pos.y - halfSize, this.pixelSize, this.pixelSize);
+            ctx.rect(pos.x - halfSize, pos.y - halfSize, this.pixelSize / zoomScale, this.pixelSize / zoomScale);
             ctx.stroke();
         } else if (this.selected) {
             ctx.beginPath();
-            ctx.lineWidth = '4';
+            ctx.lineWidth = (4 / zoomScale).toString();
             ctx.strokeStyle = 'green';
-            ctx.rect(pos.x - halfSize, pos.y - halfSize, this.pixelSize, this.pixelSize);
+            ctx.rect(pos.x - halfSize, pos.y - halfSize, this.pixelSize / zoomScale, this.pixelSize / zoomScale);
             ctx.stroke();
             rangeControl.forEach(function (enabled, radius, map) {
                 if (!enabled) return;
                 ctx.beginPath();
-                ctx.lineWidth = '2';
+                ctx.lineWidth = (2 / zoomScale).toString();
                 ctx.strokeStyle = 'green';
                 ctx.arc(pos.x, pos.y, inch * radius, 0, 2 * Math.PI);
                 ctx.stroke();
             });
         }
         ctx.drawImage(this.getIcon(currentTime),
-            pos.x - halfSize, pos.y - halfSize, this.pixelSize, this.pixelSize);
+            pos.x - halfSize, pos.y - halfSize, this.pixelSize / zoomScale, this.pixelSize / zoomScale);
     }
 
     died(currentTime) {
