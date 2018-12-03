@@ -1500,6 +1500,10 @@ namespace LuckParser.Controllers
                     isConjure = player.Account == ":Conjured Sword",
                 };
                 BuildWeaponSets(playerDto, player);
+                if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay)
+                {
+                    playerDto.combatReplayID = player.GetCombatReplayID();
+                }
                 foreach (KeyValuePair<string, Minions> pair in player.GetMinions(_log))
                 {
                     playerDto.minions.Add(new MinionDto()
@@ -1519,9 +1523,8 @@ namespace LuckParser.Controllers
 
             foreach (Target target in _log.FightData.Logic.Targets)
             {
-                TargetDto tar = new TargetDto()
+                TargetDto targetDto = new TargetDto()
                 {
-                    id = target.ID,
                     name = target.Character,
                     icon = GeneralHelper.GetNPCIcon(target.ID),
                     health = target.Health,
@@ -1529,24 +1532,28 @@ namespace LuckParser.Controllers
                     hbWidth = target.HitboxWidth,
                     tough = target.Toughness
                 };
+                if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay)
+                {
+                    targetDto.combatReplayID = target.GetCombatReplayID();
+                }
                 if (_log.FightData.Success)
                 {
-                    tar.percent = 100;
-                    tar.hpLeft = 0;
+                    targetDto.percent = 100;
+                    targetDto.hpLeft = 0;
                 }
                 else
                 {
                     if (target.HealthOverTime.Count > 0)
                     {
-                        tar.percent = Math.Round(100.0 - target.HealthOverTime[target.HealthOverTime.Count - 1].Y * 0.01, 2);
-                        tar.hpLeft = (int)Math.Floor(target.HealthOverTime[target.HealthOverTime.Count - 1].Y * 0.01);
+                        targetDto.percent = Math.Round(100.0 - target.HealthOverTime[target.HealthOverTime.Count - 1].Y * 0.01, 2);
+                        targetDto.hpLeft = (int)Math.Floor(target.HealthOverTime[target.HealthOverTime.Count - 1].Y * 0.01);
                     }
                 }
                 foreach (KeyValuePair<string, Minions> pair in target.GetMinions(_log))
                 {
-                    tar.minions.Add(new MinionDto() { id = pair.Value.MinionID, name = pair.Key.TrimEnd(" \0".ToArray()) });
+                    targetDto.minions.Add(new MinionDto() { id = pair.Value.MinionID, name = pair.Key.TrimEnd(" \0".ToArray()) });
                 }
-                logData.targets.Add(tar);
+                logData.targets.Add(targetDto);
             }
 
             Dictionary<string, List<long>> persBuffs = new Dictionary<string, List<long>>();

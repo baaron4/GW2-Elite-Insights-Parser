@@ -30,7 +30,7 @@ namespace LuckParser.Controllers
                 foreach (Player p in log.PlayerList.Where(x => x.Group == group))
                 {
                     string replayPlayerHTML = Properties.Resources.tmplCombatReplayPlayer;
-                    replayPlayerHTML = replayPlayerHTML.Replace("${instid}", p.InstID.ToString());
+                    replayPlayerHTML = replayPlayerHTML.Replace("${instid}", p.GetCombatReplayID().ToString());
                     replayPlayerHTML = replayPlayerHTML.Replace("${playerName}", p.Character.Substring(0, Math.Min(10, p.Character.Length)));
                     replayPlayerHTML = replayPlayerHTML.Replace("${imageURL}", GeneralHelper.GetProfIcon(p.Prof));
                     replayPlayerHTML = replayPlayerHTML.Replace("${prof}", p.Prof);
