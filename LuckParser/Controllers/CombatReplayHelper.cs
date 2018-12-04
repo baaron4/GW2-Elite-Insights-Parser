@@ -105,10 +105,8 @@ namespace LuckParser.Controllers
                     actors += a.GetCombatReplayJSON(map);
                 }
             }
-            string script = "var options = " + JsonConvert.SerializeObject(options) + ";";
-            script += "var actors = [" + actors + "];";
-            script += "var initialOnLoad = window.onload;";
-            script += "window.onload = function () { if (initialOnLoad) {initialOnLoad();} initCombatReplay(actors, options);};";
+            string script = "var initialOnLoad = window.onload;";
+            script += "window.onload = function () { if (initialOnLoad) {initialOnLoad();} animator = new Animator("+ JsonConvert.SerializeObject(options)+", [" + actors + "]);};";
 #if DEBUG
             script = Uglify.Js(script).Code;
 #endif

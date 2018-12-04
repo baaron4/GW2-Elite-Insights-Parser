@@ -82,10 +82,10 @@ window.onload = function () {
                 var oldMode = this.mode;
                 this.mode = iMode;
                 if (this.mode !== 1 && oldMode === 1) {
-                    this.animate = animation !== null;
-                    stopAnimate();
+                    this.animate = animator && animator.animation !== null;
+                    animator && animator.stopAnimate();
                 } else if (this.mode === 1 && this.animate) {
-                    startAnimate();
+                    animator && animator.startAnimate();
                 }
             },
         },
