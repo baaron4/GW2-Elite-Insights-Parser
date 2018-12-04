@@ -11,18 +11,18 @@ namespace LuckParser.Controllers
 {
     public static class GeneralHelper
     {
-        private static HashSet<string> _compressedFiles = new HashSet<string>()
+        private readonly static HashSet<string> _compressedFiles = new HashSet<string>()
         {
             ".zevtc",
             ".evtc.zip",
         };
 
-        private static HashSet<string> _tmpFiles = new HashSet<string>()
+        private readonly static HashSet<string> _tmpFiles = new HashSet<string>()
         {
             ".tmp.zip"
         };
 
-        private static HashSet<string> _supportedFiles = new HashSet<string>(_compressedFiles)
+        private readonly static HashSet<string> _supportedFiles = new HashSet<string>(_compressedFiles)
         {
             ".evtc"
         };
