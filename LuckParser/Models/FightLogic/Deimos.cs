@@ -91,8 +91,10 @@ namespace LuckParser.Models
                 agentData.Refresh();
                 // update combat data
                 HashSet<ulong> gadgetAgents = new HashSet<ulong>(deimosGadgets.Select(x => x.Agent));
-                HashSet<ulong> allAgents = new HashSet<ulong>(gadgetAgents);
-                allAgents.Add(target.Agent);
+                HashSet<ulong> allAgents = new HashSet<ulong>(gadgetAgents)
+                {
+                    target.Agent
+                };
                 foreach (CombatItem c in combatData)
                 {
                     if (gadgetAgents.Contains(c.SrcAgent) && c.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate)
