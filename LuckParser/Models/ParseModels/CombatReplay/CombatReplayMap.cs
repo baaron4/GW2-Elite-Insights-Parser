@@ -37,15 +37,15 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public Tuple<int, int> GetMapCoord(float realX, float realY)
+        public Tuple<double, double> GetMapCoord(float realX, float realY)
         {
             //Tuple<int, int, int, int> apiRect = getMapApiRect(log);
             Tuple<int, int> pixelSizes = GetPixelMapSize();
-            float scaleX = (float)pixelSizes.Item1 / _size.Item1;
-            float scaleY = (float)pixelSizes.Item2 / _size.Item2;
-            float x = (Math.Max(Math.Min(realX, _rect.Item3), _rect.Item1) - _rect.Item1) / (_rect.Item3 - _rect.Item1);
-            float y = (Math.Max(Math.Min(realY, _rect.Item4), _rect.Item2) - _rect.Item2) / (_rect.Item4 - _rect.Item2);
-            return Tuple.Create((int)Math.Round(scaleX * _size.Item1 * x), (int)Math.Round(scaleY * (_size.Item2 - _size.Item2 * y)));
+            double scaleX = (double)pixelSizes.Item1 / _size.Item1;
+            double scaleY = (double)pixelSizes.Item2 / _size.Item2;
+            double x = (Math.Max(Math.Min(realX, _rect.Item3), _rect.Item1) - _rect.Item1) / (_rect.Item3 - _rect.Item1);
+            double y = (Math.Max(Math.Min(realY, _rect.Item4), _rect.Item2) - _rect.Item2) / (_rect.Item4 - _rect.Item2);
+            return Tuple.Create(Math.Round(scaleX * _size.Item1 * x,2), Math.Round(scaleY * (_size.Item2 - _size.Item2 * y),2));
         }
 
         public float GetInch()

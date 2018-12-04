@@ -8,21 +8,26 @@ namespace LuckParser.Models.ParseModels
 {
     public class PositionConnector : Connector
     {
-        private Point3D _position;
+        protected Point3D Position;
+
+        public PositionConnector()
+        {
+
+        }
 
         public PositionConnector(Point3D position)
         {
-            _position = position;
+            Position = position;
         }
 
         public override object GetConnectedTo(CombatReplayMap map)
         {
-            Tuple<int, int> mapPos = map.GetMapCoord(_position.X, _position.Y);
-            return new int[2]
+            Tuple<double, double> mapPos = map.GetMapCoord(Position.X, Position.Y);
+            return new double[2]
                        {
                         mapPos.Item1,
                         mapPos.Item2
-                       }; ;
+                       };
         }
     }
 }

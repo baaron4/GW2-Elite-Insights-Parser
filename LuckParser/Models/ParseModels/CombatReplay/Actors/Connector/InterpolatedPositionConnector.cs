@@ -6,38 +6,27 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class InterpolatedPositionConnector : Connector
+    public class InterpolatedPositionConnector : PositionConnector
     {
-        private Point3D _position;
-        public InterpolatedPositionConnector(Point3D prev, Point3D next, int time)
+        public InterpolatedPositionConnector(Point3D prev, Point3D next, int time) : base()
         {
             if (prev != null && next != null)
             {
                 long denom = next.Time - prev.Time;
                 if (denom == 0)
                 {
-                    _position = prev;
+                    Position = prev;
                 }
                 else
                 {
                     float ratio = (float)(time - prev.Time) / denom;
-                    _position = new Point3D(prev, next, ratio, time);
+                    Position = new Point3D(prev, next, ratio, time);
                 }
             }
             else
             {
-                _position = prev ?? next;
+                Position = prev ?? next;
             }
-        }
-
-        public override object GetConnectedTo(CombatReplayMap map)
-        {
-            Tuple<int, int> mapPos = map.GetMapCoord(_position.X, _position.Y);
-            return new int[2]
-                       {
-                        mapPos.Item1,
-                        mapPos.Item2
-                       }; ;
         }
     }
 }

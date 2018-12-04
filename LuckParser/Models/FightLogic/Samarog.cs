@@ -209,7 +209,7 @@ namespace LuckParser.Models
                     Tuple<int, int> duration = new Tuple<int, int>(fixationGuldhemStart, fixationGuldhemEnd);
                     if (guldhem != null)
                     {
-                        replay.Actors.Add(new LineActor(0, 10, duration, "rgba(255, 100, 0, 0.3)", new AgentConnector(p), new AgentConnector(guldhem)));
+                        replay.Actors.Add(new LineActor(0, duration, "rgba(255, 100, 0, 0.3)", new AgentConnector(p), new AgentConnector(guldhem)));
                     }
                 }
             }
@@ -230,7 +230,7 @@ namespace LuckParser.Models
                     Tuple<int, int> duration = new Tuple<int, int>(fixationRigomStart, fixationRigomEnd);
                     if (rigom != null)
                     {
-                        replay.Actors.Add(new LineActor(0, 10, duration, "rgba(255, 0, 0, 0.3)", new AgentConnector(p), new AgentConnector(rigom)));
+                        replay.Actors.Add(new LineActor(0, duration, "rgba(255, 0, 0, 0.3)", new AgentConnector(p), new AgentConnector(rigom)));
                     }
                 }
             }
