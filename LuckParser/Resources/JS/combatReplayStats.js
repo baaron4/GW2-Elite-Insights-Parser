@@ -52,7 +52,7 @@ var compileCombatReplay = function () {
                     cols.push(target);
                 }
                 for (i = 0; i < this.graph.length; i++) {
-                    var cacheID, data, cur, next, curDmg, nextDmg;
+                    var cacheID, data, cur, next;
                     var player = logData.players[i];
                     var graphData = this.graph[i];
                     var dps = [];
@@ -61,34 +61,28 @@ var compileCombatReplay = function () {
                         var activeTargets = [j];
                         cacheID = 0 + '-';
                         cacheID += getTargetCacheID(activeTargets);
-                        data = computePlayerDPS(player, graphData, 0, null, activeTargets, cacheID + '-' + 0).dps.target;
+                        data = computePlayerDPS(player, graphData, 0, null, activeTargets, cacheID + '-' + 0).total.target;
                         cur = data[index];
-                        curDmg = cur * index;
                         next = data[index+1];
                         if (typeof next !== "undefined") {
-                            nextDmg = next * (index + 1);
-                            dps[2 * j] = curDmg + (this.time / 1000 - index) * (nextDmg - curDmg);
-                            dps[2 * j + 1] = dps[2 * j] / (Math.max(this.time / 1000, 1));
+                            dps[2 * j] = cur + (this.time / 1000 - index) * Math.max((next - cur), 0);
                         } else {
-                            dps[2 * j] = curDmg;
-                            dps[2 * j + 1] = cur;
+                            dps[2 * j] = cur;
                         }
+                        dps[2 * j + 1] = dps[2 * j] / (Math.max(this.time / 1000, 1));
                     }
                     {
                         cacheID = 0 + '-';
                         cacheID += getTargetCacheID(this.targets);
-                        data = computePlayerDPS(player, graphData, 0, null, this.targets, cacheID + '-' + 0).dps.total;
+                        data = computePlayerDPS(player, graphData, 0, null, this.targets, cacheID + '-' + 0).total.total;
                         cur = data[index];
-                        curDmg = cur * index;
                         next = data[index + 1];
                         if (typeof next !== "undefined") {
-                            nextDmg = next * (index + 1);
-                            dps[2 * j] = curDmg + (this.time / 1000 - index) * (nextDmg - curDmg);
-                            dps[2 * j + 1] = dps[2 * j] / (Math.max(this.time / 1000, 1));
+                            dps[2 * j] = cur + (this.time / 1000 - index) * Math.max((next - cur), 0);
                         } else {
-                            dps[2 * j] = curDmg;
-                            dps[2 * j + 1] = cur;
+                            dps[2 * j] = cur;
                         }
+                        dps[2 * j + 1] = dps[2 * j] / (Math.max(this.time / 1000, 1));
                     }
                     for (j = 0; j < dps.length; j++) {
                         total[j] = (total[j] || 0) + dps[j];
