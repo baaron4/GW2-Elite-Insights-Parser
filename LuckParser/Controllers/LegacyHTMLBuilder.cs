@@ -126,7 +126,7 @@ namespace LuckParser.Controllers
                         "name: 'All Player Dps'");
                 sw.Write("},");
                 HashSet<Mechanic> presMech = _log.MechanicData.GetPresentMechanics(phaseIndex);
-                List<ushort> playersIds = _log.PlayerList.Select(x => x.InstID).ToList();
+                HashSet<ushort> playersIds = _log.PlayerIDs;
                 foreach (Mechanic mech in presMech)
                 {
                     List<MechanicLog> filterdList = _log.MechanicData[mech].Where(x => phase.InInterval(x.Time)).ToList();
