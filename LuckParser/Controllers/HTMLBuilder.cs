@@ -16,7 +16,7 @@ namespace LuckParser.Controllers
 {
     class HTMLBuilder
     {
-        private const string _scriptVersion = "1.2";
+        private const string _scriptVersion = "1.3";
         private const int _scriptVersionRev = 0;
         private readonly SettingsContainer _settings;
 
@@ -1361,7 +1361,7 @@ namespace LuckParser.Controllers
 
         private string BuildEIJs(string path)
         {
-            var orderedScripts = new List<string>()
+            List<string> orderedScripts = new List<string>()
             {
                 Properties.Resources.globalJS,
                 Properties.Resources.commonsJS,
@@ -1375,9 +1375,11 @@ namespace LuckParser.Controllers
                 Properties.Resources.playerStatsJS,
                 Properties.Resources.ei_js
             };
+            string suffix = "";
             if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay)
             {
                 orderedScripts.Add(Properties.Resources.combatReplayStatsJS);
+                suffix = "withCR-";
             }
             string scriptContent = orderedScripts[0];
             for (int i = 1; i < orderedScripts.Count; i++)
@@ -1390,9 +1392,9 @@ namespace LuckParser.Controllers
             if (Properties.Settings.Default.HtmlExternalScripts)
             {
 #if DEBUG
-                string scriptFilename = "EliteInsights-" + _scriptVersion + ".js";
+                string scriptFilename = "EliteInsights-" + suffix + _scriptVersion + ".js";
 #else
-                string scriptFilename = "EliteInsights-" + _scriptVersion + ".min.js";
+                string scriptFilename = "EliteInsights-" + suffix + _scriptVersion +".min.js";
 #endif
                 string scriptPath = Path.Combine(path, scriptFilename);
                 try

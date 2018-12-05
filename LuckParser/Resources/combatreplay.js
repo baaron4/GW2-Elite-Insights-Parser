@@ -27,6 +27,7 @@ class Animator {
         this.rangeControl = new Map();
         this.selectedGroup = -1;
         this.selectedPlayer = null;
+        this.selectedPlayerID = null;
         // actors
         this.targetData = new Map();
         this.playerData = new Map();
@@ -67,6 +68,9 @@ class Animator {
         this.initActors(actors);
         this.initMouseEvents();
         this.initTouchEvents();
+        if (typeof mainComponent !== "undefined" && mainComponent !== null) {
+            mainComponent.animator = this;
+        }
     }
 
     initActors(actors) {
@@ -127,7 +131,7 @@ class Animator {
                 return;
             }
             const ms = Math.round(parsedTime * 1000.0);
-            time = Math.min(Math.max(ms, 0), this.times[this.times.length - 1]);
+            this.time = Math.min(Math.max(ms, 0), this.times[this.times.length - 1]);
             animateCanvas(-2);
         } catch (error) {
             console.error(error);
@@ -169,6 +173,7 @@ class Animator {
         this.selectedGroup = actor.selected ? actor.group : -1;
         if (actor.selected) {
             this.selectedPlayer = actor;
+            this.selectedPlayerID = pId;
         }
         this.playerData.forEach(function (value, key, map) {
             let hasActive = document.getElementById('id' + key).classList.contains('active') && !value.selected;

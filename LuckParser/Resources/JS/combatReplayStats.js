@@ -4,13 +4,31 @@ var compileCombatReplay = function () {
     Vue.component("combat-replay-damage-stats-component", {
         props: ["time", "playerindex"],
         template: "#tmplCombatReplayDamageTable",
-        data: function () {
+        data: function() {
             return {
-                cache: []
+                damageMode : 1
             };
         },
+        created() {
+            var i, cacheID;
+            for (var j = 0; j < this.targets.length; j++) {
+                var activeTargets = [j];
+                cacheID = 0 + '-';
+                cacheID += getTargetCacheID(activeTargets);
+                // compute dps for all players
+                for (i = 0; i < logData.players.length; i++) {
+                    computePlayerDPS(logData.players[i], this.graph[i], 0, null, activeTargets, cacheID + '-' + 0);
+                }
+            }
+            cacheID = 0 + '-';
+            cacheID += getTargetCacheID(this.targets);
+            // compute dps for all players
+            for (i = 0; i < logData.players.length; i++) {
+                computePlayerDPS(logData.players[i], this.graph[i], 0, null, this.targets, cacheID + '-' + 0);
+            }
+        },
         mounted() {
-            initTable("#combat-replay-dps-table", 0, "desc");
+            initTable("#combat-replay-dps-table", 2, "desc");
         },
         updated() {
             updateTable("#combat-replay-dps-table");
@@ -23,15 +41,10 @@ var compileCombatReplay = function () {
                 return graphData.phases[0].players;
             },
             tableData: function () {
-                var cacheID = this.time / 200;
-                if (this.cache[cacheID]) {
-                    return this.cache[cacheID];
-                }
-                var prevStatus = this.cache[cacheID - 1];
                 var rows = [];
                 var cols = [];
                 var sums = [];
-                var total = [];
+                var total = [];        
                 var index = Math.floor(this.time / 1000);
                 var i, j;
                 for (j = 0; j < this.targets.length; j++) {
@@ -39,27 +52,43 @@ var compileCombatReplay = function () {
                     cols.push(target);
                 }
                 for (i = 0; i < this.graph.length; i++) {
-                    var dpsStat = this.graph[i];
+                    var cacheID, data, cur, next, curDmg, nextDmg;
                     var player = logData.players[i];
+                    var graphData = this.graph[i];
                     var dps = [];
+                    // targets
                     for (j = 0; j < this.targets.length; j++) {
-                        var tar = dpsStat.targets[this.targets[j]];
-                        var damage = tar[index + 1];
-                        if (typeof damage !== "undefined") {
-                            dps[2 * j] = prevStatus ? prevStatus.rows[i].dps[2 * j] + 0.2 * damage : 0.2 * damage;
+                        var activeTargets = [j];
+                        cacheID = 0 + '-';
+                        cacheID += getTargetCacheID(activeTargets);
+                        data = computePlayerDPS(player, graphData, 0, null, activeTargets, cacheID + '-' + 0).dps.target;
+                        cur = data[index];
+                        curDmg = cur * index;
+                        next = data[index+1];
+                        if (typeof next !== "undefined") {
+                            nextDmg = next * (index + 1);
+                            dps[2 * j] = curDmg + (this.time / 1000 - index) * (nextDmg - curDmg);
+                            dps[2 * j + 1] = dps[2 * j] / (Math.max(this.time / 1000, 1));
                         } else {
-                            dps[2 * j] = prevStatus ? prevStatus.rows[i].dps[2 * j] : 0;
+                            dps[2 * j] = curDmg;
+                            dps[2 * j + 1] = cur;
                         }
-                        dps[2 * j + 1] = dps[2 * j] / this.time; 
                     }
-                    {                 
-                        var totalDamage = dpsStat.total[index + 1];
-                        if (typeof totalDamage !== "undefined") {
-                            dps[2 * j] = prevStatus ? prevStatus.rows[i].dps[2 * j] + 0.2 * totalDamage : 0.2 * totalDamage;
+                    {
+                        cacheID = 0 + '-';
+                        cacheID += getTargetCacheID(this.targets);
+                        data = computePlayerDPS(player, graphData, 0, null, this.targets, cacheID + '-' + 0).dps.total;
+                        cur = data[index];
+                        curDmg = cur * index;
+                        next = data[index + 1];
+                        if (typeof next !== "undefined") {
+                            nextDmg = next * (index + 1);
+                            dps[2 * j] = curDmg + (this.time / 1000 - index) * (nextDmg - curDmg);
+                            dps[2 * j + 1] = dps[2 * j] / (Math.max(this.time / 1000, 1));
                         } else {
-                            dps[2 * j] = prevStatus ? prevStatus.rows[i].dps[2 * j] : 0;
+                            dps[2 * j] = curDmg;
+                            dps[2 * j + 1] = cur;
                         }
-                        dps[2 * j + 1] = dps[2 * j] / this.time; 
                     }
                     for (j = 0; j < dps.length; j++) {
                         total[j] = (total[j] || 0) + dps[j];
@@ -78,7 +107,6 @@ var compileCombatReplay = function () {
                     rows: rows,
                     sums: sums
                 };
-                this.cache[cacheID] = res;
                 return res;
             }
         }
@@ -91,17 +119,13 @@ var compileCombatReplay = function () {
             playerindex: function() {
                 if (this.animator.selectedPlayer) {
                     for (var i = 0; i < logData.players.length; i++) {
-                        if (logData.players[i].combatReplayID == this.animator.selectedPlayer) {
+                        if (logData.players[i].combatReplayID == this.animator.selectedPlayerID) {
                             return i;
                         }
                     }
                 }
                 return -1;
             },
-            time: function() {
-                var time = Math.floor(this.animator.time / 200) * 200;
-                return time;
-            }
         }
     });
 };
