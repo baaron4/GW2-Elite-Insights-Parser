@@ -1310,6 +1310,11 @@ namespace LuckParser.Controllers
                 {"tmplTargetTabGraph",Properties.Resources.tmplTargetTabGraph },
                 {"tmplTargetData",Properties.Resources.tmplTargetData },
             };
+            if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay)
+            {
+                templates.Add("tmplCombatReplayData", Properties.Resources.tmplCombatReplayData);
+                templates.Add("tmplCombatReplayDamageTable", Properties.Resources.tmplCombatReplayDamageTable);
+            }
             foreach (var entry in templates)
             {
                 string template = "<script type=\"text/x-template\" id=\"" + entry.Key + "\">\r\n";
@@ -1356,7 +1361,7 @@ namespace LuckParser.Controllers
 
         private string BuildEIJs(string path)
         {
-            var orderedScripts = new string[]
+            var orderedScripts = new List<string>()
             {
                 Properties.Resources.globalJS,
                 Properties.Resources.commonsJS,
@@ -1370,8 +1375,12 @@ namespace LuckParser.Controllers
                 Properties.Resources.playerStatsJS,
                 Properties.Resources.ei_js
             };
+            if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay)
+            {
+                orderedScripts.Add(Properties.Resources.combatReplayStatsJS);
+            }
             string scriptContent = orderedScripts[0];
-            for (int i = 1; i < orderedScripts.Length; i++)
+            for (int i = 1; i < orderedScripts.Count; i++)
             {
                 scriptContent += orderedScripts[i];
             }

@@ -43,6 +43,9 @@ window.onload = function () {
     compileGraphs();
     compilePlayerTab();
     compileTargetTab();
+    if (logData.combatReplay) {
+        compileCombatReplay();
+    }
     new Vue({
         el: "#content",
         data: {
@@ -52,7 +55,8 @@ window.onload = function () {
             combatreplay: logData.combatReplay,
             light: logData.lightTheme,
             mode: 0,
-            animate: false
+            animate: false,
+            animator: animator
         },
         methods: {
             switchCombatReplayButtons: function(from, to) {          
