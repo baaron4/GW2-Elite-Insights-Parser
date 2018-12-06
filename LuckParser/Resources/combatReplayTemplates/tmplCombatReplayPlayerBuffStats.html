@@ -1,0 +1,43 @@
+<div class="d-flex flex-column justify-content-end" style="height: 132px">
+    <div v-if="data.enemies.length > 0">
+        <span v-for="enemy in data.enemies">
+            <img :src="enemy.buff.icon" :title="enemy.buff.name" :alt="enemy.buff.name" class="icon" />
+            {{enemy.state > 1 ? enemy.state : ''}}
+        </span>
+    </div>
+    <div v-if="data.conditions.length > 0">
+        <span v-for="condition in data.conditions">
+            <img :src="condition.buff.icon" :title="condition.buff.name" :alt="condition.buff.name" class="icon" />
+            {{condition.state > 1 ? condition.state : ''}}
+        </span>
+    </div>
+    <div v-if="data.others.length > 0">
+        <span v-for="other in data.others">
+            <img :src="other.buff.icon" :title="other.buff.name" :alt="other.buff.name" class="icon" />
+            {{other.state > 1 ? other.state : ''}}
+        </span>
+    </div>
+    <div v-if="data.offs.length > 0 || data.defs.length > 0">
+        <span v-for="off in data.offs">
+            <img :src="off.buff.icon" :title="off.buff.name" :alt="off.buff.name" class="icon" />
+            {{off.state > 1 ? off.state : ''}}
+        </span>
+        <span v-for="def in data.defs">
+            <img :src="def.buff.icon" :title="def.buff.name" :alt="def.buff.name" class="icon" />
+            {{def.state > 1 ? def.state : ''}}
+        </span>
+    </div>
+    <div v-if="data.boons.length > 0">
+        <span v-for="boon in data.boons">
+            <img :src="boon.buff.icon" :title="boon.buff.name" :alt="boon.buff.name" class="icon" />
+            {{boon.state > 1 ? boon.state : ''}}
+        </span>
+    </div>
+    <div v-if="data.consumables.length > 0">
+        <span v-for="consumable in data.consumables">
+            <img :src="consumable.buff.icon" :title="consumable.buff.name" :alt="consumable.buff.name"
+                class="icon" />
+            {{consumable.state > 1 ? consumable.state : ''}}
+        </span>
+    </div>
+</div>

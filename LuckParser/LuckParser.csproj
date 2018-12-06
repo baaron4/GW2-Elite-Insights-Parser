@@ -304,7 +304,9 @@
     <None Include="Resources\combatreplay.js" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplay.html" />
     <Content Include="Resources\combatReplayTemplates\tmplCombatReplayDamageTable.html" />
+    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayPlayerBuffStats.html" />
     <Content Include="Resources\combatReplayTemplates\tmplCombatReplayData.html" />
+    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayPlayerStats.html" />
     <Content Include="Resources\ei.css" />
     <Content Include="Resources\ei.js" />
     <None Include="Resources\htmlTemplates\tmplGeneralLayout.html" />

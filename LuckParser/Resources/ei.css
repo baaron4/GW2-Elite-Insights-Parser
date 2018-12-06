@@ -20,6 +20,20 @@
     fill-opacity: 0.9 !important;
 }
 
+.modal-open {
+    overflow: auto !important;
+}
+
+.modal {
+    overflow: hidden !important;
+    pointer-events: none;
+    min-width: 350px;
+    left: auto;
+    right: auto;
+    margin: auto;
+    margin-top: 200px;
+    margin-left: -200px;
+}
 
 body {
     font-family: -apple-system,

@@ -1310,17 +1310,30 @@ namespace LuckParser.Controllers
                 {"tmplTargetTabGraph",Properties.Resources.tmplTargetTabGraph },
                 {"tmplTargetData",Properties.Resources.tmplTargetData },
             };
-            if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay)
-            {
-                templates.Add("tmplCombatReplayData", Properties.Resources.tmplCombatReplayData);
-                templates.Add("tmplCombatReplayDamageTable", Properties.Resources.tmplCombatReplayDamageTable);
-            }
             foreach (var entry in templates)
             {
                 string template = "<script type=\"text/x-template\" id=\"" + entry.Key + "\">\r\n";
                 template += entry.Value;
                 template += "\r\n</script>\r\n";
                 templatesScript += template;
+            }
+
+            if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay)
+            {
+                Dictionary<string, string> CRtemplates = new Dictionary<string, string>()
+                {
+                    {"tmplCombatReplayData", Properties.Resources.tmplCombatReplayData },
+                    {"tmplCombatReplayDamageTable", Properties.Resources.tmplCombatReplayDamageTable },
+                    {"tmplCombatReplayPlayerBuffStats", Properties.Resources.tmplCombatReplayPlayerBuffStats },
+                    {"tmplCombatReplayPlayerStats", Properties.Resources.tmplCombatReplayPlayerStats },
+                };
+                foreach (var entry in CRtemplates)
+                {
+                    string template = "<script type=\"text/x-template\" id=\"" + entry.Key + "\">\r\n";
+                    template += entry.Value;
+                    template += "\r\n</script>\r\n";
+                    templatesScript += template;
+                }
             }
             return templatesScript;
         }
@@ -1857,7 +1870,9 @@ namespace LuckParser.Controllers
                     id = boon.ID,
                     name = boon.Name,
                     icon = boon.Link,
-                    stacking = boon.Type == Boon.BoonType.Intensity
+                    stacking = boon.Type == Boon.BoonType.Intensity,
+                    consumable = boon.Nature == Boon.BoonNature.Consumable,
+                    enemy = boon.Source == Boon.BoonSource.Enemy
                 });
             }
             return dtos;

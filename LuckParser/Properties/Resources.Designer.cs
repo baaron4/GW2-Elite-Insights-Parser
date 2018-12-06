@@ -114,16 +114,14 @@ namespace LuckParser.Properties {
         ///        template: &quot;#tmplCombatReplayDamageTable&quot;,
         ///        data: function () {
         ///            return {
-        ///                cache: []
+        ///                damageMode: 1
         ///            };
         ///        },
-        ///        mounted() {
-        ///            initTable(&quot;#combat-replay-dps-table&quot;, 0, &quot;desc&quot;);
-        ///        },
-        ///        updated() {
-        ///            updateTable(&quot;#combat-replay-dps-table&quot;);
-        ///        },
-        ///  [rest of string was truncated]&quot;;.
+        ///        created() {
+        ///            var i, cacheID;
+        ///            for (var j = 0; j &lt; this.targets.length; j++) {
+        ///                var activeTargets = [j];
+        ///                cacheID = 0 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string combatReplayStatsJS {
             get {
@@ -164,35 +162,31 @@ namespace LuckParser.Properties {
         ///    border-top: 0;
         ///}
         ///
+        ///.theme-slate g.hovertext text.name {
+        ///    fill: #cccccc !important;
+        ///}
+        ///
+        ///.theme-yeti g.hovertext text.name {
+        ///    fill: #495057 !important;
+        ///}
+        ///
+        ///.theme-slate g.hovertext rect {
+        ///    fill: #272B30 !important;
+        ///    fill-opacity: 0.9 !important;
+        ///}
+        ///
+        ///.theme-yeti g.hovertext rect {
+        ///    fill: #fff !important;
+        ///    fill-opacity: 0.9 !important;
+        ///}
+        ///
+        ///
         ///body {
         ///    font-family: -apple-system,
         ///        BlinkMacSystemFont,
         ///        &quot;Segoe UI&quot;,
         ///        Roboto,
-        ///        &quot;Helvetica Neue&quot;,
-        ///        Arial,
-        ///        sans-serif,
-        ///        &quot;Apple Color Emoji&quot;,
-        ///        &quot;Segoe UI Emoji&quot;,
-        ///        &quot;Segoe UI Symbol&quot;;
-        ///}
-        ///
-        ///.replay {
-        ///    border: 2px solid #888888;
-        ///}
-        ///
-        ///.btn {
-        ///    font-weight: 400;
-        ///    padding: 0.75rem 1rem;
-        ///}
-        ///
-        ///.btn-small {
-        ///    font-size: 0.9em;
-        ///    padding: 0.375rem 0.5rem;
-        ///}
-        ///
-        ///.btn-ssmall {
-        ///    font-siz [rest of string was truncated]&quot;;.
+        ///        &quot;Helv [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ei_css {
             get {
@@ -203,12 +197,9 @@ namespace LuckParser.Properties {
         /// <summary>
         ///   Looks up a localized string similar to /*jshint esversion: 6 */
         ///
-        ///var onLoad = window.onload;
+        ///var mainComponent = null;
         ///
         ///window.onload = function () {
-        ///    if (onLoad) {
-        ///        onLoad();
-        ///    }
         ///    // make some additional variables reactive
         ///    var i;
         ///    var simpleLogData = {
@@ -223,7 +214,8 @@ namespace LuckParser.Properties {
         ///        });
         ///    }
         ///    for (i = 0; i &lt; logData.targets.length; i++) {
-        ///    [rest of string was truncated]&quot;;.
+        ///        simpleLogData.targets.push({
+        ///             [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ei_js {
             get {
@@ -553,19 +545,16 @@ namespace LuckParser.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center&quot;&gt;
+        ///        &lt;li class=&quot;nav-item&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; @click=&quot;damageMode = 0&quot; :class=&quot;{active: damageMode === 0}&quot;&gt;Damage&lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///        &lt;li class=&quot;nav-item&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; @click=&quot;damageMode = 1&quot; :class=&quot;{active: damageMode === 1}&quot;&gt;DPS&lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///    &lt;/ul&gt;
         ///    &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot; id=&quot;combat-replay-dps-table&quot;&gt;
-        ///        &lt;thead&gt;
-        ///            &lt;tr&gt;
-        ///                &lt;th&gt;&lt;/th&gt;
-        ///                &lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
-        ///                &lt;th&gt;All DPS&lt;/th&gt;
-        ///                &lt;th v-for=&quot;col in tableData.cols&quot;&gt;
-        ///                    {{col.name}} DPS
-        ///                &lt;/th&gt;
-        ///            &lt;/tr&gt;
-        ///        &lt;/thead&gt;
-        ///        &lt;tbody&gt;
-        ///            &lt;tr v-for=&quot;row in tableData.rows&quot; :class=&quot;{active: row.player [rest of string was truncated]&quot;;.
+        ///       [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayDamageTable {
             get {
@@ -574,8 +563,9 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div&gt;
-        ///    &lt;combat-replay-damage-stats-component :time=&quot;time&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/combat-replay-damage-stats-component&gt;
+        ///   Looks up a localized string similar to &lt;div v-if=&quot;animator !== null&quot;&gt;
+        ///    &lt;combat-replay-damage-stats-component :time=&quot;animator.time&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/combat-replay-damage-stats-component&gt;
+        ///    &lt;combat-replay-player-stats :time=&quot;animator.time&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/combat-replay-player-stats&gt;
         ///&lt;/div&gt;.
         /// </summary>
         internal static string tmplCombatReplayData {
@@ -605,6 +595,35 @@ namespace LuckParser.Properties {
         internal static string tmplCombatReplayPlayer {
             get {
                 return ResourceManager.GetString("tmplCombatReplayPlayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;div v-if=&quot;data.conditions.length &gt; 0&quot;&gt;
+        ///        &lt;span v-for=&quot;condition in data.conditions&quot;&gt;
+        ///            &lt;img :src=&quot;condition.buff.icon&quot; :data-original-title=&quot;condition.buff.name&quot; :alt=&quot;condition.buff.name&quot; class=&quot;icon&quot; /&gt;
+        ///            {{condition.state}}
+        ///        &lt;/span&gt;
+        ///    &lt;/div&gt;
+        ///    &lt;div v-if=&quot;data.offs.length &gt; 0 || data.defs.length &gt; 0&quot;&gt;
+        ///        &lt;span v-for=&quot;off in data.offs&quot;&gt;
+        ///            &lt;img :src=&quot;off.buff.icon&quot; :data-original-title=&quot;off.buff.name&quot; :alt=&quot;off.buff.name&quot; class=&quot;icon&quot; / [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplCombatReplayPlayerBuffStats {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayPlayerBuffStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div v-if=&quot;playerindex &gt;= 0&quot;&gt;
+        ///    &lt;combat-replay-player-buffs-stats :time=&quot;time&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/combat-replay-player-buffs-stats&gt;
+        ///&lt;/div&gt;.
+        /// </summary>
+        internal static string tmplCombatReplayPlayerStats {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayPlayerStats", resourceCulture);
             }
         }
         

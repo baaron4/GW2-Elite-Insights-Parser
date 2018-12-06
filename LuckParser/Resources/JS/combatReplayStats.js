@@ -4,9 +4,9 @@ var compileCombatReplay = function () {
     Vue.component("combat-replay-damage-stats-component", {
         props: ["time", "playerindex"],
         template: "#tmplCombatReplayDamageTable",
-        data: function() {
+        data: function () {
             return {
-                damageMode : 1
+                damageMode: 1
             };
         },
         created() {
@@ -44,7 +44,7 @@ var compileCombatReplay = function () {
                 var rows = [];
                 var cols = [];
                 var sums = [];
-                var total = [];        
+                var total = [];
                 var index = Math.floor(this.time / 1000);
                 var i, j;
                 for (j = 0; j < this.targets.length; j++) {
@@ -63,15 +63,14 @@ var compileCombatReplay = function () {
                         cacheID += getTargetCacheID(activeTargets);
                         data = computePlayerDPS(player, graphData, 0, null, activeTargets, cacheID + '-' + 0).total.target;
                         cur = data[index];
-                        next = data[index+1];
+                        next = data[index + 1];
                         if (typeof next !== "undefined") {
                             dps[2 * j] = cur + (this.time / 1000 - index) * Math.max((next - cur), 0);
                         } else {
                             dps[2 * j] = cur;
                         }
                         dps[2 * j + 1] = dps[2 * j] / (Math.max(this.time / 1000, 1));
-                    }
-                    {
+                    } {
                         cacheID = 0 + '-';
                         cacheID += getTargetCacheID(this.targets);
                         data = computePlayerDPS(player, graphData, 0, null, this.targets, cacheID + '-' + 0).total.total;
@@ -106,11 +105,105 @@ var compileCombatReplay = function () {
         }
     });
 
+    Vue.component("combat-replay-player-buffs-stats", {
+        props: ["playerindex", "time"],
+        template: "#tmplCombatReplayPlayerBuffStats",
+        computed: {
+            boons: function () {
+                var hash = new Set();
+                for (var i = 0; i < logData.boons.length; i++) {
+                    hash.add(logData.boons[i]);
+                }
+                return hash;
+            },
+            offs: function () {
+                var hash = new Set();
+                for (var i = 0; i < logData.offBuffs.length; i++) {
+                    hash.add(logData.offBuffs[i]);
+                }
+                return hash;
+            },
+            defs: function () {
+                var hash = new Set();
+                for (var i = 0; i < logData.defBuffs.length; i++) {
+                    hash.add(logData.defBuffs[i]);
+                }
+                return hash;
+            },
+            conditions: function () {
+                var hash = new Set();
+                for (var i = 0; i < logData.conditions.length; i++) {
+                    hash.add(logData.conditions[i]);
+                }
+                return hash;
+            },
+            buffData: function() {
+                return logData.players[this.playerindex].details.boonGraph[0];
+            },
+            data: function () {
+                var res = {
+                    offs: [],
+                    defs: [],
+                    boons: [],
+                    conditions: [],
+                        enemies: [],
+                    others: [],
+                    consumables: []
+                };
+                for (var i = 0; i < this.buffData.length; i++) {
+                    var data = this.buffData[i];
+                    var id = data.id;
+                    if (id < 0) {
+                        continue;
+                    }
+                    var arrayToFill = [];
+                    var buff = findSkill(true, id);
+                    if (buff.consumable) {
+                        arrayToFill = res.consumables;
+                    } else if (buff.enemy) {
+                        arrayToFill = res.enemies;
+                    } else if (this.boons.has(id)) {
+                        arrayToFill = res.boons;
+                    } else if (this.offs.has(id)) {
+                        arrayToFill = res.offs;
+                    } else if (this.defs.has(id)) {
+                        arrayToFill = res.defs;
+                    } else if (this.conditions.has(id)) {
+                        arrayToFill = res.conditions;                    
+                    }else {
+                        arrayToFill = res.others;
+                    }
+                    var val = data.states[0][1];
+                    var t = this.time / 1000;
+                    for (var j = 1; j < data.states.length; j++) {
+                        if (data.states[j][0] < t) {
+                            val = data.states[j][1];
+                        } else {
+                            break;
+                        }
+                    }
+                    if (val > 0) {
+                        arrayToFill.push({
+                            state: val,
+                            buff: buff
+                        });
+                    }
+                }
+                return res;
+            }
+        }
+    });
+
+    Vue.component("combat-replay-player-stats", {
+        props: ["playerindex", "time"],
+        template: "#tmplCombatReplayPlayerStats"
+    });
+
     Vue.component("combat-replay-data-component", {
         template: "#tmplCombatReplayData",
         props: ["animator"],
         computed: {
-            playerindex: function() {
+            playerindex: function () {
                 if (this.animator.selectedPlayer) {
                     for (var i = 0; i < logData.players.length; i++) {
                         if (logData.players[i].combatReplayID == this.animator.selectedPlayerID) {
@@ -120,6 +213,20 @@ var compileCombatReplay = function () {
                 }
                 return -1;
             },
+            player: function () {
+                if (this.playerindex > -1) {
+                    return logData.players[this.playerindex];
+                }
+                return {
+                    name: "No Player Selected"
+                }
+            }
+        },
+        mounted() {
+             $("#playerModal").draggable({
+                 handle: ".modal-header",
+                 scroll: false
+             });
         }
     });
 };
