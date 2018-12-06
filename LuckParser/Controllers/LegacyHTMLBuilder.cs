@@ -658,12 +658,12 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + statsAll.ScholarRate+ " out of " + statsAll.PowerLoopCount + " hits <br> Pure Scholar Damage: " 
                                 + statsAll.ScholarDmg + "<br> Effective Physical Damage Increase: " 
-                                + Math.Round(100.0 * (statsAll.PlayerPowerDamage / (double)(statsAll.PlayerPowerDamage - statsAll.ScholarDmg) - 1.0) , 3) 
+                                + Math.Round(100.0 * (statsAll.PowerDamage / (double)(statsAll.PowerDamage - statsAll.ScholarDmg) - 1.0) , 3) 
                                 + "% \">" + Math.Round((double)(statsAll.ScholarRate) / statsAll.PowerLoopCount * 100,1) + "%</span>" + "</td>");//scholar
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\""
                                 + statsAll.MovingRate + " out of " + statsAll.PowerLoopCount + " hits <br> Pure Seaweed Damage: "
                                 + statsAll.MovingDamage + "<br> Effective Physical Damage Increase: "
-                                + Math.Round(100.0 * (statsAll.PlayerPowerDamage / (double)(statsAll.PlayerPowerDamage - statsAll.MovingDamage) - 1.0), 3)
+                                + Math.Round(100.0 * (statsAll.PowerDamage / (double)(statsAll.PowerDamage - statsAll.MovingDamage) - 1.0), 3)
                                 + "% \">" + Math.Round((double)(statsAll.MovingRate) / statsAll.PowerLoopCount * 100, 1) + "%</span>" + "</td>");//sws
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\""
                                 + statsAll.FlankingRate + " out of " + statsAll.PowerLoopCount + " hits \">" 
@@ -788,12 +788,12 @@ namespace LuckParser.Controllers
                             sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + statsBoss.ScholarRate + " out of " + statsBoss.PowerLoopCount + " hits <br> Pure Scholar Damage: " 
                                 + statsBoss.ScholarDmg + "<br> Effective Physical Damage Increase: " 
-                                + Math.Round(100.0* (statsBoss.PlayerPowerDamage / (double)(statsBoss.PlayerPowerDamage - statsBoss.ScholarDmg) - 1.0), 3) 
+                                + Math.Round(100.0* (statsBoss.PowerDamage / (double)(statsBoss.PowerDamage - statsBoss.ScholarDmg) - 1.0), 3) 
                                 + "% \">" + Math.Round((double)(statsBoss.ScholarRate) / statsBoss.PowerLoopCount * 100,1) + "%</td>");//scholar
                             sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\""
                                 + statsBoss.MovingRate + " out of " + statsBoss.PowerLoopCount + " hits <br> Pure Seaweed Damage: "
                                 + statsBoss.MovingDamage + "<br> Effective Physical Damage Increase: "
-                                + Math.Round(100.0 * (statsBoss.PlayerPowerDamage / (double)(statsBoss.PlayerPowerDamage - statsBoss.MovingDamage) - 1.0), 3)
+                                + Math.Round(100.0 * (statsBoss.PowerDamage / (double)(statsBoss.PowerDamage - statsBoss.MovingDamage) - 1.0), 3)
                                 + "% \">" + Math.Round((double)(statsBoss.MovingRate) / statsBoss.PowerLoopCount * 100, 1) + "%</td>");//sws
                             sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + statsBoss.FlankingRate + " out of " + statsBoss.PowerLoopCount + " hits \">" 

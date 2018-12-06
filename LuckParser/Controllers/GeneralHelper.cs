@@ -63,6 +63,17 @@ namespace LuckParser.Controllers
             return false;
         }
 
+        public static string UppercaseFirst(string s)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                return string.Empty;
+            }
+            char[] a = s.ToCharArray();
+            a[0] = char.ToUpper(a[0]);
+            return new string(a);
+        }
+
         public static T MaxBy<T, R>(this IEnumerable<T> en, Func<T, R> evaluate) where R : IComparable<R>
         {
             return en.Select(t => new Tuple<T, R>(t, evaluate(t)))

@@ -10,28 +10,28 @@ namespace LuckParser.Models
     {
         public JsonStatsAll(int phaseCount) : base(phaseCount)
         {
-            Saved = new int[phaseCount];
-            StackDist = new double[phaseCount];
-            AvgBoons = new double[phaseCount];
-            AvgConditions = new double[phaseCount];
-            SwapCount = new int[phaseCount];
-            TimeSaved = new double[phaseCount];
-            TimeWasted = new double[phaseCount];
-            Wasted = new int[phaseCount];
+            saved = new int[phaseCount];
+            stackDist = new double[phaseCount];
+            avgBoons = new double[phaseCount];
+            avgConditions = new double[phaseCount];
+            swapCount = new int[phaseCount];
+            timeSaved = new double[phaseCount];
+            timeWasted = new double[phaseCount];
+            wasted = new int[phaseCount];
         }
         
         // Rates
-        public int[] Wasted;
-        public double[] TimeWasted;
-        public int[] Saved;
-        public double[] TimeSaved;
-        public double[] StackDist;
+        public int[] wasted;
+        public double[] timeWasted;
+        public int[] saved;
+        public double[] timeSaved;
+        public double[] stackDist;
 
         // boons
-        public double[] AvgBoons;
-        public double[] AvgConditions;
+        public double[] avgBoons;
+        public double[] avgConditions;
 
         // Counts
-        public int[] SwapCount;
+        public int[] swapCount;
     }
 }

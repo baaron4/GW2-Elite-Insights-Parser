@@ -8,10 +8,10 @@ namespace LuckParser.Models
 {
     public class JsonSkill
     {
-        public int Time;
-        public int Duration;
-        public int AutoAttack;
-        public int TimeGained;
-        public int Quickness;
+        public int time;
+        public int duration;
+        public int autoAttack;
+        public int timeGained;
+        public int quickness;
     }
 }

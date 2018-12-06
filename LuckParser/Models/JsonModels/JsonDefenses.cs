@@ -10,35 +10,35 @@ namespace LuckParser.Models
     {
         public JsonDefenses(int phaseCount)
         {
-            BlockedCount = new int[phaseCount];
-            DamageBarrier = new int[phaseCount];
-            DamageInvulned = new int[phaseCount];
-            DamageTaken = new long[phaseCount];
-            EvadedCount = new int[phaseCount];
-            DodgeCount = new int[phaseCount];
-            InterruptedCount = new int[phaseCount];
-            InvulnedCount = new int[phaseCount];
-            DownCount = new int[phaseCount];
-            DownDuration = new int[phaseCount];
-            DeadCount = new int[phaseCount];
-            DeadDuration = new int[phaseCount];
-            DCCount = new int[phaseCount];
-            DCDuration = new int[phaseCount];
+            blockedCount = new int[phaseCount];
+            damageBarrier = new int[phaseCount];
+            damageInvulned = new int[phaseCount];
+            damageTaken = new long[phaseCount];
+            evadedCount = new int[phaseCount];
+            dodgeCount = new int[phaseCount];
+            interruptedCount = new int[phaseCount];
+            invulnedCount = new int[phaseCount];
+            downCount = new int[phaseCount];
+            downDuration = new int[phaseCount];
+            deadCount = new int[phaseCount];
+            deadDuration = new int[phaseCount];
+            dcCount = new int[phaseCount];
+            dcDuration = new int[phaseCount];
         }
 
-        public long[] DamageTaken;
-        public int[] BlockedCount;
-        public int[] EvadedCount;
-        public int[] DodgeCount;
-        public int[] InvulnedCount;
-        public int[] DamageInvulned;
-        public int[] DamageBarrier;
-        public int[] InterruptedCount;
-        public int[] DownCount;
-        public int[] DownDuration;
-        public int[] DeadCount;
-        public int[] DeadDuration;
-        public int[] DCCount;
-        public int[] DCDuration;
+        public long[] damageTaken;
+        public int[] blockedCount;
+        public int[] evadedCount;
+        public int[] dodgeCount;
+        public int[] invulnedCount;
+        public int[] damageInvulned;
+        public int[] damageBarrier;
+        public int[] interruptedCount;
+        public int[] downCount;
+        public int[] downDuration;
+        public int[] deadCount;
+        public int[] deadDuration;
+        public int[] dcCount;
+        public int[] dcDuration;
     }
 }

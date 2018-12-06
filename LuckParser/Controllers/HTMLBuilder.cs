@@ -184,7 +184,7 @@ namespace LuckParser.Controllers
                     
                     stats.ScholarRate, 
                     stats.ScholarDmg,
-                    stats.PlayerPowerDamage,
+                    stats.PowerDamage,
                     
                     stats.MovingRate, 
                     stats.MovingDamage, 
@@ -239,7 +239,7 @@ namespace LuckParser.Controllers
                         
                         statsTarget.ScholarRate,
                         statsTarget.ScholarDmg,
-                        statsTarget.PlayerPowerDamage,
+                        statsTarget.PowerDamage,
                         
                         statsTarget.MovingRate,
                         statsTarget.MovingDamage,

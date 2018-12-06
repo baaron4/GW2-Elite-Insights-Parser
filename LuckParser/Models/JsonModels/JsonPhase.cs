@@ -8,8 +8,8 @@ namespace LuckParser.Models
 {
     public class JsonPhase
     {
-        public long Start;
-        public long End;
-        public string Name;
+        public long start;
+        public long end;
+        public string name;
     }
 }
