@@ -70,7 +70,7 @@ namespace LuckParser.Models
             // Deimos gadgets
             List<AgentItem> deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos") && x.LastAware > target.LastAware).ToList();
             // Remove deimos despawn events as they are useless and mess with combat replay
-            combatData.RemoveAll(x => x.SrcInstid == target.InstID && x.Time <= target.LastAware && x.Time >= target.FirstAware && x.IsStateChange == ParseEnum.StateChange.Despawn);
+            combatData.RemoveAll(x => x.IsStateChange == ParseEnum.StateChange.Despawn && x.SrcInstid == target.InstID && x.Time <= target.LastAware && x.Time >= target.FirstAware);
             if (deimosGadgets.Count > 0)
             {
                 CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.Time > combatData.First().Time && x.DstAgent > 0);

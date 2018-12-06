@@ -140,9 +140,9 @@ namespace LuckParser.Models.ParseModels
                 CombatReplay.PollingRate(pollingRate, log.FightData.FightDuration, forceInterpolate);
                 if (trim)
                 {
-                    CombatItem despawnCheck = log.CombatData.AllCombatItems.LastOrDefault(x => x.SrcInstid == InstID && x.Time >= FirstAware && x.Time <= LastAware && (x.IsStateChange.IsDespawn()));
-                    CombatItem spawnCheck = log.CombatData.AllCombatItems.LastOrDefault(x => x.SrcInstid == InstID && x.Time >= FirstAware && x.Time <= LastAware && (x.IsStateChange.IsSpawn()));
-                    CombatItem deathCheck = log.CombatData.AllCombatItems.LastOrDefault(x => x.SrcInstid == InstID && x.Time >= FirstAware && x.Time <= LastAware && (x.IsStateChange.IsDead()));
+                    CombatItem despawnCheck = log.CombatData.GetStates(InstID, ParseEnum.StateChange.Despawn,FirstAware,LastAware).LastOrDefault();
+                    CombatItem spawnCheck = log.CombatData.GetStates(InstID, ParseEnum.StateChange.Spawn, FirstAware, LastAware).LastOrDefault();
+                    CombatItem deathCheck = log.CombatData.GetStates(InstID, ParseEnum.StateChange.ChangeDead, FirstAware, LastAware).LastOrDefault();
                     if (deathCheck != null)
                     {
                         CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAware), log.FightData.ToFightSpace(deathCheck.Time));
