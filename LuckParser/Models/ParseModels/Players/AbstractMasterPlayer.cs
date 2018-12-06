@@ -208,7 +208,7 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
             }
-            boonMap.Sort();
+            //boonMap.Sort();
             return boonMap;
         }
         // private setters
