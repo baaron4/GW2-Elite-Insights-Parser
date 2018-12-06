@@ -122,7 +122,11 @@ namespace LuckParser.Models.ParseModels
         }
         // privates
         protected void AddDamageLog(long time, CombatItem c)
-        {
+        {        
+            if (c.IFF == ParseEnum.IFF.Friend)
+            {
+                return;
+            }
             if (c.IsBuff != 0)//condi
             {
                 DamageLogs.Add(new DamageLogCondition(time, c));
