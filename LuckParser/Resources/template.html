@@ -8,9 +8,8 @@
     <!--${Css}-->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-            crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
@@ -31,9 +30,6 @@
 </head>
 
 <body class="theme-${bootstrapTheme}">
-    <div class="header">
-        <div>Time Start: ${encounterStart} | Time End: ${encounterEnd}</div>
-    </div>
     <div class="d-flex justify-content-center align-item-center" id="loading">
         <div class="card" style="width: 75%;">
             <div class="card-body" style="margin: 100px; text-align: center;">
@@ -42,30 +38,31 @@
         </div>
     </div>
     <div class="container" v-cloak id="content">
-
-        <div class="sticky-top d-flex flex-row justify-content-center mt-1 mb-1" style="pointer-events:none;">
-            <ul class="nav nav-pills" style="pointer-events:auto;">
-                <li class="nav-item">
-                    <a class="nav-link" @click="switchTheme(true)" :class="{active: light}">Light Theme</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" @click="switchTheme(false)" :class="{active: !light }">Dark Theme</a>
-                </li>
-            </ul>
-        </div>
         <div class="d-flex flex-row justify-content-center align-items-center">
             <div class="card fight-summary" id="encounter" style="min-width: 350px;">
                 <encounter-component></encounter-component>
             </div>
-            <div v-if="combatreplay" class="ml-5">
-                <ul class="nav nav-pills flex-column justify-content-center d-flex align-items-center">
-                    <li class="nav-item mb-1">
-                        <a class="nav-link" @click="changeMode(0)" :class="{active: !mode}">Statistics</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" @click="changeMode(1)" :class="{active: mode }">Combat Replay</a>
-                    </li>
-                </ul>
+<div class="d-flex flex-column justify-content-center align-items-center ml-5">
+                <div class="d-flex flex-row justify-content-center align-items-center mt-3 mb-3">
+                    <ul class="nav nav-pills" style="pointer-events:auto;">
+                        <li class="nav-item">
+                            <a class="nav-link" @click="switchTheme(true)" :class="{active: light}">Light Theme</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" @click="switchTheme(false)" :class="{active: !light }">Dark Theme</a>
+                        </li>
+                    </ul>
+                </div>
+                <div v-if="combatreplay">
+                    <ul class="nav nav-pills flex-column justify-content-center d-flex align-items-center">
+                        <li class="nav-item mb-1">
+                            <a class="nav-link" @click="changeMode(0)" :class="{active: !mode}">Statistics</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" @click="changeMode(1)" :class="{active: mode }">Combat Replay</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div id="stats" v-show="mode === 0">
@@ -84,30 +81,27 @@
             <general-layout-component :layout="layout" :phaseindex="activePhase">
             </general-layout-component>
             <keep-alive>
-                <damage-stats-component v-if="dataType === datatypes.damageTable" :key="'damage'"
-                    :phaseindex="activePhase" :playerindex="activePlayer" :activetargets="activePhaseTargets"></damage-stats-component>
-                <gameplay-stats-component v-if="dataType === datatypes.gameplayTable" :key="'gameplay'"
-                    :phaseindex="activePhase" :playerindex="activePlayer" :activetargets="activePhaseTargets"></gameplay-stats-component>
+                <damage-stats-component v-if="dataType === datatypes.damageTable" :key="'damage'" :phaseindex="activePhase"
+                    :playerindex="activePlayer" :activetargets="activePhaseTargets"></damage-stats-component>
+                <gameplay-stats-component v-if="dataType === datatypes.gameplayTable" :key="'gameplay'" :phaseindex="activePhase"
+                    :playerindex="activePlayer" :activetargets="activePhaseTargets"></gameplay-stats-component>
                 <dmgmodifier-stats-component v-if="dataType === datatypes.dmgModifiersTable" :key="'modifier'"
                     :phaseindex="activePhase" :playerindex="activePlayer" :activetargets="activePhaseTargets"></dmgmodifier-stats-component>
                 <support-stats-component v-if="dataType === datatypes.supTable" :key="'support'" :phaseindex="activePhase"
                     :playerindex="activePlayer"></support-stats-component>
                 <defense-stats-component v-if="dataType === datatypes.defTable" :key="'defense'" :phaseindex="activePhase"
                     :playerindex="activePlayer"></defense-stats-component>
-                <graph-stats-component v-if="dataType === datatypes.dpsGraph" :key="'graph'"
-                    :activetargets="activePhaseTargets" :phaseindex="activePhase"
-                    :playerindex="activePlayer" :light="light"></graph-stats-component>
+                <graph-stats-component v-if="dataType === datatypes.dpsGraph" :key="'graph'" :activetargets="activePhaseTargets"
+                    :phaseindex="activePhase" :playerindex="activePlayer" :light="light"></graph-stats-component>
                 <buff-stats-component v-if="dataType <= datatypes.defensiveBuffTable && dataType>= datatypes.boonTable"
-                    :key="'buffs'" :datatypes="datatypes" :datatype="dataType" :phaseindex="activePhase"
-                    :playerindex="activePlayer"></buff-stats-component>
+                    :key="'buffs'" :datatypes="datatypes" :datatype="dataType" :phaseindex="activePhase" :playerindex="activePlayer"></buff-stats-component>
                 <personal-buff-table-component v-if="dataType === datatypes.personalBuffTable" :key="'persbuffs'"
                     :phaseindex="activePhase" :persbuffs="logdata.persBuffs" :playerindex="activePlayer"></personal-buff-table-component>
                 <mechanics-stats-component v-if="dataType === datatypes.mechanicTable" :key="'mechanics'" :phaseindex="activePhase"
                     :playerindex="activePlayer"></mechanics-stats-component>
-                <target-stats-component v-if="dataType === datatypes.targetTab" :key="'targets'" :playerindex="activePlayer" 
-                    :simplephase="logdata.phases[activePhase]" :phaseindex="activePhase"
-                    :light="light"></target-stats-component>
-                <player-stats-component v-if="dataType === datatypes.playerTab" :key="'players'" :activeplayer="activePlayer" 
+                <target-stats-component v-if="dataType === datatypes.targetTab" :key="'targets'" :playerindex="activePlayer"
+                    :simplephase="logdata.phases[activePhase]" :phaseindex="activePhase" :light="light"></target-stats-component>
+                <player-stats-component v-if="dataType === datatypes.playerTab" :key="'players'" :activeplayer="activePlayer"
                     :phaseindex="activePhase" :activetargets="activePhaseTargets" :light="light"></player-stats-component>
             </keep-alive>
         </div>
@@ -117,6 +111,7 @@
     </div>
 
     <div class="footer">
+        <div>Time Start: ${encounterStart} | Time End: ${encounterEnd}</div>
         <div>ARC: ${evtcVersion} | Fight ID: ${fightID} | EI Version: ${eiVersion}</div>
         <div class="mb-2">File recorded by: ${recordedBy}</div>
         <!--${UploadLinks}-->

@@ -36,7 +36,7 @@ var compileLayout = function () {
             }
         },
         computed: {
-            phase: function() {
+            phase: function () {
                 return logData.phases[this.phaseindex];
             },
             layoutName: function () {
@@ -67,11 +67,13 @@ var compileLayout = function () {
             dataType: DataTypes.gameplayTable
         })
     );
-    statsLayout.addTab(
-        new Tab("Damage Modifiers Stats", {
-            dataType: DataTypes.dmgModifiersTable
-        })
-    );
+    if (logData.phases[0].dmgModifiersCommon.length > 0 && logData.phases[0].dmgModifiersCommon[0].length > 0) {
+        statsLayout.addTab(
+            new Tab("Damage Modifiers Stats", {
+                dataType: DataTypes.dmgModifiersTable
+            })
+        );
+    }
     statsLayout.addTab(
         new Tab("Defensive Stats", {
             dataType: DataTypes.defTable
@@ -93,22 +95,39 @@ var compileLayout = function () {
             dataType: DataTypes.boonTable
         })
     );
-    buffLayout.addTab(new Tab("Offensive Buffs", {
-        dataType: DataTypes.offensiveBuffTable
-    }));
-    buffLayout.addTab(new Tab("Defensive Buffs", {
-        dataType: DataTypes.defensiveBuffTable
-    }));
-    buffLayout.addTab(new Tab("Personal Buffs", {
-        dataType: DataTypes.personalBuffTable
-    }));
+    if (logData.offBuffs.length > 0) {
+        buffLayout.addTab(new Tab("Offensive Buffs", {
+            dataType: DataTypes.offensiveBuffTable
+        }));
+    }
+    if (logData.defBuffs.length > 0) {
+        buffLayout.addTab(new Tab("Defensive Buffs", {
+            dataType: DataTypes.defensiveBuffTable
+        }));
+    }
+    if (logData.persBuffs) {
+        var hasPersBuffs = false;
+        for (var prop in logData.persBuffs) {
+            if (logData.persBuffs.hasOwnProperty(prop) && logData.persBuffs[prop].length > 0) {
+                hasPersBuffs = true;
+                break;
+            }
+        }
+        if (hasPersBuffs) {
+            buffLayout.addTab(new Tab("Personal Buffs", {
+                dataType: DataTypes.personalBuffTable
+            }));
+        }
+    }
     buffs.layout = buffLayout;
     layout.addTab(buffs);
     // mechanics
-    var mechanics = new Tab("Mechanics", {
-        dataType: DataTypes.mechanicTable
-    });
-    layout.addTab(mechanics);
+    if (mechanicMap.length > 0) {
+        var mechanics = new Tab("Mechanics", {
+            dataType: DataTypes.mechanicTable
+        });
+        layout.addTab(mechanics);
+    }
     // graphs
     var graphs = new Tab("Graph", {
         dataType: DataTypes.dpsGraph

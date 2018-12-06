@@ -398,10 +398,10 @@ function computeTargetHealthData(graph, targets, phase, data, yaxis) {
     for (i = 0; i < graph.targets.length; i++) {
         var health = graph.targets[i].health;
         var hpTexts = [];
-        for (j = 0; j < health.length; j++) {
-            hpTexts[j] = health[j] + "%";
-        }
         var target = targets[phase.targets[i]];
+        for (j = 0; j < health.length; j++) {
+            hpTexts[j] = health[j] + "% hp - " + target.name ;
+        }
         var res = {
             text: hpTexts,
             mode: 'lines',
@@ -409,7 +409,7 @@ function computeTargetHealthData(graph, targets, phase, data, yaxis) {
                 shape: 'spline',
                 dash: 'dashdot'
             },
-            hoverinfo: 'text+x+name',
+            hoverinfo: 'text',
             name: target.name + ' health',
         };
         if (yaxis) {
@@ -428,6 +428,7 @@ function computeBuffData(buffData, data) {
             var line = {
                 x: [],
                 y: [],
+                text: [],
                 yaxis: 'y2',
                 type: 'scatter',
                 visible: boonItem.visible ? null : 'legendonly',
@@ -435,12 +436,14 @@ function computeBuffData(buffData, data) {
                     color: boonItem.color,
                     shape: 'hv'
                 },
+                hoverinfo: 'text',
                 fill: 'tozeroy',
                 name: boon.name
             };
             for (var p = 0; p < boonItem.states.length; p++) {
                 line.x[p] = boonItem.states[p][0];
                 line.y[p] = boonItem.states[p][1];
+                line.text[p] = boon.name + ': ' + boonItem.states[p][1];
             }
             data.push(line);
         }

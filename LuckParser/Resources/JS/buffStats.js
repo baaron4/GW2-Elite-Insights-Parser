@@ -56,7 +56,7 @@ var compileBuffStats = function () {
                     var spec = this.specs[i];
                     var pBySpec = [];
                     for (var j = 0; j < logData.players.length; j++) {
-                        if (logData.players[j].profession === spec) {
+                        if (logData.players[j].profession === spec && logData.phases[0].persBuffStats[j].data.length > 0) {
                             pBySpec.push(j);
                         }
                     }

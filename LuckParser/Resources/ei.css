@@ -2,6 +2,25 @@
     border-top: 0;
 }
 
+.theme-slate g.hovertext text.name {
+    fill: #cccccc !important;
+}
+
+.theme-yeti g.hovertext text.name {
+    fill: #495057 !important;
+}
+
+.theme-slate g.hovertext rect {
+    fill: #272B30 !important;
+    fill-opacity: 0.9 !important;
+}
+
+.theme-yeti g.hovertext rect {
+    fill: #fff !important;
+    fill-opacity: 0.9 !important;
+}
+
+
 body {
     font-family: -apple-system,
         BlinkMacSystemFont,

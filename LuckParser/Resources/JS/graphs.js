@@ -72,7 +72,11 @@ var compileGraphs = function () {
             var data = this.data;
             var player;
             for (i = 0; i < logData.players.length; i++) {
+                var pText = [];
                 player = logData.players[i];
+                for (j = 0; j < this.graph.players[i].total.length; j++) {
+                    pText.push(player.name);
+                }
                 data.push({
                     y: [],
                     mode: 'lines',
@@ -81,6 +85,8 @@ var compileGraphs = function () {
                         color: player.colTarget,
                         width: i === this.playerindex ? 5 : 2
                     },
+                    text: pText,
+                    hoverinfo: 'y+text',
                     name: player.name + ' DPS',
                 });
             }
@@ -89,6 +95,7 @@ var compileGraphs = function () {
                 line: {
                     shape: 'spline'
                 },
+                hoverinfo: 'name+y',
                 visible: 'legendonly',
                 name: 'All Player Dps'
             });

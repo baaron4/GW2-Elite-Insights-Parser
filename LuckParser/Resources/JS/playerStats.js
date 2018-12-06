@@ -132,6 +132,7 @@ var compilePlayerTab = function () {
                     color: this.player.colTotal,
                 },
                 yaxis: dpsY,
+                hoverinfo: 'name+y',
                 name: 'Total DPS'
             });
             this.data.push({
@@ -142,6 +143,7 @@ var compilePlayerTab = function () {
                     color: this.player.colTarget,
                 },
                 yaxis: dpsY,
+                hoverinfo: 'name+y',
                 name: 'Target DPS'
             });
             this.data.push({
@@ -152,6 +154,7 @@ var compilePlayerTab = function () {
                     color: this.player.colCleave,
                 },
                 yaxis: dpsY,
+                hoverinfo: 'name+y',
                 name: 'Cleave DPS'
             });
             this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc');
@@ -448,6 +451,14 @@ var compilePlayerTab = function () {
         computed: {
             players: function() {
                 return logData.players;
+            },
+            hasDeaths: function() {
+                for (var i = 0; i < this.players.length; i++) {
+                    if (!!this.players[i].details.deathRecap) {
+                        return true;
+                    }
+                }
+                return false;
             }
         }
     });
