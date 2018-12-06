@@ -20,6 +20,30 @@
     fill-opacity: 0.9 !important;
 }
 
+.boon-container {
+    position: relative;
+    text-align: center;
+}
+
+.boon-number {
+    position: absolute;
+    pointer-events: none;
+    font-size: 0.8em;
+    left: 18%;
+    top: 33%;
+    text-shadow: -2px -2px 3px #000000,
+    -2px 2px 3px #000000,
+    2px -2px 3px #000000,
+    0px 2px 3px #000000,
+    0px -2px 3px #000000,
+    2px 0px 3px #000000,
+    -2px 0px 3px #000000,
+    2px 2px 3px #000000;
+    font-weight: bold;
+    color: #fff;
+    width:100%;
+}
+
 .modal-open {
     overflow: auto !important;
 }
@@ -128,6 +152,11 @@ tr.condi td {
 img.icon {
     width: 18px;
     height: 18px;
+}
+
+img.icon-l {
+    width: 24px;
+    height: 24px;
 }
 
 img.icon-xl {
