@@ -266,7 +266,7 @@ var compileTargetTab = function () {
                 var health = this.graph.targets[this.phaseTargetIndex].health;
                 var hpTexts = [];
                 for (j = 0; j < health.length; j++) {
-                    hpTexts[j] = health[j] + "%";
+                    hpTexts[j] = health[j] + "% hp";
                 }
                 var res = {
                     text: hpTexts,
@@ -275,7 +275,7 @@ var compileTargetTab = function () {
                         shape: 'spline',
                         dash: 'dashdot'
                     },
-                    hoverinfo: 'text+x+name',
+                    hoverinfo: 'text',
                     name: this.target.name + ' health',
                     yaxis: dpsY
                 };
@@ -289,6 +289,7 @@ var compileTargetTab = function () {
                     shape: 'spline'
                 },
                 yaxis: dpsY,
+                hoverinfo: 'name+y',
                 name: 'Total DPS'
             });
             this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc');
