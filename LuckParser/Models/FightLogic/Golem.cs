@@ -36,12 +36,6 @@ namespace LuckParser.Models
             }
         }
 
-        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
-        {
-            List<PhaseData> phases = GetInitialPhase(log);          
-            return phases;
-        }
-
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             Target target = Targets.Find(x => x.ID == TriggerID);
