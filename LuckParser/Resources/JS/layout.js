@@ -123,7 +123,6 @@ var compileLayout = function () {
     layout.addTab(buffs);
     // mechanics
     if (mechanicMap.length > 0) {
-
         var mechanics = new Tab("Mechanics", {
             dataType: DataTypes.mechanicTable
         });
