@@ -95,8 +95,6 @@
     <Compile Include="Controllers\FlashWindow.cs" />
     <Compile Include="Controllers\GraphHelper.cs" />
     <Compile Include="Controllers\GW2APIController.cs" />
-    <Compile Include="Controllers\LegacyHTMLBuilder.cs" />
-    <Compile Include="Controllers\LegacyHTMLHelper.cs" />
     <Compile Include="Controllers\ParseHelper.cs" />
     <Compile Include="Controllers\StatisticsCalculator.cs" />
     <Compile Include="Controllers\UploadController.cs" />

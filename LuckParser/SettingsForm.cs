@@ -15,12 +15,6 @@ namespace LuckParser
             InitializeComponent();
         }
 
-        private void PlayerDpsPlotCheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.DPSGraphTotals = chkPlayerDpsPlot.Checked;
-            //mainfrm.settingArray[0] = checkBox1.Checked;
-        }
-
         private void UniversalBoonsCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.PlayerBoonsUniversal = chkUniversalBoons.Checked;
@@ -37,18 +31,7 @@ namespace LuckParser
             Properties.Settings.Default.PlayerBoonsAllProf = chkAllProfSpecBoons.Checked;
             //mainfrm.settingArray[5] = checkBox6.Checked;
         }
-        private void RotationCheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.PlayerRot = chkRotation.Checked;
-            chkSkillIcons.Enabled = Properties.Settings.Default.PlayerRot;
-        }
         
-        private void SkillIconsCheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.PlayerRotIcons = chkSkillIcons.Checked;
-            // mainfrm.settingArray[6] = checkBox7.Checked;
-        }
-
         private void SettingsFormFormClosing(object sender, FormClosingEventArgs e)
         {
             Properties.Settings.Default.Save();
@@ -61,32 +44,19 @@ namespace LuckParser
 
         private void SettingsFormLoad(object sender, EventArgs e)
         {
-            chkPlayerDpsPlot.Checked = Properties.Settings.Default.DPSGraphTotals;
-            chkShowCl.Checked = Properties.Settings.Default.ClDPSGraphTotals;
             chkUniversalBoons.Checked = Properties.Settings.Default.PlayerBoonsUniversal;
             chkImpProfSpecBoons.Checked = Properties.Settings.Default.PlayerBoonsImpProf;
             chkAllProfSpecBoons.Checked = Properties.Settings.Default.PlayerBoonsAllProf;
-            chkRotation.Checked = Properties.Settings.Default.PlayerRot;
-            chkSkillIcons.Checked = Properties.Settings.Default.PlayerRotIcons;
-            chkSkillIcons.Enabled = Properties.Settings.Default.PlayerRot;
             chkDefaultOutputLoc.Checked =Properties.Settings.Default.SaveAtOut;
-            chkEventListDbg.Checked = Properties.Settings.Default.EventList ;
             txtCustomSaveLoc.Text = Properties.Settings.Default.OutLocation;
-            chkShowAutos.Checked = Properties.Settings.Default.ShowAutos;
-            chkShowAutos.Enabled = Properties.Settings.Default.SimpleRotation;
-            chkLargeSkillIcons.Checked = Properties.Settings.Default.LargeRotIcons;
-            chkLargeSkillIcons.Enabled = Properties.Settings.Default.SimpleRotation;
             chkOutputHtml.Checked = Properties.Settings.Default.SaveOutHTML;
             chkOutputCsv.Checked = Properties.Settings.Default.SaveOutCSV;  
             chkShowEstimates.Checked = Properties.Settings.Default.ShowEstimates;
             chkPhaseParsing.Checked = Properties.Settings.Default.ParsePhases;
-            chkShow10s.Checked = Properties.Settings.Default.Show10s;
-            chkShow30s.Checked = Properties.Settings.Default.Show30s;
             chkOneAtATime.Checked = Properties.Settings.Default.ParseOneAtATime;
             radioThemeLight.Checked = Properties.Settings.Default.LightTheme;
             radioThemeDark.Checked = !Properties.Settings.Default.LightTheme;
             imgTheme.Image = Properties.Settings.Default.LightTheme ? Properties.Resources.theme_cosmo : Properties.Resources.theme_slate;
-            chkSimpleRotationTab.Checked = Properties.Settings.Default.SimpleRotation;
             chkCombatReplay.Checked = Properties.Settings.Default.ParseCombatReplay;
             chkOutputJson.Checked = Properties.Settings.Default.SaveOutJSON;
             chkIndentJSON.Checked = Properties.Settings.Default.IndentJSON;
@@ -101,12 +71,7 @@ namespace LuckParser
             chkAddPoVProf.Checked = Properties.Settings.Default.AddPoVProf;
             chkAddDuration.Checked = Properties.Settings.Default.AddDuration;
 
-            chkHtmlLegacy.Checked = Properties.Settings.Default.LegacyHtmlMode;
-            toolTip1.SetToolTip(chkHtmlLegacy, "Old method to build the HTML page.");
-
             chkHtmlExternalScripts.Checked = Properties.Settings.Default.HtmlExternalScripts;
-            chkHtmlExternalScripts.Enabled = !Properties.Settings.Default.LegacyHtmlMode;
-            legacyBox.Enabled = Properties.Settings.Default.LegacyHtmlMode;
             toolTip1.SetToolTip(chkHtmlExternalScripts, "Writes static css and js scripts in own files, which are shared between all logs. Log file size decreases, but the script files have to be kept along with the html.");
 
             panelHtml.Enabled = Properties.Settings.Default.SaveOutHTML;
@@ -136,32 +101,10 @@ namespace LuckParser
             }
         }
 
-        private void EventListDebugCheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.EventList = chkEventListDbg.Checked;
-        }
-
         private void CustomSaveLocationTextChanged(object sender, EventArgs e)
         {
 
-        }
-
-        private void SimpleRotationTabCheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.SimpleRotation = chkSimpleRotationTab.Checked;
-            chkShowAutos.Enabled = Properties.Settings.Default.SimpleRotation;
-            chkLargeSkillIcons.Enabled = Properties.Settings.Default.SimpleRotation;
-        }
-
-        private void ShowAutosCheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.ShowAutos = chkShowAutos.Checked;
-        }
-
-        private void LargeSkillIconsCheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.LargeRotIcons = chkLargeSkillIcons.Checked;
-        }
+        }    
 
         private void ResetSkillListClick(object sender, EventArgs e)
         {
@@ -203,24 +146,9 @@ namespace LuckParser
             Properties.Settings.Default.ParsePhases = chkPhaseParsing.Checked;
         }
 
-        private void Show10sCheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.Show10s = chkShow10s.Checked;
-        }
-
-        private void Show30sCheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.Show30s = chkShow30s.Checked;
-        }
-
         private void ChkCombatReplayCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ParseCombatReplay = chkCombatReplay.Checked;
-        }
-
-        private void ShowClCheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.ClDPSGraphTotals = chkShowCl.Checked;
         }
 
         private void UploadDPSReports_checkbox_CheckedChanged(object sender, EventArgs e)
@@ -262,13 +190,6 @@ namespace LuckParser
         private void chkIndentXMLCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.IndentXML = chkIndentXML.Checked;
-        }
-
-        private void chkHtmlExperimental_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.LegacyHtmlMode = chkHtmlLegacy.Checked;
-            chkHtmlExternalScripts.Enabled = !Properties.Settings.Default.LegacyHtmlMode;
-            legacyBox.Enabled = Properties.Settings.Default.LegacyHtmlMode;
         }
 
         private void chkHtmlExternalScripts_CheckedChanged(object sender, EventArgs e)

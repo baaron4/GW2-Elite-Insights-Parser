@@ -386,7 +386,7 @@ namespace LuckParser.Controllers
         private List<int> Build1SDPS(AbstractMasterPlayer player, Target target)
         {
             List<int> res = new List<int>();
-            foreach (var pt in GraphHelper.GetTargetDPSGraph(_log, player, 0, _statistics.Phases[0], GraphHelper.GraphMode.S1, target))
+            foreach (var pt in GraphHelper.GetTargetDPSGraph(_log, player, 0, _statistics.Phases[0], target))
             {
                 res.Add(pt.Y);
             }
