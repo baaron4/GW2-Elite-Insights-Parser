@@ -30,39 +30,28 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
-            this.chkPlayerDpsPlot = new System.Windows.Forms.CheckBox();
             this.chkUniversalBoons = new System.Windows.Forms.CheckBox();
             this.chkImpProfSpecBoons = new System.Windows.Forms.CheckBox();
             this.chkAllProfSpecBoons = new System.Windows.Forms.CheckBox();
-            this.chkSkillIcons = new System.Windows.Forms.CheckBox();
-            this.chkRotation = new System.Windows.Forms.CheckBox();
             this.lblSettingsInfoMsg = new System.Windows.Forms.Label();
             this.chkDefaultOutputLoc = new System.Windows.Forms.CheckBox();
             this.txtCustomSaveLoc = new System.Windows.Forms.TextBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.btnFolderSelect = new System.Windows.Forms.Button();
             this.lblCustomSaveLoc = new System.Windows.Forms.Label();
-            this.chkEventListDbg = new System.Windows.Forms.CheckBox();
-            this.chkSimpleRotationTab = new System.Windows.Forms.CheckBox();
-            this.chkShowAutos = new System.Windows.Forms.CheckBox();
-            this.chkLargeSkillIcons = new System.Windows.Forms.CheckBox();
             this.btnResetSkillList = new System.Windows.Forms.Button();
             this.btnRetrySkillList = new System.Windows.Forms.Button();
             this.chkOutputHtml = new System.Windows.Forms.CheckBox();
             this.chkOutputCsv = new System.Windows.Forms.CheckBox();
             this.chkShowEstimates = new System.Windows.Forms.CheckBox();
             this.chkPhaseParsing = new System.Windows.Forms.CheckBox();
-            this.chkShow10s = new System.Windows.Forms.CheckBox();
-            this.chkShow30s = new System.Windows.Forms.CheckBox();
             this.chkOneAtATime = new System.Windows.Forms.CheckBox();
             this.chkCombatReplay = new System.Windows.Forms.CheckBox();
-            this.chkShowCl = new System.Windows.Forms.CheckBox();
             this.UploadDPSReports_checkbox = new System.Windows.Forms.CheckBox();
             this.UploadDRRH_check = new System.Windows.Forms.CheckBox();
             this.UploadRaidar_check = new System.Windows.Forms.CheckBox();
             this.chkOutputJson = new System.Windows.Forms.CheckBox();
             this.chkIndentJSON = new System.Windows.Forms.CheckBox();
-            this.chkHtmlLegacy = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.chkHtmlExternalScripts = new System.Windows.Forms.CheckBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -81,9 +70,6 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.radioThemeLight = new System.Windows.Forms.RadioButton();
             this.radioThemeDark = new System.Windows.Forms.RadioButton();
-            this.legacyBox = new System.Windows.Forms.GroupBox();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.panelXML = new System.Windows.Forms.Panel();
@@ -104,9 +90,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.imgTheme)).BeginInit();
             this.panelHtml.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.legacyBox.SuspendLayout();
-            this.groupBox5.SuspendLayout();
-            this.groupBox4.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.panelXML.SuspendLayout();
@@ -114,19 +97,6 @@
             this.tabPage5.SuspendLayout();
             this.tabPage6.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // chkPlayerDpsPlot
-            // 
-            this.chkPlayerDpsPlot.AutoSize = true;
-            this.chkPlayerDpsPlot.Checked = true;
-            this.chkPlayerDpsPlot.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkPlayerDpsPlot.Location = new System.Drawing.Point(6, 19);
-            this.chkPlayerDpsPlot.Name = "chkPlayerDpsPlot";
-            this.chkPlayerDpsPlot.Size = new System.Drawing.Size(137, 17);
-            this.chkPlayerDpsPlot.TabIndex = 1;
-            this.chkPlayerDpsPlot.Text = "Show Total DPS Graph";
-            this.chkPlayerDpsPlot.UseVisualStyleBackColor = true;
-            this.chkPlayerDpsPlot.CheckedChanged += new System.EventHandler(this.PlayerDpsPlotCheckedChanged);
             // 
             // chkUniversalBoons
             // 
@@ -164,32 +134,6 @@
             this.chkAllProfSpecBoons.Text = "Compute Remaining Buffs";
             this.chkAllProfSpecBoons.UseVisualStyleBackColor = true;
             this.chkAllProfSpecBoons.CheckedChanged += new System.EventHandler(this.AllProfessionSpecificBoonsCheckedChanged);
-            // 
-            // chkSkillIcons
-            // 
-            this.chkSkillIcons.AutoSize = true;
-            this.chkSkillIcons.Checked = true;
-            this.chkSkillIcons.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkSkillIcons.Location = new System.Drawing.Point(22, 65);
-            this.chkSkillIcons.Name = "chkSkillIcons";
-            this.chkSkillIcons.Size = new System.Drawing.Size(99, 17);
-            this.chkSkillIcons.TabIndex = 10;
-            this.chkSkillIcons.Text = "With Skill Icons";
-            this.chkSkillIcons.UseVisualStyleBackColor = true;
-            this.chkSkillIcons.CheckedChanged += new System.EventHandler(this.SkillIconsCheckedChanged);
-            // 
-            // chkRotation
-            // 
-            this.chkRotation.AutoSize = true;
-            this.chkRotation.Checked = true;
-            this.chkRotation.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkRotation.Location = new System.Drawing.Point(4, 42);
-            this.chkRotation.Name = "chkRotation";
-            this.chkRotation.Size = new System.Drawing.Size(111, 17);
-            this.chkRotation.TabIndex = 11;
-            this.chkRotation.Text = "Compute Rotation";
-            this.chkRotation.UseVisualStyleBackColor = true;
-            this.chkRotation.CheckedChanged += new System.EventHandler(this.RotationCheckedChanged);
             // 
             // lblSettingsInfoMsg
             // 
@@ -242,54 +186,6 @@
             this.lblCustomSaveLoc.Size = new System.Drawing.Size(98, 13);
             this.lblCustomSaveLoc.TabIndex = 17;
             this.lblCustomSaveLoc.Text = "Other output folder:";
-            // 
-            // chkEventListDbg
-            // 
-            this.chkEventListDbg.AutoSize = true;
-            this.chkEventListDbg.Location = new System.Drawing.Point(18, 19);
-            this.chkEventListDbg.Name = "chkEventListDbg";
-            this.chkEventListDbg.Size = new System.Drawing.Size(177, 17);
-            this.chkEventListDbg.TabIndex = 18;
-            this.chkEventListDbg.Text = "Show Event List (for debugging)";
-            this.chkEventListDbg.UseVisualStyleBackColor = true;
-            this.chkEventListDbg.CheckedChanged += new System.EventHandler(this.EventListDebugCheckedChanged);
-            // 
-            // chkSimpleRotationTab
-            // 
-            this.chkSimpleRotationTab.AutoSize = true;
-            this.chkSimpleRotationTab.Checked = true;
-            this.chkSimpleRotationTab.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkSimpleRotationTab.Location = new System.Drawing.Point(4, 19);
-            this.chkSimpleRotationTab.Name = "chkSimpleRotationTab";
-            this.chkSimpleRotationTab.Size = new System.Drawing.Size(152, 17);
-            this.chkSimpleRotationTab.TabIndex = 21;
-            this.chkSimpleRotationTab.Text = "Show Simple Rotation Tab";
-            this.chkSimpleRotationTab.UseVisualStyleBackColor = true;
-            this.chkSimpleRotationTab.CheckedChanged += new System.EventHandler(this.SimpleRotationTabCheckedChanged);
-            // 
-            // chkShowAutos
-            // 
-            this.chkShowAutos.AutoSize = true;
-            this.chkShowAutos.Checked = true;
-            this.chkShowAutos.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkShowAutos.Location = new System.Drawing.Point(22, 110);
-            this.chkShowAutos.Name = "chkShowAutos";
-            this.chkShowAutos.Size = new System.Drawing.Size(117, 17);
-            this.chkShowAutos.TabIndex = 22;
-            this.chkShowAutos.Text = "Show Auto Attacks";
-            this.chkShowAutos.UseVisualStyleBackColor = true;
-            this.chkShowAutos.CheckedChanged += new System.EventHandler(this.ShowAutosCheckedChanged);
-            // 
-            // chkLargeSkillIcons
-            // 
-            this.chkLargeSkillIcons.AutoSize = true;
-            this.chkLargeSkillIcons.Location = new System.Drawing.Point(22, 88);
-            this.chkLargeSkillIcons.Name = "chkLargeSkillIcons";
-            this.chkLargeSkillIcons.Size = new System.Drawing.Size(104, 17);
-            this.chkLargeSkillIcons.TabIndex = 23;
-            this.chkLargeSkillIcons.Text = "Large Skill Icons";
-            this.chkLargeSkillIcons.UseVisualStyleBackColor = true;
-            this.chkLargeSkillIcons.CheckedChanged += new System.EventHandler(this.LargeSkillIconsCheckedChanged);
             // 
             // btnResetSkillList
             // 
@@ -361,32 +257,6 @@
             this.chkPhaseParsing.UseVisualStyleBackColor = true;
             this.chkPhaseParsing.CheckedChanged += new System.EventHandler(this.PhaseParsingCheckedChanged);
             // 
-            // chkShow10s
-            // 
-            this.chkShow10s.AutoSize = true;
-            this.chkShow10s.Checked = true;
-            this.chkShow10s.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkShow10s.Location = new System.Drawing.Point(6, 42);
-            this.chkShow10s.Name = "chkShow10s";
-            this.chkShow10s.Size = new System.Drawing.Size(130, 17);
-            this.chkShow10s.TabIndex = 31;
-            this.chkShow10s.Text = "Show 10s DPS Graph";
-            this.chkShow10s.UseVisualStyleBackColor = true;
-            this.chkShow10s.CheckedChanged += new System.EventHandler(this.Show10sCheckedChanged);
-            // 
-            // chkShow30s
-            // 
-            this.chkShow30s.AutoSize = true;
-            this.chkShow30s.Checked = true;
-            this.chkShow30s.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkShow30s.Location = new System.Drawing.Point(6, 65);
-            this.chkShow30s.Name = "chkShow30s";
-            this.chkShow30s.Size = new System.Drawing.Size(130, 17);
-            this.chkShow30s.TabIndex = 32;
-            this.chkShow30s.Text = "Show 30s DPS Graph";
-            this.chkShow30s.UseVisualStyleBackColor = true;
-            this.chkShow30s.CheckedChanged += new System.EventHandler(this.Show30sCheckedChanged);
-            // 
             // chkOneAtATime
             // 
             this.chkOneAtATime.AutoSize = true;
@@ -410,18 +280,6 @@
             this.chkCombatReplay.Text = "Compute Combat Replay";
             this.chkCombatReplay.UseVisualStyleBackColor = true;
             this.chkCombatReplay.CheckedChanged += new System.EventHandler(this.ChkCombatReplayCheckedChanged);
-            // 
-            // chkShowCl
-            // 
-            this.chkShowCl.AutoSize = true;
-            this.chkShowCl.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.chkShowCl.Location = new System.Drawing.Point(6, 88);
-            this.chkShowCl.Name = "chkShowCl";
-            this.chkShowCl.Size = new System.Drawing.Size(145, 17);
-            this.chkShowCl.TabIndex = 41;
-            this.chkShowCl.Text = "Show Cleave Only Graph";
-            this.chkShowCl.UseVisualStyleBackColor = true;
-            this.chkShowCl.CheckedChanged += new System.EventHandler(this.ShowClCheckedChanged);
             // 
             // UploadDPSReports_checkbox
             // 
@@ -477,17 +335,6 @@
             this.chkIndentJSON.Text = "Indent JSON";
             this.chkIndentJSON.UseVisualStyleBackColor = true;
             this.chkIndentJSON.CheckedChanged += new System.EventHandler(this.chkIndentJSONCheckedChanged);
-            // 
-            // chkHtmlLegacy
-            // 
-            this.chkHtmlLegacy.AutoSize = true;
-            this.chkHtmlLegacy.Location = new System.Drawing.Point(12, 82);
-            this.chkHtmlLegacy.Name = "chkHtmlLegacy";
-            this.chkHtmlLegacy.Size = new System.Drawing.Size(94, 17);
-            this.chkHtmlLegacy.TabIndex = 45;
-            this.chkHtmlLegacy.Text = "Legacy HTML";
-            this.chkHtmlLegacy.UseVisualStyleBackColor = true;
-            this.chkHtmlLegacy.CheckedChanged += new System.EventHandler(this.chkHtmlExperimental_CheckedChanged);
             // 
             // toolTip1
             // 
@@ -659,8 +506,6 @@
             // 
             this.panelHtml.Controls.Add(this.panel1);
             this.panelHtml.Controls.Add(this.chkShowEstimates);
-            this.panelHtml.Controls.Add(this.legacyBox);
-            this.panelHtml.Controls.Add(this.chkHtmlLegacy);
             this.panelHtml.Controls.Add(this.chkHtmlExternalScripts);
             this.panelHtml.Location = new System.Drawing.Point(0, 36);
             this.panelHtml.Name = "panelHtml";
@@ -699,45 +544,6 @@
             this.radioThemeDark.Text = "Dark Theme";
             this.radioThemeDark.UseVisualStyleBackColor = true;
             this.radioThemeDark.CheckedChanged += new System.EventHandler(this.radioThemeDark_CheckedChanged);
-            // 
-            // legacyBox
-            // 
-            this.legacyBox.Controls.Add(this.groupBox5);
-            this.legacyBox.Controls.Add(this.groupBox4);
-            this.legacyBox.Controls.Add(this.chkEventListDbg);
-            this.legacyBox.Location = new System.Drawing.Point(12, 105);
-            this.legacyBox.Name = "legacyBox";
-            this.legacyBox.Size = new System.Drawing.Size(377, 212);
-            this.legacyBox.TabIndex = 52;
-            this.legacyBox.TabStop = false;
-            this.legacyBox.Text = "Legacy";
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.chkSimpleRotationTab);
-            this.groupBox5.Controls.Add(this.chkRotation);
-            this.groupBox5.Controls.Add(this.chkSkillIcons);
-            this.groupBox5.Controls.Add(this.chkLargeSkillIcons);
-            this.groupBox5.Controls.Add(this.chkShowAutos);
-            this.groupBox5.Location = new System.Drawing.Point(18, 57);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(162, 134);
-            this.groupBox5.TabIndex = 54;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Rotation";
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.chkShowCl);
-            this.groupBox4.Controls.Add(this.chkPlayerDpsPlot);
-            this.groupBox4.Controls.Add(this.chkShow10s);
-            this.groupBox4.Controls.Add(this.chkShow30s);
-            this.groupBox4.Location = new System.Drawing.Point(209, 57);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(162, 134);
-            this.groupBox4.TabIndex = 53;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Graph";
             // 
             // tabPage3
             // 
@@ -886,12 +692,6 @@
             this.panelHtml.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.legacyBox.ResumeLayout(false);
-            this.legacyBox.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             this.tabPage4.ResumeLayout(false);
@@ -910,22 +710,15 @@
         }
 
         #endregion
-        private System.Windows.Forms.CheckBox chkPlayerDpsPlot;
         private System.Windows.Forms.CheckBox chkUniversalBoons;
         private System.Windows.Forms.CheckBox chkImpProfSpecBoons;
         private System.Windows.Forms.CheckBox chkAllProfSpecBoons;
-        private System.Windows.Forms.CheckBox chkSkillIcons;
-        private System.Windows.Forms.CheckBox chkRotation;
         private System.Windows.Forms.Label lblSettingsInfoMsg;
         private System.Windows.Forms.CheckBox chkDefaultOutputLoc;
         private System.Windows.Forms.TextBox txtCustomSaveLoc;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Button btnFolderSelect;
         private System.Windows.Forms.Label lblCustomSaveLoc;
-        private System.Windows.Forms.CheckBox chkEventListDbg;
-        private System.Windows.Forms.CheckBox chkSimpleRotationTab;
-        private System.Windows.Forms.CheckBox chkShowAutos;
-        private System.Windows.Forms.CheckBox chkLargeSkillIcons;
         private System.Windows.Forms.Button btnResetSkillList;
         private System.Windows.Forms.Button btnRetrySkillList;
         private System.Windows.Forms.CheckBox chkOutputHtml;
@@ -933,16 +726,12 @@
         private System.Windows.Forms.CheckBox chkShowEstimates;
         private System.Windows.Forms.CheckBox chkPhaseParsing;
         private System.Windows.Forms.CheckBox chkOneAtATime;
-        private System.Windows.Forms.CheckBox chkShow10s;
-        private System.Windows.Forms.CheckBox chkShow30s;
         private System.Windows.Forms.CheckBox chkCombatReplay;
-        private System.Windows.Forms.CheckBox chkShowCl;
         private System.Windows.Forms.CheckBox UploadDPSReports_checkbox;
         private System.Windows.Forms.CheckBox UploadDRRH_check;
         private System.Windows.Forms.CheckBox UploadRaidar_check;
         private System.Windows.Forms.CheckBox chkOutputJson;
         private System.Windows.Forms.CheckBox chkIndentJSON;
-        private System.Windows.Forms.CheckBox chkHtmlLegacy;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.CheckBox chkHtmlExternalScripts;
         private System.Windows.Forms.TabControl tabControl1;
@@ -959,7 +748,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.RadioButton radioThemeLight;
         private System.Windows.Forms.RadioButton radioThemeDark;
-        private System.Windows.Forms.GroupBox legacyBox;
         private System.Windows.Forms.Panel panelHtml;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
@@ -969,8 +757,6 @@
         private System.Windows.Forms.CheckBox chkAutoParse;
         private System.Windows.Forms.CheckBox chkAddPoVProf;
         private System.Windows.Forms.CheckBox chkAddDuration;
-        private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Panel panelJson;
         private System.Windows.Forms.CheckBox chkOutputXml;
         private System.Windows.Forms.Panel panelXML;
