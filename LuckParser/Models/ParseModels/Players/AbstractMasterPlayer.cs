@@ -23,7 +23,7 @@ namespace LuckParser.Models.ParseModels
             }
         };
         // Boons
-        public List<Boon> BoonToTrack { get; } = new List<Boon>();
+        public HashSet<Boon> TrackedBoons { get; } = new HashSet<Boon>();
         private readonly List<BoonDistribution> _boonDistribution = new List<BoonDistribution>();
         private readonly List<Dictionary<long, long>> _boonPresence = new List<Dictionary<long, long>>();
         private readonly List<Dictionary<long, long>> _condiPresence = new List<Dictionary<long, long>>();
@@ -180,17 +180,18 @@ namespace LuckParser.Models.ParseModels
         // private getters
         private BoonMap GetBoonMap(ParsedLog log)
         {
-            BoonMap boonMap = new BoonMap
-            {
-                BoonToTrack
-            };
+            BoonMap boonMap = new BoonMap();
             // Fill in Boon Map
             foreach (CombatItem c in log.GetBoonDataByDst(InstID, FirstAware, LastAware))
             {
                 long boonId = c.SkillID;
                 if (!boonMap.ContainsKey(boonId))
                 {
-                    continue;
+                    if (!Boon.BoonsByIds.ContainsKey(boonId))
+                    {
+                        continue;
+                    }
+                    boonMap.Add(Boon.BoonsByIds[boonId]);
                 }
                 long time = log.FightData.ToFightSpace(c.Time);
                 List<BoonLog> loglist = boonMap[boonId];
@@ -213,6 +214,10 @@ namespace LuckParser.Models.ParseModels
                 }
             }
             //boonMap.Sort();
+            foreach (var pair in boonMap)
+            {
+                TrackedBoons.Add(Boon.BoonsByIds[pair.Key]);
+            }
             return boonMap;
         }
         // private setters
@@ -333,7 +338,7 @@ namespace LuckParser.Models.ParseModels
             }
 
             long death = GetDeath(log, 0, dur);
-            foreach (Boon boon in BoonToTrack)
+            foreach (Boon boon in TrackedBoons)
             {
                 long boonid = boon.ID;
                 if (toUse.TryGetValue(boonid, out var logs) && logs.Count != 0)
