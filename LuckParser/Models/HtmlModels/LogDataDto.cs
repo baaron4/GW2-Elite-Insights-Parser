@@ -15,10 +15,10 @@ namespace LuckParser.Models.HtmlModels
         
         public List<long> conditions;
         public string encounterDuration;
-        public bool success;
+        public int success;
         public string fightName;
         public string fightIcon;
-        public bool combatReplay;
-        public bool lightTheme;
+        public int combatReplay;
+        public int lightTheme;
     }
 }

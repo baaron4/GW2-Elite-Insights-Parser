@@ -272,7 +272,7 @@ namespace LuckParser.Controllers
                                 targetFinal.Invulned++;
                             }
                             targetFinal.PowerLoopCount++;
-                            targetFinal.PlayerPowerDamage += dl.Damage;
+                            targetFinal.PowerDamage += dl.Damage;
                             if (!nonCritable.Contains(dl.SkillId))
                             {
                                 targetFinal.CritablePowerLoopCount++;
@@ -328,7 +328,7 @@ namespace LuckParser.Controllers
                         final.Invulned++;
                     }
                     final.PowerLoopCount++;
-                    final.PlayerPowerDamage += dl.Damage;
+                    final.PowerDamage += dl.Damage;
                     if (!nonCritable.Contains(dl.SkillId))
                     {
                         final.CritablePowerLoopCount++;
@@ -542,7 +542,7 @@ namespace LuckParser.Controllers
                     List<CombatItem> dcs = combatData.GetStates(player.InstID, ParseEnum.StateChange.Despawn, start, end);
                     final.DownCount = downs.Count;
                     final.DeadCount = deads.Count;
-                    final.DCCount = dcs.Count;
+                    final.DcCount = dcs.Count;
 
                     phaseDefense[phaseIndex] = final;
                 }
@@ -559,7 +559,7 @@ namespace LuckParser.Controllers
                     long end = phase.End;
                     defenses.DownDuration = (int)down.Where(x => x.Item2 >= start && x.Item1 <= end).Sum(x => Math.Min(end, x.Item2) - Math.Max(x.Item1, start));
                     defenses.DeadDuration = (int)dead.Where(x => x.Item2 >= start && x.Item1 <= end).Sum(x => Math.Min(end, x.Item2) - Math.Max(x.Item1, start));
-                    defenses.DCDuration = (int)dc.Where(x => x.Item2 >= start && x.Item1 <= end).Sum(x => Math.Min(end, x.Item2) - Math.Max(x.Item1, start));
+                    defenses.DcDuration = (int)dc.Where(x => x.Item2 >= start && x.Item1 <= end).Sum(x => Math.Min(end, x.Item2) - Math.Max(x.Item1, start));
                 }
 
                 _statistics.Defenses[player] = phaseDefense;

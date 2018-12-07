@@ -258,8 +258,8 @@ namespace LuckParser.Controllers
 
                 WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
                 Math.Round((double)(statsBoss.CriticalRate) / statsBoss.CritablePowerLoopCount * 100,1).ToString(), statsBoss.CriticalRate.ToString(),statsBoss.CriticalDmg.ToString(),
-                Math.Round((double)(statsBoss.ScholarRate) / statsBoss.PowerLoopCount * 100,1).ToString(),statsBoss.ScholarRate.ToString(),statsBoss.ScholarDmg.ToString(),Math.Round(100.0 * (statsBoss.PlayerPowerDamage / (double)(statsBoss.PlayerPowerDamage - statsBoss.ScholarDmg) - 1.0), 3).ToString(),
-                Math.Round((double)(statsBoss.MovingRate) / statsBoss.PowerLoopCount * 100,1).ToString(),statsBoss.MovingRate.ToString(),statsBoss.MovingDamage.ToString(),Math.Round(100.0 * (statsBoss.PlayerPowerDamage / (double)(statsBoss.PlayerPowerDamage - statsBoss.MovingDamage) - 1.0), 3).ToString(),
+                Math.Round((double)(statsBoss.ScholarRate) / statsBoss.PowerLoopCount * 100,1).ToString(),statsBoss.ScholarRate.ToString(),statsBoss.ScholarDmg.ToString(),Math.Round(100.0 * (statsBoss.PowerDamage / (double)(statsBoss.PowerDamage - statsBoss.ScholarDmg) - 1.0), 3).ToString(),
+                Math.Round((double)(statsBoss.MovingRate) / statsBoss.PowerLoopCount * 100,1).ToString(),statsBoss.MovingRate.ToString(),statsBoss.MovingDamage.ToString(),Math.Round(100.0 * (statsBoss.PowerDamage / (double)(statsBoss.PowerDamage - statsBoss.MovingDamage) - 1.0), 3).ToString(),
                 Math.Round(statsBoss.FlankingRate / (double)statsBoss.PowerLoopCount * 100,1).ToString(),statsBoss.FlankingRate.ToString(),
                 Math.Round(statsBoss.GlanceRate / (double)statsBoss.PowerLoopCount * 100,1).ToString(),statsBoss.GlanceRate.ToString(),
                 Math.Round(statsBoss.Missed / (double)statsBoss.PowerLoopCount * 100,1).ToString(),statsBoss.Missed.ToString(),
@@ -292,8 +292,8 @@ namespace LuckParser.Controllers
 
                 WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
                 Math.Round((double)(stats.CriticalRate) / stats.CritablePowerLoopCount * 100,1).ToString(), stats.CriticalRate.ToString(),stats.CriticalDmg.ToString(),
-                Math.Round((double)(stats.ScholarRate) / stats.PowerLoopCount * 100,1).ToString(),stats.ScholarRate.ToString(),stats.ScholarDmg.ToString(),Math.Round(100.0 * (stats.PlayerPowerDamage / (double)(stats.PlayerPowerDamage - stats.ScholarDmg) - 1.0), 3).ToString(),
-                Math.Round((double)(stats.MovingRate) / stats.PowerLoopCount * 100,1).ToString(),stats.MovingRate.ToString(),stats.MovingDamage.ToString(),Math.Round(100.0 * (stats.PlayerPowerDamage / (double)(stats.PlayerPowerDamage - stats.MovingDamage) - 1.0), 3).ToString(),
+                Math.Round((double)(stats.ScholarRate) / stats.PowerLoopCount * 100,1).ToString(),stats.ScholarRate.ToString(),stats.ScholarDmg.ToString(),Math.Round(100.0 * (stats.PowerDamage / (double)(stats.PowerDamage - stats.ScholarDmg) - 1.0), 3).ToString(),
+                Math.Round((double)(stats.MovingRate) / stats.PowerLoopCount * 100,1).ToString(),stats.MovingRate.ToString(),stats.MovingDamage.ToString(),Math.Round(100.0 * (stats.PowerDamage / (double)(stats.PowerDamage - stats.MovingDamage) - 1.0), 3).ToString(),
                 Math.Round(stats.FlankingRate / (double)stats.PowerLoopCount * 100,1).ToString(),stats.FlankingRate.ToString(),
                 Math.Round(stats.GlanceRate / (double)stats.PowerLoopCount * 100,1).ToString(),stats.GlanceRate.ToString(),
                 Math.Round(stats.Missed / (double)stats.PowerLoopCount * 100,1).ToString(),stats.Missed.ToString(),

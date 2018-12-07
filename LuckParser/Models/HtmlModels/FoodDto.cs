@@ -9,6 +9,6 @@ namespace LuckParser.Models.HtmlModels
         public double duration;
         public long id;
         public int stack;
-        public bool dimished;
+        public int dimished;
     }
 }

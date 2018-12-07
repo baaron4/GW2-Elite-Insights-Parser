@@ -10,19 +10,19 @@ namespace LuckParser.Models
     {
         public JsonDps(int phaseCount)
         {
-            CondiDamage = new int[phaseCount];
-            CondiDps = new int[phaseCount];
-            Damage = new int[phaseCount];
-            Dps = new int[phaseCount];
-            PowerDamage = new int[phaseCount];
-            PowerDps = new int[phaseCount];
+            condiDamage = new int[phaseCount];
+            condiDps = new int[phaseCount];
+            damage = new int[phaseCount];
+            dps = new int[phaseCount];
+            powerDamage = new int[phaseCount];
+            powerDps = new int[phaseCount];
         }
 
-        public int[] Dps;
-        public int[] Damage;
-        public int[] CondiDps;
-        public int[] CondiDamage;
-        public int[] PowerDps;
-        public int[] PowerDamage;
+        public int[] dps;
+        public int[] damage;
+        public int[] condiDps;
+        public int[] condiDamage;
+        public int[] powerDps;
+        public int[] powerDamage;
     }
 }
