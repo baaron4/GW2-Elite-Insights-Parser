@@ -209,15 +209,15 @@ namespace LuckParser.Models.ParseModels
             {
                 CombatItem cur = status[i];
                 CombatItem next = status[i + 1];
-                if (cur.IsStateChange.IsDown())
+                if (cur.IsStateChange == ParseEnum.StateChange.ChangeDown)
                 {
                     down.Add(new Tuple<long, long>(cur.Time - start, next.Time - start));
                 }
-                else if (cur.IsStateChange.IsDead())
+                else if (cur.IsStateChange == ParseEnum.StateChange.ChangeDead)
                 {
                     dead.Add(new Tuple<long, long>(cur.Time - start, next.Time - start));
                 }
-                else if (cur.IsStateChange.IsDespawn())
+                else if (cur.IsStateChange == ParseEnum.StateChange.Despawn)
                 {
                     dc.Add(new Tuple<long, long>(cur.Time - start, next.Time - start));
                 }
@@ -226,15 +226,15 @@ namespace LuckParser.Models.ParseModels
             if (status.Count > 0)
             {
                 CombatItem cur = status.Last();
-                if (cur.IsStateChange.IsDown())
+                if (cur.IsStateChange == ParseEnum.StateChange.ChangeDown)
                 {
                     down.Add(new Tuple<long, long>(cur.Time - start, end));
                 }
-                else if (cur.IsStateChange.IsDead())
+                else if (cur.IsStateChange == ParseEnum.StateChange.ChangeDead)
                 {
                     dead.Add(new Tuple<long, long>(cur.Time - start, end));
                 }
-                else if (cur.IsStateChange.IsDespawn())
+                else if (cur.IsStateChange == ParseEnum.StateChange.Despawn)
                 {
                     dc.Add(new Tuple<long, long>(cur.Time - start, end));
                 }

@@ -140,8 +140,14 @@ namespace LuckParser.Models.ParseModels
                 CombatReplay.PollingRate(pollingRate, log.FightData.FightDuration, forceInterpolate);
                 if (trim)
                 {
-                    CombatItem despawnCheck = log.CombatData.AllCombatItems.FirstOrDefault(x => x.SrcAgent == AgentItem.Agent && (x.IsStateChange.IsDead() || x.IsStateChange.IsDespawn()));
-                    if (despawnCheck != null)
+                    CombatItem despawnCheck = log.CombatData.GetStates(InstID, ParseEnum.StateChange.Despawn,FirstAware,LastAware).LastOrDefault();
+                    CombatItem spawnCheck = log.CombatData.GetStates(InstID, ParseEnum.StateChange.Spawn, FirstAware, LastAware).LastOrDefault();
+                    CombatItem deathCheck = log.CombatData.GetStates(InstID, ParseEnum.StateChange.ChangeDead, FirstAware, LastAware).LastOrDefault();
+                    if (deathCheck != null)
+                    {
+                        CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAware), log.FightData.ToFightSpace(deathCheck.Time));
+                    }
+                    else if (despawnCheck != null && (spawnCheck == null || spawnCheck.Time < despawnCheck.Time))
                     {
                         CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAware), log.FightData.ToFightSpace(despawnCheck.Time));
                     }
@@ -208,7 +214,7 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
             }
-            boonMap.Sort();
+            //boonMap.Sort();
             return boonMap;
         }
         // private setters
