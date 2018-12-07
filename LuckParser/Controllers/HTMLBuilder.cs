@@ -870,35 +870,32 @@ namespace LuckParser.Controllers
             return dto;
         }
 
-        private List<BoonChartDataDto> BuildPlayerBoonGraphData(AbstractMasterPlayer p, int phaseIndex)
+        private List<BoonChartDataDto> BuildBoonGraphData(AbstractMasterPlayer p, int phaseIndex)
         {
             List<BoonChartDataDto> list = new List<BoonChartDataDto>();
             PhaseData phase = _statistics.Phases[phaseIndex];
-            if (_statistics.PresentBoons.Count > 0)
+            Dictionary<long, BoonsGraphModel> boonGraphData = p.GetBoonGraphs(_log);
+            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
             {
-                Dictionary<long, BoonsGraphModel> boonGraphData = p.GetBoonGraphs(_log);
-                foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
+                BoonChartDataDto graph = BuildBoonGraph(bgm, phase);
+                if (graph != null) list.Add(graph);
+            }
+            if (p.GetType() == typeof(Player))
+            {
+                foreach (Target mainTarget in _log.FightData.GetMainTargets(_log))
                 {
-                    BoonChartDataDto graph = BuildPlayerTabBoonGraph(bgm, phase);
-                    if (graph != null) list.Add(graph);
-                }
-                if (p.GetType() == typeof(Player))
-                {
-                    foreach (Target mainTarget in _log.FightData.GetMainTargets(_log))
+                    boonGraphData = mainTarget.GetBoonGraphs(_log);
+                    foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.Boon.Name == "Compromised" || x.Boon.Name == "Unnatural Signet" || x.Boon.Name == "Fractured - Enemy"))
                     {
-                        boonGraphData = mainTarget.GetBoonGraphs(_log);
-                        foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.Boon.Name == "Compromised" || x.Boon.Name == "Unnatural Signet" || x.Boon.Name == "Fractured - Enemy"))
-                        {
-                            BoonChartDataDto graph = BuildPlayerTabBoonGraph(bgm, phase);
-                            if (graph != null) list.Add(graph);
-                        }
+                        BoonChartDataDto graph = BuildBoonGraph(bgm, phase);
+                        if (graph != null) list.Add(graph);
                     }
-                }               
+                }
             }
             return list;
         }
 
-        private BoonChartDataDto BuildPlayerTabBoonGraph(BoonsGraphModel bgm, PhaseData phase)
+        private BoonChartDataDto BuildBoonGraph(BoonsGraphModel bgm, PhaseData phase)
         {
             //TODO line: {shape: 'hv'}
             long roundedEnd = phase.Start + 1000 * phase.GetDuration("s");
@@ -1777,7 +1774,7 @@ namespace LuckParser.Controllers
                 }
                 dto.dmgDistributionsTargets.Add(dmgTargetsDto);
                 dto.dmgDistributionsTaken.Add(BuildDMGTakenDistData(player, i));
-                dto.boonGraph.Add(BuildPlayerBoonGraphData(player, i));
+                dto.boonGraph.Add(BuildBoonGraphData(player, i));
             }
             foreach (KeyValuePair<string, Minions> pair in player.GetMinions(_log))
             {
@@ -1823,7 +1820,7 @@ namespace LuckParser.Controllers
                     dto.dmgDistributions.Add(BuildTargetDMGDistData(target, i));
                     dto.dmgDistributionsTaken.Add(BuildDMGTakenDistData(target, i));
                     dto.rotation.Add(BuildRotationData(target, i));
-                    dto.boonGraph.Add(BuildPlayerBoonGraphData(target, i));
+                    dto.boonGraph.Add(BuildBoonGraphData(target, i));
                 } else
                 {
                     dto.dmgDistributions.Add(new DmgDistributionDto());
