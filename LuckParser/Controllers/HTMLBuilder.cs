@@ -874,8 +874,44 @@ namespace LuckParser.Controllers
         {
             List<BoonChartDataDto> list = new List<BoonChartDataDto>();
             PhaseData phase = _statistics.Phases[phaseIndex];
-            Dictionary<long, BoonsGraphModel> boonGraphData = p.GetBoonGraphs(_log);
-            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
+            Dictionary<long, BoonsGraphModel> boonGraphData = p.GetBoonGraphs(_log).ToDictionary(x => x.Key, x => x.Value);
+            foreach (Boon buff in _statistics.PresentBoons)
+            {
+                if (boonGraphData.TryGetValue(buff.ID, out BoonsGraphModel bgm))
+                {
+                    BoonChartDataDto graph = BuildBoonGraph(bgm, phase);
+                    if (graph != null) list.Add(graph);
+                }
+                boonGraphData.Remove(buff.ID);
+            }
+            foreach (Boon buff in _statistics.PresentConditions)
+            {
+                if (boonGraphData.TryGetValue(buff.ID, out BoonsGraphModel bgm))
+                {
+                    BoonChartDataDto graph = BuildBoonGraph(bgm, phase);
+                    if (graph != null) list.Add(graph);
+                }
+                boonGraphData.Remove(buff.ID);
+            }
+            foreach (Boon buff in _statistics.PresentOffbuffs)
+            {
+                if (boonGraphData.TryGetValue(buff.ID, out BoonsGraphModel bgm))
+                {
+                    BoonChartDataDto graph = BuildBoonGraph(bgm, phase);
+                    if (graph != null) list.Add(graph);
+                }
+                boonGraphData.Remove(buff.ID);
+            }
+            foreach (Boon buff in _statistics.PresentDefbuffs)
+            {
+                if (boonGraphData.TryGetValue(buff.ID, out BoonsGraphModel bgm))
+                {
+                    BoonChartDataDto graph = BuildBoonGraph(bgm, phase);
+                    if (graph != null) list.Add(graph);
+                }
+                boonGraphData.Remove(buff.ID);
+            }
+            foreach (BoonsGraphModel bgm in boonGraphData.Values)
             {
                 BoonChartDataDto graph = BuildBoonGraph(bgm, phase);
                 if (graph != null) list.Add(graph);
@@ -892,6 +928,7 @@ namespace LuckParser.Controllers
                     }
                 }
             }
+            list.Reverse();
             return list;
         }
 
