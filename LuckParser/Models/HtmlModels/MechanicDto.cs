@@ -8,7 +8,7 @@ namespace LuckParser.Models.HtmlModels
         public string name;       
         public string shortName;        
         public string description;       
-        public bool enemyMech;       
-        public bool playerMech;
+        public int enemyMech;       
+        public int playerMech;
     }
 }

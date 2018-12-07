@@ -11,18 +11,18 @@ namespace LuckParser.Models
     {
         public JsonTargetBuffs(int phaseCount)
         {
-            Uptime = new double[phaseCount];
-            Presence = new double[phaseCount];
-            Generated = new Dictionary<string, double>[phaseCount];
-            Overstacked = new Dictionary<string, double>[phaseCount];
-            States = new List<int[]>();
+            uptime = new double[phaseCount];
+            presence = new double[phaseCount];
+            generated = new Dictionary<string, double>[phaseCount];
+            overstacked = new Dictionary<string, double>[phaseCount];
+            states = new List<int[]>();
         }
 
-        public double[] Uptime;
-        public double[] Presence;
-        public Dictionary<string, double>[] Generated;
-        public Dictionary<string, double>[] Overstacked;
-        public List<int[]> States;
+        public double[] uptime;
+        public double[] presence;
+        public Dictionary<string, double>[] generated;
+        public Dictionary<string, double>[] overstacked;
+        public List<int[]> states;
     }
 
 }
