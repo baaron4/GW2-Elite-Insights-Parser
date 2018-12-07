@@ -123,7 +123,7 @@ namespace LuckParser.Models
                             // P1 and P2 merged
                             if (p1.Start == p2.Start)
                             {
-                                CombatItem auraHit = log.CombatData.GetDamageData(nikare.InstID).FirstOrDefault(x => x.SkillID == 52779 && x.Time > log.FightData.ToLogSpace(p1.End));
+                                CombatItem auraHit = log.CombatData.GetDamageData(nikare.InstID, log.FightData.ToLogSpace(p1.End)+1, nikare.LastAware).FirstOrDefault(x => x.SkillID == 52779);
                                 if (auraHit != null)
                                 {
                                     p2.OverrideStart(log.FightData.ToFightSpace(auraHit.Time));
@@ -147,7 +147,7 @@ namespace LuckParser.Models
                             // P1 and P2 merged
                             if (p1.Start == p2.Start)
                             {
-                                CombatItem auraHit = log.CombatData.GetDamageData(nikare.InstID).FirstOrDefault(x => x.SkillID == 52779 && x.Time > log.FightData.ToLogSpace(p1.End));
+                                CombatItem auraHit = log.CombatData.GetDamageData(nikare.InstID, log.FightData.ToLogSpace(p1.End) + 1, nikare.LastAware).FirstOrDefault(x => x.SkillID == 52779);
                                 if (auraHit != null)
                                 {
                                     p2.OverrideStart(log.FightData.ToFightSpace(auraHit.Time));
@@ -164,7 +164,7 @@ namespace LuckParser.Models
                             // P1/P2 and P3 are merged
                             if (p1.Start == p3.Start || p2.Start == p3.Start)
                             {
-                                CombatItem auraHit = log.CombatData.GetDamageData(nikare.InstID).FirstOrDefault(x => x.SkillID == 52779 && x.Time > log.FightData.ToLogSpace(p2.End));
+                                CombatItem auraHit = log.CombatData.GetDamageData(nikare.InstID, log.FightData.ToLogSpace(p2.End) + 1, nikare.LastAware).FirstOrDefault(x => x.SkillID == 52779);
                                 if (auraHit != null)
                                 {
                                     p3.OverrideStart(log.FightData.ToFightSpace(auraHit.Time));

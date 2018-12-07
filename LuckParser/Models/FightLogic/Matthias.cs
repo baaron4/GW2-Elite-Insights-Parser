@@ -72,7 +72,7 @@ namespace LuckParser.Models
             if (heatWave != null)
             {
                 phases.Add(new PhaseData(0, log.FightData.ToFightSpace(heatWave.Time) - 1));
-                CombatItem downPour = log.GetDamageData(mainTarget.InstID).Find(x => x.SkillID == 34554);
+                CombatItem downPour = log.GetDamageData(mainTarget.InstID, mainTarget.FirstAware, mainTarget.LastAware).Find(x => x.SkillID == 34554);
                 if (downPour != null)
                 {
                     phases.Add(new PhaseData(log.FightData.ToFightSpace(heatWave.Time), log.FightData.ToFightSpace(downPour.Time) - 1));
@@ -81,7 +81,7 @@ namespace LuckParser.Models
                     if (abo != null)
                     {
                         phases.Add(new PhaseData(log.FightData.ToFightSpace(downPour.Time), abo.Time - 1));
-                        CombatItem invulRemove = log.GetBoonDataByDst(mainTarget.InstID).FirstOrDefault(x => x.Time >= log.FightData.ToLogSpace(abo.Time) && x.Time <= log.FightData.ToLogSpace(abo.Time) + 10000 && x.SkillID == 757 && x.IsBuffRemove != ParseEnum.BuffRemove.None);
+                        CombatItem invulRemove = log.GetBoonDataByDst(mainTarget.InstID, log.FightData.ToLogSpace(abo.Time), log.FightData.ToLogSpace(abo.Time) + 10000).FirstOrDefault(x => x.SkillID == 757 && x.IsBuffRemove != ParseEnum.BuffRemove.None);
                         if (invulRemove != null)
                         {
                             phases.Add(new PhaseData(log.FightData.ToFightSpace(invulRemove.Time), fightDuration));

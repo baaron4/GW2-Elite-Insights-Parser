@@ -88,7 +88,7 @@ namespace LuckParser.Models
             }
             HashSet<ushort> pIds = log.PlayerIDs;
             int combatExits = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Count(x => x.SrcInstid == mainTarget.InstID);
-            CombatItem lastDamageTaken = log.CombatData.GetDamageTakenData(mainTarget.InstID).LastOrDefault(x => (x.Value > 0 || x.BuffDmg > 0) && pIds.Contains(x.SrcInstid));
+            CombatItem lastDamageTaken = log.CombatData.GetDamageTakenData(mainTarget.InstID, mainTarget.FirstAware, mainTarget.LastAware).LastOrDefault(x => (x.Value > 0 || x.BuffDmg > 0) && pIds.Contains(x.SrcInstid));
             if (combatExits == 3 && lastDamageTaken != null)
             {
                 CombatItem lastPlayerExit = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => pIds.Contains(x.SrcInstid)).LastOrDefault();

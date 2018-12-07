@@ -80,15 +80,15 @@
     <Setting Name="SaveOutJSON" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-     <Setting Name="SaveOutXML" Type="System.Boolean" Scope="User">
-        <Value Profile="(Default)">False</Value>
-     </Setting>
+    <Setting Name="SaveOutXML" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
     <Setting Name="IndentJSON" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-     <Setting Name="IndentXML" Type="System.Boolean" Scope="User">
-        <Value Profile="(Default)">False</Value>
-     </Setting>
+    <Setting Name="IndentXML" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
     <Setting Name="LegacyHtmlMode" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
@@ -107,14 +107,14 @@
     <Setting Name="AutoAddPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="AddPoVProf" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="AddDuration" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
     <Setting Name="Outdated" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="AddPoVProf" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="AddDuration" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

@@ -270,7 +270,7 @@ namespace LuckParser.Models
                                     cList = combatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDown, log.FightData.FightStart, log.FightData.FightEnd);
                                     break;
                                 case SkillItem.ResurrectId:
-                                    cList = log.GetCastData(p.InstID).Where(x => x.SkillID == SkillItem.ResurrectId && x.IsActivation.IsCasting()).ToList();
+                                    cList = log.GetCastData(p.InstID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == SkillItem.ResurrectId && x.IsActivation.IsCasting()).ToList();
                                     break;
                             }
                             foreach (CombatItem mechItem in cList)

@@ -172,7 +172,7 @@ namespace LuckParser.Controllers
                     avgBoons = _statistics.AvgTargetBoons[target],
                     avgConditions = _statistics.AvgTargetConditions[target],
                     dps = BuildDPS(_statistics.TargetDps[target]),
-                    buffs = BuildTargetBuffs(_statistics.TargetConditions[target], target),
+                    buffs = BuildTargetBuffs(_statistics.TargetBuffs[target], target),
                     hitboxHeight = target.HitboxHeight,
                     hitboxWidth = target.HitboxWidth,
                     dps1s = Build1SDPS(target, null),
@@ -220,10 +220,10 @@ namespace LuckParser.Controllers
                     defenses = BuildDefenses(_statistics.Defenses[player]),
                     totation = BuildRotation(player.GetCastLogs(_log, 0, _log.FightData.FightDuration)),
                     support = BuildSupport(_statistics.Support[player]),
-                    selfBuffs = BuildBuffUptime(_statistics.SelfBoons[player], player),
-                    groupBuffs = BuildBuffUptime(_statistics.GroupBoons[player], player),
-                    offGroupBuffs = BuildBuffUptime(_statistics.OffGroupBoons[player], player),
-                    squadBuffs = BuildBuffUptime(_statistics.SquadBoons[player], player),
+                    selfBuffs = BuildBuffUptime(_statistics.SelfBuffs[player], player),
+                    groupBuffs = BuildBuffUptime(_statistics.GroupBuffs[player], player),
+                    offGroupBuffs = BuildBuffUptime(_statistics.OffGroupBuffs[player], player),
+                    squadBuffs = BuildBuffUptime(_statistics.SquadBuffs[player], player),
                     minions = BuildMinions(player),
                     totalDamageDist = BuildDamageDist(player, null),
                     targetDamageDist = BuildDamageDist(player),
@@ -386,7 +386,7 @@ namespace LuckParser.Controllers
         private List<int> Build1SDPS(AbstractMasterPlayer player, Target target)
         {
             List<int> res = new List<int>();
-            foreach (var pt in GraphHelper.GetTargetDPSGraph(_log, player, 0, _statistics.Phases[0], GraphHelper.GraphMode.S1, target))
+            foreach (var pt in GraphHelper.GetTargetDPSGraph(_log, player, 0, _statistics.Phases[0], target))
             {
                 res.Add(pt.Y);
             }
@@ -463,7 +463,7 @@ namespace LuckParser.Controllers
 
         // Statistics to Json Converters ////////////////////////////////////////////////////
 
-        private bool ContainsTargetBoon(long boon, Dictionary<long, Statistics.FinalTargetBoon>[] statBoons)
+        private bool ContainsTargetBoon(long boon, Dictionary<long, Statistics.FinalTargetBuffs>[] statBoons)
         {
             for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
             {
@@ -475,7 +475,7 @@ namespace LuckParser.Controllers
             return false;
         }
 
-        private void MakePhaseTargetBoon(JsonTargetBuffs boon, int phase, Statistics.FinalTargetBoon value)
+        private void MakePhaseTargetBoon(JsonTargetBuffs boon, int phase, Statistics.FinalTargetBuffs value)
         {
             boon.uptime[phase] = value.Uptime;
             boon.presence[phase] = value.Presence;
@@ -493,7 +493,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        private Dictionary<string, JsonTargetBuffs> BuildTargetBuffs(Dictionary<long, Statistics.FinalTargetBoon>[] statBoons, Target target)
+        private Dictionary<string, JsonTargetBuffs> BuildTargetBuffs(Dictionary<long, Statistics.FinalTargetBuffs>[] statBoons, Target target)
         {
             int phases = _statistics.Phases.Count;
             var boons = new Dictionary<string, JsonTargetBuffs>();
@@ -555,7 +555,7 @@ namespace LuckParser.Controllers
             return finalDps;
         }
 
-        private bool ContainsBoon(long boon, Dictionary<long, Statistics.FinalBoonUptime>[] statUptimes)
+        private bool ContainsBoon(long boon, Dictionary<long, Statistics.FinalBuffs>[] statUptimes)
         {
             int phases = _statistics.Phases.Count;
             for (int phaseIndex = 0; phaseIndex < phases; phaseIndex++)
@@ -568,7 +568,7 @@ namespace LuckParser.Controllers
             return false;
         }
 
-        private void MakePhaseBoon(JsonBuffs boon, int phase, Statistics.FinalBoonUptime value)
+        private void MakePhaseBoon(JsonBuffs boon, int phase, Statistics.FinalBuffs value)
         {
             boon.overstack[phase] = value.Overstack;
             boon.generation[phase] = value.Generation;
@@ -576,7 +576,7 @@ namespace LuckParser.Controllers
             boon.presence[phase] = value.Presence;
         }
 
-        private Dictionary<string, JsonBuffs> BuildBuffUptime(Dictionary<long, Statistics.FinalBoonUptime>[] statUptimes, Player player)
+        private Dictionary<string, JsonBuffs> BuildBuffUptime(Dictionary<long, Statistics.FinalBuffs>[] statUptimes, Player player)
         {
             var uptimes = new Dictionary<string, JsonBuffs>();
             int phases = _statistics.Phases.Count;

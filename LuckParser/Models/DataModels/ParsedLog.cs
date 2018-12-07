@@ -38,63 +38,34 @@ namespace LuckParser.Models.DataModels
             CombatData.Update(FightData.FightEnd);
         }
 
-        public Dictionary<long, List<CombatItem>> GetBoonData()
-        {
-            return CombatData.BoonData;
-        }
-
         public List<CombatItem> GetBoonData(long key)
         {
             return CombatData.GetBoonData(key);
         }
 
-        public Dictionary<ushort, List<CombatItem>> GetBoonDataByDst()
+        public List<CombatItem> GetBoonDataByDst(ushort key, long start, long end)
         {
-            return CombatData.BoonDataByDst;
+            return CombatData.GetBoonDataByDst(key, start, end);
         }
 
-        public List<CombatItem> GetBoonDataByDst(ushort key)
+        public List<CombatItem> GetDamageData(ushort key, long start, long end)
         {
-            return CombatData.GetBoonDataByDst(key);
+            return CombatData.GetDamageData(key, start, end);
         }
 
-        public Dictionary<ushort, List<CombatItem>> GetDamageData()
+        public List<CombatItem> GetCastData(ushort key, long start, long end)
         {
-            return CombatData.DamageData;
+            return CombatData.GetCastData(key, start, end);
         }
-
-        public List<CombatItem> GetDamageData(ushort key)
-        {
-            return CombatData.GetDamageData(key);
-        }
-
-        public Dictionary<ushort, List<CombatItem>> GetCastData()
-        {
-            return CombatData.CastData;
-        }
-
-        public List<CombatItem> GetCastData(ushort key)
-        {
-            return CombatData.GetCastData(key);
-        }
-
-        public Dictionary<long, List<CombatItem>> GetCastDataById()
-        {
-            return CombatData.CastDataById;
-        }
+        
         public List<CombatItem> GetCastDataById(long key)
         {
             return CombatData.GetCastDataById(key);
         }
-
-        public Dictionary<ushort, List<CombatItem>> GetDamageTakenData()
+        
+        public List<CombatItem> GetDamageTakenData(ushort key, long start, long end)
         {
-            return CombatData.DamageTakenData;
-        }
-
-        public List<CombatItem> GetDamageTakenData(ushort key)
-        {
-            return CombatData.GetDamageTakenData(key);
+            return CombatData.GetDamageTakenData(key,start,end);
         }
 
         public bool IsBenchmarkMode()
@@ -112,15 +83,10 @@ namespace LuckParser.Models.DataModels
         {
             return _combatData.getHealingReceivedData();
         }*/
-
-        public Dictionary<ushort, List<CombatItem>> GetMovementData()
+        
+        public List<CombatItem> GetMovementData(ushort key, long start, long end)
         {
-            return CombatData.MovementData;
-        }
-
-        public List<CombatItem> GetMovementData(ushort key)
-        {
-            return CombatData.GetMovementData(key);
+            return CombatData.GetMovementData(key,start,end);
         }
 
         public List<CombatItem> GetStatesData(ParseEnum.StateChange key)
