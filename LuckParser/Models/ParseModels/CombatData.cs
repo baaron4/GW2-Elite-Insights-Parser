@@ -120,30 +120,30 @@ namespace LuckParser.Models.ParseModels
             return new List<CombatItem>(); ;
         }
 
-        public List<CombatItem> GetBoonDataByDst(ushort key)
+        public List<CombatItem> GetBoonDataByDst(ushort key, long start, long end)
         {
             if (BoonDataByDst.TryGetValue(key, out List<CombatItem> res))
             {
-                return res;
+                return res.Where(x => x.Time >= start && x.Time <= end).ToList();
             }
             return new List<CombatItem>(); ;
         }
 
 
-        public List<CombatItem> GetDamageData(ushort key)
+        public List<CombatItem> GetDamageData(ushort key, long start, long end)
         {
             if (DamageData.TryGetValue(key, out List<CombatItem> res))
             {
-                return res;
+                return res.Where(x => x.Time >= start && x.Time <= end).ToList();
             }
             return new List<CombatItem>(); ;
         }
 
-        public List<CombatItem> GetCastData(ushort key)
+        public List<CombatItem> GetCastData(ushort key, long start, long end)
         {
             if (CastData.TryGetValue(key, out List<CombatItem> res))
             {
-                return res;
+                return res.Where(x => x.Time >= start && x.Time <= end).ToList();
             }
             return new List<CombatItem>(); ;
         }
@@ -158,11 +158,11 @@ namespace LuckParser.Models.ParseModels
             return new List<CombatItem>(); ;
         }
 
-        public List<CombatItem> GetDamageTakenData(ushort key)
+        public List<CombatItem> GetDamageTakenData(ushort key, long start, long end)
         {
             if (DamageTakenData.TryGetValue(key, out List<CombatItem> res))
             {
-                return res;
+                return res.Where(x => x.Time >= start && x.Time <= end).ToList();
             }
             return new List<CombatItem>();
         }
@@ -178,11 +178,11 @@ namespace LuckParser.Models.ParseModels
         }*/
 
 
-        public List<CombatItem> GetMovementData(ushort key)
+        public List<CombatItem> GetMovementData(ushort key, long start, long end)
         {
             if (MovementData.TryGetValue(key, out List<CombatItem> res))
             {
-                return res;
+                return res.Where(x => x.Time >= start && x.Time <= end).ToList();
             }
             return new List<CombatItem>();
         }

@@ -185,9 +185,7 @@ namespace LuckParser.Models.ParseModels
                 BoonToTrack
             };
             // Fill in Boon Map
-            long agentStart = log.FightData.ToFightSpace(FirstAware);
-            long agentEnd = log.FightData.ToFightSpace(LastAware);
-            foreach (CombatItem c in log.GetBoonDataByDst(InstID))
+            foreach (CombatItem c in log.GetBoonDataByDst(InstID, FirstAware, LastAware))
             {
                 long boonId = c.SkillID;
                 if (!boonMap.ContainsKey(boonId))
@@ -201,7 +199,7 @@ namespace LuckParser.Models.ParseModels
                     ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
                     loglist.Add(new BoonApplicationLog(time, src, c.Value));
                 }
-                else if (c.IsStateChange != ParseEnum.StateChange.BuffInitial && time >= agentStart && time <= agentEnd)
+                else if (c.IsStateChange != ParseEnum.StateChange.BuffInitial)
                 {
                     if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                     {
@@ -220,12 +218,8 @@ namespace LuckParser.Models.ParseModels
         // private setters
         private void SetMovements(ParsedLog log)
         {
-            foreach (CombatItem c in log.GetMovementData(AgentItem.InstID))
+            foreach (CombatItem c in log.GetMovementData(InstID, FirstAware, LastAware))
             {
-                if (c.Time < FirstAware || c.Time > LastAware)
-                {
-                    continue;
-                }
                 long time = log.FightData.ToFightSpace(c.Time);
                 byte[] xy = BitConverter.GetBytes(c.DstAgent);
                 float x = BitConverter.ToSingle(xy, 0);
@@ -550,13 +544,10 @@ namespace LuckParser.Models.ParseModels
         }
         protected override void SetDamageLogs(ParsedLog log)
         {
-            foreach (CombatItem c in log.GetDamageData(AgentItem.InstID))
+            foreach (CombatItem c in log.GetDamageData(InstID, FirstAware, LastAware))
             {
-                if (c.Time >= FirstAware && c.Time <= LastAware)//selecting player or minion as caster
-                {
-                    long time = log.FightData.ToFightSpace(c.Time);
-                    AddDamageLog(time, c);
-                }
+                long time = log.FightData.ToFightSpace(c.Time);
+                AddDamageLog(time, c);
             }
             Dictionary<string, Minions> minionsList = GetMinions(log);
             foreach (Minions mins in minionsList.Values)
@@ -567,28 +558,21 @@ namespace LuckParser.Models.ParseModels
         }
         protected override void SetDamageTakenLogs(ParsedLog log)
         {
-            foreach (CombatItem c in log.GetDamageTakenData(AgentItem.InstID))
+            foreach (CombatItem c in log.GetDamageTakenData(InstID, FirstAware, LastAware))
             {
-                if (c.Time >= FirstAware && c.Time <= LastAware)
-                {
-                    long time = log.FightData.ToFightSpace(c.Time);
-                    AddDamageTakenLog(time, c);
-                }
+                long time = log.FightData.ToFightSpace(c.Time);
+                AddDamageTakenLog(time, c);
             }
         }
         protected override void SetCastLogs(ParsedLog log)
         {
             CastLog curCastLog = null;
-            foreach (CombatItem c in log.GetCastData(AgentItem.InstID))
+            foreach (CombatItem c in log.GetCastData(InstID, FirstAware, LastAware))
             {
-                if (!(c.Time >= FirstAware))
-                {
-                    continue;
-                }
                 ParseEnum.StateChange state = c.IsStateChange;
                 if (state == ParseEnum.StateChange.Normal)
                 {                  
-                    if (c.IsActivation.IsCasting() && c.Time <= LastAware)
+                    if (c.IsActivation.IsCasting())
                     {
                         // Missing end activation
                         if (curCastLog != null)
@@ -616,7 +600,7 @@ namespace LuckParser.Models.ParseModels
 
 
                 }
-                else if (state == ParseEnum.StateChange.WeaponSwap && c.Time <= LastAware)
+                else if (state == ParseEnum.StateChange.WeaponSwap)
                 {
                     long time = log.FightData.ToFightSpace(c.Time);
                     CastLog swapLog = new CastLog(time, SkillItem.WeaponSwapId, (int)c.DstAgent, c.IsActivation);
@@ -643,6 +627,7 @@ namespace LuckParser.Models.ParseModels
             }
             CastLogs.Sort((x, y) => x.Time < y.Time ? -1 : 1);
         }
+
         private static void Add<T>(Dictionary<T, long> dictionary, T key, long value)
         {
             if (dictionary.TryGetValue(key, out var existing))
