@@ -10,17 +10,17 @@ namespace LuckParser.Models
     {
         public JsonBuffs(int phaseCount)
         {
-            Generation = new double[phaseCount];
-            Overstack = new double[phaseCount];
-            Presence = new double[phaseCount];
-            Uptime = new double[phaseCount];
-            States = new List<int[]>();
+            generation = new double[phaseCount];
+            overstack = new double[phaseCount];
+            presence = new double[phaseCount];
+            uptime = new double[phaseCount];
+            states = new List<int[]>();
         }
 
-        public double[] Uptime;
-        public double[] Presence;
-        public double[] Generation;
-        public double[] Overstack;
-        public List<int[]> States;
+        public double[] uptime;
+        public double[] presence;
+        public double[] generation;
+        public double[] overstack;
+        public List<int[]> states;
     }
 }

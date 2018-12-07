@@ -5,8 +5,8 @@
         public long id;       
         public string name;       
         public string icon;       
-        public bool stacking;
-        public bool consumable;
-        public bool enemy;
+        public int stacking;
+        public int consumable;
+        public int enemy;
     }
 }

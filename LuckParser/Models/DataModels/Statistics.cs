@@ -62,7 +62,7 @@ namespace LuckParser.Models.DataModels
             public int Missed;
             public int Interrupts;
             public int Invulned;
-            public int PlayerPowerDamage;
+            public int PowerDamage;
         }
 
         public class FinalStatsAll : FinalStats
@@ -102,8 +102,8 @@ namespace LuckParser.Models.DataModels
             public int DownDuration;
             public int DeadCount;
             public int DeadDuration;
-            public int DCCount;
-            public int DCDuration;
+            public int DcCount;
+            public int DcDuration;
         }
 
         public readonly Dictionary<Player, FinalDefenses[]> Defenses;
