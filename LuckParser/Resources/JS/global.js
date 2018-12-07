@@ -114,6 +114,30 @@ function getTargetCacheID(activetargets) {
 
 function computeRotationData(rotationData, images, data) {
     if (rotationData) {
+        var rotaTrace = {
+            x: [],
+            base: [],
+            y: [],
+            name: 'Rotation',
+            text: [],
+            orientation: 'h',
+            mode: 'markers',
+            type: 'bar',
+            width: [],
+            hoverinfo: 'text',
+            hoverlabel: {
+                namelength: '-1'
+            },
+            marker: {
+                color: [],
+                width: '5',
+                line: {
+                    color: [],
+                    width: '1'
+                }
+            },
+            showlegend: false
+        }
         for (var i = 0; i < rotationData.length; i++) {
             var item = rotationData[i];
             var x = item[0];
@@ -155,31 +179,16 @@ function computeRotationData(rotationData, images, data) {
             else if (endType == 3) fillColor = 'rgb(40,220,40)';
             else fillColor = 'rgb(220,220,0)';
 
-            data.push({
-                x: [duration/1000.0],
-                base: x,
-                y: [1.2],
-                name: name + ': ' + duration + 'ms',
-                orientation: 'h',
-                mode: 'markers',
-                type: 'bar',
-                width: aa ? 0.5 : 1,
-                hoverinfo: 'name',
-                hoverlabel: {
-                    namelength: '-1'
-                },
-                marker: {
-                    color: fillColor,
-                    width: '5',
-                    line: {
-                        color: quick ? 'rgb(220,40,220)' : 'rgb(20,20,20)',
-                        width: '1'
-                    }
-                },
-                showlegend: false
-            });
+            rotaTrace.x.push(duration / 1000.0);
+            rotaTrace.base.push(x);
+            rotaTrace.y.push(1.2);
+            rotaTrace.text.push(name + ': ' + duration + 'ms');
+            rotaTrace.width.push(aa ? 0.5 : 1.0);
+            rotaTrace.marker.color.push(fillColor);
+            rotaTrace.marker.line.color.push(quick ? 'rgb(220,40,220)' : 'rgb(20,20,20)');
         }
-        return rotationData.length;
+        data.push(rotaTrace);
+        return 1;
     }
     return 0;
 }
@@ -349,6 +358,7 @@ function getActorGraphLayout(images, color) {
             traceorder: 'reversed'
         },
         hovermode: 'compare',
+        hoverdistance: 1100,
         yaxis2: {
             title: 'Buffs',
             domain: [0.11, 0.6],
@@ -423,16 +433,22 @@ function computeBuffData(buffData, data) {
                 visible: boonItem.visible ? null : 'legendonly',
                 line: {
                     color: boonItem.color,
-                    shape: 'hv'
+                    shape: 'linear'
                 },
                 hoverinfo: 'text',
                 fill: 'tozeroy',
-                name: boon.name
+                name: boon.name.substring(0,20)
             };
-            for (var p = 0; p < boonItem.states.length; p++) {
-                line.x[p] = boonItem.states[p][0];
-                line.y[p] = boonItem.states[p][1];
-                line.text[p] = boon.name + ': ' + boonItem.states[p][1];
+            line.x.push(boonItem.states[0][0]);
+            line.y.push(boonItem.states[0][1]);
+            line.text.push(boon.name + ': ' + boonItem.states[0][1]);
+            for (var p = 1; p < boonItem.states.length; p++) {
+                line.x.push(boonItem.states[p][0]-0.001);
+                line.y.push(boonItem.states[p-1][1]);
+                line.text.push(boon.name + ': ' + boonItem.states[p-1][1]);
+                line.x.push(boonItem.states[p][0]);
+                line.y.push(boonItem.states[p][1]);
+                line.text.push(boon.name + ': ' + boonItem.states[p][1]);
             }
             data.push(line);
         }
