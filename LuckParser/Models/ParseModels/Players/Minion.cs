@@ -12,33 +12,22 @@ namespace LuckParser.Models.ParseModels
 
         protected override void SetDamageLogs(ParsedLog log)
         {
-            long minTime = Math.Max(log.FightData.FightStart, AgentItem.FirstAware);
-            long maxTime = Math.Min(log.FightData.FightEnd, AgentItem.LastAware);
-            foreach (CombatItem c in log.GetDamageData(AgentItem.InstID))
+            foreach (CombatItem c in log.GetDamageData(InstID, FirstAware, LastAware))
             {
-                if (c.Time >= minTime && c.Time <= maxTime)//selecting minion as caster
-                {
-                    long time = log.FightData.ToFightSpace(c.Time);
-                    AddDamageLog(time, c);
-                }
+                long time = log.FightData.ToFightSpace(c.Time);
+                AddDamageLog(time, c);
             }
         }
 
         protected override void SetCastLogs(ParsedLog log)
         {
             CastLog curCastLog = null;
-            long minTime = Math.Max(log.FightData.FightStart, AgentItem.FirstAware);
-            long maxTime = Math.Min(log.FightData.FightEnd, AgentItem.LastAware);
-            foreach (CombatItem c in log.GetCastData(AgentItem.InstID))
+            foreach (CombatItem c in log.GetCastData(InstID, FirstAware, LastAware))
             {
-                if (!(c.Time >= minTime))
-                {
-                    continue;
-                }
                 ParseEnum.StateChange state = c.IsStateChange;
                 if (state == ParseEnum.StateChange.Normal)
                 {
-                    if (c.IsActivation.IsCasting() && c.Time <= maxTime)
+                    if (c.IsActivation.IsCasting())
                     {
                         long time = log.FightData.ToFightSpace(c.Time);
                         curCastLog = new CastLog(time, c.SkillID, c.Value, c.IsActivation);

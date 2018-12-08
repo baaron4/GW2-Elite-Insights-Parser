@@ -26,30 +26,6 @@ namespace LuckParser.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool DPSGraphTotals {
-            get {
-                return ((bool)(this["DPSGraphTotals"]));
-            }
-            set {
-                this["DPSGraphTotals"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool ClDPSGraphTotals {
-            get {
-                return ((bool)(this["ClDPSGraphTotals"]));
-            }
-            set {
-                this["ClDPSGraphTotals"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool PlayerBoonsUniversal {
             get {
                 return ((bool)(this["PlayerBoonsUniversal"]));
@@ -86,30 +62,6 @@ namespace LuckParser.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool PlayerRot {
-            get {
-                return ((bool)(this["PlayerRot"]));
-            }
-            set {
-                this["PlayerRot"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool PlayerRotIcons {
-            get {
-                return ((bool)(this["PlayerRotIcons"]));
-            }
-            set {
-                this["PlayerRotIcons"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool SaveAtOut {
             get {
                 return ((bool)(this["SaveAtOut"]));
@@ -128,54 +80,6 @@ namespace LuckParser.Properties {
             }
             set {
                 this["OutLocation"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool EventList {
-            get {
-                return ((bool)(this["EventList"]));
-            }
-            set {
-                this["EventList"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool SimpleRotation {
-            get {
-                return ((bool)(this["SimpleRotation"]));
-            }
-            set {
-                this["SimpleRotation"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ShowAutos {
-            get {
-                return ((bool)(this["ShowAutos"]));
-            }
-            set {
-                this["ShowAutos"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool LargeRotIcons {
-            get {
-                return ((bool)(this["LargeRotIcons"]));
-            }
-            set {
-                this["LargeRotIcons"] = value;
             }
         }
         
@@ -236,30 +140,6 @@ namespace LuckParser.Properties {
             }
             set {
                 this["ParsePhases"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool Show10s {
-            get {
-                return ((bool)(this["Show10s"]));
-            }
-            set {
-                this["Show10s"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool Show30s {
-            get {
-                return ((bool)(this["Show30s"]));
-            }
-            set {
-                this["Show30s"] = value;
             }
         }
         
@@ -374,18 +254,6 @@ namespace LuckParser.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool LegacyHtmlMode {
-            get {
-                return ((bool)(this["LegacyHtmlMode"]));
-            }
-            set {
-                this["LegacyHtmlMode"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool HtmlExternalScripts {
             get {
                 return ((bool)(this["HtmlExternalScripts"]));
@@ -445,6 +313,18 @@ namespace LuckParser.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Outdated {
+            get {
+                return ((bool)(this["Outdated"]));
+            }
+            set {
+                this["Outdated"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool AddPoVProf {
             get {
@@ -464,18 +344,6 @@ namespace LuckParser.Properties {
             }
             set {
                 this["AddDuration"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool Outdated {
-            get {
-                return ((bool)(this["Outdated"]));
-            }
-            set {
-                this["Outdated"] = value;
             }
         }
     }

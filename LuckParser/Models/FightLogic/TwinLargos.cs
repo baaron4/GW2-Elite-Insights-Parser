@@ -91,6 +91,78 @@ namespace LuckParser.Models
             return targetPhases;
         }
 
+        private void FallBackPhases(Target target, List<PhaseData> phases, ParsedLog log, bool firstPhaseAt0)
+        {
+            HashSet<ushort> pIds = new HashSet<ushort>(log.PlayerList.Select(x => x.InstID));
+            // clean Nikare related bugs
+            switch (phases.Count)
+            {
+                case 2:
+                    {
+                        PhaseData p1 = phases[0];
+                        PhaseData p2 = phases[1];
+                        // P1 and P2 merged
+                        if (p1.Start == p2.Start)
+                        {
+                            CombatItem hit = log.CombatData.GetDamageTakenData(target.InstID, log.FightData.ToLogSpace(p1.End) + 2000, target.LastAware).FirstOrDefault(x => (pIds.Contains(x.SrcInstid) || pIds.Contains(x.SrcMasterInstid)) && (x.Value > 0 || x.BuffDmg > 0));
+                            if (hit != null)
+                            {
+                                p2.OverrideStart(log.FightData.ToFightSpace(hit.Time));
+                            }
+                            else
+                            {
+                                p2.OverrideStart(p1.End);
+                            }
+                        }
+                    }
+                    break;
+                case 3:
+                    {
+                        PhaseData p1 = phases[0];
+                        PhaseData p2 = phases[1];
+                        PhaseData p3 = phases[2];
+                        // P1 and P2 merged
+                        if (p1.Start == p2.Start)
+                        {
+                            CombatItem hit = log.CombatData.GetDamageTakenData(target.InstID, log.FightData.ToLogSpace(p1.End) + 2000, target.LastAware).FirstOrDefault(x => (pIds.Contains(x.SrcInstid) || pIds.Contains(x.SrcMasterInstid)) && (x.Value > 0 || x.BuffDmg > 0));
+                            if (hit != null)
+                            {
+                                p2.OverrideStart(log.FightData.ToFightSpace(hit.Time));
+                            }
+                            else
+                            {
+                                p2.OverrideStart(p1.End);
+                            }
+                        }
+                        // P1/P2 and P3 are merged
+                        if (p1.Start == p3.Start || p2.Start == p3.Start)
+                        {
+                            CombatItem hit = log.CombatData.GetDamageTakenData(target.InstID, log.FightData.ToLogSpace(p2.End) + 2000, target.LastAware).FirstOrDefault(x => (pIds.Contains(x.SrcInstid) || pIds.Contains(x.SrcMasterInstid)) && (x.Value > 0 || x.BuffDmg > 0));
+                            if (hit != null)
+                            {
+                                p3.OverrideStart(log.FightData.ToFightSpace(hit.Time));
+                            }
+                            else
+                            {
+                                p3.OverrideStart(p2.End);
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+            if (!firstPhaseAt0 && phases.Count > 0 && phases.First().Start == 0)
+            {
+                PhaseData p1 = phases[0];
+                CombatItem hit = log.CombatData.GetDamageTakenData(target.InstID, log.FightData.ToLogSpace(0), target.LastAware).FirstOrDefault(x => (pIds.Contains(x.SrcInstid) || pIds.Contains(x.SrcMasterInstid)) && (x.Value > 0 || x.BuffDmg > 0));
+                if (hit != null)
+                {
+                    p1.OverrideStart(log.FightData.ToFightSpace(hit.Time));
+                }
+            } 
+        }
+
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
@@ -110,77 +182,14 @@ namespace LuckParser.Models
                 return phases;
             }
             List<PhaseData> nikPhases = GetTargetPhases(log, nikare, new string[] { "Nikare P1", "Nikare P2", "Nikare P3" });
+            FallBackPhases(nikare, nikPhases, log, true);
+            phases.AddRange(nikPhases);
             if (kenut != null)
             {
-                phases.AddRange(GetTargetPhases(log, kenut, new string[] { "Kenut P1", "Kenut P2", "Kenut P3" }));
-                // clean Nikare related bugs
-                switch (nikPhases.Count)
-                {
-                    case 2:
-                        {
-                            PhaseData p1 = nikPhases[0];
-                            PhaseData p2 = nikPhases[1];
-                            // P1 and P2 merged
-                            if (p1.Start == p2.Start)
-                            {
-                                CombatItem auraHit = log.CombatData.GetDamageData(nikare.InstID).FirstOrDefault(x => x.SkillID == 52779 && x.Time > log.FightData.ToLogSpace(p1.End));
-                                if (auraHit != null)
-                                {
-                                    p2.OverrideStart(log.FightData.ToFightSpace(auraHit.Time));
-                                }
-                                else
-                                {
-                                    CombatItem combatItem = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => x.SrcInstid == kenut.InstID).FirstOrDefault();
-                                    if (combatItem != null)
-                                    {
-                                        p2.OverrideStart(log.FightData.ToFightSpace(combatItem.Time));
-                                    }
-                                }
-                            }
-                        }
-                        break;
-                    case 3:
-                        {
-                            PhaseData p1 = nikPhases[0];
-                            PhaseData p2 = nikPhases[1];
-                            PhaseData p3 = nikPhases[2];
-                            // P1 and P2 merged
-                            if (p1.Start == p2.Start)
-                            {
-                                CombatItem auraHit = log.CombatData.GetDamageData(nikare.InstID).FirstOrDefault(x => x.SkillID == 52779 && x.Time > log.FightData.ToLogSpace(p1.End));
-                                if (auraHit != null)
-                                {
-                                    p2.OverrideStart(log.FightData.ToFightSpace(auraHit.Time));
-                                }
-                                else
-                                {
-                                    CombatItem combatItem = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => x.SrcInstid == kenut.InstID).FirstOrDefault();
-                                    if (combatItem != null)
-                                    {
-                                        p2.OverrideStart(log.FightData.ToFightSpace(combatItem.Time));
-                                    }
-                                }
-                            }
-                            // P1/P2 and P3 are merged
-                            if (p1.Start == p3.Start || p2.Start == p3.Start)
-                            {
-                                CombatItem auraHit = log.CombatData.GetDamageData(nikare.InstID).FirstOrDefault(x => x.SkillID == 52779 && x.Time > log.FightData.ToLogSpace(p2.End));
-                                if (auraHit != null)
-                                {
-                                    p3.OverrideStart(log.FightData.ToFightSpace(auraHit.Time));
-                                }
-                                else
-                                {
-                                    p3.OverrideStart(p2.End);
-                                }
-                            }
-                        }
-                        break;
-                    default:
-                        break;
-                }
+                List<PhaseData> kenPhases = GetTargetPhases(log, kenut, new string[] { "Kenut P1", "Kenut P2", "Kenut P3" });
+                FallBackPhases(kenut, kenPhases, log, false);
+                phases.AddRange(kenPhases);           
             }
-            phases.AddRange(nikPhases);
             phases.Sort((x, y) => x.Start < y.Start ? -1 : 1);
             return phases;
         }
