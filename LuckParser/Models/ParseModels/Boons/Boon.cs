@@ -185,7 +185,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Aquatic Aura (Kenut)",52211 , BoonSource.Enemy, BoonType.Intensity, 80, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Boon("Aquatic Aura (Nikare)",52929 , BoonSource.Enemy, BoonType.Intensity, 80, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Boon("Waterlogged",51935 , BoonSource.Enemy, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Protective Shadow", 31877, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.ForceOverride,"https://wiki.guildwars2.com/images/8/87/Protective_Shadow.png"),
+                new Boon("Protective Shadow", 31877, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/8/87/Protective_Shadow.png"),
                 new Boon("Narcolepsy", 34467, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Boon("Blue Pylon Power", 31413, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/6/6e/Blue_Pylon_Power.png"),
                 new Boon("Unbreakable", 34979, BoonSource.Enemy, BoonType.Intensity, 2, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/5/56/Xera%27s_Embrace.png"),
