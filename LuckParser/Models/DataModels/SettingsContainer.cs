@@ -4,9 +4,6 @@ namespace LuckParser.Models.DataModels
 {
     class SettingsContainer
     {
-        public readonly bool PlayerBoonsUniversal;
-        public readonly bool PlayerBoonsImpProf;
-        public readonly bool PlayerBoonsAllProf;
         public readonly bool ShowEstimates;
         public readonly bool ParsePhases;
         public readonly bool LightTheme;
@@ -20,9 +17,6 @@ namespace LuckParser.Models.DataModels
 
         public SettingsContainer(Settings settings)
         {
-            PlayerBoonsUniversal = settings.PlayerBoonsUniversal;
-            PlayerBoonsImpProf = settings.PlayerBoonsImpProf;
-            PlayerBoonsAllProf = settings.PlayerBoonsAllProf;
             ShowEstimates = settings.ShowEstimates;
             ParsePhases = settings.ParsePhases;
             LightTheme = settings.LightTheme;

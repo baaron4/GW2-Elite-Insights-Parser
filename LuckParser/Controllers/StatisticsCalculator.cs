@@ -399,7 +399,7 @@ namespace LuckParser.Controllers
 
             // Counts
             CombatData combatData = _log.CombatData;
-            final.SwapCount = p.GetCastLogs(_log,0, _log.FightData.FightDuration).Count(x => x.SkillId == SkillItem.WeaponSwapId);
+            final.SwapCount = p.GetCastLogs(_log, 0, _log.FightData.FightDuration).Count(x => x.SkillId == SkillItem.WeaponSwapId);
 
             if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay)
             {
@@ -784,71 +784,64 @@ namespace LuckParser.Controllers
         {
             List<CombatItem> combatList = _log.CombatData.AllCombatItems;
             var skillIDs = new HashSet<long>(combatList.Select(x => x.SkillID));
-            if (_settings.PlayerBoonsUniversal)
+            // Main boons
+            foreach (Boon boon in Boon.GetBoonList())
             {
-                // Main boons
-                foreach (Boon boon in Boon.GetBoonList())
+                if (skillIDs.Contains(boon.ID))
                 {
-                    if (skillIDs.Contains(boon.ID))
-                    {
-                        _statistics.PresentBoons.Add(boon);
-                    }
+                    _statistics.PresentBoons.Add(boon);
                 }
-                // Main Conditions
-                foreach (Boon boon in Boon.GetCondiBoonList())
+            }
+            // Main Conditions
+            foreach (Boon boon in Boon.GetCondiBoonList())
+            {
+                if (skillIDs.Contains(boon.ID))
                 {
-                    if (skillIDs.Contains(boon.ID))
-                    {
-                        _statistics.PresentConditions.Add(boon);
-                    }
+                    _statistics.PresentConditions.Add(boon);
                 }
             }
 
-            if (_settings.PlayerBoonsImpProf)
+            // Important class specific boons
+            foreach (Boon boon in Boon.GetOffensiveTableList())
             {
-                // Important class specific boons
-                foreach (Boon boon in Boon.GetOffensiveTableList())
+                if (skillIDs.Contains(boon.ID))
                 {
-                    if (skillIDs.Contains(boon.ID))
-                    {
-                        _statistics.PresentOffbuffs.Add(boon);
-                    }
+                    _statistics.PresentOffbuffs.Add(boon);
+                }
+            }
+
+            foreach (Boon boon in Boon.GetDefensiveTableList())
+            {
+                if (skillIDs.Contains(boon.ID))
+                {
+                    _statistics.PresentDefbuffs.Add(boon);
                 }
 
-                foreach (Boon boon in Boon.GetDefensiveTableList())
-                {
-                    if (skillIDs.Contains(boon.ID))
-                    {
-                        _statistics.PresentDefbuffs.Add(boon);
-                    }
-                }
             }
 
             var players = _log.PlayerList;
-            if (_settings.PlayerBoonsAllProf)
+            Dictionary<ushort, Player> playersById = new Dictionary<ushort, Player>();
+            foreach (Player player in players)
             {
-                Dictionary<ushort, Player> playersById = new Dictionary<ushort, Player>();
-                foreach (Player player in players)
-                {
-                    _statistics.PresentPersonalBuffs[player.InstID] = new HashSet<Boon>();
-                    playersById.Add(player.InstID, player);
-                }
-                // All class specific boons
-                List<Boon> remainingBuffs = new List<Boon>(Boon.GetRemainingBuffsList());
-                remainingBuffs.AddRange(Boon.GetConsumableList());
-                Dictionary<long, Boon> remainingBuffsByIds = remainingBuffs.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
+                _statistics.PresentPersonalBuffs[player.InstID] = new HashSet<Boon>();
+                playersById.Add(player.InstID, player);
+            }
+            // All class specific boons
+            List<Boon> remainingBuffs = new List<Boon>(Boon.GetRemainingBuffsList());
+            remainingBuffs.AddRange(Boon.GetConsumableList());
+            Dictionary<long, Boon> remainingBuffsByIds = remainingBuffs.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
 
-                foreach (CombatItem item in combatList)
+            foreach (CombatItem item in combatList)
+            {
+                if (playersById.TryGetValue(item.DstInstid, out Player player))
                 {
-                    if (playersById.TryGetValue(item.DstInstid, out Player player))
+                    if (remainingBuffsByIds.TryGetValue(item.SkillID, out Boon boon))
                     {
-                        if (remainingBuffsByIds.TryGetValue(item.SkillID, out Boon boon))
-                        {
-                            _statistics.PresentPersonalBuffs[player.InstID].Add(boon);
-                        }
+                        _statistics.PresentPersonalBuffs[player.InstID].Add(boon);
                     }
                 }
             }
+
         }
     }
 }
