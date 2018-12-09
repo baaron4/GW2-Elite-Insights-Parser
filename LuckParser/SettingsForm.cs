@@ -14,23 +14,6 @@ namespace LuckParser
             this.mainForm = mainForm;
             InitializeComponent();
         }
-
-        private void UniversalBoonsCheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.PlayerBoonsUniversal = chkUniversalBoons.Checked;
-            //mainfrm.settingArray[3] = checkBox4.Checked;
-        }
-
-        private void ImportantProfessionSpecificBoonsCheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.PlayerBoonsImpProf = chkImpProfSpecBoons.Checked;
-           // mainfrm.settingArray[4] = checkBox5.Checked;
-        }
-        private void AllProfessionSpecificBoonsCheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.PlayerBoonsAllProf = chkAllProfSpecBoons.Checked;
-            //mainfrm.settingArray[5] = checkBox6.Checked;
-        }
         
         private void SettingsFormFormClosing(object sender, FormClosingEventArgs e)
         {
@@ -44,9 +27,6 @@ namespace LuckParser
 
         private void SettingsFormLoad(object sender, EventArgs e)
         {
-            chkUniversalBoons.Checked = Properties.Settings.Default.PlayerBoonsUniversal;
-            chkImpProfSpecBoons.Checked = Properties.Settings.Default.PlayerBoonsImpProf;
-            chkAllProfSpecBoons.Checked = Properties.Settings.Default.PlayerBoonsAllProf;
             chkDefaultOutputLoc.Checked =Properties.Settings.Default.SaveAtOut;
             txtCustomSaveLoc.Text = Properties.Settings.Default.OutLocation;
             chkOutputHtml.Checked = Properties.Settings.Default.SaveOutHTML;

@@ -30,9 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
-            this.chkUniversalBoons = new System.Windows.Forms.CheckBox();
-            this.chkImpProfSpecBoons = new System.Windows.Forms.CheckBox();
-            this.chkAllProfSpecBoons = new System.Windows.Forms.CheckBox();
             this.lblSettingsInfoMsg = new System.Windows.Forms.Label();
             this.chkDefaultOutputLoc = new System.Windows.Forms.CheckBox();
             this.txtCustomSaveLoc = new System.Windows.Forms.TextBox();
@@ -63,7 +60,6 @@
             this.chkAddDuration = new System.Windows.Forms.CheckBox();
             this.chkAddPoVProf = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.imgTheme = new System.Windows.Forms.PictureBox();
             this.panelHtml = new System.Windows.Forms.Panel();
@@ -81,11 +77,11 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.cmdClose = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imgTheme)).BeginInit();
             this.panelHtml.SuspendLayout();
@@ -96,50 +92,14 @@
             this.panelJson.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.tabPage6.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // chkUniversalBoons
-            // 
-            this.chkUniversalBoons.AutoSize = true;
-            this.chkUniversalBoons.Checked = true;
-            this.chkUniversalBoons.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkUniversalBoons.Location = new System.Drawing.Point(6, 24);
-            this.chkUniversalBoons.Name = "chkUniversalBoons";
-            this.chkUniversalBoons.Size = new System.Drawing.Size(148, 17);
-            this.chkUniversalBoons.TabIndex = 5;
-            this.chkUniversalBoons.Text = "Compute Universal Boons";
-            this.chkUniversalBoons.UseVisualStyleBackColor = true;
-            this.chkUniversalBoons.CheckedChanged += new System.EventHandler(this.UniversalBoonsCheckedChanged);
-            // 
-            // chkImpProfSpecBoons
-            // 
-            this.chkImpProfSpecBoons.AutoSize = true;
-            this.chkImpProfSpecBoons.Checked = true;
-            this.chkImpProfSpecBoons.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkImpProfSpecBoons.Location = new System.Drawing.Point(6, 47);
-            this.chkImpProfSpecBoons.Name = "chkImpProfSpecBoons";
-            this.chkImpProfSpecBoons.Size = new System.Drawing.Size(188, 17);
-            this.chkImpProfSpecBoons.TabIndex = 7;
-            this.chkImpProfSpecBoons.Text = "Compute Profession Specific Buffs";
-            this.chkImpProfSpecBoons.UseVisualStyleBackColor = true;
-            this.chkImpProfSpecBoons.CheckedChanged += new System.EventHandler(this.ImportantProfessionSpecificBoonsCheckedChanged);
-            // 
-            // chkAllProfSpecBoons
-            // 
-            this.chkAllProfSpecBoons.AutoSize = true;
-            this.chkAllProfSpecBoons.Location = new System.Drawing.Point(6, 70);
-            this.chkAllProfSpecBoons.Name = "chkAllProfSpecBoons";
-            this.chkAllProfSpecBoons.Size = new System.Drawing.Size(148, 17);
-            this.chkAllProfSpecBoons.TabIndex = 8;
-            this.chkAllProfSpecBoons.Text = "Compute Remaining Buffs";
-            this.chkAllProfSpecBoons.UseVisualStyleBackColor = true;
-            this.chkAllProfSpecBoons.CheckedChanged += new System.EventHandler(this.AllProfessionSpecificBoonsCheckedChanged);
             // 
             // lblSettingsInfoMsg
             // 
             this.lblSettingsInfoMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblSettingsInfoMsg.AutoSize = true;
-            this.lblSettingsInfoMsg.Location = new System.Drawing.Point(12, 422);
+            this.lblSettingsInfoMsg.Location = new System.Drawing.Point(12, 334);
             this.lblSettingsInfoMsg.Name = "lblSettingsInfoMsg";
             this.lblSettingsInfoMsg.Size = new System.Drawing.Size(251, 13);
             this.lblSettingsInfoMsg.TabIndex = 12;
@@ -249,7 +209,7 @@
             this.chkPhaseParsing.AutoSize = true;
             this.chkPhaseParsing.Checked = true;
             this.chkPhaseParsing.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkPhaseParsing.Location = new System.Drawing.Point(6, 24);
+            this.chkPhaseParsing.Location = new System.Drawing.Point(6, 19);
             this.chkPhaseParsing.Name = "chkPhaseParsing";
             this.chkPhaseParsing.Size = new System.Drawing.Size(91, 17);
             this.chkPhaseParsing.TabIndex = 30;
@@ -260,11 +220,12 @@
             // chkOneAtATime
             // 
             this.chkOneAtATime.AutoSize = true;
-            this.chkOneAtATime.Location = new System.Drawing.Point(24, 263);
+            this.chkOneAtATime.Location = new System.Drawing.Point(6, 19);
             this.chkOneAtATime.Name = "chkOneAtATime";
-            this.chkOneAtATime.Size = new System.Drawing.Size(287, 17);
+            this.chkOneAtATime.Size = new System.Drawing.Size(139, 17);
             this.chkOneAtATime.TabIndex = 29;
-            this.chkOneAtATime.Text = "Parse logs one at a time (less CPU load, slower parsing)";
+            this.chkOneAtATime.Text = "Parse logs one at a time";
+            this.toolTip1.SetToolTip(this.chkOneAtATime, "Slower parsing but less ressource hungry. Keep default value if unsure.");
             this.chkOneAtATime.UseVisualStyleBackColor = true;
             this.chkOneAtATime.CheckedChanged += new System.EventHandler(this.ChkOneAtATimeCheckedChanged);
             // 
@@ -273,7 +234,7 @@
             this.chkCombatReplay.AutoSize = true;
             this.chkCombatReplay.Checked = true;
             this.chkCombatReplay.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkCombatReplay.Location = new System.Drawing.Point(6, 47);
+            this.chkCombatReplay.Location = new System.Drawing.Point(6, 42);
             this.chkCombatReplay.Name = "chkCombatReplay";
             this.chkCombatReplay.Size = new System.Drawing.Size(143, 17);
             this.chkCombatReplay.TabIndex = 40;
@@ -367,22 +328,18 @@
             this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(479, 398);
+            this.tabControl1.Size = new System.Drawing.Size(479, 310);
             this.tabControl1.TabIndex = 47;
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.chkAutoAdd);
-            this.tabPage1.Controls.Add(this.chkAutoParse);
-            this.tabPage1.Controls.Add(this.chkB_SkipFailedTries);
+            this.tabPage1.Controls.Add(this.groupBox1);
             this.tabPage1.Controls.Add(this.groupBox3);
             this.tabPage1.Controls.Add(this.groupBox2);
-            this.tabPage1.Controls.Add(this.groupBox1);
-            this.tabPage1.Controls.Add(this.chkOneAtATime);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(471, 372);
+            this.tabPage1.Size = new System.Drawing.Size(471, 284);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -390,7 +347,7 @@
             // chkAutoAdd
             // 
             this.chkAutoAdd.AutoSize = true;
-            this.chkAutoAdd.Location = new System.Drawing.Point(24, 311);
+            this.chkAutoAdd.Location = new System.Drawing.Point(6, 65);
             this.chkAutoAdd.Name = "chkAutoAdd";
             this.chkAutoAdd.Size = new System.Drawing.Size(154, 17);
             this.chkAutoAdd.TabIndex = 40;
@@ -401,7 +358,7 @@
             // chkAutoParse
             // 
             this.chkAutoParse.AutoSize = true;
-            this.chkAutoParse.Location = new System.Drawing.Point(24, 335);
+            this.chkAutoParse.Location = new System.Drawing.Point(6, 85);
             this.chkAutoParse.Name = "chkAutoParse";
             this.chkAutoParse.Size = new System.Drawing.Size(171, 17);
             this.chkAutoParse.TabIndex = 39;
@@ -412,7 +369,7 @@
             // chkB_SkipFailedTries
             // 
             this.chkB_SkipFailedTries.AutoSize = true;
-            this.chkB_SkipFailedTries.Location = new System.Drawing.Point(24, 287);
+            this.chkB_SkipFailedTries.Location = new System.Drawing.Point(6, 42);
             this.chkB_SkipFailedTries.Name = "chkB_SkipFailedTries";
             this.chkB_SkipFailedTries.Size = new System.Drawing.Size(141, 17);
             this.chkB_SkipFailedTries.TabIndex = 38;
@@ -461,24 +418,12 @@
             // 
             this.groupBox2.Controls.Add(this.chkPhaseParsing);
             this.groupBox2.Controls.Add(this.chkCombatReplay);
-            this.groupBox2.Location = new System.Drawing.Point(240, 12);
+            this.groupBox2.Location = new System.Drawing.Point(12, 18);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(216, 108);
             this.groupBox2.TabIndex = 36;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Encounter";
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.chkUniversalBoons);
-            this.groupBox1.Controls.Add(this.chkAllProfSpecBoons);
-            this.groupBox1.Controls.Add(this.chkImpProfSpecBoons);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(216, 108);
-            this.groupBox1.TabIndex = 35;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Boons";
             // 
             // tabPage2
             // 
@@ -488,7 +433,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(471, 372);
+            this.tabPage2.Size = new System.Drawing.Size(471, 284);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "HTML";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -509,7 +454,7 @@
             this.panelHtml.Controls.Add(this.chkHtmlExternalScripts);
             this.panelHtml.Location = new System.Drawing.Point(0, 36);
             this.panelHtml.Name = "panelHtml";
-            this.panelHtml.Size = new System.Drawing.Size(468, 336);
+            this.panelHtml.Size = new System.Drawing.Size(468, 87);
             this.panelHtml.TabIndex = 54;
             // 
             // panel1
@@ -550,7 +495,7 @@
             this.tabPage3.Controls.Add(this.chkOutputCsv);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(471, 372);
+            this.tabPage3.Size = new System.Drawing.Size(471, 284);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "CSV";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -563,7 +508,7 @@
             this.tabPage4.Controls.Add(this.chkOutputJson);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(471, 372);
+            this.tabPage4.Size = new System.Drawing.Size(471, 284);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Raw formats";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -613,7 +558,7 @@
             this.tabPage5.Controls.Add(this.UploadRaidar_check);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(471, 372);
+            this.tabPage5.Size = new System.Drawing.Size(471, 284);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Upload";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -626,7 +571,7 @@
             this.tabPage6.Controls.Add(this.btnResetSkillList);
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Size = new System.Drawing.Size(471, 372);
+            this.tabPage6.Size = new System.Drawing.Size(471, 284);
             this.tabPage6.TabIndex = 5;
             this.tabPage6.Text = "Maintenance";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -652,7 +597,7 @@
             // cmdClose
             // 
             this.cmdClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdClose.Location = new System.Drawing.Point(395, 421);
+            this.cmdClose.Location = new System.Drawing.Point(395, 333);
             this.cmdClose.Name = "cmdClose";
             this.cmdClose.Size = new System.Drawing.Size(84, 24);
             this.cmdClose.TabIndex = 48;
@@ -660,12 +605,25 @@
             this.cmdClose.UseVisualStyleBackColor = true;
             this.cmdClose.Click += new System.EventHandler(this.cmdClose_Click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.chkOneAtATime);
+            this.groupBox1.Controls.Add(this.chkAutoParse);
+            this.groupBox1.Controls.Add(this.chkAutoAdd);
+            this.groupBox1.Controls.Add(this.chkB_SkipFailedTries);
+            this.groupBox1.Location = new System.Drawing.Point(240, 18);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(216, 108);
+            this.groupBox1.TabIndex = 41;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Parsing";
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(503, 458);
+            this.ClientSize = new System.Drawing.Size(503, 370);
             this.Controls.Add(this.cmdClose);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.lblSettingsInfoMsg);
@@ -678,13 +636,10 @@
             this.Load += new System.EventHandler(this.SettingsFormLoad);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imgTheme)).EndInit();
@@ -704,15 +659,14 @@
             this.tabPage5.PerformLayout();
             this.tabPage6.ResumeLayout(false);
             this.tabPage6.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.CheckBox chkUniversalBoons;
-        private System.Windows.Forms.CheckBox chkImpProfSpecBoons;
-        private System.Windows.Forms.CheckBox chkAllProfSpecBoons;
         private System.Windows.Forms.Label lblSettingsInfoMsg;
         private System.Windows.Forms.CheckBox chkDefaultOutputLoc;
         private System.Windows.Forms.TextBox txtCustomSaveLoc;
@@ -744,7 +698,6 @@
         private System.Windows.Forms.Button cmdClose;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.RadioButton radioThemeLight;
         private System.Windows.Forms.RadioButton radioThemeDark;
@@ -761,5 +714,6 @@
         private System.Windows.Forms.CheckBox chkOutputXml;
         private System.Windows.Forms.Panel panelXML;
         private System.Windows.Forms.CheckBox chkIndentXML;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }

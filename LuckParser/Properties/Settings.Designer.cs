@@ -26,42 +26,6 @@ namespace LuckParser.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool PlayerBoonsUniversal {
-            get {
-                return ((bool)(this["PlayerBoonsUniversal"]));
-            }
-            set {
-                this["PlayerBoonsUniversal"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool PlayerBoonsImpProf {
-            get {
-                return ((bool)(this["PlayerBoonsImpProf"]));
-            }
-            set {
-                this["PlayerBoonsImpProf"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool PlayerBoonsAllProf {
-            get {
-                return ((bool)(this["PlayerBoonsAllProf"]));
-            }
-            set {
-                this["PlayerBoonsAllProf"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool SaveAtOut {
             get {
                 return ((bool)(this["SaveAtOut"]));
