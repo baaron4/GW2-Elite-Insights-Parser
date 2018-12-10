@@ -1,4 +1,4 @@
-<div>
+<div class="mt-2">
     <div v-if="data.start.length">
         Started with:
         <ul>
@@ -19,5 +19,8 @@
                 seconds)
             </li>
         </ul>
+    </div>
+    <div v-if="!data.refreshed.length && !data.start.length" class="text-center">
+        <h3>No consumable activity</h3>
     </div>
 </div>
