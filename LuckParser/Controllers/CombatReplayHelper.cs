@@ -107,7 +107,7 @@ namespace LuckParser.Controllers
             }
             string script = "var initialOnLoad = window.onload;";
             script += "window.onload = function () { if (initialOnLoad) {initialOnLoad();} animator = new Animator(" + JsonConvert.SerializeObject(options)+", [" + actors + "]);};";
-#if DEBUG
+#if !DEBUG
             script = Uglify.Js(script).Code;
 #endif
             return script;

@@ -117,6 +117,7 @@ namespace LuckParser.Controllers
             int page = 0;
             int pagesize = 200;
             string path = "";
+            int[] idArray;
             while (!maxPageSizeReached)
             {
                 path = "/v2/skills?page=" + page + "&page_size=" + pagesize;
@@ -124,9 +125,23 @@ namespace LuckParser.Controllers
                 if (response.IsSuccessStatusCode)
                 {
 
+                    idArray = response.Content.ReadAsAsync<int[]>().Result;
+                    foreach (int id in idArray)
+                    {
+                        GW2APISkill curSkill = new GW2APISkill();
+                        curSkill = GetGW2APISKill("/v2/skills/" + id);
+                        if (curSkill != null)
+                        {
 
-                    List<GW2APISkillCheck> skillCheck = response.Content.ReadAsAsync<List<GW2APISkillCheck>>().Result;
-                    skill_L.AddRange(skillCheck);
+                            skill_L.Add(curSkill);
+
+                        }
+                        else
+                        {
+                            Console.WriteLine("Fail to get response");//fail to retrieve
+
+                        }
+                    }
                     //if (skillCheck.facts != null)
                     // {
                     //     bool block = true;

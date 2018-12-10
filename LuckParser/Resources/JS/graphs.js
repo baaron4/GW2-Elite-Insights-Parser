@@ -3,7 +3,7 @@
 var compileGraphs = function () {
     Vue.component("graph-stats-component", {
         props: ["activetargets", "phaseindex", 'playerindex', 'light'],
-        template: "#tmplGraphStats",
+        template: `${tmplGraphStats}`,
         data: function () {
             return {
                 mode: 1
@@ -17,7 +17,7 @@ var compileGraphs = function () {
     });
     Vue.component("dps-graph-component", {
         props: ["activetargets", 'mode', 'phaseindex', 'playerindex', 'light'],
-        template: "#tmplDPSGraph",
+        template: `${tmplDPSGraph}`,
         data: function () {
             return {
                 dpsmode: 0,

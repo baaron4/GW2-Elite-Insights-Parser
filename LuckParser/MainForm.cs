@@ -296,7 +296,7 @@ namespace LuckParser
                         );
                         string splitString = "";
                         if (rowData.LogLocation != null) { splitString = ","; }
-                        rowData.LogLocation += splitString + outputFile;
+                        rowData.LogLocation += splitString + saveDirectory.FullName;
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         using (var sw = new StreamWriter(fs, Encoding.UTF8))
                         {
@@ -313,7 +313,7 @@ namespace LuckParser
                         );
                         string splitString = "";
                         if (rowData.LogLocation != null) { splitString = ","; }
-                        rowData.LogLocation += splitString + outputFile;
+                        rowData.LogLocation += splitString + saveDirectory.FullName;
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         using (var sw = new StreamWriter(fs, Encoding.UTF8))
                         {
@@ -555,12 +555,12 @@ namespace LuckParser
                         break;
 
                     case RowState.Complete:
-                        string[] files = row.LogLocation.Split(',');
-                        foreach (string fileLoc in files)
+                        string[] paths = row.LogLocation.Split(',');
+                        foreach (string path in paths)
                         {
-                            if (File.Exists(fileLoc))
+                            if (File.Exists(path) || Directory.Exists(path))
                             {
-                                System.Diagnostics.Process.Start(fileLoc);
+                                System.Diagnostics.Process.Start(path);
                             }
                         }
                         break;

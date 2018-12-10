@@ -3,7 +3,7 @@
 var compileCombatReplay = function () {
     Vue.component("combat-replay-damage-stats-component", {
         props: ["time", "playerindex"],
-        template: "#tmplCombatReplayDamageTable",
+        template: `${tmplCombatReplayDamageTable}`,
         data: function () {
             return {
                 damageMode: 1
@@ -107,7 +107,7 @@ var compileCombatReplay = function () {
 
     Vue.component("combat-replay-player-buffs-stats", {
         props: ["playerindex", "time"],
-        template: "#tmplCombatReplayPlayerBuffStats",
+        template: `${tmplCombatReplayPlayerBuffStats}`,
         computed: {
             boons: function () {
                 var hash = new Set();
@@ -196,11 +196,11 @@ var compileCombatReplay = function () {
 
     Vue.component("combat-replay-player-stats", {
         props: ["playerindex", "time"],
-        template: "#tmplCombatReplayPlayerStats"
+        template: `${tmplCombatReplayPlayerStats}`
     });
 
     Vue.component("combat-replay-data-component", {
-        template: "#tmplCombatReplayData",
+        template: `${tmplCombatReplayData}`,
         props: ["animator"],
         computed: {
             playerindex: function () {

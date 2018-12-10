@@ -6,7 +6,7 @@ var compilePlayerTab = function () {
         props: ['playerindex', 
             'phaseindex', 'activetargets'
         ],
-        template: "#tmplDamageDistPlayer",
+        template: `${tmplDamageDistPlayer}`,
         data: function () {
             return {
                 distmode: -1,
@@ -249,12 +249,12 @@ var compilePlayerTab = function () {
                 return res;
             },
         },
-        template: "#tmplPlayerTabGraph"
+        template: `${tmplPlayerTabGraph}`
     });
 
     Vue.component("food-component", {
         props: ["phaseindex", "playerindex"],
-        template: "#tmplFood",
+        template: `${tmplFood}`,
         data: function () {
             return {
                 cache: new Map()
@@ -299,7 +299,7 @@ var compilePlayerTab = function () {
 
     Vue.component("simplerotation-component", {
         props: ["playerindex", "phaseindex"],
-        template: "#tmplSimpleRotation",
+        template: `${tmplSimpleRotation}`,
         data: function () {
             return {
                 autoattack: true,
@@ -320,7 +320,7 @@ var compilePlayerTab = function () {
 
     Vue.component("deathrecap-component", {
         props: ["playerindex", "phaseindex"],
-        template: "#tmplDeathRecap",
+        template: `${tmplDeathRecap}`,
         computed: {
             phase: function() {
                 return logData.phases[this.phaseindex];
@@ -438,12 +438,12 @@ var compilePlayerTab = function () {
                 graphdata: graphData
             };
         },
-        template: "#tmplPlayerTab",
+        template: `${tmplPlayerTab}`,
     });
     // stats
     Vue.component("player-stats-component", {
         props: ["phaseindex", 'activetargets', 'activeplayer', 'light'],
-        template: "#tmplPlayerStats",
+        template: `${tmplPlayerStats}`,
         data: function () {
             return {
                 tabmode: 0
