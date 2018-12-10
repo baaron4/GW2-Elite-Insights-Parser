@@ -1307,7 +1307,7 @@ namespace LuckParser.Controllers
 #if DEBUG
                         scriptWriter.Write(Properties.Resources.combatreplay_js);
 #else
-                        scriptWriter.Write(Uglify.Js(Properties.Resources.combatreplay_js).Code);
+                        scriptWriter.Write(Uglify.Js(Properties.Resources.combatreplay_js, GeneralHelper.JSMinifySettings).Code);
 #endif
                     }
                 } catch (IOException)
@@ -1374,7 +1374,11 @@ namespace LuckParser.Controllers
             };
             foreach (var entry in templates)
             {
+#if DEBUG
+                tmplScript = tmplScript.Replace(entry.Key, entry.Value);
+#else
                 tmplScript = tmplScript.Replace(entry.Key, Regex.Replace(entry.Value, @"\t|\n|\r", ""));
+#endif
             }
             return tmplScript;
         }
@@ -1436,7 +1440,7 @@ namespace LuckParser.Controllers
             }
             scriptContent = BuildTemplates(scriptContent);
 #if !DEBUG
-            scriptContent = Uglify.Js(scriptContent).Code;
+            scriptContent = Uglify.Js(scriptContent, GeneralHelper.JSMinifySettings).Code;
 #endif
             if (Properties.Settings.Default.HtmlExternalScripts)
             {
