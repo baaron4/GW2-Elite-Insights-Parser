@@ -16,8 +16,8 @@ namespace LuckParser.Controllers
 {
     class HTMLBuilder
     {
-        private const string _scriptVersion = "1.3";
-        private const int _scriptVersionRev = 0;
+        private string _scriptVersion;
+        private int _scriptVersionRev;
         private readonly SettingsContainer _settings;
 
         private readonly ParsedLog _log;
@@ -30,6 +30,9 @@ namespace LuckParser.Controllers
 
         public HTMLBuilder(ParsedLog log, SettingsContainer settings, Statistics statistics, string[] uploadString)
         {
+            Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            _scriptVersion = version.Major + "." + version.Minor;
+            _scriptVersionRev = version.MajorRevision;
             _log = log;
 
             _settings = settings;
@@ -1265,7 +1268,8 @@ namespace LuckParser.Controllers
 
             html = html.Replace("<!--${Css}-->", BuildCss(path));
             html = html.Replace("<!--${Js}-->", BuildEIJs(path));
-            
+            html = html.Replace("<!--${JsCRLink}-->", BuildCRLinkJs(path));
+
             html = html.Replace("'${logDataJson}'", BuildLogData());
 
             html = html.Replace("<!--${Details}-->", BuildDetails());
@@ -1376,19 +1380,22 @@ namespace LuckParser.Controllers
             {
                 tmplScript = tmplScript.Replace(entry.Key, Regex.Replace(entry.Value, @"\t|\n|\r", ""));
             }
-            if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay)
-            {
-                Dictionary<string, string> CRtemplates = new Dictionary<string, string>()
+            return tmplScript;
+        }
+
+        private string BuildCRTemplates(string script)
+        {
+            string tmplScript = script;
+            Dictionary<string, string> CRtemplates = new Dictionary<string, string>()
                 {
                     {"${tmplCombatReplayData}", Properties.Resources.tmplCombatReplayData },
                     {"${tmplCombatReplayDamageTable}", Properties.Resources.tmplCombatReplayDamageTable },
                     {"${tmplCombatReplayPlayerBuffStats}", Properties.Resources.tmplCombatReplayPlayerBuffStats },
                     {"${tmplCombatReplayPlayerStats}", Properties.Resources.tmplCombatReplayPlayerStats },
                 };
-                foreach (var entry in CRtemplates)
-                {
-                    tmplScript = tmplScript.Replace(entry.Key, Regex.Replace(entry.Value, @"\t|\n|\r", ""));
-                }
+            foreach (var entry in CRtemplates)
+            {
+                tmplScript = tmplScript.Replace(entry.Key, Regex.Replace(entry.Value, @"\t|\n|\r", ""));
             }
             return tmplScript;
         }
@@ -1443,12 +1450,6 @@ namespace LuckParser.Controllers
                 Properties.Resources.playerStatsJS,
                 Properties.Resources.ei_js
             };
-            string suffix = "";
-            if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay)
-            {
-                orderedScripts.Add(Properties.Resources.combatReplayStatsJS);
-                suffix = "withCR-";
-            }
             string scriptContent = orderedScripts[0];
             for (int i = 1; i < orderedScripts.Count; i++)
             {
@@ -1461,9 +1462,47 @@ namespace LuckParser.Controllers
             if (Properties.Settings.Default.HtmlExternalScripts)
             {
 #if DEBUG
-                string scriptFilename = "EliteInsights-" + suffix + _scriptVersion + ".js";
+                string scriptFilename = "EliteInsights-" + _scriptVersion + ".js";
 #else
-                string scriptFilename = "EliteInsights-" + suffix + _scriptVersion +".min.js";
+                string scriptFilename = "EliteInsights-" + _scriptVersion +".min.js";
+#endif
+                string scriptPath = Path.Combine(path, scriptFilename);
+                try
+                {
+                    using (var fs = new FileStream(scriptPath, FileMode.Create, FileAccess.Write))
+                    using (var scriptWriter = new StreamWriter(fs, Encoding.UTF8))
+                    {
+                        scriptWriter.Write(scriptContent);
+                    }
+                }
+                catch (IOException)
+                {
+                }
+                return "<script src=\"./" + scriptFilename + "?version=" + _scriptVersionRev + "\"></script>";
+            }
+            else
+            {
+                return "<script>\r\n" + scriptContent + "\r\n</script>";
+            }
+        }
+
+        private string BuildCRLinkJs(string path)
+        {
+            if (!(_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay))
+            {
+                return "";
+            }
+            string scriptContent = Properties.Resources.combatReplayStatsJS;
+            scriptContent = BuildCRTemplates(scriptContent);
+#if !DEBUG
+            scriptContent = Uglify.Js(scriptContent).Code;
+#endif
+            if (Properties.Settings.Default.HtmlExternalScripts)
+            {
+#if DEBUG
+                string scriptFilename = "EliteInsights-CRLink-" + _scriptVersion + ".js";
+#else
+                string scriptFilename = "EliteInsights-CRLink-" + _scriptVersion +".min.js";
 #endif
                 string scriptPath = Path.Combine(path, scriptFilename);
                 try
