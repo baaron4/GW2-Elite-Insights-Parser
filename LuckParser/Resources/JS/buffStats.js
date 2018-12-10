@@ -3,7 +3,7 @@
 var compileBuffStats = function () {
     Vue.component("personal-buff-table-component", {
         props: ['phaseindex', 'playerindex'],
-        template: "#tmplPersonalBuffTable",
+        template: `${tmplPersonalBuffTable}`,
         data: function () {
             return {
                 specs: [
@@ -112,7 +112,7 @@ var compileBuffStats = function () {
 
     Vue.component("buff-stats-component", {
         props: ['datatypes', 'datatype', 'phaseindex', 'playerindex'],
-        template: "#tmplBuffStats",
+        template: `${tmplBuffStats}`,
         data: function () {
             return {
                 mode: 0,

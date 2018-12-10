@@ -3,7 +3,7 @@
 var compileMechanics = function () {
     Vue.component("mechanics-stats-component", {
         props: ["phaseindex", "playerindex"],
-        template: "#tmplMechanicsTable",
+        template: `${tmplMechanicsTable}`,
         data: function () {
             return {
                 cacheP: new Map(),
