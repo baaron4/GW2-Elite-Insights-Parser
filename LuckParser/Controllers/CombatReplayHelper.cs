@@ -108,7 +108,7 @@ namespace LuckParser.Controllers
             string script = "var initialOnLoad = window.onload;";
             script += "window.onload = function () { if (initialOnLoad) {initialOnLoad();} animator = new Animator(" + JsonConvert.SerializeObject(options)+", [" + actors + "]);};";
 #if !DEBUG
-            script = Uglify.Js(script).Code;
+            script = Uglify.Js(script, GeneralHelper.JSMinifySettings).Code;
 #endif
             return script;
         }
@@ -120,7 +120,7 @@ namespace LuckParser.Controllers
 #if DEBUG
             script += Properties.Resources.combatreplay_js;
 #else          
-            script += Uglify.Js(Properties.Resources.combatreplay_js).Code;
+            script += Uglify.Js(Properties.Resources.combatreplay_js, GeneralHelper.JSMinifySettings).Code;
 #endif
             script += "</script>";
 
