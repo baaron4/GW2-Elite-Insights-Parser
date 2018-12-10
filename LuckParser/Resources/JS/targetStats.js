@@ -41,7 +41,7 @@ var compileTargetTab = function () {
     // base
     Vue.component("buff-stats-target-component", {
         props: ['phaseindex', 'playerindex', 'targetindex'],
-        template: "#tmplBuffStatsTarget",
+        template: `${tmplBuffStatsTarget}`,
         data: function () {
             return {
                 cacheCondi: new Map(),
@@ -157,7 +157,7 @@ var compileTargetTab = function () {
         props: ['targetindex',
             'phaseindex'
         ],
-        template: "#tmplDamageDistTarget",
+        template: `${tmplDamageDistTarget}`,
         data: function () {
             return {
                 distmode: -1
@@ -184,7 +184,7 @@ var compileTargetTab = function () {
     // tab
     Vue.component("target-tab-component", {
         props: ["phaseindex", "playerindex", 'targetindex', 'mode', 'light'],
-        template: "#tmplTargetTab",
+        template: `${tmplTargetTab}`,
         computed: {
             phases: function() {
                 return logData.phases;
@@ -197,7 +197,7 @@ var compileTargetTab = function () {
     // stats
     Vue.component("target-stats-component", {
         props: ["playerindex", "phaseindex", 'light', "simplephase"],
-        template: "#tmplTargetStats",
+        template: `${tmplTargetStats}`,
         data: function () {
             return {
                 mode: 0
@@ -374,6 +374,6 @@ var compileTargetTab = function () {
                 return res;
             },
         },
-        template: "#tmplTargetTabGraph"
+        template: `${tmplTargetTabGraph}`
     });
 };
