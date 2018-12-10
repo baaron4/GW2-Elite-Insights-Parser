@@ -3,7 +3,7 @@
 var compileGeneralStats = function () {
     Vue.component("damage-stats-component", {
         props: ["activetargets", "playerindex", "phaseindex"],
-        template: "#tmplDamageTable",
+        template: `${tmplDamageTable}`,
         data: function () {
             return {
                 cacheTarget: new Map()
@@ -77,7 +77,7 @@ var compileGeneralStats = function () {
 
     Vue.component("defense-stats-component", {
         props: ["phaseindex", "playerindex"],
-        template: "#tmplDefenseTable",
+        template: `${tmplDefenseTable}`,
         data: function () {
             return {
                 cache: new Map()
@@ -144,7 +144,7 @@ var compileGeneralStats = function () {
 
     Vue.component("support-stats-component", {
         props: ["phaseindex", "playerindex"],
-        template: "#tmplSupportTable",
+        template: `${tmplSupportTable}`,
         data: function () {
             return {
                 cache: new Map()
@@ -212,7 +212,7 @@ var compileGeneralStats = function () {
 
     Vue.component("gameplay-stats-component", {
         props: ["activetargets", "playerindex", "phaseindex"],
-        template: "#tmplGameplayTable",
+        template: `${tmplGameplayTable}`,
         mixins: [roundingComponent],
         data: function () {
             return {
@@ -300,7 +300,7 @@ var compileGeneralStats = function () {
     Vue.component("dmgmodifier-stats-component", {
         props: ['phaseindex', 'playerindex', 'activetargets'
         ],
-        template: "#tmplDamageModifierTable",
+        template: `${tmplDamageModifierTable}`,
         data: function () {
             return {
                 mode: 0,

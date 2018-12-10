@@ -3,7 +3,7 @@
 var compileHeader = function () {
     Vue.component("encounter-component", {
         props: [],
-        template: "#tmplEncounter",
+        template: `${tmplEncounter}`,
         methods: {
             getResultText: function (success) {
                 return success ? "Success" : "Failure";
@@ -34,7 +34,7 @@ var compileHeader = function () {
 
     Vue.component("phase-component", {
         props: ["phases"],
-        template: "#tmplPhase",
+        template: `${tmplPhase}`,
         methods: {
             select: function (phase) {
                 for (var i = 0; i < this.phases.length; i++) {
@@ -50,7 +50,7 @@ var compileHeader = function () {
 
     Vue.component("target-component", {
         props: ["targets", "phaseindex"],
-        template: "#tmplTargets",
+        template: `${tmplTargets}`,
         computed: {
             phase: function() {
                 return logData.phases[this.phaseindex];
@@ -68,7 +68,7 @@ var compileHeader = function () {
 
     Vue.component("player-component", {
         props: ["playerindex", "players"],
-        template: "#tmplPlayers",
+        template: `${tmplPlayers}`,
         methods: {
             getIcon: function (path) {
                 return urls[path];

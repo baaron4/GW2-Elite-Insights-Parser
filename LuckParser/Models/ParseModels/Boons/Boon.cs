@@ -105,7 +105,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Bleeding", 736, BoonSource.Mixed, BoonType.Intensity, 1500, BoonNature.Condition, Logic.Override, "https://wiki.guildwars2.com/images/3/33/Bleeding.png"),
                 new Boon("Burning", 737, BoonSource.Mixed, BoonType.Intensity, 1500, BoonNature.Condition, Logic.Override, "https://wiki.guildwars2.com/images/4/45/Burning.png"),
                 new Boon("Confusion", 861, BoonSource.Mixed, BoonType.Intensity, 1500, BoonNature.Condition, Logic.Override, "https://wiki.guildwars2.com/images/e/e6/Confusion.png"),
-                new Boon("Poison", 723, BoonSource.Mixed, BoonType.Intensity, 1500, BoonNature.Condition, Logic.Override, "https://wiki.guildwars2.com/images/0/05/Poison.png"),
+                new Boon("Poison", 723, BoonSource.Mixed, BoonType.Intensity, 1500, BoonNature.Condition, Logic.Override, "https://wiki.guildwars2.com/images/1/11/Poisoned.png"),
                 new Boon("Torment", 19426, BoonSource.Mixed, BoonType.Intensity, 1500, BoonNature.Condition, Logic.Override, "https://wiki.guildwars2.com/images/0/08/Torment.png"),
                 new Boon("Blind", 720, BoonSource.Mixed, BoonType.Duration, 9, BoonNature.Condition, Logic.Queue, "https://wiki.guildwars2.com/images/3/33/Blinded.png"),
                 new Boon("Chilled", 722, BoonSource.Mixed, BoonType.Duration, 5, BoonNature.Condition, Logic.Queue, "https://wiki.guildwars2.com/images/a/a6/Chilled.png"),

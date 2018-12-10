@@ -1265,8 +1265,7 @@ namespace LuckParser.Controllers
 
             html = html.Replace("<!--${Css}-->", BuildCss(path));
             html = html.Replace("<!--${Js}-->", BuildEIJs(path));
-
-            html = html.Replace("<!--${Templates}-->", BuildTemplates());
+            
             html = html.Replace("'${logDataJson}'", BuildLogData());
 
             html = html.Replace("<!--${Details}-->", BuildDetails());
@@ -1308,7 +1307,7 @@ namespace LuckParser.Controllers
 #if DEBUG
                         scriptWriter.Write(Properties.Resources.combatreplay_js);
 #else
-                        scriptWriter.Write(Uglify.Js(Properties.Resources.combatreplay_js).Code);
+                        scriptWriter.Write(Uglify.Js(Properties.Resources.combatreplay_js, GeneralHelper.JSMinifySettings).Code);
 #endif
                     }
                 } catch (IOException)
@@ -1335,52 +1334,53 @@ namespace LuckParser.Controllers
             return CombatReplayHelper.CreateCombatReplayInterface(canvasSize, _log);
         }
 
-        private string BuildTemplates()
+        private string BuildTemplates(string script)
         {
-            string templatesScript = "";
+            string tmplScript = script; 
             Dictionary<string, string> templates = new Dictionary<string, string>()
             {
-                {"tmplBuffStats",Properties.Resources.tmplBuffStats },
-                {"tmplBuffStatsTarget",Properties.Resources.tmplBuffStatsTarget },
-                {"tmplBuffTable",Properties.Resources.tmplBuffTable },
-                {"tmplDamageDistPlayer",Properties.Resources.tmplDamageDistPlayer },
-                {"tmplDamageDistTable",Properties.Resources.tmplDamageDistTable },
-                {"tmplDamageDistTarget",Properties.Resources.tmplDamageDistTarget },
-                {"tmplDamageModifierTable",Properties.Resources.tmplDamageModifierTable },
-                {"tmplDamageTable",Properties.Resources.tmplDamageTable },
-                {"tmplDamageTaken",Properties.Resources.tmplDamageTaken },
-                {"tmplDeathRecap",Properties.Resources.tmplDeathRecap },
-                {"tmplDefenseTable",Properties.Resources.tmplDefenseTable },
-                {"tmplEncounter",Properties.Resources.tmplEncounter },
-                {"tmplFood",Properties.Resources.tmplFood },
-                {"tmplGameplayTable",Properties.Resources.tmplGameplayTable },
-                {"tmplGeneralLayout",Properties.Resources.tmplGeneralLayout },
-                {"tmplMechanicsTable",Properties.Resources.tmplMechanicsTable },
-                {"tmplPersonalBuffTable",Properties.Resources.tmplPersonalBuffTable },
-                {"tmplPhase",Properties.Resources.tmplPhase },
-                {"tmplPlayers",Properties.Resources.tmplPlayers },
-                {"tmplPlayerStats",Properties.Resources.tmplPlayerStats },
-                {"tmplPlayerTab",Properties.Resources.tmplPlayerTab },
-                {"tmplSimpleRotation",Properties.Resources.tmplSimpleRotation },
-                {"tmplSupportTable",Properties.Resources.tmplSupportTable },
-                {"tmplTargets",Properties.Resources.tmplTargets },
-                {"tmplTargetStats",Properties.Resources.tmplTargetStats },
-                {"tmplTargetTab",Properties.Resources.tmplTargetTab },
-                {"tmplDPSGraph",Properties.Resources.tmplDPSGraph },
-                {"tmplGraphStats",Properties.Resources.tmplGraphStats },
-                {"tmplPlayerTabGraph",Properties.Resources.tmplPlayerTabGraph },
-                {"tmplRotationLegend",Properties.Resources.tmplRotationLegend },
-                {"tmplTargetTabGraph",Properties.Resources.tmplTargetTabGraph },
-                {"tmplTargetData",Properties.Resources.tmplTargetData },
+                {"${tmplBuffStats}",Properties.Resources.tmplBuffStats },
+                {"${tmplBuffStatsTarget}",Properties.Resources.tmplBuffStatsTarget },
+                {"${tmplBuffTable}",Properties.Resources.tmplBuffTable },
+                {"${tmplDamageDistPlayer}",Properties.Resources.tmplDamageDistPlayer },
+                {"${tmplDamageDistTable}",Properties.Resources.tmplDamageDistTable },
+                {"${tmplDamageDistTarget}",Properties.Resources.tmplDamageDistTarget },
+                {"${tmplDamageModifierTable}",Properties.Resources.tmplDamageModifierTable },
+                {"${tmplDamageTable}",Properties.Resources.tmplDamageTable },
+                {"${tmplDamageTaken}",Properties.Resources.tmplDamageTaken },
+                {"${tmplDeathRecap}",Properties.Resources.tmplDeathRecap },
+                {"${tmplDefenseTable}",Properties.Resources.tmplDefenseTable },
+                {"${tmplEncounter}",Properties.Resources.tmplEncounter },
+                {"${tmplFood}",Properties.Resources.tmplFood },
+                {"${tmplGameplayTable}",Properties.Resources.tmplGameplayTable },
+                {"${tmplGeneralLayout}",Properties.Resources.tmplGeneralLayout },
+                {"${tmplMechanicsTable}",Properties.Resources.tmplMechanicsTable },
+                {"${tmplPersonalBuffTable}",Properties.Resources.tmplPersonalBuffTable },
+                {"${tmplPhase}",Properties.Resources.tmplPhase },
+                {"${tmplPlayers}",Properties.Resources.tmplPlayers },
+                {"${tmplPlayerStats}",Properties.Resources.tmplPlayerStats },
+                {"${tmplPlayerTab}",Properties.Resources.tmplPlayerTab },
+                {"${tmplSimpleRotation}",Properties.Resources.tmplSimpleRotation },
+                {"${tmplSupportTable}",Properties.Resources.tmplSupportTable },
+                {"${tmplTargets}",Properties.Resources.tmplTargets },
+                {"${tmplTargetStats}",Properties.Resources.tmplTargetStats },
+                {"${tmplTargetTab}",Properties.Resources.tmplTargetTab },
+                {"${tmplDPSGraph}",Properties.Resources.tmplDPSGraph },
+                {"${tmplGraphStats}",Properties.Resources.tmplGraphStats },
+                {"${tmplPlayerTabGraph}",Properties.Resources.tmplPlayerTabGraph },
+                {"${tmplRotationLegend}",Properties.Resources.tmplRotationLegend },
+                {"${tmplTargetTabGraph}",Properties.Resources.tmplTargetTabGraph },
+                {"${tmplTargetData}",Properties.Resources.tmplTargetData },
             };
             foreach (var entry in templates)
             {
-                string template = "<script type=\"text/x-template\" id=\"" + entry.Key + "\">\r\n";
-                template += entry.Value;
-                template += "\r\n</script>\r\n";
-                templatesScript += template;
+#if DEBUG
+                tmplScript = tmplScript.Replace(entry.Key, entry.Value);
+#else
+                tmplScript = tmplScript.Replace(entry.Key, Regex.Replace(entry.Value, @"\t|\n|\r", ""));
+#endif
             }
-            return templatesScript;
+            return tmplScript;
         }
 
         private string BuildCss(string path)
@@ -1438,8 +1438,9 @@ namespace LuckParser.Controllers
             {
                 scriptContent += orderedScripts[i];
             }
+            scriptContent = BuildTemplates(scriptContent);
 #if !DEBUG
-            scriptContent = Uglify.Js(scriptContent).Code;
+            scriptContent = Uglify.Js(scriptContent, GeneralHelper.JSMinifySettings).Code;
 #endif
             if (Properties.Settings.Default.HtmlExternalScripts)
             {

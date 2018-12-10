@@ -25,7 +25,7 @@ var compileLayout = function () {
     // Compile
     Vue.component("general-layout-component", {
         name: "general-layout-component",
-        template: "#tmplGeneralLayout",
+        template: `${tmplGeneralLayout}`,
         props: ["layout", "phaseindex"],
         methods: {
             select: function (tab, tabs) {

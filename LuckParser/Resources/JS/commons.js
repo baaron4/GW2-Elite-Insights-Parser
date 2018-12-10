@@ -27,12 +27,12 @@ var roundingComponent = {
 
 var compileCommons = function () {
     Vue.component('rotation-legend-component', {
-        template: "#tmplRotationLegend"
+        template: `${tmplRotationLegend}`
     });
     
     Vue.component('target-data-component', {
         props: ['targetid'],
-        template: "#tmplTargetData",
+        template: `${tmplTargetData}`,
         computed: {
             target: function() {
                 return logData.targets[this.targetid];
@@ -44,7 +44,7 @@ var compileCommons = function () {
         props: ['actor', 'tableid',
             'phaseindex'
         ],
-        template: "#tmplDamageTaken",
+        template: `${tmplDamageTaken}`,
         computed: {
             dmgtaken: function () {
                 return this.actor.details.dmgDistributionsTaken[this.phaseindex];
@@ -91,7 +91,7 @@ var compileCommons = function () {
     });
     Vue.component("buff-table-component", {
         props: ["buffs", "playerdata", "generation", "condition", "sums", "id", "playerindex"],
-        template: "#tmplBuffTable",
+        template: `${tmplBuffTable}`,
         methods: {
             getAvgTooltip: function (avg) {
                 if (avg) {
@@ -134,7 +134,7 @@ var compileCommons = function () {
 
     Vue.component("damagedist-table-component", {
         props: ["dmgdist", "tableid", "actor", "isminion", "istarget"],
-        template: "#tmplDamageDistTable",
+        template: `${tmplDamageDistTable}`,
         data: function () {
             return {
                 sortdata: {
