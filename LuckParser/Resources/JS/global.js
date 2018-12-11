@@ -330,13 +330,13 @@ function computePlayerDPS(player, dpsData, lim, phasebreaks, activetargets, cach
     if (lastTime > 0) {
         limID = 0;
         if (lim > 0) {
-            limID = Math.ceil(Math.max(lastTime - lim, 0));
+            limID = Math.round(Math.max(lastTime - lim, 0));
             start = limID;
         }
-        totalDamage += dpsData.total[j] - dpsData.total[limID];
+        totalDamage += (lastTime - j + 1) * dpsData.total[j] - dpsData.total[limID];
         for (k = 0; k < activetargets.length; k++) {
             targetid = activetargets[k];
-            targetDamage += dpsData.targets[targetid][j] - dpsData.targets[targetid][limID];
+            targetDamage += (lastTime - j + 1) * dpsData.targets[targetid][j] - dpsData.targets[targetid][limID];
         }
         if (phasebreaks && phasebreaks[j -1 ]) {
             start = j - 1;
