@@ -1396,6 +1396,8 @@ namespace LuckParser.Controllers
                     {"${tmplCombatReplayDamageTable}", Properties.Resources.tmplCombatReplayDamageTable },
                     {"${tmplCombatReplayPlayerBuffStats}", Properties.Resources.tmplCombatReplayPlayerBuffStats },
                     {"${tmplCombatReplayPlayerStats}", Properties.Resources.tmplCombatReplayPlayerStats },
+                    {"${tmplCombatReplayPlayerStatus}", Properties.Resources.tmplCombatReplayPlayerStatus },
+                    {"${tmplCombatReplayPlayerRotation}", Properties.Resources.tmplCombatReplayPlayerRotation },
                 };
             foreach (var entry in CRtemplates)
             {

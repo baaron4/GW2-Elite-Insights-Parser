@@ -194,6 +194,27 @@ var compileCombatReplay = function () {
         }
     });
 
+    Vue.component("combat-replay-player-status", {
+        props: ["playerindex", "time"],
+        template: `${tmplCombatReplayPlayerStatus}`,
+        computed: {
+            player: function() {
+                return logData.players[this.playerindex];
+            },
+            status: function() {
+                var crData = animator.playerData.get(this.player.combatReplayID);
+                var icon = crData.getIcon(this.time);
+                return icon === deadIcon ? 0 : icon === downIcon ? 1 : 2;
+            },
+        }
+    });
+
+    Vue.component("combat-replay-player-rotation", {
+        props: ["playerindex", "time"],
+        template: `${tmplCombatReplayPlayerRotation}`,
+        computed: {}
+    });
+
     Vue.component("combat-replay-player-stats", {
         props: ["playerindex", "time"],
         template: `${tmplCombatReplayPlayerStats}`

@@ -569,8 +569,11 @@ namespace LuckParser.Properties {
         ///        &lt;combat-replay-damage-stats-component :time=&quot;animator.time&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/combat-replay-damage-stats-component&gt;
         ///        &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mb-1&quot;&gt;
         ///            &lt;li class=&quot;nav-item&quot;&gt;
-        ///                &lt;a class=&quot;nav-link&quot; href=&quot;#playerModal&quot; data-backdrop=&quot;false&quot; data-toggle=&quot;modal&quot;&gt;&lt;img v-if=&quot;player.profession&quot;
-        ///                        :alt=&quot;player.pr [rest of string was truncated]&quot;;.
+        ///                &lt;a class=&quot;nav-link&quot; href=&quot;#playerModal&quot; data-backdrop=&quot;false&quot; data-toggle=&quot;modal&quot;&gt;Details Window&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///        &lt;/ul&gt;
+        ///    &lt;/div&gt;
+        ///     [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayData {
             get {
@@ -603,15 +606,15 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column justify-content-end&quot; style=&quot;height: 160px&quot;&gt;
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column justify-content-end&quot; style=&quot;height: 120px&quot;&gt;
         ///    &lt;div v-if=&quot;data.enemies.length &gt; 0&quot; class=&quot;d-flex&quot;&gt;
         ///        &lt;div v-for=&quot;enemy in data.enemies&quot; class=&quot;boon-container&quot;&gt;
-        ///            &lt;img :src=&quot;enemy.buff.icon&quot; :title=&quot;enemy.buff.name&quot; :alt=&quot;enemy.buff.name&quot; class=&quot;icon-l&quot; /&gt;
+        ///            &lt;img :src=&quot;enemy.buff.icon&quot; :title=&quot;enemy.buff.name&quot; :alt=&quot;enemy.buff.name&quot; class=&quot;icon&quot; /&gt;
         ///            &lt;div v-if=&quot;enemy.state &gt; 1&quot; class=&quot;boon-number&quot;&gt;{{enemy.state}}&lt;/div&gt;
         ///        &lt;/div&gt;
         ///    &lt;/div&gt;
         ///    &lt;div v-if=&quot;data.conditions.length &gt; 0&quot; class=&quot;d-flex&quot;&gt;
-        ///        &lt;div v-for=&quot;condition in  [rest of string was truncated]&quot;;.
+        ///        &lt;div v-for=&quot;condition in da [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayPlayerBuffStats {
             get {
@@ -621,12 +624,38 @@ namespace LuckParser.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;div&gt;
+        ///
+        ///&lt;/div&gt;.
+        /// </summary>
+        internal static string tmplCombatReplayPlayerRotation {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayPlayerRotation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
         ///    &lt;combat-replay-player-buffs-stats :time=&quot;time&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/combat-replay-player-buffs-stats&gt;
+        ///    &lt;div class=&quot;d-flex flex-column mb-1&quot;&gt;
+        ///        &lt;combat-replay-player-status :time=&quot;time&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/combat-replay-player-status&gt;
+        ///        &lt;combat-replay-player-rotation :time=&quot;time&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/combat-replay-player-rotation&gt;
+        ///    &lt;/div&gt;
         ///&lt;/div&gt;.
         /// </summary>
         internal static string tmplCombatReplayPlayerStats {
             get {
                 return ResourceManager.GetString("tmplCombatReplayPlayerStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///
+        ///&lt;/div&gt;.
+        /// </summary>
+        internal static string tmplCombatReplayPlayerStatus {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayPlayerStatus", resourceCulture);
             }
         }
         

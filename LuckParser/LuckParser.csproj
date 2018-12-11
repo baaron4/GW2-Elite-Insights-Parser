@@ -302,6 +302,8 @@
     <None Include="Resources\combatreplay.js" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplay.html" />
     <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayDamageTable.html" />
+    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayPlayerRotation.html" />
+    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayPlayerStatus.html" />
     <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayPlayerBuffStats.html" />
     <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayData.html" />
     <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayPlayerStats.html" />

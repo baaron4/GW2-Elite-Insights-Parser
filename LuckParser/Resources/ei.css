@@ -71,6 +71,30 @@
     border-top:1px solid black;
 }
 
+.cr-player-status {
+    background-color: green;
+    color: #DDDDDD;
+    width: 100px;
+}
+
+h6.cr-player-shorten {
+    max-width: 75px;
+    margin-top: 7px;
+    margin-bottom: 7px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+.cr-player-status.dead {
+    background-color: black;
+}
+
+.cr-player-status.down {
+    background-color: red;
+}
+
 .theme-slate .cr-player-data.active {
     background-color: rgba(80, 86, 92, 0.9);
 }
