@@ -67,8 +67,7 @@ namespace LuckParser.Controllers
             dmgList.Add(new Point(0, 0));
             for (int i = 1; i <= phase.GetDuration("s"); i++)
             {
-                int limitId = i - 1;
-                dmgList.Add(new Point(i, (int)Math.Round((dmgListFull[1000 * i] - dmgListFull[1000 * limitId]) / (i - limitId))));
+                dmgList.Add(new Point(i, (int)Math.Round((dmgListFull[1000 * i] - dmgListFull[1000 * (i-1)]))));
             }
             if (phase.GetDuration("s") * 1000 != phase.GetDuration())
             {
