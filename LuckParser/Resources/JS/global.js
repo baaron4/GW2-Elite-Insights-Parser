@@ -280,7 +280,7 @@ function computePhaseMarkups(shapes, annotations, phase, linecolor) {
 }
 
 
-function computePlayerDPS(player, dpsData, lim, phasebreaks, activetargets, cacheID, lastTime) {
+function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, cacheID, lastTime) {
     if (!player.dpsGraphCache) {
         player.dpsGraphCache = new Map();
     }
@@ -298,7 +298,7 @@ function computePlayerDPS(player, dpsData, lim, phasebreaks, activetargets, cach
         target: 0
     };
     var start = 0;
-    var end = dpsData.total.length;
+    var end = damageData.total.length;
     if (lastTime > 0) {
         end--;
     }
@@ -309,10 +309,10 @@ function computePlayerDPS(player, dpsData, lim, phasebreaks, activetargets, cach
             limID = Math.max(j - lim, 0);
             start = limID;
         }
-        totalDamage += dpsData.total[j] - dpsData.total[limID];
+        totalDamage += damageData.total[j] - damageData.total[limID];
         for (k = 0; k < activetargets.length; k++) {
             targetid = activetargets[k];
-            targetDamage += dpsData.targets[targetid][j] - dpsData.targets[targetid][limID];
+            targetDamage += damageData.targets[targetid][j] - damageData.targets[targetid][limID];
         }
         if (phasebreaks && phasebreaks[j - 1]) {
             start = j - 1;
@@ -333,10 +333,10 @@ function computePlayerDPS(player, dpsData, lim, phasebreaks, activetargets, cach
             limID = Math.round(Math.max(lastTime - lim, 0));
             start = limID;
         }
-        totalDamage += (lastTime - j + 1) * dpsData.total[j] - dpsData.total[limID];
+        totalDamage += damageData.total[j] - damageData.total[limID];
         for (k = 0; k < activetargets.length; k++) {
             targetid = activetargets[k];
-            targetDamage += (lastTime - j + 1) * dpsData.targets[targetid][j] - dpsData.targets[targetid][limID];
+            targetDamage += damageData.targets[targetid][j] - damageData.targets[targetid][limID];
         }
         if (phasebreaks && phasebreaks[j -1 ]) {
             start = j - 1;

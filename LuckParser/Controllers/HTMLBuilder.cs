@@ -34,7 +34,6 @@ namespace LuckParser.Controllers
 
             _settings = settings;
             CombatReplayHelper.Settings = settings;
-            GraphHelper.Settings = settings;
 
             _statistics = statistics;
 
@@ -67,22 +66,12 @@ namespace LuckParser.Controllers
             return filtered;
         }
 
-        private List<int> ConvertGraph(List<Point> points)
-        {
-            List<int> graph = new List<int>();
-            foreach (Point point in points)
-            {
-                graph.Add(point.Y);
-            }
-            return graph;
-        }
-
         private TargetChartDataDto BuildTargetGraphData(int phaseIndex, Target target)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
             return new TargetChartDataDto
             {
-                dps = ConvertGraph(GraphHelper.GetTotalDPSGraph(_log, target, phaseIndex, phase)),
+                total = target.Get1SDamageList(_log, phaseIndex, phase, null),
                 health = _statistics.TargetsHealth[phaseIndex][target]
             };
         }
@@ -99,12 +88,12 @@ namespace LuckParser.Controllers
             {
                 PlayerChartDataDto pChar = new PlayerChartDataDto()
                 {
-                    total = ConvertGraph(GraphHelper.GetTotalDPSGraph(_log, p, phaseIndex, phase)),
+                    total = p.Get1SDamageList(_log, phaseIndex, phase, null),
                     targets = new List<List<int>>()
                 };
                 foreach (Target target in phase.Targets)
                 {
-                    pChar.targets.Add(ConvertGraph(GraphHelper.GetTargetDPSGraph(_log, p, phaseIndex, phase, target)));
+                    pChar.targets.Add(p.Get1SDamageList(_log, phaseIndex, phase, target));
                 }
                 list.Add(pChar);
             }

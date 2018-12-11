@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 
 
-function computeTargetDPS(target, dpsData,lim, phasebreaks, cacheID, lastTime) {
+function computeTargetDPS(target, damageData,lim, phasebreaks, cacheID, lastTime) {
     if (!target.dpsGraphCache) {
         target.dpsGraphCache = new Map();
     }
@@ -13,7 +13,7 @@ function computeTargetDPS(target, dpsData,lim, phasebreaks, cacheID, lastTime) {
     var maxDPS = 0;
     var start = 0;
     var limID, j;
-    var end = dpsData.length;
+    var end = damageData.length;
     if (lastTime > 0) {
         end--;
     }
@@ -23,7 +23,7 @@ function computeTargetDPS(target, dpsData,lim, phasebreaks, cacheID, lastTime) {
             limID = Math.max(j - lim, 0);
             start = limID;
         }
-        totalDamage += dpsData[j] - dpsData[limID];
+        totalDamage += damageData[j] - damageData[limID];
         if (phasebreaks && phasebreaks[j - 1]) {
             start = j - 1;
             totalDamage = 0;
@@ -38,7 +38,7 @@ function computeTargetDPS(target, dpsData,lim, phasebreaks, cacheID, lastTime) {
             limID = Math.round(Math.max(lastTime - lim, 0));
             start = limID;
         }
-        totalDamage += (lastTime - j + 1) * dpsData[j] - dpsData[limID];
+        totalDamage += damageData[j] - damageData[limID];
         if (phasebreaks && phasebreaks[j - 1]) {
             start = j - 1;
             totalDamage = 0;
@@ -366,12 +366,12 @@ var compileTargetTab = function () {
                 }
                 //var before = performance.now();
                 var res;
-                var dpsData = this.graph.targets[this.phaseTargetIndex].dps;
+                var damageData = this.graph.targets[this.phaseTargetIndex].total;
                 if (this.dpsmode < 3) {
                     var lim = (this.dpsmode === 0 ? 0 : (this.dpsmode === 1 ? 10 : 30));
-                    res = computeTargetDPS(this.target, dpsData, lim, null, cacheID + '-' + this.phaseindex, this.phase.needsLastPoint ? this.phase.end - this.phase.start : 0);
+                    res = computeTargetDPS(this.target, damageData, lim, null, cacheID + '-' + this.phaseindex, this.phase.needsLastPoint ? this.phase.end - this.phase.start : 0);
                 } else {
-                    res = computeTargetDPS(this.target, dpsData, 0, this.computePhaseBreaks, cacheID + '-' + this.phaseindex, this.phase.needsLastPoint ? this.phase.end - this.phase.start : 0);
+                    res = computeTargetDPS(this.target, damageData, 0, this.computePhaseBreaks, cacheID + '-' + this.phaseindex, this.phase.needsLastPoint ? this.phase.end - this.phase.start : 0);
                 }
                 this.dpsCache.set(cacheID, res);
                 return res;
