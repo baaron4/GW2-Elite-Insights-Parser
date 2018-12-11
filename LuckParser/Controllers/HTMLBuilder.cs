@@ -935,8 +935,8 @@ namespace LuckParser.Controllers
         private BoonChartDataDto BuildBoonGraph(BoonsGraphModel bgm, PhaseData phase)
         {
             //TODO line: {shape: 'hv'}
-            long roundedEnd = phase.Start + 1000 * phase.GetDuration("s");
-            List<BoonsGraphModel.Segment> bChart = bgm.BoonChart.Where(x => x.End >= phase.Start && x.Start <= roundedEnd).ToList();
+            List<BoonsGraphModel.Segment> bChart = bgm.BoonChart.Where(x => x.End >= phase.Start && x.Start <= phase.End
+            ).ToList();
             if (bChart.Count == 0 || (bChart.Count == 1 && bChart.First().Value == 0))
             {
                 return null;
@@ -955,7 +955,7 @@ namespace LuckParser.Controllers
                 dto.states.Add(new object[] { segStart, seg.Value });
             }
             BoonsGraphModel.Segment lastSeg = bChart.Last();
-            double segEnd = Math.Round(Math.Min(lastSeg.End - phase.Start, roundedEnd - phase.Start) / 1000.0, 3);
+            double segEnd = Math.Round(Math.Min(lastSeg.End - phase.Start, phase.End - phase.Start) / 1000.0, 3);
             dto.states.Add(new object[] { segEnd, lastSeg.Value });
 
             return dto;
