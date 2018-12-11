@@ -116,7 +116,9 @@ class Animator {
     updateTime(value) {
         this.time = parseInt(value);
         this.updateTextInput();
-        animateCanvas(-1);
+        if (this.animation === null) {
+            animateCanvas(-1);
+        }
     }
 
     updateTextInput(val) {
@@ -183,7 +185,9 @@ class Animator {
                 }, 50);
             }
         });
-        animateCanvas(-1);
+        if (this.animation === null) {
+            animateCanvas(-1);
+        }           
     }
 
     initMouseEvents() {
@@ -197,8 +201,10 @@ class Animator {
             _this.dragStart = null;
             _this.dragged = false;
             ctx.setTransform(1, 0, 0, 1, 0, 0);
-            ctx.scale(resolutionMultiplier, resolutionMultiplier);
-            animateCanvas(-1);
+            ctx.scale(resolutionMultiplier, resolutionMultiplier);         
+            if (_this.animation === null) {
+                animateCanvas(-1);
+            }
         }, false);
 
         canvas.addEventListener('mousedown', function (evt) {
@@ -215,7 +221,9 @@ class Animator {
             if (_this.dragStart) {
                 var pt = ctx.transformedPoint(_this.lastX, _this.lastY);
                 ctx.translate(pt.x - _this.dragStart.x, pt.y - _this.dragStart.y);
-                animateCanvas(-1);
+                if (_this.animation === null) {
+                    animateCanvas(-1);
+                }
             }
         }, false);
 
@@ -231,7 +239,9 @@ class Animator {
                 var factor = Math.pow(1.1, delta);
                 ctx.scale(factor, factor);
                 ctx.translate(-pt.x, -pt.y);
-                animateCanvas(-1);
+                if (_this.animation === null) {
+                    animateCanvas(-1);
+                }
             }
             return evt.preventDefault() && false;
         };
@@ -250,7 +260,9 @@ class Animator {
 
     toggleRange(radius) {
         this.rangeControl.set(this.inch * radius, !this.rangeControl.get(this.inch * radius));
-        animateCanvas(-1);
+        if (this.animation === null) {
+            animateCanvas(-1);
+        }
     }
 
     // https://codepen.io/anon/pen/KrExzG
