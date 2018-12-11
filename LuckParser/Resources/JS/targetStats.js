@@ -11,39 +11,31 @@ function computeTargetDPS(target, damageData,lim, phasebreaks, cacheID, lastTime
     var totalDamage = 0;
     var totalDPS = [0];
     var maxDPS = 0;
-    var start = 0;
-    var limID, j;
+    var limID = 0, j;
     var end = damageData.length;
     if (lastTime > 0) {
         end--;
     }
     for (j = 1; j < end; j++) {
-        limID = 0;
         if (lim > 0) {
             limID = Math.max(j - lim, 0);
-            start = limID;
+        } else if (phasebreaks && phasebreaks[j-1]) {
+            limID = j;
         }
-        totalDamage += damageData[j] - damageData[limID];
-        if (phasebreaks && phasebreaks[j - 1]) {
-            start = j - 1;
-            totalDamage = 0;
-        }
-        totalDPS[j] = Math.round(totalDamage / (j - start));
+        var div = Math.max(j - limID, 1);
+        totalDamage = damageData[j] - damageData[limID];
+        totalDPS[j] = Math.round(totalDamage / (div));
         maxDPS = Math.max(maxDPS, totalDPS[j]);
     }   
     // last point management
     if (lastTime > 0) {
-        limID = 0;
         if (lim > 0) {
             limID = Math.round(Math.max(lastTime - lim, 0));
-            start = limID;
+        } else if (phasebreaks && phasebreaks[j-1]) {
+            limID = j;
         }
-        totalDamage += damageData[j] - damageData[limID];
-        if (phasebreaks && phasebreaks[j - 1]) {
-            start = j - 1;
-            totalDamage = 0;
-        }
-        totalDPS[j] = Math.round(totalDamage / (lastTime - start));
+        totalDamage = damageData[j] - damageData[limID];
+        totalDPS[j] = Math.round(totalDamage / (lastTime - limID));
         maxDPS = Math.max(maxDPS, totalDPS[j]);
     }
     if (maxDPS < 1e-6) {
