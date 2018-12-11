@@ -28,9 +28,9 @@
 .boon-number {
     position: absolute;
     pointer-events: none;
-    font-size: 0.8em;
-    left: 18%;
-    top: 33%;
+    font-size: 0.65em;
+    left: 15%;
+    top: 45%;
     text-shadow: -2px -2px 3px #000000,
     -2px 2px 3px #000000,
     2px -2px 3px #000000,
@@ -57,6 +57,34 @@
     margin: auto;
     margin-top: 200px;
     margin-left: -200px;
+}
+
+.theme-slate .modal-content {
+    background-color: rgba(50, 56, 62, 0.9);
+}
+
+.theme-yeti .modal-content {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.cr-player-data {
+    border-top:1px solid black;
+}
+
+.theme-slate .cr-player-data.active {
+    background-color: rgba(80, 86, 92, 0.9);
+}
+
+.theme-yeti .cr-player-data.active {
+    background-color: rgba(220, 220, 220, 0.9);
+}
+
+.cr-player-data {
+    border-top: 1px solid black;
+}
+
+.modal-header {
+    border-bottom: 1px solid #888888;
 }
 
 body {

@@ -254,16 +254,16 @@
       <value>..\Resources\htmlTemplates\tmplTargetData.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
    </data>
    <data name="tmplCombatReplayData" type="System.Resources.ResXFileRef, System.Windows.Forms">
-      <value>..\Resources\combatReplayTemplates\tmplCombatReplayData.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+      <value>..\Resources\combatReplayLinkTemplates\tmplCombatReplayData.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
    </data>
    <data name="tmplCombatReplayDamageTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
-      <value>..\Resources\combatReplayTemplates\tmplCombatReplayDamageTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+      <value>..\Resources\combatReplayLinkTemplates\tmplCombatReplayDamageTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
    </data>
    <data name="tmplCombatReplayPlayerStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
-      <value>..\Resources\combatReplayTemplates\tmplCombatReplayPlayerStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+      <value>..\Resources\combatReplayLinkTemplates\tmplCombatReplayPlayerStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
    </data>
    <data name="tmplCombatReplayPlayerBuffStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
-      <value>..\Resources\combatReplayTemplates\tmplCombatReplayPlayerBuffStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+      <value>..\Resources\combatReplayLinkTemplates\tmplCombatReplayPlayerBuffStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
    </data>
    <data name="tmplRotationLegend" type="System.Resources.ResXFileRef, System.Windows.Forms">
       <value>..\Resources\htmlTemplates\tmplRotationLegend.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>

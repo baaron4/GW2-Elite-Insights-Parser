@@ -66,12 +66,12 @@ namespace LuckParser.Properties {
         ///var compileBuffStats = function () {
         ///    Vue.component(&quot;personal-buff-table-component&quot;, {
         ///        props: [&apos;phaseindex&apos;, &apos;playerindex&apos;],
-        ///        template: &quot;#tmplPersonalBuffTable&quot;,
+        ///        template: `${tmplPersonalBuffTable}`,
         ///        data: function () {
         ///            return {
         ///                specs: [
         ///                    &quot;Warrior&quot;, &quot;Berserker&quot;, &quot;Spellbreaker&quot;, &quot;Revenant&quot;, &quot;Herald&quot;, &quot;Renegade&quot;, &quot;Guardian&quot;, &quot;Dragonhunter&quot;, &quot;Firebrand&quot;,
-        ///                    &quot;Ranger&quot;, &quot;Druid&quot;, &quot;Soulbeast&quot;, &quot;Engineer&quot;, &quot;Scrapper&quot;, &quot;Holosmith&quot; [rest of string was truncated]&quot;;.
+        ///                    &quot;Ranger&quot;, &quot;Druid&quot;, &quot;Soulbeast&quot;, &quot;Engineer&quot;, &quot;Scrapper&quot;, &quot;Holosmit [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string buffStatsJS {
             get {
@@ -111,7 +111,7 @@ namespace LuckParser.Properties {
         ///var compileCombatReplay = function () {
         ///    Vue.component(&quot;combat-replay-damage-stats-component&quot;, {
         ///        props: [&quot;time&quot;, &quot;playerindex&quot;],
-        ///        template: &quot;#tmplCombatReplayDamageTable&quot;,
+        ///        template: `${tmplCombatReplayDamageTable}`,
         ///        data: function () {
         ///            return {
         ///                damageMode: 1
@@ -121,7 +121,7 @@ namespace LuckParser.Properties {
         ///            var i, cacheID;
         ///            for (var j = 0; j &lt; this.targets.length; j++) {
         ///                var activeTargets = [j];
-        ///                cacheID = 0 [rest of string was truncated]&quot;;.
+        ///                cacheID = [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string combatReplayStatsJS {
             get {
@@ -180,13 +180,14 @@ namespace LuckParser.Properties {
         ///    fill-opacity: 0.9 !important;
         ///}
         ///
+        ///.boon-container {
+        ///    position: relative;
+        ///    text-align: center;
+        ///}
         ///
-        ///body {
-        ///    font-family: -apple-system,
-        ///        BlinkMacSystemFont,
-        ///        &quot;Segoe UI&quot;,
-        ///        Roboto,
-        ///        &quot;Helv [rest of string was truncated]&quot;;.
+        ///.boon-number {
+        ///    position: absolute;
+        ///    poin [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ei_css {
             get {
@@ -229,7 +230,7 @@ namespace LuckParser.Properties {
         ///var compileGeneralStats = function () {
         ///    Vue.component(&quot;damage-stats-component&quot;, {
         ///        props: [&quot;activetargets&quot;, &quot;playerindex&quot;, &quot;phaseindex&quot;],
-        ///        template: &quot;#tmplDamageTable&quot;,
+        ///        template: `${tmplDamageTable}`,
         ///        data: function () {
         ///            return {
         ///                cacheTarget: new Map()
@@ -241,7 +242,7 @@ namespace LuckParser.Properties {
         ///        updated() {
         ///            updateTable(&quot;#dps-table&quot;);
         ///        },
-        ///        computed: { [rest of string was truncated]&quot;;.
+        ///        computed: [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string generalStatsJS {
             get {
@@ -279,7 +280,7 @@ namespace LuckParser.Properties {
         ///var compileGraphs = function () {
         ///    Vue.component(&quot;graph-stats-component&quot;, {
         ///        props: [&quot;activetargets&quot;, &quot;phaseindex&quot;, &apos;playerindex&apos;, &apos;light&apos;],
-        ///        template: &quot;#tmplGraphStats&quot;,
+        ///        template: `${tmplGraphStats}`,
         ///        data: function () {
         ///            return {
         ///                mode: 1
@@ -292,7 +293,7 @@ namespace LuckParser.Properties {
         ///        }
         ///    });
         ///    Vue.component(&quot;dps-graph-component&quot;, {
-        ///        props: [rest of string was truncated]&quot;;.
+        ///        prop [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string graphsJS {
             get {
@@ -306,7 +307,7 @@ namespace LuckParser.Properties {
         ///var compileHeader = function () {
         ///    Vue.component(&quot;encounter-component&quot;, {
         ///        props: [],
-        ///        template: &quot;#tmplEncounter&quot;,
+        ///        template: `${tmplEncounter}`,
         ///        methods: {
         ///            getResultText: function (success) {
         ///                return success ? &quot;Success&quot; : &quot;Failure&quot;;
@@ -316,7 +317,7 @@ namespace LuckParser.Properties {
         ///            }
         ///        },
         ///        computed: {
-        ///            encounter: function () {        /// [rest of string was truncated]&quot;;.
+        ///            encounter: function ()  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string headerJS {
             get {
@@ -359,7 +360,7 @@ namespace LuckParser.Properties {
         ///var compileMechanics = function () {
         ///    Vue.component(&quot;mechanics-stats-component&quot;, {
         ///        props: [&quot;phaseindex&quot;, &quot;playerindex&quot;],
-        ///        template: &quot;#tmplMechanicsTable&quot;,
+        ///        template: `${tmplMechanicsTable}`,
         ///        data: function () {
         ///            return {
         ///                cacheP: new Map(),
@@ -370,7 +371,7 @@ namespace LuckParser.Properties {
         ///            initTable(&quot;#playermechs&quot;, 0, &quot;asc&quot;);
         ///            //
         ///            if (this.enemyMechHeader.length) {
-        ///                initTa [rest of string was truncated]&quot;;.
+        ///                init [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string mechanicsJS {
             get {
@@ -387,7 +388,7 @@ namespace LuckParser.Properties {
         ///        props: [&apos;playerindex&apos;, 
         ///            &apos;phaseindex&apos;, &apos;activetargets&apos;
         ///        ],
-        ///        template: &quot;#tmplDamageDistPlayer&quot;,
+        ///        template: `${tmplDamageDistPlayer}`,
         ///        data: function () {
         ///            return {
         ///                distmode: -1,
@@ -397,7 +398,7 @@ namespace LuckParser.Properties {
         ///        },
         ///        computed: {
         ///            phase: function() {
-        ///           [rest of string was truncated]&quot;;.
+        ///         [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string playerStatsJS {
             get {
@@ -564,9 +565,12 @@ namespace LuckParser.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;div v-if=&quot;animator !== null&quot;&gt;
-        ///    &lt;combat-replay-damage-stats-component :time=&quot;animator.time&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/combat-replay-damage-stats-component&gt;
-        ///    &lt;combat-replay-player-stats :time=&quot;animator.time&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/combat-replay-player-stats&gt;
-        ///&lt;/div&gt;.
+        ///    &lt;div class=&quot;d-flex flex-column justify-content-center&quot;&gt;
+        ///        &lt;combat-replay-damage-stats-component :time=&quot;animator.time&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/combat-replay-damage-stats-component&gt;
+        ///        &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mb-1&quot;&gt;
+        ///            &lt;li class=&quot;nav-item&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; href=&quot;#playerModal&quot; data-backdrop=&quot;false&quot; data-toggle=&quot;modal&quot;&gt;&lt;img v-if=&quot;player.profession&quot;
+        ///                        :alt=&quot;player.pr [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayData {
             get {
@@ -599,16 +603,15 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div&gt;
-        ///    &lt;div v-if=&quot;data.conditions.length &gt; 0&quot;&gt;
-        ///        &lt;span v-for=&quot;condition in data.conditions&quot;&gt;
-        ///            &lt;img :src=&quot;condition.buff.icon&quot; :data-original-title=&quot;condition.buff.name&quot; :alt=&quot;condition.buff.name&quot; class=&quot;icon&quot; /&gt;
-        ///            {{condition.state}}
-        ///        &lt;/span&gt;
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column justify-content-end&quot; style=&quot;height: 160px&quot;&gt;
+        ///    &lt;div v-if=&quot;data.enemies.length &gt; 0&quot; class=&quot;d-flex&quot;&gt;
+        ///        &lt;div v-for=&quot;enemy in data.enemies&quot; class=&quot;boon-container&quot;&gt;
+        ///            &lt;img :src=&quot;enemy.buff.icon&quot; :title=&quot;enemy.buff.name&quot; :alt=&quot;enemy.buff.name&quot; class=&quot;icon-l&quot; /&gt;
+        ///            &lt;div v-if=&quot;enemy.state &gt; 1&quot; class=&quot;boon-number&quot;&gt;{{enemy.state}}&lt;/div&gt;
+        ///        &lt;/div&gt;
         ///    &lt;/div&gt;
-        ///    &lt;div v-if=&quot;data.offs.length &gt; 0 || data.defs.length &gt; 0&quot;&gt;
-        ///        &lt;span v-for=&quot;off in data.offs&quot;&gt;
-        ///            &lt;img :src=&quot;off.buff.icon&quot; :data-original-title=&quot;off.buff.name&quot; :alt=&quot;off.buff.name&quot; class=&quot;icon&quot; / [rest of string was truncated]&quot;;.
+        ///    &lt;div v-if=&quot;data.conditions.length &gt; 0&quot; class=&quot;d-flex&quot;&gt;
+        ///        &lt;div v-for=&quot;condition in  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayPlayerBuffStats {
             get {
@@ -617,7 +620,7 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div v-if=&quot;playerindex &gt;= 0&quot;&gt;
+        ///   Looks up a localized string similar to &lt;div&gt;
         ///    &lt;combat-replay-player-buffs-stats :time=&quot;time&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/combat-replay-player-buffs-stats&gt;
         ///&lt;/div&gt;.
         /// </summary>
@@ -819,7 +822,7 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div&gt;
+        ///   Looks up a localized string similar to &lt;div class=&quot;mt-2&quot;&gt;
         ///    &lt;div v-if=&quot;data.start.length&quot;&gt;
         ///        Started with:
         ///        &lt;ul&gt;
@@ -833,7 +836,7 @@ namespace LuckParser.Properties {
         ///        In phase consumable updates:
         ///        &lt;ul&gt;
         ///            &lt;li v-for=&quot;refresh in data.refreshed&quot;&gt;
-        ///                {{refresh.dimishe [rest of string was truncated]&quot;;.
+        ///                {{re [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplFood {
             get {
@@ -1009,14 +1012,15 @@ namespace LuckParser.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;div&gt;
-        ///    &lt;food-component :playerindex=&quot;playerindex&quot; :phaseindex=&quot;phaseindex&quot; :phase=&quot;phase&quot;&gt;&lt;/food-component&gt;
-        ///    &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mt-5 mb-2&quot;&gt;
+        ///    &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mt-1 mb-2&quot;&gt;
         ///        &lt;li class=&quot;nav-item&quot;&gt;
         ///            &lt;a class=&quot;nav-link&quot; @click=&quot;dpsmode = 0&quot; :class=&quot;{active: dpsmode === 0}&quot;&gt;Full&lt;/a&gt;
         ///        &lt;/li&gt;
         ///        &lt;li v-if=&quot;phase.end - phase.start &gt; 10&quot; class=&quot;nav-item&quot;&gt;
         ///            &lt;a class=&quot;nav-link&quot; @click=&quot;dpsmode = 1&quot; :class=&quot;{active: dpsmode === 1}&quot;&gt;10s&lt;/a&gt;
-        ///        &lt;/li&gt;        /// [rest of string was truncated]&quot;;.
+        ///        &lt;/li&gt;
+        ///        &lt;li v-if=&quot;phase.end - phase.start &gt; 30&quot; class=&quot;nav-item&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; @click [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayerTabGraph {
             get {

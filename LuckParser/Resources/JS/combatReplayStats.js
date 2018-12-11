@@ -213,13 +213,20 @@ var compileCombatReplay = function () {
                 }
                 return -1;
             },
-            player: function () {
-                if (this.playerindex > -1) {
-                    return logData.players[this.playerindex];
+            groups: function () {
+                var res = [];
+                var i = 0;
+                for (i = 0; i < logData.players.length; i++) {
+                    var playerData = logData.players[i];
+                    if (playerData.isConjure) {
+                        continue;
+                    }
+                    if (!res[playerData.group]) {
+                        res[playerData.group] = [];
+                    }
+                    res[playerData.group].push(playerData);
                 }
-                return {
-                    name: "No Player Selected"
-                }
+                return res;
             }
         },
         mounted() {

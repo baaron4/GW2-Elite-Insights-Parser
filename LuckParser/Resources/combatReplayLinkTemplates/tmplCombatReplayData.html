@@ -1,0 +1,30 @@
+<div v-if="animator !== null">
+    <div class="d-flex flex-column justify-content-center">
+        <combat-replay-damage-stats-component :time="animator.time" :playerindex="playerindex"></combat-replay-damage-stats-component>
+        <ul class="nav nav-pills d-flex flex-row justify-content-center mb-1">
+            <li class="nav-item">
+                <a class="nav-link" href="#playerModal" data-backdrop="false" data-toggle="modal">Details Window</a>
+            </li>
+        </ul>
+    </div>
+    <div id="playerModal" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>Details Window</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex flex-row justify-content-around mb-2">
+                        <div v-for="(group,id) in groups" v-if="group" :key="id + '-group'" class="ml-1" style="width: 300px">
+                            <h3 class="text-center">Group {{id}}</h3>
+                            <div v-for="player in group" class="cr-player-data"
+                                :class="{active: playerindex === player.id}" :key="id + '-group-' +  player.id">
+                                <combat-replay-player-stats :time="animator.time" :playerindex=" player.id"></combat-replay-player-stats>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
