@@ -280,7 +280,7 @@ function computePhaseMarkups(shapes, annotations, phase, linecolor) {
 }
 
 
-function computePlayerDPS(player, dpsData,lim, phasebreaks, activetargets, cacheID) {
+function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, cacheID, lastTime) {
     if (!player.dpsGraphCache) {
         player.dpsGraphCache = new Map();
     }
@@ -301,16 +301,21 @@ function computePlayerDPS(player, dpsData,lim, phasebreaks, activetargets, cache
         target: 0
     };
     var start = 0;
-    for (var j = 1; j < dpsData.total.length; j++) {
-        var limID = 0;
+    var end = damageData.total.length;
+    if (lastTime > 0) {
+        end--;
+    }
+    var j, limID, targetid, k;
+    for (j = 1; j < end; j++) {
+        limID = 0;
         if (lim > 0) {
             limID = Math.max(j - lim, 0);
             start = limID;
         }
-        totalDamage += dpsData.total[j] - dpsData.total[limID];
-        for (var k = 0; k < activetargets.length; k++) {
-            var targetid = activetargets[k];
-            targetDamage += dpsData.targets[targetid][j] - dpsData.targets[targetid][limID];
+        totalDamage += damageData.total[j] - damageData.total[limID];
+        for (k = 0; k < activetargets.length; k++) {
+            targetid = activetargets[k];
+            targetDamage += damageData.targets[targetid][j] - damageData.targets[targetid][limID];
         }
         if (phasebreaks && phasebreaks[j - 1]) {
             start = j - 1;
@@ -326,7 +331,31 @@ function computePlayerDPS(player, dpsData,lim, phasebreaks, activetargets, cache
         maxDPS.total = Math.max(maxDPS.total, totalDPS[j]);
         maxDPS.target = Math.max(maxDPS.target, targetDPS[j]);
         maxDPS.cleave = Math.max(maxDPS.cleave, cleaveDPS[j]);
-    }   
+    }
+    // last point management
+    if (lastTime > 0) {
+        limID = 0;
+        if (lim > 0) {
+            limID = Math.round(Math.max(lastTime - lim, 0));
+            start = limID;
+        }
+        totalDamage += damageData.total[j] - damageData.total[limID];
+        for (k = 0; k < activetargets.length; k++) {
+            targetid = activetargets[k];
+            targetDamage += damageData.targets[targetid][j] - damageData.targets[targetid][limID];
+        }
+        if (phasebreaks && phasebreaks[j -1 ]) {
+            start = j - 1;
+            totalDamage = 0;
+            targetDamage = 0;
+        }
+        totalDPS[j] = Math.round(totalDamage / (lastTime - start));
+        targetDPS[j] = Math.round(targetDamage / (lastTime - start));
+        cleaveDPS[j] = Math.round((totalDamage - targetDamage) / (lastTime - start));
+        maxDPS.total = Math.max(maxDPS.total, totalDPS[j]);
+        maxDPS.target = Math.max(maxDPS.target, targetDPS[j]);
+        maxDPS.cleave = Math.max(maxDPS.cleave, cleaveDPS[j]);
+    }
     if (maxDPS.total < 1e-6) {
         maxDPS.total = 10;
     }
@@ -404,7 +433,7 @@ function getActorGraphLayout(images, color) {
     };
 }
 
-function computeTargetHealthData(graph, targets, phase, data, yaxis) {
+function computeTargetHealthData(graph, targets, phase, data, yaxis, times) {
     for (i = 0; i < graph.targets.length; i++) {
         var health = graph.targets[i].health;
         var hpTexts = [];
@@ -413,6 +442,7 @@ function computeTargetHealthData(graph, targets, phase, data, yaxis) {
             hpTexts[j] = health[j] + "% hp - " + target.name ;
         }
         var res = {
+            x: times,
             text: hpTexts,
             mode: 'lines',
             line: {
