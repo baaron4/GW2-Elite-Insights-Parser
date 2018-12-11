@@ -99,34 +99,39 @@ namespace LuckParser.Controllers
                 log.FightData.Logic.ComputeMechanics(log);
             }
             // target health
-            int seconds = (int)_statistics.Phases[0].GetDuration("s");
-            _statistics.TargetHealth = new Dictionary<Target, double[]>();
-            foreach (Target target in _log.FightData.Logic.Targets)
+            _statistics.TargetsHealth = new Dictionary<Target, double[]>[_statistics.Phases.Count];
+            for (var i = 0; i < _statistics.Phases.Count; i++)
             {
-                double[] health = new double[seconds + 1];
-                int i = 0;
-                double curHealth = 100.0;
-                foreach (Point p in target.HealthOverTime)
+                _statistics.TargetsHealth[i] = new Dictionary<Target, double[]>();
+                int seconds = (int)_statistics.Phases[i].GetDuration("s");
+                foreach (Target target in _log.FightData.Logic.Targets)
                 {
-                    double hp = p.Y / 100.0;
-                    int timeInPhase = 1 + (p.X - (int)_statistics.Phases[0].Start) / 1000;
-                    if (timeInPhase > seconds)
+                    double[] health = new double[seconds + 1];
+                    int j = 0;
+                    double curHealth = 100.0;
+                    foreach (Point p in target.HealthOverTime)
                     {
-                        break;
+                        double hp = p.Y / 100.0;
+                        int timeInPhase = 1 + (p.X - (int)_statistics.Phases[i].Start) / 1000;
+                        if (timeInPhase > seconds)
+                        {
+                            break;
+                        }
+                        while (j < timeInPhase)
+                        {
+                            health[j++] = curHealth;
+                        }
+                        curHealth = hp;
+                        if (timeInPhase >= 0)
+                        {
+                            health[timeInPhase] = curHealth;
+                        }
                     }
-                    while (i < timeInPhase)
-                    {
-                        health[i++] = curHealth;
-                    }
-                    curHealth = hp;
-                    if (timeInPhase >= 0)
-                    {
-                        health[timeInPhase] = curHealth;
-                    }
+                    for (; j <= seconds; j++) health[j] = curHealth;
+                    _statistics.TargetsHealth[i][target] = health;
                 }
-                for (; i <= seconds; i++) health[i] = curHealth;
-                _statistics.TargetHealth[target] = health;
             }
+            
             //
 
             return _statistics;

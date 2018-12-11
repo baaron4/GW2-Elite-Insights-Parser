@@ -77,21 +77,13 @@ namespace LuckParser.Controllers
             return graph;
         }
 
-        private double[] BuildTargetHealthData(int phaseIndex, Target target)
-        {
-            PhaseData phase = _statistics.Phases[phaseIndex];
-            int duration = (int)phase.GetDuration("s");
-            double[] chart = _statistics.TargetHealth[target].Skip((int)phase.Start / 1000).Take(duration + 1).ToArray();
-            return chart;
-        }
-
         private TargetChartDataDto BuildTargetGraphData(int phaseIndex, Target target)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
             return new TargetChartDataDto
             {
                 dps = ConvertGraph(GraphHelper.GetTotalDPSGraph(_log, target, phaseIndex, phase)),
-                health = BuildTargetHealthData(phaseIndex, target)
+                health = _statistics.TargetsHealth[phaseIndex][target]
             };
         }
         
