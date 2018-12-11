@@ -70,6 +70,14 @@ namespace LuckParser.Controllers
                 int limitId = i - 1;
                 dmgList.Add(new Point(i, (int)Math.Round((dmgListFull[1000 * i] - dmgListFull[1000 * limitId]) / (i - limitId))));
             }
+            if (phase.GetDuration("s") * 1000 != phase.GetDuration())
+            {
+                double lastDamage = dmgListFull[(int)phase.GetDuration()];
+                double last1SDamage = dmgListFull[(int)phase.GetDuration("s") * 1000];
+                double timeDiff = (phase.GetDuration()/1000.0 - phase.GetDuration("s"));
+                int dps = (int)Math.Round((lastDamage - last1SDamage) / timeDiff);
+                dmgList.Add(new Point((int)phase.GetDuration("s"), dps));
+            }
             p.DpsGraph[askedId] = dmgList;
             return p.GetDPSGraph(askedId);
         }
@@ -99,33 +107,6 @@ namespace LuckParser.Controllers
         public static List<Point> GetTotalDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phaseIndex, PhaseData phase)
         {
             return GetDPSGraph(log, p, phaseIndex, phase, null);
-        }
-
-        /// <summary>
-        /// Gets the points for the cleave dps graph for a given player
-        /// </summary>
-        /// <param name="log"></param>
-        /// <param name="p"></param>
-        /// <param name="phaseIndex"></param>
-        /// <param name="phase"></param>
-        /// <param name="mode"></param>
-        /// <returns></returns>
-        public static List<Point> GetCleaveDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phaseIndex, PhaseData phase, Target target)
-        {           
-            int askedId = (phaseIndex + "_" + (-1) + "_1S").GetHashCode();
-            if (p.GetDPSGraph(askedId).Count > 0)
-            {
-                return p.GetDPSGraph(askedId);
-            }
-            List<Point> totalPoints = GetTotalDPSGraph(log, p, phaseIndex, phase);
-            List<Point> targetPoints = GetTargetDPSGraph(log, p, phaseIndex, phase, target);
-            List<Point> cleavePoints = new List<Point>();
-            for (int i = 0; i < targetPoints.Count; i++)
-            {
-                cleavePoints.Add(new Point(targetPoints[i].X, totalPoints[i].Y - targetPoints[i].Y));
-            }
-            p.DpsGraph[askedId] = cleavePoints;
-            return cleavePoints;
         }
     }
 }
