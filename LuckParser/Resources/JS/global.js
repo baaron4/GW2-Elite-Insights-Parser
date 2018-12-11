@@ -352,6 +352,9 @@ function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, c
         totalDPS[j] = Math.round(totalDamage / (lastTime - start));
         targetDPS[j] = Math.round(targetDamage / (lastTime - start));
         cleaveDPS[j] = Math.round((totalDamage - targetDamage) / (lastTime - start));
+        totalTotalDamage[j] = totalDamage;
+        totalTargetDamage[j] = targetDamage;
+        totalCleaveDamage[j] = (totalDamage - targetDamage);
         maxDPS.total = Math.max(maxDPS.total, totalDPS[j]);
         maxDPS.target = Math.max(maxDPS.target, targetDPS[j]);
         maxDPS.cleave = Math.max(maxDPS.cleave, cleaveDPS[j]);
