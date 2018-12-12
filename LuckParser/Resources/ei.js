@@ -17,9 +17,9 @@ window.onload = function () {
         var phase = logData.phases[i];
         var times = [];
         var dur = phase.end - phase.start;
-        var ceilDur = Math.ceil(dur);
-        phase.needsLastPoint = dur > ceilDur + 1e-3;
-        for (var j = 0; j < ceilDur; j++) {
+        var floorDur = Math.floor(dur);
+        phase.needsLastPoint = dur > floorDur + 1e-3;
+        for (var j = 0; j <= floorDur; j++) {
             times.push(j);
         }
         if (phase.needsLastPoint) {
