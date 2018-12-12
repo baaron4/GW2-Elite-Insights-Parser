@@ -4,10 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using LuckParser.Controllers;
 using LuckParser.Models.DataModels;
 using LuckParser.Models.ParseModels;
 
-namespace LuckParser.Controllers
+namespace LuckParser.Builders
 {
     class CSVBuilder
     {

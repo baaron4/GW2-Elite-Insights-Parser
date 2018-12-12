@@ -8,6 +8,7 @@ using LuckParser.Models.DataModels;
 using System.Text;
 using System.Threading.Tasks;
 using LuckParser.Exceptions;
+using LuckParser.Builders;
 
 namespace LuckParser
 {
