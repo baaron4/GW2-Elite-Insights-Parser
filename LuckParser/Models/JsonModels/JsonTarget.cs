@@ -20,7 +20,7 @@ namespace LuckParser.Models
         public double[] avgConditions;
         public List<int[]> avgConditionsStates;
         public List<int[]> avgBoonsStates;
-        public List<int>[] damage;
+        public List<int>[] damage1S;
         public uint hitboxHeight;
         public uint hitboxWidth;
         public Dictionary<string, List<JsonSkill>> rotation;
