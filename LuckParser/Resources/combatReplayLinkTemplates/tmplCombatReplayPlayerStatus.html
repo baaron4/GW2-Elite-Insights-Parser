@@ -1,3 +1,6 @@
 <div class="d-flex cr-player-status justify-content-center" :class="{dead: status === 0, down: status === 1}">
-    <h6 class="cr-player-shorten text-center">{{player.name}}</h6>
+    <h6 class="cr-player-shorten text-center">
+        <img :src="player.icon" :alt="player.profession" height="18" width="18">
+        {{player.name}}
+    </h6>
 </div>
