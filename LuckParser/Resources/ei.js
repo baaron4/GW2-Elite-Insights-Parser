@@ -14,6 +14,18 @@ window.onload = function () {
         targets: []
     };
     for (i = 0; i < logData.phases.length; i++) {
+        var phase = logData.phases[i];
+        var times = [];
+        var dur = phase.end - phase.start;
+        var floorDur = Math.floor(dur);
+        phase.needsLastPoint = dur > floorDur + 1e-3;
+        for (var j = 0; j <= floorDur; j++) {
+            times.push(j);
+        }
+        if (phase.needsLastPoint) {
+            times.push(phase.end - phase.start);
+        }
+        phase.times = times;
         simpleLogData.phases.push({
             active: i === 0,
             focus: null

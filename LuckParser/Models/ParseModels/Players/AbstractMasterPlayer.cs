@@ -31,8 +31,8 @@ namespace LuckParser.Models.ParseModels
         private readonly Dictionary<long, BoonsGraphModel> _boonPoints = new Dictionary<long, BoonsGraphModel>();
         private readonly Dictionary<long, List<ExtraBoonData>> _boonExtra = new Dictionary<long, List<ExtraBoonData>>();
         private readonly Dictionary<Target, Dictionary<long, List<ExtraBoonData>>> _boonTargetExtra = new Dictionary<Target, Dictionary<long, List<ExtraBoonData>>>();
-        // dps graphs
-        public Dictionary<int, List<Point>> DpsGraph { get; } = new Dictionary<int, List<Point>>();
+        // damage list
+        public Dictionary<int, List<int>> DamageList1S { get; } = new Dictionary<int, List<int>>();
         // Minions
         private readonly Dictionary<string, Minions> _minions = new Dictionary<string, Minions>();
         // Replay
@@ -52,14 +52,55 @@ namespace LuckParser.Models.ParseModels
             return _minions;
         }
 
-        public List<Point> GetDPSGraph(int id)
+        public List<int> Get1SDamageList(ParsedLog log, int phaseIndex, PhaseData phase, AbstractPlayer target)
         {
-            if (DpsGraph.TryGetValue(id, out List<Point> res))
+            ulong targetId = target != null ? target.Agent : 0;
+            int id = (phaseIndex + "_" + targetId + "_1S").GetHashCode();
+            if (DamageList1S.TryGetValue(id, out List<int> res))
             {
                 return res;
             }
-            return new List<Point>();
+            List<int> dmgList = new List<int>();
+            List<DamageLog> damageLogs = GetDamageLogs(target, log, phase.Start, phase.End);
+            // fill the graph, full precision
+            List<int> dmgListFull = new List<int>();
+            for (int i = 0; i <= phase.GetDuration(); i++)
+            {
+                dmgListFull.Add(0);
+            }
+            int totalTime = 1;
+            int totalDamage = 0;
+            foreach (DamageLog dl in damageLogs)
+            {
+                int time = (int)(dl.Time - phase.Start);
+                // fill
+                for (; totalTime < time; totalTime++)
+                {
+                    dmgListFull[totalTime] = totalDamage;
+                }
+                totalDamage += dl.Damage;
+                dmgListFull[totalTime] = totalDamage;
+            }
+            // fill
+            for (; totalTime <= phase.GetDuration(); totalTime++)
+            {
+                dmgListFull[totalTime] = totalDamage;
+            }
+            //
+            dmgList.Add(0);
+            for (int i = 1; i <= phase.GetDuration("s"); i++)
+            {
+                dmgList.Add(dmgListFull[1000 * i]);
+            }
+            if (phase.GetDuration("s") * 1000 != phase.GetDuration())
+            {
+                int lastDamage = dmgListFull[(int)phase.GetDuration()];
+                dmgList.Add(lastDamage);
+            }
+            DamageList1S[id] = dmgList;
+            return dmgList;
         }
+
         public BoonDistribution GetBoonDistribution(ParsedLog log, int phaseIndex)
         {
             if (_boonDistribution.Count == 0)

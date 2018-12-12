@@ -11,7 +11,7 @@ namespace LuckParser.Models.ParseModels
 
 		public GenerationSimulationResult(IEnumerable<BoonSimulationItem> generationSimulationItems)
 		{
-			this._generationSimulationItems = generationSimulationItems.ToArray();
+			_generationSimulationItems = generationSimulationItems.ToArray();
 		}
 
 		public int GetStackCount(int time)
@@ -20,7 +20,7 @@ namespace LuckParser.Models.ParseModels
 			{
 				int start = (int) item.Start;
 				int end = (int) item.End;
-				if (time >= start && time < end)
+				if (time >= start && time <= end)
 				{
 					return item.GetStack(time);
 				}
@@ -35,10 +35,9 @@ namespace LuckParser.Models.ParseModels
 			{
 				int start = (int) item.Start;
 				int end = (int) item.End;
-				if (time >= start && time < end)
+				if (time >= start && time <= end)
 				{
-					bool present = item.Duration > 0;
-					return present;
+					return item.Duration > 0;
 				}
 			}
 

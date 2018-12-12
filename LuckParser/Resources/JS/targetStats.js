@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 
 
-function computeTargetDPS(target, dpsData,lim, phasebreaks, cacheID) {
+function computeTargetDPS(target, damageData,lim, phasebreaks, cacheID, lastTime) {
     if (!target.dpsGraphCache) {
         target.dpsGraphCache = new Map();
     }
@@ -11,21 +11,33 @@ function computeTargetDPS(target, dpsData,lim, phasebreaks, cacheID) {
     var totalDamage = 0;
     var totalDPS = [0];
     var maxDPS = 0;
-    var start = 0;
-    for (var j = 1; j < dpsData.length; j++) {
-        var limID = 0;
+    var limID = 0, j;
+    var end = damageData.length;
+    if (lastTime > 0) {
+        end--;
+    }
+    for (j = 1; j < end; j++) {
         if (lim > 0) {
             limID = Math.max(j - lim, 0);
-            start = limID;
+        } else if (phasebreaks && phasebreaks[j-1]) {
+            limID = j;
         }
-        totalDamage += dpsData[j] - dpsData[limID];
-        if (phasebreaks && phasebreaks[j - 1]) {
-            start = j - 1;
-            totalDamage = 0;
-        }
-        totalDPS[j] = Math.round(totalDamage / (j - start));
+        var div = Math.max(j - limID, 1);
+        totalDamage = damageData[j] - damageData[limID];
+        totalDPS[j] = Math.round(totalDamage / (div));
         maxDPS = Math.max(maxDPS, totalDPS[j]);
     }   
+    // last point management
+    if (lastTime > 0) {
+        if (lim > 0) {
+            limID = Math.round(Math.max(lastTime - lim, 0));
+        } else if (phasebreaks && phasebreaks[j-1]) {
+            limID = j;
+        }
+        totalDamage = damageData[j] - damageData[limID];
+        totalDPS[j] = Math.round(totalDamage / (lastTime - limID));
+        maxDPS = Math.max(maxDPS, totalDPS[j]);
+    }
     if (maxDPS < 1e-6) {
         maxDPS = 10;
     }
@@ -269,6 +281,7 @@ var compileTargetTab = function () {
                     hpTexts[j] = health[j] + "% hp";
                 }
                 var res = {
+                    x: this.phase.times,
                     text: hpTexts,
                     mode: 'lines',
                     line: {
@@ -283,6 +296,7 @@ var compileTargetTab = function () {
             }
             this.targetOffset++;
             this.data.push({
+                x: this.phase.times,
                 y: [],
                 mode: 'lines',
                 line: {
@@ -344,12 +358,13 @@ var compileTargetTab = function () {
                 }
                 //var before = performance.now();
                 var res;
-                var dpsData = this.graph.targets[this.phaseTargetIndex].dps;
+                var damageData = this.graph.targets[this.phaseTargetIndex].total;
+                var lastTime = this.phase.needsLastPoint ? this.phase.end - this.phase.start : 0;
                 if (this.dpsmode < 3) {
                     var lim = (this.dpsmode === 0 ? 0 : (this.dpsmode === 1 ? 10 : 30));
-                    res = computeTargetDPS(this.target, dpsData, lim, null, cacheID + '-' + this.phaseindex);
+                    res = computeTargetDPS(this.target, damageData, lim, null, cacheID + '-' + this.phaseindex, lastTime);
                 } else {
-                    res = computeTargetDPS(this.target, dpsData, 0, this.computePhaseBreaks, cacheID + '-' + this.phaseindex);
+                    res = computeTargetDPS(this.target, damageData, 0, this.computePhaseBreaks, cacheID + '-' + this.phaseindex, lastTime);
                 }
                 this.dpsCache.set(cacheID, res);
                 return res;

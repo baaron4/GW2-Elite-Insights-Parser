@@ -45,7 +45,6 @@ namespace LuckParser.Controllers
             _log = log;
             _sw = sw;
             _settings = settings;
-            GraphHelper.Settings = settings;
 
             _statistics = statistics;
             
@@ -175,7 +174,7 @@ namespace LuckParser.Controllers
                     buffs = BuildTargetBuffs(_statistics.TargetBuffs[target], target),
                     hitboxHeight = target.HitboxHeight,
                     hitboxWidth = target.HitboxWidth,
-                    dps1s = Build1SDPS(target, null),
+                    damage1S = BuildTotal1SDamage(target),
                     rotation = BuildRotation(target.GetCastLogs(_log, 0, _log.FightData.FightDuration)),
                     firstAware = (int)(_log.FightData.ToFightSpace(target.FirstAware)),
                     lastAware = (int)(_log.FightData.ToFightSpace(target.LastAware)),
@@ -211,8 +210,8 @@ namespace LuckParser.Controllers
                     weapons = player.GetWeaponsArray(_log).Where(w => w != null).ToArray(),
                     group = player.Group,
                     profession = player.Prof,
-                    dps1s = Build1SDPS(player, null),
-                    targetDps1s = Build1SDPS(player),
+                    damage1S = BuildTotal1SDamage(player),
+                    targetDamage1S = BuildTarget1SDamage(player),
                     dpsAll = BuildDPS(_statistics.DpsAll[player]),
                     dpsTargets = BuildDPSTarget(_statistics.DpsTarget, player),
                     statsAll = BuildStatsAll(_statistics.StatsAll[player]),
@@ -234,6 +233,32 @@ namespace LuckParser.Controllers
                     avgConditionsStates = BuildBuffStates(player.GetBoonGraphs(_log)[Boon.NumberOfConditionsID]),
                 });
             }
+        }
+
+        private List<int>[] BuildTotal1SDamage(AbstractMasterPlayer p)
+        {
+            List<int>[] list = new List<int>[_statistics.Phases.Count];
+            for (int i = 0; i < _statistics.Phases.Count; i++)
+            {
+                list[i] = p.Get1SDamageList(_log, i, _statistics.Phases[i], null);
+            }
+            return list;
+        }
+
+        private List<int>[][] BuildTarget1SDamage(Player p)
+        {
+            List<int>[][] tarList = new List<int>[_log.FightData.Logic.Targets.Count][];
+            for (int j = 0; j < _log.FightData.Logic.Targets.Count; j++)
+            {
+                Target target = _log.FightData.Logic.Targets[j];
+                List<int>[] list = new List<int>[_statistics.Phases.Count];
+                for (int i = 0; i < _statistics.Phases.Count; i++)
+                {
+                    list[i] = p.Get1SDamageList(_log, i, _statistics.Phases[i], target);
+                }
+                tarList[j] = list;
+            }
+            return tarList;
         }
 
         private List<JsonConsumable> BuildConsumables(Player player)
@@ -380,27 +405,6 @@ namespace LuckParser.Controllers
                 mins.Add(min);
             }
             return mins;
-        }
-
-
-        private List<int> Build1SDPS(AbstractMasterPlayer player, Target target)
-        {
-            List<int> res = new List<int>();
-            foreach (var pt in GraphHelper.GetTargetDPSGraph(_log, player, 0, _statistics.Phases[0], target))
-            {
-                res.Add(pt.Y);
-            }
-            return res;
-        }
-
-        private List<int>[] Build1SDPS(AbstractMasterPlayer player)
-        {
-            List<int>[] res = new List<int>[_log.FightData.Logic.Targets.Count];
-            for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
-            {
-                res[i] = Build1SDPS(player, _log.FightData.Logic.Targets[i]);
-            }
-            return res;
         }
 
         private Dictionary<string, List<JsonSkill>> BuildRotation(List<CastLog> cls)

@@ -123,8 +123,9 @@ var compilePlayerTab = function () {
             var oldOffset = this.playerOffset;
             this.playerOffset += computeBuffData(this.player.details.boonGraph[this.phaseindex], this.data);
             var dpsY = oldOffset === this.playerOffset ? 'y2' : 'y3';
-            this.playerOffset += computeTargetHealthData(this.graph, logData.targets, this.phase, this.data, dpsY);
+            this.playerOffset += computeTargetHealthData(this.graph, logData.targets, this.phase, this.data, dpsY, this.phase.times);
             this.data.push({
+                x: this.phase.times,
                 y: [],
                 mode: 'lines',
                 line: {
@@ -136,6 +137,7 @@ var compilePlayerTab = function () {
                 name: 'Total DPS'
             });
             this.data.push({
+                x: this.phase.times,
                 y: [],
                 mode: 'lines',
                 line: {
@@ -147,6 +149,7 @@ var compilePlayerTab = function () {
                 name: 'Target DPS'
             });
             this.data.push({
+                x: this.phase.times,
                 y: [],
                 mode: 'lines',
                 line: {
@@ -212,11 +215,12 @@ var compilePlayerTab = function () {
                 }
                 var data;
                 var graphData = this.graph.players[this.playerindex];
+                var lastTime = this.phase.needsLastPoint ? this.phase.end - this.phase.start : 0;
                 if (this.dpsmode < 3) {
                     var lim = (this.dpsmode === 0 ? 0 : (this.dpsmode === 1 ? 10 : 30));
-                    data = computePlayerDPS(this.player, graphData, lim, null, this.activetargets, cacheID + '-' + this.phaseindex);
+                    data = computePlayerDPS(this.player, graphData, lim, null, this.activetargets, cacheID + '-' + this.phaseindex, lastTime);
                 } else {
-                    data = computePlayerDPS(this.player, graphData, 0, this.computePhaseBreaks, this.activetargets, cacheID + '-' + this.phaseindex);
+                    data = computePlayerDPS(this.player, graphData, 0, this.computePhaseBreaks, this.activetargets, cacheID + '-' + this.phaseindex, lastTime);
                 }
                 var res = {
                     maxDPS: data.maxDPS.total,
