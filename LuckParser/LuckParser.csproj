@@ -52,7 +52,7 @@
     </Win32Resource>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>LI.ico</ApplicationIcon>
+    <ApplicationIcon>Content\LI.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>App.manifest</ApplicationManifest>
@@ -92,10 +92,10 @@
     <Compile Include="Builders\Helpers\CSVHelper.cs" />
     <Compile Include="GeneralHelper.cs" />
     <Compile Include="Controllers\FlashWindow.cs" />
-    <Compile Include="Controllers\Parser.cs" />
+    <Compile Include="Parser\Parser.cs" />
     <Compile Include="Controllers\GW2APIController.cs" />
-    <Compile Include="Controllers\ParseHelper.cs" />
-    <Compile Include="Controllers\StatisticsCalculator.cs" />
+    <Compile Include="Parser\ParseHelper.cs" />
+    <Compile Include="Models\DataModels\StatisticsCalculator.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Settings\CustomSettingsManager.cs" />
     <Compile Include="Extensions.cs" />
@@ -192,7 +192,7 @@
     <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\OverrideLogic.cs" />
     <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\QueueLogic.cs" />
     <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\StackingLogic.cs" />
-    <Compile Include="Models\ParseModels\GW2API\GW2APICategory.cs" />
+    <Compile Include="Controllers\GW2API\GW2APICategory.cs" />
     <Compile Include="Models\ParseModels\Logs\BoonRemovalLog.cs" />
     <Compile Include="Models\ParseModels\Logs\BoonApplicationLog.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicData.cs" />
@@ -208,13 +208,13 @@
     <Compile Include="Models\ParseModels\CombatReplay\Point3D.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItem.cs" />
     <Compile Include="Models\ParseModels\Players\Target.cs" />
-    <Compile Include="Models\ParseModels\GW2API\GW2APISpec.cs" />
+    <Compile Include="Controllers\GW2API\GW2APISpec.cs" />
     <Compile Include="Models\ParseModels\Logs\DamageLogCondition.cs" />
-    <Compile Include="Models\ParseModels\GW2API\GW2APISkillCheck.cs" />
-    <Compile Include="Models\ParseModels\GW2API\GW2APISkillDetailed.cs" />
-    <Compile Include="Models\ParseModels\GW2API\GW2APIfacts.cs" />
-    <Compile Include="Models\ParseModels\GW2API\GW2APIfactsDetail.cs" />
-    <Compile Include="Models\ParseModels\GW2API\GW2APISkill.cs" />
+    <Compile Include="Controllers\GW2API\GW2APISkillCheck.cs" />
+    <Compile Include="Controllers\GW2API\GW2APISkillDetailed.cs" />
+    <Compile Include="Controllers\GW2API\GW2APIfacts.cs" />
+    <Compile Include="Controllers\GW2API\GW2APIfactsDetail.cs" />
+    <Compile Include="Controllers\GW2API\GW2APISkill.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemDuration.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemIntensity.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationOverstackItem.cs" />
@@ -292,8 +292,8 @@
     <Content Include="Content\SpecList.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="LI.ico" />
-    <None Include="sample.conf">
+    <Content Include="Content\LI.ico" />
+    <None Include="Settings\sample.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\theme-cosmo.png" />
