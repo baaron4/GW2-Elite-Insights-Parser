@@ -4,14 +4,13 @@ namespace LuckParser.Models.ParseModels
 {
     public class BoonApplicationLog : BoonLog
     {
-
         public BoonApplicationLog(long time, ushort srcInstid, long value) : base(time,srcInstid,value)
         {
         }
 
-        public override ParseEnum.BuffRemove GetRemoveType()
+        public override void UpdateSimulator(BoonSimulator simulator)
         {
-            return ParseEnum.BuffRemove.None;
+            simulator.Add(Value, SrcInstid, Time);
         }
     }
 }
