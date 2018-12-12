@@ -97,7 +97,7 @@
     <Compile Include="Controllers\ParseHelper.cs" />
     <Compile Include="Controllers\StatisticsCalculator.cs" />
     <Compile Include="Controllers\UploadController.cs" />
-    <Compile Include="CustomSettingsManager.cs" />
+    <Compile Include="Settings\CustomSettingsManager.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GridRow.cs" />
     <Compile Include="MainForm.cs">
@@ -247,11 +247,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Settings.cs" />
-    <Compile Include="SettingsForm.cs">
+    <Compile Include="Settings\Settings.cs" />
+    <Compile Include="Settings\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingsForm.Designer.cs">
+    <Compile Include="Settings\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="MainForm.resx">
@@ -262,7 +262,7 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingsForm.resx">
+    <EmbeddedResource Include="Settings\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.manifest" />
