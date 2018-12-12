@@ -13,8 +13,10 @@ window.onload = function () {
     for (i = 0; i < logData.phases.length; i++) {
         var phase = logData.phases[i];
         var times = [];
-        var roundTime = Math.ceil(phase.end - phase.start);
-        for (var j = 0; j < roundTime; j++) {
+        var dur = phase.end - phase.start;
+        var floorDur = Math.floor(dur);
+        phase.needsLastPoint = dur > floorDur + 1e-3;
+        for (var j = 0; j <= floorDur; j++) {
             times.push(j);
         }
         if (phase.needsLastPoint) {

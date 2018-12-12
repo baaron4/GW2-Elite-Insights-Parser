@@ -215,11 +215,12 @@ var compilePlayerTab = function () {
                 }
                 var data;
                 var graphData = this.graph.players[this.playerindex];
+                var lastTime = this.phase.needsLastPoint ? this.phase.end - this.phase.start : 0;
                 if (this.dpsmode < 3) {
                     var lim = (this.dpsmode === 0 ? 0 : (this.dpsmode === 1 ? 10 : 30));
-                    data = computePlayerDPS(this.player, graphData, lim, null, this.activetargets, cacheID + '-' + this.phaseindex, this.phase.needsLastPoint ? this.phase.end - this.phase.start : 0);
+                    data = computePlayerDPS(this.player, graphData, lim, null, this.activetargets, cacheID + '-' + this.phaseindex, lastTime);
                 } else {
-                    data = computePlayerDPS(this.player, graphData, 0, this.computePhaseBreaks, this.activetargets, cacheID + '-' + this.phaseindex, this.phase.needsLastPoint ? this.phase.end - this.phase.start : 0);
+                    data = computePlayerDPS(this.player, graphData, 0, this.computePhaseBreaks, this.activetargets, cacheID + '-' + this.phaseindex, lastTime);
                 }
                 var res = {
                     maxDPS: data.maxDPS.total,

@@ -1673,7 +1673,6 @@ namespace LuckParser.Controllers
                     duration = phaseData.GetDuration(),
                     start = phaseData.Start / 1000.0,
                     end = phaseData.End / 1000.0,
-                    needsLastPoint = phaseData.GetDuration() != phaseData.GetDuration("s") * 1000,
                     dpsStats = BuildDPSData(i),
                     dpsStatsTargets = BuildDPSTargetsData(i),
                     dmgStatsTargets = BuildDMGStatsTargetsData(i),

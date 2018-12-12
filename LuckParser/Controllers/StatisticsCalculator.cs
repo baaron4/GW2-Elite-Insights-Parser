@@ -100,16 +100,16 @@ namespace LuckParser.Controllers
             }
             // target health
             _statistics.TargetsHealth = new Dictionary<Target, double[]>[_statistics.Phases.Count];
-            for (var i = 0; i < _statistics.Phases.Count; i++)
+            for (var j = 0; j < _statistics.Phases.Count; j++)
             {
-                _statistics.TargetsHealth[i] = new Dictionary<Target, double[]>();
-                PhaseData phase = _statistics.Phases[i];
+                _statistics.TargetsHealth[j] = new Dictionary<Target, double[]>();
+                PhaseData phase = _statistics.Phases[j];
                 int seconds = (int)phase.GetDuration("s");
-                bool needLastPoint = seconds * 1000 != phase.GetDuration();
+                bool needsLastPoint = seconds * 1000 != phase.GetDuration();
                 foreach (Target target in _log.FightData.Logic.Targets)
                 {
-                    double[] health = new double[seconds + (needLastPoint ? 2 : 1)];
-                    int j = 0;
+                    double[] health = new double[seconds + (needsLastPoint ? 2 : 1)];
+                    int i = 0;
                     double curHealth = 100.0;
                     foreach (Point p in target.HealthOverTime)
                     {
@@ -119,9 +119,9 @@ namespace LuckParser.Controllers
                         {
                             break;
                         }
-                        while (j < timeInPhase)
+                        while (i < timeInPhase)
                         {
-                            health[j++] = curHealth;
+                            health[i++] = curHealth;
                         }
                         curHealth = hp;
                         if (timeInPhase >= 0)
@@ -129,13 +129,13 @@ namespace LuckParser.Controllers
                             health[timeInPhase] = curHealth;
                         }
                     }
-                    for (; j <= seconds; j++) health[j] = curHealth;
-                    if (needLastPoint)
+                    for (; i <= seconds; i++) health[i] = curHealth;
+                    if (needsLastPoint)
                     {
                         Point last = target.HealthOverTime.LastOrDefault(x => x.X <= phase.End);
                         health[seconds + 1] = last != null ? last.Y / 100 : health[seconds];
                     }
-                    _statistics.TargetsHealth[i][target] = health;
+                    _statistics.TargetsHealth[j][target] = health;
                 }
             }
             

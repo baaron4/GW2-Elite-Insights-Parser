@@ -13,7 +13,6 @@ namespace LuckParser.Models.HtmlModels
         public double start;
         [DefaultValue(null)]
         public double end;
-        public bool needsLastPoint;
         public List<int> targets = new List<int>();
 
         public List<List<object>> dpsStats;

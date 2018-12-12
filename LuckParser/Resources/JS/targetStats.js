@@ -359,11 +359,12 @@ var compileTargetTab = function () {
                 //var before = performance.now();
                 var res;
                 var damageData = this.graph.targets[this.phaseTargetIndex].total;
+                var lastTime = this.phase.needsLastPoint ? this.phase.end - this.phase.start : 0;
                 if (this.dpsmode < 3) {
                     var lim = (this.dpsmode === 0 ? 0 : (this.dpsmode === 1 ? 10 : 30));
-                    res = computeTargetDPS(this.target, damageData, lim, null, cacheID + '-' + this.phaseindex, this.phase.needsLastPoint ? this.phase.end - this.phase.start : 0);
+                    res = computeTargetDPS(this.target, damageData, lim, null, cacheID + '-' + this.phaseindex, lastTime);
                 } else {
-                    res = computeTargetDPS(this.target, damageData, 0, this.computePhaseBreaks, cacheID + '-' + this.phaseindex, this.phase.needsLastPoint ? this.phase.end - this.phase.start : 0);
+                    res = computeTargetDPS(this.target, damageData, 0, this.computePhaseBreaks, cacheID + '-' + this.phaseindex, lastTime);
                 }
                 this.dpsCache.set(cacheID, res);
                 return res;

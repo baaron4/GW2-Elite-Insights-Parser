@@ -174,7 +174,7 @@ namespace LuckParser.Controllers
                     buffs = BuildTargetBuffs(_statistics.TargetBuffs[target], target),
                     hitboxHeight = target.HitboxHeight,
                     hitboxWidth = target.HitboxWidth,
-                    damage = BuildTotalDamage(target),
+                    damage1S = BuildTotal1SDamage(target),
                     rotation = BuildRotation(target.GetCastLogs(_log, 0, _log.FightData.FightDuration)),
                     firstAware = (int)(_log.FightData.ToFightSpace(target.FirstAware)),
                     lastAware = (int)(_log.FightData.ToFightSpace(target.LastAware)),
@@ -210,8 +210,8 @@ namespace LuckParser.Controllers
                     weapons = player.GetWeaponsArray(_log).Where(w => w != null).ToArray(),
                     group = player.Group,
                     profession = player.Prof,
-                    damage = BuildTotalDamage(player),
-                    targetDamage = BuildTargetDamage(player),
+                    damage1S = BuildTotal1SDamage(player),
+                    targetDamage1S = BuildTarget1SDamage(player),
                     dpsAll = BuildDPS(_statistics.DpsAll[player]),
                     dpsTargets = BuildDPSTarget(_statistics.DpsTarget, player),
                     statsAll = BuildStatsAll(_statistics.StatsAll[player]),
@@ -235,7 +235,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        private List<int>[] BuildTotalDamage(AbstractMasterPlayer p)
+        private List<int>[] BuildTotal1SDamage(AbstractMasterPlayer p)
         {
             List<int>[] list = new List<int>[_statistics.Phases.Count];
             for (int i = 0; i < _statistics.Phases.Count; i++)
@@ -245,7 +245,7 @@ namespace LuckParser.Controllers
             return list;
         }
 
-        private List<int>[][] BuildTargetDamage(Player p)
+        private List<int>[][] BuildTarget1SDamage(Player p)
         {
             List<int>[][] tarList = new List<int>[_log.FightData.Logic.Targets.Count][];
             for (int j = 0; j < _log.FightData.Logic.Targets.Count; j++)
