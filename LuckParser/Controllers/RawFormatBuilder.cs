@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Xml;
 using LuckParser.Models;
 using LuckParser.Models.DataModels;
+using LuckParser.Models.JsonModels;
 using LuckParser.Models.ParseModels;
 using Newtonsoft.Json;
 
