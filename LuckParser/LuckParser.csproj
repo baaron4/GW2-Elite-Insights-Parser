@@ -98,7 +98,6 @@
     <Compile Include="Models\DataModels\StatisticsCalculator.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Settings\CustomSettingsManager.cs" />
-    <Compile Include="Extensions.cs" />
     <Compile Include="GridRow.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
