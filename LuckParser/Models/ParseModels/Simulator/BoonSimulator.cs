@@ -14,6 +14,8 @@ namespace LuckParser.Models.ParseModels
             public long BoonDuration { get; private set; }
             public ushort Src { get; private set; }
 
+            private List<Tuple<ushort, long>> _extensions = new List<Tuple<ushort, long>>();
+
             public BoonStackItem(long start, long boonDuration, ushort srcinstid)
             {
                 Start = start;
@@ -26,6 +28,12 @@ namespace LuckParser.Models.ParseModels
                 Start = other.Start + startShift;
                 BoonDuration = other.BoonDuration - durationShift;
                 Src = other.Src;
+                _extensions = other._extensions;
+            }
+
+            public void Extend(ushort src, long value)
+            {
+                _extensions.Add(new Tuple<ushort, long>(src, value));
             }
         }
 
@@ -154,5 +162,7 @@ namespace LuckParser.Models.ParseModels
             _logic.Sort(_log, BoonStack);
             Update(0);
         }
+
+        public abstract void Extend(long extension, ushort srcinstid);
     }
 }

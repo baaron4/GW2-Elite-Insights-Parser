@@ -1,4 +1,5 @@
 ﻿using LuckParser.Models.DataModels;
+using System;
 using System.Linq;
 
 namespace LuckParser.Models.ParseModels
@@ -9,6 +10,21 @@ namespace LuckParser.Models.ParseModels
         // Constructor
         public BoonSimulatorIntensity(int capacity, ParsedLog log, StackingLogic logic) : base(capacity, log, logic)
         {
+        }
+
+        public override void Extend(long extension, ushort srcinstid)
+        {
+            if (BoonStack.Count > 0)
+            {
+                foreach (BoonStackItem bsi in BoonStack)
+                {
+                    bsi.Extend(srcinstid, extension);
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("No buff to extend");
+            }
         }
 
         // Public Methods

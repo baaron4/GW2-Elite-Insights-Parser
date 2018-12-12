@@ -12,6 +12,18 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
+        public override void Extend(long extension, ushort srcinstid)
+        {
+            if (BoonStack.Count > 0)
+            {
+                BoonStack[0].Extend(srcinstid, extension);
+            }
+            else
+            {
+                throw new InvalidOperationException("No buff to extend");
+            }
+        }
+
         // Public Methods
 
         protected override void Update(long timePassed)

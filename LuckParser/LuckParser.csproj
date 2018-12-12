@@ -92,6 +92,7 @@
     <Compile Include="Builders\Helpers\CSVHelper.cs" />
     <Compile Include="GeneralHelper.cs" />
     <Compile Include="Controllers\FlashWindow.cs" />
+    <Compile Include="Models\ParseModels\Logs\BoonExtensionLog.cs" />
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Controllers\GW2APIController.cs" />
     <Compile Include="Parser\ParseHelper.cs" />
