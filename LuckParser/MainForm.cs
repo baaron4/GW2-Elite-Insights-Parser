@@ -7,6 +7,7 @@ using LuckParser.Controllers;
 using LuckParser.Models.DataModels;
 using System.Text;
 using System.Threading.Tasks;
+using LuckParser.Exceptions;
 
 namespace LuckParser
 {

@@ -1,3 +1,4 @@
+using LuckParser.Exceptions;
 using LuckParser.Models;
 //recommend CTRL+M+O to collapse all
 using LuckParser.Models.DataModels;

@@ -82,17 +82,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\Exceptions\SkipException.cs" />
-    <Compile Include="Controllers\Exceptions\CancellationException.cs" />
+    <Compile Include="Exceptions\SkipException.cs" />
+    <Compile Include="Exceptions\CancellationException.cs" />
     <Compile Include="ConsoleProgram.cs" />
     <Compile Include="Controllers\CSVHelper.cs" />
+    <Compile Include="Controllers\FlashWindow.cs" />
     <Compile Include="Controllers\GeneralHelper.cs" />
     <Compile Include="Controllers\RawFormatBuilder.cs" />
     <Compile Include="Controllers\HTMLBuilder.cs" />
     <Compile Include="Controllers\CombatReplayHelper.cs" />
     <Compile Include="Controllers\Parser.cs" />
     <Compile Include="Controllers\CSVBuilder.cs" />
-    <Compile Include="Controllers\FlashWindow.cs" />
     <Compile Include="Controllers\GraphHelper.cs" />
     <Compile Include="Controllers\GW2APIController.cs" />
     <Compile Include="Controllers\ParseHelper.cs" />
@@ -187,7 +187,7 @@
     <Compile Include="Models\ParseModels\CombatReplay\Actors\RectangleActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\CombatReplay.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\CombatReplayMap.cs" />
-    <Compile Include="Models\ParseModels\Simulator\BoonSimulatorCleanseItem.cs" />
+    <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulatorCleanseItem.cs" />
     <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\HealingLogic.cs" />
     <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\ForceOverrideLogic.cs" />
     <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\OverrideLogic.cs" />
@@ -207,7 +207,7 @@
     <Compile Include="Models\ParseModels\PhaseData.cs" />
     <Compile Include="Models\ParseModels\Players\Mob.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Point3D.cs" />
-    <Compile Include="Models\ParseModels\Simulator\BoonSimulationItem.cs" />
+    <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItem.cs" />
     <Compile Include="Models\ParseModels\Players\Target.cs" />
     <Compile Include="Models\ParseModels\GW2API\GW2APISpec.cs" />
     <Compile Include="Models\ParseModels\Logs\DamageLogCondition.cs" />
@@ -216,9 +216,9 @@
     <Compile Include="Models\ParseModels\GW2API\GW2APIfacts.cs" />
     <Compile Include="Models\ParseModels\GW2API\GW2APIfactsDetail.cs" />
     <Compile Include="Models\ParseModels\GW2API\GW2APISkill.cs" />
-    <Compile Include="Models\ParseModels\Simulator\BoonSimulationItemDuration.cs" />
-    <Compile Include="Models\ParseModels\Simulator\BoonSimulationItemIntensity.cs" />
-    <Compile Include="Models\ParseModels\Simulator\BoonSimulationOverstackItem.cs" />
+    <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemDuration.cs" />
+    <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemIntensity.cs" />
+    <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationOverstackItem.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationResult.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulator.cs" />
     <Compile Include="Models\ParseModels\Agents\Agent.cs" />

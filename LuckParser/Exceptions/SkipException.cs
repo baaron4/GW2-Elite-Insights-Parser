@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LuckParser
+namespace LuckParser.Exceptions
 {
     public class SkipException : Exception
     {

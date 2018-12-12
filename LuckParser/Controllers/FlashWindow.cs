@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace LuckParser.Controllers
 {
     public static class FlashWindow
-    {
+    {/*
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool FlashWindowEx(ref FlashwInfo pwfi);
@@ -145,6 +145,6 @@ namespace LuckParser.Controllers
         private static bool Win2000OrLater
         {
             get { return Environment.OSVersion.Version.Major >= 5; }
-        }
+        }*/
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Exceptions;
+using System;
 using System.ComponentModel;
 
 namespace LuckParser
