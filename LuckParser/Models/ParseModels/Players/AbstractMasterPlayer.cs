@@ -234,9 +234,13 @@ namespace LuckParser.Models.ParseModels
                     }
                     boonMap.Add(Boon.BoonsByIds[boonId]);
                 }
+                if (c.Value == 0)
+                {
+                    continue;
+                }
                 long time = log.FightData.ToFightSpace(c.Time);
                 List<BoonLog> loglist = boonMap[boonId];
-                if (c.IsStateChange == ParseEnum.StateChange.BuffInitial && c.Value > 0)
+                if (c.IsStateChange == ParseEnum.StateChange.BuffInitial)
                 {
                     ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
                     loglist.Add(new BoonApplicationLog(time, src, c.Value));
