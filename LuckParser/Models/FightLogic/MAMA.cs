@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
-namespace LuckParser.Models
+namespace LuckParser.Models.Logic
 {
     public class MAMA : FractalLogic
     {

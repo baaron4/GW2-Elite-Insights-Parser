@@ -2,6 +2,7 @@ using LuckParser.Exceptions;
 using LuckParser.Models;
 //recommend CTRL+M+O to collapse all
 using LuckParser.Models.DataModels;
+using LuckParser.Models.Logic;
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;

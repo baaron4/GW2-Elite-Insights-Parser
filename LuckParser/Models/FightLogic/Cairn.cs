@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LuckParser.Models
+namespace LuckParser.Models.Logic
 {
     public class Cairn : RaidLogic
     {

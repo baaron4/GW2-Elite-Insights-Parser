@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
-namespace LuckParser.Models
+namespace LuckParser.Models.Logic
 {
     public abstract class FractalLogic : FightLogic
     {

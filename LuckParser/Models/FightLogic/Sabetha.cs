@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
-namespace LuckParser.Models
+namespace LuckParser.Models.Logic
 {
     public class Sabetha : RaidLogic
     {
