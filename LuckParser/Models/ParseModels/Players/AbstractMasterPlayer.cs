@@ -611,7 +611,7 @@ namespace LuckParser.Models.ParseModels
             {
                 DamageLogs.AddRange(mins.GetDamageLogs(null, log, log.FightData.ToFightSpace(FirstAware), log.FightData.ToFightSpace(LastAware)));
             }
-            DamageLogs.Sort((x, y) => x.Time < y.Time ? -1 : 1);
+            DamageLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
         }
         protected override void SetDamageTakenLogs(ParsedLog log)
         {
@@ -682,7 +682,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 cloakStart = time;
             }
-            CastLogs.Sort((x, y) => x.Time < y.Time ? -1 : 1);
+            CastLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
         }
 
         private static void Add<T>(Dictionary<T, long> dictionary, T key, long value)

@@ -6,9 +6,9 @@ namespace LuckParser.Models.ParseModels
 {
     public class OverrideLogic : StackingLogic
     {
-        public override void Sort(ParsedLog log, List<BoonSimulator.BoonStackItem> stacks)
+        public override void Sort(ParsedLog log, List<BoonStackItem> stacks)
         {
-            stacks.Sort((x, y) => x.BoonDuration < y.BoonDuration ? -1 : 1);
+            stacks.Sort((x, y) => x.BoonDuration.CompareTo(y.BoonDuration));
         }
 
         public override bool StackEffect(ParsedLog log, BoonSimulator.BoonStackItem stackItem, List<BoonSimulator.BoonStackItem> stacks, List<BoonSimulationOverstackItem> overstacks)

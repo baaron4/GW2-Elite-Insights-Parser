@@ -183,7 +183,7 @@ namespace LuckParser.Models.Logic
                     };
                 AddTargetsToPhase(phase, ids, log);
             }
-            phases.Sort((x, y) => (x.Start < y.Start) ? -1 : 1);
+            phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             phases.RemoveAll(x => x.Targets.Count == 0);
             return phases;
         }
