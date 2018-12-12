@@ -78,6 +78,7 @@ var compileGraphs = function () {
                     pText.push(player.name);
                 }
                 data.push({
+                    x: this.phase.times,
                     y: [],
                     mode: 'lines',
                     line: {
@@ -91,6 +92,7 @@ var compileGraphs = function () {
                 });
             }
             data.push({
+                x: this.phase.times,
                 mode: 'lines',
                 line: {
                     shape: 'spline'
@@ -100,7 +102,7 @@ var compileGraphs = function () {
                 name: 'All Player Dps'
             });
             // targets health
-            computeTargetHealthData(this.graph, logData.targets, this.phase, this.data);
+            computeTargetHealthData(this.graph, logData.targets, this.phase, this.data, null, this.phase.times);
             // mechanics
             for (i = 0; i < graphData.mechanics.length; i++) {
                 var mech = graphData.mechanics[i];
@@ -229,7 +231,8 @@ var compileGraphs = function () {
                 };
                 var playerDPS = [];
                 for (var i = 0; i < logData.players.length; i++) {
-                    var data = computePlayerDPS(logData.players[i], this.graph.players[i], lim, phasebreaks, this.activetargets, cacheID + '-' + this.phaseindex);
+                    var data = computePlayerDPS(logData.players[i], this.graph.players[i], lim, phasebreaks, 
+                            this.activetargets, cacheID + '-' + this.phaseindex, this.phase.needsLastPoint ? this.phase.end - this.phase.start : 0);
                     playerDPS.push(data.dps);
                     maxDPS.total = Math.max(maxDPS.total, data.maxDPS.total);
                     maxDPS.cleave = Math.max(maxDPS.cleave, data.maxDPS.cleave);

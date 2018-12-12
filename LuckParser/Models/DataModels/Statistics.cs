@@ -155,7 +155,7 @@ namespace LuckParser.Models.DataModels
 
         public readonly Dictionary<Target,Dictionary<long, FinalTargetBuffs>[]> TargetBuffs;
 
-        public Dictionary<Target, double[]> TargetHealth { get; set; }
+        public Dictionary<Target, double[]>[] TargetsHealth { get; set; }
 
         // present buff
         public readonly List<Boon> PresentBoons = new List<Boon>();//Used only for Boon tables

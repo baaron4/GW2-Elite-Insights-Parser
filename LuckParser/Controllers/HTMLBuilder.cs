@@ -34,7 +34,6 @@ namespace LuckParser.Controllers
 
             _settings = settings;
             CombatReplayHelper.Settings = settings;
-            GraphHelper.Settings = settings;
 
             _statistics = statistics;
 
@@ -67,31 +66,13 @@ namespace LuckParser.Controllers
             return filtered;
         }
 
-        private List<int> ConvertGraph(List<Point> points)
-        {
-            List<int> graph = new List<int>();
-            foreach (Point point in points)
-            {
-                graph.Add(point.Y);
-            }
-            return graph;
-        }
-
-        private double[] BuildTargetHealthData(int phaseIndex, Target target)
-        {
-            PhaseData phase = _statistics.Phases[phaseIndex];
-            int duration = (int)phase.GetDuration("s");
-            double[] chart = _statistics.TargetHealth[target].Skip((int)phase.Start / 1000).Take(duration + 1).ToArray();
-            return chart;
-        }
-
         private TargetChartDataDto BuildTargetGraphData(int phaseIndex, Target target)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
             return new TargetChartDataDto
             {
-                dps = ConvertGraph(GraphHelper.GetTotalDPSGraph(_log, target, phaseIndex, phase)),
-                health = BuildTargetHealthData(phaseIndex, target)
+                total = target.Get1SDamageList(_log, phaseIndex, phase, null),
+                health = _statistics.TargetsHealth[phaseIndex][target]
             };
         }
         
@@ -107,12 +88,12 @@ namespace LuckParser.Controllers
             {
                 PlayerChartDataDto pChar = new PlayerChartDataDto()
                 {
-                    total = ConvertGraph(GraphHelper.GetTotalDPSGraph(_log, p, phaseIndex, phase)),
+                    total = p.Get1SDamageList(_log, phaseIndex, phase, null),
                     targets = new List<List<int>>()
                 };
                 foreach (Target target in phase.Targets)
                 {
-                    pChar.targets.Add(ConvertGraph(GraphHelper.GetTargetDPSGraph(_log, p, phaseIndex, phase, target)));
+                    pChar.targets.Add(p.Get1SDamageList(_log, phaseIndex, phase, target));
                 }
                 list.Add(pChar);
             }
@@ -935,8 +916,8 @@ namespace LuckParser.Controllers
         private BoonChartDataDto BuildBoonGraph(BoonsGraphModel bgm, PhaseData phase)
         {
             //TODO line: {shape: 'hv'}
-            long roundedEnd = phase.Start + 1000 * phase.GetDuration("s");
-            List<BoonsGraphModel.Segment> bChart = bgm.BoonChart.Where(x => x.End >= phase.Start && x.Start <= roundedEnd).ToList();
+            List<BoonsGraphModel.Segment> bChart = bgm.BoonChart.Where(x => x.End >= phase.Start && x.Start <= phase.End
+            ).ToList();
             if (bChart.Count == 0 || (bChart.Count == 1 && bChart.First().Value == 0))
             {
                 return null;
@@ -955,7 +936,7 @@ namespace LuckParser.Controllers
                 dto.states.Add(new object[] { segStart, seg.Value });
             }
             BoonsGraphModel.Segment lastSeg = bChart.Last();
-            double segEnd = Math.Round(Math.Min(lastSeg.End - phase.Start, roundedEnd - phase.Start) / 1000.0, 3);
+            double segEnd = Math.Round(Math.Min(lastSeg.End - phase.Start, phase.End - phase.Start) / 1000.0, 3);
             dto.states.Add(new object[] { segEnd, lastSeg.Value });
 
             return dto;
