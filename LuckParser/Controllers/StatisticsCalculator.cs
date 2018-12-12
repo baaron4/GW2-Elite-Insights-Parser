@@ -105,10 +105,10 @@ namespace LuckParser.Controllers
                 _statistics.TargetsHealth[i] = new Dictionary<Target, double[]>();
                 PhaseData phase = _statistics.Phases[i];
                 int seconds = (int)phase.GetDuration("s");
-                bool needLastPoint = seconds * 1000 != phase.GetDuration();
+                bool needsLastPoint = seconds * 1000 != phase.GetDuration();
                 foreach (Target target in _log.FightData.Logic.Targets)
                 {
-                    double[] health = new double[seconds + (needLastPoint ? 2 : 1)];
+                    double[] health = new double[seconds + (needsLastPoint ? 2 : 1)];
                     int j = 0;
                     double curHealth = 100.0;
                     foreach (Point p in target.HealthOverTime)
@@ -130,7 +130,7 @@ namespace LuckParser.Controllers
                         }
                     }
                     for (; j <= seconds; j++) health[j] = curHealth;
-                    if (needLastPoint)
+                    if (needsLastPoint)
                     {
                         Point last = target.HealthOverTime.LastOrDefault(x => x.X <= phase.End);
                         health[seconds + 1] = last != null ? last.Y / 100 : health[seconds];
