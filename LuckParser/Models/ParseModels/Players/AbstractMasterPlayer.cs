@@ -249,8 +249,15 @@ namespace LuckParser.Models.ParseModels
                 {
                     if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                     {
-                        ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
-                        loglist.Add(new BoonApplicationLog(time, src, c.Value));
+                        if (c.IsOffcycle > 0)
+                        {
+                            loglist.Add(new BoonExtensionLog(time, c.Value, c.OverstackValue - c.Value));
+                        }
+                        else
+                        {
+                            ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
+                            loglist.Add(new BoonApplicationLog(time, src, c.Value));
+                        }
                     }
                     else if (c.IsBuffRemove != ParseEnum.BuffRemove.Manual && time < log.FightData.FightDuration - 50)
                     {

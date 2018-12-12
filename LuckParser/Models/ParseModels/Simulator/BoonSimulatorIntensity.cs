@@ -12,16 +12,21 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        public override void Extend(long extension, ushort srcinstid)
+        public override void Extend(long extension, long oldValue)
         {
+            bool extended = false;
             if (BoonStack.Count > 0)
             {
                 foreach (BoonStackItem bsi in BoonStack)
                 {
-                    bsi.Extend(srcinstid, extension);
+                    if (Math.Abs(bsi.BoonDuration - oldValue) < 10) {
+                        bsi.Extend(extension);
+                        extended = true;
+                        break;
+                    }
                 }
             }
-            else
+            if(!extended)
             {
                 throw new InvalidOperationException("No buff to extend");
             }
