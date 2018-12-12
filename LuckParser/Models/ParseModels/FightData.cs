@@ -1,4 +1,5 @@
 ﻿using LuckParser.Models.DataModels;
+using LuckParser.Models.Logic;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

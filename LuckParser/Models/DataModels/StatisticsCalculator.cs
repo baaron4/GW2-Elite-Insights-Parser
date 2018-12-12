@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using LuckParser.Models.DataModels;
 using LuckParser.Models.ParseModels;
 using static LuckParser.Models.DataModels.Statistics;
 
-namespace LuckParser.Controllers
+namespace LuckParser.Models.DataModels
 {
     /// <summary>
     /// Calculates statistical information from a log

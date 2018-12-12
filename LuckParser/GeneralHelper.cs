@@ -1,16 +1,51 @@
-﻿using LuckParser.Models.DataModels;
+﻿using LuckParser.Exceptions;
+using LuckParser.Models.DataModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
-namespace LuckParser.Controllers
+namespace LuckParser
 {
     public static class GeneralHelper
     {
+
+        /// <summary>
+        /// Reports a status update for a log, updating the background worker and the related row with the new status
+        /// </summary>
+        /// <param name="bg"></param>
+        /// <param name="row"></param>
+        /// <param name="status"></param>
+        /// <param name="percent"></param>
+        public static void UpdateProgress(this BackgroundWorker bg, GridRow row, string status, int percent)
+        {
+            row.Status = status;
+            bg.ReportProgress(percent, row);
+            if (row.Metadata.FromConsole)
+            {
+                Console.WriteLine($"{row.Location}: {status}");
+            }
+        }
+
+        /// <summary>
+        /// Throws a <see cref="CancellationException"/> if the background worker has been cancelled
+        /// </summary>
+        /// <param name="bg"></param>
+        /// <param name="row"></param>
+        /// <param name="cancelStatus"></param>
+        public static void ThrowIfCanceled(this BackgroundWorker bg, GridRow row, string cancelStatus = "Canceled")
+        {
+            if (bg.CancellationPending)
+            {
+                row.Status = cancelStatus;
+                throw new CancellationException(row);
+
+            }
+        }
 
 #if !DEBUG
         public static readonly NUglify.JavaScript.CodeSettings JSMinifySettings = new NUglify.JavaScript.CodeSettings()
@@ -102,7 +137,7 @@ namespace LuckParser.Controllers
             if (match.Success) return match.Groups[1].Value;
             return null;
         }
-        
+
         public static string GetProfIcon(string prof)
         {
             switch (prof)
@@ -171,7 +206,7 @@ namespace LuckParser.Controllers
 
         public static string GetNPCIcon(ushort id)
         {
-            switch(ParseEnum.GetTargetIDS(id))
+            switch (ParseEnum.GetTargetIDS(id))
             {
                 case ParseEnum.TargetIDS.ValeGuardian:
                     return "https://i.imgur.com/MIpP5pK.png";
@@ -234,7 +269,7 @@ namespace LuckParser.Controllers
                 case ParseEnum.TargetIDS.MedGolem:
                     return "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
             }
-            switch(ParseEnum.GetTrashIDS(id))
+            switch (ParseEnum.GetTrashIDS(id))
             {
                 case Spirit:
                 case Spirit2:
@@ -302,7 +337,7 @@ namespace LuckParser.Controllers
                 case WyvernMatriarch:
                     return "https://i.imgur.com/kLKLSfv.png";
                 case WyvernPatriarch:
-                    return "https://i.imgur.com/vjjNSpI.png"; 
+                    return "https://i.imgur.com/vjjNSpI.png";
                 case ApocalypseBringer:
                     return "https://i.imgur.com/0LGKCn2.png";
                 case ConjuredGreatsword:
@@ -314,7 +349,7 @@ namespace LuckParser.Controllers
                     return "https://i.imgur.com/sr146T6.png";
                 case LavaElemental1:
                 case LavaElemental2:
-                    return "https://i.imgur.com/mydwiYy.png"; 
+                    return "https://i.imgur.com/mydwiYy.png";
                 case PyreGuardian:
                     return "https://i.imgur.com/6zNPTUw.png";
                 case ReaperofFlesh:

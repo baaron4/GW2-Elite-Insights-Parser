@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static LuckParser.Models.JsonBuffs;
 
-namespace LuckParser.Models
+namespace LuckParser.Models.JsonModels
 {
     public class JsonTargetBuffs
     {

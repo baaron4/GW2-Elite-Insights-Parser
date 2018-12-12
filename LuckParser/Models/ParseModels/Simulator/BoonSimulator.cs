@@ -84,13 +84,7 @@ namespace LuckParser.Models.ParseModels
                     throw new InvalidOperationException("Negative passed time in boon simulation");
                 }
                 Update(timeCur - timePrev);
-                if (log.GetRemoveType() == ParseEnum.BuffRemove.None)
-                {
-                    Add(log.Value, log.SrcInstid, timeCur);
-                } else
-                {
-                    Remove(log.SrcInstid, log.Value, timeCur, log.GetRemoveType());
-                }
+                log.UpdateSimulator(this);
                 timePrev = timeCur;
             }
             Update(fightDuration - timePrev);
@@ -100,7 +94,7 @@ namespace LuckParser.Models.ParseModels
 
         protected abstract void Update(long timePassed);
         
-        private void Add(long boonDuration, ushort srcinstid, long start)
+        public void Add(long boonDuration, ushort srcinstid, long start)
         {
             var toAdd = new BoonStackItem(start, boonDuration, srcinstid);
             // Find empty slot
@@ -120,7 +114,7 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        private void Remove(ushort provokedBy, long boonDuration, long start, ParseEnum.BuffRemove removeType)
+        public void Remove(ushort provokedBy, long boonDuration, long start, ParseEnum.BuffRemove removeType)
         {
             if (GenerationSimulation.Count > 0)
             {

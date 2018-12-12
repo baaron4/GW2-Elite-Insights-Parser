@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LuckParser.Models
+namespace LuckParser.Models.Logic
 {
     public abstract class RaidLogic : FightLogic
     {
