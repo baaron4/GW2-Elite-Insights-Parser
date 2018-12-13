@@ -47,7 +47,7 @@ namespace LuckParser.Models.ParseModels
         public readonly List<BoonSimulationItemOverstack> OverstackSimulationResult = new List<BoonSimulationItemOverstack>();
         public readonly List<BoonSimulationItemWasted> WasteSimulationResult = new List<BoonSimulationItemWasted>();
         public readonly List<BoonSimulationItemCleanse> CleanseSimulationResult = new List<BoonSimulationItemCleanse>();
-        public readonly List<BoonSimulationItemExtension> ExtensionSimulationResult = new List<BoonSimulationItemExtension>();
+        public readonly List<BoonSimulationItemExtension> UnknownExtensionSimulationResult = new List<BoonSimulationItemExtension>();
         private readonly int _capacity;
         private readonly ParsedLog _log;
         private readonly StackingLogic _logic;

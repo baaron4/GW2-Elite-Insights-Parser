@@ -10,14 +10,16 @@ namespace LuckParser.Models.ParseModels
     {
         private readonly long _duration;
         private readonly long _time;
+        private readonly ushort _src;
 
-        public BoonSimulationItemExtension(long duration, long time)
+        public BoonSimulationItemExtension(long duration, long time, ushort src)
         {
             _duration = duration;
             _time = time;
+            _src = src;
         }
 
-        public long GetClampedExtension(long start, long end)
+        private long GetClampedExtension(long start, long end)
         {
             if (end > 0 && end - start > 0)
             {
@@ -31,7 +33,17 @@ namespace LuckParser.Models.ParseModels
 
         public override void SetBoonDistributionItem(Dictionary<ushort, BoonDistributionItem> distrib, long start, long end)
         {
-            throw new NotImplementedException();
+            if (distrib.TryGetValue(_src, out var toModify))
+            {
+                toModify.UnknownExtension += GetClampedExtension(start, end);
+                distrib[_src] = toModify;
+            }
+            else
+            {
+                distrib.Add(_src, new BoonDistributionItem(
+                    0,
+                    0, 0, GetClampedExtension(start, end)));
+            }
         }
     }
 }

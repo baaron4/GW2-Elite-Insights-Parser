@@ -443,21 +443,10 @@ namespace LuckParser.Models.ParseModels
                             graphSegments.AddRange(simul.ToSegment());
                         }
                     }
-                    foreach (BoonSimulationItemOverstack simul in simulator.OverstackSimulationResult)
-                    {
-                        for (int i = 0; i < phases.Count; i++)
-                        {
-                            PhaseData phase = phases[i];
-                            if (!_boonDistribution[i].TryGetValue(boonid, out var distrib))
-                            {
-                                distrib = new Dictionary<ushort, BoonDistributionItem>();
-                                _boonDistribution[i].Add(boonid, distrib);
-                            }
-                            simul.SetBoonDistributionItem(distrib, phase.Start, phase.End);
-                        }
-                    }
-
-                    foreach (BoonSimulationItemWasted simul in simulator.WasteSimulationResult)
+                    List<AbstractBoonSimulationItem> extraSimulations = new List<AbstractBoonSimulationItem>(simulator.OverstackSimulationResult);
+                    extraSimulations.AddRange(simulator.WasteSimulationResult);
+                    extraSimulations.AddRange(simulator.UnknownExtensionSimulationResult);
+                    foreach (AbstractBoonSimulationItem simul in extraSimulations)
                     {
                         for (int i = 0; i < phases.Count; i++)
                         {
