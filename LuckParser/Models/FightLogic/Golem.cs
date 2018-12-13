@@ -42,7 +42,7 @@ namespace LuckParser.Models.Logic
             foreach (CombatItem c in combatData)
             {
                 // redirect all attacks to the main golem
-                if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsStateChange == ParseEnum.StateChange.Normal && c.IFF == ParseEnum.IFF.Foe && c.IsActivation == ParseEnum.Activation.None)
+                if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsStateChange == ParseEnum.StateChange.Normal && c.IFF == ParseEnum.IFF.Foe && c.IsActivation == ParseEnum.Activation.None && c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
                     c.DstAgent = target.Agent;
                     c.DstInstid = target.InstID;
