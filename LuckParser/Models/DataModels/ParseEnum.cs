@@ -93,6 +93,9 @@ namespace LuckParser.Models.DataModels
             TeamChange      = 22,
             AttackTarget    = 23,
             Targetable      = 24,
+            MapID           = 25,
+            ReplInfo        = 26,
+            StackActive     = 27,
             Unknown
         };
 
