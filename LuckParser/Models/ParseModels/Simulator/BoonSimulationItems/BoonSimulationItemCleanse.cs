@@ -7,13 +7,13 @@ using static LuckParser.Models.ParseModels.BoonSimulator;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class BoonSimulationCleanseItem
+    public class BoonSimulationItemCleanse
     {
         public readonly ushort ProvokedBy;
         private readonly long _duration;
         private readonly long _time;
 
-        public BoonSimulationCleanseItem(ushort provokedBy, long duration, long time)
+        public BoonSimulationItemCleanse(ushort provokedBy, long duration, long time)
         {
             ProvokedBy = provokedBy;
             this._duration = duration;

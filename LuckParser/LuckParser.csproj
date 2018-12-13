@@ -186,7 +186,7 @@
     <Compile Include="Models\ParseModels\CombatReplay\Actors\RectangleActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\CombatReplay.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\CombatReplayMap.cs" />
-    <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulatorCleanseItem.cs" />
+    <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemCleanse.cs" />
     <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\HealingLogic.cs" />
     <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\ForceOverrideLogic.cs" />
     <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\OverrideLogic.cs" />
@@ -217,7 +217,7 @@
     <Compile Include="Controllers\GW2API\GW2APISkill.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemDuration.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemIntensity.cs" />
-    <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationOverstackItem.cs" />
+    <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemOverstack.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationResult.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulator.cs" />
     <Compile Include="Models\ParseModels\Agents\Agent.cs" />
