@@ -650,8 +650,10 @@ namespace LuckParser.Models.DataModels
                         uptime.Generation = Math.Round((double)totalGeneration / fightDuration / playerList.Count, 1);
                         uptime.Overstack = Math.Round((double)(totalOverstack + totalGeneration) / fightDuration / playerList.Count, 1);
                     }
-
-                    final[boon.ID] = uptime;
+                    if (uptime.Generation > 0.0)
+                    {
+                        final[boon.ID] = uptime;
+                    }
                 }
 
                 uptimesByPhase[phaseIndex] = final;

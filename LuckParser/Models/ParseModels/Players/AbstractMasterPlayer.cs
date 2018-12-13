@@ -414,7 +414,7 @@ namespace LuckParser.Models.ParseModels
                             var phase = phases[i];
                             if (!_boonDistribution[i].TryGetValue(boonid, out var distrib))
                             {
-                                distrib = new Dictionary<ushort, OverAndValue>();
+                                distrib = new Dictionary<ushort, BoonDistributionItem>();
                                 _boonDistribution[i].Add(boonid, distrib);
                             }
                             if (updateBoonPresence)
@@ -430,7 +430,7 @@ namespace LuckParser.Models.ParseModels
                                 }
                                 else
                                 {
-                                    distrib.Add(src, new OverAndValue(
+                                    distrib.Add(src, new BoonDistributionItem(
                                         simul.GetSrcDuration(src, phase.Start, phase.End),
                                         0));
                                 }
@@ -456,7 +456,7 @@ namespace LuckParser.Models.ParseModels
                             var phase = phases[i];
                             if (!_boonDistribution[i].TryGetValue(boonid, out var distrib))
                             {
-                                distrib = new Dictionary<ushort, OverAndValue>();
+                                distrib = new Dictionary<ushort, BoonDistributionItem>();
                                 _boonDistribution[i].Add(boonid, distrib);
                             }
                             if (distrib.TryGetValue(simul.Src, out var toModify))
@@ -466,7 +466,7 @@ namespace LuckParser.Models.ParseModels
                             }
                             else
                             {
-                                distrib.Add(simul.Src, new OverAndValue(
+                                distrib.Add(simul.Src, new BoonDistributionItem(
                                     0,
                                     simul.GetOverstack(phase.Start, phase.End)));
                             }
