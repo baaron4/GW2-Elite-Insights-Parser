@@ -647,7 +647,7 @@ namespace LuckParser.Builders
             WriteCell("Time");
             foreach (MechanicLog m in mLogs)
             {
-                WriteCell((m.Time / 1000f).ToString());
+                WriteCell((m.Time / 1000.0).ToString());
             }
             NewLine();
             count++;
