@@ -3,19 +3,19 @@ using System.Linq;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class OverAndValue
+    public class BoonDistributionItem
     {
         public long Value { get; set; }
         public long Overstack { get; set; }
 
-        public OverAndValue(long value, long overstack)
+        public BoonDistributionItem(long value, long overstack)
         {
             Value = value;
             Overstack = overstack;
         }
     }
 
-    public class BoonDistribution : Dictionary<long, Dictionary<ushort, OverAndValue>>
+    public class BoonDistribution : Dictionary<long, Dictionary<ushort, BoonDistributionItem>>
     {
         public long GetUptime(long boonid)
         {
