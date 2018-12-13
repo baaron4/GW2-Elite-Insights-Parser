@@ -31,7 +31,7 @@ namespace LuckParser.Models.ParseModels
                 //_extensions = other._extensions;
             }
 
-            public void Extend(long value)
+            public void Extend(long value, ushort src)
             {
                 BoonDuration += value;
             }
@@ -163,6 +163,6 @@ namespace LuckParser.Models.ParseModels
             Update(0);
         }
 
-        public abstract void Extend(long extension, long oldValue);
+        public abstract void Extend(long extension, long oldValue, ushort src);
     }
 }

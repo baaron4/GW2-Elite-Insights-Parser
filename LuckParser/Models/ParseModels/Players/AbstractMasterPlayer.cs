@@ -251,7 +251,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         if (c.IsOffcycle > 0)
                         {
-                            loglist.Add(new BoonExtensionLog(time, c.Value, c.OverstackValue - c.Value));
+                            loglist.Add(new BoonExtensionLog(time, c.Value, c.OverstackValue - c.Value, 0));
                         }
                         else
                         {

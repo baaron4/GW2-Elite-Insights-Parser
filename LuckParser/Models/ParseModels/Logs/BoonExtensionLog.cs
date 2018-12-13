@@ -7,14 +7,14 @@ namespace LuckParser.Models.ParseModels
 
         private readonly long _oldValue;
 
-        public BoonExtensionLog(long time, long value, long oldValue) : base(time, 0, value)
+        public BoonExtensionLog(long time, long value, long oldValue, ushort src) : base(time, src, value)
         {
             _oldValue = oldValue;
         }
 
         public override void UpdateSimulator(BoonSimulator simulator)
         {
-            simulator.Extend(Value, _oldValue);
+            simulator.Extend(Value, _oldValue, SrcInstid);
         }
     }
 }

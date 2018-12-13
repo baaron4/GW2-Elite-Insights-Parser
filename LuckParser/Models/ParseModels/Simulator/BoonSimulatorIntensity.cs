@@ -12,7 +12,7 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        public override void Extend(long extension, long oldValue)
+        public override void Extend(long extension, long oldValue, ushort src)
         {
             bool extended = false;
             if (BoonStack.Count > 0)
@@ -20,7 +20,7 @@ namespace LuckParser.Models.ParseModels
                 foreach (BoonStackItem bsi in BoonStack)
                 {
                     if (Math.Abs(bsi.BoonDuration - oldValue) < 10) {
-                        bsi.Extend(extension);
+                        bsi.Extend(extension, src);
                         extended = true;
                         break;
                     }

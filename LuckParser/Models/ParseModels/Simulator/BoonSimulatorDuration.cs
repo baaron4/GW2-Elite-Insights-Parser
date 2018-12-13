@@ -12,11 +12,11 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        public override void Extend(long extension, long oldValue)
+        public override void Extend(long extension, long oldValue, ushort src)
         {
             if (BoonStack.Count > 0)
             {
-                BoonStack[0].Extend(extension);
+                BoonStack[0].Extend(extension, src);
             }
             else
             {
