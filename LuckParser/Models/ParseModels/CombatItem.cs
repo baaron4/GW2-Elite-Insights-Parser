@@ -17,7 +17,8 @@ namespace LuckParser.Models.ParseModels
         public ushort DstMasterInstid { get; set; }
         public ParseEnum.IFF IFF { get; }
         public byte IsBuff { get; }
-        public ParseEnum.Result Result { get; }
+        public byte NonEnumResult { get; }
+        public ParseEnum.Result Result => ParseEnum.GetResult(NonEnumResult);
         public ParseEnum.Activation IsActivation { get; }
         public ParseEnum.BuffRemove IsBuffRemove { get; }
         public byte IsNinety { get; }
@@ -30,7 +31,7 @@ namespace LuckParser.Models.ParseModels
 
         // Constructor
         public CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
-               long skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid, ushort dstMasterInstid, ParseEnum.IFF iff, byte isBuff, ParseEnum.Result result,
+               long skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid, ushort dstMasterInstid, ParseEnum.IFF iff, byte isBuff, byte result,
                ParseEnum.Activation isActivation, ParseEnum.BuffRemove isBuffRemove, byte isNinety, byte isFifty, byte isMoving,
                ParseEnum.StateChange isStateChange, byte isFlanking, byte isShields, byte isOffcycle)
         {
@@ -47,7 +48,7 @@ namespace LuckParser.Models.ParseModels
             DstMasterInstid = dstMasterInstid;
             IFF = iff;
             IsBuff = isBuff;
-            Result = result;
+            NonEnumResult = result;
             IsActivation = isActivation;
             IsBuffRemove = isBuffRemove;
             IsNinety = isNinety;
