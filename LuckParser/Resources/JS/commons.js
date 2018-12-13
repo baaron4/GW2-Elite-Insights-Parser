@@ -111,6 +111,10 @@ var compileCommons = function () {
                             res += "<br>";
                             res += val[2] + (buff.stacking ? "" : "%") + " wasted";
                         }
+                        if (val[3] > 0) {
+                            res += "<br>";
+                            res += val[3] + (buff.stacking ? "" : "%") + " extended by unknown source";
+                        }
                         return res;
                     } else if (buff.stacking && val[1] > 0) {
                         return "Uptime: " + val[1] + "%";
