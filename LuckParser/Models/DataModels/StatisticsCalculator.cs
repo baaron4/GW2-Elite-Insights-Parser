@@ -619,10 +619,12 @@ namespace LuckParser.Models.DataModels
                     boonDistributions[p] = p.GetBoonDistribution(_log, phaseIndex);
                 }
 
+                HashSet<Boon> boonsToTrack = new HashSet<Boon>(boonDistributions.SelectMany(x => x.Value).Select(x => Boon.BoonsByIds[x.Key]));
+
                 Dictionary<long, FinalBuffs> final =
                     new Dictionary<long, FinalBuffs>();
 
-                foreach (Boon boon in player.TrackedBoons)
+                foreach (Boon boon in boonsToTrack)
                 {
                     long totalGeneration = 0;
                     long totalOverstack = 0;
@@ -656,8 +658,10 @@ namespace LuckParser.Models.DataModels
                         uptime.Wasted = Math.Round((double)(totalWasted) / fightDuration / playerList.Count, 1);
                         uptime.UnknownExtension = Math.Round((double)(totalUnknownExtension) / fightDuration / playerList.Count, 1);
                     }
-
-                    final[boon.ID] = uptime;
+                    if (uptime.Generation > 0.0)
+                    {
+                        final[boon.ID] = uptime;
+                    }
                 }
 
                 uptimesByPhase[phaseIndex] = final;
