@@ -234,7 +234,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     boonMap.Add(Boon.BoonsByIds[boonId]);
                 }
-                if (c.Value == 0)
+                if (c.Value == 0 || (c.IsBuffRemove != ParseEnum.BuffRemove.None && c.IFF == ParseEnum.IFF.Unknown && c.DstInstid == 0))
                 {
                     continue;
                 }
