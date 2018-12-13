@@ -252,7 +252,7 @@ namespace LuckParser.Models.ParseModels
                         ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
                         loglist.Add(new BoonApplicationLog(time, src, c.Value));
                     }
-                    else if (c.IsBuffRemove != ParseEnum.BuffRemove.Manual && time < log.FightData.FightDuration - 50)
+                    else if (c.IsBuffRemove != ParseEnum.BuffRemove.Manual && time < log.FightData.FightDuration - 50 && c.Value > 50)
                     {
                         loglist.Add(new BoonRemovalLog(time, c.DstInstid, c.Value, c.IsBuffRemove));
                     }
@@ -414,7 +414,7 @@ namespace LuckParser.Models.ParseModels
                             var phase = phases[i];
                             if (!_boonDistribution[i].TryGetValue(boonid, out var distrib))
                             {
-                                distrib = new Dictionary<ushort, OverAndValue>();
+                                distrib = new Dictionary<ushort, BoonDistributionItem>();
                                 _boonDistribution[i].Add(boonid, distrib);
                             }
                             if (updateBoonPresence)
@@ -430,7 +430,7 @@ namespace LuckParser.Models.ParseModels
                                 }
                                 else
                                 {
-                                    distrib.Add(src, new OverAndValue(
+                                    distrib.Add(src, new BoonDistributionItem(
                                         simul.GetSrcDuration(src, phase.Start, phase.End),
                                         0));
                                 }
@@ -456,7 +456,7 @@ namespace LuckParser.Models.ParseModels
                             var phase = phases[i];
                             if (!_boonDistribution[i].TryGetValue(boonid, out var distrib))
                             {
-                                distrib = new Dictionary<ushort, OverAndValue>();
+                                distrib = new Dictionary<ushort, BoonDistributionItem>();
                                 _boonDistribution[i].Add(boonid, distrib);
                             }
                             if (distrib.TryGetValue(simul.Src, out var toModify))
@@ -466,7 +466,7 @@ namespace LuckParser.Models.ParseModels
                             }
                             else
                             {
-                                distrib.Add(simul.Src, new OverAndValue(
+                                distrib.Add(simul.Src, new BoonDistributionItem(
                                     0,
                                     simul.GetOverstack(phase.Start, phase.End)));
                             }
