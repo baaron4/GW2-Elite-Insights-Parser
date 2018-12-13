@@ -106,9 +106,16 @@ var compileCommons = function () {
             getCellTooltip: function (buff, val, uptime) {
                 if (val instanceof Array) {
                     if (!uptime && this.generation && val[1] > 0) {
-                        return val[1] + (buff.stacking ? "" : "%") + " with overstack";
+                        var res = val[1] + (buff.stacking ? "" : "%") + " with overstack";
+                        if (val[2] > 0) {
+                            res += "<br>";
+                            res += val[2] + (buff.stacking ? "" : "%") + " wasted";
+                        }
+                        return res;
                     } else if (buff.stacking && val[1] > 0) {
                         return "Uptime: " + val[1] + "%";
+                    } else {
+                        return false;
                     }
                 }
                 return false;

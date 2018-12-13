@@ -476,6 +476,7 @@ namespace LuckParser.Builders
                 if (statBoons[phaseIndex][boon].Uptime > 0) return true;
                 if (statBoons[phaseIndex][boon].Generated.Any(x => x.Value > 0)) return true;
                 if (statBoons[phaseIndex][boon].Overstacked.Any(x => x.Value > 0)) return true;
+                if (statBoons[phaseIndex][boon].Wasted.Any(x => x.Value > 0)) return true;
             }
 
             return false;
@@ -487,6 +488,7 @@ namespace LuckParser.Builders
             boon.presence[phase] = value.Presence;
             boon.generated[phase] = boon.generated[phase] ?? new Dictionary<string, double>();
             boon.overstacked[phase] = boon.overstacked[phase] ?? new Dictionary<string, double>();
+            boon.wasted[phase] = boon.wasted[phase] ?? new Dictionary<string, double>();
 
             foreach (var playerBoon in value.Generated.Where(x => x.Value > 0))
             {
@@ -496,6 +498,11 @@ namespace LuckParser.Builders
             foreach (var playerBoon in value.Overstacked.Where(x => x.Value > 0))
             {
                 boon.overstacked[phase][playerBoon.Key.Character] = playerBoon.Value;
+            }
+
+            foreach (var playerBoon in value.Wasted.Where(x => x.Value > 0))
+            {
+                boon.wasted[phase][playerBoon.Key.Character] = playerBoon.Value;
             }
         }
 
@@ -577,6 +584,7 @@ namespace LuckParser.Builders
         private void MakePhaseBoon(JsonBuffs boon, int phase, Statistics.FinalBuffs value)
         {
             boon.overstack[phase] = value.Overstack;
+            boon.wasted[phase] = value.Wasted;
             boon.generation[phase] = value.Generation;
             boon.uptime[phase] = value.Uptime;
             boon.presence[phase] = value.Presence;

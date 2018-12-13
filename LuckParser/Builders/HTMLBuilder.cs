@@ -516,13 +516,15 @@ namespace LuckParser.Builders
                         boonData.data.Add(new List<object>(2)
                         {
                             uptime.Generation,
-                            uptime.Overstack
+                            uptime.Overstack,
+                            uptime.Wasted
                         });
                     }
                     else
                     {
                         boonData.data.Add(new List<object>(2)
                         {
+                            0,
                             0,
                             0
                         });
@@ -1162,6 +1164,7 @@ namespace LuckParser.Builders
                     {
                         boonData.Add(toUse.Generated[player]);
                         boonData.Add(toUse.Overstacked[player]);
+                        boonData.Add(toUse.Wasted[player]);
                     }
                     playerData.data.Add(boonData);
                 }

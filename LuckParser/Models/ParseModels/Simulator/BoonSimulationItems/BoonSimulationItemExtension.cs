@@ -29,7 +29,7 @@ namespace LuckParser.Models.ParseModels
             return 0;
         }
 
-        public override void SetBoonDistributionItem(Dictionary<ushort, BoonDistributionItem> distrib)
+        public override void SetBoonDistributionItem(Dictionary<ushort, BoonDistributionItem> distrib, long start, long end)
         {
             throw new NotImplementedException();
         }

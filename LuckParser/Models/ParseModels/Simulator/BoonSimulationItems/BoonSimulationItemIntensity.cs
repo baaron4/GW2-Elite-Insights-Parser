@@ -15,7 +15,7 @@ namespace LuckParser.Models.ParseModels
             {
                 _stacks.Add(new BoonSimulationItemDuration(stack));
             }
-            Duration = _stacks.Max(x => x.GetTotalDuration());
+            Duration = _stacks.Max(x => x.Duration);
         }
 
         public override void SetEnd(long end)
@@ -24,31 +24,7 @@ namespace LuckParser.Models.ParseModels
             {
                 stack.SetEnd(end);
             }
-            Duration = _stacks.Max(x => x.GetTotalDuration());
-        }
-
-        public override long GetSrcDuration(ushort src, long start, long end)
-        {
-            long total = 0;
-            foreach (BoonSimulationItemDuration stack in _stacks.Where(x => x.GetSrc()[0] == src))
-            {
-                total += stack.GetSrcDuration(src, start, end);
-            }
-            return total;
-        }
-        public override long GetTotalDuration()
-        {
-            long total = 0;
-            foreach (BoonSimulationItemDuration stack in _stacks)
-            {
-                total += stack.GetTotalDuration();
-            }
-            return total;
-        }
-
-        public override List<ushort> GetSrc()
-        {
-            return _stacks.Select(x => x.GetSrc()[0]).Distinct().ToList();
+            Duration = _stacks.Max(x => x.Duration);
         }
 
         public override int GetStack(long end)
@@ -58,7 +34,7 @@ namespace LuckParser.Models.ParseModels
 
         public override List<BoonsGraphModel.Segment> ToSegment()
         {
-            if (Duration == _stacks.Min(x => x.GetTotalDuration()))
+            if (Duration == _stacks.Min(x => x.Duration))
             {
                 return new List<BoonsGraphModel.Segment>
                 {
@@ -67,7 +43,7 @@ namespace LuckParser.Models.ParseModels
             }
             long start = Start;
             List<BoonsGraphModel.Segment> res = new List<BoonsGraphModel.Segment>();
-            foreach ( long end in _stacks.Select(x => x.GetTotalDuration() + Start).Distinct())
+            foreach ( long end in _stacks.Select(x => x.Duration + Start).Distinct())
             {
                 res.Add(new BoonsGraphModel.Segment(start,end,GetStack(end)));
                 start = end;
@@ -75,9 +51,12 @@ namespace LuckParser.Models.ParseModels
             return res;
         }
 
-        public override void SetBoonDistributionItem(Dictionary<ushort, BoonDistributionItem> distrib)
+        public override void SetBoonDistributionItem(Dictionary<ushort, BoonDistributionItem> distrib, long start, long end)
         {
-            throw new System.NotImplementedException();
+            foreach (BoonSimulationItemDuration item in _stacks)
+            {
+                item.SetBoonDistributionItem(distrib, start, end);
+            }
         }
     }
 }

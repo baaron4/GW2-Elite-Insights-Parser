@@ -428,20 +428,7 @@ namespace LuckParser.Models.ParseModels
                                 Add(_boonPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
                             if (updateCondiPresence)
                                 Add(_condiPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
-                            foreach (ushort src in simul.GetSrc())
-                            {
-                                if (distrib.TryGetValue(src, out var toModify))
-                                {
-                                    toModify.Value += simul.GetSrcDuration(src, phase.Start, phase.End);
-                                    distrib[src] = toModify;
-                                }
-                                else
-                                {
-                                    distrib.Add(src, new BoonDistributionItem(
-                                        simul.GetSrcDuration(src, phase.Start, phase.End),
-                                        0,0,0));
-                                }
-                            }
+                            simul.SetBoonDistributionItem(distrib, phase.Start, phase.End);
                         }
                         List<BoonsGraphModel.Segment> segments = simul.ToSegment();
                         if (segments.Count > 0)
@@ -466,17 +453,21 @@ namespace LuckParser.Models.ParseModels
                                 distrib = new Dictionary<ushort, BoonDistributionItem>();
                                 _boonDistribution[i].Add(boonid, distrib);
                             }
-                            if (distrib.TryGetValue(simul.Src, out var toModify))
+                            simul.SetBoonDistributionItem(distrib, phase.Start, phase.End);
+                        }
+                    }
+
+                    foreach (BoonSimulationItemWasted simul in simulator.WasteSimulationResult)
+                    {
+                        for (int i = 0; i < phases.Count; i++)
+                        {
+                            PhaseData phase = phases[i];
+                            if (!_boonDistribution[i].TryGetValue(boonid, out var distrib))
                             {
-                                toModify.Overstack += simul.GetValue(phase.Start, phase.End);
-                                distrib[simul.Src] = toModify;
+                                distrib = new Dictionary<ushort, BoonDistributionItem>();
+                                _boonDistribution[i].Add(boonid, distrib);
                             }
-                            else
-                            {
-                                distrib.Add(simul.Src, new BoonDistributionItem(
-                                    0,
-                                    simul.GetValue(phase.Start, phase.End), 0, 0));
-                            }
+                            simul.SetBoonDistributionItem(distrib, phase.Start, phase.End);
                         }
                     }
 

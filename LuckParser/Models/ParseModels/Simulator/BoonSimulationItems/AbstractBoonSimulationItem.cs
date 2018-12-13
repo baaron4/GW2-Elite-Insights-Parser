@@ -5,6 +5,6 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class AbstractBoonSimulationItem
     {
-        public abstract void SetBoonDistributionItem(Dictionary<ushort, BoonDistributionItem> distrib);
+        public abstract void SetBoonDistributionItem(Dictionary<ushort, BoonDistributionItem> distrib, long start, long end);
     }
 }

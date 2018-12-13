@@ -47,5 +47,14 @@ namespace LuckParser.Models.ParseModels
             }
             return this[boonid].Where(x => src == x.Key).Sum(x => x.Value.Overstack);
         }
+
+        public long GetWaste(long boonid, ushort src)
+        {
+            if (!ContainsKey(boonid) || src == 0)
+            {
+                return 0;
+            }
+            return this[boonid].Where(x => src == x.Key).Sum(x => x.Value.Waste);
+        }
     }
 }
