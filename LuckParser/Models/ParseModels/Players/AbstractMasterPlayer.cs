@@ -259,7 +259,7 @@ namespace LuckParser.Models.ParseModels
                             loglist.Add(new BoonApplicationLog(time, src, c.Value));
                         }
                     }
-                    else if (c.IsBuffRemove != ParseEnum.BuffRemove.Manual && time < log.FightData.FightDuration - 50)
+                    else if (c.IsBuffRemove != ParseEnum.BuffRemove.Manual && time < log.FightData.FightDuration - 50 && c.Value > 50)
                     {
                         loglist.Add(new BoonRemovalLog(time, c.DstInstid, c.Value, c.IsBuffRemove));
                     }
