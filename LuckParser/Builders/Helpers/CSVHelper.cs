@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace LuckParser.Controllers
+namespace LuckParser.Builders
 {
     class CSVHelper
     {

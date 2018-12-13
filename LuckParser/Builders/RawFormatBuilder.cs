@@ -6,12 +6,14 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
+using LuckParser.Controllers;
 using LuckParser.Models;
 using LuckParser.Models.DataModels;
+using LuckParser.Models.JsonModels;
 using LuckParser.Models.ParseModels;
 using Newtonsoft.Json;
 
-namespace LuckParser.Controllers
+namespace LuckParser.Builders
 {
     class RawFormatBuilder
     {

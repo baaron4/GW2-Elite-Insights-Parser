@@ -8,7 +8,7 @@ using LuckParser.Models.DataModels;
 using Newtonsoft.Json;
 using NUglify;
 
-namespace LuckParser.Controllers
+namespace LuckParser.Builders
 {
     class CombatReplayHelper
     {

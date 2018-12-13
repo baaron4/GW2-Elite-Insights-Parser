@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
-namespace LuckParser.Models
+namespace LuckParser.Models.Logic
 {
     public class Deimos : RaidLogic
     {
@@ -185,7 +185,7 @@ namespace LuckParser.Models
                     };
                 AddTargetsToPhase(phase, ids, log);
             }
-            phases.Sort((x, y) => (x.Start < y.Start) ? -1 : 1);
+            phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             phases.RemoveAll(x => x.Targets.Count == 0);
             return phases;
         }

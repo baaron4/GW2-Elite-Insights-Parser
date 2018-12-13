@@ -1,6 +1,9 @@
+using LuckParser.Controllers;
+using LuckParser.Exceptions;
 using LuckParser.Models;
 //recommend CTRL+M+O to collapse all
 using LuckParser.Models.DataModels;
+using LuckParser.Models.Logic;
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
@@ -10,7 +13,7 @@ using System.IO.Compression;
 using System.Linq;
 
 //recommend CTRL+M+O to collapse all
-namespace LuckParser.Controllers
+namespace LuckParser
 {
     class Parser
     {
@@ -93,12 +96,12 @@ namespace LuckParser.Controllers
             }                      
         }
 
-        private static BinaryReader CreateReader(Stream stream)
+        private BinaryReader CreateReader(Stream stream)
         {
             return new BinaryReader(stream, System.Text.Encoding.UTF8, leaveOpen: true);
         }
 
-        private static bool TryRead(Stream stream, byte[] data)
+        private bool TryRead(Stream stream, byte[] data)
         {
             int offset = 0;
             int count  = data.Length;
@@ -229,7 +232,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        private static CombatItem ReadCombatItem(BinaryReader reader)
+        private CombatItem ReadCombatItem(BinaryReader reader)
         {
             // 8 bytes: time
             long time = reader.ReadInt64();
@@ -308,7 +311,7 @@ namespace LuckParser.Controllers
                 isNinety, isFifty, isMoving, isStateChange, isFlanking, isShields, isOffcycle);
         }
 
-        private static CombatItem ReadCombatItemRev1(BinaryReader reader)
+        private CombatItem ReadCombatItemRev1(BinaryReader reader)
         {
             // 8 bytes: time
             long time = reader.ReadInt64();

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LuckParser.Models
+namespace LuckParser.Models.Logic
 {
     public class TwinLargos : RaidLogic
     {
@@ -60,7 +60,7 @@ namespace LuckParser.Models
             List<CombatItem> states = log.CombatData.GetStatesData(ParseEnum.StateChange.EnterCombat).Where(x => x.SrcInstid == target.InstID).ToList();
             states.AddRange(GetFilteredList(log, 762, target).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None));
             states.AddRange(log.CombatData.GetStatesData(ParseEnum.StateChange.ChangeDead).Where(x => x.SrcAgent == target.Agent));
-            states.Sort((x, y) => x.Time < y.Time ? -1 : 1);
+            states.Sort((x, y) => x.Time.CompareTo(y.Time));
             for (int i = 0; i < states.Count; i++)
             {
                 CombatItem state = states[i];
@@ -190,7 +190,7 @@ namespace LuckParser.Models
                 FallBackPhases(kenut, kenPhases, log, false);
                 phases.AddRange(kenPhases);           
             }
-            phases.Sort((x, y) => x.Start < y.Start ? -1 : 1);
+            phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             return phases;
         }
 

@@ -4,10 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using LuckParser.Controllers;
 using LuckParser.Models.DataModels;
 using LuckParser.Models.ParseModels;
 
-namespace LuckParser.Controllers
+namespace LuckParser.Builders
 {
     class CSVBuilder
     {
@@ -646,7 +647,7 @@ namespace LuckParser.Controllers
             WriteCell("Time");
             foreach (MechanicLog m in mLogs)
             {
-                WriteCell((m.Time / 1000f).ToString());
+                WriteCell((m.Time / 1000.0).ToString());
             }
             NewLine();
             count++;

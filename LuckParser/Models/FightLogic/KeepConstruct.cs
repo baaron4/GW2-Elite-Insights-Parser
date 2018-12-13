@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
-namespace LuckParser.Models
+namespace LuckParser.Models.Logic
 {
     public class KeepConstruct : RaidLogic
     {
@@ -116,7 +116,7 @@ namespace LuckParser.Models
                 phase.Targets.Add(mainTarget);
                 phases.Add(phase);
             }
-            phases.Sort((x, y) => (x.Start < y.Start) ? -1 : 1);
+            phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             return phases;
         }
 

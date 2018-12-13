@@ -23,7 +23,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     return 0;
                 }
-                return a.Healing < b.Healing ? 1 : -1;
+                return -a.Healing.CompareTo(b.Healing);
             }
         }
         public override void Sort(ParsedLog log, List<BoonSimulator.BoonStackItem> stacks)

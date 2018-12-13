@@ -1,4 +1,4 @@
-﻿using LuckParser.Models.ParseModels;
+﻿using LuckParser.Controllers;
 namespace LuckParser.Models
 {
     public class GW2APISkillCheck : GW2APISkill

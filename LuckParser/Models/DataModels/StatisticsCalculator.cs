@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using LuckParser.Models.DataModels;
 using LuckParser.Models.ParseModels;
 using static LuckParser.Models.DataModels.Statistics;
 
-namespace LuckParser.Controllers
+namespace LuckParser.Models.DataModels
 {
     /// <summary>
     /// Calculates statistical information from a log
@@ -391,8 +390,8 @@ namespace LuckParser.Controllers
                     }
                 }
             }
-            final.TimeSaved = final.TimeSaved / 1000f;
-            final.TimeWasted = final.TimeWasted / 1000f;
+            final.TimeSaved = final.TimeSaved / 1000.0;
+            final.TimeWasted = final.TimeWasted / 1000.0;
 
             double avgBoons = 0;
             foreach (long duration in p.GetBoonPresence(_log, phaseIndex).Values)
@@ -594,9 +593,9 @@ namespace LuckParser.Controllers
                     //List<DamageLog> healingLogs = player.getHealingLogs(log, phase.getStart(), phase.getEnd());
                     //final.allHeal = healingLogs.Sum(x => x.getDamage());
                     final.Resurrects = resArray[0];
-                    final.ResurrectTime = resArray[1] / 1000f;
+                    final.ResurrectTime = resArray[1] / 1000.0;
                     final.CondiCleanse = cleanseArray[0];
-                    final.CondiCleanseTime = cleanseArray[1] / 1000f;
+                    final.CondiCleanseTime = cleanseArray[1] / 1000.0;
 
                     phaseSupport[phaseIndex] = final;
                 }
@@ -620,10 +619,12 @@ namespace LuckParser.Controllers
                     boonDistributions[p] = p.GetBoonDistribution(_log, phaseIndex);
                 }
 
+                HashSet<Boon> boonsToTrack = new HashSet<Boon>(boonDistributions.SelectMany(x => x.Value).Select(x => Boon.BoonsByIds[x.Key]));
+
                 Dictionary<long, FinalBuffs> final =
                     new Dictionary<long, FinalBuffs>();
 
-                foreach (Boon boon in player.TrackedBoons)
+                foreach (Boon boon in boonsToTrack)
                 {
                     long totalGeneration = 0;
                     long totalOverstack = 0;
@@ -641,16 +642,18 @@ namespace LuckParser.Controllers
 
                     if (boon.Type == Boon.BoonType.Duration)
                     {
-                        uptime.Generation = Math.Round(100.0f * totalGeneration / fightDuration / playerList.Count, 1);
-                        uptime.Overstack = Math.Round(100.0f * (totalOverstack + totalGeneration) / fightDuration / playerList.Count, 1);
+                        uptime.Generation = Math.Round(100.0 * totalGeneration / fightDuration / playerList.Count, 1);
+                        uptime.Overstack = Math.Round(100.0 * (totalOverstack + totalGeneration) / fightDuration / playerList.Count, 1);
                     }
                     else if (boon.Type == Boon.BoonType.Intensity)
                     {
                         uptime.Generation = Math.Round((double)totalGeneration / fightDuration / playerList.Count, 1);
                         uptime.Overstack = Math.Round((double)(totalOverstack + totalGeneration) / fightDuration / playerList.Count, 1);
                     }
-
-                    final[boon.ID] = uptime;
+                    if (uptime.Generation > 0.0)
+                    {
+                        final[boon.ID] = uptime;
+                    }
                 }
 
                 uptimesByPhase[phaseIndex] = final;
@@ -690,8 +693,8 @@ namespace LuckParser.Controllers
                             if (boon.Type == Boon.BoonType.Duration)
                             {
                                 uptime.Uptime = Math.Round(100.0 * selfBoons.GetUptime(boon.ID) / fightDuration, 1);
-                                uptime.Generation = Math.Round(100.0f * generation / fightDuration, 1);
-                                uptime.Overstack = Math.Round(100.0f * (selfBoons.GetOverstack(boon.ID, player.InstID) + generation) / fightDuration, 1);
+                                uptime.Generation = Math.Round(100.0 * generation / fightDuration, 1);
+                                uptime.Overstack = Math.Round(100.0 * (selfBoons.GetOverstack(boon.ID, player.InstID) + generation) / fightDuration, 1);
                             }
                             else if (boon.Type == Boon.BoonType.Intensity)
                             {

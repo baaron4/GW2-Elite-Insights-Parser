@@ -1,4 +1,4 @@
-﻿namespace LuckParser.Models.ParseModels
+﻿namespace LuckParser.Controllers
 {
     public class GW2APISkill
     {
