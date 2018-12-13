@@ -112,9 +112,9 @@ namespace LuckParser.Models.DataModels
         {
             //public long allHeal;
             public int Resurrects;
-            public float ResurrectTime;
+            public double ResurrectTime;
             public int CondiCleanse;
-            public float CondiCleanseTime;
+            public double CondiCleanseTime;
         }
 
         public readonly Dictionary<Player, FinalSupport[]> Support;
