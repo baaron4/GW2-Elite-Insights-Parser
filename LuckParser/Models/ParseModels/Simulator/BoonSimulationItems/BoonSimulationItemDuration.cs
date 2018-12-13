@@ -35,13 +35,13 @@ namespace LuckParser.Models.ParseModels
         {
             if (distrib.TryGetValue(_src, out var toModify))
             {
-                toModify.Value += GetClampedDuration(Start, End);
+                toModify.Value += GetClampedDuration(start, end);
                 distrib[_src] = toModify;
             }
             else
             {
                 distrib.Add(_src, new BoonDistributionItem(
-                    GetClampedDuration(Start, End),
+                    GetClampedDuration(start, end),
                     0, 0, 0));
             }
         }
