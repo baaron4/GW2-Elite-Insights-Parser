@@ -13,12 +13,14 @@ namespace LuckParser.Models.ParseModels
             public long Start { get; private set; }
             public long BoonDuration { get; private set; }
             public ushort Src { get; private set; }
+            public ushort OriginalSrc { get; }
 
             //private List<Tuple<ushort, long>> _extensions = new List<Tuple<ushort, long>>();
 
             public BoonStackItem(long start, long boonDuration, ushort srcinstid)
             {
                 Start = start;
+                OriginalSrc = srcinstid;
                 BoonDuration = boonDuration;
                 Src = srcinstid;
             }
@@ -28,6 +30,7 @@ namespace LuckParser.Models.ParseModels
                 Start = other.Start + startShift;
                 BoonDuration = other.BoonDuration - durationShift;
                 Src = other.Src;
+                OriginalSrc = other.OriginalSrc;
                 //_extensions = other._extensions;
             }
 
@@ -42,7 +45,9 @@ namespace LuckParser.Models.ParseModels
         protected readonly List<BoonSimulationItem> GenerationSimulation = new List<BoonSimulationItem>();
         public GenerationSimulationResult GenerationSimulationResult => new GenerationSimulationResult(GenerationSimulation); 
         public readonly List<BoonSimulationItemOverstack> OverstackSimulationResult = new List<BoonSimulationItemOverstack>();
+        public readonly List<BoonSimulationItemWasted> WasteSimulationResult = new List<BoonSimulationItemWasted>();
         public readonly List<BoonSimulationItemCleanse> CleanseSimulationResult = new List<BoonSimulationItemCleanse>();
+        public readonly List<BoonSimulationItemExtension> ExtensionSimulationResult = new List<BoonSimulationItemExtension>();
         private readonly int _capacity;
         private readonly ParsedLog _log;
         private readonly StackingLogic _logic;
@@ -114,7 +119,7 @@ namespace LuckParser.Models.ParseModels
             // Replace lowest value
             else
             {
-                bool found = _logic.StackEffect(_log, toAdd, BoonStack, OverstackSimulationResult);
+                bool found = _logic.StackEffect(_log, toAdd, BoonStack, WasteSimulationResult);
                 if (!found)
                 {
                     OverstackSimulationResult.Add(new BoonSimulationItemOverstack(srcinstid, boonDuration,start));                 
@@ -137,7 +142,7 @@ namespace LuckParser.Models.ParseModels
                 case ParseEnum.BuffRemove.All:
                     foreach (BoonStackItem stackItem in BoonStack)
                     {
-                        OverstackSimulationResult.Add(new BoonSimulationItemOverstack(stackItem.Src, stackItem.BoonDuration, start));
+                        WasteSimulationResult.Add(new BoonSimulationItemWasted(stackItem.Src, stackItem.BoonDuration, start));
                         CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, stackItem.BoonDuration, start));
                     }
                     BoonStack.Clear();
@@ -149,7 +154,7 @@ namespace LuckParser.Models.ParseModels
                         BoonStackItem stackItem = BoonStack[i];
                         if (Math.Abs(boonDuration-stackItem.BoonDuration) < 10)
                         {
-                            OverstackSimulationResult.Add(new BoonSimulationItemOverstack(stackItem.Src, stackItem.BoonDuration, start));
+                            WasteSimulationResult.Add(new BoonSimulationItemWasted(stackItem.Src, stackItem.BoonDuration, start));
                             CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, stackItem.BoonDuration, start));
                             BoonStack.RemoveAt(i);
                             break;

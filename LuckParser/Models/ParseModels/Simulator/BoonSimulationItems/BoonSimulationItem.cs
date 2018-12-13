@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LuckParser.Models.ParseModels
 {
-    public abstract class BoonSimulationItem
+    public abstract class BoonSimulationItem : AbstractBoonSimulationItem
     {
         public long Start { get; protected set; }
         public long Duration { get; protected set; }

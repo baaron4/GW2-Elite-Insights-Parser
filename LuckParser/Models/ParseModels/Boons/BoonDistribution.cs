@@ -7,11 +7,15 @@ namespace LuckParser.Models.ParseModels
     {
         public long Value { get; set; }
         public long Overstack { get; set; }
+        public long Waste { get; set; }
+        public long Extension { get; set; }
 
-        public BoonDistributionItem(long value, long overstack)
+        public BoonDistributionItem(long value, long overstack, long waste, long extension)
         {
             Value = value;
             Overstack = overstack;
+            Waste = waste;
+            Extension = extension;
         }
     }
 

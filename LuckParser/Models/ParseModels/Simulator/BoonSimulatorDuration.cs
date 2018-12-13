@@ -17,6 +17,10 @@ namespace LuckParser.Models.ParseModels
             if (BoonStack.Count > 0)
             {
                 BoonStack[0].Extend(extension, src);
+                if (src == 0)
+                {
+                    ExtensionSimulationResult.Add(new BoonSimulationItemExtension(extension, BoonStack[0].Start));
+                }
             }
             else
             {

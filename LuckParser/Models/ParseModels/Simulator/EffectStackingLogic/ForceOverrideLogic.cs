@@ -11,14 +11,14 @@ namespace LuckParser.Models.ParseModels
             // no sort
         }
 
-        public override bool StackEffect(ParsedLog log, BoonStackItem stackItem, List<BoonStackItem> stacks, List<BoonSimulationItemOverstack> overstacks)
+        public override bool StackEffect(ParsedLog log, BoonStackItem stackItem, List<BoonStackItem> stacks, List<BoonSimulationItemWasted> overstacks)
         {
             if (stacks.Count == 0)
             {
                 return false;
             }
             BoonStackItem stack = stacks[0];
-            overstacks.Add(new BoonSimulationItemOverstack(stack.Src, stack.BoonDuration, stack.Start));
+            overstacks.Add(new BoonSimulationItemWasted(stack.Src, stack.BoonDuration, stack.Start));
             stacks[0] = stackItem;
             return true;
         }

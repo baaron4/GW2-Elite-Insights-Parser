@@ -51,5 +51,10 @@ namespace LuckParser.Models.ParseModels
                 new BoonsGraphModel.Segment(Start,End,1)
             };
         }
+
+        public override void SetBoonDistributionItem(Dictionary<ushort, BoonDistributionItem> distrib)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

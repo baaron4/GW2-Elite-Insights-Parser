@@ -439,7 +439,7 @@ namespace LuckParser.Models.ParseModels
                                 {
                                     distrib.Add(src, new BoonDistributionItem(
                                         simul.GetSrcDuration(src, phase.Start, phase.End),
-                                        0));
+                                        0,0,0));
                                 }
                             }
                         }
@@ -468,14 +468,14 @@ namespace LuckParser.Models.ParseModels
                             }
                             if (distrib.TryGetValue(simul.Src, out var toModify))
                             {
-                                toModify.Overstack += simul.GetOverstack(phase.Start, phase.End);
+                                toModify.Overstack += simul.GetValue(phase.Start, phase.End);
                                 distrib[simul.Src] = toModify;
                             }
                             else
                             {
                                 distrib.Add(simul.Src, new BoonDistributionItem(
                                     0,
-                                    simul.GetOverstack(phase.Start, phase.End)));
+                                    simul.GetValue(phase.Start, phase.End), 0, 0));
                             }
                         }
                     }

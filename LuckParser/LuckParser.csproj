@@ -93,6 +93,10 @@
     <Compile Include="GeneralHelper.cs" />
     <Compile Include="Controllers\FlashWindow.cs" />
     <Compile Include="Models\ParseModels\Logs\BoonExtensionLog.cs" />
+    <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\AbstractBoonSimulationItem.cs" />
+    <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemExtension.cs" />
+    <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemOverstack.cs" />
+    <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\AbstractBoonSimulationItemWasted.cs" />
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Controllers\GW2APIController.cs" />
     <Compile Include="Parser\ParseHelper.cs" />
@@ -217,7 +221,7 @@
     <Compile Include="Controllers\GW2API\GW2APISkill.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemDuration.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemIntensity.cs" />
-    <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemOverstack.cs" />
+    <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemWasted.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationResult.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulator.cs" />
     <Compile Include="Models\ParseModels\Agents\Agent.cs" />

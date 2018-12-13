@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class BoonSimulationItemOverstack : AbstractBoonSimulationItemWasted
+    public class BoonSimulationItemWasted : AbstractBoonSimulationItemWasted
     {
 
-        public BoonSimulationItemOverstack(ushort src, long overstack, long time) : base(src, overstack, time)
+        public BoonSimulationItemWasted(ushort src, long waste, long time) : base(src, waste, time)
         {
         }
 

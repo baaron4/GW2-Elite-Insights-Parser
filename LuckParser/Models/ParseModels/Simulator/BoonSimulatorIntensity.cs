@@ -21,6 +21,10 @@ namespace LuckParser.Models.ParseModels
                 {
                     if (Math.Abs(bsi.BoonDuration - oldValue) < 10) {
                         bsi.Extend(extension, src);
+                        if (src == 0)
+                        {
+                            ExtensionSimulationResult.Add(new BoonSimulationItemExtension(extension, bsi.Start));
+                        }
                         extended = true;
                         break;
                     }

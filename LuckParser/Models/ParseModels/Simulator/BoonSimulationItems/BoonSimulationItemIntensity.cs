@@ -4,7 +4,7 @@ using static LuckParser.Models.ParseModels.BoonSimulator;
 
 namespace LuckParser.Models.ParseModels
 {
-    class BoonSimulationItemIntensity : BoonSimulationItem
+    public class BoonSimulationItemIntensity : BoonSimulationItem
     {
         private List<BoonSimulationItemDuration> _stacks = new List<BoonSimulationItemDuration>();
 
@@ -73,6 +73,11 @@ namespace LuckParser.Models.ParseModels
                 start = end;
             }
             return res;
+        }
+
+        public override void SetBoonDistributionItem(Dictionary<ushort, BoonDistributionItem> distrib)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
