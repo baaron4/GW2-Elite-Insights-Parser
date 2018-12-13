@@ -642,8 +642,14 @@ namespace LuckParser.Builders
             Dictionary<long, Boon> conditionsById = _statistics.PresentConditions.ToDictionary(x => x.ID);
             SkillData skillList = _log.SkillData;
             foreach (KeyValuePair<long, List<DamageLog>> entry in damageLogsBySkill)
-            {
-                int totaldamage = 0, mindamage = int.MaxValue, maxdamage = int.MinValue, casts = 0, hits = 0, crit = 0, flank = 0, glance = 0, timeswasted = 0, timessaved = 0;
+            {         
+                int totaldamage = 0, 
+                    mindamage = int.MaxValue, 
+                    maxdamage = int.MinValue,
+                    hits = 0, 
+                    crit = 0,
+                    flank = 0, 
+                    glance = 0;
                 foreach (DamageLog dl in entry.Value)
                 {
                     if (dl.Result == ParseEnum.Result.Downed)
@@ -671,6 +677,7 @@ namespace LuckParser.Builders
                     if (!_usedSkills.ContainsKey(entry.Key)) _usedSkills.Add(entry.Key, skillList.Get(entry.Key));
                 }
 
+                int casts = 0, timeswasted = 0, timessaved = 0;
                 if (!isCondi && castLogsBySkill.TryGetValue(entry.Key, out List<CastLog> clList))
                 {
 
@@ -688,10 +695,17 @@ namespace LuckParser.Builders
                 object[] skillData = {
                     isCondi?1:0,
                     entry.Key,
-                    totaldamage, mindamage, maxdamage,
-                    casts, hits, crit, flank, glance,
+                    totaldamage,
+                    mindamage == int.MaxValue ? 0 : mindamage,
+                    maxdamage == int.MinValue ? 0 : maxdamage,
+                    casts,
+                    hits,
+                    crit,
+                    flank,
+                    glance,
                     timeswasted / 1000.0,
-                    -timessaved / 1000.0};
+                    -timessaved / 1000.0
+                };
                 list.Add(skillData);
             }
 
@@ -803,13 +817,13 @@ namespace LuckParser.Builders
             Dictionary<long, Boon> conditionsById = _statistics.PresentConditions.ToDictionary(x => x.ID);
             foreach (var entry in damageLogsBySkill)
             {
-                int totaldamage = 0;
-                int mindamage = int.MaxValue;
-                int hits = 0;
-                int maxdamage = int.MinValue;
-                int crit = 0;
-                int flank = 0;
-                int glance = 0;
+                int totaldamage = 0,
+                    mindamage = int.MaxValue,
+                    hits = 0,
+                    maxdamage = int.MinValue,
+                    crit = 0,
+                    flank = 0,
+                    glance = 0;
 
                 foreach (DamageLog dl in entry.Value)
                 {
@@ -821,10 +835,10 @@ namespace LuckParser.Builders
                     totaldamage += curdmg;
                     if (curdmg < mindamage) { mindamage = curdmg; }
                     if (curdmg > maxdamage) { maxdamage = curdmg; }
-                    if (curdmg >= 0) { hits++; };
-                    ParseEnum.Result result = dl.Result;
-                    if (result == ParseEnum.Result.Crit) { crit++; } else if (result == ParseEnum.Result.Glance) { glance++; }
-                    if (dl.IsFlanking == 1) { flank++; }
+                    hits++;
+                    if (dl.Result == ParseEnum.Result.Crit) crit++;
+                    if (dl.Result == ParseEnum.Result.Glance) glance++;
+                    if (dl.IsFlanking == 1) flank++;
                 }
 
                 bool isCondi = conditionsById.ContainsKey(entry.Key) || entry.Key == 873;
@@ -838,14 +852,19 @@ namespace LuckParser.Builders
                     if (!_usedSkills.ContainsKey(entry.Key)) _usedSkills.Add(entry.Key, skillList.Get(entry.Key));
                 }
                 object[] row = new object[12] {
-                        isCondi ? 1 : 0, // isCondi
-                        entry.Key,
-                        totaldamage,
-                        mindamage, maxdamage,
-                        0, hits,
-                        crit, flank, glance,
-                        0, 0
-                    };
+                    isCondi ? 1 : 0, // isCondi
+                    entry.Key,
+                    totaldamage,
+                    mindamage == int.MaxValue ? 0 : mindamage,
+                    maxdamage == int.MinValue ? 0 : maxdamage,
+                    0,
+                    hits,
+                    crit,
+                    flank,
+                    glance,
+                    0,
+                    0
+                };
                 dto.distribution.Add(row);
             }
 
