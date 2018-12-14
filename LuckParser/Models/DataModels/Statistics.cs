@@ -149,6 +149,7 @@ namespace LuckParser.Models.DataModels
                     Generated.Add(p, 0);
                     Overstacked.Add(p, 0);
                     Wasted.Add(p, 0);
+                    UnknownExtension.Add(p, 0);
                 }
             }
 
