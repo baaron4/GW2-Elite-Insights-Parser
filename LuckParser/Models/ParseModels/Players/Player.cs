@@ -245,7 +245,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     if (apiskill.type == "Weapon" && apiskill.professions.Count() > 0 && (apiskill.categories == null || (apiskill.categories.Count() == 1 && apiskill.categories[0] == "Phantasm")))
                     {
-                        if (apiskill.dual_wield != null && apiskill.dual_wield != "None")
+                        if (apiskill.dual_wield != null && apiskill.dual_wield != "None" && apiskill.dual_wield != "Nothing")
                         {
                             if (swapped == 4)
                             {
