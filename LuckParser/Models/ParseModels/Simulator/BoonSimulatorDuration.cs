@@ -26,7 +26,9 @@ namespace LuckParser.Models.ParseModels
                     return;
                 }
             }
+#if DEBUG
             throw new InvalidOperationException("No buff to extend");
+#endif
         }
 
         // Public Methods

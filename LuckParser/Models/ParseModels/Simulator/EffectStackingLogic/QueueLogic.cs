@@ -29,8 +29,8 @@ namespace LuckParser.Models.ParseModels
             }
             overstacks.Add(new BoonSimulationItemWasted(minItem.Src, minItem.BoonDuration, minItem.Start));
             stacks[stacks.IndexOf(minItem)] = stackItem;
-            Sort(log, stacks);
             stacks.Insert(0, first);
+            Sort(log, stacks);
             return true;
         }
     }

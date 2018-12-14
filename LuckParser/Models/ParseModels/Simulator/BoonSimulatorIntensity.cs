@@ -6,7 +6,7 @@ namespace LuckParser.Models.ParseModels
 {
     public class BoonSimulatorIntensity : BoonSimulator
     {
-        
+
         // Constructor
         public BoonSimulatorIntensity(int capacity, ParsedLog log, StackingLogic logic) : base(capacity, log, logic)
         {
@@ -14,26 +14,24 @@ namespace LuckParser.Models.ParseModels
 
         public override void Extend(long extension, long oldValue, ushort src)
         {
-            bool extended = false;
             if (BoonStack.Count > 0)
             {
                 foreach (BoonStackItem bsi in BoonStack)
                 {
-                    if (Math.Abs(bsi.BoonDuration - oldValue) < 10) {
+                    if (Math.Abs(bsi.BoonDuration - oldValue) < 10)
+                    {
                         bsi.Extend(extension, src);
                         if (src == 0)
                         {
                             UnknownExtensionSimulationResult.Add(new BoonSimulationItemExtension(extension, bsi.Start, bsi.OriginalSrc));
                         }
-                        extended = true;
-                        break;
+                        return;
                     }
                 }
             }
-            if(!extended)
-            {
-                throw new InvalidOperationException("No buff to extend");
-            }
+#if DEBUG
+            throw new InvalidOperationException("No buff to extend");
+#endif
         }
 
         // Public Methods
@@ -53,7 +51,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 GenerationSimulation.Add(toAdd);
                 // Subtract from each
-                for(int i = BoonStack.Count - 1; i >= 0; i--)
+                for (int i = BoonStack.Count - 1; i >= 0; i--)
                 {
                     var item = new BoonStackItem(BoonStack[i], timePassed, timePassed);
                     BoonStack[i] = item;
