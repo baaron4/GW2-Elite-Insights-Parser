@@ -191,7 +191,7 @@ namespace LuckParser.Controllers
         {
             //used for writing new XMLs
             FileStream fcreate = File.Open(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
-            + "/Content/SkillList.txt", FileMode.Create);
+            + "/Content/SkillList.xml", FileMode.Create);
 
             fcreate.Close();
 
@@ -228,7 +228,7 @@ namespace LuckParser.Controllers
                 //}
                 _listOfSkills.Items.AddRange(GetListGW2APISkills());
                 Stream stream = System.IO.File.OpenWrite(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
-            + "/Content/SkillList.txt");
+            + "/Content/SkillList.xml");
                 Type[] tyList = { typeof(List<GW2APISkillCheck>), typeof(List<GW2APISkillDetailed>) };
 
                 XmlSerializer xmlSer = new XmlSerializer(typeof(List<GW2APISkill>), tyList);
@@ -241,13 +241,13 @@ namespace LuckParser.Controllers
         public void RetryWriteSkillListtoFile()
         {
             if (new FileInfo(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
-                + "/Content/SkillList.txt").Length != 0)
+                + "/Content/SkillList.xml").Length != 0)
             {
                 Console.WriteLine("Reading Skilllist");
 
                 //Get list from local XML
                 using (var reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
-                + "/Content/SkillList.txt"))
+                + "/Content/SkillList.xml"))
                 {
                     Type[] tyList = { typeof(List<GW2APISkillCheck>), typeof(List<GW2APISkillDetailed>) };
 
@@ -289,7 +289,7 @@ namespace LuckParser.Controllers
                     }
                 }
                 Stream stream = System.IO.File.OpenWrite(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
-            + "/Content/SkillList.txt");
+            + "/Content/SkillList.xml");
                 Type[] tyList = { typeof(List<GW2APISkillCheck>), typeof(List<GW2APISkillDetailed>) };
 
                 XmlSerializer xmlSer = new XmlSerializer(typeof(List<GW2APISkill>), tyList);
@@ -305,13 +305,13 @@ namespace LuckParser.Controllers
             {
 
                 if (new FileInfo(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
-                + "/Content/SkillList.txt").Length != 0)
+                + "/Content/SkillList.xml").Length != 0)
                 {
                     Console.WriteLine("Reading Skilllist");
 
                     //Get list from local XML
                     using (var reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
-                    + "/Content/SkillList.txt"))
+                    + "/Content/SkillList.xml"))
                     {
                         Type[] tyList = { typeof(List<GW2APISkillCheck>), typeof(List<GW2APISkillDetailed>) };
 
@@ -378,7 +378,7 @@ namespace LuckParser.Controllers
         {
             //used for writing new XMLs
             FileStream fcreate = File.Open(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
-            + "/Content/SpecList.txt", FileMode.Create);
+            + "/Content/SpecList.xml", FileMode.Create);
 
             fcreate.Close();
 
@@ -414,7 +414,7 @@ namespace LuckParser.Controllers
 
                 }
                 Stream stream = System.IO.File.OpenWrite(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
-            + "/Content/SpecList.txt");
+            + "/Content/SpecList.xml");
                 Type[] tyList = { typeof(List<GW2APISpec>) };
 
                 XmlSerializer xmlSer = new XmlSerializer(typeof(List<GW2APISpec>), tyList);
@@ -432,13 +432,13 @@ namespace LuckParser.Controllers
             {
 
                 if (new FileInfo(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
-                + "/Content/SpecList.txt").Length != 0)
+                + "/Content/SpecList.xml").Length != 0)
                 {
                     Console.WriteLine("Reading SpecList");
 
                     //Get list from local XML
                     using (var reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
-                    + "/Content/SpecList.txt"))
+                    + "/Content/SpecList.xml"))
                     {
                         Type[] tyList = { typeof(List<GW2APISpec>) };
 
