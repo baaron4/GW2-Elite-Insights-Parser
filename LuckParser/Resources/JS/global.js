@@ -133,7 +133,7 @@ function computeRotationData(rotationData, images, data) {
                 width: '5',
                 line: {
                     color: [],
-                    width: '1'
+                    width: '2'
                 }
             },
             showlegend: false

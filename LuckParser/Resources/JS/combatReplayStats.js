@@ -137,7 +137,7 @@ var compileCombatReplay = function () {
                 }
                 return hash;
             },
-            buffData: function() {
+            buffData: function () {
                 return logData.players[this.playerindex].details.boonGraph[0];
             },
             data: function () {
@@ -146,7 +146,7 @@ var compileCombatReplay = function () {
                     defs: [],
                     boons: [],
                     conditions: [],
-                        enemies: [],
+                    enemies: [],
                     others: [],
                     consumables: []
                 };
@@ -169,8 +169,8 @@ var compileCombatReplay = function () {
                     } else if (this.defs.has(id)) {
                         arrayToFill = res.defs;
                     } else if (this.conditions.has(id)) {
-                        arrayToFill = res.conditions;                    
-                    }else {
+                        arrayToFill = res.conditions;
+                    } else {
                         arrayToFill = res.others;
                     }
                     var val = data.states[0][1];
@@ -198,13 +198,72 @@ var compileCombatReplay = function () {
         props: ["playerindex", "time"],
         template: `${tmplCombatReplayPlayerStatus}`,
         computed: {
-            player: function() {
+            player: function () {
                 return logData.players[this.playerindex];
             },
-            status: function() {
+            playerRotation: function () {
+                return this.player.details.rotation[0];
+            },
+            status: function () {
                 var crData = animator.playerData.get(this.player.combatReplayID);
                 var icon = crData.getIcon(this.time);
                 return icon === deadIcon ? 0 : icon === downIcon ? 1 : 2;
+            },
+            rotation: function () {
+                var res = {
+                    current: null,
+                    nexts: []
+                };
+                var time = this.time / 1000.0;
+                var j, next;
+                for (var i = 0; i < this.playerRotation.length; i++) {
+                    count = 0;
+                    var item = this.playerRotation[i];
+                    var x = item[0];
+                    var skillId = item[1];
+                    var endType = item[3];
+                    if (item[2] < 1e-2) {
+                        continue;
+                    }
+                    var duration = Math.round(item[2] / 1000.0);
+                    var skill = findSkill(false, skillId);
+                    if ((x <= time && time <= x + duration) || (time <= x && i > 0)) {
+                        res.current = {
+                            skill: skill,
+                            end: endType
+                        };
+                        for (j = i + 1; j < this.playerRotation.length; j++) {
+                            next = this.playerRotation[j];
+                            if (next[2] < 1e-2) {
+                                continue;
+                            }
+                            res.nexts.push({
+                                skill: findSkill(false, next[1]),
+                                end: next[3]
+                            });
+                            if (res.nexts.length == 3) {
+                                break;
+                            }
+                        }
+                        break;
+                    } else if (time <= x) {
+                        for (j = i; j < this.playerRotation.length; j++) {
+                            next = this.playerRotation[j];
+                            if (next[2] < 1e-2) {
+                                continue;
+                            }
+                            res.nexts.push({
+                                skill: findSkill(false, next[1]),
+                                end: next[3]
+                            });
+                            if (res.nexts.length == 3) {
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+                return res;
             },
         }
     });
@@ -251,10 +310,10 @@ var compileCombatReplay = function () {
             }
         },
         mounted() {
-             $("#playerModal").draggable({
-                 handle: ".modal-header",
-                 scroll: false
-             });
+            $("#playerModal").draggable({
+                handle: ".modal-header",
+                scroll: false
+            });
         }
     });
 };

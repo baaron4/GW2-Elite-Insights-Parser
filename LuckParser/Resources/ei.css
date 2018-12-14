@@ -207,6 +207,21 @@ img.icon-l {
     height: 24px;
 }
 
+.empty-icon-l {
+    width: 24px;
+    height: 24px;
+}
+
+.empty-icon-ll {
+    width: 48px;
+    height: 48px;
+}
+
+img.icon-ll {
+    width: 48px;
+    height: 48px;
+}
+
 img.icon-xl {
     width: 128px;
     height: 128px;
@@ -318,7 +333,7 @@ th {
     height: 30px;
 }
 
-.rot-icon.rot-cancelled {
+.rot-cancelled {
     border: 3px solid #ff0000;
 }
 
@@ -327,7 +342,7 @@ th {
     height: 20px;
 }
 
-.rot-small .rot-icon.rot-cancelled {
+.rot-small .rot-cancelled {
     border: 1px solid #ff0000;
 }
 
