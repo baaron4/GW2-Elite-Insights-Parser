@@ -625,13 +625,13 @@ namespace LuckParser.Models.ParseModels
                     if (c.IsActivation.IsCasting())
                     {
                         // Missing end activation
+                        long time = log.FightData.ToFightSpace(c.Time);
                         if (curCastLog != null)
                         {
-                            int actDur = curCastLog.SkillId == SkillItem.DodgeId ? 750 : curCastLog.SkillId == SkillItem.WeaponSwapId ? 50 : curCastLog.ExpectedDuration;
-                            curCastLog.SetEndStatus(actDur, ParseEnum.Activation.Unknown, log.FightData.FightDuration);
+                            int actDur = curCastLog.SkillId == SkillItem.DodgeId ? 750 : curCastLog.ExpectedDuration;
+                            curCastLog.SetEndStatus(actDur, ParseEnum.Activation.Unknown, time);
                             curCastLog = null;
                         }
-                        long time = log.FightData.ToFightSpace(c.Time);
                         curCastLog = new CastLog(time, c.SkillID, c.Value, c.IsActivation);
                         CastLogs.Add(curCastLog);
                     }
@@ -641,7 +641,7 @@ namespace LuckParser.Models.ParseModels
                         {
                             if (curCastLog.SkillId == c.SkillID)
                             {
-                                int actDur = curCastLog.SkillId == SkillItem.DodgeId ? 750 : curCastLog.SkillId == SkillItem.WeaponSwapId ? 50 : c.Value;
+                                int actDur = curCastLog.SkillId == SkillItem.DodgeId ? 750 : c.Value;
                                 curCastLog.SetEndStatus(actDur, c.IsActivation, log.FightData.FightDuration);
                                 curCastLog = null;
                             }
@@ -662,6 +662,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         CastLogs.Add(swapLog);
                     }
+                    swapLog.SetEndStatus(50, ParseEnum.Activation.Unknown, log.FightData.FightDuration);
                 }
             }
             long cloakStart = 0;
