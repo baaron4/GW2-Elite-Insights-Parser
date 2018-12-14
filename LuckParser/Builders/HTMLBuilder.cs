@@ -280,7 +280,7 @@ namespace LuckParser.Builders
                     defenses.DodgeCount
                 };
 
-                if (defenses.DownCount > 0)
+                if (defenses.DownDuration > 0)
                 {
                     TimeSpan downDuration = TimeSpan.FromMilliseconds(defenses.DownDuration);
                     playerData.Add(defenses.DownCount);
@@ -292,7 +292,7 @@ namespace LuckParser.Builders
                     playerData.Add("0% downed");
                 }
 
-                if (defenses.DeadCount > 0)
+                if (defenses.DeadDuration > 0)
                 {
                     TimeSpan deathDuration = TimeSpan.FromMilliseconds(defenses.DeadDuration);
                     playerData.Add(defenses.DeadCount);
