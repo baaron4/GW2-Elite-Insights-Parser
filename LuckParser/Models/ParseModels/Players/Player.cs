@@ -243,7 +243,7 @@ namespace LuckParser.Models.ParseModels
                 GW2APISkill apiskill = skillList.Get(cl.SkillId)?.ApiSkill;
                 if (apiskill != null && cl.Time > swappedTime)
                 {
-                    if (apiskill.type == "Weapon" && apiskill.professions.Count() > 0 && (apiskill.categories == null || (apiskill.categories.Count() == 1 && apiskill.categories[0] == "Phantasm")))
+                    if (apiskill.type == "Weapon" && apiskill.professions.Count() > 0 && (apiskill.categories == null || (apiskill.categories.Count() == 1 && (apiskill.categories[0] == "Phantasm" || apiskill.categories[0] == "DualWield"))))
                     {
                         if (apiskill.dual_wield != null && apiskill.dual_wield != "None" && apiskill.dual_wield != "Nothing")
                         {
