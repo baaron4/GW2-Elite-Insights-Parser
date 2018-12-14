@@ -16,16 +16,17 @@ namespace LuckParser.Models.ParseModels
         {
             if (BoonStack.Count > 0)
             {
-                BoonStack[0].Extend(extension, src);
-                if (src == 0)
+                if (Math.Abs(BoonStack[0].BoonDuration - oldValue) < 10)
                 {
-                    UnknownExtensionSimulationResult.Add(new BoonSimulationItemExtension(extension, BoonStack[0].Start, BoonStack[0].OriginalSrc));
+                    BoonStack[0].Extend(extension, src);
+                    if (src == 0)
+                    {
+                        UnknownExtensionSimulationResult.Add(new BoonSimulationItemExtension(extension, BoonStack[0].Start, BoonStack[0].OriginalSrc));
+                    }
+                    return;
                 }
             }
-            else
-            {
-                throw new InvalidOperationException("No buff to extend");
-            }
+            throw new InvalidOperationException("No buff to extend");
         }
 
         // Public Methods
