@@ -201,13 +201,23 @@ var compileCombatReplay = function () {
             player: function () {
                 return logData.players[this.playerindex];
             },
-            playerRotation: function () {
-                return this.player.details.rotation[0];
-            },
             status: function () {
                 var crData = animator.playerData.get(this.player.combatReplayID);
                 var icon = crData.getIcon(this.time);
                 return icon === deadIcon ? 0 : icon === downIcon ? 1 : 2;
+            },
+        }
+    });
+
+    Vue.component("combat-replay-player-rotation", {
+        props: ["playerindex", "time"],
+        template: `${tmplCombatReplayPlayerRotation}`,
+        computed: {
+            player: function () {
+                return logData.players[this.playerindex];
+            },
+            playerRotation: function () {
+                return this.player.details.rotation[0];
             },
             rotation: function () {
                 var res = {
@@ -266,12 +276,6 @@ var compileCombatReplay = function () {
                 return res;
             },
         }
-    });
-
-    Vue.component("combat-replay-player-rotation", {
-        props: ["playerindex", "time"],
-        template: `${tmplCombatReplayPlayerRotation}`,
-        computed: {}
     });
 
     Vue.component("combat-replay-player-stats", {

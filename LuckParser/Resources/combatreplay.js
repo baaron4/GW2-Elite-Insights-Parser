@@ -78,7 +78,7 @@ class Animator {
             const actor = actors[i];
             switch (actor.Type) {
                 case "Player":
-                    this.playerData.set(actor.ID, new PlayerIconDrawable(actor.Img, 25, actor.Group, actor.Positions, actor.Dead, actor.Down));
+                    this.playerData.set(actor.ID, new PlayerIconDrawable(actor.Img, 20, actor.Group, actor.Positions, actor.Dead, actor.Down));
                     if (this.times.length === 0) {
                         for (let j = 0; j < actor.Positions.length / 2; j++) {
                             this.times.push(j * this.pollingRate);
@@ -86,10 +86,10 @@ class Animator {
                     }
                     break;
                 case "Target":
-                    this.targetData.set(actor.ID, new EnemyIconDrawable(actor.Start, actor.End, actor.Img, 35, actor.Positions));
+                    this.targetData.set(actor.ID, new EnemyIconDrawable(actor.Start, actor.End, actor.Img, 30, actor.Positions));
                     break;
                 case "Mob":
-                    this.trashMobData.set(actor.ID, new EnemyIconDrawable(actor.Start, actor.End, actor.Img, 25, actor.Positions));
+                    this.trashMobData.set(actor.ID, new EnemyIconDrawable(actor.Start, actor.End, actor.Img, 15, actor.Positions));
                     break;
                 case "Circle":
                     this.mechanicActorData.add(new CircleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Radius, actor.ConnectedTo, actor.MinRadius, this.inch));

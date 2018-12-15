@@ -1,20 +1,6 @@
-<div class="d-flex">
-    <div class="d-flex cr-player-status justify-content-center" :class="{dead: status === 0, down: status === 1}">
-        <h6 class="cr-player-shorten text-center" :title="player.name">
-            <img :src="player.icon" :alt="player.profession" height="18" width="18">
-            {{player.name}}
-        </h6>
-    </div>
-    <div class="d-flex">
-        <div v-if="rotation.current">
-            <img :src="rotation.current.skill.icon" :alt="rotation.current.skill.name" :title="rotation.current.skill.name"
-                class="icon-ll" :class="{'rot-cancelled': rotation.current.end === 2}">
-        </div>
-        <div v-else class="empty-icon-ll">
-
-        </div>
-        <div v-for="next in rotation.nexts">
-            <img :src="next.skill.icon" :alt="next.skill.name" :title="next.skill.name" class="icon-l" :class="{'rot-cancelled': next.end === 2}">
-        </div>
-    </div>
+<div class="d-flex cr-player-status justify-content-center" :class="{dead: status === 0, down: status === 1}">
+    <h6 class="cr-player-shorten text-center" :title="player.name">
+        <img :src="player.icon" :alt="player.profession" height="18" width="18">
+        {{player.name}}
+    </h6>
 </div>
