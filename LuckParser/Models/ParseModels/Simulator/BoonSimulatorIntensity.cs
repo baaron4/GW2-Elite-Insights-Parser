@@ -18,7 +18,7 @@ namespace LuckParser.Models.ParseModels
             {
                 foreach (BoonStackItem bsi in BoonStack)
                 {
-                    if (Math.Abs(bsi.BoonDuration - oldValue) < 10)
+                    if (Math.Abs(bsi.BoonDuration - oldValue) < 4)
                     {
                         bsi.Extend(extension, src);
                         if (src == 0)

@@ -152,7 +152,7 @@ namespace LuckParser.Models.ParseModels
                     for (int i = 0; i < BoonStack.Count; i++)
                     {
                         BoonStackItem stackItem = BoonStack[i];
-                        if (Math.Abs(boonDuration-stackItem.BoonDuration) < 10)
+                        if (Math.Abs(boonDuration-stackItem.BoonDuration) < 4)
                         {
                             WasteSimulationResult.Add(new BoonSimulationItemWasted(stackItem.Src, stackItem.BoonDuration, start));
                             CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, stackItem.BoonDuration, start));

@@ -6,7 +6,7 @@ namespace LuckParser.Models.ParseModels
 {
     public class BoonSimulatorDuration : BoonSimulator
     {
-        
+
         // Constructor
         public BoonSimulatorDuration(int capacity, ParsedLog log, StackingLogic logic) : base(capacity, log, logic)
         {
@@ -16,19 +16,13 @@ namespace LuckParser.Models.ParseModels
         {
             if (BoonStack.Count > 0)
             {
-                if (Math.Abs(BoonStack[0].BoonDuration - oldValue) < 10)
+                BoonStack[0].Extend(extension, src);
+                if (src == 0)
                 {
-                    BoonStack[0].Extend(extension, src);
-                    if (src == 0)
-                    {
-                        UnknownExtensionSimulationResult.Add(new BoonSimulationItemExtension(extension, BoonStack[0].Start, BoonStack[0].OriginalSrc));
-                    }
-                    return;
+                    UnknownExtensionSimulationResult.Add(new BoonSimulationItemExtension(extension, BoonStack[0].Start, BoonStack[0].OriginalSrc));
                 }
+                return;
             }
-#if DEBUG
-            throw new InvalidOperationException("No buff to extend");
-#endif
         }
 
         // Public Methods
@@ -61,6 +55,6 @@ namespace LuckParser.Models.ParseModels
                     Update(leftover);
                 }
             }
-        }      
+        }
     }
 }
