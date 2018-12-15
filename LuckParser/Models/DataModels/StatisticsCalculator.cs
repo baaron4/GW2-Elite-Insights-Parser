@@ -658,10 +658,7 @@ namespace LuckParser.Models.DataModels
                         uptime.Wasted = Math.Round((double)(totalWasted) / fightDuration / playerList.Count, 1);
                         uptime.UnknownExtension = Math.Round((double)(totalUnknownExtension) / fightDuration / playerList.Count, 1);
                     }
-                    if (uptime.Generation > 0.0)
-                    {
-                        final[boon.ID] = uptime;
-                    }
+                    final[boon.ID] = uptime;
                 }
 
                 uptimesByPhase[phaseIndex] = final;

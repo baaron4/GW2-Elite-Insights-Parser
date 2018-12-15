@@ -126,10 +126,12 @@ var compileCommons = function () {
             },
             getCellValue: function (buff, val) {
                 var value = val;
+                var force = false;
                 if (val instanceof Array) {
                     value = val[0];
+                    force = this.generation && (val[1] > 0 || val[2] > 0 ||val[3] > 0);
                 }
-                if (value > 0) {
+                if (value > 0 || force) {
                     return buff.stacking ? value : value + "%";
                 }
                 return "-";

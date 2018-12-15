@@ -6,15 +6,15 @@ namespace LuckParser.Models.ParseModels
 {
     public class BoonSimulatorDuration : BoonSimulator
     {
-
+        private ushort _lastSrcRemove = 0;
         // Constructor
         public BoonSimulatorDuration(int capacity, ParsedLog log, StackingLogic logic) : base(capacity, log, logic)
         {
         }
 
-        public override void Extend(long extension, long oldValue, ushort src)
+        public override void Extend(long extension, long oldValue, ushort src, long start)
         {
-            if (BoonStack.Count > 0)
+            if (BoonStack.Count > 0 && oldValue > 0)
             {
                 BoonStack[0].Extend(extension, src);
                 if (src == 0)
@@ -22,6 +22,10 @@ namespace LuckParser.Models.ParseModels
                     UnknownExtensionSimulationResult.Add(new BoonSimulationItemExtension(extension, BoonStack[0].Start, BoonStack[0].OriginalSrc));
                 }
                 return;
+            }
+            else
+            {
+                Add(oldValue + extension, src > 0 ? src : _lastSrcRemove, start, true);
             }
         }
 
@@ -49,6 +53,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 if (BoonStack[0].BoonDuration <= 0)
                 {
+                    _lastSrcRemove = BoonStack[0].Src;
                     // Spend leftover time
                     long leftover = Math.Abs(BoonStack[0].BoonDuration);
                     BoonStack.RemoveAt(0);

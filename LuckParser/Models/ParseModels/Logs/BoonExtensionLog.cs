@@ -14,7 +14,7 @@ namespace LuckParser.Models.ParseModels
 
         public override void UpdateSimulator(BoonSimulator simulator)
         {
-            simulator.Extend(Value, _oldValue, SrcInstid);
+            simulator.Extend(Value, _oldValue, SrcInstid, Time);
         }
     }
 }
