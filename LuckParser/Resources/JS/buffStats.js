@@ -192,8 +192,8 @@ var compileBuffStats = function () {
                         totalcount++;
                         grcount[player.group]++;
                         for (var j = 0; j < stats[i].data.length; j++) {
-                            totalavg[j] = (totalavg[j] || 0) + stats[i].data[j][0];
-                            gravg[player.group][j] = (gravg[player.group][j] || 0) + stats[i].data[j][0];
+                            totalavg[j] = (totalavg[j] || 0) + (stats[i].data[j][0] || 0);
+                            gravg[player.group][j] = (gravg[player.group][j] || 0) + (stats[i].data[j][0] || 0);
                         }
                     }
                     for (i = 0; i < gravg.length; i++) {
