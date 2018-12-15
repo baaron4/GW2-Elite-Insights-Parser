@@ -139,6 +139,10 @@ body {
     padding: 0.25rem 0.4rem;
 }
 
+.target-cell, .player-cell, li a {
+    cursor: pointer !important;
+}
+
 h1,
 h2,
 h3,
