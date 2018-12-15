@@ -233,13 +233,17 @@ namespace LuckParser.Models.ParseModels
             {
                 swapped = 4;
             }
-            // if the player swapped once, check on which set they started
-            else if (swaps.Count == 1)
+            // if the player swapped, check on which set they started
+            else
             {
                 swapped = swaps.First().ExpectedDuration == 4 ? 5 : 4;
             }
             foreach (CastLog cl in casting)
             {
+                if (cl.ActualDuration == 0 && cl.SkillId != SkillItem.WeaponSwapId)
+                {
+                    continue;
+                }
                 GW2APISkill apiskill = skillList.Get(cl.SkillId)?.ApiSkill;
                 if (apiskill != null && cl.Time > swappedTime)
                 {
