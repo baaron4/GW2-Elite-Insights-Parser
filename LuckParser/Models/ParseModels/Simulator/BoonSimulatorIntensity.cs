@@ -15,7 +15,7 @@ namespace LuckParser.Models.ParseModels
 
         public override void Extend(long extension, long oldValue, ushort src, long start)
         {
-            if (BoonStack.Count > 0 && oldValue > 0)
+            if ((BoonStack.Count > 0 && oldValue > 0) || BoonStack.Count == Capacity)
             {
                 BoonStackItem minItem = BoonStack.MinBy(x => Math.Abs(x.BoonDuration - oldValue));
                 if (minItem != null)
@@ -29,14 +29,21 @@ namespace LuckParser.Models.ParseModels
             }
             else
             {
+                ushort srcToUse = 0;
                 if (_lastSrcRemoves.Count > 0 && src == 0)
                 {
-                    Add(oldValue + extension, _lastSrcRemoves.First(), start);
+                    srcToUse = _lastSrcRemoves.First();
+                    Add(oldValue + extension, srcToUse, start);
                     _lastSrcRemoves.RemoveAt(0);
                 }
                 else
                 {
-                    Add(oldValue + extension, src, start);
+                    srcToUse = src;
+                    Add(oldValue + extension, srcToUse, start);
+                }
+                if (src == 0)
+                {
+                    UnknownExtensionSimulationResult.Add(new BoonSimulationItemExtension(extension, start, srcToUse));
                 }
             }
         }
@@ -65,7 +72,7 @@ namespace LuckParser.Models.ParseModels
                     BoonStack[i] = item;
                     if (item.BoonDuration <= 0)
                     {
-                        _lastSrcRemoves.Add(item.Src);
+                        _lastSrcRemoves.Add(item.OriginalSrc);
                     }
                 }
                 BoonStack.RemoveAll(x => x.BoonDuration <= 0);

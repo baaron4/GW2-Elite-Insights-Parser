@@ -14,7 +14,7 @@ namespace LuckParser.Models.ParseModels
 
         public override void Extend(long extension, long oldValue, ushort src, long start)
         {
-            if (BoonStack.Count > 0 && oldValue > 0)
+            if ((BoonStack.Count > 0 && oldValue > 0) || BoonStack.Count == Capacity)
             {
                 BoonStack[0].Extend(extension, src);
                 if (src == 0)
@@ -25,7 +25,12 @@ namespace LuckParser.Models.ParseModels
             }
             else
             {
-                Add(oldValue + extension, src > 0 ? src : _lastSrcRemove, start, true);
+                ushort srcToUse = src > 0 ? src : _lastSrcRemove;
+                Add(oldValue + extension, srcToUse, start, true);
+                if (src == 0)
+                {
+                    UnknownExtensionSimulationResult.Add(new BoonSimulationItemExtension(extension, start, srcToUse));
+                }
             }
         }
 
@@ -53,7 +58,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 if (BoonStack[0].BoonDuration <= 0)
                 {
-                    _lastSrcRemove = BoonStack[0].Src;
+                    _lastSrcRemove = BoonStack[0].OriginalSrc;
                     // Spend leftover time
                     long leftover = Math.Abs(BoonStack[0].BoonDuration);
                     BoonStack.RemoveAt(0);

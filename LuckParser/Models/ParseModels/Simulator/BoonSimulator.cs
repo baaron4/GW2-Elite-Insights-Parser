@@ -48,14 +48,14 @@ namespace LuckParser.Models.ParseModels
         public readonly List<BoonSimulationItemWasted> WasteSimulationResult = new List<BoonSimulationItemWasted>();
         public readonly List<BoonSimulationItemCleanse> CleanseSimulationResult = new List<BoonSimulationItemCleanse>();
         public readonly List<BoonSimulationItemExtension> UnknownExtensionSimulationResult = new List<BoonSimulationItemExtension>();
-        private readonly int _capacity;
+        protected readonly int Capacity;
         private readonly ParsedLog _log;
         private readonly StackingLogic _logic;
 
         // Constructor
         protected BoonSimulator(int capacity, ParsedLog log, StackingLogic logic)
         {
-            _capacity = capacity;
+            Capacity = capacity;
             BoonStack = new List<BoonStackItem>(capacity);
             _log = log;
             _logic = logic;
@@ -111,7 +111,7 @@ namespace LuckParser.Models.ParseModels
         {
             var toAdd = new BoonStackItem(start, boonDuration, srcinstid);
             // Find empty slot
-            if (BoonStack.Count < _capacity)
+            if (BoonStack.Count < Capacity)
             {
                 if (atFirst)
                 {
