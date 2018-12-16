@@ -6,5 +6,7 @@
         public string name;       
         public string icon;       
         public int stacking;
+        public int consumable;
+        public int enemy;
     }
 }

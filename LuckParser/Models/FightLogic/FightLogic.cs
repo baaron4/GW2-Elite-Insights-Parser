@@ -251,7 +251,7 @@ namespace LuckParser.Models.Logic
             MechanicData mechData = log.MechanicData;
             CombatData combatData = log.CombatData;
             Mechanic.CheckSpecialCondition condition;
-            HashSet<ushort> playersIds = new HashSet<ushort>(log.PlayerList.Select(x => x.InstID));
+            HashSet<ushort> playersIds = log.PlayerIDs;
             Dictionary<ushort, AbstractMasterPlayer> regroupedMobs = new Dictionary<ushort, AbstractMasterPlayer>();
             foreach (Mechanic mech in MechanicList)
             {

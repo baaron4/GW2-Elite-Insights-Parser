@@ -384,7 +384,7 @@ namespace LuckParser.Models.ParseModels
             public string Img { get; set; }
             public string Type { get; set; }
             public int ID { get; set; }
-            public int[] Positions { get; set; }
+            public double[] Positions { get; set; }
             public long[] Dead { get; set; }
             public long[] Down { get; set; }
         }
@@ -397,14 +397,14 @@ namespace LuckParser.Models.ParseModels
                 Img = CombatReplay.Icon,
                 Type = "Player",
                 ID = InstID,
-                Positions = new int[2 * CombatReplay.Positions.Count],
+                Positions = new double[2 * CombatReplay.Positions.Count],
                 Dead = new long[2 * CombatReplay.Deads.Count],
                 Down = new long[2 * CombatReplay.Downs.Count]
             };
             int i = 0;
             foreach (Point3D pos in CombatReplay.Positions)
             {
-                Tuple<int, int> coord = map.GetMapCoord(pos.X, pos.Y);
+                Tuple<double, double> coord = map.GetMapCoord(pos.X, pos.Y);
                 aux.Positions[i++] = coord.Item1;
                 aux.Positions[i++] = coord.Item2;
             }

@@ -35,8 +35,11 @@ namespace LuckParser.Models.ParseModels
             if (Time + ActualDuration > end)
             {
                 ActualDuration = (int)(end - Time);
+                EndActivation = ParseEnum.Activation.CancelCancel;
+            } else
+            {
+                EndActivation = endActivation;
             }
-            EndActivation = endActivation;
         }
     }
 }

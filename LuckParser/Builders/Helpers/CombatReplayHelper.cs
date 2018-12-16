@@ -30,7 +30,7 @@ namespace LuckParser.Builders
                 foreach (Player p in log.PlayerList.Where(x => x.Group == group))
                 {
                     string replayPlayerHTML = Properties.Resources.tmplCombatReplayPlayer;
-                    replayPlayerHTML = replayPlayerHTML.Replace("${instid}", p.InstID.ToString());
+                    replayPlayerHTML = replayPlayerHTML.Replace("${instid}", p.GetCombatReplayID().ToString());
                     replayPlayerHTML = replayPlayerHTML.Replace("${playerName}", p.Character.Substring(0, Math.Min(10, p.Character.Length)));
                     replayPlayerHTML = replayPlayerHTML.Replace("${imageURL}", GeneralHelper.GetProfIcon(p.Prof));
                     replayPlayerHTML = replayPlayerHTML.Replace("${prof}", p.Prof);
@@ -105,10 +105,8 @@ namespace LuckParser.Builders
                     actors += a.GetCombatReplayJSON(map);
                 }
             }
-            string script = "var options = " + JsonConvert.SerializeObject(options) + ";";
-            script += "var actors = [" + actors + "];";
-            script += "var initialOnLoad = window.onload;";
-            script += "window.onload = function () { if (initialOnLoad) {initialOnLoad();} initCombatReplay(actors, options);};";
+            string script = "var initialOnLoad = window.onload;";
+            script += "window.onload = function () { if (initialOnLoad) {initialOnLoad();} animator = new Animator(" + JsonConvert.SerializeObject(options)+", [" + actors + "]);};";
 #if !DEBUG
             script = Uglify.Js(script, GeneralHelper.JSMinifySettings).Code;
 #endif

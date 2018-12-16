@@ -1,0 +1,12 @@
+<div class="d-flex align-items-center">
+    <div v-if="rotation.current">
+        <img :src="rotation.current.skill.icon" :alt="rotation.current.skill.name" :title="rotation.current.skill.name"
+            class="icon-ll" :class="{'rot-cancelled': rotation.current.end === 2}">
+    </div>
+    <div v-else class="empty-icon-ll">
+
+    </div>
+    <div v-for="next in rotation.nexts">
+        <img :src="next.skill.icon" :alt="next.skill.name" :title="next.skill.name" class="icon-l" :class="{'rot-cancelled': next.end === 2}">
+    </div>
+</div>

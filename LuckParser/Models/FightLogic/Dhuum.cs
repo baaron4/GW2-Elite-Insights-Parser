@@ -273,7 +273,7 @@ namespace LuckParser.Models.Logic
                     Tuple<int, int> duration = new Tuple<int, int>(shacklesStart, shacklesEnd);
                     if (shacklesTarget != null)
                     {
-                        replay.Actors.Add(new LineActor(0, 10, duration, "rgba(0, 255, 255, 0.5)", new AgentConnector(p), new AgentConnector(shacklesTarget)));
+                        replay.Actors.Add(new LineActor(0, duration, "rgba(0, 255, 255, 0.5)", new AgentConnector(p), new AgentConnector(shacklesTarget)));
                     }
                 }
             }
@@ -296,7 +296,7 @@ namespace LuckParser.Models.Logic
                     Tuple<int, int> duration = new Tuple<int, int>(shacklesDmgStart, shacklesDmgEnd);
                     if (shacklesDmgTarget != null)
                     {
-                        replay.Actors.Add(new LineActor(0, 10, duration, "rgba(0, 255, 255, 0.5)", new AgentConnector(p), new AgentConnector(shacklesDmgTarget)));
+                        replay.Actors.Add(new LineActor(0, duration, "rgba(0, 255, 255, 0.5)", new AgentConnector(p), new AgentConnector(shacklesDmgTarget)));
                     }
                 }
             }

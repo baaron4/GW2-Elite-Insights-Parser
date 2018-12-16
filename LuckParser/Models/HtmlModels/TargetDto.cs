@@ -4,10 +4,10 @@ namespace LuckParser.Models.HtmlModels
 {   
     public class TargetDto
     {
-        public long id;
         public string name;
         public string icon;
         public long health;
+        public int combatReplayID;
         public long hbWidth;
         public long hbHeight;
         public uint tough;

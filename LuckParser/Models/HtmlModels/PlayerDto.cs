@@ -6,6 +6,7 @@ namespace LuckParser.Models.HtmlModels
     public class PlayerDto
     {
         public int group;
+        public int combatReplayID;
         public string name;
         public string acc;
         public string profession;

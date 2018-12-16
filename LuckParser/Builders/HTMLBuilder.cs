@@ -17,8 +17,8 @@ namespace LuckParser.Builders
 {
     class HTMLBuilder
     {
-        private const string _scriptVersion = "1.2";
-        private const int _scriptVersionRev = 0;
+        private string _scriptVersion;
+        private int _scriptVersionRev;
         private readonly SettingsContainer _settings;
 
         private readonly ParsedLog _log;
@@ -31,6 +31,9 @@ namespace LuckParser.Builders
 
         public HTMLBuilder(ParsedLog log, SettingsContainer settings, Statistics statistics, string[] uploadString)
         {
+            Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            _scriptVersion = version.Major + "." + version.Minor;
+            _scriptVersionRev = version.MajorRevision;
             _log = log;
 
             _settings = settings;
@@ -1272,7 +1275,8 @@ namespace LuckParser.Builders
 
             html = html.Replace("<!--${Css}-->", BuildCss(path));
             html = html.Replace("<!--${Js}-->", BuildEIJs(path));
-            
+            html = html.Replace("<!--${JsCRLink}-->", BuildCRLinkJs(path));
+
             html = html.Replace("'${logDataJson}'", BuildLogData());
 
             html = html.Replace("<!--${Details}-->", BuildDetails());
@@ -1390,6 +1394,25 @@ namespace LuckParser.Builders
             return tmplScript;
         }
 
+        private string BuildCRTemplates(string script)
+        {
+            string tmplScript = script;
+            Dictionary<string, string> CRtemplates = new Dictionary<string, string>()
+                {
+                    {"${tmplCombatReplayData}", Properties.Resources.tmplCombatReplayData },
+                    {"${tmplCombatReplayDamageTable}", Properties.Resources.tmplCombatReplayDamageTable },
+                    {"${tmplCombatReplayPlayerBuffStats}", Properties.Resources.tmplCombatReplayPlayerBuffStats },
+                    {"${tmplCombatReplayPlayerStats}", Properties.Resources.tmplCombatReplayPlayerStats },
+                    {"${tmplCombatReplayPlayerStatus}", Properties.Resources.tmplCombatReplayPlayerStatus },
+                    {"${tmplCombatReplayPlayerRotation}", Properties.Resources.tmplCombatReplayPlayerRotation },
+                };
+            foreach (var entry in CRtemplates)
+            {
+                tmplScript = tmplScript.Replace(entry.Key, Regex.Replace(entry.Value, @"\t|\n|\r", ""));
+            }
+            return tmplScript;
+        }
+
         private string BuildCss(string path)
         {
 #if DEBUG
@@ -1426,7 +1449,7 @@ namespace LuckParser.Builders
 
         private string BuildEIJs(string path)
         {
-            var orderedScripts = new string[]
+            List<string> orderedScripts = new List<string>()
             {
                 Properties.Resources.globalJS,
                 Properties.Resources.commonsJS,
@@ -1441,7 +1464,7 @@ namespace LuckParser.Builders
                 Properties.Resources.ei_js
             };
             string scriptContent = orderedScripts[0];
-            for (int i = 1; i < orderedScripts.Length; i++)
+            for (int i = 1; i < orderedScripts.Count; i++)
             {
                 scriptContent += orderedScripts[i];
             }
@@ -1454,7 +1477,45 @@ namespace LuckParser.Builders
 #if DEBUG
                 string scriptFilename = "EliteInsights-" + _scriptVersion + ".js";
 #else
-                string scriptFilename = "EliteInsights-" + _scriptVersion + ".min.js";
+                string scriptFilename = "EliteInsights-" + _scriptVersion +".min.js";
+#endif
+                string scriptPath = Path.Combine(path, scriptFilename);
+                try
+                {
+                    using (var fs = new FileStream(scriptPath, FileMode.Create, FileAccess.Write))
+                    using (var scriptWriter = new StreamWriter(fs, Encoding.UTF8))
+                    {
+                        scriptWriter.Write(scriptContent);
+                    }
+                }
+                catch (IOException)
+                {
+                }
+                return "<script src=\"./" + scriptFilename + "?version=" + _scriptVersionRev + "\"></script>";
+            }
+            else
+            {
+                return "<script>\r\n" + scriptContent + "\r\n</script>";
+            }
+        }
+
+        private string BuildCRLinkJs(string path)
+        {
+            if (!(_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay))
+            {
+                return "";
+            }
+            string scriptContent = Properties.Resources.combatReplayStatsJS;
+            scriptContent = BuildCRTemplates(scriptContent);
+#if !DEBUG
+            scriptContent = Uglify.Js(scriptContent).Code;
+#endif
+            if (Properties.Settings.Default.HtmlExternalScripts)
+            {
+#if DEBUG
+                string scriptFilename = "EliteInsights-CRLink-" + _scriptVersion + ".js";
+#else
+                string scriptFilename = "EliteInsights-CRLink-" + _scriptVersion +".min.js";
 #endif
                 string scriptPath = Path.Combine(path, scriptFilename);
                 try
@@ -1571,6 +1632,10 @@ namespace LuckParser.Builders
                     isConjure = (player.Account == ":Conjured Sword") ? 1 : 0,
                 };
                 BuildWeaponSets(playerDto, player);
+                if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay)
+                {
+                    playerDto.combatReplayID = player.GetCombatReplayID();
+                }
                 foreach (KeyValuePair<string, Minions> pair in player.GetMinions(_log))
                 {
                     playerDto.minions.Add(new MinionDto()
@@ -1590,9 +1655,8 @@ namespace LuckParser.Builders
 
             foreach (Target target in _log.FightData.Logic.Targets)
             {
-                TargetDto tar = new TargetDto()
+                TargetDto targetDto = new TargetDto()
                 {
-                    id = target.ID,
                     name = target.Character,
                     icon = GeneralHelper.GetNPCIcon(target.ID),
                     health = target.Health,
@@ -1600,24 +1664,28 @@ namespace LuckParser.Builders
                     hbWidth = target.HitboxWidth,
                     tough = target.Toughness
                 };
+                if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay)
+                {
+                    targetDto.combatReplayID = target.GetCombatReplayID();
+                }
                 if (_log.FightData.Success)
                 {
-                    tar.percent = 100;
-                    tar.hpLeft = 0;
+                    targetDto.percent = 100;
+                    targetDto.hpLeft = 0;
                 }
                 else
                 {
                     if (target.HealthOverTime.Count > 0)
                     {
-                        tar.percent = Math.Round(100.0 - target.HealthOverTime[target.HealthOverTime.Count - 1].Y * 0.01, 2);
-                        tar.hpLeft = (int)Math.Floor(target.HealthOverTime[target.HealthOverTime.Count - 1].Y * 0.01);
+                        targetDto.percent = Math.Round(100.0 - target.HealthOverTime[target.HealthOverTime.Count - 1].Y * 0.01, 2);
+                        targetDto.hpLeft = (int)Math.Floor(target.HealthOverTime[target.HealthOverTime.Count - 1].Y * 0.01);
                     }
                 }
                 foreach (KeyValuePair<string, Minions> pair in target.GetMinions(_log))
                 {
-                    tar.minions.Add(new MinionDto() { id = pair.Value.MinionID, name = pair.Key.TrimEnd(" \0".ToArray()) });
+                    targetDto.minions.Add(new MinionDto() { id = pair.Value.MinionID, name = pair.Key.TrimEnd(" \0".ToArray()) });
                 }
-                logData.targets.Add(tar);
+                logData.targets.Add(targetDto);
             }
 
             Dictionary<string, List<long>> persBuffs = new Dictionary<string, List<long>>();
@@ -1913,7 +1981,9 @@ namespace LuckParser.Builders
                     id = boon.ID,
                     name = boon.Name,
                     icon = boon.Link,
-                    stacking = (boon.Type == Boon.BoonType.Intensity) ? 1 : 0
+                    stacking = (boon.Type == Boon.BoonType.Intensity) ? 1 : 0,
+                    consumable = (boon.Nature == Boon.BoonNature.Consumable) ? 1 : 0,
+                    enemy = (boon.Source == Boon.BoonSource.Enemy) ? 1 : 0
                 });
             }
             return dtos;

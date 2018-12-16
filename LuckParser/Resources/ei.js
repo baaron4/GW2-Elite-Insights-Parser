@@ -1,11 +1,8 @@
 /*jshint esversion: 6 */
 
-var onLoad = window.onload;
+var mainComponent = null;
 
 window.onload = function () {
-    if (onLoad) {
-        onLoad();
-    }
     // make some additional variables reactive
     var i;
     var simpleLogData = {
@@ -55,7 +52,10 @@ window.onload = function () {
     compileGraphs();
     compilePlayerTab();
     compileTargetTab();
-    new Vue({
+    if (logData.combatReplay) {
+        compileCombatReplay();
+    }
+    mainComponent = new Vue({
         el: "#content",
         data: {
             logdata: simpleLogData,
@@ -64,7 +64,8 @@ window.onload = function () {
             combatreplay: logData.combatReplay,
             light: logData.lightTheme,
             mode: 0,
-            animate: false
+            animate: false,
+            animator: null
         },
         methods: {
             switchCombatReplayButtons: function(from, to) {          
@@ -94,10 +95,10 @@ window.onload = function () {
                 var oldMode = this.mode;
                 this.mode = iMode;
                 if (this.mode !== 1 && oldMode === 1) {
-                    this.animate = animation !== null;
-                    stopAnimate();
+                    this.animate = this.animator && this.animator.animation !== null;
+                    this.animator && this.animator.stopAnimate();
                 } else if (this.mode === 1 && this.animate) {
-                    startAnimate();
+                    this.animator && this.animator.startAnimate();
                 }
             },
         },
