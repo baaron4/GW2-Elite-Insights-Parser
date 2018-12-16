@@ -234,10 +234,9 @@ namespace LuckParser.Models.ParseModels
                     }
                     boonMap.Add(Boon.BoonsByIds[boonId]);
                 }
-                if ((c.IsBuffRemove != ParseEnum.BuffRemove.None && 
-                        ((c.IFF == ParseEnum.IFF.Unknown && c.DstInstid == 0) 
-                        || (c.Value <= 50))) 
-                   || c.IsBuffRemove == ParseEnum.BuffRemove.Manual)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.Manual
+                    || (c.IsBuffRemove == ParseEnum.BuffRemove.Single && c.IFF == ParseEnum.IFF.Unknown && c.DstInstid == 0) 
+                    || (c.IsBuffRemove != ParseEnum.BuffRemove.None && c.Value <= 50))
                 {
                     continue;
                 }
