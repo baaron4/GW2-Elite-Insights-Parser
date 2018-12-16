@@ -234,7 +234,9 @@ namespace LuckParser.Models.ParseModels
                     }
                     boonMap.Add(Boon.BoonsByIds[boonId]);
                 }
-                if (c.Value == 0)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.Manual
+                    || (c.IsBuffRemove == ParseEnum.BuffRemove.Single && c.IFF == ParseEnum.IFF.Unknown && c.DstInstid == 0) 
+                    || (c.IsBuffRemove != ParseEnum.BuffRemove.None && c.Value <= 50))
                 {
                     continue;
                 }
@@ -249,10 +251,17 @@ namespace LuckParser.Models.ParseModels
                 {
                     if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                     {
-                        ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
-                        loglist.Add(new BoonApplicationLog(time, src, c.Value));
+                        if (c.IsOffcycle > 0)
+                        {
+                            loglist.Add(new BoonExtensionLog(time, c.Value, c.OverstackValue - c.Value, 0));
+                        }
+                        else
+                        {
+                            ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
+                            loglist.Add(new BoonApplicationLog(time, src, c.Value));
+                        }
                     }
-                    else if (c.IsBuffRemove != ParseEnum.BuffRemove.Manual && time < log.FightData.FightDuration - 50 && c.Value > 50)
+                    else if (time < log.FightData.FightDuration - 50)
                     {
                         loglist.Add(new BoonRemovalLog(time, c.DstInstid, c.Value, c.IsBuffRemove));
                     }
@@ -386,14 +395,14 @@ namespace LuckParser.Models.ParseModels
             foreach (Boon boon in TrackedBoons)
             {
                 long boonid = boon.ID;
-                if (toUse.TryGetValue(boonid, out var logs) && logs.Count != 0)
+                if (toUse.TryGetValue(boonid, out List<BoonLog> logs) && logs.Count != 0)
                 {
                     if (_boonDistribution[0].ContainsKey(boonid))
                     {
                         continue;
                     }
                     bool requireExtraData = extraDataID.Contains(boonid);
-                    var simulator = boon.CreateSimulator(log);
+                    BoonSimulator simulator = boon.CreateSimulator(log);
                     simulator.Simulate(logs, dur);
                     if (death > 0 && GetCastLogs(log, death + 5000, dur).Count == 0)
                     {
@@ -403,15 +412,15 @@ namespace LuckParser.Models.ParseModels
                     {
                         simulator.Trim(dur);
                     }
-                    var updateBoonPresence = boonIds.Contains(boonid);
-                    var updateCondiPresence = boonid != 873 && condiIds.Contains(boonid);
-                    var generationSimulation = simulator.GenerationSimulationResult;
-                    var graphSegments = new List<BoonsGraphModel.Segment>();
-                    foreach (var simul in generationSimulation.Items)
+                    bool updateBoonPresence = boonIds.Contains(boonid);
+                    bool updateCondiPresence = boonid != 873 && condiIds.Contains(boonid);
+                    GenerationSimulationResult generationSimulation = simulator.GenerationSimulationResult;
+                    List<BoonsGraphModel.Segment> graphSegments = new List<BoonsGraphModel.Segment>();
+                    foreach (BoonSimulationItem simul in generationSimulation.Items)
                     {
                         for (int i = 0; i < phases.Count; i++)
                         {
-                            var phase = phases[i];
+                            PhaseData phase = phases[i];
                             if (!_boonDistribution[i].TryGetValue(boonid, out var distrib))
                             {
                                 distrib = new Dictionary<ushort, BoonDistributionItem>();
@@ -421,20 +430,7 @@ namespace LuckParser.Models.ParseModels
                                 Add(_boonPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
                             if (updateCondiPresence)
                                 Add(_condiPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
-                            foreach (ushort src in simul.GetSrc())
-                            {
-                                if (distrib.TryGetValue(src, out var toModify))
-                                {
-                                    toModify.Value += simul.GetSrcDuration(src, phase.Start, phase.End);
-                                    distrib[src] = toModify;
-                                }
-                                else
-                                {
-                                    distrib.Add(src, new BoonDistributionItem(
-                                        simul.GetSrcDuration(src, phase.Start, phase.End),
-                                        0));
-                                }
-                            }
+                            simul.SetBoonDistributionItem(distrib, phase.Start, phase.End);
                         }
                         List<BoonsGraphModel.Segment> segments = simul.ToSegment();
                         if (segments.Count > 0)
@@ -449,37 +445,30 @@ namespace LuckParser.Models.ParseModels
                             graphSegments.AddRange(simul.ToSegment());
                         }
                     }
-                    foreach (var simul in simulator.OverstackSimulationResult)
+                    List<AbstractBoonSimulationItem> extraSimulations = new List<AbstractBoonSimulationItem>(simulator.OverstackSimulationResult);
+                    extraSimulations.AddRange(simulator.WasteSimulationResult);
+                    extraSimulations.AddRange(simulator.UnknownExtensionSimulationResult);
+                    foreach (AbstractBoonSimulationItem simul in extraSimulations)
                     {
                         for (int i = 0; i < phases.Count; i++)
                         {
-                            var phase = phases[i];
+                            PhaseData phase = phases[i];
                             if (!_boonDistribution[i].TryGetValue(boonid, out var distrib))
                             {
                                 distrib = new Dictionary<ushort, BoonDistributionItem>();
                                 _boonDistribution[i].Add(boonid, distrib);
                             }
-                            if (distrib.TryGetValue(simul.Src, out var toModify))
-                            {
-                                toModify.Overstack += simul.GetOverstack(phase.Start, phase.End);
-                                distrib[simul.Src] = toModify;
-                            }
-                            else
-                            {
-                                distrib.Add(simul.Src, new BoonDistributionItem(
-                                    0,
-                                    simul.GetOverstack(phase.Start, phase.End)));
-                            }
+                            simul.SetBoonDistributionItem(distrib, phase.Start, phase.End);
                         }
                     }
 
                     if (updateCondiPresence)
                     {
-                        foreach (var simul in simulator.CleanseSimulationResult)
+                        foreach (BoonSimulationItemCleanse simul in simulator.CleanseSimulationResult)
                         {
                             for (int i = 0; i < phases.Count; i++)
                             {
-                                var phase = phases[i];
+                                PhaseData phase = phases[i];
                                 long cleanse = simul.GetCleanseDuration(phase.Start, phase.End);
                                 if (cleanse > 0)
                                 {

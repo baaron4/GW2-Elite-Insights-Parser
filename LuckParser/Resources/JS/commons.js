@@ -105,20 +105,33 @@ var compileCommons = function () {
             },
             getCellTooltip: function (buff, val, uptime) {
                 if (val instanceof Array) {
-                    if (!uptime && this.generation && val[0] > 0) {
-                        return val[1] + (buff.stacking ? "" : "%") + " with overstack";
+                    if (!uptime && this.generation && (val[1] > 0 || val[2] > 0 || val[3] > 0)) {
+                        var res = (val[1] || 0) + (buff.stacking ? "" : "%") + " with overstack";
+                        if (val[2] > 0) {
+                            res += "<br>";
+                            res += val[2] + (buff.stacking ? "" : "%") + " wasted";
+                        }
+                        if (val[3] > 0) {
+                            res += "<br>";
+                            res += val[3] + (buff.stacking ? "" : "%") + " extended by unknown source";
+                        }
+                        return res;
                     } else if (buff.stacking && val[1] > 0) {
                         return "Uptime: " + val[1] + "%";
+                    } else {
+                        return false;
                     }
                 }
                 return false;
             },
             getCellValue: function (buff, val) {
                 var value = val;
+                var force = false;
                 if (val instanceof Array) {
                     value = val[0];
+                    force = this.generation && (val[1] > 0 || val[2] > 0 ||val[3] > 0);
                 }
-                if (value > 0) {
+                if (value > 0 || force) {
                     return buff.stacking ? value : value + "%";
                 }
                 return "-";

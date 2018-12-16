@@ -30,8 +30,10 @@ namespace LuckParser.Models.ParseModels
 
         // Constructor
         public CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
-               long skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid, ushort dstMasterInstid, ParseEnum.IFF iff, byte isBuff, ParseEnum.Result result,
-               ParseEnum.Activation isActivation, ParseEnum.BuffRemove isBuffRemove, byte isNinety, byte isFifty, byte isMoving,
+               long skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid, 
+               ushort dstMasterInstid, ParseEnum.IFF iff, byte isBuff,
+               ParseEnum.Result result, ParseEnum.Activation isActivation,
+               ParseEnum.BuffRemove isBuffRemove, byte isNinety, byte isFifty, byte isMoving,
                ParseEnum.StateChange isStateChange, byte isFlanking, byte isShields, byte isOffcycle)
         {
             Time = time;

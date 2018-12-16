@@ -13,30 +13,9 @@ namespace LuckParser.Models.ParseModels
             _src = other.Src;
         }
 
-        public override long GetSrcDuration(ushort src, long start, long end)
-        {
-            if (src != _src)
-            {
-                return 0;
-            }
-            return GetClampedDuration(start, end);
-        }
-        public override long GetTotalDuration()
-        {
-            return Duration;
-        }
         public override void SetEnd(long end)
         {
             Duration = Math.Min(Math.Max(end - Start, 0),Duration);
-        }
-
-        public override List<ushort> GetSrc()
-        {
-            List<ushort> res = new List<ushort>
-            {
-                _src
-            };
-            return res;
         }
 
         public override int GetStack(long end)
@@ -50,6 +29,21 @@ namespace LuckParser.Models.ParseModels
             {
                 new BoonsGraphModel.Segment(Start,End,1)
             };
+        }
+
+        public override void SetBoonDistributionItem(Dictionary<ushort, BoonDistributionItem> distrib, long start, long end)
+        {
+            if (distrib.TryGetValue(_src, out var toModify))
+            {
+                toModify.Value += GetClampedDuration(start, end);
+                distrib[_src] = toModify;
+            }
+            else
+            {
+                distrib.Add(_src, new BoonDistributionItem(
+                    GetClampedDuration(start, end),
+                    0, 0, 0));
+            }
         }
     }
 }

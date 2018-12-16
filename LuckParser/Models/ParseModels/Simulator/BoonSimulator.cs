@@ -7,16 +7,20 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class BoonSimulator
     {
- 
+
         public class BoonStackItem
         {
             public long Start { get; private set; }
             public long BoonDuration { get; private set; }
             public ushort Src { get; private set; }
+            public ushort OriginalSrc { get; }
+
+            //private List<Tuple<ushort, long>> _extensions = new List<Tuple<ushort, long>>();
 
             public BoonStackItem(long start, long boonDuration, ushort srcinstid)
             {
                 Start = start;
+                OriginalSrc = srcinstid;
                 BoonDuration = boonDuration;
                 Src = srcinstid;
             }
@@ -26,28 +30,37 @@ namespace LuckParser.Models.ParseModels
                 Start = other.Start + startShift;
                 BoonDuration = other.BoonDuration - durationShift;
                 Src = other.Src;
+                OriginalSrc = other.OriginalSrc;
+                //_extensions = other._extensions;
+            }
+
+            public void Extend(long value, ushort src)
+            {
+                BoonDuration += value;
             }
         }
 
         // Fields
         protected readonly List<BoonStackItem> BoonStack;
         protected readonly List<BoonSimulationItem> GenerationSimulation = new List<BoonSimulationItem>();
-        public GenerationSimulationResult GenerationSimulationResult => new GenerationSimulationResult(GenerationSimulation); 
-        public readonly List<BoonSimulationOverstackItem> OverstackSimulationResult = new List<BoonSimulationOverstackItem>();
-        public readonly List<BoonSimulationCleanseItem> CleanseSimulationResult = new List<BoonSimulationCleanseItem>();
-        private readonly int _capacity;
+        public GenerationSimulationResult GenerationSimulationResult => new GenerationSimulationResult(GenerationSimulation);
+        public readonly List<BoonSimulationItemOverstack> OverstackSimulationResult = new List<BoonSimulationItemOverstack>();
+        public readonly List<BoonSimulationItemWasted> WasteSimulationResult = new List<BoonSimulationItemWasted>();
+        public readonly List<BoonSimulationItemCleanse> CleanseSimulationResult = new List<BoonSimulationItemCleanse>();
+        public readonly List<BoonSimulationItemExtension> UnknownExtensionSimulationResult = new List<BoonSimulationItemExtension>();
+        protected readonly int Capacity;
         private readonly ParsedLog _log;
         private readonly StackingLogic _logic;
 
         // Constructor
         protected BoonSimulator(int capacity, ParsedLog log, StackingLogic logic)
         {
-            _capacity = capacity;
+            Capacity = capacity;
             BoonStack = new List<BoonStackItem>(capacity);
             _log = log;
             _logic = logic;
-        }  
-        
+        }
+
 
         // Abstract Methods
         /// <summary>
@@ -68,7 +81,7 @@ namespace LuckParser.Models.ParseModels
                     break;
                 }
             }
-            GenerationSimulation.RemoveAll(x => x.GetTotalDuration() <= 0);
+            GenerationSimulation.RemoveAll(x => x.Duration <= 0);
         }
 
         public void Simulate(List<BoonLog> logs, long fightDuration)
@@ -88,28 +101,36 @@ namespace LuckParser.Models.ParseModels
                 timePrev = timeCur;
             }
             Update(fightDuration - timePrev);
-            GenerationSimulation.RemoveAll(x => x.GetTotalDuration() <= 0);
+            GenerationSimulation.RemoveAll(x => x.Duration <= 0);
             BoonStack.Clear();
         }
 
         protected abstract void Update(long timePassed);
-        
-        public void Add(long boonDuration, ushort srcinstid, long start)
+
+        public void Add(long boonDuration, ushort srcinstid, long start, bool atFirst = false)
         {
             var toAdd = new BoonStackItem(start, boonDuration, srcinstid);
             // Find empty slot
-            if (BoonStack.Count < _capacity)
+            if (BoonStack.Count < Capacity)
             {
-                BoonStack.Add(toAdd);
+                if (atFirst)
+                {
+                    BoonStack.Insert(0, toAdd);
+                }
+                else
+                {
+
+                    BoonStack.Add(toAdd);
+                }
                 _logic.Sort(_log, BoonStack);
             }
             // Replace lowest value
             else
             {
-                bool found = _logic.StackEffect(_log, toAdd, BoonStack, OverstackSimulationResult);
+                bool found = _logic.StackEffect(_log, toAdd, BoonStack, WasteSimulationResult);
                 if (!found)
                 {
-                    OverstackSimulationResult.Add(new BoonSimulationOverstackItem(srcinstid, boonDuration,start));                 
+                    OverstackSimulationResult.Add(new BoonSimulationItemOverstack(srcinstid, boonDuration, start));
                 }
             }
         }
@@ -129,8 +150,8 @@ namespace LuckParser.Models.ParseModels
                 case ParseEnum.BuffRemove.All:
                     foreach (BoonStackItem stackItem in BoonStack)
                     {
-                        OverstackSimulationResult.Add(new BoonSimulationOverstackItem(stackItem.Src, stackItem.BoonDuration, start));
-                        CleanseSimulationResult.Add(new BoonSimulationCleanseItem(provokedBy, stackItem.BoonDuration, start));
+                        WasteSimulationResult.Add(new BoonSimulationItemWasted(stackItem.Src, stackItem.BoonDuration, start));
+                        CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, stackItem.BoonDuration, start));
                     }
                     BoonStack.Clear();
                     break;
@@ -139,10 +160,10 @@ namespace LuckParser.Models.ParseModels
                     for (int i = 0; i < BoonStack.Count; i++)
                     {
                         BoonStackItem stackItem = BoonStack[i];
-                        if (Math.Abs(boonDuration-stackItem.BoonDuration) < 10)
+                        if (Math.Abs(boonDuration - stackItem.BoonDuration) < 10)
                         {
-                            OverstackSimulationResult.Add(new BoonSimulationOverstackItem(stackItem.Src, stackItem.BoonDuration, start));
-                            CleanseSimulationResult.Add(new BoonSimulationCleanseItem(provokedBy, stackItem.BoonDuration, start));
+                            WasteSimulationResult.Add(new BoonSimulationItemWasted(stackItem.Src, stackItem.BoonDuration, start));
+                            CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, stackItem.BoonDuration, start));
                             BoonStack.RemoveAt(i);
                             break;
                         }
@@ -154,5 +175,7 @@ namespace LuckParser.Models.ParseModels
             _logic.Sort(_log, BoonStack);
             Update(0);
         }
+
+        public abstract void Extend(long extension, long oldValue, ushort src, long start);
     }
 }

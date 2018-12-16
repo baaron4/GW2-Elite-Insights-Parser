@@ -7,11 +7,15 @@ namespace LuckParser.Models.ParseModels
     {
         public long Value { get; set; }
         public long Overstack { get; set; }
+        public long Waste { get; set; }
+        public long UnknownExtension { get; set; }
 
-        public BoonDistributionItem(long value, long overstack)
+        public BoonDistributionItem(long value, long overstack, long waste, long unknowExtension)
         {
             Value = value;
             Overstack = overstack;
+            Waste = waste;
+            UnknownExtension = unknowExtension;
         }
     }
 
@@ -42,6 +46,24 @@ namespace LuckParser.Models.ParseModels
                 return 0;
             }
             return this[boonid].Where(x => src == x.Key).Sum(x => x.Value.Overstack);
+        }
+
+        public long GetWaste(long boonid, ushort src)
+        {
+            if (!ContainsKey(boonid) || src == 0)
+            {
+                return 0;
+            }
+            return this[boonid].Where(x => src == x.Key).Sum(x => x.Value.Waste);
+        }
+
+        public long GetUnknownExtension(long boonid, ushort src)
+        {
+            if (!ContainsKey(boonid) || src == 0)
+            {
+                return 0;
+            }
+            return this[boonid].Where(x => src == x.Key).Sum(x => x.Value.UnknownExtension);
         }
     }
 }

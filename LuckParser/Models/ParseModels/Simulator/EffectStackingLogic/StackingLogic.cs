@@ -6,7 +6,7 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class StackingLogic
     {
-        public abstract bool StackEffect(ParsedLog log, BoonStackItem stackItem, List<BoonStackItem> stacks, List<BoonSimulationOverstackItem> overstacks);
+        public abstract bool StackEffect(ParsedLog log, BoonStackItem stackItem, List<BoonStackItem> stacks, List<BoonSimulationItemWasted> overstacks);
 
         public abstract void Sort(ParsedLog log, List<BoonStackItem> stacks);
     }
