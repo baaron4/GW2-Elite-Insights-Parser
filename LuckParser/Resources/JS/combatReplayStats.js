@@ -34,8 +34,11 @@ var compileCombatReplay = function () {
             updateTable("#combat-replay-dps-table");
         },
         computed: {
+            phase: function () {
+                return logData.phases[0];
+            },
             targets: function () {
-                return logData.phases[0].targets;
+                return this.phase.targets;
             },
             graph: function () {
                 return graphData.phases[0].players;
@@ -45,7 +48,12 @@ var compileCombatReplay = function () {
                 var cols = [];
                 var sums = [];
                 var total = [];
-                var index = Math.floor(this.time / 1000);
+                var curTime = Math.floor(this.time / 1000);
+                var nextTime = curTime + 1;
+                var dur = Math.floor(this.phase.end - this.phase.start);
+                if (nextTime == dur + 1 && this.phase.needsLastPoint) {
+                    nextTime = this.phase.end - this.phase.start;
+                }
                 var i, j;
                 for (j = 0; j < this.targets.length; j++) {
                     var target = logData.targets[this.targets[j]];
@@ -62,27 +70,26 @@ var compileCombatReplay = function () {
                         cacheID = 0 + '-';
                         cacheID += getTargetCacheID(activeTargets);
                         data = computePlayerDPS(player, graphData, 0, null, activeTargets, cacheID + '-' + 0).total.target;
-                        cur = data[index];
-                        next = data[index + 1];
+                        cur = data[curTime];
+                        next = data[curTime + 1];
                         if (typeof next !== "undefined") {
-                            dps[2 * j] = cur + (this.time / 1000 - index) * Math.max((next - cur), 0);
-                        } else {
-                            dps[2 * j] = cur;
-                        }
-                        dps[2 * j + 1] = dps[2 * j] / (Math.max(this.time / 1000, 1));
-                    } {
-                        cacheID = 0 + '-';
-                        cacheID += getTargetCacheID(this.targets);
-                        data = computePlayerDPS(player, graphData, 0, null, this.targets, cacheID + '-' + 0).total.total;
-                        cur = data[index];
-                        next = data[index + 1];
-                        if (typeof next !== "undefined") {
-                            dps[2 * j] = cur + (this.time / 1000 - index) * Math.max((next - cur), 0);
+                            dps[2 * j] = cur + (this.time / 1000 - curTime) * (next - cur)/(nextTime - curTime);
                         } else {
                             dps[2 * j] = cur;
                         }
                         dps[2 * j + 1] = dps[2 * j] / (Math.max(this.time / 1000, 1));
                     }
+                    cacheID = 0 + '-';
+                    cacheID += getTargetCacheID(this.targets);
+                    data = computePlayerDPS(player, graphData, 0, null, this.targets, cacheID + '-' + 0).total.total;
+                    cur = data[curTime];
+                    next = data[curTime + 1];
+                    if (typeof next !== "undefined") {
+                        dps[2 * j] = cur + (this.time / 1000 - curTime) * (next - cur)/(nextTime - curTime);
+                    } else {
+                        dps[2 * j] = cur;
+                    }
+                    dps[2 * j + 1] = dps[2 * j] / (Math.max(this.time / 1000, 1));
                     for (j = 0; j < dps.length; j++) {
                         total[j] = (total[j] || 0) + dps[j];
                     }
