@@ -126,8 +126,8 @@ namespace LuckParser.Models.Logic
                 if (last.IsBuffRemove != ParseEnum.BuffRemove.None)
                 {
                     HashSet<ushort> pIds = log.PlayerIDs;
-                    CombatItem lastPlayerExit = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => pIds.Contains(x.SrcInstid)).LastOrDefault();
-                    CombatItem lastTargetExit = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).LastOrDefault(x => x.SrcInstid == mainTarget.InstID);
+                    CombatItem lastPlayerExit = log.CombatData.GetStates(ParseEnum.StateChange.ExitCombat).Where(x => pIds.Contains(x.SrcInstid)).LastOrDefault();
+                    CombatItem lastTargetExit = log.CombatData.GetStatesData(mainTarget.InstID, ParseEnum.StateChange.ExitCombat, mainTarget.FirstAware, mainTarget.LastAware).LastOrDefault();
                     CombatItem lastDamageTaken = log.CombatData.GetDamageTakenData(mainTarget.InstID, mainTarget.FirstAware, mainTarget.LastAware).LastOrDefault(x => (x.Value > 0 || x.BuffDmg > 0) && pIds.Contains(x.SrcInstid));
                     if (lastTargetExit != null && lastDamageTaken != null && lastPlayerExit != null)
                     {
