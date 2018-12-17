@@ -146,6 +146,9 @@ namespace LuckParser.Models.DataModels
             Slubling2 = 16071,
             Slubling3 = 16077,
             Slubling4 = 16104,
+            // Trio
+            BanditSaboteur = 1,
+            Warg = 2,
             // Matthias
             Spirit = 16105,
             Spirit2 = 16114,
@@ -278,6 +281,9 @@ namespace LuckParser.Models.DataModels
             Gorseval                = 15429,
             Sabetha                 = 15375,
             Slothasor               = 16123,
+            Berg                    = 3,
+            Zane                    = 4,
+            Narella                 = 5,
             Matthias                = 16115,
             KeepConstruct           = 16235,
             Xera                    = 16246,
