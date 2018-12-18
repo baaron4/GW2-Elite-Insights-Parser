@@ -14,8 +14,8 @@
                     <h5>Details Window</h5>
                 </div>
                 <div class="modal-body">
-                    <div class="d-flex flex-row justify-content-around mb-2">
-                        <div v-for="(group,id) in groups" v-if="group" :key="id + '-group'" class="ml-1" style="width: 350px; max-height: 800px">
+                    <div class="d-flex flex-row mb-2 flex-wrap">
+                        <div v-for="(group,id) in groups" v-if="group" :key="id + '-group'" class="ml-1" style="width: 250px; max-height: 800px">
                             <h5 class="text-center">Group {{id}}</h5>
                             <div v-for="player in group" class="cr-player-data d-flex flex-column" :class="{active: playerindex === player.id}"
                                 :key="id + '-group-' +  player.id">
