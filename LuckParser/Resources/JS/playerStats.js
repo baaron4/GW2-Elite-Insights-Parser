@@ -355,7 +355,7 @@ var compilePlayerTab = function () {
                         x: [],
                         type: 'bar',
                         text: [],
-                        hoverinfo: 'text',
+                        hoverinfo: 'y+text',
                         marker: {
                             color: []
                         }

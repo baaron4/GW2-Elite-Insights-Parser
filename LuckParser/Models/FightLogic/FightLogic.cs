@@ -512,7 +512,7 @@ namespace LuckParser.Models.Logic
         protected static List<CombatItem> GetFilteredList(ParsedLog log, long skillID, AbstractMasterPlayer target, bool beginWithStart = true)
         {
             bool needStart = beginWithStart;
-            List<CombatItem> main = log.GetBoonData(skillID).Where(x => ((x.DstInstid == target.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None) || (x.SrcInstid == target.InstID && x.IsBuffRemove != ParseEnum.BuffRemove.None)) && x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
+            List<CombatItem> main = log.GetBoonData(skillID).Where(x => ((x.DstInstid == target.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None) || (x.SrcInstid == target.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.Manual)) && x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
             List<CombatItem> filtered = new List<CombatItem>();
             for (int i = 0; i < main.Count; i++)
             {
@@ -522,7 +522,7 @@ namespace LuckParser.Models.Logic
                     needStart = false;
                     filtered.Add(c);
                 }
-                else if (!needStart && c.IsBuffRemove != ParseEnum.BuffRemove.None)
+                else if (!needStart && c.IsBuffRemove == ParseEnum.BuffRemove.Manual)
                 {
                     // consider only last remove event before another application
                     if ((i == main.Count - 1) || (i < main.Count - 1 && main[i + 1].IsBuffRemove == ParseEnum.BuffRemove.None))

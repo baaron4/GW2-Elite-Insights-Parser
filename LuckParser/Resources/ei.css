@@ -58,6 +58,9 @@
     margin-top: 200px;
     margin-left: -200px;
 }
+.modal-dialog {
+    max-width: 100%;
+}
 
 .theme-slate .modal-content {
     background-color: rgba(50, 56, 62, 0.9);
