@@ -95,7 +95,7 @@ namespace LuckParser.Models.Logic
                     mainTarget.AddCustomCastLog(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
                 }
             }
-            if (fightDuration - start > 5000 && start >= phases.Last().End)
+            if (fightDuration - end > 5000)
             {
                 phases.Add(new PhaseData(start, fightDuration));
             }
