@@ -46,6 +46,11 @@ namespace LuckParser.Models.ParseModels
                 case ParseEnum.TargetIDS.Slothasor:
                     Logic = new Slothasor(id);
                     break;
+                case ParseEnum.TargetIDS.Zane:
+                case ParseEnum.TargetIDS.Berg:
+                case ParseEnum.TargetIDS.Narella:
+                    Logic = new BanditTrio(id);
+                    break;
                 case ParseEnum.TargetIDS.Matthias:
                     Logic = new Matthias(id);
                     break;
