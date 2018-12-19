@@ -156,6 +156,40 @@ namespace LuckParser.Models.Logic
             }
         }
 
+        protected List<PhaseData> GetPhasesByInvul(ParsedLog log, long skillID, Target mainTarget, bool beginWithStart = true)
+        {
+            long fightDuration = log.FightData.FightDuration;
+            List<PhaseData> phases = new List<PhaseData>();
+            long last = 0;
+            List<CombatItem> invulsGorse = GetFilteredList(log, skillID, mainTarget, beginWithStart);
+            for (int i = 0; i < invulsGorse.Count; i++)
+            {
+                CombatItem c = invulsGorse[i];
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                {
+                    long end = log.FightData.ToFightSpace(c.Time);
+                    phases.Add(new PhaseData(last, end));
+                    if (i == invulsGorse.Count - 1)
+                    {
+                        mainTarget.AddCustomCastLog(new CastLog(end, -5, (int)(fightDuration - end), ParseEnum.Activation.None, (int)(fightDuration - end), ParseEnum.Activation.None), log);
+                    }
+                    last = end;
+                }
+                else
+                {
+                    long end = log.FightData.ToFightSpace(c.Time);
+                    phases.Add(new PhaseData(last, end));
+                    mainTarget.AddCustomCastLog(new CastLog(last, -5, (int)(end - last), ParseEnum.Activation.None, (int)(end - last), ParseEnum.Activation.None), log);
+                    last = end;
+                }
+            }
+            if (fightDuration - last > 5000)
+            {
+                phases.Add(new PhaseData(last, fightDuration));
+            }
+            return phases;
+        }
+
         protected List<PhaseData> GetInitialPhase(ParsedLog log)
         {
             List<PhaseData> phases = new List<PhaseData>();
@@ -512,7 +546,7 @@ namespace LuckParser.Models.Logic
         protected static List<CombatItem> GetFilteredList(ParsedLog log, long skillID, AbstractMasterPlayer target, bool beginWithStart = true)
         {
             bool needStart = beginWithStart;
-            List<CombatItem> main = log.GetBoonData(skillID).Where(x => ((x.DstInstid == target.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None) || (x.SrcInstid == target.InstID && x.IsBuffRemove != ParseEnum.BuffRemove.None)) && x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
+            List<CombatItem> main = log.GetBoonData(skillID).Where(x => ((x.DstInstid == target.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None) || (x.SrcInstid == target.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.Manual)) && x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
             List<CombatItem> filtered = new List<CombatItem>();
             for (int i = 0; i < main.Count; i++)
             {
@@ -522,7 +556,7 @@ namespace LuckParser.Models.Logic
                     needStart = false;
                     filtered.Add(c);
                 }
-                else if (!needStart && c.IsBuffRemove != ParseEnum.BuffRemove.None)
+                else if (!needStart && c.IsBuffRemove == ParseEnum.BuffRemove.Manual)
                 {
                     // consider only last remove event before another application
                     if ((i == main.Count - 1) || (i < main.Count - 1 && main[i + 1].IsBuffRemove == ParseEnum.BuffRemove.None))

@@ -41,9 +41,6 @@ namespace LuckParser.Models.Logic
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
-            long start = 0;
-            long end = 0;
-            long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
             Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Sabetha);
             if (mainTarget == null)
@@ -56,30 +53,7 @@ namespace LuckParser.Models.Logic
                 return phases;
             }
             // Invul check
-            List<CombatItem> invulsSab = GetFilteredList(log, 757, mainTarget);
-            for (int i = 0; i < invulsSab.Count; i++)
-            {
-                CombatItem c = invulsSab[i];
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
-                {
-                    end = log.FightData.ToFightSpace(c.Time);
-                    phases.Add(new PhaseData(start, end));
-                    if (i == invulsSab.Count - 1)
-                    {
-                        mainTarget.AddCustomCastLog(new CastLog(end, -5, (int)(fightDuration - end), ParseEnum.Activation.None, (int)(fightDuration - end), ParseEnum.Activation.None), log);
-                    }
-                }
-                else
-                {
-                    start = log.FightData.ToFightSpace(c.Time);
-                    phases.Add(new PhaseData(end, start));
-                    mainTarget.AddCustomCastLog(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
-                }
-            }
-            if (fightDuration - start > 5000 && start >= phases.Last().End)
-            {
-                phases.Add(new PhaseData(start, fightDuration));
-            }
+            phases.AddRange(GetPhasesByInvul(log, 757, mainTarget));
             string[] namesSab = new [] { "Phase 1", "Kernan", "Phase 2", "Knuckles", "Phase 3", "Karde", "Phase 4" };
             for (int i = 1; i < phases.Count; i++)
             {

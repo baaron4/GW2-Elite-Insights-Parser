@@ -117,6 +117,60 @@ namespace LuckParser.Models.Logic
                 phases.Add(phase);
             }
             phases.Sort((x, y) => x.Start.CompareTo(y.Start));
+            // pre burn phases
+            int preBurnCount = 1;
+            List<PhaseData> preBurnPhase = new List<PhaseData>();
+            List<CombatItem> kcInvuls = GetFilteredList(log, 762, mainTarget);
+            foreach (CombatItem invul in kcInvuls)
+            {
+                if (invul.IsBuffRemove == ParseEnum.BuffRemove.None)
+                {
+                    end = log.FightData.ToFightSpace(invul.Time);
+                    PhaseData prevPhase = phases.LastOrDefault(x => x.Start <= end || x.End <= end);
+                    if (prevPhase != null)
+                    {
+                        start = (prevPhase.End >= end ? prevPhase.Start : prevPhase.End) + 1;
+                        if (end - start > 5000)
+                        {
+                            var phase = new PhaseData(start, end)
+                            {
+                                Name = "Pre-Burn " + preBurnCount++,
+                            };
+                            phase.Targets.Add(mainTarget);
+                            preBurnPhase.Add(phase);
+                        }
+                    }
+                }
+            }
+            phases.AddRange(preBurnPhase);
+            phases.Sort((x, y) => x.Start.CompareTo(y.Start));
+            // add leftover phases
+            PhaseData cur = null;
+            int leftOverCount = 1;
+            List<PhaseData> leftOverPhases = new List<PhaseData>();
+            for (int i = 0; i < phases.Count; i++)
+            {
+                PhaseData phase = phases[i];
+                if (phase.Name.Contains("Phase"))
+                {
+                    cur = phase;
+                }
+                else if (phase.Name.Contains("orbs"))
+                {
+                    if (cur != null)
+                    {
+                        if (cur.End >= phase.End + 5000 && (i == phases.Count - 1 || phases[i + 1].Name.Contains("Phase")))
+                        {
+                            leftOverPhases.Add(new PhaseData(phase.End + 1, cur.End)
+                            {
+                                Name = "Leftover " + leftOverCount++
+                            });
+                        }
+                    }
+                }
+            }
+            phases.AddRange(leftOverPhases);
+            phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             return phases;
         }
 
@@ -277,7 +331,7 @@ namespace LuckParser.Models.Logic
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
-            
+
         }
 
         public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
