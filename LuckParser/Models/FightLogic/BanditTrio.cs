@@ -33,7 +33,7 @@ namespace LuckParser.Models.Logic
         {
             return new CombatReplayMap("https://i.imgur.com/eUZtON4.png",
                             Tuple.Create(2455, 2276),
-                            Tuple.Create(5822, -3491, 9549, 2205),
+                            Tuple.Create(-3122, -12101, 2649, -7415),
                             Tuple.Create(-12288, -27648, 12288, 27648),
                             Tuple.Create(2688, 11906, 3712, 14210));
         }
