@@ -119,8 +119,6 @@ namespace LuckParser.Models.Logic
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
-            long start = 0;
-            long end = 0;
             List<PhaseData> phases = GetInitialPhase(log);
             Target ca = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.ConjuredAmalgamate);
             if (ca == null)
@@ -132,29 +130,7 @@ namespace LuckParser.Models.Logic
             {
                 return phases;
             }
-            List<CombatItem> CAInvul = GetFilteredList(log, 52255, ca, false);
-            for (int i = 0; i < CAInvul.Count; i++)
-            {
-                CombatItem invul = CAInvul[i];
-                if (invul.IsBuffRemove != ParseEnum.BuffRemove.None)
-                {
-                    end = Math.Min(log.FightData.ToFightSpace(invul.Time), log.FightData.FightDuration);
-                    phases.Add(new PhaseData(start, end));
-                    if (i == CAInvul.Count - 1)
-                    {
-                        phases.Add(new PhaseData(end, log.FightData.FightDuration));
-                    }
-                }
-                else
-                {
-                    start = Math.Min(log.FightData.ToFightSpace(invul.Time), log.FightData.FightDuration);
-                    phases.Add(new PhaseData(end, start));
-                    if (i == CAInvul.Count - 1)
-                    {
-                        phases.Add(new PhaseData(start, log.FightData.FightDuration));
-                    }
-                }
-            }
+            phases.AddRange(GetPhasesByInvul(log, 52255, ca, false));
             phases.RemoveAll(x => x.GetDuration() < 1000);
             for (int i = 1; i < phases.Count; i++)
             {

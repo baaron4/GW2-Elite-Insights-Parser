@@ -86,8 +86,6 @@ namespace LuckParser.Models.Logic
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
-            long start = 0;
-            long end = 0;
             List<PhaseData> phases = GetInitialPhase(log);
             Target qadim = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Qadim);
             if (qadim == null)
@@ -99,28 +97,7 @@ namespace LuckParser.Models.Logic
             {
                 return phases;
             }
-            List<long> moltenArmor = GetFilteredList(log, 52329, qadim, false).Select(x => log.FightData.ToFightSpace(x.Time)).Distinct().ToList();
-            for (int i = 0; i < moltenArmor.Count; i++)
-            {
-                if (i % 2 == 1)
-                {
-                    end = Math.Min(moltenArmor[i], log.FightData.FightDuration);
-                    phases.Add(new PhaseData(start, end));
-                    if (i == moltenArmor.Count - 1)
-                    {
-                        phases.Add(new PhaseData(end, log.FightData.FightDuration));
-                    }
-                }
-                else
-                {
-                    start = Math.Min(moltenArmor[i], log.FightData.FightDuration);
-                    phases.Add(new PhaseData(end, start));
-                    if (i == moltenArmor.Count - 1)
-                    {
-                        phases.Add(new PhaseData(start, log.FightData.FightDuration));
-                    }
-                }
-            }
+            phases.AddRange(GetPhasesByInvul(log, 52329, qadim, false));
             string[] names = { "Hydra", "Qadim P1", "Apocalypse", "Qadim P2", "Wyvern", "Qadim P3" };
             for (int i = 1; i < phases.Count; i++)
             {

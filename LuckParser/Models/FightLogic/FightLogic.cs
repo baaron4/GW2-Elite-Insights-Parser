@@ -156,6 +156,40 @@ namespace LuckParser.Models.Logic
             }
         }
 
+        protected List<PhaseData> GetPhasesByInvul(ParsedLog log, long skillID, Target mainTarget, bool beginWithStart = true)
+        {
+            long fightDuration = log.FightData.FightDuration;
+            List<PhaseData> phases = new List<PhaseData>();
+            long last = 0;
+            List<CombatItem> invulsGorse = GetFilteredList(log, skillID, mainTarget, beginWithStart);
+            for (int i = 0; i < invulsGorse.Count; i++)
+            {
+                CombatItem c = invulsGorse[i];
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                {
+                    long end = log.FightData.ToFightSpace(c.Time);
+                    phases.Add(new PhaseData(last, end));
+                    if (i == invulsGorse.Count - 1)
+                    {
+                        mainTarget.AddCustomCastLog(new CastLog(end, -5, (int)(fightDuration - end), ParseEnum.Activation.None, (int)(fightDuration - end), ParseEnum.Activation.None), log);
+                    }
+                    last = end;
+                }
+                else
+                {
+                    long end = log.FightData.ToFightSpace(c.Time);
+                    phases.Add(new PhaseData(last, end));
+                    mainTarget.AddCustomCastLog(new CastLog(last, -5, (int)(end - last), ParseEnum.Activation.None, (int)(end - last), ParseEnum.Activation.None), log);
+                    last = end;
+                }
+            }
+            if (fightDuration - last > 5000)
+            {
+                phases.Add(new PhaseData(last, fightDuration));
+            }
+            return phases;
+        }
+
         protected List<PhaseData> GetInitialPhase(ParsedLog log)
         {
             List<PhaseData> phases = new List<PhaseData>();
