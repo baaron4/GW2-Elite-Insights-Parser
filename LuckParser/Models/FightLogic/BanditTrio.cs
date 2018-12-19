@@ -16,8 +16,7 @@ namespace LuckParser.Models.Logic
                 // TODO
             });
             Extension = "trio";
-            IconUrl = ""; // TODO
-            CanCombatReplay = false;
+            IconUrl = "https://i.imgur.com/UZZQUdf.png";
         }
 
         protected override List<ushort> GetFightTargetsIDs()
@@ -32,12 +31,11 @@ namespace LuckParser.Models.Logic
 
         protected override CombatReplayMap GetCombatMapInternal()
         {
-            // TODO
-            return new CombatReplayMap("https://i.imgur.com/lT1FW2r.png",
-                            Tuple.Create(889, 889),
-                            Tuple.Create(1360, 2701, 3911, 5258),
-                            Tuple.Create(-27648, -9216, 27648, 12288),
-                            Tuple.Create(11774, 4480, 14078, 5376));
+            return new CombatReplayMap("https://i.imgur.com/eUZtON4.png",
+                            Tuple.Create(2455, 2276),
+                            Tuple.Create(5822, -3491, 9549, 2205),
+                            Tuple.Create(-12288, -27648, 12288, 27648),
+                            Tuple.Create(2688, 11906, 3712, 14210));
         }
 
         public void SetPhasePerTarget(Target target, List<PhaseData> phases, ParsedLog log)
@@ -99,7 +97,18 @@ namespace LuckParser.Models.Logic
             return new List<ParseEnum.TrashIDS>
             {
                 BanditSaboteur,
-                Warg
+                Warg,
+                CagedWarg,
+                BanditAssassin,
+                BanditSapperTrio ,
+                BanditDeathsayer,
+                BanditBrawler,
+                BanditBattlemage,
+                BanditCleric,
+                BanditBombardier,
+                BanditSniper,
+                NarellaTornado,
+                OilSlick
             };
         }
 
@@ -110,8 +119,18 @@ namespace LuckParser.Models.Logic
             switch (mob.ID)
             {
                 case (ushort)BanditSaboteur:
-                    break;
                 case (ushort)Warg:
+                case (ushort)CagedWarg:
+                case (ushort)BanditAssassin:
+                case (ushort)BanditSapperTrio:
+                case (ushort)BanditDeathsayer:
+                case (ushort)BanditBrawler:
+                case (ushort)BanditBattlemage:
+                case (ushort)BanditCleric:
+                case (ushort)BanditBombardier:
+                case (ushort)BanditSniper:
+                case (ushort)NarellaTornado:
+                case (ushort)OilSlick:
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
