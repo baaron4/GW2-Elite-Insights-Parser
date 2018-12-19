@@ -245,13 +245,15 @@ var compileCombatReplay = function () {
                     var duration = Math.round(item[2] / 1000.0);
                     var skill = findSkill(false, skillId);
                     if ((x <= time && time <= x + duration) || (time <= x && i > 0)) {
+                        var offset = 0;
                         if ((x <= time && time <= x + duration)) {
                             res.current = {
                                 skill: skill,
                                 end: endType
                             };
+                            offset = 1;
                         }
-                        for (j = i + 1; j < this.playerRotation.length; j++) {
+                        for (j = i + offset; j < this.playerRotation.length; j++) {
                             next = this.playerRotation[j];
                             if (next[2] < 1e-2) {
                                 continue;

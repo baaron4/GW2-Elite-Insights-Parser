@@ -24,9 +24,6 @@ namespace LuckParser.Models.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             // generic method for fractals
-            long start = 0;
-            long end = 0;
-            long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
             Target mainTarget = Targets.Find(x => x.ID == TriggerID);
             if (mainTarget == null)
