@@ -38,29 +38,7 @@ namespace LuckParser.Models.Logic
             {
                 return phases;
             }
-            List<CombatItem> invulsTarget = GetFilteredList(log,762,mainTarget);        
-            for (int i = 0; i < invulsTarget.Count; i++)
-            {
-                CombatItem c = invulsTarget[i];
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
-                {
-                    end = log.FightData.ToFightSpace(c.Time);
-                    phases.Add(new PhaseData(start, end));
-                    if (i == invulsTarget.Count - 1)
-                    {
-                        mainTarget.AddCustomCastLog(new CastLog(end, -5, (int)(fightDuration - end), ParseEnum.Activation.None, (int)(fightDuration - end), ParseEnum.Activation.None), log);
-                    }
-                }
-                else
-                {
-                    start = log.FightData.ToFightSpace(c.Time);
-                    mainTarget.AddCustomCastLog(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
-                }
-            }
-            if (fightDuration - start > 5000 && start >= phases.Last().End)
-            {
-                phases.Add(new PhaseData(start, fightDuration));
-            }
+            phases.AddRange(GetPhasesByInvul(log, 762, mainTarget));
             phases.RemoveAll(x => x.GetDuration() < 1000);
             for (int i = 1; i < phases.Count; i++)
             {
