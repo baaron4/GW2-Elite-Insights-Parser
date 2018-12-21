@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Exceptions;
 using LuckParser.Models.Logic;
 using LuckParser.Models.ParseModels;
 
@@ -37,6 +38,14 @@ namespace LuckParser.Models.DataModels
             FightData.SetSuccess(this);
             FightData.SetCM(this);
             CombatData.Update(FightData.FightEnd);
+            if (FightData.FightDuration <= 2200)
+            {
+                throw new TooShortException();
+            }
+            if (Properties.Settings.Default.SkipFailedTries && !FightData.Success)
+            {
+                throw new SkipException();
+            }
         }
 
         public List<CombatItem> GetBoonData(long key)

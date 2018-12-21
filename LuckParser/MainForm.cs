@@ -101,12 +101,13 @@ namespace LuckParser
             {
                 GridRow row = _logQueue.Dequeue();
                 row.Run();
-            } else
+            }
+            else
             {
                 _anyRunning = false;
             }
         }
-        
+
         /// <summary>
         /// Invoked when a BackgroundWorker begins working.
         /// </summary>
@@ -137,7 +138,7 @@ namespace LuckParser
                 Task<string> DREITask = null;
                 Task<string> DRRHTask = null;
                 Task<string> RaidarTask = null;
-                string[] uploadresult = new string[3] { "","",""};
+                string[] uploadresult = new string[3] { "", "", "" };
                 bg.UpdateProgress(rowData, " Working...", 0);
 
                 SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
@@ -150,8 +151,7 @@ namespace LuckParser
                     ParsedLog log = parser.ParseLog(rowData, fInfo.FullName);
                     bg.ThrowIfCanceled(rowData);
                     bg.UpdateProgress(rowData, "35% - Data parsed", 35);
-                    bool uploadAuthorized = !Properties.Settings.Default.SkipFailedTries || (Properties.Settings.Default.SkipFailedTries && log.FightData.Success);
-                    if (Properties.Settings.Default.UploadToDPSReports && uploadAuthorized)
+                    if (Properties.Settings.Default.UploadToDPSReports)
                     {
                         bg.UpdateProgress(rowData, " 40% - Uploading to DPSReports using EI...", 40);
                         if (up_controller == null)
@@ -172,7 +172,7 @@ namespace LuckParser
                             uploadresult[0] = "Failed to Define Upload Task";
                         }
                     }
-                    if (Properties.Settings.Default.UploadToDPSReportsRH && uploadAuthorized)
+                    if (Properties.Settings.Default.UploadToDPSReportsRH)
                     {
                         bg.UpdateProgress(rowData, " 40% - Uploading to DPSReports using RH...", 40);
                         if (up_controller == null)
@@ -193,7 +193,7 @@ namespace LuckParser
                             uploadresult[1] = "Failed to Define Upload Task";
                         }
                     }
-                    if (Properties.Settings.Default.UploadToRaidar && uploadAuthorized)
+                    if (Properties.Settings.Default.UploadToRaidar)
                     {
                         bg.UpdateProgress(rowData, " 40% - Uploading to Raidar...", 40);
                         if (up_controller == null)
@@ -214,13 +214,6 @@ namespace LuckParser
                             uploadresult[2] = "Failed to Define Upload Task";
                         }
                     }
-                    if (Properties.Settings.Default.SkipFailedTries)
-                    {
-                        if (!log.FightData.Success)
-                        {
-                            throw new SkipException();
-                        }
-                    }
                     //Creating File
                     //save location
                     DirectoryInfo saveDirectory;
@@ -239,10 +232,8 @@ namespace LuckParser
                         throw new CancellationException(rowData, new Exception("Invalid save directory"));
                     }
                     string result = log.FightData.Success ? "kill" : "fail";
-                    string encounterLengthTerm = Properties.Settings.Default.AddDuration ? "_"+(log.FightData.FightDuration/1000).ToString()+"s" : "";
-                    string PoVClassTerm = Properties.Settings.Default.AddPoVProf ? "_"+log.PlayerList.Find(x => x.AgentItem.Name.Split(':')[0] == log.LogData.PoV.Split(':')[0]).Prof.ToLower() : "";
-
-
+                    string encounterLengthTerm = Properties.Settings.Default.AddDuration ? "_" + (log.FightData.FightDuration / 1000).ToString() + "s" : "";
+                    string PoVClassTerm = Properties.Settings.Default.AddPoVProf ? "_" + log.PlayerList.Find(x => x.AgentItem.Name.Split(':')[0] == log.LogData.PoV.Split(':')[0]).Prof.ToLower() : "";
 
                     StatisticsCalculator statisticsCalculator = new StatisticsCalculator(settings);
                     StatisticsCalculator.Switches switches = new StatisticsCalculator.Switches();
@@ -280,8 +271,8 @@ namespace LuckParser
                     if (Properties.Settings.Default.SaveOutCSV)
                     {
                         string outputFile = Path.Combine(
-                        saveDirectory.FullName,
-                        $"{fName}.csv"
+                            saveDirectory.FullName,
+                            $"{fName}.csv"
                         );
                         string splitString = "";
                         if (rowData.LogLocation != null) { splitString = ","; }
@@ -289,7 +280,7 @@ namespace LuckParser
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                         {
-                            var builder = new CSVBuilder(sw, ",", log, settings, statistics,uploadresult);
+                            var builder = new CSVBuilder(sw, ",", log, settings, statistics, uploadresult);
                             builder.CreateCSV();
                         }
                     }
@@ -343,10 +334,15 @@ namespace LuckParser
                 Console.Write(s.Message);
                 throw new CancellationException(rowData, s);
             }
-            catch (Exception ex) when (!System.Diagnostics.Debugger.IsAttached)	
-            {	
-                Console.Error.Write(ex.Message);	
-                throw new CancellationException(rowData, ex);	
+            catch (TooShortException t)
+            {
+                Console.Write(t.Message);
+                throw new CancellationException(rowData, t);
+            }
+            catch (Exception ex) when (!System.Diagnostics.Debugger.IsAttached)
+            {
+                Console.Error.Write(ex.Message);
+                throw new CancellationException(rowData, ex);
             }
             finally
             {
@@ -408,12 +404,12 @@ namespace LuckParser
                     row.Metadata.State = RowState.Complete;
                 }
             }
-            
+
             btnParse.Enabled = true;
             dgvFiles.Invalidate();
             RunNextWorker();
         }
-        
+
         /// <summary>
         /// Invoked when the 'Parse All' button is clicked. Begins processing of all files
         /// </summary>
@@ -576,7 +572,8 @@ namespace LuckParser
                 labWatchingDir.Text = "Watching for log files in " + Properties.Settings.Default.AutoAddPath;
                 logFileWatcher.EnableRaisingEvents = true;
                 labWatchingDir.Visible = true;
-            } else
+            }
+            else
             {
                 labWatchingDir.Visible = false;
                 logFileWatcher.EnableRaisingEvents = false;
@@ -611,7 +608,8 @@ namespace LuckParser
 
         private void LogFileWatcher_Renamed(object sender, RenamedEventArgs e)
         {
-            if (GeneralHelper.IsTemporaryFormat(e.OldFullPath) && GeneralHelper.IsCompressedFormat(e.FullPath)) {
+            if (GeneralHelper.IsTemporaryFormat(e.OldFullPath) && GeneralHelper.IsCompressedFormat(e.FullPath))
+            {
                 AddDelayed(e.FullPath);
             }
         }

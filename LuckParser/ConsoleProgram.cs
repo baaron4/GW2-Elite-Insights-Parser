@@ -70,8 +70,7 @@ namespace LuckParser
                     //Process evtc here
                     ParsedLog log = control.ParseLog(row, fInfo.FullName);
                     Console.Write("Log Parsed\n");
-                    bool uploadAuthorized = !Properties.Settings.Default.SkipFailedTries || (Properties.Settings.Default.SkipFailedTries && log.FightData.Success);
-                    if (Properties.Settings.Default.UploadToDPSReports && uploadAuthorized)
+                    if (Properties.Settings.Default.UploadToDPSReports)
                     {
                         Console.Write("Uploading to DPSReports using EI\n");
                         if (up_controller == null)
@@ -92,7 +91,7 @@ namespace LuckParser
                             uploadresult[0] = "Failed to Define Upload Task";
                         }
                     }
-                    if (Properties.Settings.Default.UploadToDPSReportsRH && uploadAuthorized)
+                    if (Properties.Settings.Default.UploadToDPSReportsRH)
                     {
                         Console.Write("Uploading to DPSReports using RH\n");
                         if (up_controller == null)
@@ -113,7 +112,7 @@ namespace LuckParser
                             uploadresult[1] = "Failed to Define Upload Task";
                         }
                     }
-                    if (Properties.Settings.Default.UploadToRaidar && uploadAuthorized)
+                    if (Properties.Settings.Default.UploadToRaidar)
                     {
                         Console.Write("Uploading to Raidar\n");
                         if (up_controller == null)
@@ -132,13 +131,6 @@ namespace LuckParser
                         else
                         {
                             uploadresult[2] = "Failed to Define Upload Task";
-                        }
-                    }
-                    if (Properties.Settings.Default.SkipFailedTries)
-                    {
-                        if (!log.FightData.Success)
-                        {
-                            throw new SkipException();
                         }
                     }
                     //Creating File
@@ -257,6 +249,12 @@ namespace LuckParser
             catch (SkipException s)
             {
                 Console.Error.Write(s.Message);
+                throw new CancellationException(row, s);
+            }
+            catch (TooShortException t)
+            {
+                Console.Error.Write(t.Message);
+                throw new CancellationException(row, t);
             }
             catch (Exception ex) when (!System.Diagnostics.Debugger.IsAttached)
             {
