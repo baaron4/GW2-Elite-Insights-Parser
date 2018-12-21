@@ -38,7 +38,7 @@ namespace LuckParser.Models.DataModels
             FightData.SetSuccess(this);
             FightData.SetCM(this);
             CombatData.Update(FightData.FightEnd);
-            if (FightData.FightDuration <= 1000)
+            if (FightData.FightDuration <= 2200)
             {
                 throw new TooShortException();
             }
