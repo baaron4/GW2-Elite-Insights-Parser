@@ -122,8 +122,8 @@ namespace LuckParser.Models.ParseModels
         private void SetDeathRecaps(ParsedLog log)
         {
             List<DeathRecap> res = _deathRecaps;
-            List<CombatItem> deads = log.CombatData.GetStates(InstID, ParseEnum.StateChange.ChangeDead, log.FightData.FightStart, log.FightData.FightEnd);
-            List<CombatItem> downs = log.CombatData.GetStates(InstID, ParseEnum.StateChange.ChangeDown, log.FightData.FightStart, log.FightData.FightEnd);
+            List<CombatItem> deads = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.ChangeDead, log.FightData.FightStart, log.FightData.FightEnd);
+            List<CombatItem> downs = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.ChangeDown, log.FightData.FightStart, log.FightData.FightEnd);
             long lastTime = log.FightData.FightStart;
             List<DamageLog> damageLogs = GetDamageTakenLogs(null, log, 0, log.FightData.FightDuration);
             foreach (CombatItem dead in deads)

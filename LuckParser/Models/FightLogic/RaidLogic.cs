@@ -23,7 +23,7 @@ namespace LuckParser.Models.Logic
                     55821,
                     60685
                 };
-            CombatItem reward = log.CombatData.GetStatesData(ParseEnum.StateChange.Reward).FirstOrDefault(x => raidRewardsIds.Contains(x.Value));
+            CombatItem reward = log.CombatData.GetStates(ParseEnum.StateChange.Reward).FirstOrDefault(x => raidRewardsIds.Contains(x.Value));
             if (reward != null)
             {
                 log.FightData.Success = true;

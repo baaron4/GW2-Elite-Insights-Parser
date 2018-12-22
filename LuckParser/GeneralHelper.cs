@@ -216,6 +216,12 @@ namespace LuckParser
                     return "https://i.imgur.com/UqbFp9S.png";
                 case ParseEnum.TargetIDS.Slothasor:
                     return "https://i.imgur.com/h1xH3ER.png";
+                case ParseEnum.TargetIDS.Berg:
+                    return "https://i.imgur.com/tLMXqL7.png";
+                case ParseEnum.TargetIDS.Narella:
+                    return "https://i.imgur.com/FwMCoR0.png";
+                case ParseEnum.TargetIDS.Zane:
+                    return "https://i.imgur.com/tkPWMST.png";
                 case ParseEnum.TargetIDS.Matthias:
                     return "https://i.imgur.com/3uMMmTS.png";
                 case ParseEnum.TargetIDS.KeepConstruct:
@@ -283,6 +289,7 @@ namespace LuckParser
                     return "https://i.imgur.com/J6oMITN.png";
                 case Pride:
                     return "https://i.imgur.com/ePTXx23.png";
+                case OilSlick:
                 case Oil:
                     return "https://i.imgur.com/R26VgEr.png";
                 case Tear:
@@ -322,6 +329,9 @@ namespace LuckParser
                     return "https://i.imgur.com/9XtNPdw.png";
                 case IcePatch:
                     return "https://i.imgur.com/yxKJ5Yc.png";
+                case BanditSaboteur:
+                    return "https://i.imgur.com/jUKMEbD.png";
+                case NarellaTornado:
                 case Tornado:
                     return "https://i.imgur.com/e10lZMa.png";
                 case Jade:
@@ -344,7 +354,7 @@ namespace LuckParser
                     return "https://i.imgur.com/vHka0QN.png";
                 case ConjuredShield:
                     return "https://i.imgur.com/wUiI19S.png";
-                case GreaterMagmaElemental1:
+                case GreaterMagmaElemental1:                  
                 case GreaterMagmaElemental2:
                     return "https://i.imgur.com/sr146T6.png";
                 case LavaElemental1:
@@ -366,6 +376,7 @@ namespace LuckParser
                     return "https://i.imgur.com/xa7Fefn.png";
                 case Scythe:
                     return "https://i.imgur.com/INCGLIK.png";
+                case BanditBombardier:
                 case SurgingSoul:
                     return "https://i.imgur.com/k79t7ZA.png";
                 case Seekers:
@@ -376,6 +387,7 @@ namespace LuckParser
                     return "https://i.imgur.com/nauDVYP.png";
                 case RedGuardian:
                     return "https://i.imgur.com/73Uj4lG.png";
+                case CagedWarg:
                 case UnderworldReaper:
                 case BanditSapper:
                     return "https://i.imgur.com/0koP4xB.png";

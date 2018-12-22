@@ -54,7 +54,7 @@ namespace LuckParser.Models.ParseModels
         {
             if (Targets.Count > 0)
             {
-                List<CombatItem> deathEvents = log.CombatData.GetStatesData(DataModels.ParseEnum.StateChange.ChangeDead);
+                List<CombatItem> deathEvents = log.CombatData.GetStates(ParseEnum.StateChange.ChangeDead);
                 Start = Math.Max(Start, log.FightData.ToFightSpace(Targets.Min(x => x.FirstAware)));
                 long end = long.MinValue;
                 foreach (Target target in Targets)

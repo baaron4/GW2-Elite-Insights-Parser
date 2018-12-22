@@ -64,7 +64,7 @@ namespace LuckParser.Models.ParseModels
                                                 (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
         }
 
-        public List<CombatItem> GetStates(int srcInstid, ParseEnum.StateChange change, long start, long end)
+        public List<CombatItem> GetStatesData(int srcInstid, ParseEnum.StateChange change, long start, long end)
         {
             if (StatesData.TryGetValue(change, out List<CombatItem> data))
             {
@@ -187,7 +187,7 @@ namespace LuckParser.Models.ParseModels
             return new List<CombatItem>();
         }
 
-        public List<CombatItem> GetStatesData(ParseEnum.StateChange key)
+        public List<CombatItem> GetStates(ParseEnum.StateChange key)
         {
             if (StatesData.TryGetValue(key, out List<CombatItem> res))
             {
@@ -199,11 +199,11 @@ namespace LuckParser.Models.ParseModels
 
         public void GetAgentStatus(long start, long end, ushort instid, List<Tuple<long, long>> dead, List<Tuple<long, long>> down, List<Tuple<long, long>> dc)
         {
-            List<CombatItem> status = GetStates(instid, ParseEnum.StateChange.ChangeDown, start, end);
-            status.AddRange(GetStates(instid, ParseEnum.StateChange.ChangeUp, start, end));
-            status.AddRange(GetStates(instid, ParseEnum.StateChange.ChangeDead, start, end));
-            status.AddRange(GetStates(instid, ParseEnum.StateChange.Spawn, start, end));
-            status.AddRange(GetStates(instid, ParseEnum.StateChange.Despawn, start, end));
+            List<CombatItem> status = GetStatesData(instid, ParseEnum.StateChange.ChangeDown, start, end);
+            status.AddRange(GetStatesData(instid, ParseEnum.StateChange.ChangeUp, start, end));
+            status.AddRange(GetStatesData(instid, ParseEnum.StateChange.ChangeDead, start, end));
+            status.AddRange(GetStatesData(instid, ParseEnum.StateChange.Spawn, start, end));
+            status.AddRange(GetStatesData(instid, ParseEnum.StateChange.Despawn, start, end));
             status = status.OrderBy(x => x.Time).ToList();
             for (var i = 0; i < status.Count - 1; i++)
             {

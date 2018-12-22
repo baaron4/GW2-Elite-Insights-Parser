@@ -103,6 +103,7 @@
     <Compile Include="Builders\Helpers\CSVHelper.cs" />
     <Compile Include="GeneralHelper.cs" />
     <Compile Include="Controllers\FlashWindow.cs" />
+    <Compile Include="Models\FightLogic\BanditTrio.cs" />
     <Compile Include="Models\ParseModels\Logs\BoonExtensionLog.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\AbstractBoonSimulationItem.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemExtension.cs" />

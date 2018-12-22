@@ -24,9 +24,6 @@ namespace LuckParser.Models.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             // generic method for fractals
-            long start = 0;
-            long end = 0;
-            long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
             Target mainTarget = Targets.Find(x => x.ID == TriggerID);
             if (mainTarget == null)
@@ -56,7 +53,7 @@ namespace LuckParser.Models.Logic
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
-            CombatItem reward = log.CombatData.GetStatesData(ParseEnum.StateChange.Reward).LastOrDefault();
+            CombatItem reward = log.CombatData.GetStates(ParseEnum.StateChange.Reward).LastOrDefault();
             CombatItem lastDamageTaken = log.CombatData.GetDamageTakenData(mainTarget.InstID, mainTarget.FirstAware, mainTarget.LastAware).LastOrDefault(x => x.Value > 0);
             if (lastDamageTaken != null)
             {

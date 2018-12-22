@@ -548,9 +548,9 @@ namespace LuckParser.Models.DataModels
                         final.InvulnedCount++;
                         final.DamageInvulned += log.Damage;
                     }
-                    List<CombatItem> deads = combatData.GetStates(player.InstID, ParseEnum.StateChange.ChangeDead, start, end);
-                    List<CombatItem> downs = combatData.GetStates(player.InstID, ParseEnum.StateChange.ChangeDown, start, end);
-                    List<CombatItem> dcs = combatData.GetStates(player.InstID, ParseEnum.StateChange.Despawn, start, end);
+                    List<CombatItem> deads = combatData.GetStatesData(player.InstID, ParseEnum.StateChange.ChangeDead, start, end);
+                    List<CombatItem> downs = combatData.GetStatesData(player.InstID, ParseEnum.StateChange.ChangeDown, start, end);
+                    List<CombatItem> dcs = combatData.GetStatesData(player.InstID, ParseEnum.StateChange.Despawn, start, end);
                     final.DownCount = downs.Count;
                     final.DeadCount = deads.Count;
                     final.DcCount = dcs.Count;

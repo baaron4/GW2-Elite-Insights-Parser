@@ -314,9 +314,10 @@ function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, c
         }
         var div = Math.max(j - limID, 1);
         totalDamage = damageData.total[j] - damageData.total[limID];
+        targetDamage = 0;
         for (k = 0; k < activetargets.length; k++) {
             targetid = activetargets[k];
-            targetDamage = damageData.targets[targetid][j] - damageData.targets[targetid][limID];
+            targetDamage += damageData.targets[targetid][j] - damageData.targets[targetid][limID];
         }
         totalDPS[j] = Math.round(totalDamage / div);
         targetDPS[j] = Math.round(targetDamage / div);

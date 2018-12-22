@@ -11,6 +11,7 @@ namespace LuckParser.Models.ParseModels
         private Dictionary<ushort, List<AgentItem>> _allAgentsByInstID;
         private Dictionary<ushort, List<AgentItem>> _allAgentsByID;
         private Dictionary<AgentItem.AgentType, List<AgentItem>> _allAgentsByType;
+        private Dictionary<string, List<AgentItem>> _allAgentsByName;
         public HashSet<ulong> AgentValues => new HashSet<ulong>(_allAgentsList.Select(x => x.Agent));
         public HashSet<ushort> InstIDValues => new HashSet<ushort>(_allAgentsList.Select(x => x.InstID));
 
@@ -90,6 +91,7 @@ namespace LuckParser.Models.ParseModels
             _allAgentsByID = _allAgentsList.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
             _allAgentsByInstID = _allAgentsList.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
             _allAgentsByType = _allAgentsList.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
+            _allAgentsByName= _allAgentsList.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList());
         }
         
         public List<AgentItem> GetAgentByType(AgentItem.AgentType type)

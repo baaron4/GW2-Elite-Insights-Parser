@@ -99,9 +99,9 @@ namespace LuckParser.Models.DataModels
             return CombatData.GetMovementData(key,start,end);
         }
 
-        public List<CombatItem> GetStatesData(ParseEnum.StateChange key)
+        public List<CombatItem> GetStatesData(ushort instid, ParseEnum.StateChange state, long start, long end)
         {
-            return CombatData.GetStatesData(key);
+            return CombatData.GetStatesData(instid, state, start, end);
         }
     }
 }

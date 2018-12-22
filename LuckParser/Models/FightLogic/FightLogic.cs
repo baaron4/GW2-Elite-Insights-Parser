@@ -130,7 +130,7 @@ namespace LuckParser.Models.Logic
 
         protected void OverrideMaxHealths(ParsedLog log)
         {
-            List<CombatItem> maxHUs = log.CombatData.GetStatesData(ParseEnum.StateChange.MaxHealthUpdate);
+            List<CombatItem> maxHUs = log.CombatData.GetStates(ParseEnum.StateChange.MaxHealthUpdate);
             if (maxHUs.Count > 0)
             {
                 foreach (Target tar in Targets)
@@ -266,7 +266,7 @@ namespace LuckParser.Models.Logic
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
-            CombatItem killed = log.CombatData.GetStatesData(ParseEnum.StateChange.ChangeDead).LastOrDefault(x => x.SrcInstid == mainTarget.InstID);
+            CombatItem killed = log.CombatData.GetStatesData(mainTarget.InstID, ParseEnum.StateChange.ChangeDead, mainTarget.FirstAware, mainTarget.LastAware).LastOrDefault();
             if (killed != null)
             {
                 log.FightData.Success = true;
@@ -298,10 +298,10 @@ namespace LuckParser.Models.Logic
                             switch (mech.SkillId)
                             {
                                 case SkillItem.DeathId:
-                                    cList = combatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDead, log.FightData.FightStart, log.FightData.FightEnd);
+                                    cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.ChangeDead, log.FightData.FightStart, log.FightData.FightEnd);
                                     break;
                                 case SkillItem.DownId:
-                                    cList = combatData.GetStates(p.InstID, ParseEnum.StateChange.ChangeDown, log.FightData.FightStart, log.FightData.FightEnd);
+                                    cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.ChangeDown, log.FightData.FightStart, log.FightData.FightEnd);
                                     break;
                                 case SkillItem.ResurrectId:
                                     cList = log.GetCastData(p.InstID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == SkillItem.ResurrectId && x.IsActivation.IsCasting()).ToList();

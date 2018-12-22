@@ -87,12 +87,12 @@ namespace LuckParser.Models.Logic
                 throw new InvalidOperationException("Main target of the fight not found");
             }
             HashSet<ushort> pIds = log.PlayerIDs;
-            int combatExits = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Count(x => x.SrcInstid == mainTarget.InstID);
+            int combatExits = log.CombatData.GetStatesData(mainTarget.InstID, ParseEnum.StateChange.ExitCombat, mainTarget.FirstAware, mainTarget.LastAware).Count;
             CombatItem lastDamageTaken = log.CombatData.GetDamageTakenData(mainTarget.InstID, mainTarget.FirstAware, mainTarget.LastAware).LastOrDefault(x => (x.Value > 0 || x.BuffDmg > 0) && pIds.Contains(x.SrcInstid));
             if (combatExits == 3 && lastDamageTaken != null)
             {
-                CombatItem lastPlayerExit = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => pIds.Contains(x.SrcInstid)).LastOrDefault();
-                CombatItem lastTargetExit = log.CombatData.GetStatesData(ParseEnum.StateChange.ExitCombat).LastOrDefault(x => x.SrcInstid == mainTarget.InstID);
+                CombatItem lastPlayerExit = log.CombatData.GetStates(ParseEnum.StateChange.ExitCombat).Where(x => pIds.Contains(x.SrcInstid)).LastOrDefault();
+                CombatItem lastTargetExit = log.CombatData.GetStatesData(mainTarget.InstID, ParseEnum.StateChange.ExitCombat, mainTarget.FirstAware, mainTarget.LastAware).LastOrDefault();
                 log.FightData.Success = lastPlayerExit != null && lastTargetExit != null && lastPlayerExit.Time - lastTargetExit.Time > 1000 ? true : false;
                 log.FightData.FightEnd = lastDamageTaken.Time;
             }

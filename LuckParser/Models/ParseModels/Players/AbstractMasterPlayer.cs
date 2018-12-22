@@ -181,9 +181,9 @@ namespace LuckParser.Models.ParseModels
                 CombatReplay.PollingRate(pollingRate, log.FightData.FightDuration, forceInterpolate);
                 if (trim)
                 {
-                    CombatItem despawnCheck = log.CombatData.GetStates(InstID, ParseEnum.StateChange.Despawn,FirstAware,LastAware).LastOrDefault();
-                    CombatItem spawnCheck = log.CombatData.GetStates(InstID, ParseEnum.StateChange.Spawn, FirstAware, LastAware).LastOrDefault();
-                    CombatItem deathCheck = log.CombatData.GetStates(InstID, ParseEnum.StateChange.ChangeDead, FirstAware, LastAware).LastOrDefault();
+                    CombatItem despawnCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Despawn,FirstAware,LastAware).LastOrDefault();
+                    CombatItem spawnCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Spawn, FirstAware, LastAware).LastOrDefault();
+                    CombatItem deathCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.ChangeDead, FirstAware, LastAware).LastOrDefault();
                     if (deathCheck != null)
                     {
                         CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAware), log.FightData.ToFightSpace(deathCheck.Time));
@@ -211,7 +211,7 @@ namespace LuckParser.Models.ParseModels
 
         public long GetDeath(ParsedLog log, long start, long end)
         {
-            CombatItem dead = log.CombatData.GetStatesData(ParseEnum.StateChange.ChangeDead).LastOrDefault(x => x.SrcInstid == InstID && x.Time >= log.FightData.ToLogSpace(start) && x.Time <= log.FightData.ToLogSpace(end));
+            CombatItem dead = log.CombatData.GetStatesData(InstID,ParseEnum.StateChange.ChangeDead, log.FightData.ToLogSpace(start), log.FightData.ToLogSpace(end)).LastOrDefault();
             if (dead != null && dead.Time > 0)
             {
                 return log.FightData.ToFightSpace(dead.Time);
