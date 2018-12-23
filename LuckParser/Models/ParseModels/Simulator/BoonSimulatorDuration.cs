@@ -17,20 +17,11 @@ namespace LuckParser.Models.ParseModels
             if ((BoonStack.Count > 0 && oldValue > 0) || BoonStack.Count == Capacity)
             {
                 BoonStack[0].Extend(extension, src);
-                if (src == 0)
-                {
-                    UnknownExtensionSimulationResult.Add(new BoonSimulationItemExtension(extension, BoonStack[0].Start, BoonStack[0].OriginalSrc));
-                }
                 return;
             }
             else
             {
-                ushort srcToUse = src > 0 ? src : _lastSrcRemove;
-                Add(oldValue + extension, srcToUse, start, true);
-                if (src == 0)
-                {
-                    UnknownExtensionSimulationResult.Add(new BoonSimulationItemExtension(extension, start, srcToUse));
-                }
+                Add(oldValue + extension, src, _lastSrcRemove, start, true);
             }
         }
 
@@ -50,20 +41,29 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
                 GenerationSimulation.Add(toAdd);
-                BoonStack[0] = new BoonStackItem(BoonStack[0], timePassed, timePassed);
-                long diff = timePassed - Math.Abs(Math.Min(BoonStack[0].BoonDuration, 0));
+                long timeDiff = BoonStack[0].BoonDuration - timePassed;
+                long diff = 0;
+                long leftOver = 0;
+                if (timeDiff < 0)
+                {
+                    diff = BoonStack[0].BoonDuration;
+                    leftOver = timePassed - diff;
+                }
+                else
+                {
+                    diff = timePassed;
+                }
+                BoonStack[0] = new BoonStackItem(BoonStack[0], diff, diff);
                 for (int i = 1; i < BoonStack.Count; i++)
                 {
                     BoonStack[i] = new BoonStackItem(BoonStack[i], diff, 0);
                 }
-                if (BoonStack[0].BoonDuration <= 0)
+                if (BoonStack[0].BoonDuration == 0)
                 {
                     _lastSrcRemove = BoonStack[0].OriginalSrc;
-                    // Spend leftover time
-                    long leftover = Math.Abs(BoonStack[0].BoonDuration);
                     BoonStack.RemoveAt(0);
-                    Update(leftover);
                 }
+                Update(leftOver);
             }
         }
     }

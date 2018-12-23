@@ -22,7 +22,7 @@ namespace LuckParser.Models.ParseModels
 				int end = (int) item.End;
 				if (time >= start && time <= end)
 				{
-					return item.GetStack(time);
+					return item.GetStack();
 				}
 			}
 

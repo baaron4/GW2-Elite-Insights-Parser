@@ -13,7 +13,7 @@ namespace LuckParser.Models.ParseModels
             // no sort
         }
 
-        public override bool StackEffect(ParsedLog log, BoonStackItem stackItem, List<BoonStackItem> stacks, List<BoonSimulationItemWasted> overstacks)
+        public override bool StackEffect(ParsedLog log, BoonStackItem stackItem, List<BoonStackItem> stacks, List<BoonSimulationItemWasted> wastes)
         {
             if (stacks.Count <= 1)
             {
@@ -27,7 +27,14 @@ namespace LuckParser.Models.ParseModels
                 stacks.Insert(0, first);
                 return false;
             }
-            overstacks.Add(new BoonSimulationItemWasted(minItem.Src, minItem.BoonDuration, minItem.Start));
+            wastes.Add(new BoonSimulationItemWasted(minItem.Src, minItem.BoonDuration, minItem.Start));
+            if (minItem.Extensions.Count > 0)
+            {
+                foreach (var item in minItem.Extensions)
+                {
+                    wastes.Add(new BoonSimulationItemWasted(item.Item1, item.Item2, minItem.Start));
+                }
+            }
             stacks[stacks.IndexOf(minItem)] = stackItem;
             stacks.Insert(0, first);
             Sort(log, stacks);

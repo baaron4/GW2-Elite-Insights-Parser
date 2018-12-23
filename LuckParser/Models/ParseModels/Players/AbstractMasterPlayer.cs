@@ -432,22 +432,19 @@ namespace LuckParser.Models.ParseModels
                                 Add(_condiPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
                             simul.SetBoonDistributionItem(distrib, phase.Start, phase.End);
                         }
-                        List<BoonsGraphModel.Segment> segments = simul.ToSegment();
-                        if (segments.Count > 0)
+                        BoonsGraphModel.Segment segment = simul.ToSegment();
+                        if (graphSegments.Count == 0)
                         {
-                            if (graphSegments.Count == 0)
-                            {
-                                graphSegments.Add(new BoonsGraphModel.Segment(0, segments.First().Start, 0));
-                            } else if (graphSegments.Last().End != segments.First().Start)
-                            {
-                                graphSegments.Add(new BoonsGraphModel.Segment(graphSegments.Last().End, segments.First().Start, 0));
-                            }
-                            graphSegments.AddRange(simul.ToSegment());
+                            graphSegments.Add(new BoonsGraphModel.Segment(0, segment.Start, 0));
                         }
+                        else if (graphSegments.Last().End != segment.Start)
+                        {
+                            graphSegments.Add(new BoonsGraphModel.Segment(graphSegments.Last().End, segment.Start, 0));
+                        }
+                        graphSegments.Add(segment);
                     }
                     List<AbstractBoonSimulationItem> extraSimulations = new List<AbstractBoonSimulationItem>(simulator.OverstackSimulationResult);
                     extraSimulations.AddRange(simulator.WasteSimulationResult);
-                    extraSimulations.AddRange(simulator.UnknownExtensionSimulationResult);
                     foreach (AbstractBoonSimulationItem simul in extraSimulations)
                     {
                         for (int i = 0; i < phases.Count; i++)
