@@ -41,15 +41,15 @@
                 <td>{{ row[4] }}</td>
                 <td>{{ !getSkill(row[0], row[1]).condi && row[5] ? row[5] : ''}}</td>
                 <td>{{ row[6] }}</td>
-                <td>{{(!getSkill(row[0], row[1]).condi && row[6] && row[5]) ? round3(row[6]/row[5]) : ''}}</td>
+                <td>{{(!getSkill(row[0], row[1]).condi && row[6] && row[5]) ? round2(row[6]/row[5]) : ''}}</td>
                 <td :data-original-title="(!getSkill(row[0], row[1]).condi && row[6]) ? row[7] +' out of ' + row[6] + ' hits': false">
-                    {{(!getSkill(row[0], row[1]).condi && row[6]) ? round3(row[7]*100/row[6]) + '%' : ''}}
+                    {{(!getSkill(row[0], row[1]).condi && row[6]) ? round2(row[7]*100/row[6]) + '%' : ''}}
                 </td>
                 <td :data-original-title="(!getSkill(row[0], row[1]).condi && row[6]) ? row[8] +' out of ' + row[6] + ' hits': false">
-                    {{(!getSkill(row[0], row[1]).condi && row[6]) ? round3(row[8]*100/row[6]) + '%' : ''}}
+                    {{(!getSkill(row[0], row[1]).condi && row[6]) ? round2(row[8]*100/row[6]) + '%' : ''}}
                 </td>
                 <td :data-original-title="(!getSkill(row[0], row[1]).condi && row[6]) ? row[9] +' out of ' + row[6] + ' hits': false">
-                    {{(!getSkill(row[0], row[1]).condi && row[6]) ? round3(row[9]*100/row[6]) + '%' : ''}}
+                    {{(!getSkill(row[0], row[1]).condi && row[6]) ? round2(row[9]*100/row[6]) + '%' : ''}}
                 </td>
                 <td>{{ row[10] ? row[10] + 's' : ''}}</td>
                 <td>{{ row[11] ? row[11] + 's' : ''}}</td>

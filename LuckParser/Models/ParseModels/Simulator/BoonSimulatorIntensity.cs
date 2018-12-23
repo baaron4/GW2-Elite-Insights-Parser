@@ -43,7 +43,6 @@ namespace LuckParser.Models.ParseModels
         {
             if (BoonStack.Count > 0 && timePassed > 0)
             {
-                _lastSrcRemoves.Clear();
                 var toAdd = new BoonSimulationItemIntensity(BoonStack);
                 if (GenerationSimulation.Count > 0)
                 {
@@ -59,7 +58,7 @@ namespace LuckParser.Models.ParseModels
                 // Subtract from each
                 for (int i = BoonStack.Count - 1; i >= 0; i--)
                 {
-                    var item = new BoonStackItem(BoonStack[i], timePassed, timePassed);
+                    var item = new BoonStackItem(BoonStack[i], diff, diff);
                     BoonStack[i] = item;
                     if (item.BoonDuration == 0)
                     {
