@@ -195,7 +195,6 @@ namespace LuckParser.Models.ParseModels
                     break;
             }
             _logic.Sort(_log, BoonStack);
-            Update(0);
         }
 
         public abstract void Extend(long extension, long oldValue, ushort src, long start);

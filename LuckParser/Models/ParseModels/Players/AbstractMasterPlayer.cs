@@ -228,7 +228,7 @@ namespace LuckParser.Models.ParseModels
                 long boonId = c.SkillID;
                 if (!boonMap.ContainsKey(boonId))
                 {
-                    if (!Boon.BoonsByIds.ContainsKey(boonId))
+                    if (!Boon.BoonsByIds.ContainsKey(boonId) || Boon.BoonsByIds[boonId].Type == Boon.BoonType.Intensity)
                     {
                         continue;
                     }

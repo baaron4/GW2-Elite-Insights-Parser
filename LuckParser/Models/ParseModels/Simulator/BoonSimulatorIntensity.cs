@@ -54,17 +54,20 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
                 GenerationSimulation.Add(toAdd);
+                long diff = Math.Min(BoonStack.Min(x => x.BoonDuration), timePassed);
+                long leftOver = timePassed - diff;
                 // Subtract from each
                 for (int i = BoonStack.Count - 1; i >= 0; i--)
                 {
                     var item = new BoonStackItem(BoonStack[i], timePassed, timePassed);
                     BoonStack[i] = item;
-                    if (item.BoonDuration <= 0)
+                    if (item.BoonDuration == 0)
                     {
                         _lastSrcRemoves.Add(item.OriginalSrc);
                     }
                 }
                 BoonStack.RemoveAll(x => x.BoonDuration == 0);
+                Update(leftOver);
             }
         }
     }

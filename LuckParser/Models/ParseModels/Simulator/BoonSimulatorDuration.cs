@@ -29,7 +29,7 @@ namespace LuckParser.Models.ParseModels
 
         protected override void Update(long timePassed)
         {
-            if (BoonStack.Count > 0)
+            if (BoonStack.Count > 0 && timePassed > 0)
             {
                 var toAdd = new BoonSimulationItemDuration(BoonStack[0]);
                 if (GenerationSimulation.Count > 0)

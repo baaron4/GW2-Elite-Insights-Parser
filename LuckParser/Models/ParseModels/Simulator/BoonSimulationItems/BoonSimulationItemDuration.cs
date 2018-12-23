@@ -38,16 +38,19 @@ namespace LuckParser.Models.ParseModels
                     GetClampedDuration(start, end),
                     0, 0, 0));
             }
-            if (distrib.TryGetValue(OriginalSrc, out var toModify2))
+            if (OriginalSrc != Src)
             {
-                toModify2.Extension += GetClampedDuration(start, end);
-                distrib[OriginalSrc] = toModify;
-            }
-            else
-            {
-                distrib.Add(OriginalSrc, new BoonDistributionItem(
-                    0,
-                    0, 0, GetClampedDuration(start, end)));
+                if (distrib.TryGetValue(OriginalSrc, out var toModify2))
+                {
+                    toModify2.Extension += GetClampedDuration(start, end);
+                    distrib[OriginalSrc] = toModify2;
+                }
+                else
+                {
+                    distrib.Add(OriginalSrc, new BoonDistributionItem(
+                        0,
+                        0, 0, GetClampedDuration(start, end)));
+                }
             }
         }
     }
