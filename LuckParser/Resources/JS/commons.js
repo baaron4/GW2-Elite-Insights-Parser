@@ -113,7 +113,7 @@ var compileCommons = function () {
                         }
                         if (val[3] > 0) {
                             res += "<br>";
-                            res += val[3] + (buff.stacking ? "" : "%") + " extended by unknown source";
+                            res += val[3] + (buff.stacking ? "" : "%") + " extended";
                         }
                         return res;
                     } else if (buff.stacking && val[1] > 0) {
