@@ -34,6 +34,57 @@ namespace LuckParser.Models.ParseModels
             CombatReplay.Icon = GeneralHelper.GetNPCIcon(ID);
             log.FightData.Logic.ComputeAdditionalTargetData(this, log);
         }
+
+        public List<double[]> Get1SHealthGraph(ParsedLog log, List<PhaseData> phases)
+        {
+            List<double[]> res = new List<double[]>();
+            // fill the graph, full precision
+            List<double> listFull = new List<double>();
+            for (int i = 0; i <= phases[0].GetDuration(); i++)
+            {
+                listFull.Add(100.0);
+            }
+            int totalTime = 0;
+            double curHealth = 100.0;
+            foreach (Point p in HealthOverTime)
+            {
+                int time = p.X;
+                if (time > phases[0].GetDuration())
+                {
+                    break;
+                }
+                for (; totalTime < time; totalTime++)
+                {
+                    listFull[totalTime] = curHealth;
+                }
+                curHealth = p.Y / 100.0;
+                listFull[time] = curHealth;
+            }
+            // fill
+            for (; totalTime <= phases[0].GetDuration(); totalTime++)
+            {
+                listFull[totalTime] = curHealth;
+            }
+            foreach (PhaseData phase in phases)
+            {
+                int seconds = (int)phase.GetDuration("s");
+                bool needsLastPoint = seconds * 1000 != phase.GetDuration();
+                double[] hps = new double[seconds + (needsLastPoint ? +2 : 1)];
+                int time = (int)phase.Start;
+                int i = 0;
+                for (i = 0; i <= seconds; i++)
+                {
+                    hps[i] = listFull[time];
+                    time += 1000;
+                }
+                if (needsLastPoint)
+                {
+                    hps[i] = listFull[(int)phase.End];
+                }
+                res.Add(hps);
+            }
+            return res;
+        }
         
 
         //
