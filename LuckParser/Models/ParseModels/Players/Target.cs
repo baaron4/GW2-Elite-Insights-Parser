@@ -49,6 +49,10 @@ namespace LuckParser.Models.ParseModels
             foreach (Point p in HealthOverTime)
             {
                 int time = p.X;
+                if (time < 0)
+                {
+                    continue;
+                }
                 if (time > phases[0].GetDuration())
                 {
                     break;
