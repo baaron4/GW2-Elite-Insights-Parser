@@ -38,7 +38,7 @@ namespace LuckParser.Models.ParseModels
                     GetClampedDuration(start, end),
                     0, 0, 0));
             }
-            if (OriginalSrc != Src)
+            if (Src == 0)
             {
                 if (distrib.TryGetValue(OriginalSrc, out var toModify2))
                 {

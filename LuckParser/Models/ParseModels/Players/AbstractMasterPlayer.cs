@@ -219,6 +219,70 @@ namespace LuckParser.Models.ParseModels
             return 0;
         }
         // private getters
+
+        private ushort TryFindSrc(ParsedLog log, long time, long extension)
+        {
+            ushort src = 0;
+            HashSet<long> idsToCheck = new HashSet<long>();
+            CombatItem cl = null;
+            switch (extension)
+            {
+                // SoI
+                case 5000:
+                    idsToCheck.Add(10236);
+                    break;
+                // Treated True Nature
+                case 3000:
+                    idsToCheck.Add(51696);
+                    break;
+                // Sand Squall, True Nature, Soulbeast trait
+                case 2000:
+                    idsToCheck.Add(51696);
+                    idsToCheck.Add(29453);
+                    break;
+
+            }
+            long uplimit = 900;
+            long downlimit = 100;
+            foreach (long id in idsToCheck)
+            {
+                List<CombatItem> cls = log.GetCastDataById(id).Where(x => x.IsActivation.NoInterruptEndCasting() && Math.Abs(x.Time - time) <= uplimit && Math.Abs(x.Time - time) >= downlimit).ToList();
+                CombatItem clCandidate = cls.LastOrDefault(x => x.Time <= time);
+                // testing purposes
+                HashSet<ushort> srcs = new HashSet<ushort>(cls.Select(x => x.SrcMasterInstid > 0 ? x.SrcMasterInstid : x.SrcInstid));
+                if (srcs.Count > 1)
+                {
+                    HashSet<long> times = new HashSet<long>(cls.Select(x => x.Time - time));
+                    int ohno = 1;
+                }
+                if (clCandidate == null)
+                {
+                    clCandidate = cls.FirstOrDefault(x => x.Time >= time);
+                }
+                if (clCandidate == null)
+                {
+                    continue;
+                }
+                if (cl == null)
+                {
+                    cl = clCandidate;
+                }
+                else if (Math.Abs(cl.Time - time) >= Math.Abs(clCandidate.Time - time))
+                {
+                    cl = clCandidate;
+                }
+            }
+            if (cl == null && AgentItem.Prof == "Soulbeast" && extension == 2000)
+            {
+                return InstID;
+            }
+            else if (cl != null)
+            {
+                src = cl.SrcInstid;
+            }
+            return src;
+        }
+
         private BoonMap GetBoonMap(ParsedLog log)
         {
             BoonMap boonMap = new BoonMap();
@@ -251,13 +315,17 @@ namespace LuckParser.Models.ParseModels
                 {
                     if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                     {
+                        ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
                         if (c.IsOffcycle > 0)
                         {
-                            loglist.Add(new BoonExtensionLog(time, c.Value, c.OverstackValue - c.Value, 0));
+                            if (src == 0)
+                            {
+                                src = TryFindSrc(log, c.Time, c.Value);
+                            }
+                            loglist.Add(new BoonExtensionLog(time, c.Value, c.OverstackValue - c.Value, src));
                         }
                         else
                         {
-                            ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
                             loglist.Add(new BoonApplicationLog(time, src, c.Value));
                         }
                     }
@@ -608,7 +676,7 @@ namespace LuckParser.Models.ParseModels
                 ParseEnum.StateChange state = c.IsStateChange;
                 if (state == ParseEnum.StateChange.Normal)
                 {                  
-                    if (c.IsActivation.IsCasting())
+                    if (c.IsActivation.StartCasting())
                     {
                         // Missing end activation
                         long time = log.FightData.ToFightSpace(c.Time);

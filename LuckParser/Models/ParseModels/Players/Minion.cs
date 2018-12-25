@@ -27,7 +27,7 @@ namespace LuckParser.Models.ParseModels
                 ParseEnum.StateChange state = c.IsStateChange;
                 if (state == ParseEnum.StateChange.Normal)
                 {
-                    if (c.IsActivation.IsCasting())
+                    if (c.IsActivation.StartCasting())
                     {
                         long time = log.FightData.ToFightSpace(c.Time);
                         curCastLog = new CastLog(time, c.SkillID, c.Value, c.IsActivation);

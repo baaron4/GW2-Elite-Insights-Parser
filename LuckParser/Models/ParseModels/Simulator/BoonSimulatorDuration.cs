@@ -17,7 +17,6 @@ namespace LuckParser.Models.ParseModels
             if ((BoonStack.Count > 0 && oldValue > 0) || BoonStack.Count == Capacity)
             {
                 BoonStack[0].Extend(extension, src);
-                return;
             }
             else
             {
