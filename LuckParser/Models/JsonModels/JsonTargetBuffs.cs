@@ -14,6 +14,7 @@ namespace LuckParser.Models.JsonModels
             presence = new double[phaseCount];
             generated = new Dictionary<string, double>[phaseCount];
             overstacked = new Dictionary<string, double>[phaseCount];
+            unknownExtension = new Dictionary<string, double>[phaseCount];
             extension = new Dictionary<string, double>[phaseCount];
             wasted = new Dictionary<string, double>[phaseCount];
             states = new List<int[]>();
@@ -24,6 +25,7 @@ namespace LuckParser.Models.JsonModels
         public Dictionary<string, double>[] generated;
         public Dictionary<string, double>[] overstacked;
         public Dictionary<string, double>[] wasted;
+        public Dictionary<string, double>[] unknownExtension;
         public Dictionary<string, double>[] extension;
         public List<int[]> states;
     }

@@ -248,13 +248,6 @@ namespace LuckParser.Models.ParseModels
             {
                 List<CombatItem> cls = log.GetCastDataById(id).Where(x => x.IsActivation.NoInterruptEndCasting() && Math.Abs(x.Time - time) <= uplimit && Math.Abs(x.Time - time) >= downlimit).ToList();
                 CombatItem clCandidate = cls.LastOrDefault(x => x.Time <= time);
-                // testing purposes
-                HashSet<ushort> srcs = new HashSet<ushort>(cls.Select(x => x.SrcMasterInstid > 0 ? x.SrcMasterInstid : x.SrcInstid));
-                if (srcs.Count > 1)
-                {
-                    HashSet<long> times = new HashSet<long>(cls.Select(x => x.Time - time));
-                    int ohno = 1;
-                }
                 if (clCandidate == null)
                 {
                     clCandidate = cls.FirstOrDefault(x => x.Time >= time);

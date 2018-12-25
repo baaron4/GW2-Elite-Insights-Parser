@@ -629,6 +629,7 @@ namespace LuckParser.Models.DataModels
                     long totalGeneration = 0;
                     long totalOverstack = 0;
                     long totalWasted = 0;
+                    long totalUnknownExtension = 0;
                     long totalExtension = 0;
 
                     foreach (BoonDistribution boons in boonDistributions.Values)
@@ -638,6 +639,7 @@ namespace LuckParser.Models.DataModels
                             totalGeneration += boons.GetGeneration(boon.ID, player.InstID);
                             totalOverstack += boons.GetOverstack(boon.ID, player.InstID);
                             totalWasted += boons.GetWaste(boon.ID, player.InstID);
+                            totalUnknownExtension += boons.GetUnknownExtension(boon.ID, player.InstID);
                             totalExtension += boons.GetExtension(boon.ID, player.InstID);
                         }
                     }
@@ -649,6 +651,7 @@ namespace LuckParser.Models.DataModels
                         uptime.Generation = Math.Round(100.0 * totalGeneration / fightDuration / playerList.Count, 2);
                         uptime.Overstack = Math.Round(100.0 * (totalOverstack + totalGeneration) / fightDuration / playerList.Count, 2);
                         uptime.Wasted = Math.Round(100.0 * (totalWasted) / fightDuration / playerList.Count, 2);
+                        uptime.UnknownExtension = Math.Round(100.0 * (totalUnknownExtension) / fightDuration / playerList.Count, 2);
                         uptime.Extension = Math.Round(100.0 * (totalExtension) / fightDuration / playerList.Count, 2);
                     }
                     else if (boon.Type == Boon.BoonType.Intensity)
@@ -656,6 +659,7 @@ namespace LuckParser.Models.DataModels
                         uptime.Generation = Math.Round((double)totalGeneration / fightDuration / playerList.Count, 2);
                         uptime.Overstack = Math.Round((double)(totalOverstack + totalGeneration) / fightDuration / playerList.Count, 2);
                         uptime.Wasted = Math.Round((double)(totalWasted) / fightDuration / playerList.Count, 2);
+                        uptime.UnknownExtension = Math.Round((double)(totalUnknownExtension) / fightDuration / playerList.Count, 2);
                         uptime.Extension = Math.Round((double)(totalExtension) / fightDuration / playerList.Count, 2);
                     }
                     final[boon.ID] = uptime;
@@ -692,6 +696,7 @@ namespace LuckParser.Models.DataModels
                             Generation = 0,
                             Overstack = 0,
                             Wasted = 0,
+                            UnknownExtension = 0,
                             Extension = 0
                         };
                         if (selfBoons.ContainsKey(boon.ID))
@@ -703,6 +708,7 @@ namespace LuckParser.Models.DataModels
                                 uptime.Generation = Math.Round(100.0 * generation / fightDuration, 2);
                                 uptime.Overstack = Math.Round(100.0 * (selfBoons.GetOverstack(boon.ID, player.InstID) + generation) / fightDuration, 2);
                                 uptime.Wasted = Math.Round(100.0 * selfBoons.GetWaste(boon.ID, player.InstID) / fightDuration, 2);
+                                uptime.UnknownExtension = Math.Round(100.0 * selfBoons.GetUnknownExtension(boon.ID, player.InstID) / fightDuration, 2);
                                 uptime.Extension = Math.Round(100.0 * selfBoons.GetExtension(boon.ID, player.InstID) / fightDuration, 2);
                             }
                             else if (boon.Type == Boon.BoonType.Intensity)
@@ -711,6 +717,7 @@ namespace LuckParser.Models.DataModels
                                 uptime.Generation = Math.Round((double)generation / fightDuration, 2);
                                 uptime.Overstack = Math.Round((double)(selfBoons.GetOverstack(boon.ID, player.InstID) + generation) / fightDuration, 2);
                                 uptime.Wasted = Math.Round((double)selfBoons.GetWaste(boon.ID, player.InstID) / fightDuration, 2);
+                                uptime.UnknownExtension = Math.Round((double)selfBoons.GetUnknownExtension(boon.ID, player.InstID) / fightDuration, 2);
                                 uptime.Extension = Math.Round((double)selfBoons.GetExtension(boon.ID, player.InstID) / fightDuration, 2);
                                 if (boonPresence.TryGetValue(boon.ID, out long presenceValueBoon))
                                 {
@@ -775,6 +782,7 @@ namespace LuckParser.Models.DataModels
                                     buff.Generated[p] = Math.Round(100.0 * gen / fightDuration, 2);
                                     buff.Overstacked[p] = Math.Round(100.0 * (boonDistribution.GetOverstack(boon.ID, p.InstID) + gen) / fightDuration, 2);
                                     buff.Wasted[p] = Math.Round(100.0 * boonDistribution.GetWaste(boon.ID, p.InstID) / fightDuration, 2);
+                                    buff.UnknownExtension[p] = Math.Round(100.0 * boonDistribution.GetUnknownExtension(boon.ID, p.InstID) / fightDuration, 2);
                                     buff.Extension[p] = Math.Round(100.0 * boonDistribution.GetExtension(boon.ID, p.InstID) / fightDuration, 2);
                                 }
                             }
@@ -787,6 +795,7 @@ namespace LuckParser.Models.DataModels
                                     buff.Generated[p] = Math.Round((double)gen / fightDuration, 2);
                                     buff.Overstacked[p] = Math.Round((double)(boonDistribution.GetOverstack(boon.ID, p.InstID) + gen) / fightDuration, 2);
                                     buff.Wasted[p] = Math.Round((double)boonDistribution.GetWaste(boon.ID, p.InstID) / fightDuration, 2);
+                                    buff.UnknownExtension[p] = Math.Round((double)boonDistribution.GetUnknownExtension(boon.ID, p.InstID) / fightDuration, 2);
                                     buff.Extension[p] = Math.Round((double)boonDistribution.GetExtension(boon.ID, p.InstID) / fightDuration, 2);
                                 }
                                 if (boonPresence.TryGetValue(boon.ID, out long presenceValueBoon))

@@ -4,7 +4,7 @@ using static LuckParser.Models.ParseModels.BoonSimulator;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class BoonSimulationItemDuration: BoonSimulationItem
+    public class BoonSimulationItemDuration : BoonSimulationItem
     {
         protected readonly ushort Src;
         protected readonly ushort OriginalSrc;
@@ -17,7 +17,7 @@ namespace LuckParser.Models.ParseModels
 
         public override void SetEnd(long end)
         {
-            Duration = Math.Min(Math.Max(end - Start, 0),Duration);
+            Duration = Math.Min(Math.Max(end - Start, 0), Duration);
         }
 
         public override int GetStack()
@@ -27,7 +27,8 @@ namespace LuckParser.Models.ParseModels
 
         public override void SetBoonDistributionItem(Dictionary<ushort, BoonDistributionItem> distrib, long start, long end)
         {
-            if (distrib.TryGetValue(Src, out var toModify))
+            BoonDistributionItem toModify;
+            if (distrib.TryGetValue(Src, out toModify))
             {
                 toModify.Value += GetClampedDuration(start, end);
                 distrib[Src] = toModify;
@@ -36,20 +37,34 @@ namespace LuckParser.Models.ParseModels
             {
                 distrib.Add(Src, new BoonDistributionItem(
                     GetClampedDuration(start, end),
-                    0, 0, 0));
+                    0, 0, 0, 0));
             }
-            if (Src == 0)
+            if (Src != OriginalSrc)
             {
-                if (distrib.TryGetValue(OriginalSrc, out var toModify2))
+                if (distrib.TryGetValue(OriginalSrc, out toModify))
                 {
-                    toModify2.Extension += GetClampedDuration(start, end);
-                    distrib[OriginalSrc] = toModify2;
+                    toModify.Extension += GetClampedDuration(start, end);
+                    distrib[OriginalSrc] = toModify;
                 }
                 else
                 {
                     distrib.Add(OriginalSrc, new BoonDistributionItem(
                         0,
-                        0, 0, GetClampedDuration(start, end)));
+                        0, 0, 0, GetClampedDuration(start, end)));
+                }
+            }
+            if (Src == 0)
+            {
+                if (distrib.TryGetValue(OriginalSrc, out toModify))
+                {
+                    toModify.UnknownExtension += GetClampedDuration(start, end);
+                    distrib[OriginalSrc] = toModify;
+                }
+                else
+                {
+                    distrib.Add(OriginalSrc, new BoonDistributionItem(
+                        0,
+                        0, 0, GetClampedDuration(start, end), 0));
                 }
             }
         }
