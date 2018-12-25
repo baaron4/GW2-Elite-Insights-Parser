@@ -53,7 +53,7 @@ namespace LuckParser.Models.Logic
                 return phases;
             }
             // Invul check
-            phases.AddRange(GetPhasesByInvul(log, 757, mainTarget));
+            phases.AddRange(GetPhasesByInvul(log, 757, mainTarget, true));
             string[] namesSab = new [] { "Phase 1", "Kernan", "Phase 2", "Knuckles", "Phase 3", "Karde", "Phase 4" };
             for (int i = 1; i < phases.Count; i++)
             {

@@ -156,20 +156,20 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        protected List<PhaseData> GetPhasesByInvul(ParsedLog log, long skillID, Target mainTarget, bool beginWithStart = true)
+        protected List<PhaseData> GetPhasesByInvul(ParsedLog log, long skillID, Target mainTarget, bool addSkipPhases, bool beginWithStart = true)
         {
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = new List<PhaseData>();
             long last = 0;
-            List<CombatItem> invulsGorse = GetFilteredList(log, skillID, mainTarget, beginWithStart);
-            for (int i = 0; i < invulsGorse.Count; i++)
+            List<CombatItem> invuls = GetFilteredList(log, skillID, mainTarget, beginWithStart);
+            for (int i = 0; i < invuls.Count; i++)
             {
-                CombatItem c = invulsGorse[i];
+                CombatItem c = invuls[i];
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
                     long end = log.FightData.ToFightSpace(c.Time);
                     phases.Add(new PhaseData(last, end));
-                    if (i == invulsGorse.Count - 1)
+                    if (i == invuls.Count - 1)
                     {
                         mainTarget.AddCustomCastLog(new CastLog(end, -5, (int)(fightDuration - end), ParseEnum.Activation.None, (int)(fightDuration - end), ParseEnum.Activation.None), log);
                     }
@@ -178,7 +178,10 @@ namespace LuckParser.Models.Logic
                 else
                 {
                     long end = log.FightData.ToFightSpace(c.Time);
-                    phases.Add(new PhaseData(last, end));
+                    if (addSkipPhases)
+                    {
+                        phases.Add(new PhaseData(last, end));
+                    }
                     mainTarget.AddCustomCastLog(new CastLog(last, -5, (int)(end - last), ParseEnum.Activation.None, (int)(end - last), ParseEnum.Activation.None), log);
                     last = end;
                 }
