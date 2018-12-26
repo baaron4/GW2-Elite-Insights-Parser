@@ -71,7 +71,7 @@ namespace LuckParser.Models.Logic
                 if (log.FightData.PhaseData.Count == 1)
                 {
                     start = log.FightData.ToFightSpace(log.FightData.PhaseData[0]);
-                    mainTarget.AddCustomCastLog(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
+                    //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
                     phases.Add(new PhaseData(start, fightDuration));
                 }
             }

@@ -219,8 +219,51 @@ namespace LuckParser.Models.ParseModels
             return 0;
         }
         // private getters
+
+        private ushort TryFindSrc(List<CastLog> castsToCheck, long time, long extension)
+        {
+            HashSet<long> idsToCheck = new HashSet<long>();
+            switch (extension)
+            {
+                // SoI
+                case 5000:
+                    idsToCheck.Add(10236);
+                    break;
+                // Treated True Nature
+                case 3000:
+                    idsToCheck.Add(51696);
+                    break;
+                // Sand Squall, True Nature, Soulbeast trait (not tracked no way to be 100% sure)
+                case 2000:
+                    idsToCheck.Add(51696);
+                    idsToCheck.Add(29453);
+                    break;
+
+            }
+            List<CastLog> cls = castsToCheck.Where(x => idsToCheck.Contains(x.SkillId) && x.Time <= time && time <= x.Time + x.ActualDuration + 10 && x.EndActivation.NoInterruptEndCasting()).ToList();
+            if (cls.Count == 1)
+            {
+                return cls.First().SrcInstId;
+            }
+            return 0;
+        }
+
         private BoonMap GetBoonMap(ParsedLog log)
         {
+            // buff extension ids
+
+            HashSet<long> idsToCheck = new HashSet<long>()
+            {
+                10236,
+                51696,
+                29453
+            };
+            List<CastLog> extensionSkills = new List<CastLog>();
+            foreach (Player p in log.PlayerList)
+            {
+                extensionSkills.AddRange(p.GetCastLogs(log, log.FightData.ToFightSpace(p.FirstAware), log.FightData.ToFightSpace(p.LastAware)).Where(x => idsToCheck.Contains(x.SkillId)));
+            }
+            //
             BoonMap boonMap = new BoonMap();
             // Fill in Boon Map
             foreach (CombatItem c in log.GetBoonDataByDst(InstID, FirstAware, LastAware))
@@ -251,13 +294,17 @@ namespace LuckParser.Models.ParseModels
                 {
                     if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                     {
+                        ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
                         if (c.IsOffcycle > 0)
                         {
-                            loglist.Add(new BoonExtensionLog(time, c.Value, c.OverstackValue - c.Value, 0));
+                            if (src == 0)
+                            {
+                                src = TryFindSrc(extensionSkills, time, c.Value);
+                            }
+                            loglist.Add(new BoonExtensionLog(time, c.Value, c.OverstackValue - c.Value, src));
                         }
                         else
                         {
-                            ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
                             loglist.Add(new BoonApplicationLog(time, src, c.Value));
                         }
                     }
@@ -432,22 +479,19 @@ namespace LuckParser.Models.ParseModels
                                 Add(_condiPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
                             simul.SetBoonDistributionItem(distrib, phase.Start, phase.End);
                         }
-                        List<BoonsGraphModel.Segment> segments = simul.ToSegment();
-                        if (segments.Count > 0)
+                        BoonsGraphModel.Segment segment = simul.ToSegment();
+                        if (graphSegments.Count == 0)
                         {
-                            if (graphSegments.Count == 0)
-                            {
-                                graphSegments.Add(new BoonsGraphModel.Segment(0, segments.First().Start, 0));
-                            } else if (graphSegments.Last().End != segments.First().Start)
-                            {
-                                graphSegments.Add(new BoonsGraphModel.Segment(graphSegments.Last().End, segments.First().Start, 0));
-                            }
-                            graphSegments.AddRange(simul.ToSegment());
+                            graphSegments.Add(new BoonsGraphModel.Segment(0, segment.Start, 0));
                         }
+                        else if (graphSegments.Last().End != segment.Start)
+                        {
+                            graphSegments.Add(new BoonsGraphModel.Segment(graphSegments.Last().End, segment.Start, 0));
+                        }
+                        graphSegments.Add(segment);
                     }
                     List<AbstractBoonSimulationItem> extraSimulations = new List<AbstractBoonSimulationItem>(simulator.OverstackSimulationResult);
                     extraSimulations.AddRange(simulator.WasteSimulationResult);
-                    extraSimulations.AddRange(simulator.UnknownExtensionSimulationResult);
                     foreach (AbstractBoonSimulationItem simul in extraSimulations)
                     {
                         for (int i = 0; i < phases.Count; i++)
@@ -575,7 +619,7 @@ namespace LuckParser.Models.ParseModels
             }
             foreach (KeyValuePair<string, Minions> pair in auxMinions)
             {
-                if (pair.Value.GetDamageLogs(null, log, log.FightData.ToFightSpace(FirstAware), log.FightData.ToFightSpace(LastAware)).Count > 0)
+                if (pair.Value.GetDamageLogs(null, log, log.FightData.ToFightSpace(FirstAware), log.FightData.ToFightSpace(LastAware)).Count > 0 || pair.Value.GetCastLogs(log, log.FightData.ToFightSpace(FirstAware), log.FightData.ToFightSpace(LastAware)).Count > 0)
                 {
                     _minions[pair.Key] = pair.Value;
                 }
@@ -611,7 +655,7 @@ namespace LuckParser.Models.ParseModels
                 ParseEnum.StateChange state = c.IsStateChange;
                 if (state == ParseEnum.StateChange.Normal)
                 {                  
-                    if (c.IsActivation.IsCasting())
+                    if (c.IsActivation.StartCasting())
                     {
                         // Missing end activation
                         long time = log.FightData.ToFightSpace(c.Time);
@@ -621,7 +665,7 @@ namespace LuckParser.Models.ParseModels
                             curCastLog.SetEndStatus(actDur, ParseEnum.Activation.Unknown, time);
                             curCastLog = null;
                         }
-                        curCastLog = new CastLog(time, c.SkillID, c.Value, c.IsActivation);
+                        curCastLog = new CastLog(time, c.SkillID, c.Value, c.IsActivation, Agent, InstID);
                         CastLogs.Add(curCastLog);
                     }
                     else
@@ -642,7 +686,7 @@ namespace LuckParser.Models.ParseModels
                 else if (state == ParseEnum.StateChange.WeaponSwap)
                 {
                     long time = log.FightData.ToFightSpace(c.Time);
-                    CastLog swapLog = new CastLog(time, SkillItem.WeaponSwapId, (int)c.DstAgent, c.IsActivation);
+                    CastLog swapLog = new CastLog(time, SkillItem.WeaponSwapId, (int)c.DstAgent, c.IsActivation, Agent, InstID);
                     if (CastLogs.Count > 0 && (time - CastLogs.Last().Time) < 10 && CastLogs.Last().SkillId == SkillItem.WeaponSwapId)
                     {
                         CastLogs[CastLogs.Count - 1] = swapLog;
@@ -659,7 +703,7 @@ namespace LuckParser.Models.ParseModels
             {
                 if (time - cloakStart > 10)
                 {
-                    CastLog dodgeLog = new CastLog(time, SkillItem.DodgeId, 0, ParseEnum.Activation.Unknown);
+                    CastLog dodgeLog = new CastLog(time, SkillItem.DodgeId, 0, ParseEnum.Activation.Unknown, Agent, InstID);
                     dodgeLog.SetEndStatus(50, ParseEnum.Activation.Unknown, log.FightData.FightDuration);
                     CastLogs.Add(dodgeLog);
                 }

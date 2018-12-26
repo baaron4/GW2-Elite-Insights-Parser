@@ -10,7 +10,7 @@ namespace LuckParser.Models.ParseModels
 
         public override void UpdateSimulator(BoonSimulator simulator)
         {
-            simulator.Add(Value, SrcInstid, Time);
+            simulator.Add(Value, SrcInstid, SrcInstid, Time);
         }
     }
 }

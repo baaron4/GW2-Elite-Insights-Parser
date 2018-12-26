@@ -39,10 +39,13 @@ namespace LuckParser.Models.ParseModels
             return 0;
         }
 
-        public abstract List<BoonsGraphModel.Segment> ToSegment();
+        public BoonsGraphModel.Segment ToSegment()
+        {
+            return new BoonsGraphModel.Segment(Start, End, GetStack());
+        }
 
         public abstract void SetEnd(long end);
 
-        public abstract int GetStack(long end);
+        public abstract int GetStack();
     }
 }

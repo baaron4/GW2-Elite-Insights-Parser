@@ -15,7 +15,7 @@ namespace LuckParser.Models.ParseModels
         public BoonSimulationItemCleanse(ushort provokedBy, long duration, long time)
         {
             ProvokedBy = provokedBy;
-            this._duration = duration;
+            _duration = duration;
             _time = time;
         }
 

@@ -126,6 +126,7 @@ namespace LuckParser.Models.DataModels
             public double Overstack;
             public double Wasted;
             public double UnknownExtension;
+            public double Extension;
             public double Presence;
         }
 
@@ -144,12 +145,14 @@ namespace LuckParser.Models.DataModels
                 Overstacked = new Dictionary<Player, double>();
                 Wasted = new Dictionary<Player, double>();
                 UnknownExtension = new Dictionary<Player, double>();
+                Extension = new Dictionary<Player, double>();
                 foreach (Player p in plist)
                 {
                     Generated.Add(p, 0);
                     Overstacked.Add(p, 0);
                     Wasted.Add(p, 0);
                     UnknownExtension.Add(p, 0);
+                    Extension.Add(p, 0);
                 }
             }
 
@@ -159,6 +162,7 @@ namespace LuckParser.Models.DataModels
             public readonly Dictionary<Player, double> Overstacked;
             public readonly Dictionary<Player, double> Wasted;
             public readonly Dictionary<Player, double> UnknownExtension;
+            public readonly Dictionary<Player, double> Extension;
         }
 
         public readonly Dictionary<Target,Dictionary<long, FinalTargetBuffs>[]> TargetBuffs;

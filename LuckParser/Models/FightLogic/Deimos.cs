@@ -141,7 +141,7 @@ namespace LuckParser.Models.Logic
                 end = log.FightData.ToFightSpace(invulDei.Time);
                 phases.Add(new PhaseData(start, end));
                 start = (log.FightData.PhaseData.Count == 1 ? log.FightData.ToFightSpace(log.FightData.PhaseData[0]) : fightDuration);
-                mainTarget.AddCustomCastLog(new CastLog(end, -6, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
+                //mainTarget.AddCustomCastLog(end, -6, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
             }
             if (fightDuration - start > 5000 && start >= phases.Last().End)
             {

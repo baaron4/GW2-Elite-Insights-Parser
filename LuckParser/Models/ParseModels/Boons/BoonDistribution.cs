@@ -9,13 +9,15 @@ namespace LuckParser.Models.ParseModels
         public long Overstack { get; set; }
         public long Waste { get; set; }
         public long UnknownExtension { get; set; }
+        public long Extension { get; set; }
 
-        public BoonDistributionItem(long value, long overstack, long waste, long unknowExtension)
+        public BoonDistributionItem(long value, long overstack, long waste, long unknownExtension, long extension)
         {
             Value = value;
             Overstack = overstack;
             Waste = waste;
-            UnknownExtension = unknowExtension;
+            UnknownExtension = unknownExtension;
+            Extension = extension;
         }
     }
 
@@ -32,38 +34,47 @@ namespace LuckParser.Models.ParseModels
 
         public long GetGeneration(long boonid, ushort src)
         {
-            if (!ContainsKey(boonid) || src == 0)
+            if (!ContainsKey(boonid) || !this[boonid].ContainsKey(src))
             {
                 return 0;
             }
-            return this[boonid].Where( x => src == x.Key).Sum(x => x.Value.Value);
+            return this[boonid][src].Value;
         }
 
         public long GetOverstack(long boonid, ushort src)
         {
-            if (!ContainsKey(boonid) || src == 0)
+            if (!ContainsKey(boonid) || !this[boonid].ContainsKey(src))
             {
                 return 0;
             }
-            return this[boonid].Where(x => src == x.Key).Sum(x => x.Value.Overstack);
+            return this[boonid][src].Overstack;
         }
 
         public long GetWaste(long boonid, ushort src)
         {
-            if (!ContainsKey(boonid) || src == 0)
+            if (!ContainsKey(boonid) || !this[boonid].ContainsKey(src))
             {
                 return 0;
             }
-            return this[boonid].Where(x => src == x.Key).Sum(x => x.Value.Waste);
+            return this[boonid][src].Waste;
         }
 
         public long GetUnknownExtension(long boonid, ushort src)
         {
-            if (!ContainsKey(boonid) || src == 0)
+            if (!ContainsKey(boonid) || !this[boonid].ContainsKey(src))
             {
                 return 0;
             }
-            return this[boonid].Where(x => src == x.Key).Sum(x => x.Value.UnknownExtension);
+            return this[boonid][src].UnknownExtension;
+        }
+
+        public long GetExtension(long boonid, ushort src)
+        {
+            if (!ContainsKey(boonid) || !this[boonid].ContainsKey(src))
+            {
+                return 0;
+            }
+            return this[boonid][src].Extension;
         }
     }
 }

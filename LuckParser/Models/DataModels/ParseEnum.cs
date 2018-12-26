@@ -349,9 +349,14 @@ namespace LuckParser.Models.DataModels
 
     static class ActivationExtensions
     {
-        public static bool IsCasting(this ParseEnum.Activation activation)
+        public static bool StartCasting(this ParseEnum.Activation activation)
         {
             return activation == ParseEnum.Activation.Normal || activation == ParseEnum.Activation.Quickness;
+        }
+
+        public static bool NoInterruptEndCasting(this ParseEnum.Activation activation)
+        {
+            return activation == ParseEnum.Activation.CancelFire || activation == ParseEnum.Activation.Reset;
         }
     }
 }

@@ -169,10 +169,10 @@ namespace LuckParser.Models.Logic
                 {
                     long end = log.FightData.ToFightSpace(c.Time);
                     phases.Add(new PhaseData(last, end));
-                    if (i == invuls.Count - 1)
+                    /*if (i == invuls.Count - 1)
                     {
-                        mainTarget.AddCustomCastLog(new CastLog(end, -5, (int)(fightDuration - end), ParseEnum.Activation.None, (int)(fightDuration - end), ParseEnum.Activation.None), log);
-                    }
+                        mainTarget.AddCustomCastLog(end, -5, (int)(fightDuration - end), ParseEnum.Activation.None, (int)(fightDuration - end), ParseEnum.Activation.None, log);
+                    }*/
                     last = end;
                 }
                 else
@@ -182,7 +182,7 @@ namespace LuckParser.Models.Logic
                     {
                         phases.Add(new PhaseData(last, end));
                     }
-                    mainTarget.AddCustomCastLog(new CastLog(last, -5, (int)(end - last), ParseEnum.Activation.None, (int)(end - last), ParseEnum.Activation.None), log);
+                    //mainTarget.AddCustomCastLog(last, -5, (int)(end - last), ParseEnum.Activation.None, (int)(end - last), ParseEnum.Activation.None, log);
                     last = end;
                 }
             }
@@ -307,7 +307,7 @@ namespace LuckParser.Models.Logic
                                     cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.ChangeDown, log.FightData.FightStart, log.FightData.FightEnd);
                                     break;
                                 case SkillItem.ResurrectId:
-                                    cList = log.GetCastData(p.InstID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == SkillItem.ResurrectId && x.IsActivation.IsCasting()).ToList();
+                                    cList = log.GetCastData(p.InstID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == SkillItem.ResurrectId && x.IsActivation.StartCasting()).ToList();
                                     break;
                             }
                             foreach (CombatItem mechItem in cList)
@@ -397,7 +397,7 @@ namespace LuckParser.Models.Logic
                                 {
                                     continue;
                                 }
-                                if (c.IsActivation.IsCasting() && c.SrcInstid == p.InstID)
+                                if (c.IsActivation.StartCasting() && c.SrcInstid == p.InstID)
                                 {
                                     mechData[mech].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), mech, p));
 
@@ -490,7 +490,7 @@ namespace LuckParser.Models.Logic
                                 continue;
                             }
                             AbstractMasterPlayer amp = null;
-                            if ((mech.MechanicType == Mechanic.MechType.EnemyCastStart && c.IsActivation.IsCasting()) || (mech.MechanicType == Mechanic.MechType.EnemyCastEnd && !c.IsActivation.IsCasting()))
+                            if ((mech.MechanicType == Mechanic.MechType.EnemyCastStart && c.IsActivation.StartCasting()) || (mech.MechanicType == Mechanic.MechType.EnemyCastEnd && !c.IsActivation.StartCasting()))
                             {
                                 Target target = Targets.Find(x => x.InstID == c.SrcInstid && x.FirstAware <= c.Time && x.LastAware >= c.Time);
                                 if (target != null)

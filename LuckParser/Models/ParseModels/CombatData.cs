@@ -77,7 +77,7 @@ namespace LuckParser.Models.ParseModels
         {
             if (CastDataById.TryGetValue(skillId, out List<CombatItem> data))
             {
-                return data.Where(x => x.SrcInstid == srcInstid && x.Time >= start && x.Time <= end && x.IsActivation.IsCasting()).ToList();
+                return data.Where(x => x.SrcInstid == srcInstid && x.Time >= start && x.Time <= end && x.IsActivation.StartCasting()).ToList();
             }
             return new List<CombatItem>();
         }
