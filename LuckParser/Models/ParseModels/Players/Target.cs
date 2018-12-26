@@ -18,14 +18,14 @@ namespace LuckParser.Models.ParseModels
         public int Health { get; set; } = -1;
         public List<Point> HealthOverTime { get; } = new List<Point>();
 
-        public void AddCustomCastLog(CastLog cl, ParsedLog log)
+        /*public void AddCustomCastLog(long time, long skillID, int expDur, ParseEnum.Activation startActivation, int actDur, ParseEnum.Activation endActivation, ParsedLog log)
         {
             if (CastLogs.Count == 0)
             {
                 GetCastLogs(log, 0, log.FightData.FightEnd);
             }
-            CastLogs.Add(cl);
-        }
+            CastLogs.Add(new CastLog(time, skillID, expDur, startActivation, actDur, endActivation, Agent, InstID));
+        }*/
 
         // Private Methods
 

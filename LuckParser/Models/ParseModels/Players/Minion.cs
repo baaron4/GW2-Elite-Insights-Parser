@@ -30,7 +30,7 @@ namespace LuckParser.Models.ParseModels
                     if (c.IsActivation.StartCasting())
                     {
                         long time = log.FightData.ToFightSpace(c.Time);
-                        curCastLog = new CastLog(time, c.SkillID, c.Value, c.IsActivation);
+                        curCastLog = new CastLog(time, c.SkillID, c.Value, c.IsActivation, Agent, InstID);
                         CastLogs.Add(curCastLog);
                     }
                     else

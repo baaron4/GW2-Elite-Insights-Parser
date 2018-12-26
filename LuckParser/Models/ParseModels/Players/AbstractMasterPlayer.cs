@@ -220,11 +220,9 @@ namespace LuckParser.Models.ParseModels
         }
         // private getters
 
-        private ushort TryFindSrc(ParsedLog log, long time, long extension)
+        private ushort TryFindSrc(List<CastLog> castsToCheck, long time, long extension)
         {
-            ushort src = 0;
             HashSet<long> idsToCheck = new HashSet<long>();
-            CombatItem cl = null;
             switch (extension)
             {
                 // SoI
@@ -235,49 +233,37 @@ namespace LuckParser.Models.ParseModels
                 case 3000:
                     idsToCheck.Add(51696);
                     break;
-                // Sand Squall, True Nature, Soulbeast trait
+                // Sand Squall, True Nature, Soulbeast trait (not tracked no way to be 100% sure)
                 case 2000:
                     idsToCheck.Add(51696);
                     idsToCheck.Add(29453);
                     break;
 
             }
-            long uplimit = 900;
-            long downlimit = 100;
-            foreach (long id in idsToCheck)
+            List<CastLog> cls = castsToCheck.Where(x => idsToCheck.Contains(x.SkillId) && x.Time <= time && time <= x.Time + x.ActualDuration + 10 && x.EndActivation.NoInterruptEndCasting()).ToList();
+            if (cls.Count == 1)
             {
-                List<CombatItem> cls = log.GetCastDataById(id).Where(x => x.IsActivation.NoInterruptEndCasting() && Math.Abs(x.Time - time) <= uplimit && Math.Abs(x.Time - time) >= downlimit).ToList();
-                CombatItem clCandidate = cls.LastOrDefault(x => x.Time <= time);
-                if (clCandidate == null)
-                {
-                    clCandidate = cls.FirstOrDefault(x => x.Time >= time);
-                }
-                if (clCandidate == null)
-                {
-                    continue;
-                }
-                if (cl == null)
-                {
-                    cl = clCandidate;
-                }
-                else if (Math.Abs(cl.Time - time) >= Math.Abs(clCandidate.Time - time))
-                {
-                    cl = clCandidate;
-                }
+                return cls.First().SrcInstId;
             }
-            if (cl == null && AgentItem.Prof == "Soulbeast" && extension == 2000)
-            {
-                return InstID;
-            }
-            else if (cl != null)
-            {
-                src = cl.SrcInstid;
-            }
-            return src;
+            return 0;
         }
 
         private BoonMap GetBoonMap(ParsedLog log)
         {
+            // buff extension ids
+
+            HashSet<long> idsToCheck = new HashSet<long>()
+            {
+                10236,
+                51696,
+                29453
+            };
+            List<CastLog> extensionSkills = new List<CastLog>();
+            foreach (Player p in log.PlayerList)
+            {
+                extensionSkills.AddRange(p.GetCastLogs(log, log.FightData.ToFightSpace(p.FirstAware), log.FightData.ToFightSpace(p.LastAware)).Where(x => idsToCheck.Contains(x.SkillId)));
+            }
+            //
             BoonMap boonMap = new BoonMap();
             // Fill in Boon Map
             foreach (CombatItem c in log.GetBoonDataByDst(InstID, FirstAware, LastAware))
@@ -313,7 +299,7 @@ namespace LuckParser.Models.ParseModels
                         {
                             if (src == 0)
                             {
-                                src = TryFindSrc(log, c.Time, c.Value);
+                                src = TryFindSrc(extensionSkills, time, c.Value);
                             }
                             loglist.Add(new BoonExtensionLog(time, c.Value, c.OverstackValue - c.Value, src));
                         }
@@ -633,7 +619,7 @@ namespace LuckParser.Models.ParseModels
             }
             foreach (KeyValuePair<string, Minions> pair in auxMinions)
             {
-                if (pair.Value.GetDamageLogs(null, log, log.FightData.ToFightSpace(FirstAware), log.FightData.ToFightSpace(LastAware)).Count > 0)
+                if (pair.Value.GetDamageLogs(null, log, log.FightData.ToFightSpace(FirstAware), log.FightData.ToFightSpace(LastAware)).Count > 0 || pair.Value.GetCastLogs(log, log.FightData.ToFightSpace(FirstAware), log.FightData.ToFightSpace(LastAware)).Count > 0)
                 {
                     _minions[pair.Key] = pair.Value;
                 }
@@ -679,7 +665,7 @@ namespace LuckParser.Models.ParseModels
                             curCastLog.SetEndStatus(actDur, ParseEnum.Activation.Unknown, time);
                             curCastLog = null;
                         }
-                        curCastLog = new CastLog(time, c.SkillID, c.Value, c.IsActivation);
+                        curCastLog = new CastLog(time, c.SkillID, c.Value, c.IsActivation, Agent, InstID);
                         CastLogs.Add(curCastLog);
                     }
                     else
@@ -700,7 +686,7 @@ namespace LuckParser.Models.ParseModels
                 else if (state == ParseEnum.StateChange.WeaponSwap)
                 {
                     long time = log.FightData.ToFightSpace(c.Time);
-                    CastLog swapLog = new CastLog(time, SkillItem.WeaponSwapId, (int)c.DstAgent, c.IsActivation);
+                    CastLog swapLog = new CastLog(time, SkillItem.WeaponSwapId, (int)c.DstAgent, c.IsActivation, Agent, InstID);
                     if (CastLogs.Count > 0 && (time - CastLogs.Last().Time) < 10 && CastLogs.Last().SkillId == SkillItem.WeaponSwapId)
                     {
                         CastLogs[CastLogs.Count - 1] = swapLog;
@@ -717,7 +703,7 @@ namespace LuckParser.Models.ParseModels
             {
                 if (time - cloakStart > 10)
                 {
-                    CastLog dodgeLog = new CastLog(time, SkillItem.DodgeId, 0, ParseEnum.Activation.Unknown);
+                    CastLog dodgeLog = new CastLog(time, SkillItem.DodgeId, 0, ParseEnum.Activation.Unknown, Agent, InstID);
                     dodgeLog.SetEndStatus(50, ParseEnum.Activation.Unknown, log.FightData.FightDuration);
                     CastLogs.Add(dodgeLog);
                 }
