@@ -34,9 +34,9 @@ namespace LuckParser.Models.ParseModels
             { 34427, "Abomination Transformation"},
             { 34510, "Shield (Abomination)"},
             // Generic
-            {-5, "Phase out" },
+            //{-5, "Phase out" },
             // Deimos
-            {-6, "Roleplay" },
+            //{-6, "Roleplay" },
             // Dhuum
             {47396, "Major Soul Split" },
             // Keep Construct
@@ -104,7 +104,7 @@ namespace LuckParser.Models.ParseModels
 
         // Public Methods
 
-        public void SetCCAPI()//this is 100% off the GW2 API is not a reliable source of finding skill CC
+        /*public void SetCCAPI()//this is 100% off the GW2 API is not a reliable source of finding skill CC
         {
             CC = 0;
             if (ApiSkill != null)
@@ -237,6 +237,6 @@ namespace LuckParser.Models.ParseModels
                 }
                
             }
-        }
+        }*/
     }
 }

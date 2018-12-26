@@ -169,10 +169,10 @@ namespace LuckParser.Models.Logic
                 {
                     long end = log.FightData.ToFightSpace(c.Time);
                     phases.Add(new PhaseData(last, end));
-                    if (i == invuls.Count - 1)
+                    /*if (i == invuls.Count - 1)
                     {
-                        mainTarget.AddCustomCastLog(new CastLog(end, -5, (int)(fightDuration - end), ParseEnum.Activation.None, (int)(fightDuration - end), ParseEnum.Activation.None), log);
-                    }
+                        mainTarget.AddCustomCastLog(end, -5, (int)(fightDuration - end), ParseEnum.Activation.None, (int)(fightDuration - end), ParseEnum.Activation.None, log);
+                    }*/
                     last = end;
                 }
                 else
@@ -182,7 +182,7 @@ namespace LuckParser.Models.Logic
                     {
                         phases.Add(new PhaseData(last, end));
                     }
-                    mainTarget.AddCustomCastLog(new CastLog(last, -5, (int)(end - last), ParseEnum.Activation.None, (int)(end - last), ParseEnum.Activation.None), log);
+                    //mainTarget.AddCustomCastLog(last, -5, (int)(end - last), ParseEnum.Activation.None, (int)(end - last), ParseEnum.Activation.None, log);
                     last = end;
                 }
             }
