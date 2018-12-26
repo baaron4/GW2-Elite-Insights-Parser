@@ -13,7 +13,6 @@ namespace LuckParser.Models.ParseModels
         public byte IsFifty { get; }
         public byte IsMoving { get; }
         public byte IsFlanking { get; }
-        public ParseEnum.Activation Activation { get; }
         public ulong SrcAgent { get; }
         public ushort SrcInstId { get; }
         public ulong DstAgent { get; }
@@ -30,7 +29,6 @@ namespace LuckParser.Models.ParseModels
             IsFifty = c.IsFifty;
             IsMoving = c.IsMoving;
             IsFlanking = c.IsFlanking;
-            Activation = c.IsActivation;
             SrcAgent = c.SrcAgent;
             SrcInstId = c.SrcInstid;
             DstAgent = c.DstAgent;
