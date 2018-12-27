@@ -675,7 +675,7 @@ namespace LuckParser.Builders
                     hits++;
                     if (dl.Result == ParseEnum.Result.Crit) crit++;
                     if (dl.Result == ParseEnum.Result.Glance) glance++;
-                    if (dl.IsFlanking == 1) flank++;
+                    if (dl.IsFlanking) flank++;
                 }
 
                 bool isCondi = conditionsById.ContainsKey(entry.Key) || entry.Key == 873;
@@ -850,7 +850,7 @@ namespace LuckParser.Builders
                     hits++;
                     if (dl.Result == ParseEnum.Result.Crit) crit++;
                     if (dl.Result == ParseEnum.Result.Glance) glance++;
-                    if (dl.IsFlanking == 1) flank++;
+                    if (dl.IsFlanking) flank++;
                 }
 
                 bool isCondi = conditionsById.ContainsKey(entry.Key) || entry.Key == 873;

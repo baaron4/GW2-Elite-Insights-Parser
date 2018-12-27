@@ -135,7 +135,7 @@ namespace LuckParser.Models.DataModels
             final.Damage = (int)damage;
             //Condi DPS
             damage = player.GetDamageLogs(target, _log,
-                    phase.Start, phase.End).Sum(x => x.IsCondi > 0 ? x.Damage : 0);
+                    phase.Start, phase.End).Sum(x => x.IsCondi ? x.Damage : 0);
 
             if (phaseDuration > 0)
             {
@@ -199,7 +199,7 @@ namespace LuckParser.Models.DataModels
             double tenGain = 0.1 / 1.1;
             foreach (DamageLog dl in dls)
             {
-                if (dl.IsCondi == 0)
+                if (!dl.IsCondi)
                 {
                     foreach (var pair in targetsFinal)
                     {
@@ -213,25 +213,25 @@ namespace LuckParser.Models.DataModels
                                 targetFinal.CriticalDmg += dl.Damage;
                             }
 
-                            if (dl.IsNinety > 0)
+                            if (dl.IsNinety)
                             {
                                 targetFinal.ScholarRate++;
                                 targetFinal.ScholarDmg += (int)(fiveGain * dl.Damage);
                             }
 
-                            if (dl.IsFifty > 0)
+                            if (dl.IsFifty)
                             {
                                 targetFinal.EagleRate++;
                                 targetFinal.EagleDmg += (int)(tenGain * dl.Damage);
                             }
 
-                            if (dl.IsMoving > 0)
+                            if (dl.IsMoving)
                             {
                                 targetFinal.MovingRate++;
                                 targetFinal.MovingDamage += (int)(fiveGain * dl.Damage);
                             }
 
-                            if (dl.IsFlanking > 0)
+                            if (dl.IsFlanking)
                             {
                                 targetFinal.FlankingDmg += (int)(tenGain * dl.Damage);
                                 targetFinal.FlankingRate++;
@@ -269,25 +269,25 @@ namespace LuckParser.Models.DataModels
                         final.CriticalDmg += dl.Damage;
                     }
 
-                    if (dl.IsNinety > 0)
+                    if (dl.IsNinety)
                     {
                         final.ScholarRate++;
                         final.ScholarDmg += (int)(fiveGain * dl.Damage);
                     }
 
-                    if (dl.IsFifty > 0)
+                    if (dl.IsFifty)
                     {
                         final.EagleRate++;
                         final.EagleDmg += (int)(tenGain * dl.Damage);
                     }
 
-                    if (dl.IsMoving > 0)
+                    if (dl.IsMoving)
                     {
                         final.MovingRate++;
                         final.MovingDamage += (int)(fiveGain * dl.Damage);
                     }
 
-                    if (dl.IsFlanking > 0)
+                    if (dl.IsFlanking)
                     {
                         final.FlankingDmg += (int)(tenGain * dl.Damage);
                         final.FlankingRate++;

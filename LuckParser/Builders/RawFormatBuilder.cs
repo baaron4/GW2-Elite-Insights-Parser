@@ -120,7 +120,7 @@ namespace LuckParser.Builders
             log.timeStart = _log.LogData.LogStart;
             log.timeEnd = _log.LogData.LogEnd;
             log.duration = durationString;
-            log.success = _log.FightData.Success ? 1 : 0;
+            log.success = _log.FightData.Success;
             log.skillNames = _skillNames;
             log.buffNames = _buffNames;
             log.personalBuffs = _personalBuffs;
@@ -234,6 +234,42 @@ namespace LuckParser.Builders
                     avgBoonsStates = BuildBuffStates(player.GetBoonGraphs(_log)[Boon.NumberOfBoonsID]),
                     avgConditionsStates = BuildBuffStates(player.GetBoonGraphs(_log)[Boon.NumberOfConditionsID]),
                 });
+            }
+            if (_log.IsBenchmarkMode)
+            {
+                List<JsonBenchData> benchData = new List<JsonBenchData>();
+                CombatItem pov = _log.CombatData.GetStates(ParseEnum.StateChange.PointOfView).FirstOrDefault();
+                if (pov != null)
+                {
+                    Player p = _log.PlayerList.Find(x => x.InstID == pov.SrcInstid);
+                    if (p == null)
+                    {
+                        throw new InvalidOperationException("Player pov not found");
+                    }
+                    foreach (DamageLog dl in p.GetDamageLogs(null, _log, _statistics.Phases[0].Start, _statistics.Phases[0].End))
+                    {
+                        JsonBenchData data = new JsonBenchData()
+                        {
+                            time = dl.Time,
+                            condi = dl.IsCondi,
+                            damage = dl.Damage,
+                            skillID = dl.SkillId,
+                            source = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time).Name,
+                            ninety = dl.IsNinety,
+                            fifty = dl.IsFifty,
+                            moving = dl.IsMoving,
+                            flanking = dl.IsFlanking,
+                            crit = dl.Result == ParseEnum.Result.Crit,
+                            glance = dl.Result == ParseEnum.Result.Glance
+                        };
+                        benchData.Add(data);
+                    }
+                }
+                else
+                {
+                    throw new InvalidOperationException("No pov data");
+                }
+                log.benchData = benchData;
             }
         }
 
@@ -364,7 +400,7 @@ namespace LuckParser.Builders
                     continue;
                 }
                 SkillItem skill = skillList.Get(pair.Key);
-                if (pair.Value.First().IsCondi == 0 && skill != null)
+                if (!pair.Value.First().IsCondi && skill != null)
                 {
                     if(!_skillNames.ContainsKey("s" + pair.Key))
                     {
@@ -376,14 +412,14 @@ namespace LuckParser.Builders
                 {
                     continue;
                 }
-                string prefix = filteredList.First().IsCondi > 0 ? "b" : "s";
+                string prefix = filteredList.First().IsCondi ? "b" : "s";
                 res[prefix + pair.Key] = new JsonDamageDist()
                 {
                     hits = filteredList.Count,
                     damage = filteredList.Sum(x => x.Damage),
                     min = filteredList.Min(x => x.Damage),
                     max = filteredList.Max(x => x.Damage),
-                    flank = filteredList.Count(x => x.IsFlanking > 0),
+                    flank = filteredList.Count(x => x.IsFlanking),
                     crit = filteredList.Count(x => x.Result == ParseEnum.Result.Crit),
                     glance = filteredList.Count(x => x.Result == ParseEnum.Result.Glance),
                 };
@@ -433,8 +469,8 @@ namespace LuckParser.Builders
                     time = (int)cl.Time,
                     duration = cl.ActualDuration,
                     timeGained = timeGained,
-                    autoAttack = skillApi != null && skillApi.slot == "Weapon_1" ? 1 : 0,
-                    quickness = cl.StartActivation == ParseEnum.Activation.Quickness ? 1 : 0
+                    autoAttack = skillApi != null && skillApi.slot == "Weapon_1",
+                    quickness = cl.StartActivation == ParseEnum.Activation.Quickness
                 };
                 if (res.TryGetValue("s" + cl.SkillId, out var list))
                 {
