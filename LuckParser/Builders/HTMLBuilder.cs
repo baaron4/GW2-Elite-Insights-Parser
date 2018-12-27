@@ -675,7 +675,7 @@ namespace LuckParser.Builders
                     hits++;
                     if (dl.Result == ParseEnum.Result.Crit) crit++;
                     if (dl.Result == ParseEnum.Result.Glance) glance++;
-                    if (dl.IsFlanking == 1) flank++;
+                    if (dl.IsFlanking) flank++;
                 }
 
                 bool isCondi = conditionsById.ContainsKey(entry.Key) || entry.Key == 873;
@@ -850,7 +850,7 @@ namespace LuckParser.Builders
                     hits++;
                     if (dl.Result == ParseEnum.Result.Crit) crit++;
                     if (dl.Result == ParseEnum.Result.Glance) glance++;
-                    if (dl.IsFlanking == 1) flank++;
+                    if (dl.IsFlanking) flank++;
                 }
 
                 bool isCondi = conditionsById.ContainsKey(entry.Key) || entry.Key == 873;
@@ -957,7 +957,7 @@ namespace LuckParser.Builders
             BoonChartDataDto dto = new BoonChartDataDto
             {
                 id = bgm.Boon.ID,
-                visible = (bgm.Boon.Name == "Might" || bgm.Boon.Name == "Quickness") ? 1 : 0,
+                visible = (bgm.Boon.Name == "Might" || bgm.Boon.Name == "Quickness"),
                 color = GeneralHelper.GetLink("Color-" + bgm.Boon.Name),
                 states = new List<object[]>(bChart.Count + 1)
             };
@@ -987,7 +987,7 @@ namespace LuckParser.Builders
                     duration = entry.Duration / 1000.0,
                     stack = entry.Stack,
                     id = entry.Item.ID,
-                    dimished = (entry.Item.ID == 46587 || entry.Item.ID == 46668) ? 1 : 0
+                    dimished = (entry.Item.ID == 46587 || entry.Item.ID == 46668)
                 };
                 _usedBoons[entry.Item.ID] = entry.Item;
                 list.Add(dto);
@@ -1076,8 +1076,8 @@ namespace LuckParser.Builders
                     name = mech.FullName,
                     shortName = mech.ShortName,
                     description = mech.Description,
-                    playerMech = playerMechs.Contains(mech) ? 1 : 0,
-                    enemyMech = enemyMechs.Contains(mech) ? 1 : 0
+                    playerMech = playerMechs.Contains(mech),
+                    enemyMech = enemyMechs.Contains(mech)
                 };
                 mechanicDtos.Add(dto);
             }
@@ -1097,7 +1097,7 @@ namespace LuckParser.Builders
                     color = mech.PlotlySetting.color,
                     symbol = mech.PlotlySetting.symbol,
                     size = mech.PlotlySetting.size,
-                    visible = (mech.SkillId == SkillItem.DeathId || mech.SkillId == SkillItem.DownId) ? 1 : 0,
+                    visible = (mech.SkillId == SkillItem.DeathId || mech.SkillId == SkillItem.DownId),
                     points = BuildMechanicGraphPointData(mechanicLogs, mech.IsEnemyMechanic)
                 };
                 mechanicsChart.Add(dto);
@@ -1635,7 +1635,7 @@ namespace LuckParser.Builders
                     colTarget = GeneralHelper.GetLink("Color-" + player.Prof),
                     colCleave = GeneralHelper.GetLink("Color-" + player.Prof + "-NonBoss"),
                     colTotal = GeneralHelper.GetLink("Color-" + player.Prof + "-Total"),
-                    isConjure = (player.Account == ":Conjured Sword") ? 1 : 0,
+                    isConjure = (player.Account == ":Conjured Sword"),
                 };
                 BuildWeaponSets(playerDto, player);
                 if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay)
@@ -1769,7 +1769,7 @@ namespace LuckParser.Builders
                         start = start / 1000.0,
                         end = end / 1000.0,
                         label = curPhase.Name,
-                        highlight = curPhase.DrawArea ? 1 : 0
+                        highlight = curPhase.DrawArea
                     };
                     phaseDto.markupAreas.Add(phaseArea);
                 }
@@ -1812,11 +1812,11 @@ namespace LuckParser.Builders
                 durationString = duration.Hours + "h " + durationString;
             }
             logData.encounterDuration = durationString;
-            logData.success = _log.FightData.Success ? 1 : 0;
+            logData.success = _log.FightData.Success;
             logData.fightName = FilterStringChars(_log.FightData.Name);
             logData.fightIcon = _log.FightData.Logic.IconUrl;
-            logData.combatReplay = (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay) ? 1 : 0;
-            logData.lightTheme = _settings.LightTheme ? 1 : 0;
+            logData.combatReplay = (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay);
+            logData.lightTheme = _settings.LightTheme;
             return ToJson(logData);
         }
 
@@ -1987,9 +1987,9 @@ namespace LuckParser.Builders
                     id = boon.ID,
                     name = boon.Name,
                     icon = boon.Link,
-                    stacking = (boon.Type == Boon.BoonType.Intensity) ? 1 : 0,
-                    consumable = (boon.Nature == Boon.BoonNature.Consumable) ? 1 : 0,
-                    enemy = (boon.Source == Boon.BoonSource.Enemy) ? 1 : 0
+                    stacking = (boon.Type == Boon.BoonType.Intensity),
+                    consumable = (boon.Nature == Boon.BoonNature.Consumable),
+                    enemy = (boon.Source == Boon.BoonSource.Enemy)
                 });
             }
             return dtos;
@@ -2005,7 +2005,7 @@ namespace LuckParser.Builders
                     id = skill.ID,
                     name = skill.Name,
                     icon = skill.Icon,
-                    aa = (apiSkill?.slot == "Weapon_1") ? 1 : 0
+                    aa = (apiSkill?.slot == "Weapon_1")
                 };
                 dtos.Add(dto);
             }

@@ -120,7 +120,7 @@ namespace LuckParser.Builders
             log.timeStart = _log.LogData.LogStart;
             log.timeEnd = _log.LogData.LogEnd;
             log.duration = durationString;
-            log.success = _log.FightData.Success ? 1 : 0;
+            log.success = _log.FightData.Success;
             log.skillNames = _skillNames;
             log.buffNames = _buffNames;
             log.personalBuffs = _personalBuffs;
@@ -229,7 +229,7 @@ namespace LuckParser.Builders
                     totalDamageDist = BuildDamageDist(player, null),
                     targetDamageDist = BuildDamageDist(player),
                     totalDamageTaken = BuildDamageTaken(player),
-                    deathRecap = player.GetDeathRecaps(_log),
+                    deathRecap = BuildDeathRecaps(player),
                     consumables = BuildConsumables(player),
                     avgBoonsStates = BuildBuffStates(player.GetBoonGraphs(_log)[Boon.NumberOfBoonsID]),
                     avgConditionsStates = BuildBuffStates(player.GetBoonGraphs(_log)[Boon.NumberOfConditionsID]),
@@ -261,6 +261,56 @@ namespace LuckParser.Builders
                 tarList[j] = list;
             }
             return tarList;
+        }
+
+        private List<JsonDeathRecap> BuildDeathRecaps(Player p)
+        {
+            List<JsonDeathRecap> res = new List<JsonDeathRecap>();
+            List<Player.DeathRecap> recaps = p.GetDeathRecaps(_log);
+            if (recaps == null)
+            {
+                return null;
+            }
+            foreach (Player.DeathRecap deathRecap in recaps)
+            {
+                JsonDeathRecap recap = new JsonDeathRecap()
+                {
+                    time = deathRecap.Time
+                };
+                res.Add(recap);
+                if (deathRecap.ToKill != null)
+                {
+                    recap.toKill = new List<JsonDeathRecap.JsonDeathRecapDamageItem>();
+                    foreach (Player.DeathRecap.DeathRecapDamageItem item in deathRecap.ToKill)
+                    {
+                        recap.toKill.Add(new JsonDeathRecap.JsonDeathRecapDamageItem()
+                        {
+                            time = item.Time,
+                            skillID = item.Skill,
+                            damage = item.Damage,
+                            source = item.Src,
+                            condi = item.Condi
+                        });
+                    }
+                }
+                if (deathRecap.ToDown != null)
+                {
+                    recap.toDown = new List<JsonDeathRecap.JsonDeathRecapDamageItem>();
+                    foreach (Player.DeathRecap.DeathRecapDamageItem item in deathRecap.ToDown)
+                    {
+                        recap.toDown.Add(new JsonDeathRecap.JsonDeathRecapDamageItem()
+                        {
+                            time = item.Time,
+                            skillID = item.Skill,
+                            damage = item.Damage,
+                            source = item.Src,
+                            condi = item.Condi
+                        });
+                    }
+                }
+
+            }
+            return res;
         }
 
         private List<JsonConsumable> BuildConsumables(Player player)
@@ -364,7 +414,7 @@ namespace LuckParser.Builders
                     continue;
                 }
                 SkillItem skill = skillList.Get(pair.Key);
-                if (pair.Value.First().IsCondi == 0 && skill != null)
+                if (!pair.Value.First().IsCondi && skill != null)
                 {
                     if(!_skillNames.ContainsKey("s" + pair.Key))
                     {
@@ -376,14 +426,14 @@ namespace LuckParser.Builders
                 {
                     continue;
                 }
-                string prefix = filteredList.First().IsCondi > 0 ? "b" : "s";
+                string prefix = filteredList.First().IsCondi ? "b" : "s";
                 res[prefix + pair.Key] = new JsonDamageDist()
                 {
                     hits = filteredList.Count,
                     damage = filteredList.Sum(x => x.Damage),
                     min = filteredList.Min(x => x.Damage),
                     max = filteredList.Max(x => x.Damage),
-                    flank = filteredList.Count(x => x.IsFlanking > 0),
+                    flank = filteredList.Count(x => x.IsFlanking),
                     crit = filteredList.Count(x => x.Result == ParseEnum.Result.Crit),
                     glance = filteredList.Count(x => x.Result == ParseEnum.Result.Glance),
                 };
@@ -433,8 +483,8 @@ namespace LuckParser.Builders
                     time = (int)cl.Time,
                     duration = cl.ActualDuration,
                     timeGained = timeGained,
-                    autoAttack = skillApi != null && skillApi.slot == "Weapon_1" ? 1 : 0,
-                    quickness = cl.StartActivation == ParseEnum.Activation.Quickness ? 1 : 0
+                    autoAttack = skillApi != null && skillApi.slot == "Weapon_1",
+                    quickness = cl.StartActivation == ParseEnum.Activation.Quickness
                 };
                 if (res.TryGetValue("s" + cl.SkillId, out var list))
                 {

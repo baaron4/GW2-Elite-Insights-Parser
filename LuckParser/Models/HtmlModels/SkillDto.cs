@@ -5,6 +5,6 @@
         public long id;
         public string name;
         public string icon;
-        public int aa;
+        public bool aa;
     }
 }

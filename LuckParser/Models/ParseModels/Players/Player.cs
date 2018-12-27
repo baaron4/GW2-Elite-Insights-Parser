@@ -32,7 +32,7 @@ namespace LuckParser.Models.ParseModels
             public class DeathRecapDamageItem
             {
                 public long Skill;
-                public int Condi;
+                public bool Condi;
                 public string Src;
                 public int Damage;
                 public int Time;
