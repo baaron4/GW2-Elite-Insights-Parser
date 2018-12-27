@@ -244,7 +244,7 @@ namespace LuckParser.Builders
                     Player p = _log.PlayerList.Find(x => x.InstID == pov.SrcInstid);
                     if (p == null)
                     {
-                        throw new InvalidOperationException("Player pov not found");
+                        return;
                     }
                     foreach (DamageLog dl in p.GetDamageLogs(null, _log, _statistics.Phases[0].Start, _statistics.Phases[0].End))
                     {
@@ -267,7 +267,7 @@ namespace LuckParser.Builders
                 }
                 else
                 {
-                    throw new InvalidOperationException("No pov data");
+                    return;
                 }
                 log.benchData = benchData;
             }
