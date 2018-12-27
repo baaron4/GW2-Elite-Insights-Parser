@@ -171,7 +171,7 @@ namespace LuckParser.Models.Logic
                         int firstConeEnd = firstConeStart + 400;
                         int secondConeEnd = secondConeStart + 400;
                         int thirdConeEnd = thirdConeStart + 400;
-                        int radius = 1200;
+                        int radius = 1500;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start);
                         if (facing != null)
                         {
