@@ -8,6 +8,6 @@ namespace LuckParser.Models.HtmlModels
         public int size;
         public string color;       
         public List<List<List<double>>> points;      
-        public int visible;
+        public bool visible;
     }
 }

@@ -9,6 +9,6 @@ namespace LuckParser.Models.HtmlModels
         [DefaultValue(null)]
         public double end;
         public string label;
-        public int highlight;
+        public bool highlight;
     }
 }
