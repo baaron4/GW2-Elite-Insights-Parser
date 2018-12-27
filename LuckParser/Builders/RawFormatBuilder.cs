@@ -235,42 +235,6 @@ namespace LuckParser.Builders
                     avgConditionsStates = BuildBuffStates(player.GetBoonGraphs(_log)[Boon.NumberOfConditionsID]),
                 });
             }
-            if (_log.IsBenchmarkMode)
-            {
-                List<JsonBenchData> benchData = new List<JsonBenchData>();
-                CombatItem pov = _log.CombatData.GetStates(ParseEnum.StateChange.PointOfView).FirstOrDefault();
-                if (pov != null)
-                {
-                    Player p = _log.PlayerList.Find(x => x.InstID == pov.SrcInstid);
-                    if (p == null)
-                    {
-                        return;
-                    }
-                    foreach (DamageLog dl in p.GetDamageLogs(null, _log, _statistics.Phases[0].Start, _statistics.Phases[0].End))
-                    {
-                        JsonBenchData data = new JsonBenchData()
-                        {
-                            time = dl.Time,
-                            condi = dl.IsCondi,
-                            damage = dl.Damage,
-                            skillID = dl.SkillId,
-                            source = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time).Name,
-                            ninety = dl.IsNinety,
-                            fifty = dl.IsFifty,
-                            moving = dl.IsMoving,
-                            flanking = dl.IsFlanking,
-                            crit = dl.Result == ParseEnum.Result.Crit,
-                            glance = dl.Result == ParseEnum.Result.Glance
-                        };
-                        benchData.Add(data);
-                    }
-                }
-                else
-                {
-                    return;
-                }
-                log.benchData = benchData;
-            }
         }
 
         private List<int>[] BuildTotal1SDamage(AbstractMasterPlayer p)

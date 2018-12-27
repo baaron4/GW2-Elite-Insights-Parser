@@ -18,7 +18,6 @@ namespace LuckParser.Models.JsonModels
         public List<JsonTarget> targets;
         public List<JsonPlayer> players;
         public List<JsonPhase> phases;
-        public List<JsonBenchData> benchData;
         public Dictionary<string, List<JsonMechanic>> mechanics;
         public string[] uploadLinks;
         public Dictionary<string, string> skillNames;
