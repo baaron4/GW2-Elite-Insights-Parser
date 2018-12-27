@@ -13,7 +13,10 @@ namespace LuckParser.Models.Logic
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
-                // TODO
+            new Mechanic(34108, "Shell-Shocked", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle-open","rgb(0,128,0)"), "Launchd","Shell-Shocked (Launched from pad)", "Shell-Shocked",0),
+            new Mechanic(34448, "Overhead Smash", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("triangle-left","rgb(200,140,0)"), "Smash","Overhead Smash (CC Attack Berg)", "CC Smash",0),
+            new Mechanic(34383, "Hail of Bullets", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("triangle-right-open","rgb(255,0,0)"), "Cone","Hail of Bullets (Zane Cone Shot)", "Hail of Bullets",0),
+            new Mechanic(34344, "Fiery Vortex", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle-open","rgb(255,200,0)"), "Torndo","Fiery Vortex (Tornado)", "Tornado",250),
             });
             Extension = "trio";
             IconUrl = "https://i.imgur.com/UZZQUdf.png";
@@ -158,7 +161,27 @@ namespace LuckParser.Models.Logic
                 case (ushort)ParseEnum.TargetIDS.Berg:
                     break;
                 case (ushort)ParseEnum.TargetIDS.Zane:
+                    List<CastLog> bulletHail = cls.Where(x => x.SkillId == 34383).ToList();
+                    foreach (CastLog c in bulletHail)
+                    {
+                        int start = (int)c.Time;
+                        int firstConeStart = start;
+                        int secondConeStart = start + 800;
+                        int thirdConeStart = start + 1600;
+                        int firstConeEnd = firstConeStart + 400;
+                        int secondConeEnd = secondConeStart + 400;
+                        int thirdConeEnd = thirdConeStart + 400;
+                        int radius = 1200;
+                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start);
+                        if (facing != null)
+                        {
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 28, new Tuple<int, int>(firstConeStart, firstConeEnd), "rgba(255,200,0,0.3)", new AgentConnector(target)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 54, new Tuple<int, int>(secondConeStart, secondConeEnd), "rgba(255,200,0,0.3)", new AgentConnector(target)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 81, new Tuple<int, int>(thirdConeStart, thirdConeEnd), "rgba(255,200,0,0.3)", new AgentConnector(target)));
+                        }
+                    }
                     break;
+
                 case (ushort)ParseEnum.TargetIDS.Narella:
                     break;
                 default:
