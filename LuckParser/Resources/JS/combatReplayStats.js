@@ -112,7 +112,7 @@ var compileCombatReplay = function () {
         }
     });
 
-    Vue.component("combat-replay-player-buffs-stats", {
+    Vue.component("combat-replay-player-buffs-stats-component", {
         props: ["playerindex", "time"],
         template: `${tmplCombatReplayPlayerBuffStats}`,
         computed: {
@@ -201,7 +201,7 @@ var compileCombatReplay = function () {
         }
     });
 
-    Vue.component("combat-replay-player-status", {
+    Vue.component("combat-replay-player-status-component", {
         props: ["playerindex", "time"],
         template: `${tmplCombatReplayPlayerStatus}`,
         computed: {
@@ -216,7 +216,7 @@ var compileCombatReplay = function () {
         }
     });
 
-    Vue.component("combat-replay-player-rotation", {
+    Vue.component("combat-replay-player-rotation-component", {
         props: ["playerindex", "time"],
         template: `${tmplCombatReplayPlayerRotation}`,
         computed: {
@@ -289,7 +289,7 @@ var compileCombatReplay = function () {
         }
     });
 
-    Vue.component("combat-replay-player-stats", {
+    Vue.component("combat-replay-player-stats-component", {
         props: ["playerindex", "time"],
         template: `${tmplCombatReplayPlayerStats}`
     });
