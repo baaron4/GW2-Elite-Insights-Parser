@@ -105,6 +105,7 @@
     <Compile Include="Controllers\FlashWindow.cs" />
     <Compile Include="Models\FightLogic\BanditTrio.cs" />
     <Compile Include="Models\JsonModels\JsonBenchData.cs" />
+    <Compile Include="Models\JsonModels\JsonDeathRecap.cs" />
     <Compile Include="Models\ParseModels\Logs\BoonExtensionLog.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\AbstractBoonSimulationItem.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemOverstack.cs" />

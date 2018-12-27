@@ -229,7 +229,7 @@ namespace LuckParser.Builders
                     totalDamageDist = BuildDamageDist(player, null),
                     targetDamageDist = BuildDamageDist(player),
                     totalDamageTaken = BuildDamageTaken(player),
-                    deathRecap = player.GetDeathRecaps(_log),
+                    deathRecap = BuildDeathRecaps(player),
                     consumables = BuildConsumables(player),
                     avgBoonsStates = BuildBuffStates(player.GetBoonGraphs(_log)[Boon.NumberOfBoonsID]),
                     avgConditionsStates = BuildBuffStates(player.GetBoonGraphs(_log)[Boon.NumberOfConditionsID]),
@@ -297,6 +297,56 @@ namespace LuckParser.Builders
                 tarList[j] = list;
             }
             return tarList;
+        }
+
+        private List<JsonDeathRecap> BuildDeathRecaps(Player p)
+        {
+            List<JsonDeathRecap> res = new List<JsonDeathRecap>();
+            List<Player.DeathRecap> recaps = p.GetDeathRecaps(_log);
+            if (recaps == null)
+            {
+                return null;
+            }
+            foreach (Player.DeathRecap deathRecap in recaps)
+            {
+                JsonDeathRecap recap = new JsonDeathRecap()
+                {
+                    time = deathRecap.Time
+                };
+                res.Add(recap);
+                if (deathRecap.ToKill != null)
+                {
+                    recap.toKill = new List<JsonDeathRecap.JsonDeathRecapDamageItem>();
+                    foreach (Player.DeathRecap.DeathRecapDamageItem item in deathRecap.ToKill)
+                    {
+                        recap.toKill.Add(new JsonDeathRecap.JsonDeathRecapDamageItem()
+                        {
+                            time = item.Time,
+                            skillID = item.Skill,
+                            damage = item.Damage,
+                            source = item.Src,
+                            condi = item.Condi
+                        });
+                    }
+                }
+                if (deathRecap.ToDown != null)
+                {
+                    recap.toDown = new List<JsonDeathRecap.JsonDeathRecapDamageItem>();
+                    foreach (Player.DeathRecap.DeathRecapDamageItem item in deathRecap.ToDown)
+                    {
+                        recap.toDown.Add(new JsonDeathRecap.JsonDeathRecapDamageItem()
+                        {
+                            time = item.Time,
+                            skillID = item.Skill,
+                            damage = item.Damage,
+                            source = item.Src,
+                            condi = item.Condi
+                        });
+                    }
+                }
+
+            }
+            return res;
         }
 
         private List<JsonConsumable> BuildConsumables(Player player)
