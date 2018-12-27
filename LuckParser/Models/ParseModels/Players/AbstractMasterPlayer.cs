@@ -235,6 +235,9 @@ namespace LuckParser.Models.ParseModels
                     break;
                 // Sand Squall, True Nature, Soulbeast trait (not tracked no way to be 100% sure)
                 case 2000:
+                    if (Prof == "Soulbeast") {
+                        break;
+                    }
                     idsToCheck.Add(51696);
                     idsToCheck.Add(29453);
                     break;
