@@ -252,10 +252,8 @@ namespace LuckParser.Models.ParseModels
             if (cls.Count == 1)
             {
                 CastLog item = cls.First();
-                if (extension == 2000)
+                if (extension == 2000 && log.PlayerListBySpec.TryGetValue("Tempest", out List<Player> tempests))
                 {
-                    // find every tempest 
-                    List<Player> tempests = log.PlayerList.Where(x => x.Prof == "Tempest" && x.InstID != item.SrcInstId).ToList();
                     List<CombatItem> magAuraApplications = log.GetBoonData(5684).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
                     foreach (Player tempest in tempests)
                     {
