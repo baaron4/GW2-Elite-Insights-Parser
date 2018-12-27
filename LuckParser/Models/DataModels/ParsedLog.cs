@@ -16,6 +16,7 @@ namespace LuckParser.Models.DataModels
         public readonly MechanicData MechanicData;
         public readonly List<Player> PlayerList;
         public readonly HashSet<ushort> PlayerIDs;
+        public bool IsBenchmarkMode => FightData.Logic.Mode == FightLogic.ParseMode.Golem;
         public readonly Dictionary<string, List<Player>> PlayerListBySpec;
         public readonly Target LegacyTarget;
 
@@ -77,12 +78,6 @@ namespace LuckParser.Models.DataModels
         {
             return CombatData.GetDamageTakenData(key,start,end);
         }
-
-        public bool IsBenchmarkMode()
-        {
-            return FightData.Logic.Mode == FightLogic.ParseMode.Golem;
-        }
-
 
         /*public List<CombatItem> getHealingData()
         {
