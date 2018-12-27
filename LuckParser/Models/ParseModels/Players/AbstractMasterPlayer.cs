@@ -257,7 +257,7 @@ namespace LuckParser.Models.ParseModels
                     List<CombatItem> magAuraApplications = log.GetBoonData(5684).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
                     foreach (Player tempest in tempests)
                     {
-                        if (magAuraApplications.FirstOrDefault(x => x.DstInstid == tempest.InstID && Math.Abs(x.Time - time) < 50) != null)
+                        if (magAuraApplications.FirstOrDefault(x => x.SrcInstid == tempest.InstID && Math.Abs(x.Time - time) < 50) != null)
                         {
                             return 0;
                         }
