@@ -32,13 +32,8 @@ namespace LuckParser.Models.ParseModels
 
         public override void SetBoonDistributionItem(Dictionary<long, Dictionary<ushort, BoonDistributionItem>> distribs, long start, long end, long boonid)
         {
-            if (!distribs.TryGetValue(boonid, out var distrib))
-            {
-                distrib = new Dictionary<ushort, BoonDistributionItem>();
-                distribs.Add(boonid, distrib);
-            }
-            BoonDistributionItem toModify;
-            if (distrib.TryGetValue(_src, out toModify))
+            Dictionary<ushort, BoonDistributionItem> distrib = GetDistrib(distribs, boonid);
+            if (distrib.TryGetValue(_src, out BoonDistributionItem toModify))
             {
                 toModify.Value += GetClampedDuration(start, end);
                 distrib[_src] = toModify;
