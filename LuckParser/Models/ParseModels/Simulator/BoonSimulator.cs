@@ -19,12 +19,12 @@ namespace LuckParser.Models.ParseModels
 
             public List<Tuple<ushort, long, long>> Extensions { get; } = new List<Tuple<ushort, long, long>>();
 
-            public BoonStackItem(long start, long boonDuration, ushort srcinstid, ushort originalSrc)
+            public BoonStackItem(long start, long boonDuration, ushort srcinstid, ushort seedSrc)
             {
                 Start = start;
                 SeedTime = start;
                 ApplicationTime = start;
-                SeedSrc = originalSrc;
+                SeedSrc = seedSrc;
                 BoonDuration = boonDuration;
                 Src = srcinstid;
             }
@@ -130,9 +130,9 @@ namespace LuckParser.Models.ParseModels
 
         protected abstract void Update(long timePassed);
 
-        public void Add(long boonDuration, ushort srcinstid, ushort originalSrc, long start, bool atFirst = false)
+        public void Add(long boonDuration, ushort srcinstid, ushort seedSrc, long start, bool atFirst = false)
         {
-            var toAdd = new BoonStackItem(start, boonDuration, srcinstid, originalSrc);
+            var toAdd = new BoonStackItem(start, boonDuration, srcinstid, seedSrc);
             // Find empty slot
             if (BoonStack.Count < Capacity)
             {

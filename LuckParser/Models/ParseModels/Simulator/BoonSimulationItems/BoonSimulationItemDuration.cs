@@ -7,8 +7,8 @@ namespace LuckParser.Models.ParseModels
     public class BoonSimulationItemDuration : BoonSimulationItem
     {
 
-        private readonly long _originalApplicationTime;
-        private readonly long _originalSeedTime;
+        private readonly long _aplicationTime;
+        private readonly long _seedTime;
         private readonly ushort _src;
         private readonly ushort _seedSrc;
 
@@ -16,8 +16,8 @@ namespace LuckParser.Models.ParseModels
         {
             _src = other.Src;
             _seedSrc = other.SeedSrc;
-            _originalApplicationTime = other.ApplicationTime;
-            _originalSeedTime = other.SeedTime;
+            _aplicationTime = other.ApplicationTime;
+            _seedTime = other.SeedTime;
         }
 
         public override void SetEnd(long end)
