@@ -8,12 +8,6 @@ namespace LuckParser.Models.ParseModels
     public class HealingLogic : QueueLogic
     {
 
-        private static uint GetHealing(BoonStackItem stack, ParsedLog log)
-        {
-            AgentItem agent = log.AgentData.GetAgentByInstID(stack.SeedSrc, log.FightData.ToLogSpace(stack.SeedTime));
-            return agent.Healing;
-        }
-
         private struct CompareHealing
         {
             private readonly ParsedLog _log;
@@ -23,9 +17,15 @@ namespace LuckParser.Models.ParseModels
                 _log = log;
             }
 
+            private uint GetHealing(BoonStackItem stack)
+            {
+                AgentItem agent = _log.AgentData.GetAgentByInstID(stack.SeedSrc, _log.FightData.ToLogSpace(stack.SeedTime));
+                return agent.Healing;
+            }
+
             public int Compare(BoonStackItem x, BoonStackItem y)
             {             
-                return -GetHealing(x, _log).CompareTo(GetHealing(y, _log));
+                return -GetHealing(x).CompareTo(GetHealing(y));
             }
         }
 
