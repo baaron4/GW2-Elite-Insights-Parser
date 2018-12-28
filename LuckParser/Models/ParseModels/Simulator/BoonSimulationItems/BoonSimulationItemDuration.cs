@@ -7,15 +7,17 @@ namespace LuckParser.Models.ParseModels
     public class BoonSimulationItemDuration : BoonSimulationItem
     {
 
-        private readonly long _originalStart;
+        private readonly long _originalApplicationTime;
+        private readonly long _originalSeedTime;
         private readonly ushort _src;
-        private readonly ushort _originalSrc;
+        private readonly ushort _seedSrc;
 
         public BoonSimulationItemDuration(BoonStackItem other) : base(other.Start, other.BoonDuration)
         {
             _src = other.Src;
-            _originalSrc = other.OriginalSrc;
-            _originalStart = other.OriginalStart;
+            _seedSrc = other.SeedSrc;
+            _originalApplicationTime = other.ApplicationTime;
+            _originalSeedTime = other.SeedTime;
         }
 
         public override void SetEnd(long end)
@@ -47,30 +49,30 @@ namespace LuckParser.Models.ParseModels
                     GetClampedDuration(start, end),
                     0, 0, 0, 0));
             }
-            if (_src != _originalSrc)
+            if (_src != _seedSrc)
             {
-                if (distrib.TryGetValue(_originalSrc, out toModify))
+                if (distrib.TryGetValue(_seedSrc, out toModify))
                 {
                     toModify.Extension += GetClampedDuration(start, end);
-                    distrib[_originalSrc] = toModify;
+                    distrib[_seedSrc] = toModify;
                 }
                 else
                 {
-                    distrib.Add(_originalSrc, new BoonDistributionItem(
+                    distrib.Add(_seedSrc, new BoonDistributionItem(
                         0,
                         0, 0, 0, GetClampedDuration(start, end)));
                 }
             }
             if (_src == 0)
             {
-                if (distrib.TryGetValue(_originalSrc, out toModify))
+                if (distrib.TryGetValue(_seedSrc, out toModify))
                 {
                     toModify.UnknownExtension += GetClampedDuration(start, end);
-                    distrib[_originalSrc] = toModify;
+                    distrib[_seedSrc] = toModify;
                 }
                 else
                 {
-                    distrib.Add(_originalSrc, new BoonDistributionItem(
+                    distrib.Add(_seedSrc, new BoonDistributionItem(
                         0,
                         0, 0, GetClampedDuration(start, end), 0));
                 }

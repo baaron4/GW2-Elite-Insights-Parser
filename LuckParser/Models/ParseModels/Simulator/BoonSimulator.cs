@@ -11,18 +11,20 @@ namespace LuckParser.Models.ParseModels
         public class BoonStackItem
         {
             public long Start { get; private set; }
-            public long OriginalStart { get; private set; }
+            public long SeedTime { get; private set; }
+            public long ApplicationTime { get; private set; }
             public long BoonDuration { get; private set; }
             public ushort Src { get; private set; }
-            public ushort OriginalSrc { get; }
+            public ushort SeedSrc { get; }
 
-            public List<Tuple<ushort, long>> Extensions { get; } = new List<Tuple<ushort, long>>();
+            public List<Tuple<ushort, long, long>> Extensions { get; } = new List<Tuple<ushort, long, long>>();
 
             public BoonStackItem(long start, long boonDuration, ushort srcinstid, ushort originalSrc)
             {
                 Start = start;
-                OriginalStart = start;
-                OriginalSrc = originalSrc;
+                SeedTime = start;
+                ApplicationTime = start;
+                SeedSrc = originalSrc;
                 BoonDuration = boonDuration;
                 Src = srcinstid;
             }
@@ -30,23 +32,25 @@ namespace LuckParser.Models.ParseModels
             public BoonStackItem(BoonStackItem other, long startShift, long durationShift)
             {
                 Start = other.Start + startShift;
-                OriginalStart = other.OriginalStart;
+                SeedTime = other.SeedTime;
+                ApplicationTime = other.ApplicationTime;
                 BoonDuration = other.BoonDuration - durationShift;
                 Src = other.Src;
-                OriginalSrc = other.OriginalSrc;
+                SeedSrc = other.SeedSrc;
                 Extensions = other.Extensions;
                 if (BoonDuration == 0 && Extensions.Count > 0)
                 {
-                    Tuple<ushort, long> ext = Extensions.First();
+                    Tuple<ushort, long, long> ext = Extensions.First();
                     Extensions.RemoveAt(0);
+                    ApplicationTime = ext.Item3;
                     Src = ext.Item1;
                     BoonDuration = ext.Item2;
                 }
             }
 
-            public void Extend(long value, ushort src)
+            public void Extend(long value, ushort src, long time)
             {
-                Extensions.Add(new Tuple<ushort, long>(src, value));
+                Extensions.Add(new Tuple<ushort, long, long>(src, value, time));
             }
         }
 
@@ -159,13 +163,13 @@ namespace LuckParser.Models.ParseModels
                 case ParseEnum.BuffRemove.All:
                     foreach (BoonStackItem stackItem in BoonStack)
                     {
-                        WasteSimulationResult.Add(new BoonSimulationItemWasted(stackItem.Src, stackItem.BoonDuration, start, stackItem.OriginalSrc, stackItem.OriginalStart));
+                        WasteSimulationResult.Add(new BoonSimulationItemWasted(stackItem.Src, stackItem.BoonDuration, start, stackItem.ApplicationTime));
                         CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, stackItem.BoonDuration, start));
                         if (stackItem.Extensions.Count > 0)
                         {
                             foreach (var item in stackItem.Extensions)
                             {
-                                WasteSimulationResult.Add(new BoonSimulationItemWasted(item.Item1, item.Item2, start, stackItem.OriginalSrc, stackItem.OriginalStart));
+                                WasteSimulationResult.Add(new BoonSimulationItemWasted(item.Item1, item.Item2, start, item.Item3));
                                 CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, item.Item2, start));
                             }
                         }
@@ -179,13 +183,13 @@ namespace LuckParser.Models.ParseModels
                         BoonStackItem stackItem = BoonStack[i];
                         if (Math.Abs(boonDuration - stackItem.BoonDuration) < 10)
                         {
-                            WasteSimulationResult.Add(new BoonSimulationItemWasted(stackItem.Src, stackItem.BoonDuration, start, stackItem.OriginalSrc, stackItem.OriginalStart));
+                            WasteSimulationResult.Add(new BoonSimulationItemWasted(stackItem.Src, stackItem.BoonDuration, start, stackItem.ApplicationTime));
                             CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, stackItem.BoonDuration, start));
                             if (stackItem.Extensions.Count > 0)
                             {
                                 foreach (var item in stackItem.Extensions)
                                 {
-                                    WasteSimulationResult.Add(new BoonSimulationItemWasted(item.Item1, item.Item2, start, stackItem.OriginalSrc, stackItem.OriginalStart));
+                                    WasteSimulationResult.Add(new BoonSimulationItemWasted(item.Item1, item.Item2, start, item.Item3));
                                     CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, item.Item2, start));
                                 }
                             }

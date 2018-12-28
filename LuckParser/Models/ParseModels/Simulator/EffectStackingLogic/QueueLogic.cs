@@ -27,12 +27,12 @@ namespace LuckParser.Models.ParseModels
                 stacks.Insert(0, first);
                 return false;
             }
-            wastes.Add(new BoonSimulationItemWasted(minItem.Src, minItem.BoonDuration, minItem.Start, minItem.OriginalSrc, minItem.OriginalStart));
+            wastes.Add(new BoonSimulationItemWasted(minItem.Src, minItem.BoonDuration, minItem.Start, minItem.ApplicationTime));
             if (minItem.Extensions.Count > 0)
             {
                 foreach (var item in minItem.Extensions)
                 {
-                    wastes.Add(new BoonSimulationItemWasted(item.Item1, item.Item2, minItem.Start, minItem.OriginalSrc, minItem.OriginalStart));
+                    wastes.Add(new BoonSimulationItemWasted(item.Item1, item.Item2, minItem.Start, item.Item3));
                 }
             }
             stacks[stacks.IndexOf(minItem)] = stackItem;

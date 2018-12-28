@@ -9,13 +9,11 @@ namespace LuckParser.Models.ParseModels
     public class BoonSimulationItemWasted : AbstractBoonSimulationItemWasted
     {
 
-        private readonly long _originalTime;
-        private readonly ushort _originalSrc;
+        private readonly long _applicationTime;
 
-        public BoonSimulationItemWasted(ushort src, long waste, long time, ushort originalSrc, long originalTime) : base(src, waste, time)
+        public BoonSimulationItemWasted(ushort src, long waste, long time, long applicationTime) : base(src, waste, time)
         {
-            _originalSrc = originalSrc;
-            _originalTime = originalTime;
+            _applicationTime = applicationTime;
         }
 
         public override void SetBoonDistributionItem(Dictionary<long,Dictionary<ushort, BoonDistributionItem>> distribs, long start, long end, long boonid)
