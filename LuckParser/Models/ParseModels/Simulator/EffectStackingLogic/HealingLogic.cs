@@ -10,7 +10,7 @@ namespace LuckParser.Models.ParseModels
 
         private static uint GetHealing(BoonStackItem stack, ParsedLog log)
         {
-            AgentItem agent = log.AgentData.GetAgentByInstID(stack.SeedSrc, stack.SeedTime);
+            AgentItem agent = log.AgentData.GetAgentByInstID(stack.SeedSrc, log.FightData.ToLogSpace(stack.SeedTime));
             return agent.Healing;
         }
 

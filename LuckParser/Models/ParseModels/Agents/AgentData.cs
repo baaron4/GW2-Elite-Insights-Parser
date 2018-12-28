@@ -72,7 +72,12 @@ namespace LuckParser.Models.ParseModels
             {
                 if (_allAgentsByInstID.TryGetValue(instid, out var list))
                 {
-                    return list.FirstOrDefault(x => x.FirstAware <= time && x.LastAware >= time);
+                    AgentItem a = list.FirstOrDefault(x => x.FirstAware <= time && x.LastAware >= time);
+                    if (a != null)
+                    {
+                        return a;
+                    }
+                    return new AgentItem(0, "UNKNOWN");
                 }
             }
             return new AgentItem(0, "UNKNOWN");
