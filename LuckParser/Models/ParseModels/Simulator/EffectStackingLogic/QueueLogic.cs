@@ -21,8 +21,8 @@ namespace LuckParser.Models.ParseModels
             }
             BoonStackItem first = stacks[0];
             stacks.RemoveAt(0);
-            BoonStackItem minItem = stacks.MinBy(x => x.BoonDuration);
-            if (minItem.BoonDuration >= stackItem.BoonDuration)
+            BoonStackItem minItem = stacks.MinBy(x => x.TotalBoonDuration());
+            if (minItem.TotalBoonDuration() >= stackItem.TotalBoonDuration())
             {
                 stacks.Insert(0, first);
                 return false;

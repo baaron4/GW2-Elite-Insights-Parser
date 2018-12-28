@@ -8,14 +8,14 @@ namespace LuckParser.Models.ParseModels
     {
         public override void Sort(ParsedLog log, List<BoonStackItem> stacks)
         {
-            stacks.Sort((x, y) => x.BoonDuration.CompareTo(y.BoonDuration));
+            stacks.Sort((x, y) => x.TotalBoonDuration().CompareTo(y.TotalBoonDuration()));
         }
 
         public override bool StackEffect(ParsedLog log, BoonStackItem stackItem, List<BoonSimulator.BoonStackItem> stacks, List<BoonSimulationItemWasted> wastes)
         {
             for (int i = 0; i < stacks.Count; i++)
             {
-                if (stacks[i].BoonDuration < stackItem.BoonDuration)
+                if (stacks[i].TotalBoonDuration() < stackItem.TotalBoonDuration())
                 {
                     BoonStackItem stack = stacks[i];
                     wastes.Add(new BoonSimulationItemWasted(stack.Src, stack.BoonDuration, stack.Start, stack.ApplicationTime));
