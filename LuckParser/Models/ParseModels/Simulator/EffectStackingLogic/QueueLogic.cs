@@ -37,6 +37,7 @@ namespace LuckParser.Models.ParseModels
             }
             stacks[stacks.IndexOf(minItem)] = stackItem;
             stacks.Insert(0, first);
+            Sort(log, stacks);
             return true;
         }
     }

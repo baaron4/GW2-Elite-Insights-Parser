@@ -5,7 +5,7 @@ using static LuckParser.Models.ParseModels.BoonSimulator;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class HealingLogic : StackingLogic
+    public class HealingLogic : QueueLogic
     {
 
         private static uint GetHealing(BoonStackItem stack, ParsedLog log)
@@ -33,29 +33,6 @@ namespace LuckParser.Models.ParseModels
         {
             CompareHealing comparator = new CompareHealing(log);
             stacks.Sort(comparator.Compare);        
-        }
-
-        public override bool StackEffect(ParsedLog log, BoonStackItem stackItem, List<BoonStackItem> stacks, List<BoonSimulationItemWasted> wastes)
-        {
-            if (stacks.Count <= 1)
-            {
-                throw new InvalidOperationException("Queue logic based must have a >1 capacity");
-            }
-            BoonStackItem minItem = stacks.MinBy(x => GetHealing(x, log));
-            if (GetHealing(minItem, log) >= GetHealing(stackItem, log))
-            {
-                return false;
-            }
-            wastes.Add(new BoonSimulationItemWasted(minItem.Src, minItem.BoonDuration, minItem.Start, minItem.ApplicationTime));
-            if (minItem.Extensions.Count > 0)
-            {
-                foreach (var item in minItem.Extensions)
-                {
-                    wastes.Add(new BoonSimulationItemWasted(item.Item1, item.Item2, minItem.Start, item.Item3));
-                }
-            }
-            stacks[stacks.IndexOf(minItem)] = stackItem;
-            return true;
         }
     }
 }
