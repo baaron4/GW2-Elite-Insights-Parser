@@ -6,6 +6,8 @@ namespace LuckParser.Models.ParseModels
 {
     public class BoonSimulationItemDuration : BoonSimulationItem
     {
+
+        private readonly long _originalStart;
         private readonly ushort _src;
         private readonly ushort _originalSrc;
 
@@ -13,6 +15,7 @@ namespace LuckParser.Models.ParseModels
         {
             _src = other.Src;
             _originalSrc = other.OriginalSrc;
+            _originalStart = other.OriginalStart;
         }
 
         public override void SetEnd(long end)
@@ -25,8 +28,13 @@ namespace LuckParser.Models.ParseModels
             return 1;
         }
 
-        public override void SetBoonDistributionItem(Dictionary<ushort, BoonDistributionItem> distrib, long start, long end)
+        public override void SetBoonDistributionItem(Dictionary<long, Dictionary<ushort, BoonDistributionItem>> distribs, long start, long end, long boonid)
         {
+            if (!distribs.TryGetValue(boonid, out var distrib))
+            {
+                distrib = new Dictionary<ushort, BoonDistributionItem>();
+                distribs.Add(boonid, distrib);
+            }
             BoonDistributionItem toModify;
             if (distrib.TryGetValue(_src, out toModify))
             {

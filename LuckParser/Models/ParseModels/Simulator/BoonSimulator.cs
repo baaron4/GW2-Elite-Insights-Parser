@@ -11,6 +11,7 @@ namespace LuckParser.Models.ParseModels
         public class BoonStackItem
         {
             public long Start { get; private set; }
+            public long OriginalStart { get; private set; }
             public long BoonDuration { get; private set; }
             public ushort Src { get; private set; }
             public ushort OriginalSrc { get; }
@@ -20,6 +21,7 @@ namespace LuckParser.Models.ParseModels
             public BoonStackItem(long start, long boonDuration, ushort srcinstid, ushort originalSrc)
             {
                 Start = start;
+                OriginalStart = start;
                 OriginalSrc = originalSrc;
                 BoonDuration = boonDuration;
                 Src = srcinstid;
@@ -28,6 +30,7 @@ namespace LuckParser.Models.ParseModels
             public BoonStackItem(BoonStackItem other, long startShift, long durationShift)
             {
                 Start = other.Start + startShift;
+                OriginalStart = other.OriginalStart;
                 BoonDuration = other.BoonDuration - durationShift;
                 Src = other.Src;
                 OriginalSrc = other.OriginalSrc;
@@ -156,13 +159,13 @@ namespace LuckParser.Models.ParseModels
                 case ParseEnum.BuffRemove.All:
                     foreach (BoonStackItem stackItem in BoonStack)
                     {
-                        WasteSimulationResult.Add(new BoonSimulationItemWasted(stackItem.Src, stackItem.BoonDuration, start));
+                        WasteSimulationResult.Add(new BoonSimulationItemWasted(stackItem.Src, stackItem.BoonDuration, start, stackItem.OriginalSrc, stackItem.OriginalStart));
                         CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, stackItem.BoonDuration, start));
                         if (stackItem.Extensions.Count > 0)
                         {
                             foreach (var item in stackItem.Extensions)
                             {
-                                WasteSimulationResult.Add(new BoonSimulationItemWasted(item.Item1, item.Item2, start));
+                                WasteSimulationResult.Add(new BoonSimulationItemWasted(item.Item1, item.Item2, start, stackItem.OriginalSrc, stackItem.OriginalStart));
                                 CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, item.Item2, start));
                             }
                         }
@@ -176,13 +179,13 @@ namespace LuckParser.Models.ParseModels
                         BoonStackItem stackItem = BoonStack[i];
                         if (Math.Abs(boonDuration - stackItem.BoonDuration) < 10)
                         {
-                            WasteSimulationResult.Add(new BoonSimulationItemWasted(stackItem.Src, stackItem.BoonDuration, start));
+                            WasteSimulationResult.Add(new BoonSimulationItemWasted(stackItem.Src, stackItem.BoonDuration, start, stackItem.OriginalSrc, stackItem.OriginalStart));
                             CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, stackItem.BoonDuration, start));
                             if (stackItem.Extensions.Count > 0)
                             {
                                 foreach (var item in stackItem.Extensions)
                                 {
-                                    WasteSimulationResult.Add(new BoonSimulationItemWasted(item.Item1, item.Item2, start));
+                                    WasteSimulationResult.Add(new BoonSimulationItemWasted(item.Item1, item.Item2, start, stackItem.OriginalSrc, stackItem.OriginalStart));
                                     CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, item.Item2, start));
                                 }
                             }

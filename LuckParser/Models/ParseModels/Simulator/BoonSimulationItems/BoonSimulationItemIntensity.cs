@@ -8,9 +8,8 @@ namespace LuckParser.Models.ParseModels
     {
         private List<BoonSimulationItemDuration> _stacks = new List<BoonSimulationItemDuration>();
 
-        public BoonSimulationItemIntensity(List<BoonStackItem> stacks) : base()
+        public BoonSimulationItemIntensity(List<BoonStackItem> stacks) : base(stacks[0].Start, 0)
         {
-            Start = stacks[0].Start;
             foreach (BoonStackItem stack in stacks)
             {
                 _stacks.Add(new BoonSimulationItemDuration(stack));
@@ -32,11 +31,11 @@ namespace LuckParser.Models.ParseModels
             return _stacks.Count;
         }
 
-        public override void SetBoonDistributionItem(Dictionary<ushort, BoonDistributionItem> distrib, long start, long end)
+        public override void SetBoonDistributionItem(Dictionary<long,Dictionary<ushort, BoonDistributionItem>> distribs, long start, long end, long boonid)
         {
             foreach (BoonSimulationItemDuration item in _stacks)
             {
-                item.SetBoonDistributionItem(distrib, start, end);
+                item.SetBoonDistributionItem(distribs, start, end, boonid);
             }
         }
     }

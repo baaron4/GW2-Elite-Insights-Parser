@@ -13,8 +13,13 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        public override void SetBoonDistributionItem(Dictionary<ushort, BoonDistributionItem> distrib, long start, long end)
+        public override void SetBoonDistributionItem(Dictionary<long,Dictionary<ushort, BoonDistributionItem>> distribs, long start, long end, long boonid)
         {
+            if (!distribs.TryGetValue(boonid, out var distrib))
+            {
+                distrib = new Dictionary<ushort, BoonDistributionItem>();
+                distribs.Add(boonid, distrib);
+            }
             if (distrib.TryGetValue(Src, out var toModify))
             {
                 toModify.Overstack += GetValue(start, end);
