@@ -35,7 +35,7 @@ namespace LuckParser.Models.JsonModels
         public Dictionary<string, JsonBuffs> groupBuffs;
         public Dictionary<string, JsonBuffs> offGroupBuffs;
         public Dictionary<string, JsonBuffs> squadBuffs;
-        public List<ParseModels.Player.DeathRecap> deathRecap;
+        public List<JsonDeathRecap> deathRecap;
         public List<JsonMinions> minions;
         public List<JsonConsumable> consumables;
     }

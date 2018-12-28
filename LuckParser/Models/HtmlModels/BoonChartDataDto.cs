@@ -6,7 +6,7 @@ namespace LuckParser.Models.HtmlModels
     {
         public long id;
         public string color;
-        public int visible;
+        public bool visible;
         public List<object[]> states;
     }
 }

@@ -14,7 +14,7 @@ namespace LuckParser.Models.JsonModels
         public string timeStart;
         public string timeEnd;
         public string duration;
-        public int success;
+        public bool success;
         public List<JsonTarget> targets;
         public List<JsonPlayer> players;
         public List<JsonPhase> phases;

@@ -19,7 +19,7 @@
                             <h5 class="text-center">Group {{id}}</h5>
                             <div v-for="player in group" class="cr-player-data d-flex flex-column" :class="{active: playerindex === player.id}"
                                 :key="id + '-group-' +  player.id">
-                                <combat-replay-player-stats :time="animator.time" :playerindex=" player.id"></combat-replay-player-stats>
+                                <combat-replay-player-stats-component :time="animator.time" :playerindex=" player.id"></combat-replay-player-stats-component>
                             </div>
                         </div>
                     </div>

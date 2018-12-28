@@ -20,6 +20,6 @@ namespace LuckParser.Models.HtmlModels
         public string colTarget;
         public string colCleave;
         public string colTotal;
-        public int isConjure;
+        public bool isConjure;
     }
 }
