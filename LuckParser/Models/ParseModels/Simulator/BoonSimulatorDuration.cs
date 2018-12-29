@@ -16,7 +16,7 @@ namespace LuckParser.Models.ParseModels
         {
             if ((BoonStack.Count > 0 && oldValue > 0) || BoonStack.Count == Capacity)
             {
-                BoonStack[0].Extend(extension, src);
+                BoonStack[0].Extend(extension, src, start);
             }
             else
             {
@@ -60,7 +60,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 if (BoonStack[0].BoonDuration == 0)
                 {
-                    _lastSrcRemove = BoonStack[0].OriginalSrc;
+                    _lastSrcRemove = BoonStack[0].SeedSrc;
                     BoonStack.RemoveAt(0);
                 }
                 Update(leftOver);

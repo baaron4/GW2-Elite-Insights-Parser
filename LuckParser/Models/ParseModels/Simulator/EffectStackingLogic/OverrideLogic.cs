@@ -8,30 +8,34 @@ namespace LuckParser.Models.ParseModels
     {
         public override void Sort(ParsedLog log, List<BoonStackItem> stacks)
         {
-            stacks.Sort((x, y) => x.BoonDuration.CompareTo(y.BoonDuration));
+            stacks.Sort((x, y) => x.TotalBoonDuration().CompareTo(y.TotalBoonDuration()));
         }
 
         public override bool StackEffect(ParsedLog log, BoonStackItem stackItem, List<BoonSimulator.BoonStackItem> stacks, List<BoonSimulationItemWasted> wastes)
         {
-            for (int i = 0; i < stacks.Count; i++)
+            if (stacks.Count == 0)
             {
-                if (stacks[i].BoonDuration < stackItem.BoonDuration)
-                {
-                    BoonStackItem stack = stacks[i];
-                    wastes.Add(new BoonSimulationItemWasted(stack.Src, stack.BoonDuration, stack.Start));
-                    if (stack.Extensions.Count > 0)
-                    {
-                        foreach (var item in stack.Extensions)
-                        {
-                            wastes.Add(new BoonSimulationItemWasted(item.Item1, item.Item2, stack.Start));
-                        }
-                    }
-                    stacks[i] = stackItem;
-                    Sort(log, stacks);
-                    return true;
-                }
+                return false;
             }
-            return false;
+            BoonStackItem stack = stacks[0];
+            if (stack.TotalBoonDuration() < stackItem.TotalBoonDuration())
+            {
+                wastes.Add(new BoonSimulationItemWasted(stack.Src, stack.BoonDuration, stack.Start, stack.ApplicationTime));
+                if (stack.Extensions.Count > 0)
+                {
+                    foreach (var item in stack.Extensions)
+                    {
+                        wastes.Add(new BoonSimulationItemWasted(item.Item1, item.Item2, stack.Start, item.Item3));
+                    }
+                }
+                stacks[0] = stackItem;
+                Sort(log, stacks);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

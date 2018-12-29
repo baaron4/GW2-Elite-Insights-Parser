@@ -5,21 +5,9 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class BoonSimulationItem : AbstractBoonSimulationItem
     {
-        public long Start { get; protected set; }
         public long Duration { get; protected set; }
-        public long End
-        {
-            get
-            {
-                return Start + Duration;
-            }
-        }
-
-        protected BoonSimulationItem()
-        {
-            Start = 0;
-            Duration = 0;
-        }
+        public long Start { get; protected set; }
+        public long End => Start + Duration;
 
         protected BoonSimulationItem(long start, long duration)
         {

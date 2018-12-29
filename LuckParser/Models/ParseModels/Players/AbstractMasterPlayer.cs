@@ -488,16 +488,11 @@ namespace LuckParser.Models.ParseModels
                         for (int i = 0; i < phases.Count; i++)
                         {
                             PhaseData phase = phases[i];
-                            if (!_boonDistribution[i].TryGetValue(boonid, out var distrib))
-                            {
-                                distrib = new Dictionary<ushort, BoonDistributionItem>();
-                                _boonDistribution[i].Add(boonid, distrib);
-                            }
                             if (updateBoonPresence)
                                 Add(_boonPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
                             if (updateCondiPresence)
                                 Add(_condiPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
-                            simul.SetBoonDistributionItem(distrib, phase.Start, phase.End);
+                            simul.SetBoonDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid);
                         }
                         BoonsGraphModel.Segment segment = simul.ToSegment();
                         if (graphSegments.Count == 0)
@@ -517,12 +512,7 @@ namespace LuckParser.Models.ParseModels
                         for (int i = 0; i < phases.Count; i++)
                         {
                             PhaseData phase = phases[i];
-                            if (!_boonDistribution[i].TryGetValue(boonid, out var distrib))
-                            {
-                                distrib = new Dictionary<ushort, BoonDistributionItem>();
-                                _boonDistribution[i].Add(boonid, distrib);
-                            }
-                            simul.SetBoonDistributionItem(distrib, phase.Start, phase.End);
+                            simul.SetBoonDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid);
                         }
                     }
 
@@ -533,21 +523,7 @@ namespace LuckParser.Models.ParseModels
                             for (int i = 0; i < phases.Count; i++)
                             {
                                 PhaseData phase = phases[i];
-                                long cleanse = simul.GetCleanseDuration(phase.Start, phase.End);
-                                if (cleanse > 0)
-                                {
-                                    if (!_condiCleanse[i].TryGetValue(simul.ProvokedBy, out var dict))
-                                    {
-                                        dict = new Dictionary<long, List<long>>();
-                                        _condiCleanse[i].Add(simul.ProvokedBy, dict);
-                                    }
-                                    if (!dict.TryGetValue(boonid, out var list))
-                                    {
-                                        list = new List<long>();
-                                        dict.Add(boonid, list);
-                                    }
-                                    list.Add(cleanse);
-                                }
+                                simul.SetCleanseItem(_condiCleanse[i], phase.Start, phase.End, boonid);
                             }
                         }
                     }
