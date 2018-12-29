@@ -957,7 +957,7 @@ namespace LuckParser.Builders
             BoonChartDataDto dto = new BoonChartDataDto
             {
                 id = bgm.Boon.ID,
-                visible = (bgm.Boon.Name == "Might" || bgm.Boon.Name == "Quickness"),
+                visible = (bgm.Boon.Name == "Might" || bgm.Boon.Name == "Quickness" || bgm.Boon.Name == "Vulnerability"),
                 color = GeneralHelper.GetLink("Color-" + bgm.Boon.Name),
                 states = new List<object[]>(bChart.Count + 1)
             };
