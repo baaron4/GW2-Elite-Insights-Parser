@@ -310,6 +310,7 @@ namespace LuckParser.Models.DataModels
             Nikare                  = 21105,
             Kenut                   = 21089,
             Qadim                   = 20934,
+            Freezie                 = 21333,
             MAMA                    = 17021,
             Siax                    = 17028,
             Ensolyss                = 16948,
