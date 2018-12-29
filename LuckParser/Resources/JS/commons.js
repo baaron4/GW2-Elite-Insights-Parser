@@ -107,6 +107,10 @@ var compileCommons = function () {
                 if (val instanceof Array) {
                     if (!uptime && this.generation && (val[1] > 0 || val[2] > 0 || val[3] > 0 || val[4] > 0)) {
                         var res = (val[1] || 0) + (buff.stacking ? "" : "%") + " with overstack";
+                        if (val[5] > 0) {
+                            res += "<br>";
+                            res += val[5] + (buff.stacking ? "" : "%") + " by extension";
+                        }
                         if (val[2] > 0) {
                             res += "<br>";
                             res += val[2] + (buff.stacking ? "" : "%") + " wasted";

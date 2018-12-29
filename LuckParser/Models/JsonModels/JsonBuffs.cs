@@ -15,6 +15,7 @@ namespace LuckParser.Models.JsonModels
             wasted = new double[phaseCount];
             unknownExtension = new double[phaseCount];
             extension = new double[phaseCount];
+            extended = new double[phaseCount];
             presence = new double[phaseCount];
             uptime = new double[phaseCount];
             states = new List<int[]>();
@@ -26,6 +27,7 @@ namespace LuckParser.Models.JsonModels
         public double[] wasted;
         public double[] unknownExtension;
         public double[] extension;
+        public double[] extended;
         public double[] overstack;
         public List<int[]> states;
     }

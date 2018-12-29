@@ -525,7 +525,8 @@ namespace LuckParser.Builders
                             uptime.Overstack,
                             uptime.Wasted,
                             uptime.UnknownExtension,
-                            uptime.Extension
+                            uptime.Extension,
+                            uptime.Extended
                         });
                     }
                     else
@@ -1177,6 +1178,7 @@ namespace LuckParser.Builders
                         boonData.Add(toUse.Wasted[player]);
                         boonData.Add(toUse.UnknownExtension[player]);
                         boonData.Add(toUse.Extension[player]);
+                        boonData.Add(toUse.Extended[player]);
                     }
                     playerData.data.Add(boonData);
                 }

@@ -25,7 +25,7 @@ namespace LuckParser.Models.ParseModels
             {
                 distrib.Add(Src, new BoonDistributionItem(
                     0,
-                    GetValue(start, end), 0, 0, 0));
+                    GetValue(start, end), 0, 0, 0, 0));
             }
         }
     }

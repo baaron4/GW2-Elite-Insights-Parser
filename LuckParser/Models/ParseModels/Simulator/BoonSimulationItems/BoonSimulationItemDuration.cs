@@ -33,43 +33,55 @@ namespace LuckParser.Models.ParseModels
         public override void SetBoonDistributionItem(Dictionary<long, Dictionary<ushort, BoonDistributionItem>> distribs, long start, long end, long boonid)
         {
             Dictionary<ushort, BoonDistributionItem> distrib = GetDistrib(distribs, boonid);
+            long cDur = GetClampedDuration(start, end);
             if (distrib.TryGetValue(_src, out BoonDistributionItem toModify))
             {
-                toModify.Value += GetClampedDuration(start, end);
+                toModify.Value += cDur;
                 distrib[_src] = toModify;
             }
             else
             {
                 distrib.Add(_src, new BoonDistributionItem(
-                    GetClampedDuration(start, end),
-                    0, 0, 0, 0));
+                    cDur,
+                    0, 0, 0, 0, 0));
             }
             if (_src != _seedSrc)
             {
                 if (distrib.TryGetValue(_seedSrc, out toModify))
                 {
-                    toModify.Extension += GetClampedDuration(start, end);
+                    toModify.Extension += cDur;
                     distrib[_seedSrc] = toModify;
                 }
                 else
                 {
                     distrib.Add(_seedSrc, new BoonDistributionItem(
                         0,
-                        0, 0, 0, GetClampedDuration(start, end)));
+                        0, 0, 0, cDur, 0));
+                }
+                if (distrib.TryGetValue(_src, out toModify))
+                {
+                    toModify.Extended += cDur;
+                    distrib[_src] = toModify;
+                }
+                else
+                {
+                    distrib.Add(_src, new BoonDistributionItem(
+                        0,
+                        0, 0, 0, 0, cDur));
                 }
             }
             if (_src == 0)
             {
                 if (distrib.TryGetValue(_seedSrc, out toModify))
                 {
-                    toModify.UnknownExtension += GetClampedDuration(start, end);
+                    toModify.UnknownExtension += cDur;
                     distrib[_seedSrc] = toModify;
                 }
                 else
                 {
                     distrib.Add(_seedSrc, new BoonDistributionItem(
                         0,
-                        0, 0, GetClampedDuration(start, end), 0));
+                        0, 0, cDur, 0, 0));
                 }
             }
         }
