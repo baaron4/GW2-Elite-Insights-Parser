@@ -88,6 +88,9 @@ namespace LuckParser.Models.ParseModels
                 case ParseEnum.TargetIDS.Qadim:
                     Logic = new Qadim(id);
                     break;
+                case ParseEnum.TargetIDS.Freezie:
+                    Logic = new Freezie(id);
+                    break;
                 case ParseEnum.TargetIDS.MAMA:
                     Logic = new MAMA(id);
                     break;
