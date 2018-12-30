@@ -120,6 +120,9 @@ var compileBuffStats = function () {
             };
         },
         computed: {
+            singleGroup: function() {
+               return logData.singleGroup;
+            },
             phase: function() {
                 return logData.phases[this.phaseindex];
             },

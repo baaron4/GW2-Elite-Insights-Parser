@@ -10,10 +10,10 @@
             <li class="nav-item">
                 <a class="nav-link" @click="mode = 2" :class="{active: mode === 2 }">Generation Group</a>
             </li>
-            <li class="nav-item">
+            <li v-if="!singleGroup" class="nav-item">
                 <a class="nav-link" @click="mode = 3" :class="{active: mode === 3 }">Generation Off-Group</a>
             </li>
-            <li class="nav-item">
+            <li v-if="!singleGroup" class="nav-item">
                 <a class="nav-link" @click="mode = 4" :class="{active: mode === 4 }">Generation Squad</a>
             </li>
         </ul>
