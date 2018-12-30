@@ -252,6 +252,8 @@ namespace LuckParser
                     return "https://i.imgur.com/TLykcrJ.png";
                 case ParseEnum.TargetIDS.Qadim:
                     return "https://i.imgur.com/IfoHTHT.png";
+                case ParseEnum.TargetIDS.Freezie:
+                    return "https://wiki.guildwars2.com/images/d/d9/Mini_Freezie.png";
                 case ParseEnum.TargetIDS.MAMA:
                     return "https://i.imgur.com/1h7HOII.png";
                 case ParseEnum.TargetIDS.Siax:
@@ -403,6 +405,8 @@ namespace LuckParser
                 case PLINK:
                 case CHOP:
                     return "https://wiki.guildwars2.com/images/4/47/Mini_Baron_von_Scrufflebutt.png";
+                case FreeziesFrozenHeart:
+                    return "https://wiki.guildwars2.com/images/9/9e/Mini_Freezie%27s_Heart.png";
             }
             return "https://i.imgur.com/HuJHqRZ.png";
         }
