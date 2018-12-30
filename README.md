@@ -61,6 +61,7 @@ Note it may take some time for each file to parse and they will not be ready to 
 - Linus
 - Sejsel
 - Flomix
+- Stonos
 
 ### Other stuffs
 - Linus (arena maps/ icons for combat replay)
