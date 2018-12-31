@@ -20,5 +20,7 @@ namespace LuckParser.Models.HtmlModels
         public string fightIcon;
         public bool combatReplay;
         public bool lightTheme;
+        public bool noMechanics;
+        public bool singleGroup;
     }
 }

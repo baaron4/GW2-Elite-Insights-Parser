@@ -122,7 +122,7 @@ var compileLayout = function () {
     buffs.layout = buffLayout;
     layout.addTab(buffs);
     // mechanics
-    if (mechanicMap.length > 0) {
+    if (mechanicMap.length > 0 && !logData.noMechanics) {
         var mechanics = new Tab("Mechanics", {
             dataType: DataTypes.mechanicTable
         });
