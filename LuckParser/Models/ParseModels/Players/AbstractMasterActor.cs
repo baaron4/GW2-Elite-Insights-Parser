@@ -23,12 +23,9 @@ namespace LuckParser.Models.ParseModels
             }
         };
         // Boons
-        public HashSet<Boon> TrackedBoons { get; } = new HashSet<Boon>();
-        private readonly List<BoonDistribution> _boonDistribution = new List<BoonDistribution>();
         private readonly List<Dictionary<long, long>> _boonPresence = new List<Dictionary<long, long>>();
         private readonly List<Dictionary<long, long>> _condiPresence = new List<Dictionary<long, long>>();
-        private readonly List<Dictionary<ushort, Dictionary<long,List<long>>>> _condiCleanse = new List<Dictionary<ushort, Dictionary<long, List<long>>>>();
-        private readonly Dictionary<long, BoonsGraphModel> _boonPoints = new Dictionary<long, BoonsGraphModel>();
+        private readonly List<Dictionary<ushort, Dictionary<long, List<long>>>> _condiCleanse = new List<Dictionary<ushort, Dictionary<long, List<long>>>>();
         private readonly Dictionary<long, List<ExtraBoonData>> _boonExtra = new Dictionary<long, List<ExtraBoonData>>();
         private readonly Dictionary<Target, Dictionary<long, List<ExtraBoonData>>> _boonTargetExtra = new Dictionary<Target, Dictionary<long, List<ExtraBoonData>>>();
         // damage list
@@ -101,25 +98,9 @@ namespace LuckParser.Models.ParseModels
             return dmgList;
         }
 
-        public BoonDistribution GetBoonDistribution(ParsedLog log, int phaseIndex)
-        {
-            if (_boonDistribution.Count == 0)
-            {
-                SetBoonDistribution(log);
-            }
-            return _boonDistribution[phaseIndex];
-        }
-        public Dictionary<long, BoonsGraphModel> GetBoonGraphs(ParsedLog log)
-        {
-            if (_boonDistribution.Count == 0)
-            {
-                SetBoonDistribution(log);
-            }
-            return _boonPoints;
-        }
         public Dictionary<long, long> GetBoonPresence(ParsedLog log, int phaseIndex)
         {
-            if (_boonDistribution.Count == 0)
+            if (BoonDistribution.Count == 0)
             {
                 SetBoonDistribution(log);
             }
@@ -132,7 +113,7 @@ namespace LuckParser.Models.ParseModels
             {
                 SetBoonDistribution(log);
             }
-            if (_condiCleanse[phaseIndex].TryGetValue(src,out Dictionary<long,List<long>> dict))
+            if (_condiCleanse[phaseIndex].TryGetValue(src, out Dictionary<long, List<long>> dict))
             {
                 return dict;
             }
@@ -141,7 +122,7 @@ namespace LuckParser.Models.ParseModels
 
         public Dictionary<long, List<ExtraBoonData>> GetExtraBoonData(ParsedLog log, Target target)
         {
-            if (_boonDistribution.Count == 0)
+            if (BoonDistribution.Count == 0)
             {
                 SetBoonDistribution(log);
             }
@@ -161,12 +142,13 @@ namespace LuckParser.Models.ParseModels
 
         public Dictionary<long, long> GetCondiPresence(ParsedLog log, int phaseIndex)
         {
-            if (_boonDistribution.Count == 0)
+            if (BoonDistribution.Count == 0)
             {
                 SetBoonDistribution(log);
             }
             return _condiPresence[phaseIndex];
         }
+
         public void InitCombatReplay(ParsedLog log, int pollingRate, bool trim, bool forceInterpolate)
         {
             if (!log.FightData.Logic.CanCombatReplay)
@@ -209,145 +191,12 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public long GetDeath(ParsedLog log, long start, long end)
-        {
-            CombatItem dead = log.CombatData.GetStatesData(InstID,ParseEnum.StateChange.ChangeDead, log.FightData.ToLogSpace(start), log.FightData.ToLogSpace(end)).LastOrDefault();
-            if (dead != null && dead.Time > 0)
-            {
-                return log.FightData.ToFightSpace(dead.Time);
-            }
-            return 0;
-        }
-
 
         public List<DamageLog> GetJustPlayerDamageLogs(AbstractActor target, ParsedLog log, long start, long end)
         {
             return GetDamageLogs(target, log, start, end).Where(x => x.SrcInstId == AgentItem.InstID).ToList();
         }
 
-        // private getters
-
-        private ushort TryFindSrc(List<CastLog> castsToCheck, long time, long extension, ParsedLog log)
-        {
-            HashSet<long> idsToCheck = new HashSet<long>();
-            switch (extension)
-            {
-                // SoI
-                case 5000:
-                    idsToCheck.Add(10236);
-                    break;
-                // Treated True Nature
-                case 3000:
-                    idsToCheck.Add(51696);
-                    break;
-                // Sand Squall, True Nature, Soulbeast trait
-                case 2000:
-                    if (Prof == "Soulbeast") {
-                        if (log.PlayerListBySpec.ContainsKey("Herald") || log.PlayerListBySpec.ContainsKey("Tempest"))
-                        {
-                            return 0;
-                        }
-                        // if not herald or tempest in squad then can only be the trait
-                        return InstID;
-                    }
-                    idsToCheck.Add(51696);
-                    idsToCheck.Add(29453);
-                    break;
-
-            }
-            List<CastLog> cls = castsToCheck.Where(x => idsToCheck.Contains(x.SkillId) && x.Time <= time && time <= x.Time + x.ActualDuration + 10 && x.EndActivation.NoInterruptEndCasting()).ToList();
-            if (cls.Count == 1)
-            {
-                CastLog item = cls.First();
-                if (extension == 2000 && log.PlayerListBySpec.TryGetValue("Tempest", out List<Player> tempests))
-                {
-                    List<CombatItem> magAuraApplications = log.GetBoonData(5684).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && x.IsOffcycle == 0).ToList();
-                    foreach (Player tempest in tempests)
-                    {
-                        if (magAuraApplications.FirstOrDefault(x => x.SrcInstid == tempest.InstID && Math.Abs(x.Time - time) < 50) != null)
-                        {
-                            return 0;
-                        }
-                    }
-                }
-                return item.SrcInstId;
-            }
-            return 0;
-        }
-
-        private BoonMap GetBoonMap(ParsedLog log)
-        {
-            // buff extension ids
-
-            HashSet<long> idsToCheck = new HashSet<long>()
-            {
-                10236,
-                51696,
-                29453
-            };
-            List<CastLog> extensionSkills = new List<CastLog>();
-            foreach (Player p in log.PlayerList)
-            {
-                extensionSkills.AddRange(p.GetCastLogs(log, log.FightData.ToFightSpace(p.FirstAware), log.FightData.ToFightSpace(p.LastAware)).Where(x => idsToCheck.Contains(x.SkillId)));
-            }
-            //
-            BoonMap boonMap = new BoonMap();
-            // Fill in Boon Map
-            foreach (CombatItem c in log.GetBoonDataByDst(InstID, FirstAware, LastAware))
-            {
-                long boonId = c.SkillID;
-                if (!boonMap.ContainsKey(boonId))
-                {
-                    if (!Boon.BoonsByIds.ContainsKey(boonId))
-                    {
-                        continue;
-                    }
-                    boonMap.Add(Boon.BoonsByIds[boonId]);
-                }
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.Manual
-                    || (c.IsBuffRemove == ParseEnum.BuffRemove.Single && c.IFF == ParseEnum.IFF.Unknown && c.DstInstid == 0) 
-                    || (c.IsBuffRemove != ParseEnum.BuffRemove.None && c.Value <= 50))
-                {
-                    continue;
-                }
-                long time = log.FightData.ToFightSpace(c.Time);
-                List<BoonLog> loglist = boonMap[boonId];
-                if (c.IsStateChange == ParseEnum.StateChange.BuffInitial)
-                {
-                    ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
-                    loglist.Add(new BoonApplicationLog(time, src, c.Value));
-                }
-                else if (c.IsStateChange != ParseEnum.StateChange.BuffInitial)
-                {
-                    if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
-                    {
-                        ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
-                        if (c.IsOffcycle > 0)
-                        {
-                            if (src == 0)
-                            {
-                                src = TryFindSrc(extensionSkills, time, c.Value, log);
-                            }
-                            loglist.Add(new BoonExtensionLog(time, c.Value, c.OverstackValue - c.Value, src));
-                        }
-                        else
-                        {
-                            loglist.Add(new BoonApplicationLog(time, src, c.Value));
-                        }
-                    }
-                    else if (time < log.FightData.FightDuration - 50)
-                    {
-                        loglist.Add(new BoonRemovalLog(time, c.DstInstid, c.Value, c.IsBuffRemove));
-                    }
-                }
-            }
-            //boonMap.Sort();
-            foreach (var pair in boonMap)
-            {
-                TrackedBoons.Add(Boon.BoonsByIds[pair.Key]);
-            }
-            return boonMap;
-        }
         // private setters
         private void SetMovements(ParsedLog log)
         {
@@ -371,7 +220,7 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
-        private void GenerateExtraBoonData(ParsedLog log, long boonid, GenerationSimulationResult buffSimulationGeneration, List<PhaseData> phases)
+        protected override void GenerateExtraBoonData(ParsedLog log, long boonid, GenerationSimulationResult buffSimulationGeneration, List<PhaseData> phases)
         {
             switch (boonid)
             {
@@ -442,7 +291,8 @@ namespace LuckParser.Models.ParseModels
                     break;
             }
         }
-        private void SetBoonDistribution(ParsedLog log)
+
+        protected override void SetBoonDistribution(ParsedLog log)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             BoonMap toUse = GetBoonMap(log);
@@ -459,7 +309,7 @@ namespace LuckParser.Models.ParseModels
             HashSet<long> condiIds = new HashSet<long>(Boon.GetCondiBoonList().Select(x => x.ID));
             for (int i = 0; i < phases.Count; i++)
             {
-                _boonDistribution.Add(new BoonDistribution());
+                BoonDistribution.Add(new BoonDistribution());
                 _boonPresence.Add(new Dictionary<long, long>());
                 _condiPresence.Add(new Dictionary<long, long>());
                 _condiCleanse.Add(new Dictionary<ushort, Dictionary<long, List<long>>>());
@@ -471,7 +321,7 @@ namespace LuckParser.Models.ParseModels
                 long boonid = boon.ID;
                 if (toUse.TryGetValue(boonid, out List<BoonLog> logs) && logs.Count != 0)
                 {
-                    if (_boonDistribution[0].ContainsKey(boonid))
+                    if (BoonDistribution[0].ContainsKey(boonid))
                     {
                         continue;
                     }
@@ -499,7 +349,7 @@ namespace LuckParser.Models.ParseModels
                                 Add(_boonPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
                             if (updateCondiPresence)
                                 Add(_condiPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
-                            simul.SetBoonDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid);
+                            simul.SetBoonDistributionItem(BoonDistribution[i], phase.Start, phase.End, boonid);
                         }
                         BoonsGraphModel.Segment segment = simul.ToSegment();
                         if (graphSegments.Count == 0)
@@ -519,7 +369,7 @@ namespace LuckParser.Models.ParseModels
                         for (int i = 0; i < phases.Count; i++)
                         {
                             PhaseData phase = phases[i];
-                            simul.SetBoonDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid);
+                            simul.SetBoonDistributionItem(BoonDistribution[i], phase.Start, phase.End, boonid);
                         }
                     }
 
@@ -541,16 +391,17 @@ namespace LuckParser.Models.ParseModels
                     if (graphSegments.Count > 0)
                     {
                         graphSegments.Add(new BoonsGraphModel.Segment(graphSegments.Last().End, dur, 0));
-                    } else
+                    }
+                    else
                     {
                         graphSegments.Add(new BoonsGraphModel.Segment(0, dur, 0));
                     }
-                    _boonPoints[boonid] = new BoonsGraphModel(boon, graphSegments);
+                    BoonPoints[boonid] = new BoonsGraphModel(boon, graphSegments);
                     if (updateBoonPresence || updateCondiPresence)
                     {
                         List<BoonsGraphModel.Segment> segmentsToFill = updateBoonPresence ? boonPresenceGraph.BoonChart : condiPresenceGraph.BoonChart;
                         bool firstPass = segmentsToFill.Count == 0;
-                        foreach (BoonsGraphModel.Segment seg in _boonPoints[boonid].BoonChart)
+                        foreach (BoonsGraphModel.Segment seg in BoonPoints[boonid].BoonChart)
                         {
                             long start = seg.Start;
                             long end = seg.End;
@@ -601,12 +452,13 @@ namespace LuckParser.Models.ParseModels
                             condiPresenceGraph.FuseSegments();
                         }
                     }
-                    
+
                 }
             }
-            _boonPoints[Boon.NumberOfBoonsID] = boonPresenceGraph;
-            _boonPoints[Boon.NumberOfConditionsID] = condiPresenceGraph;
+            BoonPoints[Boon.NumberOfBoonsID] = boonPresenceGraph;
+            BoonPoints[Boon.NumberOfConditionsID] = condiPresenceGraph;
         }
+
         private void SetMinions(ParsedLog log)
         {
             List<AgentItem> combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.MasterAgent == AgentItem.Agent).ToList();
@@ -713,18 +565,6 @@ namespace LuckParser.Models.ParseModels
                 cloakStart = time;
             }
             CastLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
-        }
-
-        private static void Add<T>(Dictionary<T, long> dictionary, T key, long value)
-        {
-            if (dictionary.TryGetValue(key, out var existing))
-            {
-                dictionary[key] = existing + value;
-            }
-            else
-            {
-                dictionary.Add(key, value);
-            }
         }
         // abstracts
         protected abstract void SetAdditionalCombatReplayData(ParsedLog log);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using LuckParser.Models.DataModels;
 
 namespace LuckParser.Models.ParseModels
@@ -10,11 +11,6 @@ namespace LuckParser.Models.ParseModels
         public DummyActor(AgentItem agent) : base(agent)
         {
 
-        }
-
-        public void AddMechanics(ParsedLog log)
-        {
-            throw new InvalidOperationException();
         }
 
         public override int GetCombatReplayID()
@@ -43,6 +39,16 @@ namespace LuckParser.Models.ParseModels
         }
 
         protected override void SetDamageTakenLogs(ParsedLog log)
+        {
+            throw new InvalidOperationException();
+        }
+
+        protected override void GenerateExtraBoonData(ParsedLog log, long boonid, GenerationSimulationResult buffSimulationGeneration, List<PhaseData> phases)
+        {
+            throw new InvalidOperationException();
+        }
+
+        protected override void SetBoonDistribution(ParsedLog log)
         {
             throw new InvalidOperationException();
         }
