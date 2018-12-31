@@ -16,16 +16,16 @@ namespace LuckParser.Models.ParseModels
 
         public override void SetBoonDistributionItem(BoonDistribution distribs, long start, long end, long boonid, ParsedLog log)
         {
-            Dictionary<AbstractActor, BoonDistributionItem> distrib = GetDistrib(distribs, boonid);
-            AbstractActor actor = GeneralHelper.GetActor(Src, Time, log);
-            if (distrib.TryGetValue(actor, out var toModify))
+            Dictionary<AgentItem, BoonDistributionItem> distrib = GetDistrib(distribs, boonid);
+            AgentItem agent = log.AgentData.GetAgentByInstID(Src, Time);
+            if (distrib.TryGetValue(agent, out var toModify))
             {
                 toModify.Overstack += GetValue(start, end);
-                distrib[actor] = toModify;
+                distrib[agent] = toModify;
             }
             else
             {
-                distrib.Add(actor, new BoonDistributionItem(
+                distrib.Add(agent, new BoonDistributionItem(
                     0,
                     GetValue(start, end), 0, 0, 0, 0));
             }

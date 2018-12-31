@@ -25,7 +25,7 @@ namespace LuckParser.Models.ParseModels
         // Boons
         private readonly List<Dictionary<long, long>> _boonPresence = new List<Dictionary<long, long>>();
         private readonly List<Dictionary<long, long>> _condiPresence = new List<Dictionary<long, long>>();
-        private readonly List<Dictionary<AbstractActor, Dictionary<long, List<long>>>> _condiCleanse = new List<Dictionary<AbstractActor, Dictionary<long, List<long>>>>();
+        private readonly List<Dictionary<AgentItem, Dictionary<long, List<long>>>> _condiCleanse = new List<Dictionary<AgentItem, Dictionary<long, List<long>>>>();
         private readonly Dictionary<long, List<ExtraBoonData>> _boonExtra = new Dictionary<long, List<ExtraBoonData>>();
         private readonly Dictionary<Target, Dictionary<long, List<ExtraBoonData>>> _boonTargetExtra = new Dictionary<Target, Dictionary<long, List<ExtraBoonData>>>();
         // damage list
@@ -107,7 +107,7 @@ namespace LuckParser.Models.ParseModels
             return _boonPresence[phaseIndex];
         }
 
-        protected Dictionary<long, List<long>> GetCondiCleanse(ParsedLog log, int phaseIndex, AbstractActor src)
+        protected Dictionary<long, List<long>> GetCondiCleanse(ParsedLog log, int phaseIndex, AgentItem src)
         {
             if (_condiCleanse.Count == 0)
             {
@@ -312,7 +312,7 @@ namespace LuckParser.Models.ParseModels
                 BoonDistribution.Add(new BoonDistribution());
                 _boonPresence.Add(new Dictionary<long, long>());
                 _condiPresence.Add(new Dictionary<long, long>());
-                _condiCleanse.Add(new Dictionary<AbstractActor, Dictionary<long, List<long>>>());
+                _condiCleanse.Add(new Dictionary<AgentItem, Dictionary<long, List<long>>>());
             }
 
             long death = GetDeath(log, 0, dur);

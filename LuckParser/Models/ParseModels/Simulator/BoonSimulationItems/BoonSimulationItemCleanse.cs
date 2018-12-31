@@ -20,16 +20,16 @@ namespace LuckParser.Models.ParseModels
             _time = time;
         }
 
-        public void SetCleanseItem(Dictionary<AbstractActor, Dictionary<long, List<long>>> cleanses, long start, long end, long boonid, ParsedLog log)
+        public void SetCleanseItem(Dictionary<AgentItem, Dictionary<long, List<long>>> cleanses, long start, long end, long boonid, ParsedLog log)
         {
             long cleanse = GetCleanseDuration(start, end);
-            AbstractActor actor = GeneralHelper.GetActor(_provokedBy, _time, log);
+            AgentItem agent = log.AgentData.GetAgentByInstID(_provokedBy, _time);
             if (cleanse > 0)
             {
-                if (!cleanses.TryGetValue(actor, out var dict))
+                if (!cleanses.TryGetValue(agent, out var dict))
                 {
                     dict = new Dictionary<long, List<long>>();
-                    cleanses.Add(actor, dict);
+                    cleanses.Add(agent, dict);
                 }
                 if (!dict.TryGetValue(boonid, out var list))
                 {

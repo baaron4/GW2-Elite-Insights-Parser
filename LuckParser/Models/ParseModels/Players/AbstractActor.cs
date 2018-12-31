@@ -5,10 +5,8 @@ using LuckParser.Models.DataModels;
 
 namespace LuckParser.Models.ParseModels
 {
-    public abstract class AbstractActor
+    public abstract class AbstractActor : DummyActor
     {
-        public readonly AgentItem AgentItem;
-        public readonly string Character;
         // Damage
         protected readonly List<DamageLog> DamageLogs = new List<DamageLog>();
         protected Dictionary<ushort,List<DamageLog>> DamageLogsByDst = new Dictionary<ushort, List<DamageLog>>();
@@ -23,35 +21,8 @@ namespace LuckParser.Models.ParseModels
         protected readonly List<BoonDistribution> BoonDistribution = new List<BoonDistribution>();
         protected readonly Dictionary<long, BoonsGraphModel> BoonPoints = new Dictionary<long, BoonsGraphModel>();
 
-        public uint Toughness => AgentItem.Toughness;
-        public uint Condition => AgentItem.Condition;
-        public uint Concentration => AgentItem.Concentration;
-        public uint Healing => AgentItem.Healing;
-        public ushort InstID => AgentItem.InstID;
-        public string Prof => AgentItem.Prof;
-        public ulong Agent => AgentItem.Agent;
-        public long LastAware => AgentItem.LastAware;
-        public long FirstAware => AgentItem.FirstAware;
-        public ushort ID => AgentItem.ID;
-        public uint HitboxHeight => AgentItem.HitboxHeight;
-        public uint HitboxWidth => AgentItem.HitboxWidth;
-
-        protected AbstractActor(AgentItem agent)
+        protected AbstractActor(AgentItem agent) : base(agent)
         {
-            string[] name = agent.Name.Split('\0');
-            Character = name[0];
-            AgentItem = agent;
-            if (GeneralHelper.AllActors.TryGetValue(agent, out var actor))
-            {
-                if (actor.GetType() == typeof(DummyActor))
-                {
-                    GeneralHelper.AllActors[agent] = this;
-                }
-            }
-            else
-            {
-                GeneralHelper.AllActors.Add(agent, this);
-            }
         }
         // Getters
 

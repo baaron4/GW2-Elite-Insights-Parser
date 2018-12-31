@@ -5,7 +5,7 @@
         private readonly Mechanic _mechanic;
 
         public long Time { get; }
-        public AbstractActor Actor { get; }
+        public DummyActor Actor { get; }
         public long Skill => _mechanic.SkillId;
         public string ShortName => _mechanic.ShortName;
         public string Description => _mechanic.Description;
@@ -13,7 +13,7 @@
         public bool Enemy => _mechanic.IsEnemyMechanic;
 
         public MechanicLog(long time, Mechanic mechanic,
-        AbstractActor actor)
+        DummyActor actor)
         {
             Time = time;
             _mechanic = mechanic;

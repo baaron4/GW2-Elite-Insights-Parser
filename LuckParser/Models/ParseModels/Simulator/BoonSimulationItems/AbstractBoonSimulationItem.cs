@@ -8,11 +8,11 @@ namespace LuckParser.Models.ParseModels
     public abstract class AbstractBoonSimulationItem
     {
 
-        protected Dictionary<AbstractActor, BoonDistributionItem> GetDistrib(BoonDistribution distribs, long boonid)
+        protected Dictionary<AgentItem, BoonDistributionItem> GetDistrib(BoonDistribution distribs, long boonid)
         {
             if (!distribs.TryGetValue(boonid, out var distrib))
             {
-                distrib = new Dictionary<AbstractActor, BoonDistributionItem>();
+                distrib = new Dictionary<AgentItem, BoonDistributionItem>();
                 distribs.Add(boonid, distrib);
             }
             return distrib;

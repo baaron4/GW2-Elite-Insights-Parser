@@ -5,52 +5,29 @@ using LuckParser.Models.DataModels;
 namespace LuckParser.Models.ParseModels
 {
     // A dummy class that only serve as "stocking" purposes, trying to do anything with it will throw an exception
-    public class DummyActor : AbstractMasterActor
+    public class DummyActor
     {
+        public readonly AgentItem AgentItem;
+        public readonly string Character;
 
-        public DummyActor(AgentItem agent) : base(agent)
+        public uint Toughness => AgentItem.Toughness;
+        public uint Condition => AgentItem.Condition;
+        public uint Concentration => AgentItem.Concentration;
+        public uint Healing => AgentItem.Healing;
+        public ushort InstID => AgentItem.InstID;
+        public string Prof => AgentItem.Prof;
+        public ulong Agent => AgentItem.Agent;
+        public long LastAware => AgentItem.LastAware;
+        public long FirstAware => AgentItem.FirstAware;
+        public ushort ID => AgentItem.ID;
+        public uint HitboxHeight => AgentItem.HitboxHeight;
+        public uint HitboxWidth => AgentItem.HitboxWidth;
+
+        public DummyActor(AgentItem agent)
         {
-
-        }
-
-        public override int GetCombatReplayID()
-        {
-            throw new InvalidOperationException();
-        }
-
-        public override string GetCombatReplayJSON(CombatReplayMap map)
-        {
-            throw new InvalidOperationException();
-        }
-
-        protected override void SetAdditionalCombatReplayData(ParsedLog log)
-        {
-            throw new InvalidOperationException();
-        }
-
-        protected override void SetCastLogs(ParsedLog log)
-        {
-            throw new InvalidOperationException();
-        }
-
-        protected override void SetDamageLogs(ParsedLog log)
-        {
-            throw new InvalidOperationException();
-        }
-
-        protected override void SetDamageTakenLogs(ParsedLog log)
-        {
-            throw new InvalidOperationException();
-        }
-
-        protected override void GenerateExtraBoonData(ParsedLog log, long boonid, GenerationSimulationResult buffSimulationGeneration, List<PhaseData> phases)
-        {
-            throw new InvalidOperationException();
-        }
-
-        protected override void SetBoonDistribution(ParsedLog log)
-        {
-            throw new InvalidOperationException();
+            string[] name = agent.Name.Split('\0');
+            Character = name[0];
+            AgentItem = agent;
         }
     }
 }
