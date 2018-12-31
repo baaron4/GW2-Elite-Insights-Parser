@@ -93,7 +93,7 @@ namespace LuckParser.Models.ParseModels
                         for (int i = 0; i < phases.Count; i++)
                         {
                             PhaseData phase = phases[i];
-                            simul.SetBoonDistributionItem(BoonDistribution[i], phase.Start, phase.End, boonid);
+                            simul.SetBoonDistributionItem(BoonDistribution[i], phase.Start, phase.End, boonid, log);
                         }
                         BoonsGraphModel.Segment segment = simul.ToSegment();
                         if (graphSegments.Count == 0)
@@ -113,7 +113,7 @@ namespace LuckParser.Models.ParseModels
                         for (int i = 0; i < phases.Count; i++)
                         {
                             PhaseData phase = phases[i];
-                            simul.SetBoonDistributionItem(BoonDistribution[i], phase.Start, phase.End, boonid);
+                            simul.SetBoonDistributionItem(BoonDistribution[i], phase.Start, phase.End, boonid, log);
                         }
                     }
                     

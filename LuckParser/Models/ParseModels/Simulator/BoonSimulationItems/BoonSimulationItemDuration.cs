@@ -1,4 +1,5 @@
 ﻿using System;
+using LuckParser.Models.DataModels;
 using System.Collections.Generic;
 using static LuckParser.Models.ParseModels.BoonSimulator;
 
@@ -30,56 +31,58 @@ namespace LuckParser.Models.ParseModels
             return 1;
         }
 
-        public override void SetBoonDistributionItem(Dictionary<long, Dictionary<ushort, BoonDistributionItem>> distribs, long start, long end, long boonid)
+        public override void SetBoonDistributionItem(BoonDistribution distribs, long start, long end, long boonid, ParsedLog log)
         {
-            Dictionary<ushort, BoonDistributionItem> distrib = GetDistrib(distribs, boonid);
+            Dictionary<AbstractActor, BoonDistributionItem> distrib = GetDistrib(distribs, boonid);
             long cDur = GetClampedDuration(start, end);
-            if (distrib.TryGetValue(_src, out BoonDistributionItem toModify))
+            AbstractActor actor = GeneralHelper.GetActor(_src, _applicationTime, log);
+            AbstractActor seedActor = GeneralHelper.GetActor(_seedSrc, _seedTime, log);
+            if (distrib.TryGetValue(actor, out BoonDistributionItem toModify))
             {
                 toModify.Value += cDur;
-                distrib[_src] = toModify;
+                distrib[actor] = toModify;
             }
             else
             {
-                distrib.Add(_src, new BoonDistributionItem(
+                distrib.Add(actor, new BoonDistributionItem(
                     cDur,
                     0, 0, 0, 0, 0));
             }
-            if (_src != _seedSrc)
+            if (actor != seedActor)
             {
-                if (distrib.TryGetValue(_seedSrc, out toModify))
+                if (distrib.TryGetValue(seedActor, out toModify))
                 {
                     toModify.Extension += cDur;
-                    distrib[_seedSrc] = toModify;
+                    distrib[seedActor] = toModify;
                 }
                 else
                 {
-                    distrib.Add(_seedSrc, new BoonDistributionItem(
+                    distrib.Add(seedActor, new BoonDistributionItem(
                         0,
                         0, 0, 0, cDur, 0));
                 }
-                if (distrib.TryGetValue(_src, out toModify))
+                if (distrib.TryGetValue(actor, out toModify))
                 {
                     toModify.Extended += cDur;
-                    distrib[_src] = toModify;
+                    distrib[actor] = toModify;
                 }
                 else
                 {
-                    distrib.Add(_src, new BoonDistributionItem(
+                    distrib.Add(actor, new BoonDistributionItem(
                         0,
                         0, 0, 0, 0, cDur));
                 }
             }
             if (_src == 0)
             {
-                if (distrib.TryGetValue(_seedSrc, out toModify))
+                if (distrib.TryGetValue(seedActor, out toModify))
                 {
                     toModify.UnknownExtension += cDur;
-                    distrib[_seedSrc] = toModify;
+                    distrib[seedActor] = toModify;
                 }
                 else
                 {
-                    distrib.Add(_seedSrc, new BoonDistributionItem(
+                    distrib.Add(seedActor, new BoonDistributionItem(
                         0,
                         0, 0, cDur, 0, 0));
                 }

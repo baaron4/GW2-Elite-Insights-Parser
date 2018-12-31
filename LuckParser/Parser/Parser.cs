@@ -550,7 +550,7 @@ namespace LuckParser
             _target = _fightData.Logic.Targets.Find(x => x.ID == _fightData.ID);
             if (_target == null)
             {
-                _target = new Target(new AgentItem(0, "UNKNOWN"));
+                _target = new Target(GeneralHelper.UnknownAgent);
             }
             if (_combatItems.Count > 0)
             {

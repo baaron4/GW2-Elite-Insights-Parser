@@ -10,18 +10,18 @@ namespace LuckParser.Models.ParseModels
     {
         protected readonly ushort Src;
         private readonly long _waste;
-        private readonly long _time;
+        protected readonly long Time;
 
         protected AbstractBoonSimulationItemWasted(ushort src, long waste, long time)
         {
             Src = src;
             _waste = waste;
-            _time = time;
+            Time = time;
         }
 
         protected long GetValue(long start, long end)
         {
-            return (start <= _time && _time <= end) ? _waste : 0;
+            return (start <= Time && Time <= end) ? _waste : 0;
         }
     }
 }

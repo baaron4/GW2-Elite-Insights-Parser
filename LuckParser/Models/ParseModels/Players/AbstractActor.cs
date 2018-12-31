@@ -41,6 +41,17 @@ namespace LuckParser.Models.ParseModels
             string[] name = agent.Name.Split('\0');
             Character = name[0];
             AgentItem = agent;
+            if (GeneralHelper.AllActors.TryGetValue(agent, out var actor))
+            {
+                if (actor.GetType() == typeof(DummyActor))
+                {
+                    GeneralHelper.AllActors[agent] = this;
+                }
+            }
+            else
+            {
+                GeneralHelper.AllActors.Add(agent, this);
+            }
         }
         // Getters
 

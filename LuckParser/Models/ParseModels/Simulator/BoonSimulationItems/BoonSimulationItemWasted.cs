@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Models.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,17 +17,18 @@ namespace LuckParser.Models.ParseModels
             _applicationTime = applicationTime;
         }
 
-        public override void SetBoonDistributionItem(Dictionary<long,Dictionary<ushort, BoonDistributionItem>> distribs, long start, long end, long boonid)
+        public override void SetBoonDistributionItem(BoonDistribution distribs, long start, long end, long boonid, ParsedLog log)
         {
-            Dictionary<ushort, BoonDistributionItem> distrib = GetDistrib(distribs, boonid);
-            if (distrib.TryGetValue(Src, out var toModify))
+            Dictionary<AbstractActor, BoonDistributionItem> distrib = GetDistrib(distribs, boonid);
+            AbstractActor actor = GeneralHelper.GetActor(Src, _applicationTime, log);
+            if (distrib.TryGetValue(actor, out var toModify))
             {
                 toModify.Waste += GetValue(start, end);
-                distrib[Src] = toModify;
+                distrib[actor] = toModify;
             }
             else
             {
-                distrib.Add(Src, new BoonDistributionItem(
+                distrib.Add(actor, new BoonDistributionItem(
                     0,
                     0, GetValue(start, end), 0, 0, 0));
             }
