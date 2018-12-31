@@ -209,14 +209,12 @@ namespace LuckParser.Properties {
         ///        targets: []
         ///    };
         ///    for (i = 0; i &lt; logData.phases.length; i++) {
-        ///        simpleLogData.phases.push({
-        ///            active: i === 0,
-        ///            focus: null
-        ///        });
-        ///    }
-        ///    for (i = 0; i &lt; logData.targets.length; i++) {
-        ///        simpleLogData.targets.push({
-        ///             [rest of string was truncated]&quot;;.
+        ///        var phase = logData.phases[i];
+        ///        var times = [];
+        ///        var dur = phase.end - phase.start;
+        ///        var floorDur = Math.floor(dur);
+        ///        phase.needsLastPoint = dur &gt; floorDur + 1e-3;
+        ///        f [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ei_js {
             get {
@@ -410,7 +408,7 @@ namespace LuckParser.Properties {
         ///   Looks up a localized string similar to /*jshint esversion: 6 */
         ///
         ///
-        ///function computeTargetDPS(target, dpsData,lim, phasebreaks, cacheID) {
+        ///function computeTargetDPS(target, damageData,lim, phasebreaks, cacheID, lastTime) {
         ///    if (!target.dpsGraphCache) {
         ///        target.dpsGraphCache = new Map();
         ///    }
@@ -420,11 +418,12 @@ namespace LuckParser.Properties {
         ///    var totalDamage = 0;
         ///    var totalDPS = [0];
         ///    var maxDPS = 0;
-        ///    var start = 0;
-        ///    for (var j = 1; j &lt; dpsData.length; j++) {
-        ///        var limID = 0;
-        ///        if (lim &gt; 0) {
-        ///            limID = Math.max(j - l [rest of string was truncated]&quot;;.
+        ///    var limID = 0, j;
+        ///    var end = damageData.length;
+        ///    if (lastTime &gt; 0) {
+        ///        end--;
+        ///    }
+        ///    for (j = 1; j &lt; end; j++) {        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string targetStatsJS {
             get {
@@ -530,17 +529,32 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex mt-2&quot;&gt;
-        ///    &lt;div class=&quot;d-flex flex-column flex-wrap mr-2&quot;&gt;
-        ///        &lt;canvas width=&quot;${canvasX}px&quot; height=&quot;${canvasY}px&quot; id=&quot;replayCanvas&quot; class=&quot;replay&quot;&gt;&lt;/canvas&gt;
-        ///        &lt;div class=&quot;d-flex justify-content-center mt-1&quot;&gt;
-        ///            &lt;div onclick=&quot;animator &amp;&amp; animator.startAnimate();&quot; type=&quot;button&quot; class=&quot;btn btn-dark btn-small&quot;&gt;Animate&lt;/div&gt;
-        ///            &lt;div onclick=&quot;animator &amp;&amp; animator.stopAnimate();&quot; type=&quot;button&quot; class=&quot;btn btn-dark btn-small&quot;&gt;Pause&lt;/div&gt;
-        ///            &lt;div onclick=&quot; [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex justify-content-center mt-2&quot;&gt;
+        ///    &lt;div class=&quot;d-flex flex-column align-items-center mr-2 mt-5&quot;&gt;
+        ///        &lt;keep-alive&gt;
+        ///            &lt;combat-replay-damage-data-component v-if=&quot;mode === 1&quot; :animator=&quot;animator&quot;&gt;&lt;/combat-replay-damage-data-component&gt;
+        ///        &lt;/keep-alive&gt;
+        ///        &lt;div class=&quot;d-flex flex-row justify-content-center align-items-start btn-group btn-group-toggle mb-5&quot;
+        ///            data-toggle=&quot;buttons&quot;&gt;
+        ///            &lt;!--${groups}--&gt;
+        ///        &lt;/div&gt;
+        ///        &lt;h3&gt;Range Selectors&lt;/ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplay {
             get {
                 return ResourceManager.GetString("tmplCombatReplay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div v-if=&quot;animator !== null&quot; class=&quot;d-flex flex-column justify-content-center&quot;&gt;
+        ///    &lt;combat-replay-damage-stats-component :time=&quot;animator.time&quot; :playerindex=&quot;playerindex&quot;&gt;
+        ///    &lt;/combat-replay-damage-stats-component&gt;
+        ///&lt;/div&gt;.
+        /// </summary>
+        internal static string tmplCombatReplayDamageData {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayDamageData", resourceCulture);
             }
         }
         
@@ -564,24 +578,6 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div v-if=&quot;animator !== null&quot;&gt;
-        ///    &lt;div class=&quot;d-flex flex-column justify-content-center&quot;&gt;
-        ///        &lt;combat-replay-damage-stats-component :time=&quot;animator.time&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/combat-replay-damage-stats-component&gt;
-        ///        &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mb-1&quot;&gt;
-        ///            &lt;li class=&quot;nav-item&quot;&gt;
-        ///                &lt;a class=&quot;nav-link&quot; href=&quot;#playerModal&quot; data-backdrop=&quot;false&quot; data-toggle=&quot;modal&quot;&gt;Details Window&lt;/a&gt;
-        ///            &lt;/li&gt;
-        ///        &lt;/ul&gt;
-        ///    &lt;/div&gt;
-        ///     [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string tmplCombatReplayData {
-            get {
-                return ResourceManager.GetString("tmplCombatReplayData", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column justify-content-center align-items-center mt-1 ml-2 mr-2&quot;&gt;
         ///        &lt;h3&gt;Group ${group}&lt;/h3&gt;
         ///        &lt;!--${players}--&gt;
@@ -594,9 +590,9 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;label id=&quot;id${instid}&quot; style=&quot;width: 100px;&quot; onclick=&quot;animator &amp;&amp; animator.selectActor(${instid});&quot; class=&quot;btn btn-dark btn-small&quot;&gt;
-        ///    ${playerName}
+        ///   Looks up a localized string similar to &lt;label id=&quot;id${instid}&quot; style=&quot;width: 120px;&quot; onclick=&quot;animator &amp;&amp; animator.selectActor(${instid});&quot; class=&quot;btn btn-dark btn-small&quot;&gt;
         ///    &lt;img src=&quot;${imageURL}&quot; alt=&quot;${prof}&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;
+        ///    ${playerName}
         ///&lt;/label&gt;.
         /// </summary>
         internal static string tmplCombatReplayPlayer {
@@ -606,7 +602,7 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column justify-content-end&quot; style=&quot;height: 120px&quot;&gt;
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column justify-content-end&quot; style=&quot;height: 100px&quot;&gt;
         ///    &lt;div v-if=&quot;data.enemies.length &gt; 0&quot; class=&quot;d-flex&quot;&gt;
         ///        &lt;div v-for=&quot;enemy in data.enemies&quot; class=&quot;boon-container&quot;&gt;
         ///            &lt;img :src=&quot;enemy.buff.icon&quot; :title=&quot;enemy.buff.name&quot; :alt=&quot;enemy.buff.name&quot; class=&quot;icon&quot; /&gt;
@@ -623,9 +619,16 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div&gt;
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex align-items-center&quot;&gt;
+        ///    &lt;div v-if=&quot;rotation.current&quot;&gt;
+        ///        &lt;img :src=&quot;rotation.current.skill.icon&quot; :alt=&quot;rotation.current.skill.name&quot; :title=&quot;rotation.current.skill.name&quot;
+        ///            class=&quot;icon-ll&quot; :class=&quot;{&apos;rot-cancelled&apos;: rotation.current.end === 2}&quot;&gt;
+        ///    &lt;/div&gt;
+        ///    &lt;div v-else class=&quot;empty-icon-ll&quot;&gt;
         ///
-        ///&lt;/div&gt;.
+        ///    &lt;/div&gt;
+        ///    &lt;div v-for=&quot;next in rotation.nexts&quot;&gt;
+        ///        &lt;img :src=&quot;next.skill.icon&quot; :alt=&quot;next.skill.name&quot; :title=&quot;next.skill.name&quot; class=&quot;icon-l&quot; :class=&quot;{&apos;rot-cancelled [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayPlayerRotation {
             get {
@@ -635,10 +638,10 @@ namespace LuckParser.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;div&gt;
-        ///    &lt;combat-replay-player-buffs-stats :time=&quot;time&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/combat-replay-player-buffs-stats&gt;
-        ///    &lt;div class=&quot;d-flex flex-column mb-1&quot;&gt;
-        ///        &lt;combat-replay-player-status :time=&quot;time&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/combat-replay-player-status&gt;
-        ///        &lt;combat-replay-player-rotation :time=&quot;time&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/combat-replay-player-rotation&gt;
+        ///    &lt;combat-replay-player-buffs-stats-component :time=&quot;time&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/combat-replay-player-buffs-stats-component&gt;
+        ///    &lt;div class=&quot;d-flex mb-1 mt-1 align-items-center&quot;&gt;
+        ///        &lt;combat-replay-player-status-component :time=&quot;time&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/combat-replay-player-status-component&gt;
+        ///        &lt;combat-replay-player-rotation-component :time=&quot;time&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/combat-replay-player-rotation-component&gt;
         ///    &lt;/div&gt;
         ///&lt;/div&gt;.
         /// </summary>
@@ -649,13 +652,33 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div&gt;
-        ///
+        ///   Looks up a localized string similar to &lt;div class=&quot;cr-player-status&quot; :class=&quot;{dead: status === 0, down: status === 1}&quot;&gt;
+        ///    &lt;h6 class=&quot;cr-player-shorten text-center&quot; :title=&quot;player.name&quot;&gt;
+        ///        &lt;img :src=&quot;player.icon&quot; :alt=&quot;player.profession&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;
+        ///        {{player.name}}
+        ///    &lt;/h6&gt;
         ///&lt;/div&gt;.
         /// </summary>
         internal static string tmplCombatReplayPlayerStatus {
             get {
                 return ResourceManager.GetString("tmplCombatReplayPlayerStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div v-if=&quot;animator !== null&quot; class=&quot;d-flex flex-column justify-content-center&quot;&gt;
+        ///    &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mb-1&quot;&gt;
+        ///        &lt;li class=&quot;nav-item&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; :class=&quot;{active: details}&quot; @click=&quot;details = !details&quot;&gt;Details Window&lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///    &lt;/ul&gt;
+        ///    &lt;div class=&quot;d-flex flex-row mb-2&quot; v-if=&quot;details&quot;&gt;
+        ///        &lt;div v-for=&quot;(group,id) in groups&quot; v-if=&quot;group&quot; :key=&quot;id + &apos;-group&apos;&quot; class=&quot;ml-1&quot; style=&quot;width: 250px; max-height: 800px&quot;&gt;
+        ///     [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplCombatReplayStatusData {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayStatusData", resourceCulture);
             }
         }
         
@@ -838,11 +861,11 @@ namespace LuckParser.Properties {
         ///   Looks up a localized string similar to &lt;div&gt;
         ///    &lt;h3 class=&quot;card-header text-center&quot;&gt;{{ encounter.name }}&lt;/h3&gt;
         ///    &lt;div class=&quot;card-body container&quot;&gt;
-        ///        &lt;div class=&quot;d-flex flex-row justify-content-center align-item-center&quot;&gt;
+        ///        &lt;div class=&quot;d-flex flex-row justify-content-center align-items-center&quot;&gt;
         ///            &lt;img class=&quot;mr-3 icon-xl&quot; :src=&quot;encounter.icon&quot; :alt=&quot;encounter.name&quot;&gt;
-        ///            &lt;div class=&quot;ml-3 d-flex flex-column justify-content-center align-item-center&quot;&gt;
+        ///            &lt;div class=&quot;ml-3 d-flex flex-column justify-content-center&quot;&gt;
         ///                &lt;div class=&quot;mb-2&quot; v-for=&quot;target in encounter.targets&quot;&gt;
-        ///                    &lt;div v-if=&quot;encounter.targets.length &gt; 1&quot; class=&quot;sma [rest of string was truncated]&quot;;.
+        ///                    &lt;div v-if=&quot;encounter.targets.length &gt; 1&quot; class=&quot;small&quot; style=&quot;text-a [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplEncounter {
             get {

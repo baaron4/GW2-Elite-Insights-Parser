@@ -44,32 +44,6 @@
     width:100%;
 }
 
-.modal-open {
-    overflow: auto !important;
-}
-
-.modal {
-    overflow: hidden !important;
-    pointer-events: none;
-    min-width: 350px;
-    left: auto;
-    right: auto;
-    margin: auto;
-    margin-top: 200px;
-    margin-left: -200px;
-}
-.modal-dialog {
-    max-width: 100%;
-}
-
-.theme-slate .modal-content {
-    background-color: rgba(50, 56, 62, 0.9);
-}
-
-.theme-yeti .modal-content {
-    background-color: rgba(255, 255, 255, 0.9);
-}
-
 .cr-player-data {
     border-top:1px solid black;
 }
@@ -106,9 +80,6 @@ h6.cr-player-shorten {
     background-color: rgba(220, 220, 220, 0.9);
 }
 
-.modal-header {
-    border-bottom: 1px solid #888888;
-}
 
 body {
     font-family: -apple-system,

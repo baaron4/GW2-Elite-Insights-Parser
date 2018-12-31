@@ -2,9 +2,6 @@
 
 
 function computeTargetDPS(target, damageData,lim, phasebreaks, cacheID, lastTime) {
-    if (!target.dpsGraphCache) {
-        target.dpsGraphCache = new Map();
-    }
     if (target.dpsGraphCache.has(cacheID)) {
         return target.dpsGraphCache.get(cacheID);
     }

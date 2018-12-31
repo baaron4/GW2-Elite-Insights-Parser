@@ -13,7 +13,6 @@ namespace LuckParser.Models.Logic
         protected RaidLogic(ushort triggerID) : base(triggerID)
         {
             Mode = ParseMode.Raid;
-            CanCombatReplay = true;
         }
 
         public override void SetSuccess(ParsedLog log)

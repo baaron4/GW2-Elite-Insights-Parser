@@ -12,7 +12,6 @@ namespace LuckParser.Models.Logic
         protected FractalLogic(ushort triggerID) : base (triggerID)
         { 
             Mode = ParseMode.Fractal;
-            CanCombatReplay = true;
             MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(37695, "Flux Bomb", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle","rgb(150,0,255)",10), "FBmb","Flux Bomb application", "Flux Bomb",0),

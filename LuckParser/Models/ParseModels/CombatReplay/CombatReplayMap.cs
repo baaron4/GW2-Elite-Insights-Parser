@@ -22,7 +22,7 @@ namespace LuckParser.Models.ParseModels
         public Tuple<int, int> GetPixelMapSize()
         {
             double ratio = (double)_size.Item1 / _size.Item2;
-            const int pixelSize = 900;
+            const int pixelSize = 850;
             if (ratio > 1.0)
             {
                 return new Tuple<int, int>(pixelSize, (int)Math.Round(pixelSize / ratio));

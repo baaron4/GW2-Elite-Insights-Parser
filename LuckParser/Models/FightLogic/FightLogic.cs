@@ -28,6 +28,7 @@ namespace LuckParser.Models.Logic
         public FightLogic(ushort triggerID)
         {
             TriggerID = triggerID;
+            CanCombatReplay = GetCombatMap() != null;
         }
 
         protected virtual CombatReplayMap GetCombatMapInternal()

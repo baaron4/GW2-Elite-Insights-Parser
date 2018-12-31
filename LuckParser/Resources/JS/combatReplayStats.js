@@ -294,9 +294,31 @@ var compileCombatReplay = function () {
         template: `${tmplCombatReplayPlayerStats}`
     });
 
-    Vue.component("combat-replay-data-component", {
-        template: `${tmplCombatReplayData}`,
+    Vue.component("combat-replay-damage-data-component", {
+        template: `${tmplCombatReplayDamageData}`,
         props: ["animator"],
+        computed: {
+            playerindex: function () {
+                if (this.animator.selectedPlayer) {
+                    for (var i = 0; i < logData.players.length; i++) {
+                        if (logData.players[i].combatReplayID == this.animator.selectedPlayerID) {
+                            return i;
+                        }
+                    }
+                }
+                return -1;
+            }
+        }
+    });
+
+    Vue.component("combat-replay-status-data-component", {
+        template: `${tmplCombatReplayStatusData}`,
+        props: ["animator"],
+        data: function() {
+            return {
+                details: false
+            };
+        },
         computed: {
             playerindex: function () {
                 if (this.animator.selectedPlayer) {
@@ -323,12 +345,6 @@ var compileCombatReplay = function () {
                 }
                 return res;
             }
-        },
-        mounted() {
-            $("#playerModal").draggable({
-                handle: ".modal-header",
-                scroll: false
-            });
         }
     });
 };
