@@ -289,7 +289,7 @@ namespace LuckParser.Models.Logic
             CombatData combatData = log.CombatData;
             Mechanic.CheckSpecialCondition condition;
             HashSet<ushort> playersIds = log.PlayerIDs;
-            Dictionary<ushort, AbstractMasterActor> regroupedMobs = new Dictionary<ushort, AbstractMasterActor>();
+            Dictionary<ushort, AbstractActor> regroupedMobs = new Dictionary<ushort, AbstractActor>();
             foreach (Mechanic mech in MechanicList)
             {
                 switch (mech.MechanicType)
@@ -414,7 +414,7 @@ namespace LuckParser.Models.Logic
                             {
                                 continue;
                             }
-                            AbstractMasterActor amp = null;
+                            AbstractActor amp = null;
                             if (mech.MechanicType == Mechanic.MechType.EnemyBoon && c.IsBuffRemove == ParseEnum.BuffRemove.None)
                             {
                                 Target target = Targets.Find(x => x.InstID == c.DstInstid && x.FirstAware <= c.Time && x.LastAware >= c.Time);
@@ -489,7 +489,7 @@ namespace LuckParser.Models.Logic
                             {
                                 continue;
                             }
-                            AbstractMasterActor amp = null;
+                            AbstractActor amp = null;
                             if ((mech.MechanicType == Mechanic.MechType.EnemyCastStart && c.IsActivation.StartCasting()) || (mech.MechanicType == Mechanic.MechType.EnemyCastEnd && !c.IsActivation.StartCasting()))
                             {
                                 Target target = Targets.Find(x => x.InstID == c.SrcInstid && x.FirstAware <= c.Time && x.LastAware >= c.Time);
@@ -528,7 +528,7 @@ namespace LuckParser.Models.Logic
                     case Mechanic.MechType.Spawn:
                         foreach (AgentItem a in log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.ID == mech.SkillId))
                         {
-                            if (!regroupedMobs.TryGetValue(a.ID, out AbstractMasterActor amp))
+                            if (!regroupedMobs.TryGetValue(a.ID, out AbstractActor amp))
                             {
                                 amp = new DummyActor(a);
                                 regroupedMobs.Add(a.ID, amp);

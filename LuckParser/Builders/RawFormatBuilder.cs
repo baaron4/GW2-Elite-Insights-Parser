@@ -143,7 +143,7 @@ namespace LuckParser.Builders
                     JsonMechanic mech = new JsonMechanic
                     {
                         time = ml.Time,
-                        player = ml.Player.Character
+                        actor = ml.Actor.Character
                     };
                     if (log.mechanics.TryGetValue(ml.InGameName, out var list))
                     {
