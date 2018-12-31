@@ -4,10 +4,10 @@ using LuckParser.Models.DataModels;
 namespace LuckParser.Models.ParseModels
 {
     // A dummy class that only serve as "stocking" purposes, trying to do anything with it will throw an exception
-    public class DummyPlayer : AbstractMasterPlayer
+    public class DummyActor : AbstractMasterActor
     {
 
-        public DummyPlayer(AgentItem agent) : base(agent)
+        public DummyActor(AgentItem agent) : base(agent)
         {
 
         }

@@ -3,7 +3,7 @@ using System;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class Minion : AbstractPlayer
+    public class Minion : AbstractActor
     {
 
         public Minion(AgentItem agent) : base(agent)

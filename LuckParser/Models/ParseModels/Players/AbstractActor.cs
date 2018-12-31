@@ -5,16 +5,18 @@ using LuckParser.Models.DataModels;
 
 namespace LuckParser.Models.ParseModels
 {
-    public abstract class AbstractPlayer
+    public abstract class AbstractActor
     {
         public readonly AgentItem AgentItem;
         public readonly string Character;
+        // Damage
         protected readonly List<DamageLog> DamageLogs = new List<DamageLog>();
         protected Dictionary<ushort,List<DamageLog>> DamageLogsByDst = new Dictionary<ushort, List<DamageLog>>();
         //protected List<DamageLog> HealingLogs = new List<DamageLog>();
         //protected List<DamageLog> HealingReceivedLogs = new List<DamageLog>();
         private readonly List<DamageLog> _damageTakenlogs = new List<DamageLog>();
         protected Dictionary<ushort, List<DamageLog>> _damageTakenLogsBySrc = new Dictionary<ushort, List<DamageLog>>();
+        // Cast
         protected readonly List<CastLog> CastLogs = new List<CastLog>();
 
         public uint Toughness => AgentItem.Toughness;
@@ -30,14 +32,14 @@ namespace LuckParser.Models.ParseModels
         public uint HitboxHeight => AgentItem.HitboxHeight;
         public uint HitboxWidth => AgentItem.HitboxWidth;
 
-        protected AbstractPlayer(AgentItem agent)
+        protected AbstractActor(AgentItem agent)
         {
             string[] name = agent.Name.Split('\0');
             Character = name[0];
             AgentItem = agent;
         }
         // Getters
-        public List<DamageLog> GetDamageLogs(AbstractPlayer target, ParsedLog log, long start, long end)
+        public List<DamageLog> GetDamageLogs(AbstractActor target, ParsedLog log, long start, long end)
         {
             if (DamageLogs.Count == 0)
             {
@@ -59,7 +61,7 @@ namespace LuckParser.Models.ParseModels
             }
             return DamageLogs.Where( x => x.Time >= start && x.Time <= end).ToList();
         }
-        public List<DamageLog> GetDamageTakenLogs(AbstractPlayer target, ParsedLog log, long start, long end)
+        public List<DamageLog> GetDamageTakenLogs(AbstractActor target, ParsedLog log, long start, long end)
         {
             if (_damageTakenlogs.Count == 0)
             {
@@ -115,10 +117,6 @@ namespace LuckParser.Models.ParseModels
             }
             return CastLogs.Where(x => x.Time + x.ActualDuration >= start && x.Time <= end).ToList();
 
-        }
-        public List<DamageLog> GetJustPlayerDamageLogs(AbstractPlayer target, ParsedLog log, long start, long end)
-        {
-            return GetDamageLogs(target, log, start, end).Where(x => x.SrcInstId == AgentItem.InstID).ToList();
         }
         // privates
         protected void AddDamageLog(long time, CombatItem c)

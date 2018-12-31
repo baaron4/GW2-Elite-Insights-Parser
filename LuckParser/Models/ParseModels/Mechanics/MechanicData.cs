@@ -10,7 +10,7 @@ namespace LuckParser.Models.ParseModels
         private readonly List<HashSet<Mechanic>> _presentOnPlayerMechanics = new List<HashSet<Mechanic>>();
         private readonly List<HashSet<Mechanic>> _presentOnEnemyMechanics = new List<HashSet<Mechanic>>();
         private readonly List<HashSet<Mechanic>> _presentMechanics = new List<HashSet<Mechanic>>();
-        private readonly List<List<AbstractMasterPlayer>> _enemyList = new List<List<AbstractMasterPlayer>>();
+        private readonly List<List<AbstractMasterActor>> _enemyList = new List<List<AbstractMasterActor>>();
 
         public MechanicData(FightData fightData)
         {
@@ -69,11 +69,11 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
                 // ready enemy list
-                List<AbstractMasterPlayer> toAdd = new List<AbstractMasterPlayer>();
+                List<AbstractMasterActor> toAdd = new List<AbstractMasterActor>();
                 _enemyList.Add(toAdd);
                 foreach(Mechanic m in Keys.Where(x=> x.IsEnemyMechanic))
                 {
-                    foreach (AbstractMasterPlayer p in this[m].Where(x => phase.InInterval(x.Time)).Select(x => x.Player).Distinct())
+                    foreach (AbstractMasterActor p in this[m].Where(x => phase.InInterval(x.Time)).Select(x => x.Player).Distinct())
                     {
                         if (toAdd.FirstOrDefault(x => x.InstID == p.InstID) == null)
                         {
@@ -102,7 +102,7 @@ namespace LuckParser.Models.ParseModels
             return _presentMechanics[phaseIndex];
         }
 
-        public List<AbstractMasterPlayer> GetEnemyList(int phaseIndex)
+        public List<AbstractMasterActor> GetEnemyList(int phaseIndex)
         {
             return _enemyList[phaseIndex];
         }

@@ -116,7 +116,7 @@ namespace LuckParser.Models.DataModels
             return _statistics;
         }
 
-        private FinalDPS GetFinalDPS(AbstractPlayer player, int phaseIndex, Target target)
+        private FinalDPS GetFinalDPS(AbstractActor player, int phaseIndex, Target target)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
             double phaseDuration = (phase.GetDuration()) / 1000.0;

@@ -8,9 +8,9 @@ namespace LuckParser.Models.ParseModels
 {
     public class AgentConnector : Connector
     {
-        private AbstractMasterPlayer _agent;
+        private AbstractMasterActor _agent;
 
-        public AgentConnector(AbstractMasterPlayer agent)
+        public AgentConnector(AbstractMasterActor agent)
         {
             _agent = agent;
         }

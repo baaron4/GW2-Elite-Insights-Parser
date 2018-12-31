@@ -17,7 +17,7 @@ namespace LuckParser.Models.ParseModels
             MinionID = id;
         }
 
-        public List<DamageLog> GetDamageLogs(AbstractPlayer target, ParsedLog log, long start, long end)
+        public List<DamageLog> GetDamageLogs(AbstractActor target, ParsedLog log, long start, long end)
         {
             if (_damageLogs.Count == 0)
             {

@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace LuckParser.Models.ParseModels
 {
-    public abstract class AbstractMasterPlayer : AbstractPlayer
+    public abstract class AbstractMasterActor : AbstractActor
     {
         public class ExtraBoonData
         {
@@ -38,7 +38,7 @@ namespace LuckParser.Models.ParseModels
         // Replay
         public CombatReplay CombatReplay { get; protected set; }
 
-        protected AbstractMasterPlayer(AgentItem agent) : base(agent)
+        protected AbstractMasterActor(AgentItem agent) : base(agent)
         {
 
         }
@@ -52,7 +52,7 @@ namespace LuckParser.Models.ParseModels
             return _minions;
         }
 
-        public List<int> Get1SDamageList(ParsedLog log, int phaseIndex, PhaseData phase, AbstractPlayer target)
+        public List<int> Get1SDamageList(ParsedLog log, int phaseIndex, PhaseData phase, AbstractActor target)
         {
             ulong targetId = target != null ? target.Agent : 0;
             int id = (phaseIndex + "_" + targetId + "_1S").GetHashCode();
@@ -218,6 +218,13 @@ namespace LuckParser.Models.ParseModels
             }
             return 0;
         }
+
+
+        public List<DamageLog> GetJustPlayerDamageLogs(AbstractActor target, ParsedLog log, long start, long end)
+        {
+            return GetDamageLogs(target, log, start, end).Where(x => x.SrcInstId == AgentItem.InstID).ToList();
+        }
+
         // private getters
 
         private ushort TryFindSrc(List<CastLog> castsToCheck, long time, long extension, ParsedLog log)

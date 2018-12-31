@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class Player : AbstractMasterPlayer
+    public class Player : AbstractMasterActor
     {
         public class Consumable
         {

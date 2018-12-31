@@ -237,7 +237,7 @@ namespace LuckParser.Builders
             }
         }
 
-        private List<int>[] BuildTotal1SDamage(AbstractMasterPlayer p)
+        private List<int>[] BuildTotal1SDamage(AbstractMasterActor p)
         {
             List<int>[] list = new List<int>[_statistics.Phases.Count];
             for (int i = 0; i < _statistics.Phases.Count; i++)
@@ -347,7 +347,7 @@ namespace LuckParser.Builders
             return res.Count > 0 ? res : null;
         }
 
-        private Dictionary<string, JsonDamageDist>[][] BuildDamageDist(AbstractMasterPlayer p)
+        private Dictionary<string, JsonDamageDist>[][] BuildDamageDist(AbstractMasterActor p)
         {
             Dictionary<string, JsonDamageDist>[][] res = new Dictionary<string, JsonDamageDist>[_log.FightData.Logic.Targets.Count][];
             for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
@@ -369,7 +369,7 @@ namespace LuckParser.Builders
             return res;
         }
 
-        private Dictionary<string, JsonDamageDist>[] BuildDamageDist(AbstractMasterPlayer p, Target target)
+        private Dictionary<string, JsonDamageDist>[] BuildDamageDist(AbstractMasterActor p, Target target)
         {
             Dictionary<string, JsonDamageDist>[] res = new Dictionary<string, JsonDamageDist>[_statistics.Phases.Count];
             for (int i = 0; i < _statistics.Phases.Count; i++)
@@ -380,7 +380,7 @@ namespace LuckParser.Builders
             return res;
         }
 
-        private Dictionary<string, JsonDamageDist>[] BuildDamageTaken(AbstractMasterPlayer p)
+        private Dictionary<string, JsonDamageDist>[] BuildDamageTaken(AbstractMasterActor p)
         {
             Dictionary<string, JsonDamageDist>[] res = new Dictionary<string, JsonDamageDist>[_statistics.Phases.Count];
             for (int i = 0; i < _statistics.Phases.Count; i++)
@@ -442,7 +442,7 @@ namespace LuckParser.Builders
             return res;
         }
 
-        private List<JsonMinions> BuildMinions(AbstractMasterPlayer master)
+        private List<JsonMinions> BuildMinions(AbstractMasterActor master)
         {
             List<JsonMinions> mins = new List<JsonMinions>();
             foreach (Minions minions in master.GetMinions(_log).Values)
