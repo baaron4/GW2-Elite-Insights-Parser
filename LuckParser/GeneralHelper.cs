@@ -1,5 +1,6 @@
 ﻿using LuckParser.Exceptions;
 using LuckParser.Models.DataModels;
+using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,6 +14,8 @@ namespace LuckParser
 {
     public static class GeneralHelper
     {
+
+        public static AgentItem UnknownAgent = new AgentItem(0, "UNKNOWN");
 
         /// <summary>
         /// Reports a status update for a log, updating the background worker and the related row with the new status

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Models.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,17 +14,18 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        public override void SetBoonDistributionItem(Dictionary<long,Dictionary<ushort, BoonDistributionItem>> distribs, long start, long end, long boonid)
+        public override void SetBoonDistributionItem(BoonDistribution distribs, long start, long end, long boonid, ParsedLog log)
         {
-            Dictionary<ushort, BoonDistributionItem> distrib = GetDistrib(distribs, boonid);
-            if (distrib.TryGetValue(Src, out var toModify))
+            Dictionary<AgentItem, BoonDistributionItem> distrib = GetDistrib(distribs, boonid);
+            AgentItem agent = log.AgentData.GetAgentByInstID(Src, log.FightData.ToLogSpace(Time));
+            if (distrib.TryGetValue(agent, out var toModify))
             {
                 toModify.Overstack += GetValue(start, end);
-                distrib[Src] = toModify;
+                distrib[agent] = toModify;
             }
             else
             {
-                distrib.Add(Src, new BoonDistributionItem(
+                distrib.Add(agent, new BoonDistributionItem(
                     0,
                     GetValue(start, end), 0, 0, 0, 0));
             }

@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class Target : AbstractMasterPlayer
+    public class Target : AbstractMasterActor
     {
         // Constructors
         public Target(AgentItem agent) : base(agent)

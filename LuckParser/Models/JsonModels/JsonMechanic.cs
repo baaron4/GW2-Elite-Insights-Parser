@@ -9,6 +9,6 @@ namespace LuckParser.Models.JsonModels
     public class JsonMechanic
     {
         public long time;
-        public string player;
+        public string actor;
     }
 }

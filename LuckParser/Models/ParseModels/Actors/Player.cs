@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class Player : AbstractMasterPlayer
+    public class Player : AbstractMasterActor
     {
         public class Consumable
         {
@@ -64,7 +64,7 @@ namespace LuckParser.Models.ParseModels
             int[] cleanse = { 0, 0 };
             foreach (Player p in log.PlayerList)
             {
-                foreach(List<long> list in p.GetCondiCleanse(log,phaseIndex, InstID).Values)
+                foreach(List<long> list in p.GetCondiCleanse(log,phaseIndex, AgentItem).Values)
                 {
                     cleanse[0] += list.Count;
                     cleanse[1] += (int)list.Sum();

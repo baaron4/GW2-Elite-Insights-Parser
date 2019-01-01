@@ -23,7 +23,7 @@ namespace LuckParser.Models.ParseModels
         }
     }
 
-    public class BoonDistribution : Dictionary<long, Dictionary<ushort, BoonDistributionItem>>
+    public class BoonDistribution : Dictionary<long, Dictionary<AgentItem, BoonDistributionItem>>
     {
         public long GetUptime(long boonid)
         {
@@ -34,7 +34,7 @@ namespace LuckParser.Models.ParseModels
             return this[boonid].Sum(x => x.Value.Value);
         }
 
-        public long GetGeneration(long boonid, ushort src)
+        public long GetGeneration(long boonid, AgentItem src)
         {
             if (!ContainsKey(boonid) || !this[boonid].ContainsKey(src))
             {
@@ -43,7 +43,7 @@ namespace LuckParser.Models.ParseModels
             return this[boonid][src].Value;
         }
 
-        public long GetOverstack(long boonid, ushort src)
+        public long GetOverstack(long boonid, AgentItem src)
         {
             if (!ContainsKey(boonid) || !this[boonid].ContainsKey(src))
             {
@@ -52,7 +52,7 @@ namespace LuckParser.Models.ParseModels
             return this[boonid][src].Overstack;
         }
 
-        public long GetWaste(long boonid, ushort src)
+        public long GetWaste(long boonid, AgentItem src)
         {
             if (!ContainsKey(boonid) || !this[boonid].ContainsKey(src))
             {
@@ -61,7 +61,7 @@ namespace LuckParser.Models.ParseModels
             return this[boonid][src].Waste;
         }
 
-        public long GetUnknownExtension(long boonid, ushort src)
+        public long GetUnknownExtension(long boonid, AgentItem src)
         {
             if (!ContainsKey(boonid) || !this[boonid].ContainsKey(src))
             {
@@ -70,7 +70,7 @@ namespace LuckParser.Models.ParseModels
             return this[boonid][src].UnknownExtension;
         }
 
-        public long GetExtension(long boonid, ushort src)
+        public long GetExtension(long boonid, AgentItem src)
         {
             if (!ContainsKey(boonid) || !this[boonid].ContainsKey(src))
             {
@@ -79,7 +79,7 @@ namespace LuckParser.Models.ParseModels
             return this[boonid][src].Extension;
         }
 
-        public long GetExtended(long boonid, ushort src)
+        public long GetExtended(long boonid, AgentItem src)
         {
             if (!ContainsKey(boonid) || !this[boonid].ContainsKey(src))
             {
