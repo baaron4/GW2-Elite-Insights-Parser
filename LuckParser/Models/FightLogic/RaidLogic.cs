@@ -20,7 +20,8 @@ namespace LuckParser.Models.Logic
             HashSet<int> raidRewardsIds = new HashSet<int>
                 {
                     55821,
-                    60685
+                    60685,
+                    914
                 };
             CombatItem reward = log.CombatData.GetStates(ParseEnum.StateChange.Reward).FirstOrDefault(x => raidRewardsIds.Contains(x.Value));
             if (reward != null)
