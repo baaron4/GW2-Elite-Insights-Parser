@@ -332,9 +332,81 @@ namespace LuckParser.Models.ParseModels
             }
         }*/
         // Setters
-        protected abstract void SetDamageLogs(ParsedLog log);     
-        protected abstract void SetCastLogs(ParsedLog log);
-        protected abstract void SetDamageTakenLogs(ParsedLog log);
+
+        protected virtual void SetDamageTakenLogs(ParsedLog log)
+        {
+            foreach (CombatItem c in log.GetDamageTakenData(InstID, FirstAware, LastAware))
+            {
+                long time = log.FightData.ToFightSpace(c.Time);
+                AddDamageTakenLog(time, c);
+            }
+        }
+
+        protected virtual void SetCastLogs(ParsedLog log)
+        {
+            CastLog curCastLog = null;
+            foreach (CombatItem c in log.GetCastData(InstID, FirstAware, LastAware))
+            {
+                ParseEnum.StateChange state = c.IsStateChange;
+                if (state == ParseEnum.StateChange.Normal)
+                {
+                    if (c.IsActivation.StartCasting())
+                    {
+                        // Missing end activation
+                        long time = log.FightData.ToFightSpace(c.Time);
+                        if (curCastLog != null)
+                        {
+                            int actDur = curCastLog.SkillId == SkillItem.DodgeId ? 750 : curCastLog.ExpectedDuration;
+                            curCastLog.SetEndStatus(actDur, ParseEnum.Activation.Unknown, time);
+                            curCastLog = null;
+                        }
+                        curCastLog = new CastLog(time, c.SkillID, c.Value, c.IsActivation, Agent, InstID);
+                        CastLogs.Add(curCastLog);
+                    }
+                    else
+                    {
+                        if (curCastLog != null)
+                        {
+                            if (curCastLog.SkillId == c.SkillID)
+                            {
+                                int actDur = curCastLog.SkillId == SkillItem.DodgeId ? 750 : c.Value;
+                                curCastLog.SetEndStatus(actDur, c.IsActivation, log.FightData.FightDuration);
+                                curCastLog = null;
+                            }
+                        }
+                    }
+                }
+                else if (state == ParseEnum.StateChange.WeaponSwap)
+                {
+                    long time = log.FightData.ToFightSpace(c.Time);
+                    CastLog swapLog = new CastLog(time, SkillItem.WeaponSwapId, (int)c.DstAgent, c.IsActivation, Agent, InstID);
+                    if (CastLogs.Count > 0 && (time - CastLogs.Last().Time) < 10 && CastLogs.Last().SkillId == SkillItem.WeaponSwapId)
+                    {
+                        CastLogs[CastLogs.Count - 1] = swapLog;
+                    }
+                    else
+                    {
+                        CastLogs.Add(swapLog);
+                    }
+                    swapLog.SetEndStatus(50, ParseEnum.Activation.Unknown, log.FightData.FightDuration);
+                }
+            }
+            long cloakStart = 0;
+            foreach (long time in log.CombatData.GetBuffs(InstID, 40408, FirstAware, LastAware).Select(x => log.FightData.ToFightSpace(x.Time)))
+            {
+                if (time - cloakStart > 10)
+                {
+                    CastLog dodgeLog = new CastLog(time, SkillItem.DodgeId, 0, ParseEnum.Activation.Unknown, Agent, InstID);
+                    dodgeLog.SetEndStatus(50, ParseEnum.Activation.Unknown, log.FightData.FightDuration);
+                    CastLogs.Add(dodgeLog);
+                }
+                cloakStart = time;
+            }
+            CastLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
+        }
+
+
+        protected abstract void SetDamageLogs(ParsedLog log);
         protected abstract void SetBoonDistribution(ParsedLog log);
         protected virtual void GenerateExtraBoonData(ParsedLog log, long boonid, GenerationSimulationResult buffSimulationGeneration, List<PhaseData> phases)
         {

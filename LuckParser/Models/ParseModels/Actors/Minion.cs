@@ -21,40 +21,6 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        protected override void SetCastLogs(ParsedLog log)
-        {
-            CastLog curCastLog = null;
-            foreach (CombatItem c in log.GetCastData(InstID, FirstAware, LastAware))
-            {
-                ParseEnum.StateChange state = c.IsStateChange;
-                if (state == ParseEnum.StateChange.Normal)
-                {
-                    if (c.IsActivation.StartCasting())
-                    {
-                        long time = log.FightData.ToFightSpace(c.Time);
-                        curCastLog = new CastLog(time, c.SkillID, c.Value, c.IsActivation, Agent, InstID);
-                        CastLogs.Add(curCastLog);
-                    }
-                    else
-                    {
-                        if (curCastLog != null)
-                        {
-                            if (curCastLog.SkillId == c.SkillID)
-                            {
-                                curCastLog.SetEndStatus(c.Value, c.IsActivation, log.FightData.FightDuration);
-                                curCastLog = null;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        protected override void SetDamageTakenLogs(ParsedLog log)
-        {
-            throw new InvalidOperationException();
-        }
-
         protected override void SetBoonDistribution(ParsedLog log)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
@@ -78,7 +44,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     BoonSimulator simulator = boon.CreateSimulator(log);
                     simulator.Simulate(logs, dur);
-                    if (death > 0 && GetCastLogs(log, death + 5000, dur).Count == 0)
+                    if (death > 0)
                     {
                         simulator.Trim(death);
                     }

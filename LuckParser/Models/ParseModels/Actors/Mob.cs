@@ -24,6 +24,9 @@ namespace LuckParser.Models.ParseModels
         protected override void SetCastLogs(ParsedLog log)
         {
         }
+        protected override void SetBoonDistribution(ParsedLog log)
+        {
+        }
 
         protected override void SetAdditionalCombatReplayData(ParsedLog log)
         {
