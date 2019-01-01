@@ -23,7 +23,7 @@ namespace LuckParser.Models.ParseModels
         public void SetCleanseItem(Dictionary<AgentItem, Dictionary<long, List<long>>> cleanses, long start, long end, long boonid, ParsedLog log)
         {
             long cleanse = GetCleanseDuration(start, end);
-            AgentItem agent = log.AgentData.GetAgentByInstID(_provokedBy, _time);
+            AgentItem agent = log.AgentData.GetAgentByInstID(_provokedBy, log.FightData.ToLogSpace(_time));
             if (cleanse > 0)
             {
                 if (!cleanses.TryGetValue(agent, out var dict))
