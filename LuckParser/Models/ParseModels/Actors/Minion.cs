@@ -21,11 +21,15 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        protected override void SetExtraBoonStatusData(ParsedLog log, BoonSimulator simulator, long boonid, bool updateBoonPresence, bool updateCondiPresence)
+        protected override void SetExtraBoonStatusGenerationData(ParsedLog log, BoonSimulator simulator, long boonid, bool updateCondiPresence)
         {
         }
 
         protected override void SetBoonStatusGenerationData(ParsedLog log, BoonSimulationItem simul, long boonid, bool updateBoonPresence, bool updateCondiPresence)
+        {
+        }
+
+        protected override void SetExtraBoonStatusData(ParsedLog log)
         {
         }
 

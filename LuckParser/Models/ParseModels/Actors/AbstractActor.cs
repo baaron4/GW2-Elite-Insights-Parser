@@ -398,7 +398,8 @@ namespace LuckParser.Models.ParseModels
 
 
         protected abstract void SetDamageLogs(ParsedLog log);
-        protected abstract void SetExtraBoonStatusData(ParsedLog log, BoonSimulator simulator, long boonid, bool updateBoonPresence, bool updateCondiPresence);
+        protected abstract void SetExtraBoonStatusGenerationData(ParsedLog log, BoonSimulator simulator, long boonid, bool updateCondiPresence);
+        protected abstract void SetExtraBoonStatusData(ParsedLog log);
         protected abstract void SetBoonStatusGenerationData(ParsedLog log, BoonSimulationItem simul, long boonid, bool updateBoonPresence, bool updateCondiPresence);
         protected abstract void InitBoonStatusData(ParsedLog log);
 
@@ -435,9 +436,8 @@ namespace LuckParser.Models.ParseModels
                     }
                     bool updateBoonPresence = boonIds.Contains(boonid);
                     bool updateCondiPresence = boonid != 873 && condiIds.Contains(boonid);
-                    GenerationSimulationResult generationSimulation = simulator.GenerationSimulationResult;
                     List<BoonsGraphModel.Segment> graphSegments = new List<BoonsGraphModel.Segment>();
-                    foreach (BoonSimulationItem simul in generationSimulation.Items)
+                    foreach (BoonSimulationItem simul in simulator.GenerationSimulation)
                     {
                         SetBoonStatusGenerationData(log, simul, boonid, updateBoonPresence, updateCondiPresence);
                         BoonsGraphModel.Segment segment = simul.ToSegment();
@@ -451,7 +451,7 @@ namespace LuckParser.Models.ParseModels
                         }
                         graphSegments.Add(segment);
                     }
-                    SetExtraBoonStatusData(log, simulator, boonid, updateBoonPresence, updateCondiPresence);
+                    SetExtraBoonStatusGenerationData(log, simulator, boonid, updateCondiPresence);
                     if (graphSegments.Count > 0)
                     {
                         graphSegments.Add(new BoonsGraphModel.Segment(graphSegments.Last().End, dur, 0));
@@ -521,6 +521,7 @@ namespace LuckParser.Models.ParseModels
             }
             BoonPoints[Boon.NumberOfBoonsID] = boonPresenceGraph;
             BoonPoints[Boon.NumberOfConditionsID] = condiPresenceGraph;
+            SetExtraBoonStatusData(log);
         }
         //protected abstract void setHealingLogs(ParsedLog log);
         //protected abstract void setHealingReceivedLogs(ParsedLog log);

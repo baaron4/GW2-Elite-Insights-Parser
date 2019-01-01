@@ -14,7 +14,7 @@ namespace LuckParser.Models.ParseModels
             public int TotalHitCount { get; }
             public int DamageGain { get; }
             public int TotalDamage { get; }
-            public ExtraBoonData (int hitCount, int totalHitCount, int damageGain, int totalDamage)
+            public ExtraBoonData(int hitCount, int totalHitCount, int damageGain, int totalDamage)
             {
                 HitCount = hitCount;
                 TotalHitCount = totalHitCount;
@@ -173,7 +173,7 @@ namespace LuckParser.Models.ParseModels
                 CombatReplay.PollingRate(pollingRate, log.FightData.FightDuration, forceInterpolate);
                 if (trim)
                 {
-                    CombatItem despawnCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Despawn,FirstAware,LastAware).LastOrDefault();
+                    CombatItem despawnCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Despawn, FirstAware, LastAware).LastOrDefault();
                     CombatItem spawnCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Spawn, FirstAware, LastAware).LastOrDefault();
                     CombatItem deathCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.ChangeDead, FirstAware, LastAware).LastOrDefault();
                     if (deathCheck != null)
@@ -230,75 +230,88 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
-        private void GenerateExtraBoonData(ParsedLog log, long boonid, GenerationSimulationResult buffSimulationGeneration, List<PhaseData> phases)
-        {
-            switch (boonid)
-            {
-                // Frost Spirit
-                case 50421:
-                    foreach (Target target in log.FightData.Logic.Targets)
-                    {
-                        if (!_boonTargetExtra.TryGetValue(target, out var extra))
-                        {
-                            _boonTargetExtra[target] = new Dictionary<long, List<ExtraBoonData>>();
-                        }
-                        Dictionary<long, List<ExtraBoonData>> dict = _boonTargetExtra[target];
-                        if (!dict.TryGetValue(boonid, out var list))
-                        {
-                            List<ExtraBoonData> extraDataList = new List<ExtraBoonData>();
-                            for (int i = 0; i < phases.Count; i++)
-                            {
-                                List<DamageLog> dmLogs = GetJustPlayerDamageLogs(target, log, phases[i].Start, phases[i].End);
-                                int totalDamage = dmLogs.Sum(x => x.Damage);
-                                List<DamageLog> effect = dmLogs.Where(x => buffSimulationGeneration.GetStackCount((int)x.Time) > 0 && !x.IsCondi).ToList();
-                                int damage = (int)(effect.Sum(x => x.Damage) / 21.0);
-                                extraDataList.Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsCondi), damage, totalDamage));
-                            }
-                            dict[boonid] = extraDataList;
-                        }                
-                    }
-                    _boonExtra[boonid] = new List<ExtraBoonData>();
-                    for (int i = 0; i < phases.Count; i++)
-                    {
-                        List<DamageLog> dmLogs = GetJustPlayerDamageLogs(null, log, phases[i].Start, phases[i].End);
-                        int totalDamage = dmLogs.Sum(x => x.Damage);
-                        List<DamageLog> effect = dmLogs.Where(x => buffSimulationGeneration.GetStackCount((int)x.Time) > 0 && !x.IsCondi).ToList();
-                        int damage = (int)(effect.Sum(x => x.Damage) / 21.0);
-                        _boonExtra[boonid].Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsCondi), damage, totalDamage));
-                    }
-                    break;
-                // GoE
-                case 31803:
-                    foreach (Target target in log.FightData.Logic.Targets)
-                    {
-                        if (!_boonTargetExtra.TryGetValue(target, out var extra))
-                        {
-                            _boonTargetExtra[target] = new Dictionary<long, List<ExtraBoonData>>();
-                        }
-                        Dictionary<long, List<ExtraBoonData>> dict = _boonTargetExtra[target];
-                        if (!dict.TryGetValue(boonid, out var list))
-                        {
-                            List<ExtraBoonData> extraDataList = new List<ExtraBoonData>();
-                            for (int i = 0; i < phases.Count; i++)
-                            {
-                                List<DamageLog> dmLogs = GetJustPlayerDamageLogs(target, log, phases[i].Start, phases[i].End);
-                                List<DamageLog> effect = dmLogs.Where(x => buffSimulationGeneration.GetStackCount((int)x.Time) > 0 && !x.IsCondi).ToList();
-                                int damage = effect.Sum(x => x.Damage);
-                                extraDataList.Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsCondi), damage, 0));
-                            }
-                            dict[boonid] = extraDataList;
-                        }
 
-                    }
-                    _boonExtra[boonid] = new List<ExtraBoonData>();
-                    for (int i = 0; i < phases.Count; i++)
+        protected override void SetExtraBoonStatusData(ParsedLog log)
+        {
+            HashSet<long> extraDataID = new HashSet<long>
+            {
+                50421,
+                31803
+            };
+            List<PhaseData> phases = log.FightData.GetPhases(log);
+            foreach (long boonid in BoonPoints.Keys)
+            {
+                if (extraDataID.Contains(boonid))
+                {
+                    BoonsGraphModel graph = BoonPoints[boonid]; switch (boonid)
                     {
-                        List<DamageLog> dmLogs = GetJustPlayerDamageLogs(null, log, phases[i].Start, phases[i].End);
-                        List<DamageLog> effect = dmLogs.Where(x => buffSimulationGeneration.GetStackCount((int)x.Time) > 0 && !x.IsCondi).ToList();
-                        int damage = effect.Sum(x => x.Damage);
-                        _boonExtra[boonid].Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsCondi), damage, 0));
+                        // Frost Spirit
+                        case 50421:
+                            foreach (Target target in log.FightData.Logic.Targets)
+                            {
+                                if (!_boonTargetExtra.TryGetValue(target, out var extra))
+                                {
+                                    _boonTargetExtra[target] = new Dictionary<long, List<ExtraBoonData>>();
+                                }
+                                Dictionary<long, List<ExtraBoonData>> dict = _boonTargetExtra[target];
+                                if (!dict.TryGetValue(boonid, out var list))
+                                {
+                                    List<ExtraBoonData> extraDataList = new List<ExtraBoonData>();
+                                    for (int i = 0; i < phases.Count; i++)
+                                    {
+                                        List<DamageLog> dmLogs = GetJustPlayerDamageLogs(target, log, phases[i].Start, phases[i].End);
+                                        int totalDamage = dmLogs.Sum(x => x.Damage);
+                                        List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsCondi).ToList();
+                                        int damage = (int)(effect.Sum(x => x.Damage) / 21.0);
+                                        extraDataList.Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsCondi), damage, totalDamage));
+                                    }
+                                    dict[boonid] = extraDataList;
+                                }
+                            }
+                            _boonExtra[boonid] = new List<ExtraBoonData>();
+                            for (int i = 0; i < phases.Count; i++)
+                            {
+                                List<DamageLog> dmLogs = GetJustPlayerDamageLogs(null, log, phases[i].Start, phases[i].End);
+                                int totalDamage = dmLogs.Sum(x => x.Damage);
+                                List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsCondi).ToList();
+                                int damage = (int)(effect.Sum(x => x.Damage) / 21.0);
+                                _boonExtra[boonid].Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsCondi), damage, totalDamage));
+                            }
+                            break;
+                        // GoE
+                        case 31803:
+                            foreach (Target target in log.FightData.Logic.Targets)
+                            {
+                                if (!_boonTargetExtra.TryGetValue(target, out var extra))
+                                {
+                                    _boonTargetExtra[target] = new Dictionary<long, List<ExtraBoonData>>();
+                                }
+                                Dictionary<long, List<ExtraBoonData>> dict = _boonTargetExtra[target];
+                                if (!dict.TryGetValue(boonid, out var list))
+                                {
+                                    List<ExtraBoonData> extraDataList = new List<ExtraBoonData>();
+                                    for (int i = 0; i < phases.Count; i++)
+                                    {
+                                        List<DamageLog> dmLogs = GetJustPlayerDamageLogs(target, log, phases[i].Start, phases[i].End);
+                                        List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsCondi).ToList();
+                                        int damage = effect.Sum(x => x.Damage);
+                                        extraDataList.Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsCondi), damage, 0));
+                                    }
+                                    dict[boonid] = extraDataList;
+                                }
+
+                            }
+                            _boonExtra[boonid] = new List<ExtraBoonData>();
+                            for (int i = 0; i < phases.Count; i++)
+                            {
+                                List<DamageLog> dmLogs = GetJustPlayerDamageLogs(null, log, phases[i].Start, phases[i].End);
+                                List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsCondi).ToList();
+                                int damage = effect.Sum(x => x.Damage);
+                                _boonExtra[boonid].Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsCondi), damage, 0));
+                            }
+                            break;
                     }
-                    break;
+                }
             }
         }
 
@@ -314,14 +327,8 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        protected override void SetExtraBoonStatusData(ParsedLog log, BoonSimulator simulator, long boonid, bool updateBoonPresence, bool updateCondiPresence)
+        protected override void SetExtraBoonStatusGenerationData(ParsedLog log, BoonSimulator simulator, long boonid, bool updateCondiPresence)
         {
-            HashSet<long> extraDataID = new HashSet<long>
-            {
-                50421,
-                31803
-            };
-            bool requireExtraData = extraDataID.Contains(boonid);
             List<PhaseData> phases = log.FightData.GetPhases(log);
             List<AbstractBoonSimulationItem> extraSimulations = new List<AbstractBoonSimulationItem>(simulator.OverstackSimulationResult);
             extraSimulations.AddRange(simulator.WasteSimulationResult);
@@ -344,10 +351,6 @@ namespace LuckParser.Models.ParseModels
                         simul.SetCleanseItem(_condiCleanse[i], phase.Start, phase.End, boonid, log);
                     }
                 }
-            }
-            if (requireExtraData)
-            {
-                GenerateExtraBoonData(log, boonid, simulator.GenerationSimulationResult, phases);
             }
         }
 
