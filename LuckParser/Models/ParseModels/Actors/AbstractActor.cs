@@ -282,7 +282,8 @@ namespace LuckParser.Models.ParseModels
                     }
                     else if (time < log.FightData.FightDuration - 50)
                     {
-                        loglist.Add(new BoonRemovalLog(time, c.DstInstid, c.Value, c.IsBuffRemove));
+                        ushort src = c.DstMasterInstid > 0 ? c.DstMasterInstid : c.DstInstid;
+                        loglist.Add(new BoonRemovalLog(time, src, c.Value, c.IsBuffRemove));
                     }
                 }
             }
