@@ -35,8 +35,8 @@ namespace LuckParser.Models.ParseModels
         {
             Dictionary<AgentItem, BoonDistributionItem> distrib = GetDistrib(distribs, boonid);
             long cDur = GetClampedDuration(start, end);
-            AgentItem agent = log.AgentData.GetAgentByInstID(_src, _applicationTime);
-            AgentItem seedAgent = log.AgentData.GetAgentByInstID(_seedSrc, _seedTime);
+            AgentItem agent = log.AgentData.GetAgentByInstID(_src, log.FightData.ToLogSpace(_applicationTime));
+            AgentItem seedAgent = log.AgentData.GetAgentByInstID(_seedSrc, log.FightData.ToLogSpace(_seedTime));
             if (distrib.TryGetValue(agent, out BoonDistributionItem toModify))
             {
                 toModify.Value += cDur;

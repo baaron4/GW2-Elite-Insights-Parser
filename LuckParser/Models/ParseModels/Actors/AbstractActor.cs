@@ -18,7 +18,6 @@ namespace LuckParser.Models.ParseModels
         protected readonly List<CastLog> CastLogs = new List<CastLog>();
         // Boons
         public HashSet<Boon> TrackedBoons { get; } = new HashSet<Boon>();
-        protected readonly List<BoonDistribution> BoonDistribution = new List<BoonDistribution>();
         protected readonly Dictionary<long, BoonsGraphModel> BoonPoints = new Dictionary<long, BoonsGraphModel>();
 
         protected AbstractActor(AgentItem agent) : base(agent)
@@ -81,19 +80,11 @@ namespace LuckParser.Models.ParseModels
             return _damageTakenlogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public BoonDistribution GetBoonDistribution(ParsedLog log, int phaseIndex)
-        {
-            if (BoonDistribution.Count == 0)
-            {
-                SetBoonDistribution(log);
-            }
-            return BoonDistribution[phaseIndex];
-        }
         public Dictionary<long, BoonsGraphModel> GetBoonGraphs(ParsedLog log)
         {
-            if (BoonDistribution.Count == 0)
+            if (BoonPoints.Count == 0)
             {
-                SetBoonDistribution(log);
+                SetBoonStatus(log);
             }
             return BoonPoints;
         }
@@ -291,7 +282,8 @@ namespace LuckParser.Models.ParseModels
                     }
                     else if (time < log.FightData.FightDuration - 50)
                     {
-                        loglist.Add(new BoonRemovalLog(time, c.DstInstid, c.Value, c.IsBuffRemove));
+                        ushort src = c.DstMasterInstid > 0 ? c.DstMasterInstid : c.DstInstid;
+                        loglist.Add(new BoonRemovalLog(time, src, c.Value, c.IsBuffRemove));
                     }
                 }
             }
@@ -332,13 +324,205 @@ namespace LuckParser.Models.ParseModels
             }
         }*/
         // Setters
-        protected abstract void SetDamageLogs(ParsedLog log);     
-        protected abstract void SetCastLogs(ParsedLog log);
-        protected abstract void SetDamageTakenLogs(ParsedLog log);
-        protected abstract void SetBoonDistribution(ParsedLog log);
-        protected virtual void GenerateExtraBoonData(ParsedLog log, long boonid, GenerationSimulationResult buffSimulationGeneration, List<PhaseData> phases)
+
+        protected virtual void SetDamageTakenLogs(ParsedLog log)
         {
-            
+            foreach (CombatItem c in log.GetDamageTakenData(InstID, FirstAware, LastAware))
+            {
+                long time = log.FightData.ToFightSpace(c.Time);
+                AddDamageTakenLog(time, c);
+            }
+        }
+
+        protected virtual void SetCastLogs(ParsedLog log)
+        {
+            CastLog curCastLog = null;
+            foreach (CombatItem c in log.GetCastData(InstID, FirstAware, LastAware))
+            {
+                ParseEnum.StateChange state = c.IsStateChange;
+                if (state == ParseEnum.StateChange.Normal)
+                {
+                    if (c.IsActivation.StartCasting())
+                    {
+                        // Missing end activation
+                        long time = log.FightData.ToFightSpace(c.Time);
+                        if (curCastLog != null)
+                        {
+                            int actDur = curCastLog.SkillId == SkillItem.DodgeId ? 750 : curCastLog.ExpectedDuration;
+                            curCastLog.SetEndStatus(actDur, ParseEnum.Activation.Unknown, time);
+                            curCastLog = null;
+                        }
+                        curCastLog = new CastLog(time, c.SkillID, c.Value, c.IsActivation, Agent, InstID);
+                        CastLogs.Add(curCastLog);
+                    }
+                    else
+                    {
+                        if (curCastLog != null)
+                        {
+                            if (curCastLog.SkillId == c.SkillID)
+                            {
+                                int actDur = curCastLog.SkillId == SkillItem.DodgeId ? 750 : c.Value;
+                                curCastLog.SetEndStatus(actDur, c.IsActivation, log.FightData.FightDuration);
+                                curCastLog = null;
+                            }
+                        }
+                    }
+                }
+                else if (state == ParseEnum.StateChange.WeaponSwap)
+                {
+                    long time = log.FightData.ToFightSpace(c.Time);
+                    CastLog swapLog = new CastLog(time, SkillItem.WeaponSwapId, (int)c.DstAgent, c.IsActivation, Agent, InstID);
+                    if (CastLogs.Count > 0 && (time - CastLogs.Last().Time) < 10 && CastLogs.Last().SkillId == SkillItem.WeaponSwapId)
+                    {
+                        CastLogs[CastLogs.Count - 1] = swapLog;
+                    }
+                    else
+                    {
+                        CastLogs.Add(swapLog);
+                    }
+                    swapLog.SetEndStatus(50, ParseEnum.Activation.Unknown, log.FightData.FightDuration);
+                }
+            }
+            long cloakStart = 0;
+            foreach (long time in log.CombatData.GetBuffs(InstID, 40408, FirstAware, LastAware).Select(x => log.FightData.ToFightSpace(x.Time)))
+            {
+                if (time - cloakStart > 10)
+                {
+                    CastLog dodgeLog = new CastLog(time, SkillItem.DodgeId, 0, ParseEnum.Activation.Unknown, Agent, InstID);
+                    dodgeLog.SetEndStatus(50, ParseEnum.Activation.Unknown, log.FightData.FightDuration);
+                    CastLogs.Add(dodgeLog);
+                }
+                cloakStart = time;
+            }
+            CastLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
+        }
+
+
+        protected abstract void SetDamageLogs(ParsedLog log);
+        protected abstract void SetExtraBoonStatusGenerationData(ParsedLog log, BoonSimulator simulator, long boonid, bool updateCondiPresence);
+        protected abstract void SetExtraBoonStatusData(ParsedLog log);
+        protected abstract void SetBoonStatusGenerationData(ParsedLog log, BoonSimulationItem simul, long boonid, bool updateBoonPresence, bool updateCondiPresence);
+        protected abstract void InitBoonStatusData(ParsedLog log);
+
+        protected void SetBoonStatus(ParsedLog log)
+        {
+            BoonMap toUse = GetBoonMap(log);
+            long dur = log.FightData.FightDuration;
+            int fightDuration = (int)(dur) / 1000;
+            BoonsGraphModel boonPresenceGraph = new BoonsGraphModel(Boon.BoonsByIds[Boon.NumberOfBoonsID]);
+            BoonsGraphModel condiPresenceGraph = new BoonsGraphModel(Boon.BoonsByIds[Boon.NumberOfConditionsID]);
+            HashSet<long> boonIds = new HashSet<long>(Boon.GetBoonList().Select(x => x.ID));
+            HashSet<long> condiIds = new HashSet<long>(Boon.GetCondiBoonList().Select(x => x.ID));
+            InitBoonStatusData(log);
+
+            long death = GetDeath(log, 0, dur);
+            foreach (Boon boon in TrackedBoons)
+            {
+                long boonid = boon.ID;
+                if (toUse.TryGetValue(boonid, out List<BoonLog> logs) && logs.Count != 0)
+                {
+                    if (BoonPoints.ContainsKey(boonid))
+                    {
+                        continue;
+                    }
+                    BoonSimulator simulator = boon.CreateSimulator(log);
+                    simulator.Simulate(logs, dur);
+                    if (death > 0 && GetCastLogs(log, death + 5000, dur).Count == 0)
+                    {
+                        simulator.Trim(death);
+                    }
+                    else
+                    {
+                        simulator.Trim(dur);
+                    }
+                    bool updateBoonPresence = boonIds.Contains(boonid);
+                    bool updateCondiPresence = boonid != 873 && condiIds.Contains(boonid);
+                    List<BoonsGraphModel.Segment> graphSegments = new List<BoonsGraphModel.Segment>();
+                    foreach (BoonSimulationItem simul in simulator.GenerationSimulation)
+                    {
+                        SetBoonStatusGenerationData(log, simul, boonid, updateBoonPresence, updateCondiPresence);
+                        BoonsGraphModel.Segment segment = simul.ToSegment();
+                        if (graphSegments.Count == 0)
+                        {
+                            graphSegments.Add(new BoonsGraphModel.Segment(0, segment.Start, 0));
+                        }
+                        else if (graphSegments.Last().End != segment.Start)
+                        {
+                            graphSegments.Add(new BoonsGraphModel.Segment(graphSegments.Last().End, segment.Start, 0));
+                        }
+                        graphSegments.Add(segment);
+                    }
+                    SetExtraBoonStatusGenerationData(log, simulator, boonid, updateCondiPresence);
+                    if (graphSegments.Count > 0)
+                    {
+                        graphSegments.Add(new BoonsGraphModel.Segment(graphSegments.Last().End, dur, 0));
+                    }
+                    else
+                    {
+                        graphSegments.Add(new BoonsGraphModel.Segment(0, dur, 0));
+                    }
+                    BoonPoints[boonid] = new BoonsGraphModel(boon, graphSegments);
+                    if (updateBoonPresence || updateCondiPresence)
+                    {
+                        List<BoonsGraphModel.Segment> segmentsToFill = updateBoonPresence ? boonPresenceGraph.BoonChart : condiPresenceGraph.BoonChart;
+                        bool firstPass = segmentsToFill.Count == 0;
+                        foreach (BoonsGraphModel.Segment seg in BoonPoints[boonid].BoonChart)
+                        {
+                            long start = seg.Start;
+                            long end = seg.End;
+                            int value = seg.Value > 0 ? 1 : 0;
+                            if (firstPass)
+                            {
+                                segmentsToFill.Add(new BoonsGraphModel.Segment(start, end, value));
+                            }
+                            else
+                            {
+                                for (int i = 0; i < segmentsToFill.Count; i++)
+                                {
+                                    BoonsGraphModel.Segment curSeg = segmentsToFill[i];
+                                    long curEnd = curSeg.End;
+                                    long curStart = curSeg.Start;
+                                    int curVal = curSeg.Value;
+                                    if (curStart > end)
+                                    {
+                                        break;
+                                    }
+                                    if (curEnd < start)
+                                    {
+                                        continue;
+                                    }
+                                    if (end <= curEnd)
+                                    {
+                                        curSeg.End = start;
+                                        segmentsToFill.Insert(i + 1, new BoonsGraphModel.Segment(start, end, curVal + value));
+                                        segmentsToFill.Insert(i + 2, new BoonsGraphModel.Segment(end, curEnd, curVal));
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        curSeg.End = start;
+                                        segmentsToFill.Insert(i + 1, new BoonsGraphModel.Segment(start, curEnd, curVal + value));
+                                        start = curEnd;
+                                        i++;
+                                    }
+                                }
+                            }
+                        }
+                        if (updateBoonPresence)
+                        {
+                            boonPresenceGraph.FuseSegments();
+                        }
+                        else
+                        {
+                            condiPresenceGraph.FuseSegments();
+                        }
+                    }
+
+                }
+            }
+            BoonPoints[Boon.NumberOfBoonsID] = boonPresenceGraph;
+            BoonPoints[Boon.NumberOfConditionsID] = condiPresenceGraph;
+            SetExtraBoonStatusData(log);
         }
         //protected abstract void setHealingLogs(ParsedLog log);
         //protected abstract void setHealingReceivedLogs(ParsedLog log);

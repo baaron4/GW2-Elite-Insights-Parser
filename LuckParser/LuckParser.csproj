@@ -235,7 +235,6 @@
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemDuration.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemIntensity.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemWasted.cs" />
-    <Compile Include="Models\ParseModels\Simulator\BoonSimulationResult.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulator.cs" />
     <Compile Include="Models\ParseModels\Agents\Agent.cs" />
     <Compile Include="Models\ParseModels\Agents\AgentData.cs" />

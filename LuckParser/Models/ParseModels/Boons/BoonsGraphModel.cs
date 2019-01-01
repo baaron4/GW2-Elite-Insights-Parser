@@ -43,6 +43,18 @@ namespace LuckParser.Models.ParseModels
             FuseSegments();
         }
 
+        public int GetStackCount(long time)
+        {
+            foreach (Segment seg in BoonChart)
+            {
+                if (seg.Start <= time && time <= seg.End)
+                {
+                    return seg.Value;
+                }
+            }
+            return 0;
+        }
+
         public void FuseSegments()
         {
             List<Segment> newChart = new List<Segment>();

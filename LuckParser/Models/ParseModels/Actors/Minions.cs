@@ -54,6 +54,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     _castLogs.AddRange(minion.GetCastLogs(log, 0, log.FightData.FightDuration));
                 }
+                _castLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
             }
             return _castLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
