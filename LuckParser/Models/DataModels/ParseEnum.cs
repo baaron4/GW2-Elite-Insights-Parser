@@ -242,6 +242,8 @@ namespace LuckParser.Models.DataModels
             WyvernMatriarch = 20997,
             WyvernPatriarch = 21183,
             Zommoros = 20961, //21118 is probably the start and end NPC, not the one during the battle
+            // Freezie
+            FreeziesFrozenHeart = 21328,
             // Fractals
             FractalVindicator = 19684, 
             FractalAvenger = 15960,
@@ -310,6 +312,7 @@ namespace LuckParser.Models.DataModels
             Nikare                  = 21105,
             Kenut                   = 21089,
             Qadim                   = 20934,
+            Freezie                 = 21333,
             MAMA                    = 17021,
             Siax                    = 17028,
             Ensolyss                = 16948,
