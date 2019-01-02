@@ -1,9 +1,11 @@
 ﻿using LuckParser.Models.DataModels;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class Minion : AbstractPlayer
+    public class Minion : AbstractActor
     {
 
         public Minion(AgentItem agent) : base(agent)
@@ -19,38 +21,20 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        protected override void SetCastLogs(ParsedLog log)
+        protected override void SetExtraBoonStatusGenerationData(ParsedLog log, BoonSimulator simulator, long boonid, bool updateCondiPresence)
         {
-            CastLog curCastLog = null;
-            foreach (CombatItem c in log.GetCastData(InstID, FirstAware, LastAware))
-            {
-                ParseEnum.StateChange state = c.IsStateChange;
-                if (state == ParseEnum.StateChange.Normal)
-                {
-                    if (c.IsActivation.StartCasting())
-                    {
-                        long time = log.FightData.ToFightSpace(c.Time);
-                        curCastLog = new CastLog(time, c.SkillID, c.Value, c.IsActivation, Agent, InstID);
-                        CastLogs.Add(curCastLog);
-                    }
-                    else
-                    {
-                        if (curCastLog != null)
-                        {
-                            if (curCastLog.SkillId == c.SkillID)
-                            {
-                                curCastLog.SetEndStatus(c.Value, c.IsActivation, log.FightData.FightDuration);
-                                curCastLog = null;
-                            }
-                        }
-                    }
-                }
-            }
         }
 
-        protected override void SetDamageTakenLogs(ParsedLog log)
+        protected override void SetBoonStatusGenerationData(ParsedLog log, BoonSimulationItem simul, long boonid, bool updateBoonPresence, bool updateCondiPresence)
         {
-            throw new InvalidOperationException();
+        }
+
+        protected override void SetExtraBoonStatusData(ParsedLog log)
+        {
+        }
+
+        protected override void InitBoonStatusData(ParsedLog log)
+        {
         }
 
         /*protected override void setHealingLogs(ParsedLog log)

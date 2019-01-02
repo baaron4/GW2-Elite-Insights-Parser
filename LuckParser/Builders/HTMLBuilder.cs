@@ -458,7 +458,7 @@ namespace LuckParser.Builders
                 List<List<object[]>> pDataTargets = new List<List<object[]>>();
                 data.Add(pData);
                 dataTargets.Add(pDataTargets);
-                Dictionary<long, List<AbstractMasterPlayer.ExtraBoonData>> extraBoonDataAll = player.GetExtraBoonData(_log, null);
+                Dictionary<long, List<AbstractMasterActor.ExtraBoonData>> extraBoonDataAll = player.GetExtraBoonData(_log, null);
                 foreach (var pair in extraBoonDataAll)
                 {
                     var extraData = pair.Value[phaseIndex];
@@ -475,7 +475,7 @@ namespace LuckParser.Builders
                 {
                     List<object[]> pTarget = new List<object[]>();
                     pDataTargets.Add(pTarget);
-                    Dictionary<long, List<AbstractMasterPlayer.ExtraBoonData>> extraBoonDataTarget = player.GetExtraBoonData(_log, target);
+                    Dictionary<long, List<AbstractMasterActor.ExtraBoonData>> extraBoonDataTarget = player.GetExtraBoonData(_log, target);
                     foreach (var pair in extraBoonDataTarget)
                     {
                         var extraData = pair.Value[phaseIndex];
@@ -553,7 +553,7 @@ namespace LuckParser.Builders
         /// <param name="p"></param>
         /// <param name="simpleRotSize"></param>
         /// <param name="phaseIndex"></param>
-        private List<object[]> BuildRotationData(AbstractPlayer p, int phaseIndex)
+        private List<object[]> BuildRotationData(AbstractActor p, int phaseIndex)
         {
             List<object[]> list = new List<object[]>();
 
@@ -746,7 +746,7 @@ namespace LuckParser.Builders
             return list;
         }
 
-        private DmgDistributionDto _BuildDMGDistData(Statistics.FinalDPS dps, AbstractMasterPlayer p, Target target, int phaseIndex)
+        private DmgDistributionDto _BuildDMGDistData(Statistics.FinalDPS dps, AbstractMasterActor p, Target target, int phaseIndex)
         {
             DmgDistributionDto dto = new DmgDistributionDto();
             PhaseData phase = _statistics.Phases[phaseIndex];
@@ -780,7 +780,7 @@ namespace LuckParser.Builders
             return _BuildDMGDistData(dps, target, null, phaseIndex);
         }
 
-        private DmgDistributionDto _BuildDMGDistData(Statistics.FinalDPS dps, AbstractMasterPlayer p, Minions minions, Target target, int phaseIndex)
+        private DmgDistributionDto _BuildDMGDistData(Statistics.FinalDPS dps, AbstractMasterActor p, Minions minions, Target target, int phaseIndex)
         {
             DmgDistributionDto dto = new DmgDistributionDto();
             PhaseData phase = _statistics.Phases[phaseIndex];
@@ -816,7 +816,7 @@ namespace LuckParser.Builders
         /// </summary>
         /// <param name="p"></param>
         /// <param name="phaseIndex"></param>
-        private DmgDistributionDto BuildDMGTakenDistData(AbstractMasterPlayer p, int phaseIndex)
+        private DmgDistributionDto BuildDMGTakenDistData(AbstractMasterActor p, int phaseIndex)
         {
             DmgDistributionDto dto = new DmgDistributionDto
             {
@@ -884,7 +884,7 @@ namespace LuckParser.Builders
             return dto;
         }
 
-        private List<BoonChartDataDto> BuildBoonGraphData(AbstractMasterPlayer p, int phaseIndex)
+        private List<BoonChartDataDto> BuildBoonGraphData(AbstractMasterActor p, int phaseIndex)
         {
             List<BoonChartDataDto> list = new List<BoonChartDataDto>();
             PhaseData phase = _statistics.Phases[phaseIndex];
@@ -1015,7 +1015,7 @@ namespace LuckParser.Builders
                 {
                     long timeFilter = 0;
                     int filterCount = 0;
-                    List<MechanicLog> mls = _log.MechanicData[mech].Where(x => x.Player.InstID == p.InstID && phase.InInterval(x.Time)).ToList();
+                    List<MechanicLog> mls = _log.MechanicData[mech].Where(x => x.Actor.InstID == p.InstID && phase.InInterval(x.Time)).ToList();
                     int count = mls.Count;
                     foreach (MechanicLog ml in mls)
                     {
@@ -1039,14 +1039,14 @@ namespace LuckParser.Builders
             List<List<int[]>> list = new List<List<int[]>>();
             HashSet<Mechanic> presMech = _log.MechanicData.GetPresentEnemyMechs(0);
             PhaseData phase = _statistics.Phases[phaseIndex];
-            foreach (AbstractMasterPlayer p in _log.MechanicData.GetEnemyList(0))
+            foreach (DummyActor p in _log.MechanicData.GetEnemyList(0))
             {
                 List<int[]> enemyData = new List<int[]>(presMech.Count);
                 foreach (Mechanic mech in presMech)
                 {
                     long timeFilter = 0;
                     int filterCount = 0;
-                    List<MechanicLog> mls = _log.MechanicData[mech].Where(x => x.Player.InstID == p.InstID && phase.InInterval(x.Time)).ToList();
+                    List<MechanicLog> mls = _log.MechanicData[mech].Where(x => x.Actor.InstID == p.InstID && phase.InInterval(x.Time)).ToList();
                     int count = mls.Count;
                     foreach (MechanicLog ml in mls)
                     {
@@ -1115,7 +1115,7 @@ namespace LuckParser.Builders
                 list.Add(phaseData);
                 if (!enemyMechanic)
                 {
-                    Dictionary<AbstractMasterPlayer, int> playerIndex = new Dictionary<AbstractMasterPlayer, int>();
+                    Dictionary<DummyActor, int> playerIndex = new Dictionary<DummyActor, int>();
                     for (var p = 0; p < _log.PlayerList.Count; p++)
                     {
                         playerIndex.Add(_log.PlayerList[p], p);
@@ -1124,14 +1124,14 @@ namespace LuckParser.Builders
                     foreach (MechanicLog ml in mechanicLogs.Where(x => phase.InInterval(x.Time)))
                     {
                         double time = (ml.Time - phase.Start) / 1000.0;
-                        if (playerIndex.TryGetValue(ml.Player, out int p))
+                        if (playerIndex.TryGetValue(ml.Actor, out int p))
                         {
                             phaseData[p].Add(time);
                         }
                     }
                 } else
                 {
-                    Dictionary<AbstractMasterPlayer, int> targetIndex = new Dictionary<AbstractMasterPlayer, int>();
+                    Dictionary<DummyActor, int> targetIndex = new Dictionary<DummyActor, int>();
                     for (var p = 0; p < phase.Targets.Count; p++)
                     {
                         targetIndex.Add(phase.Targets[p], p);
@@ -1141,7 +1141,7 @@ namespace LuckParser.Builders
                     foreach (MechanicLog ml in mechanicLogs.Where(x => phase.InInterval(x.Time)))
                     {
                         double time = (ml.Time - phase.Start) / 1000.0;
-                        if (targetIndex.TryGetValue(ml.Player, out int p))
+                        if (targetIndex.TryGetValue(ml.Actor, out int p))
                         {
                             phaseData[p].Add(time);
                         }
@@ -1656,7 +1656,7 @@ namespace LuckParser.Builders
                 logData.players.Add(playerDto);
             }
 
-            foreach(AbstractMasterPlayer enemy in _log.MechanicData.GetEnemyList(0))
+            foreach(DummyActor enemy in _log.MechanicData.GetEnemyList(0))
             {
                 logData.enemies.Add(new EnemyDto() { name = enemy.Character });
             }

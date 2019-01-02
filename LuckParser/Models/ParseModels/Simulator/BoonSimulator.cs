@@ -66,8 +66,7 @@ namespace LuckParser.Models.ParseModels
 
         // Fields
         protected readonly List<BoonStackItem> BoonStack;
-        protected readonly List<BoonSimulationItem> GenerationSimulation = new List<BoonSimulationItem>();
-        public GenerationSimulationResult GenerationSimulationResult => new GenerationSimulationResult(GenerationSimulation);
+        public readonly List<BoonSimulationItem> GenerationSimulation = new List<BoonSimulationItem>();
         public readonly List<BoonSimulationItemOverstack> OverstackSimulationResult = new List<BoonSimulationItemOverstack>();
         public readonly List<BoonSimulationItemWasted> WasteSimulationResult = new List<BoonSimulationItemWasted>();
         public readonly List<BoonSimulationItemCleanse> CleanseSimulationResult = new List<BoonSimulationItemCleanse>();

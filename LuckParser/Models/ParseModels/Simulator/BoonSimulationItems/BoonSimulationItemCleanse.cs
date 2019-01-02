@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Models.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,15 +20,16 @@ namespace LuckParser.Models.ParseModels
             _time = time;
         }
 
-        public void SetCleanseItem(Dictionary<ushort, Dictionary<long, List<long>>> cleanses, long start, long end, long boonid)
+        public void SetCleanseItem(Dictionary<AgentItem, Dictionary<long, List<long>>> cleanses, long start, long end, long boonid, ParsedLog log)
         {
             long cleanse = GetCleanseDuration(start, end);
+            AgentItem agent = log.AgentData.GetAgentByInstID(_provokedBy, log.FightData.ToLogSpace(_time));
             if (cleanse > 0)
             {
-                if (!cleanses.TryGetValue(_provokedBy, out var dict))
+                if (!cleanses.TryGetValue(agent, out var dict))
                 {
                     dict = new Dictionary<long, List<long>>();
-                    cleanses.Add(_provokedBy, dict);
+                    cleanses.Add(agent, dict);
                 }
                 if (!dict.TryGetValue(boonid, out var list))
                 {

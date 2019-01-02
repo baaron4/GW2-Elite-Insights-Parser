@@ -40,8 +40,7 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
             }
-
-            return new AgentItem(0, "UNKNOWN");
+            return GeneralHelper.UnknownAgent;
         }
 
         public List<AgentItem> GetAgentsByID(ushort id)
@@ -53,7 +52,6 @@ namespace LuckParser.Models.ParseModels
                     return list;
                 }
             }
-
             return new List<AgentItem>();
         }
 
@@ -66,7 +64,6 @@ namespace LuckParser.Models.ParseModels
                     return list;
                 }
             }
-
             return new List<AgentItem>();
         }
 
@@ -81,10 +78,10 @@ namespace LuckParser.Models.ParseModels
                     {
                         return a;
                     }
-                    return new AgentItem(0, "UNKNOWN");
+                    return GeneralHelper.UnknownAgent;
                 }
             }
-            return new AgentItem(0, "UNKNOWN");
+            return GeneralHelper.UnknownAgent;
         }
         
         public void OverrideID(ushort ID, ushort instid, AgentItem agentItem)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using LuckParser.Models.DataModels;
+using System.Collections.Generic;
 using System.Linq;
 using static LuckParser.Models.ParseModels.BoonSimulator;
 
@@ -31,11 +32,11 @@ namespace LuckParser.Models.ParseModels
             return _stacks.Count;
         }
 
-        public override void SetBoonDistributionItem(Dictionary<long,Dictionary<ushort, BoonDistributionItem>> distribs, long start, long end, long boonid)
+        public override void SetBoonDistributionItem(BoonDistribution distribs, long start, long end, long boonid, ParsedLog log)
         {
             foreach (BoonSimulationItemDuration item in _stacks)
             {
-                item.SetBoonDistributionItem(distribs, start, end, boonid);
+                item.SetBoonDistributionItem(distribs, start, end, boonid, log);
             }
         }
     }
