@@ -9,11 +9,11 @@ namespace LuckParser.Models.ParseModels
     {
         // Damage
         protected readonly List<DamageLog> DamageLogs = new List<DamageLog>();
-        protected Dictionary<ushort,List<DamageLog>> DamageLogsByDst = new Dictionary<ushort, List<DamageLog>>();
+        protected Dictionary<AgentItem, List<DamageLog>> DamageLogsByDst = new Dictionary<AgentItem, List<DamageLog>>();
         //protected List<DamageLog> HealingLogs = new List<DamageLog>();
         //protected List<DamageLog> HealingReceivedLogs = new List<DamageLog>();
         private readonly List<DamageLog> _damageTakenlogs = new List<DamageLog>();
-        protected Dictionary<ushort, List<DamageLog>> _damageTakenLogsBySrc = new Dictionary<ushort, List<DamageLog>>();
+        protected Dictionary<AgentItem, List<DamageLog>> _damageTakenLogsBySrc = new Dictionary<AgentItem, List<DamageLog>>();
         // Cast
         protected readonly List<CastLog> CastLogs = new List<CastLog>();
         // Boons
@@ -40,15 +40,13 @@ namespace LuckParser.Models.ParseModels
             if (DamageLogs.Count == 0)
             {
                 SetDamageLogs(log);
-                DamageLogsByDst = DamageLogs.GroupBy(x => x.DstInstId).ToDictionary(x => x.Key, x => x.ToList());
+                DamageLogsByDst = DamageLogs.GroupBy(x => log.AgentData.GetAgentByInstID(x.DstInstId, log.FightData.ToLogSpace(x.Time))).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
             {
-                if (DamageLogsByDst.TryGetValue(target.InstID, out var list))
+                if (DamageLogsByDst.TryGetValue(target.AgentItem, out var list))
                 {
-                    long targetStart = log.FightData.ToFightSpace(target.FirstAware);
-                    long targetEnd = log.FightData.ToFightSpace(target.LastAware);
-                    return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd).ToList();
+                    return list.Where(x => x.Time >= start && x.Time <= end).ToList();
                 }
                 else
                 {
@@ -62,11 +60,11 @@ namespace LuckParser.Models.ParseModels
             if (_damageTakenlogs.Count == 0)
             {
                 SetDamageTakenLogs(log);
-                _damageTakenLogsBySrc = _damageTakenlogs.GroupBy(x => x.SrcInstId).ToDictionary(x => x.Key, x => x.ToList());
+                _damageTakenLogsBySrc = _damageTakenlogs.GroupBy(x => log.AgentData.GetAgentByInstID(x.SrcInstId, log.FightData.ToLogSpace(x.Time))).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
             {
-                if (_damageTakenLogsBySrc.TryGetValue(target.InstID, out var list))
+                if (_damageTakenLogsBySrc.TryGetValue(target.AgentItem, out var list))
                 {
                     long targetStart = log.FightData.ToFightSpace(target.FirstAware);
                     long targetEnd = log.FightData.ToFightSpace(target.LastAware);

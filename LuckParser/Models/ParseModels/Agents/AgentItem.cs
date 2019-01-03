@@ -8,7 +8,7 @@ namespace LuckParser.Models.ParseModels
         public enum AgentType { NPC, Gadget, Player }
 
         // Fields
-        public readonly ulong Agent;
+        public ulong Agent { get; set; }
         public readonly ushort ID;
         public ulong MasterAgent { get; set; }
         public ushort InstID { get; set; }

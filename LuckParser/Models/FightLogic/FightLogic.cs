@@ -425,14 +425,14 @@ namespace LuckParser.Models.Logic
                                 }
                                 else
                                 {
-                                    AgentItem a = log.AgentData.GetAgent(c.DstAgent);
+                                    AgentItem a = log.AgentData.GetAgent(c.DstAgent, c.Time);
                                     if (playersIds.Contains(a.InstID))
                                     {
                                         continue;
                                     }
                                     else if (a.MasterAgent != 0)
                                     {
-                                        AgentItem m = log.AgentData.GetAgent(a.MasterAgent);
+                                        AgentItem m = log.AgentData.GetAgent(a.MasterAgent, c.Time);
                                         if (playersIds.Contains(m.InstID))
                                         {
                                             continue;
@@ -454,14 +454,14 @@ namespace LuckParser.Models.Logic
                                 }
                                 else
                                 {
-                                    AgentItem a = log.AgentData.GetAgent(c.SrcAgent);
+                                    AgentItem a = log.AgentData.GetAgent(c.SrcAgent, c.Time);
                                     if (playersIds.Contains(a.InstID))
                                     {
                                         continue;
                                     }
                                     else if (a.MasterAgent != 0)
                                     {
-                                        AgentItem m = log.AgentData.GetAgent(a.MasterAgent);
+                                        AgentItem m = log.AgentData.GetAgent(a.MasterAgent, c.Time);
                                         if (playersIds.Contains(m.InstID))
                                         {
                                             continue;
@@ -500,14 +500,14 @@ namespace LuckParser.Models.Logic
                                 }
                                 else
                                 {
-                                    AgentItem a = log.AgentData.GetAgent(c.SrcAgent);
+                                    AgentItem a = log.AgentData.GetAgent(c.SrcAgent, c.Time);
                                     if (playersIds.Contains(a.InstID))
                                     {
                                         continue;
                                     }
                                     else if (a.MasterAgent != 0)
                                     {
-                                        AgentItem m = log.AgentData.GetAgent(a.MasterAgent);
+                                        AgentItem m = log.AgentData.GetAgent(a.MasterAgent, c.Time);
                                         if (playersIds.Contains(m.InstID))
                                         {
                                             continue;

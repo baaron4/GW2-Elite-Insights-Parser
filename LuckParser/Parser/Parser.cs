@@ -45,17 +45,17 @@ namespace LuckParser
         /// <returns>the ParsedLog</returns>
         public ParsedLog ParseLog(GridRow row, string evtc)
         {
-            using(var fs = new FileStream(evtc, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (var fs = new FileStream(evtc, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                if(GeneralHelper.IsCompressedFormat(evtc))
+                if (GeneralHelper.IsCompressedFormat(evtc))
                 {
-                    using(var arch = new ZipArchive(fs, ZipArchiveMode.Read))
+                    using (var arch = new ZipArchive(fs, ZipArchiveMode.Read))
                     {
-                        if(arch.Entries.Count != 1)
+                        if (arch.Entries.Count != 1)
                         {
                             throw new CancellationException(row, new InvalidDataException("Invalid Archive"));
                         }
-                        using(var data = arch.Entries[0].Open())
+                        using (var data = arch.Entries[0].Open())
                         {
                             ParseLog(row, data);
                         }
@@ -93,7 +93,7 @@ namespace LuckParser
             catch (Exception ex) when (!(ex is CancellationException))
             {
                 throw new CancellationException(row, ex);
-            }                      
+            }
         }
 
         private BinaryReader CreateReader(Stream stream)
@@ -104,16 +104,16 @@ namespace LuckParser
         private bool TryRead(Stream stream, byte[] data)
         {
             int offset = 0;
-            int count  = data.Length;
-            while(count > 0)
+            int count = data.Length;
+            while (count > 0)
             {
                 var bytesRead = stream.Read(data, offset, count);
-                if(bytesRead == 0)
+                if (bytesRead == 0)
                 {
                     return false;
                 }
                 offset += bytesRead;
-                count  -= bytesRead;
+                count -= bytesRead;
             }
             return true;
         }
@@ -172,7 +172,7 @@ namespace LuckParser
                     // 2 bytes: healing
                     uint healing = reader.ReadUInt16();
                     // 2 bytes: hitbox width
-                    uint hbWidth = (uint) 2 * reader.ReadUInt16();
+                    uint hbWidth = (uint)2 * reader.ReadUInt16();
                     // 2 bytes: condition
                     uint condition = reader.ReadUInt16();
                     // 2 bytes: hitbox height
@@ -184,7 +184,7 @@ namespace LuckParser
                     string agentProf = a.GetProf(_logData.BuildVersion, _aPIController);
                     AgentItem.AgentType type;
                     string profession;
-                    switch(agentProf)
+                    switch (agentProf)
                     {
                         case "NPC":
                             // NPC
@@ -219,7 +219,7 @@ namespace LuckParser
                 uint skillCount = reader.ReadUInt32();
                 //TempData["Debug"] += "Skill Count:" + skill_count.ToString();
                 // 68 bytes: each skill
-                for(int i = 0; i < skillCount; i++)
+                for (int i = 0; i < skillCount; i++)
                 {
                     // 4 bytes: skill ID
                     int skillId = reader.ReadInt32();
@@ -307,7 +307,7 @@ namespace LuckParser
             //save
             // Add combat
             return new CombatItem(time, srcAgent, dstAgent, value, buffDmg, overstackValue, skillId,
-                srcInstid, dstInstid, srcMasterInstid,0, iff, buff, result, isActivation, isBuffRemove,
+                srcInstid, dstInstid, srcMasterInstid, 0, iff, buff, result, isActivation, isBuffRemove,
                 isNinety, isFifty, isMoving, isStateChange, isFlanking, isShields, isOffcycle);
         }
 
@@ -396,14 +396,14 @@ namespace LuckParser
         {
             // 64 bytes: each combat
             var data = new byte[64];
-            using(var ms     = new MemoryStream(data, writable: false))
-            using(var reader = CreateReader(ms))
+            using (var ms = new MemoryStream(data, writable: false))
+            using (var reader = CreateReader(ms))
             {
-                while(true)
+                while (true)
                 {
-                    if(!TryRead(stream, data)) break;
+                    if (!TryRead(stream, data)) break;
                     ms.Seek(0, SeekOrigin.Begin);
-                    CombatItem combatItem  = _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader);
+                    CombatItem combatItem = _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader);
                     if (!IsValid(combatItem)) continue;
                     _combatItems.Add(combatItem);
                 }
@@ -432,26 +432,25 @@ namespace LuckParser
 
         private void CompleteAgents()
         {
-            var agentsLookup = _allAgentsList.ToDictionary(a => a.Agent);
+            var agentsLookup = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList()); ;
             // Set Agent instid, firstAware and lastAware
             foreach (CombatItem c in _combatItems)
             {
-                if (agentsLookup.TryGetValue(c.SrcAgent, out var a))
+                if (agentsLookup.TryGetValue(c.SrcAgent, out var agentList))
                 {
-                    if (a.InstID == 0)
+                    foreach (AgentItem agent in agentList)
                     {
-                        a.InstID = c.SrcInstid;
-                    }
-                    if (a.InstID != 0)
-                    {
-                        if (a.FirstAware == 0)
+                        if (agent.InstID == 0)
                         {
-                            a.FirstAware = c.Time;
-                            a.LastAware = c.Time;
+                            agent.InstID = c.SrcInstid;
+                            agent.FirstAware = c.Time;
+                            agent.LastAware = c.Time;
+                            break;
                         }
-                        else
+                        else if (agent.InstID == c.SrcInstid)
                         {
-                            a.LastAware = c.Time;
+                            agent.LastAware = c.Time;
+                            break;
                         }
                     }
                 }
@@ -461,12 +460,18 @@ namespace LuckParser
             {
                 if (c.SrcMasterInstid != 0)
                 {
-                    var master = _allAgentsList.Find(x => x.InstID == c.SrcMasterInstid && x.FirstAware < c.Time && c.Time < x.LastAware);
+                    var master = _allAgentsList.Find(x => x.InstID == c.SrcMasterInstid && x.FirstAware <= c.Time && c.Time <= x.LastAware);
                     if (master != null)
                     {
-                        if (agentsLookup.TryGetValue(c.SrcAgent, out var minion) && minion.FirstAware < c.Time && c.Time < minion.LastAware)
+                        if (agentsLookup.TryGetValue(c.SrcAgent, out var minionList))
                         {
-                            minion.MasterAgent = (master.Agent);
+                            foreach (AgentItem minion in minionList)
+                            {
+                                if (minion.FirstAware <= c.Time && c.Time <= minion.LastAware)
+                                {
+                                    minion.MasterAgent = (master.Agent);
+                                }
+                            }
                         }
                     }
                 }
@@ -481,7 +486,7 @@ namespace LuckParser
 
             foreach (AgentItem playerAgent in playerAgentList)
             {
-                if (playerAgent.InstID == 0)
+                if (playerAgent.InstID == 0 || playerAgent.FirstAware == 0 || playerAgent.LastAware == long.MaxValue)
                 {
                     CombatItem tst = _combatItems.Find(x => x.SrcAgent == playerAgent.Agent);
                     if (tst == null)
@@ -500,7 +505,6 @@ namespace LuckParser
                     playerAgent.FirstAware = _fightData.FightStart;
                     playerAgent.LastAware = _fightData.FightEnd;
                 }
-                List<CombatItem> lp = _combatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.Despawn && x.SrcInstid == playerAgent.InstID).ToList();
                 Player player = new Player(playerAgent, _fightData.Logic.Mode == FightLogic.ParseMode.Fractal);
                 bool skip = false;
                 foreach (Player p in _playerList)
@@ -508,36 +512,41 @@ namespace LuckParser
                     if (p.Account == player.Account)//is this a copy of original?
                     {
                         skip = true;
-                    }
-                }
-                if (skip)
-                {
-                    continue;
-                }
-                if (lp.Count > 0)
-                {
-                    //make all actions of other instances to original instid
-                    foreach (AgentItem extra in _agentData.GetAgentByType(AgentItem.AgentType.NPC))
-                    {
-                        if (extra.Agent == playerAgent.Agent)
+                        Random rnd = new Random();
+                        ulong agent = 0;
+                        while (_agentData.AgentValues.Contains(agent) || agent == 0)
                         {
-                            var extraLoginId = extra.InstID;
-                            foreach (CombatItem c in _combatItems)
-                            {
-                                if (c.SrcInstid == extraLoginId)
-                                {
-                                    c.SrcInstid = playerAgent.InstID;
-                                }
-                                if (c.DstInstid == extraLoginId)
-                                {
-                                    c.DstInstid = playerAgent.InstID;
-                                }
-                            }
-                            break;
+                            agent = (ulong)rnd.Next(Int32.MaxValue / 2, Int32.MaxValue);
                         }
+                        ushort instid = 0;
+                        while (_agentData.InstIDValues.Contains(instid) || instid == 0)
+                        {
+                            instid = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
+                        }
+                        foreach (CombatItem c in _combatItems)
+                        {
+                            if (c.DstAgent == p.Agent || player.Agent == c.DstAgent)
+                            {
+                                c.DstAgent = agent;
+                                c.DstInstid = instid;
+                            }
+                            if (c.SrcAgent == p.Agent || player.Agent == c.SrcAgent)
+                            {
+                                c.SrcAgent = agent;
+                                c.SrcInstid = instid;
+                            }
+                        }
+                        p.AgentItem.InstID = instid;
+                        p.AgentItem.Agent = agent;
+                        p.AgentItem.FirstAware = Math.Min(p.AgentItem.FirstAware, player.AgentItem.FirstAware);
+                        p.AgentItem.LastAware = Math.Max(p.AgentItem.LastAware, player.AgentItem.LastAware);
+                        _agentData.Refresh();
                     }
                 }
-                _playerList.Add(player);
+                if (!skip)
+                {
+                    _playerList.Add(player);
+                }
             }
         }
         /// <summary>
@@ -562,13 +571,13 @@ namespace LuckParser
             // Grab values threw combat data
             foreach (CombatItem c in _combatItems)
             {
-                switch(c.IsStateChange)
+                switch (c.IsStateChange)
                 {
                     case ParseEnum.StateChange.PointOfView:
                         if (_logData.PoV == "N/A")//Point of View
                         {
                             ulong povAgent = c.SrcAgent;
-                            _logData.SetPOV(_agentData.GetAgent(povAgent).Name);                          
+                            _logData.SetPOV(_agentData.GetAgent(povAgent, c.Time).Name);
                         }
                         break;
                     case ParseEnum.StateChange.LogStart:
@@ -582,7 +591,7 @@ namespace LuckParser
                         break;
                     case ParseEnum.StateChange.HealthUpdate:
                         //set health update
-                        _fightData.Logic.AddHealthUpdate(c.SrcInstid,c.Time, (int)(_fightData.ToFightSpace(c.Time)), (int)c.DstAgent);
+                        _fightData.Logic.AddHealthUpdate(c.SrcInstid, c.Time, (int)(_fightData.ToFightSpace(c.Time)), (int)c.DstAgent);
                         break;
                 }
             }
@@ -590,10 +599,10 @@ namespace LuckParser
             //players
             if (_playerList.Count == 0)
             {
-                CompletePlayers();               
+                CompletePlayers();
             }
             _playerList = _playerList.OrderBy(a => a.Group).ToList();
-            
+
         }
     }
 }
