@@ -71,8 +71,6 @@ namespace LuckParser
 
         private void ParseLog(GridRow row, Stream stream)
         {
-            try
-            {
                 row.BgWorker.ThrowIfCanceled(row);
                 row.BgWorker.UpdateProgress(row, "15% - Parsing fight data...", 15);
                 ParseFightData(stream);
@@ -89,11 +87,6 @@ namespace LuckParser
                 row.BgWorker.UpdateProgress(row, "35% - Pairing data...", 35);
                 FillMissingData();
                 row.BgWorker.ThrowIfCanceled(row);
-            }
-            catch (Exception ex) when (!(ex is CancellationException))
-            {
-                throw new CancellationException(row, ex);
-            }
         }
 
         private BinaryReader CreateReader(Stream stream)
@@ -443,7 +436,10 @@ namespace LuckParser
                         if (agent.InstID == 0)
                         {
                             agent.InstID = c.SrcInstid;
-                            agent.FirstAware = c.Time;
+                            if (agent.FirstAware == 0)
+                            {
+                                agent.FirstAware = c.Time;
+                            }
                             agent.LastAware = c.Time;
                             break;
                         }
