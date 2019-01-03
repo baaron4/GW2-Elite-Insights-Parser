@@ -4,10 +4,10 @@
             <a class="nav-link" :class="{active: details}" @click="details = !details">Details Window</a>
         </li>
     </ul>
-    <div class="d-flex flex-row mb-2 flex-wrap" v-if="details" style="min-width: 550px; max-width: 800px;">
-        <div v-for="(group,id) in groups" v-if="group" :key="id + '-group'" class="ml-1" style="width: 250px; max-height: 800px">
+    <div class="d-flex flex-row mb-2 flex-wrap squad-details" v-if="details">
+        <div v-for="(group,id) in groups" v-if="group" :key="id + '-group'" class="ml-1 group-details">
             <h5 class="text-center">Group {{id}}</h5>
-            <div v-for="player in group" class="cr-player-data d-flex flex-column flex-wrap" :class="{active: playerindex === player.id}"
+            <div v-for="player in group" class="player-data d-flex flex-column flex-wrap" :class="{active: playerindex === player.id}"
                 :key="id + '-group-' +  player.id">
                 <combat-replay-player-stats-component :time="animator.time" :playerindex=" player.id"></combat-replay-player-stats-component>
             </div>

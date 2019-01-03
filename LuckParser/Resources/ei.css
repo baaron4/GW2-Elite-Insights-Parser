@@ -20,6 +20,31 @@
     fill-opacity: 0.9 !important;
 }
 
+.ei-header {
+    min-width: 1000px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.ei-header-big {
+    min-width: 1900px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.ei-container {
+    max-width: 60%;
+    min-width: 1000px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.ei-container-big {
+    min-width: 1900px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
 .boon-container {
     position: relative;
     text-align: center;
@@ -44,17 +69,17 @@
     width:100%;
 }
 
-.cr-player-data {
+.player-data {
     border-top:1px solid black;
 }
 
-.cr-player-status {
+.player-status {
     background-color: green;
     color: #DDDDDD;
     width: 100px;
 }
 
-h6.cr-player-shorten {
+h6.player-shorten {
     max-width: 75px;
     margin-top: 7px;
     margin-bottom: 7px;
@@ -64,19 +89,41 @@ h6.cr-player-shorten {
     vertical-align: middle;
 }
 
-.cr-player-status.dead {
+.player-status.dead {
     background-color: black;
 }
 
-.cr-player-status.down {
+.player-status.down {
     background-color: red;
 }
 
-.theme-slate .cr-player-data.active {
+.squad-details{
+    min-width: 550px; 
+    max-width: 800px;
+}
+
+.group-details{
+    width: 250px; 
+    max-height: 800px;
+}
+
+.range-btn {
+    width: 60px;
+}
+
+.range-btns {
+    width: 200px;
+}
+
+.ply-btn {
+    width: 120px;
+}
+
+.theme-slate .player-data.active {
     background-color: rgba(80, 86, 92, 0.9);
 }
 
-.theme-yeti .cr-player-data.active {
+.theme-yeti .player-data.active {
     background-color: rgba(220, 220, 220, 0.9);
 }
 

@@ -264,7 +264,8 @@ namespace LuckParser.Properties {
         ///    Object.defineProperty(String.prototype, &quot;includes&quot;, {
         ///        value: function (search, start) {
         ///            if (typeof start !== &apos;number&apos;) {
-        ///                start = 0;        /// [rest of string was truncated]&quot;;.
+        ///                start = 0;
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string globalJS {
             get {
@@ -423,7 +424,8 @@ namespace LuckParser.Properties {
         ///    if (lastTime &gt; 0) {
         ///        end--;
         ///    }
-        ///    for (j = 1; j &lt; end; j++) {        /// [rest of string was truncated]&quot;;.
+        ///    for (j = 1; j &lt; end; j++) {
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string targetStatsJS {
             get {
@@ -602,7 +604,7 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column justify-content-end&quot; style=&quot;height: 100px&quot;&gt;
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flexcr-boon-containerustify-content-end&quot; style=&quot;height: 100px&quot;&gt;
         ///    &lt;div v-if=&quot;data.enemies.length &gt; 0&quot; class=&quot;d-flex&quot;&gt;
         ///        &lt;div v-for=&quot;enemy in data.enemies&quot; class=&quot;boon-container&quot;&gt;
         ///            &lt;img :src=&quot;enemy.buff.icon&quot; :title=&quot;enemy.buff.name&quot; :alt=&quot;enemy.buff.name&quot; class=&quot;icon&quot; /&gt;
@@ -652,8 +654,8 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div class=&quot;cr-player-status&quot; :class=&quot;{dead: status === 0, down: status === 1}&quot;&gt;
-        ///    &lt;h6 class=&quot;cr-player-shorten text-center&quot; :title=&quot;player.name&quot;&gt;
+        ///   Looks up a localized string similar to &lt;div class=&quot;player-status&quot; :class=&quot;{dead: status === 0, down: status === 1}&quot;&gt;
+        ///    &lt;h6 class=&quot;player-shorten text-center&quot; :title=&quot;player.name&quot;&gt;
         ///        &lt;img :src=&quot;player.icon&quot; :alt=&quot;player.profession&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;
         ///        {{player.name}}
         ///    &lt;/h6&gt;
@@ -1039,7 +1041,8 @@ namespace LuckParser.Properties {
         ///                    Damage
         ///                    Distribution
         ///                &lt;/a&gt;
-        ///            &lt;/li&gt;        /// [rest of string was truncated]&quot;;.
+        ///            &lt;/li&gt;
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayerStats {
             get {
