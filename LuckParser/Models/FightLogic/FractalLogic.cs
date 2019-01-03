@@ -35,7 +35,7 @@ namespace LuckParser.Models.Logic
             {
                 return phases;
             }
-            phases.AddRange(GetPhasesByInvul(log, 762, mainTarget, false));
+            phases.AddRange(GetPhasesByInvul(log, 762, mainTarget, false, true));
             phases.RemoveAll(x => x.GetDuration() < 1000);
             for (int i = 1; i < phases.Count; i++)
             {

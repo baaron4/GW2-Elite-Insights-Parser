@@ -49,7 +49,7 @@ namespace LuckParser.Models.Logic
             {
                 return phases;
             }
-            phases.AddRange(GetPhasesByInvul(log, 31877, mainTarget, true));
+            phases.AddRange(GetPhasesByInvul(log, 31877, mainTarget, true, true));
             string[] namesGorse = new [] { "Phase 1", "Split 1", "Phase 2", "Split 2", "Phase 3" };
             for (int i = 1; i < phases.Count; i++)
             {

@@ -156,7 +156,7 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        protected List<PhaseData> GetPhasesByInvul(ParsedLog log, long skillID, Target mainTarget, bool addSkipPhases, bool beginWithStart = true)
+        protected List<PhaseData> GetPhasesByInvul(ParsedLog log, long skillID, Target mainTarget, bool addSkipPhases, bool beginWithStart)
         {
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = new List<PhaseData>();

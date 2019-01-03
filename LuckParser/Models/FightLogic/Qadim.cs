@@ -97,7 +97,7 @@ namespace LuckParser.Models.Logic
             {
                 return phases;
             }
-            phases.AddRange(GetPhasesByInvul(log, 52329, qadim, false));
+            phases.AddRange(GetPhasesByInvul(log, 52329, qadim, true, false));
             string[] names = { "Hydra", "Qadim P1", "Apocalypse", "Qadim P2", "Wyvern", "Qadim P3" };
             for (int i = 1; i < phases.Count; i++)
             {
