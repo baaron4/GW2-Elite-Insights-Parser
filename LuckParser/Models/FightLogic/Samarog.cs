@@ -152,7 +152,7 @@ namespace LuckParser.Models.Logic
                 replay.Actors.Add(new CircleActor(true, 0, 80, new Tuple<int, int>(smallStart, smallEnd), "rgba(80, 150, 0, 0.3)", new AgentConnector(p)));
             }
             // fixated
-            List<CombatItem> fixatedSam = GetFilteredList(log, 37868, p);
+            List<CombatItem> fixatedSam = GetFilteredList(log, 37868, p, true);
             int fixatedSamStart = 0;
             foreach (CombatItem c in fixatedSam)
             {
@@ -167,7 +167,7 @@ namespace LuckParser.Models.Logic
                 }
             }
             //fixated Ghuldem
-            List<CombatItem> fixatedGuldhem = GetFilteredList(log, 38223, p);
+            List<CombatItem> fixatedGuldhem = GetFilteredList(log, 38223, p, true);
             int fixationGuldhemStart = 0;
             Target guldhem = null;
             foreach (CombatItem c in fixatedGuldhem)
@@ -188,7 +188,7 @@ namespace LuckParser.Models.Logic
                 }
             }
             //fixated Rigom
-            List<CombatItem> fixatedRigom = GetFilteredList(log, 37693, p);
+            List<CombatItem> fixatedRigom = GetFilteredList(log, 37693, p, true);
             int fixationRigomStart = 0;
             Target rigom = null;
             foreach (CombatItem c in fixatedRigom)

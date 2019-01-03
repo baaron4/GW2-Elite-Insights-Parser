@@ -95,7 +95,7 @@ namespace LuckParser.Models.Logic
                     break;
                 case (ushort)ConjuredShield:
                     CombatReplay replay = mob.CombatReplay;
-                    List<CombatItem> shield = GetFilteredList(log, 53003, mob);
+                    List<CombatItem> shield = GetFilteredList(log, 53003, mob, true);
                     int shieldStart = 0;
                     foreach (CombatItem c in shield)
                     {
@@ -193,7 +193,7 @@ namespace LuckParser.Models.Logic
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.ConjuredAmalgamate:
-                    List<CombatItem> shield = GetFilteredList(log, 53003, target);
+                    List<CombatItem> shield = GetFilteredList(log, 53003, target, true);
                     int shieldStart = 0;
                     foreach (CombatItem c in shield)
                     {

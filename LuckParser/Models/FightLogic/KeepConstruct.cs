@@ -120,7 +120,7 @@ namespace LuckParser.Models.Logic
             // pre burn phases
             int preBurnCount = 1;
             List<PhaseData> preBurnPhase = new List<PhaseData>();
-            List<CombatItem> kcInvuls = GetFilteredList(log, 762, mainTarget);
+            List<CombatItem> kcInvuls = GetFilteredList(log, 762, mainTarget, true);
             foreach (CombatItem invul in kcInvuls)
             {
                 if (invul.IsBuffRemove == ParseEnum.BuffRemove.None)
@@ -338,7 +338,7 @@ namespace LuckParser.Models.Logic
         {
             // Bombs
             CombatReplay replay = p.CombatReplay;
-            List<CombatItem> xeraFury = GetFilteredList(log, 35103, p);
+            List<CombatItem> xeraFury = GetFilteredList(log, 35103, p, true);
             int xeraFuryStart = 0;
             foreach (CombatItem c in xeraFury)
             {
@@ -355,7 +355,7 @@ namespace LuckParser.Models.Logic
 
             }
             //fixated Statue
-            List<CombatItem> fixatedStatue = GetFilteredList(log, 34912, p).Concat(GetFilteredList(log, 34925, p)).ToList();
+            List<CombatItem> fixatedStatue = GetFilteredList(log, 34912, p, true).Concat(GetFilteredList(log, 34925, p, true)).ToList();
             int fixationStatueStart = 0;
             Mob statue = null;
             foreach (CombatItem c in fixatedStatue)

@@ -123,7 +123,7 @@ namespace LuckParser.Models.Logic
         {
             // Poison
             CombatReplay replay = p.CombatReplay;
-            List<CombatItem> poisonToDrop = GetFilteredList(log, 34387, p);
+            List<CombatItem> poisonToDrop = GetFilteredList(log, 34387, p, true);
             int toDropStart = 0;
             foreach (CombatItem c in poisonToDrop)
             {
@@ -144,7 +144,7 @@ namespace LuckParser.Models.Logic
                 }
             }
             // Transformation
-            List<CombatItem> slubTrans = GetFilteredList(log, 34362, p);
+            List<CombatItem> slubTrans = GetFilteredList(log, 34362, p, true);
             int transfoStart = 0;
             foreach (CombatItem c in slubTrans)
             {
@@ -159,7 +159,7 @@ namespace LuckParser.Models.Logic
                 }
             }
             // fixated
-            List<CombatItem> fixatedSloth = GetFilteredList(log, 34508, p);
+            List<CombatItem> fixatedSloth = GetFilteredList(log, 34508, p, true);
             int fixatedSlothStart = 0;
             foreach (CombatItem c in fixatedSloth)
             {

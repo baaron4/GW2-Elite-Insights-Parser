@@ -221,7 +221,7 @@ namespace LuckParser.Models.Logic
                 replay.Actors.Add(new CircleActor(true, end, 280, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(p)));
             }
             // Sapper bombs
-            List<CombatItem> sapperBombs = GetFilteredList(log, 31473, p);
+            List<CombatItem> sapperBombs = GetFilteredList(log, 31473, p, true);
             int sapperStart = 0;
             foreach (CombatItem c in sapperBombs)
             {

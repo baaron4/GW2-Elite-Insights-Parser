@@ -58,7 +58,7 @@ namespace LuckParser.Models.Logic
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> targetPhases = new List<PhaseData>();
             List<CombatItem> states = log.CombatData.GetStatesData(target.InstID, ParseEnum.StateChange.EnterCombat, target.FirstAware, target.LastAware);
-            states.AddRange(GetFilteredList(log, 762, target).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None));
+            states.AddRange(GetFilteredList(log, 762, target, true).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None));
             states.AddRange(log.CombatData.GetStatesData(target.InstID, ParseEnum.StateChange.ChangeDead, target.FirstAware, target.LastAware));
             states.Sort((x, y) => x.Time.CompareTo(y.Time));
             for (int i = 0; i < states.Count; i++)
@@ -270,7 +270,7 @@ namespace LuckParser.Models.Logic
         {
             // Water "Poison Bomb"
             CombatReplay replay = p.CombatReplay;
-            List<CombatItem> waterToDrop = GetFilteredList(log, 53097, p);
+            List<CombatItem> waterToDrop = GetFilteredList(log, 53097, p, true);
             int toDropStart = 0;
             foreach (CombatItem c in waterToDrop)
             {
@@ -297,7 +297,7 @@ namespace LuckParser.Models.Logic
                 }
             }
             // Bubble (Aquatic Detainment)
-            List<CombatItem> bubble = GetFilteredList(log, 51755, p);
+            List<CombatItem> bubble = GetFilteredList(log, 51755, p, true);
             int bubbleStart = 0;
             foreach (CombatItem c in bubble)
             {

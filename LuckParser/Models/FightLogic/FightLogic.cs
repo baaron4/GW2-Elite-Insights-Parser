@@ -546,7 +546,7 @@ namespace LuckParser.Models.Logic
         }
 
         //
-        protected static List<CombatItem> GetFilteredList(ParsedLog log, long skillID, AbstractMasterActor target, bool beginWithStart = true)
+        protected static List<CombatItem> GetFilteredList(ParsedLog log, long skillID, AbstractMasterActor target, bool beginWithStart)
         {
             bool needStart = beginWithStart;
             List<CombatItem> main = log.GetBoonData(skillID).Where(x => ((x.DstInstid == target.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None) || (x.SrcInstid == target.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.Manual)) && x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
