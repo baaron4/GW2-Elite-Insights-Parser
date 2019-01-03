@@ -114,11 +114,11 @@ namespace LuckParser.Models.Logic
                     }
                     target.AgentItem.LastAware = NPC.LastAware;
                     // get unique id for the fusion
-                    ushort instID = 1;
+                    ushort instID = 0;
                     Random rnd = new Random();
-                    while (agentData.InstIDValues.Contains(instID))
+                    while (agentData.InstIDValues.Contains(instID) || instID == 0)
                     {
-                        instID = (ushort)rnd.Next(1, ushort.MaxValue);
+                        instID = (ushort)rnd.Next(ushort.MaxValue/2, ushort.MaxValue);
                     }
                     target.AgentItem.InstID = instID;
                     agentData.Refresh();

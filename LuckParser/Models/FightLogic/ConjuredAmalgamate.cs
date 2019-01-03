@@ -56,19 +56,19 @@ namespace LuckParser.Models.Logic
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             Random rnd = new Random();
-            ulong agent = 1;
-            while (agentData.AgentValues.Contains(agent))
+            ulong agent = 0;
+            while (agentData.AgentValues.Contains(agent) || agent == 0)
             {
-                agent = (ulong)rnd.Next(1, Int32.MaxValue);
+                agent = (ulong)rnd.Next(Int32.MaxValue/2, Int32.MaxValue);
             }
-            ushort id = 1;
-            while (agentData.InstIDValues.Contains(id))
+            ushort instID = 0;
+            while (agentData.InstIDValues.Contains(instID) || instID == 0)
             {
-                id = (ushort)rnd.Next(1, ushort.MaxValue);
+                instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
             }
             AgentItem sword = new AgentItem(agent, "Conjured Sword\0:Conjured Sword\050", "Sword", AgentItem.AgentType.Player, 0, 0, 0, 0, 20, 20)
             {
-                InstID = id,
+                InstID = instID,
                 LastAware = combatData.Last().Time,
                 FirstAware = combatData.First().Time,
                 MasterAgent = 0

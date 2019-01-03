@@ -505,7 +505,6 @@ namespace LuckParser
                     playerAgent.FirstAware = _fightData.FightStart;
                     playerAgent.LastAware = _fightData.FightEnd;
                 }
-                bool dc = _combatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.Despawn && x.SrcAgent == playerAgent.Agent).Count() > 0;
                 Player player = new Player(playerAgent, _fightData.Logic.Mode == FightLogic.ParseMode.Fractal);
                 bool skip = false;
                 foreach (Player p in _playerList)
@@ -513,37 +512,41 @@ namespace LuckParser
                     if (p.Account == player.Account)//is this a copy of original?
                     {
                         skip = true;
-                    }
-                }
-                if (skip)
-                {
-                    continue;
-                }
-                if (dc)
-                {
-                    //make all actions of other instances to original instid
-                    foreach (AgentItem extra in _agentData.GetAgentByType(AgentItem.AgentType.Player))
-                    {
-                        if (extra.Agent == playerAgent.Agent)
+                        Random rnd = new Random();
+                        ulong agent = 0;
+                        while (_agentData.AgentValues.Contains(agent) || agent == 0)
                         {
-                            var extraLoginId = extra.InstID;
-                            foreach (CombatItem c in _combatItems)
-                            {
-                                if (c.SrcInstid == extraLoginId)
-                                {
-                                    c.SrcInstid = playerAgent.InstID;
-                                }
-                                if (c.DstInstid == extraLoginId)
-                                {
-                                    c.DstInstid = playerAgent.InstID;
-                                }
-                            }
-                            playerAgent.FirstAware = Math.Min(extra.FirstAware, playerAgent.FirstAware);
-                            playerAgent.LastAware = Math.Max(extra.LastAware, playerAgent.LastAware);
+                            agent = (ulong)rnd.Next(Int32.MaxValue / 2, Int32.MaxValue);
                         }
+                        ushort instid = 0;
+                        while (_agentData.InstIDValues.Contains(instid) || instid == 0)
+                        {
+                            instid = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
+                        }
+                        foreach (CombatItem c in _combatItems)
+                        {
+                            if (c.DstAgent == p.Agent || player.Agent == c.DstAgent)
+                            {
+                                c.DstAgent = agent;
+                                c.DstInstid = instid;
+                            }
+                            if (c.SrcAgent == p.Agent || player.Agent == c.SrcAgent)
+                            {
+                                c.SrcAgent = agent;
+                                c.SrcInstid = instid;
+                            }
+                        }
+                        p.AgentItem.InstID = instid;
+                        p.AgentItem.Agent = agent;
+                        p.AgentItem.FirstAware = Math.Min(p.AgentItem.FirstAware, player.AgentItem.FirstAware);
+                        p.AgentItem.LastAware = Math.Max(p.AgentItem.LastAware, player.AgentItem.LastAware);
+                        _agentData.Refresh();
                     }
                 }
-                _playerList.Add(player);
+                if (!skip)
+                {
+                    _playerList.Add(player);
+                }
             }
         }
         /// <summary>
