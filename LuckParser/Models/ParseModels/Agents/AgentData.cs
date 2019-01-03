@@ -7,7 +7,7 @@ namespace LuckParser.Models.ParseModels
     public class AgentData
     {
         private readonly List<AgentItem> _allAgentsList;
-        private Dictionary<ulong, AgentItem> _allAgentsByAgent;
+        private Dictionary<ulong, List<AgentItem>> _allAgentsByAgent;
         private Dictionary<ushort, List<AgentItem>> _allAgentsByInstID;
         private Dictionary<ushort, List<AgentItem>> _allAgentsByID;
         private Dictionary<AgentItem.AgentType, List<AgentItem>> _allAgentsByType;
@@ -27,13 +27,17 @@ namespace LuckParser.Models.ParseModels
             Refresh();
         }
 
-        public AgentItem GetAgent(ulong agentAddress)
+        public AgentItem GetAgent(ulong agentAddress, long time)
         {
             if (agentAddress != 0)
             {
-                if (_allAgentsByAgent.TryGetValue(agentAddress, out AgentItem a))
+                if (_allAgentsByAgent.TryGetValue(agentAddress, out List<AgentItem> aList))
                 {
-                    return a;
+                    AgentItem a = aList.Find(x => x.FirstAware <= time && x.LastAware >= time);
+                    if (a != null)
+                    {
+                        return a;
+                    }
                 }
             }
             return GeneralHelper.UnknownAgent;
@@ -89,7 +93,7 @@ namespace LuckParser.Models.ParseModels
 
         public void Refresh()
         {
-            _allAgentsByAgent = _allAgentsList.ToDictionary(a => a.Agent);
+            _allAgentsByAgent = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
             _allAgentsByID = _allAgentsList.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
             _allAgentsByInstID = _allAgentsList.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
             _allAgentsByType = _allAgentsList.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
