@@ -54,7 +54,7 @@ var compileCommons = function () {
 
     Vue.component("graph-component", {
         props: ['id', 'layout', 'data'],
-        template: '<div :id="id"></div>',
+        template: '<div :id="id" class="d-flex flex-row justify-content-center"></div>',
         mounted: function () {
             var div = document.querySelector(this.queryID);
             Plotly.react(div, this.data, this.layout);

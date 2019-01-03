@@ -253,8 +253,11 @@
    <data name="tmplTargetData" type="System.Resources.ResXFileRef, System.Windows.Forms">
       <value>..\Resources\htmlTemplates\tmplTargetData.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
    </data>
-   <data name="tmplCombatReplayData" type="System.Resources.ResXFileRef, System.Windows.Forms">
-      <value>..\Resources\combatReplayLinkTemplates\tmplCombatReplayData.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+   <data name="tmplCombatReplayDamageData" type="System.Resources.ResXFileRef, System.Windows.Forms">
+      <value>..\Resources\combatReplayLinkTemplates\tmplCombatReplayDamageData.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+   </data>
+   <data name="tmplCombatReplayStatusData" type="System.Resources.ResXFileRef, System.Windows.Forms">
+      <value>..\Resources\combatReplayLinkTemplates\tmplCombatReplayStatusData.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
    </data>
    <data name="tmplCombatReplayDamageTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
       <value>..\Resources\combatReplayLinkTemplates\tmplCombatReplayDamageTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
