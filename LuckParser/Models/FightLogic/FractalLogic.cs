@@ -14,9 +14,9 @@ namespace LuckParser.Models.Logic
             Mode = ParseMode.Fractal;
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(37695, "Flux Bomb", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle","rgb(150,0,255)",10), "FBmb","Flux Bomb application", "Flux Bomb",0),
-            new Mechanic(36393, "Flux Bomb", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle-open","rgb(150,0,255)",10), "FB.dmg","Flux Bomb hit", "Flux Bomb dmg",0),
-            new Mechanic(19684, "Fractal Vindicator", Mechanic.MechType.Spawn, new MechanicPlotlySetting("star-diamond-open","rgb(0,0,0)",10), "FV.spwn","Fractal Vindicator spawned", "Vindicator spawn",0),
+            new Mechanic(37695, "Flux Bomb", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle","rgb(150,0,255)",10), "Flux","Flux Bomb application", "Flux Bomb",0),
+            new Mechanic(36393, "Flux Bomb", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle-open","rgb(150,0,255)",10), "Flux dmg","Flux Bomb hit", "Flux Bomb dmg",0),
+            new Mechanic(19684, "Fractal Vindicator", Mechanic.MechType.Spawn, new MechanicPlotlySetting("star-diamond-open","rgb(0,0,0)",10), "Vindicator","Fractal Vindicator spawned", "Vindicator spawn",0),
             });
         }
 

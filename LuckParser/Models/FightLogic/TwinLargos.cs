@@ -12,22 +12,22 @@ namespace LuckParser.Models.Logic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(51935, "Waterlogged", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("hexagon-open","rgb(0,140,255)"), "Wtlg","Waterlogged (stacking water debuff)", "Waterlogged",0),
-            new Mechanic(52876, "Vapor Rush", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("triangle-left-open","rgb(0,140,255)"), "Chrg","Vapor Rush (Triple Charge)", "Vapor Rush Charge",0),
+            new Mechanic(51935, "Waterlogged", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("hexagon-open","rgb(0,140,255)"), "Debuff","Waterlogged (stacking water debuff)", "Waterlogged",0),
+            new Mechanic(52876, "Vapor Rush", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("triangle-left-open","rgb(0,140,255)"), "Charge","Vapor Rush (Triple Charge)", "Vapor Rush Charge",0),
             new Mechanic(52812, "Tidal Pool", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle","rgb(0,140,255)"), "Pool","Tidal Pool", "Tidal Pool",0),
             new Mechanic(51977, "Aquatic Barrage Start", Mechanic.MechType.EnemyCastStart, new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Breakbar", "Breakbar",0),
             new Mechanic(51977, "Aquatic Barrage End", Mechanic.MechType.EnemyCastEnd, new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Breakbar broken", "CCed",0),
-            new Mechanic(53018, "Sea Swell", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle-open","rgb(30,30,80)"), "Shkwv","Sea Swell (Shockwave)", "Shockwave",0),
-            new Mechanic(53130, "Geyser", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("hexagon","rgb(0,255,255)"), "Gysr","Geyser (Launching Aoes)", "Launch Field",0),
-            new Mechanic(53097, "Water Bomb Debuff", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("diamond","rgb(0,255,255)"), "Psn","Expanding Water Field", "Water Poison",0),
+            new Mechanic(53018, "Sea Swell", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle-open","rgb(30,30,80)"), "Wave","Sea Swell (Shockwave)", "Shockwave",0),
+            new Mechanic(53130, "Geyser", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("hexagon","rgb(0,255,255)"), "KB/Launch","Geyser (Launching Aoes)", "Launch Field",0),
+            new Mechanic(53097, "Water Bomb Debuff", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("diamond","rgb(0,255,255)"), "Poison","Expanding Water Field", "Water Poison",0),
             new Mechanic(52931, "Aquatic Detainment", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle-open","rgb(0,0,255)"), "Float","Aquatic Detainment (Float Bubble)", "Float Bubble",6000),
-            new Mechanic(52130, "Aquatic Vortex", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("star-square-open-dot","rgb(0,200,255)"), "Tndo","Aquatic Vortex (Water Tornados)", "Tornado",0),
+            new Mechanic(52130, "Aquatic Vortex", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("star-square-open-dot","rgb(0,200,255)"), "Tornado","Aquatic Vortex (Water Tornados)", "Tornado",0),
             new Mechanic(51965, "Vapor Jet", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("square","rgb(255,150,0)"), "Steal","Vapor Jet (Boon Steal)", "Boon Steal",0),
-            new Mechanic(52626, "Enraged (Nikare)", Mechanic.MechType.EnemyBoon, new MechanicPlotlySetting("star-diamond","rgb(255,0,0)"), "N.Enrg","Enraged (Kenut Dead)", "Nikare Enrage",0,(condition => condition.CombatItem.SrcInstid == Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Nikare).InstID)),
-            new Mechanic(52626, "Enraged (Kenut)", Mechanic.MechType.EnemyBoon, new MechanicPlotlySetting("star-diamond","rgb(255,0,0)"), "K.Enrg","Enraged (Nikare Dead)", "Kenut Enrage",0,(condition => condition.CombatItem.SrcInstid == Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Kenut).InstID)),
-            new Mechanic(52211, "Aquatic Aura Kenut", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("square-open","rgb(0,255,255)"), "K.Aura","Increasing Damage Debuff on Kenut's Last Platform", "Kenut Aura Debuff",0),
-            new Mechanic(52929, "Aquatic Aura Nikare", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("diamond-open","rgb(0,255,255)"), "N.Aura","Increasing Damage Debuff on Nikare's Last Platform", "Nikare Aura Debuff",0),
-            new Mechanic(51999, "Cyclone Burst", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("y-up-open","rgb(255,150,0)"), "Y-Fld","Cyclone Burst (triangular rotating fields)", "Cyclone Burst",0),
+            new Mechanic(52626, "Enraged (Nikare)", Mechanic.MechType.EnemyBoon, new MechanicPlotlySetting("star-diamond","rgb(255,0,0)"), "Nik Enrage","Enraged (Kenut Dead)", "Nikare Enrage",0,(condition => condition.CombatItem.SrcInstid == Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Nikare).InstID)),
+            new Mechanic(52626, "Enraged (Kenut)", Mechanic.MechType.EnemyBoon, new MechanicPlotlySetting("star-diamond","rgb(255,0,0)"), "Ken Enrage","Enraged (Nikare Dead)", "Kenut Enrage",0,(condition => condition.CombatItem.SrcInstid == Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Kenut).InstID)),
+            new Mechanic(52211, "Aquatic Aura Kenut", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("square-open","rgb(0,255,255)"), "Ken Aura","Increasing Damage Debuff on Kenut's Last Platform", "Kenut Aura Debuff",0),
+            new Mechanic(52929, "Aquatic Aura Nikare", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("diamond-open","rgb(0,255,255)"), "Nik Aura","Increasing Damage Debuff on Nikare's Last Platform", "Nikare Aura Debuff",0),
+            new Mechanic(51999, "Cyclone Burst", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("y-up-open","rgb(255,150,0)"), "Y Field","Cyclone Burst (triangular rotating fields on Kenut)", "Cyclone Burst",0),
             }); 
             Extension = "twinlargos";
             IconUrl = "https://i.imgur.com/6O5MT7v.png";
