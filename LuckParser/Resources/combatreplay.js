@@ -579,14 +579,15 @@ class EnemyIconDrawable extends IconDrawable {
 }
 
 class MechanicDrawable {
-    constructor(start, end, fill, growing, color, connectedTo) {
+    constructor(start, end, connectedTo) {
         this.start = start;
         this.end = end;
         this.connectedTo = connectedTo;
-        this.fill = fill;
-        this.growing = growing;
-        this.color = color;
         this.master = null;
+    }
+
+    draw() {
+        // to override
     }
 
     getPosition() {
@@ -610,6 +611,16 @@ class MechanicDrawable {
         }
     }
 
+}
+
+class FormMechanicDrawable extends MechanicDrawable {
+    constructor(start, end, fill, growing, color, connectedTo) {
+        super(start, end, connectedTo);
+        this.fill = fill;
+        this.growing = growing;
+        this.color = color;
+    }
+
     getPercent() {
         if (this.growing === 0) {
             return 1.0;
@@ -618,7 +629,7 @@ class MechanicDrawable {
     }
 }
 
-class CircleMechanicDrawable extends MechanicDrawable {
+class CircleMechanicDrawable extends FormMechanicDrawable {
     constructor(start, end, fill, growing, color, radius, connectedTo, minRadius, inch) {
         super(start, end, fill, growing, color, connectedTo);
         this.radius = inch * radius;
@@ -644,7 +655,7 @@ class CircleMechanicDrawable extends MechanicDrawable {
     }
 }
 
-class DoughnutMechanicDrawable extends MechanicDrawable {
+class DoughnutMechanicDrawable extends FormMechanicDrawable {
     constructor(start, end, fill, growing, color, innerRadius, outerRadius, connectedTo, inch) {
         super(start, end, fill, growing, color, connectedTo);
         this.outerRadius = inch * outerRadius;
@@ -673,7 +684,7 @@ class DoughnutMechanicDrawable extends MechanicDrawable {
     }
 }
 
-class RectangleMechanicDrawable extends MechanicDrawable {
+class RectangleMechanicDrawable extends FormMechanicDrawable {
     constructor(start, end, fill, growing, color, width, height, connectedTo, inch) {
         super(start, end, fill, growing, color, connectedTo);
         this.height = height * inch;
@@ -702,7 +713,7 @@ class RectangleMechanicDrawable extends MechanicDrawable {
 
 class RotatedRectangleMechanicDrawable extends RectangleMechanicDrawable {
     constructor(start, end, fill, growing, color, width, height, rotation, translation, spinangle, connectedTo, inch) {
-        super(start, end, fill, growing, color, width, height, connectedTo);
+        super(start, end, fill, growing, color, width, height, connectedTo, inch);
         this.rotation = -rotation * Math.PI / 180; // positive mathematical direction, reversed since JS has downwards increasing y axis
         this.translation = translation * inch;
         this.spinangle = -spinangle * Math.PI / 180; // positive mathematical direction, reversed since JS has downwards increasing y axis
@@ -745,7 +756,7 @@ class RotatedRectangleMechanicDrawable extends RectangleMechanicDrawable {
     }
 }
 
-class PieMechanicDrawable extends MechanicDrawable {
+class PieMechanicDrawable extends FormMechanicDrawable {
     constructor(start, end, fill, growing, color, direction, openingAngle, radius, connectedTo, inch) {
         super(start, end, fill, growing, color, connectedTo);
         this.direction = -direction * Math.PI / 180; // positive mathematical direction, reversed since JS has downwards increasing y axis
@@ -778,7 +789,7 @@ class PieMechanicDrawable extends MechanicDrawable {
     }
 }
 
-class LineMechanicDrawable extends MechanicDrawable {
+class LineMechanicDrawable extends FormMechanicDrawable {
     constructor(start, end, fill, growing, color, connectedFrom, connectedTo) {
         super(start, end, fill, growing, color, connectedTo);
         this.connectedFrom = connectedFrom;
