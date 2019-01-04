@@ -15,8 +15,8 @@ namespace LuckParser.Models.Logic
             {
             new Mechanic(34108, "Shell-Shocked", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle-open","rgb(0,128,0)"), "Launchd","Shell-Shocked (Launched from pad)", "Shell-Shocked",0),
             new Mechanic(34448, "Overhead Smash", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("triangle-left","rgb(200,140,0)"), "Smash","Overhead Smash (CC Attack Berg)", "CC Smash",0),
-            new Mechanic(34383, "Hail of Bullets", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("triangle-right-open","rgb(255,0,0)"), "Cone","Hail of Bullets (Zane Cone Shot)", "Hail of Bullets",0),
-            new Mechanic(34344, "Fiery Vortex", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle-open","rgb(255,200,0)"), "Torndo","Fiery Vortex (Tornado)", "Tornado",250),
+            new Mechanic(34383, "Hail of Bullets", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("triangle-right-open","rgb(255,0,0)"), "Zane Cone","Hail of Bullets (Zane Cone Shot)", "Hail of Bullets",0),
+            new Mechanic(34344, "Fiery Vortex", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle-open","rgb(255,200,0)"), "Tornado","Fiery Vortex (Tornado)", "Tornado",250),
             });
             Extension = "trio";
             IconUrl = "https://i.imgur.com/UZZQUdf.png";
