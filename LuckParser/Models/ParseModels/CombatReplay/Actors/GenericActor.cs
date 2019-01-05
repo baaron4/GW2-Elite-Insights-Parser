@@ -2,30 +2,19 @@
 
 namespace LuckParser.Models.ParseModels
 {
-    public abstract class Actor
-    {
-
-        public bool Filled { get; }
+    public abstract class GenericActor
+    {    
         public Tuple<int, int> Lifespan { get; }
-        public string Color { get; }
-        public int Growing { get; }
         protected Connector ConnectedTo;
         
-        protected Actor(bool fill, int growing, Tuple<int, int> lifespan, string color, Connector connector)
+        protected GenericActor(Tuple<int, int> lifespan, Connector connector)
         {
             Lifespan = lifespan;
-            Color = color;
-            Filled = fill;
-            Growing = growing;
             ConnectedTo = connector;
         }
         //
-        protected class Serializable
+        protected class GenericSerializable
         {
-
-            public bool Fill { get; set; }
-            public int Growing { get; set; }
-            public string Color { get; set; }
             public string Type { get; set; }
             public long Start { get; set; }
             public long End { get; set; }

@@ -3,7 +3,7 @@ using System;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class LineActor : Actor
+    public class LineActor : FormActor
     {
         public Connector ConnectedFrom { get; }
         public int Width { get; }
@@ -13,7 +13,7 @@ namespace LuckParser.Models.ParseModels
             ConnectedFrom = targetConnector;
         }
 
-        private class LineSerializable : Serializable
+        private class LineSerializable : FormSerializable
         {
             public object ConnectedFrom { get; set; }
         }

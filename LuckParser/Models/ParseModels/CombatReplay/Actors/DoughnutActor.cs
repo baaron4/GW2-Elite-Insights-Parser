@@ -3,7 +3,7 @@ using System;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class DoughnutActor : Actor
+    public class DoughnutActor : FormActor
     {
         public int OuterRadius { get; }
         public int InnerRadius { get; }
@@ -15,7 +15,7 @@ namespace LuckParser.Models.ParseModels
         }
         //
 
-        private class DoughnutSerializable : Serializable
+        private class DoughnutSerializable : FormSerializable
         {
             public int InnerRadius { get; set; }
             public int OuterRadius { get; set; }
