@@ -24,8 +24,8 @@
                     <img :src="row.player.icon" :alt="row.player.profession" class="icon"><span style="display:none">{{row.player.profession}}</span>
                 </td>
                 <td class="text-left">{{row.player.name}}</td>
-                <td>{{Math.round(row.dps[2*tableData.cols.length+(damageMode === 1 ? 1 : 0)])}}</td>
-                <td v-for="(col, id) in tableData.cols">
+                <td style="min-width:80px">{{Math.round(row.dps[2*tableData.cols.length+(damageMode === 1 ? 1 : 0)])}}</td>
+                <td v-for="(col, id) in tableData.cols" style="min-width:80px">
                     {{Math.round(row.dps[2*id +(damageMode === 1 ? 1 : 0)])}}
                 </td>
             </tr>
@@ -34,8 +34,8 @@
             <tr v-for="sum in tableData.sums">
                 <td></td>
                 <td class="text-left">{{sum.name}}</td>
-                <td>{{Math.round(sum.dps[2*tableData.cols.length+(damageMode === 1 ? 1 : 0)])}}</td>
-                <td v-for="(col, id) in tableData.cols">
+                <td style="min-width:80px">{{Math.round(sum.dps[2*tableData.cols.length+(damageMode === 1 ? 1 : 0)])}}</td>
+                <td v-for="(col, id) in tableData.cols" style="min-width:80px">
                     {{Math.round(sum.dps[2*id +(damageMode === 1 ? 1 : 0)])}}
                 </td>
             </tr>

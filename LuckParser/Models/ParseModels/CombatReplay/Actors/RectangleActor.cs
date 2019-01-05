@@ -3,7 +3,7 @@ using System;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class RectangleActor : Actor
+    public class RectangleActor : FormActor
     {
         public int Height { get; }
         public int Width { get; }
@@ -16,7 +16,7 @@ namespace LuckParser.Models.ParseModels
         //
 
 
-        protected class RectangleSerializable : Serializable
+        protected class RectangleSerializable : FormSerializable
         {
             public int Height { get; set; }
             public int Width { get; set; }

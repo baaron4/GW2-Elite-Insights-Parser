@@ -71,7 +71,7 @@ namespace LuckParser.Builders
                 }
                 count++;
                 actors += p.GetCombatReplayJSON(map);
-                foreach (Actor a in p.CombatReplay.Actors)
+                foreach (GenericActor a in p.CombatReplay.Actors)
                 {
                     actors += ",";
                     actors += a.GetCombatReplayJSON(map);
@@ -85,7 +85,7 @@ namespace LuckParser.Builders
                 }
                 actors += ",";
                 actors += m.GetCombatReplayJSON(map);
-                foreach (Actor a in m.CombatReplay.Actors)
+                foreach (GenericActor a in m.CombatReplay.Actors)
                 {
                     actors += ",";
                     actors += a.GetCombatReplayJSON(map);
@@ -99,7 +99,7 @@ namespace LuckParser.Builders
                 }
                 actors += ",";
                 actors += target.GetCombatReplayJSON(map);
-                foreach (Actor a in target.CombatReplay.Actors)
+                foreach (GenericActor a in target.CombatReplay.Actors)
                 {
                     actors += ",";
                     actors += a.GetCombatReplayJSON(map);
