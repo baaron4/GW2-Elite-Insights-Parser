@@ -281,9 +281,6 @@ function computePhaseMarkups(shapes, annotations, phase, linecolor) {
 
 
 function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, cacheID, lastTime) {
-    if (!player.dpsGraphCache) {
-        player.dpsGraphCache = new Map();
-    }
     if (player.dpsGraphCache.has(cacheID)) {
         return player.dpsGraphCache.get(cacheID);
     }

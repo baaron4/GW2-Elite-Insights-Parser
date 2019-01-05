@@ -1407,7 +1407,8 @@ namespace LuckParser.Builders
             string tmplScript = script;
             Dictionary<string, string> CRtemplates = new Dictionary<string, string>()
                 {
-                    {"${tmplCombatReplayData}", Properties.Resources.tmplCombatReplayData },
+                    {"${tmplCombatReplayDamageData}", Properties.Resources.tmplCombatReplayDamageData },
+                    {"${tmplCombatReplayStatusData}", Properties.Resources.tmplCombatReplayStatusData },
                     {"${tmplCombatReplayDamageTable}", Properties.Resources.tmplCombatReplayDamageTable },
                     {"${tmplCombatReplayPlayerBuffStats}", Properties.Resources.tmplCombatReplayPlayerBuffStats },
                     {"${tmplCombatReplayPlayerStats}", Properties.Resources.tmplCombatReplayPlayerStats },

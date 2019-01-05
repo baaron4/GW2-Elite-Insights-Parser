@@ -106,6 +106,8 @@
     <Compile Include="Models\FightLogic\BanditTrio.cs" />
     <Compile Include="Models\FightLogic\Freezie.cs" />
     <Compile Include="Models\JsonModels\JsonDeathRecap.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\Actors\FacingActor.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\Actors\GenericActor.cs" />
     <Compile Include="Models\ParseModels\Logs\BoonExtensionLog.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\AbstractBoonSimulationItem.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemOverstack.cs" />
@@ -190,7 +192,7 @@
     <Compile Include="Models\JsonModels\JsonPhase.cs" />
     <Compile Include="Models\JsonModels\JsonBuffs.cs" />
     <Compile Include="Models\JsonModels\JsonSupport.cs" />
-    <Compile Include="Models\ParseModels\CombatReplay\Actors\Actor.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\Actors\FormActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\Connector\AgentConnector.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\Connector\Connector.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\Connector\InterpolatedPositionConnector.cs" />
@@ -316,12 +318,13 @@
     <None Include="Resources\theme-slate.png" />
     <None Include="Resources\combatreplay.js" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplay.html" />
+    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayDamageData.html" />
     <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayDamageTable.html" />
     <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayPlayerRotation.html" />
     <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayPlayerStatus.html" />
     <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayPlayerBuffStats.html" />
-    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayData.html" />
     <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayPlayerStats.html" />
+    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayStatusData.html" />
     <Content Include="Resources\ei.css" />
     <Content Include="Resources\ei.js" />
     <None Include="Resources\htmlTemplates\tmplGeneralLayout.html" />

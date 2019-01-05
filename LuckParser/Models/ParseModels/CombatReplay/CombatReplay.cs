@@ -20,7 +20,7 @@ namespace LuckParser.Models.ParseModels
         public List<Tuple<long, long>> Downs { get; } = new List<Tuple<long, long>>();
         public List<Tuple<long, long>> DCs { get; } = new List<Tuple<long, long>>();
         // actors
-        public List<Actor> Actors { get; } = new List<Actor>();
+        public List<GenericActor> Actors { get; } = new List<GenericActor>();
   
         public void Trim(long start, long end)
         {

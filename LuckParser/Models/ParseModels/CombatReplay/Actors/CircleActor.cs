@@ -3,7 +3,7 @@ using System;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class CircleActor : Actor
+    public class CircleActor : FormActor
     {
         public int Radius { get; }
         public int MinRadius { get; }
@@ -20,7 +20,7 @@ namespace LuckParser.Models.ParseModels
         }
 
         //
-        protected class CircleSerializable : Serializable
+        protected class CircleSerializable : FormSerializable
         {
             public int Radius { get; set; }
             public int MinRadius { get; set; }
