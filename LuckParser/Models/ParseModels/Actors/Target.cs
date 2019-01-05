@@ -33,6 +33,11 @@ namespace LuckParser.Models.ParseModels
         {
             CombatReplay.Icon = GeneralHelper.GetNPCIcon(ID);
             log.FightData.Logic.ComputeAdditionalTargetData(this, log);
+            List<Point3D> facings = CombatReplay.Rotations;
+            if (facings.Any())
+            {
+                CombatReplay.Actors.Add(new FacingActor(new Tuple<int, int>((int)CombatReplay.TimeOffsets.Item1, (int)CombatReplay.TimeOffsets.Item2), new AgentConnector(this), facings));
+            }
         }
 
         public List<double[]> Get1SHealthGraph(ParsedLog log, List<PhaseData> phases)
