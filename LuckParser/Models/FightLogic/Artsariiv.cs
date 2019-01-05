@@ -70,6 +70,7 @@ namespace LuckParser.Models.Logic
 
         public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
         {
+            CombatReplay replay = target.CombatReplay;
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Artsariiv:

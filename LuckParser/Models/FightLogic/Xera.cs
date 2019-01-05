@@ -181,7 +181,6 @@ namespace LuckParser.Models.Logic
 
         public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
         {
-            // TODO: needs facing information for hadouken
             CombatReplay replay = target.CombatReplay;
             List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
