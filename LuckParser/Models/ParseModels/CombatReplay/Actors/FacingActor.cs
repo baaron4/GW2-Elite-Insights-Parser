@@ -8,7 +8,7 @@ namespace LuckParser.Models.ParseModels
     {
         private List<Tuple<double, long>> _data = new List<Tuple<double, long>>();
 
-        public FacingActor(Tuple<int, int> lifespan, Connector connector, List<Point3D> facings) : base(lifespan, connector)
+        public FacingActor(Tuple<int, int> lifespan, AgentConnector connector, List<Point3D> facings) : base(lifespan, connector)
         {
             foreach(Point3D facing in facings)
             {

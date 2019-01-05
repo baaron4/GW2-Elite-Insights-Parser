@@ -396,7 +396,7 @@ namespace LuckParser.Models.ParseModels
                 Group = Group,
                 Img = CombatReplay.Icon,
                 Type = "Player",
-                ID = InstID,
+                ID = GetCombatReplayID(),
                 Positions = new double[2 * CombatReplay.Positions.Count],
                 Dead = new long[2 * CombatReplay.Deads.Count],
                 Down = new long[2 * CombatReplay.Downs.Count]
@@ -422,11 +422,6 @@ namespace LuckParser.Models.ParseModels
             }
 
             return JsonConvert.SerializeObject(aux);
-        }
-
-        public override int GetCombatReplayID()
-        {
-            return InstID;
         }
 
 

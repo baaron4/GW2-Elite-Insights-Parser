@@ -124,11 +124,6 @@ namespace LuckParser.Models.ParseModels
             return JsonConvert.SerializeObject(aux);
         }
 
-        public override int GetCombatReplayID()
-        {
-            return (InstID + "_" + CombatReplay.TimeOffsets.Item1 + "_" + CombatReplay.TimeOffsets.Item2).GetHashCode();
-        }
-
         /*protected override void setHealingLogs(ParsedLog log)
         {
             // nothing to do
