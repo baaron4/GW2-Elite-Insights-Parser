@@ -103,7 +103,6 @@ namespace LuckParser.Models.ParseModels
             public string Type { get; set; }
             public int ID { get; set; }
             public double[] Positions { get; set; }
-            public double[] Rotations { get; set; }
             public long Start { get; set; }
             public long End { get; set; }
         }
@@ -117,8 +116,7 @@ namespace LuckParser.Models.ParseModels
                 ID = GetCombatReplayID(),
                 Start = CombatReplay.TimeOffsets.Item1,
                 End = CombatReplay.TimeOffsets.Item2,
-                Positions = new double[2 * CombatReplay.Positions.Count],
-                Rotations = new double[2 * CombatReplay.Rotations.Count]
+                Positions = new double[2 * CombatReplay.Positions.Count]
             };
             int i = 0;
             foreach (Point3D pos in CombatReplay.Positions)
@@ -126,12 +124,6 @@ namespace LuckParser.Models.ParseModels
                 Tuple<double, double> coord = map.GetMapCoord(pos.X, pos.Y);
                 aux.Positions[i++] = coord.Item1;
                 aux.Positions[i++] = coord.Item2;
-            }
-            i = 0;
-            foreach (Point3D facing in CombatReplay.Rotations)
-            {
-                aux.Rotations[i++] = Point3D.GetRotationFromFacing(facing);
-                aux.Rotations[i++] = facing.Time;
             }
             return JsonConvert.SerializeObject(aux);
         }
