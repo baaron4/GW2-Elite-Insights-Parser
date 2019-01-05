@@ -35,6 +35,7 @@ class Animator {
         this.playerData = new Map();
         this.trashMobData = new Map();
         this.mechanicActorData = new Set();
+        this.foregroundActorData = new Set();
         // animation
         this.animation = null;
         this.timeSlider = document.getElementById('timeRange');
@@ -112,7 +113,7 @@ class Animator {
                     this.mechanicActorData.add(new LineMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.ConnectedFrom, actor.ConnectedTo));
                     break;
                 case "Facing":
-                    this.mechanicActorData.add(new FacingMechanicDrawable(actor.Start, actor.End, actor.ConnectedTo, actor.FacingData));
+                    this.foregroundActorData.add(new FacingMechanicDrawable(actor.Start, actor.End, actor.ConnectedTo, actor.FacingData));
                     break;
             }
         }
@@ -377,6 +378,9 @@ function animateCanvas(noRequest) {
     if (animator.selectedPlayer !== null) {
         animator.selectedPlayer.draw();
     }
+    animator.foregroundActorData.forEach(function (value, key, map) {
+        value.draw();
+    });
     let lastTime = animator.times[animator.times.length - 1];
     if (animator.time === lastTime) {
         animator.stopAnimate();
