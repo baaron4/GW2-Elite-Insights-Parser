@@ -113,7 +113,7 @@ class Animator {
                     this.mechanicActorData.add(new LineMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.ConnectedFrom, actor.ConnectedTo));
                     break;
                 case "Facing":
-                    this.foregroundActorData.add(new FacingMechanicDrawable(actor.Start, actor.End, actor.ConnectedTo, actor.FacingData));
+                    this.foregroundActorData.add(new FacingMechanicDrawable(actor.Start, actor.End, 50, actor.ConnectedTo, actor.FacingData));
                     break;
             }
         }
@@ -623,10 +623,10 @@ class MechanicDrawable {
 }
 
 class FacingMechanicDrawable extends MechanicDrawable {
-    constructor(start, end, connectedTo, facingData) {
+    constructor(start, end, pixelSize, connectedTo, facingData) {
         super(start, end, connectedTo);
         this.facingData = facingData;
-        this.facingSize = 50; // Size of the facing indicator, currently hard-coded (maybe change it 'relative to master.pixelSize'?)
+        this.facingSize = pixelSize; // Size of the facing indicator, currently hard-coded (maybe change it 'relative to master.pixelSize'?)
     }
 
     getRotation(time) {
