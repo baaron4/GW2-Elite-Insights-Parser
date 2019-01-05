@@ -13,17 +13,17 @@ namespace LuckParser.Models.Logic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(34108, "Shell-Shocked", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle-open","rgb(0,128,0)"), "Lnchd","Shell-Shocked (launched up to cannons)", "Shell-Shocked",0),
-            new Mechanic(31473, "Sapper Bomb", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle","rgb(0,128,0)"), "SBmb","Got a Sapper Bomb", "Sapper Bomb",0),
-            new Mechanic(31485, "Time Bomb", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "TBmb","Got a Timed Bomb (Expanding circle)", "Timed Bomb",0),
-            new Mechanic(31332, "Firestorm", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("square","rgb(255,0,0)"), "Flmwll","Firestorm (killed by Flamewall)", "Flamewall",0),
+            new Mechanic(34108, "Shell-Shocked", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle-open","rgb(0,128,0)"), "Launched","Shell-Shocked (launched up to cannons)", "Shell-Shocked",0),
+            new Mechanic(31473, "Sapper Bomb", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle","rgb(0,128,0)"), "Sap Bomb","Got a Sapper Bomb", "Sapper Bomb",0),
+            new Mechanic(31485, "Time Bomb", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Timed Bomb","Got a Timed Bomb (Expanding circle)", "Timed Bomb",0),
+            new Mechanic(31332, "Firestorm", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("square","rgb(255,0,0)"), "Flamewall","Firestorm (killed by Flamewall)", "Flamewall",0),
             new Mechanic(31544, "Flak Shot", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("hexagram-open","rgb(255,140,0)"), "Flak","Flak Shot (Fire Patches)", "Flak Shot",0),
             new Mechanic(31643, "Cannon Barrage", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle","rgb(255,200,0)"), "Cannon","Cannon Barrage (stood in AoE)", "Cannon Shot",0),
-            new Mechanic(31761, "Flame Blast", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("triangle-left-open","rgb(255,200,0)"), "Flmthrwr","Flame Blast (Karde's Flamethrower)", "Flamethrower (Karde)",0),
+            new Mechanic(31761, "Flame Blast", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("triangle-left-open","rgb(255,200,0)"), "Karde Flame","Flame Blast (Karde's Flamethrower)", "Flamethrower (Karde)",0),
             new Mechanic(31408, "Kick", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("triangle-right","rgb(255,0,255)"), "Kick","Kicked by Bandit", "Bandit Kick",0),
             new Mechanic(31763, "Platform Quake", Mechanic.MechType.EnemyCastStart, new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Platform Quake (Breakbar)","Breakbar",0),
             new Mechanic(31763, "Platform Quake", Mechanic.MechType.EnemyCastEnd, new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Platform Quake (Breakbar broken) ", "CCed",0,(condition => condition.CombatItem.Value <=4400)),
-            new Mechanic(31763, "Platform Quake", Mechanic.MechType.EnemyCastEnd, new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC.Fail","Platform Quake (Breakbar failed) ", "CC Fail",0,(condition => condition.CombatItem.Value >4400)),
+            new Mechanic(31763, "Platform Quake", Mechanic.MechType.EnemyCastEnd, new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Platform Quake (Breakbar failed) ", "CC Fail",0,(condition => condition.CombatItem.Value >4400)),
             // Hit by Time Bomb could be implemented by checking if a person is affected by ID 31324 (1st Time Bomb) or 34152 (2nd Time Bomb, only below 50% boss HP) without being attributed a bomb (ID: 31485) 3000ms before (+-50ms). I think the actual heavy hit isn't logged because it may be percentage based. Nothing can be found in the logs.
             });
             Extension = "sab";

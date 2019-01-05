@@ -96,6 +96,7 @@ namespace LuckParser.Models.DataModels
             MapID           = 25,
             ReplInfo        = 26,
             StackActive     = 27,
+            StackReset      = 28,
             Unknown
         };
 

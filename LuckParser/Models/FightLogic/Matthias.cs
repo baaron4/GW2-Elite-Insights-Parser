@@ -14,19 +14,19 @@ namespace LuckParser.Models.Logic
             MechanicList.AddRange(new List<Mechanic>
             {
 
-            new Mechanic(34380, "Oppressive Gaze", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("hexagram","rgb(255,0,0)"), "Ball","Oppressive Gaze (Hadouken projectile)", "Hadouken",0),//human
-            new Mechanic(34371, "Oppressive Gaze", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("hexagram","rgb(255,0,0)"), "Ball","Oppressive Gaze (Hadouken projectile)", "Hadouken",0),//abom
-            new Mechanic(34480, "Blood Shards", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("diamond-wide-open","rgb(255,0,255)"), "RpFire","Blood Shard projectiles during bubble", "Rapid Fire",0),// //human
-            new Mechanic(34440, "Blood Shards", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("diamond-wide-open","rgb(255,0,255)"), "RpFire","Blood Shard projectiles during bubble", "Rapid Fire", 0),// //abom
-            new Mechanic(34404, "Shards of Rage", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("star-diamond","rgb(255,0,0)"), "Shrds","Shards of Rage (Jump)", "Jump Shards",1000),//human
-            new Mechanic(34411, "Shards of Rage", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("star-diamond","rgb(255,0,0)"), "Shrds","Shards of Rage (Jump)", "Jump Shards",1000),//abom
-            new Mechanic(34466, "Fiery Vortex", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("triangle-down-open","rgb(255,200,0)"), "Torndo","Fiery Vortex (Tornado)", "Tornado",250),
+            new Mechanic(34380, "Oppressive Gaze", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("hexagram","rgb(255,0,0)"), "Hadouken","Oppressive Gaze (Hadouken projectile)", "Hadouken",0),//human
+            new Mechanic(34371, "Oppressive Gaze", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("hexagram","rgb(255,0,0)"), "Hadouken","Oppressive Gaze (Hadouken projectile)", "Hadouken",0),//abom
+            new Mechanic(34480, "Blood Shards", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("diamond-wide-open","rgb(255,0,255)"), "Shoot Shards","Blood Shard projectiles during bubble", "Rapid Fire",0),// //human
+            new Mechanic(34440, "Blood Shards", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("diamond-wide-open","rgb(255,0,255)"), "Shoot Shards","Blood Shard projectiles during bubble", "Rapid Fire", 0),// //abom
+            new Mechanic(34404, "Shards of Rage", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("star-diamond","rgb(255,0,0)"), "Jump Shards","Shards of Rage (Jump)", "Jump Shards",1000),//human
+            new Mechanic(34411, "Shards of Rage", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("star-diamond","rgb(255,0,0)"), "Jump Shards","Shards of Rage (Jump)", "Jump Shards",1000),//abom
+            new Mechanic(34466, "Fiery Vortex", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("triangle-down-open","rgb(255,200,0)"), "Tornado","Fiery Vortex (Tornado)", "Tornado",250),
             new Mechanic(34543, "Thunder", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("triangle-up-open","rgb(0,255,255)"), "Storm","Thunder Storm hit (air phase)", "Storm cloud",0),
             new Mechanic(34450, "Unstable Blood Magic", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("diamond","rgb(255,0,0)"), "Well","Unstable Blood Magic application", "Well",0),
-            new Mechanic(34336, "Well of the Profane", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("diamond-open","rgb(255,0,0)"), "W.dmg","Unstable Blood Magic AoE hit", "Stood in Well",0),
-            new Mechanic(34416, "Corruption", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle","rgb(255,140,0)"), "Crptn","Corruption Application", "Corruption",0),
-            new Mechanic(34473, "Corruption", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle-open","rgb(255,140,0)"), "C.dmg","Hit by Corruption AoE", "Corruption dmg",0),
-            new Mechanic(34442, "Sacrifice", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "Scrfc","Sacrifice (Breakbar)", "Sacrifice",0),
+            new Mechanic(34336, "Well of the Profane", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("diamond-open","rgb(255,0,0)"), "Well dmg","Unstable Blood Magic AoE hit", "Stood in Well",0),
+            new Mechanic(34416, "Corruption", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle","rgb(255,140,0)"), "Corruption","Corruption Application", "Corruption",0),
+            new Mechanic(34473, "Corruption", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle-open","rgb(255,140,0)"), "Corr. dmg","Hit by Corruption AoE", "Corruption dmg",0),
+            new Mechanic(34442, "Sacrifice", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "Sacrifice","Sacrifice (Breakbar)", "Sacrifice",0),
             new Mechanic(34442, "Sacrifice", Mechanic.MechType.PlayerBoonRemove, new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CC.End","Sacrifice (Breakbar) ended", "Sacrifice End",0,(condition => condition.CombatItem.Value>25)),
             new Mechanic(34442, "Sacrificed", Mechanic.MechType.PlayerBoonRemove, new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC.Fail","Sacrifice time ran out", "Sacrificed",0,(condition => condition.CombatItem.Value<=25)),
             new Mechanic(34367, "Unbalanced", Mechanic.MechType.PlayerBoonRemove, new MechanicPlotlySetting("square","rgb(200,140,255)"), "KD","Unbalanced (triggered Storm phase Debuff)", "Knockdown",0,(condition => condition.CombatItem.Value > 0)),
@@ -34,11 +34,11 @@ namespace LuckParser.Models.Logic
             //new Mechanic(34367, "Unbalanced", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting("square","rgb(0,140,0)"), "KD","Unbalanced (triggered Storm phase Debuff) only on successful interrupt", "Knockdown (interrupt)",0,(condition => condition.getDLog().GetResult() == ParseEnum.Result.Interrupt)),
             //new Mechanic(34422, "Blood Fueled", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting("square","rgb(255,0,0)"), "Ate Reflects(good)",0),//human //Applied at the same time as Backflip Shards since it is the buff applied by them, can be omitted imho
             //new Mechanic(34428, "Blood Fueled", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting("square","rgb(255,0,0)"), "Ate Reflects(good)",0),//abom
-            new Mechanic(34376, "Blood Shield", Mechanic.MechType.EnemyBoon, new MechanicPlotlySetting("octagon","rgb(255,0,0)"), "Bble","Blood Shield (protective bubble)", "Bubble",0),//human
-            new Mechanic(34518, "Blood Shield", Mechanic.MechType.EnemyBoon, new MechanicPlotlySetting("octagon","rgb(255,0,0)"), "Bble","Blood Shield (protective bubble)", "Bubble",0),//abom
-            new Mechanic(34511, "Zealous Benediction", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle","rgb(255,200,0)"), "Bombs",0),
+            new Mechanic(34376, "Blood Shield", Mechanic.MechType.EnemyBoon, new MechanicPlotlySetting("octagon","rgb(255,0,0)"), "Bubble","Blood Shield (protective bubble)", "Bubble",0),//human
+            new Mechanic(34518, "Blood Shield", Mechanic.MechType.EnemyBoon, new MechanicPlotlySetting("octagon","rgb(255,0,0)"), "Bubble","Blood Shield (protective bubble)", "Bubble",0),//abom
+            new Mechanic(34511, "Zealous Benediction", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle","rgb(255,200,0)"), "Bombs","Zealous Benediction (Expanding bombs)","Bomb",0),
             new Mechanic(26766, "Icy Patch", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle-open","rgb(0,0,255)"), "Icy KD","Knockdown by Icy Patch", "Icy Patch KD",0,(condition => condition.CombatItem.Value == 10000)),
-            new Mechanic(34413, "Surrender", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle-open","rgb(0,0,0)"), "Sprt","Surrender (hit by walking Spirit)", "Spirit hit",0)
+            new Mechanic(34413, "Surrender", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle-open","rgb(0,0,0)"), "Spirit","Surrender (hit by walking Spirit)", "Spirit hit",0)
             });
             Extension = "matt";
             IconUrl = "https://wiki.guildwars2.com/images/5/5d/Mini_Matthias_Abomination.png";
@@ -151,7 +151,6 @@ namespace LuckParser.Models.Logic
 
         public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
         {
-            // TODO: needs facing information for hadouken
             CombatReplay replay = target.CombatReplay;
             List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)

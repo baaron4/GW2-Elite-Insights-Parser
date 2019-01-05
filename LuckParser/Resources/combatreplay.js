@@ -4,6 +4,8 @@ const deadIcon = new Image();
 deadIcon.src = "https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png";
 const downIcon = new Image();
 downIcon.src = "https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png";
+const facingIcon = new Image();
+facingIcon.src = "https://i.imgur.com/tZTmTRn.png";
 const bgImage = new Image();
 let bgLoaded = false;
 bgImage.onload = function () {
@@ -33,6 +35,7 @@ class Animator {
         this.playerData = new Map();
         this.trashMobData = new Map();
         this.mechanicActorData = new Set();
+        this.foregroundActorData = new Set();
         // animation
         this.animation = null;
         this.timeSlider = document.getElementById('timeRange');
@@ -108,6 +111,9 @@ class Animator {
                     break;
                 case "Line":
                     this.mechanicActorData.add(new LineMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.ConnectedFrom, actor.ConnectedTo));
+                    break;
+                case "Facing":
+                    this.foregroundActorData.add(new FacingMechanicDrawable(actor.Start, actor.End, 50, actor.ConnectedTo, actor.FacingData));
                     break;
             }
         }
@@ -372,6 +378,9 @@ function animateCanvas(noRequest) {
     if (animator.selectedPlayer !== null) {
         animator.selectedPlayer.draw();
     }
+    animator.foregroundActorData.forEach(function (value, key, map) {
+        value.draw();
+    });
     let lastTime = animator.times[animator.times.length - 1];
     if (animator.time === lastTime) {
         animator.stopAnimate();
@@ -611,6 +620,46 @@ class MechanicDrawable {
         }
     }
 
+}
+
+class FacingMechanicDrawable extends MechanicDrawable {
+    constructor(start, end, pixelSize, connectedTo, facingData) {
+        super(start, end, connectedTo);
+        this.facingData = facingData;
+        this.facingSize = pixelSize; // Size of the facing indicator, currently hard-coded (maybe change it 'relative to master.pixelSize'?)
+    }
+
+    getRotation(time) {
+        if (this.facingData.length === 0) {
+            return null;
+        }
+        var rot = this.facingData[0][0];
+        for (let i = 1; i < this.facingData.length; i++) {
+            if (time < this.facingData[i][1] - 150) {
+                break;
+            } else {
+                rot = this.facingData[i][0];
+            }
+        }
+        return -rot; // positive mathematical direction, reversed since JS has downwards increasing y axis
+    }
+
+    draw() {
+        const pos = this.getPosition();
+        const rot = this.getRotation(animator.time);
+        if (pos === null || rot === null) {
+            return;
+        }
+        var ctx = animator.ctx;
+        const angle = rot * Math.PI / 180;
+        ctx.save();
+        ctx.translate(pos.x, pos.y);
+        ctx.rotate(angle);
+        const facingFullSize = this.facingSize / animator.scale;
+        const facingHalfSize = facingFullSize / 2;
+        ctx.drawImage(facingIcon, -facingHalfSize, -facingHalfSize, facingFullSize, facingFullSize);
+        ctx.restore();
+    }
 }
 
 class FormMechanicDrawable extends MechanicDrawable {

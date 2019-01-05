@@ -16,19 +16,19 @@ namespace LuckParser.Models.Logic
             {
 
             new Mechanic(35128, "Temporal Shred", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Orb","Temporal Shred (Hit by Red Orb)", "Red Orb",0),
-            new Mechanic(34913, "Temporal Shred", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "O.Aoe","Temporal Shred (Stood in Orb Aoe)", "Orb AoE",0),
-            new Mechanic(35168, "Bloodstone Protection", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("hourglass-open","rgb(128,0,128)"), "InBble","Bloodstone Protection (Stood in Bubble)", "Inside Bubble",0),
+            new Mechanic(34913, "Temporal Shred", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Orb Aoe","Temporal Shred (Stood in Orb Aoe)", "Orb AoE",0),
+            new Mechanic(35168, "Bloodstone Protection", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("hourglass-open","rgb(128,0,128)"), "In Bubble","Bloodstone Protection (Stood in Bubble)", "Inside Bubble",0),
             new Mechanic(34887, "Summon Fragment Start", Mechanic.MechType.EnemyCastStart, new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Summon Fragment (Xera Breakbar)", "Breakbar",0),
-            new Mechanic(34887, "Summon Fragment End", Mechanic.MechType.EnemyCastEnd, new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC.Fail","Summon Fragment (Failed CC)", "CC Fail",0,(condition => condition.CombatItem.Value > 11940)),
+            new Mechanic(34887, "Summon Fragment End", Mechanic.MechType.EnemyCastEnd, new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Summon Fragment (Failed CC)", "CC Fail",0,(condition => condition.CombatItem.Value > 11940)),
             new Mechanic(34887, "Summon Fragment End", Mechanic.MechType.EnemyCastEnd, new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Summon Fragment (Breakbar broken)", "CCed",0,(condition => condition.CombatItem.Value <= 11940)),
-            new Mechanic(34965, "Derangement", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("square-open","rgb(200,140,255)"), "Drgmnt","Derangement (Stacking Debuff)", "Derangement",0), 
-            new Mechanic(35084, "Bending Chaos", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("triangle-down-open","rgb(255,200,0)"), "Btn1","Bending Chaos (Stood on 1st Button)", "Button 1",0),
-            new Mechanic(35162, "Shifting Chaos", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("triangle-ne-open","rgb(255,200,0)"), "Btn2","Bending Chaos (Stood on 2nd Button)", "Button 2",0),
-            new Mechanic(35032, "Twisting Chaos", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("triangle-nw-open","rgb(255,200,0)"), "Btn3","Bending Chaos (Stood on 3rd Button)", "Button 3",0),
-            new Mechanic(34956, "Intervention", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("square","rgb(0,0,255)"), "Shld","Intervention (got Special Action Key)", "Shield",0),
-            new Mechanic(34921, "Gravity Well", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle-x-open","rgb(255,0,255)"), "GrWell","Half-platform Gravity Well", "Gravity Well",4000),
-            new Mechanic(34997, "Teleport Out", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle","rgb(0,128,0)"), "TP.Out","Teleport Out (Teleport to Platform)","TP",0),
-            new Mechanic(35076, "Hero's Return", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle","rgb(0,200,0)"), "TP.Back","Hero's Return (Teleport back)", "TP back",0),
+            new Mechanic(34965, "Derangement", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("square-open","rgb(200,140,255)"), "Stacks","Derangement (Stacking Debuff)", "Derangement",0), 
+            new Mechanic(35084, "Bending Chaos", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("triangle-down-open","rgb(255,200,0)"), "Button1","Bending Chaos (Stood on 1st Button)", "Button 1",0),
+            new Mechanic(35162, "Shifting Chaos", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("triangle-ne-open","rgb(255,200,0)"), "Button2","Bending Chaos (Stood on 2nd Button)", "Button 2",0),
+            new Mechanic(35032, "Twisting Chaos", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("triangle-nw-open","rgb(255,200,0)"), "Button3","Bending Chaos (Stood on 3rd Button)", "Button 3",0),
+            new Mechanic(34956, "Intervention", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("square","rgb(0,0,255)"), "Shield","Intervention (got Special Action Key)", "Shield",0),
+            new Mechanic(34921, "Gravity Well", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle-x-open","rgb(255,0,255)"), "Gravity Half","Half-platform Gravity Well", "Gravity Well",4000),
+            new Mechanic(34997, "Teleport Out", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle","rgb(0,128,0)"), "TP Out","Teleport Out (Teleport to Platform)","TP",0),
+            new Mechanic(35076, "Hero's Return", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle","rgb(0,200,0)"), "TP Back","Hero's Return (Teleport back)", "TP back",0),
             /*new Mechanic(35000, "Intervention", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, new MechanicPlotlySetting("hourglass","rgb(128,0,128)"), "Bubble",0),*/
             //new Mechanic(35034, "Disruption", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Xera, new MechanicPlotlySetting("square","rgb(0,128,0)"), "TP",0), 
             //Not sure what this (ID 350342,"Disruption") is. Looks like it is the pulsing "orb removal" from the orange circles on the 40% platform. Would fit the name although it's weird it can hit players. 
@@ -181,7 +181,6 @@ namespace LuckParser.Models.Logic
 
         public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
         {
-            // TODO: needs facing information for hadouken
             CombatReplay replay = target.CombatReplay;
             List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
