@@ -60,7 +60,13 @@ namespace LuckParser.Models.Logic
 
         public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
         {
-            switch(target.ID)
+            CombatReplay replay = target.CombatReplay;
+            List<Point3D> facings = replay.Rotations;
+            if (facings.Any())
+            {
+                replay.Actors.Add(new FacingActor(new Tuple<int, int>((int)replay.TimeOffsets.Item1, (int)replay.TimeOffsets.Item2), new AgentConnector(target), facings));
+            }
+            switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Arkk:
                 case (ushort)Archdiviner:

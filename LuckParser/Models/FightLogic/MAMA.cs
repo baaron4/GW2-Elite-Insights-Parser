@@ -2,6 +2,7 @@
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models.Logic
@@ -46,6 +47,11 @@ namespace LuckParser.Models.Logic
         public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
         {
             CombatReplay replay = target.CombatReplay;
+            List<Point3D> facings = replay.Rotations;
+            if (facings.Any())
+            {
+                replay.Actors.Add(new FacingActor(new Tuple<int, int>((int)replay.TimeOffsets.Item1, (int)replay.TimeOffsets.Item2), new AgentConnector(target), facings));
+            }
             List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
