@@ -375,6 +375,11 @@ namespace LuckParser.Models.ParseModels
             log.CombatData.GetAgentStatus(FirstAware, LastAware, InstID, dead, down, dc);
             // Fight related stuff
             log.FightData.Logic.ComputeAdditionalPlayerData(this, log);
+            /*List<Point3D> facings = CombatReplay.Rotations;
+            if (facings.Any())
+            {
+                CombatReplay.Actors.Add(new FacingActor(new Tuple<int, int>((int)CombatReplay.TimeOffsets.Item1, (int)CombatReplay.TimeOffsets.Item2), new AgentConnector(this), facings));
+            }*/
         }
 
         //

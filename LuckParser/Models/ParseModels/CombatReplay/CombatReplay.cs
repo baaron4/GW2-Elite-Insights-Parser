@@ -10,8 +10,8 @@ namespace LuckParser.Models.ParseModels
         public List<Point3D> Velocities { get; private set; } = new List<Point3D>();
         public List<int> Times => Positions.Select(x => (int)x.Time).ToList();
         public List<Point3D> Rotations { get; } = new List<Point3D>();
-        private long _start;
-        private long _end;
+        private long _start = -1;
+        private long _end = -1;
         public Tuple<long, long> TimeOffsets => new Tuple<long, long>(_start, _end);
         // icon
         public string Icon { get; set; }
@@ -27,12 +27,6 @@ namespace LuckParser.Models.ParseModels
             Positions.RemoveAll(x => x.Time < start || x.Time > end);
             _start = Math.Max(start,1);
             _end = Math.Max(_start,end);
-            if (Positions.Count == 0)
-            {
-                _start = -1;
-                _end = -1;
-                return;
-            }
         }
            
         public void PollingRate(int rate, long fightDuration, bool forceInterpolate)
@@ -44,8 +38,6 @@ namespace LuckParser.Models.ParseModels
             }
             if (Positions.Count == 0)
             {
-                _start = -1;
-                _end = -1;
                 return;
             }
             else if (Positions.Count == 1 && !forceInterpolate)
