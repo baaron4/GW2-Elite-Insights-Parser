@@ -34,8 +34,8 @@ class Animator {
         this.targetData = new Map();
         this.playerData = new Map();
         this.trashMobData = new Map();
-        this.mechanicActorData = new Set();
-        this.foregroundActorData = new Set();
+        this.mechanicActorData = [];
+        this.attachedActorData = new Map();
         // animation
         this.animation = null;
         this.timeSlider = document.getElementById('timeRange');
@@ -95,25 +95,25 @@ class Animator {
                     this.trashMobData.set(actor.ID, new EnemyIconDrawable(actor.Start, actor.End, actor.Img, 25, actor.Positions));
                     break;
                 case "Circle":
-                    this.mechanicActorData.add(new CircleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Radius, actor.ConnectedTo, actor.MinRadius, this.inch));
+                    this.mechanicActorData.push(new CircleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Radius, actor.ConnectedTo, actor.MinRadius, this.inch));
                     break;
                 case "Rectangle":
-                    this.mechanicActorData.add(new RectangleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Width, actor.Height, actor.ConnectedTo, this.inch));
+                    this.mechanicActorData.push(new RectangleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Width, actor.Height, actor.ConnectedTo, this.inch));
                     break;
                 case "RotatedRectangle":
-                    this.mechanicActorData.add(new RotatedRectangleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Width, actor.Height, actor.Rotation, actor.RadialTranslation, actor.SpinAngle, actor.ConnectedTo, this.inch));
+                    this.mechanicActorData.push(new RotatedRectangleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Width, actor.Height, actor.Rotation, actor.RadialTranslation, actor.SpinAngle, actor.ConnectedTo, this.inch));
                     break;
                 case "Doughnut":
-                    this.mechanicActorData.add(new DoughnutMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.InnerRadius, actor.OuterRadius, actor.ConnectedTo, this.inch));
+                    this.mechanicActorData.push(new DoughnutMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.InnerRadius, actor.OuterRadius, actor.ConnectedTo, this.inch));
                     break;
                 case "Pie":
-                    this.mechanicActorData.add(new PieMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Direction, actor.OpeningAngle, actor.Radius, actor.ConnectedTo, this.inch));
+                    this.mechanicActorData.push(new PieMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Direction, actor.OpeningAngle, actor.Radius, actor.ConnectedTo, this.inch));
                     break;
                 case "Line":
-                    this.mechanicActorData.add(new LineMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.ConnectedFrom, actor.ConnectedTo));
+                    this.mechanicActorData.push(new LineMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.ConnectedFrom, actor.ConnectedTo));
                     break;
                 case "Facing":
-                    this.foregroundActorData.add(new FacingMechanicDrawable(actor.Start, actor.End, 50, actor.ConnectedTo, actor.FacingData));
+                    this.attachedActorData.set(actor.ConnectedTo, new FacingMechanicDrawable(actor.Start, actor.End, actor.ConnectedTo, actor.FacingData));
                     break;
             }
         }
@@ -361,26 +361,35 @@ function animateCanvas(noRequest) {
     ctx.restore();
     //
     ctx.drawImage(bgImage, 0, 0, canvas.width / resolutionMultiplier, canvas.height / resolutionMultiplier);
-    animator.mechanicActorData.forEach(function (value, key, map) {
-        value.draw();
-    });
+    for (let i = 0; i < animator.mechanicActorData.length; i++) {
+        animator.mechanicActorData[i].draw();
+    }
     animator.playerData.forEach(function (value, key, map) {
         if (!value.selected) {
             value.draw();
+            if (animator.attachedActorData.has(key)) {
+                animator.attachedActorData.get(key).draw();
+            }
         }
     });
     animator.trashMobData.forEach(function (value, key, map) {
         value.draw();
+        if (animator.attachedActorData.has(key)) {
+            animator.attachedActorData.get(key).draw();
+        }
     });
     animator.targetData.forEach(function (value, key, map) {
         value.draw();
+        if (animator.attachedActorData.has(key)) {
+            animator.attachedActorData.get(key).draw();
+        }
     });
     if (animator.selectedPlayer !== null) {
         animator.selectedPlayer.draw();
+        if (animator.attachedActorData.has(animator.selectedPlayerID)) {
+            animator.attachedActorData.get(animator.selectedPlayerID).draw();
+        }
     }
-    animator.foregroundActorData.forEach(function (value, key, map) {
-        value.draw();
-    });
     let lastTime = animator.times[animator.times.length - 1];
     if (animator.time === lastTime) {
         animator.stopAnimate();
@@ -623,10 +632,9 @@ class MechanicDrawable {
 }
 
 class FacingMechanicDrawable extends MechanicDrawable {
-    constructor(start, end, pixelSize, connectedTo, facingData) {
+    constructor(start, end, connectedTo, facingData) {
         super(start, end, connectedTo);
         this.facingData = facingData;
-        this.facingSize = pixelSize; // Size of the facing indicator, currently hard-coded (maybe change it 'relative to master.pixelSize'?)
     }
 
     getRotation(time) {
@@ -655,7 +663,7 @@ class FacingMechanicDrawable extends MechanicDrawable {
         ctx.save();
         ctx.translate(pos.x, pos.y);
         ctx.rotate(angle);
-        const facingFullSize = this.facingSize / animator.scale;
+        const facingFullSize = 5*this.master.pixelSize / (3*animator.scale);
         const facingHalfSize = facingFullSize / 2;
         ctx.drawImage(facingIcon, -facingHalfSize, -facingHalfSize, facingFullSize, facingFullSize);
         ctx.restore();

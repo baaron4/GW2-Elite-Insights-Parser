@@ -404,9 +404,13 @@ namespace LuckParser.Models.ParseModels
             DamageLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
         }
 
+        public int GetCombatReplayID()
+        {
+            return (InstID + "_" + CombatReplay.TimeOffsets.Item1 + "_" + CombatReplay.TimeOffsets.Item2).GetHashCode();
+        }
+
         // abstracts
         protected abstract void SetAdditionalCombatReplayData(ParsedLog log);
-        public abstract int GetCombatReplayID();
         public abstract string GetCombatReplayJSON(CombatReplayMap map);
     }
 }

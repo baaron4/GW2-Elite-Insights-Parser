@@ -375,6 +375,11 @@ namespace LuckParser.Models.ParseModels
             log.CombatData.GetAgentStatus(FirstAware, LastAware, InstID, dead, down, dc);
             // Fight related stuff
             log.FightData.Logic.ComputeAdditionalPlayerData(this, log);
+            /*List<Point3D> facings = CombatReplay.Rotations;
+            if (facings.Any())
+            {
+                CombatReplay.Actors.Add(new FacingActor(new Tuple<int, int>((int)CombatReplay.TimeOffsets.Item1, (int)CombatReplay.TimeOffsets.Item2), new AgentConnector(this), facings));
+            }*/
         }
 
         //
@@ -396,7 +401,7 @@ namespace LuckParser.Models.ParseModels
                 Group = Group,
                 Img = CombatReplay.Icon,
                 Type = "Player",
-                ID = InstID,
+                ID = GetCombatReplayID(),
                 Positions = new double[2 * CombatReplay.Positions.Count],
                 Dead = new long[2 * CombatReplay.Deads.Count],
                 Down = new long[2 * CombatReplay.Downs.Count]
@@ -422,11 +427,6 @@ namespace LuckParser.Models.ParseModels
             }
 
             return JsonConvert.SerializeObject(aux);
-        }
-
-        public override int GetCombatReplayID()
-        {
-            return InstID;
         }
 
 
