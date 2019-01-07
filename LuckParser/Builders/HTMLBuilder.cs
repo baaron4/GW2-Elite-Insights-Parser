@@ -1641,7 +1641,7 @@ namespace LuckParser.Builders
                     isConjure = (player.Account == ":Conjured Sword"),
                 };
                 BuildWeaponSets(playerDto, player);
-                if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay)
+                if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay && !playerDto.isConjure)
                 {
                     playerDto.combatReplayID = player.GetCombatReplayID();
                 }
