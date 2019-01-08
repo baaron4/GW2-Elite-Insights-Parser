@@ -24,7 +24,7 @@ namespace LuckParser.Models.ParseModels
             Time = time;
             SkillId = c.SkillID;
             IsCondi = c.IsBuff > 0;
-            Result = c.Result;
+            Result = ParseEnum.GetResult(c.Result);
             IsNinety = c.IsNinety > 0;
             IsFifty = c.IsFifty > 0;
             IsMoving = c.IsMoving > 0;

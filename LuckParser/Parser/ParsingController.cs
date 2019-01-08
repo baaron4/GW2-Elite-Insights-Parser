@@ -268,7 +268,7 @@ namespace LuckParser.Parser
             byte buff = reader.ReadByte();
 
             // 1 byte: result
-            ParseEnum.Result result = ParseEnum.GetResult(reader.ReadByte());
+            byte result = reader.ReadByte();
 
             // 1 byte: is_activation
             ParseEnum.Activation isActivation = ParseEnum.GetActivation(reader.ReadByte());
@@ -346,7 +346,7 @@ namespace LuckParser.Parser
             byte buff = reader.ReadByte();
 
             // 1 byte: result
-            ParseEnum.Result result = ParseEnum.GetResult(reader.ReadByte());
+            byte result = reader.ReadByte();
 
             // 1 byte: is_activation
             ParseEnum.Activation isActivation = ParseEnum.GetActivation(reader.ReadByte());

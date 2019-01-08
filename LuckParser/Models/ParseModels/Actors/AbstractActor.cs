@@ -136,12 +136,6 @@ namespace LuckParser.Models.ParseModels
             {
                 DamageLogs.Add(new DamageLogPower(time, c));
             }
-            else if (c.Result == ParseEnum.Result.Absorb || c.Result == ParseEnum.Result.Blind || c.Result == ParseEnum.Result.Interrupt)
-            {//Hits that where blinded, invulned, interrupts
-                DamageLogs.Add(new DamageLogPower(time, c));
-            }
-
-
         }
         protected void AddDamageTakenLog(long time, CombatItem c)
         {
