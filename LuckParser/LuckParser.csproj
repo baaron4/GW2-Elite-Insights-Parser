@@ -115,7 +115,7 @@
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Controllers\GW2APIController.cs" />
     <Compile Include="Parser\ParseHelper.cs" />
-    <Compile Include="Models\DataModels\StatisticsCalculator.cs" />
+    <Compile Include="Models\StatisticsCalculator.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Settings\CustomSettingsManager.cs" />
     <Compile Include="GridRow.cs" />
@@ -151,10 +151,10 @@
     <Compile Include="Models\FightLogic\Sabetha.cs" />
     <Compile Include="Models\FightLogic\Gorseval.cs" />
     <Compile Include="Models\FightLogic\ValeGuardian.cs" />
-    <Compile Include="Models\DataModels\ParseEnum.cs" />
-    <Compile Include="Models\DataModels\ParsedLog.cs" />
-    <Compile Include="Models\DataModels\SettingsContainer.cs" />
-    <Compile Include="Models\DataModels\Statistics.cs" />
+    <Compile Include="Parser\ParseEnum.cs" />
+    <Compile Include="Parser\ParsedLog.cs" />
+    <Compile Include="Settings\SettingsContainer.cs" />
+    <Compile Include="Models\Statistics.cs" />
     <Compile Include="Models\HtmlModels\AreaLabelDto.cs" />
     <Compile Include="Models\HtmlModels\DeathRecapDto.cs" />
     <Compile Include="Models\HtmlModels\FoodDto.cs" />
@@ -300,6 +300,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Models\DataModels\" />
     <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
