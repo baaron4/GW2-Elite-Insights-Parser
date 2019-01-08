@@ -106,13 +106,13 @@
     <Compile Include="Models\FightLogic\BanditTrio.cs" />
     <Compile Include="Models\FightLogic\Freezie.cs" />
     <Compile Include="Models\JsonModels\JsonDeathRecap.cs" />
+    <Compile Include="Models\ParseModels\CombatItem.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\FacingActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\GenericActor.cs" />
     <Compile Include="Models\ParseModels\Logs\BoonExtensionLog.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\AbstractBoonSimulationItem.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemOverstack.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\AbstractBoonSimulationItemWasted.cs" />
-    <Compile Include="Parser\ParseItem\ParseItem.cs" />
     <Compile Include="Parser\ParsingController.cs" />
     <Compile Include="Controllers\GW2APIController.cs" />
     <Compile Include="Parser\ParseHelper.cs" />
@@ -248,7 +248,6 @@
     <Compile Include="Models\ParseModels\FightData.cs" />
     <Compile Include="Models\ParseModels\Logs\CastLog.cs" />
     <Compile Include="Models\ParseModels\CombatData.cs" />
-    <Compile Include="Models\ParseModels\CombatItem.cs" />
     <Compile Include="Models\ParseModels\Logs\DamageLog.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulatorDuration.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulatorIntensity.cs" />
