@@ -162,6 +162,8 @@ var compileBuffStats = function () {
                         totalavg = [];
                     var grcount = [],
                         totalcount = 0;
+                    var grBoonAvg = [],
+                        totalBoonAvg = 0;
                     var i, k;
                     for (i = 0; i < logData.players.length; i++) {
                         var player = logData.players[i];
@@ -191,8 +193,11 @@ var compileBuffStats = function () {
                         if (!gravg[player.group]) {
                             gravg[player.group] = [];
                             grcount[player.group] = 0;
+                            grBoonAvg[player.group] = 0;
                         }
                         totalcount++;
+                        totalBoonAvg += stats[i].avg;
+                        grBoonAvg[player.group] += stats[i].avg;
                         grcount[player.group]++;
                         for (var j = 0; j < stats[i].data.length; j++) {
                             totalavg[j] = (totalavg[j] || 0) + (stats[i].data[j][0] || 0);
@@ -207,6 +212,7 @@ var compileBuffStats = function () {
                             avg.push({
                                 name: "Group " + i,
                                 data: gravg[i],
+                                avg: Math.round(10 * grBoonAvg[i] / grcount[i]) / 10
                             });
                         }
                     }
@@ -215,7 +221,8 @@ var compileBuffStats = function () {
                     }
                     avg.push({
                         name: "Total",
-                        data: totalavg
+                        data: totalavg,
+                        avg: Math.round(10 * totalBoonAvg / totalcount) / 10
                     });
                     return [uptimes, gens, gengr, genoff, gensq, avg];
                 };
