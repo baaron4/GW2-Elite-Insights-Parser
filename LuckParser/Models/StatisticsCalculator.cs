@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using LuckParser.Models.ParseModels;
-using static LuckParser.Models.DataModels.Statistics;
+using LuckParser.Parser;
+using LuckParser.Setting;
+using static LuckParser.Models.Statistics;
 
-namespace LuckParser.Models.DataModels
+namespace LuckParser.Models
 {
     /// <summary>
     /// Calculates statistical information from a log

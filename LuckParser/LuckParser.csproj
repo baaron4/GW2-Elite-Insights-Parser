@@ -112,7 +112,8 @@
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\AbstractBoonSimulationItem.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemOverstack.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\AbstractBoonSimulationItemWasted.cs" />
-    <Compile Include="Parser\Parser.cs" />
+    <Compile Include="Parser\ParseItem\ParseItem.cs" />
+    <Compile Include="Parser\ParsingController.cs" />
     <Compile Include="Controllers\GW2APIController.cs" />
     <Compile Include="Parser\ParseHelper.cs" />
     <Compile Include="Models\StatisticsCalculator.cs" />
@@ -265,7 +266,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Settings\Settings.cs" />
+    <Compile Include="Properties\Settings.cs" />
     <Compile Include="Settings\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -300,7 +301,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\DataModels\" />
     <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>

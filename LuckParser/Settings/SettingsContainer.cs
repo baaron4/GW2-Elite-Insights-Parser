@@ -1,6 +1,6 @@
 ﻿using LuckParser.Properties;
 
-namespace LuckParser.Models.DataModels
+namespace LuckParser.Setting
 {
     class SettingsContainer
     {

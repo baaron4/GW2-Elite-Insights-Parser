@@ -1,5 +1,5 @@
 ﻿using LuckParser.Controllers;
-using LuckParser.Models.DataModels;
+using LuckParser.Parser;
 using LuckParser.Models.HtmlModels;
 using LuckParser.Models.ParseModels;
 using Newtonsoft.Json;
@@ -12,6 +12,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using LuckParser.Setting;
+using LuckParser.Models;
 
 namespace LuckParser.Builders
 {

@@ -1,5 +1,5 @@
 ﻿using LuckParser.Exceptions;
-using LuckParser.Models.DataModels;
+using LuckParser.Parser;
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
+using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser
 {

@@ -2,7 +2,7 @@ using LuckParser.Controllers;
 using LuckParser.Exceptions;
 using LuckParser.Models;
 //recommend CTRL+M+O to collapse all
-using LuckParser.Models.DataModels;
+using LuckParser.Parser;
 using LuckParser.Models.Logic;
 using LuckParser.Models.ParseModels;
 using System;
@@ -11,11 +11,12 @@ using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using LuckParser.Setting;
 
 //recommend CTRL+M+O to collapse all
-namespace LuckParser
+namespace LuckParser.Parser
 {
-    class Parser
+    class ParsingController
     {
         private readonly GW2APIController _aPIController = new GW2APIController();
 
@@ -31,7 +32,7 @@ namespace LuckParser
         private Target _target;
         private byte _revision;
 
-        public Parser(SettingsContainer settings)
+        public ParsingController(SettingsContainer settings)
         {
             _settings = settings;
         }

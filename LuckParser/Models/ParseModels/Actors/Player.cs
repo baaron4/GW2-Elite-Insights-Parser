@@ -1,5 +1,5 @@
 ﻿using LuckParser.Controllers;
-using LuckParser.Models.DataModels;
+using LuckParser.Parser;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace LuckParser
+namespace LuckParser.Parser
 {
     static class ParseHelper
     {

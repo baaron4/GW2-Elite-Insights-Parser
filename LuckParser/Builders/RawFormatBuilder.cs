@@ -8,10 +8,11 @@ using System.Windows.Forms;
 using System.Xml;
 using LuckParser.Controllers;
 using LuckParser.Models;
-using LuckParser.Models.DataModels;
+using LuckParser.Parser;
 using LuckParser.Models.JsonModels;
 using LuckParser.Models.ParseModels;
 using Newtonsoft.Json;
+using LuckParser.Setting;
 
 namespace LuckParser.Builders
 {

@@ -1,4 +1,4 @@
-﻿using LuckParser.Models.DataModels;
+﻿using LuckParser.Parser;
 using System.Collections.Generic;
 using static LuckParser.Models.ParseModels.BoonSimulator;
 

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using LuckParser.Models.DataModels;
+using LuckParser.Parser;
 
 namespace LuckParser.Models.ParseModels
 {

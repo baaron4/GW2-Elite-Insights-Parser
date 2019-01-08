@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using LuckParser.Models.DataModels;
+using LuckParser.Parser;
 using Newtonsoft.Json;
 using NUglify;
+using LuckParser.Setting;
 
 namespace LuckParser.Builders
 {

@@ -4,9 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using LuckParser.Controllers;
-using LuckParser.Models.DataModels;
+using LuckParser.Parser;
 using LuckParser.Models.ParseModels;
+using LuckParser.Setting;
+using LuckParser.Models;
 
 namespace LuckParser.Builders
 {

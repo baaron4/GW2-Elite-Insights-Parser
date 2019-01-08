@@ -1,9 +1,9 @@
-using LuckParser.Models.DataModels;
+using LuckParser.Parser;
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
+using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models.Logic
 {
