@@ -106,18 +106,21 @@
     <Compile Include="Models\FightLogic\BanditTrio.cs" />
     <Compile Include="Models\FightLogic\Freezie.cs" />
     <Compile Include="Models\JsonModels\JsonDeathRecap.cs" />
-    <Compile Include="Models\ParseModels\CombatItem.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\FacingActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\GenericActor.cs" />
     <Compile Include="Models\ParseModels\Logs\BoonExtensionLog.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\AbstractBoonSimulationItem.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemOverstack.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\AbstractBoonSimulationItemWasted.cs" />
-    <Compile Include="Parser\ParsingController.cs" />
     <Compile Include="Controllers\GW2APIController.cs" />
-    <Compile Include="Parser\ParseHelper.cs" />
+    <Compile Include="Models\Statistics.cs" />
     <Compile Include="Models\StatisticsCalculator.cs" />
+    <Compile Include="Parser\ParsedLog.cs" />
+    <Compile Include="Parser\ParseEnum.cs" />
+    <Compile Include="Parser\ParseHelper.cs" />
     <Compile Include="Controllers\UploadController.cs" />
+    <Compile Include="Parser\ParsingController.cs" />
+    <Compile Include="Properties\Settings.cs" />
     <Compile Include="Settings\CustomSettingsManager.cs" />
     <Compile Include="GridRow.cs" />
     <Compile Include="MainForm.cs">
@@ -152,10 +155,6 @@
     <Compile Include="Models\FightLogic\Sabetha.cs" />
     <Compile Include="Models\FightLogic\Gorseval.cs" />
     <Compile Include="Models\FightLogic\ValeGuardian.cs" />
-    <Compile Include="Parser\ParseEnum.cs" />
-    <Compile Include="Parser\ParsedLog.cs" />
-    <Compile Include="Settings\SettingsContainer.cs" />
-    <Compile Include="Models\Statistics.cs" />
     <Compile Include="Models\HtmlModels\AreaLabelDto.cs" />
     <Compile Include="Models\HtmlModels\DeathRecapDto.cs" />
     <Compile Include="Models\HtmlModels\FoodDto.cs" />
@@ -248,6 +247,7 @@
     <Compile Include="Models\ParseModels\FightData.cs" />
     <Compile Include="Models\ParseModels\Logs\CastLog.cs" />
     <Compile Include="Models\ParseModels\CombatData.cs" />
+    <Compile Include="Models\ParseModels\CombatItem.cs" />
     <Compile Include="Models\ParseModels\Logs\DamageLog.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulatorDuration.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulatorIntensity.cs" />
@@ -265,7 +265,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\Settings.cs" />
+    <Compile Include="Settings\SettingsContainer.cs" />
     <Compile Include="Settings\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
