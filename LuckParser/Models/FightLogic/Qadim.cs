@@ -62,13 +62,13 @@ namespace LuckParser.Models.Logic
         protected override CombatReplayMap GetCombatMapInternal()
         {
             //return new CombatReplayMap("https://i.imgur.com/nGaCj1L.png",
-            //                Tuple.Create(3437, 2978),
-            //                Tuple.Create(-10966, 8825, -3870, 15289),
+            //                (3437, 2978),
+            //                (-10966, 8825, -3870, 15289),
             return new CombatReplayMap("https://i.imgur.com/qvF3ClM.png",
-                            Tuple.Create(3785, 3570),
-                            Tuple.Create(-11676, 8825, -3870, 16582),
-                            Tuple.Create(-21504, -21504, 24576, 24576),
-                            Tuple.Create(13440, 14336, 15360, 16256));
+                            (3785, 3570),
+                            (-11676, 8825, -3870, 16582),
+                            (-21504, -21504, 24576, 24576),
+                            (13440, 14336, 15360, 16256));
         }
 
 
@@ -185,14 +185,14 @@ namespace LuckParser.Models.Logic
                     foreach (CastLog c in breakbar)
                     {
                         int radius = ccRadius;
-                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Riposte
                     List<CastLog> riposte = cls.Where(x => x.SkillId == 52265).ToList();
                     foreach (CastLog c in riposte)
                     {
                         int radius = 2200;
-                        replay.Actors.Add(new CircleActor(true, 0, radius, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleActor(true, 0, radius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     }
                     //Big Hit
                     List<CastLog> maceShockwave = cls.Where(x => x.SkillId == 52310).ToList();
@@ -209,9 +209,9 @@ namespace LuckParser.Models.Logic
                         if (facing != null && targetPosition != null)
                         {
                             Point3D position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z, targetPosition.Time);
-                            replay.Actors.Add(new CircleActor(true, 0, impactRadius, new Tuple<int, int>(start, start + delay), "rgba(255, 100, 0, 0.2)", new PositionConnector(position)));
-                            replay.Actors.Add(new CircleActor(true, 0, impactRadius, new Tuple<int, int>(start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.7)", new PositionConnector(position)));
-                            replay.Actors.Add(new CircleActor(false, start + delay + duration, radius, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 200, 0, 0.7)", new PositionConnector(position)));
+                            replay.Actors.Add(new CircleActor(true, 0, impactRadius, (start, start + delay), "rgba(255, 100, 0, 0.2)", new PositionConnector(position)));
+                            replay.Actors.Add(new CircleActor(true, 0, impactRadius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.7)", new PositionConnector(position)));
+                            replay.Actors.Add(new CircleActor(false, start + delay + duration, radius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.7)", new PositionConnector(position)));
                         }
                     }
                     break;
@@ -221,7 +221,7 @@ namespace LuckParser.Models.Logic
                     foreach (CastLog c in fieryMeteor)
                     {
                         int radius = ccRadius;
-                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     List<CastLog> eleBreath = cls.Where(x => x.SkillId == 52520).ToList();
                     foreach (CastLog c in eleBreath)
@@ -234,7 +234,7 @@ namespace LuckParser.Models.Logic
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, (start + delay, start + delay + duration), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
                         }
                     }
                     break;
@@ -252,8 +252,8 @@ namespace LuckParser.Models.Logic
                         if (facing != null)
                         {
                             int rotation = Point3D.GetRotationFromFacing(facing);
-                            replay.Actors.Add(new RotatedRectangleActor(true, 0, range, span, rotation, range / 2, new Tuple<int, int>(start, start + preCast), "rgba(0,100,255,0.2)", new AgentConnector(target)));
-                            replay.Actors.Add(new RotatedRectangleActor(true, 0, range, span, rotation, range / 2, new Tuple<int, int>(start + preCast, start + duration), "rgba(0,100,255,0.5)", new AgentConnector(target)));
+                            replay.Actors.Add(new RotatedRectangleActor(true, 0, range, span, rotation, range / 2, (start, start + preCast), "rgba(0,100,255,0.2)", new AgentConnector(target)));
+                            replay.Actors.Add(new RotatedRectangleActor(true, 0, range, span, rotation, range / 2, (start + preCast, start + duration), "rgba(0,100,255,0.5)", new AgentConnector(target)));
                         }
                     }
                     //Breath
@@ -270,8 +270,8 @@ namespace LuckParser.Models.Logic
                         Point3D pos = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && pos != null)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, new Tuple<int, int>(start + delay + duration, start + delay + fieldDuration), "rgba(255, 50, 0, 0.3)", new PositionConnector(pos)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, (start + delay + duration, start + delay + fieldDuration), "rgba(255, 50, 0, 0.3)", new PositionConnector(pos)));
                         }
                     }
                     //Tail Swipe
@@ -291,8 +291,8 @@ namespace LuckParser.Models.Logic
                             for (int i = 0; i < coneAmount; i++)
                             {
                                 int rotation = Point3D.GetRotationFromFacing(facing);
-                                replay.Actors.Add(new PieActor(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(target)));
-                                replay.Actors.Add(new PieActor(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
+                                replay.Actors.Add(new PieActor(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(target)));
+                                replay.Actors.Add(new PieActor(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
 
                             }
                         }
@@ -304,7 +304,7 @@ namespace LuckParser.Models.Logic
                     foreach (CastLog c in patCC)
                     {
                         int radius = ccRadius;
-                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Breath
                     List<CastLog> patBreath = cls.Where(x => x.SkillId == 52726).ToList();
@@ -320,8 +320,8 @@ namespace LuckParser.Models.Logic
                         Point3D pos = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && pos != null)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, new Tuple<int, int>(start + delay + duration, start + delay + fieldDuration), "rgba(255, 50, 0, 0.3)", new PositionConnector(pos)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, (start + delay + duration, start + delay + fieldDuration), "rgba(255, 50, 0, 0.3)", new PositionConnector(pos)));
                         }
                     }
                     //Tail Swipe
@@ -341,8 +341,8 @@ namespace LuckParser.Models.Logic
                             for (int i = 0; i < coneAmount; i++)
                             {
                                 int rotation = Point3D.GetRotationFromFacing(facing);
-                                replay.Actors.Add(new PieActor(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(target)));
-                                replay.Actors.Add(new PieActor(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
+                                replay.Actors.Add(new PieActor(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(target)));
+                                replay.Actors.Add(new PieActor(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
                             }
                         }
                     }
@@ -355,7 +355,7 @@ namespace LuckParser.Models.Logic
                         int delay = 1800;
                         int duration = 3000;
                         int maxRadius = 2000;
-                        replay.Actors.Add(new CircleActor(false, start + delay + duration, maxRadius, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 200, 0, 0.5)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleActor(false, start + delay + duration, maxRadius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.5)", new AgentConnector(target)));
                     }
                     List<CastLog> stompShockwave = cls.Where(x => x.SkillId == 52330).ToList();
                     foreach (CastLog c in stompShockwave)
@@ -371,9 +371,9 @@ namespace LuckParser.Models.Logic
                         if (facing != null && targetPosition != null)
                         {
                             Point3D position = new Point3D(targetPosition.X + facing.X * spellCenterDistance, targetPosition.Y + facing.Y * spellCenterDistance, targetPosition.Z, targetPosition.Time);
-                            replay.Actors.Add(new CircleActor(true, 0, impactRadius, new Tuple<int, int>(start, start + delay), "rgba(255, 100, 0, 0.1)", new PositionConnector(position)));
-                            replay.Actors.Add(new CircleActor(true, 0, impactRadius, new Tuple<int, int>(start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.5)", new PositionConnector(position)));
-                            replay.Actors.Add(new CircleActor(false, start + delay + duration, maxRadius, new Tuple<int, int>(start + delay, start + delay + duration), "rgba(255, 200, 0, 0.5)", new PositionConnector(position)));
+                            replay.Actors.Add(new CircleActor(true, 0, impactRadius, (start, start + delay), "rgba(255, 100, 0, 0.1)", new PositionConnector(position)));
+                            replay.Actors.Add(new CircleActor(true, 0, impactRadius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.5)", new PositionConnector(position)));
+                            replay.Actors.Add(new CircleActor(false, start + delay + duration, maxRadius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.5)", new PositionConnector(position)));
                         }
                     }
                     //CC
@@ -381,7 +381,7 @@ namespace LuckParser.Models.Logic
                     foreach (CastLog c in summon)
                     {
                         int radius = ccRadius;
-                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Pizza
                     List<CastLog> forceWave = cls.Where(x => x.SkillId == 51759).ToList();
@@ -400,8 +400,8 @@ namespace LuckParser.Models.Logic
                             for (int i = 0; i < coneAmount; i++)
                             {
                                 int rotation = Point3D.GetRotationFromFacing(facing);
-                                replay.Actors.Add(new PieActor(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(target)));
-                                replay.Actors.Add(new PieActor(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, new Tuple<int, int>(start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
+                                replay.Actors.Add(new PieActor(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(target)));
+                                replay.Actors.Add(new PieActor(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
                             }
                         }
                     }

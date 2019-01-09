@@ -15,11 +15,11 @@ namespace LuckParser.Builders
     {
         public static SettingsContainer Settings;
   
-        public static string CreateCombatReplayInterface(Tuple<int,int> canvasSize, ParsedLog log)
+        public static string CreateCombatReplayInterface((int width, int height) canvasSize, ParsedLog log)
         {
             string replayHTML = Properties.Resources.tmplCombatReplay;
-            replayHTML = replayHTML.Replace("${canvasX}", canvasSize.Item1.ToString());
-            replayHTML = replayHTML.Replace("${canvasY}", canvasSize.Item2.ToString());
+            replayHTML = replayHTML.Replace("${canvasX}", canvasSize.width.ToString());
+            replayHTML = replayHTML.Replace("${canvasY}", canvasSize.height.ToString());
             replayHTML = replayHTML.Replace("${maxTime}", log.PlayerList.First().CombatReplay.Times.Last().ToString());
             List<int> groups = log.PlayerList.Where(x => x.Account != ":Conjured Sword").Select(x => x.Group).Distinct().ToList();
             string groupsString = "";

@@ -30,10 +30,10 @@ namespace LuckParser.Models.Logic
         protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/4wmuc8B.png",
-                            Tuple.Create(914, 914),
-                            Tuple.Create(8991, 112, 11731, 2812),
-                            Tuple.Create(-24576, -24576, 24576, 24576),
-                            Tuple.Create(11204, 4414, 13252, 6462));
+                            (914, 914),
+                            (8991, 112, 11731, 2812),
+                            (-24576, -24576, 24576, 24576),
+                            (11204, 4414, 13252, 6462));
         }
 
         protected override void RegroupTargets(AgentData agentData, List<CombatItem> combatItems)

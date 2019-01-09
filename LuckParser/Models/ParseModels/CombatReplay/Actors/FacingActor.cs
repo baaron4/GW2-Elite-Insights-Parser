@@ -6,13 +6,13 @@ namespace LuckParser.Models.ParseModels
 {
     public class FacingActor : GenericActor
     {
-        private List<Tuple<double, long>> _data = new List<Tuple<double, long>>();
+        private List<(double angle, long time)> _data = new List<(double angle, long time)>();
 
-        public FacingActor(Tuple<int, int> lifespan, AgentConnector connector, List<Point3D> facings) : base(lifespan, connector)
+        public FacingActor((int start, int end) lifespan, AgentConnector connector, List<Point3D> facings) : base(lifespan, connector)
         {
             foreach(Point3D facing in facings)
             {
-                _data.Add(new Tuple<double, long>(Point3D.GetRotationFromFacing(facing), facing.Time));
+                _data.Add((Point3D.GetRotationFromFacing(facing), facing.Time));
             }
         }
 
@@ -27,18 +27,18 @@ namespace LuckParser.Models.ParseModels
             FacingSerializable aux = new FacingSerializable
             {
                 Type = "Facing",
-                Start = Lifespan.Item1,
-                End = Lifespan.Item2,
+                Start = Lifespan.start,
+                End = Lifespan.end,
                 ConnectedTo = ConnectedTo.GetConnectedTo(map),
                 FacingData = new object[_data.Count]
             };
             int i = 0;
-            foreach(var item in _data)
+            foreach((double angle, long time) in _data)
             {
                 aux.FacingData[i++] = new object[2]
                 {
-                    item.Item1,
-                    item.Item2
+                    angle,
+                    time
                 };
             }
             return JsonConvert.SerializeObject(aux);

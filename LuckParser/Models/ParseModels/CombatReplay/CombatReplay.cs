@@ -12,13 +12,13 @@ namespace LuckParser.Models.ParseModels
         public List<Point3D> Rotations { get; } = new List<Point3D>();
         private long _start = -1;
         private long _end = -1;
-        public Tuple<long, long> TimeOffsets => new Tuple<long, long>(_start, _end);
+        public (long start, long end) TimeOffsets => (_start, _end);
         // icon
         public string Icon { get; set; }
         //status
-        public List<Tuple<long, long>> Deads { get; } = new List<Tuple<long, long>>();
-        public List<Tuple<long, long>> Downs { get; } = new List<Tuple<long, long>>();
-        public List<Tuple<long, long>> DCs { get; } = new List<Tuple<long, long>>();
+        public List<(long start, long end)> Deads { get; } = new List<(long start, long end)>();
+        public List<(long start, long end)> Downs { get; } = new List<(long start, long end)>();
+        public List<(long start, long end)> DCs { get; } = new List<(long start, long end)>();
         // actors
         public List<GenericActor> Actors { get; } = new List<GenericActor>();
   
@@ -34,7 +34,7 @@ namespace LuckParser.Models.ParseModels
             if (forceInterpolate && Positions.Count == 0)
             {
                 Positions.Add(new Point3D(short.MinValue, short.MinValue, 0, 0));
-                Deads.Add(new Tuple<long, long>(0, fightDuration));
+                Deads.Add((0, fightDuration));
             }
             if (Positions.Count == 0)
             {
@@ -108,16 +108,16 @@ namespace LuckParser.Models.ParseModels
             for (var i = 0; i < activePositions.Count; i++)
             {
                 Point3D cur = activePositions[i];
-                foreach (Tuple<long, long> status in Deads)
+                foreach ((long start, long end) in Deads)
                 {
-                    if (cur.Time >= status.Item1 && cur.Time <= status.Item2)
+                    if (cur.Time >= start && cur.Time <= end)
                     {
                         activePositions[i] = null;
                     }
                 }
-                foreach (Tuple<long, long> status in DCs)
+                foreach ((long start, long end) in DCs)
                 {
-                    if (cur.Time >= status.Item1 && cur.Time <= status.Item2)
+                    if (cur.Time >= start && cur.Time <= end)
                     {
                         activePositions[i] = null;
                     }

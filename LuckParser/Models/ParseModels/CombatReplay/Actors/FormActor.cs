@@ -9,7 +9,7 @@ namespace LuckParser.Models.ParseModels
         public string Color { get; }
         public int Growing { get; }
         
-        protected FormActor(bool fill, int growing, Tuple<int, int> lifespan, string color, Connector connector) : base(lifespan, connector)
+        protected FormActor(bool fill, int growing, (int start, int end) lifespan, string color, Connector connector) : base(lifespan, connector)
         {
             Color = color;
             Filled = fill;

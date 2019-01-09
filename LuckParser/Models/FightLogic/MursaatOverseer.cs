@@ -30,10 +30,10 @@ namespace LuckParser.Models.Logic
         protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/lT1FW2r.png",
-                            Tuple.Create(889, 889),
-                            Tuple.Create(1360, 2701, 3911, 5258),
-                            Tuple.Create(-27648, -9216, 27648, 12288),
-                            Tuple.Create(11774, 4480, 14078, 5376));
+                            (889, 889),
+                            (1360, 2701, 3911, 5258),
+                            (-27648, -9216, 27648, 12288),
+                            (11774, 4480, 14078, 5376));
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
@@ -63,7 +63,7 @@ namespace LuckParser.Models.Logic
                         else
                         {
                             int shieldEnd = (int)(log.FightData.ToFightSpace(c.Time));
-                            replay.Actors.Add(new CircleActor(true, 0, shieldRadius, new Tuple<int, int>(shieldStart, shieldEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(mob)));
+                            replay.Actors.Add(new CircleActor(true, 0, shieldRadius, (shieldStart, shieldEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(mob)));
                         }
                     }
                     List<CastLog> explosion = cls.Where(x => x.SkillId == 37788).ToList();
@@ -73,8 +73,8 @@ namespace LuckParser.Models.Logic
                         int precast = 1350;
                         int duration = 100;
                         int radius = 1200;
-                        replay.Actors.Add(new CircleActor(true, 0, radius, new Tuple<int, int>(start, start + precast + duration), "rgba(255, 0, 0, 0.05)", new AgentConnector(mob)));
-                        replay.Actors.Add(new CircleActor(true, 0, radius, new Tuple<int, int>(start + precast -10, start + precast + duration), "rgba(255, 0, 0, 0.25)", new AgentConnector(mob)));
+                        replay.Actors.Add(new CircleActor(true, 0, radius, (start, start + precast + duration), "rgba(255, 0, 0, 0.05)", new AgentConnector(mob)));
+                        replay.Actors.Add(new CircleActor(true, 0, radius, (start + precast -10, start + precast + duration), "rgba(255, 0, 0, 0.25)", new AgentConnector(mob)));
                     }
                     break;
                 default:

@@ -41,10 +41,10 @@ namespace LuckParser.Models.Logic
         protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/PO3aoJD.png",
-                            Tuple.Create(1759, 1783),
-                            Tuple.Create(-22267, 14955, -17227, 20735),
-                            Tuple.Create(-24576, -24576, 24576, 24576),
-                            Tuple.Create(11204, 4414, 13252, 6462));
+                            (1759, 1783),
+                            (-22267, 14955, -17227, 20735),
+                            (-24576, -24576, 24576, 24576),
+                            (11204, 4414, 13252, 6462));
         }
 
         public override int IsCM(ParsedLog log)

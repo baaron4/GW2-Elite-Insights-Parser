@@ -369,17 +369,17 @@ namespace LuckParser.Models.ParseModels
         {
             CombatReplay.Icon = GeneralHelper.GetProfIcon(Prof);
             // Down and deads
-            List<Tuple<long, long>> dead = CombatReplay.Deads;
-            List<Tuple<long, long>> down = CombatReplay.Downs;
-            List<Tuple<long, long>> dc = CombatReplay.DCs;
+            List<(long, long)> dead = CombatReplay.Deads;
+            List<(long, long)> down = CombatReplay.Downs;
+            List<(long, long)> dc = CombatReplay.DCs;
             log.CombatData.GetAgentStatus(FirstAware, LastAware, InstID, dead, down, dc);
             // Fight related stuff
             log.FightData.Logic.ComputeAdditionalPlayerData(this, log);
-            /*List<Point3D> facings = CombatReplay.Rotations;
+            List<Point3D> facings = CombatReplay.Rotations;
             if (facings.Any())
             {
-                CombatReplay.Actors.Add(new FacingActor(new Tuple<int, int>((int)CombatReplay.TimeOffsets.Item1, (int)CombatReplay.TimeOffsets.Item2), new AgentConnector(this), facings));
-            }*/
+                CombatReplay.Actors.Add(new FacingActor(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), facings));
+            }
         }
 
         //
@@ -409,21 +409,21 @@ namespace LuckParser.Models.ParseModels
             int i = 0;
             foreach (Point3D pos in CombatReplay.Positions)
             {
-                Tuple<double, double> coord = map.GetMapCoord(pos.X, pos.Y);
-                aux.Positions[i++] = coord.Item1;
-                aux.Positions[i++] = coord.Item2;
+                (double x, double y) = map.GetMapCoord(pos.X, pos.Y);
+                aux.Positions[i++] = x;
+                aux.Positions[i++] = y;
             }
             i = 0;
-            foreach (Tuple<long,long> status in CombatReplay.Deads)
+            foreach ((long start, long end) in CombatReplay.Deads)
             {
-                aux.Dead[i++] = status.Item1;
-                aux.Dead[i++] = status.Item2;
+                aux.Dead[i++] = start;
+                aux.Dead[i++] = end;
             }
             i = 0;
-            foreach (Tuple<long, long> status in CombatReplay.Downs)
+            foreach ((long start, long end) in CombatReplay.Downs)
             {
-                aux.Down[i++] = status.Item1;
-                aux.Down[i++] = status.Item2;
+                aux.Down[i++] = start;
+                aux.Down[i++] = end;
             }
 
             return JsonConvert.SerializeObject(aux);

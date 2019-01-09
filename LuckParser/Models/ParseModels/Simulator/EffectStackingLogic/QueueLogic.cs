@@ -30,9 +30,9 @@ namespace LuckParser.Models.ParseModels
             wastes.Add(new BoonSimulationItemWasted(minItem.Src, minItem.BoonDuration, minItem.Start, minItem.ApplicationTime));
             if (minItem.Extensions.Count > 0)
             {
-                foreach (var item in minItem.Extensions)
+                foreach ((ushort src, long value, long time) in minItem.Extensions)
                 {
-                    wastes.Add(new BoonSimulationItemWasted(item.Item1, item.Item2, minItem.Start, item.Item3));
+                    wastes.Add(new BoonSimulationItemWasted(src, value, minItem.Start, time));
                 }
             }
             stacks[stacks.IndexOf(minItem)] = stackItem;

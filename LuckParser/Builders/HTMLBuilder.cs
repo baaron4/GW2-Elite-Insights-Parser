@@ -1351,7 +1351,7 @@ namespace LuckParser.Builders
                 return "";
             }
             CombatReplayMap map = _log.FightData.Logic.GetCombatMap();
-            Tuple<int, int> canvasSize = map.GetPixelMapSize();
+            (int width, int height) canvasSize = map.GetPixelMapSize();
             return CombatReplayHelper.CreateCombatReplayInterface(canvasSize, _log);
         }
 

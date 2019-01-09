@@ -41,10 +41,10 @@ namespace LuckParser.Models.Logic
         protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/W7MocGz.png",
-                            Tuple.Create(889, 889),
-                            Tuple.Create(-6365, -22213, -3150, -18999),
-                            Tuple.Create(-15360, -36864, 15360, 39936),
-                            Tuple.Create(3456, 11012, 4736, 14212));
+                            (889, 889),
+                            (-6365, -22213, -3150, -18999),
+                            (-15360, -36864, 15360, 39936),
+                            (3456, 11012, 4736, 14212));
         }
 
         protected override List<ushort> GetFightTargetsIDs()
@@ -109,7 +109,7 @@ namespace LuckParser.Models.Logic
             switch (mob.ID)
             {
                 case (ushort)Seekers:
-                    Tuple<int, int> lifespan = new Tuple<int, int>((int)mob.CombatReplay.TimeOffsets.Item1, (int)mob.CombatReplay.TimeOffsets.Item2);
+                    (int, int) lifespan = ((int)mob.CombatReplay.TimeOffsets.start, (int)mob.CombatReplay.TimeOffsets.end);
                     mob.CombatReplay.Actors.Add(new CircleActor(false, 0, 180, lifespan, "rgba(255, 0, 0, 0.5)", new AgentConnector(mob)));
                     break;
                 default:
@@ -121,14 +121,14 @@ namespace LuckParser.Models.Logic
         {
             CombatReplay replay = target.CombatReplay;
             List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
-            Tuple<int, int> lifespan = new Tuple<int, int>((int)target.CombatReplay.TimeOffsets.Item1, (int)target.CombatReplay.TimeOffsets.Item2);
+            (int, int) lifespan = ((int)target.CombatReplay.TimeOffsets.start, (int)target.CombatReplay.TimeOffsets.end);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.ValeGuardian:
                     List<CastLog> magicStorms = cls.Where(x => x.SkillId == 31419).ToList();
                     foreach (CastLog c in magicStorms)
                     {
-                        replay.Actors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleActor(true, 0, 100, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     int distributedMagicDuration = 6700;
                     int arenaRadius = 1600;
@@ -138,27 +138,27 @@ namespace LuckParser.Models.Logic
                     {
                         int start = (int)c.Time;
                         int end = start + distributedMagicDuration;
-                        replay.Actors.Add(new PieActor(true, start + distributedMagicDuration, arenaRadius, 151, 120, new Tuple<int, int>(start, end), "rgba(0,255,0,0.1)", new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f, 0))));
-                        replay.Actors.Add(new PieActor(true, 0, arenaRadius, 151, 120, new Tuple<int, int>(end, end + impactDuration), "rgba(0,255,0,0.3)", new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f, 0))));
-                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0,255,0,0.2)", new PositionConnector(new Point3D(-5449.0f, -20219.0f, 0.0f, 0))));
+                        replay.Actors.Add(new PieActor(true, start + distributedMagicDuration, arenaRadius, 151, 120, (start, end), "rgba(0,255,0,0.1)", new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f, 0))));
+                        replay.Actors.Add(new PieActor(true, 0, arenaRadius, 151, 120, (end, end + impactDuration), "rgba(0,255,0,0.3)", new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f, 0))));
+                        replay.Actors.Add(new CircleActor(true, 0, 180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(new Point3D(-5449.0f, -20219.0f, 0.0f, 0))));
                     }
                     List<CastLog> distributedMagicBlue = cls.Where(x => x.SkillId == 31340).ToList();
                     foreach (CastLog c in distributedMagicBlue)
                     {
                         int start = (int)c.Time;
                         int end = start + distributedMagicDuration;
-                        replay.Actors.Add(new PieActor(true, start + distributedMagicDuration, arenaRadius, 31, 120, new Tuple<int, int>(start, end), "rgba(0,255,0,0.1)", new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f, 0))));
-                        replay.Actors.Add(new PieActor(true, 0, arenaRadius, 31, 120, new Tuple<int, int>(end, end + impactDuration), "rgba(0,255,0,0.3)", new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f, 0))));
-                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0,255,0,0.2)", new PositionConnector(new Point3D(-4063.0f, -20195.0f, 0.0f, 0))));
+                        replay.Actors.Add(new PieActor(true, start + distributedMagicDuration, arenaRadius, 31, 120, (start, end), "rgba(0,255,0,0.1)", new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f, 0))));
+                        replay.Actors.Add(new PieActor(true, 0, arenaRadius, 31, 120, (end, end + impactDuration), "rgba(0,255,0,0.3)", new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f, 0))));
+                        replay.Actors.Add(new CircleActor(true, 0, 180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(new Point3D(-4063.0f, -20195.0f, 0.0f, 0))));
                     }
                     List<CastLog> distributedMagicRed = cls.Where(x => x.SkillId == 31391).ToList();
                     foreach (CastLog c in distributedMagicRed)
                     {
                         int start = (int)c.Time;
                         int end = start + distributedMagicDuration;
-                        replay.Actors.Add(new PieActor(true, start + distributedMagicDuration, arenaRadius, 271, 120, new Tuple<int, int>(start, end), "rgba(0,255,0,0.1)", new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f, 0))));
-                        replay.Actors.Add(new PieActor(true, 0, arenaRadius, 271, 120, new Tuple<int, int>(end, end + impactDuration), "rgba(0,255,0,0.3)", new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f, 0))));
-                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0,255,0,0.2)", new PositionConnector(new Point3D(-4735.0f, -21407.0f, 0.0f, 0))));
+                        replay.Actors.Add(new PieActor(true, start + distributedMagicDuration, arenaRadius, 271, 120, (start, end), "rgba(0,255,0,0.1)", new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f, 0))));
+                        replay.Actors.Add(new PieActor(true, 0, arenaRadius, 271, 120, (end, end + impactDuration), "rgba(0,255,0,0.3)", new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f, 0))));
+                        replay.Actors.Add(new CircleActor(true, 0, 180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(new Point3D(-4735.0f, -21407.0f, 0.0f, 0))));
                     }
                     break;
                 case (ushort)BlueGuardian:

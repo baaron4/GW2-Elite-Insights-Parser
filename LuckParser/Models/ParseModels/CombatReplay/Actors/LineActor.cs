@@ -8,7 +8,7 @@ namespace LuckParser.Models.ParseModels
         public Connector ConnectedFrom { get; }
         public int Width { get; }
 
-        public LineActor(int growing, Tuple<int, int> lifespan, string color, Connector connector, Connector targetConnector) : base(false, growing, lifespan, color, connector)
+        public LineActor(int growing, (int start, int end) lifespan, string color, Connector connector, Connector targetConnector) : base(false, growing, lifespan, color, connector)
         {
             ConnectedFrom = targetConnector;
         }
@@ -26,8 +26,8 @@ namespace LuckParser.Models.ParseModels
                 Fill = Filled,
                 Color = Color,
                 Growing = Growing,
-                Start = Lifespan.Item1,
-                End = Lifespan.Item2,
+                Start = Lifespan.start,
+                End = Lifespan.end,
                 ConnectedTo = ConnectedTo.GetConnectedTo(map),
                 ConnectedFrom = ConnectedFrom.GetConnectedTo(map)
             };

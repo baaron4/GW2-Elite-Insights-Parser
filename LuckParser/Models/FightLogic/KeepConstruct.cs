@@ -32,10 +32,10 @@ namespace LuckParser.Models.Logic
         protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/RZbs21b.png",
-                            Tuple.Create(1099, 1114),
-                            Tuple.Create(-5467, 8069, -2282, 11297),
-                            Tuple.Create(-12288, -27648, 12288, 27648),
-                            Tuple.Create(1920, 12160, 2944, 14464));
+                            (1099, 1114),
+                            (-5467, 8069, -2282, 11297),
+                            (-12288, -27648, 12288, 27648),
+                            (1920, 12160, 2944, 14464));
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
@@ -199,9 +199,8 @@ namespace LuckParser.Models.Logic
         public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
         {
             CombatReplay replay = mob.CombatReplay;
-            int start = (int)replay.TimeOffsets.Item1;
-            int end = (int)replay.TimeOffsets.Item2;
-            Tuple<int, int> lifespan = new Tuple<int, int>(start, end);
+            int start = (int)replay.TimeOffsets.start;
+            int end = (int)replay.TimeOffsets.end;
             switch (mob.ID)
             {
                 case (ushort)Core:
@@ -214,13 +213,13 @@ namespace LuckParser.Models.Logic
                 case (ushort)Henley:
                 case (ushort)Galletta:
                 case (ushort)Ianim:
-                    replay.Actors.Add(new CircleActor(false, 0, 600, lifespan, "rgba(255, 0, 0, 0.5)", new AgentConnector(mob)));
-                    replay.Actors.Add(new CircleActor(true, 0, 400, lifespan, "rgba(0, 125, 255, 0.5)", new AgentConnector(mob)));
+                    replay.Actors.Add(new CircleActor(false, 0, 600, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(mob)));
+                    replay.Actors.Add(new CircleActor(true, 0, 400, (start, end), "rgba(0, 125, 255, 0.5)", new AgentConnector(mob)));
                     break;
                 case (ushort)GreenPhantasm:
                     int lifetime = 8000;
-                    replay.Actors.Add(new CircleActor(true, 0, 210, new Tuple<int, int>(start, start + lifetime), "rgba(0,255,0,0.2)", new AgentConnector(mob)));
-                    replay.Actors.Add(new CircleActor(true, start + lifetime, 210, new Tuple<int, int>(start, start + lifetime), "rgba(0,255,0,0.3)", new AgentConnector(mob)));
+                    replay.Actors.Add(new CircleActor(true, 0, 210, (start, start + lifetime), "rgba(0,255,0,0.2)", new AgentConnector(mob)));
+                    replay.Actors.Add(new CircleActor(true, start + lifetime, 210, (start, start + lifetime), "rgba(0,255,0,0.3)", new AgentConnector(mob)));
                     break;
                 case (ushort)RetrieverProjection:
                 case (ushort)InsidiousProjection:
@@ -250,8 +249,8 @@ namespace LuckParser.Models.Logic
                             CastLog fire = magicExplode[i];
                             int start = (int)charge.Time;
                             int end = (int)fire.Time + fire.ActualDuration;
-                            replay.Actors.Add(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
-                            replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                            replay.Actors.Add(new CircleActor(false, 0, 300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                            replay.Actors.Add(new CircleActor(true, end, 300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                         }
                     }
                     List<CastLog> towerDrop = cls.Where(x => x.SkillId == 35086).ToList();
@@ -264,8 +263,8 @@ namespace LuckParser.Models.Logic
                         Point3D prev = replay.Positions.LastOrDefault(x => x.Time <= end);
                         if (prev != null || next != null)
                         {
-                            replay.Actors.Add(new CircleActor(false, 0, 400, new Tuple<int, int>(start, skillCast), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, end)));
-                            replay.Actors.Add(new CircleActor(true, skillCast, 400, new Tuple<int, int>(start, skillCast), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, end)));
+                            replay.Actors.Add(new CircleActor(false, 0, 400, (start, skillCast), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, end)));
+                            replay.Actors.Add(new CircleActor(true, skillCast, 400, (start, skillCast), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, end)));
                         }
                     }
                     List<CastLog> blades1 = cls.Where(x => x.SkillId == 35064).ToList();
@@ -282,11 +281,11 @@ namespace LuckParser.Models.Logic
                         {
                             continue;
                         }
-                        replay.Actors.Add(new CircleActor(true, 0, 200, new Tuple<int, int>(start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", new AgentConnector(target)));
-                        replay.Actors.Add(new PieActor(true, 0, 1600, facing, 360 * 3 / 32, new Tuple<int, int>(start, start + 2 * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts twice as long
+                        replay.Actors.Add(new CircleActor(true, 0, 200, (start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", new AgentConnector(target)));
+                        replay.Actors.Add(new PieActor(true, 0, 1600, facing, 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts twice as long
                         for (int i = 1; i < ticks; i++)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 8), 360 * 3 / 32, new Tuple<int, int>(start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts longer
+                            replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts longer
                         }
                     }
                     foreach (CastLog c in blades2)
@@ -298,13 +297,13 @@ namespace LuckParser.Models.Logic
                         {
                             continue;
                         }
-                        replay.Actors.Add(new CircleActor(true, 0, 200, new Tuple<int, int>(start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", new AgentConnector(target)));
-                        replay.Actors.Add(new PieActor(true, 0, 1600, facing, 360 * 3 / 32, new Tuple<int, int>(start, start + 2 * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts twice as long
-                        replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI), 360 * 3 / 32, new Tuple<int, int>(start, start + 2 * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts twice as long
+                        replay.Actors.Add(new CircleActor(true, 0, 200, (start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", new AgentConnector(target)));
+                        replay.Actors.Add(new PieActor(true, 0, 1600, facing, 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts twice as long
+                        replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts twice as long
                         for (int i = 1; i < ticks; i++)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 8), 360 * 3 / 32, new Tuple<int, int>(start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts longer
-                            replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + i * 360 / 8), 360 * 3 / 32, new Tuple<int, int>(start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts longer
+                            replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts longer
+                            replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts longer
                         }
                     }
                     foreach (CastLog c in blades3)
@@ -316,15 +315,15 @@ namespace LuckParser.Models.Logic
                         {
                             continue;
                         }
-                        replay.Actors.Add(new CircleActor(true, 0, 200, new Tuple<int, int>(start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", new AgentConnector(target)));
-                        replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI), 360 * 3 / 32, new Tuple<int, int>(start, start + 2 * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts twice as long
-                        replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + 120), 360 * 3 / 32, new Tuple<int, int>(start, start + 2 * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts twice as long
-                        replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI - 120), 360 * 3 / 32, new Tuple<int, int>(start, start + 2 * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts twice as long
+                        replay.Actors.Add(new CircleActor(true, 0, 200, (start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", new AgentConnector(target)));
+                        replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts twice as long
+                        replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + 120), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts twice as long
+                        replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI - 120), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts twice as long
                         for (int i = 1; i < ticks; i++)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + i * 360 / 8), 360 * 3 / 32, new Tuple<int, int>(start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts longer
-                            replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + i * 360 / 8 + 120), 360 * 3 / 32, new Tuple<int, int>(start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts longer
-                            replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + i * 360 / 8 - 120), 360 * 3 / 32, new Tuple<int, int>(start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts longer
+                            replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts longer
+                            replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + i * 360 / 8 + 120), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts longer
+                            replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + i * 360 / 8 - 120), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts longer
                         }
                     }
                     break;
@@ -349,8 +348,8 @@ namespace LuckParser.Models.Logic
                 else
                 {
                     int xeraFuryEnd = (int)(log.FightData.ToFightSpace(c.Time));
-                    replay.Actors.Add(new CircleActor(true, 0, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.2)", new AgentConnector(p)));
-                    replay.Actors.Add(new CircleActor(true, xeraFuryEnd, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.4)", new AgentConnector(p)));
+                    replay.Actors.Add(new CircleActor(true, 0, 550, (xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.2)", new AgentConnector(p)));
+                    replay.Actors.Add(new CircleActor(true, xeraFuryEnd, 550, (xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.4)", new AgentConnector(p)));
                 }
 
             }
@@ -368,10 +367,9 @@ namespace LuckParser.Models.Logic
                 else
                 {
                     int fixationStatueEnd = (int)(log.FightData.ToFightSpace(c.Time));
-                    Tuple<int, int> duration = new Tuple<int, int>(fixationStatueStart, fixationStatueEnd);
                     if (statue != null)
                     {
-                        replay.Actors.Add(new LineActor(0, duration, "rgba(255, 0, 255, 0.5)", new AgentConnector(p), new AgentConnector(statue)));
+                        replay.Actors.Add(new LineActor(0, (fixationStatueStart, fixationStatueEnd), "rgba(255, 0, 255, 0.5)", new AgentConnector(p), new AgentConnector(statue)));
                     }
                 }
             }

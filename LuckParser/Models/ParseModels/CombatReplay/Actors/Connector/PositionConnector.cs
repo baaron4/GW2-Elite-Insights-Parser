@@ -22,11 +22,11 @@ namespace LuckParser.Models.ParseModels
 
         public override object GetConnectedTo(CombatReplayMap map)
         {
-            Tuple<double, double> mapPos = map.GetMapCoord(Position.X, Position.Y);
+            (double x, double y) = map.GetMapCoord(Position.X, Position.Y);
             return new double[2]
                        {
-                        mapPos.Item1,
-                        mapPos.Item2
+                        x,
+                        y
                        };
         }
     }

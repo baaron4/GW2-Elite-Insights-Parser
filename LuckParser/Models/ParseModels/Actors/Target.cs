@@ -36,7 +36,7 @@ namespace LuckParser.Models.ParseModels
             List<Point3D> facings = CombatReplay.Rotations;
             if (facings.Any())
             {
-                CombatReplay.Actors.Add(new FacingActor(new Tuple<int, int>((int)CombatReplay.TimeOffsets.Item1, (int)CombatReplay.TimeOffsets.Item2), new AgentConnector(this), facings));
+                CombatReplay.Actors.Add(new FacingActor(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), facings));
             }
         }
 
@@ -114,16 +114,16 @@ namespace LuckParser.Models.ParseModels
                 Img = CombatReplay.Icon,
                 Type = "Target",
                 ID = GetCombatReplayID(),
-                Start = CombatReplay.TimeOffsets.Item1,
-                End = CombatReplay.TimeOffsets.Item2,
+                Start = CombatReplay.TimeOffsets.start,
+                End = CombatReplay.TimeOffsets.end,
                 Positions = new double[2 * CombatReplay.Positions.Count]
             };
             int i = 0;
             foreach (Point3D pos in CombatReplay.Positions)
             {
-                Tuple<double, double> coord = map.GetMapCoord(pos.X, pos.Y);
-                aux.Positions[i++] = coord.Item1;
-                aux.Positions[i++] = coord.Item2;
+                (double x, double y) = map.GetMapCoord(pos.X, pos.Y);
+                aux.Positions[i++] = x;
+                aux.Positions[i++] = y;
             }
             return JsonConvert.SerializeObject(aux);
         }

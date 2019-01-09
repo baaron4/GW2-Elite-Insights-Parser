@@ -30,10 +30,10 @@ namespace LuckParser.Models.Logic
         protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/nTueZcX.png",
-                            Tuple.Create(1354, 1415),
-                            Tuple.Create(-653, -6754, 3701, -2206),
-                            Tuple.Create(-15360, -36864, 15360, 39936),
-                            Tuple.Create(3456, 11012, 4736, 14212));
+                            (1354, 1415),
+                            (-653, -6754, 3701, -2206),
+                            (-15360, -36864, 15360, 39936),
+                            (3456, 11012, 4736, 14212));
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
@@ -113,8 +113,8 @@ namespace LuckParser.Models.Logic
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
-                        replay.Actors.Add(new CircleActor(true, c.ExpectedDuration + (int)c.Time, 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
-                        replay.Actors.Add(new CircleActor(false, 0, 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleActor(true, c.ExpectedDuration + (int)c.Time, 600, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleActor(false, 0, 600, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
                     }
                     List<PhaseData> phases = log.FightData.GetPhases(log);
                     if (phases.Count > 1)
@@ -125,7 +125,7 @@ namespace LuckParser.Models.Logic
                         {
                             int start = (int)c.Time;
                             int end = start + c.ActualDuration;
-                            replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 125, 255, 0.3)", new AgentConnector(target)));
+                            replay.Actors.Add(new CircleActor(true, 0, 180, (start, end), "rgba(0, 125, 255, 0.3)", new AgentConnector(target)));
                             // or spawn -> 3 secs -> explosion -> 0.5 secs -> fade -> 0.5  secs-> next
                             int ticks = (int)Math.Min(Math.Ceiling(c.ActualDuration / 4000.0), 6);
                             int phaseIndex;
@@ -188,36 +188,36 @@ namespace LuckParser.Models.Logic
                                 string pattern = patterns[i];
                                 if (pattern.Contains("1"))
                                 {
-                                    replay.Actors.Add(new CircleActor(true, explosion, 360, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", new PositionConnector(pos)));
-                                    replay.Actors.Add(new CircleActor(true, 0, 360, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", new PositionConnector(pos)));
+                                    replay.Actors.Add(new CircleActor(true, explosion, 360, (tickStart, tickEnd), "rgba(25,25,112, 0.2)", new PositionConnector(pos)));
+                                    replay.Actors.Add(new CircleActor(true, 0, 360, (tickStart, tickEnd), "rgba(25,25,112, 0.4)", new PositionConnector(pos)));
                                 }
                                 if (pattern.Contains("2"))
                                 {
-                                    replay.Actors.Add(new DoughnutActor(true, explosion, 360, 720, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", new PositionConnector(pos)));
-                                    replay.Actors.Add(new DoughnutActor(true, 0, 360, 720, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", new PositionConnector(pos)));
+                                    replay.Actors.Add(new DoughnutActor(true, explosion, 360, 720, (tickStart, tickEnd), "rgba(25,25,112, 0.2)", new PositionConnector(pos)));
+                                    replay.Actors.Add(new DoughnutActor(true, 0, 360, 720, (tickStart, tickEnd), "rgba(25,25,112, 0.4)", new PositionConnector(pos)));
                                 }
                                 if (pattern.Contains("3"))
                                 {
-                                    replay.Actors.Add(new DoughnutActor(true, explosion, 720, 1080, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", new PositionConnector(pos)));
-                                    replay.Actors.Add(new DoughnutActor(true, 0, 720, 1080, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", new PositionConnector(pos)));
+                                    replay.Actors.Add(new DoughnutActor(true, explosion, 720, 1080, (tickStart, tickEnd), "rgba(25,25,112, 0.2)", new PositionConnector(pos)));
+                                    replay.Actors.Add(new DoughnutActor(true, 0, 720, 1080, (tickStart, tickEnd), "rgba(25,25,112, 0.4)", new PositionConnector(pos)));
                                 }
                                 if (pattern.Contains("4"))
                                 {
-                                    replay.Actors.Add(new DoughnutActor(true, explosion, 1080, 1440, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", new PositionConnector(pos)));
-                                    replay.Actors.Add(new DoughnutActor(true, 0, 1080, 1440, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", new PositionConnector(pos)));
+                                    replay.Actors.Add(new DoughnutActor(true, explosion, 1080, 1440, (tickStart, tickEnd), "rgba(25,25,112, 0.2)", new PositionConnector(pos)));
+                                    replay.Actors.Add(new DoughnutActor(true, 0, 1080, 1440, (tickStart, tickEnd), "rgba(25,25,112, 0.4)", new PositionConnector(pos)));
                                 }
                                 if (pattern.Contains("5"))
                                 {
-                                    replay.Actors.Add(new DoughnutActor(true, explosion, 1440, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", new PositionConnector(pos)));
-                                    replay.Actors.Add(new DoughnutActor(true, 0, 1440, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", new PositionConnector(pos)));
+                                    replay.Actors.Add(new DoughnutActor(true, explosion, 1440, 1800, (tickStart, tickEnd), "rgba(25,25,112, 0.2)", new PositionConnector(pos)));
+                                    replay.Actors.Add(new DoughnutActor(true, 0, 1440, 1800, (tickStart, tickEnd), "rgba(25,25,112, 0.4)", new PositionConnector(pos)));
                                 }
                                 if (pattern.Contains("Full"))
                                 {
                                     tickStart -= 1000;
                                     explosion -= 1000;
                                     tickEnd -= 1000;
-                                    replay.Actors.Add(new CircleActor(true, explosion, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", new PositionConnector(pos)));
-                                    replay.Actors.Add(new CircleActor(true, 0, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", new PositionConnector(pos)));
+                                    replay.Actors.Add(new CircleActor(true, explosion, 1800, (tickStart, tickEnd), "rgba(25,25,112, 0.2)", new PositionConnector(pos)));
+                                    replay.Actors.Add(new CircleActor(true, 0, 1800, (tickStart, tickEnd), "rgba(25,25,112, 0.4)", new PositionConnector(pos)));
                                 }
                             }
                         }
@@ -230,8 +230,8 @@ namespace LuckParser.Models.Logic
                         int impactTime = start + impactPoint;
                         int end = (int)Math.Min(start + c.ActualDuration, impactTime);
                         int radius = 320;
-                        replay.Actors.Add(new CircleActor(true, 0, radius, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
-                        replay.Actors.Add(new CircleActor(true, 0, radius, new Tuple<int, int>(impactTime - 10, impactTime + 100), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleActor(true, 0, radius, (start, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleActor(true, 0, radius, (impactTime - 10, impactTime + 100), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));
                     }
                     List<CombatItem> protection = log.GetBoonData(31877).Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.Manual).ToList();
                     int protectionStart = 0;
@@ -244,12 +244,12 @@ namespace LuckParser.Models.Logic
                         else
                         {
                             int protectionEnd = (int)(log.FightData.ToFightSpace(c.Time));
-                            replay.Actors.Add(new CircleActor(true, 0, 300, new Tuple<int, int>(protectionStart, protectionEnd), "rgba(0, 180, 255, 0.5)", new AgentConnector(target)));
+                            replay.Actors.Add(new CircleActor(true, 0, 300, (protectionStart, protectionEnd), "rgba(0, 180, 255, 0.5)", new AgentConnector(target)));
                         }
                     }
                     break;
                 case (ushort)ChargedSoul:
-                    Tuple<int, int> lifespan = new Tuple<int, int>((int)replay.TimeOffsets.Item1, (int)replay.TimeOffsets.Item2);
+                    (int, int) lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
                     replay.Actors.Add(new CircleActor(false, 0, 220, lifespan, "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
                     break;
                 default:

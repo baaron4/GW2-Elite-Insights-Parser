@@ -5,12 +5,12 @@ namespace LuckParser.Models.ParseModels
     public class CombatReplayMap
     {
         public string Link { get; }
-        private readonly Tuple<int, int> _size;
-        private readonly Tuple<int, int, int, int> _rect;
-        private readonly Tuple<int, int, int, int> _fullRect;
-        private readonly Tuple<int, int, int, int> _worldRect;
+        private readonly (int width, int height) _size;
+        private readonly (int topX, int topY, int bottomX, int bottomY) _rect;
+        private readonly (int topX, int topY, int bottomX, int bottomY) _fullRect;
+        private readonly (int bottomX, int bottomY, int topX, int topY) _worldRect;
 
-        public CombatReplayMap(string link, Tuple<int, int> size, Tuple<int, int, int, int> rect, Tuple<int, int, int, int> fullRect, Tuple<int, int, int, int> worldRect)
+        public CombatReplayMap(string link, (int width, int height) size, (int topX, int topY, int bottomX, int bottomY) rect, (int topX, int topY, int bottomX, int bottomY) fullRect, (int bottomX, int bottomY, int topX, int topY) worldRect)
         {
             Link = link;
             _size = size;
@@ -19,38 +19,37 @@ namespace LuckParser.Models.ParseModels
             _worldRect = worldRect;
         }
 
-        public Tuple<int, int> GetPixelMapSize()
+        public (int width, int height) GetPixelMapSize()
         {
-            double ratio = (double)_size.Item1 / _size.Item2;
+            double ratio = (double)_size.width / _size.height;
             const int pixelSize = 850;
             if (ratio > 1.0)
             {
-                return new Tuple<int, int>(pixelSize, (int)Math.Round(pixelSize / ratio));
+                return (pixelSize, (int)Math.Round(pixelSize / ratio));
             }
             else if (ratio < 1.0)
             {
-                return new Tuple<int, int>((int)Math.Round(ratio * pixelSize), pixelSize);
+                return ((int)Math.Round(ratio * pixelSize), pixelSize);
             }
             else
             {
-                return new Tuple<int, int>(pixelSize, pixelSize);
+                return (pixelSize, pixelSize);
             }
         }
 
-        public Tuple<double, double> GetMapCoord(float realX, float realY)
+        public (double x, double y) GetMapCoord(float realX, float realY)
         {
-            //Tuple<int, int, int, int> apiRect = getMapApiRect(log);
-            Tuple<int, int> pixelSizes = GetPixelMapSize();
-            double scaleX = (double)pixelSizes.Item1 / _size.Item1;
-            double scaleY = (double)pixelSizes.Item2 / _size.Item2;
-            double x = (realX - _rect.Item1) / (_rect.Item3 - _rect.Item1);
-            double y = (realY - _rect.Item2) / (_rect.Item4 - _rect.Item2);
-            return Tuple.Create(Math.Round(scaleX * _size.Item1 * x,2), Math.Round(scaleY * (_size.Item2 - _size.Item2 * y),2));
+            (int width, int height) = GetPixelMapSize();
+            double scaleX = (double)width / _size.width;
+            double scaleY = (double)height / _size.height;
+            double x = (realX - _rect.topX) / (_rect.bottomX - _rect.topX);
+            double y = (realY - _rect.topY) / (_rect.bottomY - _rect.topY);
+            return (Math.Round(scaleX * _size.width * x,2), Math.Round(scaleY * (_size.height - _size.height * y),2));
         }
 
         public float GetInch()
         {
-            float ratio = (float)(_rect.Item3 - _rect.Item1) / GetPixelMapSize().Item1 ;
+            float ratio = (float)(_rect.bottomX - _rect.topX) / GetPixelMapSize().width ;
             return (float)Math.Round(1.0f/ratio,3);
         }
 

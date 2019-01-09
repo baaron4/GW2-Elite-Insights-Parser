@@ -8,7 +8,7 @@ namespace LuckParser.Models.ParseModels
         public int Height { get; }
         public int Width { get; }
 
-        public RectangleActor(bool fill, int growing, int width, int height, Tuple<int, int> lifespan, string color, Connector connector) : base(fill, growing, lifespan, color, connector)
+        public RectangleActor(bool fill, int growing, int width, int height, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, lifespan, color, connector)
         {
             Height = height;
             Width = width;
@@ -32,8 +32,8 @@ namespace LuckParser.Models.ParseModels
                 Fill = Filled,
                 Color = Color,
                 Growing = Growing,
-                Start = Lifespan.Item1,
-                End = Lifespan.Item2,
+                Start = Lifespan.start,
+                End = Lifespan.end,
                 ConnectedTo = ConnectedTo.GetConnectedTo(map)
             };
             return JsonConvert.SerializeObject(aux);
