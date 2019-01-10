@@ -58,6 +58,15 @@ namespace LuckParser.Models.Logic
             return phases;
         }
 
+        protected override HashSet<ushort> GetUniqueTargetIDs()
+        {
+            return new HashSet<ushort>
+            {
+                (ushort)ParseEnum.TargetIDS.Freezie,
+                (ushort)FreeziesFrozenHeart
+            };
+        }
+
         protected override List<ushort> GetFightTargetsIDs()
         {
             return new List<ushort>

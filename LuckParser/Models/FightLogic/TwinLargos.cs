@@ -91,6 +91,15 @@ namespace LuckParser.Models.Logic
             return targetPhases;
         }
 
+        protected override HashSet<ushort> GetUniqueTargetIDs()
+        {
+            return new HashSet<ushort>
+            {
+                (ushort)ParseEnum.TargetIDS.Kenut,
+                (ushort)ParseEnum.TargetIDS.Nikare
+            };
+        }
+
         private void FallBackPhases(Target target, List<PhaseData> phases, ParsedLog log, bool firstPhaseAt0)
         {
             HashSet<ushort> pIds = new HashSet<ushort>(log.PlayerList.Select(x => x.InstID));

@@ -36,11 +36,6 @@ namespace LuckParser.Models.Logic
                             (11204, 4414, 13252, 6462));
         }
 
-        protected override void RegroupTargets(AgentData agentData, List<CombatItem> combatItems)
-        {
-            RegroupTargetsByID((ushort)ParseEnum.TargetIDS.Artsariiv, agentData, combatItems);
-        }
-
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
             return new List<ParseEnum.TrashIDS>

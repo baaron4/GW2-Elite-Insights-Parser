@@ -84,9 +84,9 @@ namespace LuckParser.Models.ParseModels
             return GeneralHelper.UnknownAgent;
         }
         
-        public void OverrideID(ushort ID, ushort instid, AgentItem agentItem)
+        public void OverrideID(ushort ID, AgentItem agentItem)
         {
-            _allAgentsList.RemoveAll(x => x.ID == ID && x.InstID == instid);
+            _allAgentsList.RemoveAll(x => x.ID == ID);
             _allAgentsList.Add(agentItem);
             Refresh();
         }

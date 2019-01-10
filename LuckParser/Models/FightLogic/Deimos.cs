@@ -45,12 +45,15 @@ namespace LuckParser.Models.Logic
                             (11774, 4480, 14078, 5376));
         }
 
-        protected override void RegroupTargets(AgentData agentData, List<CombatItem> combatItems)
+        protected override HashSet<ushort> GetUniqueTargetIDs()
         {
-            RegroupTargetsByID((ushort)ParseEnum.TargetIDS.Deimos, agentData, combatItems);
-            RegroupTargetsByID((ushort)Thief, agentData, combatItems);
-            RegroupTargetsByID((ushort)Drunkard, agentData, combatItems);
-            RegroupTargetsByID((ushort)Gambler, agentData, combatItems);
+            return new HashSet<ushort>
+            {
+                (ushort)ParseEnum.TargetIDS.Deimos,
+                (ushort)Thief,
+                (ushort)Drunkard,
+                (ushort)Gambler,
+            };
         }
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
@@ -153,25 +156,13 @@ namespace LuckParser.Models.Logic
                 phases[i].Targets.Add(mainTarget);
             }
             int offsetDei = phases.Count;
-            CombatItem teleport = log.GetBoonData(38169).FirstOrDefault(x => x.Time > log.FightData.FightStart + 5000);
-            int splits = 0;
-            while (teleport != null && splits < 3)
+            foreach (Target tar in Targets)
             {
-                start = log.FightData.ToFightSpace(teleport.Time);
-                CombatItem teleportBack = log.GetBoonData(38169).FirstOrDefault(x => log.FightData.ToFightSpace(x.Time) > start + 10000);
-                if (teleportBack != null)
+                if (tar.ID == (ushort) Thief || tar.ID == (ushort) Drunkard || tar.ID == (ushort) Gambler)
                 {
-                    end = Math.Min(log.FightData.ToFightSpace(teleportBack.Time), fightDuration);
+                    phases.Add(new PhaseData(log.FightData.ToFightSpace(tar.FirstAware) - 1000, log.FightData.ToFightSpace(tar.LastAware) + 1000));
                 }
-                else
-                {
-                    end = fightDuration;
-                }
-                phases.Add(new PhaseData(start, end));
-                splits++;
-                teleport = log.GetBoonData(38169).FirstOrDefault(x => log.FightData.ToFightSpace(x.Time) > end + 10000);
             }
-
             string[] namesDeiSplit = new [] { "Thief", "Gambler", "Drunkard" };
             for (int i = offsetDei; i < phases.Count; i++)
             {
