@@ -174,5 +174,9 @@ namespace LuckParser.Models.Logic
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
         }
+
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
+        {
+        }
     }
 }

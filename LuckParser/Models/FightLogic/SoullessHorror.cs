@@ -212,5 +212,9 @@ namespace LuckParser.Models.Logic
             }
             return (minDiff < 11000) ? 1 : 0;
         }
+
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
+        {
+        }
     }
 }

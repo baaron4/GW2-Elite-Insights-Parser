@@ -98,5 +98,9 @@ namespace LuckParser.Models.Logic
                 log.FightData.FightEnd = lastDamageTaken.Time;
             }
         }
+
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
+        {
+        }
     }
 }
