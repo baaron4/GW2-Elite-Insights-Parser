@@ -81,6 +81,9 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.6\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -103,6 +106,7 @@
     <Compile Include="Builders\Helpers\CSVHelper.cs" />
     <Compile Include="GeneralHelper.cs" />
     <Compile Include="Controllers\FlashWindow.cs" />
+    <Compile Include="Models\FightLogic\UnknownFightLogic.cs" />
     <Compile Include="Models\FightLogic\BanditTrio.cs" />
     <Compile Include="Models\FightLogic\Freezie.cs" />
     <Compile Include="Models\JsonModels\JsonDeathRecap.cs" />
@@ -112,11 +116,15 @@
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\AbstractBoonSimulationItem.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemOverstack.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\AbstractBoonSimulationItemWasted.cs" />
-    <Compile Include="Parser\Parser.cs" />
     <Compile Include="Controllers\GW2APIController.cs" />
+    <Compile Include="Models\Statistics.cs" />
+    <Compile Include="Models\StatisticsCalculator.cs" />
+    <Compile Include="Parser\ParsedLog.cs" />
+    <Compile Include="Parser\ParseEnum.cs" />
     <Compile Include="Parser\ParseHelper.cs" />
-    <Compile Include="Models\DataModels\StatisticsCalculator.cs" />
     <Compile Include="Controllers\UploadController.cs" />
+    <Compile Include="Parser\ParsingController.cs" />
+    <Compile Include="Properties\Settings.cs" />
     <Compile Include="Settings\CustomSettingsManager.cs" />
     <Compile Include="GridRow.cs" />
     <Compile Include="MainForm.cs">
@@ -151,10 +159,6 @@
     <Compile Include="Models\FightLogic\Sabetha.cs" />
     <Compile Include="Models\FightLogic\Gorseval.cs" />
     <Compile Include="Models\FightLogic\ValeGuardian.cs" />
-    <Compile Include="Models\DataModels\ParseEnum.cs" />
-    <Compile Include="Models\DataModels\ParsedLog.cs" />
-    <Compile Include="Models\DataModels\SettingsContainer.cs" />
-    <Compile Include="Models\DataModels\Statistics.cs" />
     <Compile Include="Models\HtmlModels\AreaLabelDto.cs" />
     <Compile Include="Models\HtmlModels\DeathRecapDto.cs" />
     <Compile Include="Models\HtmlModels\FoodDto.cs" />
@@ -265,7 +269,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Settings\Settings.cs" />
+    <Compile Include="Settings\SettingsContainer.cs" />
     <Compile Include="Settings\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>

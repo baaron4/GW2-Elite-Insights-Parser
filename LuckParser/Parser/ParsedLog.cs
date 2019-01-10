@@ -4,7 +4,7 @@ using LuckParser.Exceptions;
 using LuckParser.Models.Logic;
 using LuckParser.Models.ParseModels;
 
-namespace LuckParser.Models.DataModels
+namespace LuckParser.Parser
 {
     public class ParsedLog
     {

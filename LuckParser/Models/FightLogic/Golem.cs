@@ -1,4 +1,4 @@
-﻿using LuckParser.Models.DataModels;
+﻿using LuckParser.Parser;
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
@@ -76,6 +76,18 @@ namespace LuckParser.Models.Logic
             {
                 log.FightData.Success = mainTarget.HealthOverTime.Last().Y < 200;
             }
+        }
+
+        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
+        {
+        }
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+        }
+
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
+        {
         }
     }
 }

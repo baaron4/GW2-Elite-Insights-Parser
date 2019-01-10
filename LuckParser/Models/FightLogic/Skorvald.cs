@@ -1,9 +1,9 @@
-﻿using LuckParser.Models.DataModels;
+﻿using LuckParser.Parser;
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
+using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models.Logic
 {
@@ -41,10 +41,10 @@ namespace LuckParser.Models.Logic
         protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/PO3aoJD.png",
-                            Tuple.Create(1759, 1783),
-                            Tuple.Create(-22267, 14955, -17227, 20735),
-                            Tuple.Create(-24576, -24576, 24576, 24576),
-                            Tuple.Create(11204, 4414, 13252, 6462));
+                            (1759, 1783),
+                            (-22267, 14955, -17227, 20735),
+                            (-24576, -24576, 24576, 24576),
+                            (11204, 4414, 13252, 6462));
         }
 
         public override int IsCM(ParsedLog log)
@@ -96,6 +96,10 @@ namespace LuckParser.Models.Logic
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
+        }
+
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
+        {
         }
     }
 }

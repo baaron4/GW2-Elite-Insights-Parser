@@ -1,10 +1,10 @@
-﻿using LuckParser.Models.DataModels;
+﻿using LuckParser.Parser;
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
+using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models.Logic
 {
@@ -40,10 +40,10 @@ namespace LuckParser.Models.Logic
         protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/BoHwwY6.png",
-                            Tuple.Create(7112, 6377),
-                            Tuple.Create(-5992, -5992, 69, -522),
-                            Tuple.Create(-12288, -27648, 12288, 27648),
-                            Tuple.Create(1920, 12160, 2944, 14464));
+                            (7112, 6377),
+                            (-5992, -5992, 69, -522),
+                            (-12288, -27648, 12288, 27648),
+                            (1920, 12160, 2944, 14464));
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
@@ -189,12 +189,16 @@ namespace LuckParser.Models.Logic
                     List<CastLog> summon = cls.Where(x => x.SkillId == 34887).ToList();
                     foreach (CastLog c in summon)
                     {
-                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleActor(true, 0, 180, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
+        }
+
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
+        {
         }
     }
 }

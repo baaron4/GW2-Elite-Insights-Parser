@@ -4,10 +4,10 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class GenericActor
     {    
-        public Tuple<int, int> Lifespan { get; }
+        public (int start, int end) Lifespan { get; }
         protected Connector ConnectedTo;
         
-        protected GenericActor(Tuple<int, int> lifespan, Connector connector)
+        protected GenericActor((int start, int end) lifespan, Connector connector)
         {
             Lifespan = lifespan;
             ConnectedTo = connector;

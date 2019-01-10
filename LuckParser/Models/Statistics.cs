@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using LuckParser.Models.ParseModels;
 
-namespace LuckParser.Models.DataModels
+namespace LuckParser.Models
 {
     /// <summary>
     /// Passes statistical information about dps logs

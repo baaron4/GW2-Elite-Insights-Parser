@@ -10,18 +10,18 @@ namespace LuckParser.Models.ParseModels
         public int SpinAngle { get; } // rotation the rectangle is supposed to go through over the course of its lifespan, 0 for no rotation
 
         // Rectangles with fixed rotation and no translation
-        public RotatedRectangleActor(bool fill, int growing, int width, int height, int rotation, Tuple<int, int> lifespan, string color, Connector connector)
+        public RotatedRectangleActor(bool fill, int growing, int width, int height, int rotation, (int start, int end) lifespan, string color, Connector connector)
             : this(fill, growing, width, height, rotation, 0, 0, lifespan, color, connector) { }
         
 
         // Rectangles with a fixed rotation and translation
 
-        public RotatedRectangleActor(bool fill, int growing, int width, int height, int rotation, int translation, Tuple<int, int> lifespan, string color, Connector connector) 
+        public RotatedRectangleActor(bool fill, int growing, int width, int height, int rotation, int translation, (int start, int end) lifespan, string color, Connector connector) 
             : this(fill, growing, width, height, rotation, translation, 0, lifespan, color, connector) { }
 
         // Rectangles rotating over time
 
-        public RotatedRectangleActor(bool fill, int growing, int width, int height, int rotation, int translation, int spinAngle, Tuple<int, int> lifespan, string color, Connector connector) : base(fill, growing, width, height, lifespan, color, connector)
+        public RotatedRectangleActor(bool fill, int growing, int width, int height, int rotation, int translation, int spinAngle, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, width, height, lifespan, color, connector)
         {
             Rotation = rotation;
             RadialTranslation = translation;
@@ -48,8 +48,8 @@ namespace LuckParser.Models.ParseModels
                 Fill = Filled,
                 Color = Color,
                 Growing = Growing,
-                Start = Lifespan.Item1,
-                End = Lifespan.Item2,
+                Start = Lifespan.start,
+                End = Lifespan.end,
                 ConnectedTo = ConnectedTo.GetConnectedTo(map)
             };
             return JsonConvert.SerializeObject(aux);

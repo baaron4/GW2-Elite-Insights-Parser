@@ -1,9 +1,9 @@
-﻿using LuckParser.Models.DataModels;
+﻿using LuckParser.Parser;
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
+using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models.Logic
 {
@@ -47,10 +47,10 @@ namespace LuckParser.Models.Logic
         protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/o2DHN29.png",
-                            Tuple.Create(1221, 1171),
-                             Tuple.Create(-6526, 1218, -2423, 5146),
-                            Tuple.Create(-27648, -9216, 27648, 12288),
-                            Tuple.Create(11774, 4480, 14078, 5376));
+                            (1221, 1171),
+                            (-6526, 1218, -2423, 5146),
+                            (-27648, -9216, 27648, 12288),
+                            (11774, 4480, 14078, 5376));
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
@@ -119,7 +119,7 @@ namespace LuckParser.Models.Logic
                         else
                         {
                             int brutEnd = (int)(log.FightData.ToFightSpace(c.Time));
-                            replay.Actors.Add(new CircleActor(true, 0, 120, new Tuple<int, int>(brutStart, brutEnd), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                            replay.Actors.Add(new CircleActor(true, 0, 120, (brutStart, brutEnd), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                         }
                     }
                     break;
@@ -140,8 +140,8 @@ namespace LuckParser.Models.Logic
             {
                 int bigStart = (int)(log.FightData.ToFightSpace(c.Time));
                 int bigEnd = bigStart + 6000;
-                replay.Actors.Add(new CircleActor(true, 0, 300, new Tuple<int, int>(bigStart, bigEnd), "rgba(150, 80, 0, 0.2)", new AgentConnector(p)));
-                replay.Actors.Add(new CircleActor(true, bigEnd, 300, new Tuple<int, int>(bigStart, bigEnd), "rgba(150, 80, 0, 0.2)", new AgentConnector(p)));
+                replay.Actors.Add(new CircleActor(true, 0, 300, (bigStart, bigEnd), "rgba(150, 80, 0, 0.2)", new AgentConnector(p)));
+                replay.Actors.Add(new CircleActor(true, bigEnd, 300, (bigStart, bigEnd), "rgba(150, 80, 0, 0.2)", new AgentConnector(p)));
             }
             // small bomb
             List<CombatItem> smallbomb = log.GetBoonData(38247).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
@@ -149,7 +149,7 @@ namespace LuckParser.Models.Logic
             {
                 int smallStart = (int)(log.FightData.ToFightSpace(c.Time));
                 int smallEnd = smallStart + 6000;
-                replay.Actors.Add(new CircleActor(true, 0, 80, new Tuple<int, int>(smallStart, smallEnd), "rgba(80, 150, 0, 0.3)", new AgentConnector(p)));
+                replay.Actors.Add(new CircleActor(true, 0, 80, (smallStart, smallEnd), "rgba(80, 150, 0, 0.3)", new AgentConnector(p)));
             }
             // fixated
             List<CombatItem> fixatedSam = GetFilteredList(log, 37868, p, true);
@@ -163,7 +163,7 @@ namespace LuckParser.Models.Logic
                 else
                 {
                     int fixatedSamEnd = (int)(log.FightData.ToFightSpace(c.Time));
-                    replay.Actors.Add(new CircleActor(true, 0, 80, new Tuple<int, int>(fixatedSamStart, fixatedSamEnd), "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
+                    replay.Actors.Add(new CircleActor(true, 0, 80, (fixatedSamStart, fixatedSamEnd), "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
                 }
             }
             //fixated Ghuldem
@@ -180,10 +180,9 @@ namespace LuckParser.Models.Logic
                 else
                 {
                     int fixationGuldhemEnd = (int)(log.FightData.ToFightSpace(c.Time));
-                    Tuple<int, int> duration = new Tuple<int, int>(fixationGuldhemStart, fixationGuldhemEnd);
                     if (guldhem != null)
                     {
-                        replay.Actors.Add(new LineActor(0, duration, "rgba(255, 100, 0, 0.3)", new AgentConnector(p), new AgentConnector(guldhem)));
+                        replay.Actors.Add(new LineActor(0, (fixationGuldhemStart, fixationGuldhemEnd), "rgba(255, 100, 0, 0.3)", new AgentConnector(p), new AgentConnector(guldhem)));
                     }
                 }
             }
@@ -201,10 +200,9 @@ namespace LuckParser.Models.Logic
                 else
                 {
                     int fixationRigomEnd = (int)(log.FightData.ToFightSpace(c.Time));
-                    Tuple<int, int> duration = new Tuple<int, int>(fixationRigomStart, fixationRigomEnd);
                     if (rigom != null)
                     {
-                        replay.Actors.Add(new LineActor(0, duration, "rgba(255, 0, 0, 0.3)", new AgentConnector(p), new AgentConnector(rigom)));
+                        replay.Actors.Add(new LineActor(0, (fixationRigomStart, fixationRigomEnd), "rgba(255, 0, 0, 0.3)", new AgentConnector(p), new AgentConnector(rigom)));
                     }
                 }
             }
@@ -219,6 +217,10 @@ namespace LuckParser.Models.Logic
             }
             OverrideMaxHealths(log);
             return (target.Health > 30e6) ? 1 : 0;
+        }
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
         }
     }
 }

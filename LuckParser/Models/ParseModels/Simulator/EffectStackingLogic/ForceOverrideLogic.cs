@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using LuckParser.Models.DataModels;
+using LuckParser.Parser;
 using static LuckParser.Models.ParseModels.BoonSimulator;
 
 namespace LuckParser.Models.ParseModels
@@ -21,9 +21,9 @@ namespace LuckParser.Models.ParseModels
             wastes.Add(new BoonSimulationItemWasted(stack.Src, stack.BoonDuration, stack.Start, stack.ApplicationTime));
             if (stack.Extensions.Count > 0)
             {
-                foreach (var item in stack.Extensions)
+                foreach ((ushort src, long value, long time) in stack.Extensions)
                 {
-                    wastes.Add(new BoonSimulationItemWasted(item.Item1, item.Item2, stack.Start, item.Item3));
+                    wastes.Add(new BoonSimulationItemWasted(src, value, stack.Start, time));
                 }
             }
             stacks[0] = stackItem;

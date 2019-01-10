@@ -1,9 +1,9 @@
-﻿using LuckParser.Models.DataModels;
+﻿using LuckParser.Parser;
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
+using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models.Logic
 {
@@ -33,10 +33,10 @@ namespace LuckParser.Models.Logic
         protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/FwpMbYf.png",
-                            Tuple.Create(2790, 2763),
-                            Tuple.Create(-8587, -162, -1601, 6753),
-                            Tuple.Create(-15360, -36864, 15360, 39936),
-                            Tuple.Create(3456, 11012, 4736, 14212));
+                            (2790, 2763),
+                            (-8587, -162, -1601, 6753),
+                            (-15360, -36864, 15360, 39936),
+                            (3456, 11012, 4736, 14212));
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
@@ -133,8 +133,8 @@ namespace LuckParser.Models.Logic
                         if (facing != null)
                         {
                             int initialDirection = (int)(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI);
-                            replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, initialDirection, width / 2, new Tuple<int, int>(start, start + preCastTime), "rgba(255, 100, 0, 0.2)", new AgentConnector(target)));
-                            replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, initialDirection, width / 2, 360, new Tuple<int, int>(start + preCastTime, start + preCastTime + duration), "rgba(255, 50, 0, 0.5)", new AgentConnector(target)));
+                            replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, initialDirection, width / 2, (start, start + preCastTime), "rgba(255, 100, 0, 0.2)", new AgentConnector(target)));
+                            replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, initialDirection, width / 2, 360, (start + preCastTime, start + preCastTime + duration), "rgba(255, 50, 0, 0.5)", new AgentConnector(target)));
                         }
                     }
                     break;
@@ -153,9 +153,9 @@ namespace LuckParser.Models.Logic
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start);
                         if (facing != null)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 28, new Tuple<int, int>(firstConeStart, firstConeEnd), "rgba(255,200,0,0.3)",new AgentConnector(target)));
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 54, new Tuple<int, int>(secondConeStart, secondConeEnd), "rgba(255,200,0,0.3)", new AgentConnector(target)));
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 81, new Tuple<int, int>(thirdConeStart, thirdConeEnd), "rgba(255,200,0,0.3)", new AgentConnector(target)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 28, (firstConeStart, firstConeEnd), "rgba(255,200,0,0.3)",new AgentConnector(target)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 54, (secondConeStart, secondConeEnd), "rgba(255,200,0,0.3)", new AgentConnector(target)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 81, (thirdConeStart, thirdConeEnd), "rgba(255,200,0,0.3)", new AgentConnector(target)));
                         }
                     }
                     break;
@@ -163,7 +163,7 @@ namespace LuckParser.Models.Logic
                     List<CastLog> breakbar = cls.Where(x => x.SkillId == 31763).ToList();
                     foreach (CastLog c in breakbar)
                     {
-                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleActor(true, 0, 180, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 case (ushort)Karde:
@@ -176,7 +176,7 @@ namespace LuckParser.Models.Logic
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start);
                         if (facing != null)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 60, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 60, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)));
                         }
                     }
                     break;
@@ -217,8 +217,8 @@ namespace LuckParser.Models.Logic
             {
                 int start = (int)(log.FightData.ToFightSpace(c.Time));
                 int end = start + 3000;
-                replay.Actors.Add(new CircleActor(false, 0, 280, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(p)));
-                replay.Actors.Add(new CircleActor(true, end, 280, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(p)));
+                replay.Actors.Add(new CircleActor(false, 0, 280, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(p)));
+                replay.Actors.Add(new CircleActor(true, end, 280, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(p)));
             }
             // Sapper bombs
             List<CombatItem> sapperBombs = GetFilteredList(log, 31473, p, true);
@@ -231,8 +231,8 @@ namespace LuckParser.Models.Logic
                 }
                 else
                 {
-                    int sapperEnd = (int)(log.FightData.ToFightSpace(c.Time)); replay.Actors.Add(new CircleActor(false, 0, 180, new Tuple<int, int>(sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)", new AgentConnector(p)));
-                    replay.Actors.Add(new CircleActor(true, sapperStart + 5000, 180, new Tuple<int, int>(sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)", new AgentConnector(p)));
+                    int sapperEnd = (int)(log.FightData.ToFightSpace(c.Time)); replay.Actors.Add(new CircleActor(false, 0, 180, (sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)", new AgentConnector(p)));
+                    replay.Actors.Add(new CircleActor(true, sapperStart + 5000, 180, (sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)", new AgentConnector(p)));
                 }
             }
         }

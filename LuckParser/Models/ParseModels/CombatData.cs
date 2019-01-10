@@ -1,4 +1,4 @@
-﻿using LuckParser.Models.DataModels;
+﻿using LuckParser.Parser;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -197,7 +197,7 @@ namespace LuckParser.Models.ParseModels
         }
 
 
-        public void GetAgentStatus(long start, long end, ushort instid, List<Tuple<long, long>> dead, List<Tuple<long, long>> down, List<Tuple<long, long>> dc)
+        public void GetAgentStatus(long start, long end, ushort instid, List<(long start, long end)> dead, List<(long start, long end)> down, List<(long start, long end)> dc)
         {
             List<CombatItem> status = GetStatesData(instid, ParseEnum.StateChange.ChangeDown, start, end);
             status.AddRange(GetStatesData(instid, ParseEnum.StateChange.ChangeUp, start, end));
@@ -211,15 +211,15 @@ namespace LuckParser.Models.ParseModels
                 CombatItem next = status[i + 1];
                 if (cur.IsStateChange == ParseEnum.StateChange.ChangeDown)
                 {
-                    down.Add(new Tuple<long, long>(cur.Time - start, next.Time - start));
+                    down.Add((cur.Time - start, next.Time - start));
                 }
                 else if (cur.IsStateChange == ParseEnum.StateChange.ChangeDead)
                 {
-                    dead.Add(new Tuple<long, long>(cur.Time - start, next.Time - start));
+                    dead.Add((cur.Time - start, next.Time - start));
                 }
                 else if (cur.IsStateChange == ParseEnum.StateChange.Despawn)
                 {
-                    dc.Add(new Tuple<long, long>(cur.Time - start, next.Time - start));
+                    dc.Add((cur.Time - start, next.Time - start));
                 }
             }
             // check last value
@@ -228,15 +228,15 @@ namespace LuckParser.Models.ParseModels
                 CombatItem cur = status.Last();
                 if (cur.IsStateChange == ParseEnum.StateChange.ChangeDown)
                 {
-                    down.Add(new Tuple<long, long>(cur.Time - start, end));
+                    down.Add((cur.Time - start, end));
                 }
                 else if (cur.IsStateChange == ParseEnum.StateChange.ChangeDead)
                 {
-                    dead.Add(new Tuple<long, long>(cur.Time - start, end));
+                    dead.Add((cur.Time - start, end));
                 }
                 else if (cur.IsStateChange == ParseEnum.StateChange.Despawn)
                 {
-                    dc.Add(new Tuple<long, long>(cur.Time - start, end));
+                    dc.Add((cur.Time - start, end));
                 }
             }
         }

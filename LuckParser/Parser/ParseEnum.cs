@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LuckParser.Models.DataModels
+namespace LuckParser.Parser
 {
     public class ParseEnum
     {

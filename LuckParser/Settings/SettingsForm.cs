@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 
-namespace LuckParser
+namespace LuckParser.Setting
 {
     public partial class SettingsForm : Form
     {

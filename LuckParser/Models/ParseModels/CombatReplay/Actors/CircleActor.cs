@@ -8,12 +8,12 @@ namespace LuckParser.Models.ParseModels
         public int Radius { get; }
         public int MinRadius { get; }
 
-        public CircleActor(bool fill, int growing, int radius, Tuple<int, int> lifespan, string color, Connector connector) : base(fill, growing, lifespan, color, connector)
+        public CircleActor(bool fill, int growing, int radius, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, lifespan, color, connector)
         {
             Radius = radius;
         }
 
-        public CircleActor(bool fill, int growing, int radius, Tuple<int, int> lifespan, string color, Connector connector, int minRadius) : base(fill, growing, lifespan, color, connector)
+        public CircleActor(bool fill, int growing, int radius, (int start, int end) lifespan, string color, Connector connector, int minRadius) : base(fill, growing, lifespan, color, connector)
         {
             Radius = radius;
             MinRadius = minRadius;
@@ -36,8 +36,8 @@ namespace LuckParser.Models.ParseModels
                 Fill = Filled,
                 Color = Color,
                 Growing = Growing,
-                Start = Lifespan.Item1,
-                End = Lifespan.Item2,
+                Start = Lifespan.start,
+                End = Lifespan.end,
                 ConnectedTo = ConnectedTo.GetConnectedTo(map)
             };
             return JsonConvert.SerializeObject(aux);

@@ -4,11 +4,13 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
 using LuckParser.Controllers;
-using LuckParser.Models.DataModels;
+using LuckParser.Parser;
 using System.Text;
 using System.Threading.Tasks;
 using LuckParser.Exceptions;
 using LuckParser.Builders;
+using LuckParser.Setting;
+using LuckParser.Models;
 
 namespace LuckParser
 {
@@ -142,7 +144,7 @@ namespace LuckParser
                 bg.UpdateProgress(rowData, " Working...", 0);
 
                 SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
-                Parser parser = new Parser(settings);
+                ParsingController parser = new ParsingController(settings);
 
                 if (GeneralHelper.IsSupportedFormat(fInfo.Name))
                 {

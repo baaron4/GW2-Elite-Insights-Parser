@@ -1,7 +1,9 @@
 ﻿using LuckParser.Builders;
 using LuckParser.Controllers;
 using LuckParser.Exceptions;
-using LuckParser.Models.DataModels;
+using LuckParser.Models;
+using LuckParser.Parser;
+using LuckParser.Setting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -63,7 +65,7 @@ namespace LuckParser
             try
             {
                 SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
-                Parser control = new Parser(settings);
+                ParsingController control = new ParsingController(settings);
 
                 if (GeneralHelper.IsSupportedFormat(fInfo.Name))
                 {

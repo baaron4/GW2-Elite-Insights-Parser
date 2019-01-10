@@ -1,9 +1,9 @@
-﻿using LuckParser.Models.DataModels;
+﻿using LuckParser.Parser;
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
+using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models.Logic
 {
@@ -35,10 +35,10 @@ namespace LuckParser.Models.Logic
         protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/cVuaOc5.png", 
-                            Tuple.Create(2494, 2277),
-                            Tuple.Create(-2900, -12251, 2561, -7265),
-                            Tuple.Create(-12288, -27648, 12288, 27648),
-                            Tuple.Create(2688, 11906, 3712, 14210));
+                            (2494, 2277),
+                            (-2900, -12251, 2561, -7265),
+                            (-12288, -27648, 12288, 27648),
+                            (2688, 11906, 3712, 14210));
         }
 
         public void SetPhasePerTarget(Target target, List<PhaseData> phases, ParsedLog log)
@@ -174,9 +174,9 @@ namespace LuckParser.Models.Logic
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start);
                         if (facing != null)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 28, new Tuple<int, int>(firstConeStart, firstConeEnd), "rgba(255,200,0,0.3)", new AgentConnector(target)));
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 54, new Tuple<int, int>(secondConeStart, secondConeEnd), "rgba(255,200,0,0.3)", new AgentConnector(target)));
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 81, new Tuple<int, int>(thirdConeStart, thirdConeEnd), "rgba(255,200,0,0.3)", new AgentConnector(target)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 28, (firstConeStart, firstConeEnd), "rgba(255,200,0,0.3)", new AgentConnector(target)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 54, (secondConeStart, secondConeEnd), "rgba(255,200,0,0.3)", new AgentConnector(target)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 81, (thirdConeStart, thirdConeEnd), "rgba(255,200,0,0.3)", new AgentConnector(target)));
                         }
                     }
                     break;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LuckParser.Models.DataModels;
+using LuckParser.Parser;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -136,12 +136,6 @@ namespace LuckParser.Models.ParseModels
             {
                 DamageLogs.Add(new DamageLogPower(time, c));
             }
-            else if (c.Result == ParseEnum.Result.Absorb || c.Result == ParseEnum.Result.Blind || c.Result == ParseEnum.Result.Interrupt)
-            {//Hits that where blinded, invulned, interrupts
-                DamageLogs.Add(new DamageLogPower(time, c));
-            }
-
-
         }
         protected void AddDamageTakenLog(long time, CombatItem c)
         {

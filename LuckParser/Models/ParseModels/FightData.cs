@@ -1,4 +1,4 @@
-﻿using LuckParser.Models.DataModels;
+﻿using LuckParser.Parser;
 using LuckParser.Models.Logic;
 using System;
 using System.Collections.Generic;
@@ -118,7 +118,7 @@ namespace LuckParser.Models.ParseModels
                     break;
                 default:
                     // Unknown
-                    Logic = new FightLogic(id);
+                    Logic = new UnknownFightLogic(id);
                     break;
             }
         }

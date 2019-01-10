@@ -1,5 +1,5 @@
 ﻿using LuckParser.Exceptions;
-using LuckParser.Models.DataModels;
+using LuckParser.Parser;
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
+using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser
 {
@@ -122,14 +122,14 @@ namespace LuckParser
 
         public static T MaxBy<T, R>(this IEnumerable<T> en, Func<T, R> evaluate) where R : IComparable<R>
         {
-            return en.Select(t => new Tuple<T, R>(t, evaluate(t)))
-                .Aggregate((max, next) => next.Item2.CompareTo(max.Item2) > 0 ? next : max).Item1;
+            return en.Select(t => (value: t, eval: evaluate(t)))
+                .Aggregate((max, next) => next.eval.CompareTo(max.eval) > 0 ? next : max).value;
         }
 
         public static T MinBy<T, R>(this IEnumerable<T> en, Func<T, R> evaluate) where R : IComparable<R>
         {
-            return en.Select(t => new Tuple<T, R>(t, evaluate(t)))
-                .Aggregate((max, next) => next.Item2.CompareTo(max.Item2) < 0 ? next : max).Item1;
+            return en.Select(t => (value: t, eval: evaluate(t)))
+                .Aggregate((max, next) => next.eval.CompareTo(max.eval) < 0 ? next : max).value;
         }
 
 

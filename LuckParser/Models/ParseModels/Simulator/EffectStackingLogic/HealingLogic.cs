@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using LuckParser.Models.DataModels;
+using LuckParser.Parser;
 using static LuckParser.Models.ParseModels.BoonSimulator;
 
 namespace LuckParser.Models.ParseModels

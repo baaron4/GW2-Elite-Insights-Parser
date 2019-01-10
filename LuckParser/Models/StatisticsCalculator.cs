@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using LuckParser.Models.ParseModels;
-using static LuckParser.Models.DataModels.Statistics;
+using LuckParser.Parser;
+using LuckParser.Setting;
+using static LuckParser.Models.Statistics;
 
-namespace LuckParser.Models.DataModels
+namespace LuckParser.Models
 {
     /// <summary>
     /// Calculates statistical information from a log
@@ -530,9 +532,9 @@ namespace LuckParser.Models.DataModels
 
                     phaseDefense[phaseIndex] = final;
                 }
-                List<Tuple<long, long>> dead = new List<Tuple<long, long>>();
-                List<Tuple<long, long>> down = new List<Tuple<long, long>>();
-                List<Tuple<long, long>> dc = new List<Tuple<long, long>>();
+                List<(long start, long end)> dead = new List<(long start, long end)>();
+                List<(long start, long end)> down = new List<(long start, long end)>();
+                List<(long start, long end)> dc = new List<(long start, long end)>();
                 combatData.GetAgentStatus(player.FirstAware, player.LastAware, player.InstID, dead, down, dc);
 
                 for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
@@ -541,9 +543,9 @@ namespace LuckParser.Models.DataModels
                     PhaseData phase = _statistics.Phases[phaseIndex];
                     long start = phase.Start;
                     long end = phase.End;
-                    defenses.DownDuration = (int)down.Where(x => x.Item2 >= start && x.Item1 <= end).Sum(x => Math.Min(end, x.Item2) - Math.Max(x.Item1, start));
-                    defenses.DeadDuration = (int)dead.Where(x => x.Item2 >= start && x.Item1 <= end).Sum(x => Math.Min(end, x.Item2) - Math.Max(x.Item1, start));
-                    defenses.DcDuration = (int)dc.Where(x => x.Item2 >= start && x.Item1 <= end).Sum(x => Math.Min(end, x.Item2) - Math.Max(x.Item1, start));
+                    defenses.DownDuration = (int)down.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
+                    defenses.DeadDuration = (int)dead.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
+                    defenses.DcDuration = (int)dc.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
                 }
 
                 _statistics.Defenses[player] = phaseDefense;

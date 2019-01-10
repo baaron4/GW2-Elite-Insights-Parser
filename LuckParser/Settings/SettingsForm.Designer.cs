@@ -1,4 +1,4 @@
-﻿namespace LuckParser
+﻿namespace LuckParser.Setting
 {
     partial class SettingsForm
     {

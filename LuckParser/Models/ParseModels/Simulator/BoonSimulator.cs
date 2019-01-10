@@ -1,4 +1,4 @@
-﻿using LuckParser.Models.DataModels;
+﻿using LuckParser.Parser;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +17,7 @@ namespace LuckParser.Models.ParseModels
             public ushort Src { get; private set; }
             public ushort SeedSrc { get; }
 
-            public List<Tuple<ushort, long, long>> Extensions { get; } = new List<Tuple<ushort, long, long>>();
+            public List<(ushort src, long value, long time)> Extensions { get; } = new List<(ushort src, long value, long time)>();
 
             public BoonStackItem(long start, long boonDuration, ushort srcinstid, ushort seedSrc)
             {
@@ -40,27 +40,27 @@ namespace LuckParser.Models.ParseModels
                 Extensions = other.Extensions;
                 if (BoonDuration == 0 && Extensions.Count > 0)
                 {
-                    Tuple<ushort, long, long> ext = Extensions.First();
+                    (ushort src, long value, long time) = Extensions.First();
                     Extensions.RemoveAt(0);
-                    ApplicationTime = ext.Item3;
-                    Src = ext.Item1;
-                    BoonDuration = ext.Item2;
+                    ApplicationTime = time;
+                    Src = src;
+                    BoonDuration = value;
                 }
             }
 
             public long TotalBoonDuration()
             {
                 long res = BoonDuration;
-                foreach (var item in Extensions)
+                foreach ((ushort src, long value, long time) in Extensions)
                 {
-                    res += item.Item2;
+                    res += value;
                 }
                 return res;
             }
 
             public void Extend(long value, ushort src, long time)
             {
-                Extensions.Add(new Tuple<ushort, long, long>(src, value, time));
+                Extensions.Add((src, value, time));
             }
         }
 
@@ -176,10 +176,10 @@ namespace LuckParser.Models.ParseModels
                         CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, stackItem.BoonDuration, start));
                         if (stackItem.Extensions.Count > 0)
                         {
-                            foreach (var item in stackItem.Extensions)
+                            foreach ((ushort src, long value, long time) in stackItem.Extensions)
                             {
-                                WasteSimulationResult.Add(new BoonSimulationItemWasted(item.Item1, item.Item2, start, item.Item3));
-                                CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, item.Item2, start));
+                                WasteSimulationResult.Add(new BoonSimulationItemWasted(src, value, start, time));
+                                CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, value, start));
                             }
                         }
                     }
@@ -196,10 +196,10 @@ namespace LuckParser.Models.ParseModels
                             CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, stackItem.BoonDuration, start));
                             if (stackItem.Extensions.Count > 0)
                             {
-                                foreach (var item in stackItem.Extensions)
+                                foreach ((ushort src, long value, long time) in stackItem.Extensions)
                                 {
-                                    WasteSimulationResult.Add(new BoonSimulationItemWasted(item.Item1, item.Item2, start, item.Item3));
-                                    CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, item.Item2, start));
+                                    WasteSimulationResult.Add(new BoonSimulationItemWasted(src, value, start, time));
+                                    CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, value, start));
                                 }
                             }
                             BoonStack.RemoveAt(i);

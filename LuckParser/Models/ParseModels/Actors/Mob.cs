@@ -1,5 +1,5 @@
 ﻿using LuckParser.Controllers;
-using LuckParser.Models.DataModels;
+using LuckParser.Parser;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -48,16 +48,16 @@ namespace LuckParser.Models.ParseModels
                 Img = CombatReplay.Icon,
                 Type = "Mob",
                 Positions = new double[2 * CombatReplay.Positions.Count],
-                Start = CombatReplay.TimeOffsets.Item1,
-                End = CombatReplay.TimeOffsets.Item2,
+                Start = CombatReplay.TimeOffsets.start,
+                End = CombatReplay.TimeOffsets.end,
                 ID = GetCombatReplayID()
             };
             int i = 0;
             foreach (Point3D pos in CombatReplay.Positions)
             {
-                Tuple<double, double> coord = map.GetMapCoord(pos.X, pos.Y);
-                aux.Positions[i++] = coord.Item1;
-                aux.Positions[i++] = coord.Item2;
+                (double x, double y) = map.GetMapCoord(pos.X, pos.Y);
+                aux.Positions[i++] = x;
+                aux.Positions[i++] = y;
             }
 
             return JsonConvert.SerializeObject(aux);

@@ -8,7 +8,7 @@ namespace LuckParser.Models.ParseModels
         public int OuterRadius { get; }
         public int InnerRadius { get; }
 
-        public DoughnutActor(bool fill, int growing, int innerRadius, int outerRadius, Tuple<int, int> lifespan, string color, Connector connector) : base(fill, growing, lifespan, color, connector)
+        public DoughnutActor(bool fill, int growing, int innerRadius, int outerRadius, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, lifespan, color, connector)
         {
             InnerRadius = innerRadius;
             OuterRadius = outerRadius;
@@ -31,8 +31,8 @@ namespace LuckParser.Models.ParseModels
                 Fill = Filled,
                 Color = Color,
                 Growing = Growing,
-                Start = Lifespan.Item1,
-                End = Lifespan.Item2,
+                Start = Lifespan.start,
+                End = Lifespan.end,
                 ConnectedTo = ConnectedTo.GetConnectedTo(map)
             };
             return JsonConvert.SerializeObject(aux);
