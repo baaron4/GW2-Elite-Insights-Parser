@@ -155,26 +155,18 @@ namespace LuckParser.Models.Logic
                 phases[i].Name = "Phase " + i;
                 phases[i].Targets.Add(mainTarget);
             }
-            int offsetDei = phases.Count;
+            string[] namesDeiSplit = new[] { "Thief", "Gambler", "Drunkard" };
             foreach (Target tar in Targets)
             {
                 if (tar.ID == (ushort) Thief || tar.ID == (ushort) Drunkard || tar.ID == (ushort) Gambler)
                 {
-                    phases.Add(new PhaseData(log.FightData.ToFightSpace(tar.FirstAware) - 1000, log.FightData.ToFightSpace(tar.LastAware) + 1000));
+                    string name = (tar.ID == (ushort)Thief ? "Thief" : (tar.ID == (ushort)Drunkard ? "Drunkard" : (tar.ID == (ushort)Gambler ? "Gambled" : "")));
+                    PhaseData tarPhase = new PhaseData(log.FightData.ToFightSpace(tar.FirstAware) - 1000, log.FightData.ToFightSpace(tar.LastAware) + 1000);
+                    tarPhase.Targets.Add(tar);
+                    tarPhase.OverrideTimes(log);
+                    tarPhase.Name = name;
+                    phases.Add(tarPhase);
                 }
-            }
-            string[] namesDeiSplit = new [] { "Thief", "Gambler", "Drunkard" };
-            for (int i = offsetDei; i < phases.Count; i++)
-            {
-                PhaseData phase = phases[i];
-                phase.Name = namesDeiSplit[i - offsetDei];
-                List<ushort> ids = new List<ushort>
-                    {
-                        (ushort) Thief,
-                        (ushort) Drunkard,
-                        (ushort) Gambler,
-                    };
-                AddTargetsToPhase(phase, ids, log);
             }
             phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             phases.RemoveAll(x => x.Targets.Count == 0);
