@@ -155,12 +155,11 @@ namespace LuckParser.Models.Logic
                 phases[i].Name = "Phase " + i;
                 phases[i].Targets.Add(mainTarget);
             }
-            string[] namesDeiSplit = new[] { "Thief", "Gambler", "Drunkard" };
             foreach (Target tar in Targets)
             {
                 if (tar.ID == (ushort) Thief || tar.ID == (ushort) Drunkard || tar.ID == (ushort) Gambler)
                 {
-                    string name = (tar.ID == (ushort)Thief ? "Thief" : (tar.ID == (ushort)Drunkard ? "Drunkard" : (tar.ID == (ushort)Gambler ? "Gambled" : "")));
+                    string name = (tar.ID == (ushort)Thief ? "Thief" : (tar.ID == (ushort)Drunkard ? "Drunkard" : (tar.ID == (ushort)Gambler ? "Gambler" : "")));
                     PhaseData tarPhase = new PhaseData(log.FightData.ToFightSpace(tar.FirstAware) - 1000, log.FightData.ToFightSpace(tar.LastAware) + 1000);
                     tarPhase.Targets.Add(tar);
                     tarPhase.OverrideTimes(log);
