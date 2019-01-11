@@ -30,5 +30,13 @@ namespace LuckParser.Models.Logic
                 log.FightData.FightEnd = reward.Time;
             }
         }
+
+        protected override HashSet<ushort> GetUniqueTargetIDs()
+        {
+            return new HashSet<ushort>
+            {
+                TriggerID
+            };
+        }
     }
 }

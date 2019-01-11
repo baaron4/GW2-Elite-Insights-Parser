@@ -44,6 +44,14 @@ namespace LuckParser.Models.Logic
             return phases;
         }
 
+        protected override HashSet<ushort> GetUniqueTargetIDs()
+        {
+            return new HashSet<ushort>
+            {
+                TriggerID
+            };
+        }
+
         public override void SetSuccess(ParsedLog log)
         {
             // check reward

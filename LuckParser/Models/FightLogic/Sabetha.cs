@@ -236,5 +236,16 @@ namespace LuckParser.Models.Logic
                 }
             }
         }
+
+        protected override HashSet<ushort> GetUniqueTargetIDs()
+        {
+            return new HashSet<ushort>
+            {
+                (ushort)ParseEnum.TargetIDS.Sabetha,
+                (ushort)Kernan,
+                (ushort)Karde,
+                (ushort)Knuckles,
+            };
+        }
     }
 }

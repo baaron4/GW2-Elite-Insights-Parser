@@ -78,6 +78,14 @@ namespace LuckParser.Models.Logic
             }
         }
 
+        protected override HashSet<ushort> GetUniqueTargetIDs()
+        {
+            return new HashSet<ushort>
+            {
+                TriggerID
+            };
+        }
+
         public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
         {
         }

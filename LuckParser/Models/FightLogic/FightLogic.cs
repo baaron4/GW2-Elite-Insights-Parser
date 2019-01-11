@@ -63,45 +63,47 @@ namespace LuckParser.Models.Logic
             return target.Character;
         }
 
-        protected void RegroupTargetsByID(ushort id, AgentData agentData, List<CombatItem> combatItems)
+        private void RegroupTargetsByID(ushort id, AgentData agentData, List<CombatItem> combatItems)
         {
             List<AgentItem> agents = agentData.GetAgentsByID(id);
             List<Target> toRegroup = Targets.Where(x => x.ID == id).ToList();
-            if (agents.Count > 0 && toRegroup.Count > 0)
+            if (agents.Count > 1 && toRegroup.Count > 1)
             {
                 Targets.RemoveAll(x => x.ID == id);
                 AgentItem firstItem = agents.First();
-                agents = agents.Where(x => x.InstID == firstItem.InstID).ToList();
                 HashSet<ulong> agentValues = new HashSet<ulong>(agents.Select(x => x.Agent));
-                agentValues.Remove(firstItem.Agent);
                 AgentItem newTargetAgent = new AgentItem(firstItem)
                 {
                     FirstAware = agents.Min(x => x.FirstAware),
                     LastAware = agents.Max(x => x.LastAware)
                 };
-                agentData.OverrideID(id, firstItem.InstID, newTargetAgent);
-                Targets.Add(new Target(newTargetAgent));
-                if (agentValues.Count == 0)
+                // get unique id for the fusion
+                ushort instID = 0;
+                Random rnd = new Random();
+                while (agentData.InstIDValues.Contains(instID) || instID == 0)
                 {
-                    return;
+                    instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
                 }
+                newTargetAgent.InstID = instID;
+                agentData.OverrideID(id, newTargetAgent);
+                Targets.Add(new Target(newTargetAgent));
                 foreach (CombatItem c in combatItems)
                 {
                     if (agentValues.Contains(c.SrcAgent))
                     {
                         c.SrcAgent = newTargetAgent.Agent;
+                        c.SrcInstid = newTargetAgent.InstID;
                     }
                     if (agentValues.Contains(c.DstAgent))
                     {
                         c.DstAgent = newTargetAgent.Agent;
+                        c.DstInstid = newTargetAgent.InstID;
                     }
                 }
             }
         }
 
-        protected virtual void RegroupTargets(AgentData agentData, List<CombatItem> combatItems)
-        {
-        }
+        protected abstract HashSet<ushort> GetUniqueTargetIDs();
 
         public void ComputeFightTargets(AgentData agentData, FightData fightData, List<CombatItem> combatItems)
         {
@@ -114,7 +116,10 @@ namespace LuckParser.Models.Logic
                     Targets.Add(new Target(agentItem));
                 }
             }
-            RegroupTargets(agentData, combatItems);
+            foreach (ushort id in GetUniqueTargetIDs())
+            {
+                RegroupTargetsByID(id, agentData, combatItems);
+            }
         }
 
         public void SetMaxHealth(ushort instid, long time, int health)

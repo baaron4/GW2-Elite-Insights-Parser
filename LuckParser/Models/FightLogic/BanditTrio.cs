@@ -60,6 +60,16 @@ namespace LuckParser.Models.Logic
             }
         }
 
+        protected override HashSet<ushort> GetUniqueTargetIDs()
+        {
+            return new HashSet<ushort>
+            {
+                (ushort)ParseEnum.TargetIDS.Berg,
+                (ushort)ParseEnum.TargetIDS.Zane,
+                (ushort)ParseEnum.TargetIDS.Narella
+            };
+        }
+
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
