@@ -67,7 +67,7 @@ var compileLayout = function () {
             dataType: DataTypes.gameplayTable
         })
     );
-    if (logData.phases[0].dmgModifiersCommon.length > 0 && logData.phases[0].dmgModifiersCommon[0].length > 0) {
+    if (logData.dmgCommonModifiersBuffs.length > 0) {
         statsLayout.addTab(
             new Tab("Damage Modifiers Stats", {
                 dataType: DataTypes.dmgModifiersTable
