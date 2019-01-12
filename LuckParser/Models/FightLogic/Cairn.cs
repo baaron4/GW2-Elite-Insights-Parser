@@ -106,5 +106,9 @@ namespace LuckParser.Models.Logic
         {
             return log.CombatData.AllCombatItems.Exists(x => x.SkillID == 38098) ? 1 : 0;
         }
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+        }
     }
 }

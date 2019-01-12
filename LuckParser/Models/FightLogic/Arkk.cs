@@ -138,5 +138,9 @@ namespace LuckParser.Models.Logic
                 }
             }
         }
+
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
+        {
+        }
     }
 }

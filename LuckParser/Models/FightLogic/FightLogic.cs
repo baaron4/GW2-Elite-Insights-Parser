@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace LuckParser.Models.Logic
 {
-    public class FightLogic
+    public abstract class FightLogic
     {
 
         public enum ParseMode { Raid, Fractal, Golem, Unknown };
@@ -19,13 +19,13 @@ namespace LuckParser.Models.Logic
             new Mechanic(SkillItem.ResurrectId, "Resurrect", Mechanic.MechType.PlayerStatus, new MechanicPlotlySetting("cross-open","rgb(0,255,255)"), "Res",0)}; //Resurrects (start), Resurrect
         public ParseMode Mode { get; protected set; } = ParseMode.Unknown;
         public bool CanCombatReplay { get; set; } = false;
-        public string Extension { get; protected set; } = "boss";
-        public string IconUrl { get; protected set; } = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
+        public string Extension { get; protected set; }
+        public string IconUrl { get; protected set; }
         public List<Mob> TrashMobs { get; } = new List<Mob>();
         public List<Target> Targets { get; } = new List<Target>();
         protected readonly ushort TriggerID;
 
-        public FightLogic(ushort triggerID)
+        protected FightLogic(ushort triggerID)
         {
             TriggerID = triggerID;
             CanCombatReplay = GetCombatMap() != null;
@@ -63,45 +63,47 @@ namespace LuckParser.Models.Logic
             return target.Character;
         }
 
-        protected void RegroupTargetsByID(ushort id, AgentData agentData, List<CombatItem> combatItems)
+        private void RegroupTargetsByID(ushort id, AgentData agentData, List<CombatItem> combatItems)
         {
             List<AgentItem> agents = agentData.GetAgentsByID(id);
             List<Target> toRegroup = Targets.Where(x => x.ID == id).ToList();
-            if (agents.Count > 0 && toRegroup.Count > 0)
+            if (agents.Count > 1 && toRegroup.Count > 1)
             {
                 Targets.RemoveAll(x => x.ID == id);
                 AgentItem firstItem = agents.First();
-                agents = agents.Where(x => x.InstID == firstItem.InstID).ToList();
                 HashSet<ulong> agentValues = new HashSet<ulong>(agents.Select(x => x.Agent));
-                agentValues.Remove(firstItem.Agent);
                 AgentItem newTargetAgent = new AgentItem(firstItem)
                 {
                     FirstAware = agents.Min(x => x.FirstAware),
                     LastAware = agents.Max(x => x.LastAware)
                 };
-                agentData.OverrideID(id, firstItem.InstID, newTargetAgent);
-                Targets.Add(new Target(newTargetAgent));
-                if (agentValues.Count == 0)
+                // get unique id for the fusion
+                ushort instID = 0;
+                Random rnd = new Random();
+                while (agentData.InstIDValues.Contains(instID) || instID == 0)
                 {
-                    return;
+                    instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
                 }
+                newTargetAgent.InstID = instID;
+                agentData.OverrideID(id, newTargetAgent);
+                Targets.Add(new Target(newTargetAgent));
                 foreach (CombatItem c in combatItems)
                 {
                     if (agentValues.Contains(c.SrcAgent))
                     {
                         c.SrcAgent = newTargetAgent.Agent;
+                        c.SrcInstid = newTargetAgent.InstID;
                     }
                     if (agentValues.Contains(c.DstAgent))
                     {
                         c.DstAgent = newTargetAgent.Agent;
+                        c.DstInstid = newTargetAgent.InstID;
                     }
                 }
             }
         }
 
-        protected virtual void RegroupTargets(AgentData agentData, List<CombatItem> combatItems)
-        {
-        }
+        protected abstract HashSet<ushort> GetUniqueTargetIDs();
 
         public void ComputeFightTargets(AgentData agentData, FightData fightData, List<CombatItem> combatItems)
         {
@@ -114,7 +116,10 @@ namespace LuckParser.Models.Logic
                     Targets.Add(new Target(agentItem));
                 }
             }
-            RegroupTargets(agentData, combatItems);
+            foreach (ushort id in GetUniqueTargetIDs())
+            {
+                RegroupTargetsByID(id, agentData, combatItems);
+            }
         }
 
         public void SetMaxHealth(ushort instid, long time, int health)
@@ -227,15 +232,9 @@ namespace LuckParser.Models.Logic
             phase.OverrideTimes(log);
         }
 
-        public virtual void ComputeAdditionalTargetData(Target target, ParsedLog log)
-        {
+        public abstract void ComputeAdditionalTargetData(Target target, ParsedLog log);
 
-        }
-
-        public virtual void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
-        {
-
-        }
+        public abstract void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log);
 
         protected virtual List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
@@ -247,9 +246,7 @@ namespace LuckParser.Models.Logic
             return -1;
         }
 
-        public virtual void ComputeAdditionalPlayerData(Player p, ParsedLog log)
-        {
-        }
+        public abstract void ComputeAdditionalPlayerData(Player p, ParsedLog log);
 
         public void InitTrashMobCombatReplay(ParsedLog log, int pollingRate)
         {

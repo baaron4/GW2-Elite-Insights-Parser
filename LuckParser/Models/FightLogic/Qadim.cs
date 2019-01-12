@@ -84,6 +84,18 @@ namespace LuckParser.Models.Logic
             };
         }
 
+        protected override HashSet<ushort> GetUniqueTargetIDs()
+        {
+            return new HashSet<ushort>
+            {
+                (ushort)ParseEnum.TargetIDS.Qadim,
+                (ushort)AncientInvokedHydra,
+                (ushort)ApocalypseBringer,
+                (ushort)WyvernMatriarch,
+                (ushort)WyvernPatriarch
+            };
+        }
+
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);

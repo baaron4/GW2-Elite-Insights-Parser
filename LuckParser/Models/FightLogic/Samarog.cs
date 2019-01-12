@@ -218,5 +218,9 @@ namespace LuckParser.Models.Logic
             OverrideMaxHealths(log);
             return (target.Health > 30e6) ? 1 : 0;
         }
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+        }
     }
 }

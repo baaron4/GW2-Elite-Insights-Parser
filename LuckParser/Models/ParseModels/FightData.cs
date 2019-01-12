@@ -118,7 +118,7 @@ namespace LuckParser.Models.ParseModels
                     break;
                 default:
                     // Unknown
-                    Logic = new FightLogic(id);
+                    Logic = new UnknownFightLogic(id);
                     break;
             }
         }

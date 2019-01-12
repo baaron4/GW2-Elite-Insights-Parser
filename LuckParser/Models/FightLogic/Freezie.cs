@@ -14,6 +14,18 @@ namespace LuckParser.Models.Logic
             IconUrl = "https://wiki.guildwars2.com/images/thumb/8/8b/Freezie.jpg/189px-Freezie.jpg";
         }
 
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
+        {
+        }
+
+        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
+        {
+        }
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+        }
+
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
@@ -44,6 +56,15 @@ namespace LuckParser.Models.Logic
                 }
             }
             return phases;
+        }
+
+        protected override HashSet<ushort> GetUniqueTargetIDs()
+        {
+            return new HashSet<ushort>
+            {
+                (ushort)ParseEnum.TargetIDS.Freezie,
+                (ushort)FreeziesFrozenHeart
+            };
         }
 
         protected override List<ushort> GetFightTargetsIDs()

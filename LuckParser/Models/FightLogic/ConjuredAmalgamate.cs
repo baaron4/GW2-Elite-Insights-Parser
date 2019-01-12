@@ -87,6 +87,16 @@ namespace LuckParser.Models.Logic
             }
         }
 
+        protected override HashSet<ushort> GetUniqueTargetIDs()
+        {
+            return new HashSet<ushort>
+            {
+                (ushort)ParseEnum.TargetIDS.ConjuredAmalgamate,
+                (ushort)ParseEnum.TargetIDS.CALeftArm,
+                (ushort)ParseEnum.TargetIDS.CARightArm
+            };
+        }
+
         public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
         {
             switch (mob.ID)

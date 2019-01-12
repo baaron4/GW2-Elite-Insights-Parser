@@ -91,6 +91,15 @@ namespace LuckParser.Models.Logic
             return targetPhases;
         }
 
+        protected override HashSet<ushort> GetUniqueTargetIDs()
+        {
+            return new HashSet<ushort>
+            {
+                (ushort)ParseEnum.TargetIDS.Kenut,
+                (ushort)ParseEnum.TargetIDS.Nikare
+            };
+        }
+
         private void FallBackPhases(Target target, List<PhaseData> phases, ParsedLog log, bool firstPhaseAt0)
         {
             HashSet<ushort> pIds = new HashSet<ushort>(log.PlayerList.Select(x => x.InstID));
@@ -328,6 +337,10 @@ namespace LuckParser.Models.Logic
             }
             OverrideMaxHealths(log);
             return (target.Health > 18e6) ? 1 : 0; //Health of Nikare
+        }
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
         }
     }
 }

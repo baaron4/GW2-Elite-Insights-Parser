@@ -36,11 +36,6 @@ namespace LuckParser.Models.Logic
                             (11204, 4414, 13252, 6462));
         }
 
-        protected override void RegroupTargets(AgentData agentData, List<CombatItem> combatItems)
-        {
-            RegroupTargetsByID((ushort)ParseEnum.TargetIDS.Artsariiv, agentData, combatItems);
-        }
-
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
             return new List<ParseEnum.TrashIDS>
@@ -97,6 +92,10 @@ namespace LuckParser.Models.Logic
                 log.FightData.Success = lastPlayerExit != null && lastTargetExit != null && lastPlayerExit.Time - lastTargetExit.Time > 1000 ? true : false;
                 log.FightData.FightEnd = lastDamageTaken.Time;
             }
+        }
+
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
+        {
         }
     }
 }
