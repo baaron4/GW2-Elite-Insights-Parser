@@ -450,7 +450,7 @@ namespace LuckParser.Builders
             return list;
         }
 
-        private void BuildDmgModifiersData(int phaseIndex, List<List<object[]>> data, List<List<List<object[]>>> dataTargets)
+        private void BuildDmgModifiersData(int phaseIndex, List<long> boonToUse, List<List<object[]>> data, List<List<List<object[]>>> dataTargets)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
 
@@ -461,34 +461,58 @@ namespace LuckParser.Builders
                 data.Add(pData);
                 dataTargets.Add(pDataTargets);
                 Dictionary<long, List<AbstractMasterActor.ExtraBoonData>> extraBoonDataAll = player.GetExtraBoonData(_log, null);
-                foreach (var pair in extraBoonDataAll)
+                foreach(long id in boonToUse)
                 {
-                    var extraData = pair.Value[phaseIndex];
-                    pData.Add(new object[]
-                                {
-                                    pair.Key,
+                    if (extraBoonDataAll.TryGetValue(id, out var extraDataList))
+                    {
+                        var extraData = extraDataList[phaseIndex];
+                        pData.Add(new object[]
+                                    {
                                     extraData.HitCount,
                                     extraData.TotalHitCount,
                                     extraData.DamageGain,
                                     extraData.TotalDamage
-                                });
+                                    });
+                    }
+                    else
+                    {
+                        pData.Add(new object[]
+                                    {
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                    });
+                    }
                 }
                 foreach (Target target in phase.Targets)
                 {
                     List<object[]> pTarget = new List<object[]>();
                     pDataTargets.Add(pTarget);
                     Dictionary<long, List<AbstractMasterActor.ExtraBoonData>> extraBoonDataTarget = player.GetExtraBoonData(_log, target);
-                    foreach (var pair in extraBoonDataTarget)
+                    foreach (long id in boonToUse)
                     {
-                        var extraData = pair.Value[phaseIndex];
-                        pTarget.Add(new object[]
-                                    {
-                                        pair.Key,
+                        if (extraBoonDataTarget.TryGetValue(id, out var extraDataList))
+                        {
+                            var extraData = extraDataList[phaseIndex];
+                            pTarget.Add(new object[]
+                                        {
                                     extraData.HitCount,
                                     extraData.TotalHitCount,
                                     extraData.DamageGain,
                                     extraData.TotalDamage
-                                    });
+                                        });
+                        }
+                        else
+                        {
+                            pTarget.Add(new object[]
+                                        {
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                        });
+                        }
                     }
                 }
             }
@@ -1698,9 +1722,41 @@ namespace LuckParser.Builders
                 }
                 logData.targets.Add(targetDto);
             }
-
-            Dictionary<string, List<long>> persBuffs = new Dictionary<string, List<long>>();
-            Dictionary<string, List<Boon>> persBuffDict = BuildPersonalBoonData(persBuffs);
+            //
+            logData.persBuffs = new Dictionary<string, List<long>>();
+            Dictionary<string, List<Boon>> persBuffDict = BuildPersonalBoonData(logData.persBuffs);
+            logData.boons = new List<long>();
+            foreach (Boon boon in _statistics.PresentBoons)
+            {
+                logData.boons.Add(boon.ID);
+                _usedBoons[boon.ID] = boon;
+            }
+            logData.conditions = new List<long>();
+            foreach (Boon boon in _statistics.PresentConditions)
+            {
+                logData.conditions.Add(boon.ID);
+                _usedBoons[boon.ID] = boon;
+            }
+            logData.offBuffs = new List<long>();
+            foreach (Boon boon in _statistics.PresentOffbuffs)
+            {
+                logData.offBuffs.Add(boon.ID);
+                _usedBoons[boon.ID] = boon;
+            }
+            logData.defBuffs = new List<long>();
+            foreach (Boon boon in _statistics.PresentDefbuffs)
+            {
+                logData.defBuffs.Add(boon.ID);
+                _usedBoons[boon.ID] = boon;
+            }
+            HashSet<long> dmgCommonModifiersBuffs = new HashSet<long>();
+            foreach (Player p in _log.PlayerList)
+            {
+                Dictionary<long, List<AbstractMasterActor.ExtraBoonData>> toCheck = p.GetExtraBoonData(_log, null);
+                dmgCommonModifiersBuffs.UnionWith(toCheck.Keys);
+            }
+            logData.dmgCommonModifiersBuffs = dmgCommonModifiersBuffs.ToList();
+            //
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
                 PhaseData phaseData = _statistics.Phases[i];
@@ -1742,7 +1798,7 @@ namespace LuckParser.Builders
                 {
                     phaseDto.targets.Add(_log.FightData.Logic.Targets.IndexOf(target));
                 }
-                BuildDmgModifiersData(i, phaseDto.dmgModifiersCommon, phaseDto.dmgModifiersTargetsCommon);
+                BuildDmgModifiersData(i, logData.dmgCommonModifiersBuffs, phaseDto.dmgModifiersCommon, phaseDto.dmgModifiersTargetsCommon);
                 foreach (Target target in phaseData.Targets)
                 {
                     phaseDto.targetsCondiStats.Add(BuildTargetCondiData(i, target));
@@ -1782,32 +1838,6 @@ namespace LuckParser.Builders
                 if (phaseDto.markupLines.Count == 0) phaseDto.markupLines = null;
                 logData.phases.Add(phaseDto);
             }
-
-            logData.boons = new List<long>();
-            foreach (Boon boon in _statistics.PresentBoons)
-            {
-                logData.boons.Add(boon.ID);
-                _usedBoons[boon.ID] = boon;
-            }
-            logData.conditions = new List<long>();
-            foreach (Boon boon in _statistics.PresentConditions)
-            {
-                logData.conditions.Add(boon.ID);
-                _usedBoons[boon.ID] = boon;
-            }
-            logData.offBuffs = new List<long>();
-            foreach (Boon boon in _statistics.PresentOffbuffs)
-            {
-                logData.offBuffs.Add(boon.ID);
-                _usedBoons[boon.ID] = boon;
-            }
-            logData.defBuffs = new List<long>();
-            foreach (Boon boon in _statistics.PresentDefbuffs)
-            {
-                logData.defBuffs.Add(boon.ID);
-                _usedBoons[boon.ID] = boon;
-            }
-            logData.persBuffs = persBuffs;
             //
             double fightDuration = _log.FightData.FightDuration / 1000.0;
             TimeSpan duration = TimeSpan.FromSeconds(fightDuration);

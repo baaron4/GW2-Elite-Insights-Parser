@@ -22,7 +22,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="row in (mode ? rowsTarget : rows)" :class="{active: row.player.id === playerindex}">
+            <tr v-for="row in (mode ? tableDataTarget.rows : tableData.rows)" :class="{active: row.player.id === playerindex}">
                 <td>{{row.player.group}}</td>
                 <td :data-original-title="row.player.profession">
                     <img :src="row.player.icon" :alt="row.player.profession" class="icon"><span style="display:none">{{row.player.profession}}</span>
@@ -34,5 +34,16 @@
                 </td>
             </tr>
         </tbody>
+        <tfoot>
+            <tr v-for="row in (mode ? tableDataTarget.sums : tableData.sums)">
+                <td></td>
+                <td></td>
+                <td class="text-left">{{row.name}}</td>
+                <td></td>
+                <td v-for="(modifier, index) in modifiers" :data-original-title="getTooltip(row.data[index])">
+                    {{getCellValue(row.data[index])}}%
+                </td>
+            </tr>
+        </tfoot>
     </table>
 </div>

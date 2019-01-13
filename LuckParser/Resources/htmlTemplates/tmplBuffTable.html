@@ -33,7 +33,7 @@
                 <td></td>
                 <td v-if="sum.icon" :data-original-title="sum.name"><img :src="sum.icon" :alt="sum.name" class="icon"></td>
                 <td v-else></td>
-                <td :class="{'text-left' : !!sum.icon}" :data-original-title="getAvgTooltip(sum.avg)">{{sum.name}}</td>
+                <td class="text-left" :data-original-title="getAvgTooltip(sum.avg)">{{sum.name}}</td>
                 <td v-for=" (buff, index) in buffs" :data-original-title="getCellTooltip(buff, sum.data[index], !!sum.icon)">
                     {{ getCellValue(buff, sum.data[index]) }}
                 </td>

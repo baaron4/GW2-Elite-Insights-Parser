@@ -11,6 +11,7 @@ namespace LuckParser.Models.HtmlModels
         public List<long> boons;
         public List<long> offBuffs;
         public List<long> defBuffs;
+        public List<long> dmgCommonModifiersBuffs;
         public Dictionary<string, List<long>> persBuffs;
         
         public List<long> conditions;
