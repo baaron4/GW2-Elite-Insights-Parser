@@ -622,7 +622,7 @@ namespace LuckParser.Models
                     }
 
                     FinalBuffs uptime = new FinalBuffs();
-
+                    final[boon.ID] = uptime;
                     if (boon.Type == Boon.BoonType.Duration)
                     {
                         uptime.Generation = Math.Round(100.0 * totalGeneration / fightDuration / playerList.Count, 2);
@@ -641,7 +641,6 @@ namespace LuckParser.Models
                         uptime.Extension = Math.Round((double)(totalExtension) / fightDuration / playerList.Count, 2);
                         uptime.Extended = Math.Round((double)(totalExtended) / fightDuration / playerList.Count, 2);
                     }
-                    final[boon.ID] = uptime;
                 }
 
                 uptimesByPhase[phaseIndex] = final;
@@ -679,6 +678,7 @@ namespace LuckParser.Models
                             Extension = 0,
                             Extended = 0
                         };
+                        final[boon.ID] = uptime;
                         if (selfBoons.ContainsKey(boon.ID))
                         {
                             long generation = selfBoons.GetGeneration(boon.ID, player.AgentItem);
@@ -711,7 +711,6 @@ namespace LuckParser.Models
                                 }
                             }
                         }
-                        final[boon.ID] = uptime;
                     }
 
                     selfUptimesByPhase[phaseIndex] = final;
@@ -791,8 +790,6 @@ namespace LuckParser.Models
                                     buff.Presence = Math.Round(100.0 * presenceValueCondi / fightDuration, 2);
                                 }
                             }
-
-                            rates[boon.ID] = buff;
                         }
                     }
                     stats[phaseIndex] = rates;
