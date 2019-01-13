@@ -194,6 +194,9 @@ namespace LuckParser.Models
             HashSet<long> nonCritable = new HashSet<long>
                     {
                         9292,
+                        5492,
+                        13014,
+                        30770,
                         52370
                     };
             // (x - 1) / x
