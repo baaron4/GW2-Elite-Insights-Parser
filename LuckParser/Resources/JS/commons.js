@@ -154,7 +154,7 @@ var compileCommons = function () {
     });
 
     Vue.component("damagedist-table-component", {
-        props: ["dmgdist", "tableid", "actor", "isminion", "istarget"],
+        props: ["dmgdist", "tableid", "actor", "isminion", "istarget", "phaseindex"],
         template: `${tmplDamageDistTable}`,
         data: function () {
             return {
@@ -204,6 +204,9 @@ var compileCommons = function () {
             getSkill: function (isBoon, id) {
                 return findSkill(isBoon, id);
             }
+        },
+        computed: {
+            phaseDuration: function () { var phase = logData.phases[this.phaseindex]; return phase.end - phase.start; }
         }
     });
 };

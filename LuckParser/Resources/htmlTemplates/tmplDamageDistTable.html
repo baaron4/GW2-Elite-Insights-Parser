@@ -35,7 +35,7 @@
                     row[1]).name}}
                 </td>
                 <td>{{ round3(100*row[2]/dmgdist.contributedDamage) }}%</td>
-                <td>{{ row[2] }}</td>
+                <td :data-original-title="parseInt(row[2]/(phaseDuration===0 ? 1 : phaseDuration)).toFixed(1) +' dps'">{{ row[2] }}</td>
                 <td>{{ Math.max(row[3],0) }}</td>
                 <td>{{ round(row[2]/row[6]) }}</td>
                 <td>{{ row[4] }}</td>
