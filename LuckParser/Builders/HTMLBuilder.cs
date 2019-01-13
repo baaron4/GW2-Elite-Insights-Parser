@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using LuckParser.Setting;
 using LuckParser.Models;
+using Newtonsoft.Json.Serialization;
 
 namespace LuckParser.Builders
 {
@@ -80,8 +81,8 @@ namespace LuckParser.Builders
             PhaseData phase = _statistics.Phases[phaseIndex];
             return new TargetChartDataDto
             {
-                total = target.Get1SDamageList(_log, phaseIndex, phase, null),
-                health = _statistics.TargetsHealth[phaseIndex][target]
+                Total = target.Get1SDamageList(_log, phaseIndex, phase, null),
+                Health = _statistics.TargetsHealth[phaseIndex][target]
             };
         }
         
@@ -97,12 +98,12 @@ namespace LuckParser.Builders
             {
                 PlayerChartDataDto pChar = new PlayerChartDataDto()
                 {
-                    total = p.Get1SDamageList(_log, phaseIndex, phase, null),
-                    targets = new List<List<int>>()
+                    Total = p.Get1SDamageList(_log, phaseIndex, phase, null),
+                    Targets = new List<List<int>>()
                 };
                 foreach (Target target in phase.Targets)
                 {
-                    pChar.targets.Add(p.Get1SDamageList(_log, phaseIndex, phase, target));
+                    pChar.Targets.Add(p.Get1SDamageList(_log, phaseIndex, phase, target));
                 }
                 list.Add(pChar);
             }
@@ -362,12 +363,12 @@ namespace LuckParser.Builders
                        
                 if (boonTable)
                 {
-                    boonData.avg = Math.Round(_statistics.StatsAll[player][phaseIndex].AvgBoons, 1);
+                    boonData.Avg = Math.Round(_statistics.StatsAll[player][phaseIndex].AvgBoons, 1);
                 }
                 foreach (Boon boon in listToUse)
                 {
                     List<object> boonVals = new List<object>();
-                    boonData.data.Add(boonVals);
+                    boonData.Data.Add(boonVals);
 
                     if (boons.TryGetValue(boon.ID, out var uptime))
                     {
@@ -436,7 +437,7 @@ namespace LuckParser.Builders
                 foreach (Boon boon in boonsBySpec[player.Prof])
                 {
                     List<object> boonVals = new List<object>();
-                    boonData.data.Add(boonVals);
+                    boonData.Data.Add(boonVals);
                     if (boons.TryGetValue(boon.ID, out var uptime))
                     {
                         boonVals.Add(uptime.Uptime);
@@ -545,7 +546,7 @@ namespace LuckParser.Builders
                 {
                     if (uptimes.TryGetValue(boon.ID, out var uptime))
                     {
-                        boonData.data.Add(new List<object>()
+                        boonData.Data.Add(new List<object>()
                         {
                             uptime.Generation,
                             uptime.Overstack,
@@ -557,7 +558,7 @@ namespace LuckParser.Builders
                     }
                     else
                     {
-                        boonData.data.Add(new List<object>()
+                        boonData.Data.Add(new List<object>()
                         {
                             0,
                             0,
@@ -635,15 +636,15 @@ namespace LuckParser.Builders
             {
                 DeathRecapDto recap = new DeathRecapDto()
                 {
-                    time = deathRecap.Time
+                    Time = deathRecap.Time
                 };
                 res.Add(recap);
                 if (deathRecap.ToKill != null)
                 {
-                    recap.toKill = new List<object[]>();
+                    recap.ToKill = new List<object[]>();
                     foreach (Player.DeathRecap.DeathRecapDamageItem item in deathRecap.ToKill)
                     {
-                        recap.toKill.Add(new object[]
+                        recap.ToKill.Add(new object[]
                         {
                             item.Time,
                             item.Skill,
@@ -655,10 +656,10 @@ namespace LuckParser.Builders
                 }
                 if (deathRecap.ToDown != null)
                 {
-                    recap.toDown = new List<object[]>();
+                    recap.ToDown = new List<object[]>();
                     foreach (Player.DeathRecap.DeathRecapDamageItem item in deathRecap.ToDown)
                     {
-                        recap.toDown.Add(new object[]
+                        recap.ToDown.Add(new object[]
                         {
                             item.Time,
                             item.Skill,
@@ -778,9 +779,9 @@ namespace LuckParser.Builders
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<CastLog> casting = p.GetCastLogs(_log, phase.Start, phase.End);
             List<DamageLog> damageLogs = p.GetJustPlayerDamageLogs(target, _log, phase.Start, phase.End);
-            dto.totalDamage = dps.Damage;
-            dto.contributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
-            dto.distribution = BuildDMGDistBodyData(casting, damageLogs, dto.contributedDamage);
+            dto.TotalDamage = dps.Damage;
+            dto.ContributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
+            dto.Distribution = BuildDMGDistBodyData(casting, damageLogs, dto.ContributedDamage);
 
             return dto;
         }
@@ -812,9 +813,9 @@ namespace LuckParser.Builders
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<CastLog> casting = minions.GetCastLogs(_log, phase.Start, phase.End);
             List<DamageLog> damageLogs = minions.GetDamageLogs(target, _log, phase.Start, phase.End);
-            dto.contributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
-            dto.totalDamage = dps.Damage;
-            dto.distribution = BuildDMGDistBodyData(casting, damageLogs, dto.contributedDamage);
+            dto.ContributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
+            dto.TotalDamage = dps.Damage;
+            dto.Distribution = BuildDMGDistBodyData(casting, damageLogs, dto.ContributedDamage);
             return dto;
         }
 
@@ -846,13 +847,13 @@ namespace LuckParser.Builders
         {
             DmgDistributionDto dto = new DmgDistributionDto
             {
-                distribution = new List<object[]>()
+                Distribution = new List<object[]>()
             };
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<DamageLog> damageLogs = p.GetDamageTakenLogs(null, _log, phase.Start, phase.End);
             Dictionary<long, List<DamageLog>> damageLogsBySkill = damageLogs.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             SkillData skillList = _log.SkillData;
-            dto.contributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.Damage) : 0;
+            dto.ContributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.Damage) : 0;
             Dictionary<long, Boon> conditionsById = _statistics.PresentConditions.ToDictionary(x => x.ID);
             foreach (var entry in damageLogsBySkill)
             {
@@ -904,7 +905,7 @@ namespace LuckParser.Builders
                     0,
                     0
                 };
-                dto.distribution.Add(row);
+                dto.Distribution.Add(row);
             }
 
             return dto;
@@ -983,20 +984,20 @@ namespace LuckParser.Builders
             }
             BoonChartDataDto dto = new BoonChartDataDto
             {
-                id = bgm.Boon.ID,
-                visible = (bgm.Boon.Name == "Might" || bgm.Boon.Name == "Quickness" || bgm.Boon.Name == "Vulnerability"),
-                color = GeneralHelper.GetLink("Color-" + bgm.Boon.Name),
-                states = new List<object[]>(bChart.Count + 1)
+                Id = bgm.Boon.ID,
+                Visible = (bgm.Boon.Name == "Might" || bgm.Boon.Name == "Quickness" || bgm.Boon.Name == "Vulnerability"),
+                Color = GeneralHelper.GetLink("Color-" + bgm.Boon.Name),
+                States = new List<object[]>(bChart.Count + 1)
             };
             _usedBoons[bgm.Boon.ID] = bgm.Boon;
             foreach (BoonsGraphModel.Segment seg in bChart)
             {
                 double segStart = Math.Round(Math.Max(seg.Start - phase.Start, 0) / 1000.0, 3);
-                dto.states.Add(new object[] { segStart, seg.Value });
+                dto.States.Add(new object[] { segStart, seg.Value });
             }
             BoonsGraphModel.Segment lastSeg = bChart.Last();
             double segEnd = Math.Round(Math.Min(lastSeg.End - phase.Start, phase.End - phase.Start) / 1000.0, 3);
-            dto.states.Add(new object[] { segEnd, lastSeg.Value });
+            dto.States.Add(new object[] { segEnd, lastSeg.Value });
 
             return dto;
         }
@@ -1010,11 +1011,11 @@ namespace LuckParser.Builders
             {
                 FoodDto dto = new FoodDto
                 {
-                    time = entry.Time / 1000.0,
-                    duration = entry.Duration / 1000.0,
-                    stack = entry.Stack,
-                    id = entry.Item.ID,
-                    dimished = (entry.Item.ID == 46587 || entry.Item.ID == 46668)
+                    Time = entry.Time / 1000.0,
+                    Duration = entry.Duration / 1000.0,
+                    Stack = entry.Stack,
+                    Id = entry.Item.ID,
+                    Dimished = (entry.Item.ID == 46587 || entry.Item.ID == 46668)
                 };
                 _usedBoons[entry.Item.ID] = entry.Item;
                 list.Add(dto);
@@ -1100,11 +1101,11 @@ namespace LuckParser.Builders
                 List<MechanicLog> mechanicLogs = _log.MechanicData[mech];
                 MechanicDto dto = new MechanicDto
                 {
-                    name = mech.FullName,
-                    shortName = mech.ShortName,
-                    description = mech.Description,
-                    playerMech = playerMechs.Contains(mech),
-                    enemyMech = enemyMechs.Contains(mech)
+                    Name = mech.FullName,
+                    ShortName = mech.ShortName,
+                    Description = mech.Description,
+                    PlayerMech = playerMechs.Contains(mech),
+                    EnemyMech = enemyMechs.Contains(mech)
                 };
                 mechanicDtos.Add(dto);
             }
@@ -1121,11 +1122,11 @@ namespace LuckParser.Builders
                 List<MechanicLog> mechanicLogs = _log.MechanicData[mech];
                 MechanicChartDataDto dto = new MechanicChartDataDto
                 {
-                    color = mech.PlotlySetting.color,
-                    symbol = mech.PlotlySetting.symbol,
-                    size = mech.PlotlySetting.size,
-                    visible = (mech.SkillId == SkillItem.DeathId || mech.SkillId == SkillItem.DownId),
-                    points = BuildMechanicGraphPointData(mechanicLogs, mech.IsEnemyMechanic)
+                    Color = mech.PlotlySetting.color,
+                    Symbol = mech.PlotlySetting.symbol,
+                    Size = mech.PlotlySetting.size,
+                    Visible = (mech.SkillId == SkillItem.DeathId || mech.SkillId == SkillItem.DownId),
+                    Points = BuildMechanicGraphPointData(mechanicLogs, mech.IsEnemyMechanic)
                 };
                 mechanicsChart.Add(dto);
             }
@@ -1191,7 +1192,7 @@ namespace LuckParser.Builders
             {
                 BoonData playerData = new BoonData
                 {
-                    data = new List<List<object>>()
+                    Data = new List<List<object>>()
                 };
 
                 foreach (Boon boon in _statistics.PresentConditions)
@@ -1206,7 +1207,7 @@ namespace LuckParser.Builders
                         boonData.Add(toUse.Extension[player]);
                         boonData.Add(toUse.Extended[player]);
                     }
-                    playerData.data.Add(boonData);
+                    playerData.Data.Add(boonData);
                 }
                 list.Add(playerData);
             }
@@ -1220,9 +1221,9 @@ namespace LuckParser.Builders
             long fightDuration = phase.GetDuration();
             BoonData tagetData = new BoonData
             {
-                data = new List<List<object>>()
+                Data = new List<List<object>>()
             };
-            tagetData.avg = Math.Round(_statistics.AvgTargetConditions[target][phaseIndex], 1);
+            tagetData.Avg = Math.Round(_statistics.AvgTargetConditions[target][phaseIndex], 1);
             foreach (Boon boon in _statistics.PresentConditions)
             {
                 List<object> boonData = new List<object>();
@@ -1236,7 +1237,7 @@ namespace LuckParser.Builders
                     }
                 }
 
-                tagetData.data.Add(boonData);
+                tagetData.Data.Add(boonData);
             }
             return tagetData;
         }
@@ -1248,9 +1249,9 @@ namespace LuckParser.Builders
             long fightDuration = phase.GetDuration();
             BoonData targetData = new BoonData
             {
-                data = new List<List<object>>()
+                Data = new List<List<object>>()
             };
-            targetData.avg = Math.Round(_statistics.AvgTargetBoons[target][phaseIndex], 1);
+            targetData.Avg = Math.Round(_statistics.AvgTargetBoons[target][phaseIndex], 1);
             foreach (Boon boon in _statistics.PresentBoons)
             {
                 List<object> boonData = new List<object>();
@@ -1263,7 +1264,7 @@ namespace LuckParser.Builders
                     }
                 }
 
-                targetData.data.Add(boonData);
+                targetData.Data.Add(boonData);
             }
             return targetData;
         }
@@ -1608,19 +1609,19 @@ namespace LuckParser.Builders
             }
             if (firstSet[0] == "Unknown" && firstSet[1] == "Unknown")
             {
-                playerDto.firstSet = new List<string>();
+                playerDto.FirstSet = new List<string>();
             }
             else
             {
-                playerDto.firstSet = firstSet;
+                playerDto.FirstSet = firstSet;
             }
             if (secondSet[0] == "Unknown" && secondSet[1] == "Unknown")
             {
-                playerDto.secondSet = new List<string>();
+                playerDto.SecondSet = new List<string>();
             }
             else
             {
-                playerDto.secondSet = secondSet;
+                playerDto.SecondSet = secondSet;
             }
         }
 
@@ -1632,17 +1633,17 @@ namespace LuckParser.Builders
             {
                 PhaseChartDataDto phaseData = new PhaseChartDataDto()
                 {
-                    players = BuildPlayerGraphData(i)
+                    Players = BuildPlayerGraphData(i)
                 };
                 foreach(Target target in _statistics.Phases[i].Targets)
                 {
-                    phaseData.targets.Add(BuildTargetGraphData(i, target));
+                    phaseData.Targets.Add(BuildTargetGraphData(i, target));
                 }
 
                 phaseChartData.Add(phaseData);
              }
-            chartData.phases = phaseChartData;
-            chartData.mechanics = BuildMechanicsChartData();
+            chartData.Phases = phaseChartData;
+            chartData.Mechanics = BuildMechanicsChartData();
             return ToJson(chartData);
         }
 
@@ -1653,100 +1654,100 @@ namespace LuckParser.Builders
             {
                 PlayerDto playerDto = new PlayerDto()
                 {
-                    group = player.Group,
-                    name = player.Character,
-                    acc = player.Account.TrimStart(':'),
-                    profession = player.Prof,
-                    condi = player.Condition,
-                    conc = player.Concentration,
-                    heal = player.Healing,
-                    tough = player.Toughness,
-                    colTarget = GeneralHelper.GetLink("Color-" + player.Prof),
-                    colCleave = GeneralHelper.GetLink("Color-" + player.Prof + "-NonBoss"),
-                    colTotal = GeneralHelper.GetLink("Color-" + player.Prof + "-Total"),
-                    isConjure = (player.Account == ":Conjured Sword"),
+                    Group = player.Group,
+                    Name = player.Character,
+                    Acc = player.Account.TrimStart(':'),
+                    Profession = player.Prof,
+                    Condi = player.Condition,
+                    Conc = player.Concentration,
+                    Heal = player.Healing,
+                    Tough = player.Toughness,
+                    ColTarget = GeneralHelper.GetLink("Color-" + player.Prof),
+                    ColCleave = GeneralHelper.GetLink("Color-" + player.Prof + "-NonBoss"),
+                    ColTotal = GeneralHelper.GetLink("Color-" + player.Prof + "-Total"),
+                    IsConjure = (player.Account == ":Conjured Sword"),
                 };
                 BuildWeaponSets(playerDto, player);
-                if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay && !playerDto.isConjure)
+                if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay && !playerDto.IsConjure)
                 {
-                    playerDto.combatReplayID = player.GetCombatReplayID();
+                    playerDto.CombatReplayID = player.GetCombatReplayID();
                 }
                 foreach (KeyValuePair<string, Minions> pair in player.GetMinions(_log))
                 {
-                    playerDto.minions.Add(new MinionDto()
+                    playerDto.Minions.Add(new MinionDto()
                     {
-                        id = pair.Value.MinionID,
-                        name = pair.Key.TrimEnd(" \0".ToArray())
+                        Id = pair.Value.MinionID,
+                        Name = pair.Key.TrimEnd(" \0".ToArray())
                     });
                 }
 
-                logData.players.Add(playerDto);
+                logData.Players.Add(playerDto);
             }
 
             foreach(DummyActor enemy in _log.MechanicData.GetEnemyList(0))
             {
-                logData.enemies.Add(new EnemyDto() { name = enemy.Character });
+                logData.Enemies.Add(new EnemyDto() { Name = enemy.Character });
             }
 
             foreach (Target target in _log.FightData.Logic.Targets)
             {
                 TargetDto targetDto = new TargetDto()
                 {
-                    name = target.Character,
-                    icon = GeneralHelper.GetNPCIcon(target.ID),
-                    health = target.Health,
-                    hbHeight = target.HitboxHeight,
-                    hbWidth = target.HitboxWidth,
-                    tough = target.Toughness
+                    Name = target.Character,
+                    Icon = GeneralHelper.GetNPCIcon(target.ID),
+                    Health = target.Health,
+                    HbHeight = target.HitboxHeight,
+                    HbWidth = target.HitboxWidth,
+                    Tough = target.Toughness
                 };
                 if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay)
                 {
-                    targetDto.combatReplayID = target.GetCombatReplayID();
+                    targetDto.CombatReplayID = target.GetCombatReplayID();
                 }
                 if (_log.FightData.Success)
                 {
-                    targetDto.percent = 100;
-                    targetDto.hpLeft = 0;
+                    targetDto.Percent = 100;
+                    targetDto.HpLeft = 0;
                 }
                 else
                 {
                     if (target.HealthOverTime.Count > 0)
                     {
-                        targetDto.percent = Math.Round(100.0 - target.HealthOverTime[target.HealthOverTime.Count - 1].Y * 0.01, 2);
-                        targetDto.hpLeft = (int)Math.Floor(target.HealthOverTime[target.HealthOverTime.Count - 1].Y * 0.01);
+                        targetDto.Percent = Math.Round(100.0 - target.HealthOverTime[target.HealthOverTime.Count - 1].Y * 0.01, 2);
+                        targetDto.HpLeft = (int)Math.Floor(target.HealthOverTime[target.HealthOverTime.Count - 1].Y * 0.01);
                     }
                 }
                 foreach (KeyValuePair<string, Minions> pair in target.GetMinions(_log))
                 {
-                    targetDto.minions.Add(new MinionDto() { id = pair.Value.MinionID, name = pair.Key.TrimEnd(" \0".ToArray()) });
+                    targetDto.Minions.Add(new MinionDto() { Id = pair.Value.MinionID, Name = pair.Key.TrimEnd(" \0".ToArray()) });
                 }
-                logData.targets.Add(targetDto);
+                logData.Targets.Add(targetDto);
             }
             //
-            logData.persBuffs = new Dictionary<string, List<long>>();
-            Dictionary<string, List<Boon>> persBuffDict = BuildPersonalBoonData(logData.persBuffs);
-            logData.boons = new List<long>();
+            logData.PersBuffs = new Dictionary<string, List<long>>();
+            Dictionary<string, List<Boon>> persBuffDict = BuildPersonalBoonData(logData.PersBuffs);
+            logData.Boons = new List<long>();
             foreach (Boon boon in _statistics.PresentBoons)
             {
-                logData.boons.Add(boon.ID);
+                logData.Boons.Add(boon.ID);
                 _usedBoons[boon.ID] = boon;
             }
-            logData.conditions = new List<long>();
+            logData.Conditions = new List<long>();
             foreach (Boon boon in _statistics.PresentConditions)
             {
-                logData.conditions.Add(boon.ID);
+                logData.Conditions.Add(boon.ID);
                 _usedBoons[boon.ID] = boon;
             }
-            logData.offBuffs = new List<long>();
+            logData.OffBuffs = new List<long>();
             foreach (Boon boon in _statistics.PresentOffbuffs)
             {
-                logData.offBuffs.Add(boon.ID);
+                logData.OffBuffs.Add(boon.ID);
                 _usedBoons[boon.ID] = boon;
             }
-            logData.defBuffs = new List<long>();
+            logData.DefBuffs = new List<long>();
             foreach (Boon boon in _statistics.PresentDefbuffs)
             {
-                logData.defBuffs.Add(boon.ID);
+                logData.DefBuffs.Add(boon.ID);
                 _usedBoons[boon.ID] = boon;
             }
             HashSet<long> dmgCommonModifiersBuffs = new HashSet<long>();
@@ -1755,59 +1756,59 @@ namespace LuckParser.Builders
                 Dictionary<long, List<AbstractMasterActor.ExtraBoonData>> toCheck = p.GetExtraBoonData(_log, null);
                 dmgCommonModifiersBuffs.UnionWith(toCheck.Keys);
             }
-            logData.dmgCommonModifiersBuffs = dmgCommonModifiersBuffs.ToList();
+            logData.DmgCommonModifiersBuffs = dmgCommonModifiersBuffs.ToList();
             //
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
                 PhaseData phaseData = _statistics.Phases[i];
                 PhaseDto phaseDto = new PhaseDto()
                 {
-                    name = phaseData.Name,
-                    duration = phaseData.GetDuration(),
-                    start = phaseData.Start / 1000.0,
-                    end = phaseData.End / 1000.0,
-                    dpsStats = BuildDPSData(i),
-                    dpsStatsTargets = BuildDPSTargetsData(i),
-                    dmgStatsTargets = BuildDMGStatsTargetsData(i),
-                    dmgStats = BuildDMGStatsData(i),
-                    defStats = BuildDefenseData(i),
-                    healStats = BuildSupportData(i),
-                    boonStats = BuildBuffUptimeData(_statistics.PresentBoons, i),
-                    offBuffStats = BuildBuffUptimeData(_statistics.PresentOffbuffs, i),
-                    defBuffStats = BuildBuffUptimeData(_statistics.PresentDefbuffs, i),
-                    persBuffStats = BuildPersonalBuffUptimeData(persBuffDict, i),
-                    boonGenSelfStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "self"),
-                    boonGenGroupStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "group"),
-                    boonGenOGroupStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "off"),
-                    boonGenSquadStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "squad"),
-                    offBuffGenSelfStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, "self"),
-                    offBuffGenGroupStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, "group"),
-                    offBuffGenOGroupStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, "off"),
-                    offBuffGenSquadStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, "squad"),
-                    defBuffGenSelfStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, "self"),
-                    defBuffGenGroupStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, "group"),
-                    defBuffGenOGroupStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, "off"),
-                    defBuffGenSquadStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, "squad"),
-                    targetsCondiStats = new List<List<BoonData>>(),
-                    targetsCondiTotals = new List<BoonData>(),
-                    targetsBoonTotals = new List<BoonData>(),
-                    mechanicStats = BuildPlayerMechanicData(i),
-                    enemyMechanicStats = BuildEnemyMechanicData(i)
+                    Name = phaseData.Name,
+                    Duration = phaseData.GetDuration(),
+                    Start = phaseData.Start / 1000.0,
+                    End = phaseData.End / 1000.0,
+                    DpsStats = BuildDPSData(i),
+                    DpsStatsTargets = BuildDPSTargetsData(i),
+                    DmgStatsTargets = BuildDMGStatsTargetsData(i),
+                    DmgStats = BuildDMGStatsData(i),
+                    DefStats = BuildDefenseData(i),
+                    HealStats = BuildSupportData(i),
+                    BoonStats = BuildBuffUptimeData(_statistics.PresentBoons, i),
+                    OffBuffStats = BuildBuffUptimeData(_statistics.PresentOffbuffs, i),
+                    DefBuffStats = BuildBuffUptimeData(_statistics.PresentDefbuffs, i),
+                    PersBuffStats = BuildPersonalBuffUptimeData(persBuffDict, i),
+                    BoonGenSelfStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "self"),
+                    BoonGenGroupStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "group"),
+                    BoonGenOGroupStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "off"),
+                    BoonGenSquadStats = BuildBuffGenerationData(_statistics.PresentBoons, i, "squad"),
+                    OffBuffGenSelfStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, "self"),
+                    OffBuffGenGroupStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, "group"),
+                    OffBuffGenOGroupStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, "off"),
+                    OffBuffGenSquadStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, "squad"),
+                    DefBuffGenSelfStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, "self"),
+                    DefBuffGenGroupStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, "group"),
+                    DefBuffGenOGroupStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, "off"),
+                    DefBuffGenSquadStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, "squad"),
+                    TargetsCondiStats = new List<List<BoonData>>(),
+                    TargetsCondiTotals = new List<BoonData>(),
+                    TargetsBoonTotals = new List<BoonData>(),
+                    MechanicStats = BuildPlayerMechanicData(i),
+                    EnemyMechanicStats = BuildEnemyMechanicData(i)
                 };
                 foreach (Target target in phaseData.Targets)
                 {
-                    phaseDto.targets.Add(_log.FightData.Logic.Targets.IndexOf(target));
+                    phaseDto.Targets.Add(_log.FightData.Logic.Targets.IndexOf(target));
                 }
-                BuildDmgModifiersData(i, logData.dmgCommonModifiersBuffs, phaseDto.dmgModifiersCommon, phaseDto.dmgModifiersTargetsCommon);
+                BuildDmgModifiersData(i, logData.DmgCommonModifiersBuffs, phaseDto.DmgModifiersCommon, phaseDto.DmgModifiersTargetsCommon);
                 foreach (Target target in phaseData.Targets)
                 {
-                    phaseDto.targetsCondiStats.Add(BuildTargetCondiData(i, target));
-                    phaseDto.targetsCondiTotals.Add(BuildTargetCondiUptimeData(i, target));
-                    phaseDto.targetsBoonTotals.Add(HasBoons(i, target) ? BuildTargetBoonData(i, target) : null);
+                    phaseDto.TargetsCondiStats.Add(BuildTargetCondiData(i, target));
+                    phaseDto.TargetsCondiTotals.Add(BuildTargetCondiUptimeData(i, target));
+                    phaseDto.TargetsBoonTotals.Add(HasBoons(i, target) ? BuildTargetBoonData(i, target) : null);
                 }
                 // add phase markup to full fight graph
-                phaseDto.markupLines = new List<double>();
-                phaseDto.markupAreas = new List<AreaLabelDto>();
+                phaseDto.MarkupLines = new List<double>();
+                phaseDto.MarkupAreas = new List<AreaLabelDto>();
                 for (int j = 1; j < _statistics.Phases.Count; j++)
                 {
                     PhaseData curPhase = _statistics.Phases[j];
@@ -1816,27 +1817,27 @@ namespace LuckParser.Builders
                     {
                         continue;
                     }
-                    if (phaseDto.subPhases == null)
+                    if (phaseDto.SubPhases == null)
                     {
-                        phaseDto.subPhases = new List<int>();
+                        phaseDto.SubPhases = new List<int>();
                     }
-                    phaseDto.subPhases.Add(j); 
+                    phaseDto.SubPhases.Add(j); 
                     long start = curPhase.Start - phaseData.Start;
                     long end = curPhase.End - phaseData.Start;
-                    if (curPhase.DrawStart) phaseDto.markupLines.Add(start / 1000.0);
-                    if (curPhase.DrawEnd) phaseDto.markupLines.Add(end / 1000.0);
+                    if (curPhase.DrawStart) phaseDto.MarkupLines.Add(start / 1000.0);
+                    if (curPhase.DrawEnd) phaseDto.MarkupLines.Add(end / 1000.0);
                     AreaLabelDto phaseArea = new AreaLabelDto
                     {
-                        start = start / 1000.0,
-                        end = end / 1000.0,
-                        label = curPhase.Name,
-                        highlight = curPhase.DrawArea
+                        Start = start / 1000.0,
+                        End = end / 1000.0,
+                        Label = curPhase.Name,
+                        Highlight = curPhase.DrawArea
                     };
-                    phaseDto.markupAreas.Add(phaseArea);
+                    phaseDto.MarkupAreas.Add(phaseArea);
                 }
-                if (phaseDto.markupAreas.Count == 0) phaseDto.markupAreas = null;
-                if (phaseDto.markupLines.Count == 0) phaseDto.markupLines = null;
-                logData.phases.Add(phaseDto);
+                if (phaseDto.MarkupAreas.Count == 0) phaseDto.MarkupAreas = null;
+                if (phaseDto.MarkupLines.Count == 0) phaseDto.MarkupLines = null;
+                logData.Phases.Add(phaseDto);
             }
             //
             double fightDuration = _log.FightData.FightDuration / 1000.0;
@@ -1846,14 +1847,14 @@ namespace LuckParser.Builders
             {
                 durationString = duration.Hours + "h " + durationString;
             }
-            logData.encounterDuration = durationString;
-            logData.success = _log.FightData.Success;
-            logData.fightName = FilterStringChars(_log.FightData.Name);
-            logData.fightIcon = _log.FightData.Logic.IconUrl;
-            logData.combatReplay = (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay);
-            logData.lightTheme = _settings.LightTheme;
-            logData.singleGroup = _log.PlayerList.Where(x => x.Account != ":Conjured Sword").Select(x => x.Group).Distinct().Count() == 1;
-            logData.noMechanics = _log.FightData.Logic.MechanicList.Count == 3;
+            logData.EncounterDuration = durationString;
+            logData.Success = _log.FightData.Success;
+            logData.FightName = FilterStringChars(_log.FightData.Name);
+            logData.FightIcon = _log.FightData.Logic.IconUrl;
+            logData.CombatReplay = (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay);
+            logData.LightTheme = _settings.LightTheme;
+            logData.SingleGroup = _log.PlayerList.Where(x => x.Account != ":Conjured Sword").Select(x => x.Group).Distinct().Count() == 1;
+            logData.NoMechanics = _log.FightData.Logic.MechanicList.Count == 3;
             return ToJson(logData);
         }
 
@@ -1910,31 +1911,31 @@ namespace LuckParser.Builders
         {
             PlayerDetailsDto dto = new PlayerDetailsDto
             {
-                dmgDistributions = new List<DmgDistributionDto>(),
-                dmgDistributionsTargets = new List<List<DmgDistributionDto>>(),
-                dmgDistributionsTaken = new List<DmgDistributionDto>(),
-                boonGraph = new List<List<BoonChartDataDto>>(),
-                rotation = new List<List<object[]>>(),
-                food = BuildPlayerFoodData(player),
-                minions = new List<PlayerDetailsDto>(),
-                deathRecap = BuildDeathRecap(player)
+                DmgDistributions = new List<DmgDistributionDto>(),
+                DmgDistributionsTargets = new List<List<DmgDistributionDto>>(),
+                DmgDistributionsTaken = new List<DmgDistributionDto>(),
+                BoonGraph = new List<List<BoonChartDataDto>>(),
+                Rotation = new List<List<object[]>>(),
+                Food = BuildPlayerFoodData(player),
+                Minions = new List<PlayerDetailsDto>(),
+                DeathRecap = BuildDeathRecap(player)
             };
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
-                dto.rotation.Add(BuildRotationData(player, i));
-                dto.dmgDistributions.Add(BuildPlayerDMGDistData(player, null, i));
+                dto.Rotation.Add(BuildRotationData(player, i));
+                dto.DmgDistributions.Add(BuildPlayerDMGDistData(player, null, i));
                 List<DmgDistributionDto> dmgTargetsDto = new List<DmgDistributionDto>();
                 foreach (Target target in _statistics.Phases[i].Targets)
                 {
                     dmgTargetsDto.Add(BuildPlayerDMGDistData(player, target, i));
                 }
-                dto.dmgDistributionsTargets.Add(dmgTargetsDto);
-                dto.dmgDistributionsTaken.Add(BuildDMGTakenDistData(player, i));
-                dto.boonGraph.Add(BuildBoonGraphData(player, i));
+                dto.DmgDistributionsTargets.Add(dmgTargetsDto);
+                dto.DmgDistributionsTaken.Add(BuildDMGTakenDistData(player, i));
+                dto.BoonGraph.Add(BuildBoonGraphData(player, i));
             }
             foreach (KeyValuePair<string, Minions> pair in player.GetMinions(_log))
             {
-                dto.minions.Add(BuildPlayerMinionsData(player, pair.Value));
+                dto.Minions.Add(BuildPlayerMinionsData(player, pair.Value));
             }
 
             return dto;
@@ -1944,8 +1945,8 @@ namespace LuckParser.Builders
         {
             PlayerDetailsDto dto = new PlayerDetailsDto
             {
-                dmgDistributions = new List<DmgDistributionDto>(),
-                dmgDistributionsTargets = new List<List<DmgDistributionDto>>()
+                DmgDistributions = new List<DmgDistributionDto>(),
+                DmgDistributionsTargets = new List<List<DmgDistributionDto>>()
             };
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
@@ -1954,8 +1955,8 @@ namespace LuckParser.Builders
                 {
                     dmgTargetsDto.Add(BuildPlayerMinionDMGDistData(player, minion, target, i));
                 }
-                dto.dmgDistributionsTargets.Add(dmgTargetsDto);
-                dto.dmgDistributions.Add(BuildPlayerMinionDMGDistData(player, minion, null, i));
+                dto.DmgDistributionsTargets.Add(dmgTargetsDto);
+                dto.DmgDistributions.Add(BuildPlayerMinionDMGDistData(player, minion, null, i));
             }
             return dto;
         }
@@ -1964,32 +1965,32 @@ namespace LuckParser.Builders
         {
             PlayerDetailsDto dto = new PlayerDetailsDto
             {
-                dmgDistributions = new List<DmgDistributionDto>(),
-                dmgDistributionsTaken = new List<DmgDistributionDto>(),
-                boonGraph = new List<List<BoonChartDataDto>>(),
-                rotation = new List<List<object[]>>()
+                DmgDistributions = new List<DmgDistributionDto>(),
+                DmgDistributionsTaken = new List<DmgDistributionDto>(),
+                BoonGraph = new List<List<BoonChartDataDto>>(),
+                Rotation = new List<List<object[]>>()
             };
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
                 if (_statistics.Phases[i].Targets.Contains(target))
                 {
-                    dto.dmgDistributions.Add(BuildTargetDMGDistData(target, i));
-                    dto.dmgDistributionsTaken.Add(BuildDMGTakenDistData(target, i));
-                    dto.rotation.Add(BuildRotationData(target, i));
-                    dto.boonGraph.Add(BuildBoonGraphData(target, i));
+                    dto.DmgDistributions.Add(BuildTargetDMGDistData(target, i));
+                    dto.DmgDistributionsTaken.Add(BuildDMGTakenDistData(target, i));
+                    dto.Rotation.Add(BuildRotationData(target, i));
+                    dto.BoonGraph.Add(BuildBoonGraphData(target, i));
                 } else
                 {
-                    dto.dmgDistributions.Add(new DmgDistributionDto());
-                    dto.dmgDistributionsTaken.Add(new DmgDistributionDto());
-                    dto.rotation.Add(new List<object[]>());
-                    dto.boonGraph.Add(new List<BoonChartDataDto>());
+                    dto.DmgDistributions.Add(new DmgDistributionDto());
+                    dto.DmgDistributionsTaken.Add(new DmgDistributionDto());
+                    dto.Rotation.Add(new List<object[]>());
+                    dto.BoonGraph.Add(new List<BoonChartDataDto>());
                 }
             }
 
-            dto.minions = new List<PlayerDetailsDto>();
+            dto.Minions = new List<PlayerDetailsDto>();
             foreach (KeyValuePair<string, Minions> pair in target.GetMinions(_log))
             {
-                dto.minions.Add(BuildTargetsMinionsData(target, pair.Value));
+                dto.Minions.Add(BuildTargetsMinionsData(target, pair.Value));
             }
             return dto;
         }
@@ -1998,17 +1999,17 @@ namespace LuckParser.Builders
         {
             PlayerDetailsDto dto = new PlayerDetailsDto
             {
-                dmgDistributions = new List<DmgDistributionDto>()
+                DmgDistributions = new List<DmgDistributionDto>()
             };
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
                 if (_statistics.Phases[i].Targets.Contains(target))
                 {
-                    dto.dmgDistributions.Add(BuildTargetMinionDMGDistData(target, minion, i));
+                    dto.DmgDistributions.Add(BuildTargetMinionDMGDistData(target, minion, i));
                 }
                 else
                 {
-                    dto.dmgDistributions.Add(new DmgDistributionDto());
+                    dto.DmgDistributions.Add(new DmgDistributionDto());
                 }
             }
             return dto;
@@ -2021,12 +2022,12 @@ namespace LuckParser.Builders
             {
                 dtos.Add(new BoonDto()
                 {
-                    id = boon.ID,
-                    name = boon.Name,
-                    icon = boon.Link,
-                    stacking = (boon.Type == Boon.BoonType.Intensity),
-                    consumable = (boon.Nature == Boon.BoonNature.Consumable),
-                    enemy = (boon.Source == Boon.BoonSource.Enemy)
+                    Id = boon.ID,
+                    Name = boon.Name,
+                    Icon = boon.Link,
+                    Stacking = (boon.Type == Boon.BoonType.Intensity),
+                    Consumable = (boon.Nature == Boon.BoonNature.Consumable),
+                    Enemy = (boon.Source == Boon.BoonSource.Enemy)
                 });
             }
             return dtos;
@@ -2039,10 +2040,10 @@ namespace LuckParser.Builders
             {
                 GW2APISkill apiSkill = skill.ApiSkill;
                 SkillDto dto = new SkillDto() {
-                    id = skill.ID,
-                    name = skill.Name,
-                    icon = skill.Icon,
-                    aa = (apiSkill?.slot == "Weapon_1")
+                    Id = skill.ID,
+                    Name = skill.Name,
+                    Icon = skill.Icon,
+                    Aa = (apiSkill?.slot == "Weapon_1")
                 };
                 dtos.Add(dto);
             }
@@ -2051,10 +2052,15 @@ namespace LuckParser.Builders
  
         private string ToJson(object value)
         {
+            DefaultContractResolver contractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new CamelCaseNamingStrategy()
+            };
             JsonSerializerSettings settings = new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                DefaultValueHandling = DefaultValueHandling.Ignore
+                DefaultValueHandling = DefaultValueHandling.Ignore,
+                ContractResolver = contractResolver
             };
             return JsonConvert.SerializeObject(value, settings);
         }

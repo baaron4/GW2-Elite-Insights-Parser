@@ -5,21 +5,21 @@ namespace LuckParser.Models.HtmlModels
     
     public class PlayerDto
     {
-        public int group;
-        public int combatReplayID;
-        public string name;
-        public string acc;
-        public string profession;
-        public uint condi;
-        public uint conc;
-        public uint heal;
-        public uint tough;
-        public readonly List<MinionDto> minions = new List<MinionDto>();
-        public List<string> firstSet;
-        public List<string> secondSet;
-        public string colTarget;
-        public string colCleave;
-        public string colTotal;
-        public bool isConjure;
+        public int Group;
+        public int CombatReplayID;
+        public string Name;
+        public string Acc;
+        public string Profession;
+        public uint Condi;
+        public uint Conc;
+        public uint Heal;
+        public uint Tough;
+        public readonly List<MinionDto> Minions = new List<MinionDto>();
+        public List<string> FirstSet;
+        public List<string> SecondSet;
+        public string ColTarget;
+        public string ColCleave;
+        public string ColTotal;
+        public bool IsConjure;
     }
 }

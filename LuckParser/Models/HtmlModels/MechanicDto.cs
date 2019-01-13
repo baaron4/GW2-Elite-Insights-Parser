@@ -5,10 +5,10 @@ namespace LuckParser.Models.HtmlModels
 {  
     public class MechanicDto
     {       
-        public string name;       
-        public string shortName;        
-        public string description;       
-        public bool enemyMech;       
-        public bool playerMech;
+        public string Name;       
+        public string ShortName;        
+        public string Description;       
+        public bool EnemyMech;       
+        public bool PlayerMech;
     }
 }

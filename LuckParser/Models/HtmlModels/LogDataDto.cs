@@ -4,24 +4,24 @@ namespace LuckParser.Models.HtmlModels
 {   
     public class LogDataDto
     { 
-        public List<TargetDto> targets = new List<TargetDto>();
-        public readonly List<PlayerDto> players = new List<PlayerDto>();
-        public readonly List<EnemyDto> enemies = new List<EnemyDto>();
-        public readonly List<PhaseDto> phases = new List<PhaseDto>();
-        public List<long> boons;
-        public List<long> offBuffs;
-        public List<long> defBuffs;
-        public List<long> dmgCommonModifiersBuffs;
-        public Dictionary<string, List<long>> persBuffs;
+        public List<TargetDto> Targets = new List<TargetDto>();
+        public readonly List<PlayerDto> Players = new List<PlayerDto>();
+        public readonly List<EnemyDto> Enemies = new List<EnemyDto>();
+        public readonly List<PhaseDto> Phases = new List<PhaseDto>();
+        public List<long> Boons;
+        public List<long> OffBuffs;
+        public List<long> DefBuffs;
+        public List<long> DmgCommonModifiersBuffs;
+        public Dictionary<string, List<long>> PersBuffs;
         
-        public List<long> conditions;
-        public string encounterDuration;
-        public bool success;
-        public string fightName;
-        public string fightIcon;
-        public bool combatReplay;
-        public bool lightTheme;
-        public bool noMechanics;
-        public bool singleGroup;
+        public List<long> Conditions;
+        public string EncounterDuration;
+        public bool Success;
+        public string FightName;
+        public string FightIcon;
+        public bool CombatReplay;
+        public bool LightTheme;
+        public bool NoMechanics;
+        public bool SingleGroup;
     }
 }

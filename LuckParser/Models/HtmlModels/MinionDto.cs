@@ -2,7 +2,7 @@
 {   
     public class MinionDto
     {
-        public long id;
-        public string name;
+        public long Id;
+        public string Name;
     }
 }

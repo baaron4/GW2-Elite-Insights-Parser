@@ -4,8 +4,8 @@ namespace LuckParser.Models.HtmlModels
 {  
     public class DmgDistributionDto
     {     
-        public long contributedDamage;     
-        public long totalDamage;      
-        public List<object[]> distribution;
+        public long ContributedDamage;     
+        public long TotalDamage;      
+        public List<object[]> Distribution;
     }
 }

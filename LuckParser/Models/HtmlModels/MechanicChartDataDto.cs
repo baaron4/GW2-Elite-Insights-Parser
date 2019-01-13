@@ -4,10 +4,10 @@ namespace LuckParser.Models.HtmlModels
 {  
     public class MechanicChartDataDto
     {       
-        public string symbol;     
-        public int size;
-        public string color;       
-        public List<List<List<double>>> points;      
-        public bool visible;
+        public string Symbol;     
+        public int Size;
+        public string Color;       
+        public List<List<List<double>>> Points;      
+        public bool Visible;
     }
 }

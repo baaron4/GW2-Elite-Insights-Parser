@@ -2,9 +2,9 @@
 {  
     public class SkillDto
     {
-        public long id;
-        public string name;
-        public string icon;
-        public bool aa;
+        public long Id;
+        public string Name;
+        public string Icon;
+        public bool Aa;
     }
 }

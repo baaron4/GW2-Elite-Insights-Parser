@@ -2,11 +2,11 @@
 { 
     public class BoonDto
     {    
-        public long id;       
-        public string name;       
-        public string icon;       
-        public bool stacking;
-        public bool consumable;
-        public bool enemy;
+        public long Id;       
+        public string Name;       
+        public string Icon;       
+        public bool Stacking;
+        public bool Consumable;
+        public bool Enemy;
     }
 }

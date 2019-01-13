@@ -6,54 +6,54 @@ namespace LuckParser.Models.HtmlModels
     
     public class PhaseDto
     {
-        public string name;
+        public string Name;
         [DefaultValue(null)]
-        public long duration;
+        public long Duration;
         [DefaultValue(null)]
-        public double start;
+        public double Start;
         [DefaultValue(null)]
-        public double end;
-        public List<int> targets = new List<int>();
+        public double End;
+        public List<int> Targets = new List<int>();
 
-        public List<List<object>> dpsStats;
-        public List<List<List<object>>> dpsStatsTargets;
-        public List<List<List<object>>> dmgStatsTargets;
-        public List<List<object>> dmgStats;
-        public List<List<object>> defStats;
-        public List<List<object>> healStats;
+        public List<List<object>> DpsStats;
+        public List<List<List<object>>> DpsStatsTargets;
+        public List<List<List<object>>> DmgStatsTargets;
+        public List<List<object>> DmgStats;
+        public List<List<object>> DefStats;
+        public List<List<object>> HealStats;
 
-        public List<BoonData> boonStats;
-        public List<BoonData> boonGenSelfStats;
-        public List<BoonData> boonGenGroupStats;
-        public List<BoonData> boonGenOGroupStats;
-        public List<BoonData> boonGenSquadStats;
+        public List<BoonData> BoonStats;
+        public List<BoonData> BoonGenSelfStats;
+        public List<BoonData> BoonGenGroupStats;
+        public List<BoonData> BoonGenOGroupStats;
+        public List<BoonData> BoonGenSquadStats;
 
-        public List<BoonData> offBuffStats;
-        public List<BoonData> offBuffGenSelfStats;
-        public List<BoonData> offBuffGenGroupStats;
-        public List<BoonData> offBuffGenOGroupStats;
-        public List<BoonData> offBuffGenSquadStats;
+        public List<BoonData> OffBuffStats;
+        public List<BoonData> OffBuffGenSelfStats;
+        public List<BoonData> OffBuffGenGroupStats;
+        public List<BoonData> OffBuffGenOGroupStats;
+        public List<BoonData> OffBuffGenSquadStats;
 
-        public List<BoonData> defBuffStats;
-        public List<BoonData> defBuffGenSelfStats;
-        public List<BoonData> defBuffGenGroupStats;
-        public List<BoonData> defBuffGenOGroupStats;
-        public List<BoonData> defBuffGenSquadStats;
+        public List<BoonData> DefBuffStats;
+        public List<BoonData> DefBuffGenSelfStats;
+        public List<BoonData> DefBuffGenGroupStats;
+        public List<BoonData> DefBuffGenOGroupStats;
+        public List<BoonData> DefBuffGenSquadStats;
 
-        public List<BoonData> persBuffStats;
+        public List<BoonData> PersBuffStats;
 
-        public List<List<object[]>> dmgModifiersCommon = new List<List<object[]>>();
-        public List<List<List<object[]>>> dmgModifiersTargetsCommon = new List<List<List<object[]>>>();
+        public List<List<object[]>> DmgModifiersCommon = new List<List<object[]>>();
+        public List<List<List<object[]>>> DmgModifiersTargetsCommon = new List<List<List<object[]>>>();
 
-        public List<List<BoonData>> targetsCondiStats;
-        public List<BoonData> targetsCondiTotals;
-        public List<BoonData> targetsBoonTotals;
+        public List<List<BoonData>> TargetsCondiStats;
+        public List<BoonData> TargetsCondiTotals;
+        public List<BoonData> TargetsBoonTotals;
 
-        public List<List<int[]>> mechanicStats;
-        public List<List<int[]>> enemyMechanicStats;
+        public List<List<int[]>> MechanicStats;
+        public List<List<int[]>> EnemyMechanicStats;
 
-        public List<double> markupLines;
-        public List<AreaLabelDto> markupAreas;
-        public List<int> subPhases;
+        public List<double> MarkupLines;
+        public List<AreaLabelDto> MarkupAreas;
+        public List<int> SubPhases;
     }
 }

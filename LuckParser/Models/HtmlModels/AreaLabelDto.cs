@@ -5,10 +5,10 @@ namespace LuckParser.Models.HtmlModels
     public class AreaLabelDto
     {
         [DefaultValue(null)]
-        public double start;
+        public double Start;
         [DefaultValue(null)]
-        public double end;
-        public string label;
-        public bool highlight;
+        public double End;
+        public string Label;
+        public bool Highlight;
     }
 }

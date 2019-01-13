@@ -4,7 +4,7 @@ namespace LuckParser.Models.HtmlModels
 {   
     public class ChartDataDto
     {      
-        public List<PhaseChartDataDto> phases = new List<PhaseChartDataDto>();      
-        public List<MechanicChartDataDto> mechanics = new List<MechanicChartDataDto>();
+        public List<PhaseChartDataDto> Phases = new List<PhaseChartDataDto>();      
+        public List<MechanicChartDataDto> Mechanics = new List<MechanicChartDataDto>();
     }
 }
