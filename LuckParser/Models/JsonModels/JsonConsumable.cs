@@ -8,9 +8,9 @@ namespace LuckParser.Models.JsonModels
 {
     public class JsonConsumable
     {
-        public int stack;
-        public int duration;
-        public long time;
-        public long id;
+        public int Stack;
+        public int Duration;
+        public long Time;
+        public long Id;
     }
 }

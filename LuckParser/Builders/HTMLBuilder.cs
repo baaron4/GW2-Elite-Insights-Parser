@@ -545,7 +545,7 @@ namespace LuckParser.Builders
                 {
                     if (uptimes.TryGetValue(boon.ID, out var uptime))
                     {
-                        boonData.data.Add(new List<object>(2)
+                        boonData.data.Add(new List<object>()
                         {
                             uptime.Generation,
                             uptime.Overstack,
@@ -557,7 +557,7 @@ namespace LuckParser.Builders
                     }
                     else
                     {
-                        boonData.data.Add(new List<object>(2)
+                        boonData.data.Add(new List<object>()
                         {
                             0,
                             0,

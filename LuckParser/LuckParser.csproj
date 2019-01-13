@@ -109,7 +109,7 @@
     <Compile Include="Models\FightLogic\UnknownFightLogic.cs" />
     <Compile Include="Models\FightLogic\BanditTrio.cs" />
     <Compile Include="Models\FightLogic\Freezie.cs" />
-    <Compile Include="Models\JsonModels\JsonDeathRecap.cs" />
+    <Compile Include="Models\JsonModels\JsonActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\FacingActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\GenericActor.cs" />
     <Compile Include="Models\ParseModels\Logs\BoonExtensionLog.cs" />
@@ -187,15 +187,10 @@
     <Compile Include="Models\JsonModels\JsonSkill.cs" />
     <Compile Include="Models\JsonModels\JsonMechanic.cs" />
     <Compile Include="Models\JsonModels\JsonPlayer.cs" />
-    <Compile Include="Models\JsonModels\JsonStats.cs" />
-    <Compile Include="Models\JsonModels\JsonStatsAll.cs" />
     <Compile Include="Models\JsonModels\JsonTargetBuffs.cs" />
     <Compile Include="Models\JsonModels\JsonTarget.cs" />
-    <Compile Include="Models\JsonModels\JsonDps.cs" />
-    <Compile Include="Models\JsonModels\JsonDefenses.cs" />
     <Compile Include="Models\JsonModels\JsonPhase.cs" />
     <Compile Include="Models\JsonModels\JsonBuffs.cs" />
-    <Compile Include="Models\JsonModels\JsonSupport.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\FormActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\Connector\AgentConnector.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\Connector\Connector.cs" />

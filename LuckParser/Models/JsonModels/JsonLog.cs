@@ -6,22 +6,22 @@ namespace LuckParser.Models.JsonModels
 {
     class JsonLog
     {
-        public string eliteInsightsVersion;
-        public int triggerID;
-        public string fightName;
-        public string arcVersion;
-        public string recordedBy;
-        public string timeStart;
-        public string timeEnd;
-        public string duration;
-        public bool success;
-        public List<JsonTarget> targets;
-        public List<JsonPlayer> players;
-        public List<JsonPhase> phases;
-        public Dictionary<string, List<JsonMechanic>> mechanics;
-        public string[] uploadLinks;
-        public Dictionary<string, string> skillNames;
-        public Dictionary<string, string> buffNames;
-        public Dictionary<string, HashSet<long>> personalBuffs;
+        public string EliteInsightsVersion;
+        public int TriggerID;
+        public string FightName;
+        public string ArcVersion;
+        public string RecordedBy;
+        public string TimeStart;
+        public string TimeEnd;
+        public string Duration;
+        public bool Success;
+        public List<JsonTarget> Targets;
+        public List<JsonPlayer> Players;
+        public List<JsonPhase> Phases;
+        public Dictionary<string, List<JsonMechanic>> Mechanics;
+        public string[] UploadLinks;
+        public Dictionary<string, string> SkillNames;
+        public Dictionary<string, string> BuffNames;
+        public Dictionary<string, HashSet<long>> PersonalBuffs;
     }
 }

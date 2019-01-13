@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Models.ParseModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,37 +7,24 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models.JsonModels
 {
-    public class JsonPlayer
+    public class JsonPlayer : JsonActor
     {      
-        public string character;
-        public string account;
-        public uint condition;
-        public uint concentration;
-        public uint healing;
-        public uint toughness;
-        public int group;
-        public string profession;
-        public string[] weapons;
-        public JsonDps dpsAll;
-        public JsonDps[] dpsTargets;
-        public List<int>[] damage1S;
-        public List<int>[][] targetDamage1S;
-        public Dictionary<string, JsonDamageDist>[] totalDamageDist;
-        public Dictionary<string, JsonDamageDist>[][] targetDamageDist;
-        public Dictionary<string, JsonDamageDist>[] totalDamageTaken;
-        public JsonStatsAll statsAll;
-        public JsonStats[] statsTargets;
-        public List<int[]> avgConditionsStates;
-        public List<int[]> avgBoonsStates;
-        public JsonDefenses defenses;
-        public JsonSupport support;
-        public Dictionary<string, List<JsonSkill>> totation;
-        public Dictionary<string, JsonBuffs> selfBuffs;
-        public Dictionary<string, JsonBuffs> groupBuffs;
-        public Dictionary<string, JsonBuffs> offGroupBuffs;
-        public Dictionary<string, JsonBuffs> squadBuffs;
-        public List<JsonDeathRecap> deathRecap;
-        public List<JsonMinions> minions;
-        public List<JsonConsumable> consumables;
+        public string Account;
+        public int Group;
+        public string Profession;
+        public string[] Weapons;
+        public Statistics.FinalDPS[][] DpsTargets;
+        public List<int>[][] TargetDamage1S;
+        public Dictionary<string, JsonDamageDist>[][] TargetDamageDist;
+        public Statistics.FinalStatsAll[] StatsAll;
+        public Statistics.FinalStats[][] StatsTargets;
+        public Statistics.FinalDefenses[] Defenses;
+        public Statistics.FinalSupport[] Support;
+        public Dictionary<string, JsonBuffs> SelfBuffs;
+        public Dictionary<string, JsonBuffs> GroupBuffs;
+        public Dictionary<string, JsonBuffs> OffGroupBuffs;
+        public Dictionary<string, JsonBuffs> SquadBuffs;
+        public List<Player.DeathRecap> DeathRecap;
+        public List<Player.Consumable> Consumables;
     }
 }
