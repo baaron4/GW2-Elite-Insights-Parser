@@ -1,22 +1,22 @@
-<div class="d-flex mt-2">
-    <div class="d-flex flex-column align-items-center mr-2 mt-5" style="margin-left: auto;">
+<div class="d-flex mt-2 align-items-center">
+    <div class="d-flex flex-column align-items-center mr-2" style="margin-left: auto;">
         <keep-alive>
             <combat-replay-damage-data-component v-if="mode === 1" :animator="animator"></combat-replay-damage-data-component>
         </keep-alive>
         <div class="d-flex flex-row flex-wrap justify-content-center align-items-start btn-group btn-group-toggle mb-2"
-            data-toggle="buttons">
+             data-toggle="buttons">
             <!--${groups}-->
         </div>
         <h3>Range Selectors</h3>
         <div class="d-flex flex-column flex-wrap justify-content-center align-items-center mb-2">
             <div class="range-btns d-flex flex-row flex-wrap justify-content-center align-items-center btn-group btn-group-toggle"
-                data-toggle="buttons">
+                 data-toggle="buttons">
                 <label onclick="animator && animator.toggleRange(180);" class="btn btn-dark btn-small range-btn">180</label>
                 <label onclick="animator && animator.toggleRange(240);" class="btn btn-dark btn-small range-btn">240</label>
                 <label onclick="animator && animator.toggleRange(300);" class="btn btn-dark btn-small range-btn">300</label>
             </div>
             <div class="range-btns d-flex flex-row flex-wrap justify-content-center align-items-center btn-group btn-group-toggle"
-                data-toggle="buttons">
+                 data-toggle="buttons">
                 <label onclick="animator && animator.toggleRange(600);" class="btn btn-dark btn-small range-btn">600</label>
                 <label onclick="animator && animator.toggleRange(900);" class="btn btn-dark btn-small range-btn">900</label>
                 <label onclick="animator && animator.toggleRange(1200);" class="btn btn-dark btn-small range-btn">1200</label>
@@ -33,30 +33,46 @@
         </div>
         <div class="d-flex justify-content-center slidecontainer">
             <input style="min-width: 400px;" oninput="animator && animator.updateTime(this.value)" type="range" min="0"
-                max="${maxTime}" value="0" class="slider" id="timeRange">
+                   max="${maxTime}" value="0" class="slider" id="timeRange">
             <input style="width: 70px; text-align: right;" class="ml-3 mr-1" type="text" id="timeRangeDisplay" value="0"
-                oninput="animator && animator.updateInputTime(this.value);">
+                   oninput="animator && animator.updateInputTime(this.value);">
         </div>
         <div class="d-flex justify-content-center btn-group btn-group-toggle" data-toggle="buttons">
-            <label onclick="animator && animator.setSpeed(0.125)" class="btn btn-dark btn-ssmall"><input type="radio"
-                    autocomplete="off">0.125x</label>
-            <label onclick="animator && animator.setSpeed(0.25)" class="btn btn-dark btn-ssmall"><input type="radio"
-                    autocomplete="off">0.25x</label>
-            <label onclick="animator && animator.setSpeed(0.5)" class="btn btn-dark btn-ssmall"><input type="radio"
-                    autocomplete="off">0.5x</label>
-            <label onclick="animator && animator.setSpeed(1)" class="btn btn-dark btn-ssmall active"><input type="radio"
-                    autocomplete="off" checked>1x</label>
-            <label onclick="animator && animator.setSpeed(2)" class="btn btn-dark btn-ssmall"><input type="radio"
-                    autocomplete="off">2x</label>
-            <label onclick="animator && animator.setSpeed(4)" class="btn btn-dark btn-ssmall"><input type="radio"
-                    autocomplete="off">4x</label>
-            <label onclick="animator && animator.setSpeed(8)" class="btn btn-dark btn-ssmall"><input type="radio"
-                    autocomplete="off">8x</label>
-            <label onclick="animator && animator.setSpeed(16)" class="btn btn-dark btn-ssmall"><input type="radio"
-                    autocomplete="off">16x</label>
+            <label onclick="animator && animator.setSpeed(0.125)" class="btn btn-dark btn-ssmall">
+                <input type="radio"
+                       autocomplete="off">0.125x
+            </label>
+            <label onclick="animator && animator.setSpeed(0.25)" class="btn btn-dark btn-ssmall">
+                <input type="radio"
+                       autocomplete="off">0.25x
+            </label>
+            <label onclick="animator && animator.setSpeed(0.5)" class="btn btn-dark btn-ssmall">
+                <input type="radio"
+                       autocomplete="off">0.5x
+            </label>
+            <label onclick="animator && animator.setSpeed(1)" class="btn btn-dark btn-ssmall active">
+                <input type="radio"
+                       autocomplete="off" checked>1x
+            </label>
+            <label onclick="animator && animator.setSpeed(2)" class="btn btn-dark btn-ssmall">
+                <input type="radio"
+                       autocomplete="off">2x
+            </label>
+            <label onclick="animator && animator.setSpeed(4)" class="btn btn-dark btn-ssmall">
+                <input type="radio"
+                       autocomplete="off">4x
+            </label>
+            <label onclick="animator && animator.setSpeed(8)" class="btn btn-dark btn-ssmall">
+                <input type="radio"
+                       autocomplete="off">8x
+            </label>
+            <label onclick="animator && animator.setSpeed(16)" class="btn btn-dark btn-ssmall">
+                <input type="radio"
+                       autocomplete="off">16x
+            </label>
         </div>
     </div>
-    <div class="d-flex flex-column align-items-center ml-2 mt-5"  style="margin-right: auto;">
+    <div class="d-flex flex-column align-items-center ml-2" style="margin-right: auto;">
         <keep-alive>
             <combat-replay-status-data-component v-if="mode === 1" :animator="animator"></combat-replay-status-data-component>
         </keep-alive>
