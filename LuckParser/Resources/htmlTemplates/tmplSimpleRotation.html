@@ -10,8 +10,19 @@
         </ul>
     </div>
     <span class="rot-skill" v-for="rota in rotation" :class="{'rot-swap': rota[1] === -2 ,'mb-1': rota[1] === -2, 'rot-small': small}"
-        v-show="!getSkill(rota[1]).aa || (getSkill(rota[1]).aa && autoattack)">
-        <img class="rot-icon" :class="{'rot-cancelled': rota[3] === 2}" :src="getSkill(rota[1]).icon"
-            :data-original-title="getSkill(rota[1]).name + ', Time: ' + rota[0] + 's, Dur: ' + rota[2] + 'ms'">
+          v-show="!getSkill(rota[1]).aa || (getSkill(rota[1]).aa && autoattack)">
+        <img class="rot-icon" :class="{'rot-cancelled': rota[3] === 2, 'rot-animfull': rota[3] === 0}" :src="getSkill(rota[1]).icon"
+             :data-original-title="getSkill(rota[1]).name + ', Time: ' + rota[0] + 's, Dur: ' + rota[2] + 'ms'">
     </span>
+    <div class="card mt-2">
+        <div class="card-body container">
+            <p><u>Outline</u></p>
+            <span class="mr-1" style="padding: 2px; background-color:#999999; border-style:solid; border-width: 3px; border-color:#00FF00; color:#000000">
+                Full After Cast
+            </span>
+            <span class="mr-1" style="padding: 2px; background-color:#999999; border-style:solid; border-width: 3px; border-color:#FF0000; color:#000000">
+                Interrupted
+            </span>
+        </div>
+    </div>
 </div>

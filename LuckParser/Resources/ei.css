@@ -359,7 +359,10 @@ th {
 }
 
 .rot-cancelled {
-    border: 3px solid #ff0000;
+    border: 2px solid #ff0000;
+}
+.rot-animfull {
+    border: 2px solid #00ff00;
 }
 
 .rot-small .rot-icon {
@@ -369,6 +372,9 @@ th {
 
 .rot-small .rot-cancelled {
     border: 1px solid #ff0000;
+}
+.rot-small .rot-animfull {
+    border: 1px solid #00ff00;
 }
 
 .rot-swap:after {
