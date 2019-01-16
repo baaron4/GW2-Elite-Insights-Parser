@@ -35,6 +35,8 @@
         //PrefixedBuff
         public GW2APIfacts prefix { get; set; }
 
+        public object value { get; set; }
+
         public GW2APIfacts() { }
     }
 }

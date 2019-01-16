@@ -12,7 +12,7 @@
         public string[] professions { get; set; }
         public string slot { get; set; }
         public string[] categories { get; set; }
-        //public string[]  facts { get; set; }
+        public GW2APIfacts[] facts { get; set; }
 
         // public string attunement { get; set; }
         //public string cost { get; set; }
