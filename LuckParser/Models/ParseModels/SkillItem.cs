@@ -91,14 +91,14 @@ namespace LuckParser.Models.ParseModels
             }
             else if (ApiSkill != null)
             {
-                Name = ApiSkill.name;
-                if (ApiSkill.facts != null)
+                Name = ApiSkill.Name;
+                if (ApiSkill.Facts != null)
                 {
-                    foreach (GW2APIfacts fact in ApiSkill.facts)
+                    foreach (GW2APIfacts fact in ApiSkill.Facts)
                     {
-                        if (fact.text != null && fact.text == "Range" && fact.value != null)
+                        if (fact.Text != null && fact.Text == "Range" && fact.Value != null)
                         {
-                            Range = Convert.ToInt32(fact.value);
+                            Range = Convert.ToInt32(fact.Value);
                         }
                     }
                 }
@@ -108,7 +108,7 @@ namespace LuckParser.Models.ParseModels
                 Icon = icon;
             } else
             {
-                Icon = ApiSkill != null ? ApiSkill.icon : _defaultIcon;
+                Icon = ApiSkill != null ? ApiSkill.Icon : _defaultIcon;
             }
         }
 

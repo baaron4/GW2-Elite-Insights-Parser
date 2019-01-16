@@ -247,73 +247,73 @@ namespace LuckParser.Models.ParseModels
                 GW2APISkill apiskill = skillList.Get(cl.SkillId)?.ApiSkill;
                 if (apiskill != null && cl.Time > swappedTime)
                 {
-                    if (apiskill.type == "Weapon" && apiskill.professions.Count() > 0 && (apiskill.categories == null || (apiskill.categories.Count() == 1 && (apiskill.categories[0] == "Phantasm" || apiskill.categories[0] == "DualWield"))))
+                    if (apiskill.Type == "Weapon" && apiskill.Professions.Count() > 0 && (apiskill.Categories == null || (apiskill.Categories.Count() == 1 && (apiskill.Categories[0] == "Phantasm" || apiskill.Categories[0] == "DualWield"))))
                     {
-                        if (apiskill.dual_wield != null && apiskill.dual_wield != "None" && apiskill.dual_wield != "Nothing")
+                        if (apiskill.DualWield != null && apiskill.DualWield != "None" && apiskill.DualWield != "Nothing")
                         {
                             if (swapped == 4)
                             {
-                                weapons[0] = apiskill.weapon_type;
-                                weapons[1] = apiskill.dual_wield;
+                                weapons[0] = apiskill.WeaponType;
+                                weapons[1] = apiskill.DualWield;
                             }
                             else if (swapped == 5)
                             {
-                                weapons[2] = apiskill.weapon_type;
-                                weapons[3] = apiskill.dual_wield;
+                                weapons[2] = apiskill.WeaponType;
+                                weapons[3] = apiskill.DualWield;
                             }
                         }
-                        else if (apiskill.weapon_type == "Greatsword" || apiskill.weapon_type == "Staff" || apiskill.weapon_type == "Rifle" || apiskill.weapon_type == "Longbow" || apiskill.weapon_type == "Shortbow" || apiskill.weapon_type == "Hammer")
+                        else if (apiskill.WeaponType == "Greatsword" || apiskill.WeaponType == "Staff" || apiskill.WeaponType == "Rifle" || apiskill.WeaponType == "Longbow" || apiskill.WeaponType == "Shortbow" || apiskill.WeaponType == "Hammer")
                         {
                             if (swapped == 4)
                             {
-                                weapons[0] = apiskill.weapon_type;
+                                weapons[0] = apiskill.WeaponType;
                                 weapons[1] = "2Hand";
                             }
                             else if (swapped == 5)
                             {
-                                weapons[2] = apiskill.weapon_type;
+                                weapons[2] = apiskill.WeaponType;
                                 weapons[3] = "2Hand";
                             }
                         }//2 handed
-                        else if (apiskill.weapon_type == "Focus" || apiskill.weapon_type == "Shield" || apiskill.weapon_type == "Torch" || apiskill.weapon_type == "Warhorn")
+                        else if (apiskill.WeaponType == "Focus" || apiskill.WeaponType == "Shield" || apiskill.WeaponType == "Torch" || apiskill.WeaponType == "Warhorn")
                         {
                             if (swapped == 4)
                             {
 
-                                weapons[1] = apiskill.weapon_type;
+                                weapons[1] = apiskill.WeaponType;
                             }
                             else if (swapped == 5)
                             {
 
-                                weapons[3] = apiskill.weapon_type;
+                                weapons[3] = apiskill.WeaponType;
                             }
                         }//OffHand
-                        else if (apiskill.weapon_type == "Axe" || apiskill.weapon_type == "Dagger" || apiskill.weapon_type == "Mace" || apiskill.weapon_type == "Pistol" || apiskill.weapon_type == "Sword" || apiskill.weapon_type == "Scepter")
+                        else if (apiskill.WeaponType == "Axe" || apiskill.WeaponType == "Dagger" || apiskill.WeaponType == "Mace" || apiskill.WeaponType == "Pistol" || apiskill.WeaponType == "Sword" || apiskill.WeaponType == "Scepter")
                         {
-                            if (apiskill.slot == "Weapon_1" || apiskill.slot == "Weapon_2" || apiskill.slot == "Weapon_3")
+                            if (apiskill.Slot == "Weapon_1" || apiskill.Slot == "Weapon_2" || apiskill.Slot == "Weapon_3")
                             {
                                 if (swapped == 4)
                                 {
 
-                                    weapons[0] = apiskill.weapon_type;
+                                    weapons[0] = apiskill.WeaponType;
                                 }
                                 else if (swapped == 5)
                                 {
 
-                                    weapons[2] = apiskill.weapon_type;
+                                    weapons[2] = apiskill.WeaponType;
                                 }
                             }
-                            if (apiskill.slot == "Weapon_4" || apiskill.slot == "Weapon_5")
+                            if (apiskill.Slot == "Weapon_4" || apiskill.Slot == "Weapon_5")
                             {
                                 if (swapped == 4)
                                 {
 
-                                    weapons[1] = apiskill.weapon_type;
+                                    weapons[1] = apiskill.WeaponType;
                                 }
                                 else if (swapped == 5)
                                 {
 
-                                    weapons[3] = apiskill.weapon_type;
+                                    weapons[3] = apiskill.WeaponType;
                                 }
                             }
                         }// 1 handed

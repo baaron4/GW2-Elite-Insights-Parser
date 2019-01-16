@@ -1,6 +1,7 @@
 ﻿using LuckParser.Models;
 using LuckParser.Models.ParseModels;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,6 +13,7 @@ namespace LuckParser.Controllers
     public class GW2APIController
     {
         static HttpClient APIClient { get; set; }
+
         private void GetAPIClient()
         {
             if (APIClient == null)
@@ -70,7 +72,13 @@ namespace LuckParser.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     string data = response.Content.ReadAsStringAsync().Result;
-                    GW2APISkill[] responseArray = JsonConvert.DeserializeObject<GW2APISkill[]>(data);
+                    GW2APISkill[] responseArray = JsonConvert.DeserializeObject<GW2APISkill[]>(data, new JsonSerializerSettings
+                    {
+                        ContractResolver = new DefaultContractResolver()
+                        {
+                            NamingStrategy = new CamelCaseNamingStrategy()
+                        }
+                    });
                     skill_L.AddRange(responseArray);
                     //if (skillCheck.facts != null)
                     // {
@@ -141,12 +149,15 @@ namespace LuckParser.Controllers
                 _listOfSkills.Items.AddRange(GetListGW2APISkills());
                 StreamWriter writer = new StreamWriter(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
             + "/Content/SkillList.json");
-
                 var serializer = new JsonSerializer
                 {
                     NullValueHandling = NullValueHandling.Ignore,
+                    Formatting = Newtonsoft.Json.Formatting.Indented,
                     DefaultValueHandling = DefaultValueHandling.Ignore,
-                    Formatting = Newtonsoft.Json.Formatting.Indented
+                    ContractResolver = new DefaultContractResolver()
+                    {
+                        NamingStrategy = new CamelCaseNamingStrategy()
+                    }
                 };
                 serializer.Serialize(writer, _listOfSkills.Items);
                 writer.Close();
@@ -163,7 +174,13 @@ namespace LuckParser.Controllers
                 using (StreamReader reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
                 + "/Content/SkillList.json"))
                 {
-                    JsonSerializer serializer = new JsonSerializer();
+                    JsonSerializer serializer = new JsonSerializer()
+                    {
+                        ContractResolver = new DefaultContractResolver()
+                        {
+                            NamingStrategy = new CamelCaseNamingStrategy()
+                        }
+                    };
                     _listOfSkills.Items = (List<GW2APISkill>)serializer.Deserialize(reader, typeof(List<GW2APISkill>));
                     reader.Close();
                 }
@@ -181,7 +198,7 @@ namespace LuckParser.Controllers
 
                 foreach (int id in idArray)
                 {
-                    if (_listOfSkills.Items.FirstOrDefault(x => x.id == id) == null)
+                    if (_listOfSkills.Items.FirstOrDefault(x => x.Id == id) == null)
                     {
                         GW2APISkill curSkill = new GW2APISkill();
                         curSkill = GetGW2APISKill("/v2/skills/" + id);
@@ -204,8 +221,12 @@ namespace LuckParser.Controllers
                 var serializer = new JsonSerializer
                 {
                     NullValueHandling = NullValueHandling.Ignore,
+                    Formatting = Newtonsoft.Json.Formatting.Indented,
                     DefaultValueHandling = DefaultValueHandling.Ignore,
-                    Formatting = Newtonsoft.Json.Formatting.Indented
+                    ContractResolver = new DefaultContractResolver()
+                    {
+                        NamingStrategy = new CamelCaseNamingStrategy()
+                    }
                 };
                 serializer.Serialize(writer, _listOfSkills.Items);
                 writer.Close();
@@ -225,7 +246,13 @@ namespace LuckParser.Controllers
                     using (StreamReader reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
                     + "/Content/SkillList.json"))
                     {
-                        JsonSerializer serializer = new JsonSerializer();
+                        JsonSerializer serializer = new JsonSerializer()
+                        {
+                            ContractResolver = new DefaultContractResolver()
+                            {
+                                NamingStrategy = new CamelCaseNamingStrategy()
+                            }
+                        };
                         _listOfSkills.Items = (List<GW2APISkill>)serializer.Deserialize(reader, typeof(List<GW2APISkill>));
                         reader.Close();
                     }
@@ -245,7 +272,7 @@ namespace LuckParser.Controllers
 
         public GW2APISkill GetSkill(long id)
         {
-            GW2APISkill skill = GetSkillList().Items.FirstOrDefault(x => x.id == id);
+            GW2APISkill skill = GetSkillList().Items.FirstOrDefault(x => x.Id == id);
             //if (skill == null) {
             //    string path = "/v2/skills/" + id;
             //    skill = GetGW2APISKill(path);
@@ -320,7 +347,11 @@ namespace LuckParser.Controllers
                 var serializer = new JsonSerializer
                 {
                     NullValueHandling = NullValueHandling.Ignore,
-                    Formatting = Newtonsoft.Json.Formatting.Indented
+                    Formatting = Newtonsoft.Json.Formatting.Indented,
+                    ContractResolver = new DefaultContractResolver()
+                    {
+                        NamingStrategy = new CamelCaseNamingStrategy()
+                    }
                 };
                 serializer.Serialize(writer, _listofSpecs.Items);
                 writer.Close();
@@ -342,7 +373,13 @@ namespace LuckParser.Controllers
                     using (StreamReader reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
                     + "/Content/SpecList.json"))
                     {
-                        JsonSerializer serializer = new JsonSerializer();
+                        JsonSerializer serializer = new JsonSerializer()
+                        {
+                            ContractResolver = new DefaultContractResolver()
+                            {
+                                NamingStrategy = new CamelCaseNamingStrategy()
+                            }
+                        };
                         _listofSpecs.Items = (List<GW2APISpec>)serializer.Deserialize(reader, typeof(List<GW2APISpec>));
                         reader.Close();
                     }
@@ -367,7 +404,7 @@ namespace LuckParser.Controllers
 
         public GW2APISpec GetSpec(int id)
         {
-            GW2APISpec spec = GetSpecList().Items.FirstOrDefault(x => x.id == id);
+            GW2APISpec spec = GetSpecList().Items.FirstOrDefault(x => x.Id == id);
             
             return spec;
         }

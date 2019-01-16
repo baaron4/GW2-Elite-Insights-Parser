@@ -215,7 +215,6 @@
     <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\OverrideLogic.cs" />
     <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\QueueLogic.cs" />
     <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\StackingLogic.cs" />
-    <Compile Include="Controllers\GW2API\GW2APICategory.cs" />
     <Compile Include="Models\ParseModels\Logs\BoonRemovalLog.cs" />
     <Compile Include="Models\ParseModels\Logs\BoonApplicationLog.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicData.cs" />
