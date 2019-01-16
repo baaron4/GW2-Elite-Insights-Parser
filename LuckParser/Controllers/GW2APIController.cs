@@ -144,7 +144,8 @@ namespace LuckParser.Controllers
 
                 var serializer = new JsonSerializer
                 {
-                    NullValueHandling = NullValueHandling.Ignore,                    
+                    NullValueHandling = NullValueHandling.Ignore,
+                    DefaultValueHandling = DefaultValueHandling.Ignore,
                     Formatting = Newtonsoft.Json.Formatting.Indented
                 };
                 serializer.Serialize(writer, _listOfSkills.Items);
@@ -203,6 +204,7 @@ namespace LuckParser.Controllers
                 var serializer = new JsonSerializer
                 {
                     NullValueHandling = NullValueHandling.Ignore,
+                    DefaultValueHandling = DefaultValueHandling.Ignore,
                     Formatting = Newtonsoft.Json.Formatting.Indented
                 };
                 serializer.Serialize(writer, _listOfSkills.Items);
