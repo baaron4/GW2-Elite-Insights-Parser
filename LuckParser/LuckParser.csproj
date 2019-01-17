@@ -227,7 +227,7 @@
     <Compile Include="Models\ParseModels\Actors\Target.cs" />
     <Compile Include="Controllers\GW2API\GW2APISpec.cs" />
     <Compile Include="Models\ParseModels\Logs\DamageLogCondition.cs" />
-    <Compile Include="Controllers\GW2API\GW2APIfacts.cs" />
+    <Compile Include="Controllers\GW2API\GW2APIFact.cs" />
     <Compile Include="Controllers\GW2API\GW2APISkill.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemDuration.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemIntensity.cs" />

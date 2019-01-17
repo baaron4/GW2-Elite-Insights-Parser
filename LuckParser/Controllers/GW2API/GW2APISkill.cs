@@ -17,7 +17,7 @@ namespace LuckParser.Controllers
         public string Slot { get; set; }
         public string[] Categories { get; set; }
         public string[] Flags { get; set; }
-        public GW2APIfacts[] Facts { get; set; }
+        public GW2APIFact[] Facts { get; set; }
         public long Specialization { get; set; }
         [JsonProperty(PropertyName = "dual_wield")]
         public string DualWield { get; set; }

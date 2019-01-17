@@ -94,7 +94,7 @@ namespace LuckParser.Models.ParseModels
                 Name = ApiSkill.Name;
                 if (ApiSkill.Facts != null)
                 {
-                    foreach (GW2APIfacts fact in ApiSkill.Facts)
+                    foreach (GW2APIFact fact in ApiSkill.Facts)
                     {
                         if (fact.Text != null && fact.Text == "Range" && fact.Value != null)
                         {
