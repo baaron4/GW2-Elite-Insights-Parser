@@ -133,8 +133,8 @@ namespace LuckParser.Models
             {
                 dps = damage / phaseDuration;
             }
-            final.Dps = (int)dps;
-            final.Damage = (int)damage;
+            final.Dps = (int)Math.Round(dps);
+            final.Damage = (int)Math.Round(damage);
             //Condi DPS
             damage = player.GetDamageLogs(target, _log,
                     phase.Start, phase.End).Sum(x => x.IsCondi ? x.Damage : 0);
@@ -143,16 +143,16 @@ namespace LuckParser.Models
             {
                 dps = damage / phaseDuration;
             }
-            final.CondiDps = (int)dps;
-            final.CondiDamage = (int)damage;
+            final.CondiDps = (int)Math.Round(dps);
+            final.CondiDamage = (int)Math.Round(damage);
             //Power DPS
             damage = final.Damage - final.CondiDamage;
             if (phaseDuration > 0)
             {
                 dps = damage / phaseDuration;
             }
-            final.PowerDps = (int)dps;
-            final.PowerDamage = (int)damage;
+            final.PowerDps = (int)Math.Round(dps);
+            final.PowerDamage = (int)Math.Round(damage);
             return final;
         }
 
@@ -218,24 +218,24 @@ namespace LuckParser.Models
                             if (dl.IsNinety)
                             {
                                 targetFinal.ScholarRate++;
-                                targetFinal.ScholarDmg += (int)(fiveGain * dl.Damage);
+                                targetFinal.ScholarDmg += (int)Math.Round(fiveGain * dl.Damage);
                             }
 
                             if (dl.IsFifty)
                             {
                                 targetFinal.EagleRate++;
-                                targetFinal.EagleDmg += (int)(tenGain * dl.Damage);
+                                targetFinal.EagleDmg += (int)Math.Round(tenGain * dl.Damage);
                             }
 
                             if (dl.IsMoving)
                             {
                                 targetFinal.MovingRate++;
-                                targetFinal.MovingDamage += (int)(fiveGain * dl.Damage);
+                                targetFinal.MovingDamage += (int)Math.Round(fiveGain * dl.Damage);
                             }
 
                             if (dl.IsFlanking)
                             {
-                                targetFinal.FlankingDmg += (int)(tenGain * dl.Damage);
+                                targetFinal.FlankingDmg += (int)Math.Round(tenGain * dl.Damage);
                                 targetFinal.FlankingRate++;
                             }
 
@@ -274,24 +274,24 @@ namespace LuckParser.Models
                     if (dl.IsNinety)
                     {
                         final.ScholarRate++;
-                        final.ScholarDmg += (int)(fiveGain * dl.Damage);
+                        final.ScholarDmg += (int)Math.Round(fiveGain * dl.Damage);
                     }
 
                     if (dl.IsFifty)
                     {
                         final.EagleRate++;
-                        final.EagleDmg += (int)(tenGain * dl.Damage);
+                        final.EagleDmg += (int)Math.Round(tenGain * dl.Damage);
                     }
 
                     if (dl.IsMoving)
                     {
                         final.MovingRate++;
-                        final.MovingDamage += (int)(fiveGain * dl.Damage);
+                        final.MovingDamage += (int)Math.Round(fiveGain * dl.Damage);
                     }
 
                     if (dl.IsFlanking)
                     {
-                        final.FlankingDmg += (int)(tenGain * dl.Damage);
+                        final.FlankingDmg += (int)Math.Round(tenGain * dl.Damage);
                         final.FlankingRate++;
                     }
 
@@ -622,7 +622,7 @@ namespace LuckParser.Models
                     }
 
                     FinalBuffs uptime = new FinalBuffs();
-
+                    final[boon.ID] = uptime;
                     if (boon.Type == Boon.BoonType.Duration)
                     {
                         uptime.Generation = Math.Round(100.0 * totalGeneration / fightDuration / playerList.Count, 2);
@@ -641,7 +641,6 @@ namespace LuckParser.Models
                         uptime.Extension = Math.Round((double)(totalExtension) / fightDuration / playerList.Count, 2);
                         uptime.Extended = Math.Round((double)(totalExtended) / fightDuration / playerList.Count, 2);
                     }
-                    final[boon.ID] = uptime;
                 }
 
                 uptimesByPhase[phaseIndex] = final;
@@ -679,6 +678,7 @@ namespace LuckParser.Models
                             Extension = 0,
                             Extended = 0
                         };
+                        final[boon.ID] = uptime;
                         if (selfBoons.ContainsKey(boon.ID))
                         {
                             long generation = selfBoons.GetGeneration(boon.ID, player.AgentItem);
@@ -711,7 +711,6 @@ namespace LuckParser.Models
                                 }
                             }
                         }
-                        final[boon.ID] = uptime;
                     }
 
                     selfUptimesByPhase[phaseIndex] = final;
@@ -791,8 +790,6 @@ namespace LuckParser.Models
                                     buff.Presence = Math.Round(100.0 * presenceValueCondi / fightDuration, 2);
                                 }
                             }
-
-                            rates[boon.ID] = buff;
                         }
                     }
                     stats[phaseIndex] = rates;
