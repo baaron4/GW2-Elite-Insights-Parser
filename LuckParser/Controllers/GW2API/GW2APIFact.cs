@@ -2,7 +2,7 @@
 
 namespace LuckParser.Controllers
 {
-    public class GW2APIFacts
+    public class GW2APIFact
     {
         public string Text { get; set; }
         public string Icon { get; set; }
@@ -23,7 +23,7 @@ namespace LuckParser.Controllers
         [JsonProperty(PropertyName = "dmg_multiplier")]
         public float DmgMultiplier { get; set; }
         public int Distance { get; set; }
-        public GW2APIFacts Prefix { get; set; }
+        public GW2APIFact Prefix { get; set; }
 
         public object Value { get; set; }
     }
