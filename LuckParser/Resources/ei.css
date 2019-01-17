@@ -364,6 +364,9 @@ th {
 .rot-animfull {
     border: 2px solid #00ff00;
 }
+.rot-unknown {
+    border: 2px solid #ffff00;
+}
 
 .rot-small .rot-icon {
     width: 20px;
@@ -375,6 +378,9 @@ th {
 }
 .rot-small .rot-animfull {
     border: 1px solid #00ff00;
+}
+.rot-small .rot-unknown {
+    border: 1px solid #ffff00;
 }
 
 .rot-swap:after {
