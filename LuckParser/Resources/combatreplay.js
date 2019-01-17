@@ -121,14 +121,13 @@ class Animator {
 
     updateTime(value) {
         this.time = parseInt(value);
-        this.updateTextInput();
         if (this.animation === null) {
             animateCanvas(-1);
         }
     }
 
-    updateTextInput(val) {
-        this.timeSliderDisplay.value = (val / 1000.0).toFixed(3);
+    updateTextInput() {
+        this.timeSliderDisplay.value = (this.time / 1000.0).toFixed(3);
     }
 
     updateInputTime(value) {
@@ -349,6 +348,21 @@ class Animator {
 }
 
 function animateCanvas(noRequest) {
+    let lastTime = animator.times[animator.times.length - 1];
+    if (noRequest > -1 && animator.animation !== null && bgLoaded) {
+        let curTime = new Date().getTime();
+        let timeOffset = curTime - animator.prevTime;
+        animator.prevTime = curTime;
+        animator.time = Math.round(Math.min(animator.time + animator.speed * timeOffset, lastTime));
+    }
+    if (animator.time === lastTime) {
+        animator.stopAnimate();
+    }
+    animator.timeSlider.value = animator.time.toString();
+    if (noRequest > -2) {
+        animator.updateTextInput();
+    }
+
     var ctx = animator.ctx;
     var canvas = animator.canvas;
     var p1 = ctx.transformedPoint(0, 0);
@@ -390,19 +404,7 @@ function animateCanvas(noRequest) {
             animator.attachedActorData.get(animator.selectedPlayerID).draw();
         }
     }
-    let lastTime = animator.times[animator.times.length - 1];
-    if (animator.time === lastTime) {
-        animator.stopAnimate();
-    }
-    animator.timeSlider.value = animator.time.toString();
-    if (noRequest !== -2) {
-        animator.updateTextInput(animator.time);
-    }
     if (noRequest > -1 && animator.animation !== null && bgLoaded) {
-        let curTime = new Date().getTime();
-        let timeOffset = curTime - animator.prevTime;
-        animator.prevTime = curTime;
-        animator.time = Math.round(Math.min(animator.time + animator.speed * timeOffset, lastTime));
         animator.animation = requestAnimationFrame(animateCanvas);
     }
 }
