@@ -1,7 +1,7 @@
 <div class="d-flex mt-2 align-items-center">
     <div class="d-flex flex-column align-items-center mr-2" style="margin-left: auto;">
         <keep-alive>
-            <combat-replay-damage-data-component v-if="mode === 1" :animator="animator"></combat-replay-damage-data-component>
+            <combat-replay-damage-data-component v-if="mode === 1 && animator !== null" :time="animator.time"></combat-replay-damage-data-component>
         </keep-alive>
         <div class="d-flex flex-row flex-wrap justify-content-center align-items-start btn-group btn-group-toggle mb-2"
              data-toggle="buttons">
@@ -74,7 +74,7 @@
     </div>
     <div class="d-flex flex-column align-items-center ml-2" style="margin-right: auto;">
         <keep-alive>
-            <combat-replay-status-data-component v-if="mode === 1" :animator="animator"></combat-replay-status-data-component>
+            <combat-replay-status-data-component v-if="mode === 1 && animator !== null" :time="animator.time"></combat-replay-status-data-component>
         </keep-alive>
     </div>
 </div>

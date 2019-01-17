@@ -17,7 +17,7 @@ const resolutionMultiplier = 2;
 var animator = null;
 
 class Animator {
-    constructor(options, actors) {
+    constructor(options) {
         // time
         this.prevTime = 0;
         this.time = 0;
@@ -41,13 +41,14 @@ class Animator {
         this.timeSlider = document.getElementById('timeRange');
         this.timeSliderDisplay = document.getElementById('timeRangeDisplay');
         this.canvas = document.getElementById('replayCanvas');
-        this.canvas.style.width = this.canvas.width +"px";
-        this.canvas.style.height = this.canvas.height +"px";
+        this.canvas.style.width = this.canvas.width + "px";
+        this.canvas.style.height = this.canvas.height + "px";
         this.canvas.width *= resolutionMultiplier;
         this.canvas.height *= resolutionMultiplier;
         this.ctx = this.canvas.getContext('2d');
         this.ctx.imageSmoothingEnabled = true;
         this.ctx.imageSmoothingQuality = "high";
+        this.controlledByHTML = false;
         // manipulation
         this.lastX = this.canvas.width / 2;
         this.lastY = this.canvas.height / 2;
@@ -60,15 +61,14 @@ class Animator {
             if (options.mapLink) bgImage.src = options.mapLink;
         }
         //
-        this.rangeControl.set(this.inch * 180, false);
-        this.rangeControl.set(this.inch * 240, false);
-        this.rangeControl.set(this.inch * 300, false);
-        this.rangeControl.set(this.inch * 600, false);
-        this.rangeControl.set(this.inch * 900, false);
-        this.rangeControl.set(this.inch * 1200, false);
+        this.rangeControl.set(180, false);
+        this.rangeControl.set(240, false);
+        this.rangeControl.set(300, false);
+        this.rangeControl.set(600, false);
+        this.rangeControl.set(900, false);
+        this.rangeControl.set(1200, false);
         this.trackTransforms();
         this.ctx.scale(resolutionMultiplier, resolutionMultiplier);
-        this.initActors(actors);
         this.initMouseEvents();
         this.initTouchEvents();
         if (typeof mainComponent !== "undefined" && mainComponent !== null) {
@@ -77,6 +77,11 @@ class Animator {
     }
 
     initActors(actors) {
+        this.playerData.clear();
+        this.targetData.clear();
+        this.trashMobData.clear();
+        this.attachedActorData.clear();
+        this.mechanicActorData = [];
         for (let i = 0; i < actors.length; i++) {
             const actor = actors[i];
             switch (actor.Type) {
@@ -95,19 +100,19 @@ class Animator {
                     this.trashMobData.set(actor.ID, new EnemyIconDrawable(actor.Start, actor.End, actor.Img, 25, actor.Positions));
                     break;
                 case "Circle":
-                    this.mechanicActorData.push(new CircleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Radius, actor.ConnectedTo, actor.MinRadius, this.inch));
+                    this.mechanicActorData.push(new CircleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Radius, actor.ConnectedTo, actor.MinRadius));
                     break;
                 case "Rectangle":
-                    this.mechanicActorData.push(new RectangleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Width, actor.Height, actor.ConnectedTo, this.inch));
+                    this.mechanicActorData.push(new RectangleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Width, actor.Height, actor.ConnectedTo));
                     break;
                 case "RotatedRectangle":
-                    this.mechanicActorData.push(new RotatedRectangleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Width, actor.Height, actor.Rotation, actor.RadialTranslation, actor.SpinAngle, actor.ConnectedTo, this.inch));
+                    this.mechanicActorData.push(new RotatedRectangleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Width, actor.Height, actor.Rotation, actor.RadialTranslation, actor.SpinAngle, actor.ConnectedTo));
                     break;
                 case "Doughnut":
-                    this.mechanicActorData.push(new DoughnutMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.InnerRadius, actor.OuterRadius, actor.ConnectedTo, this.inch));
+                    this.mechanicActorData.push(new DoughnutMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.InnerRadius, actor.OuterRadius, actor.ConnectedTo));
                     break;
                 case "Pie":
-                    this.mechanicActorData.push(new PieMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Direction, actor.OpeningAngle, actor.Radius, actor.ConnectedTo, this.inch));
+                    this.mechanicActorData.push(new PieMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Direction, actor.OpeningAngle, actor.Radius, actor.ConnectedTo));
                     break;
                 case "Line":
                     this.mechanicActorData.push(new LineMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.ConnectedFrom, actor.ConnectedTo));
@@ -192,7 +197,7 @@ class Animator {
         });
         if (this.animation === null) {
             animateCanvas(-1);
-        }           
+        }
     }
 
     initMouseEvents() {
@@ -206,7 +211,7 @@ class Animator {
             _this.dragStart = null;
             _this.dragged = false;
             ctx.setTransform(1, 0, 0, 1, 0, 0);
-            ctx.scale(resolutionMultiplier, resolutionMultiplier);         
+            ctx.scale(resolutionMultiplier, resolutionMultiplier);
             if (_this.animation === null) {
                 animateCanvas(-1);
             }
@@ -264,7 +269,7 @@ class Animator {
     }
 
     toggleRange(radius) {
-        this.rangeControl.set(this.inch * radius, !this.rangeControl.get(this.inch * radius));
+        this.rangeControl.set(radius, !this.rangeControl.get(radius));
         if (this.animation === null) {
             animateCanvas(-1);
         }
@@ -345,6 +350,51 @@ class Animator {
             return pt.matrixTransform(xform.inverse());
         };
     }
+    // animation
+    draw() {
+        var _this = this;
+        var ctx = this.ctx;
+        var canvas = this.canvas;
+        var p1 = ctx.transformedPoint(0, 0);
+        var p2 = ctx.transformedPoint(canvas.width, canvas.height);
+        ctx.clearRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
+
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.restore();
+        //
+        ctx.drawImage(bgImage, 0, 0, canvas.width / resolutionMultiplier, canvas.height / resolutionMultiplier);
+        for (let i = 0; i < this.mechanicActorData.length; i++) {
+            this.mechanicActorData[i].draw();
+        }
+        this.playerData.forEach(function (value, key, map) {
+            if (!value.selected) {
+                value.draw();
+                if (_this.attachedActorData.has(key)) {
+                    _this.attachedActorData.get(key).draw();
+                }
+            }
+        });
+        this.trashMobData.forEach(function (value, key, map) {
+            value.draw();
+            if (_this.attachedActorData.has(key)) {
+                _this.attachedActorData.get(key).draw();
+            }
+        });
+        this.targetData.forEach(function (value, key, map) {
+            value.draw();
+            if (_this.attachedActorData.has(key)) {
+                _this.attachedActorData.get(key).draw();
+            }
+        });
+        if (this.selectedPlayer !== null) {
+            this.selectedPlayer.draw();
+            if (this.attachedActorData.has(this.selectedPlayerID)) {
+                this.attachedActorData.get(this.selectedPlayerID).draw();
+            }
+        }
+    }
 }
 
 function animateCanvas(noRequest) {
@@ -362,47 +412,8 @@ function animateCanvas(noRequest) {
     if (noRequest > -2) {
         animator.updateTextInput();
     }
-
-    var ctx = animator.ctx;
-    var canvas = animator.canvas;
-    var p1 = ctx.transformedPoint(0, 0);
-    var p2 = ctx.transformedPoint(canvas.width, canvas.height);
-    ctx.clearRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
-
-    ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.restore();
-    //
-    ctx.drawImage(bgImage, 0, 0, canvas.width / resolutionMultiplier, canvas.height / resolutionMultiplier);
-    for (let i = 0; i < animator.mechanicActorData.length; i++) {
-        animator.mechanicActorData[i].draw();
-    }
-    animator.playerData.forEach(function (value, key, map) {
-        if (!value.selected) {
-            value.draw();
-            if (animator.attachedActorData.has(key)) {
-                animator.attachedActorData.get(key).draw();
-            }
-        }
-    });
-    animator.trashMobData.forEach(function (value, key, map) {
-        value.draw();
-        if (animator.attachedActorData.has(key)) {
-            animator.attachedActorData.get(key).draw();
-        }
-    });
-    animator.targetData.forEach(function (value, key, map) {
-        value.draw();
-        if (animator.attachedActorData.has(key)) {
-            animator.attachedActorData.get(key).draw();
-        }
-    });
-    if (animator.selectedPlayer !== null) {
-        animator.selectedPlayer.draw();
-        if (animator.attachedActorData.has(animator.selectedPlayerID)) {
-            animator.attachedActorData.get(animator.selectedPlayerID).draw();
-        }
+    if (!animator.controlledByHTML || noRequest < 0) {
+        animator.draw();
     }
     if (noRequest > -1 && animator.animation !== null && bgLoaded) {
         animator.animation = requestAnimationFrame(animateCanvas);
@@ -475,8 +486,8 @@ class IconDrawable {
             pt.x = positionX;
             pt.y = positionY;
         }
-        pt.x = Math.round(10*pt.x * animator.scale) / (10*animator.scale);
-        pt.y = Math.round(10*pt.y * animator.scale) / (10*animator.scale);
+        pt.x = Math.round(10 * pt.x * animator.scale) / (10 * animator.scale);
+        pt.y = Math.round(10 * pt.y * animator.scale) / (10 * animator.scale);
         return pt;
     }
 
@@ -496,11 +507,11 @@ class IconDrawable {
         const lastTime = animator.times[animator.times.length - 1];
         const startIndex = Math.ceil((animator.times.length - 1) * Math.max(this.start, 0) / lastTime);
         const currentIndex = Math.floor((animator.times.length - 1) * animator.time / lastTime);
-        return this.getInterpolatedPosition(startIndex, Math.max(currentIndex, startIndex), animator.time);
+        return this.getInterpolatedPosition(startIndex, Math.max(currentIndex, startIndex));
     }
 
     draw() {
-        const pos = this.getPosition(animator.time, animator.times);
+        const pos = this.getPosition();
         if (pos === null) {
             return;
         }
@@ -532,7 +543,7 @@ class PlayerIconDrawable extends IconDrawable {
         const halfSize = fullSize / 2;
         if (!this.selected && this.group === animator.selectedGroup) {
             ctx.beginPath();
-            ctx.lineWidth = (2/animator.scale).toString();
+            ctx.lineWidth = (2 / animator.scale).toString();
             ctx.strokeStyle = 'blue';
             ctx.rect(pos.x - halfSize, pos.y - halfSize, fullSize, fullSize);
             ctx.stroke();
@@ -547,7 +558,7 @@ class PlayerIconDrawable extends IconDrawable {
                 ctx.beginPath();
                 ctx.lineWidth = (2 / animator.scale).toString();
                 ctx.strokeStyle = 'green';
-                ctx.arc(pos.x, pos.y, radius, 0, 2 * Math.PI);
+                ctx.arc(pos.x, pos.y, animator.inch * radius, 0, 2 * Math.PI);
                 ctx.stroke();
             });
         }
@@ -639,13 +650,13 @@ class FacingMechanicDrawable extends MechanicDrawable {
         this.facingData = facingData;
     }
 
-    getRotation(time) {
+    getRotation() {
         if (this.facingData.length === 0) {
             return null;
         }
         var rot = this.facingData[0][0];
         for (let i = 1; i < this.facingData.length; i++) {
-            if (time < this.facingData[i][1] - 150) {
+            if (animator.time < this.facingData[i][1] - 150) {
                 break;
             } else {
                 rot = this.facingData[i][0];
@@ -656,7 +667,7 @@ class FacingMechanicDrawable extends MechanicDrawable {
 
     draw() {
         const pos = this.getPosition();
-        const rot = this.getRotation(animator.time);
+        const rot = this.getRotation();
         if (pos === null || rot === null) {
             return;
         }
@@ -665,7 +676,7 @@ class FacingMechanicDrawable extends MechanicDrawable {
         ctx.save();
         ctx.translate(pos.x, pos.y);
         ctx.rotate(angle);
-        const facingFullSize = 5*this.master.pixelSize / (3*animator.scale);
+        const facingFullSize = 5 * this.master.pixelSize / (3 * animator.scale);
         const facingHalfSize = facingFullSize / 2;
         ctx.drawImage(facingIcon, -facingHalfSize, -facingHalfSize, facingFullSize, facingFullSize);
         ctx.restore();
@@ -689,10 +700,10 @@ class FormMechanicDrawable extends MechanicDrawable {
 }
 
 class CircleMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, fill, growing, color, radius, connectedTo, minRadius, inch) {
+    constructor(start, end, fill, growing, color, radius, connectedTo, minRadius) {
         super(start, end, fill, growing, color, connectedTo);
-        this.radius = inch * radius;
-        this.minRadius = inch * minRadius;
+        this.radius = animator.inch * radius;
+        this.minRadius = animator.inch * minRadius;
     }
 
     draw() {
@@ -715,10 +726,10 @@ class CircleMechanicDrawable extends FormMechanicDrawable {
 }
 
 class DoughnutMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, fill, growing, color, innerRadius, outerRadius, connectedTo, inch) {
+    constructor(start, end, fill, growing, color, innerRadius, outerRadius, connectedTo) {
         super(start, end, fill, growing, color, connectedTo);
-        this.outerRadius = inch * outerRadius;
-        this.innerRadius = inch * innerRadius;
+        this.outerRadius = animator.inch * outerRadius;
+        this.innerRadius = animator.inch * innerRadius;
     }
 
     draw() {
@@ -744,10 +755,10 @@ class DoughnutMechanicDrawable extends FormMechanicDrawable {
 }
 
 class RectangleMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, fill, growing, color, width, height, connectedTo, inch) {
+    constructor(start, end, fill, growing, color, width, height, connectedTo) {
         super(start, end, fill, growing, color, connectedTo);
-        this.height = height * inch;
-        this.width = width * inch;
+        this.height = height * animator.inch;
+        this.width = width * animator.inch;
     }
 
     draw() {
@@ -771,10 +782,10 @@ class RectangleMechanicDrawable extends FormMechanicDrawable {
 }
 
 class RotatedRectangleMechanicDrawable extends RectangleMechanicDrawable {
-    constructor(start, end, fill, growing, color, width, height, rotation, translation, spinangle, connectedTo, inch) {
-        super(start, end, fill, growing, color, width, height, connectedTo, inch);
+    constructor(start, end, fill, growing, color, width, height, rotation, translation, spinangle, connectedTo) {
+        super(start, end, fill, growing, color, width, height, connectedTo);
         this.rotation = -rotation * Math.PI / 180; // positive mathematical direction, reversed since JS has downwards increasing y axis
-        this.translation = translation * inch;
+        this.translation = translation * animator.inch;
         this.spinangle = -spinangle * Math.PI / 180; // positive mathematical direction, reversed since JS has downwards increasing y axis
     }
 
@@ -816,11 +827,11 @@ class RotatedRectangleMechanicDrawable extends RectangleMechanicDrawable {
 }
 
 class PieMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, fill, growing, color, direction, openingAngle, radius, connectedTo, inch) {
+    constructor(start, end, fill, growing, color, direction, openingAngle, radius, connectedTo) {
         super(start, end, fill, growing, color, connectedTo);
         this.direction = -direction * Math.PI / 180; // positive mathematical direction, reversed since JS has downwards increasing y axis
         this.openingAngle = 0.5 * openingAngle * Math.PI / 180;
-        this.radius = inch * radius;
+        this.radius = animator.inch * radius;
         this.dx = Math.cos(this.direction - this.openingAngle) * this.radius;
         this.dy = Math.sin(this.direction - this.openingAngle) * this.radius;
     }
@@ -879,7 +890,6 @@ class LineMechanicDrawable extends FormMechanicDrawable {
     draw() {
         const pos = this.getPosition();
         const target = this.getTargetPosition();
-
         if (pos === null || target === null) {
             return;
         }
