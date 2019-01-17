@@ -206,7 +206,9 @@ var compileCommons = function () {
             }
         },
         computed: {
-            phaseDuration: function () { var phase = logData.phases[this.phaseindex]; return phase.end - phase.start; }
+            phaseDuration: function () {
+                var phase = logData.phases[this.phaseindex]; return Math.max(phase.end - phase.start,0.001);
+            }
         }
     });
 };
