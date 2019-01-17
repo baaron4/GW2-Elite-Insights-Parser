@@ -1,40 +1,30 @@
-﻿namespace LuckParser.Controllers
+﻿using Newtonsoft.Json;
+
+namespace LuckParser.Controllers
 {
     public class GW2APIfacts
     {
-        public string text { get; set; }
-        public string icon { get; set; }
-        public string type { get; set; }
+        public string Text { get; set; }
+        public string Icon { get; set; }
+        public string Type { get; set; }
+        public string Target { get; set; }
+        public string Status { get; set; }
+        public string Description { get; set; }
+        [JsonProperty(PropertyName = "apply_count")]
+        public int ApplyCount { get; set; }
+        public int Duration { get; set; }
+        [JsonProperty(PropertyName = "field_type")]
+        public string FieldType { get; set; }
+        [JsonProperty(PropertyName = "finisher_type")]
+        public string Finisher_type { get; set; }
+        public float Percent { get; set; }
+        [JsonProperty(PropertyName = "hit_count")]
+        public int HitCount { get; set; }
+        [JsonProperty(PropertyName = "dmg_multiplier")]
+        public float DmgMultiplier { get; set; }
+        public int Distance { get; set; }
+        public GW2APIfacts Prefix { get; set; }
 
-        public string target { get; set; }
-        //Buff
-        public string status { get; set; }
-        public string description { get; set; }
-        public int apply_count { get; set; }
-        public int duration { get; set; }
-        //ComboField
-        public string field_type { get; set; }
-        //ComboFinisher
-        public string finisher_type { get; set; }
-        public float percent { get; set; }
-        //Damage
-        public int hit_count { get; set; }
-        public float dmg_multiplier { get; set; }
-        //Distance
-        public int distance { get; set; }
-        //Duration
-        //public int duration { get; set; }
-        //Heal
-        //public int hit_count { get; set; }
-        //HealingAdjust
-        //NoData
-        //Number
-        //value
-        //Percent
-        //percent
-        //PrefixedBuff
-        public GW2APIfacts prefix { get; set; }
-
-        public GW2APIfacts() { }
+        public object Value { get; set; }
     }
 }

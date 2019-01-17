@@ -1,32 +1,26 @@
-﻿namespace LuckParser.Controllers
+﻿using Newtonsoft.Json;
+
+namespace LuckParser.Controllers
 {
     public class GW2APISkill
     {
-        public long id { get; set; }
-        public string name { get; set; }
-        public string description { get; set; }
-        public string icon { get; set; }
-        public string chat_link { get; set; }
-        public string type { get; set; }
-        public string weapon_type { get; set; }
-        public string[] professions { get; set; }
-        public string slot { get; set; }
-        public string[] categories { get; set; }
-        //public string[]  facts { get; set; }
-
-        // public string attunement { get; set; }
-        //public string cost { get; set; }
-        public string dual_wield { get; set; }
-        // public int flip_skill { get; set; }
-        // public int initiative { get; set; }
-        // public int next_chain { get; set; }
-        // public int prev_chain { get; set; }
-
-
-        //public int toolbelt_skill { get; set; }
-
-
-        public GW2APISkill() { }
+        public long Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Icon { get; set; }
+        [JsonProperty(PropertyName = "chat_link")]
+        public string ChatLink { get; set; }
+        public string Type { get; set; }
+        [JsonProperty(PropertyName = "weapon_type")]
+        public string WeaponType { get; set; }
+        public string[] Professions { get; set; }
+        public string Slot { get; set; }
+        public string[] Categories { get; set; }
+        public string[] Flags { get; set; }
+        public GW2APIfacts[] Facts { get; set; }
+        public long Specialization { get; set; }
+        [JsonProperty(PropertyName = "dual_wield")]
+        public string DualWield { get; set; }
     }
 
 }

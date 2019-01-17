@@ -169,13 +169,13 @@ namespace LuckParser.Models.ParseModels
                     }
 
                     GW2APISpec spec = apiController.GetSpec((int)_isElite);
-                    if (spec.elite)
+                    if (spec.Elite)
                     {
-                        return spec.name;
+                        return spec.Name;
                     }
                     else
                     {
-                        return spec.profession;
+                        return spec.Profession;
                     }
 
                 }

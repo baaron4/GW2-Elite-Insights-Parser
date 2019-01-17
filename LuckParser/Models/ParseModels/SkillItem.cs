@@ -60,7 +60,8 @@ namespace LuckParser.Models.ParseModels
         private const string _defaultIcon = "https://render.guildwars2.com/file/1D55D34FB4EE20B1962E315245E40CA5E1042D0E/62248.png";
 
         // Fields
-        public readonly long ID;
+        public long ID { get; private set; }
+        public int Range { get; private set; } = 0;
         public string Name { get; private set; }
         public string Icon { get; private set; }
         public GW2APISkill ApiSkill { get; private set; }
@@ -90,15 +91,24 @@ namespace LuckParser.Models.ParseModels
             }
             else if (ApiSkill != null)
             {
-                Name = ApiSkill.name;
-
+                Name = ApiSkill.Name;
+                if (ApiSkill.Facts != null)
+                {
+                    foreach (GW2APIfacts fact in ApiSkill.Facts)
+                    {
+                        if (fact.Text != null && fact.Text == "Range" && fact.Value != null)
+                        {
+                            Range = Convert.ToInt32(fact.Value);
+                        }
+                    }
+                }
             }
             if (ApiSkill == null && _overrideIcons.TryGetValue(ID, out string icon))
             {
                 Icon = icon;
             } else
             {
-                Icon = ApiSkill != null ? ApiSkill.icon : _defaultIcon;
+                Icon = ApiSkill != null ? ApiSkill.Icon : _defaultIcon;
             }
         }
 

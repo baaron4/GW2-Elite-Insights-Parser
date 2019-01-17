@@ -467,7 +467,7 @@ namespace LuckParser.Builders
                     Time = (int)cl.Time,
                     Duration = cl.ActualDuration,
                     TimeGained = timeGained,
-                    AutoAttack = skillApi != null && skillApi.slot == "Weapon_1",
+                    AutoAttack = skillApi != null && skillApi.Slot == "Weapon_1",
                     Quickness = cl.StartActivation == ParseEnum.Activation.Quickness
                 };
                 if (res.TryGetValue("s" + cl.SkillId, out var list))

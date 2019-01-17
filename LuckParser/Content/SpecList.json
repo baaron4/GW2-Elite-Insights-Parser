@@ -1,0 +1,506 @@
+[
+  {
+    "id": 1,
+    "name": "Dueling",
+    "profession": "Mesmer",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/43C5400906A104C60F30DFE0A145D1E767353573/1012003.png",
+    "background": "https://render.guildwars2.com/file/992D53319C5FCD4AE841C592DC2AE91D5906AECF/1012057.png"
+  },
+  {
+    "id": 2,
+    "name": "Death Magic",
+    "profession": "Necromancer",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/16663C1CDF532AB0DCC0CB08951DD2F49351D5D4/1012008.png",
+    "background": "https://render.guildwars2.com/file/B3F92D581B0A036CABB51590E6E560B21708391F/1012067.png"
+  },
+  {
+    "id": 3,
+    "name": "Invocation",
+    "profession": "Revenant",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/2C4DCE5C0C255F32B51DCF9E4360106823EAF926/1012018.png",
+    "background": "https://render.guildwars2.com/file/B73FB47165CB20DE21B1FAE91FE22BDE29B6FB76/1012093.png"
+  },
+  {
+    "id": 4,
+    "name": "Strength",
+    "profession": "Warrior",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/0D48C40A1C042B0BC6DAA4B91AB272E5E90C934C/1012032.png",
+    "background": "https://render.guildwars2.com/file/09160450B40ED777650F632F2CE82504B90F5644/1012109.png"
+  },
+  {
+    "id": 5,
+    "name": "Druid",
+    "profession": "Ranger",
+    "elite": true,
+    "icon": "https://render.guildwars2.com/file/BE10CB10D8446208729934F3F1BD3A54BEED9AD6/1012013.png",
+    "background": "https://render.guildwars2.com/file/306D6ED9D3F09FF5552609EC7DA2046ECD114F90/1012077.png"
+  },
+  {
+    "id": 6,
+    "name": "Explosives",
+    "profession": "Engineer",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/7DCC0CC4CE0E550C36F37F65469FF3103E2F2DA5/1011989.png",
+    "background": "https://render.guildwars2.com/file/159455B54672DF9C9BEEC2EB13E05DB07E757E02/1012041.png"
+  },
+  {
+    "id": 7,
+    "name": "Daredevil",
+    "profession": "Thief",
+    "elite": true,
+    "icon": "https://render.guildwars2.com/file/F1985D4E1CE043D7145E030C0AC4CFDABED73A59/1012025.png",
+    "background": "https://render.guildwars2.com/file/B969F9B27EE82CBF0E4651FD0F760F702CB5FCED/1012101.png"
+  },
+  {
+    "id": 8,
+    "name": "Marksmanship",
+    "profession": "Ranger",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/80FEB75663DAE60BAC59495671261C206C0BAFC3/1012014.png",
+    "background": "https://render.guildwars2.com/file/100CE796CC2318DA62D2189A02BAAD2AE91BCE1F/1012079.png"
+  },
+  {
+    "id": 9,
+    "name": "Retribution",
+    "profession": "Revenant",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/70B5F7E02769762D5FEE056D0136093BF3F580FF/1029933.png",
+    "background": "https://render.guildwars2.com/file/E6100E7B7704EEC632AD5B399C3BE8A84D7F7CED/1012095.png"
+  },
+  {
+    "id": 10,
+    "name": "Domination",
+    "profession": "Mesmer",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/4B61EA5997709A5DC1E46FF50CEDF2A13C1F0C3D/1012002.png",
+    "background": "https://render.guildwars2.com/file/2C436DDDC3244409EEBF470A0AE3ED7CED1F99C0/1012055.png"
+  },
+  {
+    "id": 11,
+    "name": "Tactics",
+    "profession": "Warrior",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/373162E8DED2793801194E622FEDEF2DBBDA6F10/1012033.png",
+    "background": "https://render.guildwars2.com/file/6FCF0E0E0C0E539290A8245F0DA49D0556D71E62/1012110.png"
+  },
+  {
+    "id": 12,
+    "name": "Salvation",
+    "profession": "Revenant",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/0F0144B0E123163E0454B0C3D532282555BE7CE5/1029934.png",
+    "background": "https://render.guildwars2.com/file/1043F6D2CFECB77BC21C70B43F580611E5DAD7CD/1012097.png"
+  },
+  {
+    "id": 13,
+    "name": "Valor",
+    "profession": "Guardian",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/F8A95D6D3904A1F6430CF2D33A02FDF2A6132037/1011997.png",
+    "background": "https://render.guildwars2.com/file/12B4C72ADCE4EF2890606111B400630F3832F83D/1012048.png"
+  },
+  {
+    "id": 14,
+    "name": "Corruption",
+    "profession": "Revenant",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/FF4CBE97A807903DF3495E0ECC380E080291C698/1029931.png",
+    "background": "https://render.guildwars2.com/file/5AB700B8AE15619DDD3CAFD60D0203E5EB23C3BE/1012087.png"
+  },
+  {
+    "id": 15,
+    "name": "Devastation",
+    "profession": "Revenant",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/C95CAFC4DC0D2AF5DB0C66CB0E0B0FA699E45D6C/1029932.png",
+    "background": "https://render.guildwars2.com/file/0744C43591FB9C11A7554C9601215CA8022F4216/1012089.png"
+  },
+  {
+    "id": 16,
+    "name": "Radiance",
+    "profession": "Guardian",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/16A05D047DFC0828D0E496F46FD8B20F97B42EB3/1011996.png",
+    "background": "https://render.guildwars2.com/file/9BE9604B0378D103EB2F551730BF802F2B1F3AA0/1012047.png"
+  },
+  {
+    "id": 17,
+    "name": "Water",
+    "profession": "Elementalist",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/A3D60C0EBE0B33907505C7DED0FD4E4DE565250F/1011987.png",
+    "background": "https://render.guildwars2.com/file/F99A435D26057D6865ECBD0794B73D35A69FBB58/1012039.png"
+  },
+  {
+    "id": 18,
+    "name": "Berserker",
+    "profession": "Warrior",
+    "elite": true,
+    "icon": "https://render.guildwars2.com/file/B706475993F16D0BD7DFDF3BB30AA144051CDC94/1029935.png",
+    "background": "https://render.guildwars2.com/file/665548439B5F7AB8CA63F46906A0630DAAF6069F/1012106.png"
+  },
+  {
+    "id": 19,
+    "name": "Blood Magic",
+    "profession": "Necromancer",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/D1D9C63AD9CC05FC1B19970556B0C1E0ADD77905/1012006.png",
+    "background": "https://render.guildwars2.com/file/47F5CA90475E566650EF540BA82CA69C1C0332B1/1012063.png"
+  },
+  {
+    "id": 20,
+    "name": "Shadow Arts",
+    "profession": "Thief",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/B62E5512754BEB1D0116B1DB3B6FA0ECA4DD630C/1012027.png",
+    "background": "https://render.guildwars2.com/file/6943976957615E2337BE6B38292BAEB23C2BAAB9/1012103.png"
+  },
+  {
+    "id": 21,
+    "name": "Tools",
+    "profession": "Engineer",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/2CBB5AE626A47DF79C9294ECA61D77922A123600/1011993.png",
+    "background": "https://render.guildwars2.com/file/4E906A6B625209A213085FD65DB9A4457726759D/1012044.png"
+  },
+  {
+    "id": 22,
+    "name": "Defense",
+    "profession": "Warrior",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/5F0B793A5479007078067CD71D0E01B30602189B/1012030.png",
+    "background": "https://render.guildwars2.com/file/E0190E3B3745AA61D32CFF92C1FEFFFB56A90D4C/1012107.png"
+  },
+  {
+    "id": 23,
+    "name": "Inspiration",
+    "profession": "Mesmer",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/BCC2C316C4FC2823679E0FD062C5A87E96E460CC/1012004.png",
+    "background": "https://render.guildwars2.com/file/DC30B4FF5377E80F21F4E912E8D548B004C95042/1012059.png"
+  },
+  {
+    "id": 24,
+    "name": "Illusions",
+    "profession": "Mesmer",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/A6D57C63D9EFB3FE75C9DAF8CBE603D8F45A635F/1012005.png",
+    "background": "https://render.guildwars2.com/file/B00D98B31B13416811B8484FC146C49B1E055BAC/1012061.png"
+  },
+  {
+    "id": 25,
+    "name": "Nature Magic",
+    "profession": "Ranger",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/DC7A387D9AB3EACCDA35AEA872E4EA1007139612/1012015.png",
+    "background": "https://render.guildwars2.com/file/01B5C3050EAFB0C47065C333C8AA2B4255374DA7/1012081.png"
+  },
+  {
+    "id": 26,
+    "name": "Earth",
+    "profession": "Elementalist",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/BA6BC962A7ABA1330B3AC4141299397C0036559F/1011985.png",
+    "background": "https://render.guildwars2.com/file/B9C5BE9716010E3F7F170A52B5B272327CDA49A1/1012037.png"
+  },
+  {
+    "id": 27,
+    "name": "Dragonhunter",
+    "profession": "Guardian",
+    "elite": true,
+    "icon": "https://render.guildwars2.com/file/736DB02E6DA2ACFAD3B9B0F4655113AD214FFA40/1011994.png",
+    "background": "https://render.guildwars2.com/file/6BD5F59A7A0EF4F20C1B1D216AFE2B084CC19FF4/1012045.png"
+  },
+  {
+    "id": 28,
+    "name": "Deadly Arts",
+    "profession": "Thief",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/38F6FA9A5D04CEC605AF6E5D994119281A38A9FA/1012026.png",
+    "background": "https://render.guildwars2.com/file/2AA7FB65630AD540E204982978DA9601023B540E/1012102.png"
+  },
+  {
+    "id": 29,
+    "name": "Alchemy",
+    "profession": "Engineer",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/2AD4CD9B66F349A6CBC006A14848CF531E97396D/1011988.png",
+    "background": "https://render.guildwars2.com/file/A89F18BA0F9A53E662BAE3F39C705559A97B407F/1012040.png"
+  },
+  {
+    "id": 30,
+    "name": "Skirmishing",
+    "profession": "Ranger",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/A026F49FF905C0F8AFAC6EDFDE281AABE1912459/1012016.png",
+    "background": "https://render.guildwars2.com/file/08D1BEEC43F45C02DE59AE9010B9391F1FCA2966/1012083.png"
+  },
+  {
+    "id": 31,
+    "name": "Fire",
+    "profession": "Elementalist",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/B4BDAB2452DEF1A34615DDC4F30A157DADC743C5/1011986.png",
+    "background": "https://render.guildwars2.com/file/6BB3E8FDEA6E679050D59E411A4AA956D347B045/1012038.png"
+  },
+  {
+    "id": 32,
+    "name": "Beastmastery",
+    "profession": "Ranger",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/02D851E1D7186112786D0F67910B58FACB5CCCF6/1012012.png",
+    "background": "https://render.guildwars2.com/file/4727784BBF467241CA9F29E4FEDE487FD33E2809/1012075.png"
+  },
+  {
+    "id": 33,
+    "name": "Wilderness Survival",
+    "profession": "Ranger",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/BEDA4B0CCD2E6F5F5C64509D67D3454E47D019F3/1012017.png",
+    "background": "https://render.guildwars2.com/file/417DC1B29EF0EADBD9CBE15B462B2D5B6AF328DA/1012085.png"
+  },
+  {
+    "id": 34,
+    "name": "Reaper",
+    "profession": "Necromancer",
+    "elite": true,
+    "icon": "https://render.guildwars2.com/file/530A582BD864B73AF5CC6C44F9C61954322D9A15/1012009.png",
+    "background": "https://render.guildwars2.com/file/3717FBED4FDCD060925205DD09B15C0598E062F4/1012069.png"
+  },
+  {
+    "id": 35,
+    "name": "Critical Strikes",
+    "profession": "Thief",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/1CDB2736E6CAF79A1B549B06CDED717B3418F7B1/1012024.png",
+    "background": "https://render.guildwars2.com/file/29C9C0E8F16ADC18F745CA93CB58BA0C164B5CE1/1012100.png"
+  },
+  {
+    "id": 36,
+    "name": "Arms",
+    "profession": "Warrior",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/03754E10970D0C68D76A1955245D7CB39AA21E59/1012029.png",
+    "background": "https://render.guildwars2.com/file/0A08B2DC35C8D22CC07B9F4C9023F7E9734C1B27/1012105.png"
+  },
+  {
+    "id": 37,
+    "name": "Arcane",
+    "profession": "Elementalist",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/C7F4C199EC07D0E6CC9417C6F53F53FDD3F92947/1011984.png",
+    "background": "https://render.guildwars2.com/file/01F1264B9F05CC52E46434C53DF6BA2A57CE21C5/1012035.png"
+  },
+  {
+    "id": 38,
+    "name": "Firearms",
+    "profession": "Engineer",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/67A2C92B59BC94EDD3D857C2DD18E1A02A631F98/1011990.png",
+    "background": "https://render.guildwars2.com/file/2A37FAA50318E4BAE2B193D7A1DF30AAFCE7B139/1012042.png"
+  },
+  {
+    "id": 39,
+    "name": "Curses",
+    "profession": "Necromancer",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/C8E1A81601C3D5AC10285505E9F730621C3357CD/1012007.png",
+    "background": "https://render.guildwars2.com/file/71E7075E1AC9460AA507A630B54D1395DA465B2D/1012065.png"
+  },
+  {
+    "id": 40,
+    "name": "Chronomancer",
+    "profession": "Mesmer",
+    "elite": true,
+    "icon": "https://render.guildwars2.com/file/D9C960059A69F4DB6604DAD6AF06D0F940E76754/1012001.png",
+    "background": "https://render.guildwars2.com/file/9D9F0DA395FDB21423981FAC2CABC850CF7E0A62/1012053.png"
+  },
+  {
+    "id": 41,
+    "name": "Air",
+    "profession": "Elementalist",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/D3DB62FF6055021A717F3C6A0C19502F2C4EC1FF/1011983.png",
+    "background": "https://render.guildwars2.com/file/97BE972EC832ABC4F8645FF4A063EFF89B2942B8/1012034.png"
+  },
+  {
+    "id": 42,
+    "name": "Zeal",
+    "profession": "Guardian",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/479676FC6349C7A12D429B685F0D4205ABFF2F94/1011999.png",
+    "background": "https://render.guildwars2.com/file/9244C9726D2AD30F9D7E22CF5C7A49601BFAFCC0/1012050.png"
+  },
+  {
+    "id": 43,
+    "name": "Scrapper",
+    "profession": "Engineer",
+    "elite": true,
+    "icon": "https://render.guildwars2.com/file/FEB1B8C559DDB5A04F9C0579F741080259FEF841/1011991.png",
+    "background": "https://render.guildwars2.com/file/011D6BF69FF9A9F6E3DCBA1197BAA9281067FF01/1128516.png"
+  },
+  {
+    "id": 44,
+    "name": "Trickery",
+    "profession": "Thief",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/06BF06CDA7150617C5E075265C1E2F15E84B3D64/1012028.png",
+    "background": "https://render.guildwars2.com/file/00CDEB242E93EA19125E48B556D2069639D03DBF/1012104.png"
+  },
+  {
+    "id": 45,
+    "name": "Chaos",
+    "profession": "Mesmer",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/7FD4DF076AFB31793EFA07220B35B427B3D406C3/1012000.png",
+    "background": "https://render.guildwars2.com/file/B20B7C6DDC30F72207D9BE4FB87C2FDCDC292E90/1012051.png"
+  },
+  {
+    "id": 46,
+    "name": "Virtues",
+    "profession": "Guardian",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/E165042F92999B3BEFA91E280CB807F62EF30218/1011998.png",
+    "background": "https://render.guildwars2.com/file/08FE79184543F8314648D3104268789B484AB0BF/1012049.png"
+  },
+  {
+    "id": 47,
+    "name": "Inventions",
+    "profession": "Engineer",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/91F9AF48FA1DDEB66A449095A4E1A6E901AE203D/1011992.png",
+    "background": "https://render.guildwars2.com/file/807C3D97D8B6A25E47B49C905B081419A779201D/1012043.png"
+  },
+  {
+    "id": 48,
+    "name": "Tempest",
+    "profession": "Elementalist",
+    "elite": true,
+    "icon": "https://render.guildwars2.com/file/D1970ABC09D07B4275C7E47DDD0EDC0F4CFC050C/1029930.png",
+    "background": "https://render.guildwars2.com/file/D22197110A38F5651AA3F4C23914A197DD2C5BA1/1029936.png"
+  },
+  {
+    "id": 49,
+    "name": "Honor",
+    "profession": "Guardian",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/A4C0E39152B005EE226DA56D010DEEABB1ADBF2B/1011995.png",
+    "background": "https://render.guildwars2.com/file/98C3AB64254E61E59D03D3AF29D75314730E9E72/1012046.png"
+  },
+  {
+    "id": 50,
+    "name": "Soul Reaping",
+    "profession": "Necromancer",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/A5A95CB5FADD99F59E07400907F0782B659574A9/1012010.png",
+    "background": "https://render.guildwars2.com/file/0956926B4A5109E07EFAB556E5DBEDCBC2B67C3B/1012071.png"
+  },
+  {
+    "id": 51,
+    "name": "Discipline",
+    "profession": "Warrior",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/D10B771D01C85DA404472EE90F35EF15B0B36240/1012031.png",
+    "background": "https://render.guildwars2.com/file/2B80CF6504DA1B0DC8470D45ED5BE9992BEEC2B7/1012108.png"
+  },
+  {
+    "id": 52,
+    "name": "Herald",
+    "profession": "Revenant",
+    "elite": true,
+    "icon": "https://render.guildwars2.com/file/78496E9E95C46527F8E0B974530A07A017DC9B79/1058520.png",
+    "background": "https://render.guildwars2.com/file/F2EEC706430942BEC2D51565AECC13135DF304F8/1012091.png"
+  },
+  {
+    "id": 53,
+    "name": "Spite",
+    "profession": "Necromancer",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/2D34377B04051FFDCDB553C7DCDABCD5DFBB68D7/1012011.png",
+    "background": "https://render.guildwars2.com/file/DDF39DBD61CCC1BCDD03B271080869251D097041/1012073.png"
+  },
+  {
+    "id": 54,
+    "name": "Acrobatics",
+    "profession": "Thief",
+    "elite": false,
+    "icon": "https://render.guildwars2.com/file/E109FF4E65CD3FA4AAC20E9D219C4D5207E1E461/1012023.png",
+    "background": "https://render.guildwars2.com/file/0CACB74F6E36F80921C6D6F2F0786B6C1CCCDCA4/1012099.png"
+  },
+  {
+    "id": 55,
+    "name": "Soulbeast",
+    "profession": "Ranger",
+    "elite": true,
+    "icon": "https://render.guildwars2.com/file/0AA4A2C62C4F2D0E0D59DBEE9C63EB4AF472F0C5/1769893.png",
+    "background": "https://render.guildwars2.com/file/D624537D6B50C90B2A329EB16CF8911BDD4C0107/1769902.png"
+  },
+  {
+    "id": 56,
+    "name": "Weaver",
+    "profession": "Elementalist",
+    "elite": true,
+    "icon": "https://render.guildwars2.com/file/02FAA82BF2F5BF3E3AD89BCF05FF56B4C86139F4/1769888.png",
+    "background": "https://render.guildwars2.com/file/C3D501E451AD49310F05B40924B20A3B7CB14E07/1769897.png"
+  },
+  {
+    "id": 57,
+    "name": "Holosmith",
+    "profession": "Engineer",
+    "elite": true,
+    "icon": "https://render.guildwars2.com/file/F41CDEE4603FC0741669A7F2A7E977D36123DF7C/1769889.png",
+    "background": "https://render.guildwars2.com/file/FF0814C6EFA56F9ADA0B3EA7986BADF120F7D11D/1769898.png"
+  },
+  {
+    "id": 58,
+    "name": "Deadeye",
+    "profession": "Thief",
+    "elite": true,
+    "icon": "https://render.guildwars2.com/file/F93EF1717238E9ACC1CA330D4416D324AE08585D/1769895.png",
+    "background": "https://render.guildwars2.com/file/09B7D10707C7095C050B34ED68E3E3BB06626C7A/1769904.png"
+  },
+  {
+    "id": 59,
+    "name": "Mirage",
+    "profession": "Mesmer",
+    "elite": true,
+    "icon": "https://render.guildwars2.com/file/6403ECA8E6C1683E2C9D075A39C154ED3A7C04A1/1769891.png",
+    "background": "https://render.guildwars2.com/file/BB67F76B46052E6E291AFE75807AFC7DD33563E4/1769900.png"
+  },
+  {
+    "id": 60,
+    "name": "Scourge",
+    "profession": "Necromancer",
+    "elite": true,
+    "icon": "https://render.guildwars2.com/file/1407ADE7787A6BF6E457F5FA6DFA1062A5FA93FD/1769892.png",
+    "background": "https://render.guildwars2.com/file/DEE244AB7045EE31941E222AE4A06A94DCB4360E/1769901.png"
+  },
+  {
+    "id": 61,
+    "name": "Spellbreaker",
+    "profession": "Warrior",
+    "elite": true,
+    "icon": "https://render.guildwars2.com/file/06DFB7E3F267ADD0BB43C7383251343858371D02/1769896.png",
+    "background": "https://render.guildwars2.com/file/C0D57D3B17CC0408A2EE17FE2BA0C80A4E1838FA/1769905.png"
+  },
+  {
+    "id": 62,
+    "name": "Firebrand",
+    "profession": "Guardian",
+    "elite": true,
+    "icon": "https://render.guildwars2.com/file/6D18B2D3EE0BFA0E4BC851A7D3C39D4330250916/1769890.png",
+    "background": "https://render.guildwars2.com/file/7E6454FF9A13DBE93873AF72E192A74622990171/1769899.png"
+  },
+  {
+    "id": 63,
+    "name": "Renegade",
+    "profession": "Revenant",
+    "elite": true,
+    "icon": "https://render.guildwars2.com/file/0152279F7DD0FCFA21F2D1CC17DE21B2BD58EFF3/1769894.png",
+    "background": "https://render.guildwars2.com/file/30377A5829605D7F1209B4064203A83F580548AD/1769903.png"
+  }
+]

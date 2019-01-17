@@ -210,7 +210,6 @@
     <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\OverrideLogic.cs" />
     <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\QueueLogic.cs" />
     <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\StackingLogic.cs" />
-    <Compile Include="Controllers\GW2API\GW2APICategory.cs" />
     <Compile Include="Models\ParseModels\Logs\BoonRemovalLog.cs" />
     <Compile Include="Models\ParseModels\Logs\BoonApplicationLog.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicData.cs" />
@@ -228,10 +227,7 @@
     <Compile Include="Models\ParseModels\Actors\Target.cs" />
     <Compile Include="Controllers\GW2API\GW2APISpec.cs" />
     <Compile Include="Models\ParseModels\Logs\DamageLogCondition.cs" />
-    <Compile Include="Controllers\GW2API\GW2APISkillCheck.cs" />
-    <Compile Include="Controllers\GW2API\GW2APISkillDetailed.cs" />
     <Compile Include="Controllers\GW2API\GW2APIfacts.cs" />
-    <Compile Include="Controllers\GW2API\GW2APIfactsDetail.cs" />
     <Compile Include="Controllers\GW2API\GW2APISkill.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemDuration.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemIntensity.cs" />
@@ -303,10 +299,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Dodge_Instructor.png" />
-    <Content Include="Content\SkillList.xml">
+    <Content Include="Content\SkillList.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\SpecList.xml">
+    <Content Include="Content\SpecList.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\LI.ico" />

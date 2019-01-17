@@ -2043,7 +2043,7 @@ namespace LuckParser.Builders
                     Id = skill.ID,
                     Name = skill.Name,
                     Icon = skill.Icon,
-                    Aa = (apiSkill?.slot == "Weapon_1")
+                    Aa = (apiSkill?.Slot == "Weapon_1")
                 };
                 dtos.Add(dto);
             }
