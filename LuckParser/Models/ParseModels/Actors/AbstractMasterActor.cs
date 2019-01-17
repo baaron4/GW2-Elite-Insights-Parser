@@ -262,7 +262,7 @@ namespace LuckParser.Models.ParseModels
                                         List<DamageLog> dmLogs = GetJustPlayerDamageLogs(target, log, phases[i].Start, phases[i].End);
                                         int totalDamage = dmLogs.Sum(x => x.Damage);
                                         List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsCondi).ToList();
-                                        int damage = (int)(effect.Sum(x => x.Damage) / 21.0);
+                                        int damage = (int)Math.Round(effect.Sum(x => x.Damage) / 21.0);
                                         extraDataList.Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsCondi), damage, totalDamage));
                                     }
                                     dict[boonid] = extraDataList;
@@ -274,7 +274,7 @@ namespace LuckParser.Models.ParseModels
                                 List<DamageLog> dmLogs = GetJustPlayerDamageLogs(null, log, phases[i].Start, phases[i].End);
                                 int totalDamage = dmLogs.Sum(x => x.Damage);
                                 List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsCondi).ToList();
-                                int damage = (int)(effect.Sum(x => x.Damage) / 21.0);
+                                int damage = (int)Math.Round(effect.Sum(x => x.Damage) / 21.0);
                                 _boonExtra[boonid].Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsCondi), damage, totalDamage));
                             }
                             break;
