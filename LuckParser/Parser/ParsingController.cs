@@ -506,38 +506,48 @@ namespace LuckParser.Parser
                 bool skip = false;
                 foreach (Player p in _playerList)
                 {
-                    if (p.Account == player.Account)//is this a copy of original?
+                    if (p.Account == player.Account)// same player
                     {
-                        skip = true;
-                        Random rnd = new Random();
-                        ulong agent = 0;
-                        while (_agentData.AgentValues.Contains(agent) || agent == 0)
+                        if (p.Character == player.Character) // same character, can be fused
                         {
-                            agent = (ulong)rnd.Next(Int32.MaxValue / 2, Int32.MaxValue);
-                        }
-                        ushort instid = 0;
-                        while (_agentData.InstIDValues.Contains(instid) || instid == 0)
-                        {
-                            instid = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
-                        }
-                        foreach (CombatItem c in _combatItems)
-                        {
-                            if (c.DstAgent == p.Agent || player.Agent == c.DstAgent)
+                            skip = true;
+                            Random rnd = new Random();
+                            ulong agent = 0;
+                            while (_agentData.AgentValues.Contains(agent) || agent == 0)
                             {
-                                c.DstAgent = agent;
-                                c.DstInstid = instid;
+                                agent = (ulong)rnd.Next(Int32.MaxValue / 2, Int32.MaxValue);
                             }
-                            if (c.SrcAgent == p.Agent || player.Agent == c.SrcAgent)
+                            ushort instid = 0;
+                            while (_agentData.InstIDValues.Contains(instid) || instid == 0)
                             {
-                                c.SrcAgent = agent;
-                                c.SrcInstid = instid;
+                                instid = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
                             }
+                            foreach (CombatItem c in _combatItems)
+                            {
+                                if (c.DstAgent == p.Agent || player.Agent == c.DstAgent)
+                                {
+                                    c.DstAgent = agent;
+                                    c.DstInstid = instid;
+                                }
+                                if (c.SrcAgent == p.Agent || player.Agent == c.SrcAgent)
+                                {
+                                    c.SrcAgent = agent;
+                                    c.SrcInstid = instid;
+                                }
+                            }
+                            p.AgentItem.InstID = instid;
+                            p.AgentItem.Agent = agent;
+                            p.AgentItem.FirstAware = Math.Min(p.AgentItem.FirstAware, player.AgentItem.FirstAware);
+                            p.AgentItem.LastAware = Math.Max(p.AgentItem.LastAware, player.AgentItem.LastAware);
+                            _agentData.Refresh();
+                            break;
                         }
-                        p.AgentItem.InstID = instid;
-                        p.AgentItem.Agent = agent;
-                        p.AgentItem.FirstAware = Math.Min(p.AgentItem.FirstAware, player.AgentItem.FirstAware);
-                        p.AgentItem.LastAware = Math.Max(p.AgentItem.LastAware, player.AgentItem.LastAware);
-                        _agentData.Refresh();
+                        // different character in raid mode, discard it as it can't have any influence, otherwise add as a separate entity
+                        else if (_fightData.Logic.Mode == FightLogic.ParseMode.Raid)
+                        {
+                            skip = true;
+                            break;
+                        }
                     }
                 }
                 if (!skip)

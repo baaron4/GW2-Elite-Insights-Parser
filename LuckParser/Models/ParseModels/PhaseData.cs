@@ -67,7 +67,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     end = Math.Max(end, log.FightData.ToFightSpace(dead));
                 }
-                End = Math.Min(End, end);
+                End = Math.Min(Math.Min(End, end), log.FightData.FightDuration);
             }
         }
     }
