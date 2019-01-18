@@ -67,7 +67,7 @@ window.onload = function () {
             light: logData.lightTheme,
             mode: 0,
             animate: false,
-            animator: null
+            animationStatus: null
         },
         methods: {
             switchCombatReplayButtons: function(from, to) {          
@@ -105,6 +105,9 @@ window.onload = function () {
             },
         },
         computed: {
+            animator: function () {
+                return this.animationStatus ? animator : null;
+            },
             activePhase: function () {
                 var phases = this.logdata.phases;
                 for (var i = 0; i < phases.length; i++) {

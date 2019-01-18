@@ -296,12 +296,12 @@ var compileCombatReplay = function () {
 
     Vue.component("combat-replay-damage-data-component", {
         template: `${tmplCombatReplayDamageData}`,
-        props: ["time"],
+        props: ["time", "selectedplayer", "selectedplayerid"],
         computed: {
             playerindex: function () {
-                if (animator.selectedPlayer) {
+                if (this.selectedplayer) {
                     for (var i = 0; i < logData.players.length; i++) {
-                        if (logData.players[i].combatReplayID == animator.selectedPlayerID) {
+                        if (logData.players[i].combatReplayID == this.selectedplayerid) {
                             return i;
                         }
                     }
@@ -313,7 +313,7 @@ var compileCombatReplay = function () {
 
     Vue.component("combat-replay-status-data-component", {
         template: `${tmplCombatReplayStatusData}`,
-        props: ["time"],
+        props: ["time", "selectedplayer", "selectedplayerid"],
         data: function() {
             return {
                 details: false
@@ -325,9 +325,9 @@ var compileCombatReplay = function () {
         },
         computed: {
             playerindex: function () {
-                if (animator.selectedPlayer) {
+                if (this.selectedplayer) {
                     for (var i = 0; i < logData.players.length; i++) {
-                        if (logData.players[i].combatReplayID == animator.selectedPlayerID) {
+                        if (logData.players[i].combatReplayID == this.selectedplayerid) {
                             return i;
                         }
                     }

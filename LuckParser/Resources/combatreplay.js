@@ -18,9 +18,14 @@ var animator = null;
 
 class Animator {
     constructor(options) {
+        // status
+        this.reactiveDataStatus = {
+            time: 0,
+            selectedPlayer: null,
+            selectedPlayerID: null
+        };
         // time
         this.prevTime = 0;
-        this.time = 0;
         this.times = [];
         // simulation params
         this.inch = 10;
@@ -28,8 +33,6 @@ class Animator {
         this.speed = 1;
         this.rangeControl = new Map();
         this.selectedGroup = -1;
-        this.selectedPlayer = null;
-        this.selectedPlayerID = null;
         // actors
         this.targetData = new Map();
         this.playerData = new Map();
@@ -72,7 +75,7 @@ class Animator {
         this.initMouseEvents();
         this.initTouchEvents();
         if (typeof mainComponent !== "undefined" && mainComponent !== null) {
-            mainComponent.animator = this;
+            mainComponent.animationStatus = this.reactiveDataStatus;
         }
     }
 
@@ -125,14 +128,14 @@ class Animator {
     }
 
     updateTime(value) {
-        this.time = parseInt(value);
+        this.reactiveDataStatus.time = parseInt(value);
         if (this.animation === null) {
             animateCanvas(-1);
         }
     }
 
     updateTextInput() {
-        this.timeSliderDisplay.value = (this.time / 1000.0).toFixed(3);
+        this.timeSliderDisplay.value = (this.reactiveDataStatus.time / 1000.0).toFixed(3);
     }
 
     updateInputTime(value) {
@@ -143,7 +146,7 @@ class Animator {
                 return;
             }
             const ms = Math.round(parsedTime * 1000.0);
-            this.time = Math.min(Math.max(ms, 0), this.times[this.times.length - 1]);
+            this.reactiveDataStatus.time = Math.min(Math.max(ms, 0), this.times[this.times.length - 1]);
             animateCanvas(-2);
         } catch (error) {
             console.error(error);
@@ -152,8 +155,8 @@ class Animator {
 
     startAnimate() {
         if (this.animation === null && this.times.length > 0) {
-            if (this.time >= this.times[this.times.length - 1]) {
-                this.time = 0;
+            if (this.reactiveDataStatus.time >= this.times[this.times.length - 1]) {
+                this.reactiveDataStatus.time = 0;
             }
             this.prevTime = new Date().getTime();
             this.animation = requestAnimationFrame(animateCanvas);
@@ -168,7 +171,7 @@ class Animator {
     }
 
     restartAnimate() {
-        this.time = 0;
+        this.reactiveDataStatus.time = 0;
         if (this.animation === null) {
             animateCanvas(-1);
         }
@@ -176,7 +179,7 @@ class Animator {
 
     selectActor(pId) {
         let actor = this.playerData.get(pId);
-        this.selectedPlayer = null;
+        this.reactiveDataStatus.selectedPlayer = null;
         let oldSelect = actor.selected;
         this.playerData.forEach(function (value, key, map) {
             value.selected = false;
@@ -184,8 +187,8 @@ class Animator {
         actor.selected = !oldSelect;
         this.selectedGroup = actor.selected ? actor.group : -1;
         if (actor.selected) {
-            this.selectedPlayer = actor;
-            this.selectedPlayerID = pId;
+            this.reactiveDataStatus.selectedPlayer = actor;
+            this.reactiveDataStatus.selectedPlayerID = pId;
         }
         this.playerData.forEach(function (value, key, map) {
             let hasActive = document.getElementById('id' + key).classList.contains('active') && !value.selected;
@@ -388,10 +391,10 @@ class Animator {
                 _this.attachedActorData.get(key).draw();
             }
         });
-        if (this.selectedPlayer !== null) {
-            this.selectedPlayer.draw();
-            if (this.attachedActorData.has(this.selectedPlayerID)) {
-                this.attachedActorData.get(this.selectedPlayerID).draw();
+        if (this.reactiveDataStatus.selectedPlayer !== null) {
+            this.reactiveDataStatus.selectedPlayer.draw();
+            if (this.attachedActorData.has(this.reactiveDataStatus.selectedPlayerID)) {
+                this.attachedActorData.get(this.reactiveDataStatus.selectedPlayerID).draw();
             }
         }
     }
@@ -403,12 +406,12 @@ function animateCanvas(noRequest) {
         let curTime = new Date().getTime();
         let timeOffset = curTime - animator.prevTime;
         animator.prevTime = curTime;
-        animator.time = Math.round(Math.min(animator.time + animator.speed * timeOffset, lastTime));
+        animator.reactiveDataStatus.time = Math.round(Math.min(animator.reactiveDataStatus.time + animator.speed * timeOffset, lastTime));
     }
-    if (animator.time === lastTime) {
+    if (animator.reactiveDataStatus.time === lastTime) {
         animator.stopAnimate();
     }
-    animator.timeSlider.value = animator.time.toString();
+    animator.timeSlider.value = animator.reactiveDataStatus.time.toString();
     if (noRequest > -2) {
         animator.updateTextInput();
     }
@@ -476,12 +479,13 @@ class IconDrawable {
             x: 0,
             y: 0
         };
-        if (animator.time - timeValue > 0 && offsetedIndex < 0.5 * this.pos.length - 1) {
+        var time = animator.reactiveDataStatus.time;
+        if (time - timeValue > 0 && offsetedIndex < 0.5 * this.pos.length - 1) {
             const nextTimeValue = animator.times[currentIndex + 1];
             const nextPositionX = this.pos[2 * offsetedIndex + 2];
             const nextPositionY = this.pos[2 * offsetedIndex + 3];
-            pt.x = positionX + (animator.time - timeValue) / (nextTimeValue - timeValue) * (nextPositionX - positionX);
-            pt.y = positionY + (animator.time - timeValue) / (nextTimeValue - timeValue) * (nextPositionY - positionY);
+            pt.x = positionX + (time - timeValue) / (nextTimeValue - timeValue) * (nextPositionX - positionX);
+            pt.y = positionY + (time - timeValue) / (nextTimeValue - timeValue) * (nextPositionY - positionY);
         } else {
             pt.x = positionX;
             pt.y = positionY;
@@ -495,7 +499,8 @@ class IconDrawable {
         if (this.pos === null || this.pos.length === 0) {
             return null;
         }
-        if (this.start !== -1 && (this.start >= animator.time || this.end <= animator.time)) {
+        var time = animator.reactiveDataStatus.time;
+        if (this.start !== -1 && (this.start >= time || this.end <= time)) {
             return null;
         }
         if (this.pos.length === 2) {
@@ -506,7 +511,7 @@ class IconDrawable {
         }
         const lastTime = animator.times[animator.times.length - 1];
         const startIndex = Math.ceil((animator.times.length - 1) * Math.max(this.start, 0) / lastTime);
-        const currentIndex = Math.floor((animator.times.length - 1) * animator.time / lastTime);
+        const currentIndex = Math.floor((animator.times.length - 1) * time / lastTime);
         return this.getInterpolatedPosition(startIndex, Math.max(currentIndex, startIndex));
     }
 
@@ -570,8 +575,9 @@ class PlayerIconDrawable extends IconDrawable {
         if (this.dead === null || this.dead.length === 0) {
             return false;
         }
+        var time = animator.reactiveDataStatus.time;
         for (let i = 0; i < this.dead.length; i += 2) {
-            if (this.dead[i] <= animator.time && this.dead[i + 1] >= animator.time) {
+            if (this.dead[i] <= time && this.dead[i + 1] >= time) {
                 return true;
             }
         }
@@ -582,8 +588,9 @@ class PlayerIconDrawable extends IconDrawable {
         if (this.down === null || this.down.length === 0) {
             return false;
         }
+        var time = animator.reactiveDataStatus.time;
         for (let i = 0; i < this.down.length; i += 2) {
-            if (this.down[i] <= animator.time && this.down[i + 1] >= animator.time) {
+            if (this.down[i] <= time && this.down[i + 1] >= time) {
                 return true;
             }
         }
@@ -625,7 +632,8 @@ class MechanicDrawable {
         if (this.connectedTo === null) {
             return null;
         }
-        if (this.start !== -1 && (this.start >= animator.time || this.end <= animator.time)) {
+        var time = animator.reactiveDataStatus.time;
+        if (this.start !== -1 && (this.start >= time || this.end <= time)) {
             return null;
         }
         if (this.connectedTo instanceof Array) {
@@ -654,9 +662,10 @@ class FacingMechanicDrawable extends MechanicDrawable {
         if (this.facingData.length === 0) {
             return null;
         }
+        var time = animator.reactiveDataStatus.time;
         var rot = this.facingData[0][0];
         for (let i = 1; i < this.facingData.length; i++) {
-            if (animator.time < this.facingData[i][1] - 150) {
+            if (time < this.facingData[i][1] - 150) {
                 break;
             } else {
                 rot = this.facingData[i][0];
@@ -695,7 +704,8 @@ class FormMechanicDrawable extends MechanicDrawable {
         if (this.growing === 0) {
             return 1.0;
         }
-        return Math.min((animator.time - this.start) / (this.growing - this.start), 1.0);
+        var time = animator.reactiveDataStatus.time;
+        return Math.min((time - this.start) / (this.growing - this.start), 1.0);
     }
 }
 
@@ -793,7 +803,8 @@ class RotatedRectangleMechanicDrawable extends RectangleMechanicDrawable {
         if (this.spinangle === 0) {
             return 1.0;
         }
-        return Math.min((animator.time - this.start) / (this.end - this.start), 1.0);
+        var time = animator.reactiveDataStatus.time;
+        return Math.min((time - this.start) / (this.end - this.start), 1.0);
     }
 
     draw() {
@@ -837,12 +848,12 @@ class PieMechanicDrawable extends FormMechanicDrawable {
     }
 
     draw() {
-        const pos = this.getPosition(animator.time);
+        const pos = this.getPosition();
         if (pos === null) {
             return;
         }
         var ctx = animator.ctx;
-        const percent = this.getPercent(animator.time);
+        const percent = this.getPercent();
         ctx.beginPath();
         ctx.moveTo(pos.x, pos.y);
         ctx.lineTo(pos.x + this.dx * percent, pos.y + this.dy * percent);
@@ -870,7 +881,8 @@ class LineMechanicDrawable extends FormMechanicDrawable {
         if (this.connectedFrom === null) {
             return null;
         }
-        if (this.start !== -1 && (this.start >= animator.time || this.end <= animator.time)) {
+        var time = animator.reactiveDataStatus.time;
+        if (this.start !== -1 && (this.start >= time || this.end <= time)) {
             return null;
         }
         if (this.connectedFrom instanceof Array) {
