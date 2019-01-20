@@ -88,7 +88,6 @@ namespace LuckParser.Models.Logic
             return phases;
         }
 
-
         public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
         {
             switch (mob.ID)
