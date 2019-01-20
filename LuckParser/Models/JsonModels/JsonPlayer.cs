@@ -20,6 +20,8 @@ namespace LuckParser.Models.JsonModels
         public Statistics.FinalStats[][] StatsTargets;
         public Statistics.FinalDefenses[] Defenses;
         public Statistics.FinalSupport[] Support;
+        public Dictionary<string, List<AbstractMasterActor.ExtraBoonData>> DamageModifiers;
+        public Dictionary<string, List<AbstractMasterActor.ExtraBoonData>>[] DamageModifiersTarget;
         public Dictionary<string, JsonBuffs> SelfBuffs;
         public Dictionary<string, JsonBuffs> GroupBuffs;
         public Dictionary<string, JsonBuffs> OffGroupBuffs;

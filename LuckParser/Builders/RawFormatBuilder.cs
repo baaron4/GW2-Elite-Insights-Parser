@@ -244,6 +244,8 @@ namespace LuckParser.Builders
                     GroupBuffs = BuildBuffUptime(_statistics.GroupBuffs[player], player),
                     OffGroupBuffs = BuildBuffUptime(_statistics.OffGroupBuffs[player], player),
                     SquadBuffs = BuildBuffUptime(_statistics.SquadBuffs[player], player),
+                    DamageModifiers = BuildDamageModifiers(player.GetExtraBoonData(_log, null)),
+                    DamageModifiersTarget = BuildDamageModifiersTarget(player),
                     Minions = BuildMinions(player),
                     TotalDamageDist = BuildDamageDist(player, null),
                     TargetDamageDist = BuildDamageDist(player),
@@ -300,6 +302,28 @@ namespace LuckParser.Builders
             foreach (Target tar in _log.FightData.Logic.Targets)
             {
                 res[i++] = stats[tar][p];
+            }
+            return res;
+        }
+
+        private Dictionary<string, List<AbstractMasterActor.ExtraBoonData>> BuildDamageModifiers(Dictionary<long, List<AbstractMasterActor.ExtraBoonData>> extra)
+        {
+            Dictionary<string, List<AbstractMasterActor.ExtraBoonData>> res = new Dictionary<string, List<AbstractMasterActor.ExtraBoonData>>();
+            foreach (long key in extra.Keys)
+            {
+                _buffNames["b" + key] = Boon.BoonsByIds[key].Name;
+                res["b" + key] = extra[key];
+            }
+            return res;
+        }
+
+        private Dictionary<string, List<AbstractMasterActor.ExtraBoonData>>[] BuildDamageModifiersTarget(Player p)
+        {
+            Dictionary<string, List<AbstractMasterActor.ExtraBoonData>>[] res = new Dictionary<string, List<AbstractMasterActor.ExtraBoonData>>[_log.FightData.Logic.Targets.Count];
+            for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
+            {
+                Target tar = _log.FightData.Logic.Targets[i];
+                res[i] = BuildDamageModifiers(p.GetExtraBoonData(_log, tar));
             }
             return res;
         }
