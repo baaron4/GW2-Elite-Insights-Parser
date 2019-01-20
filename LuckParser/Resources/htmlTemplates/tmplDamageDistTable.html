@@ -35,7 +35,7 @@
                     row[1]).name}}
                 </td>
                 <td>{{ round3(100*row[2]/dmgdist.contributedDamage) }}%</td>
-                <td>{{ row[2] }}</td>
+                <td :data-original-title="(row[2]/phaseDuration).toFixed(1) +' dps'">{{ row[2] }}</td>
                 <td>{{ Math.max(row[3],0) }}</td>
                 <td>{{ round(row[2]/row[6]) }}</td>
                 <td>{{ row[4] }}</td>
@@ -59,7 +59,7 @@
             <tr>
                 <td class="text-left">Total</td>
                 <td></td>
-                <td>{{dmgdist.contributedDamage ? dmgdist.contributedDamage : 0}}</td>
+                <td :data-original-title="Math.round((dmgdist.contributedDamage ? dmgdist.contributedDamage : 0)/phaseDuration) +' dps'">{{dmgdist.contributedDamage ? dmgdist.contributedDamage : 0}}</td>
                 <td></td>
                 <td></td>
                 <td></td>

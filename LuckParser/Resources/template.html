@@ -53,7 +53,7 @@
                         </li>
                     </ul>
                 </div>
-                <div v-if="combatreplay">
+                <div v-if="animationStatus">
                     <ul class="nav nav-pills flex-column justify-content-center d-flex align-items-center">
                         <li class="nav-item mb-1">
                             <a class="nav-link" @click="changeMode(0)" :class="{active: !mode}">Statistics</a>
@@ -72,7 +72,7 @@
                 </div>
                 <div class="d-flex flex-row justify-content-center mb-3 mt-3" id="actors">
                     <div v-show="dataType !== datatypes.targetTab" :class="{'d-flex':dataType !== datatypes.targetTab}"
-                        id="targets" class="flex-row justify-content-center align-items-center flex-wrap mr-5">
+                         id="targets" class="flex-row justify-content-center align-items-center flex-wrap mr-5">
                         <target-component :targets="logdata.targets" :phaseindex="activePhase"></target-component>
                     </div>
                     <div id="players" class="ml-5">
@@ -83,41 +83,40 @@
                 </general-layout-component>
                 <keep-alive>
                     <damage-stats-component v-if="dataType === datatypes.damageTable" :key="'damage'" :phaseindex="activePhase"
-                        :playerindex="activePlayer" :activetargets="activePhaseTargets"></damage-stats-component>
+                                            :playerindex="activePlayer" :activetargets="activePhaseTargets"></damage-stats-component>
                     <gameplay-stats-component v-if="dataType === datatypes.gameplayTable" :key="'gameplay'" :phaseindex="activePhase"
-                        :playerindex="activePlayer" :activetargets="activePhaseTargets"></gameplay-stats-component>
+                                              :playerindex="activePlayer" :activetargets="activePhaseTargets"></gameplay-stats-component>
                     <dmgmodifier-stats-component v-if="dataType === datatypes.dmgModifiersTable" :key="'modifier'"
-                        :phaseindex="activePhase" :playerindex="activePlayer" :activetargets="activePhaseTargets"></dmgmodifier-stats-component>
+                                                 :phaseindex="activePhase" :playerindex="activePlayer" :activetargets="activePhaseTargets"></dmgmodifier-stats-component>
                     <support-stats-component v-if="dataType === datatypes.supTable" :key="'support'" :phaseindex="activePhase"
-                        :playerindex="activePlayer"></support-stats-component>
+                                             :playerindex="activePlayer"></support-stats-component>
                     <defense-stats-component v-if="dataType === datatypes.defTable" :key="'defense'" :phaseindex="activePhase"
-                        :playerindex="activePlayer"></defense-stats-component>
+                                             :playerindex="activePlayer"></defense-stats-component>
                     <graph-stats-component v-if="dataType === datatypes.dpsGraph" :key="'graph'" :activetargets="activePhaseTargets"
-                        :phaseindex="activePhase" :playerindex="activePlayer" :light="light"></graph-stats-component>
+                                           :phaseindex="activePhase" :playerindex="activePlayer" :light="light"></graph-stats-component>
                     <buff-stats-component v-if="dataType <= datatypes.defensiveBuffTable && dataType>= datatypes.boonTable"
-                        :key="'buffs'" :datatypes="datatypes" :datatype="dataType" :phaseindex="activePhase"
-                        :playerindex="activePlayer"></buff-stats-component>
+                                          :key="'buffs'" :datatypes="datatypes" :datatype="dataType" :phaseindex="activePhase"
+                                          :playerindex="activePlayer"></buff-stats-component>
                     <personal-buff-table-component v-if="dataType === datatypes.personalBuffTable" :key="'persbuffs'"
-                        :phaseindex="activePhase" :persbuffs="logdata.persBuffs" :playerindex="activePlayer"></personal-buff-table-component>
+                                                   :phaseindex="activePhase" :persbuffs="logdata.persBuffs" :playerindex="activePlayer"></personal-buff-table-component>
                     <mechanics-stats-component v-if="dataType === datatypes.mechanicTable" :key="'mechanics'"
-                        :phaseindex="activePhase" :playerindex="activePlayer"></mechanics-stats-component>
+                                               :phaseindex="activePhase" :playerindex="activePlayer"></mechanics-stats-component>
                     <target-stats-component v-if="dataType === datatypes.targetTab" :key="'targets'" :playerindex="activePlayer"
-                        :simplephase="logdata.phases[activePhase]" :phaseindex="activePhase" :light="light"></target-stats-component>
+                                            :simplephase="logdata.phases[activePhase]" :phaseindex="activePhase" :light="light"></target-stats-component>
                     <player-stats-component v-if="dataType === datatypes.playerTab" :key="'players'" :activeplayer="activePlayer"
-                        :phaseindex="activePhase" :activetargets="activePhaseTargets" :light="light"></player-stats-component>
+                                            :phaseindex="activePhase" :activetargets="activePhaseTargets" :light="light"></player-stats-component>
                 </keep-alive>
             </div>
         </div>
         <div id="combat-replay" v-show="mode === 1" class="ei-container-big">
             <!--${CombatReplayBody}-->
         </div>
-    </div>
-
-    <div class="footer">
-        <div>Time Start: ${encounterStart} | Time End: ${encounterEnd}</div>
-        <div>ARC: ${evtcVersion} | Fight ID: ${fightID} | EI Version: ${eiVersion}</div>
-        <div class="mb-2">File recorded by: ${recordedBy}</div>
-        <!--${UploadLinks}-->
+        <div class="footer" :class="{'ei-header': !mode, 'ei-header-big': mode}">
+            <div>Time Start: ${encounterStart} | Time End: ${encounterEnd}</div>
+            <div>ARC: ${evtcVersion} | Fight ID: ${fightID} | EI Version: ${eiVersion}</div>
+            <div class="mb-2">File recorded by: ${recordedBy}</div>
+            <!--${UploadLinks}-->
+        </div>
     </div>
 </body>
 

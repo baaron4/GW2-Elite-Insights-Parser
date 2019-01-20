@@ -107,7 +107,7 @@ namespace LuckParser.Builders
                 }
             }
             string script = "var initialOnLoad = window.onload;";
-            script += "window.onload = function () { if (initialOnLoad) {initialOnLoad();} animator = new Animator(" + JsonConvert.SerializeObject(options)+", [" + actors + "]);};";
+            script += "window.onload = function () { if (initialOnLoad) {initialOnLoad();} animator = new Animator(" + JsonConvert.SerializeObject(options) + "); animator.initActors([" + actors + "]);};";
 #if !DEBUG
             script = Uglify.Js(script, GeneralHelper.JSMinifySettings).Code;
 #endif

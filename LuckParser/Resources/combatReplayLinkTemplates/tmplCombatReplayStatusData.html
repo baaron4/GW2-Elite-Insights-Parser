@@ -1,4 +1,4 @@
-<div v-if="animator !== null" class="d-flex flex-column justify-content-center" style="min-width: 200px;">
+<div class="d-flex flex-column justify-content-center" style="min-width: 200px;">
     <ul class="nav nav-pills d-flex flex-row justify-content-center mb-1">
         <li class="nav-item">
             <a class="nav-link" :class="{active: details}" @click="details = !details">Details Window</a>
@@ -10,7 +10,7 @@
             <div class=" d-flex flex-column flex-wrap group-details">
                 <div v-for="player in group" class="player-data  ml-1 mr-1" :class="{active: playerindex === player.id}"
                      :key="id + '-group-' +  player.id">
-                    <combat-replay-player-stats-component :time="animator.time" :playerindex=" player.id"></combat-replay-player-stats-component>
+                    <combat-replay-player-stats-component :time="time" :playerindex="player.id"></combat-replay-player-stats-component>
                 </div>
             </div>
         </div>
