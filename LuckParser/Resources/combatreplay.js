@@ -39,6 +39,7 @@ class Animator {
         this.trashMobData = new Map();
         this.mechanicActorData = [];
         this.attachedActorData = new Map();
+        this.backgroundActorData = [];
         // animation
         this.animation = null;
         this.timeSlider = document.getElementById('timeRange');
@@ -368,6 +369,9 @@ class Animator {
         ctx.restore();
         //
         ctx.drawImage(bgImage, 0, 0, canvas.width / resolutionMultiplier, canvas.height / resolutionMultiplier);
+        for (let i = 0; i < animator.backgroundActorData.length; i++) {
+            animator.backgroundActorData[i].draw();
+        }
         for (let i = 0; i < this.mechanicActorData.length; i++) {
             this.mechanicActorData[i].draw();
         }
@@ -913,5 +917,20 @@ class LineMechanicDrawable extends FormMechanicDrawable {
         ctx.lineWidth = (2 / animator.scale).toString();
         ctx.strokeStyle = this.color;
         ctx.stroke();
+    }
+}
+
+class BackgroundDrawable {
+    constructor(start, end) {
+        this.start = start;
+        this.end = end;
+    }
+
+    draw() {
+        // to override
+    }
+
+    getPosition() {
+        // to override
     }
 }
