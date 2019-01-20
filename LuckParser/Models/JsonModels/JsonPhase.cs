@@ -12,5 +12,6 @@ namespace LuckParser.Models.JsonModels
         public long End;
         public string Name;
         public List<int> Targets;
+        public List<int> SubPhases;
     }
 }

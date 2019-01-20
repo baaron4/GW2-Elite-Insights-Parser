@@ -535,6 +535,20 @@ namespace LuckParser.Builders
                     phaseJson.Targets.Add(_log.FightData.Logic.Targets.IndexOf(tar));
                 }
                 log.Phases.Add(phaseJson);
+                for (int j = 1; j < _statistics.Phases.Count; j++)
+                {
+                    PhaseData curPhase = _statistics.Phases[j];
+                    if (curPhase.Start < phaseJson.Start || curPhase.End > phaseJson.End ||
+                         (curPhase.Start == phaseJson.Start && curPhase.End == phaseJson.End))
+                    {
+                        continue;
+                    }
+                    if (phaseJson.SubPhases == null)
+                    {
+                        phaseJson.SubPhases = new List<int>();
+                    }
+                    phaseJson.SubPhases.Add(j);
+                }
             }
         }
 
