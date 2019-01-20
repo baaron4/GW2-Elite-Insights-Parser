@@ -61,6 +61,41 @@ namespace LuckParser.Models.Logic
             }
         }
 
+        private List<PhaseData> GetInBetweenSoulSplits(ParsedLog log, Target dhuum, long mainStart, long mainEnd)
+        {
+            List<CastLog> cls = dhuum.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<CastLog> cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
+            List<CastLog> gDeathmark = cls.Where(x => x.SkillId == 48210).ToList();
+            if (gDeathmark.Count < cataCycle.Count)
+            {
+                return new List<PhaseData>();
+            }
+            List<PhaseData> phases = new List<PhaseData>();
+            long start = mainStart;
+            long end = 0;
+            int i = 1;
+            foreach (CastLog cl in cataCycle)
+            {
+                CastLog clDeathmark = gDeathmark[i - 1];
+                end = Math.Min(clDeathmark.Time, mainEnd);
+                phases.Add(new PhaseData(start, end)
+                {
+                    Name = "Pre-Split " + i++
+                });
+                start = cl.Time + cl.ActualDuration;
+            }
+            phases.Add(new PhaseData(start, mainEnd)
+            {
+                Name = "Pre-Ritual"
+            });
+            foreach (PhaseData phase in phases)
+            {
+                phase.Targets.Add(dhuum);
+            }
+            phases.RemoveAll(x => x.GetDuration() <= 2200);
+            return phases;
+        }
+
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             long fightDuration = log.FightData.FightDuration;
@@ -103,6 +138,16 @@ namespace LuckParser.Models.Logic
             {
                 phases[i].Name = namesDh[i - 1];
                 phases[i].Targets.Add(mainTarget);
+            }
+            if (dhuumCast.Count > 0 && phases.Count > 1)
+            {
+                phases.AddRange(GetInBetweenSoulSplits(log, mainTarget, phases[1].Start, phases[1].End));
+                phases.Sort((x, y) => x.Start.CompareTo(y.Start));
+            }
+            else if (phases.Count > 2)
+            {
+                phases.AddRange(GetInBetweenSoulSplits(log, mainTarget, phases[2].Start, phases[2].End));
+                phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             }
             return phases;
         }
