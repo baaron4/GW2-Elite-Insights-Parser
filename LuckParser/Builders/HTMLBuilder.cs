@@ -1850,7 +1850,6 @@ namespace LuckParser.Builders
             logData.success = _log.FightData.Success;
             logData.fightName = FilterStringChars(_log.FightData.Name);
             logData.fightIcon = _log.FightData.Logic.IconUrl;
-            logData.combatReplay = (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay);
             logData.lightTheme = _settings.LightTheme;
             logData.singleGroup = _log.PlayerList.Where(x => x.Account != ":Conjured Sword").Select(x => x.Group).Distinct().Count() == 1;
             logData.noMechanics = _log.FightData.Logic.MechanicList.Count == 3;
