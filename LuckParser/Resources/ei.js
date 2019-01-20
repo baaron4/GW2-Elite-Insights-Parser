@@ -54,7 +54,7 @@ window.onload = function () {
     compileGraphs();
     compilePlayerTab();
     compileTargetTab();
-    if (logData.combatReplay) {
+    if (typeof compileCombatReplay !== "undefined") {
         compileCombatReplay();
     }
     mainComponent = new Vue({
@@ -63,17 +63,16 @@ window.onload = function () {
             logdata: simpleLogData,
             layout: layout,
             datatypes: DataTypes,
-            combatreplay: logData.combatReplay,
             light: logData.lightTheme,
             mode: 0,
             animate: false,
             animationStatus: null
         },
         methods: {
-            switchCombatReplayButtons: function(from, to) {          
+            switchCombatReplayButtons: function (from, to) {
                 var combatReplay = $('#combat-replay');
                 if (combatReplay) {
-                    var buttons = combatReplay.find('.'+from);
+                    var buttons = combatReplay.find('.' + from);
                     buttons.addClass(to).removeClass(from);
                 }
             },
@@ -87,8 +86,8 @@ window.onload = function () {
                 document.body.classList.remove("theme-"+style);
                 document.body.classList.add("theme-"+newStyle);
                 var theme = document.getElementById('theme');
-                theme.href = themes[newStyle];              
-                this.switchCombatReplayButtons(this.light ? 'btn-dark' : 'btn-light', this.light ? 'btn-light' : 'btn-dark');
+                theme.href = themes[newStyle];
+                this.switchCombatReplayButtons(this.light ? 'btn-dark' : 'btn-light', this.light ? 'btn-light' : 'btn-dark');     
             },
             changeMode: function(iMode) {
                 if (this.mode === iMode) {
