@@ -244,88 +244,12 @@ namespace LuckParser.Models.ParseModels
                 {
                     continue;
                 }
-                GW2APISkill apiskill = skillList.Get(cl.SkillId)?.ApiSkill;
-                if (apiskill != null && cl.Time > swappedTime)
-                {
-                    if (apiskill.Type == "Weapon" && apiskill.Professions.Count() > 0 && (apiskill.Categories == null || (apiskill.Categories.Count() == 1 && (apiskill.Categories[0] == "Phantasm" || apiskill.Categories[0] == "DualWield"))))
-                    {
-                        if (apiskill.DualWield != null && apiskill.DualWield != "None" && apiskill.DualWield != "Nothing")
-                        {
-                            if (swapped == 4)
-                            {
-                                weapons[0] = apiskill.WeaponType;
-                                weapons[1] = apiskill.DualWield;
-                            }
-                            else if (swapped == 5)
-                            {
-                                weapons[2] = apiskill.WeaponType;
-                                weapons[3] = apiskill.DualWield;
-                            }
-                        }
-                        else if (apiskill.WeaponType == "Greatsword" || apiskill.WeaponType == "Staff" || apiskill.WeaponType == "Rifle" || apiskill.WeaponType == "Longbow" || apiskill.WeaponType == "Shortbow" || apiskill.WeaponType == "Hammer")
-                        {
-                            if (swapped == 4)
-                            {
-                                weapons[0] = apiskill.WeaponType;
-                                weapons[1] = "2Hand";
-                            }
-                            else if (swapped == 5)
-                            {
-                                weapons[2] = apiskill.WeaponType;
-                                weapons[3] = "2Hand";
-                            }
-                        }//2 handed
-                        else if (apiskill.WeaponType == "Focus" || apiskill.WeaponType == "Shield" || apiskill.WeaponType == "Torch" || apiskill.WeaponType == "Warhorn")
-                        {
-                            if (swapped == 4)
-                            {
-
-                                weapons[1] = apiskill.WeaponType;
-                            }
-                            else if (swapped == 5)
-                            {
-
-                                weapons[3] = apiskill.WeaponType;
-                            }
-                        }//OffHand
-                        else if (apiskill.WeaponType == "Axe" || apiskill.WeaponType == "Dagger" || apiskill.WeaponType == "Mace" || apiskill.WeaponType == "Pistol" || apiskill.WeaponType == "Sword" || apiskill.WeaponType == "Scepter")
-                        {
-                            if (apiskill.Slot == "Weapon_1" || apiskill.Slot == "Weapon_2" || apiskill.Slot == "Weapon_3")
-                            {
-                                if (swapped == 4)
-                                {
-
-                                    weapons[0] = apiskill.WeaponType;
-                                }
-                                else if (swapped == 5)
-                                {
-
-                                    weapons[2] = apiskill.WeaponType;
-                                }
-                            }
-                            if (apiskill.Slot == "Weapon_4" || apiskill.Slot == "Weapon_5")
-                            {
-                                if (swapped == 4)
-                                {
-
-                                    weapons[1] = apiskill.WeaponType;
-                                }
-                                else if (swapped == 5)
-                                {
-
-                                    weapons[3] = apiskill.WeaponType;
-                                }
-                            }
-                        }// 1 handed
-                    }
-
-                }
-                else if (cl.SkillId == SkillItem.WeaponSwapId)
+                SkillItem skill = skillList.Get(cl.SkillId);
+                if (!skill.EstimateWeapons(weapons, swapped, cl.Time > swappedTime) && cl.SkillId == SkillItem.WeaponSwapId)
                 {
                     //wepswap  
                     swapped = cl.ExpectedDuration;
                     swappedTime = cl.Time;
-                    continue;
                 }
             }
             _weaponsArray = weapons;

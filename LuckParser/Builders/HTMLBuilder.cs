@@ -2037,12 +2037,11 @@ namespace LuckParser.Builders
             List<SkillDto> dtos = new List<SkillDto>();
             foreach (SkillItem skill in skills)
             {
-                GW2APISkill apiSkill = skill.ApiSkill;
                 SkillDto dto = new SkillDto() {
                     Id = skill.ID,
                     Name = skill.Name,
                     Icon = skill.Icon,
-                    Aa = (apiSkill?.Slot == "Weapon_1")
+                    Aa = skill.AA
                 };
                 dtos.Add(dto);
             }

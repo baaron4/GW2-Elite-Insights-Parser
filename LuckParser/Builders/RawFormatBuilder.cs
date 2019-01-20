@@ -28,8 +28,8 @@ namespace LuckParser.Builders
 
         private readonly string[] _uploadLink;
         //
-        private readonly Dictionary<string, string> _skillNames = new Dictionary<string, string>();
-        private readonly Dictionary<string, string> _buffNames = new Dictionary<string, string>();
+        private readonly Dictionary<string, JsonLog.SkillDesc> _skillNames = new Dictionary<string, JsonLog.SkillDesc>();
+        private readonly Dictionary<string, JsonLog.BuffDesc> _buffNames = new Dictionary<string, JsonLog.BuffDesc>();
         private readonly Dictionary<string, HashSet<long>> _personalBuffs = new Dictionary<string, HashSet<long>>();
 
         public static void UpdateStatisticSwitches(StatisticsCalculator.Switches switches)
@@ -134,8 +134,8 @@ namespace LuckParser.Builders
             log.TimeEnd = _log.LogData.LogEnd;
             log.Duration = durationString;
             log.Success = _log.FightData.Success;
-            log.SkillNames = _skillNames;
-            log.BuffNames = _buffNames;
+            log.SkillMap = _skillNames;
+            log.BuffMap = _buffNames;
             log.PersonalBuffs = _personalBuffs;
             log.UploadLinks = _uploadLink;
         }
@@ -311,8 +311,12 @@ namespace LuckParser.Builders
             Dictionary<string, List<AbstractMasterActor.ExtraBoonData>> res = new Dictionary<string, List<AbstractMasterActor.ExtraBoonData>>();
             foreach (long key in extra.Keys)
             {
-                _buffNames["b" + key] = Boon.BoonsByIds[key].Name;
-                res["b" + key] = extra[key];
+                string nKey = "b" + key;
+                if (!_buffNames.ContainsKey(nKey))
+                {
+                    _buffNames[nKey] = new JsonLog.BuffDesc(Boon.BoonsByIds[key]);
+                }
+                res[nKey] = extra[key];
             }
             return res;
         }
@@ -333,7 +337,10 @@ namespace LuckParser.Builders
             List<Player.Consumable> res = player.GetConsumablesList(_log, 0, _log.FightData.FightDuration);
             foreach(var food in res)
             {
-                _buffNames["b"+food.Item.ID] = food.Item.Name;
+                if (!_buffNames.ContainsKey("b" + food.Item.ID))
+                {
+                    _buffNames["b" + food.Item.ID] = new JsonLog.BuffDesc(food.Item);
+                }
             }
             return res.Count > 0 ? res : null;
         }
@@ -426,7 +433,7 @@ namespace LuckParser.Builders
                 {
                     if(!_skillNames.ContainsKey("s" + pair.Key))
                     {
-                        _skillNames["s" + pair.Key] = skill.Name;
+                        _skillNames["s" + pair.Key] = new JsonLog.SkillDesc(skill);
                     }
                 }
                 List<DamageLog> filteredList = pair.Value.Where(x => x.Result != ParseEnum.Result.Downed).ToList();
@@ -474,9 +481,11 @@ namespace LuckParser.Builders
             foreach (CastLog cl in cls)
             {
                 SkillItem skill = skillList.Get(cl.SkillId);
-                GW2APISkill skillApi = skill?.ApiSkill;
                 string skillName = skill.Name;
-                _skillNames["s" + cl.SkillId] = skillName;
+                if (!_skillNames.ContainsKey("s" + cl.SkillId))
+                {
+                    _skillNames["s" + cl.SkillId] = new JsonLog.SkillDesc(skill);
+                }
                 int timeGained = 0;
                 if (cl.EndActivation == ParseEnum.Activation.CancelFire && cl.ActualDuration < cl.ExpectedDuration)
                 {
@@ -491,7 +500,6 @@ namespace LuckParser.Builders
                     Time = (int)cl.Time,
                     Duration = cl.ActualDuration,
                     TimeGained = timeGained,
-                    AutoAttack = skillApi != null && skillApi.Slot == "Weapon_1",
                     Quickness = cl.StartActivation == ParseEnum.Activation.Quickness
                 };
                 if (res.TryGetValue("s" + cl.SkillId, out var list))
@@ -547,7 +555,10 @@ namespace LuckParser.Builders
 
             foreach (var pair in statBoons[0])
             {
-                _buffNames["b" + pair.Key] = Boon.BoonsByIds[pair.Key].Name;
+                if (!_buffNames.ContainsKey("b" + pair.Key))
+                {
+                    _buffNames["b" + pair.Key] = new JsonLog.BuffDesc(Boon.BoonsByIds[pair.Key]);
+                }
                 List<JsonTargetBuffs.JsonTargetBuffsData> data = new List<JsonTargetBuffs.JsonTargetBuffsData>();
                 for (int i = 0; i < _statistics.Phases.Count; i++)
                 {
@@ -581,7 +592,10 @@ namespace LuckParser.Builders
             foreach (var pair in statUptimes[0])
             {
                 Boon buff = Boon.BoonsByIds[pair.Key];
-                _buffNames["b" + pair.Key] = buff.Name;
+                if (!_buffNames.ContainsKey("b" + pair.Key))
+                {
+                    _buffNames["b" + pair.Key] = new JsonLog.BuffDesc(buff);
+                }
                 if (buff.Nature == Boon.BoonNature.GraphOnlyBuff && buff.Source == Boon.ProfToEnum(player.Prof))
                 {
                     if (player.GetBoonDistribution(_log, 0).GetUptime(pair.Key) > 0)
