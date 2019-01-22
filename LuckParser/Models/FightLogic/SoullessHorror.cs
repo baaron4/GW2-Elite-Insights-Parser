@@ -96,6 +96,43 @@ namespace LuckParser.Models.Logic
             }
         }
 
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
+        {
+            long fightDuration = log.FightData.FightDuration;
+            List<PhaseData> phases = GetInitialPhase(log);
+            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.SoullessHorror);
+            if (mainTarget == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
+            phases[0].Targets.Add(mainTarget);
+            if (!requirePhases)
+            {
+                return phases;
+            }
+            List<CastLog> howling = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 48662).ToList();
+            long start = 0;
+            int i = 1;
+            foreach (CastLog c in howling)
+            {
+                PhaseData phase = new PhaseData(start, Math.Min(c.Time, fightDuration))
+                {
+                    Name = "Phase " + i++
+                };
+                phase.Targets.Add(mainTarget);
+                start = c.Time + c.ActualDuration;
+                phases.Add(phase);
+            }
+            PhaseData lastPhase = new PhaseData(start, fightDuration)
+            {
+                Name = "Phase " + i++
+            };
+            lastPhase.Targets.Add(mainTarget);
+            phases.Add(lastPhase);
+            phases.RemoveAll(x => x.GetDuration() <= 1000);
+            return phases;
+        }
+
         public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
         {
             CombatReplay replay = target.CombatReplay;

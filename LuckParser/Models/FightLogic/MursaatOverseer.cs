@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
+using System.Drawing;
 
 namespace LuckParser.Models.Logic
 {
@@ -43,6 +44,58 @@ namespace LuckParser.Models.Logic
                 Jade
             };
         }
+
+
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
+        {
+            long fightDuration = log.FightData.FightDuration;
+            List<PhaseData> phases = GetInitialPhase(log);
+            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.MursaatOverseer);
+            if (mainTarget == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
+            phases[0].Targets.Add(mainTarget);
+            if (!requirePhases)
+            {
+                return phases;
+            }
+            List<int> limit = new List<int>()
+            {
+                75,
+                50,
+                25,
+                0
+            };
+            long start = 0;
+            int i = 0;
+            for (i = 0; i < limit.Count; i++)
+            {
+                Point pt = mainTarget.HealthOverTime.FirstOrDefault(x => x.Y/100.0 <= limit[i]);
+                if (pt == null)
+                {
+                    break;
+                }
+                PhaseData phase = new PhaseData(start, Math.Min(pt.X, fightDuration))
+                {
+                    Name = (25 + limit[i]) + "% - " + limit[i] + "%"
+                };
+                phase.Targets.Add(mainTarget);
+                phases.Add(phase);
+                start = pt.X;
+            }
+            if (i < 4)
+            {
+                PhaseData lastPhase = new PhaseData(start, fightDuration)
+                {
+                    Name = (25 + limit[i]) + "% -" + limit[i] + "%"
+                };
+                lastPhase.Targets.Add(mainTarget);
+                phases.Add(lastPhase);
+            }
+            return phases;
+        }
+
 
         public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
         {
