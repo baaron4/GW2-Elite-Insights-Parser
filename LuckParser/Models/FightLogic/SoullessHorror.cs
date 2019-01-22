@@ -117,7 +117,7 @@ namespace LuckParser.Models.Logic
             {
                 PhaseData phase = new PhaseData(start, Math.Min(c.Time, fightDuration))
                 {
-                    Name = "Phase " + i++
+                    Name = "Pre-Breakbar " + i++
                 };
                 phase.Targets.Add(mainTarget);
                 start = c.Time + c.ActualDuration;
@@ -125,7 +125,7 @@ namespace LuckParser.Models.Logic
             }
             PhaseData lastPhase = new PhaseData(start, fightDuration)
             {
-                Name = "Phase " + i++
+                Name = "Pre-Breakbar " + i++
             };
             lastPhase.Targets.Add(mainTarget);
             phases.Add(lastPhase);
