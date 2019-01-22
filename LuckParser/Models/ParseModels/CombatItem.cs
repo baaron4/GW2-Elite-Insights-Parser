@@ -7,7 +7,7 @@ namespace LuckParser.Models.ParseModels
         public long Time { get; set; }
         public ulong SrcAgent { get; set; }
         public ulong DstAgent { get; set; }
-        public int Value { get; }
+        public int Value { get; set; }
         public int BuffDmg { get; }
         public uint OverstackValue { get; }
         public long SkillID { get; }

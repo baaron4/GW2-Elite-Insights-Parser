@@ -690,12 +690,14 @@ namespace LuckParser.Builders
                     crit = 0,
                     flank = 0, 
                     glance = 0;
+                bool isCondi = false;
                 foreach (DamageLog dl in entry.Value)
                 {
                     if (dl.Result == ParseEnum.Result.Downed)
                     {
                         continue;
                     }
+                    isCondi = dl.IsCondi;
                     int curdmg = dl.Damage;
                     totaldamage += curdmg;
                     if (curdmg < mindamage) { mindamage = curdmg; }
@@ -706,11 +708,21 @@ namespace LuckParser.Builders
                     if (dl.IsFlanking) flank++;
                 }
 
-                bool isCondi = conditionsById.ContainsKey(entry.Key) || entry.Key == 873;
                 if (isCondi)
                 {
-                    Boon condi = entry.Key == 873 ? Boon.BoonsByIds[873] : conditionsById[entry.Key];
-                    if (!_usedBoons.ContainsKey(condi.ID)) _usedBoons.Add(condi.ID, condi);
+                    if (Boon.BoonsByIds.TryGetValue(entry.Key, out Boon buff))
+                    {
+                        if (!_usedBoons.ContainsKey(buff.ID)) _usedBoons.Add(buff.ID, buff);
+                    }
+                    else
+                    {
+                        if (!_usedBoons.ContainsKey(entry.Key))
+                        {
+                            SkillItem aux = skillList.Get(entry.Key);
+                            Boon auxBoon = new Boon(aux.Name, entry.Key, aux.Icon);
+                            _usedBoons.Add(auxBoon.ID, auxBoon);
+                        };
+                    }
                 }
                 else
                 {
@@ -733,7 +745,7 @@ namespace LuckParser.Builders
                 }
 
                 object[] skillData = {
-                    isCondi?1:0,
+                    isCondi,
                     entry.Key,
                     totaldamage,
                     mindamage == int.MaxValue ? 0 : mindamage,
@@ -865,12 +877,14 @@ namespace LuckParser.Builders
                     flank = 0,
                     glance = 0;
 
+                bool isCondi = false;
                 foreach (DamageLog dl in entry.Value)
                 {
                     if (dl.Result == ParseEnum.Result.Downed)
                     {
                         continue;
                     }
+                    isCondi = dl.IsCondi;
                     int curdmg = dl.Damage;
                     totaldamage += curdmg;
                     if (curdmg < mindamage) { mindamage = curdmg; }
@@ -880,19 +894,27 @@ namespace LuckParser.Builders
                     if (dl.Result == ParseEnum.Result.Glance) glance++;
                     if (dl.IsFlanking) flank++;
                 }
-
-                bool isCondi = conditionsById.ContainsKey(entry.Key) || entry.Key == 873;
                 if (isCondi)
                 {
-                    Boon condi = entry.Key == 873 ? Boon.BoonsByIds[873] : conditionsById[entry.Key];
-                    if (!_usedBoons.ContainsKey(condi.ID)) _usedBoons.Add(condi.ID, condi);
+                    if (Boon.BoonsByIds.TryGetValue(entry.Key, out Boon buff))
+                    {
+                        if (!_usedBoons.ContainsKey(buff.ID)) _usedBoons.Add(buff.ID, buff);
+                    } else
+                    {
+                        if(!_usedBoons.ContainsKey(entry.Key))
+                        {
+                            SkillItem aux = skillList.Get(entry.Key);
+                            Boon auxBoon = new Boon(aux.Name, entry.Key, aux.Icon);
+                            _usedBoons.Add(auxBoon.ID, auxBoon);
+                        };
+                    }
                 }
                 else
                 {
                     if (!_usedSkills.ContainsKey(entry.Key)) _usedSkills.Add(entry.Key, skillList.Get(entry.Key));
                 }
                 object[] row = new object[12] {
-                    isCondi ? 1 : 0, // isCondi
+                    isCondi, // isCondi
                     entry.Key,
                     totaldamage,
                     mindamage == int.MaxValue ? 0 : mindamage,
