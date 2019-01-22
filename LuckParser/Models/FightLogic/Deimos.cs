@@ -175,9 +175,32 @@ namespace LuckParser.Models.Logic
                     string name = (tar.ID == (ushort)Thief ? "Thief" : (tar.ID == (ushort)Drunkard ? "Drunkard" : (tar.ID == (ushort)Gambler ? "Gambler" : "")));
                     PhaseData tarPhase = new PhaseData(log.FightData.ToFightSpace(tar.FirstAware) - 1000, log.FightData.ToFightSpace(tar.LastAware) + 1000);
                     tarPhase.Targets.Add(tar);
+                    tarPhase.Targets.Add(mainTarget);
                     tarPhase.OverrideTimes(log);
                     tarPhase.Name = name;
                     phases.Add(tarPhase);
+                }
+            }
+            List<CombatItem> signets = GetFilteredList(log, 38224, mainTarget, true);
+            long sigStart = 0;
+            long sigEnd = 0;
+            int burstID = 1;
+            for (int i = 0; i < signets.Count; i++)
+            {
+                CombatItem signet = signets[i];
+                if (signet.IsBuffRemove == ParseEnum.BuffRemove.None)
+                {
+                    sigStart = log.FightData.ToFightSpace(signet.Time);
+                }
+                else
+                {
+                    sigEnd = log.FightData.ToFightSpace(signet.Time);
+                    PhaseData burstPhase = new PhaseData(sigStart, sigEnd)
+                    {
+                        Name = "Burst " + burstID++
+                    };
+                    burstPhase.Targets.Add(mainTarget);
+                    phases.Add(burstPhase);
                 }
             }
             phases.Sort((x, y) => x.Start.CompareTo(y.Start));
@@ -295,6 +318,21 @@ namespace LuckParser.Models.Logic
                                 replay.Actors.Add(new PieActor(true, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 200, 0, 0.5)", new AgentConnector(target)));
                                 replay.Actors.Add(new PieActor(false, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
                             }
+                        }
+                    }
+                    List<CombatItem> signets = GetFilteredList(log, 38224, target, true);
+                    int sigStart = 0;
+                    int sigEnd = 0;
+                    foreach (CombatItem signet in signets)
+                    {
+                        if (signet.IsBuffRemove == ParseEnum.BuffRemove.None)
+                        {
+                            sigStart = (int)log.FightData.ToFightSpace(signet.Time);
+                        }
+                        else
+                        {
+                            sigEnd = (int)log.FightData.ToFightSpace(signet.Time);
+                            replay.Actors.Add(new CircleActor(true, 0, 120, (sigStart, sigEnd), "rgba(0, 200, 200, 0.5)", new AgentConnector(target)));
                         }
                     }
                     break;
