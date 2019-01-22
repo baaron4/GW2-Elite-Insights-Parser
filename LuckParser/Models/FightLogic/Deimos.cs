@@ -70,10 +70,11 @@ namespace LuckParser.Models.Logic
             {
                 fightData.FightStart = enterCombat.Time;
             }
-            // Deimos gadgets
-            List<AgentItem> deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos") && x.LastAware > target.LastAware).ToList();
             // Remove deimos despawn events as they are useless and mess with combat replay
             combatData.RemoveAll(x => x.IsStateChange == ParseEnum.StateChange.Despawn && x.SrcInstid == target.InstID && x.Time <= target.LastAware && x.Time >= target.FirstAware);
+            // Deimos gadgets
+            List<AgentItem> deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos") && x.LastAware > target.LastAware).ToList();
+            CombatItem invulApp = combatData.FirstOrDefault(x => x.DstInstid == target.InstID && x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0 && x.SkillID == 762);
             if (deimosGadgets.Count > 0)
             {
                 CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.Time > combatData.First().Time && x.DstAgent > 0);
@@ -118,6 +119,17 @@ namespace LuckParser.Models.Logic
                         c.DstAgent = target.Agent;
                     }
                 }
+            } else if ( invulApp != null)
+            {
+                CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.Time > combatData.First().Time && x.DstAgent > 0);
+                long firstAware = invulApp.Time;
+                if (targetable != null)
+                {
+                    firstAware = targetable.Time;
+                    invulApp.Value = (int)(firstAware - invulApp.Time);
+                }
+                long oldAware = target.LastAware;
+                fightData.PhaseData.Add(firstAware >= oldAware ? firstAware : oldAware);
             }
         }
 
@@ -150,9 +162,10 @@ namespace LuckParser.Models.Logic
             {
                 phases.Add(new PhaseData(start, fightDuration));
             }
+            string[] names = { "100% - 10%", "10% - 0%" };
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].Name = "Phase " + i;
+                phases[i].Name = names[i - 1];
                 phases[i].Targets.Add(mainTarget);
             }
             foreach (Target tar in Targets)
