@@ -709,18 +709,18 @@ namespace LuckParser.Builders
 
                 if (isCondi)
                 {
-                    if (Boon.BoonsByIds.TryGetValue(entry.Key, out Boon buff))
+                    if (!_usedBoons.ContainsKey(entry.Key))
                     {
-                        if (!_usedBoons.ContainsKey(buff.ID)) _usedBoons.Add(buff.ID, buff);
-                    }
-                    else
-                    {
-                        if (!_usedBoons.ContainsKey(entry.Key))
+                        if (Boon.BoonsByIds.TryGetValue(entry.Key, out Boon buff))
+                        {
+                            _usedBoons.Add(buff.ID, buff);
+                        }
+                        else
                         {
                             SkillItem aux = skillList.Get(entry.Key);
                             Boon auxBoon = new Boon(aux.Name, entry.Key, aux.Icon);
                             _usedBoons.Add(auxBoon.ID, auxBoon);
-                        };
+                        }
                     }
                 }
                 else
@@ -893,21 +893,24 @@ namespace LuckParser.Builders
                     if (dl.Result == ParseEnum.Result.Glance) glance++;
                     if (dl.IsFlanking) flank++;
                 }
+
                 if (isCondi)
                 {
-                    if (Boon.BoonsByIds.TryGetValue(entry.Key, out Boon buff))
+                    if (!_usedBoons.ContainsKey(entry.Key))
                     {
-                        if (!_usedBoons.ContainsKey(buff.ID)) _usedBoons.Add(buff.ID, buff);
-                    } else
-                    {
-                        if(!_usedBoons.ContainsKey(entry.Key))
+                        if (Boon.BoonsByIds.TryGetValue(entry.Key, out Boon buff))
+                        {
+                            _usedBoons.Add(buff.ID, buff);
+                        }
+                        else
                         {
                             SkillItem aux = skillList.Get(entry.Key);
                             Boon auxBoon = new Boon(aux.Name, entry.Key, aux.Icon);
                             _usedBoons.Add(auxBoon.ID, auxBoon);
-                        };
+                        }
                     }
                 }
+
                 else
                 {
                     if (!_usedSkills.ContainsKey(entry.Key)) _usedSkills.Add(entry.Key, skillList.Get(entry.Key));
