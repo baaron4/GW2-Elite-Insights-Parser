@@ -162,10 +162,12 @@ namespace LuckParser.Models.Logic
                     {
                         if (cur.End >= phase.End + 5000 && (i == phases.Count - 1 || phases[i + 1].Name.Contains("Phase")))
                         {
-                            leftOverPhases.Add(new PhaseData(phase.End + 1, cur.End)
+                            PhaseData leftOverPhase = new PhaseData(phase.End + 1, cur.End)
                             {
-                                Name = "Leftover " + leftOverCount++
-                            });
+                                Name = "Leftover " + leftOverCount++,
+                            };
+                            leftOverPhase.Targets.Add(mainTarget);
+                            leftOverPhases.Add(leftOverPhase);
                         }
                     }
                 }
