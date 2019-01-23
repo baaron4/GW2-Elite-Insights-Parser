@@ -8,10 +8,10 @@ namespace LuckParser.Models.ParseModels
     public class Boon
     {
         // Boon
-        public enum BoonNature { Condition, Boon, OffensiveBuffTable, DefensiveBuffTable, GraphOnlyBuff, Consumable };
-        public enum BoonSource { Mixed, Necromancer, Elementalist, Mesmer, Warrior, Revenant, Guardian, Thief, Ranger, Engineer, Item, Enemy };
-        public enum BoonType { Duration, Intensity };
-        private enum Logic { Queue, HealingPower, Override, ForceOverride };
+        public enum BoonNature { Condition, Boon, OffensiveBuffTable, DefensiveBuffTable, GraphOnlyBuff, Consumable, Unknow };
+        public enum BoonSource { Mixed, Necromancer, Elementalist, Mesmer, Warrior, Revenant, Guardian, Thief, Ranger, Engineer, Item, Enemy, Unknown };
+        public enum BoonType { Duration, Intensity, Unknown };
+        private enum Logic { Queue, HealingPower, Override, ForceOverride, Unknown };
 
         public const long NumberOfConditionsID = -3;
         public const long NumberOfBoonsID = -2;
@@ -81,6 +81,19 @@ namespace LuckParser.Models.ParseModels
             Link = link;
             _logic = logic;
         }
+
+        public Boon(string name, long id, string link)
+        {
+            Name = name;
+            ID = id;
+            Source = BoonSource.Unknown;
+            Type = BoonType.Unknown;
+            Capacity = 0;
+            Nature = BoonNature.Unknow;
+            Link = link;
+            _logic = Logic.Unknown;
+        }
+
         // Public Methods
 
         private static List<Boon> _allBoons = new List<Boon>
@@ -120,14 +133,14 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Stealth", 13017, BoonSource.Mixed, BoonType.Duration, 5, BoonNature.GraphOnlyBuff, Logic.Queue, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
                 new Boon("Revealed", 890, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/db/Revealed.png"),
                 new Boon("Superspeed", 5974, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.ForceOverride,"https://wiki.guildwars2.com/images/1/1a/Super_Speed.png"),
-                new Boon("Determined", 762, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
-                new Boon("Determined", 788, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
-                new Boon("Determined", 895, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
-                new Boon("Determined", 3892, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
-                new Boon("Determined", 31450, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
-                new Boon("Determined", 52271, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
-                new Boon("Invulnerability", 757, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
-                new Boon("Invulnerability", 801, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Boon("Determined (762)", 762, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Boon("Determined (788)", 788, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Boon("Determined (895)", 895, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Boon("Determined (3892)", 3892, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Boon("Determined (31450)", 31450, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Boon("Determined (52271)", 52271, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Boon("Invulnerability (757)", 757, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Boon("Invulnerability (801)", 801, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 // Fractals 
                 new Boon("Rigorous Certainty", 33652, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.ForceOverride,"https://wiki.guildwars2.com/images/6/60/Desert_Carapace.png"),
                 new Boon("Fractal Mobility", 33024, BoonSource.Mixed, BoonType.Intensity, 5, BoonNature.Consumable, Logic.ForceOverride,"https://wiki.guildwars2.com/images/thumb/2/22/Mist_Mobility_Potion.png/40px-Mist_Mobility_Potion.png"),
@@ -677,15 +690,17 @@ namespace LuckParser.Models.ParseModels
                 case Logic.ForceOverride:
                     logicToUse = new ForceOverrideLogic();
                     break;
-                default:
+                case Logic.Override:
                     logicToUse = new OverrideLogic();
                     break;
+                default:
+                    throw new InvalidOperationException("Cannot simulate unknown/custom buffs");
             }
             switch (Type)
             {
                 case BoonType.Intensity: return new BoonSimulatorIntensity(Capacity, log, logicToUse);
                 case BoonType.Duration: return new BoonSimulatorDuration(Capacity, log, logicToUse);
-                default: throw new InvalidOperationException();
+                default: throw new InvalidOperationException("Cannot simulate typeless boons");
             }
         }
     }
