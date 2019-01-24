@@ -369,9 +369,12 @@ class Animator {
         ctx.restore();
         //
         ctx.drawImage(bgImage, 0, 0, canvas.width / resolutionMultiplier, canvas.height / resolutionMultiplier);
-        for (let i = 0; i < animator.backgroundActorData.length; i++) {
-            animator.backgroundActorData[i].draw();
-        }
+		// Background items commonly overlap so they need to be drawn in the correct order by height
+		// This is sorted in reverse order because the z axis is inverted
+		animator.backgroundActorData.sort((x, y) => y.getHeight() - x.getHeight());
+		for (let i = 0; i < animator.backgroundActorData.length; i++) {
+			animator.backgroundActorData[i].draw();
+		}
         for (let i = 0; i < this.mechanicActorData.length; i++) {
             this.mechanicActorData[i].draw();
         }
@@ -927,6 +930,10 @@ class BackgroundDrawable {
     }
 
     draw() {
+        // to override
+    }
+
+    getHeight() {
         // to override
     }
 
