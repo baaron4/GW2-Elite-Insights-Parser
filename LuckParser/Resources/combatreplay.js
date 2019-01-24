@@ -1002,7 +1002,8 @@ class MovingPlatformDrawable extends BackgroundDrawable {
     }
 
     getInterpolatedPosition() {
-        if (animator.time < this.start || animator.time > this.end) {
+        let time = animator.reactiveDataStatus.time;
+        if (time < this.start || time > this.end) {
             return null;
         }
         if (this.positions.length === 0) {
@@ -1020,12 +1021,12 @@ class MovingPlatformDrawable extends BackgroundDrawable {
 
         let i;
         let changed = false;
-        if (this.currentStart <= animator.time && animator.time < this.currentEnd) {
+        if (this.currentStart <= time && time < this.currentEnd) {
             i = this.currentIndex;
         } else {
             for (i = 0; i < this.positions.length; i++) {
-                let time = this.positions[i][5];
-                if (time > animator.time) {
+                let positionTime = this.positions[i][5];
+                if (positionTime > time) {
                     break;
                 }
             }
@@ -1063,7 +1064,7 @@ class MovingPlatformDrawable extends BackgroundDrawable {
             };
         }
 
-        let progress = (animator.time - this.positions[i - 1][5]) / (this.positions[i][5] - this.positions[i - 1][5]);
+        let progress = (time - this.positions[i - 1][5]) / (this.positions[i][5] - this.positions[i - 1][5]);
 
         return {
             x: (this.positions[i - 1][0] * (1 - progress) + this.positions[i][0] * progress),
