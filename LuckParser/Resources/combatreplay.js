@@ -124,6 +124,9 @@ class Animator {
                 case "Facing":
                     this.attachedActorData.set(actor.ConnectedTo, new FacingMechanicDrawable(actor.Start, actor.End, actor.ConnectedTo, actor.FacingData));
                     break;
+                case "MovingPlatform":
+                    this.backgroundActorData.push(new MovingPlatformDrawable(actor.Start, actor.End, actor.Image, actor.Width, actor.Height, actor.Positions));
+                    break;
             }
         }
     }
@@ -369,12 +372,12 @@ class Animator {
         ctx.restore();
         //
         ctx.drawImage(bgImage, 0, 0, canvas.width / resolutionMultiplier, canvas.height / resolutionMultiplier);
-		// Background items commonly overlap so they need to be drawn in the correct order by height
-		// This is sorted in reverse order because the z axis is inverted
-		animator.backgroundActorData.sort((x, y) => y.getHeight() - x.getHeight());
-		for (let i = 0; i < animator.backgroundActorData.length; i++) {
-			animator.backgroundActorData[i].draw();
-		}
+        // Background items commonly overlap so they need to be drawn in the correct order by height
+        // This is sorted in reverse order because the z axis is inverted
+        animator.backgroundActorData.sort((x, y) => y.getHeight() - x.getHeight());
+        for (let i = 0; i < animator.backgroundActorData.length; i++) {
+            animator.backgroundActorData[i].draw();
+        }
         for (let i = 0; i < this.mechanicActorData.length; i++) {
             this.mechanicActorData[i].draw();
         }
@@ -939,5 +942,135 @@ class BackgroundDrawable {
 
     getPosition() {
         // to override
+    }
+}
+
+class MovingPlatformDrawable extends BackgroundDrawable {
+    constructor(start, end, image, width, height, positions) {
+        super(start, end);
+        this.image = new Image();
+        this.image.src = image;
+        this.width = width;
+        this.height = height;
+        this.positions = positions;
+        if (this.positions.length > 1) {
+            this.currentIndex = 0;
+            this.currentStart = Number.NEGATIVE_INFINITY;
+            this.currentEnd = positions[0][5];
+        }
+    }
+
+    draw() {
+        const pos = this.getAnimatorPosition();
+        if (pos === null) {
+            return;
+        }
+        let ctx = animator.ctx;
+        const offset = {
+            x: pos.x,
+            y: pos.y
+        };
+        const rads = pos.angle;
+        ctx.save();
+        ctx.translate(offset.x, offset.y);
+        ctx.rotate(rads % (2 * Math.PI));
+        ctx.globalAlpha = pos.opacity;
+        ctx.beginPath();
+        ctx.drawImage(this.image, -0.5 * this.width, -0.5 * this.height, this.width, this.height);
+        ctx.restore();
+    }
+
+    getHeight() {
+        let position = this.getInterpolatedPosition();
+        if (position === null) {
+            return Number.NEGATIVE_INFINITY;
+        }
+
+        return position.z;
+    }
+
+    getAnimatorPosition() {
+        let position = this.getInterpolatedPosition();
+        if (position === null) {
+            return null;
+        }
+
+        position.x = Math.round(10 * position.x * animator.scale) / (10 * animator.scale);
+        position.y = Math.round(10 * position.y * animator.scale) / (10 * animator.scale);
+
+        return position;
+    }
+
+    getInterpolatedPosition() {
+        if (animator.time < this.start || animator.time > this.end) {
+            return null;
+        }
+        if (this.positions.length === 0) {
+            return null;
+        }
+        if (this.positions.length === 1) {
+            return {
+                x: this.positions[0][0],
+                y: this.positions[0][1],
+                z: this.positions[0][2],
+                angle: this.positions[0][3],
+                opacity: this.positions[0][4],
+            };
+        }
+
+        let i;
+        let changed = false;
+        if (this.currentStart <= animator.time && animator.time < this.currentEnd) {
+            i = this.currentIndex;
+        } else {
+            for (i = 0; i < this.positions.length; i++) {
+                let time = this.positions[i][5];
+                if (time > animator.time) {
+                    break;
+                }
+            }
+            changed = true;
+        }
+
+        if (changed) {
+            this.currentIndex = i;
+            if (i === 0) {
+                this.currentStart = Number.NEGATIVE_INFINITY;
+                this.currentEnd = this.positions[0][5];
+            } else {
+                this.currentStart = this.positions[i - 1][5];
+                if (i === this.positions.length) {
+                    this.currentEnd = Number.POSITIVE_INFINITY;
+                } else {
+                    this.currentEnd = this.positions[i][5];
+                }
+            }
+        }
+
+        if (i === 0) {
+            // First position is in the future
+            return null;
+        }
+
+        if (i === this.positions.length) {
+            // The last position is in the past, use the last position
+            return {
+                x: this.positions[i - 1][0],
+                y: this.positions[i - 1][1],
+                z: this.positions[i - 1][2],
+                angle: this.positions[i - 1][3],
+                opacity: this.positions[i - 1][4],
+            };
+        }
+
+        let progress = (animator.time - this.positions[i - 1][5]) / (this.positions[i][5] - this.positions[i - 1][5]);
+
+        return {
+            x: (this.positions[i - 1][0] * (1 - progress) + this.positions[i][0] * progress),
+            y: (this.positions[i - 1][1] * (1 - progress) + this.positions[i][1] * progress),
+            z: (this.positions[i - 1][2] * (1 - progress) + this.positions[i][2] * progress),
+            angle: (this.positions[i - 1][3] * (1 - progress) + this.positions[i][3] * progress),
+            opacity: (this.positions[i - 1][4] * (1 - progress) + this.positions[i][4] * progress),
+        };
     }
 }
