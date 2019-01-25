@@ -15,5 +15,16 @@ namespace LuckParser.Models.JsonModels
         public int Crit;
         public int Glance;
         public int Flank;
+
+        public JsonDamageDist(List<ParseModels.DamageLog> list)
+        {
+            Hits = list.Count;
+            Damage = list.Sum(x => x.Damage);
+            Min = list.Min(x => x.Damage);
+            Max = list.Max(x => x.Damage);
+            Flank = list.Count(x => x.IsFlanking);
+            Crit = list.Count(x => x.Result == Parser.ParseEnum.Result.Crit);
+            Glance = list.Count(x => x.Result == Parser.ParseEnum.Result.Glance);
+        }
     }
 }

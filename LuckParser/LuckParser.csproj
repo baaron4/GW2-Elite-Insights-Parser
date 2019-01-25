@@ -110,6 +110,9 @@
     <Compile Include="Models\FightLogic\BanditTrio.cs" />
     <Compile Include="Models\FightLogic\Freezie.cs" />
     <Compile Include="Models\JsonModels\JsonActor.cs" />
+    <Compile Include="Models\JsonModels\JsonDeathRecap.cs" />
+    <Compile Include="Models\JsonModels\JsonExtraBoonData.cs" />
+    <Compile Include="Models\JsonModels\JsonStatistics.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\FacingActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\GenericActor.cs" />
     <Compile Include="Models\ParseModels\Logs\BoonExtensionLog.cs" />

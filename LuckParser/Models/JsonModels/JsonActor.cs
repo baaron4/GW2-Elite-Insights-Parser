@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static LuckParser.Models.JsonModels.JsonStatistics;
 
 namespace LuckParser.Models.JsonModels
 {
@@ -18,7 +19,7 @@ namespace LuckParser.Models.JsonModels
         public uint HitboxWidth;
         public List<JsonMinions> Minions;
 
-        public Statistics.FinalDPS[] DpsAll;
+        public JsonDPS[] DpsAll;
         public Dictionary<string, JsonDamageDist>[] TotalDamageDist;
         public Dictionary<string, JsonDamageDist>[] TotalDamageTaken;
         public Dictionary<string, List<JsonSkill>> Rotation;

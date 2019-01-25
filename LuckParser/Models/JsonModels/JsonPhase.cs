@@ -13,5 +13,13 @@ namespace LuckParser.Models.JsonModels
         public string Name;
         public List<int> Targets;
         public List<int> SubPhases;
+
+        public JsonPhase(ParseModels.PhaseData phase)
+        {
+            Start = phase.Start;
+            End = phase.End;
+            Name = phase.Name;
+            Targets = new List<int>();
+        }
     }
 }

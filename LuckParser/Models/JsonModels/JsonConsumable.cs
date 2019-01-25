@@ -12,5 +12,13 @@ namespace LuckParser.Models.JsonModels
         public int Duration;
         public long Time;
         public long Id;
+
+        public JsonConsumable(ParseModels.Player.Consumable food)
+        {
+            Stack = food.Stack;
+            Duration = food.Duration;
+            Time = food.Time;
+            Id = food.Item.ID;
+        }
     }
 }
