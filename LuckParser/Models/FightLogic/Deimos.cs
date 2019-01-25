@@ -118,36 +118,41 @@ namespace LuckParser.Models.Logic
             List<AgentItem> deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos") && x.LastAware > target.LastAware).ToList();
             CombatItem invulApp = combatData.FirstOrDefault(x => x.DstInstid == target.InstID && x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0 && x.SkillID == 762);
             CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.Time > combatData.First().Time && x.DstAgent > 0);
-            if ( invulApp != null && targetable != null)
+            if (invulApp != null && targetable != null)
             {
-                    HashSet<ulong> gadgetAgents = new HashSet<ulong>();
-                    long firstAware = targetable.Time;
-                    AgentItem targetAgent = agentData.GetAgentByInstID(targetable.SrcInstid, targetable.Time);
-                    if (targetAgent != GeneralHelper.UnknownAgent)
+                HashSet<ulong> gadgetAgents = new HashSet<ulong>();
+                long firstAware = targetable.Time;
+                AgentItem targetAgent = agentData.GetAgentByInstID(targetable.SrcInstid, targetable.Time);
+                if (targetAgent != GeneralHelper.UnknownAgent)
+                {
+                    try
                     {
-                        try
+                        string[] names = targetAgent.Name.Split('-');
+                        if (ushort.TryParse(names[2], out ushort masterInstid))
                         {
-                            string[] names = targetAgent.Name.Split('-');
-                            if (ushort.TryParse(names[2], out ushort masterInstid))
+                            CombatItem structDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && x.IFF == ParseEnum.IFF.Foe && x.DstInstid == masterInstid && x.IsStateChange == ParseEnum.StateChange.Normal && x.IsBuffRemove == ParseEnum.BuffRemove.None &&
+                                    ((x.IsBuff == 1 && x.BuffDmg >= 0 && x.Value == 0) ||
+                                    (x.IsBuff == 0 && x.Value >= 0)));
+                            if (structDeimosDamageEvent != null)
                             {
-                                CombatItem structDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && x.IFF == ParseEnum.IFF.Foe && x.DstInstid == masterInstid && x.IsStateChange == ParseEnum.StateChange.Normal && x.IsBuffRemove == ParseEnum.BuffRemove.None &&
-                                        ((x.IsBuff == 1 && x.BuffDmg >= 0 && x.Value == 0) ||
-                                        (x.IsBuff == 0 && x.Value >= 0)));
-                                if (structDeimosDamageEvent != null)
-                                {
-                                    gadgetAgents.Add(structDeimosDamageEvent.DstAgent);
-                                }
-                            };
-                        }
-                        catch
-                        {
-                            // nothing to do
-                        }
+                                gadgetAgents.Add(structDeimosDamageEvent.DstAgent);
+                            }
+                            CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && x.SkillID == 37980 && x.SrcAgent != 0 && x.SrcInstid != 0);
+                            if (armDeimosDamageEvent != null)
+                            {
+                                gadgetAgents.Add(armDeimosDamageEvent.SrcAgent);
+                            }
+                        };
                     }
-                    invulApp.Value = (int)(firstAware - invulApp.Time);
-                    _specialSplit = (firstAware >= target.LastAware ? firstAware : target.LastAware);
-                    target.AgentItem.LastAware = combatData.Last().Time;
-                    SetUniqueID(target, gadgetAgents, agentData, combatData);
+                    catch
+                    {
+                        // nothing to do
+                    }
+                }
+                invulApp.Value = (int)(firstAware - invulApp.Time);
+                _specialSplit = (firstAware >= target.LastAware ? firstAware : target.LastAware);
+                target.AgentItem.LastAware = combatData.Last().Time;
+                SetUniqueID(target, gadgetAgents, agentData, combatData);
             }
             // legacy method
             else if (deimosGadgets.Count > 0)
