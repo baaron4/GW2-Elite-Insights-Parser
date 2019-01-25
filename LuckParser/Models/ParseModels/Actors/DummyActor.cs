@@ -8,7 +8,7 @@ namespace LuckParser.Models.ParseModels
     public class DummyActor
     {
         public readonly AgentItem AgentItem;
-        public readonly string Character;
+        public string Character { get; protected set; }
 
         public uint Toughness => AgentItem.Toughness;
         public uint Condition => AgentItem.Condition;
