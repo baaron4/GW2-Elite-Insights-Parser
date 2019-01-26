@@ -961,21 +961,16 @@ class MovingPlatformDrawable extends BackgroundDrawable {
     }
 
     draw() {
-        const pos = this.getAnimatorPosition();
+        const pos = this.getInterpolatedPosition();
         if (pos === null) {
             return;
         }
         let ctx = animator.ctx;
-        const offset = {
-            x: pos.x,
-            y: pos.y
-        };
         const rads = pos.angle;
         ctx.save();
-        ctx.translate(offset.x, offset.y);
+        ctx.translate(pos.x, pos.y);
         ctx.rotate(rads % (2 * Math.PI));
         ctx.globalAlpha = pos.opacity;
-        ctx.beginPath();
         ctx.drawImage(this.image, -0.5 * this.width, -0.5 * this.height, this.width, this.height);
         ctx.restore();
     }
@@ -987,18 +982,6 @@ class MovingPlatformDrawable extends BackgroundDrawable {
         }
 
         return position.z;
-    }
-
-    getAnimatorPosition() {
-        let position = this.getInterpolatedPosition();
-        if (position === null) {
-            return null;
-        }
-
-        position.x = Math.round(10 * position.x * animator.scale) / (10 * animator.scale);
-        position.y = Math.round(10 * position.y * animator.scale) / (10 * animator.scale);
-
-        return position;
     }
 
     getInterpolatedPosition() {
