@@ -62,10 +62,7 @@ namespace LuckParser.Models.Logic
 
         protected override CombatReplayMap GetCombatMapInternal()
         {
-            //return new CombatReplayMap("https://i.imgur.com/nGaCj1L.png",
-            //                (3437, 2978),
-            //                (-10966, 8825, -3870, 15289),
-            return new CombatReplayMap("https://i.imgur.com/zspXy2L.png",
+            return new CombatReplayMap("https://i.imgur.com/UTuqVcb.png",
                             (3785, 3570),
                             (-11676, 8825, -3870, 16582),
                             (-21504, -21504, 24576, 24576),
@@ -458,7 +455,7 @@ namespace LuckParser.Models.Logic
             // It would be way nicer to calculate them here, but we don't have a nice vector library
             // and it would double the amount of work.
 
-            const string platformImageUrl = "https://i.imgur.com/DbXr5Fo.png";
+            const string platformImageUrl = "https://i.imgur.com/Kj1aSpg.png";
             const double hiddenOpacity = 0.2;
 
             const int xLeft = -7975;
@@ -830,7 +827,7 @@ namespace LuckParser.Models.Logic
             var platforms = new MovingPlatformActor[platformCount];
             for (int i = 0; i < platformCount; i++)
             {
-                platforms[i] = new MovingPlatformActor(platformImageUrl, 236, 236, (int.MinValue, int.MaxValue));
+                platforms[i] = new MovingPlatformActor(platformImageUrl, 245, 245, (int.MinValue, int.MaxValue));
                 target.CombatReplay.Actors.Add(platforms[i]);
             }
 
