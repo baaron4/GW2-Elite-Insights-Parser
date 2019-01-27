@@ -1,11 +1,17 @@
 /*jshint esversion: 6 */
 // const images
 const deadIcon = new Image();
-deadIcon.src = "https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png";
+deadIcon.onload = function () {
+    animateCanvas(-1);
+};
 const downIcon = new Image();
-downIcon.src = "https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png";
+downIcon.onload = function () {
+    animateCanvas(-1);
+};
 const facingIcon = new Image();
-facingIcon.src = "https://i.imgur.com/tZTmTRn.png";
+facingIcon.onload = function () {
+    animateCanvas(-1);
+};
 const bgImage = new Image();
 let bgLoaded = false;
 bgImage.onload = function () {
@@ -68,6 +74,9 @@ class Animator {
             if (options.inch) this.inch = options.inch;
             if (options.pollingRate) this.pollingRate = options.pollingRate;
             if (options.mapLink) bgImage.src = options.mapLink;
+            downIcon.src = "https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png";
+            deadIcon.src = "https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png";
+            facingIcon.src = "https://i.imgur.com/tZTmTRn.png";
         }
         //
         this.rangeControl.set(180, false);
@@ -416,6 +425,9 @@ class Animator {
 }
 
 function animateCanvas(noRequest) {
+    if (animator == null) {
+        return;
+    }
     let lastTime = animator.times[animator.times.length - 1];
     if (noRequest > -1 && animator.animation !== null && bgLoaded) {
         let curTime = new Date().getTime();
@@ -482,6 +494,9 @@ class IconDrawable {
         this.end = end;
         this.img = new Image();
         this.img.src = imgSrc;
+        this.img.onload = function () {
+            animateCanvas(-1);
+        };
         this.pixelSize = pixelSize;
     }
 
@@ -955,6 +970,9 @@ class MovingPlatformDrawable extends BackgroundDrawable {
         super(start, end);
         this.image = new Image();
         this.image.src = image;
+        this.image.onload = function () {
+            animateCanvas(-1);
+        };
         this.width = width;
         this.height = height;
         this.positions = positions;
