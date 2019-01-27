@@ -72,7 +72,7 @@ namespace LuckParser.Models.ParseModels
 			Positions.Add((x, y, z, angle, opacity, time));
 		}
 
-		public override string GetCombatReplayJSON(CombatReplayMap map)
+		public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map)
 		{
 			var positions = Positions.OrderBy(x => x.time).Select(pos =>
 			{
@@ -93,7 +93,7 @@ namespace LuckParser.Models.ParseModels
 				End = Lifespan.Item2,
 				Positions = positions
 			};
-			return JsonConvert.SerializeObject(aux);
+			return aux;
 		}
 	}
 }

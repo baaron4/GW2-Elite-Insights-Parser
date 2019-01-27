@@ -18,7 +18,7 @@ namespace LuckParser.Models.ParseModels
             public object ConnectedFrom { get; set; }
         }
 
-        public override string GetCombatReplayJSON(CombatReplayMap map)
+        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map)
         {
             LineSerializable aux = new LineSerializable
             {
@@ -31,7 +31,7 @@ namespace LuckParser.Models.ParseModels
                 ConnectedTo = ConnectedTo.GetConnectedTo(map),
                 ConnectedFrom = ConnectedFrom.GetConnectedTo(map)
             };
-            return JsonConvert.SerializeObject(aux);
+            return aux;
         }
     }
 }

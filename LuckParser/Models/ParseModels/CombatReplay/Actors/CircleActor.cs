@@ -26,7 +26,7 @@ namespace LuckParser.Models.ParseModels
             public int MinRadius { get; set; }
         }
 
-        public override string GetCombatReplayJSON(CombatReplayMap map)
+        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map)
         {
             CircleSerializable aux = new CircleSerializable
             {
@@ -40,7 +40,7 @@ namespace LuckParser.Models.ParseModels
                 End = Lifespan.end,
                 ConnectedTo = ConnectedTo.GetConnectedTo(map)
             };
-            return JsonConvert.SerializeObject(aux);
+            return aux;
         }
     }
 }
