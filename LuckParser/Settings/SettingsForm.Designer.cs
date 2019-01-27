@@ -53,8 +53,9 @@
             this.chkHtmlExternalScripts = new System.Windows.Forms.CheckBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.chkAutoAdd = new System.Windows.Forms.CheckBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.chkAutoParse = new System.Windows.Forms.CheckBox();
+            this.chkAutoAdd = new System.Windows.Forms.CheckBox();
             this.chkB_SkipFailedTries = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.chkAddDuration = new System.Windows.Forms.CheckBox();
@@ -77,9 +78,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.cmdClose = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.dumpButton = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -92,7 +94,6 @@
             this.panelJson.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.tabPage6.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblSettingsInfoMsg
@@ -344,16 +345,18 @@
             this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // chkAutoAdd
+            // groupBox1
             // 
-            this.chkAutoAdd.AutoSize = true;
-            this.chkAutoAdd.Location = new System.Drawing.Point(6, 65);
-            this.chkAutoAdd.Name = "chkAutoAdd";
-            this.chkAutoAdd.Size = new System.Drawing.Size(154, 17);
-            this.chkAutoAdd.TabIndex = 40;
-            this.chkAutoAdd.Text = "Automatically add new logs";
-            this.chkAutoAdd.UseVisualStyleBackColor = true;
-            this.chkAutoAdd.CheckedChanged += new System.EventHandler(this.ChkAutoAdd_CheckedChanged);
+            this.groupBox1.Controls.Add(this.chkOneAtATime);
+            this.groupBox1.Controls.Add(this.chkAutoParse);
+            this.groupBox1.Controls.Add(this.chkAutoAdd);
+            this.groupBox1.Controls.Add(this.chkB_SkipFailedTries);
+            this.groupBox1.Location = new System.Drawing.Point(240, 18);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(216, 108);
+            this.groupBox1.TabIndex = 41;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Parsing";
             // 
             // chkAutoParse
             // 
@@ -365,6 +368,17 @@
             this.chkAutoParse.Text = "Automatically parse added files";
             this.chkAutoParse.UseVisualStyleBackColor = true;
             this.chkAutoParse.CheckedChanged += new System.EventHandler(this.ChkAutoParse_CheckedChanged);
+            // 
+            // chkAutoAdd
+            // 
+            this.chkAutoAdd.AutoSize = true;
+            this.chkAutoAdd.Location = new System.Drawing.Point(6, 65);
+            this.chkAutoAdd.Name = "chkAutoAdd";
+            this.chkAutoAdd.Size = new System.Drawing.Size(154, 17);
+            this.chkAutoAdd.TabIndex = 40;
+            this.chkAutoAdd.Text = "Automatically add new logs";
+            this.chkAutoAdd.UseVisualStyleBackColor = true;
+            this.chkAutoAdd.CheckedChanged += new System.EventHandler(this.ChkAutoAdd_CheckedChanged);
             // 
             // chkB_SkipFailedTries
             // 
@@ -605,18 +619,16 @@
             this.cmdClose.UseVisualStyleBackColor = true;
             this.cmdClose.Click += new System.EventHandler(this.cmdClose_Click);
             // 
-            // groupBox1
+            // button1
             // 
-            this.groupBox1.Controls.Add(this.chkOneAtATime);
-            this.groupBox1.Controls.Add(this.chkAutoParse);
-            this.groupBox1.Controls.Add(this.chkAutoAdd);
-            this.groupBox1.Controls.Add(this.chkB_SkipFailedTries);
-            this.groupBox1.Location = new System.Drawing.Point(240, 18);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(216, 108);
-            this.groupBox1.TabIndex = 41;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Parsing";
+            this.dumpButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.dumpButton.Location = new System.Drawing.Point(295, 333);
+            this.dumpButton.Name = "button1";
+            this.dumpButton.Size = new System.Drawing.Size(84, 24);
+            this.dumpButton.TabIndex = 49;
+            this.dumpButton.Text = "Dump Settings";
+            this.dumpButton.UseVisualStyleBackColor = true;
+            this.dumpButton.Click += new System.EventHandler(this.settingsDump_Click);
             // 
             // SettingsForm
             // 
@@ -624,6 +636,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(503, 370);
+            this.Controls.Add(this.dumpButton);
             this.Controls.Add(this.cmdClose);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.lblSettingsInfoMsg);
@@ -636,6 +649,8 @@
             this.Load += new System.EventHandler(this.SettingsFormLoad);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -659,8 +674,6 @@
             this.tabPage5.PerformLayout();
             this.tabPage6.ResumeLayout(false);
             this.tabPage6.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -715,5 +728,6 @@
         private System.Windows.Forms.Panel panelXML;
         private System.Windows.Forms.CheckBox chkIndentXML;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button dumpButton;
     }
 }

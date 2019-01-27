@@ -1,6 +1,7 @@
 ﻿using LuckParser.Controllers;
 using System;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 namespace LuckParser.Setting
@@ -248,6 +249,24 @@ namespace LuckParser.Setting
         private void chkAddDuration_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.AddDuration = chkAddDuration.Checked;
+        }
+
+        private void settingsDump_Click(object sender, EventArgs e)
+        {
+            string dump = CustomSettingsManager.DumpSettings();
+            using (var saveFile = new SaveFileDialog())
+            {
+                saveFile.Filter = "Conf file|*.conf";
+                saveFile.Title = "Save a Configuration file";
+                DialogResult result = saveFile.ShowDialog();
+                if (saveFile.FileName != "")
+                {
+                    FileStream fs = (FileStream)saveFile.OpenFile();
+                    byte[] settings = new UTF8Encoding(true).GetBytes(dump);
+                    fs.Write(settings, 0, settings.Length);
+                    fs.Close();
+                }
+            }
         }
     }
 }

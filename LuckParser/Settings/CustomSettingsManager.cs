@@ -44,6 +44,16 @@ namespace LuckParser
             }
         }
 
+        public static string DumpSettings()
+        {
+            string res = "";
+            foreach (SettingsProperty key in Properties.Settings.Default.Properties)
+            {
+                res += key.Name + "=" + Properties.Settings.Default[key.Name] + "\n";
+            }
+            return res;
+        }
+
         private static void ProcessSettingsLine(string line)
         {
             if (line.StartsWith("#")) return; // commented out line
