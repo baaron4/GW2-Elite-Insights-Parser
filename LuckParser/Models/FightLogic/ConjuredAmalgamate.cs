@@ -66,7 +66,7 @@ namespace LuckParser.Models.Logic
             {
                 instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
             }
-            AgentItem sword = new AgentItem(agent, "Conjured Sword\0:Conjured Sword\050", "Sword", AgentItem.AgentType.Player, 0, 0, 0, 0, 20, 20)
+            AgentItem sword = new AgentItem(agent, "Conjured Sword\0:Conjured Sword\050", "Sword", 0, AgentItem.AgentType.Player, 0, 0, 0, 0, 20, 20)
             {
                 InstID = instID,
                 LastAware = combatData.Last().Time,

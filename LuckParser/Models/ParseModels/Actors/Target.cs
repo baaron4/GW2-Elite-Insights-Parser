@@ -40,6 +40,11 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
+        public void OverrideName(string name)
+        {
+            Character = name;
+        }
+
         public List<double[]> Get1SHealthGraph(ParsedLog log, List<PhaseData> phases)
         {
             List<double[]> res = new List<double[]>();

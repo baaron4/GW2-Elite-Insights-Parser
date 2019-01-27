@@ -1157,12 +1157,12 @@ namespace LuckParser.Builders
             return mechanicsChart;
         }
 
-        private List<List<List<double>>> BuildMechanicGraphPointData(List<MechanicLog> mechanicLogs, bool enemyMechanic)
+        private List<List<List<object>>> BuildMechanicGraphPointData(List<MechanicLog> mechanicLogs, bool enemyMechanic)
         {
-            List<List<List<double>>> list = new List<List<List<double>>>();
+            List<List<List<object>>> list = new List<List<List<object>>>();
             foreach (PhaseData phase in _statistics.Phases)
             {
-                List<List<double>> phaseData = new List<List<double>>();
+                List<List<object>> phaseData = new List<List<object>>();
                 list.Add(phaseData);
                 if (!enemyMechanic)
                 {
@@ -1170,7 +1170,7 @@ namespace LuckParser.Builders
                     for (var p = 0; p < _log.PlayerList.Count; p++)
                     {
                         playerIndex.Add(_log.PlayerList[p], p);
-                        phaseData.Add(new List<double>());
+                        phaseData.Add(new List<object>());
                     }
                     foreach (MechanicLog ml in mechanicLogs.Where(x => phase.InInterval(x.Time)))
                     {
@@ -1186,9 +1186,9 @@ namespace LuckParser.Builders
                     for (var p = 0; p < phase.Targets.Count; p++)
                     {
                         targetIndex.Add(phase.Targets[p], p);
-                        phaseData.Add(new List<double>());
+                        phaseData.Add(new List<object>());
                     }
-                    phaseData.Add(new List<double>());
+                    phaseData.Add(new List<object>());
                     foreach (MechanicLog ml in mechanicLogs.Where(x => phase.InInterval(x.Time)))
                     {
                         double time = (ml.Time - phase.Start) / 1000.0;
@@ -1198,7 +1198,7 @@ namespace LuckParser.Builders
                         }
                         else
                         {
-                            phaseData[phaseData.Count - 1].Add(time);
+                            phaseData[phaseData.Count - 1].Add(new object[] { time, ml.Actor.Character });
                         }
                     }
                 }

@@ -10,7 +10,6 @@ namespace LuckParser.Models.ParseModels
     {
         // Fields
         private List<PhaseData> _phases = new List<PhaseData>();
-        public readonly List<long> PhaseData = new List<long>();
         public ushort ID { get; }
         private readonly bool _requirePhases;
         public readonly FightLogic Logic;
