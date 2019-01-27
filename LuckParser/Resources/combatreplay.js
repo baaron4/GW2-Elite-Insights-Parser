@@ -93,20 +93,20 @@ class Animator {
         this.mechanicActorData = [];
         for (let i = 0; i < actors.length; i++) {
             const actor = actors[i];
-            switch (actor.Type) {
+            switch (actor.type) {
                 case "Player":
-                    this.playerData.set(actor.ID, new PlayerIconDrawable(actor.img, 20, actor.group, actor.positions, actor.dead, actor.down));
+                    this.playerData.set(actor.id, new PlayerIconDrawable(actor.img, 20, actor.group, actor.positions, actor.dead, actor.down));
                     if (this.times.length === 0) {
-                        for (let j = 0; j < actor.Positions.length / 2; j++) {
+                        for (let j = 0; j < actor.positions.length / 2; j++) {
                             this.times.push(j * this.pollingRate);
                         }
                     }
                     break;
                 case "Target":
-                    this.targetData.set(actor.ID, new EnemyIconDrawable(actor.start, actor.end, actor.img, 30, actor.positions));
+                    this.targetData.set(actor.id, new EnemyIconDrawable(actor.start, actor.end, actor.img, 30, actor.positions));
                     break;
                 case "Mob":
-                    this.trashMobData.set(actor.ID, new EnemyIconDrawable(actor.start, actor.end, actor.omg, 25, actor.positions));
+                    this.trashMobData.set(actor.id, new EnemyIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions));
                     break;
                 case "Circle":
                     this.mechanicActorData.push(new CircleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.radius, actor.connectedTo, actor.minRadius));
