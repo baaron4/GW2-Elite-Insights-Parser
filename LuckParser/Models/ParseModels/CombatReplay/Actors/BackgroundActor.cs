@@ -8,10 +8,10 @@ namespace LuckParser.Models.ParseModels
 		{
 		}
 
-		protected class BackgroundSerializable : GenericSerializable
+		protected class BackgroundSerializable : GenericActorSerializable
 		{
 		}
 
-		public abstract override string GetCombatReplayJSON(CombatReplayMap map);
+		public abstract override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map);
 	}
 }
