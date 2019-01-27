@@ -20,7 +20,7 @@ namespace LuckParser
         private readonly List<string> _logsFiles;
         private bool _anyRunning;
         private readonly Queue<GridRow> _logQueue = new Queue<GridRow>();
-        public MainForm()
+        private MainForm()
         {
             InitializeComponent();
             //display version
@@ -32,11 +32,16 @@ namespace LuckParser
             UpdateWatchDirectory();
         }
 
+        public MainForm(IEnumerable<string> filesArray) : this()
+        {
+            AddLogFiles(filesArray);
+        }
+
         /// <summary>
         /// Adds log files to the bound data source for display in the interface
         /// </summary>
         /// <param name="filesArray"></param>
-        private void AddLogFiles(string[] filesArray)
+        private void AddLogFiles(IEnumerable<string> filesArray)
         {
             foreach (string file in filesArray)
             {
@@ -174,6 +179,7 @@ namespace LuckParser
                             uploadresult[0] = "Failed to Define Upload Task";
                         }
                     }
+                    bg.ThrowIfCanceled(rowData);
                     if (Properties.Settings.Default.UploadToDPSReportsRH)
                     {
                         bg.UpdateProgress(rowData, " 40% - Uploading to DPSReports using RH...", 40);
@@ -195,6 +201,7 @@ namespace LuckParser
                             uploadresult[1] = "Failed to Define Upload Task";
                         }
                     }
+                    bg.ThrowIfCanceled(rowData);
                     if (Properties.Settings.Default.UploadToRaidar)
                     {
                         bg.UpdateProgress(rowData, " 40% - Uploading to Raidar...", 40);
@@ -216,6 +223,7 @@ namespace LuckParser
                             uploadresult[2] = "Failed to Define Upload Task";
                         }
                     }
+                    bg.ThrowIfCanceled(rowData);
                     //Creating File
                     //save location
                     DirectoryInfo saveDirectory;
@@ -251,11 +259,14 @@ namespace LuckParser
                     {
                         RawFormatBuilder.UpdateStatisticSwitches(switches);
                     }
+                    bg.ThrowIfCanceled(rowData);
                     Statistics statistics = statisticsCalculator.CalculateStatistics(log, switches);
                     bg.UpdateProgress(rowData, "85% - Statistics computed", 85);
+                    bg.ThrowIfCanceled(rowData);
                     string fName = fInfo.Name.Split('.')[0];
                     fName = $"{fName}{PoVClassTerm}_{log.FightData.Logic.Extension}{encounterLengthTerm}_{result}";
                     bg.UpdateProgress(rowData, "90% - Creating File...", 90);
+                    bg.ThrowIfCanceled(rowData);
                     if (Properties.Settings.Default.SaveOutHTML)
                     {
                         string outputFile = Path.Combine(
