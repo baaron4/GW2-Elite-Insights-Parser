@@ -55,10 +55,11 @@ namespace LuckParser
             }
 
             List<string> logFiles = new List<string>();
-
+            bool uiMode = true;
             Application.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             if (args.Length > 0)
             {
+                uiMode = false;
                 int parserArgOffset = 0;
 
                 if (args.Contains("-h"))
@@ -67,8 +68,15 @@ namespace LuckParser
                     Console.WriteLine("");
                     Console.WriteLine("-c [config path] : use another config file");
                     Console.WriteLine("-p : disable windows specific functions");
+                    Console.WriteLine("-ui : runs in the application with user interface");
                     Console.WriteLine("-h : help");
                     return 0;
+                }
+
+                if (args.Contains("-ui"))
+                {
+                    parserArgOffset += 1;
+                    uiMode = true;
                 }
 
                 if (args.Contains("-p"))
@@ -123,16 +131,21 @@ namespace LuckParser
                     logFiles.Add(args[i]);
                 }
             }
-            if (logFiles.Count > 0)
+            if (uiMode)
             {
-                // Use the application through console 
-                new ConsoleProgram(logFiles);
-                return 0;
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new MainForm(logFiles));
             }
-
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            else
+            {
+                if (logFiles.Count > 0)
+                {
+                    // Use the application through console 
+                    new ConsoleProgram(logFiles);
+                    return 0;
+                }
+            }
             return 0;
         }
     }
