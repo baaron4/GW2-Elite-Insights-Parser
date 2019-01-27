@@ -21,7 +21,7 @@ namespace LuckParser.Models.ParseModels
             public int OuterRadius { get; set; }
         }
 
-        public override string GetCombatReplayJSON(CombatReplayMap map)
+        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map)
         {
             DoughnutSerializable aux = new DoughnutSerializable
             {
@@ -35,7 +35,7 @@ namespace LuckParser.Models.ParseModels
                 End = Lifespan.end,
                 ConnectedTo = ConnectedTo.GetConnectedTo(map)
             };
-            return JsonConvert.SerializeObject(aux);
+            return aux;
         }
 
     }

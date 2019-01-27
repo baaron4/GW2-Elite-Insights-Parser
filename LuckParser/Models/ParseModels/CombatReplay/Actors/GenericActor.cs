@@ -13,7 +13,7 @@ namespace LuckParser.Models.ParseModels
             ConnectedTo = connector;
         }
         //
-        protected class GenericSerializable
+        public class GenericActorSerializable
         {
             public string Type { get; set; }
             public long Start { get; set; }
@@ -21,7 +21,7 @@ namespace LuckParser.Models.ParseModels
             public object ConnectedTo { get; set; }
         }
 
-        public abstract string GetCombatReplayJSON(CombatReplayMap map);
+        public abstract GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map);
 
     }
 }

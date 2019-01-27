@@ -16,7 +16,7 @@ namespace LuckParser.Models.ParseModels
             Growing = growing;
         }
         //
-        protected class FormSerializable : GenericSerializable
+        protected class FormSerializable : GenericActorSerializable
         {
             public bool Fill { get; set; }
             public int Growing { get; set; }

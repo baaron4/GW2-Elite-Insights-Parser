@@ -17,12 +17,12 @@ namespace LuckParser.Models.ParseModels
         }
 
         //
-        protected class FacingSerializable : GenericSerializable
+        protected class FacingSerializable : GenericActorSerializable
         {
             public object[] FacingData;
         }
 
-        public override string GetCombatReplayJSON(CombatReplayMap map)
+        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map)
         {
             FacingSerializable aux = new FacingSerializable
             {
@@ -41,7 +41,7 @@ namespace LuckParser.Models.ParseModels
                     time
                 };
             }
-            return JsonConvert.SerializeObject(aux);
+            return aux;
         }
     }
 }
