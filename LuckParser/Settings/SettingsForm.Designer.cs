@@ -79,6 +79,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.cmdClose = new System.Windows.Forms.Button();
             this.dumpButton = new System.Windows.Forms.Button();
+            this.loadButton = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -100,7 +101,7 @@
             // 
             this.lblSettingsInfoMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblSettingsInfoMsg.AutoSize = true;
-            this.lblSettingsInfoMsg.Location = new System.Drawing.Point(12, 334);
+            this.lblSettingsInfoMsg.Location = new System.Drawing.Point(9, 292);
             this.lblSettingsInfoMsg.Name = "lblSettingsInfoMsg";
             this.lblSettingsInfoMsg.Size = new System.Drawing.Size(251, 13);
             this.lblSettingsInfoMsg.TabIndex = 12;
@@ -329,7 +330,7 @@
             this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(479, 310);
+            this.tabControl1.Size = new System.Drawing.Size(479, 277);
             this.tabControl1.TabIndex = 47;
             // 
             // tabPage1
@@ -340,7 +341,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(471, 284);
+            this.tabPage1.Size = new System.Drawing.Size(471, 251);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -447,7 +448,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(471, 284);
+            this.tabPage2.Size = new System.Drawing.Size(471, 251);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "HTML";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -509,7 +510,7 @@
             this.tabPage3.Controls.Add(this.chkOutputCsv);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(471, 284);
+            this.tabPage3.Size = new System.Drawing.Size(471, 251);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "CSV";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -522,7 +523,7 @@
             this.tabPage4.Controls.Add(this.chkOutputJson);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(471, 284);
+            this.tabPage4.Size = new System.Drawing.Size(471, 251);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Raw formats";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -572,7 +573,7 @@
             this.tabPage5.Controls.Add(this.UploadRaidar_check);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(471, 284);
+            this.tabPage5.Size = new System.Drawing.Size(471, 251);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Upload";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -585,7 +586,7 @@
             this.tabPage6.Controls.Add(this.btnResetSkillList);
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Size = new System.Drawing.Size(471, 284);
+            this.tabPage6.Size = new System.Drawing.Size(471, 251);
             this.tabPage6.TabIndex = 5;
             this.tabPage6.Text = "Maintenance";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -611,7 +612,7 @@
             // cmdClose
             // 
             this.cmdClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdClose.Location = new System.Drawing.Point(395, 333);
+            this.cmdClose.Location = new System.Drawing.Point(412, 312);
             this.cmdClose.Name = "cmdClose";
             this.cmdClose.Size = new System.Drawing.Size(84, 24);
             this.cmdClose.TabIndex = 48;
@@ -619,23 +620,35 @@
             this.cmdClose.UseVisualStyleBackColor = true;
             this.cmdClose.Click += new System.EventHandler(this.cmdClose_Click);
             // 
-            // button1
+            // dumpButton
             // 
             this.dumpButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.dumpButton.Location = new System.Drawing.Point(295, 333);
-            this.dumpButton.Name = "button1";
+            this.dumpButton.Location = new System.Drawing.Point(322, 312);
+            this.dumpButton.Name = "dumpButton";
             this.dumpButton.Size = new System.Drawing.Size(84, 24);
             this.dumpButton.TabIndex = 49;
-            this.dumpButton.Text = "Dump Settings";
+            this.dumpButton.Text = "Save Settings";
             this.dumpButton.UseVisualStyleBackColor = true;
             this.dumpButton.Click += new System.EventHandler(this.settingsDump_Click);
+            // 
+            // loadButton
+            // 
+            this.loadButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.loadButton.Location = new System.Drawing.Point(232, 312);
+            this.loadButton.Name = "button1";
+            this.loadButton.Size = new System.Drawing.Size(84, 24);
+            this.loadButton.TabIndex = 50;
+            this.loadButton.Text = "Load Settings";
+            this.loadButton.UseVisualStyleBackColor = true;
+            this.loadButton.Click += new System.EventHandler(this.settingsLoad_Click);
             // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(503, 370);
+            this.ClientSize = new System.Drawing.Size(503, 348);
+            this.Controls.Add(this.loadButton);
             this.Controls.Add(this.dumpButton);
             this.Controls.Add(this.cmdClose);
             this.Controls.Add(this.tabControl1);
@@ -729,5 +742,6 @@
         private System.Windows.Forms.CheckBox chkIndentXML;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button dumpButton;
+        private System.Windows.Forms.Button loadButton;
     }
 }
