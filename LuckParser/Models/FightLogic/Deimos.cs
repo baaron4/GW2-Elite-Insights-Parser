@@ -137,7 +137,7 @@ namespace LuckParser.Models.Logic
                             {
                                 gadgetAgents.Add(structDeimosDamageEvent.DstAgent);
                             }
-                            CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && x.SkillID == 37980 && x.SrcAgent != 0 && x.SrcInstid != 0);
+                            CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && (x.SkillID == 37980 ||x.SkillID == 37982 || x.SkillID == 38046) && x.SrcAgent != 0 && x.SrcInstid != 0);
                             if (armDeimosDamageEvent != null)
                             {
                                 gadgetAgents.Add(armDeimosDamageEvent.SrcAgent);
