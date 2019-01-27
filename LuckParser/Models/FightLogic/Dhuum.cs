@@ -80,7 +80,7 @@ namespace LuckParser.Models.Logic
                 end = Math.Min(clDeathmark.Time, mainEnd);
                 phases.Add(new PhaseData(start, end)
                 {
-                    Name = "Pre-Split " + i++
+                    Name = "Pre-Soulsplit " + i++
                 });
                 start = cl.Time + cl.ActualDuration;
             }

@@ -25,23 +25,12 @@ namespace LuckParser.Models.ParseModels
         public readonly uint HitboxHeight;
 
         // Constructors
-        public AgentItem(ulong agent, string name, string prof, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight)
+        public AgentItem(ulong agent, string name, string prof, ushort id, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight)
         {
             Agent = agent;
             Name = name;
             Prof = prof;
-            if (prof.Contains(":"))
-            {
-                var splitted = Prof.Split(':');
-                try
-                {
-                    ID = ushort.Parse(splitted[splitted.Length - 1]);
-                }
-                catch(FormatException)
-                {
-                    ID = 0;
-                }
-            }
+            ID = id;
             Type = type;
             Toughness = toughness;
             Healing = healing;
@@ -56,18 +45,7 @@ namespace LuckParser.Models.ParseModels
             Agent = other.Agent;
             Name = other.Name;
             Prof = other.Prof;
-            if (Prof.Contains(":"))
-            {
-                var splitted = Prof.Split(':');
-                try
-                {
-                    ID = ushort.Parse(splitted[splitted.Length - 1]);
-                }
-                catch (FormatException)
-                {
-                    ID = 0;
-                }
-            }
+            ID = other.ID;
             Type = other.Type;
             Toughness = other.Toughness;
             Healing = other.Healing;

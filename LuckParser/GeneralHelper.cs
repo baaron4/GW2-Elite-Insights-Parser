@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
+using LuckParser.Controllers;
 
 namespace LuckParser
 {
@@ -107,6 +108,137 @@ namespace LuckParser
                 }
             }
             return false;
+        }
+
+        public static string GetAgentProfString(string build, GW2APIController apiController, uint prof, uint elite)
+        {
+            if (elite == 0xFFFFFFFF)
+            {
+                if ((prof & 0xffff0000) == 0xffff0000)
+                {
+                    return "GDG";
+                }
+                else
+                {
+                    return "NPC";
+                }
+            }
+            else if (elite == 0)
+            {
+                switch (prof)
+                {
+                    case 1:
+                        return "Guardian";
+                    case 2:
+                        return "Warrior";
+                    case 3:
+                        return "Engineer";
+                    case 4:
+                        return "Ranger";
+                    case 5:
+                        return "Thief";
+                    case 6:
+                        return "Elementalist";
+                    case 7:
+                        return "Mesmer";
+                    case 8:
+                        return "Necromancer";
+                    case 9:
+                        return "Revenant";
+                }
+            }
+            else if (Convert.ToInt32(build.Substring(4, 8)) < 20170914)
+            {
+                if (elite == 1)
+                {
+                    switch (prof + 9)
+                    {
+                        case 10:
+                            return "Dragonhunter";
+                        case 11:
+                            return "Berserker";
+                        case 12:
+                            return "Scrapper";
+                        case 13:
+                            return "Druid";
+                        case 14:
+                            return "Daredevil";
+                        case 15:
+                            return "Tempest";
+                        case 16:
+                            return "Chronomancer";
+                        case 17:
+                            return "Reaper";
+                        case 18:
+                            return "Herald";
+                    }
+
+                }
+            }
+            else if (Convert.ToInt32(build.Substring(4, 8)) >= 20170914)
+            {
+                if (elite == 1)
+                {
+                    switch (prof + 9)
+                    {
+                        case 10:
+                            return "Dragonhunter";
+                        case 11:
+                            return "Berserker";
+                        case 12:
+                            return "Scrapper";
+                        case 13:
+                            return "Druid";
+                        case 14:
+                            return "Daredevil";
+                        case 15:
+                            return "Tempest";
+                        case 16:
+                            return "Chronomancer";
+                        case 17:
+                            return "Reaper";
+                        case 18:
+                            return "Herald";
+
+
+                    }
+
+                }
+                else if (elite > 1)
+                {
+                    switch (elite)
+                    {
+                        case 55:
+                            return "Soulbeast";
+                        case 56:
+                            return "Weaver";
+                        case 57:
+                            return "Holosmith";
+                        case 58:
+                            return "Deadeye";
+                        case 59:
+                            return "Mirage";
+                        case 60:
+                            return "Scourge";
+                        case 61:
+                            return "Spellbreaker";
+                        case 62:
+                            return "Firebrand";
+                        case 63:
+                            return "Renegade";
+                    }
+                    GW2APISpec spec = apiController.GetSpec((int)elite);
+                    if (spec.Elite)
+                    {
+                        return spec.Name;
+                    }
+                    else
+                    {
+                        return spec.Profession;
+                    }
+                }
+            }
+            return null;
         }
 
         public static string UppercaseFirst(string s)

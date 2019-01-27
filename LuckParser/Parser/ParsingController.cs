@@ -174,29 +174,41 @@ namespace LuckParser.Parser
                     // 68 bytes: name
                     string name = ParseHelper.GetString(stream, 68, false);
                     //Save
-                    Agent a = new Agent(agent, name, prof, isElite);
-                    string agentProf = a.GetProf(_logData.BuildVersion, _aPIController);
+                    string agentProf = GeneralHelper.GetAgentProfString(_logData.BuildVersion, _aPIController, prof, isElite);
                     AgentItem.AgentType type;
-                    string profession;
+                    ushort ID = 0;
                     switch (agentProf)
                     {
                         case "NPC":
                             // NPC
-                            profession = a.Name + ":" + prof.ToString().PadLeft(5, '0');
+                            try
+                            {
+                                ID = ushort.Parse(prof.ToString().PadLeft(5, '0'));
+                            }
+                            catch (FormatException)
+                            {
+                                ID = 0;
+                            }
                             type = AgentItem.AgentType.NPC;
                             break;
                         case "GDG":
                             // Gadget
-                            profession = a.Name + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0');
+                            try
+                            {
+                                ID = ushort.Parse((prof & 0x0000ffff).ToString().PadLeft(5, '0'));
+                            }
+                            catch (FormatException)
+                            {
+                                ID = 0;
+                            }
                             type = AgentItem.AgentType.Gadget;
                             break;
                         default:
                             // Player
-                            profession = agentProf;
                             type = AgentItem.AgentType.Player;
                             break;
                     }
-                    _allAgentsList.Add(new AgentItem(agent, name, profession, type, toughness, healing, condition, concentration, hbWidth, hbHeight));
+                    _allAgentsList.Add(new AgentItem(agent, name, agentProf, ID, type, toughness, healing, condition, concentration, hbWidth, hbHeight));
                 }
             }
         }

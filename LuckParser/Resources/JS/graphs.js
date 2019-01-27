@@ -135,9 +135,9 @@ var compileGraphs = function () {
                             }
                         } else {
                             for (k = 0; k < pts.length; k++) {
-                                time = pts[k];
+                                time = pts[k][0];
                                 chart.x.push(time);
-                                chart.text.push(time + 's');
+                                chart.text.push(time + 's: ' + pts[k][1]);
                             }
                         }
                     }

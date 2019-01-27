@@ -117,18 +117,21 @@ namespace LuckParser.Models.Logic
             {
                 PhaseData phase = new PhaseData(start, Math.Min(c.Time, fightDuration))
                 {
-                    Name = "Phase " + i++
+                    Name = "Pre-Breakbar " + i++
                 };
                 phase.Targets.Add(mainTarget);
                 start = c.Time + c.ActualDuration;
                 phases.Add(phase);
             }
-            PhaseData lastPhase = new PhaseData(start, fightDuration)
+            if (fightDuration - start > 3000)
             {
-                Name = "Phase " + i++
-            };
-            lastPhase.Targets.Add(mainTarget);
-            phases.Add(lastPhase);
+                PhaseData lastPhase = new PhaseData(start, fightDuration)
+                {
+                    Name = "Final"
+                };
+                lastPhase.Targets.Add(mainTarget);
+                phases.Add(lastPhase);
+            }
             phases.RemoveAll(x => x.GetDuration() <= 1000);
             return phases;
         }
