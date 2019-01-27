@@ -411,6 +411,16 @@ namespace LuckParser.Models.ParseModels
 
         // abstracts
         protected abstract void SetAdditionalCombatReplayData(ParsedLog log);
-        public abstract string GetCombatReplayJSON(CombatReplayMap map);
+
+
+        public abstract class AbstractMasterActorSerializable
+        {
+            public string Img { get; set; }
+            public string Type { get; set; }
+            public int ID { get; set; }
+            public double[] Positions { get; set; }
+        }
+
+        public abstract AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map);
     }
 }

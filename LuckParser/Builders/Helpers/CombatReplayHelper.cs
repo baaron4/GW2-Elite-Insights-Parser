@@ -8,6 +8,7 @@ using LuckParser.Parser;
 using Newtonsoft.Json;
 using NUglify;
 using LuckParser.Setting;
+using Newtonsoft.Json.Serialization;
 
 namespace LuckParser.Builders
 {
@@ -44,18 +45,9 @@ namespace LuckParser.Builders
             return replayHTML;
         }
 
-        public static string GetDynamicCombatReplayScript(ParsedLog log, int pollingRate, CombatReplayMap map)
+        public static List<object> GetCombatReplayActors(ParsedLog log, CombatReplayMap map)
         {
-
-            Dictionary<string, object> options = new Dictionary<string, object>
-            {
-                { "inch", map.GetInch() },
-                { "pollingRate", pollingRate },
-                { "mapLink", map.Link }
-            };
-
-            string actors = "";
-            int count = 0;
+            List<object> actors = new List<object>();
             foreach (Player p in log.PlayerList)
             {
                 if (p.Account == ":Conjured Sword")
@@ -66,16 +58,10 @@ namespace LuckParser.Builders
                 {
                     continue;
                 }
-                if (count > 0)
-                {
-                    actors += ",";
-                }
-                count++;
-                actors += p.GetCombatReplayJSON(map);
+                actors.Add(p.GetCombatReplayJSON(map));
                 foreach (GenericActor a in p.CombatReplay.Actors)
                 {
-                    actors += ",";
-                    actors += a.GetCombatReplayJSON(map);
+                    actors.Add(a.GetCombatReplayJSON(map));
                 }
             }
             foreach (Mob m in log.FightData.Logic.TrashMobs)
@@ -84,12 +70,10 @@ namespace LuckParser.Builders
                 {
                     continue;
                 }
-                actors += ",";
-                actors += m.GetCombatReplayJSON(map);
+                actors.Add(m.GetCombatReplayJSON(map));
                 foreach (GenericActor a in m.CombatReplay.Actors)
                 {
-                    actors += ",";
-                    actors += a.GetCombatReplayJSON(map);
+                    actors.Add(a.GetCombatReplayJSON(map));
                 }
             }
             foreach (Target target in log.FightData.Logic.Targets)
@@ -98,16 +82,36 @@ namespace LuckParser.Builders
                 {
                     continue;
                 }
-                actors += ",";
-                actors += target.GetCombatReplayJSON(map);
+                actors.Add(target.GetCombatReplayJSON(map));
                 foreach (GenericActor a in target.CombatReplay.Actors)
                 {
-                    actors += ",";
-                    actors += a.GetCombatReplayJSON(map);
+                    actors.Add(a.GetCombatReplayJSON(map));
                 }
             }
+            return actors;
+        }
+
+        public static string GetDynamicCombatReplayScript(ParsedLog log, int pollingRate, CombatReplayMap map)
+        {
+            DefaultContractResolver contractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new CamelCaseNamingStrategy()
+            };
+            JsonSerializerSettings settings = new JsonSerializerSettings()
+            {
+                ContractResolver = contractResolver
+            };
+            Dictionary<string, object> options = new Dictionary<string, object>
+            {
+                { "inch", map.GetInch() },
+                { "pollingRate", pollingRate },
+                { "mapLink", map.Link }
+            };
+
+            List<object> actors = GetCombatReplayActors(log, map);
+            
             string script = "var initialOnLoad = window.onload;";
-            script += "window.onload = function () { if (initialOnLoad) {initialOnLoad();} animator = new Animator(" + JsonConvert.SerializeObject(options) + "); animator.initActors([" + actors + "]);};";
+            script += "window.onload = function () { if (initialOnLoad) {initialOnLoad();} animator = new Animator(" + JsonConvert.SerializeObject(options, settings) + "); animator.initActors(" + JsonConvert.SerializeObject(actors, settings) + ");};";
 #if !DEBUG
             script = Uglify.Js(script, GeneralHelper.JSMinifySettings).Code;
 #endif

@@ -7,7 +7,7 @@ namespace LuckParser.Models.HtmlModels
         public string Symbol;     
         public int Size;
         public string Color;       
-        public List<List<List<double>>> Points;      
+        public List<List<List<object>>> Points;      
         public bool Visible;
     }
 }

@@ -22,7 +22,7 @@ namespace LuckParser.Models.ParseModels
             public int Width { get; set; }
         }
 
-        public override string GetCombatReplayJSON(CombatReplayMap map)
+        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map)
         {
             RectangleSerializable aux = new RectangleSerializable
             {
@@ -36,7 +36,7 @@ namespace LuckParser.Models.ParseModels
                 End = Lifespan.end,
                 ConnectedTo = ConnectedTo.GetConnectedTo(map)
             };
-            return JsonConvert.SerializeObject(aux);
+            return aux;
         }
     }
 }

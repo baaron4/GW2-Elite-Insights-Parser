@@ -31,19 +31,15 @@ namespace LuckParser.Models.ParseModels
             log.FightData.Logic.ComputeAdditionalThrashMobData(this, log);
         }
         //
-        private class Serializable
+        private class MobSerializable : AbstractMasterActorSerializable
         {
-            public string Img { get; set; }
-            public string Type { get; set; }
-            public int ID { get; set; }
-            public double[] Positions { get; set; }
             public long Start { get; set; }
             public long End { get; set; }
         }
 
-        public override string GetCombatReplayJSON(CombatReplayMap map)
+        public override AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map)
         {
-            Serializable aux = new Serializable
+            MobSerializable aux = new MobSerializable
             {
                 Img = CombatReplay.Icon,
                 Type = "Mob",
@@ -60,7 +56,7 @@ namespace LuckParser.Models.ParseModels
                 aux.Positions[i++] = y;
             }
 
-            return JsonConvert.SerializeObject(aux);
+            return aux;
         }
     }
 }

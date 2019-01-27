@@ -12,7 +12,13 @@ bgImage.onload = function () {
     animateCanvas(-1);
     bgLoaded = true;
 };
-const resolutionMultiplier = 2;
+
+var mobilecheck = function () {
+    var check = false;
+    (function (a) { if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) check = true; })(navigator.userAgent || navigator.vendor || window.opera);
+    return check;
+};
+const resolutionMultiplier = mobilecheck() ? 3 : 2;
 
 var animator = null;
 
@@ -39,6 +45,7 @@ class Animator {
         this.trashMobData = new Map();
         this.mechanicActorData = [];
         this.attachedActorData = new Map();
+        this.backgroundActorData = [];
         // animation
         this.animation = null;
         this.timeSlider = document.getElementById('timeRange');
@@ -50,7 +57,6 @@ class Animator {
         this.canvas.height *= resolutionMultiplier;
         this.ctx = this.canvas.getContext('2d');
         this.ctx.imageSmoothingEnabled = true;
-        this.ctx.imageSmoothingQuality = "high";
         this.controlledByHTML = false;
         // manipulation
         this.lastX = this.canvas.width / 2;
@@ -87,41 +93,44 @@ class Animator {
         this.mechanicActorData = [];
         for (let i = 0; i < actors.length; i++) {
             const actor = actors[i];
-            switch (actor.Type) {
+            switch (actor.type) {
                 case "Player":
-                    this.playerData.set(actor.ID, new PlayerIconDrawable(actor.Img, 20, actor.Group, actor.Positions, actor.Dead, actor.Down));
+                    this.playerData.set(actor.id, new PlayerIconDrawable(actor.img, 20, actor.group, actor.positions, actor.dead, actor.down));
                     if (this.times.length === 0) {
-                        for (let j = 0; j < actor.Positions.length / 2; j++) {
+                        for (let j = 0; j < actor.positions.length / 2; j++) {
                             this.times.push(j * this.pollingRate);
                         }
                     }
                     break;
                 case "Target":
-                    this.targetData.set(actor.ID, new EnemyIconDrawable(actor.Start, actor.End, actor.Img, 30, actor.Positions));
+                    this.targetData.set(actor.id, new EnemyIconDrawable(actor.start, actor.end, actor.img, 30, actor.positions));
                     break;
                 case "Mob":
-                    this.trashMobData.set(actor.ID, new EnemyIconDrawable(actor.Start, actor.End, actor.Img, 25, actor.Positions));
+                    this.trashMobData.set(actor.id, new EnemyIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions));
                     break;
                 case "Circle":
-                    this.mechanicActorData.push(new CircleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Radius, actor.ConnectedTo, actor.MinRadius));
+                    this.mechanicActorData.push(new CircleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.radius, actor.connectedTo, actor.minRadius));
                     break;
                 case "Rectangle":
-                    this.mechanicActorData.push(new RectangleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Width, actor.Height, actor.ConnectedTo));
+                    this.mechanicActorData.push(new RectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.width, actor.height, actor.connectedTo));
                     break;
                 case "RotatedRectangle":
-                    this.mechanicActorData.push(new RotatedRectangleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Width, actor.Height, actor.Rotation, actor.RadialTranslation, actor.SpinAngle, actor.ConnectedTo));
+                    this.mechanicActorData.push(new RotatedRectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.width, actor.height, actor.rotation, actor.radialTranslation, actor.spinAngle, actor.connectedTo));
                     break;
                 case "Doughnut":
-                    this.mechanicActorData.push(new DoughnutMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.InnerRadius, actor.OuterRadius, actor.ConnectedTo));
+                    this.mechanicActorData.push(new DoughnutMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.innerRadius, actor.outerRadius, actor.connectedTo));
                     break;
                 case "Pie":
-                    this.mechanicActorData.push(new PieMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Direction, actor.OpeningAngle, actor.Radius, actor.ConnectedTo));
+                    this.mechanicActorData.push(new PieMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.direction, actor.openingAngle, actor.radius, actor.connectedTo));
                     break;
                 case "Line":
-                    this.mechanicActorData.push(new LineMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.ConnectedFrom, actor.ConnectedTo));
+                    this.mechanicActorData.push(new LineMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.connectedFrom, actor.connectedTo));
                     break;
                 case "Facing":
-                    this.attachedActorData.set(actor.ConnectedTo, new FacingMechanicDrawable(actor.Start, actor.End, actor.ConnectedTo, actor.FacingData));
+                    this.attachedActorData.set(actor.connectedTo, new FacingMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData));
+                    break;
+                case "MovingPlatform":
+                    this.backgroundActorData.push(new MovingPlatformDrawable(actor.start, actor.end, actor.image, actor.width, actor.height, actor.positions));
                     break;
             }
         }
@@ -368,6 +377,12 @@ class Animator {
         ctx.restore();
         //
         ctx.drawImage(bgImage, 0, 0, canvas.width / resolutionMultiplier, canvas.height / resolutionMultiplier);
+        // Background items commonly overlap so they need to be drawn in the correct order by height
+        // This is sorted in reverse order because the z axis is inverted
+        animator.backgroundActorData.sort((x, y) => y.getHeight() - x.getHeight());
+        for (let i = 0; i < animator.backgroundActorData.length; i++) {
+            animator.backgroundActorData[i].draw();
+        }
         for (let i = 0; i < this.mechanicActorData.length; i++) {
             this.mechanicActorData[i].draw();
         }
@@ -913,5 +928,138 @@ class LineMechanicDrawable extends FormMechanicDrawable {
         ctx.lineWidth = (2 / animator.scale).toString();
         ctx.strokeStyle = this.color;
         ctx.stroke();
+    }
+}
+
+class BackgroundDrawable {
+    constructor(start, end) {
+        this.start = start;
+        this.end = end;
+    }
+
+    draw() {
+        // to override
+    }
+
+    getHeight() {
+        // to override
+    }
+
+    getPosition() {
+        // to override
+    }
+}
+
+class MovingPlatformDrawable extends BackgroundDrawable {
+    constructor(start, end, image, width, height, positions) {
+        super(start, end);
+        this.image = new Image();
+        this.image.src = image;
+        this.width = width;
+        this.height = height;
+        this.positions = positions;
+        if (this.positions.length > 1) {
+            this.currentIndex = 0;
+            this.currentStart = Number.NEGATIVE_INFINITY;
+            this.currentEnd = positions[0][5];
+        }
+    }
+
+    draw() {
+        const pos = this.getInterpolatedPosition();
+        if (pos === null) {
+            return;
+        }
+        let ctx = animator.ctx;
+        const rads = pos.angle;
+        ctx.save();
+        ctx.translate(pos.x, pos.y);
+        ctx.rotate(rads % (2 * Math.PI));
+        ctx.globalAlpha = pos.opacity;
+        ctx.drawImage(this.image, -0.5 * this.width, -0.5 * this.height, this.width, this.height);
+        ctx.restore();
+    }
+
+    getHeight() {
+        let position = this.getInterpolatedPosition();
+        if (position === null) {
+            return Number.NEGATIVE_INFINITY;
+        }
+
+        return position.z;
+    }
+
+    getInterpolatedPosition() {
+        let time = animator.reactiveDataStatus.time;
+        if (time < this.start || time > this.end) {
+            return null;
+        }
+        if (this.positions.length === 0) {
+            return null;
+        }
+        if (this.positions.length === 1) {
+            return {
+                x: this.positions[0][0],
+                y: this.positions[0][1],
+                z: this.positions[0][2],
+                angle: this.positions[0][3],
+                opacity: this.positions[0][4],
+            };
+        }
+
+        let i;
+        let changed = false;
+        if (this.currentStart <= time && time < this.currentEnd) {
+            i = this.currentIndex;
+        } else {
+            for (i = 0; i < this.positions.length; i++) {
+                let positionTime = this.positions[i][5];
+                if (positionTime > time) {
+                    break;
+                }
+            }
+            changed = true;
+        }
+
+        if (changed) {
+            this.currentIndex = i;
+            if (i === 0) {
+                this.currentStart = Number.NEGATIVE_INFINITY;
+                this.currentEnd = this.positions[0][5];
+            } else {
+                this.currentStart = this.positions[i - 1][5];
+                if (i === this.positions.length) {
+                    this.currentEnd = Number.POSITIVE_INFINITY;
+                } else {
+                    this.currentEnd = this.positions[i][5];
+                }
+            }
+        }
+
+        if (i === 0) {
+            // First position is in the future
+            return null;
+        }
+
+        if (i === this.positions.length) {
+            // The last position is in the past, use the last position
+            return {
+                x: this.positions[i - 1][0],
+                y: this.positions[i - 1][1],
+                z: this.positions[i - 1][2],
+                angle: this.positions[i - 1][3],
+                opacity: this.positions[i - 1][4],
+            };
+        }
+
+        let progress = (time - this.positions[i - 1][5]) / (this.positions[i][5] - this.positions[i - 1][5]);
+
+        return {
+            x: (this.positions[i - 1][0] * (1 - progress) + this.positions[i][0] * progress),
+            y: (this.positions[i - 1][1] * (1 - progress) + this.positions[i][1] * progress),
+            z: (this.positions[i - 1][2] * (1 - progress) + this.positions[i][2] * progress),
+            angle: (this.positions[i - 1][3] * (1 - progress) + this.positions[i][3] * progress),
+            opacity: (this.positions[i - 1][4] * (1 - progress) + this.positions[i][4] * progress),
+        };
     }
 }

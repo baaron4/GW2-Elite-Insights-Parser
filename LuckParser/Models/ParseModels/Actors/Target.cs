@@ -40,6 +40,11 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
+        public void OverrideName(string name)
+        {
+            Character = name;
+        }
+
         public List<double[]> Get1SHealthGraph(ParsedLog log, List<PhaseData> phases)
         {
             List<double[]> res = new List<double[]>();
@@ -97,19 +102,15 @@ namespace LuckParser.Models.ParseModels
         
 
         //
-        private class Serializable
+        private class TargetSerializable : AbstractMasterActorSerializable
         {
-            public string Img { get; set; }
-            public string Type { get; set; }
-            public int ID { get; set; }
-            public double[] Positions { get; set; }
             public long Start { get; set; }
             public long End { get; set; }
         }
 
-        public override string GetCombatReplayJSON(CombatReplayMap map)
+        public override AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map)
         {
-            Serializable aux = new Serializable
+            TargetSerializable aux = new TargetSerializable
             {
                 Img = CombatReplay.Icon,
                 Type = "Target",
@@ -125,7 +126,7 @@ namespace LuckParser.Models.ParseModels
                 aux.Positions[i++] = x;
                 aux.Positions[i++] = y;
             }
-            return JsonConvert.SerializeObject(aux);
+            return aux;
         }
 
         /*protected override void setHealingLogs(ParsedLog log)

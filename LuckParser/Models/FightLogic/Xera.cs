@@ -10,6 +10,9 @@ namespace LuckParser.Models.Logic
 {
     public class Xera : RaidLogic
     {
+
+        private long _specialSplit = 0;
+
         public Xera(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
@@ -68,9 +71,9 @@ namespace LuckParser.Models.Logic
                 end = log.FightData.ToFightSpace(invulXera.Time);
                 phases.Add(new PhaseData(start, end));
                 // split happened
-                if (log.FightData.PhaseData.Count == 1)
+                if (_specialSplit > 0)
                 {
-                    start = log.FightData.ToFightSpace(log.FightData.PhaseData[0]);
+                    start = log.FightData.ToFightSpace(_specialSplit);
                     //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
                     phases.Add(new PhaseData(start, fightDuration));
                 }
@@ -107,10 +110,10 @@ namespace LuckParser.Models.Logic
                     CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position && x.SrcInstid == NPC.InstID && x.Time >= NPC.FirstAware + 500 && x.Time <= NPC.LastAware);
                     if (move != null)
                     {
-                        fightData.PhaseData.Add(move.Time);
+                        _specialSplit = move.Time;
                     } else
                     {
-                        fightData.PhaseData.Add(NPC.FirstAware);
+                        _specialSplit = NPC.FirstAware;
                     }
                     target.AgentItem.LastAware = NPC.LastAware;
                     // get unique id for the fusion

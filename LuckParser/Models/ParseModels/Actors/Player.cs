@@ -307,20 +307,16 @@ namespace LuckParser.Models.ParseModels
         }
 
         //
-        private class Serializable
+        private class PlayerSerializable : AbstractMasterActorSerializable
         {
             public int Group { get; set; }
-            public string Img { get; set; }
-            public string Type { get; set; }
-            public int ID { get; set; }
-            public double[] Positions { get; set; }
             public long[] Dead { get; set; }
             public long[] Down { get; set; }
         }
 
-        public override string GetCombatReplayJSON(CombatReplayMap map)
+        public override AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map)
         {
-            Serializable aux = new Serializable
+            PlayerSerializable aux = new PlayerSerializable
             {
                 Group = Group,
                 Img = CombatReplay.Icon,
@@ -350,7 +346,7 @@ namespace LuckParser.Models.ParseModels
                 aux.Down[i++] = end;
             }
 
-            return JsonConvert.SerializeObject(aux);
+            return aux;
         }
 
 

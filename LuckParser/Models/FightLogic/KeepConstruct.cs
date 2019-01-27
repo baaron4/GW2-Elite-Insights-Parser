@@ -77,9 +77,10 @@ namespace LuckParser.Models.Logic
                 phases.Add(new PhaseData(start, fightDuration));
                 start = fightDuration;
             }
+            string[] mainPhaseNames = { "100% - 66%", "66% - 33%", "33% - 0%" };
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].Name = "Phase " + i;
+                phases[i].Name = mainPhaseNames[i - 1];
                 phases[i].Targets.Add(mainTarget);
             }
             // add burn phases
@@ -151,7 +152,7 @@ namespace LuckParser.Models.Logic
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                if (phase.Name.Contains("Phase"))
+                if (phase.Name.Contains("%"))
                 {
                     cur = phase;
                 }
@@ -161,10 +162,12 @@ namespace LuckParser.Models.Logic
                     {
                         if (cur.End >= phase.End + 5000 && (i == phases.Count - 1 || phases[i + 1].Name.Contains("Phase")))
                         {
-                            leftOverPhases.Add(new PhaseData(phase.End + 1, cur.End)
+                            PhaseData leftOverPhase = new PhaseData(phase.End + 1, cur.End)
                             {
-                                Name = "Leftover " + leftOverCount++
-                            });
+                                Name = "Leftover " + leftOverCount++,
+                            };
+                            leftOverPhase.Targets.Add(mainTarget);
+                            leftOverPhases.Add(leftOverPhase);
                         }
                     }
                 }
