@@ -698,7 +698,7 @@ class FacingMechanicDrawable extends MechanicDrawable {
             var curTime = curData[1];
             var curAngle = curData[0];
             for (; j < times.length && times[j] < curTime - 150; j++) {
-                this.facingData.push(-curAngle);
+                this.facingData.push(-curAngle);// positive mathematical direction, reversed since JS has downwards increasing y axis
             }
         }
     }
@@ -710,7 +710,7 @@ class FacingMechanicDrawable extends MechanicDrawable {
         var time = animator.reactiveDataStatus.time;
         const lastTime = animator.times[animator.times.length - 1];
         const currentIndex = Math.floor((animator.times.length - 1) * time / lastTime);
-        return this.facingData[currentIndex]; // positive mathematical direction, reversed since JS has downwards increasing y axis
+        return this.facingData[currentIndex]; 
     }
 
     draw() {
