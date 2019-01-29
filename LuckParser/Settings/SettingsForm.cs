@@ -1,6 +1,7 @@
 ﻿using LuckParser.Controllers;
 using System;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 namespace LuckParser.Setting
@@ -25,12 +26,13 @@ namespace LuckParser.Setting
             }
         }
 
-        private void SettingsFormLoad(object sender, EventArgs e)
+        private void SetValues()
         {
-            chkDefaultOutputLoc.Checked =Properties.Settings.Default.SaveAtOut;
+
+            chkDefaultOutputLoc.Checked = Properties.Settings.Default.SaveAtOut;
             txtCustomSaveLoc.Text = Properties.Settings.Default.OutLocation;
             chkOutputHtml.Checked = Properties.Settings.Default.SaveOutHTML;
-            chkOutputCsv.Checked = Properties.Settings.Default.SaveOutCSV;  
+            chkOutputCsv.Checked = Properties.Settings.Default.SaveOutCSV;
             chkShowEstimates.Checked = Properties.Settings.Default.ShowEstimates;
             chkPhaseParsing.Checked = Properties.Settings.Default.ParsePhases;
             chkOneAtATime.Checked = Properties.Settings.Default.ParseOneAtATime;
@@ -52,11 +54,16 @@ namespace LuckParser.Setting
             chkAddDuration.Checked = Properties.Settings.Default.AddDuration;
 
             chkHtmlExternalScripts.Checked = Properties.Settings.Default.HtmlExternalScripts;
-            toolTip1.SetToolTip(chkHtmlExternalScripts, "Writes static css and js scripts in own files, which are shared between all logs. Log file size decreases, but the script files have to be kept along with the html.");
 
             panelHtml.Enabled = Properties.Settings.Default.SaveOutHTML;
             panelJson.Enabled = Properties.Settings.Default.SaveOutJSON;
             panelXML.Enabled = Properties.Settings.Default.SaveOutXML;
+        }
+
+        private void SettingsFormLoad(object sender, EventArgs e)
+        {
+            SetValues();
+            toolTip1.SetToolTip(chkHtmlExternalScripts, "Writes static css and js scripts in own files, which are shared between all logs. Log file size decreases, but the script files have to be kept along with the html.");
         }
 
         private void DefaultOutputLocationCheckedChanged(object sender, EventArgs e)
@@ -248,6 +255,39 @@ namespace LuckParser.Setting
         private void chkAddDuration_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.AddDuration = chkAddDuration.Checked;
+        }
+
+        private void settingsDump_Click(object sender, EventArgs e)
+        {
+            string dump = CustomSettingsManager.DumpSettings();
+            using (var saveFile = new SaveFileDialog())
+            {
+                saveFile.Filter = "Conf file|*.conf";
+                saveFile.Title = "Save a Configuration file";
+                DialogResult result = saveFile.ShowDialog();
+                if (saveFile.FileName != "")
+                {
+                    FileStream fs = (FileStream)saveFile.OpenFile();
+                    byte[] settings = new UTF8Encoding(true).GetBytes(dump);
+                    fs.Write(settings, 0, settings.Length);
+                    fs.Close();
+                }
+            }
+        }
+
+        private void settingsLoad_Click(object sender, EventArgs e)
+        {
+            using (var loadFile = new OpenFileDialog())
+            {
+                loadFile.Filter = "Conf file|*.conf";
+                loadFile.Title = "Load a Configuration file";
+                DialogResult result = loadFile.ShowDialog();
+                if (loadFile.FileName != "")
+                {
+                    CustomSettingsManager.ReadConfig(loadFile.FileName);
+                    SetValues();
+                }
+            }
         }
     }
 }
