@@ -99,11 +99,9 @@ h6.player-shorten {
 
 .squad-details{
     min-width: 550px; 
-    max-width: 800px;
 }
 
 .group-details{
-    width: 250px; 
     max-height: 800px;
 }
 
