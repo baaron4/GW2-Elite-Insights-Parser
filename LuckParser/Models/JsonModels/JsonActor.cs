@@ -50,13 +50,13 @@ namespace LuckParser.Models.JsonModels
         public List<JsonMinions> Minions;
 
         /// <summary>
-        /// Array of Total DPS stats
+        /// Array of Total DPS stats \n
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonDPS"/>
         public JsonDPS[] DpsAll;
         /// <summary>
-        /// Total Damage distribution array
+        /// Total Damage distribution array \n
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonDamageDist"/>
@@ -73,23 +73,23 @@ namespace LuckParser.Models.JsonModels
         /// <seealso cref="JsonRotation"/>
         public List<JsonRotation> Rotation;
         /// <summary>
-        /// Array of int representing 1S damage points
+        /// Array of int representing 1S damage points \n
         /// Length == # of phases
         /// </summary>
         /// <remarks>
-        /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point
+        /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
         public List<int>[] Damage1S;
         /// <summary>
-        /// Array of int[2] that represents the number of conditions status
-        /// Value[i][0] will be the time, value[i][1] will be the number of conditions present from value[i][0] to value[i+1][0]
-        /// If i corresponds to the last element that means the status did not change for the remainder of the fight
+        /// Array of int[2] that represents the number of conditions status \n
+        /// Value[i][0] will be the time, value[i][1] will be the number of conditions present from value[i][0] to value[i+1][0] \n
+        /// If i corresponds to the last element that means the status did not change for the remainder of the fight \n
         /// </summary>
         public List<int[]> ConditionsStates;
         /// <summary>
-        /// Array of int[2] that represents the number of boons status
-        /// Value[i][0] will be the time, value[i][1] will be the number of boons present from value[i][0] to value[i+1][0]
+        /// Array of int[2] that represents the number of boons status \n
+        /// Value[i][0] will be the time, value[i][1] will be the number of boons present from value[i][0] to value[i+1][0] \n
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight
         /// </summary>
         public List<int[]> BoonsStates;

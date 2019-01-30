@@ -16,13 +16,13 @@ namespace LuckParser.Models.JsonModels
         /// </summary>
         public string Name;
         /// <summary>
-        /// Total Damage distribution array
+        /// Total Damage distribution array \n
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonDamageDist"/>
         public List<JsonDamageDist>[] TotalDamageDist;
         /// <summary>
-        /// Per Target Damage distribution array
+        /// Per Target Damage distribution array \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
         /// </summary>
         /// <seealso cref="JsonDamageDist"/>

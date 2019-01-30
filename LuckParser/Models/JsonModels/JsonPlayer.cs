@@ -23,15 +23,15 @@ namespace LuckParser.Models.JsonModels
         /// </summary>
         public string Profession;
         /// <summary>
-        /// Weapons of the player
-        /// Length == 4 if wep swap, 2 otherwise
+        /// Weapons of the player \n
+        /// Length == 4 if wep swap, 2 otherwise \n
         /// When 2 handed weapon even indices will have "2Hand" as value
         /// </summary>
         public string[] Weapons;
         public JsonDPS[][] DpsTargets;
         public List<int>[][] TargetDamage1S;
         /// <summary>
-        /// Per Target Damage distribution array
+        /// Per Target Damage distribution array \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
         /// </summary>
         /// <seealso cref="JsonDamageDist"/>
@@ -43,31 +43,31 @@ namespace LuckParser.Models.JsonModels
         public Dictionary<string, List<JsonBuffDamageModifierData>> DamageModifiers;
         public Dictionary<string, List<JsonBuffDamageModifierData>>[] DamageModifiersTarget;
         /// <summary>
-        /// List of buff status on self (uptime + self generation)
+        /// List of buff status on self (uptime + self generation) \n
         /// Key is "'b' + id"
         /// </summary>
         /// <seealso cref="JsonBuffs"/>
         public List<JsonBuffs> SelfBuffs;
         /// <summary>
-        /// List of buff status on group generation
+        /// List of buff status on group generation \n
         /// Key is "'b' + id"
         /// </summary>
         /// <seealso cref="JsonBuffs"/>
         public List<JsonBuffs> GroupBuffs;
         /// <summary>
-        /// List of buff status on off group generation
+        /// List of buff status on off group generation \n
         /// Key is "'b' + id"
         /// </summary>
         /// <seealso cref="JsonBuffs"/>
         public List<JsonBuffs> OffGroupBuffs;
         /// <summary>
-        /// List of buff status on squad generation
+        /// List of buff status on squad generation \n
         /// Key is "'b' + id"
         /// </summary>
         /// <seealso cref="JsonBuffs"/>
         public List<JsonBuffs> SquadBuffs;
         /// <summary>
-        /// List of death recaps
+        /// List of death recaps \n
         /// Length == number of death
         /// </summary>
         /// <seealso cref="JsonDeathRecap"/>

@@ -33,18 +33,17 @@ namespace LuckParser.Models.JsonModels
         /// </summary>
         public int LastAware;
         /// <summary>
-        /// Array of average number of boons on the target
+        /// Array of average number of boons on the target \n
         /// Length == # of phases
         /// </summary>
         public double[] AvgBoons;
         /// <summary>
-        /// Array of average number of conditions on the target
+        /// Array of average number of conditions on the target \n
         /// Length == # of phases
         /// </summary>
         public double[] AvgConditions;
         /// <summary>
         /// List of buff status
-        /// Key is "'b' + id"
         /// </summary>
         /// <seealso cref="JsonTargetBuffs"/>
         public List<JsonTargetBuffs> Buffs;
