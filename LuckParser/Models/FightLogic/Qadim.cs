@@ -62,8 +62,8 @@ namespace LuckParser.Models.Logic
 
         protected override CombatReplayMap GetCombatMapInternal()
         {
-            return new CombatReplayMap("https://i.imgur.com/UTuqVcb.png",
-                            (3785, 3570),
+            return new CombatReplayMap("https://i.imgur.com/gHq0j79.png",
+                            (3903, 3878),
                             (-11676, 8825, -3870, 16582),
                             (-21504, -21504, 24576, 24576),
                             (13440, 14336, 15360, 16256));
@@ -455,7 +455,7 @@ namespace LuckParser.Models.Logic
             // It would be way nicer to calculate them here, but we don't have a nice vector library
             // and it would double the amount of work.
 
-            const string platformImageUrl = "https://i.imgur.com/Kj1aSpg.png";
+            const string platformImageUrl = "https://i.imgur.com/DbXr5Fo.png";
             const double hiddenOpacity = 0.2;
 
             const int xLeft = -7975;
