@@ -13,14 +13,14 @@ namespace LuckParser.Models.ParseModels
     {
         public class Consumable
         {
-            public Boon Item { get; }
+            public Boon Buff { get; }
             public long Time { get; }
             public int Duration { get; }
             public int Stack { get; set; }
 
             public Consumable(Boon item, long time, int duration)
             {
-                Item = item;
+                Buff = item;
                 Time = time;
                 Duration = duration;
                 Stack = 1;
@@ -31,14 +31,14 @@ namespace LuckParser.Models.ParseModels
         {
             public class DeathRecapDamageItem
             {
-                public long Skill;
-                public bool Condi;
+                public long ID;
+                public bool IsCondi;
                 public string Src;
                 public int Damage;
                 public int Time;
             }
 
-            public int Time;
+            public int DeathTime;
             public List<DeathRecapDamageItem> ToDown;
             public List<DeathRecapDamageItem> ToKill;
         }
@@ -130,7 +130,7 @@ namespace LuckParser.Models.ParseModels
             {
                 DeathRecap recap = new DeathRecap()
                 {
-                    Time = (int)(log.FightData.ToFightSpace(dead.Time))
+                    DeathTime = (int)(log.FightData.ToFightSpace(dead.Time))
                 };
                 CombatItem downed = downs.LastOrDefault(x => x.Time <= dead.Time && x.Time >= lastTime);
                 if (downed != null)
@@ -145,8 +145,8 @@ namespace LuckParser.Models.ParseModels
                         DeathRecap.DeathRecapDamageItem item = new DeathRecap.DeathRecapDamageItem()
                         {
                             Time = (int)dl.Time,
-                            Condi = dl.IsCondi,
-                            Skill = dl.SkillId,
+                            IsCondi = dl.IsCondi,
+                            ID = dl.SkillId,
                             Damage = dl.Damage,
                             Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
                         };
@@ -166,8 +166,8 @@ namespace LuckParser.Models.ParseModels
                         DeathRecap.DeathRecapDamageItem item = new DeathRecap.DeathRecapDamageItem()
                         {
                             Time = (int)dl.Time,
-                            Condi = dl.IsCondi,
-                            Skill = dl.SkillId,
+                            IsCondi = dl.IsCondi,
+                            ID = dl.SkillId,
                             Damage = dl.Damage,
                             Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
                         };
@@ -187,8 +187,8 @@ namespace LuckParser.Models.ParseModels
                         DeathRecap.DeathRecapDamageItem item = new DeathRecap.DeathRecapDamageItem()
                         {
                             Time = (int)dl.Time,
-                            Condi = dl.IsCondi,
-                            Skill = dl.SkillId,
+                            IsCondi = dl.IsCondi,
+                            ID = dl.SkillId,
                             Damage = dl.Damage,
                             Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
                         };
@@ -274,7 +274,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     if (time <= fightDuration)
                     {
-                        Consumable existing = _consumeList.Find(x => x.Time == time && x.Item.ID == consumable.ID);
+                        Consumable existing = _consumeList.Find(x => x.Time == time && x.Buff.ID == consumable.ID);
                         if (existing != null)
                         {
                             existing.Stack++;

@@ -151,7 +151,8 @@ namespace LuckParser.Builders
             }
             if (mechanicLogs.Any())
             {
-                log.Mechanics = new Dictionary<string, List<JsonMechanic>>();
+                log.Mechanics = new List<JsonMechanics>();
+                Dictionary<string, List<JsonMechanic>> dict = new Dictionary<string, List<JsonMechanic>>();
                 foreach (MechanicLog ml in mechanicLogs)
                 {
                     JsonMechanic mech = new JsonMechanic
@@ -159,17 +160,25 @@ namespace LuckParser.Builders
                         Time = ml.Time,
                         Actor = ml.Actor.Character
                     };
-                    if (log.Mechanics.TryGetValue(ml.InGameName, out var list))
+                    if (dict.TryGetValue(ml.InGameName, out var list))
                     {
                         list.Add(mech);
                     }
                     else
                     {
-                        log.Mechanics[ml.InGameName] = new List<JsonMechanic>()
+                        dict[ml.InGameName] = new List<JsonMechanic>()
                         {
                             mech
                         };
                     }
+                }
+                foreach (var pair in dict)
+                {
+                    log.Mechanics.Add(new JsonMechanics()
+                    {
+                        Name = pair.Key,
+                        MechanicsData = pair.Value
+                    });
                 }
             }
         }
@@ -201,13 +210,13 @@ namespace LuckParser.Builders
                     Minions = BuildMinions(target),
                     TotalDamageDist = BuildDamageDist(target, null),
                     TotalDamageTaken = BuildDamageTaken(target),
-                    AvgBoonsStates = BuildBuffStates(target.GetBoonGraphs(_log)[Boon.NumberOfBoonsID]),
-                    AvgConditionsStates = BuildBuffStates(target.GetBoonGraphs(_log)[Boon.NumberOfConditionsID])
+                    BoonsStates = BuildBuffStates(target.GetBoonGraphs(_log)[Boon.NumberOfBoonsID]),
+                    ConditionsStates = BuildBuffStates(target.GetBoonGraphs(_log)[Boon.NumberOfConditionsID])
                 };
                 int finalTargetHealth = target.HealthOverTime.Count > 0
                     ? target.HealthOverTime.Last().Y
                     : 10000;
-                jsTarget.FinalHealth = target.Health * (finalTargetHealth * 0.01);
+                jsTarget.FinalHealth = (int)Math.Round(target.Health * (finalTargetHealth * 0.01));
                 jsTarget.HealthPercentBurned = 100.0 - finalTargetHealth * 0.01;
                 log.Targets.Add(jsTarget);
             }
@@ -253,8 +262,8 @@ namespace LuckParser.Builders
                     TotalDamageTaken = BuildDamageTaken(player),
                     DeathRecap = BuildDeathRecap(player.GetDeathRecaps(_log)),
                     Consumables = BuildConsumables(player),
-                    AvgBoonsStates = BuildBuffStates(player.GetBoonGraphs(_log)[Boon.NumberOfBoonsID]),
-                    AvgConditionsStates = BuildBuffStates(player.GetBoonGraphs(_log)[Boon.NumberOfConditionsID]),
+                    BoonsStates = BuildBuffStates(player.GetBoonGraphs(_log)[Boon.NumberOfBoonsID]),
+                    ConditionsStates = BuildBuffStates(player.GetBoonGraphs(_log)[Boon.NumberOfConditionsID]),
                 });
             }
         }
@@ -317,9 +326,9 @@ namespace LuckParser.Builders
             return res;
         }
 
-        private Dictionary<string, List<JsonExtraBoonData>> BuildDamageModifiers(Dictionary<long, List<AbstractMasterActor.ExtraBoonData>> extra)
+        private Dictionary<string, List<JsonBuffDamageModifierData>> BuildDamageModifiers(Dictionary<long, List<AbstractMasterActor.ExtraBoonData>> extra)
         {
-            Dictionary<string, List<JsonExtraBoonData>> res = new Dictionary<string, List<JsonExtraBoonData>>();
+            Dictionary<string, List<JsonBuffDamageModifierData>> res = new Dictionary<string, List<JsonBuffDamageModifierData>>();
             foreach (long key in extra.Keys)
             {
                 string nKey = "b" + key;
@@ -327,14 +336,14 @@ namespace LuckParser.Builders
                 {
                     _buffDesc[nKey] = new JsonLog.BuffDesc(Boon.BoonsByIds[key]);
                 }
-                res[nKey] = extra[key].Select(x => new JsonExtraBoonData(x)).ToList();
+                res[nKey] = extra[key].Select(x => new JsonBuffDamageModifierData(x)).ToList();
             }
             return res;
         }
 
-        private Dictionary<string, List<JsonExtraBoonData>>[] BuildDamageModifiersTarget(Player p)
+        private Dictionary<string, List<JsonBuffDamageModifierData>>[] BuildDamageModifiersTarget(Player p)
         {
-            Dictionary<string, List<JsonExtraBoonData>>[] res = new Dictionary<string, List<JsonExtraBoonData>>[_log.FightData.Logic.Targets.Count];
+            Dictionary<string, List<JsonBuffDamageModifierData>>[] res = new Dictionary<string, List<JsonBuffDamageModifierData>>[_log.FightData.Logic.Targets.Count];
             for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
             {
                 Target tar = _log.FightData.Logic.Targets[i];
@@ -349,9 +358,9 @@ namespace LuckParser.Builders
             List<JsonConsumable> res = new List<JsonConsumable>();
             foreach (var food in input)
             {
-                if (!_buffDesc.ContainsKey("b" + food.Item.ID))
+                if (!_buffDesc.ContainsKey("b" + food.Buff.ID))
                 {
-                    _buffDesc["b" + food.Item.ID] = new JsonLog.BuffDesc(food.Item);
+                    _buffDesc["b" + food.Buff.ID] = new JsonLog.BuffDesc(food.Buff);
                 }
                 res.Add(new JsonConsumable(food));
             }
@@ -368,9 +377,9 @@ namespace LuckParser.Builders
             return res.Count > 0 ? res : null;
         }
 
-        private Dictionary<string, JsonDamageDist>[][] BuildDamageDist(AbstractMasterActor p)
+        private List<JsonDamageDist>[][] BuildDamageDist(AbstractMasterActor p)
         {
-            Dictionary<string, JsonDamageDist>[][] res = new Dictionary<string, JsonDamageDist>[_log.FightData.Logic.Targets.Count][];
+            List<JsonDamageDist>[][] res = new List<JsonDamageDist>[_log.FightData.Logic.Targets.Count][];
             for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
             {
                 Target target = _log.FightData.Logic.Targets[i];
@@ -379,9 +388,9 @@ namespace LuckParser.Builders
             return res;
         }
 
-        private Dictionary<string, JsonDamageDist>[][] BuildDamageDist(Minions p)
+        private List<JsonDamageDist>[][] BuildDamageDist(Minions p)
         {
-            Dictionary<string, JsonDamageDist>[][] res = new Dictionary<string, JsonDamageDist>[_log.FightData.Logic.Targets.Count][];
+            List<JsonDamageDist>[][] res = new List<JsonDamageDist>[_log.FightData.Logic.Targets.Count][];
             for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
             {
                 Target target = _log.FightData.Logic.Targets[i];
@@ -390,9 +399,9 @@ namespace LuckParser.Builders
             return res;
         }
 
-        private Dictionary<string, JsonDamageDist>[] BuildDamageDist(AbstractMasterActor p, Target target)
+        private List<JsonDamageDist>[] BuildDamageDist(AbstractMasterActor p, Target target)
         {
-            Dictionary<string, JsonDamageDist>[] res = new Dictionary<string, JsonDamageDist>[_statistics.Phases.Count];
+            List<JsonDamageDist>[] res = new List<JsonDamageDist>[_statistics.Phases.Count];
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
                 PhaseData phase = _statistics.Phases[i];
@@ -401,9 +410,9 @@ namespace LuckParser.Builders
             return res;
         }
 
-        private Dictionary<string, JsonDamageDist>[] BuildDamageTaken(AbstractMasterActor p)
+        private List<JsonDamageDist>[] BuildDamageTaken(AbstractMasterActor p)
         {
-            Dictionary<string, JsonDamageDist>[] res = new Dictionary<string, JsonDamageDist>[_statistics.Phases.Count];
+            List<JsonDamageDist>[] res = new List<JsonDamageDist>[_statistics.Phases.Count];
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
                 PhaseData phase = _statistics.Phases[i];
@@ -412,9 +421,9 @@ namespace LuckParser.Builders
             return res;
         }
 
-        private Dictionary<string, JsonDamageDist>[] BuildDamageDist(Minions p, Target target)
+        private List<JsonDamageDist>[] BuildDamageDist(Minions p, Target target)
         {
-            Dictionary<string, JsonDamageDist>[] res = new Dictionary<string, JsonDamageDist>[_statistics.Phases.Count];
+            List<JsonDamageDist>[] res = new List<JsonDamageDist>[_statistics.Phases.Count];
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
                 PhaseData phase = _statistics.Phases[i];
@@ -423,9 +432,9 @@ namespace LuckParser.Builders
             return res;
         }
 
-        private Dictionary<string, JsonDamageDist> BuildDamageDist(List<DamageLog> dls)
+        private List<JsonDamageDist> BuildDamageDist(List<DamageLog> dls)
         {
-            Dictionary<string, JsonDamageDist> res = new Dictionary<string, JsonDamageDist>();
+            List<JsonDamageDist> res = new List<JsonDamageDist>();
             Dictionary<long, List<DamageLog>> dict = dls.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             SkillData skillList = _log.SkillData;
             foreach (KeyValuePair<long, List<DamageLog>> pair in dict)
@@ -463,7 +472,7 @@ namespace LuckParser.Builders
                     continue;
                 }
                 string prefix = filteredList.First().IsCondi ? "b" : "s";
-                res[prefix + pair.Key] = new JsonDamageDist(filteredList);
+                res.Add(new JsonDamageDist(filteredList, filteredList.First().IsCondi, pair.Key));
         }
 
             return res;
@@ -486,9 +495,9 @@ namespace LuckParser.Builders
             return mins;
         }
 
-        private Dictionary<string, List<JsonSkill>> BuildRotation(List<CastLog> cls)
+        private List<JsonRotation> BuildRotation(List<CastLog> cls)
         {
-            Dictionary<string, List<JsonSkill>> res = new Dictionary<string, List<JsonSkill>>();
+            Dictionary<long, List<JsonSkill>> dict = new Dictionary<long, List<JsonSkill>>();
             SkillData skillList = _log.SkillData;
             foreach (CastLog cl in cls)
             {
@@ -499,18 +508,26 @@ namespace LuckParser.Builders
                     _skillDesc["s" + cl.SkillId] = new JsonLog.SkillDesc(skill);
                 }
                 JsonSkill jSkill = new JsonSkill(cl);
-                if (res.TryGetValue("s" + cl.SkillId, out var list))
+                if (dict.TryGetValue(cl.SkillId, out var list))
                 {
                     list.Add(jSkill);
                 } else
                 {
-                    res["s"+cl.SkillId] = new List<JsonSkill>()
+                    dict[cl.SkillId] = new List<JsonSkill>()
                     {
                         jSkill
                     };
                 }
             }
-
+            List<JsonRotation> res = new List<JsonRotation>();
+            foreach (var pair in dict)
+            {
+                res.Add(new JsonRotation()
+                {
+                    ID = pair.Key,
+                    Skills = pair.Value
+                });
+            }
             return res;
         }
 
@@ -543,10 +560,10 @@ namespace LuckParser.Builders
             }
         }
 
-        private Dictionary<string, JsonTargetBuffs> BuildTargetBuffs(Dictionary<long, Statistics.FinalTargetBuffs>[] statBoons, Target target)
+        private List<JsonTargetBuffs> BuildTargetBuffs(Dictionary<long, Statistics.FinalTargetBuffs>[] statBoons, Target target)
         {
             int phases = _statistics.Phases.Count;
-            var boons = new Dictionary<string, JsonTargetBuffs>();
+            var boons = new List<JsonTargetBuffs>();
 
             foreach (var pair in statBoons[0])
             {
@@ -563,17 +580,18 @@ namespace LuckParser.Builders
                 JsonTargetBuffs jsonBuffs = new JsonTargetBuffs()
                 {
                     States = BuildBuffStates(target.GetBoonGraphs(_log)[pair.Key]),
-                    Data = data
+                    Data = data,
+                    ID = pair.Key
                 };
-                boons["b" + pair.Key] = jsonBuffs;
+                boons.Add(jsonBuffs);
             }
 
             return boons;
         }
 
-        private Dictionary<string, JsonBuffs> BuildPlayerBuffs(Dictionary<long, Statistics.FinalBuffs>[] statUptimes, Player player)
+        private List<JsonBuffs> BuildPlayerBuffs(Dictionary<long, Statistics.FinalBuffs>[] statUptimes, Player player)
         {
-            var uptimes = new Dictionary<string, JsonBuffs>();
+            var uptimes = new List<JsonBuffs>();
             int phases = _statistics.Phases.Count;
             foreach (var pair in statUptimes[0])
             {
@@ -607,9 +625,10 @@ namespace LuckParser.Builders
                 JsonBuffs jsonBuffs = new JsonBuffs()
                 {
                     States = BuildBuffStates(player.GetBoonGraphs(_log)[pair.Key]),
-                    Data = data
+                    Data = data,
+                    ID = pair.Key
                 };
-                uptimes["b" + pair.Key] = jsonBuffs;
+                uptimes.Add(jsonBuffs);
             }
 
             if (!uptimes.Any()) return null;

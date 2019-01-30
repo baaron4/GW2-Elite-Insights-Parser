@@ -6,11 +6,26 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models.JsonModels
 {
+    /// <summary>
+    /// Class corresponding to a skill
+    /// </summary>
     public class JsonSkill
     {
-        public int Time;
+        /// <summary>
+        /// Time at which the skill was cast
+        /// </summary>
+        public int CastTime;
+        /// <summary>
+        /// Duration of the animation
+        /// </summary>
         public int Duration;
+        /// <summary>
+        /// Gained time from the animation, could be negative, which means time was lost
+        /// </summary>
         public int TimeGained;
+        /// <summary>
+        /// Animation started while under quickness
+        /// </summary>
         public bool Quickness;
 
         public JsonSkill(ParseModels.CastLog cl)
@@ -24,7 +39,7 @@ namespace LuckParser.Models.JsonModels
             {
                 timeGained = -cl.ActualDuration;
             }
-            Time = (int)cl.Time;
+            CastTime = (int)cl.Time;
             Duration = cl.ActualDuration;
             TimeGained = timeGained;
             Quickness = cl.StartActivation == Parser.ParseEnum.Activation.Quickness;

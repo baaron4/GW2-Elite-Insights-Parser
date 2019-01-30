@@ -111,7 +111,9 @@
     <Compile Include="Models\FightLogic\Freezie.cs" />
     <Compile Include="Models\JsonModels\JsonActor.cs" />
     <Compile Include="Models\JsonModels\JsonDeathRecap.cs" />
-    <Compile Include="Models\JsonModels\JsonExtraBoonData.cs" />
+    <Compile Include="Models\JsonModels\JsonBuffDamageModifierData.cs" />
+    <Compile Include="Models\JsonModels\JsonMechanics.cs" />
+    <Compile Include="Models\JsonModels\JsonRotation.cs" />
     <Compile Include="Models\JsonModels\JsonStatistics.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\BackgroundActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\FacingActor.cs" />

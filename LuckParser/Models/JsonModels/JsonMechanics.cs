@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 namespace LuckParser.Models.JsonModels
 {
     /// <summary>
-    /// Class corresponding to a mechanic event
+    /// Class corresponding to mechanics
     /// </summary>
-    public class JsonMechanic
+    public class JsonMechanics
     {
         /// <summary>
-        /// Time a which the event happened
+        /// List of mechanics application
         /// </summary>
-        public long Time;
+        public List<JsonMechanic> MechanicsData;
         /// <summary>
-        /// The actor who was hit by the mechanic
+        /// Name of the mechanic
         /// </summary>
-        public string Actor;
+        public string Name;
     }
 }

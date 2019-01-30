@@ -7,17 +7,19 @@ using System.Threading.Tasks;
 namespace LuckParser.Models.JsonModels
 {
     /// <summary>
-    /// Class corresponding to a mechanic event
+    /// Class corresponding to a skill
     /// </summary>
-    public class JsonMechanic
+    public class JsonRotation
     {
         /// <summary>
-        /// Time a which the event happened
+        /// ID of the skill
         /// </summary>
-        public long Time;
+        /// <seealso cref="JsonLog.SkillMap"/>
+        public long ID;
         /// <summary>
-        /// The actor who was hit by the mechanic
+        /// List of casted skills
         /// </summary>
-        public string Actor;
+        /// <seealso cref="JsonSkill"/>
+        public List<JsonSkill> Skills;
     }
 }

@@ -472,7 +472,7 @@ namespace LuckParser.Builders
                                     extraData.HitCount,
                                     extraData.TotalHitCount,
                                     extraData.DamageGain,
-                                    extraData.TotalDamage
+                                    extraData.Multiplier ? extraData.TotalDamage : 0
                                     });
                     }
                     else
@@ -501,7 +501,7 @@ namespace LuckParser.Builders
                                     extraData.HitCount,
                                     extraData.TotalHitCount,
                                     extraData.DamageGain,
-                                    extraData.TotalDamage
+                                    extraData.Multiplier ? extraData.TotalDamage : 0
                                         });
                         }
                         else
@@ -636,7 +636,7 @@ namespace LuckParser.Builders
             {
                 DeathRecapDto recap = new DeathRecapDto()
                 {
-                    Time = deathRecap.Time
+                    Time = deathRecap.DeathTime
                 };
                 res.Add(recap);
                 if (deathRecap.ToKill != null)
@@ -647,10 +647,10 @@ namespace LuckParser.Builders
                         recap.ToKill.Add(new object[]
                         {
                             item.Time,
-                            item.Skill,
+                            item.ID,
                             item.Damage,
                             item.Src,
-                            item.Condi
+                            item.IsCondi
                         });
                     }
                 }
@@ -662,10 +662,10 @@ namespace LuckParser.Builders
                         recap.ToDown.Add(new object[]
                         {
                             item.Time,
-                            item.Skill,
+                            item.ID,
                             item.Damage,
                             item.Src,
-                            item.Condi
+                            item.IsCondi
                         });
                     }
                 }
@@ -1039,10 +1039,10 @@ namespace LuckParser.Builders
                     Time = entry.Time / 1000.0,
                     Duration = entry.Duration / 1000.0,
                     Stack = entry.Stack,
-                    Id = entry.Item.ID,
-                    Dimished = (entry.Item.ID == 46587 || entry.Item.ID == 46668)
+                    Id = entry.Buff.ID,
+                    Dimished = (entry.Buff.ID == 46587 || entry.Buff.ID == 46668)
                 };
-                _usedBoons[entry.Item.ID] = entry.Item;
+                _usedBoons[entry.Buff.ID] = entry.Buff;
                 list.Add(dto);
             }
 

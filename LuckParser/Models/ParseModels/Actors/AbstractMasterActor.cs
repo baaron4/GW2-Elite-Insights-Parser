@@ -14,12 +14,14 @@ namespace LuckParser.Models.ParseModels
             public int TotalHitCount { get; }
             public int DamageGain { get; }
             public int TotalDamage { get; }
-            public ExtraBoonData(int hitCount, int totalHitCount, int damageGain, int totalDamage)
+            public bool Multiplier { get; }
+            public ExtraBoonData(int hitCount, int totalHitCount, int damageGain, int totalDamage, bool multiplier)
             {
                 HitCount = hitCount;
                 TotalHitCount = totalHitCount;
                 DamageGain = damageGain;
                 TotalDamage = totalDamage;
+                Multiplier = multiplier;
             }
         };
         // Boons
@@ -263,7 +265,7 @@ namespace LuckParser.Models.ParseModels
                                         int totalDamage = dmLogs.Sum(x => x.Damage);
                                         List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsCondi).ToList();
                                         int damage = (int)Math.Round(effect.Sum(x => x.Damage) / 21.0);
-                                        extraDataList.Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsCondi), damage, totalDamage));
+                                        extraDataList.Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsCondi), damage, totalDamage, true));
                                     }
                                     dict[boonid] = extraDataList;
                                 }
@@ -275,7 +277,7 @@ namespace LuckParser.Models.ParseModels
                                 int totalDamage = dmLogs.Sum(x => x.Damage);
                                 List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsCondi).ToList();
                                 int damage = (int)Math.Round(effect.Sum(x => x.Damage) / 21.0);
-                                _boonExtra[boonid].Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsCondi), damage, totalDamage));
+                                _boonExtra[boonid].Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsCondi), damage, totalDamage, true));
                             }
                             break;
                         // GoE
@@ -294,8 +296,9 @@ namespace LuckParser.Models.ParseModels
                                     {
                                         List<DamageLog> dmLogs = GetJustPlayerDamageLogs(target, log, phases[i].Start, phases[i].End);
                                         List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsCondi).ToList();
+                                        int totalDamage = dmLogs.Sum(x => x.Damage);
                                         int damage = effect.Sum(x => x.Damage);
-                                        extraDataList.Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsCondi), damage, 0));
+                                        extraDataList.Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsCondi), damage, totalDamage, false));
                                     }
                                     dict[boonid] = extraDataList;
                                 }
@@ -306,8 +309,9 @@ namespace LuckParser.Models.ParseModels
                             {
                                 List<DamageLog> dmLogs = GetJustPlayerDamageLogs(null, log, phases[i].Start, phases[i].End);
                                 List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsCondi).ToList();
+                                int totalDamage = dmLogs.Sum(x => x.Damage);
                                 int damage = effect.Sum(x => x.Damage);
-                                _boonExtra[boonid].Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsCondi), damage, 0));
+                                _boonExtra[boonid].Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsCondi), damage, totalDamage, false));
                             }
                             break;
                     }
