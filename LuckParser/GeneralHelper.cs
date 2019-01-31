@@ -35,6 +35,11 @@ namespace LuckParser
             }
         }
 
+        public static bool HasFormat()
+        {
+            return Properties.Settings.Default.SaveOutCSV || Properties.Settings.Default.SaveOutHTML || Properties.Settings.Default.SaveOutXML || Properties.Settings.Default.SaveOutJSON;
+        }
+
         /// <summary>
         /// Throws a <see cref="CancellationException"/> if the background worker has been cancelled
         /// </summary>
