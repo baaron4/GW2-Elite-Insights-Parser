@@ -2,6 +2,8 @@
 For quick questions, discussions or other conversation that isn't an issue feel free to join an open discord channel: 
 https://discord.gg/dCDEPXx
 
+Our GitHub Page: https://baaron4.github.io/GW2-Elite-Insights-Parser/ 
+
 # GW2-Elite-Insights-Parser
 ## Set Up
 
