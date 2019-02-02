@@ -191,8 +191,6 @@
     <Compile Include="Models\JsonModels\JsonDamageDist.cs" />
     <Compile Include="Models\JsonModels\JsonLog.cs" />
     <Compile Include="Models\JsonModels\JsonMinions.cs" />
-    <Compile Include="Models\JsonModels\JsonSkill.cs" />
-    <Compile Include="Models\JsonModels\JsonMechanic.cs" />
     <Compile Include="Models\JsonModels\JsonPlayer.cs" />
     <Compile Include="Models\JsonModels\JsonTargetBuffs.cs" />
     <Compile Include="Models\JsonModels\JsonTarget.cs" />

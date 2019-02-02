@@ -40,8 +40,8 @@ namespace LuckParser.Models.JsonModels
         public JsonStats[][] StatsTargets;
         public JsonDefenses[] Defenses;
         public JsonSupport[] Support;
-        public Dictionary<string, List<JsonBuffDamageModifierData>> DamageModifiers;
-        public Dictionary<string, List<JsonBuffDamageModifierData>>[] DamageModifiersTarget;
+        public List<JsonBuffDamageModifierData> DamageModifiers;
+        public List<JsonBuffDamageModifierData>[] DamageModifiersTarget;
         /// <summary>
         /// List of buff status on self (uptime + self generation) \n
         /// Key is "'b' + id"

@@ -8,66 +8,6 @@ namespace LuckParser.Models.JsonModels
 {
     public class JsonStatistics
     {
-        public class JsonBuffsData
-        {
-            public double Uptime;
-            public double Generation;
-            public double Overstack;
-            public double Wasted;
-            public double UnknownExtension;
-            public double Extension;
-            public double Extended;
-            public double Presence;
-
-            public JsonBuffsData(Statistics.FinalBuffs stats)
-            {
-                Uptime = stats.Uptime;
-                Generation = stats.Generation;
-                Overstack = stats.Overstack;
-                Wasted = stats.Wasted;
-                UnknownExtension = stats.UnknownExtension;
-                Extended = stats.Extended;
-                Presence = stats.Presence;
-            }
-
-        }
-
-
-        public class JsonTargetBuffsData
-        {
-            public double Uptime;
-            public double Presence;
-            public Dictionary<string, double> Generated;
-            public Dictionary<string, double> Overstacked;
-            public Dictionary<string, double> Wasted;
-            public Dictionary<string, double> UnknownExtension;
-            public Dictionary<string, double> Extension;
-            public Dictionary<string, double> Extended;
-
-
-            private static Dictionary<string, double> ConvertKeys(Dictionary<ParseModels.Player, double> toConvert)
-            {
-                Dictionary<string, double> res = new Dictionary<string, double>();
-                foreach (var pair in toConvert)
-                {
-                    res[pair.Key.Character] = pair.Value;
-                }
-                return res;
-            }
-
-            public JsonTargetBuffsData(Statistics.FinalTargetBuffs stats)
-            {
-                Uptime = stats.Uptime;
-                Presence = stats.Presence;
-                Generated = ConvertKeys(stats.Generated);
-                Overstacked = ConvertKeys(stats.Overstacked);
-                Wasted = ConvertKeys(stats.Wasted);
-                UnknownExtension = ConvertKeys(stats.UnknownExtension);
-                Extension = ConvertKeys(stats.Extension);
-                Extended = ConvertKeys(stats.Extended);
-            }
-        }
-
         public class JsonDefenses
         {
             public long DamageTaken;

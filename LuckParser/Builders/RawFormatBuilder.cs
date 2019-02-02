@@ -15,6 +15,11 @@ using Newtonsoft.Json;
 using LuckParser.Setting;
 using Newtonsoft.Json.Serialization;
 using static LuckParser.Models.JsonModels.JsonStatistics;
+using static LuckParser.Models.JsonModels.JsonBuffs;
+using static LuckParser.Models.JsonModels.JsonTargetBuffs;
+using static LuckParser.Models.JsonModels.JsonRotation;
+using static LuckParser.Models.JsonModels.JsonBuffDamageModifierData;
+using static LuckParser.Models.JsonModels.JsonMechanics;
 
 namespace LuckParser.Builders
 {
@@ -326,9 +331,9 @@ namespace LuckParser.Builders
             return res;
         }
 
-        private Dictionary<string, List<JsonBuffDamageModifierData>> BuildDamageModifiers(Dictionary<long, List<AbstractMasterActor.ExtraBoonData>> extra)
+        private List<JsonBuffDamageModifierData> BuildDamageModifiers(Dictionary<long, List<AbstractMasterActor.ExtraBoonData>> extra)
         {
-            Dictionary<string, List<JsonBuffDamageModifierData>> res = new Dictionary<string, List<JsonBuffDamageModifierData>>();
+            Dictionary<long, List<JsonBuffDamageModifierItem>> dict = new Dictionary<long, List<JsonBuffDamageModifierItem>>();
             foreach (long key in extra.Keys)
             {
                 string nKey = "b" + key;
@@ -336,14 +341,23 @@ namespace LuckParser.Builders
                 {
                     _buffDesc[nKey] = new JsonLog.BuffDesc(Boon.BoonsByIds[key]);
                 }
-                res[nKey] = extra[key].Select(x => new JsonBuffDamageModifierData(x)).ToList();
+                dict[key] = extra[key].Select(x => new JsonBuffDamageModifierItem(x)).ToList();
+            }
+            List<JsonBuffDamageModifierData> res = new List<JsonBuffDamageModifierData>();
+            foreach (var pair in dict)
+            {
+                res.Add(new JsonBuffDamageModifierData()
+                {
+                    ID = pair.Key,
+                    DamageModifiers = pair.Value
+                });
             }
             return res;
         }
 
-        private Dictionary<string, List<JsonBuffDamageModifierData>>[] BuildDamageModifiersTarget(Player p)
+        private List<JsonBuffDamageModifierData>[] BuildDamageModifiersTarget(Player p)
         {
-            Dictionary<string, List<JsonBuffDamageModifierData>>[] res = new Dictionary<string, List<JsonBuffDamageModifierData>>[_log.FightData.Logic.Targets.Count];
+            List<JsonBuffDamageModifierData>[] res = new List<JsonBuffDamageModifierData>[_log.FightData.Logic.Targets.Count];
             for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
             {
                 Target tar = _log.FightData.Logic.Targets[i];
@@ -580,7 +594,7 @@ namespace LuckParser.Builders
                 JsonTargetBuffs jsonBuffs = new JsonTargetBuffs()
                 {
                     States = BuildBuffStates(target.GetBoonGraphs(_log)[pair.Key]),
-                    Data = data,
+                    BuffData = data,
                     ID = pair.Key
                 };
                 boons.Add(jsonBuffs);
@@ -625,7 +639,7 @@ namespace LuckParser.Builders
                 JsonBuffs jsonBuffs = new JsonBuffs()
                 {
                     States = BuildBuffStates(player.GetBoonGraphs(_log)[pair.Key]),
-                    Data = data,
+                    BuffData = data,
                     ID = pair.Key
                 };
                 uptimes.Add(jsonBuffs);
