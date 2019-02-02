@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using LuckParser.Models.ParseModels;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace LuckParser.Models.HtmlModels
@@ -55,5 +57,144 @@ namespace LuckParser.Models.HtmlModels
         public List<double> MarkupLines;
         public List<AreaLabelDto> MarkupAreas;
         public List<int> SubPhases;
+
+
+        // helper methods
+
+        public static List<object> GetDMGStatData(Statistics.FinalStatsAll stats)
+        {
+            List<object> data = new List<object>
+                {
+                    stats.PowerLoopCount,
+                    stats.CritablePowerLoopCount,
+                    stats.CriticalRate,
+                    stats.CriticalDmg,
+
+                    stats.ScholarRate,
+                    stats.ScholarDmg,
+                    stats.PowerDamage,
+
+                    stats.MovingRate,
+                    stats.MovingDamage,
+
+                    stats.FlankingRate,
+
+                    stats.GlanceRate,
+
+                    stats.Missed,
+                    stats.Interrupts,
+                    stats.Invulned,
+
+                    stats.EagleRate,
+                    stats.EagleDmg,
+                    stats.FlankingDmg, 
+                    // commons
+                    stats.TimeWasted,
+                    stats.Wasted,
+
+                    stats.TimeSaved,
+                    stats.Saved,
+
+                    stats.SwapCount,
+                    Math.Round(stats.StackDist, 2)
+                };
+            return data;
+        }
+
+        public static List<object> GetDMGTargetStatData(Statistics.FinalStats stats)
+        {
+            List<object> data = new List<object>
+                {
+                    stats.PowerLoopCount,
+                    stats.CritablePowerLoopCount,
+                    stats.CriticalRate,
+                    stats.CriticalDmg,
+
+                    stats.ScholarRate,
+                    stats.ScholarDmg,
+                    stats.PowerDamage,
+
+                    stats.MovingRate,
+                    stats.MovingDamage,
+
+                    stats.FlankingRate,
+
+                    stats.GlanceRate,
+
+                    stats.Missed,
+                    stats.Interrupts,
+                    stats.Invulned,
+
+                    stats.EagleRate,
+                    stats.EagleDmg,
+                    stats.FlankingDmg
+                };
+            return data;
+        }
+
+        public static List<object> GetDPSStatData(Statistics.FinalDPS dpsAll)
+        {
+            List<object> data = new List<object>
+                {
+                    dpsAll.Damage,
+                    dpsAll.Dps,
+                    dpsAll.PowerDamage,
+                    dpsAll.PowerDps,
+                    dpsAll.CondiDamage,
+                    dpsAll.CondiDps
+                };
+            return data;
+        }
+
+        public static List<object> GetSupportStatData(Statistics.FinalSupport support)
+        {
+            List<object> data = new List<object>()
+                {
+                    support.CondiCleanse,
+                    support.CondiCleanseTime,
+                    support.Resurrects,
+                    support.ResurrectTime
+                };
+            return data;
+        }
+
+        public static List<object> GetDefenseStatData(Statistics.FinalDefenses defenses, PhaseData phase)
+        {
+            List<object> data = new List<object>
+                {
+                    defenses.DamageTaken,
+                    defenses.DamageBarrier,
+                    defenses.BlockedCount,
+                    defenses.InvulnedCount,
+                    defenses.InterruptedCount,
+                    defenses.EvadedCount,
+                    defenses.DodgeCount
+                };
+
+            if (defenses.DownDuration > 0)
+            {
+                TimeSpan downDuration = TimeSpan.FromMilliseconds(defenses.DownDuration);
+                data.Add(defenses.DownCount);
+                data.Add(downDuration.TotalSeconds + " seconds downed, " + Math.Round((downDuration.TotalMilliseconds / phase.GetDuration()) * 100, 1) + "% Downed");
+            }
+            else
+            {
+                data.Add(0);
+                data.Add("0% downed");
+            }
+
+            if (defenses.DeadDuration > 0)
+            {
+                TimeSpan deathDuration = TimeSpan.FromMilliseconds(defenses.DeadDuration);
+                data.Add(defenses.DeadCount);
+                data.Add(deathDuration.TotalSeconds + " seconds dead, " + (100.0 - Math.Round((deathDuration.TotalMilliseconds / phase.GetDuration()) * 100, 1)) + "% Alive");
+            }
+            else
+            {
+                data.Add(0);
+                data.Add("100% Alive");
+            }
+            return data;
+        }
     }
 }

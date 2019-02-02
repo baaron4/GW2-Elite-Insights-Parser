@@ -185,7 +185,7 @@
     <Compile Include="Models\HtmlModels\BoonData.cs" />
     <Compile Include="Models\HtmlModels\PhaseDto.cs" />
     <Compile Include="Models\HtmlModels\LogDataDto.cs" />
-    <Compile Include="Models\HtmlModels\PlayerDetailsDto.cs" />
+    <Compile Include="Models\HtmlModels\ActorDetailsDto.cs" />
     <Compile Include="Models\HtmlModels\PlayerDto.cs" />
     <Compile Include="Models\JsonModels\JsonConsumable.cs" />
     <Compile Include="Models\JsonModels\JsonDamageDist.cs" />
