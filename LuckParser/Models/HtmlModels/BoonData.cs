@@ -10,12 +10,7 @@ namespace LuckParser.Models.HtmlModels
         public double Avg;       
         public List<List<object>> Data = new List<List<object>>();
 
-        public BoonData()
-        {
-
-        }
-
-        public BoonData(Dictionary<long, Statistics.FinalBuffs> boons, List<Boon> listToUse, long fightDuration, double avg)
+        public BoonData(Dictionary<long, Statistics.FinalBuffs> boons, List<Boon> listToUse, double avg)
         {
             Avg = avg;
             foreach (Boon boon in listToUse)
@@ -31,6 +26,43 @@ namespace LuckParser.Models.HtmlModels
                         boonVals.Add(uptime.Presence);
                     }
                 }
+            }
+        }
+
+        public BoonData(Dictionary<long, Statistics.FinalTargetBuffs> boons, List<Boon> listToUse, double avg)
+        {
+            Avg = avg;
+            foreach (Boon boon in listToUse)
+            {
+                List<object> boonVals = new List<object>();
+                Data.Add(boonVals);
+
+                if (boons.TryGetValue(boon.ID, out var uptime))
+                {
+                    boonVals.Add(uptime.Uptime);
+                    if (boon.Type == Boon.BoonType.Intensity && uptime.Presence > 0)
+                    {
+                        boonVals.Add(uptime.Presence);
+                    }
+                }
+            }
+        }
+
+        public BoonData(Dictionary<long, Statistics.FinalTargetBuffs> boons, List<Boon> listToUse, Player player)
+        {
+            foreach (Boon boon in listToUse)
+            {
+                List<object> boonData = new List<object>();
+                if (boons.TryGetValue(boon.ID, out var toUse))
+                {
+                    boonData.Add(toUse.Generated[player]);
+                    boonData.Add(toUse.Overstacked[player]);
+                    boonData.Add(toUse.Wasted[player]);
+                    boonData.Add(toUse.UnknownExtension[player]);
+                    boonData.Add(toUse.Extension[player]);
+                    boonData.Add(toUse.Extended[player]);
+                }
+                Data.Add(boonData);
             }
         }
 

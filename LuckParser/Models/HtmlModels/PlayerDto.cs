@@ -40,7 +40,7 @@ namespace LuckParser.Models.HtmlModels
             ColTotal = GeneralHelper.GetLink("Color-" + player.Prof + "-Total");
             IsConjure = (player.Account == ":Conjured Sword");
             BuildWeaponSets(player, log);
-            if (cr && log.FightData.Logic.CanCombatReplay && !IsConjure)
+            if (cr && !IsConjure)
             {
                 CombatReplayID = player.GetCombatReplayID();
             }

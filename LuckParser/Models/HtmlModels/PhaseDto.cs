@@ -1,4 +1,5 @@
 ﻿using LuckParser.Models.ParseModels;
+using LuckParser.Parser;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -57,6 +58,49 @@ namespace LuckParser.Models.HtmlModels
         public List<double> MarkupLines;
         public List<AreaLabelDto> MarkupAreas;
         public List<int> SubPhases;
+        
+        public PhaseDto(PhaseData phaseData, List<PhaseData> phases, ParsedLog log)
+        {
+            Name = phaseData.Name;
+            Duration = phaseData.GetDuration();
+            Start = phaseData.Start / 1000.0;
+            End = phaseData.End / 1000.0;
+            foreach (Target target in phaseData.Targets)
+            {
+                Targets.Add(log.FightData.Logic.Targets.IndexOf(target));
+            }
+            // add phase markup
+            MarkupLines = new List<double>();
+            MarkupAreas = new List<AreaLabelDto>();
+            for (int j = 1; j < phases.Count; j++)
+            {
+                PhaseData curPhase = phases[j];
+                if (curPhase.Start < phaseData.Start || curPhase.End > phaseData.End ||
+                    (curPhase.Start == phaseData.Start && curPhase.End == phaseData.End))
+                {
+                    continue;
+                }
+                if (SubPhases == null)
+                {
+                    SubPhases = new List<int>();
+                }
+                SubPhases.Add(j);
+                long start = curPhase.Start - phaseData.Start;
+                long end = curPhase.End - phaseData.Start;
+                if (curPhase.DrawStart) MarkupLines.Add(start / 1000.0);
+                if (curPhase.DrawEnd) MarkupLines.Add(end / 1000.0);
+                AreaLabelDto phaseArea = new AreaLabelDto
+                {
+                    Start = start / 1000.0,
+                    End = end / 1000.0,
+                    Label = curPhase.Name,
+                    Highlight = curPhase.DrawArea
+                };
+                MarkupAreas.Add(phaseArea);
+            }
+            if (MarkupAreas.Count == 0) MarkupAreas = null;
+            if (MarkupLines.Count == 0) MarkupLines = null;
+        }
 
 
         // helper methods
