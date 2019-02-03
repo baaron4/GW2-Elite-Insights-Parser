@@ -303,6 +303,11 @@ namespace LuckParser.Models.Logic
                                     break;
                                 case SkillItem.DownId:
                                     cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.ChangeDown, log.FightData.FightStart, log.FightData.FightEnd);
+                                    List<CombatItem> downByVaporForm = combatData.GetBoonData(5620).Where(x => x.SrcInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.All).ToList();
+                                    foreach(CombatItem c in downByVaporForm)
+                                    {
+                                        cList.RemoveAll(x => Math.Abs(x.Time - c.Time) < 20);
+                                    }
                                     break;
                                 case SkillItem.ResurrectId:
                                     cList = log.GetCastData(p.InstID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == SkillItem.ResurrectId && x.IsActivation.StartCasting()).ToList();
