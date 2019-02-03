@@ -10,7 +10,7 @@ namespace LuckParser.Models.ParseModels
         public int Value { get; set; }
         public int BuffDmg { get; }
         public uint OverstackValue { get; }
-        public long SkillID { get; }
+        public long SkillID { get; set; }
         public ushort SrcInstid { get; set; }
         public ushort DstInstid { get; set; }
         public ushort SrcMasterInstid { get; set; }
