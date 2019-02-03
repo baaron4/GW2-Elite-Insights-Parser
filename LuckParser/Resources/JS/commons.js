@@ -145,6 +145,19 @@ var compileCommons = function () {
                 return "-";
             }
         },
+        computed: {
+            tooltipExpl: function () {
+                return `<ul>
+                        <li>The value shown in the row is "generation + extensions you are the source"</li>
+                        <li>With overstack is "generation + extensions you are the source + stacks that couldn't make into the queue/stacks"</li>
+                        <li>By extension is "extensions you are the source"</li>
+                        <li>Waste is "stacks that were overriden/cleansed". If you have high waste values that could mean there is an issue with your composition as someone may be overriding your stacks non-stop.</li>
+                        <li>Extended by unknown source is the extension value for which we were unable to find an src, not included in generation.</li>
+                        <li>Extended is "extended by unknown source + extended by known source other than yourself". Not included in generation. This value is just here to indicate if you are a good seed.</li>
+                        </ul>                        
+                        `
+            }
+        },
         mounted() {
             initTable("#" + this.id, 0, "asc");
         },
