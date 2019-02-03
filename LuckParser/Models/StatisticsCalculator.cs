@@ -529,7 +529,7 @@ namespace LuckParser.Models
                     List<CombatItem> deads = combatData.GetStatesData(player.InstID, ParseEnum.StateChange.ChangeDead, start, end);
                     List<CombatItem> downs = combatData.GetStatesData(player.InstID, ParseEnum.StateChange.ChangeDown, start, end);
                     List<CombatItem> dcs = combatData.GetStatesData(player.InstID, ParseEnum.StateChange.Despawn, start, end);
-                    final.DownCount = downs.Count;
+                    final.DownCount = downs.Count - combatData.GetBoonData(5620).Where(x => x.SrcInstid == player.InstID && x.Time >= start && x.Time <= end && x.IsBuffRemove == ParseEnum.BuffRemove.All).Count();
                     final.DeadCount = deads.Count;
                     final.DcCount = dcs.Count;
 
