@@ -405,7 +405,6 @@ namespace LuckParser.Models.ParseModels
             BoonsGraphModel condiPresenceGraph = new BoonsGraphModel(Boon.BoonsByIds[Boon.NumberOfConditionsID]);
             HashSet<long> boonIds = new HashSet<long>(Boon.GetBoonList().Select(x => x.ID));
             HashSet<long> condiIds = new HashSet<long>(Boon.GetCondiBoonList().Select(x => x.ID));
-            condiIds.Remove(873);
             InitBoonStatusData(log);
 
             long death = GetDeath(log, 0, dur);

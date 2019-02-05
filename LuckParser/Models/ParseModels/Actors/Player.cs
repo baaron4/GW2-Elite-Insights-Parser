@@ -145,7 +145,7 @@ namespace LuckParser.Models.ParseModels
                         DeathRecap.DeathRecapDamageItem item = new DeathRecap.DeathRecapDamageItem()
                         {
                             Time = (int)dl.Time,
-                            Condi = dl.IsCondi,
+                            Condi = dl.IsIndirectDamage,
                             Skill = dl.SkillId,
                             Damage = dl.Damage,
                             Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
@@ -166,7 +166,7 @@ namespace LuckParser.Models.ParseModels
                         DeathRecap.DeathRecapDamageItem item = new DeathRecap.DeathRecapDamageItem()
                         {
                             Time = (int)dl.Time,
-                            Condi = dl.IsCondi,
+                            Condi = dl.IsIndirectDamage,
                             Skill = dl.SkillId,
                             Damage = dl.Damage,
                             Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
@@ -187,7 +187,7 @@ namespace LuckParser.Models.ParseModels
                         DeathRecap.DeathRecapDamageItem item = new DeathRecap.DeathRecapDamageItem()
                         {
                             Time = (int)dl.Time,
-                            Condi = dl.IsCondi,
+                            Condi = dl.IsIndirectDamage,
                             Skill = dl.SkillId,
                             Damage = dl.Damage,
                             Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""

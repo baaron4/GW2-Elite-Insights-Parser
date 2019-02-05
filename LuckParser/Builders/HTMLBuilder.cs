@@ -689,14 +689,14 @@ namespace LuckParser.Builders
                     crit = 0,
                     flank = 0, 
                     glance = 0;
-                bool isCondi = false;
+                bool IsIndirectDamage = false;
                 foreach (DamageLog dl in entry.Value)
                 {
                     if (dl.Result == ParseEnum.Result.Downed)
                     {
                         continue;
                     }
-                    isCondi = dl.IsCondi;
+                    IsIndirectDamage = dl.IsIndirectDamage;
                     int curdmg = dl.Damage;
                     totaldamage += curdmg;
                     if (curdmg < mindamage) { mindamage = curdmg; }
@@ -707,7 +707,7 @@ namespace LuckParser.Builders
                     if (dl.IsFlanking) flank++;
                 }
 
-                if (isCondi)
+                if (IsIndirectDamage)
                 {
                     if (!_usedBoons.ContainsKey(entry.Key))
                     {
@@ -729,7 +729,7 @@ namespace LuckParser.Builders
                 }
 
                 int casts = 0, timeswasted = 0, timessaved = 0;
-                if (!isCondi && castLogsBySkill.TryGetValue(entry.Key, out List<CastLog> clList))
+                if (!IsIndirectDamage && castLogsBySkill.TryGetValue(entry.Key, out List<CastLog> clList))
                 {
 
                     casts = clList.Count;
@@ -744,7 +744,7 @@ namespace LuckParser.Builders
                 }
 
                 object[] skillData = {
-                    isCondi,
+                    IsIndirectDamage,
                     entry.Key,
                     totaldamage,
                     mindamage == int.MaxValue ? 0 : mindamage,
@@ -876,14 +876,14 @@ namespace LuckParser.Builders
                     flank = 0,
                     glance = 0;
 
-                bool isCondi = false;
+                bool IsIndirectDamage = false;
                 foreach (DamageLog dl in entry.Value)
                 {
                     if (dl.Result == ParseEnum.Result.Downed)
                     {
                         continue;
                     }
-                    isCondi = dl.IsCondi;
+                    IsIndirectDamage = dl.IsIndirectDamage;
                     int curdmg = dl.Damage;
                     totaldamage += curdmg;
                     if (curdmg < mindamage) { mindamage = curdmg; }
@@ -894,7 +894,7 @@ namespace LuckParser.Builders
                     if (dl.IsFlanking) flank++;
                 }
 
-                if (isCondi)
+                if (IsIndirectDamage)
                 {
                     if (!_usedBoons.ContainsKey(entry.Key))
                     {
@@ -916,7 +916,7 @@ namespace LuckParser.Builders
                     if (!_usedSkills.ContainsKey(entry.Key)) _usedSkills.Add(entry.Key, skillList.Get(entry.Key));
                 }
                 object[] row = new object[12] {
-                    isCondi, // isCondi
+                    IsIndirectDamage, // isCondi
                     entry.Key,
                     totaldamage,
                     mindamage == int.MaxValue ? 0 : mindamage,
