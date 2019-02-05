@@ -47,7 +47,7 @@ namespace LuckParser.Models.ParseModels
             var boonData = new List<CombatItem>(buffRemove);
             boonData.AddRange(buffApply);
             boonData.AddRange(buffInitial);
-            SpecialBuffParse(boonData);
+            //SpecialBuffParse(boonData);
             boonData.Sort((x, y) => x.Time.CompareTo(y.Time));
             BoonData = boonData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
             BoonDataByDst = boonData.GroupBy(x => x.IsBuffRemove == ParseEnum.BuffRemove.None ? x.DstInstid : x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList());
