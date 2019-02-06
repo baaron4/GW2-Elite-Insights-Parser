@@ -2,8 +2,6 @@
 For quick questions, discussions or other conversation that isn't an issue feel free to join an open discord channel: 
 https://discord.gg/dCDEPXx
 
-Our GitHub Page: https://baaron4.github.io/GW2-Elite-Insights-Parser/ 
-
 # GW2-Elite-Insights-Parser
 ## Set Up
 
@@ -67,5 +65,4 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 ### Other stuffs
 - Linus (arena maps/ icons for combat replay)
-
 

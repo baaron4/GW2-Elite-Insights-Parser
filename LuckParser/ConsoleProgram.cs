@@ -67,6 +67,11 @@ namespace LuckParser
                 SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
                 ParsingController control = new ParsingController(settings);
 
+                if (!GeneralHelper.HasFormat())
+                {
+                    throw new CancellationException(row, new Exception("No output format has been selected"));
+                }
+
                 if (GeneralHelper.IsSupportedFormat(fInfo.Name))
                 {
                     //Process evtc here

@@ -1,4 +1,5 @@
 <div>
+    <img class="icon mb-1" src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png" :data-original-title="scoreExpl" />
     <table class="table composition">
         <tbody>
             <tr v-for="group in groups">
@@ -6,13 +7,13 @@
                     <div>
                         <img :src="player.icon" :alt="player.profession" class="icon" :data-original-title="player.profession">
                         <img v-if="player.condi > 0" src="https://wiki.guildwars2.com/images/5/54/Condition_Damage.png"
-                            alt="Condition Damage" class="icon" :data-original-title="'Condition Damage: ' + player.condi">
+                             alt="Condition Damage" class="icon" :data-original-title="'Condition Damage: ' + player.condi">
                         <img v-if="player.conc > 0" src="https://wiki.guildwars2.com/images/4/44/Boon_Duration.png" alt="Concentration"
-                            class="icon" :data-original-title="'Concentration: ' + player.conc">
+                             class="icon" :data-original-title="'Concentration: ' + player.conc">
                         <img v-if="player.heal > 0" src="https://wiki.guildwars2.com/images/8/81/Healing_Power.png" alt="Healing Power"
-                            class="icon" :data-original-title="'Healing Power: ' + player.heal">
+                             class="icon" :data-original-title="'Healing Power: ' + player.heal">
                         <img v-if="player.tough > 0" src="https://wiki.guildwars2.com/images/1/12/Toughness.png" alt="Toughness"
-                            class="icon" :data-original-title="'Toughness: ' + player.tough">
+                             class="icon" :data-original-title="'Toughness: ' + player.tough">
                     </div>
                     <div>
                         <img v-for="wep in player.firstSet" :src="getIcon(wep)" :data-original-title="wep" class="icon">
