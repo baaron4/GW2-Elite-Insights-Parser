@@ -415,7 +415,7 @@ namespace LuckParser.Builders
                     continue;
                 }
                 SkillItem skill = skillList.Get(pair.Key);
-                if (!pair.Value.First().IsCondi && skill != null)
+                if (!pair.Value.First().IsIndirectDamage && skill != null)
                 {
                     if(!_skillNames.ContainsKey("s" + pair.Key))
                     {
@@ -427,7 +427,7 @@ namespace LuckParser.Builders
                 {
                     continue;
                 }
-                string prefix = filteredList.First().IsCondi ? "b" : "s";
+                string prefix = filteredList.First().IsIndirectDamage ? "b" : "s";
                 res[prefix + pair.Key] = new JsonDamageDist()
                 {
                     hits = filteredList.Count,

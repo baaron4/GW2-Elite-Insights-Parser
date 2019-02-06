@@ -261,9 +261,9 @@ namespace LuckParser.Models.ParseModels
                                     {
                                         List<DamageLog> dmLogs = GetJustPlayerDamageLogs(target, log, phases[i].Start, phases[i].End);
                                         int totalDamage = dmLogs.Sum(x => x.Damage);
-                                        List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsCondi).ToList();
+                                        List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsIndirectDamage).ToList();
                                         int damage = (int)Math.Round(effect.Sum(x => x.Damage) / 21.0);
-                                        extraDataList.Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsCondi), damage, totalDamage));
+                                        extraDataList.Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsIndirectDamage), damage, totalDamage));
                                     }
                                     dict[boonid] = extraDataList;
                                 }
@@ -273,9 +273,9 @@ namespace LuckParser.Models.ParseModels
                             {
                                 List<DamageLog> dmLogs = GetJustPlayerDamageLogs(null, log, phases[i].Start, phases[i].End);
                                 int totalDamage = dmLogs.Sum(x => x.Damage);
-                                List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsCondi).ToList();
+                                List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsIndirectDamage).ToList();
                                 int damage = (int)Math.Round(effect.Sum(x => x.Damage) / 21.0);
-                                _boonExtra[boonid].Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsCondi), damage, totalDamage));
+                                _boonExtra[boonid].Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsIndirectDamage), damage, totalDamage));
                             }
                             break;
                         // GoE
@@ -293,9 +293,9 @@ namespace LuckParser.Models.ParseModels
                                     for (int i = 0; i < phases.Count; i++)
                                     {
                                         List<DamageLog> dmLogs = GetJustPlayerDamageLogs(target, log, phases[i].Start, phases[i].End);
-                                        List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsCondi).ToList();
+                                        List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsIndirectDamage).ToList();
                                         int damage = effect.Sum(x => x.Damage);
-                                        extraDataList.Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsCondi), damage, 0));
+                                        extraDataList.Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsIndirectDamage), damage, 0));
                                     }
                                     dict[boonid] = extraDataList;
                                 }
@@ -305,9 +305,9 @@ namespace LuckParser.Models.ParseModels
                             for (int i = 0; i < phases.Count; i++)
                             {
                                 List<DamageLog> dmLogs = GetJustPlayerDamageLogs(null, log, phases[i].Start, phases[i].End);
-                                List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsCondi).ToList();
+                                List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsIndirectDamage).ToList();
                                 int damage = effect.Sum(x => x.Damage);
-                                _boonExtra[boonid].Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsCondi), damage, 0));
+                                _boonExtra[boonid].Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsIndirectDamage), damage, 0));
                             }
                             break;
                     }

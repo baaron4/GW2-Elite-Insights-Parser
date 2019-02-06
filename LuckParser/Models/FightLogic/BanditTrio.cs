@@ -54,7 +54,7 @@ namespace LuckParser.Models.Logic
                 {
                     end = log.FightData.ToFightSpace(phaseEnd.Time);
                 }
-                PhaseData phase = new PhaseData(start, end);
+                PhaseData phase = new PhaseData(start, Math.Min(end, log.FightData.FightDuration));
                 phase.Targets.Add(target);
                 phases.Add(phase);
             }

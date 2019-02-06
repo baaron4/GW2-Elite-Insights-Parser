@@ -381,7 +381,7 @@ namespace LuckParser.Models.Logic
                             {
                                 foreach (DamageLog dl in p.GetDamageLogs(null, log, 0, log.FightData.FightDuration))
                                 {
-                                    if (dl.DstInstId != a.InstID || dl.IsCondi || dl.Time < log.FightData.ToFightSpace(a.FirstAware) || dl.Time > log.FightData.ToFightSpace(a.LastAware) || (condition != null && !condition(new SpecialConditionItem(dl))))
+                                    if (dl.DstInstId != a.InstID || dl.IsIndirectDamage || dl.Time < log.FightData.ToFightSpace(a.FirstAware) || dl.Time > log.FightData.ToFightSpace(a.LastAware) || (condition != null && !condition(new SpecialConditionItem(dl))))
                                     {
                                         continue;
                                     }

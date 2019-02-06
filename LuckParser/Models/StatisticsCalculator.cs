@@ -204,7 +204,7 @@ namespace LuckParser.Models
             double tenGain = 0.1 / 1.1;
             foreach (DamageLog dl in dls)
             {
-                if (!dl.IsCondi)
+                if (!dl.IsIndirectDamage)
                 {
                     foreach (var pair in targetsFinal)
                     {
