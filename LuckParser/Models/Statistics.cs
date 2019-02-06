@@ -125,8 +125,8 @@ namespace LuckParser.Models
             public double Generation;
             public double Overstack;
             public double Wasted;
-            public double UnknownExtension;
-            public double Extension;
+            public double UnknownExtended;
+            public double ByExtension;
             public double Extended;
             public double Presence;
         }

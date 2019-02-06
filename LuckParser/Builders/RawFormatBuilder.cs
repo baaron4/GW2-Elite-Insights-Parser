@@ -15,7 +15,7 @@ using Newtonsoft.Json;
 using LuckParser.Setting;
 using Newtonsoft.Json.Serialization;
 using static LuckParser.Models.JsonModels.JsonStatistics;
-using static LuckParser.Models.JsonModels.JsonBuffs;
+using static LuckParser.Models.JsonModels.JsonPlayerBuffs;
 using static LuckParser.Models.JsonModels.JsonTargetBuffs;
 using static LuckParser.Models.JsonModels.JsonRotation;
 using static LuckParser.Models.JsonModels.JsonBuffDamageModifierData;
@@ -603,9 +603,9 @@ namespace LuckParser.Builders
             return boons;
         }
 
-        private List<JsonBuffs> BuildPlayerBuffs(Dictionary<long, Statistics.FinalBuffs>[] statUptimes, Player player)
+        private List<JsonPlayerBuffs> BuildPlayerBuffs(Dictionary<long, Statistics.FinalBuffs>[] statUptimes, Player player)
         {
-            var uptimes = new List<JsonBuffs>();
+            var uptimes = new List<JsonPlayerBuffs>();
             int phases = _statistics.Phases.Count;
             foreach (var pair in statUptimes[0])
             {
@@ -631,12 +631,12 @@ namespace LuckParser.Builders
                         }
                     }
                 }
-                List<JsonBuffsData> data = new List<JsonBuffsData>();
+                List<JsonPlayerBuffsData> data = new List<JsonPlayerBuffsData>();
                 for (int i = 0; i < _statistics.Phases.Count; i++)
                 {
-                    data.Add(new JsonBuffsData(statUptimes[pair.Key][i]));
+                    data.Add(new JsonPlayerBuffsData(statUptimes[pair.Key][i]));
                 }
-                JsonBuffs jsonBuffs = new JsonBuffs()
+                JsonPlayerBuffs jsonBuffs = new JsonPlayerBuffs()
                 {
                     States = BuildBuffStates(player.GetBoonGraphs(_log)[pair.Key]),
                     BuffData = data,

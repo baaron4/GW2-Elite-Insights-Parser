@@ -77,8 +77,8 @@ namespace LuckParser.Models.HtmlModels
                             uptime.Generation,
                             uptime.Overstack,
                             uptime.Wasted,
-                            uptime.UnknownExtension,
-                            uptime.Extension,
+                            uptime.UnknownExtended,
+                            uptime.ByExtension,
                             uptime.Extended
                         });
                 }
