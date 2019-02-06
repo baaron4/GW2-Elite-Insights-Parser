@@ -68,7 +68,7 @@ namespace LuckParser.Models.JsonModels
         /// ID of the buff
         /// </summary>
         /// <seealso cref="JsonLog.BuffMap"/>
-        public long ID;
+        public long Id;
         /// <summary>
         /// Array of buff data \n
         /// Length == # of phases

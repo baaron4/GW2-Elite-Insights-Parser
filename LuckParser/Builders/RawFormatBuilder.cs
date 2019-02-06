@@ -195,7 +195,7 @@ namespace LuckParser.Builders
             {
                 JsonTarget jsTarget = new JsonTarget
                 {
-                    ID = target.ID,
+                    Id = target.ID,
                     Name = target.Character,
                     Toughness = target.Toughness,
                     Healing = target.Healing,
@@ -348,7 +348,7 @@ namespace LuckParser.Builders
             {
                 res.Add(new JsonBuffDamageModifierData()
                 {
-                    ID = pair.Key,
+                    Id = pair.Key,
                     DamageModifiers = pair.Value
                 });
             }
@@ -538,7 +538,7 @@ namespace LuckParser.Builders
             {
                 res.Add(new JsonRotation()
                 {
-                    ID = pair.Key,
+                    Id = pair.Key,
                     Skills = pair.Value
                 });
             }
@@ -595,7 +595,7 @@ namespace LuckParser.Builders
                 {
                     States = BuildBuffStates(target.GetBoonGraphs(_log)[pair.Key]),
                     BuffData = data,
-                    ID = pair.Key
+                    Id = pair.Key
                 };
                 boons.Add(jsonBuffs);
             }
@@ -640,7 +640,7 @@ namespace LuckParser.Builders
                 {
                     States = BuildBuffStates(player.GetBoonGraphs(_log)[pair.Key]),
                     BuffData = data,
-                    ID = pair.Key
+                    Id = pair.Key
                 };
                 uptimes.Add(jsonBuffs);
             }

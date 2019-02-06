@@ -55,7 +55,7 @@ namespace LuckParser.Models.JsonModels
         /// ID of the skill
         /// </summary>
         /// <seealso cref="JsonLog.SkillMap"/>
-        public long ID;
+        public long Id;
         /// <summary>
         /// List of casted skills
         /// </summary>

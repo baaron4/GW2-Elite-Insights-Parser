@@ -11,7 +11,7 @@ namespace LuckParser.Models.JsonModels
         /// <summary>
         /// Game ID of the target
         /// </summary>
-        public ushort ID;
+        public ushort Id;
         /// <summary>
         /// Total health of the target
         /// </summary>

@@ -44,7 +44,7 @@ namespace LuckParser.Models.JsonModels
         /// </summary>
         /// <seealso cref="JsonLog.SkillMap"/>
         /// <seealso cref="JsonLog.BuffMap"/>
-        public long ID;
+        public long Id;
         /// <summary>
         /// True if indirect damage
         /// </summary>
@@ -60,7 +60,7 @@ namespace LuckParser.Models.JsonModels
             Crit = list.Count(x => x.Result == Parser.ParseEnum.Result.Crit);
             Glance = list.Count(x => x.Result == Parser.ParseEnum.Result.Glance);
             Condi = condi;
-            ID = id;
+            Id = id;
         }
     }
 }
