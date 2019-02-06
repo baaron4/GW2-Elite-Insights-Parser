@@ -47,7 +47,6 @@ namespace LuckParser.Models.ParseModels
             var boonData = new List<CombatItem>(buffRemove);
             boonData.AddRange(buffApply);
             boonData.AddRange(buffInitial);
-            //SpecialBuffParse(boonData);
             boonData.Sort((x, y) => x.Time.CompareTo(y.Time));
             BoonData = boonData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
             BoonDataByDst = boonData.GroupBy(x => x.IsBuffRemove == ParseEnum.BuffRemove.None ? x.DstInstid : x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList());
@@ -63,21 +62,6 @@ namespace LuckParser.Models.ParseModels
             healing_received_data = allCombatItems.Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                             ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
                                                 (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
-        }
-
-        private void SpecialBuffParse(List<CombatItem> buffEvents)
-        {
-            HashSet<long> guardPISignets = new HashSet<long>()
-            {
-                9240,9239,9237,9238
-            };
-            foreach (CombatItem c in buffEvents.Where(x => guardPISignets.Contains(x.SkillID)))
-            {
-                if (c.Value < 500000)
-                {
-                    c.SkillID = -c.SkillID;
-                }
-            }
         }
 
         public List<CombatItem> GetStatesData(int srcInstid, ParseEnum.StateChange change, long start, long end)
