@@ -370,85 +370,10 @@ namespace LuckParser.Builders
             Dictionary<long, Boon> conditionsById = _statistics.PresentConditions.ToDictionary(x => x.ID);
             SkillData skillList = _log.SkillData;
             foreach (KeyValuePair<long, List<DamageLog>> entry in damageLogsBySkill)
-            {         
-                int totaldamage = 0, 
-                    mindamage = int.MaxValue, 
-                    maxdamage = int.MinValue,
-                    hits = 0, 
-                    crit = 0,
-                    flank = 0, 
-                    glance = 0;
-                bool IsIndirectDamage = false;
-                foreach (DamageLog dl in entry.Value)
-                {
-                    if (dl.Result == ParseEnum.Result.Downed)
-                    {
-                        continue;
-                    }
-                    IsIndirectDamage = dl.IsIndirectDamage;
-                    int curdmg = dl.Damage;
-                    totaldamage += curdmg;
-                    if (curdmg < mindamage) { mindamage = curdmg; }
-                    if (curdmg > maxdamage) { maxdamage = curdmg; }
-                    hits++;
-                    if (dl.Result == ParseEnum.Result.Crit) crit++;
-                    if (dl.Result == ParseEnum.Result.Glance) glance++;
-                    if (dl.IsFlanking) flank++;
-                }
-
-                if (IsIndirectDamage)
-                {
-                    if (!_usedBoons.ContainsKey(entry.Key))
-                    {
-                        if (Boon.BoonsByIds.TryGetValue(entry.Key, out Boon buff))
-                        {
-                            _usedBoons.Add(buff.ID, buff);
-                        }
-                        else
-                        {
-                            SkillItem aux = skillList.Get(entry.Key);
-                            Boon auxBoon = new Boon(aux.Name, entry.Key, aux.Icon);
-                            _usedBoons.Add(auxBoon.ID, auxBoon);
-                        }
-                    }
-                }
-                else
-                {
-                    if (!_usedSkills.ContainsKey(entry.Key)) _usedSkills.Add(entry.Key, skillList.Get(entry.Key));
-                }
-
-                int casts = 0, timeswasted = 0, timessaved = 0;
-                if (!IsIndirectDamage && castLogsBySkill.TryGetValue(entry.Key, out List<CastLog> clList))
-                {
-
-                    casts = clList.Count;
-                    foreach (CastLog cl in clList)
-                    {
-                        if (cl.EndActivation == ParseEnum.Activation.CancelCancel) timeswasted += cl.ActualDuration;
-                        if (cl.EndActivation == ParseEnum.Activation.CancelFire && cl.ActualDuration < cl.ExpectedDuration)
-                        {
-                            timessaved += cl.ExpectedDuration - cl.ActualDuration;
-                        }
-                    }
-                }
-
-                object[] skillData = {
-                    IsIndirectDamage,
-                    entry.Key,
-                    totaldamage,
-                    mindamage == int.MaxValue ? 0 : mindamage,
-                    maxdamage == int.MinValue ? 0 : maxdamage,
-                    casts,
-                    hits,
-                    crit,
-                    flank,
-                    glance,
-                    timeswasted / 1000.0,
-                    -timessaved / 1000.0
-                };
-                list.Add(skillData);
+            {   
+                list.Add(DmgDistributionDto.GetDMGDtoItem(entry, castLogsBySkill, skillList, _usedSkills, _usedBoons));
             }
-
+            // non damaging
             foreach (KeyValuePair<long, List<CastLog>> entry in castLogsBySkill)
             {
                 if (damageLogsBySkill.ContainsKey(entry.Key)) continue;
@@ -557,70 +482,8 @@ namespace LuckParser.Builders
             Dictionary<long, Boon> conditionsById = _statistics.PresentConditions.ToDictionary(x => x.ID);
             foreach (var entry in damageLogsBySkill)
             {
-                int totaldamage = 0,
-                    mindamage = int.MaxValue,
-                    hits = 0,
-                    maxdamage = int.MinValue,
-                    crit = 0,
-                    flank = 0,
-                    glance = 0;
-
-                bool IsIndirectDamage = false;
-                foreach (DamageLog dl in entry.Value)
-                {
-                    if (dl.Result == ParseEnum.Result.Downed)
-                    {
-                        continue;
-                    }
-                    IsIndirectDamage = dl.IsIndirectDamage;
-                    int curdmg = dl.Damage;
-                    totaldamage += curdmg;
-                    if (curdmg < mindamage) { mindamage = curdmg; }
-                    if (curdmg > maxdamage) { maxdamage = curdmg; }
-                    hits++;
-                    if (dl.Result == ParseEnum.Result.Crit) crit++;
-                    if (dl.Result == ParseEnum.Result.Glance) glance++;
-                    if (dl.IsFlanking) flank++;
-                }
-
-                if (IsIndirectDamage)
-                {
-                    if (!_usedBoons.ContainsKey(entry.Key))
-                    {
-                        if (Boon.BoonsByIds.TryGetValue(entry.Key, out Boon buff))
-                        {
-                            _usedBoons.Add(buff.ID, buff);
-                        }
-                        else
-                        {
-                            SkillItem aux = skillList.Get(entry.Key);
-                            Boon auxBoon = new Boon(aux.Name, entry.Key, aux.Icon);
-                            _usedBoons.Add(auxBoon.ID, auxBoon);
-                        }
-                    }
-                }
-
-                else
-                {
-                    if (!_usedSkills.ContainsKey(entry.Key)) _usedSkills.Add(entry.Key, skillList.Get(entry.Key));
-                }
-                object[] row = new object[12] {
-                    IsIndirectDamage, // isCondi
-                    entry.Key,
-                    totaldamage,
-                    mindamage == int.MaxValue ? 0 : mindamage,
-                    maxdamage == int.MinValue ? 0 : maxdamage,
-                    0,
-                    hits,
-                    crit,
-                    flank,
-                    glance,
-                    0,
-                    0
-                };
-                dto.Distribution.Add(row);
+                dto.Distribution.Add(DmgDistributionDto.GetDMGDtoItem(entry, null, skillList, _usedSkills, _usedBoons));
             }
-
             return dto;
         }
 
