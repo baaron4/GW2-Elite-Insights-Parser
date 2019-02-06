@@ -42,7 +42,7 @@ namespace LuckParser.Models.JsonModels
             /// </summary>
             public double ByExtension;
             /// <summary>
-            /// Extended
+            /// Buff extended 
             /// </summary>
             public double Extended;
             /// <summary>

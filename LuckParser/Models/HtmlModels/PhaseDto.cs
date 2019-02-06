@@ -109,14 +109,14 @@ namespace LuckParser.Models.HtmlModels
         {
             List<object> data = new List<object>
                 {
-                    stats.PowerLoopCount,
-                    stats.CritablePowerLoopCount,
+                    stats.DirectDamageCount,
+                    stats.CritableDirectDamageCount,
                     stats.CriticalRate,
                     stats.CriticalDmg,
 
                     stats.ScholarRate,
                     stats.ScholarDmg,
-                    stats.PowerDamage,
+                    stats.DirectDamage,
 
                     stats.MovingRate,
                     stats.MovingDamage,
@@ -149,14 +149,14 @@ namespace LuckParser.Models.HtmlModels
         {
             List<object> data = new List<object>
                 {
-                    stats.PowerLoopCount,
-                    stats.CritablePowerLoopCount,
+                    stats.DirectDamageCount,
+                    stats.CritableDirectDamageCount,
                     stats.CriticalRate,
                     stats.CriticalDmg,
 
                     stats.ScholarRate,
                     stats.ScholarDmg,
-                    stats.PowerDamage,
+                    stats.DirectDamage,
 
                     stats.MovingRate,
                     stats.MovingDamage,

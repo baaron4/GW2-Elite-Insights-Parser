@@ -195,7 +195,7 @@ namespace LuckParser.Builders
             {
                 JsonTarget jsTarget = new JsonTarget
                 {
-                    Id = target.ID,
+                    ID = target.ID,
                     Name = target.Character,
                     Toughness = target.Toughness,
                     Healing = target.Healing,
