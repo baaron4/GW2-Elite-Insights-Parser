@@ -2,6 +2,6 @@
 {   
     public class EnemyDto
     {
-        public string name;
+        public string Name;
     }
 }

@@ -46,8 +46,8 @@ namespace LuckParser.Models
 
         public class FinalStats
         {
-            public int PowerLoopCount;
-            public int CritablePowerLoopCount;
+            public int DirectDamageCount;
+            public int CritableDirectDamageCount;
             public int CriticalRate;
             public int CriticalDmg;
             public int ScholarRate;
@@ -62,7 +62,7 @@ namespace LuckParser.Models
             public int Missed;
             public int Interrupts;
             public int Invulned;
-            public int PowerDamage;
+            public int DirectDamage;
         }
 
         public class FinalStatsAll : FinalStats
@@ -125,8 +125,8 @@ namespace LuckParser.Models
             public double Generation;
             public double Overstack;
             public double Wasted;
-            public double UnknownExtension;
-            public double Extension;
+            public double UnknownExtended;
+            public double ByExtension;
             public double Extended;
             public double Presence;
         }

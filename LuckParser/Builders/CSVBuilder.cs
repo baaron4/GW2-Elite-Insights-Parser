@@ -259,13 +259,13 @@ namespace LuckParser.Builders
                 Statistics.FinalStats statsBoss = _statistics.StatsTarget[_log.LegacyTarget][player][phaseIndex];
 
                 WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
-                Math.Round((double)(statsBoss.CriticalRate) / statsBoss.CritablePowerLoopCount * 100,1).ToString(), statsBoss.CriticalRate.ToString(),statsBoss.CriticalDmg.ToString(),
-                Math.Round((double)(statsBoss.ScholarRate) / statsBoss.PowerLoopCount * 100,1).ToString(),statsBoss.ScholarRate.ToString(),statsBoss.ScholarDmg.ToString(),Math.Round(100.0 * (statsBoss.PowerDamage / (double)(statsBoss.PowerDamage - statsBoss.ScholarDmg) - 1.0), 3).ToString(),
-                Math.Round((double)(statsBoss.MovingRate) / statsBoss.PowerLoopCount * 100,1).ToString(),statsBoss.MovingRate.ToString(),statsBoss.MovingDamage.ToString(),Math.Round(100.0 * (statsBoss.PowerDamage / (double)(statsBoss.PowerDamage - statsBoss.MovingDamage) - 1.0), 3).ToString(),
-                Math.Round(statsBoss.FlankingRate / (double)statsBoss.PowerLoopCount * 100,1).ToString(),statsBoss.FlankingRate.ToString(),
-                Math.Round(statsBoss.GlanceRate / (double)statsBoss.PowerLoopCount * 100,1).ToString(),statsBoss.GlanceRate.ToString(),
-                Math.Round(statsBoss.Missed / (double)statsBoss.PowerLoopCount * 100,1).ToString(),statsBoss.Missed.ToString(),
-                statsBoss.PowerLoopCount.ToString(),
+                Math.Round((double)(statsBoss.CriticalRate) / statsBoss.CritableDirectDamageCount * 100,1).ToString(), statsBoss.CriticalRate.ToString(),statsBoss.CriticalDmg.ToString(),
+                Math.Round((double)(statsBoss.ScholarRate) / statsBoss.DirectDamageCount * 100,1).ToString(),statsBoss.ScholarRate.ToString(),statsBoss.ScholarDmg.ToString(),Math.Round(100.0 * (statsBoss.DirectDamage / (double)(statsBoss.DirectDamage - statsBoss.ScholarDmg) - 1.0), 3).ToString(),
+                Math.Round((double)(statsBoss.MovingRate) / statsBoss.DirectDamageCount * 100,1).ToString(),statsBoss.MovingRate.ToString(),statsBoss.MovingDamage.ToString(),Math.Round(100.0 * (statsBoss.DirectDamage / (double)(statsBoss.DirectDamage - statsBoss.MovingDamage) - 1.0), 3).ToString(),
+                Math.Round(statsBoss.FlankingRate / (double)statsBoss.DirectDamageCount * 100,1).ToString(),statsBoss.FlankingRate.ToString(),
+                Math.Round(statsBoss.GlanceRate / (double)statsBoss.DirectDamageCount * 100,1).ToString(),statsBoss.GlanceRate.ToString(),
+                Math.Round(statsBoss.Missed / (double)statsBoss.DirectDamageCount * 100,1).ToString(),statsBoss.Missed.ToString(),
+                statsBoss.DirectDamageCount.ToString(),
                 statsBoss.Interrupts.ToString(),statsBoss.Invulned.ToString(),stats.TimeWasted.ToString(),stats.TimeSaved.ToString(),stats.SwapCount.ToString() });
                 count++;
             }
@@ -293,13 +293,13 @@ namespace LuckParser.Builders
                 Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
 
                 WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
-                Math.Round((double)(stats.CriticalRate) / stats.CritablePowerLoopCount * 100,1).ToString(), stats.CriticalRate.ToString(),stats.CriticalDmg.ToString(),
-                Math.Round((double)(stats.ScholarRate) / stats.PowerLoopCount * 100,1).ToString(),stats.ScholarRate.ToString(),stats.ScholarDmg.ToString(),Math.Round(100.0 * (stats.PowerDamage / (double)(stats.PowerDamage - stats.ScholarDmg) - 1.0), 3).ToString(),
-                Math.Round((double)(stats.MovingRate) / stats.PowerLoopCount * 100,1).ToString(),stats.MovingRate.ToString(),stats.MovingDamage.ToString(),Math.Round(100.0 * (stats.PowerDamage / (double)(stats.PowerDamage - stats.MovingDamage) - 1.0), 3).ToString(),
-                Math.Round(stats.FlankingRate / (double)stats.PowerLoopCount * 100,1).ToString(),stats.FlankingRate.ToString(),
-                Math.Round(stats.GlanceRate / (double)stats.PowerLoopCount * 100,1).ToString(),stats.GlanceRate.ToString(),
-                Math.Round(stats.Missed / (double)stats.PowerLoopCount * 100,1).ToString(),stats.Missed.ToString(),
-                stats.PowerLoopCount.ToString(),
+                Math.Round((double)(stats.CriticalRate) / stats.CritableDirectDamageCount * 100,1).ToString(), stats.CriticalRate.ToString(),stats.CriticalDmg.ToString(),
+                Math.Round((double)(stats.ScholarRate) / stats.DirectDamageCount * 100,1).ToString(),stats.ScholarRate.ToString(),stats.ScholarDmg.ToString(),Math.Round(100.0 * (stats.DirectDamage / (double)(stats.DirectDamage - stats.ScholarDmg) - 1.0), 3).ToString(),
+                Math.Round((double)(stats.MovingRate) / stats.DirectDamageCount * 100,1).ToString(),stats.MovingRate.ToString(),stats.MovingDamage.ToString(),Math.Round(100.0 * (stats.DirectDamage / (double)(stats.DirectDamage - stats.MovingDamage) - 1.0), 3).ToString(),
+                Math.Round(stats.FlankingRate / (double)stats.DirectDamageCount * 100,1).ToString(),stats.FlankingRate.ToString(),
+                Math.Round(stats.GlanceRate / (double)stats.DirectDamageCount * 100,1).ToString(),stats.GlanceRate.ToString(),
+                Math.Round(stats.Missed / (double)stats.DirectDamageCount * 100,1).ToString(),stats.Missed.ToString(),
+                stats.DirectDamageCount.ToString(),
                 stats.Interrupts.ToString(),stats.Invulned.ToString(),stats.TimeWasted.ToString(),stats.TimeSaved.ToString(),stats.SwapCount.ToString() });
                 count++;
             }

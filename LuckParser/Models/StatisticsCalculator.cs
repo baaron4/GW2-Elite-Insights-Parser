@@ -122,7 +122,7 @@ namespace LuckParser.Models
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
             double phaseDuration = (phase.GetDuration()) / 1000.0;
-            double damage;
+            int damage;
             double dps = 0.0;
             FinalDPS final = new FinalDPS();
             //DPS
@@ -134,7 +134,7 @@ namespace LuckParser.Models
                 dps = damage / phaseDuration;
             }
             final.Dps = (int)Math.Round(dps);
-            final.Damage = (int)Math.Round(damage);
+            final.Damage = damage;
             //Condi DPS
             damage = player.GetDamageLogs(target, _log,
                     phase.Start, phase.End).Sum(x => x.IsCondi ? x.Damage : 0);
@@ -144,7 +144,7 @@ namespace LuckParser.Models
                 dps = damage / phaseDuration;
             }
             final.CondiDps = (int)Math.Round(dps);
-            final.CondiDamage = (int)Math.Round(damage);
+            final.CondiDamage = damage;
             //Power DPS
             damage = final.Damage - final.CondiDamage;
             if (phaseDuration > 0)
@@ -152,7 +152,7 @@ namespace LuckParser.Models
                 dps = damage / phaseDuration;
             }
             final.PowerDps = (int)Math.Round(dps);
-            final.PowerDamage = (int)Math.Round(damage);
+            final.PowerDamage = damage;
             return final;
         }
 
@@ -260,11 +260,11 @@ namespace LuckParser.Models
                             {
                                 targetFinal.Invulned++;
                             }
-                            targetFinal.PowerLoopCount++;
-                            targetFinal.PowerDamage += dl.Damage;
+                            targetFinal.DirectDamageCount++;
+                            targetFinal.DirectDamage += dl.Damage;
                             if (!nonCritable.Contains(dl.SkillId))
                             {
-                                targetFinal.CritablePowerLoopCount++;
+                                targetFinal.CritableDirectDamageCount++;
                             }
                         }
                     }
@@ -316,11 +316,11 @@ namespace LuckParser.Models
                     {
                         final.Invulned++;
                     }
-                    final.PowerLoopCount++;
-                    final.PowerDamage += dl.Damage;
+                    final.DirectDamageCount++;
+                    final.DirectDamage += dl.Damage;
                     if (!nonCritable.Contains(dl.SkillId))
                     {
-                        final.CritablePowerLoopCount++;
+                        final.CritableDirectDamageCount++;
                     }
                 }
             }
@@ -631,8 +631,8 @@ namespace LuckParser.Models
                         uptime.Generation = Math.Round(100.0 * totalGeneration / fightDuration / playerList.Count, 2);
                         uptime.Overstack = Math.Round(100.0 * (totalOverstack + totalGeneration) / fightDuration / playerList.Count, 2);
                         uptime.Wasted = Math.Round(100.0 * (totalWasted) / fightDuration / playerList.Count, 2);
-                        uptime.UnknownExtension = Math.Round(100.0 * (totalUnknownExtension) / fightDuration / playerList.Count, 2);
-                        uptime.Extension = Math.Round(100.0 * (totalExtension) / fightDuration / playerList.Count, 2);
+                        uptime.UnknownExtended = Math.Round(100.0 * (totalUnknownExtension) / fightDuration / playerList.Count, 2);
+                        uptime.ByExtension = Math.Round(100.0 * (totalExtension) / fightDuration / playerList.Count, 2);
                         uptime.Extended = Math.Round(100.0 * (totalExtended) / fightDuration / playerList.Count, 2);
                     }
                     else if (boon.Type == Boon.BoonType.Intensity)
@@ -640,8 +640,8 @@ namespace LuckParser.Models
                         uptime.Generation = Math.Round((double)totalGeneration / fightDuration / playerList.Count, 2);
                         uptime.Overstack = Math.Round((double)(totalOverstack + totalGeneration) / fightDuration / playerList.Count, 2);
                         uptime.Wasted = Math.Round((double)(totalWasted) / fightDuration / playerList.Count, 2);
-                        uptime.UnknownExtension = Math.Round((double)(totalUnknownExtension) / fightDuration / playerList.Count, 2);
-                        uptime.Extension = Math.Round((double)(totalExtension) / fightDuration / playerList.Count, 2);
+                        uptime.UnknownExtended = Math.Round((double)(totalUnknownExtension) / fightDuration / playerList.Count, 2);
+                        uptime.ByExtension = Math.Round((double)(totalExtension) / fightDuration / playerList.Count, 2);
                         uptime.Extended = Math.Round((double)(totalExtended) / fightDuration / playerList.Count, 2);
                     }
                 }
@@ -677,8 +677,8 @@ namespace LuckParser.Models
                             Generation = 0,
                             Overstack = 0,
                             Wasted = 0,
-                            UnknownExtension = 0,
-                            Extension = 0,
+                            UnknownExtended = 0,
+                            ByExtension = 0,
                             Extended = 0
                         };
                         final[boon.ID] = uptime;
@@ -691,8 +691,8 @@ namespace LuckParser.Models
                                 uptime.Generation = Math.Round(100.0 * generation / fightDuration, 2);
                                 uptime.Overstack = Math.Round(100.0 * (selfBoons.GetOverstack(boon.ID, player.AgentItem) + generation) / fightDuration, 2);
                                 uptime.Wasted = Math.Round(100.0 * selfBoons.GetWaste(boon.ID, player.AgentItem) / fightDuration, 2);
-                                uptime.UnknownExtension = Math.Round(100.0 * selfBoons.GetUnknownExtension(boon.ID, player.AgentItem) / fightDuration, 2);
-                                uptime.Extension = Math.Round(100.0 * selfBoons.GetExtension(boon.ID, player.AgentItem) / fightDuration, 2);
+                                uptime.UnknownExtended = Math.Round(100.0 * selfBoons.GetUnknownExtension(boon.ID, player.AgentItem) / fightDuration, 2);
+                                uptime.ByExtension = Math.Round(100.0 * selfBoons.GetExtension(boon.ID, player.AgentItem) / fightDuration, 2);
                                 uptime.Extended = Math.Round(100.0 * selfBoons.GetExtended(boon.ID, player.AgentItem) / fightDuration, 2);
                             }
                             else if (boon.Type == Boon.BoonType.Intensity)
@@ -701,8 +701,8 @@ namespace LuckParser.Models
                                 uptime.Generation = Math.Round((double)generation / fightDuration, 2);
                                 uptime.Overstack = Math.Round((double)(selfBoons.GetOverstack(boon.ID, player.AgentItem) + generation) / fightDuration, 2);
                                 uptime.Wasted = Math.Round((double)selfBoons.GetWaste(boon.ID, player.AgentItem) / fightDuration, 2);
-                                uptime.UnknownExtension = Math.Round((double)selfBoons.GetUnknownExtension(boon.ID, player.AgentItem) / fightDuration, 2);
-                                uptime.Extension = Math.Round((double)selfBoons.GetExtension(boon.ID, player.AgentItem) / fightDuration, 2);
+                                uptime.UnknownExtended = Math.Round((double)selfBoons.GetUnknownExtension(boon.ID, player.AgentItem) / fightDuration, 2);
+                                uptime.ByExtension = Math.Round((double)selfBoons.GetExtension(boon.ID, player.AgentItem) / fightDuration, 2);
                                 uptime.Extended = Math.Round((double)selfBoons.GetExtended(boon.ID, player.AgentItem) / fightDuration, 2);
                                 if (boonPresence.TryGetValue(boon.ID, out long presenceValueBoon))
                                 {
