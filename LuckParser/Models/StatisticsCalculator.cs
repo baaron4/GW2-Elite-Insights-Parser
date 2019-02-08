@@ -842,29 +842,20 @@ namespace LuckParser.Models
 
             }
 
+            // All class specific boons
+            Dictionary<long, Boon> remainingBuffsByIds = Boon.GetRemainingBuffsList().GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
             var players = _log.PlayerList;
-            Dictionary<ushort, Player> playersById = new Dictionary<ushort, Player>();
             foreach (Player player in players)
             {
                 _statistics.PresentPersonalBuffs[player.InstID] = new HashSet<Boon>();
-                playersById.Add(player.InstID, player);
-            }
-            // All class specific boons
-            List<Boon> remainingBuffs = new List<Boon>(Boon.GetRemainingBuffsList());
-            remainingBuffs.AddRange(Boon.GetConsumableList());
-            Dictionary<long, Boon> remainingBuffsByIds = remainingBuffs.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
-
-            foreach (CombatItem item in combatList)
-            {
-                if (playersById.TryGetValue(item.DstInstid, out Player player))
+                foreach (CombatItem item in _log.CombatData.GetBoonDataByDst(player.InstID, player.FirstAware, player.LastAware))
                 {
-                    if (remainingBuffsByIds.TryGetValue(item.SkillID, out Boon boon))
+                    if (item.DstInstid == player.InstID && item.IsBuffRemove == ParseEnum.BuffRemove.None && remainingBuffsByIds.TryGetValue(item.SkillID, out Boon boon))
                     {
                         _statistics.PresentPersonalBuffs[player.InstID].Add(boon);
                     }
                 }
             }
-
         }
     }
 }
