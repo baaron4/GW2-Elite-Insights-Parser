@@ -805,8 +805,7 @@ namespace LuckParser.Models
         /// </summary>
         private void SetPresentBoons()
         {
-            List<CombatItem> combatList = _log.CombatData.AllCombatItems;
-            var skillIDs = new HashSet<long>(combatList.Select(x => x.SkillID));
+            HashSet<long> skillIDs = _log.CombatData.GetSkills();
             // Main boons
             foreach (Boon boon in Boon.GetBoonList())
             {

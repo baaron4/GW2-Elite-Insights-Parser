@@ -261,7 +261,7 @@ namespace LuckParser.Models.ParseModels
             long fightDuration = log.FightData.FightDuration;
             foreach (Boon consumable in consumableList)
             {
-                foreach (CombatItem c in log.GetBoonData(consumable.ID))
+                foreach (CombatItem c in log.CombatData.GetBoonData(consumable.ID))
                 {
                     if (c.IsBuffRemove != ParseEnum.BuffRemove.None || (c.IsBuff != 18 && c.IsBuff != 1) || AgentItem.InstID != c.DstInstid)
                     {

@@ -65,7 +65,7 @@ namespace LuckParser.Models.Logic
                 return phases;
             }
             long end = 0;
-            CombatItem invulXera = log.GetBoonData(762).Find(x => x.DstInstid == mainTarget.InstID) ?? log.GetBoonData(34113).Find(x => x.DstInstid == mainTarget.InstID);
+            CombatItem invulXera = log.CombatData.GetBoonData(762).Find(x => x.DstInstid == mainTarget.InstID) ?? log.CombatData.GetBoonData(34113).Find(x => x.DstInstid == mainTarget.InstID);
             if (invulXera != null)
             {
                 end = log.FightData.ToFightSpace(invulXera.Time);

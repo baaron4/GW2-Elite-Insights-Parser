@@ -7,39 +7,37 @@ namespace LuckParser.Models.ParseModels
 {
     public class CombatData
     {
-        public List<CombatItem> AllCombatItems { get; private set; }
-
-        public Dictionary<ParseEnum.StateChange, List<CombatItem>> StatesData { get; private set; }
+        private Dictionary<ParseEnum.StateChange, List<CombatItem>> _statesData;
         //private List<CombatItem> _healingData;
         //private List<CombatItem> _healingReceivedData;
-
-        public Dictionary<long, List<CombatItem>> BoonData { get; private set; }
-        public Dictionary<ushort, List<CombatItem>> BoonDataByDst { get; private set; }
-        public Dictionary<ushort, List<CombatItem>> DamageData { get; private set; }
-        public Dictionary<ushort, List<CombatItem>> CastData { get; private set; }
-        public Dictionary<long, List<CombatItem>> CastDataById { get; private set; }
-        public Dictionary<ushort, List<CombatItem>> DamageTakenData { get; private set; }
-        public Dictionary<ushort, List<CombatItem>> MovementData { get; private set; }
+        private Dictionary<long, List<CombatItem>> _skillData;
+        private Dictionary<long, List<CombatItem>> _boonData;
+        private Dictionary<ushort, List<CombatItem>> _boonDataByDst;
+        private Dictionary<ushort, List<CombatItem>> _damageData;
+        private Dictionary<ushort, List<CombatItem>> _castData;
+        private Dictionary<long, List<CombatItem>> _castDataById;
+        private Dictionary<ushort, List<CombatItem>> _damageTakenData;
+        private Dictionary<ushort, List<CombatItem>> _movementData;
 
         public CombatData(List<CombatItem> allCombatItems, FightData fightData)
         {
-            AllCombatItems = allCombatItems;
+            _skillData = allCombatItems.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
             var noStateActiBuffRem = allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.Normal && x.IsActivation == ParseEnum.Activation.None && x.IsBuffRemove == ParseEnum.BuffRemove.None);
             // movement events
-            MovementData = fightData.Logic.CanCombatReplay
+            _movementData = fightData.Logic.CanCombatReplay
                 ? allCombatItems.Where(x =>
                         x.IsStateChange == ParseEnum.StateChange.Position ||
                         x.IsStateChange == ParseEnum.StateChange.Velocity ||
                         x.IsStateChange == ParseEnum.StateChange.Rotation).GroupBy(x => x.SrcInstid)
                     .ToDictionary(x => x.Key, x => x.ToList())
                 : new Dictionary<ushort, List<CombatItem>>();
-            fightData.Logic.CanCombatReplay = MovementData.Count > 1;
+            fightData.Logic.CanCombatReplay = _movementData.Count > 1;
             // state change events
-            StatesData = allCombatItems.GroupBy(x => x.IsStateChange).ToDictionary(x => x.Key, x => x.ToList());
+            _statesData = allCombatItems.GroupBy(x => x.IsStateChange).ToDictionary(x => x.Key, x => x.ToList());
             // activation events
             var castData = allCombatItems.Where(x => x.IsActivation != ParseEnum.Activation.None || x.IsStateChange == ParseEnum.StateChange.WeaponSwap);
-            CastData = castData.GroupBy(x => x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList());
-            CastDataById = castData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
+            _castData = castData.GroupBy(x => x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList());
+            _castDataById = castData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
             // buff remove event
             var buffRemove = allCombatItems.Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.IsBuff != 0);
             var buffApply = noStateActiBuffRem.Where(x => x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0);
@@ -48,12 +46,12 @@ namespace LuckParser.Models.ParseModels
             boonData.AddRange(buffApply);
             boonData.AddRange(buffInitial);
             boonData.Sort((x, y) => x.Time.CompareTo(y.Time));
-            BoonData = boonData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
-            BoonDataByDst = boonData.GroupBy(x => x.IsBuffRemove == ParseEnum.BuffRemove.None ? x.DstInstid : x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList());
+            _boonData = boonData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
+            _boonDataByDst = boonData.GroupBy(x => x.IsBuffRemove == ParseEnum.BuffRemove.None ? x.DstInstid : x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList());
             // damage events
             var damageData = noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0));
-            DamageData = damageData.GroupBy(x => x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList());
-            DamageTakenData = damageData.GroupBy(x => x.DstInstid).ToDictionary(x => x.Key, x => x.ToList());
+            _damageData = damageData.GroupBy(x => x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList());
+            _damageTakenData = damageData.GroupBy(x => x.DstInstid).ToDictionary(x => x.Key, x => x.ToList());
 
             /*healing_data = allCombatItems.Where(x => x.getDstInstid() != 0 && x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                          ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
@@ -64,27 +62,18 @@ namespace LuckParser.Models.ParseModels
                                                 (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
         }
 
-        public List<CombatItem> GetStatesData(int srcInstid, ParseEnum.StateChange change, long start, long end)
+        public List<CombatItem> GetStatesData(ushort srcInstid, ParseEnum.StateChange change, long start, long end)
         {
-            if (StatesData.TryGetValue(change, out List<CombatItem> data))
+            if (_statesData.TryGetValue(change, out List<CombatItem> data))
             {
                 return data.Where(x => x.SrcInstid == srcInstid && x.Time >= start && x.Time <= end).ToList();
             }
             return new List<CombatItem>();
         }
 
-        public List<CombatItem> GetSkills(int srcInstid, long skillId, long start, long end)
+        public List<CombatItem> GetBuffs(ushort srcInstid, long skillId, long start, long end)
         {
-            if (CastDataById.TryGetValue(skillId, out List<CombatItem> data))
-            {
-                return data.Where(x => x.SrcInstid == srcInstid && x.Time >= start && x.Time <= end && x.IsActivation.StartCasting()).ToList();
-            }
-            return new List<CombatItem>();
-        }
-
-        public List<CombatItem> GetBuffs(int srcInstid, long skillId, long start, long end)
-        {
-            if (BoonData.TryGetValue(skillId, out List<CombatItem> data))
+            if (_boonData.TryGetValue(skillId, out List<CombatItem> data))
             {
                 return data.Where(x => x.SrcInstid == srcInstid && x.Time >= start && x.Time <= end && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
             }
@@ -93,7 +82,7 @@ namespace LuckParser.Models.ParseModels
 
         public void Update(long end)
         {
-            List<CombatItem> damageData = DamageData.SelectMany(x => x.Value).ToList();
+            List<CombatItem> damageData = _damageData.SelectMany(x => x.Value).ToList();
             damageData.Sort((x, y) => x.Time.CompareTo(y.Time));
             damageData.Reverse();
             foreach (CombatItem c in damageData)
@@ -111,9 +100,23 @@ namespace LuckParser.Models.ParseModels
 
         // getters
 
+        public HashSet<long> GetSkills()
+        {
+            return new HashSet<long>(_skillData.Keys);
+        }
+
+        public List<CombatItem> GetSkillData(long key)
+        {
+            if (_skillData.TryGetValue(key, out List<CombatItem> res))
+            {
+                return res;
+            }
+            return new List<CombatItem>(); ;
+        }
+
         public List<CombatItem> GetBoonData(long key)
         {
-            if (BoonData.TryGetValue(key, out List<CombatItem> res))
+            if (_boonData.TryGetValue(key, out List<CombatItem> res))
             {
                 return res;
             }
@@ -122,7 +125,7 @@ namespace LuckParser.Models.ParseModels
 
         public List<CombatItem> GetBoonDataByDst(ushort key, long start, long end)
         {
-            if (BoonDataByDst.TryGetValue(key, out List<CombatItem> res))
+            if (_boonDataByDst.TryGetValue(key, out List<CombatItem> res))
             {
                 return res.Where(x => x.Time >= start && x.Time <= end).ToList();
             }
@@ -132,7 +135,7 @@ namespace LuckParser.Models.ParseModels
 
         public List<CombatItem> GetDamageData(ushort key, long start, long end)
         {
-            if (DamageData.TryGetValue(key, out List<CombatItem> res))
+            if (_damageData.TryGetValue(key, out List<CombatItem> res))
             {
                 return res.Where(x => x.Time >= start && x.Time <= end).ToList();
             }
@@ -141,7 +144,7 @@ namespace LuckParser.Models.ParseModels
 
         public List<CombatItem> GetCastData(ushort key, long start, long end)
         {
-            if (CastData.TryGetValue(key, out List<CombatItem> res))
+            if (_castData.TryGetValue(key, out List<CombatItem> res))
             {
                 return res.Where(x => x.Time >= start && x.Time <= end).ToList();
             }
@@ -151,7 +154,7 @@ namespace LuckParser.Models.ParseModels
 
         public List<CombatItem> GetCastDataById(long key)
         {
-            if (CastDataById.TryGetValue(key, out List<CombatItem> res))
+            if (_castDataById.TryGetValue(key, out List<CombatItem> res))
             {
                 return res;
             }
@@ -160,7 +163,7 @@ namespace LuckParser.Models.ParseModels
 
         public List<CombatItem> GetDamageTakenData(ushort key, long start, long end)
         {
-            if (DamageTakenData.TryGetValue(key, out List<CombatItem> res))
+            if (_damageTakenData.TryGetValue(key, out List<CombatItem> res))
             {
                 return res.Where(x => x.Time >= start && x.Time <= end).ToList();
             }
@@ -180,7 +183,7 @@ namespace LuckParser.Models.ParseModels
 
         public List<CombatItem> GetMovementData(ushort key, long start, long end)
         {
-            if (MovementData.TryGetValue(key, out List<CombatItem> res))
+            if (_movementData.TryGetValue(key, out List<CombatItem> res))
             {
                 return res.Where(x => x.Time >= start && x.Time <= end).ToList();
             }
@@ -189,7 +192,7 @@ namespace LuckParser.Models.ParseModels
 
         public List<CombatItem> GetStates(ParseEnum.StateChange key)
         {
-            if (StatesData.TryGetValue(key, out List<CombatItem> res))
+            if (_statesData.TryGetValue(key, out List<CombatItem> res))
             {
                 return res;
             }

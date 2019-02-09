@@ -159,7 +159,7 @@ namespace LuckParser.Models.Logic
             Target leftArm = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.CALeftArm);
             if (leftArm != null)
             {
-                List<long> leftArmDown = log.GetBoonData(52430).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All && x.SrcInstid == leftArm.InstID).Select(x => log.FightData.ToFightSpace(x.Time)).ToList();
+                List<long> leftArmDown = log.CombatData.GetBoonData(52430).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All && x.SrcInstid == leftArm.InstID).Select(x => log.FightData.ToFightSpace(x.Time)).ToList();
                 for (int i = 1; i < phases.Count; i += 2)
                 {
                     PhaseData phase = phases[i];
@@ -173,7 +173,7 @@ namespace LuckParser.Models.Logic
             Target rightArm = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.CARightArm);
             if (rightArm != null)
             {
-                List<long> rightArmDown = log.GetBoonData(52430).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All && x.SrcInstid == rightArm.InstID).Select(x => log.FightData.ToFightSpace(x.Time)).ToList();
+                List<long> rightArmDown = log.CombatData.GetBoonData(52430).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All && x.SrcInstid == rightArm.InstID).Select(x => log.FightData.ToFightSpace(x.Time)).ToList();
                 for (int i = 1; i < phases.Count; i += 2)
                 {
                     PhaseData phase = phases[i];

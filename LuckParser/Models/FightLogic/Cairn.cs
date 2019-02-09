@@ -92,7 +92,7 @@ namespace LuckParser.Models.Logic
         public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
             // shared agony
-            List<CombatItem> agony = log.GetBoonData(38049).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
+            List<CombatItem> agony = log.CombatData.GetBoonData(38049).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
             CombatReplay replay = p.CombatReplay;
             foreach (CombatItem c in agony)
             {
@@ -104,7 +104,7 @@ namespace LuckParser.Models.Logic
 
         public override int IsCM(ParsedLog log)
         {
-            return log.CombatData.AllCombatItems.Exists(x => x.SkillID == 38098) ? 1 : 0;
+            return log.CombatData.GetSkills().Contains(38098) ? 1 : 0;
         }
 
         public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)

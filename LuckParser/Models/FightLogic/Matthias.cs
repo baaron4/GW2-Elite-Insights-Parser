@@ -68,11 +68,11 @@ namespace LuckParser.Models.Logic
                 return phases;
             }
             // Special buff cast check
-            CombatItem heatWave = log.GetBoonData(34526).FirstOrDefault();
+            CombatItem heatWave = log.CombatData.GetBoonData(34526).FirstOrDefault();
             if (heatWave != null)
             {
                 phases.Add(new PhaseData(0, log.FightData.ToFightSpace(heatWave.Time) - 1));
-                CombatItem downPour = log.GetDamageData(mainTarget.InstID, mainTarget.FirstAware, mainTarget.LastAware).Find(x => x.SkillID == 34554);
+                CombatItem downPour = log.CombatData.GetDamageData(mainTarget.InstID, mainTarget.FirstAware, mainTarget.LastAware).Find(x => x.SkillID == 34554);
                 if (downPour != null)
                 {
                     phases.Add(new PhaseData(log.FightData.ToFightSpace(heatWave.Time), log.FightData.ToFightSpace(downPour.Time) - 1));
@@ -81,7 +81,7 @@ namespace LuckParser.Models.Logic
                     if (abo != null)
                     {
                         phases.Add(new PhaseData(log.FightData.ToFightSpace(downPour.Time), abo.Time - 1));
-                        CombatItem invulRemove = log.GetBoonDataByDst(mainTarget.InstID, log.FightData.ToLogSpace(abo.Time), log.FightData.ToLogSpace(abo.Time) + 10000).FirstOrDefault(x => x.SkillID == 757 && x.IsBuffRemove != ParseEnum.BuffRemove.None);
+                        CombatItem invulRemove = log.CombatData.GetBoonDataByDst(mainTarget.InstID, log.FightData.ToLogSpace(abo.Time), log.FightData.ToLogSpace(abo.Time) + 10000).FirstOrDefault(x => x.SkillID == 757 && x.IsBuffRemove != ParseEnum.BuffRemove.None);
                         if (invulRemove != null)
                         {
                             phases.Add(new PhaseData(log.FightData.ToFightSpace(invulRemove.Time), fightDuration));
@@ -156,7 +156,7 @@ namespace LuckParser.Models.Logic
             {
                 case (ushort)ParseEnum.TargetIDS.Matthias:
                     List<CastLog> humanShield = cls.Where(x => x.SkillId == 34468).ToList();
-                    List<int> humanShieldRemoval = log.GetBoonData(34518).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All).Select(x => (int)(log.FightData.ToFightSpace(x.Time))).Distinct().ToList();
+                    List<int> humanShieldRemoval = log.CombatData.GetBoonData(34518).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All).Select(x => (int)(log.FightData.ToFightSpace(x.Time))).Distinct().ToList();
                     for (var i = 0; i < humanShield.Count; i++)
                     {
                         var shield = humanShield[i];
@@ -171,7 +171,7 @@ namespace LuckParser.Models.Logic
                         }
                     }
                     List<CastLog> aboShield = cls.Where(x => x.SkillId == 34510).ToList();
-                    List<int> aboShieldRemoval = log.GetBoonData(34376).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All).Select(x => (int)(log.FightData.ToFightSpace(x.Time))).Distinct().ToList();
+                    List<int> aboShieldRemoval = log.CombatData.GetBoonData(34376).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All).Select(x => (int)(log.FightData.ToFightSpace(x.Time))).Distinct().ToList();
                     for (var i = 0; i < aboShield.Count; i++)
                     {
                         var shield = aboShield[i];
@@ -280,7 +280,7 @@ namespace LuckParser.Models.Logic
                 }
             }
             // Bombs
-            List<CombatItem> zealousBenediction = log.GetBoonData(34511).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
+            List<CombatItem> zealousBenediction = log.CombatData.GetBoonData(34511).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
             foreach (CombatItem c in zealousBenediction)
             {
                 int zealousStart = (int)(log.FightData.ToFightSpace(c.Time)) ;

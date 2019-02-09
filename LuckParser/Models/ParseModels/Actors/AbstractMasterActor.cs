@@ -212,7 +212,7 @@ namespace LuckParser.Models.ParseModels
         // private setters
         private void SetMovements(ParsedLog log)
         {
-            foreach (CombatItem c in log.GetMovementData(InstID, FirstAware, LastAware))
+            foreach (CombatItem c in log.CombatData.GetMovementData(InstID, FirstAware, LastAware))
             {
                 long time = log.FightData.ToFightSpace(c.Time);
                 byte[] xy = BitConverter.GetBytes(c.DstAgent);
@@ -393,7 +393,7 @@ namespace LuckParser.Models.ParseModels
         }
         protected override void SetDamageLogs(ParsedLog log)
         {
-            foreach (CombatItem c in log.GetDamageData(InstID, FirstAware, LastAware))
+            foreach (CombatItem c in log.CombatData.GetDamageData(InstID, FirstAware, LastAware))
             {
                 long time = log.FightData.ToFightSpace(c.Time);
                 AddDamageLog(time, c);

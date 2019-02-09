@@ -121,7 +121,7 @@ namespace LuckParser.Models.Logic
             }
             else
             {
-                CombatItem invulDhuum = log.GetBoonData(762).FirstOrDefault(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SrcInstid == mainTarget.InstID && x.Time > 115000 + log.FightData.FightStart);
+                CombatItem invulDhuum = log.CombatData.GetBoonData(762).FirstOrDefault(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SrcInstid == mainTarget.InstID && x.Time > 115000 + log.FightData.FightStart);
                 if (invulDhuum != null)
                 {
                     long end = log.FightData.ToFightSpace(invulDhuum.Time);
@@ -261,7 +261,7 @@ namespace LuckParser.Models.Logic
         {
             // spirit transform
             CombatReplay replay = p.CombatReplay;
-            List<CombatItem> spiritTransform = log.GetBoonData(46950).Where(x => x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
+            List<CombatItem> spiritTransform = log.CombatData.GetBoonData(46950).Where(x => x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
             Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
             if (mainTarget == null)
             {
@@ -275,7 +275,7 @@ namespace LuckParser.Models.Logic
                 {
                     duration = 30000;
                 }
-                CombatItem removedBuff = log.GetBoonData(48281).FirstOrDefault(x => x.SrcInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.All && x.Time > c.Time && x.Time < c.Time + duration);
+                CombatItem removedBuff = log.CombatData.GetBoonData(48281).FirstOrDefault(x => x.SrcInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.All && x.Time > c.Time && x.Time < c.Time + duration);
                 int end = start + duration;
                 if (removedBuff != null)
                 {

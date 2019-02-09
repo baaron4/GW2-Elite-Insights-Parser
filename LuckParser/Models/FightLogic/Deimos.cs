@@ -182,7 +182,7 @@ namespace LuckParser.Models.Logic
                 return phases;
             }
             // Determined + additional data on inst change
-            CombatItem invulDei = log.GetBoonData(762).Find(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && x.DstInstid == mainTarget.InstID);
+            CombatItem invulDei = log.CombatData.GetBoonData(762).Find(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && x.DstInstid == mainTarget.InstID);
             if (invulDei != null)
             {
                 end = log.FightData.ToFightSpace(invulDei.Time);

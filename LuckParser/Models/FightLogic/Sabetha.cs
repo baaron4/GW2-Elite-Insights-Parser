@@ -212,7 +212,7 @@ namespace LuckParser.Models.Logic
         {
             // timed bombs
             CombatReplay replay = p.CombatReplay;
-            List<CombatItem> timedBombs = log.GetBoonData(31485).Where(x => x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
+            List<CombatItem> timedBombs = log.CombatData.GetBoonData(31485).Where(x => x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
             foreach (CombatItem c in timedBombs)
             {
                 int start = (int)(log.FightData.ToFightSpace(c.Time));
