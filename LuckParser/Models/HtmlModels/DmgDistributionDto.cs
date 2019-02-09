@@ -77,13 +77,13 @@ namespace LuckParser.Models.HtmlModels
                     totaldamage,
                     mindamage == int.MaxValue ? 0 : mindamage,
                     maxdamage == int.MinValue ? 0 : maxdamage,
-                    casts,
+                    IsIndirectDamage ? 0 : casts,
                     hits,
-                    crit,
-                    flank,
-                    glance,
-                    timeswasted / 1000.0,
-                    -timessaved / 1000.0
+                    IsIndirectDamage ? 0 : crit,
+                    IsIndirectDamage ? 0 : flank,
+                    IsIndirectDamage ? 0 : glance,
+                    IsIndirectDamage ? 0 : timeswasted / 1000.0,
+                    IsIndirectDamage ? 0 : -timessaved / 1000.0
                 };
             return skillItem;
         }

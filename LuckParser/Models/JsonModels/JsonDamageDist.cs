@@ -48,18 +48,18 @@ namespace LuckParser.Models.JsonModels
         /// <summary>
         /// True if indirect damage
         /// </summary>
-        public bool Condi;
+        public bool IndirectDamage;
 
-        public JsonDamageDist(List<ParseModels.DamageLog> list, bool condi, long id)
+        public JsonDamageDist(List<ParseModels.DamageLog> list, bool indirectDamage, long id)
         {
             Hits = list.Count;
             TotalDamage = list.Sum(x => x.Damage);
             Min = list.Min(x => x.Damage);
             Max = list.Max(x => x.Damage);
-            Flank = list.Count(x => x.IsFlanking);
-            Crit = list.Count(x => x.Result == Parser.ParseEnum.Result.Crit);
-            Glance = list.Count(x => x.Result == Parser.ParseEnum.Result.Glance);
-            Condi = condi;
+            Flank = indirectDamage ? 0: list.Count(x => x.IsFlanking);
+            Crit = indirectDamage ? 0 : list.Count(x => x.Result == Parser.ParseEnum.Result.Crit);
+            Glance = indirectDamage ? 0 : list.Count(x => x.Result == Parser.ParseEnum.Result.Glance);
+            IndirectDamage = indirectDamage;
             Id = id;
         }
     }

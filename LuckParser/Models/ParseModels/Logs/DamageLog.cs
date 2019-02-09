@@ -29,7 +29,7 @@ namespace LuckParser.Models.ParseModels
             {
                 IsCondi = (boon.Nature == Boon.BoonNature.Condition);
             }
-            Result = ParseEnum.GetResult(c.Result);
+            Result = c.ResultEnum;
             IsNinety = c.IsNinety > 0;
             IsFifty = c.IsFifty > 0;
             IsMoving = c.IsMoving > 0;

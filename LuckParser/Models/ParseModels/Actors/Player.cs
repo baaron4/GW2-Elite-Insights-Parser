@@ -32,7 +32,7 @@ namespace LuckParser.Models.ParseModels
             public class DeathRecapDamageItem
             {
                 public long ID;
-                public bool IsCondi;
+                public bool IsIndirectDamage;
                 public string Src;
                 public int Damage;
                 public int Time;
@@ -145,7 +145,7 @@ namespace LuckParser.Models.ParseModels
                         DeathRecap.DeathRecapDamageItem item = new DeathRecap.DeathRecapDamageItem()
                         {
                             Time = (int)dl.Time,
-                            IsCondi = dl.IsIndirectDamage,
+                            IsIndirectDamage = dl.IsIndirectDamage,
                             ID = dl.SkillId,
                             Damage = dl.Damage,
                             Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
@@ -166,7 +166,7 @@ namespace LuckParser.Models.ParseModels
                         DeathRecap.DeathRecapDamageItem item = new DeathRecap.DeathRecapDamageItem()
                         {
                             Time = (int)dl.Time,
-                            IsCondi = dl.IsIndirectDamage,
+                            IsIndirectDamage = dl.IsIndirectDamage,
                             ID = dl.SkillId,
                             Damage = dl.Damage,
                             Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
@@ -187,7 +187,7 @@ namespace LuckParser.Models.ParseModels
                         DeathRecap.DeathRecapDamageItem item = new DeathRecap.DeathRecapDamageItem()
                         {
                             Time = (int)dl.Time,
-                            IsCondi = dl.IsIndirectDamage,
+                            IsIndirectDamage = dl.IsIndirectDamage,
                             ID = dl.SkillId,
                             Damage = dl.Damage,
                             Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
@@ -261,7 +261,7 @@ namespace LuckParser.Models.ParseModels
             long fightDuration = log.FightData.FightDuration;
             foreach (Boon consumable in consumableList)
             {
-                foreach (CombatItem c in log.GetBoonData(consumable.ID))
+                foreach (CombatItem c in log.CombatData.GetBoonData(consumable.ID))
                 {
                     if (c.IsBuffRemove != ParseEnum.BuffRemove.None || (c.IsBuff != 18 && c.IsBuff != 1) || AgentItem.InstID != c.DstInstid)
                     {

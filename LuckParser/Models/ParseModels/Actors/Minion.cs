@@ -14,7 +14,7 @@ namespace LuckParser.Models.ParseModels
 
         protected override void SetDamageLogs(ParsedLog log)
         {
-            foreach (CombatItem c in log.GetDamageData(InstID, FirstAware, LastAware))
+            foreach (CombatItem c in log.CombatData.GetDamageData(InstID, FirstAware, LastAware))
             {
                 long time = log.FightData.ToFightSpace(c.Time);
                 AddDamageLog(time, c);

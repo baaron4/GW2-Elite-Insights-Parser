@@ -199,7 +199,7 @@ namespace LuckParser.Models.ParseModels
                 CastLog item = cls.First();
                 if (extension == 2000 && log.PlayerListBySpec.TryGetValue("Tempest", out List<Player> tempests))
                 {
-                    List<CombatItem> magAuraApplications = log.GetBoonData(5684).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && x.IsOffcycle == 0).ToList();
+                    List<CombatItem> magAuraApplications = log.CombatData.GetBoonData(5684).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && x.IsOffcycle == 0).ToList();
                     foreach (Player tempest in tempests)
                     {
                         if (magAuraApplications.FirstOrDefault(x => x.SrcInstid == tempest.InstID && Math.Abs(x.Time - time) < 50) != null)
@@ -230,7 +230,7 @@ namespace LuckParser.Models.ParseModels
             //
             BoonMap boonMap = new BoonMap();
             // Fill in Boon Map
-            foreach (CombatItem c in log.GetBoonDataByDst(InstID, FirstAware, LastAware))
+            foreach (CombatItem c in log.CombatData.GetBoonDataByDst(InstID, FirstAware, LastAware))
             {
                 long boonId = c.SkillID;
                 if (!boonMap.ContainsKey(boonId))
@@ -319,7 +319,7 @@ namespace LuckParser.Models.ParseModels
 
         protected virtual void SetDamageTakenLogs(ParsedLog log)
         {
-            foreach (CombatItem c in log.GetDamageTakenData(InstID, FirstAware, LastAware))
+            foreach (CombatItem c in log.CombatData.GetDamageTakenData(InstID, FirstAware, LastAware))
             {
                 long time = log.FightData.ToFightSpace(c.Time);
                 AddDamageTakenLog(time, c);
@@ -329,7 +329,7 @@ namespace LuckParser.Models.ParseModels
         protected virtual void SetCastLogs(ParsedLog log)
         {
             CastLog curCastLog = null;
-            foreach (CombatItem c in log.GetCastData(InstID, FirstAware, LastAware))
+            foreach (CombatItem c in log.CombatData.GetCastData(InstID, FirstAware, LastAware))
             {
                 ParseEnum.StateChange state = c.IsStateChange;
                 if (state == ParseEnum.StateChange.Normal)

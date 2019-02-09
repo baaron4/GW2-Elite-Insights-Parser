@@ -25,7 +25,7 @@ namespace LuckParser.Models.JsonModels
             /// <summary>
             /// True if the damage was indirect
             /// </summary>
-            public bool Condi;
+            public bool IndirectDamage;
             /// <summary>
             /// Source of the damage
             /// </summary>
@@ -42,7 +42,7 @@ namespace LuckParser.Models.JsonModels
             public JsonDeathRecapDamageItem(ParseModels.Player.DeathRecap.DeathRecapDamageItem item)
             {
                 Id = item.ID;
-                Condi = item.IsCondi;
+                IndirectDamage = item.IsIndirectDamage;
                 Src = item.Src;
                 Damage = item.Damage;
                 Time = item.Time;
