@@ -590,7 +590,6 @@ namespace LuckParser.Builders
         {
             List<MechanicDto> mechanicDtos = new List<MechanicDto>();
             HashSet<Mechanic> playerMechs = _log.MechanicData.GetPresentPlayerMechs(0);
-            HashSet<Mechanic> enemyMechs = _log.MechanicData.GetPresentEnemyMechs(0);
             foreach (Mechanic mech in _log.MechanicData.GetPresentMechanics(0))
             {
                 MechanicDto dto = new MechanicDto
@@ -599,7 +598,7 @@ namespace LuckParser.Builders
                     ShortName = mech.ShortName,
                     Description = mech.Description,
                     PlayerMech = playerMechs.Contains(mech),
-                    EnemyMech = enemyMechs.Contains(mech)
+                    EnemyMech = mech.IsEnemyMechanic
                 };
                 mechanicDtos.Add(dto);
             }
@@ -609,16 +608,14 @@ namespace LuckParser.Builders
         private List<MechanicChartDataDto> BuildMechanicsChartData()
         {
             List<MechanicChartDataDto> mechanicsChart = new List<MechanicChartDataDto>();
-            HashSet<Mechanic> playerMechs = _log.MechanicData.GetPresentPlayerMechs(0);
-            HashSet<Mechanic> enemyMechs = _log.MechanicData.GetPresentEnemyMechs(0);
             foreach (Mechanic mech in _log.MechanicData.GetPresentMechanics(0))
             {
                 List<MechanicLog> mechanicLogs = _log.MechanicData[mech];
                 MechanicChartDataDto dto = new MechanicChartDataDto
                 {
-                    Color = mech.PlotlySetting.color,
-                    Symbol = mech.PlotlySetting.symbol,
-                    Size = mech.PlotlySetting.size,
+                    Color = mech.PlotlySetting.Color,
+                    Symbol = mech.PlotlySetting.Symbol,
+                    Size = mech.PlotlySetting.Size,
                     Visible = (mech.SkillId == SkillItem.DeathId || mech.SkillId == SkillItem.DownId),
                     Points = BuildMechanicGraphPointData(mechanicLogs, mech.IsEnemyMechanic)
                 };
