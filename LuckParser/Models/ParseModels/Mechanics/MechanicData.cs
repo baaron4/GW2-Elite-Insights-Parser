@@ -21,9 +21,9 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public void ComputePresentMechanics(ParsedLog log)
+        public void ProcessMechanics(ParsedLog log)
         {
-            if (_presentOnPlayerMechanics.Count > 0)
+            if (_presentMechanics.Count > 0)
             {
                 return;
             }
@@ -62,7 +62,7 @@ namespace LuckParser.Models.ParseModels
                         if (pair.Key.IsEnemyMechanic)
                         {
                             toAddEnemy.Add(pair.Key);
-                        } else if (pair.Key.MechanicType != Mechanic.MechType.PlayerStatus)
+                        } else if (pair.Key.ShowOnTable)
                         {
                             toAddPlayer.Add(pair.Key);
                         }

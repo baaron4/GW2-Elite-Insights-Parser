@@ -13,23 +13,23 @@ namespace LuckParser.Models.Logic
             MechanicList.AddRange(new List<Mechanic>
             {
             // (ID, ingame name, Type, BossID, plotly marker, Table header name, ICD, Special condition) // long table hover name, graph legend name
-            new Mechanic(38113, "Displacement", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle","rgb(255,140,0)"), "Port","Orange Teleport Field", "Orange TP",0), 
-            new Mechanic(37611, "Spatial Manipulation", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Green Spatial Manipulation Field (lift)", "Green",0), 
-            new Mechanic(37629, "Spatial Manipulation", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Green Spatial Manipulation Field (lift)", "Green",0),
-            new Mechanic(37642, "Spatial Manipulation", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Green Spatial Manipulation Field (lift)", "Green",0),
-            new Mechanic(37673, "Spatial Manipulation", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Green Spatial Manipulation Field (lift)", "Green",0),
-            new Mechanic(38074, "Spatial Manipulation", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Green Spatial Manipulation Field (lift)", "Green",0),
-            new Mechanic(38302, "Spatial Manipulation", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Green Spatial Manipulation Field (lift)", "Green",0),
-            new Mechanic(38313, "Meteor Swarm", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "KB","Knockback Crystals (tornado like)", "KB Crystal",1000),
-            new Mechanic(38049, "Shared Agony", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Agony","Shared Agony Debuff Application", "Shared Agony",0),//could flip
-            new Mechanic(38170, "Shared Agony", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("star-triangle-up-open","rgb(255,150,0)"), "Agony 25","Shared Agony Damage (25% Player's HP)", "SA dmg 25%",0), // Seems to be a (invisible) debuff application for 1 second from the Agony carrier to the closest(?) person in the circle.
-            new Mechanic(37768, "Shared Agony", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("star-diamond-open","rgb(255,50,0)"), "Agony 50","Shared Agony Damage (50% Player's HP)", "SA dmg 50%",0), //Chaining from the first person hit by 38170, applying a 1 second debuff to the next person.
-            new Mechanic(38209, "Shared Agony", Mechanic.MechType.PlayerBoon, new MechanicPlotlySetting("star-open","rgb(200,0,0)"), "Agony 75","Shared Agony Damage (75% Player's HP)", "SA dmg 75%",0), //Chaining from the first person hit by 37768, applying a 1 second debuff to the next person.
+            new HitOnPlayerMechanic(38113, "Displacement", new MechanicPlotlySetting("circle","rgb(255,140,0)"), "Port","Orange Teleport Field", "Orange TP",0), 
+            new HitOnPlayerMechanic(37611, "Spatial Manipulation", new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Green Spatial Manipulation Field (lift)", "Green",0), 
+            new HitOnPlayerMechanic(37629, "Spatial Manipulation", new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Green Spatial Manipulation Field (lift)", "Green",0),
+            new HitOnPlayerMechanic(37642, "Spatial Manipulation", new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Green Spatial Manipulation Field (lift)", "Green",0),
+            new HitOnPlayerMechanic(37673, "Spatial Manipulation", new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Green Spatial Manipulation Field (lift)", "Green",0),
+            new HitOnPlayerMechanic(38074, "Spatial Manipulation", new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Green Spatial Manipulation Field (lift)", "Green",0),
+            new HitOnPlayerMechanic(38302, "Spatial Manipulation", new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Green Spatial Manipulation Field (lift)", "Green",0),
+            new HitOnPlayerMechanic(38313, "Meteor Swarm", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "KB","Knockback Crystals (tornado like)", "KB Crystal",1000),
+            new PlayerBoonApplyMechanic(38049, "Shared Agony", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Agony","Shared Agony Debuff Application", "Shared Agony",0),//could flip
+            new PlayerBoonApplyMechanic(38170, "Shared Agony", new MechanicPlotlySetting("star-triangle-up-open","rgb(255,150,0)"), "Agony 25","Shared Agony Damage (25% Player's HP)", "SA dmg 25%",0), // Seems to be a (invisible) debuff application for 1 second from the Agony carrier to the closest(?) person in the circle.
+            new PlayerBoonApplyMechanic(37768, "Shared Agony", new MechanicPlotlySetting("star-diamond-open","rgb(255,50,0)"), "Agony 50","Shared Agony Damage (50% Player's HP)", "SA dmg 50%",0), //Chaining from the first person hit by 38170, applying a 1 second debuff to the next person.
+            new PlayerBoonApplyMechanic(38209, "Shared Agony", new MechanicPlotlySetting("star-open","rgb(200,0,0)"), "Agony 75","Shared Agony Damage (75% Player's HP)", "SA dmg 75%",0), //Chaining from the first person hit by 37768, applying a 1 second debuff to the next person.
             // new Mechanic(37775, "Shared Agony", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Cairn, new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Agony Damage",0), from old raidheroes logs? Small damage packets. Is also named "Shared Agony" in the evtc. Doesn't seem to occur anymore.
             // new Mechanic(38210, "Shared Agony", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Cairn, new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "SA.dmg","Shared Agony Damage dealt", "Shared Agony dmg",0), //could flip. HP% attack, thus only shows on down/absorb hits.
-            new Mechanic(38060, "Energy Surge", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("triangle-left","rgb(0,128,0)"), "Leap","Jump between green fields", "Leap",100),
-            new Mechanic(37631, "Orbital Sweep", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("diamond-wide","rgb(255,0,255)"), "Sweep","Sword Spin (Knockback)", "Sweep",100),//short cooldown because of multihits. Would still like to register second hit at the end of spin though, thus only 0.1s
-            new Mechanic(37910, "Gravity Wave", Mechanic.MechType.SkillOnPlayer, new MechanicPlotlySetting("octagon","rgb(255,0,255)"), "Donut","Expanding Crystal Donut Wave (Knockback)", "Crystal Donut",0)
+            new HitOnPlayerMechanic(38060, "Energy Surge", new MechanicPlotlySetting("triangle-left","rgb(0,128,0)"), "Leap","Jump between green fields", "Leap",100),
+            new HitOnPlayerMechanic(37631, "Orbital Sweep", new MechanicPlotlySetting("diamond-wide","rgb(255,0,255)"), "Sweep","Sword Spin (Knockback)", "Sweep",100),//short cooldown because of multihits. Would still like to register second hit at the end of spin though, thus only 0.1s
+            new HitOnPlayerMechanic(37910, "Gravity Wave", new MechanicPlotlySetting("octagon","rgb(255,0,255)"), "Donut","Expanding Crystal Donut Wave (Knockback)", "Crystal Donut",0)
 
             });
             Extension = "cairn";
@@ -92,7 +92,7 @@ namespace LuckParser.Models.Logic
         public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
             // shared agony
-            List<CombatItem> agony = log.GetBoonData(38049).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
+            List<CombatItem> agony = log.CombatData.GetBoonData(38049).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
             CombatReplay replay = p.CombatReplay;
             foreach (CombatItem c in agony)
             {
@@ -104,7 +104,7 @@ namespace LuckParser.Models.Logic
 
         public override int IsCM(ParsedLog log)
         {
-            return log.CombatData.AllCombatItems.Exists(x => x.SkillID == 38098) ? 1 : 0;
+            return log.CombatData.GetSkills().Contains(38098) ? 1 : 0;
         }
 
         public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)

@@ -13,10 +13,7 @@ namespace LuckParser.Models.Logic
         public enum ParseMode { Raid, Fractal, Golem, Unknown };
 
         private CombatReplayMap _map;
-        public readonly List<Mechanic> MechanicList = new List<Mechanic> {
-            new Mechanic(SkillItem.DeathId, "Dead", Mechanic.MechType.PlayerStatus, new MechanicPlotlySetting("x","rgb(0,0,0)"), "Dead",0),
-            new Mechanic(SkillItem.DownId, "Downed", Mechanic.MechType.PlayerStatus, new MechanicPlotlySetting("cross","rgb(255,0,0)"), "Downed",0),
-            new Mechanic(SkillItem.ResurrectId, "Resurrect", Mechanic.MechType.PlayerStatus, new MechanicPlotlySetting("cross-open","rgb(0,255,255)"), "Res",0)}; //Resurrects (start), Resurrect
+        public readonly List<Mechanic> MechanicList; //Resurrects (start), Resurrect
         public ParseMode Mode { get; protected set; } = ParseMode.Unknown;
         public bool CanCombatReplay { get; set; } = false;
         public string Extension { get; protected set; }
@@ -29,6 +26,11 @@ namespace LuckParser.Models.Logic
         {
             TriggerID = triggerID;
             CanCombatReplay = GetCombatMap() != null;
+            MechanicList = new List<Mechanic>() {
+                new PlayerStatusMechanic(SkillItem.DeathId, "Dead", new MechanicPlotlySetting("x","rgb(0,0,0)"), "Dead",0),
+                new PlayerStatusMechanic(SkillItem.DownId, "Downed", new MechanicPlotlySetting("cross","rgb(255,0,0)"), "Downed",0),
+                new PlayerStatusMechanic(SkillItem.ResurrectId, "Resurrect", new MechanicPlotlySetting("cross-open","rgb(0,255,255)"), "Res",0)
+            };
         }
 
         protected virtual CombatReplayMap GetCombatMapInternal()
@@ -285,263 +287,13 @@ namespace LuckParser.Models.Logic
         {
             MechanicData mechData = log.MechanicData;
             CombatData combatData = log.CombatData;
-            Mechanic.CheckSpecialCondition condition;
             HashSet<ushort> playersIds = log.PlayerIDs;
             Dictionary<ushort, DummyActor> regroupedMobs = new Dictionary<ushort, DummyActor>();
             foreach (Mechanic mech in MechanicList)
             {
-                switch (mech.MechanicType)
-                {
-                    case Mechanic.MechType.PlayerStatus:
-                        foreach (Player p in log.PlayerList)
-                        {
-                            List<CombatItem> cList = new List<CombatItem>();
-                            switch (mech.SkillId)
-                            {
-                                case SkillItem.DeathId:
-                                    cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.ChangeDead, log.FightData.FightStart, log.FightData.FightEnd);
-                                    break;
-                                case SkillItem.DownId:
-                                    cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.ChangeDown, log.FightData.FightStart, log.FightData.FightEnd);
-                                    List<CombatItem> downByVaporForm = combatData.GetBoonData(5620).Where(x => x.SrcInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.All).ToList();
-                                    foreach(CombatItem c in downByVaporForm)
-                                    {
-                                        cList.RemoveAll(x => Math.Abs(x.Time - c.Time) < 20);
-                                    }
-                                    break;
-                                case SkillItem.ResurrectId:
-                                    cList = log.GetCastData(p.InstID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == SkillItem.ResurrectId && x.IsActivation.StartCasting()).ToList();
-                                    break;
-                            }
-                            foreach (CombatItem mechItem in cList)
-                            {
-                                mechData[mech].Add(new MechanicLog(log.FightData.ToFightSpace(mechItem.Time), mech, p));
-                            }
-                        }
-                        break;
-                    case Mechanic.MechType.SkillOnPlayer:
-                        foreach (Player p in log.PlayerList)
-                        {
-                            List<DamageLog> dls = p.GetDamageTakenLogs(null, log, 0, log.FightData.FightDuration);
-                            condition = mech.SpecialCondition;
-                            foreach (DamageLog dLog in dls)
-                            {
-                                if (condition != null && !condition(new SpecialConditionItem(dLog)))
-                                {
-                                    continue;
-                                }
-                                if (dLog.SkillId == mech.SkillId && dLog.Result.IsHit())
-                                {
-                                    mechData[mech].Add(new MechanicLog(dLog.Time, mech, p));
-
-                                }
-                            }
-                        }
-                        break;
-                    case Mechanic.MechType.PlayerBoon:
-                    case Mechanic.MechType.PlayerOnPlayer:
-                    case Mechanic.MechType.PlayerBoonRemove:
-                        foreach (Player p in log.PlayerList)
-                        {
-                            condition = mech.SpecialCondition;
-                            foreach (CombatItem c in log.GetBoonData(mech.SkillId))
-                            {
-                                if (condition != null && !condition(new SpecialConditionItem(c)))
-                                {
-                                    continue;
-                                }
-                                if (mech.MechanicType == Mechanic.MechType.PlayerBoonRemove)
-                                {
-                                    if (c.IsBuffRemove == ParseEnum.BuffRemove.Manual && p.InstID == c.SrcInstid)
-                                    {
-                                        mechData[mech].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), mech, p));
-                                    }
-                                }
-                                else
-                                {
-
-                                    if (c.IsBuffRemove == ParseEnum.BuffRemove.None && p.InstID == c.DstInstid)
-                                    {
-                                        mechData[mech].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), mech, p));
-                                        if (mech.MechanicType == Mechanic.MechType.PlayerOnPlayer)
-                                        {
-                                            mechData[mech].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), mech, log.PlayerList.FirstOrDefault(x => x.InstID == c.SrcInstid)));
-                                        }
-                                    }
-                                }
-                            }
-                        }                       
-                        break;
-                    case Mechanic.MechType.HitOnEnemy:
-                        foreach (Player p in log.PlayerList)
-                        {
-                            condition = mech.SpecialCondition;
-                            IEnumerable<AgentItem> agents = log.AgentData.GetAgentsByID((ushort)mech.SkillId);
-                            foreach (AgentItem a in agents)
-                            {
-                                foreach (DamageLog dl in p.GetDamageLogs(null, log, 0, log.FightData.FightDuration))
-                                {
-                                    if (dl.DstInstId != a.InstID || dl.IsIndirectDamage || dl.Time < log.FightData.ToFightSpace(a.FirstAware) || dl.Time > log.FightData.ToFightSpace(a.LastAware) || (condition != null && !condition(new SpecialConditionItem(dl))))
-                                    {
-                                        continue;
-                                    }
-                                    mechData[mech].Add(new MechanicLog(dl.Time, mech, p));
-                                }
-                            }
-                        }
-                        break;
-                    case Mechanic.MechType.PlayerSkill:
-                        foreach (Player p in log.PlayerList)
-                        {
-                            condition = mech.SpecialCondition;
-                            foreach (CombatItem c in log.GetCastDataById(mech.SkillId))
-                            {
-                                if (condition != null && !condition(new SpecialConditionItem(c)))
-                                {
-                                    continue;
-                                }
-                                if (c.IsActivation.StartCasting() && c.SrcInstid == p.InstID)
-                                {
-                                    mechData[mech].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), mech, p));
-
-                                }
-                            }
-                        }
-                        break;
-                    case Mechanic.MechType.EnemyBoon:
-                    case Mechanic.MechType.EnemyBoonStrip:
-                        condition = mech.SpecialCondition;
-                        foreach (CombatItem c in log.GetBoonData(mech.SkillId))
-                        {
-                            if (condition != null && !condition(new SpecialConditionItem(c)))
-                            {
-                                continue;
-                            }
-                            DummyActor amp = null;
-                            if (mech.MechanicType == Mechanic.MechType.EnemyBoon && c.IsBuffRemove == ParseEnum.BuffRemove.None)
-                            {
-                                Target target = Targets.Find(x => x.InstID == c.DstInstid && x.FirstAware <= c.Time && x.LastAware >= c.Time);
-                                if (target != null)
-                                {
-                                    amp = target;
-                                }
-                                else
-                                {
-                                    AgentItem a = log.AgentData.GetAgent(c.DstAgent, c.Time);
-                                    if (playersIds.Contains(a.InstID))
-                                    {
-                                        continue;
-                                    }
-                                    else if (a.MasterAgent != 0)
-                                    {
-                                        AgentItem m = log.AgentData.GetAgent(a.MasterAgent, c.Time);
-                                        if (playersIds.Contains(m.InstID))
-                                        {
-                                            continue;
-                                        }
-                                    }
-                                    if (!regroupedMobs.TryGetValue(a.ID, out amp))
-                                    {
-                                        amp = new DummyActor(a);
-                                        regroupedMobs.Add(a.ID, amp);
-                                    }
-                                }
-                            }
-                            else if (mech.MechanicType == Mechanic.MechType.EnemyBoonStrip && c.IsBuffRemove == ParseEnum.BuffRemove.Manual)
-                            {
-                                Target target = Targets.Find(x => x.InstID == c.SrcInstid && x.FirstAware <= c.Time && x.LastAware >= c.Time);
-                                if (target != null)
-                                { 
-                                    amp = target;
-                                }
-                                else
-                                {
-                                    AgentItem a = log.AgentData.GetAgent(c.SrcAgent, c.Time);
-                                    if (playersIds.Contains(a.InstID))
-                                    {
-                                        continue;
-                                    }
-                                    else if (a.MasterAgent != 0)
-                                    {
-                                        AgentItem m = log.AgentData.GetAgent(a.MasterAgent, c.Time);
-                                        if (playersIds.Contains(m.InstID))
-                                        {
-                                            continue;
-                                        }
-                                    }
-                                    if (!regroupedMobs.TryGetValue(a.ID, out amp))
-                                    {
-                                        amp = new DummyActor(a);
-                                        regroupedMobs.Add(a.ID, amp);
-                                    }
-                                }
-                            }
-                            if (amp != null)
-                            {
-                                mechData[mech].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), mech, amp));
-                            }
-
-                        }
-                        break;
-                    case Mechanic.MechType.EnemyCastEnd:
-                    case Mechanic.MechType.EnemyCastStart:
-                        condition = mech.SpecialCondition;
-                        foreach (CombatItem c in log.GetCastDataById(mech.SkillId))
-                        {
-                            if (condition != null && !condition(new SpecialConditionItem(c)))
-                            {
-                                continue;
-                            }
-                            DummyActor amp = null;
-                            if ((mech.MechanicType == Mechanic.MechType.EnemyCastStart && c.IsActivation.StartCasting()) || (mech.MechanicType == Mechanic.MechType.EnemyCastEnd && !c.IsActivation.StartCasting()))
-                            {
-                                Target target = Targets.Find(x => x.InstID == c.SrcInstid && x.FirstAware <= c.Time && x.LastAware >= c.Time);
-                                if (target != null)
-                                {
-                                    amp = target;
-                                }
-                                else
-                                {
-                                    AgentItem a = log.AgentData.GetAgent(c.SrcAgent, c.Time);
-                                    if (playersIds.Contains(a.InstID))
-                                    {
-                                        continue;
-                                    }
-                                    else if (a.MasterAgent != 0)
-                                    {
-                                        AgentItem m = log.AgentData.GetAgent(a.MasterAgent, c.Time);
-                                        if (playersIds.Contains(m.InstID))
-                                        {
-                                            continue;
-                                        }
-                                    }
-                                    if (!regroupedMobs.TryGetValue(a.ID, out amp))
-                                    {
-                                        amp = new DummyActor(a);
-                                        regroupedMobs.Add(a.ID, amp);
-                                    }
-                                }
-                            }
-                            if (amp != null)
-                            {
-                                mechData[mech].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), mech, amp));
-                            }
-                        }
-                        break;
-                    case Mechanic.MechType.Spawn:
-                        foreach (AgentItem a in log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.ID == mech.SkillId))
-                        {
-                            if (!regroupedMobs.TryGetValue(a.ID, out DummyActor amp))
-                            {
-                                amp = new DummyActor(a);
-                                regroupedMobs.Add(a.ID, amp);
-                            }
-                            mechData[mech].Add(new MechanicLog(log.FightData.ToFightSpace(a.FirstAware), mech, amp));
-                        }
-                        break;
-                }
+                mech.CheckMechanic(log, regroupedMobs);
             }
-            mechData.ComputePresentMechanics(log);
+            mechData.ProcessMechanics(log);
         }
 
         public virtual void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
@@ -552,7 +304,7 @@ namespace LuckParser.Models.Logic
         protected static List<CombatItem> GetFilteredList(ParsedLog log, long skillID, AbstractMasterActor target, bool beginWithStart)
         {
             bool needStart = beginWithStart;
-            List<CombatItem> main = log.GetBoonData(skillID).Where(x => ((x.DstInstid == target.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None) || (x.SrcInstid == target.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.Manual)) && x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
+            List<CombatItem> main = log.CombatData.GetBoonData(skillID).Where(x => ((x.DstInstid == target.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None) || (x.SrcInstid == target.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.Manual)) && x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
             List<CombatItem> filtered = new List<CombatItem>();
             for (int i = 0; i < main.Count; i++)
             {
