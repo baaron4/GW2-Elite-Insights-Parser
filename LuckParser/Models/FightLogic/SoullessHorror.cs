@@ -26,8 +26,8 @@ namespace LuckParser.Models.Logic
             new HitOnPlayerMechanic(48327, "Corrupt the Living", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Spin","Corrupt the Living (Torment+Poisen Spin)", "Torment+Poisen Spin",0),
             new HitOnPlayerMechanic(47756, "Wurm Spit", new MechanicPlotlySetting("diamond-open","rgb(0,128,128)"), "Spit","Wurm Spit", "Wurm Spit",0),
             new EnemyCastStartMechanic(48662, "Howling Death", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Howling Death (Breakbar)", "Breakbar",0),
-            new EnemyCastEndMechanic(48662, "Howling Death", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Howling Death (Breakbar) broken", "CCed",0,(condition => condition.Value <=6800)),
-            new EnemyCastEndMechanic(48662, "Howling Death", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Howling Death (Breakbar failed) ", "CC Fail",0,(condition => condition.Value >6800)),
+            new EnemyCastEndMechanic(48662, "Howling Death", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Howling Death (Breakbar) broken", "CCed",0,new List<MechanicChecker>{ new CombatItemValueChecker(6800, MechanicChecker.ValueCompare.LEQ) }, Mechanic.TriggerRule.AND),
+            new EnemyCastEndMechanic(48662, "Howling Death", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Howling Death (Breakbar failed) ", "CC Fail",0,new List<MechanicChecker>{ new CombatItemValueChecker(6800, MechanicChecker.ValueCompare.G) }, Mechanic.TriggerRule.AND),
 
             });
             Extension = "sh";

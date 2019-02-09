@@ -11,11 +11,20 @@ namespace LuckParser.Models.ParseModels
     public class EnemyBoonApplyMechanic : Mechanic
     {
 
-        public EnemyBoonApplyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, CheckTriggerCondition condition = null) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, condition)
+        public EnemyBoonApplyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<MechanicChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)
         {
         }
 
-        public EnemyBoonApplyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, CheckTriggerCondition condition = null) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
+        public EnemyBoonApplyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<MechanicChecker> conditions, TriggerRule rule) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, conditions, rule)
+        {
+            IsEnemyMechanic = true;
+        }
+
+        public EnemyBoonApplyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
+        {
+        }
+
+        public EnemyBoonApplyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
             IsEnemyMechanic = true;
         }
@@ -27,12 +36,8 @@ namespace LuckParser.Models.ParseModels
             HashSet<ushort> playersIds = log.PlayerIDs;
             foreach (CombatItem c in log.CombatData.GetBoonData(SkillId))
             {
-                if (!Keep(c))
-                {
-                    continue;
-                }
                 DummyActor amp = null;
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None && Keep(c, log))
                 {
                     Target target = log.FightData.Logic.Targets.Find(x => x.InstID == c.DstInstid && x.FirstAware <= c.Time && x.LastAware >= c.Time);
                     if (target != null)

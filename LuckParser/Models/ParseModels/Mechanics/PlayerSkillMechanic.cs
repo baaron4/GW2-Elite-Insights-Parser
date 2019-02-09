@@ -11,11 +11,19 @@ namespace LuckParser.Models.ParseModels
     public class PlayerSkillMechanic : Mechanic
     {
 
-        public PlayerSkillMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, CheckTriggerCondition condition = null) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, condition)
+        public PlayerSkillMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<MechanicChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)
         {
         }
 
-        public PlayerSkillMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, CheckTriggerCondition condition = null) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
+        public PlayerSkillMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+        {
+        }
+
+        public PlayerSkillMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
+        {
+        }
+
+        public PlayerSkillMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<MechanicChecker> conditions, TriggerRule rule) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, conditions, rule)
         {
         }
 
@@ -28,11 +36,7 @@ namespace LuckParser.Models.ParseModels
             {
                 foreach (CombatItem c in log.CombatData.GetCastDataById(SkillId))
                 {
-                    if (!Keep(c))
-                    {
-                        continue;
-                    }
-                    if (c.IsActivation.StartCasting() && c.SrcInstid == p.InstID)
+                    if (c.IsActivation.StartCasting() && c.SrcInstid == p.InstID && Keep(c, log))
                     {
                         mechData[this].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), this, p));
 

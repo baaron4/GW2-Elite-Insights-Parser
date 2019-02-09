@@ -11,11 +11,19 @@ namespace LuckParser.Models.ParseModels
     public class PlayerOnPlayerMechanic : Mechanic
     {
 
-        public PlayerOnPlayerMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, CheckTriggerCondition condition = null) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, condition)
+        public PlayerOnPlayerMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<MechanicChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)
         {
         }
 
-        public PlayerOnPlayerMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, CheckTriggerCondition condition = null) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
+        public PlayerOnPlayerMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<MechanicChecker> conditions, TriggerRule rule) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, conditions, rule)
+        {
+        }
+
+        public PlayerOnPlayerMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
+        {
+        }
+
+        public PlayerOnPlayerMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
         }
 
@@ -28,12 +36,7 @@ namespace LuckParser.Models.ParseModels
             {
                 foreach (CombatItem c in log.CombatData.GetBoonData(SkillId))
                 {
-                    if (!Keep(c))
-                    {
-                        continue;
-                    }
-
-                    if (c.IsBuffRemove == ParseEnum.BuffRemove.None && p.InstID == c.DstInstid)
+                    if (c.IsBuffRemove == ParseEnum.BuffRemove.None && p.InstID == c.DstInstid && Keep(c, log))
                     {
                         mechData[this].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), this, p));
                         mechData[this].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), this, log.PlayerList.FirstOrDefault(x => x.InstID == c.SrcInstid)));
