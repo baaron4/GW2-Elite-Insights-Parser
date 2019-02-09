@@ -57,8 +57,8 @@ namespace LuckParser.Builders
             _settings = settings;
 
             _statistics = statistics;
-            
-           _uploadLink = UploadString;
+
+            _uploadLink = UploadString;
         }
 
         public void CreateJSON()
@@ -305,7 +305,7 @@ namespace LuckParser.Builders
             int i = 0;
             foreach (Target tar in _log.FightData.Logic.Targets)
             {
-                res[i++] = stats[tar][p].Select(x => new JsonDPS(x)).ToArray();            
+                res[i++] = stats[tar][p].Select(x => new JsonDPS(x)).ToArray();
             }
             return res;
         }
@@ -486,8 +486,8 @@ namespace LuckParser.Builders
                     continue;
                 }
                 string prefix = filteredList.First().IsIndirectDamage ? "b" : "s";
-                res.Add(new JsonDamageDist(filteredList, filteredList.First().IsCondi, pair.Key));
-        }
+                res.Add(new JsonDamageDist(filteredList, filteredList.First().IsIndirectDamage, pair.Key));
+            }
 
             return res;
         }
@@ -525,7 +525,8 @@ namespace LuckParser.Builders
                 if (dict.TryGetValue(cl.SkillId, out var list))
                 {
                     list.Add(jSkill);
-                } else
+                }
+                else
                 {
                     dict[cl.SkillId] = new List<JsonSkill>()
                     {

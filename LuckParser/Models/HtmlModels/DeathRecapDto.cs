@@ -22,7 +22,7 @@ namespace LuckParser.Models.HtmlModels
                             item.ID,
                             item.Damage,
                             item.Src,
-                            item.IsCondi
+                            item.IndirectDamage
                 });
             }
             return data;
