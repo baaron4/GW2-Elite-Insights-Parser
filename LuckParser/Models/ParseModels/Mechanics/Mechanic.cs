@@ -25,20 +25,15 @@ namespace LuckParser.Models.ParseModels
 
     public class MechanicPlotlySetting
     {
-        public string color { get; }
-        public int size { get; }
-        public string symbol { get; }
+        public string Color { get; }
+        public int Size { get; }
+        public string Symbol { get; }
 
         public MechanicPlotlySetting(string symbol, string color, int size = 15)
         {
-            this.color = color;
-            this.symbol = symbol;
-            this.size = size;
-        }
-
-        public string ToJson()
-        {
-            return JsonConvert.SerializeObject(this);
+            Color = color;
+            Symbol = symbol;
+            Size = size;
         }
 
     }
@@ -69,7 +64,6 @@ namespace LuckParser.Models.ParseModels
         public int InternalCooldown { get; }
         public CheckSpecialCondition SpecialCondition { get; }
         public MechanicPlotlySetting PlotlySetting { get; }
-        public string PlotlyJson => PlotlySetting.ToJson();
         public string Description { get; }
         public string InGameName { get; }
         public string ShortName { get; }

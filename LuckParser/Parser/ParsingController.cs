@@ -589,8 +589,12 @@ namespace LuckParser.Parser
             }
             if (_combatItems.Count > 0)
             {
-                _fightData.FightStart = _combatItems.First().Time;
-                _fightData.FightEnd = _combatItems.Last().Time;
+                _fightData.FightStart = _combatItems.Min(x => x.Time);
+                _fightData.FightEnd = _combatItems.Max(x => x.Time);
+            }
+            else
+            {
+                throw new InvalidDataException("No combat events found");
             }
             // Dealing with special cases
             _fightData.Logic.SpecialParse(_fightData, _agentData, _combatItems);
@@ -623,10 +627,7 @@ namespace LuckParser.Parser
             }
 
             //players
-            if (_playerList.Count == 0)
-            {
-                CompletePlayers();
-            }
+            CompletePlayers();
             _playerList = _playerList.OrderBy(a => a.Group).ToList();
 
         }

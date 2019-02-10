@@ -85,7 +85,7 @@ namespace LuckParser.Models.Logic
             }
             // add burn phases
             int offset = phases.Count;
-            List<CombatItem> orbItems = log.GetBoonData(35096).Where(x => x.DstInstid == mainTarget.InstID).ToList();
+            List<CombatItem> orbItems = log.CombatData.GetBoonData(35096).Where(x => x.DstInstid == mainTarget.InstID).ToList();
             // Get number of orbs and filter the list
             start = 0;
             int orbCount = 0;

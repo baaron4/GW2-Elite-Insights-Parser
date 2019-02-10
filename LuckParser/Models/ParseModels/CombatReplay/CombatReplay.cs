@@ -48,7 +48,7 @@ namespace LuckParser.Models.ParseModels
             List<Point3D> interpolatedPositions = new List<Point3D>();
             int tablePos = 0;
             Point3D currentVelocity = null;
-            for (int i = -50*rate; i < fightDuration; i += rate)
+            for (int i = (int)Math.Min(0, rate * ((Positions[0].Time / rate) - 1)) ; i < fightDuration; i += rate)
             {
                 Point3D pt = Positions[tablePos];
                 if (i <= pt.Time)

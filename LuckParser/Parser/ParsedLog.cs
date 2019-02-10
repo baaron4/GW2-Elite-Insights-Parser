@@ -48,55 +48,5 @@ namespace LuckParser.Parser
                 throw new SkipException();
             }
         }
-
-        public List<CombatItem> GetBoonData(long key)
-        {
-            return CombatData.GetBoonData(key);
-        }
-
-        public List<CombatItem> GetBoonDataByDst(ushort key, long start, long end)
-        {
-            return CombatData.GetBoonDataByDst(key, start, end);
-        }
-
-        public List<CombatItem> GetDamageData(ushort key, long start, long end)
-        {
-            return CombatData.GetDamageData(key, start, end);
-        }
-
-        public List<CombatItem> GetCastData(ushort key, long start, long end)
-        {
-            return CombatData.GetCastData(key, start, end);
-        }
-        
-        public List<CombatItem> GetCastDataById(long key)
-        {
-            return CombatData.GetCastDataById(key);
-        }
-        
-        public List<CombatItem> GetDamageTakenData(ushort key, long start, long end)
-        {
-            return CombatData.GetDamageTakenData(key,start,end);
-        }
-
-        /*public List<CombatItem> getHealingData()
-        {
-            return _combatData.getHealingData();
-        }
-
-        public List<CombatItem> getHealingReceivedData()
-        {
-            return _combatData.getHealingReceivedData();
-        }*/
-        
-        public List<CombatItem> GetMovementData(ushort key, long start, long end)
-        {
-            return CombatData.GetMovementData(key,start,end);
-        }
-
-        public List<CombatItem> GetStatesData(ushort instid, ParseEnum.StateChange state, long start, long end)
-        {
-            return CombatData.GetStatesData(instid, state, start, end);
-        }
     }
 }

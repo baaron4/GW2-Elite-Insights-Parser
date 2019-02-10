@@ -310,7 +310,7 @@ namespace LuckParser.Models.Logic
                                     }
                                     break;
                                 case SkillItem.ResurrectId:
-                                    cList = log.GetCastData(p.InstID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == SkillItem.ResurrectId && x.IsActivation.StartCasting()).ToList();
+                                    cList = log.CombatData.GetCastData(p.InstID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == SkillItem.ResurrectId && x.IsActivation.StartCasting()).ToList();
                                     break;
                             }
                             foreach (CombatItem mechItem in cList)
@@ -344,7 +344,7 @@ namespace LuckParser.Models.Logic
                         foreach (Player p in log.PlayerList)
                         {
                             condition = mech.SpecialCondition;
-                            foreach (CombatItem c in log.GetBoonData(mech.SkillId))
+                            foreach (CombatItem c in log.CombatData.GetBoonData(mech.SkillId))
                             {
                                 if (condition != null && !condition(new SpecialConditionItem(c)))
                                 {
@@ -394,7 +394,7 @@ namespace LuckParser.Models.Logic
                         foreach (Player p in log.PlayerList)
                         {
                             condition = mech.SpecialCondition;
-                            foreach (CombatItem c in log.GetCastDataById(mech.SkillId))
+                            foreach (CombatItem c in log.CombatData.GetCastDataById(mech.SkillId))
                             {
                                 if (condition != null && !condition(new SpecialConditionItem(c)))
                                 {
@@ -411,7 +411,7 @@ namespace LuckParser.Models.Logic
                     case Mechanic.MechType.EnemyBoon:
                     case Mechanic.MechType.EnemyBoonStrip:
                         condition = mech.SpecialCondition;
-                        foreach (CombatItem c in log.GetBoonData(mech.SkillId))
+                        foreach (CombatItem c in log.CombatData.GetBoonData(mech.SkillId))
                         {
                             if (condition != null && !condition(new SpecialConditionItem(c)))
                             {
@@ -486,7 +486,7 @@ namespace LuckParser.Models.Logic
                     case Mechanic.MechType.EnemyCastEnd:
                     case Mechanic.MechType.EnemyCastStart:
                         condition = mech.SpecialCondition;
-                        foreach (CombatItem c in log.GetCastDataById(mech.SkillId))
+                        foreach (CombatItem c in log.CombatData.GetCastDataById(mech.SkillId))
                         {
                             if (condition != null && !condition(new SpecialConditionItem(c)))
                             {
@@ -552,7 +552,7 @@ namespace LuckParser.Models.Logic
         protected static List<CombatItem> GetFilteredList(ParsedLog log, long skillID, AbstractMasterActor target, bool beginWithStart)
         {
             bool needStart = beginWithStart;
-            List<CombatItem> main = log.GetBoonData(skillID).Where(x => ((x.DstInstid == target.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None) || (x.SrcInstid == target.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.Manual)) && x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
+            List<CombatItem> main = log.CombatData.GetBoonData(skillID).Where(x => ((x.DstInstid == target.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None) || (x.SrcInstid == target.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.Manual)) && x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
             List<CombatItem> filtered = new List<CombatItem>();
             for (int i = 0; i < main.Count; i++)
             {
