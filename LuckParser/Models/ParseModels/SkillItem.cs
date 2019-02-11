@@ -105,7 +105,8 @@ namespace LuckParser.Models.ParseModels
                         weapons[3] = _apiSkill.DualWield;
                     }
                 }
-                else if (_apiSkill.WeaponType == "Greatsword" || _apiSkill.WeaponType == "Staff" || _apiSkill.WeaponType == "Rifle" || _apiSkill.WeaponType == "Longbow" || _apiSkill.WeaponType == "Shortbow" || _apiSkill.WeaponType == "Hammer")
+                else if (_apiSkill.WeaponType == "Greatsword" || _apiSkill.WeaponType == "Staff" || _apiSkill.WeaponType == "Rifle" || _apiSkill.WeaponType == "Longbow" || _apiSkill.WeaponType == "Shortbow" || _apiSkill.WeaponType == "Hammer"
+                    || _apiSkill.WeaponType == "Trident" || _apiSkill.WeaponType == "Speargun" || _apiSkill.WeaponType == "Spear")
                 {
                     if (swapped == 4)
                     {
