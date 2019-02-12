@@ -7,7 +7,7 @@ using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models.Logic
 {
-    public class UnknownFightLogic : FractalLogic
+    public class UnknownFightLogic : FightLogic
     {
         public UnknownFightLogic(ushort triggerID) : base(triggerID)
         {

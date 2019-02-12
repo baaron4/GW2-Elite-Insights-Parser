@@ -90,7 +90,10 @@ var urls = {
     Longbow: "https://wiki.guildwars2.com/images/f/f0/Crimson_Antique_Greatbow.png",
     Shortbow: "https://wiki.guildwars2.com/images/1/17/Crimson_Antique_Short_Bow.png",
     Rifle: "https://wiki.guildwars2.com/images/1/19/Crimson_Antique_Musket.png",
-    Staff: "https://wiki.guildwars2.com/images/5/5f/Crimson_Antique_Spire.png"
+    Staff: "https://wiki.guildwars2.com/images/5/5f/Crimson_Antique_Spire.png",
+    Trident: "https://wiki.guildwars2.com/images/9/98/Crimson_Antique_Trident.png",
+    Speargun: "https://wiki.guildwars2.com/images/3/3b/Crimson_Antique_Harpoon_Gun.png",
+    Spear: "https://wiki.guildwars2.com/images/c/cb/Crimson_Antique_Impaler.png"
 };
 
 function findSkill(isBuff, id) {
