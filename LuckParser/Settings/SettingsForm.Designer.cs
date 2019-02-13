@@ -297,7 +297,7 @@
             this.chkIndentJSON.TabIndex = 44;
             this.chkIndentJSON.Text = "Indent JSON";
             this.chkIndentJSON.UseVisualStyleBackColor = true;
-            this.chkIndentJSON.CheckedChanged += new System.EventHandler(this.chkIndentJSONCheckedChanged);
+            this.chkIndentJSON.CheckedChanged += new System.EventHandler(this.ChkIndentJSONCheckedChanged);
             // 
             // toolTip1
             // 
@@ -312,7 +312,7 @@
             this.chkHtmlExternalScripts.TabIndex = 46;
             this.chkHtmlExternalScripts.Text = "External Scripts";
             this.chkHtmlExternalScripts.UseVisualStyleBackColor = true;
-            this.chkHtmlExternalScripts.CheckedChanged += new System.EventHandler(this.chkHtmlExternalScripts_CheckedChanged);
+            this.chkHtmlExternalScripts.CheckedChanged += new System.EventHandler(this.ChkHtmlExternalScripts_CheckedChanged);
             // 
             // tabControl1
             // 
@@ -390,7 +390,7 @@
             this.chkB_SkipFailedTries.TabIndex = 38;
             this.chkB_SkipFailedTries.Text = "Skip generating log if fail";
             this.chkB_SkipFailedTries.UseVisualStyleBackColor = true;
-            this.chkB_SkipFailedTries.CheckedChanged += new System.EventHandler(this.chkB_SkipFailedTries_CheckedChanged);
+            this.chkB_SkipFailedTries.CheckedChanged += new System.EventHandler(this.ChkB_SkipFailedTries_CheckedChanged);
             // 
             // groupBox3
             // 
@@ -416,7 +416,7 @@
             this.chkAddDuration.TabIndex = 19;
             this.chkAddDuration.Text = "Add encounter duration to file name";
             this.chkAddDuration.UseVisualStyleBackColor = true;
-            this.chkAddDuration.CheckedChanged += new System.EventHandler(this.chkAddDuration_CheckedChanged);
+            this.chkAddDuration.CheckedChanged += new System.EventHandler(this.ChkAddDuration_CheckedChanged);
             // 
             // chkAddPoVProf
             // 
@@ -427,7 +427,7 @@
             this.chkAddPoVProf.TabIndex = 18;
             this.chkAddPoVProf.Text = "Add PoV profession to file name";
             this.chkAddPoVProf.UseVisualStyleBackColor = true;
-            this.chkAddPoVProf.CheckedChanged += new System.EventHandler(this.chkAddPoVProf_CheckedChanged);
+            this.chkAddPoVProf.CheckedChanged += new System.EventHandler(this.ChkAddPoVProf_CheckedChanged);
             // 
             // groupBox2
             // 
@@ -491,7 +491,7 @@
             this.radioThemeLight.TabStop = true;
             this.radioThemeLight.Text = "Light Theme";
             this.radioThemeLight.UseVisualStyleBackColor = true;
-            this.radioThemeLight.CheckedChanged += new System.EventHandler(this.radioThemeLight_CheckedChanged);
+            this.radioThemeLight.CheckedChanged += new System.EventHandler(this.RadioThemeLight_CheckedChanged);
             // 
             // radioThemeDark
             // 
@@ -503,7 +503,7 @@
             this.radioThemeDark.TabStop = true;
             this.radioThemeDark.Text = "Dark Theme";
             this.radioThemeDark.UseVisualStyleBackColor = true;
-            this.radioThemeDark.CheckedChanged += new System.EventHandler(this.radioThemeDark_CheckedChanged);
+            this.radioThemeDark.CheckedChanged += new System.EventHandler(this.RadioThemeDark_CheckedChanged);
             // 
             // tabPage3
             // 
@@ -545,7 +545,7 @@
             this.chkIndentXML.TabIndex = 44;
             this.chkIndentXML.Text = "Indent XML";
             this.chkIndentXML.UseVisualStyleBackColor = true;
-            this.chkIndentXML.CheckedChanged += new System.EventHandler(this.chkIndentXMLCheckedChanged);
+            this.chkIndentXML.CheckedChanged += new System.EventHandler(this.ChkIndentXMLCheckedChanged);
             // 
             // chkOutputXml
             // 
@@ -618,7 +618,7 @@
             this.cmdClose.TabIndex = 48;
             this.cmdClose.Text = "Close";
             this.cmdClose.UseVisualStyleBackColor = true;
-            this.cmdClose.Click += new System.EventHandler(this.cmdClose_Click);
+            this.cmdClose.Click += new System.EventHandler(this.CmdClose_Click);
             // 
             // dumpButton
             // 
@@ -629,7 +629,7 @@
             this.dumpButton.TabIndex = 49;
             this.dumpButton.Text = "Save Settings";
             this.dumpButton.UseVisualStyleBackColor = true;
-            this.dumpButton.Click += new System.EventHandler(this.settingsDump_Click);
+            this.dumpButton.Click += new System.EventHandler(this.SettingsDump_Click);
             // 
             // loadButton
             // 
@@ -640,7 +640,7 @@
             this.loadButton.TabIndex = 50;
             this.loadButton.Text = "Load Settings";
             this.loadButton.UseVisualStyleBackColor = true;
-            this.loadButton.Click += new System.EventHandler(this.settingsLoad_Click);
+            this.loadButton.Click += new System.EventHandler(this.SettingsLoad_Click);
             // 
             // SettingsForm
             // 
