@@ -615,7 +615,7 @@ namespace LuckParser.Models
                     {
                         if (boons.ContainsKey(boon.ID))
                         {
-                            hasGeneration = true;
+                            hasGeneration = hasGeneration || boons.HasSrc(boon.ID, player.AgentItem);
                             totalGeneration += boons.GetGeneration(boon.ID, player.AgentItem);
                             totalOverstack += boons.GetOverstack(boon.ID, player.AgentItem);
                             totalWasted += boons.GetWaste(boon.ID, player.AgentItem);
