@@ -610,11 +610,12 @@ namespace LuckParser.Models
                     long totalUnknownExtension = 0;
                     long totalExtension = 0;
                     long totalExtended = 0;
-
+                    bool hasGeneration = false;
                     foreach (BoonDistribution boons in boonDistributions.Values)
                     {
                         if (boons.ContainsKey(boon.ID))
                         {
+                            hasGeneration = true;
                             totalGeneration += boons.GetGeneration(boon.ID, player.AgentItem);
                             totalOverstack += boons.GetOverstack(boon.ID, player.AgentItem);
                             totalWasted += boons.GetWaste(boon.ID, player.AgentItem);
@@ -624,25 +625,28 @@ namespace LuckParser.Models
                         }
                     }
 
-                    FinalBuffs uptime = new FinalBuffs();
-                    final[boon.ID] = uptime;
-                    if (boon.Type == Boon.BoonType.Duration)
+                    if (hasGeneration)
                     {
-                        uptime.Generation = Math.Round(100.0 * totalGeneration / fightDuration / playerList.Count, 2);
-                        uptime.Overstack = Math.Round(100.0 * (totalOverstack + totalGeneration) / fightDuration / playerList.Count, 2);
-                        uptime.Wasted = Math.Round(100.0 * (totalWasted) / fightDuration / playerList.Count, 2);
-                        uptime.UnknownExtended = Math.Round(100.0 * (totalUnknownExtension) / fightDuration / playerList.Count, 2);
-                        uptime.ByExtension = Math.Round(100.0 * (totalExtension) / fightDuration / playerList.Count, 2);
-                        uptime.Extended = Math.Round(100.0 * (totalExtended) / fightDuration / playerList.Count, 2);
-                    }
-                    else if (boon.Type == Boon.BoonType.Intensity)
-                    {
-                        uptime.Generation = Math.Round((double)totalGeneration / fightDuration / playerList.Count, 2);
-                        uptime.Overstack = Math.Round((double)(totalOverstack + totalGeneration) / fightDuration / playerList.Count, 2);
-                        uptime.Wasted = Math.Round((double)(totalWasted) / fightDuration / playerList.Count, 2);
-                        uptime.UnknownExtended = Math.Round((double)(totalUnknownExtension) / fightDuration / playerList.Count, 2);
-                        uptime.ByExtension = Math.Round((double)(totalExtension) / fightDuration / playerList.Count, 2);
-                        uptime.Extended = Math.Round((double)(totalExtended) / fightDuration / playerList.Count, 2);
+                        FinalBuffs uptime = new FinalBuffs();
+                        final[boon.ID] = uptime;
+                        if (boon.Type == Boon.BoonType.Duration)
+                        {
+                            uptime.Generation = Math.Round(100.0 * totalGeneration / fightDuration / playerList.Count, 2);
+                            uptime.Overstack = Math.Round(100.0 * (totalOverstack + totalGeneration) / fightDuration / playerList.Count, 2);
+                            uptime.Wasted = Math.Round(100.0 * (totalWasted) / fightDuration / playerList.Count, 2);
+                            uptime.UnknownExtended = Math.Round(100.0 * (totalUnknownExtension) / fightDuration / playerList.Count, 2);
+                            uptime.ByExtension = Math.Round(100.0 * (totalExtension) / fightDuration / playerList.Count, 2);
+                            uptime.Extended = Math.Round(100.0 * (totalExtended) / fightDuration / playerList.Count, 2);
+                        }
+                        else if (boon.Type == Boon.BoonType.Intensity)
+                        {
+                            uptime.Generation = Math.Round((double)totalGeneration / fightDuration / playerList.Count, 2);
+                            uptime.Overstack = Math.Round((double)(totalOverstack + totalGeneration) / fightDuration / playerList.Count, 2);
+                            uptime.Wasted = Math.Round((double)(totalWasted) / fightDuration / playerList.Count, 2);
+                            uptime.UnknownExtended = Math.Round((double)(totalUnknownExtension) / fightDuration / playerList.Count, 2);
+                            uptime.ByExtension = Math.Round((double)(totalExtension) / fightDuration / playerList.Count, 2);
+                            uptime.Extended = Math.Round((double)(totalExtended) / fightDuration / playerList.Count, 2);
+                        }
                     }
                 }
 
@@ -671,19 +675,19 @@ namespace LuckParser.Models
                     long fightDuration = phase.End - phase.Start;
                     foreach (Boon boon in player.TrackedBoons)
                     {
-                        FinalBuffs uptime = new FinalBuffs
-                        {
-                            Uptime = 0,
-                            Generation = 0,
-                            Overstack = 0,
-                            Wasted = 0,
-                            UnknownExtended = 0,
-                            ByExtension = 0,
-                            Extended = 0
-                        };
-                        final[boon.ID] = uptime;
                         if (selfBoons.ContainsKey(boon.ID))
                         {
+                            FinalBuffs uptime = new FinalBuffs
+                            {
+                                Uptime = 0,
+                                Generation = 0,
+                                Overstack = 0,
+                                Wasted = 0,
+                                UnknownExtended = 0,
+                                ByExtension = 0,
+                                Extended = 0
+                            };
+                            final[boon.ID] = uptime;
                             long generation = selfBoons.GetGeneration(boon.ID, player.AgentItem);
                             if (boon.Type == Boon.BoonType.Duration)
                             {
@@ -753,10 +757,10 @@ namespace LuckParser.Models
 
                     foreach (Boon boon in target.TrackedBoons)
                     {
-                        FinalTargetBuffs buff = new FinalTargetBuffs(_log.PlayerList);
-                        rates[boon.ID] = buff;
                         if (boonDistribution.ContainsKey(boon.ID))
                         {
+                            FinalTargetBuffs buff = new FinalTargetBuffs(_log.PlayerList);
+                            rates[boon.ID] = buff;
                             if (boon.Type == Boon.BoonType.Duration)
                             {
                                 buff.Uptime = Math.Round(100.0 * boonDistribution.GetUptime(boon.ID) / fightDuration, 2);
