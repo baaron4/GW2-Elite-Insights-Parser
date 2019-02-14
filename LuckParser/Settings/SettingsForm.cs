@@ -8,11 +8,11 @@ namespace LuckParser.Setting
 {
     public partial class SettingsForm : Form
     {
-        private MainForm mainForm;
+        public event EventHandler SettingsClosedEvent;
+        public event EventHandler WatchDirectoryUpdatedEvent;
 
         public SettingsForm(MainForm mainForm)
         {
-            this.mainForm = mainForm;
             InitializeComponent();
         }
         
@@ -23,6 +23,7 @@ namespace LuckParser.Setting
             {
                 e.Cancel = true;
                 Hide();
+                SettingsClosedEvent(this, null);
             }
         }
 
@@ -153,7 +154,7 @@ namespace LuckParser.Setting
             Properties.Settings.Default.UploadToDPSReportsRH = UploadDRRH_check.Checked;
         }
 
-        private void chkB_SkipFailedTries_CheckedChanged(object sender, EventArgs e)
+        private void ChkB_SkipFailedTries_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SkipFailedTries = chkB_SkipFailedTries.Checked;
         }
@@ -169,34 +170,34 @@ namespace LuckParser.Setting
             panelXML.Enabled = Properties.Settings.Default.SaveOutXML;
         }
 
-        private void chkIndentJSONCheckedChanged(object sender, EventArgs e)
+        private void ChkIndentJSONCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.IndentJSON = chkIndentJSON.Checked;
         }
 
-        private void chkIndentXMLCheckedChanged(object sender, EventArgs e)
+        private void ChkIndentXMLCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.IndentXML = chkIndentXML.Checked;
         }
 
-        private void chkHtmlExternalScripts_CheckedChanged(object sender, EventArgs e)
+        private void ChkHtmlExternalScripts_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.HtmlExternalScripts = chkHtmlExternalScripts.Checked;
         }
 
-        private void radioThemeLight_CheckedChanged(object sender, EventArgs e)
+        private void RadioThemeLight_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.LightTheme = radioThemeLight.Checked;
             imgTheme.Image = Properties.Settings.Default.LightTheme ? Properties.Resources.theme_cosmo : Properties.Resources.theme_slate;
         }
 
-        private void radioThemeDark_CheckedChanged(object sender, EventArgs e)
+        private void RadioThemeDark_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.LightTheme = radioThemeLight.Checked;
             imgTheme.Image = Properties.Settings.Default.LightTheme ? Properties.Resources.theme_cosmo : Properties.Resources.theme_slate;
         }
 
-        private void cmdClose_Click(object sender, EventArgs e)
+        private void CmdClose_Click(object sender, EventArgs e)
         {
             this.Close();
         }
@@ -239,7 +240,7 @@ namespace LuckParser.Setting
                 }
             }
             Properties.Settings.Default.AutoAdd = chkAutoAdd.Checked;
-            mainForm.UpdateWatchDirectory();
+            WatchDirectoryUpdatedEvent(this, null);
         }
 
         private void ChkAutoParse_CheckedChanged(object sender, EventArgs e)
@@ -247,17 +248,17 @@ namespace LuckParser.Setting
             Properties.Settings.Default.AutoParse = chkAutoParse.Checked;
         }
 
-        private void chkAddPoVProf_CheckedChanged(object sender, EventArgs e)
+        private void ChkAddPoVProf_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.AddPoVProf = chkAddPoVProf.Checked;
         }
 
-        private void chkAddDuration_CheckedChanged(object sender, EventArgs e)
+        private void ChkAddDuration_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.AddDuration = chkAddDuration.Checked;
         }
 
-        private void settingsDump_Click(object sender, EventArgs e)
+        private void SettingsDump_Click(object sender, EventArgs e)
         {
             string dump = CustomSettingsManager.DumpSettings();
             using (var saveFile = new SaveFileDialog())
@@ -275,7 +276,7 @@ namespace LuckParser.Setting
             }
         }
 
-        private void settingsLoad_Click(object sender, EventArgs e)
+        private void SettingsLoad_Click(object sender, EventArgs e)
         {
             using (var loadFile = new OpenFileDialog())
             {

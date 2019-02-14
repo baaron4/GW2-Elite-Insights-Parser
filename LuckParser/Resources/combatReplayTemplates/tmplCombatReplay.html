@@ -30,6 +30,7 @@
             <div onclick="animator && animator.startAnimate();" type="button" class="btn btn-dark btn-small">Animate</div>
             <div onclick="animator && animator.stopAnimate();" type="button" class="btn btn-dark btn-small">Pause</div>
             <div onclick="animator && animator.restartAnimate();" type="button" class="btn btn-dark btn-small">Restart</div>
+            <div onclick="animator && animator.toggleBackwards();" id="animatorBackwards" type="button" class="btn btn-dark btn-small">Backwards</div>
         </div>
         <div class="d-flex justify-content-center slidecontainer">
             <input style="min-width: 400px;" oninput="animator && animator.updateTime(this.value)" type="range" min="0"
