@@ -16,7 +16,7 @@ namespace LuckParser.Models.ParseModels
             _value = value;
         }
 
-        public override bool Check(CombatItem item, ParsedLog log)
+        public override bool Keep(CombatItem item, ParsedLog log)
         {
             ParseEnum.Result val = item.ResultEnum;
             return val == _value;

@@ -52,7 +52,7 @@ namespace LuckParser.Models.ParseModels
             {
                 foreach (MechanicChecker checker in _triggerConditions)
                 {
-                    bool res = checker.Check(c, log);
+                    bool res = checker.Keep(c, log);
                     if (_triggerRule == TriggerRule.AND && !res)
                     {
                         return false;
