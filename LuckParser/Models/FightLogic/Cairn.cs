@@ -110,5 +110,10 @@ namespace LuckParser.Models.Logic
         public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
         {
         }
+
+        public override string GetFightName()
+        {
+            return "Cairn";
+        }
     }
 }
