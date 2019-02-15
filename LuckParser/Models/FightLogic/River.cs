@@ -24,18 +24,6 @@ namespace LuckParser.Models.Logic
                             (19072, 15484, 20992, 16508));
         }
 
-        /*
-        protected override List<ushort> GetFightTargetsIDs()
-        {
-            return new List<ushort>
-            {
-                (ushort)ParseEnum.TargetIDS.Desmina,
-                (ushort)Enervator,
-                (ushort)RiverOfSouls
-            };
-        }
-        */
-
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
             return new List<ParseEnum.TrashIDS>
@@ -46,10 +34,8 @@ namespace LuckParser.Models.Logic
             };
         }
 
-
         public override void ComputeAdditionalTargetData(Target target, ParsedLog log) { }
         public override void ComputeAdditionalPlayerData(Player p, ParsedLog log) { }
-        public override int IsCM(ParsedLog log) { return 0; }
         public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log) {
             CombatReplay replay = mob.CombatReplay;
             int start = (int)replay.TimeOffsets.start;
@@ -60,9 +46,25 @@ namespace LuckParser.Models.Logic
                     replay.Actors.Add(new CircleActor(false, 0, 260, (start, end), "rgba(0, 80, 255, 0.5)", new AgentConnector(mob)));
                     break;
                 case (ushort)RiverOfSouls:
-                    replay.Actors.Add(new RectangleActor(true, 0, 240, 660, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(mob)));
-
-                    replay.Actors.Add(new CircleActor(true, 0, 180, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(mob)));
+                    Console.Out.Write(replay.Positions);
+                    float prevX = replay.Positions[0].X;
+                    float prevY = replay.Positions[0].Y;
+                    foreach (Point3D pos in replay.Positions)
+                    {
+                        if (prevX != pos.X || prevY != pos.Y)
+                        {
+                            start = (int)pos.Time;
+                            replay.Trim(start, end);
+                            break;
+                        }
+                    }
+                    int angle = 0;
+                    Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                    if (facing != null)
+                    {
+                        angle = Point3D.GetRotationFromFacing(facing);
+                    }
+                    replay.Actors.Add(new RotatedRectangleActor(true, 0, 240, 660, angle, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(mob)));
                     break;
                 case (ushort)Enervator:
                     replay.Actors.Add(new CircleActor(true, 0, 200, (start, end), "rgba(0, 0, 255, 0.5)", new AgentConnector(mob)));
