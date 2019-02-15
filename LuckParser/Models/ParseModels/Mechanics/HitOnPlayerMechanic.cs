@@ -37,7 +37,11 @@ namespace LuckParser.Models.ParseModels
                 List<CombatItem> combatitems = combatData.GetDamageTakenData(p.InstID, p.FirstAware, p.LastAware);
                 foreach (CombatItem c in combatitems)
                 {
-                    if (c.SkillID == SkillId && (c.IsBuff == 0 && c.ResultEnum.IsHit()) || (c.IsBuff > 0 && c.Result == 0) && Keep(c, log))
+                    if (c.IsBuff > 0 || !c.ResultEnum.IsHit() || !Keep(c, log) )
+                    {
+                        continue;
+                    }
+                    if (c.SkillID == SkillId)
                     {
                         mechData[this].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), this, p));
 
