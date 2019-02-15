@@ -48,6 +48,7 @@ class Animator {
         this.inch = 10;
         this.pollingRate = 150;
         this.speed = 1;
+        this.backwards = false;
         this.rangeControl = new Map();
         this.selectedGroup = -1;
         // actors
@@ -294,6 +295,26 @@ class Animator {
         this.speed = value;
     }
 
+    getSpeed() {
+        if (this.backwards) {
+            return -this.speed;
+        }
+        return this.speed;
+    }
+
+    toggleBackwards() {
+        this.backwards = !this.backwards;
+        if (this.backwards) {
+            setTimeout(function () {
+                document.getElementById('animatorBackwards').classList.add('active');
+            }, 50);
+        } else {
+            setTimeout(function () {
+                document.getElementById('animatorBackwards').classList.remove('active');
+            }, 50);
+        }
+    }
+
     toggleRange(radius) {
         this.rangeControl.set(radius, !this.rangeControl.get(radius));
         if (this.animation === null) {
@@ -438,9 +459,9 @@ function animateCanvas(noRequest) {
         let curTime = new Date().getTime();
         let timeOffset = curTime - animator.prevTime;
         animator.prevTime = curTime;
-        animator.reactiveDataStatus.time = Math.round(Math.min(animator.reactiveDataStatus.time + animator.speed * timeOffset, lastTime));
+        animator.reactiveDataStatus.time = Math.round(Math.max(Math.min(animator.reactiveDataStatus.time + animator.getSpeed() * timeOffset, lastTime),0));
     }
-    if (animator.reactiveDataStatus.time === lastTime) {
+    if ((animator.reactiveDataStatus.time === lastTime && !animator.backwards) || (animator.reactiveDataStatus.time === 0 && animator.backwards)) {
         animator.stopAnimate();
     }
     animator.timeSlider.value = animator.reactiveDataStatus.time.toString();

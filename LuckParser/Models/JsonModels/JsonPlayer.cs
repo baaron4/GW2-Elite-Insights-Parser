@@ -85,7 +85,13 @@ namespace LuckParser.Models.JsonModels
         /// <seealso cref="JsonBuffDamageModifierData"/>
         public List<JsonBuffDamageModifierData>[] DamageModifiersTarget;
         /// <summary>
-        /// List of buff status on self (uptime + self generation) \n
+        /// List of buff status on uptimes + states \n
+        /// Key is "'b' + id"
+        /// </summary>
+        /// <seealso cref="JsonPlayerBuffs"/>
+        public List<JsonPlayerBuffs> BuffUptimes;
+        /// <summary>
+        /// List of buff status on self generation  \n
         /// Key is "'b' + id"
         /// </summary>
         /// <seealso cref="JsonPlayerBuffs"/>

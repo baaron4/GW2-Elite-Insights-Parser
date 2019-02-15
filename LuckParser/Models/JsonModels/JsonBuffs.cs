@@ -50,16 +50,22 @@ namespace LuckParser.Models.JsonModels
             /// </summary>
             public double Presence;
 
-            public JsonPlayerBuffsData(Statistics.FinalBuffs stats)
+            public JsonPlayerBuffsData(Statistics.FinalBuffs stats, bool generation)
             {
-                Uptime = stats.Uptime;
-                Generation = stats.Generation;
-                Overstack = stats.Overstack;
-                Wasted = stats.Wasted;
-                UnknownExtended = stats.UnknownExtended;
-                Extended = stats.Extended;
-                Presence = stats.Presence;
-                ByExtension = stats.ByExtension;
+                if (generation)
+                {
+                    Generation = stats.Generation;
+                    Overstack = stats.Overstack;
+                    Wasted = stats.Wasted;
+                    UnknownExtended = stats.UnknownExtended;
+                    Extended = stats.Extended;
+                    Presence = stats.Presence;
+                    ByExtension = stats.ByExtension;
+                }
+                else
+                {
+                    Uptime = stats.Uptime;
+                }
             }
 
         }

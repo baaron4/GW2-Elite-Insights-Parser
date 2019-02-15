@@ -62,7 +62,7 @@ namespace LuckParser.Models.ParseModels
         // Fields
         public long ID { get; private set; }
         public int Range { get; private set; } = 0;
-        public bool AA => _apiSkill?.Slot == "Weapon_1";
+        public bool AA => _apiSkill?.Slot == "Weapon_1" || _apiSkill?.Slot == "Downed_1";
         public string Name { get; private set; }
         public string Icon { get; private set; }
         private GW2APISkill _apiSkill;
@@ -105,7 +105,8 @@ namespace LuckParser.Models.ParseModels
                         weapons[3] = _apiSkill.DualWield;
                     }
                 }
-                else if (_apiSkill.WeaponType == "Greatsword" || _apiSkill.WeaponType == "Staff" || _apiSkill.WeaponType == "Rifle" || _apiSkill.WeaponType == "Longbow" || _apiSkill.WeaponType == "Shortbow" || _apiSkill.WeaponType == "Hammer")
+                else if (_apiSkill.WeaponType == "Greatsword" || _apiSkill.WeaponType == "Staff" || _apiSkill.WeaponType == "Rifle" || _apiSkill.WeaponType == "Longbow" || _apiSkill.WeaponType == "Shortbow" || _apiSkill.WeaponType == "Hammer"
+                    || _apiSkill.WeaponType == "Trident" || _apiSkill.WeaponType == "Speargun" || _apiSkill.WeaponType == "Spear")
                 {
                     if (swapped == 4)
                     {

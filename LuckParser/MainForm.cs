@@ -30,6 +30,9 @@ namespace LuckParser
             btnCancel.Enabled = false;
             btnParse.Enabled = false;
             UpdateWatchDirectory();
+            _settingsForm = new SettingsForm(this);
+            _settingsForm.SettingsClosedEvent += EnableSettingsWatcher;
+            _settingsForm.WatchDirectoryUpdatedEvent += UpdateWatchDirectoryWatcher;
         }
 
         public MainForm(IEnumerable<string> filesArray) : this()
@@ -70,6 +73,11 @@ namespace LuckParser
             }
 
             btnParse.Enabled = true;
+        }
+
+        private void EnableSettingsWatcher(object sender, EventArgs e)
+        {
+            btnSettings.Enabled = true;
         }
 
         /// <summary>
@@ -488,9 +496,9 @@ namespace LuckParser
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void BtnSettingsClick(object sender, EventArgs e)
-        {
-            _settingsForm = new SettingsForm(this);
+        {          
             _settingsForm.Show();
+            btnSettings.Enabled = false;
         }
 
         /// <summary>
@@ -582,7 +590,12 @@ namespace LuckParser
             }
         }
 
-        public void UpdateWatchDirectory()
+        private void UpdateWatchDirectoryWatcher(object sender, EventArgs e)
+        {
+            UpdateWatchDirectory();
+        }
+
+        private void UpdateWatchDirectory()
         {
             if (Properties.Settings.Default.AutoAdd)
             {
