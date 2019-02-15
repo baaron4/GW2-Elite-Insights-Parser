@@ -42,7 +42,7 @@ namespace LuckParser.Models.JsonModels
             public JsonDeathRecapDamageItem(ParseModels.Player.DeathRecap.DeathRecapDamageItem item)
             {
                 Id = item.ID;
-                IndirectDamage = item.IsIndirectDamage;
+                IndirectDamage = item.IndirectDamage;
                 Src = item.Src;
                 Damage = item.Damage;
                 Time = item.Time;
