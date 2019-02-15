@@ -25,6 +25,11 @@ namespace LuckParser.Models.ParseModels
 
     public class BoonDistribution : Dictionary<long, Dictionary<AgentItem, BoonDistributionItem>>
     {
+        public bool HasSrc(long boonid, AgentItem src)
+        {
+            return ContainsKey(boonid) && this[boonid].ContainsKey(src);
+        }
+
         public long GetUptime(long boonid)
         {
             if (!ContainsKey(boonid))
