@@ -133,7 +133,7 @@
     <Compile Include="Models\ParseModels\Mechanics\PlayerSkillMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\EnemyBoonApplyMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\SpawnMechanic.cs" />
-    <Compile Include="Models\ParseModels\Mechanics\DamageOnPlayerMechanic.cs" />
+    <Compile Include="Models\ParseModels\Mechanics\SkillOnPlayerMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\PlayerStatusMechanic.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\AbstractBoonSimulationItem.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemOverstack.cs" />
