@@ -14,18 +14,18 @@ namespace LuckParser.Models.Logic
             MechanicList.AddRange(new List<Mechanic>
             {
 
-            new HitOnPlayerMechanic(34380, "Oppressive Gaze", new MechanicPlotlySetting("hexagram","rgb(255,0,0)"), "Hadouken","Oppressive Gaze (Hadouken projectile)", "Hadouken",0),//human
-            new HitOnPlayerMechanic(34371, "Oppressive Gaze", new MechanicPlotlySetting("hexagram","rgb(255,0,0)"), "Hadouken","Oppressive Gaze (Hadouken projectile)", "Hadouken",0),//abom
-            new HitOnPlayerMechanic(34480, "Blood Shards", new MechanicPlotlySetting("diamond-wide-open","rgb(255,0,255)"), "Shoot Shards","Blood Shard projectiles during bubble", "Rapid Fire",0),// //human
-            new HitOnPlayerMechanic(34440, "Blood Shards", new MechanicPlotlySetting("diamond-wide-open","rgb(255,0,255)"), "Shoot Shards","Blood Shard projectiles during bubble", "Rapid Fire", 0),// //abom
-            new HitOnPlayerMechanic(34404, "Shards of Rage", new MechanicPlotlySetting("star-diamond","rgb(255,0,0)"), "Jump Shards","Shards of Rage (Jump)", "Jump Shards",1000),//human
-            new HitOnPlayerMechanic(34411, "Shards of Rage", new MechanicPlotlySetting("star-diamond","rgb(255,0,0)"), "Jump Shards","Shards of Rage (Jump)", "Jump Shards",1000),//abom
-            new HitOnPlayerMechanic(34466, "Fiery Vortex", new MechanicPlotlySetting("triangle-down-open","rgb(255,200,0)"), "Tornado","Fiery Vortex (Tornado)", "Tornado",250),
-            new HitOnPlayerMechanic(34543, "Thunder", new MechanicPlotlySetting("triangle-up-open","rgb(0,255,255)"), "Storm","Thunder Storm hit (air phase)", "Storm cloud",0),
+            new DamageOnPlayerMechanic(34380, "Oppressive Gaze", new MechanicPlotlySetting("hexagram","rgb(255,0,0)"), "Hadouken","Oppressive Gaze (Hadouken projectile)", "Hadouken",0),//human
+            new DamageOnPlayerMechanic(34371, "Oppressive Gaze", new MechanicPlotlySetting("hexagram","rgb(255,0,0)"), "Hadouken","Oppressive Gaze (Hadouken projectile)", "Hadouken",0),//abom
+            new DamageOnPlayerMechanic(34480, "Blood Shards", new MechanicPlotlySetting("diamond-wide-open","rgb(255,0,255)"), "Shoot Shards","Blood Shard projectiles during bubble", "Rapid Fire",0),// //human
+            new DamageOnPlayerMechanic(34440, "Blood Shards", new MechanicPlotlySetting("diamond-wide-open","rgb(255,0,255)"), "Shoot Shards","Blood Shard projectiles during bubble", "Rapid Fire", 0),// //abom
+            new DamageOnPlayerMechanic(34404, "Shards of Rage", new MechanicPlotlySetting("star-diamond","rgb(255,0,0)"), "Jump Shards","Shards of Rage (Jump)", "Jump Shards",1000),//human
+            new DamageOnPlayerMechanic(34411, "Shards of Rage", new MechanicPlotlySetting("star-diamond","rgb(255,0,0)"), "Jump Shards","Shards of Rage (Jump)", "Jump Shards",1000),//abom
+            new DamageOnPlayerMechanic(34466, "Fiery Vortex", new MechanicPlotlySetting("triangle-down-open","rgb(255,200,0)"), "Tornado","Fiery Vortex (Tornado)", "Tornado",250),
+            new DamageOnPlayerMechanic(34543, "Thunder", new MechanicPlotlySetting("triangle-up-open","rgb(0,255,255)"), "Storm","Thunder Storm hit (air phase)", "Storm cloud",0),
             new PlayerBoonApplyMechanic(34450, "Unstable Blood Magic", new MechanicPlotlySetting("diamond","rgb(255,0,0)"), "Well","Unstable Blood Magic application", "Well",0),
-            new HitOnPlayerMechanic(34336, "Well of the Profane", new MechanicPlotlySetting("diamond-open","rgb(255,0,0)"), "Well dmg","Unstable Blood Magic AoE hit", "Stood in Well",0),
+            new DamageOnPlayerMechanic(34336, "Well of the Profane", new MechanicPlotlySetting("diamond-open","rgb(255,0,0)"), "Well dmg","Unstable Blood Magic AoE hit", "Stood in Well",0),
             new PlayerBoonApplyMechanic(34416, "Corruption", new MechanicPlotlySetting("circle","rgb(255,140,0)"), "Corruption","Corruption Application", "Corruption",0),
-            new HitOnPlayerMechanic(34473, "Corruption", new MechanicPlotlySetting("circle-open","rgb(255,140,0)"), "Corr. dmg","Hit by Corruption AoE", "Corruption dmg",0),
+            new DamageOnPlayerMechanic(34473, "Corruption", new MechanicPlotlySetting("circle-open","rgb(255,140,0)"), "Corr. dmg","Hit by Corruption AoE", "Corruption dmg",0),
             new PlayerBoonApplyMechanic(34442, "Sacrifice", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "Sacrifice","Sacrifice (Breakbar)", "Sacrifice",0),
             new PlayerBoonRemoveMechanic(34442, "Sacrifice", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CC.End","Sacrifice (Breakbar) ended", "Sacrifice End",0, new List<MechanicChecker>{ new CombatItemValueChecker(25, MechanicChecker.ValueCompare.G) }, Mechanic.TriggerRule.AND),
             new PlayerBoonRemoveMechanic(34442, "Sacrificed", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC.Fail","Sacrifice time ran out", "Sacrificed",0, new List<MechanicChecker>{ new CombatItemValueChecker(25, MechanicChecker.ValueCompare.LEQ) }, Mechanic.TriggerRule.AND),
@@ -38,7 +38,7 @@ namespace LuckParser.Models.Logic
             new EnemyBoonApplyMechanic(34518, "Blood Shield", new MechanicPlotlySetting("octagon","rgb(255,0,0)"), "Bubble","Blood Shield (protective bubble)", "Bubble",0),//abom
             new PlayerBoonApplyMechanic(34511, "Zealous Benediction", new MechanicPlotlySetting("circle","rgb(255,200,0)"), "Bombs","Zealous Benediction (Expanding bombs)","Bomb",0),
             new PlayerBoonApplyMechanic(26766, "Icy Patch", new MechanicPlotlySetting("circle-open","rgb(0,0,255)"), "Icy KD","Knockdown by Icy Patch", "Icy Patch KD",0, new List<MechanicChecker>{ new CombatItemValueChecker(10000, MechanicChecker.ValueCompare.EQ) }, Mechanic.TriggerRule.AND),
-            new HitOnPlayerMechanic(34413, "Surrender", new MechanicPlotlySetting("circle-open","rgb(0,0,0)"), "Spirit","Surrender (hit by walking Spirit)", "Spirit hit",0)
+            new DamageOnPlayerMechanic(34413, "Surrender", new MechanicPlotlySetting("circle-open","rgb(0,0,0)"), "Spirit","Surrender (hit by walking Spirit)", "Spirit hit",0)
             });
             Extension = "matt";
             IconUrl = "https://wiki.guildwars2.com/images/5/5d/Mini_Matthias_Abomination.png";
