@@ -32,9 +32,9 @@ namespace LuckParser.Models.ParseModels
         private readonly Dictionary<long, List<ExtraBoonData>> _boonExtra = new Dictionary<long, List<ExtraBoonData>>();
         private readonly Dictionary<Target, Dictionary<long, List<ExtraBoonData>>> _boonTargetExtra = new Dictionary<Target, Dictionary<long, List<ExtraBoonData>>>();
         // damage list
-        public Dictionary<int, List<int>> DamageList1S { get; } = new Dictionary<int, List<int>>();
+        private Dictionary<int, List<int>> _damageList1S = new Dictionary<int, List<int>>();
         // Minions
-        private readonly Dictionary<string, Minions> _minions = new Dictionary<string, Minions>();
+        private Dictionary<string, Minions> _minions = new Dictionary<string, Minions>();
         // Replay
         public CombatReplay CombatReplay { get; protected set; }
         // Statistics
@@ -47,7 +47,7 @@ namespace LuckParser.Models.ParseModels
 
         public Dictionary<string, Minions> GetMinions(ParsedLog log)
         {
-            if (_minions.Count == 0)
+            if (_minions == null)
             {
                 SetMinions(log);
             }
@@ -58,7 +58,7 @@ namespace LuckParser.Models.ParseModels
         {
             ulong targetId = target != null ? target.Agent : 0;
             int id = (phaseIndex + "_" + targetId + "_1S").GetHashCode();
-            if (DamageList1S.TryGetValue(id, out List<int> res))
+            if (_damageList1S.TryGetValue(id, out List<int> res))
             {
                 return res;
             }
@@ -99,13 +99,13 @@ namespace LuckParser.Models.ParseModels
                 int lastDamage = dmgListFull[(int)phase.GetDuration()];
                 dmgList.Add(lastDamage);
             }
-            DamageList1S[id] = dmgList;
+            _damageList1S[id] = dmgList;
             return dmgList;
         }
 
         public BoonDistribution GetBoonDistribution(ParsedLog log, int phaseIndex)
         {
-            if (BoonPoints.Count == 0)
+            if (BoonPoints == null)
             {
                 SetBoonStatus(log);
             }
@@ -114,7 +114,7 @@ namespace LuckParser.Models.ParseModels
 
         public Dictionary<long, long> GetBoonPresence(ParsedLog log, int phaseIndex)
         {
-            if (BoonPoints.Count == 0)
+            if (BoonPoints == null)
             {
                 SetBoonStatus(log);
             }
@@ -123,7 +123,7 @@ namespace LuckParser.Models.ParseModels
 
         protected Dictionary<long, List<long>> GetCondiCleanse(ParsedLog log, int phaseIndex, AgentItem src)
         {
-            if (BoonPoints.Count == 0)
+            if (BoonPoints == null)
             {
                 SetBoonStatus(log);
             }
@@ -136,7 +136,7 @@ namespace LuckParser.Models.ParseModels
 
         public Dictionary<long, List<ExtraBoonData>> GetExtraBoonData(ParsedLog log, Target target)
         {
-            if (BoonPoints.Count == 0)
+            if (BoonPoints == null)
             {
                 SetBoonStatus(log);
             }
@@ -156,7 +156,7 @@ namespace LuckParser.Models.ParseModels
 
         public Dictionary<long, long> GetCondiPresence(ParsedLog log, int phaseIndex)
         {
-            if (BoonPoints.Count == 0)
+            if (BoonPoints == null)
             {
                 SetBoonStatus(log);
             }
@@ -437,6 +437,7 @@ namespace LuckParser.Models.ParseModels
 
         private void SetMinions(ParsedLog log)
         {
+            _minions = new Dictionary<string, Minions>();
             List<AgentItem> combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.MasterAgent == AgentItem.Agent).ToList();
             Dictionary<string, Minions> auxMinions = new Dictionary<string, Minions>();
             foreach (AgentItem agent in combatMinion)

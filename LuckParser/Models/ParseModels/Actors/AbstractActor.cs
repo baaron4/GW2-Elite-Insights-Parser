@@ -8,17 +8,17 @@ namespace LuckParser.Models.ParseModels
     public abstract class AbstractActor : DummyActor
     {
         // Damage
-        protected readonly List<DamageLog> DamageLogs = new List<DamageLog>();
-        protected Dictionary<AgentItem, List<DamageLog>> DamageLogsByDst = new Dictionary<AgentItem, List<DamageLog>>();
+        protected List<DamageLog> DamageLogs;
+        protected Dictionary<AgentItem, List<DamageLog>> DamageLogsByDst;
         //protected List<DamageLog> HealingLogs = new List<DamageLog>();
         //protected List<DamageLog> HealingReceivedLogs = new List<DamageLog>();
-        private readonly List<DamageLog> _damageTakenlogs = new List<DamageLog>();
-        protected Dictionary<AgentItem, List<DamageLog>> _damageTakenLogsBySrc = new Dictionary<AgentItem, List<DamageLog>>();
+        private List<DamageLog> _damageTakenlogs;
+        protected Dictionary<AgentItem, List<DamageLog>> _damageTakenLogsBySrc;
         // Cast
-        protected readonly List<CastLog> CastLogs = new List<CastLog>();
+        protected List<CastLog> CastLogs;
         // Boons
         public HashSet<Boon> TrackedBoons { get; } = new HashSet<Boon>();
-        protected readonly Dictionary<long, BoonsGraphModel> BoonPoints = new Dictionary<long, BoonsGraphModel>();
+        protected Dictionary<long, BoonsGraphModel> BoonPoints;
 
         protected AbstractActor(AgentItem agent) : base(agent)
         {
@@ -37,8 +37,9 @@ namespace LuckParser.Models.ParseModels
 
         public List<DamageLog> GetDamageLogs(AbstractActor target, ParsedLog log, long start, long end)
         {
-            if (DamageLogs.Count == 0)
+            if (DamageLogs == null)
             {
+                DamageLogs = new List<DamageLog>();
                 SetDamageLogs(log);
                 DamageLogsByDst = DamageLogs.GroupBy(x => log.AgentData.GetAgentByInstID(x.DstInstId, log.FightData.ToLogSpace(x.Time))).ToDictionary(x => x.Key, x => x.ToList());
             }
@@ -57,8 +58,9 @@ namespace LuckParser.Models.ParseModels
         }
         public List<DamageLog> GetDamageTakenLogs(AbstractActor target, ParsedLog log, long start, long end)
         {
-            if (_damageTakenlogs.Count == 0)
+            if (_damageTakenlogs == null)
             {
+                _damageTakenlogs = new List<DamageLog>();
                 SetDamageTakenLogs(log);
                 _damageTakenLogsBySrc = _damageTakenlogs.GroupBy(x => log.AgentData.GetAgentByInstID(x.SrcInstId, log.FightData.ToLogSpace(x.Time))).ToDictionary(x => x.Key, x => x.ToList());
             }
@@ -80,7 +82,7 @@ namespace LuckParser.Models.ParseModels
 
         public Dictionary<long, BoonsGraphModel> GetBoonGraphs(ParsedLog log)
         {
-            if (BoonPoints.Count == 0)
+            if (BoonPoints == null)
             {
                 SetBoonStatus(log);
             }
@@ -104,8 +106,9 @@ namespace LuckParser.Models.ParseModels
         }*/
         public List<CastLog> GetCastLogs(ParsedLog log, long start, long end)
         {
-            if (CastLogs.Count == 0)
+            if (CastLogs == null)
             {
+                CastLogs = new List<CastLog>();
                 SetCastLogs(log);
             }
             return CastLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
@@ -114,8 +117,9 @@ namespace LuckParser.Models.ParseModels
 
         public List<CastLog> GetCastLogsActDur(ParsedLog log, long start, long end)
         {
-            if (CastLogs.Count == 0)
+            if (CastLogs == null)
             {
+                CastLogs = new List<CastLog>();
                 SetCastLogs(log);
             }
             return CastLogs.Where(x => x.Time + x.ActualDuration >= start && x.Time <= end).ToList();
@@ -398,6 +402,7 @@ namespace LuckParser.Models.ParseModels
 
         protected void SetBoonStatus(ParsedLog log)
         {
+            BoonPoints = new Dictionary<long, BoonsGraphModel>();
             BoonMap toUse = GetBoonMap(log);
             long dur = log.FightData.FightDuration;
             int fightDuration = (int)(dur) / 1000;
