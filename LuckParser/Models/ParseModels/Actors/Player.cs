@@ -335,7 +335,7 @@ namespace LuckParser.Models.ParseModels
                 // If conjured sword, stop
                 if (Account == ":Conjured Sword")
                 {
-                    return;
+                    continue;
                 }
                 foreach (CastLog cl in GetCastLogs(log, phase.Start, phase.End))
                 {
@@ -817,10 +817,6 @@ namespace LuckParser.Models.ParseModels
                 }
                 lastTime = dead.Time;
                 res.Add(recap);
-            }
-            if (_deathRecaps.Count == 0)
-            {
-                _deathRecaps = null;
             }
         }
 
