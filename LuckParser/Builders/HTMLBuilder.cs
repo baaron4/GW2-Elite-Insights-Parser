@@ -189,7 +189,7 @@ namespace LuckParser.Builders
 
             foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalSupport support = _statistics.Support[player][phaseIndex];
+                Statistics.FinalSupport support = player.GetSupport(_log, phaseIndex);
                 list.Add(PhaseDto.GetSupportStatData(support));
             }
             return list;

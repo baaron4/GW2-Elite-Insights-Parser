@@ -44,38 +44,11 @@ namespace LuckParser.Models
         public Statistics CalculateStatistics(ParsedLog log, Switches switches)
         {
             if (switches.CalculateBoons) CalculateBoons();
-            if (switches.CalculateSupport) CalculateSupport();
 
             if (switches.CalculateConditions) CalculateConditions();
             //
 
             return _statistics;
-        }
-
-        private void CalculateSupport()
-        {
-            foreach (Player player in _log.PlayerList)
-            {
-                FinalSupport[] phaseSupport = new FinalSupport[_phases.Count];
-                for (int phaseIndex = 0; phaseIndex < _phases.Count; phaseIndex++)
-                {
-                    FinalSupport final = new FinalSupport();
-
-                    PhaseData phase = _phases[phaseIndex];
-
-                    int[] resArray = player.GetReses(_log, phase.Start, phase.End);
-                    int[] cleanseArray = player.GetCleanses(_log, phaseIndex);
-                    //List<DamageLog> healingLogs = player.getHealingLogs(log, phase.getStart(), phase.getEnd());
-                    //final.allHeal = healingLogs.Sum(x => x.getDamage());
-                    final.Resurrects = resArray[0];
-                    final.ResurrectTime = resArray[1] / 1000.0;
-                    final.CondiCleanse = cleanseArray[0];
-                    final.CondiCleanseTime = cleanseArray[1] / 1000.0;
-
-                    phaseSupport[phaseIndex] = final;
-                }
-                _statistics.Support[player] = phaseSupport;
-            }
         }
 
         private Dictionary<long, FinalBuffs>[] GetBoonsForPlayers(List<Player> playerList, Player player)

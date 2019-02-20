@@ -53,6 +53,7 @@ namespace LuckParser.Models.ParseModels
         private Dictionary<Target, List<Statistics.FinalStats>> _statsTarget;
         private List<Statistics.FinalStatsAll> _statsAll;
         private List<Statistics.FinalDefenses> _defenses;
+        private List<Statistics.FinalSupport> _support;
         //weaponslist
         private string[] _weaponsArray;
 
@@ -457,6 +458,45 @@ namespace LuckParser.Models.ParseModels
                 final.DownDuration = (int)down.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
                 final.DeadDuration = (int)dead.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
                 final.DcDuration = (int)dc.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
+            }
+        }
+
+        public Statistics.FinalSupport GetSupport(ParsedLog log, int phaseIndex)
+        {
+            if (_support == null)
+            {
+                SetSupport(log);
+            }
+            return _support[phaseIndex];
+        }
+
+        public List<Statistics.FinalSupport> GetSupport(ParsedLog log)
+        {
+            if (_support == null)
+            {
+                SetSupport(log);
+            }
+            return _support;
+        }
+
+        private void SetSupport(ParsedLog log)
+        {
+            _support = new List<Statistics.FinalSupport>();
+            List<PhaseData> phases = log.FightData.GetPhases(log);
+            for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+            {
+                Statistics.FinalSupport final = new Statistics.FinalSupport();
+                _support.Add(final);
+                PhaseData phase = phases[phaseIndex];
+
+                int[] resArray = GetReses(log, phase.Start, phase.End);
+                int[] cleanseArray = GetCleanses(log, phaseIndex);
+                //List<DamageLog> healingLogs = player.getHealingLogs(log, phase.getStart(), phase.getEnd());
+                //final.allHeal = healingLogs.Sum(x => x.getDamage());
+                final.Resurrects = resArray[0];
+                final.ResurrectTime = resArray[1] / 1000.0;
+                final.CondiCleanse = cleanseArray[0];
+                final.CondiCleanseTime = cleanseArray[1] / 1000.0;
             }
         }
 

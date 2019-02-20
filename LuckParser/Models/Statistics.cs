@@ -93,8 +93,6 @@ namespace LuckParser.Models
             public double CondiCleanseTime;
         }
 
-        public readonly Dictionary<Player, FinalSupport[]> Support;
-
         public class FinalBuffs
         {
             public double Uptime;

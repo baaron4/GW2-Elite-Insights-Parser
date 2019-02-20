@@ -336,7 +336,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalSupport support = _statistics.Support[player][phaseIndex];
+                Statistics.FinalSupport support = player.GetSupport(_log, phaseIndex);
 
                 WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
                 support.CondiCleanse.ToString(),support.CondiCleanseTime.ToString(),support.Resurrects.ToString(),support.ResurrectTime.ToString() });
