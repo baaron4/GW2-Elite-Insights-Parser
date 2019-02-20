@@ -70,6 +70,17 @@ namespace LuckParser.Models.ParseModels
         public readonly string Link;
         private readonly Logic _logic;
 
+        /// <summary>
+        /// Boon constructor
+        /// </summary>
+        /// <param name="name">The name of the boon</param>
+        /// <param name="id">The id of the boon</param>
+        /// <param name="source">Source of the boon <see cref="BoonSource"/></param>
+        /// <param name="type">Type of the boon (duration or intensity) <see cref="BoonType"/></param>
+        /// <param name="capacity">Maximun amount of boon in the queue (duration) or stack (intensity)</param>
+        /// <param name="nature">Nature of the boon, dictates in which category the boon will appear <see cref="BoonNature"/></param>
+        /// <param name="logic">Stacking logic of the boon <see cref="Logic"/>, in doubt use Override</param>
+        /// <param name="link">URL to the icon of the buff</param>
         private Boon(string name, long id, BoonSource source, BoonType type, int capacity, BoonNature nature, Logic logic, string link)
         {
             Name = name;

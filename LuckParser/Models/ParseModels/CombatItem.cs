@@ -18,6 +18,7 @@ namespace LuckParser.Models.ParseModels
         public ParseEnum.IFF IFF { get; }
         public byte IsBuff { get; }
         public byte Result { get; }
+        public ParseEnum.Result ResultEnum { get; }
         public ParseEnum.Activation IsActivation { get; }
         public ParseEnum.BuffRemove IsBuffRemove { get; }
         public byte IsNinety { get; }
@@ -50,6 +51,7 @@ namespace LuckParser.Models.ParseModels
             IFF = iff;
             IsBuff = isBuff;
             Result = result;
+            ResultEnum = ParseEnum.GetResult(result);
             IsActivation = isActivation;
             IsBuffRemove = isBuffRemove;
             IsNinety = isNinety;

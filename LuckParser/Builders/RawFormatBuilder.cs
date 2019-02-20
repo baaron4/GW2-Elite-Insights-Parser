@@ -493,7 +493,6 @@ namespace LuckParser.Builders
                 string prefix = filteredList.First().IsIndirectDamage ? "b" : "s";
                 res.Add(new JsonDamageDist(filteredList, filteredList.First().IsIndirectDamage, pair.Key));
             }
-
             return res;
         }
 

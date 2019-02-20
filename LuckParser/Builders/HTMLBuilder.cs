@@ -589,7 +589,6 @@ namespace LuckParser.Builders
         private List<MechanicDto> BuildMechanics()
         {
             List<MechanicDto> mechanicDtos = new List<MechanicDto>();
-            HashSet<Mechanic> playerMechs = _log.MechanicData.GetPresentPlayerMechs(0);
             foreach (Mechanic mech in _log.MechanicData.GetPresentMechanics(0))
             {
                 MechanicDto dto = new MechanicDto
@@ -597,7 +596,7 @@ namespace LuckParser.Builders
                     Name = mech.FullName,
                     ShortName = mech.ShortName,
                     Description = mech.Description,
-                    PlayerMech = playerMechs.Contains(mech),
+                    PlayerMech = mech.ShowOnTable && !mech.IsEnemyMechanic,
                     EnemyMech = mech.IsEnemyMechanic
                 };
                 mechanicDtos.Add(dto);

@@ -56,9 +56,9 @@ namespace LuckParser.Models.JsonModels
             TotalDamage = list.Sum(x => x.Damage);
             Min = list.Min(x => x.Damage);
             Max = list.Max(x => x.Damage);
-            Flank = indirectDamage ? 0 :list.Count(x => x.IsFlanking);
+            Flank = indirectDamage ? 0: list.Count(x => x.IsFlanking);
             Crit = indirectDamage ? 0 : list.Count(x => x.Result == Parser.ParseEnum.Result.Crit);
-            Glance = indirectDamage ? 0 :list.Count(x => x.Result == Parser.ParseEnum.Result.Glance);
+            Glance = indirectDamage ? 0 : list.Count(x => x.Result == Parser.ParseEnum.Result.Glance);
             IndirectDamage = indirectDamage;
             Id = id;
         }

@@ -1,35 +1,37 @@
 ﻿using LuckParser.Controllers;
 using LuckParser.Parser;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class SpecialConditionItem
-    {
-        public DamageLog DamageLog { get; }
-        public CombatItem CombatItem { get; }
-
-        //covers the special conditions that one might want to check when tracking mechanics
-        public SpecialConditionItem(DamageLog damageLog)
-        {
-            DamageLog = damageLog;
-            CombatItem = null;
-        }
-
-        public SpecialConditionItem(CombatItem combatItem)
-        {
-            DamageLog = null;
-            CombatItem = combatItem;
-        }
-    }
-
+    /// <summary>
+    /// Plot description of the mechanic
+    /// </summary>
     public class MechanicPlotlySetting
     {
         public string Color { get; }
-        public int Size { get; }
+        public int Size { get; } = 15;
         public string Symbol { get; }
 
-        public MechanicPlotlySetting(string symbol, string color, int size = 15)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="symbol">Symbol to use, see https://plot.ly/javascript/reference/#scatter-marker-symbol </param>
+        /// <param name="color">The color of the symbol</param>
+        public MechanicPlotlySetting(string symbol, string color)
+        {
+            Color = color;
+            Symbol = symbol;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="symbol">Symbol to use, see https://plot.ly/javascript/reference/#scatter-marker-symbol </param>
+        /// <param name="color">The color of the symbol</param>
+        /// <param name="size">Size, in pixel, of the symbol, defaults to 15</param>
+        public MechanicPlotlySetting(string symbol, string color, int size)
         {
             Color = color;
             Symbol = symbol;
@@ -38,57 +40,78 @@ namespace LuckParser.Models.ParseModels
 
     }
 
-    public class Mechanic
+    public abstract class Mechanic
     {
-        /// <summary>
-        /// PlayerBoon 
-        /// TargetBoon 
-        /// PlayerSkill
-        /// SkillOnPlayer
-        /// EnemyBoonStrip
-        /// Spawn
-        /// TargetCast
-        /// PlayerOnPlayer
-        /// HitOnEnemy
-        /// PlayerStatus
-        /// EnemyCastStart
-        /// EnemyCastEnd -> put skill id the same but negative so that you can also track the Start of the same skill if you want
-        /// </summary>
-        public enum MechType { PlayerBoon, PlayerBoonRemove, EnemyBoon, SkillOnPlayer, PlayerSkill, EnemyBoonStrip, Spawn, PlayerOnPlayer, HitOnEnemy, PlayerStatus, EnemyCastStart, EnemyCastEnd }
+        public enum TriggerRule { OR, AND};
+        private readonly List<MechanicChecker> _triggerConditions = new List<MechanicChecker>();
+        private readonly TriggerRule _triggerRule = TriggerRule.AND;
 
-        public delegate bool CheckSpecialCondition(SpecialConditionItem conditionItem);
+        protected bool Keep(CombatItem c, ParsedLog log)
+        {
+            if (_triggerConditions.Count > 0)
+            {
+                foreach (MechanicChecker checker in _triggerConditions)
+                {
+                    bool res = checker.Keep(c, log);
+                    if (_triggerRule == TriggerRule.AND && !res)
+                    {
+                        return false;
+                    }
+                    else if (_triggerRule == TriggerRule.OR && res)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return true;
+        }
 
         public long SkillId { get; }
-        public MechType MechanicType { get; }
 
         public int InternalCooldown { get; }
-        public CheckSpecialCondition SpecialCondition { get; }
         public MechanicPlotlySetting PlotlySetting { get; }
         public string Description { get; }
         public string InGameName { get; }
         public string ShortName { get; }
         public string FullName { get; }
-        public bool IsEnemyMechanic { get; }
+        public bool IsEnemyMechanic { get; protected set; }
+        public bool ShowOnTable { get; protected set; }
 
-        public Mechanic(long skillId, string inGameName, MechType mechType, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, CheckSpecialCondition condition = null) : this(skillId, inGameName, mechType, plotlySetting, shortName, shortName, shortName, internalCoolDown, null)
+        protected Mechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<MechanicChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)
         {
         }
 
-        public Mechanic(long skillId, string inGameName, MechType mechType, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, CheckSpecialCondition condition = null)
+        protected Mechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<MechanicChecker> conditions, TriggerRule rule)
         {
             InGameName = inGameName;
             SkillId = skillId;
-            MechanicType = mechType;
             PlotlySetting = plotlySetting;
             ShortName = shortName;
             FullName = fullName;
             Description = description;
             InternalCooldown = internalCoolDown;
-            SpecialCondition = condition;
-            IsEnemyMechanic = MechanicType == MechType.EnemyBoon || MechanicType == MechType.EnemyBoonStrip ||
-                              MechanicType == MechType.EnemyCastEnd || MechanicType == MechType.EnemyCastStart ||
-                              MechanicType == MechType.Spawn;
+            ShowOnTable = true;
+            _triggerConditions.AddRange(conditions);
+            _triggerRule = rule;
         }
+
+        protected Mechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
+        {
+        }
+
+        protected Mechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown)
+        {
+            InGameName = inGameName;
+            SkillId = skillId;
+            PlotlySetting = plotlySetting;
+            ShortName = shortName;
+            FullName = fullName;
+            Description = description;
+            InternalCooldown = internalCoolDown;
+            ShowOnTable = true;
+        }
+
+        public abstract void CheckMechanic(ParsedLog log, Dictionary<ushort, DummyActor> regroupedMobs);
 
     }
 }
