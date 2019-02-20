@@ -660,7 +660,7 @@ namespace LuckParser.Builders
         {
             Target boss = _log.LegacyTarget;
             long fightDuration = _phases[phaseIndex].GetDuration();
-            Dictionary<long, Statistics.FinalTargetBuffs> conditions = _statistics.TargetBuffs[_log.LegacyTarget][phaseIndex];
+            Dictionary<long, Statistics.FinalTargetBuffs> conditions = _log.LegacyTarget.GetBuffs(_log, phaseIndex);
 
             WriteCell("Name");
             WriteCell("Avg");
@@ -702,7 +702,7 @@ namespace LuckParser.Builders
         private void CreateBossBoonUptime(int phaseIndex)
         {
             Target boss = _log.LegacyTarget;
-            Dictionary<long, Statistics.FinalTargetBuffs> conditions = _statistics.TargetBuffs[_log.LegacyTarget][phaseIndex];
+            Dictionary<long, Statistics.FinalTargetBuffs> conditions = _log.LegacyTarget.GetBuffs(_log, phaseIndex);
             WriteCell("Name");
             WriteCell("Avg");
             foreach (Boon boon in _statistics.PresentBoons)
@@ -741,7 +741,7 @@ namespace LuckParser.Builders
         }
         private void CreateCondiGen(int phaseIndex)
         {
-            Dictionary<long, Statistics.FinalTargetBuffs> conditions = _statistics.TargetBuffs[_log.LegacyTarget][phaseIndex];
+            Dictionary<long, Statistics.FinalTargetBuffs> conditions = _log.LegacyTarget.GetBuffs(_log, phaseIndex);
             //bool hasBoons = false;
             int count = 0;
             WriteCell("Name");

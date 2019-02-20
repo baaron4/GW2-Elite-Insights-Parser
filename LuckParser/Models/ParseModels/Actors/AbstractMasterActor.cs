@@ -226,8 +226,6 @@ namespace LuckParser.Models.ParseModels
             return final;
         }
 
-        protected abstract void SetBuffs(ParsedLog log);
-
         public void InitCombatReplay(ParsedLog log, int pollingRate, bool trim, bool forceInterpolate)
         {
             if (!log.FightData.Logic.CanCombatReplay)

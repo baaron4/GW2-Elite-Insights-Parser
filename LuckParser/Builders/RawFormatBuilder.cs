@@ -193,7 +193,7 @@ namespace LuckParser.Builders
                     AvgBoons = target.GetAverageBoons(_log),
                     AvgConditions = target.GetAverageConditions(_log),
                     DpsAll = target.GetDPSAll(_log).Select(x => new JsonDPS(x)).ToArray(),
-                    Buffs = BuildTargetBuffs(_statistics.TargetBuffs[target], target),
+                    Buffs = BuildTargetBuffs(target.GetBuffs(_log), target),
                     HitboxHeight = target.HitboxHeight,
                     HitboxWidth = target.HitboxWidth,
                     Damage1S = BuildTotal1SDamage(target),
@@ -567,7 +567,7 @@ namespace LuckParser.Builders
             }
         }
 
-        private List<JsonTargetBuffs> BuildTargetBuffs(Dictionary<long, Statistics.FinalTargetBuffs>[] statBoons, Target target)
+        private List<JsonTargetBuffs> BuildTargetBuffs(List<Dictionary<long, Statistics.FinalTargetBuffs>> statBoons, Target target)
         {
             int phases = _phases.Count;
             var boons = new List<JsonTargetBuffs>();

@@ -140,7 +140,6 @@
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\AbstractBoonSimulationItemWasted.cs" />
     <Compile Include="Controllers\GW2APIController.cs" />
     <Compile Include="Models\Statistics.cs" />
-    <Compile Include="Models\StatisticsCalculator.cs" />
     <Compile Include="Parser\ParsedLog.cs" />
     <Compile Include="Parser\ParseEnum.cs" />
     <Compile Include="Parser\ParseHelper.cs" />

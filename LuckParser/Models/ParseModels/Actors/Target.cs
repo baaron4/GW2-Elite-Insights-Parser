@@ -13,6 +13,7 @@ namespace LuckParser.Models.ParseModels
 
         private List<double> _avgConditions;
         private List<double> _avgBoons;
+        private List<Dictionary<long, Statistics.FinalTargetBuffs>> _buffs;
         // Constructors
         public Target(AgentItem agent) : base(agent)
         {
@@ -91,9 +92,84 @@ namespace LuckParser.Models.ParseModels
             return _avgConditions;
         }
 
-
-        protected override void SetBuffs(ParsedLog log)
+        public Dictionary<long, Statistics.FinalTargetBuffs> GetBuffs(ParsedLog log, int phaseIndex)
         {
+            if (_buffs == null)
+            {
+                SetBuffs(log);
+            }
+            return _buffs[phaseIndex];
+        }
+
+        public List<Dictionary<long, Statistics.FinalTargetBuffs>> GetBuffs(ParsedLog log)
+        {
+            if (_buffs == null)
+            {
+                SetBuffs(log);
+            }
+            return _buffs;
+        }
+
+        private void SetBuffs(ParsedLog log)
+        {
+            _buffs = new List<Dictionary<long, Statistics.FinalTargetBuffs>>();
+            List<PhaseData> phases = log.FightData.GetPhases(log);
+            for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+            {
+                BoonDistribution boonDistribution = GetBoonDistribution(log, phaseIndex);
+                Dictionary<long, Statistics.FinalTargetBuffs> rates = new Dictionary<long, Statistics.FinalTargetBuffs>();
+                _buffs.Add(rates);
+                Dictionary<long, long> boonPresence = GetBoonPresence(log, phaseIndex);
+                Dictionary<long, long> condiPresence = GetCondiPresence(log, phaseIndex);
+
+                PhaseData phase = phases[phaseIndex];
+                long fightDuration = phase.GetDuration();
+
+                foreach (Boon boon in TrackedBoons)
+                {
+                    if (boonDistribution.ContainsKey(boon.ID))
+                    {
+                        Statistics.FinalTargetBuffs buff = new Statistics.FinalTargetBuffs(log.PlayerList);
+                        rates[boon.ID] = buff;
+                        if (boon.Type == Boon.BoonType.Duration)
+                        {
+                            buff.Uptime = Math.Round(100.0 * boonDistribution.GetUptime(boon.ID) / fightDuration, 2);
+                            foreach (Player p in log.PlayerList)
+                            {
+                                long gen = boonDistribution.GetGeneration(boon.ID, p.AgentItem);
+                                buff.Generated[p] = Math.Round(100.0 * gen / fightDuration, 2);
+                                buff.Overstacked[p] = Math.Round(100.0 * (boonDistribution.GetOverstack(boon.ID, p.AgentItem) + gen) / fightDuration, 2);
+                                buff.Wasted[p] = Math.Round(100.0 * boonDistribution.GetWaste(boon.ID, p.AgentItem) / fightDuration, 2);
+                                buff.UnknownExtension[p] = Math.Round(100.0 * boonDistribution.GetUnknownExtension(boon.ID, p.AgentItem) / fightDuration, 2);
+                                buff.Extension[p] = Math.Round(100.0 * boonDistribution.GetExtension(boon.ID, p.AgentItem) / fightDuration, 2);
+                                buff.Extended[p] = Math.Round(100.0 * boonDistribution.GetExtended(boon.ID, p.AgentItem) / fightDuration, 2);
+                            }
+                        }
+                        else if (boon.Type == Boon.BoonType.Intensity)
+                        {
+                            buff.Uptime = Math.Round((double)boonDistribution.GetUptime(boon.ID) / fightDuration, 2);
+                            foreach (Player p in log.PlayerList)
+                            {
+                                long gen = boonDistribution.GetGeneration(boon.ID, p.AgentItem);
+                                buff.Generated[p] = Math.Round((double)gen / fightDuration, 2);
+                                buff.Overstacked[p] = Math.Round((double)(boonDistribution.GetOverstack(boon.ID, p.AgentItem) + gen) / fightDuration, 2);
+                                buff.Wasted[p] = Math.Round((double)boonDistribution.GetWaste(boon.ID, p.AgentItem) / fightDuration, 2);
+                                buff.UnknownExtension[p] = Math.Round((double)boonDistribution.GetUnknownExtension(boon.ID, p.AgentItem) / fightDuration, 2);
+                                buff.Extension[p] = Math.Round((double)boonDistribution.GetExtension(boon.ID, p.AgentItem) / fightDuration, 2);
+                                buff.Extended[p] = Math.Round((double)boonDistribution.GetExtended(boon.ID, p.AgentItem) / fightDuration, 2);
+                            }
+                            if (boonPresence.TryGetValue(boon.ID, out long presenceValueBoon))
+                            {
+                                buff.Presence = Math.Round(100.0 * presenceValueBoon / fightDuration, 2);
+                            }
+                            else if (condiPresence.TryGetValue(boon.ID, out long presenceValueCondi))
+                            {
+                                buff.Presence = Math.Round(100.0 * presenceValueCondi / fightDuration, 2);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         protected override void SetAdditionalCombatReplayData(ParsedLog log)

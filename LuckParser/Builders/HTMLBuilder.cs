@@ -20,8 +20,8 @@ namespace LuckParser.Builders
 {
     class HTMLBuilder
     {
-        private string _scriptVersion;
-        private int _scriptVersionRev;
+        private readonly string _scriptVersion;
+        private readonly int _scriptVersionRev;
 
         private readonly ParsedLog _log;
         private readonly List<PhaseData> _phases;
@@ -618,7 +618,7 @@ namespace LuckParser.Builders
         private List<BoonData> BuildTargetCondiData(int phaseIndex, Target target)
         {
             PhaseData phase = _phases[phaseIndex];
-            Dictionary<long, Statistics.FinalTargetBuffs> conditions = _statistics.TargetBuffs[target][phaseIndex];
+            Dictionary<long, Statistics.FinalTargetBuffs> conditions = target.GetBuffs(_log, phaseIndex);
             List<BoonData> list = new List<BoonData>();
 
             foreach (Player player in _log.PlayerList)
@@ -631,7 +631,7 @@ namespace LuckParser.Builders
         private BoonData BuildTargetCondiUptimeData(int phaseIndex, Target target)
         {
             PhaseData phase = _phases[phaseIndex];
-            Dictionary<long, Statistics.FinalTargetBuffs> buffs = _statistics.TargetBuffs[target][phaseIndex];
+            Dictionary<long, Statistics.FinalTargetBuffs> buffs = target.GetBuffs(_log, phaseIndex);
             long fightDuration = phase.GetDuration();
             return new BoonData(buffs, _statistics.PresentConditions, Math.Round(target.GetAverageConditions(_log, phaseIndex), 1));
         }
@@ -639,7 +639,7 @@ namespace LuckParser.Builders
         private BoonData BuildTargetBoonData(int phaseIndex, Target target)
         {
             PhaseData phase = _phases[phaseIndex];
-            Dictionary<long, Statistics.FinalTargetBuffs> buffs = _statistics.TargetBuffs[target][phaseIndex];
+            Dictionary<long, Statistics.FinalTargetBuffs> buffs = target.GetBuffs(_log, phaseIndex);
             long fightDuration = phase.GetDuration();
             return new BoonData(buffs, _statistics.PresentBoons, Math.Round(target.GetAverageBoons(_log, phaseIndex), 1));
         }
@@ -1083,7 +1083,7 @@ namespace LuckParser.Builders
 
         private bool HasBoons(int phaseIndex, Target target)
         {
-            Dictionary<long, Statistics.FinalTargetBuffs> conditions = _statistics.TargetBuffs[target][phaseIndex];
+            Dictionary<long, Statistics.FinalTargetBuffs> conditions = target.GetBuffs(_log, phaseIndex);
             foreach (Boon boon in _statistics.PresentBoons)
             {
                 if (conditions.TryGetValue(boon.ID, out var uptime))

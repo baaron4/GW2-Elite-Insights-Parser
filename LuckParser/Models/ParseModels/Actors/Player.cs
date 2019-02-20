@@ -619,7 +619,7 @@ namespace LuckParser.Models.ParseModels
             return uptimesByPhase;
         }
 
-        protected override void SetBuffs(ParsedLog log)
+        private void SetBuffs(ParsedLog log)
         {
             // Boons applied to self
             _selfBuffs = new List<Dictionary<long, Statistics.FinalBuffs>>();

@@ -140,8 +140,6 @@ namespace LuckParser.Models
             public readonly Dictionary<Player, double> Extended;
         }
 
-        public readonly Dictionary<Target, Dictionary<long, FinalTargetBuffs>[]> TargetBuffs;
-
         // present buff
         public readonly List<Boon> PresentBoons = new List<Boon>();//Used only for Boon tables
         public readonly List<Boon> PresentConditions = new List<Boon>();//Used only for Condition tables
