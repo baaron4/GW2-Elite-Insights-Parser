@@ -105,10 +105,7 @@ namespace LuckParser.Models
             public double Presence;
         }
 
-        public readonly Dictionary<Player, Dictionary<long, FinalBuffs>[]> SelfBuffs;
-        public readonly Dictionary<Player, Dictionary<long, FinalBuffs>[]> GroupBuffs;
-        public readonly Dictionary<Player, Dictionary<long, FinalBuffs>[]> OffGroupBuffs;
-        public readonly Dictionary<Player, Dictionary<long, FinalBuffs>[]> SquadBuffs;
+        public enum BuffEnum { Self, Group, OffGroup, Squad};
 
         public class FinalTargetBuffs
         {

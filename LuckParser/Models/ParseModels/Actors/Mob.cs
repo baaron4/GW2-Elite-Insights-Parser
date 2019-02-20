@@ -58,5 +58,10 @@ namespace LuckParser.Models.ParseModels
 
             return aux;
         }
+
+        protected override void SetBuffs(ParsedLog log)
+        {
+            throw new InvalidOperationException("No SetBuffs for Mob");
+        }
     }
 }

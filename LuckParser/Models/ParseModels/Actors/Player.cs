@@ -46,14 +46,18 @@ namespace LuckParser.Models.ParseModels
         public readonly string Account;
         public readonly int Group;
        
-        private readonly List<Consumable> _consumeList = new List<Consumable>();
-        private List<DeathRecap> _deathRecaps = new List<DeathRecap>();
+        private List<Consumable> _consumeList;
+        private List<DeathRecap> _deathRecaps;
         // statistics
         private Dictionary<Target, List<Statistics.FinalDPS>> _dpsTarget;
         private Dictionary<Target, List<Statistics.FinalStats>> _statsTarget;
         private List<Statistics.FinalStatsAll> _statsAll;
         private List<Statistics.FinalDefenses> _defenses;
         private List<Statistics.FinalSupport> _support;
+        private List<Dictionary<long, Statistics.FinalBuffs>> _selfBuffs;
+        private List<Dictionary<long, Statistics.FinalBuffs>> _groupBuffs;
+        private List<Dictionary<long, Statistics.FinalBuffs>> _offGroupBuffs;
+        private List<Dictionary<long, Statistics.FinalBuffs>> _squadBuffs;
         //weaponslist
         private string[] _weaponsArray;
 
@@ -500,15 +504,211 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
+        public Dictionary<long, Statistics.FinalBuffs> GetBuffs(ParsedLog log, int phaseIndex, Statistics.BuffEnum type)
+        {
+            if (_selfBuffs == null)
+            {
+                SetBuffs(log);
+            }
+            switch(type)
+            {
+                case Statistics.BuffEnum.Group:
+                    return _groupBuffs[phaseIndex];
+                case Statistics.BuffEnum.OffGroup:
+                    return _offGroupBuffs[phaseIndex];
+                case Statistics.BuffEnum.Squad:
+                    return _squadBuffs[phaseIndex];
+                case Statistics.BuffEnum.Self:
+                default:
+                    return _selfBuffs[phaseIndex];
+            }
+        }
+
+        public List<Dictionary<long, Statistics.FinalBuffs>> GetBuffs(ParsedLog log, Statistics.BuffEnum type)
+        {
+            if (_selfBuffs == null)
+            {
+                SetBuffs(log);
+            }
+            switch (type)
+            {
+                case Statistics.BuffEnum.Group:
+                    return _groupBuffs;
+                case Statistics.BuffEnum.OffGroup:
+                    return _offGroupBuffs;
+                case Statistics.BuffEnum.Squad:
+                    return _squadBuffs;
+                case Statistics.BuffEnum.Self:
+                default:
+                    return _selfBuffs;
+            }
+        }
+
+        private List<Dictionary<long, Statistics.FinalBuffs>> GetBoonsForPlayers(List<Player> playerList, ParsedLog log)
+        {
+            List<Dictionary<long, Statistics.FinalBuffs>> uptimesByPhase = new List<Dictionary<long, Statistics.FinalBuffs>>();
+
+            List<PhaseData> phases = log.FightData.GetPhases(log);
+            for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+            {
+                PhaseData phase = phases[phaseIndex];
+                long fightDuration = phase.End - phase.Start;
+
+                Dictionary<Player, BoonDistribution> boonDistributions = new Dictionary<Player, BoonDistribution>();
+                foreach (Player p in playerList)
+                {
+                    boonDistributions[p] = p.GetBoonDistribution(log, phaseIndex);
+                }
+
+                HashSet<Boon> boonsToTrack = new HashSet<Boon>(boonDistributions.SelectMany(x => x.Value).Select(x => Boon.BoonsByIds[x.Key]));
+
+                Dictionary<long, Statistics.FinalBuffs> final =
+                    new Dictionary<long, Statistics.FinalBuffs>();
+
+                foreach (Boon boon in boonsToTrack)
+                {
+                    long totalGeneration = 0;
+                    long totalOverstack = 0;
+                    long totalWasted = 0;
+                    long totalUnknownExtension = 0;
+                    long totalExtension = 0;
+                    long totalExtended = 0;
+                    bool hasGeneration = false;
+                    foreach (BoonDistribution boons in boonDistributions.Values)
+                    {
+                        if (boons.ContainsKey(boon.ID))
+                        {
+                            hasGeneration = hasGeneration || boons.HasSrc(boon.ID, AgentItem);
+                            totalGeneration += boons.GetGeneration(boon.ID, AgentItem);
+                            totalOverstack += boons.GetOverstack(boon.ID, AgentItem);
+                            totalWasted += boons.GetWaste(boon.ID, AgentItem);
+                            totalUnknownExtension += boons.GetUnknownExtension(boon.ID, AgentItem);
+                            totalExtension += boons.GetExtension(boon.ID, AgentItem);
+                            totalExtended += boons.GetExtended(boon.ID, AgentItem);
+                        }
+                    }
+
+                    if (hasGeneration)
+                    {
+                        Statistics.FinalBuffs uptime = new Statistics.FinalBuffs();
+                        final[boon.ID] = uptime;
+                        if (boon.Type == Boon.BoonType.Duration)
+                        {
+                            uptime.Generation = Math.Round(100.0 * totalGeneration / fightDuration / playerList.Count, 2);
+                            uptime.Overstack = Math.Round(100.0 * (totalOverstack + totalGeneration) / fightDuration / playerList.Count, 2);
+                            uptime.Wasted = Math.Round(100.0 * (totalWasted) / fightDuration / playerList.Count, 2);
+                            uptime.UnknownExtended = Math.Round(100.0 * (totalUnknownExtension) / fightDuration / playerList.Count, 2);
+                            uptime.ByExtension = Math.Round(100.0 * (totalExtension) / fightDuration / playerList.Count, 2);
+                            uptime.Extended = Math.Round(100.0 * (totalExtended) / fightDuration / playerList.Count, 2);
+                        }
+                        else if (boon.Type == Boon.BoonType.Intensity)
+                        {
+                            uptime.Generation = Math.Round((double)totalGeneration / fightDuration / playerList.Count, 2);
+                            uptime.Overstack = Math.Round((double)(totalOverstack + totalGeneration) / fightDuration / playerList.Count, 2);
+                            uptime.Wasted = Math.Round((double)(totalWasted) / fightDuration / playerList.Count, 2);
+                            uptime.UnknownExtended = Math.Round((double)(totalUnknownExtension) / fightDuration / playerList.Count, 2);
+                            uptime.ByExtension = Math.Round((double)(totalExtension) / fightDuration / playerList.Count, 2);
+                            uptime.Extended = Math.Round((double)(totalExtended) / fightDuration / playerList.Count, 2);
+                        }
+                    }
+                }
+
+                uptimesByPhase.Add(final);
+            }
+
+            return uptimesByPhase;
+        }
+
+        protected override void SetBuffs(ParsedLog log)
+        {
+            // Boons applied to self
+            _selfBuffs = new List<Dictionary<long, Statistics.FinalBuffs>>();
+            List<PhaseData> phases = log.FightData.GetPhases(log);
+            for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+            {
+                Dictionary<long, Statistics.FinalBuffs> final = new Dictionary<long, Statistics.FinalBuffs>();
+
+                PhaseData phase = phases[phaseIndex];
+
+                BoonDistribution selfBoons = GetBoonDistribution(log, phaseIndex);
+                Dictionary<long, long> boonPresence = GetBoonPresence(log, phaseIndex);
+                Dictionary<long, long> condiPresence = GetCondiPresence(log, phaseIndex);
+
+                long fightDuration = phase.End - phase.Start;
+                foreach (Boon boon in TrackedBoons)
+                {
+                    if (selfBoons.ContainsKey(boon.ID))
+                    {
+                        Statistics.FinalBuffs uptime = new Statistics.FinalBuffs
+                        {
+                            Uptime = 0,
+                            Generation = 0,
+                            Overstack = 0,
+                            Wasted = 0,
+                            UnknownExtended = 0,
+                            ByExtension = 0,
+                            Extended = 0
+                        };
+                        final[boon.ID] = uptime;
+                        long generation = selfBoons.GetGeneration(boon.ID, AgentItem);
+                        if (boon.Type == Boon.BoonType.Duration)
+                        {
+                            uptime.Uptime = Math.Round(100.0 * selfBoons.GetUptime(boon.ID) / fightDuration, 2);
+                            uptime.Generation = Math.Round(100.0 * generation / fightDuration, 2);
+                            uptime.Overstack = Math.Round(100.0 * (selfBoons.GetOverstack(boon.ID, AgentItem) + generation) / fightDuration, 2);
+                            uptime.Wasted = Math.Round(100.0 * selfBoons.GetWaste(boon.ID, AgentItem) / fightDuration, 2);
+                            uptime.UnknownExtended = Math.Round(100.0 * selfBoons.GetUnknownExtension(boon.ID, AgentItem) / fightDuration, 2);
+                            uptime.ByExtension = Math.Round(100.0 * selfBoons.GetExtension(boon.ID, AgentItem) / fightDuration, 2);
+                            uptime.Extended = Math.Round(100.0 * selfBoons.GetExtended(boon.ID, AgentItem) / fightDuration, 2);
+                        }
+                        else if (boon.Type == Boon.BoonType.Intensity)
+                        {
+                            uptime.Uptime = Math.Round((double)selfBoons.GetUptime(boon.ID) / fightDuration, 2);
+                            uptime.Generation = Math.Round((double)generation / fightDuration, 2);
+                            uptime.Overstack = Math.Round((double)(selfBoons.GetOverstack(boon.ID, AgentItem) + generation) / fightDuration, 2);
+                            uptime.Wasted = Math.Round((double)selfBoons.GetWaste(boon.ID, AgentItem) / fightDuration, 2);
+                            uptime.UnknownExtended = Math.Round((double)selfBoons.GetUnknownExtension(boon.ID, AgentItem) / fightDuration, 2);
+                            uptime.ByExtension = Math.Round((double)selfBoons.GetExtension(boon.ID, AgentItem) / fightDuration, 2);
+                            uptime.Extended = Math.Round((double)selfBoons.GetExtended(boon.ID, AgentItem) / fightDuration, 2);
+                            if (boonPresence.TryGetValue(boon.ID, out long presenceValueBoon))
+                            {
+                                uptime.Presence = Math.Round(100.0 * presenceValueBoon / fightDuration, 2);
+                            }
+                            else if (condiPresence.TryGetValue(boon.ID, out long presenceValueCondi))
+                            {
+                                uptime.Presence = Math.Round(100.0 * presenceValueCondi / fightDuration, 2);
+                            }
+                        }
+                    }
+                }
+
+                _selfBuffs.Add(final);
+            }
+
+            // Boons applied to player's group
+            var otherPlayersInGroup = log.PlayerList
+                .Where(p => p.Group == Group && InstID != p.InstID)
+                .ToList();
+            _groupBuffs = GetBoonsForPlayers(otherPlayersInGroup, log);
+
+            // Boons applied to other groups
+            var offGroupPlayers = log.PlayerList.Where(p => p.Group != Group).ToList();
+            _offGroupBuffs = GetBoonsForPlayers(offGroupPlayers, log);
+
+            // Boons applied to squad
+            var otherPlayers = log.PlayerList.Where(p => p.InstID != InstID).ToList();
+            _squadBuffs = GetBoonsForPlayers(otherPlayers, log);
+        }
+
         public List<DeathRecap> GetDeathRecaps(ParsedLog log)
         {
             if(_deathRecaps == null)
             {
-                return null;
+                SetDeathRecaps(log);
             }
             if (_deathRecaps.Count == 0)
             {
-                SetDeathRecaps(log);
+                return null;
             }
             return _deathRecaps;
         }
@@ -524,7 +724,7 @@ namespace LuckParser.Models.ParseModels
 
         public List<Consumable> GetConsumablesList(ParsedLog log, long start, long end)
         {
-            if (_consumeList.Count == 0)
+            if (_consumeList == null)
             {
                 SetConsumablesList(log);
             }
@@ -535,6 +735,7 @@ namespace LuckParser.Models.ParseModels
 
         private void SetDeathRecaps(ParsedLog log)
         {
+            _deathRecaps = new List<DeathRecap>();
             List<DeathRecap> res = _deathRecaps;
             List<CombatItem> deads = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.ChangeDead, log.FightData.FightStart, log.FightData.FightEnd);
             List<CombatItem> downs = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.ChangeDown, log.FightData.FightStart, log.FightData.FightEnd);
@@ -672,6 +873,7 @@ namespace LuckParser.Models.ParseModels
         private void SetConsumablesList(ParsedLog log)
         {
             List<Boon> consumableList = Boon.GetConsumableList();
+            _consumeList = new List<Consumable>();
             long fightDuration = log.FightData.FightDuration;
             foreach (Boon consumable in consumableList)
             {

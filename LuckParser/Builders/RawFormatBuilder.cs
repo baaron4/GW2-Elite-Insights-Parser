@@ -255,11 +255,11 @@ namespace LuckParser.Builders
                     Defenses = player.GetDefenses(_log).Select(x => new JsonDefenses(x)).ToArray(),
                     Rotation = BuildRotation(player.GetCastLogs(_log, 0, _log.FightData.FightDuration)),
                     Support = player.GetSupport(_log).Select(x => new JsonSupport(x)).ToArray(),
-                    BuffUptimes = BuildPlayerBuffUptimes(_statistics.SelfBuffs[player], player),
-                    SelfBuffs = BuildPlayerBuffGenerations(_statistics.SelfBuffs[player], player),
-                    GroupBuffs = BuildPlayerBuffGenerations(_statistics.GroupBuffs[player], player),
-                    OffGroupBuffs = BuildPlayerBuffGenerations(_statistics.OffGroupBuffs[player], player),
-                    SquadBuffs = BuildPlayerBuffGenerations(_statistics.SquadBuffs[player], player),
+                    BuffUptimes = BuildPlayerBuffUptimes(player.GetBuffs(_log, Statistics.BuffEnum.Self), player),
+                    SelfBuffs = BuildPlayerBuffGenerations(player.GetBuffs(_log, Statistics.BuffEnum.Self), player),
+                    GroupBuffs = BuildPlayerBuffGenerations(player.GetBuffs(_log, Statistics.BuffEnum.Group), player),
+                    OffGroupBuffs = BuildPlayerBuffGenerations(player.GetBuffs(_log, Statistics.BuffEnum.OffGroup), player),
+                    SquadBuffs = BuildPlayerBuffGenerations(player.GetBuffs(_log, Statistics.BuffEnum.Squad), player),
                     DamageModifiers = BuildDamageModifiers(player.GetExtraBoonData(_log, null)),
                     DamageModifiersTarget = BuildDamageModifiersTarget(player),
                     Minions = BuildMinions(player),
@@ -608,7 +608,7 @@ namespace LuckParser.Builders
             return boons;
         }
 
-        private List<JsonPlayerBuffs> BuildPlayerBuffGenerations(Dictionary<long, Statistics.FinalBuffs>[] statUptimes, Player player)
+        private List<JsonPlayerBuffs> BuildPlayerBuffGenerations(List<Dictionary<long, Statistics.FinalBuffs>> statUptimes, Player player)
         {
             var uptimes = new List<JsonPlayerBuffs>();
             int phases = _phases.Count;
@@ -637,7 +637,7 @@ namespace LuckParser.Builders
             return uptimes;
         }
 
-        private List<JsonPlayerBuffs> BuildPlayerBuffUptimes(Dictionary<long, Statistics.FinalBuffs>[] statUptimes, Player player)
+        private List<JsonPlayerBuffs> BuildPlayerBuffUptimes(List<Dictionary<long, Statistics.FinalBuffs>> statUptimes, Player player)
         {
             var uptimes = new List<JsonPlayerBuffs>();
             int phases = _phases.Count;

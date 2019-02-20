@@ -91,6 +91,11 @@ namespace LuckParser.Models.ParseModels
             return _avgConditions;
         }
 
+
+        protected override void SetBuffs(ParsedLog log)
+        {
+        }
+
         protected override void SetAdditionalCombatReplayData(ParsedLog log)
         {
             CombatReplay.Icon = GeneralHelper.GetNPCIcon(ID);

@@ -365,7 +365,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                Dictionary<long, Statistics.FinalBuffs> uptimes = _statistics.SelfBuffs[player][phaseIndex];
+                Dictionary<long, Statistics.FinalBuffs> uptimes = player.GetBuffs(_log, phaseIndex, Statistics.BuffEnum.Self);
 
                 WriteCell(player.Character);
                 WriteCell(Math.Round(player.GetStatsAll(_log, phaseIndex).AvgBoons, 1).ToString());
@@ -411,7 +411,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                Dictionary<long, Statistics.FinalBuffs> uptimes = _statistics.SelfBuffs[player][phaseIndex];
+                Dictionary<long, Statistics.FinalBuffs> uptimes = player.GetBuffs(_log, phaseIndex, Statistics.BuffEnum.Self);
 
                 WriteCell(player.Character);
                 foreach (Boon boon in listToUse)
@@ -460,8 +460,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                Dictionary<long, Statistics.FinalBuffs> boons =
-                            _statistics.GroupBuffs[player][phaseIndex];
+                Dictionary<long, Statistics.FinalBuffs> boons = player.GetBuffs(_log, phaseIndex, Statistics.BuffEnum.Group);
 
                 WriteCell(player.Character);
                 foreach (Boon boon in listToUse)
@@ -511,8 +510,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                Dictionary<long, Statistics.FinalBuffs> boons =
-                              _statistics.OffGroupBuffs[player][phaseIndex];
+                Dictionary<long, Statistics.FinalBuffs> boons = player.GetBuffs(_log, phaseIndex, Statistics.BuffEnum.OffGroup);
 
                 WriteCell(player.Character);
                 foreach (Boon boon in listToUse)
@@ -562,8 +560,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                Dictionary<long, Statistics.FinalBuffs> boons =
-                            _statistics.SquadBuffs[player][phaseIndex];
+                Dictionary<long, Statistics.FinalBuffs> boons = player.GetBuffs(_log, phaseIndex, Statistics.BuffEnum.Squad);
                 WriteCell(player.Character);
                 foreach (Boon boon in listToUse)
                 {
