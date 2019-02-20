@@ -687,7 +687,7 @@ namespace LuckParser.Builders
             NewLine();
             int count = 0;
             WriteCell(boss.Character);
-            WriteCell(Math.Round(_statistics.AvgTargetConditions[_log.LegacyTarget][phaseIndex], 1).ToString());
+            WriteCell(Math.Round(_log.LegacyTarget.GetAverageConditions(_log, phaseIndex), 1).ToString());
             foreach (Boon boon in _statistics.PresentConditions)
             {
                 if (conditions.TryGetValue(boon.ID, out var uptime))

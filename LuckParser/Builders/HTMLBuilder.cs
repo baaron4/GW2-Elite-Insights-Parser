@@ -649,7 +649,7 @@ namespace LuckParser.Builders
             PhaseData phase = _phases[phaseIndex];
             Dictionary<long, Statistics.FinalTargetBuffs> buffs = _statistics.TargetBuffs[target][phaseIndex];
             long fightDuration = phase.GetDuration();
-            return new BoonData(buffs, _statistics.PresentConditions, Math.Round(_statistics.AvgTargetConditions[target][phaseIndex], 1));
+            return new BoonData(buffs, _statistics.PresentConditions, Math.Round(target.GetAverageConditions(_log, phaseIndex), 1));
         }
 
         private BoonData BuildTargetBoonData(int phaseIndex, Target target)
@@ -657,7 +657,7 @@ namespace LuckParser.Builders
             PhaseData phase = _phases[phaseIndex];
             Dictionary<long, Statistics.FinalTargetBuffs> buffs = _statistics.TargetBuffs[target][phaseIndex];
             long fightDuration = phase.GetDuration();
-            return new BoonData(buffs, _statistics.PresentBoons, Math.Round(_statistics.AvgTargetBoons[target][phaseIndex], 1));
+            return new BoonData(buffs, _statistics.PresentBoons, Math.Round(target.GetAverageBoons(_log, phaseIndex), 1));
         }
 
         private string ReplaceVariables(string html)

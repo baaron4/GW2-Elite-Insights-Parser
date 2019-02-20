@@ -10,6 +10,9 @@ namespace LuckParser.Models.ParseModels
 {
     public class Target : AbstractMasterActor
     {
+
+        private List<double> _avgConditions;
+        private List<double> _avgBoons;
         // Constructors
         public Target(AgentItem agent) : base(agent)
         {
@@ -27,7 +30,66 @@ namespace LuckParser.Models.ParseModels
             CastLogs.Add(new CastLog(time, skillID, expDur, startActivation, actDur, endActivation, Agent, InstID));
         }*/
 
-        // Private Methods
+        private void SetAvgBoonsConditions(ParsedLog log)
+        {
+            _avgBoons = new List<double>();
+            _avgConditions = new List<double>();
+            for (int phaseIndex = 0; phaseIndex < log.FightData.GetPhases(log).Count; phaseIndex++)
+            {
+                PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
+                double avgBoon = 0;
+                foreach (long duration in GetBoonPresence(log, phaseIndex).Values)
+                {
+                    avgBoon += duration;
+                }
+                avgBoon /= phase.GetDuration();
+                _avgBoons.Add(avgBoon);
+
+                double avgCondi = 0;
+                foreach (long duration in GetCondiPresence(log, phaseIndex).Values)
+                {
+                    avgCondi += duration;
+                }
+                avgCondi /= phase.GetDuration();
+                _avgConditions.Add(avgCondi);
+            }
+        }
+
+        public double GetAverageBoons(ParsedLog log, int phaseIndex)
+        {
+            if (_avgBoons == null)
+            {
+                SetAvgBoonsConditions(log);
+            }
+            return _avgBoons[phaseIndex];
+        }
+
+        public List<double> GetAverageBoons(ParsedLog log)
+        {
+            if (_avgBoons == null)
+            {
+                SetAvgBoonsConditions(log);
+            }
+            return _avgBoons;
+        }
+
+        public double GetAverageConditions(ParsedLog log, int phaseIndex)
+        {
+            if (_avgConditions == null)
+            {
+                SetAvgBoonsConditions(log);
+            }
+            return _avgConditions[phaseIndex];
+        }
+
+        public List<double> GetAverageConditions(ParsedLog log)
+        {
+            if (_avgConditions == null)
+            {
+                SetAvgBoonsConditions(log);
+            }
+            return _avgConditions;
+        }
 
         protected override void SetAdditionalCombatReplayData(ParsedLog log)
         {

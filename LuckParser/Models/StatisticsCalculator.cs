@@ -289,31 +289,6 @@ namespace LuckParser.Models
 
         private void CalculateStats()
         {
-            foreach (Target target in _log.FightData.Logic.Targets)
-            {
-                double[] avgBoons = new double[_phases.Count];
-                double[] avgCondis = new double[_phases.Count];
-                for (int phaseIndex = 0; phaseIndex < _phases.Count; phaseIndex++)
-                {
-                    double avgBoon = 0;
-                    foreach (long duration in target.GetBoonPresence(_log, phaseIndex).Values)
-                    {
-                        avgBoon += duration;
-                    }
-                    avgBoon /= _phases[phaseIndex].GetDuration();
-                    avgBoons[phaseIndex] = avgBoon;
-
-                    double avgCondi = 0;
-                    foreach (long duration in target.GetCondiPresence(_log, phaseIndex).Values)
-                    {
-                        avgCondi += duration;
-                    }
-                    avgCondi /= _phases[phaseIndex].GetDuration();
-                    avgCondis[phaseIndex] = avgCondi;
-                }
-                _statistics.AvgTargetBoons[target] = avgBoons;
-                _statistics.AvgTargetConditions[target] = avgCondis;
-            }
             foreach (Player player in _log.PlayerList)
             {
                 FinalStatsAll[] phaseStats = new FinalStatsAll[_phases.Count];

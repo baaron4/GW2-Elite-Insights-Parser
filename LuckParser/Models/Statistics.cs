@@ -67,8 +67,6 @@ namespace LuckParser.Models
 
         public readonly Dictionary<Target, Dictionary<Player, FinalStats[]>> StatsTarget;
         public readonly Dictionary<Player, FinalStatsAll[]> StatsAll;
-        public readonly Dictionary<Target, double[]> AvgTargetConditions;
-        public readonly Dictionary<Target, double[]> AvgTargetBoons;
 
         public class FinalDefenses
         {
