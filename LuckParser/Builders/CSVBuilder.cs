@@ -200,7 +200,7 @@ namespace LuckParser.Builders
             foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalDPS dps = player.GetDPSAll(_log, phaseIndex);
-                Statistics.FinalDefenses defense = _statistics.Defenses[player][phaseIndex];
+                Statistics.FinalDefenses defense = player.GetDefenses(_log, phaseIndex);
                 Statistics.FinalDPS dpsBoss = player.GetDPSTarget(_log, phaseIndex, _log.LegacyTarget);
                 string deathString = defense.DeadCount.ToString();
                 string deadthTooltip = "";
@@ -316,7 +316,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalDefenses defenses = _statistics.Defenses[player][phaseIndex];
+                Statistics.FinalDefenses defenses = player.GetDefenses(_log, phaseIndex);
 
                 WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
                 defenses.DamageTaken.ToString(),defenses.DamageBarrier.ToString(),defenses.BlockedCount.ToString(),defenses.InvulnedCount.ToString(),defenses.EvadedCount.ToString(),defenses.DodgeCount.ToString() });

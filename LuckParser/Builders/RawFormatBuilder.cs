@@ -252,7 +252,7 @@ namespace LuckParser.Builders
                     DpsTargets = BuildDPSTarget(player),
                     StatsAll = player.GetStatsAll(_log).Select(x => new JsonStatsAll(x)).ToArray(),
                     StatsTargets = BuildStatsTarget(player),
-                    Defenses = _statistics.Defenses[player].Select(x => new JsonDefenses(x)).ToArray(),
+                    Defenses = player.GetDefenses(_log).Select(x => new JsonDefenses(x)).ToArray(),
                     Rotation = BuildRotation(player.GetCastLogs(_log, 0, _log.FightData.FightDuration)),
                     Support = _statistics.Support[player].Select(x => new JsonSupport(x)).ToArray(),
                     BuffUptimes = BuildPlayerBuffUptimes(_statistics.SelfBuffs[player], player),

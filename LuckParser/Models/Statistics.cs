@@ -84,8 +84,6 @@ namespace LuckParser.Models
             public int DcDuration;
         }
 
-        public readonly Dictionary<Player, FinalDefenses[]> Defenses;
-
         public class FinalSupport
         {
             //public long allHeal;

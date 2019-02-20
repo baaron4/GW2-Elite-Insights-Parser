@@ -176,7 +176,7 @@ namespace LuckParser.Builders
 
             foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalDefenses defenses = _statistics.Defenses[player][phaseIndex];
+                Statistics.FinalDefenses defenses = player.GetDefenses(_log, phaseIndex);
                 list.Add(PhaseDto.GetDefenseStatData(defenses, phase));
             }
 

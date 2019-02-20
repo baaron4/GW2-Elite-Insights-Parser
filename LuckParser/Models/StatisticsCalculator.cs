@@ -44,72 +44,12 @@ namespace LuckParser.Models
         public Statistics CalculateStatistics(ParsedLog log, Switches switches)
         {
             if (switches.CalculateBoons) CalculateBoons();
-            if (switches.CalculateDefense) CalculateDefenses();
             if (switches.CalculateSupport) CalculateSupport();
 
             if (switches.CalculateConditions) CalculateConditions();
             //
 
             return _statistics;
-        }
-        private void CalculateDefenses()
-        {
-            CombatData combatData = _log.CombatData;
-            foreach (Player player in _log.PlayerList)
-            {
-                FinalDefenses[] phaseDefense = new FinalDefenses[_phases.Count];
-                for (int phaseIndex = 0; phaseIndex < _phases.Count; phaseIndex++)
-                {
-                    FinalDefenses final = new FinalDefenses();
-
-                    PhaseData phase = _phases[phaseIndex];
-                    long start = _log.FightData.ToLogSpace(phase.Start);
-                    long end = _log.FightData.ToLogSpace(phase.End);
-
-                    List<DamageLog> damageLogs = player.GetDamageTakenLogs(null, _log, phase.Start, phase.End);
-                    //List<DamageLog> healingLogs = player.getHealingReceivedLogs(log, phase.getStart(), phase.getEnd());
-
-                    final.DamageTaken = damageLogs.Sum(x => (long)x.Damage);
-                    //final.allHealReceived = healingLogs.Sum(x => x.getDamage());
-                    final.BlockedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Block);
-                    final.InvulnedCount = 0;
-                    final.DamageInvulned = 0;
-                    final.EvadedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Evade);
-                    final.DodgeCount = player.GetCastLogs(_log, 0, _log.FightData.FightDuration).Count(x => x.SkillId == SkillItem.DodgeId);
-                    final.DamageBarrier = damageLogs.Sum(x => x.ShieldDamage);
-                    final.InterruptedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Interrupt);
-                    foreach (DamageLog log in damageLogs.Where(x => x.Result == ParseEnum.Result.Absorb))
-                    {
-                        final.InvulnedCount++;
-                        final.DamageInvulned += log.Damage;
-                    }
-                    List<CombatItem> deads = combatData.GetStatesData(player.InstID, ParseEnum.StateChange.ChangeDead, start, end);
-                    List<CombatItem> downs = combatData.GetStatesData(player.InstID, ParseEnum.StateChange.ChangeDown, start, end);
-                    List<CombatItem> dcs = combatData.GetStatesData(player.InstID, ParseEnum.StateChange.Despawn, start, end);
-                    final.DownCount = downs.Count - combatData.GetBoonData(5620).Where(x => x.SrcInstid == player.InstID && x.Time >= start && x.Time <= end && x.IsBuffRemove == ParseEnum.BuffRemove.All).Count();
-                    final.DeadCount = deads.Count;
-                    final.DcCount = dcs.Count;
-
-                    phaseDefense[phaseIndex] = final;
-                }
-                List<(long start, long end)> dead = new List<(long start, long end)>();
-                List<(long start, long end)> down = new List<(long start, long end)>();
-                List<(long start, long end)> dc = new List<(long start, long end)>();
-                combatData.GetAgentStatus(player.FirstAware, player.LastAware, player.InstID, dead, down, dc);
-
-                for (int phaseIndex = 0; phaseIndex < _phases.Count; phaseIndex++)
-                {
-                    FinalDefenses defenses = phaseDefense[phaseIndex];
-                    PhaseData phase = _phases[phaseIndex];
-                    long start = phase.Start;
-                    long end = phase.End;
-                    defenses.DownDuration = (int)down.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
-                    defenses.DeadDuration = (int)dead.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
-                    defenses.DcDuration = (int)dc.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
-                }
-
-                _statistics.Defenses[player] = phaseDefense;
-            }
         }
 
         private void CalculateSupport()

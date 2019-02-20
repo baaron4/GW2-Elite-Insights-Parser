@@ -50,8 +50,9 @@ namespace LuckParser.Models.ParseModels
         private List<DeathRecap> _deathRecaps = new List<DeathRecap>();
         // statistics
         private Dictionary<Target, List<Statistics.FinalDPS>> _dpsTarget;
-        private readonly Dictionary<Target, List<Statistics.FinalStats>> _statsTarget;
-        private readonly List<Statistics.FinalStatsAll> _statsAll;
+        private Dictionary<Target, List<Statistics.FinalStats>> _statsTarget;
+        private List<Statistics.FinalStatsAll> _statsAll;
+        private List<Statistics.FinalDefenses> _defenses;
         //weaponslist
         private string[] _weaponsArray;
 
@@ -308,6 +309,8 @@ namespace LuckParser.Models.ParseModels
         private void SetStats(ParsedLog log)
         {
             int phaseIndex = -1;
+            _statsAll = new List<Statistics.FinalStatsAll>();
+            _statsTarget = new Dictionary<Target, List<Statistics.FinalStats>>();
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
                 phaseIndex++;
@@ -323,6 +326,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 Statistics.FinalStatsAll final = new Statistics.FinalStatsAll();
                 FillFinalStats(log, GetJustPlayerDamageLogs(null, log, phase.Start, phase.End), final, targetDict);
+                _statsAll.Add(final);
                 // If conjured sword, stop
                 if (Account == ":Conjured Sword")
                 {
@@ -388,8 +392,71 @@ namespace LuckParser.Models.ParseModels
                     {
                         final.StackDist = -1;
                     }
-
                 }
+            }
+        }
+
+        public Statistics.FinalDefenses GetDefenses(ParsedLog log, int phaseIndex)
+        {
+            if (_defenses == null)
+            {
+                SetDefenses(log);
+            }
+            return _defenses[phaseIndex];
+        }
+
+        public List<Statistics.FinalDefenses> GetDefenses(ParsedLog log)
+        {
+            if (_defenses == null)
+            {
+                SetDefenses(log);
+            }
+            return _defenses;
+        }
+
+        private void SetDefenses(ParsedLog log)
+        {
+            List<(long start, long end)> dead = new List<(long start, long end)>();
+            List<(long start, long end)> down = new List<(long start, long end)>();
+            List<(long start, long end)> dc = new List<(long start, long end)>();
+            log.CombatData.GetAgentStatus(FirstAware, LastAware, InstID, dead, down, dc);
+            _defenses = new List<Statistics.FinalDefenses>();
+            foreach (PhaseData phase in log.FightData.GetPhases(log))
+            {
+                Statistics.FinalDefenses final = new Statistics.FinalDefenses();
+                _defenses.Add(final);
+                long start = log.FightData.ToLogSpace(phase.Start);
+                long end = log.FightData.ToLogSpace(phase.End);
+                List<DamageLog> damageLogs = GetDamageTakenLogs(null, log, phase.Start, phase.End);
+                //List<DamageLog> healingLogs = player.getHealingReceivedLogs(log, phase.getStart(), phase.getEnd());
+
+                final.DamageTaken = damageLogs.Sum(x => (long)x.Damage);
+                //final.allHealReceived = healingLogs.Sum(x => x.getDamage());
+                final.BlockedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Block);
+                final.InvulnedCount = 0;
+                final.DamageInvulned = 0;
+                final.EvadedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Evade);
+                final.DodgeCount = GetCastLogs(log, 0, log.FightData.FightDuration).Count(x => x.SkillId == SkillItem.DodgeId);
+                final.DamageBarrier = damageLogs.Sum(x => x.ShieldDamage);
+                final.InterruptedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Interrupt);
+                foreach (DamageLog dl in damageLogs.Where(x => x.Result == ParseEnum.Result.Absorb))
+                {
+                    final.InvulnedCount++;
+                    final.DamageInvulned += dl.Damage;
+                }
+                List<CombatItem> deads = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.ChangeDead, start, end);
+                List<CombatItem> downs = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.ChangeDown, start, end);
+                List<CombatItem> dcs = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Despawn, start, end);
+                final.DownCount = downs.Count - log.CombatData.GetBoonData(5620).Where(x => x.SrcInstid == InstID && x.Time >= start && x.Time <= end && x.IsBuffRemove == ParseEnum.BuffRemove.All).Count();
+                final.DeadCount = deads.Count;
+                final.DcCount = dcs.Count;
+
+                //
+                start = phase.Start;
+                end = phase.End;
+                final.DownDuration = (int)down.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
+                final.DeadDuration = (int)dead.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
+                final.DcDuration = (int)dc.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
             }
         }
 
