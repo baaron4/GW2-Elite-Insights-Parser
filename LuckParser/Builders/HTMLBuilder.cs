@@ -32,7 +32,7 @@ namespace LuckParser.Builders
         private Dictionary<long, Boon> _usedBoons = new Dictionary<long, Boon>();
         private Dictionary<long, SkillItem> _usedSkills = new Dictionary<long, SkillItem>();
 
-        public HTMLBuilder(ParsedLog log, Statistics statistics, string[] uploadString)
+        public HTMLBuilder(ParsedLog log, string[] uploadString)
         {
             Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             _scriptVersion = version.Major + "." + version.Minor;
@@ -43,21 +43,9 @@ namespace LuckParser.Builders
             _log = log;
             _phases = log.FightData.GetPhases(log);
 
-            _statistics = statistics;
+            _statistics = log.Statistics;
 
             _uploadLink = uploadString;
-        }
-
-        public static void UpdateStatisticSwitches(StatisticsCalculator.Switches switches)
-        {
-            switches.CalculateBoons = true;
-            switches.CalculateDPS = true;
-            switches.CalculateConditions = true;
-            switches.CalculateDefense = true;
-            switches.CalculateStats = true;
-            switches.CalculateSupport = true;
-            switches.CalculateCombatReplay = true;
-            switches.CalculateMechanics = true;
         }
 
         private static string FilterStringChars(string str)

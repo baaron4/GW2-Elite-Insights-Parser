@@ -14,17 +14,6 @@ namespace LuckParser.Models
     /// </summary>
     class StatisticsCalculator
     {
-        public class Switches
-        {
-            public bool CalculateDPS = false;
-            public bool CalculateStats = false;
-            public bool CalculateDefense = false;
-            public bool CalculateSupport = false;
-            public bool CalculateBoons = false;
-            public bool CalculateConditions = false;
-            public bool CalculateCombatReplay = false;
-            public bool CalculateMechanics = false;
-        }
 
         private Statistics _statistics;
 
@@ -41,10 +30,10 @@ namespace LuckParser.Models
         /// <param name="log"></param>
         /// <param name="switches"></param>
         /// <returns></returns>
-        public Statistics CalculateStatistics(ParsedLog log, Switches switches)
+        public Statistics CalculateStatistics(ParsedLog log)
         {
 
-            if (switches.CalculateConditions) CalculateConditions();
+            CalculateConditions();
             //
 
             return _statistics;

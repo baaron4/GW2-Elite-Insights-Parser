@@ -21,27 +21,15 @@ namespace LuckParser.Builders
         readonly string _delimiter;
 
         readonly string[] _uploadResult;
-
-        public static void UpdateStatisticSwitches(StatisticsCalculator.Switches switches)
-        {
-            switches.CalculateBoons = true;
-            switches.CalculateDPS = true;
-            switches.CalculateConditions = true;
-            switches.CalculateDefense = true;
-            switches.CalculateStats = true;
-            switches.CalculateSupport = true;
-            switches.CalculateCombatReplay = true;
-            switches.CalculateMechanics = true;
-        }
        
-        public CSVBuilder(StreamWriter sw, string delimiter,ParsedLog log, Statistics statistics,string[] uploadresult)
+        public CSVBuilder(StreamWriter sw, string delimiter, ParsedLog log, string[] uploadresult)
         {
             _log = log;
             _sw = sw;
             _delimiter = delimiter;
             _phases = log.FightData.GetPhases(log);
 
-            _statistics = statistics;
+            _statistics = log.Statistics;
 
             _uploadResult = uploadresult;
         }

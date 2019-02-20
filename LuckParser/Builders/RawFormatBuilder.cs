@@ -37,26 +37,14 @@ namespace LuckParser.Builders
         private readonly Dictionary<string, JsonLog.SkillDesc> _skillDesc = new Dictionary<string, JsonLog.SkillDesc>();
         private readonly Dictionary<string, JsonLog.BuffDesc> _buffDesc = new Dictionary<string, JsonLog.BuffDesc>();
         private readonly Dictionary<string, HashSet<long>> _personalBuffs = new Dictionary<string, HashSet<long>>();
-
-        public static void UpdateStatisticSwitches(StatisticsCalculator.Switches switches)
-        {
-            switches.CalculateBoons = true;
-            switches.CalculateDPS = true;
-            switches.CalculateConditions = true;
-            switches.CalculateDefense = true;
-            switches.CalculateStats = true;
-            switches.CalculateSupport = true;
-            switches.CalculateCombatReplay = true;
-            switches.CalculateMechanics = true;
-        }
-
-        public RawFormatBuilder(StreamWriter sw, ParsedLog log, Statistics statistics, string[] UploadString)
+       
+        public RawFormatBuilder(StreamWriter sw, ParsedLog log, string[] UploadString)
         {
             _log = log;
             _sw = sw;
             _phases = log.FightData.GetPhases(log);
 
-            _statistics = statistics;
+            _statistics = log.Statistics;
 
             _uploadLink = UploadString;
         }
