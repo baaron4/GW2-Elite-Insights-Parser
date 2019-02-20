@@ -143,7 +143,7 @@ namespace LuckParser.Builders
             PhaseData phase = _phases[phaseIndex];
             foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];             
+                Statistics.FinalStatsAll stats = player.GetStatsAll(_log, phaseIndex);             
                 list.Add(PhaseDto.GetDMGStatData(stats));
             }
             return list;
@@ -160,7 +160,7 @@ namespace LuckParser.Builders
                 List<List<object>> playerData = new List<List<object>>();
                 foreach (Target target in phase.Targets)
                 {
-                    Statistics.FinalStats statsTarget = _statistics.StatsTarget[target][player][phaseIndex];
+                    Statistics.FinalStats statsTarget = player.GetStatsTarget(_log, phaseIndex, target);
                     playerData.Add(PhaseDto.GetDMGTargetStatData(statsTarget));
                 }
                 list.Add(playerData);
@@ -206,7 +206,7 @@ namespace LuckParser.Builders
                 double avg = 0.0;
                 if (boonTable)
                 {
-                    avg = Math.Round(_statistics.StatsAll[player][phaseIndex].AvgBoons, 1);
+                    avg = Math.Round(player.GetStatsAll(_log, phaseIndex).AvgBoons, 1);
                 }
                 list.Add(new BoonData(_statistics.SelfBuffs[player][phaseIndex], listToUse, avg));
             }

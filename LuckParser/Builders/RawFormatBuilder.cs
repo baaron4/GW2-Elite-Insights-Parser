@@ -250,8 +250,8 @@ namespace LuckParser.Builders
                     TargetDamage1S = BuildTarget1SDamage(player),
                     DpsAll = player.GetDPSAll(_log).Select(x => new JsonDPS(x)).ToArray(),
                     DpsTargets = BuildDPSTarget(player),
-                    StatsAll = _statistics.StatsAll[player].Select(x => new JsonStatsAll(x)).ToArray(),
-                    StatsTargets = BuildStatsTarget(_statistics.StatsTarget, player),
+                    StatsAll = player.GetStatsAll(_log).Select(x => new JsonStatsAll(x)).ToArray(),
+                    StatsTargets = BuildStatsTarget(player),
                     Defenses = _statistics.Defenses[player].Select(x => new JsonDefenses(x)).ToArray(),
                     Rotation = BuildRotation(player.GetCastLogs(_log, 0, _log.FightData.FightDuration)),
                     Support = _statistics.Support[player].Select(x => new JsonSupport(x)).ToArray(),
@@ -311,13 +311,13 @@ namespace LuckParser.Builders
             return res;
         }
 
-        private JsonStats[][] BuildStatsTarget(Dictionary<Target, Dictionary<Player, Statistics.FinalStats[]>> stats, Player p)
+        private JsonStats[][] BuildStatsTarget(Player p)
         {
             JsonStats[][] res = new JsonStats[_log.FightData.Logic.Targets.Count][];
             int i = 0;
             foreach (Target tar in _log.FightData.Logic.Targets)
             {
-                res[i++] = stats[tar][p].Select(x => new JsonStats(x)).ToArray();
+                res[i++] = p.GetStatsTarget(_log, tar).Select(x => new JsonStats(x)).ToArray();
             }
             return res;
         }

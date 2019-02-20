@@ -65,9 +65,6 @@ namespace LuckParser.Models
             public int SwapCount;
         }
 
-        public readonly Dictionary<Target, Dictionary<Player, FinalStats[]>> StatsTarget;
-        public readonly Dictionary<Player, FinalStatsAll[]> StatsAll;
-
         public class FinalDefenses
         {
             //public long allHealReceived;

@@ -84,7 +84,7 @@ namespace LuckParser.Parser
                     mob.ComputeAdditionalCombatReplayData(this);
                 }
             }
-
+            FightData.Logic.ComputeMechanics(this);
             Statistics = new Statistics(this);
         }
     }

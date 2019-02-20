@@ -48,7 +48,10 @@ namespace LuckParser.Models.ParseModels
        
         private readonly List<Consumable> _consumeList = new List<Consumable>();
         private List<DeathRecap> _deathRecaps = new List<DeathRecap>();
+        // statistics
         private Dictionary<Target, List<Statistics.FinalDPS>> _dpsTarget;
+        private readonly Dictionary<Target, List<Statistics.FinalStats>> _statsTarget;
+        private readonly List<Statistics.FinalStatsAll> _statsAll;
         //weaponslist
         private string[] _weaponsArray;
 
@@ -127,6 +130,267 @@ namespace LuckParser.Models.ParseModels
                 return GetDPSAll(log);
             }
             return _dpsTarget[target];
+        }
+
+        public Statistics.FinalStatsAll GetStatsAll(ParsedLog log, int phaseIndex)
+        {
+            if (_statsAll == null)
+            {
+                SetStats(log);
+            }
+            return _statsAll[phaseIndex];
+        }
+
+        public Statistics.FinalStats GetStatsTarget(ParsedLog log, int phaseIndex, Target target)
+        {
+            if (_statsTarget == null)
+            {
+                SetStats(log);
+            }
+            return _statsTarget[target][phaseIndex];
+        }
+
+        public List<Statistics.FinalStatsAll> GetStatsAll(ParsedLog log)
+        {
+            if (_statsAll == null)
+            {
+                SetStats(log);
+            }
+            return _statsAll;
+        }
+
+        public List<Statistics.FinalStats> GetStatsTarget(ParsedLog log, Target target)
+        {
+            if (_statsTarget == null)
+            {
+                SetStats(log);
+            }
+            return _statsTarget[target];
+        }
+
+        private void FillFinalStats(ParsedLog log, List<DamageLog> dls, Statistics.FinalStats final, Dictionary<Target, Statistics.FinalStats> targetsFinal)
+        {
+            HashSet<long> nonCritable = new HashSet<long>
+                    {
+                        9292,
+                        5492,
+                        13014,
+                        30770,
+                        52370
+                    };
+            // (x - 1) / x
+            double fiveGain = 0.05 / 1.05;
+            double tenGain = 0.1 / 1.1;
+            foreach (DamageLog dl in dls)
+            {
+                if (!dl.IsIndirectDamage)
+                {
+                    foreach (var pair in targetsFinal)
+                    {
+                        Target target = pair.Key;
+                        if (dl.DstInstId == target.InstID && dl.Time <= log.FightData.ToFightSpace(target.LastAware) && dl.Time >= log.FightData.ToFightSpace(target.FirstAware))
+                        {
+                            Statistics.FinalStats targetFinal = pair.Value;
+                            if (dl.Result == ParseEnum.Result.Crit)
+                            {
+                                targetFinal.CriticalRate++;
+                                targetFinal.CriticalDmg += dl.Damage;
+                            }
+
+                            if (dl.IsNinety)
+                            {
+                                targetFinal.ScholarRate++;
+                                targetFinal.ScholarDmg += (int)Math.Round(fiveGain * dl.Damage);
+                            }
+
+                            if (dl.IsFifty)
+                            {
+                                targetFinal.EagleRate++;
+                                targetFinal.EagleDmg += (int)Math.Round(tenGain * dl.Damage);
+                            }
+
+                            if (dl.IsMoving)
+                            {
+                                targetFinal.MovingRate++;
+                                targetFinal.MovingDamage += (int)Math.Round(fiveGain * dl.Damage);
+                            }
+
+                            if (dl.IsFlanking)
+                            {
+                                targetFinal.FlankingDmg += (int)Math.Round(tenGain * dl.Damage);
+                                targetFinal.FlankingRate++;
+                            }
+
+                            if (dl.Result == ParseEnum.Result.Glance)
+                            {
+                                targetFinal.GlanceRate++;
+                            }
+
+                            if (dl.Result == ParseEnum.Result.Blind)
+                            {
+                                targetFinal.Missed++;
+                            }
+                            if (dl.Result == ParseEnum.Result.Interrupt)
+                            {
+                                targetFinal.Interrupts++;
+                            }
+
+                            if (dl.Result == ParseEnum.Result.Absorb)
+                            {
+                                targetFinal.Invulned++;
+                            }
+                            targetFinal.DirectDamageCount++;
+                            targetFinal.DirectDamage += dl.Damage;
+                            if (!nonCritable.Contains(dl.SkillId))
+                            {
+                                targetFinal.CritableDirectDamageCount++;
+                            }
+                        }
+                    }
+                    if (dl.Result == ParseEnum.Result.Crit)
+                    {
+                        final.CriticalRate++;
+                        final.CriticalDmg += dl.Damage;
+                    }
+
+                    if (dl.IsNinety)
+                    {
+                        final.ScholarRate++;
+                        final.ScholarDmg += (int)Math.Round(fiveGain * dl.Damage);
+                    }
+
+                    if (dl.IsFifty)
+                    {
+                        final.EagleRate++;
+                        final.EagleDmg += (int)Math.Round(tenGain * dl.Damage);
+                    }
+
+                    if (dl.IsMoving)
+                    {
+                        final.MovingRate++;
+                        final.MovingDamage += (int)Math.Round(fiveGain * dl.Damage);
+                    }
+
+                    if (dl.IsFlanking)
+                    {
+                        final.FlankingDmg += (int)Math.Round(tenGain * dl.Damage);
+                        final.FlankingRate++;
+                    }
+
+                    if (dl.Result == ParseEnum.Result.Glance)
+                    {
+                        final.GlanceRate++;
+                    }
+
+                    if (dl.Result == ParseEnum.Result.Blind)
+                    {
+                        final.Missed++;
+                    }
+                    if (dl.Result == ParseEnum.Result.Interrupt)
+                    {
+                        final.Interrupts++;
+                    }
+
+                    if (dl.Result == ParseEnum.Result.Absorb)
+                    {
+                        final.Invulned++;
+                    }
+                    final.DirectDamageCount++;
+                    final.DirectDamage += dl.Damage;
+                    if (!nonCritable.Contains(dl.SkillId))
+                    {
+                        final.CritableDirectDamageCount++;
+                    }
+                }
+            }
+        }
+
+        private void SetStats(ParsedLog log)
+        {
+            int phaseIndex = -1;
+            foreach (PhaseData phase in log.FightData.GetPhases(log))
+            {
+                phaseIndex++;
+                Dictionary<Target, Statistics.FinalStats> targetDict = new Dictionary<Target, Statistics.FinalStats>();
+                foreach (Target target in log.FightData.Logic.Targets)
+                {
+                    if (!_statsTarget.ContainsKey(target))
+                    {
+                        _statsTarget[target] = new List<Statistics.FinalStats>();
+                    }
+                    _statsTarget[target].Add(new Statistics.FinalStats());
+                    targetDict[target] = _statsTarget[target].Last();
+                }
+                Statistics.FinalStatsAll final = new Statistics.FinalStatsAll();
+                FillFinalStats(log, GetJustPlayerDamageLogs(null, log, phase.Start, phase.End), final, targetDict);
+                // If conjured sword, stop
+                if (Account == ":Conjured Sword")
+                {
+                    return;
+                }
+                foreach (CastLog cl in GetCastLogs(log, phase.Start, phase.End))
+                {
+                    if (cl.EndActivation == ParseEnum.Activation.CancelCancel)
+                    {
+                        final.Wasted++;
+                        final.TimeWasted += cl.ActualDuration;
+                    }
+                    if (cl.EndActivation == ParseEnum.Activation.CancelFire)
+                    {
+                        if (cl.ActualDuration < cl.ExpectedDuration)
+                        {
+                            final.Saved++;
+                            final.TimeSaved += cl.ExpectedDuration - cl.ActualDuration;
+                        }
+                    }
+                    if (cl.SkillId == SkillItem.WeaponSwapId)
+                    {
+                        final.SwapCount++;
+                    }
+                }
+                final.TimeSaved = Math.Round(final.TimeSaved / 1000.0, 3);
+                final.TimeWasted = Math.Round(final.TimeWasted / 1000.0, 3);
+
+                double avgBoons = 0;
+                foreach (long duration in GetBoonPresence(log, phaseIndex).Values)
+                {
+                    avgBoons += duration;
+                }
+                final.AvgBoons = avgBoons / phase.GetDuration();
+
+                double avgCondis = 0;
+                foreach (long duration in GetCondiPresence(log, phaseIndex).Values)
+                {
+                    avgCondis += duration;
+                }
+                final.AvgConditions = avgCondis / phase.GetDuration();
+
+                if (Properties.Settings.Default.ParseCombatReplay && log.FightData.Logic.CanCombatReplay)
+                {
+                    List<Point3D> positions = CombatReplay.Positions.Where(x => x.Time >= phase.Start && x.Time <= phase.End).ToList();
+                    int offset = CombatReplay.Positions.Count(x => x.Time < phase.Start);
+                    if (positions.Count > 1)
+                    {
+                        List<float> distances = new List<float>();
+                        for (int time = 0; time < positions.Count; time++)
+                        {
+
+                            float deltaX = positions[time].X - log.Statistics.StackCenterPositions[time + offset].X;
+                            float deltaY = positions[time].Y - log.Statistics.StackCenterPositions[time + offset].Y;
+                            //float deltaZ = positions[time].Z - StackCenterPositions[time].Z;
+
+
+                            distances.Add((float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY));
+                        }
+                        final.StackDist = distances.Sum() / distances.Count;
+                    }
+                    else
+                    {
+                        final.StackDist = -1;
+                    }
+
+                }
+            }
         }
 
         public List<DeathRecap> GetDeathRecaps(ParsedLog log)

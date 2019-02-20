@@ -254,8 +254,8 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
-                Statistics.FinalStats statsBoss = _statistics.StatsTarget[_log.LegacyTarget][player][phaseIndex];
+                Statistics.FinalStatsAll stats = player.GetStatsAll(_log, phaseIndex);
+                Statistics.FinalStats statsBoss = player.GetStatsTarget(_log, phaseIndex, _log.LegacyTarget);
 
                 WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
                 Math.Round((double)(statsBoss.CriticalRate) / statsBoss.CritableDirectDamageCount * 100,1).ToString(), statsBoss.CriticalRate.ToString(),statsBoss.CriticalDmg.ToString(),
@@ -289,7 +289,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
+                Statistics.FinalStatsAll stats = player.GetStatsAll(_log, phaseIndex);
 
                 WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
                 Math.Round((double)(stats.CriticalRate) / stats.CritableDirectDamageCount * 100,1).ToString(), stats.CriticalRate.ToString(),stats.CriticalDmg.ToString(),
@@ -368,7 +368,7 @@ namespace LuckParser.Builders
                 Dictionary<long, Statistics.FinalBuffs> uptimes = _statistics.SelfBuffs[player][phaseIndex];
 
                 WriteCell(player.Character);
-                WriteCell(Math.Round(_statistics.StatsAll[player][phaseIndex].AvgBoons, 1).ToString());
+                WriteCell(Math.Round(player.GetStatsAll(_log, phaseIndex).AvgBoons, 1).ToString());
                 foreach (Boon boon in listToUse)
                 {
                     if (uptimes.TryGetValue(boon.ID, out var value))
