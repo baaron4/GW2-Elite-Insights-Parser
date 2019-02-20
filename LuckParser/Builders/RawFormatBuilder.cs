@@ -25,7 +25,6 @@ namespace LuckParser.Builders
 {
     class RawFormatBuilder
     {
-        readonly SettingsContainer _settings;
 
         readonly ParsedLog _log;
         readonly List<PhaseData> _phases;
@@ -51,12 +50,11 @@ namespace LuckParser.Builders
             switches.CalculateMechanics = true;
         }
 
-        public RawFormatBuilder(StreamWriter sw, ParsedLog log, SettingsContainer settings, Statistics statistics, string[] UploadString)
+        public RawFormatBuilder(StreamWriter sw, ParsedLog log, Statistics statistics, string[] UploadString)
         {
             _log = log;
             _sw = sw;
             _phases = log.FightData.GetPhases(log);
-            _settings = settings;
 
             _statistics = statistics;
 
@@ -85,7 +83,7 @@ namespace LuckParser.Builders
             };
             var writer = new JsonTextWriter(_sw)
             {
-                Formatting = _settings.IndentJSON ? Newtonsoft.Json.Formatting.Indented : Newtonsoft.Json.Formatting.None
+                Formatting = Properties.Settings.Default.IndentJSON ? Newtonsoft.Json.Formatting.Indented : Newtonsoft.Json.Formatting.None
             };
             serializer.Serialize(writer, log);
         }
@@ -118,7 +116,7 @@ namespace LuckParser.Builders
             XmlDocument xml = JsonConvert.DeserializeXmlNode(json);
             XmlTextWriter xmlTextWriter = new XmlTextWriter(_sw)
             {
-                Formatting = _settings.IndentXML ? System.Xml.Formatting.Indented : System.Xml.Formatting.None
+                Formatting = Properties.Settings.Default.IndentXML ? System.Xml.Formatting.Indented : System.Xml.Formatting.None
             };
 
             xml.WriteTo(xmlTextWriter);

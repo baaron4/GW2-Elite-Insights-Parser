@@ -22,7 +22,6 @@ namespace LuckParser.Builders
     {
         private string _scriptVersion;
         private int _scriptVersionRev;
-        private readonly SettingsContainer _settings;
 
         private readonly ParsedLog _log;
         private readonly List<PhaseData> _phases;
@@ -33,7 +32,7 @@ namespace LuckParser.Builders
         private Dictionary<long, Boon> _usedBoons = new Dictionary<long, Boon>();
         private Dictionary<long, SkillItem> _usedSkills = new Dictionary<long, SkillItem>();
 
-        public HTMLBuilder(ParsedLog log, SettingsContainer settings, Statistics statistics, string[] uploadString)
+        public HTMLBuilder(ParsedLog log, Statistics statistics, string[] uploadString)
         {
             Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             _scriptVersion = version.Major + "." + version.Minor;
@@ -43,9 +42,6 @@ namespace LuckParser.Builders
             _scriptVersionRev = version.Revision;
             _log = log;
             _phases = log.FightData.GetPhases(log);
-
-            _settings = settings;
-            CombatReplayHelper.Settings = settings;
 
             _statistics = statistics;
 
@@ -666,7 +662,7 @@ namespace LuckParser.Builders
 
         private string ReplaceVariables(string html)
         {
-            html = html.Replace("${bootstrapTheme}", !_settings.LightTheme ? "slate" : "yeti");
+            html = html.Replace("${bootstrapTheme}", !Properties.Settings.Default.LightTheme ? "slate" : "yeti");
 
             html = html.Replace("${encounterStart}", _log.LogData.LogStart);
             html = html.Replace("${encounterEnd}", _log.LogData.LogEnd);
@@ -676,15 +672,15 @@ namespace LuckParser.Builders
             html = html.Replace("${recordedBy}", _log.LogData.PoV.Split(':')[0]);
 
             string uploadString = "";
-            if (_settings.UploadToDPSReports)
+            if (Properties.Settings.Default.UploadToDPSReports)
             {
                 uploadString += "<p>DPS Reports Link (EI): <a href=\"" + _uploadLink[0] + "\">" + _uploadLink[0] + "</a></p>";
             }
-            if (_settings.UploadToDPSReportsRH)
+            if (Properties.Settings.Default.UploadToDPSReportsRH)
             {
                 uploadString += "<p>DPS Reports Link (RH): <a href=\"" + _uploadLink[1] + "\">" + _uploadLink[1] + "</a></p>";
             }
-            if (_settings.UploadToRaidar)
+            if (Properties.Settings.Default.UploadToRaidar)
             {
                 uploadString += "<p>Raidar Link: <a href=\"" + _uploadLink[2] + "\">" + _uploadLink[2] + "</a></p>";
             }
@@ -723,7 +719,7 @@ namespace LuckParser.Builders
 
         private string BuildCombatReplayScript(string path)
         {
-            if (!_settings.ParseCombatReplay || !_log.FightData.Logic.CanCombatReplay)
+            if (!Properties.Settings.Default.ParseCombatReplay || !_log.FightData.Logic.CanCombatReplay)
             {
                 return "";
             }
@@ -751,18 +747,18 @@ namespace LuckParser.Builders
                 {
                 }
                 string content = "<script src=\"./" + jsFileName + "?version=" + _scriptVersionRev + "\"></script>\n";
-                content += "<script>"+ CombatReplayHelper.GetDynamicCombatReplayScript(_log, _settings.PollingRate, map)+ "</script>";
+                content += "<script>"+ CombatReplayHelper.GetDynamicCombatReplayScript(_log, GeneralHelper.PollingRate, map)+ "</script>";
                 return content;
             }
             else
             {
-                return CombatReplayHelper.CreateCombatReplayScript(_log, map, _settings.PollingRate);
+                return CombatReplayHelper.CreateCombatReplayScript(_log, map, GeneralHelper.PollingRate);
             }
         }
 
         private string BuildCombatReplayContent()
         {
-            if (!_settings.ParseCombatReplay || !_log.FightData.Logic.CanCombatReplay)
+            if (!Properties.Settings.Default.ParseCombatReplay || !_log.FightData.Logic.CanCombatReplay)
             {
                 return "";
             }
@@ -928,7 +924,7 @@ namespace LuckParser.Builders
 
         private string BuildCRLinkJs(string path)
         {
-            if (!(_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay))
+            if (!(Properties.Settings.Default.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay))
             {
                 return "";
             }
@@ -991,7 +987,7 @@ namespace LuckParser.Builders
             LogDataDto logData = new LogDataDto();
             foreach(Player player in _log.PlayerList)
             {
-                logData.Players.Add(new PlayerDto(player, _log, _settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay));
+                logData.Players.Add(new PlayerDto(player, _log, Properties.Settings.Default.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay));
             }
 
             foreach(DummyActor enemy in _log.MechanicData.GetEnemyList(0))
@@ -1001,7 +997,7 @@ namespace LuckParser.Builders
 
             foreach (Target target in _log.FightData.Logic.Targets)
             {
-                TargetDto targetDto = new TargetDto(target, _log, _settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay);
+                TargetDto targetDto = new TargetDto(target, _log, Properties.Settings.Default.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay);
                 
                 
                 logData.Targets.Add(targetDto);
@@ -1095,7 +1091,7 @@ namespace LuckParser.Builders
             logData.Success = _log.FightData.Success;
             logData.FightName = FilterStringChars(_log.FightData.Name);
             logData.FightIcon = _log.FightData.Logic.IconUrl;
-            logData.LightTheme = _settings.LightTheme;
+            logData.LightTheme = Properties.Settings.Default.LightTheme;
             logData.SingleGroup = _log.PlayerList.Where(x => x.Account != ":Conjured Sword").Select(x => x.Group).Distinct().Count() == 1;
             logData.NoMechanics = _log.FightData.Logic.MechanicList.Count == 3;
             return ToJson(logData);

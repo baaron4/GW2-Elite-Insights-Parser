@@ -26,16 +26,13 @@ namespace LuckParser.Models
             public bool CalculateMechanics = false;
         }
 
-        private readonly SettingsContainer _settings;
-
         private Statistics _statistics;
 
         private ParsedLog _log;
         private List<PhaseData> _phases;
 
-        public StatisticsCalculator(SettingsContainer settings)
+        public StatisticsCalculator()
         {
-            _settings = settings;
         }
 
         /// <summary>
@@ -52,7 +49,7 @@ namespace LuckParser.Models
             _phases = log.FightData.GetPhases(log);
 
             SetPresentBoons();
-            if (switches.CalculateCombatReplay && _settings.ParseCombatReplay)
+            if (switches.CalculateCombatReplay && Properties.Settings.Default.ParseCombatReplay)
             {
                 foreach (Player p in log.PlayerList)
                 {
@@ -60,13 +57,13 @@ namespace LuckParser.Models
                     {
                         continue;
                     }
-                    p.InitCombatReplay(log, _settings.PollingRate, false, true);
+                    p.InitCombatReplay(log, GeneralHelper.PollingRate, false, true);
                 }
                 foreach (Target target in log.FightData.Logic.Targets)
                 {
-                    target.InitCombatReplay(log, _settings.PollingRate, true, log.FightData.GetMainTargets(log).Contains(target));
+                    target.InitCombatReplay(log, GeneralHelper.PollingRate, true, log.FightData.GetMainTargets(log).Contains(target));
                 }
-                log.FightData.Logic.InitTrashMobCombatReplay(log, _settings.PollingRate);
+                log.FightData.Logic.InitTrashMobCombatReplay(log, GeneralHelper.PollingRate);
 
                 // Ensuring all combat replays are initialized before extra data (and agent interaction) is computed
                 foreach (Player p in log.PlayerList)
@@ -391,7 +388,7 @@ namespace LuckParser.Models
             CombatData combatData = _log.CombatData;
             final.SwapCount = p.GetCastLogs(_log, 0, _log.FightData.FightDuration).Count(x => x.SkillId == SkillItem.WeaponSwapId);
 
-            if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay)
+            if (Properties.Settings.Default.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay)
             {
                 if (_statistics.StackCenterPositions == null)
                 {
@@ -429,7 +426,7 @@ namespace LuckParser.Models
                         x = x / activePlayers;
                         y = y / activePlayers;
                         z = z / activePlayers;
-                        _statistics.StackCenterPositions.Add(new Point3D(x, y, z, _settings.PollingRate * time));
+                        _statistics.StackCenterPositions.Add(new Point3D(x, y, z, GeneralHelper.PollingRate * time));
                     }
                 }
                 List<Point3D> positions = p.CombatReplay.Positions.Where(x => x.Time >= phase.Start && x.Time <= phase.End).ToList();

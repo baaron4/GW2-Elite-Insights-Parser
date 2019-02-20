@@ -14,8 +14,6 @@ namespace LuckParser.Builders
 {
     class CombatReplayHelper
     {
-        public static SettingsContainer Settings;
-  
         public static string CreateCombatReplayInterface((int width, int height) canvasSize, ParsedLog log)
         {
             string replayHTML = Properties.Resources.tmplCombatReplay;

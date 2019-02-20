@@ -26,15 +26,13 @@ namespace LuckParser.Parser
         private AgentData _agentData;
         private readonly List<AgentItem> _allAgentsList = new List<AgentItem>();
         private readonly SkillData _skillData = new SkillData();
-        private readonly SettingsContainer _settings;
         private List<CombatItem> _combatItems = new List<CombatItem>();
         private List<Player> _playerList = new List<Player>();
         private Target _target;
         private byte _revision;
 
-        public ParsingController(SettingsContainer settings)
+        public ParsingController()
         {
-            _settings = settings;
         }
 
         //Main Parse method------------------------------------------------------------------------------------------------------------------------------------------------
@@ -140,7 +138,7 @@ namespace LuckParser.Parser
                 ParseHelper.SafeSkip(stream, 1);
 
                 //Save
-                _fightData = new FightData(id, _settings.ParsePhases);
+                _fightData = new FightData(id, Properties.Settings.Default.ParsePhases);
             }
         }
 

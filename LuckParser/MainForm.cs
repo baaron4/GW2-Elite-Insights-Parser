@@ -155,9 +155,8 @@ namespace LuckParser
                 Task<string> RaidarTask = null;
                 string[] uploadresult = new string[3] { "", "", "" };
                 bg.UpdateProgress(rowData, " Working...", 0);
-
-                SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
-                ParsingController parser = new ParsingController(settings);
+                
+                ParsingController parser = new ParsingController();
 
                 if (!GeneralHelper.HasFormat())
                 {
@@ -258,7 +257,7 @@ namespace LuckParser
                     string encounterLengthTerm = Properties.Settings.Default.AddDuration ? "_" + (log.FightData.FightDuration / 1000).ToString() + "s" : "";
                     string PoVClassTerm = Properties.Settings.Default.AddPoVProf ? "_" + log.PlayerList.Find(x => x.AgentItem.Name.Split(':')[0] == log.LogData.PoV.Split(':')[0]).Prof.ToLower() : "";
 
-                    StatisticsCalculator statisticsCalculator = new StatisticsCalculator(settings);
+                    StatisticsCalculator statisticsCalculator = new StatisticsCalculator();
                     StatisticsCalculator.Switches switches = new StatisticsCalculator.Switches();
                     if (Properties.Settings.Default.SaveOutHTML)
                     {
@@ -290,7 +289,7 @@ namespace LuckParser
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         using (var sw = new StreamWriter(fs))
                         {
-                            var builder = new HTMLBuilder(log, settings, statistics, uploadresult);
+                            var builder = new HTMLBuilder(log, statistics, uploadresult);
                             builder.CreateHTML(sw, saveDirectory.FullName);
                         }
                     }
@@ -306,7 +305,7 @@ namespace LuckParser
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                         {
-                            var builder = new CSVBuilder(sw, ",", log, settings, statistics, uploadresult);
+                            var builder = new CSVBuilder(sw, ",", log, statistics, uploadresult);
                             builder.CreateCSV();
                         }
                     }
@@ -322,7 +321,7 @@ namespace LuckParser
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         using (var sw = new StreamWriter(fs, Encoding.UTF8))
                         {
-                            var builder = new RawFormatBuilder(sw, log, settings, statistics, uploadresult);
+                            var builder = new RawFormatBuilder(sw, log, statistics, uploadresult);
                             builder.CreateJSON();
                         }
                     }
@@ -339,7 +338,7 @@ namespace LuckParser
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         using (var sw = new StreamWriter(fs, Encoding.UTF8))
                         {
-                            var builder = new RawFormatBuilder(sw, log, settings, statistics, uploadresult);
+                            var builder = new RawFormatBuilder(sw, log, statistics, uploadresult);
                             builder.CreateXML();
                         }
                     }

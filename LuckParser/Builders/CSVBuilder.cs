@@ -13,8 +13,6 @@ namespace LuckParser.Builders
 {
     class CSVBuilder
     {
-        readonly SettingsContainer _settings;
-
         readonly ParsedLog _log;
         readonly List<PhaseData> _phases;
 
@@ -36,12 +34,11 @@ namespace LuckParser.Builders
             switches.CalculateMechanics = true;
         }
        
-        public CSVBuilder(StreamWriter sw, string delimiter,ParsedLog log, SettingsContainer settings, Statistics statistics,string[] uploadresult)
+        public CSVBuilder(StreamWriter sw, string delimiter,ParsedLog log, Statistics statistics,string[] uploadresult)
         {
             _log = log;
             _sw = sw;
             _delimiter = delimiter;
-            _settings = settings;
             _phases = log.FightData.GetPhases(log);
 
             _statistics = statistics;
@@ -96,7 +93,7 @@ namespace LuckParser.Builders
             WriteLine(new [] { "Recorded By", _log.LogData.PoV.Split(':')[0] });
             WriteLine(new [] { "Time Start", _log.LogData.LogStart });
             WriteLine(new [] { "Time End", _log.LogData.LogEnd });
-            if (_settings.UploadToDPSReports || _settings.UploadToDPSReportsRH || _settings.UploadToRaidar)
+            if (Properties.Settings.Default.UploadToDPSReports || Properties.Settings.Default.UploadToDPSReportsRH || Properties.Settings.Default.UploadToRaidar)
             {
                 WriteLine(new[] { "Links", _uploadResult[0], _uploadResult[1], _uploadResult[2] });
             }
