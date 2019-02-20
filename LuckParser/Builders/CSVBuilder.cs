@@ -199,9 +199,9 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalDPS dps = _statistics.DpsAll[player][phaseIndex];
+                Statistics.FinalDPS dps = player.GetDPSAll(_log, phaseIndex);
                 Statistics.FinalDefenses defense = _statistics.Defenses[player][phaseIndex];
-                Statistics.FinalDPS dpsBoss = _statistics.DpsTarget[_log.LegacyTarget][player][phaseIndex];
+                Statistics.FinalDPS dpsBoss = player.GetDPSTarget(_log, phaseIndex, _log.LegacyTarget);
                 string deathString = defense.DeadCount.ToString();
                 string deadthTooltip = "";
                 if (defense.DeadCount > 0)

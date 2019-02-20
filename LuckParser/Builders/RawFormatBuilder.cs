@@ -204,7 +204,7 @@ namespace LuckParser.Builders
                     TotalHealth = target.Health,
                     AvgBoons = _statistics.AvgTargetBoons[target],
                     AvgConditions = _statistics.AvgTargetConditions[target],
-                    DpsAll = _statistics.TargetDps[target].Select(x => new JsonDPS(x)).ToArray(),
+                    DpsAll = target.GetDPSAll(_log).Select(x => new JsonDPS(x)).ToArray(),
                     Buffs = BuildTargetBuffs(_statistics.TargetBuffs[target], target),
                     HitboxHeight = target.HitboxHeight,
                     HitboxWidth = target.HitboxWidth,
@@ -248,8 +248,8 @@ namespace LuckParser.Builders
                     Profession = player.Prof,
                     Damage1S = BuildTotal1SDamage(player),
                     TargetDamage1S = BuildTarget1SDamage(player),
-                    DpsAll = _statistics.DpsAll[player].Select(x => new JsonDPS(x)).ToArray(),
-                    DpsTargets = BuildDPSTarget(_statistics.DpsTarget, player),
+                    DpsAll = player.GetDPSAll(_log).Select(x => new JsonDPS(x)).ToArray(),
+                    DpsTargets = BuildDPSTarget(player),
                     StatsAll = _statistics.StatsAll[player].Select(x => new JsonStatsAll(x)).ToArray(),
                     StatsTargets = BuildStatsTarget(_statistics.StatsTarget, player),
                     Defenses = _statistics.Defenses[player].Select(x => new JsonDefenses(x)).ToArray(),
@@ -300,13 +300,13 @@ namespace LuckParser.Builders
             return tarList;
         }
 
-        private JsonDPS[][] BuildDPSTarget(Dictionary<Target, Dictionary<Player, Statistics.FinalDPS[]>> stats, Player p)
+        private JsonDPS[][] BuildDPSTarget(Player p)
         {
             JsonDPS[][] res = new JsonDPS[_log.FightData.Logic.Targets.Count][];
             int i = 0;
             foreach (Target tar in _log.FightData.Logic.Targets)
             {
-                res[i++] = stats[tar][p].Select(x => new JsonDPS(x)).ToArray();
+                res[i++] = p.GetDPSTarget(_log, tar).Select(x => new JsonDPS(x)).ToArray();
             }
             return res;
         }

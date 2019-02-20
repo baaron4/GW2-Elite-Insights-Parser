@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using LuckParser.Exceptions;
+using LuckParser.Models;
 using LuckParser.Models.Logic;
 using LuckParser.Models.ParseModels;
 
@@ -19,6 +20,7 @@ namespace LuckParser.Parser
         public bool IsBenchmarkMode => FightData.Logic.Mode == FightLogic.ParseMode.Golem;
         public readonly Dictionary<string, List<Player>> PlayerListBySpec;
         public readonly Target LegacyTarget;
+        public readonly Statistics Statistics;
 
         
 
@@ -35,7 +37,6 @@ namespace LuckParser.Parser
             MechanicData = new MechanicData(fightData);
             PlayerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
             PlayerIDs = new HashSet<ushort>(playerList.Select(x => x.InstID));
-
             FightData.SetSuccess(this);
             FightData.SetCM(this);
             CombatData.Update(FightData.FightEnd);
@@ -47,6 +48,44 @@ namespace LuckParser.Parser
             {
                 throw new SkipException();
             }
+
+            // init combat replay
+            if (Properties.Settings.Default.ParseCombatReplay && FightData.Logic.CanCombatReplay)
+            {
+                foreach (Player p in PlayerList)
+                {
+                    if (p.Account == ":Conjured Sword")
+                    {
+                        continue;
+                    }
+                    p.InitCombatReplay(this, GeneralHelper.PollingRate, false, true);
+                }
+                foreach (Target tar in FightData.Logic.Targets)
+                {
+                    tar.InitCombatReplay(this, GeneralHelper.PollingRate, true, FightData.GetMainTargets(this).Contains(tar));
+                }
+                FightData.Logic.InitTrashMobCombatReplay(this, GeneralHelper.PollingRate);
+
+                // Ensuring all combat replays are initialized before extra data (and agent interaction) is computed
+                foreach (Player p in PlayerList)
+                {
+                    if (p.Account == ":Conjured Sword")
+                    {
+                        continue;
+                    }
+                    p.ComputeAdditionalCombatReplayData(this);
+                }
+                foreach (Target tar in FightData.Logic.Targets)
+                {
+                    tar.ComputeAdditionalCombatReplayData(this);
+                }
+                foreach (Mob mob in FightData.Logic.TrashMobs)
+                {
+                    mob.ComputeAdditionalCombatReplayData(this);
+                }
+            }
+
+            Statistics = new Statistics(this);
         }
     }
 }

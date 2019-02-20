@@ -43,50 +43,6 @@ namespace LuckParser.Models
         /// <returns></returns>
         public Statistics CalculateStatistics(ParsedLog log, Switches switches)
         {
-            _statistics = new Statistics();
-
-            _log = log;
-            _phases = log.FightData.GetPhases(log);
-
-            SetPresentBoons();
-            if (switches.CalculateCombatReplay && Properties.Settings.Default.ParseCombatReplay)
-            {
-                foreach (Player p in log.PlayerList)
-                {
-                    if (p.Account == ":Conjured Sword")
-                    {
-                        continue;
-                    }
-                    p.InitCombatReplay(log, GeneralHelper.PollingRate, false, true);
-                }
-                foreach (Target target in log.FightData.Logic.Targets)
-                {
-                    target.InitCombatReplay(log, GeneralHelper.PollingRate, true, log.FightData.GetMainTargets(log).Contains(target));
-                }
-                log.FightData.Logic.InitTrashMobCombatReplay(log, GeneralHelper.PollingRate);
-
-                // Ensuring all combat replays are initialized before extra data (and agent interaction) is computed
-                foreach (Player p in log.PlayerList)
-                {
-                    if (p.Account == ":Conjured Sword")
-                    {
-                        continue;
-                    }
-                    p.ComputeAdditionalCombatReplayData(log);
-                }
-                foreach (Target target in log.FightData.Logic.Targets)
-                {
-                    target.ComputeAdditionalCombatReplayData(log);
-                }
-
-                foreach (Mob mob in log.FightData.Logic.TrashMobs)
-                {
-                    mob.ComputeAdditionalCombatReplayData(log);
-                }
-
-
-            }
-            if (switches.CalculateDPS) CalculateDPS();
             if (switches.CalculateBoons) CalculateBoons();
             if (switches.CalculateStats) CalculateStats();
             if (switches.CalculateDefense) CalculateDefenses();
@@ -97,94 +53,9 @@ namespace LuckParser.Models
             {
                 log.FightData.Logic.ComputeMechanics(log);
             }
-            // target health
-            _statistics.TargetsHealth = new Dictionary<Target, double[]>[_phases.Count];
-            for (int i = 0; i < _phases.Count; i++)
-            {
-                _statistics.TargetsHealth[i] = new Dictionary<Target, double[]>();
-            }
-            foreach (Target target in _log.FightData.Logic.Targets)
-            {
-                List<double[]> hps = target.Get1SHealthGraph(_log, _phases);
-                for (int i = 0; i < hps.Count; i++)
-                {
-                    _statistics.TargetsHealth[i][target] = hps[i];
-                }
-            }
             //
 
             return _statistics;
-        }
-
-        private FinalDPS GetFinalDPS(AbstractActor player, int phaseIndex, Target target)
-        {
-            PhaseData phase = _phases[phaseIndex];
-            double phaseDuration = (phase.GetDuration()) / 1000.0;
-            int damage;
-            double dps = 0.0;
-            FinalDPS final = new FinalDPS();
-            //DPS
-            damage = player.GetDamageLogs(target, _log,
-                    phase.Start, phase.End).Sum(x => x.Damage);
-
-            if (phaseDuration > 0)
-            {
-                dps = damage / phaseDuration;
-            }
-            final.Dps = (int)Math.Round(dps);
-            final.Damage = damage;
-            //Condi DPS
-            damage = player.GetDamageLogs(target, _log,
-                    phase.Start, phase.End).Sum(x => x.IsCondi ? x.Damage : 0);
-
-            if (phaseDuration > 0)
-            {
-                dps = damage / phaseDuration;
-            }
-            final.CondiDps = (int)Math.Round(dps);
-            final.CondiDamage = damage;
-            //Power DPS
-            damage = final.Damage - final.CondiDamage;
-            if (phaseDuration > 0)
-            {
-                dps = damage / phaseDuration;
-            }
-            final.PowerDps = (int)Math.Round(dps);
-            final.PowerDamage = damage;
-            return final;
-        }
-
-        private void CalculateDPS()
-        {
-            foreach (Player player in _log.PlayerList)
-            {
-                FinalDPS[] phaseDps = new FinalDPS[_phases.Count];
-                for (int phaseIndex = 0; phaseIndex < _phases.Count; phaseIndex++)
-                {
-                    phaseDps[phaseIndex] = GetFinalDPS(player, phaseIndex, null);
-                }
-                _statistics.DpsAll[player] = phaseDps;
-            }
-            foreach (Target target in _log.FightData.Logic.Targets)
-            {
-                Dictionary<Player, FinalDPS[]> stats = new Dictionary<Player, FinalDPS[]>();
-                foreach (Player player in _log.PlayerList)
-                {
-                    FinalDPS[] phaseDpsTarget = new FinalDPS[_phases.Count];
-                    for (int phaseIndex = 0; phaseIndex < _phases.Count; phaseIndex++)
-                    {
-                        phaseDpsTarget[phaseIndex] = GetFinalDPS(player, phaseIndex, target);
-                    }
-                    stats[player] = phaseDpsTarget;
-                }
-                _statistics.DpsTarget[target] = stats;
-                FinalDPS[] phaseTargetDps = new FinalDPS[_phases.Count];
-                for (int phaseIndex = 0; phaseIndex < _phases.Count; phaseIndex++)
-                {
-                    phaseTargetDps[phaseIndex] = GetFinalDPS(target, phaseIndex, null);
-                }
-                _statistics.TargetDps[target] = phaseTargetDps;
-            }
         }
 
         private void FillFinalStats(List<DamageLog> dls, FinalStats final, Dictionary<Target, FinalStats> targetsFinal)
@@ -390,45 +261,6 @@ namespace LuckParser.Models
 
             if (Properties.Settings.Default.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay)
             {
-                if (_statistics.StackCenterPositions == null)
-                {
-                    _statistics.StackCenterPositions = new List<Point3D>();
-                    List<List<Point3D>> GroupsPosList = new List<List<Point3D>>();
-                    foreach (Player player in _log.PlayerList)
-                    {
-                        if (player.Account == ":Conjured Sword")
-                        {
-                            continue;
-                        }
-                        GroupsPosList.Add(player.CombatReplay.GetActivePositions());
-                    }
-                    for (int time = 0; time < GroupsPosList[0].Count; time++)
-                    {
-                        float x = 0;
-                        float y = 0;
-                        float z = 0;
-                        int activePlayers = GroupsPosList.Count;
-                        foreach (List<Point3D> points in GroupsPosList)
-                        {
-                            Point3D point = points[time];
-                            if (point != null)
-                            {
-                                x += point.X;
-                                y += point.Y;
-                                z += point.Z;
-                            }
-                            else
-                            {
-                                activePlayers--;
-                            }
-
-                        }
-                        x = x / activePlayers;
-                        y = y / activePlayers;
-                        z = z / activePlayers;
-                        _statistics.StackCenterPositions.Add(new Point3D(x, y, z, GeneralHelper.PollingRate * time));
-                    }
-                }
                 List<Point3D> positions = p.CombatReplay.Positions.Where(x => x.Time >= phase.Start && x.Time <= phase.End).ToList();
                 int offset = p.CombatReplay.Positions.Count(x => x.Time < phase.Start);
                 if (positions.Count > 1)

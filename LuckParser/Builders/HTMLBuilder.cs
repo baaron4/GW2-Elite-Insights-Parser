@@ -80,7 +80,7 @@ namespace LuckParser.Builders
             return new TargetChartDataDto
             {
                 Total = target.Get1SDamageList(_log, phaseIndex, phase, null),
-                Health = _statistics.TargetsHealth[phaseIndex][target]
+                Health = target.Get1SHealthGraph(_log, _phases)[phaseIndex]
             };
         }
 
@@ -112,7 +112,7 @@ namespace LuckParser.Builders
 
             foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalDPS dpsAll = _statistics.DpsAll[player][phaseIndex];
+                Statistics.FinalDPS dpsAll = player.GetDPSAll(_log, phaseIndex);
                 list.Add(PhaseDto.GetDPSStatData(dpsAll));
             }
             return list;
@@ -130,7 +130,7 @@ namespace LuckParser.Builders
                 foreach (Target target in phase.Targets)
                 {
                     List<object> tar = new List<object>();
-                    playerData.Add(PhaseDto.GetDPSStatData(_statistics.DpsTarget[target][player][phaseIndex]));
+                    playerData.Add(PhaseDto.GetDPSStatData(player.GetDPSTarget(_log, phaseIndex, target)));
                 }
                 list.Add(playerData);
             }
@@ -417,7 +417,7 @@ namespace LuckParser.Builders
         /// <param name="phaseIndex"></param>
         private DmgDistributionDto BuildPlayerDMGDistData(Player p, Target target, int phaseIndex)
         {
-            Statistics.FinalDPS dps = target != null ? _statistics.DpsTarget[target][p][phaseIndex] : _statistics.DpsAll[p][phaseIndex];
+            Statistics.FinalDPS dps = p.GetDPSTarget(_log, phaseIndex, target);
             return _BuildDMGDistData(dps, p, target, phaseIndex);
         }
 
@@ -426,7 +426,7 @@ namespace LuckParser.Builders
         /// </summary>
         private DmgDistributionDto BuildTargetDMGDistData(Target target, int phaseIndex)
         {
-            Statistics.FinalDPS dps = _statistics.TargetDps[target][phaseIndex];
+            Statistics.FinalDPS dps = target.GetDPSAll(_log, phaseIndex);
             return _BuildDMGDistData(dps, target, null, phaseIndex);
         }
 
@@ -447,7 +447,7 @@ namespace LuckParser.Builders
         /// </summary>
         private DmgDistributionDto BuildPlayerMinionDMGDistData(Player p, Minions minions, Target target, int phaseIndex)
         {
-            Statistics.FinalDPS dps = target != null ? _statistics.DpsTarget[target][p][phaseIndex] : _statistics.DpsAll[p][phaseIndex];
+            Statistics.FinalDPS dps = p.GetDPSTarget(_log, phaseIndex, target);
 
             return _BuildDMGDistData(dps, p, minions, target, phaseIndex);
         }
@@ -457,7 +457,7 @@ namespace LuckParser.Builders
         /// </summary>
         private DmgDistributionDto BuildTargetMinionDMGDistData(Target target, Minions minions, int phaseIndex)
         {
-            Statistics.FinalDPS dps = _statistics.TargetDps[target][phaseIndex];
+            Statistics.FinalDPS dps = target.GetDPSAll(_log, phaseIndex);
             return _BuildDMGDistData(dps, target, minions, null, phaseIndex);
         }
 

@@ -48,6 +48,7 @@ namespace LuckParser.Models.ParseModels
        
         private readonly List<Consumable> _consumeList = new List<Consumable>();
         private List<DeathRecap> _deathRecaps = new List<DeathRecap>();
+        private Dictionary<Target, List<Statistics.FinalDPS>> _dpsTarget;
         //weaponslist
         private string[] _weaponsArray;
 
@@ -84,6 +85,48 @@ namespace LuckParser.Models.ParseModels
                 }
             }
             return reses;
+        }
+
+        public Statistics.FinalDPS GetDPSTarget(ParsedLog log, int phaseIndex, Target target)
+        {
+            if (_dpsTarget == null)
+            {
+                _dpsTarget = new Dictionary<Target, List<Statistics.FinalDPS>>();
+                foreach (Target tar in log.FightData.Logic.Targets)
+                {
+                    _dpsTarget[tar] = new List<Statistics.FinalDPS>();
+                    foreach (PhaseData phase in log.FightData.GetPhases(log))
+                    {
+                        _dpsTarget[tar].Add(GetFinalDPS(log, phase, tar));
+                    }
+                }
+            }
+            if (target == null)
+            {
+                return GetDPSAll(log, phaseIndex);
+            }
+            return _dpsTarget[target][phaseIndex];
+        }
+
+        public List<Statistics.FinalDPS> GetDPSTarget(ParsedLog log, Target target)
+        {
+            if (_dpsTarget == null)
+            {
+                _dpsTarget = new Dictionary<Target, List<Statistics.FinalDPS>>();
+                foreach (Target tar in log.FightData.Logic.Targets)
+                {
+                    _dpsTarget[tar] = new List<Statistics.FinalDPS>();
+                    foreach (PhaseData phase in log.FightData.GetPhases(log))
+                    {
+                        _dpsTarget[tar].Add(GetFinalDPS(log, phase, tar));
+                    }
+                }
+            }
+            if (target == null)
+            {
+                return GetDPSAll(log);
+            }
+            return _dpsTarget[target];
         }
 
         public List<DeathRecap> GetDeathRecaps(ParsedLog log)

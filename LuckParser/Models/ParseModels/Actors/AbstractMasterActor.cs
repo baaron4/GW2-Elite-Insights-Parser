@@ -37,6 +37,8 @@ namespace LuckParser.Models.ParseModels
         private readonly Dictionary<string, Minions> _minions = new Dictionary<string, Minions>();
         // Replay
         public CombatReplay CombatReplay { get; protected set; }
+        // Statistics
+        private List<Statistics.FinalDPS> _dpsAll;
 
         protected AbstractMasterActor(AgentItem agent) : base(agent)
         {
@@ -159,6 +161,69 @@ namespace LuckParser.Models.ParseModels
                 SetBoonStatus(log);
             }
             return _condiPresence[phaseIndex];
+        }
+
+        public Statistics.FinalDPS GetDPSAll(ParsedLog log, int phaseIndex)
+        {
+            if (_dpsAll == null)
+            {
+                _dpsAll = new List<Statistics.FinalDPS>();
+                foreach (PhaseData phase in log.FightData.GetPhases(log))
+                {
+                    _dpsAll.Add(GetFinalDPS(log, phase, null));
+                }
+            }
+            return _dpsAll[phaseIndex];
+        }
+
+        public List<Statistics.FinalDPS> GetDPSAll(ParsedLog log)
+        {
+            if (_dpsAll == null)
+            {
+                _dpsAll = new List<Statistics.FinalDPS>();
+                foreach (PhaseData phase in log.FightData.GetPhases(log))
+                {
+                    _dpsAll.Add(GetFinalDPS(log, phase, null));
+                }
+            }
+            return _dpsAll;
+        }
+
+        protected Statistics.FinalDPS GetFinalDPS(ParsedLog log, PhaseData phase, Target target)
+        {
+            double phaseDuration = (phase.GetDuration()) / 1000.0;
+            int damage;
+            double dps = 0.0;
+            Statistics.FinalDPS final = new Statistics.FinalDPS();
+            //DPS
+            damage = GetDamageLogs(target, log,
+                    phase.Start, phase.End).Sum(x => x.Damage);
+
+            if (phaseDuration > 0)
+            {
+                dps = damage / phaseDuration;
+            }
+            final.Dps = (int)Math.Round(dps);
+            final.Damage = damage;
+            //Condi DPS
+            damage = GetDamageLogs(target, log,
+                    phase.Start, phase.End).Sum(x => x.IsCondi ? x.Damage : 0);
+
+            if (phaseDuration > 0)
+            {
+                dps = damage / phaseDuration;
+            }
+            final.CondiDps = (int)Math.Round(dps);
+            final.CondiDamage = damage;
+            //Power DPS
+            damage = final.Damage - final.CondiDamage;
+            if (phaseDuration > 0)
+            {
+                dps = damage / phaseDuration;
+            }
+            final.PowerDps = (int)Math.Round(dps);
+            final.PowerDamage = damage;
+            return final;
         }
 
         public void InitCombatReplay(ParsedLog log, int pollingRate, bool trim, bool forceInterpolate)
