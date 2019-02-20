@@ -28,6 +28,7 @@ namespace LuckParser.Builders
         readonly SettingsContainer _settings;
 
         readonly ParsedLog _log;
+        readonly List<PhaseData> _phases;
 
         readonly Statistics _statistics;
         readonly StreamWriter _sw;
@@ -54,6 +55,7 @@ namespace LuckParser.Builders
         {
             _log = log;
             _sw = sw;
+            _phases = log.FightData.GetPhases(log);
             _settings = settings;
 
             _statistics = statistics;
@@ -276,10 +278,10 @@ namespace LuckParser.Builders
 
         private List<int>[] BuildTotal1SDamage(AbstractMasterActor p)
         {
-            List<int>[] list = new List<int>[_statistics.Phases.Count];
-            for (int i = 0; i < _statistics.Phases.Count; i++)
+            List<int>[] list = new List<int>[_phases.Count];
+            for (int i = 0; i < _phases.Count; i++)
             {
-                list[i] = p.Get1SDamageList(_log, i, _statistics.Phases[i], null);
+                list[i] = p.Get1SDamageList(_log, i, _phases[i], null);
             }
             return list;
         }
@@ -290,10 +292,10 @@ namespace LuckParser.Builders
             for (int j = 0; j < _log.FightData.Logic.Targets.Count; j++)
             {
                 Target target = _log.FightData.Logic.Targets[j];
-                List<int>[] list = new List<int>[_statistics.Phases.Count];
-                for (int i = 0; i < _statistics.Phases.Count; i++)
+                List<int>[] list = new List<int>[_phases.Count];
+                for (int i = 0; i < _phases.Count; i++)
                 {
-                    list[i] = p.Get1SDamageList(_log, i, _statistics.Phases[i], target);
+                    list[i] = p.Get1SDamageList(_log, i, _phases[i], target);
                 }
                 tarList[j] = list;
             }
@@ -420,10 +422,10 @@ namespace LuckParser.Builders
 
         private List<JsonDamageDist>[] BuildDamageDist(AbstractMasterActor p, Target target)
         {
-            List<JsonDamageDist>[] res = new List<JsonDamageDist>[_statistics.Phases.Count];
-            for (int i = 0; i < _statistics.Phases.Count; i++)
+            List<JsonDamageDist>[] res = new List<JsonDamageDist>[_phases.Count];
+            for (int i = 0; i < _phases.Count; i++)
             {
-                PhaseData phase = _statistics.Phases[i];
+                PhaseData phase = _phases[i];
                 res[i] = BuildDamageDist(p.GetJustPlayerDamageLogs(target, _log, phase.Start, phase.End));
             }
             return res;
@@ -431,10 +433,10 @@ namespace LuckParser.Builders
 
         private List<JsonDamageDist>[] BuildDamageTaken(AbstractMasterActor p)
         {
-            List<JsonDamageDist>[] res = new List<JsonDamageDist>[_statistics.Phases.Count];
-            for (int i = 0; i < _statistics.Phases.Count; i++)
+            List<JsonDamageDist>[] res = new List<JsonDamageDist>[_phases.Count];
+            for (int i = 0; i < _phases.Count; i++)
             {
-                PhaseData phase = _statistics.Phases[i];
+                PhaseData phase = _phases[i];
                 res[i] = BuildDamageDist(p.GetDamageTakenLogs(null, _log, phase.Start, phase.End));
             }
             return res;
@@ -442,10 +444,10 @@ namespace LuckParser.Builders
 
         private List<JsonDamageDist>[] BuildDamageDist(Minions p, Target target)
         {
-            List<JsonDamageDist>[] res = new List<JsonDamageDist>[_statistics.Phases.Count];
-            for (int i = 0; i < _statistics.Phases.Count; i++)
+            List<JsonDamageDist>[] res = new List<JsonDamageDist>[_phases.Count];
+            for (int i = 0; i < _phases.Count; i++)
             {
-                PhaseData phase = _statistics.Phases[i];
+                PhaseData phase = _phases[i];
                 res[i] = BuildDamageDist(p.GetDamageLogs(target, _log, phase.Start, phase.End));
             }
             return res;
@@ -554,7 +556,7 @@ namespace LuckParser.Builders
         {
             log.Phases = new List<JsonPhase>();
 
-            foreach (var phase in _statistics.Phases)
+            foreach (var phase in _phases)
             {
                 JsonPhase phaseJson = new JsonPhase(phase);
                 foreach (Target tar in phase.Targets)
@@ -562,9 +564,9 @@ namespace LuckParser.Builders
                     phaseJson.Targets.Add(_log.FightData.Logic.Targets.IndexOf(tar));
                 }
                 log.Phases.Add(phaseJson);
-                for (int j = 1; j < _statistics.Phases.Count; j++)
+                for (int j = 1; j < _phases.Count; j++)
                 {
-                    PhaseData curPhase = _statistics.Phases[j];
+                    PhaseData curPhase = _phases[j];
                     if (curPhase.Start < phaseJson.Start || curPhase.End > phaseJson.End ||
                          (curPhase.Start == phaseJson.Start && curPhase.End == phaseJson.End))
                     {
@@ -581,7 +583,7 @@ namespace LuckParser.Builders
 
         private List<JsonTargetBuffs> BuildTargetBuffs(Dictionary<long, Statistics.FinalTargetBuffs>[] statBoons, Target target)
         {
-            int phases = _statistics.Phases.Count;
+            int phases = _phases.Count;
             var boons = new List<JsonTargetBuffs>();
 
             foreach (var pair in statBoons[0])
@@ -591,7 +593,7 @@ namespace LuckParser.Builders
                     _buffDesc["b" + pair.Key] = new JsonLog.BuffDesc(Boon.BoonsByIds[pair.Key]);
                 }
                 List<JsonTargetBuffsData> data = new List<JsonTargetBuffsData>();
-                for (int i = 0; i < _statistics.Phases.Count; i++)
+                for (int i = 0; i < _phases.Count; i++)
                 {
                     JsonTargetBuffsData value = new JsonTargetBuffsData(statBoons[i][pair.Key]);
                     data.Add(value);
@@ -611,7 +613,7 @@ namespace LuckParser.Builders
         private List<JsonPlayerBuffs> BuildPlayerBuffGenerations(Dictionary<long, Statistics.FinalBuffs>[] statUptimes, Player player)
         {
             var uptimes = new List<JsonPlayerBuffs>();
-            int phases = _statistics.Phases.Count;
+            int phases = _phases.Count;
             foreach (var pair in statUptimes[0])
             {
                 Boon buff = Boon.BoonsByIds[pair.Key];
@@ -620,7 +622,7 @@ namespace LuckParser.Builders
                     _buffDesc["b" + pair.Key] = new JsonLog.BuffDesc(buff);
                 }
                 List<JsonPlayerBuffsData> data = new List<JsonPlayerBuffsData>();
-                for (int i = 0; i < _statistics.Phases.Count; i++)
+                for (int i = 0; i < _phases.Count; i++)
                 {
                     data.Add(new JsonPlayerBuffsData(statUptimes[i][pair.Key], true));
                 }
@@ -640,7 +642,7 @@ namespace LuckParser.Builders
         private List<JsonPlayerBuffs> BuildPlayerBuffUptimes(Dictionary<long, Statistics.FinalBuffs>[] statUptimes, Player player)
         {
             var uptimes = new List<JsonPlayerBuffs>();
-            int phases = _statistics.Phases.Count;
+            int phases = _phases.Count;
             foreach (var pair in statUptimes[0])
             {
                 Boon buff = Boon.BoonsByIds[pair.Key];
@@ -666,7 +668,7 @@ namespace LuckParser.Builders
                     }
                 }
                 List<JsonPlayerBuffsData> data = new List<JsonPlayerBuffsData>();
-                for (int i = 0; i < _statistics.Phases.Count; i++)
+                for (int i = 0; i < _phases.Count; i++)
                 {
                     data.Add(new JsonPlayerBuffsData(statUptimes[i][pair.Key], false));
                 }

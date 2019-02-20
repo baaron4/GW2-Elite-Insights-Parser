@@ -16,6 +16,7 @@ namespace LuckParser.Builders
         readonly SettingsContainer _settings;
 
         readonly ParsedLog _log;
+        readonly List<PhaseData> _phases;
 
         readonly Statistics _statistics;
         readonly StreamWriter _sw;
@@ -41,6 +42,7 @@ namespace LuckParser.Builders
             _sw = sw;
             _delimiter = delimiter;
             _settings = settings;
+            _phases = log.FightData.GetPhases(log);
 
             _statistics = statistics;
 
@@ -191,7 +193,7 @@ namespace LuckParser.Builders
         }
         private void CreateDPSTable(int phaseIndex)
         {
-            PhaseData phase = _statistics.Phases[phaseIndex];
+            PhaseData phase = _phases[phaseIndex];
             WriteLine(new[] { "Sub Group", "Profession","Role","Name","Account","WepSet1_1","WepSet1_2","WepSet2_1","WepSet2_2",
                 "Boss DPS","Boss DMG","Boss Power DPS","Boss Power DMG","Boss Condi DPS","Boss Condi DMG",
                 "All DPS","All DMG","All Power DPS","All Power DMG","All Condi DPS","All Condi DMG",
@@ -352,7 +354,7 @@ namespace LuckParser.Builders
         private void CreateUptimeTable(List<Boon> listToUse, int phaseIndex)
         {
             //generate Uptime Table table
-            PhaseData phase = _statistics.Phases[phaseIndex];
+            PhaseData phase = _phases[phaseIndex];
             long fightDuration = phase.GetDuration();
 
             WriteCells(new [] { "Name", "Avg Boons" });
@@ -603,7 +605,7 @@ namespace LuckParser.Builders
         {
             HashSet<Mechanic> presMech = _log.MechanicData.GetPresentPlayerMechs(phaseIndex);
             //Dictionary<string, HashSet<Mechanic>> presEnemyMech = log.MechanicData.getPresentEnemyMechs(phaseIndex);
-            PhaseData phase = _statistics.Phases[phaseIndex];
+            PhaseData phase = _phases[phaseIndex];
             //List<AbstractMasterPlayer> enemyList = log.MechanicData.getEnemyList(phaseIndex);
             int countLines = 0;
             if (presMech.Count > 0)
@@ -675,8 +677,7 @@ namespace LuckParser.Builders
         private void CreateCondiUptime(int phaseIndex)
         {
             Target boss = _log.LegacyTarget;
-            List<PhaseData> phases = _statistics.Phases;
-            long fightDuration = phases[phaseIndex].GetDuration();
+            long fightDuration = _phases[phaseIndex].GetDuration();
             Dictionary<long, Statistics.FinalTargetBuffs> conditions = _statistics.TargetBuffs[_log.LegacyTarget][phaseIndex];
 
             WriteCell("Name");
@@ -719,7 +720,6 @@ namespace LuckParser.Builders
         private void CreateBossBoonUptime(int phaseIndex)
         {
             Target boss = _log.LegacyTarget;
-            List<PhaseData> phases = _statistics.Phases;
             Dictionary<long, Statistics.FinalTargetBuffs> conditions = _statistics.TargetBuffs[_log.LegacyTarget][phaseIndex];
             WriteCell("Name");
             WriteCell("Avg");
@@ -759,7 +759,6 @@ namespace LuckParser.Builders
         }
         private void CreateCondiGen(int phaseIndex)
         {
-            List<PhaseData> phases = _statistics.Phases;
             Dictionary<long, Statistics.FinalTargetBuffs> conditions = _statistics.TargetBuffs[_log.LegacyTarget][phaseIndex];
             //bool hasBoons = false;
             int count = 0;

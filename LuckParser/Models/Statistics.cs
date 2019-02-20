@@ -24,10 +24,7 @@ namespace LuckParser.Models
             TargetDps = new Dictionary<Target, FinalDPS[]>();
             AvgTargetConditions = new Dictionary<Target, double[]>();
             AvgTargetBoons = new Dictionary<Target, double[]>();
-            Phases = new List<PhaseData>();
         }
-
-        public List<PhaseData> Phases;
 
         public class FinalDPS
         {

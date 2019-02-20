@@ -31,6 +31,7 @@ namespace LuckParser.Models
         private Statistics _statistics;
 
         private ParsedLog _log;
+        private List<PhaseData> _phases;
 
         public StatisticsCalculator(SettingsContainer settings)
         {
@@ -48,9 +49,9 @@ namespace LuckParser.Models
             _statistics = new Statistics();
 
             _log = log;
+            _phases = log.FightData.GetPhases(log);
 
             SetPresentBoons();
-            _statistics.Phases = log.FightData.GetPhases(log);
             if (switches.CalculateCombatReplay && _settings.ParseCombatReplay)
             {
                 foreach (Player p in log.PlayerList)
@@ -100,14 +101,14 @@ namespace LuckParser.Models
                 log.FightData.Logic.ComputeMechanics(log);
             }
             // target health
-            _statistics.TargetsHealth = new Dictionary<Target, double[]>[_statistics.Phases.Count];
-            for (int i = 0; i < _statistics.Phases.Count; i++)
+            _statistics.TargetsHealth = new Dictionary<Target, double[]>[_phases.Count];
+            for (int i = 0; i < _phases.Count; i++)
             {
                 _statistics.TargetsHealth[i] = new Dictionary<Target, double[]>();
             }
             foreach (Target target in _log.FightData.Logic.Targets)
             {
-                List<double[]> hps = target.Get1SHealthGraph(_log, _statistics.Phases);
+                List<double[]> hps = target.Get1SHealthGraph(_log, _phases);
                 for (int i = 0; i < hps.Count; i++)
                 {
                     _statistics.TargetsHealth[i][target] = hps[i];
@@ -120,7 +121,7 @@ namespace LuckParser.Models
 
         private FinalDPS GetFinalDPS(AbstractActor player, int phaseIndex, Target target)
         {
-            PhaseData phase = _statistics.Phases[phaseIndex];
+            PhaseData phase = _phases[phaseIndex];
             double phaseDuration = (phase.GetDuration()) / 1000.0;
             int damage;
             double dps = 0.0;
@@ -160,8 +161,8 @@ namespace LuckParser.Models
         {
             foreach (Player player in _log.PlayerList)
             {
-                FinalDPS[] phaseDps = new FinalDPS[_statistics.Phases.Count];
-                for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
+                FinalDPS[] phaseDps = new FinalDPS[_phases.Count];
+                for (int phaseIndex = 0; phaseIndex < _phases.Count; phaseIndex++)
                 {
                     phaseDps[phaseIndex] = GetFinalDPS(player, phaseIndex, null);
                 }
@@ -172,16 +173,16 @@ namespace LuckParser.Models
                 Dictionary<Player, FinalDPS[]> stats = new Dictionary<Player, FinalDPS[]>();
                 foreach (Player player in _log.PlayerList)
                 {
-                    FinalDPS[] phaseDpsTarget = new FinalDPS[_statistics.Phases.Count];
-                    for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
+                    FinalDPS[] phaseDpsTarget = new FinalDPS[_phases.Count];
+                    for (int phaseIndex = 0; phaseIndex < _phases.Count; phaseIndex++)
                     {
                         phaseDpsTarget[phaseIndex] = GetFinalDPS(player, phaseIndex, target);
                     }
                     stats[player] = phaseDpsTarget;
                 }
                 _statistics.DpsTarget[target] = stats;
-                FinalDPS[] phaseTargetDps = new FinalDPS[_statistics.Phases.Count];
-                for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
+                FinalDPS[] phaseTargetDps = new FinalDPS[_phases.Count];
+                for (int phaseIndex = 0; phaseIndex < _phases.Count; phaseIndex++)
                 {
                     phaseTargetDps[phaseIndex] = GetFinalDPS(target, phaseIndex, null);
                 }
@@ -328,7 +329,7 @@ namespace LuckParser.Models
 
         private FinalStatsAll GetFinalStats(Player p, int phaseIndex)
         {
-            PhaseData phase = _statistics.Phases[phaseIndex];
+            PhaseData phase = _phases[phaseIndex];
             long start = _log.FightData.ToLogSpace(phase.Start);
             long end = _log.FightData.ToLogSpace(phase.End);
             Dictionary<Target, FinalStats> targetDict = new Dictionary<Target, FinalStats>();
@@ -341,7 +342,7 @@ namespace LuckParser.Models
                 Dictionary<Player, FinalStats[]> targetStats = _statistics.StatsTarget[target];
                 if (!targetStats.ContainsKey(p))
                 {
-                    targetStats[p] = new FinalStats[_statistics.Phases.Count];
+                    targetStats[p] = new FinalStats[_phases.Count];
                 }
                 targetStats[p][phaseIndex] = new FinalStats();
                 targetDict[target] = targetStats[p][phaseIndex];
@@ -461,16 +462,16 @@ namespace LuckParser.Models
         {
             foreach (Target target in _log.FightData.Logic.Targets)
             {
-                double[] avgBoons = new double[_statistics.Phases.Count];
-                double[] avgCondis = new double[_statistics.Phases.Count];
-                for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
+                double[] avgBoons = new double[_phases.Count];
+                double[] avgCondis = new double[_phases.Count];
+                for (int phaseIndex = 0; phaseIndex < _phases.Count; phaseIndex++)
                 {
                     double avgBoon = 0;
                     foreach (long duration in target.GetBoonPresence(_log, phaseIndex).Values)
                     {
                         avgBoon += duration;
                     }
-                    avgBoon /= _statistics.Phases[phaseIndex].GetDuration();
+                    avgBoon /= _phases[phaseIndex].GetDuration();
                     avgBoons[phaseIndex] = avgBoon;
 
                     double avgCondi = 0;
@@ -478,7 +479,7 @@ namespace LuckParser.Models
                     {
                         avgCondi += duration;
                     }
-                    avgCondi /= _statistics.Phases[phaseIndex].GetDuration();
+                    avgCondi /= _phases[phaseIndex].GetDuration();
                     avgCondis[phaseIndex] = avgCondi;
                 }
                 _statistics.AvgTargetBoons[target] = avgBoons;
@@ -486,8 +487,8 @@ namespace LuckParser.Models
             }
             foreach (Player player in _log.PlayerList)
             {
-                FinalStatsAll[] phaseStats = new FinalStatsAll[_statistics.Phases.Count];
-                for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
+                FinalStatsAll[] phaseStats = new FinalStatsAll[_phases.Count];
+                for (int phaseIndex = 0; phaseIndex < _phases.Count; phaseIndex++)
                 {
                     phaseStats[phaseIndex] = GetFinalStats(player, phaseIndex);
                 }
@@ -500,12 +501,12 @@ namespace LuckParser.Models
             CombatData combatData = _log.CombatData;
             foreach (Player player in _log.PlayerList)
             {
-                FinalDefenses[] phaseDefense = new FinalDefenses[_statistics.Phases.Count];
-                for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
+                FinalDefenses[] phaseDefense = new FinalDefenses[_phases.Count];
+                for (int phaseIndex = 0; phaseIndex < _phases.Count; phaseIndex++)
                 {
                     FinalDefenses final = new FinalDefenses();
 
-                    PhaseData phase = _statistics.Phases[phaseIndex];
+                    PhaseData phase = _phases[phaseIndex];
                     long start = _log.FightData.ToLogSpace(phase.Start);
                     long end = _log.FightData.ToLogSpace(phase.End);
 
@@ -540,10 +541,10 @@ namespace LuckParser.Models
                 List<(long start, long end)> dc = new List<(long start, long end)>();
                 combatData.GetAgentStatus(player.FirstAware, player.LastAware, player.InstID, dead, down, dc);
 
-                for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
+                for (int phaseIndex = 0; phaseIndex < _phases.Count; phaseIndex++)
                 {
                     FinalDefenses defenses = phaseDefense[phaseIndex];
-                    PhaseData phase = _statistics.Phases[phaseIndex];
+                    PhaseData phase = _phases[phaseIndex];
                     long start = phase.Start;
                     long end = phase.End;
                     defenses.DownDuration = (int)down.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
@@ -559,12 +560,12 @@ namespace LuckParser.Models
         {
             foreach (Player player in _log.PlayerList)
             {
-                FinalSupport[] phaseSupport = new FinalSupport[_statistics.Phases.Count];
-                for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
+                FinalSupport[] phaseSupport = new FinalSupport[_phases.Count];
+                for (int phaseIndex = 0; phaseIndex < _phases.Count; phaseIndex++)
                 {
                     FinalSupport final = new FinalSupport();
 
-                    PhaseData phase = _statistics.Phases[phaseIndex];
+                    PhaseData phase = _phases[phaseIndex];
 
                     int[] resArray = player.GetReses(_log, phase.Start, phase.End);
                     int[] cleanseArray = player.GetCleanses(_log, phaseIndex);
@@ -584,11 +585,11 @@ namespace LuckParser.Models
         private Dictionary<long, FinalBuffs>[] GetBoonsForPlayers(List<Player> playerList, Player player)
         {
             Dictionary<long, FinalBuffs>[] uptimesByPhase =
-                new Dictionary<long, FinalBuffs>[_statistics.Phases.Count];
+                new Dictionary<long, FinalBuffs>[_phases.Count];
 
-            for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
+            for (int phaseIndex = 0; phaseIndex < _phases.Count; phaseIndex++)
             {
-                PhaseData phase = _statistics.Phases[phaseIndex];
+                PhaseData phase = _phases[phaseIndex];
                 long fightDuration = phase.End - phase.Start;
 
                 Dictionary<Player, BoonDistribution> boonDistributions = new Dictionary<Player, BoonDistribution>();
@@ -661,12 +662,12 @@ namespace LuckParser.Models
             foreach (Player player in _log.PlayerList)
             {
                 // Boons applied to self
-                Dictionary<long, FinalBuffs>[] selfUptimesByPhase = new Dictionary<long, FinalBuffs>[_statistics.Phases.Count];
-                for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
+                Dictionary<long, FinalBuffs>[] selfUptimesByPhase = new Dictionary<long, FinalBuffs>[_phases.Count];
+                for (int phaseIndex = 0; phaseIndex < _phases.Count; phaseIndex++)
                 {
                     Dictionary<long, FinalBuffs> final = new Dictionary<long, FinalBuffs>();
 
-                    PhaseData phase = _statistics.Phases[phaseIndex];
+                    PhaseData phase = _phases[phaseIndex];
 
                     BoonDistribution selfBoons = player.GetBoonDistribution(_log, phaseIndex);
                     Dictionary<long, long> boonPresence = player.GetBoonPresence(_log, phaseIndex);
@@ -744,15 +745,15 @@ namespace LuckParser.Models
         {
             foreach (Target target in _log.FightData.Logic.Targets)
             {
-                Dictionary<long, FinalTargetBuffs>[] stats = new Dictionary<long, FinalTargetBuffs>[_statistics.Phases.Count];
-                for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
+                Dictionary<long, FinalTargetBuffs>[] stats = new Dictionary<long, FinalTargetBuffs>[_phases.Count];
+                for (int phaseIndex = 0; phaseIndex < _phases.Count; phaseIndex++)
                 {
                     BoonDistribution boonDistribution = target.GetBoonDistribution(_log, phaseIndex);
                     Dictionary<long, FinalTargetBuffs> rates = new Dictionary<long, FinalTargetBuffs>();
                     Dictionary<long, long> boonPresence = target.GetBoonPresence(_log, phaseIndex);
                     Dictionary<long, long> condiPresence = target.GetCondiPresence(_log, phaseIndex);
 
-                    PhaseData phase = _statistics.Phases[phaseIndex];
+                    PhaseData phase = _phases[phaseIndex];
                     long fightDuration = phase.GetDuration();
 
                     foreach (Boon boon in target.TrackedBoons)
