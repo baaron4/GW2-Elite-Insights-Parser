@@ -310,21 +310,21 @@ namespace LuckParser.Builders
             return res;
         }
 
-        private List<JsonDeathRecap> BuildDeathRecap(List<Player.DeathRecap> recaps)
+        private List<JsonDeathRecap> BuildDeathRecap(List<Statistics.DeathRecap> recaps)
         {
             if (recaps == null)
             {
                 return null;
             }
             List<JsonDeathRecap> res = new List<JsonDeathRecap>();
-            foreach (Player.DeathRecap recap in recaps)
+            foreach (Statistics.DeathRecap recap in recaps)
             {
                 res.Add(new JsonDeathRecap(recap));
             }
             return res;
         }
 
-        private List<JsonBuffDamageModifierData> BuildDamageModifiers(Dictionary<long, List<AbstractMasterActor.ExtraBoonData>> extra)
+        private List<JsonBuffDamageModifierData> BuildDamageModifiers(Dictionary<long, List<Statistics.ExtraBoonData>> extra)
         {
             Dictionary<long, List<JsonBuffDamageModifierItem>> dict = new Dictionary<long, List<JsonBuffDamageModifierItem>>();
             foreach (long key in extra.Keys)
@@ -361,7 +361,7 @@ namespace LuckParser.Builders
 
         private List<JsonConsumable> BuildConsumables(Player player)
         {
-            List<Player.Consumable> input = player.GetConsumablesList(_log, 0, _log.FightData.FightDuration);
+            List<Statistics.Consumable> input = player.GetConsumablesList(_log, 0, _log.FightData.FightDuration);
             List<JsonConsumable> res = new List<JsonConsumable>();
             foreach (var food in input)
             {

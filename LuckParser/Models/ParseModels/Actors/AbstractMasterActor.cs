@@ -3,27 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using static LuckParser.Models.Statistics;
 
 namespace LuckParser.Models.ParseModels
 {
     public abstract class AbstractMasterActor : AbstractActor
     {
-        public class ExtraBoonData
-        {
-            public int HitCount { get; }
-            public int TotalHitCount { get; }
-            public int DamageGain { get; }
-            public int TotalDamage { get; }
-            public bool Multiplier { get; }
-            public ExtraBoonData(int hitCount, int totalHitCount, int damageGain, int totalDamage, bool multiplier)
-            {
-                HitCount = hitCount;
-                TotalHitCount = totalHitCount;
-                DamageGain = damageGain;
-                TotalDamage = totalDamage;
-                Multiplier = multiplier;
-            }
-        };
+        
         // Boons
         private readonly List<BoonDistribution> _boonDistribution = new List<BoonDistribution>();
         private readonly List<Dictionary<long, long>> _boonPresence = new List<Dictionary<long, long>>();
@@ -38,7 +24,7 @@ namespace LuckParser.Models.ParseModels
         // Replay
         public CombatReplay CombatReplay { get; protected set; }
         // Statistics
-        private List<Statistics.FinalDPS> _dpsAll;
+        private List<FinalDPS> _dpsAll;
 
         protected AbstractMasterActor(AgentItem agent) : base(agent)
         {
@@ -163,11 +149,11 @@ namespace LuckParser.Models.ParseModels
             return _condiPresence[phaseIndex];
         }
 
-        public Statistics.FinalDPS GetDPSAll(ParsedLog log, int phaseIndex)
+        public FinalDPS GetDPSAll(ParsedLog log, int phaseIndex)
         {
             if (_dpsAll == null)
             {
-                _dpsAll = new List<Statistics.FinalDPS>();
+                _dpsAll = new List<FinalDPS>();
                 foreach (PhaseData phase in log.FightData.GetPhases(log))
                 {
                     _dpsAll.Add(GetFinalDPS(log, phase, null));
@@ -176,11 +162,11 @@ namespace LuckParser.Models.ParseModels
             return _dpsAll[phaseIndex];
         }
 
-        public List<Statistics.FinalDPS> GetDPSAll(ParsedLog log)
+        public List<FinalDPS> GetDPSAll(ParsedLog log)
         {
             if (_dpsAll == null)
             {
-                _dpsAll = new List<Statistics.FinalDPS>();
+                _dpsAll = new List<FinalDPS>();
                 foreach (PhaseData phase in log.FightData.GetPhases(log))
                 {
                     _dpsAll.Add(GetFinalDPS(log, phase, null));
@@ -189,12 +175,12 @@ namespace LuckParser.Models.ParseModels
             return _dpsAll;
         }
 
-        protected Statistics.FinalDPS GetFinalDPS(ParsedLog log, PhaseData phase, Target target)
+        protected FinalDPS GetFinalDPS(ParsedLog log, PhaseData phase, Target target)
         {
             double phaseDuration = (phase.GetDuration()) / 1000.0;
             int damage;
             double dps = 0.0;
-            Statistics.FinalDPS final = new Statistics.FinalDPS();
+            FinalDPS final = new FinalDPS();
             //DPS
             damage = GetDamageLogs(target, log,
                     phase.Start, phase.End).Sum(x => x.Damage);

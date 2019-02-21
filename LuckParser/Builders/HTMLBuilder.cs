@@ -319,12 +319,12 @@ namespace LuckParser.Builders
         private List<DeathRecapDto> BuildDeathRecap(Player p)
         {
             List<DeathRecapDto> res = new List<DeathRecapDto>();
-            List<Player.DeathRecap> recaps = p.GetDeathRecaps(_log);
+            List<Statistics.DeathRecap> recaps = p.GetDeathRecaps(_log);
             if (recaps == null)
             {
                 return null;
             }
-            foreach (Player.DeathRecap deathRecap in recaps)
+            foreach (Statistics.DeathRecap deathRecap in recaps)
             {
                 DeathRecapDto recap = new DeathRecapDto()
                 {
@@ -527,9 +527,9 @@ namespace LuckParser.Builders
         private List<FoodDto> BuildPlayerFoodData(Player p)
         {
             List<FoodDto> list = new List<FoodDto>();
-            List<Player.Consumable> consume = p.GetConsumablesList(_log, 0, _log.FightData.FightDuration);
+            List<Statistics.Consumable> consume = p.GetConsumablesList(_log, 0, _log.FightData.FightDuration);
 
-            foreach(Player.Consumable entry in consume)
+            foreach(Statistics.Consumable entry in consume)
             {
                 _usedBoons[entry.Buff.ID] = entry.Buff;
                 list.Add(new FoodDto(entry));
@@ -1016,7 +1016,7 @@ namespace LuckParser.Builders
             HashSet<long> dmgCommonModifiersBuffs = new HashSet<long>();
             foreach (Player p in _log.PlayerList)
             {
-                Dictionary<long, List<AbstractMasterActor.ExtraBoonData>> toCheck = p.GetExtraBoonData(_log, null);
+                Dictionary<long, List<Statistics.ExtraBoonData>> toCheck = p.GetExtraBoonData(_log, null);
                 dmgCommonModifiersBuffs.UnionWith(toCheck.Keys);
             }
             logData.DmgCommonModifiersBuffs = dmgCommonModifiersBuffs.ToList();

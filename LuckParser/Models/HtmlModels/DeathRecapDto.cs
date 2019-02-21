@@ -11,10 +11,10 @@ namespace LuckParser.Models.HtmlModels
         public List<object[]> ToDown = null;
         public List<object[]> ToKill = null;
 
-        public static List<object[]> BuildDeathRecapItemList(List<Player.DeathRecap.DeathRecapDamageItem> list)
+        public static List<object[]> BuildDeathRecapItemList(List<Statistics.DeathRecap.DeathRecapDamageItem> list)
         {
             List<object[]> data = new List<object[]>();
-            foreach (Player.DeathRecap.DeathRecapDamageItem item in list)
+            foreach (Statistics.DeathRecap.DeathRecapDamageItem item in list)
             {
                 data.Add(new object[]
                 {

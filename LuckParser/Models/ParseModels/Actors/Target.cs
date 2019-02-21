@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using static LuckParser.Models.Statistics;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -13,7 +14,7 @@ namespace LuckParser.Models.ParseModels
 
         private List<double> _avgConditions;
         private List<double> _avgBoons;
-        private List<Dictionary<long, Statistics.FinalTargetBuffs>> _buffs;
+        private List<Dictionary<long, FinalTargetBuffs>> _buffs;
         // Constructors
         public Target(AgentItem agent) : base(agent)
         {
@@ -92,7 +93,7 @@ namespace LuckParser.Models.ParseModels
             return _avgConditions;
         }
 
-        public Dictionary<long, Statistics.FinalTargetBuffs> GetBuffs(ParsedLog log, int phaseIndex)
+        public Dictionary<long, FinalTargetBuffs> GetBuffs(ParsedLog log, int phaseIndex)
         {
             if (_buffs == null)
             {
@@ -101,7 +102,7 @@ namespace LuckParser.Models.ParseModels
             return _buffs[phaseIndex];
         }
 
-        public List<Dictionary<long, Statistics.FinalTargetBuffs>> GetBuffs(ParsedLog log)
+        public List<Dictionary<long, FinalTargetBuffs>> GetBuffs(ParsedLog log)
         {
             if (_buffs == null)
             {
@@ -112,12 +113,12 @@ namespace LuckParser.Models.ParseModels
 
         private void SetBuffs(ParsedLog log)
         {
-            _buffs = new List<Dictionary<long, Statistics.FinalTargetBuffs>>();
+            _buffs = new List<Dictionary<long, FinalTargetBuffs>>();
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
                 BoonDistribution boonDistribution = GetBoonDistribution(log, phaseIndex);
-                Dictionary<long, Statistics.FinalTargetBuffs> rates = new Dictionary<long, Statistics.FinalTargetBuffs>();
+                Dictionary<long, FinalTargetBuffs> rates = new Dictionary<long, FinalTargetBuffs>();
                 _buffs.Add(rates);
                 Dictionary<long, long> boonPresence = GetBoonPresence(log, phaseIndex);
                 Dictionary<long, long> condiPresence = GetCondiPresence(log, phaseIndex);
@@ -129,7 +130,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     if (boonDistribution.ContainsKey(boon.ID))
                     {
-                        Statistics.FinalTargetBuffs buff = new Statistics.FinalTargetBuffs(log.PlayerList);
+                        FinalTargetBuffs buff = new FinalTargetBuffs(log.PlayerList);
                         rates[boon.ID] = buff;
                         if (boon.Type == Boon.BoonType.Duration)
                         {

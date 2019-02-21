@@ -6,42 +6,12 @@ using System.Collections.Generic;
 
 using System.Globalization;
 using System.Linq;
+using static LuckParser.Models.Statistics;
 
 namespace LuckParser.Models.ParseModels
 {
     public class Player : AbstractMasterActor
     {
-        public class Consumable
-        {
-            public Boon Buff { get; }
-            public long Time { get; }
-            public int Duration { get; }
-            public int Stack { get; set; }
-
-            public Consumable(Boon item, long time, int duration)
-            {
-                Buff = item;
-                Time = time;
-                Duration = duration;
-                Stack = 1;
-            }
-        }
-
-        public class DeathRecap
-        {
-            public class DeathRecapDamageItem
-            {
-                public long ID;
-                public bool IndirectDamage;
-                public string Src;
-                public int Damage;
-                public int Time;
-            }
-
-            public int DeathTime;
-            public List<DeathRecapDamageItem> ToDown;
-            public List<DeathRecapDamageItem> ToKill;
-        }
         // Fields
         public readonly string Account;
         public readonly int Group;
@@ -49,15 +19,15 @@ namespace LuckParser.Models.ParseModels
         private List<Consumable> _consumeList;
         private List<DeathRecap> _deathRecaps;
         // statistics
-        private Dictionary<Target, List<Statistics.FinalDPS>> _dpsTarget;
-        private Dictionary<Target, List<Statistics.FinalStats>> _statsTarget;
-        private List<Statistics.FinalStatsAll> _statsAll;
-        private List<Statistics.FinalDefenses> _defenses;
-        private List<Statistics.FinalSupport> _support;
-        private List<Dictionary<long, Statistics.FinalBuffs>> _selfBuffs;
-        private List<Dictionary<long, Statistics.FinalBuffs>> _groupBuffs;
-        private List<Dictionary<long, Statistics.FinalBuffs>> _offGroupBuffs;
-        private List<Dictionary<long, Statistics.FinalBuffs>> _squadBuffs;
+        private Dictionary<Target, List<FinalDPS>> _dpsTarget;
+        private Dictionary<Target, List<FinalStats>> _statsTarget;
+        private List<FinalStatsAll> _statsAll;
+        private List<FinalDefenses> _defenses;
+        private List<FinalSupport> _support;
+        private List<Dictionary<long, FinalBuffs>> _selfBuffs;
+        private List<Dictionary<long, FinalBuffs>> _groupBuffs;
+        private List<Dictionary<long, FinalBuffs>> _offGroupBuffs;
+        private List<Dictionary<long, FinalBuffs>> _squadBuffs;
         //weaponslist
         private string[] _weaponsArray;
 
@@ -96,14 +66,14 @@ namespace LuckParser.Models.ParseModels
             return reses;
         }
 
-        public Statistics.FinalDPS GetDPSTarget(ParsedLog log, int phaseIndex, Target target)
+        public FinalDPS GetDPSTarget(ParsedLog log, int phaseIndex, Target target)
         {
             if (_dpsTarget == null)
             {
-                _dpsTarget = new Dictionary<Target, List<Statistics.FinalDPS>>();
+                _dpsTarget = new Dictionary<Target, List<FinalDPS>>();
                 foreach (Target tar in log.FightData.Logic.Targets)
                 {
-                    _dpsTarget[tar] = new List<Statistics.FinalDPS>();
+                    _dpsTarget[tar] = new List<FinalDPS>();
                     foreach (PhaseData phase in log.FightData.GetPhases(log))
                     {
                         _dpsTarget[tar].Add(GetFinalDPS(log, phase, tar));
@@ -117,14 +87,14 @@ namespace LuckParser.Models.ParseModels
             return _dpsTarget[target][phaseIndex];
         }
 
-        public List<Statistics.FinalDPS> GetDPSTarget(ParsedLog log, Target target)
+        public List<FinalDPS> GetDPSTarget(ParsedLog log, Target target)
         {
             if (_dpsTarget == null)
             {
-                _dpsTarget = new Dictionary<Target, List<Statistics.FinalDPS>>();
+                _dpsTarget = new Dictionary<Target, List<FinalDPS>>();
                 foreach (Target tar in log.FightData.Logic.Targets)
                 {
-                    _dpsTarget[tar] = new List<Statistics.FinalDPS>();
+                    _dpsTarget[tar] = new List<FinalDPS>();
                     foreach (PhaseData phase in log.FightData.GetPhases(log))
                     {
                         _dpsTarget[tar].Add(GetFinalDPS(log, phase, tar));
@@ -138,7 +108,7 @@ namespace LuckParser.Models.ParseModels
             return _dpsTarget[target];
         }
 
-        public Statistics.FinalStatsAll GetStatsAll(ParsedLog log, int phaseIndex)
+        public FinalStatsAll GetStatsAll(ParsedLog log, int phaseIndex)
         {
             if (_statsAll == null)
             {
@@ -147,7 +117,7 @@ namespace LuckParser.Models.ParseModels
             return _statsAll[phaseIndex];
         }
 
-        public Statistics.FinalStats GetStatsTarget(ParsedLog log, int phaseIndex, Target target)
+        public FinalStats GetStatsTarget(ParsedLog log, int phaseIndex, Target target)
         {
             if (_statsTarget == null)
             {
@@ -160,7 +130,7 @@ namespace LuckParser.Models.ParseModels
             return _statsTarget[target][phaseIndex];
         }
 
-        public List<Statistics.FinalStatsAll> GetStatsAll(ParsedLog log)
+        public List<FinalStatsAll> GetStatsAll(ParsedLog log)
         {
             if (_statsAll == null)
             {
@@ -169,7 +139,7 @@ namespace LuckParser.Models.ParseModels
             return _statsAll;
         }
 
-        public List<Statistics.FinalStats> GetStatsTarget(ParsedLog log, Target target)
+        public List<FinalStats> GetStatsTarget(ParsedLog log, Target target)
         {
             if (_statsTarget == null)
             {
@@ -177,12 +147,12 @@ namespace LuckParser.Models.ParseModels
             }
             if (target == null)
             {
-                return new List<Statistics.FinalStats>(GetStatsAll(log));
+                return new List<FinalStats>(GetStatsAll(log));
             }
             return _statsTarget[target];
         }
 
-        private void FillFinalStats(ParsedLog log, List<DamageLog> dls, Statistics.FinalStats final, Dictionary<Target, Statistics.FinalStats> targetsFinal)
+        private void FillFinalStats(ParsedLog log, List<DamageLog> dls, FinalStats final, Dictionary<Target, FinalStats> targetsFinal)
         {
             HashSet<long> nonCritable = new HashSet<long>
                     {
@@ -204,7 +174,7 @@ namespace LuckParser.Models.ParseModels
                         Target target = pair.Key;
                         if (dl.DstInstId == target.InstID && dl.Time <= log.FightData.ToFightSpace(target.LastAware) && dl.Time >= log.FightData.ToFightSpace(target.FirstAware))
                         {
-                            Statistics.FinalStats targetFinal = pair.Value;
+                            FinalStats targetFinal = pair.Value;
                             if (dl.Result == ParseEnum.Result.Crit)
                             {
                                 targetFinal.CriticalRate++;
@@ -322,22 +292,22 @@ namespace LuckParser.Models.ParseModels
         private void SetStats(ParsedLog log)
         {
             int phaseIndex = -1;
-            _statsAll = new List<Statistics.FinalStatsAll>();
-            _statsTarget = new Dictionary<Target, List<Statistics.FinalStats>>();
+            _statsAll = new List<FinalStatsAll>();
+            _statsTarget = new Dictionary<Target, List<FinalStats>>();
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
                 phaseIndex++;
-                Dictionary<Target, Statistics.FinalStats> targetDict = new Dictionary<Target, Statistics.FinalStats>();
+                Dictionary<Target, FinalStats> targetDict = new Dictionary<Target, FinalStats>();
                 foreach (Target target in log.FightData.Logic.Targets)
                 {
                     if (!_statsTarget.ContainsKey(target))
                     {
-                        _statsTarget[target] = new List<Statistics.FinalStats>();
+                        _statsTarget[target] = new List<FinalStats>();
                     }
-                    _statsTarget[target].Add(new Statistics.FinalStats());
+                    _statsTarget[target].Add(new FinalStats());
                     targetDict[target] = _statsTarget[target].Last();
                 }
-                Statistics.FinalStatsAll final = new Statistics.FinalStatsAll();
+                FinalStatsAll final = new FinalStatsAll();
                 FillFinalStats(log, GetJustPlayerDamageLogs(null, log, phase.Start, phase.End), final, targetDict);
                 _statsAll.Add(final);
                 // If conjured sword, stop
@@ -409,7 +379,7 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public Statistics.FinalDefenses GetDefenses(ParsedLog log, int phaseIndex)
+        public FinalDefenses GetDefenses(ParsedLog log, int phaseIndex)
         {
             if (_defenses == null)
             {
@@ -418,7 +388,7 @@ namespace LuckParser.Models.ParseModels
             return _defenses[phaseIndex];
         }
 
-        public List<Statistics.FinalDefenses> GetDefenses(ParsedLog log)
+        public List<FinalDefenses> GetDefenses(ParsedLog log)
         {
             if (_defenses == null)
             {
@@ -433,10 +403,10 @@ namespace LuckParser.Models.ParseModels
             List<(long start, long end)> down = new List<(long start, long end)>();
             List<(long start, long end)> dc = new List<(long start, long end)>();
             log.CombatData.GetAgentStatus(FirstAware, LastAware, InstID, dead, down, dc);
-            _defenses = new List<Statistics.FinalDefenses>();
+            _defenses = new List<FinalDefenses>();
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
-                Statistics.FinalDefenses final = new Statistics.FinalDefenses();
+                FinalDefenses final = new FinalDefenses();
                 _defenses.Add(final);
                 long start = log.FightData.ToLogSpace(phase.Start);
                 long end = log.FightData.ToLogSpace(phase.End);
@@ -473,7 +443,7 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public Statistics.FinalSupport GetSupport(ParsedLog log, int phaseIndex)
+        public FinalSupport GetSupport(ParsedLog log, int phaseIndex)
         {
             if (_support == null)
             {
@@ -482,7 +452,7 @@ namespace LuckParser.Models.ParseModels
             return _support[phaseIndex];
         }
 
-        public List<Statistics.FinalSupport> GetSupport(ParsedLog log)
+        public List<FinalSupport> GetSupport(ParsedLog log)
         {
             if (_support == null)
             {
@@ -493,11 +463,11 @@ namespace LuckParser.Models.ParseModels
 
         private void SetSupport(ParsedLog log)
         {
-            _support = new List<Statistics.FinalSupport>();
+            _support = new List<FinalSupport>();
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
-                Statistics.FinalSupport final = new Statistics.FinalSupport();
+                FinalSupport final = new FinalSupport();
                 _support.Add(final);
                 PhaseData phase = phases[phaseIndex];
 
@@ -512,7 +482,7 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public Dictionary<long, Statistics.FinalBuffs> GetBuffs(ParsedLog log, int phaseIndex, Statistics.BuffEnum type)
+        public Dictionary<long, FinalBuffs> GetBuffs(ParsedLog log, int phaseIndex, BuffEnum type)
         {
             if (_selfBuffs == null)
             {
@@ -532,7 +502,7 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public List<Dictionary<long, Statistics.FinalBuffs>> GetBuffs(ParsedLog log, Statistics.BuffEnum type)
+        public List<Dictionary<long, FinalBuffs>> GetBuffs(ParsedLog log, BuffEnum type)
         {
             if (_selfBuffs == null)
             {
@@ -552,9 +522,9 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        private List<Dictionary<long, Statistics.FinalBuffs>> GetBoonsForPlayers(List<Player> playerList, ParsedLog log)
+        private List<Dictionary<long, FinalBuffs>> GetBoonsForPlayers(List<Player> playerList, ParsedLog log)
         {
-            List<Dictionary<long, Statistics.FinalBuffs>> uptimesByPhase = new List<Dictionary<long, Statistics.FinalBuffs>>();
+            List<Dictionary<long, FinalBuffs>> uptimesByPhase = new List<Dictionary<long, FinalBuffs>>();
 
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
@@ -570,8 +540,8 @@ namespace LuckParser.Models.ParseModels
 
                 HashSet<Boon> boonsToTrack = new HashSet<Boon>(boonDistributions.SelectMany(x => x.Value).Select(x => Boon.BoonsByIds[x.Key]));
 
-                Dictionary<long, Statistics.FinalBuffs> final =
-                    new Dictionary<long, Statistics.FinalBuffs>();
+                Dictionary<long, FinalBuffs> final =
+                    new Dictionary<long, FinalBuffs>();
 
                 foreach (Boon boon in boonsToTrack)
                 {
@@ -598,7 +568,7 @@ namespace LuckParser.Models.ParseModels
 
                     if (hasGeneration)
                     {
-                        Statistics.FinalBuffs uptime = new Statistics.FinalBuffs();
+                        FinalBuffs uptime = new FinalBuffs();
                         final[boon.ID] = uptime;
                         if (boon.Type == Boon.BoonType.Duration)
                         {
@@ -630,11 +600,11 @@ namespace LuckParser.Models.ParseModels
         private void SetBuffs(ParsedLog log)
         {
             // Boons applied to self
-            _selfBuffs = new List<Dictionary<long, Statistics.FinalBuffs>>();
+            _selfBuffs = new List<Dictionary<long, FinalBuffs>>();
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
-                Dictionary<long, Statistics.FinalBuffs> final = new Dictionary<long, Statistics.FinalBuffs>();
+                Dictionary<long, FinalBuffs> final = new Dictionary<long, FinalBuffs>();
 
                 PhaseData phase = phases[phaseIndex];
 
@@ -647,7 +617,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     if (selfBoons.ContainsKey(boon.ID))
                     {
-                        Statistics.FinalBuffs uptime = new Statistics.FinalBuffs
+                        FinalBuffs uptime = new FinalBuffs
                         {
                             Uptime = 0,
                             Generation = 0,

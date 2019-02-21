@@ -39,7 +39,7 @@ namespace LuckParser.Models.JsonModels
             /// </summary>
             public int Time;
 
-            public JsonDeathRecapDamageItem(ParseModels.Player.DeathRecap.DeathRecapDamageItem item)
+            public JsonDeathRecapDamageItem(Statistics.DeathRecap.DeathRecapDamageItem item)
             {
                 Id = item.ID;
                 IndirectDamage = item.IndirectDamage;
@@ -62,7 +62,7 @@ namespace LuckParser.Models.JsonModels
         /// </summary>
         public List<JsonDeathRecapDamageItem> ToKill;
 
-        public JsonDeathRecap(ParseModels.Player.DeathRecap recap)
+        public JsonDeathRecap(Statistics.DeathRecap recap)
         {
             DeathTime = recap.DeathTime;
             ToDown = recap.ToDown?.Select(x => new JsonDeathRecapDamageItem(x)).ToList();

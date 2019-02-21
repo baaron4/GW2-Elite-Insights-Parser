@@ -140,6 +140,57 @@ namespace LuckParser.Models
             public readonly Dictionary<Player, double> Extended;
         }
 
+        public class ExtraBoonData
+        {
+            public int HitCount { get; }
+            public int TotalHitCount { get; }
+            public int DamageGain { get; }
+            public int TotalDamage { get; }
+            public bool Multiplier { get; }
+
+            public ExtraBoonData(int hitCount, int totalHitCount, int damageGain, int totalDamage, bool multiplier)
+            {
+                HitCount = hitCount;
+                TotalHitCount = totalHitCount;
+                DamageGain = damageGain;
+                TotalDamage = totalDamage;
+                Multiplier = multiplier;
+            }
+        }
+
+
+        public class Consumable
+        {
+            public Boon Buff { get; }
+            public long Time { get; }
+            public int Duration { get; }
+            public int Stack { get; set; }
+
+            public Consumable(Boon item, long time, int duration)
+            {
+                Buff = item;
+                Time = time;
+                Duration = duration;
+                Stack = 1;
+            }
+        }
+
+        public class DeathRecap
+        {
+            public class DeathRecapDamageItem
+            {
+                public long ID;
+                public bool IndirectDamage;
+                public string Src;
+                public int Damage;
+                public int Time;
+            }
+
+            public int DeathTime;
+            public List<DeathRecapDamageItem> ToDown;
+            public List<DeathRecapDamageItem> ToKill;
+        }
+
         // present buff
         public readonly List<Boon> PresentBoons = new List<Boon>();//Used only for Boon tables
         public readonly List<Boon> PresentConditions = new List<Boon>();//Used only for Condition tables

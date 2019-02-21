@@ -6,7 +6,7 @@ namespace LuckParser.Models.ParseModels
 {
     public class ForceOverrideLogic : StackingLogic
     {
-        public override void Sort(ParsedLog log, List<BoonSimulator.BoonStackItem> stacks)
+        public override void Sort(ParsedLog log, List<BoonStackItem> stacks)
         {
             // no sort
         }
