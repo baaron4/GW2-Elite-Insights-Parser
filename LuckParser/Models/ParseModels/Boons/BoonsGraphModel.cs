@@ -30,6 +30,7 @@ namespace LuckParser.Models.ParseModels
 
         public readonly Boon Boon;
         public List<Segment> BoonChart { get; private set; } = new List<Segment>();
+        public List<Segment> FullGranularityBoonChart { get; private set; } = new List<Segment>();
 
         // Constructor
         public BoonsGraphModel(Boon boon)
@@ -83,6 +84,7 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
             }
+            FullGranularityBoonChart = BoonChart;
             BoonChart = newChart;
         }
 
