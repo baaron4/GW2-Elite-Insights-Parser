@@ -153,6 +153,10 @@ namespace LuckParser.Models.ParseModels
             {
                 SetStats(log);
             }
+            if (target == null)
+            {
+                return GetStatsAll(log, phaseIndex);
+            }
             return _statsTarget[target][phaseIndex];
         }
 
@@ -170,6 +174,10 @@ namespace LuckParser.Models.ParseModels
             if (_statsTarget == null)
             {
                 SetStats(log);
+            }
+            if (target == null)
+            {
+                return new List<Statistics.FinalStats>(GetStatsAll(log));
             }
             return _statsTarget[target];
         }
