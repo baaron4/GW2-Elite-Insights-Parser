@@ -285,7 +285,7 @@ var compileTargetTab = function () {
                         shape: 'spline',
                         dash: 'dashdot'
                     },
-                    hoverinfo: 'text',
+                    hoverinfo: 'text+x',
                     name: this.target.name + ' health',
                     yaxis: dpsY
                 };
@@ -300,7 +300,7 @@ var compileTargetTab = function () {
                     shape: 'spline'
                 },
                 yaxis: dpsY,
-                hoverinfo: 'name+y',
+                hoverinfo: 'name+y+x',
                 name: 'Total DPS'
             });
             this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc');
