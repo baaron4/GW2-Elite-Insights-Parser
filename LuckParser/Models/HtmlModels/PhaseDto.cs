@@ -107,31 +107,9 @@ namespace LuckParser.Models.HtmlModels
 
         public static List<object> GetDMGStatData(Statistics.FinalStatsAll stats)
         {
-            List<object> data = new List<object>
+            List<object> data = GetDMGTargetStatData(stats);
+            data.AddRange(new List<object>
                 {
-                    stats.DirectDamageCount,
-                    stats.CritableDirectDamageCount,
-                    stats.CriticalRate,
-                    stats.CriticalDmg,
-
-                    stats.ScholarRate,
-                    stats.ScholarDmg,
-                    stats.DirectDamage,
-
-                    stats.MovingRate,
-                    stats.MovingDamage,
-
-                    stats.FlankingRate,
-
-                    stats.GlanceRate,
-
-                    stats.Missed,
-                    stats.Interrupts,
-                    stats.Invulned,
-
-                    stats.EagleRate,
-                    stats.EagleDmg,
-                    stats.FlankingDmg, 
                     // commons
                     stats.TimeWasted,
                     stats.Wasted,
@@ -141,7 +119,7 @@ namespace LuckParser.Models.HtmlModels
 
                     stats.SwapCount,
                     Math.Round(stats.StackDist, 2)
-                };
+                });
             return data;
         }
 
