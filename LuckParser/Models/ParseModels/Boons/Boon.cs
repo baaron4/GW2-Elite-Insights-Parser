@@ -15,6 +15,10 @@ namespace LuckParser.Models.ParseModels
 
         public const long NumberOfConditionsID = -3;
         public const long NumberOfBoonsID = -2;
+        public const long ScholarRune = -4;
+        public const long EagleRune = -5;
+        public const long MovingBuff = -6;
+        public const long ThiefRune = -7;
 
         public static BoonSource ProfToEnum(string prof)
         {
@@ -190,9 +194,9 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Compromised",35096, BoonSource.Enemy, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/48/Compromised.png"),
                 new Boon("Spirited Fusion",31722, BoonSource.Enemy, BoonType.Intensity, 500, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/eb/Spirited_Fusion.png"),
                 new Boon("Blood Shield",34376, BoonSource.Enemy, BoonType.Intensity, 18, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
-                new Boon("Blood Shield",34518, BoonSource.Enemy, BoonType.Intensity, 18, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
+                new Boon("Blood Shield Abo",34518, BoonSource.Enemy, BoonType.Intensity, 18, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
                 new Boon("Blood Fueled",34422, BoonSource.Enemy, BoonType.Intensity, 20, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Blood Fueled",34428, BoonSource.Enemy, BoonType.Intensity, 20, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Blood Fueled Abo",34428, BoonSource.Enemy, BoonType.Intensity, 20, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Boon("Flame Armor",52568, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Boon("Fiery Surge",52588, BoonSource.Enemy, BoonType.Intensity, 99, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Boon("Fractured - Enemy",53030, BoonSource.Enemy, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
@@ -377,9 +381,9 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Signet of the Hunt (Active)",12541, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/df/Signet_of_the_Hunt.png"),
                 //spirits
                 // new Boon("Water Spirit", 50386, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/0/06/Water_Spirit.png/33px-Water_Spirit.png"),
-                new Boon("Frost Spirit", 12544, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png"),
-                new Boon("Sun Spirit", 12540, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/d/dd/Sun_Spirit.png/33px-Sun_Spirit.png"),
-                new Boon("Stone Spirit", 12547, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/3/35/Stone_Spirit.png/20px-Stone_Spirit.png"),
+                new Boon("Frost Spirit Old", 12544, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png"),
+                new Boon("Sun Spirit Old", 12540, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/d/dd/Sun_Spirit.png/33px-Sun_Spirit.png"),
+                new Boon("Stone Spirit Old", 12547, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/3/35/Stone_Spirit.png/20px-Stone_Spirit.png"),
                 //new Boon("Storm Spirit", 50381, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/2/25/Storm_Spirit.png/30px-Storm_Spirit.png"),
                 //reworked
                 new Boon("Water Spirit", 50386, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/0/06/Water_Spirit.png/33px-Water_Spirit.png"),
@@ -622,6 +626,7 @@ namespace LuckParser.Models.ParseModels
         public static Dictionary<BoonNature, List<Boon>> BoonsByNature = _allBoons.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => x.ToList());
         public static Dictionary<BoonSource, List<Boon>> BoonsBySource = _allBoons.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => x.ToList());
         public static Dictionary<BoonType, List<Boon>> BoonsByType = _allBoons.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
+        public static Dictionary<string, List<Boon>> BoonsByName = _allBoons.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList());
         public static Dictionary<int, List<Boon>> BoonsByCapacity = _allBoons.GroupBy(x => x.Capacity).ToDictionary(x => x.Key, x => x.ToList());
 
         // debug

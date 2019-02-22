@@ -61,16 +61,23 @@ namespace LuckParser.Models.ParseModels
         protected bool Multiplier { get; }
         protected double GainPerStack { get; }
         public ModifierSource Src { get; }
+        public long ID { get; }
         public string Url { get; }
+        public string Name { get; }
 
         private static readonly List<DamageModifier> _allDamageModifier = new List<DamageModifier>() {
-
+            new DamageLogDamageModifier(Boon.ScholarRune,"Scholar Rune", true, 5.0,"https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png", x => x.IsNinety ),
+            new DamageLogDamageModifier(Boon.EagleRune, "Eagle Rune", true, 10.0,"https://wiki.guildwars2.com/images/9/9b/Superior_Rune_of_the_Eagle.png", x => x.IsFifty ),
+            new DamageLogDamageModifier(Boon.MovingBuff, "Moving", true, 5.0,"https://wiki.guildwars2.com/images/1/1c/Bowl_of_Seaweed_Salad.png", x => x.IsMoving ),
+            new DamageLogDamageModifier(Boon.ThiefRune, "Thief Rune", true, 10.0,"https://wiki.guildwars2.com/images/9/96/Superior_Rune_of_the_Thief.png", x => x.IsFlanking ),
         };
 
         public static Dictionary<ModifierSource, List<DamageModifier>> DamageModifiersPerSource = _allDamageModifier.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
 
-        protected DamageModifier(bool multiplier, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url)
+        protected DamageModifier(long id, string name, bool multiplier, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url)
         {
+            ID = id;
+            Name = name;
             Multiplier = multiplier;
             GainPerStack = gainPerStack;
             _compareType = compareType;
