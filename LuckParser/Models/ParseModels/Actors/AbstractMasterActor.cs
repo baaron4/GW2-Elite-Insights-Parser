@@ -3,27 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using static LuckParser.Models.Statistics;
 
 namespace LuckParser.Models.ParseModels
 {
     public abstract class AbstractMasterActor : AbstractActor
     {
-        public class ExtraBoonData
-        {
-            public int HitCount { get; }
-            public int TotalHitCount { get; }
-            public int DamageGain { get; }
-            public int TotalDamage { get; }
-            public bool Multiplier { get; }
-            public ExtraBoonData(int hitCount, int totalHitCount, int damageGain, int totalDamage, bool multiplier)
-            {
-                HitCount = hitCount;
-                TotalHitCount = totalHitCount;
-                DamageGain = damageGain;
-                TotalDamage = totalDamage;
-                Multiplier = multiplier;
-            }
-        };
+        
         // Boons
         private readonly List<BoonDistribution> _boonDistribution = new List<BoonDistribution>();
         private readonly List<Dictionary<long, long>> _boonPresence = new List<Dictionary<long, long>>();
@@ -32,11 +18,13 @@ namespace LuckParser.Models.ParseModels
         private readonly Dictionary<long, List<ExtraBoonData>> _boonExtra = new Dictionary<long, List<ExtraBoonData>>();
         private readonly Dictionary<Target, Dictionary<long, List<ExtraBoonData>>> _boonTargetExtra = new Dictionary<Target, Dictionary<long, List<ExtraBoonData>>>();
         // damage list
-        public Dictionary<int, List<int>> DamageList1S { get; } = new Dictionary<int, List<int>>();
+        private Dictionary<int, List<int>> _damageList1S = new Dictionary<int, List<int>>();
         // Minions
-        private readonly Dictionary<string, Minions> _minions = new Dictionary<string, Minions>();
+        private Dictionary<string, Minions> _minions = new Dictionary<string, Minions>();
         // Replay
         public CombatReplay CombatReplay { get; protected set; }
+        // Statistics
+        private List<FinalDPS> _dpsAll;
 
         protected AbstractMasterActor(AgentItem agent) : base(agent)
         {
@@ -45,7 +33,7 @@ namespace LuckParser.Models.ParseModels
 
         public Dictionary<string, Minions> GetMinions(ParsedLog log)
         {
-            if (_minions.Count == 0)
+            if (_minions == null)
             {
                 SetMinions(log);
             }
@@ -56,7 +44,7 @@ namespace LuckParser.Models.ParseModels
         {
             ulong targetId = target != null ? target.Agent : 0;
             int id = (phaseIndex + "_" + targetId + "_1S").GetHashCode();
-            if (DamageList1S.TryGetValue(id, out List<int> res))
+            if (_damageList1S.TryGetValue(id, out List<int> res))
             {
                 return res;
             }
@@ -97,13 +85,13 @@ namespace LuckParser.Models.ParseModels
                 int lastDamage = dmgListFull[(int)phase.GetDuration()];
                 dmgList.Add(lastDamage);
             }
-            DamageList1S[id] = dmgList;
+            _damageList1S[id] = dmgList;
             return dmgList;
         }
 
         public BoonDistribution GetBoonDistribution(ParsedLog log, int phaseIndex)
         {
-            if (BoonPoints.Count == 0)
+            if (BoonPoints == null)
             {
                 SetBoonStatus(log);
             }
@@ -112,7 +100,7 @@ namespace LuckParser.Models.ParseModels
 
         public Dictionary<long, long> GetBoonPresence(ParsedLog log, int phaseIndex)
         {
-            if (BoonPoints.Count == 0)
+            if (BoonPoints == null)
             {
                 SetBoonStatus(log);
             }
@@ -121,7 +109,7 @@ namespace LuckParser.Models.ParseModels
 
         protected Dictionary<long, List<long>> GetCondiCleanse(ParsedLog log, int phaseIndex, AgentItem src)
         {
-            if (BoonPoints.Count == 0)
+            if (BoonPoints == null)
             {
                 SetBoonStatus(log);
             }
@@ -134,7 +122,7 @@ namespace LuckParser.Models.ParseModels
 
         public Dictionary<long, List<ExtraBoonData>> GetExtraBoonData(ParsedLog log, Target target)
         {
-            if (BoonPoints.Count == 0)
+            if (BoonPoints == null)
             {
                 SetBoonStatus(log);
             }
@@ -154,11 +142,74 @@ namespace LuckParser.Models.ParseModels
 
         public Dictionary<long, long> GetCondiPresence(ParsedLog log, int phaseIndex)
         {
-            if (BoonPoints.Count == 0)
+            if (BoonPoints == null)
             {
                 SetBoonStatus(log);
             }
             return _condiPresence[phaseIndex];
+        }
+
+        public FinalDPS GetDPSAll(ParsedLog log, int phaseIndex)
+        {
+            if (_dpsAll == null)
+            {
+                _dpsAll = new List<FinalDPS>();
+                foreach (PhaseData phase in log.FightData.GetPhases(log))
+                {
+                    _dpsAll.Add(GetFinalDPS(log, phase, null));
+                }
+            }
+            return _dpsAll[phaseIndex];
+        }
+
+        public List<FinalDPS> GetDPSAll(ParsedLog log)
+        {
+            if (_dpsAll == null)
+            {
+                _dpsAll = new List<FinalDPS>();
+                foreach (PhaseData phase in log.FightData.GetPhases(log))
+                {
+                    _dpsAll.Add(GetFinalDPS(log, phase, null));
+                }
+            }
+            return _dpsAll;
+        }
+
+        protected FinalDPS GetFinalDPS(ParsedLog log, PhaseData phase, Target target)
+        {
+            double phaseDuration = (phase.GetDuration()) / 1000.0;
+            int damage;
+            double dps = 0.0;
+            FinalDPS final = new FinalDPS();
+            //DPS
+            damage = GetDamageLogs(target, log,
+                    phase.Start, phase.End).Sum(x => x.Damage);
+
+            if (phaseDuration > 0)
+            {
+                dps = damage / phaseDuration;
+            }
+            final.Dps = (int)Math.Round(dps);
+            final.Damage = damage;
+            //Condi DPS
+            damage = GetDamageLogs(target, log,
+                    phase.Start, phase.End).Sum(x => x.IsCondi ? x.Damage : 0);
+
+            if (phaseDuration > 0)
+            {
+                dps = damage / phaseDuration;
+            }
+            final.CondiDps = (int)Math.Round(dps);
+            final.CondiDamage = damage;
+            //Power DPS
+            damage = final.Damage - final.CondiDamage;
+            if (phaseDuration > 0)
+            {
+                dps = damage / phaseDuration;
+            }
+            final.PowerDps = (int)Math.Round(dps);
+            final.PowerDamage = damage;
+            return final;
         }
 
         public void InitCombatReplay(ParsedLog log, int pollingRate, bool trim, bool forceInterpolate)
@@ -372,6 +423,7 @@ namespace LuckParser.Models.ParseModels
 
         private void SetMinions(ParsedLog log)
         {
+            _minions = new Dictionary<string, Minions>();
             List<AgentItem> combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.MasterAgent == AgentItem.Agent).ToList();
             Dictionary<string, Minions> auxMinions = new Dictionary<string, Minions>();
             foreach (AgentItem agent in combatMinion)

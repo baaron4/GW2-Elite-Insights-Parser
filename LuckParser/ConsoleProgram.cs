@@ -64,8 +64,7 @@ namespace LuckParser
             string[] uploadresult = new string[3] { "", "", "" };
             try
             {
-                SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
-                ParsingController control = new ParsingController(settings);
+                ParsingController control = new ParsingController();
 
                 if (!GeneralHelper.HasFormat())
                 {
@@ -163,21 +162,6 @@ namespace LuckParser
                     string encounterLengthTerm = Properties.Settings.Default.AddDuration ? "_" + (log.FightData.FightDuration / 1000).ToString() + "s" : "";
                     string PoVClassTerm = Properties.Settings.Default.AddPoVProf ? "_" + log.PlayerList.Find(x => x.AgentItem.Name.Split(':')[0] == log.LogData.PoV.Split(':')[0]).Prof.ToLower() : "";
 
-                    StatisticsCalculator statisticsCalculator = new StatisticsCalculator(settings);
-                    StatisticsCalculator.Switches switches = new StatisticsCalculator.Switches();
-                    if (Properties.Settings.Default.SaveOutHTML)
-                    {
-                        HTMLBuilder.UpdateStatisticSwitches(switches);
-                    }
-                    if (Properties.Settings.Default.SaveOutCSV)
-                    {
-                        CSVBuilder.UpdateStatisticSwitches(switches);
-                    }
-                    if (Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML)
-                    {
-                        RawFormatBuilder.UpdateStatisticSwitches(switches);
-                    }
-                    Statistics statistics = statisticsCalculator.CalculateStatistics(log, switches);
                     Console.Write("Statistics Computed\n");
 
                     string fName = fInfo.Name.Split('.')[0];
@@ -192,7 +176,7 @@ namespace LuckParser
                         {
                             using (StreamWriter sw = new StreamWriter(fs))
                             {
-                                var builder = new HTMLBuilder(log, settings, statistics, uploadresult);
+                                var builder = new HTMLBuilder(log, uploadresult);
                                 builder.CreateHTML(sw, saveDirectory.FullName);
                             }
                         }
@@ -207,7 +191,7 @@ namespace LuckParser
                         {
                             using (StreamWriter sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                             {
-                                var builder = new CSVBuilder(sw, ",",log, settings, statistics,uploadresult);
+                                var builder = new CSVBuilder(sw, ",", log, uploadresult);
                                 builder.CreateCSV();
                             }
                         }
@@ -223,7 +207,7 @@ namespace LuckParser
                         {
                             using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
                             {
-                                var builder = new RawFormatBuilder(sw, log, settings, statistics, uploadresult);
+                                var builder = new RawFormatBuilder(sw, log, uploadresult);
                                 builder.CreateJSON();
                             }
                         }
@@ -239,7 +223,7 @@ namespace LuckParser
                         {
                             using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
                             {
-                                var builder = new RawFormatBuilder(sw, log, settings, statistics, uploadresult);
+                                var builder = new RawFormatBuilder(sw, log, uploadresult);
                                 builder.CreateXML();
                             }
                         }

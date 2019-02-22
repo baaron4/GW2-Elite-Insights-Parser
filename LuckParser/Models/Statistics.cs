@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using LuckParser.Models.ParseModels;
+using LuckParser.Parser;
 
 namespace LuckParser.Models
 {
@@ -8,26 +10,11 @@ namespace LuckParser.Models
     /// </summary>
     public class Statistics
     {
-        public Statistics()
+        public Statistics(ParsedLog log)
         {
-            DpsTarget = new Dictionary<Target, Dictionary<Player, FinalDPS[]>>();
-            DpsAll = new Dictionary<Player, FinalDPS[]>();
-            Defenses = new Dictionary<Player, FinalDefenses[]>();
-            StatsTarget = new Dictionary<Target, Dictionary<Player, FinalStats[]>>();
-            StatsAll = new Dictionary<Player, FinalStatsAll[]>();
-            Support = new Dictionary<Player, FinalSupport[]>();
-            SelfBuffs = new Dictionary<Player, Dictionary<long, FinalBuffs>[]>();
-            GroupBuffs = new Dictionary<Player, Dictionary<long, FinalBuffs>[]>();
-            OffGroupBuffs = new Dictionary<Player, Dictionary<long, FinalBuffs>[]>();
-            SquadBuffs = new Dictionary<Player, Dictionary<long, FinalBuffs>[]>();
-            TargetBuffs = new Dictionary<Target, Dictionary<long, FinalTargetBuffs>[]>();
-            TargetDps = new Dictionary<Target, FinalDPS[]>();
-            AvgTargetConditions = new Dictionary<Target, double[]>();
-            AvgTargetBoons = new Dictionary<Target, double[]>();
-            Phases = new List<PhaseData>();
+            SetPresentBoons(log.CombatData.GetSkills(), log.PlayerList, log.CombatData);
+            SetStackCenterPositions(log.FightData.Logic.CanCombatReplay, log.PlayerList);
         }
-
-        public List<PhaseData> Phases;
 
         public class FinalDPS
         {
@@ -39,10 +26,6 @@ namespace LuckParser.Models
             public int PowerDps;
             public int PowerDamage;
         }
-
-        public readonly Dictionary<Target, Dictionary<Player, FinalDPS[]>> DpsTarget;
-        public readonly Dictionary<Player, FinalDPS[]> DpsAll;
-        public Dictionary<Target, FinalDPS[]> TargetDps;
 
         public class FinalStats
         {
@@ -82,11 +65,6 @@ namespace LuckParser.Models
             public int SwapCount;
         }
 
-        public readonly Dictionary<Target, Dictionary<Player, FinalStats[]>> StatsTarget;
-        public readonly Dictionary<Player, FinalStatsAll[]> StatsAll;
-        public readonly Dictionary<Target, double[]> AvgTargetConditions;
-        public readonly Dictionary<Target, double[]> AvgTargetBoons;
-
         public class FinalDefenses
         {
             //public long allHealReceived;
@@ -106,8 +84,6 @@ namespace LuckParser.Models
             public int DcDuration;
         }
 
-        public readonly Dictionary<Player, FinalDefenses[]> Defenses;
-
         public class FinalSupport
         {
             //public long allHeal;
@@ -116,8 +92,6 @@ namespace LuckParser.Models
             public int CondiCleanse;
             public double CondiCleanseTime;
         }
-
-        public readonly Dictionary<Player, FinalSupport[]> Support;
 
         public class FinalBuffs
         {
@@ -131,10 +105,7 @@ namespace LuckParser.Models
             public double Presence;
         }
 
-        public readonly Dictionary<Player, Dictionary<long, FinalBuffs>[]> SelfBuffs;
-        public readonly Dictionary<Player, Dictionary<long, FinalBuffs>[]> GroupBuffs;
-        public readonly Dictionary<Player, Dictionary<long, FinalBuffs>[]> OffGroupBuffs;
-        public readonly Dictionary<Player, Dictionary<long, FinalBuffs>[]> SquadBuffs;
+        public enum BuffEnum { Self, Group, OffGroup, Squad};
 
         public class FinalTargetBuffs
         {
@@ -169,9 +140,56 @@ namespace LuckParser.Models
             public readonly Dictionary<Player, double> Extended;
         }
 
-        public readonly Dictionary<Target,Dictionary<long, FinalTargetBuffs>[]> TargetBuffs;
+        public class ExtraBoonData
+        {
+            public int HitCount { get; }
+            public int TotalHitCount { get; }
+            public int DamageGain { get; }
+            public int TotalDamage { get; }
+            public bool Multiplier { get; }
 
-        public Dictionary<Target, double[]>[] TargetsHealth { get; set; }
+            public ExtraBoonData(int hitCount, int totalHitCount, int damageGain, int totalDamage, bool multiplier)
+            {
+                HitCount = hitCount;
+                TotalHitCount = totalHitCount;
+                DamageGain = damageGain;
+                TotalDamage = totalDamage;
+                Multiplier = multiplier;
+            }
+        }
+
+
+        public class Consumable
+        {
+            public Boon Buff { get; }
+            public long Time { get; }
+            public int Duration { get; }
+            public int Stack { get; set; }
+
+            public Consumable(Boon item, long time, int duration)
+            {
+                Buff = item;
+                Time = time;
+                Duration = duration;
+                Stack = 1;
+            }
+        }
+
+        public class DeathRecap
+        {
+            public class DeathRecapDamageItem
+            {
+                public long ID;
+                public bool IndirectDamage;
+                public string Src;
+                public int Damage;
+                public int Time;
+            }
+
+            public int DeathTime;
+            public List<DeathRecapDamageItem> ToDown;
+            public List<DeathRecapDamageItem> ToKill;
+        }
 
         // present buff
         public readonly List<Boon> PresentBoons = new List<Boon>();//Used only for Boon tables
@@ -182,5 +200,103 @@ namespace LuckParser.Models
 
         //Positions for group
         public List<Point3D> StackCenterPositions;
+
+        private void SetStackCenterPositions(bool canCombatReplay, List<Player> players)
+        {
+            if (Properties.Settings.Default.ParseCombatReplay && canCombatReplay)
+            {
+                StackCenterPositions = new List<Point3D>();
+                List<List<Point3D>> GroupsPosList = new List<List<Point3D>>();
+                foreach (Player player in players)
+                {
+                    if (player.Account == ":Conjured Sword")
+                    {
+                        continue;
+                    }
+                    GroupsPosList.Add(player.CombatReplay.GetActivePositions());
+                }
+                for (int time = 0; time < GroupsPosList[0].Count; time++)
+                {
+                    float x = 0;
+                    float y = 0;
+                    float z = 0;
+                    int activePlayers = GroupsPosList.Count;
+                    foreach (List<Point3D> points in GroupsPosList)
+                    {
+                        Point3D point = points[time];
+                        if (point != null)
+                        {
+                            x += point.X;
+                            y += point.Y;
+                            z += point.Z;
+                        }
+                        else
+                        {
+                            activePlayers--;
+                        }
+
+                    }
+                    x = x / activePlayers;
+                    y = y / activePlayers;
+                    z = z / activePlayers;
+                    StackCenterPositions.Add(new Point3D(x, y, z, GeneralHelper.PollingRate * time));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Checks the combat data and gets buffs that were present during the fight
+        /// </summary>
+        private void SetPresentBoons(HashSet<long> skillIDs, List<Player> players, CombatData combatData)
+        {
+            // Main boons
+            foreach (Boon boon in Boon.GetBoonList())
+            {
+                if (skillIDs.Contains(boon.ID))
+                {
+                    PresentBoons.Add(boon);
+                }
+            }
+            // Main Conditions
+            foreach (Boon boon in Boon.GetCondiBoonList())
+            {
+                if (skillIDs.Contains(boon.ID))
+                {
+                    PresentConditions.Add(boon);
+                }
+            }
+
+            // Important class specific boons
+            foreach (Boon boon in Boon.GetOffensiveTableList())
+            {
+                if (skillIDs.Contains(boon.ID))
+                {
+                    PresentOffbuffs.Add(boon);
+                }
+            }
+
+            foreach (Boon boon in Boon.GetDefensiveTableList())
+            {
+                if (skillIDs.Contains(boon.ID))
+                {
+                    PresentDefbuffs.Add(boon);
+                }
+
+            }
+
+            // All class specific boons
+            Dictionary<long, Boon> remainingBuffsByIds = Boon.GetRemainingBuffsList().GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
+            foreach (Player player in players)
+            {
+                PresentPersonalBuffs[player.InstID] = new HashSet<Boon>();
+                foreach (CombatItem item in combatData.GetBoonDataByDst(player.InstID, player.FirstAware, player.LastAware))
+                {
+                    if (item.DstInstid == player.InstID && item.IsBuffRemove == ParseEnum.BuffRemove.None && remainingBuffsByIds.TryGetValue(item.SkillID, out Boon boon))
+                    {
+                        PresentPersonalBuffs[player.InstID].Add(boon);
+                    }
+                }
+            }
+        }
     }
 }

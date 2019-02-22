@@ -7,9 +7,9 @@ namespace LuckParser.Models.ParseModels
     public class Minions : List<Minion>
     {
         public readonly int MinionID;
-        private readonly List<DamageLog> _damageLogs = new List<DamageLog>();
-        private Dictionary<AgentItem, List<DamageLog>> _damageLogsByDst = new Dictionary<AgentItem, List<DamageLog>>();
-        private readonly List<CastLog> _castLogs = new List<CastLog>();
+        private List<DamageLog> _damageLogs;
+        private Dictionary<AgentItem, List<DamageLog>> _damageLogsByDst;
+        private List<CastLog> _castLogs;
         public string Character => Count > 0 ? this[0].Character : "";
 
         public Minions(int id)
@@ -19,8 +19,9 @@ namespace LuckParser.Models.ParseModels
 
         public List<DamageLog> GetDamageLogs(AbstractActor target, ParsedLog log, long start, long end)
         {
-            if (_damageLogs.Count == 0)
+            if (_damageLogs == null)
             {
+                _damageLogs = new List<DamageLog>();
                 foreach (Minion minion in this)
                 {
                     _damageLogs.AddRange(minion.GetDamageLogs(null, log, 0, log.FightData.FightDuration));
@@ -46,8 +47,9 @@ namespace LuckParser.Models.ParseModels
 
         public List<CastLog> GetCastLogs(ParsedLog log, long start, long end)
         {
-            if (_castLogs.Count == 0)
+            if (_castLogs == null)
             {
+                _castLogs = new List<CastLog>();
                 foreach (Minion minion in this)
                 {
                     _castLogs.AddRange(minion.GetCastLogs(log, 0, log.FightData.FightDuration));

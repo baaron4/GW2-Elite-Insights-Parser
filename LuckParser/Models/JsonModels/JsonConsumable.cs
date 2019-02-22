@@ -29,7 +29,7 @@ namespace LuckParser.Models.JsonModels
         /// <seealso cref="JsonLog.BuffMap"/>
         public long Id;
 
-        public JsonConsumable(ParseModels.Player.Consumable food)
+        public JsonConsumable(Statistics.Consumable food)
         {
             Stack = food.Stack;
             Duration = food.Duration;

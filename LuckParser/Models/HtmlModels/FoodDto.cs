@@ -12,7 +12,7 @@ namespace LuckParser.Models.HtmlModels
         public int Stack;
         public bool Dimished;
 
-        public FoodDto(Player.Consumable consume)
+        public FoodDto(Statistics.Consumable consume)
         {
             Time = consume.Time / 1000.0;
             Duration = consume.Duration / 1000.0;

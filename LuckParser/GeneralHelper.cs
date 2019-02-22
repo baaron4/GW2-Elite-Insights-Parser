@@ -15,6 +15,7 @@ namespace LuckParser
 {
     public static class GeneralHelper
     {
+        public static int PollingRate = 150;
 
         public static AgentItem UnknownAgent = new AgentItem(0, "UNKNOWN");
 

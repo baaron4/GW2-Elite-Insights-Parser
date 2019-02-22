@@ -36,12 +36,12 @@ namespace LuckParser.Models.JsonModels
         /// Array of average number of boons on the target \n
         /// Length == # of phases
         /// </summary>
-        public double[] AvgBoons;
+        public List<double> AvgBoons;
         /// <summary>
         /// Array of average number of conditions on the target \n
         /// Length == # of phases
         /// </summary>
-        public double[] AvgConditions;
+        public List<double> AvgConditions;
         /// <summary>
         /// List of buff status
         /// </summary>
