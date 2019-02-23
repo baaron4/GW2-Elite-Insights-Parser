@@ -133,7 +133,7 @@ var compilePlayerTab = function () {
                     color: this.player.colTotal,
                 },
                 yaxis: dpsY,
-                hoverinfo: 'name+y',
+                hoverinfo: 'name+y+x',
                 name: 'Total DPS'
             });
             this.data.push({
@@ -145,7 +145,7 @@ var compilePlayerTab = function () {
                     color: this.player.colTarget,
                 },
                 yaxis: dpsY,
-                hoverinfo: 'name+y',
+                hoverinfo: 'name+y+x',
                 name: 'Target DPS'
             });
             this.data.push({
@@ -157,7 +157,7 @@ var compilePlayerTab = function () {
                     color: this.player.colCleave,
                 },
                 yaxis: dpsY,
-                hoverinfo: 'name+y',
+                hoverinfo: 'name+y+x',
                 name: 'Cleave DPS'
             });
             this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc');
