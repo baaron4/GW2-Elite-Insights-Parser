@@ -26,13 +26,13 @@ namespace LuckParser.Models.ParseModels
                 case ValueCompare.EQ:
                     return val == _value;
                 case ValueCompare.G:
-                    return val < _value;
-                case ValueCompare.GEQ:
-                    return val <= _value;
-                case ValueCompare.L:
                     return val > _value;
-                case ValueCompare.LEQ:
+                case ValueCompare.GEQ:
                     return val >= _value;
+                case ValueCompare.L:
+                    return val < _value;
+                case ValueCompare.LEQ:
+                    return val <= _value;
                 case ValueCompare.NEQ:
                     return val != _value;
             }
