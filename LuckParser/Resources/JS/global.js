@@ -185,7 +185,7 @@ function computeRotationData(rotationData, images, data) {
             rotaTrace.x.push(duration / 1000.0);
             rotaTrace.base.push(x);
             rotaTrace.y.push(1.2);
-            rotaTrace.text.push(name + ' at ' + x +'s for '+ duration + 'ms');
+            rotaTrace.text.push(name + ' at ' + x + 's for ' + duration + 'ms');
             rotaTrace.width.push(aa ? 0.5 : 1.0);
             rotaTrace.marker.color.push(fillColor);
             rotaTrace.marker.line.color.push(quick ? 'rgb(220,40,220)' : 'rgb(20,20,20)');

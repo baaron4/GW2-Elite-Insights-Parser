@@ -7,7 +7,7 @@ namespace LuckParser.Models.ParseModels
 {
     public class CombatData
     {
-        public List<CombatItem> AllCombatItems;
+        public List<CombatItem> AllCombatItems { get; }
         private Dictionary<ParseEnum.StateChange, List<CombatItem>> _statesData;
         //private List<CombatItem> _healingData;
         //private List<CombatItem> _healingReceivedData;
