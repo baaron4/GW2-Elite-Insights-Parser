@@ -87,7 +87,7 @@ var compileGraphs = function () {
                         width: i === this.playerindex ? 5 : 2
                     },
                     text: pText,
-                    hoverinfo: 'y+text',
+                    hoverinfo: 'y+text+x',
                     name: player.name + ' DPS',
                 });
             }
@@ -97,7 +97,7 @@ var compileGraphs = function () {
                 line: {
                     shape: 'spline'
                 },
-                hoverinfo: 'name+y',
+                hoverinfo: 'name+y+x',
                 visible: 'legendonly',
                 name: 'All Player Dps'
             });
@@ -119,7 +119,7 @@ var compileGraphs = function () {
                     },
                     text: [],
                     name: mechData.name,
-                    hoverinfo: 'text'
+                    hoverinfo: 'text+x'
                 };
                 var time, pts, k;
                 if (mechData.enemyMech) {

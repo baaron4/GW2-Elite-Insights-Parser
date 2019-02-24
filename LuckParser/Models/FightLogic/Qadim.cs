@@ -94,6 +94,22 @@ namespace LuckParser.Models.Logic
             };
         }
 
+        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            // Find target
+            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Qadim);
+            if (target == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
+            CombatItem startCast = combatData.FirstOrDefault(x => x.SkillID == 52496 && x.IsActivation.StartCasting());
+            if (startCast == null)
+            {
+                throw new Exceptions.TooShortException();
+            }
+            fightData.FightStart = startCast.Time;
+        }
+
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             // Warning: Combat replay relies on these phases.
@@ -536,6 +552,7 @@ namespace LuckParser.Models.Logic
             int wyvernPhaseTime = (int) (phases.Count > 4 ? phases[4].End + timeAfterPhase2 : int.MaxValue);
             int jumpingPuzzleTime = (int) (phases.Count > 5 ? phases[5].End + timeAfterWyvernPhase : int.MaxValue);
             int finalPhaseTime = int.MaxValue;
+            int startOffset = -(int)(phases.First().Start - log.FightData.ToFightSpace(log.CombatData.AllCombatItems.First().Time));
             if (phases.Count > 6)
             {
                 var lastPhase = phases[6];
@@ -585,7 +602,7 @@ namespace LuckParser.Models.Logic
                 (
                     // Initial position, all platforms tightly packed
 
-                    0, 0, new[]
+                    startOffset, 0, new[]
                     {
                         (xLeftLeftLeft, yMid, zDefault, 0.0, 1.0),
                         (xLeftLeft, yUpUp, zDefault, Math.PI, 1.0),
@@ -603,7 +620,7 @@ namespace LuckParser.Models.Logic
                 ),
                 (
                     // Hydra phase, all platforms have a small gap between them
-                    0, 12000, new[]
+                    startOffset, 12000, new[]
                     {
                         (xGapsLeftLeftLeft, yMid, zDefault, 0.0, 1.0),
                         (xGapsLeftLeft, yGapsUpUp, zDefault, Math.PI, 1.0),

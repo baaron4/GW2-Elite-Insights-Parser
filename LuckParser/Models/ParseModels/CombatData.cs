@@ -7,6 +7,7 @@ namespace LuckParser.Models.ParseModels
 {
     public class CombatData
     {
+        public List<CombatItem> AllCombatItems { get; }
         private Dictionary<ParseEnum.StateChange, List<CombatItem>> _statesData;
         //private List<CombatItem> _healingData;
         //private List<CombatItem> _healingReceivedData;
@@ -21,6 +22,7 @@ namespace LuckParser.Models.ParseModels
 
         public CombatData(List<CombatItem> allCombatItems, FightData fightData)
         {
+            AllCombatItems = allCombatItems;
             _skillData = allCombatItems.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
             var noStateActiBuffRem = allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.Normal && x.IsActivation == ParseEnum.Activation.None && x.IsBuffRemove == ParseEnum.BuffRemove.None);
             // movement events
