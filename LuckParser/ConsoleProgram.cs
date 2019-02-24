@@ -43,7 +43,7 @@ namespace LuckParser
             System.Globalization.CultureInfo before = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture =
                     new System.Globalization.CultureInfo("en-US");
-            GridRow row = new GridRow(logFile as string, "")
+            GridRow row = new GridRow(logFile as string, "Ready to parse")
             {
                 BgWorker = new System.ComponentModel.BackgroundWorker()
                 {
