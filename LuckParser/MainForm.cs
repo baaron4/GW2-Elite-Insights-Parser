@@ -18,6 +18,7 @@ namespace LuckParser
     {
         private SettingsForm _settingsForm;
         private readonly List<string> _logsFiles;
+        private int _runningCount;
         private bool _anyRunning;
         private readonly Queue<GridRow> _logQueue = new Queue<GridRow>();
         private MainForm()
@@ -66,7 +67,7 @@ namespace LuckParser
 
                 gridRowBindingSource.Add(gRow);
 
-                if (Properties.Settings.Default.AutoParse || !btnParse.Enabled)
+                if (Properties.Settings.Default.AutoParse)
                 {
                     QueueOrRunWorker(gRow);
                 }
@@ -104,6 +105,8 @@ namespace LuckParser
             }
             else
             {
+                row.Status = "Waiting for a thread";
+                row.Metadata.State = RowState.Pending;
                 row.Run();
             }
         }
@@ -113,17 +116,24 @@ namespace LuckParser
         /// </summary>
         private void RunNextWorker()
         {
+            if (Properties.Settings.Default.ParseOneAtATime)
+            {
+                _anyRunning = false;
+            }
             if (_logQueue.Count > 0)
             {
                 GridRow row = _logQueue.Dequeue();
+                _anyRunning = true;
                 row.Run();
             }
             else
             {
-                _anyRunning = false;
-                btnParse.Enabled = true;
-                btnClear.Enabled = true;
-                btnCancel.Enabled = false;
+                if (_runningCount == 0)
+                {
+                    btnParse.Enabled = true;
+                    btnClear.Enabled = true;
+                    btnCancel.Enabled = false;
+                }
             }
         }
 
@@ -142,6 +152,7 @@ namespace LuckParser
             UploadController up_controller = null;
             e.Result = rowData;
 
+            _runningCount++;
             bg.ThrowIfCanceled(rowData);
 
             try
@@ -384,6 +395,7 @@ namespace LuckParser
         private void BgWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             GridRow row;
+            _runningCount--;
             if (e.Cancelled || e.Error != null)
             {
                 if (e.Error is CancellationException)
