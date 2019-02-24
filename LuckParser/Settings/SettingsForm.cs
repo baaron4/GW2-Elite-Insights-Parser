@@ -99,6 +99,7 @@ namespace LuckParser.Setting
             //Update skill list
             GW2APIController tempcontroller = new GW2APIController();
             tempcontroller.WriteSkillListToFile();
+            MessageBox.Show("Skill List has been redone");
         }
 
         private void RetrySkillListClick(object sender, EventArgs e)
@@ -106,6 +107,7 @@ namespace LuckParser.Setting
             //Update skill list
             GW2APIController tempcontroller = new GW2APIController();
             tempcontroller.RetryWriteSkillListtoFile();
+            MessageBox.Show("Skill List has been redone");
         }
 
         private void OuputCheckedChanged(object sender, EventArgs e)
