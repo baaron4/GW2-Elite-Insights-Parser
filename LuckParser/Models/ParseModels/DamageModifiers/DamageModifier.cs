@@ -115,6 +115,13 @@ namespace LuckParser.Models.ParseModels
             new BuffDamageModifier(Boon.BoonsByName["Vigor"].ID, "Excessive Energy", false, 10.0, DamageType.Power, DamageType.Power, ModifierSource.Engineer, _byPresence, "https://wiki.guildwars2.com/images/1/1f/Excessive_Energy.png"),
             new BuffDamageModifierTarget(Boon.BoonsByName["Vulnerability"].ID, "Shaped Charge", false, 10.0, DamageType.Power, DamageType.Power, ModifierSource.Engineer, _byPresence, "https://wiki.guildwars2.com/images/f/f3/Explosive_Powder.png"),
             new BuffDamageModifierTarget(Boon.BoonsByName["Number of Conditions"].ID, "Modified Ammunition", false, 2.0, DamageType.Power, DamageType.Power, ModifierSource.Engineer, _byStack, "https://wiki.guildwars2.com/images/9/94/Modified_Ammunition.png"),
+            /// RANGER
+            new BuffDamageModifier(Boon.BoonsByName["Sic 'Em!"], false, 40.0, DamageType.Power, DamageType.Power, ModifierSource.Ranger, _byPresence),
+            new BuffDamageModifier(Boon.BoonsByName["Light on your Feet"], false, 10.0, DamageType.Power, DamageType.Power, ModifierSource.Ranger, _byPresence),
+            new BuffDamageModifier(Boon.BoonsByName["Twice as Vicious"], false, 5.0, DamageType.All, DamageType.All, ModifierSource.Ranger, _byPresence),
+            new BuffDamageModifier(Boon.BoonsByName["Number of Boons"].ID, "Bountiful Hunter", true, 1.0, DamageType.Power, DamageType.Power, ModifierSource.Ranger, _byStack, "https://wiki.guildwars2.com/images/2/25/Bountiful_Hunter.png"),
+            new BuffDamageModifier(Boon.BoonsByName["Fury"].ID, "Furious Strength", true, 1.0, DamageType.Power, DamageType.Power, ModifierSource.Ranger, _byStack, "https://wiki.guildwars2.com/images/c/ca/Furious_Strength.png"),
+            // TODO Predator's Onslaught
         };
 
         public static Dictionary<ModifierSource, List<DamageModifier>> DamageModifiersPerSource = _allDamageModifier.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
