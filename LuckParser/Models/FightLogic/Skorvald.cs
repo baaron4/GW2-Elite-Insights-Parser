@@ -58,19 +58,6 @@ namespace LuckParser.Models.Logic
             return (target.Health == 5551340) ? 1 : 0;
         }
 
-        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
-        {
-            CombatReplay replay = target.CombatReplay;
-            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
-            switch (target.ID)
-            {
-                case (ushort)ParseEnum.TargetIDS.Skorvald:
-                    break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-        }
-
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
             return new List<ParseEnum.TrashIDS>
@@ -81,25 +68,6 @@ namespace LuckParser.Models.Logic
                 FluxAnomaly1,
                 SolarBloom
             };
-        }
-
-        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
-        {
-            switch (mob.ID)
-            {
-                case (ushort)FluxAnomaly4:
-                case (ushort)FluxAnomaly3:
-                case (ushort)FluxAnomaly2:
-                case (ushort)FluxAnomaly1:
-                case (ushort)SolarBloom:
-                    break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-        }
-
-        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
-        {
         }
     }
 }

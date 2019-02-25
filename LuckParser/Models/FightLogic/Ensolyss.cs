@@ -43,19 +43,7 @@ namespace LuckParser.Models.Logic
                             (-6144, -6144, 9216, 9216),
                             (11804, 4414, 12444, 5054));
         }
-
-
-        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
-        {
-            CombatReplay replay = target.CombatReplay;
-            switch (target.ID)
-            {
-                case (ushort)ParseEnum.TargetIDS.Ensolyss:
-                    break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-        }
+        
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
@@ -80,22 +68,6 @@ namespace LuckParser.Models.Logic
                 NightmareHallucination1,
                 NightmareHallucination2
             };
-        }
-
-        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
-        {
-            switch (mob.ID)
-            {
-                case (ushort)NightmareHallucination1:
-                case (ushort)NightmareHallucination2:
-                    break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-        }
-
-        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
-        {
         }
     }
 }

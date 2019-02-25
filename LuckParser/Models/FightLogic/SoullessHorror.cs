@@ -55,7 +55,7 @@ namespace LuckParser.Models.Logic
         }
 
 
-        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        public override void ComputeAdditionalTrashMobData(Mob mob, ParsedLog log)
         {
             CombatReplay replay = mob.CombatReplay;
             int start = (int)replay.TimeOffsets.start;
@@ -251,10 +251,6 @@ namespace LuckParser.Models.Logic
                 }
             }
             return (minDiff < 11000) ? 1 : 0;
-        }
-
-        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
-        {
         }
     }
 }

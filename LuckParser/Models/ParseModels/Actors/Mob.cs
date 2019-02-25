@@ -28,7 +28,7 @@ namespace LuckParser.Models.ParseModels
         protected override void SetAdditionalCombatReplayData(ParsedLog log)
         {
             CombatReplay.Icon = GeneralHelper.GetNPCIcon(ID);
-            log.FightData.Logic.ComputeAdditionalThrashMobData(this, log);
+            log.FightData.Logic.ComputeAdditionalTrashMobData(this, log);
         }
         //
         private class MobSerializable : AbstractMasterActorSerializable
