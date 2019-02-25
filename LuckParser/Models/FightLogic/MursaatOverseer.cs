@@ -97,7 +97,7 @@ namespace LuckParser.Models.Logic
         }
 
 
-        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        public override void ComputeAdditionalTrashMobData(Mob mob, ParsedLog log)
         {
             CombatReplay replay = mob.CombatReplay;
             List<CastLog> cls = mob.GetCastLogs(log, 0, log.FightData.FightDuration);
@@ -135,20 +135,6 @@ namespace LuckParser.Models.Logic
             }
         }
 
-
-        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
-        {
-            CombatReplay replay = target.CombatReplay;
-            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
-            switch (target.ID)
-            {
-                case (ushort)ParseEnum.TargetIDS.MursaatOverseer:
-                    break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-        }
-
         public override int IsCM(ParsedLog log)
         {
             Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.MursaatOverseer);
@@ -158,10 +144,6 @@ namespace LuckParser.Models.Logic
             }
             OverrideMaxHealths(log);
             return (target.Health > 25e6) ? 1 : 0;
-        }
-
-        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
-        {
         }
     }
 }

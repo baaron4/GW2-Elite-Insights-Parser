@@ -97,7 +97,7 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        public override void ComputeAdditionalTrashMobData(Mob mob, ParsedLog log)
         {
             switch (mob.ID)
             {

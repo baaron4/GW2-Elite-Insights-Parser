@@ -234,9 +234,17 @@ namespace LuckParser.Models.Logic
             phase.OverrideTimes(log);
         }
 
-        public abstract void ComputeAdditionalTargetData(Target target, ParsedLog log);
+        public virtual void ComputeAdditionalPlayerData(Player p, ParsedLog log)
+        {
+        }
 
-        public abstract void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log);
+        public virtual void ComputeAdditionalTargetData(Target target, ParsedLog log)
+        {
+        }
+
+        public virtual void ComputeAdditionalTrashMobData(Mob mob, ParsedLog log)
+        {
+        }
 
         protected virtual List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
@@ -247,8 +255,6 @@ namespace LuckParser.Models.Logic
         {
             return -1;
         }
-
-        public abstract void ComputeAdditionalPlayerData(Player p, ParsedLog log);
 
         public void InitTrashMobCombatReplay(ParsedLog log, int pollingRate)
         {

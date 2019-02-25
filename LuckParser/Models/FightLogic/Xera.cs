@@ -162,26 +162,6 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
-        {
-            switch (mob.ID)
-            {
-                case (ushort)WhiteMantleSeeker1:
-                case (ushort)WhiteMantleSeeker2:
-                case (ushort)WhiteMantleKnight1:
-                case (ushort)WhiteMantleKnight2:
-                case (ushort)WhiteMantleBattleMage1:
-                case (ushort)WhiteMantleBattleMage2:
-                case (ushort)ExquisiteConjunction:
-                case (ushort)ChargedBloodstone:
-                case (ushort)BloodstoneFragment:
-                case (ushort)XerasPhantasm:
-                    break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-        }
-
         public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
         {
             CombatReplay replay = target.CombatReplay;
@@ -198,10 +178,6 @@ namespace LuckParser.Models.Logic
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
-        }
-
-        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
-        {
         }
     }
 }

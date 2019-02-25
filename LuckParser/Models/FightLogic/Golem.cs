@@ -85,17 +85,5 @@ namespace LuckParser.Models.Logic
                 TriggerID
             };
         }
-
-        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
-        {
-        }
-
-        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
-        {
-        }
-
-        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
-        {
-        }
     }
 }

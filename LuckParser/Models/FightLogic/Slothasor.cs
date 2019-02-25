@@ -88,20 +88,6 @@ namespace LuckParser.Models.Logic
             return phases;
         }
 
-        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
-        {
-            switch (mob.ID)
-            {
-                case (ushort)Slubling1:
-                case (ushort)Slubling2:
-                case (ushort)Slubling3:
-                case (ushort)Slubling4:
-                    break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-        }
-
         public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
         {
             CombatReplay replay = target.CombatReplay;
