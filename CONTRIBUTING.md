@@ -55,7 +55,8 @@ If you are feeling a little bit more courageous, you can add support for a new f
 - an icon for the fight
 - an icon for the target(s) you wish to track
 
-and that's it. Only "simple" support will be explained. Adding combat replay requires the creation of custom assets and proper coordinates positioning. Advanced usage also requires good server_events/combat_events understanding.
+and that's it. 
+Only "simple" support will be explained. Adding combat replay requires the creation of custom assets and proper coordinates positioning. Advanced usage, like phases, also requires good server_events/combat_events understanding.
 
 Now create a file name "MyFightName".cs in LuckParser>Models>FightLogic that inherits from:
 - RaidLogic if a raid fight
