@@ -157,6 +157,7 @@ namespace LuckParser
             e.Result = rowData;
 
             _runningCount++;
+            _anyRunning = true;
             bg.ThrowIfCanceled(rowData);
 
             try
