@@ -131,9 +131,10 @@
     <Compile Include="Models\ParseModels\Mechanics\MechanicsChecker\CombatItemValueChecker.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicsChecker\MechanicChecker.cs" />
     <Compile Include="Models\ParseModels\Mechanics\PlayerBoonApplyMechanic.cs" />
+    <Compile Include="Models\ParseModels\Mechanics\PlayerCastEndMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\PlayerOnPlayerMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\PlayerBoonRemoveMechanic.cs" />
-    <Compile Include="Models\ParseModels\Mechanics\PlayerSkillMechanic.cs" />
+    <Compile Include="Models\ParseModels\Mechanics\PlayerCastStartMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\EnemyBoonApplyMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\SpawnMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\SkillOnPlayerMechanic.cs" />

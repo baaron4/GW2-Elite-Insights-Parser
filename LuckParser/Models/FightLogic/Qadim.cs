@@ -179,28 +179,6 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
-        {
-            switch (mob.ID)
-            {
-                case (ushort)LavaElemental1:
-                case (ushort)LavaElemental2:
-                case (ushort)IcebornHydra:
-                case (ushort)GreaterMagmaElemental1:
-                case (ushort)GreaterMagmaElemental2:
-                case (ushort)FireElemental:
-                case (ushort)FireImp:
-                case (ushort)PyreGuardian:
-                case (ushort)DestroyerTroll:
-                case (ushort)ReaperofFlesh:
-                case (ushort)IceElemental:
-                case (ushort)Zommoros:
-                    break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-        }
-
         public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
         {
             CombatReplay replay = target.CombatReplay;
@@ -444,11 +422,6 @@ namespace LuckParser.Models.Logic
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
-        }
-
-        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
-        {
-
         }
 
         public override int IsCM(ParsedLog log)

@@ -77,10 +77,32 @@ namespace LuckParser.Models.ParseModels
         public bool IsEnemyMechanic { get; protected set; }
         public bool ShowOnTable { get; protected set; }
 
+        /// <summary>
+        /// Simplified constructor with special checks where only short name is given. FullName and Description are equal to ShortName
+        /// </summary>
+        /// <param name="skillId">id of the mechanic</param>
+        /// <param name="inGameName">official name of the mechanic</param>
+        /// <param name="plotlySetting">html plot settings <seealso cref="MechanicPlotlySetting"/></param>
+        /// <param name="shortName">name of the mechanic</param>
+        /// <param name="internalCoolDown">grace period, in ms, during which getting hit by the mechanic does not count</param>
+        /// <param name="conditions">a list of special checks <seealso cref="MechanicChecker"/></param>
+        /// <param name="rule">AND or OR rule on the special checks <seealso cref="TriggerRule"/></param>
         protected Mechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<MechanicChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)
         {
         }
 
+        /// <summary>
+        /// Full constructor with special checks
+        /// </summary>
+        /// <param name="skillId">id of the mechanic</param>
+        /// <param name="inGameName">official name of the mechanic</param>
+        /// <param name="plotlySetting">html plot settings <seealso cref="MechanicPlotlySetting"/></param>
+        /// <param name="shortName">shortened name of the mechanic</param>
+        /// <param name="description">description of the mechanic</param>
+        /// <param name="fullName">full name of the mechanic</param>
+        /// <param name="internalCoolDown">grace period, in ms, during which getting hit by the mechanic does not count</param>
+        /// <param name="conditions">a list of special checks <seealso cref="MechanicChecker"/></param>
+        /// <param name="rule">AND or OR rule on the special checks <seealso cref="TriggerRule"/></param>
         protected Mechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<MechanicChecker> conditions, TriggerRule rule)
         {
             InGameName = inGameName;
@@ -95,10 +117,29 @@ namespace LuckParser.Models.ParseModels
             _triggerRule = rule;
         }
 
+
+        /// <summary>
+        /// Simplified constructor without special checks where only short name is given. FullName and Description are equal to ShortName
+        /// </summary>
+        /// <param name="skillId">id of the mechanic</param>
+        /// <param name="inGameName">official name of the mechanic</param>
+        /// <param name="plotlySetting">html plot settings <seealso cref="MechanicPlotlySetting"/></param>
+        /// <param name="shortName">name of the mechanic</param>
+        /// <param name="internalCoolDown">grace period, in ms, during which getting hit by the mechanic does not count</param>
         protected Mechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
         {
         }
 
+        /// <summary>
+        /// Full constructor without special checks
+        /// </summary>
+        /// <param name="skillId">id of the mechanic</param>
+        /// <param name="inGameName">official name of the mechanic</param>
+        /// <param name="plotlySetting">html plot settings <seealso cref="MechanicPlotlySetting"/></param>
+        /// <param name="shortName">shortened name of the mechanic</param>
+        /// <param name="description">description of the mechanic</param>
+        /// <param name="fullName">full name of the mechanic</param>
+        /// <param name="internalCoolDown">grace period, in ms, during which getting hit by the mechanic does not count</param>
         protected Mechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown)
         {
             InGameName = inGameName;

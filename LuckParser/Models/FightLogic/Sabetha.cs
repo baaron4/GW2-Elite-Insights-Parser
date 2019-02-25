@@ -195,19 +195,6 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
-        {
-            switch (mob.ID)
-            {
-                case (ushort)BanditArsonist:
-                case (ushort)BanditThug:
-                case (ushort)BanditSapper:
-                    break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-        }
-
         public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
             // timed bombs

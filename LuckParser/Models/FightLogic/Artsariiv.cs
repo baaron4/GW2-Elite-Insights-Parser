@@ -48,33 +48,6 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
-        {
-            switch (mob.ID)
-            {
-                case (ushort)TemporalAnomaly:
-                case (ushort)Spark:
-                case (ushort)Artsariiv1:
-                case (ushort)Artsariiv2:
-                case (ushort)Artsariiv3:
-                    break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-        }
-
-        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
-        {
-            CombatReplay replay = target.CombatReplay;
-            switch (target.ID)
-            {
-                case (ushort)ParseEnum.TargetIDS.Artsariiv:
-                    break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-        }
-
         public override void SetSuccess(ParsedLog log)
         {
             Target mainTarget = Targets.Find(x => x.ID == TriggerID);
@@ -92,10 +65,6 @@ namespace LuckParser.Models.Logic
                 log.FightData.Success = lastPlayerExit != null && lastTargetExit != null && lastPlayerExit.Time - lastTargetExit.Time > 1000 ? true : false;
                 log.FightData.FightEnd = lastDamageTaken.Time;
             }
-        }
-
-        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
-        {
         }
     }
 }

@@ -43,20 +43,6 @@ namespace LuckParser.Models.Logic
                             (11804, 4414, 12444, 5054));
         }
 
-
-        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
-        {
-            CombatReplay replay = target.CombatReplay;
-            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
-            switch (target.ID)
-            {
-                case (ushort)ParseEnum.TargetIDS.MAMA:
-                    break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-        }
-
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
             return new List<ParseEnum.TrashIDS>
@@ -66,24 +52,6 @@ namespace LuckParser.Models.Logic
                 BlueKnight,
                 TwistedHorror
             };
-        }
-
-        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
-        {
-            switch (mob.ID)
-            {
-                case (ushort)GreenKnight:
-                case (ushort)RedKnight:
-                case (ushort)BlueKnight:
-                case (ushort)TwistedHorror:
-                    break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-        }
-
-        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
-        {
         }
     }
 }

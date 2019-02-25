@@ -125,40 +125,9 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
-        {
-            CombatReplay replay = mob.CombatReplay;
-            List<CastLog> cls = mob.GetCastLogs(log, 0, log.FightData.FightDuration);
-            switch (mob.ID)
-            {
-                case (ushort)BanditSaboteur:
-                case (ushort)Warg:
-                case (ushort)CagedWarg:
-                case (ushort)BanditAssassin:
-                case (ushort)BanditSapperTrio:
-                case (ushort)BanditDeathsayer:
-                case (ushort)BanditBrawler:
-                case (ushort)BanditBattlemage:
-                case (ushort)BanditCleric:
-                case (ushort)BanditBombardier:
-                case (ushort)BanditSniper:
-                case (ushort)NarellaTornado:
-                case (ushort)OilSlick:
-                    break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-        }
-
-
         public override string GetFightName()
         {
             return "Bandit Trio";
-        }
-
-        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
-        {
-            // TODO
         }
 
         public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
