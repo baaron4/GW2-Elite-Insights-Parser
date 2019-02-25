@@ -32,7 +32,7 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 #if PROD    
-[assembly: AssemblyVersion("2.7.0.0")]
+[assembly: AssemblyVersion("2.7.1.0")]
 #else
 [assembly: AssemblyVersion("2.7.*")]
 #endif
