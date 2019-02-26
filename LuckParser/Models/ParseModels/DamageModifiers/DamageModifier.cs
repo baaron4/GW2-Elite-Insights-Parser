@@ -62,7 +62,6 @@ namespace LuckParser.Models.ParseModels
         protected double GainPerStack { get; }
         protected readonly GainComputer GainComputer;
         public ModifierSource Src { get; }
-        protected long ID { get; }
         public string Url { get; }
         public string Name { get; }
         public delegate bool DamageLogChecker(DamageLog dl);
@@ -75,10 +74,10 @@ namespace LuckParser.Models.ParseModels
 
         private static readonly List<DamageModifier> _allDamageModifier = new List<DamageModifier>() {
             /// commons
-            new DamageLogDamageModifier(Boon.ScholarRune,"Scholar Rune", false, 5.0, DamageType.Power, DamageType.Power, ModifierSource.All,"https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png", x => x.IsNinety, _byPresence ),
-            new DamageLogDamageModifier(Boon.EagleRune, "Eagle Rune", false, 10.0, DamageType.Power, DamageType.Power, ModifierSource.All,"https://wiki.guildwars2.com/images/9/9b/Superior_Rune_of_the_Eagle.png", x => x.IsFifty, _byPresence ),
-            new DamageLogDamageModifier(Boon.MovingBuff, "Moving", false, 5.0, DamageType.Power, DamageType.Power, ModifierSource.All,"https://wiki.guildwars2.com/images/1/1c/Bowl_of_Seaweed_Salad.png", x => x.IsMoving, _byPresence ),
-            new DamageLogDamageModifier(Boon.ThiefRune, "Thief Rune", false, 10.0, DamageType.Power, DamageType.Power, ModifierSource.All,"https://wiki.guildwars2.com/images/9/96/Superior_Rune_of_the_Thief.png", x => x.IsFlanking , _byPresence),
+            new DamageLogDamageModifier("Scholar Rune", false, 5.0, DamageType.Power, DamageType.Power, ModifierSource.All,"https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png", x => x.IsNinety, _byPresence ),
+            new DamageLogDamageModifier("Eagle Rune", false, 10.0, DamageType.Power, DamageType.Power, ModifierSource.All,"https://wiki.guildwars2.com/images/9/9b/Superior_Rune_of_the_Eagle.png", x => x.IsFifty, _byPresence ),
+            new DamageLogDamageModifier("Moving Food", false, 5.0, DamageType.Power, DamageType.Power, ModifierSource.All,"https://wiki.guildwars2.com/images/1/1c/Bowl_of_Seaweed_Salad.png", x => x.IsMoving, _byPresence ),
+            new DamageLogDamageModifier("Thief Rune", false, 10.0, DamageType.Power, DamageType.Power, ModifierSource.All,"https://wiki.guildwars2.com/images/9/96/Superior_Rune_of_the_Thief.png", x => x.IsFlanking , _byPresence),
             new BuffDamageModifier(Boon.BoonsByName["Vulnerability"], false, 1.0, DamageType.All, DamageType.All, ModifierSource.All, _byStack),
             new BuffDamageModifier(Boon.BoonsByName["Frost Spirit"], false, 5.0, DamageType.Power, DamageType.Power, ModifierSource.All, _byPresence),
             new DamageLogDamageModifier(Boon.BoonsByName["Soulcleave's Summit"], 0, false, DamageType.Power, DamageType.Power, ModifierSource.All, _byPresence),
@@ -98,7 +97,7 @@ namespace LuckParser.Models.ParseModels
             new BuffDamageModifier(Boon.BoonsByName["Kalla's Fervor"], false, 2.0, DamageType.Condition, DamageType.Condition, ModifierSource.Revenant, _byStack),
             new BuffDamageModifier(Boon.BoonsByName["Improved Kalla's Fervor"], false, 3.0, DamageType.Condition, DamageType.Condition, ModifierSource.Revenant, _byStack),
             new BuffDamageModifierTarget(Boon.BoonsByName["Vulnerability"].ID, "Targeted Destruction", false, 10.0, DamageType.Power, DamageType.Power, ModifierSource.Revenant, _byPresence, "https://wiki.guildwars2.com/images/e/ed/Targeted_Destruction.png"),
-            new DamageLogDamageModifier(Boon.UnderFifty, "Swift Termination", false, 20.0, DamageType.Power, DamageType.Power, ModifierSource.Revenant,"https://wiki.guildwars2.com/images/b/bb/Swift_Termination.png", x => x.IsFifty, _byPresence),
+            new DamageLogDamageModifier("Swift Termination", false, 20.0, DamageType.Power, DamageType.Power, ModifierSource.Revenant,"https://wiki.guildwars2.com/images/b/bb/Swift_Termination.png", x => x.IsFifty, _byPresence),
             /// Warrior
             new BuffDamageModifier(Boon.BoonsByName["Peak Performance"], false, 20.0, DamageType.Power, DamageType.Power, ModifierSource.Warrior, _byPresence),
             new BuffDamageModifier(Boon.BoonsByName["Always Angry"], false, 7.0, DamageType.All, DamageType.All, ModifierSource.Warrior, _byStack),
@@ -129,10 +128,10 @@ namespace LuckParser.Models.ParseModels
             new BuffDamageModifier(Boon.BoonsByName["Lotus Training"], false, 10.0, DamageType.Condition, DamageType.Condition, ModifierSource.Thief, _byPresence),
             new BuffDamageModifier(Boon.BoonsByName["Bounding Dodger"], false, 10.0, DamageType.Power, DamageType.Power, ModifierSource.Thief, _byPresence),
             new BuffDamageModifierTarget(Boon.BoonsByName["Number of Conditions"].ID, "Exposed Weakness", false, 2.0, DamageType.Power, DamageType.Power, ModifierSource.Thief, _byStack, "https://wiki.guildwars2.com/images/0/02/Exposed_Weakness.png"),
-            new DamageLogDamageModifier(Boon.UnderFifty, "Executioner", false, 20.0, DamageType.Power, DamageType.Power, ModifierSource.Thief,"https://wiki.guildwars2.com/images/9/93/Executioner.png", x => x.IsFifty, _byPresence),
-            new DamageLogDamageModifier(Boon.AboveFifty, "Ferocius Strikes", false, 10.0, DamageType.Power, DamageType.Power, ModifierSource.Thief,"https://wiki.guildwars2.com/images/d/d1/Ferocious_Strikes.png", x => !x.IsFifty, _byPresence),
+            new DamageLogDamageModifier("Executioner", false, 20.0, DamageType.Power, DamageType.Power, ModifierSource.Thief,"https://wiki.guildwars2.com/images/9/93/Executioner.png", x => x.IsFifty, _byPresence),
+            new DamageLogDamageModifier("Ferocius Strikes", false, 10.0, DamageType.Power, DamageType.Power, ModifierSource.Thief,"https://wiki.guildwars2.com/images/d/d1/Ferocious_Strikes.png", x => !x.IsFifty, _byPresence),
             //new BuffDamageModifierTarget(Boon.BoonsByName["Crippled"].ID, "Ankle Shots", false, 5.0, DamageType.Power, DamageType.Power, ModifierSource.Thief, _byPresence, "https://wiki.guildwars2.com/images/b/b4/Unscathed_Contender.png"), // It's not always possible to detect the presence of pistol and the trait is additive with itself. Staff master is worse as we can't detect endurance at all
-            new DamageLogDamageModifier(Boon.AboveNinety, "Twin Fangs", false, 7.0, DamageType.Power, DamageType.Power, ModifierSource.Thief,"https://wiki.guildwars2.com/images/d/d1/Ferocious_Strikes.png", x => x.IsNinety && x.Result == ParseEnum.Result.Crit, _byPresence),
+            new DamageLogDamageModifier("Twin Fangs", false, 7.0, DamageType.Power, DamageType.Power, ModifierSource.Thief,"https://wiki.guildwars2.com/images/d/d1/Ferocious_Strikes.png", x => x.IsNinety && x.Result == ParseEnum.Result.Crit, _byPresence),
             new BuffDamageModifier(Boon.BoonsByName["Number of Boons"].ID, "Premeditation", true, 1.0, DamageType.Power, DamageType.Power, ModifierSource.Thief, _byStack, "https://wiki.guildwars2.com/images/d/d7/Premeditation.png"),
             /// MESMER
             new BuffDamageModifier(Boon.BoonsByName["Compounding Power"], false, 2.0, DamageType.Power, DamageType.Power, ModifierSource.Mesmer, _byStack),
@@ -143,7 +142,7 @@ namespace LuckParser.Models.ParseModels
             /// NECROMANCER     
             new BuffDamageModifierTarget(Boon.BoonsByName["Number of Boons"].ID, "Spiteful Talisman", true, 10.0, DamageType.Power, DamageType.Power, ModifierSource.Necromancer, _byAbsence, "https://wiki.guildwars2.com/images/9/96/Spiteful_Talisman.png"),
             new BuffDamageModifierTarget(Boon.BoonsByName["Fear"].ID, "Dread", true, 33.0, DamageType.Power, DamageType.Power, ModifierSource.Necromancer, _byPresence, "https://wiki.guildwars2.com/images/e/e2/Unholy_Fervor.png"),
-            new DamageLogDamageModifier(Boon.UnderFifty, "Close to Death", false, 20.0, DamageType.Power, DamageType.Power, ModifierSource.Necromancer,"https://wiki.guildwars2.com/images/b/b2/Close_to_Death.png", x => x.IsFifty, _byPresence),
+            new DamageLogDamageModifier("Close to Death", false, 20.0, DamageType.Power, DamageType.Power, ModifierSource.Necromancer,"https://wiki.guildwars2.com/images/b/b2/Close_to_Death.png", x => x.IsFifty, _byPresence),
             new BuffDamageModifierTarget(Boon.BoonsByName["Chilled"].ID, "Cold Shoulder", true, 10.0, DamageType.Power, DamageType.Power, ModifierSource.Necromancer, _byPresence, "https://wiki.guildwars2.com/images/7/78/Cold_Shoulder.png"),
             /// ELEMENTALIST
             new BuffDamageModifier(Boon.BoonsByName["Harmonious Conduit"], false, 10.0, DamageType.Power, DamageType.Power, ModifierSource.Elementalist, _byPresence),
@@ -151,18 +150,17 @@ namespace LuckParser.Models.ParseModels
             new BuffDamageModifier(Boon.BoonsByName["Elements of Rage"], false, 10.0, DamageType.Power, DamageType.Power, ModifierSource.Elementalist, _byPresence),
             new BuffDamageModifier(Boon.BoonsByName["Fire Attunement"].ID, "Pyromancer's Training", false, 10.0, DamageType.Power, DamageType.Power, ModifierSource.Elementalist, _byPresence, "https://wiki.guildwars2.com/images/e/e6/Pyromancer%27s_Training.png"),
             new BuffDamageModifierTarget(Boon.BoonsByName["Burning"].ID, "Burning Rage", true, 10.0, DamageType.Power, DamageType.Power, ModifierSource.Elementalist, _byPresence, "https://wiki.guildwars2.com/images/b/bd/Burning_Rage.png"),
-            new DamageLogDamageModifier(Boon.UnderFifty, "Bolt to the Heart", false, 20.0, DamageType.Power, DamageType.Power, ModifierSource.Elementalist,"https://wiki.guildwars2.com/images/f/f8/Bolt_to_the_Heart.png", x => x.IsFifty, _byPresence),
+            new DamageLogDamageModifier("Bolt to the Heart", false, 20.0, DamageType.Power, DamageType.Power, ModifierSource.Elementalist,"https://wiki.guildwars2.com/images/f/f8/Bolt_to_the_Heart.png", x => x.IsFifty, _byPresence),
             new BuffDamageModifierTarget(Boon.BoonsByName["Bleeding"].ID, "Serrated Stones", true, 5.0, DamageType.Power, DamageType.Power, ModifierSource.Elementalist, _byPresence, "https://wiki.guildwars2.com/images/6/60/Serrated_Stones.png"),
-            new DamageLogDamageModifier(Boon.AboveNinety, "Aquamancer's Training", false, 10.0, DamageType.Power, DamageType.Power, ModifierSource.Elementalist,"https://wiki.guildwars2.com/images/8/81/Aquamancer%27s_Training.png", x => x.IsNinety, _byPresence),
+            new DamageLogDamageModifier("Aquamancer's Training", false, 10.0, DamageType.Power, DamageType.Power, ModifierSource.Elementalist,"https://wiki.guildwars2.com/images/8/81/Aquamancer%27s_Training.png", x => x.IsNinety, _byPresence),
             new BuffDamageModifier(Boon.BoonsByName["Number of Boons"].ID, "Bountiful Power", true, 2.0, DamageType.Power, DamageType.Power, ModifierSource.Elementalist, _byStack, "https://wiki.guildwars2.com/images/7/75/Bountiful_Power.png"),
             // TODO Swift Revenge
         };
 
         public static Dictionary<ModifierSource, List<DamageModifier>> DamageModifiersPerSource = _allDamageModifier.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
 
-        protected DamageModifier(long id, string name, bool withPets,  double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, GainComputer gainComputer)
+        protected DamageModifier(string name, bool withPets,  double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, GainComputer gainComputer)
         {
-            ID = id;
             Name = name;
             _withPets = withPets;
             GainPerStack = gainPerStack;
@@ -205,6 +203,6 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public abstract void ComputeDamageModifier(Dictionary<long, List<ExtraBoonData>> data, Dictionary<Target, Dictionary<long, List<ExtraBoonData>>> dataTarget, Player p, ParsedLog log);
+        public abstract void ComputeDamageModifier(Dictionary<string, List<ExtraBoonData>> data, Dictionary<Target, Dictionary<string, List<ExtraBoonData>>> dataTarget, Player p, ParsedLog log);
     }
 }

@@ -11,17 +11,17 @@ namespace LuckParser.Models.ParseModels
     public class DamageLogDamageModifier : DamageModifier
     {
 
-        public DamageLogDamageModifier(long id, string name, bool withPets, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, DamageLogChecker checker, GainComputer gainComputer) : base(id, name, withPets, gainPerStack, srctype, compareType, src, url, gainComputer)
+        public DamageLogDamageModifier(string name, bool withPets, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, DamageLogChecker checker, GainComputer gainComputer) : base(name, withPets, gainPerStack, srctype, compareType, src, url, gainComputer)
         {
             Checker = checker;
         }
 
-        public DamageLogDamageModifier(Boon boon, long id, bool withPets, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer) : base(boon.ID, boon.Name, withPets, double.PositiveInfinity, srctype, compareType, src, boon.Link, gainComputer)
+        public DamageLogDamageModifier(Boon boon, long id, bool withPets, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer) : base(boon.Name, withPets, double.PositiveInfinity, srctype, compareType, src, boon.Link, gainComputer)
         {
             Checker = (dl => dl.SkillId == id);
         }
 
-        public override void ComputeDamageModifier(Dictionary<long, List<ExtraBoonData>> data, Dictionary<Target, Dictionary<long, List<ExtraBoonData>>> dataTarget, Player p, ParsedLog log)
+        public override void ComputeDamageModifier(Dictionary<string, List<ExtraBoonData>> data, Dictionary<Target, Dictionary<string, List<ExtraBoonData>>> dataTarget, Player p, ParsedLog log)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             double gain = double.IsPositiveInfinity(GainPerStack) ? 1.0 : GainComputer.ComputeGain(GainPerStack, 1);
@@ -29,10 +29,10 @@ namespace LuckParser.Models.ParseModels
             {
                 if (!dataTarget.TryGetValue(target, out var extra))
                 {
-                    dataTarget[target] = new Dictionary<long, List<ExtraBoonData>>();
+                    dataTarget[target] = new Dictionary<string, List<ExtraBoonData>>();
                 }
-                Dictionary<long, List<ExtraBoonData>> dict = dataTarget[target];
-                if (!dict.TryGetValue(ID, out var list))
+                Dictionary<string, List<ExtraBoonData>> dict = dataTarget[target];
+                if (!dict.TryGetValue(Name, out var list))
                 {
                     List<ExtraBoonData> extraDataList = new List<ExtraBoonData>();
                     for (int i = 0; i < phases.Count; i++)
@@ -42,16 +42,16 @@ namespace LuckParser.Models.ParseModels
                         int damage = (int)Math.Round(gain * effect.Sum(x => x.Damage));
                         extraDataList.Add(new ExtraBoonData(effect.Count, count, damage, totalDamage, GainComputer.Multiplier));
                     }
-                    dict[ID] = extraDataList;
+                    dict[Name] = extraDataList;
                 }
             }
-            data[ID] = new List<ExtraBoonData>();
+            data[Name] = new List<ExtraBoonData>();
             for (int i = 0; i < phases.Count; i++)
             {
                 (int totalDamage, int count) = GetTotalDamageData(p, log, null, phases[i]);
                 List<DamageLog> effect = GetDamageLogs(p, log, null, phases[i]).Where(x => Checker(x)).ToList();
                 int damage = (int)Math.Round(gain * effect.Sum(x => x.Damage));
-                data[ID].Add(new ExtraBoonData(effect.Count, count, damage, totalDamage, GainComputer.Multiplier));
+                data[Name].Add(new ExtraBoonData(effect.Count, count, damage, totalDamage, GainComputer.Multiplier));
             }
         }
     }

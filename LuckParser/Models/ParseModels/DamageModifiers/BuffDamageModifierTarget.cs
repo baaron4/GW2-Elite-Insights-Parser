@@ -27,7 +27,7 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        public override void ComputeDamageModifier(Dictionary<long, List<ExtraBoonData>> data, Dictionary<Target, Dictionary<long, List<ExtraBoonData>>> dataTarget, Player p, ParsedLog log)
+        public override void ComputeDamageModifier(Dictionary<string, List<ExtraBoonData>> data, Dictionary<Target, Dictionary<string, List<ExtraBoonData>>> dataTarget, Player p, ParsedLog log)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             Dictionary<long, BoonsGraphModel> bgms = p.GetBoonGraphs(log);
@@ -42,10 +42,10 @@ namespace LuckParser.Models.ParseModels
                 bgm = bgms[ID];
                 if (!dataTarget.TryGetValue(target, out var extra))
                 {
-                    dataTarget[target] = new Dictionary<long, List<ExtraBoonData>>();
+                    dataTarget[target] = new Dictionary<string, List<ExtraBoonData>>();
                 }
-                Dictionary<long, List<ExtraBoonData>> dict = dataTarget[target];
-                if (!dict.TryGetValue(ID, out var list))
+                Dictionary<string, List<ExtraBoonData>> dict = dataTarget[target];
+                if (!dict.TryGetValue(Name, out var list))
                 {
                     List<ExtraBoonData> extraDataList = new List<ExtraBoonData>();
                     for (int i = 0; i < phases.Count; i++)
@@ -55,7 +55,7 @@ namespace LuckParser.Models.ParseModels
                         int damage = (int)effect.Sum(x => Math.Round(ComputeGain(bgm.GetStackCount(x.Time), x) * x.Damage));
                         extraDataList.Add(new ExtraBoonData(effect.Count, count, damage, totalDamage, GainComputer.Multiplier));
                     }
-                    dict[ID] = extraDataList;
+                    dict[Name] = extraDataList;
                 }
             }
         }
