@@ -19,8 +19,22 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        protected double ComputeGain(int stack)
+        public BuffDamageModifier(Boon buff, bool withPets, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, DamageLogChecker checker) : base(buff.ID, buff.Name, withPets, gainPerStack, srctype, compareType, src, buff.Link, gainComputer)
         {
+            Checker = checker;
+        }
+
+        public BuffDamageModifier(long id, string name, bool withPets, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, DamageLogChecker checker) : base(id, name, withPets, gainPerStack, srctype, compareType, src, url, gainComputer)
+        {
+            Checker = checker;
+        }
+
+        protected double ComputeGain(int stack, DamageLog dl)
+        {
+            if (Checker != null && !Checker(dl))
+            {
+                return 0.0;
+            }
             return GainComputer.ComputeGain(GainPerStack, stack);
         }
 
@@ -48,7 +62,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         (int totalDamage, int count) = GetTotalDamageData(p, log, target, phases[i]);
                         List<DamageLog> effect = GetDamageLogs(p, log, target, phases[i]);
-                        int damage = (int)effect.Sum(x => Math.Round(ComputeGain(bgm.GetStackCount(x.Time)) * x.Damage));
+                        int damage = (int)effect.Sum(x => Math.Round(ComputeGain(bgm.GetStackCount(x.Time), x) * x.Damage));
                         extraDataList.Add(new ExtraBoonData(effect.Count, count, damage, totalDamage, GainComputer.Multiplier));
                     }
                     dict[ID] = extraDataList;
@@ -59,7 +73,7 @@ namespace LuckParser.Models.ParseModels
             {
                 (int totalDamage, int count) = GetTotalDamageData(p, log, null, phases[i]);
                 List<DamageLog> effect = GetDamageLogs(p, log, null, phases[i]);
-                int damage = (int)effect.Sum(x => Math.Round(ComputeGain(bgm.GetStackCount(x.Time)) * x.Damage));
+                int damage = (int)effect.Sum(x => Math.Round(ComputeGain(bgm.GetStackCount(x.Time), x) * x.Damage));
                 data[ID].Add(new ExtraBoonData(effect.Count, count, damage, totalDamage, GainComputer.Multiplier));
             }
         }

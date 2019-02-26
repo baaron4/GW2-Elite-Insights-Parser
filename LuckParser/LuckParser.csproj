@@ -124,6 +124,7 @@
     <Compile Include="Models\ParseModels\DamageModifiers\DamageLogDamageModifier.cs" />
     <Compile Include="Models\ParseModels\DamageModifiers\DamageModifier.cs" />
     <Compile Include="Models\ParseModels\DamageModifiers\GainComputers\GainComputer.cs" />
+    <Compile Include="Models\ParseModels\DamageModifiers\GainComputers\GainComputerByAbsence.cs" />
     <Compile Include="Models\ParseModels\DamageModifiers\GainComputers\GainComputerNonMultiplier.cs" />
     <Compile Include="Models\ParseModels\DamageModifiers\GainComputers\GainComputerByStack.cs" />
     <Compile Include="Models\ParseModels\DamageModifiers\GainComputers\GainComputerByPresence.cs" />

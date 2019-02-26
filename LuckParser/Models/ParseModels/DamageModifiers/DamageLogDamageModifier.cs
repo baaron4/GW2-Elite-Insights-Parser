@@ -10,17 +10,15 @@ namespace LuckParser.Models.ParseModels
 {
     public class DamageLogDamageModifier : DamageModifier
     {
-        public delegate bool DamageLogChecker(DamageLog dl);
-        private readonly DamageLogChecker _checker;
 
         public DamageLogDamageModifier(long id, string name, bool withPets, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, DamageLogChecker checker, GainComputer gainComputer) : base(id, name, withPets, gainPerStack, srctype, compareType, src, url, gainComputer)
         {
-            _checker = checker;
+            Checker = checker;
         }
 
         public DamageLogDamageModifier(Boon boon, long id, bool withPets, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer) : base(boon.ID, boon.Name, withPets, double.PositiveInfinity, srctype, compareType, src, boon.Link, gainComputer)
         {
-            _checker = (dl => dl.SkillId == id);
+            Checker = (dl => dl.SkillId == id);
         }
 
         public override void ComputeDamageModifier(Dictionary<long, List<ExtraBoonData>> data, Dictionary<Target, Dictionary<long, List<ExtraBoonData>>> dataTarget, Player p, ParsedLog log)
@@ -40,7 +38,7 @@ namespace LuckParser.Models.ParseModels
                     for (int i = 0; i < phases.Count; i++)
                     {
                         (int totalDamage, int count) = GetTotalDamageData(p, log, target, phases[i]);
-                        List<DamageLog> effect = GetDamageLogs(p, log, target, phases[i]).Where(x => _checker(x)).ToList();
+                        List<DamageLog> effect = GetDamageLogs(p, log, target, phases[i]).Where(x => Checker(x)).ToList();
                         int damage = (int)Math.Round(gain * effect.Sum(x => x.Damage));
                         extraDataList.Add(new ExtraBoonData(effect.Count, count, damage, totalDamage, GainComputer.Multiplier));
                     }
@@ -51,7 +49,7 @@ namespace LuckParser.Models.ParseModels
             for (int i = 0; i < phases.Count; i++)
             {
                 (int totalDamage, int count) = GetTotalDamageData(p, log, null, phases[i]);
-                List<DamageLog> effect = GetDamageLogs(p, log, null, phases[i]).Where(x => _checker(x)).ToList();
+                List<DamageLog> effect = GetDamageLogs(p, log, null, phases[i]).Where(x => Checker(x)).ToList();
                 int damage = (int)Math.Round(gain * effect.Sum(x => x.Damage));
                 data[ID].Add(new ExtraBoonData(effect.Count, count, damage, totalDamage, GainComputer.Multiplier));
             }
