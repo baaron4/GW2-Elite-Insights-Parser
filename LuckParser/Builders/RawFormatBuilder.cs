@@ -324,15 +324,15 @@ namespace LuckParser.Builders
             return res;
         }
 
-        private List<JsonBuffDamageModifierData> BuildDamageModifiers(Dictionary<long, List<Statistics.ExtraBoonData>> extra)
+        private List<JsonBuffDamageModifierData> BuildDamageModifiers(Dictionary<string, List<Statistics.ExtraBoonData>> extra)
         {
-            Dictionary<long, List<JsonBuffDamageModifierItem>> dict = new Dictionary<long, List<JsonBuffDamageModifierItem>>();
-            foreach (long key in extra.Keys)
+            Dictionary<string, List<JsonBuffDamageModifierItem>> dict = new Dictionary<string, List<JsonBuffDamageModifierItem>>();
+            foreach (string key in extra.Keys)
             {
-                string nKey = "b" + key;
+                string nKey = "b" + Boon.BoonsByName[key].ID;
                 if (!_buffDesc.ContainsKey(nKey))
                 {
-                    _buffDesc[nKey] = new JsonLog.BuffDesc(Boon.BoonsByIds[key]);
+                    _buffDesc[nKey] = new JsonLog.BuffDesc(Boon.BoonsByName[key]);
                 }
                 dict[key] = extra[key].Select(x => new JsonBuffDamageModifierItem(x)).ToList();
             }
@@ -341,7 +341,7 @@ namespace LuckParser.Builders
             {
                 res.Add(new JsonBuffDamageModifierData()
                 {
-                    Id = pair.Key,
+                    Id = Boon.BoonsByName[pair.Key].ID,
                     DamageModifiers = pair.Value
                 });
             }

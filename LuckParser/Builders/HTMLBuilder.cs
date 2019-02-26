@@ -1016,8 +1016,8 @@ namespace LuckParser.Builders
             HashSet<long> dmgCommonModifiersBuffs = new HashSet<long>();
             foreach (Player p in _log.PlayerList)
             {
-                Dictionary<long, List<Statistics.ExtraBoonData>> toCheck = p.GetExtraBoonData(_log, null);
-                dmgCommonModifiersBuffs.UnionWith(toCheck.Keys);
+                Dictionary<string, List<Statistics.ExtraBoonData>> toCheck = p.GetExtraBoonData(_log, null);
+                dmgCommonModifiersBuffs.UnionWith(toCheck.Keys.Select(x => Boon.BoonsByName[x].ID));
             }
             logData.DmgCommonModifiersBuffs = dmgCommonModifiersBuffs.ToList();
             //
