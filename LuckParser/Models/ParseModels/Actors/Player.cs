@@ -18,8 +18,8 @@ namespace LuckParser.Models.ParseModels
        
         private List<Consumable> _consumeList;
         private List<DeathRecap> _deathRecaps;
-        private readonly Dictionary<long, List<ExtraBoonData>> _boonExtra = new Dictionary<long, List<ExtraBoonData>>();
-        private readonly Dictionary<Target, Dictionary<long, List<ExtraBoonData>>> _boonTargetExtra = new Dictionary<Target, Dictionary<long, List<ExtraBoonData>>>();
+        private readonly Dictionary<string, List<ExtraBoonData>> _boonExtra = new Dictionary<string, List<ExtraBoonData>>();
+        private readonly Dictionary<Target, Dictionary<string, List<ExtraBoonData>>> _boonTargetExtra = new Dictionary<Target, Dictionary<string, List<ExtraBoonData>>>();
         // statistics
         private Dictionary<Target, List<FinalDPS>> _dpsTarget;
         private Dictionary<Target, List<FinalStats>> _statsTarget;
@@ -711,7 +711,7 @@ namespace LuckParser.Models.ParseModels
             return _consumeList.Where(x => x.Time >= start && x.Time <= end).ToList() ;
         }
 
-        public Dictionary<long, List<ExtraBoonData>> GetExtraBoonData(ParsedLog log, Target target)
+        public Dictionary<string, List<ExtraBoonData>> GetExtraBoonData(ParsedLog log, Target target)
         {
             if (BoonPoints == null)
             {
@@ -725,7 +725,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 else
                 {
-                    return new Dictionary<long, List<ExtraBoonData>>();
+                    return new Dictionary<string, List<ExtraBoonData>>();
                 }
             }
             return _boonExtra;
@@ -746,6 +746,7 @@ namespace LuckParser.Models.ParseModels
                 if (extraDataID.Contains(boonid))
                 {
                     BoonsGraphModel graph = BoonPoints[boonid];
+                    Boon boon = Boon.BoonsByIds[boonid];
                     switch (boonid)
                     {
                         // Frost Spirit
@@ -754,10 +755,10 @@ namespace LuckParser.Models.ParseModels
                             {
                                 if (!_boonTargetExtra.TryGetValue(target, out var extra))
                                 {
-                                    _boonTargetExtra[target] = new Dictionary<long, List<ExtraBoonData>>();
+                                    _boonTargetExtra[target] = new Dictionary<string, List<ExtraBoonData>>();
                                 }
-                                Dictionary<long, List<ExtraBoonData>> dict = _boonTargetExtra[target];
-                                if (!dict.TryGetValue(boonid, out var list))
+                                Dictionary<string, List<ExtraBoonData>> dict = _boonTargetExtra[target];
+                                if (!dict.TryGetValue(boon.Name, out var list))
                                 {
                                     List<ExtraBoonData> extraDataList = new List<ExtraBoonData>();
                                     for (int i = 0; i < phases.Count; i++)
@@ -768,17 +769,17 @@ namespace LuckParser.Models.ParseModels
                                         int damage = (int)Math.Round(effect.Sum(x => x.Damage) / 21.0);
                                         extraDataList.Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsIndirectDamage), damage, totalDamage, true));
                                     }
-                                    dict[boonid] = extraDataList;
+                                    dict[boon.Name] = extraDataList;
                                 }
                             }
-                            _boonExtra[boonid] = new List<ExtraBoonData>();
+                            _boonExtra[boon.Name] = new List<ExtraBoonData>();
                             for (int i = 0; i < phases.Count; i++)
                             {
                                 List<DamageLog> dmLogs = GetJustPlayerDamageLogs(null, log, phases[i].Start, phases[i].End);
                                 int totalDamage = dmLogs.Sum(x => x.Damage);
                                 List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsIndirectDamage).ToList();
                                 int damage = (int)Math.Round(effect.Sum(x => x.Damage) / 21.0);
-                                _boonExtra[boonid].Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsIndirectDamage), damage, totalDamage, true));
+                                _boonExtra[boon.Name].Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsIndirectDamage), damage, totalDamage, true));
                             }
                             break;
                         // GoE
@@ -787,10 +788,10 @@ namespace LuckParser.Models.ParseModels
                             {
                                 if (!_boonTargetExtra.TryGetValue(target, out var extra))
                                 {
-                                    _boonTargetExtra[target] = new Dictionary<long, List<ExtraBoonData>>();
+                                    _boonTargetExtra[target] = new Dictionary<string, List<ExtraBoonData>>();
                                 }
-                                Dictionary<long, List<ExtraBoonData>> dict = _boonTargetExtra[target];
-                                if (!dict.TryGetValue(boonid, out var list))
+                                Dictionary<string, List<ExtraBoonData>> dict = _boonTargetExtra[target];
+                                if (!dict.TryGetValue(boon.Name, out var list))
                                 {
                                     List<ExtraBoonData> extraDataList = new List<ExtraBoonData>();
                                     for (int i = 0; i < phases.Count; i++)
@@ -800,17 +801,17 @@ namespace LuckParser.Models.ParseModels
                                         int damage = effect.Sum(x => x.Damage);
                                         extraDataList.Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsIndirectDamage), damage, 0, false));
                                     }
-                                    dict[boonid] = extraDataList;
+                                    dict[boon.Name] = extraDataList;
                                 }
 
                             }
-                            _boonExtra[boonid] = new List<ExtraBoonData>();
+                            _boonExtra[boon.Name] = new List<ExtraBoonData>();
                             for (int i = 0; i < phases.Count; i++)
                             {
                                 List<DamageLog> dmLogs = GetJustPlayerDamageLogs(null, log, phases[i].Start, phases[i].End);
                                 List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsIndirectDamage).ToList();
                                 int damage = effect.Sum(x => x.Damage);
-                                _boonExtra[boonid].Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsIndirectDamage), damage, 0, false));
+                                _boonExtra[boon.Name].Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsIndirectDamage), damage, 0, false));
                             }
                             break;
                     }
