@@ -11,27 +11,27 @@ namespace LuckParser.Models.ParseModels
     public class BuffDamageModifierTarget : BuffDamageModifier
     {
 
-        public BuffDamageModifierTarget(Boon buff, bool withPets, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer) : base(buff, withPets, gainPerStack, srctype, compareType, src, gainComputer)
+        public BuffDamageModifierTarget(Boon buff, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer) : base(buff, damageSource, gainPerStack, srctype, compareType, src, gainComputer)
         {
         }
 
-        public BuffDamageModifierTarget(Boon buff, string name, bool withPets, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url) : base(buff, name, withPets, gainPerStack, srctype, compareType, src, gainComputer, url)
+        public BuffDamageModifierTarget(Boon buff, string name, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url) : base(buff, name, damageSource, gainPerStack, srctype, compareType, src, gainComputer, url)
         {
         }
 
-        public BuffDamageModifierTarget(BuffsTrackerMulti buffsChecker, string name, bool withPets, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url) : base(buffsChecker, name, withPets, gainPerStack, srctype, compareType, src, url)
+        public BuffDamageModifierTarget(BuffsTrackerMulti buffsChecker, string name, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url) : base(buffsChecker, name, damageSource, gainPerStack, srctype, compareType, src, url)
         {
         }
 
-        public BuffDamageModifierTarget(Boon buff, bool withPets, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, DamageLogChecker dlChecker) : base(buff, withPets, gainPerStack, srctype, compareType, src, gainComputer, dlChecker)
+        public BuffDamageModifierTarget(Boon buff, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, DamageLogChecker dlChecker) : base(buff, damageSource, gainPerStack, srctype, compareType, src, gainComputer, dlChecker)
         {
         }
 
-        public BuffDamageModifierTarget(Boon buff, string name, bool withPets, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, DamageLogChecker dlChecker) : base(buff, name, withPets, gainPerStack, srctype, compareType, src, gainComputer, url, dlChecker)
+        public BuffDamageModifierTarget(Boon buff, string name, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, DamageLogChecker dlChecker) : base(buff, name, damageSource, gainPerStack, srctype, compareType, src, gainComputer, url, dlChecker)
         {
         }
 
-        public BuffDamageModifierTarget(BuffsTrackerMulti buffsChecker, string name, bool withPets, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, DamageLogChecker dlChecker) : base(buffsChecker, name, withPets, gainPerStack, srctype, compareType, src, url, dlChecker)
+        public BuffDamageModifierTarget(BuffsTrackerMulti buffsChecker, string name, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, DamageLogChecker dlChecker) : base(buffsChecker, name, damageSource, gainPerStack, srctype, compareType, src, url, dlChecker)
         {
         }
 
