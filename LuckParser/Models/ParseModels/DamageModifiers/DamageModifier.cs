@@ -91,9 +91,9 @@ namespace LuckParser.Models.ParseModels
             new DamageLogDamageModifier(Boon.BoonsByName["One Wolf Pack"], 0, false, DamageType.Power, DamageType.Power, ModifierSource.Shareable, ByPresence),
             new DamageLogDamageModifier(Boon.BoonsByName["Static Charge"], 0, false, DamageType.Power, DamageType.Power, ModifierSource.Shareable, ByPresence),
             //new BuffDamageModifier(Boon.BoonsByName["Glyph of Empowerment"], false, 10.0, DamageType.Power, DamageType.Power, ModifierSource.All, _nonMultiplier),
-            new BuffDamageModifierTarget(Boon.BoonsByName["Unnatural Signet"], false, 200.0, DamageType.Power, DamageType.Power, ModifierSource.Shareable, ByPresence),
-            new BuffDamageModifierTarget(Boon.BoonsByName["Compromised"], false, 75.0, DamageType.Power, DamageType.Power, ModifierSource.Shareable, ByStack),
-            new BuffDamageModifierTarget(Boon.BoonsByName["Fractured - Enemy"], false, 10.0, DamageType.Power, DamageType.Power, ModifierSource.Shareable, ByStack),
+            new BuffDamageModifierTarget(Boon.BoonsByName["Unnatural Signet"], true, 200.0, DamageType.Power, DamageType.Power, ModifierSource.Shareable, ByPresence),
+            new BuffDamageModifierTarget(Boon.BoonsByName["Compromised"], true, 75.0, DamageType.Power, DamageType.Power, ModifierSource.Shareable, ByStack),
+            new BuffDamageModifierTarget(Boon.BoonsByName["Fractured - Enemy"], true, 10.0, DamageType.Power, DamageType.Power, ModifierSource.Shareable, ByStack),
             new BuffDamageModifier(Boon.BoonsByName["Blood Fueled"], false, 20.0, DamageType.Power, DamageType.Power, ModifierSource.Shareable, ByStack),
             new BuffDamageModifier(Boon.BoonsByName["Blood Fueled Abo"], false, 20.0, DamageType.Power, DamageType.Power, ModifierSource.Shareable, ByStack),
             /// Revenant
