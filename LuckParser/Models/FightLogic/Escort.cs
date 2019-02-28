@@ -10,6 +10,11 @@ namespace LuckParser.Models.Logic
     {
         public Escort(ushort triggerID) : base(triggerID)
         {
+            MechanicList.AddRange(new List<Mechanic>
+            {
+
+            }
+            );
             Extension = "escort";
             IconUrl = "https://wiki.guildwars2.com/images/b/b5/Mini_McLeod_the_Silent.png";
         }
@@ -23,16 +28,8 @@ namespace LuckParser.Models.Logic
                             (1920, 12160, 2944, 14464));
         }
 
-        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
-        {
+        public override string GetFightName() {
+            return "Escort";
         }
-
-        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
-        {
-        }
-
-        public override int IsCM(ParsedLog log) { return 0; }
-        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log) {}
-        public override string GetFightName() { return "Escort"; }
     }
 }

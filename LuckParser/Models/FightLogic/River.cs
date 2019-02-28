@@ -11,6 +11,11 @@ namespace LuckParser.Models.Logic
     {
         public River(ushort triggerID) : base(triggerID)
         {
+            MechanicList.AddRange( new List<Mechanic>
+            {
+
+            }
+            );
             Extension = "river";
             IconUrl = "https://wiki.guildwars2.com/images/thumb/7/7b/Gold_River_of_Souls_Trophy.jpg/220px-Gold_River_of_Souls_Trophy.jpg";
         }
@@ -34,9 +39,8 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void ComputeAdditionalTargetData(Target target, ParsedLog log) { }
-        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log) { }
-        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log) {
+        public override void ComputeAdditionalTrashMobData(Mob mob, ParsedLog log)
+        {
             CombatReplay replay = mob.CombatReplay;
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
@@ -46,7 +50,6 @@ namespace LuckParser.Models.Logic
                     replay.Actors.Add(new CircleActor(false, 0, 260, (start, end), "rgba(0, 80, 255, 0.5)", new AgentConnector(mob)));
                     break;
                 case (ushort)RiverOfSouls:
-                    Console.Out.Write(replay.Positions);
                     float prevX = replay.Positions[0].X;
                     float prevY = replay.Positions[0].Y;
                     foreach (Point3D pos in replay.Positions)
@@ -74,6 +77,9 @@ namespace LuckParser.Models.Logic
             }
 
         }
-        public override string GetFightName() { return "River of Souls"; }
+
+        public override string GetFightName() {
+            return "River of Souls";
+        }
     }
 }

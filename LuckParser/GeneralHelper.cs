@@ -378,6 +378,7 @@ namespace LuckParser
                 case ParseEnum.TargetIDS.Deimos:
                     return "https://i.imgur.com/mWfxBaO.png";
                 case ParseEnum.TargetIDS.SoullessHorror:
+                case ParseEnum.TargetIDS.Desmina:
                     return "https://i.imgur.com/jAiRplg.png";
                 case ParseEnum.TargetIDS.Dhuum:
                     return "https://i.imgur.com/RKaDon5.png";
