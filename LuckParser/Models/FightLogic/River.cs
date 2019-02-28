@@ -22,10 +22,10 @@ namespace LuckParser.Models.Logic
 
         protected override CombatReplayMap GetCombatMapInternal()
         {
-            return new CombatReplayMap("https://wiki.guildwars2.com/images/e/e8/River_of_Souls_Mechanics.jpg",
-                            (4625, 2209),
-                            (-12250, -5115, 7900, 3697),
-                            (-215040, -222880, 245760, 222880),
+            return new CombatReplayMap("https://i.imgur.com/YBtiFnH.png",
+                            (4145, 1603),
+                            (-12201, -4866, 7742, 2851),
+                            (-21504, -12288, 24576, 12288),
                             (19072, 15484, 20992, 16508));
         }
 
