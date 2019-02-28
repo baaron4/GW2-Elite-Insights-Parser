@@ -18,7 +18,7 @@ namespace LuckParser.Models.ParseModels
         // damage list
         private Dictionary<int, List<int>> _damageList1S = new Dictionary<int, List<int>>();
         // Minions
-        private Dictionary<string, Minions> _minions = new Dictionary<string, Minions>();
+        private Dictionary<string, Minions> _minions;
         // Replay
         public CombatReplay CombatReplay { get; protected set; }
         // Statistics

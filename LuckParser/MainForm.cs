@@ -73,7 +73,8 @@ namespace LuckParser
                 }
             }
 
-            btnParse.Enabled = _logQueue.Count == 0;
+            btnParse.Enabled = !Properties.Settings.Default.AutoParse;
+            btnCancel.Enabled = Properties.Settings.Default.AutoParse;
         }
 
         private void EnableSettingsWatcher(object sender, EventArgs e)
@@ -88,6 +89,8 @@ namespace LuckParser
         private void QueueOrRunWorker(GridRow row)
         {
             btnClear.Enabled = false;
+            btnParse.Enabled = false;
+            btnCancel.Enabled = true;
             if (Properties.Settings.Default.ParseOneAtATime)
             {
                 if (_anyRunning)
@@ -130,6 +133,7 @@ namespace LuckParser
             {
                 if (_runningCount == 0)
                 {
+                    _anyRunning = false;
                     btnParse.Enabled = true;
                     btnClear.Enabled = true;
                     btnCancel.Enabled = false;
@@ -153,6 +157,7 @@ namespace LuckParser
             e.Result = rowData;
 
             _runningCount++;
+            _anyRunning = true;
             bg.ThrowIfCanceled(rowData);
 
             try
@@ -491,6 +496,7 @@ namespace LuckParser
 
             btnClear.Enabled = true;
             btnParse.Enabled = true;
+            btnCancel.Enabled = false;
         }
 
         /// <summary>
