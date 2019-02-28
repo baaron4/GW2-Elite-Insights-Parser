@@ -74,15 +74,13 @@ namespace LuckParser.Models.Logic
                 MasterAgent = 0
             };
             agentData.AddCustomAgent(sword);
-            foreach(CombatItem cl in combatData)
+            foreach(CombatItem c in combatData)
             {
-                if (cl.SkillID == 52370 && cl.IsStateChange == ParseEnum.StateChange.Normal && cl.IsBuffRemove == ParseEnum.BuffRemove.None &&
-                                        ((cl.IsBuff == 1 && cl.BuffDmg >= 0 && cl.Value == 0) ||
-                                        (cl.IsBuff == 0 && cl.Value >= 0)) && cl.DstInstid != 0 && cl.IFF == ParseEnum.IFF.Foe)
+                if (c.SkillID == 52370 && c.IsStateChange == ParseEnum.StateChange.Normal && c.IsBuffRemove == ParseEnum.BuffRemove.None &&
+                                        ((c.IsBuff == 1 && c.BuffDmg >= 0 && c.Value == 0) ||
+                                        (c.IsBuff == 0 && c.Value >= 0)) && c.DstInstid != 0 && c.IFF == ParseEnum.IFF.Foe)
                 {
-                    cl.SrcAgent = sword.Agent;
-                    cl.SrcInstid = sword.InstID;
-                    cl.SrcMasterInstid = 0;
+                    c.OverrideSrcValues(sword.Agent, sword.InstID, 0);
                 }
             }
         }

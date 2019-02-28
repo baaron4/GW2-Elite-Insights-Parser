@@ -39,6 +39,40 @@ namespace LuckParser.Models.Logic
             };
         }
 
+        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            // The walls spawn at the start of the encounter, we fix it by overriding their first aware to the first velocity change event
+            List<AgentItem> riverOfSouls = agentData.GetAgentByInstID((ushort)RiverOfSouls);
+            bool sortCombatList = false;
+            foreach (AgentItem riverOfSoul in riverOfSouls)
+            {
+                CombatItem firstMovement = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Velocity && x.SrcInstid == riverOfSoul.InstID && x.Time <= riverOfSoul.LastAware);
+                if (firstMovement != null)
+                {
+                    // update start
+                    riverOfSoul.FirstAware = firstMovement.Time - 10;
+                    foreach (CombatItem c in combatData)
+                    {
+                        if (c.SrcInstid == riverOfSoul.InstID && c.Time < riverOfSoul.LastAware && (c.IsStateChange == ParseEnum.StateChange.Position || c.IsStateChange == ParseEnum.StateChange.Rotation))
+                        {
+                            sortCombatList = true;
+                            c.OverrideTime(riverOfSoul.FirstAware);
+                        }
+                    }
+                }
+                else
+                {
+                    // otherwise remove the agent from the pool
+                    agentData.RemoveAgent(riverOfSoul);
+                }
+            }
+            // make sure the list is still sorted by time after overrides
+            if (sortCombatList)
+            {
+                combatData.Sort((x, y) => x.Time.CompareTo(y.Time));
+            }
+        }
+
         public override void ComputeAdditionalTrashMobData(Mob mob, ParsedLog log)
         {
             CombatReplay replay = mob.CombatReplay;
@@ -50,24 +84,12 @@ namespace LuckParser.Models.Logic
                     replay.Actors.Add(new CircleActor(false, 0, 260, (start, end), "rgba(0, 80, 255, 0.5)", new AgentConnector(mob)));
                     break;
                 case (ushort)RiverOfSouls:
-                    float prevX = replay.Positions[0].X;
-                    float prevY = replay.Positions[0].Y;
-                    foreach (Point3D pos in replay.Positions)
-                    {
-                        if (prevX != pos.X || prevY != pos.Y)
-                        {
-                            start = (int)pos.Time;
-                            replay.Trim(start, end);
-                            break;
-                        }
-                    }
-                    int angle = 0;
                     Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
                     if (facing != null)
                     {
-                        angle = Point3D.GetRotationFromFacing(facing);
+                        int angle = Point3D.GetRotationFromFacing(facing);
+                        replay.Actors.Add(new RotatedRectangleActor(true, 0, 240, 660, angle, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(mob)));
                     }
-                    replay.Actors.Add(new RotatedRectangleActor(true, 0, 240, 660, angle, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(mob)));
                     break;
                 case (ushort)Enervator:
                     replay.Actors.Add(new CircleActor(true, 0, 200, (start, end), "rgba(0, 0, 255, 0.5)", new AgentConnector(mob)));

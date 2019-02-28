@@ -543,13 +543,11 @@ namespace LuckParser.Parser
                             {
                                 if (c.DstAgent == p.Agent || player.Agent == c.DstAgent)
                                 {
-                                    c.DstAgent = agent;
-                                    c.DstInstid = instid;
+                                    c.OverrideDstValues(agent, instid);
                                 }
                                 if (c.SrcAgent == p.Agent || player.Agent == c.SrcAgent)
                                 {
-                                    c.SrcAgent = agent;
-                                    c.SrcInstid = instid;
+                                    c.OverrideSrcValues(agent, instid);
                                 }
                             }
                             p.AgentItem.InstID = instid;

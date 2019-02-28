@@ -93,13 +93,11 @@ namespace LuckParser.Models.Logic
                 {
                     if (agentValues.Contains(c.SrcAgent))
                     {
-                        c.SrcAgent = newTargetAgent.Agent;
-                        c.SrcInstid = newTargetAgent.InstID;
+                        c.OverrideSrcValues(newTargetAgent.Agent, newTargetAgent.InstID);
                     }
                     if (agentValues.Contains(c.DstAgent))
                     {
-                        c.DstAgent = newTargetAgent.Agent;
-                        c.DstInstid = newTargetAgent.InstID;
+                        c.OverrideDstValues(newTargetAgent.Agent, newTargetAgent.InstID);
                     }
                 }
             }
