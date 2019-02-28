@@ -73,15 +73,34 @@ namespace LuckParser.Models.Logic
             }
         }
 
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
+        {
+            // TODO bombs dual following circle actor (one growing, other static) + dual static circle actor (one growing with min radius the final radius of the previous, other static). Missing buff id
+        }
+
         public override void ComputeAdditionalTrashMobData(Mob mob, ParsedLog log)
         {
+            Target desmina = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Desmina);
+            if (desmina == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
             CombatReplay replay = mob.CombatReplay;
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
+            List<CastLog> cls = mob.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (mob.ID)
             {
                 case (ushort)HollowedBomber:
-                    replay.Actors.Add(new CircleActor(false, 0, 260, (start, end), "rgba(0, 80, 255, 0.5)", new AgentConnector(mob)));
+                    List<CastLog> bomberman = mob.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 48272).ToList();
+                    foreach (CastLog bomb in bomberman)
+                    {
+                        int startCast = (int)bomb.Time;
+                        int endCast = startCast + bomb.ActualDuration;
+                        int expectedEnd = Math.Max(startCast + bomb.ExpectedDuration, endCast);
+                        replay.Actors.Add(new CircleActor(true, 0, 480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(mob)));
+                        replay.Actors.Add(new CircleActor(true, expectedEnd, 480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(mob)));
+                    }
                     break;
                 case (ushort)RiverOfSouls:
                     List<Point3D> facings = replay.Rotations;
@@ -91,7 +110,7 @@ namespace LuckParser.Models.Logic
                     }
                     break;
                 case (ushort)Enervator:
-                    replay.Actors.Add(new CircleActor(true, 0, 200, (start, end), "rgba(0, 0, 255, 0.5)", new AgentConnector(mob)));
+                    // TODO Line actor between desmina and enervator. Missing skillID
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
