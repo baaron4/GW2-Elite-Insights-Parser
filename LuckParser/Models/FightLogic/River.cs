@@ -42,7 +42,7 @@ namespace LuckParser.Models.Logic
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // The walls spawn at the start of the encounter, we fix it by overriding their first aware to the first velocity change event
-            List<AgentItem> riverOfSouls = agentData.GetAgentByInstID((ushort)RiverOfSouls);
+            List<AgentItem> riverOfSouls = agentData.GetAgentsByID((ushort)RiverOfSouls);
             bool sortCombatList = false;
             foreach (AgentItem riverOfSoul in riverOfSouls)
             {
@@ -53,7 +53,7 @@ namespace LuckParser.Models.Logic
                     riverOfSoul.FirstAware = firstMovement.Time - 10;
                     foreach (CombatItem c in combatData)
                     {
-                        if (c.SrcInstid == riverOfSoul.InstID && c.Time < riverOfSoul.LastAware && (c.IsStateChange == ParseEnum.StateChange.Position || c.IsStateChange == ParseEnum.StateChange.Rotation))
+                        if (c.SrcInstid == riverOfSoul.InstID && c.Time < riverOfSoul.FirstAware && (c.IsStateChange == ParseEnum.StateChange.Position || c.IsStateChange == ParseEnum.StateChange.Rotation))
                         {
                             sortCombatList = true;
                             c.OverrideTime(riverOfSoul.FirstAware);
@@ -84,11 +84,10 @@ namespace LuckParser.Models.Logic
                     replay.Actors.Add(new CircleActor(false, 0, 260, (start, end), "rgba(0, 80, 255, 0.5)", new AgentConnector(mob)));
                     break;
                 case (ushort)RiverOfSouls:
-                    Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
-                    if (facing != null)
+                    List<Point3D> facings = replay.Rotations;
+                    if (facings.Count > 0)
                     {
-                        int angle = Point3D.GetRotationFromFacing(facing);
-                        replay.Actors.Add(new RotatedRectangleActor(true, 0, 240, 660, angle, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(mob)));
+                        replay.Actors.Add(new RectangleFacingActor((start, end), new AgentConnector(mob), facings, 240, 660, "rgba(255,100,0,0.5)"));
                     }
                     break;
                 case (ushort)Enervator:
