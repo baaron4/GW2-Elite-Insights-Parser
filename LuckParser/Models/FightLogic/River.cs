@@ -88,7 +88,6 @@ namespace LuckParser.Models.Logic
             CombatReplay replay = mob.CombatReplay;
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
-            List<CastLog> cls = mob.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (mob.ID)
             {
                 case (ushort)HollowedBomber:
