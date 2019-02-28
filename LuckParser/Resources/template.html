@@ -4,25 +4,25 @@
 <head>
     <meta charset="utf-8">
     <link id="theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/${bootstrapTheme}/bootstrap.min.css"
-        crossorigin="anonymous">
+          crossorigin="anonymous">
     <!--${Css}-->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous"></script>
+            crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/plug-ins/1.10.13/sorting/alt-string.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-	<script>
+    <script>
         function initTheme() {
             window.theme = '${bootstrapTheme}';
             if (window.localStorage) {
                 var theme = window.localStorage.getItem('ei_theme');
                 if (theme) {
                     window.theme = theme;
-                    $('#theme').attr('href', 'https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/'+theme+'/bootstrap.min.css');
+                    $('#theme').attr('href', 'https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/' + theme + '/bootstrap.min.css');
                 }
             }
         }
