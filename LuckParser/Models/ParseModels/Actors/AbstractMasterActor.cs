@@ -67,7 +67,10 @@ namespace LuckParser.Models.ParseModels
                     dmgListFull[totalTime] = totalDamage;
                 }
                 totalDamage += dl.Damage;
-                dmgListFull[totalTime] = totalDamage;
+                if (totalTime > 1)
+                {
+                    dmgListFull[totalTime] = totalDamage;
+                }
             }
             // fill
             for (; totalTime <= phase.GetDuration(); totalTime++)

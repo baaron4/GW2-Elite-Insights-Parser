@@ -317,6 +317,10 @@ table.dataTable thead .sorting_desc:after {
     margin-top: 10px;
 }
 
+a {
+	cursor: pointer;
+}
+
 td,
 th {
     text-align: center;
@@ -341,14 +345,17 @@ th {
     color: #fff;
 }
 
-.theme-yeti .nav-pills .nav-link {
-    border-radius: 0.25rem;
-}
 .theme-yeti .nav-pills .nav-link:not(.active) {
     background-color: #eee;
+	border: 1px solid #e1e1e1;
 }
 .theme-yeti .nav-pills .nav-link:hover, .theme-yeti .nav-pills .nav-link:focus {
     background-color: #008cba;
+	border-color: #0079a1;
+}
+
+.nav-tabs {
+	margin-top: 0.5rem;
 }
 
 .rot-icon {
@@ -467,4 +474,20 @@ th {
 }
 .theme-slate table tbody tr.active {
     background-color: rgba(50, 120, 0, 0.5);
+}
+
+.nav-item .nav-link {
+    margin-left: -1px;
+    border-radius: 0;
+}
+
+.nav-item:first-child .nav-link {
+    margin-left: 0;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+}
+
+.nav-item:last-child .nav-link {
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
 }

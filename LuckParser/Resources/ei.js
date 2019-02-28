@@ -63,7 +63,7 @@ window.onload = function () {
             logdata: simpleLogData,
             layout: layout,
             datatypes: DataTypes,
-            light: logData.lightTheme,
+			light: typeof(window.theme)!=="undefined"?(window.theme=='yeti'):logData.lightTheme,
             mode: 0,
             animate: false,
             animationStatus: null
@@ -85,6 +85,7 @@ window.onload = function () {
                 var newStyle = this.light ? 'yeti' : 'slate';
                 document.body.classList.remove("theme-"+style);
                 document.body.classList.add("theme-"+newStyle);
+				if(storeTheme)storeTheme(newStyle);
                 var theme = document.getElementById('theme');
                 theme.href = themes[newStyle];
                 this.switchCombatReplayButtons(this.light ? 'btn-dark' : 'btn-light', this.light ? 'btn-light' : 'btn-dark');     

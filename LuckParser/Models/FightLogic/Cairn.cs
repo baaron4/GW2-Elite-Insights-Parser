@@ -106,5 +106,10 @@ namespace LuckParser.Models.Logic
         {
             return log.CombatData.GetSkills().Contains(38098) ? 1 : 0;
         }
+        
+        public override string GetFightName()
+        {
+            return "Cairn";
+        }
     }
 }
