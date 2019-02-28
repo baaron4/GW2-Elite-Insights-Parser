@@ -53,9 +53,9 @@ namespace LuckParser.Models.ParseModels
                 case ParseEnum.TargetIDS.Matthias:
                     Logic = new Matthias(id);
                     break;
-                case ParseEnum.TargetIDS.Escort:
+                /*case ParseEnum.TargetIDS.Escort:
                     Logic = new Escort(id);
-                    break;
+                    break;*/
                 case ParseEnum.TargetIDS.KeepConstruct:
                     Logic = new KeepConstruct(id);
                     break;
