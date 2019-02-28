@@ -118,7 +118,7 @@
     <Compile Include="Models\JsonModels\JsonRotation.cs" />
     <Compile Include="Models\JsonModels\JsonStatistics.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\BackgroundActor.cs" />
-    <Compile Include="Models\ParseModels\CombatReplay\Actors\RectangleFacingActor.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\Actors\FacingRectangleActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\FacingActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\GenericActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\MovingPlatformActor.cs" />

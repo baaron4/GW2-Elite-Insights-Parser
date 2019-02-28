@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class RectangleFacingActor : FacingActor
+    public class FacingRectangleActor : FacingActor
     {
         private readonly int _width;
         private readonly int _height;
         private readonly string _color;
-        public RectangleFacingActor((int start, int end) lifespan, AgentConnector connector, List<Point3D> facings, int width, int height, string color) : base(lifespan, connector, facings)
+        public FacingRectangleActor((int start, int end) lifespan, AgentConnector connector, List<Point3D> facings, int width, int height, string color) : base(lifespan, connector, facings)
         {
             _width = width;
             _height = height;
@@ -17,7 +17,7 @@ namespace LuckParser.Models.ParseModels
         }
 
         //
-        protected class RectangleFacingSerializable : FacingSerializable
+        protected class FacingRectangleSerializable : FacingSerializable
         {
             public int Width { get; set; }
             public int Height { get; set; }
@@ -26,9 +26,9 @@ namespace LuckParser.Models.ParseModels
 
         public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map)
         {
-            FacingSerializable aux = new RectangleFacingSerializable
+            FacingSerializable aux = new FacingRectangleSerializable
             {
-                Type = "RectangleFacing",
+                Type = "FacingRectangle",
                 Start = Lifespan.start,
                 End = Lifespan.end,
                 ConnectedTo = ConnectedTo.GetConnectedTo(map),

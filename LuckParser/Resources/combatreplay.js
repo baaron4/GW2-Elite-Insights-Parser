@@ -144,8 +144,8 @@ class Animator {
                 case "Facing":
                     this.attachedActorData.set(actor.connectedTo, new FacingMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData));
                     break;
-                case "RectangleFacing":
-                    this.attachedActorData.set(actor.connectedTo, new RectangleFacingMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, actor.width, actor.height, actor.color));
+                case "FacingRectangle":
+                    this.attachedActorData.set(actor.connectedTo, new FacingRectangleMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, actor.width, actor.height, actor.color));
                     break;
                 case "MovingPlatform":
                     this.backgroundActorData.push(new MovingPlatformDrawable(actor.start, actor.end, actor.image, actor.width, actor.height, actor.positions));
@@ -755,7 +755,7 @@ class FacingMechanicDrawable extends MechanicDrawable {
     }
 }
 
-class RectangleFacingMechanicDrawable extends FacingMechanicDrawable {
+class FacingRectangleMechanicDrawable extends FacingMechanicDrawable {
     constructor(start, end, connectedTo, facingData, width, height, color) {
         super(start, end, connectedTo, facingData);
         this.width = animator.inch * width;

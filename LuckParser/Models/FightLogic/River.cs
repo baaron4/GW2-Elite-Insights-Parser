@@ -87,7 +87,7 @@ namespace LuckParser.Models.Logic
                     List<Point3D> facings = replay.Rotations;
                     if (facings.Count > 0)
                     {
-                        replay.Actors.Add(new RectangleFacingActor((start, end), new AgentConnector(mob), facings, 240, 660, "rgba(255,100,0,0.5)"));
+                        replay.Actors.Add(new FacingRectangleActor((start, end), new AgentConnector(mob), facings, 240, 660, "rgba(255,100,0,0.5)"));
                     }
                     break;
                 case (ushort)Enervator:
