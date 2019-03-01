@@ -256,7 +256,8 @@ namespace LuckParser.Models.Logic
 
         public void InitTrashMobCombatReplay(ParsedLog log, int pollingRate)
         {
-            List<ParseEnum.TrashIDS> ids = GetTrashMobsIDS(); List<AgentItem> aList = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
+            List<ParseEnum.TrashIDS> ids = GetTrashMobsIDS();
+            List<AgentItem> aList = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
             foreach (AgentItem a in aList)
             {
                 Mob mob = new Mob(a);
