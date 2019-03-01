@@ -8,11 +8,11 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class AbstractBoonSimulationItemWasted : AbstractBoonSimulationItem
     {
-        protected readonly ushort Src;
+        protected readonly AgentItem Src;
         private readonly long _waste;
         protected readonly long Time;
 
-        protected AbstractBoonSimulationItemWasted(ushort src, long waste, long time)
+        protected AbstractBoonSimulationItemWasted(AgentItem src, long waste, long time)
         {
             Src = src;
             _waste = waste;

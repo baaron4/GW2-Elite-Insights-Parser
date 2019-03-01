@@ -14,19 +14,29 @@ namespace LuckParser.Models.ParseModels
             public long SeedTime { get; private set; }
             public long ApplicationTime { get; private set; }
             public long BoonDuration { get; private set; }
-            public ushort Src { get; private set; }
-            public ushort SeedSrc { get; }
+            public AgentItem Src { get; private set; }
+            public AgentItem SeedSrc { get; }
 
-            public List<(ushort src, long value, long time)> Extensions { get; } = new List<(ushort src, long value, long time)>();
+            public List<(AgentItem src, long value, long time)> Extensions { get; } = new List<(AgentItem src, long value, long time)>();
 
-            public BoonStackItem(long start, long boonDuration, ushort srcinstid, ushort seedSrc)
+            public BoonStackItem(long start, long boonDuration, AgentItem src, AgentItem seedSrc)
             {
                 Start = start;
                 SeedTime = start;
                 ApplicationTime = start;
                 SeedSrc = seedSrc;
                 BoonDuration = boonDuration;
-                Src = srcinstid;
+                Src = src;
+            }
+
+            public BoonStackItem(long start, long boonDuration, AgentItem src)
+            {
+                Start = start;
+                SeedTime = start;
+                ApplicationTime = start;
+                SeedSrc = src;
+                BoonDuration = boonDuration;
+                Src = src;
             }
 
             public BoonStackItem(BoonStackItem other, long startShift, long durationShift)
@@ -40,7 +50,7 @@ namespace LuckParser.Models.ParseModels
                 Extensions = other.Extensions;
                 if (BoonDuration == 0 && Extensions.Count > 0)
                 {
-                    (ushort src, long value, long time) = Extensions.First();
+                    (AgentItem src, long value, long time) = Extensions.First();
                     Extensions.RemoveAt(0);
                     ApplicationTime = time;
                     Src = src;
@@ -51,14 +61,14 @@ namespace LuckParser.Models.ParseModels
             public long TotalBoonDuration()
             {
                 long res = BoonDuration;
-                foreach ((ushort src, long value, long time) in Extensions)
+                foreach ((AgentItem src, long value, long time) in Extensions)
                 {
                     res += value;
                 }
                 return res;
             }
 
-            public void Extend(long value, ushort src, long time)
+            public void Extend(long value, AgentItem src, long time)
             {
                 Extensions.Add((src, value, time));
             }
@@ -129,7 +139,27 @@ namespace LuckParser.Models.ParseModels
 
         protected abstract void Update(long timePassed);
 
-        public void Add(long boonDuration, ushort srcinstid, ushort seedSrc, long start, bool atFirst = false)
+        public void Add(long boonDuration, AgentItem src, long start)
+        {
+            var toAdd = new BoonStackItem(start, boonDuration, src);
+            // Find empty slot
+            if (BoonStack.Count < Capacity)
+            {
+                BoonStack.Add(toAdd);
+                _logic.Sort(_log, BoonStack);
+            }
+            // Replace lowest value
+            else
+            {
+                bool found = _logic.StackEffect(_log, toAdd, BoonStack, WasteSimulationResult);
+                if (!found)
+                {
+                    OverstackSimulationResult.Add(new BoonSimulationItemOverstack(src, boonDuration, start));
+                }
+            }
+        }
+
+        protected void Add(long boonDuration, AgentItem srcinstid, AgentItem seedSrc, long start, bool atFirst)
         {
             var toAdd = new BoonStackItem(start, boonDuration, srcinstid, seedSrc);
             // Find empty slot
@@ -157,7 +187,7 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public void Remove(ushort provokedBy, long boonDuration, long start, ParseEnum.BuffRemove removeType)
+        public void Remove(AgentItem provokedBy, long boonDuration, long start, ParseEnum.BuffRemove removeType)
         {
             if (GenerationSimulation.Count > 0)
             {
@@ -176,7 +206,7 @@ namespace LuckParser.Models.ParseModels
                         CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, stackItem.BoonDuration, start));
                         if (stackItem.Extensions.Count > 0)
                         {
-                            foreach ((ushort src, long value, long time) in stackItem.Extensions)
+                            foreach ((AgentItem src, long value, long time) in stackItem.Extensions)
                             {
                                 WasteSimulationResult.Add(new BoonSimulationItemWasted(src, value, start, time));
                                 CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, value, start));
@@ -196,7 +226,7 @@ namespace LuckParser.Models.ParseModels
                             CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, stackItem.BoonDuration, start));
                             if (stackItem.Extensions.Count > 0)
                             {
-                                foreach ((ushort src, long value, long time) in stackItem.Extensions)
+                                foreach ((AgentItem src, long value, long time) in stackItem.Extensions)
                                 {
                                     WasteSimulationResult.Add(new BoonSimulationItemWasted(src, value, start, time));
                                     CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, value, start));
@@ -213,6 +243,6 @@ namespace LuckParser.Models.ParseModels
             _logic.Sort(_log, BoonStack);
         }
 
-        public abstract void Extend(long extension, long oldValue, ushort src, long start);
+        public abstract void Extend(long extension, long oldValue, AgentItem src, long start);
     }
 }

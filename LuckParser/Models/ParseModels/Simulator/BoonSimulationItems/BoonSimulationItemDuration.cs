@@ -10,8 +10,8 @@ namespace LuckParser.Models.ParseModels
 
         private readonly long _applicationTime;
         private readonly long _seedTime;
-        private readonly ushort _src;
-        private readonly ushort _seedSrc;
+        private readonly AgentItem _src;
+        private readonly AgentItem _seedSrc;
 
         public BoonSimulationItemDuration(BoonStackItem other) : base(other.Start, other.BoonDuration)
         {
@@ -35,8 +35,8 @@ namespace LuckParser.Models.ParseModels
         {
             Dictionary<AgentItem, BoonDistributionItem> distrib = GetDistrib(distribs, boonid);
             long cDur = GetClampedDuration(start, end);
-            AgentItem agent = log.AgentData.GetAgentByInstID(_src, log.FightData.ToLogSpace(_applicationTime));
-            AgentItem seedAgent = log.AgentData.GetAgentByInstID(_seedSrc, log.FightData.ToLogSpace(_seedTime));
+            AgentItem agent = _src;
+            AgentItem seedAgent = _seedSrc;
             if (distrib.TryGetValue(agent, out BoonDistributionItem toModify))
             {
                 toModify.Value += cDur;
@@ -73,7 +73,7 @@ namespace LuckParser.Models.ParseModels
                         0, 0, 0, 0, cDur));
                 }
             }
-            if (_src == 0)
+            if (agent == GeneralHelper.UnknownAgent)
             {
                 if (distrib.TryGetValue(seedAgent, out toModify))
                 {
