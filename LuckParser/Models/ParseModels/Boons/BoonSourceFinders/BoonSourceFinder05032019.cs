@@ -9,8 +9,14 @@ namespace LuckParser.Models.ParseModels
 {
     public class BoonSourceFinder05032019 : BoonSourceFinder
     {
-        public override ushort TryFindSrc(AbstractActor a, List<CastLog> castsToCheck, long time, long extension, ParsedLog log)
+        public override ushort TryFindSrc(AbstractActor a, long time, long extension, ParsedLog log)
         {
+            HashSet<long> extensionIDS = new HashSet<long>()
+            {
+                10236,
+                51696,
+                29453
+            };
             HashSet<long> idsToCheck = new HashSet<long>();
             switch (extension)
             {
@@ -35,7 +41,7 @@ namespace LuckParser.Models.ParseModels
                     break;
 
             }
-            List<CastLog> cls = castsToCheck.Where(x => idsToCheck.Contains(x.SkillId) && x.Time <= time && time <= x.Time + x.ActualDuration + 10 && x.EndActivation.NoInterruptEndCasting()).ToList();
+            List<CastLog> cls = GetExtensionSkills(log, extensionIDS).Where(x => idsToCheck.Contains(x.SkillId) && x.Time <= time && time <= x.Time + x.ActualDuration + 10 && x.EndActivation.NoInterruptEndCasting()).ToList();
             if (cls.Count == 1)
             {
                 CastLog item = cls.First();

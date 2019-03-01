@@ -172,17 +172,6 @@ namespace LuckParser.Models.ParseModels
         {
             // buff extension ids
             BoonSourceFinder sourceFinder = Boon.GetBoonSourceFinder(log);
-            HashSet<long> idsToCheck = new HashSet<long>()
-            {
-                10236,
-                51696,
-                29453
-            };
-            List<CastLog> extensionSkills = new List<CastLog>();
-            foreach (Player p in log.PlayerList)
-            {
-                extensionSkills.AddRange(p.GetCastLogs(log, log.FightData.ToFightSpace(p.FirstAware), log.FightData.ToFightSpace(p.LastAware)).Where(x => idsToCheck.Contains(x.SkillId)));
-            }
             //
             BoonMap boonMap = new BoonMap();
             // Fill in Boon Map
@@ -219,7 +208,7 @@ namespace LuckParser.Models.ParseModels
                         {
                             if (src == 0)
                             {
-                                src = sourceFinder.TryFindSrc(this, extensionSkills, time, c.Value, log);
+                                src = sourceFinder.TryFindSrc(this, time, c.Value, log);
                             }
                             loglist.Add(new BoonExtensionLog(time, c.Value, c.OverstackValue - c.Value, log.AgentData.GetAgentByInstID(src, c.Time)));
                         }
