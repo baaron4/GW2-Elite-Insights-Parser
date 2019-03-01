@@ -27,6 +27,12 @@ namespace LuckParser.Models.ParseModels
             Refresh();
         }
 
+        public void RemoveAgent(AgentItem agent)
+        {
+            _allAgentsList.Remove(agent);
+            Refresh();
+        }
+
         public AgentItem GetAgent(ulong agentAddress, long time)
         {
             if (agentAddress != 0)

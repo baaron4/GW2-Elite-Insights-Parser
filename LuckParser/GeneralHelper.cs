@@ -378,6 +378,7 @@ namespace LuckParser
                 case ParseEnum.TargetIDS.Deimos:
                     return "https://i.imgur.com/mWfxBaO.png";
                 case ParseEnum.TargetIDS.SoullessHorror:
+                case ParseEnum.TargetIDS.Desmina:
                     return "https://i.imgur.com/jAiRplg.png";
                 case ParseEnum.TargetIDS.Dhuum:
                     return "https://i.imgur.com/RKaDon5.png";
@@ -423,6 +424,7 @@ namespace LuckParser
                 case Spirit:
                 case Spirit2:
                 case ChargedSoul:
+                case HollowedBomber:
                     return "https://i.imgur.com/sHmksvO.png";
                 case Saul:
                     return "https://i.imgur.com/ck2IsoS.png";
@@ -521,6 +523,7 @@ namespace LuckParser
                     return "https://i.imgur.com/INCGLIK.png";
                 case BanditBombardier:
                 case SurgingSoul:
+                case Enervator:
                     return "https://i.imgur.com/k79t7ZA.png";
                 case Seekers:
                     return "https://i.imgur.com/FrPoluz.png";

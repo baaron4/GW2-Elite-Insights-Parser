@@ -87,6 +87,7 @@ namespace LuckParser.Models.ParseModels
             List<CombatItem> damageData = _damageData.SelectMany(x => x.Value).ToList();
             damageData.Sort((x, y) => x.Time.CompareTo(y.Time));
             damageData.Reverse();
+            bool sortCombatList = false;
             foreach (CombatItem c in damageData)
             {
                 if (c.Time <= end)
@@ -95,8 +96,13 @@ namespace LuckParser.Models.ParseModels
                 }
                 else if (c.Time <= end + 1000)
                 {
-                    c.Time = end;
+                    sortCombatList = true;
+                    c.OverrideTime(end);
                 }
+            }
+            if (sortCombatList)
+            {
+                AllCombatItems.Sort((x, y) => x.Time.CompareTo(y.Time));
             }
         }
 

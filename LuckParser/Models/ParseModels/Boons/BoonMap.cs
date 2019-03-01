@@ -43,7 +43,7 @@ namespace LuckParser.Models.ParseModels
             this[boon.ID] = new List<BoonLog>();
         }
 
-        private int CompareApplicationType(BoonLog x, BoonLog y)
+        /*private int CompareApplicationType(BoonLog x, BoonLog y)
         {
             if (x.Time < y.Time)
             {
@@ -87,7 +87,7 @@ namespace LuckParser.Models.ParseModels
             {
                 pair.Value.Sort(CompareApplicationType);
             }
-        }
+        }*/
         
     }
 

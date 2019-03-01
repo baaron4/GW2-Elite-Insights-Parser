@@ -144,6 +144,9 @@ class Animator {
                 case "Facing":
                     this.attachedActorData.set(actor.connectedTo, new FacingMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData));
                     break;
+                case "FacingRectangle":
+                    this.attachedActorData.set(actor.connectedTo, new FacingRectangleMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, actor.width, actor.height, actor.color));
+                    break;
                 case "MovingPlatform":
                     this.backgroundActorData.push(new MovingPlatformDrawable(actor.start, actor.end, actor.image, actor.width, actor.height, actor.positions));
                     break;
@@ -512,7 +515,7 @@ function initCombatReplay(actors, options) {
 */
 
 // Drawables
-
+//// ACTORS
 class IconDrawable {
     constructor(start, end, imgSrc, pixelSize) {
         this.pos = null;
@@ -671,7 +674,7 @@ class EnemyIconDrawable extends IconDrawable {
         this.pos = pos;
     }
 }
-
+//// BASE MECHANIC
 class MechanicDrawable {
     constructor(start, end, connectedTo) {
         this.start = start;
@@ -707,7 +710,7 @@ class MechanicDrawable {
     }
 
 }
-
+//// FACING
 class FacingMechanicDrawable extends MechanicDrawable {
     constructor(start, end, connectedTo, facingData) {
         super(start, end, connectedTo);
@@ -752,6 +755,33 @@ class FacingMechanicDrawable extends MechanicDrawable {
     }
 }
 
+class FacingRectangleMechanicDrawable extends FacingMechanicDrawable {
+    constructor(start, end, connectedTo, facingData, width, height, color) {
+        super(start, end, connectedTo, facingData);
+        this.width = animator.inch * width;
+        this.height = animator.inch * height;
+        this.color = color;
+    }
+
+    draw() {
+        const pos = this.getPosition();
+        const rot = this.getRotation();
+        if (pos === null || rot === null) {
+            return;
+        }
+        var ctx = animator.ctx;
+        const angle = rot * Math.PI / 180;
+        ctx.save();
+        ctx.translate(pos.x, pos.y);
+        ctx.rotate(angle);
+        ctx.beginPath();
+        ctx.rect(- 0.5 * this.width, - 0.5 * this.height, this.width, this.height);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.restore();
+    }
+}
+//// FORMS
 class FormMechanicDrawable extends MechanicDrawable {
     constructor(start, end, fill, growing, color, connectedTo) {
         super(start, end, connectedTo);
@@ -975,7 +1005,7 @@ class LineMechanicDrawable extends FormMechanicDrawable {
         ctx.stroke();
     }
 }
-
+//// BACKGROUND
 class BackgroundDrawable {
     constructor(start, end) {
         this.start = start;

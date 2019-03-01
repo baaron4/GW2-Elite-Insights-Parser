@@ -6,13 +6,13 @@ namespace LuckParser.Models.ParseModels
 {
     public class FacingActor : GenericActor
     {
-        private List<(double angle, long time)> _data = new List<(double angle, long time)>();
+        protected List<(double angle, long time)> Data = new List<(double angle, long time)>();
 
         public FacingActor((int start, int end) lifespan, AgentConnector connector, List<Point3D> facings) : base(lifespan, connector)
         {
             foreach(Point3D facing in facings)
             {
-                _data.Add((Point3D.GetRotationFromFacing(facing), facing.Time));
+                Data.Add((Point3D.GetRotationFromFacing(facing), facing.Time));
             }
         }
 
@@ -30,10 +30,10 @@ namespace LuckParser.Models.ParseModels
                 Start = Lifespan.start,
                 End = Lifespan.end,
                 ConnectedTo = ConnectedTo.GetConnectedTo(map),
-                FacingData = new object[_data.Count]
+                FacingData = new object[Data.Count]
             };
             int i = 0;
-            foreach((double angle, long time) in _data)
+            foreach((double angle, long time) in Data)
             {
                 aux.FacingData[i++] = new object[2]
                 {

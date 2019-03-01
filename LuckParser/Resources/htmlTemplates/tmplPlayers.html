@@ -1,6 +1,6 @@
 <div>
     <img class="icon mb-1" src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png" :data-original-title="scoreExpl" />
-    <table class="table composition">
+    <table class="table table-sm table-bordered composition">
         <tbody>
             <tr v-for="group in groups">
                 <td v-for="player in group" class="player-cell" :class="{active: player.id === playerindex}" @click="select(player.id)">

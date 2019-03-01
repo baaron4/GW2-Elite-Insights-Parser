@@ -4,17 +4,36 @@
 <head>
     <meta charset="utf-8">
     <link id="theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/${bootstrapTheme}/bootstrap.min.css"
-        crossorigin="anonymous">
+          crossorigin="anonymous">
     <!--${Css}-->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous"></script>
+            crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/plug-ins/1.10.13/sorting/alt-string.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script>
+        function initTheme() {
+            window.theme = '${bootstrapTheme}';
+            if (window.localStorage) {
+                var theme = window.localStorage.getItem('ei_theme');
+                if (theme) {
+                    window.theme = theme;
+                    $('#theme').attr('href', 'https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/' + theme + '/bootstrap.min.css');
+                }
+            }
+        }
+        function storeTheme(theme) {
+            if (window.localStorage) {
+                window.localStorage.setItem('ei_theme', theme);
+            }
+        }
+        initTheme();
+    </script>
+
     <!--${Vue}-->
     <script>
         var logData = '${logDataJson}';
@@ -29,8 +48,11 @@
     <!--${CombatReplayScript}-->
 </head>
 
-<body class="theme-${bootstrapTheme}">
-    <div class="d-flex justify-content-center align-items-center" id="loading">
+<body>
+    <script>
+        $('body').addClass('theme-' + window.theme);
+    </script>
+    <div class="d-flex justify-content-center align-item-center mt-2" id="loading">
         <div class="card" style="width: 75%;">
             <div class="card-body" style="margin: 100px; text-align: center;">
                 Loading data...
@@ -38,7 +60,7 @@
         </div>
     </div>
     <div v-cloak id="content">
-        <div class="d-flex flex-row justify-content-center align-items-center" :class="{'ei-header': !mode, 'ei-header-big': mode}">
+        <div class="d-flex flex-row justify-content-center align-items-center mt-2" :class="{'ei-header': !mode, 'ei-header-big': mode}">
             <div class="card fight-summary" id="encounter" style="min-width: 350px;">
                 <encounter-component></encounter-component>
             </div>
@@ -53,8 +75,8 @@
                         </li>
                     </ul>
                 </div>
-                <div v-if="animationStatus">
-                    <ul class="nav nav-pills flex-column justify-content-center d-flex align-items-center">
+                <div v-if="animationStatus" class="d-flex flex-row justify-content-center align-items-center">
+                    <ul class="nav nav-pills">
                         <li class="nav-item mb-1">
                             <a class="nav-link" @click="changeMode(0)" :class="{active: !mode}">Statistics</a>
                         </li>
