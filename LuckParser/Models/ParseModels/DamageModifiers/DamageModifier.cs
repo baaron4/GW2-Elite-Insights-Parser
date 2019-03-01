@@ -105,7 +105,7 @@ namespace LuckParser.Models.ParseModels
             new BuffDamageModifier(Boon.BoonsByName["Fury"], "Ferocious Aggression", DamageSource.NoPets, 7.0, DamageType.All, DamageType.All, ModifierSource.Revenant, ByPresence, "https://wiki.guildwars2.com/images/e/ec/Ferocious_Aggression.png"),
             new BuffDamageModifier(Boon.BoonsByName["Kalla's Fervor"], DamageSource.NoPets, 2.0, DamageType.Condition, DamageType.Condition, ModifierSource.Revenant, ByStack),
             new BuffDamageModifier(Boon.BoonsByName["Improved Kalla's Fervor"], DamageSource.NoPets, 3.0, DamageType.Condition, DamageType.Condition, ModifierSource.Revenant, ByStack),
-            new BuffDamageModifierTarget(Boon.BoonsByName["Vulnerability"], "Targeted Destruction", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.Power, ModifierSource.Revenant, ByPresence, "https://wiki.guildwars2.com/images/e/ed/Targeted_Destruction.png"),
+            new BuffDamageModifierTarget(Boon.BoonsByName["Vulnerability"], "Targeted Destruction", DamageSource.NoPets, 0.5, DamageType.Power, DamageType.Power, ModifierSource.Revenant, ByStack, "https://wiki.guildwars2.com/images/e/ed/Targeted_Destruction.png"),
             new DamageLogDamageModifier("Swift Termination", DamageSource.NoPets, 20.0, DamageType.Power, DamageType.Power, ModifierSource.Revenant,"https://wiki.guildwars2.com/images/b/bb/Swift_Termination.png", x => x.IsFifty, ByPresence),
             /// Warrior
             new BuffDamageModifier(Boon.BoonsByName["Peak Performance"], DamageSource.NoPets, 20.0, DamageType.Power, DamageType.Power, ModifierSource.Warrior, ByPresence),
