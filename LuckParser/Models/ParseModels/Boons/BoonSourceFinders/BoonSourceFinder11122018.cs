@@ -44,16 +44,16 @@ namespace LuckParser.Models.ParseModels
                     break;
 
             }
-            List<CastLog> cls = GetExtensionSkills(log, extensionIDS).Where(x => idsToCheck.Contains(x.SkillId) && x.Time <= time && time <= x.Time + x.ActualDuration + 10 && x.EndActivation.NoInterruptEndCasting()).ToList();
+            List<CastLog> cls = GetExtensionSkills(log, extensionIDS, time, idsToCheck);
             if (cls.Count == 1)
             {
                 CastLog item = cls.First();
                 if (extension == 2000 && log.PlayerListBySpec.TryGetValue("Tempest", out List<Player> tempests))
                 {
-                    List<CombatItem> magAuraApplications = log.CombatData.GetBoonData(5684).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && x.DstInstid != item.SrcInstId).ToList();
+                    List<CombatItem> magAuraApplications = log.CombatData.GetBoonData(5684).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && Math.Abs(x.Time - log.FightData.ToLogSpace(time)) < 50 && x.SrcInstid != item.SrcInstId).ToList();
                     foreach (Player tempest in tempests)
                     {
-                        if (magAuraApplications.FirstOrDefault(x => x.SrcInstid == tempest.InstID && Math.Abs(x.Time - time) < 50) != null)
+                        if (magAuraApplications.FirstOrDefault(x => x.SrcInstid == tempest.InstID ) != null)
                         {
                             return 0;
                         }

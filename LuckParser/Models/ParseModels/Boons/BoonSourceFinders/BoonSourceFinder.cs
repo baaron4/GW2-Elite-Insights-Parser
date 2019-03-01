@@ -11,17 +11,17 @@ namespace LuckParser.Models.ParseModels
     {
         private List<CastLog> _extensionSkills = null;
 
-        protected List<CastLog> GetExtensionSkills(ParsedLog log, HashSet<long> ids)
+        protected List<CastLog> GetExtensionSkills(ParsedLog log, HashSet<long> ids, long time, HashSet<long> idsToKeep)
         {
             if (_extensionSkills == null)
             {
                 List<CastLog> extensionSkills = new List<CastLog>();
                 foreach (Player p in log.PlayerList)
                 {
-                    _extensionSkills.AddRange(p.GetCastLogs(log, log.FightData.ToFightSpace(p.FirstAware), log.FightData.ToFightSpace(p.LastAware)).Where(x => ids.Contains(x.SkillId)));
+                    _extensionSkills.AddRange(p.GetCastLogs(log, log.FightData.ToFightSpace(p.FirstAware), log.FightData.ToFightSpace(p.LastAware)).Where(x => ids.Contains(x.SkillId) && x.EndActivation.NoInterruptEndCasting()));
                 }
             }
-            return _extensionSkills;
+            return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time <= time && time <= x.Time + x.ActualDuration + 10).ToList();
         }
 
         public abstract ushort TryFindSrc(AbstractActor a, long time, long extension, ParsedLog log);
