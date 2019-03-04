@@ -15,7 +15,7 @@ namespace LuckParser.Models.ParseModels
         {
             if (_extensionSkills == null)
             {
-                List<CastLog> extensionSkills = new List<CastLog>();
+                _extensionSkills = new List<CastLog>();
                 foreach (Player p in log.PlayerList)
                 {
                     _extensionSkills.AddRange(p.GetCastLogs(log, log.FightData.ToFightSpace(p.FirstAware), log.FightData.ToFightSpace(p.LastAware)).Where(x => ids.Contains(x.SkillId) && x.EndActivation.NoInterruptEndCasting()));
