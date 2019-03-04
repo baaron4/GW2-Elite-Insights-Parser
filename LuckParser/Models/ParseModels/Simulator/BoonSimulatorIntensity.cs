@@ -7,32 +7,32 @@ namespace LuckParser.Models.ParseModels
 {
     public class BoonSimulatorIntensity : BoonSimulator
     {
-        private List<ushort> _lastSrcRemoves = new List<ushort>();
+        private List<AgentItem> _lastSrcRemoves = new List<AgentItem>();
         // Constructor
         public BoonSimulatorIntensity(int capacity, ParsedLog log, StackingLogic logic) : base(capacity, log, logic)
         {
         }
 
-        public override void Extend(long extension, long oldValue, ushort src, long start)
+        public override void Extend(long extension, long oldValue, AgentItem src, long start)
         {
             if ((BoonStack.Count > 0 && oldValue > 0) || BoonStack.Count == Capacity)
             {
                 BoonStackItem minItem = BoonStack.MinBy(x => Math.Abs(x.TotalBoonDuration() - oldValue));
                 if (minItem != null)
                 {
-                    minItem.Extend(extension, src, start);
+                    minItem.Extend(extension, src);
                 }
             }
             else
             {
                 if (_lastSrcRemoves.Count > 0)
                 {
-                    Add(oldValue + extension, src, _lastSrcRemoves.First(), start);
+                    Add(oldValue + extension, src, _lastSrcRemoves.First(), start, false);
                     _lastSrcRemoves.RemoveAt(0);
                 }
                 else
                 {
-                    Add(oldValue + extension, src, src, start);
+                    Add(oldValue + extension, src, start);
                 }
             }
         }
