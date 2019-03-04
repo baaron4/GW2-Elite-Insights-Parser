@@ -18,12 +18,12 @@ namespace LuckParser.Models.ParseModels
                 return false;
             }
             BoonStackItem stack = stacks[0];
-            wastes.Add(new BoonSimulationItemWasted(stack.Src, stack.BoonDuration, stack.Start, stack.ApplicationTime));
+            wastes.Add(new BoonSimulationItemWasted(stack.Src, stack.BoonDuration, stack.Start));
             if (stack.Extensions.Count > 0)
             {
-                foreach ((AgentItem src, long value, long time) in stack.Extensions)
+                foreach ((AgentItem src, long value) in stack.Extensions)
                 {
-                    wastes.Add(new BoonSimulationItemWasted(src, value, stack.Start, time));
+                    wastes.Add(new BoonSimulationItemWasted(src, value, stack.Start));
                 }
             }
             stacks[0] = stackItem;

@@ -20,7 +20,7 @@ namespace LuckParser.Models.ParseModels
                 BoonStackItem minItem = BoonStack.MinBy(x => Math.Abs(x.TotalBoonDuration() - oldValue));
                 if (minItem != null)
                 {
-                    minItem.Extend(extension, src, start);
+                    minItem.Extend(extension, src);
                 }
             }
             else
