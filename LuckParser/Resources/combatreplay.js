@@ -144,6 +144,9 @@ class Animator {
                 case "Facing":
                     this.attachedActorData.set(actor.connectedTo, new FacingMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData));
                     break;
+                case "FacingRectangle":
+                    this.attachedActorData.set(actor.connectedTo, new FacingRectangleMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, actor.width, actor.height, actor.color));
+                    break;
                 case "MovingPlatform":
                     this.backgroundActorData.push(new MovingPlatformDrawable(actor.start, actor.end, actor.image, actor.width, actor.height, actor.positions));
                     break;
@@ -512,7 +515,7 @@ function initCombatReplay(actors, options) {
 */
 
 // Drawables
-
+//// ACTORS
 class IconDrawable {
     constructor(start, end, imgSrc, pixelSize) {
         this.pos = null;
@@ -671,7 +674,7 @@ class EnemyIconDrawable extends IconDrawable {
         this.pos = pos;
     }
 }
-
+//// BASE MECHANIC
 class MechanicDrawable {
     constructor(start, end, connectedTo) {
         this.start = start;
@@ -707,21 +710,11 @@ class MechanicDrawable {
     }
 
 }
-
+//// FACING
 class FacingMechanicDrawable extends MechanicDrawable {
     constructor(start, end, connectedTo, facingData) {
         super(start, end, connectedTo);
-        this.facingData = [];
-        var j = 0;
-        var times = animator.times;
-        for (var i = 0; i < facingData.length; i++) {
-            var curData = facingData[i];
-            var curTime = curData[1];
-            var curAngle = curData[0];
-            for (; j < times.length && times[j] < curTime - 150; j++) {
-                this.facingData.push(-curAngle);// positive mathematical direction, reversed since JS has downwards increasing y axis
-            }
-        }
+        this.facingData = facingData;
     }
 
     getRotation() {
@@ -729,9 +722,17 @@ class FacingMechanicDrawable extends MechanicDrawable {
             return null;
         }
         var time = animator.reactiveDataStatus.time;
+        if (this.start !== -1 && (this.start >= time || this.end <= time)) {
+            return null;
+        }
+        if (this.facingData.length === 1) {
+            this.facingData[0];
+        }
         const lastTime = animator.times[animator.times.length - 1];
+        const startIndex = Math.ceil((animator.times.length - 1) * Math.max(this.start, 0) / lastTime);
         const currentIndex = Math.floor((animator.times.length - 1) * time / lastTime);
-        return this.facingData[currentIndex]; 
+        const offsetedIndex = Math.max(currentIndex - startIndex, 0);
+        return this.facingData[offsetedIndex]; 
     }
 
     draw() {
@@ -752,6 +753,33 @@ class FacingMechanicDrawable extends MechanicDrawable {
     }
 }
 
+class FacingRectangleMechanicDrawable extends FacingMechanicDrawable {
+    constructor(start, end, connectedTo, facingData, width, height, color) {
+        super(start, end, connectedTo, facingData);
+        this.width = animator.inch * width;
+        this.height = animator.inch * height;
+        this.color = color;
+    }
+
+    draw() {
+        const pos = this.getPosition();
+        const rot = this.getRotation();
+        if (pos === null || rot === null) {
+            return;
+        }
+        var ctx = animator.ctx;
+        const angle = rot * Math.PI / 180;
+        ctx.save();
+        ctx.translate(pos.x, pos.y);
+        ctx.rotate(angle);
+        ctx.beginPath();
+        ctx.rect(- 0.5 * this.width, - 0.5 * this.height, this.width, this.height);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.restore();
+    }
+}
+//// FORMS
 class FormMechanicDrawable extends MechanicDrawable {
     constructor(start, end, fill, growing, color, connectedTo) {
         super(start, end, connectedTo);
@@ -975,7 +1003,7 @@ class LineMechanicDrawable extends FormMechanicDrawable {
         ctx.stroke();
     }
 }
-
+//// BACKGROUND
 class BackgroundDrawable {
     constructor(start, end) {
         this.start = start;

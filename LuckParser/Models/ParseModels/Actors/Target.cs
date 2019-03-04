@@ -177,10 +177,9 @@ namespace LuckParser.Models.ParseModels
         {
             CombatReplay.Icon = GeneralHelper.GetNPCIcon(ID);
             log.FightData.Logic.ComputeAdditionalTargetData(this, log);
-            List<Point3D> facings = CombatReplay.Rotations;
-            if (facings.Any())
+            if (CombatReplay.Rotations.Any())
             {
-                CombatReplay.Actors.Add(new FacingActor(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), facings));
+                CombatReplay.Actors.Add(new FacingActor(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
             }
         }
 

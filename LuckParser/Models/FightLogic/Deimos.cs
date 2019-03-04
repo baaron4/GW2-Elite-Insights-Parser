@@ -82,14 +82,12 @@ namespace LuckParser.Models.Logic
                 }
                 if (allAgents.Contains(c.SrcAgent))
                 {
-                    c.SrcInstid = target.InstID;
-                    c.SrcAgent = target.Agent;
+                    c.OverrideSrcValues(target.Agent, target.InstID);
 
                 }
                 if (allAgents.Contains(c.DstAgent))
                 {
-                    c.DstInstid = target.InstID;
-                    c.DstAgent = target.Agent;
+                    c.OverrideDstValues(target.Agent, target.InstID);
                 }
             }
         }

@@ -106,6 +106,8 @@
     <Compile Include="Builders\Helpers\CSVHelper.cs" />
     <Compile Include="GeneralHelper.cs" />
     <Compile Include="Controllers\FlashWindow.cs" />
+    <Compile Include="Models\FightLogic\River.cs" />
+    <Compile Include="Models\FightLogic\Escort.cs" />
     <Compile Include="Models\FightLogic\UnknownFightLogic.cs" />
     <Compile Include="Models\FightLogic\BanditTrio.cs" />
     <Compile Include="Models\FightLogic\Freezie.cs" />
@@ -119,6 +121,7 @@
     <Compile Include="Models\ParseModels\Boons\BoonSourceFinders\BoonSourceFinder05032019.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonSourceFinders\BoonSourceFinder.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\BackgroundActor.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\Actors\FacingRectangleActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\FacingActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\GenericActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\MovingPlatformActor.cs" />
