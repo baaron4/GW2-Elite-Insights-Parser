@@ -6,13 +6,13 @@ namespace LuckParser.Models.ParseModels
     {
         public long Time { get; }
         public long Value { get; }
-        public ushort SrcInstid { get; }
+        public AgentItem Src { get; }
 
-        protected BoonLog(long time, ushort srcInstid, long value)
+        protected BoonLog(long time, AgentItem src, long value)
         {
             Time = time;
             Value = value;
-            SrcInstid = srcInstid;
+            Src = src;
         }
 
         public abstract void UpdateSimulator(BoonSimulator simulator);

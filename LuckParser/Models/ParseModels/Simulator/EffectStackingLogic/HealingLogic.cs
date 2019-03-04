@@ -19,8 +19,7 @@ namespace LuckParser.Models.ParseModels
 
             private uint GetHealing(BoonStackItem stack)
             {
-                AgentItem agent = _log.AgentData.GetAgentByInstID(stack.SeedSrc, _log.FightData.ToLogSpace(stack.SeedTime));
-                return agent.Healing;
+                return stack.SeedSrc.Healing;
             }
 
             public int Compare(BoonStackItem x, BoonStackItem y)

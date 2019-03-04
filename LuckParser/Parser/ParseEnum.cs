@@ -217,6 +217,15 @@ namespace LuckParser.Parser
             SurgingSoul = 19474,
             Scythe = 19396,
             FleshWurm = 19464,
+
+
+            // River
+            Enervator = 19863,
+            HollowedBomber = 19399,
+            RiverOfSouls = 19829,
+
+
+
             // Dhuum
             Messenger = 19807,
             Echo = 19628,
@@ -299,6 +308,7 @@ namespace LuckParser.Parser
             Zane                    = 16137,
             Narella                 = 16125,
             Matthias                = 16115,
+            Escort                  = 16253, // McLeod the Silent
             KeepConstruct           = 16235,
             Xera                    = 16246,
             Cairn                   = 17194,
@@ -306,6 +316,7 @@ namespace LuckParser.Parser
             Samarog                 = 17188,
             Deimos                  = 17154,
             SoullessHorror          = 19767,
+            Desmina                 = 19828,
             Dhuum                   = 19450,
             ConjuredAmalgamate      = 43974,
             CARightArm              = 10142,
