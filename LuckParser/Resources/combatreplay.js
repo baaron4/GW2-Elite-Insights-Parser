@@ -711,17 +711,7 @@ class MechanicDrawable {
 class FacingMechanicDrawable extends MechanicDrawable {
     constructor(start, end, connectedTo, facingData) {
         super(start, end, connectedTo);
-        this.facingData = [];
-        var j = 0;
-        var times = animator.times;
-        for (var i = 0; i < facingData.length; i++) {
-            var curData = facingData[i];
-            var curTime = curData[1];
-            var curAngle = curData[0];
-            for (; j < times.length && times[j] < curTime - 150; j++) {
-                this.facingData.push(-curAngle);// positive mathematical direction, reversed since JS has downwards increasing y axis
-            }
-        }
+        this.facingData = facingData;
     }
 
     getRotation() {
@@ -729,9 +719,17 @@ class FacingMechanicDrawable extends MechanicDrawable {
             return null;
         }
         var time = animator.reactiveDataStatus.time;
+        if (this.start !== -1 && (this.start >= time || this.end <= time)) {
+            return null;
+        }
+        if (this.facingData.length === 1) {
+            this.facingData[0];
+        }
         const lastTime = animator.times[animator.times.length - 1];
+        const startIndex = Math.ceil((animator.times.length - 1) * Math.max(this.start, 0) / lastTime);
         const currentIndex = Math.floor((animator.times.length - 1) * time / lastTime);
-        return this.facingData[currentIndex]; 
+        const offsetedIndex = Math.max(currentIndex - startIndex, 0);
+        return this.facingData[offsetedIndex]; 
     }
 
     draw() {
