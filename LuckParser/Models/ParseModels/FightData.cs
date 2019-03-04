@@ -53,6 +53,9 @@ namespace LuckParser.Models.ParseModels
                 case ParseEnum.TargetIDS.Matthias:
                     Logic = new Matthias(id);
                     break;
+                /*case ParseEnum.TargetIDS.Escort:
+                    Logic = new Escort(id);
+                    break;*/
                 case ParseEnum.TargetIDS.KeepConstruct:
                     Logic = new KeepConstruct(id);
                     break;
@@ -73,6 +76,9 @@ namespace LuckParser.Models.ParseModels
                     break;
                 case ParseEnum.TargetIDS.SoullessHorror:
                     Logic = new SoullessHorror(id);
+                    break;
+                case ParseEnum.TargetIDS.Desmina:
+                    Logic = new River(id);
                     break;
                 case ParseEnum.TargetIDS.Dhuum:
                     Logic = new Dhuum(id);

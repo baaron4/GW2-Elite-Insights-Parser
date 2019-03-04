@@ -4,17 +4,17 @@ namespace LuckParser.Models.ParseModels
 {
     public class CombatItem
     {
-        public long Time { get; set; }
-        public ulong SrcAgent { get; set; }
-        public ulong DstAgent { get; set; }
+        public long Time { get; private set; }
+        public ulong SrcAgent { get; private set; }
+        public ulong DstAgent { get; private set; }
         public int Value { get; set; }
         public int BuffDmg { get; }
         public uint OverstackValue { get; }
         public long SkillID { get; }
-        public ushort SrcInstid { get; set; }
-        public ushort DstInstid { get; set; }
-        public ushort SrcMasterInstid { get; set; }
-        public ushort DstMasterInstid { get; set; }
+        public ushort SrcInstid { get; private set; }
+        public ushort DstInstid { get; private set; }
+        public ushort SrcMasterInstid { get; private set; }
+        public ushort DstMasterInstid { get; private set; }
         public ParseEnum.IFF IFF { get; }
         public byte IsBuff { get; }
         public byte Result { get; }
@@ -61,6 +61,37 @@ namespace LuckParser.Models.ParseModels
             IsFlanking = isFlanking;
             IsShields = isShields;
             IsOffcycle = isOffcycle;
+        }
+
+        public void OverrideTime(long time)
+        {
+            Time = time;
+        }
+
+        public void OverrideSrcValues(ulong agent, ushort instid)
+        {
+            SrcInstid = instid;
+            SrcAgent = agent;
+        }
+
+        public void OverrideSrcValues(ulong agent, ushort instid, ushort masterInstid)
+        {
+            SrcInstid = instid;
+            SrcAgent = agent;
+            SrcMasterInstid = masterInstid;
+        }
+
+        public void OverrideDstValues(ulong agent, ushort instid)
+        {
+            DstInstid = instid;
+            DstAgent = agent;
+        }
+
+        public void OverrideDstValues(ulong agent, ushort instid, ushort masterInstid)
+        {
+            DstInstid = instid;
+            DstAgent = agent;
+            DstMasterInstid = masterInstid;
         }
     }
 }
