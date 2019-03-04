@@ -32,19 +32,15 @@ namespace LuckParser.Models.ParseModels
                 Start = Lifespan.start,
                 End = Lifespan.end,
                 ConnectedTo = ConnectedTo.GetConnectedTo(map),
-                FacingData = new object[Data.Count],
+                FacingData = new int[Data.Count],
                 Width = _width,
                 Height = _height,
                 Color = _color
             };
             int i = 0;
-            foreach ((double angle, long time) in Data)
+            foreach (int angle in Data)
             {
-                aux.FacingData[i++] = new object[2]
-                {
-                    angle,
-                    time
-                };
+                aux.FacingData[i++] = angle;
             }
             return aux;
         }

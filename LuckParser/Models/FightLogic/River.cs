@@ -102,10 +102,9 @@ namespace LuckParser.Models.Logic
                     }
                     break;
                 case (ushort)RiverOfSouls:
-                    List<Point3D> facings = replay.Rotations;
-                    if (facings.Count > 0)
+                    if (replay.Rotations.Count > 0)
                     {
-                        replay.Actors.Add(new FacingRectangleActor((start, end), new AgentConnector(mob), facings, 240, 660, "rgba(255,100,0,0.5)"));
+                        replay.Actors.Add(new FacingRectangleActor((start, end), new AgentConnector(mob), replay.PolledRotations, 240, 660, "rgba(255,100,0,0.5)"));
                     }
                     break;
                 case (ushort)Enervator:
