@@ -606,6 +606,9 @@ namespace LuckParser.Parser
                             _logData.SetPOV(_agentData.GetAgent(povAgent, c.Time).Name);
                         }
                         break;
+                    case ParseEnum.StateChange.GWBuild:
+                        _logData.GW2Version = c.SrcAgent;
+                        break;
                     case ParseEnum.StateChange.LogStart:
                         _logData.SetLogStart(c.Value);
                         break;
