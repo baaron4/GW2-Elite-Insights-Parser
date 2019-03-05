@@ -24,6 +24,8 @@ namespace LuckParser.Models.ParseModels
                 {3000, new HashSet<long> { 51696 } }, // Treated TN
                 {2000, new HashSet<long> { 51696 , 29453 } }, // TN, SandSquall
             };
+            EssenceOfSpeed = 2000;
+            ImbuedMelodies = 2000;
         }
 
     }

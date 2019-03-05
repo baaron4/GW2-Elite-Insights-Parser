@@ -12,6 +12,9 @@ namespace LuckParser.Models.ParseModels
         private List<CastLog> _extensionSkills = null;
         protected HashSet<long> ExtensionIDS = new HashSet<long>();
         protected Dictionary<long, HashSet<long>> DurationToIDs = new Dictionary<long, HashSet<long>>();
+        // non trackable times
+        protected long EssenceOfSpeed;
+        protected long ImbuedMelodies;
 
         private List<CastLog> GetExtensionSkills(ParsedLog log, long time, HashSet<long> idsToKeep)
         {
@@ -25,10 +28,10 @@ namespace LuckParser.Models.ParseModels
             }
             return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time <= time && time <= x.Time + x.ActualDuration + 10).ToList();
         }
-
-        public virtual ushort TryFindSrc(AbstractActor a, long time, long extension, ParsedLog log)
+        // Spec specific checks
+        private int CheckSoulbeast(AbstractActor a, long extension, ParsedLog log)
         {
-            if (extension == 2000 && a.Prof == "Soulbeast")
+            if (extension == EssenceOfSpeed && a.Prof == "Soulbeast")
             {
                 if (log.PlayerListBySpec.ContainsKey("Herald") || log.PlayerListBySpec.ContainsKey("Tempest"))
                 {
@@ -36,6 +39,32 @@ namespace LuckParser.Models.ParseModels
                 }
                 // if not herald or tempest in squad then can only be the trait
                 return a.InstID;
+            }
+            return -1;
+        }
+
+        private int CheckTempest(CastLog item, long time, long extension, ParsedLog log)
+        {
+            if (extension == ImbuedMelodies && log.PlayerListBySpec.TryGetValue("Tempest", out List<Player> tempests))
+            {
+                List<CombatItem> magAuraApplications = log.CombatData.GetBoonData(5684).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && Math.Abs(x.Time - log.FightData.ToLogSpace(time)) < 50 && x.SrcInstid != item.SrcInstId).ToList();
+                foreach (Player tempest in tempests)
+                {
+                    if (magAuraApplications.FirstOrDefault(x => x.SrcInstid == tempest.InstID) != null)
+                    {
+                        return 0;
+                    }
+                }
+            }
+            return -1;
+        }
+        // Main method
+        public ushort TryFindSrc(AbstractActor a, long time, long extension, ParsedLog log)
+        {
+            int sbCheck = CheckSoulbeast(a, extension, log);
+            if (sbCheck != -1)
+            {
+                return (ushort)sbCheck;
             }
             HashSet<long> idsToCheck = new HashSet<long>();
             if (DurationToIDs.TryGetValue(extension, out idsToCheck))
@@ -45,16 +74,10 @@ namespace LuckParser.Models.ParseModels
                 {
                     CastLog item = cls.First();
                     // Imbued Melodies check
-                    if (extension == 2000 && log.PlayerListBySpec.TryGetValue("Tempest", out List<Player> tempests))
+                    int tempestCheck = CheckTempest(item, time, extension, log);
+                    if (tempestCheck != -1)
                     {
-                        List<CombatItem> magAuraApplications = log.CombatData.GetBoonData(5684).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && Math.Abs(x.Time - log.FightData.ToLogSpace(time)) < 50 && x.SrcInstid != item.SrcInstId).ToList();
-                        foreach (Player tempest in tempests)
-                        {
-                            if (magAuraApplications.FirstOrDefault(x => x.SrcInstid == tempest.InstID) != null)
-                            {
-                                return 0;
-                            }
-                        }
+                        return (ushort)tempestCheck;
                     }
                     return item.SrcInstId;
                 }
