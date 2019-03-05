@@ -83,7 +83,6 @@ namespace LuckParser.Models.ParseModels
             new BuffDamageModifierTarget(Boon.BoonsByName["Number of Boons"], "Spellbreaker Rune",  DamageSource.NoPets, 7.0, DamageType.Power, DamageType.Power, ModifierSource.Item, ByAbsence, "https://wiki.guildwars2.com/images/1/1a/Superior_Rune_of_the_Spellbreaker.png"),
             new BuffDamageModifierTarget(Boon.BoonsByName["Chilled"], "Ice Rune",  DamageSource.NoPets, 7.0, DamageType.Power, DamageType.Power, ModifierSource.Item, ByPresence, "https://wiki.guildwars2.com/images/7/78/Superior_Rune_of_the_Ice.png"),
             new BuffDamageModifier(Boon.BoonsByName["Fury"], "Rage Rune",  DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.Item, ByPresence, "https://wiki.guildwars2.com/images/9/9e/Superior_Rune_of_Rage.png"),
-            new BuffDamageModifier(Boon.BoonsByName["Fractal Offensive"],  DamageSource.NoPets, 3.0, DamageType.All, DamageType.All, ModifierSource.Item, ByStack),
             new BuffDamageModifier(Boon.BoonsByName["Bowl of Seaweed Salad"], DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.Item, ByPresence, x => x.IsMoving),
             /// commons
             new BuffDamageModifier(Boon.BoonsByName["Vulnerability"], DamageSource.All, 1.0, DamageType.All, DamageType.All, ModifierSource.Shareable, ByStack),
@@ -97,6 +96,7 @@ namespace LuckParser.Models.ParseModels
             new BuffDamageModifierTarget(Boon.BoonsByName["Fractured - Enemy"], DamageSource.All, 10.0, DamageType.All, DamageType.All, ModifierSource.Shareable, ByStack),
             new BuffDamageModifier(Boon.BoonsByName["Blood Fueled"], DamageSource.NoPets, 20.0, DamageType.All, DamageType.All, ModifierSource.Shareable, ByStack),
             new BuffDamageModifier(Boon.BoonsByName["Blood Fueled Abo"], DamageSource.NoPets, 20.0, DamageType.All, DamageType.All, ModifierSource.Shareable, ByStack),
+            new BuffDamageModifier(Boon.BoonsByName["Fractal Offensive"],  DamageSource.NoPets, 3.0, DamageType.All, DamageType.All, ModifierSource.Item, ByStack),
             /// Revenant
             new BuffDamageModifier(Boon.BoonsByName["Vicious Lacerations"], DamageSource.NoPets, 3.0, DamageType.Power, DamageType.Power, ModifierSource.Revenant, ByStack),
             new BuffDamageModifier(Boon.BoonsByName["Retaliation"], "Vicious Reprisal", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.Power, ModifierSource.Revenant, ByPresence, "https://wiki.guildwars2.com/images/c/cf/Vicious_Reprisal.png"),
