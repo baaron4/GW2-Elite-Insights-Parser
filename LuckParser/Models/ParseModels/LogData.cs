@@ -6,6 +6,7 @@ namespace LuckParser.Models.ParseModels
     {
         // Fields
         public readonly string BuildVersion;
+        public ulong GW2Version { get; set; }
         public string PoV { get; private set; } = "N/A";
         public string LogStart { get; private set; } = "yyyy-MM-dd HH:mm:ss z";
         public string LogEnd { get; private set; } = "yyyy-MM-dd HH:mm:ss z";
