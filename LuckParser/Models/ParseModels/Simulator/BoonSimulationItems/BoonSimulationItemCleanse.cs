@@ -9,11 +9,11 @@ namespace LuckParser.Models.ParseModels
 {
     public class BoonSimulationItemCleanse
     {
-        private readonly ushort _provokedBy;
+        private readonly AgentItem _provokedBy;
         private readonly long _duration;
         private readonly long _time;
 
-        public BoonSimulationItemCleanse(ushort provokedBy, long duration, long time)
+        public BoonSimulationItemCleanse(AgentItem provokedBy, long duration, long time)
         {
             _provokedBy = provokedBy;
             _duration = duration;
@@ -23,7 +23,7 @@ namespace LuckParser.Models.ParseModels
         public void SetCleanseItem(Dictionary<AgentItem, Dictionary<long, List<long>>> cleanses, long start, long end, long boonid, ParsedLog log)
         {
             long cleanse = GetCleanseDuration(start, end);
-            AgentItem agent = log.AgentData.GetAgentByInstID(_provokedBy, log.FightData.ToLogSpace(_time));
+            AgentItem agent = _provokedBy;
             if (cleanse > 0)
             {
                 if (!cleanses.TryGetValue(agent, out var dict))

@@ -117,6 +117,9 @@
     <Compile Include="Models\JsonModels\JsonMechanics.cs" />
     <Compile Include="Models\JsonModels\JsonRotation.cs" />
     <Compile Include="Models\JsonModels\JsonStatistics.cs" />
+    <Compile Include="Models\ParseModels\Boons\BoonSourceFinders\BoonSourceFinder11122018.cs" />
+    <Compile Include="Models\ParseModels\Boons\BoonSourceFinders\BoonSourceFinder05032019.cs" />
+    <Compile Include="Models\ParseModels\Boons\BoonSourceFinders\BoonSourceFinder.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\BackgroundActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\FacingRectangleActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\FacingActor.cs" />

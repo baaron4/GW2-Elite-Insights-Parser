@@ -6,14 +6,14 @@ namespace LuckParser.Models.ParseModels
     {
         private readonly ParseEnum.BuffRemove _removeType;
 
-        public BoonRemovalLog(long time, ushort srcInstid, long value, ParseEnum.BuffRemove removeType) : base(time, srcInstid, value)
+        public BoonRemovalLog(long time, AgentItem src, long value, ParseEnum.BuffRemove removeType) : base(time, src, value)
         {
             _removeType = removeType;
         }
 
         public override void UpdateSimulator(BoonSimulator simulator)
         {
-            simulator.Remove(SrcInstid,Value,Time, _removeType);
+            simulator.Remove(Src,Value,Time, _removeType);
         }
     }
 }

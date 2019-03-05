@@ -717,5 +717,20 @@ namespace LuckParser.Models.ParseModels
                 default: throw new InvalidOperationException("Cannot simulate typeless boons");
             }
         }
+
+        private readonly static BoonSourceFinder b05032019 = new BoonSourceFinder05032019();
+        private readonly static BoonSourceFinder b11122018 = new BoonSourceFinder11122018();
+
+        public static BoonSourceFinder GetBoonSourceFinder(ParsedLog log)
+        {
+            if (log.FightData.FightStart > 1551808800)
+            {
+                return b05032019;
+            }
+            else
+            {
+                return b11122018;
+            }
+        }
     }
 }
