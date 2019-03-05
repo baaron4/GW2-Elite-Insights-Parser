@@ -47,10 +47,10 @@ namespace LuckParser.Models.ParseModels
         {
             if (extension == ImbuedMelodies && log.PlayerListBySpec.TryGetValue("Tempest", out List<Player> tempests))
             {
-                List<CombatItem> magAuraApplications = log.CombatData.GetBoonData(5684).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && Math.Abs(x.Time - log.FightData.ToLogSpace(time)) < 50 && x.SrcInstid != item.SrcInstId).ToList();
+                HashSet<ushort> magAuraApplications = new HashSet<ushort>(log.CombatData.GetBoonData(5684).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && Math.Abs(x.Time - log.FightData.ToLogSpace(time)) < 50 && x.SrcInstid != item.SrcInstId).Select(x => x.SrcInstid));
                 foreach (Player tempest in tempests)
                 {
-                    if (magAuraApplications.FirstOrDefault(x => x.SrcInstid == tempest.InstID) != null)
+                    if (magAuraApplications.Contains(tempest.InstID))
                     {
                         return 0;
                     }
