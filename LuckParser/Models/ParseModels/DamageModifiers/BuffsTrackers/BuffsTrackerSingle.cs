@@ -22,7 +22,7 @@ namespace LuckParser.Models.ParseModels
 
         public override bool Has(Dictionary<long, BoonsGraphModel> bgms)
         {
-            return !bgms.ContainsKey(_id);
+            return bgms.ContainsKey(_id);
         }
     }
 }
