@@ -259,12 +259,12 @@ namespace LuckParser.Builders
             foreach (Player player in _log.PlayerList)
             {
                 List<List<object[]>> pDataTargets = new List<List<object[]>>();
-                data.Add(BoonData.GetDamageModifierData(boonToUse, player.GetExtraBoonData(_log, null), phaseIndex));
+                data.Add(BoonData.GetDamageModifierData(boonToUse, player.GetDamageModifierData(_log, null), phaseIndex));
                 dataTargets.Add(pDataTargets);
                 foreach (Target target in phase.Targets)
                 {
                     List<object[]> pTarget = new List<object[]>();
-                    pDataTargets.Add(BoonData.GetDamageModifierData(boonToUse, player.GetExtraBoonData(_log, target), phaseIndex));
+                    pDataTargets.Add(BoonData.GetDamageModifierData(boonToUse, player.GetDamageModifierData(_log, target), phaseIndex));
                 }
             }
         }

@@ -711,7 +711,7 @@ namespace LuckParser.Models.ParseModels
             return _consumeList.Where(x => x.Time >= start && x.Time <= end).ToList() ;
         }
 
-        public Dictionary<string, List<DamageModifierData>> GetExtraBoonData(ParsedLog log, Target target)
+        public Dictionary<string, List<DamageModifierData>> GetDamageModifierData(ParsedLog log, Target target)
         {
             if (BoonPoints == null)
             {
