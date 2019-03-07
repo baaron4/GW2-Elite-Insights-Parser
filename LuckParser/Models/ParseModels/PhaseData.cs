@@ -9,6 +9,9 @@ namespace LuckParser.Models.ParseModels
     {
         public long Start { get; private set; }
         public long End { get; private set; }
+        public long DurationInS { get; private set; }
+        public long DurationInMS { get; private set; }
+        public long DurationInM { get; private set; }
         public string Name { get; set; }
         public bool DrawStart { get; set; } = true;
         public bool DrawEnd { get; set; } = true;
@@ -19,20 +22,9 @@ namespace LuckParser.Models.ParseModels
         {
             Start = start;
             End = end;
-        }
-
-        public long GetDuration(string format = "ms")
-        {
-            switch (format)
-            {
-                case "m":
-                    return (End - Start) / 60000;
-                case "s":
-                    return (End - Start) / 1000;
-                default:
-                    return (End - Start);
-            }
-
+            DurationInM = (End - Start) / 60000;
+            DurationInMS = (End - Start);
+            DurationInS = (End - Start) / 1000;
         }
 
         public bool InInterval(long time)
@@ -69,6 +61,9 @@ namespace LuckParser.Models.ParseModels
                 }
                 End = Math.Min(Math.Min(End, end), log.FightData.FightDuration);
             }
+            DurationInM = (End - Start) / 60000;
+            DurationInMS = (End - Start);
+            DurationInS = (End - Start) / 1000;
         }
     }
 }

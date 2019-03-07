@@ -62,7 +62,7 @@ namespace LuckParser.Models.HtmlModels
         public PhaseDto(PhaseData phaseData, List<PhaseData> phases, ParsedLog log)
         {
             Name = phaseData.Name;
-            Duration = phaseData.GetDuration();
+            Duration = phaseData.DurationInMS;
             Start = phaseData.Start / 1000.0;
             End = phaseData.End / 1000.0;
             foreach (Target target in phaseData.Targets)
@@ -186,7 +186,7 @@ namespace LuckParser.Models.HtmlModels
             {
                 TimeSpan downDuration = TimeSpan.FromMilliseconds(defenses.DownDuration);
                 data.Add(defenses.DownCount);
-                data.Add(downDuration.TotalSeconds + " seconds downed, " + Math.Round((downDuration.TotalMilliseconds / phase.GetDuration()) * 100, 1) + "% Downed");
+                data.Add(downDuration.TotalSeconds + " seconds downed, " + Math.Round((downDuration.TotalMilliseconds / phase.DurationInMS) * 100, 1) + "% Downed");
             }
             else
             {
@@ -198,7 +198,7 @@ namespace LuckParser.Models.HtmlModels
             {
                 TimeSpan deathDuration = TimeSpan.FromMilliseconds(defenses.DeadDuration);
                 data.Add(defenses.DeadCount);
-                data.Add(deathDuration.TotalSeconds + " seconds dead, " + (100.0 - Math.Round((deathDuration.TotalMilliseconds / phase.GetDuration()) * 100, 1)) + "% Alive");
+                data.Add(deathDuration.TotalSeconds + " seconds dead, " + (100.0 - Math.Round((deathDuration.TotalMilliseconds / phase.DurationInMS) * 100, 1)) + "% Alive");
             }
             else
             {

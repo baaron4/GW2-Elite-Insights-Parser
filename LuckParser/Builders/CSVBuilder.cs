@@ -195,7 +195,7 @@ namespace LuckParser.Builders
                 if (defense.DeadCount > 0)
                 {
                     TimeSpan deathDuration = TimeSpan.FromMilliseconds(defense.DeadDuration);
-                    deadthTooltip = deathDuration.TotalSeconds + " seconds dead, " + (100.0 - Math.Round((deathDuration.TotalMilliseconds / phase.GetDuration()) * 100, 1)) + "% Alive";
+                    deadthTooltip = deathDuration.TotalSeconds + " seconds dead, " + (100.0 - Math.Round((deathDuration.TotalMilliseconds / phase.DurationInMS) * 100, 1)) + "% Alive";
                 }
                 string[] wep = player.GetWeaponsArray(_log);
                 string build = "";
@@ -340,7 +340,7 @@ namespace LuckParser.Builders
         {
             //generate Uptime Table table
             PhaseData phase = _phases[phaseIndex];
-            long fightDuration = phase.GetDuration();
+            long fightDuration = phase.DurationInMS;
 
             WriteCells(new [] { "Name", "Avg Boons" });
             foreach (Boon boon in listToUse)
@@ -659,7 +659,7 @@ namespace LuckParser.Builders
         private void CreateCondiUptime(int phaseIndex)
         {
             Target boss = _log.LegacyTarget;
-            long fightDuration = _phases[phaseIndex].GetDuration();
+            long fightDuration = _phases[phaseIndex].DurationInMS;
             Dictionary<long, Statistics.FinalTargetBuffs> conditions = _log.LegacyTarget.GetBuffs(_log, phaseIndex);
 
             WriteCell("Name");

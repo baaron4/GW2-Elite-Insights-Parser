@@ -244,7 +244,7 @@ namespace LuckParser.Builders
         private List<BoonData> BuildPersonalBuffUptimeData(Dictionary<string, List<Boon>> boonsBySpec, int phaseIndex)
         {
             List<BoonData> list = new List<BoonData>();
-            long fightDuration = _phases[phaseIndex].GetDuration();
+            long fightDuration = _phases[phaseIndex].DurationInMS;
             foreach (Player player in _log.PlayerList)
             {
                 list.Add(new BoonData(player.Prof, boonsBySpec, player.GetBuffs(_log, phaseIndex, Statistics.BuffEnum.Self)));
@@ -632,7 +632,7 @@ namespace LuckParser.Builders
         {
             PhaseData phase = _phases[phaseIndex];
             Dictionary<long, Statistics.FinalTargetBuffs> buffs = target.GetBuffs(_log, phaseIndex);
-            long fightDuration = phase.GetDuration();
+            long fightDuration = phase.DurationInMS;
             return new BoonData(buffs, _statistics.PresentConditions, Math.Round(target.GetAverageConditions(_log, phaseIndex), 1));
         }
 
@@ -640,7 +640,7 @@ namespace LuckParser.Builders
         {
             PhaseData phase = _phases[phaseIndex];
             Dictionary<long, Statistics.FinalTargetBuffs> buffs = target.GetBuffs(_log, phaseIndex);
-            long fightDuration = phase.GetDuration();
+            long fightDuration = phase.DurationInMS;
             return new BoonData(buffs, _statistics.PresentBoons, Math.Round(target.GetAverageBoons(_log, phaseIndex), 1));
         }
 
