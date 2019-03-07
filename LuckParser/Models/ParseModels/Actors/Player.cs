@@ -490,13 +490,13 @@ namespace LuckParser.Models.ParseModels
             }
             switch(type)
             {
-                case Statistics.BuffEnum.Group:
+                case BuffEnum.Group:
                     return _groupBuffs[phaseIndex];
-                case Statistics.BuffEnum.OffGroup:
+                case BuffEnum.OffGroup:
                     return _offGroupBuffs[phaseIndex];
-                case Statistics.BuffEnum.Squad:
+                case BuffEnum.Squad:
                     return _squadBuffs[phaseIndex];
-                case Statistics.BuffEnum.Self:
+                case BuffEnum.Self:
                 default:
                     return _selfBuffs[phaseIndex];
             }
@@ -510,13 +510,13 @@ namespace LuckParser.Models.ParseModels
             }
             switch (type)
             {
-                case Statistics.BuffEnum.Group:
+                case BuffEnum.Group:
                     return _groupBuffs;
-                case Statistics.BuffEnum.OffGroup:
+                case BuffEnum.OffGroup:
                     return _offGroupBuffs;
-                case Statistics.BuffEnum.Squad:
+                case BuffEnum.Squad:
                     return _squadBuffs;
-                case Statistics.BuffEnum.Self:
+                case BuffEnum.Self:
                 default:
                     return _selfBuffs;
             }
