@@ -735,9 +735,10 @@ namespace LuckParser.Models.ParseModels
 
         protected override void SetDamageModifiersData(ParsedLog log)
         {
+            DamageModifier.ModifierSource src = DamageModifier.ProfToEnum(Prof);
             List<DamageModifier> damageMods = new List<DamageModifier>(DamageModifier.DamageModifiersPerSource[DamageModifier.ModifierSource.ItemBuff]);
             damageMods.AddRange(DamageModifier.DamageModifiersPerSource[DamageModifier.ModifierSource.CommonBuff]);
-            damageMods.AddRange(DamageModifier.DamageModifiersPerSource[DamageModifier.ProfToEnum(Prof)]);
+            damageMods.AddRange(DamageModifier.DamageModifiersPerSource[src]);
             foreach (DamageModifier mod in damageMods)
             {
                 mod.ComputeDamageModifier(_damageModifiers, _damageModifiersTargets, this, log);
