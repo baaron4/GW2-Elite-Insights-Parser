@@ -19,6 +19,7 @@ namespace LuckParser.Models.ParseModels
         private DamageSource _dmgSrc { get; }
         protected double GainPerStack { get; }
         protected readonly GainComputer GainComputer;
+        public bool Multiplier => GainComputer.Multiplier;
         public ModifierSource Src { get; }
         public string Url { get; }
         public string Name { get; }
@@ -37,6 +38,7 @@ namespace LuckParser.Models.ParseModels
             GainComputer = gainComputer;
             DLChecker = dlChecker;
         }
+
 
         protected int GetTotalDamage(Player p, ParsedLog log, Target t, PhaseData phase)
         {

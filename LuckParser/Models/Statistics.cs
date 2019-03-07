@@ -146,15 +146,13 @@ namespace LuckParser.Models
             public int TotalHitCount { get; }
             public int DamageGain { get; }
             public int TotalDamage { get; }
-            public bool Multiplier { get; }
 
-            public DamageModifierData(int hitCount, int totalHitCount, int damageGain, int totalDamage, bool multiplier)
+            public DamageModifierData(int hitCount, int totalHitCount, int damageGain, int totalDamage)
             {
                 HitCount = hitCount;
                 TotalHitCount = totalHitCount;
                 DamageGain = damageGain;
                 TotalDamage = totalDamage;
-                Multiplier = multiplier;
             }
         }
 

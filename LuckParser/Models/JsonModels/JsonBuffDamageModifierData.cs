@@ -29,10 +29,6 @@ namespace LuckParser.Models.JsonModels
             /// Total damage done
             /// </summary>
             public int TotalDamage;
-            /// <summary>
-            /// True if the buff is a multiplier type, in which case a % gain makes sense
-            /// </summary>
-            public bool Multiplier;
 
             public JsonBuffDamageModifierItem(Statistics.DamageModifierData extraData)
             {
@@ -40,7 +36,6 @@ namespace LuckParser.Models.JsonModels
                 TotalHitCount = extraData.TotalHitCount;
                 DamageGain = extraData.DamageGain;
                 TotalDamage = extraData.TotalDamage;
-                Multiplier = extraData.Multiplier;
             }
         }
 

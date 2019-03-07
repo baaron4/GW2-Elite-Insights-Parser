@@ -41,7 +41,7 @@ namespace LuckParser.Models.ParseModels
                         List<DamageLog> typeHits = GetDamageLogs(p, log, target, phases[i]);
                         List<DamageLog> effect = typeHits.Where(x => DLChecker(x)).ToList();
                         int damage = (int)Math.Round(gain * effect.Sum(x => x.Damage));
-                        extraDataList.Add(new DamageModifierData(effect.Count, typeHits.Count, damage, totalDamage, GainComputer.Multiplier));
+                        extraDataList.Add(new DamageModifierData(effect.Count, typeHits.Count, damage, totalDamage));
                     }
                     dict[Name] = extraDataList;
                 }
@@ -53,7 +53,7 @@ namespace LuckParser.Models.ParseModels
                 List<DamageLog> typeHits = GetDamageLogs(p, log, null, phases[i]);
                 List<DamageLog> effect = typeHits.Where(x => DLChecker(x)).ToList();
                 int damage = (int)Math.Round(gain * effect.Sum(x => x.Damage));
-                data[Name].Add(new DamageModifierData(effect.Count, typeHits.Count, damage, totalDamage, GainComputer.Multiplier));
+                data[Name].Add(new DamageModifierData(effect.Count, typeHits.Count, damage, totalDamage));
             }
         }
     }
