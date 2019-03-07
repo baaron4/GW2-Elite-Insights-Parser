@@ -140,7 +140,7 @@ namespace LuckParser.Models
             public readonly Dictionary<Player, double> Extended;
         }
 
-        public class ExtraBoonData
+        public class DamageModifierData
         {
             public int HitCount { get; }
             public int TotalHitCount { get; }
@@ -148,7 +148,7 @@ namespace LuckParser.Models
             public int TotalDamage { get; }
             public bool Multiplier { get; }
 
-            public ExtraBoonData(int hitCount, int totalHitCount, int damageGain, int totalDamage, bool multiplier)
+            public DamageModifierData(int hitCount, int totalHitCount, int damageGain, int totalDamage, bool multiplier)
             {
                 HitCount = hitCount;
                 TotalHitCount = totalHitCount;
