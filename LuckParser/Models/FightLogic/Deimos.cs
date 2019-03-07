@@ -205,8 +205,9 @@ namespace LuckParser.Models.Logic
                     string name = (tar.ID == (ushort)Thief ? "Thief" : (tar.ID == (ushort)Drunkard ? "Drunkard" : (tar.ID == (ushort)Gambler ? "Gambler" : "")));
                     PhaseData tarPhase = new PhaseData(log.FightData.ToFightSpace(tar.FirstAware) - 1000, log.FightData.ToFightSpace(tar.LastAware) + 1000);
                     tarPhase.Targets.Add(tar);
-                    tarPhase.Targets.Add(mainTarget);
                     tarPhase.OverrideTimes(log);
+                    // override first then add Deimos so that it does not disturb the override process
+                    tarPhase.Targets.Add(mainTarget);
                     tarPhase.Name = name;
                     phases.Add(tarPhase);
                 }

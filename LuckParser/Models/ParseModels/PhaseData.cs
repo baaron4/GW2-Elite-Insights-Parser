@@ -42,6 +42,10 @@ namespace LuckParser.Models.ParseModels
             End = end;
         }
 
+        /// <summary>
+        /// Override times in a manner that the phase englobes the targets present in the phase (if possible)
+        /// </summary>
+        /// <param name="log"></param>
         public void OverrideTimes(ParsedLog log)
         {
             if (Targets.Count > 0)

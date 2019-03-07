@@ -736,7 +736,7 @@ namespace LuckParser.Models.ParseModels
 
         public static BoonSourceFinder GetBoonSourceFinder(ParsedLog log)
         {
-            if (log.FightData.FightStart > 1551808800)
+            if (log.LogData.GW2Version > 95112)
             {
                 return b05032019;
             }
