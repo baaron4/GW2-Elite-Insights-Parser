@@ -71,6 +71,10 @@ namespace LuckParser.Models.ParseModels
 
         public List<AgentItem> GetSources(long time)
         {
+            if (_boonChartWithSource == null)
+            {
+                return new List<AgentItem>() { GeneralHelper.UnknownAgent };
+            }
             foreach (SegmentWithSources seg in _boonChartWithSource)
             {
                 if (seg.Start <= time && time <= seg.End)
