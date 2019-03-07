@@ -21,12 +21,17 @@ namespace LuckParser.Models.ParseModels
 
         public override int GetStack(Dictionary<long, BoonsGraphModel> bgms, long time)
         {
-            throw new NotImplementedException();
+            int stack = 0;
+            foreach (long key in bgms.Keys.Intersect(_ids))
+            {
+                stack = Math.Max(bgms[key].GetStackCount(time), stack);
+            }
+            return stack;
         }
 
         public override bool Has(Dictionary<long, BoonsGraphModel> bgms)
         {
-            throw new NotImplementedException();
+            return bgms.Keys.Intersect(_ids).Count() > 0;
         }
     }
 }

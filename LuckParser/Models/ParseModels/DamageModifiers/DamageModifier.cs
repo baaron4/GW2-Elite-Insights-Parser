@@ -12,7 +12,7 @@ namespace LuckParser.Models.ParseModels
     {
         public enum DamageType { All, Power, Condition};
         public enum DamageSource { All, NoPets };
-        public enum ModifierSource { Shareable, Item, Necromancer, Elementalist, Mesmer, Warrior, Revenant, Guardian, Thief, Ranger, Engineer};
+        public enum ModifierSource { CommonBuff, ItemBuff, Necromancer, Elementalist, Mesmer, Warrior, Revenant, Guardian, Thief, Ranger, Engineer};
         public static ModifierSource ProfToEnum(string prof)
         {
             switch (prof)
@@ -54,7 +54,7 @@ namespace LuckParser.Models.ParseModels
                 case "Revenant":
                     return ModifierSource.Revenant;
             }
-            return ModifierSource.Shareable;
+            return ModifierSource.CommonBuff;
         }
 
         private DamageType _compareType { get; }
@@ -74,29 +74,29 @@ namespace LuckParser.Models.ParseModels
 
         private static readonly List<DamageModifier> _allDamageModifier = new List<DamageModifier>() {
             // Gear
-            new DamageLogDamageModifier("Scholar Rune", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.Item,"https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png", x => x.IsNinety, ByPresence ),
-            new DamageLogDamageModifier("Eagle Rune", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.Power, ModifierSource.Item,"https://wiki.guildwars2.com/images/9/9b/Superior_Rune_of_the_Eagle.png", x => x.IsFifty, ByPresence ),
-            new DamageLogDamageModifier("Thief Rune", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.Power, ModifierSource.Item,"https://wiki.guildwars2.com/images/9/96/Superior_Rune_of_the_Thief.png", x => x.IsFlanking , ByPresence),
-            new BuffDamageModifier(Boon.BoonsByName["Might"], "Strength Rune",  DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.Item, ByPresence, "https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_Strength.png"),
-            new BuffDamageModifier(Boon.BoonsByName["Fire Aura"], "Fire Rune",  DamageSource.NoPets, 10.0, DamageType.Power, DamageType.Power, ModifierSource.Item, ByPresence, "https://wiki.guildwars2.com/images/4/4a/Superior_Rune_of_the_Fire.png"),
-            new BuffDamageModifierTarget(Boon.BoonsByName["Burning"], "Flame Legion Rune",  DamageSource.NoPets, 7.0, DamageType.Power, DamageType.Power, ModifierSource.Item, ByPresence, "https://wiki.guildwars2.com/images/4/4a/Superior_Rune_of_the_Flame_Legion.png"),
-            new BuffDamageModifierTarget(Boon.BoonsByName["Number of Boons"], "Spellbreaker Rune",  DamageSource.NoPets, 7.0, DamageType.Power, DamageType.Power, ModifierSource.Item, ByAbsence, "https://wiki.guildwars2.com/images/1/1a/Superior_Rune_of_the_Spellbreaker.png"),
-            new BuffDamageModifierTarget(Boon.BoonsByName["Chilled"], "Ice Rune",  DamageSource.NoPets, 7.0, DamageType.Power, DamageType.Power, ModifierSource.Item, ByPresence, "https://wiki.guildwars2.com/images/7/78/Superior_Rune_of_the_Ice.png"),
-            new BuffDamageModifier(Boon.BoonsByName["Fury"], "Rage Rune",  DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.Item, ByPresence, "https://wiki.guildwars2.com/images/9/9e/Superior_Rune_of_Rage.png"),
-            new BuffDamageModifier(Boon.BoonsByName["Bowl of Seaweed Salad"], DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.Item, ByPresence, x => x.IsMoving),
+            new DamageLogDamageModifier("Scholar Rune", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff,"https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png", x => x.IsNinety, ByPresence ),
+            new DamageLogDamageModifier("Eagle Rune", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff,"https://wiki.guildwars2.com/images/9/9b/Superior_Rune_of_the_Eagle.png", x => x.IsFifty, ByPresence ),
+            new DamageLogDamageModifier("Thief Rune", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff,"https://wiki.guildwars2.com/images/9/96/Superior_Rune_of_the_Thief.png", x => x.IsFlanking , ByPresence),
+            new BuffDamageModifier(Boon.BoonsByName["Might"], "Strength Rune",  DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff, ByPresence, "https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_Strength.png"),
+            new BuffDamageModifier(Boon.BoonsByName["Fire Aura"], "Fire Rune",  DamageSource.NoPets, 10.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff, ByPresence, "https://wiki.guildwars2.com/images/4/4a/Superior_Rune_of_the_Fire.png"),
+            new BuffDamageModifierTarget(Boon.BoonsByName["Burning"], "Flame Legion Rune",  DamageSource.NoPets, 7.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff, ByPresence, "https://wiki.guildwars2.com/images/4/4a/Superior_Rune_of_the_Flame_Legion.png"),
+            new BuffDamageModifierTarget(Boon.BoonsByName["Number of Boons"], "Spellbreaker Rune",  DamageSource.NoPets, 7.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff, ByAbsence, "https://wiki.guildwars2.com/images/1/1a/Superior_Rune_of_the_Spellbreaker.png"),
+            new BuffDamageModifierTarget(Boon.BoonsByName["Chilled"], "Ice Rune",  DamageSource.NoPets, 7.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff, ByPresence, "https://wiki.guildwars2.com/images/7/78/Superior_Rune_of_the_Ice.png"),
+            new BuffDamageModifier(Boon.BoonsByName["Fury"], "Rage Rune",  DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff, ByPresence, "https://wiki.guildwars2.com/images/9/9e/Superior_Rune_of_Rage.png"),
+            new BuffDamageModifier(Boon.BoonsByName["Bowl of Seaweed Salad"], DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff, ByPresence, x => x.IsMoving),
             /// commons
-            new BuffDamageModifier(Boon.BoonsByName["Vulnerability"], DamageSource.All, 1.0, DamageType.All, DamageType.All, ModifierSource.Shareable, ByStack),
-            new BuffDamageModifier(Boon.BoonsByName["Frost Spirit"], DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.Shareable, ByPresence),
-            new DamageLogDamageModifier(Boon.BoonsByName["Soulcleave's Summit"], 0, DamageSource.NoPets, DamageType.Power, DamageType.Power, ModifierSource.Shareable, ByPresence),
-            new DamageLogDamageModifier(Boon.BoonsByName["One Wolf Pack"], 0, DamageSource.NoPets, DamageType.Power, DamageType.Power, ModifierSource.Shareable, ByPresence),
-            new DamageLogDamageModifier(Boon.BoonsByName["Static Charge"], 0, DamageSource.NoPets, DamageType.Power, DamageType.Power, ModifierSource.Shareable, ByPresence),
+            new BuffDamageModifier(Boon.BoonsByName["Vulnerability"], DamageSource.All, 1.0, DamageType.All, DamageType.All, ModifierSource.CommonBuff, ByStack),
+            new BuffDamageModifier(Boon.BoonsByName["Frost Spirit"], DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.CommonBuff, ByPresence),
+            new DamageLogDamageModifier(Boon.BoonsByName["Soulcleave's Summit"], 0, DamageSource.NoPets, DamageType.Power, DamageType.Power, ModifierSource.CommonBuff, ByPresence),
+            new DamageLogDamageModifier(Boon.BoonsByName["One Wolf Pack"], 0, DamageSource.NoPets, DamageType.Power, DamageType.Power, ModifierSource.CommonBuff, ByPresence),
+            new DamageLogDamageModifier(Boon.BoonsByName["Static Charge"], 0, DamageSource.NoPets, DamageType.Power, DamageType.Power, ModifierSource.CommonBuff, ByPresence),
             //new BuffDamageModifier(Boon.BoonsByName["Glyph of Empowerment"], DamageSource.NoPets, 10.0, DamageType.Power, DamageType.Power, ModifierSource.All, _nonMultiplier),
-            new BuffDamageModifierTarget(Boon.BoonsByName["Unnatural Signet"], DamageSource.All, 200.0, DamageType.All, DamageType.All, ModifierSource.Shareable, ByPresence),
-            new BuffDamageModifierTarget(Boon.BoonsByName["Compromised"], DamageSource.All, 75.0, DamageType.All, DamageType.All, ModifierSource.Shareable, ByStack),
-            new BuffDamageModifierTarget(Boon.BoonsByName["Fractured - Enemy"], DamageSource.All, 10.0, DamageType.All, DamageType.All, ModifierSource.Shareable, ByStack),
-            new BuffDamageModifier(Boon.BoonsByName["Blood Fueled"], DamageSource.NoPets, 20.0, DamageType.All, DamageType.All, ModifierSource.Shareable, ByStack),
-            new BuffDamageModifier(Boon.BoonsByName["Blood Fueled Abo"], DamageSource.NoPets, 20.0, DamageType.All, DamageType.All, ModifierSource.Shareable, ByStack),
-            new BuffDamageModifier(Boon.BoonsByName["Fractal Offensive"],  DamageSource.NoPets, 3.0, DamageType.All, DamageType.All, ModifierSource.Item, ByStack),
+            new BuffDamageModifierTarget(Boon.BoonsByName["Unnatural Signet"], DamageSource.All, 200.0, DamageType.All, DamageType.All, ModifierSource.CommonBuff, ByPresence),
+            new BuffDamageModifierTarget(Boon.BoonsByName["Compromised"], DamageSource.All, 75.0, DamageType.All, DamageType.All, ModifierSource.CommonBuff, ByStack),
+            new BuffDamageModifierTarget(Boon.BoonsByName["Fractured - Enemy"], DamageSource.All, 10.0, DamageType.All, DamageType.All, ModifierSource.CommonBuff, ByStack),
+            new BuffDamageModifier(Boon.BoonsByName["Blood Fueled"], DamageSource.NoPets, 20.0, DamageType.All, DamageType.All, ModifierSource.CommonBuff, ByStack),
+            new BuffDamageModifier(Boon.BoonsByName["Blood Fueled Abo"], DamageSource.NoPets, 20.0, DamageType.All, DamageType.All, ModifierSource.CommonBuff, ByStack),
+            new BuffDamageModifier(Boon.BoonsByName["Fractal Offensive"],  DamageSource.NoPets, 3.0, DamageType.All, DamageType.All, ModifierSource.CommonBuff, ByStack),
             /// Revenant
             new BuffDamageModifier(Boon.BoonsByName["Vicious Lacerations"], DamageSource.NoPets, 3.0, DamageType.Power, DamageType.Power, ModifierSource.Revenant, ByStack),
             new BuffDamageModifier(Boon.BoonsByName["Retaliation"], "Vicious Reprisal", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.Power, ModifierSource.Revenant, ByPresence, "https://wiki.guildwars2.com/images/c/cf/Vicious_Reprisal.png"),
@@ -113,7 +113,7 @@ namespace LuckParser.Models.ParseModels
             new BuffDamageModifierTarget(Boon.BoonsByName["Weakness"], "Cull the Weak", DamageSource.NoPets, 7.0, DamageType.Power, DamageType.Power, ModifierSource.Warrior, ByPresence, "https://wiki.guildwars2.com/images/7/72/Cull_the_Weak.png"),
             new BuffDamageModifier(Boon.BoonsByName["Number of Boons"], "Empowered", DamageSource.NoPets, 1.0, DamageType.Power, DamageType.Power, ModifierSource.Warrior, ByStack, "https://wiki.guildwars2.com/images/c/c2/Empowered.png"),
             new BuffDamageModifierTarget(Boon.BoonsByName["Number of Boons"], "Destruction of the Empowered", DamageSource.NoPets, 3.0, DamageType.Power, DamageType.Power, ModifierSource.Warrior, ByStack, "https://wiki.guildwars2.com/images/5/5c/Destruction_of_the_Empowered.png"),
-            new BuffDamageModifierTarget(Boon.BoonsByName["Number of Boons"], "Pure Strike", DamageSource.NoPets, (1.14/1.07 * 100.0) - 100.0, DamageType.Power, DamageType.Power, ModifierSource.Warrior, ByAbsence, "https://wiki.guildwars2.com/images/7/76/Pure_Strike_%28trait%29.png"),
+            //new BuffDamageModifierTarget(Boon.BoonsByName["Number of Boons"], "Pure Strike", DamageSource.NoPets, (1.14/1.07 * 100.0) - 100.0, DamageType.Power, DamageType.Power, ModifierSource.Warrior, ByAbsence, "https://wiki.guildwars2.com/images/7/76/Pure_Strike_%28trait%29.png", x => x.Result == ParseEnum.Result.Crit), // Could use a different logic, like a dual gain per stack
             // TO TRACK Berserker's Power
             /// Guardian
             new BuffDamageModifierTarget(Boon.BoonsByName["Burning"], "Fiery Wrath", DamageSource.NoPets, 7.0, DamageType.Power, DamageType.Power, ModifierSource.Guardian, ByPresence, "https://wiki.guildwars2.com/images/7/70/Fiery_Wrath.png"),
@@ -165,6 +165,7 @@ namespace LuckParser.Models.ParseModels
             new BuffDamageModifierTarget(Boon.BoonsByName["Bleeding"], "Serrated Stones", DamageSource.All, 5.0, DamageType.Power, DamageType.Power, ModifierSource.Elementalist, ByPresence, "https://wiki.guildwars2.com/images/6/60/Serrated_Stones.png"),
             new DamageLogDamageModifier("Aquamancer's Training", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.Power, ModifierSource.Elementalist,"https://wiki.guildwars2.com/images/8/81/Aquamancer%27s_Training.png", x => x.IsNinety, ByPresence),
             new BuffDamageModifier(Boon.BoonsByName["Number of Boons"], "Bountiful Power", DamageSource.All, 2.0, DamageType.Power, DamageType.Power, ModifierSource.Elementalist, ByStack, "https://wiki.guildwars2.com/images/7/75/Bountiful_Power.png"),
+            new BuffDamageModifier(new BuffsTrackerMulti(Boon.BoonsByName["Swiftness"], Boon.BoonsByName["Superspeed"]), "Swift Revenge", DamageSource.All, 7.0, DamageType.Power, DamageType.Power, ModifierSource.Elementalist, "https://wiki.guildwars2.com/images/9/94/Swift_Revenge.png"),
             // TODO Swift Revenge
         };
 
