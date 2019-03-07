@@ -630,13 +630,17 @@ namespace LuckParser.Models.ParseModels
         public static Dictionary<BoonNature, List<Boon>> BoonsByNature = _allBoons.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => x.ToList());
         public static Dictionary<BoonSource, List<Boon>> BoonsBySource = _allBoons.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => x.ToList());
         public static Dictionary<BoonType, List<Boon>> BoonsByType = _allBoons.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
-        public static Dictionary<string, Boon> BoonsByName = _allBoons.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().Count > 1 ? throw new InvalidOperationException(x.First().Name) : x.First());
+        private static Dictionary<string, Boon> _boonsByName = _allBoons.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().Count > 1 ? throw new InvalidOperationException(x.First().Name) : x.First());
         public static Dictionary<int, List<Boon>> BoonsByCapacity = _allBoons.GroupBy(x => x.Capacity).ToDictionary(x => x.Key, x => x.ToList());
 
-        // debug
-        public static List<Boon> GetBoonByName(string name)
+        
+        public static Boon GetBoonByName(string name)
         {
-            return _allBoons.Where(x => x.Name == name).ToList();
+            if (_boonsByName.TryGetValue(name, out Boon buff))
+            {
+                return buff;
+            }
+            throw new InvalidOperationException("Buff " + name + " does not exist");
         }
 
         // get everything
