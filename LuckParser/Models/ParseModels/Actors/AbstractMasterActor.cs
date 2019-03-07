@@ -274,7 +274,7 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        protected override void SetExtraBoonStatusGenerationData(ParsedLog log, BoonSimulator simulator, long boonid, bool updateCondiPresence)
+        protected override void SetBoonStatusCleanseWasteData(ParsedLog log, BoonSimulator simulator, long boonid, bool updateCondiPresence)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             List<AbstractBoonSimulationItem> extraSimulations = new List<AbstractBoonSimulationItem>(simulator.OverstackSimulationResult);

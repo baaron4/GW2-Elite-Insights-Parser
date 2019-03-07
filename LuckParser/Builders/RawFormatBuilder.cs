@@ -326,7 +326,7 @@ namespace LuckParser.Builders
             return res;
         }
 
-        private List<JsonBuffDamageModifierData> BuildDamageModifiers(Dictionary<string, List<Statistics.ExtraBoonData>> extra)
+        private List<JsonBuffDamageModifierData> BuildDamageModifiers(Dictionary<string, List<Statistics.DamageModifierData>> extra)
         {
             Dictionary<int, List<JsonBuffDamageModifierItem>> dict = new Dictionary<int, List<JsonBuffDamageModifierItem>>();
             foreach (string key in extra.Keys)

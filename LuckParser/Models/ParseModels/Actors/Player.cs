@@ -18,8 +18,8 @@ namespace LuckParser.Models.ParseModels
        
         private List<Consumable> _consumeList;
         private List<DeathRecap> _deathRecaps;
-        private readonly Dictionary<string, List<ExtraBoonData>> _boonExtra = new Dictionary<string, List<ExtraBoonData>>();
-        private readonly Dictionary<Target, Dictionary<string, List<ExtraBoonData>>> _boonTargetExtra = new Dictionary<Target, Dictionary<string, List<ExtraBoonData>>>();
+        private readonly Dictionary<string, List<DamageModifierData>> _damageModifiers = new Dictionary<string, List<DamageModifierData>>();
+        private readonly Dictionary<Target, Dictionary<string, List<DamageModifierData>>> _damageModifiersTargets = new Dictionary<Target, Dictionary<string, List<DamageModifierData>>>();
         // statistics
         private Dictionary<Target, List<FinalDPS>> _dpsTarget;
         private Dictionary<Target, List<FinalStats>> _statsTarget;
@@ -711,7 +711,7 @@ namespace LuckParser.Models.ParseModels
             return _consumeList.Where(x => x.Time >= start && x.Time <= end).ToList() ;
         }
 
-        public Dictionary<string, List<ExtraBoonData>> GetExtraBoonData(ParsedLog log, Target target)
+        public Dictionary<string, List<DamageModifierData>> GetExtraBoonData(ParsedLog log, Target target)
         {
             if (BoonPoints == null)
             {
@@ -719,103 +719,28 @@ namespace LuckParser.Models.ParseModels
             }
             if (target != null)
             {
-                if (_boonTargetExtra.TryGetValue(target, out var res))
+                if (_damageModifiersTargets.TryGetValue(target, out var res))
                 {
                     return res;
                 }
                 else
                 {
-                    return new Dictionary<string, List<ExtraBoonData>>();
+                    return new Dictionary<string, List<DamageModifierData>>();
                 }
             }
-            return _boonExtra;
+            return _damageModifiers;
         }
 
         // Private Methods
 
-        protected override void SetExtraBoonStatusData(ParsedLog log)
+        protected override void SetDamageModifiersData(ParsedLog log)
         {
-            HashSet<long> extraDataID = new HashSet<long>
+            List<DamageModifier> damageMods = new List<DamageModifier>(DamageModifier.DamageModifiersPerSource[DamageModifier.ModifierSource.ItemBuff]);
+            damageMods.AddRange(DamageModifier.DamageModifiersPerSource[DamageModifier.ModifierSource.CommonBuff]);
+            damageMods.AddRange(DamageModifier.DamageModifiersPerSource[DamageModifier.ProfToEnum(Prof)]);
+            foreach (DamageModifier mod in damageMods)
             {
-                50421,
-                31803
-            };
-            List<PhaseData> phases = log.FightData.GetPhases(log);
-            foreach (long boonid in BoonPoints.Keys)
-            {
-                if (extraDataID.Contains(boonid))
-                {
-                    BoonsGraphModel graph = BoonPoints[boonid];
-                    Boon boon = Boon.BoonsByIds[boonid];
-                    switch (boonid)
-                    {
-                        // Frost Spirit
-                        case 50421:
-                            foreach (Target target in log.FightData.Logic.Targets)
-                            {
-                                if (!_boonTargetExtra.TryGetValue(target, out var extra))
-                                {
-                                    _boonTargetExtra[target] = new Dictionary<string, List<ExtraBoonData>>();
-                                }
-                                Dictionary<string, List<ExtraBoonData>> dict = _boonTargetExtra[target];
-                                if (!dict.TryGetValue(boon.Name, out var list))
-                                {
-                                    List<ExtraBoonData> extraDataList = new List<ExtraBoonData>();
-                                    for (int i = 0; i < phases.Count; i++)
-                                    {
-                                        List<DamageLog> dmLogs = GetJustPlayerDamageLogs(target, log, phases[i].Start, phases[i].End);
-                                        int totalDamage = dmLogs.Sum(x => x.Damage);
-                                        List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsIndirectDamage).ToList();
-                                        int damage = (int)Math.Round(effect.Sum(x => x.Damage) / 21.0);
-                                        extraDataList.Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsIndirectDamage), damage, totalDamage, true));
-                                    }
-                                    dict[boon.Name] = extraDataList;
-                                }
-                            }
-                            _boonExtra[boon.Name] = new List<ExtraBoonData>();
-                            for (int i = 0; i < phases.Count; i++)
-                            {
-                                List<DamageLog> dmLogs = GetJustPlayerDamageLogs(null, log, phases[i].Start, phases[i].End);
-                                int totalDamage = dmLogs.Sum(x => x.Damage);
-                                List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsIndirectDamage).ToList();
-                                int damage = (int)Math.Round(effect.Sum(x => x.Damage) / 21.0);
-                                _boonExtra[boon.Name].Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsIndirectDamage), damage, totalDamage, true));
-                            }
-                            break;
-                        // GoE
-                        case 31803:
-                            foreach (Target target in log.FightData.Logic.Targets)
-                            {
-                                if (!_boonTargetExtra.TryGetValue(target, out var extra))
-                                {
-                                    _boonTargetExtra[target] = new Dictionary<string, List<ExtraBoonData>>();
-                                }
-                                Dictionary<string, List<ExtraBoonData>> dict = _boonTargetExtra[target];
-                                if (!dict.TryGetValue(boon.Name, out var list))
-                                {
-                                    List<ExtraBoonData> extraDataList = new List<ExtraBoonData>();
-                                    for (int i = 0; i < phases.Count; i++)
-                                    {
-                                        List<DamageLog> dmLogs = GetJustPlayerDamageLogs(target, log, phases[i].Start, phases[i].End);
-                                        List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsIndirectDamage).ToList();
-                                        int damage = effect.Sum(x => x.Damage);
-                                        extraDataList.Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsIndirectDamage), damage, 0, false));
-                                    }
-                                    dict[boon.Name] = extraDataList;
-                                }
-
-                            }
-                            _boonExtra[boon.Name] = new List<ExtraBoonData>();
-                            for (int i = 0; i < phases.Count; i++)
-                            {
-                                List<DamageLog> dmLogs = GetJustPlayerDamageLogs(null, log, phases[i].Start, phases[i].End);
-                                List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsIndirectDamage).ToList();
-                                int damage = effect.Sum(x => x.Damage);
-                                _boonExtra[boon.Name].Add(new ExtraBoonData(effect.Count, dmLogs.Count(x => !x.IsIndirectDamage), damage, 0, false));
-                            }
-                            break;
-                    }
-                }
+                mod.ComputeDamageModifier(_damageModifiers, _damageModifiersTargets, this, log);
             }
         }
 

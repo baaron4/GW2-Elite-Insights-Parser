@@ -34,7 +34,7 @@ namespace LuckParser.Models.JsonModels
             /// </summary>
             public bool Multiplier;
 
-            public JsonBuffDamageModifierItem(Statistics.ExtraBoonData extraData)
+            public JsonBuffDamageModifierItem(Statistics.DamageModifierData extraData)
             {
                 HitCount = extraData.HitCount;
                 TotalHitCount = extraData.TotalHitCount;
