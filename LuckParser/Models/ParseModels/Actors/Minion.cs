@@ -29,7 +29,7 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        protected override void SetExtraBoonStatusData(ParsedLog log)
+        protected override void SetDamageModifiersData(ParsedLog log)
         {
         }
 
