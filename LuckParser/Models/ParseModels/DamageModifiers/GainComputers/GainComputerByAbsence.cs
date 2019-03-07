@@ -15,7 +15,7 @@ namespace LuckParser.Models.ParseModels
 
         public override double ComputeGain(double gainPerStack, int stack)
         {
-            return stack == 0 ? gainPerStack / (100 + gainPerStack) / 100.0 : 0;
+            return stack == 0 ? gainPerStack / (100 + gainPerStack) : 0;
         }
     }
 }
