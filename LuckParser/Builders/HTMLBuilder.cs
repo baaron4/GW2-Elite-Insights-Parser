@@ -3,7 +3,6 @@ using LuckParser.Parser;
 using LuckParser.Models.HtmlModels;
 using LuckParser.Models.ParseModels;
 using Newtonsoft.Json;
-using NUglify;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -36,7 +35,7 @@ namespace LuckParser.Builders
         {
             Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             _scriptVersion = version.Major + "." + version.Minor;
-#if PROD
+#if !DEBUG
             _scriptVersion += "." + version.Build;
 #endif
             _scriptVersionRev = version.Revision;
@@ -711,9 +710,9 @@ namespace LuckParser.Builders
             if (Properties.Settings.Default.HtmlExternalScripts)
             {
 #if DEBUG
-                string jsFileName = "EliteInsights-CR-" + _scriptVersion + ".js";
+                string jsFileName = "EliteInsights-CR-" + _scriptVersion + ".debug.js";
 #else
-                string jsFileName = "EliteInsights-CR-" + _scriptVersion + ".min.js";
+                string jsFileName = "EliteInsights-CR-" + _scriptVersion + ".js";
 #endif
                 string jsPath = Path.Combine(path, jsFileName);
                 try
@@ -721,11 +720,7 @@ namespace LuckParser.Builders
                     using (var fs = new FileStream(jsPath, FileMode.Create, FileAccess.Write))
                     using (var scriptWriter = new StreamWriter(fs, Encoding.UTF8))
                     {
-#if DEBUG
                         scriptWriter.Write(Properties.Resources.combatreplay_js);
-#else
-                        scriptWriter.Write(Uglify.Js(Properties.Resources.combatreplay_js, GeneralHelper.JSMinifySettings).Code);
-#endif
                     }
                 } catch (IOException)
                 {
@@ -822,17 +817,13 @@ namespace LuckParser.Builders
 
         private string BuildCss(string path)
         {
-#if DEBUG
             string scriptContent = Properties.Resources.ei_css;
-#else
-            string scriptContent = Uglify.Css(Properties.Resources.ei_css).Code;
-#endif
             if (Properties.Settings.Default.HtmlExternalScripts)
             {
 #if DEBUG
-                string cssFilename = "EliteInsights-" + _scriptVersion + ".css";
+                string cssFilename = "EliteInsights-" + _scriptVersion + ".debug.css";
 #else
-                string cssFilename = "EliteInsights-" + _scriptVersion + ".min.css";
+                string cssFilename = "EliteInsights-" + _scriptVersion + ".css";
 #endif
                 string cssPath = Path.Combine(path, cssFilename);
                 try
@@ -876,15 +867,13 @@ namespace LuckParser.Builders
                 scriptContent += orderedScripts[i];
             }
             scriptContent = BuildTemplates(scriptContent);
-#if !DEBUG
-            scriptContent = Uglify.Js(scriptContent, GeneralHelper.JSMinifySettings).Code;
-#endif
+
             if (Properties.Settings.Default.HtmlExternalScripts)
             {
 #if DEBUG
-                string scriptFilename = "EliteInsights-" + _scriptVersion + ".js";
+                string scriptFilename = "EliteInsights-" + _scriptVersion + ".debug.js";
 #else
-                string scriptFilename = "EliteInsights-" + _scriptVersion +".min.js";
+                string scriptFilename = "EliteInsights-" + _scriptVersion +".js";
 #endif
                 string scriptPath = Path.Combine(path, scriptFilename);
                 try
@@ -914,15 +903,13 @@ namespace LuckParser.Builders
             }
             string scriptContent = Properties.Resources.combatReplayStatsJS;
             scriptContent = BuildCRTemplates(scriptContent);
-#if !DEBUG
-            scriptContent = Uglify.Js(scriptContent).Code;
-#endif
+
             if (Properties.Settings.Default.HtmlExternalScripts)
             {
 #if DEBUG
-                string scriptFilename = "EliteInsights-CRLink-" + _scriptVersion + ".js";
+                string scriptFilename = "EliteInsights-CRLink-" + _scriptVersion + ".debug.js";
 #else
-                string scriptFilename = "EliteInsights-CRLink-" + _scriptVersion +".min.js";
+                string scriptFilename = "EliteInsights-CRLink-" + _scriptVersion +".js";
 #endif
                 string scriptPath = Path.Combine(path, scriptFilename);
                 try
