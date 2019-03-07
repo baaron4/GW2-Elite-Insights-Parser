@@ -92,7 +92,7 @@ namespace LuckParser.Models.Logic
             {
                 phase.Targets.Add(dhuum);
             }
-            phases.RemoveAll(x => x.GetDuration() <= 2200);
+            phases.RemoveAll(x => x.DurationInMS <= 2200);
             return phases;
         }
 

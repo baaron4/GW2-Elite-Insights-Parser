@@ -136,7 +136,7 @@ namespace LuckParser.Models.ParseModels
                 long fightDuration = log.FightData.FightDuration;
                 _phases = log.FightData.Logic.GetPhases(log, _requirePhases);
             }
-            _phases.RemoveAll(x => x.GetDuration() <= 1000);
+            _phases.RemoveAll(x => x.DurationInMS <= 1000);
             return _phases;
         }
 

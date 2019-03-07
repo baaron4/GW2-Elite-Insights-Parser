@@ -3,7 +3,6 @@ using LuckParser.Parser;
 using LuckParser.Models.HtmlModels;
 using LuckParser.Models.ParseModels;
 using Newtonsoft.Json;
-using NUglify;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -244,7 +243,7 @@ namespace LuckParser.Builders
         private List<BoonData> BuildPersonalBuffUptimeData(Dictionary<string, List<Boon>> boonsBySpec, int phaseIndex)
         {
             List<BoonData> list = new List<BoonData>();
-            long fightDuration = _phases[phaseIndex].GetDuration();
+            long fightDuration = _phases[phaseIndex].DurationInMS;
             foreach (Player player in _log.PlayerList)
             {
                 list.Add(new BoonData(player.Prof, boonsBySpec, player.GetBuffs(_log, phaseIndex, Statistics.BuffEnum.Self)));
@@ -414,7 +413,7 @@ namespace LuckParser.Builders
             return _BuildDMGDistData(dps, target, null, phaseIndex);
         }
 
-        private DmgDistributionDto _BuildDMGDistData(Statistics.FinalDPS dps, AbstractMasterActor p, Minions minions, Target target, int phaseIndex)
+        private DmgDistributionDto _BuildDMGDistDataMinions(Statistics.FinalDPS dps, AbstractMasterActor p, Minions minions, Target target, int phaseIndex)
         {
             DmgDistributionDto dto = new DmgDistributionDto();
             PhaseData phase = _phases[phaseIndex];
@@ -433,7 +432,7 @@ namespace LuckParser.Builders
         {
             Statistics.FinalDPS dps = p.GetDPSTarget(_log, phaseIndex, target);
 
-            return _BuildDMGDistData(dps, p, minions, target, phaseIndex);
+            return _BuildDMGDistDataMinions(dps, p, minions, target, phaseIndex);
         }
 
         /// <summary>
@@ -442,7 +441,7 @@ namespace LuckParser.Builders
         private DmgDistributionDto BuildTargetMinionDMGDistData(Target target, Minions minions, int phaseIndex)
         {
             Statistics.FinalDPS dps = target.GetDPSAll(_log, phaseIndex);
-            return _BuildDMGDistData(dps, target, minions, null, phaseIndex);
+            return _BuildDMGDistDataMinions(dps, target, minions, null, phaseIndex);
         }
 
         /// <summary>
@@ -632,7 +631,7 @@ namespace LuckParser.Builders
         {
             PhaseData phase = _phases[phaseIndex];
             Dictionary<long, Statistics.FinalTargetBuffs> buffs = target.GetBuffs(_log, phaseIndex);
-            long fightDuration = phase.GetDuration();
+            long fightDuration = phase.DurationInMS;
             return new BoonData(buffs, _statistics.PresentConditions, Math.Round(target.GetAverageConditions(_log, phaseIndex), 1));
         }
 
@@ -640,7 +639,7 @@ namespace LuckParser.Builders
         {
             PhaseData phase = _phases[phaseIndex];
             Dictionary<long, Statistics.FinalTargetBuffs> buffs = target.GetBuffs(_log, phaseIndex);
-            long fightDuration = phase.GetDuration();
+            long fightDuration = phase.DurationInMS;
             return new BoonData(buffs, _statistics.PresentBoons, Math.Round(target.GetAverageBoons(_log, phaseIndex), 1));
         }
 
@@ -711,9 +710,9 @@ namespace LuckParser.Builders
             if (Properties.Settings.Default.HtmlExternalScripts)
             {
 #if DEBUG
-                string jsFileName = "EliteInsights-CR-" + _scriptVersion + ".js";
+                string jsFileName = "EliteInsights-CR-" + _scriptVersion + ".debug.js";
 #else
-                string jsFileName = "EliteInsights-CR-" + _scriptVersion + ".min.js";
+                string jsFileName = "EliteInsights-CR-" + _scriptVersion + ".js";
 #endif
                 string jsPath = Path.Combine(path, jsFileName);
                 try
@@ -721,11 +720,7 @@ namespace LuckParser.Builders
                     using (var fs = new FileStream(jsPath, FileMode.Create, FileAccess.Write))
                     using (var scriptWriter = new StreamWriter(fs, Encoding.UTF8))
                     {
-#if DEBUG
                         scriptWriter.Write(Properties.Resources.combatreplay_js);
-#else
-                        scriptWriter.Write(Uglify.Js(Properties.Resources.combatreplay_js, GeneralHelper.JSMinifySettings).Code);
-#endif
                     }
                 } catch (IOException)
                 {
@@ -822,17 +817,14 @@ namespace LuckParser.Builders
 
         private string BuildCss(string path)
         {
-#if DEBUG
             string scriptContent = Properties.Resources.ei_css;
-#else
-            string scriptContent = Uglify.Css(Properties.Resources.ei_css).Code;
-#endif
+
             if (Properties.Settings.Default.HtmlExternalScripts)
             {
 #if DEBUG
-                string cssFilename = "EliteInsights-" + _scriptVersion + ".css";
+                string cssFilename = "EliteInsights-" + _scriptVersion + ".debug.css";
 #else
-                string cssFilename = "EliteInsights-" + _scriptVersion + ".min.css";
+                string cssFilename = "EliteInsights-" + _scriptVersion + ".css";
 #endif
                 string cssPath = Path.Combine(path, cssFilename);
                 try
@@ -876,15 +868,13 @@ namespace LuckParser.Builders
                 scriptContent += orderedScripts[i];
             }
             scriptContent = BuildTemplates(scriptContent);
-#if !DEBUG
-            scriptContent = Uglify.Js(scriptContent, GeneralHelper.JSMinifySettings).Code;
-#endif
+
             if (Properties.Settings.Default.HtmlExternalScripts)
             {
 #if DEBUG
-                string scriptFilename = "EliteInsights-" + _scriptVersion + ".js";
+                string scriptFilename = "EliteInsights-" + _scriptVersion + ".debug.js";
 #else
-                string scriptFilename = "EliteInsights-" + _scriptVersion +".min.js";
+                string scriptFilename = "EliteInsights-" + _scriptVersion +".js";
 #endif
                 string scriptPath = Path.Combine(path, scriptFilename);
                 try
@@ -914,15 +904,13 @@ namespace LuckParser.Builders
             }
             string scriptContent = Properties.Resources.combatReplayStatsJS;
             scriptContent = BuildCRTemplates(scriptContent);
-#if !DEBUG
-            scriptContent = Uglify.Js(scriptContent).Code;
-#endif
+
             if (Properties.Settings.Default.HtmlExternalScripts)
             {
 #if DEBUG
-                string scriptFilename = "EliteInsights-CRLink-" + _scriptVersion + ".js";
+                string scriptFilename = "EliteInsights-CRLink-" + _scriptVersion + ".debug.js";
 #else
-                string scriptFilename = "EliteInsights-CRLink-" + _scriptVersion +".min.js";
+                string scriptFilename = "EliteInsights-CRLink-" + _scriptVersion +".js";
 #endif
                 string scriptPath = Path.Combine(path, scriptFilename);
                 try

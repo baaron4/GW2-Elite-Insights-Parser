@@ -343,14 +343,14 @@ namespace LuckParser.Models.ParseModels
                 {
                     avgBoons += duration;
                 }
-                final.AvgBoons = avgBoons / phase.GetDuration();
+                final.AvgBoons = avgBoons / phase.DurationInMS;
 
                 double avgCondis = 0;
                 foreach (long duration in GetCondiPresence(log, phaseIndex).Values)
                 {
                     avgCondis += duration;
                 }
-                final.AvgConditions = avgCondis / phase.GetDuration();
+                final.AvgConditions = avgCondis / phase.DurationInMS;
 
                 if (Properties.Settings.Default.ParseCombatReplay && log.FightData.Logic.CanCombatReplay)
                 {

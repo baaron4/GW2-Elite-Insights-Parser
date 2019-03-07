@@ -52,7 +52,7 @@ namespace LuckParser.Models.ParseModels
             List<DamageLog> damageLogs = GetDamageLogs(target, log, phase.Start, phase.End);
             // fill the graph, full precision
             List<int> dmgListFull = new List<int>();
-            for (int i = 0; i <= phase.GetDuration(); i++)
+            for (int i = 0; i <= phase.DurationInMS; i++)
             {
                 dmgListFull.Add(0);
             }
@@ -70,19 +70,19 @@ namespace LuckParser.Models.ParseModels
                 dmgListFull[totalTime] = totalDamage;
             }
             // fill
-            for (; totalTime <= phase.GetDuration(); totalTime++)
+            for (; totalTime <= phase.DurationInMS; totalTime++)
             {
                 dmgListFull[totalTime] = totalDamage;
             }
             //
             dmgList.Add(0);
-            for (int i = 1; i <= phase.GetDuration("s"); i++)
+            for (int i = 1; i <= phase.DurationInS; i++)
             {
                 dmgList.Add(dmgListFull[1000 * i]);
             }
-            if (phase.GetDuration("s") * 1000 != phase.GetDuration())
+            if (phase.DurationInS * 1000 != phase.DurationInMS)
             {
-                int lastDamage = dmgListFull[(int)phase.GetDuration()];
+                int lastDamage = dmgListFull[(int)phase.DurationInMS];
                 dmgList.Add(lastDamage);
             }
             _damageList1S[id] = dmgList;
@@ -177,7 +177,7 @@ namespace LuckParser.Models.ParseModels
 
         protected FinalDPS GetFinalDPS(ParsedLog log, PhaseData phase, Target target)
         {
-            double phaseDuration = (phase.GetDuration()) / 1000.0;
+            double phaseDuration = (phase.DurationInMS) / 1000.0;
             int damage;
             double dps = 0.0;
             FinalDPS final = new FinalDPS();

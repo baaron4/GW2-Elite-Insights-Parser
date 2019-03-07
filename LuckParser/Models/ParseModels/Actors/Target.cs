@@ -44,7 +44,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     avgBoon += duration;
                 }
-                avgBoon /= phase.GetDuration();
+                avgBoon /= phase.DurationInMS;
                 _avgBoons.Add(avgBoon);
 
                 double avgCondi = 0;
@@ -52,7 +52,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     avgCondi += duration;
                 }
-                avgCondi /= phase.GetDuration();
+                avgCondi /= phase.DurationInMS;
                 _avgConditions.Add(avgCondi);
             }
         }
@@ -124,7 +124,7 @@ namespace LuckParser.Models.ParseModels
                 Dictionary<long, long> condiPresence = GetCondiPresence(log, phaseIndex);
 
                 PhaseData phase = phases[phaseIndex];
-                long fightDuration = phase.GetDuration();
+                long fightDuration = phase.DurationInMS;
 
                 foreach (Boon boon in TrackedBoons)
                 {
@@ -193,7 +193,7 @@ namespace LuckParser.Models.ParseModels
             List<double[]> res = new List<double[]>();
             // fill the graph, full precision
             List<double> listFull = new List<double>();
-            for (int i = 0; i <= phases[0].GetDuration(); i++)
+            for (int i = 0; i <= phases[0].DurationInMS; i++)
             {
                 listFull.Add(100.0);
             }
@@ -206,7 +206,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     continue;
                 }
-                if (time > phases[0].GetDuration())
+                if (time > phases[0].DurationInMS)
                 {
                     break;
                 }
@@ -218,14 +218,14 @@ namespace LuckParser.Models.ParseModels
                 listFull[time] = curHealth;
             }
             // fill
-            for (; totalTime <= phases[0].GetDuration(); totalTime++)
+            for (; totalTime <= phases[0].DurationInMS; totalTime++)
             {
                 listFull[totalTime] = curHealth;
             }
             foreach (PhaseData phase in phases)
             {
-                int seconds = (int)phase.GetDuration("s");
-                bool needsLastPoint = seconds * 1000 != phase.GetDuration();
+                int seconds = (int)phase.DurationInS;
+                bool needsLastPoint = seconds * 1000 != phase.DurationInMS;
                 double[] hps = new double[seconds + (needsLastPoint ? +2 : 1)];
                 int time = (int)phase.Start;
                 int i = 0;
