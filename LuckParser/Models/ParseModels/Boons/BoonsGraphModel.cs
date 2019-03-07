@@ -43,13 +43,12 @@ namespace LuckParser.Models.ParseModels
 
         public readonly Boon Boon;
         public List<Segment> BoonChart { get; private set; } = new List<Segment>();
-        private List<SegmentWithSources> _boonChartWithSource { get; private set; } = new List<SegmentWithSources>();
+        private readonly List<SegmentWithSources> _boonChartWithSource;
 
         // Constructor
         public BoonsGraphModel(Boon boon)
         {
             Boon = boon;
-            _boonChartWithSource = null;
         }
         public BoonsGraphModel(Boon boon, List<SegmentWithSources> boonChartWithSource)
         {
