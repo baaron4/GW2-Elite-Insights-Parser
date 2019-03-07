@@ -35,7 +35,7 @@ namespace LuckParser.Builders
         {
             Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             _scriptVersion = version.Major + "." + version.Minor;
-#if PROD
+#if !DEBUG
             _scriptVersion += "." + version.Build;
 #endif
             _scriptVersionRev = version.Revision;
