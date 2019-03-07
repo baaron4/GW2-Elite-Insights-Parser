@@ -263,10 +263,10 @@ var compileGeneralStats = function () {
                     total.count++;
                     var stats = this.phase.dmgStats[i];
                     for (var j = 0; j < stats.length; j++) {
-                        if (j >= 17) {
-                            commons[j - 17] = stats[j];
-                            groups[player.group].commons[j - 17] = (groups[player.group].commons[j - 17] || 0) + commons[j - 17];
-                            total.commons[j - 17] = (total.commons[j - 17] || 0) + commons[j - 17];
+                        if (j >= 9) {
+                            commons[j - 9] = stats[j];
+                            groups[player.group].commons[j - 9] = (groups[player.group].commons[j - 9] || 0) + commons[j - 9];
+                            total.commons[j - 9] = (total.commons[j - 9] || 0) + commons[j - 9];
                         } else {
                             data[j] = stats[j];
                             groups[player.group].data[j] = (groups[player.group].data[j] || 0) + data[j];
@@ -326,10 +326,10 @@ var compileGeneralStats = function () {
                     total.count++;
                     var stats = this.phase.dmgStats[i];
                     for (var j = 0; j < stats.length; j++) {
-                        if (j >= 17) {
-                            commons[j - 17] = stats[j];
-                            groups[player.group].commons[j - 17] = (groups[player.group].commons[j - 17] || 0) + commons[j - 17];
-                            total.commons[j - 17] = (total.commons[j - 17] || 0) + commons[j - 17];
+                        if (j >= 9) {
+                            commons[j - 9] = stats[j];
+                            groups[player.group].commons[j - 9] = (groups[player.group].commons[j - 9] || 0) + commons[j - 9];
+                            total.commons[j - 9] = (total.commons[j - 9] || 0) + commons[j - 9];
                         } else {
                             for (var k = 0; k < this.activetargets.length; k++) {
                                 var tar = this.phase.dmgStatsTargets[i][this.activetargets[k]];

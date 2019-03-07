@@ -111,14 +111,14 @@ namespace LuckParser.Models.HtmlModels
             data.AddRange(new List<object>
                 {
                     // commons
-                    stats.TimeWasted,
-                    stats.Wasted,
+                    stats.TimeWasted, // 9
+                    stats.Wasted, // 10
 
-                    stats.TimeSaved,
-                    stats.Saved,
+                    stats.TimeSaved, // 11
+                    stats.Saved, // 12
 
-                    stats.SwapCount,
-                    Math.Round(stats.StackDist, 2)
+                    stats.SwapCount, // 13
+                    Math.Round(stats.StackDist, 2) // 14
                 });
             return data;
         }
@@ -127,29 +127,18 @@ namespace LuckParser.Models.HtmlModels
         {
             List<object> data = new List<object>
                 {
-                    stats.DirectDamageCount,
-                    stats.CritableDirectDamageCount,
-                    stats.CriticalRate,
-                    stats.CriticalDmg,
+                    stats.DirectDamageCount, // 0
+                    stats.CritableDirectDamageCount, // 1
+                    stats.CriticalRate, // 2
+                    stats.CriticalDmg, // 3
 
-                    stats.ScholarRate,
-                    stats.ScholarDmg,
-                    stats.DirectDamage,
+                    stats.FlankingRate, // 4
 
-                    stats.MovingRate,
-                    stats.MovingDamage,
+                    stats.GlanceRate, // 5
 
-                    stats.FlankingRate,
-
-                    stats.GlanceRate,
-
-                    stats.Missed,
-                    stats.Interrupts,
-                    stats.Invulned,
-
-                    stats.EagleRate,
-                    stats.EagleDmg,
-                    stats.FlankingDmg
+                    stats.Missed,// 6
+                    stats.Interrupts, // 7
+                    stats.Invulned // 8
                 };
             return data;
         }

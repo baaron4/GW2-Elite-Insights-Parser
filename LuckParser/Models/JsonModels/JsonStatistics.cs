@@ -153,37 +153,9 @@ namespace LuckParser.Models.JsonModels
             /// </summary>
             public int CriticalDmg;
             /// <summary>
-            /// Number of hits above 90% hp
-            /// </summary>
-            public int ScholarRate;
-            /// <summary>
-            /// Scholar rune bonus damage
-            /// </summary>
-            public int ScholarDmg;
-            /// <summary>
-            /// Number of hits against a target below 50% hp
-            /// </summary>
-            public int EagleRate;
-            /// <summary>
-            /// Eagle rune bonus damage
-            /// </summary>
-            public int EagleDmg;
-            /// <summary>
-            /// Number of hits while moving
-            /// </summary>
-            public int MovingRate;
-            /// <summary>
-            /// Seaweed salad buff bonus damage
-            /// </summary>
-            public int MovingDamage;
-            /// <summary>
             /// Number of hits while flanking
             /// </summary>
             public int FlankingRate;
-            /// <summary>
-            /// Thief rune bonus damage
-            /// </summary>
-            public int FlankingDmg;
             /// <summary>
             /// Number of glanced hits
             /// </summary>
@@ -200,10 +172,6 @@ namespace LuckParser.Models.JsonModels
             /// Number of hits against invulnerable targets
             /// </summary>
             public int Invulned;
-            /// <summary>
-            /// Total direct damage
-            /// </summary>
-            public int DirectDamage;
 
             public JsonStats(Statistics.FinalStats stats)
             {
@@ -211,19 +179,11 @@ namespace LuckParser.Models.JsonModels
                 CritableDirectDamageCount = stats.CritableDirectDamageCount;
                 CriticalRate = stats.CriticalRate;
                 CriticalDmg = stats.CriticalDmg;
-                ScholarRate = stats.ScholarRate;
-                ScholarDmg = stats.ScholarDmg;
-                EagleRate = stats.EagleRate;
-                EagleDmg = stats.EagleDmg;
-                MovingRate = stats.MovingRate;
-                MovingDamage = stats.MovingDamage;
-                FlankingDmg = stats.FlankingDmg;
                 FlankingRate = stats.FlankingRate;
                 GlanceRate = stats.GlanceRate;
                 Missed = stats.Missed;
                 Interrupts = stats.Interrupts;
                 Invulned = stats.Invulned;
-                DirectDamage = stats.DirectDamage;
             }
 
             public JsonStats(Statistics.FinalStatsAll stats)
@@ -232,19 +192,11 @@ namespace LuckParser.Models.JsonModels
                 CritableDirectDamageCount = stats.CritableDirectDamageCount;
                 CriticalRate = stats.CriticalRate;
                 CriticalDmg = stats.CriticalDmg;
-                ScholarRate = stats.ScholarRate;
-                ScholarDmg = stats.ScholarDmg;
-                EagleRate = stats.EagleRate;
-                EagleDmg = stats.EagleDmg;
-                MovingRate = stats.MovingRate;
-                MovingDamage = stats.MovingDamage;
-                FlankingDmg = stats.FlankingDmg;
                 FlankingRate = stats.FlankingRate;
                 GlanceRate = stats.GlanceRate;
                 Missed = stats.Missed;
                 Interrupts = stats.Interrupts;
                 Invulned = stats.Invulned;
-                DirectDamage = stats.DirectDamage;
             }
         }
 
