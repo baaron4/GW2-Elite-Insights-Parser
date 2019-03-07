@@ -115,18 +115,10 @@ var compileLayout = function () {
     buffs.layout = buffLayout;
     layout.addTab(buffs);
     // damage modifiers
-    if (logData.dmgCommonModifiersBuffs.length > 0) {
-        var damageModifiers = new Tab("Damage Modifiers");
-        var damageModifiersLayout = new Layout(null);
-        damageModifiersLayout.addTab(
-            new Tab("Damage Modifiers", {
-                active: true,
-                dataType: DataTypes.dmgModifiersTable
-            })
-        );
-        damageModifiers.layout = damageModifiersLayout;
-        layout.addTab(damageModifiers);
-    }
+    var damageModifiers = new Tab("Damage Modifiers", {
+        dataType: DataTypes.dmgModifiersTable
+    });
+    layout.addTab(damageModifiers);
     // mechanics
     if (mechanicMap.length > 0 && !logData.noMechanics) {
         var mechanics = new Tab("Mechanics", {

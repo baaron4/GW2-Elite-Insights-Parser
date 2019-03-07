@@ -553,10 +553,10 @@ var DataTypes = {
     offensiveBuffTable: 6,
     defensiveBuffTable: 7,
     personalBuffTable: 8,
-    dmgModifiersTable: 9,
-    playerTab: 10,
-    targetTab: 11,
-    dpsGraph: 12
+    playerTab: 9,
+    targetTab: 10,
+    dpsGraph: 11,
+    dmgModifiersTable: 12,
 };
 
 /*function getActorGraphLayout(images, boonYs, stackingBoons) {
