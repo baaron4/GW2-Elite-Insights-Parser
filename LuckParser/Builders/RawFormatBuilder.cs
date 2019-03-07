@@ -36,6 +36,7 @@ namespace LuckParser.Builders
         //
         private readonly Dictionary<string, JsonLog.SkillDesc> _skillDesc = new Dictionary<string, JsonLog.SkillDesc>();
         private readonly Dictionary<string, JsonLog.BuffDesc> _buffDesc = new Dictionary<string, JsonLog.BuffDesc>();
+        private readonly Dictionary<string, JsonLog.DamageModDesc> _damageModDesc = new Dictionary<string, JsonLog.DamageModDesc>();
         private readonly Dictionary<string, HashSet<long>> _personalBuffs = new Dictionary<string, HashSet<long>>();
        
         public RawFormatBuilder(StreamWriter sw, ParsedLog log, string[] UploadString)
@@ -130,6 +131,7 @@ namespace LuckParser.Builders
             log.Success = _log.FightData.Success;
             log.SkillMap = _skillDesc;
             log.BuffMap = _buffDesc;
+            log.DamageModMap = _damageModDesc;
             log.PersonalBuffs = _personalBuffs;
             log.UploadLinks = _uploadLink;
         }
@@ -326,22 +328,23 @@ namespace LuckParser.Builders
 
         private List<JsonBuffDamageModifierData> BuildDamageModifiers(Dictionary<string, List<Statistics.ExtraBoonData>> extra)
         {
-            Dictionary<string, List<JsonBuffDamageModifierItem>> dict = new Dictionary<string, List<JsonBuffDamageModifierItem>>();
+            Dictionary<int, List<JsonBuffDamageModifierItem>> dict = new Dictionary<int, List<JsonBuffDamageModifierItem>>();
             foreach (string key in extra.Keys)
             {
-                string nKey = "b" + Boon.BoonsByName[key].ID;
-                if (!_buffDesc.ContainsKey(nKey))
+                int iKey = key.GetHashCode();
+                string nKey = "d" + iKey;
+                if (!_damageModDesc.ContainsKey(nKey))
                 {
-                    _buffDesc[nKey] = new JsonLog.BuffDesc(Boon.BoonsByName[key]);
+                    _damageModDesc[nKey] = new JsonLog.DamageModDesc(DamageModifier.DamageModifiersByName[key]);
                 }
-                dict[key] = extra[key].Select(x => new JsonBuffDamageModifierItem(x)).ToList();
+                dict[iKey] = extra[key].Select(x => new JsonBuffDamageModifierItem(x)).ToList();
             }
             List<JsonBuffDamageModifierData> res = new List<JsonBuffDamageModifierData>();
             foreach (var pair in dict)
             {
                 res.Add(new JsonBuffDamageModifierData()
                 {
-                    Id = Boon.BoonsByName[pair.Key].ID,
+                    Id = pair.Key,
                     DamageModifiers = pair.Value
                 });
             }

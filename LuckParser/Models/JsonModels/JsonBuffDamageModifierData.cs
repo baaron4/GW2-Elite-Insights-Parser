@@ -44,7 +44,7 @@ namespace LuckParser.Models.JsonModels
             }
         }
 
-        public long Id;
+        public int Id;
         public List<JsonBuffDamageModifierItem> DamageModifiers;
     }
 }

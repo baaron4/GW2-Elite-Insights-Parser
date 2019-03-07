@@ -62,6 +62,27 @@ namespace LuckParser.Models.JsonModels
         }
 
         /// <summary>
+        /// Describs the damage modifier item
+        /// </summary>
+        public class DamageModDesc
+        {
+            public DamageModDesc(DamageModifier item)
+            {
+                Name = item.Name;
+                Icon = item.Url;
+            }
+
+            /// <summary>
+            /// Name of the damage modifier
+            /// </summary>
+            public string Name;
+            /// <summary>
+            /// Icon of the damage modifier
+            /// </summary>
+            public string Icon;
+        }
+
+        /// <summary>
         /// The used EI version
         /// </summary>
         public string EliteInsightsVersion;
@@ -131,6 +152,11 @@ namespace LuckParser.Models.JsonModels
         /// </summary>
         /// <seealso cref="BuffDesc"/>
         public Dictionary<string, BuffDesc> BuffMap;
+        /// <summary>
+        /// Dictionary of damage modifiers' description, the key is in "'d' + id" format
+        /// </summary>
+        /// <seealso cref="DamageModDesc"/>
+        public Dictionary<string, DamageModDesc> DamageModMap;
         /// <summary>
         /// Dictionary of personal buffs. The key is the profession, the value is a list of buff ids
         /// </summary>
