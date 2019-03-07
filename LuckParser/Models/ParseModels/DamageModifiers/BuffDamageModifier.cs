@@ -71,10 +71,10 @@ namespace LuckParser.Models.ParseModels
                     List<DamageModifierData> extraDataList = new List<DamageModifierData>();
                     for (int i = 0; i < phases.Count; i++)
                     {
-                        (int totalDamage, int count) = GetTotalDamageData(p, log, target, phases[i]);
-                        List<DamageLog> effect = GetDamageLogs(p, log, target, phases[i]);
-                        int damage = (int)effect.Sum(x => Math.Round(ComputeGain(BuffsChecker.GetStack(bgms, x.Time), x) * x.Damage));
-                        extraDataList.Add(new DamageModifierData(effect.Count, count, damage, totalDamage, GainComputer.Multiplier));
+                        int totalDamage = GetTotalDamage(p, log, target, phases[i]);
+                        List<DamageLog> typeHits = GetDamageLogs(p, log, target, phases[i]);
+                        List<double> damages = typeHits.Select(x => ComputeGain(BuffsChecker.GetStack(bgms, x.Time), x) * x.Damage).ToList();
+                        extraDataList.Add(new DamageModifierData(damages.Count, typeHits.Count, (int)Math.Round(damages.Sum()), totalDamage, GainComputer.Multiplier));
                     }
                     dict[Name] = extraDataList;
                 }
@@ -82,10 +82,10 @@ namespace LuckParser.Models.ParseModels
             data[Name] = new List<DamageModifierData>();
             for (int i = 0; i < phases.Count; i++)
             {
-                (int totalDamage, int count) = GetTotalDamageData(p, log, null, phases[i]);
-                List<DamageLog> effect = GetDamageLogs(p, log, null, phases[i]);
-                int damage = (int)effect.Sum(x => Math.Round(ComputeGain(BuffsChecker.GetStack(bgms, x.Time), x) * x.Damage));
-                data[Name].Add(new DamageModifierData(effect.Count, count, damage, totalDamage, GainComputer.Multiplier));
+                int totalDamage = GetTotalDamage(p, log, null, phases[i]);
+                List<DamageLog> typeHits = GetDamageLogs(p, log, null, phases[i]);
+                List<double> damages = typeHits.Select(x => ComputeGain(BuffsChecker.GetStack(bgms, x.Time), x) * x.Damage).ToList();
+                data[Name].Add(new DamageModifierData(damages.Count, typeHits.Count, (int)Math.Round(damages.Sum()), totalDamage, GainComputer.Multiplier));
             }
         }
     }

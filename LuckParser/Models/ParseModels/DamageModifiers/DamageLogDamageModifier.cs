@@ -37,10 +37,11 @@ namespace LuckParser.Models.ParseModels
                     List<DamageModifierData> extraDataList = new List<DamageModifierData>();
                     for (int i = 0; i < phases.Count; i++)
                     {
-                        (int totalDamage, int count) = GetTotalDamageData(p, log, target, phases[i]);
-                        List<DamageLog> effect = GetDamageLogs(p, log, target, phases[i]).Where(x => DLChecker(x)).ToList();
+                        int totalDamage = GetTotalDamage(p, log, target, phases[i]);
+                        List<DamageLog> typeHits = GetDamageLogs(p, log, target, phases[i]);
+                        List<DamageLog> effect = typeHits.Where(x => DLChecker(x)).ToList();
                         int damage = (int)Math.Round(gain * effect.Sum(x => x.Damage));
-                        extraDataList.Add(new DamageModifierData(effect.Count, count, damage, totalDamage, GainComputer.Multiplier));
+                        extraDataList.Add(new DamageModifierData(effect.Count, typeHits.Count, damage, totalDamage, GainComputer.Multiplier));
                     }
                     dict[Name] = extraDataList;
                 }
@@ -48,10 +49,11 @@ namespace LuckParser.Models.ParseModels
             data[Name] = new List<DamageModifierData>();
             for (int i = 0; i < phases.Count; i++)
             {
-                (int totalDamage, int count) = GetTotalDamageData(p, log, null, phases[i]);
-                List<DamageLog> effect = GetDamageLogs(p, log, null, phases[i]).Where(x => DLChecker(x)).ToList();
+                int totalDamage = GetTotalDamage(p, log, null, phases[i]);
+                List<DamageLog> typeHits = GetDamageLogs(p, log, null, phases[i]);
+                List<DamageLog> effect = typeHits.Where(x => DLChecker(x)).ToList();
                 int damage = (int)Math.Round(gain * effect.Sum(x => x.Damage));
-                data[Name].Add(new DamageModifierData(effect.Count, count, damage, totalDamage, GainComputer.Multiplier));
+                data[Name].Add(new DamageModifierData(effect.Count, typeHits.Count, damage, totalDamage, GainComputer.Multiplier));
             }
         }
     }
