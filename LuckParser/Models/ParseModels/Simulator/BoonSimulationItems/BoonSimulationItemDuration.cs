@@ -26,6 +26,11 @@ namespace LuckParser.Models.ParseModels
             return 1;
         }
 
+        public override List<AgentItem> GetSources()
+        {
+            return new List<AgentItem>() { _src };
+        }
+
         public override void SetBoonDistributionItem(BoonDistribution distribs, long start, long end, long boonid, ParsedLog log)
         {
             Dictionary<AgentItem, BoonDistributionItem> distrib = GetDistrib(distribs, boonid);
