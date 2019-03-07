@@ -1014,11 +1014,11 @@ namespace LuckParser.Builders
                 _usedBoons[boon.ID] = boon;
             }
             HashSet<long> dmgCommonModifiersBuffs = new HashSet<long>();
-            foreach (Player p in _log.PlayerList)
+            /*foreach (Player p in _log.PlayerList)
             {
                 Dictionary<string, List<Statistics.ExtraBoonData>> toCheck = p.GetExtraBoonData(_log, null);
                 dmgCommonModifiersBuffs.UnionWith(toCheck.Keys.Select(x => Boon.BoonsByName[x].ID));
-            }
+            }*/
             logData.DmgCommonModifiersBuffs = dmgCommonModifiersBuffs.ToList();
             //
             for (int i = 0; i < _phases.Count; i++)
