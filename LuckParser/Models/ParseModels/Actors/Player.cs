@@ -18,7 +18,8 @@ namespace LuckParser.Models.ParseModels
        
         private List<Consumable> _consumeList;
         private List<DeathRecap> _deathRecaps;
-        private Dictionary<string, List<DamageModifierData>> _damageModifiers; 
+        private Dictionary<string, List<DamageModifierData>> _damageModifiers;
+        private HashSet<string> _presentDamageModifiers;
         private Dictionary<Target, Dictionary<string, List<DamageModifierData>>> _damageModifiersTargets; 
         // statistics
         private Dictionary<Target, List<FinalDPS>> _dpsTarget;
@@ -689,12 +690,22 @@ namespace LuckParser.Models.ParseModels
             return _damageModifiers;
         }
 
+        public HashSet<string> GetPresentDamageModifier(ParsedLog log)
+        {
+            if (_presentDamageModifiers == null)
+            {
+                SetDamageModifiersData(log);
+            }
+            return _presentDamageModifiers;
+        }
+
         // Private Methods
 
         private void SetDamageModifiersData(ParsedLog log)
         {
             _damageModifiers = new Dictionary<string, List<DamageModifierData>>();
             _damageModifiersTargets = new Dictionary<Target, Dictionary<string, List<DamageModifierData>>>();
+            _presentDamageModifiers = new HashSet<string>();
             DamageModifier.ModifierSource src = DamageModifier.ProfToEnum(Prof);
             List<DamageModifier> damageMods = new List<DamageModifier>(DamageModifier.DamageModifiersPerSource[DamageModifier.ModifierSource.ItemBuff]);
             damageMods.AddRange(DamageModifier.DamageModifiersPerSource[DamageModifier.ModifierSource.CommonBuff]);
@@ -702,6 +713,11 @@ namespace LuckParser.Models.ParseModels
             foreach (DamageModifier mod in damageMods)
             {
                 mod.ComputeDamageModifier(_damageModifiers, _damageModifiersTargets, this, log);
+            }
+            _presentDamageModifiers.UnionWith(_damageModifiers.Keys);
+            foreach (Target tar in _damageModifiersTargets.Keys)
+            {
+                _presentDamageModifiers.UnionWith(_damageModifiersTargets[tar].Keys);
             }
         }
 
