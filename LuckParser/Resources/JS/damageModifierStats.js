@@ -15,12 +15,22 @@ var compileDamageModifiers = function () {
             phase: function () {
                 return logData.phases[this.phaseindex];
             },
-            modifiers: function () {
-                var buffs = [];
-                return buffs;
+            commonModifiers: function () {
+                var modifiers = [];
+                for (var i = 0; i < logData.dmgCommonModifiersCommon.length; i++) {
+                    modifiers.push(damageModMap['d' + logData.dmgCommonModifiersCommon[i]]);
+                }
+                return modifiers;
+            },
+            itemModifiers: function () {
+                var modifiers = [];
+                for (var i = 0; i < logData.dmgCommonModifiersItem.length; i++) {
+                    modifiers.push(damageModMap['d' + logData.dmgCommonModifiersItem[i]]);
+                }
+                return modifiers;
             }
         }
-    };
+    });
 
     Vue.component("dmgmodifier-table-component", {
         props: ['phaseindex', 'id', 'playerindex', 'activetargets', 'modifiers', 'modifiersdata', 'mode'
@@ -56,10 +66,10 @@ var compileDamageModifiers = function () {
                             data: []
                         };
                     }
-                    var dmgModifier = this.phase.dmgModifiersCommon[i];
+                    var dmgModifier = this.modifiersdata[i].data;
                     var data = [];
                     for (j = 0; j < this.modifiers.length; j++) {
-                        data[j] = dmgModifier[j].slice(0);
+                        data[j] = dmgModifier[j];
                         if (!groups[player.group].data[j]) {
                             groups[player.group].data[j] = [0, 0, 0, 0];
                         }
@@ -124,11 +134,11 @@ var compileDamageModifiers = function () {
                             total.data[j] = [0, 0, 0, 0];
                         }
                     }
-                    var dmgModifier = this.phase.dmgModifiersTargetsCommon[i];
+                    var dmgModifier = this.modifiersdata[i].dataTarget;
                     for (j = 0; j < this.activetargets.length; j++) {
                         var modifier = dmgModifier[this.activetargets[j]];
                         for (var k = 0; k < this.modifiers.length; k++) {
-                            var targetData = modifier[k].slice(0);
+                            var targetData = modifier[k];
                             var curData = data[k];
                             for (var l = 0; l < targetData.length; l++) {
                                 curData[l] += targetData[l];
@@ -162,6 +172,9 @@ var compileDamageModifiers = function () {
         },
         methods: {
             getTooltip: function (item) {
+                if (item[0] === 0) {
+                    return null;
+                }
                 var hits = item[0] + " out of " + item[1] + " hits";
                 if (item[3] > 0) {
                     var gain = "Pure Damage: " + item[2];
@@ -175,7 +188,7 @@ var compileDamageModifiers = function () {
             },
             getCellValue: function (item) {
                 var res = Math.round(100 * 100 * item[0] / Math.max(item[1], 1)) / 100;
-                return isNaN(res) ? 0 : res;
+                return res === 0 ? '-' : (isNaN(res) ? 0 : res) + '%';
             }
         },
         mounted() {
