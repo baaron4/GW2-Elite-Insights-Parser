@@ -165,8 +165,6 @@ namespace LuckParser.Models.ParseModels
                         52370
                     };
             // (x - 1) / x
-            double fiveGain = 0.05 / 1.05;
-            double tenGain = 0.1 / 1.1;
             foreach (DamageLog dl in dls)
             {
                 if (!dl.IsIndirectDamage)
