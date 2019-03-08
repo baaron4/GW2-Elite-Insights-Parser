@@ -112,36 +112,5 @@ namespace LuckParser.Models.HtmlModels
                 }
             }
         }
-
-        public static List<object[]> GetDamageModifierData(List<long> boonToUse, Dictionary<string, List<Statistics.DamageModifierData>> extraBoonData, int phaseIndex)
-        {
-            List<object[]> data = new List<object[]>();
-            /*foreach (long id in boonToUse)
-            {
-                string name = Dama.BoonsByIds[id].Name;
-                if (extraBoonData.TryGetValue(name, out var extraDataList))
-                {
-                    var extraData = extraDataList[phaseIndex];
-                    data.Add(new object[]
-                                {
-                                    extraData.HitCount,
-                                    extraData.TotalHitCount,
-                                    extraData.DamageGain,
-                                    extraData.Multiplier ? extraData.TotalDamage : 0
-                                });
-                }
-                else
-                {
-                    data.Add(new object[]
-                                {
-                                    0,
-                                    0,
-                                    0,
-                                    0
-                                });
-                }
-            }*/
-            return data;
-        }
     }
 }

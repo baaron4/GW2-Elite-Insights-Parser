@@ -45,8 +45,9 @@ namespace LuckParser.Models.HtmlModels
 
         public List<BoonData> PersBuffStats;
 
-        public List<List<object[]>> DmgModifiersCommon = new List<List<object[]>>();
-        public List<List<List<object[]>>> DmgModifiersTargetsCommon = new List<List<List<object[]>>>();
+        public List<DamageModData> DmgModifiersCommon;
+        public List<DamageModData> DmgModifiersItem;
+        public List<DamageModData> DmgModifiersPers;
 
         public List<List<BoonData>> TargetsCondiStats;
         public List<BoonData> TargetsCondiTotals;
