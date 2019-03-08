@@ -1,0 +1,23 @@
+<div>
+    <ul class="nav nav-tabs">
+        <li>
+            <a class="nav-link" :class="{active: displayMode === 0}" @click="displayMode = 0"> Gear Based Damage Modifiers </a>
+        </li>
+        <li>
+            <a class="nav-link" :class="{active: displayMode === 1}" @click="displayMode = 1"> Shared Damage Modifiers </a>
+        </li>
+        <li>
+            <a class="nav-link" :class="{active: displayMode === 2}" @click="displayMode = 2"> Class Based Damage Modifiers </a>
+        </li>
+    </ul>
+    <div class="d-flex flex-row justify-content-center mt-1 mb-1">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link" @click="mode = 1" :class="{active: mode}">Target</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" @click="mode = 0" :class="{active: !mode }">All</a>
+            </li>
+        </ul>
+    </div>
+</div>

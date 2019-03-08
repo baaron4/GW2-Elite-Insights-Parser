@@ -49,6 +49,7 @@ window.onload = function () {
     compileCommons();
     compileHeader();
     compileGeneralStats();
+    compileDamageModifiers();
     compileBuffStats();
     compileMechanics();
     compileGraphs();
