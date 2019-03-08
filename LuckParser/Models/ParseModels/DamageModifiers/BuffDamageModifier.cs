@@ -46,9 +46,10 @@ namespace LuckParser.Models.ParseModels
         {
             if (DLChecker != null && !DLChecker(dl))
             {
-                return 0.0;
+                return -1.0;
             }
-            return GainComputer.ComputeGain(GainPerStack, stack);
+            double gain = GainComputer.ComputeGain(GainPerStack, stack);
+            return gain > 0.0 ? gain * dl.Damage : -1.0;
         }
 
         public override void ComputeDamageModifier(Dictionary<string, List<DamageModifierData>> data, Dictionary<Target, Dictionary<string, List<DamageModifierData>>> dataTarget, Player p, ParsedLog log)
@@ -73,7 +74,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         int totalDamage = GetTotalDamage(p, log, target, phases[i]);
                         List<DamageLog> typeHits = GetDamageLogs(p, log, target, phases[i]);
-                        List<double> damages = typeHits.Select(x => ComputeGain(BuffsChecker.GetStack(bgms, x.Time), x) * x.Damage).ToList();
+                        List<double> damages = typeHits.Select(x => ComputeGain(BuffsChecker.GetStack(bgms, x.Time), x)).Where(x => x != -1.0).ToList();
                         extraDataList.Add(new DamageModifierData(damages.Count, typeHits.Count, (int)Math.Round(damages.Sum()), totalDamage));
                     }
                     dict[Name] = extraDataList;
@@ -84,7 +85,7 @@ namespace LuckParser.Models.ParseModels
             {
                 int totalDamage = GetTotalDamage(p, log, null, phases[i]);
                 List<DamageLog> typeHits = GetDamageLogs(p, log, null, phases[i]);
-                List<double> damages = typeHits.Select(x => ComputeGain(BuffsChecker.GetStack(bgms, x.Time), x) * x.Damage).ToList();
+                List<double> damages = typeHits.Select(x => ComputeGain(BuffsChecker.GetStack(bgms, x.Time), x)).Where(x => x != -1.0).ToList();
                 data[Name].Add(new DamageModifierData(damages.Count, typeHits.Count, (int)Math.Round(damages.Sum()), totalDamage));
             }
         }
