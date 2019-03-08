@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using LuckParser.Parser;
 using Newtonsoft.Json;
-using NUglify;
 using LuckParser.Setting;
 using Newtonsoft.Json.Serialization;
 
@@ -110,9 +109,6 @@ namespace LuckParser.Builders
             
             string script = "var initialOnLoad = window.onload;";
             script += "window.onload = function () { if (initialOnLoad) {initialOnLoad();} animator = new Animator(" + JsonConvert.SerializeObject(options, settings) + "); animator.initActors(" + JsonConvert.SerializeObject(actors, settings) + ");};";
-#if !DEBUG
-            script = Uglify.Js(script, GeneralHelper.JSMinifySettings).Code;
-#endif
             return script;
         }
 
@@ -120,11 +116,9 @@ namespace LuckParser.Builders
         {
             string script = "";
             script += "<script>";
-#if DEBUG
+
             script += Properties.Resources.combatreplay_js;
-#else          
-            script += Uglify.Js(Properties.Resources.combatreplay_js, GeneralHelper.JSMinifySettings).Code;
-#endif
+
             script += "</script>";
 
             script += "<script>";

@@ -57,13 +57,6 @@ namespace LuckParser
             }
         }
 
-#if !DEBUG
-        public static readonly NUglify.JavaScript.CodeSettings JSMinifySettings = new NUglify.JavaScript.CodeSettings()
-        {
-            LocalRenaming = NUglify.JavaScript.LocalRenaming.KeepAll
-        };
-#endif
-
         private readonly static HashSet<string> _compressedFiles = new HashSet<string>()
         {
             ".zevtc",

@@ -248,7 +248,7 @@ namespace LuckParser.Builders
                     GroupBuffs = BuildPlayerBuffGenerations(player.GetBuffs(_log, Statistics.BuffEnum.Group), player),
                     OffGroupBuffs = BuildPlayerBuffGenerations(player.GetBuffs(_log, Statistics.BuffEnum.OffGroup), player),
                     SquadBuffs = BuildPlayerBuffGenerations(player.GetBuffs(_log, Statistics.BuffEnum.Squad), player),
-                    DamageModifiers = BuildDamageModifiers(player.GetExtraBoonData(_log, null)),
+                    DamageModifiers = BuildDamageModifiers(player.GetDamageModifierData(_log, null)),
                     DamageModifiersTarget = BuildDamageModifiersTarget(player),
                     Minions = BuildMinions(player),
                     TotalDamageDist = BuildDamageDist(player, null),
@@ -324,7 +324,7 @@ namespace LuckParser.Builders
             return res;
         }
 
-        private List<JsonBuffDamageModifierData> BuildDamageModifiers(Dictionary<long, List<Statistics.ExtraBoonData>> extra)
+        private List<JsonBuffDamageModifierData> BuildDamageModifiers(Dictionary<long, List<Statistics.DamageModifierData>> extra)
         {
             Dictionary<long, List<JsonBuffDamageModifierItem>> dict = new Dictionary<long, List<JsonBuffDamageModifierItem>>();
             foreach (long key in extra.Keys)
@@ -354,7 +354,7 @@ namespace LuckParser.Builders
             for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
             {
                 Target tar = _log.FightData.Logic.Targets[i];
-                res[i] = BuildDamageModifiers(p.GetExtraBoonData(_log, tar));
+                res[i] = BuildDamageModifiers(p.GetDamageModifierData(_log, tar));
             }
             return res;
         }

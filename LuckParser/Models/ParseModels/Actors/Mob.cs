@@ -49,5 +49,9 @@ namespace LuckParser.Models.ParseModels
 
             return aux;
         }
+
+        protected override void SetDamageModifiersData(ParsedLog log)
+        {
+        }
     }
 }
