@@ -18,8 +18,8 @@ namespace LuckParser.Models.ParseModels
        
         private List<Consumable> _consumeList;
         private List<DeathRecap> _deathRecaps;
-        private readonly Dictionary<string, List<DamageModifierData>> _damageModifiers = new Dictionary<string, List<DamageModifierData>>();
-        private readonly Dictionary<Target, Dictionary<string, List<DamageModifierData>>> _damageModifiersTargets = new Dictionary<Target, Dictionary<string, List<DamageModifierData>>>();
+        private Dictionary<string, List<DamageModifierData>> _damageModifiers; 
+        private Dictionary<Target, Dictionary<string, List<DamageModifierData>>> _damageModifiersTargets; 
         // statistics
         private Dictionary<Target, List<FinalDPS>> _dpsTarget;
         private Dictionary<Target, List<FinalStats>> _statsTarget;
@@ -713,9 +713,9 @@ namespace LuckParser.Models.ParseModels
 
         public Dictionary<string, List<DamageModifierData>> GetDamageModifierData(ParsedLog log, Target target)
         {
-            if (BoonPoints == null)
+            if (_damageModifiers == null)
             {
-                SetBoonStatus(log);
+                SetDamageModifiersData(log);
             }
             if (target != null)
             {
@@ -733,8 +733,10 @@ namespace LuckParser.Models.ParseModels
 
         // Private Methods
 
-        protected override void SetDamageModifiersData(ParsedLog log)
+        private void SetDamageModifiersData(ParsedLog log)
         {
+            _damageModifiers = new Dictionary<string, List<DamageModifierData>>();
+            _damageModifiersTargets = new Dictionary<Target, Dictionary<string, List<DamageModifierData>>>();
             DamageModifier.ModifierSource src = DamageModifier.ProfToEnum(Prof);
             List<DamageModifier> damageMods = new List<DamageModifier>(DamageModifier.DamageModifiersPerSource[DamageModifier.ModifierSource.ItemBuff]);
             damageMods.AddRange(DamageModifier.DamageModifiersPerSource[DamageModifier.ModifierSource.CommonBuff]);

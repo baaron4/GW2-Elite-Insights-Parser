@@ -272,10 +272,6 @@ namespace LuckParser.Models.ParseModels
             return aux;
         }
 
-        protected override void SetDamageModifiersData(ParsedLog log)
-        {
-        }
-
         /*protected override void setHealingLogs(ParsedLog log)
         {
             // nothing to do

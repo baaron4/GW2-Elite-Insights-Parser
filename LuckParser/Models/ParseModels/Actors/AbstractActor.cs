@@ -337,7 +337,6 @@ namespace LuckParser.Models.ParseModels
 
         protected abstract void SetDamageLogs(ParsedLog log);
         protected abstract void SetBoonStatusCleanseWasteData(ParsedLog log, BoonSimulator simulator, long boonid, bool updateCondiPresence);
-        protected abstract void SetDamageModifiersData(ParsedLog log);
         protected abstract void SetBoonStatusGenerationData(ParsedLog log, BoonSimulationItem simul, long boonid, bool updateBoonPresence, bool updateCondiPresence);
         protected abstract void InitBoonStatusData(ParsedLog log);
 
@@ -460,7 +459,6 @@ namespace LuckParser.Models.ParseModels
             }
             BoonPoints[Boon.NumberOfBoonsID] = boonPresenceGraph;
             BoonPoints[Boon.NumberOfConditionsID] = condiPresenceGraph;
-            SetDamageModifiersData(log);
         }
         //protected abstract void setHealingLogs(ParsedLog log);
         //protected abstract void setHealingReceivedLogs(ParsedLog log);
