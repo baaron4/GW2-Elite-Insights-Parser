@@ -818,6 +818,7 @@ namespace LuckParser.Builders
         private string BuildCss(string path)
         {
             string scriptContent = Properties.Resources.ei_css;
+
             if (Properties.Settings.Default.HtmlExternalScripts)
             {
 #if DEBUG
