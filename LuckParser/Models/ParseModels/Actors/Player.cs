@@ -183,27 +183,8 @@ namespace LuckParser.Models.ParseModels
                                 targetFinal.CriticalDmg += dl.Damage;
                             }
 
-                            if (dl.IsNinety)
-                            {
-                                targetFinal.ScholarRate++;
-                                targetFinal.ScholarDmg += (int)Math.Round(fiveGain * dl.Damage);
-                            }
-
-                            if (dl.IsFifty)
-                            {
-                                targetFinal.EagleRate++;
-                                targetFinal.EagleDmg += (int)Math.Round(tenGain * dl.Damage);
-                            }
-
-                            if (dl.IsMoving)
-                            {
-                                targetFinal.MovingRate++;
-                                targetFinal.MovingDamage += (int)Math.Round(fiveGain * dl.Damage);
-                            }
-
                             if (dl.IsFlanking)
                             {
-                                targetFinal.FlankingDmg += (int)Math.Round(tenGain * dl.Damage);
                                 targetFinal.FlankingRate++;
                             }
 
@@ -226,7 +207,6 @@ namespace LuckParser.Models.ParseModels
                                 targetFinal.Invulned++;
                             }
                             targetFinal.DirectDamageCount++;
-                            targetFinal.DirectDamage += dl.Damage;
                             if (!nonCritable.Contains(dl.SkillId))
                             {
                                 targetFinal.CritableDirectDamageCount++;
@@ -239,27 +219,8 @@ namespace LuckParser.Models.ParseModels
                         final.CriticalDmg += dl.Damage;
                     }
 
-                    if (dl.IsNinety)
-                    {
-                        final.ScholarRate++;
-                        final.ScholarDmg += (int)Math.Round(fiveGain * dl.Damage);
-                    }
-
-                    if (dl.IsFifty)
-                    {
-                        final.EagleRate++;
-                        final.EagleDmg += (int)Math.Round(tenGain * dl.Damage);
-                    }
-
-                    if (dl.IsMoving)
-                    {
-                        final.MovingRate++;
-                        final.MovingDamage += (int)Math.Round(fiveGain * dl.Damage);
-                    }
-
                     if (dl.IsFlanking)
                     {
-                        final.FlankingDmg += (int)Math.Round(tenGain * dl.Damage);
                         final.FlankingRate++;
                     }
 
@@ -282,7 +243,6 @@ namespace LuckParser.Models.ParseModels
                         final.Invulned++;
                     }
                     final.DirectDamageCount++;
-                    final.DirectDamage += dl.Damage;
                     if (!nonCritable.Contains(dl.SkillId))
                     {
                         final.CritableDirectDamageCount++;

@@ -15,14 +15,6 @@ namespace LuckParser.Models.ParseModels
 
         public const long NumberOfConditionsID = -3;
         public const long NumberOfBoonsID = -2;
-        public const long ScholarRune = -4;
-        public const long EagleRune = -5;
-        public const long MovingBuff = -6;
-        public const long ThiefRune = -7;
-        public const long UnderFifty = -8;
-        public const long AboveFifty = -9;
-        public const long AboveNinety = -10;
-        public const long UnderNinety = -11;
 
         public static BoonSource ProfToEnum(string prof)
         {
