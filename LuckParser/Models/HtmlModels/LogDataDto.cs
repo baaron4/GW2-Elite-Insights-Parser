@@ -8,13 +8,13 @@ namespace LuckParser.Models.HtmlModels
         public readonly List<PlayerDto> Players = new List<PlayerDto>();
         public readonly List<EnemyDto> Enemies = new List<EnemyDto>();
         public readonly List<PhaseDto> Phases = new List<PhaseDto>();
-        public List<long> Boons;
-        public List<long> OffBuffs;
-        public List<long> DefBuffs;
+        public readonly List<long> Boons = new List<long>();
+        public readonly List<long> OffBuffs = new List<long>();
+        public readonly List<long> DefBuffs = new List<long>();
         public List<long> DmgCommonModifiersBuffs;
-        public Dictionary<string, List<long>> PersBuffs;
+        public readonly Dictionary<string, List<long>> PersBuffs = new Dictionary<string, List<long>>();
         
-        public List<long> Conditions;
+        public readonly List<long> Conditions = new List<long>();
         public string EncounterDuration;
         public bool Success;
         public string FightName;

@@ -68,9 +68,6 @@ namespace LuckParser.Models.JsonModels
                 Generated = ConvertKeys(stats.Generated);
                 Overstacked = ConvertKeys(stats.Overstacked);
                 Wasted = ConvertKeys(stats.Wasted);
-                UnknownExtended = ConvertKeys(stats.UnknownExtension);
-                ByExtension = ConvertKeys(stats.Extension);
-                Extended = ConvertKeys(stats.Extended);
             }
         }
 
