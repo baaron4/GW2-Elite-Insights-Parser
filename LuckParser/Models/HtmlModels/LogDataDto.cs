@@ -17,6 +17,7 @@ namespace LuckParser.Models.HtmlModels
         public readonly List<long> Conditions = new List<long>();
         public string EncounterDuration;
         public bool Success;
+        public bool NoTarget;
         public string FightName;
         public string FightIcon;
         public bool LightTheme;

@@ -93,7 +93,7 @@
                     <phase-component :phases="logdata.phases"></phase-component>
                 </div>
                 <div class="d-flex flex-row justify-content-center mb-3 mt-3" id="actors">
-                    <div v-show="dataType !== datatypes.targetTab" :class="{'d-flex':dataType !== datatypes.targetTab}"
+                    <div v-if="!noTarget" v-show="dataType !== datatypes.targetTab" :class="{'d-flex':dataType !== datatypes.targetTab}"
                          id="targets" class="flex-row justify-content-center align-items-center flex-wrap mr-5">
                         <target-component :targets="logdata.targets" :phaseindex="activePhase"></target-component>
                     </div>
