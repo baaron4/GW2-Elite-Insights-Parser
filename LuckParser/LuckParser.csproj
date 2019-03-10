@@ -95,6 +95,7 @@
     <Compile Include="Controllers\FlashWindow.cs" />
     <Compile Include="Models\FightLogic\River.cs" />
     <Compile Include="Models\FightLogic\Escort.cs" />
+    <Compile Include="Models\FightLogic\WvWFight.cs" />
     <Compile Include="Models\FightLogic\UnknownFightLogic.cs" />
     <Compile Include="Models\FightLogic\BanditTrio.cs" />
     <Compile Include="Models\FightLogic\Freezie.cs" />
