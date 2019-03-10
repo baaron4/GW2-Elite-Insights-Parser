@@ -114,6 +114,9 @@ namespace LuckParser.Models.ParseModels
                 case ParseEnum.TargetIDS.Arkk:
                     Logic = new Arkk(id);
                     break;
+                case ParseEnum.TargetIDS.WorldVersusWorld:
+                    Logic = new WvWFight(id);
+                    break;
                 case ParseEnum.TargetIDS.MassiveGolem:
                 case ParseEnum.TargetIDS.AvgGolem:
                 case ParseEnum.TargetIDS.LGolem:

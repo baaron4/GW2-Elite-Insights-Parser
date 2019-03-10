@@ -342,6 +342,8 @@ namespace LuckParser
         {
             switch (ParseEnum.GetTargetIDS(id))
             {
+                case ParseEnum.TargetIDS.WorldVersusWorld:
+                    return "https://wiki.guildwars2.com/images/3/35/WvW_Rank_up.png";
                 case ParseEnum.TargetIDS.ValeGuardian:
                     return "https://i.imgur.com/MIpP5pK.png";
                 case ParseEnum.TargetIDS.Gorseval:

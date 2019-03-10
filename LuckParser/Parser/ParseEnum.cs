@@ -300,6 +300,7 @@ namespace LuckParser.Parser
 
         public enum TargetIDS : ushort
         {
+            WorldVersusWorld        = 1,
             ValeGuardian            = 15438,
             Gorseval                = 15429,
             Sabetha                 = 15375,
