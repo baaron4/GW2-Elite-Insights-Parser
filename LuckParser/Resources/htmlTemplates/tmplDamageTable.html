@@ -6,9 +6,9 @@
                 <th></th>
                 <th class="text-left">Name</th>
                 <th>Account</th>
-                <th>Target DPS</th>
-                <th>Power</th>
-                <th>Condi</th>
+                <th v-if="!noTarget">Target DPS</th>
+                <th v-if="!noTarget">Power</th>
+                <th v-if="!noTarget">Condi</th>
                 <th>All DPS</th>
                 <th>Power</th>
                 <th>Condi</th>
@@ -22,9 +22,9 @@
                 </td>
                 <td class="text-left">{{row.player.name}}</td>
                 <td>{{row.player.acc}}</td>
-                <td :data-original-title="row.dps[0] + ' dmg'">{{row.dps[1]}}</td>
-                <td :data-original-title="row.dps[2] + ' dmg'">{{row.dps[3]}}</td>
-                <td :data-original-title="row.dps[4] + ' dmg'">{{row.dps[5]}}</td>
+                <td v-if="!noTarget" :data-original-title="row.dps[0] + ' dmg'">{{row.dps[1]}}</td>
+                <td v-if="!noTarget" :data-original-title="row.dps[2] + ' dmg'">{{row.dps[3]}}</td>
+                <td v-if="!noTarget" :data-original-title="row.dps[4] + ' dmg'">{{row.dps[5]}}</td>
                 <td :data-original-title="row.dps[6] + ' dmg'">{{row.dps[7]}}</td>
                 <td :data-original-title="row.dps[8] + ' dmg'">{{row.dps[9]}}</td>
                 <td :data-original-title="row.dps[10] + ' dmg'">{{row.dps[11]}}</td>
@@ -36,9 +36,9 @@
                 <td></td>
                 <td class="text-left">{{sum.name}}</td>
                 <td></td>
-                <td :data-original-title="sum.dps[0] + ' dmg'">{{sum.dps[1]}}</td>
-                <td :data-original-title="sum.dps[2] + ' dmg'">{{sum.dps[3]}}</td>
-                <td :data-original-title="sum.dps[4] + ' dmg'">{{sum.dps[5]}}</td>
+                <td v-if="!noTarget" :data-original-title="sum.dps[0] + ' dmg'">{{sum.dps[1]}}</td>
+                <td v-if="!noTarget" :data-original-title="sum.dps[2] + ' dmg'">{{sum.dps[3]}}</td>
+                <td v-if="!noTarget" :data-original-title="sum.dps[4] + ' dmg'">{{sum.dps[5]}}</td>
                 <td :data-original-title="sum.dps[6] + ' dmg'">{{sum.dps[7]}}</td>
                 <td :data-original-title="sum.dps[8] + ' dmg'">{{sum.dps[9]}}</td>
                 <td :data-original-title="sum.dps[10] + ' dmg'">{{sum.dps[11]}}</td>
