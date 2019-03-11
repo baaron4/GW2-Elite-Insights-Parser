@@ -23,8 +23,8 @@
     <keep-alive>
         <dmgmodifier-table-component v-if="displayMode === 0" :key="'gear'" 
                                      :phaseindex="phaseindex" :playerindex="playerindex" :activetargets="activetargets"
-                                     :mode="mode" :id="'damage-modifier-item-table'" :modifiers="itemModifiers" :modifiersdata="phase.dmgModifiersItem"></dmgmodifier-table-component>
+                                     :mode="mode" :id="'damage-modifier-item-table'" :modifiers="itemModifiers" :modifiersdata="phase.dmgModifiersItem" :sum="true"></dmgmodifier-table-component>
         <dmgmodifier-table-component v-if="displayMode === 1" :key="'common'" :phaseindex="phaseindex" :playerindex="playerindex" :activetargets="activetargets"
-                                     :mode="mode" :id="'damage-modifier-common-table'" :modifiers="commonModifiers" :modifiersdata="phase.dmgModifiersCommon"></dmgmodifier-table-component>
+                                     :mode="mode" :id="'damage-modifier-common-table'" :modifiers="commonModifiers" :modifiersdata="phase.dmgModifiersCommon" :sum="true"></dmgmodifier-table-component>
     </keep-alive>
 </div>

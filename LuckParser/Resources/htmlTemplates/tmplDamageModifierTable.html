@@ -22,7 +22,7 @@
                 </td>
             </tr>
         </tbody>
-        <tfoot>
+        <tfoot v-if="sum">
             <tr v-for="row in (mode ? tableDataTarget.sums : tableData.sums)">
                 <td></td>
                 <td></td>

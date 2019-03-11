@@ -34,7 +34,7 @@ var compileDamageModifiers = function () {
     });
 
     Vue.component("dmgmodifier-table-component", {
-        props: ['phaseindex', 'id', 'playerindex', 'activetargets', 'modifiers', 'modifiersdata', 'mode'
+        props: ['phaseindex', 'id', 'playerindex', 'activetargets', 'modifiers', 'modifiersdata', 'mode', 'sum'
         ],
         template: `${tmplDamageModifierTable}`,
         data: function () {
