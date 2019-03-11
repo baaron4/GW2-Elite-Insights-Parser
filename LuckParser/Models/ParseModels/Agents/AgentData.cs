@@ -37,8 +37,8 @@ namespace LuckParser.Models.ParseModels
             AgentItem agent = new AgentItem(agentValue, name, prof, ID, type, 0, 0, 0, 0, 20, 20)
             {
                 InstID = instID,
-                LastAware = start,
-                FirstAware = end,
+                LastAware = end,
+                FirstAware = start,
                 MasterAgent = 0
             };
             _allAgentsList.Add(agent);
