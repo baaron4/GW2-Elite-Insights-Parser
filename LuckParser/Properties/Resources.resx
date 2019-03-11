@@ -187,6 +187,9 @@
    <data name="tmplDamageModifierStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
       <value>..\Resources\htmlTemplates\tmplDamageModifierStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
    </data>
+   <data name="tmplDamageModifierPersStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
+      <value>..\Resources\htmlTemplates\tmplDamageModifierPersStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+   </data>
    <data name="tmplDamageTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
       <value>..\Resources\htmlTemplates\tmplDamageTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
    </data>

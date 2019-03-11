@@ -9,10 +9,7 @@ var compileDamageModifiers = function () {
             return {
                 noTarget: !!logData.noTarget,
                 mode: logData.noTarget ? 0 : 1,
-                displayMode: 0,
-                bases: [],
-                specmode: "Warrior",
-                specToBase: specToBase
+                displayMode: 0
             };
         },
         computed: {
@@ -32,6 +29,24 @@ var compileDamageModifiers = function () {
                     modifiers.push(damageModMap['d' + logData.dmgCommonModifiersItem[i]]);
                 }
                 return modifiers;
+            }
+        }
+    });
+
+    Vue.component("dmgmodifier-persstats-component", {
+        props: ['phaseindex', 'playerindex', 'activetargets', 'mode'
+        ],
+        template: `${tmplDamageModifierPersStats}`,
+        data: function () {
+            return {
+                bases: [],
+                specmode: "Warrior",
+                specToBase: specToBase
+            };
+        },
+        computed: {
+            phase: function () {
+                return logData.phases[this.phaseindex];
             },
             orderedSpecs: function () {
                 var res = [];

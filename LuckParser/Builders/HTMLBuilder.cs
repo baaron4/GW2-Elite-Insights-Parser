@@ -794,6 +794,7 @@ namespace LuckParser.Builders
                 {"${tmplDamageDistTarget}",Properties.Resources.tmplDamageDistTarget },
                 {"${tmplDamageModifierTable}",Properties.Resources.tmplDamageModifierTable },
                 {"${tmplDamageModifierStats}",Properties.Resources.tmplDamageModifierStats },
+                {"${tmplDamageModifierPersStats}",Properties.Resources.tmplDamageModifierPersStats },
                 {"${tmplDamageTable}",Properties.Resources.tmplDamageTable },
                 {"${tmplDamageTaken}",Properties.Resources.tmplDamageTaken },
                 {"${tmplDeathRecap}",Properties.Resources.tmplDeathRecap },

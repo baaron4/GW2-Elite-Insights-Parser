@@ -69,9 +69,15 @@ namespace LuckParser.Properties {
         ///        template: `${tmplPersonalBuffTable}`,
         ///        data: function () {
         ///            return {
-        ///                specs: [
-        ///                    &quot;Warrior&quot;, &quot;Berserker&quot;, &quot;Spellbreaker&quot;, &quot;Revenant&quot;, &quot;Herald&quot;, &quot;Renegade&quot;, &quot;Guardian&quot;, &quot;Dragonhunter&quot;, &quot;Firebrand&quot;,
-        ///                    &quot;Ranger&quot;, &quot;Druid&quot;, &quot;Soulbeast&quot;, &quot;Engineer&quot;, &quot;Scrapper&quot;, &quot;Holosmit [rest of string was truncated]&quot;;.
+        ///                bases: [],
+        ///                mode: &quot;Warrior&quot;,
+        ///                cache: new Map(),
+        ///                specToBase: specToBase
+        ///            };
+        ///        },
+        ///        computed: {
+        ///            phase: function() {
+        ///                return logDa [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string buffStatsJS {
             get {
@@ -171,14 +177,14 @@ namespace LuckParser.Properties {
         ///        template: `${tmplDamageModifierStats}`,
         ///        data: function () {
         ///            return {
-        ///                mode: 0,
+        ///                noTarget: !!logData.noTarget,
+        ///                mode: logData.noTarget ? 0 : 1,
         ///                displayMode: 0
         ///            };
         ///        },
         ///        computed: {
         ///            phase: function () {
-        ///                return logData.phases[this.phaseindex];
-        ///            },        /// [rest of string was truncated]&quot;;.
+        ///   [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string damageModifierStatsJS {
             get {
@@ -260,6 +266,7 @@ namespace LuckParser.Properties {
         ///        template: `${tmplDamageTable}`,
         ///        data: function () {
         ///            return {
+        ///                noTarget: !!logData.noTarget,
         ///                cacheTarget: new Map()
         ///            };
         ///        },
@@ -267,9 +274,7 @@ namespace LuckParser.Properties {
         ///            initTable(&quot;#dps-table&quot;, 4, &quot;desc&quot;);
         ///        },
         ///        updated() {
-        ///            updateTable(&quot;#dps-table&quot;);
-        ///        },
-        ///        computed: [rest of string was truncated]&quot;;.
+        ///            updateTabl [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string generalStatsJS {
             get {
@@ -279,6 +284,7 @@ namespace LuckParser.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to /*jshint esversion: 6 */
+        ///&quot;use strict&quot;;
         ///$.extend($.fn.dataTable.defaults, {
         ///    searching: false,
         ///    ordering: true,
@@ -293,7 +299,7 @@ namespace LuckParser.Properties {
         ///    Object.defineProperty(String.prototype, &quot;includes&quot;, {
         ///        value: function (search, start) {
         ///            if (typeof start !== &apos;number&apos;) {
-        ///                start = 0;        /// [rest of string was truncated]&quot;;.
+        ///             [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string globalJS {
             get {
@@ -310,17 +316,15 @@ namespace LuckParser.Properties {
         ///        template: `${tmplGraphStats}`,
         ///        data: function () {
         ///            return {
-        ///                mode: 1
+        ///                noTarget: !!logData.noTarget,
+        ///                mode: logData.noTarget ? 0 : 1
         ///            };
         ///        },
         ///        computed: {
         ///            phases: function() {
         ///                return logData.phases;
         ///            }
-        ///        }
-        ///    });
-        ///    Vue.component(&quot;dps-graph-component&quot;, {
-        ///        prop [rest of string was truncated]&quot;;.
+        ///       [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string graphsJS {
             get {
@@ -419,13 +423,11 @@ namespace LuckParser.Properties {
         ///        data: function () {
         ///            return {
         ///                distmode: -1,
-        ///                targetmode: 1,
+        ///                noTarget: !!logData.noTarget,
+        ///                targetmode: logData.noTarget ? 0 : 1,
         ///                cacheTarget: new Map()
         ///            };
-        ///        },
-        ///        computed: {
-        ///            phase: function() {
-        ///         [rest of string was truncated]&quot;;.
+        ///     [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string playerStatsJS {
             get {
@@ -763,6 +765,25 @@ namespace LuckParser.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mt-2 mb-2&quot;&gt;
+        ///        &lt;li v-for=&quot;base in bases&quot; class=&quot;nav-item&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; @click=&quot;specmode = base&quot; :class=&quot;{active: specmode === base}&quot;&gt;{{ base }}&lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///    &lt;/ul&gt;
+        ///    &lt;div v-show=&quot;displayMode === 2&quot;&gt;
+        ///        &lt;div v-for=&quot;(spec, index) in orderedSpecs&quot; class=&quot;mt-3 mb-3&quot;&gt;
+        ///            &lt;div v-show=&quot;specToBase[spec.name] === specmode&quot;&gt;
+        ///                &lt;h3 class=&quot;text-center&quot;&gt;{{ spec.name }}&lt;/h3&gt;
+        ///  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplDamageModifierPersStats {
+            get {
+                return ResourceManager.GetString("tmplDamageModifierPersStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
         ///    &lt;ul class=&quot;nav nav-tabs&quot;&gt;
         ///        &lt;li&gt;
         ///            &lt;a class=&quot;nav-link&quot; :class=&quot;{active: displayMode === 0}&quot; @click=&quot;displayMode = 0&quot;&gt; Gear Based Damage Modifiers &lt;/a&gt;
@@ -789,12 +810,13 @@ namespace LuckParser.Properties {
         ///                &lt;th&gt;Sub&lt;/th&gt;
         ///                &lt;th&gt;&lt;/th&gt;
         ///                &lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
-        ///                &lt;th&gt;Account&lt;/th&gt;
         ///                &lt;th v-for=&quot;modifier in modifiers&quot; :data-original-title=&quot;modifier.name&quot;&gt;
         ///                    &lt;img :src=&quot;modifier.icon&quot; :alt=&quot;modifier.name&quot; class=&quot;icon icon-hover&quot;&gt;
         ///                &lt;/th&gt;
         ///            &lt;/tr&gt;
-        ///       [rest of string was truncated]&quot;;.
+        ///        &lt;/thead&gt;
+        ///        &lt;tbody&gt;
+        ///      [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplDamageModifierTable {
             get {
@@ -811,13 +833,11 @@ namespace LuckParser.Properties {
         ///                &lt;th&gt;&lt;/th&gt;
         ///                &lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
         ///                &lt;th&gt;Account&lt;/th&gt;
-        ///                &lt;th&gt;Target DPS&lt;/th&gt;
-        ///                &lt;th&gt;Power&lt;/th&gt;
-        ///                &lt;th&gt;Condi&lt;/th&gt;
+        ///                &lt;th v-if=&quot;!noTarget&quot;&gt;Target DPS&lt;/th&gt;
+        ///                &lt;th v-if=&quot;!noTarget&quot;&gt;Power&lt;/th&gt;
+        ///                &lt;th v-if=&quot;!noTarget&quot;&gt;Condi&lt;/th&gt;
         ///                &lt;th&gt;All DPS&lt;/th&gt;
         ///                &lt;th&gt;Power&lt;/th&gt;
-        ///                &lt;th&gt;Condi&lt;/th&gt;
-        ///            &lt;/tr&gt;
         ///       [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplDamageTable {
@@ -939,7 +959,7 @@ namespace LuckParser.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;div&gt;
         ///    &lt;div class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;
-        ///        &lt;ul class=&quot;nav nav-pills&quot;&gt;
+        ///        &lt;ul v-if=&quot;!noTarget&quot; class=&quot;nav nav-pills&quot;&gt;
         ///            &lt;li class=&quot;nav-item&quot;&gt;
         ///                &lt;a class=&quot;nav-link&quot; @click=&quot;mode = 1&quot; :class=&quot;{active: mode}&quot;&gt;Target&lt;/a&gt;
         ///            &lt;/li&gt;
@@ -948,7 +968,7 @@ namespace LuckParser.Properties {
         ///            &lt;/li&gt;
         ///        &lt;/ul&gt;
         ///    &lt;/div&gt;
-        ///    &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100% [rest of string was truncated]&quot;;.
+        ///    &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacin [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplGameplayTable {
             get {
@@ -978,7 +998,7 @@ namespace LuckParser.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;div&gt;
         ///    &lt;div&gt;
-        ///        &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///        &lt;ul v-if=&quot;!noTarget&quot; class=&quot;nav nav-tabs&quot;&gt;
         ///            &lt;li&gt;
         ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 0}&quot; @click=&quot;mode = 0&quot;&gt;Total&lt;/a&gt;
         ///            &lt;/li&gt;
@@ -990,8 +1010,7 @@ namespace LuckParser.Properties {
         ///            &lt;/li&gt;
         ///        &lt;/ul&gt;
         ///    &lt;/div&gt;
-        ///    &lt;keep-alive&gt;
-        ///        &lt;dps-gra [rest of string was truncated]&quot;;.
+        ///    &lt;keep-alive&gt;        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplGraphStats {
             get {
