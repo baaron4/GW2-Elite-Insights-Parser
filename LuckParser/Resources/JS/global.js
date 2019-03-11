@@ -131,7 +131,7 @@ const specToBase = {
     Elementalist: "Elementalist",
     Tempest: "Elementalist",
     Weaver: "Elementalist"
-},
+};
 
 function findSkill(isBuff, id) {
     var skill;

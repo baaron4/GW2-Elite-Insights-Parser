@@ -8,7 +8,8 @@ var compileBuffStats = function () {
             return {
                 bases: [],
                 mode: "Warrior",
-                cache: new Map()
+                cache: new Map(),
+                specToBase: specToBase
             };
         },
         computed: {
