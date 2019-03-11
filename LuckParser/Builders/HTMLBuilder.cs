@@ -248,7 +248,7 @@ namespace LuckParser.Builders
             // Collect all personal damage mods by spec
             foreach (var pair in _log.PlayerListBySpec)
             {    
-                HashSet<string> specDamageModsName = new HashSet<string>(DamageModifier.DamageModifiersPerSource[DamageModifier.ProfToEnum(pair.Key)].Select(x => x.Name));
+                HashSet<string> specDamageModsName = new HashSet<string>(DamageModifier.GetModifiersPerProf(pair.Key).Select(x => x.Name));
                 HashSet<DamageModifier> damageModsToUse = new HashSet<DamageModifier>();
                 foreach (Player player in pair.Value)
                 {

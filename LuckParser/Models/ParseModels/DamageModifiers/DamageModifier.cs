@@ -12,7 +12,19 @@ namespace LuckParser.Models.ParseModels
     {
         public enum DamageType { All, Power, Condition};
         public enum DamageSource { All, NoPets };
-        public enum ModifierSource { CommonBuff, ItemBuff, Necromancer, Elementalist, Mesmer, Warrior, Revenant, Guardian, Thief, Ranger, Engineer};
+        public enum ModifierSource {
+            CommonBuff,
+            ItemBuff,
+            Necromancer, Reaper, Scourge,
+            Elementalist, Tempest, Weaver,
+            Mesmer, Chronomancer, Mirage,
+            Warrior, Berserker, Spellbreaker,
+            Revenant, Herald, Renegade,
+            Guardian, Dragonhunter, Firebrand,
+            Thief, Daredevil, Deadeye,
+            Ranger, Druid, Soulbeast,
+            Engineer, Scrapper, Holosmith
+        };
 
         private DamageType _compareType { get; }
         private DamageType _srcType { get; }
@@ -74,48 +86,66 @@ namespace LuckParser.Models.ParseModels
 
         public abstract void ComputeDamageModifier(Dictionary<string, List<DamageModifierData>> data, Dictionary<Target, Dictionary<string, List<DamageModifierData>>> dataTarget, Player p, ParsedLog log);
 
-        public static ModifierSource ProfToEnum(string prof)
+        private static List<ModifierSource> ProfToEnum(string prof)
         {
             switch (prof)
             {
                 case "Druid":
+                    return new List<ModifierSource> { ModifierSource.Ranger, ModifierSource.Druid };
                 case "Ranger":
+                    return new List<ModifierSource> { ModifierSource.Ranger, ModifierSource.Soulbeast };
                 case "Soulbeast":
-                    return ModifierSource.Ranger;
+                    return new List<ModifierSource> { ModifierSource.Ranger};
                 case "Scrapper":
+                    return new List<ModifierSource> { ModifierSource.Engineer, ModifierSource.Scrapper };
                 case "Holosmith":
+                    return new List<ModifierSource> { ModifierSource.Engineer, ModifierSource.Holosmith };
                 case "Engineer":
-                    return ModifierSource.Engineer;
+                    return new List<ModifierSource> { ModifierSource.Engineer};
                 case "Daredevil":
+                    return new List<ModifierSource> { ModifierSource.Thief, ModifierSource.Daredevil };
                 case "Deadeye":
+                    return new List<ModifierSource> { ModifierSource.Thief, ModifierSource.Deadeye };
                 case "Thief":
-                    return ModifierSource.Thief;
+                    return new List<ModifierSource> { ModifierSource.Thief};
                 case "Weaver":
+                    return new List<ModifierSource> { ModifierSource.Elementalist, ModifierSource.Weaver };
                 case "Tempest":
+                    return new List<ModifierSource> { ModifierSource.Elementalist, ModifierSource.Tempest };
                 case "Elementalist":
-                    return ModifierSource.Elementalist;
+                    return new List<ModifierSource> { ModifierSource.Elementalist};
                 case "Mirage":
+                    return new List<ModifierSource> { ModifierSource.Mesmer, ModifierSource.Mirage };
                 case "Chronomancer":
+                    return new List<ModifierSource> { ModifierSource.Mesmer, ModifierSource.Chronomancer };
                 case "Mesmer":
-                    return ModifierSource.Mesmer;
+                    return new List<ModifierSource> { ModifierSource.Mesmer};
                 case "Scourge":
+                    return new List<ModifierSource> { ModifierSource.Necromancer, ModifierSource.Scourge };
                 case "Reaper":
+                    return new List<ModifierSource> { ModifierSource.Necromancer, ModifierSource.Reaper };
                 case "Necromancer":
-                    return ModifierSource.Necromancer;
+                    return new List<ModifierSource> { ModifierSource.Necromancer};
                 case "Spellbreaker":
+                    return new List<ModifierSource> { ModifierSource.Warrior, ModifierSource.Spellbreaker };
                 case "Berserker":
+                    return new List<ModifierSource> { ModifierSource.Warrior, ModifierSource.Berserker };
                 case "Warrior":
-                    return ModifierSource.Warrior;
+                    return new List<ModifierSource> { ModifierSource.Warrior};
                 case "Firebrand":
+                    return new List<ModifierSource> { ModifierSource.Guardian, ModifierSource.Firebrand };
                 case "Dragonhunter":
+                    return new List<ModifierSource> { ModifierSource.Guardian, ModifierSource.Dragonhunter };
                 case "Guardian":
-                    return ModifierSource.Guardian;
+                    return new List<ModifierSource> { ModifierSource.Guardian};
                 case "Renegade":
+                    return new List<ModifierSource> { ModifierSource.Revenant, ModifierSource.Renegade };
                 case "Herald":
+                    return new List<ModifierSource> { ModifierSource.Revenant, ModifierSource.Herald };
                 case "Revenant":
-                    return ModifierSource.Revenant;
+                    return new List<ModifierSource> { ModifierSource.Revenant};
             }
-            return ModifierSource.CommonBuff;
+            throw new InvalidOperationException("Unknown spec in damage modifier");
         }
 
         protected static GainComputer ByPresence = new GainComputerByPresence();
@@ -138,10 +168,10 @@ namespace LuckParser.Models.ParseModels
             /// commons
             new BuffDamageModifierTarget(Boon.GetBoonByName("Vulnerability"), DamageSource.All, 1.0, DamageType.All, DamageType.All, ModifierSource.CommonBuff, ByStack),
             new BuffDamageModifier(Boon.GetBoonByName("Frost Spirit"), DamageSource.NoPets, 5.0, DamageType.Power, DamageType.All, ModifierSource.CommonBuff, ByPresence),
-            //new DamageLogDamageModifier(Boon.GetBoonByName("Soulcleave's Summit"), 0, DamageSource.NoPets, DamageType.Power, DamageType.Power, ModifierSource.CommonBuff, ByPresence),
-            new DamageLogDamageModifier(Boon.GetBoonByName("One Wolf Pack"), 42145, DamageSource.NoPets, DamageType.Power, DamageType.Power, ModifierSource.CommonBuff, ByPresence),
-            //new DamageLogDamageModifier(Boon.GetBoonByName("Static Charge"), 0, DamageSource.NoPets, DamageType.Power, DamageType.Power, ModifierSource.CommonBuff, ByPresence),
-            //new BuffDamageModifier(Boon.GetBoonByName("Glyph of Empowerment"), DamageSource.NoPets, 10.0, DamageType.Power, DamageType.Power, ModifierSource.All, _nonMultiplier),
+            //new DamageLogDamageModifier(Boon.GetBoonByName("Soulcleave's Summit"), 0, DamageSource.NoPets, DamageType.Power, DamageType.All, ModifierSource.CommonBuff, ByPresence),
+            new DamageLogDamageModifier(Boon.GetBoonByName("One Wolf Pack"), 42145, DamageSource.NoPets, DamageType.Power, DamageType.All, ModifierSource.CommonBuff, ByPresence),
+            //new DamageLogDamageModifier(Boon.GetBoonByName("Static Charge"), 0, DamageSource.NoPets, DamageType.Power, DamageType.All, ModifierSource.CommonBuff, ByPresence),
+            //new BuffDamageModifier(Boon.GetBoonByName("Glyph of Empowerment"), DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ModifierSource.All, _nonMultiplier),
             new BuffDamageModifierTarget(Boon.GetBoonByName("Unnatural Signet"), DamageSource.All, 200.0, DamageType.All, DamageType.All, ModifierSource.CommonBuff, ByPresence),
             new BuffDamageModifierTarget(Boon.GetBoonByName("Compromised"), DamageSource.All, 75.0, DamageType.All, DamageType.All, ModifierSource.CommonBuff, ByStack),
             new BuffDamageModifierTarget(Boon.GetBoonByName("Fractured - Enemy"), DamageSource.All, 10.0, DamageType.All, DamageType.All, ModifierSource.CommonBuff, ByStack),
@@ -221,6 +251,20 @@ namespace LuckParser.Models.ParseModels
         };
 
         public static Dictionary<ModifierSource, List<DamageModifier>> DamageModifiersPerSource = _allDamageModifier.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
+
+        public static List<DamageModifier> GetModifiersPerProf(string prof)
+        {
+            List<DamageModifier> res = new List<DamageModifier>();
+            List<ModifierSource> srcs = ProfToEnum(prof);
+            foreach (ModifierSource src in srcs)
+            {
+                if (DamageModifiersPerSource.TryGetValue(src, out var list))
+                {
+                    res.AddRange(list);
+                }
+            }
+            return res;
+        }
 
         public static Dictionary<string, DamageModifier> DamageModifiersByName = _allDamageModifier.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().First());
     }
