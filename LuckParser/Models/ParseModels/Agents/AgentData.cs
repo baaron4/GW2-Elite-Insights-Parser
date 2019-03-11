@@ -21,10 +21,29 @@ namespace LuckParser.Models.ParseModels
             Refresh();
         }
 
-        public void AddCustomAgent(AgentItem agent)
+        public AgentItem AddCustomAgent(long start, long end, AgentItem.AgentType type, string name, string prof, ushort ID)
         {
+            Random rnd = new Random();
+            ulong agentValue = 0;
+            while (AgentValues.Contains(agentValue) || agentValue == 0)
+            {
+                agentValue = (ulong)rnd.Next(Int32.MaxValue / 2, Int32.MaxValue);
+            }
+            ushort instID = 0;
+            while (InstIDValues.Contains(instID) || instID == 0)
+            {
+                instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
+            }
+            AgentItem agent = new AgentItem(agentValue, name, prof, ID, type, 0, 0, 0, 0, 20, 20)
+            {
+                InstID = instID,
+                LastAware = start,
+                FirstAware = end,
+                MasterAgent = 0
+            };
             _allAgentsList.Add(agent);
             Refresh();
+            return agent;
         }
 
         public void RemoveAgent(AgentItem agent)

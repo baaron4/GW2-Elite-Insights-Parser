@@ -63,6 +63,7 @@ window.onload = function () {
         data: {
             logdata: simpleLogData,
             layout: layout,
+            noTarget: !!logData.noTarget,
             datatypes: DataTypes,
             light: typeof (window.theme) !== "undefined" ? (window.theme === 'yeti') : logData.lightTheme,
             mode: 0,

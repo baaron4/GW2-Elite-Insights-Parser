@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using LuckParser.Setting;
 using LuckParser.Models;
 using Newtonsoft.Json.Serialization;
+using LuckParser.Models.Logic;
 
 namespace LuckParser.Builders
 {
@@ -1113,6 +1114,7 @@ namespace LuckParser.Builders
             }
             logData.EncounterDuration = durationString;
             logData.Success = _log.FightData.Success;
+            logData.NoTarget = _log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
             logData.FightName = FilterStringChars(_log.FightData.Name);
             logData.FightIcon = _log.FightData.Logic.IconUrl;
             logData.LightTheme = Properties.Settings.Default.LightTheme;
