@@ -70,7 +70,7 @@ namespace LuckParser.Models.JsonModels
             {
                 Name = item.Name;
                 Icon = item.Url;
-                Multiplier = item.Multiplier;
+                NonMultiplier = !item.Multiplier;
             }
 
             /// <summary>
@@ -82,9 +82,9 @@ namespace LuckParser.Models.JsonModels
             /// </summary>
             public string Icon;
             /// <summary>
-            /// True if the modifier is multiplicative
+            /// False if the modifier is multiplicative
             /// </summary>
-            public bool Multiplier;
+            public bool NonMultiplier;
         }
 
         /// <summary>

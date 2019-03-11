@@ -245,23 +245,22 @@ var compileDamageModifiers = function () {
         },
         methods: {
             getTooltip: function (item) {
-                if (item[0] === 0) {
+                if (item[2] === 0) {
                     return null;
                 }
                 var hits = item[0] + " out of " + item[1] + " hits";
-                if (item[3] > 0) {
-                    var gain = "Pure Damage: " + item[2];
-                    var damageIncrease = Math.round(100 * 100 * (item[3] / (item[3] - item[2]) - 1.0)) / 100;
-                    var increase = "Damage Gain: " + (isNaN(damageIncrease) ? "0" : damageIncrease) + "%";
-                    return hits + "<br>" + gain + "<br>" + increase;
-                } else {
-                    var done = "Damage Done: " + item[2];
-                    return hits + "<br>" + done;
-                }
+                var gain = "Pure Damage: " + item[2];
+                return hits + "<br>" + gain;
             },
             getCellValue: function (item) {
-                var res = Math.round(100 * 100 * item[0] / Math.max(item[1], 1)) / 100;
-                return res === 0 ? '-' : (isNaN(res) ? 0 : res) + '%';
+                if (item[2] === 0) {
+                    return '-';
+                }
+                var damageIncrease = Math.round(1000 * 100 * (item[3] / (item[3] - item[2]) - 1.0)) / 1000;
+                if (Math.abs(damageIncrease) < 1e-6 || isNaN(damageIncrease)) {
+                    return "-";
+                }
+                return damageIncrease + '%';
             }
         },
         mounted() {

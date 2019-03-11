@@ -139,7 +139,7 @@ namespace LuckParser.Models.ParseModels
             new BuffDamageModifierTarget(Boon.GetBoonByName("Vulnerability"), DamageSource.All, 1.0, DamageType.All, DamageType.All, ModifierSource.CommonBuff, ByStack),
             new BuffDamageModifier(Boon.GetBoonByName("Frost Spirit"), DamageSource.NoPets, 5.0, DamageType.Power, DamageType.All, ModifierSource.CommonBuff, ByPresence),
             //new DamageLogDamageModifier(Boon.GetBoonByName("Soulcleave's Summit"), 0, DamageSource.NoPets, DamageType.Power, DamageType.Power, ModifierSource.CommonBuff, ByPresence),
-            //new DamageLogDamageModifier(Boon.GetBoonByName("One Wolf Pack"), 0, DamageSource.NoPets, DamageType.Power, DamageType.Power, ModifierSource.CommonBuff, ByPresence),
+            new DamageLogDamageModifier(Boon.GetBoonByName("One Wolf Pack"), 42145, DamageSource.NoPets, DamageType.Power, DamageType.Power, ModifierSource.CommonBuff, ByPresence),
             //new DamageLogDamageModifier(Boon.GetBoonByName("Static Charge"), 0, DamageSource.NoPets, DamageType.Power, DamageType.Power, ModifierSource.CommonBuff, ByPresence),
             //new BuffDamageModifier(Boon.GetBoonByName("Glyph of Empowerment"), DamageSource.NoPets, 10.0, DamageType.Power, DamageType.Power, ModifierSource.All, _nonMultiplier),
             new BuffDamageModifierTarget(Boon.GetBoonByName("Unnatural Signet"), DamageSource.All, 200.0, DamageType.All, DamageType.All, ModifierSource.CommonBuff, ByPresence),
