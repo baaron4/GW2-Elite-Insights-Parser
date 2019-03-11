@@ -136,7 +136,7 @@ namespace LuckParser.Models.ParseModels
             new BuffDamageModifier(Boon.GetBoonByName("Fury"), "Rage Rune",  DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff, ByPresence, "https://wiki.guildwars2.com/images/9/9e/Superior_Rune_of_Rage.png"),
             new BuffDamageModifier(Boon.GetBoonByName("Bowl of Seaweed Salad"), DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff, ByPresence, x => x.IsMoving),
             /// commons
-            new BuffDamageModifier(Boon.GetBoonByName("Vulnerability"), DamageSource.All, 1.0, DamageType.All, DamageType.All, ModifierSource.CommonBuff, ByStack),
+            new BuffDamageModifierTarget(Boon.GetBoonByName("Vulnerability"), DamageSource.All, 1.0, DamageType.All, DamageType.All, ModifierSource.CommonBuff, ByStack),
             new BuffDamageModifier(Boon.GetBoonByName("Frost Spirit"), DamageSource.NoPets, 5.0, DamageType.Power, DamageType.All, ModifierSource.CommonBuff, ByPresence),
             //new DamageLogDamageModifier(Boon.GetBoonByName("Soulcleave's Summit"), 0, DamageSource.NoPets, DamageType.Power, DamageType.Power, ModifierSource.CommonBuff, ByPresence),
             //new DamageLogDamageModifier(Boon.GetBoonByName("One Wolf Pack"), 0, DamageSource.NoPets, DamageType.Power, DamageType.Power, ModifierSource.CommonBuff, ByPresence),
