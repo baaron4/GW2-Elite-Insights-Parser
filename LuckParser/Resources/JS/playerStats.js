@@ -246,10 +246,10 @@ var compilePlayerTab = function () {
                 res[offset++] = dpsData.playerDPS.total;
                 res[offset++] = dpsData.playerDPS.target;
                 res[offset++] = dpsData.playerDPS.cleave;
-                for (i = 0; i < this.graph.targets.length; i++) {
+                for (var i = 0; i < this.graph.targets.length; i++) {
                     var health = this.graph.targets[i].health;
                     var hpPoints = [];
-                    for (j = 0; j < health.length; j++) {
+                    for (var j = 0; j < health.length; j++) {
                         hpPoints[j] = health[j] * dpsData.maxDPS / 100.0;
                     }
                     res[offset++] = hpPoints;

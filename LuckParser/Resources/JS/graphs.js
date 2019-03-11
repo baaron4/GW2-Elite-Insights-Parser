@@ -128,7 +128,7 @@ var compileGraphs = function () {
                         pts = mech.points[this.phaseindex][j];
                         var tarId = this.phase.targets[j];
                         if (tarId >= 0) {
-                            target = logData.targets[tarId];
+                            var target = logData.targets[tarId];
                             for (k = 0; k < pts.length; k++) {
                                 time = pts[k];
                                 chart.x.push(time);
@@ -296,7 +296,7 @@ var compileGraphs = function () {
                 for (i = 0; i < graphData.mechanics.length; i++) {
                     var mech = graphData.mechanics[i];
                     var mechData = mechanicMap[i];
-                    chart = [];
+                    var chart = [];
                     res[offset++] = chart;
                     var time, pts, k, ftime, y, yp1;
                     if (mechData.enemyMech) {
@@ -304,7 +304,6 @@ var compileGraphs = function () {
                             pts = mech.points[this.phaseindex][j];
                             var tarId = this.phase.targets[j];
                             if (tarId >= 0) {
-                                target = logData.targets[tarId];
                                 for (k = 0; k < pts.length; k++) {
                                     time = pts[k];
                                     ftime = Math.floor(time);

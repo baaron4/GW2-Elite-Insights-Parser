@@ -258,7 +258,7 @@ function computePhaseMarkupSettings(currentArea, areas, annotations) {
 
 function computePhaseMarkups(shapes, annotations, phase, linecolor) {
     if (phase.markupAreas) {
-        for (i = 0; i < phase.markupAreas.length; i++) {
+        for (var i = 0; i < phase.markupAreas.length; i++) {
             var area = phase.markupAreas[i];
             var setting = computePhaseMarkupSettings(area, phase.markupAreas, annotations);
             annotations.push({
@@ -298,7 +298,7 @@ function computePhaseMarkups(shapes, annotations, phase, linecolor) {
         }
     }
     if (phase.markupLines) {
-        for (i = 0; i < phase.markupLines.length; i++) {
+        for (var i = 0; i < phase.markupLines.length; i++) {
             var x = phase.markupLines[i];
             shapes.push({
                 type: 'line',
@@ -345,7 +345,6 @@ function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, c
     for (j = 1; j < end; j++) {
         if (lim > 0) {
             limID = Math.max(j - lim, 0);
-            start = limID;
         } else if (phasebreaks && phasebreaks[j-1]) {
             limID = j;
         }
@@ -467,11 +466,11 @@ function getActorGraphLayout(images, color) {
 }
 
 function computeTargetHealthData(graph, targets, phase, data, yaxis, times) {
-    for (i = 0; i < graph.targets.length; i++) {
+    for (var i = 0; i < graph.targets.length; i++) {
         var health = graph.targets[i].health;
         var hpTexts = [];
         var target = targets[phase.targets[i]];
-        for (j = 0; j < health.length; j++) {
+        for (var j = 0; j < health.length; j++) {
             hpTexts[j] = health[j] + "% hp - " + target.name ;
         }
         var res = {
