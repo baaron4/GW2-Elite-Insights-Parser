@@ -9,7 +9,10 @@ var compileDamageModifiers = function () {
             return {
                 noTarget: !!logData.noTarget,
                 mode: logData.noTarget ? 0 : 1,
-                displayMode: 0
+                displayMode: 0,
+                bases: [],
+                specmode: "Warrior",
+                specToBase: specToBase
             };
         },
         computed: {
@@ -29,12 +32,51 @@ var compileDamageModifiers = function () {
                     modifiers.push(damageModMap['d' + logData.dmgCommonModifiersItem[i]]);
                 }
                 return modifiers;
+            },
+            orderedSpecs: function () {
+                var res = [];
+                var aux = new Set();
+                for (var i = 0; i < specs.length; i++) {
+                    var spec = specs[i];
+                    var pBySpec = [];
+                    for (var j = 0; j < logData.players.length; j++) {
+                        if (logData.players[j].profession === spec && logData.phases[0].dmgModifiersPers[j].data.length > 0) {
+                            pBySpec.push(j);
+                        }
+                    }
+                    if (pBySpec.length) {
+                        aux.add(specToBase[spec]);
+                        res.push({
+                            ids: pBySpec,
+                            name: spec
+                        });
+                    }
+                }
+                this.bases = [];
+                var _this = this;
+                aux.forEach(function (value, value2, set) {
+                    _this.bases.push(value);
+                });
+                this.specmode = this.bases[0];
+                return res;
+            },
+            personalModifiers: function () {
+                var res = [];
+                for (var i = 0; i < this.orderedSpecs.length; i++) {
+                    var spec = this.orderedSpecs[i];
+                    var data = [];
+                    for (var j = 0; j < logData.dmgCommonModifiersPers[spec.name].length; j++) {
+                        data.push(damageModMap['d' + logData.dmgCommonModifiersPers[spec.name][j]]);
+                    }
+                    res.push(data);
+                }
+                return res;
             }
         }
     });
 
     Vue.component("dmgmodifier-table-component", {
-        props: ['phaseindex', 'id', 'playerindex', 'activetargets', 'modifiers', 'modifiersdata', 'mode', 'sum'
+        props: ['phaseindex', 'id', 'playerindex', 'playerindices', 'activetargets', 'modifiers', 'modifiersdata', 'mode', 'sum'
         ],
         template: `${tmplDamageModifierTable}`,
         data: function () {
@@ -44,6 +86,19 @@ var compileDamageModifiers = function () {
             };
         },
         computed: {
+            indicesToUse: function () {
+                var res = [];
+                if (this.playerindices !== null) {
+                    for (var i = 0; i < this.playerindices.length; i++) {
+                        res.push(this.playerindices[i]);
+                    }
+                    return res;
+                }
+                for (var i = 0; i < logData.players.length; i++) {
+                    res.push(i);
+                }
+                return res;
+            },
             tableData: function () {
                 if (this.cache.has(this.phaseindex)) {
                     return this.cache.get(this.phaseindex);
@@ -56,8 +111,9 @@ var compileDamageModifiers = function () {
                     data: []
                 };
                 var j;
-                for (var i = 0; i < logData.players.length; i++) {
-                    var player = logData.players[i];
+                for (var i = 0; i < this.indicesToUse.length; i++) {
+                    var index = this.indicesToUse[i];
+                    var player = logData.players[index];
                     if (player.isConjure) {
                         continue;
                     }
@@ -67,7 +123,7 @@ var compileDamageModifiers = function () {
                             data: []
                         };
                     }
-                    var dmgModifier = this.modifiersdata[i].data;
+                    var dmgModifier = this.modifiersdata[index].data;
                     var data = [];
                     for (j = 0; j < this.modifiers.length; j++) {
                         data[j] = dmgModifier[j];
@@ -114,8 +170,9 @@ var compileDamageModifiers = function () {
                     data: []
                 };
                 var j;
-                for (var i = 0; i < logData.players.length; i++) {
-                    var player = logData.players[i];
+                for (var i = 0; i < this.indicesToUse.length; i++) {
+                    var index = this.indicesToUse[i];
+                    var player = logData.players[index];
                     if (player.isConjure) {
                         continue;
                     }
@@ -135,7 +192,7 @@ var compileDamageModifiers = function () {
                             total.data[j] = [0, 0, 0, 0];
                         }
                     }
-                    var dmgModifier = this.modifiersdata[i].dataTarget;
+                    var dmgModifier = this.modifiersdata[index].dataTarget;
                     for (j = 0; j < this.activetargets.length; j++) {
                         var modifier = dmgModifier[this.activetargets[j]];
                         for (var k = 0; k < this.modifiers.length; k++) {
