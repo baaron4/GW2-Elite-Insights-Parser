@@ -10,7 +10,7 @@ namespace LuckParser.Models.Logic
     public abstract class FightLogic
     {
 
-        public enum ParseMode { Raid, Fractal, Golem, Unknown };
+        public enum ParseMode { Raid, Fractal, Golem, WvW, Unknown };
 
         private CombatReplayMap _map;
         public readonly List<Mechanic> MechanicList; //Resurrects (start), Resurrect

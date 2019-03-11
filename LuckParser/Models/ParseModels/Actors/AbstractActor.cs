@@ -336,7 +336,7 @@ namespace LuckParser.Models.ParseModels
 
 
         protected abstract void SetDamageLogs(ParsedLog log);
-        protected abstract void SetExtraBoonStatusGenerationData(ParsedLog log, BoonSimulator simulator, long boonid, bool updateCondiPresence);
+        protected abstract void SetBoonStatusCleanseWasteData(ParsedLog log, BoonSimulator simulator, long boonid, bool updateCondiPresence);
         protected abstract void SetDamageModifiersData(ParsedLog log);
         protected abstract void SetBoonStatusGenerationData(ParsedLog log, BoonSimulationItem simul, long boonid, bool updateBoonPresence, bool updateCondiPresence);
         protected abstract void InitBoonStatusData(ParsedLog log);
@@ -390,7 +390,7 @@ namespace LuckParser.Models.ParseModels
                         }
                         graphSegments.Add(segment);
                     }
-                    SetExtraBoonStatusGenerationData(log, simulator, boonid, updateCondiPresence);
+                    SetBoonStatusCleanseWasteData(log, simulator, boonid, updateCondiPresence);
                     if (graphSegments.Count > 0)
                     {
                         graphSegments.Add(new BoonsGraphModel.Segment(graphSegments.Last().End, dur, 0));

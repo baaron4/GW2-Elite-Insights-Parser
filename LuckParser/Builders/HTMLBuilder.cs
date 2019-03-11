@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using LuckParser.Setting;
 using LuckParser.Models;
 using Newtonsoft.Json.Serialization;
+using LuckParser.Models.Logic;
 
 namespace LuckParser.Builders
 {
@@ -975,27 +976,22 @@ namespace LuckParser.Builders
                 logData.Targets.Add(targetDto);
             }
             //
-            logData.PersBuffs = new Dictionary<string, List<long>>();
             Dictionary<string, List<Boon>> persBuffDict = BuildPersonalBoonData(logData.PersBuffs);
-            logData.Boons = new List<long>();
             foreach (Boon boon in _statistics.PresentBoons)
             {
                 logData.Boons.Add(boon.ID);
                 _usedBoons[boon.ID] = boon;
             }
-            logData.Conditions = new List<long>();
             foreach (Boon boon in _statistics.PresentConditions)
             {
                 logData.Conditions.Add(boon.ID);
                 _usedBoons[boon.ID] = boon;
             }
-            logData.OffBuffs = new List<long>();
             foreach (Boon boon in _statistics.PresentOffbuffs)
             {
                 logData.OffBuffs.Add(boon.ID);
                 _usedBoons[boon.ID] = boon;
             }
-            logData.DefBuffs = new List<long>();
             foreach (Boon boon in _statistics.PresentDefbuffs)
             {
                 logData.DefBuffs.Add(boon.ID);
@@ -1061,6 +1057,7 @@ namespace LuckParser.Builders
             }
             logData.EncounterDuration = durationString;
             logData.Success = _log.FightData.Success;
+            logData.NoTarget = _log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
             logData.FightName = FilterStringChars(_log.FightData.Name);
             logData.FightIcon = _log.FightData.Logic.IconUrl;
             logData.LightTheme = Properties.Settings.Default.LightTheme;

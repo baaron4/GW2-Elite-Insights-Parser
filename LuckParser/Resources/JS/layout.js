@@ -134,10 +134,12 @@ var compileLayout = function () {
     });
     layout.addTab(graphs);
     // targets
-    var targets = new Tab("Targets Summary", {
-        dataType: DataTypes.targetTab
-    });
-    layout.addTab(targets);
+    if (!logData.noTarget) {
+        var targets = new Tab("Targets Summary", {
+            dataType: DataTypes.targetTab
+        });
+        layout.addTab(targets);
+    }
     // player
     var player = new Tab("Player Summary", {
         dataType: DataTypes.playerTab

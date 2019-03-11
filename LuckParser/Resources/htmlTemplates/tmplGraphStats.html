@@ -1,6 +1,6 @@
 <div>
     <div>
-        <ul class="nav nav-tabs">
+        <ul v-if="!noTarget" class="nav nav-tabs">
             <li>
                 <a class="nav-link" :class="{active: mode === 0}" @click="mode = 0">Total</a>
             </li>
