@@ -1,4 +1,5 @@
 /*jshint esversion: 6 */
+"use strict";
 $.extend($.fn.dataTable.defaults, {
     searching: false,
     ordering: true,
@@ -95,6 +96,42 @@ var urls = {
     Speargun: "https://wiki.guildwars2.com/images/3/3b/Crimson_Antique_Harpoon_Gun.png",
     Spear: "https://wiki.guildwars2.com/images/c/cb/Crimson_Antique_Impaler.png"
 };
+
+const specs = [
+    "Warrior", "Berserker", "Spellbreaker", "Revenant", "Herald", "Renegade", "Guardian", "Dragonhunter", "Firebrand",
+    "Ranger", "Druid", "Soulbeast", "Engineer", "Scrapper", "Holosmith", "Thief", "Daredevil", "Deadeye",
+    "Mesmer", "Chronomancer", "Mirage", "Necromancer", "Reaper", "Scourge", "Elementalist", "Tempest", "Weaver"
+];
+
+const specToBase = {
+    Warrior: 'Warrior',
+    Berserker: 'Warrior',
+    Spellbreaker: 'Warrior',
+    Revenant: "Revenant",
+    Herald: "Revenant",
+    Renegade: "Revenant",
+    Guardian: "Guardian",
+    Dragonhunter: "Guardian",
+    Firebrand: "Guardian",
+    Ranger: "Ranger",
+    Druid: "Ranger",
+    Soulbeast: "Ranger",
+    Engineer: "Engineer",
+    Scrapper: "Engineer",
+    Holosmith: "Engineer",
+    Thief: "Thief",
+    Daredevil: "Thief",
+    Deadeye: "Thief",
+    Mesmer: "Mesmer",
+    Chronomancer: "Mesmer",
+    Mirage: "Mesmer",
+    Necromancer: "Necromancer",
+    Reaper: "Necromancer",
+    Scourge: "Necromancer",
+    Elementalist: "Elementalist",
+    Tempest: "Elementalist",
+    Weaver: "Elementalist"
+},
 
 function findSkill(isBuff, id) {
     var skill;
