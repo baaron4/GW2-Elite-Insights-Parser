@@ -726,7 +726,7 @@ class FacingMechanicDrawable extends MechanicDrawable {
             return null;
         }
         if (this.facingData.length === 1) {
-            this.facingData[0];
+            return this.facingData[0];
         }
         const lastTime = animator.times[animator.times.length - 1];
         const startIndex = Math.ceil((animator.times.length - 1) * Math.max(this.start, 0) / lastTime);
