@@ -35,7 +35,10 @@ namespace LuckParser.Models.Logic
             {
                 Enervator,
                 HollowedBomber,
-                RiverOfSouls
+                RiverOfSouls,
+                SpiritHorde1,
+                SpiritHorde2,
+                SpiritHorde3
             };
         }
 
@@ -104,11 +107,14 @@ namespace LuckParser.Models.Logic
                 case (ushort)RiverOfSouls:
                     if (replay.Rotations.Count > 0)
                     {
-                        replay.Actors.Add(new FacingRectangleActor((start, end), new AgentConnector(mob), replay.PolledRotations, 240, 660, "rgba(255,100,0,0.5)"));
+                        replay.Actors.Add(new FacingRectangleActor((start, end), new AgentConnector(mob), replay.PolledRotations, 160, 390, "rgba(255,100,0,0.5)"));
                     }
                     break;
                 case (ushort)Enervator:
-                    // TODO Line actor between desmina and enervator. Missing skillID
+                // TODO Line actor between desmina and enervator. Missing skillID
+                case (ushort)SpiritHorde1:
+                case (ushort)SpiritHorde2:
+                case (ushort)SpiritHorde3:
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
