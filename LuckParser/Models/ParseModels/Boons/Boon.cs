@@ -722,18 +722,15 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        private readonly static BoonSourceFinder b05032019 = new BoonSourceFinder05032019();
-        private readonly static BoonSourceFinder b11122018 = new BoonSourceFinder11122018();
-
-        public static BoonSourceFinder GetBoonSourceFinder(ParsedLog log)
+        public static BoonSourceFinder GetBoonSourceFinder(ulong version)
         {
-            if (log.LogData.GW2Version > 95112)
+            if (version > 95112)
             {
-                return b05032019;
+                return new BoonSourceFinder05032019();
             }
             else
             {
-                return b11122018;
+                return new BoonSourceFinder11122018();
             }
         }
     }
