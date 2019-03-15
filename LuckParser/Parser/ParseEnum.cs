@@ -223,8 +223,9 @@ namespace LuckParser.Parser
             Enervator = 19863,
             HollowedBomber = 19399,
             RiverOfSouls = 19829,
-
-
+            SpiritHorde1 = 19461,
+            SpiritHorde2 = 19400,
+            SpiritHorde3 = 19692,
 
             // Dhuum
             Messenger = 19807,
