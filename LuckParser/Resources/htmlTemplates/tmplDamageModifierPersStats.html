@@ -1,0 +1,16 @@
+<div>
+    <ul class="nav nav-pills d-flex flex-row justify-content-center mt-2 mb-2">
+        <li v-for="base in bases" class="nav-item">
+            <a class="nav-link" @click="specmode = base" :class="{active: specmode === base}">{{ base }}</a>
+        </li>
+    </ul>
+    <div>
+        <div v-for="(spec, index) in orderedSpecs" class="mt-3 mb-3">
+            <div v-show="specToBase[spec.name] === specmode">
+                <h3 class="text-center">{{ spec.name }}</h3>
+                <dmgmodifier-table-component :phaseindex="phaseindex" :playerindex="playerindex" :activetargets="activetargets"
+                                             :mode="mode" :id="'damage-modifier-pers-table-'+spec.name" :modifiers="personalModifiers[index]" :playerindices="spec.ids" :modifiersdata="phase.dmgModifiersPers" :sum="false"></dmgmodifier-table-component>
+            </div>
+        </div>
+    </div>
+</div>

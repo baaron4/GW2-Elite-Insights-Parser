@@ -1,4 +1,5 @@
 /*jshint esversion: 6 */
+"use strict";
 $.extend($.fn.dataTable.defaults, {
     searching: false,
     ordering: true,
@@ -94,6 +95,42 @@ var urls = {
     Trident: "https://wiki.guildwars2.com/images/9/98/Crimson_Antique_Trident.png",
     Speargun: "https://wiki.guildwars2.com/images/3/3b/Crimson_Antique_Harpoon_Gun.png",
     Spear: "https://wiki.guildwars2.com/images/c/cb/Crimson_Antique_Impaler.png"
+};
+
+const specs = [
+    "Warrior", "Berserker", "Spellbreaker", "Revenant", "Herald", "Renegade", "Guardian", "Dragonhunter", "Firebrand",
+    "Ranger", "Druid", "Soulbeast", "Engineer", "Scrapper", "Holosmith", "Thief", "Daredevil", "Deadeye",
+    "Mesmer", "Chronomancer", "Mirage", "Necromancer", "Reaper", "Scourge", "Elementalist", "Tempest", "Weaver"
+];
+
+const specToBase = {
+    Warrior: 'Warrior',
+    Berserker: 'Warrior',
+    Spellbreaker: 'Warrior',
+    Revenant: "Revenant",
+    Herald: "Revenant",
+    Renegade: "Revenant",
+    Guardian: "Guardian",
+    Dragonhunter: "Guardian",
+    Firebrand: "Guardian",
+    Ranger: "Ranger",
+    Druid: "Ranger",
+    Soulbeast: "Ranger",
+    Engineer: "Engineer",
+    Scrapper: "Engineer",
+    Holosmith: "Engineer",
+    Thief: "Thief",
+    Daredevil: "Thief",
+    Deadeye: "Thief",
+    Mesmer: "Mesmer",
+    Chronomancer: "Mesmer",
+    Mirage: "Mesmer",
+    Necromancer: "Necromancer",
+    Reaper: "Necromancer",
+    Scourge: "Necromancer",
+    Elementalist: "Elementalist",
+    Tempest: "Elementalist",
+    Weaver: "Elementalist"
 };
 
 function findSkill(isBuff, id) {
@@ -221,7 +258,7 @@ function computePhaseMarkupSettings(currentArea, areas, annotations) {
 
 function computePhaseMarkups(shapes, annotations, phase, linecolor) {
     if (phase.markupAreas) {
-        for (i = 0; i < phase.markupAreas.length; i++) {
+        for (var i = 0; i < phase.markupAreas.length; i++) {
             var area = phase.markupAreas[i];
             var setting = computePhaseMarkupSettings(area, phase.markupAreas, annotations);
             annotations.push({
@@ -261,7 +298,7 @@ function computePhaseMarkups(shapes, annotations, phase, linecolor) {
         }
     }
     if (phase.markupLines) {
-        for (i = 0; i < phase.markupLines.length; i++) {
+        for (var i = 0; i < phase.markupLines.length; i++) {
             var x = phase.markupLines[i];
             shapes.push({
                 type: 'line',
@@ -308,7 +345,6 @@ function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, c
     for (j = 1; j < end; j++) {
         if (lim > 0) {
             limID = Math.max(j - lim, 0);
-            start = limID;
         } else if (phasebreaks && phasebreaks[j-1]) {
             limID = j;
         }
@@ -430,11 +466,11 @@ function getActorGraphLayout(images, color) {
 }
 
 function computeTargetHealthData(graph, targets, phase, data, yaxis, times) {
-    for (i = 0; i < graph.targets.length; i++) {
+    for (var i = 0; i < graph.targets.length; i++) {
         var health = graph.targets[i].health;
         var hpTexts = [];
         var target = targets[phase.targets[i]];
-        for (j = 0; j < health.length; j++) {
+        for (var j = 0; j < health.length; j++) {
             hpTexts[j] = health[j] + "% hp - " + target.name ;
         }
         var res = {
@@ -553,10 +589,10 @@ var DataTypes = {
     offensiveBuffTable: 6,
     defensiveBuffTable: 7,
     personalBuffTable: 8,
-    dmgModifiersTable: 9,
-    playerTab: 10,
-    targetTab: 11,
-    dpsGraph: 12
+    playerTab: 9,
+    targetTab: 10,
+    dpsGraph: 11,
+    dmgModifiersTable: 12,
 };
 
 /*function getActorGraphLayout(images, boonYs, stackingBoons) {

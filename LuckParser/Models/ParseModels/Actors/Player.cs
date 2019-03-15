@@ -18,8 +18,9 @@ namespace LuckParser.Models.ParseModels
        
         private List<Consumable> _consumeList;
         private List<DeathRecap> _deathRecaps;
-        private readonly Dictionary<long, List<DamageModifierData>> _damageModifiers = new Dictionary<long, List<DamageModifierData>>();
-        private readonly Dictionary<Target, Dictionary<long, List<DamageModifierData>>> _damageModifiersTargets = new Dictionary<Target, Dictionary<long, List<DamageModifierData>>>();
+        private Dictionary<string, List<DamageModifierData>> _damageModifiers;
+        private HashSet<string> _presentDamageModifiers;
+        private Dictionary<Target, Dictionary<string, List<DamageModifierData>>> _damageModifiersTargets; 
         // statistics
         private Dictionary<Target, List<FinalDPS>> _dpsTarget;
         private Dictionary<Target, List<FinalStats>> _statsTarget;
@@ -165,8 +166,6 @@ namespace LuckParser.Models.ParseModels
                         52370
                     };
             // (x - 1) / x
-            double fiveGain = 0.05 / 1.05;
-            double tenGain = 0.1 / 1.1;
             foreach (DamageLog dl in dls)
             {
                 if (!dl.IsIndirectDamage)
@@ -183,27 +182,8 @@ namespace LuckParser.Models.ParseModels
                                 targetFinal.CriticalDmg += dl.Damage;
                             }
 
-                            if (dl.IsNinety)
-                            {
-                                targetFinal.ScholarRate++;
-                                targetFinal.ScholarDmg += (int)Math.Round(fiveGain * dl.Damage);
-                            }
-
-                            if (dl.IsFifty)
-                            {
-                                targetFinal.EagleRate++;
-                                targetFinal.EagleDmg += (int)Math.Round(tenGain * dl.Damage);
-                            }
-
-                            if (dl.IsMoving)
-                            {
-                                targetFinal.MovingRate++;
-                                targetFinal.MovingDamage += (int)Math.Round(fiveGain * dl.Damage);
-                            }
-
                             if (dl.IsFlanking)
                             {
-                                targetFinal.FlankingDmg += (int)Math.Round(tenGain * dl.Damage);
                                 targetFinal.FlankingRate++;
                             }
 
@@ -226,7 +206,6 @@ namespace LuckParser.Models.ParseModels
                                 targetFinal.Invulned++;
                             }
                             targetFinal.DirectDamageCount++;
-                            targetFinal.DirectDamage += dl.Damage;
                             if (!nonCritable.Contains(dl.SkillId))
                             {
                                 targetFinal.CritableDirectDamageCount++;
@@ -239,27 +218,8 @@ namespace LuckParser.Models.ParseModels
                         final.CriticalDmg += dl.Damage;
                     }
 
-                    if (dl.IsNinety)
-                    {
-                        final.ScholarRate++;
-                        final.ScholarDmg += (int)Math.Round(fiveGain * dl.Damage);
-                    }
-
-                    if (dl.IsFifty)
-                    {
-                        final.EagleRate++;
-                        final.EagleDmg += (int)Math.Round(tenGain * dl.Damage);
-                    }
-
-                    if (dl.IsMoving)
-                    {
-                        final.MovingRate++;
-                        final.MovingDamage += (int)Math.Round(fiveGain * dl.Damage);
-                    }
-
                     if (dl.IsFlanking)
                     {
-                        final.FlankingDmg += (int)Math.Round(tenGain * dl.Damage);
                         final.FlankingRate++;
                     }
 
@@ -282,7 +242,6 @@ namespace LuckParser.Models.ParseModels
                         final.Invulned++;
                     }
                     final.DirectDamageCount++;
-                    final.DirectDamage += dl.Damage;
                     if (!nonCritable.Contains(dl.SkillId))
                     {
                         final.CritableDirectDamageCount++;
@@ -711,11 +670,11 @@ namespace LuckParser.Models.ParseModels
             return _consumeList.Where(x => x.Time >= start && x.Time <= end).ToList() ;
         }
 
-        public Dictionary<long, List<DamageModifierData>> GetDamageModifierData(ParsedLog log, Target target)
+        public Dictionary<string, List<DamageModifierData>> GetDamageModifierData(ParsedLog log, Target target)
         {
-            if (BoonPoints == null)
+            if (_damageModifiers == null)
             {
-                SetBoonStatus(log);
+                SetDamageModifiersData(log);
             }
             if (target != null)
             {
@@ -725,98 +684,41 @@ namespace LuckParser.Models.ParseModels
                 }
                 else
                 {
-                    return new Dictionary<long, List<DamageModifierData>>();
+                    return new Dictionary<string, List<DamageModifierData>>();
                 }
             }
             return _damageModifiers;
         }
 
-        // Private Methods
-
-        protected override void SetDamageModifiersData(ParsedLog log)
+        public HashSet<string> GetPresentDamageModifier(ParsedLog log)
         {
-            HashSet<long> extraDataID = new HashSet<long>
+            if (_presentDamageModifiers == null)
             {
-                50421,
-                31803
-            };
-            List<PhaseData> phases = log.FightData.GetPhases(log);
-            foreach (long boonid in BoonPoints.Keys)
-            {
-                if (extraDataID.Contains(boonid))
-                {
-                    BoonsGraphModel graph = BoonPoints[boonid]; switch (boonid)
-                    {
-                        // Frost Spirit
-                        case 50421:
-                            foreach (Target target in log.FightData.Logic.Targets)
-                            {
-                                if (!_damageModifiersTargets.TryGetValue(target, out var extra))
-                                {
-                                    _damageModifiersTargets[target] = new Dictionary<long, List<DamageModifierData>>();
-                                }
-                                Dictionary<long, List<DamageModifierData>> dict = _damageModifiersTargets[target];
-                                if (!dict.TryGetValue(boonid, out var list))
-                                {
-                                    List<DamageModifierData> extraDataList = new List<DamageModifierData>();
-                                    for (int i = 0; i < phases.Count; i++)
-                                    {
-                                        List<DamageLog> dmLogs = GetJustPlayerDamageLogs(target, log, phases[i].Start, phases[i].End);
-                                        int totalDamage = dmLogs.Sum(x => x.Damage);
-                                        List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsIndirectDamage).ToList();
-                                        int damage = (int)Math.Round(effect.Sum(x => x.Damage) / 21.0);
-                                        extraDataList.Add(new DamageModifierData(effect.Count, dmLogs.Count(x => !x.IsIndirectDamage), damage, totalDamage, true));
-                                    }
-                                    dict[boonid] = extraDataList;
-                                }
-                            }
-                            _damageModifiers[boonid] = new List<DamageModifierData>();
-                            for (int i = 0; i < phases.Count; i++)
-                            {
-                                List<DamageLog> dmLogs = GetJustPlayerDamageLogs(null, log, phases[i].Start, phases[i].End);
-                                int totalDamage = dmLogs.Sum(x => x.Damage);
-                                List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsIndirectDamage).ToList();
-                                int damage = (int)Math.Round(effect.Sum(x => x.Damage) / 21.0);
-                                _damageModifiers[boonid].Add(new DamageModifierData(effect.Count, dmLogs.Count(x => !x.IsIndirectDamage), damage, totalDamage, true));
-                            }
-                            break;
-                        // GoE
-                        case 31803:
-                            foreach (Target target in log.FightData.Logic.Targets)
-                            {
-                                if (!_damageModifiersTargets.TryGetValue(target, out var extra))
-                                {
-                                    _damageModifiersTargets[target] = new Dictionary<long, List<DamageModifierData>>();
-                                }
-                                Dictionary<long, List<DamageModifierData>> dict = _damageModifiersTargets[target];
-                                if (!dict.TryGetValue(boonid, out var list))
-                                {
-                                    List<DamageModifierData> extraDataList = new List<DamageModifierData>();
-                                    for (int i = 0; i < phases.Count; i++)
-                                    {
-                                        List<DamageLog> dmLogs = GetJustPlayerDamageLogs(target, log, phases[i].Start, phases[i].End);
-                                        List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsIndirectDamage).ToList();
-                                        int damage = effect.Sum(x => x.Damage);
-                                        extraDataList.Add(new DamageModifierData(effect.Count, dmLogs.Count(x => !x.IsIndirectDamage), damage, 0, false));
-                                    }
-                                    dict[boonid] = extraDataList;
-                                }
-
-                            }
-                            _damageModifiers[boonid] = new List<DamageModifierData>();
-                            for (int i = 0; i < phases.Count; i++)
-                            {
-                                List<DamageLog> dmLogs = GetJustPlayerDamageLogs(null, log, phases[i].Start, phases[i].End);
-                                List<DamageLog> effect = dmLogs.Where(x => graph.GetStackCount(x.Time) > 0 && !x.IsIndirectDamage).ToList();
-                                int damage = effect.Sum(x => x.Damage);
-                                _damageModifiers[boonid].Add(new DamageModifierData(effect.Count, dmLogs.Count(x => !x.IsIndirectDamage), damage, 0, false));
-                            }
-                            break;
-                    }
-                }
+                SetDamageModifiersData(log);
             }
+            return _presentDamageModifiers;
         }
 
+        // Private Methods
+
+        private void SetDamageModifiersData(ParsedLog log)
+        {
+            _damageModifiers = new Dictionary<string, List<DamageModifierData>>();
+            _damageModifiersTargets = new Dictionary<Target, Dictionary<string, List<DamageModifierData>>>();
+            _presentDamageModifiers = new HashSet<string>();
+            List<DamageModifier> damageMods = new List<DamageModifier>(DamageModifier.DamageModifiersPerSource[DamageModifier.ModifierSource.ItemBuff]);
+            damageMods.AddRange(DamageModifier.DamageModifiersPerSource[DamageModifier.ModifierSource.CommonBuff]);
+            damageMods.AddRange(DamageModifier.GetModifiersPerProf(Prof));
+            foreach (DamageModifier mod in damageMods)
+            {
+                mod.ComputeDamageModifier(_damageModifiers, _damageModifiersTargets, this, log);
+            }
+            _presentDamageModifiers.UnionWith(_damageModifiers.Keys);
+            foreach (Target tar in _damageModifiersTargets.Keys)
+            {
+                _presentDamageModifiers.UnionWith(_damageModifiersTargets[tar].Keys);
+            }
+        }
 
         private void SetDeathRecaps(ParsedLog log)
         {

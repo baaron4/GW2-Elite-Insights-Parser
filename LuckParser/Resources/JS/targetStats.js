@@ -274,7 +274,7 @@ var compileTargetTab = function () {
             {
                 var health = this.graph.targets[this.phaseTargetIndex].health;
                 var hpTexts = [];
-                for (j = 0; j < health.length; j++) {
+                for (var j = 0; j < health.length; j++) {
                     hpTexts[j] = health[j] + "% hp";
                 }
                 var res = {
@@ -377,7 +377,7 @@ var compileTargetTab = function () {
                 {
                     var health = this.graph.targets[this.phaseTargetIndex].health;
                     var hpPoints = [];
-                    for (j = 0; j < health.length; j++) {
+                    for (var j = 0; j < health.length; j++) {
                         hpPoints[j] = health[j] * dpsData.maxDPS / 100.0;
                     }
                     res[1] = hpPoints;

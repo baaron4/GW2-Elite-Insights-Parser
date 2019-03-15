@@ -337,7 +337,6 @@ namespace LuckParser.Models.ParseModels
 
         protected abstract void SetDamageLogs(ParsedLog log);
         protected abstract void SetBoonStatusCleanseWasteData(ParsedLog log, BoonSimulator simulator, long boonid, bool updateCondiPresence);
-        protected abstract void SetDamageModifiersData(ParsedLog log);
         protected abstract void SetBoonStatusGenerationData(ParsedLog log, BoonSimulationItem simul, long boonid, bool updateBoonPresence, bool updateCondiPresence);
         protected abstract void InitBoonStatusData(ParsedLog log);
 
@@ -375,29 +374,29 @@ namespace LuckParser.Models.ParseModels
                     }
                     bool updateBoonPresence = boonIds.Contains(boonid);
                     bool updateCondiPresence = condiIds.Contains(boonid);
-                    List<BoonsGraphModel.Segment> graphSegments = new List<BoonsGraphModel.Segment>();
+                    List<BoonsGraphModel.SegmentWithSources> graphSegments = new List<BoonsGraphModel.SegmentWithSources>();
                     foreach (BoonSimulationItem simul in simulator.GenerationSimulation)
                     {
                         SetBoonStatusGenerationData(log, simul, boonid, updateBoonPresence, updateCondiPresence);
-                        BoonsGraphModel.Segment segment = simul.ToSegment();
+                        BoonsGraphModel.SegmentWithSources segment = simul.ToSegment();
                         if (graphSegments.Count == 0)
                         {
-                            graphSegments.Add(new BoonsGraphModel.Segment(0, segment.Start, 0));
+                            graphSegments.Add(new BoonsGraphModel.SegmentWithSources(0, segment.Start, 0, GeneralHelper.UnknownAgent));
                         }
                         else if (graphSegments.Last().End != segment.Start)
                         {
-                            graphSegments.Add(new BoonsGraphModel.Segment(graphSegments.Last().End, segment.Start, 0));
+                            graphSegments.Add(new BoonsGraphModel.SegmentWithSources(graphSegments.Last().End, segment.Start, 0, GeneralHelper.UnknownAgent));
                         }
                         graphSegments.Add(segment);
                     }
                     SetBoonStatusCleanseWasteData(log, simulator, boonid, updateCondiPresence);
                     if (graphSegments.Count > 0)
                     {
-                        graphSegments.Add(new BoonsGraphModel.Segment(graphSegments.Last().End, dur, 0));
+                        graphSegments.Add(new BoonsGraphModel.SegmentWithSources(graphSegments.Last().End, dur, 0, GeneralHelper.UnknownAgent));
                     }
                     else
                     {
-                        graphSegments.Add(new BoonsGraphModel.Segment(0, dur, 0));
+                        graphSegments.Add(new BoonsGraphModel.SegmentWithSources(0, dur, 0, GeneralHelper.UnknownAgent));
                     }
                     BoonPoints[boonid] = new BoonsGraphModel(boon, graphSegments);
                     if (updateBoonPresence || updateCondiPresence)
@@ -460,7 +459,6 @@ namespace LuckParser.Models.ParseModels
             }
             BoonPoints[Boon.NumberOfBoonsID] = boonPresenceGraph;
             BoonPoints[Boon.NumberOfConditionsID] = condiPresenceGraph;
-            SetDamageModifiersData(log);
         }
         //protected abstract void setHealingLogs(ParsedLog log);
         //protected abstract void setHealingReceivedLogs(ParsedLog log);

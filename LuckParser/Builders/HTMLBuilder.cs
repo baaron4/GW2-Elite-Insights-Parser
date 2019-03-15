@@ -29,8 +29,9 @@ namespace LuckParser.Builders
         private readonly string[] _uploadLink;
 
         private readonly Statistics _statistics;
-        private Dictionary<long, Boon> _usedBoons = new Dictionary<long, Boon>();
-        private Dictionary<long, SkillItem> _usedSkills = new Dictionary<long, SkillItem>();
+        private readonly Dictionary<long, Boon> _usedBoons = new Dictionary<long, Boon>();
+        private readonly HashSet<DamageModifier> _usedDamageMods = new HashSet<DamageModifier>();
+        private readonly Dictionary<long, SkillItem> _usedSkills = new Dictionary<long, SkillItem>();
 
         public HTMLBuilder(ParsedLog log, string[] uploadString)
         {
@@ -241,6 +242,36 @@ namespace LuckParser.Builders
             return boonsBySpec;
         }
 
+        private Dictionary<string, List<DamageModifier>> BuildPersonalDamageModData(Dictionary<string, List<long>> dict)
+        {
+            Dictionary<string, List<DamageModifier>> damageModBySpecs = new Dictionary<string, List<DamageModifier>>();
+            // Collect all personal damage mods by spec
+            foreach (var pair in _log.PlayerListBySpec)
+            {    
+                HashSet<string> specDamageModsName = new HashSet<string>(DamageModifier.GetModifiersPerProf(pair.Key).Select(x => x.Name));
+                HashSet<DamageModifier> damageModsToUse = new HashSet<DamageModifier>();
+                foreach (Player player in pair.Value)
+                {
+                    HashSet<string> presentDamageMods = new HashSet<string>(player.GetPresentDamageModifier(_log).Intersect(specDamageModsName));
+                    foreach (string name in presentDamageMods)
+                    {
+                        damageModsToUse.Add(DamageModifier.DamageModifiersByName[name]);
+                    }
+                }
+                damageModBySpecs[pair.Key] = damageModsToUse.ToList();
+            }
+            foreach (var pair in damageModBySpecs)
+            {
+                dict[pair.Key] = new List<long>();
+                foreach (DamageModifier mod in pair.Value)
+                {
+                    dict[pair.Key].Add(mod.Name.GetHashCode());
+                    _usedDamageMods.Add(mod);
+                }
+            }
+            return damageModBySpecs;
+        }
+
         private List<BoonData> BuildPersonalBuffUptimeData(Dictionary<string, List<Boon>> boonsBySpec, int phaseIndex)
         {
             List<BoonData> list = new List<BoonData>();
@@ -252,21 +283,24 @@ namespace LuckParser.Builders
             return list;
         }
 
-        private void BuildDmgModifiersData(int phaseIndex, List<long> boonToUse, List<List<object[]>> data, List<List<List<object[]>>> dataTargets)
+        private List<DamageModData> BuildDmgModifiersData(int phaseIndex, List<DamageModifier> damageModsToUse)
         {
-            PhaseData phase = _phases[phaseIndex];
-
+            List<DamageModData> pData = new List<DamageModData>();
             foreach (Player player in _log.PlayerList)
             {
-                List<List<object[]>> pDataTargets = new List<List<object[]>>();
-                data.Add(BoonData.GetDamageModifierData(boonToUse, player.GetDamageModifierData(_log, null), phaseIndex));
-                dataTargets.Add(pDataTargets);
-                foreach (Target target in phase.Targets)
-                {
-                    List<object[]> pTarget = new List<object[]>();
-                    pDataTargets.Add(BoonData.GetDamageModifierData(boonToUse, player.GetDamageModifierData(_log, target), phaseIndex));
-                }
+                pData.Add(new DamageModData(player, _log, damageModsToUse, phaseIndex));
             }
+            return pData;
+        }
+
+        private List<DamageModData> BuildPersonalDmgModifiersData(int phaseIndex, Dictionary<string,List<DamageModifier>> damageModsToUse)
+        {
+            List<DamageModData> pData = new List<DamageModData>();
+            foreach (Player player in _log.PlayerList)
+            {
+                pData.Add(new DamageModData(player, _log, damageModsToUse[player.Prof], phaseIndex));
+            }
+            return pData;
         }
 
         /// <summary>
@@ -759,6 +793,8 @@ namespace LuckParser.Builders
                 {"${tmplDamageDistTable}",Properties.Resources.tmplDamageDistTable },
                 {"${tmplDamageDistTarget}",Properties.Resources.tmplDamageDistTarget },
                 {"${tmplDamageModifierTable}",Properties.Resources.tmplDamageModifierTable },
+                {"${tmplDamageModifierStats}",Properties.Resources.tmplDamageModifierStats },
+                {"${tmplDamageModifierPersStats}",Properties.Resources.tmplDamageModifierPersStats },
                 {"${tmplDamageTable}",Properties.Resources.tmplDamageTable },
                 {"${tmplDamageTaken}",Properties.Resources.tmplDamageTaken },
                 {"${tmplDeathRecap}",Properties.Resources.tmplDeathRecap },
@@ -856,6 +892,7 @@ namespace LuckParser.Builders
                 Properties.Resources.headerJS,
                 Properties.Resources.layoutJS,
                 Properties.Resources.generalStatsJS,
+                Properties.Resources.damageModifierStatsJS,
                 Properties.Resources.buffStatsJS,
                 Properties.Resources.graphsJS,
                 Properties.Resources.mechanicsJS,
@@ -977,6 +1014,32 @@ namespace LuckParser.Builders
             }
             //
             Dictionary<string, List<Boon>> persBuffDict = BuildPersonalBoonData(logData.PersBuffs);
+            Dictionary<string, List<DamageModifier>> persDamageModDict = BuildPersonalDamageModData(logData.DmgCommonModifiersPers);
+            HashSet<string> allDamageMods = new HashSet<string>();
+            foreach (Player p in _log.PlayerList)
+            {
+                allDamageMods.UnionWith(p.GetPresentDamageModifier(_log));
+            }
+            List<DamageModifier> commonDamageModifiers = new List<DamageModifier>();
+            foreach (DamageModifier dMod in DamageModifier.DamageModifiersPerSource[DamageModifier.ModifierSource.CommonBuff])
+            {
+                if (allDamageMods.Contains(dMod.Name))
+                {
+                    commonDamageModifiers.Add(dMod);
+                    logData.DmgCommonModifiersCommon.Add(dMod.Name.GetHashCode());
+                    _usedDamageMods.Add(dMod);
+                }
+            }
+            List<DamageModifier> itemDamageModifiers = new List<DamageModifier>();
+            foreach (DamageModifier dMod in DamageModifier.DamageModifiersPerSource[DamageModifier.ModifierSource.ItemBuff])
+            {
+                if (allDamageMods.Contains(dMod.Name))
+                {
+                    itemDamageModifiers.Add(dMod);
+                    logData.DmgCommonModifiersItem.Add(dMod.Name.GetHashCode());
+                    _usedDamageMods.Add(dMod);
+                }
+            }
             foreach (Boon boon in _statistics.PresentBoons)
             {
                 logData.Boons.Add(boon.ID);
@@ -997,13 +1060,6 @@ namespace LuckParser.Builders
                 logData.DefBuffs.Add(boon.ID);
                 _usedBoons[boon.ID] = boon;
             }
-            HashSet<long> dmgCommonModifiersBuffs = new HashSet<long>();
-            foreach (Player p in _log.PlayerList)
-            {
-                Dictionary<long, List<Statistics.DamageModifierData>> toCheck = p.GetDamageModifierData(_log, null);
-                dmgCommonModifiersBuffs.UnionWith(toCheck.Keys);
-            }
-            logData.DmgCommonModifiersBuffs = dmgCommonModifiersBuffs.ToList();
             //
             for (int i = 0; i < _phases.Count; i++)
             {
@@ -1032,13 +1088,15 @@ namespace LuckParser.Builders
                     DefBuffGenGroupStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, Statistics.BuffEnum.Group),
                     DefBuffGenOGroupStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, Statistics.BuffEnum.OffGroup),
                     DefBuffGenSquadStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, Statistics.BuffEnum.Squad),
+                    DmgModifiersCommon = BuildDmgModifiersData(i, commonDamageModifiers),
+                    DmgModifiersItem = BuildDmgModifiersData(i, itemDamageModifiers),
+                    DmgModifiersPers = BuildPersonalDmgModifiersData(i, persDamageModDict),
                     TargetsCondiStats = new List<List<BoonData>>(),
                     TargetsCondiTotals = new List<BoonData>(),
                     TargetsBoonTotals = new List<BoonData>(),
                     MechanicStats = BuildPlayerMechanicData(i),
                     EnemyMechanicStats = BuildEnemyMechanicData(i)
                 };
-                BuildDmgModifiersData(i, logData.DmgCommonModifiersBuffs, phaseDto.DmgModifiersCommon, phaseDto.DmgModifiersTargetsCommon);
                 foreach (Target target in phaseData.Targets)
                 {
                     phaseDto.TargetsCondiStats.Add(BuildTargetCondiData(i, target));
@@ -1111,8 +1169,13 @@ namespace LuckParser.Builders
                 "$.each(usedBoons, function(i, boon) {" +
                     "buffMap['b'+boon.id]=boon;" +
                 "});";
+            string damageModsScript = "var usedDamageMods = " + ToJson(DamageModDto.AssembleDamageModifiers(_usedDamageMods)) + ";" +
+                "var damageModMap = {};" +
+                "$.each(usedDamageMods, function(i, damageMod) {" +
+                    "damageModMap['d'+damageMod.id]=damageMod;" +
+                "});";
             string mechanicsScript = "var mechanicMap = " + ToJson(BuildMechanics()) + ";";
-            return "<script>\r\n" + skillsScript + "\r\n" + boonsScript + "\r\n" + mechanicsScript + "\r\n</script>";
+            return "<script>\r\n" + skillsScript + "\r\n" + boonsScript + "\r\n" + damageModsScript + "\r\n" + mechanicsScript + "\r\n</script>";
         }
 
         private ActorDetailsDto BuildPlayerData(Player player)

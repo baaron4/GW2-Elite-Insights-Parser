@@ -33,19 +33,11 @@ namespace LuckParser.Models
             public int CritableDirectDamageCount;
             public int CriticalRate;
             public int CriticalDmg;
-            public int ScholarRate;
-            public int ScholarDmg;
-            public int EagleRate;
-            public int EagleDmg;
-            public int MovingRate;
-            public int MovingDamage;
-            public int FlankingDmg;
             public int FlankingRate;
             public int GlanceRate;
             public int Missed;
             public int Interrupts;
             public int Invulned;
-            public int DirectDamage;
         }
 
         public class FinalStatsAll : FinalStats
@@ -146,15 +138,13 @@ namespace LuckParser.Models
             public int TotalHitCount { get; }
             public int DamageGain { get; }
             public int TotalDamage { get; }
-            public bool Multiplier { get; }
 
-            public DamageModifierData(int hitCount, int totalHitCount, int damageGain, int totalDamage, bool multiplier)
+            public DamageModifierData(int hitCount, int totalHitCount, int damageGain, int totalDamage)
             {
                 HitCount = hitCount;
                 TotalHitCount = totalHitCount;
                 DamageGain = damageGain;
                 TotalDamage = totalDamage;
-                Multiplier = multiplier;
             }
         }
 

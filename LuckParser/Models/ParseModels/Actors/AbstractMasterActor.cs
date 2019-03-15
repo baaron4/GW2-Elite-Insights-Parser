@@ -262,7 +262,6 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-
         protected override void InitBoonStatusData(ParsedLog log)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);

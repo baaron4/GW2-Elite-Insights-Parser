@@ -67,13 +67,6 @@ var compileLayout = function () {
             dataType: DataTypes.gameplayTable
         })
     );
-    if (logData.dmgCommonModifiersBuffs.length > 0) {
-        statsLayout.addTab(
-            new Tab("Damage Modifiers Stats", {
-                dataType: DataTypes.dmgModifiersTable
-            })
-        );
-    }
     statsLayout.addTab(
         new Tab("Defensive Stats", {
             dataType: DataTypes.defTable
@@ -121,6 +114,11 @@ var compileLayout = function () {
     }
     buffs.layout = buffLayout;
     layout.addTab(buffs);
+    // damage modifiers
+    var damageModifiers = new Tab("Damage Modifiers", {
+        dataType: DataTypes.dmgModifiersTable
+    });
+    layout.addTab(damageModifiers);
     // mechanics
     if (mechanicMap.length > 0 && !logData.noMechanics) {
         var mechanics = new Tab("Mechanics", {

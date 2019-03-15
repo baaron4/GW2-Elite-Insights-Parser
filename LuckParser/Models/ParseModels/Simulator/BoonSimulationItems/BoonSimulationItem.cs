@@ -27,12 +27,14 @@ namespace LuckParser.Models.ParseModels
             return 0;
         }
 
-        public BoonsGraphModel.Segment ToSegment()
+        public BoonsGraphModel.SegmentWithSources ToSegment()
         {
-            return new BoonsGraphModel.Segment(Start, End, GetStack());
+            return new BoonsGraphModel.SegmentWithSources(Start, End, GetStack(), GetSources().ToArray());
         }
 
         public abstract void SetEnd(long end);
+
+        public abstract List<AgentItem> GetSources();
 
         public abstract int GetStack();
     }

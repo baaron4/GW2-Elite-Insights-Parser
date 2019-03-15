@@ -1,21 +1,10 @@
-<div v-if="modifiers.length > 0">
-    <div class="d-flex flex-row justify-content-center mt-1 mb-1">
-        <ul v-if="!noTarget" class="nav nav-pills">
-            <li class="nav-item">
-                <a class="nav-link" @click="mode = 1" :class="{active: mode}">Target</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" @click="mode = 0" :class="{active: !mode }">All</a>
-            </li>
-        </ul>
-    </div>
-    <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" id="dmgmodifier-table">
+<div>
+    <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="id">
         <thead>
             <tr>
                 <th>Sub</th>
                 <th></th>
                 <th class="text-left">Name</th>
-                <th>Account</th>
                 <th v-for="modifier in modifiers" :data-original-title="modifier.name">
                     <img :src="modifier.icon" :alt="modifier.name" class="icon icon-hover">
                 </th>
@@ -28,20 +17,18 @@
                     <img :src="row.player.icon" :alt="row.player.profession" class="icon"><span style="display:none">{{row.player.profession}}</span>
                 </td>
                 <td class="text-left">{{row.player.name}}</td>
-                <td>{{row.player.acc}}</td>
                 <td v-for="(modifier, index) in modifiers" :data-original-title="getTooltip(row.data[index])">
-                    {{getCellValue(row.data[index])}}%
+                    {{getCellValue(row.data[index])}}
                 </td>
             </tr>
         </tbody>
-        <tfoot>
+        <tfoot v-if="sum">
             <tr v-for="row in (mode ? tableDataTarget.sums : tableData.sums)">
                 <td></td>
                 <td></td>
                 <td class="text-left">{{row.name}}</td>
-                <td></td>
                 <td v-for="(modifier, index) in modifiers" :data-original-title="getTooltip(row.data[index])">
-                    {{getCellValue(row.data[index])}}%
+                    {{getCellValue(row.data[index])}}
                 </td>
             </tr>
         </tfoot>

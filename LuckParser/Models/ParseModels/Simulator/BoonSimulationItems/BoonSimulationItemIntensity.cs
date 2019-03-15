@@ -8,6 +8,7 @@ namespace LuckParser.Models.ParseModels
     public class BoonSimulationItemIntensity : BoonSimulationItem
     {
         private List<BoonSimulationItemDuration> _stacks = new List<BoonSimulationItemDuration>();
+        private List<AgentItem> _sources;
 
         public BoonSimulationItemIntensity(List<BoonStackItem> stacks) : base(stacks[0].Start, 0)
         {
@@ -16,6 +17,11 @@ namespace LuckParser.Models.ParseModels
                 _stacks.Add(new BoonSimulationItemDuration(stack));
             }
             Duration = _stacks.Max(x => x.Duration);
+            _sources = new List<AgentItem>();
+            foreach (BoonSimulationItemDuration item in _stacks)
+            {
+                _sources.AddRange(item.GetSources());
+            }
         }
 
         public override void SetEnd(long end)
@@ -38,6 +44,11 @@ namespace LuckParser.Models.ParseModels
             {
                 item.SetBoonDistributionItem(distribs, start, end, boonid, log);
             }
+        }
+
+        public override List<AgentItem> GetSources()
+        {
+            return _sources;
         }
     }
 }

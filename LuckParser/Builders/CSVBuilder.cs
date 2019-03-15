@@ -244,11 +244,14 @@ namespace LuckParser.Builders
             {
                 Statistics.FinalStatsAll stats = player.GetStatsAll(_log, phaseIndex);
                 Statistics.FinalStats statsBoss = player.GetStatsTarget(_log, phaseIndex, _log.LegacyTarget);
+                Dictionary<string, List<Statistics.DamageModifierData>> damageMods = player.GetDamageModifierData(_log, _log.LegacyTarget);
+                Statistics.DamageModifierData scholar = damageMods["Scholar Rune"][phaseIndex];
+                Statistics.DamageModifierData moving = damageMods["Bowl of Seaweed Salad"][phaseIndex];
 
                 WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
                 Math.Round((double)(statsBoss.CriticalRate) / statsBoss.CritableDirectDamageCount * 100,1).ToString(), statsBoss.CriticalRate.ToString(),statsBoss.CriticalDmg.ToString(),
-                Math.Round((double)(statsBoss.ScholarRate) / statsBoss.DirectDamageCount * 100,1).ToString(),statsBoss.ScholarRate.ToString(),statsBoss.ScholarDmg.ToString(),Math.Round(100.0 * (statsBoss.DirectDamage / (double)(statsBoss.DirectDamage - statsBoss.ScholarDmg) - 1.0), 3).ToString(),
-                Math.Round((double)(statsBoss.MovingRate) / statsBoss.DirectDamageCount * 100,1).ToString(),statsBoss.MovingRate.ToString(),statsBoss.MovingDamage.ToString(),Math.Round(100.0 * (statsBoss.DirectDamage / (double)(statsBoss.DirectDamage - statsBoss.MovingDamage) - 1.0), 3).ToString(),
+                Math.Round((double)(scholar.HitCount) / scholar.TotalHitCount * 100,1).ToString(),scholar.HitCount.ToString(),scholar.DamageGain.ToString(),Math.Round(100.0 * (scholar.TotalDamage / (double)(scholar.TotalDamage - scholar.DamageGain) - 1.0), 3).ToString(),
+                Math.Round((double)(moving.HitCount) / moving.TotalHitCount * 100,1).ToString(),moving.HitCount.ToString(),moving.DamageGain.ToString(),Math.Round(100.0 * (moving.TotalDamage / (double)(moving.TotalDamage - moving.DamageGain) - 1.0), 3).ToString(),
                 Math.Round(statsBoss.FlankingRate / (double)statsBoss.DirectDamageCount * 100,1).ToString(),statsBoss.FlankingRate.ToString(),
                 Math.Round(statsBoss.GlanceRate / (double)statsBoss.DirectDamageCount * 100,1).ToString(),statsBoss.GlanceRate.ToString(),
                 Math.Round(statsBoss.Missed / (double)statsBoss.DirectDamageCount * 100,1).ToString(),statsBoss.Missed.ToString(),
@@ -278,11 +281,14 @@ namespace LuckParser.Builders
             foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalStatsAll stats = player.GetStatsAll(_log, phaseIndex);
+                Dictionary<string, List<Statistics.DamageModifierData>> damageMods = player.GetDamageModifierData(_log, null);
+                Statistics.DamageModifierData scholar = damageMods["Scholar Rune"][phaseIndex];
+                Statistics.DamageModifierData moving = damageMods["Bowl of Seaweed Salad"][phaseIndex];
 
                 WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
                 Math.Round((double)(stats.CriticalRate) / stats.CritableDirectDamageCount * 100,1).ToString(), stats.CriticalRate.ToString(),stats.CriticalDmg.ToString(),
-                Math.Round((double)(stats.ScholarRate) / stats.DirectDamageCount * 100,1).ToString(),stats.ScholarRate.ToString(),stats.ScholarDmg.ToString(),Math.Round(100.0 * (stats.DirectDamage / (double)(stats.DirectDamage - stats.ScholarDmg) - 1.0), 3).ToString(),
-                Math.Round((double)(stats.MovingRate) / stats.DirectDamageCount * 100,1).ToString(),stats.MovingRate.ToString(),stats.MovingDamage.ToString(),Math.Round(100.0 * (stats.DirectDamage / (double)(stats.DirectDamage - stats.MovingDamage) - 1.0), 3).ToString(),
+                Math.Round((double)(scholar.HitCount) / scholar.TotalHitCount * 100,1).ToString(),scholar.HitCount.ToString(),scholar.DamageGain.ToString(),Math.Round(100.0 * (scholar.TotalDamage / (double)(scholar.TotalDamage - scholar.DamageGain) - 1.0), 3).ToString(),
+                Math.Round((double)(moving.HitCount) / moving.TotalHitCount * 100,1).ToString(),moving.HitCount.ToString(),moving.DamageGain.ToString(),Math.Round(100.0 * (moving.TotalDamage / (double)(moving.TotalDamage - moving.DamageGain) - 1.0), 3).ToString(),
                 Math.Round(stats.FlankingRate / (double)stats.DirectDamageCount * 100,1).ToString(),stats.FlankingRate.ToString(),
                 Math.Round(stats.GlanceRate / (double)stats.DirectDamageCount * 100,1).ToString(),stats.GlanceRate.ToString(),
                 Math.Round(stats.Missed / (double)stats.DirectDamageCount * 100,1).ToString(),stats.Missed.ToString(),

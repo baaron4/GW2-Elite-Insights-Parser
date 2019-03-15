@@ -119,7 +119,7 @@ namespace LuckParser.Models.ParseModels
             for (int i = (int)Math.Min(0, rate * ((Rotations[0].Time / rate) - 1)); i < fightDuration; i += rate)
             {
                 Point3D pt = Rotations[tablePos];
-                if (i <= pt.Time - 150)
+                if (i <= pt.Time)
                 {
                     PolledRotations.Add(new Point3D(pt.X, pt.Y, pt.Z, i));
                 }
@@ -132,7 +132,7 @@ namespace LuckParser.Models.ParseModels
                     else
                     {
                         Point3D ptn = Rotations[tablePos + 1];
-                        if (ptn.Time < i - 150)
+                        if (ptn.Time < i)
                         {
                             tablePos++;
                             i -= rate;
