@@ -171,7 +171,7 @@ namespace LuckParser.Models.ParseModels
         protected BoonMap GetBoonMap(ParsedLog log)
         {
             // buff extension ids
-            BoonSourceFinder sourceFinder = Boon.GetBoonSourceFinder(log);
+            BoonSourceFinder sourceFinder = log.BoonSourceFinder;
             //
             BoonMap boonMap = new BoonMap();
             // Fill in Boon Map

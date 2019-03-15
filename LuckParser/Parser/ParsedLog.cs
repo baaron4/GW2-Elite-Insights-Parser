@@ -17,6 +17,7 @@ namespace LuckParser.Parser
         public readonly MechanicData MechanicData;
         public readonly List<Player> PlayerList;
         public readonly HashSet<ushort> PlayerIDs;
+        public readonly BoonSourceFinder BoonSourceFinder;
         public bool IsBenchmarkMode => FightData.Logic.Mode == FightLogic.ParseMode.Golem;
         public readonly Dictionary<string, List<Player>> PlayerListBySpec;
         public readonly Target LegacyTarget;
@@ -33,6 +34,7 @@ namespace LuckParser.Parser
             SkillData = skillData;
             CombatData = combatData;
             PlayerList = playerList;
+            BoonSourceFinder = Boon.GetBoonSourceFinder(logData.GW2Version);
             LegacyTarget = target;
             MechanicData = new MechanicData(fightData);
             PlayerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
