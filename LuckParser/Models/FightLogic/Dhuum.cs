@@ -9,8 +9,13 @@ namespace LuckParser.Models.Logic
 {
     public class Dhuum : RaidLogic
     {
+        private bool _isBugged;
+        private short _reapersSeen;
+
         public Dhuum(ushort triggerID) : base(triggerID)
         {
+            _isBugged = false;
+            _reapersSeen = -7;
             MechanicList.AddRange(new List<Mechanic>
             {
             new SkillOnPlayerMechanic(48172, "Hateful Ephemera", new MechanicPlotlySetting("square","rgb(255,140,0)"), "Golem","Hateful Ephemera (Golem AoE dmg)", "Golem Dmg",0),
@@ -118,6 +123,7 @@ namespace LuckParser.Models.Logic
             {
                 namesDh = new[] { "Main Fight", "Ritual" };
                 ComputeFightPhases(mainTarget, phases, log, castLogs, fightDuration, 0);
+                _isBugged = true;
             }
             else
             {
@@ -249,7 +255,68 @@ namespace LuckParser.Models.Logic
                     replay.Actors.Add(new CircleActor(true, 0, 180, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(mob)));
                     break;
                 case (ushort)Deathling:
+                    break;
                 case (ushort)UnderworldReaper:
+                    if (_isBugged)
+                    {
+                        break;
+                    }
+                    List<int> greens = new List<int>();
+                    switch (_reapersSeen)
+                    {
+                        case 0:
+                            greens = new List<int>()
+                            {
+                                31000, 241000, 451000
+                            };
+                            break;
+                        case 1:
+                            greens = new List<int>()
+                            {
+                                61000, 271000, 481000
+                            };
+                            break;
+                        case 2:
+                            greens = new List<int>()
+                            {
+                                91000, 301000, 510000
+                            };
+                            break;
+                        case 3:
+                            greens = new List<int>()
+                            {
+                                121000, 331000, 541000
+                            };
+                            break;
+                        case 4:
+                            greens = new List<int>()
+                            {
+                                151000, 361000, 571000
+                            };
+                            break;
+                        case 5:
+                            greens = new List<int>()
+                            {
+                                181000, 391000, 601000
+                            };
+                            break;
+                        case 6:
+                            greens = new List<int>()
+                            {
+                                211000, 421000
+                            };
+                            break;
+                        default:
+                            break;
+
+                    }
+                    foreach(int gstart in greens)
+                    {
+                        int gend = gstart + 5000;
+                        replay.Actors.Add(new CircleActor(true, 0, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(mob)));
+                        replay.Actors.Add(new CircleActor(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(mob)));
+                    }
+                    _reapersSeen++;
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
