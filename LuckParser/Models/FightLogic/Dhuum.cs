@@ -316,6 +316,21 @@ namespace LuckParser.Models.Logic
                         replay.Actors.Add(new CircleActor(true, 0, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(mob)));
                         replay.Actors.Add(new CircleActor(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(mob)));
                     }
+                    List<CombatItem> stealths = GetFilteredList(log, 13017, mob, true);
+                    int stealthStart = 0;
+                    int stealthEnd = 0;
+                    foreach (CombatItem c in stealths)
+                    {
+                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                        {
+                            stealthStart = (int)(log.FightData.ToFightSpace(c.Time));
+                        }
+                        else
+                        {
+                            stealthEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                            replay.Actors.Add(new CircleActor(true, 0, 180, (stealthStart, stealthEnd), "rgba(80, 80, 80, 0.3)", new AgentConnector(mob)));
+                        }
+                    }
                     _reapersSeen++;
                     break;
                 default:
