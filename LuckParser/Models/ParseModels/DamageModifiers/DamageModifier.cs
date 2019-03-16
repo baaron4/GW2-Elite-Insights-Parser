@@ -58,13 +58,13 @@ namespace LuckParser.Models.ParseModels
             switch (_compareType)
             {
                 case DamageType.All:
-                    dls = _dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase.Start, phase.End) : p.GetJustPlayerDamageLogs(t, log, phase.Start, phase.End);
+                    dls = _dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase) : p.GetJustPlayerDamageLogs(t, log, phase);
                     break;
                 case DamageType.Condition:
-                    dls = (_dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase.Start, phase.End) : p.GetJustPlayerDamageLogs(t, log, phase.Start, phase.End)).Where(x => x.IsCondi).ToList();
+                    dls = (_dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase) : p.GetJustPlayerDamageLogs(t, log, phase)).Where(x => x.IsCondi).ToList();
                     break;
                 case DamageType.Power:
-                    dls = (_dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase.Start, phase.End) : p.GetJustPlayerDamageLogs(t, log, phase.Start, phase.End)).Where(x => !x.IsCondi).ToList();
+                    dls = (_dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase) : p.GetJustPlayerDamageLogs(t, log, phase)).Where(x => !x.IsCondi).ToList();
                     break;
             }
             return dls.Sum(x => x.Damage);
@@ -75,12 +75,12 @@ namespace LuckParser.Models.ParseModels
             switch (_srcType)
             {
                 case DamageType.All:
-                    return _dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase.Start, phase.End) : p.GetJustPlayerDamageLogs(t, log, phase.Start, phase.End);
+                    return _dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase) : p.GetJustPlayerDamageLogs(t, log, phase);
                 case DamageType.Condition:
-                    return (_dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase.Start, phase.End) : p.GetJustPlayerDamageLogs(t, log, phase.Start, phase.End)).Where(x => x.IsCondi).ToList();
+                    return (_dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase) : p.GetJustPlayerDamageLogs(t, log, phase)).Where(x => x.IsCondi).ToList();
                 case DamageType.Power:
                 default:
-                    return (_dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase.Start, phase.End) : p.GetJustPlayerDamageLogs(t, log, phase.Start, phase.End)).Where(x => !x.IsCondi).ToList();
+                    return (_dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase) : p.GetJustPlayerDamageLogs(t, log, phase)).Where(x => !x.IsCondi).ToList();
             }
         }
 

@@ -18,6 +18,8 @@ namespace LuckParser
         public static int PollingRate = 150;
 
         public static AgentItem UnknownAgent = new AgentItem(0, "UNKNOWN");
+        // use this for "null" in AbstractActor dictionaries
+        public static Mob NullActorAgent = new Mob(UnknownAgent);
 
         /// <summary>
         /// Reports a status update for a log, updating the background worker and the related row with the new status

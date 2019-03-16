@@ -17,6 +17,7 @@ namespace LuckParser.Models.ParseModels
         private readonly List<Dictionary<AgentItem, Dictionary<long, List<long>>>> _condiCleanse = new List<Dictionary<AgentItem, Dictionary<long, List<long>>>>();
         // damage list
         private Dictionary<int, List<int>> _damageList1S = new Dictionary<int, List<int>>();
+        private Dictionary<PhaseData, Dictionary<AbstractActor, List<DamageLog>>> _selfDamageLogsPerPhasePerTarget = new Dictionary<PhaseData, Dictionary<AbstractActor, List<DamageLog>>>();
         // Minions
         private Dictionary<string, Minions> _minions;
         // Replay
@@ -47,7 +48,7 @@ namespace LuckParser.Models.ParseModels
                 return res;
             }
             List<int> dmgList = new List<int>();
-            List<DamageLog> damageLogs = GetDamageLogs(target, log, phase.Start, phase.End);
+            List<DamageLog> damageLogs = GetDamageLogs(target, log, phase);
             // fill the graph, full precision
             List<int> dmgListFull = new List<int>();
             for (int i = 0; i <= phase.DurationInMS; i++)
@@ -160,8 +161,7 @@ namespace LuckParser.Models.ParseModels
             double dps = 0.0;
             FinalDPS final = new FinalDPS();
             //DPS
-            damage = GetDamageLogs(target, log,
-                    phase.Start, phase.End).Sum(x => x.Damage);
+            damage = GetDamageLogs(target, log, phase).Sum(x => x.Damage);
 
             if (phaseDuration > 0)
             {
@@ -170,8 +170,7 @@ namespace LuckParser.Models.ParseModels
             final.Dps = (int)Math.Round(dps);
             final.Damage = damage;
             //Condi DPS
-            damage = GetDamageLogs(target, log,
-                    phase.Start, phase.End).Sum(x => x.IsCondi ? x.Damage : 0);
+            damage = GetDamageLogs(target, log, phase).Sum(x => x.IsCondi ? x.Damage : 0);
 
             if (phaseDuration > 0)
             {
@@ -232,10 +231,19 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-
-        public List<DamageLog> GetJustPlayerDamageLogs(AbstractActor target, ParsedLog log, long start, long end)
+        public List<DamageLog> GetJustPlayerDamageLogs(AbstractActor target, ParsedLog log, PhaseData phase)
         {
-            return GetDamageLogs(target, log, start, end).Where(x => x.SrcInstId == AgentItem.InstID).ToList();
+            if (!_selfDamageLogsPerPhasePerTarget.TryGetValue(phase, out Dictionary<AbstractActor, List<DamageLog>> targetDict))
+            {
+                targetDict = new Dictionary<AbstractActor, List<DamageLog>>();
+                _selfDamageLogsPerPhasePerTarget[phase] = targetDict;
+            }
+            if (!targetDict.TryGetValue(target??GeneralHelper.NullActorAgent, out List<DamageLog> dls))
+            {
+                dls = GetDamageLogs(target, log, phase);
+                targetDict[target ?? GeneralHelper.NullActorAgent] = dls;
+            }
+            return dls;
         }
 
         // private setters
