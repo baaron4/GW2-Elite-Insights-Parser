@@ -269,7 +269,7 @@ namespace LuckParser.Models.ParseModels
                     targetDict[target] = _statsTarget[target].Last();
                 }
                 FinalStatsAll final = new FinalStatsAll();
-                FillFinalStats(log, GetJustPlayerDamageLogs(null, log, phase.Start, phase.End), final, targetDict);
+                FillFinalStats(log, GetJustPlayerDamageLogs(null, log, phase), final, targetDict);
                 _statsAll.Add(final);
                 // If conjured sword, stop
                 if (Account == ":Conjured Sword")

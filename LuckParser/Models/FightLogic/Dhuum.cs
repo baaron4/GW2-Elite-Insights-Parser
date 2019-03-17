@@ -9,8 +9,15 @@ namespace LuckParser.Models.Logic
 {
     public class Dhuum : RaidLogic
     {
+        private bool _isBugged;
+        private short _reapersSeen;
+        private int _greenStart;
+
         public Dhuum(ushort triggerID) : base(triggerID)
         {
+            _isBugged = false;
+            _reapersSeen = -7;
+            _greenStart = 0;
             MechanicList.AddRange(new List<Mechanic>
             {
             new SkillOnPlayerMechanic(48172, "Hateful Ephemera", new MechanicPlotlySetting("square","rgb(255,140,0)"), "Golem","Hateful Ephemera (Golem AoE dmg)", "Golem Dmg",0),
@@ -118,6 +125,7 @@ namespace LuckParser.Models.Logic
             {
                 namesDh = new[] { "Main Fight", "Ritual" };
                 ComputeFightPhases(mainTarget, phases, log, castLogs, fightDuration, 0);
+                _isBugged = true;
             }
             else
             {
@@ -249,7 +257,52 @@ namespace LuckParser.Models.Logic
                     replay.Actors.Add(new CircleActor(true, 0, 180, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(mob)));
                     break;
                 case (ushort)Deathling:
+                    break;
                 case (ushort)UnderworldReaper:
+                    if (!_isBugged && _reapersSeen >= 0)
+                    {
+                        if (_greenStart == 0)
+                        {
+                            List<CombatItem> greenTaken = log.CombatData.GetBoonData(46950).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
+                            if (greenTaken.Count > 0)
+                            {
+                                _greenStart = (int)log.FightData.ToFightSpace(greenTaken[0].Time) - 5000;
+                            }
+                            else
+                            {
+                                _greenStart = 30600;
+                            }
+                        }
+                        int multiplier = 210000;
+                        int gStart = _greenStart + _reapersSeen * 30000;
+                        List<int> greens = new List<int>() {
+                            gStart,
+                            gStart + multiplier,
+                            gStart + 2 * multiplier
+                        };
+                        foreach (int gstart in greens)
+                        {
+                            int gend = gstart + 5000;
+                            replay.Actors.Add(new CircleActor(true, 0, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(mob)));
+                            replay.Actors.Add(new CircleActor(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(mob)));
+                        }
+                    }
+                    List<CombatItem> stealths = GetFilteredList(log, 13017, mob, true);
+                    int stealthStart = 0;
+                    int stealthEnd = 0;
+                    foreach (CombatItem c in stealths)
+                    {
+                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                        {
+                            stealthStart = (int)(log.FightData.ToFightSpace(c.Time));
+                        }
+                        else
+                        {
+                            stealthEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                            replay.Actors.Add(new CircleActor(true, 0, 180, (stealthStart, stealthEnd), "rgba(80, 80, 80, 0.3)", new AgentConnector(mob)));
+                        }
+                    }
+                    _reapersSeen++;
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");

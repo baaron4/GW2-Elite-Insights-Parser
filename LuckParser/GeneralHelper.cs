@@ -18,6 +18,8 @@ namespace LuckParser
         public static int PollingRate = 150;
 
         public static AgentItem UnknownAgent = new AgentItem(0, "UNKNOWN");
+        // use this for "null" in AbstractActor dictionaries
+        public static Mob NullActor = new Mob(UnknownAgent);
 
         /// <summary>
         /// Reports a status update for a log, updating the background worker and the related row with the new status
@@ -528,8 +530,9 @@ namespace LuckParser
                     return "https://i.imgur.com/nauDVYP.png";
                 case RedGuardian:
                     return "https://i.imgur.com/73Uj4lG.png";
-                case CagedWarg:
                 case UnderworldReaper:
+                    return "https://i.imgur.com/Tq6SYVe.png";
+                case CagedWarg:
                 case BanditSapper:
                     return "https://i.imgur.com/0koP4xB.png";
                 case FleshWurm:

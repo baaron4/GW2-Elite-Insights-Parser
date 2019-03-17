@@ -10,6 +10,7 @@ namespace LuckParser.Models.ParseModels
         // Damage
         protected List<DamageLog> DamageLogs;
         protected Dictionary<AgentItem, List<DamageLog>> DamageLogsByDst;
+        private Dictionary<PhaseData, Dictionary<AbstractActor, List<DamageLog>>> _damageLogsPerPhasePerTarget = new Dictionary<PhaseData, Dictionary<AbstractActor, List<DamageLog>>>();
         //protected List<DamageLog> HealingLogs = new List<DamageLog>();
         //protected List<DamageLog> HealingReceivedLogs = new List<DamageLog>();
         private List<DamageLog> _damageTakenlogs;
@@ -56,6 +57,22 @@ namespace LuckParser.Models.ParseModels
             }
             return DamageLogs.Where( x => x.Time >= start && x.Time <= end).ToList();
         }
+
+        public List<DamageLog> GetDamageLogs(AbstractActor target, ParsedLog log, PhaseData phase)
+        {
+            if (!_damageLogsPerPhasePerTarget.TryGetValue(phase, out Dictionary<AbstractActor, List<DamageLog>> targetDict))
+            {
+                targetDict = new Dictionary<AbstractActor, List<DamageLog>>();
+                _damageLogsPerPhasePerTarget[phase] = targetDict;
+            }
+            if (!targetDict.TryGetValue(target ?? GeneralHelper.NullActor, out List<DamageLog> dls))
+            {
+                dls = GetDamageLogs(target, log, phase.Start, phase.End);
+                targetDict[target ?? GeneralHelper.NullActor] = dls;
+            }
+            return dls;
+        }
+
         public List<DamageLog> GetDamageTakenLogs(AbstractActor target, ParsedLog log, long start, long end)
         {
             if (_damageTakenlogs == null)

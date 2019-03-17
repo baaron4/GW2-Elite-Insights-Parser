@@ -25,6 +25,10 @@ namespace LuckParser.Models.ParseModels
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             double gain = double.IsPositiveInfinity(GainPerStack) ? 1.0 : GainComputer.ComputeGain(GainPerStack, 1);
+            if (!p.GetDamageLogs(null, log, phases[0]).Exists(x => DLChecker(x)))
+            {
+                return;
+            }
             foreach (Target target in log.FightData.Logic.Targets)
             {
                 if (!dataTarget.TryGetValue(target, out var extra))

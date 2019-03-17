@@ -415,7 +415,7 @@ namespace LuckParser.Builders
             for (int i = 0; i < _phases.Count; i++)
             {
                 PhaseData phase = _phases[i];
-                res[i] = BuildDamageDist(p.GetJustPlayerDamageLogs(target, _log, phase.Start, phase.End));
+                res[i] = BuildDamageDist(p.GetJustPlayerDamageLogs(target, _log, phase));
             }
             return res;
         }
