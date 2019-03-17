@@ -65,10 +65,10 @@ namespace LuckParser.Models.ParseModels
                 targetDict = new Dictionary<AbstractActor, List<DamageLog>>();
                 _damageLogsPerPhasePerTarget[phase] = targetDict;
             }
-            if (!targetDict.TryGetValue(target ?? GeneralHelper.NullActorAgent, out List<DamageLog> dls))
+            if (!targetDict.TryGetValue(target ?? GeneralHelper.NullActor, out List<DamageLog> dls))
             {
                 dls = GetDamageLogs(target, log, phase.Start, phase.End);
-                targetDict[target ?? GeneralHelper.NullActorAgent] = dls;
+                targetDict[target ?? GeneralHelper.NullActor] = dls;
             }
             return dls;
         }

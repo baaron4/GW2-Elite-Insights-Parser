@@ -19,7 +19,7 @@ namespace LuckParser
 
         public static AgentItem UnknownAgent = new AgentItem(0, "UNKNOWN");
         // use this for "null" in AbstractActor dictionaries
-        public static Mob NullActorAgent = new Mob(UnknownAgent);
+        public static Mob NullActor = new Mob(UnknownAgent);
 
         /// <summary>
         /// Reports a status update for a log, updating the background worker and the related row with the new status
