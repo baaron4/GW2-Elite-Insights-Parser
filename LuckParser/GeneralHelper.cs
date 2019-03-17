@@ -530,8 +530,9 @@ namespace LuckParser
                     return "https://i.imgur.com/nauDVYP.png";
                 case RedGuardian:
                     return "https://i.imgur.com/73Uj4lG.png";
-                case CagedWarg:
                 case UnderworldReaper:
+                    return "https://i.imgur.com/Tq6SYVe.png";
+                case CagedWarg:
                 case BanditSapper:
                     return "https://i.imgur.com/0koP4xB.png";
                 case FleshWurm:
