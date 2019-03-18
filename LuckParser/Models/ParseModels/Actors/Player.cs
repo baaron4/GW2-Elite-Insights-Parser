@@ -706,6 +706,11 @@ namespace LuckParser.Models.ParseModels
             _damageModifiers = new Dictionary<string, List<DamageModifierData>>();
             _damageModifiersTargets = new Dictionary<Target, Dictionary<string, List<DamageModifierData>>>();
             _presentDamageModifiers = new HashSet<string>();
+            // If conjured sword, stop
+            if (Account == ":Conjured Sword")
+            {
+                return;
+            }
             List<DamageModifier> damageMods = new List<DamageModifier>(DamageModifier.DamageModifiersPerSource[DamageModifier.ModifierSource.ItemBuff]);
             damageMods.AddRange(DamageModifier.DamageModifiersPerSource[DamageModifier.ModifierSource.CommonBuff]);
             damageMods.AddRange(DamageModifier.GetModifiersPerProf(Prof));

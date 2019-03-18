@@ -145,7 +145,7 @@ namespace LuckParser.Models.ParseModels
                 case "Revenant":
                     return new List<ModifierSource> { ModifierSource.Revenant};
             }
-            throw new InvalidOperationException("Unknown spec in damage modifier");
+            return new List<ModifierSource> {};
         }
 
         protected static GainComputer ByPresence = new GainComputerByPresence();
