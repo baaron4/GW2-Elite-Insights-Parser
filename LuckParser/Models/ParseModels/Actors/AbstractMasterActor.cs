@@ -240,7 +240,7 @@ namespace LuckParser.Models.ParseModels
             }
             if (!targetDict.TryGetValue(target??GeneralHelper.NullActor, out List<DamageLog> dls))
             {
-                dls = GetDamageLogs(target, log, phase);
+                dls = GetDamageLogs(target, log, phase).Where(x => x.SrcInstId == InstID).ToList();
                 targetDict[target ?? GeneralHelper.NullActor] = dls;
             }
             return dls;
