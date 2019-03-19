@@ -249,7 +249,7 @@ var compileDamageModifiers = function () {
                     return null;
                 }
                 var hits = item[0] + " out of " + item[1] + " hits";
-                var gain = "Pure Damage: " + item[2];
+                var gain = "Pure Damage: " + Math.round(1000.0*item[2])/1000.0;
                 return hits + "<br>" + gain;
             },
             getCellValue: function (item) {
