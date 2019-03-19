@@ -51,8 +51,7 @@ namespace LuckParser.Models.ParseModels
             DLChecker = dlChecker;
         }
 
-
-        protected int GetTotalDamage(Player p, ParsedLog log, Target t, PhaseData phase)
+        public int GetTotalDamage(Player p, ParsedLog log, Target t, PhaseData phase)
         {
             List<DamageLog> dls = new List<DamageLog>();
             switch (_compareType)
@@ -70,7 +69,7 @@ namespace LuckParser.Models.ParseModels
             return dls.Sum(x => x.Damage);
         }
 
-        protected List<DamageLog> GetDamageLogs(Player p, ParsedLog log, Target t, PhaseData phase)
+        public List<DamageLog> GetDamageLogs(Player p, ParsedLog log, Target t, PhaseData phase)
         {
             switch (_srcType)
             {
@@ -80,7 +79,7 @@ namespace LuckParser.Models.ParseModels
                     return (_dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase) : p.GetJustPlayerDamageLogs(t, log, phase)).Where(x => x.IsCondi).ToList();
                 case DamageType.Power:
                 default:
-                    return (_dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase) : p.GetJustPlayerDamageLogs(t, log, phase)).Where(x => !x.IsCondi).ToList();
+                    return (_dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase) : p.GetJustPlayerDamageLogs(t, log, phase)).Where(x => !x.IsIndirectDamage).ToList();
             }
         }
 

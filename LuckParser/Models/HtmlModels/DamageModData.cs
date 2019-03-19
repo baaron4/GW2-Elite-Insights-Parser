@@ -13,6 +13,7 @@ namespace LuckParser.Models.HtmlModels
         public DamageModData(Player player, ParsedLog log, List<DamageModifier> listToUse, int phaseIndex)
         {
             Dictionary<string, List<Statistics.DamageModifierData>> dModData = player.GetDamageModifierData(log, null);
+            List<PhaseData> phases = log.FightData.GetPhases(log);
             foreach (DamageModifier dMod in listToUse)
             {
                 if (dModData.TryGetValue(dMod.Name, out var list))
@@ -30,9 +31,9 @@ namespace LuckParser.Models.HtmlModels
                     Data.Add(new object[]
                     {
                         0,
+                        dMod.GetDamageLogs(player, log, null, phases[phaseIndex]).Count,
                         0,
-                        0,
-                        0
+                        dMod.Multiplier ? dMod.GetTotalDamage(player, log, null, phases[phaseIndex]) : 0
                     });
                 }
             }
@@ -60,9 +61,9 @@ namespace LuckParser.Models.HtmlModels
                         pTarget.Add(new object[]
                         {
                             0,
+                            dMod.GetDamageLogs(player, log, target, phases[phaseIndex]).Count,
                             0,
-                            0,
-                            0
+                            dMod.Multiplier ? dMod.GetTotalDamage(player, log, target, phases[phaseIndex]) : 0
                         });
                     }
                 }
