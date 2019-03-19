@@ -157,13 +157,13 @@ namespace LuckParser.Models.ParseModels
             new DamageLogDamageModifier("Scholar Rune", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff,"https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png", x => x.IsNinety, ByPresence ),
             new DamageLogDamageModifier("Eagle Rune", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff,"https://wiki.guildwars2.com/images/9/9b/Superior_Rune_of_the_Eagle.png", x => x.IsFifty, ByPresence ),
             new DamageLogDamageModifier("Thief Rune", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff,"https://wiki.guildwars2.com/images/9/96/Superior_Rune_of_the_Thief.png", x => x.IsFlanking , ByPresence),
+            new DamageLogDamageModifier("Moving Bonus", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff,"https://wiki.guildwars2.com/images/1/1c/Bowl_of_Seaweed_Salad.png", x => x.IsMoving, ByPresence),
             new BuffDamageModifier(Boon.GetBoonByName("Might"), "Strength Rune",  DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff, ByPresence, "https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_Strength.png"),
             new BuffDamageModifier(Boon.GetBoonByName("Fire Shield"), "Fire Rune",  DamageSource.NoPets, 10.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff, ByPresence, "https://wiki.guildwars2.com/images/4/4a/Superior_Rune_of_the_Fire.png"),
             new BuffDamageModifierTarget(Boon.GetBoonByName("Burning"), "Flame Legion Rune",  DamageSource.NoPets, 7.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff, ByPresence, "https://wiki.guildwars2.com/images/4/4a/Superior_Rune_of_the_Flame_Legion.png"),
             new BuffDamageModifierTarget(Boon.GetBoonByName("Number of Boons"), "Spellbreaker Rune",  DamageSource.NoPets, 7.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff, ByAbsence, "https://wiki.guildwars2.com/images/1/1a/Superior_Rune_of_the_Spellbreaker.png"),
             new BuffDamageModifierTarget(Boon.GetBoonByName("Chilled"), "Ice Rune",  DamageSource.NoPets, 7.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff, ByPresence, "https://wiki.guildwars2.com/images/7/78/Superior_Rune_of_the_Ice.png"),
             new BuffDamageModifier(Boon.GetBoonByName("Fury"), "Rage Rune",  DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff, ByPresence, "https://wiki.guildwars2.com/images/9/9e/Superior_Rune_of_Rage.png"),
-            new BuffDamageModifier(Boon.GetBoonByName("Bowl of Seaweed Salad"), DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff, ByPresence, x => x.IsMoving),
             /// commons
             new BuffDamageModifierTarget(Boon.GetBoonByName("Vulnerability"), DamageSource.All, 1.0, DamageType.All, DamageType.All, ModifierSource.CommonBuff, ByStack),
             new BuffDamageModifier(Boon.GetBoonByName("Frost Spirit"), DamageSource.NoPets, 5.0, DamageType.Power, DamageType.All, ModifierSource.CommonBuff, ByPresence),
@@ -189,7 +189,7 @@ namespace LuckParser.Models.ParseModels
             new DamageLogDamageModifier("Swift Termination", DamageSource.NoPets, 20.0, DamageType.Power, DamageType.All, ModifierSource.Revenant,"https://wiki.guildwars2.com/images/b/bb/Swift_Termination.png", x => x.IsFifty, ByPresence),
             /// Warrior
             new BuffDamageModifier(Boon.GetBoonByName("Peak Performance"), DamageSource.NoPets, 20.0, DamageType.Power, DamageType.All, ModifierSource.Warrior, ByPresence),
-            new BuffDamageModifier(Boon.GetBoonByName("Always Angry"), DamageSource.NoPets, 7.0, DamageType.All, DamageType.All, ModifierSource.Berserker, ByStack),
+            new BuffDamageModifier(Boon.GetBoonByName("Always Angry"), DamageSource.NoPets, 7.0, DamageType.All, DamageType.All, ModifierSource.Berserker, ByPresence),
             new BuffDamageModifierTarget(Boon.GetBoonByName("Weakness"), "Cull the Weak", DamageSource.NoPets, 7.0, DamageType.Power, DamageType.All, ModifierSource.Warrior, ByPresence, "https://wiki.guildwars2.com/images/7/72/Cull_the_Weak.png"),
             new BuffDamageModifier(Boon.GetBoonByName("Number of Boons"), "Empowered", DamageSource.NoPets, 1.0, DamageType.Power, DamageType.All, ModifierSource.Warrior, ByStack, "https://wiki.guildwars2.com/images/c/c2/Empowered.png"),
             new BuffDamageModifierTarget(Boon.GetBoonByName("Number of Boons"), "Destruction of the Empowered", DamageSource.NoPets, 3.0, DamageType.Power, DamageType.All, ModifierSource.Warrior, ByStack, "https://wiki.guildwars2.com/images/5/5c/Destruction_of_the_Empowered.png"),
