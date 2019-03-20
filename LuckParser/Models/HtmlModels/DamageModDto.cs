@@ -7,7 +7,8 @@ namespace LuckParser.Models.HtmlModels
     {    
         public long Id;       
         public string Name;       
-        public string Icon;       
+        public string Icon;
+        public string Tooltip;
         public bool NonMultiplier;
 
         public static List<DamageModDto> AssembleDamageModifiers(ICollection<DamageModifier> damageMods)
@@ -20,6 +21,7 @@ namespace LuckParser.Models.HtmlModels
                     Id = mod.Name.GetHashCode(),
                     Name = mod.Name,
                     Icon = mod.Url,
+                    Tooltip = mod.Tooltip,
                     NonMultiplier = !mod.Multiplier
                 });
             }
