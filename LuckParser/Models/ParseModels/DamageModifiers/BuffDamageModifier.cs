@@ -72,7 +72,7 @@ namespace LuckParser.Models.ParseModels
                     List<DamageModifierData> extraDataList = new List<DamageModifierData>();
                     for (int i = 0; i < phases.Count; i++)
                     {
-                        int totalDamage = GetTotalDamage(p, log, target, phases[i]);
+                        int totalDamage = GetTotalDamage(p, log, target, i);
                         List<DamageLog> typeHits = GetDamageLogs(p, log, target, phases[i]);
                         List<double> damages = typeHits.Select(x => ComputeGain(BuffsChecker.GetStack(bgms, x.Time), x)).Where(x => x != -1.0).ToList();
                         extraDataList.Add(new DamageModifierData(damages.Count, typeHits.Count, damages.Sum(), totalDamage));
@@ -83,7 +83,7 @@ namespace LuckParser.Models.ParseModels
             data[Name] = new List<DamageModifierData>();
             for (int i = 0; i < phases.Count; i++)
             {
-                int totalDamage = GetTotalDamage(p, log, null, phases[i]);
+                int totalDamage = GetTotalDamage(p, log, null, i);
                 List<DamageLog> typeHits = GetDamageLogs(p, log, null, phases[i]);
                 List<double> damages = typeHits.Select(x => ComputeGain(BuffsChecker.GetStack(bgms, x.Time), x)).Where(x => x != -1.0).ToList();
                 data[Name].Add(new DamageModifierData(damages.Count, typeHits.Count, damages.Sum(), totalDamage));

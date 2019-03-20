@@ -25,6 +25,13 @@ namespace LuckParser.Models
             public int CondiDamage;
             public int PowerDps;
             public int PowerDamage;
+            // Actor only
+            public int ActorDps;
+            public int ActorDamage;
+            public int ActorCondiDps;
+            public int ActorCondiDamage;
+            public int ActorPowerDps;
+            public int ActorPowerDamage;
         }
 
         public class FinalStats

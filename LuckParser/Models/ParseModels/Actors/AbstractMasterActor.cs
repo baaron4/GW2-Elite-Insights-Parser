@@ -186,6 +186,32 @@ namespace LuckParser.Models.ParseModels
             }
             final.PowerDps = (int)Math.Round(dps);
             final.PowerDamage = damage;
+            // Actor DPS
+            damage = GetJustPlayerDamageLogs(target, log, phase).Sum(x => x.Damage);
+
+            if (phaseDuration > 0)
+            {
+                dps = damage / phaseDuration;
+            }
+            final.ActorDps = (int)Math.Round(dps);
+            final.ActorDamage = damage;
+            //Actor Condi DPS
+            damage = GetJustPlayerDamageLogs(target, log, phase).Sum(x => x.IsCondi ? x.Damage : 0);
+
+            if (phaseDuration > 0)
+            {
+                dps = damage / phaseDuration;
+            }
+            final.ActorCondiDps = (int)Math.Round(dps);
+            final.ActorCondiDamage = damage;
+            //Actor Power DPS
+            damage = final.ActorDamage - final.ActorCondiDamage;
+            if (phaseDuration > 0)
+            {
+                dps = damage / phaseDuration;
+            }
+            final.ActorPowerDps = (int)Math.Round(dps);
+            final.ActorPowerDamage = damage;
             return final;
         }
 

@@ -33,7 +33,7 @@ namespace LuckParser.Models.HtmlModels
                         0,
                         dMod.GetDamageLogs(player, log, null, phases[phaseIndex]).Count,
                         0,
-                        dMod.Multiplier ? dMod.GetTotalDamage(player, log, null, phases[phaseIndex]) : 0
+                        dMod.Multiplier ? dMod.GetTotalDamage(player, log, null, phaseIndex) : 0
                     });
                 }
             }
@@ -63,7 +63,7 @@ namespace LuckParser.Models.HtmlModels
                             0,
                             dMod.GetDamageLogs(player, log, target, phases[phaseIndex]).Count,
                             0,
-                            dMod.Multiplier ? dMod.GetTotalDamage(player, log, target, phases[phaseIndex]) : 0
+                            dMod.Multiplier ? dMod.GetTotalDamage(player, log, target, phaseIndex) : 0
                         });
                     }
                 }

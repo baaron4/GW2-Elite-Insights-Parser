@@ -51,22 +51,19 @@ namespace LuckParser.Models.ParseModels
             DLChecker = dlChecker;
         }
 
-        public int GetTotalDamage(Player p, ParsedLog log, Target t, PhaseData phase)
+        public int GetTotalDamage(Player p, ParsedLog log, Target t, int phaseIndex)
         {
-            List<DamageLog> dls = new List<DamageLog>();
+            FinalDPS damageData = p.GetDPSTarget(log, phaseIndex, t);
             switch (_compareType)
             {
                 case DamageType.All:
-                    dls = _dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase) : p.GetJustPlayerDamageLogs(t, log, phase);
-                    break;
+                    return _dmgSrc == DamageSource.All ? damageData.Damage  : damageData.ActorDamage;
                 case DamageType.Condition:
-                    dls = (_dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase) : p.GetJustPlayerDamageLogs(t, log, phase)).Where(x => x.IsCondi).ToList();
-                    break;
+                    return _dmgSrc == DamageSource.All ? damageData.CondiDamage : damageData.ActorCondiDamage;
                 case DamageType.Power:
-                    dls = (_dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase) : p.GetJustPlayerDamageLogs(t, log, phase)).Where(x => !x.IsCondi).ToList();
-                    break;
+                    return _dmgSrc == DamageSource.All ? damageData.PowerDamage : damageData.ActorPowerDamage;
             }
-            return dls.Sum(x => x.Damage);
+            return 0;
         }
 
         public List<DamageLog> GetDamageLogs(Player p, ParsedLog log, Target t, PhaseData phase)
