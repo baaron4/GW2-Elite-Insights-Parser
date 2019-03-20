@@ -24,7 +24,7 @@ namespace LuckParser.Models.JsonModels
             /// <summary>
             /// Gained damage
             /// </summary>
-            public int DamageGain;
+            public double DamageGain;
             /// <summary>
             /// Total damage done
             /// </summary>
