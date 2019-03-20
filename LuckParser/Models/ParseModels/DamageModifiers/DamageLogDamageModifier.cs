@@ -11,12 +11,12 @@ namespace LuckParser.Models.ParseModels
     public class DamageLogDamageModifier : DamageModifier
     {
 
-        public DamageLogDamageModifier(string name, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, DamageLogChecker checker, GainComputer gainComputer) : base(name, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer)
+        public DamageLogDamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, DamageLogChecker checker, GainComputer gainComputer) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer)
         {
             DLChecker = checker;
         }
 
-        public DamageLogDamageModifier(Boon boon, long id, DamageSource damageSource, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer) : base(boon.Name, damageSource, double.PositiveInfinity, srctype, compareType, src, boon.Link, gainComputer)
+        public DamageLogDamageModifier(Boon boon, string tooltip, long id, DamageSource damageSource, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer) : base(boon.Name, tooltip, damageSource, double.PositiveInfinity, srctype, compareType, src, boon.Link, gainComputer)
         {
             DLChecker = (dl => dl.SkillId == id);
         }

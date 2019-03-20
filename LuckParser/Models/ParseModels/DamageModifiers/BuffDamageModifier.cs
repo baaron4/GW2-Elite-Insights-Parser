@@ -12,32 +12,37 @@ namespace LuckParser.Models.ParseModels
     {
         protected BuffsTracker BuffsChecker;
 
-        public BuffDamageModifier(Boon buff, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer) : base(buff.Name, damageSource, gainPerStack, srctype, compareType, src, buff.Link, gainComputer)
+        public BuffDamageModifier(Boon buff, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer) : base(buff.Name, tooltip, damageSource, gainPerStack, srctype, compareType, src, buff.Link, gainComputer)
         {
             BuffsChecker = new BuffsTrackerSingle(buff);
         }
 
-        public BuffDamageModifier(Boon buff, string name, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url) : base(name, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer)
+        public BuffDamageModifier(Boon buff, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, buff.Link, gainComputer)
         {
             BuffsChecker = new BuffsTrackerSingle(buff);
         }
 
-        public BuffDamageModifier(BuffsTrackerMulti buffsChecker, string name, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url) : base(name, damageSource, gainPerStack, srctype, compareType, src, url, ByPresence)
+        public BuffDamageModifier(Boon buff, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer)
+        {
+            BuffsChecker = new BuffsTrackerSingle(buff);
+        }
+
+        public BuffDamageModifier(BuffsTrackerMulti buffsChecker, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, ByPresence)
         {
             BuffsChecker = buffsChecker;
         }
 
-        public BuffDamageModifier(Boon buff, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, DamageLogChecker dlChecker) : base(buff.Name, damageSource, gainPerStack, srctype, compareType, src, buff.Link, gainComputer, dlChecker)
+        public BuffDamageModifier(Boon buff, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, DamageLogChecker dlChecker) : base(buff.Name, tooltip, damageSource, gainPerStack, srctype, compareType, src, buff.Link, gainComputer, dlChecker)
         {
             BuffsChecker = new BuffsTrackerSingle(buff);
         }
 
-        public BuffDamageModifier(Boon buff, string name, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, DamageLogChecker dlChecker) : base(name, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer, dlChecker)
+        public BuffDamageModifier(Boon buff, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, DamageLogChecker dlChecker) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer, dlChecker)
         {
             BuffsChecker = new BuffsTrackerSingle(buff);
         }
 
-        public BuffDamageModifier(BuffsTrackerMulti buffsChecker, string name, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, DamageLogChecker dlChecker) : base(name, damageSource, gainPerStack, srctype, compareType, src, url, ByPresence, dlChecker)
+        public BuffDamageModifier(BuffsTrackerMulti buffsChecker, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, DamageLogChecker dlChecker) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, ByPresence, dlChecker)
         {
             BuffsChecker = buffsChecker;
         }
