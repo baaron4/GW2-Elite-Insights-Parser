@@ -15,10 +15,6 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        public BuffDamageModifierTarget(Boon buff, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer) : base(buff, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer)
-        {
-        }
-
         public BuffDamageModifierTarget(Boon buff, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url) : base(buff, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, url)
         {
         }

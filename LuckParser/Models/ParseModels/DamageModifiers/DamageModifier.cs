@@ -224,7 +224,7 @@ namespace LuckParser.Models.ParseModels
             new DamageLogDamageModifier("Twin Fangs","Twin Fangs – 7% over 90%", DamageSource.NoPets, 7.0, DamageType.Power, DamageType.All, ModifierSource.Thief,"https://wiki.guildwars2.com/images/d/d1/Ferocious_Strikes.png", x => x.IsNinety && x.Result == ParseEnum.Result.Crit, ByPresence),
             new BuffDamageModifier(Boon.GetBoonByName("Number of Boons"), "Premeditation", "Premeditation – 1% per boon",DamageSource.NoPets, 1.0, DamageType.Power, DamageType.All, ModifierSource.Deadeye, ByStack, "https://wiki.guildwars2.com/images/d/d7/Premeditation.png"),
             /// MESMER
-            new BuffDamageModifier(Boon.GetBoonByName("Compounding Power"), "Compounding Power", "Compounding Power – 2% per stack (8s) after creating an illusion ", DamageSource.NoPets, 2.0, DamageType.Power, DamageType.All, ModifierSource.Mesmer, ByStack),
+            new BuffDamageModifier(Boon.GetBoonByName("Compounding Power"), "Compounding Power – 2% per stack (8s) after creating an illusion ", DamageSource.NoPets, 2.0, DamageType.Power, DamageType.All, ModifierSource.Mesmer, ByStack),
             new BuffDamageModifierTarget(Boon.GetBoonByName("Vulnerability"), "Fragility", "Fragility – 0.5% per stack vuln on target", DamageSource.NoPets, 0.5, DamageType.Power, DamageType.All, ModifierSource.Mesmer, ByStack, "https://wiki.guildwars2.com/images/3/33/Fragility.png"),
             // Phantasmal Force would require activating buff tracking on minions, huge performance impact and some code impact
             // TOCHECK Superiority Complex
