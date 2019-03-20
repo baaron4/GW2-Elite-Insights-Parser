@@ -118,6 +118,30 @@ namespace LuckParser.Models.JsonModels
             /// Total power damage
             /// </summary>
             public int PowerDamage;
+            /// <summary>
+            /// Total actor only dps
+            /// </summary>
+            public int ActorDps;
+            /// <summary>
+            /// Total actor only damage
+            /// </summary>
+            public int ActorDamage;
+            /// <summary>
+            /// Total actor only condi dps
+            /// </summary>
+            public int ActorCondiDps;
+            /// <summary>
+            /// Total actor only condi damage
+            /// </summary>
+            public int ActorCondiDamage;
+            /// <summary>
+            /// Total actor only power dps
+            /// </summary>
+            public int ActorPowerDps;
+            /// <summary>
+            /// Total actor only power damage
+            /// </summary>
+            public int ActorPowerDamage;
 
             public JsonDPS(Statistics.FinalDPS stats)
             {
@@ -127,6 +151,13 @@ namespace LuckParser.Models.JsonModels
                 CondiDamage = stats.CondiDamage;
                 PowerDps = stats.PowerDps;
                 PowerDamage = stats.PowerDamage;
+
+                ActorDps = stats.ActorDps;
+                ActorDamage = stats.ActorDamage;
+                ActorCondiDps = stats.ActorCondiDps;
+                ActorCondiDamage = stats.ActorCondiDamage;
+                ActorPowerDps = stats.ActorPowerDps;
+                ActorPowerDamage = stats.ActorPowerDamage;
             }
 
         }

@@ -15,10 +15,6 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        public BuffDamageModifierTarget(Boon buff, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer) : base(buff, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer)
-        {
-        }
-
         public BuffDamageModifierTarget(Boon buff, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url) : base(buff, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, url)
         {
         }
@@ -59,10 +55,10 @@ namespace LuckParser.Models.ParseModels
                     List<DamageModifierData> extraDataList = new List<DamageModifierData>();
                     for (int i = 0; i < phases.Count; i++)
                     {
-                        int totalDamage = GetTotalDamage(p, log, target, phases[i]);
+                        int totalDamage = GetTotalDamage(p, log, target, i);
                         List<DamageLog> typedHits = GetDamageLogs(p, log, target, phases[i]);
                         List<double> damages = typedHits.Select(x => ComputeGain(BuffsChecker.GetStack(bgms, x.Time), x)).Where(x => x != -1.0).ToList();
-                        extraDataList.Add(new DamageModifierData(damages.Count, typedHits.Count, (int)Math.Round(damages.Sum()), totalDamage));
+                        extraDataList.Add(new DamageModifierData(damages.Count, typedHits.Count, damages.Sum(), totalDamage));
                     }
                     dict[Name] = extraDataList;
                 }

@@ -70,6 +70,7 @@ namespace LuckParser.Models.JsonModels
             {
                 Name = item.Name;
                 Icon = item.Url;
+                Description = item.Tooltip;
                 NonMultiplier = !item.Multiplier;
             }
 
@@ -81,6 +82,10 @@ namespace LuckParser.Models.JsonModels
             /// Icon of the damage modifier
             /// </summary>
             public string Icon;
+            /// <summary>
+            /// Description of the damage modifier
+            /// </summary>
+            public string Description;
             /// <summary>
             /// False if the modifier is multiplicative
             /// </summary>

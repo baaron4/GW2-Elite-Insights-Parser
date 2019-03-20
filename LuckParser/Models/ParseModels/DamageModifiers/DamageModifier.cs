@@ -51,28 +51,57 @@ namespace LuckParser.Models.ParseModels
             Url = url;
             GainComputer = gainComputer;
             DLChecker = dlChecker;
-        }
-
-
-        protected int GetTotalDamage(Player p, ParsedLog log, Target t, PhaseData phase)
-        {
-            List<DamageLog> dls = new List<DamageLog>();
+            switch (_dmgSrc)
+            {
+                case DamageSource.All:
+                    Tooltip += "<br>Actor + Minions";
+                    break;
+                case DamageSource.NoPets:
+                    Tooltip += "<br>No Minions";
+                    break;
+            }
+            switch (_srcType)
+            {
+                case DamageType.All:
+                    Tooltip += "<br>All Damage type";
+                    break;
+                case DamageType.Power:
+                    Tooltip += "<br>Power Damage only";
+                    break;
+                case DamageType.Condition:
+                    Tooltip += "<br>Condition Damage only";
+                    break;
+            }
             switch (_compareType)
             {
                 case DamageType.All:
-                    dls = _dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase) : p.GetJustPlayerDamageLogs(t, log, phase);
-                    break;
-                case DamageType.Condition:
-                    dls = (_dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase) : p.GetJustPlayerDamageLogs(t, log, phase)).Where(x => x.IsCondi).ToList();
+                    Tooltip += "<br>Compared against All Damage";
                     break;
                 case DamageType.Power:
-                    dls = (_dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase) : p.GetJustPlayerDamageLogs(t, log, phase)).Where(x => !x.IsCondi).ToList();
+                    Tooltip += "<br>Compared against Power Damage";
+                    break;
+                case DamageType.Condition:
+                    Tooltip += "<br>Compared against Condition Damage";
                     break;
             }
-            return dls.Sum(x => x.Damage);
         }
 
-        protected List<DamageLog> GetDamageLogs(Player p, ParsedLog log, Target t, PhaseData phase)
+        public int GetTotalDamage(Player p, ParsedLog log, Target t, int phaseIndex)
+        {
+            FinalDPS damageData = p.GetDPSTarget(log, phaseIndex, t);
+            switch (_compareType)
+            {
+                case DamageType.All:
+                    return _dmgSrc == DamageSource.All ? damageData.Damage  : damageData.ActorDamage;
+                case DamageType.Condition:
+                    return _dmgSrc == DamageSource.All ? damageData.CondiDamage : damageData.ActorCondiDamage;
+                case DamageType.Power:
+                    return _dmgSrc == DamageSource.All ? damageData.PowerDamage : damageData.ActorPowerDamage;
+            }
+            return 0;
+        }
+
+        public List<DamageLog> GetDamageLogs(Player p, ParsedLog log, Target t, PhaseData phase)
         {
             switch (_srcType)
             {
@@ -82,7 +111,7 @@ namespace LuckParser.Models.ParseModels
                     return (_dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase) : p.GetJustPlayerDamageLogs(t, log, phase)).Where(x => x.IsCondi).ToList();
                 case DamageType.Power:
                 default:
-                    return (_dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase) : p.GetJustPlayerDamageLogs(t, log, phase)).Where(x => !x.IsCondi).ToList();
+                    return (_dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase) : p.GetJustPlayerDamageLogs(t, log, phase)).Where(x => !x.IsIndirectDamage).ToList();
             }
         }
 
@@ -160,13 +189,13 @@ namespace LuckParser.Models.ParseModels
             new DamageLogDamageModifier("Scholar Rune", "Scholar Rune – 5% over 90% HP", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff,"https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png", x => x.IsNinety, ByPresence ),
             new DamageLogDamageModifier("Eagle Rune", "Eagle Rune – 10% if target <50% HP", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff,"https://wiki.guildwars2.com/images/9/9b/Superior_Rune_of_the_Eagle.png", x => x.IsFifty, ByPresence ),
             new DamageLogDamageModifier("Thief Rune", "Thief Rune – 10% while flanking", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff,"https://wiki.guildwars2.com/images/9/96/Superior_Rune_of_the_Thief.png", x => x.IsFlanking , ByPresence),
+            new DamageLogDamageModifier("Moving Bonus","Seaweed Salad (and the likes) – 5% while moving", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff,"https://wiki.guildwars2.com/images/1/1c/Bowl_of_Seaweed_Salad.png", x => x.IsMoving, ByPresence),
             new BuffDamageModifier(Boon.GetBoonByName("Might"), "Strength Rune", "Strength Rune – 5% under might",  DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff, ByPresence, "https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_Strength.png"),
             new BuffDamageModifier(Boon.GetBoonByName("Fire Shield"), "Fire Rune", "Fire Rune – 10% under fire aura",  DamageSource.NoPets, 10.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff, ByPresence, "https://wiki.guildwars2.com/images/4/4a/Superior_Rune_of_the_Fire.png"),
             new BuffDamageModifierTarget(Boon.GetBoonByName("Burning"), "Flame Legion Rune", "Flame Legion Rune - 7% on burning target",  DamageSource.NoPets, 7.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff, ByPresence, "https://wiki.guildwars2.com/images/4/4a/Superior_Rune_of_the_Flame_Legion.png"),
             new BuffDamageModifierTarget(Boon.GetBoonByName("Number of Boons"), "Spellbreaker Rune", "Spellbreaker Rune – 7% on boonless target",  DamageSource.NoPets, 7.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff, ByAbsence, "https://wiki.guildwars2.com/images/1/1a/Superior_Rune_of_the_Spellbreaker.png"),
             new BuffDamageModifierTarget(Boon.GetBoonByName("Chilled"), "Ice Rune", "Ice Rune – 7% on chilled target",  DamageSource.NoPets, 7.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff, ByPresence, "https://wiki.guildwars2.com/images/7/78/Superior_Rune_of_the_Ice.png"),
             new BuffDamageModifier(Boon.GetBoonByName("Fury"), "Rage Rune", "Rage Rune – 5% under fury",  DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff, ByPresence, "https://wiki.guildwars2.com/images/9/9e/Superior_Rune_of_Rage.png"),
-            new BuffDamageModifier(Boon.GetBoonByName("Bowl of Seaweed Salad"), "Seaweed Salad", "Seaweed Salad – 5% while moving", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff, ByPresence, "https://wiki.guildwars2.com/images/1/1c/Bowl_of_Seaweed_Salad.png", x => x.IsMoving),
             /// commons
             new BuffDamageModifierTarget(Boon.GetBoonByName("Vulnerability"), "Vulnerability – 1% per Stack", DamageSource.All, 1.0, DamageType.All, DamageType.All, ModifierSource.CommonBuff, ByStack),
             new BuffDamageModifier(Boon.GetBoonByName("Frost Spirit"), "Frost Spirit – 5%", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.All, ModifierSource.CommonBuff, ByPresence),
@@ -228,7 +257,7 @@ namespace LuckParser.Models.ParseModels
             new DamageLogDamageModifier("Twin Fangs","Twin Fangs – 7% over 90%", DamageSource.NoPets, 7.0, DamageType.Power, DamageType.All, ModifierSource.Thief,"https://wiki.guildwars2.com/images/d/d1/Ferocious_Strikes.png", x => x.IsNinety && x.Result == ParseEnum.Result.Crit, ByPresence),
             new BuffDamageModifier(Boon.GetBoonByName("Number of Boons"), "Premeditation", "Premeditation – 1% per boon",DamageSource.NoPets, 1.0, DamageType.Power, DamageType.All, ModifierSource.Deadeye, ByStack, "https://wiki.guildwars2.com/images/d/d7/Premeditation.png"),
             /// MESMER
-            new BuffDamageModifier(Boon.GetBoonByName("Compounding Power"), "Compounding Power", "Compounding Power – 2% per stack (8s) after creating an illusion ", DamageSource.NoPets, 2.0, DamageType.Power, DamageType.All, ModifierSource.Mesmer, ByStack),
+            new BuffDamageModifier(Boon.GetBoonByName("Compounding Power"), "Compounding Power – 2% per stack (8s) after creating an illusion ", DamageSource.NoPets, 2.0, DamageType.Power, DamageType.All, ModifierSource.Mesmer, ByStack),
             new BuffDamageModifierTarget(Boon.GetBoonByName("Vulnerability"), "Fragility", "Fragility – 0.5% per stack vuln on target", DamageSource.NoPets, 0.5, DamageType.Power, DamageType.All, ModifierSource.Mesmer, ByStack, "https://wiki.guildwars2.com/images/3/33/Fragility.png"),
             // Phantasmal Force would require activating buff tracking on minions, huge performance impact and some code impact
             // TOCHECK Superiority Complex

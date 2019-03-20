@@ -5,7 +5,7 @@
                 <th>Sub</th>
                 <th></th>
                 <th class="text-left">Name</th>
-                <th v-for="modifier in modifiers" :data-original-title="modifier.name">
+                <th v-for="modifier in modifiers" :data-original-title="modifier.name + '<br>' + modifier.tooltip">
                     <img :src="modifier.icon" :alt="modifier.name" class="icon icon-hover">
                 </th>
             </tr>

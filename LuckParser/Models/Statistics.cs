@@ -25,6 +25,13 @@ namespace LuckParser.Models
             public int CondiDamage;
             public int PowerDps;
             public int PowerDamage;
+            // Actor only
+            public int ActorDps;
+            public int ActorDamage;
+            public int ActorCondiDps;
+            public int ActorCondiDamage;
+            public int ActorPowerDps;
+            public int ActorPowerDamage;
         }
 
         public class FinalStats
@@ -136,10 +143,10 @@ namespace LuckParser.Models
         {
             public int HitCount { get; }
             public int TotalHitCount { get; }
-            public int DamageGain { get; }
+            public double DamageGain { get; }
             public int TotalDamage { get; }
 
-            public DamageModifierData(int hitCount, int totalHitCount, int damageGain, int totalDamage)
+            public DamageModifierData(int hitCount, int totalHitCount, double damageGain, int totalDamage)
             {
                 HitCount = hitCount;
                 TotalHitCount = totalHitCount;

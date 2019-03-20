@@ -17,7 +17,11 @@ namespace LuckParser.Models.ParseModels
 
         public override int GetStack(Dictionary<long, BoonsGraphModel> bgms, long time)
         {
-            return bgms[_id].GetStackCount(time);
+            if (bgms.TryGetValue(_id, out var bgm))
+            {
+                return bgm.GetStackCount(time);
+            }
+            return 0;
         }
 
         public override bool Has(Dictionary<long, BoonsGraphModel> bgms)
