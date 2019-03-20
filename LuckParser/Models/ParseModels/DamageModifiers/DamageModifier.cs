@@ -51,6 +51,39 @@ namespace LuckParser.Models.ParseModels
             Url = url;
             GainComputer = gainComputer;
             DLChecker = dlChecker;
+            switch (_dmgSrc)
+            {
+                case DamageSource.All:
+                    Tooltip += "<br>Actor + Minions";
+                    break;
+                case DamageSource.NoPets:
+                    Tooltip += "<br>No Minions";
+                    break;
+            }
+            switch (_srcType)
+            {
+                case DamageType.All:
+                    Tooltip += "<br>All Damage type";
+                    break;
+                case DamageType.Power:
+                    Tooltip += "<br>Power Damage only";
+                    break;
+                case DamageType.Condition:
+                    Tooltip += "<br>Condition Damage only";
+                    break;
+            }
+            switch (_compareType)
+            {
+                case DamageType.All:
+                    Tooltip += "<br>Compared against All Damage";
+                    break;
+                case DamageType.Power:
+                    Tooltip += "<br>Compared against Power Damage";
+                    break;
+                case DamageType.Condition:
+                    Tooltip += "<br>Compared against Condition Damage";
+                    break;
+            }
         }
 
         public int GetTotalDamage(Player p, ParsedLog log, Target t, int phaseIndex)
