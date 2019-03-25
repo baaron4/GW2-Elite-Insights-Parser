@@ -35,11 +35,17 @@ namespace LuckParser.Models.ParseModels
         public void OverrideStart(long start)
         {
             Start = start;
+            DurationInM = (End - Start) / 60000;
+            DurationInMS = (End - Start);
+            DurationInS = (End - Start) / 1000;
         }
 
         public void OverrideEnd(long end)
         {
             End = end;
+            DurationInM = (End - Start) / 60000;
+            DurationInMS = (End - Start);
+            DurationInS = (End - Start) / 1000;
         }
 
         /// <summary>
