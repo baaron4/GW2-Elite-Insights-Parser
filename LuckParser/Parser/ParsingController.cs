@@ -580,14 +580,17 @@ namespace LuckParser.Parser
                     {
                         _playerList.Add(player);
                     }
-                } catch (Exception ex)
+                } catch (InvalidPlayerException ex)
                 {
                     if (_fightData.Logic.Mode != FightLogic.ParseMode.WvW)
                     {
                         throw ex;
                     }
                     // the players are enemy
-                    //_fightData.Logic.Targets.Add(new Target(playerAgent));
+                    /*if (!ex.Squadless)
+                    {
+                        _fightData.Logic.Targets.Add(new Target(playerAgent));
+                    }*/
                 }
             }
         }

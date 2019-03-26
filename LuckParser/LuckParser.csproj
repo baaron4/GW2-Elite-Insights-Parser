@@ -82,6 +82,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\InvalidPlayerException.cs" />
     <Compile Include="Exceptions\TooShortException.cs" />
     <Compile Include="Exceptions\SkipException.cs" />
     <Compile Include="Exceptions\CancellationException.cs" />
