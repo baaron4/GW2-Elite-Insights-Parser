@@ -587,7 +587,7 @@ namespace LuckParser.Parser
                         throw ex;
                     }
                     // the players are enemy
-                    _fightData.Logic.Targets.Add(new Target(playerAgent));
+                    //_fightData.Logic.Targets.Add(new Target(playerAgent));
                 }
             }
         }
