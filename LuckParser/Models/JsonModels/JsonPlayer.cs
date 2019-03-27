@@ -24,8 +24,9 @@ namespace LuckParser.Models.JsonModels
         public string Profession;
         /// <summary>
         /// Weapons of the player \n
-        /// Length == 4 if wep swap, 2 otherwise \n
-        /// When 2 handed weapon even indices will have "2Hand" as value
+        /// First 2 are the first set, second 2 are the second set \n
+        /// When unknown, 'Unknown' value will appear \n
+        /// If 2 handed weapon even indices will have "2Hand" as value
         /// </summary>
         public string[] Weapons;
         /// <summary>

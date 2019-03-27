@@ -85,6 +85,10 @@ namespace LuckParser.Models.ParseModels
 
         public bool EstimateWeapons(string[] weapons, int swapped, bool swapCheck)
         {
+            if (weapons.Length != 4)
+            {
+                throw new InvalidOperationException("Invalid count in weapons array");
+            }
             if (!(_apiSkill != null && swapCheck))
             {
                 return false;
