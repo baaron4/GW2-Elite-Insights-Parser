@@ -7,10 +7,10 @@ using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models.Logic
 {
-    public class SoulEater : RaidLogic
+    public class EaterOfSouls : RaidLogic
     {
         // TODO - add CR icons/indicators (vomit, greens, etc) and some mechanics
-        public SoulEater(ushort triggerID) : base(triggerID)
+        public EaterOfSouls(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange( new List<Mechanic>
             {
@@ -18,7 +18,7 @@ namespace LuckParser.Models.Logic
             }
             );
             Extension = "souleater";
-            IconUrl = "https://wiki.guildwars2.com/images/thumb/7/7b/Gold_River_of_Souls_Trophy.jpg/220px-Gold_River_of_Souls_Trophy.jpg";
+            IconUrl = "https://wiki.guildwars2.com/images/thumb/2/24/Eater_of_Souls_%28Hall_of_Chains%29.jpg/194px-Eater_of_Souls_%28Hall_of_Chains%29.jpg";
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()

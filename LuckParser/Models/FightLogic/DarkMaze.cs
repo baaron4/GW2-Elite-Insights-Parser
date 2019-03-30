@@ -18,7 +18,7 @@ namespace LuckParser.Models.Logic
             }
             );
             Extension = "eyes";
-            IconUrl = "https://wiki.guildwars2.com/images/thumb/7/7b/Gold_River_of_Souls_Trophy.jpg/220px-Gold_River_of_Souls_Trophy.jpg";
+            IconUrl = "https://wiki.guildwars2.com/images/thumb/a/a7/Eye_of_Fate.jpg/188px-Eye_of_Fate.jpg";
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()

@@ -84,7 +84,7 @@ namespace LuckParser.Models.ParseModels
                     Logic = new BrokenKing(id);
                     break;
                 case ParseEnum.TargetIDS.SoulEater:
-                    Logic = new SoulEater(id);
+                    Logic = new EaterOfSouls(id);
                     break;
                 case ParseEnum.TargetIDS.EyeOfFate:
                 case ParseEnum.TargetIDS.EyeOfJudgement:
