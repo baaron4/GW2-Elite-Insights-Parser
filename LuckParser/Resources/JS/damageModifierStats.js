@@ -9,7 +9,7 @@ var compileDamageModifiers = function () {
             return {
                 wvw: !!logData.wvw,
                 mode: logData.wvw ? 0 : 1,
-                displayMode: 0
+                displayMode: logData.dmgModifiersItem.length > 0 ? 0 : logData.dmgModifiersCommon.length > 0 ? 1 : 2
             };
         },
         computed: {
@@ -18,15 +18,15 @@ var compileDamageModifiers = function () {
             },
             commonModifiers: function () {
                 var modifiers = [];
-                for (var i = 0; i < logData.dmgCommonModifiersCommon.length; i++) {
-                    modifiers.push(damageModMap['d' + logData.dmgCommonModifiersCommon[i]]);
+                for (var i = 0; i < logData.dmgModifiersCommon.length; i++) {
+                    modifiers.push(damageModMap['d' + logData.dmgModifiersCommon[i]]);
                 }
                 return modifiers;
             },
             itemModifiers: function () {
                 var modifiers = [];
-                for (var i = 0; i < logData.dmgCommonModifiersItem.length; i++) {
-                    modifiers.push(damageModMap['d' + logData.dmgCommonModifiersItem[i]]);
+                for (var i = 0; i < logData.dmgModifiersItem.length; i++) {
+                    modifiers.push(damageModMap['d' + logData.dmgModifiersItem[i]]);
                 }
                 return modifiers;
             }
@@ -80,8 +80,8 @@ var compileDamageModifiers = function () {
                 for (var i = 0; i < this.orderedSpecs.length; i++) {
                     var spec = this.orderedSpecs[i];
                     var data = [];
-                    for (var j = 0; j < logData.dmgCommonModifiersPers[spec.name].length; j++) {
-                        data.push(damageModMap['d' + logData.dmgCommonModifiersPers[spec.name][j]]);
+                    for (var j = 0; j < logData.dmgModifiersPers[spec.name].length; j++) {
+                        data.push(damageModMap['d' + logData.dmgModifiersPers[spec.name][j]]);
                     }
                     res.push(data);
                 }

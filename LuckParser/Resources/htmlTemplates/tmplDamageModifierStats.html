@@ -1,9 +1,9 @@
 <div>
     <ul class="nav nav-tabs">
-        <li v-if="hasGear">
+        <li v-if="itemModifiers.length > 0">
             <a class="nav-link" :class="{active: displayMode === 0}" @click="displayMode = 0"> Gear Based Damage Modifiers </a>
         </li>
-        <li v-if="hasShared">
+        <li v-if="commonModifiers.length > 0">
             <a class="nav-link" :class="{active: displayMode === 1}" @click="displayMode = 1"> Shared Damage Modifiers </a>
         </li>
         <li>
