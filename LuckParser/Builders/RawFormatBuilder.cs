@@ -233,7 +233,7 @@ namespace LuckParser.Builders
                     Toughness = player.Toughness,
                     HitboxHeight = player.HitboxHeight,
                     HitboxWidth = player.HitboxWidth,
-                    Weapons = player.GetWeaponsArray(_log).Where(w => w != null).ToArray(),
+                    Weapons = player.GetWeaponsArray(_log).Select(w => w ?? "Unknown").ToArray(),
                     Group = player.Group,
                     Profession = player.Prof,
                     Damage1S = BuildTotal1SDamage(player),
