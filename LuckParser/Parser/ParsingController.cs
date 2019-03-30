@@ -90,6 +90,11 @@ namespace LuckParser.Parser
                 row.BgWorker.UpdateProgress(row, "35% - Pairing data...", 35);
                 FillMissingData();
                 row.BgWorker.ThrowIfCanceled(row);
+                _target = _fightData.Logic.Targets.Find(x => x.ID == _fightData.ID);
+                if (_target == null)
+                {
+                    _target = new Target(GeneralHelper.UnknownAgent);
+                }
 #if !DEBUG
         }
             catch (Exception ex) when (!(ex is CancellationException))
@@ -575,14 +580,17 @@ namespace LuckParser.Parser
                     {
                         _playerList.Add(player);
                     }
-                } catch (Exception ex)
+                } catch (InvalidPlayerException ex)
                 {
                     if (_fightData.Logic.Mode != FightLogic.ParseMode.WvW)
                     {
                         throw ex;
                     }
                     // the players are enemy
-                    _fightData.Logic.Targets.Add(new Target(playerAgent));
+                    /*if (!ex.Squadless)
+                    {
+                        _fightData.Logic.Targets.Add(new Target(playerAgent));
+                    }*/
                 }
             }
         }
@@ -593,11 +601,6 @@ namespace LuckParser.Parser
         {
             CompleteAgents();
             _fightData.Logic.ComputeFightTargets(_agentData, _fightData, _combatItems);
-            _target = _fightData.Logic.Targets.Find(x => x.ID == _fightData.ID);
-            if (_target == null)
-            {
-                _target = new Target(GeneralHelper.UnknownAgent);
-            }
             if (_combatItems.Count > 0)
             {
                 _fightData.FightStart = _combatItems.Min(x => x.Time);

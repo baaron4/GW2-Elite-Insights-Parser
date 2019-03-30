@@ -1,5 +1,6 @@
 ﻿using LuckParser.Controllers;
 using LuckParser.Models.Logic;
+using LuckParser.Exceptions;
 using LuckParser.Parser;
 using Newtonsoft.Json;
 using System;
@@ -39,6 +40,14 @@ namespace LuckParser.Models.ParseModels
         public Player(AgentItem agent, bool noSquad) : base(agent)
         {
             string[] name = agent.Name.Split('\0');
+            if (name.Length < 2)
+            {
+                throw new InvalidPlayerException(false);
+            }
+            if (name[1].Length == 0 || name[2].Length == 0 || Character.Contains("-"))
+            {
+                throw new InvalidPlayerException(name[1].Length != 0 && name[2].Length == 0);
+            }
             Account = name[1];
             Group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
         }

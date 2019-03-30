@@ -242,11 +242,23 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
+                if (player.Account == ":Conjured Sword")
+                {
+                    continue;
+                }
                 Statistics.FinalStatsAll stats = player.GetStatsAll(_log, phaseIndex);
                 Statistics.FinalStats statsBoss = player.GetStatsTarget(_log, phaseIndex, _log.LegacyTarget);
                 Dictionary<string, List<Statistics.DamageModifierData>> damageMods = player.GetDamageModifierData(_log, _log.LegacyTarget);
-                Statistics.DamageModifierData scholar = damageMods["Scholar Rune"][phaseIndex];
-                Statistics.DamageModifierData moving = damageMods["Bowl of Seaweed Salad"][phaseIndex];
+                Statistics.DamageModifierData scholar = new Statistics.DamageModifierData(0, 0, 0, 0);
+                Statistics.DamageModifierData moving = new Statistics.DamageModifierData(0, 0, 0, 0);
+                if (damageMods.TryGetValue("Scholar Rune", out var schoDict))
+                {
+                    scholar = schoDict[phaseIndex];
+                }
+                if (damageMods.TryGetValue("Moving Bonus", out var moveDict))
+                {
+                    moving = moveDict[phaseIndex];
+                }
 
                 WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
                 Math.Round((double)(statsBoss.CriticalRate) / statsBoss.CritableDirectDamageCount * 100,1).ToString(), statsBoss.CriticalRate.ToString(),statsBoss.CriticalDmg.ToString(),
@@ -280,10 +292,22 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
+                if (player.Account == ":Conjured Sword")
+                {
+                    continue;
+                }
                 Statistics.FinalStatsAll stats = player.GetStatsAll(_log, phaseIndex);
                 Dictionary<string, List<Statistics.DamageModifierData>> damageMods = player.GetDamageModifierData(_log, null);
-                Statistics.DamageModifierData scholar = damageMods["Scholar Rune"][phaseIndex];
-                Statistics.DamageModifierData moving = damageMods["Bowl of Seaweed Salad"][phaseIndex];
+                Statistics.DamageModifierData scholar = new Statistics.DamageModifierData(0,0,0,0);
+                Statistics.DamageModifierData moving = new Statistics.DamageModifierData(0, 0, 0, 0);
+                if (damageMods.TryGetValue("Scholar Rune", out var schoDict ))
+                {
+                    scholar = schoDict[phaseIndex];
+                }
+                if (damageMods.TryGetValue("Moving Bonus", out var moveDict))
+                {
+                    moving = moveDict[phaseIndex];
+                }
 
                 WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
                 Math.Round((double)(stats.CriticalRate) / stats.CritableDirectDamageCount * 100,1).ToString(), stats.CriticalRate.ToString(),stats.CriticalDmg.ToString(),
@@ -310,6 +334,10 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
+                if (player.Account == ":Conjured Sword")
+                {
+                    continue;
+                }
                 Statistics.FinalDefenses defenses = player.GetDefenses(_log, phaseIndex);
 
                 WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
@@ -330,6 +358,10 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
+                if (player.Account == ":Conjured Sword")
+                {
+                    continue;
+                }
                 Statistics.FinalSupport support = player.GetSupport(_log, phaseIndex);
 
                 WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
@@ -359,6 +391,10 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
+                if (player.Account == ":Conjured Sword")
+                {
+                    continue;
+                }
                 Dictionary<long, Statistics.FinalBuffs> uptimes = player.GetBuffs(_log, phaseIndex, Statistics.BuffEnum.Self);
 
                 WriteCell(player.Character);
@@ -405,6 +441,10 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
+                if (player.Account == ":Conjured Sword")
+                {
+                    continue;
+                }
                 Dictionary<long, Statistics.FinalBuffs> uptimes = player.GetBuffs(_log, phaseIndex, Statistics.BuffEnum.Self);
 
                 WriteCell(player.Character);
@@ -454,6 +494,10 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
+                if (player.Account == ":Conjured Sword")
+                {
+                    continue;
+                }
                 Dictionary<long, Statistics.FinalBuffs> boons = player.GetBuffs(_log, phaseIndex, Statistics.BuffEnum.Group);
 
                 WriteCell(player.Character);
@@ -504,6 +548,10 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
+                if (player.Account == ":Conjured Sword")
+                {
+                    continue;
+                }
                 Dictionary<long, Statistics.FinalBuffs> boons = player.GetBuffs(_log, phaseIndex, Statistics.BuffEnum.OffGroup);
 
                 WriteCell(player.Character);
@@ -554,6 +602,10 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
+                if (player.Account == ":Conjured Sword")
+                {
+                    continue;
+                }
                 Dictionary<long, Statistics.FinalBuffs> boons = player.GetBuffs(_log, phaseIndex, Statistics.BuffEnum.Squad);
                 WriteCell(player.Character);
                 foreach (Boon boon in listToUse)
@@ -759,6 +811,10 @@ namespace LuckParser.Builders
             NewLine();
             foreach (Player player in _log.PlayerList)
             {
+                if (player.Account == ":Conjured Sword")
+                {
+                    continue;
+                }
                 WriteCell(player.Character);
                 foreach (Boon boon in _statistics.PresentConditions)
                 {
