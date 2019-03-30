@@ -7,8 +7,8 @@ var compileDamageModifiers = function () {
         template: `${tmplDamageModifierStats}`,
         data: function () {
             return {
-                noTarget: !!logData.noTarget,
-                mode: logData.noTarget ? 0 : 1,
+                wvw: !!logData.wvw,
+                mode: logData.wvw ? 0 : 1,
                 displayMode: 0
             };
         },

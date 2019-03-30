@@ -1115,7 +1115,7 @@ namespace LuckParser.Builders
             }
             logData.EncounterDuration = durationString;
             logData.Success = _log.FightData.Success;
-            logData.NoTarget = _log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
+            logData.Wvw = _log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
             logData.FightName = FilterStringChars(_log.FightData.Name);
             logData.FightIcon = _log.FightData.Logic.IconUrl;
             logData.LightTheme = Properties.Settings.Default.LightTheme;
