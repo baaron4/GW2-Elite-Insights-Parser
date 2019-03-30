@@ -80,6 +80,16 @@ namespace LuckParser.Models.ParseModels
                 case ParseEnum.TargetIDS.Desmina:
                     Logic = new River(id);
                     break;
+                case ParseEnum.TargetIDS.BrokenKing:
+                    Logic = new BrokenKing(id);
+                    break;
+                case ParseEnum.TargetIDS.SoulEater:
+                    Logic = new SoulEater(id);
+                    break;
+                case ParseEnum.TargetIDS.EyeOfFate:
+                case ParseEnum.TargetIDS.EyeOfJudgement:
+                    Logic = new DarkMaze(id);
+                    break;
                 case ParseEnum.TargetIDS.Dhuum:
                     Logic = new Dhuum(id);
                     break;
