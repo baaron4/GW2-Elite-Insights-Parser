@@ -97,6 +97,7 @@ namespace LuckParser.Parser
             ReplInfo        = 26,
             StackActive     = 27,
             StackReset      = 28,
+            Guild           = 29,
             Unknown
         };
 
