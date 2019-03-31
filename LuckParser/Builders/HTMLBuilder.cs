@@ -1014,7 +1014,7 @@ namespace LuckParser.Builders
             }
             //
             Dictionary<string, List<Boon>> persBuffDict = BuildPersonalBoonData(logData.PersBuffs);
-            Dictionary<string, List<DamageModifier>> persDamageModDict = BuildPersonalDamageModData(logData.DmgCommonModifiersPers);
+            Dictionary<string, List<DamageModifier>> persDamageModDict = BuildPersonalDamageModData(logData.DmgModifiersPers);
             HashSet<string> allDamageMods = new HashSet<string>();
             foreach (Player p in _log.PlayerList)
             {
@@ -1026,7 +1026,7 @@ namespace LuckParser.Builders
                 if (allDamageMods.Contains(dMod.Name))
                 {
                     commonDamageModifiers.Add(dMod);
-                    logData.DmgCommonModifiersCommon.Add(dMod.Name.GetHashCode());
+                    logData.DmgModifiersCommon.Add(dMod.Name.GetHashCode());
                     _usedDamageMods.Add(dMod);
                 }
             }
@@ -1036,7 +1036,7 @@ namespace LuckParser.Builders
                 if (allDamageMods.Contains(dMod.Name))
                 {
                     itemDamageModifiers.Add(dMod);
-                    logData.DmgCommonModifiersItem.Add(dMod.Name.GetHashCode());
+                    logData.DmgModifiersItem.Add(dMod.Name.GetHashCode());
                     _usedDamageMods.Add(dMod);
                 }
             }
@@ -1115,7 +1115,7 @@ namespace LuckParser.Builders
             }
             logData.EncounterDuration = durationString;
             logData.Success = _log.FightData.Success;
-            logData.NoTarget = _log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
+            logData.Wvw = _log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
             logData.FightName = FilterStringChars(_log.FightData.Name);
             logData.FightIcon = _log.FightData.Logic.IconUrl;
             logData.LightTheme = Properties.Settings.Default.LightTheme;

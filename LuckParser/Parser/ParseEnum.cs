@@ -97,6 +97,7 @@ namespace LuckParser.Parser
             ReplInfo        = 26,
             StackActive     = 27,
             StackReset      = 28,
+            Guild           = 29,
             Unknown
         };
 
@@ -319,6 +320,10 @@ namespace LuckParser.Parser
             Deimos                  = 17154,
             SoullessHorror          = 19767,
             Desmina                 = 19828,
+            BrokenKing              = 19691,
+            SoulEater               = 19536,
+            EyeOfJudgement          = 19651,
+            EyeOfFate               = 19844,
             Dhuum                   = 19450,
             ConjuredAmalgamate      = 43974,
             CARightArm              = 10142,

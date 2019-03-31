@@ -11,15 +11,15 @@ namespace LuckParser.Models.HtmlModels
         public readonly List<long> Boons = new List<long>();
         public readonly List<long> OffBuffs = new List<long>();
         public readonly List<long> DefBuffs = new List<long>();
-        public readonly List<long> DmgCommonModifiersItem = new List<long>();
-        public readonly List<long> DmgCommonModifiersCommon = new List<long>();
-        public readonly Dictionary<string, List<long>> DmgCommonModifiersPers = new Dictionary<string, List<long>>();
+        public readonly List<long> DmgModifiersItem = new List<long>();
+        public readonly List<long> DmgModifiersCommon = new List<long>();
+        public readonly Dictionary<string, List<long>> DmgModifiersPers = new Dictionary<string, List<long>>();
         public readonly Dictionary<string, List<long>> PersBuffs = new Dictionary<string, List<long>>();
         
         public readonly List<long> Conditions = new List<long>();
         public string EncounterDuration;
         public bool Success;
-        public bool NoTarget;
+        public bool Wvw;
         public string FightName;
         public string FightIcon;
         public bool LightTheme;

@@ -1,16 +1,16 @@
 <div>
     <ul class="nav nav-tabs">
-        <li>
+        <li v-if="itemModifiers.length > 0">
             <a class="nav-link" :class="{active: displayMode === 0}" @click="displayMode = 0"> Gear Based Damage Modifiers </a>
         </li>
-        <li>
+        <li v-if="commonModifiers.length > 0">
             <a class="nav-link" :class="{active: displayMode === 1}" @click="displayMode = 1"> Shared Damage Modifiers </a>
         </li>
         <li>
             <a class="nav-link" :class="{active: displayMode === 2}" @click="displayMode = 2"> Class Based Damage Modifiers </a>
         </li>
     </ul>
-    <ul v-if="!noTarget" class="nav nav-pills d-flex flex-row justify-content-center mt-1 mb-1">
+    <ul v-if="!wvw" class="nav nav-pills d-flex flex-row justify-content-center mt-1 mb-1">
         <li class="nav-item">
             <a class="nav-link" @click="mode = 1" :class="{active: mode}">Target</a>
         </li>

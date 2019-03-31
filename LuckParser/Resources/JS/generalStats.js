@@ -6,7 +6,7 @@ var compileGeneralStats = function () {
         template: `${tmplDamageTable}`,
         data: function () {
             return {
-                noTarget: !!logData.noTarget,
+                wvw: !!logData.wvw,
                 cacheTarget: new Map()
             };
         },
@@ -217,8 +217,8 @@ var compileGeneralStats = function () {
         mixins: [roundingComponent],
         data: function () {
             return {
-                noTarget: !!logData.noTarget,
-                mode: logData.noTarget ? 0 :1,
+                wvw: !!logData.wvw,
+                mode: logData.wvw ? 0 :1,
                 cache: new Map(),
                 cacheTarget: new Map()
             };

@@ -1,4 +1,5 @@
 ﻿using LuckParser.Controllers;
+using LuckParser.Models.Logic;
 using LuckParser.Exceptions;
 using LuckParser.Parser;
 using Newtonsoft.Json;
@@ -715,8 +716,8 @@ namespace LuckParser.Models.ParseModels
             _damageModifiers = new Dictionary<string, List<DamageModifierData>>();
             _damageModifiersTargets = new Dictionary<Target, Dictionary<string, List<DamageModifierData>>>();
             _presentDamageModifiers = new HashSet<string>();
-            // If conjured sword, stop
-            if (Account == ":Conjured Sword")
+            // If conjured sword or WvW, stop
+            if (Account == ":Conjured Sword" || log.FightData.Logic.Mode == FightLogic.ParseMode.WvW)
             {
                 return;
             }

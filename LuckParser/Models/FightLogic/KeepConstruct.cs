@@ -216,8 +216,20 @@ namespace LuckParser.Models.Logic
                 case (ushort)Henley:
                 case (ushort)Galletta:
                 case (ushort)Ianim:
+                    Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.KeepConstruct);
+                    if (mainTarget == null)
+                    {
+                        throw new InvalidOperationException("Main target of the fight not found");
+                    }
+                    CombatReplay mtCR = mainTarget.CombatReplay;
                     replay.Actors.Add(new CircleActor(false, 0, 600, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(mob)));
                     replay.Actors.Add(new CircleActor(true, 0, 400, (start, end), "rgba(0, 125, 255, 0.5)", new AgentConnector(mob)));
+                    Point3D pos = replay.Positions.FirstOrDefault();
+                    if (pos != null)
+                    {
+                        mtCR.Actors.Add(new CircleActor(true, 0, 300, (start - 5000, start), "rgba(220, 50, 0, 0.5)", new PositionConnector(pos)));
+                        mtCR.Actors.Add(new CircleActor(true, start, 300, (start - 5000, start), "rgba(220, 50, 0, 0.5)", new PositionConnector(pos)));
+                    }
                     break;
                 case (ushort)GreenPhantasm:
                     int lifetime = 8000;

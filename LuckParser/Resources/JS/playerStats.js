@@ -10,8 +10,8 @@ var compilePlayerTab = function () {
         data: function () {
             return {
                 distmode: -1,
-                noTarget: !!logData.noTarget,
-                targetmode: logData.noTarget ? 0 : 1,
+                wvw: !!logData.wvw,
+                targetmode: logData.wvw ? 0 : 1,
                 cacheTarget: new Map()
             };
         },
@@ -137,7 +137,7 @@ var compilePlayerTab = function () {
                 hoverinfo: 'name+y+x',
                 name: 'Total DPS'
             });
-            if (!logData.noTarget) {
+            if (!logData.wvw) {
                 this.data.push({
                     x: this.phase.times,
                     y: [],
@@ -200,7 +200,7 @@ var compilePlayerTab = function () {
                 var res = this.data;
                 var data = this.computeDPSRelatedData();
                 this.data[this.playerOffset].y = data[0];
-                if (!logData.noTarget) {
+                if (!logData.wvw) {
                     this.data[this.playerOffset + 1].y = data[1];
                     this.data[this.playerOffset + 2].y = data[2];
                 }
