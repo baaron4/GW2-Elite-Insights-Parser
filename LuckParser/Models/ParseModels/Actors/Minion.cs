@@ -25,7 +25,7 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        protected override void SetBoonStatusGenerationData(ParsedLog log, BoonSimulationItem simul, long boonid, bool updateBoonPresence, bool updateCondiPresence)
+        protected override void SetBoonStatusGenerationData(ParsedLog log, BoonSimulationItem simul, long boonid)
         {
         }
 
