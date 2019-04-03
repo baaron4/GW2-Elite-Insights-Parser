@@ -12,8 +12,7 @@ namespace LuckParser.Models.ParseModels
         
         // Boons
         private readonly List<BoonDistribution> _boonDistribution = new List<BoonDistribution>();
-        private readonly List<Dictionary<long, long>> _boonPresence = new List<Dictionary<long, long>>();
-        private readonly List<Dictionary<long, long>> _condiPresence = new List<Dictionary<long, long>>();
+        private readonly List<Dictionary<long, long>> _buffPresence = new List<Dictionary<long, long>>();
         private readonly List<Dictionary<AgentItem, Dictionary<long, List<long>>>> _condiCleanse = new List<Dictionary<AgentItem, Dictionary<long, List<long>>>>();
         // damage list
         private Dictionary<int, List<int>> _damageList1S = new Dictionary<int, List<int>>();
@@ -97,13 +96,13 @@ namespace LuckParser.Models.ParseModels
             return _boonDistribution[phaseIndex];
         }
 
-        public Dictionary<long, long> GetBoonPresence(ParsedLog log, int phaseIndex)
+        public Dictionary<long, long> GetBuffPresence(ParsedLog log, int phaseIndex)
         {
             if (BoonPoints == null)
             {
                 SetBoonStatus(log);
             }
-            return _boonPresence[phaseIndex];
+            return _buffPresence[phaseIndex];
         }
 
         protected Dictionary<long, List<long>> GetCondiCleanse(ParsedLog log, int phaseIndex, AgentItem src)
@@ -117,15 +116,6 @@ namespace LuckParser.Models.ParseModels
                 return dict;
             }
             return new Dictionary<long, List<long>>();
-        }
-
-        public Dictionary<long, long> GetCondiPresence(ParsedLog log, int phaseIndex)
-        {
-            if (BoonPoints == null)
-            {
-                SetBoonStatus(log);
-            }
-            return _condiPresence[phaseIndex];
         }
 
         public FinalDPS GetDPSAll(ParsedLog log, int phaseIndex)
@@ -302,8 +292,7 @@ namespace LuckParser.Models.ParseModels
             for (int i = 0; i < phases.Count; i++)
             {
                 _boonDistribution.Add(new BoonDistribution());
-                _boonPresence.Add(new Dictionary<long, long>());
-                _condiPresence.Add(new Dictionary<long, long>());
+                _buffPresence.Add(new Dictionary<long, long>());
                 _condiCleanse.Add(new Dictionary<AgentItem, Dictionary<long, List<long>>>());
             }
         }
@@ -335,16 +324,15 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        protected override void SetBoonStatusGenerationData(ParsedLog log, BoonSimulationItem simul, long boonid, bool updateBoonPresence, bool updateCondiPresence)
+        protected override void SetBoonStatusGenerationData(ParsedLog log, BoonSimulationItem simul, long boonid)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
+            Boon boon = Boon.BoonsByIds[boonid];
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                if (updateBoonPresence)
-                    Add(_boonPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
-                if (updateCondiPresence)
-                    Add(_condiPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
+                if (boon.Type == Boon.BoonType.Intensity)
+                    Add(_buffPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
                 simul.SetBoonDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
             }
         }

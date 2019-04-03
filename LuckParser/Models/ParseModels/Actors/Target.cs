@@ -40,7 +40,7 @@ namespace LuckParser.Models.ParseModels
             {
                 PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
                 double avgBoon = 0;
-                foreach (long duration in GetBoonPresence(log, phaseIndex).Values)
+                foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => Boon.BoonsByIds[x.Key].Nature == Boon.BoonNature.Boon).Select(x => x.Value))
                 {
                     avgBoon += duration;
                 }
@@ -48,7 +48,7 @@ namespace LuckParser.Models.ParseModels
                 _avgBoons.Add(avgBoon);
 
                 double avgCondi = 0;
-                foreach (long duration in GetCondiPresence(log, phaseIndex).Values)
+                foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => Boon.BoonsByIds[x.Key].Nature == Boon.BoonNature.Condition).Select(x => x.Value))
                 {
                     avgCondi += duration;
                 }
@@ -120,8 +120,7 @@ namespace LuckParser.Models.ParseModels
                 BoonDistribution boonDistribution = GetBoonDistribution(log, phaseIndex);
                 Dictionary<long, FinalTargetBuffs> rates = new Dictionary<long, FinalTargetBuffs>();
                 _buffs.Add(rates);
-                Dictionary<long, long> boonPresence = GetBoonPresence(log, phaseIndex);
-                Dictionary<long, long> condiPresence = GetCondiPresence(log, phaseIndex);
+                Dictionary<long, long> buffPresence = GetBuffPresence(log, phaseIndex);
 
                 PhaseData phase = phases[phaseIndex];
                 long fightDuration = phase.DurationInMS;
@@ -159,13 +158,9 @@ namespace LuckParser.Models.ParseModels
                                 buff.Extension[p] = Math.Round((double)boonDistribution.GetExtension(boon.ID, p.AgentItem) / fightDuration, 2);
                                 buff.Extended[p] = Math.Round((double)boonDistribution.GetExtended(boon.ID, p.AgentItem) / fightDuration, 2);
                             }
-                            if (boonPresence.TryGetValue(boon.ID, out long presenceValueBoon))
+                            if (buffPresence.TryGetValue(boon.ID, out long presenceValueBoon))
                             {
                                 buff.Presence = Math.Round(100.0 * presenceValueBoon / fightDuration, 2);
-                            }
-                            else if (condiPresence.TryGetValue(boon.ID, out long presenceValueCondi))
-                            {
-                                buff.Presence = Math.Round(100.0 * presenceValueCondi / fightDuration, 2);
                             }
                         }
                     }
