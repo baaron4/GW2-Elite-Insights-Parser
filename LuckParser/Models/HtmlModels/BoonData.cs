@@ -90,6 +90,7 @@ namespace LuckParser.Models.HtmlModels
                             0,
                             0,
                             0,
+                            0,
                             0
                         });
                 }

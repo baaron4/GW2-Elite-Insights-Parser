@@ -14,6 +14,7 @@ namespace LuckParser.Models.ParseModels
             public long BoonDuration { get; private set; }
             public AgentItem Src { get; private set; }
             public AgentItem SeedSrc { get; }
+            public bool IsExtension { get; }
 
             public List<(AgentItem src, long value)> Extensions { get; } = new List<(AgentItem src, long value)>();
 
@@ -23,6 +24,7 @@ namespace LuckParser.Models.ParseModels
                 SeedSrc = seedSrc;
                 BoonDuration = boonDuration;
                 Src = src;
+                IsExtension = false;
             }
 
             public BoonStackItem(long start, long boonDuration, AgentItem src)
@@ -31,6 +33,7 @@ namespace LuckParser.Models.ParseModels
                 SeedSrc = src;
                 BoonDuration = boonDuration;
                 Src = src;
+                IsExtension = false;
             }
 
             public BoonStackItem(BoonStackItem other, long startShift, long durationShift)
@@ -40,12 +43,14 @@ namespace LuckParser.Models.ParseModels
                 Src = other.Src;
                 SeedSrc = other.SeedSrc;
                 Extensions = other.Extensions;
+                IsExtension = other.IsExtension;
                 if (BoonDuration == 0 && Extensions.Count > 0)
                 {
                     (AgentItem src, long value) = Extensions.First();
                     Extensions.RemoveAt(0);
                     Src = src;
                     BoonDuration = value;
+                    IsExtension = true;
                 }
             }
 

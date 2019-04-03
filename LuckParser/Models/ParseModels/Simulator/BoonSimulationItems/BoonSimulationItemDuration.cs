@@ -9,11 +9,13 @@ namespace LuckParser.Models.ParseModels
     {
         private readonly AgentItem _src;
         private readonly AgentItem _seedSrc;
+        private readonly bool _isExtension;
 
         public BoonSimulationItemDuration(BoonStackItem other) : base(other.Start, other.BoonDuration)
         {
             _src = other.Src;
             _seedSrc = other.SeedSrc;
+            _isExtension = other.IsExtension;
         }
 
         public override void SetEnd(long end)
@@ -48,27 +50,30 @@ namespace LuckParser.Models.ParseModels
                     cDur,
                     0, 0, 0, 0, 0));
             }
-            if (agent != seedAgent)
+            if (_isExtension)
             {
-                if (distrib.TryGetValue(seedAgent, out toModify))
-                {
-                    toModify.Extension += cDur;
-                    distrib[seedAgent] = toModify;
-                }
-                else
-                {
-                    distrib.Add(seedAgent, new BoonDistributionItem(
-                        0,
-                        0, 0, 0, cDur, 0));
-                }
                 if (distrib.TryGetValue(agent, out toModify))
                 {
-                    toModify.Extended += cDur;
+                    toModify.Extension += cDur;
                     distrib[agent] = toModify;
                 }
                 else
                 {
                     distrib.Add(agent, new BoonDistributionItem(
+                        0,
+                        0, 0, 0, cDur, 0));
+                }
+            }
+            if (agent != seedAgent)
+            {
+                if (distrib.TryGetValue(seedAgent, out toModify))
+                {
+                    toModify.Extended += cDur;
+                    distrib[seedAgent] = toModify;
+                }
+                else
+                {
+                    distrib.Add(seedAgent, new BoonDistributionItem(
                         0,
                         0, 0, 0, 0, cDur));
                 }
