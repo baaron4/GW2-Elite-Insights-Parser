@@ -18,13 +18,13 @@ namespace LuckParser.Models.ParseModels
 
             public List<(AgentItem src, long value)> Extensions { get; } = new List<(AgentItem src, long value)>();
 
-            public BoonStackItem(long start, long boonDuration, AgentItem src, AgentItem seedSrc)
+            public BoonStackItem(long start, long boonDuration, AgentItem src, AgentItem seedSrc, bool isExtension)
             {
                 Start = start;
                 SeedSrc = seedSrc;
                 BoonDuration = boonDuration;
                 Src = src;
-                IsExtension = false;
+                IsExtension = isExtension;
             }
 
             public BoonStackItem(long start, long boonDuration, AgentItem src)
@@ -155,9 +155,9 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        protected void Add(long boonDuration, AgentItem srcinstid, AgentItem seedSrc, long start, bool atFirst)
+        protected void Add(long boonDuration, AgentItem srcinstid, AgentItem seedSrc, long start, bool atFirst, bool isExtension)
         {
-            var toAdd = new BoonStackItem(start, boonDuration, srcinstid, seedSrc);
+            var toAdd = new BoonStackItem(start, boonDuration, srcinstid, seedSrc, isExtension);
             // Find empty slot
             if (BoonStack.Count < Capacity)
             {

@@ -6,7 +6,7 @@ namespace LuckParser.Models.ParseModels
 {
     public class BoonSimulatorDuration : BoonSimulator
     {
-        private AgentItem _lastSrcRemove = GeneralHelper.UnknownAgent;
+        private (AgentItem agent, bool extension) _lastSrcRemove = (GeneralHelper.UnknownAgent, false);
         // Constructor
         public BoonSimulatorDuration(int capacity, ParsedLog log, StackingLogic logic) : base(capacity, log, logic)
         {
@@ -20,7 +20,7 @@ namespace LuckParser.Models.ParseModels
             }
             else
             {
-                Add(oldValue + extension, src, _lastSrcRemove, start, true);
+                Add(oldValue + extension, src, _lastSrcRemove.agent, start, true, _lastSrcRemove.extension);
             }
         }
 
@@ -30,7 +30,7 @@ namespace LuckParser.Models.ParseModels
         {
             if (BoonStack.Count > 0 && timePassed > 0)
             {
-                _lastSrcRemove = GeneralHelper.UnknownAgent;
+                _lastSrcRemove = (GeneralHelper.UnknownAgent, false);
                    var toAdd = new BoonSimulationItemDuration(BoonStack[0]);
                 if (GenerationSimulation.Count > 0)
                 {
@@ -60,7 +60,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 if (BoonStack[0].BoonDuration == 0)
                 {
-                    _lastSrcRemove = BoonStack[0].SeedSrc;
+                    _lastSrcRemove = (BoonStack[0].SeedSrc, BoonStack[0].IsExtension);
                     BoonStack.RemoveAt(0);
                 }
                 Update(leftOver);

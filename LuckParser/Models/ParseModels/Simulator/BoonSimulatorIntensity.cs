@@ -7,7 +7,7 @@ namespace LuckParser.Models.ParseModels
 {
     public class BoonSimulatorIntensity : BoonSimulator
     {
-        private List<AgentItem> _lastSrcRemoves = new List<AgentItem>();
+        private List<(AgentItem agent, bool extension)> _lastSrcRemoves = new List<(AgentItem agent, bool extension)>();
         // Constructor
         public BoonSimulatorIntensity(int capacity, ParsedLog log, StackingLogic logic) : base(capacity, log, logic)
         {
@@ -27,7 +27,7 @@ namespace LuckParser.Models.ParseModels
             {
                 if (_lastSrcRemoves.Count > 0)
                 {
-                    Add(oldValue + extension, src, _lastSrcRemoves.First(), start, false);
+                    Add(oldValue + extension, src, _lastSrcRemoves.First().agent, start, false, _lastSrcRemoves.First().extension);
                     _lastSrcRemoves.RemoveAt(0);
                 }
                 else
@@ -63,7 +63,7 @@ namespace LuckParser.Models.ParseModels
                     BoonStack[i] = item;
                     if (item.BoonDuration == 0)
                     {
-                        _lastSrcRemoves.Add(item.SeedSrc);
+                        _lastSrcRemoves.Add((item.SeedSrc, item.IsExtension));
                     }
                 }
                 BoonStack.RemoveAll(x => x.BoonDuration == 0);
