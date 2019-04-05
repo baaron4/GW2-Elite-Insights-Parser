@@ -21,14 +21,14 @@ namespace LuckParser.Models.Logic
             IconUrl = "https://wiki.guildwars2.com/images/3/37/Mini_Broken_King.png";
         }
 
-        /*protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
-            return new CombatReplayMap("https://i.imgur.com/YBtiFnH.png",
-                            (4145, 1603),
-                            (-12201, -4866, 7742, 2851),
+            return new CombatReplayMap("https://i.imgur.com/JRPskkX.png",
+                            (999, 890),
+                            (2497, 5388, 7302, 9668),
                             (-21504, -12288, 24576, 12288),
                             (19072, 15484, 20992, 16508));
-        }*/
+        }
 
         public override string GetFightName() {
             return "Statue of Ice";
