@@ -21,7 +21,7 @@ namespace LuckParser.Models.ParseModels
         }
 
         public int Health { get; set; } = -1;
-        public List<(long time, int hp)> HealthOverTime { get; } = new List<(long time, int hp)>();
+        public List<(long logTime, int hp)> HealthOverTime { get; } = new List<(long logTime, int hp)>();
 
         /*public void AddCustomCastLog(long time, long skillID, int expDur, ParseEnum.Activation startActivation, int actDur, ParseEnum.Activation endActivation, ParsedLog log)
         {

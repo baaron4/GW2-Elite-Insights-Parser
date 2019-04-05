@@ -108,7 +108,7 @@ namespace LuckParser.Models.Logic
                         break;
                     }
                 }
-                log.FightData.FightEnd = Math.Max(eye1.HealthOverTime[lastIEye1].time, eye2.HealthOverTime[lastIEye2].time);
+                log.FightData.FightEnd = Math.Max(eye1.HealthOverTime[lastIEye1].logTime, eye2.HealthOverTime[lastIEye2].logTime);
             }
         }
 

@@ -323,7 +323,7 @@ namespace LuckParser.Models.Logic
             foreach (CombatItem c in spiritTransform)
             {
                 int duration = 15000;
-                if (mainTarget.HealthOverTime.FirstOrDefault(x => x.time > c.Time).hp < 1050)
+                if (mainTarget.HealthOverTime.FirstOrDefault(x => x.logTime > c.Time).hp < 1050)
                 {
                     duration = 30000;
                 }
