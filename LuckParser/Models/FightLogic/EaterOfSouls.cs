@@ -40,6 +40,11 @@ namespace LuckParser.Models.Logic
             };
         }
 
+        public override void SetSuccess(ParsedLog log)
+        {
+            SetSuccessByDeath(log, TriggerID);
+        }
+
         public override string GetFightName()
         {
             return "Statue of Death";

@@ -150,13 +150,13 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public virtual void AddHealthUpdate(ushort instid, long time, int healthTime, int health)
+        public virtual void AddHealthUpdate(ushort instid, long time, long healthTime, int health)
         {
             foreach (Target target in Targets)
             {
                 if (target.InstID == instid && target.FirstAware <= time && target.LastAware >= time)
                 {
-                    target.HealthOverTime.Add(new Point(healthTime, health));
+                    target.HealthOverTime.Add((healthTime, health));
                     break;
                 }
             }
@@ -266,24 +266,39 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        protected void SetSuccessByDeath(ParsedLog log)
+        protected void SetSuccessByDeath(ParsedLog log, ushort idFirst, params ushort[] ids)
         {
-            Target mainTarget = Targets.Find(x => x.ID == TriggerID);
-            if (mainTarget == null)
+            int success = 0;
+            long maxTime = long.MinValue;
+            List<ushort> idsToUse = new List<ushort>
             {
-                throw new InvalidOperationException("Main target of the fight not found");
+                idFirst
+            };
+            idsToUse.AddRange(ids);
+            foreach (ushort id in idsToUse)
+            {
+                Target target = Targets.Find(x => x.ID == TriggerID);
+                if (target == null)
+                {
+                    throw new InvalidOperationException("Main target of the fight not found");
+                }
+                CombatItem killed = log.CombatData.GetStatesData(target.InstID, ParseEnum.StateChange.ChangeDead, target.FirstAware, target.LastAware).LastOrDefault();
+                if (killed != null)
+                {
+                    success++;
+                    maxTime = Math.Max(killed.Time, maxTime);
+                }
             }
-            CombatItem killed = log.CombatData.GetStatesData(mainTarget.InstID, ParseEnum.StateChange.ChangeDead, mainTarget.FirstAware, mainTarget.LastAware).LastOrDefault();
-            if (killed != null)
+            if (success == idsToUse.Count)
             {
                 log.FightData.Success = true;
-                log.FightData.FightEnd = killed.Time;
+                log.FightData.FightEnd = maxTime;
             }
         }
 
         public virtual void SetSuccess(ParsedLog log)
         {
-            SetSuccessByDeath(log);
+            SetSuccessByDeath(log, TriggerID);
         }
 
 

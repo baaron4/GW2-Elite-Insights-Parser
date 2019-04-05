@@ -58,6 +58,60 @@ namespace LuckParser.Models.Logic
             };
         }
 
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
+        {
+            List<PhaseData> phases = GetInitialPhase(log);
+            Target eye1 = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.EyeOfFate);
+            Target eye2 = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.EyeOfJudgement);
+            if (eye2 == null || eye1 == null)
+            {
+                throw new InvalidOperationException("Eyes not found");
+            }
+            phases[0].Targets.Add(eye2);
+            phases[0].Targets.Add(eye1);
+            return phases;
+        }
+
+        public override void SetSuccess(ParsedLog log)
+        {
+
+            Target eye1 = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.EyeOfFate);
+            Target eye2 = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.EyeOfJudgement);
+            if (eye2 == null || eye1 == null)
+            {
+                throw new InvalidOperationException("Eyes not found");
+            }
+            if (eye1.HealthOverTime.Count == 0 || eye2.HealthOverTime.Count == 0)
+            {
+                return;
+            }
+            long lastEye1Hp = eye1.HealthOverTime.LastOrDefault().hp;
+            long lastEye2Hp = eye2.HealthOverTime.LastOrDefault().hp;
+            if (lastEye1Hp == 0 && lastEye2Hp == 0)
+            {
+                log.FightData.Success = true;
+                int lastIEye1;
+                for (lastIEye1 = eye1.HealthOverTime.Count - 1; lastIEye1 >= 0; lastIEye1--)
+                {
+                    if (eye1.HealthOverTime[lastIEye1].hp > 0)
+                    {
+                        lastIEye1++;
+                        break;
+                    }
+                }
+                int lastIEye2;
+                for (lastIEye2 = eye2.HealthOverTime.Count - 1; lastIEye2 >= 0; lastIEye2--)
+                {
+                    if (eye2.HealthOverTime[lastIEye2].hp > 0)
+                    {
+                        lastIEye2++;
+                        break;
+                    }
+                }
+                log.FightData.FightEnd = Math.Max(eye1.HealthOverTime[lastIEye1].time, eye2.HealthOverTime[lastIEye2].time);
+            }
+        }
+
         public override string GetFightName() {
             return "Statue of Darkness";
         }

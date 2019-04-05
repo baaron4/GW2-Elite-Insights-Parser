@@ -323,12 +323,12 @@ namespace LuckParser.Models.Logic
             foreach (CombatItem c in spiritTransform)
             {
                 int duration = 15000;
-                int start = (int)(log.FightData.ToFightSpace(c.Time));
-                if (mainTarget.HealthOverTime.FirstOrDefault(x => x.X > start).Y < 1050)
+                if (mainTarget.HealthOverTime.FirstOrDefault(x => x.time > c.Time).hp < 1050)
                 {
                     duration = 30000;
                 }
                 CombatItem removedBuff = log.CombatData.GetBoonData(48281).FirstOrDefault(x => x.SrcInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.All && x.Time > c.Time && x.Time < c.Time + duration);
+                int start = (int)(log.FightData.ToFightSpace(c.Time));
                 int end = start + duration;
                 if (removedBuff != null)
                 {

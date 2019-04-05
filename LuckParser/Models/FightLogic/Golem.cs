@@ -73,7 +73,7 @@ namespace LuckParser.Models.Logic
             }
             if (mainTarget.HealthOverTime.Count > 0)
             {
-                log.FightData.Success = mainTarget.HealthOverTime.Last().Y < 200;
+                log.FightData.Success = mainTarget.HealthOverTime.Last().hp < 200;
             }
         }
 

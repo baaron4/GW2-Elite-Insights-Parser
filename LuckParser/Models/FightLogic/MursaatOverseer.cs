@@ -71,18 +71,18 @@ namespace LuckParser.Models.Logic
             int i = 0;
             for (i = 0; i < limit.Count; i++)
             {
-                Point pt = mainTarget.HealthOverTime.FirstOrDefault(x => x.Y/100.0 <= limit[i]);
-                if (pt == null)
+                (long logTime, int hp) = mainTarget.HealthOverTime.FirstOrDefault(x => x.hp/100.0 <= limit[i]);
+                if (logTime == 0)
                 {
                     break;
                 }
-                PhaseData phase = new PhaseData(start, Math.Min(pt.X, fightDuration))
+                PhaseData phase = new PhaseData(start, Math.Min(log.FightData.ToFightSpace(logTime), fightDuration))
                 {
                     Name = (25 + limit[i]) + "% - " + limit[i] + "%"
                 };
                 phase.Targets.Add(mainTarget);
                 phases.Add(phase);
-                start = pt.X;
+                start = log.FightData.ToFightSpace(logTime);
             }
             if (i < 4)
             {

@@ -638,7 +638,7 @@ namespace LuckParser.Parser
                         break;
                     case ParseEnum.StateChange.HealthUpdate:
                         //set health update
-                        _fightData.Logic.AddHealthUpdate(c.SrcInstid, c.Time, (int)(_fightData.ToFightSpace(c.Time)), (int)c.DstAgent);
+                        _fightData.Logic.AddHealthUpdate(c.SrcInstid, c.Time, c.Time, (int)c.DstAgent);
                         break;
                 }
             }

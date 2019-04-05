@@ -21,7 +21,7 @@ namespace LuckParser.Models.ParseModels
         }
 
         public int Health { get; set; } = -1;
-        public List<Point> HealthOverTime { get; } = new List<Point>();
+        public List<(long time, int hp)> HealthOverTime { get; } = new List<(long time, int hp)>();
 
         /*public void AddCustomCastLog(long time, long skillID, int expDur, ParseEnum.Activation startActivation, int actDur, ParseEnum.Activation endActivation, ParsedLog log)
         {
@@ -194,9 +194,9 @@ namespace LuckParser.Models.ParseModels
             }
             int totalTime = 0;
             double curHealth = 100.0;
-            foreach (Point p in HealthOverTime)
+            foreach ((long logTime, int hp) in HealthOverTime)
             {
-                int time = p.X;
+                int time = (int)log.FightData.ToFightSpace(logTime);
                 if (time < 0)
                 {
                     continue;
@@ -209,7 +209,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     listFull[totalTime] = curHealth;
                 }
-                curHealth = p.Y / 100.0;
+                curHealth = hp / 100.0;
                 listFull[time] = curHealth;
             }
             // fill

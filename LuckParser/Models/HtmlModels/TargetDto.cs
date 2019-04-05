@@ -39,7 +39,7 @@ namespace LuckParser.Models.HtmlModels
             {
                 if (target.HealthOverTime.Count > 0)
                 {
-                    HpLeft = target.HealthOverTime[target.HealthOverTime.Count - 1].Y;
+                    HpLeft = target.HealthOverTime[target.HealthOverTime.Count - 1].hp;
                 }
             }
             Percent = Math.Round(100.0 - HpLeft * 0.01, 2);

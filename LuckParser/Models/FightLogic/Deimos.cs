@@ -293,18 +293,18 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override void AddHealthUpdate(ushort instid, long time, int healthTime, int health)
+        public override void AddHealthUpdate(ushort instid, long time, long healthTime, int health)
         {
             foreach (Target target in Targets)
             {
                 if (target.InstID == instid && target.FirstAware <= time && target.LastAware >= time)
                 {
                     // Additional check because the arm gives a health update of 100%
-                    if (target.HealthOverTime.Count > 0 && target.HealthOverTime.Last().Y < 10000 && health > 9900)
+                    if (target.HealthOverTime.Count > 0 && target.HealthOverTime.Last().hp < 10000 && health > 9900)
                     {
                         break;
                     }
-                    target.HealthOverTime.Add(new System.Drawing.Point(healthTime, health));
+                    target.HealthOverTime.Add((healthTime, health));
                     break;
                 }
             }
