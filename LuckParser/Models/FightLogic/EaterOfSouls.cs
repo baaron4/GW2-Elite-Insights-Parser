@@ -34,9 +34,11 @@ namespace LuckParser.Models.Logic
         {
             return new List<ParseEnum.TrashIDS>
             {
-                // spiders - special icon
-                // spirits - green dot
-                // skeletons - red dot
+                OrbSpider,
+                SpiritHorde1,
+                SpiritHorde2,
+                SpiritHorde3,
+                GreenSpirit
             };
         }
 

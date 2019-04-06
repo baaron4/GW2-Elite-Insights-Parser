@@ -34,8 +34,8 @@ namespace LuckParser.Models.Logic
         {
             return new List<ParseEnum.TrashIDS>
             {
-                // skeletons - red dot
-                // minotaur - special icon
+                LightThieves,
+                //MazeMinotaur,
             };
         }
 
