@@ -377,6 +377,13 @@ namespace LuckParser
                 case ParseEnum.TargetIDS.SoullessHorror:
                 case ParseEnum.TargetIDS.Desmina:
                     return "https://i.imgur.com/jAiRplg.png";
+                case ParseEnum.TargetIDS.BrokenKing:
+                    return "https://i.imgur.com/FNgUmvL.png";
+                case ParseEnum.TargetIDS.SoulEater:
+                    return "https://i.imgur.com/Sd6Az8M.png";
+                case ParseEnum.TargetIDS.EyeOfFate:
+                case ParseEnum.TargetIDS.EyeOfJudgement:
+                    return "https://i.imgur.com/kAgdoa5.png";
                 case ParseEnum.TargetIDS.Dhuum:
                     return "https://i.imgur.com/RKaDon5.png";
                 case ParseEnum.TargetIDS.ConjuredAmalgamate:
@@ -520,8 +527,11 @@ namespace LuckParser
                     return "https://i.imgur.com/INCGLIK.png";
                 case BanditBombardier:
                 case SurgingSoul:
+                //case MazeMinotaur:
                 case Enervator:
                     return "https://i.imgur.com/k79t7ZA.png";
+                case OrbSpider:
+                    return "https://i.imgur.com/FB5VM9X.png";
                 case Seekers:
                     return "https://i.imgur.com/FrPoluz.png";
                 case BlueGuardian:
@@ -533,6 +543,7 @@ namespace LuckParser
                 case UnderworldReaper:
                     return "https://i.imgur.com/Tq6SYVe.png";
                 case CagedWarg:
+                case GreenSpirit:
                 case BanditSapper:
                     return "https://i.imgur.com/0koP4xB.png";
                 case FleshWurm:

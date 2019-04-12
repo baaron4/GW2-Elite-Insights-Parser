@@ -96,7 +96,7 @@ namespace LuckParser.Builders
             WriteLine(new [] { "Boss", fightName });
             WriteLine(new [] { "Success", _log.FightData.Success.ToString() });
             WriteLine(new [] { "Total Boss Health", _log.LegacyTarget.Health.ToString() });
-            int finalBossHealth = _log.LegacyTarget.HealthOverTime.Count > 0 ? _log.LegacyTarget.HealthOverTime.Last().Y : 10000;
+            int finalBossHealth = _log.LegacyTarget.HealthOverTime.Count > 0 ? _log.LegacyTarget.HealthOverTime.Last().hp : 10000;
             WriteLine(new [] { "Final Boss Health", (_log.LegacyTarget.Health * (100.0 - finalBossHealth * 0.01)).ToString() });
             WriteLine(new [] { "Boss Health Burned %", (100.0 - finalBossHealth * 0.01).ToString() });
             WriteLine(new [] { "Duration", durationString });

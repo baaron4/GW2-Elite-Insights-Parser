@@ -28,8 +28,8 @@ namespace LuckParser.Parser
         private readonly SkillData _skillData = new SkillData();
         private List<CombatItem> _combatItems = new List<CombatItem>();
         private List<Player> _playerList = new List<Player>();
-        private Target _target;
         private byte _revision;
+        private ushort _id;
 
         public ParsingController()
         {
@@ -65,7 +65,12 @@ namespace LuckParser.Parser
                     ParseLog(row, fs);
                 }
             }
-            return new ParsedLog(_logData, _fightData, _agentData, _skillData, new CombatData(_combatItems, _fightData), _playerList, _target);
+            Target legacyTarget = _fightData.Logic.Targets.Find(x => x.ID == _fightData.ID);
+            if (legacyTarget == null)
+            {
+                legacyTarget = new Target(GeneralHelper.UnknownAgent);
+            }
+            return new ParsedLog(_logData, _fightData, _agentData, _skillData, new CombatData(_combatItems, _fightData), _playerList, legacyTarget);
         }
 
         private void ParseLog(GridRow row, Stream stream)
@@ -90,11 +95,6 @@ namespace LuckParser.Parser
                 row.BgWorker.UpdateProgress(row, "35% - Pairing data...", 35);
                 FillMissingData();
                 row.BgWorker.ThrowIfCanceled(row);
-                _target = _fightData.Logic.Targets.Find(x => x.ID == _fightData.ID);
-                if (_target == null)
-                {
-                    _target = new Target(GeneralHelper.UnknownAgent);
-                }
 #if !DEBUG
         }
             catch (Exception ex) when (!(ex is CancellationException))
@@ -142,12 +142,9 @@ namespace LuckParser.Parser
                 _revision = reader.ReadByte();
 
                 // 2 bytes: fight instance ID
-                ushort id = reader.ReadUInt16();
+                _id = reader.ReadUInt16();
                 // 1 byte: position
                 ParseHelper.SafeSkip(stream, 1);
-
-                //Save
-                _fightData = new FightData(id, Properties.Settings.Default.ParsePhases);
             }
         }
 
@@ -600,6 +597,7 @@ namespace LuckParser.Parser
         private void FillMissingData()
         {
             CompleteAgents();
+            _fightData = new FightData(_id, _agentData);
             _fightData.Logic.ComputeFightTargets(_agentData, _fightData, _combatItems);
             if (_combatItems.Count > 0)
             {
@@ -638,7 +636,7 @@ namespace LuckParser.Parser
                         break;
                     case ParseEnum.StateChange.HealthUpdate:
                         //set health update
-                        _fightData.Logic.AddHealthUpdate(c.SrcInstid, c.Time, (int)(_fightData.ToFightSpace(c.Time)), (int)c.DstAgent);
+                        _fightData.Logic.AddHealthUpdate(c.SrcInstid, c.Time, c.Time, (int)c.DstAgent);
                         break;
                 }
             }

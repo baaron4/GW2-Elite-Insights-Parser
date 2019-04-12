@@ -106,6 +106,23 @@ namespace LuckParser.Models.Logic
             }
         }
 
+        private List<long> GetTargetableTimes(ParsedLog log, Target target)
+        {
+            List<CombatItem> attackTargetsAgents = log.CombatData.GetStates(ParseEnum.StateChange.AttackTarget).Where(x => x.DstAgent == target.Agent).Take(2).ToList(); // 3rd one is weird
+            List<AgentItem> attackTargets = new List<AgentItem>();
+            foreach (CombatItem c in attackTargetsAgents)
+            {
+                attackTargets.Add(log.AgentData.GetAgent(c.SrcAgent, c.Time));
+            }
+            List<long> targetables = new List<long>();
+            foreach (AgentItem attackTarget in attackTargets)
+            {
+                var aux = log.CombatData.GetStates(ParseEnum.StateChange.Targetable).Where(x => x.SrcAgent == attackTarget.Agent).ToList();
+                targetables.AddRange(aux.Where(x => x.DstAgent == 1).Select(x => log.FightData.ToFightSpace(x.Time)));
+            }
+            return targetables;
+        }
+
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
@@ -139,11 +156,11 @@ namespace LuckParser.Models.Logic
             Target leftArm = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.CALeftArm);
             if (leftArm != null)
             {
-                List<long> leftArmDown = log.CombatData.GetBoonData(52430).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All && x.SrcInstid == leftArm.InstID).Select(x => log.FightData.ToFightSpace(x.Time)).ToList();
+                List<long> targetables = GetTargetableTimes(log, leftArm);
                 for (int i = 1; i < phases.Count; i += 2)
                 {
                     PhaseData phase = phases[i];
-                    if (leftArmDown.Exists(x => phase.InInterval(x)))
+                    if (targetables.Exists(x => phase.InInterval(x)))
                     {
                         phase.Name = "Left " + phase.Name;
                         phase.Targets.Add(leftArm);
@@ -153,11 +170,11 @@ namespace LuckParser.Models.Logic
             Target rightArm = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.CARightArm);
             if (rightArm != null)
             {
-                List<long> rightArmDown = log.CombatData.GetBoonData(52430).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All && x.SrcInstid == rightArm.InstID).Select(x => log.FightData.ToFightSpace(x.Time)).ToList();
+                List<long> targetables = GetTargetableTimes(log, rightArm);
                 for (int i = 1; i < phases.Count; i += 2)
                 {
                     PhaseData phase = phases[i];
-                    if (rightArmDown.Exists(x => phase.InInterval(x)))
+                    if (targetables.Exists(x => phase.InInterval(x)))
                     {
                         if (phase.Name.Contains("Left"))
                         {

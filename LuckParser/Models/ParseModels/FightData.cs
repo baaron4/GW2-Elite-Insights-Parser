@@ -27,10 +27,10 @@ namespace LuckParser.Models.ParseModels
             }
         }
         // Constructors
-        public FightData(ushort id, bool requirePhases)
+        public FightData(ushort id, AgentData agentData)
         {
             ID = id;
-            _requirePhases = requirePhases;
+            _requirePhases = Properties.Settings.Default.ParsePhases;
             switch (ParseEnum.GetTargetIDS(id))
             {
                 case ParseEnum.TargetIDS.ValeGuardian:
@@ -91,6 +91,13 @@ namespace LuckParser.Models.ParseModels
                     Logic = new DarkMaze(id);
                     break;
                 case ParseEnum.TargetIDS.Dhuum:
+                    // some eyes log are registered as Dhuum
+                    if (agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.EyeOfFate).Count > 0 ||
+                        agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.EyeOfJudgement).Count > 0)
+                    {
+                        Logic = new DarkMaze((ushort)ParseEnum.TargetIDS.EyeOfFate);
+                        break;
+                    }
                     Logic = new Dhuum(id);
                     break;
                 case ParseEnum.TargetIDS.ConjuredAmalgamate:

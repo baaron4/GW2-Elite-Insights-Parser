@@ -228,6 +228,15 @@ namespace LuckParser.Parser
             SpiritHorde2 = 19400,
             SpiritHorde3 = 19692,
 
+            // Statues of Darkness
+            LightThieves = 19658,
+            //MazeMinotaur = 5,
+
+            // Statue of Death
+            OrbSpider = 19801,
+            GreenSpirit = 19587,
+            // Skeletons are the same as Spirit hordes
+
             // Dhuum
             Messenger = 19807,
             Echo = 19628,

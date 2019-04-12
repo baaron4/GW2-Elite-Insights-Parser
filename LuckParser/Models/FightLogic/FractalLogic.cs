@@ -72,7 +72,7 @@ namespace LuckParser.Models.Logic
                 }
                 else
                 {
-                    SetSuccessByDeath(log);
+                    SetSuccessByDeath(log, TriggerID);
                     if (log.FightData.Success)
                     {
                         log.FightData.FightEnd = Math.Min(log.FightData.FightEnd, lastDamageTaken.Time);
