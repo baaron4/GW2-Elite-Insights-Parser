@@ -133,34 +133,34 @@ namespace LuckParser.Models.ParseModels
                         rates[boon.ID] = buff;
                         if (boon.Type == Boon.BoonType.Duration)
                         {
-                            buff.Uptime = Math.Round(100.0 * boonDistribution.GetUptime(boon.ID) / fightDuration, 2);
+                            buff.Uptime = Math.Round(100.0 * boonDistribution.GetUptime(boon.ID) / fightDuration, 3);
                             foreach (Player p in log.PlayerList)
                             {
                                 long gen = boonDistribution.GetGeneration(boon.ID, p.AgentItem);
-                                buff.Generated[p] = Math.Round(100.0 * gen / fightDuration, 2);
-                                buff.Overstacked[p] = Math.Round(100.0 * (boonDistribution.GetOverstack(boon.ID, p.AgentItem) + gen) / fightDuration, 2);
-                                buff.Wasted[p] = Math.Round(100.0 * boonDistribution.GetWaste(boon.ID, p.AgentItem) / fightDuration, 2);
-                                buff.UnknownExtension[p] = Math.Round(100.0 * boonDistribution.GetUnknownExtension(boon.ID, p.AgentItem) / fightDuration, 2);
-                                buff.Extension[p] = Math.Round(100.0 * boonDistribution.GetExtension(boon.ID, p.AgentItem) / fightDuration, 2);
-                                buff.Extended[p] = Math.Round(100.0 * boonDistribution.GetExtended(boon.ID, p.AgentItem) / fightDuration, 2);
+                                buff.Generated[p] = Math.Round(100.0 * gen / fightDuration, 3);
+                                buff.Overstacked[p] = Math.Round(100.0 * (boonDistribution.GetOverstack(boon.ID, p.AgentItem) + gen) / fightDuration, 3);
+                                buff.Wasted[p] = Math.Round(100.0 * boonDistribution.GetWaste(boon.ID, p.AgentItem) / fightDuration, 3);
+                                buff.UnknownExtension[p] = Math.Round(100.0 * boonDistribution.GetUnknownExtension(boon.ID, p.AgentItem) / fightDuration, 3);
+                                buff.Extension[p] = Math.Round(100.0 * boonDistribution.GetExtension(boon.ID, p.AgentItem) / fightDuration, 3);
+                                buff.Extended[p] = Math.Round(100.0 * boonDistribution.GetExtended(boon.ID, p.AgentItem) / fightDuration, 3);
                             }
                         }
                         else if (boon.Type == Boon.BoonType.Intensity)
                         {
-                            buff.Uptime = Math.Round((double)boonDistribution.GetUptime(boon.ID) / fightDuration, 2);
+                            buff.Uptime = Math.Round((double)boonDistribution.GetUptime(boon.ID) / fightDuration, 3);
                             foreach (Player p in log.PlayerList)
                             {
                                 long gen = boonDistribution.GetGeneration(boon.ID, p.AgentItem);
-                                buff.Generated[p] = Math.Round((double)gen / fightDuration, 2);
-                                buff.Overstacked[p] = Math.Round((double)(boonDistribution.GetOverstack(boon.ID, p.AgentItem) + gen) / fightDuration, 2);
-                                buff.Wasted[p] = Math.Round((double)boonDistribution.GetWaste(boon.ID, p.AgentItem) / fightDuration, 2);
-                                buff.UnknownExtension[p] = Math.Round((double)boonDistribution.GetUnknownExtension(boon.ID, p.AgentItem) / fightDuration, 2);
-                                buff.Extension[p] = Math.Round((double)boonDistribution.GetExtension(boon.ID, p.AgentItem) / fightDuration, 2);
-                                buff.Extended[p] = Math.Round((double)boonDistribution.GetExtended(boon.ID, p.AgentItem) / fightDuration, 2);
+                                buff.Generated[p] = Math.Round((double)gen / fightDuration, 3);
+                                buff.Overstacked[p] = Math.Round((double)(boonDistribution.GetOverstack(boon.ID, p.AgentItem) + gen) / fightDuration, 3);
+                                buff.Wasted[p] = Math.Round((double)boonDistribution.GetWaste(boon.ID, p.AgentItem) / fightDuration, 3);
+                                buff.UnknownExtension[p] = Math.Round((double)boonDistribution.GetUnknownExtension(boon.ID, p.AgentItem) / fightDuration, 3);
+                                buff.Extension[p] = Math.Round((double)boonDistribution.GetExtension(boon.ID, p.AgentItem) / fightDuration, 3);
+                                buff.Extended[p] = Math.Round((double)boonDistribution.GetExtended(boon.ID, p.AgentItem) / fightDuration, 3);
                             }
                             if (buffPresence.TryGetValue(boon.ID, out long presenceValueBoon))
                             {
-                                buff.Presence = Math.Round(100.0 * presenceValueBoon / fightDuration, 2);
+                                buff.Presence = Math.Round(100.0 * presenceValueBoon / fightDuration, 3);
                             }
                         }
                     }

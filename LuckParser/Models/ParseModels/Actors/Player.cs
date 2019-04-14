@@ -543,21 +543,21 @@ namespace LuckParser.Models.ParseModels
                         final[boon.ID] = uptime;
                         if (boon.Type == Boon.BoonType.Duration)
                         {
-                            uptime.Generation = Math.Round(100.0 * totalGeneration / fightDuration / playerList.Count, 2);
-                            uptime.Overstack = Math.Round(100.0 * (totalOverstack + totalGeneration) / fightDuration / playerList.Count, 2);
-                            uptime.Wasted = Math.Round(100.0 * (totalWasted) / fightDuration / playerList.Count, 2);
-                            uptime.UnknownExtended = Math.Round(100.0 * (totalUnknownExtension) / fightDuration / playerList.Count, 2);
-                            uptime.ByExtension = Math.Round(100.0 * (totalExtension) / fightDuration / playerList.Count, 2);
-                            uptime.Extended = Math.Round(100.0 * (totalExtended) / fightDuration / playerList.Count, 2);
+                            uptime.Generation = Math.Round(100.0 * totalGeneration / fightDuration / playerList.Count, 3);
+                            uptime.Overstack = Math.Round(100.0 * (totalOverstack + totalGeneration) / fightDuration / playerList.Count, 3);
+                            uptime.Wasted = Math.Round(100.0 * (totalWasted) / fightDuration / playerList.Count, 3);
+                            uptime.UnknownExtended = Math.Round(100.0 * (totalUnknownExtension) / fightDuration / playerList.Count, 3);
+                            uptime.ByExtension = Math.Round(100.0 * (totalExtension) / fightDuration / playerList.Count, 3);
+                            uptime.Extended = Math.Round(100.0 * (totalExtended) / fightDuration / playerList.Count, 3);
                         }
                         else if (boon.Type == Boon.BoonType.Intensity)
                         {
-                            uptime.Generation = Math.Round((double)totalGeneration / fightDuration / playerList.Count, 2);
-                            uptime.Overstack = Math.Round((double)(totalOverstack + totalGeneration) / fightDuration / playerList.Count, 2);
-                            uptime.Wasted = Math.Round((double)(totalWasted) / fightDuration / playerList.Count, 2);
-                            uptime.UnknownExtended = Math.Round((double)(totalUnknownExtension) / fightDuration / playerList.Count, 2);
-                            uptime.ByExtension = Math.Round((double)(totalExtension) / fightDuration / playerList.Count, 2);
-                            uptime.Extended = Math.Round((double)(totalExtended) / fightDuration / playerList.Count, 2);
+                            uptime.Generation = Math.Round((double)totalGeneration / fightDuration / playerList.Count, 3);
+                            uptime.Overstack = Math.Round((double)(totalOverstack + totalGeneration) / fightDuration / playerList.Count, 3);
+                            uptime.Wasted = Math.Round((double)(totalWasted) / fightDuration / playerList.Count, 3);
+                            uptime.UnknownExtended = Math.Round((double)(totalUnknownExtension) / fightDuration / playerList.Count, 3);
+                            uptime.ByExtension = Math.Round((double)(totalExtension) / fightDuration / playerList.Count, 3);
+                            uptime.Extended = Math.Round((double)(totalExtended) / fightDuration / playerList.Count, 3);
                         }
                     }
                 }
@@ -601,26 +601,26 @@ namespace LuckParser.Models.ParseModels
                         long generation = selfBoons.GetGeneration(boon.ID, AgentItem);
                         if (boon.Type == Boon.BoonType.Duration)
                         {
-                            uptime.Uptime = Math.Round(100.0 * selfBoons.GetUptime(boon.ID) / fightDuration, 2);
-                            uptime.Generation = Math.Round(100.0 * generation / fightDuration, 2);
-                            uptime.Overstack = Math.Round(100.0 * (selfBoons.GetOverstack(boon.ID, AgentItem) + generation) / fightDuration, 2);
-                            uptime.Wasted = Math.Round(100.0 * selfBoons.GetWaste(boon.ID, AgentItem) / fightDuration, 2);
-                            uptime.UnknownExtended = Math.Round(100.0 * selfBoons.GetUnknownExtension(boon.ID, AgentItem) / fightDuration, 2);
-                            uptime.ByExtension = Math.Round(100.0 * selfBoons.GetExtension(boon.ID, AgentItem) / fightDuration, 2);
-                            uptime.Extended = Math.Round(100.0 * selfBoons.GetExtended(boon.ID, AgentItem) / fightDuration, 2);
+                            uptime.Uptime = Math.Round(100.0 * selfBoons.GetUptime(boon.ID) / fightDuration, 3);
+                            uptime.Generation = Math.Round(100.0 * generation / fightDuration, 3);
+                            uptime.Overstack = Math.Round(100.0 * (selfBoons.GetOverstack(boon.ID, AgentItem) + generation) / fightDuration, 3);
+                            uptime.Wasted = Math.Round(100.0 * selfBoons.GetWaste(boon.ID, AgentItem) / fightDuration, 3);
+                            uptime.UnknownExtended = Math.Round(100.0 * selfBoons.GetUnknownExtension(boon.ID, AgentItem) / fightDuration, 3);
+                            uptime.ByExtension = Math.Round(100.0 * selfBoons.GetExtension(boon.ID, AgentItem) / fightDuration, 3);
+                            uptime.Extended = Math.Round(100.0 * selfBoons.GetExtended(boon.ID, AgentItem) / fightDuration, 3);
                         }
                         else if (boon.Type == Boon.BoonType.Intensity)
                         {
-                            uptime.Uptime = Math.Round((double)selfBoons.GetUptime(boon.ID) / fightDuration, 2);
-                            uptime.Generation = Math.Round((double)generation / fightDuration, 2);
-                            uptime.Overstack = Math.Round((double)(selfBoons.GetOverstack(boon.ID, AgentItem) + generation) / fightDuration, 2);
-                            uptime.Wasted = Math.Round((double)selfBoons.GetWaste(boon.ID, AgentItem) / fightDuration, 2);
-                            uptime.UnknownExtended = Math.Round((double)selfBoons.GetUnknownExtension(boon.ID, AgentItem) / fightDuration, 2);
-                            uptime.ByExtension = Math.Round((double)selfBoons.GetExtension(boon.ID, AgentItem) / fightDuration, 2);
-                            uptime.Extended = Math.Round((double)selfBoons.GetExtended(boon.ID, AgentItem) / fightDuration, 2);
+                            uptime.Uptime = Math.Round((double)selfBoons.GetUptime(boon.ID) / fightDuration, 3);
+                            uptime.Generation = Math.Round((double)generation / fightDuration, 3);
+                            uptime.Overstack = Math.Round((double)(selfBoons.GetOverstack(boon.ID, AgentItem) + generation) / fightDuration, 3);
+                            uptime.Wasted = Math.Round((double)selfBoons.GetWaste(boon.ID, AgentItem) / fightDuration, 3);
+                            uptime.UnknownExtended = Math.Round((double)selfBoons.GetUnknownExtension(boon.ID, AgentItem) / fightDuration, 3);
+                            uptime.ByExtension = Math.Round((double)selfBoons.GetExtension(boon.ID, AgentItem) / fightDuration, 3);
+                            uptime.Extended = Math.Round((double)selfBoons.GetExtended(boon.ID, AgentItem) / fightDuration, 3);
                             if (buffPresence.TryGetValue(boon.ID, out long presenceValueBoon))
                             {
-                                uptime.Presence = Math.Round(100.0 * presenceValueBoon / fightDuration, 2);
+                                uptime.Presence = Math.Round(100.0 * presenceValueBoon / fightDuration, 3);
                             }
                         }
                     }
