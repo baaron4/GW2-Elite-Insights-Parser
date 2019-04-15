@@ -920,6 +920,7 @@ namespace LuckParser.Models.ParseModels
             public int Group { get; set; }
             public long[] Dead { get; set; }
             public long[] Down { get; set; }
+            public long[] Dc { get; set; }
         }
 
         public override AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map)
@@ -932,7 +933,8 @@ namespace LuckParser.Models.ParseModels
                 ID = GetCombatReplayID(),
                 Positions = new double[2 * CombatReplay.Positions.Count],
                 Dead = new long[2 * CombatReplay.Deads.Count],
-                Down = new long[2 * CombatReplay.Downs.Count]
+                Down = new long[2 * CombatReplay.Downs.Count],
+                Dc = new long[2 * CombatReplay.DCs.Count]
             };
             int i = 0;
             foreach (Point3D pos in CombatReplay.Positions)
@@ -952,6 +954,12 @@ namespace LuckParser.Models.ParseModels
             {
                 aux.Down[i++] = start;
                 aux.Down[i++] = end;
+            }
+            i = 0;
+            foreach ((long start, long end) in CombatReplay.DCs)
+            {
+                aux.Dc[i++] = start;
+                aux.Dc[i++] = end;
             }
 
             return aux;

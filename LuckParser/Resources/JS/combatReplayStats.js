@@ -211,7 +211,7 @@ var compileCombatReplay = function () {
             status: function () {
                 var crData = animator.playerData.get(this.player.combatReplayID);
                 var icon = crData.getIcon(this.time);
-                return icon === deadIcon ? 0 : icon === downIcon ? 1 : 2;
+                return icon === deadIcon ? 0 : icon === downIcon ? 1 : icon === dcIcon ? 2 : 3;
             },
         }
     });

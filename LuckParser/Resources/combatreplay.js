@@ -8,6 +8,10 @@ const downIcon = new Image();
 downIcon.onload = function () {
     animateCanvas(-1);
 };
+const dcIcon = new Image();
+dcIcon.onload = function () {
+    animateCanvas(-1);
+};
 const facingIcon = new Image();
 facingIcon.onload = function () {
     animateCanvas(-1);
@@ -81,6 +85,7 @@ class Animator {
             if (options.pollingRate) this.pollingRate = options.pollingRate;
             if (options.mapLink) bgImage.src = options.mapLink;
             downIcon.src = "https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png";
+            dcIcon.src = "https://wiki.guildwars2.com/images/f/f5/Talk_end_option_tango.png";
             deadIcon.src = "https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png";
             facingIcon.src = "https://i.imgur.com/tZTmTRn.png";
         }
@@ -110,7 +115,7 @@ class Animator {
             const actor = actors[i];
             switch (actor.type) {
                 case "Player":
-                    this.playerData.set(actor.id, new PlayerIconDrawable(actor.img, 20, actor.group, actor.positions, actor.dead, actor.down));
+                    this.playerData.set(actor.id, new PlayerIconDrawable(actor.img, 20, actor.group, actor.positions, actor.dead, actor.down, actor.dc));
                     if (this.times.length === 0) {
                         for (let j = 0; j < actor.positions.length / 2; j++) {
                             this.times.push(j * this.pollingRate);
@@ -588,11 +593,12 @@ class IconDrawable {
 }
 
 class PlayerIconDrawable extends IconDrawable {
-    constructor(imgSrc, pixelSize, group, pos, dead, down) {
+    constructor(imgSrc, pixelSize, group, pos, dead, down, dc) {
         super(-1, -1, imgSrc, pixelSize);
         this.pos = pos;
         this.dead = dead;
         this.down = down;
+        this.dc = dc;
         this.selected = false;
         this.group = group;
     }
@@ -656,12 +662,32 @@ class PlayerIconDrawable extends IconDrawable {
         return false;
     }
 
+    disconnected() {
+        if (this.dc === null || this.dc.length === 0) {
+            return false;
+        }
+        var time = animator.reactiveDataStatus.time;
+        for (let i = 0; i < this.dc.length; i += 2) {
+            var t1 = this.dc[i];
+            var t2 = this.dc[i + 1];
+            if (t1 <= time && t2 >= time) {
+                return true;
+            } else if (Math.abs(t1 - t2 < 10) && t1 <= time) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     getIcon() {
         if (this.died()) {
             return deadIcon;
         }
         if (this.downed()) {
             return downIcon;
+        }
+        if (this.disconnected()) {
+            return dcIcon;
         }
         return this.img;
     }
