@@ -26,12 +26,12 @@ namespace LuckParser.Models.ParseModels
         }
         // Getters
 
-        public long GetDeath(ParsedLog log, long start, long end)
+        private long GetState(ParsedLog log, long start, long end, ParseEnum.StateChange state)
         {
-            CombatItem dead = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.ChangeDead, Math.Max(log.FightData.ToLogSpace(start), FirstAware), Math.Min(log.FightData.ToLogSpace(end), LastAware)).LastOrDefault();
-            if (dead != null && dead.Time > 0)
+            CombatItem status = log.CombatData.GetStatesData(InstID, state, Math.Max(log.FightData.ToLogSpace(start), FirstAware), Math.Min(log.FightData.ToLogSpace(end), LastAware)).LastOrDefault();
+            if (status != null && status.Time > 0)
             {
-                return log.FightData.ToFightSpace(dead.Time);
+                return log.FightData.ToFightSpace(status.Time);
             }
             return 0;
         }
@@ -369,7 +369,8 @@ namespace LuckParser.Models.ParseModels
             HashSet<long> condiIds = new HashSet<long>(Boon.GetCondiBoonList().Select(x => x.ID));
             InitBoonStatusData(log);
 
-            long death = GetDeath(log, 0, dur);
+            long death = GetState(log, 0, dur, ParseEnum.StateChange.ChangeDead);
+            long dc = GetState(log, 0, dur, ParseEnum.StateChange.Despawn);
             foreach (Boon boon in TrackedBoons)
             {
                 long boonid = boon.ID;
@@ -384,6 +385,10 @@ namespace LuckParser.Models.ParseModels
                     if (death > 0 && GetCastLogs(log, death + 5000, dur).Count == 0)
                     {
                         simulator.Trim(death);
+                    }
+                    else if (dc > 0 && GetCastLogs(log, dc + 5000, dur).Count == 0)
+                    {
+                        simulator.Trim(dc);
                     }
                     else
                     {
