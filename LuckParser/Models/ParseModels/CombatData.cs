@@ -208,7 +208,7 @@ namespace LuckParser.Models.ParseModels
         }
 
 
-        public void GetAgentStatus(long start, long end, ushort instid, List<(long start, long end)> dead, List<(long start, long end)> down, List<(long start, long end)> dc, long offset)
+        public void GetAgentStatus(long start, long end, ushort instid, List<(long start, long end)> dead, List<(long start, long end)> down, List<(long start, long end)> dc, long fightStart, long fightEnd)
         {
             List<CombatItem> status = GetStatesData(instid, ParseEnum.StateChange.ChangeDown, start, end);
             status.AddRange(GetStatesData(instid, ParseEnum.StateChange.ChangeUp, start, end));
@@ -222,15 +222,15 @@ namespace LuckParser.Models.ParseModels
                 CombatItem next = status[i + 1];
                 if (cur.IsStateChange == ParseEnum.StateChange.ChangeDown)
                 {
-                    down.Add((cur.Time - offset, next.Time - offset));
+                    down.Add((cur.Time - fightStart, next.Time - fightStart));
                 }
                 else if (cur.IsStateChange == ParseEnum.StateChange.ChangeDead)
                 {
-                    dead.Add((cur.Time - offset, next.Time - offset));
+                    dead.Add((cur.Time - fightStart, next.Time - fightStart));
                 }
                 else if (cur.IsStateChange == ParseEnum.StateChange.Despawn)
                 {
-                    dc.Add((cur.Time - offset, next.Time - offset));
+                    dc.Add((cur.Time - fightStart, next.Time - fightStart));
                 }
             }
             // check last value
@@ -239,15 +239,15 @@ namespace LuckParser.Models.ParseModels
                 CombatItem cur = status.Last();
                 if (cur.IsStateChange == ParseEnum.StateChange.ChangeDown)
                 {
-                    down.Add((cur.Time - offset, end - offset));
+                    down.Add((cur.Time - fightStart, fightEnd - fightStart));
                 }
                 else if (cur.IsStateChange == ParseEnum.StateChange.ChangeDead)
                 {
-                    dead.Add((cur.Time - offset, end - offset));
+                    dead.Add((cur.Time - fightStart, fightEnd - fightStart));
                 }
                 else if (cur.IsStateChange == ParseEnum.StateChange.Despawn)
                 {
-                    dc.Add((cur.Time - offset, end - offset));
+                    dc.Add((cur.Time - fightStart, fightEnd - fightStart));
                 }
             }
         }

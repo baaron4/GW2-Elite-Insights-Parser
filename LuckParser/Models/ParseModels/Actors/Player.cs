@@ -373,7 +373,7 @@ namespace LuckParser.Models.ParseModels
             List<(long start, long end)> dead = new List<(long start, long end)>();
             List<(long start, long end)> down = new List<(long start, long end)>();
             List<(long start, long end)> dc = new List<(long start, long end)>();
-            log.CombatData.GetAgentStatus(FirstAware, LastAware, InstID, dead, down, dc, log.FightData.FightStart);
+            log.CombatData.GetAgentStatus(FirstAware, LastAware, InstID, dead, down, dc, log.FightData.FightStart, log.FightData.FightEnd);
             _defenses = new List<FinalDefenses>();
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
@@ -905,7 +905,7 @@ namespace LuckParser.Models.ParseModels
             List<(long, long)> dead = CombatReplay.Deads;
             List<(long, long)> down = CombatReplay.Downs;
             List<(long, long)> dc = CombatReplay.DCs;
-            log.CombatData.GetAgentStatus(FirstAware, LastAware, InstID, dead, down, dc, log.FightData.FightStart);
+            log.CombatData.GetAgentStatus(FirstAware, LastAware, InstID, dead, down, dc, log.FightData.FightStart, log.FightData.FightEnd);
             // Fight related stuff
             log.FightData.Logic.ComputeAdditionalPlayerData(this, log);
             if (CombatReplay.Rotations.Any())

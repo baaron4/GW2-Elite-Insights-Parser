@@ -668,11 +668,7 @@ class PlayerIconDrawable extends IconDrawable {
         }
         var time = animator.reactiveDataStatus.time;
         for (let i = 0; i < this.dc.length; i += 2) {
-            var t1 = this.dc[i];
-            var t2 = this.dc[i + 1];
-            if (t1 <= time && t2 >= time) {
-                return true;
-            } else if (Math.abs(t1 - t2 < 10) && t1 <= time) {
+            if (this.dc[i] <= time && this.dc[i + 1] >= time) {
                 return true;
             }
         }
