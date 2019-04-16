@@ -1,18 +1,33 @@
-<div class="d-flex flex-column justify-content-center" style="min-width: 200px;"> 
+<div class="d-flex flex-column justify-content-center" style="min-width: 200px;">
     <ul class="nav nav-pills d-flex flex-row justify-content-center mb-1">
         <li class="nav-item">
             <a class="nav-link" :class="{active: details}" @click="details = !details">Details Window <img class="mb-1 icon" src="https://wiki.guildwars2.com/images/4/40/Commander_tag_%28red%29.png" data-original-title="Not properly optimized for now, high cpu cost." /> </a>
         </li>
     </ul>
-    <div class="d-flex flex-row flex-wrap mb-2 squad-details" v-if="details">
-        <div v-for="(group,id) in groups" v-if="group" :key="id + '-group'" class="ml-1 mt-2" style="border-left: 1px solid #000000">
-            <h5 class="text-center">Group {{id}}</h5>
-            <div class=" d-flex flex-column flex-wrap group-details" :style="{'width': group.length > 5 ? '500px' : '250px'}">
-                <div v-for="player in group" class="player-data  ml-1 mr-1" :class="{active: playerindex === player.id}"
-                     :key="id + '-group-' +  player.id">
-                    <combat-replay-player-stats-component :time="time" :playerindex="player.id"></combat-replay-player-stats-component>
+    <ul class="nav nav-pills d-flex flex-row justify-content-center mb-1" v-if="details">
+        <li class="nav-item">
+            <a class="nav-link" :class="{active: mode === 0}" @click="mode = 0">Players</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" :class="{active: mode === 1}" @click="mode = 1">Targets</a>
+        </li>
+    </ul>
+    <div class="squad-details" v-if="details">
+        <keep-alive>
+            <div class="d-flex flex-row flex-wrap mb-2" v-if="mode === 0" :key="players-details">
+                <div v-for="(group,id) in groups" v-if="group" :key="id + '-group'" class="ml-1 mt-2" style="border-left: 1px solid #000000">
+                    <h5 class="text-center">Group {{id}}</h5>
+                    <div class=" d-flex flex-column flex-wrap group-details" :style="{'width': group.length > 5 ? '500px' : '250px'}">
+                        <div v-for="player in group" class="player-data  ml-1 mr-1" :class="{active: playerindex === player.id}"
+                             :key="id + '-group-' +  player.id">
+                            <combat-replay-player-stats-component :time="time" :playerindex="player.id"></combat-replay-player-stats-component>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+            <div v-if="mode === 1" :key="targets-details">
+
+            </div>
+        </keep-alive>
     </div>
 </div>

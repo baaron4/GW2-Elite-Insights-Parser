@@ -112,9 +112,9 @@ var compileCombatReplay = function () {
         }
     });
 
-    Vue.component("combat-replay-player-buffs-stats-component", {
-        props: ["playerindex", "time"],
-        template: `${tmplCombatReplayPlayerBuffStats}`,
+    Vue.component("combat-replay-actor-buffs-stats-component", {
+        props: ["actorindex","time"],
+        template: `${tmplCombatReplayActorBuffStats}`,
         computed: {
             boons: function () {
                 var hash = new Set();
@@ -144,8 +144,11 @@ var compileCombatReplay = function () {
                 }
                 return hash;
             },
+            actor: function () {
+                return logData.players[this.actorindex];
+            },
             buffData: function () {
-                return logData.players[this.playerindex].details.boonGraph[0];
+                return this.actor.details.boonGraph[0];
             },
             data: function () {
                 var res = {
@@ -216,15 +219,15 @@ var compileCombatReplay = function () {
         }
     });
 
-    Vue.component("combat-replay-player-rotation-component", {
-        props: ["playerindex", "time"],
-        template: `${tmplCombatReplayPlayerRotation}`,
+    Vue.component("combat-replay-actor-rotation-component", {
+        props: ["actorindex", "time"],
+        template: `${tmplCombatReplayActorRotation}`,
         computed: {
-            player: function () {
-                return logData.players[this.playerindex];
+            actor: function () {
+                return logData.players[this.actorindex];
             },
-            playerRotation: function () {
-                return this.player.details.rotation[0];
+            actorRotation: function () {
+                return this.actor.details.rotation[0];
             },
             rotation: function () {
                 var res = {
@@ -233,9 +236,9 @@ var compileCombatReplay = function () {
                 };
                 var time = this.time / 1000.0;
                 var j, next;
-                for (var i = 0; i < this.playerRotation.length; i++) {
+                for (var i = 0; i < this.actorRotation.length; i++) {
                     count = 0;
-                    var item = this.playerRotation[i];
+                    var item = this.actorRotation[i];
                     var x = item[0];
                     var skillId = item[1];
                     var endType = item[3];
@@ -253,8 +256,8 @@ var compileCombatReplay = function () {
                             };
                             offset = 1;
                         }
-                        for (j = i + offset; j < this.playerRotation.length; j++) {
-                            next = this.playerRotation[j];
+                        for (j = i + offset; j < this.actorRotation.length; j++) {
+                            next = this.actorRotation[j];
                             if (next[2] < 1e-2) {
                                 continue;
                             }
@@ -268,8 +271,8 @@ var compileCombatReplay = function () {
                         }
                         break;
                     } else if (time <= x) {
-                        for (j = i; j < this.playerRotation.length; j++) {
-                            next = this.playerRotation[j];
+                        for (j = i; j < this.actorRotation.length; j++) {
+                            next = this.actorRotation[j];
                             if (next[2] < 1e-2) {
                                 continue;
                             }
@@ -316,11 +319,12 @@ var compileCombatReplay = function () {
         props: ["time", "selectedplayer", "selectedplayerid"],
         data: function() {
             return {
-                details: false
+                details: false,
+                mode: 0
             };
         },
         updated() {
-            animator.controlledByHTML = this.details;
+            animator.controlledByHTML = this.details && this.mode === 0;
             animator.draw();
         },
         computed: {
