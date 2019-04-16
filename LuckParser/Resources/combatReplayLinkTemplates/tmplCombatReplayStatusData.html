@@ -25,8 +25,12 @@
                     </div>
                 </div>
             </div>
-            <div v-if="mode === 1" :key="targets-details">
-
+            <div class="d-flex flex-row flex-wrap mb-2" v-if="mode === 1" :key="targets-details">
+                <!--<div class=" d-flex flex-column flex-wrap group-details" :style="{'width': '250px'}">
+                    <div v-for="(status, id) in targets" class="player-data ml-1 mr-1" :key="id + '-target'">
+                        <combat-replay-target-stats-component v-if="status.start <= time && status.end >= time" :time="time" :playerindex="id"></combat-replay-target-stats-component>
+                    </div>
+                </div>-->
             </div>
         </keep-alive>
     </div>
