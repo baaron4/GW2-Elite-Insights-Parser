@@ -195,7 +195,7 @@ namespace LuckParser.Builders
                 double avg = 0.0;
                 if (boonTable)
                 {
-                    avg = Math.Round(player.GetStatsAll(_log, phaseIndex).AvgBoons, 1);
+                    avg = player.GetStatsAll(_log, phaseIndex).AvgBoons;
                 }
                 list.Add(new BoonData(player.GetBuffs(_log, phaseIndex, Statistics.BuffEnum.Self), listToUse, avg));
             }

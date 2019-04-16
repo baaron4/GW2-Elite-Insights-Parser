@@ -314,14 +314,14 @@ namespace LuckParser.Models.ParseModels
                 {
                     avgBoons += duration;
                 }
-                final.AvgBoons = avgBoons / phase.DurationInMS;
+                final.AvgBoons = Math.Round(avgBoons / phase.DurationInMS, 1);
 
                 double avgCondis = 0;
                 foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => Boon.BoonsByIds[x.Key].Nature == Boon.BoonNature.Condition).Select(x => x.Value))
                 {
                     avgCondis += duration;
                 }
-                final.AvgConditions = avgCondis / phase.DurationInMS;
+                final.AvgConditions = Math.Round(avgCondis / phase.DurationInMS, 1);
 
                 if (Properties.Settings.Default.ParseCombatReplay && log.FightData.Logic.CanCombatReplay)
                 {
