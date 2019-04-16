@@ -25,6 +25,7 @@ namespace LuckParser.Builders
 
         private readonly ParsedLog _log;
         private readonly List<PhaseData> _phases;
+        private readonly bool _cr;
 
         private readonly string[] _uploadLink;
 
@@ -47,6 +48,8 @@ namespace LuckParser.Builders
             _statistics = log.Statistics;
 
             _uploadLink = uploadString;
+
+            _cr = Properties.Settings.Default.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay;
         }
 
         private static string FilterStringChars(string str)
@@ -737,7 +740,7 @@ namespace LuckParser.Builders
 
         private string BuildCombatReplayScript(string path)
         {
-            if (!Properties.Settings.Default.ParseCombatReplay || !_log.FightData.Logic.CanCombatReplay)
+            if (!_cr)
             {
                 return "";
             }
@@ -772,7 +775,7 @@ namespace LuckParser.Builders
 
         private string BuildCombatReplayContent()
         {
-            if (!Properties.Settings.Default.ParseCombatReplay || !_log.FightData.Logic.CanCombatReplay)
+            if (!_cr)
             {
                 return "";
             }
@@ -936,7 +939,7 @@ namespace LuckParser.Builders
 
         private string BuildCRLinkJs(string path)
         {
-            if (!(Properties.Settings.Default.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay))
+            if (!_cr)
             {
                 return "";
             }
@@ -997,7 +1000,7 @@ namespace LuckParser.Builders
             LogDataDto logData = new LogDataDto();
             foreach(Player player in _log.PlayerList)
             {
-                logData.Players.Add(new PlayerDto(player, _log, Properties.Settings.Default.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay));
+                logData.Players.Add(new PlayerDto(player, _log, _cr));
             }
 
             foreach(DummyActor enemy in _log.MechanicData.GetEnemyList(0))
@@ -1007,7 +1010,7 @@ namespace LuckParser.Builders
 
             foreach (Target target in _log.FightData.Logic.Targets)
             {
-                TargetDto targetDto = new TargetDto(target, _log, Properties.Settings.Default.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay);
+                TargetDto targetDto = new TargetDto(target, _log, _cr);
                 
                 
                 logData.Targets.Add(targetDto);
@@ -1243,7 +1246,7 @@ namespace LuckParser.Builders
             };
             for (int i = 0; i < _phases.Count; i++)
             {
-                if (_phases[i].Targets.Contains(target))
+                if (_phases[i].Targets.Contains(target) || (i == 0 && _cr))
                 {
                     dto.DmgDistributions.Add(BuildTargetDMGDistData(target, i));
                     dto.DmgDistributionsTaken.Add(BuildDMGTakenDistData(target, i));
@@ -1274,7 +1277,7 @@ namespace LuckParser.Builders
             };
             for (int i = 0; i < _phases.Count; i++)
             {
-                if (_phases[i].Targets.Contains(target))
+                if (_phases[i].Targets.Contains(target) || (i == 0 && _cr))
                 {
                     dto.DmgDistributions.Add(BuildTargetMinionDMGDistData(target, minion, i));
                 }

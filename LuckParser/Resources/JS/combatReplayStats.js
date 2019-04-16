@@ -113,7 +113,7 @@ var compileCombatReplay = function () {
     });
 
     Vue.component("combat-replay-actor-buffs-stats-component", {
-        props: ["actorindex","time"],
+        props: ["actorindex","time", "enemy"],
         template: `${tmplCombatReplayActorBuffStats}`,
         computed: {
             boons: function () {
@@ -145,7 +145,7 @@ var compileCombatReplay = function () {
                 return hash;
             },
             actor: function () {
-                return logData.players[this.actorindex];
+                return this.enemy ? logData.targets[this.actorindex] : logData.players[this.actorindex];
             },
             buffData: function () {
                 return this.actor.details.boonGraph[0];
@@ -220,11 +220,11 @@ var compileCombatReplay = function () {
     });
 
     Vue.component("combat-replay-actor-rotation-component", {
-        props: ["actorindex", "time"],
+        props: ["actorindex", "time", "enemy"],
         template: `${tmplCombatReplayActorRotation}`,
         computed: {
             actor: function () {
-                return logData.players[this.actorindex];
+                return this.enemy ? logData.targets[this.actorindex] : logData.players[this.actorindex];
             },
             actorRotation: function () {
                 return this.actor.details.rotation[0];
