@@ -991,6 +991,14 @@ namespace LuckParser.Builders
                 {
                     phaseData.Targets.Add(BuildTargetGraphData(i, target));
                 }
+                if (i == 0)
+                {
+                    phaseData.TargetsHealthForCR = new List<double[]>();
+                    foreach (Target target in _log.FightData.Logic.Targets)
+                    {
+                        phaseData.TargetsHealthForCR.Add(target.Get1SHealthGraph(_log, _phases)[0]);
+                    }
+                }
 
                 phaseChartData.Add(phaseData);
              }

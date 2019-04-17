@@ -222,7 +222,43 @@ var compileCombatReplay = function () {
     Vue.component("combat-replay-target-status-component", {
         props: ["targetindex", "time"],
         template: `${tmplCombatReplayTargetStatus}`,
+        methods: {
+            getPercent: function (time) {
+                var curTime = Math.floor(time / 1000);
+                var nextTime = curTime + 1;
+                var dur = Math.floor(this.phase.end - this.phase.start);
+                if (nextTime == dur + 1 && this.phase.needsLastPoint) {
+                    nextTime = this.phase.end - this.phase.start;
+                }
+                var data = this.healths;
+                var cur = data[curTime];
+                var next = data[curTime + 1];
+                if (typeof next !== "undefined") {
+                    res = cur + (time / 1000 - curTime) * (next - cur) / (nextTime - curTime);
+                } else {
+                    res = cur;
+                }
+                return res;
+            },
+            getGradient: function (time) {
+                var template = 'linear-gradient(to right, $green$, $middle$, $black$)';
+                var res = this.getPercent(time);
+                var greenPercent = "green " + res + "%";
+                var blackPercent = "black " + (100 - res) + "%";
+                var middle = res + "%";
+                template = template.replace('$green$', greenPercent);
+                template = template.replace('$black$', blackPercent);
+                template = template.replace('$middle$', middle);
+                return template;
+            }
+        },
         computed: {
+            phase: function () {
+                return logData.phases[0];
+            },
+            healths: function () {
+                return graphData.phases[0].targetsHealthForCR[this.targetindex];
+            },
             target: function () {
                 return logData.targets[this.targetindex];
             }
@@ -328,7 +364,6 @@ var compileCombatReplay = function () {
             }
         }
     });
-
 
     Vue.component("combat-replay-targets-stats-component", {
         props: ["time"],

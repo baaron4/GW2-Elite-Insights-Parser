@@ -124,6 +124,14 @@ h6.actor-shorten {
     width: 120px;
 }
 
+.cr-hp-display {
+    font-size: 0.65rem;
+    position: relative;
+    top: -12px;
+    width: 40px;
+    left: 210px;
+}
+
 .theme-slate .player-data.active {
     background-color: rgba(80, 86, 92, 0.9);
 }
