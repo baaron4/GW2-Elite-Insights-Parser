@@ -314,14 +314,14 @@ namespace LuckParser.Models.ParseModels
                 {
                     avgBoons += duration;
                 }
-                final.AvgBoons = avgBoons / phase.DurationInMS;
+                final.AvgBoons = Math.Round(avgBoons / phase.DurationInMS, 1);
 
                 double avgCondis = 0;
                 foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => Boon.BoonsByIds[x.Key].Nature == Boon.BoonNature.Condition).Select(x => x.Value))
                 {
                     avgCondis += duration;
                 }
-                final.AvgConditions = avgCondis / phase.DurationInMS;
+                final.AvgConditions = Math.Round(avgCondis / phase.DurationInMS, 1);
 
                 if (Properties.Settings.Default.ParseCombatReplay && log.FightData.Logic.CanCombatReplay)
                 {
@@ -373,7 +373,7 @@ namespace LuckParser.Models.ParseModels
             List<(long start, long end)> dead = new List<(long start, long end)>();
             List<(long start, long end)> down = new List<(long start, long end)>();
             List<(long start, long end)> dc = new List<(long start, long end)>();
-            log.CombatData.GetAgentStatus(FirstAware, LastAware, InstID, dead, down, dc);
+            log.CombatData.GetAgentStatus(FirstAware, LastAware, InstID, dead, down, dc, log.FightData.FightStart, log.FightData.FightEnd);
             _defenses = new List<FinalDefenses>();
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
@@ -905,7 +905,7 @@ namespace LuckParser.Models.ParseModels
             List<(long, long)> dead = CombatReplay.Deads;
             List<(long, long)> down = CombatReplay.Downs;
             List<(long, long)> dc = CombatReplay.DCs;
-            log.CombatData.GetAgentStatus(FirstAware, LastAware, InstID, dead, down, dc);
+            log.CombatData.GetAgentStatus(FirstAware, LastAware, InstID, dead, down, dc, log.FightData.FightStart, log.FightData.FightEnd);
             // Fight related stuff
             log.FightData.Logic.ComputeAdditionalPlayerData(this, log);
             if (CombatReplay.Rotations.Any())
@@ -920,6 +920,7 @@ namespace LuckParser.Models.ParseModels
             public int Group { get; set; }
             public long[] Dead { get; set; }
             public long[] Down { get; set; }
+            public long[] Dc { get; set; }
         }
 
         public override AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map)
@@ -932,7 +933,8 @@ namespace LuckParser.Models.ParseModels
                 ID = GetCombatReplayID(),
                 Positions = new double[2 * CombatReplay.Positions.Count],
                 Dead = new long[2 * CombatReplay.Deads.Count],
-                Down = new long[2 * CombatReplay.Downs.Count]
+                Down = new long[2 * CombatReplay.Downs.Count],
+                Dc = new long[2 * CombatReplay.DCs.Count]
             };
             int i = 0;
             foreach (Point3D pos in CombatReplay.Positions)
@@ -952,6 +954,12 @@ namespace LuckParser.Models.ParseModels
             {
                 aux.Down[i++] = start;
                 aux.Down[i++] = end;
+            }
+            i = 0;
+            foreach ((long start, long end) in CombatReplay.DCs)
+            {
+                aux.Dc[i++] = start;
+                aux.Dc[i++] = end;
             }
 
             return aux;

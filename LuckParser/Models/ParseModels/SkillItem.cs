@@ -12,6 +12,9 @@ namespace LuckParser.Models.ParseModels
         public const long WeaponSwapId = -2;
         public const long DeathId = -4;
         public const long DownId = -3;
+        public const long DCId = -5;
+        public const long AliveId = -6;
+        public const long RespawnId = -7;
 
         readonly static Dictionary<long, string> _overrideNames = new Dictionary<long, string>()
         {

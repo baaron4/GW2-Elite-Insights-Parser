@@ -90,6 +90,10 @@ h6.player-shorten {
     background-color: red;
 }
 
+.player-status.dc {
+    background-color: grey;
+}
+
 .squad-details {
     min-width: 550px;
 }
