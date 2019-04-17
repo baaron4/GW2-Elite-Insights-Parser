@@ -348,6 +348,10 @@
     <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayDamageData.html" />
     <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayDamageTable.html" />
     <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayActorRotation.html" />
+    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayTargetsStats.html" />
+    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayPlayersStats.html" />
+    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayTargetStatus.html" />
+    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayTargetStats.html" />
     <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayPlayerStatus.html" />
     <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayActorBuffStats.html" />
     <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayPlayerStats.html" />

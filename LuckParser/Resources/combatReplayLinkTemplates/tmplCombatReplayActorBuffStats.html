@@ -1,4 +1,4 @@
-<div class="d-flex flex-column justify-content-end" style="height: 100px">
+<div class="d-flex flex-column justify-content-end" :style="{'height': enemy ? '60px' : '100px'}">
     <div v-if="data.enemies.length > 0" class="d-flex">
         <div v-for="enemy in data.enemies" class="boon-container">
             <img :src="enemy.buff.icon" :title="enemy.buff.name" :alt="enemy.buff.name" class="icon" />
@@ -17,7 +17,7 @@
             <div v-if="other.state > 1" class="boon-number">{{other.state}}</div>
         </div>
     </div>
-    <div v-if="data.offs.length > 0 || data.defs.length > 0" class="d-flex">
+    <div v-if="!enemy && (data.offs.length > 0 || data.defs.length > 0)" class="d-flex">
         <div v-for="off in data.offs" class="boon-container">
             <img :src="off.buff.icon" :title="off.buff.name" :alt="off.buff.name" class="icon" />
             <div v-if="off.state > 1" class="boon-number">{{off.state}}</div>

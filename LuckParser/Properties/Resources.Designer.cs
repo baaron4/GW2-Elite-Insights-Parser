@@ -659,11 +659,25 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-row flex-wrap mb-2&quot;&gt;
+        ///    &lt;div v-for=&quot;(group,id) in groups&quot; v-if=&quot;group&quot; class=&quot;ml-1 mt-2&quot; style=&quot;border-left: 1px solid #000000&quot;&gt;
+        ///        &lt;h5 class=&quot;text-center&quot;&gt;Group {{id}}&lt;/h5&gt;
+        ///        &lt;div class=&quot; d-flex flex-column flex-wrap group-details&quot; :style=&quot;{&apos;width&apos;: group.length &gt; 5 ? &apos;500px&apos; : &apos;250px&apos;}&quot;&gt;
+        ///            &lt;div v-for=&quot;player in group&quot; class=&quot;player-data  ml-1 mr-1&quot; :class=&quot;{active: selectedplayerindex === player.id}&quot;&gt;
+        ///                &lt;combat-replay-player-stats-component  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplCombatReplayPlayersStats {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayPlayersStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;div&gt;
-        ///    &lt;combat-replay-actor-buffs-stats-component :time=&quot;time&quot;&gt;&lt;/combat-replay-actor-buffs-stats-component&gt;
+        ///    &lt;combat-replay-actor-buffs-stats-component :time=&quot;time&quot; :actorindex=&quot;playerindex&quot; :enemy=&quot;false&quot;&gt;&lt;/combat-replay-actor-buffs-stats-component&gt;
         ///    &lt;div class=&quot;d-flex mb-1 mt-1 align-items-center&quot;&gt;
         ///        &lt;combat-replay-player-status-component :time=&quot;time&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/combat-replay-player-status-component&gt;
-        ///        &lt;combat-replay-actor-rotation-component :time=&quot;time&quot;&gt;&lt;/combat-replay-actor-rotation-component&gt;
+        ///        &lt;combat-replay-actor-rotation-component :time=&quot;time&quot; :actorindex=&quot;playerindex&quot; :enemy=&quot;false&quot;&gt;&lt;/combat-replay-actor-rotation-component&gt;
         ///    &lt;/div&gt;
         ///&lt;/div&gt;.
         /// </summary>
@@ -688,17 +702,61 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column justify-content-center&quot; style=&quot;min-width: 200px;&quot;&gt; 
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column justify-content-center&quot; style=&quot;min-width: 200px;&quot;&gt;
         ///    &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mb-1&quot;&gt;
         ///        &lt;li class=&quot;nav-item&quot;&gt;
         ///            &lt;a class=&quot;nav-link&quot; :class=&quot;{active: details}&quot; @click=&quot;details = !details&quot;&gt;Details Window &lt;img class=&quot;mb-1 icon&quot; src=&quot;https://wiki.guildwars2.com/images/4/40/Commander_tag_%28red%29.png&quot; data-original-title=&quot;Not properly optimized for now, high cpu cost.&quot; /&gt; &lt;/a&gt;
         ///        &lt;/li&gt;
         ///    &lt;/ul&gt;
-        ///    &lt;div class=&quot;d- [rest of string was truncated]&quot;;.
+        ///    &lt;ul class=&quot;nav  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayStatusData {
             get {
                 return ResourceManager.GetString("tmplCombatReplayStatusData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-row flex-wrap mb-2&quot;&gt;
+        ///    &lt;div class=&quot; d-flex flex-column flex-wrap group-details&quot; :style=&quot;{&apos;width&apos;: &apos;250px&apos;}&quot;&gt;
+        ///        &lt;div v-for=&quot;(status, id) in targets&quot; class=&quot;player-data ml-1 mr-1&quot;&gt;
+        ///            &lt;combat-replay-target-stats-component v-show=&quot;alive(status)&quot; :time=&quot;time&quot; :targetindex=&quot;id&quot;&gt;&lt;/combat-replay-target-stats-component&gt;
+        ///        &lt;/div&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/div&gt;.
+        /// </summary>
+        internal static string tmplCombatReplayTargetsStats {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayTargetsStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;combat-replay-actor-buffs-stats-component :time=&quot;time&quot; :actorindex=&quot;targetindex&quot; :enemy=&quot;true&quot;&gt;&lt;/combat-replay-actor-buffs-stats-component&gt;
+        ///    &lt;div class=&quot;d-flex mb-1 mt-1 align-items-center&quot;&gt;
+        ///        &lt;combat-replay-target-status-component :time=&quot;time&quot; :targetindex=&quot;targetindex&quot;&gt;&lt;/combat-replay-target-status-component&gt;
+        ///        &lt;combat-replay-actor-rotation-component :time=&quot;time&quot; :actorindex=&quot;targetindex&quot; :enemy=&quot;true&quot;&gt;&lt;/combat-replay-actor-rotation-component&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/div&gt;.
+        /// </summary>
+        internal static string tmplCombatReplayTargetStats {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayTargetStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;target-status&quot;&gt;
+        ///    &lt;h6 class=&quot;player-shorten text-center&quot; :title=&quot;target.name&quot;&gt;
+        ///        &lt;img :src=&quot;target.icon&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;
+        ///        {{target.name}}
+        ///    &lt;/h6&gt;
+        ///&lt;/div&gt;.
+        /// </summary>
+        internal static string tmplCombatReplayTargetStatus {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayTargetStatus", resourceCulture);
             }
         }
         

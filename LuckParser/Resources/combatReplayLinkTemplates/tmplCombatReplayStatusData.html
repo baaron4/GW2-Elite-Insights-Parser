@@ -14,24 +14,8 @@
     </ul>
     <div class="squad-details" v-if="details">
         <keep-alive>
-            <div class="d-flex flex-row flex-wrap mb-2" v-if="mode === 0" :key="players-details">
-                <div v-for="(group,id) in groups" v-if="group" :key="id + '-group'" class="ml-1 mt-2" style="border-left: 1px solid #000000">
-                    <h5 class="text-center">Group {{id}}</h5>
-                    <div class=" d-flex flex-column flex-wrap group-details" :style="{'width': group.length > 5 ? '500px' : '250px'}">
-                        <div v-for="player in group" class="player-data  ml-1 mr-1" :class="{active: playerindex === player.id}"
-                             :key="id + '-group-' +  player.id">
-                            <combat-replay-player-stats-component :time="time" :playerindex="player.id"></combat-replay-player-stats-component>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="d-flex flex-row flex-wrap mb-2" v-if="mode === 1" :key="targets-details">
-                <!--<div class=" d-flex flex-column flex-wrap group-details" :style="{'width': '250px'}">
-                    <div v-for="(status, id) in targets" class="player-data ml-1 mr-1" :key="id + '-target'">
-                        <combat-replay-target-stats-component v-if="status.start <= time && status.end >= time" :time="time" :playerindex="id"></combat-replay-target-stats-component>
-                    </div>
-                </div>-->
-            </div>
+            <combat-replay-players-stats-component v-if="mode === 0" :key="'players-cr-details'" :time="time" :selectedplayer="selectedplayer" :selectedplayerid="selectedplayerid"></combat-replay-players-stats-component>
+            <combat-replay-targets-stats-component v-if="mode === 1" :key="'targets-cr-details'" :time="time"></combat-replay-targets-stats-component>      
         </keep-alive>
     </div>
 </div>

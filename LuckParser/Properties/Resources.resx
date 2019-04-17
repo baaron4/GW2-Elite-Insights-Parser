@@ -274,11 +274,23 @@
    <data name="tmplCombatReplayPlayerStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
       <value>..\Resources\combatReplayLinkTemplates\tmplCombatReplayPlayerStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
    </data>
+   <data name="tmplCombatReplayTargetStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
+      <value>..\Resources\combatReplayLinkTemplates\tmplCombatReplayTargetStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+   </data>
    <data name="tmplCombatReplayActorRotation" type="System.Resources.ResXFileRef, System.Windows.Forms">
       <value>..\Resources\combatReplayLinkTemplates\tmplCombatReplayActorRotation.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
    </data>
    <data name="tmplCombatReplayPlayerStatus" type="System.Resources.ResXFileRef, System.Windows.Forms">
       <value>..\Resources\combatReplayLinkTemplates\tmplCombatReplayPlayerStatus.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+   </data>
+   <data name="tmplCombatReplayTargetStatus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+      <value>..\Resources\combatReplayLinkTemplates\tmplCombatReplayTargetStatus.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+   </data>
+   <data name="tmplCombatReplayTargetsStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
+      <value>..\Resources\combatReplayLinkTemplates\tmplCombatReplayTargetsStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+   </data>
+   <data name="tmplCombatReplayPlayersStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
+      <value>..\Resources\combatReplayLinkTemplates\tmplCombatReplayPlayersStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
    </data>
    <data name="tmplCombatReplayActorBuffStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
       <value>..\Resources\combatReplayLinkTemplates\tmplCombatReplayActorBuffStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>

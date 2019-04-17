@@ -219,6 +219,16 @@ var compileCombatReplay = function () {
         }
     });
 
+    Vue.component("combat-replay-target-status-component", {
+        props: ["targetindex", "time"],
+        template: `${tmplCombatReplayTargetStatus}`,
+        computed: {
+            target: function () {
+                return logData.targets[this.targetindex];
+            }
+        }
+    });
+
     Vue.component("combat-replay-actor-rotation-component", {
         props: ["actorindex", "time", "enemy"],
         template: `${tmplCombatReplayActorRotation}`,
@@ -297,6 +307,11 @@ var compileCombatReplay = function () {
         template: `${tmplCombatReplayPlayerStats}`
     });
 
+    Vue.component("combat-replay-target-stats-component", {
+        props: ["targetindex", "time"],
+        template: `${tmplCombatReplayTargetStats}`
+    });
+
     Vue.component("combat-replay-damage-data-component", {
         template: `${tmplCombatReplayDamageData}`,
         props: ["time", "selectedplayer", "selectedplayerid"],
@@ -314,21 +329,36 @@ var compileCombatReplay = function () {
         }
     });
 
-    Vue.component("combat-replay-status-data-component", {
-        template: `${tmplCombatReplayStatusData}`,
-        props: ["time", "selectedplayer", "selectedplayerid"],
-        data: function() {
-            return {
-                details: false,
-                mode: 0
-            };
-        },
-        updated() {
-            animator.controlledByHTML = this.details && this.mode === 0;
-            animator.draw();
+
+    Vue.component("combat-replay-targets-stats-component", {
+        props: ["time"],
+        template: `${tmplCombatReplayTargetsStats}`,
+        methods: {
+            alive: function (status) {
+                return status.start <= this.time && status.end >= this.time;
+            }
         },
         computed: {
-            playerindex: function () {
+            targets: function () {
+                var res = [];
+                for (var i = 0; i < logData.targets.length; i++) {
+                    var target = logData.targets[i];
+                    var crTarget = animator.targetData.get(target.combatReplayID);
+                    res.push({
+                        start: crTarget.start,
+                        end: crTarget.end
+                    });
+                }
+                return res;
+            },
+        }
+    });
+
+    Vue.component("combat-replay-players-stats-component", {
+        props: ["time", "selectedplayer", "selectedplayerid"],
+        template: `${tmplCombatReplayPlayersStats}`,
+        computed: {
+            selectedplayerindex: function () {
                 if (this.selectedplayer) {
                     for (var i = 0; i < logData.players.length; i++) {
                         if (logData.players[i].combatReplayID == this.selectedplayerid) {
@@ -353,6 +383,21 @@ var compileCombatReplay = function () {
                 }
                 return res;
             }
+        }
+    });
+
+    Vue.component("combat-replay-status-data-component", {
+        template: `${tmplCombatReplayStatusData}`,
+        props: ["time", "selectedplayer", "selectedplayerid"],
+        data: function() {
+            return {
+                details: false,
+                mode: 0
+            };
+        },
+        updated() {
+            animator.controlledByHTML = this.details;
+            animator.draw();
         }
     });
 };
