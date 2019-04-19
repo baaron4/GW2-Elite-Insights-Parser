@@ -248,14 +248,14 @@ namespace LuckParser.Builders
             // Collect all personal damage mods by spec
             foreach (var pair in _log.PlayerListBySpec)
             {    
-                HashSet<string> specDamageModsName = new HashSet<string>(DamageModifier.GetModifiersPerProf(pair.Key).Select(x => x.Name));
+                HashSet<string> specDamageModsName = new HashSet<string>(_log.DamageModifiers.GetModifiersPerProf(pair.Key).Select(x => x.Name));
                 HashSet<DamageModifier> damageModsToUse = new HashSet<DamageModifier>();
                 foreach (Player player in pair.Value)
                 {
                     HashSet<string> presentDamageMods = new HashSet<string>(player.GetPresentDamageModifier(_log).Intersect(specDamageModsName));
                     foreach (string name in presentDamageMods)
                     {
-                        damageModsToUse.Add(DamageModifier.DamageModifiersByName[name]);
+                        damageModsToUse.Add(_log.DamageModifiers.DamageModifiersByName[name]);
                     }
                 }
                 damageModBySpecs[pair.Key] = damageModsToUse.ToList();
@@ -1021,7 +1021,7 @@ namespace LuckParser.Builders
                 allDamageMods.UnionWith(p.GetPresentDamageModifier(_log));
             }
             List<DamageModifier> commonDamageModifiers = new List<DamageModifier>();
-            foreach (DamageModifier dMod in DamageModifier.DamageModifiersPerSource[DamageModifier.ModifierSource.CommonBuff])
+            foreach (DamageModifier dMod in _log.DamageModifiers.DamageModifiersPerSource[DamageModifier.ModifierSource.CommonBuff])
             {
                 if (allDamageMods.Contains(dMod.Name))
                 {
@@ -1031,7 +1031,7 @@ namespace LuckParser.Builders
                 }
             }
             List<DamageModifier> itemDamageModifiers = new List<DamageModifier>();
-            foreach (DamageModifier dMod in DamageModifier.DamageModifiersPerSource[DamageModifier.ModifierSource.ItemBuff])
+            foreach (DamageModifier dMod in _log.DamageModifiers.DamageModifiersPerSource[DamageModifier.ModifierSource.ItemBuff])
             {
                 if (allDamageMods.Contains(dMod.Name))
                 {
