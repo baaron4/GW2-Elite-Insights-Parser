@@ -331,8 +331,7 @@ namespace LuckParser.Models.ParseModels
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                if (boon.Type == Boon.BoonType.Intensity)
-                    Add(_buffPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
+                Add(_buffPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
                 simul.SetBoonDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
             }
         }
