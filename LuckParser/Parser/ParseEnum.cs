@@ -234,7 +234,8 @@ namespace LuckParser.Parser
 
             // Statue of Death
             OrbSpider = 19801,
-            GreenSpirit = 19587,
+            GreenSpirit1 = 19587,
+            GreenSpirit2 = 19571,
             // Skeletons are the same as Spirit hordes
 
             // Dhuum
