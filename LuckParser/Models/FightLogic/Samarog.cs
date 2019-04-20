@@ -100,7 +100,7 @@ namespace LuckParser.Models.Logic
         }
         
 
-        public override void ComputeAdditionalTargetData(Target target, ParsedLog log, CombatReplay replay)
+        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
             // TODO: facing information (shock wave)
             List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
@@ -130,7 +130,7 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log, CombatReplay replay)
+        public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // big bomb
             List<CombatItem> bigbomb = log.CombatData.GetBoonData(37966).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();

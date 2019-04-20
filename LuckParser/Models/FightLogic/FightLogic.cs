@@ -242,15 +242,15 @@ namespace LuckParser.Models.Logic
             phase.OverrideTimes(log);
         }
 
-        public virtual void ComputeAdditionalPlayerData(Player p, ParsedLog log, CombatReplay replay)
+        public virtual void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
         }
 
-        public virtual void ComputeAdditionalTargetData(Target target, ParsedLog log, CombatReplay replay)
+        public virtual void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
         }
 
-        public virtual void ComputeAdditionalTrashMobData(Mob mob, ParsedLog log, CombatReplay replay)
+        public virtual void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
         {
         }
 

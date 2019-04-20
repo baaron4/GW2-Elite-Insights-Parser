@@ -97,7 +97,7 @@ namespace LuckParser.Models.Logic
         }
 
 
-        public override void ComputeAdditionalTrashMobData(Mob mob, ParsedLog log, CombatReplay replay)
+        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
         {
             List<CastLog> cls = mob.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (mob.ID)

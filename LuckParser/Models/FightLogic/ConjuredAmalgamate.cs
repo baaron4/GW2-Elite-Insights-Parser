@@ -77,7 +77,7 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void ComputeAdditionalTrashMobData(Mob mob, ParsedLog log, CombatReplay replay)
+        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
         {
             switch (mob.ID)
             {
@@ -190,7 +190,7 @@ namespace LuckParser.Models.Logic
             return phases;
         }
 
-        public override void ComputeAdditionalTargetData(Target target, ParsedLog log, CombatReplay replay)
+        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
             List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
 
@@ -221,7 +221,7 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log, CombatReplay replay)
+        public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             List<CastLog> cls = p.GetCastLogs(log, 0, log.FightData.FightDuration);
             List<CastLog> shieldCast = cls.Where(x => x.SkillId == 52780).ToList();

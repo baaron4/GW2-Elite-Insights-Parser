@@ -123,7 +123,7 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void ComputeAdditionalTrashMobData(Mob mob, ParsedLog log, CombatReplay replay)
+        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
         {
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
@@ -147,7 +147,7 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override void ComputeAdditionalTargetData(Target target, ParsedLog log, CombatReplay replay)
+        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
             List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
@@ -213,7 +213,7 @@ namespace LuckParser.Models.Logic
             
         }
 
-        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log, CombatReplay replay)
+        public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // Corruption
             List<CombatItem> corruptedMatthias = GetFilteredList(log, 34416, p, true);

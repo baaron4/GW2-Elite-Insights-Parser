@@ -907,7 +907,7 @@ namespace LuckParser.Models.ParseModels
             }
             CombatReplay.Icon = GeneralHelper.GetProfIcon(Prof);
             // Fight related stuff
-            log.FightData.Logic.ComputeAdditionalPlayerData(this, log, CombatReplay);
+            log.FightData.Logic.ComputePlayerCombatReplayActors(this, log, CombatReplay);
             if (CombatReplay.Rotations.Any())
             {
                 CombatReplay.Actors.Add(new FacingActor(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));

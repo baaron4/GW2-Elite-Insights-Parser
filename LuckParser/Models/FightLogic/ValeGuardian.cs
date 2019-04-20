@@ -104,7 +104,7 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void ComputeAdditionalTrashMobData(Mob mob, ParsedLog log, CombatReplay replay)
+        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
         {
             switch (mob.ID)
             {
@@ -117,7 +117,7 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override void ComputeAdditionalTargetData(Target target, ParsedLog log, CombatReplay replay)
+        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
             List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             (int, int) lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
