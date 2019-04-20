@@ -16,10 +16,10 @@ namespace LuckParser.Models.ParseModels
 
         //setters
 
-        protected override void SetAdditionalCombatReplayData(ParsedLog log)
+        protected override void InitAdditionalCombatReplayData(ParsedLog log)
         {
             CombatReplay.Icon = GeneralHelper.GetNPCIcon(ID);
-            log.FightData.Logic.ComputeAdditionalTrashMobData(this, log);
+            log.FightData.Logic.ComputeAdditionalTrashMobData(this, log, CombatReplay);
         }
         //
         private class MobSerializable : AbstractMasterActorSerializable
@@ -48,6 +48,33 @@ namespace LuckParser.Models.ParseModels
             }
 
             return aux;
+        }
+
+        protected override void InitCombatReplay(ParsedLog log)
+        {
+            if (!log.FightData.Logic.CanCombatReplay)
+            {
+                // no combat replay support on fight
+                return;
+            }
+            CombatReplay = new CombatReplay();
+            SetMovements(log);
+            CombatReplay.PollingRate(log.FightData.FightDuration, false);
+            CombatItem despawnCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Despawn, FirstAware, LastAware).LastOrDefault();
+            CombatItem spawnCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Spawn, FirstAware, LastAware).LastOrDefault();
+            CombatItem deathCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.ChangeDead, FirstAware, LastAware).LastOrDefault();
+            if (deathCheck != null)
+            {
+                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAware), log.FightData.ToFightSpace(deathCheck.Time));
+            }
+            else if (despawnCheck != null && (spawnCheck == null || spawnCheck.Time < despawnCheck.Time))
+            {
+                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAware), log.FightData.ToFightSpace(despawnCheck.Time));
+            }
+            else
+            {
+                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAware), log.FightData.ToFightSpace(AgentItem.LastAware));
+            }
         }
     }
 }

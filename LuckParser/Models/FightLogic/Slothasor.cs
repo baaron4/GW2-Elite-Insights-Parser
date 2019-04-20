@@ -9,7 +9,7 @@ namespace LuckParser.Models.Logic
 {
     public class Slothasor : RaidLogic
     {
-        public Slothasor(ushort triggerID) : base(triggerID)
+        public Slothasor(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -88,9 +88,8 @@ namespace LuckParser.Models.Logic
             return phases;
         }
 
-        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
+        public override void ComputeAdditionalTargetData(Target target, ParsedLog log, CombatReplay replay)
         {
-            CombatReplay replay = target.CombatReplay;
             List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
@@ -139,10 +138,9 @@ namespace LuckParser.Models.Logic
            
         }
 
-        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log, CombatReplay replay)
         {
             // Poison
-            CombatReplay replay = p.CombatReplay;
             List<CombatItem> poisonToDrop = GetFilteredList(log, 34387, p, true);
             int toDropStart = 0;
             foreach (CombatItem c in poisonToDrop)

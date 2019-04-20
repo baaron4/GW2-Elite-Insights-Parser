@@ -10,7 +10,7 @@ namespace LuckParser.Models.Logic
 {
     public class Qadim : RaidLogic
     {
-        public Qadim(ushort triggerID) : base(triggerID)
+        public Qadim(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
         {
             MechanicList.AddRange(new List<Mechanic>
             { 
@@ -179,21 +179,15 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
+        public override void ComputeAdditionalTargetData(Target target, ParsedLog log, CombatReplay replay)
         {
-            CombatReplay replay = target.CombatReplay;
-
-            if (target.ID == (int) ParseEnum.TargetIDS.Qadim)
-            {
-                AddPlatformsToCombatReplay(target, log);
-            }
-
             List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             int ccRadius = 200;
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Qadim:
                     //CC
+                    AddPlatformsToCombatReplay(target, log, replay);
                     List<CastLog> breakbar = cls.Where(x => x.SkillId == 51943).ToList();
                     foreach (CastLog c in breakbar)
                     {
@@ -435,7 +429,7 @@ namespace LuckParser.Models.Logic
             return (target.Health > 21e6) ? 1 : 0;
         }
 
-        private void AddPlatformsToCombatReplay(Target target, ParsedLog log)
+        private void AddPlatformsToCombatReplay(Target target, ParsedLog log, CombatReplay replay)
         {
             // We later use the target to find out the timing of the last move
             Debug.Assert(target.ID == (int) ParseEnum.TargetIDS.Qadim);
@@ -818,7 +812,7 @@ namespace LuckParser.Models.Logic
             for (int i = 0; i < platformCount; i++)
             {
                 platforms[i] = new MovingPlatformActor(platformImageUrl, 245, 245, (int.MinValue, int.MaxValue));
-                target.CombatReplay.Actors.Add(platforms[i]);
+                replay.Actors.Add(platforms[i]);
             }
 
             // Add movement "keyframes" on a movement end and on the start of the next one.

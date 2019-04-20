@@ -8,7 +8,7 @@ namespace LuckParser.Models.Logic
 {
     public class Escort : RaidLogic
     {
-        public Escort(ushort triggerID) : base(triggerID)
+        public Escort(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

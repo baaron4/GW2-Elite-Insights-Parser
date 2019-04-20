@@ -168,10 +168,10 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        protected override void SetAdditionalCombatReplayData(ParsedLog log)
+        protected override void InitAdditionalCombatReplayData(ParsedLog log)
         {
             CombatReplay.Icon = GeneralHelper.GetNPCIcon(ID);
-            log.FightData.Logic.ComputeAdditionalTargetData(this, log);
+            log.FightData.Logic.ComputeAdditionalTargetData(this, log, CombatReplay);
             if (CombatReplay.Rotations.Any())
             {
                 CombatReplay.Actors.Add(new FacingActor(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
@@ -265,6 +265,33 @@ namespace LuckParser.Models.ParseModels
                 aux.Positions[i++] = y;
             }
             return aux;
+        }
+
+        protected override void InitCombatReplay(ParsedLog log)
+        {
+            if (!log.FightData.Logic.CanCombatReplay)
+            {
+                // no combat replay support on fight
+                return;
+            }
+            CombatReplay = new CombatReplay();
+            SetMovements(log);
+            CombatReplay.PollingRate(log.FightData.FightDuration, log.FightData.GetMainTargets(log).Contains(this));
+            CombatItem despawnCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Despawn, FirstAware, LastAware).LastOrDefault();
+            CombatItem spawnCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Spawn, FirstAware, LastAware).LastOrDefault();
+            CombatItem deathCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.ChangeDead, FirstAware, LastAware).LastOrDefault();
+            if (deathCheck != null)
+            {
+                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAware), log.FightData.ToFightSpace(deathCheck.Time));
+            }
+            else if (despawnCheck != null && (spawnCheck == null || spawnCheck.Time < despawnCheck.Time))
+            {
+                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAware), log.FightData.ToFightSpace(despawnCheck.Time));
+            }
+            else
+            {
+                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAware), log.FightData.ToFightSpace(AgentItem.LastAware));
+            }
         }
 
         /*protected override void setHealingLogs(ParsedLog log)

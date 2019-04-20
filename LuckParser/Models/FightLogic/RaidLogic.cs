@@ -10,7 +10,7 @@ namespace LuckParser.Models.Logic
 {
     public abstract class RaidLogic : FightLogic
     {
-        protected RaidLogic(ushort triggerID) : base(triggerID)
+        protected RaidLogic(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
         {
             Mode = ParseMode.Raid;
         }

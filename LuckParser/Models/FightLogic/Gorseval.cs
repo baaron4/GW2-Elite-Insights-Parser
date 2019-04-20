@@ -9,7 +9,7 @@ namespace LuckParser.Models.Logic
 {
     public class Gorseval : RaidLogic
     {
-        public Gorseval(ushort triggerID) : base(triggerID)
+        public Gorseval(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -89,9 +89,8 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
+        public override void ComputeAdditionalTargetData(Target target, ParsedLog log, CombatReplay replay)
         {
-            CombatReplay replay = target.CombatReplay;
             List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
@@ -108,7 +107,7 @@ namespace LuckParser.Models.Logic
                     if (phases.Count > 1)
                     {
                         List<CastLog> rampage = cls.Where(x => x.SkillId == 31834).ToList();
-                        Point3D pos = target.CombatReplay.Positions.First();
+                        Point3D pos = target.GetCombatReplayPositions(log).First();
                         foreach (CastLog c in rampage)
                         {
                             int start = (int)c.Time;

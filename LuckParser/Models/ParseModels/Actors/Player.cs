@@ -899,16 +899,15 @@ namespace LuckParser.Models.ParseModels
 
         }
 
-        protected override void SetAdditionalCombatReplayData(ParsedLog log)
+        protected override void InitAdditionalCombatReplayData(ParsedLog log)
         {
+            if (IsFakeActor)
+            {
+                return;
+            }
             CombatReplay.Icon = GeneralHelper.GetProfIcon(Prof);
-            // Down and deads
-            List<(long, long)> dead = CombatReplay.Deads;
-            List<(long, long)> down = CombatReplay.Downs;
-            List<(long, long)> dc = CombatReplay.DCs;
-            log.CombatData.GetAgentStatus(FirstAware, LastAware, InstID, dead, down, dc, log.FightData.FightStart, log.FightData.FightEnd);
             // Fight related stuff
-            log.FightData.Logic.ComputeAdditionalPlayerData(this, log);
+            log.FightData.Logic.ComputeAdditionalPlayerData(this, log, CombatReplay);
             if (CombatReplay.Rotations.Any())
             {
                 CombatReplay.Actors.Add(new FacingActor(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
@@ -964,6 +963,23 @@ namespace LuckParser.Models.ParseModels
             }
 
             return aux;
+        }
+
+        protected override void InitCombatReplay(ParsedLog log)
+        {
+            if (!log.FightData.Logic.CanCombatReplay || IsFakeActor)
+            {
+                // no combat replay support on fight
+                return;
+            }
+            CombatReplay = new CombatReplay();
+            SetMovements(log);
+            // Down and deads
+            List<(long, long)> dead = CombatReplay.Deads;
+            List<(long, long)> down = CombatReplay.Downs;
+            List<(long, long)> dc = CombatReplay.DCs;
+            log.CombatData.GetAgentStatus(FirstAware, LastAware, InstID, dead, down, dc, log.FightData.FightStart, log.FightData.FightEnd);
+            CombatReplay.PollingRate(log.FightData.FightDuration, true);
         }
 
 

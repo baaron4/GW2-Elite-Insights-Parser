@@ -8,7 +8,7 @@ namespace LuckParser.Models.Logic
 {
     class Freezie : RaidLogic
     {
-        public Freezie(ushort triggerID) : base(triggerID)
+        public Freezie(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
         {
             Extension = "freezie";
             IconUrl = "https://wiki.guildwars2.com/images/thumb/8/8b/Freezie.jpg/189px-Freezie.jpg";

@@ -18,7 +18,7 @@ namespace LuckParser.Builders
             string replayHTML = Properties.Resources.tmplCombatReplay;
             replayHTML = replayHTML.Replace("${canvasX}", canvasSize.width.ToString());
             replayHTML = replayHTML.Replace("${canvasY}", canvasSize.height.ToString());
-            replayHTML = replayHTML.Replace("${maxTime}", log.PlayerList.First().CombatReplay.Times.Last().ToString());
+            replayHTML = replayHTML.Replace("${maxTime}", log.PlayerList.First().GetCombatReplayTimes(log).Last().ToString());
             List<int> groups = log.PlayerList.Where(x => !x.IsFakeActor).Select(x => x.Group).Distinct().ToList();
             string groupsString = "";
             foreach (int group in groups)
@@ -51,36 +51,36 @@ namespace LuckParser.Builders
                 {
                     continue;
                 }
-                if (p.CombatReplay.Positions.Count == 0)
+                if (p.GetCombatReplayPositions(log).Count == 0)
                 {
                     continue;
                 }
                 actors.Add(p.GetCombatReplayJSON(map));
-                foreach (GenericActor a in p.CombatReplay.Actors)
+                foreach (GenericActor a in p.GetCombatReplayActors(log))
                 {
                     actors.Add(a.GetCombatReplayJSON(map));
                 }
             }
             foreach (Mob m in log.FightData.Logic.TrashMobs)
             {
-                if (m.CombatReplay.Positions.Count == 0)
+                if (m.GetCombatReplayPositions(log).Count == 0)
                 {
                     continue;
                 }
                 actors.Add(m.GetCombatReplayJSON(map));
-                foreach (GenericActor a in m.CombatReplay.Actors)
+                foreach (GenericActor a in m.GetCombatReplayActors(log))
                 {
                     actors.Add(a.GetCombatReplayJSON(map));
                 }
             }
             foreach (Target target in log.FightData.Logic.Targets)
             {
-                if (target.CombatReplay.Positions.Count == 0)
+                if (target.GetCombatReplayPositions(log).Count == 0)
                 {
                     continue;
                 }
                 actors.Add(target.GetCombatReplayJSON(map));
-                foreach (GenericActor a in target.CombatReplay.Actors)
+                foreach (GenericActor a in target.GetCombatReplayActors(log))
                 {
                     actors.Add(a.GetCombatReplayJSON(map));
                 }

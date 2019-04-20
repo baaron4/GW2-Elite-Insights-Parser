@@ -9,7 +9,7 @@ namespace LuckParser.Models.Logic
 {
     public class KeepConstruct : RaidLogic
     {
-        public KeepConstruct(ushort triggerID) : base(triggerID)
+        public KeepConstruct(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -199,9 +199,8 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void ComputeAdditionalTrashMobData(Mob mob, ParsedLog log)
+        public override void ComputeAdditionalTrashMobData(Mob mob, ParsedLog log, CombatReplay replay)
         {
-            CombatReplay replay = mob.CombatReplay;
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (mob.ID)
@@ -221,15 +220,8 @@ namespace LuckParser.Models.Logic
                     {
                         throw new InvalidOperationException("Main target of the fight not found");
                     }
-                    CombatReplay mtCR = mainTarget.CombatReplay;
                     replay.Actors.Add(new CircleActor(false, 0, 600, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(mob)));
                     replay.Actors.Add(new CircleActor(true, 0, 400, (start, end), "rgba(0, 125, 255, 0.5)", new AgentConnector(mob)));
-                    Point3D pos = replay.Positions.FirstOrDefault();
-                    if (pos != null)
-                    {
-                        mtCR.Actors.Add(new CircleActor(true, 0, 300, (start - 5000, start), "rgba(220, 50, 0, 0.5)", new PositionConnector(pos)));
-                        mtCR.Actors.Add(new CircleActor(true, start, 300, (start - 5000, start), "rgba(220, 50, 0, 0.5)", new PositionConnector(pos)));
-                    }
                     break;
                 case (ushort)GreenPhantasm:
                     int lifetime = 8000;
@@ -247,9 +239,8 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
+        public override void ComputeAdditionalTargetData(Target target, ParsedLog log, CombatReplay replay)
         {
-            CombatReplay replay = target.CombatReplay;
             List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
@@ -341,6 +332,31 @@ namespace LuckParser.Models.Logic
                             replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + i * 360 / 8 - 120), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts longer
                         }
                     }
+                    // phantasms locations
+                    HashSet<ushort> phantasmsID = new HashSet<ushort>
+                    {
+                        (ushort)Jessica,
+                        (ushort)Olson,
+                        (ushort)Engul,
+                        (ushort)Faerla,
+                        (ushort)Caulle,
+                        (ushort)Henley,
+                        (ushort)Galletta,
+                        (ushort)Ianim,
+                    };
+                    foreach (Mob m in TrashMobs)
+                    {
+                        if (phantasmsID.Contains(m.ID))
+                        {
+                            int start = (int)log.FightData.ToFightSpace(m.FirstAware);
+                            Point3D pos = m.GetCombatReplayPositions(log).FirstOrDefault();
+                            if (pos != null)
+                            {
+                                replay.Actors.Add(new CircleActor(true, 0, 300, (start - 5000, start), "rgba(220, 50, 0, 0.5)", new PositionConnector(pos)));
+                                replay.Actors.Add(new CircleActor(true, start, 300, (start - 5000, start), "rgba(220, 50, 0, 0.5)", new PositionConnector(pos)));
+                            }
+                        }
+                    }
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
@@ -348,10 +364,9 @@ namespace LuckParser.Models.Logic
 
         }
 
-        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log, CombatReplay replay)
         {
             // Bombs
-            CombatReplay replay = p.CombatReplay;
             List<CombatItem> xeraFury = GetFilteredList(log, 35103, p, true);
             int xeraFuryStart = 0;
             foreach (CombatItem c in xeraFury)
