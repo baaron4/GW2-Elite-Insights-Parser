@@ -179,7 +179,7 @@ var compileBuffStats = function () {
                             avg.push({
                                 name: "Group " + i,
                                 data: gravg[i],
-                                avg: Math.round(10 * grBoonAvg[i] / grcount[i]) / 10
+                                avg: Math.round(100 * grBoonAvg[i] / grcount[i]) / 100
                             });
                         }
                     }
@@ -189,7 +189,7 @@ var compileBuffStats = function () {
                     avg.push({
                         name: "Total",
                         data: totalavg,
-                        avg: Math.round(10 * totalBoonAvg / totalcount) / 10
+                        avg: Math.round(100 * totalBoonAvg / totalcount) / 100
                     });
                     return [uptimes, gens, gengr, genoff, gensq, avg];
                 };
