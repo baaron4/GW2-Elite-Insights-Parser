@@ -66,14 +66,23 @@
     border-top: 1px solid black;
 }
 
+.target-data {
+    border-bottom: 1px solid black;
+}
+
 .player-status {
     background-color: green;
     color: #DDDDDD;
     width: 100px;
 }
 
-h6.player-shorten {
-    max-width: 75px;
+.target-status {
+    color: #DDDDDD;
+    width: 250px;
+}
+
+h6.actor-shorten {
+    width: 100%;
     margin-top: 7px;
     margin-bottom: 7px;
     overflow: hidden;
@@ -96,6 +105,7 @@ h6.player-shorten {
 
 .squad-details {
     min-width: 550px;
+    min-height: 850px;
 }
 
 .group-details {
@@ -112,6 +122,14 @@ h6.player-shorten {
 
 .ply-btn {
     width: 120px;
+}
+
+.cr-hp-display {
+    font-size: 0.65rem;
+    position: relative;
+    top: -12px;
+    width: 40px;
+    left: 210px;
 }
 
 .theme-slate .player-data.active {

@@ -1,7 +1,7 @@
 ﻿<div>
-    <combat-replay-player-buffs-stats-component :time="time" :playerindex="playerindex"></combat-replay-player-buffs-stats-component>
+    <combat-replay-actor-buffs-stats-component :time="time" :actorindex="playerindex" :enemy="false"></combat-replay-actor-buffs-stats-component>
     <div class="d-flex mb-1 mt-1 align-items-center">
         <combat-replay-player-status-component :time="time" :playerindex="playerindex"></combat-replay-player-status-component>
-        <combat-replay-player-rotation-component :time="time" :playerindex="playerindex"></combat-replay-player-rotation-component>
+        <combat-replay-actor-rotation-component :time="time" :actorindex="playerindex" :enemy="false"></combat-replay-actor-rotation-component>
     </div>
 </div>
