@@ -19,7 +19,7 @@ namespace LuckParser.Builders
             replayHTML = replayHTML.Replace("${canvasX}", canvasSize.width.ToString());
             replayHTML = replayHTML.Replace("${canvasY}", canvasSize.height.ToString());
             replayHTML = replayHTML.Replace("${maxTime}", log.PlayerList.First().CombatReplay.Times.Last().ToString());
-            List<int> groups = log.PlayerList.Where(x => x.Account != ":Conjured Sword").Select(x => x.Group).Distinct().ToList();
+            List<int> groups = log.PlayerList.Where(x => !x.IsFakeActor).Select(x => x.Group).Distinct().ToList();
             string groupsString = "";
             foreach (int group in groups)
             {
@@ -47,7 +47,7 @@ namespace LuckParser.Builders
             List<object> actors = new List<object>();
             foreach (Player p in log.PlayerList)
             {
-                if (p.Account == ":Conjured Sword")
+                if (p.IsFakeActor)
                 {
                     continue;
                 }

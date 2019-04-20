@@ -206,7 +206,7 @@ namespace LuckParser.Models
                 List<List<Point3D>> GroupsPosList = new List<List<Point3D>>();
                 foreach (Player player in players)
                 {
-                    if (player.Account == ":Conjured Sword")
+                    if (player.IsFakeActor)
                     {
                         continue;
                     }

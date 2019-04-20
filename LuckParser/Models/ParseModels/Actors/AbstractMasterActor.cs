@@ -9,7 +9,7 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class AbstractMasterActor : AbstractActor
     {
-        
+        public bool IsFakeActor { get; protected set; }
         // Boons
         private readonly List<BoonDistribution> _boonDistribution = new List<BoonDistribution>();
         private readonly List<Dictionary<long, long>> _buffPresence = new List<Dictionary<long, long>>();

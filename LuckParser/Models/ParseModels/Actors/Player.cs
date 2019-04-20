@@ -50,6 +50,7 @@ namespace LuckParser.Models.ParseModels
             }
             Account = name[1];
             Group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
+            IsFakeActor = Account == ":Conjured Sword";
         }
         
         // Public methods
@@ -282,7 +283,7 @@ namespace LuckParser.Models.ParseModels
                 FillFinalStats(log, GetJustPlayerDamageLogs(null, log, phase), final, targetDict);
                 _statsAll.Add(final);
                 // If conjured sword, stop
-                if (Account == ":Conjured Sword")
+                if (IsFakeActor)
                 {
                     continue;
                 }
@@ -712,7 +713,7 @@ namespace LuckParser.Models.ParseModels
             _damageModifiersTargets = new Dictionary<Target, Dictionary<string, List<DamageModifierData>>>();
             _presentDamageModifiers = new HashSet<string>();
             // If conjured sword or WvW, stop
-            if (Account == ":Conjured Sword" || log.FightData.Logic.Mode == FightLogic.ParseMode.WvW)
+            if (IsFakeActor || log.FightData.Logic.Mode == FightLogic.ParseMode.WvW)
             {
                 return;
             }

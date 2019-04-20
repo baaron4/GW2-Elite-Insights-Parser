@@ -57,7 +57,7 @@ namespace LuckParser.Parser
             {
                 foreach (Player p in PlayerList)
                 {
-                    if (p.Account == ":Conjured Sword")
+                    if (p.IsFakeActor)
                     {
                         continue;
                     }
@@ -72,7 +72,7 @@ namespace LuckParser.Parser
                 // Ensuring all combat replays are initialized before extra data (and agent interaction) is computed
                 foreach (Player p in PlayerList)
                 {
-                    if (p.Account == ":Conjured Sword")
+                    if (p.IsFakeActor)
                     {
                         continue;
                     }

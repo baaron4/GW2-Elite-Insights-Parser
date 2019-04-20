@@ -38,7 +38,7 @@ namespace LuckParser.Models.HtmlModels
             ColTarget = GeneralHelper.GetLink("Color-" + player.Prof);
             ColCleave = GeneralHelper.GetLink("Color-" + player.Prof + "-NonBoss");
             ColTotal = GeneralHelper.GetLink("Color-" + player.Prof + "-Total");
-            IsConjure = (player.Account == ":Conjured Sword");
+            IsConjure = (player.IsFakeActor);
             BuildWeaponSets(player, log);
             if (cr && !IsConjure)
             {
