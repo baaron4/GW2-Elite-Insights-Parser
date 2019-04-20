@@ -95,6 +95,7 @@ namespace LuckParser.Models.ParseModels
                     if (agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.EyeOfFate).Count > 0 ||
                         agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.EyeOfJudgement).Count > 0)
                     {
+                        ID = (ushort)ParseEnum.TargetIDS.EyeOfFate;
                         Logic = new DarkMaze((ushort)ParseEnum.TargetIDS.EyeOfFate);
                         break;
                     }

@@ -11,14 +11,12 @@ namespace LuckParser.Models.ParseModels
     public class DamageLogDamageModifier : DamageModifier
     {
 
-        public DamageLogDamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, DamageLogChecker checker, GainComputer gainComputer) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer)
+        public DamageLogDamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, DamageLogChecker checker, GainComputer gainComputer, ulong maxBuild = ulong.MaxValue) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer, checker, maxBuild)
         {
-            DLChecker = checker;
         }
 
-        public DamageLogDamageModifier(Boon boon, string tooltip, long id, DamageSource damageSource, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer) : base(boon.Name, tooltip, damageSource, double.PositiveInfinity, srctype, compareType, src, boon.Link, gainComputer)
+        public DamageLogDamageModifier(Boon boon, string tooltip, long id, DamageSource damageSource, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, ulong maxBuild = ulong.MaxValue) : base(boon.Name, tooltip, damageSource, double.PositiveInfinity, srctype, compareType, src, boon.Link, gainComputer, (dl => dl.SkillId == id), maxBuild)
         {
-            DLChecker = (dl => dl.SkillId == id);
         }
 
         public override void ComputeDamageModifier(Dictionary<string, List<DamageModifierData>> data, Dictionary<Target, Dictionary<string, List<DamageModifierData>>> dataTarget, Player p, ParsedLog log)

@@ -44,13 +44,13 @@ namespace LuckParser.Models.ParseModels
             double scaleY = (double)height / _size.height;
             double x = (realX - _rect.topX) / (_rect.bottomX - _rect.topX);
             double y = (realY - _rect.topY) / (_rect.bottomY - _rect.topY);
-            return (Math.Round(scaleX * _size.width * x,2), Math.Round(scaleY * (_size.height - _size.height * y),2));
+            return (Math.Round(scaleX * _size.width * x, 2), Math.Round(scaleY * (_size.height - _size.height * y), 2));
         }
 
         public float GetInch()
         {
-            float ratio = (float)(_rect.bottomX - _rect.topX) / GetPixelMapSize().width ;
-            return (float)Math.Round(1.0f/ratio,3);
+            float ratio = (float)(_rect.bottomX - _rect.topX) / GetPixelMapSize().width;
+            return (float)Math.Round(1.0f / ratio, 3);
         }
 
     }

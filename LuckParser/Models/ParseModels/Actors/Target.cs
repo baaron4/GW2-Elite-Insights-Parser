@@ -45,7 +45,7 @@ namespace LuckParser.Models.ParseModels
                     avgBoon += duration;
                 }
                 avgBoon /= phase.DurationInMS;
-                _avgBoons.Add(Math.Round(avgBoon, 1));
+                _avgBoons.Add(Math.Round(avgBoon, GeneralHelper.BoonDigit));
 
                 double avgCondi = 0;
                 foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => Boon.BoonsByIds[x.Key].Nature == Boon.BoonNature.Condition).Select(x => x.Value))
@@ -53,7 +53,7 @@ namespace LuckParser.Models.ParseModels
                     avgCondi += duration;
                 }
                 avgCondi /= phase.DurationInMS;
-                _avgConditions.Add(Math.Round(avgCondi, 1));
+                _avgConditions.Add(Math.Round(avgCondi, GeneralHelper.BoonDigit));
             }
         }
 
@@ -133,34 +133,34 @@ namespace LuckParser.Models.ParseModels
                         rates[boon.ID] = buff;
                         if (boon.Type == Boon.BoonType.Duration)
                         {
-                            buff.Uptime = Math.Round(100.0 * boonDistribution.GetUptime(boon.ID) / fightDuration, 3);
+                            buff.Uptime = Math.Round(100.0 * boonDistribution.GetUptime(boon.ID) / fightDuration, GeneralHelper.BoonDigit);
                             foreach (Player p in log.PlayerList)
                             {
                                 long gen = boonDistribution.GetGeneration(boon.ID, p.AgentItem);
-                                buff.Generated[p] = Math.Round(100.0 * gen / fightDuration, 3);
-                                buff.Overstacked[p] = Math.Round(100.0 * (boonDistribution.GetOverstack(boon.ID, p.AgentItem) + gen) / fightDuration, 3);
-                                buff.Wasted[p] = Math.Round(100.0 * boonDistribution.GetWaste(boon.ID, p.AgentItem) / fightDuration, 3);
-                                buff.UnknownExtension[p] = Math.Round(100.0 * boonDistribution.GetUnknownExtension(boon.ID, p.AgentItem) / fightDuration, 3);
-                                buff.Extension[p] = Math.Round(100.0 * boonDistribution.GetExtension(boon.ID, p.AgentItem) / fightDuration, 3);
-                                buff.Extended[p] = Math.Round(100.0 * boonDistribution.GetExtended(boon.ID, p.AgentItem) / fightDuration, 3);
+                                buff.Generated[p] = Math.Round(100.0 * gen / fightDuration, GeneralHelper.BoonDigit);
+                                buff.Overstacked[p] = Math.Round(100.0 * (boonDistribution.GetOverstack(boon.ID, p.AgentItem) + gen) / fightDuration, GeneralHelper.BoonDigit);
+                                buff.Wasted[p] = Math.Round(100.0 * boonDistribution.GetWaste(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
+                                buff.UnknownExtension[p] = Math.Round(100.0 * boonDistribution.GetUnknownExtension(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
+                                buff.Extension[p] = Math.Round(100.0 * boonDistribution.GetExtension(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
+                                buff.Extended[p] = Math.Round(100.0 * boonDistribution.GetExtended(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
                             }
                         }
                         else if (boon.Type == Boon.BoonType.Intensity)
                         {
-                            buff.Uptime = Math.Round((double)boonDistribution.GetUptime(boon.ID) / fightDuration, 3);
+                            buff.Uptime = Math.Round((double)boonDistribution.GetUptime(boon.ID) / fightDuration, GeneralHelper.BoonDigit);
                             foreach (Player p in log.PlayerList)
                             {
                                 long gen = boonDistribution.GetGeneration(boon.ID, p.AgentItem);
-                                buff.Generated[p] = Math.Round((double)gen / fightDuration, 3);
-                                buff.Overstacked[p] = Math.Round((double)(boonDistribution.GetOverstack(boon.ID, p.AgentItem) + gen) / fightDuration, 3);
-                                buff.Wasted[p] = Math.Round((double)boonDistribution.GetWaste(boon.ID, p.AgentItem) / fightDuration, 3);
-                                buff.UnknownExtension[p] = Math.Round((double)boonDistribution.GetUnknownExtension(boon.ID, p.AgentItem) / fightDuration, 3);
-                                buff.Extension[p] = Math.Round((double)boonDistribution.GetExtension(boon.ID, p.AgentItem) / fightDuration, 3);
-                                buff.Extended[p] = Math.Round((double)boonDistribution.GetExtended(boon.ID, p.AgentItem) / fightDuration, 3);
+                                buff.Generated[p] = Math.Round((double)gen / fightDuration, GeneralHelper.BoonDigit);
+                                buff.Overstacked[p] = Math.Round((double)(boonDistribution.GetOverstack(boon.ID, p.AgentItem) + gen) / fightDuration, GeneralHelper.BoonDigit);
+                                buff.Wasted[p] = Math.Round((double)boonDistribution.GetWaste(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
+                                buff.UnknownExtension[p] = Math.Round((double)boonDistribution.GetUnknownExtension(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
+                                buff.Extension[p] = Math.Round((double)boonDistribution.GetExtension(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
+                                buff.Extended[p] = Math.Round((double)boonDistribution.GetExtended(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
                             }
                             if (buffPresence.TryGetValue(boon.ID, out long presenceValueBoon))
                             {
-                                buff.Presence = Math.Round(100.0 * presenceValueBoon / fightDuration, 3);
+                                buff.Presence = Math.Round(100.0 * presenceValueBoon / fightDuration, GeneralHelper.BoonDigit);
                             }
                         }
                     }

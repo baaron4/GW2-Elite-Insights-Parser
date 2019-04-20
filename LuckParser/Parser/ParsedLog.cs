@@ -22,6 +22,7 @@ namespace LuckParser.Parser
         public readonly Dictionary<string, List<Player>> PlayerListBySpec;
         public readonly Target LegacyTarget;
         public readonly Statistics Statistics;
+        public readonly DamageModifierContainer DamageModifiers;
 
         
 
@@ -88,6 +89,7 @@ namespace LuckParser.Parser
             }
             FightData.Logic.ComputeMechanics(this);
             Statistics = new Statistics(this);
+            DamageModifiers = new DamageModifierContainer(logData.GW2Version);
         }
     }
 }
