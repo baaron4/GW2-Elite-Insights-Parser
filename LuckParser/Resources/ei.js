@@ -25,7 +25,7 @@ window.onload = function () {
         phase.times = times;
         simpleLogData.phases.push({
             active: i === 0,
-            focus: null
+            focus: -1
         });
     }
     for (i = 0; i < logData.targets.length; i++) {

@@ -59,12 +59,12 @@ namespace LuckParser.Models.JsonModels
                     Wasted = stats.Wasted;
                     UnknownExtended = stats.UnknownExtended;
                     Extended = stats.Extended;
-                    Presence = stats.Presence;
                     ByExtension = stats.ByExtension;
                 }
                 else
                 {
                     Uptime = stats.Uptime;
+                    Presence = stats.Presence;
                 }
             }
 

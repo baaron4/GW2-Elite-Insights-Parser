@@ -225,8 +225,8 @@ var compileTargetTab = function () {
                     var tar = logData.targets[this.phase.targets[i]];
                     res.push(tar);
                 }
-                if (this.simplephase.focus === null) {
-                    this.simplephase.focus = res[0] ? res[0].id : null;
+                if (this.simplephase.focus === -1) {
+                    this.simplephase.focus = res[0] ? res[0].id : -1;
                 }
                 return res;
             }
