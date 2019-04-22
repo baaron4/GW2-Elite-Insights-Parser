@@ -24,6 +24,8 @@ namespace LuckParser
         // use this for "null" in AbstractActor dictionaries
         public static Mob NullActor = new Mob(UnknownAgent);
 
+        public static UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
+
         /// <summary>
         /// Reports a status update for a log, updating the background worker and the related row with the new status
         /// </summary>
