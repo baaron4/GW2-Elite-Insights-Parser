@@ -10,7 +10,7 @@ namespace LuckParser.Models.Logic
     public class DarkMaze : RaidLogic
     {
         // TODO - add CR icons and some mechanics
-        public DarkMaze(ushort triggerID) : base(triggerID)
+        public DarkMaze(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
         {
             MechanicList.AddRange( new List<Mechanic>
             {

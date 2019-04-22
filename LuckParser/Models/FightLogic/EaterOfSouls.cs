@@ -10,7 +10,7 @@ namespace LuckParser.Models.Logic
     public class EaterOfSouls : RaidLogic
     {
         // TODO - add CR icons/indicators (vomit, greens, etc) and some mechanics
-        public EaterOfSouls(ushort triggerID) : base(triggerID)
+        public EaterOfSouls(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
         {
             MechanicList.AddRange( new List<Mechanic>
             {

@@ -8,7 +8,7 @@ namespace LuckParser.Models.Logic
 {
     public class Golem : FightLogic
     {
-        public Golem(ushort id) : base(id)
+        public Golem(ushort id, AgentData agentData) : base(id, agentData)
         {
             Mode = ParseMode.Golem;  
             switch (id)

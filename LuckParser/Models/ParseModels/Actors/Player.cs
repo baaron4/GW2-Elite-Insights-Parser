@@ -50,6 +50,7 @@ namespace LuckParser.Models.ParseModels
             }
             Account = name[1];
             Group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
+            IsFakeActor = Account == ":Conjured Sword";
         }
         
         // Public methods
@@ -282,7 +283,7 @@ namespace LuckParser.Models.ParseModels
                 FillFinalStats(log, GetJustPlayerDamageLogs(null, log, phase), final, targetDict);
                 _statsAll.Add(final);
                 // If conjured sword, stop
-                if (Account == ":Conjured Sword")
+                if (IsFakeActor)
                 {
                     continue;
                 }
@@ -712,7 +713,7 @@ namespace LuckParser.Models.ParseModels
             _damageModifiersTargets = new Dictionary<Target, Dictionary<string, List<DamageModifierData>>>();
             _presentDamageModifiers = new HashSet<string>();
             // If conjured sword or WvW, stop
-            if (Account == ":Conjured Sword" || log.FightData.Logic.Mode == FightLogic.ParseMode.WvW)
+            if (IsFakeActor || log.FightData.Logic.Mode == FightLogic.ParseMode.WvW)
             {
                 return;
             }
@@ -898,16 +899,15 @@ namespace LuckParser.Models.ParseModels
 
         }
 
-        protected override void SetAdditionalCombatReplayData(ParsedLog log)
+        protected override void InitAdditionalCombatReplayData(ParsedLog log)
         {
+            if (IsFakeActor)
+            {
+                return;
+            }
             CombatReplay.Icon = GeneralHelper.GetProfIcon(Prof);
-            // Down and deads
-            List<(long, long)> dead = CombatReplay.Deads;
-            List<(long, long)> down = CombatReplay.Downs;
-            List<(long, long)> dc = CombatReplay.DCs;
-            log.CombatData.GetAgentStatus(FirstAware, LastAware, InstID, dead, down, dc, log.FightData.FightStart, log.FightData.FightEnd);
             // Fight related stuff
-            log.FightData.Logic.ComputeAdditionalPlayerData(this, log);
+            log.FightData.Logic.ComputePlayerCombatReplayActors(this, log, CombatReplay);
             if (CombatReplay.Rotations.Any())
             {
                 CombatReplay.Actors.Add(new FacingActor(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
@@ -963,6 +963,23 @@ namespace LuckParser.Models.ParseModels
             }
 
             return aux;
+        }
+
+        protected override void InitCombatReplay(ParsedLog log)
+        {
+            if (!log.FightData.Logic.CanCombatReplay || IsFakeActor)
+            {
+                // no combat replay support on fight
+                return;
+            }
+            CombatReplay = new CombatReplay();
+            SetMovements(log);
+            // Down and deads
+            List<(long, long)> dead = CombatReplay.Deads;
+            List<(long, long)> down = CombatReplay.Downs;
+            List<(long, long)> dc = CombatReplay.DCs;
+            log.CombatData.GetAgentStatus(FirstAware, LastAware, InstID, dead, down, dc, log.FightData.FightStart, log.FightData.FightEnd);
+            CombatReplay.PollingRate(log.FightData.FightDuration, true);
         }
 
 

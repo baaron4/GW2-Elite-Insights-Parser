@@ -242,7 +242,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                if (player.Account == ":Conjured Sword")
+                if (player.IsFakeActor)
                 {
                     continue;
                 }
@@ -292,7 +292,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                if (player.Account == ":Conjured Sword")
+                if (player.IsFakeActor)
                 {
                     continue;
                 }
@@ -334,7 +334,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                if (player.Account == ":Conjured Sword")
+                if (player.IsFakeActor)
                 {
                     continue;
                 }
@@ -358,7 +358,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                if (player.Account == ":Conjured Sword")
+                if (player.IsFakeActor)
                 {
                     continue;
                 }
@@ -391,7 +391,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                if (player.Account == ":Conjured Sword")
+                if (player.IsFakeActor)
                 {
                     continue;
                 }
@@ -441,7 +441,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                if (player.Account == ":Conjured Sword")
+                if (player.IsFakeActor)
                 {
                     continue;
                 }
@@ -494,7 +494,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                if (player.Account == ":Conjured Sword")
+                if (player.IsFakeActor)
                 {
                     continue;
                 }
@@ -548,7 +548,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                if (player.Account == ":Conjured Sword")
+                if (player.IsFakeActor)
                 {
                     continue;
                 }
@@ -602,7 +602,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                if (player.Account == ":Conjured Sword")
+                if (player.IsFakeActor)
                 {
                     continue;
                 }
@@ -811,7 +811,7 @@ namespace LuckParser.Builders
             NewLine();
             foreach (Player player in _log.PlayerList)
             {
-                if (player.Account == ":Conjured Sword")
+                if (player.IsFakeActor)
                 {
                     continue;
                 }

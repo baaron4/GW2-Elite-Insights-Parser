@@ -10,7 +10,7 @@ namespace LuckParser.Models.Logic
 {
     public class MursaatOverseer : RaidLogic
     {
-        public MursaatOverseer(ushort triggerID) : base(triggerID)
+        public MursaatOverseer(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
@@ -97,9 +97,8 @@ namespace LuckParser.Models.Logic
         }
 
 
-        public override void ComputeAdditionalTrashMobData(Mob mob, ParsedLog log)
+        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
         {
-            CombatReplay replay = mob.CombatReplay;
             List<CastLog> cls = mob.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (mob.ID)
             {
