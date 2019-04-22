@@ -32,7 +32,7 @@ namespace LuckParser.Models.Logic
 
         public override void SetSuccess(ParsedLog log)
         {
-            SetSuccessByDeath(log, TriggerID);
+            SetSuccessByDeath(log, true, TriggerID);
         }
 
         public override string GetFightName() {
