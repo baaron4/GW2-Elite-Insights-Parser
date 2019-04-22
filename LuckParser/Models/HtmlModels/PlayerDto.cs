@@ -42,7 +42,7 @@ namespace LuckParser.Models.HtmlModels
             BuildWeaponSets(player, log);
             if (cr && !IsConjure)
             {
-                CombatReplayID = player.GetCombatReplayID();
+                CombatReplayID = player.GetCombatReplayID(log);
             }
             foreach (KeyValuePair<string, Minions> pair in player.GetMinions(log))
             {
