@@ -546,7 +546,8 @@ namespace LuckParser
                 case UnderworldReaper:
                     return "https://i.imgur.com/Tq6SYVe.png";
                 case CagedWarg:
-                case GreenSpirit:
+                case GreenSpirit1:
+                case GreenSpirit2:
                 case BanditSapper:
                     return "https://i.imgur.com/0koP4xB.png";
                 case FleshWurm:
