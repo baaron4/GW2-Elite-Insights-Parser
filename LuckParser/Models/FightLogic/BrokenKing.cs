@@ -32,9 +32,8 @@ namespace LuckParser.Models.Logic
                             (19072, 15484, 20992, 16508));
         }
 
-        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
+        public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
-            CombatReplay replay = p.CombatReplay;
             List<CombatItem> green = log.CombatData.GetBoonData(47776).Where(x => x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
             foreach (CombatItem c in green)
             {
@@ -50,9 +49,8 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
+        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            CombatReplay replay = target.CombatReplay;
             List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {

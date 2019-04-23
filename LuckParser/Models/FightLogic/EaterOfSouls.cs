@@ -44,9 +44,8 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
+        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            CombatReplay replay = target.CombatReplay;
             List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
@@ -90,9 +89,8 @@ namespace LuckParser.Models.Logic
 
         }
 
-        public override void ComputeAdditionalTrashMobData(Mob mob, ParsedLog log)
+        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
         {
-            CombatReplay replay = mob.CombatReplay;
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (mob.ID)
@@ -119,9 +117,8 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
+        public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
-            CombatReplay replay = p.CombatReplay;
             List<CombatItem> spiritTransform = log.CombatData.GetBoonData(46950).Where(x => x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
             foreach (CombatItem c in spiritTransform)
             {
