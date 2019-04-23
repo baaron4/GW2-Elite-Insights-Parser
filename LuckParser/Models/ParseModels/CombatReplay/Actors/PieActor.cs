@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using LuckParser.Parser;
+using Newtonsoft.Json;
 using System;
 
 namespace LuckParser.Models.ParseModels
@@ -44,7 +45,7 @@ namespace LuckParser.Models.ParseModels
             public int OpeningAngle { get; set; }
         }
 
-        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map)
+        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
             PieSerializable aux = new PieSerializable
             {
@@ -57,7 +58,7 @@ namespace LuckParser.Models.ParseModels
                 Growing = Growing,
                 Start = Lifespan.start,
                 End = Lifespan.end,
-                ConnectedTo = ConnectedTo.GetConnectedTo(map)
+                ConnectedTo = ConnectedTo.GetConnectedTo(map, log)
             };
             return aux;
         }

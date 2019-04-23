@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using LuckParser.Parser;
+using Newtonsoft.Json;
 using System;
 
 namespace LuckParser.Models.ParseModels
@@ -21,7 +22,7 @@ namespace LuckParser.Models.ParseModels
             public int OuterRadius { get; set; }
         }
 
-        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map)
+        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
             DoughnutSerializable aux = new DoughnutSerializable
             {
@@ -33,7 +34,7 @@ namespace LuckParser.Models.ParseModels
                 Growing = Growing,
                 Start = Lifespan.start,
                 End = Lifespan.end,
-                ConnectedTo = ConnectedTo.GetConnectedTo(map)
+                ConnectedTo = ConnectedTo.GetConnectedTo(map, log)
             };
             return aux;
         }

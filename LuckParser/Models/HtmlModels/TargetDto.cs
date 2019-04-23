@@ -29,7 +29,7 @@ namespace LuckParser.Models.HtmlModels
             Tough = target.Toughness;
             if (cr)
             {
-                CombatReplayID = target.GetCombatReplayID();
+                CombatReplayID = target.GetCombatReplayID(log);
             }
             if (log.FightData.Success)
             {

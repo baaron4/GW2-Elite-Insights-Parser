@@ -379,11 +379,11 @@ namespace LuckParser.Models.ParseModels
             DamageLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
         }
 
-        public int GetCombatReplayID()
+        public int GetCombatReplayID(ParsedLog log)
         {
             if (CombatReplay == null)
             {
-                throw new InvalidOperationException("No Combat Replay");
+                InitCombatReplay(log);
             }
             return (InstID + "_" + CombatReplay.TimeOffsets.start + "_" + CombatReplay.TimeOffsets.end).GetHashCode();
         }
@@ -400,6 +400,6 @@ namespace LuckParser.Models.ParseModels
             public double[] Positions { get; set; }
         }
 
-        public abstract AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map);
+        public abstract AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log);
     }
 }

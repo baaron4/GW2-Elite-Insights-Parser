@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Parser;
+using System;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -21,7 +22,7 @@ namespace LuckParser.Models.ParseModels
             public object ConnectedTo { get; set; }
         }
 
-        public abstract GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map);
+        public abstract GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log);
 
     }
 }

@@ -756,7 +756,7 @@ namespace LuckParser.Builders
                 try
                 {
                     using (var fs = new FileStream(jsPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, Encoding.UTF8))
+                    using (var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
                     {
                         scriptWriter.Write(Properties.Resources.combatreplay_js);
                     }
@@ -874,7 +874,7 @@ namespace LuckParser.Builders
                 try
                 {
                     using (var fs = new FileStream(cssPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, Encoding.UTF8))
+                    using (var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
                     {
                         scriptWriter.Write(scriptContent);
                     }
@@ -925,7 +925,7 @@ namespace LuckParser.Builders
                 try
                 {
                     using (var fs = new FileStream(scriptPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, Encoding.UTF8))
+                    using (var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
                     {
                         scriptWriter.Write(scriptContent);
                     }
@@ -961,7 +961,7 @@ namespace LuckParser.Builders
                 try
                 {
                     using (var fs = new FileStream(scriptPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, Encoding.UTF8))
+                    using (var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
                     {
                         scriptWriter.Write(scriptContent);
                     }

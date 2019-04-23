@@ -905,7 +905,6 @@ namespace LuckParser.Models.ParseModels
             {
                 return;
             }
-            CombatReplay.Icon = GeneralHelper.GetProfIcon(Prof);
             // Fight related stuff
             log.FightData.Logic.ComputePlayerCombatReplayActors(this, log, CombatReplay);
             if (CombatReplay.Rotations.Any())
@@ -923,14 +922,18 @@ namespace LuckParser.Models.ParseModels
             public long[] Dc { get; set; }
         }
 
-        public override AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map)
+        public override AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
+            if (CombatReplay == null)
+            {
+                InitCombatReplay(log);
+            }
             PlayerSerializable aux = new PlayerSerializable
             {
                 Group = Group,
                 Img = CombatReplay.Icon,
                 Type = "Player",
-                ID = GetCombatReplayID(),
+                ID = GetCombatReplayID(log),
                 Positions = new double[2 * CombatReplay.Positions.Count],
                 Dead = new long[2 * CombatReplay.Deads.Count],
                 Down = new long[2 * CombatReplay.Downs.Count],
@@ -972,7 +975,10 @@ namespace LuckParser.Models.ParseModels
                 // no combat replay support on fight
                 return;
             }
-            CombatReplay = new CombatReplay();
+            CombatReplay = new CombatReplay
+            {
+                Icon = GeneralHelper.GetProfIcon(Prof)
+            };
             SetMovements(log);
             // Down and deads
             List<(long, long)> dead = CombatReplay.Deads;

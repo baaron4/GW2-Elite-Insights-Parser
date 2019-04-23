@@ -324,7 +324,7 @@ namespace LuckParser
                         if (rowData.LogLocation != null) { splitString = ","; }
                         rowData.LogLocation += splitString + saveDirectory.FullName;
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
-                        using (var sw = new StreamWriter(fs, Encoding.UTF8))
+                        using (var sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
                         {
                             var builder = new RawFormatBuilder(sw, log, uploadresult);
                             builder.CreateJSON();
@@ -341,7 +341,7 @@ namespace LuckParser
                         if (rowData.LogLocation != null) { splitString = ","; }
                         rowData.LogLocation += splitString + saveDirectory.FullName;
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
-                        using (var sw = new StreamWriter(fs, Encoding.UTF8))
+                        using (var sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
                         {
                             var builder = new RawFormatBuilder(sw, log, uploadresult);
                             builder.CreateXML();

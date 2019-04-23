@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using LuckParser.Parser;
+using Newtonsoft.Json;
 using System;
 
 namespace LuckParser.Models.ParseModels
@@ -18,7 +19,7 @@ namespace LuckParser.Models.ParseModels
             public object ConnectedFrom { get; set; }
         }
 
-        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map)
+        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
             LineSerializable aux = new LineSerializable
             {
@@ -28,8 +29,8 @@ namespace LuckParser.Models.ParseModels
                 Growing = Growing,
                 Start = Lifespan.start,
                 End = Lifespan.end,
-                ConnectedTo = ConnectedTo.GetConnectedTo(map),
-                ConnectedFrom = ConnectedFrom.GetConnectedTo(map)
+                ConnectedTo = ConnectedTo.GetConnectedTo(map, log),
+                ConnectedFrom = ConnectedFrom.GetConnectedTo(map, log)
             };
             return aux;
         }

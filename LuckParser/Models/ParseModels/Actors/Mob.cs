@@ -18,7 +18,6 @@ namespace LuckParser.Models.ParseModels
 
         protected override void InitAdditionalCombatReplayData(ParsedLog log)
         {
-            CombatReplay.Icon = GeneralHelper.GetNPCIcon(ID);
             log.FightData.Logic.ComputeMobCombatReplayActors(this, log, CombatReplay);
         }
         //
@@ -28,8 +27,12 @@ namespace LuckParser.Models.ParseModels
             public long End { get; set; }
         }
 
-        public override AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map)
+        public override AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
+            if (CombatReplay == null)
+            {
+                InitCombatReplay(log);
+            }
             MobSerializable aux = new MobSerializable
             {
                 Img = CombatReplay.Icon,
@@ -37,7 +40,7 @@ namespace LuckParser.Models.ParseModels
                 Positions = new double[2 * CombatReplay.Positions.Count],
                 Start = CombatReplay.TimeOffsets.start,
                 End = CombatReplay.TimeOffsets.end,
-                ID = GetCombatReplayID()
+                ID = GetCombatReplayID(log)
             };
             int i = 0;
             foreach (Point3D pos in CombatReplay.Positions)
@@ -57,7 +60,10 @@ namespace LuckParser.Models.ParseModels
                 // no combat replay support on fight
                 return;
             }
-            CombatReplay = new CombatReplay();
+            CombatReplay = new CombatReplay
+            {
+                Icon = GeneralHelper.GetNPCIcon(ID)
+            };
             SetMovements(log);
             CombatReplay.PollingRate(log.FightData.FightDuration, false);
             CombatItem despawnCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Despawn, FirstAware, LastAware).LastOrDefault();

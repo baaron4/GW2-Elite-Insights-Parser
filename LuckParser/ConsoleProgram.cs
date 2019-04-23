@@ -205,7 +205,7 @@ namespace LuckParser
                         );
                         using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         {
-                            using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
+                            using (StreamWriter sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
                             {
                                 var builder = new RawFormatBuilder(sw, log, uploadresult);
                                 builder.CreateJSON();
@@ -221,7 +221,7 @@ namespace LuckParser
                         );
                         using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         {
-                            using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
+                            using (StreamWriter sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
                             {
                                 var builder = new RawFormatBuilder(sw, log, uploadresult);
                                 builder.CreateXML();

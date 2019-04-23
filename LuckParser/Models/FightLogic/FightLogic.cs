@@ -264,7 +264,7 @@ namespace LuckParser.Models.Logic
             return -1;
         }
 
-        protected void SetSuccessByDeath(ParsedLog log, ushort idFirst, params ushort[] ids)
+        protected void SetSuccessByDeath(ParsedLog log, bool all, ushort idFirst, params ushort[] ids)
         {
             int success = 0;
             long maxTime = long.MinValue;
@@ -275,7 +275,7 @@ namespace LuckParser.Models.Logic
             idsToUse.AddRange(ids);
             foreach (ushort id in idsToUse)
             {
-                Target target = Targets.Find(x => x.ID == TriggerID);
+                Target target = Targets.Find(x => x.ID == id);
                 if (target == null)
                 {
                     throw new InvalidOperationException("Main target of the fight not found");
@@ -287,7 +287,7 @@ namespace LuckParser.Models.Logic
                     maxTime = Math.Max(killed.Time, maxTime);
                 }
             }
-            if (success == idsToUse.Count)
+            if ((all && success == idsToUse.Count) || (!all && success > 0))
             {
                 log.FightData.Success = true;
                 log.FightData.FightEnd = maxTime;
@@ -296,7 +296,7 @@ namespace LuckParser.Models.Logic
 
         public virtual void SetSuccess(ParsedLog log)
         {
-            SetSuccessByDeath(log, TriggerID);
+            SetSuccessByDeath(log, true, TriggerID);
         }
 
 
