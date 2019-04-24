@@ -111,6 +111,7 @@
     <Compile Include="Models\JsonModels\JsonMechanics.cs" />
     <Compile Include="Models\JsonModels\JsonRotation.cs" />
     <Compile Include="Models\JsonModels\JsonStatistics.cs" />
+    <Compile Include="Models\ParseModels\Boons\BoonsContainer.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonSourceFinders\BoonSourceFinder11122018.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonSourceFinders\BoonSourceFinder05032019.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonSourceFinders\BoonSourceFinder.cs" />

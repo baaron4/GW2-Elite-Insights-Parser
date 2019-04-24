@@ -66,6 +66,7 @@ namespace LuckParser.Models.ParseModels
         public readonly BoonNature Nature;
         public readonly BoonSource Source;
         public readonly BoonType Type;
+        public readonly long Version;
         public readonly int Capacity;
         public readonly string Link;
         private readonly Logic _logic;
@@ -105,9 +106,7 @@ namespace LuckParser.Models.ParseModels
             _logic = Logic.Unknown;
         }
 
-        // Public Methods
-
-        private static List<Boon> _allBoons = new List<Boon>
+        public static List<Boon> AllBoons = new List<Boon>
             {
                 // Custom Boons
                 new Boon("Number of Conditions", NumberOfConditionsID, BoonSource.Mixed, BoonType.Intensity, 0, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/38/Condition_Duration.png"),
@@ -617,83 +616,6 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Powerful Potion of Ice Brood Slaying",9861, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/0/0d/Powerful_Potion_of_Ice_Brood_Slaying.png"),
                 // new Boon("Hylek Maintenance Oil",9968, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"), when wiki says "same stats" its literally the same buff
         };
-
-
-        public static Dictionary<long, Boon> BoonsByIds = _allBoons.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.First());
-        public static Dictionary<BoonNature, List<Boon>> BoonsByNature = _allBoons.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => x.ToList());
-        public static Dictionary<BoonSource, List<Boon>> BoonsBySource = _allBoons.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => x.ToList());
-        public static Dictionary<BoonType, List<Boon>> BoonsByType = _allBoons.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
-        private static Dictionary<string, Boon> _boonsByName = _allBoons.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().Count > 1 ? throw new InvalidOperationException(x.First().Name) : x.First());
-        public static Dictionary<int, List<Boon>> BoonsByCapacity = _allBoons.GroupBy(x => x.Capacity).ToDictionary(x => x.Key, x => x.ToList());
-        
-        public static Boon GetBoonByName(string name)
-        {
-            if (_boonsByName.TryGetValue(name, out Boon buff))
-            {
-                return buff;
-            }
-            throw new InvalidOperationException("Buff " + name + " does not exist");
-        }
-
-        // get everything
-        public static List<Boon> GetAll()
-        {
-            return _allBoons;
-        }
-
-        // Conditions
-        public static List<Boon> GetCondiBoonList()
-        {
-            return BoonsByNature[BoonNature.Condition];
-        }
-        // Boons
-        public static List<Boon> GetBoonList()
-        {
-            return BoonsByNature[BoonNature.Boon];
-        }
-        // Shareable buffs
-        public static List<Boon> GetOffensiveTableList()
-        {
-            return BoonsByNature[BoonNature.OffensiveBuffTable];
-        }
-        public static List<Boon> GetDefensiveTableList()
-        {
-            return BoonsByNature[BoonNature.DefensiveBuffTable];
-        }
-        // Consumables (Food and Utility)
-        public static List<Boon> GetConsumableList()
-        {
-            return BoonsByNature[BoonNature.Consumable];
-        }
-        // Enemy
-        public static List<Boon> GetEnemyBoonList()
-        {
-            return BoonsBySource[BoonSource.Enemy];
-        }
-        // All buffs
-        public static List<Boon> GetAllBuffList()
-        {
-            List<Boon> res = new List<Boon>();
-            // correct order for the boon graph
-            res.AddRange(BoonsByNature[BoonNature.Boon]);
-            res.AddRange(BoonsByNature[BoonNature.DefensiveBuffTable]);
-            res.AddRange(BoonsByNature[BoonNature.OffensiveBuffTable]);
-            res.AddRange(BoonsByNature[BoonNature.GraphOnlyBuff]);
-            return res;
-        }
-        // Non shareable buffs
-        public static List<Boon> GetRemainingBuffsList()
-        {
-            return BoonsByNature[BoonNature.GraphOnlyBuff];
-        }
-        private static List<Boon> GetRemainingBuffsList(BoonSource source)
-        {
-            return BoonsBySource[source].Where(x => x.Nature == BoonNature.GraphOnlyBuff).ToList();
-        }
-        public static List<Boon> GetRemainingBuffsList(string source)
-        {
-            return GetRemainingBuffsList(ProfToEnum(source));
-        }
 
         public BoonSimulator CreateSimulator(ParsedLog log)
         {
