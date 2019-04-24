@@ -458,7 +458,7 @@ namespace LuckParser.Builders
                 {
                     if (!_buffDesc.ContainsKey("b" + pair.Key))
                     {
-                        if (Boon.BoonsByIds.TryGetValue(pair.Key, out Boon buff))
+                        if (_log.Boons.BoonsByIds.TryGetValue(pair.Key, out Boon buff))
                         {
                             _buffDesc["b" + pair.Key] = new JsonLog.BuffDesc(buff);
                         }
@@ -579,7 +579,7 @@ namespace LuckParser.Builders
             {
                 if (!_buffDesc.ContainsKey("b" + pair.Key))
                 {
-                    _buffDesc["b" + pair.Key] = new JsonLog.BuffDesc(Boon.BoonsByIds[pair.Key]);
+                    _buffDesc["b" + pair.Key] = new JsonLog.BuffDesc(_log.Boons.BoonsByIds[pair.Key]);
                 }
                 List<JsonTargetBuffsData> data = new List<JsonTargetBuffsData>();
                 for (int i = 0; i < _phases.Count; i++)
@@ -605,7 +605,7 @@ namespace LuckParser.Builders
             int phases = _phases.Count;
             foreach (var pair in statUptimes[0])
             {
-                Boon buff = Boon.BoonsByIds[pair.Key];
+                Boon buff = _log.Boons.BoonsByIds[pair.Key];
                 if (!_buffDesc.ContainsKey("b" + pair.Key))
                 {
                     _buffDesc["b" + pair.Key] = new JsonLog.BuffDesc(buff);
@@ -634,7 +634,7 @@ namespace LuckParser.Builders
             int phases = _phases.Count;
             foreach (var pair in statUptimes[0])
             {
-                Boon buff = Boon.BoonsByIds[pair.Key];
+                Boon buff = _log.Boons.BoonsByIds[pair.Key];
                 if (!_buffDesc.ContainsKey("b" + pair.Key))
                 {
                     _buffDesc["b" + pair.Key] = new JsonLog.BuffDesc(buff);

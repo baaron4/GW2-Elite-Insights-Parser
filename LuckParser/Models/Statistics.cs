@@ -12,7 +12,7 @@ namespace LuckParser.Models
     {
         public Statistics(ParsedLog log)
         {
-            SetPresentBoons(log.CombatData.GetSkills(), log.PlayerList, log.CombatData);
+            SetPresentBoons(log.CombatData.GetSkills(), log.PlayerList, log.CombatData, log.Boons);
             SetStackCenterPositions(log.FightData.Logic.CanCombatReplay, log);
         }
 
@@ -244,10 +244,10 @@ namespace LuckParser.Models
         /// <summary>
         /// Checks the combat data and gets buffs that were present during the fight
         /// </summary>
-        private void SetPresentBoons(HashSet<long> skillIDs, List<Player> players, CombatData combatData)
+        private void SetPresentBoons(HashSet<long> skillIDs, List<Player> players, CombatData combatData, BoonsContainer boons)
         {
             // Main boons
-            foreach (Boon boon in Boon.GetBoonList())
+            foreach (Boon boon in boons.GetBoonList())
             {
                 if (skillIDs.Contains(boon.ID))
                 {
@@ -255,7 +255,7 @@ namespace LuckParser.Models
                 }
             }
             // Main Conditions
-            foreach (Boon boon in Boon.GetCondiBoonList())
+            foreach (Boon boon in boons.GetCondiBoonList())
             {
                 if (skillIDs.Contains(boon.ID))
                 {
@@ -264,7 +264,7 @@ namespace LuckParser.Models
             }
 
             // Important class specific boons
-            foreach (Boon boon in Boon.GetOffensiveTableList())
+            foreach (Boon boon in boons.GetOffensiveTableList())
             {
                 if (skillIDs.Contains(boon.ID))
                 {
@@ -272,7 +272,7 @@ namespace LuckParser.Models
                 }
             }
 
-            foreach (Boon boon in Boon.GetDefensiveTableList())
+            foreach (Boon boon in boons.GetDefensiveTableList())
             {
                 if (skillIDs.Contains(boon.ID))
                 {
@@ -282,7 +282,7 @@ namespace LuckParser.Models
             }
 
             // All class specific boons
-            Dictionary<long, Boon> remainingBuffsByIds = Boon.GetRemainingBuffsList().GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
+            Dictionary<long, Boon> remainingBuffsByIds = boons.GetRemainingBuffsList().GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
             foreach (Player player in players)
             {
                 PresentPersonalBuffs[player.InstID] = new HashSet<Boon>();

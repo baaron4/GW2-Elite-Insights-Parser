@@ -7,8 +7,8 @@ namespace LuckParser.Models.ParseModels
         public long Time { get; }
         public int Damage { get; protected set; }
         public long SkillId { get; }
-        public bool IsIndirectDamage { get; }
-        public bool IsCondi { get; }
+        public bool IsIndirectDamage { get; protected set; }
+        public bool IsCondi { get; protected set; }
         public ParseEnum.Result Result { get; }
         public bool IsNinety { get; }
         public bool IsFifty { get; }
@@ -24,11 +24,6 @@ namespace LuckParser.Models.ParseModels
         {
             Time = time;
             SkillId = c.SkillID;
-            IsIndirectDamage = c.IsBuff > 0;
-            if (Boon.BoonsByIds.TryGetValue(c.SkillID, out Boon boon))
-            {
-                IsCondi = (boon.Nature == Boon.BoonNature.Condition);
-            }
             Result = c.ResultEnum;
             IsNinety = c.IsNinety > 0;
             IsFifty = c.IsFifty > 0;

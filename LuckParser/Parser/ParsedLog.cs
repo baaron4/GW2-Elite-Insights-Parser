@@ -23,8 +23,9 @@ namespace LuckParser.Parser
         public readonly Target LegacyTarget;
         public readonly Statistics Statistics;
         public readonly DamageModifierContainer DamageModifiers;
+        public readonly BoonsContainer Boons;
 
-        
+
 
         public ParsedLog(LogData logData, FightData fightData, AgentData agentData, SkillData skillData, 
                 CombatData combatData, List<Player> playerList, Target target)
@@ -36,6 +37,7 @@ namespace LuckParser.Parser
             CombatData = combatData;
             PlayerList = playerList;
             BoonSourceFinder = Boon.GetBoonSourceFinder(logData.GW2Version);
+            Boons = new BoonsContainer(logData.GW2Version);
             DamageModifiers = new DamageModifierContainer(logData.GW2Version);
             LegacyTarget = target;
             MechanicData = new MechanicData(fightData);

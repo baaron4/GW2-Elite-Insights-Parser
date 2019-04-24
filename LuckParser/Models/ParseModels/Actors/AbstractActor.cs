@@ -143,7 +143,7 @@ namespace LuckParser.Models.ParseModels
 
         }
         // privates
-        protected void AddDamageLog(long time, CombatItem c)
+        protected void AddDamageLog(long time, CombatItem c, BoonsContainer boons)
         {        
             if (c.IFF == ParseEnum.IFF.Friend)
             {
@@ -151,20 +151,20 @@ namespace LuckParser.Models.ParseModels
             }
             if (c.IsBuff != 0)//condi
             {
-                DamageLogs.Add(new DamageLogCondition(time, c));
+                DamageLogs.Add(new DamageLogCondition(time, c, boons));
             }
             else if (c.IsBuff == 0)//power
             {
                 DamageLogs.Add(new DamageLogPower(time, c));
             }
         }
-        protected void AddDamageTakenLog(long time, CombatItem c)
+        protected void AddDamageTakenLog(long time, CombatItem c, BoonsContainer boons)
         {
             if (c.IsBuff != 0)
             {
                 //inco,ing condi dmg not working or just not present?
                 // damagetaken.Add(c.getBuffDmg());
-                _damageTakenlogs.Add(new DamageLogCondition(time, c));
+                _damageTakenlogs.Add(new DamageLogCondition(time, c, boons));
             }
             else if (c.IsBuff == 0)
             {
@@ -197,11 +197,11 @@ namespace LuckParser.Models.ParseModels
                 long boonId = c.SkillID;
                 if (!boonMap.ContainsKey(boonId))
                 {
-                    if (!Boon.BoonsByIds.ContainsKey(boonId))
+                    if (!log.Boons.BoonsByIds.ContainsKey(boonId))
                     {
                         continue;
                     }
-                    boonMap.Add(Boon.BoonsByIds[boonId]);
+                    boonMap.Add(log.Boons.BoonsByIds[boonId]);
                 }
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.Manual
                     || (c.IsBuffRemove == ParseEnum.BuffRemove.Single && c.IFF == ParseEnum.IFF.Unknown && c.DstInstid == 0)
@@ -244,7 +244,7 @@ namespace LuckParser.Models.ParseModels
             //boonMap.Sort();
             foreach (var pair in boonMap)
             {
-                TrackedBoons.Add(Boon.BoonsByIds[pair.Key]);
+                TrackedBoons.Add(log.Boons.BoonsByIds[pair.Key]);
             }
             return boonMap;
         }
@@ -284,7 +284,7 @@ namespace LuckParser.Models.ParseModels
             foreach (CombatItem c in log.CombatData.GetDamageTakenData(InstID, FirstAware, LastAware))
             {
                 long time = log.FightData.ToFightSpace(c.Time);
-                AddDamageTakenLog(time, c);
+                AddDamageTakenLog(time, c, log.Boons);
             }
         }
 
@@ -363,10 +363,10 @@ namespace LuckParser.Models.ParseModels
             BoonMap toUse = GetBoonMap(log);
             long dur = log.FightData.FightDuration;
             int fightDuration = (int)(dur) / 1000;
-            BoonsGraphModel boonPresenceGraph = new BoonsGraphModel(Boon.BoonsByIds[Boon.NumberOfBoonsID]);
-            BoonsGraphModel condiPresenceGraph = new BoonsGraphModel(Boon.BoonsByIds[Boon.NumberOfConditionsID]);
-            HashSet<long> boonIds = new HashSet<long>(Boon.GetBoonList().Select(x => x.ID));
-            HashSet<long> condiIds = new HashSet<long>(Boon.GetCondiBoonList().Select(x => x.ID));
+            BoonsGraphModel boonPresenceGraph = new BoonsGraphModel(log.Boons.BoonsByIds[Boon.NumberOfBoonsID]);
+            BoonsGraphModel condiPresenceGraph = new BoonsGraphModel(log.Boons.BoonsByIds[Boon.NumberOfConditionsID]);
+            HashSet<long> boonIds = new HashSet<long>(log.Boons.GetBoonList().Select(x => x.ID));
+            HashSet<long> condiIds = new HashSet<long>(log.Boons.GetCondiBoonList().Select(x => x.ID));
             InitBoonStatusData(log);
 
             long death = GetState(log, 0, dur, ParseEnum.StateChange.ChangeDead);

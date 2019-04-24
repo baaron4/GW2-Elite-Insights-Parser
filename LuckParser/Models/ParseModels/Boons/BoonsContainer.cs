@@ -10,14 +10,29 @@ namespace LuckParser.Models.ParseModels
     public class BoonsContainer
     {
 
-        public static Dictionary<long, Boon> BoonsByIds = AllBoons.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.First());
-        public static Dictionary<BoonNature, List<Boon>> BoonsByNature = AllBoons.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => x.ToList());
-        public static Dictionary<BoonSource, List<Boon>> BoonsBySource = AllBoons.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => x.ToList());
-        public static Dictionary<BoonType, List<Boon>> BoonsByType = AllBoons.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
-        private static Dictionary<string, Boon> _boonsByName = AllBoons.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().Count > 1 ? throw new InvalidOperationException(x.First().Name) : x.First());
-        public static Dictionary<int, List<Boon>> BoonsByCapacity = AllBoons.GroupBy(x => x.Capacity).ToDictionary(x => x.Key, x => x.ToList());
+        public Dictionary<long, Boon> BoonsByIds { get; }
+        public Dictionary<BoonNature, List<Boon>> BoonsByNature { get; }
+        public Dictionary<BoonSource, List<Boon>> BoonsBySource { get; }
+        public Dictionary<BoonType, List<Boon>> BoonsByType { get; }
+        private readonly Dictionary<string, Boon> _boonsByName;
+        public Dictionary<int, List<Boon>> BoonsByCapacity { get; }
 
-        public static Boon GetBoonByName(string name)
+        public BoonsContainer(ulong build)
+        {
+            List<Boon> currentBoons = new List<Boon>();
+            foreach (List<Boon> boons in AllBoons)
+            {
+                currentBoons.AddRange(boons.Where(x => x.MaxBuild >= build));
+            }
+            BoonsByIds = currentBoons.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.First());
+            BoonsByNature = currentBoons.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => x.ToList());
+            BoonsBySource = currentBoons.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => x.ToList());
+            BoonsByType = currentBoons.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
+            _boonsByName = currentBoons.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().Count > 1 ? throw new InvalidOperationException(x.First().Name) : x.First());
+            BoonsByCapacity = currentBoons.GroupBy(x => x.Capacity).ToDictionary(x => x.Key, x => x.ToList());
+        }
+
+        public Boon GetBoonByName(string name)
         {
             if (_boonsByName.TryGetValue(name, out Boon buff))
             {

@@ -212,7 +212,7 @@ namespace LuckParser.Builders
             foreach (var pair in _log.PlayerListBySpec)
             {
                 List<Player> players = pair.Value;
-                HashSet<long> specBoonIds = new HashSet<long>(Boon.GetRemainingBuffsList(pair.Key).Select(x => x.ID));
+                HashSet<long> specBoonIds = new HashSet<long>(_log.Boons.GetRemainingBuffsList(pair.Key).Select(x => x.ID));
                 HashSet<Boon> boonToUse = new HashSet<Boon>();
                 foreach (Player player in players)
                 {
@@ -389,8 +389,8 @@ namespace LuckParser.Builders
             Dictionary<long, Boon> conditionsById = _statistics.PresentConditions.ToDictionary(x => x.ID);
             SkillData skillList = _log.SkillData;
             foreach (KeyValuePair<long, List<DamageLog>> entry in damageLogsBySkill)
-            {   
-                list.Add(DmgDistributionDto.GetDMGDtoItem(entry, castLogsBySkill, skillList, _usedSkills, _usedBoons));
+            {
+                list.Add(DmgDistributionDto.GetDMGDtoItem(entry, castLogsBySkill, skillList, _usedSkills, _usedBoons, _log.Boons));
             }
             // non damaging
             foreach (KeyValuePair<long, List<CastLog>> entry in castLogsBySkill)
@@ -501,7 +501,7 @@ namespace LuckParser.Builders
             Dictionary<long, Boon> conditionsById = _statistics.PresentConditions.ToDictionary(x => x.ID);
             foreach (var entry in damageLogsBySkill)
             {
-                dto.Distribution.Add(DmgDistributionDto.GetDMGDtoItem(entry, null, skillList, _usedSkills, _usedBoons));
+                dto.Distribution.Add(DmgDistributionDto.GetDMGDtoItem(entry, null, skillList, _usedSkills, _usedBoons, _log.Boons));
             }
             return dto;
         }
