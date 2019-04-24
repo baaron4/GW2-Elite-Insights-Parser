@@ -18,7 +18,11 @@ namespace LuckParser.Models.ParseModels
 
         public DamageModifierContainer(ulong build)
         {
-            IEnumerable<DamageModifier> currentDamageMods = AllDamageModifiers.Where(x => x.MaxBuild >= build);
+            List<DamageModifier> currentDamageMods = new List<DamageModifier>();
+            foreach (List<DamageModifier> boons in AllDamageModifiers)
+            {
+                currentDamageMods.AddRange(boons.Where(x => x.MaxBuild >= build));
+            }
             DamageModifiersPerSource = currentDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
             DamageModifiersByName = currentDamageMods.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().First());
         }
