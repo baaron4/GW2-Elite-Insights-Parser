@@ -10,13 +10,17 @@ namespace LuckParser.Models.ParseModels
     {
         private readonly HashSet<long> _ids;
 
-        public BuffsTracker(params Boon[] buffs)
+        public BuffsTracker(Boon buff)
         {
-            _ids = new HashSet<long>();
-            foreach (Boon buff in buffs)
+            _ids = new HashSet<long>()
             {
-                _ids.Add(buff.ID);
-            }
+                buff.ID
+            };
+        }
+
+        public BuffsTracker(List<Boon> buffs)
+        {
+            _ids = new HashSet<long>(buffs.Select(x => x.ID));
         }
 
         public int GetStack(Dictionary<long, BoonsGraphModel> bgms, long time)

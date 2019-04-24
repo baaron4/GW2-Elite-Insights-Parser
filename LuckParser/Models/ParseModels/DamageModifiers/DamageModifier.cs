@@ -181,7 +181,7 @@ namespace LuckParser.Models.ParseModels
         {
 
             new BuffDamageModifierTarget(Boon.GetBoonByName("Burning"), "Fiery Wrath", "7% on burning target", DamageSource.NoPets, 7.0, DamageType.Power, DamageType.All, ModifierSource.Guardian, ByPresence, "https://wiki.guildwars2.com/images/7/70/Fiery_Wrath.png"),
-            new BuffDamageModifier(Boon.GetBoonByName("Retaliation"), "10% under retaliation", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ModifierSource.Guardian, ByPresence, "https://wiki.guildwars2.com/images/d/d7/Retribution_%28trait%29.png"),
+            new BuffDamageModifier(Boon.GetBoonByName("Retaliation"), "Retribution", "10% under retaliation", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ModifierSource.Guardian, ByPresence, "https://wiki.guildwars2.com/images/d/d7/Retribution_%28trait%29.png"),
             new BuffDamageModifier(Boon.GetBoonByName("Aegis"), "Unscathed Contender", "20% under aegis", DamageSource.NoPets, 20.0, DamageType.Power, DamageType.All, ModifierSource.Guardian, ByPresence, "https://wiki.guildwars2.com/images/b/b4/Unscathed_Contender.png"),
             new BuffDamageModifier(Boon.GetBoonByName("Number of Boons"), "Power of the Virtuous", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Power, DamageType.All, ModifierSource.Guardian, ByStack, "https://wiki.guildwars2.com/images/e/ee/Power_of_the_Virtuous.png"),
             new BuffDamageModifierTarget(Boon.GetBoonByName("Crippled"), "Zealot's Aggression", "10% on crippled target", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ModifierSource.Dragonhunter, ByPresence, "https://wiki.guildwars2.com/images/7/7e/Zealot%27s_Aggression.png"),

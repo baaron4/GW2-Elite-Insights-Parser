@@ -685,6 +685,23 @@ namespace LuckParser.Models.ParseModels
                 _elementalist
         };
 
+        private readonly static Dictionary<string, List<Boon>> _allBoonsByName = AllBoons.SelectMany(x => x).GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList());
+
+        // For damage modifiers
+        public static Boon GetBoonByName(string name, ulong build)
+        {
+            if (_allBoonsByName.TryGetValue(name, out var list))
+            {
+                List<Boon> subList = list.Where(x => x.MaxBuild >= build).ToList();
+                if (subList.Count != 1)
+                {
+                    throw new InvalidOperationException("No boon with correct build");
+                }
+                return subList[0];
+            }
+            throw new InvalidOperationException("No boon with correct name");
+        }
+
         public BoonSimulator CreateSimulator(ParsedLog log)
         {
             StackingLogic logicToUse;
