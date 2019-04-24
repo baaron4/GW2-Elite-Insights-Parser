@@ -106,7 +106,7 @@ namespace LuckParser.Parser
 
         private BinaryReader CreateReader(Stream stream)
         {
-            return new BinaryReader(stream, System.Text.Encoding.UTF8, leaveOpen: true);
+            return new BinaryReader(stream, new System.Text.UTF8Encoding(), leaveOpen: true);
         }
 
         private bool TryRead(Stream stream, byte[] data)

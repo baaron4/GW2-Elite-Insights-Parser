@@ -13,7 +13,7 @@ namespace LuckParser.Models.Logic
 
         private long _specialSplit = 0;
 
-        public Xera(ushort triggerID) : base(triggerID)
+        public Xera(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -160,9 +160,8 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
+        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            CombatReplay replay = target.CombatReplay;
             List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Parser;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,9 +16,9 @@ namespace LuckParser.Models.ParseModels
             _agent = agent;
         }
 
-        public override object GetConnectedTo(CombatReplayMap map)
+        public override object GetConnectedTo(CombatReplayMap map, ParsedLog log)
         {
-            return _agent.GetCombatReplayID();
+            return _agent.GetCombatReplayID(log);
         }
     }
 }

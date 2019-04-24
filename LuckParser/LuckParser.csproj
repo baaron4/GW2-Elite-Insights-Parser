@@ -126,6 +126,7 @@
     <Compile Include="Models\ParseModels\DamageModifiers\BuffsTrackers\BuffsTrackerSingle.cs" />
     <Compile Include="Models\ParseModels\DamageModifiers\BuffsTrackers\BuffsTracker.cs" />
     <Compile Include="Models\ParseModels\DamageModifiers\DamageLogDamageModifier.cs" />
+    <Compile Include="Models\ParseModels\DamageModifiers\DamageModifierContainer.cs" />
     <Compile Include="Models\ParseModels\DamageModifiers\DamageModifier.cs" />
     <Compile Include="Models\ParseModels\DamageModifiers\GainComputers\GainComputer.cs" />
     <Compile Include="Models\ParseModels\DamageModifiers\GainComputers\GainComputerByAbsence.cs" />
@@ -159,6 +160,11 @@
     <Compile Include="Parser\ParseHelper.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Parser\ParsingController.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.cs" />
     <Compile Include="Settings\CustomSettingsManager.cs" />
     <Compile Include="GridRow.cs" />
@@ -287,11 +293,6 @@
     <Compile Include="Models\ParseModels\SkillItem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Settings\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -348,9 +349,13 @@
     <None Include="Resources\combatReplayTemplates\tmplCombatReplay.html" />
     <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayDamageData.html" />
     <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayDamageTable.html" />
-    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayPlayerRotation.html" />
+    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayActorRotation.html" />
+    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayTargetsStats.html" />
+    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayPlayersStats.html" />
+    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayTargetStatus.html" />
+    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayTargetStats.html" />
     <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayPlayerStatus.html" />
-    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayPlayerBuffStats.html" />
+    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayActorBuffStats.html" />
     <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayPlayerStats.html" />
     <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayStatusData.html" />
     <Content Include="Resources\ei.css" />

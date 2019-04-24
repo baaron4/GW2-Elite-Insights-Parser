@@ -8,7 +8,7 @@ namespace LuckParser.Models.Logic
 {
     public class Cairn : RaidLogic
     {
-        public Cairn(ushort triggerID) : base(triggerID)
+        public Cairn(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -45,9 +45,8 @@ namespace LuckParser.Models.Logic
                             (11774, 4480, 14078, 5376));
         }
         
-        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
+        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            CombatReplay replay = target.CombatReplay;
             List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
@@ -89,11 +88,10 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
+        public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // shared agony
             List<CombatItem> agony = log.CombatData.GetBoonData(38049).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
-            CombatReplay replay = p.CombatReplay;
             foreach (CombatItem c in agony)
             {
                 int agonyStart = (int)log.FightData.ToFightSpace(c.Time);

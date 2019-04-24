@@ -1,3 +1,4 @@
+using LuckParser.Parser;
 using System.Collections.Generic;
 
 namespace LuckParser.Models.ParseModels
@@ -12,6 +13,6 @@ namespace LuckParser.Models.ParseModels
 		{
 		}
 
-		public abstract override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map);
+		public abstract override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log);
 	}
 }

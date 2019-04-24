@@ -306,7 +306,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Purging Flames",21672, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/28/Purging_Flames.png"),
                 new Boon("Litany of Wrath",21665, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4a/Litany_of_Wrath.png"),
                 new Boon("Renewed Focus",9255, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/10/Renewed_Focus.png"),
-                new Boon("Ashes of the Just",41957, BoonSource.Guardian, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/6d/Epilogue-_Ashes_of_the_Just.png"),
+                new Boon("Ashes of the Just",41957, BoonSource.Guardian, BoonType.Intensity, 25, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/6/6d/Epilogue-_Ashes_of_the_Just.png"),
                 new Boon("Eternal Oasis",44871, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/5/5f/Epilogue-_Eternal_Oasis.png"),
                 new Boon("Unbroken Lines",43194, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/d/d8/Epilogue-_Unbroken_Lines.png"),
                 //signets
@@ -424,7 +424,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Infiltrator's Signet",13063, BoonSource.Thief, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8e/Infiltrator%27s_Signet.png"),
                 new Boon("Signet of Agility",13061, BoonSource.Thief, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/1d/Signet_of_Agility.png"),
                 new Boon("Signet of Shadows",13059, BoonSource.Thief, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/17/Signet_of_Shadows.png"),
-                //venoms
+                //venoms // src is always the user, makes generation data useless
                 new Boon("Skelk Venom",21780, BoonSource.Thief, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/75/Skelk_Venom.png"),
                 new Boon("Ice Drake Venom",13095, BoonSource.Thief, BoonType.Intensity, 4, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/7b/Ice_Drake_Venom.png"),
                 new Boon("Devourer Venom", 13094, BoonSource.Thief, BoonType.Intensity, 2, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4d/Devourer_Venom.png"),
@@ -498,6 +498,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Vampiric Aura", 30285, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/d/da/Vampiric_Presence.png"),
                 new Boon("Last Rites",29726, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/1/1a/Last_Rites_%28effect%29.png"),
                 new Boon("Sadistic Searing",43626, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/dd/Sadistic_Searing.png"),
+                new Boon("Soul Barbs",53489, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/bd/Soul_Barbs.png"),
                 //ELEMENTALIST
                 //signets
                 new Boon("Signet of Restoration",739, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/dd/Signet_of_Restoration.png"),

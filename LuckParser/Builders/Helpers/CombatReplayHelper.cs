@@ -18,8 +18,8 @@ namespace LuckParser.Builders
             string replayHTML = Properties.Resources.tmplCombatReplay;
             replayHTML = replayHTML.Replace("${canvasX}", canvasSize.width.ToString());
             replayHTML = replayHTML.Replace("${canvasY}", canvasSize.height.ToString());
-            replayHTML = replayHTML.Replace("${maxTime}", log.PlayerList.First().CombatReplay.Times.Last().ToString());
-            List<int> groups = log.PlayerList.Where(x => x.Account != ":Conjured Sword").Select(x => x.Group).Distinct().ToList();
+            replayHTML = replayHTML.Replace("${maxTime}", log.PlayerList.First().GetCombatReplayTimes(log).Last().ToString());
+            List<int> groups = log.PlayerList.Where(x => !x.IsFakeActor).Select(x => x.Group).Distinct().ToList();
             string groupsString = "";
             foreach (int group in groups)
             {
@@ -29,7 +29,7 @@ namespace LuckParser.Builders
                 foreach (Player p in log.PlayerList.Where(x => x.Group == group))
                 {
                     string replayPlayerHTML = Properties.Resources.tmplCombatReplayPlayer;
-                    replayPlayerHTML = replayPlayerHTML.Replace("${instid}", p.GetCombatReplayID().ToString());
+                    replayPlayerHTML = replayPlayerHTML.Replace("${instid}", p.GetCombatReplayID(log).ToString());
                     replayPlayerHTML = replayPlayerHTML.Replace("${playerName}", p.Character.Substring(0, Math.Min(10, p.Character.Length)));
                     replayPlayerHTML = replayPlayerHTML.Replace("${imageURL}", GeneralHelper.GetProfIcon(p.Prof));
                     replayPlayerHTML = replayPlayerHTML.Replace("${prof}", p.Prof);
@@ -47,42 +47,42 @@ namespace LuckParser.Builders
             List<object> actors = new List<object>();
             foreach (Player p in log.PlayerList)
             {
-                if (p.Account == ":Conjured Sword")
+                if (p.IsFakeActor)
                 {
                     continue;
                 }
-                if (p.CombatReplay.Positions.Count == 0)
+                if (p.GetCombatReplayPositions(log).Count == 0)
                 {
                     continue;
                 }
-                actors.Add(p.GetCombatReplayJSON(map));
-                foreach (GenericActor a in p.CombatReplay.Actors)
+                actors.Add(p.GetCombatReplayJSON(map, log));
+                foreach (GenericActor a in p.GetCombatReplayActors(log))
                 {
-                    actors.Add(a.GetCombatReplayJSON(map));
+                    actors.Add(a.GetCombatReplayJSON(map, log));
                 }
             }
             foreach (Mob m in log.FightData.Logic.TrashMobs)
             {
-                if (m.CombatReplay.Positions.Count == 0)
+                if (m.GetCombatReplayPositions(log).Count == 0)
                 {
                     continue;
                 }
-                actors.Add(m.GetCombatReplayJSON(map));
-                foreach (GenericActor a in m.CombatReplay.Actors)
+                actors.Add(m.GetCombatReplayJSON(map, log));
+                foreach (GenericActor a in m.GetCombatReplayActors(log))
                 {
-                    actors.Add(a.GetCombatReplayJSON(map));
+                    actors.Add(a.GetCombatReplayJSON(map, log));
                 }
             }
             foreach (Target target in log.FightData.Logic.Targets)
             {
-                if (target.CombatReplay.Positions.Count == 0)
+                if (target.GetCombatReplayPositions(log).Count == 0)
                 {
                     continue;
                 }
-                actors.Add(target.GetCombatReplayJSON(map));
-                foreach (GenericActor a in target.CombatReplay.Actors)
+                actors.Add(target.GetCombatReplayJSON(map, log));
+                foreach (GenericActor a in target.GetCombatReplayActors(log))
                 {
-                    actors.Add(a.GetCombatReplayJSON(map));
+                    actors.Add(a.GetCombatReplayJSON(map, log));
                 }
             }
             return actors;

@@ -9,7 +9,7 @@ namespace LuckParser.Models.Logic
 {
     public class ValeGuardian : RaidLogic
     {
-        public ValeGuardian(ushort triggerID) : base(triggerID)
+        public ValeGuardian(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -104,24 +104,23 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void ComputeAdditionalTrashMobData(Mob mob, ParsedLog log)
+        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
         {
             switch (mob.ID)
             {
                 case (ushort)Seekers:
-                    (int, int) lifespan = ((int)mob.CombatReplay.TimeOffsets.start, (int)mob.CombatReplay.TimeOffsets.end);
-                    mob.CombatReplay.Actors.Add(new CircleActor(false, 0, 180, lifespan, "rgba(255, 0, 0, 0.5)", new AgentConnector(mob)));
+                    (int, int) lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
+                    replay.Actors.Add(new CircleActor(false, 0, 180, lifespan, "rgba(255, 0, 0, 0.5)", new AgentConnector(mob)));
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
         }
 
-        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
+        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            CombatReplay replay = target.CombatReplay;
             List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
-            (int, int) lifespan = ((int)target.CombatReplay.TimeOffsets.start, (int)target.CombatReplay.TimeOffsets.end);
+            (int, int) lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.ValeGuardian:

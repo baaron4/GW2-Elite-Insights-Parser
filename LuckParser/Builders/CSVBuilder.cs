@@ -242,7 +242,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                if (player.Account == ":Conjured Sword")
+                if (player.IsFakeActor)
                 {
                     continue;
                 }
@@ -292,7 +292,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                if (player.Account == ":Conjured Sword")
+                if (player.IsFakeActor)
                 {
                     continue;
                 }
@@ -334,7 +334,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                if (player.Account == ":Conjured Sword")
+                if (player.IsFakeActor)
                 {
                     continue;
                 }
@@ -358,7 +358,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                if (player.Account == ":Conjured Sword")
+                if (player.IsFakeActor)
                 {
                     continue;
                 }
@@ -391,14 +391,14 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                if (player.Account == ":Conjured Sword")
+                if (player.IsFakeActor)
                 {
                     continue;
                 }
                 Dictionary<long, Statistics.FinalBuffs> uptimes = player.GetBuffs(_log, phaseIndex, Statistics.BuffEnum.Self);
 
                 WriteCell(player.Character);
-                WriteCell(Math.Round(player.GetStatsAll(_log, phaseIndex).AvgBoons, 1).ToString());
+                WriteCell(player.GetStatsAll(_log, phaseIndex).AvgBoons.ToString());
                 foreach (Boon boon in listToUse)
                 {
                     if (uptimes.TryGetValue(boon.ID, out var value))
@@ -441,7 +441,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                if (player.Account == ":Conjured Sword")
+                if (player.IsFakeActor)
                 {
                     continue;
                 }
@@ -494,7 +494,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                if (player.Account == ":Conjured Sword")
+                if (player.IsFakeActor)
                 {
                     continue;
                 }
@@ -548,7 +548,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                if (player.Account == ":Conjured Sword")
+                if (player.IsFakeActor)
                 {
                     continue;
                 }
@@ -602,7 +602,7 @@ namespace LuckParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                if (player.Account == ":Conjured Sword")
+                if (player.IsFakeActor)
                 {
                     continue;
                 }
@@ -811,7 +811,7 @@ namespace LuckParser.Builders
             NewLine();
             foreach (Player player in _log.PlayerList)
             {
-                if (player.Account == ":Conjured Sword")
+                if (player.IsFakeActor)
                 {
                     continue;
                 }

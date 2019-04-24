@@ -9,7 +9,7 @@ namespace LuckParser.Models.Logic
 {
     public class SoullessHorror : RaidLogic
     {
-        public SoullessHorror(ushort triggerID) : base(triggerID)
+        public SoullessHorror(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -55,9 +55,8 @@ namespace LuckParser.Models.Logic
         }
 
 
-        public override void ComputeAdditionalTrashMobData(Mob mob, ParsedLog log)
+        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
         {
-            CombatReplay replay = mob.CombatReplay;
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (mob.ID)
@@ -136,9 +135,8 @@ namespace LuckParser.Models.Logic
             return phases;
         }
 
-        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
+        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            CombatReplay replay = target.CombatReplay;
             List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {

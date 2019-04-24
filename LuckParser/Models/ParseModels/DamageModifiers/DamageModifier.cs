@@ -31,6 +31,7 @@ namespace LuckParser.Models.ParseModels
         private DamageSource _dmgSrc { get; }
         protected double GainPerStack { get; }
         protected readonly GainComputer GainComputer;
+        public ulong MaxBuild { get; }
         public bool Multiplier => GainComputer.Multiplier;
         public ModifierSource Src { get; }
         public string Url { get; }
@@ -39,7 +40,7 @@ namespace LuckParser.Models.ParseModels
         public delegate bool DamageLogChecker(DamageLog dl);
         protected DamageLogChecker DLChecker;
 
-        protected DamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, GainComputer gainComputer, DamageLogChecker dlChecker = null)
+        protected DamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, GainComputer gainComputer, DamageLogChecker dlChecker, ulong maxBuild)
         {
             Tooltip = tooltip;
             Name = name;
@@ -51,6 +52,7 @@ namespace LuckParser.Models.ParseModels
             Url = url;
             GainComputer = gainComputer;
             DLChecker = dlChecker;
+            MaxBuild = maxBuild;
             switch (_dmgSrc)
             {
                 case DamageSource.All:
@@ -117,73 +119,11 @@ namespace LuckParser.Models.ParseModels
 
         public abstract void ComputeDamageModifier(Dictionary<string, List<DamageModifierData>> data, Dictionary<Target, Dictionary<string, List<DamageModifierData>>> dataTarget, Player p, ParsedLog log);
 
-        private static List<ModifierSource> ProfToEnum(string prof)
-        {
-            switch (prof)
-            {
-                case "Druid":
-                    return new List<ModifierSource> { ModifierSource.Ranger, ModifierSource.Druid };
-                case "Soulbeast":
-                    return new List<ModifierSource> { ModifierSource.Ranger, ModifierSource.Soulbeast };
-                case "Ranger":
-                    return new List<ModifierSource> { ModifierSource.Ranger};
-                case "Scrapper":
-                    return new List<ModifierSource> { ModifierSource.Engineer, ModifierSource.Scrapper };
-                case "Holosmith":
-                    return new List<ModifierSource> { ModifierSource.Engineer, ModifierSource.Holosmith };
-                case "Engineer":
-                    return new List<ModifierSource> { ModifierSource.Engineer};
-                case "Daredevil":
-                    return new List<ModifierSource> { ModifierSource.Thief, ModifierSource.Daredevil };
-                case "Deadeye":
-                    return new List<ModifierSource> { ModifierSource.Thief, ModifierSource.Deadeye };
-                case "Thief":
-                    return new List<ModifierSource> { ModifierSource.Thief};
-                case "Weaver":
-                    return new List<ModifierSource> { ModifierSource.Elementalist, ModifierSource.Weaver };
-                case "Tempest":
-                    return new List<ModifierSource> { ModifierSource.Elementalist, ModifierSource.Tempest };
-                case "Elementalist":
-                    return new List<ModifierSource> { ModifierSource.Elementalist};
-                case "Mirage":
-                    return new List<ModifierSource> { ModifierSource.Mesmer, ModifierSource.Mirage };
-                case "Chronomancer":
-                    return new List<ModifierSource> { ModifierSource.Mesmer, ModifierSource.Chronomancer };
-                case "Mesmer":
-                    return new List<ModifierSource> { ModifierSource.Mesmer};
-                case "Scourge":
-                    return new List<ModifierSource> { ModifierSource.Necromancer, ModifierSource.Scourge };
-                case "Reaper":
-                    return new List<ModifierSource> { ModifierSource.Necromancer, ModifierSource.Reaper };
-                case "Necromancer":
-                    return new List<ModifierSource> { ModifierSource.Necromancer};
-                case "Spellbreaker":
-                    return new List<ModifierSource> { ModifierSource.Warrior, ModifierSource.Spellbreaker };
-                case "Berserker":
-                    return new List<ModifierSource> { ModifierSource.Warrior, ModifierSource.Berserker };
-                case "Warrior":
-                    return new List<ModifierSource> { ModifierSource.Warrior};
-                case "Firebrand":
-                    return new List<ModifierSource> { ModifierSource.Guardian, ModifierSource.Firebrand };
-                case "Dragonhunter":
-                    return new List<ModifierSource> { ModifierSource.Guardian, ModifierSource.Dragonhunter };
-                case "Guardian":
-                    return new List<ModifierSource> { ModifierSource.Guardian};
-                case "Renegade":
-                    return new List<ModifierSource> { ModifierSource.Revenant, ModifierSource.Renegade };
-                case "Herald":
-                    return new List<ModifierSource> { ModifierSource.Revenant, ModifierSource.Herald };
-                case "Revenant":
-                    return new List<ModifierSource> { ModifierSource.Revenant};
-            }
-            return new List<ModifierSource> {};
-        }
-
         protected static GainComputer ByPresence = new GainComputerByPresence();
         protected static GainComputer ByStack = new GainComputerByStack();
         protected static GainComputer ByAbsence = new GainComputerByAbsence();
 
-        private static List<DamageModifier> _allDamageModifier = new List<DamageModifier>
+        public static List<DamageModifier> AllDamageModifiers = new List<DamageModifier>
         {
             // Gear
             new DamageLogDamageModifier("Scholar Rune", "Scholar Rune – 5% over 90% HP", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.ItemBuff,"https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png", x => x.IsNinety, ByPresence ),
@@ -263,10 +203,12 @@ namespace LuckParser.Models.ParseModels
             // TOCHECK Superiority Complex
             new BuffDamageModifierTarget(Boon.GetBoonByName("Slow"), "Danger Time", "Danger Time – 10% on slowed target", DamageSource.All, 10.0, DamageType.Power, DamageType.All, ModifierSource.Chronomancer, ByPresence, "https://wiki.guildwars2.com/images/3/33/Fragility.png", (x => x.Result == ParseEnum.Result.Crit)),
             /// NECROMANCER     
+            // todo Soul barbs
             new BuffDamageModifierTarget(Boon.GetBoonByName("Number of Boons"), "Spiteful Talisman", "Spiteful Talisman – 10% on boonless target", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ModifierSource.Necromancer, ByAbsence, "https://wiki.guildwars2.com/images/9/96/Spiteful_Talisman.png"),
             new BuffDamageModifierTarget(Boon.GetBoonByName("Fear"), "Dread", "Dread – 33% on feared target", DamageSource.NoPets, 33.0, DamageType.Power, DamageType.All, ModifierSource.Necromancer, ByPresence, "https://wiki.guildwars2.com/images/e/e2/Unholy_Fervor.png"),
             new DamageLogDamageModifier("Close to Death", "Close to Death – 20% below 90% HP", DamageSource.NoPets, 20.0, DamageType.Power, DamageType.All, ModifierSource.Necromancer,"https://wiki.guildwars2.com/images/b/b2/Close_to_Death.png", x => x.IsFifty, ByPresence),
             new BuffDamageModifierTarget(Boon.GetBoonByName("Chilled"), "Cold Shoulder", "Cold Shoulder – 15% on chilled target", DamageSource.NoPets, 15.0, DamageType.Power, DamageType.All, ModifierSource.Reaper, ByPresence, "https://wiki.guildwars2.com/images/7/78/Cold_Shoulder.png"),
+            new BuffDamageModifier(Boon.GetBoonByName("Soul Barbs"), "Soul Barbs – 10% after entering or exiting shroud", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ModifierSource.Necromancer, ByPresence),
             /// ELEMENTALIST
             new BuffDamageModifier(Boon.GetBoonByName("Harmonious Conduit"), "Harmonious Conduit – 10% (4s) after overload", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ModifierSource.Tempest, ByPresence),
             new BuffDamageModifier(Boon.GetBoonByName("Weaver's Prowess"), "Weaver's Prowess – 10% cDam (8s) after switching element",  DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, ModifierSource.Weaver, ByPresence),
@@ -280,23 +222,5 @@ namespace LuckParser.Models.ParseModels
             new BuffDamageModifier(new BuffsTrackerMulti(Boon.GetBoonByName("Swiftness"), Boon.GetBoonByName("Superspeed")), "Swift Revenge", "Swift Revenge – 7% under swiftness/superspeed", DamageSource.NoPets, 7.0, DamageType.Power, DamageType.All, ModifierSource.Weaver, "https://wiki.guildwars2.com/images/9/94/Swift_Revenge.png")
             // TODO Piercing Shards
         };
-
-        public static Dictionary<ModifierSource, List<DamageModifier>> DamageModifiersPerSource = _allDamageModifier.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
-
-        public static List<DamageModifier> GetModifiersPerProf(string prof)
-        {
-            List<DamageModifier> res = new List<DamageModifier>();
-            List<ModifierSource> srcs = ProfToEnum(prof);
-            foreach (ModifierSource src in srcs)
-            {
-                if (DamageModifiersPerSource.TryGetValue(src, out var list))
-                {
-                    res.AddRange(list);
-                }
-            }
-            return res;
-        }
-
-        public static Dictionary<string, DamageModifier> DamageModifiersByName = _allDamageModifier.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().First());
     }
 }

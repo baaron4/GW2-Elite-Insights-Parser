@@ -10,7 +10,7 @@ namespace LuckParser.Models.Logic
     public class DarkMaze : RaidLogic
     {
         // TODO - add CR icons and some mechanics
-        public DarkMaze(ushort triggerID) : base(triggerID)
+        public DarkMaze(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
         {
             MechanicList.AddRange( new List<Mechanic>
             {
@@ -72,9 +72,8 @@ namespace LuckParser.Models.Logic
             return phases;
         }
 
-        public override void SetSuccess(ParsedLog log)
+        private void HPCheck(ParsedLog log)
         {
-
             Target eye1 = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.EyeOfFate);
             Target eye2 = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.EyeOfJudgement);
             if (eye2 == null || eye1 == null)
@@ -87,13 +86,15 @@ namespace LuckParser.Models.Logic
             }
             long lastEye1Hp = eye1.HealthOverTime.LastOrDefault().hp;
             long lastEye2Hp = eye2.HealthOverTime.LastOrDefault().hp;
-            if (lastEye1Hp == 0 && lastEye2Hp == 0)
+            long margin1 = Math.Min(80, lastEye1Hp);
+            long margin2 = Math.Min(80, lastEye2Hp);
+            if (lastEye1Hp <= margin1 && lastEye2Hp <= margin2)
             {
                 log.FightData.Success = true;
                 int lastIEye1;
                 for (lastIEye1 = eye1.HealthOverTime.Count - 1; lastIEye1 >= 0; lastIEye1--)
                 {
-                    if (eye1.HealthOverTime[lastIEye1].hp > 0)
+                    if (eye1.HealthOverTime[lastIEye1].hp > margin1)
                     {
                         lastIEye1++;
                         break;
@@ -102,13 +103,24 @@ namespace LuckParser.Models.Logic
                 int lastIEye2;
                 for (lastIEye2 = eye2.HealthOverTime.Count - 1; lastIEye2 >= 0; lastIEye2--)
                 {
-                    if (eye2.HealthOverTime[lastIEye2].hp > 0)
+                    if (eye2.HealthOverTime[lastIEye2].hp > margin2)
                     {
                         lastIEye2++;
                         break;
                     }
                 }
                 log.FightData.FightEnd = Math.Max(eye1.HealthOverTime[lastIEye1].logTime, eye2.HealthOverTime[lastIEye2].logTime);
+            }
+        }
+
+        public override void SetSuccess(ParsedLog log)
+        {
+            // First check using hp, best
+            HPCheck(log);
+            // hp could be unreliable or missing, fall back (around 200 ms more)
+            if (!log.FightData.Success)
+            {
+                SetSuccessByDeath(log, false, (ushort)ParseEnum.TargetIDS.EyeOfFate, (ushort)ParseEnum.TargetIDS.EyeOfJudgement);
             }
         }
 

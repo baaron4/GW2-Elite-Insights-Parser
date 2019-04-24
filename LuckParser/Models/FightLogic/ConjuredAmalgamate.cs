@@ -9,7 +9,7 @@ namespace LuckParser.Models.Logic
 {
     public class ConjuredAmalgamate : RaidLogic
     {
-        public ConjuredAmalgamate(ushort triggerID) : base(triggerID)
+        public ConjuredAmalgamate(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -77,14 +77,13 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void ComputeAdditionalTrashMobData(Mob mob, ParsedLog log)
+        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
         {
             switch (mob.ID)
             {
                 case (ushort)ConjuredGreatsword:
                     break;
                 case (ushort)ConjuredShield:
-                    CombatReplay replay = mob.CombatReplay;
                     List<CombatItem> shield = GetFilteredList(log, 53003, mob, true);
                     int shieldStart = 0;
                     foreach (CombatItem c in shield)
@@ -191,9 +190,8 @@ namespace LuckParser.Models.Logic
             return phases;
         }
 
-        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
+        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            CombatReplay replay = target.CombatReplay;
             List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
 
             switch (target.ID)
@@ -223,9 +221,8 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
+        public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
-            CombatReplay replay = p.CombatReplay;
             List<CastLog> cls = p.GetCastLogs(log, 0, log.FightData.FightDuration);
             List<CastLog> shieldCast = cls.Where(x => x.SkillId == 52780).ToList();
             foreach (CastLog c in shieldCast)

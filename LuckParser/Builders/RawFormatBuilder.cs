@@ -335,7 +335,7 @@ namespace LuckParser.Builders
                 string nKey = "d" + iKey;
                 if (!_damageModDesc.ContainsKey(nKey))
                 {
-                    _damageModDesc[nKey] = new JsonLog.DamageModDesc(DamageModifier.DamageModifiersByName[key]);
+                    _damageModDesc[nKey] = new JsonLog.DamageModDesc(_log.DamageModifiers.DamageModifiersByName[key]);
                 }
                 dict[iKey] = extra[key].Select(x => new JsonBuffDamageModifierItem(x)).ToList();
             }

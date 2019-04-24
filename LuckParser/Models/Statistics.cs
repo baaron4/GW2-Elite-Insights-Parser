@@ -13,7 +13,7 @@ namespace LuckParser.Models
         public Statistics(ParsedLog log)
         {
             SetPresentBoons(log.CombatData.GetSkills(), log.PlayerList, log.CombatData);
-            SetStackCenterPositions(log.FightData.Logic.CanCombatReplay, log.PlayerList);
+            SetStackCenterPositions(log.FightData.Logic.CanCombatReplay, log);
         }
 
         public class FinalDPS
@@ -198,19 +198,19 @@ namespace LuckParser.Models
         //Positions for group
         public List<Point3D> StackCenterPositions;
 
-        private void SetStackCenterPositions(bool canCombatReplay, List<Player> players)
+        private void SetStackCenterPositions(bool canCombatReplay, ParsedLog log)
         {
             if (Properties.Settings.Default.ParseCombatReplay && canCombatReplay)
             {
                 StackCenterPositions = new List<Point3D>();
                 List<List<Point3D>> GroupsPosList = new List<List<Point3D>>();
-                foreach (Player player in players)
+                foreach (Player player in log.PlayerList)
                 {
-                    if (player.Account == ":Conjured Sword")
+                    if (player.IsFakeActor)
                     {
                         continue;
                     }
-                    GroupsPosList.Add(player.CombatReplay.GetActivePositions());
+                    GroupsPosList.Add(player.GetCombatReplayActivePositions(log));
                 }
                 for (int time = 0; time < GroupsPosList[0].Count; time++)
                 {

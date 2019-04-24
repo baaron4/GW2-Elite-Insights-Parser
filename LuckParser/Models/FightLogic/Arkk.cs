@@ -9,7 +9,7 @@ namespace LuckParser.Models.Logic
 {
     public class Arkk : FractalLogic
     {
-        public Arkk(ushort triggerID) : base(triggerID)
+        public Arkk(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

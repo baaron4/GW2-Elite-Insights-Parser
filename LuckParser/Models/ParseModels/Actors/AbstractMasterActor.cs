@@ -9,7 +9,7 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class AbstractMasterActor : AbstractActor
     {
-        
+        public bool IsFakeActor { get; protected set; }
         // Boons
         private readonly List<BoonDistribution> _boonDistribution = new List<BoonDistribution>();
         private readonly List<Dictionary<long, long>> _buffPresence = new List<Dictionary<long, long>>();
@@ -20,7 +20,7 @@ namespace LuckParser.Models.ParseModels
         // Minions
         private Dictionary<string, Minions> _minions;
         // Replay
-        public CombatReplay CombatReplay { get; protected set; }
+        protected CombatReplay CombatReplay;
         // Statistics
         private List<FinalDPS> _dpsAll;
 
@@ -205,46 +205,52 @@ namespace LuckParser.Models.ParseModels
             return final;
         }
 
-        public void InitCombatReplay(ParsedLog log, int pollingRate, bool trim, bool forceInterpolate)
+        public List<int> GetCombatReplayTimes(ParsedLog log)
         {
-            if (!log.FightData.Logic.CanCombatReplay)
+            if (CombatReplay == null)
+            {
+                InitCombatReplay(log);
+            }
+            return CombatReplay.Times;
+        }
+
+        public List<Point3D> GetCombatReplayPositions(ParsedLog log)
+        {
+            if (CombatReplay == null)
+            {
+                InitCombatReplay(log);
+            }
+            return CombatReplay.Positions;
+        }
+
+        public List<Point3D> GetCombatReplayActivePositions(ParsedLog log)
+        {
+            if (CombatReplay == null)
+            {
+                InitCombatReplay(log);
+            }
+            return CombatReplay.GetActivePositions();
+        }
+
+        protected abstract void InitCombatReplay(ParsedLog log);
+
+        public List<GenericActor> GetCombatReplayActors(ParsedLog log)
+        {
+            if (!log.FightData.Logic.CanCombatReplay || IsFakeActor)
             {
                 // no combat replay support on fight
-                return;
+                return null;
             }
             if (CombatReplay == null)
             {
-                CombatReplay = new CombatReplay();
-                SetMovements(log);
-                CombatReplay.PollingRate(pollingRate, log.FightData.FightDuration, forceInterpolate);
-                if (trim)
-                {
-                    CombatItem despawnCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Despawn, FirstAware, LastAware).LastOrDefault();
-                    CombatItem spawnCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Spawn, FirstAware, LastAware).LastOrDefault();
-                    CombatItem deathCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.ChangeDead, FirstAware, LastAware).LastOrDefault();
-                    if (deathCheck != null)
-                    {
-                        CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAware), log.FightData.ToFightSpace(deathCheck.Time));
-                    }
-                    else if (despawnCheck != null && (spawnCheck == null || spawnCheck.Time < despawnCheck.Time))
-                    {
-                        CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAware), log.FightData.ToFightSpace(despawnCheck.Time));
-                    }
-                    else
-                    {
-                        CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAware), log.FightData.ToFightSpace(AgentItem.LastAware));
-                    }
-                }
-                //SetAdditionalCombatReplayData(log);
+                InitCombatReplay(log);
             }
-        }
-
-        public void ComputeAdditionalCombatReplayData(ParsedLog log)
-        {
-            if (CombatReplay != null && CombatReplay.Actors.Count == 0)
+            if (CombatReplay.NoActors)
             {
-                SetAdditionalCombatReplayData(log);
+                CombatReplay.NoActors = false;
+                InitAdditionalCombatReplayData(log);
             }
+            return CombatReplay.Actors;
         }
 
         public List<DamageLog> GetJustPlayerDamageLogs(AbstractActor target, ParsedLog log, PhaseData phase)
@@ -263,7 +269,7 @@ namespace LuckParser.Models.ParseModels
         }
 
         // private setters
-        private void SetMovements(ParsedLog log)
+        protected void SetMovements(ParsedLog log)
         {
             foreach (CombatItem c in log.CombatData.GetMovementData(InstID, FirstAware, LastAware))
             {
@@ -331,8 +337,7 @@ namespace LuckParser.Models.ParseModels
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                if (boon.Type == Boon.BoonType.Intensity)
-                    Add(_buffPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
+                Add(_buffPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
                 simul.SetBoonDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
             }
         }
@@ -374,13 +379,17 @@ namespace LuckParser.Models.ParseModels
             DamageLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
         }
 
-        public int GetCombatReplayID()
+        public int GetCombatReplayID(ParsedLog log)
         {
+            if (CombatReplay == null)
+            {
+                InitCombatReplay(log);
+            }
             return (InstID + "_" + CombatReplay.TimeOffsets.start + "_" + CombatReplay.TimeOffsets.end).GetHashCode();
         }
 
         // abstracts
-        protected abstract void SetAdditionalCombatReplayData(ParsedLog log);
+        protected abstract void InitAdditionalCombatReplayData(ParsedLog log);
 
 
         public abstract class AbstractMasterActorSerializable
@@ -391,6 +400,6 @@ namespace LuckParser.Models.ParseModels
             public double[] Positions { get; set; }
         }
 
-        public abstract AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map);
+        public abstract AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log);
     }
 }

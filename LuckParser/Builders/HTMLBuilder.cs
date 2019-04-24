@@ -25,6 +25,7 @@ namespace LuckParser.Builders
 
         private readonly ParsedLog _log;
         private readonly List<PhaseData> _phases;
+        private readonly bool _cr;
 
         private readonly string[] _uploadLink;
 
@@ -47,6 +48,8 @@ namespace LuckParser.Builders
             _statistics = log.Statistics;
 
             _uploadLink = uploadString;
+
+            _cr = Properties.Settings.Default.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay;
         }
 
         private static string FilterStringChars(string str)
@@ -195,7 +198,7 @@ namespace LuckParser.Builders
                 double avg = 0.0;
                 if (boonTable)
                 {
-                    avg = Math.Round(player.GetStatsAll(_log, phaseIndex).AvgBoons, 1);
+                    avg = player.GetStatsAll(_log, phaseIndex).AvgBoons;
                 }
                 list.Add(new BoonData(player.GetBuffs(_log, phaseIndex, Statistics.BuffEnum.Self), listToUse, avg));
             }
@@ -248,14 +251,14 @@ namespace LuckParser.Builders
             // Collect all personal damage mods by spec
             foreach (var pair in _log.PlayerListBySpec)
             {    
-                HashSet<string> specDamageModsName = new HashSet<string>(DamageModifier.GetModifiersPerProf(pair.Key).Select(x => x.Name));
+                HashSet<string> specDamageModsName = new HashSet<string>(_log.DamageModifiers.GetModifiersPerProf(pair.Key).Select(x => x.Name));
                 HashSet<DamageModifier> damageModsToUse = new HashSet<DamageModifier>();
                 foreach (Player player in pair.Value)
                 {
                     HashSet<string> presentDamageMods = new HashSet<string>(player.GetPresentDamageModifier(_log).Intersect(specDamageModsName));
                     foreach (string name in presentDamageMods)
                     {
-                        damageModsToUse.Add(DamageModifier.DamageModifiersByName[name]);
+                        damageModsToUse.Add(_log.DamageModifiers.DamageModifiersByName[name]);
                     }
                 }
                 damageModBySpecs[pair.Key] = damageModsToUse.ToList();
@@ -667,7 +670,7 @@ namespace LuckParser.Builders
             PhaseData phase = _phases[phaseIndex];
             Dictionary<long, Statistics.FinalTargetBuffs> buffs = target.GetBuffs(_log, phaseIndex);
             long fightDuration = phase.DurationInMS;
-            return new BoonData(buffs, _statistics.PresentConditions, Math.Round(target.GetAverageConditions(_log, phaseIndex), 1));
+            return new BoonData(buffs, _statistics.PresentConditions, target.GetAverageConditions(_log, phaseIndex));
         }
 
         private BoonData BuildTargetBoonData(int phaseIndex, Target target)
@@ -675,7 +678,7 @@ namespace LuckParser.Builders
             PhaseData phase = _phases[phaseIndex];
             Dictionary<long, Statistics.FinalTargetBuffs> buffs = target.GetBuffs(_log, phaseIndex);
             long fightDuration = phase.DurationInMS;
-            return new BoonData(buffs, _statistics.PresentBoons, Math.Round(target.GetAverageBoons(_log, phaseIndex), 1));
+            return new BoonData(buffs, _statistics.PresentBoons, target.GetAverageBoons(_log, phaseIndex));
         }
 
         private string ReplaceVariables(string html)
@@ -737,7 +740,7 @@ namespace LuckParser.Builders
 
         private string BuildCombatReplayScript(string path)
         {
-            if (!Properties.Settings.Default.ParseCombatReplay || !_log.FightData.Logic.CanCombatReplay)
+            if (!_cr)
             {
                 return "";
             }
@@ -753,7 +756,7 @@ namespace LuckParser.Builders
                 try
                 {
                     using (var fs = new FileStream(jsPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, Encoding.UTF8))
+                    using (var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
                     {
                         scriptWriter.Write(Properties.Resources.combatreplay_js);
                     }
@@ -772,7 +775,7 @@ namespace LuckParser.Builders
 
         private string BuildCombatReplayContent()
         {
-            if (!Properties.Settings.Default.ParseCombatReplay || !_log.FightData.Logic.CanCombatReplay)
+            if (!_cr)
             {
                 return "";
             }
@@ -840,10 +843,14 @@ namespace LuckParser.Builders
                     {"${tmplCombatReplayDamageData}", Properties.Resources.tmplCombatReplayDamageData },
                     {"${tmplCombatReplayStatusData}", Properties.Resources.tmplCombatReplayStatusData },
                     {"${tmplCombatReplayDamageTable}", Properties.Resources.tmplCombatReplayDamageTable },
-                    {"${tmplCombatReplayPlayerBuffStats}", Properties.Resources.tmplCombatReplayPlayerBuffStats },
+                    {"${tmplCombatReplayActorBuffStats}", Properties.Resources.tmplCombatReplayActorBuffStats },
                     {"${tmplCombatReplayPlayerStats}", Properties.Resources.tmplCombatReplayPlayerStats },
                     {"${tmplCombatReplayPlayerStatus}", Properties.Resources.tmplCombatReplayPlayerStatus },
-                    {"${tmplCombatReplayPlayerRotation}", Properties.Resources.tmplCombatReplayPlayerRotation },
+                    {"${tmplCombatReplayActorRotation}", Properties.Resources.tmplCombatReplayActorRotation },
+                    {"${tmplCombatReplayTargetStats}", Properties.Resources.tmplCombatReplayTargetStats },
+                    {"${tmplCombatReplayTargetStatus}", Properties.Resources.tmplCombatReplayTargetStatus },
+                    {"${tmplCombatReplayTargetsStats}", Properties.Resources.tmplCombatReplayTargetsStats },
+                    {"${tmplCombatReplayPlayersStats}", Properties.Resources.tmplCombatReplayPlayersStats },
                 };
             foreach (var entry in CRtemplates)
             {
@@ -867,7 +874,7 @@ namespace LuckParser.Builders
                 try
                 {
                     using (var fs = new FileStream(cssPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, Encoding.UTF8))
+                    using (var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
                     {
                         scriptWriter.Write(scriptContent);
                     }
@@ -918,7 +925,7 @@ namespace LuckParser.Builders
                 try
                 {
                     using (var fs = new FileStream(scriptPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, Encoding.UTF8))
+                    using (var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
                     {
                         scriptWriter.Write(scriptContent);
                     }
@@ -936,7 +943,7 @@ namespace LuckParser.Builders
 
         private string BuildCRLinkJs(string path)
         {
-            if (!(Properties.Settings.Default.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay))
+            if (!_cr)
             {
                 return "";
             }
@@ -954,7 +961,7 @@ namespace LuckParser.Builders
                 try
                 {
                     using (var fs = new FileStream(scriptPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, Encoding.UTF8))
+                    using (var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
                     {
                         scriptWriter.Write(scriptContent);
                     }
@@ -984,6 +991,14 @@ namespace LuckParser.Builders
                 {
                     phaseData.Targets.Add(BuildTargetGraphData(i, target));
                 }
+                if (i == 0)
+                {
+                    phaseData.TargetsHealthForCR = new List<double[]>();
+                    foreach (Target target in _log.FightData.Logic.Targets)
+                    {
+                        phaseData.TargetsHealthForCR.Add(target.Get1SHealthGraph(_log, _phases)[0]);
+                    }
+                }
 
                 phaseChartData.Add(phaseData);
              }
@@ -997,7 +1012,7 @@ namespace LuckParser.Builders
             LogDataDto logData = new LogDataDto();
             foreach(Player player in _log.PlayerList)
             {
-                logData.Players.Add(new PlayerDto(player, _log, Properties.Settings.Default.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay));
+                logData.Players.Add(new PlayerDto(player, _log, _cr));
             }
 
             foreach(DummyActor enemy in _log.MechanicData.GetEnemyList(0))
@@ -1007,7 +1022,7 @@ namespace LuckParser.Builders
 
             foreach (Target target in _log.FightData.Logic.Targets)
             {
-                TargetDto targetDto = new TargetDto(target, _log, Properties.Settings.Default.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay);
+                TargetDto targetDto = new TargetDto(target, _log, _cr);
                 
                 
                 logData.Targets.Add(targetDto);
@@ -1021,7 +1036,7 @@ namespace LuckParser.Builders
                 allDamageMods.UnionWith(p.GetPresentDamageModifier(_log));
             }
             List<DamageModifier> commonDamageModifiers = new List<DamageModifier>();
-            foreach (DamageModifier dMod in DamageModifier.DamageModifiersPerSource[DamageModifier.ModifierSource.CommonBuff])
+            foreach (DamageModifier dMod in _log.DamageModifiers.DamageModifiersPerSource[DamageModifier.ModifierSource.CommonBuff])
             {
                 if (allDamageMods.Contains(dMod.Name))
                 {
@@ -1031,7 +1046,7 @@ namespace LuckParser.Builders
                 }
             }
             List<DamageModifier> itemDamageModifiers = new List<DamageModifier>();
-            foreach (DamageModifier dMod in DamageModifier.DamageModifiersPerSource[DamageModifier.ModifierSource.ItemBuff])
+            foreach (DamageModifier dMod in _log.DamageModifiers.DamageModifiersPerSource[DamageModifier.ModifierSource.ItemBuff])
             {
                 if (allDamageMods.Contains(dMod.Name))
                 {
@@ -1119,7 +1134,7 @@ namespace LuckParser.Builders
             logData.FightName = FilterStringChars(_log.FightData.Name);
             logData.FightIcon = _log.FightData.Logic.IconUrl;
             logData.LightTheme = Properties.Settings.Default.LightTheme;
-            logData.SingleGroup = _log.PlayerList.Where(x => x.Account != ":Conjured Sword").Select(x => x.Group).Distinct().Count() == 1;
+            logData.SingleGroup = _log.PlayerList.Where(x => !x.IsFakeActor).Select(x => x.Group).Distinct().Count() == 1;
             logData.NoMechanics = _log.FightData.Logic.MechanicList.Count == 3;
             return ToJson(logData);
         }
@@ -1243,7 +1258,7 @@ namespace LuckParser.Builders
             };
             for (int i = 0; i < _phases.Count; i++)
             {
-                if (_phases[i].Targets.Contains(target))
+                if (_phases[i].Targets.Contains(target) || (i == 0 && _cr))
                 {
                     dto.DmgDistributions.Add(BuildTargetDMGDistData(target, i));
                     dto.DmgDistributionsTaken.Add(BuildDMGTakenDistData(target, i));
@@ -1274,7 +1289,7 @@ namespace LuckParser.Builders
             };
             for (int i = 0; i < _phases.Count; i++)
             {
-                if (_phases[i].Targets.Contains(target))
+                if (_phases[i].Targets.Contains(target) || (i == 0 && _cr))
                 {
                     dto.DmgDistributions.Add(BuildTargetMinionDMGDistData(target, minion, i));
                 }

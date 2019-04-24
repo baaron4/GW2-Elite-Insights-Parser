@@ -14,15 +14,16 @@ namespace LuckParser.Models.ParseModels
         private long _start = -1;
         private long _end = -1;
         public (long start, long end) TimeOffsets => (_start, _end);
-        // icon
-        public string Icon { get; set; }
         //status
         public List<(long start, long end)> Deads { get; } = new List<(long start, long end)>();
         public List<(long start, long end)> Downs { get; } = new List<(long start, long end)>();
         public List<(long start, long end)> DCs { get; } = new List<(long start, long end)>();
+        // icon
+        public string Icon { get; set; }
         // actors
+        public bool NoActors { get; set; } = true;
         public List<GenericActor> Actors { get; } = new List<GenericActor>();
-  
+
         public void Trim(long start, long end)
         {
             Positions.RemoveAll(x => x.Time < start || x.Time > end);
@@ -146,10 +147,10 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public void PollingRate(int rate, long fightDuration, bool forceInterpolate)
+        public void PollingRate(long fightDuration, bool forceInterpolate)
         {
-            PositionPolling(rate, fightDuration, forceInterpolate);
-            RotationPolling(rate, fightDuration, forceInterpolate);
+            PositionPolling(GeneralHelper.PollingRate, fightDuration, forceInterpolate);
+            RotationPolling(GeneralHelper.PollingRate, fightDuration, forceInterpolate);
         }
 
         public List<Point3D> GetActivePositions()

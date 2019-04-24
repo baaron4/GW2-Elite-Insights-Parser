@@ -22,7 +22,7 @@ namespace LuckParser.Models.Logic
         public List<Target> Targets { get; } = new List<Target>();
         protected readonly ushort TriggerID;
 
-        protected FightLogic(ushort triggerID)
+        protected FightLogic(ushort triggerID, AgentData agentData)
         {
             TriggerID = triggerID;
             CanCombatReplay = GetCombatMap() != null;
@@ -34,6 +34,13 @@ namespace LuckParser.Models.Logic
                 new PlayerStatusMechanic(SkillItem.DCId, "Disconnected", new MechanicPlotlySetting("x","rgb(120,120,120)"), "DC",0),
                 new PlayerStatusMechanic(SkillItem.RespawnId, "Respawn", new MechanicPlotlySetting("cross","rgb(120,120,255)"), "Resp",0)
             };
+            List<ParseEnum.TrashIDS> ids = GetTrashMobsIDS();
+            List<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
+            foreach (AgentItem a in aList)
+            {
+                Mob mob = new Mob(a);
+                TrashMobs.Add(mob);
+            }
         }
 
         protected virtual CombatReplayMap GetCombatMapInternal()
@@ -235,15 +242,15 @@ namespace LuckParser.Models.Logic
             phase.OverrideTimes(log);
         }
 
-        public virtual void ComputeAdditionalPlayerData(Player p, ParsedLog log)
+        public virtual void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
         }
 
-        public virtual void ComputeAdditionalTargetData(Target target, ParsedLog log)
+        public virtual void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
         }
 
-        public virtual void ComputeAdditionalTrashMobData(Mob mob, ParsedLog log)
+        public virtual void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
         {
         }
 
@@ -257,19 +264,7 @@ namespace LuckParser.Models.Logic
             return -1;
         }
 
-        public void InitTrashMobCombatReplay(ParsedLog log, int pollingRate)
-        {
-            List<ParseEnum.TrashIDS> ids = GetTrashMobsIDS();
-            List<AgentItem> aList = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
-            foreach (AgentItem a in aList)
-            {
-                Mob mob = new Mob(a);
-                mob.InitCombatReplay(log, pollingRate, true, false);
-                TrashMobs.Add(mob);
-            }
-        }
-
-        protected void SetSuccessByDeath(ParsedLog log, ushort idFirst, params ushort[] ids)
+        protected void SetSuccessByDeath(ParsedLog log, bool all, ushort idFirst, params ushort[] ids)
         {
             int success = 0;
             long maxTime = long.MinValue;
@@ -280,7 +275,7 @@ namespace LuckParser.Models.Logic
             idsToUse.AddRange(ids);
             foreach (ushort id in idsToUse)
             {
-                Target target = Targets.Find(x => x.ID == TriggerID);
+                Target target = Targets.Find(x => x.ID == id);
                 if (target == null)
                 {
                     throw new InvalidOperationException("Main target of the fight not found");
@@ -292,7 +287,7 @@ namespace LuckParser.Models.Logic
                     maxTime = Math.Max(killed.Time, maxTime);
                 }
             }
-            if (success == idsToUse.Count)
+            if ((all && success == idsToUse.Count) || (!all && success > 0))
             {
                 log.FightData.Success = true;
                 log.FightData.FightEnd = maxTime;
@@ -301,7 +296,7 @@ namespace LuckParser.Models.Logic
 
         public virtual void SetSuccess(ParsedLog log)
         {
-            SetSuccessByDeath(log, TriggerID);
+            SetSuccessByDeath(log, true, TriggerID);
         }
 
 

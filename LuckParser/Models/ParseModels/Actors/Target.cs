@@ -45,7 +45,7 @@ namespace LuckParser.Models.ParseModels
                     avgBoon += duration;
                 }
                 avgBoon /= phase.DurationInMS;
-                _avgBoons.Add(avgBoon);
+                _avgBoons.Add(Math.Round(avgBoon, GeneralHelper.BoonDigit));
 
                 double avgCondi = 0;
                 foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => Boon.BoonsByIds[x.Key].Nature == Boon.BoonNature.Condition).Select(x => x.Value))
@@ -53,7 +53,7 @@ namespace LuckParser.Models.ParseModels
                     avgCondi += duration;
                 }
                 avgCondi /= phase.DurationInMS;
-                _avgConditions.Add(avgCondi);
+                _avgConditions.Add(Math.Round(avgCondi, GeneralHelper.BoonDigit));
             }
         }
 
@@ -133,34 +133,34 @@ namespace LuckParser.Models.ParseModels
                         rates[boon.ID] = buff;
                         if (boon.Type == Boon.BoonType.Duration)
                         {
-                            buff.Uptime = Math.Round(100.0 * boonDistribution.GetUptime(boon.ID) / fightDuration, 2);
+                            buff.Uptime = Math.Round(100.0 * boonDistribution.GetUptime(boon.ID) / fightDuration, GeneralHelper.BoonDigit);
                             foreach (Player p in log.PlayerList)
                             {
                                 long gen = boonDistribution.GetGeneration(boon.ID, p.AgentItem);
-                                buff.Generated[p] = Math.Round(100.0 * gen / fightDuration, 2);
-                                buff.Overstacked[p] = Math.Round(100.0 * (boonDistribution.GetOverstack(boon.ID, p.AgentItem) + gen) / fightDuration, 2);
-                                buff.Wasted[p] = Math.Round(100.0 * boonDistribution.GetWaste(boon.ID, p.AgentItem) / fightDuration, 2);
-                                buff.UnknownExtension[p] = Math.Round(100.0 * boonDistribution.GetUnknownExtension(boon.ID, p.AgentItem) / fightDuration, 2);
-                                buff.Extension[p] = Math.Round(100.0 * boonDistribution.GetExtension(boon.ID, p.AgentItem) / fightDuration, 2);
-                                buff.Extended[p] = Math.Round(100.0 * boonDistribution.GetExtended(boon.ID, p.AgentItem) / fightDuration, 2);
+                                buff.Generated[p] = Math.Round(100.0 * gen / fightDuration, GeneralHelper.BoonDigit);
+                                buff.Overstacked[p] = Math.Round(100.0 * (boonDistribution.GetOverstack(boon.ID, p.AgentItem) + gen) / fightDuration, GeneralHelper.BoonDigit);
+                                buff.Wasted[p] = Math.Round(100.0 * boonDistribution.GetWaste(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
+                                buff.UnknownExtension[p] = Math.Round(100.0 * boonDistribution.GetUnknownExtension(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
+                                buff.Extension[p] = Math.Round(100.0 * boonDistribution.GetExtension(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
+                                buff.Extended[p] = Math.Round(100.0 * boonDistribution.GetExtended(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
                             }
                         }
                         else if (boon.Type == Boon.BoonType.Intensity)
                         {
-                            buff.Uptime = Math.Round((double)boonDistribution.GetUptime(boon.ID) / fightDuration, 2);
+                            buff.Uptime = Math.Round((double)boonDistribution.GetUptime(boon.ID) / fightDuration, GeneralHelper.BoonDigit);
                             foreach (Player p in log.PlayerList)
                             {
                                 long gen = boonDistribution.GetGeneration(boon.ID, p.AgentItem);
-                                buff.Generated[p] = Math.Round((double)gen / fightDuration, 2);
-                                buff.Overstacked[p] = Math.Round((double)(boonDistribution.GetOverstack(boon.ID, p.AgentItem) + gen) / fightDuration, 2);
-                                buff.Wasted[p] = Math.Round((double)boonDistribution.GetWaste(boon.ID, p.AgentItem) / fightDuration, 2);
-                                buff.UnknownExtension[p] = Math.Round((double)boonDistribution.GetUnknownExtension(boon.ID, p.AgentItem) / fightDuration, 2);
-                                buff.Extension[p] = Math.Round((double)boonDistribution.GetExtension(boon.ID, p.AgentItem) / fightDuration, 2);
-                                buff.Extended[p] = Math.Round((double)boonDistribution.GetExtended(boon.ID, p.AgentItem) / fightDuration, 2);
+                                buff.Generated[p] = Math.Round((double)gen / fightDuration, GeneralHelper.BoonDigit);
+                                buff.Overstacked[p] = Math.Round((double)(boonDistribution.GetOverstack(boon.ID, p.AgentItem) + gen) / fightDuration, GeneralHelper.BoonDigit);
+                                buff.Wasted[p] = Math.Round((double)boonDistribution.GetWaste(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
+                                buff.UnknownExtension[p] = Math.Round((double)boonDistribution.GetUnknownExtension(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
+                                buff.Extension[p] = Math.Round((double)boonDistribution.GetExtension(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
+                                buff.Extended[p] = Math.Round((double)boonDistribution.GetExtended(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
                             }
                             if (buffPresence.TryGetValue(boon.ID, out long presenceValueBoon))
                             {
-                                buff.Presence = Math.Round(100.0 * presenceValueBoon / fightDuration, 2);
+                                buff.Presence = Math.Round(100.0 * presenceValueBoon / fightDuration, GeneralHelper.BoonDigit);
                             }
                         }
                     }
@@ -168,10 +168,9 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        protected override void SetAdditionalCombatReplayData(ParsedLog log)
+        protected override void InitAdditionalCombatReplayData(ParsedLog log)
         {
-            CombatReplay.Icon = GeneralHelper.GetNPCIcon(ID);
-            log.FightData.Logic.ComputeAdditionalTargetData(this, log);
+            log.FightData.Logic.ComputeTargetCombatReplayActors(this, log, CombatReplay);
             if (CombatReplay.Rotations.Any())
             {
                 CombatReplay.Actors.Add(new FacingActor(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
@@ -246,13 +245,17 @@ namespace LuckParser.Models.ParseModels
             public long End { get; set; }
         }
 
-        public override AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map)
+        public override AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
+            if (CombatReplay == null)
+            {
+                InitCombatReplay(log);
+            }
             TargetSerializable aux = new TargetSerializable
             {
                 Img = CombatReplay.Icon,
                 Type = "Target",
-                ID = GetCombatReplayID(),
+                ID = GetCombatReplayID(log),
                 Start = CombatReplay.TimeOffsets.start,
                 End = CombatReplay.TimeOffsets.end,
                 Positions = new double[2 * CombatReplay.Positions.Count]
@@ -265,6 +268,36 @@ namespace LuckParser.Models.ParseModels
                 aux.Positions[i++] = y;
             }
             return aux;
+        }
+
+        protected override void InitCombatReplay(ParsedLog log)
+        {
+            if (!log.FightData.Logic.CanCombatReplay)
+            {
+                // no combat replay support on fight
+                return;
+            }
+            CombatReplay = new CombatReplay
+            {
+                Icon = GeneralHelper.GetNPCIcon(ID)
+            };
+            SetMovements(log);
+            CombatReplay.PollingRate(log.FightData.FightDuration, log.FightData.GetMainTargets(log).Contains(this));
+            CombatItem despawnCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Despawn, FirstAware, LastAware).LastOrDefault();
+            CombatItem spawnCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Spawn, FirstAware, LastAware).LastOrDefault();
+            CombatItem deathCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.ChangeDead, FirstAware, LastAware).LastOrDefault();
+            if (deathCheck != null)
+            {
+                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAware), log.FightData.ToFightSpace(deathCheck.Time));
+            }
+            else if (despawnCheck != null && (spawnCheck == null || spawnCheck.Time < despawnCheck.Time))
+            {
+                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAware), log.FightData.ToFightSpace(despawnCheck.Time));
+            }
+            else
+            {
+                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAware), log.FightData.ToFightSpace(AgentItem.LastAware));
+            }
         }
 
         /*protected override void setHealingLogs(ParsedLog log)

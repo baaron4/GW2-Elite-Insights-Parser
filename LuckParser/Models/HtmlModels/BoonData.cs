@@ -106,6 +106,10 @@ namespace LuckParser.Models.HtmlModels
                 if (boons.TryGetValue(boon.ID, out var uptime))
                 {
                     boonVals.Add(uptime.Uptime);
+                    if (boon.Type == Boon.BoonType.Intensity && uptime.Presence > 0)
+                    {
+                        boonVals.Add(uptime.Presence);
+                    }
                 }
                 else
                 {

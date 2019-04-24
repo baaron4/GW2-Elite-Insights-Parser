@@ -50,6 +50,7 @@ namespace LuckParser.Models.ParseModels
             }
             Account = name[1];
             Group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
+            IsFakeActor = Account == ":Conjured Sword";
         }
         
         // Public methods
@@ -282,7 +283,7 @@ namespace LuckParser.Models.ParseModels
                 FillFinalStats(log, GetJustPlayerDamageLogs(null, log, phase), final, targetDict);
                 _statsAll.Add(final);
                 // If conjured sword, stop
-                if (Account == ":Conjured Sword")
+                if (IsFakeActor)
                 {
                     continue;
                 }
@@ -306,22 +307,22 @@ namespace LuckParser.Models.ParseModels
                         final.SwapCount++;
                     }
                 }
-                final.TimeSaved = Math.Round(final.TimeSaved / 1000.0, 3);
-                final.TimeWasted = Math.Round(final.TimeWasted / 1000.0, 3);
+                final.TimeSaved = Math.Round(final.TimeSaved / 1000.0, GeneralHelper.TimeDigit);
+                final.TimeWasted = Math.Round(final.TimeWasted / 1000.0, GeneralHelper.TimeDigit);
 
                 double avgBoons = 0;
                 foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => Boon.BoonsByIds[x.Key].Nature == Boon.BoonNature.Boon).Select(x => x.Value))
                 {
                     avgBoons += duration;
                 }
-                final.AvgBoons = avgBoons / phase.DurationInMS;
+                final.AvgBoons = Math.Round(avgBoons / phase.DurationInMS, GeneralHelper.BoonDigit);
 
                 double avgCondis = 0;
                 foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => Boon.BoonsByIds[x.Key].Nature == Boon.BoonNature.Condition).Select(x => x.Value))
                 {
                     avgCondis += duration;
                 }
-                final.AvgConditions = avgCondis / phase.DurationInMS;
+                final.AvgConditions = Math.Round(avgCondis / phase.DurationInMS, GeneralHelper.BoonDigit);
 
                 if (Properties.Settings.Default.ParseCombatReplay && log.FightData.Logic.CanCombatReplay)
                 {
@@ -543,21 +544,21 @@ namespace LuckParser.Models.ParseModels
                         final[boon.ID] = uptime;
                         if (boon.Type == Boon.BoonType.Duration)
                         {
-                            uptime.Generation = Math.Round(100.0 * totalGeneration / fightDuration / playerList.Count, 2);
-                            uptime.Overstack = Math.Round(100.0 * (totalOverstack + totalGeneration) / fightDuration / playerList.Count, 2);
-                            uptime.Wasted = Math.Round(100.0 * (totalWasted) / fightDuration / playerList.Count, 2);
-                            uptime.UnknownExtended = Math.Round(100.0 * (totalUnknownExtension) / fightDuration / playerList.Count, 2);
-                            uptime.ByExtension = Math.Round(100.0 * (totalExtension) / fightDuration / playerList.Count, 2);
-                            uptime.Extended = Math.Round(100.0 * (totalExtended) / fightDuration / playerList.Count, 2);
+                            uptime.Generation = Math.Round(100.0 * totalGeneration / fightDuration / playerList.Count, GeneralHelper.BoonDigit);
+                            uptime.Overstack = Math.Round(100.0 * (totalOverstack + totalGeneration) / fightDuration / playerList.Count, GeneralHelper.BoonDigit);
+                            uptime.Wasted = Math.Round(100.0 * (totalWasted) / fightDuration / playerList.Count, GeneralHelper.BoonDigit);
+                            uptime.UnknownExtended = Math.Round(100.0 * (totalUnknownExtension) / fightDuration / playerList.Count, GeneralHelper.BoonDigit);
+                            uptime.ByExtension = Math.Round(100.0 * (totalExtension) / fightDuration / playerList.Count, GeneralHelper.BoonDigit);
+                            uptime.Extended = Math.Round(100.0 * (totalExtended) / fightDuration / playerList.Count, GeneralHelper.BoonDigit);
                         }
                         else if (boon.Type == Boon.BoonType.Intensity)
                         {
-                            uptime.Generation = Math.Round((double)totalGeneration / fightDuration / playerList.Count, 2);
-                            uptime.Overstack = Math.Round((double)(totalOverstack + totalGeneration) / fightDuration / playerList.Count, 2);
-                            uptime.Wasted = Math.Round((double)(totalWasted) / fightDuration / playerList.Count, 2);
-                            uptime.UnknownExtended = Math.Round((double)(totalUnknownExtension) / fightDuration / playerList.Count, 2);
-                            uptime.ByExtension = Math.Round((double)(totalExtension) / fightDuration / playerList.Count, 2);
-                            uptime.Extended = Math.Round((double)(totalExtended) / fightDuration / playerList.Count, 2);
+                            uptime.Generation = Math.Round((double)totalGeneration / fightDuration / playerList.Count, GeneralHelper.BoonDigit);
+                            uptime.Overstack = Math.Round((double)(totalOverstack + totalGeneration) / fightDuration / playerList.Count, GeneralHelper.BoonDigit);
+                            uptime.Wasted = Math.Round((double)(totalWasted) / fightDuration / playerList.Count, GeneralHelper.BoonDigit);
+                            uptime.UnknownExtended = Math.Round((double)(totalUnknownExtension) / fightDuration / playerList.Count, GeneralHelper.BoonDigit);
+                            uptime.ByExtension = Math.Round((double)(totalExtension) / fightDuration / playerList.Count, GeneralHelper.BoonDigit);
+                            uptime.Extended = Math.Round((double)(totalExtended) / fightDuration / playerList.Count, GeneralHelper.BoonDigit);
                         }
                     }
                 }
@@ -601,26 +602,26 @@ namespace LuckParser.Models.ParseModels
                         long generation = selfBoons.GetGeneration(boon.ID, AgentItem);
                         if (boon.Type == Boon.BoonType.Duration)
                         {
-                            uptime.Uptime = Math.Round(100.0 * selfBoons.GetUptime(boon.ID) / fightDuration, 2);
-                            uptime.Generation = Math.Round(100.0 * generation / fightDuration, 2);
-                            uptime.Overstack = Math.Round(100.0 * (selfBoons.GetOverstack(boon.ID, AgentItem) + generation) / fightDuration, 2);
-                            uptime.Wasted = Math.Round(100.0 * selfBoons.GetWaste(boon.ID, AgentItem) / fightDuration, 2);
-                            uptime.UnknownExtended = Math.Round(100.0 * selfBoons.GetUnknownExtension(boon.ID, AgentItem) / fightDuration, 2);
-                            uptime.ByExtension = Math.Round(100.0 * selfBoons.GetExtension(boon.ID, AgentItem) / fightDuration, 2);
-                            uptime.Extended = Math.Round(100.0 * selfBoons.GetExtended(boon.ID, AgentItem) / fightDuration, 2);
+                            uptime.Uptime = Math.Round(100.0 * selfBoons.GetUptime(boon.ID) / fightDuration, GeneralHelper.BoonDigit);
+                            uptime.Generation = Math.Round(100.0 * generation / fightDuration, GeneralHelper.BoonDigit);
+                            uptime.Overstack = Math.Round(100.0 * (selfBoons.GetOverstack(boon.ID, AgentItem) + generation) / fightDuration, GeneralHelper.BoonDigit);
+                            uptime.Wasted = Math.Round(100.0 * selfBoons.GetWaste(boon.ID, AgentItem) / fightDuration, GeneralHelper.BoonDigit);
+                            uptime.UnknownExtended = Math.Round(100.0 * selfBoons.GetUnknownExtension(boon.ID, AgentItem) / fightDuration, GeneralHelper.BoonDigit);
+                            uptime.ByExtension = Math.Round(100.0 * selfBoons.GetExtension(boon.ID, AgentItem) / fightDuration, GeneralHelper.BoonDigit);
+                            uptime.Extended = Math.Round(100.0 * selfBoons.GetExtended(boon.ID, AgentItem) / fightDuration, GeneralHelper.BoonDigit);
                         }
                         else if (boon.Type == Boon.BoonType.Intensity)
                         {
-                            uptime.Uptime = Math.Round((double)selfBoons.GetUptime(boon.ID) / fightDuration, 2);
-                            uptime.Generation = Math.Round((double)generation / fightDuration, 2);
-                            uptime.Overstack = Math.Round((double)(selfBoons.GetOverstack(boon.ID, AgentItem) + generation) / fightDuration, 2);
-                            uptime.Wasted = Math.Round((double)selfBoons.GetWaste(boon.ID, AgentItem) / fightDuration, 2);
-                            uptime.UnknownExtended = Math.Round((double)selfBoons.GetUnknownExtension(boon.ID, AgentItem) / fightDuration, 2);
-                            uptime.ByExtension = Math.Round((double)selfBoons.GetExtension(boon.ID, AgentItem) / fightDuration, 2);
-                            uptime.Extended = Math.Round((double)selfBoons.GetExtended(boon.ID, AgentItem) / fightDuration, 2);
+                            uptime.Uptime = Math.Round((double)selfBoons.GetUptime(boon.ID) / fightDuration, GeneralHelper.BoonDigit);
+                            uptime.Generation = Math.Round((double)generation / fightDuration, GeneralHelper.BoonDigit);
+                            uptime.Overstack = Math.Round((double)(selfBoons.GetOverstack(boon.ID, AgentItem) + generation) / fightDuration, GeneralHelper.BoonDigit);
+                            uptime.Wasted = Math.Round((double)selfBoons.GetWaste(boon.ID, AgentItem) / fightDuration, GeneralHelper.BoonDigit);
+                            uptime.UnknownExtended = Math.Round((double)selfBoons.GetUnknownExtension(boon.ID, AgentItem) / fightDuration, GeneralHelper.BoonDigit);
+                            uptime.ByExtension = Math.Round((double)selfBoons.GetExtension(boon.ID, AgentItem) / fightDuration, GeneralHelper.BoonDigit);
+                            uptime.Extended = Math.Round((double)selfBoons.GetExtended(boon.ID, AgentItem) / fightDuration, GeneralHelper.BoonDigit);
                             if (buffPresence.TryGetValue(boon.ID, out long presenceValueBoon))
                             {
-                                uptime.Presence = Math.Round(100.0 * presenceValueBoon / fightDuration, 2);
+                                uptime.Presence = Math.Round(100.0 * presenceValueBoon / fightDuration, GeneralHelper.BoonDigit);
                             }
                         }
                     }
@@ -712,13 +713,13 @@ namespace LuckParser.Models.ParseModels
             _damageModifiersTargets = new Dictionary<Target, Dictionary<string, List<DamageModifierData>>>();
             _presentDamageModifiers = new HashSet<string>();
             // If conjured sword or WvW, stop
-            if (Account == ":Conjured Sword" || log.FightData.Logic.Mode == FightLogic.ParseMode.WvW)
+            if (IsFakeActor || log.FightData.Logic.Mode == FightLogic.ParseMode.WvW)
             {
                 return;
             }
-            List<DamageModifier> damageMods = new List<DamageModifier>(DamageModifier.DamageModifiersPerSource[DamageModifier.ModifierSource.ItemBuff]);
-            damageMods.AddRange(DamageModifier.DamageModifiersPerSource[DamageModifier.ModifierSource.CommonBuff]);
-            damageMods.AddRange(DamageModifier.GetModifiersPerProf(Prof));
+            List<DamageModifier> damageMods = new List<DamageModifier>(log.DamageModifiers.DamageModifiersPerSource[DamageModifier.ModifierSource.ItemBuff]);
+            damageMods.AddRange(log.DamageModifiers.DamageModifiersPerSource[DamageModifier.ModifierSource.CommonBuff]);
+            damageMods.AddRange(log.DamageModifiers.GetModifiersPerProf(Prof));
             foreach (DamageModifier mod in damageMods)
             {
                 mod.ComputeDamageModifier(_damageModifiers, _damageModifiersTargets, this, log);
@@ -898,16 +899,14 @@ namespace LuckParser.Models.ParseModels
 
         }
 
-        protected override void SetAdditionalCombatReplayData(ParsedLog log)
+        protected override void InitAdditionalCombatReplayData(ParsedLog log)
         {
-            CombatReplay.Icon = GeneralHelper.GetProfIcon(Prof);
-            // Down and deads
-            List<(long, long)> dead = CombatReplay.Deads;
-            List<(long, long)> down = CombatReplay.Downs;
-            List<(long, long)> dc = CombatReplay.DCs;
-            log.CombatData.GetAgentStatus(FirstAware, LastAware, InstID, dead, down, dc, log.FightData.FightStart, log.FightData.FightEnd);
+            if (IsFakeActor)
+            {
+                return;
+            }
             // Fight related stuff
-            log.FightData.Logic.ComputeAdditionalPlayerData(this, log);
+            log.FightData.Logic.ComputePlayerCombatReplayActors(this, log, CombatReplay);
             if (CombatReplay.Rotations.Any())
             {
                 CombatReplay.Actors.Add(new FacingActor(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
@@ -923,14 +922,18 @@ namespace LuckParser.Models.ParseModels
             public long[] Dc { get; set; }
         }
 
-        public override AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map)
+        public override AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
+            if (CombatReplay == null)
+            {
+                InitCombatReplay(log);
+            }
             PlayerSerializable aux = new PlayerSerializable
             {
                 Group = Group,
                 Img = CombatReplay.Icon,
                 Type = "Player",
-                ID = GetCombatReplayID(),
+                ID = GetCombatReplayID(log),
                 Positions = new double[2 * CombatReplay.Positions.Count],
                 Dead = new long[2 * CombatReplay.Deads.Count],
                 Down = new long[2 * CombatReplay.Downs.Count],
@@ -963,6 +966,26 @@ namespace LuckParser.Models.ParseModels
             }
 
             return aux;
+        }
+
+        protected override void InitCombatReplay(ParsedLog log)
+        {
+            if (!log.FightData.Logic.CanCombatReplay || IsFakeActor)
+            {
+                // no combat replay support on fight
+                return;
+            }
+            CombatReplay = new CombatReplay
+            {
+                Icon = GeneralHelper.GetProfIcon(Prof)
+            };
+            SetMovements(log);
+            // Down and deads
+            List<(long, long)> dead = CombatReplay.Deads;
+            List<(long, long)> down = CombatReplay.Downs;
+            List<(long, long)> dc = CombatReplay.DCs;
+            log.CombatData.GetAgentStatus(FirstAware, LastAware, InstID, dead, down, dc, log.FightData.FightStart, log.FightData.FightEnd);
+            CombatReplay.PollingRate(log.FightData.FightDuration, true);
         }
 
 

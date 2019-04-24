@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using LuckParser.Parser;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -24,14 +25,14 @@ namespace LuckParser.Models.ParseModels
             public string Color { get; set; }
         }
 
-        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map)
+        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
             FacingSerializable aux = new FacingRectangleSerializable
             {
                 Type = "FacingRectangle",
                 Start = Lifespan.start,
                 End = Lifespan.end,
-                ConnectedTo = ConnectedTo.GetConnectedTo(map),
+                ConnectedTo = ConnectedTo.GetConnectedTo(map, log),
                 FacingData = new int[Data.Count],
                 Width = _width,
                 Height = _height,

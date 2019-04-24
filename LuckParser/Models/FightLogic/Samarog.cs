@@ -9,7 +9,7 @@ namespace LuckParser.Models.Logic
 {
     public class Samarog : RaidLogic
     {
-        public Samarog(ushort triggerID) : base(triggerID)
+        public Samarog(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -100,10 +100,9 @@ namespace LuckParser.Models.Logic
         }
         
 
-        public override void ComputeAdditionalTargetData(Target target, ParsedLog log)
+        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
             // TODO: facing information (shock wave)
-            CombatReplay replay = target.CombatReplay;
             List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
@@ -131,10 +130,9 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
+        public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // big bomb
-            CombatReplay replay = p.CombatReplay;
             List<CombatItem> bigbomb = log.CombatData.GetBoonData(37966).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
             foreach (CombatItem c in bigbomb)
             {

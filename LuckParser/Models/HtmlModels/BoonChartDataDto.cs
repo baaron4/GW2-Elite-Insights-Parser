@@ -20,11 +20,11 @@ namespace LuckParser.Models.HtmlModels
             States = new List<object[]>(bChart.Count + 1);
             foreach (BoonsGraphModel.Segment seg in bChart)
             {
-                double segStart = Math.Round(Math.Max(seg.Start - phase.Start, 0) / 1000.0, 3);
+                double segStart = Math.Round(Math.Max(seg.Start - phase.Start, 0) / 1000.0, GeneralHelper.TimeDigit);
                 States.Add(new object[] { segStart, seg.Value });
             }
             BoonsGraphModel.Segment lastSeg = bChart.Last();
-            double segEnd = Math.Round(Math.Min(lastSeg.End - phase.Start, phase.End - phase.Start) / 1000.0, 3);
+            double segEnd = Math.Round(Math.Min(lastSeg.End - phase.Start, phase.End - phase.Start) / 1000.0, GeneralHelper.TimeDigit);
             States.Add(new object[] { segEnd, lastSeg.Value });
         }
     }

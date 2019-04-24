@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Parser;
 using Newtonsoft.Json;
 
 namespace LuckParser.Models.ParseModels
@@ -72,7 +73,7 @@ namespace LuckParser.Models.ParseModels
 			Positions.Add((x, y, z, angle, opacity, time));
 		}
 
-		public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map)
+		public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
 		{
 			var positions = Positions.OrderBy(x => x.time).Select(pos =>
 			{

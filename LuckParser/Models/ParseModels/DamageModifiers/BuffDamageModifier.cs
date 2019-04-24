@@ -12,32 +12,32 @@ namespace LuckParser.Models.ParseModels
     {
         protected BuffsTracker BuffsChecker;
 
-        public BuffDamageModifier(Boon buff, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer) : base(buff.Name, tooltip, damageSource, gainPerStack, srctype, compareType, src, buff.Link, gainComputer)
+        public BuffDamageModifier(Boon buff, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, ulong maxBuild = ulong.MaxValue) : base(buff.Name, tooltip, damageSource, gainPerStack, srctype, compareType, src, buff.Link, gainComputer, null, maxBuild)
         {
             BuffsChecker = new BuffsTrackerSingle(buff);
         }
 
-        public BuffDamageModifier(Boon buff, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer)
+        public BuffDamageModifier(Boon buff, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, ulong maxBuild = ulong.MaxValue) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer, null, maxBuild)
         {
             BuffsChecker = new BuffsTrackerSingle(buff);
         }
 
-        public BuffDamageModifier(BuffsTrackerMulti buffsChecker, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, ByPresence)
+        public BuffDamageModifier(BuffsTrackerMulti buffsChecker, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, ulong maxBuild = ulong.MaxValue) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, ByPresence, null, maxBuild)
         {
             BuffsChecker = buffsChecker;
         }
 
-        public BuffDamageModifier(Boon buff, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, DamageLogChecker dlChecker) : base(buff.Name, tooltip, damageSource, gainPerStack, srctype, compareType, src, buff.Link, gainComputer, dlChecker)
+        public BuffDamageModifier(Boon buff, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, DamageLogChecker dlChecker, ulong maxBuild = ulong.MaxValue) : base(buff.Name, tooltip, damageSource, gainPerStack, srctype, compareType, src, buff.Link, gainComputer, dlChecker, maxBuild)
         {
             BuffsChecker = new BuffsTrackerSingle(buff);
         }
 
-        public BuffDamageModifier(Boon buff, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, DamageLogChecker dlChecker) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer, dlChecker)
+        public BuffDamageModifier(Boon buff, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, DamageLogChecker dlChecker, ulong maxBuild = ulong.MaxValue) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer, dlChecker, maxBuild)
         {
             BuffsChecker = new BuffsTrackerSingle(buff);
         }
 
-        public BuffDamageModifier(BuffsTrackerMulti buffsChecker, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, DamageLogChecker dlChecker) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, ByPresence, dlChecker)
+        public BuffDamageModifier(BuffsTrackerMulti buffsChecker, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, DamageLogChecker dlChecker, ulong maxBuild = ulong.MaxValue) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, ByPresence, dlChecker, maxBuild)
         {
             BuffsChecker = buffsChecker;
         }

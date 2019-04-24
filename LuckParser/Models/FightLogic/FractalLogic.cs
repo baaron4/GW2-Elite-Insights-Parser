@@ -9,7 +9,7 @@ namespace LuckParser.Models.Logic
 {
     public abstract class FractalLogic : FightLogic
     {
-        protected FractalLogic(ushort triggerID) : base (triggerID)
+        protected FractalLogic(ushort triggerID, AgentData agentData) : base (triggerID, agentData)
         { 
             Mode = ParseMode.Fractal;
             MechanicList.AddRange(new List<Mechanic>
@@ -72,7 +72,7 @@ namespace LuckParser.Models.Logic
                 }
                 else
                 {
-                    SetSuccessByDeath(log, TriggerID);
+                    SetSuccessByDeath(log, true, TriggerID);
                     if (log.FightData.Success)
                     {
                         log.FightData.FightEnd = Math.Min(log.FightData.FightEnd, lastDamageTaken.Time);
