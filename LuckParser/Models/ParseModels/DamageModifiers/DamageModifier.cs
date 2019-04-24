@@ -247,7 +247,7 @@ namespace LuckParser.Models.ParseModels
             new BuffDamageModifierTarget(Boon.GetBoonByName("Bleeding"), "Serrated Stones", "5% to bleeding target", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.All, ModifierSource.Elementalist, ByPresence, "https://wiki.guildwars2.com/images/6/60/Serrated_Stones.png"),
             new DamageLogDamageModifier("Aquamancer's Training", "10% over 90% HP", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ModifierSource.Elementalist,"https://wiki.guildwars2.com/images/8/81/Aquamancer%27s_Training.png", x => x.IsNinety, ByPresence),
             new BuffDamageModifier(Boon.GetBoonByName("Number of Boons"), "Bountiful Power", "2% per boon", DamageSource.NoPets, 2.0, DamageType.Power, DamageType.All, ModifierSource.Elementalist, ByStack, "https://wiki.guildwars2.com/images/7/75/Bountiful_Power.png"),
-            new BuffDamageModifier(new BuffsTrackerMulti(Boon.GetBoonByName("Swiftness"), Boon.GetBoonByName("Superspeed")), "Swift Revenge", "7% under swiftness/superspeed", DamageSource.NoPets, 7.0, DamageType.Power, DamageType.All, ModifierSource.Weaver, "https://wiki.guildwars2.com/images/9/94/Swift_Revenge.png")
+            new BuffDamageModifier(new BuffsTracker(Boon.GetBoonByName("Swiftness"), Boon.GetBoonByName("Superspeed")), "Swift Revenge", "7% under swiftness/superspeed", DamageSource.NoPets, 7.0, DamageType.Power, DamageType.All, ModifierSource.Weaver, "https://wiki.guildwars2.com/images/9/94/Swift_Revenge.png")
             // TODO Piercing Shards
         };
 

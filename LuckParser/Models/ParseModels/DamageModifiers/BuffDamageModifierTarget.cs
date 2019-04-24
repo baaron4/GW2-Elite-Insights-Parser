@@ -19,7 +19,7 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        public BuffDamageModifierTarget(BuffsTrackerMulti buffsChecker, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, ulong maxBuild = ulong.MaxValue) : base(buffsChecker, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, maxBuild)
+        public BuffDamageModifierTarget(BuffsTracker buffsChecker, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, ulong maxBuild = ulong.MaxValue) : base(buffsChecker, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, maxBuild)
         {
         }
 
@@ -31,7 +31,7 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        public BuffDamageModifierTarget(BuffsTrackerMulti buffsChecker, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, DamageLogChecker dlChecker) : base(buffsChecker, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, dlChecker)
+        public BuffDamageModifierTarget(BuffsTracker buffsChecker, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, DamageLogChecker dlChecker) : base(buffsChecker, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, dlChecker)
         {
         }
 

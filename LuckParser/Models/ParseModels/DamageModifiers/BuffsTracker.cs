@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class BuffsTrackerMulti : BuffsTracker
+    public class BuffsTracker
     {
         private readonly HashSet<long> _ids;
 
-        public BuffsTrackerMulti(params Boon[] buffs)
+        public BuffsTracker(params Boon[] buffs)
         {
             _ids = new HashSet<long>();
             foreach (Boon buff in buffs)
@@ -19,7 +19,7 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public override int GetStack(Dictionary<long, BoonsGraphModel> bgms, long time)
+        public int GetStack(Dictionary<long, BoonsGraphModel> bgms, long time)
         {
             int stack = 0;
             foreach (long key in bgms.Keys.Intersect(_ids))
@@ -29,7 +29,7 @@ namespace LuckParser.Models.ParseModels
             return stack;
         }
 
-        public override bool Has(Dictionary<long, BoonsGraphModel> bgms)
+        public bool Has(Dictionary<long, BoonsGraphModel> bgms)
         {
             return bgms.Keys.Intersect(_ids).Count() > 0;
         }
