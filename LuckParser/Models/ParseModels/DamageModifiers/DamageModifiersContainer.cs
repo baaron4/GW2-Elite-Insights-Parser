@@ -9,14 +9,14 @@ using static LuckParser.Models.Statistics;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class DamageModifierContainer
+    public class DamageModifiersContainer
     {
 
         public Dictionary<ModifierSource, List<DamageModifier>> DamageModifiersPerSource { get; }
 
         public Dictionary<string, DamageModifier> DamageModifiersByName { get; } 
 
-        public DamageModifierContainer(ulong build)
+        public DamageModifiersContainer(ulong build)
         {
             List<DamageModifier> currentDamageMods = new List<DamageModifier>();
             foreach (List<DamageModifier> boons in AllDamageModifiers)

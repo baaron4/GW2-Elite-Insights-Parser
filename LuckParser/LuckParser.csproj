@@ -124,7 +124,7 @@
     <Compile Include="Models\ParseModels\DamageModifiers\BuffDamageModifier.cs" />
     <Compile Include="Models\ParseModels\DamageModifiers\BuffsTracker.cs" />
     <Compile Include="Models\ParseModels\DamageModifiers\DamageLogDamageModifier.cs" />
-    <Compile Include="Models\ParseModels\DamageModifiers\DamageModifierContainer.cs" />
+    <Compile Include="Models\ParseModels\DamageModifiers\DamageModifiersContainer.cs" />
     <Compile Include="Models\ParseModels\DamageModifiers\DamageModifier.cs" />
     <Compile Include="Models\ParseModels\DamageModifiers\GainComputers\GainComputer.cs" />
     <Compile Include="Models\ParseModels\DamageModifiers\GainComputers\GainComputerByAbsence.cs" />
