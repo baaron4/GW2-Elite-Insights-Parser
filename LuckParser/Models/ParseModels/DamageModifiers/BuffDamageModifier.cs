@@ -13,7 +13,7 @@ namespace LuckParser.Models.ParseModels
 
         protected readonly BuffsTracker Tracker;
 
-        public BuffDamageModifier(long id, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, DamageLogChecker dlChecker = null) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer, dlChecker, ulong.MinValue, ulong.MinValue)
+        public BuffDamageModifier(long id, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, DamageLogChecker dlChecker = null) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer, dlChecker, ulong.MinValue, ulong.MaxValue)
         {
             Tracker = new BuffsTracker(id);
         }
