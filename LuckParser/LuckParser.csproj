@@ -122,7 +122,9 @@
     <Compile Include="Models\ParseModels\CombatReplay\Actors\MovingPlatformActor.cs" />
     <Compile Include="Models\ParseModels\DamageModifiers\BuffDamageModifierTarget.cs" />
     <Compile Include="Models\ParseModels\DamageModifiers\BuffDamageModifier.cs" />
-    <Compile Include="Models\ParseModels\DamageModifiers\BuffsTracker.cs" />
+    <Compile Include="Models\ParseModels\DamageModifiers\BuffsTrackers\BuffsTrackerSingle.cs" />
+    <Compile Include="Models\ParseModels\DamageModifiers\BuffsTrackers\BuffsTrackeMulti.cs" />
+    <Compile Include="Models\ParseModels\DamageModifiers\BuffsTrackers\BuffsTracker.cs" />
     <Compile Include="Models\ParseModels\DamageModifiers\DamageLogDamageModifier.cs" />
     <Compile Include="Models\ParseModels\DamageModifiers\DamageModifiersContainer.cs" />
     <Compile Include="Models\ParseModels\DamageModifiers\DamageModifier.cs" />

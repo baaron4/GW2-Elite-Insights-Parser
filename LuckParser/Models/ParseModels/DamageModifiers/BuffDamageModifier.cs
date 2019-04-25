@@ -15,22 +15,22 @@ namespace LuckParser.Models.ParseModels
 
         public BuffDamageModifier(long id, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, DamageLogChecker dlChecker = null) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer, dlChecker, ulong.MinValue, ulong.MaxValue)
         {
-            Tracker = new BuffsTracker(id);
+            Tracker = new BuffsTrackerSingle(id);
         }
 
         public BuffDamageModifier(long id, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, ulong minBuild, ulong maxBuild, DamageLogChecker dlChecker = null) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer, dlChecker, minBuild, maxBuild)
         {
-            Tracker = new BuffsTracker(id);
+            Tracker = new BuffsTrackerSingle(id);
         }
 
         public BuffDamageModifier(long[] ids, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, DamageLogChecker dlChecker = null) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer, dlChecker, ulong.MinValue, ulong.MaxValue)
         {
-            Tracker = new BuffsTracker(new List<long>(ids));
+            Tracker = new BuffsTrackerMulti(new List<long>(ids));
         }
 
         public BuffDamageModifier(long[] ids, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, ulong minBuild, ulong maxBuild, DamageLogChecker dlChecker = null) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer, dlChecker, minBuild, maxBuild)
         {
-            Tracker = new BuffsTracker(new List<long>(ids));
+            Tracker = new BuffsTrackerMulti(new List<long>(ids));
         }
 
         protected double ComputeGain(int stack, DamageLog dl)
