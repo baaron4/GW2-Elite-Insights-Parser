@@ -21,7 +21,7 @@ namespace LuckParser.Models.ParseModels
             List<DamageModifier> currentDamageMods = new List<DamageModifier>();
             foreach (List<DamageModifier> boons in AllDamageModifiers)
             {
-                currentDamageMods.AddRange(boons.Where(x => x.MaxBuild >= build));
+                currentDamageMods.AddRange(boons.Where(x => x.MaxBuild > build && build >= x.MinBuild));
             }
             DamageModifiersPerSource = currentDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
             DamageModifiersByName = currentDamageMods.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().First());

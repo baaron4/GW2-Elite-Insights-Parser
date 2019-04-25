@@ -22,7 +22,7 @@ namespace LuckParser.Models.ParseModels
             List<Boon> currentBoons = new List<Boon>();
             foreach (List<Boon> boons in AllBoons)
             {
-                currentBoons.AddRange(boons.Where(x => x.MaxBuild >= build));
+                currentBoons.AddRange(boons.Where(x => x.MaxBuild > build && build >= x.MinBuild));
             }
             BoonsByIds = currentBoons.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.First());
             BoonsByNature = currentBoons.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => x.ToList());

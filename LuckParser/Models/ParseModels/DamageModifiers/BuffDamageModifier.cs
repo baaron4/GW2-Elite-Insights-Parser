@@ -10,36 +10,27 @@ namespace LuckParser.Models.ParseModels
 {
     public class BuffDamageModifier : DamageModifier
     {
-        protected BuffsTracker BuffsChecker;
 
-        public BuffDamageModifier(Boon buff, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, ulong maxBuild = ulong.MaxValue) : base(buff.Name, tooltip, damageSource, gainPerStack, srctype, compareType, src, buff.Link, gainComputer, null, maxBuild)
+        protected readonly BuffsTracker Tracker;
+
+        public BuffDamageModifier(long id, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, DamageLogChecker dlChecker = null) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer, dlChecker, ulong.MinValue, ulong.MinValue)
         {
-            BuffsChecker = new BuffsTracker(buff);
+            Tracker = new BuffsTracker(id);
         }
 
-        public BuffDamageModifier(Boon buff, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, ulong maxBuild = ulong.MaxValue) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer, null, maxBuild)
+        public BuffDamageModifier(long id, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, ulong minBuild, ulong maxBuild, DamageLogChecker dlChecker = null) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer, dlChecker, minBuild, maxBuild)
         {
-            BuffsChecker = new BuffsTracker(buff);
+            Tracker = new BuffsTracker(id);
         }
 
-        public BuffDamageModifier(BuffsTracker buffsChecker, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, ulong maxBuild = ulong.MaxValue) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, ByPresence, null, maxBuild)
+        public BuffDamageModifier(long[] ids, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, DamageLogChecker dlChecker = null) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer, dlChecker, ulong.MinValue, ulong.MaxValue)
         {
-            BuffsChecker = buffsChecker;
+            Tracker = new BuffsTracker(new List<long>(ids));
         }
 
-        public BuffDamageModifier(Boon buff, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, DamageLogChecker dlChecker, ulong maxBuild = ulong.MaxValue) : base(buff.Name, tooltip, damageSource, gainPerStack, srctype, compareType, src, buff.Link, gainComputer, dlChecker, maxBuild)
+        public BuffDamageModifier(long[] ids, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, ulong minBuild, ulong maxBuild, DamageLogChecker dlChecker = null) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer, dlChecker, minBuild, maxBuild)
         {
-            BuffsChecker = new BuffsTracker(buff);
-        }
-
-        public BuffDamageModifier(Boon buff, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, DamageLogChecker dlChecker, ulong maxBuild = ulong.MaxValue) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer, dlChecker, maxBuild)
-        {
-            BuffsChecker = new BuffsTracker(buff);
-        }
-
-        public BuffDamageModifier(BuffsTracker buffsChecker, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, DamageLogChecker dlChecker, ulong maxBuild = ulong.MaxValue) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, ByPresence, dlChecker, maxBuild)
-        {
-            BuffsChecker = buffsChecker;
+            Tracker = new BuffsTracker(new List<long>(ids));
         }
 
         protected double ComputeGain(int stack, DamageLog dl)
@@ -56,7 +47,7 @@ namespace LuckParser.Models.ParseModels
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             Dictionary<long, BoonsGraphModel> bgms = p.GetBoonGraphs(log);
-            if (!BuffsChecker.Has(bgms))
+            if (!Tracker.Has(bgms))
             {
                 return;
             }
@@ -74,7 +65,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         int totalDamage = GetTotalDamage(p, log, target, i);
                         List<DamageLog> typeHits = GetDamageLogs(p, log, target, phases[i]);
-                        List<double> damages = typeHits.Select(x => ComputeGain(BuffsChecker.GetStack(bgms, x.Time), x)).Where(x => x != -1.0).ToList();
+                        List<double> damages = typeHits.Select(x => ComputeGain(Tracker.GetStack(bgms, x.Time), x)).Where(x => x != -1.0).ToList();
                         extraDataList.Add(new DamageModifierData(damages.Count, typeHits.Count, damages.Sum(), totalDamage));
                     }
                     dict[Name] = extraDataList;
@@ -85,7 +76,7 @@ namespace LuckParser.Models.ParseModels
             {
                 int totalDamage = GetTotalDamage(p, log, null, i);
                 List<DamageLog> typeHits = GetDamageLogs(p, log, null, phases[i]);
-                List<double> damages = typeHits.Select(x => ComputeGain(BuffsChecker.GetStack(bgms, x.Time), x)).Where(x => x != -1.0).ToList();
+                List<double> damages = typeHits.Select(x => ComputeGain(Tracker.GetStack(bgms, x.Time), x)).Where(x => x != -1.0).ToList();
                 data[Name].Add(new DamageModifierData(damages.Count, typeHits.Count, damages.Sum(), totalDamage));
             }
         }
