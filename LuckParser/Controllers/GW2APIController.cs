@@ -30,19 +30,13 @@ namespace LuckParser.Controllers
 
         private GW2APISkill GetGW2APISKill(string path)
         {
-            //System.Threading.Thread.Sleep(100);
             if (APIClient == null) { GetAPIClient(); }
             GW2APISkill skill = null;
             HttpResponseMessage response = APIClient.GetAsync(path).Result;
             if (response.IsSuccessStatusCode)
             {
-
-                //skill = response.Content.ReadAsAsync<GW2APISkill>().Result;
+                
                 skill = response.Content.ReadAsAsync<GW2APISkill>().Result;
-                /*if (skillCheck.categories != null)
-                {
-                    int stop = 0;
-                }*/
             }
             else
             {//try again after a wait
@@ -50,7 +44,6 @@ namespace LuckParser.Controllers
                 response = APIClient.GetAsync(path).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    //skill = response.Content.ReadAsAsync<GW2APISkill>().Result;
                     skill = response.Content.ReadAsAsync<GW2APISkill>().Result;
 
                 }
@@ -80,33 +73,6 @@ namespace LuckParser.Controllers
                         }
                     });
                     skill_L.AddRange(responseArray);
-                    //if (skillCheck.facts != null)
-                    // {
-                    //     bool block = true;
-                    //     foreach (GW2APIfacts fact in skillCheck.facts)
-                    //     {
-                    //         if (fact.type == "Unblockable" || fact.type == "StunBreak")//Unblockable changing value from an int to a bool has caused so much chaos
-                    //         {
-                    //             skill = skillCheck;
-                    //             block = false;
-                    //             break;
-                    //         }
-
-                    //     }
-                    //     if (block)
-                    //     {
-                    //         response = APIClient.GetAsync(path).Result;
-                    //         if (response.IsSuccessStatusCode)
-                    //         {
-                    //             skill = response.Content.ReadAsAsync<GW2APISkillDetailed>().Result;
-                    //         }
-
-                    //     }
-                    // }
-                    // else
-                    // {
-                    //     skill = skillCheck;
-                    // }
                 }
                 else
                 {
@@ -165,99 +131,37 @@ namespace LuckParser.Controllers
             }
             return failedList;
         }
-        public void RetryWriteSkillListtoFile()
-        {
-            if (new FileInfo(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
-                + "/Content/SkillList.json").Length != 0)
-            {
-                Console.WriteLine("Reading Skilllist");
-                using (StreamReader reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
-                + "/Content/SkillList.json"))
-                {
-                    JsonSerializer serializer = new JsonSerializer()
-                    {
-                        ContractResolver = new DefaultContractResolver()
-                        {
-                            NamingStrategy = new CamelCaseNamingStrategy()
-                        }
-                    };
-                    _listOfSkills.Items = (List<GW2APISkill>)serializer.Deserialize(reader, typeof(List<GW2APISkill>));
-                    reader.Close();
-                }
-            }
-            Console.WriteLine("Getting APi");
-            //Get list from API
-            GetAPIClient();
-
-            HttpResponseMessage response = APIClient.GetAsync("/v2/skills").Result;
-            int[] idArray;
-            if (response.IsSuccessStatusCode)
-            {
-                // Get Skill ID list
-                idArray = response.Content.ReadAsAsync<int[]>().Result;
-
-                foreach (int id in idArray)
-                {
-                    if (_listOfSkills.Items.FirstOrDefault(x => x.Id == id) == null)
-                    {
-                        GW2APISkill curSkill = new GW2APISkill();
-                        curSkill = GetGW2APISKill("/v2/skills/" + id);
-                        if (curSkill != null)
-                        {
-
-                            _listOfSkills.Items.Add(curSkill);
-
-                        }
-                        else
-                        {
-                            Console.WriteLine("Fail to get response");//fail to retrieve
-
-                        }
-                    }
-                }
-                StreamWriter writer = new StreamWriter(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
-            + "/Content/SkillList.json");
-
-                var serializer = new JsonSerializer
-                {
-                    NullValueHandling = NullValueHandling.Ignore,
-                    Formatting = Newtonsoft.Json.Formatting.Indented,
-                    DefaultValueHandling = DefaultValueHandling.Ignore,
-                    ContractResolver = new DefaultContractResolver()
-                    {
-                        NamingStrategy = new CamelCaseNamingStrategy()
-                    }
-                };
-                serializer.Serialize(writer, _listOfSkills.Items);
-                writer.Close();
-            }
-
-        }
         private void SetSkillList()
         {
 
             if (_listOfSkills.Items.Count == 0)
             {
-
-                if (new FileInfo(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
-                + "/Content/SkillList.json").Length != 0)
+                string path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
+                + "/Content/SkillList.json";
+                if (File.Exists(path))
                 {
-                    Console.WriteLine("Reading Skilllist");
-                    using (StreamReader reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
-                    + "/Content/SkillList.json"))
+                    if (new FileInfo(path).Length != 0)
                     {
-                        JsonSerializer serializer = new JsonSerializer()
+                        Console.WriteLine("Reading Skilllist");
+                        using (StreamReader reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
+                        + "/Content/SkillList.json"))
                         {
-                            ContractResolver = new DefaultContractResolver()
+                            JsonSerializer serializer = new JsonSerializer()
                             {
-                                NamingStrategy = new CamelCaseNamingStrategy()
-                            }
-                        };
-                        _listOfSkills.Items = (List<GW2APISkill>)serializer.Deserialize(reader, typeof(List<GW2APISkill>));
-                        reader.Close();
+                                ContractResolver = new DefaultContractResolver()
+                                {
+                                    NamingStrategy = new CamelCaseNamingStrategy()
+                                }
+                            };
+                            _listOfSkills.Items = (List<GW2APISkill>)serializer.Deserialize(reader, typeof(List<GW2APISkill>));
+                            reader.Close();
+                        }
                     }
                 }
-
+                if (_listOfSkills.Items.Count == 0)
+                {
+                    WriteSkillListToFile();
+                }
             }
             return;
         }
@@ -365,23 +269,26 @@ namespace LuckParser.Controllers
 
             if (_listofSpecs.Items.Count == 0)
             {
-
-                if (new FileInfo(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
-                + "/Content/SpecList.json").Length != 0)
+                string path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
+                + "/Content/SpecList.json";
+                if (File.Exists(path))
                 {
-                    Console.WriteLine("Reading SpecList");
-                    using (StreamReader reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
-                    + "/Content/SpecList.json"))
+                    if (new FileInfo(path).Length != 0)
                     {
-                        JsonSerializer serializer = new JsonSerializer()
+                        Console.WriteLine("Reading SpecList");
+                        using (StreamReader reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
+                        + "/Content/SpecList.json"))
                         {
-                            ContractResolver = new DefaultContractResolver()
+                            JsonSerializer serializer = new JsonSerializer()
                             {
-                                NamingStrategy = new CamelCaseNamingStrategy()
-                            }
-                        };
-                        _listofSpecs.Items = (List<GW2APISpec>)serializer.Deserialize(reader, typeof(List<GW2APISpec>));
-                        reader.Close();
+                                ContractResolver = new DefaultContractResolver()
+                                {
+                                    NamingStrategy = new CamelCaseNamingStrategy()
+                                }
+                            };
+                            _listofSpecs.Items = (List<GW2APISpec>)serializer.Deserialize(reader, typeof(List<GW2APISpec>));
+                            reader.Close();
+                        }
                     }
                 }
                 if (_listofSpecs.Items.Count == 0)//if nothing in file or fail write new file

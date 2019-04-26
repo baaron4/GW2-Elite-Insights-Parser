@@ -2471,7 +2471,7 @@
         "text": "Range",
         "icon": "https://render.guildwars2.com/file/0AAB34BEB1C9F4A25EC612DDBEACF3E20B2810FA/156666.png",
         "type": "Range",
-        "value": 300
+        "value": 240
       },
       {
         "text": "Damage",
@@ -3818,7 +3818,7 @@
   {
     "id": 5525,
     "name": "Ring of Earth",
-    "description": "Bleed foes with a ring of rocky spikes.",
+    "description": "Use the earth to launch yourself into the air and strike foes in a small radius. Deliver a larger ring of earthen spikes upon impact.",
     "icon": "https://render.guildwars2.com/file/0AFCBDA61E7BE315E50FE567B23632C803BF02A3/103107.png",
     "chat_link": "[&BpUVAAA=]",
     "type": "Weapon",
@@ -3838,7 +3838,14 @@
         "value": 6
       },
       {
-        "text": "Damage",
+        "text": "Initial Damage",
+        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
+        "type": "Damage",
+        "hit_count": 1,
+        "dmg_multiplier": 0.33
+      },
+      {
+        "text": "Final Impact Damage",
         "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
         "type": "Damage",
         "hit_count": 1,
@@ -3851,7 +3858,7 @@
         "status": "Bleeding",
         "description": "Deals damage every second; stacks intensity.",
         "apply_count": 3,
-        "duration": 12
+        "duration": 6
       },
       {
         "text": "Apply Buff/Condition",
@@ -3860,10 +3867,22 @@
         "status": "Crippled",
         "description": "Movement speed decreased by 50%; stacks duration.",
         "apply_count": 1,
-        "duration": 3
+        "duration": 2
       },
       {
-        "text": "Radius",
+        "text": "Number of Impacts",
+        "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
+        "type": "Number",
+        "value": 2
+      },
+      {
+        "text": "Initial Radius",
+        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
+        "type": "Distance",
+        "distance": 180
+      },
+      {
+        "text": "Final Impact",
         "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
         "type": "Distance",
         "distance": 240
@@ -4126,7 +4145,7 @@
   {
     "id": 5530,
     "name": "Swirling Winds",
-    "description": "Create a swirling wind that destroys projectiles.",
+    "description": "Create a swirling wind that blocks projectiles.",
     "icon": "https://render.guildwars2.com/file/2931CBED030FDBF30F0A0B293A0010925B90FDA6/103250.png",
     "chat_link": "[&BpoVAAA=]",
     "type": "Weapon",
@@ -4155,7 +4174,7 @@
         "text": "Radius",
         "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
         "type": "Distance",
-        "distance": 400
+        "distance": 360
       }
     ],
     "specialization": 56
@@ -4578,7 +4597,7 @@
         "icon": "https://render.guildwars2.com/file/D4347C52157B040943051D7E09DEAD7AF63D4378/156662.png",
         "type": "AttributeAdjust",
         "target": "Healing",
-        "value": 201
+        "value": 236
       },
       {
         "text": "Number of Targets",
@@ -5209,7 +5228,7 @@
         "text": "Radius",
         "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
         "type": "Distance",
-        "distance": 450
+        "distance": 480
       },
       {
         "text": "Conditions Removed",
@@ -5577,7 +5596,7 @@
         "icon": "https://render.guildwars2.com/file/D4347C52157B040943051D7E09DEAD7AF63D4378/156662.png",
         "type": "AttributeAdjust",
         "target": "Healing",
-        "value": 1302
+        "value": 1558
       },
       {
         "text": "Conditions Removed",
@@ -5602,8 +5621,8 @@
   },
   {
     "id": 5559,
-    "name": "Magnetic Leap",
-    "description": "Pull yourself to a foe and deliver an immobilizing strike.",
+    "name": "Earthen Rush",
+    "description": "Quickly dash along the ground, summoning spikes along the way and then delivering an area strike.",
     "icon": "https://render.guildwars2.com/file/DA71280E1C50AB7F0901A2CD2597E3ACCC1D6665/534761.png",
     "chat_link": "[&BrcVAAA=]",
     "type": "Weapon",
@@ -5620,7 +5639,7 @@
         "text": "Range",
         "icon": "https://render.guildwars2.com/file/0AAB34BEB1C9F4A25EC612DDBEACF3E20B2810FA/156666.png",
         "type": "Range",
-        "value": 900
+        "value": 600
       },
       {
         "text": "Recharge",
@@ -5633,7 +5652,7 @@
         "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
         "type": "Damage",
         "hit_count": 1,
-        "dmg_multiplier": 0.1
+        "dmg_multiplier": 1.0
       },
       {
         "text": "Apply Buff/Condition",
@@ -5642,7 +5661,31 @@
         "status": "Immobile",
         "description": "Unable to move; stacks duration.",
         "apply_count": 1,
-        "duration": 3
+        "duration": 2
+      },
+      {
+        "text": "Spike Maximum Targets",
+        "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
+        "type": "Number",
+        "value": 1
+      },
+      {
+        "text": "Final Strike Maximum Targets",
+        "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
+        "type": "Number",
+        "value": 5
+      },
+      {
+        "text": "Spike Radius",
+        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
+        "type": "Distance",
+        "distance": 60
+      },
+      {
+        "text": "Impact Radius",
+        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
+        "type": "Distance",
+        "distance": 240
       },
       {
         "text": "Combo Finisher",
@@ -7584,7 +7627,7 @@
   },
   {
     "id": 5646,
-    "name": "Lightning Touch",
+    "name": "Convergence",
     "description": "Shock a foe and inflict weakness. Gain fury for each foe hit.",
     "icon": "https://render.guildwars2.com/file/A7F6522CC73138ECBF15A04D62634A2FFFBFD246/103374.png",
     "chat_link": "[&Bg4WAAA=]",
@@ -7598,12 +7641,6 @@
       "NoUnderwater"
     ],
     "facts": [
-      {
-        "text": "Range",
-        "icon": "https://render.guildwars2.com/file/0AAB34BEB1C9F4A25EC612DDBEACF3E20B2810FA/156666.png",
-        "type": "Range",
-        "value": 300
-      },
       {
         "text": "Recharge",
         "icon": "https://render.guildwars2.com/file/D767B963D120F077C3B163A05DC05A7317D7DB70/156651.png",
@@ -7624,7 +7661,7 @@
         "status": "Weakness",
         "description": "Endurance regeneration decreased by 50%. 50% of hits are Glancing Blows (50% damage). Stacks duration.",
         "apply_count": 1,
-        "duration": 5
+        "duration": 3
       },
       {
         "text": "Apply Buff/Condition",
@@ -7639,7 +7676,13 @@
         "text": "Number of Targets",
         "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
         "type": "Number",
-        "value": 3
+        "value": 5
+      },
+      {
+        "text": "Radius",
+        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
+        "type": "Distance",
+        "distance": 240
       }
     ]
   },
@@ -8407,7 +8450,7 @@
         "text": "Apply Buff/Condition",
         "icon": "https://render.guildwars2.com/file/2AE8672D7A08BB4129B6F0F40C2BC10642D55C28/102884.png",
         "type": "Buff",
-        "status": "Fire Shield",
+        "status": "Fire Aura",
         "description": "Enveloped in a fiery shield that burns foes, grants might each time you are struck (1-second cooldown per attacker).",
         "apply_count": 1,
         "duration": 4
@@ -11199,7 +11242,7 @@
         "icon": "https://render.guildwars2.com/file/D4347C52157B040943051D7E09DEAD7AF63D4378/156662.png",
         "type": "AttributeAdjust",
         "target": "Healing",
-        "value": 1302
+        "value": 1558
       },
       {
         "text": "Conditions Removed",
@@ -12408,7 +12451,7 @@
         "text": "Damage",
         "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
         "type": "Damage",
-        "hit_count": 1,
+        "hit_count": 5,
         "dmg_multiplier": 0.4
       },
       {
@@ -12417,14 +12460,8 @@
         "type": "Buff",
         "status": "Poisoned",
         "description": "Deals damage every second; decreases healing effectiveness by 33%; damage stacks intensity.",
-        "apply_count": 1,
+        "apply_count": 5,
         "duration": 7
-      },
-      {
-        "text": "Number of Darts",
-        "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
-        "type": "Number",
-        "value": 5
       }
     ]
   },
@@ -14274,10 +14311,24 @@
         "duration": 3
       },
       {
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/B47BF5803FED2718D7474EAF9617629AD068EE10/102849.png",
+        "type": "Buff",
+        "status": "Burning",
+        "description": "Deals damage every second; stacks intensity.",
+        "apply_count": 2,
+        "duration": 3
+      },
+      {
         "text": "Blast Radius",
         "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
         "type": "Number",
         "value": 240
+      },
+      {
+        "text": "Pierces",
+        "icon": "https://render.guildwars2.com/file/F833590B593E0C2D4948DFFE9951B91655250052/1770207.png",
+        "type": "NoData"
       },
       {
         "text": "Combo Finisher",
@@ -16534,14 +16585,14 @@
         "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
         "type": "Damage",
         "hit_count": 1,
-        "dmg_multiplier": 0.4
+        "dmg_multiplier": 0.3
       },
       {
         "text": "Landing Damage",
         "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
         "type": "Damage",
         "hit_count": 1,
-        "dmg_multiplier": 2.3
+        "dmg_multiplier": 2.4
       },
       {
         "text": "Apply Buff/Condition",
@@ -18162,7 +18213,7 @@
   {
     "id": 6153,
     "name": "Blunderbuss",
-    "description": "Fire a cloud of shrapnel that causes more damage the closer you are to foes.",
+    "description": "Fire several shards of shrapnel that inflict more damage the closer you are to foes.",
     "icon": "https://render.guildwars2.com/file/FC0C5A43332CBCEEFB32EF5331F89650FC0AF310/103111.png",
     "chat_link": "[&BgkYAAA=]",
     "type": "Weapon",
@@ -18179,7 +18230,7 @@
         "text": "Range",
         "icon": "https://render.guildwars2.com/file/0AAB34BEB1C9F4A25EC612DDBEACF3E20B2810FA/156666.png",
         "type": "Range",
-        "value": 700
+        "value": 900
       },
       {
         "text": "Recharge",
@@ -18188,28 +18239,23 @@
         "value": 9
       },
       {
-        "text": "Damage within 0-250 Range",
+        "text": "Maximum Damage",
         "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
         "type": "Damage",
         "hit_count": 1,
         "dmg_multiplier": 1.76
       },
       {
-        "text": "Damage within 250-400 Range",
-        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
-        "type": "Damage",
-        "hit_count": 1,
-        "dmg_multiplier": 1.54
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/79FF0046A5F9ADA3B4C4EC19ADB4CB124D5F0021/102848.png",
+        "type": "Buff",
+        "status": "Bleeding",
+        "description": "Deals damage every second; stacks intensity.",
+        "apply_count": 3,
+        "duration": 9
       },
       {
-        "text": "Damage within 400-550 Range",
-        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
-        "type": "Damage",
-        "hit_count": 1,
-        "dmg_multiplier": 1.32
-      },
-      {
-        "text": "Damage within 550-700 Range",
+        "text": "Minimum Damage",
         "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
         "type": "Damage",
         "hit_count": 1,
@@ -18221,35 +18267,8 @@
         "type": "Buff",
         "status": "Bleeding",
         "description": "Deals damage every second; stacks intensity.",
-        "apply_count": 4,
-        "duration": 7
-      },
-      {
-        "text": "Apply Buff/Condition",
-        "icon": "https://render.guildwars2.com/file/79FF0046A5F9ADA3B4C4EC19ADB4CB124D5F0021/102848.png",
-        "type": "Buff",
-        "status": "Bleeding",
-        "description": "Deals damage every second; stacks intensity.",
         "apply_count": 3,
-        "duration": 7
-      },
-      {
-        "text": "Apply Buff/Condition",
-        "icon": "https://render.guildwars2.com/file/79FF0046A5F9ADA3B4C4EC19ADB4CB124D5F0021/102848.png",
-        "type": "Buff",
-        "status": "Bleeding",
-        "description": "Deals damage every second; stacks intensity.",
-        "apply_count": 2,
-        "duration": 7
-      },
-      {
-        "text": "Apply Buff/Condition",
-        "icon": "https://render.guildwars2.com/file/79FF0046A5F9ADA3B4C4EC19ADB4CB124D5F0021/102848.png",
-        "type": "Buff",
-        "status": "Bleeding",
-        "description": "Deals damage every second; stacks intensity.",
-        "apply_count": 1,
-        "duration": 7
+        "duration": 3
       },
       {
         "text": "Number of Targets",
@@ -19967,7 +19986,7 @@
   {
     "id": 9086,
     "name": "Protector's Strike",
-    "description": "Surround yourself and nearby allies with a shield. Damage foes that strike protected allies, and then apply boons in a radius.",
+    "description": "Surround yourself and nearby allies with a shield. Damage foes that strike protected allies, and then apply boons in a radius. If an attack is not blocked, fully charge your Justice virtue.",
     "icon": "https://render.guildwars2.com/file/7C42A81ACFBFFE32A528DFCA8014E7C4476358C8/103202.png",
     "chat_link": "[&Bn4jAAA=]",
     "type": "Weapon",
@@ -20788,7 +20807,7 @@
   {
     "id": 9104,
     "name": "Zealot's Flame",
-    "description": "Set yourself alight, periodically burning up to three nearby foes.",
+    "description": "Set yourself alight, periodically burning up to three nearby foes. The final pulse applies additional burning.",
     "icon": "https://render.guildwars2.com/file/3CB42772DD937ACF48EF5FE4615EF33F49035450/103231.png",
     "chat_link": "[&BpAjAAA=]",
     "type": "Weapon",
@@ -20924,7 +20943,7 @@
   {
     "id": 9107,
     "name": "Zealot's Defense",
-    "description": "Destroy ranged attacks while casting magical projectiles.",
+    "description": "Block ranged attacks while casting magical projectiles.",
     "icon": "https://render.guildwars2.com/file/C0ED0D01EA4116136DCBE4925B1C2B92A209B221/103648.png",
     "chat_link": "[&BpMjAAA=]",
     "type": "Weapon",
@@ -20954,6 +20973,13 @@
         "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
         "type": "Damage",
         "hit_count": 8,
+        "dmg_multiplier": 0.5
+      },
+      {
+        "text": "Damage",
+        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
+        "type": "Damage",
+        "hit_count": 8,
         "dmg_multiplier": 0.33
       },
       {
@@ -20961,6 +20987,11 @@
         "icon": "https://render.guildwars2.com/file/7B2193ACCF77E56C13E608191B082D68AA0FAA71/156659.png",
         "type": "Time",
         "duration": 3
+      },
+      {
+        "text": "Blocks Missiles",
+        "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
+        "type": "NoData"
       }
     ]
   },
@@ -20991,14 +21022,14 @@
         "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
         "type": "Damage",
         "hit_count": 1,
-        "dmg_multiplier": 1.4
+        "dmg_multiplier": 1.55
       },
       {
         "text": "Healing",
         "icon": "https://render.guildwars2.com/file/D4347C52157B040943051D7E09DEAD7AF63D4378/156662.png",
         "type": "AttributeAdjust",
         "target": "Healing",
-        "value": 399
+        "value": 367
       },
       {
         "text": "Radius",
@@ -21126,7 +21157,7 @@
         "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
         "type": "Damage",
         "hit_count": 5,
-        "dmg_multiplier": 0.5
+        "dmg_multiplier": 0.65
       },
       {
         "text": "Apply Buff/Condition",
@@ -21481,7 +21512,9 @@
     "categories": [
       "SpiritWeapon"
     ],
-    "flags": [],
+    "flags": [
+      "GroundTargeted"
+    ],
     "facts": [
       {
         "text": "Range",
@@ -21538,7 +21571,7 @@
   {
     "id": 9128,
     "name": "Sanctuary",
-    "description": "Consecration. Form a protective healing shelter for allies. Foes and projectiles cannot enter.",
+    "description": "Consecration. Form a protective healing shelter for allies. Block foes and their missiles from entering.",
     "icon": "https://render.guildwars2.com/file/2E31D763EA1D05432949EBB39603CD6DBBE29870/103541.png",
     "chat_link": "[&BqgjAAA=]",
     "type": "Utility",
@@ -21608,6 +21641,11 @@
         "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
         "type": "Number",
         "value": 10
+      },
+      {
+        "text": "Blocks Missiles",
+        "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
+        "type": "NoData"
       }
     ]
   },
@@ -22485,7 +22523,7 @@
         "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
         "type": "Damage",
         "hit_count": 1,
-        "dmg_multiplier": 0.9
+        "dmg_multiplier": 0.8
       },
       {
         "text": "Number of Targets",
@@ -22637,7 +22675,9 @@
     "categories": [
       "SpiritWeapon"
     ],
-    "flags": [],
+    "flags": [
+      "GroundTargeted"
+    ],
     "facts": [
       {
         "text": "Range",
@@ -22799,13 +22839,15 @@
     "categories": [
       "SpiritWeapon"
     ],
-    "flags": [],
+    "flags": [
+      "GroundTargeted"
+    ],
     "facts": [
       {
         "text": "Range",
         "icon": "https://render.guildwars2.com/file/0AAB34BEB1C9F4A25EC612DDBEACF3E20B2810FA/156666.png",
         "type": "Range",
-        "value": 1200
+        "value": 900
       },
       {
         "text": "Recharge",
@@ -22852,6 +22894,18 @@
         "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
         "type": "Number",
         "value": 5
+      },
+      {
+        "text": "Dome Radius",
+        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
+        "type": "Distance",
+        "distance": 180
+      },
+      {
+        "text": "Explosion Radius",
+        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
+        "type": "Distance",
+        "distance": 360
       }
     ]
   },
@@ -23533,7 +23587,7 @@
   {
     "id": 9209,
     "name": "Refraction",
-    "description": "Create a bubble that absorbs hostile projectiles and grant retaliation to allies.",
+    "description": "Create a bubble that blocks enemy missiles and grants retaliation to allies.",
     "icon": "https://render.guildwars2.com/file/1933280FB808E26577A7241B06D7F25D4F6474A9/103696.png",
     "chat_link": "[&BvkjAAA=]",
     "type": "Weapon",
@@ -23576,6 +23630,11 @@
         "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
         "type": "Number",
         "value": 5
+      },
+      {
+        "text": "Blocks Missiles",
+        "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
+        "type": "NoData"
       },
       {
         "text": "Combo Field",
@@ -24465,7 +24524,7 @@
   {
     "id": 9254,
     "name": "Merciful Sanctuary",
-    "description": "Consecration. Form a protective healing shelter for allies. Foes and projectiles cannot enter.",
+    "description": "Consecration. Form a protective healing shelter for allies. Block foes and their missiles from entering.",
     "icon": "https://render.guildwars2.com/file/2E31D763EA1D05432949EBB39603CD6DBBE29870/103541.png",
     "chat_link": "[&BiYkAAA=]",
     "categories": [
@@ -24726,6 +24785,13 @@
         "icon": "https://render.guildwars2.com/file/D767B963D120F077C3B163A05DC05A7317D7DB70/156651.png",
         "type": "Recharge",
         "value": 12
+      },
+      {
+        "text": "Damage",
+        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
+        "type": "Damage",
+        "hit_count": 7,
+        "dmg_multiplier": 0.38
       },
       {
         "text": "Damage",
@@ -26316,7 +26382,7 @@
         "text": "Daze",
         "icon": "https://render.guildwars2.com/file/07B6122FBF169A2124A23FBCB06A3B7991A35179/156658.png",
         "type": "Time",
-        "duration": 1
+        "duration": 2
       },
       {
         "text": "Radius",
@@ -27062,7 +27128,7 @@
         "text": "Stun",
         "icon": "https://render.guildwars2.com/file/143F46DEF466062F01C52B69922FFCEF73DCA801/156668.png",
         "type": "Time",
-        "duration": 2
+        "duration": 3
       },
       {
         "text": "Number of Bounces",
@@ -27549,7 +27615,7 @@
         "text": "Recharge",
         "icon": "https://render.guildwars2.com/file/D767B963D120F077C3B163A05DC05A7317D7DB70/156651.png",
         "type": "Recharge",
-        "value": 90
+        "value": 60
       },
       {
         "text": "Apply Buff/Condition",
@@ -27558,7 +27624,7 @@
         "status": "Stealth",
         "description": "Currently invisible. Ends if you deal damage.",
         "apply_count": 1,
-        "duration": 5
+        "duration": 6
       },
       {
         "text": "Radius",
@@ -28219,6 +28285,15 @@
         "type": "Damage",
         "hit_count": 12,
         "dmg_multiplier": 0.14
+      },
+      {
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/3A394C1A0A3257EB27A44842DDEEF0DF000E1241/102850.png",
+        "type": "Buff",
+        "status": "Vulnerability",
+        "description": "Damage and condition damage taken are increased; stacks intensity.",
+        "apply_count": 12,
+        "duration": 5
       }
     ]
   },
@@ -28344,7 +28419,7 @@
         "distance": 240
       },
       {
-        "text": "Enemies Dazed",
+        "text": "Number of Targets",
         "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
         "type": "Number",
         "value": 1
@@ -28950,7 +29025,7 @@
         "text": "Apply Buff/Condition",
         "icon": "https://render.guildwars2.com/file/043B48A4DAF74DF16D48BA5F36E298D16CF471B6/103765.png",
         "type": "Buff",
-        "status": "Chaos Armor",
+        "status": "Chaos Aura",
         "description": "Give yourself random boons and your foe random conditions whenever you are struck.",
         "apply_count": 1,
         "duration": 4
@@ -29052,7 +29127,7 @@
   {
     "id": 10331,
     "name": "Chaos Armor",
-    "description": "Apply a random condition to nearby foes and gain chaos armor. Chaos armor gives you random boons and your foe random conditions whenever you are struck.",
+    "description": "Apply a random condition to nearby foes and gain chaos aura. Chaos aura grants you random boons and inflicts your foe with random conditions whenever you are struck.",
     "icon": "https://render.guildwars2.com/file/043B48A4DAF74DF16D48BA5F36E298D16CF471B6/103765.png",
     "chat_link": "[&BlsoAAA=]",
     "type": "Weapon",
@@ -29075,7 +29150,7 @@
         "text": "Apply Buff/Condition",
         "icon": "https://render.guildwars2.com/file/043B48A4DAF74DF16D48BA5F36E298D16CF471B6/103765.png",
         "type": "Buff",
-        "status": "Chaos Armor",
+        "status": "Chaos Aura",
         "description": "Give yourself random boons and your foe random conditions whenever you are struck.",
         "apply_count": 1,
         "duration": 5
@@ -29497,7 +29572,7 @@
         "text": "Daze",
         "icon": "https://render.guildwars2.com/file/07B6122FBF169A2124A23FBCB06A3B7991A35179/156658.png",
         "type": "Time",
-        "duration": 1
+        "duration": 2
       },
       {
         "text": "Number of Targets",
@@ -31037,7 +31112,7 @@
   {
     "id": 10557,
     "name": "Locust Swarm",
-    "description": "Gain swiftness and summon a swarm of locusts that cripple nearby foes.",
+    "description": "Gain swiftness and summon a swarm of locusts that siphon health to you from nearby foes.",
     "icon": "https://render.guildwars2.com/file/1E2D4A00340B96CAE9A1E19F2B07B35A01741B14/103809.png",
     "chat_link": "[&Bj0pAAA=]",
     "type": "Weapon",
@@ -31057,13 +31132,6 @@
         "value": 30
       },
       {
-        "text": "Damage",
-        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
-        "type": "Damage",
-        "hit_count": 1,
-        "dmg_multiplier": 0.2
-      },
-      {
         "text": "Apply Buff/Condition",
         "icon": "https://render.guildwars2.com/file/20CFC14967E67F7A3FD4A4B8722B4CF5B8565E11/102836.png",
         "type": "Buff",
@@ -31073,19 +31141,10 @@
         "duration": 15
       },
       {
-        "text": "Apply Buff/Condition",
-        "icon": "https://render.guildwars2.com/file/070325E519C178D502A8160523766070D30C0C19/102838.png",
-        "type": "Buff",
-        "status": "Crippled",
-        "description": "Movement speed decreased by 50%; stacks duration.",
-        "apply_count": 1,
-        "duration": 2
-      },
-      {
         "text": "Duration",
         "icon": "https://render.guildwars2.com/file/7B2193ACCF77E56C13E608191B082D68AA0FAA71/156659.png",
         "type": "Time",
-        "duration": 10
+        "duration": 5
       },
       {
         "text": "Number of Impacts",
@@ -31109,7 +31168,21 @@
         "text": "Radius",
         "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
         "type": "Distance",
-        "distance": 210
+        "distance": 180
+      },
+      {
+        "text": "Life Siphon Damage",
+        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
+        "type": "AttributeAdjust",
+        "target": "Power",
+        "value": 37
+      },
+      {
+        "text": "Life Siphon Healing",
+        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
+        "type": "AttributeAdjust",
+        "target": "Healing",
+        "value": 37
       }
     ]
   },
@@ -31551,12 +31624,10 @@
     "type": "Profession",
     "weapon_type": "None",
     "professions": [
-      "Warrior",
       "Necromancer"
     ],
-    "slot": "Profession_2",
-    "flags": [],
-    "specialization": 18
+    "slot": "Profession_1",
+    "flags": []
   },
   {
     "id": 10588,
@@ -32951,6 +33022,12 @@
         "description": "Deals damage every second; stacks intensity.",
         "apply_count": 2,
         "duration": 2
+      },
+      {
+        "text": "Life Force",
+        "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
+        "type": "Percent",
+        "percent": 2.0
       }
     ]
   },
@@ -34590,7 +34667,7 @@
   {
     "id": 10689,
     "name": "Corrosive Poison Cloud",
-    "description": "Corruption. Weaken yourself and envelope the target area in a noxious cloud that poisons foes and leaves them weakened. Projectiles that pass through the field are destroyed.",
+    "description": "Corruption. Weaken yourself and envelope the target area in a noxious cloud that blocks enemy missiles and poisons foes and leaves them weakened.",
     "icon": "https://render.guildwars2.com/file/2B32FAFBD66F35AB51C3D97E910912AB74DD57A0/102897.png",
     "chat_link": "[&BsEpAAA=]",
     "type": "Utility",
@@ -35303,73 +35380,6 @@
         "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
         "type": "Number",
         "value": 5
-      }
-    ]
-  },
-  {
-    "id": 10707,
-    "name": "Reaper's Touch",
-    "description": "Send out a scythe that bounces between foes and allies. Causes vulnerability on foes and regeneration on allies.",
-    "icon": "https://render.guildwars2.com/file/FA5ADFEE0A3C38BC6B9A0E301E6DEFFF9C763A54/103137.png",
-    "chat_link": "[&BtMpAAA=]",
-    "type": "Weapon",
-    "weapon_type": "Focus",
-    "professions": [
-      "Necromancer"
-    ],
-    "slot": "Weapon_4",
-    "flags": [
-      "NoUnderwater"
-    ],
-    "facts": [
-      {
-        "text": "Range",
-        "icon": "https://render.guildwars2.com/file/0AAB34BEB1C9F4A25EC612DDBEACF3E20B2810FA/156666.png",
-        "type": "Range",
-        "value": 1200
-      },
-      {
-        "text": "Recharge",
-        "icon": "https://render.guildwars2.com/file/D767B963D120F077C3B163A05DC05A7317D7DB70/156651.png",
-        "type": "Recharge",
-        "value": 15
-      },
-      {
-        "text": "Damage",
-        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
-        "type": "Damage",
-        "hit_count": 1,
-        "dmg_multiplier": 0.75
-      },
-      {
-        "text": "Apply Buff/Condition",
-        "icon": "https://render.guildwars2.com/file/F69996772B9E18FD18AD0AABAB25D7E3FC42F261/102835.png",
-        "type": "Buff",
-        "status": "Regeneration",
-        "description": "Gain health every second; stacks duration.",
-        "apply_count": 1,
-        "duration": 5
-      },
-      {
-        "text": "Apply Buff/Condition",
-        "icon": "https://render.guildwars2.com/file/3A394C1A0A3257EB27A44842DDEEF0DF000E1241/102850.png",
-        "type": "Buff",
-        "status": "Vulnerability",
-        "description": "Damage and condition damage taken are increased; stacks intensity.",
-        "apply_count": 4,
-        "duration": 10
-      },
-      {
-        "text": "Life Force",
-        "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
-        "type": "Percent",
-        "percent": 3.0
-      },
-      {
-        "text": "Number of Bounces",
-        "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
-        "type": "Number",
-        "value": 4
       }
     ]
   },
@@ -48822,7 +48832,7 @@
   {
     "id": 13065,
     "name": "Smoke Screen",
-    "description": "Deception. Create a smoke screen that blocks projectiles and blinds foes.",
+    "description": "Deception. Create a smoke screen that blocks missiles and blinds foes.",
     "icon": "https://render.guildwars2.com/file/074E2F086D3E313BEDBCCB681E07E22A76E87548/104082.png",
     "chat_link": "[&BgkzAAA=]",
     "type": "Utility",
@@ -48870,6 +48880,11 @@
         "icon": "https://render.guildwars2.com/file/7B2193ACCF77E56C13E608191B082D68AA0FAA71/156659.png",
         "type": "Time",
         "duration": 7
+      },
+      {
+        "text": "Blocks Missiles",
+        "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
+        "type": "NoData"
       },
       {
         "text": "Combo Field",
@@ -52150,7 +52165,7 @@
   {
     "id": 14184,
     "name": "Lesser Smoke Screen",
-    "description": "Deception. Create a smoke screen that blocks projectiles and blinds foes.",
+    "description": "Deception. Create a smoke screen that blocks missiles and blinds foes.",
     "icon": "https://render.guildwars2.com/file/074E2F086D3E313BEDBCCB681E07E22A76E87548/104082.png",
     "chat_link": "[&Bmg3AAA=]",
     "categories": [
@@ -52190,6 +52205,11 @@
         "icon": "https://render.guildwars2.com/file/7B2193ACCF77E56C13E608191B082D68AA0FAA71/156659.png",
         "type": "Time",
         "duration": 7
+      },
+      {
+        "text": "Blocks Missiles",
+        "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
+        "type": "NoData"
       },
       {
         "text": "Combo Field",
@@ -53234,11 +53254,18 @@
         "value": 130
       },
       {
-        "text": "Damage",
+        "text": "First Chop Damage",
         "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
         "type": "Damage",
-        "hit_count": 2,
-        "dmg_multiplier": 0.75
+        "hit_count": 1,
+        "dmg_multiplier": 0.45
+      },
+      {
+        "text": "Second Chop Damage",
+        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
+        "type": "Damage",
+        "hit_count": 1,
+        "dmg_multiplier": 1.05
       },
       {
         "text": "Number of Targets",
@@ -57919,7 +57946,7 @@
         "text": "Duration",
         "icon": "https://render.guildwars2.com/file/7B2193ACCF77E56C13E608191B082D68AA0FAA71/156659.png",
         "type": "Time",
-        "duration": 15
+        "duration": 10
       },
       {
         "text": "Damage Reduced",
@@ -61033,6 +61060,17 @@
         "type": "Damage",
         "hit_count": 1,
         "dmg_multiplier": 0.375
+      },
+      {
+        "text": "Pierces",
+        "icon": "https://render.guildwars2.com/file/F833590B593E0C2D4948DFFE9951B91655250052/1770207.png",
+        "type": "NoData"
+      },
+      {
+        "text": "Number of Targets",
+        "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
+        "type": "Number",
+        "value": 5
       }
     ]
   },
@@ -61870,7 +61908,7 @@
         "icon": "https://render.guildwars2.com/file/D4347C52157B040943051D7E09DEAD7AF63D4378/156662.png",
         "type": "AttributeAdjust",
         "target": "Healing",
-        "value": 1302
+        "value": 1558
       },
       {
         "text": "Radius",
@@ -62185,7 +62223,7 @@
         "text": "Apply Buff/Condition",
         "icon": "https://render.guildwars2.com/file/2AE8672D7A08BB4129B6F0F40C2BC10642D55C28/102884.png",
         "type": "Buff",
-        "status": "Fire Shield",
+        "status": "Fire Aura",
         "description": "Enveloped in a fiery shield that burns foes, grants might each time you are struck (1-second cooldown per attacker).",
         "apply_count": 1,
         "duration": 4
@@ -66290,7 +66328,7 @@
   {
     "id": 27356,
     "name": "Energy Expulsion",
-    "description": "Legendary Centaur. Force energy to erupt from the tablet, knocking back nearby foes and leaving behind energy fragments that heal allies. Lose all remaining energy and remove conditions from allies based on the amount of energy lost.",
+    "description": "Legendary Centaur. Force energy to erupt from the tablet, knocking back nearby foes and leaving behind healing fragments that heal allies who pick them up. Lose all remaining energy and remove conditions from allies based on the amount of energy lost.",
     "icon": "https://render.guildwars2.com/file/47F60D20E87C7A6D5B9E4E5D062F01F2793A1414/1012984.png",
     "chat_link": "[&BtxqAAA=]",
     "type": "Elite",
@@ -68201,7 +68239,7 @@
         "icon": "https://render.guildwars2.com/file/D4347C52157B040943051D7E09DEAD7AF63D4378/156662.png",
         "type": "AttributeAdjust",
         "target": "Healing",
-        "value": 805
+        "value": 613
       },
       {
         "text": "Number of Targets",
@@ -68873,49 +68911,6 @@
     ]
   },
   {
-    "id": 28948,
-    "name": "Debilitating Slam",
-    "description": "Imbue your staff with mist energy and slam it down, damaging and dazing nearby foes.",
-    "icon": "https://render.guildwars2.com/file/12DDECFA0E3828C920F25C6702E5C3F054E4689B/1024106.png",
-    "chat_link": "[&BhRxAAA=]",
-    "type": "Weapon",
-    "weapon_type": "Staff",
-    "professions": [
-      "Revenant"
-    ],
-    "slot": "Weapon_2",
-    "flags": [
-      "NoUnderwater"
-    ],
-    "facts": [
-      {
-        "text": "Damage",
-        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
-        "type": "Damage",
-        "hit_count": 1,
-        "dmg_multiplier": 1.5
-      },
-      {
-        "text": "Daze",
-        "icon": "https://render.guildwars2.com/file/07B6122FBF169A2124A23FBCB06A3B7991A35179/156658.png",
-        "type": "Time",
-        "duration": 1
-      },
-      {
-        "text": "Number of Targets",
-        "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
-        "type": "Number",
-        "value": 3
-      },
-      {
-        "text": "Radius",
-        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
-        "type": "Distance",
-        "distance": 240
-      }
-    ]
-  },
-  {
     "id": 28964,
     "name": "Rift Slash",
     "description": "Slash foes, creating a rift on them that explodes for additional damage after a short delay.",
@@ -69066,7 +69061,7 @@
         "icon": "https://render.guildwars2.com/file/D4347C52157B040943051D7E09DEAD7AF63D4378/156662.png",
         "type": "AttributeAdjust",
         "target": "Healing",
-        "value": 165
+        "value": 197
       },
       {
         "text": "Number of Targets",
@@ -69079,6 +69074,12 @@
         "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
         "type": "Number",
         "value": 2
+      },
+      {
+        "text": "Healing Radius",
+        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
+        "type": "Distance",
+        "distance": 120
       },
       {
         "text": "Combo Finisher",
@@ -69187,7 +69188,7 @@
   {
     "id": 29114,
     "name": "Energy Expulsion",
-    "description": "Legendary Centaur. Force energy to erupt from the tablet, knocking back nearby foes and leaving behind energy fragments that heal allies. Lose all remaining energy and remove conditions from allies based on the amount of energy lost.",
+    "description": "Legendary Centaur. Force energy to erupt from the tablet, knocking back nearby foes and leaving behind healing fragments that heal allies who pick them up. Lose all remaining energy and remove conditions from allies based on the amount of energy lost.",
     "icon": "https://render.guildwars2.com/file/47F60D20E87C7A6D5B9E4E5D062F01F2793A1414/1012984.png",
     "chat_link": "[&BrpxAAA=]",
     "type": "Elite",
@@ -69260,8 +69261,8 @@
   },
   {
     "id": 29145,
-    "name": "Punishing Sweep",
-    "description": "Sweep your staff at your foe.\nGain access to Debilitating Slam if your foe is using a skill when struck.",
+    "name": "Mender's Rebuke",
+    "description": "Smash the ground in front of you to damage foes. After a delay, allies in the area are healed. Heals for more if an enemy was struck.",
     "icon": "https://render.guildwars2.com/file/0F7CB313454F1B2A3568E54F439D7ED36F2A7075/1012996.png",
     "chat_link": "[&BtlxAAA=]",
     "type": "Weapon",
@@ -69291,7 +69292,7 @@
         "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
         "type": "Damage",
         "hit_count": 1,
-        "dmg_multiplier": 1.0
+        "dmg_multiplier": 1.5
       },
       {
         "text": "Apply Buff/Condition",
@@ -69307,6 +69308,31 @@
         "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
         "type": "Number",
         "value": 3
+      },
+      {
+        "text": "Healing",
+        "icon": "https://render.guildwars2.com/file/D4347C52157B040943051D7E09DEAD7AF63D4378/156662.png",
+        "type": "AttributeAdjust",
+        "target": "Healing",
+        "value": 650
+      },
+      {
+        "text": "Number of Allied Targets",
+        "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
+        "type": "Number",
+        "value": 5
+      },
+      {
+        "text": "Healing Increase on Enemy Hit",
+        "icon": "https://render.guildwars2.com/file/D4347C52157B040943051D7E09DEAD7AF63D4378/156662.png",
+        "type": "Percent",
+        "percent": 50.0
+      },
+      {
+        "text": "Radius",
+        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
+        "type": "Distance",
+        "distance": 240
       }
     ]
   },
@@ -69648,7 +69674,7 @@
   {
     "id": 29288,
     "name": "Warding Rift",
-    "description": "Create a rift from the Mists, warding you from attack. While the rift is open projectiles will hit nearby foes, blinding them.",
+    "description": "Create a rift from the Mists that blocks incoming attacks. When the rift closes it blinds foes in front of you.",
     "icon": "https://render.guildwars2.com/file/DD1CCDF4034E9CF70346FFBDA643F908B096077F/1012997.png",
     "chat_link": "[&BmhyAAA=]",
     "type": "Weapon",
@@ -69665,7 +69691,7 @@
         "text": "Range",
         "icon": "https://render.guildwars2.com/file/0AAB34BEB1C9F4A25EC612DDBEACF3E20B2810FA/156666.png",
         "type": "Range",
-        "value": 600
+        "value": 180
       },
       {
         "text": "Recharge",
@@ -69678,7 +69704,7 @@
         "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
         "type": "Damage",
         "hit_count": 1,
-        "dmg_multiplier": 0.2
+        "dmg_multiplier": 0.4
       },
       {
         "text": "Apply Buff/Condition",
@@ -69686,7 +69712,7 @@
         "type": "Buff",
         "status": "Blinded",
         "description": "Next outgoing attack misses; stacks duration.",
-        "apply_count": 3,
+        "apply_count": 1,
         "duration": 4
       },
       {
@@ -69699,7 +69725,7 @@
         "text": "Number of Targets",
         "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
         "type": "Number",
-        "value": 3
+        "value": 5
       }
     ]
   },
@@ -69742,7 +69768,7 @@
   {
     "id": 29321,
     "name": "Renewing Wave",
-    "description": "Release a burst of mist energy that heals and removes conditions from allies.",
+    "description": "Release a burst of Mists energy that heals and removes conditions from allies. Create a healing orb for each ally that loses conditions.",
     "icon": "https://render.guildwars2.com/file/08B93F4A0EA8B764F9F6F80721F7AD3DC02565A0/1012998.png",
     "chat_link": "[&BolyAAA=]",
     "type": "Weapon",
@@ -69944,6 +69970,41 @@
       }
     ],
     "specialization": 52
+  },
+  {
+    "id": 29373,
+    "name": "Healing Orb",
+    "description": "Create a healing orb near your target. When an ally touches the orb, nearby allies are healed.",
+    "icon": "https://render.guildwars2.com/file/5CEC75C6494329457DC36C972204952ECF80E5C3/1012995.png",
+    "chat_link": "[&Br1yAAA=]",
+    "flags": [],
+    "facts": [
+      {
+        "text": "Healing",
+        "icon": "https://render.guildwars2.com/file/D4347C52157B040943051D7E09DEAD7AF63D4378/156662.png",
+        "type": "AttributeAdjust",
+        "target": "Healing",
+        "value": 197
+      },
+      {
+        "text": "Number of Targets",
+        "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
+        "type": "Number",
+        "value": 5
+      },
+      {
+        "text": "Radius",
+        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
+        "type": "Distance",
+        "distance": 120
+      },
+      {
+        "text": "Duration",
+        "icon": "https://render.guildwars2.com/file/7B2193ACCF77E56C13E608191B082D68AA0FAA71/156659.png",
+        "type": "Time",
+        "duration": 3
+      }
+    ]
   },
   {
     "id": 29386,
@@ -71597,7 +71658,7 @@
   {
     "id": 29613,
     "name": "Sundering Leap",
-    "description": "Rage. Leap to a location and gain adrenaline. When you land, deal damage and inflict conditions on all foes in the area. Gain bonus adrenaline if your attack hits.",
+    "description": "Rage. Leap to a location, dealing damage and inflicting conditions on all foes in the area. Extends the duration of berserk mode if it hits.",
     "icon": "https://render.guildwars2.com/file/C8B8AD46430401040D732711F8EB3BFF37B6052B/1058651.png",
     "chat_link": "[&Bq1zAAA=]",
     "type": "Utility",
@@ -71664,16 +71725,10 @@
         "distance": 180
       },
       {
-        "text": "Adrenaline",
-        "icon": "https://render.guildwars2.com/file/E1E7C4D3A6E62F3D5C9F627CE8175BFB0C614CBE/156652.png",
-        "type": "Number",
-        "value": 10
-      },
-      {
-        "text": "Bonus Adrenaline",
-        "icon": "https://render.guildwars2.com/file/E1E7C4D3A6E62F3D5C9F627CE8175BFB0C614CBE/156652.png",
-        "type": "Number",
-        "value": 20
+        "text": "Duration Increase",
+        "icon": "https://render.guildwars2.com/file/7B2193ACCF77E56C13E608191B082D68AA0FAA71/156659.png",
+        "type": "Time",
+        "duration": 5
       },
       {
         "text": "Combo Finisher",
@@ -71802,7 +71857,7 @@
   {
     "id": 29630,
     "name": "Deflecting Shot",
-    "description": "Fire a missile that blinds enemies and destroys projectiles. Destroying a projectile increases damage dealt.",
+    "description": "Fire a missile that blinds enemies and blocks missiles. Blocking a missile increases damage dealt.",
     "icon": "https://render.guildwars2.com/file/71415F58F7FF445672ADA1DA7BC12576E7FA557B/1012871.png",
     "chat_link": "[&Br5zAAA=]",
     "type": "Weapon",
@@ -71866,6 +71921,11 @@
         "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
         "type": "Distance",
         "distance": 120
+      },
+      {
+        "text": "Blocks Missiles",
+        "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
+        "type": "NoData"
       },
       {
         "text": "Combo Finisher",
@@ -72730,9 +72790,7 @@
     "categories": [
       "Well"
     ],
-    "flags": [
-      "NoUnderwater"
-    ],
+    "flags": [],
     "facts": [
       {
         "text": "Recharge",
@@ -72799,7 +72857,7 @@
         "text": "Range",
         "icon": "https://render.guildwars2.com/file/0AAB34BEB1C9F4A25EC612DDBEACF3E20B2810FA/156666.png",
         "type": "Range",
-        "value": 750
+        "value": 900
       },
       {
         "text": "Recharge",
@@ -73328,7 +73386,7 @@
   {
     "id": 29852,
     "name": "Arc Divider",
-    "description": "Primal Burst. Deliver a circular attack to foes around you, creating a violent shock wave that damages foes. Deal more damage to foes with low health.",
+    "description": "Primal Burst. Spin to create shock waves that grow in size to damage nearby foes.",
     "icon": "https://render.guildwars2.com/file/0CC6E97CF3DD32E5B57001980702C10F1538F97E/1058639.png",
     "chat_link": "[&Bpx0AAA=]",
     "type": "Profession",
@@ -73360,21 +73418,32 @@
         "text": "Damage",
         "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
         "type": "Damage",
-        "hit_count": 1,
-        "dmg_multiplier": 1.32
-      },
-      {
-        "text": "Damage against Foes under 50% Health",
-        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
-        "type": "Damage",
-        "hit_count": 1,
-        "dmg_multiplier": 2.31
+        "hit_count": 3,
+        "dmg_multiplier": 1.4
       },
       {
         "text": "Number of Targets",
         "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
         "type": "Number",
         "value": 5
+      },
+      {
+        "text": "First Strike Radius",
+        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
+        "type": "Distance",
+        "distance": 240
+      },
+      {
+        "text": "Second Strike Radius",
+        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
+        "type": "Distance",
+        "distance": 360
+      },
+      {
+        "text": "Third Strike Radius",
+        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
+        "type": "Distance",
+        "distance": 480
       }
     ],
     "specialization": 18
@@ -73930,7 +73999,7 @@
   {
     "id": 29921,
     "name": "Shredder Gyro",
-    "description": "Well. Deploy a shredder gyro to whirl at a target location, striking foes and using combo fields.",
+    "description": "Well. Deploy a shredder gyro to attack foes near you and repeatedly use whirl finishers.",
     "icon": "https://render.guildwars2.com/file/E60C094A2349552EA6F6250D9B14E69BE91E4468/1128595.png",
     "chat_link": "[&BuF0AAA=]",
     "type": "Utility",
@@ -73942,9 +74011,7 @@
     "categories": [
       "Well"
     ],
-    "flags": [
-      "NoUnderwater"
-    ],
+    "flags": [],
     "facts": [
       {
         "text": "Recharge",
@@ -73964,7 +74031,7 @@
         "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
         "type": "Damage",
         "hit_count": 12,
-        "dmg_multiplier": 0.3
+        "dmg_multiplier": 0.4
       },
       {
         "text": "Radius",
@@ -74155,7 +74222,7 @@
   {
     "id": 29941,
     "name": "Wild Blow",
-    "description": "Rage. Gain adrenaline and lash out with a critical attack that launches your target. Your target flies backward with such force that they knock back other foes in the way.",
+    "description": "Rage. Lash out with a critical attack that launches your target. The target flies backward, knocking back other foes in the way. Gain fury and extend the duration of berserk mode if this attack hits.",
     "icon": "https://render.guildwars2.com/file/584D27AD243C071B3505B311D9A50CB9B9C0ED94/1058653.png",
     "chat_link": "[&BvV0AAA=]",
     "type": "Utility",
@@ -74215,24 +74282,19 @@
         "value": 5
       },
       {
-        "text": "Adrenaline",
-        "icon": "https://render.guildwars2.com/file/E1E7C4D3A6E62F3D5C9F627CE8175BFB0C614CBE/156652.png",
-        "type": "Number",
-        "value": 10
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/96D90DF84CAFE008233DD1C2606A12C1A0E68048/102842.png",
+        "type": "Buff",
+        "status": "Fury",
+        "description": "Critical Chance increased by 20%; stacks duration.",
+        "apply_count": 1,
+        "duration": 8
       },
       {
-        "text": "Apply Buff/Condition",
-        "icon": "https://render.guildwars2.com/file/09770136BB76FD0DBE1CC4267DEED54774CB20F6/102837.png",
-        "type": "Buff",
-        "status": "Blinded",
-        "description": "Next outgoing attack misses; stacks duration."
-      },
-      {
-        "text": "Apply Buff/Condition",
-        "icon": "https://render.guildwars2.com/file/6CB0E64AF9AA292E332A38C1770CE577E2CDE0E8/102853.png",
-        "type": "Buff",
-        "status": "Weakness",
-        "description": "Endurance regeneration decreased by 50%. 50% of hits are Glancing Blows (50% damage). Stacks duration."
+        "text": "Duration Increase",
+        "icon": "https://render.guildwars2.com/file/7B2193ACCF77E56C13E608191B082D68AA0FAA71/156659.png",
+        "type": "Time",
+        "duration": 3
       }
     ],
     "specialization": 18
@@ -74471,7 +74533,7 @@
         "text": "Apply Buff/Condition",
         "icon": "https://render.guildwars2.com/file/2AE8672D7A08BB4129B6F0F40C2BC10642D55C28/102884.png",
         "type": "PrefixedBuff",
-        "status": "Fire Shield",
+        "status": "Fire Aura",
         "description": "Enveloped in a fiery shield that burns foes, grants might each time you are struck (1-second cooldown per attacker).",
         "apply_count": 1,
         "duration": 4,
@@ -75134,7 +75196,7 @@
   {
     "id": 30074,
     "name": "Shattering Blow",
-    "description": "Rage. Shatter a rock to gain adrenaline and send out rock fragments that inflict bleeding on all foes in front of you. The shock wave produced by this attack reflects projectiles. Block attacks and gain boons while activating this skill.",
+    "description": "Rage. Summon a rock that blocks attacks, then shatter it to send out rock fragments that inflict bleeding on all foes in front of you. Extends the duration of berserk mode if it hits.",
     "icon": "https://render.guildwars2.com/file/317AAB9736A32EBBE8A54FA6519FAD7510A71672/1058650.png",
     "chat_link": "[&Bnp1AAA=]",
     "type": "Utility",
@@ -75190,12 +75252,6 @@
         "type": "NoData"
       },
       {
-        "text": "Adrenaline",
-        "icon": "https://render.guildwars2.com/file/E1E7C4D3A6E62F3D5C9F627CE8175BFB0C614CBE/156652.png",
-        "type": "Number",
-        "value": 10
-      },
-      {
         "text": "Apply Buff/Condition",
         "icon": "https://render.guildwars2.com/file/3D3A1C2D6D791C05179AB871902D28782C65C244/415959.png",
         "type": "Buff",
@@ -75212,6 +75268,12 @@
         "description": "Block incoming attacks.",
         "apply_count": 1,
         "duration": 1
+      },
+      {
+        "text": "Duration Increase",
+        "icon": "https://render.guildwars2.com/file/7B2193ACCF77E56C13E608191B082D68AA0FAA71/156659.png",
+        "type": "Time",
+        "duration": 2
       }
     ],
     "specialization": 18
@@ -75409,9 +75471,7 @@
     "categories": [
       "Well"
     ],
-    "flags": [
-      "NoUnderwater"
-    ],
+    "flags": [],
     "facts": [
       {
         "text": "Recharge",
@@ -75427,11 +75487,25 @@
         "value": 3348
       },
       {
+        "text": "Initial Personal Barrier",
+        "icon": "https://render.guildwars2.com/file/357922487919E8E84B914EAC13D5796DDDC42D14/1770209.png",
+        "type": "AttributeAdjust",
+        "target": "Healing",
+        "value": 2226
+      },
+      {
         "text": "Pulse Personal Barrier",
         "icon": "https://render.guildwars2.com/file/357922487919E8E84B914EAC13D5796DDDC42D14/1770209.png",
         "type": "AttributeAdjust",
         "target": "Healing",
         "value": 1093
+      },
+      {
+        "text": "Pulse Personal Barrier",
+        "icon": "https://render.guildwars2.com/file/357922487919E8E84B914EAC13D5796DDDC42D14/1770209.png",
+        "type": "AttributeAdjust",
+        "target": "Healing",
+        "value": 726
       },
       {
         "text": "Duration",
@@ -75701,7 +75775,7 @@
         "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
         "type": "Damage",
         "hit_count": 1,
-        "dmg_multiplier": 0.7125
+        "dmg_multiplier": 0.666
       },
       {
         "text": "Number of Targets",
@@ -75761,7 +75835,7 @@
         "text": "Range",
         "icon": "https://render.guildwars2.com/file/0AAB34BEB1C9F4A25EC612DDBEACF3E20B2810FA/156666.png",
         "type": "Range",
-        "value": 170
+        "value": 180
       },
       {
         "text": "Recharge",
@@ -75841,7 +75915,7 @@
   {
     "id": 30185,
     "name": "Berserk",
-    "description": "Rage. Gain adrenaline, an attack-speed boost, and access to primal burst skills.",
+    "description": "Burst. Gain adrenaline, an attack-speed boost, and access to primal burst skills.",
     "icon": "https://render.guildwars2.com/file/1354D8FC07F9F859DC7F0E7B61C0724FD4927C4E/1058638.png",
     "chat_link": "[&Bul1AAA=]",
     "type": "Profession",
@@ -75849,9 +75923,9 @@
     "professions": [
       "Warrior"
     ],
-    "slot": "Profession_2",
+    "slot": "Profession_1",
     "categories": [
-      "Rage"
+      "Burst"
     ],
     "flags": [],
     "facts": [
@@ -75866,6 +75940,43 @@
         "icon": "https://render.guildwars2.com/file/DCF0719729165FD8910E034CA4E0780F90582D15/156654.png",
         "type": "StunBreak",
         "value": true
+      },
+      {
+        "text": "Number of Targets",
+        "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
+        "type": "Number",
+        "value": 5
+      },
+      {
+        "text": "Damage",
+        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
+        "type": "Damage",
+        "hit_count": 1,
+        "dmg_multiplier": 0.8
+      },
+      {
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/B47BF5803FED2718D7474EAF9617629AD068EE10/102849.png",
+        "type": "Buff",
+        "status": "Burning",
+        "description": "Deals damage every second; stacks intensity.",
+        "apply_count": 1,
+        "duration": 3
+      },
+      {
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/3D3A1C2D6D791C05179AB871902D28782C65C244/415959.png",
+        "type": "Buff",
+        "status": "Stability",
+        "description": "Cannot be knocked down, pushed back, pulled, launched, stunned, dazed, floated, sunk, feared, or taunted.",
+        "apply_count": 1,
+        "duration": 1
+      },
+      {
+        "text": "Radius",
+        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
+        "type": "Distance",
+        "distance": 300
       },
       {
         "text": "Attack Speed Increase",
@@ -75891,7 +76002,7 @@
   {
     "id": 30189,
     "name": "Blood Reckoning",
-    "description": "Rage. Heal yourself, gain adrenaline, and recharge all burst skills. Heal for a percentage of your outgoing damage.",
+    "description": "Rage. Heal yourself, gain adrenaline, and recharge all primal burst skills. Heal for a percentage of your outgoing damage. This skill extends the duration of berserk mode.",
     "icon": "https://render.guildwars2.com/file/3E80EA264B52D3A3B3CA2E5DA41F57BF35445AF4/1058642.png",
     "chat_link": "[&Bu11AAA=]",
     "type": "Heal",
@@ -75925,16 +76036,22 @@
         "percent": 25.0
       },
       {
-        "text": "Adrenaline",
-        "icon": "https://render.guildwars2.com/file/E1E7C4D3A6E62F3D5C9F627CE8175BFB0C614CBE/156652.png",
-        "type": "Number",
-        "value": 30
-      },
-      {
         "text": "Duration",
         "icon": "https://render.guildwars2.com/file/7B2193ACCF77E56C13E608191B082D68AA0FAA71/156659.png",
         "type": "Time",
         "duration": 5
+      },
+      {
+        "text": "Berserk Duration Increase",
+        "icon": "https://render.guildwars2.com/file/7B2193ACCF77E56C13E608191B082D68AA0FAA71/156659.png",
+        "type": "Time",
+        "duration": 2
+      },
+      {
+        "text": "Adrenaline",
+        "icon": "https://render.guildwars2.com/file/E1E7C4D3A6E62F3D5C9F627CE8175BFB0C614CBE/156652.png",
+        "type": "Number",
+        "value": 10
       }
     ],
     "specialization": 18
@@ -76366,7 +76483,7 @@
   {
     "id": 30258,
     "name": "Outrage",
-    "description": "Rage. Break out of stun and gain adrenaline. Gain additional adrenaline for each foe near you.",
+    "description": "Rage. Break out of stun and extend the duration of berserk mode. The extension of berserk mode increases if a stun was broken.",
     "icon": "https://render.guildwars2.com/file/DE44372830465728D82500744A04041359ECA9C0/1058652.png",
     "chat_link": "[&BjJ2AAA=]",
     "type": "Utility",
@@ -76387,34 +76504,21 @@
         "value": 10
       },
       {
-        "text": "StunBreak",
+        "text": "Breaks Stun",
         "icon": "https://render.guildwars2.com/file/DCF0719729165FD8910E034CA4E0780F90582D15/156654.png",
-        "type": "StunBreak",
-        "value": true
+        "type": "NoData"
       },
       {
-        "text": "Adrenaline",
-        "icon": "https://render.guildwars2.com/file/E1E7C4D3A6E62F3D5C9F627CE8175BFB0C614CBE/156652.png",
-        "type": "Number",
-        "value": 5
+        "text": "Duration Increase",
+        "icon": "https://render.guildwars2.com/file/7B2193ACCF77E56C13E608191B082D68AA0FAA71/156659.png",
+        "type": "Time",
+        "duration": 1
       },
       {
-        "text": "Adrenaline per Target",
-        "icon": "https://render.guildwars2.com/file/E1E7C4D3A6E62F3D5C9F627CE8175BFB0C614CBE/156652.png",
-        "type": "Number",
-        "value": 2
-      },
-      {
-        "text": "Radius",
-        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
-        "type": "Distance",
-        "distance": 240
-      },
-      {
-        "text": "Number of Targets",
-        "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
-        "type": "Number",
-        "value": 5
+        "text": "Stun-Break Duration Increase",
+        "icon": "https://render.guildwars2.com/file/7B2193ACCF77E56C13E608191B082D68AA0FAA71/156659.png",
+        "type": "Time",
+        "duration": 5
       }
     ],
     "specialization": 18
@@ -77106,7 +77210,7 @@
   {
     "id": 30343,
     "name": "Head Butt",
-    "description": "Rage. Stun your target. Stun yourself. Gain adrenaline if you hit.",
+    "description": "Rage. Stun your target and stun yourself. Gain adrenaline and extend berserk duration if you hit.",
     "icon": "https://render.guildwars2.com/file/046F1B0E64AC140CB7C0DE26A8D61CE13E02466A/1058637.png",
     "chat_link": "[&Bod2AAA=]",
     "type": "Elite",
@@ -77164,6 +77268,12 @@
         "icon": "https://render.guildwars2.com/file/E1E7C4D3A6E62F3D5C9F627CE8175BFB0C614CBE/156652.png",
         "type": "Number",
         "value": 30
+      },
+      {
+        "text": "Duration Increase",
+        "icon": "https://render.guildwars2.com/file/7B2193ACCF77E56C13E608191B082D68AA0FAA71/156659.png",
+        "type": "Time",
+        "duration": 2
       }
     ],
     "specialization": 18
@@ -77183,9 +77293,7 @@
     "categories": [
       "Well"
     ],
-    "flags": [
-      "NoUnderwater"
-    ],
+    "flags": [],
     "facts": [
       {
         "text": "Recharge",
@@ -77204,7 +77312,7 @@
         "icon": "https://render.guildwars2.com/file/D4347C52157B040943051D7E09DEAD7AF63D4378/156662.png",
         "type": "AttributeAdjust",
         "target": "Healing",
-        "value": 3326
+        "value": 4510
       },
       {
         "text": "Area Pulse Heal",
@@ -77235,7 +77343,7 @@
         "text": "Combo Field",
         "icon": "https://render.guildwars2.com/file/59E0DB6A699810641C959926ADFEF73E08CC255B/156655.png",
         "type": "ComboField",
-        "field_type": "Lightning"
+        "field_type": "Water"
       }
     ],
     "specialization": 43
@@ -77746,7 +77854,7 @@
   {
     "id": 30435,
     "name": "Berserk",
-    "description": "Rage. Gain adrenaline, an attack-speed boost, and access to primal burst skills.",
+    "description": "Burst. Gain adrenaline, an attack-speed boost, and access to primal burst skills.",
     "icon": "https://render.guildwars2.com/file/1354D8FC07F9F859DC7F0E7B61C0724FD4927C4E/1058638.png",
     "chat_link": "[&BuN2AAA=]",
     "type": "Profession",
@@ -77754,9 +77862,9 @@
     "professions": [
       "Warrior"
     ],
-    "slot": "Profession_2",
+    "slot": "Profession_1",
     "categories": [
-      "Rage"
+      "Burst"
     ],
     "flags": [],
     "facts": [
@@ -77765,6 +77873,28 @@
         "icon": "https://render.guildwars2.com/file/D767B963D120F077C3B163A05DC05A7317D7DB70/156651.png",
         "type": "Recharge",
         "value": 15
+      },
+      {
+        "text": "Number of Targets",
+        "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
+        "type": "Number",
+        "value": 5
+      },
+      {
+        "text": "Damage",
+        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
+        "type": "Damage",
+        "hit_count": 1,
+        "dmg_multiplier": 0.8
+      },
+      {
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/B47BF5803FED2718D7474EAF9617629AD068EE10/102849.png",
+        "type": "Buff",
+        "status": "Burning",
+        "description": "Deals damage every second; stacks intensity.",
+        "apply_count": 1,
+        "duration": 3
       },
       {
         "text": "Attack Speed Increase",
@@ -77783,6 +77913,12 @@
         "icon": "https://render.guildwars2.com/file/E1E7C4D3A6E62F3D5C9F627CE8175BFB0C614CBE/156652.png",
         "type": "Number",
         "value": 10
+      },
+      {
+        "text": "Radius",
+        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
+        "type": "Distance",
+        "distance": 300
       }
     ],
     "specialization": 18
@@ -78932,7 +79068,7 @@
         "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
         "type": "Damage",
         "hit_count": 1,
-        "dmg_multiplier": 0.7125
+        "dmg_multiplier": 0.666
       },
       {
         "text": "Number of Targets",
@@ -79188,7 +79324,7 @@
         "text": "Apply Buff/Condition",
         "icon": "https://render.guildwars2.com/file/2AE8672D7A08BB4129B6F0F40C2BC10642D55C28/102884.png",
         "type": "Buff",
-        "status": "Fire Shield",
+        "status": "Fire Aura",
         "description": "Enveloped in a fiery shield that burns foes, grants might each time you are struck (1-second cooldown per attacker).",
         "apply_count": 1,
         "duration": 4
@@ -79349,7 +79485,7 @@
   {
     "id": 30682,
     "name": "Flaming Flurry",
-    "description": "Primal Burst. Lash out with a flurry of strikes that destroys projectiles and shoots fireballs at foes in front of you.",
+    "description": "Primal Burst. Lash out with a flurry of strikes that block missiles and shoot fireballs at foes in front of you.",
     "icon": "https://render.guildwars2.com/file/F7DB99C8C851FA8094FFFAE2B92F0372641CF89F/1058647.png",
     "chat_link": "[&Btp3AAA=]",
     "type": "Profession",
@@ -79403,6 +79539,11 @@
         "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
         "type": "Number",
         "value": 5
+      },
+      {
+        "text": "Blocks Missiles",
+        "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
+        "type": "NoData"
       }
     ],
     "specialization": 18
@@ -80279,9 +80420,7 @@
     "categories": [
       "Well"
     ],
-    "flags": [
-      "NoUnderwater"
-    ],
+    "flags": [],
     "facts": [
       {
         "text": "Recharge",
@@ -80315,6 +80454,15 @@
         "description": "Currently invisible. Ends if you deal damage.",
         "apply_count": 1,
         "duration": 3
+      },
+      {
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/3BD4670638470439F3325B444FAF7D5FA620CCE5/62777.png",
+        "type": "Buff",
+        "status": "Stealth",
+        "description": "Currently invisible. Ends if you deal damage.",
+        "apply_count": 1,
+        "duration": 2
       },
       {
         "text": "Pulses",
@@ -80462,7 +80610,7 @@
   {
     "id": 30851,
     "name": "Decapitate",
-    "description": "Primal Burst. Leap at your foe with a powerful attack. If it hits, gain might and deal damage to foes behind your target.",
+    "description": "Primal Burst. Gather your strength into a powerful attack. If it hits, gain might and recharge this skill.",
     "icon": "https://render.guildwars2.com/file/93C1E158334AF969FCDCDFC3FD2625780C73B237/1058636.png",
     "chat_link": "[&BoN4AAA=]",
     "type": "Profession",
@@ -80498,19 +80646,6 @@
         "dmg_multiplier": 2.5
       },
       {
-        "text": "Shock Wave Damage",
-        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
-        "type": "Damage",
-        "hit_count": 1,
-        "dmg_multiplier": 2.5
-      },
-      {
-        "text": "Shock Wave Targets",
-        "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
-        "type": "Number",
-        "value": 5
-      },
-      {
         "text": "Apply Buff/Condition",
         "icon": "https://render.guildwars2.com/file/2FA9DF9D6BC17839BBEA14723F1C53D645DDB5E1/102852.png",
         "type": "Buff",
@@ -80520,10 +80655,9 @@
         "duration": 5
       },
       {
-        "text": "Combo Finisher",
-        "icon": "https://render.guildwars2.com/file/A513F3653D33FBA4220D2D307799F8A327A36A3B/156656.png",
-        "type": "ComboFinisher",
-        "finisher_type": "Leap",
+        "text": "Recharge Reduced",
+        "icon": "https://render.guildwars2.com/file/AAB7C5387A08367C2F023F19FEE70E1556AD4375/1770202.png",
+        "type": "Percent",
         "percent": 100.0
       }
     ],
@@ -80532,7 +80666,7 @@
   {
     "id": 30860,
     "name": "Death Spiral",
-    "description": "Conjure a drill of dark energy on your blade, and rend the armor of foes in front of you. Deal increased damage to foes above the health threshold.",
+    "description": "Conjure a drill of dark energy on your blade, and rend the armor of foes in front of you.",
     "icon": "https://render.guildwars2.com/file/5CE4CE5573EEF5054F016F13D3E1F850F2A1DB0C/1012925.png",
     "chat_link": "[&Box4AAA=]",
     "type": "Weapon",
@@ -80549,38 +80683,27 @@
         "text": "Range",
         "icon": "https://render.guildwars2.com/file/0AAB34BEB1C9F4A25EC612DDBEACF3E20B2810FA/156666.png",
         "type": "Range",
-        "value": 220
+        "value": 240
       },
       {
         "text": "Recharge",
         "icon": "https://render.guildwars2.com/file/D767B963D120F077C3B163A05DC05A7317D7DB70/156651.png",
         "type": "Recharge",
-        "value": 12
+        "value": 10
       },
       {
         "text": "Damage",
         "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
         "type": "Damage",
         "hit_count": 6,
-        "dmg_multiplier": 0.33
+        "dmg_multiplier": 0.425
       },
       {
-        "text": "Health Threshold",
-        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
-        "type": "Percent",
-        "percent": 50.0
-      },
-      {
-        "text": "Damage Increase",
+        "text": "Damage",
         "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
-        "type": "Percent",
-        "percent": 50.0
-      },
-      {
-        "text": "Damage Increase",
-        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
-        "type": "Percent",
-        "percent": 10.0
+        "type": "Damage",
+        "hit_count": 6,
+        "dmg_multiplier": 0.35
       },
       {
         "text": "Number of Targets",
@@ -81609,9 +81732,7 @@
     "categories": [
       "Well"
     ],
-    "flags": [
-      "NoUnderwater"
-    ],
+    "flags": [],
     "facts": [
       {
         "text": "Recharge",
@@ -81670,6 +81791,12 @@
         "type": "ComboFinisher",
         "finisher_type": "Blast",
         "percent": 100.0
+      },
+      {
+        "text": "Combo Field",
+        "icon": "https://render.guildwars2.com/file/59E0DB6A699810641C959926ADFEF73E08CC255B/156655.png",
+        "type": "ComboField",
+        "field_type": "Fire"
       }
     ],
     "specialization": 43
@@ -81828,7 +81955,7 @@
   {
     "id": 31295,
     "name": "Sanctuary",
-    "description": "Consecration. Form a protective healing shelter for allies. Foes and projectiles cannot enter.",
+    "description": "Consecration. Form a protective healing shelter for allies. Block foes and their missiles from entering.",
     "icon": "https://render.guildwars2.com/file/2E31D763EA1D05432949EBB39603CD6DBBE29870/103541.png",
     "chat_link": "[&Bj96AAA=]",
     "type": "Utility",
@@ -82412,7 +82539,7 @@
   {
     "id": 31407,
     "name": "Glyph of Rejuvenation",
-    "description": "Glyph. Heal yourself and pet, while healing nearby allies for a lesser value.",
+    "description": "Glyph. Greatly heal yourself and your pet, while healing nearby allies for a minor amount.",
     "icon": "https://render.guildwars2.com/file/0A3119FC4F62C31A0646B0FF901E701D74BD3EEA/1128605.png",
     "chat_link": "[&Bq96AAA=]",
     "type": "Heal",
@@ -83070,9 +83197,9 @@
   },
   {
     "id": 31582,
-    "name": "Glyph of Empowerment",
-    "description": "Glyph. Empower the outgoing damage or healing of your allies.",
-    "icon": "https://render.guildwars2.com/file/E04535E0710904BE9841BAC49922200E39B9B413/1128636.png",
+    "name": "Glyph of Unity",
+    "description": "Glyph. Use nature energy to connect to foes or allies.",
+    "icon": "https://render.guildwars2.com/file/2A0DAB9B761FB75E2FEF5FF5D0ADE1143E32A6F4/1128639.png",
     "chat_link": "[&Bl57AAA=]",
     "type": "Utility",
     "weapon_type": "None",
@@ -83091,7 +83218,7 @@
         "text": "Recharge",
         "icon": "https://render.guildwars2.com/file/D767B963D120F077C3B163A05DC05A7317D7DB70/156651.png",
         "type": "Recharge",
-        "value": 20
+        "value": 30
       },
       {
         "text": "Number of Targets",
@@ -83103,52 +83230,16 @@
         "text": "Radius",
         "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
         "type": "Distance",
-        "distance": 600
-      }
-    ],
-    "specialization": 5
-  },
-  {
-    "id": 31602,
-    "name": "Glyph of Empowerment",
-    "description": "Glyph. Increase outgoing healing of nearby allies.",
-    "icon": "https://render.guildwars2.com/file/045471E55B24643A19C40B0D78593007AA1BE665/1128631.png",
-    "chat_link": "[&BnJ7AAA=]",
-    "type": "Utility",
-    "weapon_type": "None",
-    "professions": [
-      "Ranger"
-    ],
-    "slot": "Utility",
-    "categories": [
-      "Glyph"
-    ],
-    "flags": [
-      "NoUnderwater"
-    ],
-    "facts": [
-      {
-        "text": "Recharge",
-        "icon": "https://render.guildwars2.com/file/D767B963D120F077C3B163A05DC05A7317D7DB70/156651.png",
-        "type": "Recharge",
-        "value": 20
+        "distance": 360
       },
       {
-        "text": "Apply Buff/Condition",
-        "icon": "https://render.guildwars2.com/file/045471E55B24643A19C40B0D78593007AA1BE665/1128631.png",
-        "type": "Buff",
-        "status": "Glyph of Empowerment",
-        "apply_count": 1,
+        "text": "Duration",
+        "icon": "https://render.guildwars2.com/file/7B2193ACCF77E56C13E608191B082D68AA0FAA71/156659.png",
+        "type": "Time",
         "duration": 6
       },
       {
-        "text": "Number of Targets",
-        "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
-        "type": "Number",
-        "value": 5
-      },
-      {
-        "text": "Radius",
+        "text": "Maximum Leash Range",
         "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
         "type": "Distance",
         "distance": 600
@@ -83159,7 +83250,7 @@
   {
     "id": 31607,
     "name": "Glyph of Alignment",
-    "description": "Glyph. Damage and apply conditions to nearby foes.",
+    "description": "Glyph. Inflict bleeding and debilitate nearby foes.",
     "icon": "https://render.guildwars2.com/file/580715C2B8F00800A4D23615DD1E019050BF4B50/1128635.png",
     "chat_link": "[&Bnd7AAA=]",
     "type": "Utility",
@@ -83190,21 +83281,21 @@
       },
       {
         "text": "Apply Buff/Condition",
-        "icon": "https://render.guildwars2.com/file/070325E519C178D502A8160523766070D30C0C19/102838.png",
+        "icon": "https://render.guildwars2.com/file/79FF0046A5F9ADA3B4C4EC19ADB4CB124D5F0021/102848.png",
         "type": "Buff",
-        "status": "Crippled",
-        "description": "Movement speed decreased by 50%; stacks duration.",
-        "apply_count": 1,
-        "duration": 5
+        "status": "Bleeding",
+        "description": "Deals damage every second; stacks intensity.",
+        "apply_count": 3,
+        "duration": 8
       },
       {
         "text": "Apply Buff/Condition",
-        "icon": "https://render.guildwars2.com/file/559B0AF9FB5E1243D2649FAAE660CCB338AACC19/102840.png",
+        "icon": "https://render.guildwars2.com/file/397A613651BFCA2832B6469CE34735580A2C120E/102844.png",
         "type": "Buff",
-        "status": "Poisoned",
-        "description": "Deals damage every second; decreases healing effectiveness by 33%; damage stacks intensity.",
-        "apply_count": 2,
-        "duration": 8
+        "status": "Immobile",
+        "description": "Unable to move; stacks duration.",
+        "apply_count": 1,
+        "duration": 2
       },
       {
         "text": "Apply Buff/Condition",
@@ -83430,9 +83521,9 @@
   },
   {
     "id": 31677,
-    "name": "Glyph of Unity",
-    "description": "Glyph. Use nature energy to connect to foes or allies.",
-    "icon": "https://render.guildwars2.com/file/2A0DAB9B761FB75E2FEF5FF5D0ADE1143E32A6F4/1128639.png",
+    "name": "Glyph of the Stars",
+    "description": "Glyph. Channel the power of the stars to prevent harm to your allies.",
+    "icon": "https://render.guildwars2.com/file/E04535E0710904BE9841BAC49922200E39B9B413/1128636.png",
     "chat_link": "[&Br17AAA=]",
     "type": "Elite",
     "weapon_type": "None",
@@ -83444,6 +83535,7 @@
       "Glyph"
     ],
     "flags": [
+      "GroundTargeted",
       "NoUnderwater"
     ],
     "facts": [
@@ -83451,31 +83543,13 @@
         "text": "Recharge",
         "icon": "https://render.guildwars2.com/file/D767B963D120F077C3B163A05DC05A7317D7DB70/156651.png",
         "type": "Recharge",
-        "value": 30
+        "value": 60
       },
       {
-        "text": "Number of Targets",
+        "text": "Number of Allied Targets",
         "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
         "type": "Number",
         "value": 5
-      },
-      {
-        "text": "Radius",
-        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
-        "type": "Distance",
-        "distance": 400
-      },
-      {
-        "text": "Duration",
-        "icon": "https://render.guildwars2.com/file/7B2193ACCF77E56C13E608191B082D68AA0FAA71/156659.png",
-        "type": "Time",
-        "duration": 6
-      },
-      {
-        "text": "Maximum Leash Range",
-        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
-        "type": "Distance",
-        "distance": 600
       }
     ],
     "specialization": 5
@@ -83763,12 +83837,12 @@
     "description": "Glyph. Tether yourself to nearby allies. Whenever you're healed, heal the tethered allies as well.",
     "icon": "https://render.guildwars2.com/file/7EFAFBEBC310D707342BF0EA5D166D0FA12E3EB8/1128634.png",
     "chat_link": "[&Bvx7AAA=]",
-    "type": "Elite",
+    "type": "Utility",
     "weapon_type": "None",
     "professions": [
       "Ranger"
     ],
-    "slot": "Elite",
+    "slot": "Utility",
     "categories": [
       "Glyph"
     ],
@@ -83799,13 +83873,13 @@
         "text": "Radius",
         "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
         "type": "Distance",
-        "distance": 400
+        "distance": 360
       },
       {
         "text": "Duration",
         "icon": "https://render.guildwars2.com/file/7B2193ACCF77E56C13E608191B082D68AA0FAA71/156659.png",
         "type": "Time",
-        "duration": 6
+        "duration": 8
       },
       {
         "text": "Maximum Leash Range",
@@ -84241,57 +84315,9 @@
     ]
   },
   {
-    "id": 31804,
-    "name": "Glyph of Empowerment",
-    "description": "Glyph. Increase outgoing damage of nearby allies.",
-    "icon": "https://render.guildwars2.com/file/E04535E0710904BE9841BAC49922200E39B9B413/1128636.png",
-    "chat_link": "[&Bjx8AAA=]",
-    "type": "Utility",
-    "weapon_type": "None",
-    "professions": [
-      "Ranger"
-    ],
-    "slot": "Utility",
-    "categories": [
-      "Glyph"
-    ],
-    "flags": [
-      "NoUnderwater"
-    ],
-    "facts": [
-      {
-        "text": "Recharge",
-        "icon": "https://render.guildwars2.com/file/D767B963D120F077C3B163A05DC05A7317D7DB70/156651.png",
-        "type": "Recharge",
-        "value": 20
-      },
-      {
-        "text": "Apply Buff/Condition",
-        "icon": "https://render.guildwars2.com/file/E04535E0710904BE9841BAC49922200E39B9B413/1128636.png",
-        "type": "Buff",
-        "status": "Glyph of Empowerment",
-        "apply_count": 1,
-        "duration": 6
-      },
-      {
-        "text": "Number of Targets",
-        "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
-        "type": "Number",
-        "value": 5
-      },
-      {
-        "text": "Radius",
-        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
-        "type": "Distance",
-        "distance": 600
-      }
-    ],
-    "specialization": 5
-  },
-  {
     "id": 31819,
     "name": "Glyph of Rejuvenation",
-    "description": "Glyph. Apply significant healing to yourself and pet, while healing allies for a minor amount.",
+    "description": "Glyph. Greatly heal yourself and your pet, while healing nearby allies for a minor amount.",
     "icon": "https://render.guildwars2.com/file/0A3119FC4F62C31A0646B0FF901E701D74BD3EEA/1128605.png",
     "chat_link": "[&Bkt8AAA=]",
     "type": "Heal",
@@ -84325,7 +84351,7 @@
         "icon": "https://render.guildwars2.com/file/D4347C52157B040943051D7E09DEAD7AF63D4378/156662.png",
         "type": "AttributeAdjust",
         "target": "Healing",
-        "value": 1300
+        "value": 1950
       },
       {
         "text": "Number of Targets",
@@ -84374,7 +84400,7 @@
   },
   {
     "id": 31835,
-    "name": "Sand Squall",
+    "name": "Lesser Sand Squall",
     "description": "Apply protection to you and your allies, then increase the duration of all boons currently existing on you and your allies. Gain magnetic aura.",
     "icon": "https://render.guildwars2.com/file/7B047DE80C026DCF420E43DD16D80409E8C679A4/1029996.png",
     "chat_link": "[&Blt8AAA=]",
@@ -84493,7 +84519,7 @@
   {
     "id": 31867,
     "name": "Glyph of Rejuvenation",
-    "description": "Glyph. Apply significant healing to your allies and minor healing to yourself and pet.",
+    "description": "Glyph. Greatly heal your allies while healing yourself and your pet for a minor amount.",
     "icon": "https://render.guildwars2.com/file/0CA807B60E96D1757EF1E59825269CB4FE1B31E6/1128604.png",
     "chat_link": "[&Bnt8AAA=]",
     "type": "Heal",
@@ -84520,7 +84546,7 @@
         "icon": "https://render.guildwars2.com/file/D4347C52157B040943051D7E09DEAD7AF63D4378/156662.png",
         "type": "AttributeAdjust",
         "target": "Healing",
-        "value": 1300
+        "value": 1950
       },
       {
         "text": "Allied Healing",
@@ -84648,12 +84674,12 @@
     "description": "Glyph. Tether yourself to nearby foes. Whenever you take damage, deal damage to the foes tethered to you.",
     "icon": "https://render.guildwars2.com/file/2A0DAB9B761FB75E2FEF5FF5D0ADE1143E32A6F4/1128639.png",
     "chat_link": "[&BpB8AAA=]",
-    "type": "Elite",
+    "type": "Utility",
     "weapon_type": "None",
     "professions": [
       "Ranger"
     ],
-    "slot": "Elite",
+    "slot": "Utility",
     "categories": [
       "Glyph"
     ],
@@ -84684,13 +84710,13 @@
         "text": "Radius",
         "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
         "type": "Distance",
-        "distance": 400
+        "distance": 360
       },
       {
         "text": "Duration",
         "icon": "https://render.guildwars2.com/file/7B2193ACCF77E56C13E608191B082D68AA0FAA71/156659.png",
         "type": "Time",
-        "duration": 6
+        "duration": 8
       },
       {
         "text": "Maximum Leash Range",
@@ -95316,7 +95342,7 @@
   {
     "id": 40436,
     "name": "Sniper's Cover",
-    "description": "Kneel. Create a barrier of shadows that absorbs incoming projectiles.",
+    "description": "Kneel. Create a barrier of shadows that blocks incoming missiles.",
     "icon": "https://render.guildwars2.com/file/21A0A255EA0126D30453CAE6CC40DF0B0B70B2ED/1770632.png",
     "chat_link": "[&BvSdAAA=]",
     "type": "Weapon",
@@ -95704,6 +95730,11 @@
         "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
         "type": "Number",
         "value": 5
+      },
+      {
+        "text": "Blocks Missiles",
+        "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
+        "type": "NoData"
       }
     ],
     "specialization": 57
@@ -98664,13 +98695,15 @@
     "categories": [
       "SpiritWeapon"
     ],
-    "flags": [],
+    "flags": [
+      "GroundTargeted"
+    ],
     "facts": [
       {
         "text": "Range",
         "icon": "https://render.guildwars2.com/file/0AAB34BEB1C9F4A25EC612DDBEACF3E20B2810FA/156666.png",
         "type": "Range",
-        "value": 1200
+        "value": 900
       },
       {
         "text": "Recharge",
@@ -98679,16 +98712,22 @@
         "value": 1
       },
       {
+        "text": "Dome Radius",
+        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
+        "type": "Distance",
+        "distance": 180
+      },
+      {
+        "text": "Explosion Radius",
+        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
+        "type": "Distance",
+        "distance": 360
+      },
+      {
         "text": "Duration",
         "icon": "https://render.guildwars2.com/file/7B2193ACCF77E56C13E608191B082D68AA0FAA71/156659.png",
         "type": "Time",
         "duration": 5
-      },
-      {
-        "text": "Count Recharge",
-        "icon": "https://render.guildwars2.com/file/AAB7C5387A08367C2F023F19FEE70E1556AD4375/1770202.png",
-        "type": "Time",
-        "duration": 20
       },
       {
         "text": "Casts",
@@ -107712,7 +107751,8 @@
         "type": "Distance",
         "distance": 600
       }
-    ]
+    ],
+    "specialization": 55
   },
   {
     "id": 44637,
@@ -108279,7 +108319,9 @@
     "categories": [
       "SpiritWeapon"
     ],
-    "flags": [],
+    "flags": [
+      "GroundTargeted"
+    ],
     "facts": [
       {
         "text": "Recharge",
@@ -109921,7 +109963,7 @@
   {
     "id": 45333,
     "name": "Winds of Disenchantment",
-    "description": "Meditation. Create an area of calm where foes cannot receive boons and lose boons every interval. Projectiles entering this area are destroyed.",
+    "description": "Meditation. Create an area of calm where foes cannot receive boons and lose boons every interval. Enemy missiles entering this area are blocked.",
     "icon": "https://render.guildwars2.com/file/0C185490CB6D7215360704CA345150D807444968/1770659.png",
     "chat_link": "[&BhWxAAA=]",
     "type": "Elite",
@@ -109946,6 +109988,20 @@
         "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
         "type": "Unblockable",
         "value": true
+      },
+      {
+        "text": "Damage",
+        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
+        "type": "Damage",
+        "hit_count": 1,
+        "dmg_multiplier": 0.2
+      },
+      {
+        "text": "Damage",
+        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
+        "type": "Damage",
+        "hit_count": 1,
+        "dmg_multiplier": 0.45
       },
       {
         "text": "Apply Buff/Condition",
@@ -111381,8 +111437,7 @@
         "apply_count": 1,
         "duration": 4
       }
-    ],
-    "specialization": 55
+    ]
   },
   {
     "id": 45846,
@@ -112233,7 +112288,9 @@
     "categories": [
       "SpiritWeapon"
     ],
-    "flags": [],
+    "flags": [
+      "GroundTargeted"
+    ],
     "facts": [
       {
         "text": "Range",
@@ -117228,6 +117285,11 @@
         "distance": 300
       },
       {
+        "text": "Blocks Missiles",
+        "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
+        "type": "NoData"
+      },
+      {
         "text": "Combo Field",
         "icon": "https://render.guildwars2.com/file/59E0DB6A699810641C959926ADFEF73E08CC255B/156655.png",
         "type": "ComboField",
@@ -120205,7 +120267,7 @@
   {
     "id": 51667,
     "name": "True Nature",
-    "description": "Strip boons from nearby enemies.",
+    "description": "Legendary Dragon. Consume. Strip boons from nearby enemies.",
     "icon": "https://render.guildwars2.com/file/B8D4BCE521B2ADED5E2F7CBC0A676C4262E9C714/1058607.png",
     "chat_link": "[&BtPJAAA=]",
     "type": "Profession",
@@ -120259,7 +120321,7 @@
   {
     "id": 51675,
     "name": "True Nature",
-    "description": "Grant stability to nearby allies.",
+    "description": "Legendary Dragon. Consume. Grant stability to nearby allies.",
     "icon": "https://render.guildwars2.com/file/B8D4BCE521B2ADED5E2F7CBC0A676C4262E9C714/1058607.png",
     "chat_link": "[&BtvJAAA=]",
     "type": "Profession",
@@ -120362,7 +120424,7 @@
   {
     "id": 51696,
     "name": "True Nature",
-    "description": "Increase the duration of allies' boons.",
+    "description": "Legendary Dragon. Consume. Increase the duration of allies' boons.",
     "icon": "https://render.guildwars2.com/file/B8D4BCE521B2ADED5E2F7CBC0A676C4262E9C714/1058607.png",
     "chat_link": "[&BvDJAAA=]",
     "type": "Profession",
@@ -120549,7 +120611,7 @@
   {
     "id": 51713,
     "name": "True Nature",
-    "description": "Cleanse conditions from nearby allies. Heal for each condition removed.",
+    "description": "Legendary Dragon. Consume. Cleanse conditions from nearby allies. Heal for each condition removed.",
     "icon": "https://render.guildwars2.com/file/B8D4BCE521B2ADED5E2F7CBC0A676C4262E9C714/1058607.png",
     "chat_link": "[&BgHKAAA=]",
     "type": "Profession",
@@ -120599,7 +120661,7 @@
   {
     "id": 51714,
     "name": "True Nature",
-    "description": "Transfer conditions to nearby enemies. Gain might for each condition transferred.",
+    "description": "Legendary Dragon. Consume. Transfer conditions to nearby enemies. Gain might for each condition transferred.",
     "icon": "https://render.guildwars2.com/file/B8D4BCE521B2ADED5E2F7CBC0A676C4262E9C714/1058607.png",
     "chat_link": "[&BgLKAAA=]",
     "type": "Profession",
@@ -125375,12 +125437,6 @@
         "value": 3
       },
       {
-        "text": "Pulses",
-        "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
-        "type": "Number",
-        "value": 7
-      },
-      {
         "text": "Boons Converted to Conditions",
         "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
         "type": "Number",
@@ -125503,5 +125559,884 @@
       }
     ],
     "specialization": 60
+  },
+  {
+    "id": 55019,
+    "name": "Sword of Justice",
+    "description": "Spirit Weapon. Will the Sword of Justice to appear beside your enemy and attack nearby foes.",
+    "icon": "https://render.guildwars2.com/file/98B40D09401B44949604E073F5F793C660B7ED22/103669.png",
+    "chat_link": "[&BuvWAAA=]",
+    "type": "Utility",
+    "weapon_type": "None",
+    "professions": [
+      "Guardian"
+    ],
+    "slot": "Utility",
+    "categories": [
+      "SpiritWeapon"
+    ],
+    "flags": [],
+    "facts": [
+      {
+        "text": "Recharge",
+        "icon": "https://render.guildwars2.com/file/D767B963D120F077C3B163A05DC05A7317D7DB70/156651.png",
+        "type": "Recharge",
+        "value": 1
+      },
+      {
+        "text": "Casts",
+        "icon": "https://render.guildwars2.com/file/B4490FB81AA1E7C06F1B22056AE09A0F54CBE2C4/1770201.png",
+        "type": "Number",
+        "value": 3
+      },
+      {
+        "text": "Damage",
+        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
+        "type": "Damage",
+        "hit_count": 4,
+        "dmg_multiplier": 0.62
+      },
+      {
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/3A394C1A0A3257EB27A44842DDEEF0DF000E1241/102850.png",
+        "type": "Buff",
+        "status": "Vulnerability",
+        "description": "Damage and condition damage taken are increased; stacks intensity.",
+        "apply_count": 12,
+        "duration": 8
+      },
+      {
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/070325E519C178D502A8160523766070D30C0C19/102838.png",
+        "type": "Buff",
+        "status": "Crippled",
+        "description": "Movement speed decreased by 50%; stacks duration.",
+        "apply_count": 1,
+        "duration": 3
+      },
+      {
+        "text": "Radius",
+        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
+        "type": "Distance",
+        "distance": 180
+      },
+      {
+        "text": "Number of Targets",
+        "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
+        "type": "Number",
+        "value": 5
+      }
+    ]
+  },
+  {
+    "id": 55024,
+    "name": "Glyph of the Stars",
+    "description": "Glyph. Prevent health drain while downed and revive downed allies in the targeted area. Heal and grant boons to allies in that area.",
+    "icon": "https://render.guildwars2.com/file/045471E55B24643A19C40B0D78593007AA1BE665/1128631.png",
+    "chat_link": "[&BvDWAAA=]",
+    "type": "Elite",
+    "weapon_type": "None",
+    "professions": [
+      "Ranger"
+    ],
+    "slot": "Elite",
+    "categories": [
+      "Glyph"
+    ],
+    "flags": [
+      "GroundTargeted",
+      "NoUnderwater"
+    ],
+    "facts": [
+      {
+        "text": "Range",
+        "icon": "https://render.guildwars2.com/file/0AAB34BEB1C9F4A25EC612DDBEACF3E20B2810FA/156666.png",
+        "type": "Range",
+        "value": 1200
+      },
+      {
+        "text": "Recharge",
+        "icon": "https://render.guildwars2.com/file/D767B963D120F077C3B163A05DC05A7317D7DB70/156651.png",
+        "type": "Recharge",
+        "value": 90
+      },
+      {
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/045471E55B24643A19C40B0D78593007AA1BE665/1128631.png",
+        "type": "Buff",
+        "status": "You do not lose health from being downed.",
+        "apply_count": 1
+      },
+      {
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/CD77D1FAB7B270223538A8F8ECDA1CFB044D65F4/102834.png",
+        "type": "Buff",
+        "status": "Protection",
+        "description": "Incoming damage decreased by 33%; stacks duration.",
+        "apply_count": 1,
+        "duration": 6
+      },
+      {
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/F69996772B9E18FD18AD0AABAB25D7E3FC42F261/102835.png",
+        "type": "Buff",
+        "status": "Regeneration",
+        "description": "Gain health every second; stacks duration.",
+        "apply_count": 1,
+        "duration": 12
+      },
+      {
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/58E92EBAF0DB4DA7C4AC04D9B22BCA5ECF0100DE/102843.png",
+        "type": "Buff",
+        "status": "Vigor",
+        "description": "Endurance regeneration increased by 50%; stacks duration.",
+        "apply_count": 1,
+        "duration": 12
+      },
+      {
+        "text": "Radius",
+        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
+        "type": "Distance",
+        "distance": 360
+      },
+      {
+        "text": "Revive per Pulse",
+        "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
+        "type": "Percent",
+        "percent": 4.0
+      },
+      {
+        "text": "Revive Pulses",
+        "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
+        "type": "Number",
+        "value": 18
+      },
+      {
+        "text": "Number of Allied Targets",
+        "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
+        "type": "Number",
+        "value": 10
+      },
+      {
+        "text": "Healing",
+        "icon": "https://render.guildwars2.com/file/D4347C52157B040943051D7E09DEAD7AF63D4378/156662.png",
+        "type": "AttributeAdjust",
+        "target": "Healing",
+        "value": 392
+      },
+      {
+        "text": "Boon and Healing Pulses",
+        "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
+        "type": "Number",
+        "value": 6
+      }
+    ],
+    "specialization": 5
+  },
+  {
+    "id": 55027,
+    "name": "Sword of Justice",
+    "description": "Spirit Weapon. Will the Sword of Justice to appear beside your enemy and attack nearby foes.",
+    "icon": "https://render.guildwars2.com/file/98B40D09401B44949604E073F5F793C660B7ED22/103669.png",
+    "chat_link": "[&BvPWAAA=]",
+    "type": "Utility",
+    "weapon_type": "None",
+    "professions": [
+      "Guardian"
+    ],
+    "slot": "Utility",
+    "categories": [
+      "SpiritWeapon"
+    ],
+    "flags": [],
+    "facts": [
+      {
+        "text": "Range",
+        "icon": "https://render.guildwars2.com/file/0AAB34BEB1C9F4A25EC612DDBEACF3E20B2810FA/156666.png",
+        "type": "Range",
+        "value": 900
+      },
+      {
+        "text": "Recharge",
+        "icon": "https://render.guildwars2.com/file/D767B963D120F077C3B163A05DC05A7317D7DB70/156651.png",
+        "type": "Recharge",
+        "value": 1
+      },
+      {
+        "text": "Count Recharge",
+        "icon": "https://render.guildwars2.com/file/AAB7C5387A08367C2F023F19FEE70E1556AD4375/1770202.png",
+        "type": "Time",
+        "duration": 20
+      },
+      {
+        "text": "Casts",
+        "icon": "https://render.guildwars2.com/file/B4490FB81AA1E7C06F1B22056AE09A0F54CBE2C4/1770201.png",
+        "type": "Number",
+        "value": 3
+      },
+      {
+        "text": "Damage",
+        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
+        "type": "Damage",
+        "hit_count": 4,
+        "dmg_multiplier": 0.62
+      },
+      {
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/3A394C1A0A3257EB27A44842DDEEF0DF000E1241/102850.png",
+        "type": "Buff",
+        "status": "Vulnerability",
+        "description": "Damage and condition damage taken are increased; stacks intensity.",
+        "apply_count": 12,
+        "duration": 8
+      },
+      {
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/070325E519C178D502A8160523766070D30C0C19/102838.png",
+        "type": "Buff",
+        "status": "Crippled",
+        "description": "Movement speed decreased by 50%; stacks duration.",
+        "apply_count": 1,
+        "duration": 3
+      },
+      {
+        "text": "Radius",
+        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
+        "type": "Distance",
+        "distance": 180
+      },
+      {
+        "text": "Number of Targets",
+        "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
+        "type": "Number",
+        "value": 5
+      }
+    ]
+  },
+  {
+    "id": 55029,
+    "name": "Ancient Echo",
+    "description": "Refresh your bond with your channeled legend, gaining energy and legend-specific effects.",
+    "icon": "https://render.guildwars2.com/file/1D64DDAE58CA483FF80EBD6ED01861E95A4B0F77/2128020.png",
+    "chat_link": "[&BvXWAAA=]",
+    "type": "Profession",
+    "weapon_type": "None",
+    "professions": [
+      "Revenant"
+    ],
+    "slot": "Profession_2",
+    "flags": [
+      "NoUnderwater"
+    ],
+    "facts": [
+      {
+        "text": "Recharge",
+        "icon": "https://render.guildwars2.com/file/D767B963D120F077C3B163A05DC05A7317D7DB70/156651.png",
+        "type": "Recharge",
+        "value": 20
+      },
+      {
+        "text": "Energy Gain",
+        "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
+        "type": "Number",
+        "value": 25
+      },
+      {
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/6C9F184D04E3590AC3F4061327BF0A68904D7DED/1013016.png",
+        "type": "PrefixedBuff",
+        "status": "Unblockable",
+        "description": "Your attacks can't be blocked.",
+        "apply_count": 2,
+        "duration": 5,
+        "prefix": {
+          "text": "Apply Buff/Condition",
+          "icon": "https://render.guildwars2.com/file/67CDD35F6BC3072E0837715A5E0A90646529BAA2/1030005.png",
+          "status": "Legendary Assassin Stance",
+          "description": "Currently invoking the power of Shiro Tagachi."
+        }
+      },
+      {
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/4FDAC2113B500104121753EF7E026E45C141E94D/1938787.png",
+        "type": "PrefixedBuff",
+        "status": "Alacrity",
+        "description": "Skills recharge faster.",
+        "apply_count": 1,
+        "duration": 4,
+        "prefix": {
+          "text": "Apply Buff/Condition",
+          "icon": "https://render.guildwars2.com/file/0E091B41C047DD5A1BCA6B9193C73E6B29524C5D/1983636.png",
+          "status": "Legendary Centaur Stance",
+          "description": "Currently invoking the power of Ventari."
+        }
+      },
+      {
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/D8AEB219F1A057F3F4E47E5E54A12BBABFC8474F/961437.png",
+        "type": "PrefixedBuff",
+        "status": "Rite of the Great Dwarf",
+        "description": "Gain 50% damage reduction. You are still susceptible to conditions and control effects.",
+        "apply_count": 1,
+        "duration": 3,
+        "prefix": {
+          "text": "Apply Buff/Condition",
+          "icon": "https://render.guildwars2.com/file/03C66FA8A89697A0C4D309484172080E3A1141EF/961410.png",
+          "status": "Legendary Dwarf Stance",
+          "description": "Currently invoking the power of King Jalis Ironhammer."
+        }
+      },
+      {
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/50BAC1B8E10CFAB9E749A5D910D4A9DCF29EBB7C/961398.png",
+        "type": "PrefixedBuff",
+        "status": "Resistance",
+        "description": "Conditions currently on you are ineffective; stacks duration.",
+        "apply_count": 1,
+        "duration": 3,
+        "prefix": {
+          "text": "Apply Buff/Condition",
+          "icon": "https://render.guildwars2.com/file/1A1407F7D34E5ED41B59A25F39EBF728CC926423/961413.png",
+          "status": "Legendary Demon Stance",
+          "description": "Currently invoking the power of Mallyx the Unyielding."
+        }
+      }
+    ]
+  },
+  {
+    "id": 55031,
+    "name": "Swipe",
+    "description": "Shadowstep to your foe and steal from them.",
+    "icon": "https://render.guildwars2.com/file/07B49B4F1BB7613332987FBCEC39E24A0EAD01F6/2128021.png",
+    "chat_link": "[&BvfWAAA=]",
+    "type": "Profession",
+    "weapon_type": "None",
+    "professions": [
+      "Thief"
+    ],
+    "slot": "Profession_1",
+    "flags": [],
+    "facts": [
+      {
+        "text": "Range",
+        "icon": "https://render.guildwars2.com/file/0AAB34BEB1C9F4A25EC612DDBEACF3E20B2810FA/156666.png",
+        "type": "Range",
+        "value": 600
+      },
+      {
+        "text": "Recharge",
+        "icon": "https://render.guildwars2.com/file/D767B963D120F077C3B163A05DC05A7317D7DB70/156651.png",
+        "type": "Recharge",
+        "value": 30
+      },
+      {
+        "text": "Unblockable",
+        "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
+        "type": "NoData"
+      }
+    ],
+    "specialization": 7
+  },
+  {
+    "id": 55035,
+    "name": "Shield of the Avenger",
+    "description": "Spirit Weapon. Command the Shield of the Avenger to form a protective dome, and then shatter, flying out to weaken nearby foes.",
+    "icon": "https://render.guildwars2.com/file/CFBE4110635CD25B68EE194E7DBE25166DAAA197/103673.png",
+    "chat_link": "[&BvvWAAA=]",
+    "type": "Utility",
+    "weapon_type": "None",
+    "professions": [
+      "Guardian"
+    ],
+    "slot": "Utility",
+    "categories": [
+      "SpiritWeapon"
+    ],
+    "flags": [],
+    "facts": [
+      {
+        "text": "Recharge",
+        "icon": "https://render.guildwars2.com/file/D767B963D120F077C3B163A05DC05A7317D7DB70/156651.png",
+        "type": "Recharge",
+        "value": 1
+      },
+      {
+        "text": "Dome Radius",
+        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
+        "type": "Distance",
+        "distance": 180
+      },
+      {
+        "text": "Explosion Radius",
+        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
+        "type": "Distance",
+        "distance": 360
+      },
+      {
+        "text": "Duration",
+        "icon": "https://render.guildwars2.com/file/7B2193ACCF77E56C13E608191B082D68AA0FAA71/156659.png",
+        "type": "Time",
+        "duration": 5
+      },
+      {
+        "text": "Casts",
+        "icon": "https://render.guildwars2.com/file/B4490FB81AA1E7C06F1B22056AE09A0F54CBE2C4/1770201.png",
+        "type": "Number",
+        "value": 3
+      },
+      {
+        "text": "Damage",
+        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
+        "type": "Damage",
+        "hit_count": 1,
+        "dmg_multiplier": 0.5
+      },
+      {
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/6CB0E64AF9AA292E332A38C1770CE577E2CDE0E8/102853.png",
+        "type": "Buff",
+        "status": "Weakness",
+        "description": "Endurance regeneration decreased by 50%. 50% of hits are Glancing Blows (50% damage). Stacks duration.",
+        "apply_count": 1,
+        "duration": 6
+      },
+      {
+        "text": "Number of Targets",
+        "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
+        "type": "Number",
+        "value": 5
+      }
+    ]
+  },
+  {
+    "id": 55037,
+    "name": "Shield of the Avenger",
+    "description": "Spirit Weapon. Command the Shield of the Avenger to form a protective dome, and then shatter, flying out to weaken nearby foes.",
+    "icon": "https://render.guildwars2.com/file/CFBE4110635CD25B68EE194E7DBE25166DAAA197/103673.png",
+    "chat_link": "[&Bv3WAAA=]",
+    "type": "Utility",
+    "weapon_type": "None",
+    "professions": [
+      "Guardian"
+    ],
+    "slot": "Utility",
+    "categories": [
+      "SpiritWeapon"
+    ],
+    "flags": [],
+    "facts": [
+      {
+        "text": "Recharge",
+        "icon": "https://render.guildwars2.com/file/D767B963D120F077C3B163A05DC05A7317D7DB70/156651.png",
+        "type": "Recharge",
+        "value": 1
+      },
+      {
+        "text": "Duration",
+        "icon": "https://render.guildwars2.com/file/7B2193ACCF77E56C13E608191B082D68AA0FAA71/156659.png",
+        "type": "Time",
+        "duration": 5
+      },
+      {
+        "text": "Count Recharge",
+        "icon": "https://render.guildwars2.com/file/AAB7C5387A08367C2F023F19FEE70E1556AD4375/1770202.png",
+        "type": "Time",
+        "duration": 25
+      },
+      {
+        "text": "Casts",
+        "icon": "https://render.guildwars2.com/file/B4490FB81AA1E7C06F1B22056AE09A0F54CBE2C4/1770201.png",
+        "type": "Number",
+        "value": 3
+      },
+      {
+        "text": "Damage",
+        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
+        "type": "Damage",
+        "hit_count": 1,
+        "dmg_multiplier": 0.5
+      },
+      {
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/6CB0E64AF9AA292E332A38C1770CE577E2CDE0E8/102853.png",
+        "type": "Buff",
+        "status": "Weakness",
+        "description": "Endurance regeneration decreased by 50%. 50% of hits are Glancing Blows (50% damage). Stacks duration.",
+        "apply_count": 1,
+        "duration": 6
+      },
+      {
+        "text": "Number of Targets",
+        "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
+        "type": "Number",
+        "value": 5
+      },
+      {
+        "text": "Dome Radius",
+        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
+        "type": "Distance",
+        "distance": 180
+      },
+      {
+        "text": "Explosion Radius",
+        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
+        "type": "Distance",
+        "distance": 360
+      }
+    ]
+  },
+  {
+    "id": 55038,
+    "name": "Soul Grasp",
+    "description": "Release a disembodied hand to draw life force from your foe.",
+    "icon": "https://render.guildwars2.com/file/FA5ADFEE0A3C38BC6B9A0E301E6DEFFF9C763A54/103137.png",
+    "chat_link": "[&Bv7WAAA=]",
+    "type": "Weapon",
+    "weapon_type": "Focus",
+    "professions": [
+      "Necromancer"
+    ],
+    "slot": "Weapon_4",
+    "flags": [
+      "NoUnderwater"
+    ],
+    "facts": [
+      {
+        "text": "Range",
+        "icon": "https://render.guildwars2.com/file/0AAB34BEB1C9F4A25EC612DDBEACF3E20B2810FA/156666.png",
+        "type": "Range",
+        "value": 1200
+      },
+      {
+        "text": "Recharge",
+        "icon": "https://render.guildwars2.com/file/D767B963D120F077C3B163A05DC05A7317D7DB70/156651.png",
+        "type": "Recharge",
+        "value": 3
+      },
+      {
+        "text": "Life Siphon Damage",
+        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
+        "type": "AttributeAdjust",
+        "target": "Power",
+        "value": 440
+      },
+      {
+        "text": "Life Siphon Healing",
+        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
+        "type": "AttributeAdjust",
+        "target": "Healing",
+        "value": 440
+      },
+      {
+        "text": "Count Recharge",
+        "icon": "https://render.guildwars2.com/file/AAB7C5387A08367C2F023F19FEE70E1556AD4375/1770202.png",
+        "type": "Time",
+        "duration": 15
+      },
+      {
+        "text": "Maximum Count",
+        "icon": "https://render.guildwars2.com/file/B4490FB81AA1E7C06F1B22056AE09A0F54CBE2C4/1770201.png",
+        "type": "Number",
+        "value": 2
+      },
+      {
+        "text": "Life Force",
+        "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
+        "type": "Percent",
+        "percent": 11.0
+      },
+      {
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/3A394C1A0A3257EB27A44842DDEEF0DF000E1241/102850.png",
+        "type": "Buff",
+        "status": "Vulnerability",
+        "description": "Damage and condition damage taken are increased; stacks intensity.",
+        "apply_count": 5,
+        "duration": 6
+      }
+    ]
+  },
+  {
+    "id": 55040,
+    "name": "Hammer of Wisdom",
+    "description": "Spirit Weapon. Order the Hammer of Wisdom to knock down your foe.",
+    "icon": "https://render.guildwars2.com/file/99430A49F97BA45EF101E611A69193D57BF70A7D/103655.png",
+    "chat_link": "[&BgDXAAA=]",
+    "type": "Utility",
+    "weapon_type": "None",
+    "professions": [
+      "Guardian"
+    ],
+    "slot": "Utility",
+    "categories": [
+      "SpiritWeapon"
+    ],
+    "flags": [],
+    "facts": [
+      {
+        "text": "Range",
+        "icon": "https://render.guildwars2.com/file/0AAB34BEB1C9F4A25EC612DDBEACF3E20B2810FA/156666.png",
+        "type": "Range",
+        "value": 900
+      },
+      {
+        "text": "Recharge",
+        "icon": "https://render.guildwars2.com/file/D767B963D120F077C3B163A05DC05A7317D7DB70/156651.png",
+        "type": "Recharge",
+        "value": 8
+      },
+      {
+        "text": "Count Recharge",
+        "icon": "https://render.guildwars2.com/file/AAB7C5387A08367C2F023F19FEE70E1556AD4375/1770202.png",
+        "type": "Time",
+        "duration": 25
+      },
+      {
+        "text": "Damage",
+        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
+        "type": "Damage",
+        "hit_count": 1,
+        "dmg_multiplier": 1.2
+      },
+      {
+        "text": "Sink",
+        "icon": "https://render.guildwars2.com/file/7D674324681E300974D90D02961EC27212ECBBE6/156667.png",
+        "type": "Time",
+        "duration": 2
+      },
+      {
+        "text": "Combo Finisher",
+        "icon": "https://render.guildwars2.com/file/A513F3653D33FBA4220D2D307799F8A327A36A3B/156656.png",
+        "type": "ComboFinisher",
+        "finisher_type": "Blast",
+        "percent": 100.0
+      },
+      {
+        "text": "Number of Targets",
+        "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
+        "type": "Number",
+        "value": 3
+      },
+      {
+        "text": "Casts",
+        "icon": "https://render.guildwars2.com/file/B4490FB81AA1E7C06F1B22056AE09A0F54CBE2C4/1770201.png",
+        "type": "Number",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": 55046,
+    "name": "Glyph of the Stars",
+    "description": "Glyph. Heal allies, cleanse conditions, and prevent conditions from being inflicted on allies in the area.",
+    "icon": "https://render.guildwars2.com/file/E04535E0710904BE9841BAC49922200E39B9B413/1128636.png",
+    "chat_link": "[&BgbXAAA=]",
+    "type": "Elite",
+    "weapon_type": "None",
+    "professions": [
+      "Ranger"
+    ],
+    "slot": "Elite",
+    "categories": [
+      "Glyph"
+    ],
+    "flags": [
+      "GroundTargeted",
+      "NoUnderwater"
+    ],
+    "facts": [
+      {
+        "text": "Range",
+        "icon": "https://render.guildwars2.com/file/0AAB34BEB1C9F4A25EC612DDBEACF3E20B2810FA/156666.png",
+        "type": "Range",
+        "value": 1200
+      },
+      {
+        "text": "Recharge",
+        "icon": "https://render.guildwars2.com/file/D767B963D120F077C3B163A05DC05A7317D7DB70/156651.png",
+        "type": "Recharge",
+        "value": 90
+      },
+      {
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/E04535E0710904BE9841BAC49922200E39B9B413/1128636.png",
+        "type": "Buff",
+        "status": "Incoming conditions are ignored.",
+        "apply_count": 1
+      },
+      {
+        "text": "Radius",
+        "icon": "https://render.guildwars2.com/file/B0CD8077991E4FB1622D2930337ED7F9B54211D5/156665.png",
+        "type": "Distance",
+        "distance": 360
+      },
+      {
+        "text": "Pulses",
+        "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
+        "type": "Number",
+        "value": 7
+      },
+      {
+        "text": "Conditions Removed",
+        "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
+        "type": "Number",
+        "value": 2
+      },
+      {
+        "text": "Number of Allied Targets",
+        "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
+        "type": "Number",
+        "value": 10
+      },
+      {
+        "text": "Healing",
+        "icon": "https://render.guildwars2.com/file/D4347C52157B040943051D7E09DEAD7AF63D4378/156662.png",
+        "type": "AttributeAdjust",
+        "target": "Healing",
+        "value": 293
+      },
+      {
+        "text": "Combo Field",
+        "icon": "https://render.guildwars2.com/file/59E0DB6A699810641C959926ADFEF73E08CC255B/156655.png",
+        "type": "ComboField",
+        "field_type": "Water"
+      }
+    ],
+    "specialization": 5
+  },
+  {
+    "id": 55050,
+    "name": "Soul Grasp",
+    "description": "Release a disembodied hand to draw life force from your foe.",
+    "icon": "https://render.guildwars2.com/file/FA5ADFEE0A3C38BC6B9A0E301E6DEFFF9C763A54/103137.png",
+    "chat_link": "[&BgrXAAA=]",
+    "type": "Weapon",
+    "weapon_type": "Focus",
+    "professions": [
+      "Necromancer"
+    ],
+    "slot": "Weapon_4",
+    "flags": [
+      "NoUnderwater"
+    ],
+    "facts": [
+      {
+        "text": "Range",
+        "icon": "https://render.guildwars2.com/file/0AAB34BEB1C9F4A25EC612DDBEACF3E20B2810FA/156666.png",
+        "type": "Range",
+        "value": 1200
+      },
+      {
+        "text": "Recharge",
+        "icon": "https://render.guildwars2.com/file/D767B963D120F077C3B163A05DC05A7317D7DB70/156651.png",
+        "type": "Recharge",
+        "value": 3
+      },
+      {
+        "text": "Count Recharge",
+        "icon": "https://render.guildwars2.com/file/AAB7C5387A08367C2F023F19FEE70E1556AD4375/1770202.png",
+        "type": "Time",
+        "duration": 15
+      },
+      {
+        "text": "Maximum Count",
+        "icon": "https://render.guildwars2.com/file/B4490FB81AA1E7C06F1B22056AE09A0F54CBE2C4/1770201.png",
+        "type": "Number",
+        "value": 2
+      },
+      {
+        "text": "Life Force",
+        "icon": "https://render.guildwars2.com/file/9352ED3244417304995F26CB01AE76BB7E547052/156661.png",
+        "type": "Percent",
+        "percent": 11.0
+      },
+      {
+        "text": "Apply Buff/Condition",
+        "icon": "https://render.guildwars2.com/file/3A394C1A0A3257EB27A44842DDEEF0DF000E1241/102850.png",
+        "type": "Buff",
+        "status": "Vulnerability",
+        "description": "Damage and condition damage taken are increased; stacks intensity.",
+        "apply_count": 5,
+        "duration": 6
+      },
+      {
+        "text": "Life Siphon Damage",
+        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
+        "type": "AttributeAdjust",
+        "target": "Power",
+        "value": 440
+      },
+      {
+        "text": "Life Siphon Healing",
+        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
+        "type": "AttributeAdjust",
+        "target": "Healing",
+        "value": 440
+      }
+    ]
+  },
+  {
+    "id": 55053,
+    "name": "Hammer of Wisdom",
+    "description": "Spirit Weapon. Order the Hammer of Wisdom to knock down your foe.",
+    "icon": "https://render.guildwars2.com/file/99430A49F97BA45EF101E611A69193D57BF70A7D/103655.png",
+    "chat_link": "[&Bg3XAAA=]",
+    "type": "Utility",
+    "weapon_type": "None",
+    "professions": [
+      "Guardian"
+    ],
+    "slot": "Utility",
+    "categories": [
+      "SpiritWeapon"
+    ],
+    "flags": [],
+    "facts": [
+      {
+        "text": "Range",
+        "icon": "https://render.guildwars2.com/file/0AAB34BEB1C9F4A25EC612DDBEACF3E20B2810FA/156666.png",
+        "type": "Range",
+        "value": 900
+      },
+      {
+        "text": "Recharge",
+        "icon": "https://render.guildwars2.com/file/D767B963D120F077C3B163A05DC05A7317D7DB70/156651.png",
+        "type": "Recharge",
+        "value": 8
+      },
+      {
+        "text": "Damage",
+        "icon": "https://render.guildwars2.com/file/61AA4919C4A7990903241B680A69530121E994C7/156657.png",
+        "type": "Damage",
+        "hit_count": 1,
+        "dmg_multiplier": 1.2
+      },
+      {
+        "text": "Sink",
+        "icon": "https://render.guildwars2.com/file/7D674324681E300974D90D02961EC27212ECBBE6/156667.png",
+        "type": "Time",
+        "duration": 2
+      },
+      {
+        "text": "Combo Finisher",
+        "icon": "https://render.guildwars2.com/file/A513F3653D33FBA4220D2D307799F8A327A36A3B/156656.png",
+        "type": "ComboFinisher",
+        "finisher_type": "Blast",
+        "percent": 100.0
+      },
+      {
+        "text": "Number of Targets",
+        "icon": "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
+        "type": "Number",
+        "value": 1
+      },
+      {
+        "text": "Casts",
+        "icon": "https://render.guildwars2.com/file/B4490FB81AA1E7C06F1B22056AE09A0F54CBE2C4/1770201.png",
+        "type": "Number",
+        "value": 2
+      }
+    ]
   }
 ]
