@@ -463,7 +463,7 @@ function animateCanvas(noRequest) {
         animator.reactiveDataStatus.time = Math.round(Math.max(Math.min(animator.reactiveDataStatus.time + animator.getSpeed() * timeOffset, lastTime),0));
     }
     if ((animator.reactiveDataStatus.time === lastTime && !animator.backwards) || (animator.reactiveDataStatus.time === 0 && animator.backwards)) {
-        animator.stopAnimate();
+        animator.toggleAnimate();
     }
     animator.timeSlider.value = animator.reactiveDataStatus.time.toString();
     if (noRequest > -2) {
