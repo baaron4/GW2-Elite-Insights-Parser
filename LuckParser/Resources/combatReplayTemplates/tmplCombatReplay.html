@@ -27,8 +27,7 @@
         <p class="text-justify text-center">Double click on canvas to restore viewpoint</p>
         <canvas width="${canvasX}px" height="${canvasY}px" id="replayCanvas" class="replay"></canvas>
         <div class="d-flex justify-content-center">
-            <div onclick="animator && animator.startAnimate();" type="button" class="btn btn-dark btn-small">Animate</div>
-            <div onclick="animator && animator.stopAnimate();" type="button" class="btn btn-dark btn-small">Pause</div>
+            <div onclick="animator && animator.toggleAnimate();" type="button" id="playBtn" class="btn btn-dark btn-small">Play</div>
             <div onclick="animator && animator.restartAnimate();" type="button" class="btn btn-dark btn-small">Restart</div>
             <div onclick="animator && animator.toggleBackwards();" id="animatorBackwards" type="button" class="btn btn-dark btn-small">Backwards</div>
         </div>
