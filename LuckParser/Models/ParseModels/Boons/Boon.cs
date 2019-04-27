@@ -747,15 +747,15 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public static BoonSourceFinder GetBoonSourceFinder(ulong version)
+        public static BoonSourceFinder GetBoonSourceFinder(ulong version, BoonsContainer boons)
         {
             if (version > 95112)
             {
-                return new BoonSourceFinder05032019();
+                return new BoonSourceFinder05032019(boons);
             }
             else
             {
-                return new BoonSourceFinder11122018();
+                return new BoonSourceFinder11122018(boons);
             }
         }
     }

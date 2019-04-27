@@ -225,7 +225,7 @@ namespace LuckParser.Models.ParseModels
                         {
                             if (src == 0)
                             {
-                                src = sourceFinder.TryFindSrc(this, time, c.Value, log);
+                                src = sourceFinder.TryFindSrc(this, time, c.Value, log, boonId);
                             }
                             loglist.Add(new BoonExtensionLog(time, c.Value, c.OverstackValue - c.Value, log.AgentData.GetAgentByInstID(src, c.Time)));
                         }
