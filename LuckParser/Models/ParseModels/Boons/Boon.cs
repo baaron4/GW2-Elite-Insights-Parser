@@ -174,12 +174,13 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Daze", 833, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.ForceOverride, "https://wiki.guildwars2.com/images/7/79/Daze.png"),
                 new Boon("Exposed", 48209, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/f/f4/Exposed_%28effect%29.png"),
                 //Auras
-                new Boon("Chaos Armor", 10332, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/1/1b/Chaos_Armor.png"),
-                new Boon("Fire Shield", 5677, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/1/18/Fire_Shield.png"),
+                new Boon("Chaos Aura", 10332, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/1/1b/Chaos_Armor.png"),
+                new Boon("Fire Aura", 5677, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/1/18/Fire_Shield.png"),
                 new Boon("Frost Aura", 5579, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/6/68/Frost_Aura.png"),
                 new Boon("Light Aura", 25518, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/5/5a/Light_Aura.png"),
                 new Boon("Magnetic Aura", 5684, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/5a/Magnetic_Aura.png"),
                 new Boon("Shocking Aura", 5577, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/3/31/Shocking_Aura.png"),
+                new Boon("Dark Aura", 39978, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/ef/Dark_Aura.png", 96406, ulong.MaxValue),
                 //race
                 new Boon("Take Root", 12459, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/b/b2/Take_Root.png"),
                 new Boon("Become the Bear",12426, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/7/7e/Become_the_Bear.png"),
@@ -196,8 +197,8 @@ namespace LuckParser.Models.ParseModels
 
         private readonly static List<Boon> _gear = new List<Boon>
         {
-                new Boon("Sigil of Concentration", 33719, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b3/Superior_Sigil_of_Concentration.png"),
-                new Boon("Superior Rune of the Monk", 53285, BoonSource.Mixed, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/18/Superior_Rune_of_the_Monk.png"),
+                new Boon("Sigil of Concentration", 33719, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b3/Superior_Sigil_of_Concentration.png",0 , 93543),
+                new Boon("Superior Rune of the Monk", 53285, BoonSource.Mixed, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/18/Superior_Rune_of_the_Monk.png", 93543, ulong.MaxValue),
                 new Boon("Sigil of Corruption", 9374, BoonSource.Mixed, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/18/Superior_Sigil_of_Corruption.png"),
                 new Boon("Sigil of Life", 9386, BoonSource.Mixed, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a7/Superior_Sigil_of_Life.png"),
                 new Boon("Sigil of Perception", 9385, BoonSource.Mixed, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/cc/Superior_Sigil_of_Perception.png"),
@@ -286,9 +287,10 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Vicious Lacerations",29395, BoonSource.Revenant, BoonType.Intensity, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png"),
                 new Boon("Rising Momentum",51683, BoonSource.Revenant, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8c/Rising_Momentum.png"),
                 new Boon("Assassin's Presence", 26854, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/5/54/Assassin%27s_Presence.png"),
-                //new Boon("Expose Defenses", 48894, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),
+                new Boon("Expose Defenses", 48894, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/5c/Mutilate_Defenses.png"),
                 new Boon("Invoking Harmony",29025, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/ec/Invoking_Harmony.png"),
-                //new Boon("Selfless Amplification",30509, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),
+                new Boon("Unyielding Devotion",55044, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4f/Unyielding_Devotion.png", 96406, ulong.MaxValue),
+                //new Boon("Selfless Amplification",29025, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/23/Selfless_Amplification.png"),
                 new Boon("Hardening Persistence",28957, BoonSource.Revenant, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/0/0f/Hardening_Persistence.png"),
                 new Boon("Soothing Bastion",34136, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/0/04/Soothing_Bastion.png"),
                 new Boon("Kalla's Fervor",42883, BoonSource.Revenant, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/9e/Kalla%27s_Fervor.png"),
@@ -297,6 +299,7 @@ namespace LuckParser.Models.ParseModels
 
         private readonly static List<Boon> _warrior = new List<Boon>
         {
+                new Boon("Berserk",29502, BoonSource.Warrior, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/4/44/Berserk.png"),
             //skills
                 new Boon("Riposte",14434, BoonSource.Warrior, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/d/de/Riposte.png"),
                 new Boon("Flames of War", 31708, BoonSource.Warrior, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/6f/Flames_of_War_%28warrior_skill%29.png"),
@@ -328,7 +331,8 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Furious Surge", 30204, BoonSource.Warrior, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/65/Furious.png"),
                 //new Boon("Health Gain per Adrenaline bar Spent",-1, BoonSource.Warrior, BoonType.Intensity, 3, BoonEnum.GraphOnlyBuff,RemoveType.Normal, Logic.Override),
                 new Boon("Rousing Resilience",24383, BoonSource.Warrior, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/ca/Rousing_Resilience.png"),
-                new Boon("Always Angry",34099, BoonSource.Warrior, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/63/Always_Angry.png"),
+                new Boon("Feel No Pain (Savage Instinct)",55030, BoonSource.Warrior, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4d/Savage_Instinct.png", 96406, ulong.MaxValue),
+                new Boon("Always Angry",34099, BoonSource.Warrior, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/63/Always_Angry.png", 0 , 96406),
                 new Boon("Full Counter",43949, BoonSource.Warrior, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/f/fb/Full_Counter.png"),
                 new Boon("Attacker's Insight",41963, BoonSource.Warrior, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/89/Attacker%27s_Insight.png"),
         };
@@ -435,7 +439,10 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Sic 'Em!",33902, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png"),
                 new Boon("Sharpening Stones",12536, BoonSource.Ranger, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/af/Sharpening_Stone.png"),
                 new Boon("Ancestral Grace", 31584, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4b/Ancestral_Grace.png"),
-                new Boon("Glyph of Empowerment", 31803, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/f/f0/Glyph_of_Empowerment.png/33px-Glyph_of_Empowerment.png"),
+                new Boon("Glyph of Empowerment", 31803, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/d/d7/Glyph_of_the_Stars.png", 0 , 96406),
+                new Boon("Glyph of Unity", 31385, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b1/Glyph_of_Unity.png"),
+                new Boon("Glyph of Unity (CA)", 31556, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/4/4c/Glyph_of_Unity_%28Celestial_Avatar%29.png"),
+                new Boon("Glyph of the Stars", 55048, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/d/d7/Glyph_of_the_Stars.png", 96406, ulong.MaxValue),
                 new Boon("Dolyak Stance",41815, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/7/71/Dolyak_Stance.png"),
                 new Boon("Griffon Stance",46280, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/9/98/Griffon_Stance.png"),
                 new Boon("Moa Stance",45038, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/6/66/Moa_Stance.png"),
@@ -492,6 +499,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Lotus Training", 32200, BoonSource.Thief, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/ea/Lotus_Training.png"),
                 new Boon("Unhindered Combatant", 32931, BoonSource.Thief, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a1/Unhindered_Combatant.png"),
                 new Boon("Bounding Dodger", 33162, BoonSource.Thief, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/30/Bounding_Dodger.png"),
+                new Boon("Weakening Strikes", 34081, BoonSource.Thief, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/7c/Weakening_Strikes.png", 96406, ulong.MaxValue),
 
         };
 
