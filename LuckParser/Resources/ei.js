@@ -99,11 +99,12 @@ window.onload = function () {
                 var oldMode = this.mode;
                 this.mode = iMode;
                 if (this.animator) {
-                    if (this.mode !== 1 && oldMode === 1) {
-                        // animation running when going out of CR
-                        this.animate = this.animator.animation !== null;
-                    }
-                    if (this.animate) {
+                    if (this.mode !== 1) {
+                        if (oldMode === 1) {
+                            // animation running when going out of CR
+                            this.animate = this.animator.animation !== null;
+                        }
+                    } else if (this.animate) {
                         this.animator.toggleAnimate();
                     }
                 }
