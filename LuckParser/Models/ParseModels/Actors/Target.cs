@@ -40,7 +40,7 @@ namespace LuckParser.Models.ParseModels
             {
                 PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
                 double avgBoon = 0;
-                foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => Boon.BoonsByIds[x.Key].Nature == Boon.BoonNature.Boon).Select(x => x.Value))
+                foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => log.Boons.BoonsByIds[x.Key].Nature == Boon.BoonNature.Boon).Select(x => x.Value))
                 {
                     avgBoon += duration;
                 }
@@ -48,7 +48,7 @@ namespace LuckParser.Models.ParseModels
                 _avgBoons.Add(Math.Round(avgBoon, GeneralHelper.BoonDigit));
 
                 double avgCondi = 0;
-                foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => Boon.BoonsByIds[x.Key].Nature == Boon.BoonNature.Condition).Select(x => x.Value))
+                foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => log.Boons.BoonsByIds[x.Key].Nature == Boon.BoonNature.Condition).Select(x => x.Value))
                 {
                     avgCondi += duration;
                 }

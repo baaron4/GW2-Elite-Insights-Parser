@@ -10,11 +10,17 @@ namespace LuckParser.Models.ParseModels
     public abstract class BoonSourceFinder
     {
         private List<CastLog> _extensionSkills = null;
+        private readonly HashSet<long> _boonIds = null;
         protected HashSet<long> ExtensionIDS = new HashSet<long>();
         protected Dictionary<long, HashSet<long>> DurationToIDs = new Dictionary<long, HashSet<long>>();
         // non trackable times
         protected long EssenceOfSpeed;
         protected long ImbuedMelodies;
+
+        protected BoonSourceFinder(BoonsContainer boons)
+        {
+            _boonIds = new HashSet<long>(boons.BoonsByNature[Boon.BoonNature.Boon].Select(x => x.ID));
+        }
 
         private List<CastLog> GetExtensionSkills(ParsedLog log, long time, HashSet<long> idsToKeep)
         {
@@ -59,8 +65,12 @@ namespace LuckParser.Models.ParseModels
             return -1;
         }
         // Main method
-        public ushort TryFindSrc(AbstractActor a, long time, long extension, ParsedLog log)
+        public ushort TryFindSrc(AbstractActor a, long time, long extension, ParsedLog log, long boonid)
         {
+            if (!_boonIds.Contains(boonid))
+            {
+                return a.InstID;
+            }
             int sbCheck = CheckSoulbeast(a, extension, log);
             if (sbCheck != -1)
             {

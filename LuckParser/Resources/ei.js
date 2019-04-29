@@ -98,11 +98,15 @@ window.onload = function () {
                 }
                 var oldMode = this.mode;
                 this.mode = iMode;
-                if (this.mode !== 1 && oldMode === 1) {
-                    this.animate = this.animator && this.animator.animation !== null;
-                    this.animator && this.animator.stopAnimate();
-                } else if (this.mode === 1 && this.animate) {
-                    this.animator && this.animator.startAnimate();
+                if (this.animator) {
+                    if (this.mode !== 1) {
+                        if (oldMode === 1) {
+                            // animation running when going out of CR
+                            this.animate = this.animator.animation !== null;
+                        }
+                    } else if (this.animate) {
+                        this.animator.toggleAnimate();
+                    }
                 }
             },
         },

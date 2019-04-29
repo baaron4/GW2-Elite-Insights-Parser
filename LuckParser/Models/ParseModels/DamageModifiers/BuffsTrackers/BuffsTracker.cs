@@ -8,9 +8,7 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class BuffsTracker
     {
-
-        public abstract bool Has(Dictionary<long, BoonsGraphModel> bgms);
-
         public abstract int GetStack(Dictionary<long, BoonsGraphModel> bgms, long time);
+        public abstract bool Has(Dictionary<long, BoonsGraphModel> bgms);
     }
 }

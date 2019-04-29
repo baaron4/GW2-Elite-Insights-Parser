@@ -37,7 +37,7 @@
             this.btnFolderSelect = new System.Windows.Forms.Button();
             this.lblCustomSaveLoc = new System.Windows.Forms.Label();
             this.btnResetSkillList = new System.Windows.Forms.Button();
-            this.btnRetrySkillList = new System.Windows.Forms.Button();
+            this.btnResetSpecList = new System.Windows.Forms.Button();
             this.chkOutputHtml = new System.Windows.Forms.CheckBox();
             this.chkOutputCsv = new System.Windows.Forms.CheckBox();
             this.chkShowEstimates = new System.Windows.Forms.CheckBox();
@@ -159,15 +159,15 @@
             this.btnResetSkillList.UseVisualStyleBackColor = true;
             this.btnResetSkillList.Click += new System.EventHandler(this.ResetSkillListClick);
             // 
-            // btnRetrySkillList
+            // btnResetSpecList
             // 
-            this.btnRetrySkillList.Location = new System.Drawing.Point(24, 48);
-            this.btnRetrySkillList.Name = "btnRetrySkillList";
-            this.btnRetrySkillList.Size = new System.Drawing.Size(144, 23);
-            this.btnRetrySkillList.TabIndex = 25;
-            this.btnRetrySkillList.Text = "Retry Skill List";
-            this.btnRetrySkillList.UseVisualStyleBackColor = true;
-            this.btnRetrySkillList.Click += new System.EventHandler(this.RetrySkillListClick);
+            this.btnResetSpecList.Location = new System.Drawing.Point(24, 48);
+            this.btnResetSpecList.Name = "btnResetSpecList";
+            this.btnResetSpecList.Size = new System.Drawing.Size(144, 23);
+            this.btnResetSpecList.TabIndex = 25;
+            this.btnResetSpecList.Text = "Reset Spec List";
+            this.btnResetSpecList.UseVisualStyleBackColor = true;
+            this.btnResetSpecList.Click += new System.EventHandler(this.ResetSpecListClick);
             // 
             // chkOutputHtml
             // 
@@ -582,7 +582,7 @@
             // 
             this.tabPage6.Controls.Add(this.label2);
             this.tabPage6.Controls.Add(this.label1);
-            this.tabPage6.Controls.Add(this.btnRetrySkillList);
+            this.tabPage6.Controls.Add(this.btnResetSpecList);
             this.tabPage6.Controls.Add(this.btnResetSkillList);
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
@@ -605,9 +605,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(24, 24);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(310, 13);
+            this.label1.Size = new System.Drawing.Size(306, 13);
             this.label1.TabIndex = 26;
-            this.label1.Text = "Updates missing skills in the local skill storage from the GW2 API";
+            this.label1.Text = "Resets the local spec list and loads all specs from the GW2 API";
             // 
             // cmdClose
             // 
@@ -635,7 +635,7 @@
             // 
             this.loadButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.loadButton.Location = new System.Drawing.Point(232, 312);
-            this.loadButton.Name = "button1";
+            this.loadButton.Name = "loadButton";
             this.loadButton.Size = new System.Drawing.Size(84, 24);
             this.loadButton.TabIndex = 50;
             this.loadButton.Text = "Load Settings";
@@ -700,7 +700,7 @@
         private System.Windows.Forms.Button btnFolderSelect;
         private System.Windows.Forms.Label lblCustomSaveLoc;
         private System.Windows.Forms.Button btnResetSkillList;
-        private System.Windows.Forms.Button btnRetrySkillList;
+        private System.Windows.Forms.Button btnResetSpecList;
         private System.Windows.Forms.CheckBox chkOutputHtml;
         private System.Windows.Forms.CheckBox chkOutputCsv;
         private System.Windows.Forms.CheckBox chkShowEstimates;

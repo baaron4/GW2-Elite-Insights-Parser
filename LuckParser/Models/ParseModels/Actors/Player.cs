@@ -311,14 +311,14 @@ namespace LuckParser.Models.ParseModels
                 final.TimeWasted = Math.Round(final.TimeWasted / 1000.0, GeneralHelper.TimeDigit);
 
                 double avgBoons = 0;
-                foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => Boon.BoonsByIds[x.Key].Nature == Boon.BoonNature.Boon).Select(x => x.Value))
+                foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => log.Boons.BoonsByIds[x.Key].Nature == Boon.BoonNature.Boon).Select(x => x.Value))
                 {
                     avgBoons += duration;
                 }
                 final.AvgBoons = Math.Round(avgBoons / phase.DurationInMS, GeneralHelper.BoonDigit);
 
                 double avgCondis = 0;
-                foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => Boon.BoonsByIds[x.Key].Nature == Boon.BoonNature.Condition).Select(x => x.Value))
+                foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => log.Boons.BoonsByIds[x.Key].Nature == Boon.BoonNature.Condition).Select(x => x.Value))
                 {
                     avgCondis += duration;
                 }
@@ -510,7 +510,7 @@ namespace LuckParser.Models.ParseModels
                     boonDistributions[p] = p.GetBoonDistribution(log, phaseIndex);
                 }
 
-                HashSet<Boon> boonsToTrack = new HashSet<Boon>(boonDistributions.SelectMany(x => x.Value).Select(x => Boon.BoonsByIds[x.Key]));
+                HashSet<Boon> boonsToTrack = new HashSet<Boon>(boonDistributions.SelectMany(x => x.Value).Select(x => log.Boons.BoonsByIds[x.Key]));
 
                 Dictionary<long, FinalBuffs> final =
                     new Dictionary<long, FinalBuffs>();
@@ -866,7 +866,7 @@ namespace LuckParser.Models.ParseModels
         
         private void SetConsumablesList(ParsedLog log)
         {
-            List<Boon> consumableList = Boon.GetConsumableList();
+            List<Boon> consumableList = log.Boons.GetConsumableList();
             _consumeList = new List<Consumable>();
             long fightDuration = log.FightData.FightDuration;
             foreach (Boon consumable in consumableList)

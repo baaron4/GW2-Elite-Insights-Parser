@@ -11,11 +11,11 @@ namespace LuckParser.Models.ParseModels
     public class DamageLogDamageModifier : DamageModifier
     {
 
-        public DamageLogDamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, DamageLogChecker checker, GainComputer gainComputer, ulong maxBuild = ulong.MaxValue) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer, checker, maxBuild)
+        public DamageLogDamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, DamageLogChecker checker, GainComputer gainComputer, ulong minBuild, ulong maxBuild) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer, checker, minBuild, maxBuild)
         {
         }
 
-        public DamageLogDamageModifier(Boon boon, string tooltip, long id, DamageSource damageSource, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, ulong maxBuild = ulong.MaxValue) : base(boon.Name, tooltip, damageSource, double.PositiveInfinity, srctype, compareType, src, boon.Link, gainComputer, (dl => dl.SkillId == id), maxBuild)
+        public DamageLogDamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, DamageLogChecker checker, GainComputer gainComputer) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer, checker, ulong.MinValue, ulong.MaxValue)
         {
         }
 

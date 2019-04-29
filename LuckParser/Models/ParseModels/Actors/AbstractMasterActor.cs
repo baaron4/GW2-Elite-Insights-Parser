@@ -333,7 +333,7 @@ namespace LuckParser.Models.ParseModels
         protected override void SetBoonStatusGenerationData(ParsedLog log, BoonSimulationItem simul, long boonid)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
-            Boon boon = Boon.BoonsByIds[boonid];
+            Boon boon = log.Boons.BoonsByIds[boonid];
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
@@ -369,7 +369,7 @@ namespace LuckParser.Models.ParseModels
             foreach (CombatItem c in log.CombatData.GetDamageData(InstID, FirstAware, LastAware))
             {
                 long time = log.FightData.ToFightSpace(c.Time);
-                AddDamageLog(time, c);
+                AddDamageLog(time, c, log.Boons);
             }
             Dictionary<string, Minions> minionsList = GetMinions(log);
             foreach (Minions mins in minionsList.Values)

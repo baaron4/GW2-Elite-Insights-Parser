@@ -22,9 +22,10 @@ namespace LuckParser.Parser
         public readonly Dictionary<string, List<Player>> PlayerListBySpec;
         public readonly Target LegacyTarget;
         public readonly Statistics Statistics;
-        public readonly DamageModifierContainer DamageModifiers;
+        public readonly DamageModifiersContainer DamageModifiers;
+        public readonly BoonsContainer Boons;
 
-        
+
 
         public ParsedLog(LogData logData, FightData fightData, AgentData agentData, SkillData skillData, 
                 CombatData combatData, List<Player> playerList, Target target)
@@ -35,8 +36,9 @@ namespace LuckParser.Parser
             SkillData = skillData;
             CombatData = combatData;
             PlayerList = playerList;
-            BoonSourceFinder = Boon.GetBoonSourceFinder(logData.GW2Version);
-            DamageModifiers = new DamageModifierContainer(logData.GW2Version);
+            Boons = new BoonsContainer(logData.GW2Version);
+            BoonSourceFinder = Boon.GetBoonSourceFinder(logData.GW2Version, Boons);
+            DamageModifiers = new DamageModifiersContainer(logData.GW2Version);
             LegacyTarget = target;
             MechanicData = new MechanicData(fightData);
             PlayerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());

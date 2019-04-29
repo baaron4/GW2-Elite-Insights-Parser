@@ -90,12 +90,6 @@ class Animator {
             facingIcon.src = "https://i.imgur.com/tZTmTRn.png";
         }
         //
-        this.rangeControl.set(180, false);
-        this.rangeControl.set(240, false);
-        this.rangeControl.set(300, false);
-        this.rangeControl.set(600, false);
-        this.rangeControl.set(900, false);
-        this.rangeControl.set(1200, false);
         this.trackTransforms();
         this.ctx.scale(resolutionMultiplier, resolutionMultiplier);
         this.initMouseEvents();
@@ -185,20 +179,19 @@ class Animator {
         }
     }
 
-    startAnimate() {
+    toggleAnimate() {
+        const playBtn = document.getElementById("playBtn");
         if (this.animation === null && this.times.length > 0) {
             if (this.reactiveDataStatus.time >= this.times[this.times.length - 1]) {
                 this.reactiveDataStatus.time = 0;
             }
             this.prevTime = new Date().getTime();
             this.animation = requestAnimationFrame(animateCanvas);
-        }
-    }
-
-    stopAnimate() {
-        if (this.animation !== null) {
+            playBtn.innerHTML = "Pause";
+        } else if (this.animation !== null) {
             window.cancelAnimationFrame(this.animation);
             this.animation = null;
+            playBtn.innerHTML = "Play";
         }
     }
 
@@ -470,7 +463,7 @@ function animateCanvas(noRequest) {
         animator.reactiveDataStatus.time = Math.round(Math.max(Math.min(animator.reactiveDataStatus.time + animator.getSpeed() * timeOffset, lastTime),0));
     }
     if ((animator.reactiveDataStatus.time === lastTime && !animator.backwards) || (animator.reactiveDataStatus.time === 0 && animator.backwards)) {
-        animator.stopAnimate();
+        animator.toggleAnimate();
     }
     animator.timeSlider.value = animator.reactiveDataStatus.time.toString();
     if (noRequest > -2) {

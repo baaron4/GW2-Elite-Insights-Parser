@@ -9,16 +9,20 @@ using static LuckParser.Models.Statistics;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class DamageModifierContainer
+    public class DamageModifiersContainer
     {
 
         public Dictionary<ModifierSource, List<DamageModifier>> DamageModifiersPerSource { get; }
 
         public Dictionary<string, DamageModifier> DamageModifiersByName { get; } 
 
-        public DamageModifierContainer(ulong build)
+        public DamageModifiersContainer(ulong build)
         {
-            IEnumerable<DamageModifier> currentDamageMods = AllDamageModifiers.Where(x => x.MaxBuild >= build);
+            List<DamageModifier> currentDamageMods = new List<DamageModifier>();
+            foreach (List<DamageModifier> boons in AllDamageModifiers)
+            {
+                currentDamageMods.AddRange(boons.Where(x => x.MaxBuild > build && build >= x.MinBuild));
+            }
             DamageModifiersPerSource = currentDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
             DamageModifiersByName = currentDamageMods.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().First());
         }

@@ -10,9 +10,9 @@ namespace LuckParser.Models.ParseModels
     {
         private readonly long _id;
 
-        public BuffsTrackerSingle(Boon buff)
+        public BuffsTrackerSingle(long id)
         {
-            _id = buff.ID;
+            _id = id;
         }
 
         public override int GetStack(Dictionary<long, BoonsGraphModel> bgms, long time)
