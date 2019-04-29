@@ -215,7 +215,7 @@ namespace LuckParser.Builders
                 {
                     build += " Toughness:" + player.Toughness;
                 }
-                WriteLine(new [] { player.Group.ToString(), player.Prof,build,player.Character, player.Account.TrimStart(':') ,wep[0],wep[1],wep[2],wep[3],
+                WriteLine(new [] { player.Group.ToString(), player.Prof,build,player.Character, player.Account ,wep[0],wep[1],wep[2],wep[3],
                 dpsBoss.Dps.ToString(),dpsBoss.Damage.ToString(),dpsBoss.PowerDps.ToString(),dpsBoss.PowerDamage.ToString(),dpsBoss.CondiDps.ToString(),dpsBoss.CondiDamage.ToString(),
                 dps.Dps.ToString(),dps.Damage.ToString(),dps.PowerDps.ToString(),dps.PowerDamage.ToString(),dps.CondiDps.ToString(),dps.CondiDamage.ToString(),
                 defense.DownCount.ToString(), deathString, deadthTooltip});

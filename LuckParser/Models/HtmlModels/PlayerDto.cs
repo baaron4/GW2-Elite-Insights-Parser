@@ -29,7 +29,7 @@ namespace LuckParser.Models.HtmlModels
         {
             Group = player.Group;
             Name = player.Character;
-            Acc = player.Account.TrimStart(':');
+            Acc = player.Account;
             Profession = player.Prof;
             Condi = player.Condition;
             Conc = player.Concentration;
