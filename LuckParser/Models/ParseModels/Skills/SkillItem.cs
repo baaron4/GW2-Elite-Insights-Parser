@@ -16,6 +16,11 @@ namespace LuckParser.Models.ParseModels
         public const long AliveId = -6;
         public const long RespawnId = -7;
 
+        public const int FirstLandSet = 4;
+        public const int SecondLandSet = 5;
+        public const int FirstWaterSet = 0;
+        public const int SecondWaterSet = 1;
+
         readonly static Dictionary<long, string> _overrideNames = new Dictionary<long, string>()
         {
             {ResurrectId, "Resurrect"},
@@ -68,6 +73,7 @@ namespace LuckParser.Models.ParseModels
         public bool AA => _apiSkill?.Slot == "Weapon_1" || _apiSkill?.Slot == "Downed_1";
         public string Name { get; private set; }
         public string Icon { get; private set; }
+        public WeaponDescriptor WeaponDescriptor { get; private set; }
         private GW2APISkill _apiSkill;
 
         // Constructor
@@ -88,93 +94,42 @@ namespace LuckParser.Models.ParseModels
 
         public bool EstimateWeapons(string[] weapons, int swapped, bool swapCheck)
         {
-            if (weapons.Length != 4)
+            if (weapons.Length != 8)
             {
                 throw new InvalidOperationException("Invalid count in weapons array");
             }
-            if (!(_apiSkill != null && swapCheck))
+            if (_apiSkill == null || !swapCheck)
             {
                 return false;
             }
-
-            if (_apiSkill.Type == "Weapon" && _apiSkill.Professions.Length > 0 && (_apiSkill.Categories == null || (_apiSkill.Categories.Length == 1 && (_apiSkill.Categories[0] == "Phantasm" || _apiSkill.Categories[0] == "DualWield"))))
+            int id = swapped == FirstLandSet ? 0 : swapped == SecondLandSet ? 2 : swapped == FirstWaterSet ? 4 : swapped == SecondWaterSet ? 6 : -1;
+            if (WeaponDescriptor != null && id > -1)
             {
-                if (_apiSkill.DualWield != null && _apiSkill.DualWield != "None" && _apiSkill.DualWield != "Nothing")
+                if (WeaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.Dual)
                 {
-                    if (swapped == 4)
-                    {
-                        weapons[0] = _apiSkill.WeaponType;
-                        weapons[1] = _apiSkill.DualWield;
-                    }
-                    else if (swapped == 5)
-                    {
-                        weapons[2] = _apiSkill.WeaponType;
-                        weapons[3] = _apiSkill.DualWield;
-                    }
+                    weapons[id] = _apiSkill.WeaponType;
+                    weapons[id + 1] = _apiSkill.DualWield;
                 }
-                else if (_apiSkill.WeaponType == "Greatsword" || _apiSkill.WeaponType == "Staff" || _apiSkill.WeaponType == "Rifle" || _apiSkill.WeaponType == "Longbow" || _apiSkill.WeaponType == "Shortbow" || _apiSkill.WeaponType == "Hammer"
-                    || _apiSkill.WeaponType == "Trident" || _apiSkill.WeaponType == "Speargun" || _apiSkill.WeaponType == "Spear")
+                else if (WeaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.TwoHand)
                 {
-                    if (swapped == 4)
-                    {
-                        weapons[0] = _apiSkill.WeaponType;
-                        weapons[1] = "2Hand";
-                    }
-                    else if (swapped == 5)
-                    {
-                        weapons[2] = _apiSkill.WeaponType;
-                        weapons[3] = "2Hand";
-                    }
-                }//2 handed
-                else if (_apiSkill.WeaponType == "Focus" || _apiSkill.WeaponType == "Shield" || _apiSkill.WeaponType == "Torch" || _apiSkill.WeaponType == "Warhorn")
+                    weapons[id] = _apiSkill.WeaponType;
+                    weapons[id + 1] = "2Hand";
+                }
+                else if (WeaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.MainHand)
                 {
-                    if (swapped == 4)
-                    {
-
-                        weapons[1] = _apiSkill.WeaponType;
-                    }
-                    else if (swapped == 5)
-                    {
-
-                        weapons[3] = _apiSkill.WeaponType;
-                    }
-                }//OffHand
-                else if (_apiSkill.WeaponType == "Axe" || _apiSkill.WeaponType == "Dagger" || _apiSkill.WeaponType == "Mace" || _apiSkill.WeaponType == "Pistol" || _apiSkill.WeaponType == "Sword" || _apiSkill.WeaponType == "Scepter")
+                    weapons[id] = _apiSkill.WeaponType;
+                }
+                else
                 {
-                    if (_apiSkill.Slot == "Weapon_1" || _apiSkill.Slot == "Weapon_2" || _apiSkill.Slot == "Weapon_3")
-                    {
-                        if (swapped == 4)
-                        {
-
-                            weapons[0] = _apiSkill.WeaponType;
-                        }
-                        else if (swapped == 5)
-                        {
-
-                            weapons[2] = _apiSkill.WeaponType;
-                        }
-                    }
-                    if (_apiSkill.Slot == "Weapon_4" || _apiSkill.Slot == "Weapon_5")
-                    {
-                        if (swapped == 4)
-                        {
-
-                            weapons[1] = _apiSkill.WeaponType;
-                        }
-                        else if (swapped == 5)
-                        {
-
-                            weapons[3] = _apiSkill.WeaponType;
-                        }
-                    }
-                }// 1 handed
+                    weapons[id + 1] = _apiSkill.WeaponType;
+                }
             }
             return true;
         }
 
         private void CompleteItem()
         {
-            if (_apiSkill == null && _overrideNames.TryGetValue(ID,out string name))
+            if (_apiSkill == null && _overrideNames.TryGetValue(ID, out string name))
             {
                 Name = name;
             }
@@ -195,9 +150,14 @@ namespace LuckParser.Models.ParseModels
             if (_apiSkill == null && _overrideIcons.TryGetValue(ID, out string icon))
             {
                 Icon = icon;
-            } else
+            }
+            else
             {
                 Icon = _apiSkill != null ? _apiSkill.Icon : _defaultIcon;
+            }
+            if (_apiSkill != null && _apiSkill.Type == "Weapon" && _apiSkill.Professions.Length > 0 && (_apiSkill.Categories == null || (_apiSkill.Categories.Length == 1 && (_apiSkill.Categories[0] == "Phantasm" || _apiSkill.Categories[0] == "DualWield"))))
+            {
+                WeaponDescriptor = new WeaponDescriptor(_apiSkill);
             }
         }
 

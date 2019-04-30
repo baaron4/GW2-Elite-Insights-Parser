@@ -154,6 +154,7 @@
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemOverstack.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\AbstractBoonSimulationItemWasted.cs" />
     <Compile Include="Controllers\GW2APIController.cs" />
+    <Compile Include="Models\ParseModels\Skills\WeaponDescriptor.cs" />
     <Compile Include="Models\Statistics.cs" />
     <Compile Include="Parser\ParsedLog.cs" />
     <Compile Include="Parser\ParseEnum.cs" />
@@ -289,8 +290,8 @@
     <Compile Include="Models\ParseModels\Logs\MechanicLog.cs" />
     <Compile Include="Models\ParseModels\Actors\Player.cs" />
     <Compile Include="Models\ParseModels\Logs\DamageLogPower.cs" />
-    <Compile Include="Models\ParseModels\SkillData.cs" />
-    <Compile Include="Models\ParseModels\SkillItem.cs" />
+    <Compile Include="Models\ParseModels\Skills\SkillData.cs" />
+    <Compile Include="Models\ParseModels\Skills\SkillItem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\SettingsForm.cs">

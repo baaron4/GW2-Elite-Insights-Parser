@@ -59,7 +59,7 @@ namespace LuckParser.Models.HtmlModels
             string[] weps = player.GetWeaponsArray(log);
             List<string> firstSet = new List<string>();
             List<string> secondSet = new List<string>();
-            for (int j = 0; j < weps.Length; j++)
+            for (int j = 0; j < 4; j++)
             {
                 var wep = weps[j];
                 if (wep != null)

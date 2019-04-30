@@ -827,26 +827,20 @@ namespace LuckParser.Models.ParseModels
                     "Sword",
                     "2Hand",
                     null,
+                    null,
+                    null,
+                    null,
+                    null,
                     null
                 };
                 return;
             }
-            string[] weapons = new string[4];//first 2 for first set next 2 for second set
+            string[] weapons = new string[8];//first 2 for first set next 2 for second set, second sets of 4 for underwater
             SkillData skillList = log.SkillData;
             List<CastLog> casting = GetCastLogs(log, 0, log.FightData.FightDuration);      
-            int swapped = 0;//4 for first set and 5 for next
+            int swapped = -1;
             long swappedTime = 0;
-            List<CastLog> swaps = casting.Where(x => x.SkillId == SkillItem.WeaponSwapId).Take(2).ToList();
-            // If the player never swapped, assume they are on their first set
-            if (swaps.Count == 0)
-            {
-                swapped = 4;
-            }
-            // if the player swapped, check on which set they started
-            else
-            {
-                swapped = swaps.First().ExpectedDuration == 4 ? 5 : 4;
-            }
+            List<int> swaps = casting.Where(x => x.SkillId == SkillItem.WeaponSwapId).Select(x => x.ExpectedDuration).ToList();
             foreach (CastLog cl in casting)
             {
                 if (cl.ActualDuration == 0 && cl.SkillId != SkillItem.WeaponSwapId)
@@ -854,6 +848,37 @@ namespace LuckParser.Models.ParseModels
                     continue;
                 }
                 SkillItem skill = skillList.Get(cl.SkillId);
+                // first iteration
+                if (swapped == -1)
+                {
+                    // we started on a proper weapon set
+                    if (skill.WeaponDescriptor != null)
+                    {
+                        int firstSwap = swaps.Count > 0 ? swaps[0] : -1;
+                        if (skill.WeaponDescriptor.IsLand)
+                        {
+                            if (firstSwap != SkillItem.FirstLandSet && firstSwap != SkillItem.SecondLandSet)
+                            {
+                                swapped = swaps.Exists(x => x == SkillItem.FirstLandSet || x == SkillItem.SecondLandSet) ? swaps.First(x => x == SkillItem.FirstLandSet || x == SkillItem.SecondLandSet) : SkillItem.FirstLandSet;
+                            }
+                            else
+                            {
+                                swapped = firstSwap == SkillItem.FirstLandSet ? SkillItem.SecondLandSet : SkillItem.FirstLandSet;
+                            }
+                        }
+                        else
+                        {
+                            if (firstSwap != SkillItem.FirstWaterSet && firstSwap != SkillItem.SecondWaterSet)
+                            {
+                                swapped = swaps.Exists(x => x == SkillItem.FirstWaterSet || x == SkillItem.FirstWaterSet) ? swaps.First(x => x == SkillItem.FirstWaterSet || x == SkillItem.SecondWaterSet) : SkillItem.FirstWaterSet;
+                            }
+                            else
+                            {
+                                swapped = firstSwap == SkillItem.FirstWaterSet ? SkillItem.SecondWaterSet : SkillItem.FirstWaterSet;
+                            }
+                        }
+                    }
+                }
                 if (!skill.EstimateWeapons(weapons, swapped, cl.Time > swappedTime) && cl.SkillId == SkillItem.WeaponSwapId)
                 {
                     //wepswap  
