@@ -1,6 +1,7 @@
 ﻿using LuckParser.Controllers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -73,7 +74,7 @@ namespace LuckParser.Models.ParseModels
         public bool AA => _apiSkill?.Slot == "Weapon_1" || _apiSkill?.Slot == "Downed_1";
         public string Name { get; private set; }
         public string Icon { get; private set; }
-        public WeaponDescriptor WeaponDescriptor { get; private set; }
+        private WeaponDescriptor _weaponDescriptor;
         private GW2APISkill _apiSkill;
 
         // Constructor
@@ -92,6 +93,39 @@ namespace LuckParser.Models.ParseModels
             CompleteItem();
         }
 
+        public int FindWeaponSlot(List<int> swaps)
+        {
+            int swapped = -1;
+            // we started on a proper weapon set
+            if (_weaponDescriptor != null)
+            {
+                int firstSwap = swaps.Count > 0 ? swaps[0] : -1;
+                if (_weaponDescriptor.IsLand)
+                {
+                    if (firstSwap != FirstLandSet && firstSwap != SecondLandSet)
+                    {
+                        swapped = swaps.Exists(x => x == FirstLandSet || x == SecondLandSet) ? swaps.First(x => x == FirstLandSet || x == SecondLandSet) : FirstLandSet;
+                    }
+                    else
+                    {
+                        swapped = firstSwap == FirstLandSet ? SecondLandSet : FirstLandSet;
+                    }
+                }
+                else
+                {
+                    if (firstSwap != FirstWaterSet && firstSwap != SecondWaterSet)
+                    {
+                        swapped = swaps.Exists(x => x == FirstWaterSet || x == FirstWaterSet) ? swaps.First(x => x == FirstWaterSet || x == SecondWaterSet) : FirstWaterSet;
+                    }
+                    else
+                    {
+                        swapped = firstSwap == FirstWaterSet ? SecondWaterSet : FirstWaterSet;
+                    }
+                }
+            }
+            return swapped;
+        }
+
         public bool EstimateWeapons(string[] weapons, int swapped, bool swapCheck)
         {
             if (weapons.Length != 8)
@@ -103,19 +137,19 @@ namespace LuckParser.Models.ParseModels
                 return false;
             }
             int id = swapped == FirstLandSet ? 0 : swapped == SecondLandSet ? 2 : swapped == FirstWaterSet ? 4 : swapped == SecondWaterSet ? 6 : -1;
-            if (WeaponDescriptor != null && id > -1)
+            if (_weaponDescriptor != null && id > -1)
             {
-                if (WeaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.Dual)
+                if (_weaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.Dual)
                 {
                     weapons[id] = _apiSkill.WeaponType;
                     weapons[id + 1] = _apiSkill.DualWield;
                 }
-                else if (WeaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.TwoHand)
+                else if (_weaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.TwoHand)
                 {
                     weapons[id] = _apiSkill.WeaponType;
                     weapons[id + 1] = "2Hand";
                 }
-                else if (WeaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.MainHand)
+                else if (_weaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.MainHand)
                 {
                     weapons[id] = _apiSkill.WeaponType;
                 }
@@ -157,7 +191,7 @@ namespace LuckParser.Models.ParseModels
             }
             if (_apiSkill != null && _apiSkill.Type == "Weapon" && _apiSkill.Professions.Length > 0 && (_apiSkill.Categories == null || (_apiSkill.Categories.Length == 1 && (_apiSkill.Categories[0] == "Phantasm" || _apiSkill.Categories[0] == "DualWield"))))
             {
-                WeaponDescriptor = new WeaponDescriptor(_apiSkill);
+                _weaponDescriptor = new WeaponDescriptor(_apiSkill);
             }
         }
 

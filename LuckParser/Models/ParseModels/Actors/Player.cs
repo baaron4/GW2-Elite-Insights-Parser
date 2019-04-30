@@ -851,33 +851,7 @@ namespace LuckParser.Models.ParseModels
                 // first iteration
                 if (swapped == -1)
                 {
-                    // we started on a proper weapon set
-                    if (skill.WeaponDescriptor != null)
-                    {
-                        int firstSwap = swaps.Count > 0 ? swaps[0] : -1;
-                        if (skill.WeaponDescriptor.IsLand)
-                        {
-                            if (firstSwap != SkillItem.FirstLandSet && firstSwap != SkillItem.SecondLandSet)
-                            {
-                                swapped = swaps.Exists(x => x == SkillItem.FirstLandSet || x == SkillItem.SecondLandSet) ? swaps.First(x => x == SkillItem.FirstLandSet || x == SkillItem.SecondLandSet) : SkillItem.FirstLandSet;
-                            }
-                            else
-                            {
-                                swapped = firstSwap == SkillItem.FirstLandSet ? SkillItem.SecondLandSet : SkillItem.FirstLandSet;
-                            }
-                        }
-                        else
-                        {
-                            if (firstSwap != SkillItem.FirstWaterSet && firstSwap != SkillItem.SecondWaterSet)
-                            {
-                                swapped = swaps.Exists(x => x == SkillItem.FirstWaterSet || x == SkillItem.FirstWaterSet) ? swaps.First(x => x == SkillItem.FirstWaterSet || x == SkillItem.SecondWaterSet) : SkillItem.FirstWaterSet;
-                            }
-                            else
-                            {
-                                swapped = firstSwap == SkillItem.FirstWaterSet ? SkillItem.SecondWaterSet : SkillItem.FirstWaterSet;
-                            }
-                        }
-                    }
+                    swapped = skill.FindWeaponSlot(swaps);
                 }
                 if (!skill.EstimateWeapons(weapons, swapped, cl.Time > swappedTime) && cl.SkillId == SkillItem.WeaponSwapId)
                 {
