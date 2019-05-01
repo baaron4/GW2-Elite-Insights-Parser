@@ -10,21 +10,18 @@ namespace LuckParser.Models.HtmlModels
         public string Icon;
         public bool Aa;
 
-        public static List<SkillDto> AssembleSkills(ICollection<SkillItem> skills)
+        public static void AssembleSkills(ICollection<SkillItem> skills, Dictionary<string, SkillDto> dict)
         {
-            List<SkillDto> dtos = new List<SkillDto>();
             foreach (SkillItem skill in skills)
             {
-                SkillDto dto = new SkillDto()
+                dict["s" + skill.ID] = new SkillDto()
                 {
                     Id = skill.ID,
                     Name = skill.Name,
                     Icon = skill.Icon,
                     Aa = skill.AA
                 };
-                dtos.Add(dto);
             }
-            return dtos;
         }
     }
 }

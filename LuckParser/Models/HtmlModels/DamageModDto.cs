@@ -11,21 +11,20 @@ namespace LuckParser.Models.HtmlModels
         public string Tooltip;
         public bool NonMultiplier;
 
-        public static List<DamageModDto> AssembleDamageModifiers(ICollection<DamageModifier> damageMods)
+        public static void AssembleDamageModifiers(ICollection<DamageModifier> damageMods, Dictionary<string, DamageModDto> dict)
         {
-            List<DamageModDto> dtos = new List<DamageModDto>();
             foreach (DamageModifier mod in damageMods)
             {
-                dtos.Add(new DamageModDto()
+                int id = mod.Name.GetHashCode();
+                dict["d" + id] = new DamageModDto()
                 {
-                    Id = mod.Name.GetHashCode(),
+                    Id = id,
                     Name = mod.Name,
                     Icon = mod.Url,
                     Tooltip = mod.Tooltip,
                     NonMultiplier = !mod.Multiplier
-                });
+                };
             }
-            return dtos;
         }
     }
 }

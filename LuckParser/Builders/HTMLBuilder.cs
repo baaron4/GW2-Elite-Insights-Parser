@@ -604,24 +604,6 @@ namespace LuckParser.Builders
             }
             return list;
         }
-        
-        private List<MechanicDto> BuildMechanics()
-        {
-            List<MechanicDto> mechanicDtos = new List<MechanicDto>();
-            foreach (Mechanic mech in _log.MechanicData.GetPresentMechanics(0))
-            {
-                MechanicDto dto = new MechanicDto
-                {
-                    Name = mech.FullName,
-                    ShortName = mech.ShortName,
-                    Description = mech.Description,
-                    PlayerMech = mech.ShowOnTable && !mech.IsEnemyMechanic,
-                    EnemyMech = mech.IsEnemyMechanic
-                };
-                mechanicDtos.Add(dto);
-            }
-            return mechanicDtos;
-        }
 
         private List<MechanicChartDataDto> BuildMechanicsChartData()
         {
@@ -721,8 +703,6 @@ namespace LuckParser.Builders
             html = html.Replace("<!--${JsCRLink}-->", BuildCRLinkJs(path));
 
             html = html.Replace("'${logDataJson}'", BuildLogData());
-
-            html = html.Replace("<!--${Maps}-->", BuildMaps());
 #if DEBUG
             html = html.Replace("<!--${Vue}-->", "<script src=\"https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js\"></script>");
 #else
@@ -1126,7 +1106,12 @@ namespace LuckParser.Builders
             logData.FightIcon = _log.FightData.Logic.IconUrl;
             logData.LightTheme = Properties.Settings.Default.LightTheme;
             logData.SingleGroup = _log.PlayerList.Where(x => !x.IsFakeActor).Select(x => x.Group).Distinct().Count() == 1;
-            logData.NoMechanics = _log.FightData.Logic.MechanicList.Count == 3;
+            logData.NoMechanics = _log.FightData.Logic.MechanicList.Count == 6;
+            //
+            SkillDto.AssembleSkills(_usedSkills.Values, logData.SkillMap);
+            DamageModDto.AssembleDamageModifiers(_usedDamageMods, logData.DamageModMap);
+            BoonDto.AssembleBoons(_usedBoons.Values, logData.BuffMap);
+            MechanicDto.BuildMechanics(_log.MechanicData.GetPresentMechanics(0), logData.MechanicMap);
             return ToJson(logData);
         }
 
@@ -1144,27 +1129,6 @@ namespace LuckParser.Builders
                 }
             }
             return false;
-        }
-
-        private string BuildMaps()
-        {
-            string skillsScript = "var usedSkills = " + ToJson(SkillDto.AssembleSkills(_usedSkills.Values)) + ";" +
-                "var skillMap = {};" +
-                "$.each(usedSkills, function(i, skill) {" +
-                    "skillMap['s'+skill.id]=skill;" +
-                "});";
-            string boonsScript = "var usedBoons = " + ToJson(BoonDto.AssembleBoons(_usedBoons.Values)) + ";" +
-                "var buffMap = {};" +
-                "$.each(usedBoons, function(i, boon) {" +
-                    "buffMap['b'+boon.id]=boon;" +
-                "});";
-            string damageModsScript = "var usedDamageMods = " + ToJson(DamageModDto.AssembleDamageModifiers(_usedDamageMods)) + ";" +
-                "var damageModMap = {};" +
-                "$.each(usedDamageMods, function(i, damageMod) {" +
-                    "damageModMap['d'+damageMod.id]=damageMod;" +
-                "});";
-            string mechanicsScript = "var mechanicMap = " + ToJson(BuildMechanics()) + ";";
-            return "<script>\r\n" + skillsScript + "\r\n" + boonsScript + "\r\n" + damageModsScript + "\r\n" + mechanicsScript + "\r\n</script>";
         }
 
         private ActorDetailsDto BuildPlayerData(Player player)

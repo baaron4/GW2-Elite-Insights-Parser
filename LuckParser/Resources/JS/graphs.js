@@ -107,7 +107,7 @@ var compileGraphs = function () {
             // mechanics
             for (i = 0; i < graphData.mechanics.length; i++) {
                 var mech = graphData.mechanics[i];
-                var mechData = mechanicMap[i];
+                var mechData = logData.mechanicMap[i];
                 var chart = {
                     x: [],
                     mode: 'markers',
@@ -295,7 +295,7 @@ var compileGraphs = function () {
                 }
                 for (i = 0; i < graphData.mechanics.length; i++) {
                     var mech = graphData.mechanics[i];
-                    var mechData = mechanicMap[i];
+                    var mechData = logData.mechanicMap[i];
                     var chart = [];
                     res[offset++] = chart;
                     var time, pts, k, ftime, y, yp1;

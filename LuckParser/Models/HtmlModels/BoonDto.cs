@@ -12,12 +12,11 @@ namespace LuckParser.Models.HtmlModels
         public bool Consumable;
         public bool Enemy;
 
-        public static List<BoonDto> AssembleBoons(ICollection<Boon> boons)
+        public static void AssembleBoons(ICollection<Boon> boons, Dictionary<string, BoonDto> dict)
         {
-            List<BoonDto> dtos = new List<BoonDto>();
             foreach (Boon boon in boons)
             {
-                dtos.Add(new BoonDto()
+                dict["b" + boon.ID] = new BoonDto()
                 {
                     Id = boon.ID,
                     Name = boon.Name,
@@ -25,9 +24,8 @@ namespace LuckParser.Models.HtmlModels
                     Stacking = (boon.Type == Boon.BoonType.Intensity),
                     Consumable = (boon.Nature == Boon.BoonNature.Consumable),
                     Enemy = (boon.Source == Boon.BoonSource.Enemy)
-                });
+                };
             }
-            return dtos;
         }
     }
 }
