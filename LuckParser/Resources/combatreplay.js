@@ -180,19 +180,34 @@ class Animator {
     }
 
     toggleAnimate() {
-        const playBtn = document.getElementById("playBtn");
+        if (!this.startAnimate()) {
+            this.stopAnimate();
+        }
+    }
+
+    startAnimate() {
         if (this.animation === null && this.times.length > 0) {
+            const playBtn = document.getElementById("playBtn");
             if (this.reactiveDataStatus.time >= this.times[this.times.length - 1]) {
                 this.reactiveDataStatus.time = 0;
             }
             this.prevTime = new Date().getTime();
             this.animation = requestAnimationFrame(animateCanvas);
             playBtn.innerHTML = "Pause";
-        } else if (this.animation !== null) {
+            return true;
+        }
+        return false;
+    }
+
+    stopAnimate() {
+        if (this.animation !== null) {
+            const playBtn = document.getElementById("playBtn");
             window.cancelAnimationFrame(this.animation);
             this.animation = null;
             playBtn.innerHTML = "Play";
+            return true;
         }
+        return false;
     }
 
     restartAnimate() {
@@ -463,7 +478,7 @@ function animateCanvas(noRequest) {
         animator.reactiveDataStatus.time = Math.round(Math.max(Math.min(animator.reactiveDataStatus.time + animator.getSpeed() * timeOffset, lastTime),0));
     }
     if ((animator.reactiveDataStatus.time === lastTime && !animator.backwards) || (animator.reactiveDataStatus.time === 0 && animator.backwards)) {
-        animator.toggleAnimate();
+        animator.stopAnimate();
     }
     animator.timeSlider.value = animator.reactiveDataStatus.time.toString();
     if (noRequest > -2) {
