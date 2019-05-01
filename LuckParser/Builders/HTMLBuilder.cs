@@ -722,7 +722,6 @@ namespace LuckParser.Builders
 
             html = html.Replace("'${logDataJson}'", BuildLogData());
 
-            html = html.Replace("<!--${Details}-->", BuildDetails());
             html = html.Replace("<!--${Maps}-->", BuildMaps());
 #if DEBUG
             html = html.Replace("<!--${Vue}-->", "<script src=\"https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js\"></script>");
@@ -1004,7 +1003,7 @@ namespace LuckParser.Builders
             }
             foreach(Player player in _log.PlayerList)
             {
-                logData.Players.Add(new PlayerDto(player, _log, _cr));
+                logData.Players.Add(new PlayerDto(player, _log, _cr, BuildPlayerData(player)));
             }
 
             foreach(DummyActor enemy in _log.MechanicData.GetEnemyList(0))
@@ -1014,7 +1013,7 @@ namespace LuckParser.Builders
 
             foreach (Target target in _log.FightData.Logic.Targets)
             {
-                TargetDto targetDto = new TargetDto(target, _log, _cr);
+                TargetDto targetDto = new TargetDto(target, _log, _cr, BuildTargetData(target));
                 
                 
                 logData.Targets.Add(targetDto);
@@ -1145,23 +1144,6 @@ namespace LuckParser.Builders
                 }
             }
             return false;
-        }
-
-        private string BuildDetails()
-        {
-            string scripts = "";
-            for (var i = 0; i < _log.PlayerList.Count; i++) {
-                Player player = _log.PlayerList[i];
-                string playerScript = "logData.players[" + i + "].details = " + ToJson(BuildPlayerData(player)) + ";\r\n";
-                scripts += playerScript;
-            }
-            for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
-            {
-                Target target = _log.FightData.Logic.Targets[i];
-                string targetScript = "logData.targets[" + i + "].details = " + ToJson(BuildTargetData(target)) + ";\r\n";
-                scripts += targetScript;
-            }
-            return "<script>\r\n"+scripts + "\r\n</script>";
         }
 
         private string BuildMaps()
