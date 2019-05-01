@@ -17,10 +17,10 @@ namespace LuckParser.Models.ParseModels
         public const long AliveId = -6;
         public const long RespawnId = -7;
 
-        public const int FirstLandSet = 4;
-        public const int SecondLandSet = 5;
-        public const int FirstWaterSet = 0;
-        public const int SecondWaterSet = 1;
+        private const int _firstLandSet = 4;
+        private const int _secondLandSet = 5;
+        private const int _firstWaterSet = 0;
+        private const int _secondWaterSet = 1;
 
         readonly static Dictionary<long, string> _overrideNames = new Dictionary<long, string>()
         {
@@ -93,6 +93,11 @@ namespace LuckParser.Models.ParseModels
             CompleteItem();
         }
 
+        public static bool IsWeaponSet(int swapped)
+        {
+            return swapped == _firstLandSet || swapped == _secondLandSet || swapped == _firstWaterSet || swapped == _secondWaterSet;
+        }
+
         public int FindWeaponSlot(List<int> swaps)
         {
             int swapped = -1;
@@ -102,24 +107,26 @@ namespace LuckParser.Models.ParseModels
                 int firstSwap = swaps.Count > 0 ? swaps[0] : -1;
                 if (_weaponDescriptor.IsLand)
                 {
-                    if (firstSwap != FirstLandSet && firstSwap != SecondLandSet)
+                    // if the first swap is not a land set that means the next time we get to a land set was the first set to begin with
+                    if (firstSwap != _firstLandSet && firstSwap != _secondLandSet)
                     {
-                        swapped = swaps.Exists(x => x == FirstLandSet || x == SecondLandSet) ? swaps.First(x => x == FirstLandSet || x == SecondLandSet) : FirstLandSet;
+                        swapped = swaps.Exists(x => x == _firstLandSet || x == _secondLandSet) ? swaps.First(x => x == _firstLandSet || x == _secondLandSet) : _firstLandSet;
                     }
                     else
                     {
-                        swapped = firstSwap == FirstLandSet ? SecondLandSet : FirstLandSet;
+                        swapped = firstSwap == _firstLandSet ? _secondLandSet : _firstLandSet;
                     }
                 }
                 else
                 {
-                    if (firstSwap != FirstWaterSet && firstSwap != SecondWaterSet)
+                    // if the first swap is not a water set that means the next time we get to a water set was the first set to begin with
+                    if (firstSwap != _firstWaterSet && firstSwap != _secondWaterSet)
                     {
-                        swapped = swaps.Exists(x => x == FirstWaterSet || x == FirstWaterSet) ? swaps.First(x => x == FirstWaterSet || x == SecondWaterSet) : FirstWaterSet;
+                        swapped = swaps.Exists(x => x == _firstWaterSet || x == _firstWaterSet) ? swaps.First(x => x == _firstWaterSet || x == _secondWaterSet) : _firstWaterSet;
                     }
                     else
                     {
-                        swapped = firstSwap == FirstWaterSet ? SecondWaterSet : FirstWaterSet;
+                        swapped = firstSwap == _firstWaterSet ? _secondWaterSet : _firstWaterSet;
                     }
                 }
             }
@@ -132,31 +139,28 @@ namespace LuckParser.Models.ParseModels
             {
                 throw new InvalidOperationException("Invalid count in weapons array");
             }
-            if (_apiSkill == null || !swapCheck)
+            int id = swapped == _firstLandSet ? 0 : swapped == _secondLandSet ? 2 : swapped == _firstWaterSet ? 4 : swapped == _secondWaterSet ? 6 : -1;
+            if (_weaponDescriptor == null || id == - 1 || !swapCheck)
             {
                 return false;
             }
-            int id = swapped == FirstLandSet ? 0 : swapped == SecondLandSet ? 2 : swapped == FirstWaterSet ? 4 : swapped == SecondWaterSet ? 6 : -1;
-            if (_weaponDescriptor != null && id > -1)
+            if (_weaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.Dual)
             {
-                if (_weaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.Dual)
-                {
-                    weapons[id] = _apiSkill.WeaponType;
-                    weapons[id + 1] = _apiSkill.DualWield;
-                }
-                else if (_weaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.TwoHand)
-                {
-                    weapons[id] = _apiSkill.WeaponType;
-                    weapons[id + 1] = "2Hand";
-                }
-                else if (_weaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.MainHand)
-                {
-                    weapons[id] = _apiSkill.WeaponType;
-                }
-                else
-                {
-                    weapons[id + 1] = _apiSkill.WeaponType;
-                }
+                weapons[id] = _apiSkill.WeaponType;
+                weapons[id + 1] = _apiSkill.DualWield;
+            }
+            else if (_weaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.TwoHand)
+            {
+                weapons[id] = _apiSkill.WeaponType;
+                weapons[id + 1] = "2Hand";
+            }
+            else if (_weaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.MainHand)
+            {
+                weapons[id] = _apiSkill.WeaponType;
+            }
+            else
+            {
+                weapons[id + 1] = _apiSkill.WeaponType;
             }
             return true;
         }
