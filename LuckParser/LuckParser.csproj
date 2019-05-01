@@ -90,7 +90,6 @@
     <Compile Include="Builders\HTMLBuilder.cs" />
     <Compile Include="Builders\CSVBuilder.cs" />
     <Compile Include="Builders\RawFormatBuilder.cs" />
-    <Compile Include="Builders\Helpers\CombatReplayHelper.cs" />
     <Compile Include="Builders\Helpers\CSVHelper.cs" />
     <Compile Include="GeneralHelper.cs" />
     <Compile Include="Controllers\FlashWindow.cs" />
@@ -103,6 +102,7 @@
     <Compile Include="Models\FightLogic\UnknownFightLogic.cs" />
     <Compile Include="Models\FightLogic\BanditTrio.cs" />
     <Compile Include="Models\FightLogic\Freezie.cs" />
+    <Compile Include="Models\HtmlModels\CombatReplayDto.cs" />
     <Compile Include="Models\HtmlModels\DamageModData.cs" />
     <Compile Include="Models\HtmlModels\DamageModDto.cs" />
     <Compile Include="Models\JsonModels\JsonActor.cs" />

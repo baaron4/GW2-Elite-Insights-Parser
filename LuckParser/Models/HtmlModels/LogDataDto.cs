@@ -14,9 +14,9 @@ namespace LuckParser.Models.HtmlModels
         public readonly List<long> DmgModifiersItem = new List<long>();
         public readonly List<long> DmgModifiersCommon = new List<long>();
         public readonly Dictionary<string, List<long>> DmgModifiersPers = new Dictionary<string, List<long>>();
-        public readonly Dictionary<string, List<long>> PersBuffs = new Dictionary<string, List<long>>();
-        
+        public readonly Dictionary<string, List<long>> PersBuffs = new Dictionary<string, List<long>>();     
         public readonly List<long> Conditions = new List<long>();
+        public CombatReplayDto CrData = null;
         public string EncounterDuration;
         public bool Success;
         public bool Wvw;

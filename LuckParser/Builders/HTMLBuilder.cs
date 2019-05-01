@@ -733,7 +733,6 @@ namespace LuckParser.Builders
             html = html.Replace("'${graphDataJson}'", BuildGraphJson());
 
             html = html.Replace("<!--${CombatReplayScript}-->", BuildCombatReplayScript(path));
-            html = html.Replace("<!--${CombatReplayBody}-->", BuildCombatReplayContent());
             sw.Write(html);
             return;       
         }
@@ -744,6 +743,7 @@ namespace LuckParser.Builders
             {
                 return "";
             }
+            string scriptContent = Properties.Resources.combatreplay_js;
             CombatReplayMap map = _log.FightData.Logic.GetCombatMap();
             if (Properties.Settings.Default.HtmlExternalScripts)
             {
@@ -758,30 +758,18 @@ namespace LuckParser.Builders
                     using (var fs = new FileStream(jsPath, FileMode.Create, FileAccess.Write))
                     using (var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
                     {
-                        scriptWriter.Write(Properties.Resources.combatreplay_js);
+                        scriptWriter.Write(scriptContent);
                     }
                 } catch (IOException)
                 {
                 }
                 string content = "<script src=\"./" + jsFileName + "?version=" + _scriptVersionRev + "\"></script>\n";
-                content += "<script>"+ CombatReplayHelper.GetDynamicCombatReplayScript(_log, GeneralHelper.PollingRate, map)+ "</script>";
                 return content;
             }
             else
             {
-                return CombatReplayHelper.CreateCombatReplayScript(_log, map, GeneralHelper.PollingRate);
+                return "<script>\r\n" + scriptContent + "\r\n</script>";
             }
-        }
-
-        private string BuildCombatReplayContent()
-        {
-            if (!_cr)
-            {
-                return "";
-            }
-            CombatReplayMap map = _log.FightData.Logic.GetCombatMap();
-            (int width, int height) canvasSize = map.GetPixelMapSize();
-            return CombatReplayHelper.CreateCombatReplayInterface(canvasSize, _log);
         }
 
         private string BuildTemplates(string script)
@@ -1010,6 +998,10 @@ namespace LuckParser.Builders
         private string BuildLogData()
         {
             LogDataDto logData = new LogDataDto();
+            if (_cr)
+            {
+                logData.CrData = new CombatReplayDto(_log);
+            }
             foreach(Player player in _log.PlayerList)
             {
                 logData.Players.Add(new PlayerDto(player, _log, _cr));
