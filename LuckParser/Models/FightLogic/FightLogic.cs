@@ -299,20 +299,6 @@ namespace LuckParser.Models.Logic
             SetSuccessByDeath(log, true, TriggerID);
         }
 
-
-        public void ComputeMechanics(ParsedLog log)
-        {
-            MechanicData mechData = log.MechanicData;
-            CombatData combatData = log.CombatData;
-            HashSet<ushort> playersIds = log.PlayerIDs;
-            Dictionary<ushort, DummyActor> regroupedMobs = new Dictionary<ushort, DummyActor>();
-            foreach (Mechanic mech in MechanicList)
-            {
-                mech.CheckMechanic(log, regroupedMobs);
-            }
-            mechData.ProcessMechanics(log);
-        }
-
         public virtual void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
         }
