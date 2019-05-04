@@ -8,6 +8,7 @@ namespace LuckParser.Models.ParseModels
     public class CombatData
     {
         public List<CombatItem> AllCombatItems { get; }
+
         private Dictionary<ParseEnum.StateChange, List<CombatItem>> _statesData;
         //private List<CombatItem> _healingData;
         //private List<CombatItem> _healingReceivedData;
@@ -20,7 +21,19 @@ namespace LuckParser.Models.ParseModels
         private Dictionary<ushort, List<CombatItem>> _damageTakenData;
         private Dictionary<ushort, List<CombatItem>> _movementData;
 
-        public CombatData(List<CombatItem> allCombatItems, FightData fightData)
+        private void PlayerSpecialBoonParse(List<Player> players, Dictionary<ushort, List<CombatItem>> buffsPerInst)
+        {
+
+            foreach (Player p in players)
+            {
+                if (p.Prof == "Weaver")
+                {
+                    WeaverBoonsHelper.TransformWeaverAttunements(p, buffsPerInst);
+                }
+            }
+        }
+
+        public CombatData(List<CombatItem> allCombatItems, FightData fightData, List<Player> players)
         {
             AllCombatItems = allCombatItems;
             _skillData = allCombatItems.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
@@ -48,8 +61,9 @@ namespace LuckParser.Models.ParseModels
             boonData.AddRange(buffApply);
             boonData.AddRange(buffInitial);
             boonData.Sort((x, y) => x.Time.CompareTo(y.Time));
-            _boonData = boonData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
             _boonDataByDst = boonData.GroupBy(x => x.IsBuffRemove == ParseEnum.BuffRemove.None ? x.DstInstid : x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList());
+            PlayerSpecialBoonParse(players, _boonDataByDst);
+            _boonData = boonData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
             // damage events
             var damageData = noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0));
             _damageData = damageData.GroupBy(x => x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList());
