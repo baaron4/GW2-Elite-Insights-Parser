@@ -18,10 +18,10 @@ namespace LuckParser.Models.HtmlModels
         public uint Heal;
         public uint Tough;
         public readonly List<MinionDto> Minions = new List<MinionDto>();
-        public List<string> L1Set;
-        public List<string> L2Set;
-        public List<string> A1Set;
-        public List<string> A2Set;
+        public readonly List<string> L1Set = new List<string>();
+        public readonly List<string> L2Set = new List<string>();
+        public readonly List<string> A1Set = new List<string>();
+        public readonly List<string> A2Set = new List<string>();
         public string ColTarget;
         public string ColCleave;
         public string ColTotal;
