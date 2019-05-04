@@ -18,8 +18,10 @@ namespace LuckParser.Models.HtmlModels
         public uint Heal;
         public uint Tough;
         public readonly List<MinionDto> Minions = new List<MinionDto>();
-        public List<string> FirstSet;
-        public List<string> SecondSet;
+        public readonly List<string> L1Set = new List<string>();
+        public readonly List<string> L2Set = new List<string>();
+        public readonly List<string> A1Set = new List<string>();
+        public readonly List<string> A2Set = new List<string>();
         public string ColTarget;
         public string ColCleave;
         public string ColTotal;
@@ -54,25 +56,23 @@ namespace LuckParser.Models.HtmlModels
             }
         }
 
-        private void BuildWeaponSets(Player player, ParsedLog log)
+        private void BuildWeaponSets(string[] weps, int offset, List<string> set1, List<string> set2)
         {
-            string[] weps = player.GetWeaponsArray(log);
-            List<string> firstSet = new List<string>();
-            List<string> secondSet = new List<string>();
-            for (int j = 0; j < weps.Length; j++)
+
+            for (int j = 0; j < 4; j++)
             {
-                var wep = weps[j];
+                var wep = weps[j + offset];
                 if (wep != null)
                 {
                     if (wep != "2Hand")
                     {
                         if (j > 1)
                         {
-                            secondSet.Add(wep);
+                            set2.Add(wep);
                         }
                         else
                         {
-                            firstSet.Add(wep);
+                            set1.Add(wep);
                         }
                     }
                 }
@@ -80,30 +80,29 @@ namespace LuckParser.Models.HtmlModels
                 {
                     if (j > 1)
                     {
-                        secondSet.Add("Unknown");
+                        set2.Add("Unknown");
                     }
                     else
                     {
-                        firstSet.Add("Unknown");
+                        set1.Add("Unknown");
                     }
                 }
             }
-            if (firstSet[0] == "Unknown" && firstSet[1] == "Unknown")
+            if (set1[0] == "Unknown" && set1[1] == "Unknown")
             {
-                FirstSet = new List<string>();
+                set1.Clear();
             }
-            else
+            if (set2[0] == "Unknown" && set2[1] == "Unknown")
             {
-                FirstSet = firstSet;
+                set2.Clear();
             }
-            if (secondSet[0] == "Unknown" && secondSet[1] == "Unknown")
-            {
-                SecondSet = new List<string>();
-            }
-            else
-            {
-                SecondSet = secondSet;
-            }
+        }
+
+        private void BuildWeaponSets(Player player, ParsedLog log)
+        {
+            string[] weps = player.GetWeaponsArray(log);
+            BuildWeaponSets(weps, 0, L1Set, L2Set);
+            BuildWeaponSets(weps, 4, A1Set, A2Set);
         }
     }
 }

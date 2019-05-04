@@ -35,7 +35,7 @@ namespace LuckParser.Models.ParseModels
             return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time <= time && time <= x.Time + x.ActualDuration + 10).ToList();
         }
         // Spec specific checks
-        private int CheckSoulbeast(AbstractActor a, long extension, ParsedLog log)
+        private int CouldBeEssenceOfSpeed(AbstractActor a, long extension, ParsedLog log)
         {
             if (extension == EssenceOfSpeed && a.Prof == "Soulbeast")
             {
@@ -49,7 +49,7 @@ namespace LuckParser.Models.ParseModels
             return -1;
         }
 
-        private int CheckTempest(CastLog item, long time, long extension, ParsedLog log)
+        private bool CouldBeImbuedMelodies(CastLog item, long time, long extension, ParsedLog log)
         {
             if (extension == ImbuedMelodies && log.PlayerListBySpec.TryGetValue("Tempest", out List<Player> tempests))
             {
@@ -58,11 +58,11 @@ namespace LuckParser.Models.ParseModels
                 {
                     if (magAuraApplications.Contains(tempest.InstID))
                     {
-                        return 0;
+                        return true;
                     }
                 }
             }
-            return -1;
+            return false;
         }
         // Main method
         public ushort TryFindSrc(AbstractActor a, long time, long extension, ParsedLog log, long boonid)
@@ -71,10 +71,11 @@ namespace LuckParser.Models.ParseModels
             {
                 return a.InstID;
             }
-            int sbCheck = CheckSoulbeast(a, extension, log);
-            if (sbCheck != -1)
+            int essenceOfSpeedCheck = CouldBeEssenceOfSpeed(a, extension, log);
+            if (essenceOfSpeedCheck != -1)
             {
-                return (ushort)sbCheck;
+                // unknown or self
+                return (ushort)essenceOfSpeedCheck;
             }
             HashSet<long> idsToCheck = new HashSet<long>();
             if (DurationToIDs.TryGetValue(extension, out idsToCheck))
@@ -84,10 +85,9 @@ namespace LuckParser.Models.ParseModels
                 {
                     CastLog item = cls.First();
                     // Imbued Melodies check
-                    int tempestCheck = CheckTempest(item, time, extension, log);
-                    if (tempestCheck != -1)
+                    if (CouldBeImbuedMelodies(item, time, extension, log))
                     {
-                        return (ushort)tempestCheck;
+                        return 0;
                     }
                     return item.SrcInstId;
                 }

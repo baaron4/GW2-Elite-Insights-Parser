@@ -24,7 +24,8 @@ namespace LuckParser.Models.JsonModels
         public string Profession;
         /// <summary>
         /// Weapons of the player \n
-        /// First 2 are the first set, second 2 are the second set \n
+        /// 0-1 are the first land set, 1-2 are the second land set \n
+        /// 3-4 are the first aquatic set, 5-6 are the second aquatic set \n
         /// When unknown, 'Unknown' value will appear \n
         /// If 2 handed weapon even indices will have "2Hand" as value
         /// </summary>

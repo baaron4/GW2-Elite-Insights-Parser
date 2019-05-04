@@ -102,10 +102,10 @@ window.onload = function () {
                     if (this.mode !== 1) {
                         if (oldMode === 1) {
                             // animation running when going out of CR
-                            this.animate = this.animator.animation !== null;
+                            this.animate = this.stopAnimate();
                         }
                     } else if (this.animate) {
-                        this.animator.toggleAnimate();
+                        this.animator.startAnimate();
                     }
                 }
             },

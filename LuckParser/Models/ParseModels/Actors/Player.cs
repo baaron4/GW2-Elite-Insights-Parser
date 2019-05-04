@@ -827,26 +827,20 @@ namespace LuckParser.Models.ParseModels
                     "Sword",
                     "2Hand",
                     null,
+                    null,
+                    null,
+                    null,
+                    null,
                     null
                 };
                 return;
             }
-            string[] weapons = new string[4];//first 2 for first set next 2 for second set
+            string[] weapons = new string[8];//first 2 for first set next 2 for second set, second sets of 4 for underwater
             SkillData skillList = log.SkillData;
             List<CastLog> casting = GetCastLogs(log, 0, log.FightData.FightDuration);      
-            int swapped = 0;//4 for first set and 5 for next
+            int swapped = -1;
             long swappedTime = 0;
-            List<CastLog> swaps = casting.Where(x => x.SkillId == SkillItem.WeaponSwapId).Take(2).ToList();
-            // If the player never swapped, assume they are on their first set
-            if (swaps.Count == 0)
-            {
-                swapped = 4;
-            }
-            // if the player swapped, check on which set they started
-            else
-            {
-                swapped = swaps.First().ExpectedDuration == 4 ? 5 : 4;
-            }
+            List<int> swaps = casting.Where(x => x.SkillId == SkillItem.WeaponSwapId).Select(x => x.ExpectedDuration).ToList();
             foreach (CastLog cl in casting)
             {
                 if (cl.ActualDuration == 0 && cl.SkillId != SkillItem.WeaponSwapId)
@@ -854,6 +848,11 @@ namespace LuckParser.Models.ParseModels
                     continue;
                 }
                 SkillItem skill = skillList.Get(cl.SkillId);
+                // first iteration
+                if (swapped == -1)
+                {
+                    swapped = skill.FindWeaponSlot(swaps);
+                }
                 if (!skill.EstimateWeapons(weapons, swapped, cl.Time > swappedTime) && cl.SkillId == SkillItem.WeaponSwapId)
                 {
                     //wepswap  
