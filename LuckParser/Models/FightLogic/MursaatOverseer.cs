@@ -103,7 +103,7 @@ namespace LuckParser.Models.Logic
             switch (mob.ID)
             {
                 case (ushort)Jade:
-                    List<CombatItem> shield = GetFilteredList(log, 38155, mob, true);
+                    List<CombatItem> shield = GetFilteredList(log.CombatData, 38155, mob, true);
                     int shieldStart = 0;
                     int shieldRadius = 100;
                     foreach (CombatItem c in shield)
@@ -134,14 +134,14 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override int IsCM(ParsedLog log)
+        public override int IsCM(ParsedEvtcContainer evtcContainer)
         {
             Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.MursaatOverseer);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
-            OverrideMaxHealths(log);
+            OverrideMaxHealths(evtcContainer);
             return (target.Health > 25e6) ? 1 : 0;
         }
     }

@@ -34,9 +34,8 @@ namespace LuckParser.Parser
                 CombatData combatData, List<Player> playerList, Target target)
         {
             _container = new ParsedEvtcContainer(logData, fightData, agentData, skillData, combatData, playerList);
-            Boons = new BoonsContainer(logData.GW2Version);
-
-            FightData.SetSuccess(this);
+            //
+            FightData.SetSuccess(_container);
             if (FightData.FightDuration <= 2200)
             {
                 throw new TooShortException();
@@ -46,8 +45,9 @@ namespace LuckParser.Parser
                 throw new SkipException();
             }
             CombatData.Update(FightData.FightEnd);
-            FightData.SetCM(this);
-
+            FightData.SetCM(_container);
+            //
+            Boons = new BoonsContainer(logData.GW2Version);
             BoonSourceFinder = Boon.GetBoonSourceFinder(logData.GW2Version, Boons);
             DamageModifiers = new DamageModifiersContainer(logData.GW2Version);
             MechanicData = new MechanicData(this);

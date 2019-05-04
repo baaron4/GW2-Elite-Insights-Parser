@@ -77,7 +77,7 @@ namespace LuckParser.Models.Logic
             return phases;
         }
 
-        private void HPCheck(ParsedLog log)
+        private void HPCheck(ParsedEvtcContainer evtcContainer)
         {
             Target eye1 = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.EyeOfFate);
             Target eye2 = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.EyeOfJudgement);
@@ -95,7 +95,7 @@ namespace LuckParser.Models.Logic
             long margin2 = Math.Min(80, lastEye2Hp);
             if (lastEye1Hp <= margin1 && lastEye2Hp <= margin2)
             {
-                log.FightData.Success = true;
+                evtcContainer.FightData.Success = true;
                 int lastIEye1;
                 for (lastIEye1 = eye1.HealthOverTime.Count - 1; lastIEye1 >= 0; lastIEye1--)
                 {
@@ -114,18 +114,18 @@ namespace LuckParser.Models.Logic
                         break;
                     }
                 }
-                log.FightData.FightEnd = Math.Max(eye1.HealthOverTime[lastIEye1].logTime, eye2.HealthOverTime[lastIEye2].logTime);
+                evtcContainer.FightData.FightEnd = Math.Max(eye1.HealthOverTime[lastIEye1].logTime, eye2.HealthOverTime[lastIEye2].logTime);
             }
         }
 
-        public override void SetSuccess(ParsedLog log)
+        public override void SetSuccess(ParsedEvtcContainer evtcContainer)
         {
             // First check using hp, best
-            HPCheck(log);
+            HPCheck(evtcContainer);
             // hp could be unreliable or missing, fall back (around 200 ms more)
-            if (!log.FightData.Success)
+            if (!evtcContainer.FightData.Success)
             {
-                SetSuccessByDeath(log, false, (ushort)ParseEnum.TargetIDS.EyeOfFate, (ushort)ParseEnum.TargetIDS.EyeOfJudgement);
+                SetSuccessByDeath(evtcContainer, false, (ushort)ParseEnum.TargetIDS.EyeOfFate, (ushort)ParseEnum.TargetIDS.EyeOfJudgement);
             }
         }
 

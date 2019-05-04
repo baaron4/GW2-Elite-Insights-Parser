@@ -285,7 +285,7 @@ namespace LuckParser.Models.Logic
                             replay.Actors.Add(new CircleActor(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(mob)));
                         }
                     }
-                    List<CombatItem> stealths = GetFilteredList(log, 13017, mob, true);
+                    List<CombatItem> stealths = GetFilteredList(log.CombatData, 13017, mob, true);
                     int stealthStart = 0;
                     int stealthEnd = 0;
                     foreach (CombatItem c in stealths)
@@ -335,7 +335,7 @@ namespace LuckParser.Models.Logic
                 replay.Actors.Add(new CircleActor(true, start + duration, 100, (start, end), "rgba(0, 50, 200, 0.5)", new AgentConnector(p)));
             }
             // bomb
-            List<CombatItem> bombDhuum = GetFilteredList(log, 47646, p, true);
+            List<CombatItem> bombDhuum = GetFilteredList(log.CombatData, 47646, p, true);
             int bombDhuumStart = 0;
             foreach (CombatItem c in bombDhuum)
             {
@@ -351,7 +351,7 @@ namespace LuckParser.Models.Logic
                 }
             }
             // shackles connection
-            List<CombatItem> shackles = GetFilteredList(log, 47335, p, true).Concat(GetFilteredList(log, 48591, p, true)).ToList();
+            List<CombatItem> shackles = GetFilteredList(log.CombatData, 47335, p, true).Concat(GetFilteredList(log.CombatData, 48591, p, true)).ToList();
             int shacklesStart = 0;
             Player shacklesTarget = null;
             foreach (CombatItem c in shackles)
@@ -373,7 +373,7 @@ namespace LuckParser.Models.Logic
             // shackles damage (identical to the connection for now, not yet properly distinguishable from the pure connection, further investigation needed due to inconsistent behavior (triggering too early, not triggering the damaging skill though)
             // shackles start with buff 47335 applied from one player to the other, this is switched over to buff 48591 after mostly 2 seconds, sometimes later. This is switched to 48042 usually 4 seconds after initial application and the damaging skill 47164 starts to deal damage from that point on.
             // Before that point, 47164 is only logged when evaded/blocked, but doesn't deal damage. Further investigation needed.
-            List<CombatItem> shacklesDmg = GetFilteredList(log, 48042, p, true);
+            List<CombatItem> shacklesDmg = GetFilteredList(log.CombatData, 48042, p, true);
             int shacklesDmgStart = 0;
             Player shacklesDmgTarget = null;
             foreach (CombatItem c in shacklesDmg)
@@ -394,14 +394,14 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override int IsCM(ParsedLog log)
+        public override int IsCM(ParsedEvtcContainer evtcContainer)
         {
             Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
-            OverrideMaxHealths(log);
+            OverrideMaxHealths(evtcContainer);
             return (target.Health > 35e6) ? 1 : 0;
         }
     }

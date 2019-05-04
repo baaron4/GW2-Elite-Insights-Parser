@@ -100,9 +100,9 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override int IsCM(ParsedLog log)
+        public override int IsCM(ParsedEvtcContainer evtcContainer)
         {
-            return log.CombatData.GetSkills().Contains(38098) ? 1 : 0;
+            return evtcContainer.CombatData.GetSkills().Contains(38098) ? 1 : 0;
         }
         
         public override string GetFightName()
