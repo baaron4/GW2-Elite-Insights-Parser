@@ -20,6 +20,7 @@ namespace LuckParser.Parser
         public List<Player> PlayerList => _container.PlayerList;
         public HashSet<ushort> PlayerIDs => _container.PlayerIDs;
         public Dictionary<string, List<Player>> PlayerListBySpec => _container.PlayerListBySpec;
+        public bool CanCombatReplay => CombatData.HasMovementData && FightData.Logic.HasCombatReplayMap;
 
 
         public readonly MechanicData MechanicData;
@@ -50,7 +51,7 @@ namespace LuckParser.Parser
             Boons = new BoonsContainer(logData.GW2Version);
             BoonSourceFinder = Boon.GetBoonSourceFinder(logData.GW2Version, Boons);
             DamageModifiers = new DamageModifiersContainer(logData.GW2Version);
-            MechanicData = new MechanicData(this);
+            MechanicData = FightData.Logic.GetMechanicData(this);
             Statistics = new Statistics(this);
             LegacyTarget = target;
         }

@@ -9,6 +9,8 @@ namespace LuckParser.Models.ParseModels
     {
         public List<CombatItem> AllCombatItems { get; }
 
+        public readonly bool HasMovementData;
+
         private Dictionary<ParseEnum.StateChange, List<CombatItem>> _statesData;
         //private List<CombatItem> _healingData;
         //private List<CombatItem> _healingReceivedData;
@@ -39,14 +41,14 @@ namespace LuckParser.Models.ParseModels
             _skillData = allCombatItems.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
             var noStateActiBuffRem = allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.Normal && x.IsActivation == ParseEnum.Activation.None && x.IsBuffRemove == ParseEnum.BuffRemove.None);
             // movement events
-            _movementData = fightData.Logic.CanCombatReplay
+            _movementData = fightData.Logic.HasCombatReplayMap
                 ? allCombatItems.Where(x =>
                         x.IsStateChange == ParseEnum.StateChange.Position ||
                         x.IsStateChange == ParseEnum.StateChange.Velocity ||
                         x.IsStateChange == ParseEnum.StateChange.Rotation).GroupBy(x => x.SrcInstid)
                     .ToDictionary(x => x.Key, x => x.ToList())
                 : new Dictionary<ushort, List<CombatItem>>();
-            fightData.Logic.CanCombatReplay = _movementData.Count > 1;
+            HasMovementData = _movementData.Count > 1;
             // state change events
             _statesData = allCombatItems.GroupBy(x => x.IsStateChange).ToDictionary(x => x.Key, x => x.ToList());
             // activation events

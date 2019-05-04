@@ -13,11 +13,12 @@ namespace LuckParser.Models.Logic
         public enum ParseMode { Raid, Fractal, Golem, WvW, Unknown };
 
         private CombatReplayMap _map;
-        public readonly List<Mechanic> MechanicList; //Resurrects (start), Resurrect
+        protected readonly List<Mechanic> MechanicList; //Resurrects (start), Resurrect
         public ParseMode Mode { get; protected set; } = ParseMode.Unknown;
-        public bool CanCombatReplay { get; set; } = false;
+        public bool HasCombatReplayMap { get; protected set; } = false;
         public string Extension { get; protected set; }
         public string IconUrl { get; protected set; }
+        public bool HasFightSpecificMechanics => MechanicList.Count == 3;
         public List<Mob> TrashMobs { get; } = new List<Mob>();
         public List<Target> Targets { get; } = new List<Target>();
         protected readonly ushort TriggerID;
@@ -25,7 +26,7 @@ namespace LuckParser.Models.Logic
         protected FightLogic(ushort triggerID, AgentData agentData)
         {
             TriggerID = triggerID;
-            CanCombatReplay = GetCombatMap() != null;
+            HasCombatReplayMap = GetCombatMap() != null;
             MechanicList = new List<Mechanic>() {
                 new PlayerStatusMechanic(SkillItem.DeathId, "Dead", new MechanicPlotlySetting("x","rgb(0,0,0)"), "Dead",0),
                 new PlayerStatusMechanic(SkillItem.DownId, "Downed", new MechanicPlotlySetting("cross","rgb(255,0,0)"), "Downed",0),
@@ -41,6 +42,11 @@ namespace LuckParser.Models.Logic
                 Mob mob = new Mob(a);
                 TrashMobs.Add(mob);
             }
+        }
+
+        public MechanicData GetMechanicData(ParsedLog log)
+        {
+            return new MechanicData(MechanicList, log);
         }
 
         protected virtual CombatReplayMap GetCombatMapInternal()

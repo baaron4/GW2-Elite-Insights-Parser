@@ -12,9 +12,8 @@ namespace LuckParser.Models.ParseModels
         private readonly List<HashSet<Mechanic>> _presentMechanics = new List<HashSet<Mechanic>>();
         private readonly List<List<DummyActor>> _enemyList = new List<List<DummyActor>>();
 
-        public MechanicData(ParsedLog log)
+        public MechanicData(List<Mechanic> fightMechanics, ParsedLog log)
         {
-            List<Mechanic> fightMechanics = log.FightData.Logic.MechanicList;
             foreach(Mechanic m in fightMechanics)
             {
                 Add(m, new List<MechanicLog>());
