@@ -1135,7 +1135,7 @@ namespace LuckParser.Builders
             logData.FightIcon = _log.FightData.Logic.IconUrl;
             logData.LightTheme = Properties.Settings.Default.LightTheme;
             logData.SingleGroup = _log.PlayerList.Where(x => !x.IsFakeActor).Select(x => x.Group).Distinct().Count() == 1;
-            logData.NoMechanics = _log.FightData.Logic.HasFightSpecificMechanics;
+            logData.NoMechanics = _log.FightData.Logic.HasNoFightSpecificMechanics;
             return ToJson(logData);
         }
 

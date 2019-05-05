@@ -18,7 +18,8 @@ namespace LuckParser.Models.Logic
         public bool HasCombatReplayMap { get; protected set; } = false;
         public string Extension { get; protected set; }
         public string IconUrl { get; protected set; }
-        public bool HasFightSpecificMechanics => MechanicList.Count == 3;
+        private readonly int _basicMechanicsCount;
+        public bool HasNoFightSpecificMechanics => MechanicList.Count == _basicMechanicsCount;
         public List<Mob> TrashMobs { get; } = new List<Mob>();
         public List<Target> Targets { get; } = new List<Target>();
         protected readonly ushort TriggerID;
@@ -35,6 +36,7 @@ namespace LuckParser.Models.Logic
                 new PlayerStatusMechanic(SkillItem.DCId, "Disconnected", new MechanicPlotlySetting("x","rgb(120,120,120)"), "DC",0),
                 new PlayerStatusMechanic(SkillItem.RespawnId, "Respawn", new MechanicPlotlySetting("cross","rgb(120,120,255)"), "Resp",0)
             };
+            _basicMechanicsCount = MechanicList.Count;
             List<ParseEnum.TrashIDS> ids = GetTrashMobsIDS();
             List<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
             foreach (AgentItem a in aList)

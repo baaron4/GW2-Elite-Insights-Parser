@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class WeaverBoonsHelper
+    public class WeaverHelper : ElementalistHelper
     {
         // Weaver attunements
         public const long FireWater = -5;

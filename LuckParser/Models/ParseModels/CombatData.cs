@@ -30,7 +30,7 @@ namespace LuckParser.Models.ParseModels
             {
                 if (p.Prof == "Weaver")
                 {
-                    WeaverBoonsHelper.TransformWeaverAttunements(p, buffsPerInst);
+                    WeaverHelper.TransformWeaverAttunements(p, buffsPerInst);
                 }
             }
         }
