@@ -65,20 +65,6 @@ namespace LuckParser.Models.ParseModels
                 AirDual,
                 EarthDual
             };
-            HashSet<long> majors = new HashSet<long>
-            {
-                _fireMajor,
-                _waterMajor,
-                _airMajor,
-                _earthMajor
-            };
-            HashSet<long> minors = new HashSet<long>
-            {
-                _fireMinor,
-                _waterMinor,
-                _airMinor,
-                _earthMinor
-            };
             HashSet<long> major = null;
             HashSet<long> minor = null;
             foreach (CombatItem c in buffApplies)
@@ -87,11 +73,11 @@ namespace LuckParser.Models.ParseModels
                 {
                     return c.SkillID;
                 }
-                if (majors.Contains(c.SkillID))
+                if (_majorsTranslation.ContainsKey(c.SkillID))
                 {
                     major = _majorsTranslation[c.SkillID];
                 }
-                else if (minors.Contains(c.SkillID))
+                else if (_minorsTranslation.ContainsKey(c.SkillID))
                 {
                     minor = _minorsTranslation[c.SkillID];
                 }
