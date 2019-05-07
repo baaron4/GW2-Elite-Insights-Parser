@@ -115,6 +115,7 @@
     <Compile Include="Models\ParseModels\Boons\BoonSourceFinders\BoonSourceFinder11122018.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonSourceFinders\BoonSourceFinder05032019.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonSourceFinders\BoonSourceFinder.cs" />
+    <Compile Include="Models\ParseModels\DamageModifiers\GainComputers\GainComputerBySkill.cs" />
     <Compile Include="Models\ParseModels\ProfHelpers\ElementalistHelper.cs" />
     <Compile Include="Models\ParseModels\ProfHelpers\ProfHelper.cs" />
     <Compile Include="Models\ParseModels\ProfHelpers\WeaverHelper.cs" />

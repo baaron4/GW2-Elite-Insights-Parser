@@ -249,12 +249,21 @@ var compileDamageModifiers = function () {
                     return null;
                 }
                 var hits = item[0] + " out of " + item[1] + " hits";
-                var gain = "Pure Damage: " + Math.round(1000.0*item[2])/1000.0;
-                return hits + "<br>" + gain;
+                var gain;
+                if (item[3] < 0) {
+                  gain = "Damage Done: ";         
+                } else {               
+                  gain = "Pure Damage: ";
+                }
+                gain += Math.round(1000.0*item[2])/1000.0;
+                return hits + "<br>" + gain;   
             },
             getCellValue: function (item) {
                 if (item[2] === 0) {
                     return '-';
+                }
+                if (item[3] < 0) {
+                   return 'Tooltip';
                 }
                 var damageIncrease = Math.round(1000 * 100 * (item[3] / (item[3] - item[2]) - 1.0)) / 1000;
                 if (Math.abs(damageIncrease) < 1e-6 || isNaN(damageIncrease)) {
