@@ -13,11 +13,13 @@ namespace LuckParser.Models.Logic
         public enum ParseMode { Raid, Fractal, Golem, WvW, Unknown };
 
         private CombatReplayMap _map;
-        public readonly List<Mechanic> MechanicList; //Resurrects (start), Resurrect
+        protected readonly List<Mechanic> MechanicList; //Resurrects (start), Resurrect
         public ParseMode Mode { get; protected set; } = ParseMode.Unknown;
-        public bool CanCombatReplay { get; set; } = false;
+        public bool HasCombatReplayMap { get; protected set; } = false;
         public string Extension { get; protected set; }
         public string IconUrl { get; protected set; }
+        private readonly int _basicMechanicsCount;
+        public bool HasNoFightSpecificMechanics => MechanicList.Count == _basicMechanicsCount;
         public List<Mob> TrashMobs { get; } = new List<Mob>();
         public List<Target> Targets { get; } = new List<Target>();
         protected readonly ushort TriggerID;
@@ -25,7 +27,7 @@ namespace LuckParser.Models.Logic
         protected FightLogic(ushort triggerID, AgentData agentData)
         {
             TriggerID = triggerID;
-            CanCombatReplay = GetCombatMap() != null;
+            HasCombatReplayMap = GetCombatMap() != null;
             MechanicList = new List<Mechanic>() {
                 new PlayerStatusMechanic(SkillItem.DeathId, "Dead", new MechanicPlotlySetting("x","rgb(0,0,0)"), "Dead",0),
                 new PlayerStatusMechanic(SkillItem.DownId, "Downed", new MechanicPlotlySetting("cross","rgb(255,0,0)"), "Downed",0),
@@ -34,6 +36,7 @@ namespace LuckParser.Models.Logic
                 new PlayerStatusMechanic(SkillItem.DCId, "Disconnected", new MechanicPlotlySetting("x","rgb(120,120,120)"), "DC",0),
                 new PlayerStatusMechanic(SkillItem.RespawnId, "Respawn", new MechanicPlotlySetting("cross","rgb(120,120,255)"), "Resp",0)
             };
+            _basicMechanicsCount = MechanicList.Count;
             List<ParseEnum.TrashIDS> ids = GetTrashMobsIDS();
             List<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
             foreach (AgentItem a in aList)
@@ -41,6 +44,11 @@ namespace LuckParser.Models.Logic
                 Mob mob = new Mob(a);
                 TrashMobs.Add(mob);
             }
+        }
+
+        public MechanicData GetMechanicData(ParsedLog log)
+        {
+            return new MechanicData(MechanicList, log);
         }
 
         protected virtual CombatReplayMap GetCombatMapInternal()
@@ -144,9 +152,9 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        protected void OverrideMaxHealths(ParsedLog log)
+        protected void OverrideMaxHealths(ParsedEvtcContainer evtcContainer)
         {
-            List<CombatItem> maxHUs = log.CombatData.GetStates(ParseEnum.StateChange.MaxHealthUpdate);
+            List<CombatItem> maxHUs = evtcContainer.CombatData.GetStates(ParseEnum.StateChange.MaxHealthUpdate);
             if (maxHUs.Count > 0)
             {
                 foreach (Target tar in Targets)
@@ -177,7 +185,7 @@ namespace LuckParser.Models.Logic
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = new List<PhaseData>();
             long last = 0;
-            List<CombatItem> invuls = GetFilteredList(log, skillID, mainTarget, beginWithStart);
+            List<CombatItem> invuls = GetFilteredList(log.CombatData, skillID, mainTarget, beginWithStart);
             for (int i = 0; i < invuls.Count; i++)
             {
                 CombatItem c = invuls[i];
@@ -259,12 +267,12 @@ namespace LuckParser.Models.Logic
             return new List<ParseEnum.TrashIDS>();
         }
 
-        public virtual int IsCM(ParsedLog log)
+        public virtual int IsCM(ParsedEvtcContainer evtcContainer)
         {
             return -1;
         }
 
-        protected void SetSuccessByDeath(ParsedLog log, bool all, ushort idFirst, params ushort[] ids)
+        protected void SetSuccessByDeath(ParsedEvtcContainer evtcContainer, bool all, ushort idFirst, params ushort[] ids)
         {
             int success = 0;
             long maxTime = long.MinValue;
@@ -280,7 +288,7 @@ namespace LuckParser.Models.Logic
                 {
                     throw new InvalidOperationException("Main target of the fight not found");
                 }
-                CombatItem killed = log.CombatData.GetStatesData(target.InstID, ParseEnum.StateChange.ChangeDead, target.FirstAware, target.LastAware).LastOrDefault();
+                CombatItem killed = evtcContainer.CombatData.GetStatesData(target.InstID, ParseEnum.StateChange.ChangeDead, target.FirstAware, target.LastAware).LastOrDefault();
                 if (killed != null)
                 {
                     success++;
@@ -289,28 +297,14 @@ namespace LuckParser.Models.Logic
             }
             if ((all && success == idsToUse.Count) || (!all && success > 0))
             {
-                log.FightData.Success = true;
-                log.FightData.FightEnd = maxTime;
+                evtcContainer.FightData.Success = true;
+                evtcContainer.FightData.FightEnd = maxTime;
             }
         }
 
-        public virtual void SetSuccess(ParsedLog log)
+        public virtual void SetSuccess(ParsedEvtcContainer evtcContainer)
         {
-            SetSuccessByDeath(log, true, TriggerID);
-        }
-
-
-        public void ComputeMechanics(ParsedLog log)
-        {
-            MechanicData mechData = log.MechanicData;
-            CombatData combatData = log.CombatData;
-            HashSet<ushort> playersIds = log.PlayerIDs;
-            Dictionary<ushort, DummyActor> regroupedMobs = new Dictionary<ushort, DummyActor>();
-            foreach (Mechanic mech in MechanicList)
-            {
-                mech.CheckMechanic(log, regroupedMobs);
-            }
-            mechData.ProcessMechanics(log);
+            SetSuccessByDeath(evtcContainer, true, TriggerID);
         }
 
         public virtual void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
@@ -318,10 +312,10 @@ namespace LuckParser.Models.Logic
         }
 
         //
-        protected static List<CombatItem> GetFilteredList(ParsedLog log, long skillID, AbstractMasterActor target, bool beginWithStart)
+        protected static List<CombatItem> GetFilteredList(CombatData combatData, long skillID, AbstractMasterActor target, bool beginWithStart)
         {
             bool needStart = beginWithStart;
-            List<CombatItem> main = log.CombatData.GetBoonData(skillID).Where(x => ((x.DstInstid == target.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None) || (x.SrcInstid == target.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.Manual)) && x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
+            List<CombatItem> main = combatData.GetBoonData(skillID).Where(x => ((x.DstInstid == target.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None) || (x.SrcInstid == target.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.Manual)) && x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
             List<CombatItem> filtered = new List<CombatItem>();
             for (int i = 0; i < main.Count; i++)
             {

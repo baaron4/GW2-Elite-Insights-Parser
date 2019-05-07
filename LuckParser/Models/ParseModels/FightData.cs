@@ -182,16 +182,16 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Setters
-        public void SetCM(ParsedLog log)
+        public void SetCM(ParsedEvtcContainer evtcContainer)
         {
             if (_isCM == -1)
             {
-                _isCM = Logic.IsCM(log);
+                _isCM = Logic.IsCM(evtcContainer);
             }
         }
-        public void SetSuccess(ParsedLog log)
+        public void SetSuccess(ParsedEvtcContainer evtcContainer)
         {
-            Logic.SetSuccess(log);
+            Logic.SetSuccess(evtcContainer);
         }
     }
 }

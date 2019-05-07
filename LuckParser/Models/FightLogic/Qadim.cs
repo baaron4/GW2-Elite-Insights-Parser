@@ -418,14 +418,14 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override int IsCM(ParsedLog log)
+        public override int IsCM(ParsedEvtcContainer evtcContainer)
         {
             Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Qadim);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
-            OverrideMaxHealths(log);
+            OverrideMaxHealths(evtcContainer);
             return (target.Health > 21e6) ? 1 : 0;
         }
 

@@ -236,7 +236,7 @@ namespace LuckParser.Models.ParseModels
 
         public List<GenericActor> GetCombatReplayActors(ParsedLog log)
         {
-            if (!log.FightData.Logic.CanCombatReplay || IsFakeActor)
+            if (!log.CanCombatReplay || IsFakeActor)
             {
                 // no combat replay support on fight
                 return null;

@@ -70,7 +70,7 @@ namespace LuckParser.Parser
             {
                 legacyTarget = new Target(GeneralHelper.UnknownAgent);
             }
-            return new ParsedLog(_logData, _fightData, _agentData, _skillData, new CombatData(_combatItems, _fightData), _playerList, legacyTarget);
+            return new ParsedLog(_logData, _fightData, _agentData, _skillData, new CombatData(_combatItems, _fightData, _playerList), _playerList, legacyTarget);
         }
 
         private void ParseLog(GridRow row, Stream stream)

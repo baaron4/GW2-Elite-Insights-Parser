@@ -15,6 +15,7 @@ namespace LuckParser.Models.ParseModels
 
         public const long NumberOfConditionsID = -3;
         public const long NumberOfBoonsID = -2;
+        public const long NoBuff = -4;
 
         public static BoonSource ProfToEnum(string prof)
         {
@@ -571,11 +572,31 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Signet of Earth",5592, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/ce/Signet_of_Earth.png"),
                 new Boon("Signet of Fire",5544, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b0/Signet_of_Fire.png"),
                 new Boon("Signet of Water",5591, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/f/fd/Signet_of_Water.png"),
-                //attunements
+                ///attunements
+                // Fire
                 new Boon("Fire Attunement", 5585, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png"),
+                new Boon("Dual Fire Attunement", WeaverHelper.FireDual, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png"),
+                new Boon("Fire Water Attunement", WeaverHelper.FireWater, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://i.imgur.com/ihqKuUJ.png"),
+                new Boon("Fire Air Attunement", WeaverHelper.FireAir, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://i.imgur.com/kKFJ8cT.png"),
+                new Boon("Fire Earth Attunement", WeaverHelper.FireEarth, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://i.imgur.com/T4187h0.png"),
+                // Water
                 new Boon("Water Attunement", 5586, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/31/Water_Attunement.png"),
+                new Boon("Dual Water Attunement", WeaverHelper.WaterDual, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/31/Water_Attunement.png"),
+                new Boon("Water Fire Attunement", WeaverHelper.WaterFire, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://i.imgur.com/vMUkzxH.png"),
+                new Boon("Water Air Attunement", WeaverHelper.WaterAir, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://i.imgur.com/5G5OFud.png"),
+                new Boon("Water Earth Attunement", WeaverHelper.WaterEarth, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://i.imgur.com/QKEtF2P.png"),
+                // Air
                 new Boon("Air Attunement", 5575, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/91/Air_Attunement.png"),
+                new Boon("Dual Air Attunement", WeaverHelper.AirDual, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/91/Air_Attunement.png"),
+                new Boon("Air Fire Attunement", WeaverHelper.AirFire, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://i.imgur.com/vf68GJm.png"),
+                new Boon("Air Water Attunement", WeaverHelper.AirWater, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://i.imgur.com/Tuj5Sro.png"),
+                new Boon("Air Earth Attunement", WeaverHelper.AirEarth, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://i.imgur.com/lHcOSwk.png"),
+                // Earth
                 new Boon("Earth Attunement", 5580, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a8/Earth_Attunement.png"),
+                new Boon("Dual Earth Attunement", WeaverHelper.EarthDual, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a8/Earth_Attunement.png"),
+                new Boon("Earth Fire Attunement", WeaverHelper.EarthFire, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://i.imgur.com/aJWvE0I.png"),
+                new Boon("Earth Water Attunement", WeaverHelper.EarthWater, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://i.imgur.com/jtjj2TG.png"),
+                new Boon("Earth Air Attunement", WeaverHelper.EarthAir, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://i.imgur.com/4Eti7Pb.png"),
                 //forms
                 new Boon("Mist Form",5543, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/1b/Mist_Form.png"),
                 new Boon("Ride the Lightning",5588, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/59/Ride_the_Lightning.png"),
@@ -590,6 +611,8 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Conjure Fiery Greatsword", 15792, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/e/e2/Conjure_Fiery_Greatsword.png"),
                 //skills
                 new Boon("Arcane Power",5582, BoonSource.Elementalist, BoonType.Intensity, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/72/Arcane_Power.png"),
+                new Boon("Primordial Stance",42086, BoonSource.Elementalist, BoonType.Intensity, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/3a/Primordial_Stance.png"),
+                new Boon("Unravel",42683, BoonSource.Elementalist, BoonType.Intensity, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4b/Unravel.png"),
                 new Boon("Arcane Shield",5640, BoonSource.Elementalist, BoonType.Intensity, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/9d/Arcane_Shield.png"),
                 new Boon("Renewal of Fire",5764, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/63/Renewal_of_Fire.png"),
                 new Boon("Glyph of Elemental Power (Fire)",5739, BoonSource.Elementalist, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/f/f2/Glyph_of_Elemental_Power_%28fire%29.png"),

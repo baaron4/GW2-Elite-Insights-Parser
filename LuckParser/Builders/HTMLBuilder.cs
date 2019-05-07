@@ -49,7 +49,7 @@ namespace LuckParser.Builders
 
             _uploadLink = uploadString;
 
-            _cr = Properties.Settings.Default.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay;
+            _cr = Properties.Settings.Default.ParseCombatReplay && _log.CanCombatReplay;
         }
 
         private static string FilterStringChars(string str)
@@ -1135,7 +1135,7 @@ namespace LuckParser.Builders
             logData.FightIcon = _log.FightData.Logic.IconUrl;
             logData.LightTheme = Properties.Settings.Default.LightTheme;
             logData.SingleGroup = _log.PlayerList.Where(x => !x.IsFakeActor).Select(x => x.Group).Distinct().Count() == 1;
-            logData.NoMechanics = _log.FightData.Logic.MechanicList.Count == 3;
+            logData.NoMechanics = _log.FightData.Logic.HasNoFightSpecificMechanics;
             return ToJson(logData);
         }
 

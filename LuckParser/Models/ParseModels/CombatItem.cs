@@ -10,7 +10,7 @@ namespace LuckParser.Models.ParseModels
         public int Value { get; set; }
         public int BuffDmg { get; }
         public uint OverstackValue { get; }
-        public long SkillID { get; }
+        public long SkillID { get; private set; }
         public ushort SrcInstid { get; private set; }
         public ushort DstInstid { get; private set; }
         public ushort SrcMasterInstid { get; private set; }
@@ -66,6 +66,11 @@ namespace LuckParser.Models.ParseModels
         public void OverrideTime(long time)
         {
             Time = time;
+        }
+
+        public void OverrideSkillID(long skillID)
+        {
+            SkillID = skillID;
         }
 
         public void OverrideSrcValues(ulong agent, ushort instid)

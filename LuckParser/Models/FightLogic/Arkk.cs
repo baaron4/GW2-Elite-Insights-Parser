@@ -82,27 +82,27 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void SetSuccess(ParsedLog log)
+        public override void SetSuccess(ParsedEvtcContainer evtcContainer)
         {
             Target mainTarget = Targets.Find(x => x.ID == TriggerID);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
-            List<CombatItem> invulsTarget = GetFilteredList(log, 762, mainTarget, true);
+            List<CombatItem> invulsTarget = GetFilteredList(evtcContainer.CombatData, 762, mainTarget, true);
             if (invulsTarget.Count == 10)
             {
                 CombatItem last = invulsTarget.Last();
                 if (last.IsBuffRemove != ParseEnum.BuffRemove.None)
                 {
-                    HashSet<ushort> pIds = log.PlayerIDs;
-                    CombatItem lastPlayerExit = log.CombatData.GetStates(ParseEnum.StateChange.ExitCombat).Where(x => pIds.Contains(x.SrcInstid)).LastOrDefault();
-                    CombatItem lastTargetExit = log.CombatData.GetStatesData(mainTarget.InstID, ParseEnum.StateChange.ExitCombat, mainTarget.FirstAware, mainTarget.LastAware).LastOrDefault();
-                    CombatItem lastDamageTaken = log.CombatData.GetDamageTakenData(mainTarget.InstID, mainTarget.FirstAware, mainTarget.LastAware).LastOrDefault(x => (x.Value > 0 || x.BuffDmg > 0) && pIds.Contains(x.SrcInstid));
+                    HashSet<ushort> pIds = evtcContainer.PlayerIDs;
+                    CombatItem lastPlayerExit = evtcContainer.CombatData.GetStates(ParseEnum.StateChange.ExitCombat).Where(x => pIds.Contains(x.SrcInstid)).LastOrDefault();
+                    CombatItem lastTargetExit = evtcContainer.CombatData.GetStatesData(mainTarget.InstID, ParseEnum.StateChange.ExitCombat, mainTarget.FirstAware, mainTarget.LastAware).LastOrDefault();
+                    CombatItem lastDamageTaken = evtcContainer.CombatData.GetDamageTakenData(mainTarget.InstID, mainTarget.FirstAware, mainTarget.LastAware).LastOrDefault(x => (x.Value > 0 || x.BuffDmg > 0) && pIds.Contains(x.SrcInstid));
                     if (lastTargetExit != null && lastDamageTaken != null && lastPlayerExit != null)
                     {
-                        log.FightData.FightEnd = lastDamageTaken.Time;
-                        log.FightData.Success = lastPlayerExit.Time > lastTargetExit.Time + 1000;
+                        evtcContainer.FightData.FightEnd = lastDamageTaken.Time;
+                        evtcContainer.FightData.Success = lastPlayerExit.Time > lastTargetExit.Time + 1000;
                     }
                 }
             }

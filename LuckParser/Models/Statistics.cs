@@ -13,7 +13,7 @@ namespace LuckParser.Models
         public Statistics(ParsedLog log)
         {
             SetPresentBoons(log.CombatData.GetSkills(), log.PlayerList, log.CombatData, log.Boons);
-            SetStackCenterPositions(log.FightData.Logic.CanCombatReplay, log);
+            SetStackCenterPositions(log.CanCombatReplay, log);
         }
 
         public class FinalDPS

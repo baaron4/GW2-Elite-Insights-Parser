@@ -350,7 +350,7 @@ namespace LuckParser.Models.Logic
                             }
                         }
                     }
-                    List<CombatItem> signets = GetFilteredList(log, 38224, target, true);
+                    List<CombatItem> signets = GetFilteredList(log.CombatData, 38224, target, true);
                     int sigStart = 0;
                     int sigEnd = 0;
                     foreach (CombatItem signet in signets)
@@ -379,7 +379,7 @@ namespace LuckParser.Models.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // teleport zone
-            List<CombatItem> tpDeimos = GetFilteredList(log, 37730, p, true);
+            List<CombatItem> tpDeimos = GetFilteredList(log.CombatData, 37730, p, true);
             int tpStart = 0;
             foreach (CombatItem c in tpDeimos)
             {
@@ -396,14 +396,14 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override int IsCM(ParsedLog log)
+        public override int IsCM(ParsedEvtcContainer evtcContainer)
         {
             Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Deimos);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
-            OverrideMaxHealths(log);
+            OverrideMaxHealths(evtcContainer);
             return (target.Health > 40e6) ? 1 : 0;
         }
     }

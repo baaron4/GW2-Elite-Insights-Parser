@@ -84,7 +84,7 @@ namespace LuckParser.Models.Logic
                 case (ushort)ConjuredGreatsword:
                     break;
                 case (ushort)ConjuredShield:
-                    List<CombatItem> shield = GetFilteredList(log, 53003, mob, true);
+                    List<CombatItem> shield = GetFilteredList(log.CombatData, 53003, mob, true);
                     int shieldStart = 0;
                     foreach (CombatItem c in shield)
                     {
@@ -197,7 +197,7 @@ namespace LuckParser.Models.Logic
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.ConjuredAmalgamate:
-                    List<CombatItem> shield = GetFilteredList(log, 53003, target, true);
+                    List<CombatItem> shield = GetFilteredList(log.CombatData, 53003, target, true);
                     int shieldStart = 0;
                     foreach (CombatItem c in shield)
                     {
@@ -240,14 +240,14 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override int IsCM(ParsedLog log)
+        public override int IsCM(ParsedEvtcContainer evtcContainer)
         {
             Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.ConjuredAmalgamate);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
-            return log.CombatData.GetBoonData(53075).Count > 0 ? 1 : 0;
+            return evtcContainer.CombatData.GetBoonData(53075).Count > 0 ? 1 : 0;
         }
     }
 }

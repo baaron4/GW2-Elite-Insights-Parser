@@ -324,7 +324,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 final.AvgConditions = Math.Round(avgCondis / phase.DurationInMS, GeneralHelper.BoonDigit);
 
-                if (Properties.Settings.Default.ParseCombatReplay && log.FightData.Logic.CanCombatReplay)
+                if (Properties.Settings.Default.ParseCombatReplay && log.CanCombatReplay)
                 {
                     List<Point3D> positions = CombatReplay.Positions.Where(x => x.Time >= phase.Start && x.Time <= phase.End).ToList();
                     int offset = CombatReplay.Positions.Count(x => x.Time < phase.Start);
@@ -969,7 +969,7 @@ namespace LuckParser.Models.ParseModels
 
         protected override void InitCombatReplay(ParsedLog log)
         {
-            if (!log.FightData.Logic.CanCombatReplay || IsFakeActor)
+            if (!log.CanCombatReplay || IsFakeActor)
             {
                 // no combat replay support on fight
                 return;
