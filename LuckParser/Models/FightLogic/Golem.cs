@@ -59,21 +59,21 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override void SetSuccess(ParsedLog log)
+        public override void SetSuccess(ParsedEvtcContainer evtcContainer)
         {
             Target mainTarget = Targets.Find(x => x.ID == TriggerID);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
-            CombatItem lastDamageTaken = log.CombatData.GetDamageTakenData(mainTarget.InstID, mainTarget.FirstAware, mainTarget.LastAware).LastOrDefault(x => x.Value > 0 || x.BuffDmg > 0);
+            CombatItem lastDamageTaken = evtcContainer.CombatData.GetDamageTakenData(mainTarget.InstID, mainTarget.FirstAware, mainTarget.LastAware).LastOrDefault(x => x.Value > 0 || x.BuffDmg > 0);
             if (lastDamageTaken != null)
             {
-                log.FightData.FightEnd = lastDamageTaken.Time;
+                evtcContainer.FightData.FightEnd = lastDamageTaken.Time;
             }
             if (mainTarget.HealthOverTime.Count > 0)
             {
-                log.FightData.Success = mainTarget.HealthOverTime.Last().hp < 200;
+                evtcContainer.FightData.Success = mainTarget.HealthOverTime.Last().hp < 200;
             }
         }
 

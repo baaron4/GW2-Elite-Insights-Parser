@@ -12,16 +12,23 @@ namespace LuckParser.Models.ParseModels
         private readonly List<HashSet<Mechanic>> _presentMechanics = new List<HashSet<Mechanic>>();
         private readonly List<List<DummyActor>> _enemyList = new List<List<DummyActor>>();
 
-        public MechanicData(FightData fightData)
+        public MechanicData(List<Mechanic> fightMechanics, ParsedLog log)
         {
-            List<Mechanic> fightMechanics = fightData.Logic.MechanicList;
             foreach(Mechanic m in fightMechanics)
             {
                 Add(m, new List<MechanicLog>());
             }
+            CombatData combatData = log.CombatData;
+            HashSet<ushort> playersIds = log.PlayerIDs;
+            Dictionary<ushort, DummyActor> regroupedMobs = new Dictionary<ushort, DummyActor>();
+            foreach (Mechanic mech in fightMechanics)
+            {
+                mech.CheckMechanic(log, regroupedMobs);
+            }
+            ProcessMechanics(log);
         }
 
-        public void ProcessMechanics(ParsedLog log)
+        private void ProcessMechanics(ParsedLog log)
         {
             if (_presentMechanics.Count > 0)
             {

@@ -55,7 +55,7 @@ namespace LuckParser.Models.ParseModels
 
         protected override void InitCombatReplay(ParsedLog log)
         {
-            if (!log.FightData.Logic.CanCombatReplay)
+            if (!log.CanCombatReplay)
             {
                 // no combat replay support on fight
                 return;

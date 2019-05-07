@@ -135,9 +135,9 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override void SetSuccess(ParsedLog log)
+        public override void SetSuccess(ParsedEvtcContainer evtcContainer)
         {
-            SetSuccessByDeath(log, true, TriggerID);
+            SetSuccessByDeath(evtcContainer, true, TriggerID);
         }
 
         public override string GetFightName()

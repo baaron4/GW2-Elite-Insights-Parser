@@ -115,6 +115,9 @@
     <Compile Include="Models\ParseModels\Boons\BoonSourceFinders\BoonSourceFinder11122018.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonSourceFinders\BoonSourceFinder05032019.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonSourceFinders\BoonSourceFinder.cs" />
+    <Compile Include="Models\ParseModels\ProfHelpers\ElementalistHelper.cs" />
+    <Compile Include="Models\ParseModels\ProfHelpers\ProfHelper.cs" />
+    <Compile Include="Models\ParseModels\ProfHelpers\WeaverHelper.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\BackgroundActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\FacingRectangleActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\FacingActor.cs" />
@@ -156,6 +159,7 @@
     <Compile Include="Controllers\GW2APIController.cs" />
     <Compile Include="Models\ParseModels\Skills\WeaponDescriptor.cs" />
     <Compile Include="Models\Statistics.cs" />
+    <Compile Include="Parser\ParsedEvtcContainer.cs" />
     <Compile Include="Parser\ParsedLog.cs" />
     <Compile Include="Parser\ParseEnum.cs" />
     <Compile Include="Parser\ParseHelper.cs" />
