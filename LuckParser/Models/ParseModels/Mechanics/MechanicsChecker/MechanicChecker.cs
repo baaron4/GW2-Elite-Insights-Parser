@@ -12,6 +12,6 @@ namespace LuckParser.Models.ParseModels
         public enum ValueCompare { EQ, LEQ, L, GEQ, G, NEQ };
         public enum BoonCompare { GAIN, LOSS };
 
-        public abstract bool Keep(CombatItem item, ParsedLog log);
+        public abstract bool Keep(CombatItem item, ParsedEvtcContainer evtcContainer);
     }
 }

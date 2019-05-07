@@ -18,7 +18,7 @@ namespace LuckParser.Models.ParseModels
             _compare = compare;
         }
 
-        public override bool Keep(CombatItem item, ParsedLog log)
+        public override bool Keep(CombatItem item, ParsedEvtcContainer evtcContainer)
         {
             long val = item.Value;
             switch(_compare)
