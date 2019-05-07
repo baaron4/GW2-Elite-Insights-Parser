@@ -94,7 +94,7 @@ namespace LuckParser.Models.ParseModels
             return inter.First();
         }
 
-        public static void TransformWeaverAttunements(Player p, Dictionary<ushort, List<CombatItem>> buffsPerInst)
+        public static void TransformWeaverAttunements(Player p, Dictionary<ushort, List<CombatItem>> buffsPerDst)
         {
             HashSet<long> attunements = new HashSet<long>
             {
@@ -135,7 +135,7 @@ namespace LuckParser.Models.ParseModels
                 waterEarth,
                 airEarth,*/
             };
-            List<CombatItem> buffs = buffsPerInst[p.InstID].Where(x => x.Time <= p.LastAware && x.Time >= p.FirstAware).ToList();
+            List<CombatItem> buffs = buffsPerDst[p.InstID].Where(x => x.Time <= p.LastAware && x.Time >= p.FirstAware).ToList();
             // first we get rid of standard attunements
             List<CombatItem> attuns = buffs.Where(x => attunements.Contains(x.SkillID)).ToList();
             foreach (CombatItem c in attuns)

@@ -23,14 +23,14 @@ namespace LuckParser.Models.ParseModels
         private Dictionary<ushort, List<CombatItem>> _damageTakenData;
         private Dictionary<ushort, List<CombatItem>> _movementData;
 
-        private void PlayerSpecialBoonParse(List<Player> players, Dictionary<ushort, List<CombatItem>> buffsPerInst)
+        private void DstSpecialBoonParse(List<Player> players, Dictionary<ushort, List<CombatItem>> buffsPerDst)
         {
 
             foreach (Player p in players)
             {
                 if (p.Prof == "Weaver")
                 {
-                    WeaverHelper.TransformWeaverAttunements(p, buffsPerInst);
+                    WeaverHelper.TransformWeaverAttunements(p, buffsPerDst);
                 }
             }
         }
@@ -64,7 +64,7 @@ namespace LuckParser.Models.ParseModels
             boonData.AddRange(buffInitial);
             boonData.Sort((x, y) => x.Time.CompareTo(y.Time));
             _boonDataByDst = boonData.GroupBy(x => x.IsBuffRemove == ParseEnum.BuffRemove.None ? x.DstInstid : x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList());
-            PlayerSpecialBoonParse(players, _boonDataByDst);
+            DstSpecialBoonParse(players, _boonDataByDst);
             _boonData = boonData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
             // damage events
             var damageData = noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0));
