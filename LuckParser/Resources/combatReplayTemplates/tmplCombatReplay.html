@@ -1,25 +1,23 @@
 <div class="d-flex mt-2 align-items-center">
     <div class="d-flex flex-column align-items-center mr-2" style="margin-left: auto;">
-        <keep-alive>
-            <combat-replay-damage-data-component v-if="mode === 1 && animationStatus !== null" :time="animationStatus.time" :selectedplayer="animationStatus.selectedPlayer" :selectedplayerid="animationStatus.selectedPlayerID"></combat-replay-damage-data-component>
-        </keep-alive>
+            <combat-replay-damage-data-component :time="animationStatus.time" :selectedplayer="animationStatus.selectedPlayer" :selectedplayerid="animationStatus.selectedPlayerID"></combat-replay-damage-data-component>
         <div class="d-flex flex-row flex-wrap justify-content-center align-items-start btn-group btn-group-toggle mb-2"
              data-toggle="buttons">
-            <!--${groups}-->
+            <div class="d-flex flex-column justify-content-center align-items-center mt-1 ml-2 mr-2">
+                  <div v-for="group in groups">                 
+                    <h3>Group {{group.id}}</h3>
+                    <label v-for="player in group.players" @click="animator && animator.selectActor(player.combatReplayID);" class="btn btn-dark btn-small ply-btn">
+                         <img :src="player.icon" :alt="player.profession" class="icon">
+                         {{ player.name }}
+                    </label>
+                  </div>
+            </div>
         </div>
         <h3>Range Selectors</h3>
-        <div class="d-flex flex-column flex-wrap justify-content-center align-items-center mb-2">
+        <div class="d-flex flex-column flex-wrap justify-content-center align-items-center mb-2" v-for="rangeCol in rangeSelectArrays">
             <div class="range-btns d-flex flex-row flex-wrap justify-content-center align-items-center btn-group btn-group-toggle"
                  data-toggle="buttons">
-                <label onclick="animator && animator.toggleRange(180);" class="btn btn-dark btn-small range-btn">180</label>
-                <label onclick="animator && animator.toggleRange(240);" class="btn btn-dark btn-small range-btn">240</label>
-                <label onclick="animator && animator.toggleRange(300);" class="btn btn-dark btn-small range-btn">300</label>
-            </div>
-            <div class="range-btns d-flex flex-row flex-wrap justify-content-center align-items-center btn-group btn-group-toggle"
-                 data-toggle="buttons">
-                <label onclick="animator && animator.toggleRange(600);" class="btn btn-dark btn-small range-btn">600</label>
-                <label onclick="animator && animator.toggleRange(900);" class="btn btn-dark btn-small range-btn">900</label>
-                <label onclick="animator && animator.toggleRange(1200);" class="btn btn-dark btn-small range-btn">1200</label>
+                <label v-for="range in rangeCol" @click="animator && animator.toggleRange(range);" class="btn btn-dark btn-small range-btn">{{range}}</label>
             </div>
         </div>
     </div>
@@ -38,43 +36,13 @@
                    oninput="animator && animator.updateInputTime(this.value);">
         </div>
         <div class="d-flex justify-content-center btn-group btn-group-toggle" data-toggle="buttons">
-            <label onclick="animator && animator.setSpeed(0.125)" class="btn btn-dark btn-ssmall">
+            <label v-for="speed in speeds" @click="animator && animator.setSpeed(speed)" class="btn btn-dark btn-ssmall">
                 <input type="radio"
-                       autocomplete="off">0.125x
-            </label>
-            <label onclick="animator && animator.setSpeed(0.25)" class="btn btn-dark btn-ssmall">
-                <input type="radio"
-                       autocomplete="off">0.25x
-            </label>
-            <label onclick="animator && animator.setSpeed(0.5)" class="btn btn-dark btn-ssmall">
-                <input type="radio"
-                       autocomplete="off">0.5x
-            </label>
-            <label onclick="animator && animator.setSpeed(1)" class="btn btn-dark btn-ssmall active">
-                <input type="radio"
-                       autocomplete="off" checked>1x
-            </label>
-            <label onclick="animator && animator.setSpeed(2)" class="btn btn-dark btn-ssmall">
-                <input type="radio"
-                       autocomplete="off">2x
-            </label>
-            <label onclick="animator && animator.setSpeed(4)" class="btn btn-dark btn-ssmall">
-                <input type="radio"
-                       autocomplete="off">4x
-            </label>
-            <label onclick="animator && animator.setSpeed(8)" class="btn btn-dark btn-ssmall">
-                <input type="radio"
-                       autocomplete="off">8x
-            </label>
-            <label onclick="animator && animator.setSpeed(16)" class="btn btn-dark btn-ssmall">
-                <input type="radio"
-                       autocomplete="off">16x
+                       autocomplete="off">{{speed}}x
             </label>
         </div>
     </div>
     <div class="d-flex flex-column align-items-center ml-2" style="margin-right: auto;">
-        <keep-alive>
-            <combat-replay-status-data-component v-if="mode === 1 && animationStatus !== null" :time="animationStatus.time" :selectedplayer="animationStatus.selectedPlayer" :selectedplayerid="animationStatus.selectedPlayerID"></combat-replay-status-data-component>
-        </keep-alive>
+            <combat-replay-status-data-component :time="animationStatus.time" :selectedplayer="animationStatus.selectedPlayer" :selectedplayerid="animationStatus.selectedPlayerID"></combat-replay-status-data-component>
     </div>
 </div>
