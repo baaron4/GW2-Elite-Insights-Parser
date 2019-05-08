@@ -20,13 +20,13 @@ namespace LuckParser.Parser
         public List<Player> PlayerList => _container.PlayerList;
         public HashSet<ushort> PlayerIDs => _container.PlayerIDs;
         public Dictionary<string, List<Player>> PlayerListBySpec => _container.PlayerListBySpec;
+        public DamageModifiersContainer DamageModifiers => _container.DamageModifiers;
+        public BoonsContainer Boons => _container.Boons;
         public bool CanCombatReplay => CombatData.HasMovementData && FightData.Logic.HasCombatReplayMap;
 
 
         public readonly MechanicData MechanicData;
         public readonly BoonSourceFinder BoonSourceFinder;
-        public readonly DamageModifiersContainer DamageModifiers;
-        public readonly BoonsContainer Boons;
         public bool IsBenchmarkMode => FightData.Logic.Mode == FightLogic.ParseMode.Golem;
         public readonly Target LegacyTarget;
         public readonly Statistics Statistics;
@@ -48,11 +48,9 @@ namespace LuckParser.Parser
             CombatData.Update(FightData.FightEnd);
             FightData.SetCM(_container);
             //
-            Boons = new BoonsContainer(logData.GW2Version);
             BoonSourceFinder = Boon.GetBoonSourceFinder(logData.GW2Version, Boons);
-            DamageModifiers = new DamageModifiersContainer(logData.GW2Version);
             MechanicData = FightData.Logic.GetMechanicData(_container);
-            Statistics = new Statistics(this);
+            Statistics = new Statistics(_container);
             LegacyTarget = target;
         }
     }

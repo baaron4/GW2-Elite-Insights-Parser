@@ -327,6 +327,7 @@ namespace LuckParser.Models.ParseModels
                 if (Properties.Settings.Default.ParseCombatReplay && log.CanCombatReplay)
                 {
                     List<Point3D> positions = CombatReplay.Positions.Where(x => x.Time >= phase.Start && x.Time <= phase.End).ToList();
+                    List<Point3D> stackCenterPositions = log.Statistics.GetStackCenterPositions(log);
                     int offset = CombatReplay.Positions.Count(x => x.Time < phase.Start);
                     if (positions.Count > 1)
                     {
@@ -334,8 +335,8 @@ namespace LuckParser.Models.ParseModels
                         for (int time = 0; time < positions.Count; time++)
                         {
 
-                            float deltaX = positions[time].X - log.Statistics.StackCenterPositions[time + offset].X;
-                            float deltaY = positions[time].Y - log.Statistics.StackCenterPositions[time + offset].Y;
+                            float deltaX = positions[time].X - stackCenterPositions[time + offset].X;
+                            float deltaY = positions[time].Y - stackCenterPositions[time + offset].Y;
                             //float deltaZ = positions[time].Z - StackCenterPositions[time].Z;
 
 
