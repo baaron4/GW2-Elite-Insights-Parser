@@ -84,7 +84,7 @@ namespace LuckParser.Models.ParseModels
             }
             if (major == null || minor == null)
             {
-                throw new InvalidOperationException("Missing major or minor in TranslateWeaverAttunement");
+                return 0;
             }
             IEnumerable<long> inter = major.Intersect(minor);
             if (inter.Count() != 1)
@@ -170,6 +170,10 @@ namespace LuckParser.Models.ParseModels
                 List<CombatItem> applies = items.Where(x => x.IsBuffRemove == Parser.ParseEnum.BuffRemove.None).ToList();
                 List<CombatItem> removals = items.Where(x => x.IsBuffRemove != Parser.ParseEnum.BuffRemove.None).ToList();
                 long curID = TranslateWeaverAttunement(applies);
+                if (curID == 0)
+                {
+                    continue;
+                }
                 for (int i = 0; i < applies.Count; i++)
                 {
                     if (i == 0)
