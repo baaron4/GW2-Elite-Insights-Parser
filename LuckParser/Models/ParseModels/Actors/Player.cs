@@ -48,9 +48,9 @@ namespace LuckParser.Models.ParseModels
             {
                 throw new InvalidPlayerException(name[1].Length != 0 && name[2].Length == 0);
             }
-            Account = name[1];
+            Account = name[1].TrimStart(':');
             Group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
-            IsFakeActor = Account == ":Conjured Sword";
+            IsFakeActor = Account == "Conjured Sword";
         }
         
         // Public methods
