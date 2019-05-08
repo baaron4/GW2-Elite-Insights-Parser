@@ -27,18 +27,17 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        public override void CheckMechanic(ParsedLog log, Dictionary<ushort, DummyActor> regroupedMobs)
+        public override void CheckMechanic(ParsedEvtcContainer evtcContainer, Dictionary<Mechanic, List<MechanicLog>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs)
         {
-            MechanicData mechData = log.MechanicData;
-            CombatData combatData = log.CombatData;
-            HashSet<ushort> playersIds = log.PlayerIDs;
-            foreach (Player p in log.PlayerList)
+            CombatData combatData = evtcContainer.CombatData;
+            HashSet<ushort> playersIds = evtcContainer.PlayerIDs;
+            foreach (Player p in evtcContainer.PlayerList)
             {
-                foreach (CombatItem c in log.CombatData.GetCastDataById(SkillId))
+                foreach (CombatItem c in evtcContainer.CombatData.GetCastDataById(SkillId))
                 {
-                    if (c.IsActivation.StartCasting() && c.SrcInstid == p.InstID && Keep(c, log))
+                    if (c.IsActivation.StartCasting() && c.SrcInstid == p.InstID && Keep(c, evtcContainer))
                     {
-                        mechData[this].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), this, p));
+                        mechanicLogs[this].Add(new MechanicLog(evtcContainer.FightData.ToFightSpace(c.Time), this, p));
 
                     }
                 }

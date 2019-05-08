@@ -643,7 +643,7 @@ namespace LuckParser.Builders
         }
         private void CreateMechanicTable(int phaseIndex)
         {
-            HashSet<Mechanic> presMech = _log.MechanicData.GetPresentPlayerMechs(phaseIndex);
+            HashSet<Mechanic> presMech = _log.MechanicData.GetPresentPlayerMechs(_log, phaseIndex);
             //Dictionary<string, HashSet<Mechanic>> presEnemyMech = log.MechanicData.getPresentEnemyMechs(phaseIndex);
             PhaseData phase = _phases[phaseIndex];
             //List<AbstractMasterPlayer> enemyList = log.MechanicData.getEnemyList(phaseIndex);
@@ -662,7 +662,7 @@ namespace LuckParser.Builders
                     WriteCell(p.Character);
                     foreach (Mechanic mech in presMech)
                     {
-                        int count = _log.MechanicData[mech].Count(x => x.Actor.InstID == p.InstID && phase.InInterval(x.Time));
+                        int count = _log.MechanicData.GetMechanicLogs(mech).Count(x => x.Actor.InstID == p.InstID && phase.InInterval(x.Time));
                         WriteCell(count.ToString());
                     }
                     NewLine();
@@ -681,7 +681,7 @@ namespace LuckParser.Builders
         {
             MechanicData mData = _log.MechanicData;
             List<MechanicLog> mLogs = new List<MechanicLog>();
-            foreach (List<MechanicLog> mLs in mData.Values)
+            foreach (List<MechanicLog> mLs in mData.GetAllMechanics())
             {
                 mLogs.AddRange(mLs);
             }

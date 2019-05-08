@@ -22,7 +22,8 @@ namespace LuckParser.Models.JsonModels
             /// </summary>
             public int TotalHitCount;
             /// <summary>
-            /// Gained damage
+            /// Gained damage \n
+            /// If the corresponding <see cref="JsonLog.DamageModDesc.NonMultiplier"/> is true then this value correspond to the damage done while under the effect. One will have to deduce the gain manualy depending on your gear.
             /// </summary>
             public double DamageGain;
             /// <summary>

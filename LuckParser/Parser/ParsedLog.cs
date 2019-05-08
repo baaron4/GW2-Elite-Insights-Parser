@@ -51,7 +51,7 @@ namespace LuckParser.Parser
             Boons = new BoonsContainer(logData.GW2Version);
             BoonSourceFinder = Boon.GetBoonSourceFinder(logData.GW2Version, Boons);
             DamageModifiers = new DamageModifiersContainer(logData.GW2Version);
-            MechanicData = FightData.Logic.GetMechanicData(this);
+            MechanicData = FightData.Logic.GetMechanicData(_container);
             Statistics = new Statistics(this);
             LegacyTarget = target;
         }

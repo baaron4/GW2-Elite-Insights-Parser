@@ -88,6 +88,10 @@ namespace LuckParser.Models.ParseModels
                     Tooltip += "<br>Compared against Condition Damage";
                     break;
             }
+            if (!Multiplier)
+            {
+                Tooltip += "<br>Non multiplier";
+            }
         }
 
         public int GetTotalDamage(Player p, ParsedLog log, Target t, int phaseIndex)
@@ -122,6 +126,8 @@ namespace LuckParser.Models.ParseModels
         public abstract void ComputeDamageModifier(Dictionary<string, List<DamageModifierData>> data, Dictionary<Target, Dictionary<string, List<DamageModifierData>>> dataTarget, Player p, ParsedLog log);
 
         protected static GainComputer ByPresence = new GainComputerByPresence();
+        protected static GainComputer ByPresenceNonMulti = new GainComputerNonMultiplier();
+        protected static GainComputer BySkill = new GainComputerBySkill();
         protected static GainComputer ByStack = new GainComputerByStack();
         protected static GainComputer ByAbsence = new GainComputerByAbsence();
 
@@ -143,9 +149,9 @@ namespace LuckParser.Models.ParseModels
         private static readonly List<DamageModifier> _commonDamageModifiers = new List<DamageModifier>
         {
             new BuffDamageModifierTarget(738, "Vulnerability", "1% per Stack", DamageSource.All, 1.0, DamageType.All, DamageType.All, ModifierSource.CommonBuff, ByStack, "https://wiki.guildwars2.com/images/a/af/Vulnerability.png"),
-            new BuffDamageModifier(12544, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.All, ModifierSource.CommonBuff, ByPresence, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png", 88541, ulong.MaxValue),
-            new DamageLogDamageModifier("Soulcleave's Summit", "per hit (no ICD)", DamageSource.NoPets, double.PositiveInfinity, DamageType.Power, DamageType.All, ModifierSource.CommonBuff,"https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png", (x => x.SkillId == 45026), ByPresence),
-            new DamageLogDamageModifier("One Wolf Pack", "per hit (max. once every 0.25s)", DamageSource.NoPets, double.PositiveInfinity, DamageType.Power, DamageType.All, ModifierSource.CommonBuff, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png", (x => x.SkillId == 42145), ByPresence),
+            new BuffDamageModifier(50421, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.All, ModifierSource.CommonBuff, ByPresenceNonMulti, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png", 88541, ulong.MaxValue),
+            new DamageLogDamageModifier("Soulcleave's Summit", "per hit (no ICD)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, ModifierSource.CommonBuff,"https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png", (x => x.SkillId == 45026), BySkill),
+            new DamageLogDamageModifier("One Wolf Pack", "per hit (max. once every 0.25s)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, ModifierSource.CommonBuff, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png", (x => x.SkillId == 42145), BySkill),
             //new DamageLogDamageModifier(Boon.GetBoonByName("Static Charge"), 0, DamageSource.NoPets, DamageType.Power, DamageType.All, ModifierSource.CommonBuff, ByPresence),
             //new BuffDamageModifier(Boon.GetBoonByName("Glyph of Empowerment"), DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ModifierSource.All, ByPresence),
             new BuffDamageModifierTarget(38224,"Unnatural Signet", "100%", DamageSource.All, 100.0, DamageType.All, DamageType.All, ModifierSource.CommonBuff, ByPresence, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png"),
