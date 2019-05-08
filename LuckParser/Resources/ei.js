@@ -55,8 +55,9 @@ window.onload = function () {
     compileGraphs();
     compilePlayerTab();
     compileTargetTab();
-    if (typeof compileCombatReplay !== "undefined") {
+    if (logData.crData) {
         compileCombatReplay();
+        compileCombatReplayUI();
     }
     mainComponent = new Vue({
         el: "#content",
@@ -68,7 +69,8 @@ window.onload = function () {
             light: typeof (window.theme) !== "undefined" ? (window.theme === 'yeti') : logData.lightTheme,
             mode: 0,
             animate: false,
-            animationStatus: null
+            animationStatus: null,
+            cr: !!logData.crData
         },
         methods: {
             switchCombatReplayButtons: function (from, to) {

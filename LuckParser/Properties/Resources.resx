@@ -160,6 +160,9 @@
    <data name="combatReplayStatsJS" type="System.Resources.ResXFileRef, System.Windows.Forms">
       <value>..\Resources\JS\combatReplayStats.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
    </data>
+   <data name="combatReplayStatsUI" type="System.Resources.ResXFileRef, System.Windows.Forms">
+      <value>..\Resources\JS\combatReplayUI.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+   </data>
    <data name="targetStatsJS" type="System.Resources.ResXFileRef, System.Windows.Forms">
       <value>..\Resources\JS\targetStats.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
    </data>
@@ -292,6 +295,9 @@
    <data name="tmplCombatReplayPlayersStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
       <value>..\Resources\combatReplayTemplates\tmplCombatReplayPlayersStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
    </data>
+   <data name="tmplCombatReplayUI" type="System.Resources.ResXFileRef, System.Windows.Forms">
+      <value>..\Resources\combatReplayTemplates\tmplCombatReplayUI.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+   </data>
    <data name="tmplCombatReplayActorBuffStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
       <value>..\Resources\combatReplayTemplates\tmplCombatReplayActorBuffStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
    </data>
@@ -300,9 +306,6 @@
    </data>
    <data name="template_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
       <value>..\Resources\template.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-   </data>
-   <data name="tmplCombatReplay" type="System.Resources.ResXFileRef, System.Windows.Forms">
-      <value>..\Resources\combatReplayTemplates\tmplCombatReplay.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
    </data>
    <data name="theme_cosmo" type="System.Resources.ResXFileRef, System.Windows.Forms">
       <value>..\Resources\theme-cosmo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

@@ -73,7 +73,7 @@
                         </li>
                     </ul>
                 </div>
-                <div v-if="animationStatus" class="d-flex flex-row justify-content-center align-items-center">
+                <div v-if="cr" class="d-flex flex-row justify-content-center align-items-center">
                     <ul class="nav nav-pills">
                         <li class="nav-item mb-1">
                             <a class="nav-link" @click="changeMode(0)" :class="{active: !mode}">Statistics</a>
@@ -128,8 +128,8 @@
                 </keep-alive>
             </div>
         </div>
-        <div id="combat-replay" v-show="mode === 1" class="ei-container-big">
-
+        <div id="combat-replay" v-if="cr" v-show="mode === 1" class="ei-container-big">
+            <combat-replay-ui-component :mode="mode"></combat-replay-ui-component>
         </div>
         <div class="footer" :class="{'ei-header': !mode, 'ei-header-big': mode}">
             <div>Time Start: ${encounterStart} | Time End: ${encounterEnd}</div>

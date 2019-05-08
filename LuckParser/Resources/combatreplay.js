@@ -38,13 +38,9 @@ const resolutionMultiplier = mobilecheck() ? 3 : 2;
 var animator = null;
 
 class Animator {
-    constructor(options) {
+    constructor(options, reactiveData) {
         // status
-        this.reactiveDataStatus = {
-            time: 0,
-            selectedPlayer: null,
-            selectedPlayerID: null
-        };
+        this.reactiveDataStatus = reactiveData;
         // time
         this.prevTime = 0;
         this.times = [];
@@ -53,7 +49,7 @@ class Animator {
         this.pollingRate = 150;
         this.speed = 1;
         this.backwards = false;
-        this.rangeControl = new Map();
+        this.rangeControl = new Set();
         this.selectedGroup = -1;
         // actors
         this.targetData = new Map();
@@ -84,6 +80,7 @@ class Animator {
             if (options.inch) this.inch = options.inch;
             if (options.pollingRate) this.pollingRate = options.pollingRate;
             if (options.mapLink) bgImage.src = options.mapLink;
+            if (options.actors) this.initActors(options.actors);
             downIcon.src = "https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png";
             dcIcon.src = "https://wiki.guildwars2.com/images/f/f5/Talk_end_option_tango.png";
             deadIcon.src = "https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png";
@@ -123,19 +120,19 @@ class Animator {
                     this.trashMobData.set(actor.id, new EnemyIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions));
                     break;
                 case "Circle":
-                    this.mechanicActorData.push(new CircleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.radius, actor.connectedTo, actor.minRadius));
+                    this.mechanicActorData.push(new CircleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inch * actor.radius, actor.connectedTo, this.inch * actor.minRadius));
                     break;
                 case "Rectangle":
-                    this.mechanicActorData.push(new RectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.width, actor.height, actor.connectedTo));
+                    this.mechanicActorData.push(new RectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inch * actor.width, this.inch * actor.height, actor.connectedTo));
                     break;
                 case "RotatedRectangle":
-                    this.mechanicActorData.push(new RotatedRectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.width, actor.height, actor.rotation, actor.radialTranslation, actor.spinAngle, actor.connectedTo));
+                    this.mechanicActorData.push(new RotatedRectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inch * actor.width, this.inch * actor.height, actor.rotation, this.inch * actor.radialTranslation, actor.spinAngle, actor.connectedTo));
                     break;
                 case "Doughnut":
-                    this.mechanicActorData.push(new DoughnutMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.innerRadius, actor.outerRadius, actor.connectedTo));
+                    this.mechanicActorData.push(new DoughnutMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inch * actor.innerRadius, this.inch * actor.outerRadius, actor.connectedTo));
                     break;
                 case "Pie":
-                    this.mechanicActorData.push(new PieMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.direction, actor.openingAngle, actor.radius, actor.connectedTo));
+                    this.mechanicActorData.push(new PieMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.direction, actor.openingAngle, this.inch * actor.radius, actor.connectedTo));
                     break;
                 case "Line":
                     this.mechanicActorData.push(new LineMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.connectedFrom, actor.connectedTo));
@@ -144,10 +141,10 @@ class Animator {
                     this.attachedActorData.set(actor.connectedTo, new FacingMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData));
                     break;
                 case "FacingRectangle":
-                    this.attachedActorData.set(actor.connectedTo, new FacingRectangleMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, actor.width, actor.height, actor.color));
+                    this.attachedActorData.set(actor.connectedTo, new FacingRectangleMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, this.inch * actor.width, this.inch * actor.height, actor.color));
                     break;
                 case "MovingPlatform":
-                    this.backgroundActorData.push(new MovingPlatformDrawable(actor.start, actor.end, actor.image, actor.width, actor.height, actor.positions));
+                    this.backgroundActorData.push(new MovingPlatformDrawable(actor.start, actor.end, actor.image, this.inch * actor.width, this.inch * actor.height, actor.positions));
                     break;
             }
         }
@@ -182,18 +179,18 @@ class Animator {
     toggleAnimate() {
         if (!this.startAnimate()) {
             this.stopAnimate();
+            return 0;
         }
+        return 1;
     }
 
     startAnimate() {
         if (this.animation === null && this.times.length > 0) {
-            const playBtn = document.getElementById("playBtn");
             if (this.reactiveDataStatus.time >= this.times[this.times.length - 1]) {
                 this.reactiveDataStatus.time = 0;
             }
             this.prevTime = new Date().getTime();
             this.animation = requestAnimationFrame(animateCanvas);
-            playBtn.innerHTML = "Pause";
             return true;
         }
         return false;
@@ -201,10 +198,8 @@ class Animator {
 
     stopAnimate() {
         if (this.animation !== null) {
-            const playBtn = document.getElementById("playBtn");
             window.cancelAnimationFrame(this.animation);
             this.animation = null;
-            playBtn.innerHTML = "Play";
             return true;
         }
         return false;
@@ -230,14 +225,6 @@ class Animator {
             this.reactiveDataStatus.selectedPlayer = actor;
             this.reactiveDataStatus.selectedPlayerID = pId;
         }
-        this.playerData.forEach(function (value, key, map) {
-            let hasActive = document.getElementById('id' + key).classList.contains('active') && !value.selected;
-            if (hasActive) {
-                setTimeout(function () {
-                    document.getElementById('id' + key).classList.remove('active');
-                }, 50);
-            }
-        });
         if (this.animation === null) {
             animateCanvas(-1);
         }
@@ -320,22 +307,22 @@ class Animator {
 
     toggleBackwards() {
         this.backwards = !this.backwards;
-        if (this.backwards) {
-            setTimeout(function () {
-                document.getElementById('animatorBackwards').classList.add('active');
-            }, 50);
-        } else {
-            setTimeout(function () {
-                document.getElementById('animatorBackwards').classList.remove('active');
-            }, 50);
-        }
+        return this.backwards;
     }
 
     toggleRange(radius) {
-        this.rangeControl.set(radius, !this.rangeControl.get(radius));
+        var active;
+        if (this.rangeControl.has(radius)) {
+            this.rangeControl.delete(radius);
+            active = false;
+        } else {
+            this.rangeControl.add(radius);
+            active = true;
+        }
         if (this.animation === null) {
             animateCanvas(-1);
         }
+        return active;
     }
 
     // https://codepen.io/anon/pen/KrExzG
@@ -631,8 +618,7 @@ class PlayerIconDrawable extends IconDrawable {
             ctx.strokeStyle = 'green';
             ctx.rect(pos.x - halfSize, pos.y - halfSize, fullSize, fullSize);
             ctx.stroke();
-            animator.rangeControl.forEach(function (enabled, radius, map) {
-                if (!enabled) return;
+            animator.rangeControl.forEach(function (present, radius, set) {
                 ctx.beginPath();
                 ctx.lineWidth = (2 / animator.scale).toString();
                 ctx.strokeStyle = 'green';
@@ -786,8 +772,8 @@ class FacingMechanicDrawable extends MechanicDrawable {
 class FacingRectangleMechanicDrawable extends FacingMechanicDrawable {
     constructor(start, end, connectedTo, facingData, width, height, color) {
         super(start, end, connectedTo, facingData);
-        this.width = animator.inch * width;
-        this.height = animator.inch * height;
+        this.width = width;
+        this.height = height;
         this.color = color;
     }
 
@@ -830,8 +816,8 @@ class FormMechanicDrawable extends MechanicDrawable {
 class CircleMechanicDrawable extends FormMechanicDrawable {
     constructor(start, end, fill, growing, color, radius, connectedTo, minRadius) {
         super(start, end, fill, growing, color, connectedTo);
-        this.radius = animator.inch * radius;
-        this.minRadius = animator.inch * minRadius;
+        this.radius = radius;
+        this.minRadius = minRadius;
     }
 
     draw() {
@@ -856,8 +842,8 @@ class CircleMechanicDrawable extends FormMechanicDrawable {
 class DoughnutMechanicDrawable extends FormMechanicDrawable {
     constructor(start, end, fill, growing, color, innerRadius, outerRadius, connectedTo) {
         super(start, end, fill, growing, color, connectedTo);
-        this.outerRadius = animator.inch * outerRadius;
-        this.innerRadius = animator.inch * innerRadius;
+        this.outerRadius = outerRadius;
+        this.innerRadius = innerRadius;
     }
 
     draw() {
@@ -885,8 +871,8 @@ class DoughnutMechanicDrawable extends FormMechanicDrawable {
 class RectangleMechanicDrawable extends FormMechanicDrawable {
     constructor(start, end, fill, growing, color, width, height, connectedTo) {
         super(start, end, fill, growing, color, connectedTo);
-        this.height = height * animator.inch;
-        this.width = width * animator.inch;
+        this.height = height;
+        this.width = width;
     }
 
     draw() {
@@ -913,7 +899,7 @@ class RotatedRectangleMechanicDrawable extends RectangleMechanicDrawable {
     constructor(start, end, fill, growing, color, width, height, rotation, translation, spinangle, connectedTo) {
         super(start, end, fill, growing, color, width, height, connectedTo);
         this.rotation = -rotation * Math.PI / 180; // positive mathematical direction, reversed since JS has downwards increasing y axis
-        this.translation = translation * animator.inch;
+        this.translation = translation;
         this.spinangle = -spinangle * Math.PI / 180; // positive mathematical direction, reversed since JS has downwards increasing y axis
     }
 
@@ -960,7 +946,7 @@ class PieMechanicDrawable extends FormMechanicDrawable {
         super(start, end, fill, growing, color, connectedTo);
         this.direction = -direction * Math.PI / 180; // positive mathematical direction, reversed since JS has downwards increasing y axis
         this.openingAngle = 0.5 * openingAngle * Math.PI / 180;
-        this.radius = animator.inch * radius;
+        this.radius = radius;
         this.dx = Math.cos(this.direction - this.openingAngle) * this.radius;
         this.dy = Math.sin(this.direction - this.openingAngle) * this.radius;
     }

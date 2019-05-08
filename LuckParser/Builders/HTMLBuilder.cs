@@ -818,6 +818,7 @@ namespace LuckParser.Builders
                     {"${tmplCombatReplayTargetStatus}", Properties.Resources.tmplCombatReplayTargetStatus },
                     {"${tmplCombatReplayTargetsStats}", Properties.Resources.tmplCombatReplayTargetsStats },
                     {"${tmplCombatReplayPlayersStats}", Properties.Resources.tmplCombatReplayPlayersStats },
+                    {"${tmplCombatReplayUI}", Properties.Resources.tmplCombatReplayUI },
                 };
             foreach (var entry in CRtemplates)
             {
@@ -914,7 +915,16 @@ namespace LuckParser.Builders
             {
                 return "";
             }
-            string scriptContent = Properties.Resources.combatReplayStatsJS;
+            List<string> orderedScripts = new List<string>()
+            {
+                Properties.Resources.combatReplayStatsUI,
+                Properties.Resources.combatReplayStatsJS,
+            };
+            string scriptContent = orderedScripts[0];
+            for (int i = 1; i < orderedScripts.Count; i++)
+            {
+                scriptContent += orderedScripts[i];
+            }
             scriptContent = BuildCRTemplates(scriptContent);
 
             if (Properties.Settings.Default.HtmlExternalScripts)
@@ -1248,7 +1258,6 @@ namespace LuckParser.Builders
             JsonSerializerSettings settings = new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                DefaultValueHandling = DefaultValueHandling.Ignore,
                 ContractResolver = contractResolver
             };
             return JsonConvert.SerializeObject(value, settings);

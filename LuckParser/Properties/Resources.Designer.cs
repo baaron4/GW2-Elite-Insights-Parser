@@ -142,6 +142,28 @@ namespace LuckParser.Properties {
         /// <summary>
         ///   Looks up a localized string similar to /*jshint esversion: 6 */
         ///
+        ///var compileCombatReplayUI = function () {
+        ///    Vue.component(&quot;combat-replay-ui-component&quot;, {
+        ///        props: [&quot;mode&quot;],
+        ///        template: `${tmplCombatReplayUI}`,
+        ///        data: function () {
+        ///            return {
+        ///                damageMode: 1,
+        ///                rangeSelect: [180, 240, 300, 600, 900, 1200],
+        ///                speeds: [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0],
+        ///                animationStatus: {
+        ///                   time: 0,
+        ///                   selectedPlayer: nul [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string combatReplayStatsUI {
+            get {
+                return ResourceManager.GetString("combatReplayStatsUI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /*jshint esversion: 6 */
+        ///
         ///var roundingComponent = {
         ///    methods: {
         ///        round: function (value) {
@@ -555,19 +577,6 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex mt-2 align-items-center&quot;&gt;
-        ///    &lt;div class=&quot;d-flex flex-column align-items-center mr-2&quot; style=&quot;margin-left: auto;&quot;&gt;
-        ///            &lt;combat-replay-damage-data-component :time=&quot;animationStatus.time&quot; :selectedplayer=&quot;animationStatus.selectedPlayer&quot; :selectedplayerid=&quot;animationStatus.selectedPlayerID&quot;&gt;&lt;/combat-replay-damage-data-component&gt;
-        ///        &lt;div class=&quot;d-flex flex-row flex-wrap justify-content-center align-items-start btn-group btn-group-toggle mb-2&quot;
-        ///             data-toggle=&quot;buttons&quot;&gt;        /// [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string tmplCombatReplay {
-            get {
-                return ResourceManager.GetString("tmplCombatReplay", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column justify-content-end&quot; :style=&quot;{&apos;height&apos;: enemy ? &apos;80px&apos; : &apos;100px&apos;}&quot;&gt;
         ///    &lt;div v-if=&quot;data.enemies.length &gt; 0&quot; class=&quot;d-flex&quot;&gt;
         ///        &lt;div v-for=&quot;enemy in data.enemies&quot; class=&quot;boon-container&quot;&gt;
@@ -734,6 +743,21 @@ namespace LuckParser.Properties {
         internal static string tmplCombatReplayTargetStatus {
             get {
                 return ResourceManager.GetString("tmplCombatReplayTargetStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex mt-2 align-items-center&quot;&gt;
+        ///    &lt;div class=&quot;d-flex flex-column align-items-center mr-2&quot; style=&quot;margin-left: auto;&quot;&gt;
+        ///        &lt;combat-replay-damage-data-component :time=&quot;animationStatus.time&quot;
+        ///            :selectedplayer=&quot;animationStatus.selectedPlayer&quot; :selectedplayerid=&quot;animationStatus.selectedPlayerID&quot;&gt;
+        ///        &lt;/combat-replay-damage-data-component&gt;
+        ///        &lt;div class=&quot;d-flex flex-row flex-wrap justify-content-center align-items-start btn-group btn-group-toggle mb-2&quot;
+        ///            data- [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplCombatReplayUI {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayUI", resourceCulture);
             }
         }
         

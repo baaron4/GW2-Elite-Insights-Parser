@@ -10,11 +10,8 @@ namespace LuckParser.Models.HtmlModels
     public class PhaseDto
     {
         public string Name;
-        [DefaultValue(null)]
         public long Duration;
-        [DefaultValue(null)]
         public double Start;
-        [DefaultValue(null)]
         public double End;
         public List<int> Targets = new List<int>();
 

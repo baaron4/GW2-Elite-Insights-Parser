@@ -352,7 +352,7 @@
     <None Include="Resources\theme-cosmo.png" />
     <None Include="Resources\theme-slate.png" />
     <None Include="Resources\combatreplay.js" />
-    <None Include="Resources\combatReplayTemplates\tmplCombatReplay.html" />
+    <None Include="Resources\combatReplayTemplates\tmplCombatReplayUI.html" />
     <Content Include="Resources\combatReplayTemplates\tmplCombatReplayDamageData.html" />
     <Content Include="Resources\combatReplayTemplates\tmplCombatReplayDamageTable.html" />
     <Content Include="Resources\combatReplayTemplates\tmplCombatReplayActorRotation.html" />
