@@ -48,6 +48,7 @@
 .boon-container {
     position: relative;
     text-align: center;
+    height: 20px;
 }
 
 .boon-number {

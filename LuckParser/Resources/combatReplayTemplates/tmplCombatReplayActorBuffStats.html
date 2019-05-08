@@ -5,16 +5,16 @@
             <div v-if="enemy.state > 1" class="boon-number">{{enemy.state}}</div>
         </div>
     </div>
-    <div v-if="data.conditions.length > 0" class="d-flex">
-        <div v-for="condition in data.conditions" class="boon-container">
-            <img :src="condition.buff.icon" :title="condition.buff.name" :alt="condition.buff.name" class="icon" />
-            <div v-if="condition.state > 1" class="boon-number">{{condition.state}}</div>
-        </div>
-    </div>
     <div v-if="data.others.length > 0" class="d-flex">
         <div v-for="other in data.others" class="boon-container">
             <img :src="other.buff.icon" :title="other.buff.name" :alt="other.buff.name" class="icon" />
             <div v-if="other.state > 1" class="boon-number">{{other.state}}</div>
+        </div>
+    </div>
+    <div v-if="data.conditions.length > 0" class="d-flex">
+        <div v-for="condition in data.conditions" class="boon-container">
+            <img :src="condition.buff.icon" :title="condition.buff.name" :alt="condition.buff.name" class="icon" />
+            <div v-if="condition.state > 1" class="boon-number">{{condition.state}}</div>
         </div>
     </div>
     <div v-if="!enemy && (data.offs.length > 0 || data.defs.length > 0)" class="d-flex">
