@@ -69,7 +69,6 @@ class Animator {
         this.canvas.height *= resolutionMultiplier;
         this.ctx = this.canvas.getContext('2d');
         this.ctx.imageSmoothingEnabled = true;
-        this.controlledByHTML = false;
         // manipulation
         this.lastX = this.canvas.width / 2;
         this.lastY = this.canvas.height / 2;
@@ -91,9 +90,6 @@ class Animator {
         this.ctx.scale(resolutionMultiplier, resolutionMultiplier);
         this.initMouseEvents();
         this.initTouchEvents();
-        if (typeof mainComponent !== "undefined" && mainComponent !== null) {
-            mainComponent.animationStatus = this.reactiveDataStatus;
-        }
     }
 
     initActors(actors) {
@@ -179,9 +175,9 @@ class Animator {
     toggleAnimate() {
         if (!this.startAnimate()) {
             this.stopAnimate();
-            return 0;
+            return false;
         }
-        return 1;
+        return true;
     }
 
     startAnimate() {
@@ -471,7 +467,7 @@ function animateCanvas(noRequest) {
     if (noRequest > -2) {
         animator.updateTextInput();
     }
-    if (!animator.controlledByHTML || noRequest < 0) {
+    if (noRequest < 0) {
         animator.draw();
     }
     if (noRequest > -1 && animator.animation !== null && bgLoaded) {

@@ -76,10 +76,10 @@
                 <div v-if="cr" class="d-flex flex-row justify-content-center align-items-center">
                     <ul class="nav nav-pills">
                         <li class="nav-item mb-1">
-                            <a class="nav-link" @click="changeMode(0)" :class="{active: !mode}">Statistics</a>
+                            <a class="nav-link" @click="mode = 0" :class="{active: mode === 0}">Statistics</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" @click="changeMode(1)" :class="{active: mode }">Combat Replay</a>
+                            <a class="nav-link" @click="mode = 1" :class="{active: mode === 1 }">Combat Replay</a>
                         </li>
                     </ul>
                 </div>

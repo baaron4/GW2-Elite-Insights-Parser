@@ -30,7 +30,7 @@
         <canvas :width="canvas.x + 'px'" :height="canvas.y + 'px'" id="replayCanvas" class="replay"></canvas>
         <div class="d-flex justify-content-center">
             <div @click="toggleAnimate();"
-                class="btn btn-dark btn-small">{{animated ? "Pause" : "Play"}}</div>
+                class="btn btn-dark btn-small" style="width: 50px;">{{animated ? "Pause" : "Play"}}</div>
             <div @click="restartAnimate();" class="btn btn-dark btn-small">Restart
             </div>
             <div @click="toggleBackwards();"

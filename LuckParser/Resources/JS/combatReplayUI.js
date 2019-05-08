@@ -28,6 +28,20 @@ var compileCombatReplayUI = function () {
         mounted() {
             animator = new Animator(logData.crData, this.animationStatus);
         },
+        watch: {
+            mode: {
+                handler: function () {
+                    if (this.animated && animator != null) {
+                        if (this.mode === 1) {
+                            animator.startAnimate();
+                        } else {
+                            animator.stopAnimate();
+                        }
+                    }
+                },
+                deep: true
+            }
+        },
         methods: {
             toggleRange: function(range) {
                 var active = animator.toggleRange(range);
@@ -40,9 +54,18 @@ var compileCombatReplayUI = function () {
             toggleBackwards: function() {
                 this.backwards = animator.toggleBackwards();
             },
+            toggleAnimate: function() {
+                this.animated = animator.toggleAnimate();
+            },
+            restartAnimate: function() {
+                animator.restartAnimate();
+            },
+            selectActor: function(id) {
+                animator.selectActor(id);
+            },
             setSpeed: function(speed) {
                 animator.setSpeed(speed);
-                this.speed = speed;
+                this.selectedSpeed = speed;
             },
             updateTime: function(value) {
                 animator.updateTime(value);

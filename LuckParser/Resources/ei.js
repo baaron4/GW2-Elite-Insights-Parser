@@ -68,8 +68,6 @@ window.onload = function () {
             datatypes: DataTypes,
             light: typeof (window.theme) !== "undefined" ? (window.theme === 'yeti') : logData.lightTheme,
             mode: 0,
-            animate: false,
-            animationStatus: null,
             cr: !!logData.crData
         },
         methods: {
@@ -93,29 +91,9 @@ window.onload = function () {
                 var theme = document.getElementById('theme');
                 theme.href = themes[newStyle];
                 this.switchCombatReplayButtons(this.light ? 'btn-dark' : 'btn-light', this.light ? 'btn-light' : 'btn-dark');
-            },
-            changeMode: function (iMode) {
-                if (this.mode === iMode) {
-                    return;
-                }
-                var oldMode = this.mode;
-                this.mode = iMode;
-                if (this.animator) {
-                    if (this.mode !== 1) {
-                        if (oldMode === 1) {
-                            // animation running when going out of CR
-                            this.animate = this.stopAnimate();
-                        }
-                    } else if (this.animate) {
-                        this.animator.startAnimate();
-                    }
-                }
-            },
+            }
         },
         computed: {
-            animator: function () {
-                return this.animationStatus ? animator : null;
-            },
             activePhase: function () {
                 var phases = this.logdata.phases;
                 for (var i = 0; i < phases.length; i++) {

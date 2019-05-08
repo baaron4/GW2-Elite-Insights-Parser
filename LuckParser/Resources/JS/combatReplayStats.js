@@ -429,10 +429,6 @@ var compileCombatReplay = function () {
                 details: false,
                 mode: 0
             };
-        },
-        updated() {
-            animator.controlledByHTML = this.details;
-            animator.draw();
         }
     });
 };
