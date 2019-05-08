@@ -1111,7 +1111,7 @@ namespace LuckParser.Builders
             SkillDto.AssembleSkills(_usedSkills.Values, logData.SkillMap);
             DamageModDto.AssembleDamageModifiers(_usedDamageMods, logData.DamageModMap);
             BoonDto.AssembleBoons(_usedBoons.Values, logData.BuffMap);
-            MechanicDto.BuildMechanics(_log.MechanicData.GetPresentMechanics(0), logData.MechanicMap);
+            MechanicDto.BuildMechanics(_log.MechanicData.GetPresentMechanics(_log, 0), logData.MechanicMap);
             return ToJson(logData);
         }
 
