@@ -400,12 +400,9 @@ namespace LuckParser.Models.ParseModels
                     final.InvulnedCount++;
                     final.DamageInvulned += dl.Damage;
                 }
-                List<CombatItem> deads = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.ChangeDead, start, end);
-                List<CombatItem> downs = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.ChangeDown, start, end);
-                List<CombatItem> dcs = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Despawn, start, end);
-                final.DownCount = downs.Count - log.CombatData.GetBoonData(5620).Where(x => x.SrcInstid == InstID && x.Time >= start && x.Time <= end && x.IsBuffRemove == ParseEnum.BuffRemove.All).Count();
-                final.DeadCount = deads.Count;
-                final.DcCount = dcs.Count;
+                final.DownCount = log.MechanicData.GetMechanicLogs(SkillItem.DownId).Count(x => x.Actor == this && x.Time >= start && x.Time <= end);
+                final.DeadCount = log.MechanicData.GetMechanicLogs(SkillItem.DeathId).Count(x => x.Actor == this && x.Time >= start && x.Time <= end);
+                final.DcCount = log.MechanicData.GetMechanicLogs(SkillItem.DCId).Count(x => x.Actor == this && x.Time >= start && x.Time <= end);
 
                 //
                 start = phase.Start;

@@ -115,6 +115,16 @@ namespace LuckParser.Models.ParseModels
             return new List<MechanicLog>();
         }
 
+        public List<MechanicLog> GetMechanicLogs(long id)
+        {
+            Mechanic mech = _mechanicLogs.Keys.FirstOrDefault(x => x.SkillId == id);
+            if ( mech != null)
+            {
+                return _mechanicLogs[mech];
+            }
+            return new List<MechanicLog>();
+        }
+
         public HashSet<Mechanic> GetPresentEnemyMechs(ParsedLog log, int phaseIndex)
         {
             ProcessMechanics(log);
