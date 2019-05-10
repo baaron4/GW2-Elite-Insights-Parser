@@ -397,9 +397,9 @@ namespace LuckParser
                     return "https://i.imgur.com/qrkQvEY.png";
                 case ParseEnum.TargetIDS.CARightArm:
                     return "https://i.imgur.com/MVwjtH7.png";
-                case ParseEnum.TargetIDS.Nikare:
-                    return "https://i.imgur.com/6yq45Cc.png";
                 case ParseEnum.TargetIDS.Kenut:
+                    return "https://i.imgur.com/6yq45Cc.png";
+                case ParseEnum.TargetIDS.Nikare:
                     return "https://i.imgur.com/TLykcrJ.png";
                 case ParseEnum.TargetIDS.Qadim:
                     return "https://i.imgur.com/IfoHTHT.png";
