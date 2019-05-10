@@ -35,7 +35,8 @@ namespace LuckParser.Models.Logic
           //  new Mechanic(48281, "Mortal Coil", ParseEnum.BossIDS.Dhuum, new MechanicPlotlySetting("circle","rgb(0,128,0)"), "Green Orbs",
             new PlayerBoonApplyMechanic(46950, "Fractured Spirit", new MechanicPlotlySetting("square","rgb(0,255,0)"), "Orb CD","Applied when taking green", "Green port",0),
             //new SkillOnPlayerMechanic(47076 , "Echo's Damage", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Echo","Damaged by Ender's Echo (pick up)", "Ender's Echo",5000),
-            new PlayerBoonApplyMechanic(49125, "Echo's Pick up", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Echo PU","Picked up by Ender's Echo", "Ender's Echo", 3000)
+            new PlayerBoonApplyMechanic(49125, "Echo's Pick up", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Echo PU","Picked up by Ender's Echo", "Ender's Pick up", 3000),
+            new PlayerBoonRemoveMechanic(49125, "Freed from Echo", new MechanicPlotlySetting("square","rgb(0,0,255)"), "F Echo","Freed from Ender's Echo", "Freed from Echo", 0, new List<MechanicChecker>{ new ActorStateChecker(ParseEnum.StateChange.ChangeDead, false) }, Mechanic.TriggerRule.AND)
             });
             Extension = "dhuum";
             IconUrl = "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
@@ -94,7 +95,7 @@ namespace LuckParser.Models.Logic
             }
             phases.Add(new PhaseData(start, mainEnd)
             {
-                Name = "Pre-Ritual"
+                Name = phases.Exists(x => x.Name == "Ritual") ? "Pre-Ritual" : "Pre-Wipe"
             });
             foreach (PhaseData phase in phases)
             {
