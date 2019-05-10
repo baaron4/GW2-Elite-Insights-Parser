@@ -257,6 +257,10 @@ namespace LuckParser.Models.Logic
                 case (ushort)Deathling:
                     break;
                 case (ushort)UnderworldReaper:
+                    if (!_isBugged && _reapersSeen == -7 && end < log.FightData.ToFightSpace(log.FightData.FightEnd) - 20000)
+                    {
+                        _reapersSeen = 0;
+                    }
                     if (!_isBugged && _reapersSeen >= 0)
                     {
                         if (_greenStart == 0)
