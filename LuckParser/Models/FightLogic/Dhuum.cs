@@ -34,7 +34,8 @@ namespace LuckParser.Models.Logic
             new SkillOnPlayerMechanic(48210, "Greater Death Mark", new MechanicPlotlySetting("circle","rgb(255,140,0)"), "KB dmg","Knockback damage during Greater Deathmark (mid port)", "Knockback dmg",0),
           //  new Mechanic(48281, "Mortal Coil", ParseEnum.BossIDS.Dhuum, new MechanicPlotlySetting("circle","rgb(0,128,0)"), "Green Orbs",
             new PlayerBoonApplyMechanic(46950, "Fractured Spirit", new MechanicPlotlySetting("square","rgb(0,255,0)"), "Orb CD","Applied when taking green", "Green port",0),
-            new SkillOnPlayerMechanic(47076 , "Echo's Damage", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Echo","Damaged by Ender's Echo (pick up)", "Ender's Echo",5000),
+            //new SkillOnPlayerMechanic(47076 , "Echo's Damage", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Echo","Damaged by Ender's Echo (pick up)", "Ender's Echo",5000),
+            new PlayerBoonApplyMechanic(49125, "Echo's Pick up", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Echo PU","Picked up by Ender's Echo", "Ender's Echo", 3000)
             });
             Extension = "dhuum";
             IconUrl = "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
@@ -257,7 +258,7 @@ namespace LuckParser.Models.Logic
                 case (ushort)Deathling:
                     break;
                 case (ushort)UnderworldReaper:
-                    if (!_isBugged && _reapersSeen == -7 && end < log.FightData.ToFightSpace(log.FightData.FightEnd) - 20000)
+                    if (!_isBugged && _reapersSeen == -7 && TrashMobs.Where(x => x.ID == (ushort) UnderworldReaper && x.GetCombatReplayPositions(log).Count == 0).Count() <= 7)
                     {
                         _reapersSeen = 0;
                     }
