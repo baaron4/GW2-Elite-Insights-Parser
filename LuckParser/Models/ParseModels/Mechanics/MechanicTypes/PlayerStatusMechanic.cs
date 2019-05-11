@@ -20,29 +20,29 @@ namespace LuckParser.Models.ParseModels
             ShowOnTable = false;
         }
 
-        public override void CheckMechanic(ParsedEvtcContainer evtcContainer, Dictionary<Mechanic, List<MechanicLog>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs)
+        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicLog>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs)
         {
-            CombatData combatData = evtcContainer.CombatData;
-            HashSet<ushort> playersIds = evtcContainer.PlayerIDs;
-            foreach (Player p in evtcContainer.PlayerList)
+            CombatData combatData = log.CombatData;
+            HashSet<ushort> playersIds = log.PlayerIDs;
+            foreach (Player p in log.PlayerList)
             {
                 List<CombatItem> cList = new List<CombatItem>();
                 switch (SkillId)
                 {
                     case SkillItem.DeathId:
-                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.ChangeDead, evtcContainer.FightData.FightStart, evtcContainer.FightData.FightEnd);
+                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.ChangeDead, log.FightData.FightStart, log.FightData.FightEnd);
                         break;
                     case SkillItem.DCId:
-                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.Despawn, evtcContainer.FightData.FightStart, evtcContainer.FightData.FightEnd);
+                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.Despawn, log.FightData.FightStart, log.FightData.FightEnd);
                         break;
                     case SkillItem.RespawnId:
-                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.Spawn, evtcContainer.FightData.FightStart, evtcContainer.FightData.FightEnd);
+                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.Spawn, log.FightData.FightStart, log.FightData.FightEnd);
                         break;
                     case SkillItem.AliveId:
-                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.ChangeUp, evtcContainer.FightData.FightStart, evtcContainer.FightData.FightEnd);
+                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.ChangeUp, log.FightData.FightStart, log.FightData.FightEnd);
                         break;
                     case SkillItem.DownId:
-                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.ChangeDown, evtcContainer.FightData.FightStart, evtcContainer.FightData.FightEnd);
+                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.ChangeDown, log.FightData.FightStart, log.FightData.FightEnd);
                         List<CombatItem> downByVaporForm = combatData.GetBoonData(5620).Where(x => x.SrcInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.All).ToList();
                         foreach (CombatItem c in downByVaporForm)
                         {
@@ -50,12 +50,12 @@ namespace LuckParser.Models.ParseModels
                         }
                         break;
                     case SkillItem.ResurrectId:
-                        cList = evtcContainer.CombatData.GetCastData(p.InstID, evtcContainer.FightData.FightStart, evtcContainer.FightData.FightEnd).Where(x => x.SkillID == SkillItem.ResurrectId && x.IsActivation.StartCasting()).ToList();
+                        cList = log.CombatData.GetCastData(p.InstID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == SkillItem.ResurrectId && x.IsActivation.StartCasting()).ToList();
                         break;
                 }
                 foreach (CombatItem mechItem in cList)
                 {
-                    mechanicLogs[this].Add(new MechanicLog(evtcContainer.FightData.ToFightSpace(mechItem.Time), this, p));
+                    mechanicLogs[this].Add(new MechanicLog(log.FightData.ToFightSpace(mechItem.Time), this, p));
                 }
             }
         }

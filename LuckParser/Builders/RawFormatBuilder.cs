@@ -140,7 +140,7 @@ namespace LuckParser.Builders
         {
             MechanicData mechanicData = _log.MechanicData;
             var mechanicLogs = new List<MechanicLog>();
-            foreach (var mLog in mechanicData.GetAllMechanics())
+            foreach (var mLog in mechanicData.GetAllMechanics(_log))
             {
                 mechanicLogs.AddRange(mLog);
             }

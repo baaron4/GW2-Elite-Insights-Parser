@@ -46,9 +46,9 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public MechanicData GetMechanicData(ParsedEvtcContainer evtcContainer)
+        public MechanicData GetMechanicData()
         {
-            return new MechanicData(MechanicList, evtcContainer);
+            return new MechanicData(MechanicList);
         }
 
         protected virtual CombatReplayMap GetCombatMapInternal()

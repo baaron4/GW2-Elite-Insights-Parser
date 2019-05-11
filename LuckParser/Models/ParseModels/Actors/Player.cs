@@ -400,9 +400,9 @@ namespace LuckParser.Models.ParseModels
                     final.InvulnedCount++;
                     final.DamageInvulned += dl.Damage;
                 }
-                final.DownCount = log.MechanicData.GetMechanicLogs(SkillItem.DownId).Count(x => x.Actor == this && x.Time >= start && x.Time <= end);
-                final.DeadCount = log.MechanicData.GetMechanicLogs(SkillItem.DeathId).Count(x => x.Actor == this && x.Time >= start && x.Time <= end);
-                final.DcCount = log.MechanicData.GetMechanicLogs(SkillItem.DCId).Count(x => x.Actor == this && x.Time >= start && x.Time <= end);
+                final.DownCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DownId).Count(x => x.Actor == this && x.Time >= start && x.Time <= end);
+                final.DeadCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DeathId).Count(x => x.Actor == this && x.Time >= start && x.Time <= end);
+                final.DcCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DCId).Count(x => x.Actor == this && x.Time >= start && x.Time <= end);
 
                 //
                 start = phase.Start;

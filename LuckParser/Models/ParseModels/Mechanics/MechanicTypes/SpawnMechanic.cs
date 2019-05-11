@@ -20,18 +20,18 @@ namespace LuckParser.Models.ParseModels
             IsEnemyMechanic = true;
         }
 
-        public override void CheckMechanic(ParsedEvtcContainer evtcContainer, Dictionary<Mechanic, List<MechanicLog>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs)
+        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicLog>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs)
         {
-            CombatData combatData = evtcContainer.CombatData;
-            HashSet<ushort> playersIds = evtcContainer.PlayerIDs;
-            foreach (AgentItem a in evtcContainer.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.ID == SkillId))
+            CombatData combatData = log.CombatData;
+            HashSet<ushort> playersIds = log.PlayerIDs;
+            foreach (AgentItem a in log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.ID == SkillId))
             {
                 if (!regroupedMobs.TryGetValue(a.ID, out DummyActor amp))
                 {
                     amp = new DummyActor(a);
                     regroupedMobs.Add(a.ID, amp);
                 }
-                mechanicLogs[this].Add(new MechanicLog(evtcContainer.FightData.ToFightSpace(a.FirstAware), this, amp));
+                mechanicLogs[this].Add(new MechanicLog(log.FightData.ToFightSpace(a.FirstAware), this, amp));
             }
         }
     }

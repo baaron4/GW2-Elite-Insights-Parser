@@ -49,7 +49,7 @@ namespace LuckParser.Parser
             FightData.SetCM(_container);
             //
             BoonSourceFinder = Boon.GetBoonSourceFinder(logData.GW2Version, Boons);
-            MechanicData = FightData.Logic.GetMechanicData(_container);
+            MechanicData = FightData.Logic.GetMechanicData();
             Statistics = new Statistics(_container);
             LegacyTarget = target;
         }

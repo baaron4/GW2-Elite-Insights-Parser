@@ -46,13 +46,13 @@ namespace LuckParser.Models.ParseModels
         private readonly List<MechanicChecker> _triggerConditions = new List<MechanicChecker>();
         private readonly TriggerRule _triggerRule = TriggerRule.AND;
 
-        protected bool Keep(CombatItem c, ParsedEvtcContainer evtcContainer)
+        protected bool Keep(CombatItem c, ParsedLog log)
         {
             if (_triggerConditions.Count > 0)
             {
                 foreach (MechanicChecker checker in _triggerConditions)
                 {
-                    bool res = checker.Keep(c, evtcContainer);
+                    bool res = checker.Keep(c, log);
                     if (_triggerRule == TriggerRule.AND && !res)
                     {
                         return false;
@@ -152,7 +152,7 @@ namespace LuckParser.Models.ParseModels
             ShowOnTable = true;
         }
 
-        public abstract void CheckMechanic(ParsedEvtcContainer evtcContainer, Dictionary<Mechanic, List<MechanicLog>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs);
+        public abstract void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicLog>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs);
 
     }
 }

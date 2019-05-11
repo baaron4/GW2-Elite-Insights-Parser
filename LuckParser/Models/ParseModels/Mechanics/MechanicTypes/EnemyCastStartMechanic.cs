@@ -29,30 +29,30 @@ namespace LuckParser.Models.ParseModels
             IsEnemyMechanic = true;
         }
 
-        public override void CheckMechanic(ParsedEvtcContainer evtcContainer, Dictionary<Mechanic, List<MechanicLog>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs)
+        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicLog>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs)
         {
-            CombatData combatData = evtcContainer.CombatData;
-            HashSet<ushort> playersIds = evtcContainer.PlayerIDs;
-            foreach (CombatItem c in evtcContainer.CombatData.GetCastDataById(SkillId))
+            CombatData combatData = log.CombatData;
+            HashSet<ushort> playersIds = log.PlayerIDs;
+            foreach (CombatItem c in log.CombatData.GetCastDataById(SkillId))
             {
                 DummyActor amp = null;
-                if (c.IsActivation.StartCasting() && Keep(c, evtcContainer))
+                if (c.IsActivation.StartCasting() && Keep(c, log))
                 {
-                    Target target = evtcContainer.FightData.Logic.Targets.Find(x => x.InstID == c.SrcInstid && x.FirstAware <= c.Time && x.LastAware >= c.Time);
+                    Target target = log.FightData.Logic.Targets.Find(x => x.InstID == c.SrcInstid && x.FirstAware <= c.Time && x.LastAware >= c.Time);
                     if (target != null)
                     {
                         amp = target;
                     }
                     else
                     {
-                        AgentItem a = evtcContainer.AgentData.GetAgent(c.SrcAgent, c.Time);
+                        AgentItem a = log.AgentData.GetAgent(c.SrcAgent, c.Time);
                         if (playersIds.Contains(a.InstID))
                         {
                             continue;
                         }
                         else if (a.MasterAgent != 0)
                         {
-                            AgentItem m = evtcContainer.AgentData.GetAgent(a.MasterAgent, c.Time);
+                            AgentItem m = log.AgentData.GetAgent(a.MasterAgent, c.Time);
                             if (playersIds.Contains(m.InstID))
                             {
                                 continue;
@@ -67,7 +67,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 if (amp != null)
                 {
-                    mechanicLogs[this].Add(new MechanicLog(evtcContainer.FightData.ToFightSpace(c.Time), this, amp));
+                    mechanicLogs[this].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), this, amp));
                 }
             }
         }

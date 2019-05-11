@@ -27,25 +27,25 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        public override void CheckMechanic(ParsedEvtcContainer evtcContainer, Dictionary<Mechanic, List<MechanicLog>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs)
+        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicLog>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs)
         {
-            CombatData combatData = evtcContainer.CombatData;
-            HashSet<ushort> playersIds = evtcContainer.PlayerIDs;
-            IEnumerable<AgentItem> agents = evtcContainer.AgentData.GetAgentsByID((ushort)SkillId);
+            CombatData combatData = log.CombatData;
+            HashSet<ushort> playersIds = log.PlayerIDs;
+            IEnumerable<AgentItem> agents = log.AgentData.GetAgentsByID((ushort)SkillId);
             foreach (AgentItem a in agents)
             {
                 List<CombatItem> combatitems = combatData.GetDamageTakenData(a.InstID, a.FirstAware, a.LastAware);
                 foreach (CombatItem c in combatitems)
                 {
-                    if (c.IsBuff > 0 || !c.ResultEnum.IsHit() || !Keep(c, evtcContainer) )
+                    if (c.IsBuff > 0 || !c.ResultEnum.IsHit() || !Keep(c, log) )
                     {
                         continue;
                     }
-                    foreach (Player p in evtcContainer.PlayerList)
+                    foreach (Player p in log.PlayerList)
                     {
                         if (c.SrcInstid == p.InstID || c.SrcMasterInstid == p.InstID )
                         {
-                            mechanicLogs[this].Add(new MechanicLog(evtcContainer.FightData.ToFightSpace(c.Time), this, p));
+                            mechanicLogs[this].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), this, p));
                         }
                     }
                 }

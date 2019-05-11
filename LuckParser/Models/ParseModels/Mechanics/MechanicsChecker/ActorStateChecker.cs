@@ -18,15 +18,15 @@ namespace LuckParser.Models.ParseModels
             _has = has;
         }
 
-        public override bool Keep(CombatItem item, ParsedEvtcContainer evtcContainer)
+        public override bool Keep(CombatItem item, ParsedLog log)
         {
             if (_has)
             {
-                return evtcContainer.CombatData.GetStatesData(item.SrcInstid, _compare, item.Time - 20, item.Time + 20).Count > 0;
+                return log.CombatData.GetStatesData(item.SrcInstid, _compare, item.Time - 20, item.Time + 20).Count > 0;
             }
             else
             {
-                return evtcContainer.CombatData.GetStatesData(item.SrcInstid, _compare, item.Time - 20, item.Time + 20).Count == 0;
+                return log.CombatData.GetStatesData(item.SrcInstid, _compare, item.Time - 20, item.Time + 20).Count == 0;
             }
         }
     }
