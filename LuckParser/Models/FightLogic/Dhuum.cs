@@ -70,7 +70,7 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        private List<PhaseData> GetInBetweenSoulSplits(ParsedLog log, Target dhuum, long mainStart, long mainEnd)
+        private List<PhaseData> GetInBetweenSoulSplits(ParsedLog log, Target dhuum, long mainStart, long mainEnd, bool hasRitual)
         {
             List<CastLog> cls = dhuum.GetCastLogs(log, 0, log.FightData.FightDuration);
             List<CastLog> cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
@@ -95,7 +95,7 @@ namespace LuckParser.Models.Logic
             }
             phases.Add(new PhaseData(start, mainEnd)
             {
-                Name = phases.Exists(x => x.Name == "Ritual") ? "Pre-Ritual" : "Pre-Wipe"
+                Name = hasRitual ? "Pre-Ritual" : "Pre-Wipe"
             });
             foreach (PhaseData phase in phases)
             {
@@ -149,14 +149,15 @@ namespace LuckParser.Models.Logic
                 phases[i].Name = namesDh[i - 1];
                 phases[i].Targets.Add(mainTarget);
             }
+            bool hasRitual = phases.Last().Name == "Ritual";
             if (dhuumCast.Count > 0 && phases.Count > 1)
             {
-                phases.AddRange(GetInBetweenSoulSplits(log, mainTarget, phases[1].Start, phases[1].End));
+                phases.AddRange(GetInBetweenSoulSplits(log, mainTarget, phases[1].Start, phases[1].End, hasRitual));
                 phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             }
             else if (phases.Count > 2)
             {
-                phases.AddRange(GetInBetweenSoulSplits(log, mainTarget, phases[2].Start, phases[2].End));
+                phases.AddRange(GetInBetweenSoulSplits(log, mainTarget, phases[2].Start, phases[2].End, hasRitual));
                 phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             }
             return phases;
