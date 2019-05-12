@@ -11,6 +11,7 @@ namespace LuckParser.Parser
     public class ParsedLog
     {
         private readonly ParsedEvtcContainer _container;
+        private readonly List<Mob> _auxMobs = new List<Mob>();
 
         public LogData LogData => _container.LogData;
         public FightData FightData => _container.FightData;
@@ -52,6 +53,25 @@ namespace LuckParser.Parser
             MechanicData = FightData.Logic.GetMechanicData();
             Statistics = new Statistics(_container);
             LegacyTarget = target;
+        }
+
+        public AbstractActor FindActor(long time, ushort instid)
+        {
+            AbstractActor res = PlayerList.FirstOrDefault(x => x.InstID == instid);
+            if (res == null)
+            {
+                res = FightData.Logic.Targets.FirstOrDefault(x => x.InstID == instid && x.FirstAware <= time && x.LastAware >= time);
+                if (res == null)
+                {
+                    res = _auxMobs.FirstOrDefault(x => x.InstID == instid && x.FirstAware <= time && x.LastAware >= time);
+                    if (res == null)
+                    {
+                        _auxMobs.Add(new Mob(AgentData.GetAgentByInstID(instid, time)));
+                        res = _auxMobs.Last();
+                    }
+                }
+            }
+            return res;
         }
     }
 }

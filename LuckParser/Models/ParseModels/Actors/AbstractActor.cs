@@ -203,9 +203,10 @@ namespace LuckParser.Models.ParseModels
                     }
                     boonMap.Add(log.Boons.BoonsByIds[boonId]);
                 }
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.Manual
-                    || (c.IsBuffRemove == ParseEnum.BuffRemove.Single && c.IFF == ParseEnum.IFF.Unknown && c.DstInstid == 0)
-                    || (c.IsBuffRemove != ParseEnum.BuffRemove.None && c.Value <= 50))
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.Manual // don't check manuals
+                    || (c.IsBuffRemove == ParseEnum.BuffRemove.Single && c.IFF == ParseEnum.IFF.Unknown && c.DstInstid == 0) // weird single remove
+                    || (c.IsBuffRemove == ParseEnum.BuffRemove.Single && c.Value <= 50)
+                    || (c.IsBuffRemove == ParseEnum.BuffRemove.All && c.Value <= 50 && c.BuffDmg <= 50)) // don't take into account low value buff removals, with server delays it can mess up some stuff
                 {
                     continue;
                 }

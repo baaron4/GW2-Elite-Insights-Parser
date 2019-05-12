@@ -214,6 +214,11 @@ namespace LuckParser.Models.ParseModels
         {
                 new Boon("Unnatural Signet",38224, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png"),
                 new Boon("Compromised",35096, BoonSource.Enemy, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/48/Compromised.png"),
+                new Boon("Xera's Fury",35103, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/dd/Xera%27s_Fury.png"),
+                new Boon("Statue Fixated",34912, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/dd/Xera%27s_Fury.png"),
+                new Boon("Crimson Attunement (Orb)",35091, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/3e/Crimson_Attunement.png"),
+                new Boon("Radiant Attunement (Orb)",35109, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/68/Radiant_Attunement.png"),
+                new Boon("Magic Blast",35119, BoonSource.Enemy, BoonType.Intensity, 35, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a9/Magic_Blast_Intensity.png"),
                 new Boon("Spirited Fusion",31722, BoonSource.Enemy, BoonType.Intensity, 500, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/eb/Spirited_Fusion.png"),
                 new Boon("Blood Shield Abo",34376, BoonSource.Enemy, BoonType.Intensity, 18, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
                 new Boon("Blood Shield",34518, BoonSource.Enemy, BoonType.Intensity, 18, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
