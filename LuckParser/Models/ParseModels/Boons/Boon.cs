@@ -287,7 +287,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Legendary Renegade Stance",44272, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/19/Legendary_Renegade_Stance.png"),
                 //summons
                 new Boon("Breakrazor's Bastion",44682, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/a/a7/Breakrazor%27s_Bastion.png"),
-                new Boon("Razorclaw's Rage",41016, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/73/Razorclaw%27s_Rage.png"),
+                new Boon("Razorclaw's Rage",41016, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/7/73/Razorclaw%27s_Rage.png"),
                 new Boon("Soulcleave's Summit",45026, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png"),
                 //traits
                 new Boon("Vicious Lacerations",29395, BoonSource.Revenant, BoonType.Intensity, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png"),
