@@ -2,7 +2,7 @@
 
 var compileCombatReplayUI = function () {
     Vue.component("combat-replay-ui-component", {
-        props: ["mode"],
+        props: ["mode", "light"],
         template: `${tmplCombatReplayUI}`,
         data: function () {
             return {
@@ -63,7 +63,7 @@ var compileCombatReplayUI = function () {
     });
 
     Vue.component("combat-replay-player-select-component", {
-        props: ['selectedplayerid'],
+        props: ['selectedplayerid', "light"],
         template: `${tmplCombatReplayPlayerSelect}`,
         methods: {
             selectActor: function (id) {
@@ -96,6 +96,7 @@ var compileCombatReplayUI = function () {
     });
 
     Vue.component("combat-replay-range-select-component", {
+        props: ["light"],
         template: `${tmplCombatReplayRangeSelect}`,
         data: function () {
             return {

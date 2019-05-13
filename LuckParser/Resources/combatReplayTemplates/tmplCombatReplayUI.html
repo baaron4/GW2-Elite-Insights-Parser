@@ -3,19 +3,19 @@
         <combat-replay-damage-data-component :time="animationStatus.time"
             :selectedplayer="animationStatus.selectedPlayer" :selectedplayerid="animationStatus.selectedPlayerID">
         </combat-replay-damage-data-component>
-        <combat-replay-player-select-component :selectedplayerid="animationStatus.selectedPlayerID"></combat-replay-player-select-component>
-        <combat-replay-range-select-component></combat-replay-range-select-component>
+        <combat-replay-player-select-component :selectedplayerid="animationStatus.selectedPlayerID" :light="light"></combat-replay-player-select-component>
+        <combat-replay-range-select-component :light="light"></combat-replay-range-select-component>
     </div>
     <div class="d-flex flex-column flex-wrap">
         <p class="text-justify text-center">Double click on canvas to restore viewpoint</p>
         <canvas :width="canvas.x + 'px'" :height="canvas.y + 'px'" id="replayCanvas" class="replay"></canvas>
         <div class="d-flex justify-content-center">
             <div @click="toggleAnimate();"
-                class="btn btn-dark btn-small" style="width: 50px;">{{animated ? "Pause" : "Play"}}</div>
-            <div @click="restartAnimate();" class="btn btn-dark btn-small">Restart
+                class="btn btn-small" :class="{'btn-dark': !light, 'btn-light': light}" style="width: 50px;">{{animated ? "Pause" : "Play"}}</div>
+            <div @click="restartAnimate();" class="btn btn-small" :class="{'btn-dark': !light, 'btn-light': light}">Restart
             </div>
             <div @click="toggleBackwards();"
-                class="btn btn-dark btn-small" :class="{'active': backwards}">Backwards</div>
+                class="btn btn-small" :class="{'active': backwards, 'btn-dark': !light, 'btn-light': light}">Backwards</div>
         </div>
         <div class="d-flex justify-content-center slidecontainer">
             <input style="min-width: 400px;" @input="updateTime($event.target.value)" type="range" min="0"
@@ -24,8 +24,8 @@
                 @input="updateInputTime($event.target.value);">
         </div>
         <div class="d-flex justify-content-center">
-            <label v-for="speed in speeds" @click="setSpeed(speed)" :class="{'active': speed === selectedSpeed}"
-                class="btn btn-dark btn-ssmall">
+            <label v-for="speed in speeds" @click="setSpeed(speed)" :class="{'active': speed === selectedSpeed, 'btn-dark': !light, 'btn-light': light}"
+                class="btn btn-ssmall">
                 {{speed}}x
             </label>
         </div>

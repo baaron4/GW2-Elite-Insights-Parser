@@ -5,7 +5,7 @@
             <h3>Group {{group.id}}</h3>
             <label v-for="player in group.players"
                    @click="selectActor(player.combatReplayID);"
-                   class="btn btn-dark btn-small ply-btn" :class="{'active': selectedplayerid === player.combatReplayID}" :title="player.name">
+                   class="btn btn-small ply-btn" :class="{'active': selectedplayerid === player.combatReplayID, 'btn-dark': !light, 'btn-light': light}" :title="player.name">
                 <img :src="player.icon" :alt="player.profession" class="icon">
                 {{ player.name }}
             </label>

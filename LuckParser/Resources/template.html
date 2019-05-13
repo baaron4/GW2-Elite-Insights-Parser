@@ -129,7 +129,7 @@
             </div>
         </div>
         <div id="combat-replay" v-if="cr" v-show="mode === 1" class="ei-container-big">
-            <combat-replay-ui-component :mode="mode"></combat-replay-ui-component>
+            <combat-replay-ui-component :mode="mode" :light="light"></combat-replay-ui-component>
         </div>
         <div class="footer" :class="{'ei-header': !mode, 'ei-header-big': mode}">
             <div>Time Start: ${encounterStart} | Time End: ${encounterEnd}</div>
