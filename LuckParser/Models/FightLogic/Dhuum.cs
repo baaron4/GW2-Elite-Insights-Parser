@@ -34,7 +34,9 @@ namespace LuckParser.Models.Logic
             new SkillOnPlayerMechanic(48210, "Greater Death Mark", new MechanicPlotlySetting("circle","rgb(255,140,0)"), "KB dmg","Knockback damage during Greater Deathmark (mid port)", "Knockback dmg",0),
           //  new Mechanic(48281, "Mortal Coil", ParseEnum.BossIDS.Dhuum, new MechanicPlotlySetting("circle","rgb(0,128,0)"), "Green Orbs",
             new PlayerBoonApplyMechanic(46950, "Fractured Spirit", new MechanicPlotlySetting("square","rgb(0,255,0)"), "Orb CD","Applied when taking green", "Green port",0),
-            new SkillOnPlayerMechanic(47076 , "Echo's Damage", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Echo","Damaged by Ender's Echo (pick up)", "Ender's Echo",5000),
+            //new SkillOnPlayerMechanic(47076 , "Echo's Damage", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Echo","Damaged by Ender's Echo (pick up)", "Ender's Echo",5000),
+            new PlayerBoonApplyMechanic(49125, "Echo's Pick up", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Echo PU","Picked up by Ender's Echo", "Ender's Pick up", 3000),
+            new PlayerBoonRemoveMechanic(49125, "Freed from Echo", new MechanicPlotlySetting("square","rgb(0,0,255)"), "F Echo","Freed from Ender's Echo", "Freed from Echo", 0, new List<MechanicChecker>{ new ActorStateChecker(ParseEnum.StateChange.ChangeDead, false) }, Mechanic.TriggerRule.AND)
             });
             Extension = "dhuum";
             IconUrl = "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
@@ -68,7 +70,7 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        private List<PhaseData> GetInBetweenSoulSplits(ParsedLog log, Target dhuum, long mainStart, long mainEnd)
+        private List<PhaseData> GetInBetweenSoulSplits(ParsedLog log, Target dhuum, long mainStart, long mainEnd, bool hasRitual)
         {
             List<CastLog> cls = dhuum.GetCastLogs(log, 0, log.FightData.FightDuration);
             List<CastLog> cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
@@ -93,7 +95,7 @@ namespace LuckParser.Models.Logic
             }
             phases.Add(new PhaseData(start, mainEnd)
             {
-                Name = "Pre-Ritual"
+                Name = hasRitual ? "Pre-Ritual" : "Pre-Wipe"
             });
             foreach (PhaseData phase in phases)
             {
@@ -147,14 +149,15 @@ namespace LuckParser.Models.Logic
                 phases[i].Name = namesDh[i - 1];
                 phases[i].Targets.Add(mainTarget);
             }
+            bool hasRitual = phases.Last().Name == "Ritual";
             if (dhuumCast.Count > 0 && phases.Count > 1)
             {
-                phases.AddRange(GetInBetweenSoulSplits(log, mainTarget, phases[1].Start, phases[1].End));
+                phases.AddRange(GetInBetweenSoulSplits(log, mainTarget, phases[1].Start, phases[1].End, hasRitual));
                 phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             }
             else if (phases.Count > 2)
             {
-                phases.AddRange(GetInBetweenSoulSplits(log, mainTarget, phases[2].Start, phases[2].End));
+                phases.AddRange(GetInBetweenSoulSplits(log, mainTarget, phases[2].Start, phases[2].End, hasRitual));
                 phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             }
             return phases;
@@ -257,6 +260,10 @@ namespace LuckParser.Models.Logic
                 case (ushort)Deathling:
                     break;
                 case (ushort)UnderworldReaper:
+                    if (!_isBugged && _reapersSeen == -7 && TrashMobs.Where(x => x.ID == (ushort) UnderworldReaper && x.GetCombatReplayPositions(log).Count == 0).Count() <= 7)
+                    {
+                        _reapersSeen = 0;
+                    }
                     if (!_isBugged && _reapersSeen >= 0)
                     {
                         if (_greenStart == 0)

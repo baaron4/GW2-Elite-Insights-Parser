@@ -13,18 +13,20 @@ namespace LuckParser.Models.ParseModels
         private List<HashSet<Mechanic>> _presentMechanics;
         private List<List<DummyActor>> _enemyList;
 
-        public MechanicData(List<Mechanic> fightMechanics, ParsedEvtcContainer evtcContainer)
+        public MechanicData(List<Mechanic> fightMechanics)
         {
             foreach(Mechanic m in fightMechanics)
             {
                 _mechanicLogs.Add(m, new List<MechanicLog>());
             }
-            CombatData combatData = evtcContainer.CombatData;
-            HashSet<ushort> playersIds = evtcContainer.PlayerIDs;
+        }
+
+        private void CheckMechanics(ParsedLog log)
+        {
             Dictionary<ushort, DummyActor> regroupedMobs = new Dictionary<ushort, DummyActor>();
-            foreach (Mechanic mech in fightMechanics)
+            foreach (Mechanic mech in _mechanicLogs.Keys)
             {
-                mech.CheckMechanic(evtcContainer, _mechanicLogs, regroupedMobs);
+                mech.CheckMechanic(log, _mechanicLogs, regroupedMobs);
             }
             // regroup same mechanics with diff ids
             Dictionary<string, Mechanic> altNames = new Dictionary<string, Mechanic>();
@@ -53,6 +55,7 @@ namespace LuckParser.Models.ParseModels
             {
                 return;
             }
+            CheckMechanics(log);
             _presentOnPlayerMechanics = new List<HashSet<Mechanic>>();
             _presentOnEnemyMechanics = new List<HashSet<Mechanic>>();
             _presentMechanics = new List<HashSet<Mechanic>>();
@@ -101,16 +104,29 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public Dictionary<Mechanic, List<MechanicLog>>.ValueCollection GetAllMechanics()
+        public Dictionary<Mechanic, List<MechanicLog>>.ValueCollection GetAllMechanics(ParsedLog log)
         {
+            ProcessMechanics(log);
             return _mechanicLogs.Values;
         }
 
-        public List<MechanicLog> GetMechanicLogs(Mechanic mech)
+        public List<MechanicLog> GetMechanicLogs(ParsedLog log, Mechanic mech)
         {
+            ProcessMechanics(log);
             if (_mechanicLogs.TryGetValue(mech, out var list))
             {
                 return list;
+            }
+            return new List<MechanicLog>();
+        }
+
+        public List<MechanicLog> GetMechanicLogs(ParsedLog log, long id)
+        {
+            ProcessMechanics(log);
+            Mechanic mech = _mechanicLogs.Keys.FirstOrDefault(x => x.SkillId == id);
+            if ( mech != null)
+            {
+                return _mechanicLogs[mech];
             }
             return new List<MechanicLog>();
         }

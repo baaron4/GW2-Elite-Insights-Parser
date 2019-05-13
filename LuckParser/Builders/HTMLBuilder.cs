@@ -610,7 +610,7 @@ namespace LuckParser.Builders
             List<MechanicChartDataDto> mechanicsChart = new List<MechanicChartDataDto>();
             foreach (Mechanic mech in _log.MechanicData.GetPresentMechanics(_log, 0))
             {
-                List<MechanicLog> mechanicLogs = _log.MechanicData.GetMechanicLogs(mech);
+                List<MechanicLog> mechanicLogs = _log.MechanicData.GetMechanicLogs(_log, mech);
                 MechanicChartDataDto dto = new MechanicChartDataDto
                 {
                     Color = mech.PlotlySetting.Color,

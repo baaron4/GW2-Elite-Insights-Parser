@@ -662,7 +662,7 @@ namespace LuckParser.Builders
                     WriteCell(p.Character);
                     foreach (Mechanic mech in presMech)
                     {
-                        int count = _log.MechanicData.GetMechanicLogs(mech).Count(x => x.Actor.InstID == p.InstID && phase.InInterval(x.Time));
+                        int count = _log.MechanicData.GetMechanicLogs(_log, mech).Count(x => x.Actor.InstID == p.InstID && phase.InInterval(x.Time));
                         WriteCell(count.ToString());
                     }
                     NewLine();
@@ -681,7 +681,7 @@ namespace LuckParser.Builders
         {
             MechanicData mData = _log.MechanicData;
             List<MechanicLog> mLogs = new List<MechanicLog>();
-            foreach (List<MechanicLog> mLs in mData.GetAllMechanics())
+            foreach (List<MechanicLog> mLs in mData.GetAllMechanics(_log))
             {
                 mLogs.AddRange(mLs);
             }

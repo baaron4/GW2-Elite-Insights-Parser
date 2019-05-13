@@ -10,10 +10,57 @@ namespace LuckParser.Models
     /// </summary>
     public class Statistics
     {
-        public Statistics(ParsedLog log)
+        public Statistics(ParsedEvtcContainer evtcContainer)
         {
-            SetPresentBoons(log.CombatData.GetSkills(), log.PlayerList, log.CombatData, log.Boons);
-            SetStackCenterPositions(log.CanCombatReplay, log);
+            HashSet<long> skillIDs = evtcContainer.CombatData.GetSkills();
+            // Main boons
+            foreach (Boon boon in evtcContainer.Boons.GetBoonList())
+            {
+                if (skillIDs.Contains(boon.ID))
+                {
+                    PresentBoons.Add(boon);
+                }
+            }
+            // Main Conditions
+            foreach (Boon boon in evtcContainer.Boons.GetCondiBoonList())
+            {
+                if (skillIDs.Contains(boon.ID))
+                {
+                    PresentConditions.Add(boon);
+                }
+            }
+
+            // Important class specific boons
+            foreach (Boon boon in evtcContainer.Boons.GetOffensiveTableList())
+            {
+                if (skillIDs.Contains(boon.ID))
+                {
+                    PresentOffbuffs.Add(boon);
+                }
+            }
+
+            foreach (Boon boon in evtcContainer.Boons.GetDefensiveTableList())
+            {
+                if (skillIDs.Contains(boon.ID))
+                {
+                    PresentDefbuffs.Add(boon);
+                }
+
+            }
+
+            // All class specific boons
+            Dictionary<long, Boon> remainingBuffsByIds = evtcContainer.Boons.GetRemainingBuffsList().GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
+            foreach (Player player in evtcContainer.PlayerList)
+            {
+                PresentPersonalBuffs[player.InstID] = new HashSet<Boon>();
+                foreach (CombatItem item in evtcContainer.CombatData.GetBoonDataByDst(player.InstID, player.FirstAware, player.LastAware))
+                {
+                    if (item.DstInstid == player.InstID && item.IsBuffRemove == ParseEnum.BuffRemove.None && remainingBuffsByIds.TryGetValue(item.SkillID, out Boon boon))
+                    {
+                        PresentPersonalBuffs[player.InstID].Add(boon);
+                    }
+                }
+            }
         }
 
         public class FinalDPS
@@ -196,13 +243,22 @@ namespace LuckParser.Models
         public readonly Dictionary<ushort, HashSet<Boon>> PresentPersonalBuffs = new Dictionary<ushort, HashSet<Boon>>();
 
         //Positions for group
-        public List<Point3D> StackCenterPositions;
+        private List<Point3D> _stackCenterPositions = null;
 
-        private void SetStackCenterPositions(bool canCombatReplay, ParsedLog log)
+        public List<Point3D> GetStackCenterPositions(ParsedLog log)
         {
-            if (Properties.Settings.Default.ParseCombatReplay && canCombatReplay)
+            if (_stackCenterPositions == null)
             {
-                StackCenterPositions = new List<Point3D>();
+                SetStackCenterPositions(log);
+            }
+            return _stackCenterPositions;
+        }
+
+        private void SetStackCenterPositions(ParsedLog log)
+        {
+            _stackCenterPositions = new List<Point3D>();
+            if (Properties.Settings.Default.ParseCombatReplay && log.CanCombatReplay)
+            {
                 List<List<Point3D>> GroupsPosList = new List<List<Point3D>>();
                 foreach (Player player in log.PlayerList)
                 {
@@ -236,62 +292,7 @@ namespace LuckParser.Models
                     x = x / activePlayers;
                     y = y / activePlayers;
                     z = z / activePlayers;
-                    StackCenterPositions.Add(new Point3D(x, y, z, GeneralHelper.PollingRate * time));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Checks the combat data and gets buffs that were present during the fight
-        /// </summary>
-        private void SetPresentBoons(HashSet<long> skillIDs, List<Player> players, CombatData combatData, BoonsContainer boons)
-        {
-            // Main boons
-            foreach (Boon boon in boons.GetBoonList())
-            {
-                if (skillIDs.Contains(boon.ID))
-                {
-                    PresentBoons.Add(boon);
-                }
-            }
-            // Main Conditions
-            foreach (Boon boon in boons.GetCondiBoonList())
-            {
-                if (skillIDs.Contains(boon.ID))
-                {
-                    PresentConditions.Add(boon);
-                }
-            }
-
-            // Important class specific boons
-            foreach (Boon boon in boons.GetOffensiveTableList())
-            {
-                if (skillIDs.Contains(boon.ID))
-                {
-                    PresentOffbuffs.Add(boon);
-                }
-            }
-
-            foreach (Boon boon in boons.GetDefensiveTableList())
-            {
-                if (skillIDs.Contains(boon.ID))
-                {
-                    PresentDefbuffs.Add(boon);
-                }
-
-            }
-
-            // All class specific boons
-            Dictionary<long, Boon> remainingBuffsByIds = boons.GetRemainingBuffsList().GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
-            foreach (Player player in players)
-            {
-                PresentPersonalBuffs[player.InstID] = new HashSet<Boon>();
-                foreach (CombatItem item in combatData.GetBoonDataByDst(player.InstID, player.FirstAware, player.LastAware))
-                {
-                    if (item.DstInstid == player.InstID && item.IsBuffRemove == ParseEnum.BuffRemove.None && remainingBuffsByIds.TryGetValue(item.SkillID, out Boon boon))
-                    {
-                        PresentPersonalBuffs[player.InstID].Add(boon);
-                    }
+                    _stackCenterPositions.Add(new Point3D(x, y, z, GeneralHelper.PollingRate * time));
                 }
             }
         }

@@ -165,7 +165,7 @@ namespace LuckParser.Models.ParseModels
                 }
             }
             long prevID = 0;
-            foreach(List<CombatItem> items in groupByTime.Values)
+            foreach (List<CombatItem> items in groupByTime.Values)
             {
                 List<CombatItem> applies = items.Where(x => x.IsBuffRemove == Parser.ParseEnum.BuffRemove.None).ToList();
                 List<CombatItem> removals = items.Where(x => x.IsBuffRemove != Parser.ParseEnum.BuffRemove.None).ToList();
