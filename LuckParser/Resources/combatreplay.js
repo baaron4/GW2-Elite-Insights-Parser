@@ -211,6 +211,7 @@ class Animator {
     selectActor(pId) {
         let actor = this.playerData.get(pId);
         this.reactiveDataStatus.selectedPlayer = null;
+        this.reactiveDataStatus.selectedPlayerID = null;
         let oldSelect = actor.selected;
         this.playerData.forEach(function (value, key, map) {
             value.selected = false;
