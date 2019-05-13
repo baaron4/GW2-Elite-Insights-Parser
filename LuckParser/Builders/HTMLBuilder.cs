@@ -819,6 +819,8 @@ namespace LuckParser.Builders
                     {"${tmplCombatReplayTargetsStats}", Properties.Resources.tmplCombatReplayTargetsStats },
                     {"${tmplCombatReplayPlayersStats}", Properties.Resources.tmplCombatReplayPlayersStats },
                     {"${tmplCombatReplayUI}", Properties.Resources.tmplCombatReplayUI },
+                    {"${tmplCombatReplayPlayerSelect}", Properties.Resources.tmplCombatReplayPlayerSelect },
+                    {"${tmplCombatReplayRangeSelect}", Properties.Resources.tmplCombatReplayRangeSelect },
                 };
             foreach (var entry in CRtemplates)
             {

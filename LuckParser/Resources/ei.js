@@ -71,13 +71,6 @@ window.onload = function () {
             cr: !!logData.crData
         },
         methods: {
-            switchCombatReplayButtons: function (from, to) {
-                var combatReplay = $('#combat-replay');
-                if (combatReplay) {
-                    var buttons = combatReplay.find('.' + from);
-                    buttons.addClass(to).removeClass(from);
-                }
-            },
             switchTheme: function (state) {
                 if (state === this.light) {
                     return;
@@ -90,7 +83,6 @@ window.onload = function () {
                 if (storeTheme) storeTheme(newStyle);
                 var theme = document.getElementById('theme');
                 theme.href = themes[newStyle];
-                this.switchCombatReplayButtons(this.light ? 'btn-dark' : 'btn-light', this.light ? 'btn-light' : 'btn-dark');
             }
         },
         computed: {
@@ -143,9 +135,6 @@ window.onload = function () {
         mounted() {
             var element = document.getElementById("loading");
             element.parentNode.removeChild(element);
-            if (this.light) {
-                this.switchCombatReplayButtons('btn-dark', 'btn-light');
-            }
         }
     });
     $("body").tooltip({

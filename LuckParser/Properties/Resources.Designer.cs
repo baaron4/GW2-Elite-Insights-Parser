@@ -148,12 +148,13 @@ namespace LuckParser.Properties {
         ///        template: `${tmplCombatReplayUI}`,
         ///        data: function () {
         ///            return {
-        ///                damageMode: 1,
-        ///                rangeSelect: [180, 240, 300, 600, 900, 1200],
         ///                speeds: [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0],
         ///                animationStatus: {
         ///                   time: 0,
-        ///                   selectedPlayer: nul [rest of string was truncated]&quot;;.
+        ///                   selectedPlayer: null,
+        ///                   selectedPlayerID: null
+        ///                },
+        ///                animated: fa [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string combatReplayStatsUI {
             get {
@@ -584,8 +585,8 @@ namespace LuckParser.Properties {
         ///            &lt;div v-if=&quot;enemy.state &gt; 1&quot; class=&quot;boon-number&quot;&gt;{{enemy.state}}&lt;/div&gt;
         ///        &lt;/div&gt;
         ///    &lt;/div&gt;
-        ///    &lt;div v-if=&quot;data.conditions.length &gt; 0&quot; class=&quot;d-flex&quot;&gt;
-        ///        &lt;di [rest of string was truncated]&quot;;.
+        ///    &lt;div v-if=&quot;data.others.length &gt; 0&quot; class=&quot;d-flex&quot;&gt;
+        ///        &lt;div v- [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayActorBuffStats {
             get {
@@ -643,6 +644,22 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 
+        ///&lt;div class=&quot;d-flex flex-row flex-wrap justify-content-center align-items-start mb-2&quot;&gt;
+        ///    &lt;div class=&quot;d-flex flex-row justify-content-center align-items-center&quot;&gt;
+        ///        &lt;div v-for=&quot;group in groups&quot; class=&quot;d-flex flex-column justify-content-center align-items-center mt-1 ml-2 mr-2&quot;&gt;
+        ///            &lt;h3&gt;Group {{group.id}}&lt;/h3&gt;
+        ///            &lt;label v-for=&quot;player in group.players&quot;
+        ///                   @click=&quot;selectActor(player.combatReplayID);&quot;
+        ///                   class=&quot;btn btn-dark btn-small ply-btn&quot; :class= [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplCombatReplayPlayerSelect {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayPlayerSelect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-row flex-wrap mb-2&quot;&gt;
         ///    &lt;div v-for=&quot;(group,id) in groups&quot; v-if=&quot;group&quot; class=&quot;ml-1 mt-2&quot; style=&quot;border-left: 1px solid #000000&quot;&gt;
         ///        &lt;h5 class=&quot;text-center&quot;&gt;Group {{id}}&lt;/h5&gt;
@@ -682,6 +699,23 @@ namespace LuckParser.Properties {
         internal static string tmplCombatReplayPlayerStatus {
             get {
                 return ResourceManager.GetString("tmplCombatReplayPlayerStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///&lt;h3&gt;Range Selectors&lt;/h3&gt;
+        ///&lt;div class=&quot;d-flex flex-column flex-wrap justify-content-center align-items-center mb-2&quot;
+        ///     v-for=&quot;rangeCol in rangeSelectArrays&quot;&gt;
+        ///    &lt;div class=&quot;range-btns d-flex flex-row flex-wrap justify-content-center align-items-center&quot;&gt;
+        ///        &lt;label v-for=&quot;range in rangeCol&quot; @click=&quot;toggleRange(range);&quot;
+        ///               class=&quot;btn btn-dark btn-small range-btn&quot; :class=&quot;{&apos;active&apos;: selectedRanges.indexOf(range) &gt; -1}&quot;&gt;{{range}}&lt;/label&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/div&gt;.
+        /// </summary>
+        internal static string tmplCombatReplayRangeSelect {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayRangeSelect", resourceCulture);
             }
         }
         
@@ -752,8 +786,7 @@ namespace LuckParser.Properties {
         ///        &lt;combat-replay-damage-data-component :time=&quot;animationStatus.time&quot;
         ///            :selectedplayer=&quot;animationStatus.selectedPlayer&quot; :selectedplayerid=&quot;animationStatus.selectedPlayerID&quot;&gt;
         ///        &lt;/combat-replay-damage-data-component&gt;
-        ///        &lt;div class=&quot;d-flex flex-row flex-wrap justify-content-center align-items-start btn-group btn-group-toggle mb-2&quot;
-        ///            data- [rest of string was truncated]&quot;;.
+        ///        &lt;combat-replay-player-select-component :selectedplayerid=&quot;animationStatus.selectedPlayerID&quot;&gt;&lt;/combat-replay-player-select-componen [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayUI {
             get {

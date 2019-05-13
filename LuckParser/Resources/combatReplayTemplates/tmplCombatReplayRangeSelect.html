@@ -1,0 +1,12 @@
+
+<div>
+    <h3>Range Selectors</h3>
+    <div class="d-flex flex-column flex-wrap justify-content-center align-items-center">
+        <div class="d-flex flex-column flex-wrap justify-content-center align-items-center mb-2" v-for="rangeCol in rangeSelectArrays">
+            <div class="range-btns d-flex flex-row flex-wrap justify-content-center align-items-center">
+                <label v-for="range in rangeCol" @click="toggleRange(range);"
+                       class="btn btn-dark btn-small range-btn" :class="{'active': selectedRanges.indexOf(range) > -1}">{{range}}</label>
+            </div>
+        </div>
+    </div>
+</div>

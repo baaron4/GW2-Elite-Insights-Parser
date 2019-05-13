@@ -3,27 +3,8 @@
         <combat-replay-damage-data-component :time="animationStatus.time"
             :selectedplayer="animationStatus.selectedPlayer" :selectedplayerid="animationStatus.selectedPlayerID">
         </combat-replay-damage-data-component>
-        <div class="d-flex flex-row flex-wrap justify-content-center align-items-start mb-2">
-            <div class="d-flex flex-row justify-content-center align-items-center">
-                <div v-for="group in groups" class="d-flex flex-column justify-content-center align-items-center mt-1 ml-2 mr-2">
-                    <h3>Group {{group.id}}</h3>
-                    <label v-for="player in group.players"
-                        @click="selectActor(player.combatReplayID);"
-                        class="btn btn-dark btn-small ply-btn" :class="{'active': animationStatus.selectedPlayerID === player.combatReplayID}" :title="player.name">
-                        <img :src="player.icon" :alt="player.profession" class="icon">
-                        {{ player.name }}
-                    </label>
-                </div>
-            </div>
-        </div>
-        <h3>Range Selectors</h3>
-        <div class="d-flex flex-column flex-wrap justify-content-center align-items-center mb-2"
-            v-for="rangeCol in rangeSelectArrays">
-            <div class="range-btns d-flex flex-row flex-wrap justify-content-center align-items-center">
-                <label v-for="range in rangeCol" @click="toggleRange(range);"
-                    class="btn btn-dark btn-small range-btn" :class="{'active': selectedRanges.indexOf(range) > -1}">{{range}}</label>
-            </div>
-        </div>
+        <combat-replay-player-select-component :selectedplayerid="animationStatus.selectedPlayerID"></combat-replay-player-select-component>
+        <combat-replay-range-select-component></combat-replay-range-select-component>
     </div>
     <div class="d-flex flex-column flex-wrap">
         <p class="text-justify text-center">Double click on canvas to restore viewpoint</p>
