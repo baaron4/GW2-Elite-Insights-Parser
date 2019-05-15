@@ -59,22 +59,18 @@ namespace LuckParser.Models.Logic
             {
                 return phases;
             }
-            // Main phases 34894
-            List<CastLog> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
-            List<CastLog> magicCharge = castLogs.Where(x => x.SkillId == 35048).ToList();
-            List<CastLog> magicBlast = castLogs.Where(x => x.SkillId == 34894).ToList();
-            foreach (CastLog cl in magicCharge)
+            // Main phases 35025
+            List<CombatItem> kcPhaseInvuls = GetFilteredList(log.CombatData, 35025, mainTarget, true);
+            foreach (CombatItem c in kcPhaseInvuls)
             {
-                end = cl.Time;
-                phases.Add(new PhaseData(start, end));
-                CastLog blast = magicBlast.FirstOrDefault(x => x.Time >= cl.Time);
-                if (blast != null)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    start = blast.Time + blast.ActualDuration;
-                }
+                    end = log.FightData.ToFightSpace(c.Time);
+                    phases.Add(new PhaseData(start, end));
+                } 
                 else
                 {
-                    start = end + cl.ActualDuration;
+                    start = log.FightData.ToFightSpace(c.Time);
                 }
             }
             if (fightDuration - start > 5000 && start >= phases.Last().End)
@@ -165,7 +161,7 @@ namespace LuckParser.Models.Logic
                 {
                     if (cur != null)
                     {
-                        if (cur.End >= phase.End + 5000 && (i == phases.Count - 1 || phases[i + 1].Name.Contains("Phase")))
+                        if (cur.End >= phase.End + 5000 && (i == phases.Count - 1 || phases[i + 1].Name.Contains("%")))
                         {
                             PhaseData leftOverPhase = new PhaseData(phase.End + 1, cur.End)
                             {
