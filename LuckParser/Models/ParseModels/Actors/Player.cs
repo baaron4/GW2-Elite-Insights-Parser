@@ -327,6 +327,7 @@ namespace LuckParser.Models.ParseModels
                 if (Properties.Settings.Default.ParseCombatReplay && log.CanCombatReplay)
                 {
                     List<Point3D> positions = CombatReplay.Positions.Where(x => x.Time >= phase.Start && x.Time <= phase.End).ToList();
+                    List<Point3D> stackCenterPositions = log.Statistics.GetStackCenterPositions(log);
                     int offset = CombatReplay.Positions.Count(x => x.Time < phase.Start);
                     if (positions.Count > 1)
                     {
@@ -334,8 +335,8 @@ namespace LuckParser.Models.ParseModels
                         for (int time = 0; time < positions.Count; time++)
                         {
 
-                            float deltaX = positions[time].X - log.Statistics.StackCenterPositions[time + offset].X;
-                            float deltaY = positions[time].Y - log.Statistics.StackCenterPositions[time + offset].Y;
+                            float deltaX = positions[time].X - stackCenterPositions[time + offset].X;
+                            float deltaY = positions[time].Y - stackCenterPositions[time + offset].Y;
                             //float deltaZ = positions[time].Z - StackCenterPositions[time].Z;
 
 
@@ -399,12 +400,9 @@ namespace LuckParser.Models.ParseModels
                     final.InvulnedCount++;
                     final.DamageInvulned += dl.Damage;
                 }
-                List<CombatItem> deads = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.ChangeDead, start, end);
-                List<CombatItem> downs = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.ChangeDown, start, end);
-                List<CombatItem> dcs = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Despawn, start, end);
-                final.DownCount = downs.Count - log.CombatData.GetBoonData(5620).Where(x => x.SrcInstid == InstID && x.Time >= start && x.Time <= end && x.IsBuffRemove == ParseEnum.BuffRemove.All).Count();
-                final.DeadCount = deads.Count;
-                final.DcCount = dcs.Count;
+                final.DownCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DownId).Count(x => x.Actor == this && x.Time >= start && x.Time <= end);
+                final.DeadCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DeathId).Count(x => x.Actor == this && x.Time >= start && x.Time <= end);
+                final.DcCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DCId).Count(x => x.Actor == this && x.Time >= start && x.Time <= end);
 
                 //
                 start = phase.Start;

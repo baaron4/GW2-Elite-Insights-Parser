@@ -17,12 +17,17 @@ namespace LuckParser.Models.Logic
             new PlayerBoonApplyMechanic(34925, "Fixate", new MechanicPlotlySetting("star","rgb(255,0,255)"), "Fixate","Fixated by Statue", "Fixated",0),
             new SkillOnPlayerMechanic(35077, "Hail of Fury", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Debris","Hail of Fury (Falling Debris)", "Debris",0),
             new EnemyBoonApplyMechanic(35096, "Compromised", new MechanicPlotlySetting("hexagon","rgb(0,0,255)"), "Rift#","Compromised (Pushed Orb through Rifts)", "Compromised",0),
+            new EnemyBoonApplyMechanic(35119, "Magic Blast", new MechanicPlotlySetting("star","rgb(0,255,255)"), "M.B.#","Magic Blast (Orbs eaten by KC)", "Magic Blast",0),
             new SpawnMechanic(16227, "Insidious Projection", new MechanicPlotlySetting("bowtie","rgb(255,0,0)"), "Merge","Insidious Projection spawn (2 Statue merge)", "Merged Statues",0),
             new SkillOnPlayerMechanic(35137, "Phantasmal Blades", new MechanicPlotlySetting("hexagram-open","rgb(255,0,255)"), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
             new SkillOnPlayerMechanic(34971, "Phantasmal Blades", new MechanicPlotlySetting("hexagram-open","rgb(255,0,255)"), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
             new SkillOnPlayerMechanic(35064, "Phantasmal Blades", new MechanicPlotlySetting("hexagram-open","rgb(255,0,255)"), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
             new SkillOnPlayerMechanic(35086, "Tower Drop", new MechanicPlotlySetting("circle","rgb(255,140,0)"), "Jump","Tower Drop (KC Jump)", "Tower Drop",0),
             new PlayerBoonApplyMechanic(35103, "Xera's Fury", new MechanicPlotlySetting("circle","rgb(200,140,0)"), "Bomb","Xera's Fury (Large Bombs) application", "Bombs",0),
+            new SkillOnPlayerMechanic(34914, "Good White Orb", new MechanicPlotlySetting("circle","rgb(200,200,200)"), "GW.Orb","Good White Orb", "Good White Orb",0, new List<MechanicChecker> { new ActorBuffChecker(35109, true, true) }, Mechanic.TriggerRule.AND),
+            new SkillOnPlayerMechanic(34972, "Good Red Orb", new MechanicPlotlySetting("circle","rgb(100,0,0)"), "GR.Orb","Good Red Orb", "Good Red Orb",0, new List<MechanicChecker> { new ActorBuffChecker(35091, true, true) }, Mechanic.TriggerRule.AND),
+            new SkillOnPlayerMechanic(34914, "Bad White Orb", new MechanicPlotlySetting("circle","rgb(100,100,100)"), "BW.Orb","Bad White Orb", "Bad White Orb",0, new List<MechanicChecker> { new ActorBuffChecker(35109, false, true) }, Mechanic.TriggerRule.AND),
+            new SkillOnPlayerMechanic(34972, "Bad Red Orb", new MechanicPlotlySetting("circle","rgb(200,0,0)"), "BR.Orb","Bad Red Orb", "Bad Red Orb",0, new List<MechanicChecker> { new ActorBuffChecker(35091, false, true) }, Mechanic.TriggerRule.AND),
             new HitOnEnemyMechanic(16261, "Core Hit", new MechanicPlotlySetting("star-open","rgb(255,140,0)"), "Core Hit","Core was Hit by Player", "Core Hit",1000)
             });
             Extension = "kc";
@@ -54,22 +59,18 @@ namespace LuckParser.Models.Logic
             {
                 return phases;
             }
-            // Main phases 34894
-            List<CastLog> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
-            List<CastLog> magicCharge = castLogs.Where(x => x.SkillId == 35048).ToList();
-            List<CastLog> magicBlast = castLogs.Where(x => x.SkillId == 34894).ToList();
-            foreach (CastLog cl in magicCharge)
+            // Main phases 35025
+            List<CombatItem> kcPhaseInvuls = GetFilteredList(log.CombatData, 35025, mainTarget, true);
+            foreach (CombatItem c in kcPhaseInvuls)
             {
-                end = cl.Time;
-                phases.Add(new PhaseData(start, end));
-                CastLog blast = magicBlast.FirstOrDefault(x => x.Time >= cl.Time);
-                if (blast != null)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    start = blast.Time + blast.ActualDuration;
-                }
+                    end = log.FightData.ToFightSpace(c.Time);
+                    phases.Add(new PhaseData(start, end));
+                } 
                 else
                 {
-                    start = end + cl.ActualDuration;
+                    start = log.FightData.ToFightSpace(c.Time);
                 }
             }
             if (fightDuration - start > 5000 && start >= phases.Last().End)
@@ -160,7 +161,7 @@ namespace LuckParser.Models.Logic
                 {
                     if (cur != null)
                     {
-                        if (cur.End >= phase.End + 5000 && (i == phases.Count - 1 || phases[i + 1].Name.Contains("Phase")))
+                        if (cur.End >= phase.End + 5000 && (i == phases.Count - 1 || phases[i + 1].Name.Contains("%")))
                         {
                             PhaseData leftOverPhase = new PhaseData(phase.End + 1, cur.End)
                             {

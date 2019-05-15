@@ -27,9 +27,8 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        public override void CheckMechanic(ParsedLog log, Dictionary<ushort, DummyActor> regroupedMobs)
+        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicLog>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs)
         {
-            MechanicData mechData = log.MechanicData;
             CombatData combatData = log.CombatData;
             HashSet<ushort> playersIds = log.PlayerIDs;
             IEnumerable<AgentItem> agents = log.AgentData.GetAgentsByID((ushort)SkillId);
@@ -46,7 +45,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         if (c.SrcInstid == p.InstID || c.SrcMasterInstid == p.InstID )
                         {
-                            mechData[this].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), this, p));
+                            mechanicLogs[this].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), this, p));
                         }
                     }
                 }

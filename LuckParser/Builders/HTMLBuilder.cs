@@ -583,7 +583,7 @@ namespace LuckParser.Builders
         private List<List<int[]>> BuildPlayerMechanicData(int phaseIndex)
         {
             List<List<int[]>> list = new List<List<int[]>>();
-            HashSet<Mechanic> presMech = _log.MechanicData.GetPresentPlayerMechs(0);
+            HashSet<Mechanic> presMech = _log.MechanicData.GetPresentPlayerMechs(_log, 0);
             PhaseData phase = _phases[phaseIndex];
 
             foreach (Player p in _log.PlayerList)
@@ -596,9 +596,9 @@ namespace LuckParser.Builders
         private List<List<int[]>> BuildEnemyMechanicData(int phaseIndex)
         {
             List<List<int[]>> list = new List<List<int[]>>();
-            HashSet<Mechanic> presMech = _log.MechanicData.GetPresentEnemyMechs(0);
+            HashSet<Mechanic> presMech = _log.MechanicData.GetPresentEnemyMechs(_log, 0);
             PhaseData phase = _phases[phaseIndex];
-            foreach (DummyActor enemy in _log.MechanicData.GetEnemyList(0))
+            foreach (DummyActor enemy in _log.MechanicData.GetEnemyList(_log, 0))
             {
                 list.Add(MechanicDto.GetMechanicData(presMech, _log, enemy, phase));
             }
@@ -608,7 +608,7 @@ namespace LuckParser.Builders
         private List<MechanicDto> BuildMechanics()
         {
             List<MechanicDto> mechanicDtos = new List<MechanicDto>();
-            foreach (Mechanic mech in _log.MechanicData.GetPresentMechanics(0))
+            foreach (Mechanic mech in _log.MechanicData.GetPresentMechanics(_log, 0))
             {
                 MechanicDto dto = new MechanicDto
                 {
@@ -626,9 +626,9 @@ namespace LuckParser.Builders
         private List<MechanicChartDataDto> BuildMechanicsChartData()
         {
             List<MechanicChartDataDto> mechanicsChart = new List<MechanicChartDataDto>();
-            foreach (Mechanic mech in _log.MechanicData.GetPresentMechanics(0))
+            foreach (Mechanic mech in _log.MechanicData.GetPresentMechanics(_log, 0))
             {
-                List<MechanicLog> mechanicLogs = _log.MechanicData[mech];
+                List<MechanicLog> mechanicLogs = _log.MechanicData.GetMechanicLogs(_log, mech);
                 MechanicChartDataDto dto = new MechanicChartDataDto
                 {
                     Color = mech.PlotlySetting.Color,
@@ -1015,7 +1015,7 @@ namespace LuckParser.Builders
                 logData.Players.Add(new PlayerDto(player, _log, _cr));
             }
 
-            foreach(DummyActor enemy in _log.MechanicData.GetEnemyList(0))
+            foreach(DummyActor enemy in _log.MechanicData.GetEnemyList(_log, 0))
             {
                 logData.Enemies.Add(new EnemyDto() { Name = enemy.Character });
             }

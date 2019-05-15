@@ -24,7 +24,7 @@ namespace LuckParser.Models.HtmlModels
                         data.HitCount,
                         data.TotalHitCount,
                         data.DamageGain,
-                        dMod.Multiplier ? data.TotalDamage : 0
+                        dMod.Multiplier ? data.TotalDamage : -1
                     });
                 } else
                 {
@@ -33,7 +33,7 @@ namespace LuckParser.Models.HtmlModels
                         0,
                         dMod.GetDamageLogs(player, log, null, phases[phaseIndex]).Count,
                         0,
-                        dMod.Multiplier ? dMod.GetTotalDamage(player, log, null, phaseIndex) : 0
+                        dMod.Multiplier ? dMod.GetTotalDamage(player, log, null, phaseIndex) : -1
                     });
                 }
             }
@@ -53,7 +53,7 @@ namespace LuckParser.Models.HtmlModels
                             data.HitCount,
                             data.TotalHitCount,
                             data.DamageGain,
-                            dMod.Multiplier ? data.TotalDamage : 0
+                            dMod.Multiplier ? data.TotalDamage : -1
                         });
                     }
                     else
@@ -63,7 +63,7 @@ namespace LuckParser.Models.HtmlModels
                             0,
                             dMod.GetDamageLogs(player, log, target, phases[phaseIndex]).Count,
                             0,
-                            dMod.Multiplier ? dMod.GetTotalDamage(player, log, target, phaseIndex) : 0
+                            dMod.Multiplier ? dMod.GetTotalDamage(player, log, target, phaseIndex) : -1
                         });
                     }
                 }

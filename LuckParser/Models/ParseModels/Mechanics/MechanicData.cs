@@ -4,47 +4,62 @@ using System.Linq;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class MechanicData : Dictionary<Mechanic,List<MechanicLog>>
+    public class MechanicData
     {
+        private readonly Dictionary<Mechanic, List<MechanicLog>> _mechanicLogs = new Dictionary<Mechanic, List<MechanicLog>>();
 
-        private readonly List<HashSet<Mechanic>> _presentOnPlayerMechanics = new List<HashSet<Mechanic>>();
-        private readonly List<HashSet<Mechanic>> _presentOnEnemyMechanics = new List<HashSet<Mechanic>>();
-        private readonly List<HashSet<Mechanic>> _presentMechanics = new List<HashSet<Mechanic>>();
-        private readonly List<List<DummyActor>> _enemyList = new List<List<DummyActor>>();
+        private List<HashSet<Mechanic>> _presentOnPlayerMechanics;
+        private List<HashSet<Mechanic>> _presentOnEnemyMechanics;
+        private List<HashSet<Mechanic>> _presentMechanics;
+        private List<List<DummyActor>> _enemyList;
 
-        public MechanicData(FightData fightData)
+        public MechanicData(List<Mechanic> fightMechanics)
         {
-            List<Mechanic> fightMechanics = fightData.Logic.MechanicList;
             foreach(Mechanic m in fightMechanics)
             {
-                Add(m, new List<MechanicLog>());
+                _mechanicLogs.Add(m, new List<MechanicLog>());
             }
         }
 
-        public void ProcessMechanics(ParsedLog log)
+        private void CheckMechanics(ParsedLog log)
         {
-            if (_presentMechanics.Count > 0)
+            Dictionary<ushort, DummyActor> regroupedMobs = new Dictionary<ushort, DummyActor>();
+            foreach (Mechanic mech in _mechanicLogs.Keys)
             {
-                return;
+                mech.CheckMechanic(log, _mechanicLogs, regroupedMobs);
             }
             // regroup same mechanics with diff ids
             Dictionary<string, Mechanic> altNames = new Dictionary<string, Mechanic>();
             List<Mechanic> toRemove = new List<Mechanic>();
-            foreach (Mechanic mech in Keys)
+            foreach (Mechanic mech in _mechanicLogs.Keys)
             {
                 if (altNames.ContainsKey(mech.ShortName))
                 {
-                    this[altNames[mech.ShortName]].AddRange(this[mech]);
+                    _mechanicLogs[altNames[mech.ShortName]].AddRange(_mechanicLogs[mech]);
                     toRemove.Add(mech);
-                } else
+                }
+                else
                 {
                     altNames.Add(mech.ShortName, mech);
                 }
             }
-            foreach(Mechanic mech in toRemove)
+            foreach (Mechanic mech in toRemove)
             {
-                Remove(mech);
+                _mechanicLogs.Remove(mech);
             }
+        }
+
+        private void ProcessMechanics(ParsedLog log)
+        {
+            if (_presentMechanics != null)
+            {
+                return;
+            }
+            CheckMechanics(log);
+            _presentOnPlayerMechanics = new List<HashSet<Mechanic>>();
+            _presentOnEnemyMechanics = new List<HashSet<Mechanic>>();
+            _presentMechanics = new List<HashSet<Mechanic>>();
+            _enemyList = new List<List<DummyActor>>();
             // ready present mechanics
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
@@ -54,7 +69,7 @@ namespace LuckParser.Models.ParseModels
                 _presentOnPlayerMechanics.Add(toAddPlayer);
                 _presentOnEnemyMechanics.Add(toAddEnemy);
                 _presentMechanics.Add(toAddAll);
-                foreach (KeyValuePair<Mechanic, List<MechanicLog>> pair in this)
+                foreach (KeyValuePair<Mechanic, List<MechanicLog>> pair in _mechanicLogs)
                 {
                     if (pair.Value.Count(x => phase.InInterval(x.Time)) > 0)
                     {
@@ -71,9 +86,9 @@ namespace LuckParser.Models.ParseModels
                 // ready enemy list
                 List<DummyActor> toAdd = new List<DummyActor>();
                 _enemyList.Add(toAdd);
-                foreach(Mechanic m in Keys.Where(x=> x.IsEnemyMechanic))
+                foreach(Mechanic m in _mechanicLogs.Keys.Where(x=> x.IsEnemyMechanic))
                 {
-                    foreach (DummyActor p in this[m].Where(x => phase.InInterval(x.Time)).Select(x => x.Actor).Distinct())
+                    foreach (DummyActor p in _mechanicLogs[m].Where(x => phase.InInterval(x.Time)).Select(x => x.Actor).Distinct())
                     {
                         if (toAdd.FirstOrDefault(x => x.InstID == p.InstID) == null)
                         {
@@ -82,28 +97,59 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
             }
-            List<Mechanic> emptyMechanic = this.Where(pair => pair.Value.Count == 0).Select(pair => pair.Key).ToList();
+            List<Mechanic> emptyMechanic = _mechanicLogs.Where(pair => pair.Value.Count == 0).Select(pair => pair.Key).ToList();
             foreach (Mechanic m in emptyMechanic)
             {
-                Remove(m);
+                _mechanicLogs.Remove(m);
             }
         }
 
-        public HashSet<Mechanic> GetPresentEnemyMechs(int phaseIndex)
+        public Dictionary<Mechanic, List<MechanicLog>>.ValueCollection GetAllMechanics(ParsedLog log)
         {
+            ProcessMechanics(log);
+            return _mechanicLogs.Values;
+        }
+
+        public List<MechanicLog> GetMechanicLogs(ParsedLog log, Mechanic mech)
+        {
+            ProcessMechanics(log);
+            if (_mechanicLogs.TryGetValue(mech, out var list))
+            {
+                return list;
+            }
+            return new List<MechanicLog>();
+        }
+
+        public List<MechanicLog> GetMechanicLogs(ParsedLog log, long id)
+        {
+            ProcessMechanics(log);
+            Mechanic mech = _mechanicLogs.Keys.FirstOrDefault(x => x.SkillId == id);
+            if ( mech != null)
+            {
+                return _mechanicLogs[mech];
+            }
+            return new List<MechanicLog>();
+        }
+
+        public HashSet<Mechanic> GetPresentEnemyMechs(ParsedLog log, int phaseIndex)
+        {
+            ProcessMechanics(log);
             return _presentOnEnemyMechanics[phaseIndex];
         }
-        public HashSet<Mechanic> GetPresentPlayerMechs(int phaseIndex)
+        public HashSet<Mechanic> GetPresentPlayerMechs(ParsedLog log, int phaseIndex)
         {
+            ProcessMechanics(log);
             return _presentOnPlayerMechanics[phaseIndex];
         }
-        public HashSet<Mechanic> GetPresentMechanics(int phaseIndex)
+        public HashSet<Mechanic> GetPresentMechanics(ParsedLog log, int phaseIndex)
         {
+            ProcessMechanics(log);
             return _presentMechanics[phaseIndex];
         }
 
-        public List<DummyActor> GetEnemyList(int phaseIndex)
+        public List<DummyActor> GetEnemyList(ParsedLog log, int phaseIndex)
         {
+            ProcessMechanics(log);
             return _enemyList[phaseIndex];
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
@@ -25,6 +26,13 @@ namespace LuckParser.Models.ParseModels
                 Start = other.Start;
                 End = other.End;
                 Value = other.Value;
+            }
+
+            public bool Intersect(long start, long end)
+            {
+                long maxStart = Math.Max(start, Start);
+                long minEnd = Math.Min(end, End);
+                return minEnd - maxStart >= 0;
             }
         }
 
@@ -69,6 +77,20 @@ namespace LuckParser.Models.ParseModels
             return 0;
         }
 
+
+        public bool IsPresent(long time, long window)
+        {
+            int count = 0;
+            foreach (Segment seg in BoonChart)
+            {
+                if (seg.Intersect(time - window, time + window))
+                {
+                    count += seg.Value;
+                }
+            }
+            return count > 0;
+        }
+
         public List<AgentItem> GetSources(long time)
         {
             if (_boonChartWithSource == null)
@@ -82,7 +104,7 @@ namespace LuckParser.Models.ParseModels
                     return seg.Sources;
                 }
             }
-            return new List<AgentItem>() { GeneralHelper.UnknownAgent };
+            return new List<AgentItem>();
         }
 
         private void FuseFromSegmentsWithSource()

@@ -13,7 +13,7 @@ namespace LuckParser.Models.Logic
         public enum ParseMode { Raid, Fractal, Golem, WvW, Unknown };
 
         private CombatReplayMap _map;
-        public readonly List<Mechanic> MechanicList; //Resurrects (start), Resurrect
+        protected readonly List<Mechanic> MechanicList; //Resurrects (start), Resurrect
         public ParseMode Mode { get; protected set; } = ParseMode.Unknown;
         public bool HasCombatReplayMap { get; protected set; } = false;
         public string Extension { get; protected set; }
@@ -46,15 +46,9 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public void ComputeMechanics(ParsedLog log)
+        public MechanicData GetMechanicData()
         {
-            MechanicData mechData = log.MechanicData;
-            Dictionary<ushort, DummyActor> regroupedMobs = new Dictionary<ushort, DummyActor>();
-            foreach (Mechanic mech in MechanicList)
-            {
-                mech.CheckMechanic(log, regroupedMobs);
-            }
-            mechData.ProcessMechanics(log);
+            return new MechanicData(MechanicList);
         }
 
         protected virtual CombatReplayMap GetCombatMapInternal()

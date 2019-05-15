@@ -152,7 +152,7 @@ namespace LuckParser.Models.ParseModels
             ShowOnTable = true;
         }
 
-        public abstract void CheckMechanic(ParsedLog log, Dictionary<ushort, DummyActor> regroupedMobs);
+        public abstract void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicLog>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs);
 
     }
 }
