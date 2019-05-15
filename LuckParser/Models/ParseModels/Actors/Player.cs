@@ -15,8 +15,8 @@ namespace LuckParser.Models.ParseModels
     public class Player : AbstractMasterActor
     {
         // Fields
-        public readonly string Account;
-        public readonly int Group;
+        public string Account { get; protected set; }
+        public int Group { get; }
        
         private List<Consumable> _consumeList;
         private List<DeathRecap> _deathRecaps;
@@ -641,6 +641,12 @@ namespace LuckParser.Models.ParseModels
             // Boons applied to squad
             var otherPlayers = log.PlayerList.Where(p => p.InstID != InstID).ToList();
             _squadBuffs = GetBoonsForPlayers(otherPlayers, log);
+        }
+
+        internal void Anonymize(int index)
+        {
+            Character = "Player " + index;
+            Account = "Account " + index;
         }
 
         public List<DeathRecap> GetDeathRecaps(ParsedLog log)
