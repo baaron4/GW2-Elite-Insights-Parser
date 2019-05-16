@@ -644,7 +644,13 @@ namespace LuckParser.Parser
             //players
             CompletePlayers();
             _playerList = _playerList.OrderBy(a => a.Group).ToList();
-
+            if (Properties.Settings.Default.Anonymous)
+            {
+                for (int i = 0; i < _playerList.Count; i++)
+                {
+                    _playerList[i].Anonymize(i + 1);
+                }
+            }
         }
     }
 }

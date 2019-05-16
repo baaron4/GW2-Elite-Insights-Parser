@@ -59,22 +59,18 @@ namespace LuckParser.Models.Logic
             {
                 return phases;
             }
-            // Main phases 34894
-            List<CastLog> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
-            List<CastLog> magicCharge = castLogs.Where(x => x.SkillId == 35048).ToList();
-            List<CastLog> magicBlast = castLogs.Where(x => x.SkillId == 34894).ToList();
-            foreach (CastLog cl in magicCharge)
+            // Main phases 35025
+            List<CombatItem> kcPhaseInvuls = GetFilteredList(log.CombatData, 35025, mainTarget, true);
+            foreach (CombatItem c in kcPhaseInvuls)
             {
-                end = cl.Time;
-                phases.Add(new PhaseData(start, end));
-                CastLog blast = magicBlast.FirstOrDefault(x => x.Time >= cl.Time);
-                if (blast != null)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    start = blast.Time + blast.ActualDuration;
-                }
+                    end = log.FightData.ToFightSpace(c.Time);
+                    phases.Add(new PhaseData(start, end));
+                } 
                 else
                 {
-                    start = end + cl.ActualDuration;
+                    start = log.FightData.ToFightSpace(c.Time);
                 }
             }
             if (fightDuration - start > 5000 && start >= phases.Last().End)
@@ -165,7 +161,7 @@ namespace LuckParser.Models.Logic
                 {
                     if (cur != null)
                     {
-                        if (cur.End >= phase.End + 5000 && (i == phases.Count - 1 || phases[i + 1].Name.Contains("Phase")))
+                        if (cur.End >= phase.End + 5000 && (i == phases.Count - 1 || phases[i + 1].Name.Contains("%")))
                         {
                             PhaseData leftOverPhase = new PhaseData(phase.End + 1, cur.End)
                             {
@@ -250,18 +246,20 @@ namespace LuckParser.Models.Logic
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.KeepConstruct:
-                    List<CastLog> magicCharge = cls.Where(x => x.SkillId == 35048).ToList();
-                    List<CastLog> magicExplode = cls.Where(x => x.SkillId == 34894).ToList();
-                    for (var i = 0; i < magicCharge.Count; i++)
+
+                    List<CombatItem> kcOrbCollect = GetFilteredList(log.CombatData, 35025, target, true);
+                    int kcOrbStart = 0 , kcOrbEnd = 0;
+                    foreach (CombatItem c in kcOrbCollect)
                     {
-                        CastLog charge = magicCharge[i];
-                        if (i < magicExplode.Count)
+                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                         {
-                            CastLog fire = magicExplode[i];
-                            int start = (int)charge.Time;
-                            int end = (int)fire.Time + fire.ActualDuration;
-                            replay.Actors.Add(new CircleActor(false, 0, 300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
-                            replay.Actors.Add(new CircleActor(true, end, 300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                            kcOrbStart = (int)log.FightData.ToFightSpace(c.Time);
+                        }
+                        else
+                        {
+                            kcOrbEnd = (int)log.FightData.ToFightSpace(c.Time);
+                            replay.Actors.Add(new CircleActor(false, 0, 300, (kcOrbStart, kcOrbEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                            replay.Actors.Add(new CircleActor(true, kcOrbEnd, 300, (kcOrbStart, kcOrbEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                         }
                     }
                     List<CastLog> towerDrop = cls.Where(x => x.SkillId == 35086).ToList();

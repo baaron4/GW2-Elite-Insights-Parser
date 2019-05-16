@@ -53,6 +53,7 @@ namespace LuckParser.Setting
             chkAutoParse.Checked = Properties.Settings.Default.AutoParse;
             chkAddPoVProf.Checked = Properties.Settings.Default.AddPoVProf;
             chkAddDuration.Checked = Properties.Settings.Default.AddDuration;
+            chkAnonymous.Checked = Properties.Settings.Default.Anonymous;
 
             chkHtmlExternalScripts.Checked = Properties.Settings.Default.HtmlExternalScripts;
 
@@ -291,6 +292,11 @@ namespace LuckParser.Setting
                     SetValues();
                 }
             }
+        }
+
+        private void ChkAnonymous_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Anonymous = chkAnonymous.Checked;
         }
     }
 }
