@@ -468,9 +468,7 @@ function animateCanvas(noRequest) {
     if (noRequest > -2) {
         animator.updateTextInput();
     }
-    if (noRequest < 0) {
-        animator.draw();
-    }
+    animator.draw();
     if (noRequest > -1 && animator.animation !== null && bgLoaded) {
         animator.animation = requestAnimationFrame(animateCanvas);
     }

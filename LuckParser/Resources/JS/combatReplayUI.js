@@ -6,12 +6,24 @@ var compileCombatReplayUI = function () {
         template: `${tmplCombatReplayUI}`,
         data: function () {
             return {
-                speeds: [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0],
                 animationStatus: {
-                   time: 0,
-                   selectedPlayer: null,
-                   selectedPlayerID: null
-                },
+                    time: 0,
+                    selectedPlayer: null,
+                    selectedPlayerID: null
+                }
+            };
+        },
+        mounted() {
+            animator = new Animator(logData.crData, this.animationStatus);
+        },
+    });
+
+    Vue.component("combat-replay-animation-control-component", {
+        props: ["mode", "light"],
+        template: `${tmplCombatReplayAnimationControl}`,
+        data: function () {
+            return {
+                speeds: [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0],
                 animated: false,
                 selectedSpeed: 1,
                 backwards: false,
@@ -21,9 +33,6 @@ var compileCombatReplayUI = function () {
                 },
                 maxTime: logData.crData.maxTime
             };
-        },
-        mounted() {
-            animator = new Animator(logData.crData, this.animationStatus);
         },
         watch: {
             mode: {
@@ -40,23 +49,23 @@ var compileCombatReplayUI = function () {
             }
         },
         methods: {
-            toggleBackwards: function() {
+            toggleBackwards: function () {
                 this.backwards = animator.toggleBackwards();
             },
-            toggleAnimate: function() {
+            toggleAnimate: function () {
                 this.animated = animator.toggleAnimate();
             },
-            restartAnimate: function() {
+            restartAnimate: function () {
                 animator.restartAnimate();
             },
-            setSpeed: function(speed) {
+            setSpeed: function (speed) {
                 animator.setSpeed(speed);
                 this.selectedSpeed = speed;
             },
-            updateTime: function(value) {
+            updateTime: function (value) {
                 animator.updateTime(value);
             },
-            updateInputTime: function(value) {
+            updateInputTime: function (value) {
                 animator.updateInputTime(value);
             }
         },

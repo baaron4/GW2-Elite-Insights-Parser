@@ -144,17 +144,19 @@ namespace LuckParser.Properties {
         ///
         ///var compileCombatReplayUI = function () {
         ///    Vue.component(&quot;combat-replay-ui-component&quot;, {
-        ///        props: [&quot;mode&quot;],
+        ///        props: [&quot;mode&quot;, &quot;light&quot;],
         ///        template: `${tmplCombatReplayUI}`,
         ///        data: function () {
         ///            return {
-        ///                speeds: [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0],
         ///                animationStatus: {
         ///                   time: 0,
         ///                   selectedPlayer: null,
         ///                   selectedPlayerID: null
-        ///                },
-        ///                animated: fa [rest of string was truncated]&quot;;.
+        ///                }
+        ///            };
+        ///        },
+        ///        mounted() {
+        ///            animator = new Animator(logDat [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string combatReplayStatsUI {
             get {
@@ -613,6 +615,21 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column flex-wrap&quot;&gt;
+        ///    &lt;p class=&quot;text-justify text-center&quot;&gt;Double click on canvas to restore viewpoint&lt;/p&gt;
+        ///    &lt;canvas :width=&quot;canvas.x + &apos;px&apos;&quot; :height=&quot;canvas.y + &apos;px&apos;&quot; id=&quot;replayCanvas&quot; class=&quot;replay&quot;&gt;&lt;/canvas&gt;
+        ///    &lt;div class=&quot;d-flex justify-content-center&quot;&gt;
+        ///        &lt;div @click=&quot;toggleAnimate();&quot;
+        ///             class=&quot;btn btn-small&quot; :class=&quot;{&apos;btn-dark&apos;: !light, &apos;btn-light&apos;: light}&quot; style=&quot;width: 50px;&quot;&gt;{{animated ? &quot;Pause&quot; : &quot;Play&quot;}}&lt;/div&gt;
+        ///        &lt;div @click=&quot;restartAnimate(); [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplCombatReplayAnimationControl {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayAnimationControl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column justify-content-center&quot;&gt;
         ///    &lt;combat-replay-damage-stats-component :time=&quot;time&quot; :playerindex=&quot;playerindex&quot;&gt;
         ///    &lt;/combat-replay-damage-stats-component&gt;
@@ -651,7 +668,7 @@ namespace LuckParser.Properties {
         ///            &lt;h3&gt;Group {{group.id}}&lt;/h3&gt;
         ///            &lt;label v-for=&quot;player in group.players&quot;
         ///                   @click=&quot;selectActor(player.combatReplayID);&quot;
-        ///                   class=&quot;btn btn-dark btn-small ply-btn&quot; :class= [rest of string was truncated]&quot;;.
+        ///                   class=&quot;btn btn-small ply-btn&quot; :class=&quot;{&apos;active [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayPlayerSelect {
             get {
@@ -704,14 +721,13 @@ namespace LuckParser.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to 
-        ///&lt;h3&gt;Range Selectors&lt;/h3&gt;
-        ///&lt;div class=&quot;d-flex flex-column flex-wrap justify-content-center align-items-center mb-2&quot;
-        ///     v-for=&quot;rangeCol in rangeSelectArrays&quot;&gt;
-        ///    &lt;div class=&quot;range-btns d-flex flex-row flex-wrap justify-content-center align-items-center&quot;&gt;
-        ///        &lt;label v-for=&quot;range in rangeCol&quot; @click=&quot;toggleRange(range);&quot;
-        ///               class=&quot;btn btn-dark btn-small range-btn&quot; :class=&quot;{&apos;active&apos;: selectedRanges.indexOf(range) &gt; -1}&quot;&gt;{{range}}&lt;/label&gt;
-        ///    &lt;/div&gt;
-        ///&lt;/div&gt;.
+        ///&lt;div&gt;
+        ///    &lt;h3&gt;Range Selectors&lt;/h3&gt;
+        ///    &lt;div class=&quot;d-flex flex-column flex-wrap justify-content-center align-items-center&quot;&gt;
+        ///        &lt;div class=&quot;d-flex flex-column flex-wrap justify-content-center align-items-center mb-2&quot; v-for=&quot;rangeCol in rangeSelectArrays&quot;&gt;
+        ///            &lt;div class=&quot;range-btns d-flex flex-row flex-wrap justify-content-center align-items-center&quot;&gt;
+        ///                &lt;label v-for=&quot;range in rangeCol&quot; @click=&quot;toggleRange(range);&quot;
+        ///                       class=&quot;btn btn-small range-btn&quot; :class [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayRangeSelect {
             get {
@@ -786,7 +802,7 @@ namespace LuckParser.Properties {
         ///        &lt;combat-replay-damage-data-component :time=&quot;animationStatus.time&quot;
         ///            :selectedplayer=&quot;animationStatus.selectedPlayer&quot; :selectedplayerid=&quot;animationStatus.selectedPlayerID&quot;&gt;
         ///        &lt;/combat-replay-damage-data-component&gt;
-        ///        &lt;combat-replay-player-select-component :selectedplayerid=&quot;animationStatus.selectedPlayerID&quot;&gt;&lt;/combat-replay-player-select-componen [rest of string was truncated]&quot;;.
+        ///        &lt;combat-replay-player-select-component :selectedplayerid=&quot;animationStatus.selectedPlayerID&quot; :light=&quot;light&quot;&gt;&lt;/combat-replay-player- [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayUI {
             get {

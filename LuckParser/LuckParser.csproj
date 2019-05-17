@@ -368,6 +368,7 @@
     <Content Include="Resources\combatReplayTemplates\tmplCombatReplayPlayerStats.html" />
     <Content Include="Resources\combatReplayTemplates\tmplCombatReplayStatusData.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayPlayerSelect.html" />
+    <None Include="Resources\combatReplayTemplates\tmplCombatReplayAnimationControl.html" />
     <Content Include="Resources\ei.css" />
     <Content Include="Resources\ei.js" />
     <None Include="Resources\htmlTemplates\tmplGeneralLayout.html" />
