@@ -163,9 +163,6 @@ var compileCombatReplay = function () {
                 for (var i = 0; i < this.buffData.length; i++) {
                     var data = this.buffData[i];
                     var id = data.id;
-                    if (id < 0) {
-                        continue;
-                    }
                     var arrayToFill = [];
                     var buff = findSkill(true, id);
                     if (buff.consumable) {
