@@ -260,7 +260,8 @@ namespace LuckParser.Models.Logic
                 case (ushort)Deathling:
                     break;
                 case (ushort)UnderworldReaper:
-                    if (!_isBugged && _reapersSeen == -7 && TrashMobs.Where(x => x.ID == (ushort) UnderworldReaper && x.GetCombatReplayPositions(log).Count == 0).Count() <= 7)
+                    // if not bugged and first reaper seen, check if it's not one one the reapers at the door
+                    if (!_isBugged && _reapersSeen == -7 && start > 2000)
                     {
                         _reapersSeen = 0;
                     }
