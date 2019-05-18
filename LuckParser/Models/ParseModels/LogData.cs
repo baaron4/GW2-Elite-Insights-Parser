@@ -4,21 +4,25 @@ namespace LuckParser.Models.ParseModels
 {
     public class LogData
     {
+        public static readonly string DefaultTimeValue = "MISSING";
+
         // Fields
         public readonly string BuildVersion;
         public ulong GW2Version { get; set; }
         public string PoV { get; private set; } = "N/A";
         private readonly string _dateFormat = "yyyy-MM-dd HH:mm:ss zz";
         public string LogStart { get; private set; }
+        public long LogStartUnixSeconds { get; private set; }
         public string LogEnd { get; private set; }
-       // private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+        public long LogEndUnixSeconds { get; private set; }
+        // private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 
         // Constructors
         public LogData(string buildVersion)
         {
             BuildVersion = buildVersion;
-            LogStart = _dateFormat;
-            LogEnd = _dateFormat;
+            LogStart = DefaultTimeValue;
+            LogEnd = DefaultTimeValue;
            // this.sdf.setTimeZone(TimeZone.getDefault());
         }
         
@@ -37,11 +41,13 @@ namespace LuckParser.Models.ParseModels
 
         public void SetLogStart(long unixSeconds)
         {
+            LogStartUnixSeconds = unixSeconds;
             LogStart = GetDateTime(unixSeconds);
         }
 
         public void SetLogEnd(long unixSeconds)
         {
+            LogEndUnixSeconds = unixSeconds;
             LogEnd = GetDateTime(unixSeconds);
         }
     }

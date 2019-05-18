@@ -640,7 +640,14 @@ namespace LuckParser.Parser
                         break;
                 }
             }
-
+            if (_logData.LogStart != LogData.DefaultTimeValue && _logData.LogEnd == LogData.DefaultTimeValue)
+            {
+                _logData.SetLogEnd(_logData.LogStartUnixSeconds + _combatItems.Last().Time - _combatItems.First().Time);
+            }
+            else if (_logData.LogStart == LogData.DefaultTimeValue && _logData.LogEnd != LogData.DefaultTimeValue)
+            {
+                _logData.SetLogStart(_logData.LogEndUnixSeconds - (_combatItems.Last().Time - _combatItems.First().Time));
+            }
             //players
             CompletePlayers();
             _playerList = _playerList.OrderBy(a => a.Group).ToList();
