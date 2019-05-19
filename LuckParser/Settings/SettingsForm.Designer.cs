@@ -58,6 +58,7 @@
             this.chkAutoAdd = new System.Windows.Forms.CheckBox();
             this.chkB_SkipFailedTries = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.chkAnonymous = new System.Windows.Forms.CheckBox();
             this.chkAddDuration = new System.Windows.Forms.CheckBox();
             this.chkAddPoVProf = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -394,6 +395,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.chkAnonymous);
             this.groupBox3.Controls.Add(this.chkAddDuration);
             this.groupBox3.Controls.Add(this.chkAddPoVProf);
             this.groupBox3.Controls.Add(this.chkDefaultOutputLoc);
@@ -406,6 +408,18 @@
             this.groupBox3.TabIndex = 37;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Output";
+            // 
+            // checkAnonymous
+            // 
+            this.chkAnonymous.AutoSize = true;
+            this.chkAnonymous.Location = new System.Drawing.Point(228, 24);
+            this.chkAnonymous.Name = "checkAnonymous";
+            this.chkAnonymous.Size = new System.Drawing.Size(118, 17);
+            this.chkAnonymous.TabIndex = 20;
+            this.chkAnonymous.Text = "Anonymous Players";
+            this.toolTip1.SetToolTip(this.chkAnonymous, "Replaces Players\' account names and character names by generic names");
+            this.chkAnonymous.UseVisualStyleBackColor = true;
+            this.chkAnonymous.CheckedChanged += new System.EventHandler(this.ChkAnonymous_CheckedChanged);
             // 
             // chkAddDuration
             // 
@@ -743,5 +757,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button dumpButton;
         private System.Windows.Forms.Button loadButton;
+        private System.Windows.Forms.CheckBox chkAnonymous;
     }
 }
