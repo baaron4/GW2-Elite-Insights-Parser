@@ -192,6 +192,8 @@ namespace LuckParser.Models.ParseModels
                     if (!removeAll && c.IsBuffRemove == Parser.ParseEnum.BuffRemove.All)
                     {
                         c.OverrideSkillID(prevID);
+                        c.OverrideValue(100);
+                        c.OverrideBuffDmg(100);
                         removeAll = true;
                     }
                     else if (!removeManual && c.IsBuffRemove == Parser.ParseEnum.BuffRemove.Manual)

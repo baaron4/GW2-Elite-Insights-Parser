@@ -122,7 +122,7 @@ var compileLayout = function () {
         layout.addTab(damageModifiers);
     }
     // mechanics
-    if (mechanicMap.length > 0 && !logData.noMechanics) {
+    if (logData.mechanicMap.length > 0 && !logData.noMechanics) {
         var mechanics = new Tab("Mechanics", {
             dataType: DataTypes.mechanicTable
         });

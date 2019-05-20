@@ -604,24 +604,6 @@ namespace LuckParser.Builders
             }
             return list;
         }
-        
-        private List<MechanicDto> BuildMechanics()
-        {
-            List<MechanicDto> mechanicDtos = new List<MechanicDto>();
-            foreach (Mechanic mech in _log.MechanicData.GetPresentMechanics(_log, 0))
-            {
-                MechanicDto dto = new MechanicDto
-                {
-                    Name = mech.FullName,
-                    ShortName = mech.ShortName,
-                    Description = mech.Description,
-                    PlayerMech = mech.ShowOnTable && !mech.IsEnemyMechanic,
-                    EnemyMech = mech.IsEnemyMechanic
-                };
-                mechanicDtos.Add(dto);
-            }
-            return mechanicDtos;
-        }
 
         private List<MechanicChartDataDto> BuildMechanicsChartData()
         {
@@ -721,9 +703,6 @@ namespace LuckParser.Builders
             html = html.Replace("<!--${JsCRLink}-->", BuildCRLinkJs(path));
 
             html = html.Replace("'${logDataJson}'", BuildLogData());
-
-            html = html.Replace("<!--${Details}-->", BuildDetails());
-            html = html.Replace("<!--${Maps}-->", BuildMaps());
 #if DEBUG
             html = html.Replace("<!--${Vue}-->", "<script src=\"https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js\"></script>");
 #else
@@ -733,7 +712,6 @@ namespace LuckParser.Builders
             html = html.Replace("'${graphDataJson}'", BuildGraphJson());
 
             html = html.Replace("<!--${CombatReplayScript}-->", BuildCombatReplayScript(path));
-            html = html.Replace("<!--${CombatReplayBody}-->", BuildCombatReplayContent());
             sw.Write(html);
             return;       
         }
@@ -744,6 +722,7 @@ namespace LuckParser.Builders
             {
                 return "";
             }
+            string scriptContent = Properties.Resources.combatreplay_js;
             CombatReplayMap map = _log.FightData.Logic.GetCombatMap();
             if (Properties.Settings.Default.HtmlExternalScripts)
             {
@@ -758,30 +737,18 @@ namespace LuckParser.Builders
                     using (var fs = new FileStream(jsPath, FileMode.Create, FileAccess.Write))
                     using (var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
                     {
-                        scriptWriter.Write(Properties.Resources.combatreplay_js);
+                        scriptWriter.Write(scriptContent);
                     }
                 } catch (IOException)
                 {
                 }
                 string content = "<script src=\"./" + jsFileName + "?version=" + _scriptVersionRev + "\"></script>\n";
-                content += "<script>"+ CombatReplayHelper.GetDynamicCombatReplayScript(_log, GeneralHelper.PollingRate, map)+ "</script>";
                 return content;
             }
             else
             {
-                return CombatReplayHelper.CreateCombatReplayScript(_log, map, GeneralHelper.PollingRate);
+                return "<script>\r\n" + scriptContent + "\r\n</script>";
             }
-        }
-
-        private string BuildCombatReplayContent()
-        {
-            if (!_cr)
-            {
-                return "";
-            }
-            CombatReplayMap map = _log.FightData.Logic.GetCombatMap();
-            (int width, int height) canvasSize = map.GetPixelMapSize();
-            return CombatReplayHelper.CreateCombatReplayInterface(canvasSize, _log);
         }
 
         private string BuildTemplates(string script)
@@ -851,6 +818,10 @@ namespace LuckParser.Builders
                     {"${tmplCombatReplayTargetStatus}", Properties.Resources.tmplCombatReplayTargetStatus },
                     {"${tmplCombatReplayTargetsStats}", Properties.Resources.tmplCombatReplayTargetsStats },
                     {"${tmplCombatReplayPlayersStats}", Properties.Resources.tmplCombatReplayPlayersStats },
+                    {"${tmplCombatReplayUI}", Properties.Resources.tmplCombatReplayUI },
+                    {"${tmplCombatReplayPlayerSelect}", Properties.Resources.tmplCombatReplayPlayerSelect },
+                    {"${tmplCombatReplayRangeSelect}", Properties.Resources.tmplCombatReplayRangeSelect },
+                    {"${tmplCombatReplayAnimationControl}", Properties.Resources.tmplCombatReplayAnimationControl },
                 };
             foreach (var entry in CRtemplates)
             {
@@ -947,7 +918,16 @@ namespace LuckParser.Builders
             {
                 return "";
             }
-            string scriptContent = Properties.Resources.combatReplayStatsJS;
+            List<string> orderedScripts = new List<string>()
+            {
+                Properties.Resources.combatReplayStatsUI,
+                Properties.Resources.combatReplayStatsJS,
+            };
+            string scriptContent = orderedScripts[0];
+            for (int i = 1; i < orderedScripts.Count; i++)
+            {
+                scriptContent += orderedScripts[i];
+            }
             scriptContent = BuildCRTemplates(scriptContent);
 
             if (Properties.Settings.Default.HtmlExternalScripts)
@@ -1010,9 +990,13 @@ namespace LuckParser.Builders
         private string BuildLogData()
         {
             LogDataDto logData = new LogDataDto();
+            if (_cr)
+            {
+                logData.CrData = new CombatReplayDto(_log);
+            }
             foreach(Player player in _log.PlayerList)
             {
-                logData.Players.Add(new PlayerDto(player, _log, _cr));
+                logData.Players.Add(new PlayerDto(player, _log, _cr, BuildPlayerData(player)));
             }
 
             foreach(DummyActor enemy in _log.MechanicData.GetEnemyList(_log, 0))
@@ -1022,7 +1006,7 @@ namespace LuckParser.Builders
 
             foreach (Target target in _log.FightData.Logic.Targets)
             {
-                TargetDto targetDto = new TargetDto(target, _log, _cr);
+                TargetDto targetDto = new TargetDto(target, _log, _cr, BuildTargetData(target));
                 
                 
                 logData.Targets.Add(targetDto);
@@ -1136,6 +1120,11 @@ namespace LuckParser.Builders
             logData.LightTheme = Properties.Settings.Default.LightTheme;
             logData.SingleGroup = _log.PlayerList.Where(x => !x.IsFakeActor).Select(x => x.Group).Distinct().Count() == 1;
             logData.NoMechanics = _log.FightData.Logic.HasNoFightSpecificMechanics;
+            //
+            SkillDto.AssembleSkills(_usedSkills.Values, logData.SkillMap);
+            DamageModDto.AssembleDamageModifiers(_usedDamageMods, logData.DamageModMap);
+            BoonDto.AssembleBoons(_usedBoons.Values, logData.BuffMap);
+            MechanicDto.BuildMechanics(_log.MechanicData.GetPresentMechanics(_log, 0), logData.MechanicMap);
             return ToJson(logData);
         }
 
@@ -1153,44 +1142,6 @@ namespace LuckParser.Builders
                 }
             }
             return false;
-        }
-
-        private string BuildDetails()
-        {
-            string scripts = "";
-            for (var i = 0; i < _log.PlayerList.Count; i++) {
-                Player player = _log.PlayerList[i];
-                string playerScript = "logData.players[" + i + "].details = " + ToJson(BuildPlayerData(player)) + ";\r\n";
-                scripts += playerScript;
-            }
-            for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
-            {
-                Target target = _log.FightData.Logic.Targets[i];
-                string targetScript = "logData.targets[" + i + "].details = " + ToJson(BuildTargetData(target)) + ";\r\n";
-                scripts += targetScript;
-            }
-            return "<script>\r\n"+scripts + "\r\n</script>";
-        }
-
-        private string BuildMaps()
-        {
-            string skillsScript = "var usedSkills = " + ToJson(SkillDto.AssembleSkills(_usedSkills.Values)) + ";" +
-                "var skillMap = {};" +
-                "$.each(usedSkills, function(i, skill) {" +
-                    "skillMap['s'+skill.id]=skill;" +
-                "});";
-            string boonsScript = "var usedBoons = " + ToJson(BoonDto.AssembleBoons(_usedBoons.Values)) + ";" +
-                "var buffMap = {};" +
-                "$.each(usedBoons, function(i, boon) {" +
-                    "buffMap['b'+boon.id]=boon;" +
-                "});";
-            string damageModsScript = "var usedDamageMods = " + ToJson(DamageModDto.AssembleDamageModifiers(_usedDamageMods)) + ";" +
-                "var damageModMap = {};" +
-                "$.each(usedDamageMods, function(i, damageMod) {" +
-                    "damageModMap['d'+damageMod.id]=damageMod;" +
-                "});";
-            string mechanicsScript = "var mechanicMap = " + ToJson(BuildMechanics()) + ";";
-            return "<script>\r\n" + skillsScript + "\r\n" + boonsScript + "\r\n" + damageModsScript + "\r\n" + mechanicsScript + "\r\n</script>";
         }
 
         private ActorDetailsDto BuildPlayerData(Player player)
@@ -1310,7 +1261,6 @@ namespace LuckParser.Builders
             JsonSerializerSettings settings = new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                DefaultValueHandling = DefaultValueHandling.Ignore,
                 ContractResolver = contractResolver
             };
             return JsonConvert.SerializeObject(value, settings);

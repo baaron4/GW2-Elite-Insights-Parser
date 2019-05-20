@@ -19,14 +19,14 @@ var compileDamageModifiers = function () {
             commonModifiers: function () {
                 var modifiers = [];
                 for (var i = 0; i < logData.dmgModifiersCommon.length; i++) {
-                    modifiers.push(damageModMap['d' + logData.dmgModifiersCommon[i]]);
+                    modifiers.push(logData.damageModMap['d' + logData.dmgModifiersCommon[i]]);
                 }
                 return modifiers;
             },
             itemModifiers: function () {
                 var modifiers = [];
                 for (var i = 0; i < logData.dmgModifiersItem.length; i++) {
-                    modifiers.push(damageModMap['d' + logData.dmgModifiersItem[i]]);
+                    modifiers.push(logData.damageModMap['d' + logData.dmgModifiersItem[i]]);
                 }
                 return modifiers;
             }
@@ -81,7 +81,7 @@ var compileDamageModifiers = function () {
                     var spec = this.orderedSpecs[i];
                     var data = [];
                     for (var j = 0; j < logData.dmgModifiersPers[spec.name].length; j++) {
-                        data.push(damageModMap['d' + logData.dmgModifiersPers[spec.name][j]]);
+                        data.push(logData.damageModMap['d' + logData.dmgModifiersPers[spec.name][j]]);
                     }
                     res.push(data);
                 }

@@ -55,8 +55,9 @@ window.onload = function () {
     compileGraphs();
     compilePlayerTab();
     compileTargetTab();
-    if (typeof compileCombatReplay !== "undefined") {
+    if (logData.crData) {
         compileCombatReplay();
+        compileCombatReplayUI();
     }
     mainComponent = new Vue({
         el: "#content",
@@ -67,17 +68,9 @@ window.onload = function () {
             datatypes: DataTypes,
             light: typeof (window.theme) !== "undefined" ? (window.theme === 'yeti') : logData.lightTheme,
             mode: 0,
-            animate: false,
-            animationStatus: null
+            cr: !!logData.crData
         },
         methods: {
-            switchCombatReplayButtons: function (from, to) {
-                var combatReplay = $('#combat-replay');
-                if (combatReplay) {
-                    var buttons = combatReplay.find('.' + from);
-                    buttons.addClass(to).removeClass(from);
-                }
-            },
             switchTheme: function (state) {
                 if (state === this.light) {
                     return;
@@ -90,30 +83,9 @@ window.onload = function () {
                 if (storeTheme) storeTheme(newStyle);
                 var theme = document.getElementById('theme');
                 theme.href = themes[newStyle];
-                this.switchCombatReplayButtons(this.light ? 'btn-dark' : 'btn-light', this.light ? 'btn-light' : 'btn-dark');
-            },
-            changeMode: function (iMode) {
-                if (this.mode === iMode) {
-                    return;
-                }
-                var oldMode = this.mode;
-                this.mode = iMode;
-                if (this.animator) {
-                    if (this.mode !== 1) {
-                        if (oldMode === 1) {
-                            // animation running when going out of CR
-                            this.animate = this.stopAnimate();
-                        }
-                    } else if (this.animate) {
-                        this.animator.startAnimate();
-                    }
-                }
-            },
+            }
         },
         computed: {
-            animator: function () {
-                return this.animationStatus ? animator : null;
-            },
             activePhase: function () {
                 var phases = this.logdata.phases;
                 for (var i = 0; i < phases.length; i++) {
@@ -163,9 +135,6 @@ window.onload = function () {
         mounted() {
             var element = document.getElementById("loading");
             element.parentNode.removeChild(element);
-            if (this.light) {
-                this.switchCombatReplayButtons('btn-dark', 'btn-light');
-            }
         }
     });
     $("body").tooltip({

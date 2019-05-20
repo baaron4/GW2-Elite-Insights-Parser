@@ -1,0 +1,14 @@
+
+<div class="d-flex flex-row flex-wrap justify-content-center align-items-start mb-2">
+    <div class="d-flex flex-row justify-content-center align-items-center">
+        <div v-for="group in groups" class="d-flex flex-column justify-content-center align-items-center mt-1 ml-2 mr-2">
+            <h3>Group {{group.id}}</h3>
+            <label v-for="player in group.players"
+                   @click="selectActor(player.combatReplayID);"
+                   class="btn btn-small ply-btn" :class="{'active': selectedplayerid === player.combatReplayID, 'btn-dark': !light, 'btn-light': light}" :title="player.name">
+                <img :src="player.icon" :alt="player.profession" class="icon">
+                {{ player.name }}
+            </label>
+        </div>
+    </div>
+</div>

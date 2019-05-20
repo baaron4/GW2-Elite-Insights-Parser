@@ -36,5 +36,21 @@ namespace LuckParser.Models.HtmlModels
             }
             return res;
         }
+
+        public static void BuildMechanics(HashSet<Mechanic> mechs, List<MechanicDto> mechsDtos)
+        {
+            foreach (Mechanic mech in mechs)
+            {
+                MechanicDto dto = new MechanicDto
+                {
+                    Name = mech.FullName,
+                    ShortName = mech.ShortName,
+                    Description = mech.Description,
+                    PlayerMech = mech.ShowOnTable && !mech.IsEnemyMechanic,
+                    EnemyMech = mech.IsEnemyMechanic
+                };
+                mechsDtos.Add(dto);
+            }
+        }
     }
 }

@@ -33,19 +33,25 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\LuckParser.bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\LuckParser.bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup>
     <Win32Resource>
@@ -90,7 +96,6 @@
     <Compile Include="Builders\HTMLBuilder.cs" />
     <Compile Include="Builders\CSVBuilder.cs" />
     <Compile Include="Builders\RawFormatBuilder.cs" />
-    <Compile Include="Builders\Helpers\CombatReplayHelper.cs" />
     <Compile Include="Builders\Helpers\CSVHelper.cs" />
     <Compile Include="GeneralHelper.cs" />
     <Compile Include="Controllers\FlashWindow.cs" />
@@ -103,6 +108,7 @@
     <Compile Include="Models\FightLogic\UnknownFightLogic.cs" />
     <Compile Include="Models\FightLogic\BanditTrio.cs" />
     <Compile Include="Models\FightLogic\Freezie.cs" />
+    <Compile Include="Models\HtmlModels\CombatReplayDto.cs" />
     <Compile Include="Models\HtmlModels\DamageModData.cs" />
     <Compile Include="Models\HtmlModels\DamageModDto.cs" />
     <Compile Include="Models\JsonModels\JsonActor.cs" />
@@ -354,18 +360,21 @@
     <None Include="Resources\theme-cosmo.png" />
     <None Include="Resources\theme-slate.png" />
     <None Include="Resources\combatreplay.js" />
-    <None Include="Resources\combatReplayTemplates\tmplCombatReplay.html" />
-    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayDamageData.html" />
-    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayDamageTable.html" />
-    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayActorRotation.html" />
-    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayTargetsStats.html" />
-    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayPlayersStats.html" />
-    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayTargetStatus.html" />
-    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayTargetStats.html" />
-    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayPlayerStatus.html" />
-    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayActorBuffStats.html" />
-    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayPlayerStats.html" />
-    <Content Include="Resources\combatReplayLinkTemplates\tmplCombatReplayStatusData.html" />
+    <None Include="Resources\combatReplayTemplates\tmplCombatReplayUI.html" />
+    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayDamageData.html" />
+    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayDamageTable.html" />
+    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayActorRotation.html" />
+    <None Include="Resources\combatReplayTemplates\tmplCombatReplayRangeSelect.html" />
+    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayTargetsStats.html" />
+    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayPlayersStats.html" />
+    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayTargetStatus.html" />
+    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayTargetStats.html" />
+    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayPlayerStatus.html" />
+    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayActorBuffStats.html" />
+    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayPlayerStats.html" />
+    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayStatusData.html" />
+    <None Include="Resources\combatReplayTemplates\tmplCombatReplayPlayerSelect.html" />
+    <None Include="Resources\combatReplayTemplates\tmplCombatReplayAnimationControl.html" />
     <Content Include="Resources\ei.css" />
     <Content Include="Resources\ei.js" />
     <None Include="Resources\htmlTemplates\tmplGeneralLayout.html" />
@@ -391,9 +400,7 @@
     <None Include="Resources\htmlTemplates\tmplPlayerStats.html" />
     <None Include="Resources\htmlTemplates\tmplGraphStats.html" />
     <None Include="Resources\htmlTemplates\tmplDPSGraph.html" />
-    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayGroup.html" />
     <None Include="Resources\htmlTemplates\tmplTargets.html" />
-    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayPlayer.html" />
     <None Include="Resources\htmlTemplates\tmplPlayers.html" />
     <None Include="Resources\htmlTemplates\tmplDamageModifierTable.html" />
     <None Include="Resources\htmlTemplates\tmplPlayerTabGraph.html" />
@@ -404,6 +411,7 @@
     <None Include="Resources\htmlTemplates\tmplDamageModifierPersStats.html" />
     <Content Include="Resources\htmlTemplates\tmplDamageTaken.html" />
     <Content Include="Resources\htmlTemplates\tmplTargetData.html" />
+    <Content Include="Resources\JS\combatReplayUI.js" />
     <Content Include="Resources\JS\combatReplayStats.js" />
     <Content Include="Resources\JS\generalStats.js" />
     <Content Include="Resources\JS\buffStats.js" />

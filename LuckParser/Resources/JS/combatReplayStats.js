@@ -1,8 +1,37 @@
 /*jshint esversion: 6 */
 
 var compileCombatReplay = function () {
+    var timeRefreshComponent = {
+        props: ["time"],
+        data: function() {
+            return {
+                refreshTime: 0
+            };
+        },
+        computed: {
+            timeToUse: function() {
+                if (animator) {
+                    var animated = animator.animation !== null;
+                    if (animated) {
+                        var speed = animator.speed;
+                        if (Math.abs(this.time - this.refreshTime) > speed * 96) {
+                            this.refreshTime = this.time;
+                            return this.time;
+                        }
+                        return this.refreshTime;
+                    } else {
+                        this.refreshTime = this.time;
+                        return this.time;
+                    }
+                }
+                return this.time;
+            },
+        },
+    };
+
     Vue.component("combat-replay-damage-stats-component", {
-        props: ["time", "playerindex"],
+        mixins: [timeRefreshComponent],
+        props: ["playerindex"],
         template: `${tmplCombatReplayDamageTable}`,
         data: function () {
             return {
@@ -48,7 +77,8 @@ var compileCombatReplay = function () {
                 var cols = [];
                 var sums = [];
                 var total = [];
-                var curTime = Math.floor(this.time / 1000);
+                var tS = this.timeToUse / 1000.0;
+                var curTime = Math.floor(tS);
                 var nextTime = curTime + 1;
                 var dur = Math.floor(this.phase.end - this.phase.start);
                 if (nextTime == dur + 1 && this.phase.needsLastPoint) {
@@ -73,11 +103,11 @@ var compileCombatReplay = function () {
                         cur = data[curTime];
                         next = data[curTime + 1];
                         if (typeof next !== "undefined") {
-                            dps[2 * j] = cur + (this.time / 1000 - curTime) * (next - cur)/(nextTime - curTime);
+                            dps[2 * j] = cur + (tS - curTime) * (next - cur)/(nextTime - curTime);
                         } else {
                             dps[2 * j] = cur;
                         }
-                        dps[2 * j + 1] = dps[2 * j] / (Math.max(this.time / 1000, 1));
+                        dps[2 * j + 1] = dps[2 * j] / (Math.max(tS, 1));
                     }
                     cacheID = 0 + '-';
                     cacheID += getTargetCacheID(this.targets);
@@ -85,11 +115,11 @@ var compileCombatReplay = function () {
                     cur = data[curTime];
                     next = data[curTime + 1];
                     if (typeof next !== "undefined") {
-                        dps[2 * j] = cur + (this.time / 1000 - curTime) * (next - cur)/(nextTime - curTime);
+                        dps[2 * j] = cur + (tS - curTime) * (next - cur)/(nextTime - curTime);
                     } else {
                         dps[2 * j] = cur;
                     }
-                    dps[2 * j + 1] = dps[2 * j] / (Math.max(this.time / 1000, 1));
+                    dps[2 * j + 1] = dps[2 * j] / (Math.max(tS, 1));
                     for (j = 0; j < dps.length; j++) {
                         total[j] = (total[j] || 0) + dps[j];
                     }
@@ -113,8 +143,29 @@ var compileCombatReplay = function () {
     });
 
     Vue.component("combat-replay-actor-buffs-stats-component", {
-        props: ["actorindex","time", "enemy"],
+        mixins: [timeRefreshComponent],
+        props: ["actorindex", "enemy"],
         template: `${tmplCombatReplayActorBuffStats}`,
+        methods: {
+            findBuffState: function (states, timeS, start, end) {
+                // when the array exists, it covers from 0 to fightEnd by construction
+                var id = Math.floor((end + start) / 2);
+                if (id === start || id === end) {
+                    return states[id][1];
+                }
+                var item = states[id];
+                var itemN = states[id + 1];
+                var x = item[0];
+                var xN = itemN[0];
+                if (timeS < x) {
+                    return this.findBuffState(states, timeS, start, id);
+                } else if (timeS > xN) {
+                    return this.findBuffState(states, timeS, id, end);
+                } else {
+                    return item[1];
+                }
+            }
+        },
         computed: {
             boons: function () {
                 var hash = new Set();
@@ -163,9 +214,6 @@ var compileCombatReplay = function () {
                 for (var i = 0; i < this.buffData.length; i++) {
                     var data = this.buffData[i];
                     var id = data.id;
-                    if (id < 0) {
-                        continue;
-                    }
                     var arrayToFill = [];
                     var buff = findSkill(true, id);
                     if (buff.consumable) {
@@ -183,15 +231,8 @@ var compileCombatReplay = function () {
                     } else {
                         arrayToFill = res.others;
                     }
-                    var val = data.states[0][1];
-                    var t = this.time / 1000;
-                    for (var j = 1; j < data.states.length; j++) {
-                        if (data.states[j][0] < t) {
-                            val = data.states[j][1];
-                        } else {
-                            break;
-                        }
-                    }
+                    var t = this.timeToUse / 1000;
+                    var val = this.findBuffState(data.states, t, 0, data.states.length - 1);
                     if (val > 0) {
                         arrayToFill.push({
                             state: val,
@@ -212,8 +253,8 @@ var compileCombatReplay = function () {
                 return logData.players[this.playerindex];
             },
             status: function () {
-                var crData = animator.playerData.get(this.player.combatReplayID);
-                var icon = crData.getIcon(this.time);
+                var crPData = animator.playerData.get(this.player.combatReplayID);
+                var icon = crPData.getIcon(this.time);
                 return icon === deadIcon ? 0 : icon === downIcon ? 1 : icon === dcIcon ? 2 : 3;
             },
         }
@@ -266,71 +307,88 @@ var compileCombatReplay = function () {
     });
 
     Vue.component("combat-replay-actor-rotation-component", {
-        props: ["actorindex", "time", "enemy"],
+        mixins: [timeRefreshComponent],
+        props: ["actorindex", "enemy"],
         template: `${tmplCombatReplayActorRotation}`,
+        methods: {
+            findRotationIndex: function (rotation, timeS, start, end) {
+                if (end === 0) {
+                    return 0;
+                }
+                if (timeS < rotation[start][0]) {
+                    return start;
+                } else if (timeS > rotation[end][0] + rotation[end][2] / 1000.0) {
+                    return end;
+                }
+                var id = Math.floor((end + start) / 2);
+                var item, x, duration;
+                if (id === start || id === end) {               
+                    item = rotation[start];
+                    x = item[0];
+                    duration = item[2] / 1000.0;
+                    if (timeS >= x && x + duration >= timeS) {
+                        return start;
+                    }
+                    return end;
+                }
+                item = rotation[id];
+                x = item[0];
+                duration = item[2] / 1000.0;
+                if (timeS < x) {
+                    return this.findRotationIndex(rotation, timeS, start, id);
+                } else if (timeS > x + duration) {
+                    return this.findRotationIndex(rotation, timeS, id, end);
+                } else {
+                    return id;
+                }
+            }
+        },
         computed: {
             actor: function () {
                 return this.enemy ? logData.targets[this.actorindex] : logData.players[this.actorindex];
             },
             actorRotation: function () {
-                return this.actor.details.rotation[0];
+                return this.actor.details.rotation[0].filter(x => x[2] > 1e-2);
             },
             rotation: function () {
                 var res = {
                     current: null,
                     nexts: []
                 };
-                var time = this.time / 1000.0;
+                var time = this.timeToUse / 1000.0;
+                var id = this.findRotationIndex(this.actorRotation, time, 0, this.actorRotation.length - 1);
                 var j, next;
-                for (var i = 0; i < this.actorRotation.length; i++) {
-                    count = 0;
-                    var item = this.actorRotation[i];
-                    var x = item[0];
-                    var skillId = item[1];
-                    var endType = item[3];
-                    if (item[2] < 1e-2) {
-                        continue;
+                var item = this.actorRotation[id];
+                var x = item[0];
+                var skillId = item[1];
+                var endType = item[3];
+                var duration = item[2] / 1000.0;
+                var skill = findSkill(false, skillId);
+                if (x <= time && time <= x + duration) {
+                    res.current = {
+                        skill: skill,
+                        end: endType
+                    };
+                    for (j = id + 1; j < this.actorRotation.length; j++) {
+                        next = this.actorRotation[j];
+                        res.nexts.push({
+                            skill: findSkill(false, next[1]),
+                            end: next[3]
+                        });
+                        if (res.nexts.length == 3) {
+                            break;
+                        }
                     }
-                    var duration = Math.round(item[2] / 1000.0);
-                    var skill = findSkill(false, skillId);
-                    if ((x <= time && time <= x + duration) || (time <= x && i > 0)) {
-                        var offset = 0;
-                        if ((x <= time && time <= x + duration)) {
-                            res.current = {
-                                skill: skill,
-                                end: endType
-                            };
-                            offset = 1;
+                } else {
+                    for (j = id; j < this.actorRotation.length; j++) {
+                        next = this.actorRotation[j];
+                        res.nexts.push({
+                            skill: findSkill(false, next[1]),
+                            end: next[3]
+                        });
+                        if (res.nexts.length == 3) {
+                            break;
                         }
-                        for (j = i + offset; j < this.actorRotation.length; j++) {
-                            next = this.actorRotation[j];
-                            if (next[2] < 1e-2) {
-                                continue;
-                            }
-                            res.nexts.push({
-                                skill: findSkill(false, next[1]),
-                                end: next[3]
-                            });
-                            if (res.nexts.length == 3) {
-                                break;
-                            }
-                        }
-                        break;
-                    } else if (time <= x) {
-                        for (j = i; j < this.actorRotation.length; j++) {
-                            next = this.actorRotation[j];
-                            if (next[2] < 1e-2) {
-                                continue;
-                            }
-                            res.nexts.push({
-                                skill: findSkill(false, next[1]),
-                                end: next[3]
-                            });
-                            if (res.nexts.length == 3) {
-                                break;
-                            }
-                        }
-                        break;
                     }
                 }
                 return res;
@@ -429,10 +487,6 @@ var compileCombatReplay = function () {
                 details: false,
                 mode: 0
             };
-        },
-        updated() {
-            animator.controlledByHTML = this.details;
-            animator.draw();
         }
     });
 };

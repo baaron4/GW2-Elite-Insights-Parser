@@ -260,8 +260,10 @@ namespace LuckParser.Models.Logic
                 case (ushort)Deathling:
                     break;
                 case (ushort)UnderworldReaper:
-                    if (!_isBugged && _reapersSeen == -7 && TrashMobs.Where(x => x.ID == (ushort) UnderworldReaper && x.GetCombatReplayPositions(log).Count == 0).Count() <= 7)
+                    // if not bugged and we assumed we are still on the reapers at the door, check if start is above 2 seconds (first reaper spawns around 10+ seconds). If yes, put _reapersSeen at 0 to start greens. 
+                    if (!_isBugged && _reapersSeen < 0 && start > 2000)
                     {
+                        //Reminder that agents appear in chronological order, after this one, reaper has spawned afer the first one
                         _reapersSeen = 0;
                     }
                     if (!_isBugged && _reapersSeen >= 0)

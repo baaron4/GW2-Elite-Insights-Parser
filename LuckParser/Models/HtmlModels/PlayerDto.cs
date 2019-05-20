@@ -26,8 +26,9 @@ namespace LuckParser.Models.HtmlModels
         public string ColCleave;
         public string ColTotal;
         public bool IsConjure;
+        public ActorDetailsDto Details;
 
-        public PlayerDto(Player player, ParsedLog log, bool cr)
+        public PlayerDto(Player player, ParsedLog log, bool cr, ActorDetailsDto details)
         {
             Group = player.Group;
             Name = player.Character;
@@ -42,6 +43,7 @@ namespace LuckParser.Models.HtmlModels
             ColTotal = GeneralHelper.GetLink("Color-" + player.Prof + "-Total");
             IsConjure = (player.IsFakeActor);
             BuildWeaponSets(player, log);
+            Details = details;
             if (cr && !IsConjure)
             {
                 CombatReplayID = player.GetCombatReplayID(log);

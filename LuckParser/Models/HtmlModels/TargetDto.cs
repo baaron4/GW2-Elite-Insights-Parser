@@ -18,8 +18,9 @@ namespace LuckParser.Models.HtmlModels
         public readonly List<MinionDto> Minions = new List<MinionDto>();
         public double Percent;
         public int HpLeft;
+        public ActorDetailsDto Details;
 
-        public TargetDto(Target target, ParsedLog log, bool cr)
+        public TargetDto(Target target, ParsedLog log, bool cr, ActorDetailsDto details)
         {
             Name = target.Character;
             Icon = GeneralHelper.GetNPCIcon(target.ID);
@@ -27,6 +28,7 @@ namespace LuckParser.Models.HtmlModels
             HbHeight = target.HitboxHeight;
             HbWidth = target.HitboxWidth;
             Tough = target.Toughness;
+            Details = details;
             if (cr)
             {
                 CombatReplayID = target.GetCombatReplayID(log);

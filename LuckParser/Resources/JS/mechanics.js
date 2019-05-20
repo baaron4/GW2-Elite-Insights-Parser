@@ -30,9 +30,10 @@ var compileMechanics = function () {
             },
             playerMechHeader: function () {
                 var playerMechanics = [];
-                for (var i = 0; i < mechanicMap.length; i++) {
-                    if (mechanicMap[i].playerMech) {
-                        playerMechanics.push(mechanicMap[i]);
+                for (var i = 0; i < logData.mechanicMap.length; i++) {
+                    var mech = logData.mechanicMap[i];
+                    if (mech.playerMech) {
+                        playerMechanics.push(mech);
                     }
                 }
                 return playerMechanics;
@@ -58,9 +59,10 @@ var compileMechanics = function () {
             },
             enemyMechHeader: function () {
                 var enemyMechanics = [];
-                for (var i = 0; i < mechanicMap.length; i++) {
-                    if (mechanicMap[i].enemyMech) {
-                        enemyMechanics.push(mechanicMap[i]);
+                for (var i = 0; i < logData.mechanicMap.length; i++) {
+                    var mech = logData.mechanicMap[i];
+                    if (mech.enemyMech) {
+                        enemyMechanics.push(mech);
                     }
                 }
                 return enemyMechanics;

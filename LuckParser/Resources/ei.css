@@ -65,6 +65,8 @@
 
 .player-data {
     border-top: 1px solid black;
+    width: 250px;
+    height: 160px;
 }
 
 .target-data {
@@ -119,10 +121,15 @@ h6.actor-shorten {
 
 .range-btns {
     width: 200px;
+    height: 30px;
 }
 
 .ply-btn {
     width: 120px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
 }
 
 .cr-hp-display {

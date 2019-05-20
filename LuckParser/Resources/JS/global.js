@@ -136,11 +136,11 @@ const specToBase = {
 function findSkill(isBuff, id) {
     var skill;
     if (isBuff) {
-        skill = buffMap['b' + id] || {};
+        skill = logData.buffMap['b' + id] || {};
+        skill.condi = true;
     } else {
-        skill = skillMap["s" + id] || {};
+        skill = logData.skillMap["s" + id] || {};
     }
-    skill.condi = isBuff;
     return skill;
 }
 
