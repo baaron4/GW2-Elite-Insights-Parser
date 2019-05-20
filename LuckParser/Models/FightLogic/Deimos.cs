@@ -147,7 +147,7 @@ namespace LuckParser.Models.Logic
                         // nothing to do
                     }
                 }
-                invulApp.Value = (int)(firstAware - invulApp.Time);
+                invulApp.OverrideValue((int)(firstAware - invulApp.Time));
                 _specialSplit = (firstAware >= target.LastAware ? firstAware : target.LastAware);
                 target.AgentItem.LastAware = combatData.Last().Time;
                 SetUniqueID(target, gadgetAgents, agentData, combatData);

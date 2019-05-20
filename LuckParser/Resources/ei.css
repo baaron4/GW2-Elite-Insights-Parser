@@ -65,6 +65,8 @@
 
 .player-data {
     border-top: 1px solid black;
+    width: 250px;
+    height: 160px;
 }
 
 .target-data {

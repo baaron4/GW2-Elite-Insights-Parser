@@ -114,11 +114,13 @@ namespace LuckParser.Models.JsonModels
         /// </summary>
         public string RecordedBy;
         /// <summary>
-        /// The time at which the fight started in "yyyy-mm-dd hh:mm:ss" format 
+        /// The time at which the fight started in "yyyy-mm-dd hh:mm:ss zz" format \n
+        /// The value will be <see cref="LogData.DefaultTimeValue"/> if the event does not exist
         /// </summary>
         public string TimeStart;
         /// <summary>
-        /// The time at which the fight ended in "yyyy-mm-dd hh:mm:ss" format
+        /// The time at which the fight ended in "yyyy-mm-dd hh:mm:ss zz" format \n
+        /// The value will be <see cref="LogData.DefaultTimeValue"/> if the event does not exist
         /// </summary>
         public string TimeEnd;
         /// <summary>
