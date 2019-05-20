@@ -45,19 +45,27 @@ namespace LuckParser.tst
         {
             MemoryStream ms = new MemoryStream();
             StreamWriter sw = new StreamWriter(ms);
-            RawFormatBuilder builder = new RawFormatBuilder(sw, log, null);
+            RawFormatBuilder builder = new RawFormatBuilder(log, null);
 
-            builder.CreateJSON();
+            builder.CreateJSON(sw);
+
+            return sw.ToString();
+        }
+
+        public string HtmlString(ParsedLog log)
+        {
+            MemoryStream ms = new MemoryStream();
+            StreamWriter sw = new StreamWriter(ms);
+            HTMLBuilder builder = new HTMLBuilder(log, null);
+
+            builder.CreateHTML(sw, null);
 
             return sw.ToString();
         }
 
         public JsonLog JsonLog(ParsedLog log)
         {
-            MemoryStream ms = new MemoryStream();
-            StreamWriter sw = new StreamWriter(ms);
-            RawFormatBuilder builder = new RawFormatBuilder(sw, log, null);
-
+            RawFormatBuilder builder = new RawFormatBuilder(log, null);
             return builder.CreateJsonLog();
         }
     }

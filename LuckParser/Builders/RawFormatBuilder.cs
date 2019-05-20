@@ -30,7 +30,6 @@ namespace LuckParser.Builders
         readonly List<PhaseData> _phases;
 
         readonly Statistics _statistics;
-        readonly StreamWriter _sw;
 
         private readonly string[] _uploadLink;
         //
@@ -39,14 +38,9 @@ namespace LuckParser.Builders
         private readonly Dictionary<string, JsonLog.DamageModDesc> _damageModDesc = new Dictionary<string, JsonLog.DamageModDesc>();
         private readonly Dictionary<string, HashSet<long>> _personalBuffs = new Dictionary<string, HashSet<long>>();
        
-        public RawFormatBuilder(StreamWriter sw, ParsedLog log, string[] UploadString)
+        public RawFormatBuilder(ParsedLog log, string[] UploadString)
         {
-            if (sw == null)
-            {
-                throw new InvalidOperationException("Stream writer must be non null");
-            }
             _log = log;
-            _sw = sw;
             _phases = log.FightData.GetPhases(log);
 
             _statistics = log.Statistics;
@@ -67,7 +61,7 @@ namespace LuckParser.Builders
             return log;
         }
 
-        public void CreateJSON()
+        public void CreateJSON(StreamWriter sw)
         {
             var log = CreateJsonLog();
             DefaultContractResolver contractResolver = new DefaultContractResolver
@@ -80,14 +74,14 @@ namespace LuckParser.Builders
                 NullValueHandling = NullValueHandling.Ignore,
                 ContractResolver = contractResolver
             };
-            var writer = new JsonTextWriter(_sw)
+            var writer = new JsonTextWriter(sw)
             {
                 Formatting = Properties.Settings.Default.IndentJSON ? Newtonsoft.Json.Formatting.Indented : Newtonsoft.Json.Formatting.None
             };
             serializer.Serialize(writer, log);
         }
 
-        public void CreateXML()
+        public void CreateXML(StreamWriter sw)
         {
 
             var log = CreateJsonLog();
@@ -108,7 +102,7 @@ namespace LuckParser.Builders
             string json = JsonConvert.SerializeObject(root, settings);
 
             XmlDocument xml = JsonConvert.DeserializeXmlNode(json);
-            XmlTextWriter xmlTextWriter = new XmlTextWriter(_sw)
+            XmlTextWriter xmlTextWriter = new XmlTextWriter(sw)
             {
                 Formatting = Properties.Settings.Default.IndentXML ? System.Xml.Formatting.Indented : System.Xml.Formatting.None
             };
