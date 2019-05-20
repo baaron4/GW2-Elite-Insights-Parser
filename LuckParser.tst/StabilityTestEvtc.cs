@@ -5,6 +5,7 @@ using System.IO;
 using LuckParser.Exceptions;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LuckParser.tst
 {
@@ -19,7 +20,8 @@ namespace LuckParser.tst
             Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
 
             List<string> failed = new List<string>();
-            foreach (string file in Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories))
+            List<string> toCheck = Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories).ToList();
+            foreach (string file in toCheck)
             {
                 try
                 {
@@ -46,7 +48,8 @@ namespace LuckParser.tst
 
             Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
             List<string> failed = new List<string>();
-            foreach (string file in Directory.EnumerateFiles(testLocation, "*.evtc.zip", SearchOption.AllDirectories))
+            List<string> toCheck = Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories).ToList();
+            foreach (string file in toCheck)
             {
                 try
                 {
@@ -74,7 +77,8 @@ namespace LuckParser.tst
             Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
 
             List<string> failed = new List<string>();
-            foreach (string file in Directory.EnumerateFiles(testLocation, "*.zevtc", SearchOption.AllDirectories))
+            List<string> toCheck = Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories).ToList();
+            foreach (string file in toCheck)
             {
                 try
                 {
