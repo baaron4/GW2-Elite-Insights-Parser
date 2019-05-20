@@ -210,8 +210,8 @@ namespace LuckParser.Builders
                 int finalTargetHealth = target.HealthOverTime.Count > 0
                     ? target.HealthOverTime.Last().hp
                     : 10000;
-                jsTarget.FinalHealth = (int)Math.Round(target.Health * (finalTargetHealth * 0.01));
                 jsTarget.HealthPercentBurned = 100.0 - finalTargetHealth * 0.01;
+                jsTarget.FinalHealth = (int)Math.Round(target.Health * (jsTarget.HealthPercentBurned * 0.01));
                 log.Targets.Add(jsTarget);
             }
         }
