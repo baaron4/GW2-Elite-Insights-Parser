@@ -41,7 +41,7 @@ namespace LuckParser.tst
             return parser.ParseLog(row, fInfo.FullName);
         }
 
-        public string JsonString(ParsedLog log)
+        public static string JsonString(ParsedLog log)
         {
             MemoryStream ms = new MemoryStream();
             StreamWriter sw = new StreamWriter(ms);
@@ -52,7 +52,7 @@ namespace LuckParser.tst
             return sw.ToString();
         }
 
-        public string HtmlString(ParsedLog log)
+        public static string HtmlString(ParsedLog log)
         {
             MemoryStream ms = new MemoryStream();
             StreamWriter sw = new StreamWriter(ms);
@@ -63,7 +63,7 @@ namespace LuckParser.tst
             return sw.ToString();
         }
 
-        public JsonLog JsonLog(ParsedLog log)
+        public static JsonLog JsonLog(ParsedLog log)
         {
             RawFormatBuilder builder = new RawFormatBuilder(log, null);
             return builder.CreateJsonLog();

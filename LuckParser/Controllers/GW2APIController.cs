@@ -93,7 +93,7 @@ namespace LuckParser.Controllers
         }
         public List<int> WriteSkillListToFile()
         {
-            FileStream fcreate = File.Open(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
+            FileStream fcreate = File.Open(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/SkillList.json", FileMode.Create);
 
             fcreate.Close();
@@ -113,7 +113,7 @@ namespace LuckParser.Controllers
                 idArray = response.Content.ReadAsAsync<int[]>().Result;
                 
                 _listOfSkills.Items.AddRange(GetListGW2APISkills());
-                StreamWriter writer = new StreamWriter(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
+                StreamWriter writer = new StreamWriter(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/SkillList.json");
                 var serializer = new JsonSerializer
                 {
@@ -136,14 +136,14 @@ namespace LuckParser.Controllers
 
             if (_listOfSkills.Items.Count == 0)
             {
-                string path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
+                string path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
                 + "/Content/SkillList.json";
                 if (File.Exists(path))
                 {
                     if (new FileInfo(path).Length != 0)
                     {
                         Console.WriteLine("Reading Skilllist");
-                        using (StreamReader reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
+                        using (StreamReader reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
                         + "/Content/SkillList.json"))
                         {
                             JsonSerializer serializer = new JsonSerializer()
@@ -209,7 +209,7 @@ namespace LuckParser.Controllers
         }
         public List<int> WriteSpecListToFile()
         {
-            FileStream fcreate = File.Open(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
+            FileStream fcreate = File.Open(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/SpecList.json", FileMode.Create);
 
             fcreate.Close();
@@ -245,7 +245,7 @@ namespace LuckParser.Controllers
                     }
 
                 }
-                StreamWriter writer = new StreamWriter(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
+                StreamWriter writer = new StreamWriter(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/SpecList.json");
 
                 var serializer = new JsonSerializer
@@ -269,14 +269,14 @@ namespace LuckParser.Controllers
 
             if (_listofSpecs.Items.Count == 0)
             {
-                string path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
+                string path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
                 + "/Content/SpecList.json";
                 if (File.Exists(path))
                 {
                     if (new FileInfo(path).Length != 0)
                     {
                         Console.WriteLine("Reading SpecList");
-                        using (StreamReader reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
+                        using (StreamReader reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
                         + "/Content/SpecList.json"))
                         {
                             JsonSerializer serializer = new JsonSerializer()
