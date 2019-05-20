@@ -262,3 +262,8 @@ __pycache__/
 
 # VS Code
 .vscode
+
+# Stability test logs
+./LuckParser.tst/EvtcLogs/StabilityTest/*.evtc
+./LuckParser.tst/EvtcLogs/StabilityTest/*.zevtc
+./LuckParser.tst/EvtcLogs/StabilityTest/*.evtc.zip
