@@ -4,17 +4,13 @@ using LuckParser.Parser;
 using System.IO;
 using LuckParser.Exceptions;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace LuckParser.tst
 {
     [TestClass]
     public class StabilityTestEvtc
     {
-        private bool CheckException(CancellationException ex)
-        {
-            return ex.InnerException == null || (ex.InnerException.GetType() != typeof(SkipException) && ex.InnerException.GetType() != typeof(TooShortException));
-        }
-
         [TestMethod]
         public void TestEvtc()
         {
@@ -22,44 +18,25 @@ namespace LuckParser.tst
 
             Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
 
+            List<string> failed = new List<string>();
             foreach (string file in Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories))
             {
                 try
                 {
                     ParsedLog log = TestHelper.ParseLog(file);
-                    try
-                    {
-                        TestHelper.JsonString(log);
-                    }
-                    catch (CancellationException ex)
-                    {
-                        if (CheckException(ex))
-                        {
-                            Assert.Fail(file + " has failed to generate json");
-                        }
-                    }
-                    try
-                    {
-                        TestHelper.HtmlString(log);
-                    }
-                    catch (CancellationException ex)
-                    {
-                        if (CheckException(ex))
-                        {
-                            Assert.Fail(file + " has failed to generate html");
-                        }
-                    }
+                    TestHelper.JsonString(log);
+                    TestHelper.HtmlString(log);
                 }
-                catch (CancellationException ex)
+                catch (Exception ex)
                 {
-                    if (CheckException(ex))
+                    if (!(ex is TooShortException || ex is SkipException))
                     {
-                        Assert.Fail(file + " has failed to parse properly");
+                        failed.Add(file);
                     }
                 }
             }
 
-            Assert.IsTrue(true);
+            Assert.IsTrue(failed.Count == 0, failed.ToString());
         }
 
         [TestMethod]
@@ -68,45 +45,25 @@ namespace LuckParser.tst
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "../../../EvtcLogs/StabilityTest";
 
             Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
-
+            List<string> failed = new List<string>();
             foreach (string file in Directory.EnumerateFiles(testLocation, "*.evtc.zip", SearchOption.AllDirectories))
             {
                 try
                 {
                     ParsedLog log = TestHelper.ParseLog(file);
-                    try
-                    {
-                        TestHelper.JsonString(log);
-                    }
-                    catch (CancellationException ex)
-                    {
-                        if (CheckException(ex))
-                        {
-                            Assert.Fail(file + " has failed to generate json");
-                        }
-                    }
-                    try
-                    {
-                        TestHelper.HtmlString(log);
-                    }
-                    catch (CancellationException ex)
-                    {
-                        if (CheckException(ex))
-                        {
-                            Assert.Fail(file + " has failed to generate html");
-                        }
-                    }
+                    TestHelper.JsonString(log);
+                    TestHelper.HtmlString(log);
                 }
-                catch (CancellationException ex)
+                catch (Exception ex)
                 {
-                    if (CheckException(ex))
+                    if (!(ex is TooShortException || ex is SkipException))
                     {
-                        Assert.Fail(file + " has failed to parse properly");
+                        failed.Add(file);
                     }
                 }
             }
 
-            Assert.IsTrue(true);
+            Assert.IsTrue(failed.Count == 0, failed.ToString());
         }
 
         [TestMethod]
@@ -116,44 +73,25 @@ namespace LuckParser.tst
 
             Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
 
+            List<string> failed = new List<string>();
             foreach (string file in Directory.EnumerateFiles(testLocation, "*.zevtc", SearchOption.AllDirectories))
             {
                 try
                 {
                     ParsedLog log = TestHelper.ParseLog(file);
-                    try
-                    {
-                        TestHelper.JsonString(log);
-                    }
-                    catch (CancellationException ex)
-                    {
-                        if (CheckException(ex))
-                        {
-                            Assert.Fail(file + " has failed to generate json");
-                        }
-                    }
-                    try
-                    {
-                        TestHelper.HtmlString(log);
-                    }
-                    catch (CancellationException ex)
-                    {
-                        if (CheckException(ex))
-                        {
-                            Assert.Fail(file + " has failed to generate html");
-                        }
-                    }
+                    TestHelper.JsonString(log);
+                    TestHelper.HtmlString(log);
                 }
-                catch (CancellationException ex)
+                catch (Exception ex)
                 {
-                    if (CheckException(ex))
+                    if (!(ex is TooShortException || ex is SkipException))
                     {
-                        Assert.Fail(file + " has failed to parse properly");
+                        failed.Add(file);
                     }
                 }
             }
 
-            Assert.IsTrue(true);
+            Assert.IsTrue(failed.Count == 0, failed.ToString());
         }
     }
 }
