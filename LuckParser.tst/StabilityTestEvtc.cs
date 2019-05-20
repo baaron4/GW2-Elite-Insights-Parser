@@ -10,12 +10,17 @@ namespace LuckParser.tst
     [TestClass]
     public class StabilityTestEvtc
     {
+        private bool CheckException(CancellationException ex)
+        {
+            return ex.InnerException == null || (ex.InnerException.GetType() != typeof(SkipException) && ex.InnerException.GetType() != typeof(TooShortException));
+        }
+
         [TestMethod]
         public void TestEvtc()
         {
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "../../../EvtcLogs/StabilityTest";
-            
-             Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
+
+            Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
 
             foreach (string file in Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories))
             {
@@ -28,7 +33,7 @@ namespace LuckParser.tst
                     }
                     catch (CancellationException ex)
                     {
-                        if (ex.InnerException == null || (ex.InnerException.GetType() == typeof(SkipException) || ex.InnerException.GetType() == typeof(TooShortException)))
+                        if (CheckException(ex))
                         {
                             Assert.Fail(file + " has failed to generate json");
                         }
@@ -39,14 +44,15 @@ namespace LuckParser.tst
                     }
                     catch (CancellationException ex)
                     {
-                        if (ex.InnerException == null || (ex.InnerException.GetType() == typeof(SkipException) || ex.InnerException.GetType() == typeof(TooShortException)))
+                        if (CheckException(ex))
                         {
                             Assert.Fail(file + " has failed to generate html");
                         }
                     }
-                } catch (CancellationException ex)
+                }
+                catch (CancellationException ex)
                 {
-                    if (ex.InnerException == null || (ex.InnerException.GetType() == typeof(SkipException) || ex.InnerException.GetType() == typeof(TooShortException)))
+                    if (CheckException(ex))
                     {
                         Assert.Fail(file + " has failed to parse properly");
                     }
@@ -74,7 +80,7 @@ namespace LuckParser.tst
                     }
                     catch (CancellationException ex)
                     {
-                        if (ex.InnerException == null || (ex.InnerException.GetType() == typeof(SkipException) || ex.InnerException.GetType() == typeof(TooShortException)))
+                        if (CheckException(ex))
                         {
                             Assert.Fail(file + " has failed to generate json");
                         }
@@ -85,7 +91,7 @@ namespace LuckParser.tst
                     }
                     catch (CancellationException ex)
                     {
-                        if (ex.InnerException == null || (ex.InnerException.GetType() == typeof(SkipException) || ex.InnerException.GetType() == typeof(TooShortException)))
+                        if (CheckException(ex))
                         {
                             Assert.Fail(file + " has failed to generate html");
                         }
@@ -93,7 +99,7 @@ namespace LuckParser.tst
                 }
                 catch (CancellationException ex)
                 {
-                    if (ex.InnerException == null || (ex.InnerException.GetType() == typeof(SkipException) || ex.InnerException.GetType() == typeof(TooShortException)))
+                    if (CheckException(ex))
                     {
                         Assert.Fail(file + " has failed to parse properly");
                     }
@@ -121,7 +127,7 @@ namespace LuckParser.tst
                     }
                     catch (CancellationException ex)
                     {
-                        if (ex.InnerException == null || (ex.InnerException.GetType() == typeof(SkipException) || ex.InnerException.GetType() == typeof(TooShortException)))
+                        if (CheckException(ex))
                         {
                             Assert.Fail(file + " has failed to generate json");
                         }
@@ -132,7 +138,7 @@ namespace LuckParser.tst
                     }
                     catch (CancellationException ex)
                     {
-                        if (ex.InnerException == null || (ex.InnerException.GetType() == typeof(SkipException) || ex.InnerException.GetType() == typeof(TooShortException)))
+                        if (CheckException(ex))
                         {
                             Assert.Fail(file + " has failed to generate html");
                         }
@@ -140,7 +146,7 @@ namespace LuckParser.tst
                 }
                 catch (CancellationException ex)
                 {
-                    if (ex.InnerException == null || (ex.InnerException.GetType() == typeof(SkipException) || ex.InnerException.GetType() == typeof(TooShortException)))
+                    if (CheckException(ex))
                     {
                         Assert.Fail(file + " has failed to parse properly");
                     }
