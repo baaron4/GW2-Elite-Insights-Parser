@@ -16,7 +16,7 @@ using LuckParser.Setting;
 //recommend CTRL+M+O to collapse all
 namespace LuckParser.Parser
 {
-    class ParsingController
+    public class ParsingController
     {
         private readonly GW2APIController _aPIController = new GW2APIController();
 

@@ -23,7 +23,7 @@ using static LuckParser.Models.JsonModels.JsonMechanics;
 
 namespace LuckParser.Builders
 {
-    class RawFormatBuilder
+    public class RawFormatBuilder
     {
 
         readonly ParsedLog _log;
@@ -41,6 +41,10 @@ namespace LuckParser.Builders
        
         public RawFormatBuilder(StreamWriter sw, ParsedLog log, string[] UploadString)
         {
+            if (sw == null)
+            {
+                throw new InvalidOperationException("Stream writer must be non null");
+            }
             _log = log;
             _sw = sw;
             _phases = log.FightData.GetPhases(log);
@@ -50,7 +54,7 @@ namespace LuckParser.Builders
             _uploadLink = UploadString;
         }
 
-        public void CreateJSON()
+        public JsonLog CreateJsonLog()
         {
             var log = new JsonLog();
 
@@ -60,6 +64,12 @@ namespace LuckParser.Builders
             SetPhases(log);
             SetMechanics(log);
 
+            return log;
+        }
+
+        public void CreateJSON()
+        {
+            var log = CreateJsonLog();
             DefaultContractResolver contractResolver = new DefaultContractResolver
             {
                 NamingStrategy = new CamelCaseNamingStrategy()
@@ -79,13 +89,8 @@ namespace LuckParser.Builders
 
         public void CreateXML()
         {
-            var log = new JsonLog();
 
-            SetGeneral(log);
-            SetTargets(log);
-            SetPlayers(log);
-            SetPhases(log);
-            SetMechanics(log);
+            var log = CreateJsonLog();
 
             DefaultContractResolver contractResolver = new DefaultContractResolver
             {
