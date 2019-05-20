@@ -48,6 +48,7 @@ namespace LuckParser.tst
             RawFormatBuilder builder = new RawFormatBuilder(log, null);
 
             builder.CreateJSON(sw);
+            sw.Close();
 
             return sw.ToString();
         }
@@ -59,6 +60,7 @@ namespace LuckParser.tst
             HTMLBuilder builder = new HTMLBuilder(log, null);
 
             builder.CreateHTML(sw, null);
+            sw.Close();
 
             return sw.ToString();
         }

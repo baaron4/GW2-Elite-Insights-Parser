@@ -49,8 +49,10 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StabilityTestEvtcZip.cs" />
+    <Compile Include="StabilityTestZevtc.cs" />
     <Compile Include="TestHelper.cs" />
-    <Compile Include="StabilityTest.cs" />
+    <Compile Include="StabilityTestEvtc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -8,7 +8,7 @@ using System.Reflection;
 namespace LuckParser.tst
 {
     [TestClass]
-    public class StabilityTest
+    public class StabilityTestEvtcZip
     {
         [TestMethod]
         public void TestMethod1()
@@ -17,7 +17,7 @@ namespace LuckParser.tst
             
              Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
 
-            foreach (string file in Directory.EnumerateFiles(testLocation, "*.*evtc*", SearchOption.AllDirectories))
+            foreach (string file in Directory.EnumerateFiles(testLocation, "*.evtc.zip", SearchOption.AllDirectories))
             {
                 try
                 {
