@@ -267,3 +267,4 @@ __pycache__/
 /LuckParser.tst/EvtcLogs/StabilityTest/**/*.evtc
 /LuckParser.tst/EvtcLogs/StabilityTest/**/*.zevtc
 /LuckParser.tst/EvtcLogs/StabilityTest/**/*.evtc.zip
+/LuckParser.tst/EvtcLogs/**/*.json
