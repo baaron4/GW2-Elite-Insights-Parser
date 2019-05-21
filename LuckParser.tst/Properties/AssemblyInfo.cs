@@ -2,12 +2,12 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("LuckParser.tst")]
+[assembly: AssemblyTitle("EliteInsights")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("DASSAULT SYSTEMES")]
-[assembly: AssemblyProduct("LuckParser.tst")]
-[assembly: AssemblyCopyright("Copyright © DASSAULT SYSTEMES 2019")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("EliteInsights")]
+[assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
