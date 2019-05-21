@@ -672,6 +672,10 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Saffron Stuffed Mushroom",-1, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/e/e2/Saffron_Stuffed_Mushroom.png"), //same as Karka Egg Omelet
                 new Boon("Soul Pastry",53222, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/2/2c/Soul_Pastry.png"),
                 new Boon("Bowl of Fire Meat Chili",10119, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/b/ba/Bowl_of_Fire_Meat_Chili.png"),
+                new Boon("Plate of Fire Flank Steak",9765, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/2/27/Plate_of_Fire_Flank_Steak.png"),
+                new Boon("Plate of Orrian Steak Frittes",9773, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/4/4d/Plate_of_Orrian_Steak_Frittes.png"),
+                new Boon("Spicier Flank Steak",9764, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/0/01/Spicier_Flank_Steak.png"),
+                new Boon("Mango Pie",9993, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/3/3d/Mango_Pie.png"),
                 // UTILITIES 
                 // 1h versions have the same ID as 30 min versions 
                 new Boon("Diminished",46668, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/7/71/Diminished.png"),

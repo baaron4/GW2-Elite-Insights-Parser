@@ -193,7 +193,7 @@ namespace LuckParser.Models.ParseModels
             {
                 Icon = _apiSkill != null ? _apiSkill.Icon : _defaultIcon;
             }
-            if (_apiSkill != null && _apiSkill.Type == "Weapon" && _apiSkill.Professions.Length > 0 && (_apiSkill.Categories == null || (_apiSkill.Categories.Length == 1 && (_apiSkill.Categories[0] == "Phantasm" || _apiSkill.Categories[0] == "DualWield"))))
+            if (_apiSkill != null && _apiSkill.Type == "Weapon" && _apiSkill.WeaponType != "None" && _apiSkill.Professions.Length > 0 && (_apiSkill.Categories == null || (_apiSkill.Categories.Length == 1 && (_apiSkill.Categories[0] == "Phantasm" || _apiSkill.Categories[0] == "DualWield"))))
             {
                 _weaponDescriptor = new WeaponDescriptor(_apiSkill);
             }
