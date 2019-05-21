@@ -14,7 +14,7 @@ namespace LuckParser.tst
     [TestClass]
     public class StabilityTestEvtc
     {
-        private void Loop(List<string> failed, List<string> messages,  string file)
+        private bool Loop(List<string> failed, List<string> messages,  string file)
         {
             try
             {
@@ -28,7 +28,9 @@ namespace LuckParser.tst
                 {
                     failed.Add(file);
                     messages.Add(canc.Message);
+                    return false;
                 }
+                return true;
             }
             catch (Exception ex)
             {
@@ -36,24 +38,34 @@ namespace LuckParser.tst
                 {
                     failed.Add(file);
                     messages.Add(ex.Message);
+                    return false;
                 }
+                return true;
             }
+            return true;
         }
 
-        private void GenerateCrashData(List<string> failed, List<string> messages, string type)
+        private void GenerateCrashData(List<string> failed, List<string> messages, string type, bool copy)
         {
-            if (failed.Count == 0)
-            {
-                return;
-            }
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "../../../EvtcLogs/Crashes/";
 
+            Directory.CreateDirectory(testLocation + "/Logs");
+
             string logName = testLocation + "log_" + type + ".json";
+            if (File.Exists(logName))
+            {
+                File.Delete(logName);
+            }
 
             Dictionary<string, string> dict = new Dictionary<string, string>();
             for (int i = 0; i < failed.Count; i++)
             {
-                dict[failed[i].Split('\\').Last()] = messages[i];
+                string evtcName = failed[i].Split('\\').Last();
+                if (copy)
+                {
+                    File.Copy(failed[i], testLocation + "Logs/" + evtcName, true);
+                }
+                dict[evtcName] = messages[i];
             }
 
             using (FileStream fs = new FileStream(logName, FileMode.Create, FileAccess.Write))
@@ -94,9 +106,9 @@ namespace LuckParser.tst
                 Loop(failed, messages, file);
             }
 
-            GenerateCrashData(failed, messages, "evtc");
+            GenerateCrashData(failed, messages, "evtc", true);
 
-            Assert.IsTrue(failed.Count == 0, failed.ToString());
+            Assert.IsTrue(failed.Count == 0, "Check Crashes folder");
         }
 
         [TestMethod]
@@ -113,9 +125,9 @@ namespace LuckParser.tst
                 Loop(failed, messages, file);
             }
 
-            GenerateCrashData(failed, messages, "evtczip");
+            GenerateCrashData(failed, messages, "evtczip", true);
 
-            Assert.IsTrue(failed.Count == 0, failed.ToString());
+            Assert.IsTrue(failed.Count == 0, "Check Crashes folder");
         }
 
         [TestMethod]
@@ -133,9 +145,59 @@ namespace LuckParser.tst
                 Loop(failed, messages, file);
             }
 
-            GenerateCrashData(failed, messages, "zevtc");
+            GenerateCrashData(failed, messages, "zevtc", true);
 
-            Assert.IsTrue(failed.Count == 0, failed.ToString());
+            Assert.IsTrue(failed.Count == 0, "Check Crashes folder");
+        }
+
+        [TestMethod]
+        public void TestCrashed()
+        {
+            string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "../../../EvtcLogs/Crashes/Logs";
+
+            List<string> failed = new List<string>();
+            int failedCount = 0;
+            List<string> messages = new List<string>();
+            List<string> toCheck = Directory.EnumerateFiles(testLocation, "*.zevtc", SearchOption.AllDirectories).ToList();
+            foreach (string file in toCheck)
+            {
+                if (Loop(failed, messages, file))
+                {
+                    File.Delete(file);
+                }
+            }
+            GenerateCrashData(failed, messages, "zevtc", false);
+            failedCount += failed.Count;
+            failed.Clear();
+            messages.Clear();
+
+            toCheck = Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories).ToList();
+            foreach (string file in toCheck)
+            {
+                if (Loop(failed, messages, file))
+                {
+                    File.Delete(file);
+                }
+            }
+            GenerateCrashData(failed, messages, "evtc", false);
+            failedCount += failed.Count;
+            failed.Clear();
+            messages.Clear();
+
+            toCheck = Directory.EnumerateFiles(testLocation, "*.evtc.zip", SearchOption.AllDirectories).ToList();
+            foreach (string file in toCheck)
+            {
+                if (Loop(failed, messages, file))
+                {
+                    File.Delete(file);
+                }
+            }
+            GenerateCrashData(failed, messages, "evtczip", false);
+            failedCount += failed.Count;
+            failed.Clear();
+            messages.Clear();
+
+            Assert.IsTrue(failedCount == 0, "Check Crashes folder");
         }
     }
 }
