@@ -14,7 +14,7 @@ var compileCombatReplay = function () {
                     var animated = animator.animation !== null;
                     if (animated) {
                         var speed = animator.speed;
-                        if (Math.abs(this.time - this.refreshTime) > speed * 96) {
+                        if (Math.abs(this.time - this.refreshTime) > speed * 48) {
                             this.refreshTime = this.time;
                             return this.time;
                         }
