@@ -166,7 +166,7 @@ namespace LuckParser.tst
                     File.Delete(file);
                 }
             }
-            GenerateCrashData(failed, messages, "zevtc", false);
+            GenerateCrashData(failed, messages, "zevtc_remaining", false);
             failedCount += failed.Count;
             failed.Clear();
             messages.Clear();
@@ -179,7 +179,7 @@ namespace LuckParser.tst
                     File.Delete(file);
                 }
             }
-            GenerateCrashData(failed, messages, "evtc", false);
+            GenerateCrashData(failed, messages, "evtc_remaining", false);
             failedCount += failed.Count;
             failed.Clear();
             messages.Clear();
@@ -192,7 +192,7 @@ namespace LuckParser.tst
                     File.Delete(file);
                 }
             }
-            GenerateCrashData(failed, messages, "evtczip", false);
+            GenerateCrashData(failed, messages, "evtczip_remaining", false);
             failedCount += failed.Count;
             failed.Clear();
             messages.Clear();
