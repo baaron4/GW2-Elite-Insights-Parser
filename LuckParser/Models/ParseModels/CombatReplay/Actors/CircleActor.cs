@@ -1,32 +1,33 @@
-﻿using Newtonsoft.Json;
+﻿using LuckParser.Parser;
+using Newtonsoft.Json;
 using System;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class CircleActor : Actor
+    public class CircleActor : FormActor
     {
         public int Radius { get; }
         public int MinRadius { get; }
 
-        public CircleActor(bool fill, int growing, int radius, Tuple<int, int> lifespan, string color, Connector connector) : base(fill, growing, lifespan, color, connector)
+        public CircleActor(bool fill, int growing, int radius, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, lifespan, color, connector)
         {
             Radius = radius;
         }
 
-        public CircleActor(bool fill, int growing, int radius, Tuple<int, int> lifespan, string color, Connector connector, int minRadius) : base(fill, growing, lifespan, color, connector)
+        public CircleActor(bool fill, int growing, int radius, (int start, int end) lifespan, string color, Connector connector, int minRadius) : base(fill, growing, lifespan, color, connector)
         {
             Radius = radius;
             MinRadius = minRadius;
         }
 
         //
-        protected class CircleSerializable : Serializable
+        protected class CircleSerializable : FormSerializable
         {
             public int Radius { get; set; }
             public int MinRadius { get; set; }
         }
 
-        public override string GetCombatReplayJSON(CombatReplayMap map)
+        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
             CircleSerializable aux = new CircleSerializable
             {
@@ -36,11 +37,11 @@ namespace LuckParser.Models.ParseModels
                 Fill = Filled,
                 Color = Color,
                 Growing = Growing,
-                Start = Lifespan.Item1,
-                End = Lifespan.Item2,
-                ConnectedTo = ConnectedTo.GetConnectedTo(map)
+                Start = Lifespan.start,
+                End = Lifespan.end,
+                ConnectedTo = ConnectedTo.GetConnectedTo(map, log)
             };
-            return JsonConvert.SerializeObject(aux);
+            return aux;
         }
     }
 }

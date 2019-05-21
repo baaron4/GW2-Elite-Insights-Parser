@@ -1,27 +1,28 @@
-﻿using Newtonsoft.Json;
+﻿using LuckParser.Parser;
+using Newtonsoft.Json;
 using System;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class DoughnutActor : Actor
+    public class DoughnutActor : FormActor
     {
         public int OuterRadius { get; }
         public int InnerRadius { get; }
 
-        public DoughnutActor(bool fill, int growing, int innerRadius, int outerRadius, Tuple<int, int> lifespan, string color, Connector connector) : base(fill, growing, lifespan, color, connector)
+        public DoughnutActor(bool fill, int growing, int innerRadius, int outerRadius, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, lifespan, color, connector)
         {
             InnerRadius = innerRadius;
             OuterRadius = outerRadius;
         }
         //
 
-        private class DoughnutSerializable : Serializable
+        private class DoughnutSerializable : FormSerializable
         {
             public int InnerRadius { get; set; }
             public int OuterRadius { get; set; }
         }
 
-        public override string GetCombatReplayJSON(CombatReplayMap map)
+        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
             DoughnutSerializable aux = new DoughnutSerializable
             {
@@ -31,11 +32,11 @@ namespace LuckParser.Models.ParseModels
                 Fill = Filled,
                 Color = Color,
                 Growing = Growing,
-                Start = Lifespan.Item1,
-                End = Lifespan.Item2,
-                ConnectedTo = ConnectedTo.GetConnectedTo(map)
+                Start = Lifespan.start,
+                End = Lifespan.end,
+                ConnectedTo = ConnectedTo.GetConnectedTo(map, log)
             };
-            return JsonConvert.SerializeObject(aux);
+            return aux;
         }
 
     }

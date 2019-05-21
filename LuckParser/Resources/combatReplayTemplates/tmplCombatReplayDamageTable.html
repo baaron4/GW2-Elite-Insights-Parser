@@ -1,0 +1,44 @@
+<div>
+    <ul class="nav nav-pills d-flex flex-row justify-content-center">
+        <li class="nav-item">
+            <a class="nav-link" @click="damageMode = 0" :class="{active: damageMode === 0}">Damage</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" @click="damageMode = 1" :class="{active: damageMode === 1}">DPS</a>
+        </li>
+    </ul>
+    <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" id="combat-replay-dps-table">
+        <thead>
+            <tr>
+                <th></th>
+                <th class="text-left">Name</th>
+                <th>All</th>
+                <th v-for="col in tableData.cols">
+                    {{col.name}}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="row in tableData.rows" :class="{active: row.player.id === playerindex}">
+                <td :data-original-title="row.player.profession">
+                    <img :src="row.player.icon" :alt="row.player.profession" class="icon"><span style="display:none">{{row.player.profession}}</span>
+                </td>
+                <td class="text-left">{{row.player.name}}</td>
+                <td style="min-width:80px">{{Math.round(row.dps[2*tableData.cols.length+(damageMode === 1 ? 1 : 0)])}}</td>
+                <td v-for="(col, id) in tableData.cols" style="min-width:80px">
+                    {{Math.round(row.dps[2*id +(damageMode === 1 ? 1 : 0)])}}
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr v-for="sum in tableData.sums">
+                <td></td>
+                <td class="text-left">{{sum.name}}</td>
+                <td style="min-width:80px">{{Math.round(sum.dps[2*tableData.cols.length+(damageMode === 1 ? 1 : 0)])}}</td>
+                <td v-for="(col, id) in tableData.cols" style="min-width:80px">
+                    {{Math.round(sum.dps[2*id +(damageMode === 1 ? 1 : 0)])}}
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

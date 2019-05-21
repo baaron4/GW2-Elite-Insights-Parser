@@ -1,15 +1,23 @@
-﻿using System.Runtime.Serialization;
+﻿using LuckParser.Models.ParseModels;
+using System.ComponentModel;
 
 namespace LuckParser.Models.HtmlModels
-{
-    [DataContract]
+{   
     public class FoodDto
     {
-        [DataMember] public double time;
-        [DataMember] public double duration;
-        [DataMember] public string icon;
-        [DataMember] public string name;
-        [DataMember] public int stack;
-        [DataMember] public bool dimished;
+        public double Time;
+        public double Duration;
+        public long Id;
+        public int Stack;
+        public bool Dimished;
+
+        public FoodDto(Statistics.Consumable consume)
+        {
+            Time = consume.Time / 1000.0;
+            Duration = consume.Duration / 1000.0;
+            Stack = consume.Stack;
+            Id = consume.Buff.ID;
+            Dimished = (consume.Buff.ID == 46587 || consume.Buff.ID == 46668);
+        }
     }
 }

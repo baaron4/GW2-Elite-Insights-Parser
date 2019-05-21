@@ -1,0 +1,45 @@
+<div>
+    <table v-if="playerMechHeader.length > 0" class="table table-sm table-striped table-hover" cellspacing="0" id="playermechs">
+        <thead>
+            <tr>
+                <th width="30px">Sub</th>
+                <th width="30px"></th>
+                <th class="text-left">Player</th>
+                <th v-for="mech in playerMechHeader" :data-original-title="mech.description">
+                    {{ mech.shortName}}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="row in playerMechRows" :class="{active: row.player.id === playerindex}">
+                <td>{{row.player.group}}</td>
+                <td :data-original-title="row.player.profession">
+                    <img :src="row.player.icon" :alt="row.player.profession" class="icon">
+                    <span style="display:none">{{row.player.profession}}</span>
+                </td>
+                <td class="text-left">{{row.player.name}}</td>
+                <td v-for="mech in row.mechs" :data-original-title="mech[1] !== mech[0] ? mech[1] + ' times (multi hits)' : false">
+                    {{ mech[0] ? mech[0] : '-'}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table v-if="enemyMechHeader.length > 0" class="table table-sm table-striped table-hover" cellspacing="0" id="enemymechs">
+        <thead>
+            <tr>
+                <th class="text-left">Enemy</th>
+                <th v-for="mech in enemyMechHeader" :data-original-title="mech.description">
+                    {{ mech.shortName}}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="row in enemyMechRows">
+                <td class="text-left">{{row.enemy}}</td>
+                <td v-for="mech in row.mechs" :data-original-title="mech[1] !== mech[0] ? mech[1] + ' times (multi hits)' : false">
+                    {{mech[0] ? mech[0] : '-'}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,26 @@
+<div class="mt-2">
+    <div v-if="data.start.length">
+        Started with:
+        <ul>
+            <li v-for="initial in data.start">
+                {{initial.name}} <img class="icon" :alt="initial.name" :src="initial.icon">
+                {{initial.stack > 1 ? "("+initial.stack+")" : ""}}
+            </li>
+        </ul>
+    </div>
+    <div v-if="data.refreshed.length">
+        In phase consumable updates:
+        <ul>
+            <li v-for="refresh in data.refreshed">
+                {{refresh.dimished ? 'suffered' : 'consumed'}} {{refresh.name}}
+                <img class="icon" :alt="refresh.name" :src="refresh.icon">
+                {{refresh.stack > 1 ? "("+refresh.stack+")" : ""}}
+                at {{round3(refresh.time - phase.start)}}s ({{refresh.duration}}
+                seconds)
+            </li>
+        </ul>
+    </div>
+    <div v-if="!data.refreshed.length && !data.start.length" class="text-center">
+        <h3>No consumable activity</h3>
+    </div>
+</div>

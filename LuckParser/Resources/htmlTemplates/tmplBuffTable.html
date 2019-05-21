@@ -1,0 +1,44 @@
+<div v-if="buffs.length > 0">
+    <img v-if="generation" class="mb-1 icon" src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png" :data-original-title="tooltipExpl"/>
+    <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="id">
+        <thead>
+            <tr>
+                <th>Sub</th>
+                <th></th>
+                <th>Name</th>
+                <th v-for="buff in buffs" :data-original-title="buff.name">
+                    <img :src="buff.icon" :alt="buff.name" class="icon icon-hover">
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="row in playerdata" :class="{active: row.player.group && row.player.id === playerindex}">
+                <td>{{ row.player.group ? row.player.group : '-' }}</td>
+                <td :data-original-title="row.player.profession ? row.player.profession : row.player.name">
+                    <img :src="row.player.icon" :alt="row.player.profession ? row.player.profession : row.player.name"
+                        class="icon">
+                    <span style="display:none">
+                        {{ row.player.profession ? row.player.profession : row.player.name}}
+                    </span>
+                </td>
+                <td class="text-left" :data-original-title="getAvgTooltip(row.data.avg)">
+                    {{ row.player.name }}
+                </td>
+                <td v-for=" (buff, index) in buffs" :data-original-title="getCellTooltip(buff, row.data.data[index])">
+                    {{ getCellValue(buff, row.data.data[index]) }}
+                </td>
+            </tr>
+        </tbody>
+        <tfoot v-show="sums.length > 0">
+            <tr v-for="sum in sums">
+                <td></td>
+                <td v-if="sum.icon" :data-original-title="sum.name"><img :src="sum.icon" :alt="sum.name" class="icon"></td>
+                <td v-else></td>
+                <td class="text-left" :data-original-title="getAvgTooltip(sum.avg)">{{sum.name}}</td>
+                <td v-for=" (buff, index) in buffs" :data-original-title="getCellTooltip(buff, sum.data[index], !!sum.icon)">
+                    {{ getCellValue(buff, sum.data[index]) }}
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

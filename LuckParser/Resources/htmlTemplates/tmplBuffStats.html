@@ -1,0 +1,35 @@
+<div>
+    <div class="d-flex flex-row justify-content-center mt-2 mb-2">
+        <ul class="nav nav-pills d-flex flex-row justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link" @click="mode = 0" :class="{active: mode === 0}">Uptime</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" @click="mode = 1" :class="{active: mode === 1 }">Generation Self</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" @click="mode = 2" :class="{active: mode === 2 }">Generation Group</a>
+            </li>
+            <li v-if="!singleGroup" class="nav-item">
+                <a class="nav-link" @click="mode = 3" :class="{active: mode === 3 }">Generation Off-Group</a>
+            </li>
+            <li v-if="!singleGroup" class="nav-item">
+                <a class="nav-link" @click="mode = 4" :class="{active: mode === 4 }">Generation Squad</a>
+            </li>
+        </ul>
+    </div>
+    <keep-alive>
+        <buff-table-component v-if="datatype === datatypes.boonTable" :key="'boon-stats-table'" :condition="false"
+            :generation="mode > 0" :id="'boon-stats-table'" :buffs="boons" :playerdata="buffData.boonsData[mode]" 
+            :sums="mode === 0 ? buffData.boonsData[5] : []":playerindex="playerindex">
+        </buff-table-component>
+        <buff-table-component v-if="datatype === datatypes.offensiveBuffTable" :key="'offensivebuff-stats-table'"
+            :condition="false" :generation="mode > 0" :id="'offensivebuff-stats-table'" :buffs="offs" :playerdata="buffData.offsData[mode]"
+            :sums="mode === 0 ? buffData.offsData[5] : []" :playerindex="playerindex">
+        </buff-table-component>
+        <buff-table-component v-if="datatype === datatypes.defensiveBuffTable" :key="'defensivebuff-stats-table'"
+            :condition="false" :generation="mode > 0" :id="'defensivebuff-stats-table'" :buffs="defs" :playerdata="buffData.defsData[mode]"
+            :sums="mode === 0 ? buffData.defsData[5] : []" :playerindex="playerindex">
+        </buff-table-component>
+    </keep-alive>
+</div>

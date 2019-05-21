@@ -1,16 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
 
 namespace LuckParser.Models.HtmlModels
-{
-    [DataContract]
+{  
     public class PhaseChartDataDto
-    {
-        [DataMember]
-        public List<PlayerChartDataDto> players;
-        [DataMember]
-        public PlayerChartDataDto boss;
-        [DataMember]
-        public double[] bossHealth;
+    {    
+        public List<PlayerChartDataDto> Players = new List<PlayerChartDataDto>();      
+        public List<TargetChartDataDto> Targets = new List<TargetChartDataDto>();
+
+        public List<double[]> TargetsHealthForCR = null;
     }
 }

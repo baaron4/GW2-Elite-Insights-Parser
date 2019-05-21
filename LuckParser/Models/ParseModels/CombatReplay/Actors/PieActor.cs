@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using LuckParser.Parser;
+using Newtonsoft.Json;
 using System;
 
 namespace LuckParser.Models.ParseModels
@@ -13,7 +14,7 @@ namespace LuckParser.Models.ParseModels
 
         //using arcs rotation argument as Input (cone in facing direction). Y direction is reversed due to different axis definitions for arc and javascript
 
-        public PieActor(bool fill, int growing, int radius, Point3D rotation, int openingAngle, Tuple<int, int> lifespan, string color, Connector connector) : base(fill, growing, radius, lifespan, color, connector)
+        public PieActor(bool fill, int growing, int radius, Point3D rotation, int openingAngle, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, radius, lifespan, color, connector)
         {
             Direction = (int)Math.Round(Math.Atan2(rotation.Y, rotation.X) * 180 / Math.PI);
             OpeningAngle = openingAngle;
@@ -22,7 +23,7 @@ namespace LuckParser.Models.ParseModels
 
         //using simple direction/opening angle definition 
 
-        public PieActor(bool fill, int growing, int radius, int direction, int openingAngle, Tuple<int, int> lifespan, string color, Connector connector) : base(fill, growing, radius, lifespan, color, connector)
+        public PieActor(bool fill, int growing, int radius, int direction, int openingAngle, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, radius, lifespan, color, connector)
         {
             Direction = direction;
             OpeningAngle = openingAngle;
@@ -30,7 +31,7 @@ namespace LuckParser.Models.ParseModels
 
         //using starting point and end point (center of the circle and middle of the curved circle segment line)
 
-        public PieActor(bool fill, int growing, Point3D startPoint, Point3D endPoint, int openingAngle, Tuple<int, int> lifespan, string color, Connector connector) : base(fill, growing, (int)startPoint.DistanceToPoint(endPoint), lifespan, color, connector)
+        public PieActor(bool fill, int growing, Point3D startPoint, Point3D endPoint, int openingAngle, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, (int)startPoint.DistanceToPoint(endPoint), lifespan, color, connector)
         {
             Direction = (int)Math.Round(Math.Atan2(endPoint.Y - startPoint.Y, endPoint.X - startPoint.X) * 180 / Math.PI);
             OpeningAngle = openingAngle;
@@ -44,7 +45,7 @@ namespace LuckParser.Models.ParseModels
             public int OpeningAngle { get; set; }
         }
 
-        public override string GetCombatReplayJSON(CombatReplayMap map)
+        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
             PieSerializable aux = new PieSerializable
             {
@@ -55,11 +56,11 @@ namespace LuckParser.Models.ParseModels
                 Fill = Filled,
                 Color = Color,
                 Growing = Growing,
-                Start = Lifespan.Item1,
-                End = Lifespan.Item2,
-                ConnectedTo = ConnectedTo.GetConnectedTo(map)
+                Start = Lifespan.start,
+                End = Lifespan.end,
+                ConnectedTo = ConnectedTo.GetConnectedTo(map, log)
             };
-            return JsonConvert.SerializeObject(aux);
+            return aux;
         }
     }
 }

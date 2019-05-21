@@ -1,30 +1,20 @@
-﻿using LuckParser.Models.DataModels;
+﻿using LuckParser.Parser;
 
 namespace LuckParser.Models.ParseModels
 {
     public abstract class BoonLog
     {
-        public long Time { get; private set; }
-        public long Value { get; private set; }
-        public ushort SrcInstid { get; }
+        public long Time { get; }
+        public long Value { get; }
+        public AgentItem Src { get; }
 
-        protected BoonLog(long time, ushort srcInstid, long value)
+        protected BoonLog(long time, AgentItem src, long value)
         {
             Time = time;
             Value = value;
-            SrcInstid = srcInstid;
+            Src = src;
         }
 
-        public void AddTime(long time)
-        {
-            Time += time;
-        }
-
-        public void AddValue(long value)
-        {
-            Value += value;
-        }
-
-        public abstract ParseEnum.BuffRemove GetRemoveType();
+        public abstract void UpdateSimulator(BoonSimulator simulator);
     }
 }

@@ -1,40 +1,38 @@
-﻿using Newtonsoft.Json;
+﻿using LuckParser.Parser;
+using Newtonsoft.Json;
 using System;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class LineActor : Actor
+    public class LineActor : FormActor
     {
         public Connector ConnectedFrom { get; }
         public int Width { get; }
 
-        public LineActor(int growing, int width, Tuple<int, int> lifespan, string color, Connector connector, Connector targetConnector) : base(false, growing, lifespan, color, connector)
+        public LineActor(int growing, (int start, int end) lifespan, string color, Connector connector, Connector targetConnector) : base(false, growing, lifespan, color, connector)
         {
             ConnectedFrom = targetConnector;
-            Width = width;
         }
 
-        private class LineSerializable : Serializable
+        private class LineSerializable : FormSerializable
         {
-            public Object ConnectedFrom { get; set; }
-            public int Width { get; set; }
+            public object ConnectedFrom { get; set; }
         }
 
-        public override string GetCombatReplayJSON(CombatReplayMap map)
+        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
             LineSerializable aux = new LineSerializable
             {
                 Type = "Line",
-                Width = Width,
                 Fill = Filled,
                 Color = Color,
                 Growing = Growing,
-                Start = Lifespan.Item1,
-                End = Lifespan.Item2,
-                ConnectedTo = ConnectedTo.GetConnectedTo(map),
-                ConnectedFrom = ConnectedFrom.GetConnectedTo(map)
+                Start = Lifespan.start,
+                End = Lifespan.end,
+                ConnectedTo = ConnectedTo.GetConnectedTo(map, log),
+                ConnectedFrom = ConnectedFrom.GetConnectedTo(map, log)
             };
-            return JsonConvert.SerializeObject(aux);
+            return aux;
         }
     }
 }

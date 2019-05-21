@@ -1,30 +1,31 @@
-﻿using System;
+﻿using LuckParser.Models.ParseModels;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Runtime.Serialization;
 
 namespace LuckParser.Models.HtmlModels
-{
-    [DataContract]
+{ 
     public class BoonDto
-    {
-        [DataMember(EmitDefaultValue = false)]
-        public long id;
-        [DataMember(EmitDefaultValue=false)]
-        public string name;
-        [DataMember(EmitDefaultValue = false)]
-        public string icon;
-        [DataMember]
-        public bool stacking;
+    {    
+        public long Id;       
+        public string Name;       
+        public string Icon;       
+        public bool Stacking;
+        public bool Consumable;
+        public bool Enemy;
 
-        public BoonDto(long id, string name, string icon, bool stacking)
+        public static void AssembleBoons(ICollection<Boon> boons, Dictionary<string, BoonDto> dict)
         {
-            this.id = id;
-            this.name = name;
-            this.icon = icon;
-            this.stacking = stacking;
+            foreach (Boon boon in boons)
+            {
+                dict["b" + boon.ID] = new BoonDto()
+                {
+                    Id = boon.ID,
+                    Name = boon.Name,
+                    Icon = boon.Link,
+                    Stacking = (boon.Type == Boon.BoonType.Intensity),
+                    Consumable = (boon.Nature == Boon.BoonNature.Consumable),
+                    Enemy = (boon.Source == Boon.BoonSource.Enemy)
+                };
+            }
         }
     }
 }

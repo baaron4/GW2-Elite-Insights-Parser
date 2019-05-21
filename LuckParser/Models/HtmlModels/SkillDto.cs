@@ -1,30 +1,27 @@
-﻿using System;
+﻿using LuckParser.Models.ParseModels;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Runtime.Serialization;
 
 namespace LuckParser.Models.HtmlModels
-{
-    [DataContract]
+{  
     public class SkillDto
     {
-        [DataMember(EmitDefaultValue = false, Order = 0)]
-        public long id;
-        [DataMember(EmitDefaultValue=false, Order = 1)]
-        public string name;
-        [DataMember(EmitDefaultValue = false, Order = 2)]
-        public string icon;
-        [DataMember(EmitDefaultValue = false, Order = 3)]
-        public bool aa;
+        public long Id;
+        public string Name;
+        public string Icon;
+        public bool Aa;
 
-        public SkillDto(long id, string name, string icon, bool aa)
+        public static void AssembleSkills(ICollection<SkillItem> skills, Dictionary<string, SkillDto> dict)
         {
-            this.id = id;
-            this.name = name;
-            this.icon = icon;
-            this.aa = aa;
+            foreach (SkillItem skill in skills)
+            {
+                dict["s" + skill.ID] = new SkillDto()
+                {
+                    Id = skill.ID,
+                    Name = skill.Name,
+                    Icon = skill.Icon,
+                    Aa = skill.AA
+                };
+            }
         }
     }
 }

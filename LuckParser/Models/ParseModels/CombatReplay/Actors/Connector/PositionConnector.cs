@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Parser;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,21 +9,26 @@ namespace LuckParser.Models.ParseModels
 {
     public class PositionConnector : Connector
     {
-        private Point3D _position;
+        protected Point3D Position;
+
+        public PositionConnector()
+        {
+
+        }
 
         public PositionConnector(Point3D position)
         {
-            _position = position;
+            Position = position;
         }
 
-        public override object GetConnectedTo(CombatReplayMap map)
+        public override object GetConnectedTo(CombatReplayMap map, ParsedLog log)
         {
-            Tuple<int, int> mapPos = map.GetMapCoord(_position.X, _position.Y);
-            return new int[2]
+            (double x, double y) = map.GetMapCoord(Position.X, Position.Y);
+            return new double[2]
                        {
-                        mapPos.Item1,
-                        mapPos.Item2
-                       }; ;
+                        x,
+                        y
+                       };
         }
     }
 }

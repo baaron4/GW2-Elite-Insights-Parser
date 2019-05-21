@@ -1,4 +1,4 @@
-﻿using LuckParser.Models.DataModels;
+﻿using LuckParser.Parser;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,13 +8,14 @@ namespace LuckParser.Models.ParseModels
     public class Boon
     {
         // Boon
-        public enum BoonNature { Condition, Boon, OffensiveBuffTable, DefensiveBuffTable, GraphOnlyBuff, Food, Utility, Consumable };
-        public enum BoonSource { Mixed, Necromancer, Elementalist, Mesmer, Warrior, Revenant, Guardian, Thief, Ranger, Engineer, Item, Boss };
-        public enum BoonType { Duration, Intensity };
-        private enum Logic { Queue, HealingPower, Override, ForceOverride };
+        public enum BoonNature { Condition, Boon, OffensiveBuffTable, DefensiveBuffTable, GraphOnlyBuff, Consumable, Unknow };
+        public enum BoonSource { Mixed, Necromancer, Elementalist, Mesmer, Warrior, Revenant, Guardian, Thief, Ranger, Engineer, Item, Enemy, Unknown };
+        public enum BoonType { Duration, Intensity, Unknown };
+        private enum Logic { Queue, HealingPower, Override, ForceOverride, Unknown };
 
         public const long NumberOfConditionsID = -3;
         public const long NumberOfBoonsID = -2;
+        public const long NoBuff = -4;
 
         public static BoonSource ProfToEnum(string prof)
         {
@@ -61,15 +62,28 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Fields
-        public readonly string Name;
-        public readonly long ID;
-        public readonly BoonNature Nature;
-        public readonly BoonSource Source;
-        public readonly BoonType Type;
-        public readonly int Capacity;
-        public readonly string Link;
+        public string Name { get; }
+        public long ID { get; }
+        public BoonNature Nature { get; }
+        public BoonSource Source { get; }
+        public BoonType Type { get; }
+        public ulong MaxBuild { get; } = ulong.MaxValue;
+        public ulong MinBuild { get; } = ulong.MinValue;
+        public int Capacity { get; }
+        public string Link { get; }
         private readonly Logic _logic;
 
+        /// <summary>
+        /// Boon constructor
+        /// </summary>
+        /// <param name="name">The name of the boon</param>
+        /// <param name="id">The id of the boon</param>
+        /// <param name="source">Source of the boon <see cref="BoonSource"/></param>
+        /// <param name="type">Type of the boon (duration or intensity) <see cref="BoonType"/></param>
+        /// <param name="capacity">Maximun amount of boon in the queue (duration) or stack (intensity)</param>
+        /// <param name="nature">Nature of the boon, dictates in which category the boon will appear <see cref="BoonNature"/></param>
+        /// <param name="logic">Stacking logic of the boon <see cref="Logic"/>, in doubt use Override</param>
+        /// <param name="link">URL to the icon of the buff</param>
         private Boon(string name, long id, BoonSource source, BoonType type, int capacity, BoonNature nature, Logic logic, string link)
         {
             Name = name;
@@ -81,14 +95,35 @@ namespace LuckParser.Models.ParseModels
             Link = link;
             _logic = logic;
         }
-        // Public Methods
 
-        private static List<Boon> _allBoons = new List<Boon>
-            {
-                // Custom Boons
-                new Boon("Number of Conditions", NumberOfConditionsID, BoonSource.Mixed, BoonType.Intensity, 0, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/38/Condition_Duration.png"),
-                new Boon("Number of Boons", NumberOfBoonsID, BoonSource.Mixed, BoonType.Intensity, 0, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/44/Boon_Duration.png"),
-                //Base boons
+        private Boon(string name, long id, BoonSource source, BoonType type, int capacity, BoonNature nature, Logic logic, string link, ulong minBuild, ulong maxBuild)
+        {
+            Name = name;
+            ID = id;
+            Source = source;
+            Type = type;
+            Capacity = capacity;
+            Nature = nature;
+            Link = link;
+            _logic = logic;
+            MaxBuild = maxBuild;
+            MinBuild = minBuild;
+        }
+
+        public Boon(string name, long id, string link)
+        {
+            Name = name;
+            ID = id;
+            Source = BoonSource.Unknown;
+            Type = BoonType.Unknown;
+            Capacity = 0;
+            Nature = BoonNature.Unknow;
+            Link = link;
+            _logic = Logic.Unknown;
+        }
+
+        private readonly static List<Boon> _boons = new List<Boon>
+        {
                 new Boon("Might", 740, BoonSource.Mixed, BoonType.Intensity, 25, BoonNature.Boon, Logic.Override, "https://wiki.guildwars2.com/images/7/7c/Might.png"),
                 new Boon("Fury", 725, BoonSource.Mixed, BoonType.Duration, 9, BoonNature.Boon, Logic.Queue, "https://wiki.guildwars2.com/images/4/46/Fury.png"),//or 3m and 30s
                 new Boon("Quickness", 1187, BoonSource.Mixed, BoonType.Duration, 5, BoonNature.Boon, Logic.Queue, "https://wiki.guildwars2.com/images/b/b4/Quickness.png"),
@@ -101,11 +136,15 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Swiftness", 719, BoonSource.Mixed, BoonType.Duration, 9, BoonNature.Boon, Logic.Queue, "https://wiki.guildwars2.com/images/a/af/Swiftness.png"),
                 new Boon("Retaliation", 873, BoonSource.Mixed, BoonType.Duration, 5, BoonNature.Boon, Logic.Queue, "https://wiki.guildwars2.com/images/5/53/Retaliation.png"),
                 new Boon("Resistance", 26980, BoonSource.Mixed, BoonType.Duration, 5, BoonNature.Boon, Logic.Queue, "https://wiki.guildwars2.com/images/4/4b/Resistance.png"),
-                // Condis         
+                new Boon("Number of Boons", NumberOfBoonsID, BoonSource.Mixed, BoonType.Intensity, 0, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/44/Boon_Duration.png"),
+        };
+
+        private readonly static List<Boon> _conditions = new List<Boon>
+        { 
                 new Boon("Bleeding", 736, BoonSource.Mixed, BoonType.Intensity, 1500, BoonNature.Condition, Logic.Override, "https://wiki.guildwars2.com/images/3/33/Bleeding.png"),
                 new Boon("Burning", 737, BoonSource.Mixed, BoonType.Intensity, 1500, BoonNature.Condition, Logic.Override, "https://wiki.guildwars2.com/images/4/45/Burning.png"),
                 new Boon("Confusion", 861, BoonSource.Mixed, BoonType.Intensity, 1500, BoonNature.Condition, Logic.Override, "https://wiki.guildwars2.com/images/e/e6/Confusion.png"),
-                new Boon("Poison", 723, BoonSource.Mixed, BoonType.Intensity, 1500, BoonNature.Condition, Logic.Override, "https://wiki.guildwars2.com/images/0/05/Poison.png"),
+                new Boon("Poison", 723, BoonSource.Mixed, BoonType.Intensity, 1500, BoonNature.Condition, Logic.Override, "https://wiki.guildwars2.com/images/1/11/Poisoned.png"),
                 new Boon("Torment", 19426, BoonSource.Mixed, BoonType.Intensity, 1500, BoonNature.Condition, Logic.Override, "https://wiki.guildwars2.com/images/0/08/Torment.png"),
                 new Boon("Blind", 720, BoonSource.Mixed, BoonType.Duration, 9, BoonNature.Condition, Logic.Queue, "https://wiki.guildwars2.com/images/3/33/Blinded.png"),
                 new Boon("Chilled", 722, BoonSource.Mixed, BoonType.Duration, 5, BoonNature.Condition, Logic.Queue, "https://wiki.guildwars2.com/images/a/a6/Chilled.png"),
@@ -116,24 +155,33 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Weakness", 742, BoonSource.Mixed, BoonType.Duration, 5, BoonNature.Condition, Logic.Queue, "https://wiki.guildwars2.com/images/f/f9/Weakness.png"),
                 new Boon("Taunt", 27705, BoonSource.Mixed, BoonType.Duration, 5, BoonNature.Condition, Logic.Queue, "https://wiki.guildwars2.com/images/c/cc/Taunt.png"),
                 new Boon("Vulnerability", 738, BoonSource.Mixed, BoonType.Intensity, 25, BoonNature.Condition, Logic.Override, "https://wiki.guildwars2.com/images/a/af/Vulnerability.png"),
-                // Generic
+                new Boon("Number of Conditions", NumberOfConditionsID, BoonSource.Mixed, BoonType.Intensity, 0, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/38/Condition_Duration.png"),
+        };
+
+        private readonly static List<Boon> _commons = new List<Boon>
+        {
                 new Boon("Stealth", 13017, BoonSource.Mixed, BoonType.Duration, 5, BoonNature.GraphOnlyBuff, Logic.Queue, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
                 new Boon("Revealed", 890, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/db/Revealed.png"),
                 new Boon("Superspeed", 5974, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.ForceOverride,"https://wiki.guildwars2.com/images/1/1a/Super_Speed.png"),
-                // Fractals
-                new Boon("Rigorous Certainty", 33652, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.ForceOverride,"https://wiki.guildwars2.com/images/6/60/Desert_Carapace.png"),
-                new Boon("Fractal Mobility", 33024, BoonSource.Mixed, BoonType.Intensity, 5, BoonNature.Consumable, Logic.ForceOverride,"https://wiki.guildwars2.com/images/thumb/2/22/Mist_Mobility_Potion.png/40px-Mist_Mobility_Potion.png"),
-                new Boon("Fractal Defensive", 32134, BoonSource.Mixed, BoonType.Intensity, 5, BoonNature.Consumable, Logic.ForceOverride,"https://wiki.guildwars2.com/images/thumb/e/e6/Mist_Defensive_Potion.png/40px-Mist_Defensive_Potion.png"),
-                new Boon("Fractal Offensive", 32473, BoonSource.Mixed, BoonType.Intensity, 5, BoonNature.Consumable, Logic.ForceOverride,"https://wiki.guildwars2.com/images/thumb/8/8d/Mist_Offensive_Potion.png/40px-Mist_Offensive_Potion.png"),
-                // Sigils
-                new Boon("Sigil of Concentration", 33719, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b3/Superior_Sigil_of_Concentration.png"),
+                new Boon("Determined (762)", 762, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Boon("Determined (788)", 788, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Boon("Determined (895)", 895, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Boon("Determined (3892)", 3892, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Boon("Determined (31450)", 31450, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Boon("Determined (52271)", 52271, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Boon("Invulnerability (757)", 757, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Boon("Invulnerability (801)", 801, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Boon("Stun", 872, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.ForceOverride, "https://wiki.guildwars2.com/images/9/97/Stun.png"),
+                new Boon("Daze", 833, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.ForceOverride, "https://wiki.guildwars2.com/images/7/79/Daze.png"),
+                new Boon("Exposed", 48209, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/f/f4/Exposed_%28effect%29.png"),
                 //Auras
-                new Boon("Chaos Armor", 10332, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/1/1b/Chaos_Armor.png"),
-                new Boon("Fire Shield", 5677, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/1/18/Fire_Shield.png"),
+                new Boon("Chaos Aura", 10332, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/1/1b/Chaos_Armor.png"),
+                new Boon("Fire Aura", 5677, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/1/18/Fire_Shield.png"),
                 new Boon("Frost Aura", 5579, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/6/68/Frost_Aura.png"),
                 new Boon("Light Aura", 25518, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/5/5a/Light_Aura.png"),
                 new Boon("Magnetic Aura", 5684, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/5a/Magnetic_Aura.png"),
                 new Boon("Shocking Aura", 5577, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/3/31/Shocking_Aura.png"),
+                new Boon("Dark Aura", 39978, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/ef/Dark_Aura.png", 96406, ulong.MaxValue),
                 //race
                 new Boon("Take Root", 12459, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/b/b2/Take_Root.png"),
                 new Boon("Become the Bear",12426, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/7/7e/Become_the_Bear.png"),
@@ -144,31 +192,66 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Power Suit",12326, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/89/Summon_Power_Suit.png"),
                 new Boon("Reaper of Grenth", 12366, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/0/07/Reaper_of_Grenth.png"),
                 new Boon("Charrzooka",43503, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/1/17/Charrzooka.png"),
-                // BOSS
-                new Boon("Unnatural Signet",38224, BoonSource.Boss, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png"),
-                new Boon("Compromised",35096, BoonSource.Boss, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/48/Compromised.png"),
-                new Boon("Spirited Fusion",31722, BoonSource.Boss, BoonType.Intensity, 500, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/eb/Spirited_Fusion.png"),
-                new Boon("Blood Shield",34376, BoonSource.Boss, BoonType.Intensity, 18, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
-                new Boon("Blood Shield",34518, BoonSource.Boss, BoonType.Intensity, 18, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
-                new Boon("Blood Fueled",34422, BoonSource.Boss, BoonType.Intensity, 20, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Blood Fueled",34428, BoonSource.Boss, BoonType.Intensity, 20, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Flame Armor",52568, BoonSource.Boss, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Fiery Surge",52588, BoonSource.Boss, BoonType.Intensity, 99, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Fractured - Enemy",53030, BoonSource.Boss, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Fractured - Allied",52213, BoonSource.Boss, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Conjured Protection",52973 , BoonSource.Boss, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Conjured Shield",52754 , BoonSource.Boss, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Greatsword Power",52667 , BoonSource.Boss, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Conjured Barrier",53003 , BoonSource.Boss, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Scepter Lock-on",53075  , BoonSource.Boss, BoonType.Intensity, 4, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Augmented Power",52074  , BoonSource.Boss, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("CA Invul",52255 , BoonSource.Boss, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Arm Up",52430 , BoonSource.Boss, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Aquatic Detainment",52931 , BoonSource.Boss, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Aquatic Aura (Kenut)",52211 , BoonSource.Boss, BoonType.Intensity, 80, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Aquatic Aura (Nikare)",52929 , BoonSource.Boss, BoonType.Intensity, 80, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Boon("Waterlogged",51935 , BoonSource.Boss, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                //REVENANT
+                // Fractals 
+                new Boon("Rigorous Certainty", 33652, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.ForceOverride,"https://wiki.guildwars2.com/images/6/60/Desert_Carapace.png"),
+        };
+
+        private readonly static List<Boon> _gear = new List<Boon>
+        {
+                new Boon("Sigil of Concentration", 33719, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b3/Superior_Sigil_of_Concentration.png",0 , 93543),
+                new Boon("Superior Rune of the Monk", 53285, BoonSource.Mixed, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/18/Superior_Rune_of_the_Monk.png", 93543, ulong.MaxValue),
+                new Boon("Sigil of Corruption", 9374, BoonSource.Mixed, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/18/Superior_Sigil_of_Corruption.png"),
+                new Boon("Sigil of Life", 9386, BoonSource.Mixed, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a7/Superior_Sigil_of_Life.png"),
+                new Boon("Sigil of Perception", 9385, BoonSource.Mixed, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/cc/Superior_Sigil_of_Perception.png"),
+                new Boon("Sigil of Bloodlust", 9286, BoonSource.Mixed, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/f/fb/Superior_Sigil_of_Bloodlust.png"),
+                new Boon("Sigil of Bounty", 38588, BoonSource.Mixed, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/f/f8/Superior_Sigil_of_Bounty.png"),
+                new Boon("Sigil of Benevolence", 9398, BoonSource.Mixed, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/59/Superior_Sigil_of_Benevolence.png"),
+                new Boon("Sigil of Momentum", 22144, BoonSource.Mixed, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/30/Superior_Sigil_of_Momentum.png"),
+                new Boon("Sigil of the Stars", 46953, BoonSource.Mixed, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/dc/Superior_Sigil_of_the_Stars.png"),
+        };
+
+        private readonly static List<Boon> _fightSpecific = new List<Boon>
+        {
+                new Boon("Unnatural Signet",38224, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png"),
+                new Boon("Compromised",35096, BoonSource.Enemy, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/48/Compromised.png"),
+                new Boon("Xera's Boon",35025, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/0/04/Xera%27s_Boon.png"),
+                new Boon("Xera's Fury",35103, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/dd/Xera%27s_Fury.png"),
+                new Boon("Statue Fixated",34912, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/dd/Xera%27s_Fury.png"),
+                new Boon("Crimson Attunement (Orb)",35091, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/3e/Crimson_Attunement.png"),
+                new Boon("Radiant Attunement (Orb)",35109, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/68/Radiant_Attunement.png"),
+                new Boon("Magic Blast",35119, BoonSource.Enemy, BoonType.Intensity, 35, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a9/Magic_Blast_Intensity.png"),
+                new Boon("Spirited Fusion",31722, BoonSource.Enemy, BoonType.Intensity, 500, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/eb/Spirited_Fusion.png"),
+                new Boon("Blood Shield Abo",34376, BoonSource.Enemy, BoonType.Intensity, 18, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
+                new Boon("Blood Shield",34518, BoonSource.Enemy, BoonType.Intensity, 18, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
+                new Boon("Blood Fueled",34422, BoonSource.Enemy, BoonType.Intensity, 20, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Blood Fueled Abo",34428, BoonSource.Enemy, BoonType.Intensity, 20, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Flame Armor",52568, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Fiery Surge",52588, BoonSource.Enemy, BoonType.Intensity, 99, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Necrosis",47414, BoonSource.Enemy, BoonType.Intensity, 99, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/47/Ichor.png"),
+                new Boon("Fractured - Enemy",53030, BoonSource.Enemy, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Fractured - Allied",52213, BoonSource.Enemy, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Conjured Protection",52973 , BoonSource.Enemy, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Conjured Shield",52754 , BoonSource.Enemy, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Greatsword Power",52667 , BoonSource.Enemy, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Conjured Barrier",53003 , BoonSource.Enemy, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Scepter Lock-on",53075  , BoonSource.Enemy, BoonType.Intensity, 4, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Augmented Power",52074  , BoonSource.Enemy, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("CA Invul",52255 , BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Arm Up",52430 , BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Aquatic Detainment",52931 , BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Aquatic Aura (Kenut)",52211 , BoonSource.Enemy, BoonType.Intensity, 80, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Aquatic Aura (Nikare)",52929 , BoonSource.Enemy, BoonType.Intensity, 80, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Waterlogged",51935 , BoonSource.Enemy, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Boon("Protective Shadow", 31877, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/8/87/Protective_Shadow.png"),
+                new Boon("Narcolepsy", 34467, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Boon("Blue Pylon Power", 31413, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/6/6e/Blue_Pylon_Power.png"),
+                new Boon("Unbreakable", 34979, BoonSource.Enemy, BoonType.Intensity, 2, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/5/56/Xera%27s_Embrace.png"),
+                new Boon("Not the Bees!", 34434, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/0/08/Throw_Jar.png"),
+                new Boon("Targeted", 34392, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
+        };
+
+        private readonly static List<Boon> _revenant = new List<Boon>
+        {         
                 //skills
                 new Boon("Crystal Hibernation", 28262, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/4/4a/Crystal_Hibernation.png"),
                 new Boon("Vengeful Hammers", 27273, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/c/c8/Vengeful_Hammers.png"),
@@ -181,21 +264,20 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Facet of Light",27336, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/18/Facet_of_Light.png"),
                 new Boon("Facet of Light (Traited)",51690, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/18/Facet_of_Light.png"), //Lingering buff with Draconic Echo trait
                 new Boon("Infuse Light",27737, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/6/60/Infuse_Light.png"),
-                new Boon("Facet of Darkness",28036, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override,"https://wiki.guildwars2.com/images/e/e4/Facet_of_Darkness.png"),
-                new Boon("Facet of Darkness (Traited)",51695, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override,"https://wiki.guildwars2.com/images/e/e4/Facet_of_Darkness.png"),//Lingering buff with Draconic Echo trait
-                new Boon("Facet of Elements",28243, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/c/ce/Facet_of_Elements.png"),
-                new Boon("Facet of Elements (Traited)",51706, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/c/ce/Facet_of_Elements.png"),//Lingering buff with Draconic Echo trait
-                new Boon("Facet of Strength",27376, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/a/a8/Facet_of_Strength.png"),
-                new Boon("Facet of Strength (Traited)",51700, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/a/a8/Facet_of_Strength.png"),//Lingering buff with Draconic Echo trait
-                new Boon("Facet of Chaos",27983, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/c/c7/Facet_of_Chaos.png"),
-                new Boon("Facet of Chaos (Traited)",51658, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/c/c7/Facet_of_Chaos.png"),//Lingering buff with Draconic Echo trait
+                new Boon("Facet of Darkness",28036, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/e4/Facet_of_Darkness.png"),
+                new Boon("Facet of Darkness (Traited)",51695, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/e4/Facet_of_Darkness.png"),//Lingering buff with Draconic Echo trait
+                new Boon("Facet of Elements",28243, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/ce/Facet_of_Elements.png"),
+                new Boon("Facet of Elements (Traited)",51706, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/ce/Facet_of_Elements.png"),//Lingering buff with Draconic Echo trait
+                new Boon("Facet of Strength",27376, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a8/Facet_of_Strength.png"),
+                new Boon("Facet of Strength (Traited)",51700, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a8/Facet_of_Strength.png"),//Lingering buff with Draconic Echo trait
+                new Boon("Facet of Chaos",27983, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/c7/Facet_of_Chaos.png"),
                 new Boon("Facet of Nature",29275, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e9/Facet_of_Nature.png"),
                 new Boon("Facet of Nature (Traited)",51681, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e9/Facet_of_Nature.png"),//Lingering buff with Draconic Echo trait
-                new Boon("Facet of Nature-Assassin",51692, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/cd/Facet_of_Nature%E2%80%95Assassin.png"),
-                new Boon("Facet of Nature-Dragon",51674, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/47/Facet_of_Nature%E2%80%95Dragon.png"),
-                new Boon("Facet of Nature-Demon",51704, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/f/ff/Facet_of_Nature%E2%80%95Demon.png"),
-                new Boon("Facet of Nature-Dwarf",51677, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4c/Facet_of_Nature%E2%80%95Dwarf.png"),
-                new Boon("Facet of Nature-Centaur",51699, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/74/Facet_of_Nature%E2%80%95Centaur.png"),
+                new Boon("Facet of Nature-Assassin",51692, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/c/cd/Facet_of_Nature%E2%80%95Assassin.png"),
+                new Boon("Facet of Nature-Dragon",51674, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/4/47/Facet_of_Nature%E2%80%95Dragon.png"),
+                new Boon("Facet of Nature-Demon",51704, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/f/ff/Facet_of_Nature%E2%80%95Demon.png"),
+                new Boon("Facet of Nature-Dwarf",51677, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/4/4c/Facet_of_Nature%E2%80%95Dwarf.png"),
+                new Boon("Facet of Nature-Centaur",51699, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/7/74/Facet_of_Nature%E2%80%95Centaur.png"),
                 new Boon("Naturalistic Resonance", 29379, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/e/e9/Facet_of_Nature.png"),
                 //legends
                 new Boon("Legendary Centaur Stance",27972, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8a/Legendary_Centaur_Stance.png"),
@@ -206,21 +288,26 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Legendary Renegade Stance",44272, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/19/Legendary_Renegade_Stance.png"),
                 //summons
                 new Boon("Breakrazor's Bastion",44682, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/a/a7/Breakrazor%27s_Bastion.png"),
-                new Boon("Razorclaw's Rage",41016, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/73/Razorclaw%27s_Rage.png"),
+                new Boon("Razorclaw's Rage",41016, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/7/73/Razorclaw%27s_Rage.png"),
                 new Boon("Soulcleave's Summit",45026, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png"),
                 //traits
                 new Boon("Vicious Lacerations",29395, BoonSource.Revenant, BoonType.Intensity, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png"),
                 new Boon("Rising Momentum",51683, BoonSource.Revenant, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8c/Rising_Momentum.png"),
                 new Boon("Assassin's Presence", 26854, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/5/54/Assassin%27s_Presence.png"),
-                //new Boon("Expose Defenses", 48894, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),
+                new Boon("Expose Defenses", 48894, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/5c/Mutilate_Defenses.png"),
                 new Boon("Invoking Harmony",29025, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/ec/Invoking_Harmony.png"),
-                //new Boon("Selfless Amplification",30509, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),
+                new Boon("Unyielding Devotion",55044, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4f/Unyielding_Devotion.png", 96406, ulong.MaxValue),
+                //new Boon("Selfless Amplification",29025, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/23/Selfless_Amplification.png"),
                 new Boon("Hardening Persistence",28957, BoonSource.Revenant, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/0/0f/Hardening_Persistence.png"),
                 new Boon("Soothing Bastion",34136, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/0/04/Soothing_Bastion.png"),
                 new Boon("Kalla's Fervor",42883, BoonSource.Revenant, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/9e/Kalla%27s_Fervor.png"),
                 new Boon("Improved Kalla's Fervor",45614, BoonSource.Revenant, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/9e/Kalla%27s_Fervor.png"),
-                //WARRIOR
-                //skills
+        };
+
+        private readonly static List<Boon> _warrior = new List<Boon>
+        {
+                new Boon("Berserk",29502, BoonSource.Warrior, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/4/44/Berserk.png"),
+            //skills
                 new Boon("Riposte",14434, BoonSource.Warrior, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/d/de/Riposte.png"),
                 new Boon("Flames of War", 31708, BoonSource.Warrior, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/6f/Flames_of_War_%28warrior_skill%29.png"),
                 new Boon("Blood Reckoning", 29466 , BoonSource.Warrior, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d6/Blood_Reckoning.png"),
@@ -251,29 +338,35 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Furious Surge", 30204, BoonSource.Warrior, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/65/Furious.png"),
                 //new Boon("Health Gain per Adrenaline bar Spent",-1, BoonSource.Warrior, BoonType.Intensity, 3, BoonEnum.GraphOnlyBuff,RemoveType.Normal, Logic.Override),
                 new Boon("Rousing Resilience",24383, BoonSource.Warrior, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/ca/Rousing_Resilience.png"),
-                new Boon("Always Angry",34099, BoonSource.Warrior, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/63/Always_Angry.png"),
+                new Boon("Feel No Pain (Savage Instinct)",55030, BoonSource.Warrior, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4d/Savage_Instinct.png", 96406, ulong.MaxValue),
+                new Boon("Always Angry",34099, BoonSource.Warrior, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/63/Always_Angry.png", 0 , 96406),
                 new Boon("Full Counter",43949, BoonSource.Warrior, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/f/fb/Full_Counter.png"),
                 new Boon("Attacker's Insight",41963, BoonSource.Warrior, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/89/Attacker%27s_Insight.png"),
-                // GUARDIAN
+        };
+
+        private readonly static List<Boon> _guardian = new List<Boon>
+        {        
                 //skills
                 new Boon("Zealot's Flame", 9103, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/7a/Zealot%27s_Flame.png"),
                 new Boon("Purging Flames",21672, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/28/Purging_Flames.png"),
                 new Boon("Litany of Wrath",21665, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4a/Litany_of_Wrath.png"),
                 new Boon("Renewed Focus",9255, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/10/Renewed_Focus.png"),
-                new Boon("Ashes of the Just",41957, BoonSource.Guardian, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/6d/Epilogue-_Ashes_of_the_Just.png"),
+                new Boon("Ashes of the Just",41957, BoonSource.Guardian, BoonType.Intensity, 25, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/6/6d/Epilogue-_Ashes_of_the_Just.png"),
                 new Boon("Eternal Oasis",44871, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/5/5f/Epilogue-_Eternal_Oasis.png"),
                 new Boon("Unbroken Lines",43194, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/d/d8/Epilogue-_Unbroken_Lines.png"),
                 //signets
                 new Boon("Signet of Resolve",9220, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/75/Signet_of_Resolve.png"),
+                new Boon("Signet of Resolve (Shared)", 46554, BoonSource.Guardian, BoonType.Intensity, 99, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/7/75/Signet_of_Resolve.png"),
                 new Boon("Bane Signet",9092, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/56/Bane_Signet.png"),
-                new Boon("Bane Signet",9240, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/56/Bane_Signet.png"),
+                new Boon("Bane Signet (PI)",9240, BoonSource.Guardian, BoonType.Intensity, 99, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/5/56/Bane_Signet.png"),
                 new Boon("Signet of Judgment",9156, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/f/fe/Signet_of_Judgment.png"),
-                new Boon("Signet of Judgment",9239, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/f/fe/Signet_of_Judgment.png"),
+                new Boon("Signet of Judgment (PI)",9239, BoonSource.Guardian, BoonType.Intensity, 99, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/f/fe/Signet_of_Judgment.png"),
                 new Boon("Signet of Mercy",9162, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/37/Signet_of_Mercy.png"),
-                new Boon("Signet of Mercy",9238, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/37/Signet_of_Mercy.png"),
+                new Boon("Signet of Mercy (PI)",9238, BoonSource.Guardian, BoonType.Intensity, 99, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/3/37/Signet_of_Mercy.png"),
                 new Boon("Signet of Wrath",9100, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/18/Signet_of_Wrath.png"),
-                new Boon("Signet of Wrath",9237, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/18/Signet_of_Wrath.png"),
+                new Boon("Signet of Wrath (PI)",9237, BoonSource.Guardian, BoonType.Intensity, 99, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/1/18/Signet_of_Wrath.png"),
                 new Boon("Signet of Courage",29633, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/5d/Signet_of_Courage.png"),
+                new Boon("Signet of Courage (Shared)",43487 , BoonSource.Guardian, BoonType.Intensity, 99, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/5/5d/Signet_of_Courage.png"),
                 //virtues
                 new Boon("Virtue of Justice", 9114, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/10/Virtue_of_Justice.png"),
                 new Boon("Spear of Justice", 29632, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/f/f1/Spear_of_Justice.png"),
@@ -290,8 +383,10 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Battle Presence", 17046, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/2/27/Battle_Presence.png"),
                 //new Boon("Force of Will",29485, BoonSource.Guardian, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),//not sure if intensity
                 new Boon("Quickfire",45123, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d6/Quickfire.png"),
-                //ENGINEER
-                //skills
+        };
+
+        private readonly static List<Boon> _engineer = new List<Boon>
+        {       //skills
                 new Boon("Static Shield",6055, BoonSource.Engineer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/90/Static_Shield.png"),
                 new Boon("Absorb",6056, BoonSource.Engineer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8a/Absorb.png"),
                 new Boon("A.E.D.",21660, BoonSource.Engineer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e6/A.E.D..png"),
@@ -317,7 +412,12 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Heat Therapy",40694, BoonSource.Engineer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/34/Heat_Therapy.png"),
                 new Boon("Overheat", 40397, BoonSource.Engineer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4b/Overheat.png"),
                 new Boon("Thermal Vision", 51389, BoonSource.Engineer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8a/Skilled_Marksman.png"),
-                //RANGER
+
+        };
+
+        private readonly static List<Boon> _ranger = new List<Boon>
+        {
+
                 new Boon("Celestial Avatar", 31508, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/59/Celestial_Avatar.png"),
                 new Boon("Counterattack",14509, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/c1/Counterattack.png"),
                 //signets
@@ -328,25 +428,28 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Signet of Stone (Active)",12543, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/63/Signet_of_Stone.png"),
                 new Boon("Signet of the Hunt (Active)",12541, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/df/Signet_of_the_Hunt.png"),
                 //spirits
-                // new Boon("Water Spirit", 50386, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/0/06/Water_Spirit.png/33px-Water_Spirit.png"),
-                new Boon("Frost Spirit", 12544, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png"),
-                new Boon("Sun Spirit", 12540, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/d/dd/Sun_Spirit.png/33px-Sun_Spirit.png"),
-                new Boon("Stone Spirit", 12547, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/3/35/Stone_Spirit.png/20px-Stone_Spirit.png"),
-                //new Boon("Storm Spirit", 50381, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/2/25/Storm_Spirit.png/30px-Storm_Spirit.png"),
+                // new Boon("Water Spirit (old)", 50386, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/0/06/Water_Spirit.png/33px-Water_Spirit.png"),
+                new Boon("Frost Spirit", 12544, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png", 0, 88541),
+                new Boon("Sun Spirit", 12540, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/d/dd/Sun_Spirit.png/33px-Sun_Spirit.png", 0, 88541),
+                new Boon("Stone Spirit", 12547, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/3/35/Stone_Spirit.png/20px-Stone_Spirit.png", 0, 88541),
+                //new Boon("Storm Spirit (old)", 50381, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/2/25/Storm_Spirit.png/30px-Storm_Spirit.png"),
                 //reworked
-                new Boon("Water Spirit", 50386, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/0/06/Water_Spirit.png/33px-Water_Spirit.png"),
-                new Boon("Frost Spirit", 50421, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png"),
-                new Boon("Sun Spirit", 50413, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/d/dd/Sun_Spirit.png/33px-Sun_Spirit.png"),
-                new Boon("Stone Spirit", 50415, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/3/35/Stone_Spirit.png/20px-Stone_Spirit.png"),
-                new Boon("Storm Spirit", 50381, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/2/25/Storm_Spirit.png/30px-Storm_Spirit.png"),
+                new Boon("Water Spirit", 50386, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/0/06/Water_Spirit.png/33px-Water_Spirit.png", 88541, ulong.MaxValue),
+                new Boon("Frost Spirit", 50421, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png", 88541, ulong.MaxValue),
+                new Boon("Sun Spirit", 50413, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/d/dd/Sun_Spirit.png/33px-Sun_Spirit.png", 88541, ulong.MaxValue),
+                new Boon("Stone Spirit", 50415, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/3/35/Stone_Spirit.png/20px-Stone_Spirit.png", 88541, ulong.MaxValue),
+                new Boon("Storm Spirit", 50381, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/2/25/Storm_Spirit.png/30px-Storm_Spirit.png", 88541, ulong.MaxValue),
                 //skills
                 new Boon("Attack of Opportunity",12574, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/47/Moment_of_Clarity.png"),
                 new Boon("Call of the Wild",36781, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8d/Call_of_the_Wild.png"),
-                new Boon("Strength of the pack!",12554, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4b/%22Strength_of_the_Pack%21%22.png"),
+                new Boon("Strength of the Pack!",12554, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4b/%22Strength_of_the_Pack%21%22.png"),
                 new Boon("Sic 'Em!",33902, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png"),
                 new Boon("Sharpening Stones",12536, BoonSource.Ranger, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/af/Sharpening_Stone.png"),
                 new Boon("Ancestral Grace", 31584, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4b/Ancestral_Grace.png"),
-                new Boon("Glyph of Empowerment", 31803, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/f/f0/Glyph_of_Empowerment.png/33px-Glyph_of_Empowerment.png"),
+                new Boon("Glyph of Empowerment", 31803, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/d/d7/Glyph_of_the_Stars.png", 0 , 96406),
+                new Boon("Glyph of Unity", 31385, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b1/Glyph_of_Unity.png"),
+                new Boon("Glyph of Unity (CA)", 31556, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/4/4c/Glyph_of_Unity_%28Celestial_Avatar%29.png"),
+                new Boon("Glyph of the Stars", 55048, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/d/d7/Glyph_of_the_Stars.png", 96406, ulong.MaxValue),
                 new Boon("Dolyak Stance",41815, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/7/71/Dolyak_Stance.png"),
                 new Boon("Griffon Stance",46280, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/9/98/Griffon_Stance.png"),
                 new Boon("Moa Stance",45038, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/6/66/Moa_Stance.png"),
@@ -358,7 +461,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Spotter", 14055, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/b/b0/Spotter.png"),
                 new Boon("Opening Strike",13988, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/44/Opening_Strike_%28effect%29.png"),
                 new Boon("Quick Draw",29703, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/39/Quick_Draw.png"),
-                new Boon("Light on your feet",30673, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/22/Light_on_your_Feet.png"),
+                new Boon("Light on your Feet",30673, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/22/Light_on_your_Feet.png"),
                 new Boon("Natural Mender",30449, BoonSource.Ranger, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e9/Natural_Mender.png"),
                 new Boon("Lingering Light",32248, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/5d/Lingering_Light.png"),
                 new Boon("Deadly",44932, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/94/Deadly_%28Archetype%29.png"),
@@ -368,7 +471,10 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Stout",40272, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/80/Stout_%28Archetype%29.png"),
                 new Boon("Unstoppable Union",44439, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b2/Unstoppable_Union.png"),
                 new Boon("Twice as Vicious",45600, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/0/00/Twice_as_Vicious.png"),
-                //THIEF
+        };
+
+        private readonly static List<Boon> _thief = new List<Boon>
+        {
                 //signets
                 new Boon("Signet of Malice",13049, BoonSource.Thief, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/ae/Signet_of_Malice.png"),
                 new Boon("Assassin's Signet (Passive)",13047, BoonSource.Thief, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/23/Assassin%27s_Signet.png"),
@@ -376,7 +482,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Infiltrator's Signet",13063, BoonSource.Thief, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8e/Infiltrator%27s_Signet.png"),
                 new Boon("Signet of Agility",13061, BoonSource.Thief, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/1d/Signet_of_Agility.png"),
                 new Boon("Signet of Shadows",13059, BoonSource.Thief, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/17/Signet_of_Shadows.png"),
-                //venoms
+                //venoms // src is always the user, makes generation data useless
                 new Boon("Skelk Venom",21780, BoonSource.Thief, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/75/Skelk_Venom.png"),
                 new Boon("Ice Drake Venom",13095, BoonSource.Thief, BoonType.Intensity, 4, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/7b/Ice_Drake_Venom.png"),
                 new Boon("Devourer Venom", 13094, BoonSource.Thief, BoonType.Intensity, 2, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4d/Devourer_Venom.png"),
@@ -400,31 +506,13 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Lotus Training", 32200, BoonSource.Thief, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/ea/Lotus_Training.png"),
                 new Boon("Unhindered Combatant", 32931, BoonSource.Thief, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a1/Unhindered_Combatant.png"),
                 new Boon("Bounding Dodger", 33162, BoonSource.Thief, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/30/Bounding_Dodger.png"),
-                //MESMER
-                //signets
-                new Boon("Signet of the Ether", 21751, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/7a/Signet_of_the_Ether.png"),
-                new Boon("Signet of Domination",10231, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/3b/Signet_of_Domination.png"),
-                new Boon("Signet of Illusions",10246, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/ce/Signet_of_Illusions.png"),
-                new Boon("Signet of Inspiration",10235, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/ed/Signet_of_Inspiration.png"),
-                new Boon("Signet of Midnight",10233, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/24/Signet_of_Midnight.png"),
-                new Boon("Signet of Humility",30739, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b5/Signet_of_Humility.png"),
-                //skills
-                new Boon("Distortion",10243, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/22/Distortion.png"),
-                new Boon("Blur", 10335 , BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/22/Distortion.png"),
-                new Boon("Mirror",10357, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b8/Mirror.png"),
-                new Boon("Echo",29664, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/ce/Echo.png"),
-                //new Boon("Illusion of Life",-1, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Normal, Logic.Override),
-                //new Boon("Time Block",30134, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff), What is this?
-                new Boon("Time Echo",29582, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8d/Deja_Vu.png"),
-                new Boon("Illusionary Counter",10278, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e5/Illusionary_Counter.png"),
-                new Boon("Time Anchored",30136, BoonSource.Mesmer, BoonType.Duration, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/db/Continuum_Split.png"),
-                //traits
-                new Boon("Fencer's Finesse", 30426 , BoonSource.Mesmer, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e7/Fencer%27s_Finesse.png"),
-                new Boon("Illusionary Defense",49099, BoonSource.Mesmer, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e0/Illusionary_Defense.png"),
-                new Boon("Compounding Power",49058, BoonSource.Mesmer, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e5/Compounding_Power.png"),
-                new Boon("Phantasmal Force", 44691 , BoonSource.Mesmer, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/5f/Mistrust.png"),
-                new Boon("Mirage Cloak",40408, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a5/Mirage_Cloak_%28effect%29.png"),
-                //NECROMANCER
+                new Boon("Weakening Strikes", 34081, BoonSource.Thief, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/7c/Weakening_Strikes.png", 96406, ulong.MaxValue),
+
+        };
+
+        private readonly static List<Boon> _necromancer = new List<Boon>
+        {
+            
                 //forms
                 new Boon("Lich Form",10631, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/ab/Lich_Form.png"),
                 new Boon("Death Shroud", 790, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/f/f5/Death_Shroud.png"),
@@ -450,18 +538,71 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Vampiric Aura", 30285, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/d/da/Vampiric_Presence.png"),
                 new Boon("Last Rites",29726, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/1/1a/Last_Rites_%28effect%29.png"),
                 new Boon("Sadistic Searing",43626, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/dd/Sadistic_Searing.png"),
-                //ELEMENTALIST
+                new Boon("Soul Barbs",53489, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/bd/Soul_Barbs.png"),
+        };
+
+        private readonly static List<Boon> _mesmer = new List<Boon>
+        {
+            
+                //signets
+                new Boon("Signet of the Ether", 21751, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/7a/Signet_of_the_Ether.png"),
+                new Boon("Signet of Domination",10231, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/3b/Signet_of_Domination.png"),
+                new Boon("Signet of Illusions",10246, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/ce/Signet_of_Illusions.png"),
+                new Boon("Signet of Inspiration",10235, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/ed/Signet_of_Inspiration.png"),
+                new Boon("Signet of Midnight",10233, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/24/Signet_of_Midnight.png"),
+                new Boon("Signet of Humility",30739, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b5/Signet_of_Humility.png"),
+                //skills
+                new Boon("Distortion",10243, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/22/Distortion.png"),
+                new Boon("Blur", 10335 , BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/22/Distortion.png"),
+                new Boon("Mirror",10357, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b8/Mirror.png"),
+                new Boon("Echo",29664, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/ce/Echo.png"),
+                //new Boon("Illusion of Life",-1, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Normal, Logic.Override),
+                //new Boon("Time Block",30134, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff), What is this?
+                new Boon("Time Echo",29582, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8d/Deja_Vu.png"),
+                new Boon("Illusionary Counter",10278, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e5/Illusionary_Counter.png"),
+                new Boon("Time Anchored",30136, BoonSource.Mesmer, BoonType.Duration, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/db/Continuum_Split.png"),
+                //traits
+                new Boon("Fencer's Finesse", 30426 , BoonSource.Mesmer, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e7/Fencer%27s_Finesse.png"),
+                new Boon("Illusionary Defense",49099, BoonSource.Mesmer, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e0/Illusionary_Defense.png"),
+                new Boon("Compounding Power",49058, BoonSource.Mesmer, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e5/Compounding_Power.png"),
+                new Boon("Phantasmal Force", 44691 , BoonSource.Mesmer, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/5f/Mistrust.png"),
+                new Boon("Mirage Cloak",40408, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a5/Mirage_Cloak_%28effect%29.png"),
+        };
+
+        private readonly static List<Boon> _elementalist = new List<Boon>
+        {
+            
                 //signets
                 new Boon("Signet of Restoration",739, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/dd/Signet_of_Restoration.png"),
                 new Boon("Signet of Air",5590, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/92/Signet_of_Air.png"),
                 new Boon("Signet of Earth",5592, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/ce/Signet_of_Earth.png"),
                 new Boon("Signet of Fire",5544, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b0/Signet_of_Fire.png"),
                 new Boon("Signet of Water",5591, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/f/fd/Signet_of_Water.png"),
-                //attunements
+                ///attunements
+                // Fire
                 new Boon("Fire Attunement", 5585, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png"),
+                new Boon("Dual Fire Attunement", WeaverHelper.FireDual, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png"),
+                new Boon("Fire Water Attunement", WeaverHelper.FireWater, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://i.imgur.com/ihqKuUJ.png"),
+                new Boon("Fire Air Attunement", WeaverHelper.FireAir, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://i.imgur.com/kKFJ8cT.png"),
+                new Boon("Fire Earth Attunement", WeaverHelper.FireEarth, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://i.imgur.com/T4187h0.png"),
+                // Water
                 new Boon("Water Attunement", 5586, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/31/Water_Attunement.png"),
+                new Boon("Dual Water Attunement", WeaverHelper.WaterDual, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/31/Water_Attunement.png"),
+                new Boon("Water Fire Attunement", WeaverHelper.WaterFire, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://i.imgur.com/vMUkzxH.png"),
+                new Boon("Water Air Attunement", WeaverHelper.WaterAir, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://i.imgur.com/5G5OFud.png"),
+                new Boon("Water Earth Attunement", WeaverHelper.WaterEarth, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://i.imgur.com/QKEtF2P.png"),
+                // Air
                 new Boon("Air Attunement", 5575, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/91/Air_Attunement.png"),
+                new Boon("Dual Air Attunement", WeaverHelper.AirDual, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/91/Air_Attunement.png"),
+                new Boon("Air Fire Attunement", WeaverHelper.AirFire, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://i.imgur.com/vf68GJm.png"),
+                new Boon("Air Water Attunement", WeaverHelper.AirWater, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://i.imgur.com/Tuj5Sro.png"),
+                new Boon("Air Earth Attunement", WeaverHelper.AirEarth, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://i.imgur.com/lHcOSwk.png"),
+                // Earth
                 new Boon("Earth Attunement", 5580, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a8/Earth_Attunement.png"),
+                new Boon("Dual Earth Attunement", WeaverHelper.EarthDual, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a8/Earth_Attunement.png"),
+                new Boon("Earth Fire Attunement", WeaverHelper.EarthFire, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://i.imgur.com/aJWvE0I.png"),
+                new Boon("Earth Water Attunement", WeaverHelper.EarthWater, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://i.imgur.com/jtjj2TG.png"),
+                new Boon("Earth Air Attunement", WeaverHelper.EarthAir, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://i.imgur.com/4Eti7Pb.png"),
                 //forms
                 new Boon("Mist Form",5543, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/1b/Mist_Form.png"),
                 new Boon("Ride the Lightning",5588, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/59/Ride_the_Lightning.png"),
@@ -476,7 +617,9 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Conjure Fiery Greatsword", 15792, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/e/e2/Conjure_Fiery_Greatsword.png"),
                 //skills
                 new Boon("Arcane Power",5582, BoonSource.Elementalist, BoonType.Intensity, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/72/Arcane_Power.png"),
-                new Boon("Arcane Shield",5640, BoonSource.Elementalist, BoonType.Intensity, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/wiki/File:Arcane_Shield.png"),
+                new Boon("Primordial Stance",42086, BoonSource.Elementalist, BoonType.Intensity, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/3a/Primordial_Stance.png"),
+                new Boon("Unravel",42683, BoonSource.Elementalist, BoonType.Intensity, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4b/Unravel.png"),
+                new Boon("Arcane Shield",5640, BoonSource.Elementalist, BoonType.Intensity, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/9d/Arcane_Shield.png"),
                 new Boon("Renewal of Fire",5764, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/63/Renewal_of_Fire.png"),
                 new Boon("Glyph of Elemental Power (Fire)",5739, BoonSource.Elementalist, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/f/f2/Glyph_of_Elemental_Power_%28fire%29.png"),
                 new Boon("Glyph of Elemental Power (Water)",5741, BoonSource.Elementalist, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/bf/Glyph_of_Elemental_Power_%28water%29.png"),
@@ -487,13 +630,18 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Magnetic Wave",15794, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/32/Magnetic_Wave.png"),
                 new Boon("Obsidian Flesh",5667, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/c1/Obsidian_Flesh.png"),
                 new Boon("Grinding Stones",51658, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/3d/Grinding_Stones.png"),
+                new Boon("Static Charge",31487, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/4/4b/Overload_Air.png"),
                 //traits
                 new Boon("Harmonious Conduit",31353, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b3/Harmonious_Conduit.png"),
                 new Boon("Fresh Air",34241, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d8/Fresh_Air.png"),
                 new Boon("Soothing Mist", 5587, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/f/f7/Soothing_Mist.png"),
                 new Boon("Weaver's Prowess",42061, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/75/Weaver%27s_Prowess.png"),
                 new Boon("Elements of Rage",42416, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a2/Elements_of_Rage.png"),
-                // FOODS
+        };
+
+        private readonly static List<Boon> _consumables = new List<Boon>
+        {
+
                 new Boon("Malnourished",46587, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/6/67/Malnourished.png"),
                 new Boon("Plate of Truffle Steak",9769, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/4/4c/Plate_of_Truffle_Steak.png"),
                 new Boon("Bowl of Sweet and Spicy Butternut Squash Soup",17825, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/d/df/Bowl_of_Sweet_and_Spicy_Butternut_Squash_Soup.png"),
@@ -523,6 +671,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Steamed Red Dumpling",26536, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/8/8c/Steamed_Red_Dumpling.png"),
                 new Boon("Saffron Stuffed Mushroom",-1, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/e/e2/Saffron_Stuffed_Mushroom.png"), //same as Karka Egg Omelet
                 new Boon("Soul Pastry",53222, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/2/2c/Soul_Pastry.png"),
+                new Boon("Bowl of Fire Meat Chili",10119, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/b/ba/Bowl_of_Fire_Meat_Chili.png"),
                 // UTILITIES 
                 // 1h versions have the same ID as 30 min versions 
                 new Boon("Diminished",46668, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/7/71/Diminished.png"),
@@ -538,10 +687,13 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Toxic Focusing Crystal",21828, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/d/de/Toxic_Focusing_Crystal.png"),
                 new Boon("Magnanimous Maintenance Oil",38605, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/5/53/Magnanimous_Maintenance_Oil.png"),
                 new Boon("Peppermint Oil",34187, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/b/bc/Peppermint_Oil.png"),
+                new Boon("Potent Lucent Oil",53374, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/1/16/Potent_Lucent_Oil.png"),
+                new Boon("Enhanced Lucent Oil",53304, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/e/ee/Enhanced_Lucent_Oil.png"),
                 new Boon("Furious Maintenance Oil",25881, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"),
                 new Boon("Furious Sharpening Stone",25882, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Superior_Sharpening_Stone.png"),
                 new Boon("Bountiful Maintenance Oil",25879, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"),
                 new Boon("Tin of Fruitcake",34211, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/a/af/Tin_of_Fruitcake.png"),
+                new Boon("Holographic Super Cheese",50320, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/f/fa/Holographic_Super_Cheese.png"),
                 new Boon("Writ of Masterful Malice",33836, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/2/20/Writ_of_Masterful_Malice.png"),
                 new Boon("Writ of Masterful Strength",33297, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/2/2b/Writ_of_Masterful_Strength.png"),
                 new Boon("Powerful Potion of Flame Legion Slaying",9925, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/e/e2/Powerful_Potion_of_Flame_Legion_Slaying.png"),
@@ -562,79 +714,46 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Powerful Potion of Outlaw Slaying",9933, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/e/ec/Powerful_Potion_of_Outlaw_Slaying.png"),
                 new Boon("Powerful Potion of Ice Brood Slaying",9861, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/0/0d/Powerful_Potion_of_Ice_Brood_Slaying.png"),
                 // new Boon("Hylek Maintenance Oil",9968, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"), when wiki says "same stats" its literally the same buff
+                // Fractals 
+                new Boon("Fractal Mobility", 33024, BoonSource.Mixed, BoonType.Intensity, 5, BoonNature.Consumable, Logic.ForceOverride,"https://wiki.guildwars2.com/images/thumb/2/22/Mist_Mobility_Potion.png/40px-Mist_Mobility_Potion.png"),
+                new Boon("Fractal Defensive", 32134, BoonSource.Mixed, BoonType.Intensity, 5, BoonNature.Consumable, Logic.ForceOverride,"https://wiki.guildwars2.com/images/thumb/e/e6/Mist_Defensive_Potion.png/40px-Mist_Defensive_Potion.png"),
+                new Boon("Fractal Offensive", 32473, BoonSource.Mixed, BoonType.Intensity, 5, BoonNature.Consumable, Logic.ForceOverride,"https://wiki.guildwars2.com/images/thumb/8/8d/Mist_Offensive_Potion.png/40px-Mist_Offensive_Potion.png"),
         };
 
+        public static List<List<Boon>> AllBoons = new List<List<Boon>>()
+            {   
+                _boons,
+                _conditions,
+                _commons,
+                _gear,
+                _consumables,
+                _fightSpecific,
+                _revenant,
+                _warrior,
+                _guardian,
+                _ranger,
+                _thief,
+                _engineer,
+                _mesmer,
+                _necromancer,
+                _elementalist
+        };
 
-        public static Dictionary<long, Boon> BoonsByIds = _allBoons.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.First());
-        public static Dictionary<BoonNature, List<Boon>> BoonsByNature = _allBoons.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => x.ToList());
-        public static Dictionary<BoonSource, List<Boon>> BoonsBySource = _allBoons.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => x.ToList());
-        public static Dictionary<BoonType, List<Boon>> BoonsByType = _allBoons.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
-        public static Dictionary<int, List<Boon>> BoonsByCapacity = _allBoons.GroupBy(x => x.Capacity).ToDictionary(x => x.Key, x => x.ToList());
+        private readonly static Dictionary<string, List<Boon>> _allBoonsByName = AllBoons.SelectMany(x => x).GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList());
 
-        // debug
-        public static List<Boon> GetBoonByName(string name)
+        // For damage modifiers
+        public static Boon GetBoonByName(string name, ulong build)
         {
-            return _allBoons.Where(x => x.Name == name).ToList();
-        }
-
-        // get everything
-        public static List<Boon> GetAll()
-        {
-            return _allBoons;
-        }
-
-        // Conditions
-        public static List<Boon> GetCondiBoonList()
-        {
-            return BoonsByNature[BoonNature.Condition];
-        }
-        // Boons
-        public static List<Boon> GetBoonList()
-        {
-            return BoonsByNature[BoonNature.Boon];
-        }
-        // Shareable buffs
-        public static List<Boon> GetOffensiveTableList()
-        {
-            return BoonsByNature[BoonNature.OffensiveBuffTable];
-        }
-        public static List<Boon> GetDefensiveTableList()
-        {
-            return BoonsByNature[BoonNature.DefensiveBuffTable];
-        }
-        // Consumables (Food and Utility)
-        public static List<Boon> GetConsumableList()
-        {
-            return BoonsByNature[BoonNature.Consumable];
-        }
-        // Boss
-        public static List<Boon> GetBossBoonList()
-        {
-            return BoonsBySource[BoonSource.Boss];
-        }
-        // All buffs
-        public static List<Boon> GetAllBuffList()
-        {
-            List<Boon> res = new List<Boon>();
-            // correct order for the boon graph
-            res.AddRange(BoonsByNature[BoonNature.Boon]);
-            res.AddRange(BoonsByNature[BoonNature.DefensiveBuffTable]);
-            res.AddRange(BoonsByNature[BoonNature.OffensiveBuffTable]);
-            res.AddRange(BoonsByNature[BoonNature.GraphOnlyBuff]);
-            return res;
-        }
-        // Non shareable buffs
-        public static List<Boon> GetRemainingBuffsList()
-        {
-            return BoonsByNature[BoonNature.GraphOnlyBuff];
-        }
-        private static List<Boon> GetRemainingBuffsList(BoonSource source)
-        {
-            return BoonsBySource[source].Where(x => x.Nature == BoonNature.GraphOnlyBuff).ToList();
-        }
-        public static List<Boon> GetRemainingBuffsList(String source)
-        {
-            return GetRemainingBuffsList(ProfToEnum(source));
+            if (_allBoonsByName.TryGetValue(name, out var list))
+            {
+                List<Boon> subList = list.Where(x => x.MaxBuild >= build).ToList();
+                if (subList.Count != 1)
+                {
+                    throw new InvalidOperationException("No boon with correct build");
+                }
+                return subList[0];
+            }
+            throw new InvalidOperationException("No boon with correct name");
         }
 
         public BoonSimulator CreateSimulator(ParsedLog log)
@@ -651,15 +770,29 @@ namespace LuckParser.Models.ParseModels
                 case Logic.ForceOverride:
                     logicToUse = new ForceOverrideLogic();
                     break;
-                default:
+                case Logic.Override:
                     logicToUse = new OverrideLogic();
                     break;
+                default:
+                    throw new InvalidOperationException("Cannot simulate unknown/custom buffs");
             }
             switch (Type)
             {
                 case BoonType.Intensity: return new BoonSimulatorIntensity(Capacity, log, logicToUse);
                 case BoonType.Duration: return new BoonSimulatorDuration(Capacity, log, logicToUse);
-                default: throw new InvalidOperationException();
+                default: throw new InvalidOperationException("Cannot simulate typeless boons");
+            }
+        }
+
+        public static BoonSourceFinder GetBoonSourceFinder(ulong version, BoonsContainer boons)
+        {
+            if (version > 95112)
+            {
+                return new BoonSourceFinder05032019(boons);
+            }
+            else
+            {
+                return new BoonSourceFinder11122018(boons);
             }
         }
     }

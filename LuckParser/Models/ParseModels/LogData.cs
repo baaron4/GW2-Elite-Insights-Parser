@@ -4,17 +4,25 @@ namespace LuckParser.Models.ParseModels
 {
     public class LogData
     {
+        public static readonly string DefaultTimeValue = "MISSING";
+
         // Fields
         public readonly string BuildVersion;
+        public ulong GW2Version { get; set; }
         public string PoV { get; private set; } = "N/A";
-        public string LogStart { get; private set; } = "yyyy-MM-dd HH:mm:ss z";
-        public string LogEnd { get; private set; } = "yyyy-MM-dd HH:mm:ss z";
-       // private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+        private readonly string _dateFormat = "yyyy-MM-dd HH:mm:ss zz";
+        public string LogStart { get; private set; }
+        public long LogStartUnixSeconds { get; private set; }
+        public string LogEnd { get; private set; }
+        public long LogEndUnixSeconds { get; private set; }
+        // private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 
         // Constructors
         public LogData(string buildVersion)
         {
             BuildVersion = buildVersion;
+            LogStart = DefaultTimeValue;
+            LogEnd = DefaultTimeValue;
            // this.sdf.setTimeZone(TimeZone.getDefault());
         }
         
@@ -24,18 +32,23 @@ namespace LuckParser.Models.ParseModels
             PoV = pov.Substring(0, pov.LastIndexOf('\0'));
         }
 
-        public void SetLogStart(long unixSeconds)
+        private string GetDateTime(long unixSeconds)
         {
             DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             dtDateTime = dtDateTime.AddSeconds(unixSeconds).ToLocalTime();
-            LogStart = dtDateTime.ToString("yyyy-MM-dd HH:mm:ss z");
+            return dtDateTime.ToString(_dateFormat);
+        }
+
+        public void SetLogStart(long unixSeconds)
+        {
+            LogStartUnixSeconds = unixSeconds;
+            LogStart = GetDateTime(unixSeconds);
         }
 
         public void SetLogEnd(long unixSeconds)
         {
-            DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            dtDateTime = dtDateTime.AddSeconds(unixSeconds).ToLocalTime();
-            LogEnd = dtDateTime.ToString("yyyy-MM-dd HH:mm:ss z");
+            LogEndUnixSeconds = unixSeconds;
+            LogEnd = GetDateTime(unixSeconds);
         }
     }
 }

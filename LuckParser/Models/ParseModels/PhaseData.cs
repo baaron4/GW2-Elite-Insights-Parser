@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Parser;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,55 +9,57 @@ namespace LuckParser.Models.ParseModels
     {
         public long Start { get; private set; }
         public long End { get; private set; }
+        public long DurationInS { get; private set; }
+        public long DurationInMS { get; private set; }
+        public long DurationInM { get; private set; }
         public string Name { get; set; }
-        public bool DrawStart { get; set; }
-        public bool DrawEnd { get; set; }
-        public bool DrawArea { get; set; }
-        public List<Boss> Targets { get; } = new List<Boss>();
+        public bool DrawStart { get; set; } = true;
+        public bool DrawEnd { get; set; } = true;
+        public bool DrawArea { get; set; } = true;
+        public List<Target> Targets { get; } = new List<Target>();
 
         public PhaseData(long start, long end)
         {
             Start = start;
             End = end;
-        }
-        
-        public long GetDuration(string format = "ms")
-        {
-            switch (format)
-            {
-                case "m":
-                    return (End - Start) / 60000;
-                case "s":
-                    return (End - Start) / 1000;
-                default:
-                    return (End - Start);
-            }
-
+            DurationInM = (End - Start) / 60000;
+            DurationInMS = (End - Start);
+            DurationInS = (End - Start) / 1000;
         }
 
-        public bool InInterval(long time, long offset = 0)
+        public bool InInterval(long time)
         {
-            return Start <= time - offset && time - offset <= End;
+            return Start <= time && time <= End;
         }
 
         public void OverrideStart(long start)
         {
             Start = start;
+            DurationInM = (End - Start) / 60000;
+            DurationInMS = (End - Start);
+            DurationInS = (End - Start) / 1000;
         }
 
         public void OverrideEnd(long end)
         {
             End = end;
+            DurationInM = (End - Start) / 60000;
+            DurationInMS = (End - Start);
+            DurationInS = (End - Start) / 1000;
         }
 
-        public void OverrideTimes(long offset, CombatData combatData)
+        /// <summary>
+        /// Override times in a manner that the phase englobes the targets present in the phase (if possible)
+        /// </summary>
+        /// <param name="log"></param>
+        public void OverrideTimes(ParsedLog log)
         {
             if (Targets.Count > 0)
             {
-                List<CombatItem> deathEvents = combatData.GetStatesData(DataModels.ParseEnum.StateChange.ChangeDead);
-                Start = Math.Max(Start, Targets.Min(x => x.FirstAware)- offset);
+                List<CombatItem> deathEvents = log.CombatData.GetStates(ParseEnum.StateChange.ChangeDead);
+                Start = Math.Max(Start, log.FightData.ToFightSpace(Targets.Min(x => x.FirstAware)));
                 long end = long.MinValue;
-                foreach (Boss target in Targets)
+                foreach (Target target in Targets)
                 {
                     long dead = target.LastAware;
                     CombatItem died = deathEvents.FirstOrDefault(x => x.SrcInstid == target.InstID && x.Time >= target.FirstAware && x.Time <= target.LastAware);
@@ -64,10 +67,13 @@ namespace LuckParser.Models.ParseModels
                     {
                         dead = died.Time;
                     }
-                    end = Math.Max(end, dead);
+                    end = Math.Max(end, log.FightData.ToFightSpace(dead));
                 }
-                End = Math.Min(End, end - offset);
+                End = Math.Min(Math.Min(End, end), log.FightData.FightDuration);
             }
+            DurationInM = (End - Start) / 60000;
+            DurationInMS = (End - Start);
+            DurationInS = (End - Start) / 1000;
         }
     }
 }

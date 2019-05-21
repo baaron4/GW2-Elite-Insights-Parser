@@ -92,13 +92,13 @@ namespace LuckParser.Controllers
 
                 if (responseContent != null)
                 {
-                    Task<String> stringContentsTask = responseContent.ReadAsStringAsync();
-                    String stringContents = stringContentsTask.Result;
+                    Task<string> stringContentsTask = responseContent.ReadAsStringAsync();
+                    string stringContents = stringContentsTask.Result;
                     int first = stringContents.IndexOf('{');
                     int length = stringContents.LastIndexOf('}') - first + 1;
-                    String JSONFormat = stringContents.Substring(first, length);
+                    string JSONFormat = stringContents.Substring(first, length);
                     DPSReportsResponseItem item = JsonConvert.DeserializeObject<DPSReportsResponseItem>(JSONFormat);
-                    String logLink = item.permalink;
+                    string logLink = item.permalink;
                     return logLink;
                 }
             }

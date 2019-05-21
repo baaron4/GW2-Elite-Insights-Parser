@@ -1,4 +1,5 @@
-﻿using LuckParser.Models.DataModels;
+﻿using LuckParser.Parser;
+using LuckParser.Models.Logic;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -9,19 +10,12 @@ namespace LuckParser.Models.ParseModels
     {
         // Fields
         private List<PhaseData> _phases = new List<PhaseData>();
-        public readonly List<long> PhaseData = new List<long>();
         public ushort ID { get; }
         private readonly bool _requirePhases;
-        public readonly BossLogic Logic;
+        public readonly FightLogic Logic;
         public long FightStart { get; set; }
         public long FightEnd { get; set; } = long.MaxValue;
-        public long FightDuration
-        {
-            get
-            {
-                return FightEnd - FightStart;
-            }
-        }
+        public long FightDuration => FightEnd - FightStart;
         public bool Success { get; set; }
         public string Name => Logic.GetFightName() + (_isCM == 1 ? " CM" : "") ;
         private int _isCM = -1;
@@ -33,89 +27,124 @@ namespace LuckParser.Models.ParseModels
             }
         }
         // Constructors
-        public FightData(ushort id, bool requirePhases)
+        public FightData(ushort id, AgentData agentData)
         {
             ID = id;
-            _requirePhases = requirePhases;
-            switch (ParseEnum.GetBossIDS(id))
+            _requirePhases = Properties.Settings.Default.ParsePhases;
+            switch (ParseEnum.GetTargetIDS(id))
             {
-                case ParseEnum.BossIDS.ValeGuardian:
-                    Logic = new ValeGuardian(id);
+                case ParseEnum.TargetIDS.ValeGuardian:
+                    Logic = new ValeGuardian(id, agentData);
                     break;
-                case ParseEnum.BossIDS.Gorseval:
-                    Logic = new Gorseval(id);
+                case ParseEnum.TargetIDS.Gorseval:
+                    Logic = new Gorseval(id, agentData);
                     break;
-                case ParseEnum.BossIDS.Sabetha:
-                    Logic = new Sabetha(id);
+                case ParseEnum.TargetIDS.Sabetha:
+                    Logic = new Sabetha(id, agentData);
                     break;
-                case ParseEnum.BossIDS.Slothasor:
-                    Logic = new Slothasor(id);
+                case ParseEnum.TargetIDS.Slothasor:
+                    Logic = new Slothasor(id, agentData);
                     break;
-                case ParseEnum.BossIDS.Matthias:
-                    Logic = new Matthias(id);
+                case ParseEnum.TargetIDS.Zane:
+                case ParseEnum.TargetIDS.Berg:
+                case ParseEnum.TargetIDS.Narella:
+                    Logic = new BanditTrio(id, agentData);
                     break;
-                case ParseEnum.BossIDS.KeepConstruct:
-                    Logic = new KeepConstruct(id);
+                case ParseEnum.TargetIDS.Matthias:
+                    Logic = new Matthias(id, agentData);
                     break;
-                case ParseEnum.BossIDS.Xera:
-                    Logic = new Xera(id);
+                /*case ParseEnum.TargetIDS.Escort:
+                    Logic = new Escort(id, agentData);
+                    break;*/
+                case ParseEnum.TargetIDS.KeepConstruct:
+                    Logic = new KeepConstruct(id, agentData);
                     break;
-                case ParseEnum.BossIDS.Cairn:
-                    Logic = new Cairn(id);
+                case ParseEnum.TargetIDS.Xera:
+                    Logic = new Xera(id, agentData);
                     break;
-                case ParseEnum.BossIDS.MursaatOverseer:
-                    Logic = new MursaatOverseer(id);
+                case ParseEnum.TargetIDS.Cairn:
+                    Logic = new Cairn(id, agentData);
                     break;
-                case ParseEnum.BossIDS.Samarog:
-                    Logic = new Samarog(id);
+                case ParseEnum.TargetIDS.MursaatOverseer:
+                    Logic = new MursaatOverseer(id, agentData);
                     break;
-                case ParseEnum.BossIDS.Deimos:
-                    Logic = new Deimos(id);
+                case ParseEnum.TargetIDS.Samarog:
+                    Logic = new Samarog(id, agentData);
                     break;
-                case ParseEnum.BossIDS.SoullessHorror:
-                    Logic = new SoullessHorror(id);
+                case ParseEnum.TargetIDS.Deimos:
+                    Logic = new Deimos(id, agentData);
                     break;
-                case ParseEnum.BossIDS.Dhuum:
-                    Logic = new Dhuum(id);
+                case ParseEnum.TargetIDS.SoullessHorror:
+                    Logic = new SoullessHorror(id, agentData);
                     break;
-                case ParseEnum.BossIDS.ConjuredAmalgamate:
-                    Logic = new ConjuredAmalgamate(id);
+                case ParseEnum.TargetIDS.Desmina:
+                    Logic = new River(id, agentData);
                     break;
-                case ParseEnum.BossIDS.Kenut:
-                case ParseEnum.BossIDS.Nikare:
-                    Logic = new TwinLargos(id);
+                case ParseEnum.TargetIDS.BrokenKing:
+                    Logic = new BrokenKing(id, agentData);
                     break;
-                case ParseEnum.BossIDS.Qadim:
-                    Logic = new Qadim(id);
+                case ParseEnum.TargetIDS.SoulEater:
+                    Logic = new EaterOfSouls(id, agentData);
                     break;
-                case ParseEnum.BossIDS.MAMA:
-                    Logic = new MAMA(id);
+                case ParseEnum.TargetIDS.EyeOfFate:
+                case ParseEnum.TargetIDS.EyeOfJudgement:
+                    Logic = new DarkMaze(id, agentData);
                     break;
-                case ParseEnum.BossIDS.Siax:
-                    Logic = new Siax(id);
+                case ParseEnum.TargetIDS.Dhuum:
+                    // some eyes log are registered as Dhuum
+                    if (agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.EyeOfFate).Count > 0 ||
+                        agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.EyeOfJudgement).Count > 0)
+                    {
+                        ID = (ushort)ParseEnum.TargetIDS.EyeOfFate;
+                        Logic = new DarkMaze((ushort)ParseEnum.TargetIDS.EyeOfFate, agentData);
+                        break;
+                    }
+                    Logic = new Dhuum(id, agentData);
                     break;
-                case ParseEnum.BossIDS.Ensolyss:
-                    Logic = new Ensolyss(id);
+                case ParseEnum.TargetIDS.ConjuredAmalgamate:
+                    Logic = new ConjuredAmalgamate(id, agentData);
                     break;
-                case ParseEnum.BossIDS.Skorvald:
-                    Logic = new Skorvald(id);
+                case ParseEnum.TargetIDS.Kenut:
+                case ParseEnum.TargetIDS.Nikare:
+                    Logic = new TwinLargos(id, agentData);
                     break;
-                case ParseEnum.BossIDS.Artsariiv:
-                    Logic = new Artsariiv(id);
+                case ParseEnum.TargetIDS.Qadim:
+                    Logic = new Qadim(id, agentData);
                     break;
-                case ParseEnum.BossIDS.Arkk:
-                    Logic = new Arkk(id);
+                case ParseEnum.TargetIDS.Freezie:
+                    Logic = new Freezie(id, agentData);
                     break;
-                case ParseEnum.BossIDS.MassiveGolem:
-                case ParseEnum.BossIDS.AvgGolem:
-                case ParseEnum.BossIDS.LGolem:
-                case ParseEnum.BossIDS.MedGolem:
-                case ParseEnum.BossIDS.StdGolem:
-                    Logic = new Golem(id);
+                case ParseEnum.TargetIDS.MAMA:
+                    Logic = new MAMA(id, agentData);
+                    break;
+                case ParseEnum.TargetIDS.Siax:
+                    Logic = new Siax(id, agentData);
+                    break;
+                case ParseEnum.TargetIDS.Ensolyss:
+                    Logic = new Ensolyss(id, agentData);
+                    break;
+                case ParseEnum.TargetIDS.Skorvald:
+                    Logic = new Skorvald(id, agentData);
+                    break;
+                case ParseEnum.TargetIDS.Artsariiv:
+                    Logic = new Artsariiv(id, agentData);
+                    break;
+                case ParseEnum.TargetIDS.Arkk:
+                    Logic = new Arkk(id, agentData);
+                    break;
+                case ParseEnum.TargetIDS.WorldVersusWorld:
+                    Logic = new WvWFight(id, agentData);
+                    break;
+                case ParseEnum.TargetIDS.MassiveGolem:
+                case ParseEnum.TargetIDS.AvgGolem:
+                case ParseEnum.TargetIDS.LGolem:
+                case ParseEnum.TargetIDS.MedGolem:
+                case ParseEnum.TargetIDS.StdGolem:
+                    Logic = new Golem(id, agentData);
                     break;
                 default:
                     // Unknown
-                    Logic = new BossLogic(id);
+                    Logic = new UnknownFightLogic(id, agentData);
                     break;
             }
         }
@@ -128,10 +157,11 @@ namespace LuckParser.Models.ParseModels
                 long fightDuration = log.FightData.FightDuration;
                 _phases = log.FightData.Logic.GetPhases(log, _requirePhases);
             }
+            _phases.RemoveAll(x => x.DurationInMS <= 1000);
             return _phases;
         }
 
-        public List<Boss> GetMainTargets(ParsedLog log)
+        public List<Target> GetMainTargets(ParsedLog log)
         {
             if (_phases.Count == 0)
             {
@@ -141,17 +171,27 @@ namespace LuckParser.Models.ParseModels
             return _phases[0].Targets;
         }
 
+        public long ToFightSpace(long time)
+        {
+            return time - FightStart;
+        }
+
+        public long ToLogSpace(long time)
+        {
+            return time + FightStart;
+        }
+
         // Setters
-        public void SetCM(ParsedLog log)
+        public void SetCM(ParsedEvtcContainer evtcContainer)
         {
             if (_isCM == -1)
             {
-                _isCM = Logic.IsCM(log);
+                _isCM = Logic.IsCM(evtcContainer);
             }
         }
-        public void SetSuccess(ParsedLog log)
+        public void SetSuccess(ParsedEvtcContainer evtcContainer)
         {
-            Logic.SetSuccess(log);
+            Logic.SetSuccess(evtcContainer);
         }
     }
 }

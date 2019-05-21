@@ -1,0 +1,7 @@
+<div v-if="phases.length > 1">
+    <ul class="nav nav-pills d-flex flex-row justify-content-center">
+        <li class="nav-item" v-for="(phase, id) in phases" :data-original-title="getPhaseData(id).duration / 1000.0 + ' seconds'">
+            <a class="nav-link" @click="select(phase)" :class="{active: phase.active}">{{getPhaseData(id).name}}</a>
+        </li>
+    </ul>
+</div>

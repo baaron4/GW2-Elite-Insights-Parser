@@ -1,47 +1,33 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
 
 namespace LuckParser.Models.HtmlModels
-{
-    [DataContract]
+{   
     public class LogDataDto
-    {
-        [DataMember]
-        public BossDto boss;
-        [DataMember(Order = 0)]
-        public readonly List<PlayerDto> players = new List<PlayerDto>();
-        [DataMember(Order = 1)]
-        public readonly List<EnemyDto> enemies = new List<EnemyDto>();
-        [DataMember(Order = 2)]
-        public readonly List<GraphDto> graphs = new List<GraphDto>();
-        [DataMember(Order = 3)]
-        public readonly List<PhaseDto> phases = new List<PhaseDto>();
-        [DataMember(Order = 4)]
-        public List<BoonDto> boons;
-        [DataMember(Order = 5)]
-        public List<BoonDto> offBuffs;
-        [DataMember(Order = 6)]
-        public List<BoonDto> defBuffs;
-        [DataMember]
-        public List<BoonDto> bossCondis;
-        [DataMember]
-        public List<BoonDto> bossBoons;
-        [DataMember(Order = 7)]
-        public List<MechanicDto> mechanics;
-        [DataMember(Order = 8)]
-        public List<SkillDto> skills;
-        [DataMember(Order = 9)]
-        public LogFlags flags = new LogFlags();
-    }
-
-    [DataContract]
-    public class LogFlags
-    {
-        [DataMember]
-        public bool simpleRotation;
-        [DataMember]
-        public bool dark;
-        [DataMember]
-        public bool combatReplay;
+    { 
+        public List<TargetDto> Targets = new List<TargetDto>();
+        public readonly List<PlayerDto> Players = new List<PlayerDto>();
+        public readonly List<EnemyDto> Enemies = new List<EnemyDto>();
+        public readonly List<PhaseDto> Phases = new List<PhaseDto>();
+        public readonly List<long> Boons = new List<long>();
+        public readonly List<long> OffBuffs = new List<long>();
+        public readonly List<long> DefBuffs = new List<long>();
+        public readonly List<long> DmgModifiersItem = new List<long>();
+        public readonly List<long> DmgModifiersCommon = new List<long>();
+        public readonly Dictionary<string, List<long>> DmgModifiersPers = new Dictionary<string, List<long>>();
+        public readonly Dictionary<string, List<long>> PersBuffs = new Dictionary<string, List<long>>();     
+        public readonly List<long> Conditions = new List<long>();
+        public readonly Dictionary<string, SkillDto> SkillMap = new Dictionary<string, SkillDto>();
+        public readonly Dictionary<string, BoonDto> BuffMap = new Dictionary<string, BoonDto>();
+        public readonly Dictionary<string, DamageModDto> DamageModMap = new Dictionary<string, DamageModDto>();
+        public readonly List<MechanicDto> MechanicMap = new List<MechanicDto>();
+        public CombatReplayDto CrData = null;
+        public string EncounterDuration;
+        public bool Success;
+        public bool Wvw;
+        public string FightName;
+        public string FightIcon;
+        public bool LightTheme;
+        public bool NoMechanics;
+        public bool SingleGroup;
     }
 }

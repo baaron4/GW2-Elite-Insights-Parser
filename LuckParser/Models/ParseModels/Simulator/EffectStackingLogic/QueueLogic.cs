@@ -1,5 +1,5 @@
 ﻿using LuckParser.Controllers;
-using LuckParser.Models.DataModels;
+using LuckParser.Parser;
 using System;
 using System.Collections.Generic;
 using static LuckParser.Models.ParseModels.BoonSimulator;
@@ -13,7 +13,7 @@ namespace LuckParser.Models.ParseModels
             // no sort
         }
 
-        public override bool StackEffect(ParsedLog log, BoonStackItem stackItem, List<BoonStackItem> stacks, List<BoonSimulationOverstackItem> overstacks)
+        public override bool StackEffect(ParsedLog log, BoonStackItem stackItem, List<BoonStackItem> stacks, List<BoonSimulationItemWasted> wastes)
         {
             if (stacks.Count <= 1)
             {
@@ -21,12 +21,20 @@ namespace LuckParser.Models.ParseModels
             }
             BoonStackItem first = stacks[0];
             stacks.RemoveAt(0);
-            BoonStackItem minItem = stacks.MinBy(x => x.BoonDuration);
-            if (minItem.BoonDuration >= stackItem.BoonDuration)
+            BoonStackItem minItem = stacks.MinBy(x => x.TotalBoonDuration());
+            if (minItem.TotalBoonDuration() >= stackItem.TotalBoonDuration())
             {
+                stacks.Insert(0, first);
                 return false;
             }
-            overstacks.Add(new BoonSimulationOverstackItem(minItem.Src, minItem.BoonDuration, minItem.Start));
+            wastes.Add(new BoonSimulationItemWasted(minItem.Src, minItem.BoonDuration, minItem.Start));
+            if (minItem.Extensions.Count > 0)
+            {
+                foreach ((AgentItem src, long value) in minItem.Extensions)
+                {
+                    wastes.Add(new BoonSimulationItemWasted(src, value, minItem.Start));
+                }
+            }
             stacks[stacks.IndexOf(minItem)] = stackItem;
             stacks.Insert(0, first);
             Sort(log, stacks);

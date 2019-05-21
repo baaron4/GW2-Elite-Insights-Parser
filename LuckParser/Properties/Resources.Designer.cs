@@ -61,22 +61,53 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to const deadIcon = new Image();
-        ///deadIcon.src = &quot;https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png&quot;;
+        ///   Looks up a localized string similar to /*jshint esversion: 6 */
+        ///
+        ///var compileBuffStats = function () {
+        ///    Vue.component(&quot;personal-buff-table-component&quot;, {
+        ///        props: [&apos;phaseindex&apos;, &apos;playerindex&apos;],
+        ///        template: `${tmplPersonalBuffTable}`,
+        ///        data: function () {
+        ///            return {
+        ///                bases: [],
+        ///                mode: &quot;Warrior&quot;,
+        ///                cache: new Map(),
+        ///                specToBase: specToBase
+        ///            };
+        ///        },
+        ///        computed: {
+        ///            phase: function() {
+        ///                return logDa [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string buffStatsJS {
+            get {
+                return ResourceManager.GetString("buffStatsJS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /*jshint esversion: 6 */
+        ///// const images
+        ///const deadIcon = new Image();
+        ///deadIcon.onload = function () {
+        ///    animateCanvas(-1);
+        ///};
         ///const downIcon = new Image();
-        ///downIcon.src = &quot;https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png&quot;;
-        ///let time = 0;
-        ///let inch = 0;
-        ///let speed = 1;
-        ///const times = [];
-        ///const bossData = new Map();
-        ///const playerData = new Map();
-        ///const trashMobData = new Map();
-        ///const mechanicActorData = new Set();
-        ///const rangeControl = new Map();
-        ///let selectedGroup = -1;
-        ///let selectedPlayer = null;
-        ///co [rest of string was truncated]&quot;;.
+        ///downIcon.onload = function () {
+        ///    animateCanvas(-1);
+        ///};
+        ///const dcIcon = new Image();
+        ///dcIcon.onload = function () {
+        ///    animateCanvas(-1);
+        ///};
+        ///const facingIcon = new Image();
+        ///facingIcon.onload = function () {
+        ///    animateCanvas(-1);
+        ///};
+        ///const bgImage = new Image();
+        ///let bgLoaded = false;
+        ///bgImage.onload = function () {
+        ///    animateCanva [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string combatreplay_js {
             get {
@@ -85,99 +116,392 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .table th { border-top: 0; }
+        ///   Looks up a localized string similar to /*jshint esversion: 6 */
         ///
-        ///.header {
-        ///    text-align: center;
-        ///	width: 100%;
-        ///	margin-top: 6px;
-        ///	margin-bottom: 10px;
-        ///}
-        ///
-        ///.footer {
-        ///    text-align: center;
-        ///	margin-top: 10px;
-        ///	margin-bottom: 6px;
-        ///	width: 100%;
-        ///}
-        ///
-        ///td.sorting_1 {
-        ///	background-color: rgba(39,128,227,0.05);
-        ///}
-        ///
-        ///.table &gt; tfoot &gt; tr:first-child &gt; td, .table &gt; tfoot &gt; tr:last-child &gt; td {
-        ///    border-top-width: 3px;
-        ///}
-        ///.table &gt; tfoot &gt; tr &gt; td {
-        ///	color: #888;
-        ///}
-        ///
-        ///tr.condi td {
-        ///    background-color: rgba(255,0,0,0.25);
-        ///}
-        ///
-        ///i [rest of string was truncated]&quot;;.
+        ///var compileCombatReplay = function () {
+        ///    Vue.component(&quot;combat-replay-damage-stats-component&quot;, {
+        ///        props: [&quot;time&quot;, &quot;playerindex&quot;],
+        ///        template: `${tmplCombatReplayDamageTable}`,
+        ///        data: function () {
+        ///            return {
+        ///                damageMode: 1
+        ///            };
+        ///        },
+        ///        created() {
+        ///            var i, cacheID;
+        ///            for (var j = 0; j &lt; this.targets.length; j++) {
+        ///                var activeTargets = [j];
+        ///                cacheID = [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string flomix_ei_css {
+        internal static string combatReplayStatsJS {
             get {
-                return ResourceManager.GetString("flomix_ei_css", resourceCulture);
+                return ResourceManager.GetString("combatReplayStatsJS", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to $.extend($.fn.dataTable.defaults, { searching: false, ordering: true, paging: false, dom: &quot;t&quot; });
-        ///$.views.converters(&quot;dec&quot;,
-        ///	function (val) {
-        ///		return Math.round(val * 100) / 100;
-        ///	}
-        ///);
-        ///$.views.converters(&quot;round&quot;,
-        ///	function (val) {
-        ///		return Math.round(val);
-        ///	}
-        ///);
+        ///   Looks up a localized string similar to /*jshint esversion: 6 */
         ///
-        ///var urls = {
-        ///	&apos;Warrior&apos;: &apos;https://wiki.guildwars2.com/images/4/43/Warrior_tango_icon_20px.png&apos;,
-        ///	&apos;Berserker&apos;: &apos;https://wiki.guildwars2.com/images/d/da/Berserker_tango_icon_20px.png&apos;,
-        ///	&apos;Spellbreaker&apos;: &apos;https://wiki.guildwars2.com/ima [rest of string was truncated]&quot;;.
+        ///var compileCombatReplayUI = function () {
+        ///    Vue.component(&quot;combat-replay-ui-component&quot;, {
+        ///        props: [&quot;mode&quot;, &quot;light&quot;],
+        ///        template: `${tmplCombatReplayUI}`,
+        ///        data: function () {
+        ///            return {
+        ///                animationStatus: {
+        ///                   time: 0,
+        ///                   selectedPlayer: null,
+        ///                   selectedPlayerID: null
+        ///                }
+        ///            };
+        ///        },
+        ///        mounted() {
+        ///            animator = new Animator(logDat [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string flomix_ei_js {
+        internal static string combatReplayStatsUI {
             get {
-                return ResourceManager.GetString("flomix_ei_js", resourceCulture);
+                return ResourceManager.GetString("combatReplayStatsUI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /*jshint esversion: 6 */
+        ///
+        ///var roundingComponent = {
+        ///    methods: {
+        ///        round: function (value) {
+        ///            if (isNaN(value)) {
+        ///                return 0;
+        ///            }
+        ///            return Math.round(value);
+        ///        },
+        ///        round2: function (value) {
+        ///            if (isNaN(value)) {
+        ///                return 0;
+        ///            }
+        ///            var mul = 100;
+        ///            return Math.round(mul * value) / mul;
+        ///        },
+        ///        round3: function (value) {
+        ///            if (isNaN(value)) {
+        ///          [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string commonsJS {
+            get {
+                return ResourceManager.GetString("commonsJS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /*jshint esversion: 6 */
+        ///
+        ///var compileDamageModifiers = function () {
+        ///    Vue.component(&quot;dmgmodifier-stats-component&quot;, {
+        ///        props: [&apos;phaseindex&apos;, &apos;playerindex&apos;, &apos;activetargets&apos;,
+        ///        ],
+        ///        template: `${tmplDamageModifierStats}`,
+        ///        data: function () {
+        ///            return {
+        ///                wvw: !!logData.wvw,
+        ///                mode: logData.wvw ? 0 : 1,
+        ///                displayMode: logData.dmgModifiersItem.length &gt; 0 ? 0 : logData.dmgModifiersCommon.length &gt; 0 ? 1 : 2
+        ///            }; [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string damageModifierStatsJS {
+            get {
+                return ResourceManager.GetString("damageModifierStatsJS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .table th {
+        ///    border-top: 0;
+        ///}
+        ///
+        ///.theme-slate g.hovertext text.name {
+        ///    fill: #cccccc !important;
+        ///}
+        ///
+        ///.theme-yeti g.hovertext text.name {
+        ///    fill: #495057 !important;
+        ///}
+        ///
+        ///.theme-slate g.hovertext rect {
+        ///    fill: #272B30 !important;
+        ///    fill-opacity: 0.9 !important;
+        ///}
+        ///
+        ///.theme-yeti g.hovertext rect {
+        ///    fill: #fff !important;
+        ///    fill-opacity: 0.9 !important;
+        ///}
+        ///
+        ///.ei-header {
+        ///    min-width: 1000px;
+        ///    margin-right: auto;
+        ///    margin-left: auto;
+        ///}
+        ///
+        ///.ei-header-big {
+        ///    min-width [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ei_css {
+            get {
+                return ResourceManager.GetString("ei_css", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /*jshint esversion: 6 */
+        ///
+        ///var mainComponent = null;
+        ///
+        ///window.onload = function () {
+        ///    // make some additional variables reactive
+        ///    var i;
+        ///    var simpleLogData = {
+        ///        phases: [],
+        ///        players: [],
+        ///        targets: []
+        ///    };
+        ///    for (i = 0; i &lt; logData.phases.length; i++) {
+        ///        var phase = logData.phases[i];
+        ///        var times = [];
+        ///        var dur = phase.end - phase.start;
+        ///        var floorDur = Math.floor(dur);
+        ///        phase.needsLastPoint = dur &gt; floorDur + 1e-3;
+        ///        f [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ei_js {
+            get {
+                return ResourceManager.GetString("ei_js", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /*jshint esversion: 6 */
+        ///
+        ///var compileGeneralStats = function () {
+        ///    Vue.component(&quot;damage-stats-component&quot;, {
+        ///        props: [&quot;activetargets&quot;, &quot;playerindex&quot;, &quot;phaseindex&quot;],
+        ///        template: `${tmplDamageTable}`,
+        ///        data: function () {
+        ///            return {
+        ///                wvw: !!logData.wvw,
+        ///                cacheTarget: new Map()
+        ///            };
+        ///        },
+        ///        mounted() {
+        ///            initTable(&quot;#dps-table&quot;, 4, &quot;desc&quot;);
+        ///        },
+        ///        updated() {
+        ///            updateTable(&quot;#dps-ta [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string generalStatsJS {
+            get {
+                return ResourceManager.GetString("generalStatsJS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /*jshint esversion: 6 */
+        ///&quot;use strict&quot;;
+        ///$.extend($.fn.dataTable.defaults, {
+        ///    searching: false,
+        ///    ordering: true,
+        ///    paging: false,
+        ///    retrieve: true,
+        ///    dom: &quot;t&quot;
+        ///});
+        ///
+        ///// polyfill for string include
+        ///// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes
+        ///if (!String.prototype.includes) {
+        ///    Object.defineProperty(String.prototype, &quot;includes&quot;, {
+        ///        value: function (search, start) {
+        ///            if (typeof start !== &apos;number&apos;) {
+        ///             [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string globalJS {
+            get {
+                return ResourceManager.GetString("globalJS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /*jshint esversion: 6 */
+        ///
+        ///var compileGraphs = function () {
+        ///    Vue.component(&quot;graph-stats-component&quot;, {
+        ///        props: [&quot;activetargets&quot;, &quot;phaseindex&quot;, &apos;playerindex&apos;, &apos;light&apos;],
+        ///        template: `${tmplGraphStats}`,
+        ///        data: function () {
+        ///            return {
+        ///                wvw: !!logData.wvw,
+        ///                mode: logData.wvw ? 0 : 1
+        ///            };
+        ///        },
+        ///        computed: {
+        ///            phases: function() {
+        ///                return logData.phases;
+        ///            }
+        ///        }
+        ///    });
+        ///  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string graphsJS {
+            get {
+                return ResourceManager.GetString("graphsJS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /*jshint esversion: 6 */
+        ///
+        ///var compileHeader = function () {
+        ///    Vue.component(&quot;encounter-component&quot;, {
+        ///        props: [],
+        ///        template: `${tmplEncounter}`,
+        ///        methods: {
+        ///            getResultText: function (success) {
+        ///                return success ? &quot;Success&quot; : &quot;Failure&quot;;
+        ///            },
+        ///            getResultClass: function (success) {
+        ///                return success ? [&quot;text-success&quot;] : [&quot;text-warning&quot;];
+        ///            }
+        ///        },
+        ///        computed: {
+        ///            encounter: function ()  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string headerJS {
+            get {
+                return ResourceManager.GetString("headerJS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /*jshint esversion: 6 */
+        ///var Layout = function (desc) {
+        ///    this.desc = desc;
+        ///    this.tabs = null;
+        ///};
+        ///
+        ///Layout.prototype.addTab = function (tab) {
+        ///    if (this.tabs === null) {
+        ///        this.tabs = [];
+        ///    }
+        ///    this.tabs.push(tab);
+        ///};
+        ///
+        ///var Tab = function (name, options) {
+        ///    this.name = name;
+        ///    options = options ? options : {};
+        ///    this.layout = null;
+        ///    this.desc = options.desc ? options.desc : null;
+        ///    this.active = options.active ? options.active : false;
+        ///    this.dataType =
+        ///     [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string layoutJS {
+            get {
+                return ResourceManager.GetString("layoutJS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /*jshint esversion: 6 */
+        ///
+        ///var compileMechanics = function () {
+        ///    Vue.component(&quot;mechanics-stats-component&quot;, {
+        ///        props: [&quot;phaseindex&quot;, &quot;playerindex&quot;],
+        ///        template: `${tmplMechanicsTable}`,
+        ///        data: function () {
+        ///            return {
+        ///                cacheP: new Map(),
+        ///                cacheE: new Map()
+        ///            };
+        ///        },
+        ///        mounted() {
+        ///            initTable(&quot;#playermechs&quot;, 0, &quot;asc&quot;);
+        ///            //
+        ///            if (this.enemyMechHeader.length) {
+        ///                init [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string mechanicsJS {
+            get {
+                return ResourceManager.GetString("mechanicsJS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /*jshint esversion: 6 */
+        ///
+        ///var compilePlayerTab = function () {
+        ///    // Base stuff
+        ///    Vue.component(&apos;dmgdist-player-component&apos;, {
+        ///        props: [&apos;playerindex&apos;, 
+        ///            &apos;phaseindex&apos;, &apos;activetargets&apos;
+        ///        ],
+        ///        template: `${tmplDamageDistPlayer}`,
+        ///        data: function () {
+        ///            return {
+        ///                distmode: -1,
+        ///                wvw: !!logData.wvw,
+        ///                targetmode: logData.wvw ? 0 : 1,
+        ///                cacheTarget: new Map()
+        ///            };
+        ///        },
+        ///        [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string playerStatsJS {
+            get {
+                return ResourceManager.GetString("playerStatsJS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /*jshint esversion: 6 */
+        ///
+        ///
+        ///function computeTargetDPS(target, damageData,lim, phasebreaks, cacheID, lastTime) {
+        ///    if (target.dpsGraphCache.has(cacheID)) {
+        ///        return target.dpsGraphCache.get(cacheID);
+        ///    }
+        ///    var totalDamage = 0;
+        ///    var totalDPS = [0];
+        ///    var maxDPS = 0;
+        ///    var limID = 0, j;
+        ///    var end = damageData.length;
+        ///    if (lastTime &gt; 0) {
+        ///        end--;
+        ///    }
+        ///    for (j = 1; j &lt; end; j++) {
+        ///        if (lim &gt; 0) {
+        ///            limID = Math.max(j - lim, 0);
+        ///        } else i [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string targetStatsJS {
+            get {
+                return ResourceManager.GetString("targetStatsJS", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
         ///&lt;html lang=&quot;en&quot;&gt;
+        ///
         ///&lt;head&gt;
-        ///&lt;meta charset=&quot;utf-8&quot;&gt;
-        ///&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/${bootstrapTheme}/bootstrap.min.css&quot;  crossorigin=&quot;anonymous&quot;&gt;
-        ///&lt;link href=&quot;https://fonts.googleapis.com/css?family=Open+Sans&quot; rel=&quot;stylesheet&quot;&gt;
-        ///&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css&quot;&gt;
-        ///&lt;!--${flomixCss}--&gt;
-        ///&lt;script src=&quot;https://code.jquery.com/jquery-3.3.1.js&quot;&gt;&lt;/script&gt;
-        ///&lt;script src [rest of string was truncated]&quot;;.
+        ///    &lt;meta charset=&quot;utf-8&quot;&gt;
+        ///    &lt;link id=&quot;theme&quot; rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/${bootstrapTheme}/bootstrap.min.css&quot;
+        ///          crossorigin=&quot;anonymous&quot;&gt;
+        ///    &lt;!--${Css}--&gt;
+        ///    &lt;link href=&quot;https://fonts.googleapis.com/css?family=Open+Sans&quot; rel=&quot;stylesheet&quot;&gt;
+        ///    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css&quot;&gt;
+        ///    &lt;script src=&quot;https://code.jquery.co [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string template_html {
             get {
                 return ResourceManager.GetString("template_html", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex justify-content-around align-items-center justify-content-center&quot;&gt;
-        ///    &lt;div class=&quot;d-flex flex-column flex-wrap&quot;&gt;
-        ///            &lt;canvas width=&quot;${canvasX}px&quot; height=&quot;${canvasY}px&quot;  id=&quot;replayCanvas&quot; class=&quot;replay&quot;&gt;
-        ///            &lt;/canvas&gt;
-        ///            &lt;div class=&quot;d-flex justify-content-center slidecontainer&quot;&gt;
-        ///                &lt;input style=&quot;min-width: 400px;&quot; oninput=&quot;updateTime(this.value)&quot; type=&quot;range&quot; min =&quot;0&quot; max=&quot;${maxTime}&quot; value=&quot;0&quot; class=&quot;slider&quot; id=&quot;timeRange&quot;&gt;
-        ///                &lt;inp [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string template_replay_html {
-            get {
-                return ResourceManager.GetString("template_replay_html", resourceCulture);
             }
         }
         
@@ -202,268 +526,859 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot;&gt;
-        ///	&lt;thead&gt;
-        ///		&lt;tr&gt;
-        ///			&lt;th width=&quot;30px&quot;&gt;Sub&lt;/th&gt;
-        ///			&lt;th width=&quot;30px&quot;&gt;&lt;/th&gt;
-        ///			&lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
-        ///			{{for boons}}
-        ///			&lt;th title=&quot;{{:name}}&quot;&gt;&lt;img src=&quot;{{:icon}}&quot; alt=&quot;{{:name}}&quot; class=&quot;icon icon-hover&quot;&gt;&lt;/th&gt;
-        ///			{{/for}}
-        ///		&lt;/tr&gt;
-        ///	&lt;/thead&gt;
-        ///	&lt;tbody&gt;
-        ///		{{for rows ~boons=boons}}
-        ///		&lt;tr&gt;
-        ///			&lt;td&gt;{{:player.group}}&lt;/td&gt;
-        ///			&lt;td title=&quot;{{:player.profession}}&quot;&gt;&lt;img src=&quot;{{:player.icon}}&quot; alt=&quot;{{:player.profession}}&quot; class=&quot;ico [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;div class=&quot;d-flex flex-row justify-content-center mt-2 mb-2&quot;&gt;
+        ///        &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center&quot;&gt;
+        ///            &lt;li class=&quot;nav-item&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;mode = 0&quot; :class=&quot;{active: mode === 0}&quot;&gt;Uptime&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li class=&quot;nav-item&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;mode = 1&quot; :class=&quot;{active: mode === 1 }&quot;&gt;Generation Self&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li class=&quot;nav-item&quot;&gt;
+        ///                &lt; [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string tmplBoonTable {
+        internal static string tmplBuffStats {
             get {
-                return ResourceManager.GetString("tmplBoonTable", resourceCulture);
+                return ResourceManager.GetString("tmplBuffStats", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;table class=&quot;table composition&quot;&gt;
-        ///&lt;tbody&gt;
-        ///	{{for groups}}
-        ///	{{if #data}}
-        ///	&lt;tr&gt;
-        ///		{{for #data}}
-        ///		&lt;td&gt;
-        ///			&lt;div&gt;
-        ///				&lt;img src=&quot;{{:icon}}&quot; alt=&quot;{{:profession}}&quot; class=&quot;icon&quot; title=&quot;{{:profession}}&quot;&gt;
-        ///				{{if condi}}&lt;img src=&quot;https://wiki.guildwars2.com/images/5/54/Condition_Damage.png&quot; alt=&quot;Condition Damage&quot; title=&quot;Condition Damage -{{:condi}}&quot; class=&quot;icon&quot;&gt;{{/if}}
-        ///				{{if conc}}&lt;img src=&quot;https://wiki.guildwars2.com/images/4/44/Boon_Duration.png&quot; alt =&quot;Concentration&quot; title=&quot;Concentration -{{:conc}}&quot;  [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;div&gt;
+        ///        &lt;h3 class=&quot;text-center&quot;&gt;Conditions&lt;/h3&gt;
+        ///        &lt;buff-table-component :condition=&quot;true&quot; :generation=&quot;true&quot; :id=&quot;&apos;condition-stats-table-&apos; + target.id&quot; :buffs=&quot;conditions&quot;
+        ///            :playerdata=&quot;condiData&quot; :sums=&quot;condiSums&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/buff-table-component&gt;
+        ///    &lt;/div&gt;
+        ///    &lt;div v-show=&quot;hasBoons&quot; class=&quot;mt-2&quot;&gt;
+        ///        &lt;h3 class=&quot;text-center&quot;&gt;Boons&lt;/h3&gt;
+        ///        &lt;buff-table-component :condition=&quot;false&quot; :generation=&quot;false&quot; :id=&quot;&apos;buff-stats-table-&apos; + target.id&quot; :bu [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string tmplCompTable {
+        internal static string tmplBuffStatsTarget {
             get {
-                return ResourceManager.GetString("tmplCompTable", resourceCulture);
+                return ResourceManager.GetString("tmplBuffStatsTarget", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
-        ///	&lt;thead&gt;
-        ///		&lt;tr&gt;
-        ///			&lt;th&gt;Sub&lt;/th&gt;
-        ///			&lt;th&gt;&lt;/th&gt;
-        ///			&lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
-        ///			&lt;th&gt;Dmg Taken&lt;/th&gt;
-        ///			&lt;th&gt;Dmg Barrier&lt;/th&gt;
-        ///			&lt;th&gt;Blocked&lt;/th&gt;
-        ///			&lt;th&gt;Invulned&lt;/th&gt;
-        ///			&lt;th&gt;Evaded&lt;/th&gt;
-        ///			&lt;th&gt;&lt;span data-toggle=&quot;tooltip&quot; data-html=&quot;true&quot; data-placement=&quot;top&quot; title=&quot;Dodges or Mirage Cloak &quot;&gt;Dodges&lt;/span&gt;&lt;/th&gt;
-        ///			&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png&quot; alt=&quot;Downs&quot; title=&quot;Times down [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;div v-if=&quot;buffs.length &gt; 0&quot;&gt;
+        ///    &lt;img v-if=&quot;generation&quot; class=&quot;mb-1 icon&quot; src=&quot;https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png&quot; :data-original-title=&quot;tooltipExpl&quot;/&gt;
+        ///    &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot; :id=&quot;id&quot;&gt;
+        ///        &lt;thead&gt;
+        ///            &lt;tr&gt;
+        ///                &lt;th&gt;Sub&lt;/th&gt;
+        ///                &lt;th&gt;&lt;/th&gt;
+        ///                &lt;th&gt;Name&lt;/th&gt;
+        ///                &lt;th v-for=&quot;buff in buffs&quot; :data-original-title=&quot;buff.name&quot;&gt;
+        ///                    &lt;im [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string tmplDefTable {
+        internal static string tmplBuffTable {
             get {
-                return ResourceManager.GetString("tmplDefTable", resourceCulture);
+                return ResourceManager.GetString("tmplBuffTable", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {{if minion}}
-        ///&lt;div&gt;{{&gt;minion.name}} did {{:contribution}}% of {{&gt;player.name}}&apos;s total{{if toBoss}} Boss{{/if}} dps&lt;/div&gt;
-        ///{{else player}}
-        ///&lt;div&gt;{{&gt;player.name}} did {{:contribution}}% of his own total{{if toBoss}} Boss{{/if}} dps&lt;/div&gt;
-        ///{{/if}}
-        ///&lt;table class=&quot;table table-sm table-striped table-hover&quot;  cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
-        ///	&lt;thead&gt;
-        ///		&lt;tr&gt;
-        ///			&lt;th class=&quot;text-left&quot;&gt;Skill&lt;/th&gt;
-        ///			&lt;th&gt;&lt;/th&gt;
-        ///			&lt;th&gt;Damage&lt;/th&gt;
-        ///			&lt;th&gt;Min&lt;/th&gt;
-        ///			&lt;th&gt;Avg&lt;/th&gt;
-        ///			&lt;th&gt;Max&lt;/th&gt;
-        ///			&lt;th&gt;Casts&lt;/th&gt;
-        ///			&lt;th&gt;Hits&lt;/th&gt;        /// [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column justify-content-end&quot; :style=&quot;{&apos;height&apos;: enemy ? &apos;80px&apos; : &apos;100px&apos;}&quot;&gt;
+        ///    &lt;div v-if=&quot;data.enemies.length &gt; 0&quot; class=&quot;d-flex&quot;&gt;
+        ///        &lt;div v-for=&quot;enemy in data.enemies&quot; class=&quot;boon-container&quot;&gt;
+        ///            &lt;img :src=&quot;enemy.buff.icon&quot; :title=&quot;enemy.buff.name&quot; :alt=&quot;enemy.buff.name&quot; class=&quot;icon&quot; /&gt;
+        ///            &lt;div v-if=&quot;enemy.state &gt; 1&quot; class=&quot;boon-number&quot;&gt;{{enemy.state}}&lt;/div&gt;
+        ///        &lt;/div&gt;
+        ///    &lt;/div&gt;
+        ///    &lt;div v-if=&quot;data.others.length &gt; 0&quot; class=&quot;d-flex&quot;&gt;
+        ///        &lt;div v- [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string tmplDmgDistTable {
+        internal static string tmplCombatReplayActorBuffStats {
             get {
-                return ResourceManager.GetString("tmplDmgDistTable", resourceCulture);
+                return ResourceManager.GetString("tmplCombatReplayActorBuffStats", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
-        ///	&lt;thead&gt;
-        ///		&lt;tr&gt;
-        ///			&lt;th&gt;Sub&lt;/th&gt;
-        ///			&lt;th&gt;&lt;/th&gt;
-        ///      &lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
-        ///			&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars2.com/images/9/95/Critical_Chance.png&quot; alt=&quot;Crits&quot; title=&quot;Percent time hits critical&quot; class=&quot;icon icon-hover&quot;&gt;&lt;/th&gt;
-        ///			&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png&quot; alt=&quot;Scholar&quot; title=&quot;Percent time hits while above 90% health&quot; class=&quot;icon icon-hover&quot;&gt;&lt;/t [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex align-items-center&quot;&gt;
+        ///    &lt;div v-if=&quot;rotation.current&quot;&gt;
+        ///        &lt;img :src=&quot;rotation.current.skill.icon&quot; :alt=&quot;rotation.current.skill.name&quot; :title=&quot;rotation.current.skill.name&quot;
+        ///            class=&quot;icon-ll&quot; :class=&quot;{&apos;rot-cancelled&apos;: rotation.current.end === 2}&quot;&gt;
+        ///    &lt;/div&gt;
+        ///    &lt;div v-else class=&quot;empty-icon-ll&quot;&gt;
+        ///
+        ///    &lt;/div&gt;
+        ///    &lt;div v-for=&quot;next in rotation.nexts&quot;&gt;
+        ///        &lt;img :src=&quot;next.skill.icon&quot; :alt=&quot;next.skill.name&quot; :title=&quot;next.skill.name&quot; class=&quot;icon-l&quot; :class=&quot;{&apos;rot-cancelled [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string tmplDmgTable {
+        internal static string tmplCombatReplayActorRotation {
             get {
-                return ResourceManager.GetString("tmplDmgTable", resourceCulture);
+                return ResourceManager.GetString("tmplCombatReplayActorRotation", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
-        ///	&lt;thead&gt;
-        ///		&lt;tr&gt;
-        ///			&lt;th class=&quot;text-left&quot;&gt;Skill&lt;/th&gt;
-        ///			&lt;th&gt;Damage&lt;/th&gt;
-        ///			&lt;th&gt;Percent&lt;/th&gt;
-        ///			&lt;th&gt;Hits&lt;/th&gt;
-        ///			&lt;th&gt;Min&lt;/th&gt;
-        ///			&lt;th&gt;Avg&lt;/th&gt;
-        ///			&lt;th&gt;Max&lt;/th&gt;
-        ///			&lt;th&gt;Crit&lt;/th&gt;
-        ///			&lt;th&gt;Flank&lt;/th&gt;
-        ///			&lt;th&gt;Glance&lt;/th&gt;
-        ///		&lt;/tr&gt;
-        ///	&lt;/thead&gt;
-        ///	&lt;tbody&gt;
-        ///		{{for rows ~totalDamage=totalDamage}}
-        ///		&lt;tr class=&quot;{{if skill.condi}}condi{{else}}power{{/if}}&quot;&gt;
-        ///			&lt;td class=&quot;text-left&quot; title=&quot;{{:skill.id}}&quot;&gt;{{if skill.icon}}&lt;img src [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column flex-wrap&quot;&gt;
+        ///    &lt;p class=&quot;text-justify text-center&quot;&gt;Double click on canvas to restore viewpoint&lt;/p&gt;
+        ///    &lt;canvas :width=&quot;canvas.x + &apos;px&apos;&quot; :height=&quot;canvas.y + &apos;px&apos;&quot; id=&quot;replayCanvas&quot; class=&quot;replay&quot;&gt;&lt;/canvas&gt;
+        ///    &lt;div class=&quot;d-flex justify-content-center&quot;&gt;
+        ///        &lt;div @click=&quot;toggleAnimate();&quot;
+        ///             class=&quot;btn btn-small&quot; :class=&quot;{&apos;btn-dark&apos;: !light, &apos;btn-light&apos;: light}&quot; style=&quot;width: 50px;&quot;&gt;{{animated ? &quot;Pause&quot; : &quot;Play&quot;}}&lt;/div&gt;
+        ///        &lt;div @click=&quot;restartAnimate(); [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string tmplDmgTakenTable {
+        internal static string tmplCombatReplayAnimationControl {
             get {
-                return ResourceManager.GetString("tmplDmgTakenTable", resourceCulture);
+                return ResourceManager.GetString("tmplCombatReplayAnimationControl", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;table class=&quot;table table-sm table-striped table-hover&quot;  cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
-        ///	&lt;thead&gt;
-        ///		&lt;tr&gt;
-        ///			&lt;th&gt;Sub&lt;/th&gt;
-        ///			&lt;th&gt;&lt;/th&gt;
-        ///			&lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
-        ///			&lt;th&gt;Account&lt;/th&gt;
-        ///			&lt;th&gt;Boss DPS&lt;/th&gt;
-        ///			&lt;th&gt;Power&lt;/th&gt;
-        ///			&lt;th&gt;Condi&lt;/th&gt;
-        ///			&lt;th&gt;All DPS&lt;/th&gt;
-        ///			&lt;th&gt;Power&lt;/th&gt;
-        ///			&lt;th&gt;Condi&lt;/th&gt;
-        ///			&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png&quot; alt=&quot;Downs&quot; title=&quot;Times downed&quot; class=&quot;icon icon-hover&quot;&gt;&lt;/th&gt;
-        ///			&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars2.com/images/4/4a/All [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string tmplDpsTable {
-            get {
-                return ResourceManager.GetString("tmplDpsTable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column justify-content-center align-items-center mt-2&quot;&gt;
-        ///        &lt;h3&gt;Group ${group}&lt;/h3&gt;
-        ///        &lt;!--${players}--&gt;
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column justify-content-center&quot;&gt;
+        ///    &lt;combat-replay-damage-stats-component :time=&quot;time&quot; :playerindex=&quot;playerindex&quot;&gt;
+        ///    &lt;/combat-replay-damage-stats-component&gt;
         ///&lt;/div&gt;.
         /// </summary>
-        internal static string tmplGroupCombatReplay {
+        internal static string tmplCombatReplayDamageData {
             get {
-                return ResourceManager.GetString("tmplGroupCombatReplay", resourceCulture);
+                return ResourceManager.GetString("tmplCombatReplayDamageData", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot;&gt;
-        ///	&lt;thead&gt;
-        ///		&lt;tr&gt;
-        ///			{{if ~playerMech}}
-        ///			&lt;th width=&quot;30px&quot;&gt;Sub&lt;/th&gt;
-        ///			&lt;th width=&quot;30px&quot;&gt;&lt;/th&gt;
-        ///			&lt;th class=&quot;text-left&quot;&gt;Player&lt;/th&gt;
-        ///			{{else}}
-        ///			&lt;th class=&quot;text-left&quot;&gt;Enemy&lt;/th&gt;
-        ///			{{/if}}
-        ///			{{for mechanics}}
-        ///			{{if playerMech &amp;&amp; ~playerMech || enemyMech &amp;&amp; !~playerMech}}
-        ///				&lt;th title=&quot;{{:description}}&quot;&gt;{{:shortName}}&lt;/th&gt;
-        ///			{{/if}}
-        ///			{{/for}}
-        ///		&lt;/tr&gt;
-        ///	&lt;/thead&gt;
-        ///	&lt;tbody&gt;
-        ///		{{for rows ~mechanics=mechanics}}
-        ///		&lt;tr&gt; [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center&quot;&gt;
+        ///        &lt;li class=&quot;nav-item&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; @click=&quot;damageMode = 0&quot; :class=&quot;{active: damageMode === 0}&quot;&gt;Damage&lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///        &lt;li class=&quot;nav-item&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; @click=&quot;damageMode = 1&quot; :class=&quot;{active: damageMode === 1}&quot;&gt;DPS&lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///    &lt;/ul&gt;
+        ///    &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot; id=&quot;combat-replay-dps-table&quot;&gt;
+        ///       [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string tmplMechanicTable {
+        internal static string tmplCombatReplayDamageTable {
             get {
-                return ResourceManager.GetString("tmplMechanicTable", resourceCulture);
+                return ResourceManager.GetString("tmplCombatReplayDamageTable", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;td&gt;{{:player.group}}&lt;/td&gt;
-        ///&lt;td title=&quot;{{:player.profession}}&quot;&gt;&lt;img src=&quot;{{:player.icon}}&quot; alt=&quot;{{:player.profession}}&quot; class=&quot;icon&quot;&gt;&lt;span style=&quot;display:none&quot;&gt;{{:player.profession}}&lt;/span&gt;&lt;/td&gt;
-        ///&lt;td class=&quot;text-left&quot;&gt;{{:player.name}}&lt;/td&gt;.
+        ///   Looks up a localized string similar to 
+        ///&lt;div class=&quot;d-flex flex-row flex-wrap justify-content-center align-items-start mb-2&quot;&gt;
+        ///    &lt;div class=&quot;d-flex flex-row justify-content-center align-items-center&quot;&gt;
+        ///        &lt;div v-for=&quot;group in groups&quot; class=&quot;d-flex flex-column justify-content-center align-items-center mt-1 ml-2 mr-2&quot;&gt;
+        ///            &lt;h3&gt;Group {{group.id}}&lt;/h3&gt;
+        ///            &lt;label v-for=&quot;player in group.players&quot;
+        ///                   @click=&quot;selectActor(player.combatReplayID);&quot;
+        ///                   class=&quot;btn btn-small ply-btn&quot; :class=&quot;{&apos;active [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string tmplPlayerCells {
+        internal static string tmplCombatReplayPlayerSelect {
             get {
-                return ResourceManager.GetString("tmplPlayerCells", resourceCulture);
+                return ResourceManager.GetString("tmplCombatReplayPlayerSelect", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;label id=&quot;id ${instid}&quot; style=&quot;width: 150px;&quot; onclick=&quot;selectActor(${instid});&quot; class=&quot;btn btn-dark&quot;&gt;
-        ///    &lt;input class=&quot;invisible&quot; type=&quot;radio&quot; autocomplete=&quot;off&quot;&gt;
-        ///    ${playerName}
-        ///    &lt;img src=&quot;${imageURL}&quot; alt=&quot;${prof}&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;
-        ///&lt;/label&gt; .
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-row flex-wrap mb-2&quot;&gt;
+        ///    &lt;div v-for=&quot;(group,id) in groups&quot; v-if=&quot;group&quot; class=&quot;ml-1 mt-2&quot; style=&quot;border-left: 1px solid #000000&quot;&gt;
+        ///        &lt;h5 class=&quot;text-center&quot;&gt;Group {{id}}&lt;/h5&gt;
+        ///        &lt;div class=&quot; d-flex flex-column flex-wrap group-details&quot; :style=&quot;{&apos;width&apos;: group.length &gt; 5 ? &apos;500px&apos; : &apos;250px&apos;}&quot;&gt;
+        ///            &lt;div v-for=&quot;player in group&quot; class=&quot;player-data  ml-1 mr-1&quot; :class=&quot;{active: selectedplayerindex === player.id}&quot;&gt;
+        ///                &lt;combat-replay-player-stats-component  [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string tmplPlayerSelectCombatReplay {
+        internal static string tmplCombatReplayPlayersStats {
             get {
-                return ResourceManager.GetString("tmplPlayerSelectCombatReplay", resourceCulture);
+                return ResourceManager.GetString("tmplCombatReplayPlayersStats", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;table class=&quot;table table-sm table-striped table-hover&quot;  cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
-        ///	&lt;thead&gt;
-        ///		&lt;tr&gt;
-        ///			&lt;th&gt;Sub&lt;/th&gt;
-        ///			&lt;th&gt;&lt;/th&gt;
-        ///			&lt;th&gt;Name&lt;/th&gt;
-        ///			&lt;th&gt;Condi Cleanse&lt;/th&gt;
-        ///			&lt;th&gt;Resurrects&lt;/th&gt;
-        ///		&lt;/tr&gt;
-        ///	&lt;/thead&gt;
-        ///	&lt;tbody&gt;
-        ///		{{for rows}}
-        ///		&lt;tr&gt;
-        ///			{{include tmpl=&quot;tmplPlayerCells&quot;/}}
-        ///			&lt;td title=&quot;{{:data[1]}} seconds&quot;&gt;{{:data[0]}}&lt;/td&gt;
-        ///			&lt;td title=&quot;{{:data[3]}} seconds&quot;&gt;{{:data[2]}}&lt;/td&gt;
-        ///		&lt;/tr&gt;
-        ///		{{/for}}
-        ///	&lt;/tbody&gt;
-        ///	&lt;tfoot&gt;
-        ///		{{for sums}}
-        ///		&lt;tr&gt;
-        ///			&lt;td&gt;&lt;/td&gt;
-        ///			&lt;td&gt;&lt;/td&gt;
-        ///			&lt;td c [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;combat-replay-actor-buffs-stats-component :time=&quot;time&quot; :actorindex=&quot;playerindex&quot; :enemy=&quot;false&quot;&gt;&lt;/combat-replay-actor-buffs-stats-component&gt;
+        ///    &lt;div class=&quot;d-flex mb-1 mt-1 align-items-center&quot;&gt;
+        ///        &lt;combat-replay-player-status-component :time=&quot;time&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/combat-replay-player-status-component&gt;
+        ///        &lt;combat-replay-actor-rotation-component :time=&quot;time&quot; :actorindex=&quot;playerindex&quot; :enemy=&quot;false&quot;&gt;&lt;/combat-replay-actor-rotation-component&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/div&gt;.
         /// </summary>
-        internal static string tmplSupTable {
+        internal static string tmplCombatReplayPlayerStats {
             get {
-                return ResourceManager.GetString("tmplSupTable", resourceCulture);
+                return ResourceManager.GetString("tmplCombatReplayPlayerStats", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;ul class=&quot;nav nav-tabs&quot;&gt;
-        ///	{{for tabs}}
-        ///	{{if subtabs}}
-        ///	&lt;li class=&quot;nav-item dropdown&quot;&gt;&lt;a class=&quot;nav-link dropdown-toggle&quot; data-toggle=&quot;dropdown&quot; href=&quot;#&quot; role=&quot;button&quot; aria-haspopup=&quot;true&quot; aria-expanded=&quot;true&quot;&gt;{{&gt;name}}&lt;/a&gt;
-        ///		&lt;div class=&quot;dropdown-menu&quot; x-placement=&quot;bottom-start&quot;&gt;
-        ///			{{for subtabs ~idPrefix=~idPrefix+#getIndex()+&quot;-&quot; tabindex=#getIndex()}}
-        ///				&lt;a class=&quot;dropdown-item&quot; data-toggle=&quot;tab&quot; href=&quot;#{{:~idPrefix+#index}}&quot;&gt;{{if icon}}&lt;img src=&quot;{{attr:icon}}&quot; alt=&quot;{{attr:iconName}}&quot; title=&quot;{{at [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;div class=&quot;player-status&quot; :class=&quot;{dead: status === 0, down: status === 1, dc: status === 2}&quot;&gt;
+        ///    &lt;h6 class=&quot;actor-shorten text-center&quot; :title=&quot;player.name&quot;&gt;
+        ///        &lt;img :src=&quot;player.icon&quot; :alt=&quot;player.profession&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;
+        ///        {{player.name}}
+        ///    &lt;/h6&gt;
+        ///&lt;/div&gt;.
         /// </summary>
-        internal static string tmplTabs {
+        internal static string tmplCombatReplayPlayerStatus {
             get {
-                return ResourceManager.GetString("tmplTabs", resourceCulture);
+                return ResourceManager.GetString("tmplCombatReplayPlayerStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///&lt;div&gt;
+        ///    &lt;h3&gt;Range Selectors&lt;/h3&gt;
+        ///    &lt;div class=&quot;d-flex flex-column flex-wrap justify-content-center align-items-center&quot;&gt;
+        ///        &lt;div class=&quot;d-flex flex-column flex-wrap justify-content-center align-items-center mb-2&quot; v-for=&quot;rangeCol in rangeSelectArrays&quot;&gt;
+        ///            &lt;div class=&quot;range-btns d-flex flex-row flex-wrap justify-content-center align-items-center&quot;&gt;
+        ///                &lt;label v-for=&quot;range in rangeCol&quot; @click=&quot;toggleRange(range);&quot;
+        ///                       class=&quot;btn btn-small range-btn&quot; :class [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplCombatReplayRangeSelect {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayRangeSelect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column justify-content-center&quot; style=&quot;min-width: 200px;&quot;&gt;
+        ///    &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mb-1&quot;&gt;
+        ///        &lt;li class=&quot;nav-item&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; :class=&quot;{active: details}&quot; @click=&quot;details = !details&quot;&gt;Details Window &lt;img class=&quot;mb-1 icon&quot; src=&quot;https://wiki.guildwars2.com/images/4/40/Commander_tag_%28red%29.png&quot; data-original-title=&quot;Not properly optimized for now, high cpu cost.&quot; /&gt; &lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///    &lt;/ul&gt;
+        ///    &lt;ul class=&quot;nav  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplCombatReplayStatusData {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayStatusData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;mt-3&quot;&gt;
+        ///    &lt;div class=&quot; d-flex flex-column justify-content-center align-items-center&quot;&gt;
+        ///        &lt;div v-for=&quot;(status, id) in targets&quot; v-if=&quot;alive(status)&quot; class=&quot;target-data ml-1 mr-1&quot;&gt;
+        ///            &lt;combat-replay-target-stats-component :time=&quot;time&quot; :targetindex=&quot;id&quot;&gt;&lt;/combat-replay-target-stats-component&gt;
+        ///        &lt;/div&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/div&gt;.
+        /// </summary>
+        internal static string tmplCombatReplayTargetsStats {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayTargetsStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;combat-replay-actor-buffs-stats-component :time=&quot;time&quot; :actorindex=&quot;targetindex&quot; :enemy=&quot;true&quot;&gt;&lt;/combat-replay-actor-buffs-stats-component&gt;
+        ///    &lt;div class=&quot;d-flex mb-1 mt-1 align-items-center&quot;&gt;
+        ///        &lt;combat-replay-target-status-component :time=&quot;time&quot; :targetindex=&quot;targetindex&quot;&gt;&lt;/combat-replay-target-status-component&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/div&gt;.
+        /// </summary>
+        internal static string tmplCombatReplayTargetStats {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayTargetStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;target-status&quot; :style=&quot;{&apos;background&apos;: getGradient(time), &apos;height&apos;: &apos;35px&apos;}&quot;&gt;
+        ///    &lt;h6 class=&quot;actor-shorten text-center&quot; :title=&quot;target.name + &apos; - &apos; + target.health + &apos; health&apos;&quot;&gt;
+        ///        &lt;img :src=&quot;target.icon&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;
+        ///        {{target.name}}
+        ///    &lt;/h6&gt;
+        ///    &lt;p class=&quot;text-right cr-hp-display&quot;&gt;
+        ///        {{(Math.round(100*getPercent(time))/100).toFixed(2)}} %
+        ///    &lt;/p&gt;
+        ///&lt;/div&gt;.
+        /// </summary>
+        internal static string tmplCombatReplayTargetStatus {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayTargetStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex mt-2 align-items-center&quot;&gt;
+        ///    &lt;div class=&quot;d-flex flex-column align-items-center mr-2&quot; style=&quot;margin-left: auto;&quot;&gt;
+        ///        &lt;combat-replay-damage-data-component :time=&quot;animationStatus.time&quot;
+        ///            :selectedplayer=&quot;animationStatus.selectedPlayer&quot; :selectedplayerid=&quot;animationStatus.selectedPlayerID&quot;&gt;
+        ///        &lt;/combat-replay-damage-data-component&gt;
+        ///        &lt;combat-replay-player-select-component :selectedplayerid=&quot;animationStatus.selectedPlayerID&quot; :light=&quot;light&quot;&gt;&lt;/combat-replay-player- [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplCombatReplayUI {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayUI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;div v-if=&quot;player.minions.length &gt; 0&quot;&gt;
+        ///        &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///            &lt;li&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === -1}&quot; @click=&quot;distmode = -1&quot;&gt;{{player.name}}&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li v-for=&quot;(minion, mindex) in player.minions&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === mindex}&quot; @click=&quot;distmode = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///        &lt;/ul&gt;
+        ///    &lt;/div&gt;
+        ///    &lt;div class=&quot;d-flex flex-row justify-cont [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplDamageDistPlayer {
+            get {
+                return ResourceManager.GetString("tmplDamageDistPlayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;div v-if=&quot;actor !== null&quot;&gt;
+        ///        &lt;div v-if=&quot;isminion&quot;&gt;
+        ///            {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its master&apos;s total
+        ///            {{istarget ? &apos;Target&apos; :&apos;&apos;}} dps
+        ///        &lt;/div&gt;
+        ///        &lt;div v-else&gt;
+        ///            {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its total {{istarget ?
+        ///            &apos;Target&apos; :&apos;&apos;}} dps
+        ///        &lt;/div&gt;
+        ///    &lt;/div&gt;
+        ///    &lt;table class=&quot;table table-sm table-striped table-hover&quot;  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplDamageDistTable {
+            get {
+                return ResourceManager.GetString("tmplDamageDistTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;div v-if=&quot;target.minions.length &gt; 0&quot;&gt;
+        ///        &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///            &lt;li&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === -1}&quot; @click=&quot;distmode = -1&quot;&gt;{{target.name}}&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li v-for=&quot;(minion, mindex) in target.minions&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === mindex}&quot; @click=&quot;distmode = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///        &lt;/ul&gt;
+        ///    &lt;/div&gt;
+        ///    &lt;damagedist-table-component :dmgdist=&quot;dm [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplDamageDistTarget {
+            get {
+                return ResourceManager.GetString("tmplDamageDistTarget", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mt-2 mb-2&quot;&gt;
+        ///        &lt;li v-for=&quot;base in bases&quot; class=&quot;nav-item&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; @click=&quot;specmode = base&quot; :class=&quot;{active: specmode === base}&quot;&gt;{{ base }}&lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///    &lt;/ul&gt;
+        ///    &lt;div&gt;
+        ///        &lt;div v-for=&quot;(spec, index) in orderedSpecs&quot; class=&quot;mt-3 mb-3&quot;&gt;
+        ///            &lt;div v-show=&quot;specToBase[spec.name] === specmode&quot;&gt;
+        ///                &lt;h3 class=&quot;text-center&quot;&gt;{{ spec.name }}&lt;/h3&gt;
+        ///                &lt;dmgmodifier [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplDamageModifierPersStats {
+            get {
+                return ResourceManager.GetString("tmplDamageModifierPersStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///        &lt;li v-if=&quot;itemModifiers.length &gt; 0&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; :class=&quot;{active: displayMode === 0}&quot; @click=&quot;displayMode = 0&quot;&gt; Gear Based Damage Modifiers &lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///        &lt;li v-if=&quot;commonModifiers.length &gt; 0&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; :class=&quot;{active: displayMode === 1}&quot; @click=&quot;displayMode = 1&quot;&gt; Shared Damage Modifiers &lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///        &lt;li&gt;
+        ///            &lt;a class=&quot;nav-link&quot; :class=&quot;{active: displayMode === 2}&quot; @click=&quot;displ [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplDamageModifierStats {
+            get {
+                return ResourceManager.GetString("tmplDamageModifierStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot; :id=&quot;id&quot;&gt;
+        ///        &lt;thead&gt;
+        ///            &lt;tr&gt;
+        ///                &lt;th&gt;Sub&lt;/th&gt;
+        ///                &lt;th&gt;&lt;/th&gt;
+        ///                &lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
+        ///                &lt;th v-for=&quot;modifier in modifiers&quot; :data-original-title=&quot;modifier.name + &apos;&lt;br&gt;&apos; + modifier.tooltip&quot;&gt;
+        ///                    &lt;img :src=&quot;modifier.icon&quot; :alt=&quot;modifier.name&quot; class=&quot;icon icon-hover&quot;&gt;
+        ///                &lt;/th&gt;
+        ///            &lt;/tr&gt;
+        ///        &lt;/th [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplDamageModifierTable {
+            get {
+                return ResourceManager.GetString("tmplDamageModifierTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot; id=&quot;dps-table&quot;&gt;
+        ///        &lt;thead&gt;
+        ///            &lt;tr&gt;
+        ///                &lt;th&gt;Sub&lt;/th&gt;
+        ///                &lt;th&gt;&lt;/th&gt;
+        ///                &lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
+        ///                &lt;th&gt;Account&lt;/th&gt;
+        ///                &lt;th v-if=&quot;!wvw&quot;&gt;Target DPS&lt;/th&gt;
+        ///                &lt;th v-if=&quot;!wvw&quot;&gt;Power&lt;/th&gt;
+        ///                &lt;th v-if=&quot;!wvw&quot;&gt;Condi&lt;/th&gt;
+        ///                &lt;th&gt;All DPS&lt;/th&gt;
+        ///                &lt;th&gt;Power&lt;/th&gt;
+        ///                &lt;th&gt;C [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplDamageTable {
+            get {
+                return ResourceManager.GetString("tmplDamageTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;damagedist-table-component :dmgdist=&quot;dmgtaken&quot; :tableid=&quot;tableid&quot; :actor=&quot;null&quot; :isminion=&quot;false&quot;
+        ///    :istarget=&quot;false&quot; :phaseindex=&quot;phaseindex&quot;&gt;
+        ///&lt;/damagedist-table-component&gt;.
+        /// </summary>
+        internal static string tmplDamageTaken {
+            get {
+                return ResourceManager.GetString("tmplDamageTaken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;div v-if=&quot;recaps&quot;&gt;
+        ///            &lt;div v-for=&quot;index in phaseRecaps&quot;&gt;
+        ///                &lt;h3 v-if=&quot;phaseRecaps.length &gt; 1&quot; class=&quot;text-center&quot;&gt;
+        ///                    Death #{{index + 1}}
+        ///                &lt;/h3&gt;
+        ///                &lt;div v-if=&quot;!recaps[index].toKill&quot;&gt;
+        ///                    &lt;h3 class=&quot;text-center&quot;&gt;Player was instantly killed after down&lt;/h3&gt;
+        ///                    &lt;div class=&quot;text-center&quot;&gt;
+        ///                        Took {{data.totalDamage.down[index]}}
+        ///                        damage to go into do [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplDeathRecap {
+            get {
+                return ResourceManager.GetString("tmplDeathRecap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot; id=&quot;def-table&quot;&gt;
+        ///        &lt;thead&gt;
+        ///            &lt;tr&gt;
+        ///                &lt;th&gt;Sub&lt;/th&gt;
+        ///                &lt;th&gt;&lt;/th&gt;
+        ///                &lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
+        ///                &lt;th&gt;Account&lt;/th&gt;
+        ///                &lt;th&gt;Dmg Taken&lt;/th&gt;
+        ///                &lt;th&gt;Dmg Barrier&lt;/th&gt;
+        ///                &lt;th&gt;Blocked&lt;/th&gt;
+        ///                &lt;th&gt;Invulned&lt;/th&gt;
+        ///                &lt;th&gt;Interrupted&lt;/th&gt;
+        ///                &lt;th&gt;Evaded&lt;/th&gt;
+        ///           [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplDefenseTable {
+            get {
+                return ResourceManager.GetString("tmplDefenseTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mt-2 mb-2&quot;&gt;
+        ///        &lt;li class=&quot;nav-item&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; @click=&quot;dpsmode = 0&quot; :class=&quot;{active: dpsmode === 0}&quot;&gt;Full&lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///        &lt;li v-if=&quot;phase.end - phase.start &gt; 10&quot; class=&quot;nav-item&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; @click=&quot;dpsmode = 1&quot; :class=&quot;{active: dpsmode === 1}&quot;&gt;10s&lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///        &lt;li v-if=&quot;phase.end - phase.start &gt; 30&quot; class=&quot;nav-item&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; @click [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplDPSGraph {
+            get {
+                return ResourceManager.GetString("tmplDPSGraph", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;h3 class=&quot;card-header text-center&quot;&gt;{{ encounter.name }}&lt;/h3&gt;
+        ///    &lt;div class=&quot;card-body container&quot;&gt;
+        ///        &lt;div class=&quot;d-flex flex-row justify-content-center align-items-center&quot;&gt;
+        ///            &lt;img class=&quot;mr-3 icon-xl&quot; :src=&quot;encounter.icon&quot; :alt=&quot;encounter.name&quot;&gt;
+        ///            &lt;div class=&quot;ml-3 d-flex flex-column justify-content-center&quot;&gt;
+        ///                &lt;div class=&quot;mb-2&quot; v-for=&quot;target in encounter.targets&quot;&gt;
+        ///                    &lt;div v-if=&quot;encounter.targets.length &gt; 1&quot; class=&quot;small&quot; style=&quot;text-a [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplEncounter {
+            get {
+                return ResourceManager.GetString("tmplEncounter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;mt-2&quot;&gt;
+        ///    &lt;div v-if=&quot;data.start.length&quot;&gt;
+        ///        Started with:
+        ///        &lt;ul&gt;
+        ///            &lt;li v-for=&quot;initial in data.start&quot;&gt;
+        ///                {{initial.name}} &lt;img class=&quot;icon&quot; :alt=&quot;initial.name&quot; :src=&quot;initial.icon&quot;&gt;
+        ///                {{initial.stack &gt; 1 ? &quot;(&quot;+initial.stack+&quot;)&quot; : &quot;&quot;}}
+        ///            &lt;/li&gt;
+        ///        &lt;/ul&gt;
+        ///    &lt;/div&gt;
+        ///    &lt;div v-if=&quot;data.refreshed.length&quot;&gt;
+        ///        In phase consumable updates:
+        ///        &lt;ul&gt;
+        ///            &lt;li v-for=&quot;refresh in data.refreshed&quot;&gt;
+        ///                {{re [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplFood {
+            get {
+                return ResourceManager.GetString("tmplFood", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;div class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;
+        ///        &lt;ul v-if=&quot;!wvw&quot; class=&quot;nav nav-pills&quot;&gt;
+        ///            &lt;li class=&quot;nav-item&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;mode = 1&quot; :class=&quot;{active: mode}&quot;&gt;Target&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li class=&quot;nav-item&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;mode = 0&quot; :class=&quot;{active: !mode }&quot;&gt;All&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///        &lt;/ul&gt;
+        ///    &lt;/div&gt;
+        ///    &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplGameplayTable {
+            get {
+                return ResourceManager.GetString("tmplGameplayTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;h2 v-if=&quot;layout.desc&quot; :class=&quot;{&apos;text-center&apos;: phaseindex &gt;= 0}&quot;&gt;{{ layoutName }}&lt;/h2&gt;
+        ///    &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///        &lt;li v-for=&quot;tab in layout.tabs&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tab.active}&quot; @click=&quot;select(tab, layout.tabs)&quot;&gt; {{ tab.name }} &lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///    &lt;/ul&gt;
+        ///    &lt;div v-for=&quot;tab in layout.tabs&quot; v-show=&quot;tab.active&quot;&gt;
+        ///        &lt;div v-if=&quot;tab.desc&quot;&gt;{{ tab.desc }}&lt;/div&gt;
+        ///        &lt;div v-if=&quot;tab.layout&quot;&gt;
+        ///            &lt;general-layout-component :layout=&quot;tab.layo [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplGeneralLayout {
+            get {
+                return ResourceManager.GetString("tmplGeneralLayout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;div&gt;
+        ///        &lt;ul v-if=&quot;!wvw&quot; class=&quot;nav nav-tabs&quot;&gt;
+        ///            &lt;li&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 0}&quot; @click=&quot;mode = 0&quot;&gt;Total&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 1}&quot; @click=&quot;mode = 1&quot;&gt;Target&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 2}&quot; @click=&quot;mode = 2&quot;&gt;Cleave&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///        &lt;/ul&gt;
+        ///    &lt;/div&gt;
+        ///    &lt;keep-alive&gt;
+        ///     [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplGraphStats {
+            get {
+                return ResourceManager.GetString("tmplGraphStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;table v-if=&quot;playerMechHeader.length &gt; 0&quot; class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; id=&quot;playermechs&quot;&gt;
+        ///        &lt;thead&gt;
+        ///            &lt;tr&gt;
+        ///                &lt;th width=&quot;30px&quot;&gt;Sub&lt;/th&gt;
+        ///                &lt;th width=&quot;30px&quot;&gt;&lt;/th&gt;
+        ///                &lt;th class=&quot;text-left&quot;&gt;Player&lt;/th&gt;
+        ///                &lt;th v-for=&quot;mech in playerMechHeader&quot; :data-original-title=&quot;mech.description&quot;&gt;
+        ///                    {{ mech.shortName}}
+        ///                &lt;/th&gt;
+        ///            &lt;/tr&gt;
+        ///        &lt;/thead&gt;
+        ///        &lt;t [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplMechanicsTable {
+            get {
+                return ResourceManager.GetString("tmplMechanicsTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mt-2 mb-2&quot;&gt;
+        ///        &lt;li v-for=&quot;base in bases&quot; class=&quot;nav-item&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; @click=&quot;mode = base&quot; :class=&quot;{active: mode === base}&quot;&gt;{{ base }}&lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///    &lt;/ul&gt;
+        ///    &lt;div v-for=&quot;(spec, id) in orderedSpecs&quot; class=&quot;mt-3 mb-3&quot;&gt;
+        ///        &lt;div v-show=&quot;specToBase[spec.name] === mode&quot;&gt;
+        ///            &lt;h3 class=&quot;text-center&quot;&gt;{{ spec.name }}&lt;/h3&gt;
+        ///            &lt;buff-table-component :target=&quot;null&quot; :condition=&quot;false [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplPersonalBuffTable {
+            get {
+                return ResourceManager.GetString("tmplPersonalBuffTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div v-if=&quot;phases.length &gt; 1&quot;&gt;
+        ///    &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center&quot;&gt;
+        ///        &lt;li class=&quot;nav-item&quot; v-for=&quot;(phase, id) in phases&quot; :data-original-title=&quot;getPhaseData(id).duration / 1000.0 + &apos; seconds&apos;&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; @click=&quot;select(phase)&quot; :class=&quot;{active: phase.active}&quot;&gt;{{getPhaseData(id).name}}&lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///    &lt;/ul&gt;
+        ///&lt;/div&gt;.
+        /// </summary>
+        internal static string tmplPhase {
+            get {
+                return ResourceManager.GetString("tmplPhase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;img class=&quot;icon mb-1&quot; src=&quot;https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png&quot; :data-original-title=&quot;scoreExpl&quot; /&gt;
+        ///    &lt;table class=&quot;table table-sm table-bordered composition&quot;&gt;
+        ///        &lt;tbody&gt;
+        ///            &lt;tr v-for=&quot;group in groups&quot;&gt;
+        ///                &lt;td v-for=&quot;player in group&quot; class=&quot;player-cell&quot; :class=&quot;{active: player.id === playerindex}&quot; @click=&quot;select(player.id)&quot;&gt;
+        ///                    &lt;div&gt;
+        ///                        &lt;img :src=&quot;player.icon&quot; :alt=&quot;player.profession&quot; class= [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplPlayers {
+            get {
+                return ResourceManager.GetString("tmplPlayers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    
+        ///        &lt;h3 v-for=&quot;player in players&quot; :key=&quot;player.id&quot; v-if=&quot;!player.isConjure&quot; v-show=&quot;player.id === activeplayer&quot; class=&quot;text-center mt-2&quot;&gt;&lt;img :alt=&quot;player.profession&quot; class=&quot;icon&quot; :src=&quot;player.icon&quot;&gt;{{player.name}}&lt;/h3&gt;
+        ///        &lt;ul class=&quot;nav nav-tabs&quot; v-show=&quot;activeplayer &gt; -1&quot;&gt;
+        ///            &lt;li&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tabmode === 0}&quot; @click=&quot;tabmode = 0&quot;&gt;
+        ///                    Damage
+        ///                    Distribution
+        ///                &lt;/a&gt;
+        ///            &lt;/li&gt;        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplPlayerStats {
+            get {
+                return ResourceManager.GetString("tmplPlayerStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;keep-alive&gt;
+        ///        &lt;dmgdist-player-component v-if=&quot;tabmode === 0&quot; :key=&quot;&apos;dist&apos; + playerindex&quot; :playerindex=&quot;playerindex&quot;
+        ///            :phaseindex=&quot;phaseindex&quot; :activetargets=&quot;activetargets&quot;&gt;&lt;/dmgdist-player-component&gt;
+        ///        &lt;dmgtaken-component v-if=&quot;tabmode ===1&quot; :key=&quot;&apos;taken&apos; + playerindex&quot; :actor=&quot;player&quot; :tableid=&quot;&apos;dmgtaken-player-&apos;+playerindex&quot;
+        ///            :phaseindex=&quot;phaseindex&quot;&gt;&lt;/dmgtaken-component&gt;
+        ///        &lt;player-graph-tab-component v-for=&quot;(ph, id) in phases&quot; v-if=&quot;tabmode === 2  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplPlayerTab {
+            get {
+                return ResourceManager.GetString("tmplPlayerTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mt-1 mb-2&quot;&gt;
+        ///        &lt;li class=&quot;nav-item&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; @click=&quot;dpsmode = 0&quot; :class=&quot;{active: dpsmode === 0}&quot;&gt;Full&lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///        &lt;li v-if=&quot;phase.end - phase.start &gt; 10&quot; class=&quot;nav-item&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; @click=&quot;dpsmode = 1&quot; :class=&quot;{active: dpsmode === 1}&quot;&gt;10s&lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///        &lt;li v-if=&quot;phase.end - phase.start &gt; 30&quot; class=&quot;nav-item&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; @click [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplPlayerTabGraph {
+            get {
+                return ResourceManager.GetString("tmplPlayerTabGraph", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;card&quot;&gt;
+        ///    &lt;div class=&quot;card-body container&quot;&gt;
+        ///        &lt;p&gt;&lt;u&gt;Fill&lt;/u&gt;&lt;/p&gt;
+        ///        &lt;span style=&quot;padding: 2px; background-color:#0000FF; border-style:solid; border-width: 1px; border-color:#000000; color:#FFFFFF&quot;&gt;Hit
+        ///            without aftercast&lt;/span&gt;
+        ///        &lt;span style=&quot;padding: 2px; background-color:#00FF00; border-style:solid; border-width: 1px; border-color:#000000; color:#000000&quot;&gt;Hit
+        ///            with full aftercast&lt;/span&gt;
+        ///        &lt;span style=&quot;padding: 2px; background-color:#FF0000; bo [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplRotationLegend {
+            get {
+                return ResourceManager.GetString("tmplRotationLegend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;div class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;
+        ///        &lt;ul class=&quot;nav nav-pills&quot;&gt;
+        ///            &lt;li class=&quot;nav-item&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;autoattack = !autoattack&quot; :class=&quot;{active: autoattack}&quot;&gt;Show auto attacks&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li class=&quot;nav-item&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;small = !small&quot; :class=&quot;{active: small}&quot;&gt;Small icons&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///        &lt;/ul&gt;
+        ///    &lt;/div&gt;
+        ///    &lt;span class=&quot;rot-skill&quot; v-for=&quot;rota i [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplSimpleRotation {
+            get {
+                return ResourceManager.GetString("tmplSimpleRotation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot; id=&quot;sup-table&quot;&gt;
+        ///        &lt;thead&gt;
+        ///            &lt;tr&gt;
+        ///                &lt;th&gt;Sub&lt;/th&gt;
+        ///                &lt;th&gt;&lt;/th&gt;
+        ///                &lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
+        ///                &lt;th&gt;Account&lt;/th&gt;
+        ///                &lt;th&gt;Condi Cleanse&lt;/th&gt;
+        ///                &lt;th&gt;Resurrects&lt;/th&gt;
+        ///            &lt;/tr&gt;
+        ///        &lt;/thead&gt;
+        ///        &lt;tbody&gt;
+        ///            &lt;tr v-for=&quot;row in tableData.rows&quot; :class=&quot;{active: row.player.id === playerindex} [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplSupportTable {
+            get {
+                return ResourceManager.GetString("tmplSupportTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-row justify-content-center align-items-center mb-2&quot;&gt;
+        ///    &lt;img v-if=&quot;target.health &gt; 0&quot; src=&quot;https://wiki.guildwars2.com/images/b/be/Vitality.png&quot; alt=&quot;Health&quot; class=&quot;icon&quot;
+        ///        :data-original-title=&quot;&apos;Health: &apos; + target.health&quot;&gt;
+        ///    &lt;img v-if=&quot;target.tough &gt; 0&quot; src=&quot;https://wiki.guildwars2.com/images/1/12/Toughness.png&quot; alt=&quot;Toughness&quot; class=&quot;icon&quot;
+        ///        hbHeight :data-original-title=&quot;&apos;Toughness: &apos; + target.tough&quot;&gt;
+        ///    &lt;img v-if=&quot;target.hbWidth &gt; 0&quot; src=&quot;https://wiki.guildwa [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplTargetData {
+            get {
+                return ResourceManager.GetString("tmplTargetData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-row justify-content-center flex-wrap&quot;&gt;
+        ///    &lt;div v-for=&quot;(target, id) in targets&quot; v-show=&quot;show(id)&quot;&gt;
+        ///        &lt;img class=&quot;icon-lg mr-2 ml-2 target-cell&quot; :src=&quot;getTargetData(id).icon&quot; :alt=&quot;getTargetData(id).name&quot; :data-original-title=&quot;getTargetData(id).name&quot;
+        ///            :class=&quot;{active: target.active}&quot; @click=&quot;target.active = !target.active&quot;&gt;
+        ///        &lt;target-data-component :targetid=&quot;id&quot;&gt;&lt;/target-data-component&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/div&gt;.
+        /// </summary>
+        internal static string tmplTargets {
+            get {
+                return ResourceManager.GetString("tmplTargets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;ul v-if=&quot;phaseTargets.length &gt; 1&quot; class=&quot; nav nav-tabs&quot;&gt;
+        ///        &lt;li v-for=&quot;target in phaseTargets&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; :class=&quot;{active: simplephase.focus === target.id}&quot; @click=&quot;simplephase.focus = target.id&quot;&gt;
+        ///                {{target.name}}
+        ///            &lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///    &lt;/ul&gt;
+        ///    &lt;div v-for=&quot;target in phaseTargets&quot; v-show=&quot;simplephase.focus === target.id&quot;&gt;
+        ///        &lt;div class=&quot;d-flex flex-row justify-content-center align-items-center&quot;&gt;
+        ///            &lt;div class=&quot;d-flex f [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplTargetStats {
+            get {
+                return ResourceManager.GetString("tmplTargetStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;keep-alive&gt;
+        ///        &lt;dmgdist-target-component v-if=&quot;mode === 0&quot; :key=&quot;&apos;dist&apos; + targetindex&quot; :phaseindex=&quot;phaseindex&quot;
+        ///            :targetindex=&quot;targetindex&quot;&gt;&lt;/dmgdist-target-component&gt;
+        ///        &lt;dmgtaken-component v-if=&quot;mode === 1&quot; :actor=&quot;target&quot; :key=&quot;&apos;taken&apos; + targetindex&quot; :tableid=&quot;&apos;dmgtaken-target-&apos;+targetindex&quot;
+        ///            :phaseindex=&quot;phaseindex&quot;&gt;&lt;/dmgtaken-component&gt;
+        ///        &lt;target-graph-tab-component v-for=&quot;(ph, id) in phases&quot; v-if=&quot;mode === 2 &amp;&amp; id === phaseindex&quot; :key=&quot;id&quot; :target [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplTargetTab {
+            get {
+                return ResourceManager.GetString("tmplTargetTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div&gt;
+        ///    &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mt-5 mb-2&quot;&gt;
+        ///        &lt;li class=&quot;nav-item&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; @click=&quot;dpsmode = 0&quot; :class=&quot;{active: dpsmode === 0}&quot;&gt;Full&lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///        &lt;li v-if=&quot;phase.end - phase.start &gt; 10&quot; class=&quot;nav-item&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; @click=&quot;dpsmode = 1&quot; :class=&quot;{active: dpsmode === 1}&quot;&gt;10s&lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///        &lt;li v-if=&quot;phase.end - phase.start &gt; 30&quot; class=&quot;nav-item&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; @click [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplTargetTabGraph {
+            get {
+                return ResourceManager.GetString("tmplTargetTabGraph", resourceCulture);
             }
         }
     }

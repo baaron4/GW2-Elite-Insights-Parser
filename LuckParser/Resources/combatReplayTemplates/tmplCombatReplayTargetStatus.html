@@ -1,0 +1,9 @@
+<div class="target-status" :style="{'background': getGradient(time), 'height': '35px'}">
+    <h6 class="actor-shorten text-center" :title="target.name + ' - ' + target.health + ' health'">
+        <img :src="target.icon" height="18" width="18">
+        {{target.name}}
+    </h6>
+    <p class="text-right cr-hp-display">
+        {{(Math.round(100*getPercent(time))/100).toFixed(2)}} %
+    </p>
+</div>

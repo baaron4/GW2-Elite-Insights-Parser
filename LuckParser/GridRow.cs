@@ -71,7 +71,6 @@ namespace LuckParser
         /// </summary>
         public void Cancel()
         {
-            Status = "Cancelling...";
             Metadata.State = RowState.Cancelling;
             BgWorker.CancelAsync();
         }

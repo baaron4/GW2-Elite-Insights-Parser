@@ -1,14 +1,15 @@
-﻿using Newtonsoft.Json;
+﻿using LuckParser.Parser;
+using Newtonsoft.Json;
 using System;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class RectangleActor : Actor
+    public class RectangleActor : FormActor
     {
         public int Height { get; }
         public int Width { get; }
 
-        public RectangleActor(bool fill, int growing, int width, int height, Tuple<int, int> lifespan, string color, Connector connector) : base(fill, growing, lifespan, color, connector)
+        public RectangleActor(bool fill, int growing, int width, int height, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, lifespan, color, connector)
         {
             Height = height;
             Width = width;
@@ -16,13 +17,13 @@ namespace LuckParser.Models.ParseModels
         //
 
 
-        protected class RectangleSerializable : Serializable
+        protected class RectangleSerializable : FormSerializable
         {
             public int Height { get; set; }
             public int Width { get; set; }
         }
 
-        public override string GetCombatReplayJSON(CombatReplayMap map)
+        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
             RectangleSerializable aux = new RectangleSerializable
             {
@@ -32,11 +33,11 @@ namespace LuckParser.Models.ParseModels
                 Fill = Filled,
                 Color = Color,
                 Growing = Growing,
-                Start = Lifespan.Item1,
-                End = Lifespan.Item2,
-                ConnectedTo = ConnectedTo.GetConnectedTo(map)
+                Start = Lifespan.start,
+                End = Lifespan.end,
+                ConnectedTo = ConnectedTo.GetConnectedTo(map, log)
             };
-            return JsonConvert.SerializeObject(aux);
+            return aux;
         }
     }
 }

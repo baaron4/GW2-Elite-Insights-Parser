@@ -1,0 +1,12 @@
+<div>
+    <div>
+        <h3 class="text-center">Conditions</h3>
+        <buff-table-component :condition="true" :generation="true" :id="'condition-stats-table-' + target.id" :buffs="conditions"
+            :playerdata="condiData" :sums="condiSums" :playerindex="playerindex"></buff-table-component>
+    </div>
+    <div v-show="hasBoons" class="mt-2">
+        <h3 class="text-center">Boons</h3>
+        <buff-table-component :condition="false" :generation="false" :id="'buff-stats-table-' + target.id" :buffs="boons"
+            :playerdata="boonData" :sums="[]"></buff-table-component>
+    </div>
+</div>

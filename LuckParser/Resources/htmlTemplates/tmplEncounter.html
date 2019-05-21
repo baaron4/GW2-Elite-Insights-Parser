@@ -1,0 +1,24 @@
+<div>
+    <h3 class="card-header text-center">{{ encounter.name }}</h3>
+    <div class="card-body container">
+        <div class="d-flex flex-row justify-content-center align-items-center">
+            <img class="mr-3 icon-xl" :src="encounter.icon" :alt="encounter.name">
+            <div class="ml-3 d-flex flex-column justify-content-center">
+                <div class="mb-2" v-for="target in encounter.targets">
+                    <div v-if="encounter.targets.length > 1" class="small" style="text-align:center;">
+                        {{target.name}}
+                    </div>
+                    <div class="progress" style="width: 100%; height: 10px;" :data-original-title="(target.hpLeft ? target.hpLeft / 100 : 0) + '% left'">
+                        <div class="progress-bar bg-success" :style="{width: target.percent + '%'}" role="progressbar"
+                            :aria-valuenow="target.percent" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="small" style="text-align:center;">{{ target.health }} Health</div>
+                </div>
+                <div class="mb-2 text" :class="getResultClass(encounter.success)">
+                    Result: {{getResultText(encounter.success)}}
+                </div>
+                <div class="mb-2">Duration: {{ encounter.duration }}</div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -2,54 +2,177 @@
 using System.Collections.Generic;
 using LuckParser.Models.ParseModels;
 
-namespace LuckParser.Models.DataModels
+namespace LuckParser.Models.JsonModels
 {
-    class JsonLog
+    /// <summary>
+    /// The root of the JSON
+    /// </summary>
+    public class JsonLog
     {
-
-        public class MechanicDesc
+        /// <summary>
+        /// Describes the skill item
+        /// </summary>
+        public class SkillDesc
         {
-            public string PlotlySymbol;
-            public string PlotlyColor;
-            public int Enemy;
-            public string Description;
-            public string PlotlyName;
+            public SkillDesc(SkillItem item)
+            {
+                Name = item.Name;
+                AutoAttack = item.AA;
+                Icon = item.Icon;
+            }
+
+            /// <summary>
+            /// Name of the skill
+            /// </summary>
+            public string Name;
+            /// <summary>
+            /// If the skill is an auto attack
+            /// </summary>
+            public bool AutoAttack;
+            /// <summary>
+            /// Icon of the skill
+            /// </summary>
+            public string Icon;
         }
 
+        /// <summary>
+        /// Describs the buff item
+        /// </summary>
         public class BuffDesc
         {
+            public BuffDesc(Boon item)
+            {
+                Name = item.Name;
+                Icon = item.Link;
+                Stacking = item.Type == Boon.BoonType.Intensity;
+            }
+
+            /// <summary>
+            /// Name of the buff
+            /// </summary>
+            public string Name;
+            /// <summary>
+            /// Icon of the buff
+            /// </summary>
             public string Icon;
-            public int Stacking;
-            public int Table;
+            /// <summary>
+            /// True if the buff is stacking
+            /// </summary>
+            public bool Stacking;
         }
 
-        public class JsonExtraLog
+        /// <summary>
+        /// Describs the damage modifier item
+        /// </summary>
+        public class DamageModDesc
         {
-            public Dictionary<long, BuffDesc> BuffData = null;
-            public Dictionary<long, string> SkillIcons = null;
-            public Dictionary<string, string> ActorIcons = null;
-            public string FightIcon = null;
-            public Dictionary<string, string> GeneralIcons = null;
-            public Dictionary<string, MechanicDesc> MechanicData = null;
-            public Dictionary<string, List<long>> PersonalBuffs = null;
+            public DamageModDesc(DamageModifier item)
+            {
+                Name = item.Name;
+                Icon = item.Url;
+                Description = item.Tooltip;
+                NonMultiplier = !item.Multiplier;
+            }
+
+            /// <summary>
+            /// Name of the damage modifier
+            /// </summary>
+            public string Name;
+            /// <summary>
+            /// Icon of the damage modifier
+            /// </summary>
+            public string Icon;
+            /// <summary>
+            /// Description of the damage modifier
+            /// </summary>
+            public string Description;
+            /// <summary>
+            /// False if the modifier is multiplicative \n
+            /// If true then the correspond <see cref="JsonBuffDamageModifierData.JsonBuffDamageModifierItem.DamageGain"/> are damage done under the effect. One will have to deduce the gain manualy depending on your gear.
+            /// </summary>
+            public bool NonMultiplier;
         }
 
+        /// <summary>
+        /// The used EI version
+        /// </summary>
         public string EliteInsightsVersion;
+        /// <summary>
+        /// The id with which the log has been triggered
+        /// </summary>
         public int TriggerID;
+        /// <summary>
+        /// The name of the fight
+        /// </summary>
         public string FightName;
+        /// <summary>
+        /// The used arcdps version
+        /// </summary>
         public string ArcVersion;
+        /// <summary>
+        /// The player who recorded the fight
+        /// </summary>
         public string RecordedBy;
+        /// <summary>
+        /// The time at which the fight started in "yyyy-mm-dd hh:mm:ss zz" format \n
+        /// The value will be <see cref="LogData.DefaultTimeValue"/> if the event does not exist
+        /// </summary>
         public string TimeStart;
+        /// <summary>
+        /// The time at which the fight ended in "yyyy-mm-dd hh:mm:ss zz" format \n
+        /// The value will be <see cref="LogData.DefaultTimeValue"/> if the event does not exist
+        /// </summary>
         public string TimeEnd;
+        /// <summary>
+        /// The duration of the fight in "xh xm xs xms" format
+        /// </summary>
         public string Duration;
-        public int Success;
-        public List<JsonBoss> Boss;
+        /// <summary>
+        /// The success status of the fight
+        /// </summary>
+        public bool Success;
+        /// <summary>
+        /// The list of targets
+        /// </summary>
+        /// <seealso cref="JsonTarget"/>
+        public List<JsonTarget> Targets;
+        /// <summary>
+        /// The list of players
+        /// </summary>
+        /// <seealso cref="JsonPlayer"/>
         public List<JsonPlayer> Players;
+        /// <summary>
+        /// The list of phases
+        /// </summary>
+        /// <seealso cref="JsonPhase"/>
         public List<JsonPhase> Phases;
-        public Dictionary<string, List<JsonMechanic>> Mechanics;
+        /// <summary>
+        /// List of mechanics
+        /// </summary>
+        /// <seealso cref="JsonMechanics"/>
+        public List<JsonMechanics> Mechanics;
+        /// <summary>
+        /// Upload links to dps.reports/raidar
+        /// </summary>
         public string[] UploadLinks;
-        public Dictionary<long, string> SkillNames;
-        public Dictionary<long, string> BuffNames;
-        public JsonExtraLog ED = null;
+        /// <summary>
+        /// Dictionary of skills' description, the key is in "'s' + id" format
+        /// </summary>
+        /// <seealso cref="SkillDesc"/>
+        public Dictionary<string, SkillDesc> SkillMap;
+        /// <summary>
+        /// Dictionary of buffs' description, the key is in "'b' + id" format
+        /// </summary>
+        /// <seealso cref="BuffDesc"/>
+        public Dictionary<string, BuffDesc> BuffMap;
+        /// <summary>
+        /// Dictionary of damage modifiers' description, the key is in "'d' + id" format
+        /// </summary>
+        /// <seealso cref="DamageModDesc"/>
+        public Dictionary<string, DamageModDesc> DamageModMap;
+        /// <summary>
+        /// Dictionary of personal buffs. The key is the profession, the value is a list of buff ids
+        /// </summary>
+        public Dictionary<string, HashSet<long>> PersonalBuffs;
     }
 }

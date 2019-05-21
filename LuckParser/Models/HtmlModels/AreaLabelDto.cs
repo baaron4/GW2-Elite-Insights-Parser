@@ -1,13 +1,12 @@
-﻿using System.Runtime.Serialization;
+﻿using System.ComponentModel;
 
 namespace LuckParser.Models.HtmlModels
 {
-    [DataContract]
     public class AreaLabelDto
     {
-        [DataMember] public double start;
-        [DataMember] public double end;
-        [DataMember] public string label;
-        [DataMember] public bool highlight;
+        public double Start;
+        public double End;
+        public string Label;
+        public bool Highlight;
     }
 }

@@ -1,17 +1,7 @@
-﻿using System.Runtime.Serialization;
-
-namespace LuckParser.Models.HtmlModels
-{
-    [DataContract]
+﻿namespace LuckParser.Models.HtmlModels
+{   
     public class EnemyDto
     {
-        [DataMember] public string name;
-
-        public EnemyDto() { }
-
-        public EnemyDto(string name)
-        {
-            this.name = name;
-        }
+        public string Name;
     }
 }
