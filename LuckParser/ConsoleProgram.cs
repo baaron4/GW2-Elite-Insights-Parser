@@ -68,7 +68,7 @@ namespace LuckParser
 
                 if (!GeneralHelper.HasFormat())
                 {
-                    throw new CancellationException(row, new Exception("No output format has been selected"));
+                    throw new CancellationException(row, new InvalidDataException("No output format has been selected"));
                 }
 
                 if (GeneralHelper.IsSupportedFormat(fInfo.Name))

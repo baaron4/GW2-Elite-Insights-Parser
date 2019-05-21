@@ -12,6 +12,27 @@ namespace LuckParser.tst
     [TestClass]
     public class StabilityTestEvtc
     {
+        private void Loop(List<string> failed, string file)
+        {
+            try
+            {
+                ParsedLog log = TestHelper.ParseLog(file);
+                TestHelper.JsonString(log);
+                TestHelper.HtmlString(log);
+            }
+            catch (CancellationException canc)
+            {
+                if (canc.InnerException == null || !(canc.InnerException is TooShortException || canc.InnerException is SkipException))
+                {
+                    failed.Add(file);
+                }
+            }
+            catch (Exception ex)
+            {
+                failed.Add(file);
+            }
+        }
+
         [TestMethod]
         public void TestEvtc()
         {
@@ -23,19 +44,7 @@ namespace LuckParser.tst
             List<string> toCheck = Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories).ToList();
             foreach (string file in toCheck)
             {
-                try
-                {
-                    ParsedLog log = TestHelper.ParseLog(file);
-                    TestHelper.JsonString(log);
-                    TestHelper.HtmlString(log);
-                }
-                catch (Exception ex)
-                {
-                    if (!(ex is TooShortException || ex is SkipException))
-                    {
-                        failed.Add(file);
-                    }
-                }
+                Loop(failed, file);
             }
 
             Assert.IsTrue(failed.Count == 0, failed.ToString());
@@ -51,19 +60,7 @@ namespace LuckParser.tst
             List<string> toCheck = Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories).ToList();
             foreach (string file in toCheck)
             {
-                try
-                {
-                    ParsedLog log = TestHelper.ParseLog(file);
-                    TestHelper.JsonString(log);
-                    TestHelper.HtmlString(log);
-                }
-                catch (Exception ex)
-                {
-                    if (!(ex is TooShortException || ex is SkipException))
-                    {
-                        failed.Add(file);
-                    }
-                }
+                Loop(failed, file);
             }
 
             Assert.IsTrue(failed.Count == 0, failed.ToString());
@@ -80,19 +77,7 @@ namespace LuckParser.tst
             List<string> toCheck = Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories).ToList();
             foreach (string file in toCheck)
             {
-                try
-                {
-                    ParsedLog log = TestHelper.ParseLog(file);
-                    TestHelper.JsonString(log);
-                    TestHelper.HtmlString(log);
-                }
-                catch (Exception ex)
-                {
-                    if (!(ex is TooShortException || ex is SkipException))
-                    {
-                        failed.Add(file);
-                    }
-                }
+                Loop(failed, file);
             }
 
             Assert.IsTrue(failed.Count == 0, failed.ToString());
