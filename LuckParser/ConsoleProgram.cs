@@ -68,7 +68,7 @@ namespace LuckParser
 
                 if (!GeneralHelper.HasFormat())
                 {
-                    throw new CancellationException(row, new Exception("No output format has been selected"));
+                    throw new CancellationException(row, new InvalidDataException("No output format has been selected"));
                 }
 
                 if (GeneralHelper.IsSupportedFormat(fInfo.Name))
@@ -207,8 +207,8 @@ namespace LuckParser
                         {
                             using (StreamWriter sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
                             {
-                                var builder = new RawFormatBuilder(sw, log, uploadresult);
-                                builder.CreateJSON();
+                                var builder = new RawFormatBuilder(log, uploadresult);
+                                builder.CreateJSON(sw);
                             }
                         }
                     }
@@ -223,8 +223,8 @@ namespace LuckParser
                         {
                             using (StreamWriter sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
                             {
-                                var builder = new RawFormatBuilder(sw, log, uploadresult);
-                                builder.CreateXML();
+                                var builder = new RawFormatBuilder(log, uploadresult);
+                                builder.CreateXML(sw);
                             }
                         }
                     }

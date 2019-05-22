@@ -54,7 +54,8 @@ namespace LuckParser.Models.ParseModels
 
         private static long TranslateWeaverAttunement(List<CombatItem> buffApplies)
         {
-            if (buffApplies.Count > 3)
+            // check if more than 3 ids are present
+            if (buffApplies.Select(x => x.SkillID).Distinct().Count() > 3)
             {
                 throw new InvalidOperationException("Too much buff apply events in TranslateWeaverAttunement");
             }

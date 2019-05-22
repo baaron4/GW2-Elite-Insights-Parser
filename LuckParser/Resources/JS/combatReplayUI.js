@@ -9,51 +9,51 @@ var compileCombatReplayUI = function () {
                 animationStatus: {
                     time: 0,
                     selectedPlayer: null,
-                    selectedPlayerID: null
+                    selectedPlayerID: null,
+                    animated: false
                 }
             };
         },
         mounted() {
             animator = new Animator(logData.crData, this.animationStatus);
         },
-    });
-
-    Vue.component("combat-replay-animation-control-component", {
-        props: ["mode", "light"],
-        template: `${tmplCombatReplayAnimationControl}`,
-        data: function () {
-            return {
-                speeds: [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0],
-                animated: false,
-                selectedSpeed: 1,
-                backwards: false,
-                canvas: {
-                    x: logData.crData.sizes[0],
-                    y: logData.crData.sizes[1]
-                },
-                maxTime: logData.crData.maxTime
-            };
-        },
         watch: {
             mode: {
                 handler: function () {
-                    if (this.animated && animator != null) {
+                    if (this.animationStatus.animated && animator != null) {
                         if (this.mode === 1) {
-                            animator.startAnimate();
+                            animator.startAnimate(false);
                         } else {
-                            animator.stopAnimate();
+                            animator.stopAnimate(false);
                         }
                     }
                 },
                 deep: true
             }
         },
+    });
+
+    Vue.component("combat-replay-animation-control-component", {
+        props: ["light", "animated"],
+        template: `${tmplCombatReplayAnimationControl}`,
+        data: function () {
+            return {
+                speeds: [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0],
+                selectedSpeed: 1,
+                backwards: false,
+                canvas: {
+                    x: logData.crData.sizes[0],
+                    y: logData.crData.sizes[1]
+                },
+                maxTime: logData.crData.maxTime,
+            };
+        },
         methods: {
             toggleBackwards: function () {
                 this.backwards = animator.toggleBackwards();
             },
             toggleAnimate: function () {
-                this.animated = animator.toggleAnimate();
+                animator.toggleAnimate();
             },
             restartAnimate: function () {
                 animator.restartAnimate();

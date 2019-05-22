@@ -1,7 +1,7 @@
 <div class="d-flex flex-column justify-content-center" style="min-width: 200px;">
     <ul class="nav nav-pills d-flex flex-row justify-content-center mb-1">
         <li class="nav-item">
-            <a class="nav-link" :class="{active: details}" @click="details = !details">Details Window <img class="mb-1 icon" src="https://wiki.guildwars2.com/images/4/40/Commander_tag_%28red%29.png" data-original-title="Not properly optimized for now, high cpu cost." /> </a>
+            <a class="nav-link" :class="{active: details}" @click="details = !details">Details Window <img class="mb-1 icon" src="https://wiki.guildwars2.com/images/4/40/Commander_tag_%28red%29.png" data-original-title="Slight performance hit." /> </a>
         </li>
     </ul>
     <ul class="nav nav-pills d-flex flex-row justify-content-center mb-1" v-if="details">

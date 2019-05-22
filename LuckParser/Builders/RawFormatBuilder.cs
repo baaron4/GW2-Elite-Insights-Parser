@@ -23,14 +23,13 @@ using static LuckParser.Models.JsonModels.JsonMechanics;
 
 namespace LuckParser.Builders
 {
-    class RawFormatBuilder
+    public class RawFormatBuilder
     {
 
         readonly ParsedLog _log;
         readonly List<PhaseData> _phases;
 
         readonly Statistics _statistics;
-        readonly StreamWriter _sw;
 
         private readonly string[] _uploadLink;
         //
@@ -39,10 +38,9 @@ namespace LuckParser.Builders
         private readonly Dictionary<string, JsonLog.DamageModDesc> _damageModDesc = new Dictionary<string, JsonLog.DamageModDesc>();
         private readonly Dictionary<string, HashSet<long>> _personalBuffs = new Dictionary<string, HashSet<long>>();
        
-        public RawFormatBuilder(StreamWriter sw, ParsedLog log, string[] UploadString)
+        public RawFormatBuilder(ParsedLog log, string[] UploadString)
         {
             _log = log;
-            _sw = sw;
             _phases = log.FightData.GetPhases(log);
 
             _statistics = log.Statistics;
@@ -50,7 +48,7 @@ namespace LuckParser.Builders
             _uploadLink = UploadString;
         }
 
-        public void CreateJSON()
+        public JsonLog CreateJsonLog()
         {
             var log = new JsonLog();
 
@@ -60,6 +58,12 @@ namespace LuckParser.Builders
             SetPhases(log);
             SetMechanics(log);
 
+            return log;
+        }
+
+        public void CreateJSON(StreamWriter sw)
+        {
+            var log = CreateJsonLog();
             DefaultContractResolver contractResolver = new DefaultContractResolver
             {
                 NamingStrategy = new CamelCaseNamingStrategy()
@@ -70,22 +74,17 @@ namespace LuckParser.Builders
                 NullValueHandling = NullValueHandling.Ignore,
                 ContractResolver = contractResolver
             };
-            var writer = new JsonTextWriter(_sw)
+            var writer = new JsonTextWriter(sw)
             {
                 Formatting = Properties.Settings.Default.IndentJSON ? Newtonsoft.Json.Formatting.Indented : Newtonsoft.Json.Formatting.None
             };
             serializer.Serialize(writer, log);
         }
 
-        public void CreateXML()
+        public void CreateXML(StreamWriter sw)
         {
-            var log = new JsonLog();
 
-            SetGeneral(log);
-            SetTargets(log);
-            SetPlayers(log);
-            SetPhases(log);
-            SetMechanics(log);
+            var log = CreateJsonLog();
 
             DefaultContractResolver contractResolver = new DefaultContractResolver
             {
@@ -103,7 +102,7 @@ namespace LuckParser.Builders
             string json = JsonConvert.SerializeObject(root, settings);
 
             XmlDocument xml = JsonConvert.DeserializeXmlNode(json);
-            XmlTextWriter xmlTextWriter = new XmlTextWriter(_sw)
+            XmlTextWriter xmlTextWriter = new XmlTextWriter(sw)
             {
                 Formatting = Properties.Settings.Default.IndentXML ? System.Xml.Formatting.Indented : System.Xml.Formatting.None
             };
@@ -211,8 +210,8 @@ namespace LuckParser.Builders
                 int finalTargetHealth = target.HealthOverTime.Count > 0
                     ? target.HealthOverTime.Last().hp
                     : 10000;
-                jsTarget.FinalHealth = (int)Math.Round(target.Health * (finalTargetHealth * 0.01));
                 jsTarget.HealthPercentBurned = 100.0 - finalTargetHealth * 0.01;
+                jsTarget.FinalHealth = (int)Math.Round(target.Health * (jsTarget.HealthPercentBurned * 0.01));
                 log.Targets.Add(jsTarget);
             }
         }

@@ -173,29 +173,33 @@ class Animator {
     }
 
     toggleAnimate() {
-        if (!this.startAnimate()) {
-            this.stopAnimate();
-            return false;
+        if (!this.startAnimate(true)) {
+            this.stopAnimate(true);
         }
-        return true;
     }
 
-    startAnimate() {
+    startAnimate(updateReactiveStatus) {
         if (this.animation === null && this.times.length > 0) {
             if (this.reactiveDataStatus.time >= this.times[this.times.length - 1]) {
                 this.reactiveDataStatus.time = 0;
             }
             this.prevTime = new Date().getTime();
             this.animation = requestAnimationFrame(animateCanvas);
+            if (updateReactiveStatus) {
+                this.reactiveDataStatus.animated = true;
+            }
             return true;
         }
         return false;
     }
 
-    stopAnimate() {
+    stopAnimate(updateReactiveStatus) {
         if (this.animation !== null) {
             window.cancelAnimationFrame(this.animation);
             this.animation = null;
+            if (updateReactiveStatus) {
+                this.reactiveDataStatus.animated = false;
+            }
             return true;
         }
         return false;
@@ -462,7 +466,7 @@ function animateCanvas(noRequest) {
         animator.reactiveDataStatus.time = Math.round(Math.max(Math.min(animator.reactiveDataStatus.time + animator.getSpeed() * timeOffset, lastTime),0));
     }
     if ((animator.reactiveDataStatus.time === lastTime && !animator.backwards) || (animator.reactiveDataStatus.time === 0 && animator.backwards)) {
-        animator.stopAnimate();
+        animator.stopAnimate(true);
     }
     animator.timeSlider.value = animator.reactiveDataStatus.time.toString();
     if (noRequest > -2) {

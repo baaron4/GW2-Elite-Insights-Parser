@@ -18,7 +18,7 @@ using LuckParser.Models.Logic;
 
 namespace LuckParser.Builders
 {
-    class HTMLBuilder
+    public class HTMLBuilder
     {
         private readonly string _scriptVersion;
         private readonly int _scriptVersionRev;
@@ -724,7 +724,7 @@ namespace LuckParser.Builders
             }
             string scriptContent = Properties.Resources.combatreplay_js;
             CombatReplayMap map = _log.FightData.Logic.GetCombatMap();
-            if (Properties.Settings.Default.HtmlExternalScripts)
+            if (Properties.Settings.Default.HtmlExternalScripts && path != null)
             {
 #if DEBUG
                 string jsFileName = "EliteInsights-CR-" + _scriptVersion + ".debug.js";
@@ -834,7 +834,7 @@ namespace LuckParser.Builders
         {
             string scriptContent = Properties.Resources.ei_css;
 
-            if (Properties.Settings.Default.HtmlExternalScripts)
+            if (Properties.Settings.Default.HtmlExternalScripts && path != null)
             {
 #if DEBUG
                 string cssFilename = "EliteInsights-" + _scriptVersion + ".debug.css";
@@ -885,7 +885,7 @@ namespace LuckParser.Builders
             }
             scriptContent = BuildTemplates(scriptContent);
 
-            if (Properties.Settings.Default.HtmlExternalScripts)
+            if (Properties.Settings.Default.HtmlExternalScripts && path != null)
             {
 #if DEBUG
                 string scriptFilename = "EliteInsights-" + _scriptVersion + ".debug.js";
@@ -930,7 +930,7 @@ namespace LuckParser.Builders
             }
             scriptContent = BuildCRTemplates(scriptContent);
 
-            if (Properties.Settings.Default.HtmlExternalScripts)
+            if (Properties.Settings.Default.HtmlExternalScripts && path != null)
             {
 #if DEBUG
                 string scriptFilename = "EliteInsights-CRLink-" + _scriptVersion + ".debug.js";

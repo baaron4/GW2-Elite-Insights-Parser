@@ -14,7 +14,7 @@ var compileCombatReplay = function () {
                     var animated = animator.animation !== null;
                     if (animated) {
                         var speed = animator.speed;
-                        if (Math.abs(this.time - this.refreshTime) > speed * 96) {
+                        if (Math.abs(this.time - this.refreshTime) > speed * 64) {
                             this.refreshTime = this.time;
                             return this.time;
                         }
@@ -382,10 +382,12 @@ var compileCombatReplay = function () {
                 } else {
                     for (j = id; j < this.actorRotation.length; j++) {
                         next = this.actorRotation[j];
-                        res.nexts.push({
-                            skill: findSkill(false, next[1]),
-                            end: next[3]
-                        });
+                        if (next[0] >= time) {
+                            res.nexts.push({
+                                skill: findSkill(false, next[1]),
+                                end: next[3]
+                            });
+                        }
                         if (res.nexts.length == 3) {
                             break;
                         }

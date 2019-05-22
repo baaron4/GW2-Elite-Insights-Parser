@@ -180,7 +180,7 @@ namespace LuckParser
 
                 if (!GeneralHelper.HasFormat())
                 {
-                    throw new CancellationException(rowData, new Exception("No output format has been selected"));
+                    throw new CancellationException(rowData, new InvalidDataException("No output format has been selected"));
                 }
 
                 if (GeneralHelper.IsSupportedFormat(fInfo.Name))
@@ -271,7 +271,7 @@ namespace LuckParser
                     }
                     if (saveDirectory == null)
                     {
-                        throw new CancellationException(rowData, new Exception("Invalid save directory"));
+                        throw new CancellationException(rowData, new InvalidDataException("Invalid save directory"));
                     }
                     string result = log.FightData.Success ? "kill" : "fail";
                     string encounterLengthTerm = Properties.Settings.Default.AddDuration ? "_" + (log.FightData.FightDuration / 1000).ToString() + "s" : "";
@@ -326,8 +326,8 @@ namespace LuckParser
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         using (var sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
                         {
-                            var builder = new RawFormatBuilder(sw, log, uploadresult);
-                            builder.CreateJSON();
+                            var builder = new RawFormatBuilder(log, uploadresult);
+                            builder.CreateJSON(sw);
                         }
                     }
 
@@ -343,8 +343,8 @@ namespace LuckParser
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         using (var sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
                         {
-                            var builder = new RawFormatBuilder(sw, log, uploadresult);
-                            builder.CreateXML();
+                            var builder = new RawFormatBuilder(log, uploadresult);
+                            builder.CreateXML(sw);
                         }
                     }
 
