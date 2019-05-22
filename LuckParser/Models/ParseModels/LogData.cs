@@ -12,9 +12,7 @@ namespace LuckParser.Models.ParseModels
         public string PoV { get; private set; } = "N/A";
         private readonly string _dateFormat = "yyyy-MM-dd HH:mm:ss zz";
         public string LogStart { get; private set; }
-        public long LogStartUnixSeconds { get; private set; }
         public string LogEnd { get; private set; }
-        public long LogEndUnixSeconds { get; private set; }
         // private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 
         // Constructors
@@ -41,13 +39,11 @@ namespace LuckParser.Models.ParseModels
 
         public void SetLogStart(long unixSeconds)
         {
-            LogStartUnixSeconds = unixSeconds;
             LogStart = GetDateTime(unixSeconds);
         }
 
         public void SetLogEnd(long unixSeconds)
         {
-            LogEndUnixSeconds = unixSeconds;
             LogEnd = GetDateTime(unixSeconds);
         }
     }
