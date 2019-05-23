@@ -326,6 +326,10 @@ namespace LuckParser.Models.ParseModels
 
                 if (Properties.Settings.Default.ParseCombatReplay && log.CanCombatReplay)
                 {
+                    if (CombatReplay == null)
+                    {
+                        InitCombatReplay(log);
+                    }
                     List<Point3D> positions = CombatReplay.Positions.Where(x => x.Time >= phase.Start && x.Time <= phase.End).ToList();
                     List<Point3D> stackCenterPositions = log.Statistics.GetStackCenterPositions(log);
                     int offset = CombatReplay.Positions.Count(x => x.Time < phase.Start);
