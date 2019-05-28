@@ -28,10 +28,10 @@ namespace LuckParser.Models.ParseModels
 
         public AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, offset)
         {
-            From = agentData.GetAgentByInstID(evtcItem.SrcInstid, evtcItem.Time);
-            MasterFrom = evtcItem.SrcMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.SrcMasterInstid, evtcItem.Time) : null;
-            To = agentData.GetAgentByInstID(evtcItem.DstInstid, evtcItem.Time);
-            MasterTo = evtcItem.DstMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.DstMasterInstid, evtcItem.Time) : null;
+            From = agentData.GetAgentByInstID(evtcItem.SrcInstid, Time);
+            MasterFrom = evtcItem.SrcMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.SrcMasterInstid, Time) : null;
+            To = agentData.GetAgentByInstID(evtcItem.DstInstid, Time);
+            MasterTo = evtcItem.DstMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.DstMasterInstid, Time) : null;
             SkillID = evtcItem.SkillID;
             ShieldDamage = evtcItem.IsShields > 0 ? evtcItem.OverstackValue > 0 ? (int)evtcItem.OverstackValue : evtcItem.Value : 0;
             IsNinety = evtcItem.IsNinety > 0;

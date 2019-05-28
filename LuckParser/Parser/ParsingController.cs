@@ -596,7 +596,6 @@ namespace LuckParser.Parser
         /// </summary>
         private void FillMissingData()
         {
-            CompleteAgents();
             long start, end;
             if (_combatItems.Count > 0)
             {
@@ -607,6 +606,7 @@ namespace LuckParser.Parser
             {
                 throw new InvalidDataException("No combat events found");
             }
+            CompleteAgents();
             _fightData = new FightData(_id, _agentData, start, end);
             _fightData.Logic.ComputeFightTargets(_agentData, _fightData, _combatItems);
             // Dealing with special cases

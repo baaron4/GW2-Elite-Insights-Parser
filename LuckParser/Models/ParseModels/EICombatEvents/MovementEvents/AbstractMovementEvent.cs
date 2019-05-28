@@ -29,6 +29,6 @@ namespace LuckParser.Models.ParseModels
             return (x, y, _value);
         }
 
-        public abstract void AddPoint3D(CombatReplay replay, ParsedLog log);
+        public abstract void AddPoint3D(CombatReplay replay);
     }
 }

@@ -14,11 +14,10 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        public override void AddPoint3D(CombatReplay replay, ParsedLog log)
+        public override void AddPoint3D(CombatReplay replay)
         {
-            long time = log.FightData.ToFightSpace(Time);
             (float x, float y, float z) = Unpack();
-            replay.Rotations.Add(new Point3D(x, y, z, time));
+            replay.Rotations.Add(new Point3D(x, y, z, Time));
         }
     }
 }
