@@ -104,7 +104,13 @@ namespace LuckParser.Models.ParseModels
             Positions = interpolatedPositions.Where(x => x.Time >= 0).ToList();
             Velocities = null;
         }
-
+        /// <summary>
+        /// The method exists only to have the same amount of rotation as positions, it's easier to do it here than
+        /// in javascript
+        /// </summary>
+        /// <param name="rate"></param>
+        /// <param name="fightDuration"></param>
+        /// <param name="forceInterpolate"></param>
         private void RotationPolling(int rate, long fightDuration, bool forceInterpolate)
         {
             if (Rotations.Count == 0)

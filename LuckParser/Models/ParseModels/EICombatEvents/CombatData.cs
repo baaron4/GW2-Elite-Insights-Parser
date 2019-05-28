@@ -14,14 +14,14 @@ namespace LuckParser.Models.ParseModels
         private Dictionary<ParseEnum.StateChange, List<CombatItem>> _statesData;
         //private List<CombatItem> _healingData;
         //private List<CombatItem> _healingReceivedData;
-        private Dictionary<long, List<CombatItem>> _skillData;
-        private Dictionary<long, List<CombatItem>> _boonData;
-        private Dictionary<ushort, List<CombatItem>> _boonDataByDst;
-        private Dictionary<ushort, List<CombatItem>> _damageData;
-        private Dictionary<ushort, List<CombatItem>> _castData;
-        private Dictionary<long, List<CombatItem>> _castDataById;
-        private Dictionary<ushort, List<CombatItem>> _damageTakenData;
-        private Dictionary<ushort, List<CombatItem>> _movementData;
+        private readonly HashSet<long> _skillIds;
+        private readonly Dictionary<long, List<CombatItem>> _boonData;
+        private readonly Dictionary<ushort, List<CombatItem>> _boonDataByDst;
+        private readonly Dictionary<ushort, List<CombatItem>> _damageData;
+        private readonly Dictionary<ushort, List<CombatItem>> _castData;
+        private readonly Dictionary<long, List<CombatItem>> _castDataById;
+        private readonly Dictionary<ushort, List<CombatItem>> _damageTakenData;
+        private readonly Dictionary<AgentItem, List<AbstractMovementEvent>> _movementData;
 
         private void DstSpecialBoonParse(List<Player> players, Dictionary<ushort, List<CombatItem>> buffsPerDst)
         {
@@ -35,19 +35,19 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public CombatData(List<CombatItem> allCombatItems, FightData fightData, List<Player> players)
+        public CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, List<Player> players)
         {
             AllCombatItems = allCombatItems;
-            _skillData = allCombatItems.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
+            _skillIds = new HashSet<long>(allCombatItems.Select(x => x.SkillID));
             var noStateActiBuffRem = allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.Normal && x.IsActivation == ParseEnum.Activation.None && x.IsBuffRemove == ParseEnum.BuffRemove.None);
             // movement events
             _movementData = fightData.Logic.HasCombatReplayMap
                 ? allCombatItems.Where(x =>
                         x.IsStateChange == ParseEnum.StateChange.Position ||
                         x.IsStateChange == ParseEnum.StateChange.Velocity ||
-                        x.IsStateChange == ParseEnum.StateChange.Rotation).GroupBy(x => x.SrcInstid)
+                        x.IsStateChange == ParseEnum.StateChange.Rotation).Select(x => EICombatEventFactory.CreateMovementEvent(x, agentData)).GroupBy(x => x.AgentItem)
                     .ToDictionary(x => x.Key, x => x.ToList())
-                : new Dictionary<ushort, List<CombatItem>>();
+                : new Dictionary<AgentItem, List<AbstractMovementEvent>>();
             HasMovementData = _movementData.Count > 1;
             // state change events
             _statesData = allCombatItems.GroupBy(x => x.IsStateChange).ToDictionary(x => x.Key, x => x.ToList());
@@ -103,7 +103,6 @@ namespace LuckParser.Models.ParseModels
             List<CombatItem> damageData = _damageData.SelectMany(x => x.Value).ToList();
             damageData.Sort((x, y) => x.Time.CompareTo(y.Time));
             damageData.Reverse();
-            bool sortCombatList = false;
             foreach (CombatItem c in damageData)
             {
                 if (c.Time <= end)
@@ -112,13 +111,8 @@ namespace LuckParser.Models.ParseModels
                 }
                 else if (c.Time <= end + 1000)
                 {
-                    sortCombatList = true;
                     c.OverrideTime(end);
                 }
-            }
-            if (sortCombatList)
-            {
-                AllCombatItems.Sort((x, y) => x.Time.CompareTo(y.Time));
             }
         }
 
@@ -126,16 +120,7 @@ namespace LuckParser.Models.ParseModels
 
         public HashSet<long> GetSkills()
         {
-            return new HashSet<long>(_skillData.Keys);
-        }
-
-        public List<CombatItem> GetSkillData(long key)
-        {
-            if (_skillData.TryGetValue(key, out List<CombatItem> res))
-            {
-                return res;
-            }
-            return new List<CombatItem>(); ;
+            return _skillIds;
         }
 
         public List<CombatItem> GetBoonData(long key)
@@ -205,13 +190,13 @@ namespace LuckParser.Models.ParseModels
         }*/
 
 
-        public List<CombatItem> GetMovementData(ushort key, long start, long end)
+        public List<AbstractMovementEvent> GetMovementData(AgentItem key)
         {
-            if (_movementData.TryGetValue(key, out List<CombatItem> res))
+            if (_movementData.TryGetValue(key, out List<AbstractMovementEvent> res))
             {
-                return res.Where(x => x.Time >= start && x.Time <= end).ToList();
+                return res;
             }
-            return new List<CombatItem>();
+            return new List<AbstractMovementEvent>();
         }
 
         public List<CombatItem> GetStates(ParseEnum.StateChange key)

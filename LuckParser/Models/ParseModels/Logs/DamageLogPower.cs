@@ -1,4 +1,6 @@
-﻿namespace LuckParser.Models.ParseModels
+﻿using LuckParser.Parser;
+
+namespace LuckParser.Models.ParseModels
 {
     public class DamageLogPower : DamageLog
     {

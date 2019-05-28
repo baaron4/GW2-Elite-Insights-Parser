@@ -271,24 +271,9 @@ namespace LuckParser.Models.ParseModels
         // private setters
         protected void SetMovements(ParsedLog log)
         {
-            foreach (CombatItem c in log.CombatData.GetMovementData(InstID, FirstAware, LastAware))
+            foreach (AbstractMovementEvent movementEvent in log.CombatData.GetMovementData(AgentItem))
             {
-                long time = log.FightData.ToFightSpace(c.Time);
-                byte[] xy = BitConverter.GetBytes(c.DstAgent);
-                float x = BitConverter.ToSingle(xy, 0);
-                float y = BitConverter.ToSingle(xy, 4);
-                if (c.IsStateChange == ParseEnum.StateChange.Position)
-                {
-                    CombatReplay.Positions.Add(new Point3D(x, y, c.Value, time));
-                }
-                else if (c.IsStateChange == ParseEnum.StateChange.Velocity)
-                {
-                    CombatReplay.Velocities.Add(new Point3D(x, y, c.Value, time));
-                }
-                else if (c.IsStateChange == ParseEnum.StateChange.Rotation)
-                {
-                    CombatReplay.Rotations.Add(new Point3D(x, y, c.Value, time));
-                }
+                movementEvent.AddPoint3D(CombatReplay, log);
             }
         }
 

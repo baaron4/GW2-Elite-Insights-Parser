@@ -33,9 +33,9 @@ namespace LuckParser.Parser
         public readonly Statistics Statistics;
 
         public ParsedLog(LogData logData, FightData fightData, AgentData agentData, SkillData skillData, 
-                CombatData combatData, List<Player> playerList, Target target)
+                List<CombatItem> combatItems, List<Player> playerList, Target target)
         {
-            _container = new ParsedEvtcContainer(logData, fightData, agentData, skillData, combatData, playerList);
+            _container = new ParsedEvtcContainer(logData, fightData, agentData, skillData, combatItems, playerList);
             //
             FightData.SetSuccess(_container);
             if (FightData.FightDuration <= 2200)

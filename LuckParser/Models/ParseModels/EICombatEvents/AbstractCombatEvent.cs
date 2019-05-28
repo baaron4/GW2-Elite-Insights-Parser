@@ -1,0 +1,21 @@
+﻿using LuckParser.Parser;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace LuckParser.Models.ParseModels
+{
+    public class AbstractCombatEvent
+    {
+        protected readonly CombatItem EvtcItem;
+
+        public long Time => EvtcItem.Time;
+
+        protected AbstractCombatEvent(CombatItem evtcItem)
+        {
+            EvtcItem = evtcItem;
+        }
+    }
+}

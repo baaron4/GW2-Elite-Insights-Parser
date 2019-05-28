@@ -519,26 +519,22 @@ namespace LuckParser.Models.Logic
             int wyvernPhaseTime = (int) (phases.Count > 4 ? phases[4].End + timeAfterPhase2 : int.MaxValue);
             int jumpingPuzzleTime = (int) (phases.Count > 5 ? phases[5].End + timeAfterWyvernPhase : int.MaxValue);
             int finalPhaseTime = int.MaxValue;
-            int startOffset = -(int)(phases.First().Start - log.FightData.ToFightSpace(log.CombatData.AllCombatItems.First().Time));
+            int startOffset = -(int)(phases.First().Start - log.FightData.ToFightSpace(log.CombatData.AllCombatItems.Min(x => x.Time)));
             if (phases.Count > 6)
             {
                 var lastPhase = phases[6];
 
-                var qadimMovement = log.CombatData.GetMovementData(target.InstID,
-                    log.FightData.ToLogSpace(lastPhase.Start), log.FightData.ToLogSpace(lastPhase.End));
+                var qadimMovement = log.CombatData.GetMovementData(target.AgentItem);
 
                 var lastMove = qadimMovement.FirstOrDefault(
                     c =>
                     {
-                        if (c.IsStateChange != ParseEnum.StateChange.Position)
+                        if (c.StateChange != ParseEnum.StateChange.Position)
                         {
                             return false;
                         }
-
-                        // TODO: Figure out how to not duplicate this code
-                        byte[] xy = BitConverter.GetBytes(c.DstAgent);
-                        float x = BitConverter.ToSingle(xy, 0);
-                        float y = BitConverter.ToSingle(xy, 4);
+                        
+                        (float x, float y, float z) = c.Unpack();
 
                         return Math.Abs(x - qadimFinalX) < 5 && Math.Abs(y - qadimFinalY) < 5;
                     });

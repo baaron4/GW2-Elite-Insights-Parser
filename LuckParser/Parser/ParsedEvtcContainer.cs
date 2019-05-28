@@ -24,13 +24,13 @@ namespace LuckParser.Parser
         public readonly BoonsContainer Boons;
 
         public ParsedEvtcContainer(LogData logData, FightData fightData, AgentData agentData, SkillData skillData,
-                CombatData combatData, List<Player> playerList)
+                List<CombatItem> combatItems, List<Player> playerList)
         {
             LogData = logData;
             FightData = fightData;
             AgentData = agentData;
             SkillData = skillData;
-            CombatData = combatData;
+            CombatData = new CombatData(combatItems, fightData, agentData, playerList);
             PlayerList = playerList;
             Boons = new BoonsContainer(logData.GW2Version);
             DamageModifiers = new DamageModifiersContainer(logData.GW2Version);
