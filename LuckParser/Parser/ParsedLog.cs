@@ -38,7 +38,7 @@ namespace LuckParser.Parser
         {
             _container = new ParsedEvtcContainer(logData, fightData, agentData, skillData, combatItems, playerList);
             //
-            FightData.SetSuccess(_container);
+            FightData.CheckSuccess(_container);
             if (FightData.FightDuration <= 2200)
             {
                 throw new TooShortException();

@@ -52,7 +52,7 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void SetSuccess(ParsedEvtcContainer evtcContainer)
+        public override void CheckSuccess(ParsedEvtcContainer evtcContainer)
         {
             // check reward
             Target mainTarget = Targets.Find(x => x.ID == TriggerID);
@@ -67,15 +67,14 @@ namespace LuckParser.Models.Logic
             {
                 if (reward != null && lastDamageTaken.Time - reward.Time < 100)
                 {
-                    evtcContainer.FightData.Success = true;
-                    evtcContainer.FightData.FightEnd = Math.Min(lastDamageTaken.Time, reward.Time);
+                    evtcContainer.FightData.SetSuccess(true, Math.Min(lastDamageTaken.Time, reward.Time));
                 }
                 else
                 {
                     SetSuccessByDeath(evtcContainer, true, TriggerID);
                     if (evtcContainer.FightData.Success)
                     {
-                        evtcContainer.FightData.FightEnd = Math.Min(evtcContainer.FightData.FightEnd, lastDamageTaken.Time);
+                        evtcContainer.FightData.SetSuccess(true, Math.Min(evtcContainer.FightData.FightEnd, lastDamageTaken.Time));
                     }
                 }
             }

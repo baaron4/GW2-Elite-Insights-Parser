@@ -95,7 +95,6 @@ namespace LuckParser.Models.Logic
             long margin2 = Math.Min(80, lastEye2Hp);
             if (lastEye1Hp <= margin1 && lastEye2Hp <= margin2)
             {
-                evtcContainer.FightData.Success = true;
                 int lastIEye1;
                 for (lastIEye1 = eye1.HealthOverTime.Count - 1; lastIEye1 >= 0; lastIEye1--)
                 {
@@ -114,11 +113,11 @@ namespace LuckParser.Models.Logic
                         break;
                     }
                 }
-                evtcContainer.FightData.FightEnd = Math.Max(eye1.HealthOverTime[lastIEye1].logTime, eye2.HealthOverTime[lastIEye2].logTime);
+                evtcContainer.FightData.SetSuccess(true, Math.Max(eye1.HealthOverTime[lastIEye1].logTime, eye2.HealthOverTime[lastIEye2].logTime));
             }
         }
 
-        public override void SetSuccess(ParsedEvtcContainer evtcContainer)
+        public override void CheckSuccess(ParsedEvtcContainer evtcContainer)
         {
             // First check using hp, best
             HPCheck(evtcContainer);

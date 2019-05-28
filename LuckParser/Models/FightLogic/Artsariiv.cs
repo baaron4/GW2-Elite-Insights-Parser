@@ -48,7 +48,7 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void SetSuccess(ParsedEvtcContainer evtcContainer)
+        public override void CheckSuccess(ParsedEvtcContainer evtcContainer)
         {
             Target mainTarget = Targets.Find(x => x.ID == TriggerID);
             if (mainTarget == null)
@@ -62,8 +62,7 @@ namespace LuckParser.Models.Logic
             {
                 CombatItem lastPlayerExit = evtcContainer.CombatData.GetStates(ParseEnum.StateChange.ExitCombat).Where(x => evtcContainer.PlayerIDs.Contains(x.SrcInstid)).LastOrDefault();
                 CombatItem lastTargetExit = evtcContainer.CombatData.GetStatesData(mainTarget.InstID, ParseEnum.StateChange.ExitCombat, mainTarget.FirstAware, mainTarget.LastAware).LastOrDefault();
-                evtcContainer.FightData.Success = lastPlayerExit != null && lastTargetExit != null && lastPlayerExit.Time - lastTargetExit.Time > 1000 ? true : false;
-                evtcContainer.FightData.FightEnd = lastDamageTaken.Time;
+                evtcContainer.FightData.SetSuccess(lastPlayerExit != null && lastTargetExit != null && lastPlayerExit.Time - lastTargetExit.Time > 1000 ? true : false, lastDamageTaken.Time);
             }
         }
     }

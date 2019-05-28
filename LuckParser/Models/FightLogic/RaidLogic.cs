@@ -15,7 +15,7 @@ namespace LuckParser.Models.Logic
             Mode = ParseMode.Raid;
         }
 
-        public override void SetSuccess(ParsedEvtcContainer evtcContainer)
+        public override void CheckSuccess(ParsedEvtcContainer evtcContainer)
         {
             HashSet<int> raidRewardsIds = new HashSet<int>
                 {
@@ -26,8 +26,7 @@ namespace LuckParser.Models.Logic
             CombatItem reward = evtcContainer.CombatData.GetStates(ParseEnum.StateChange.Reward).FirstOrDefault(x => raidRewardsIds.Contains(x.Value));
             if (reward != null)
             {
-                evtcContainer.FightData.Success = true;
-                evtcContainer.FightData.FightEnd = reward.Time;
+                evtcContainer.FightData.SetSuccess(true, reward.Time);
             }
         }
 

@@ -107,7 +107,7 @@ namespace LuckParser.Models.Logic
             {
                 throw new Exceptions.TooShortException();
             }
-            fightData.FightStart = startCast.Time;
+            fightData.OverrideStart(startCast.Time);
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)

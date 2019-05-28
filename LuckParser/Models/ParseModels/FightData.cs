@@ -13,10 +13,10 @@ namespace LuckParser.Models.ParseModels
         public ushort ID { get; }
         private readonly bool _requirePhases;
         public readonly FightLogic Logic;
-        public long FightStart { get; set; }
-        public long FightEnd { get; set; } = long.MaxValue;
+        public long FightStart { get; private set; }
+        public long FightEnd { get; private set; } = long.MaxValue;
         public long FightDuration => FightEnd - FightStart;
-        public bool Success { get; set; }
+        public bool Success { get; private set; }
         public string Name => Logic.GetFightName() + (_isCM == 1 ? " CM" : "") ;
         private int _isCM = -1;
         public bool IsCM
@@ -27,8 +27,10 @@ namespace LuckParser.Models.ParseModels
             }
         }
         // Constructors
-        public FightData(ushort id, AgentData agentData)
+        public FightData(ushort id, AgentData agentData, long start, long end)
         {
+            FightStart = start;
+            FightEnd = end;
             ID = id;
             _requirePhases = Properties.Settings.Default.ParsePhases;
             switch (ParseEnum.GetTargetIDS(id))
@@ -189,9 +191,19 @@ namespace LuckParser.Models.ParseModels
                 _isCM = Logic.IsCM(evtcContainer);
             }
         }
-        public void SetSuccess(ParsedEvtcContainer evtcContainer)
+        public void CheckSuccess(ParsedEvtcContainer evtcContainer)
         {
-            Logic.SetSuccess(evtcContainer);
+            Logic.CheckSuccess(evtcContainer);
+        }
+
+        public void SetSuccess(bool success, long fightEnd)
+        {
+            Success = success;
+        }
+
+        public void OverrideStart(long fightStart)
+        {
+            FightStart = fightStart;
         }
     }
 }

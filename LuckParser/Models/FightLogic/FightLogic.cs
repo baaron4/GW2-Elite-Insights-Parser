@@ -297,12 +297,11 @@ namespace LuckParser.Models.Logic
             }
             if ((all && success == idsToUse.Count) || (!all && success > 0))
             {
-                evtcContainer.FightData.Success = true;
-                evtcContainer.FightData.FightEnd = maxTime;
+                evtcContainer.FightData.SetSuccess(true, maxTime);
             }
         }
 
-        public virtual void SetSuccess(ParsedEvtcContainer evtcContainer)
+        public virtual void CheckSuccess(ParsedEvtcContainer evtcContainer)
         {
             SetSuccessByDeath(evtcContainer, true, TriggerID);
         }

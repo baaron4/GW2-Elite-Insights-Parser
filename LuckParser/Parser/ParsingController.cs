@@ -597,17 +597,18 @@ namespace LuckParser.Parser
         private void FillMissingData()
         {
             CompleteAgents();
-            _fightData = new FightData(_id, _agentData);
-            _fightData.Logic.ComputeFightTargets(_agentData, _fightData, _combatItems);
+            long start, end;
             if (_combatItems.Count > 0)
             {
-                _fightData.FightStart = _combatItems.Min(x => x.Time);
-                _fightData.FightEnd = _combatItems.Max(x => x.Time);
+                start = _combatItems.Min(x => x.Time);
+                end = _combatItems.Max(x => x.Time);
             }
             else
             {
                 throw new InvalidDataException("No combat events found");
             }
+            _fightData = new FightData(_id, _agentData, start, end);
+            _fightData.Logic.ComputeFightTargets(_agentData, _fightData, _combatItems);
             // Dealing with special cases
             _fightData.Logic.SpecialParse(_fightData, _agentData, _combatItems);
             // Grab values threw combat data

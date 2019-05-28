@@ -99,7 +99,7 @@ namespace LuckParser.Models.Logic
             CombatItem enterCombat = combatData.Find(x => x.SrcInstid == target.InstID && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
             if (enterCombat != null)
             {
-                fightData.FightStart = enterCombat.Time;
+                fightData.OverrideStart(enterCombat.Time);
             }
             // find split
             foreach (AgentItem NPC in agentData.GetAgentByType(AgentItem.AgentType.NPC))
