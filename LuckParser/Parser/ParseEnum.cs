@@ -42,7 +42,7 @@ namespace LuckParser.Parser
 
         // Result
         
-        public enum Result : byte
+        public enum PhysicalResult : byte
         {
             Normal      = 0,
             Crit        = 1,
@@ -58,11 +58,28 @@ namespace LuckParser.Parser
             Unknown
         };
 
-        public static Result GetResult(byte bt)
+        public static PhysicalResult GetPhysicalResult(byte bt)
         {
-            return bt < (byte)Result.Unknown
-                ? (Result)bt
-                : Result.Unknown;
+            return bt < (byte)PhysicalResult.Unknown
+                ? (PhysicalResult)bt
+                : PhysicalResult.Unknown;
+        }
+
+        public enum ConditionResult : byte
+        {
+            ExpectedToHit = 0,
+            InvulByBuff = 1,
+            InvulByPlayerSkill1 = 2,
+            InvulByPlayerSkill2 = 3,
+            InvulByPlayerSkill3 = 4,
+
+            Unknown
+        };
+        public static ConditionResult GetConditionResult(byte bt)
+        {
+            return bt < (byte)ConditionResult.Unknown
+                ? (ConditionResult)bt
+                : ConditionResult.Unknown;
         }
 
         // State Change    
@@ -363,11 +380,19 @@ namespace LuckParser.Parser
 
     }
 
-    static class ResultExtensions
+    static class PhysicalResultExtensions
     {
-        public static bool IsHit(this ParseEnum.Result result)
+        public static bool IsHit(this ParseEnum.PhysicalResult result)
         {
-            return result == ParseEnum.Result.Normal || result == ParseEnum.Result.Crit || result == ParseEnum.Result.Glance || result == ParseEnum.Result.KillingBlow; //Downed and Interrupt omitted for now due to double procing mechanics || result == ParseEnum.Result.Downed || result == ParseEnum.Result.Interrupt; 
+            return result == ParseEnum.PhysicalResult.Normal || result == ParseEnum.PhysicalResult.Crit || result == ParseEnum.PhysicalResult.Glance || result == ParseEnum.PhysicalResult.KillingBlow; //Downed and Interrupt omitted for now due to double procing mechanics || result == ParseEnum.Result.Downed || result == ParseEnum.Result.Interrupt; 
+        }
+    }
+
+    static class ConditionResultExtensions
+    {
+        public static bool IsHit(this ParseEnum.ConditionResult result)
+        {
+            return result == ParseEnum.ConditionResult.ExpectedToHit;
         }
     }
 

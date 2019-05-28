@@ -30,12 +30,12 @@ namespace LuckParser.Parser
             FightData = fightData;
             AgentData = agentData;
             SkillData = skillData;
-            CombatData = new CombatData(combatItems, fightData, agentData, playerList);
             PlayerList = playerList;
             Boons = new BoonsContainer(logData.GW2Version);
             DamageModifiers = new DamageModifiersContainer(logData.GW2Version);
             PlayerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
             PlayerIDs = new HashSet<ushort>(playerList.Select(x => x.InstID));
+            CombatData = new CombatData(combatItems, fightData, agentData, playerList);
         }
     }
 }

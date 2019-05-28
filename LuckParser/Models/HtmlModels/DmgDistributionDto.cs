@@ -22,7 +22,7 @@ namespace LuckParser.Models.HtmlModels
             bool IsIndirectDamage = false;
             foreach (DamageLog dl in entry.Value)
             {
-                if (dl.Result == ParseEnum.Result.Downed)
+                if (dl.Result == ParseEnum.PhysicalResult.Downed)
                 {
                     continue;
                 }
@@ -32,8 +32,8 @@ namespace LuckParser.Models.HtmlModels
                 if (curdmg < mindamage) { mindamage = curdmg; }
                 if (curdmg > maxdamage) { maxdamage = curdmg; }
                 hits++;
-                if (dl.Result == ParseEnum.Result.Crit) crit++;
-                if (dl.Result == ParseEnum.Result.Glance) glance++;
+                if (dl.Result == ParseEnum.PhysicalResult.Crit) crit++;
+                if (dl.Result == ParseEnum.PhysicalResult.Glance) glance++;
                 if (dl.IsFlanking) flank++;
             }
             if (IsIndirectDamage)

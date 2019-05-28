@@ -10,20 +10,25 @@ namespace LuckParser.Models.ParseModels
     public abstract class AbstractMovementEvent : AbstractCombatEvent
     {
         public AgentItem AgentItem { get; }
-        public ParseEnum.StateChange StateChange => EvtcItem.IsStateChange;
+        public ParseEnum.StateChange StateChange { get; }
+        private readonly ulong _dstAgent;
+        private readonly long _value;
 
         public AbstractMovementEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem)
         {
             AgentItem = agentData.GetAgentByInstID(evtcItem.SrcInstid, evtcItem.Time);
+            StateChange = evtcItem.IsStateChange;
+            _dstAgent = evtcItem.DstAgent;
+            _value = evtcItem.Value;
         }
 
         public (float x, float y, float z) Unpack()
         {
-            byte[] xy = BitConverter.GetBytes(EvtcItem.DstAgent);
+            byte[] xy = BitConverter.GetBytes(_dstAgent);
             float x = BitConverter.ToSingle(xy, 0);
             float y = BitConverter.ToSingle(xy, 4);
 
-            return (x, y, EvtcItem.Value);
+            return (x, y, _value);
         }
 
         public abstract void AddPoint3D(CombatReplay replay, ParsedLog log);

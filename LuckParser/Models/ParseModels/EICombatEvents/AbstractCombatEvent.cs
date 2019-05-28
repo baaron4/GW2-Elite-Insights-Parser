@@ -9,13 +9,11 @@ namespace LuckParser.Models.ParseModels
 {
     public class AbstractCombatEvent
     {
-        protected readonly CombatItem EvtcItem;
-
-        public long Time => EvtcItem.Time;
+        public long Time { get; protected set; }
 
         protected AbstractCombatEvent(CombatItem evtcItem)
         {
-            EvtcItem = evtcItem;
+            Time = evtcItem.Time;
         }
     }
 }

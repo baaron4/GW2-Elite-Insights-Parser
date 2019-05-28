@@ -9,7 +9,7 @@ namespace LuckParser.Models.ParseModels
         public long SkillId { get; }
         public bool IsIndirectDamage { get; protected set; }
         public bool IsCondi { get; protected set; }
-        public ParseEnum.Result Result { get; }
+        public ParseEnum.PhysicalResult Result { get; }
         public bool IsNinety { get; }
         public bool IsFifty { get; }
         public bool IsMoving { get; }
@@ -24,7 +24,7 @@ namespace LuckParser.Models.ParseModels
         {
             Time = time;
             SkillId = c.SkillID;
-            Result = c.ResultEnum;
+            Result = ParseEnum.GetPhysicalResult(c.Result);
             IsNinety = c.IsNinety > 0;
             IsFifty = c.IsFifty > 0;
             IsMoving = c.IsMoving > 0;

@@ -187,7 +187,7 @@ namespace LuckParser.Models.ParseModels
                         if (dl.DstInstId == target.InstID && dl.Time <= log.FightData.ToFightSpace(target.LastAware) && dl.Time >= log.FightData.ToFightSpace(target.FirstAware))
                         {
                             FinalStats targetFinal = pair.Value;
-                            if (dl.Result == ParseEnum.Result.Crit)
+                            if (dl.Result == ParseEnum.PhysicalResult.Crit)
                             {
                                 targetFinal.CriticalRate++;
                                 targetFinal.CriticalDmg += dl.Damage;
@@ -198,21 +198,21 @@ namespace LuckParser.Models.ParseModels
                                 targetFinal.FlankingRate++;
                             }
 
-                            if (dl.Result == ParseEnum.Result.Glance)
+                            if (dl.Result == ParseEnum.PhysicalResult.Glance)
                             {
                                 targetFinal.GlanceRate++;
                             }
 
-                            if (dl.Result == ParseEnum.Result.Blind)
+                            if (dl.Result == ParseEnum.PhysicalResult.Blind)
                             {
                                 targetFinal.Missed++;
                             }
-                            if (dl.Result == ParseEnum.Result.Interrupt)
+                            if (dl.Result == ParseEnum.PhysicalResult.Interrupt)
                             {
                                 targetFinal.Interrupts++;
                             }
 
-                            if (dl.Result == ParseEnum.Result.Absorb)
+                            if (dl.Result == ParseEnum.PhysicalResult.Absorb)
                             {
                                 targetFinal.Invulned++;
                             }
@@ -223,7 +223,7 @@ namespace LuckParser.Models.ParseModels
                             }
                         }
                     }
-                    if (dl.Result == ParseEnum.Result.Crit)
+                    if (dl.Result == ParseEnum.PhysicalResult.Crit)
                     {
                         final.CriticalRate++;
                         final.CriticalDmg += dl.Damage;
@@ -234,21 +234,21 @@ namespace LuckParser.Models.ParseModels
                         final.FlankingRate++;
                     }
 
-                    if (dl.Result == ParseEnum.Result.Glance)
+                    if (dl.Result == ParseEnum.PhysicalResult.Glance)
                     {
                         final.GlanceRate++;
                     }
 
-                    if (dl.Result == ParseEnum.Result.Blind)
+                    if (dl.Result == ParseEnum.PhysicalResult.Blind)
                     {
                         final.Missed++;
                     }
-                    if (dl.Result == ParseEnum.Result.Interrupt)
+                    if (dl.Result == ParseEnum.PhysicalResult.Interrupt)
                     {
                         final.Interrupts++;
                     }
 
-                    if (dl.Result == ParseEnum.Result.Absorb)
+                    if (dl.Result == ParseEnum.PhysicalResult.Absorb)
                     {
                         final.Invulned++;
                     }
@@ -392,14 +392,14 @@ namespace LuckParser.Models.ParseModels
 
                 final.DamageTaken = damageLogs.Sum(x => (long)x.Damage);
                 //final.allHealReceived = healingLogs.Sum(x => x.getDamage());
-                final.BlockedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Block);
+                final.BlockedCount = damageLogs.Count(x => x.Result == ParseEnum.PhysicalResult.Block);
                 final.InvulnedCount = 0;
                 final.DamageInvulned = 0;
-                final.EvadedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Evade);
+                final.EvadedCount = damageLogs.Count(x => x.Result == ParseEnum.PhysicalResult.Evade);
                 final.DodgeCount = GetCastLogs(log, 0, log.FightData.FightDuration).Count(x => x.SkillId == SkillItem.DodgeId);
                 final.DamageBarrier = damageLogs.Sum(x => x.ShieldDamage);
-                final.InterruptedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Interrupt);
-                foreach (DamageLog dl in damageLogs.Where(x => x.Result == ParseEnum.Result.Absorb))
+                final.InterruptedCount = damageLogs.Count(x => x.Result == ParseEnum.PhysicalResult.Interrupt);
+                foreach (DamageLog dl in damageLogs.Where(x => x.Result == ParseEnum.PhysicalResult.Absorb))
                 {
                     final.InvulnedCount++;
                     final.DamageInvulned += dl.Damage;

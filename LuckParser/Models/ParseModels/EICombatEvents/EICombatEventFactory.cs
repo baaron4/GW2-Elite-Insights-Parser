@@ -25,5 +25,18 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
+        public static AbstractDamageEvent CreateDamageEvent(CombatItem c, AgentData agentData, BoonsContainer boons)
+        {
+            if ((c.IsBuff != 0 && c.Value == 0))
+            {
+                return new NonDirectDamageEvent(c, agentData, boons);
+            }
+            else if (c.IsBuff == 0)
+            {
+                return new DirectDamageEvent(c, agentData);
+            }
+            throw new InvalidOperationException("Invalid data in CreateMovementEvent");
+        }
+
     }
 }

@@ -9,16 +9,16 @@ namespace LuckParser.Models.ParseModels
 {
     public class CombatItemResultChecker : MechanicChecker
     {
-        private readonly ParseEnum.Result _value;
+        private readonly ParseEnum.PhysicalResult _value;
 
-        public CombatItemResultChecker(ParseEnum.Result value)
+        public CombatItemResultChecker(ParseEnum.PhysicalResult value)
         {
             _value = value;
         }
 
         public override bool Keep(CombatItem item, ParsedLog log)
         {
-            ParseEnum.Result val = item.ResultEnum;
+            ParseEnum.PhysicalResult val = ParseEnum.GetPhysicalResult(item.Result);
             return val == _value;
         }
     }

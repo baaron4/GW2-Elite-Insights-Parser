@@ -475,7 +475,7 @@ namespace LuckParser.Builders
                         _skillDesc["s" + pair.Key] = new JsonLog.SkillDesc(skill);
                     }
                 }
-                List<DamageLog> filteredList = pair.Value.Where(x => x.Result != ParseEnum.Result.Downed).ToList();
+                List<DamageLog> filteredList = pair.Value.Where(x => x.Result != ParseEnum.PhysicalResult.Downed).ToList();
                 if (filteredList.Count == 0)
                 {
                     continue;

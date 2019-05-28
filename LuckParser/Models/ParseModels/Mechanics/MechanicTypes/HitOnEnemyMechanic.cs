@@ -37,7 +37,7 @@ namespace LuckParser.Models.ParseModels
                 List<CombatItem> combatitems = combatData.GetDamageTakenData(a.InstID, a.FirstAware, a.LastAware);
                 foreach (CombatItem c in combatitems)
                 {
-                    if (c.IsBuff > 0 || !c.ResultEnum.IsHit() || !Keep(c, log) )
+                    if (c.IsBuff > 0 || !ParseEnum.GetPhysicalResult(c.Result).IsHit() || !Keep(c, log) )
                     {
                         continue;
                     }
