@@ -20,6 +20,7 @@ namespace LuckParser.Parser
         public CombatData CombatData => _container.CombatData;
         public List<Player> PlayerList => _container.PlayerList;
         public HashSet<ushort> PlayerIDs => _container.PlayerIDs;
+        public HashSet<AgentItem> PlayerAgents => _container.PlayerAgents;
         public Dictionary<string, List<Player>> PlayerListBySpec => _container.PlayerListBySpec;
         public DamageModifiersContainer DamageModifiers => _container.DamageModifiers;
         public BoonsContainer Boons => _container.Boons;

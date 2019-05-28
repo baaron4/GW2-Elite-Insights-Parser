@@ -18,6 +18,7 @@ namespace LuckParser.Parser
         public readonly CombatData CombatData;
         public readonly List<Player> PlayerList;
         public readonly HashSet<ushort> PlayerIDs;
+        public readonly HashSet<AgentItem> PlayerAgents;
         public bool IsBenchmarkMode => FightData.Logic.Mode == FightLogic.ParseMode.Golem;
         public readonly Dictionary<string, List<Player>> PlayerListBySpec;
         public readonly DamageModifiersContainer DamageModifiers;
@@ -35,7 +36,8 @@ namespace LuckParser.Parser
             DamageModifiers = new DamageModifiersContainer(logData.GW2Version);
             PlayerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
             PlayerIDs = new HashSet<ushort>(playerList.Select(x => x.InstID));
-            CombatData = new CombatData(combatItems, fightData, agentData, playerList);
+            PlayerAgents = new HashSet<AgentItem>(playerList.Select(x => x.AgentItem));
+            CombatData = new CombatData(combatItems, fightData, agentData, playerList, Boons);
         }
     }
 }

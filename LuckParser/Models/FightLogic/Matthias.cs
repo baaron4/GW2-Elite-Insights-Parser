@@ -72,7 +72,7 @@ namespace LuckParser.Models.Logic
             if (heatWave != null)
             {
                 phases.Add(new PhaseData(0, log.FightData.ToFightSpace(heatWave.Time) - 1));
-                CombatItem downPour = log.CombatData.GetDamageData(mainTarget.InstID, mainTarget.FirstAware, mainTarget.LastAware).Find(x => x.SkillID == 34554);
+                AbstractDamageEvent downPour = log.CombatData.GetDamageData(mainTarget.AgentItem).Find(x => x.SkillID == 34554);
                 if (downPour != null)
                 {
                     phases.Add(new PhaseData(log.FightData.ToFightSpace(heatWave.Time), log.FightData.ToFightSpace(downPour.Time) - 1));

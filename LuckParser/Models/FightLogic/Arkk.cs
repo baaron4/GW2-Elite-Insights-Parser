@@ -98,7 +98,7 @@ namespace LuckParser.Models.Logic
                     HashSet<ushort> pIds = evtcContainer.PlayerIDs;
                     CombatItem lastPlayerExit = evtcContainer.CombatData.GetStates(ParseEnum.StateChange.ExitCombat).Where(x => pIds.Contains(x.SrcInstid)).LastOrDefault();
                     CombatItem lastTargetExit = evtcContainer.CombatData.GetStatesData(mainTarget.InstID, ParseEnum.StateChange.ExitCombat, mainTarget.FirstAware, mainTarget.LastAware).LastOrDefault();
-                    CombatItem lastDamageTaken = evtcContainer.CombatData.GetDamageTakenData(mainTarget.InstID, mainTarget.FirstAware, mainTarget.LastAware).LastOrDefault(x => (x.Value > 0 || x.BuffDmg > 0) && pIds.Contains(x.SrcInstid));
+                    AbstractDamageEvent lastDamageTaken = evtcContainer.CombatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => (x.Damage > 0) && evtcContainer.PlayerAgents.Contains(x.From));
                     if (lastTargetExit != null && lastDamageTaken != null && lastPlayerExit != null)
                     {
                         evtcContainer.FightData.FightEnd = lastDamageTaken.Time;

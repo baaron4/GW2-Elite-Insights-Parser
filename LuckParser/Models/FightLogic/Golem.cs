@@ -66,7 +66,7 @@ namespace LuckParser.Models.Logic
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
-            CombatItem lastDamageTaken = evtcContainer.CombatData.GetDamageTakenData(mainTarget.InstID, mainTarget.FirstAware, mainTarget.LastAware).LastOrDefault(x => x.Value > 0 || x.BuffDmg > 0);
+            AbstractDamageEvent lastDamageTaken = evtcContainer.CombatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => x.Damage > 0);
             if (lastDamageTaken != null)
             {
                 evtcContainer.FightData.FightEnd = lastDamageTaken.Time;

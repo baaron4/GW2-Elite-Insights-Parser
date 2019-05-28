@@ -166,7 +166,7 @@ namespace LuckParser.Models.ParseModels
             return _statsTarget[target];
         }
 
-        private void FillFinalStats(ParsedLog log, List<DamageLog> dls, FinalStats final, Dictionary<Target, FinalStats> targetsFinal)
+        private void FillFinalStats(ParsedLog log, List<AbstractDamageEvent> dls, FinalStats final, Dictionary<Target, FinalStats> targetsFinal)
         {
             HashSet<long> nonCritable = new HashSet<long>
                     {
@@ -177,17 +177,17 @@ namespace LuckParser.Models.ParseModels
                         52370
                     };
             // (x - 1) / x
-            foreach (DamageLog dl in dls)
+            foreach (AbstractDamageEvent dl in dls)
             {
                 if (!dl.IsIndirectDamage)
                 {
                     foreach (var pair in targetsFinal)
                     {
                         Target target = pair.Key;
-                        if (dl.DstInstId == target.InstID && dl.Time <= log.FightData.ToFightSpace(target.LastAware) && dl.Time >= log.FightData.ToFightSpace(target.FirstAware))
+                        if (dl.To == target.AgentItem)
                         {
                             FinalStats targetFinal = pair.Value;
-                            if (dl.Result == ParseEnum.PhysicalResult.Crit)
+                            if (dl.IsCrit())
                             {
                                 targetFinal.CriticalRate++;
                                 targetFinal.CriticalDmg += dl.Damage;
@@ -198,32 +198,32 @@ namespace LuckParser.Models.ParseModels
                                 targetFinal.FlankingRate++;
                             }
 
-                            if (dl.Result == ParseEnum.PhysicalResult.Glance)
+                            if (dl.IsGlance())
                             {
                                 targetFinal.GlanceRate++;
                             }
 
-                            if (dl.Result == ParseEnum.PhysicalResult.Blind)
+                            if (dl.IsBlind())
                             {
                                 targetFinal.Missed++;
                             }
-                            if (dl.Result == ParseEnum.PhysicalResult.Interrupt)
+                            if (dl.IsInterrupt())
                             {
                                 targetFinal.Interrupts++;
                             }
 
-                            if (dl.Result == ParseEnum.PhysicalResult.Absorb)
+                            if (dl.IsAbsorb())
                             {
                                 targetFinal.Invulned++;
                             }
                             targetFinal.DirectDamageCount++;
-                            if (!nonCritable.Contains(dl.SkillId))
+                            if (!nonCritable.Contains(dl.SkillID))
                             {
                                 targetFinal.CritableDirectDamageCount++;
                             }
                         }
                     }
-                    if (dl.Result == ParseEnum.PhysicalResult.Crit)
+                    if (dl.IsCrit())
                     {
                         final.CriticalRate++;
                         final.CriticalDmg += dl.Damage;
@@ -234,26 +234,26 @@ namespace LuckParser.Models.ParseModels
                         final.FlankingRate++;
                     }
 
-                    if (dl.Result == ParseEnum.PhysicalResult.Glance)
+                    if (dl.IsGlance())
                     {
                         final.GlanceRate++;
                     }
 
-                    if (dl.Result == ParseEnum.PhysicalResult.Blind)
+                    if (dl.IsBlind())
                     {
                         final.Missed++;
                     }
-                    if (dl.Result == ParseEnum.PhysicalResult.Interrupt)
+                    if (dl.IsInterrupt())
                     {
                         final.Interrupts++;
                     }
 
-                    if (dl.Result == ParseEnum.PhysicalResult.Absorb)
+                    if (dl.IsAbsorb())
                     {
                         final.Invulned++;
                     }
                     final.DirectDamageCount++;
-                    if (!nonCritable.Contains(dl.SkillId))
+                    if (!nonCritable.Contains(dl.SkillID))
                     {
                         final.CritableDirectDamageCount++;
                     }
@@ -387,19 +387,19 @@ namespace LuckParser.Models.ParseModels
                 _defenses.Add(final);
                 long start = log.FightData.ToLogSpace(phase.Start);
                 long end = log.FightData.ToLogSpace(phase.End);
-                List<DamageLog> damageLogs = GetDamageTakenLogs(null, log, phase.Start, phase.End);
+                List<AbstractDamageEvent> damageLogs = GetDamageTakenLogs(null, log, phase.Start, phase.End);
                 //List<DamageLog> healingLogs = player.getHealingReceivedLogs(log, phase.getStart(), phase.getEnd());
 
                 final.DamageTaken = damageLogs.Sum(x => (long)x.Damage);
                 //final.allHealReceived = healingLogs.Sum(x => x.getDamage());
-                final.BlockedCount = damageLogs.Count(x => x.Result == ParseEnum.PhysicalResult.Block);
+                final.BlockedCount = damageLogs.Count(x => x.IsBlock());
                 final.InvulnedCount = 0;
                 final.DamageInvulned = 0;
-                final.EvadedCount = damageLogs.Count(x => x.Result == ParseEnum.PhysicalResult.Evade);
+                final.EvadedCount = damageLogs.Count(x => x.IsEvade());
                 final.DodgeCount = GetCastLogs(log, 0, log.FightData.FightDuration).Count(x => x.SkillId == SkillItem.DodgeId);
                 final.DamageBarrier = damageLogs.Sum(x => x.ShieldDamage);
-                final.InterruptedCount = damageLogs.Count(x => x.Result == ParseEnum.PhysicalResult.Interrupt);
-                foreach (DamageLog dl in damageLogs.Where(x => x.Result == ParseEnum.PhysicalResult.Absorb))
+                final.InterruptedCount = damageLogs.Count(x => x.IsInterrupt());
+                foreach (AbstractDamageEvent dl in damageLogs.Where(x => x.IsAbsorb()))
                 {
                     final.InvulnedCount++;
                     final.DamageInvulned += dl.Damage;
@@ -748,7 +748,7 @@ namespace LuckParser.Models.ParseModels
             List<CombatItem> deads = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.ChangeDead, log.FightData.FightStart, log.FightData.FightEnd);
             List<CombatItem> downs = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.ChangeDown, log.FightData.FightStart, log.FightData.FightEnd);
             long lastTime = log.FightData.FightStart;
-            List<DamageLog> damageLogs = GetDamageTakenLogs(null, log, 0, log.FightData.FightDuration);
+            List<AbstractDamageEvent> damageLogs = GetDamageTakenLogs(null, log, 0, log.FightData.FightDuration);
             foreach (CombatItem dead in deads)
             {
                 DeathRecap recap = new DeathRecap()
@@ -758,18 +758,18 @@ namespace LuckParser.Models.ParseModels
                 CombatItem downed = downs.LastOrDefault(x => x.Time <= dead.Time && x.Time >= lastTime);
                 if (downed != null)
                 {
-                    List<DamageLog> damageToDown = damageLogs.Where(x => x.Time < log.FightData.ToFightSpace(downed.Time) && x.Damage > 0 && x.Time > log.FightData.ToFightSpace(lastTime)).ToList();
+                    List<AbstractDamageEvent> damageToDown = damageLogs.Where(x => x.Time < log.FightData.ToFightSpace(downed.Time) && x.Damage > 0 && x.Time > log.FightData.ToFightSpace(lastTime)).ToList();
                     recap.ToDown = damageToDown.Count > 0 ? new List<DeathRecap.DeathRecapDamageItem>() : null;
                     int damage = 0;
                     for (int i = damageToDown.Count - 1; i >= 0; i--)
                     {
-                        DamageLog dl = damageToDown[i];
-                        AgentItem ag = log.AgentData.GetAgentByInstID(dl.SrcInstId, log.FightData.ToLogSpace(dl.Time));
+                        AbstractDamageEvent dl = damageToDown[i];
+                        AgentItem ag = dl.From;
                         DeathRecap.DeathRecapDamageItem item = new DeathRecap.DeathRecapDamageItem()
                         {
                             Time = (int)dl.Time,
                             IndirectDamage = dl.IsIndirectDamage,
-                            ID = dl.SkillId,
+                            ID = dl.SkillID,
                             Damage = dl.Damage,
                             Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
                         };
@@ -780,17 +780,17 @@ namespace LuckParser.Models.ParseModels
                             break;
                         }
                     }
-                    List<DamageLog> damageToKill = damageLogs.Where(x => x.Time > log.FightData.ToFightSpace(downed.Time) && x.Time < log.FightData.ToFightSpace(dead.Time) && x.Damage > 0 && x.Time > log.FightData.ToFightSpace(lastTime)).ToList();
+                    List<AbstractDamageEvent> damageToKill = damageLogs.Where(x => x.Time > log.FightData.ToFightSpace(downed.Time) && x.Time < log.FightData.ToFightSpace(dead.Time) && x.Damage > 0 && x.Time > log.FightData.ToFightSpace(lastTime)).ToList();
                     recap.ToKill = damageToKill.Count > 0 ? new List<DeathRecap.DeathRecapDamageItem>() : null;
                     for (int i = damageToKill.Count - 1; i >= 0; i--)
                     {
-                        DamageLog dl = damageToKill[i];
-                        AgentItem ag = log.AgentData.GetAgentByInstID(dl.SrcInstId, log.FightData.ToLogSpace(dl.Time));
+                        AbstractDamageEvent dl = damageToKill[i];
+                        AgentItem ag = dl.From;
                         DeathRecap.DeathRecapDamageItem item = new DeathRecap.DeathRecapDamageItem()
                         {
                             Time = (int)dl.Time,
                             IndirectDamage = dl.IsIndirectDamage,
-                            ID = dl.SkillId,
+                            ID = dl.SkillID,
                             Damage = dl.Damage,
                             Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
                         };
@@ -800,18 +800,18 @@ namespace LuckParser.Models.ParseModels
                 else
                 {
                     recap.ToDown = null;
-                    List<DamageLog> damageToKill = damageLogs.Where(x => x.Time < log.FightData.ToFightSpace(dead.Time) && x.Damage > 0 && x.Time > log.FightData.ToFightSpace(lastTime)).ToList();
+                    List<AbstractDamageEvent> damageToKill = damageLogs.Where(x => x.Time < log.FightData.ToFightSpace(dead.Time) && x.Damage > 0 && x.Time > log.FightData.ToFightSpace(lastTime)).ToList();
                     recap.ToKill = damageToKill.Count > 0 ? new List<DeathRecap.DeathRecapDamageItem>() : null;
                     int damage = 0;
                     for (int i = damageToKill.Count - 1; i >= 0; i--)
                     {
-                        DamageLog dl = damageToKill[i];
-                        AgentItem ag = log.AgentData.GetAgentByInstID(dl.SrcInstId, log.FightData.ToLogSpace(dl.Time));
+                        AbstractDamageEvent dl = damageToKill[i];
+                        AgentItem ag = dl.From;
                         DeathRecap.DeathRecapDamageItem item = new DeathRecap.DeathRecapDamageItem()
                         {
                             Time = (int)dl.Time,
                             IndirectDamage = dl.IsIndirectDamage,
-                            ID = dl.SkillId,
+                            ID = dl.SkillID,
                             Damage = dl.Damage,
                             Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
                         };

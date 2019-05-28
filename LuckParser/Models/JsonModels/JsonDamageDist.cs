@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Models.ParseModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,15 +51,15 @@ namespace LuckParser.Models.JsonModels
         /// </summary>
         public bool IndirectDamage;
 
-        public JsonDamageDist(List<ParseModels.DamageLog> list, bool indirectDamage, long id)
+        public JsonDamageDist(List<AbstractDamageEvent> list, bool indirectDamage, long id)
         {
             Hits = list.Count;
             TotalDamage = list.Sum(x => x.Damage);
             Min = list.Min(x => x.Damage);
             Max = list.Max(x => x.Damage);
             Flank = indirectDamage ? 0: list.Count(x => x.IsFlanking);
-            Crit = indirectDamage ? 0 : list.Count(x => x.Result == Parser.ParseEnum.PhysicalResult.Crit);
-            Glance = indirectDamage ? 0 : list.Count(x => x.Result == Parser.ParseEnum.PhysicalResult.Glance);
+            Crit = indirectDamage ? 0 : list.Count(x => x.IsCrit());
+            Glance = indirectDamage ? 0 : list.Count(x => x.IsGlance());
             IndirectDamage = indirectDamage;
             Id = id;
         }

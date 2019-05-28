@@ -441,12 +441,12 @@ namespace LuckParser.Builders
             return res;
         }
 
-        private List<JsonDamageDist> BuildDamageDist(List<DamageLog> dls)
+        private List<JsonDamageDist> BuildDamageDist(List<AbstractDamageEvent> dls)
         {
             List<JsonDamageDist> res = new List<JsonDamageDist>();
-            Dictionary<long, List<DamageLog>> dict = dls.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
+            Dictionary<long, List<AbstractDamageEvent>> dict = dls.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
             SkillData skillList = _log.SkillData;
-            foreach (KeyValuePair<long, List<DamageLog>> pair in dict)
+            foreach (KeyValuePair<long, List<AbstractDamageEvent>> pair in dict)
             {
                 if (pair.Value.Count == 0)
                 {
@@ -475,7 +475,7 @@ namespace LuckParser.Builders
                         _skillDesc["s" + pair.Key] = new JsonLog.SkillDesc(skill);
                     }
                 }
-                List<DamageLog> filteredList = pair.Value.Where(x => x.Result != ParseEnum.PhysicalResult.Downed).ToList();
+                List<AbstractDamageEvent> filteredList = pair.Value.Where(x => !x.IsDowned()).ToList();
                 if (filteredList.Count == 0)
                 {
                     continue;

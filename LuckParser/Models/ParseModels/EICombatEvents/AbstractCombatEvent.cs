@@ -15,5 +15,10 @@ namespace LuckParser.Models.ParseModels
         {
             Time = evtcItem.Time;
         }
+
+        public void OverrideTime(long time)
+        {
+            Time = time;
+        }
     }
 }

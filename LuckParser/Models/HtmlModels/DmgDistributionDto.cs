@@ -10,7 +10,7 @@ namespace LuckParser.Models.HtmlModels
         public long TotalDamage;      
         public List<object[]> Distribution;
 
-        public static object[] GetDMGDtoItem(KeyValuePair<long, List<DamageLog>> entry, Dictionary<long, List<CastLog>> castLogsBySkill, SkillData skillData, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons, BoonsContainer boons)
+        public static object[] GetDMGDtoItem(KeyValuePair<long, List<AbstractDamageEvent>> entry, Dictionary<long, List<CastLog>> castLogsBySkill, SkillData skillData, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons, BoonsContainer boons)
         {
             int totaldamage = 0,
                     mindamage = int.MaxValue,
@@ -20,9 +20,9 @@ namespace LuckParser.Models.HtmlModels
                     flank = 0,
                     glance = 0;
             bool IsIndirectDamage = false;
-            foreach (DamageLog dl in entry.Value)
+            foreach (AbstractDamageEvent dl in entry.Value)
             {
-                if (dl.Result == ParseEnum.PhysicalResult.Downed)
+                if (dl.IsDowned())
                 {
                     continue;
                 }
@@ -32,8 +32,8 @@ namespace LuckParser.Models.HtmlModels
                 if (curdmg < mindamage) { mindamage = curdmg; }
                 if (curdmg > maxdamage) { maxdamage = curdmg; }
                 hits++;
-                if (dl.Result == ParseEnum.PhysicalResult.Crit) crit++;
-                if (dl.Result == ParseEnum.PhysicalResult.Glance) glance++;
+                if (dl.IsCrit()) crit++;
+                if (dl.IsGlance()) glance++;
                 if (dl.IsFlanking) flank++;
             }
             if (IsIndirectDamage)

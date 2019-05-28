@@ -38,7 +38,7 @@ namespace LuckParser.Models.ParseModels
         public string Url { get; protected set; }
         public string Name { get; protected set; }
         public string Tooltip { get; protected set; }
-        public delegate bool DamageLogChecker(DamageLog dl);
+        public delegate bool DamageLogChecker(AbstractDamageEvent dl);
         protected DamageLogChecker DLChecker;
 
         protected DamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, GainComputer gainComputer, DamageLogChecker dlChecker, ulong minBuild, ulong maxBuild)
@@ -109,7 +109,7 @@ namespace LuckParser.Models.ParseModels
             return 0;
         }
 
-        public List<DamageLog> GetDamageLogs(Player p, ParsedLog log, Target t, PhaseData phase)
+        public List<AbstractDamageEvent> GetDamageLogs(Player p, ParsedLog log, Target t, PhaseData phase)
         {
             switch (_srcType)
             {
@@ -150,8 +150,8 @@ namespace LuckParser.Models.ParseModels
         {
             new BuffDamageModifierTarget(738, "Vulnerability", "1% per Stack", DamageSource.All, 1.0, DamageType.All, DamageType.All, ModifierSource.CommonBuff, ByStack, "https://wiki.guildwars2.com/images/a/af/Vulnerability.png"),
             new BuffDamageModifier(50421, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.All, ModifierSource.CommonBuff, ByPresenceNonMulti, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png", 88541, ulong.MaxValue),
-            new DamageLogDamageModifier("Soulcleave's Summit", "per hit (no ICD)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, ModifierSource.CommonBuff,"https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png", (x => x.SkillId == 45026), BySkill),
-            new DamageLogDamageModifier("One Wolf Pack", "per hit (max. once every 0.25s)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, ModifierSource.CommonBuff, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png", (x => x.SkillId == 42145), BySkill),
+            new DamageLogDamageModifier("Soulcleave's Summit", "per hit (no ICD)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, ModifierSource.CommonBuff,"https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png", (x => x.SkillID == 45026), BySkill),
+            new DamageLogDamageModifier("One Wolf Pack", "per hit (max. once every 0.25s)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, ModifierSource.CommonBuff, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png", (x => x.SkillID == 42145), BySkill),
             //new DamageLogDamageModifier(Boon.GetBoonByName("Static Charge"), 0, DamageSource.NoPets, DamageType.Power, DamageType.All, ModifierSource.CommonBuff, ByPresence),
             //new BuffDamageModifier(Boon.GetBoonByName("Glyph of Empowerment"), DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ModifierSource.All, ByPresence),
             new BuffDamageModifierTarget(38224,"Unnatural Signet", "100%", DamageSource.All, 100.0, DamageType.All, DamageType.All, ModifierSource.CommonBuff, ByPresence, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png"),
@@ -216,9 +216,9 @@ namespace LuckParser.Models.ParseModels
             new BuffDamageModifierTarget(Boon.NumberOfConditionsID, "Exposed Weakness", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Power, DamageType.All, ModifierSource.Thief, ByStack, "https://wiki.guildwars2.com/images/0/02/Exposed_Weakness.png", 90455, ulong.MaxValue),
             new BuffDamageModifierTarget(Boon.NumberOfConditionsID, "Exposed Weakness", "10% if condition on target", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ModifierSource.Thief, ByPresence, "https://wiki.guildwars2.com/images/0/02/Exposed_Weakness.png", 0, 90455),
             new DamageLogDamageModifier("Executioner", "20% if target <50% HP", DamageSource.NoPets, 20.0, DamageType.Power, DamageType.All, ModifierSource.Thief,"https://wiki.guildwars2.com/images/9/93/Executioner.png", x => x.IsFifty, ByPresence),
-            new DamageLogDamageModifier("Ferocious Strikes", "10% on critical strikes if target >50%", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ModifierSource.Thief,"https://wiki.guildwars2.com/images/d/d1/Ferocious_Strikes.png", x => !x.IsFifty && x.Result == ParseEnum.PhysicalResult.Crit, ByPresence),
+            new DamageLogDamageModifier("Ferocious Strikes", "10% on critical strikes if target >50%", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ModifierSource.Thief,"https://wiki.guildwars2.com/images/d/d1/Ferocious_Strikes.png", x => !x.IsFifty && x.IsCrit(), ByPresence),
             //new BuffDamageModifierTarget(Boon.GetBoonByName("Crippled").ID, "Ankle Shots", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ModifierSource.Thief, _byPresence, "https://wiki.guildwars2.com/images/b/b4/Unscathed_Contender.png"), // It's not always possible to detect the presence of pistol and the trait is additive with itself. Staff master is worse as we can't detect endurance at all
-            new DamageLogDamageModifier("Twin Fangs","7% over 90%", DamageSource.NoPets, 7.0, DamageType.Power, DamageType.All, ModifierSource.Thief,"https://wiki.guildwars2.com/images/d/d1/Ferocious_Strikes.png", x => x.IsNinety && x.Result == ParseEnum.PhysicalResult.Crit, ByPresence),
+            new DamageLogDamageModifier("Twin Fangs","7% over 90%", DamageSource.NoPets, 7.0, DamageType.Power, DamageType.All, ModifierSource.Thief,"https://wiki.guildwars2.com/images/d/d1/Ferocious_Strikes.png", x => x.IsNinety && x.IsCrit(), ByPresence),
             new BuffDamageModifier(Boon.NumberOfBoonsID, "Premeditation", "1% per boon",DamageSource.NoPets, 1.0, DamageType.Power, DamageType.All, ModifierSource.Deadeye, ByStack, "https://wiki.guildwars2.com/images/d/d7/Premeditation.png"),
         };
         private static readonly List<DamageModifier> _rangerDamageModifiers = new List<DamageModifier>
@@ -236,7 +236,7 @@ namespace LuckParser.Models.ParseModels
             new BuffDamageModifierTarget(738, "Fragility", "0.5% per stack vuln on target", DamageSource.NoPets, 0.5, DamageType.Power, DamageType.All, ModifierSource.Mesmer, ByStack, "https://wiki.guildwars2.com/images/3/33/Fragility.png"),
             // Phantasmal Force would require activating buff tracking on minions, huge performance impact and some code impact
             // TOCHECK Superiority Complex
-            new BuffDamageModifierTarget(26766, "Danger Time", "10% on slowed target", DamageSource.All, 10.0, DamageType.Power, DamageType.All, ModifierSource.Chronomancer, ByPresence, "https://wiki.guildwars2.com/images/3/33/Fragility.png", (x => x.Result == ParseEnum.PhysicalResult.Crit)),
+            new BuffDamageModifierTarget(26766, "Danger Time", "10% on slowed target", DamageSource.All, 10.0, DamageType.Power, DamageType.All, ModifierSource.Chronomancer, ByPresence, "https://wiki.guildwars2.com/images/3/33/Fragility.png", (x => x.IsCrit())),
         };
         private static readonly List<DamageModifier> _necromancerDamageModifiers = new List<DamageModifier>
         {

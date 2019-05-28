@@ -136,9 +136,6 @@
     <Compile Include="Models\ParseModels\EICombatEvents\MovementEvents\VelocityEvent.cs" />
     <Compile Include="Models\ParseModels\EICombatEvents\MovementEvents\RotationEvent.cs" />
     <Compile Include="Models\ParseModels\EICombatEvents\MovementEvents\AbstractMovementEvent.cs" />
-    <Compile Include="Models\ParseModels\Logs\DamageLog.cs" />
-    <Compile Include="Models\ParseModels\Logs\DamageLogCondition.cs" />
-    <Compile Include="Models\ParseModels\Logs\DamageLogPower.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicsChecker\ActorBuffChecker.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicsChecker\ActorStateChecker.cs" />
     <Compile Include="Models\ParseModels\ProfHelpers\ElementalistHelper.cs" />

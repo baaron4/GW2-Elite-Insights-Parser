@@ -8,13 +8,13 @@ namespace LuckParser.Models.ParseModels
     public abstract class AbstractActor : DummyActor
     {
         // Damage
-        protected List<DamageLog> DamageLogs;
-        protected Dictionary<AgentItem, List<DamageLog>> DamageLogsByDst;
-        private Dictionary<PhaseData, Dictionary<AbstractActor, List<DamageLog>>> _damageLogsPerPhasePerTarget = new Dictionary<PhaseData, Dictionary<AbstractActor, List<DamageLog>>>();
+        protected List<AbstractDamageEvent> DamageLogs;
+        protected Dictionary<AgentItem, List<AbstractDamageEvent>> DamageLogsByDst;
+        private Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>> _damageLogsPerPhasePerTarget = new Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>>();
         //protected List<DamageLog> HealingLogs = new List<DamageLog>();
         //protected List<DamageLog> HealingReceivedLogs = new List<DamageLog>();
-        private List<DamageLog> _damageTakenlogs;
-        protected Dictionary<AgentItem, List<DamageLog>> _damageTakenLogsBySrc;
+        private List<AbstractDamageEvent> _damageTakenlogs;
+        protected Dictionary<AgentItem, List<AbstractDamageEvent>> _damageTakenLogsBySrc;
         // Cast
         protected List<CastLog> CastLogs;
         // Boons
@@ -36,13 +36,13 @@ namespace LuckParser.Models.ParseModels
             return 0;
         }
 
-        public List<DamageLog> GetDamageLogs(AbstractActor target, ParsedLog log, long start, long end)
+        public List<AbstractDamageEvent> GetDamageLogs(AbstractActor target, ParsedLog log, long start, long end)
         {
             if (DamageLogs == null)
             {
-                DamageLogs = new List<DamageLog>();
+                DamageLogs = new List<AbstractDamageEvent>();
                 SetDamageLogs(log);
-                DamageLogsByDst = DamageLogs.GroupBy(x => log.AgentData.GetAgentByInstID(x.DstInstId, log.FightData.ToLogSpace(x.Time))).ToDictionary(x => x.Key, x => x.ToList());
+                DamageLogsByDst = DamageLogs.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
             {
@@ -52,20 +52,20 @@ namespace LuckParser.Models.ParseModels
                 }
                 else
                 {
-                    return new List<DamageLog>();
+                    return new List<AbstractDamageEvent>();
                 }
             }
             return DamageLogs.Where( x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public List<DamageLog> GetDamageLogs(AbstractActor target, ParsedLog log, PhaseData phase)
+        public List<AbstractDamageEvent> GetDamageLogs(AbstractActor target, ParsedLog log, PhaseData phase)
         {
-            if (!_damageLogsPerPhasePerTarget.TryGetValue(phase, out Dictionary<AbstractActor, List<DamageLog>> targetDict))
+            if (!_damageLogsPerPhasePerTarget.TryGetValue(phase, out Dictionary<AbstractActor, List<AbstractDamageEvent>> targetDict))
             {
-                targetDict = new Dictionary<AbstractActor, List<DamageLog>>();
+                targetDict = new Dictionary<AbstractActor, List<AbstractDamageEvent>>();
                 _damageLogsPerPhasePerTarget[phase] = targetDict;
             }
-            if (!targetDict.TryGetValue(target ?? GeneralHelper.NullActor, out List<DamageLog> dls))
+            if (!targetDict.TryGetValue(target ?? GeneralHelper.NullActor, out List<AbstractDamageEvent> dls))
             {
                 dls = GetDamageLogs(target, log, phase.Start, phase.End);
                 targetDict[target ?? GeneralHelper.NullActor] = dls;
@@ -73,13 +73,13 @@ namespace LuckParser.Models.ParseModels
             return dls;
         }
 
-        public List<DamageLog> GetDamageTakenLogs(AbstractActor target, ParsedLog log, long start, long end)
+        public List<AbstractDamageEvent> GetDamageTakenLogs(AbstractActor target, ParsedLog log, long start, long end)
         {
             if (_damageTakenlogs == null)
             {
-                _damageTakenlogs = new List<DamageLog>();
+                _damageTakenlogs = new List<AbstractDamageEvent>();
                 SetDamageTakenLogs(log);
-                _damageTakenLogsBySrc = _damageTakenlogs.GroupBy(x => log.AgentData.GetAgentByInstID(x.SrcInstId, log.FightData.ToLogSpace(x.Time))).ToDictionary(x => x.Key, x => x.ToList());
+                _damageTakenLogsBySrc = _damageTakenlogs.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
             {
@@ -91,7 +91,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 else
                 {
-                    return new List<DamageLog>();
+                    return new List<AbstractDamageEvent>();
                 }
             }
             return _damageTakenlogs.Where(x => x.Time >= start && x.Time <= end).ToList();
@@ -143,34 +143,13 @@ namespace LuckParser.Models.ParseModels
 
         }
         // privates
-        protected void AddDamageLog(long time, CombatItem c, BoonsContainer boons)
+        protected void AddDamageLog(AbstractDamageEvent c)
         {        
             if (c.IFF == ParseEnum.IFF.Friend)
             {
                 return;
             }
-            if (c.IsBuff != 0)//condi
-            {
-                DamageLogs.Add(new DamageLogCondition(time, c, boons));
-            }
-            else if (c.IsBuff == 0)//power
-            {
-                DamageLogs.Add(new DamageLogPower(time, c));
-            }
-        }
-        protected void AddDamageTakenLog(long time, CombatItem c, BoonsContainer boons)
-        {
-            if (c.IsBuff != 0)
-            {
-                //inco,ing condi dmg not working or just not present?
-                // damagetaken.Add(c.getBuffDmg());
-                _damageTakenlogs.Add(new DamageLogCondition(time, c, boons));
-            }
-            else if (c.IsBuff == 0)
-            {
-                _damageTakenlogs.Add(new DamageLogPower(time, c));
-
-            }
+            DamageLogs.Add(c);
         }
 
         protected static void Add<T>(Dictionary<T, long> dictionary, T key, long value)
@@ -282,10 +261,9 @@ namespace LuckParser.Models.ParseModels
 
         protected virtual void SetDamageTakenLogs(ParsedLog log)
         {
-            foreach (CombatItem c in log.CombatData.GetDamageTakenData(InstID, FirstAware, LastAware))
+            foreach (AbstractDamageEvent c in log.CombatData.GetDamageTakenData(AgentItem))
             {
-                long time = log.FightData.ToFightSpace(c.Time);
-                AddDamageTakenLog(time, c, log.Boons);
+                _damageTakenlogs.Add(c);
             }
         }
 

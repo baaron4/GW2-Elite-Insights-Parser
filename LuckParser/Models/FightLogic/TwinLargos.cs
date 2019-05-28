@@ -101,7 +101,7 @@ namespace LuckParser.Models.Logic
 
         private void FallBackPhases(Target target, List<PhaseData> phases, ParsedLog log, bool firstPhaseAt0)
         {
-            HashSet<ushort> pIds = new HashSet<ushort>(log.PlayerList.Select(x => x.InstID));
+            HashSet<AgentItem> pAgents = log.PlayerAgents;
             // clean Nikare related bugs
             switch (phases.Count)
             {
@@ -112,7 +112,7 @@ namespace LuckParser.Models.Logic
                         // P1 and P2 merged
                         if (p1.Start == p2.Start)
                         {
-                            CombatItem hit = log.CombatData.GetDamageTakenData(target.InstID, log.FightData.ToLogSpace(p1.End) + 2000, target.LastAware).FirstOrDefault(x => (pIds.Contains(x.SrcInstid) || pIds.Contains(x.SrcMasterInstid)) && (x.Value > 0 || x.BuffDmg > 0));
+                            AbstractDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p1.End + 2000 && (pAgents.Contains(x.From) || pAgents.Contains(x.MasterFrom)) && x.Damage> 0);
                             if (hit != null)
                             {
                                 p2.OverrideStart(log.FightData.ToFightSpace(hit.Time));
@@ -132,7 +132,7 @@ namespace LuckParser.Models.Logic
                         // P1 and P2 merged
                         if (p1.Start == p2.Start)
                         {
-                            CombatItem hit = log.CombatData.GetDamageTakenData(target.InstID, log.FightData.ToLogSpace(p1.End) + 2000, target.LastAware).FirstOrDefault(x => (pIds.Contains(x.SrcInstid) || pIds.Contains(x.SrcMasterInstid)) && (x.Value > 0 || x.BuffDmg > 0));
+                            AbstractDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p1.End + 2000 && (pAgents.Contains(x.From) || pAgents.Contains(x.MasterFrom)) && x.Damage > 0);
                             if (hit != null)
                             {
                                 p2.OverrideStart(log.FightData.ToFightSpace(hit.Time));
@@ -145,7 +145,7 @@ namespace LuckParser.Models.Logic
                         // P1/P2 and P3 are merged
                         if (p1.Start == p3.Start || p2.Start == p3.Start)
                         {
-                            CombatItem hit = log.CombatData.GetDamageTakenData(target.InstID, log.FightData.ToLogSpace(p2.End) + 2000, target.LastAware).FirstOrDefault(x => (pIds.Contains(x.SrcInstid) || pIds.Contains(x.SrcMasterInstid)) && (x.Value > 0 || x.BuffDmg > 0));
+                            AbstractDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p2.End + 2000 && (pAgents.Contains(x.From) || pAgents.Contains(x.MasterFrom)) && x.Damage > 0);
                             if (hit != null)
                             {
                                 p3.OverrideStart(log.FightData.ToFightSpace(hit.Time));
@@ -163,7 +163,7 @@ namespace LuckParser.Models.Logic
             if (!firstPhaseAt0 && phases.Count > 0 && phases.First().Start == 0)
             {
                 PhaseData p1 = phases[0];
-                CombatItem hit = log.CombatData.GetDamageTakenData(target.InstID, log.FightData.ToLogSpace(0), target.LastAware).FirstOrDefault(x => (pIds.Contains(x.SrcInstid) || pIds.Contains(x.SrcMasterInstid)) && (x.Value > 0 || x.BuffDmg > 0));
+                AbstractDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= log.FightData.FightStart && (pAgents.Contains(x.From) || pAgents.Contains(x.MasterFrom)) && x.Damage > 0);
                 if (hit != null)
                 {
                     p1.OverrideStart(log.FightData.ToFightSpace(hit.Time));
