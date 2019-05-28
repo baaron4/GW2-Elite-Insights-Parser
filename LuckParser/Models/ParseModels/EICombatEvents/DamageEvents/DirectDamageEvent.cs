@@ -11,7 +11,7 @@ namespace LuckParser.Models.ParseModels
     {
         private readonly ParseEnum.PhysicalResult _result;
 
-        public DirectDamageEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
+        public DirectDamageEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, agentData, offset)
         {
             Damage = evtcItem.Value;
             _result = ParseEnum.GetPhysicalResult(evtcItem.Result);

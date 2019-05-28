@@ -11,7 +11,7 @@ namespace LuckParser.Models.ParseModels
     {
         private readonly ParseEnum.ConditionResult _result;
 
-        public NonDirectDamageEvent(CombatItem evtcItem, AgentData agentData, BoonsContainer boons) : base(evtcItem, agentData)
+        public NonDirectDamageEvent(CombatItem evtcItem, AgentData agentData, BoonsContainer boons, long offset) : base(evtcItem, agentData, offset)
         {
             IsIndirectDamage = true;
             IsCondi = false;

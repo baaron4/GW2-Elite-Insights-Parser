@@ -10,7 +10,7 @@ namespace LuckParser.Models.ParseModels
     public class PositionEvent : AbstractMovementEvent
     {
 
-        public PositionEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
+        public PositionEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, agentData, offset)
         {
         }
 

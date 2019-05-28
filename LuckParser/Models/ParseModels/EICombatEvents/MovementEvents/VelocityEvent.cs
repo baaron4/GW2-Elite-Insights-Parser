@@ -10,7 +10,7 @@ namespace LuckParser.Models.ParseModels
     public class VelocityEvent : AbstractMovementEvent
     {
 
-        public VelocityEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
+        public VelocityEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, agentData, offset)
         {
         }
 

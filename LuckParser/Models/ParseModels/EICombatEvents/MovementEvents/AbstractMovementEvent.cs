@@ -13,7 +13,7 @@ namespace LuckParser.Models.ParseModels
         private readonly ulong _dstAgent;
         private readonly long _value;
 
-        public AbstractMovementEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem)
+        public AbstractMovementEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, offset)
         {
             AgentItem = agentData.GetAgentByInstID(evtcItem.SrcInstid, evtcItem.Time);
             _dstAgent = evtcItem.DstAgent;

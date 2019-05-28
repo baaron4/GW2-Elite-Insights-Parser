@@ -45,7 +45,7 @@ namespace LuckParser.Models.ParseModels
                 ? allCombatItems.Where(x =>
                         x.IsStateChange == ParseEnum.StateChange.Position ||
                         x.IsStateChange == ParseEnum.StateChange.Velocity ||
-                        x.IsStateChange == ParseEnum.StateChange.Rotation).Select(x => EICombatEventFactory.CreateMovementEvent(x, agentData)).GroupBy(x => x.AgentItem)
+                        x.IsStateChange == ParseEnum.StateChange.Rotation).Select(x => EICombatEventFactory.CreateMovementEvent(x, agentData, fightData.FightStart)).GroupBy(x => x.AgentItem)
                     .ToDictionary(x => x.Key, x => x.ToList())
                 : new Dictionary<AgentItem, List<AbstractMovementEvent>>();
             HasMovementData = _movementData.Count > 1;
@@ -67,7 +67,7 @@ namespace LuckParser.Models.ParseModels
             DstSpecialBoonParse(players, _boonDataByDst);
             _boonData = boonData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
             // damage events
-            var damageData = noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0)).Select(x => EICombatEventFactory.CreateDamageEvent(x, agentData, boons));
+            var damageData = noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0)).Select(x => EICombatEventFactory.CreateDamageEvent(x, agentData, boons, fightData.FightStart));
             _damageData = damageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             _damageTakenData = damageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
 

@@ -9,7 +9,7 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class CastStartEvent : AbstractCastEvent
     {
-        public CastStartEvent(CombatItem evtcItem) : base(evtcItem)
+        public CastStartEvent(CombatItem evtcItem, long offset) : base(evtcItem, offset)
         {
 
         }
