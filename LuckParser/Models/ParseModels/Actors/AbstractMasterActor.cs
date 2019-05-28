@@ -273,7 +273,7 @@ namespace LuckParser.Models.ParseModels
         {
             foreach (AbstractMovementEvent movementEvent in log.CombatData.GetMovementData(AgentItem))
             {
-                movementEvent.AddPoint3D(CombatReplay, log);
+                movementEvent.AddPoint3D(CombatReplay);
             }
         }
 
