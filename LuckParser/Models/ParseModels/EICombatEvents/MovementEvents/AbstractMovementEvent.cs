@@ -10,14 +10,12 @@ namespace LuckParser.Models.ParseModels
     public abstract class AbstractMovementEvent : AbstractCombatEvent
     {
         public AgentItem AgentItem { get; }
-        public ParseEnum.StateChange StateChange { get; }
         private readonly ulong _dstAgent;
         private readonly long _value;
 
         public AbstractMovementEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem)
         {
             AgentItem = agentData.GetAgentByInstID(evtcItem.SrcInstid, evtcItem.Time);
-            StateChange = evtcItem.IsStateChange;
             _dstAgent = evtcItem.DstAgent;
             _value = evtcItem.Value;
         }

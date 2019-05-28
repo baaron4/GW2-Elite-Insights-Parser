@@ -524,19 +524,12 @@ namespace LuckParser.Models.Logic
             {
                 var lastPhase = phases[6];
 
-                var qadimMovement = log.CombatData.GetMovementData(target.AgentItem);
+                List<Point3D> qadimMovement = target.GetCombatReplayPositions(log);
 
                 var lastMove = qadimMovement.FirstOrDefault(
-                    c =>
+                    pt =>
                     {
-                        if (c.StateChange != ParseEnum.StateChange.Position)
-                        {
-                            return false;
-                        }
-                        
-                        (float x, float y, float z) = c.Unpack();
-
-                        return Math.Abs(x - qadimFinalX) < 5 && Math.Abs(y - qadimFinalY) < 5;
+                        return Math.Abs(pt.X - qadimFinalX) < 5 && Math.Abs(pt.Y - qadimFinalY) < 5;
                     });
 
                 if (lastMove != null)
