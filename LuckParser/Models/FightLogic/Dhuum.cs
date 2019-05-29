@@ -270,10 +270,10 @@ namespace LuckParser.Models.Logic
                     {
                         if (_greenStart == 0)
                         {
-                            List<CombatItem> greenTaken = log.CombatData.GetBoonData(46950).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
-                            if (greenTaken.Count > 0)
+                            CombatItem greenTaken = log.CombatData.GetBoonData(46950).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None).FirstOrDefault();
+                            if (greenTaken != null)
                             {
-                                _greenStart = (int)log.FightData.ToFightSpace(greenTaken[0].Time) - 5000;
+                                _greenStart = (int)log.FightData.ToFightSpace(greenTaken.Time) - 5000;
                             }
                             else
                             {
