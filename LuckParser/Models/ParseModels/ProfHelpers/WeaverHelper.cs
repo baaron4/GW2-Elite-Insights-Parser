@@ -9,20 +9,6 @@ namespace LuckParser.Models.ParseModels
 {
     public class WeaverHelper : ElementalistHelper
     {
-        // Weaver attunements
-        public const long FireWater = -5;
-        public const long FireAir = -6;
-        public const long FireEarth = -7;
-        public const long WaterFire = -8;
-        public const long WaterAir = -9;
-        public const long WaterEarth = -10;
-        public const long AirFire = -11;
-        public const long AirWater = -12;
-        public const long AirEarth = -13;
-        public const long EarthFire = -14;
-        public const long EarthWater = -15;
-        public const long EarthAir = -16;
-
         private const long _fireMajor = 40926;
         private const long _fireMinor = 42811;
         private const long _waterMajor = 43236;
@@ -31,11 +17,6 @@ namespace LuckParser.Models.ParseModels
         private const long _airMinor = 43229;
         private const long _earthMajor = 43740;
         private const long _earthMinor = 44822;
-
-        public const long FireDual = 43470;
-        public const long WaterDual = 41166;
-        public const long AirDual = 42264;
-        public const long EarthDual = 44857;
 
         private static Dictionary<long, HashSet<long>> _minorsTranslation = new Dictionary<long, HashSet<long>>
         {
