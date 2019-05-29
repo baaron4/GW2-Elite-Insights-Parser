@@ -39,7 +39,7 @@ namespace LuckParser.Models.ParseModels
                 InstID = instID,
                 LastAware = end,
                 FirstAware = start,
-                MasterAgent = 0
+                MasterAgent = null
             };
             _allAgentsList.Add(agent);
             Refresh();

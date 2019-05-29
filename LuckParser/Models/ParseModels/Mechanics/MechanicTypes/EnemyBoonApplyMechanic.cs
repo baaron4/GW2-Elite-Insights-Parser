@@ -50,9 +50,9 @@ namespace LuckParser.Models.ParseModels
                         {
                             continue;
                         }
-                        else if (a.MasterAgent != 0)
+                        else if (a.MasterAgent != null)
                         {
-                            AgentItem m = log.AgentData.GetAgent(a.MasterAgent, c.Time);
+                            AgentItem m = a.MasterAgent;
                             if (playersIds.Contains(m.InstID))
                             {
                                 continue;

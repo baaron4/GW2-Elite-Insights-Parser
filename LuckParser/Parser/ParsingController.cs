@@ -489,7 +489,7 @@ namespace LuckParser.Parser
                             {
                                 if (minion.FirstAware <= c.Time && c.Time <= minion.LastAware)
                                 {
-                                    minion.MasterAgent = (master.Agent);
+                                    minion.MasterAgent = master;
                                 }
                             }
                         }

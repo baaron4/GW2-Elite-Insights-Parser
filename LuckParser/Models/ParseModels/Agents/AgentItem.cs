@@ -10,7 +10,7 @@ namespace LuckParser.Models.ParseModels
         // Fields
         public ulong Agent { get; set; }
         public readonly ushort ID;
-        public ulong MasterAgent { get; set; }
+        public AgentItem MasterAgent { get; set; }
         public ushort InstID { get; set; }
         public AgentType Type { get; }
         public long FirstAware { get; set; }
