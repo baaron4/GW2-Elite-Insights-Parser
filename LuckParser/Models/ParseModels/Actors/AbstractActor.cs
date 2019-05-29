@@ -161,7 +161,7 @@ namespace LuckParser.Models.ParseModels
         protected BoonMap GetBoonMap(ParsedLog log)
         {
             // buff extension ids
-            BoonSourceFinder sourceFinder = log.BoonSourceFinder;
+            BoonSourceFinder sourceFinder = log.Boons.BoonSourceFinder;
             //
             BoonMap boonMap = new BoonMap();
             // Fill in Boon Map
@@ -199,7 +199,7 @@ namespace LuckParser.Models.ParseModels
                         {
                             if (src == 0)
                             {
-                                src = sourceFinder.TryFindSrc(this, time, c.Value, log, boonId);
+                                src = sourceFinder.TryFindSrc(AgentItem, time, c.Value, log, boonId).InstID;
                             }
                             loglist.Add(new BoonExtensionLog(time, c.Value, c.OverstackValue - c.Value, log.AgentData.GetAgentByInstID(src, c.Time)));
                         }

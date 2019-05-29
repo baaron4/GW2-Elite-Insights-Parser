@@ -22,6 +22,7 @@ namespace LuckParser.Models.ParseModels
         public bool ReducedAnimation { get; protected set; }
         public int ActualDuration { get; protected set; }
 
+        // Swaps
         public int SwappedTo { get; protected set; }
 
         public AbstractCastEvent(CombatItem startEvtcItem, AgentData agentData, long offset) : base(startEvtcItem.Time, offset)

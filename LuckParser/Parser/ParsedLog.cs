@@ -28,7 +28,6 @@ namespace LuckParser.Parser
 
 
         public readonly MechanicData MechanicData;
-        public readonly BoonSourceFinder BoonSourceFinder;
         public bool IsBenchmarkMode => FightData.Logic.Mode == FightLogic.ParseMode.Golem;
         public readonly Target LegacyTarget;
         public readonly Statistics Statistics;
@@ -50,7 +49,6 @@ namespace LuckParser.Parser
             CombatData.Update(FightData.FightEnd);
             FightData.SetCM(_container);
             //
-            BoonSourceFinder = Boon.GetBoonSourceFinder(logData.GW2Version, Boons);
             MechanicData = FightData.Logic.GetMechanicData();
             Statistics = new Statistics(_container);
             LegacyTarget = target;

@@ -17,6 +17,8 @@ namespace LuckParser.Models.ParseModels
         private readonly Dictionary<string, Boon> _boonsByName;
         public Dictionary<int, List<Boon>> BoonsByCapacity { get; }
 
+        public BoonSourceFinder BoonSourceFinder { get; }
+
         public BoonsContainer(ulong build)
         {
             List<Boon> currentBoons = new List<Boon>();
@@ -30,6 +32,7 @@ namespace LuckParser.Models.ParseModels
             BoonsByType = currentBoons.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
             _boonsByName = currentBoons.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().Count > 1 ? throw new InvalidOperationException(x.First().Name) : x.First());
             BoonsByCapacity = currentBoons.GroupBy(x => x.Capacity).ToDictionary(x => x.Key, x => x.ToList());
+            BoonSourceFinder = GetBoonSourceFinder(build, new HashSet<long>(BoonsByNature[BoonNature.Boon].Select(x => x.ID)));
         }
 
         public Boon GetBoonByName(string name)

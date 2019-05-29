@@ -5,8 +5,8 @@ namespace LuckParser.Models.ParseModels
     public abstract class BoonLog
     {
         public long Time { get; }
-        public long Value { get; }
-        public AgentItem Src { get; }
+        protected long Value;
+        protected AgentItem Src;
 
         protected BoonLog(long time, AgentItem src, long value)
         {

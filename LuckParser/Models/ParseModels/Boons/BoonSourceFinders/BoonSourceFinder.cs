@@ -17,9 +17,9 @@ namespace LuckParser.Models.ParseModels
         protected long EssenceOfSpeed;
         protected long ImbuedMelodies;
 
-        protected BoonSourceFinder(BoonsContainer boons)
+        protected BoonSourceFinder(HashSet<long> boonIds)
         {
-            _boonIds = new HashSet<long>(boons.BoonsByNature[Boon.BoonNature.Boon].Select(x => x.ID));
+            _boonIds = boonIds;
         }
 
         private List<AbstractCastEvent> GetExtensionSkills(ParsedLog log, long time, HashSet<long> idsToKeep)
@@ -35,16 +35,16 @@ namespace LuckParser.Models.ParseModels
             return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time <= time && time <= x.Time + x.ActualDuration + 10).ToList();
         }
         // Spec specific checks
-        private int CouldBeEssenceOfSpeed(AbstractActor a, long extension, ParsedLog log)
+        private int CouldBeEssenceOfSpeed(AgentItem dst, long extension, ParsedLog log)
         {
-            if (extension == EssenceOfSpeed && a.Prof == "Soulbeast")
+            if (extension == EssenceOfSpeed && dst.Prof == "Soulbeast")
             {
                 if (log.PlayerListBySpec.ContainsKey("Herald") || log.PlayerListBySpec.ContainsKey("Tempest"))
                 {
                     return 0;
                 }
                 // if not herald or tempest in squad then can only be the trait
-                return a.InstID;
+                return 1;
             }
             return -1;
         }
@@ -65,17 +65,17 @@ namespace LuckParser.Models.ParseModels
             return false;
         }
         // Main method
-        public ushort TryFindSrc(AbstractActor a, long time, long extension, ParsedLog log, long boonid)
+        public AgentItem TryFindSrc(AgentItem dst, long time, long extension, ParsedLog log, long boonid)
         {
             if (!_boonIds.Contains(boonid))
             {
-                return a.InstID;
+                return dst;
             }
-            int essenceOfSpeedCheck = CouldBeEssenceOfSpeed(a, extension, log);
+            int essenceOfSpeedCheck = CouldBeEssenceOfSpeed(dst, extension, log);
             if (essenceOfSpeedCheck != -1)
             {
                 // unknown or self
-                return (ushort)essenceOfSpeedCheck;
+                return essenceOfSpeedCheck == 0 ? GeneralHelper.UnknownAgent : dst;
             }
             HashSet<long> idsToCheck = new HashSet<long>();
             if (DurationToIDs.TryGetValue(extension, out idsToCheck))
@@ -87,12 +87,12 @@ namespace LuckParser.Models.ParseModels
                     // Imbued Melodies check
                     if (CouldBeImbuedMelodies(item, time, extension, log))
                     {
-                        return 0;
+                        return GeneralHelper.UnknownAgent;
                     }
-                    return 0 /*item.SrcInstId*/;
+                    return dst;
                 }
             }
-            return 0;
+            return GeneralHelper.UnknownAgent;
         }
 
     }
