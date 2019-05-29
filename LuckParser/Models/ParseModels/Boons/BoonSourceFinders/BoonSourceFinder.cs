@@ -65,9 +65,9 @@ namespace LuckParser.Models.ParseModels
             return false;
         }
         // Main method
-        public AgentItem TryFindSrc(AgentItem dst, long time, long extension, ParsedLog log, long boonid)
+        public AgentItem TryFindSrc(AgentItem dst, long time, long extension, ParsedLog log, long buffID)
         {
-            if (!_boonIds.Contains(boonid))
+            if (!_boonIds.Contains(buffID))
             {
                 return dst;
             }
