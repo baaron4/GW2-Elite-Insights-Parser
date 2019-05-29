@@ -11,9 +11,9 @@ namespace LuckParser.Models.ParseModels
     {
         public long Time { get; protected set; }
 
-        protected AbstractCombatEvent(CombatItem evtcItem, long offset)
+        protected AbstractCombatEvent(long logTime, long offset)
         {
-            Time = evtcItem.Time - offset;
+            Time = logTime - offset;
         }
 
         public void OverrideTime(long time)

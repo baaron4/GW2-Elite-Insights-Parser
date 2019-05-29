@@ -26,7 +26,7 @@ namespace LuckParser.Models.ParseModels
         public bool IsIndirectDamage { get; protected set; }
         public bool IsCondi { get; protected set; }
 
-        public AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, offset)
+        public AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem.Time, offset)
         {
             From = agentData.GetAgentByInstID(evtcItem.SrcInstid, evtcItem.Time);
             MasterFrom = evtcItem.SrcMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.SrcMasterInstid, evtcItem.Time) : null;
