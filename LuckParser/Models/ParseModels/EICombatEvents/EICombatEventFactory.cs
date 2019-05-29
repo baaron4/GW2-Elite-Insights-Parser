@@ -66,10 +66,11 @@ namespace LuckParser.Models.ParseModels
                 {
                     if (c.IsOffcycle > 0)
                     {
-
-                    } else
+                        res.Add(new BuffExtensionEvent(c, agentData, offset));
+                    }
+                    else
                     {
-
+                        res.Add(new BuffApplyEvent(c, agentData, offset));
                     }
                 } else
                 {
