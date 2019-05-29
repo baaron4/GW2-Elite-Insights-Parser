@@ -57,6 +57,28 @@ namespace LuckParser.Models.ParseModels
             return res;
         }
 
+        public static List<AbstractBuffEvent> CreateBuffEvents(List<CombatItem> buffEvents, AgentData agentData, long offset)
+        {
+            List<AbstractBuffEvent> res = new List<AbstractBuffEvent>();
+            foreach (CombatItem c in buffEvents)
+            {
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None || c.IsStateChange == ParseEnum.StateChange.BuffInitial)
+                {
+                    if (c.IsOffcycle > 0)
+                    {
+
+                    } else
+                    {
+
+                    }
+                } else
+                {
+                    res.Add(new BuffRemoveEvent(c, agentData, offset));
+                }
+            }
+            return res;
+        }
+
         public static List<AnimatedCastEvent> CreateCastEvents(List<CombatItem> castEvents, AgentData agentData, long offset)
         {
             List<AnimatedCastEvent> res = new List<AnimatedCastEvent>();
