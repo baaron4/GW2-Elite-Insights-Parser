@@ -25,6 +25,16 @@ namespace LuckParser.Models.ParseModels
         public bool IsFlanking { get; }
         public bool IsIndirectDamage { get; protected set; }
         public bool IsCondi { get; protected set; }
+        public bool IsHit { get; protected set; }
+        public bool IsCrit { get; protected set; }
+        public bool IsGlance { get; protected set; }
+        public bool IsBlind { get; protected set; }
+        public bool IsAbsorb { get; protected set; }
+        public bool IsInterrupt { get; protected set; }
+        public bool IsDowned { get; protected set; }
+        public bool IsKilled { get; protected set; }
+        public bool IsBlock { get; protected set; }
+        public bool IsEvade { get; protected set; }
 
         public AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem.Time, offset)
         {
@@ -40,16 +50,5 @@ namespace LuckParser.Models.ParseModels
             IsFlanking = evtcItem.IsFlanking > 0;
             IFF = evtcItem.IFF;
         }
-
-        public abstract bool IsHit();
-        public abstract bool IsCrit();
-        public abstract bool IsGlance();
-        public abstract bool IsBlind();
-        public abstract bool IsAbsorb();
-        public abstract bool IsInterrupt();
-        public abstract bool IsDowned();
-        public abstract bool IsKilled();
-        public abstract bool IsBlock();
-        public abstract bool IsEvade();
     }
 }

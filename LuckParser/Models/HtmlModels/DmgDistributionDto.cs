@@ -22,7 +22,7 @@ namespace LuckParser.Models.HtmlModels
             bool IsIndirectDamage = false;
             foreach (AbstractDamageEvent dl in entry.Value)
             {
-                if (dl.IsDowned())
+                if (dl.IsDowned)
                 {
                     continue;
                 }
@@ -32,8 +32,8 @@ namespace LuckParser.Models.HtmlModels
                 if (curdmg < mindamage) { mindamage = curdmg; }
                 if (curdmg > maxdamage) { maxdamage = curdmg; }
                 hits++;
-                if (dl.IsCrit()) crit++;
-                if (dl.IsGlance()) glance++;
+                if (dl.IsCrit) crit++;
+                if (dl.IsGlance) glance++;
                 if (dl.IsFlanking) flank++;
             }
             if (IsIndirectDamage)
