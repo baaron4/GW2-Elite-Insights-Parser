@@ -14,10 +14,7 @@ namespace LuckParser.Models.ParseModels
 
         protected override void SetDamageLogs(ParsedLog log)
         {
-            foreach (AbstractDamageEvent c in log.CombatData.GetDamageData(AgentItem))
-            {
-                AddDamageLog(c);
-            }
+            AddDamageLogs(log.CombatData.GetDamageData(AgentItem));
         }
 
         protected override void SetBoonStatusCleanseWasteData(ParsedLog log, BoonSimulator simulator, long boonid, bool updateCondiPresence)

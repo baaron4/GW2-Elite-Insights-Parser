@@ -351,10 +351,7 @@ namespace LuckParser.Models.ParseModels
         }
         protected override void SetDamageLogs(ParsedLog log)
         {
-            foreach (AbstractDamageEvent c in log.CombatData.GetDamageData(AgentItem))
-            {
-                AddDamageLog(c);
-            }
+            AddDamageLogs(log.CombatData.GetDamageData(AgentItem));
             Dictionary<string, Minions> minionsList = GetMinions(log);
             foreach (Minions mins in minionsList.Values)
             {

@@ -143,13 +143,9 @@ namespace LuckParser.Models.ParseModels
 
         }
         // privates
-        protected void AddDamageLog(AbstractDamageEvent c)
-        {        
-            if (c.IFF == ParseEnum.IFF.Friend)
-            {
-                return;
-            }
-            DamageLogs.Add(c);
+        protected void AddDamageLogs(List<AbstractDamageEvent> damageEvents)
+        {
+            DamageLogs.AddRange(damageEvents.Where(x => x.IFF == ParseEnum.IFF.Friend));
         }
 
         protected static void Add<T>(Dictionary<T, long> dictionary, T key, long value)
@@ -261,10 +257,7 @@ namespace LuckParser.Models.ParseModels
 
         protected virtual void SetDamageTakenLogs(ParsedLog log)
         {
-            foreach (AbstractDamageEvent c in log.CombatData.GetDamageTakenData(AgentItem))
-            {
-                _damageTakenlogs.Add(c);
-            }
+            _damageTakenlogs.AddRange(log.CombatData.GetDamageTakenData(AgentItem));
         }
 
         protected virtual void SetCastLogs(ParsedLog log)
