@@ -127,7 +127,10 @@ namespace LuckParser.Models.Logic
                     List<AbstractCastEvent> magicStorms = cls.Where(x => x.SkillId == 31419).ToList();
                     foreach (AbstractCastEvent c in magicStorms)
                     {
-                        replay.Actors.Add(new CircleActor(true, 0, 100, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        int start = (int)c.Time;
+                        int end = start + c.ActualDuration;
+                        replay.Actors.Add(new CircleActor(true, start + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleActor(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     int distributedMagicDuration = 6700;
                     int arenaRadius = 1600;

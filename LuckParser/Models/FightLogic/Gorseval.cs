@@ -100,7 +100,7 @@ namespace LuckParser.Models.Logic
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
-                        replay.Actors.Add(new CircleActor(true, c.ExpectedDuration + (int)c.Time, 600, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleActor(true, c.ExpectedDuration + start, 600, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
                         replay.Actors.Add(new CircleActor(false, 0, 600, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
                     }
                     List<PhaseData> phases = log.FightData.GetPhases(log);
