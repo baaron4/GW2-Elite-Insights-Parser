@@ -60,6 +60,18 @@ namespace LuckParser.Parser
             AbstractActor res = PlayerList.FirstOrDefault(x => x.InstID == instid);
             if (res == null)
             {
+                foreach (Player p in PlayerList)
+                {
+                    Dictionary<string, Minions> minionsDict = p.GetMinions(this);
+                    foreach (Minions minions in minionsDict.Values)
+                    {
+                        res = minions.FirstOrDefault(x => x.InstID == instid && x.FirstAware <= time && x.LastAware >= time);
+                        if (res != null)
+                        {
+                            return res;
+                        }
+                    }
+                }
                 res = FightData.Logic.Targets.FirstOrDefault(x => x.InstID == instid && x.FirstAware <= time && x.LastAware >= time);
                 if (res == null)
                 {
