@@ -524,7 +524,7 @@ namespace LuckParser.Models.Logic
             {
                 var lastPhase = phases[6];
 
-                List<Point3D> qadimMovement = target.GetCombatReplayPositions(log);
+                List<Point3D> qadimMovement = replay.Positions;
 
                 var lastMove = qadimMovement.FirstOrDefault(
                     pt =>

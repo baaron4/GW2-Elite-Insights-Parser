@@ -107,7 +107,7 @@ namespace LuckParser.Models.Logic
                     if (phases.Count > 1)
                     {
                         List<CastLog> rampage = cls.Where(x => x.SkillId == 31834).ToList();
-                        Point3D pos = target.GetCombatReplayPositions(log).First();
+                        Point3D pos = replay.Positions.First();
                         foreach (CastLog c in rampage)
                         {
                             int start = (int)c.Time;
