@@ -123,7 +123,7 @@ namespace LuckParser.Models.ParseModels
             List<CombatItem> attuns = buffs.Where(x => attunements.Contains(x.SkillID)).ToList();
             foreach (CombatItem c in attuns)
             {
-                c.OverrideSkillID(Boon.NoBuff);
+                c.OverrideSkillID(NoBuff);
             }
             // get all weaver attunements ids and group them by time
             List<CombatItem> weaverAttuns = buffs.Where(x => weaverAttunements.Contains(x.SkillID)).ToList();
@@ -165,7 +165,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     else
                     {
-                        applies[i].OverrideSkillID(Boon.NoBuff);
+                        applies[i].OverrideSkillID(NoBuff);
                     }
                 }
                 bool removeAll = false;
@@ -186,7 +186,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     else
                     {
-                        c.OverrideSkillID(Boon.NoBuff);
+                        c.OverrideSkillID(NoBuff);
                     }
                 }
                 prevID = curID;

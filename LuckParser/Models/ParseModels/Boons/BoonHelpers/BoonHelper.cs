@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models.ParseModels
 {
-    public abstract class ProfHelper
+    public abstract class BoonHelper
     {
+
+        public const long NumberOfConditionsID = -3;
+        public const long NumberOfBoonsID = -2;
+        public const long NoBuff = -4;
+
         // Weaver attunements
         public const long FireWater = -5;
         public const long FireAir = -6;

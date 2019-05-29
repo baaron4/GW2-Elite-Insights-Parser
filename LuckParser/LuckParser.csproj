@@ -141,9 +141,9 @@
     <Compile Include="Models\ParseModels\EICombatEvents\MovementEvents\AbstractMovementEvent.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicsChecker\ActorBuffChecker.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicsChecker\ActorStateChecker.cs" />
-    <Compile Include="Models\ParseModels\ProfHelpers\ElementalistHelper.cs" />
-    <Compile Include="Models\ParseModels\ProfHelpers\ProfHelper.cs" />
-    <Compile Include="Models\ParseModels\ProfHelpers\WeaverHelper.cs" />
+    <Compile Include="Models\ParseModels\Boons\BoonHelpers\ElementalistHelper.cs" />
+    <Compile Include="Models\ParseModels\Boons\BoonHelpers\BoonHelper.cs" />
+    <Compile Include="Models\ParseModels\Boons\BoonHelpers\WeaverHelper.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\BackgroundActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\FacingRectangleActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\FacingActor.cs" />

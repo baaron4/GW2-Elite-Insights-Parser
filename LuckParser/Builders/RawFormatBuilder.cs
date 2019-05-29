@@ -204,8 +204,8 @@ namespace LuckParser.Builders
                     Minions = BuildMinions(target),
                     TotalDamageDist = BuildDamageDist(target, null),
                     TotalDamageTaken = BuildDamageTaken(target),
-                    BoonsStates = BuildBuffStates(target.GetBoonGraphs(_log)[Boon.NumberOfBoonsID]),
-                    ConditionsStates = BuildBuffStates(target.GetBoonGraphs(_log)[Boon.NumberOfConditionsID])
+                    BoonsStates = BuildBuffStates(target.GetBoonGraphs(_log)[BoonHelper.NumberOfBoonsID]),
+                    ConditionsStates = BuildBuffStates(target.GetBoonGraphs(_log)[BoonHelper.NumberOfConditionsID])
                 };
                 int finalTargetHealth = target.HealthOverTime.Count > 0
                     ? target.HealthOverTime.Last().hp
@@ -257,8 +257,8 @@ namespace LuckParser.Builders
                     TotalDamageTaken = BuildDamageTaken(player),
                     DeathRecap = BuildDeathRecap(player.GetDeathRecaps(_log)),
                     Consumables = BuildConsumables(player),
-                    BoonsStates = BuildBuffStates(player.GetBoonGraphs(_log)[Boon.NumberOfBoonsID]),
-                    ConditionsStates = BuildBuffStates(player.GetBoonGraphs(_log)[Boon.NumberOfConditionsID]),
+                    BoonsStates = BuildBuffStates(player.GetBoonGraphs(_log)[BoonHelper.NumberOfBoonsID]),
+                    ConditionsStates = BuildBuffStates(player.GetBoonGraphs(_log)[BoonHelper.NumberOfConditionsID]),
                 });
             }
         }
