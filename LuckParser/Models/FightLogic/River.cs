@@ -93,8 +93,8 @@ namespace LuckParser.Models.Logic
             switch (mob.ID)
             {
                 case (ushort)HollowedBomber:
-                    List<CastLog> bomberman = mob.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 48272).ToList();
-                    foreach (CastLog bomb in bomberman)
+                    List<AbstractCastEvent> bomberman = mob.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 48272).ToList();
+                    foreach (AbstractCastEvent bomb in bomberman)
                     {
                         int startCast = (int)bomb.Time;
                         int endCast = startCast + bomb.ActualDuration;

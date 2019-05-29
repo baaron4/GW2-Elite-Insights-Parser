@@ -14,7 +14,7 @@ namespace LuckParser.Models.ParseModels
         public AgentItem To { get; }
         public AgentItem MasterTo { get; }
 
-        public long SkillID { get; }
+        public long SkillId { get; }
         public ParseEnum.IFF IFF { get; }
 
         public int Damage { get; protected set; }
@@ -42,7 +42,7 @@ namespace LuckParser.Models.ParseModels
             MasterFrom = evtcItem.SrcMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.SrcMasterInstid, evtcItem.Time) : null;
             To = agentData.GetAgentByInstID(evtcItem.DstInstid, evtcItem.Time);
             MasterTo = evtcItem.DstMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.DstMasterInstid, evtcItem.Time) : null;
-            SkillID = evtcItem.SkillID;
+            SkillId = evtcItem.SkillID;
             ShieldDamage = evtcItem.IsShields > 0 ? evtcItem.OverstackValue > 0 ? (int)evtcItem.OverstackValue : evtcItem.Value : 0;
             IsNinety = evtcItem.IsNinety > 0;
             IsFifty = evtcItem.IsFifty > 0;

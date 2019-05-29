@@ -192,7 +192,7 @@ namespace LuckParser.Models.Logic
 
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
 
             switch (target.ID)
             {
@@ -223,9 +223,9 @@ namespace LuckParser.Models.Logic
 
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
-            List<CastLog> cls = p.GetCastLogs(log, 0, log.FightData.FightDuration);
-            List<CastLog> shieldCast = cls.Where(x => x.SkillId == 52780).ToList();
-            foreach (CastLog c in shieldCast)
+            List<AbstractCastEvent> cls = p.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> shieldCast = cls.Where(x => x.SkillId == 52780).ToList();
+            foreach (AbstractCastEvent c in shieldCast)
             {
                 int start = (int)c.Time;
                 int duration = 10000;

@@ -17,33 +17,33 @@ namespace LuckParser.Models.HtmlModels
 
         // helpers
 
-        public static object[] GetSkillData(CastLog cl, long phaseStart)
+        public static object[] GetSkillData(AbstractCastEvent cl, long phaseStart)
         {
             object[] rotEntry = new object[5];
-            double offset = 0.0;
             double start = (cl.Time - phaseStart) / 1000.0;
             rotEntry[0] = start;
-            if (start < 0.0)
-            {
-                offset = -1000.0 * start;
-                rotEntry[0] = 0;
-            }
             rotEntry[1] = cl.SkillId;
-            rotEntry[2] = cl.ActualDuration - offset; ;
-            rotEntry[3] = EncodeEndActivation(cl.EndActivation);
-            rotEntry[4] = cl.StartActivation == ParseEnum.Activation.Quickness ? 1 : 0;
+            rotEntry[2] = cl.ActualDuration  ;
+            rotEntry[3] = EncodeEndActivation(cl);
+            rotEntry[4] = cl.UnderQuickness ? 1 : 0;
             return rotEntry;
         }
 
-        private static int EncodeEndActivation(ParseEnum.Activation endActivation)
+        private static int EncodeEndActivation(AbstractCastEvent cl)
         {
-            switch (endActivation)
+            if (cl.ReducedAnimation)
             {
-                case ParseEnum.Activation.CancelFire: return 1;
-                case ParseEnum.Activation.CancelCancel: return 2;
-                case ParseEnum.Activation.Reset: return 3;
-                default: return 0;
+                return 1;
             }
+            if (cl.Interrupted)
+            {
+                return 2;
+            }
+            if (cl.FullAnimation)
+            {
+                return 3;
+            }
+            return 0;
         }
     }
 }

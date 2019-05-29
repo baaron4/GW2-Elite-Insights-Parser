@@ -15,8 +15,8 @@ namespace LuckParser.Models.Logic
             new PlayerBoonApplyMechanic(51935, "Waterlogged", new MechanicPlotlySetting("hexagon-open","rgb(0,140,255)"), "Debuff","Waterlogged (stacking water debuff)", "Waterlogged",0),
             new SkillOnPlayerMechanic(52876, "Vapor Rush", new MechanicPlotlySetting("triangle-left-open","rgb(0,140,255)"), "Charge","Vapor Rush (Triple Charge)", "Vapor Rush Charge",0),
             new SkillOnPlayerMechanic(52812, "Tidal Pool", new MechanicPlotlySetting("circle","rgb(0,140,255)"), "Pool","Tidal Pool", "Tidal Pool",0),
-            new EnemyCastStartMechanic(51977, "Aquatic Barrage Start", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Breakbar", "Breakbar",0),
-            new EnemyCastEndMechanic(51977, "Aquatic Barrage End", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Breakbar broken", "CCed",0),
+            new EnemyCastMechanic(51977, "Aquatic Barrage Start", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Breakbar", "Breakbar",0),
+            new EnemyCastMechanic(51977, "Aquatic Barrage End", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Breakbar broken", "CCed",0),
             new SkillOnPlayerMechanic(53018, "Sea Swell", new MechanicPlotlySetting("circle-open","rgb(30,30,80)"), "Wave","Sea Swell (Shockwave)", "Shockwave",0),
             new SkillOnPlayerMechanic(53130, "Geyser", new MechanicPlotlySetting("hexagon","rgb(0,255,255)"), "KB/Launch","Geyser (Launching Aoes)", "Launch Field",0),
             new PlayerBoonApplyMechanic(53097, "Water Bomb Debuff", new MechanicPlotlySetting("diamond","rgb(0,255,255)"), "Poison","Expanding Water Field", "Water Poison",0),
@@ -204,19 +204,19 @@ namespace LuckParser.Models.Logic
 
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Nikare:
                     //CC
-                    List<CastLog> barrageN = cls.Where(x => x.SkillId == 51977).ToList();
-                    foreach (CastLog c in barrageN)
+                    List<AbstractCastEvent> barrageN = cls.Where(x => x.SkillId == 51977).ToList();
+                    foreach (AbstractCastEvent c in barrageN)
                     {
                         replay.Actors.Add(new CircleActor(true, 0, 250, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Platform wipe (CM only)
-                    List<CastLog> aquaticDomainN = cls.Where(x => x.SkillId == 52374).ToList();
-                    foreach (CastLog c in aquaticDomainN)
+                    List<AbstractCastEvent> aquaticDomainN = cls.Where(x => x.SkillId == 52374).ToList();
+                    foreach (AbstractCastEvent c in aquaticDomainN)
                     {
                         int start = (int)c.Time;
                         int duration = c.ActualDuration;
@@ -227,14 +227,14 @@ namespace LuckParser.Models.Logic
                     break;
                 case (ushort)ParseEnum.TargetIDS.Kenut:
                     //CC
-                    List<CastLog> barrageK = cls.Where(x => x.SkillId == 51977).ToList();
-                    foreach (CastLog c in barrageK)
+                    List<AbstractCastEvent> barrageK = cls.Where(x => x.SkillId == 51977).ToList();
+                    foreach (AbstractCastEvent c in barrageK)
                     {
                         replay.Actors.Add(new CircleActor(true, 0, 250, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Platform wipe (CM only)
-                    List<CastLog> aquaticDomainK = cls.Where(x => x.SkillId == 52374).ToList();
-                    foreach (CastLog c in aquaticDomainK)
+                    List<AbstractCastEvent> aquaticDomainK = cls.Where(x => x.SkillId == 52374).ToList();
+                    foreach (AbstractCastEvent c in aquaticDomainK)
                     {
                         int start = (int)c.Time;
                         int duration = c.ActualDuration;
@@ -242,8 +242,8 @@ namespace LuckParser.Models.Logic
                         int radius = 800;
                         replay.Actors.Add(new CircleActor(true, end, radius, (start, end), "rgba(255, 255, 0, 0.3)", new AgentConnector(target)));
                     }
-                    List<CastLog> shockwave = cls.Where(x => x.SkillId == 53018).ToList();
-                    foreach (CastLog c in shockwave)
+                    List<AbstractCastEvent> shockwave = cls.Where(x => x.SkillId == 53018).ToList();
+                    foreach (AbstractCastEvent c in shockwave)
                     {
                         int start = (int)c.Time;
                         int delay = 960;
@@ -251,8 +251,8 @@ namespace LuckParser.Models.Logic
                         int radius = 1200;
                         replay.Actors.Add(new CircleActor(false, start + delay + duration, radius, (start + delay, start + delay + duration), "rgba(100, 200, 255, 0.5)", new AgentConnector(target)));
                     }
-                    List<CastLog> boonSteal = cls.Where(x => x.SkillId == 51965).ToList();
-                    foreach (CastLog c in boonSteal)
+                    List<AbstractCastEvent> boonSteal = cls.Where(x => x.SkillId == 51965).ToList();
+                    foreach (AbstractCastEvent c in boonSteal)
                     {
                         int start = (int)c.Time;
                         int delay = 1000;

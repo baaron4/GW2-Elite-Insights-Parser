@@ -26,36 +26,36 @@ namespace LuckParser.Models.ParseModels
             HashSet<ushort> playersIds = log.PlayerIDs;
             foreach (Player p in log.PlayerList)
             {
-                List<CombatItem> cList = new List<CombatItem>();
+                List<long> cList = new List<long>();
                 switch (SkillId)
                 {
                     case SkillItem.DeathId:
-                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.ChangeDead, log.FightData.FightStart, log.FightData.FightEnd);
+                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.ChangeDead, log.FightData.FightStart, log.FightData.FightEnd).Select(x => log.FightData.ToFightSpace(x.Time)).ToList();
                         break;
                     case SkillItem.DCId:
-                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.Despawn, log.FightData.FightStart, log.FightData.FightEnd);
+                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.Despawn, log.FightData.FightStart, log.FightData.FightEnd).Select(x => log.FightData.ToFightSpace(x.Time)).ToList();
                         break;
                     case SkillItem.RespawnId:
-                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.Spawn, log.FightData.FightStart, log.FightData.FightEnd);
+                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.Spawn, log.FightData.FightStart, log.FightData.FightEnd).Select(x => log.FightData.ToFightSpace(x.Time)).ToList();
                         break;
                     case SkillItem.AliveId:
-                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.ChangeUp, log.FightData.FightStart, log.FightData.FightEnd);
+                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.ChangeUp, log.FightData.FightStart, log.FightData.FightEnd).Select(x => log.FightData.ToFightSpace(x.Time)).ToList();
                         break;
                     case SkillItem.DownId:
-                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.ChangeDown, log.FightData.FightStart, log.FightData.FightEnd);
-                        List<CombatItem> downByVaporForm = combatData.GetBoonData(5620).Where(x => x.SrcInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.All).ToList();
-                        foreach (CombatItem c in downByVaporForm)
+                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.ChangeDown, log.FightData.FightStart, log.FightData.FightEnd).Select(x => log.FightData.ToFightSpace(x.Time)).ToList();
+                        List<long> downByVaporForm = combatData.GetBoonData(5620).Where(x => x.SrcInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.All).Select(x => log.FightData.ToFightSpace(x.Time)).ToList();
+                        foreach (long time in downByVaporForm)
                         {
-                            cList.RemoveAll(x => Math.Abs(x.Time - c.Time) < 20);
+                            cList.RemoveAll(x => Math.Abs(x - time) < 20);
                         }
                         break;
                     case SkillItem.ResurrectId:
-                        cList = log.CombatData.GetCastData(p.InstID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == SkillItem.ResurrectId && x.IsActivation.StartCasting()).ToList();
+                        cList = log.CombatData.GetCastData(p.AgentItem).Where(x => x.SkillId == SkillItem.ResurrectId).Select(x => x.Time).ToList();
                         break;
                 }
-                foreach (CombatItem mechItem in cList)
+                foreach (long time in cList)
                 {
-                    mechanicLogs[this].Add(new MechanicLog(log.FightData.ToFightSpace(mechItem.Time), this, p));
+                    mechanicLogs[this].Add(new MechanicLog(time, this, p));
                 }
             }
         }

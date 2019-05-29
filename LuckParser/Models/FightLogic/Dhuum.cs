@@ -51,14 +51,14 @@ namespace LuckParser.Models.Logic
                             (19072, 15484, 20992, 16508));
         }
 
-        private void ComputeFightPhases(Target mainTarget, List<PhaseData> phases, ParsedLog log, List<CastLog> castLogs, long fightDuration, long start)
+        private void ComputeFightPhases(Target mainTarget, List<PhaseData> phases, ParsedLog log, List<AbstractCastEvent> castLogs, long fightDuration, long start)
         {
-            CastLog shield = castLogs.Find(x => x.SkillId == 47396);
+            AbstractCastEvent shield = castLogs.Find(x => x.SkillId == 47396);
             if (shield != null)
             {
                 long end = shield.Time;
                 phases.Add(new PhaseData(start, end));
-                CastLog firstDamage = castLogs.FirstOrDefault(x => x.SkillId == 47304 && x.Time >= end);
+                AbstractCastEvent firstDamage = castLogs.FirstOrDefault(x => x.SkillId == 47304 && x.Time >= end);
                 if (firstDamage != null)
                 {
                     phases.Add(new PhaseData(firstDamage.Time, fightDuration));
@@ -72,9 +72,9 @@ namespace LuckParser.Models.Logic
 
         private List<PhaseData> GetInBetweenSoulSplits(ParsedLog log, Target dhuum, long mainStart, long mainEnd, bool hasRitual)
         {
-            List<CastLog> cls = dhuum.GetCastLogs(log, 0, log.FightData.FightDuration);
-            List<CastLog> cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
-            List<CastLog> gDeathmark = cls.Where(x => x.SkillId == 48210).ToList();
+            List<AbstractCastEvent> cls = dhuum.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
+            List<AbstractCastEvent> gDeathmark = cls.Where(x => x.SkillId == 48210).ToList();
             if (gDeathmark.Count < cataCycle.Count)
             {
                 return new List<PhaseData>();
@@ -83,9 +83,9 @@ namespace LuckParser.Models.Logic
             long start = mainStart;
             long end = 0;
             int i = 1;
-            foreach (CastLog cl in cataCycle)
+            foreach (AbstractCastEvent cl in cataCycle)
             {
-                CastLog clDeathmark = gDeathmark[i - 1];
+                AbstractCastEvent clDeathmark = gDeathmark[i - 1];
                 end = Math.Min(clDeathmark.Time, mainEnd);
                 phases.Add(new PhaseData(start, end)
                 {
@@ -120,8 +120,8 @@ namespace LuckParser.Models.Logic
                 return phases;
             }
             // Sometimes the preevent is not in the evtc
-            List<CastLog> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
-            List<CastLog> dhuumCast = mainTarget.GetCastLogs(log, 0, 20000);
+            List<AbstractCastEvent> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
+            List<AbstractCastEvent> dhuumCast = mainTarget.GetCastLogs(log, 0, 20000);
             string[] namesDh;
             if (dhuumCast.Count > 0)
             {
@@ -178,13 +178,13 @@ namespace LuckParser.Models.Logic
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
             // TODO: correct position
-            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Dhuum:
-                    List<CastLog> deathmark = cls.Where(x => x.SkillId == 48176).ToList();
-                    CastLog majorSplit = cls.Find(x => x.SkillId == 47396);
-                    foreach (CastLog c in deathmark)
+                    List<AbstractCastEvent> deathmark = cls.Where(x => x.SkillId == 48176).ToList();
+                    AbstractCastEvent majorSplit = cls.Find(x => x.SkillId == 47396);
+                    foreach (AbstractCastEvent c in deathmark)
                     {
                         int start = (int)c.Time;
                         int zoneActive = start + 1550;
@@ -209,16 +209,16 @@ namespace LuckParser.Models.Logic
 
                         }
                     }
-                    List<CastLog> cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
-                    foreach (CastLog c in cataCycle)
+                    List<AbstractCastEvent> cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
+                    foreach (AbstractCastEvent c in cataCycle)
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
                         replay.Actors.Add(new CircleActor(true, end, 300, (start, end), "rgba(255, 150, 0, 0.7)", new AgentConnector(target)));
                         replay.Actors.Add(new CircleActor(true, 0, 300, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
                     }
-                    List<CastLog> slash = cls.Where(x => x.SkillId == 47561).ToList();
-                    foreach (CastLog c in slash)
+                    List<AbstractCastEvent> slash = cls.Where(x => x.SkillId == 47561).ToList();
+                    foreach (AbstractCastEvent c in slash)
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;

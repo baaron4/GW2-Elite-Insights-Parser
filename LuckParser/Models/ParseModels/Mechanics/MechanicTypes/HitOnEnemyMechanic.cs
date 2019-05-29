@@ -34,16 +34,16 @@ namespace LuckParser.Models.ParseModels
             IEnumerable<AgentItem> agents = log.AgentData.GetAgentsByID((ushort)SkillId);
             foreach (AgentItem a in agents)
             {
-                List<CombatItem> combatitems = combatData.GetDamageTakenData(a.InstID, a.FirstAware, a.LastAware);
-                foreach (CombatItem c in combatitems)
+                List<AbstractDamageEvent> combatitems = combatData.GetDamageTakenData(a);
+                foreach (AbstractDamageEvent c in combatitems)
                 {
-                    if (c.IsBuff > 0 || !ParseEnum.GetPhysicalResult(c.Result).IsHit() || !Keep(c, log) )
+                    if (c.IsIndirectDamage || !c.IsHit /*|| !Keep(c, log)*/ )
                     {
                         continue;
                     }
                     foreach (Player p in log.PlayerList)
                     {
-                        if (c.SrcInstid == p.InstID || c.SrcMasterInstid == p.InstID )
+                        if (c.From == p.AgentItem || c.MasterFrom == p.AgentItem )
                         {
                             mechanicLogs[this].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), this, p));
                         }

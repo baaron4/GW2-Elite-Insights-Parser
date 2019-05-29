@@ -132,14 +132,14 @@ namespace LuckParser.Models.Logic
 
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Berg:
                     break;
                 case (ushort)ParseEnum.TargetIDS.Zane:
-                    List<CastLog> bulletHail = cls.Where(x => x.SkillId == 34383).ToList();
-                    foreach (CastLog c in bulletHail)
+                    List<AbstractCastEvent> bulletHail = cls.Where(x => x.SkillId == 34383).ToList();
+                    foreach (AbstractCastEvent c in bulletHail)
                     {
                         int start = (int)c.Time;
                         int firstConeStart = start;

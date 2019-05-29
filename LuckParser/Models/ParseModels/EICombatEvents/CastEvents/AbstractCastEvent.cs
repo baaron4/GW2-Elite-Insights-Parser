@@ -7,11 +7,54 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models.ParseModels
 {
-    public abstract class CastStartEvent : AbstractCastEvent
+    public abstract class AbstractCastEvent : AbstractCombatEvent
     {
-        public CastStartEvent(CombatItem evtcItem, long offset) : base(evtcItem, offset)
-        {
+        // start item
+        public long SkillId { get; protected set; }
+        public AgentItem Caster { get; }
+        public AgentItem MasterCaster { get; }
+        public int ExpectedDuration { get; protected set; }
+        public bool UnderQuickness { get; protected set; }
 
+        // end item
+        public bool Interrupted { get; protected set; }
+        public bool FullAnimation { get; protected set; }
+        public bool ReducedAnimation { get; protected set; }
+        public int ActualDuration { get; protected set; }
+
+        public int SwappedTo { get; protected set; }
+
+        public AbstractCastEvent(CombatItem startEvtcItem, AgentData agentData, long offset) : base(startEvtcItem.Time, offset)
+        {
+            SkillId = startEvtcItem.SkillID;
+            Caster = agentData.GetAgentByInstID(startEvtcItem.SrcInstid, startEvtcItem.Time);
+            UnderQuickness = startEvtcItem.IsActivation == ParseEnum.Activation.Quickness;
+            ExpectedDuration = startEvtcItem.Value;
+            MasterCaster = startEvtcItem.SrcMasterInstid > 0 ? agentData.GetAgentByInstID(startEvtcItem.SrcMasterInstid, startEvtcItem.Time) : null;
+            if (SkillId == SkillItem.DodgeId)
+            {
+                ExpectedDuration = 750;
+            }
+        }
+
+        public AbstractCastEvent(long time, long skillID, AgentItem caster) : base(time, 0)
+        {
+            SkillId = skillID;
+            Caster = caster;
+            MasterCaster = null;
+        }
+
+        public int GetSavedTime()
+        {
+            if (Interrupted)
+            {
+                return ActualDuration;
+            }
+            else if (ReducedAnimation && ActualDuration < ExpectedDuration)
+            {
+                return ExpectedDuration - ActualDuration;
+            }
+            return 0;
         }
     }
 }

@@ -46,20 +46,20 @@ namespace LuckParser.Models.Logic
 
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.SoulEater:
-                    List<CastLog> breakbar = cls.Where(x => x.SkillId == 48007).ToList();
-                    foreach (CastLog c in breakbar)
+                    List<AbstractCastEvent> breakbar = cls.Where(x => x.SkillId == 48007).ToList();
+                    foreach (AbstractCastEvent c in breakbar)
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
                         replay.Actors.Add(new CircleActor(true, (int)c.Time + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                         replay.Actors.Add(new CircleActor(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
-                    List<CastLog> vomit = cls.Where(x => x.SkillId == 47303).ToList();
-                    foreach (CastLog c in vomit)
+                    List<AbstractCastEvent> vomit = cls.Where(x => x.SkillId == 47303).ToList();
+                    foreach (AbstractCastEvent c in vomit)
                     {
                         int start = (int)c.Time+2100;
                         int cascading = 1500;
@@ -73,8 +73,8 @@ namespace LuckParser.Models.Logic
                             replay.Actors.Add(new PieActor(true, start+cascading, radius, facing, 60, (start, end), "rgba(220,255,0,0.5)", new PositionConnector(position)));
                         }
                     }
-                    List<CastLog> pseudoDeath = cls.Where(x => x.SkillId == 47440).ToList();
-                    foreach (CastLog c in pseudoDeath)
+                    List<AbstractCastEvent> pseudoDeath = cls.Where(x => x.SkillId == 47440).ToList();
+                    foreach (AbstractCastEvent c in pseudoDeath)
                     {
                         int start = (int)c.Time;
                         //int duration = 900;
@@ -97,9 +97,9 @@ namespace LuckParser.Models.Logic
             {
                 case (ushort)GreenSpirit1:
                 case (ushort)GreenSpirit2:
-                    List<CastLog> cls = mob.GetCastLogs(log, 0, log.FightData.FightDuration);
-                    List<CastLog> green = cls.Where(x => x.SkillId == 47153).ToList();
-                    foreach (CastLog c in green)
+                    List<AbstractCastEvent> cls = mob.GetCastLogs(log, 0, log.FightData.FightDuration);
+                    List<AbstractCastEvent> green = cls.Where(x => x.SkillId == 47153).ToList();
+                    foreach (AbstractCastEvent c in green)
                     {
                         int gstart = (int)c.Time+667;
                         int gend = gstart + 5000;

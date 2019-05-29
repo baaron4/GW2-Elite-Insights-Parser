@@ -21,9 +21,9 @@ namespace LuckParser.Models.Logic
             new SkillOnPlayerMechanic(31643, "Cannon Barrage", new MechanicPlotlySetting("circle","rgb(255,200,0)"), "Cannon","Cannon Barrage (stood in AoE)", "Cannon Shot",0),
             new SkillOnPlayerMechanic(31761, "Flame Blast", new MechanicPlotlySetting("triangle-left-open","rgb(255,200,0)"), "Karde Flame","Flame Blast (Karde's Flamethrower)", "Flamethrower (Karde)",0),
             new SkillOnPlayerMechanic(31408, "Kick", new MechanicPlotlySetting("triangle-right","rgb(255,0,255)"), "Kick","Kicked by Bandit", "Bandit Kick",0),
-            new EnemyCastStartMechanic(31763, "Platform Quake", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Platform Quake (Breakbar)","Breakbar",0),
-            new EnemyCastEndMechanic(31763, "Platform Quake", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Platform Quake (Breakbar broken) ", "CCed",0,new List<MechanicChecker>{ new CombatItemValueChecker(4400, MechanicChecker.ValueCompare.LEQ) }, Mechanic.TriggerRule.AND),
-            new EnemyCastEndMechanic(31763, "Platform Quake", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Platform Quake (Breakbar failed) ", "CC Fail",0,new List<MechanicChecker>{ new CombatItemValueChecker(4400, MechanicChecker.ValueCompare.G) }, Mechanic.TriggerRule.AND),
+            new EnemyCastMechanic(31763, "Platform Quake", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Platform Quake (Breakbar)","Breakbar",0),
+            new EnemyCastMechanic(31763, "Platform Quake", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Platform Quake (Breakbar broken) ", "CCed",0,new List<MechanicChecker>{ new CombatItemValueChecker(4400, MechanicChecker.ValueCompare.LEQ) }, Mechanic.TriggerRule.AND),
+            new EnemyCastMechanic(31763, "Platform Quake", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Platform Quake (Breakbar failed) ", "CC Fail",0,new List<MechanicChecker>{ new CombatItemValueChecker(4400, MechanicChecker.ValueCompare.G) }, Mechanic.TriggerRule.AND),
             // Hit by Time Bomb could be implemented by checking if a person is affected by ID 31324 (1st Time Bomb) or 34152 (2nd Time Bomb, only below 50% boss HP) without being attributed a bomb (ID: 31485) 3000ms before (+-50ms). I think the actual heavy hit isn't logged because it may be percentage based. Nothing can be found in the logs.
             });
             Extension = "sab";
@@ -117,12 +117,12 @@ namespace LuckParser.Models.Logic
 
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Sabetha:
-                    List<CastLog> flameWall = cls.Where(x => x.SkillId == 31332).ToList();
-                    foreach (CastLog c in flameWall)
+                    List<AbstractCastEvent> flameWall = cls.Where(x => x.SkillId == 31332).ToList();
+                    foreach (AbstractCastEvent c in flameWall)
                     {
                         int start = (int)c.Time;
                         int preCastTime = 2800;
@@ -138,8 +138,8 @@ namespace LuckParser.Models.Logic
                     }
                     break;
                 case (ushort)Kernan:
-                    List<CastLog> bulletHail = cls.Where(x => x.SkillId == 31721).ToList();
-                    foreach (CastLog c in bulletHail)
+                    List<AbstractCastEvent> bulletHail = cls.Where(x => x.SkillId == 31721).ToList();
+                    foreach (AbstractCastEvent c in bulletHail)
                     {
                         int start = (int)c.Time;
                         int firstConeStart = start;
@@ -159,15 +159,15 @@ namespace LuckParser.Models.Logic
                     }
                     break;
                 case (ushort)Knuckles:
-                    List<CastLog> breakbar = cls.Where(x => x.SkillId == 31763).ToList();
-                    foreach (CastLog c in breakbar)
+                    List<AbstractCastEvent> breakbar = cls.Where(x => x.SkillId == 31763).ToList();
+                    foreach (AbstractCastEvent c in breakbar)
                     {
                         replay.Actors.Add(new CircleActor(true, 0, 180, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 case (ushort)Karde:
-                    List<CastLog> flameBlast = cls.Where(x => x.SkillId == 31761).ToList();
-                    foreach (CastLog c in flameBlast)
+                    List<AbstractCastEvent> flameBlast = cls.Where(x => x.SkillId == 31761).ToList();
+                    foreach (AbstractCastEvent c in flameBlast)
                     {
                         int start = (int)c.Time;
                         int end = start + 4000;

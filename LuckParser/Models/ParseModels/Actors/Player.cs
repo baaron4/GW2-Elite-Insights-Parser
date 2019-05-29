@@ -68,9 +68,9 @@ namespace LuckParser.Models.ParseModels
         }
         public int[] GetReses(ParsedLog log, long start, long end)
         {
-            List<CastLog> cls = GetCastLogs(log, start, end);
+            List<AbstractCastEvent> cls = GetCastLogs(log, start, end);
             int[] reses = { 0, 0 };
-            foreach (CastLog cl in cls) {
+            foreach (AbstractCastEvent cl in cls) {
                 if (cl.SkillId == SkillItem.ResurrectId)
                 {
                     reses[0]++;
@@ -217,7 +217,7 @@ namespace LuckParser.Models.ParseModels
                                 targetFinal.Invulned++;
                             }
                             targetFinal.DirectDamageCount++;
-                            if (!nonCritable.Contains(dl.SkillID))
+                            if (!nonCritable.Contains(dl.SkillId))
                             {
                                 targetFinal.CritableDirectDamageCount++;
                             }
@@ -253,7 +253,7 @@ namespace LuckParser.Models.ParseModels
                         final.Invulned++;
                     }
                     final.DirectDamageCount++;
-                    if (!nonCritable.Contains(dl.SkillID))
+                    if (!nonCritable.Contains(dl.SkillId))
                     {
                         final.CritableDirectDamageCount++;
                     }
@@ -287,14 +287,14 @@ namespace LuckParser.Models.ParseModels
                 {
                     continue;
                 }
-                foreach (CastLog cl in GetCastLogs(log, phase.Start, phase.End))
+                foreach (AbstractCastEvent cl in GetCastLogs(log, phase.Start, phase.End))
                 {
-                    if (cl.EndActivation == ParseEnum.Activation.CancelCancel)
+                    if (cl.Interrupted)
                     {
                         final.Wasted++;
                         final.TimeWasted += cl.ActualDuration;
                     }
-                    if (cl.EndActivation == ParseEnum.Activation.CancelFire)
+                    if (cl.ReducedAnimation)
                     {
                         if (cl.ActualDuration < cl.ExpectedDuration)
                         {
@@ -769,7 +769,7 @@ namespace LuckParser.Models.ParseModels
                         {
                             Time = (int)dl.Time,
                             IndirectDamage = dl.IsIndirectDamage,
-                            ID = dl.SkillID,
+                            ID = dl.SkillId,
                             Damage = dl.Damage,
                             Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
                         };
@@ -790,7 +790,7 @@ namespace LuckParser.Models.ParseModels
                         {
                             Time = (int)dl.Time,
                             IndirectDamage = dl.IsIndirectDamage,
-                            ID = dl.SkillID,
+                            ID = dl.SkillId,
                             Damage = dl.Damage,
                             Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
                         };
@@ -811,7 +811,7 @@ namespace LuckParser.Models.ParseModels
                         {
                             Time = (int)dl.Time,
                             IndirectDamage = dl.IsIndirectDamage,
-                            ID = dl.SkillID,
+                            ID = dl.SkillId,
                             Damage = dl.Damage,
                             Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
                         };
@@ -847,11 +847,11 @@ namespace LuckParser.Models.ParseModels
             }
             string[] weapons = new string[8];//first 2 for first set next 2 for second set, second sets of 4 for underwater
             SkillData skillList = log.SkillData;
-            List<CastLog> casting = GetCastLogs(log, 0, log.FightData.FightDuration);      
+            List<AbstractCastEvent> casting = GetCastLogs(log, 0, log.FightData.FightDuration);      
             int swapped = -1;
             long swappedTime = 0;
             List<int> swaps = casting.Where(x => x.SkillId == SkillItem.WeaponSwapId).Select(x => x.ExpectedDuration).ToList();
-            foreach (CastLog cl in casting)
+            foreach (AbstractCastEvent cl in casting)
             {
                 if (cl.ActualDuration == 0 && cl.SkillId != SkillItem.WeaponSwapId)
                 {
@@ -866,7 +866,7 @@ namespace LuckParser.Models.ParseModels
                 if (!skill.EstimateWeapons(weapons, swapped, cl.Time > swappedTime) && cl.SkillId == SkillItem.WeaponSwapId)
                 {
                     //wepswap  
-                    swapped = cl.ExpectedDuration;
+                    swapped = cl.SwappedTo;
                     swappedTime = cl.Time;
                 }
             }

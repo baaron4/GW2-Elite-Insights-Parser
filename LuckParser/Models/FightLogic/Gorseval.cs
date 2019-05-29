@@ -19,9 +19,9 @@ namespace LuckParser.Models.Logic
             new EnemyBoonApplyMechanic(31722, "Spirited Fusion", new MechanicPlotlySetting("square","rgb(255,140,0)"), "Spirit Buff","Spirited Fusion (Consumed a Spirit)", "Ate Spirit",0),
             new SkillOnPlayerMechanic(31720, "Kick", new MechanicPlotlySetting("triangle-right","rgb(255,0,255)"), "Kick","Kicked by small add", "Spirit Kick",0),
             new PlayerBoonApplyMechanic(738, "Ghastly Rampage Black Goo Hit", new MechanicPlotlySetting("circle","rgb(0,0,0)"), "Black","Hit by Black Goo","Black Goo",3000, new List<MechanicChecker>{ new CombatItemValueChecker(10000, MechanicChecker.ValueCompare.EQ) }, Mechanic.TriggerRule.AND),
-            new EnemyCastStartMechanic(31834, "Ghastly Rampage", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Ghastly Rampage (Breakbar)", "Breakbar",0),
-            new EnemyCastEndMechanic(31834, "Ghastly Rampage", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC End","Ghastly Rampage (Full duration)", "CC ran out",0,new List<MechanicChecker>{ new CombatItemValueChecker(21985, MechanicChecker.ValueCompare.G) }, Mechanic.TriggerRule.AND),
-            new EnemyCastEndMechanic(31834, "Ghastly Rampage", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Ghastly Rampage (Breakbar broken)", "CCed",0,new List<MechanicChecker>{ new CombatItemValueChecker(21985, MechanicChecker.ValueCompare.LEQ) }, Mechanic.TriggerRule.AND),
+            new EnemyCastMechanic(31834, "Ghastly Rampage", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Ghastly Rampage (Breakbar)", "Breakbar",0),
+            new EnemyCastMechanic(31834, "Ghastly Rampage", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC End","Ghastly Rampage (Full duration)", "CC ran out",0,new List<MechanicChecker>{ new CombatItemValueChecker(21985, MechanicChecker.ValueCompare.G) }, Mechanic.TriggerRule.AND),
+            new EnemyCastMechanic(31834, "Ghastly Rampage", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Ghastly Rampage (Breakbar broken)", "CCed",0,new List<MechanicChecker>{ new CombatItemValueChecker(21985, MechanicChecker.ValueCompare.LEQ) }, Mechanic.TriggerRule.AND),
             });
             Extension = "gors";
             IconUrl = "https://wiki.guildwars2.com/images/d/d1/Mini_Gorseval_the_Multifarious.png";
@@ -91,12 +91,12 @@ namespace LuckParser.Models.Logic
 
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Gorseval:
-                    List<CastLog> blooms = cls.Where(x => x.SkillId == 31616).ToList();
-                    foreach (CastLog c in blooms)
+                    List<AbstractCastEvent> blooms = cls.Where(x => x.SkillId == 31616).ToList();
+                    foreach (AbstractCastEvent c in blooms)
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
@@ -106,9 +106,9 @@ namespace LuckParser.Models.Logic
                     List<PhaseData> phases = log.FightData.GetPhases(log);
                     if (phases.Count > 1)
                     {
-                        List<CastLog> rampage = cls.Where(x => x.SkillId == 31834).ToList();
+                        List<AbstractCastEvent> rampage = cls.Where(x => x.SkillId == 31834).ToList();
                         Point3D pos = replay.Positions.First();
-                        foreach (CastLog c in rampage)
+                        foreach (AbstractCastEvent c in rampage)
                         {
                             int start = (int)c.Time;
                             int end = start + c.ActualDuration;
@@ -209,8 +209,8 @@ namespace LuckParser.Models.Logic
                             }
                         }
                     }
-                    List<CastLog> slam = cls.Where(x => x.SkillId == 31875).ToList();
-                    foreach (CastLog c in slam)
+                    List<AbstractCastEvent> slam = cls.Where(x => x.SkillId == 31875).ToList();
+                    foreach (AbstractCastEvent c in slam)
                     {
                         int start = (int)c.Time;
                         int impactPoint = 1185;

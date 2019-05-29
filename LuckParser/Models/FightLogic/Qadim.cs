@@ -14,9 +14,9 @@ namespace LuckParser.Models.Logic
         {
             MechanicList.AddRange(new List<Mechanic>
             { 
-            new EnemyCastStartMechanic(51943, "Qadim CC", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "Qadim CC","Qadim CC", "Qadim CC",0),
-            new EnemyCastEndMechanic(51943, "Qadim CC", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "Qadim CCed","Quadim Breakbar broken", "Quadim CCed",0, new List<MechanicChecker>{ new CombatItemValueChecker(6500, MechanicChecker.ValueCompare.L) }, Mechanic.TriggerRule.AND),
-            new EnemyCastStartMechanic(52265, "Riposte", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "Qadim CC Fail","Qadim Breakbar failed", "Quadim CC Fail",0),
+            new EnemyCastMechanic(51943, "Qadim CC", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "Qadim CC","Qadim CC", "Qadim CC",0),
+            new EnemyCastMechanic(51943, "Qadim CC", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "Qadim CCed","Quadim Breakbar broken", "Quadim CCed",0, new List<MechanicChecker>{ new CombatItemValueChecker(6500, MechanicChecker.ValueCompare.L) }, Mechanic.TriggerRule.AND),
+            new EnemyCastMechanic(52265, "Riposte", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "Qadim CC Fail","Qadim Breakbar failed", "Quadim CC Fail",0),
             new SkillOnPlayerMechanic(52265, "Riposte", new MechanicPlotlySetting("circle","rgb(255,0,255)"), "NoCC Attack", "Riposte (Attack if CC on Qadim failed)", "Riposte (No CC)", 0),
             new SkillOnPlayerMechanic(52614, "Fiery Dance", new MechanicPlotlySetting("asterisk-open","rgb(255,100,0)"), "Fiery Dance", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
             new SkillOnPlayerMechanic(52864, "Fiery Dance", new MechanicPlotlySetting("asterisk-open","rgb(255,100,0)"), "Fiery Dance", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
@@ -29,10 +29,10 @@ namespace LuckParser.Models.Logic
             new SkillOnPlayerMechanic(52520, "Elemental Breath", new MechanicPlotlySetting("triangle-left","rgb(255,0,0)"), "Hydra Breath","Elemental Breath (Hydra Breath)", "Hydra Breath",0),
             new SkillOnPlayerMechanic(53013, "Fireball", new MechanicPlotlySetting("circle-open","rgb(255,200,0)",10), "Hydra FBall","Fireball (Hydra)", "Hydra Fireball",0),
             new SkillOnPlayerMechanic(52941, "Fiery Meteor", new MechanicPlotlySetting("circle-open","rgb(255,150,0)"), "Hydra Meteor","Fiery Meteor (Hydra)", "Hydra Meteor",0),
-            new EnemyCastStartMechanic(52941, "Fiery Meteor", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "Hydra CC","Fiery Meteor (Hydra Breakbar)", "Hydra CC",0),
+            new EnemyCastMechanic(52941, "Fiery Meteor", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "Hydra CC","Fiery Meteor (Hydra Breakbar)", "Hydra CC",0),
             //new Mechanic(718, "Fiery Meteor (Spawn)", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Qadim, new MechanicPlotlySetting("diamond-tall","rgb(150,0,0)"), "H.CC.Fail","Fiery Meteor Spawned (Hydra Breakbar)", "Hydra CC Fail",0,(condition =>  condition.CombatItem.IFF == ParseEnum.IFF.Foe)),
-            new EnemyCastEndMechanic(52941, "Fiery Meteor", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "Hydra CCed","Fiery Meteor (Hydra Breakbar broken)", "Hydra CCed",0,new List<MechanicChecker>{ new CombatItemValueChecker(12364, MechanicChecker.ValueCompare.L) }, Mechanic.TriggerRule.AND),
-            new EnemyCastEndMechanic(52941, "Fiery Meteor", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "Hydra CC Fail","Fiery Meteor (Hydra Breakbar not broken)", "Hydra CC Failed",0,new List<MechanicChecker>{ new CombatItemValueChecker(12364, MechanicChecker.ValueCompare.GEQ) }, Mechanic.TriggerRule.AND),
+            new EnemyCastMechanic(52941, "Fiery Meteor", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "Hydra CCed","Fiery Meteor (Hydra Breakbar broken)", "Hydra CCed",0,new List<MechanicChecker>{ new CombatItemValueChecker(12364, MechanicChecker.ValueCompare.L) }, Mechanic.TriggerRule.AND),
+            new EnemyCastMechanic(52941, "Fiery Meteor", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "Hydra CC Fail","Fiery Meteor (Hydra Breakbar not broken)", "Hydra CC Failed",0,new List<MechanicChecker>{ new CombatItemValueChecker(12364, MechanicChecker.ValueCompare.GEQ) }, Mechanic.TriggerRule.AND),
             new SkillOnPlayerMechanic(53051, "Teleport", new MechanicPlotlySetting("circle","rgb(150,0,200)"), "Hydra KB","Teleport Knockback (Hydra)", "Hydra TP KB",0),
             new SkillOnPlayerMechanic(52310, "Big Hit", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Mace","Big Hit (Mace Impact)", "Mace Impact",0),
             new SkillOnPlayerMechanic(52587, "Inferno", new MechanicPlotlySetting("triangle-down-open","rgb(255,0,0)"), "Inferno","Inferno (Lava Pool drop  on long platform spokes)", "Inferno Pool",0),
@@ -40,15 +40,15 @@ namespace LuckParser.Models.Logic
             new SkillOnPlayerMechanic(52705, "Tail Swipe", new MechanicPlotlySetting("diamond-open","rgb(255,200,0)"), "Wyv Pizza","Wyvern Tail Swipe (Pizza attack)", "Tail Swipe",0),
             new SkillOnPlayerMechanic(52726, "Fire Breath", new MechanicPlotlySetting("triangle-right-open","rgb(255,100,0)"), "Wyv Breath","Fire Breath (Wyvern)", "Fire Breath",0),
             new SkillOnPlayerMechanic(52734, "Wing Buffet", new MechanicPlotlySetting("star-diamond-open","rgb(0,125,125)"), "Wyv Wing","Wing Buffet (Wyvern Launching Wing Storm)", "Wing Buffet",0),
-            new EnemyCastStartMechanic(53132, "Patriarch CC", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "Wyv BB","Platform Destruction (Patriarch CC)", "Patriarch CC",0),
-            new EnemyCastEndMechanic(53132, "Patriarch CC", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "Wyv CCed","Platform Destruction (Patriarch Breakbar broken)", "Patriarch CCed",0, new List<MechanicChecker>{ new CombatItemValueChecker(6500, MechanicChecker.ValueCompare.L) }, Mechanic.TriggerRule.AND),
-            new EnemyCastStartMechanic(51984, "Patriarch CC (Jump into air)", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "Wyv CC Fail","Platform Destruction (Patriarch Breakbar failed)", "Patriarch CC Fail",0),
+            new EnemyCastMechanic(53132, "Patriarch CC", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "Wyv BB","Platform Destruction (Patriarch CC)", "Patriarch CC",0),
+            new EnemyCastMechanic(53132, "Patriarch CC", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "Wyv CCed","Platform Destruction (Patriarch Breakbar broken)", "Patriarch CCed",0, new List<MechanicChecker>{ new CombatItemValueChecker(6500, MechanicChecker.ValueCompare.L) }, Mechanic.TriggerRule.AND),
+            new EnemyCastMechanic(51984, "Patriarch CC (Jump into air)", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "Wyv CC Fail","Platform Destruction (Patriarch Breakbar failed)", "Patriarch CC Fail",0),
             new SkillOnPlayerMechanic(52330, "Seismic Stomp", new MechanicPlotlySetting("star-open","rgb(255,255,0)"), "Dest Stomp","Seismic Stomp (Destroyer Stomp)", "Seismic Stomp (Destroyer)",0),
             new SkillOnPlayerMechanic(51923, "Shattered Earth", new MechanicPlotlySetting("hexagram-open","rgb(255,0,0)"), "Dest Slam","Shattered Earth (Destroyer Jump Slam)", "Jump Slam (Destroyer)",0),
             new SkillOnPlayerMechanic(51759, "Wave of Force", new MechanicPlotlySetting("diamond-open","rgb(255,200,0)"), "Dest Pizza","Wave of Force (Destroyer Pizza)", "Destroyer Auto",0),
-            new EnemyCastStartMechanic(52054, "Summon", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "Dest CC","Summon (Destroyer Breakbar)", "Destroyer CC",0),
-            new EnemyCastEndMechanic(52054, "Summon", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "Dest CCed","Summon (Destroyer Breakbar broken)", "Destroyer CCed",0, new List<MechanicChecker>{ new CombatItemValueChecker(8332, MechanicChecker.ValueCompare.L) }, Mechanic.TriggerRule.AND),
-            new EnemyCastEndMechanic(52054, "Summon", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "Dest CC Fail","Summon (Destroyer Breakbar failed)", "Destroyer CC Fail",0, new List<MechanicChecker>{ new CombatItemValueChecker(8332, MechanicChecker.ValueCompare.GEQ) }, Mechanic.TriggerRule.AND),
+            new EnemyCastMechanic(52054, "Summon", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "Dest CC","Summon (Destroyer Breakbar)", "Destroyer CC",0),
+            new EnemyCastMechanic(52054, "Summon", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "Dest CCed","Summon (Destroyer Breakbar broken)", "Destroyer CCed",0, new List<MechanicChecker>{ new CombatItemValueChecker(8332, MechanicChecker.ValueCompare.L) }, Mechanic.TriggerRule.AND),
+            new EnemyCastMechanic(52054, "Summon", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "Dest CC Fail","Summon (Destroyer Breakbar failed)", "Destroyer CC Fail",0, new List<MechanicChecker>{ new CombatItemValueChecker(8332, MechanicChecker.ValueCompare.GEQ) }, Mechanic.TriggerRule.AND),
             new SpawnMechanic(20944, "Summon (Spawn)", new MechanicPlotlySetting("diamond-tall","rgb(150,0,0)"), "Dest Spwn","Summon (Destroyer Trolls summoned)", "Destroyer Summoned",0),
             new SkillOnPlayerMechanic(51879, "Body of Flame", new MechanicPlotlySetting("star-open","rgb(255,150,0)",10), "Pyre AoE","Body of Flame (Pyre Ground AoE (CM))", "Pyre Hitbox AoE",0),
             new SkillOnPlayerMechanic(52461, "Sea of Flame", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Qadim Hitbox","Sea of Flame (Stood in Qadim Hitbox)", "Qadim Hitbox AoE",0),
@@ -181,29 +181,29 @@ namespace LuckParser.Models.Logic
 
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             int ccRadius = 200;
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Qadim:
                     //CC
                     AddPlatformsToCombatReplay(target, log, replay);
-                    List<CastLog> breakbar = cls.Where(x => x.SkillId == 51943).ToList();
-                    foreach (CastLog c in breakbar)
+                    List<AbstractCastEvent> breakbar = cls.Where(x => x.SkillId == 51943).ToList();
+                    foreach (AbstractCastEvent c in breakbar)
                     {
                         int radius = ccRadius;
                         replay.Actors.Add(new CircleActor(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Riposte
-                    List<CastLog> riposte = cls.Where(x => x.SkillId == 52265).ToList();
-                    foreach (CastLog c in riposte)
+                    List<AbstractCastEvent> riposte = cls.Where(x => x.SkillId == 52265).ToList();
+                    foreach (AbstractCastEvent c in riposte)
                     {
                         int radius = 2200;
                         replay.Actors.Add(new CircleActor(true, 0, radius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     }
                     //Big Hit
-                    List<CastLog> maceShockwave = cls.Where(x => x.SkillId == 52310).ToList();
-                    foreach (CastLog c in maceShockwave)
+                    List<AbstractCastEvent> maceShockwave = cls.Where(x => x.SkillId == 52310).ToList();
+                    foreach (AbstractCastEvent c in maceShockwave)
                     {
                         int start = (int)c.Time;
                         int delay = 2230;
@@ -224,14 +224,14 @@ namespace LuckParser.Models.Logic
                     break;
                 case (ushort)AncientInvokedHydra:
                     //CC
-                    List<CastLog> fieryMeteor = cls.Where(x => x.SkillId == 52941).ToList();
-                    foreach (CastLog c in fieryMeteor)
+                    List<AbstractCastEvent> fieryMeteor = cls.Where(x => x.SkillId == 52941).ToList();
+                    foreach (AbstractCastEvent c in fieryMeteor)
                     {
                         int radius = ccRadius;
                         replay.Actors.Add(new CircleActor(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
-                    List<CastLog> eleBreath = cls.Where(x => x.SkillId == 52520).ToList();
-                    foreach (CastLog c in eleBreath)
+                    List<AbstractCastEvent> eleBreath = cls.Where(x => x.SkillId == 52520).ToList();
+                    foreach (AbstractCastEvent c in eleBreath)
                     {
                         int start = (int)c.Time;
                         int radius = 1300;
@@ -247,8 +247,8 @@ namespace LuckParser.Models.Logic
                     break;
                 case (ushort)WyvernMatriarch:
                     //Wing Buffet
-                    List<CastLog> wingBuffet = cls.Where(x => x.SkillId == 52734).ToList();
-                    foreach (CastLog c in wingBuffet)
+                    List<AbstractCastEvent> wingBuffet = cls.Where(x => x.SkillId == 52734).ToList();
+                    foreach (AbstractCastEvent c in wingBuffet)
                     {
                         int start = (int)c.Time;
                         int preCast = Math.Min(3500, c.ActualDuration);
@@ -264,8 +264,8 @@ namespace LuckParser.Models.Logic
                         }
                     }
                     //Breath
-                    List<CastLog> matBreath = cls.Where(x => x.SkillId == 52726).ToList();
-                    foreach (CastLog c in matBreath)
+                    List<AbstractCastEvent> matBreath = cls.Where(x => x.SkillId == 52726).ToList();
+                    foreach (AbstractCastEvent c in matBreath)
                     {
                         int start = (int)c.Time;
                         int radius = 1000;
@@ -282,8 +282,8 @@ namespace LuckParser.Models.Logic
                         }
                     }
                     //Tail Swipe
-                    List<CastLog> matSwipe = cls.Where(x => x.SkillId == 52705).ToList();
-                    foreach (CastLog c in matSwipe)
+                    List<AbstractCastEvent> matSwipe = cls.Where(x => x.SkillId == 52705).ToList();
+                    foreach (AbstractCastEvent c in matSwipe)
                     {
                         int start = (int)c.Time;
                         int maxRadius = 700;
@@ -307,15 +307,15 @@ namespace LuckParser.Models.Logic
                     break;
                 case (ushort)WyvernPatriarch:
                     //CC
-                    List<CastLog> patCC = cls.Where(x => x.SkillId == 53132).ToList();
-                    foreach (CastLog c in patCC)
+                    List<AbstractCastEvent> patCC = cls.Where(x => x.SkillId == 53132).ToList();
+                    foreach (AbstractCastEvent c in patCC)
                     {
                         int radius = ccRadius;
                         replay.Actors.Add(new CircleActor(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Breath
-                    List<CastLog> patBreath = cls.Where(x => x.SkillId == 52726).ToList();
-                    foreach (CastLog c in patBreath)
+                    List<AbstractCastEvent> patBreath = cls.Where(x => x.SkillId == 52726).ToList();
+                    foreach (AbstractCastEvent c in patBreath)
                     {
                         int start = (int)c.Time;
                         int radius = 1000;
@@ -332,8 +332,8 @@ namespace LuckParser.Models.Logic
                         }
                     }
                     //Tail Swipe
-                    List<CastLog> patSwipe = cls.Where(x => x.SkillId == 52705).ToList();
-                    foreach (CastLog c in patSwipe)
+                    List<AbstractCastEvent> patSwipe = cls.Where(x => x.SkillId == 52705).ToList();
+                    foreach (AbstractCastEvent c in patSwipe)
                     {
                         int start = (int)c.Time;
                         int maxRadius = 700;
@@ -355,8 +355,8 @@ namespace LuckParser.Models.Logic
                     }
                     break;
                 case (ushort)ApocalypseBringer:
-                    List<CastLog> jumpShockwave = cls.Where(x => x.SkillId == 51923).ToList();
-                    foreach (CastLog c in jumpShockwave)
+                    List<AbstractCastEvent> jumpShockwave = cls.Where(x => x.SkillId == 51923).ToList();
+                    foreach (AbstractCastEvent c in jumpShockwave)
                     {
                         int start = (int)c.Time;
                         int delay = 1800;
@@ -364,8 +364,8 @@ namespace LuckParser.Models.Logic
                         int maxRadius = 2000;
                         replay.Actors.Add(new CircleActor(false, start + delay + duration, maxRadius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.5)", new AgentConnector(target)));
                     }
-                    List<CastLog> stompShockwave = cls.Where(x => x.SkillId == 52330).ToList();
-                    foreach (CastLog c in stompShockwave)
+                    List<AbstractCastEvent> stompShockwave = cls.Where(x => x.SkillId == 52330).ToList();
+                    foreach (AbstractCastEvent c in stompShockwave)
                     {
                         int start = (int)c.Time;
                         int delay = 1600;
@@ -384,15 +384,15 @@ namespace LuckParser.Models.Logic
                         }
                     }
                     //CC
-                    List<CastLog> summon = cls.Where(x => x.SkillId == 52054).ToList();
-                    foreach (CastLog c in summon)
+                    List<AbstractCastEvent> summon = cls.Where(x => x.SkillId == 52054).ToList();
+                    foreach (AbstractCastEvent c in summon)
                     {
                         int radius = ccRadius;
                         replay.Actors.Add(new CircleActor(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Pizza
-                    List<CastLog> forceWave = cls.Where(x => x.SkillId == 51759).ToList();
-                    foreach (CastLog c in forceWave)
+                    List<AbstractCastEvent> forceWave = cls.Where(x => x.SkillId == 51759).ToList();
+                    foreach (AbstractCastEvent c in forceWave)
                     {
                         int start = (int)c.Time;
                         int maxRadius = 1000;

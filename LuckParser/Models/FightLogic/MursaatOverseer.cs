@@ -99,7 +99,7 @@ namespace LuckParser.Models.Logic
 
         public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
         {
-            List<CastLog> cls = mob.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = mob.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (mob.ID)
             {
                 case (ushort)Jade:
@@ -118,8 +118,8 @@ namespace LuckParser.Models.Logic
                             replay.Actors.Add(new CircleActor(true, 0, shieldRadius, (shieldStart, shieldEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(mob)));
                         }
                     }
-                    List<CastLog> explosion = cls.Where(x => x.SkillId == 37788).ToList();
-                    foreach (CastLog c in explosion)
+                    List<AbstractCastEvent> explosion = cls.Where(x => x.SkillId == 37788).ToList();
+                    foreach (AbstractCastEvent c in explosion)
                     {
                         int start = (int)c.Time;
                         int precast = 1350;

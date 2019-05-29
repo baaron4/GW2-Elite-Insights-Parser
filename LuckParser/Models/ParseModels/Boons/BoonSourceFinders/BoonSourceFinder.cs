@@ -9,7 +9,7 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class BoonSourceFinder
     {
-        private List<CastLog> _extensionSkills = null;
+        private List<AbstractCastEvent> _extensionSkills = null;
         private readonly HashSet<long> _boonIds = null;
         protected HashSet<long> ExtensionIDS = new HashSet<long>();
         protected Dictionary<long, HashSet<long>> DurationToIDs = new Dictionary<long, HashSet<long>>();
@@ -22,14 +22,14 @@ namespace LuckParser.Models.ParseModels
             _boonIds = new HashSet<long>(boons.BoonsByNature[Boon.BoonNature.Boon].Select(x => x.ID));
         }
 
-        private List<CastLog> GetExtensionSkills(ParsedLog log, long time, HashSet<long> idsToKeep)
+        private List<AbstractCastEvent> GetExtensionSkills(ParsedLog log, long time, HashSet<long> idsToKeep)
         {
             if (_extensionSkills == null)
             {
-                _extensionSkills = new List<CastLog>();
+                _extensionSkills = new List<AbstractCastEvent>();
                 foreach (Player p in log.PlayerList)
                 {
-                    _extensionSkills.AddRange(p.GetCastLogs(log, log.FightData.ToFightSpace(p.FirstAware), log.FightData.ToFightSpace(p.LastAware)).Where(x => ExtensionIDS.Contains(x.SkillId) && x.EndActivation.NoInterruptEndCasting()));
+                    _extensionSkills.AddRange(p.GetCastLogs(log, log.FightData.ToFightSpace(p.FirstAware), log.FightData.ToFightSpace(p.LastAware)).Where(x => ExtensionIDS.Contains(x.SkillId) && !x.Interrupted));
                 }
             }
             return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time <= time && time <= x.Time + x.ActualDuration + 10).ToList();
@@ -49,11 +49,11 @@ namespace LuckParser.Models.ParseModels
             return -1;
         }
 
-        private bool CouldBeImbuedMelodies(CastLog item, long time, long extension, ParsedLog log)
+        private bool CouldBeImbuedMelodies(AbstractCastEvent item, long time, long extension, ParsedLog log)
         {
             if (extension == ImbuedMelodies && log.PlayerListBySpec.TryGetValue("Tempest", out List<Player> tempests))
             {
-                HashSet<ushort> magAuraApplications = new HashSet<ushort>(log.CombatData.GetBoonData(5684).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && Math.Abs(x.Time - log.FightData.ToLogSpace(time)) < 50 && x.SrcInstid != item.SrcInstId).Select(x => x.SrcInstid));
+                HashSet<ushort> magAuraApplications = new HashSet<ushort>(log.CombatData.GetBoonData(5684).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && Math.Abs(x.Time - log.FightData.ToLogSpace(time)) < 50 /*&& x.SrcInstid != item.SrcInstId*/).Select(x => x.SrcInstid));
                 foreach (Player tempest in tempests)
                 {
                     if (magAuraApplications.Contains(tempest.InstID))
@@ -80,16 +80,16 @@ namespace LuckParser.Models.ParseModels
             HashSet<long> idsToCheck = new HashSet<long>();
             if (DurationToIDs.TryGetValue(extension, out idsToCheck))
             {
-                List<CastLog> cls = GetExtensionSkills(log, time, idsToCheck);
+                List<AbstractCastEvent> cls = GetExtensionSkills(log, time, idsToCheck);
                 if (cls.Count == 1)
                 {
-                    CastLog item = cls.First();
+                    AbstractCastEvent item = cls.First();
                     // Imbued Melodies check
                     if (CouldBeImbuedMelodies(item, time, extension, log))
                     {
                         return 0;
                     }
-                    return item.SrcInstId;
+                    return 0 /*item.SrcInstId*/;
                 }
             }
             return 0;

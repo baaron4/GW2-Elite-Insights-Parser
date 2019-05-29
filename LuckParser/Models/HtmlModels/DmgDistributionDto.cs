@@ -10,7 +10,7 @@ namespace LuckParser.Models.HtmlModels
         public long TotalDamage;      
         public List<object[]> Distribution;
 
-        public static object[] GetDMGDtoItem(KeyValuePair<long, List<AbstractDamageEvent>> entry, Dictionary<long, List<CastLog>> castLogsBySkill, SkillData skillData, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons, BoonsContainer boons)
+        public static object[] GetDMGDtoItem(KeyValuePair<long, List<AbstractDamageEvent>> entry, Dictionary<long, List<AbstractCastEvent>> castLogsBySkill, SkillData skillData, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons, BoonsContainer boons)
         {
             int totaldamage = 0,
                     mindamage = int.MaxValue,
@@ -58,14 +58,17 @@ namespace LuckParser.Models.HtmlModels
             }
 
             int casts = 0, timeswasted = 0, timessaved = 0;
-            if (!IsIndirectDamage && castLogsBySkill != null && castLogsBySkill.TryGetValue(entry.Key, out List<CastLog> clList))
+            if (!IsIndirectDamage && castLogsBySkill != null && castLogsBySkill.TryGetValue(entry.Key, out List<AbstractCastEvent> clList))
             {
 
                 casts = clList.Count;
-                foreach (CastLog cl in clList)
+                foreach (AbstractCastEvent cl in clList)
                 {
-                    if (cl.EndActivation == ParseEnum.Activation.CancelCancel) timeswasted += cl.ActualDuration;
-                    if (cl.EndActivation == ParseEnum.Activation.CancelFire && cl.ActualDuration < cl.ExpectedDuration)
+                    if (cl.Interrupted)
+                    {
+                        timeswasted += cl.ActualDuration;
+                    }
+                    else if (cl.ReducedAnimation && cl.ActualDuration < cl.ExpectedDuration)
                     {
                         timessaved += cl.ExpectedDuration - cl.ActualDuration;
                     }
@@ -83,7 +86,7 @@ namespace LuckParser.Models.HtmlModels
                     IsIndirectDamage ? 0 : flank,
                     IsIndirectDamage ? 0 : glance,
                     IsIndirectDamage ? 0 : timeswasted / 1000.0,
-                    IsIndirectDamage ? 0 : -timessaved / 1000.0
+                    IsIndirectDamage ? 0 : timessaved / 1000.0
                 };
             return skillItem;
         }

@@ -66,10 +66,10 @@ namespace LuckParser.Models.Logic
             {
                 return phases;
             }
-            List<CastLog> sleepy = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 34515).ToList();
+            List<AbstractCastEvent> sleepy = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 34515).ToList();
             long start = 0;
             int i = 1;
-            foreach (CastLog c in sleepy)
+            foreach (AbstractCastEvent c in sleepy)
             {
                 PhaseData phase = new PhaseData(start, Math.Min(c.Time, fightDuration)) {
                     Name = "Phase " + i++
@@ -90,17 +90,17 @@ namespace LuckParser.Models.Logic
 
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Slothasor:
-                    List<CastLog> sleepy = cls.Where(x => x.SkillId == 34515).ToList();
-                    foreach (CastLog c in sleepy)
+                    List<AbstractCastEvent> sleepy = cls.Where(x => x.SkillId == 34515).ToList();
+                    foreach (AbstractCastEvent c in sleepy)
                     {
                         replay.Actors.Add(new CircleActor(true, 0, 180, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
-                    List<CastLog> breath = cls.Where(x => x.SkillId == 34516).ToList();
-                    foreach (CastLog c in breath)
+                    List<AbstractCastEvent> breath = cls.Where(x => x.SkillId == 34516).ToList();
+                    foreach (AbstractCastEvent c in breath)
                     {
                         int start = (int)c.Time;
                         int preCastTime = 1000;
@@ -115,16 +115,16 @@ namespace LuckParser.Models.Logic
                             replay.Actors.Add(new PieActor(true, 0, range, direction, angle, (start + preCastTime, start + preCastTime + duration), "rgba(255,200,0,0.4)", new AgentConnector(target)));
                         }
                     }
-                    List<CastLog> tantrum = cls.Where(x => x.SkillId == 34547).ToList();
-                    foreach (CastLog c in tantrum)
+                    List<AbstractCastEvent> tantrum = cls.Where(x => x.SkillId == 34547).ToList();
+                    foreach (AbstractCastEvent c in tantrum)
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
                         replay.Actors.Add(new CircleActor(false, 0, 300, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                         replay.Actors.Add(new CircleActor(true, end, 300, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                     }
-                    List<CastLog> shakes = cls.Where(x => x.SkillId == 34482).ToList();
-                    foreach (CastLog c in shakes)
+                    List<AbstractCastEvent> shakes = cls.Where(x => x.SkillId == 34482).ToList();
+                    foreach (AbstractCastEvent c in shakes)
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;

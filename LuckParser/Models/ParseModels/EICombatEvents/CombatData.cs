@@ -18,8 +18,9 @@ namespace LuckParser.Models.ParseModels
         private readonly Dictionary<long, List<CombatItem>> _boonData;
         private readonly Dictionary<ushort, List<CombatItem>> _boonDataByDst;
         private readonly Dictionary<AgentItem, List<AbstractDamageEvent>> _damageData;
-        private readonly Dictionary<ushort, List<CombatItem>> _castData;
-        private readonly Dictionary<long, List<CombatItem>> _castDataById;
+        private readonly Dictionary<AgentItem, List<AnimatedCastEvent>> _castData;
+        private readonly Dictionary<AgentItem, List<WeaponSwapEvent>> _weaponSwapData;
+        private readonly Dictionary<long, List<AbstractCastEvent>> _castDataById;
         private readonly Dictionary<AgentItem, List<AbstractDamageEvent>> _damageTakenData;
         private readonly Dictionary<AgentItem, List<AbstractMovementEvent>> _movementData;
 
@@ -42,19 +43,22 @@ namespace LuckParser.Models.ParseModels
             var noStateActiBuffRem = allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.Normal && x.IsActivation == ParseEnum.Activation.None && x.IsBuffRemove == ParseEnum.BuffRemove.None);
             // movement events
             _movementData = fightData.Logic.HasCombatReplayMap
-                ? allCombatItems.Where(x =>
+                ? EICombatEventFactory.CreateMovementEvents(allCombatItems.Where(x =>
                         x.IsStateChange == ParseEnum.StateChange.Position ||
                         x.IsStateChange == ParseEnum.StateChange.Velocity ||
-                        x.IsStateChange == ParseEnum.StateChange.Rotation).Select(x => EICombatEventFactory.CreateMovementEvent(x, agentData, fightData.FightStart)).GroupBy(x => x.AgentItem)
-                    .ToDictionary(x => x.Key, x => x.ToList())
+                        x.IsStateChange == ParseEnum.StateChange.Rotation).ToList(), agentData, fightData.FightStart)
                 : new Dictionary<AgentItem, List<AbstractMovementEvent>>();
             HasMovementData = _movementData.Count > 1;
             // state change events
             _statesData = allCombatItems.GroupBy(x => x.IsStateChange).ToDictionary(x => x.Key, x => x.ToList());
             // activation events
-            var castData = allCombatItems.Where(x => x.IsActivation != ParseEnum.Activation.None || x.IsStateChange == ParseEnum.StateChange.WeaponSwap);
-            _castData = castData.GroupBy(x => x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList());
-            _castDataById = castData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
+            List<AnimatedCastEvent> castData = EICombatEventFactory.CreateCastEvents(allCombatItems.Where(x => x.IsActivation != ParseEnum.Activation.None).ToList(), agentData, fightData.FightStart);
+            List<WeaponSwapEvent> wepSwaps = EICombatEventFactory.CreateWeaponSwapEvents(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.WeaponSwap).ToList(), agentData, fightData.FightStart);
+            _weaponSwapData = wepSwaps.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
+            _castData = castData.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
+            List<AbstractCastEvent> allCastEvents = new List<AbstractCastEvent>(castData);
+            allCastEvents.AddRange(wepSwaps);
+            _castDataById = allCastEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             // buff remove event
             var buffRemove = allCombatItems.Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.IsBuff != 0);
             var buffApply = noStateActiBuffRem.Where(x => x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0);
@@ -67,7 +71,7 @@ namespace LuckParser.Models.ParseModels
             DstSpecialBoonParse(players, _boonDataByDst);
             _boonData = boonData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
             // damage events
-            var damageData = noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0)).Select(x => EICombatEventFactory.CreateDamageEvent(x, agentData, boons, fightData.FightStart));
+            List<AbstractDamageEvent> damageData = EICombatEventFactory.CreateDamageEvents(noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0)).ToList(), agentData, boons, fightData.FightStart);
             _damageData = damageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             _damageTakenData = damageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
 
@@ -151,23 +155,32 @@ namespace LuckParser.Models.ParseModels
             return new List<AbstractDamageEvent>(); ;
         }
 
-        public List<CombatItem> GetCastData(ushort key, long start, long end)
+        public List<AnimatedCastEvent> GetCastData(AgentItem key)
         {
-            if (_castData.TryGetValue(key, out List<CombatItem> res))
-            {
-                return res.Where(x => x.Time >= start && x.Time <= end).ToList();
-            }
-            return new List<CombatItem>(); ;
-        }
-
-
-        public List<CombatItem> GetCastDataById(long key)
-        {
-            if (_castDataById.TryGetValue(key, out List<CombatItem> res))
+            if (_castData.TryGetValue(key, out List<AnimatedCastEvent> res))
             {
                 return res;
             }
-            return new List<CombatItem>(); ;
+            return new List<AnimatedCastEvent>(); ;
+        }
+
+        public List<WeaponSwapEvent> GetWeaponSwapData(AgentItem key)
+        {
+            if (_weaponSwapData.TryGetValue(key, out List<WeaponSwapEvent> res))
+            {
+                return res;
+            }
+            return new List<WeaponSwapEvent>(); ;
+        }
+
+
+        public List<AbstractCastEvent> GetCastDataById(long key)
+        {
+            if (_castDataById.TryGetValue(key, out List<AbstractCastEvent> res))
+            {
+                return res;
+            }
+            return new List<AbstractCastEvent>(); ;
         }
 
         public List<AbstractDamageEvent> GetDamageTakenData(AgentItem key)

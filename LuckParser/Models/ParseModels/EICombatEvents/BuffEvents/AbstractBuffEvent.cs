@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models.ParseModels
 {
-    public abstract class AbstractBuffEvent : AbstractCastEvent
+    public abstract class AbstractBuffEvent : AbstractCombatEvent
     {
-        public AbstractBuffEvent(CombatItem evtcItem, long offset) : base(evtcItem, offset)
+        public AbstractBuffEvent(CombatItem evtcItem, long offset) : base(evtcItem.Time, offset)
         {
 
         }

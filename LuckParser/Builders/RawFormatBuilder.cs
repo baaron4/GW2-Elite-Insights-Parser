@@ -444,7 +444,7 @@ namespace LuckParser.Builders
         private List<JsonDamageDist> BuildDamageDist(List<AbstractDamageEvent> dls)
         {
             List<JsonDamageDist> res = new List<JsonDamageDist>();
-            Dictionary<long, List<AbstractDamageEvent>> dict = dls.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
+            Dictionary<long, List<AbstractDamageEvent>> dict = dls.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             SkillData skillList = _log.SkillData;
             foreach (KeyValuePair<long, List<AbstractDamageEvent>> pair in dict)
             {
@@ -503,11 +503,11 @@ namespace LuckParser.Builders
             return mins;
         }
 
-        private List<JsonRotation> BuildRotation(List<CastLog> cls)
+        private List<JsonRotation> BuildRotation(List<AbstractCastEvent> cls)
         {
             Dictionary<long, List<JsonSkill>> dict = new Dictionary<long, List<JsonSkill>>();
             SkillData skillList = _log.SkillData;
-            foreach (CastLog cl in cls)
+            foreach (AbstractCastEvent cl in cls)
             {
                 SkillItem skill = skillList.Get(cl.SkillId);
                 string skillName = skill.Name;

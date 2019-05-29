@@ -16,7 +16,7 @@ namespace LuckParser.Models.ParseModels
         private List<AbstractDamageEvent> _damageTakenlogs;
         protected Dictionary<AgentItem, List<AbstractDamageEvent>> _damageTakenLogsBySrc;
         // Cast
-        protected List<CastLog> CastLogs;
+        protected List<AbstractCastEvent> CastLogs;
         // Boons
         public HashSet<Boon> TrackedBoons { get; } = new HashSet<Boon>();
         protected Dictionary<long, BoonsGraphModel> BoonPoints;
@@ -121,22 +121,20 @@ namespace LuckParser.Models.ParseModels
             }
             return healingReceivedLogs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
         }*/
-        public List<CastLog> GetCastLogs(ParsedLog log, long start, long end)
+        public List<AbstractCastEvent> GetCastLogs(ParsedLog log, long start, long end)
         {
             if (CastLogs == null)
             {
-                CastLogs = new List<CastLog>();
                 SetCastLogs(log);
             }
             return CastLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
 
         }
 
-        public List<CastLog> GetCastLogsActDur(ParsedLog log, long start, long end)
+        public List<AbstractCastEvent> GetCastLogsActDur(ParsedLog log, long start, long end)
         {
             if (CastLogs == null)
             {
-                CastLogs = new List<CastLog>();
                 SetCastLogs(log);
             }
             return CastLogs.Where(x => x.Time + x.ActualDuration >= start && x.Time <= end).ToList();
@@ -145,7 +143,7 @@ namespace LuckParser.Models.ParseModels
         // privates
         protected void AddDamageLogs(List<AbstractDamageEvent> damageEvents)
         {
-            DamageLogs.AddRange(damageEvents.Where(x => x.IFF == ParseEnum.IFF.Friend));
+            DamageLogs.AddRange(damageEvents.Where(x => x.IFF != ParseEnum.IFF.Friend));
         }
 
         protected static void Add<T>(Dictionary<T, long> dictionary, T key, long value)
@@ -262,51 +260,16 @@ namespace LuckParser.Models.ParseModels
 
         protected virtual void SetCastLogs(ParsedLog log)
         {
-            CastLog curCastLog = null;
-            foreach (CombatItem c in log.CombatData.GetCastData(InstID, FirstAware, LastAware))
+            CastLogs = new List<AbstractCastEvent>(log.CombatData.GetCastData(AgentItem));
+            foreach (WeaponSwapEvent wepSwap in log.CombatData.GetWeaponSwapData(AgentItem))
             {
-                ParseEnum.StateChange state = c.IsStateChange;
-                if (state == ParseEnum.StateChange.Normal)
+                if (CastLogs.Count > 0 && (wepSwap.Time - CastLogs.Last().Time) < 10 && CastLogs.Last().SkillId == SkillItem.WeaponSwapId)
                 {
-                    if (c.IsActivation.StartCasting())
-                    {
-                        // Missing end activation
-                        long time = log.FightData.ToFightSpace(c.Time);
-                        if (curCastLog != null)
-                        {
-                            int actDur = curCastLog.SkillId == SkillItem.DodgeId ? 750 : curCastLog.ExpectedDuration;
-                            curCastLog.SetEndStatus(actDur, ParseEnum.Activation.Unknown, time);
-                            curCastLog = null;
-                        }
-                        curCastLog = new CastLog(time, c.SkillID, c.Value, c.IsActivation, Agent, InstID);
-                        CastLogs.Add(curCastLog);
-                    }
-                    else
-                    {
-                        if (curCastLog != null)
-                        {
-                            if (curCastLog.SkillId == c.SkillID)
-                            {
-                                int actDur = curCastLog.SkillId == SkillItem.DodgeId ? 750 : c.Value;
-                                curCastLog.SetEndStatus(actDur, c.IsActivation, log.FightData.FightDuration);
-                                curCastLog = null;
-                            }
-                        }
-                    }
+                    CastLogs[CastLogs.Count - 1] = wepSwap;
                 }
-                else if (state == ParseEnum.StateChange.WeaponSwap)
+                else
                 {
-                    long time = log.FightData.ToFightSpace(c.Time);
-                    CastLog swapLog = new CastLog(time, SkillItem.WeaponSwapId, (int)c.DstAgent, c.IsActivation, Agent, InstID);
-                    if (CastLogs.Count > 0 && (time - CastLogs.Last().Time) < 10 && CastLogs.Last().SkillId == SkillItem.WeaponSwapId)
-                    {
-                        CastLogs[CastLogs.Count - 1] = swapLog;
-                    }
-                    else
-                    {
-                        CastLogs.Add(swapLog);
-                    }
-                    swapLog.SetEndStatus(50, ParseEnum.Activation.Unknown, log.FightData.FightDuration);
+                    CastLogs.Add(wepSwap);
                 }
             }
             long cloakStart = 0;
@@ -314,8 +277,7 @@ namespace LuckParser.Models.ParseModels
             {
                 if (time - cloakStart > 10)
                 {
-                    CastLog dodgeLog = new CastLog(time, SkillItem.DodgeId, 0, ParseEnum.Activation.Unknown, Agent, InstID);
-                    dodgeLog.SetEndStatus(50, ParseEnum.Activation.Unknown, log.FightData.FightDuration);
+                    AnimatedCastEvent dodgeLog = new AnimatedCastEvent(time, SkillItem.DodgeId, 50, AgentItem);
                     CastLogs.Add(dodgeLog);
                 }
                 cloakStart = time;

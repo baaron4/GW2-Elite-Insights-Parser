@@ -72,12 +72,12 @@ namespace LuckParser.Models.Logic
             if (heatWave != null)
             {
                 phases.Add(new PhaseData(0, log.FightData.ToFightSpace(heatWave.Time) - 1));
-                AbstractDamageEvent downPour = log.CombatData.GetDamageData(mainTarget.AgentItem).Find(x => x.SkillID == 34554);
+                AbstractDamageEvent downPour = log.CombatData.GetDamageData(mainTarget.AgentItem).Find(x => x.SkillId == 34554);
                 if (downPour != null)
                 {
                     phases.Add(new PhaseData(log.FightData.ToFightSpace(heatWave.Time), log.FightData.ToFightSpace(downPour.Time) - 1));
-                    List<CastLog> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
-                    CastLog abo = castLogs.Find(x => x.SkillId == 34427);
+                    List<AbstractCastEvent> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
+                    AbstractCastEvent abo = castLogs.Find(x => x.SkillId == 34427);
                     if (abo != null)
                     {
                         phases.Add(new PhaseData(log.FightData.ToFightSpace(downPour.Time), abo.Time - 1));
@@ -149,11 +149,11 @@ namespace LuckParser.Models.Logic
 
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Matthias:
-                    List<CastLog> humanShield = cls.Where(x => x.SkillId == 34468).ToList();
+                    List<AbstractCastEvent> humanShield = cls.Where(x => x.SkillId == 34468).ToList();
                     List<int> humanShieldRemoval = log.CombatData.GetBoonData(34518).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All).Select(x => (int)(log.FightData.ToFightSpace(x.Time))).Distinct().ToList();
                     for (var i = 0; i < humanShield.Count; i++)
                     {
@@ -168,7 +168,7 @@ namespace LuckParser.Models.Logic
                             replay.Actors.Add(new CircleActor(true, 0, 250, ((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
                         }
                     }
-                    List<CastLog> aboShield = cls.Where(x => x.SkillId == 34510).ToList();
+                    List<AbstractCastEvent> aboShield = cls.Where(x => x.SkillId == 34510).ToList();
                     List<int> aboShieldRemoval = log.CombatData.GetBoonData(34376).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All).Select(x => (int)(log.FightData.ToFightSpace(x.Time))).Distinct().ToList();
                     for (var i = 0; i < aboShield.Count; i++)
                     {
@@ -183,16 +183,16 @@ namespace LuckParser.Models.Logic
                             replay.Actors.Add(new CircleActor(true, 0, 250, ((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
                         }
                     }
-                    List<CastLog> rageShards = cls.Where(x => x.SkillId == 34404 || x.SkillId == 34411).ToList();
-                    foreach (CastLog c in rageShards)
+                    List<AbstractCastEvent> rageShards = cls.Where(x => x.SkillId == 34404 || x.SkillId == 34411).ToList();
+                    foreach (AbstractCastEvent c in rageShards)
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
                         replay.Actors.Add(new CircleActor(false, 0, 300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                         replay.Actors.Add(new CircleActor(true, end, 300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     }
-                    List<CastLog> hadouken = cls.Where(x => x.SkillId == 34371 || x.SkillId == 34380).ToList();
-                    foreach (CastLog c in hadouken)
+                    List<AbstractCastEvent> hadouken = cls.Where(x => x.SkillId == 34371 || x.SkillId == 34380).ToList();
+                    foreach (AbstractCastEvent c in hadouken)
                     {
                         int start = (int)c.Time;
                         int preCastTime = 1000;

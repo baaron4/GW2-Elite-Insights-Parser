@@ -47,12 +47,12 @@ namespace LuckParser.Models.Logic
         
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Cairn:
-                    List<CastLog> swordSweep = cls.Where(x => x.SkillId == 37631).ToList();
-                    foreach (CastLog c in swordSweep)
+                    List<AbstractCastEvent> swordSweep = cls.Where(x => x.SkillId == 37631).ToList();
+                    foreach (AbstractCastEvent c in swordSweep)
                     {
                         int start = (int)c.Time;
                         int preCastTime = 1400;
@@ -68,8 +68,8 @@ namespace LuckParser.Models.Logic
                             replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, initialDirection, width / 2, 360, (start + preCastTime + initialHitDuration, start + preCastTime + initialHitDuration + sweepDuration), "rgba(150, 0, 180, 0.5)", new AgentConnector(target)));
                         }
                     }
-                    List<CastLog> wave = cls.Where(x => x.SkillId == 37910).ToList();
-                    foreach (CastLog c in wave)
+                    List<AbstractCastEvent> wave = cls.Where(x => x.SkillId == 37910).ToList();
+                    foreach (AbstractCastEvent c in wave)
                     {
                         int start = (int)c.Time;
                         int preCastTime = 1200;

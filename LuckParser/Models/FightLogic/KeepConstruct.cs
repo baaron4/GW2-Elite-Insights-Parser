@@ -242,7 +242,7 @@ namespace LuckParser.Models.Logic
 
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.KeepConstruct:
@@ -262,8 +262,8 @@ namespace LuckParser.Models.Logic
                             replay.Actors.Add(new CircleActor(true, kcOrbEnd, 300, (kcOrbStart, kcOrbEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                         }
                     }
-                    List<CastLog> towerDrop = cls.Where(x => x.SkillId == 35086).ToList();
-                    foreach (CastLog c in towerDrop)
+                    List<AbstractCastEvent> towerDrop = cls.Where(x => x.SkillId == 35086).ToList();
+                    foreach (AbstractCastEvent c in towerDrop)
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
@@ -276,12 +276,12 @@ namespace LuckParser.Models.Logic
                             replay.Actors.Add(new CircleActor(true, skillCast, 400, (start, skillCast), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, end)));
                         }
                     }
-                    List<CastLog> blades1 = cls.Where(x => x.SkillId == 35064).ToList();
-                    List<CastLog> blades2 = cls.Where(x => x.SkillId == 35137).ToList();
-                    List<CastLog> blades3 = cls.Where(x => x.SkillId == 34971).ToList();
+                    List<AbstractCastEvent> blades1 = cls.Where(x => x.SkillId == 35064).ToList();
+                    List<AbstractCastEvent> blades2 = cls.Where(x => x.SkillId == 35137).ToList();
+                    List<AbstractCastEvent> blades3 = cls.Where(x => x.SkillId == 34971).ToList();
                     int bladeDelay = 150;
                     int duration = 1000;
-                    foreach (CastLog c in blades1)
+                    foreach (AbstractCastEvent c in blades1)
                     {
                         int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
                         int start = (int)c.Time + bladeDelay;
@@ -297,7 +297,7 @@ namespace LuckParser.Models.Logic
                             replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts longer
                         }
                     }
-                    foreach (CastLog c in blades2)
+                    foreach (AbstractCastEvent c in blades2)
                     {
                         int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
                         int start = (int)c.Time + bladeDelay;
@@ -315,7 +315,7 @@ namespace LuckParser.Models.Logic
                             replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts longer
                         }
                     }
-                    foreach (CastLog c in blades3)
+                    foreach (AbstractCastEvent c in blades3)
                     {
                         int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
                         int start = (int)c.Time + bladeDelay;
