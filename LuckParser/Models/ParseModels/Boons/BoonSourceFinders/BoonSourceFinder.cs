@@ -89,7 +89,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         return GeneralHelper.UnknownAgent;
                     }
-                    return dst;
+                    return item.Caster;
                 }
             }
             return GeneralHelper.UnknownAgent;
