@@ -519,7 +519,7 @@ namespace LuckParser.Models.Logic
             int wyvernPhaseTime = (int) (phases.Count > 4 ? phases[4].End + timeAfterPhase2 : int.MaxValue);
             int jumpingPuzzleTime = (int) (phases.Count > 5 ? phases[5].End + timeAfterWyvernPhase : int.MaxValue);
             int finalPhaseTime = int.MaxValue;
-            int startOffset = -(int)(phases.First().Start - log.FightData.ToFightSpace(log.CombatData.AllCombatItems.Min(x => x.LogTime)));
+            int startOffset = -(int)(phases.First().Start - log.FightData.ToFightSpace(log.FightData.FightStartOffset));
             if (phases.Count > 6)
             {
                 PhaseData lastPhase = phases[6];
