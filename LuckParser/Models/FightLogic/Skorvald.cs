@@ -54,8 +54,7 @@ namespace LuckParser.Models.Logic
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
-            OverrideMaxHealths(combatData);
-            return (target.Health == 5551340) ? 1 : 0;
+            return (target.GetHealth(combatData) == 5551340) ? 1 : 0;
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()

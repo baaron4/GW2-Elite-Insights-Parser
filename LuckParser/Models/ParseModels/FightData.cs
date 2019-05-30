@@ -14,9 +14,9 @@ namespace LuckParser.Models.ParseModels
         private readonly bool _requirePhases;
         public readonly FightLogic Logic;
         public long FightStartOffset { get; }
-        public long FightStart { get; private set; }
-        public long FightEnd { get; private set; } = long.MaxValue;
-        public long FightDuration => FightEnd - FightStart;
+        public long FightStartLogTime { get; private set; }
+        public long FightEndLogTime { get; private set; } = long.MaxValue;
+        public long FightDuration => FightEndLogTime - FightStartLogTime;
         public bool Success { get; private set; }
         public string Name => Logic.GetFightName() + (_isCM == 1 ? " CM" : "") ;
         private int _isCM = -1;
@@ -31,8 +31,8 @@ namespace LuckParser.Models.ParseModels
         public FightData(ushort id, AgentData agentData, long start, long end)
         {
             FightStartOffset = start;
-            FightStart = start;
-            FightEnd = end;
+            FightStartLogTime = start;
+            FightEndLogTime = end;
             ID = id;
             _requirePhases = Properties.Settings.Default.ParsePhases;
             switch (ParseEnum.GetTargetIDS(id))
@@ -177,12 +177,12 @@ namespace LuckParser.Models.ParseModels
 
         public long ToFightSpace(long time)
         {
-            return time - FightStart;
+            return time - FightStartLogTime;
         }
 
         public long ToLogSpace(long time)
         {
-            return time + FightStart;
+            return time + FightStartLogTime;
         }
 
         // Setters
@@ -194,14 +194,15 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public void SetSuccess(bool success, long fightEnd)
+        public void SetSuccess(bool success, long fightEndLogTime)
         {
             Success = success;
+            FightEndLogTime = fightEndLogTime;
         }
 
-        public void OverrideStart(long fightStart)
+        public void OverrideStart(long fightStartLogTime)
         {
-            FightStart = fightStart;
+            FightStartLogTime = fightStartLogTime;
         }
     }
 }

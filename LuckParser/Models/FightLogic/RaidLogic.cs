@@ -17,16 +17,16 @@ namespace LuckParser.Models.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            HashSet<int> raidRewardsIds = new HashSet<int>
+            HashSet<int> raidRewardsTypes = new HashSet<int>
                 {
                     55821,
                     60685,
                     914
                 };
-            CombatItem reward = combatData.GetStates(ParseEnum.StateChange.Reward).FirstOrDefault(x => raidRewardsIds.Contains(x.Value));
+            RewardEvent reward = combatData.GetRewardEvents().FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType));
             if (reward != null)
             {
-                fightData.SetSuccess(true, reward.LogTime);
+                fightData.SetSuccess(true, fightData.ToLogSpace(reward.Time));
             }
         }
 

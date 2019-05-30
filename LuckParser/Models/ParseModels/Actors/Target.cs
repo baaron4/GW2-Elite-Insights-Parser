@@ -20,8 +20,22 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        public int Health { get; set; } = -1;
-        public List<(long logTime, int hp)> HealthOverTime { get; } = new List<(long logTime, int hp)>();
+        private int _health = -1;
+
+        public int GetHealth(CombatData combatData)
+        {
+            if (_health == -1)
+            {
+                List<MaxHealthUpdateEvent> maxHpUpdates = combatData.GetMaxHealthUpdateEvents(AgentItem);
+                _health = maxHpUpdates.Count > 0 ? maxHpUpdates.Max(x => x.MaxHealth) : 1;
+            }
+            return _health;
+        }
+
+        public void SetManualHealth(int health)
+        {
+            _health = health;
+        }
 
         /*public void AddCustomCastLog(long time, long skillID, int expDur, ParseEnum.Activation startActivation, int actDur, ParseEnum.Activation endActivation, ParsedLog log)
         {
@@ -193,9 +207,9 @@ namespace LuckParser.Models.ParseModels
             }
             int totalTime = 0;
             double curHealth = 100.0;
-            foreach ((long logTime, int hp) in HealthOverTime)
+            foreach (HealthUpdateEvent e in log.CombatData.GetHealthUpdateEvents(AgentItem))
             {
-                int time = (int)log.FightData.ToFightSpace(logTime);
+                int time = (int)e.Time;
                 if (time < 0)
                 {
                     continue;
@@ -208,7 +222,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     listFull[totalTime] = curHealth;
                 }
-                curHealth = hp / 100.0;
+                curHealth = e.HPPercent;
                 listFull[time] = curHealth;
             }
             // fill

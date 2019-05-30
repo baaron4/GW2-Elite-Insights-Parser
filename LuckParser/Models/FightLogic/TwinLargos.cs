@@ -56,16 +56,17 @@ namespace LuckParser.Models.Logic
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> targetPhases = new List<PhaseData>();
-            List<CombatItem> states = log.CombatData.GetStatesData(target.InstID, ParseEnum.StateChange.EnterCombat, target.FirstAwareLogTime, target.LastAwareLogTime);
+            List<AbstractCombatEvent> states = new List<AbstractCombatEvent>();
+            states.AddRange(log.CombatData.GetEnterCombatEvents(target.AgentItem));
             states.AddRange(GetFilteredList(log.CombatData, 762, target, true).Where(x => x is BuffApplyEvent));
-            states.AddRange(log.CombatData.GetStatesData(target.InstID, ParseEnum.StateChange.ChangeDead, target.FirstAwareLogTime, target.LastAwareLogTime));
-            states.Sort((x, y) => x.LogTime.CompareTo(y.LogTime));
+            states.AddRange(log.CombatData.GetDeadEvents(target.AgentItem));
+            states.Sort((x, y) => x.Time.CompareTo(y.Time));
             for (int i = 0; i < states.Count; i++)
             {
-                CombatItem state = states[i];
-                if (state.IsStateChange == ParseEnum.StateChange.EnterCombat)
+                AbstractCombatEvent state = states[i];
+                if (state is EnterCombatEvent)
                 {
-                    start = log.FightData.ToFightSpace(state.LogTime);
+                    start = state.Time;
                     if (i == states.Count - 1)
                     {
                         targetPhases.Add(new PhaseData(start, fightDuration));
@@ -73,7 +74,7 @@ namespace LuckParser.Models.Logic
                 }
                 else
                 {
-                    end = Math.Min(log.FightData.ToFightSpace(state.LogTime), fightDuration);
+                    end = Math.Min(state.Time, fightDuration);
                     targetPhases.Add(new PhaseData(start, end));
                     if (i == states.Count - 1 && targetPhases.Count < 3)
                     {
@@ -163,7 +164,7 @@ namespace LuckParser.Models.Logic
             if (!firstPhaseAt0 && phases.Count > 0 && phases.First().Start == 0)
             {
                 PhaseData p1 = phases[0];
-                AbstractDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= log.FightData.FightStart && (pAgents.Contains(x.From) || pAgents.Contains(x.MasterFrom)) && x.Damage > 0);
+                AbstractDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= 0 && (pAgents.Contains(x.From) || pAgents.Contains(x.MasterFrom)) && x.Damage > 0);
                 if (hit != null)
                 {
                     p1.OverrideStart(hit.Time);
@@ -332,8 +333,7 @@ namespace LuckParser.Models.Logic
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
-            OverrideMaxHealths(combatData);
-            return (target.Health > 18e6) ? 1 : 0; //Health of Nikare
+            return (target.GetHealth(combatData) > 18e6) ? 1 : 0; //Health of Nikare
         }
     }
 }

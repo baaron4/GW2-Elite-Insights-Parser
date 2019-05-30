@@ -425,8 +425,7 @@ namespace LuckParser.Models.Logic
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
-            OverrideMaxHealths(combatData);
-            return (target.Health > 21e6) ? 1 : 0;
+            return (target.GetHealth(combatData) > 21e6) ? 1 : 0;
         }
 
         private void AddPlatformsToCombatReplay(Target target, ParsedLog log, CombatReplay replay)

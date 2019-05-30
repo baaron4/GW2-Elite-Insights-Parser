@@ -190,7 +190,7 @@ namespace LuckParser.Builders
                     Healing = target.Healing,
                     Concentration = target.Concentration,
                     Condition = target.Condition,
-                    TotalHealth = target.Health,
+                    TotalHealth = target.GetHealth(_log.CombatData),
                     AvgBoons = target.GetAverageBoons(_log),
                     AvgConditions = target.GetAverageConditions(_log),
                     DpsAll = target.GetDPSAll(_log).Select(x => new JsonDPS(x)).ToArray(),
@@ -207,11 +207,12 @@ namespace LuckParser.Builders
                     BoonsStates = BuildBuffStates(target.GetBoonGraphs(_log)[BoonHelper.NumberOfBoonsID]),
                     ConditionsStates = BuildBuffStates(target.GetBoonGraphs(_log)[BoonHelper.NumberOfConditionsID])
                 };
-                int finalTargetHealth = target.HealthOverTime.Count > 0
-                    ? target.HealthOverTime.Last().hp
-                    : 10000;
-                jsTarget.HealthPercentBurned = 100.0 - finalTargetHealth * 0.01;
-                jsTarget.FinalHealth = (int)Math.Round(target.Health * (jsTarget.HealthPercentBurned * 0.01));
+                List<HealthUpdateEvent> hpUpdates = _log.CombatData.GetHealthUpdateEvents(target.AgentItem);
+                double finalTargetHealth = hpUpdates.Count > 0
+                    ? hpUpdates.Last().HPPercent
+                    : 100.0;
+                jsTarget.HealthPercentBurned = 100.0 - finalTargetHealth;
+                jsTarget.FinalHealth = (int)Math.Round(target.GetHealth(_log.CombatData) * (jsTarget.HealthPercentBurned * 0.01));
                 log.Targets.Add(jsTarget);
             }
         }

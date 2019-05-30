@@ -76,7 +76,7 @@ namespace LuckParser.Models.Logic
                 if (downPour != null)
                 {
                     phases.Add(new PhaseData(heatWave.Time, downPour.Time - 1));
-                    List<AbstractCastEvent> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
+                    List<AbstractCastEvent> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration);
                     AbstractCastEvent abo = castLogs.Find(x => x.SkillId == 34427);
                     if (abo != null)
                     {

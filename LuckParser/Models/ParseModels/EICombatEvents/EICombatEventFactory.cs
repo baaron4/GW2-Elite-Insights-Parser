@@ -47,74 +47,87 @@ namespace LuckParser.Models.ParseModels
             return res;
         }
 
-        public static void CreateStateChangeEvents(List<CombatItem> stateChangeEvents, List<AbstractMetaDataEvent> metaDataEvents, List<AbstractStatusEvent> statusEvents, AgentData agentData, long offset) 
+        public static void CreateStateChangeEvents(List<CombatItem> stateChangeEvents, MetaEventsContainer metaDataEvents, StatusEventsContainer statusEvents, AgentData agentData, long offset) 
         {
             foreach (CombatItem c in stateChangeEvents)
             {
                 switch (c.IsStateChange)
                 {
                     case ParseEnum.StateChange.EnterCombat:
-                        statusEvents.Add(new EnterCombatEvent(c, agentData, offset));
+                        EnterCombatEvent enterCombatEvt = new EnterCombatEvent(c, agentData, offset);
+                        GeneralHelper.Add(statusEvents.EnterCombatEvents, enterCombatEvt.Src, enterCombatEvt);
                         break;
                     case ParseEnum.StateChange.ExitCombat:
-                        statusEvents.Add(new ExitCombatEvent(c, agentData, offset));
+                        ExitCombatEvent exitCombatEvt = new ExitCombatEvent(c, agentData, offset);
+                        GeneralHelper.Add(statusEvents.ExitCombatEvents, exitCombatEvt.Src, exitCombatEvt);
                         break;
                     case ParseEnum.StateChange.ChangeUp:
-                        statusEvents.Add(new AliveEvent(c, agentData, offset));
+                        AliveEvent aliveEvt = new AliveEvent(c, agentData, offset);
+                        GeneralHelper.Add(statusEvents.AliveEvents, aliveEvt.Src, aliveEvt);
                         break;
                     case ParseEnum.StateChange.ChangeDead:
-                        statusEvents.Add(new DeadEvent(c, agentData, offset));
+                        DeadEvent deadEvt = new DeadEvent(c, agentData, offset);
+                        GeneralHelper.Add(statusEvents.DeadEvents, deadEvt.Src, deadEvt);
                         break;
                     case ParseEnum.StateChange.ChangeDown:
-                        statusEvents.Add(new DownEvent(c, agentData, offset));
+                        DownEvent downEvt = new DownEvent(c, agentData, offset);
+                        GeneralHelper.Add(statusEvents.DownEvents, downEvt.Src, downEvt);
                         break;
                     case ParseEnum.StateChange.Spawn:
-                        statusEvents.Add(new SpawnEvent(c, agentData, offset));
+                        SpawnEvent spawnEvt = new SpawnEvent(c, agentData, offset);
+                        GeneralHelper.Add(statusEvents.SpawnEvents, spawnEvt.Src, spawnEvt);
                         break;
                     case ParseEnum.StateChange.Despawn:
-                        statusEvents.Add(new DespawnEvent(c, agentData, offset));
+                        DespawnEvent despawnEvt = new DespawnEvent(c, agentData, offset);
+                        GeneralHelper.Add(statusEvents.DespawnEvents, despawnEvt.Src, despawnEvt);
                         break;
                     case ParseEnum.StateChange.HealthUpdate:
-                        statusEvents.Add(new HealthUpdateEvent(c, agentData, offset));
+                        HealthUpdateEvent healthEvt = new HealthUpdateEvent(c, agentData, offset);
+                        GeneralHelper.Add(statusEvents.HealthUpdateEvents, healthEvt.Src, healthEvt);
                         break;
                     case ParseEnum.StateChange.LogStart:
-                        metaDataEvents.Add(new LogStartEvent(c, offset));
+                        metaDataEvents.LogStartEvents.Add(new LogStartEvent(c, offset));
                         break;
                     case ParseEnum.StateChange.LogEnd:
-                        metaDataEvents.Add(new LogEndEvent(c, offset));
+                        metaDataEvents.LogEndEvents.Add(new LogEndEvent(c, offset));
                         break;
                     case ParseEnum.StateChange.MaxHealthUpdate:
-                        statusEvents.Add(new MaxHealthUpdateEvent(c, agentData, offset));
+                        MaxHealthUpdateEvent maxHealthEvt = new MaxHealthUpdateEvent(c, agentData, offset);
+                        GeneralHelper.Add(statusEvents.MaxHealthUpdateEvents, maxHealthEvt.Src, maxHealthEvt);
                         break;
                     case ParseEnum.StateChange.PointOfView:
-                        statusEvents.Add(new PointOfViewEvent(c, agentData, offset));
+                        metaDataEvents.PointOfViewEvents.Add(new PointOfViewEvent(c, agentData, offset));
                         break;
                     case ParseEnum.StateChange.Language:
-                        metaDataEvents.Add(new LanguageEvent(c, offset));
+                        metaDataEvents.LanguageEvents.Add(new LanguageEvent(c, offset));
                         break;
                     case ParseEnum.StateChange.GWBuild:
-                        metaDataEvents.Add(new BuildEvent(c, offset));
+                        metaDataEvents.BuildEvents.Add(new BuildEvent(c, offset));
                         break;
                     case ParseEnum.StateChange.ShardId:
-                        metaDataEvents.Add(new ShardEvent(c, offset));
+                        metaDataEvents.ShardEvents.Add(new ShardEvent(c, offset));
                         break;
                     case ParseEnum.StateChange.Reward:
-                        metaDataEvents.Add(new RewardEvent(c, offset));
+                        metaDataEvents.RewardEvents.Add(new RewardEvent(c, offset));
                         break;
                     case ParseEnum.StateChange.TeamChange:
-                        statusEvents.Add(new TeamChangeEvent(c, agentData, offset));
+                        TeamChangeEvent tcEvt = new TeamChangeEvent(c, agentData, offset);
+                        GeneralHelper.Add(statusEvents.TeamChangeEvents, tcEvt.Src, tcEvt);
                         break;
                     case ParseEnum.StateChange.AttackTarget:
-                        statusEvents.Add(new AttackTargetEvent(c, agentData, offset));
+                        AttackTargetEvent aTEvt = new AttackTargetEvent(c, agentData, offset);
+                        GeneralHelper.Add(statusEvents.AttackTargetEvents, aTEvt.Src, aTEvt);
                         break;
                     case ParseEnum.StateChange.Targetable:
-                        statusEvents.Add(new TargetableEvent(c, agentData, offset));
+                        TargetableEvent tarEvt = new TargetableEvent(c, agentData, offset);
+                        GeneralHelper.Add(statusEvents.TargetableEvents, tarEvt.Src, tarEvt);
                         break;
                     case ParseEnum.StateChange.MapID:
-                        metaDataEvents.Add(new MapIDEvent(c, offset));
+                        metaDataEvents.MapIDEvents.Add(new MapIDEvent(c, offset));
                         break;
                     case ParseEnum.StateChange.Guild:
-                        statusEvents.Add(new GuildEvent(c, agentData, offset));
+                        GuildEvent gEvt = new GuildEvent(c, agentData, offset);
+                        GeneralHelper.Add(statusEvents.GuildEvents, gEvt.Src, gEvt);
                         break;
                 }
             }

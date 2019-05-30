@@ -9,7 +9,7 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class AbstractStatusEvent : AbstractCombatEvent
     {
-        public AgentItem Src { get; }
+        public AgentItem Src { get; protected set; }
 
         public AbstractStatusEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem.LogTime, offset)
         {

@@ -20,14 +20,15 @@ namespace LuckParser.Models.ParseModels
 
         public override bool Keep(CombatItem item, ParsedLog log)
         {
-            if (_has)
+            /*if (_has)
             {
                 return log.CombatData.GetStatesData(item.SrcInstid, _compare, item.LogTime - 20, item.LogTime + 20).Count > 0;
             }
             else
             {
                 return log.CombatData.GetStatesData(item.SrcInstid, _compare, item.LogTime - 20, item.LogTime + 20).Count == 0;
-            }
+            }*/
+            return true;
         }
     }
 }

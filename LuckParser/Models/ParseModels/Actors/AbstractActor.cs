@@ -26,16 +26,6 @@ namespace LuckParser.Models.ParseModels
         }
         // Getters
 
-        private long GetState(ParsedLog log, long start, long end, ParseEnum.StateChange state)
-        {
-            CombatItem status = log.CombatData.GetStatesData(InstID, state, Math.Max(log.FightData.ToLogSpace(start), FirstAwareLogTime), Math.Min(log.FightData.ToLogSpace(end), LastAwareLogTime)).LastOrDefault();
-            if (status != null && status.LogTime > 0)
-            {
-                return log.FightData.ToFightSpace(status.LogTime);
-            }
-            return 0;
-        }
-
         public List<AbstractDamageEvent> GetDamageLogs(AbstractActor target, ParsedLog log, long start, long end)
         {
             if (DamageLogs == null)
@@ -174,7 +164,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     boonMap.Add(log.Boons.BoonsByIds[boonId]);
                 }
-                if (!c.IsBoonSimulatorCompliant(log.FightData.FightEnd))
+                if (!c.IsBoonSimulatorCompliant(log.FightData.FightDuration))
                 {
                     continue;
                 }
@@ -270,8 +260,8 @@ namespace LuckParser.Models.ParseModels
             HashSet<long> condiIds = new HashSet<long>(log.Boons.GetConditionList().Select(x => x.ID));
             InitBoonStatusData(log);
 
-            long death = GetState(log, 0, dur, ParseEnum.StateChange.ChangeDead);
-            long dc = GetState(log, 0, dur, ParseEnum.StateChange.Despawn);
+            DeadEvent death = log.CombatData.GetDeadEvents(AgentItem).LastOrDefault();
+            DespawnEvent dc = log.CombatData.GetDespawnEvents(AgentItem).LastOrDefault();
             foreach (Boon boon in TrackedBoons)
             {
                 long boonid = boon.ID;
@@ -283,13 +273,13 @@ namespace LuckParser.Models.ParseModels
                     }
                     BoonSimulator simulator = boon.CreateSimulator(log);
                     simulator.Simulate(logs, dur);
-                    if (death > 0 && GetCastLogs(log, death + 5000, dur).Count == 0)
+                    if (death != null && GetCastLogs(log, death.Time + 5000, dur).Count == 0)
                     {
-                        simulator.Trim(death);
+                        simulator.Trim(death.Time);
                     }
-                    else if (dc > 0 && GetCastLogs(log, dc + 5000, dur).Count == 0)
+                    else if (dc != null && GetCastLogs(log, dc.Time + 5000, dur).Count == 0)
                     {
-                        simulator.Trim(dc);
+                        simulator.Trim(dc.Time);
                     }
                     else
                     {

@@ -120,7 +120,7 @@ namespace LuckParser.Models.Logic
                 return phases;
             }
             // Sometimes the preevent is not in the evtc
-            List<AbstractCastEvent> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
+            List<AbstractCastEvent> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration);
             List<AbstractCastEvent> dhuumCast = mainTarget.GetCastLogs(log, 0, 20000);
             string[] namesDh;
             if (dhuumCast.Count > 0)
@@ -329,7 +329,7 @@ namespace LuckParser.Models.Logic
             foreach (AbstractBuffEvent c in spiritTransform)
             {
                 int duration = 15000;
-                if (mainTarget.HealthOverTime.FirstOrDefault(x => log.FightData.ToFightSpace(x.logTime) > c.Time).hp < 1050)
+                if (log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem).FirstOrDefault(x => x.Time > c.Time).HPPercent < 10.50)
                 {
                     duration = 30000;
                 }
@@ -410,8 +410,7 @@ namespace LuckParser.Models.Logic
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
-            OverrideMaxHealths(combatData);
-            return (target.Health > 35e6) ? 1 : 0;
+            return (target.GetHealth(combatData) > 35e6) ? 1 : 0;
         }
     }
 }

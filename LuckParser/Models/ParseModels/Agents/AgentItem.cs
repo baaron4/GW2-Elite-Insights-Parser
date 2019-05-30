@@ -1,4 +1,7 @@
-﻿using System;
+﻿using LuckParser.Parser;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -61,6 +64,52 @@ namespace LuckParser.Models.ParseModels
         {
             Agent = agent;
             Name = name;
+        }
+
+
+        public void GetAgentStatus(List<(long start, long end)> dead, List<(long start, long end)> down, List<(long start, long end)> dc, ParsedLog log)
+        {
+            List<AbstractStatusEvent> status = new List<AbstractStatusEvent>();
+            status.AddRange(log.CombatData.GetDownEvents(this));
+            status.AddRange(log.CombatData.GetAliveEvents(this));
+            status.AddRange(log.CombatData.GetDeadEvents(this));
+            status.AddRange(log.CombatData.GetSpawnEvents(this));
+            status.AddRange(log.CombatData.GetDespawnEvents(this));
+            status = status.OrderBy(x => x.Time).ToList();
+            for (var i = 0; i < status.Count - 1; i++)
+            {
+                AbstractStatusEvent cur = status[i];
+                AbstractStatusEvent next = status[i + 1];
+                if (cur is DownEvent)
+                {
+                    down.Add((cur.Time, next.Time));
+                }
+                else if (cur is DeadEvent)
+                {
+                    dead.Add((cur.Time, next.Time));
+                }
+                else if (cur is DespawnEvent)
+                {
+                    dc.Add((cur.Time, next.Time));
+                }
+            }
+            // check last value
+            if (status.Count > 0)
+            {
+                AbstractStatusEvent cur = status.Last();
+                if (cur is DownEvent)
+                {
+                    down.Add((cur.Time, log.FightData.FightDuration));
+                }
+                else if (cur is DeadEvent)
+                {
+                    dead.Add((cur.Time, log.FightData.FightDuration));
+                }
+                else if (cur is DespawnEvent)
+                {
+                    dc.Add((cur.Time, log.FightData.FightDuration));
+                }
+            }
         }
     }
 }

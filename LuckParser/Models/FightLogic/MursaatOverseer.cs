@@ -69,20 +69,21 @@ namespace LuckParser.Models.Logic
             };
             long start = 0;
             int i = 0;
+            List<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem);
             for (i = 0; i < limit.Count; i++)
             {
-                (long logTime, int hp) = mainTarget.HealthOverTime.FirstOrDefault(x => x.hp/100.0 <= limit[i]);
-                if (logTime == 0)
+                HealthUpdateEvent evt = hpUpdates.FirstOrDefault(x => x.HPPercent <= limit[i]);
+                if (evt == null)
                 {
                     break;
                 }
-                PhaseData phase = new PhaseData(start, Math.Min(log.FightData.ToFightSpace(logTime), fightDuration))
+                PhaseData phase = new PhaseData(start, Math.Min(evt.Time, fightDuration))
                 {
                     Name = (25 + limit[i]) + "% - " + limit[i] + "%"
                 };
                 phase.Targets.Add(mainTarget);
                 phases.Add(phase);
-                start = log.FightData.ToFightSpace(logTime);
+                start = evt.Time;
             }
             if (i < 4)
             {
@@ -141,8 +142,7 @@ namespace LuckParser.Models.Logic
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
-            OverrideMaxHealths(combatData);
-            return (target.Health > 25e6) ? 1 : 0;
+            return (target.GetHealth(combatData) > 25e6) ? 1 : 0;
         }
     }
 }

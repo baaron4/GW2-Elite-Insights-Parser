@@ -140,46 +140,6 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public void SetMaxHealth(ushort instid, long time, int health)
-        {
-            foreach (Target target in Targets)
-            {
-                if (target.Health == -1 && target.InstID == instid && target.FirstAwareLogTime <= time && target.LastAwareLogTime >= time)
-                {
-                    target.Health = health;
-                    break;
-                }
-            }
-        }
-
-        protected void OverrideMaxHealths(CombatData combatData)
-        {
-            List<CombatItem> maxHUs = combatData.GetStates(ParseEnum.StateChange.MaxHealthUpdate);
-            if (maxHUs.Count > 0)
-            {
-                foreach (Target tar in Targets)
-                {
-                    List<CombatItem> subList = maxHUs.Where(x => x.SrcInstid == tar.InstID && x.LogTime >= tar.FirstAwareLogTime && x.LogTime <= tar.LastAwareLogTime).ToList();
-                    if (subList.Count > 0)
-                    {
-                        tar.Health = subList.Max(x => (int)x.DstAgent);
-                    }
-                }
-            }
-        }
-
-        public virtual void AddHealthUpdate(ushort instid, long time, long healthTime, int health)
-        {
-            foreach (Target target in Targets)
-            {
-                if (target.InstID == instid && target.FirstAwareLogTime <= time && target.LastAwareLogTime >= time)
-                {
-                    target.HealthOverTime.Add((healthTime, health));
-                    break;
-                }
-            }
-        }
-
         protected List<PhaseData> GetPhasesByInvul(ParsedLog log, long skillID, Target mainTarget, bool addSkipPhases, bool beginWithStart)
         {
             long fightDuration = log.FightData.FightDuration;
@@ -288,16 +248,16 @@ namespace LuckParser.Models.Logic
                 {
                     throw new InvalidOperationException("Main target of the fight not found");
                 }
-                CombatItem killed = combatData.GetStatesData(target.InstID, ParseEnum.StateChange.ChangeDead, target.FirstAwareLogTime, target.LastAwareLogTime).LastOrDefault();
+                DeadEvent killed = combatData.GetDeadEvents(target.AgentItem).LastOrDefault();
                 if (killed != null)
                 {
                     success++;
-                    maxTime = Math.Max(killed.LogTime, maxTime);
+                    maxTime = Math.Max(killed.Time, maxTime);
                 }
             }
             if ((all && success == idsToUse.Count) || (!all && success > 0))
             {
-                fightData.SetSuccess(true, maxTime);
+                fightData.SetSuccess(true, fightData.ToLogSpace(maxTime));
             }
         }
 

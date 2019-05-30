@@ -1,6 +1,7 @@
 ﻿using LuckParser.Parser;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -9,8 +10,8 @@ namespace LuckParser.Models.ParseModels
         public static readonly string DefaultTimeValue = "MISSING";
 
         // Fields
-        public readonly string BuildVersion;
-        public ulong GW2Version { get; set; }
+        public string BuildVersion { get; }
+        public ulong GW2Version { get; }
         public AgentItem PoV { get; private set; } = null;
         public string PoVName { get; private set; } = "N/A";
         private readonly string _dateFormat = "yyyy-MM-dd HH:mm:ss zz";
@@ -23,6 +24,29 @@ namespace LuckParser.Models.ParseModels
             BuildVersion = buildVersion;
             LogStart = DefaultTimeValue;
             LogEnd = DefaultTimeValue;
+            uint unixStart = 0;
+            foreach (PointOfViewEvent povEvt in combatData.GetPointOfViewEvents())
+            {
+                SetPOV(povEvt.PoV);
+            }
+            foreach(BuildEvent buildEvt in combatData.GetBuildEvents())
+            {
+                GW2Version = buildEvt.Data;
+            }
+            foreach (LogStartEvent logStr in combatData.GetLogStartEvents())
+            {
+                SetLogStart(logStr.LocalUnixTimeStamp);
+                unixStart = logStr.LocalUnixTimeStamp;
+            }
+            foreach (LogEndEvent logEnd in combatData.GetLogEndEvents())
+            {
+                SetLogEnd(logEnd.LocalUnixTimeStamp);
+            }
+            if (LogEnd == DefaultTimeValue && LogStart != DefaultTimeValue)
+            {
+                long dur = allCombatItems.Max(x => x.LogTime) - allCombatItems.Min(x => x.LogTime) / 1000;
+                SetLogEnd(dur + unixStart);
+            }
         }
         
         // Setters

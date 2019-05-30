@@ -85,35 +85,37 @@ namespace LuckParser.Models.Logic
             {
                 throw new InvalidOperationException("Eyes not found");
             }
-            if (eye1.HealthOverTime.Count == 0 || eye2.HealthOverTime.Count == 0)
+            List<HealthUpdateEvent> eye1HPs = combatData.GetHealthUpdateEvents(eye1.AgentItem);
+            List<HealthUpdateEvent> eye2HPs = combatData.GetHealthUpdateEvents(eye2.AgentItem);
+            if (eye1HPs.Count == 0 || eye2HPs.Count == 0)
             {
                 return;
             }
-            long lastEye1Hp = eye1.HealthOverTime.LastOrDefault().hp;
-            long lastEye2Hp = eye2.HealthOverTime.LastOrDefault().hp;
-            long margin1 = Math.Min(80, lastEye1Hp);
-            long margin2 = Math.Min(80, lastEye2Hp);
+            double lastEye1Hp = eye1HPs.LastOrDefault().HPPercent;
+            double lastEye2Hp = eye2HPs.LastOrDefault().HPPercent;
+            double margin1 = Math.Min(0.80, lastEye1Hp);
+            double margin2 = Math.Min(0.80, lastEye2Hp);
             if (lastEye1Hp <= margin1 && lastEye2Hp <= margin2)
             {
                 int lastIEye1;
-                for (lastIEye1 = eye1.HealthOverTime.Count - 1; lastIEye1 >= 0; lastIEye1--)
+                for (lastIEye1 = eye1HPs.Count - 1; lastIEye1 >= 0; lastIEye1--)
                 {
-                    if (eye1.HealthOverTime[lastIEye1].hp > margin1)
+                    if (eye1HPs[lastIEye1].HPPercent > margin1)
                     {
                         lastIEye1++;
                         break;
                     }
                 }
                 int lastIEye2;
-                for (lastIEye2 = eye2.HealthOverTime.Count - 1; lastIEye2 >= 0; lastIEye2--)
+                for (lastIEye2 = eye2HPs.Count - 1; lastIEye2 >= 0; lastIEye2--)
                 {
-                    if (eye2.HealthOverTime[lastIEye2].hp > margin2)
+                    if (eye2HPs[lastIEye2].HPPercent > margin2)
                     {
                         lastIEye2++;
                         break;
                     }
                 }
-                fightData.SetSuccess(true, Math.Max(eye1.HealthOverTime[lastIEye1].logTime, eye2.HealthOverTime[lastIEye2].logTime));
+                fightData.SetSuccess(true, fightData.ToLogSpace(Math.Max(eye1HPs[lastIEye1].Time, eye2HPs[lastIEye2].Time)));
             }
         }
 

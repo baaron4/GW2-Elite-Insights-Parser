@@ -521,8 +521,8 @@ namespace LuckParser.Parser
                     {
                         playerAgent.InstID = tst.SrcInstid;
                     }
-                    playerAgent.FirstAwareLogTime = _fightData.FightStart;
-                    playerAgent.LastAwareLogTime = _fightData.FightEnd;
+                    playerAgent.FirstAwareLogTime = _fightData.FightStartLogTime;
+                    playerAgent.LastAwareLogTime = _fightData.FightEndLogTime;
                 }
                 try
                 {
@@ -610,44 +610,6 @@ namespace LuckParser.Parser
             _fightData.Logic.ComputeFightTargets(_agentData, _fightData, _combatItems);
             // Dealing with special cases
             _fightData.Logic.SpecialParse(_fightData, _agentData, _combatItems);
-            // Grab values threw combat data
-            foreach (CombatItem c in _combatItems)
-            {
-                switch (c.IsStateChange)
-                {
-                    case ParseEnum.StateChange.PointOfView:
-                        if (_logData.PoV == null)//Point of View
-                        {
-                            ulong povAgent = c.SrcAgent;
-                            _logData.SetPOV(_agentData.GetAgent(povAgent, c.LogTime));
-                        }
-                        break;
-                    case ParseEnum.StateChange.GWBuild:
-                        _logData.GW2Version = c.SrcAgent;
-                        break;
-                    case ParseEnum.StateChange.LogStart:
-                        _logData.SetLogStart(c.Value);
-                        break;
-                    case ParseEnum.StateChange.LogEnd:
-                        _logData.SetLogEnd(c.Value);
-                        break;
-                    case ParseEnum.StateChange.MaxHealthUpdate:
-                        _fightData.Logic.SetMaxHealth(c.SrcInstid, c.LogTime, (int)c.DstAgent);
-                        break;
-                    case ParseEnum.StateChange.HealthUpdate:
-                        //set health update
-                        _fightData.Logic.AddHealthUpdate(c.SrcInstid, c.LogTime, c.LogTime, (int)c.DstAgent);
-                        break;
-                }
-            }
-            if (_logData.LogStart == LogData.DefaultTimeValue)
-            {
-                _logData.SetLogStart(_combatItems.First().LogTime);
-            }
-            if (_logData.LogEnd == LogData.DefaultTimeValue)
-            {
-                _logData.SetLogEnd(_combatItems.Last().LogTime);
-            }
             //players
             CompletePlayers();
             _playerList = _playerList.OrderBy(a => a.Group).ToList();

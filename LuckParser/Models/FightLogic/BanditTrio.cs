@@ -44,15 +44,15 @@ namespace LuckParser.Models.Logic
         public void SetPhasePerTarget(Target target, List<PhaseData> phases, ParsedLog log)
         {
             long fightDuration = log.FightData.FightDuration;
-            CombatItem phaseStart = log.CombatData.GetStatesData(target.InstID, ParseEnum.StateChange.EnterCombat, target.FirstAwareLogTime, target.LastAwareLogTime).Where(x => x.SrcInstid == target.InstID).LastOrDefault();
+            EnterCombatEvent phaseStart = log.CombatData.GetEnterCombatEvents(target.AgentItem).LastOrDefault();
             if (phaseStart != null)
             {
-                long start = log.FightData.ToFightSpace(phaseStart.LogTime);
-                CombatItem phaseEnd = log.CombatData.GetStatesData(target.InstID, ParseEnum.StateChange.ChangeDead, target.FirstAwareLogTime, target.LastAwareLogTime).Where(x => x.SrcInstid == target.InstID).LastOrDefault();
+                long start = phaseStart.Time;
+                DeadEvent phaseEnd = log.CombatData.GetDeadEvents(target.AgentItem).LastOrDefault();
                 long end = fightDuration;
                 if (phaseEnd != null)
                 {
-                    end = log.FightData.ToFightSpace(phaseEnd.LogTime);
+                    end = phaseEnd.Time;
                 }
                 PhaseData phase = new PhaseData(start, Math.Min(end, log.FightData.FightDuration));
                 phase.Targets.Add(target);

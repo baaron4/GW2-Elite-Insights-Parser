@@ -236,16 +236,16 @@ namespace LuckParser.Models.ParseModels
 
         protected void TrimCombatReplay(ParsedLog log)
         {
-            CombatItem despawnCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Despawn, FirstAwareLogTime, LastAwareLogTime).LastOrDefault();
-            CombatItem spawnCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Spawn, FirstAwareLogTime, LastAwareLogTime).LastOrDefault();
-            CombatItem deathCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.ChangeDead, FirstAwareLogTime, LastAwareLogTime).LastOrDefault();
+            DespawnEvent despawnCheck = log.CombatData.GetDespawnEvents(AgentItem).LastOrDefault();
+            SpawnEvent spawnCheck = log.CombatData.GetSpawnEvents(AgentItem).LastOrDefault();
+            DeadEvent deathCheck = log.CombatData.GetDeadEvents(AgentItem).LastOrDefault();
             if (deathCheck != null)
             {
-                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAwareLogTime), log.FightData.ToFightSpace(deathCheck.LogTime));
+                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAwareLogTime), deathCheck.Time);
             }
-            else if (despawnCheck != null && (spawnCheck == null || spawnCheck.LogTime < despawnCheck.LogTime))
+            else if (despawnCheck != null && (spawnCheck == null || spawnCheck.Time < despawnCheck.Time))
             {
-                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAwareLogTime), log.FightData.ToFightSpace(despawnCheck.LogTime));
+                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAwareLogTime), despawnCheck.Time);
             }
             else
             {

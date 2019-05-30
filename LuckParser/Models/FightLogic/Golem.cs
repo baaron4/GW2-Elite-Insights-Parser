@@ -67,17 +67,18 @@ namespace LuckParser.Models.Logic
                 throw new InvalidOperationException("Main target of the fight not found");
             }
             AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => x.Damage > 0);
-            long fightEnd = fightData.FightEnd;
+            long fightEndLogTime = fightData.FightEndLogTime;
             bool success = false;
             if (lastDamageTaken != null)
             {
-                fightEnd = lastDamageTaken.Time;
+                fightEndLogTime = fightData.ToLogSpace(lastDamageTaken.Time);
             }
-            if (mainTarget.HealthOverTime.Count > 0)
+            List<HealthUpdateEvent> hpUpdates = combatData.GetHealthUpdateEvents(mainTarget.AgentItem);
+            if (hpUpdates.Count > 0)
             {
-                success = mainTarget.HealthOverTime.Last().hp < 200;
+                success = hpUpdates.Last().HPPercent < 2.00;
             }
-            fightData.SetSuccess(success, fightEnd);
+            fightData.SetSuccess(success, fightEndLogTime);
         }
 
         protected override HashSet<ushort> GetUniqueTargetIDs()

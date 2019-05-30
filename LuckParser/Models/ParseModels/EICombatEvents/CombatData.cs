@@ -9,9 +9,10 @@ namespace LuckParser.Models.ParseModels
     {
         public bool HasMovementData { get; }
 
-        private Dictionary<ParseEnum.StateChange, List<CombatItem>> _statesData;
         //private List<CombatItem> _healingData;
         //private List<CombatItem> _healingReceivedData;
+        private readonly StatusEventsContainer _statusEvents = new StatusEventsContainer();
+        private readonly MetaEventsContainer _metaDataEvents = new MetaEventsContainer();
         private readonly HashSet<long> _skillIds;
         private readonly Dictionary<long, List<AbstractBuffEvent>> _boonData;
         private readonly Dictionary<AgentItem, List<AbstractBuffEvent>> _boonDataByDst;
@@ -53,17 +54,14 @@ namespace LuckParser.Models.ParseModels
                 ? EICombatEventFactory.CreateMovementEvents(allCombatItems.Where(x =>
                         x.IsStateChange == ParseEnum.StateChange.Position ||
                         x.IsStateChange == ParseEnum.StateChange.Velocity ||
-                        x.IsStateChange == ParseEnum.StateChange.Rotation).ToList(), agentData, fightData.FightStart)
+                        x.IsStateChange == ParseEnum.StateChange.Rotation).ToList(), agentData, fightData.FightStartLogTime)
                 : new Dictionary<AgentItem, List<AbstractMovementEvent>>();
             HasMovementData = _movementData.Count > 1;
             // state change events
-            List<AbstractMetaDataEvent> metaDataEvents = new List<AbstractMetaDataEvent>();
-            List<AbstractStatusEvent> statusEvents = new List<AbstractStatusEvent>();
-            EICombatEventFactory.CreateStateChangeEvents(allCombatItems, metaDataEvents, statusEvents, agentData, fightData.FightStart);
-            _statesData = allCombatItems.GroupBy(x => x.IsStateChange).ToDictionary(x => x.Key, x => x.ToList());
+            EICombatEventFactory.CreateStateChangeEvents(allCombatItems, _metaDataEvents, _statusEvents, agentData, fightData.FightStartLogTime);
             // activation events
-            List<AnimatedCastEvent> castData = EICombatEventFactory.CreateCastEvents(allCombatItems.Where(x => x.IsActivation != ParseEnum.Activation.None).ToList(), agentData, fightData.FightStart);
-            List<WeaponSwapEvent> wepSwaps = EICombatEventFactory.CreateWeaponSwapEvents(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.WeaponSwap).ToList(), agentData, fightData.FightStart);
+            List<AnimatedCastEvent> castData = EICombatEventFactory.CreateCastEvents(allCombatItems.Where(x => x.IsActivation != ParseEnum.Activation.None).ToList(), agentData, fightData.FightStartLogTime);
+            List<WeaponSwapEvent> wepSwaps = EICombatEventFactory.CreateWeaponSwapEvents(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.WeaponSwap).ToList(), agentData, fightData.FightStartLogTime);
             _weaponSwapData = wepSwaps.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
             _castData = castData.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
             List<AbstractCastEvent> allCastEvents = new List<AbstractCastEvent>(castData);
@@ -74,12 +72,12 @@ namespace LuckParser.Models.ParseModels
             buffCombatEvents.AddRange(noStateActiBuffRem.Where(x => x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0));
             buffCombatEvents.AddRange(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.BuffInitial));
             buffCombatEvents.Sort((x, y) => x.LogTime.CompareTo(y.LogTime));
-            List<AbstractBuffEvent> buffEvents = EICombatEventFactory.CreateBuffEvents(buffCombatEvents, agentData, fightData.FightStart);
+            List<AbstractBuffEvent> buffEvents = EICombatEventFactory.CreateBuffEvents(buffCombatEvents, agentData, fightData.FightStartLogTime);
             SpecialBoonParse(players, buffEvents);
             _boonDataByDst = buffEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             _boonData = buffEvents.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
             // damage events
-            List<AbstractDamageEvent> damageData = EICombatEventFactory.CreateDamageEvents(noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0)).ToList(), agentData, fightData.FightStart);
+            List<AbstractDamageEvent> damageData = EICombatEventFactory.CreateDamageEvents(noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0)).ToList(), agentData, fightData.FightStartLogTime);
             _damageData = damageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             _damageTakenData = damageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
 
@@ -92,16 +90,7 @@ namespace LuckParser.Models.ParseModels
                                                 (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
         }
 
-        public List<CombatItem> GetStatesData(ushort srcInstid, ParseEnum.StateChange change, long start, long end)
-        {
-            if (_statesData.TryGetValue(change, out List<CombatItem> data))
-            {
-                return data.Where(x => x.SrcInstid == srcInstid && x.LogTime >= start && x.LogTime <= end).ToList();
-            }
-            return new List<CombatItem>();
-        }
-
-        public void Update(long end)
+        public void UpdateDamageEvents(long end)
         {
             List<AbstractDamageEvent> damageData = _damageData.SelectMany(x => x.Value).ToList();
             damageData.Sort((x, y) => x.Time.CompareTo(y.Time));
@@ -124,6 +113,163 @@ namespace LuckParser.Models.ParseModels
         public HashSet<long> GetSkills()
         {
             return _skillIds;
+        }
+
+        public List<AliveEvent> GetAliveEvents(AgentItem key)
+        {
+            if (_statusEvents.AliveEvents.TryGetValue(key, out var list))
+            {
+                return list;
+            }
+            return new List<AliveEvent>();
+        }
+
+        public List<AttackTargetEvent> GetAttackTargetEvents(AgentItem key)
+        {
+            if (_statusEvents.AttackTargetEvents.TryGetValue(key, out var list))
+            {
+                return list;
+            }
+            return new List<AttackTargetEvent>();
+        }
+
+        public List<DeadEvent> GetDeadEvents(AgentItem key)
+        {
+            if (_statusEvents.DeadEvents.TryGetValue(key, out var list))
+            {
+                return list;
+            }
+            return new List<DeadEvent>();
+        }
+
+        public List<DespawnEvent> GetDespawnEvents(AgentItem key)
+        {
+            if (_statusEvents.DespawnEvents.TryGetValue(key, out var list))
+            {
+                return list;
+            }
+            return new List<DespawnEvent>();
+        }
+
+        public List<DownEvent> GetDownEvents(AgentItem key)
+        {
+            if (_statusEvents.DownEvents.TryGetValue(key, out var list))
+            {
+                return list;
+            }
+            return new List<DownEvent>();
+        }
+
+        public List<EnterCombatEvent> GetEnterCombatEvents(AgentItem key)
+        {
+            if (_statusEvents.EnterCombatEvents.TryGetValue(key, out var list))
+            {
+                return list;
+            }
+            return new List<EnterCombatEvent>();
+        }
+
+        public List<ExitCombatEvent> GetExitCombatEvents(AgentItem key)
+        {
+            if (_statusEvents.ExitCombatEvents.TryGetValue(key, out var list))
+            {
+                return list;
+            }
+            return new List<ExitCombatEvent>();
+        }
+
+        public List<GuildEvent> GetGuildEvents(AgentItem key)
+        {
+            if (_statusEvents.GuildEvents.TryGetValue(key, out var list))
+            {
+                return list;
+            }
+            return new List<GuildEvent>();
+        }
+
+        public List<HealthUpdateEvent> GetHealthUpdateEvents(AgentItem key)
+        {
+            if (_statusEvents.HealthUpdateEvents.TryGetValue(key, out var list))
+            {
+                return list;
+            }
+            return new List<HealthUpdateEvent>();
+        }
+
+        public List<MaxHealthUpdateEvent> GetMaxHealthUpdateEvents(AgentItem key)
+        {
+            if (_statusEvents.MaxHealthUpdateEvents.TryGetValue(key, out var list))
+            {
+                return list;
+            }
+            return new List<MaxHealthUpdateEvent>();
+        }
+
+        public List<PointOfViewEvent> GetPointOfViewEvents()
+        {
+            return _metaDataEvents.PointOfViewEvents;
+        }
+
+        public List<SpawnEvent> GetSpawnEvents(AgentItem key)
+        {
+            if (_statusEvents.SpawnEvents.TryGetValue(key, out var list))
+            {
+                return list;
+            }
+            return new List<SpawnEvent>();
+        }
+
+        public List<TargetableEvent> GetTargetableEvents(AgentItem key)
+        {
+            if (_statusEvents.TargetableEvents.TryGetValue(key, out var list))
+            {
+                return list;
+            }
+            return new List<TargetableEvent>();
+        }
+
+        public List<TeamChangeEvent> GetTeamChangeEvents(AgentItem key)
+        {
+            if (_statusEvents.TeamChangeEvents.TryGetValue(key, out var list))
+            {
+                return list;
+            }
+            return new List<TeamChangeEvent>();
+        }
+
+        public List<BuildEvent> GetBuildEvents()
+        {
+            return _metaDataEvents.BuildEvents;
+        }
+
+        public List<LanguageEvent> GetLanguageEvents()
+        {
+            return _metaDataEvents.LanguageEvents;
+        }
+
+        public List<LogStartEvent> GetLogStartEvents()
+        {
+            return _metaDataEvents.LogStartEvents;
+        }
+
+        public List<LogEndEvent> GetLogEndEvents()
+        {
+            return _metaDataEvents.LogEndEvents;
+        }
+
+        public List<MapIDEvent> GetMapIDEvents()
+        {
+            return _metaDataEvents.MapIDEvents;
+        }
+
+        public List<RewardEvent> GetRewardEvents()
+        {
+            return _metaDataEvents.RewardEvents;
+        }
+
+        public List<ShardEvent> GetShardEvents()
+        {
+            return _metaDataEvents.ShardEvents;
         }
 
         public List<AbstractBuffEvent> GetBoonData(long key)
@@ -209,60 +355,6 @@ namespace LuckParser.Models.ParseModels
                 return res;
             }
             return new List<AbstractMovementEvent>();
-        }
-
-        public List<CombatItem> GetStates(ParseEnum.StateChange key)
-        {
-            if (_statesData.TryGetValue(key, out List<CombatItem> res))
-            {
-                return res;
-            }
-            return new List<CombatItem>();
-        }
-
-
-        public void GetAgentStatus(long start, long end, ushort instid, List<(long start, long end)> dead, List<(long start, long end)> down, List<(long start, long end)> dc, long fightStart, long fightEnd)
-        {
-            List<CombatItem> status = GetStatesData(instid, ParseEnum.StateChange.ChangeDown, start, end);
-            status.AddRange(GetStatesData(instid, ParseEnum.StateChange.ChangeUp, start, end));
-            status.AddRange(GetStatesData(instid, ParseEnum.StateChange.ChangeDead, start, end));
-            status.AddRange(GetStatesData(instid, ParseEnum.StateChange.Spawn, start, end));
-            status.AddRange(GetStatesData(instid, ParseEnum.StateChange.Despawn, start, end));
-            status = status.OrderBy(x => x.LogTime).ToList();
-            for (var i = 0; i < status.Count - 1; i++)
-            {
-                CombatItem cur = status[i];
-                CombatItem next = status[i + 1];
-                if (cur.IsStateChange == ParseEnum.StateChange.ChangeDown)
-                {
-                    down.Add((cur.LogTime - fightStart, next.LogTime - fightStart));
-                }
-                else if (cur.IsStateChange == ParseEnum.StateChange.ChangeDead)
-                {
-                    dead.Add((cur.LogTime - fightStart, next.LogTime - fightStart));
-                }
-                else if (cur.IsStateChange == ParseEnum.StateChange.Despawn)
-                {
-                    dc.Add((cur.LogTime - fightStart, next.LogTime - fightStart));
-                }
-            }
-            // check last value
-            if (status.Count > 0)
-            {
-                CombatItem cur = status.Last();
-                if (cur.IsStateChange == ParseEnum.StateChange.ChangeDown)
-                {
-                    down.Add((cur.LogTime - fightStart, fightEnd - fightStart));
-                }
-                else if (cur.IsStateChange == ParseEnum.StateChange.ChangeDead)
-                {
-                    dead.Add((cur.LogTime - fightStart, fightEnd - fightStart));
-                }
-                else if (cur.IsStateChange == ParseEnum.StateChange.Despawn)
-                {
-                    dc.Add((cur.LogTime - fightStart, fightEnd - fightStart));
-                }
-            }
         }
 
     }

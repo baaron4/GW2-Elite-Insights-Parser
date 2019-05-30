@@ -106,7 +106,7 @@ namespace LuckParser.Models.Logic
             {
                 if (NPC.ID == 16286)
                 {
-                    target.Health = 24085950;
+                    target.SetManualHealth(24085950);
                     CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position && x.SrcInstid == NPC.InstID && x.LogTime >= NPC.FirstAwareLogTime + 500 && x.LogTime <= NPC.LastAwareLogTime);
                     if (move != null)
                     {

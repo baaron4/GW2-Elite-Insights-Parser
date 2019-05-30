@@ -95,12 +95,17 @@ namespace LuckParser.Models.Logic
                 AbstractBuffEvent last = invulsTarget.Last();
                 if (!(last is BuffApplyEvent))
                 {
-                    CombatItem lastPlayerExit = combatData.GetStates(ParseEnum.StateChange.ExitCombat).Where(x => pIds.Contains(x.SrcInstid)).LastOrDefault();
-                    CombatItem lastTargetExit = combatData.GetStatesData(mainTarget.InstID, ParseEnum.StateChange.ExitCombat, mainTarget.FirstAwareLogTime, mainTarget.LastAwareLogTime).LastOrDefault();
+                    List<ExitCombatEvent> playerExits = new List<ExitCombatEvent>();
+                    foreach (AgentItem a in playerAgents)
+                    {
+                        playerExits.AddRange(combatData.GetExitCombatEvents(a));
+                    }
+                    ExitCombatEvent lastPlayerExit = playerExits.LastOrDefault();
+                    ExitCombatEvent lastTargetExit = combatData.GetExitCombatEvents(mainTarget.AgentItem).LastOrDefault();
                     AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => (x.Damage > 0) && playerAgents.Contains(x.From));
                     if (lastTargetExit != null && lastDamageTaken != null && lastPlayerExit != null)
                     {
-                        fightData.SetSuccess(lastPlayerExit.LogTime > lastTargetExit.LogTime + 1000, lastDamageTaken.Time);
+                        fightData.SetSuccess(lastPlayerExit.Time > lastTargetExit.Time + 1000, fightData.ToLogSpace(lastDamageTaken.Time));
                     }
                 }
             }

@@ -17,14 +17,14 @@ namespace LuckParser.Models.HtmlModels
         public uint Tough;
         public readonly List<MinionDto> Minions = new List<MinionDto>();
         public double Percent;
-        public int HpLeft;
+        public double HpLeft;
         public ActorDetailsDto Details;
 
         public TargetDto(Target target, ParsedLog log, bool cr, ActorDetailsDto details)
         {
             Name = target.Character;
             Icon = GeneralHelper.GetNPCIcon(target.ID);
-            Health = target.Health;
+            Health = target.GetHealth(log.CombatData);
             HbHeight = target.HitboxHeight;
             HbWidth = target.HitboxWidth;
             Tough = target.Toughness;
@@ -39,12 +39,13 @@ namespace LuckParser.Models.HtmlModels
             }
             else
             {
-                if (target.HealthOverTime.Count > 0)
+                List<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(target.AgentItem);
+                if (hpUpdates.Count > 0)
                 {
-                    HpLeft = target.HealthOverTime[target.HealthOverTime.Count - 1].hp;
+                    HpLeft = hpUpdates.Last().HPPercent;
                 }
             }
-            Percent = Math.Round(100.0 - HpLeft * 0.01, 2);
+            Percent = Math.Round(100.0 - HpLeft, 2);
             foreach (KeyValuePair<string, Minions> pair in target.GetMinions(log))
             {
                 Minions.Add(new MinionDto() { Id = pair.Value.MinionID, Name = pair.Key.TrimEnd(" \0".ToArray()) });

@@ -50,14 +50,13 @@ namespace LuckParser.Models.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            fightData.SetSuccess(true, fightData.FightEnd);
+            fightData.SetSuccess(true, fightData.FightEndLogTime);
         }
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             AgentItem dummyAgent = agentData.AddCustomAgent(combatData.First().LogTime, combatData.Last().LogTime, AgentItem.AgentType.NPC, "WorldVsWorld", "", TriggerID);
             Targets.Add(new Target(dummyAgent));
-            Targets[0].Health = 1;
         }
     }
 }

@@ -60,20 +60,20 @@ namespace LuckParser.Models.Logic
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
-            CombatItem reward = combatData.GetStates(ParseEnum.StateChange.Reward).LastOrDefault();
+            RewardEvent reward = combatData.GetRewardEvents().LastOrDefault();
             AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => (x.Damage > 0) && playerAgents.Contains(x.From));
             if (lastDamageTaken != null)
             {
-                if (reward != null && lastDamageTaken.Time - reward.LogTime < 100)
+                if (reward != null && lastDamageTaken.Time - reward.Time < 100)
                 {
-                    fightData.SetSuccess(true, Math.Min(lastDamageTaken.Time, reward.LogTime));
+                    fightData.SetSuccess(true, fightData.ToLogSpace(Math.Min(lastDamageTaken.Time, reward.Time)));
                 }
                 else
                 {
                     SetSuccessByDeath(combatData, agentData, fightData, true, TriggerID);
                     if (fightData.Success)
                     {
-                        fightData.SetSuccess(true, Math.Min(fightData.FightEnd, lastDamageTaken.Time));
+                        fightData.SetSuccess(true, Math.Min(fightData.FightEndLogTime, fightData.ToLogSpace(lastDamageTaken.Time)));
                     }
                 }
             }

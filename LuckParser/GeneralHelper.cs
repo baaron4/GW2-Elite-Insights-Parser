@@ -104,6 +104,21 @@ namespace LuckParser
             return false;
         }
 
+        public static void Add<T>(Dictionary<AgentItem, List<T>> dict, AgentItem key, T evt)
+        {
+            if (dict.TryGetValue(key, out var list))
+            {
+                list.Add(evt);
+            }
+            else
+            {
+                dict[key] = new List<T>()
+                {
+                    evt
+                };
+            }
+        }
+
         public static bool IsSupportedFormat(string fileName)
         {
             foreach (string format in _supportedFiles)

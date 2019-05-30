@@ -9,11 +9,11 @@ namespace LuckParser.Models.ParseModels
 {
     public class MaxHealthUpdateEvent : AbstractStatusEvent
     {
-        public ulong MaxHealth { get; }
+        public int MaxHealth { get; }
 
         public MaxHealthUpdateEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, agentData, offset)
         {
-            MaxHealth = evtcItem.DstAgent;
+            MaxHealth = (int)evtcItem.DstAgent;
         }
 
     }

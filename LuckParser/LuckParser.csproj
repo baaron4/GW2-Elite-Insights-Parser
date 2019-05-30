@@ -133,6 +133,8 @@
     <Compile Include="Models\ParseModels\EICombatEvents\CastEvents\WeaponSwapEvent.cs" />
     <Compile Include="Models\ParseModels\EICombatEvents\CastEvents\AbstractCastEvent.cs" />
     <Compile Include="Models\ParseModels\EICombatEvents\CastEvents\AnimatedCastEvent.cs" />
+    <Compile Include="Models\ParseModels\EICombatEvents\MetaEventsContainer.cs" />
+    <Compile Include="Models\ParseModels\EICombatEvents\StatusEventsContainer.cs" />
     <Compile Include="Models\ParseModels\EICombatEvents\DamageEvents\NonDirectDamageEvent.cs" />
     <Compile Include="Models\ParseModels\EICombatEvents\DamageEvents\DirectDamageEvent.cs" />
     <Compile Include="Models\ParseModels\EICombatEvents\DamageEvents\AbstractDamageEvent.cs" />
@@ -158,7 +160,7 @@
     <Compile Include="Models\ParseModels\EICombatEvents\StatusEvents\MaxHealthUpdateEvent.cs" />
     <Compile Include="Models\ParseModels\EICombatEvents\StatusEvents\TargetableEvent.cs" />
     <Compile Include="Models\ParseModels\EICombatEvents\StatusEvents\TeamChangeEvent.cs" />
-    <Compile Include="Models\ParseModels\EICombatEvents\StatusEvents\PointOfViewEvent.cs" />
+    <Compile Include="Models\ParseModels\EICombatEvents\MetaDataEvents\PointOfViewEvent.cs" />
     <Compile Include="Models\ParseModels\EICombatEvents\StatusEvents\HealthUpdateEvent.cs" />
     <Compile Include="Models\ParseModels\EICombatEvents\StatusEvents\SpawnEvent.cs" />
     <Compile Include="Models\ParseModels\EICombatEvents\StatusEvents\DespawnEvent.cs" />

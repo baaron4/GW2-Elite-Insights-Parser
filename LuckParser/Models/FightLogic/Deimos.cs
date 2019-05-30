@@ -292,23 +292,6 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override void AddHealthUpdate(ushort instid, long time, long healthTime, int health)
-        {
-            foreach (Target target in Targets)
-            {
-                if (target.InstID == instid && target.FirstAwareLogTime <= time && target.LastAwareLogTime >= time)
-                {
-                    // Additional check because the arm gives a health update of 100%
-                    if (target.HealthOverTime.Count > 0 && target.HealthOverTime.Last().hp < 10000 && health > 9900)
-                    {
-                        break;
-                    }
-                    target.HealthOverTime.Add((healthTime, health));
-                    break;
-                }
-            }
-        }
-
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
@@ -403,8 +386,7 @@ namespace LuckParser.Models.Logic
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
-            OverrideMaxHealths(combatData);
-            return (target.Health > 40e6) ? 1 : 0;
+            return (target.GetHealth(combatData) > 40e6) ? 1 : 0;
         }
     }
 }

@@ -107,17 +107,17 @@ namespace LuckParser.Models.Logic
 
         private List<long> GetTargetableTimes(ParsedLog log, Target target)
         {
-            List<CombatItem> attackTargetsAgents = log.CombatData.GetStates(ParseEnum.StateChange.AttackTarget).Where(x => x.DstAgent == target.Agent).Take(2).ToList(); // 3rd one is weird
+            List<AttackTargetEvent> attackTargetsAgents = log.CombatData.GetAttackTargetEvents(target.AgentItem).Take(2).ToList(); // 3rd one is weird
             List<AgentItem> attackTargets = new List<AgentItem>();
-            foreach (CombatItem c in attackTargetsAgents)
+            foreach (AttackTargetEvent c in attackTargetsAgents)
             {
-                attackTargets.Add(log.AgentData.GetAgent(c.SrcAgent, c.LogTime));
+                attackTargets.Add(c.AttackTarget);
             }
             List<long> targetables = new List<long>();
             foreach (AgentItem attackTarget in attackTargets)
             {
-                var aux = log.CombatData.GetStates(ParseEnum.StateChange.Targetable).Where(x => x.SrcAgent == attackTarget.Agent).ToList();
-                targetables.AddRange(aux.Where(x => x.DstAgent == 1).Select(x => log.FightData.ToFightSpace(x.LogTime)));
+                var aux = log.CombatData.GetTargetableEvents(attackTarget);
+                targetables.AddRange(aux.Where(x => x.Targetable).Select(x => x.Time));
             }
             return targetables;
         }
