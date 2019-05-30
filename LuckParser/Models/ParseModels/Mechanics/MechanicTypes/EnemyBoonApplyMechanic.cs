@@ -29,7 +29,7 @@ namespace LuckParser.Models.ParseModels
             IsEnemyMechanic = true;
         }
 
-        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicLog>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs)
+        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs)
         {
             CombatData combatData = log.CombatData;
             HashSet<AgentItem> playerAgents = log.PlayerAgents;
@@ -67,7 +67,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 if (amp != null)
                 {
-                    mechanicLogs[this].Add(new MechanicLog(c.Time, this, amp));
+                    mechanicLogs[this].Add(new MechanicEvent(c.Time, this, amp));
                 }
             }
         }

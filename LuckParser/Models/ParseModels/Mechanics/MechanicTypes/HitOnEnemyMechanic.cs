@@ -27,10 +27,9 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicLog>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs)
+        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs)
         {
             CombatData combatData = log.CombatData;
-            HashSet<ushort> playersIds = log.PlayerIDs;
             IEnumerable<AgentItem> agents = log.AgentData.GetAgentsByID((ushort)SkillId);
             foreach (AgentItem a in agents)
             {
@@ -45,7 +44,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         if (c.From == p.AgentItem || c.MasterFrom == p.AgentItem )
                         {
-                            mechanicLogs[this].Add(new MechanicLog(c.Time, this, p));
+                            mechanicLogs[this].Add(new MechanicEvent(c.Time, this, p));
                         }
                     }
                 }

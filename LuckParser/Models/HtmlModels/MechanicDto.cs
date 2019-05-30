@@ -21,9 +21,9 @@ namespace LuckParser.Models.HtmlModels
             {
                 long timeFilter = 0;
                 int filterCount = 0;
-                List<MechanicLog> mls = log.MechanicData.GetMechanicLogs(log, mech).Where(x => x.Actor.InstID == actor.InstID && phase.InInterval(x.Time)).ToList();
+                List<MechanicEvent> mls = log.MechanicData.GetMechanicLogs(log, mech).Where(x => x.Actor.InstID == actor.InstID && phase.InInterval(x.Time)).ToList();
                 int count = mls.Count;
-                foreach (MechanicLog ml in mls)
+                foreach (MechanicEvent ml in mls)
                 {
                     if (mech.InternalCooldown != 0 && ml.Time - timeFilter < mech.InternalCooldown)//ICD check
                     {

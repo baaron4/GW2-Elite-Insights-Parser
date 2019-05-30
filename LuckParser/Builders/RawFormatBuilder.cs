@@ -138,7 +138,7 @@ namespace LuckParser.Builders
         private void SetMechanics(JsonLog log)
         {
             MechanicData mechanicData = _log.MechanicData;
-            var mechanicLogs = new List<MechanicLog>();
+            var mechanicLogs = new List<MechanicEvent>();
             foreach (var mLog in mechanicData.GetAllMechanics(_log))
             {
                 mechanicLogs.AddRange(mLog);
@@ -147,7 +147,7 @@ namespace LuckParser.Builders
             {
                 log.Mechanics = new List<JsonMechanics>();
                 Dictionary<string, List<JsonMechanic>> dict = new Dictionary<string, List<JsonMechanic>>();
-                foreach (MechanicLog ml in mechanicLogs)
+                foreach (MechanicEvent ml in mechanicLogs)
                 {
                     JsonMechanic mech = new JsonMechanic
                     {

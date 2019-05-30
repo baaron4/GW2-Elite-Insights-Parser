@@ -186,16 +186,12 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Setters
-        public void SetCM(ParsedEvtcContainer evtcContainer)
+        public void SetCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             if (_isCM == -1)
             {
-                _isCM = Logic.IsCM(evtcContainer);
+                _isCM = Logic.IsCM(combatData, agentData, fightData);
             }
-        }
-        public void CheckSuccess(ParsedEvtcContainer evtcContainer)
-        {
-            Logic.CheckSuccess(evtcContainer);
         }
 
         public void SetSuccess(bool success, long fightEnd)

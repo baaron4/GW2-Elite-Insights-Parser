@@ -51,7 +51,7 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Conditions
-        public List<Boon> GetCondiBoonList()
+        public List<Boon> GetConditionList()
         {
             return BoonsByNature[BoonNature.Condition];
         }

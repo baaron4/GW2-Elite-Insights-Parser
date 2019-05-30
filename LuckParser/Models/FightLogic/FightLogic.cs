@@ -152,9 +152,9 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        protected void OverrideMaxHealths(ParsedEvtcContainer evtcContainer)
+        protected void OverrideMaxHealths(CombatData combatData)
         {
-            List<CombatItem> maxHUs = evtcContainer.CombatData.GetStates(ParseEnum.StateChange.MaxHealthUpdate);
+            List<CombatItem> maxHUs = combatData.GetStates(ParseEnum.StateChange.MaxHealthUpdate);
             if (maxHUs.Count > 0)
             {
                 foreach (Target tar in Targets)
@@ -267,12 +267,12 @@ namespace LuckParser.Models.Logic
             return new List<ParseEnum.TrashIDS>();
         }
 
-        public virtual int IsCM(ParsedEvtcContainer evtcContainer)
+        public virtual int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             return -1;
         }
 
-        protected void SetSuccessByDeath(ParsedEvtcContainer evtcContainer, bool all, ushort idFirst, params ushort[] ids)
+        protected void SetSuccessByDeath(CombatData combatData, AgentData agentData, FightData fightData, bool all, ushort idFirst, params ushort[] ids)
         {
             int success = 0;
             long maxTime = long.MinValue;
@@ -288,7 +288,7 @@ namespace LuckParser.Models.Logic
                 {
                     throw new InvalidOperationException("Main target of the fight not found");
                 }
-                CombatItem killed = evtcContainer.CombatData.GetStatesData(target.InstID, ParseEnum.StateChange.ChangeDead, target.FirstAwareLogTime, target.LastAwareLogTime).LastOrDefault();
+                CombatItem killed = combatData.GetStatesData(target.InstID, ParseEnum.StateChange.ChangeDead, target.FirstAwareLogTime, target.LastAwareLogTime).LastOrDefault();
                 if (killed != null)
                 {
                     success++;
@@ -297,13 +297,13 @@ namespace LuckParser.Models.Logic
             }
             if ((all && success == idsToUse.Count) || (!all && success > 0))
             {
-                evtcContainer.FightData.SetSuccess(true, maxTime);
+                fightData.SetSuccess(true, maxTime);
             }
         }
 
-        public virtual void CheckSuccess(ParsedEvtcContainer evtcContainer)
+        public virtual void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByDeath(evtcContainer, true, TriggerID);
+            SetSuccessByDeath(combatData, agentData, fightData, true, TriggerID);
         }
 
         public virtual void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)

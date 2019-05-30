@@ -27,18 +27,17 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicLog>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs)
+        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs)
         {
             CombatData combatData = log.CombatData;
-            HashSet<ushort> playersIds = log.PlayerIDs;
             foreach (Player p in log.PlayerList)
             {
                 foreach (AbstractBuffEvent c in log.CombatData.GetBoonData(SkillId))
                 {
                     if (c is BuffApplyEvent && p.AgentItem == c.To /*&& Keep(c, log)*/)
                     {
-                        mechanicLogs[this].Add(new MechanicLog(c.Time, this, p));
-                        mechanicLogs[this].Add(new MechanicLog(c.Time, this, log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By)));
+                        mechanicLogs[this].Add(new MechanicEvent(c.Time, this, p));
+                        mechanicLogs[this].Add(new MechanicEvent(c.Time, this, log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By)));
                     }
 
                 }

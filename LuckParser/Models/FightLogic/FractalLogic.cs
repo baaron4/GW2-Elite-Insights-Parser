@@ -52,7 +52,7 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void CheckSuccess(ParsedEvtcContainer evtcContainer)
+        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             // check reward
             Target mainTarget = Targets.Find(x => x.ID == TriggerID);
@@ -60,21 +60,20 @@ namespace LuckParser.Models.Logic
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
-            HashSet<AgentItem> pAgents = evtcContainer.PlayerAgents;
-            CombatItem reward = evtcContainer.CombatData.GetStates(ParseEnum.StateChange.Reward).LastOrDefault();
-            AbstractDamageEvent lastDamageTaken = evtcContainer.CombatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => (x.Damage > 0) && pAgents.Contains(x.From));
+            CombatItem reward = combatData.GetStates(ParseEnum.StateChange.Reward).LastOrDefault();
+            AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => (x.Damage > 0) && playerAgents.Contains(x.From));
             if (lastDamageTaken != null)
             {
                 if (reward != null && lastDamageTaken.Time - reward.LogTime < 100)
                 {
-                    evtcContainer.FightData.SetSuccess(true, Math.Min(lastDamageTaken.Time, reward.LogTime));
+                    fightData.SetSuccess(true, Math.Min(lastDamageTaken.Time, reward.LogTime));
                 }
                 else
                 {
-                    SetSuccessByDeath(evtcContainer, true, TriggerID);
-                    if (evtcContainer.FightData.Success)
+                    SetSuccessByDeath(combatData, agentData, fightData, true, TriggerID);
+                    if (fightData.Success)
                     {
-                        evtcContainer.FightData.SetSuccess(true, Math.Min(evtcContainer.FightData.FightEnd, lastDamageTaken.Time));
+                        fightData.SetSuccess(true, Math.Min(fightData.FightEnd, lastDamageTaken.Time));
                     }
                 }
             }

@@ -47,14 +47,14 @@ namespace LuckParser.Models.Logic
                             (11204, 4414, 13252, 6462));
         }
 
-        public override int IsCM(ParsedEvtcContainer evtcContainer)
+        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Skorvald);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
-            OverrideMaxHealths(evtcContainer);
+            OverrideMaxHealths(combatData);
             return (target.Health == 5551340) ? 1 : 0;
         }
 

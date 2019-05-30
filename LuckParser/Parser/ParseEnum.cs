@@ -85,7 +85,7 @@ namespace LuckParser.Parser
         // State Change    
         public enum StateChange : byte
         {
-            Normal          =  0,
+            None            =  0,
             EnterCombat     =  1,
             ExitCombat      =  2,
             ChangeUp        =  3,
@@ -99,7 +99,7 @@ namespace LuckParser.Parser
             WeaponSwap      = 11,
             MaxHealthUpdate = 12,
             PointOfView     = 13,
-            CBTSLanguage    = 14,
+            Language    = 14,
             GWBuild         = 15,
             ShardId         = 16,
             Reward          = 17,
@@ -400,7 +400,7 @@ namespace LuckParser.Parser
     {
         public static bool IsSpawn(this ParseEnum.StateChange state)
         {
-            return state == ParseEnum.StateChange.Normal || state == ParseEnum.StateChange.Position || state == ParseEnum.StateChange.Velocity || state == ParseEnum.StateChange.Rotation || state == ParseEnum.StateChange.MaxHealthUpdate || state == ParseEnum.StateChange.Spawn || state == ParseEnum.StateChange.TeamChange;
+            return state == ParseEnum.StateChange.None || state == ParseEnum.StateChange.Position || state == ParseEnum.StateChange.Velocity || state == ParseEnum.StateChange.Rotation || state == ParseEnum.StateChange.MaxHealthUpdate || state == ParseEnum.StateChange.Spawn || state == ParseEnum.StateChange.TeamChange;
         }
     }
 

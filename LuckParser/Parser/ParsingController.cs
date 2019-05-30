@@ -21,7 +21,6 @@ namespace LuckParser.Parser
         private readonly GW2APIController _aPIController = new GW2APIController();
 
         //Main data storage after binary parse
-        private LogData _logData;
         private FightData _fightData;
         private AgentData _agentData;
         private readonly List<AgentItem> _allAgentsList = new List<AgentItem>();
@@ -30,6 +29,7 @@ namespace LuckParser.Parser
         private List<Player> _playerList = new List<Player>();
         private byte _revision;
         private ushort _id;
+        private string _buildVersion;
 
         public ParsingController()
         {
@@ -70,7 +70,7 @@ namespace LuckParser.Parser
             {
                 legacyTarget = new Target(GeneralHelper.UnknownAgent);
             }
-            return new ParsedLog(_logData, _fightData, _agentData, _skillData, _combatItems, _playerList, legacyTarget);
+            return new ParsedLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, legacyTarget);
         }
 
         private void ParseLog(GridRow row, Stream stream)
@@ -135,8 +135,7 @@ namespace LuckParser.Parser
             using (var reader = CreateReader(stream))
             {
                 // 12 bytes: arc build version
-                var buildVersion = ParseHelper.GetString(stream, 12);
-                _logData = new LogData(buildVersion);
+                _buildVersion = ParseHelper.GetString(stream, 12);
 
                 // 1 byte: skip
                 _revision = reader.ReadByte();
@@ -185,7 +184,7 @@ namespace LuckParser.Parser
                     // 68 bytes: name
                     string name = ParseHelper.GetString(stream, 68, false);
                     //Save
-                    string agentProf = GeneralHelper.GetAgentProfString(_logData.BuildVersion, _aPIController, prof, isElite);
+                    string agentProf = GeneralHelper.GetAgentProfString(_buildVersion, _aPIController, prof, isElite);
                     AgentItem.AgentType type;
                     ushort ID = 0;
                     switch (agentProf)

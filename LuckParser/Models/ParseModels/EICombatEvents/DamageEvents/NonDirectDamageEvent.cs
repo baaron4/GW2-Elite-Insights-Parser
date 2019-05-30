@@ -9,13 +9,10 @@ namespace LuckParser.Models.ParseModels
 {
     public class NonDirectDamageEvent : AbstractDamageEvent
     {
-        public NonDirectDamageEvent(CombatItem evtcItem, AgentData agentData, BoonsContainer boons, long offset) : base(evtcItem, agentData, offset)
+        private int _isCondi = -1;
+
+        public NonDirectDamageEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, agentData, offset)
         {
-            IsCondi = false;
-            if (boons.BoonsByIds.TryGetValue(evtcItem.SkillID, out Boon boon))
-            {
-                IsCondi = (boon.Nature == Boon.BoonNature.Condition);
-            }
             Damage = evtcItem.BuffDmg;
             ParseEnum.ConditionResult result = ParseEnum.GetConditionResult(evtcItem.Result);
 
@@ -24,6 +21,15 @@ namespace LuckParser.Models.ParseModels
                 result == ParseEnum.ConditionResult.InvulByPlayerSkill2 ||
                 result == ParseEnum.ConditionResult.InvulByPlayerSkill3;
             IsHit = result == ParseEnum.ConditionResult.ExpectedToHit;
+        }
+
+        public override bool IsCondi(ParsedLog log)
+        {
+            if (_isCondi == -1 && log.Boons.BoonsByIds.TryGetValue(SkillId, out Boon b))
+            {
+                _isCondi = b.Nature == Boon.BoonNature.Condition ? 1 : 0;
+            }
+            return _isCondi == 1;
         }
     }
 }

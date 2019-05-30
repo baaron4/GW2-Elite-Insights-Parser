@@ -58,7 +58,7 @@ namespace LuckParser.Models.Logic
             AgentItem sword = agentData.AddCustomAgent(combatData.First().LogTime, combatData.Last().LogTime, AgentItem.AgentType.Player, "Conjured Sword\0:Conjured Sword\050", "Sword", 0);
             foreach(CombatItem c in combatData)
             {
-                if (c.SkillID == 52370 && c.IsStateChange == ParseEnum.StateChange.Normal && c.IsBuffRemove == ParseEnum.BuffRemove.None &&
+                if (c.SkillID == 52370 && c.IsStateChange == ParseEnum.StateChange.None && c.IsBuffRemove == ParseEnum.BuffRemove.None &&
                                         ((c.IsBuff == 1 && c.BuffDmg >= 0 && c.Value == 0) ||
                                         (c.IsBuff == 0 && c.Value >= 0)) && c.DstInstid != 0 && c.IFF == ParseEnum.IFF.Foe)
                 {
@@ -240,14 +240,14 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override int IsCM(ParsedEvtcContainer evtcContainer)
+        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.ConjuredAmalgamate);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
-            return evtcContainer.CombatData.GetBoonData(53075).Count > 0 ? 1 : 0;
+            return combatData.GetBoonData(53075).Count > 0 ? 1 : 0;
         }
     }
 }

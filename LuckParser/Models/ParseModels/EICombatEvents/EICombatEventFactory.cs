@@ -47,6 +47,79 @@ namespace LuckParser.Models.ParseModels
             return res;
         }
 
+        public static void CreateStateChangeEvents(List<CombatItem> stateChangeEvents, List<AbstractMetaDataEvent> metaDataEvents, List<AbstractStatusEvent> statusEvents, AgentData agentData, long offset) 
+        {
+            foreach (CombatItem c in stateChangeEvents)
+            {
+                switch (c.IsStateChange)
+                {
+                    case ParseEnum.StateChange.EnterCombat:
+                        statusEvents.Add(new EnterCombatEvent(c, agentData, offset));
+                        break;
+                    case ParseEnum.StateChange.ExitCombat:
+                        statusEvents.Add(new ExitCombatEvent(c, agentData, offset));
+                        break;
+                    case ParseEnum.StateChange.ChangeUp:
+                        statusEvents.Add(new AliveEvent(c, agentData, offset));
+                        break;
+                    case ParseEnum.StateChange.ChangeDead:
+                        statusEvents.Add(new DeadEvent(c, agentData, offset));
+                        break;
+                    case ParseEnum.StateChange.ChangeDown:
+                        statusEvents.Add(new DownEvent(c, agentData, offset));
+                        break;
+                    case ParseEnum.StateChange.Spawn:
+                        statusEvents.Add(new SpawnEvent(c, agentData, offset));
+                        break;
+                    case ParseEnum.StateChange.Despawn:
+                        statusEvents.Add(new DespawnEvent(c, agentData, offset));
+                        break;
+                    case ParseEnum.StateChange.HealthUpdate:
+                        statusEvents.Add(new HealthUpdateEvent(c, agentData, offset));
+                        break;
+                    case ParseEnum.StateChange.LogStart:
+                        metaDataEvents.Add(new LogStartEvent(c, offset));
+                        break;
+                    case ParseEnum.StateChange.LogEnd:
+                        metaDataEvents.Add(new LogEndEvent(c, offset));
+                        break;
+                    case ParseEnum.StateChange.MaxHealthUpdate:
+                        statusEvents.Add(new MaxHealthUpdateEvent(c, agentData, offset));
+                        break;
+                    case ParseEnum.StateChange.PointOfView:
+                        statusEvents.Add(new PointOfViewEvent(c, agentData, offset));
+                        break;
+                    case ParseEnum.StateChange.Language:
+                        metaDataEvents.Add(new LanguageEvent(c, offset));
+                        break;
+                    case ParseEnum.StateChange.GWBuild:
+                        metaDataEvents.Add(new BuildEvent(c, offset));
+                        break;
+                    case ParseEnum.StateChange.ShardId:
+                        metaDataEvents.Add(new ShardEvent(c, offset));
+                        break;
+                    case ParseEnum.StateChange.Reward:
+                        metaDataEvents.Add(new RewardEvent(c, offset));
+                        break;
+                    case ParseEnum.StateChange.TeamChange:
+                        statusEvents.Add(new TeamChangeEvent(c, agentData, offset));
+                        break;
+                    case ParseEnum.StateChange.AttackTarget:
+                        statusEvents.Add(new AttackTargetEvent(c, agentData, offset));
+                        break;
+                    case ParseEnum.StateChange.Targetable:
+                        statusEvents.Add(new TargetableEvent(c, agentData, offset));
+                        break;
+                    case ParseEnum.StateChange.MapID:
+                        metaDataEvents.Add(new MapIDEvent(c, offset));
+                        break;
+                    case ParseEnum.StateChange.Guild:
+                        statusEvents.Add(new GuildEvent(c, agentData, offset));
+                        break;
+                }
+            }
+        }
+
         public static List<WeaponSwapEvent> CreateWeaponSwapEvents(List<CombatItem> swapEvents, AgentData agentData, long offset)
         {
             List<WeaponSwapEvent> res = new List<WeaponSwapEvent>();
@@ -119,14 +192,14 @@ namespace LuckParser.Models.ParseModels
             return res;
         }
 
-        public static List<AbstractDamageEvent> CreateDamageEvents(List<CombatItem> damageEvents, AgentData agentData, BoonsContainer boons, long offset)
+        public static List<AbstractDamageEvent> CreateDamageEvents(List<CombatItem> damageEvents, AgentData agentData, long offset)
         {
             List<AbstractDamageEvent> res = new List<AbstractDamageEvent>();
             foreach (CombatItem c in damageEvents)
             {
                 if ((c.IsBuff != 0 && c.Value == 0))
                 {
-                    res.Add(new NonDirectDamageEvent(c, agentData, boons, offset));
+                    res.Add(new NonDirectDamageEvent(c, agentData, offset));
                 }
                 else if (c.IsBuff == 0)
                 {

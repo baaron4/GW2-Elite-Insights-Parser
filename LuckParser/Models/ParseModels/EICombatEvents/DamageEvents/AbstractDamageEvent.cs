@@ -23,7 +23,6 @@ namespace LuckParser.Models.ParseModels
         public bool IsFifty { get; }
         public bool IsMoving { get; }
         public bool IsFlanking { get; }
-        public bool IsCondi { get; protected set; }
         public bool IsHit { get; protected set; }
         public bool IsCrit { get; protected set; }
         public bool IsGlance { get; protected set; }
@@ -49,5 +48,7 @@ namespace LuckParser.Models.ParseModels
             IsFlanking = evtcItem.IsFlanking > 0;
             IFF = evtcItem.IFF;
         }
+
+        public abstract bool IsCondi(ParsedLog log);
     }
 }

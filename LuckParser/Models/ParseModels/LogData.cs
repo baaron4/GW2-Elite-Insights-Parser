@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LuckParser.Parser;
+using System;
+using System.Collections.Generic;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -14,19 +16,17 @@ namespace LuckParser.Models.ParseModels
         private readonly string _dateFormat = "yyyy-MM-dd HH:mm:ss zz";
         public string LogStart { get; private set; }
         public string LogEnd { get; private set; }
-        // private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 
         // Constructors
-        public LogData(string buildVersion)
+        public LogData(string buildVersion, CombatData combatData, List<CombatItem> allCombatItems)
         {
             BuildVersion = buildVersion;
             LogStart = DefaultTimeValue;
             LogEnd = DefaultTimeValue;
-           // this.sdf.setTimeZone(TimeZone.getDefault());
         }
         
         // Setters
-        public void SetPOV(AgentItem pov)
+        private void SetPOV(AgentItem pov)
         {
             PoV = pov;
             PoVName = pov.Name.Substring(0, pov.Name.LastIndexOf('\0')).Split(':')[0].TrimEnd('\u0000');
@@ -39,12 +39,12 @@ namespace LuckParser.Models.ParseModels
             return dtDateTime.ToString(_dateFormat);
         }
 
-        public void SetLogStart(long unixSeconds)
+        private void SetLogStart(long unixSeconds)
         {
             LogStart = GetDateTime(unixSeconds);
         }
 
-        public void SetLogEnd(long unixSeconds)
+        private void SetLogEnd(long unixSeconds)
         {
             LogEnd = GetDateTime(unixSeconds);
         }

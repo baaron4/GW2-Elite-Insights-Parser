@@ -218,9 +218,9 @@ namespace LuckParser.Models.Logic
             
         }
 
-        public override int IsCM(ParsedEvtcContainer evtcContainer)
+        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            List<AbstractBuffEvent> necrosis = evtcContainer.CombatData.GetBoonData(47414).Where(x => x is BuffApplyEvent).ToList();
+            List<AbstractBuffEvent> necrosis = combatData.GetBoonData(47414).Where(x => x is BuffApplyEvent).ToList();
             if (necrosis.Count == 0)
             {
                 return 0;

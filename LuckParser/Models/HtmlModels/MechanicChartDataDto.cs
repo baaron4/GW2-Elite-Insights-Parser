@@ -13,7 +13,7 @@ namespace LuckParser.Models.HtmlModels
         public List<List<List<object>>> Points;      
         public bool Visible;
 
-        public static List<List<object>> GetMechanicChartPoints(List<MechanicLog> mechanicLogs,PhaseData phase, ParsedLog log, bool enemyMechanic)
+        public static List<List<object>> GetMechanicChartPoints(List<MechanicEvent> mechanicLogs,PhaseData phase, ParsedLog log, bool enemyMechanic)
         {
             List<List<object>> res = new List<List<object>>();
             if (!enemyMechanic)
@@ -24,7 +24,7 @@ namespace LuckParser.Models.HtmlModels
                     playerIndex.Add(log.PlayerList[p], p);
                     res.Add(new List<object>());
                 }
-                foreach (MechanicLog ml in mechanicLogs.Where(x => phase.InInterval(x.Time)))
+                foreach (MechanicEvent ml in mechanicLogs.Where(x => phase.InInterval(x.Time)))
                 {
                     double time = (ml.Time - phase.Start) / 1000.0;
                     if (playerIndex.TryGetValue(ml.Actor, out int p))
@@ -42,7 +42,7 @@ namespace LuckParser.Models.HtmlModels
                     res.Add(new List<object>());
                 }
                 res.Add(new List<object>());
-                foreach (MechanicLog ml in mechanicLogs.Where(x => phase.InInterval(x.Time)))
+                foreach (MechanicEvent ml in mechanicLogs.Where(x => phase.InInterval(x.Time)))
                 {
                     double time = (ml.Time - phase.Start) / 1000.0;
                     if (targetIndex.TryGetValue(ml.Actor, out int p))

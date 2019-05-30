@@ -48,21 +48,20 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void CheckSuccess(ParsedEvtcContainer evtcContainer)
+        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             Target mainTarget = Targets.Find(x => x.ID == TriggerID);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
-            HashSet<AgentItem> pAgents = evtcContainer.PlayerAgents;
-            int combatExits = evtcContainer.CombatData.GetStatesData(mainTarget.InstID, ParseEnum.StateChange.ExitCombat, mainTarget.FirstAwareLogTime, mainTarget.LastAwareLogTime).Count;
-            AbstractDamageEvent lastDamageTaken = evtcContainer.CombatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => (x.Damage > 0) && pAgents.Contains(x.From));
+            int combatExits = combatData.GetStatesData(mainTarget.InstID, ParseEnum.StateChange.ExitCombat, mainTarget.FirstAwareLogTime, mainTarget.LastAwareLogTime).Count;
+            AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => (x.Damage > 0) && playerAgents.Contains(x.From));
             if (combatExits == 3 && lastDamageTaken != null)
             {
-                CombatItem lastPlayerExit = evtcContainer.CombatData.GetStates(ParseEnum.StateChange.ExitCombat).Where(x => evtcContainer.PlayerIDs.Contains(x.SrcInstid)).LastOrDefault();
-                CombatItem lastTargetExit = evtcContainer.CombatData.GetStatesData(mainTarget.InstID, ParseEnum.StateChange.ExitCombat, mainTarget.FirstAwareLogTime, mainTarget.LastAwareLogTime).LastOrDefault();
-                evtcContainer.FightData.SetSuccess(lastPlayerExit != null && lastTargetExit != null && lastPlayerExit.LogTime - lastTargetExit.LogTime > 1000 ? true : false, lastDamageTaken.Time);
+                CombatItem lastPlayerExit = combatData.GetStates(ParseEnum.StateChange.ExitCombat).Where(x => evtcContainer.PlayerIDs.Contains(x.SrcInstid)).LastOrDefault();
+                CombatItem lastTargetExit = combatData.GetStatesData(mainTarget.InstID, ParseEnum.StateChange.ExitCombat, mainTarget.FirstAwareLogTime, mainTarget.LastAwareLogTime).LastOrDefault();
+                fightData.SetSuccess(lastPlayerExit != null && lastTargetExit != null && lastPlayerExit.LogTime - lastTargetExit.LogTime > 1000 ? true : false, lastDamageTaken.Time);
             }
         }
     }

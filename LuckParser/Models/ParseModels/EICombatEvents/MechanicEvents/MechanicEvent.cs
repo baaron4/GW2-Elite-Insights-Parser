@@ -9,13 +9,18 @@ namespace LuckParser.Models.ParseModels
 {
     public class MechanicEvent : AbstractCombatEvent
     {
-        public AgentItem Src { get; }
-        public Mechanic Mechanic { get; }
+        private readonly Mechanic _mechanic;
+        public DummyActor Actor { get; }
+        public long Skill => _mechanic.SkillId;
+        public string ShortName => _mechanic.ShortName;
+        public string Description => _mechanic.Description;
+        public string InGameName => _mechanic.InGameName;
+        public bool Enemy => _mechanic.IsEnemyMechanic;
 
-        public MechanicEvent(long time, Mechanic mech, AgentItem src) : base(time, 0)
+        public MechanicEvent(long time, Mechanic mech, DummyActor actor) : base(time, 0)
         {
-            Src = src;
-            Mechanic = mech;
+            Actor = actor;
+            _mechanic = mech;
         }
     }
 }

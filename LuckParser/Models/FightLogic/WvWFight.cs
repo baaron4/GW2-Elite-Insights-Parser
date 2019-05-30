@@ -48,9 +48,9 @@ namespace LuckParser.Models.Logic
             return phases;
         }
 
-        public override void CheckSuccess(ParsedEvtcContainer evtcContainer)
+        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            evtcContainer.FightData.SetSuccess(true, evtcContainer.FightData.FightEnd);
+            fightData.SetSuccess(true, fightData.FightEnd);
         }
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)

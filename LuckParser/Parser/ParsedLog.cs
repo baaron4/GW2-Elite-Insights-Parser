@@ -10,34 +10,50 @@ namespace LuckParser.Parser
 {
     public class ParsedLog
     {
-        private readonly ParsedEvtcContainer _container;
         private readonly List<Mob> _auxMobs = new List<Mob>();
 
-        public LogData LogData => _container.LogData;
-        public FightData FightData => _container.FightData;
-        public AgentData AgentData => _container.AgentData;
-        public SkillData SkillData => _container.SkillData;
-        public CombatData CombatData => _container.CombatData;
-        public List<Player> PlayerList => _container.PlayerList;
-        public HashSet<ushort> PlayerIDs => _container.PlayerIDs;
-        public HashSet<AgentItem> PlayerAgents => _container.PlayerAgents;
-        public Dictionary<string, List<Player>> PlayerListBySpec => _container.PlayerListBySpec;
-        public DamageModifiersContainer DamageModifiers => _container.DamageModifiers;
-        public BoonsContainer Boons => _container.Boons;
+        public LogData LogData { get; }
+        public FightData FightData { get; }
+        public AgentData AgentData { get; }
+        public SkillData SkillData { get; }
+        public CombatData CombatData { get; }
+        public List<Player> PlayerList { get; }
+        public HashSet<AgentItem> PlayerAgents { get; }
+        public bool IsBenchmarkMode => FightData.Logic.Mode == FightLogic.ParseMode.Golem;
+        public Dictionary<string, List<Player>> PlayerListBySpec { get; }
+        public DamageModifiersContainer DamageModifiers { get; }
+        public BoonsContainer Boons { get; }
         public bool CanCombatReplay => CombatData.HasMovementData && FightData.Logic.HasCombatReplayMap;
 
-
         public readonly MechanicData MechanicData;
-        public bool IsBenchmarkMode => FightData.Logic.Mode == FightLogic.ParseMode.Golem;
         public readonly Target LegacyTarget;
         public readonly Statistics Statistics;
 
-        public ParsedLog(LogData logData, FightData fightData, AgentData agentData, SkillData skillData, 
+        public ParsedLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData, 
                 List<CombatItem> combatItems, List<Player> playerList, Target target)
         {
-            _container = new ParsedEvtcContainer(logData, fightData, agentData, skillData, combatItems, playerList);
+            FightData = fightData;
+            AgentData = agentData;
+            SkillData = skillData;
+            PlayerList = playerList;
             //
-            FightData.CheckSuccess(_container);
+            PlayerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
+            PlayerAgents = new HashSet<AgentItem>(playerList.Select(x => x.AgentItem));
+            CombatData = new CombatData(combatItems, fightData, agentData, playerList);
+            LogData = new LogData(buildVersion, CombatData, combatItems);
+            //
+            UpdateFightData();
+            //
+            Boons = new BoonsContainer(LogData.GW2Version);
+            DamageModifiers = new DamageModifiersContainer(LogData.GW2Version);
+            MechanicData = FightData.Logic.GetMechanicData();
+            Statistics = new Statistics(CombatData, AgentData, FightData, PlayerList, Boons);
+            LegacyTarget = target;
+        }
+
+        private void UpdateFightData()
+        {
+            FightData.Logic.CheckSuccess(CombatData, AgentData, FightData, PlayerAgents);
             if (FightData.FightDuration <= 2200)
             {
                 throw new TooShortException();
@@ -47,11 +63,7 @@ namespace LuckParser.Parser
                 throw new SkipException();
             }
             CombatData.Update(FightData.FightEnd);
-            FightData.SetCM(_container);
-            //
-            MechanicData = FightData.Logic.GetMechanicData();
-            Statistics = new Statistics(_container);
-            LegacyTarget = target;
+            FightData.SetCM(CombatData, AgentData, FightData);
         }
 
         public AbstractActor FindActor(long logTime, ushort instid)

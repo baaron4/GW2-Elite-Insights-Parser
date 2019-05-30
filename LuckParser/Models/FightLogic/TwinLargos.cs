@@ -325,14 +325,14 @@ namespace LuckParser.Models.Logic
             return "Twin Largos";
         }
 
-        public override int IsCM(ParsedEvtcContainer evtcContainer)
+        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Nikare);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
-            OverrideMaxHealths(evtcContainer);
+            OverrideMaxHealths(combatData);
             return (target.Health > 18e6) ? 1 : 0; //Health of Nikare
         }
     }

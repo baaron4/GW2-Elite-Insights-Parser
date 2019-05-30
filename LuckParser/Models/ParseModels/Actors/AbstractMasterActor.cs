@@ -160,7 +160,7 @@ namespace LuckParser.Models.ParseModels
             final.Dps = (int)Math.Round(dps);
             final.Damage = damage;
             //Condi DPS
-            damage = GetDamageLogs(target, log, phase).Sum(x => x.IsCondi ? x.Damage : 0);
+            damage = GetDamageLogs(target, log, phase).Sum(x => x.IsCondi(log) ? x.Damage : 0);
 
             if (phaseDuration > 0)
             {
@@ -186,7 +186,7 @@ namespace LuckParser.Models.ParseModels
             final.ActorDps = (int)Math.Round(dps);
             final.ActorDamage = damage;
             //Actor Condi DPS
-            damage = GetJustPlayerDamageLogs(target, log, phase).Sum(x => x.IsCondi ? x.Damage : 0);
+            damage = GetJustPlayerDamageLogs(target, log, phase).Sum(x => x.IsCondi(log) ? x.Damage : 0);
 
             if (phaseDuration > 0)
             {

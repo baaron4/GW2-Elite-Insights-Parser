@@ -680,29 +680,29 @@ namespace LuckParser.Builders
         private void CreateMechList(int phaseIndex)
         {
             MechanicData mData = _log.MechanicData;
-            List<MechanicLog> mLogs = new List<MechanicLog>();
-            foreach (List<MechanicLog> mLs in mData.GetAllMechanics(_log))
+            List<MechanicEvent> mLogs = new List<MechanicEvent>();
+            foreach (List<MechanicEvent> mLs in mData.GetAllMechanics(_log))
             {
                 mLogs.AddRange(mLs);
             }
             mLogs = mLogs.OrderBy(x => x.Time).ToList();
             int count = 0;
             WriteCell("Time");
-            foreach (MechanicLog m in mLogs)
+            foreach (MechanicEvent m in mLogs)
             {
                 WriteCell((m.Time / 1000.0).ToString());
             }
             NewLine();
             count++;
             WriteCell("Player");
-            foreach (MechanicLog m in mLogs)
+            foreach (MechanicEvent m in mLogs)
             {
                 WriteCell(m.Actor.Character);
             }
             NewLine();
             count++;
             WriteCell("Mechanic");
-            foreach (MechanicLog m in mLogs)
+            foreach (MechanicEvent m in mLogs)
             {
                 WriteCell("\"" + m.Description + "\"");
             }

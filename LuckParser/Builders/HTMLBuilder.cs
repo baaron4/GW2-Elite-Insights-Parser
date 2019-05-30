@@ -613,7 +613,7 @@ namespace LuckParser.Builders
             List<MechanicChartDataDto> mechanicsChart = new List<MechanicChartDataDto>();
             foreach (Mechanic mech in _log.MechanicData.GetPresentMechanics(_log, 0))
             {
-                List<MechanicLog> mechanicLogs = _log.MechanicData.GetMechanicLogs(_log, mech);
+                List<MechanicEvent> mechanicLogs = _log.MechanicData.GetMechanicLogs(_log, mech);
                 MechanicChartDataDto dto = new MechanicChartDataDto
                 {
                     Color = mech.PlotlySetting.Color,
@@ -627,7 +627,7 @@ namespace LuckParser.Builders
             return mechanicsChart;
         }
 
-        private List<List<List<object>>> BuildMechanicGraphPointData(List<MechanicLog> mechanicLogs, bool enemyMechanic)
+        private List<List<List<object>>> BuildMechanicGraphPointData(List<MechanicEvent> mechanicLogs, bool enemyMechanic)
         {
             List<List<List<object>>> list = new List<List<List<object>>>();
             foreach (PhaseData phase in _phases)

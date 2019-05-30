@@ -7,7 +7,7 @@ namespace LuckParser.Models.ParseModels
 {
     public class CombatData
     {
-        public readonly bool HasMovementData;
+        public bool HasMovementData { get; }
 
         private Dictionary<ParseEnum.StateChange, List<CombatItem>> _statesData;
         //private List<CombatItem> _healingData;
@@ -44,10 +44,10 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, List<Player> players, BoonsContainer boons)
+        public CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, List<Player> players)
         {
             _skillIds = new HashSet<long>(allCombatItems.Select(x => x.SkillID));
-            var noStateActiBuffRem = allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.Normal && x.IsActivation == ParseEnum.Activation.None && x.IsBuffRemove == ParseEnum.BuffRemove.None);
+            var noStateActiBuffRem = allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.None && x.IsActivation == ParseEnum.Activation.None && x.IsBuffRemove == ParseEnum.BuffRemove.None);
             // movement events
             _movementData = fightData.Logic.HasCombatReplayMap
                 ? EICombatEventFactory.CreateMovementEvents(allCombatItems.Where(x =>
@@ -57,6 +57,9 @@ namespace LuckParser.Models.ParseModels
                 : new Dictionary<AgentItem, List<AbstractMovementEvent>>();
             HasMovementData = _movementData.Count > 1;
             // state change events
+            List<AbstractMetaDataEvent> metaDataEvents = new List<AbstractMetaDataEvent>();
+            List<AbstractStatusEvent> statusEvents = new List<AbstractStatusEvent>();
+            EICombatEventFactory.CreateStateChangeEvents(allCombatItems, metaDataEvents, statusEvents, agentData, fightData.FightStart);
             _statesData = allCombatItems.GroupBy(x => x.IsStateChange).ToDictionary(x => x.Key, x => x.ToList());
             // activation events
             List<AnimatedCastEvent> castData = EICombatEventFactory.CreateCastEvents(allCombatItems.Where(x => x.IsActivation != ParseEnum.Activation.None).ToList(), agentData, fightData.FightStart);
@@ -76,7 +79,7 @@ namespace LuckParser.Models.ParseModels
             _boonDataByDst = buffEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             _boonData = buffEvents.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
             // damage events
-            List<AbstractDamageEvent> damageData = EICombatEventFactory.CreateDamageEvents(noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0)).ToList(), agentData, boons, fightData.FightStart);
+            List<AbstractDamageEvent> damageData = EICombatEventFactory.CreateDamageEvents(noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0)).ToList(), agentData, fightData.FightStart);
             _damageData = damageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             _damageTakenData = damageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
 

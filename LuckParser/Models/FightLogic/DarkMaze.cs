@@ -77,7 +77,7 @@ namespace LuckParser.Models.Logic
             return phases;
         }
 
-        private void HPCheck(ParsedEvtcContainer evtcContainer)
+        private void HPCheck(CombatData combatData, AgentData agentData, FightData fightData)
         {
             Target eye1 = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.EyeOfFate);
             Target eye2 = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.EyeOfJudgement);
@@ -113,18 +113,18 @@ namespace LuckParser.Models.Logic
                         break;
                     }
                 }
-                evtcContainer.FightData.SetSuccess(true, Math.Max(eye1.HealthOverTime[lastIEye1].logTime, eye2.HealthOverTime[lastIEye2].logTime));
+                fightData.SetSuccess(true, Math.Max(eye1.HealthOverTime[lastIEye1].logTime, eye2.HealthOverTime[lastIEye2].logTime));
             }
         }
 
-        public override void CheckSuccess(ParsedEvtcContainer evtcContainer)
+        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             // First check using hp, best
-            HPCheck(evtcContainer);
+            HPCheck(combatData, agentData, fightData);
             // hp could be unreliable or missing, fall back (around 200 ms more)
-            if (!evtcContainer.FightData.Success)
+            if (!fightData.Success)
             {
-                SetSuccessByDeath(evtcContainer, false, (ushort)ParseEnum.TargetIDS.EyeOfFate, (ushort)ParseEnum.TargetIDS.EyeOfJudgement);
+                SetSuccessByDeath(combatData, agentData, fightData, false, (ushort)ParseEnum.TargetIDS.EyeOfFate, (ushort)ParseEnum.TargetIDS.EyeOfJudgement);
             }
         }
 

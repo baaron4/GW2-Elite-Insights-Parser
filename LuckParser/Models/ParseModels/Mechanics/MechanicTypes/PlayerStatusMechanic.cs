@@ -20,10 +20,9 @@ namespace LuckParser.Models.ParseModels
             ShowOnTable = false;
         }
 
-        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicLog>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs)
+        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs)
         {
             CombatData combatData = log.CombatData;
-            HashSet<ushort> playersIds = log.PlayerIDs;
             foreach (Player p in log.PlayerList)
             {
                 List<long> cList = new List<long>();
@@ -55,7 +54,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 foreach (long time in cList)
                 {
-                    mechanicLogs[this].Add(new MechanicLog(time, this, p));
+                    mechanicLogs[this].Add(new MechanicEvent(time, this, p));
                 }
             }
         }

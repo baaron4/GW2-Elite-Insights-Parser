@@ -128,7 +128,7 @@ namespace LuckParser.Models.Logic
                         string[] names = targetAgent.Name.Split('-');
                         if (ushort.TryParse(names[2], out ushort masterInstid))
                         {
-                            CombatItem structDeimosDamageEvent = combatData.FirstOrDefault(x => x.LogTime >= firstAware && x.IFF == ParseEnum.IFF.Foe && x.DstInstid == masterInstid && x.IsStateChange == ParseEnum.StateChange.Normal && x.IsBuffRemove == ParseEnum.BuffRemove.None &&
+                            CombatItem structDeimosDamageEvent = combatData.FirstOrDefault(x => x.LogTime >= firstAware && x.IFF == ParseEnum.IFF.Foe && x.DstInstid == masterInstid && x.IsStateChange == ParseEnum.StateChange.None && x.IsBuffRemove == ParseEnum.BuffRemove.None &&
                                     ((x.IsBuff == 1 && x.BuffDmg >= 0 && x.Value == 0) ||
                                     (x.IsBuff == 0 && x.Value >= 0)));
                             if (structDeimosDamageEvent != null)
@@ -396,14 +396,14 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override int IsCM(ParsedEvtcContainer evtcContainer)
+        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Deimos);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
-            OverrideMaxHealths(evtcContainer);
+            OverrideMaxHealths(combatData);
             return (target.Health > 40e6) ? 1 : 0;
         }
     }
