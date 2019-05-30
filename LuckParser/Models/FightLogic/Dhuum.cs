@@ -329,7 +329,8 @@ namespace LuckParser.Models.Logic
             foreach (AbstractBuffEvent c in spiritTransform)
             {
                 int duration = 15000;
-                if (log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem).FirstOrDefault(x => x.Time > c.Time).HPPercent < 10.50)
+                HealthUpdateEvent hpUpdate = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem).FirstOrDefault(x => x.Time > c.Time);
+                if (hpUpdate != null && hpUpdate.HPPercent < 10.50)
                 {
                     duration = 30000;
                 }
