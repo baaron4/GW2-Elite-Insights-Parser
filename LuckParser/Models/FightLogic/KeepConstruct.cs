@@ -60,17 +60,17 @@ namespace LuckParser.Models.Logic
                 return phases;
             }
             // Main phases 35025
-            List<CombatItem> kcPhaseInvuls = GetFilteredList(log.CombatData, 35025, mainTarget, true);
-            foreach (CombatItem c in kcPhaseInvuls)
+            List<AbstractBuffEvent> kcPhaseInvuls = GetFilteredList(log.CombatData, 35025, mainTarget, true);
+            foreach (AbstractBuffEvent c in kcPhaseInvuls)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    end = log.FightData.ToFightSpace(c.Time);
+                    end = c.Time;
                     phases.Add(new PhaseData(start, end));
                 } 
                 else
                 {
-                    start = log.FightData.ToFightSpace(c.Time);
+                    start = c.Time;
                 }
             }
             if (fightDuration - start > 5000 && start >= phases.Last().End)
@@ -86,24 +86,24 @@ namespace LuckParser.Models.Logic
             }
             // add burn phases
             int offset = phases.Count;
-            List<CombatItem> orbItems = log.CombatData.GetBoonData(35096).Where(x => x.DstInstid == mainTarget.InstID).ToList();
+            List<AbstractBuffEvent> orbItems = log.CombatData.GetBoonData(35096).Where(x => x.To == mainTarget.AgentItem).ToList();
             // Get number of orbs and filter the list
             start = 0;
             int orbCount = 0;
             List<BoonsGraphModel.Segment> segments = new List<BoonsGraphModel.Segment>();
-            foreach (CombatItem c in orbItems)
+            foreach (AbstractBuffEvent c in orbItems)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
                     if (start == 0)
                     {
-                        start = log.FightData.ToFightSpace(c.Time);
+                        start = c.Time;
                     }
                     orbCount++;
                 }
                 else if (start != 0)
                 {
-                    segments.Add(new BoonsGraphModel.Segment(start, Math.Min(log.FightData.ToFightSpace(c.Time), fightDuration), orbCount));
+                    segments.Add(new BoonsGraphModel.Segment(start, Math.Min(c.Time, fightDuration), orbCount));
                     orbCount = 0;
                     start = 0;
                 }
@@ -122,12 +122,12 @@ namespace LuckParser.Models.Logic
             // pre burn phases
             int preBurnCount = 1;
             List<PhaseData> preBurnPhase = new List<PhaseData>();
-            List<CombatItem> kcInvuls = GetFilteredList(log.CombatData, 762, mainTarget, true);
-            foreach (CombatItem invul in kcInvuls)
+            List<AbstractBuffEvent> kcInvuls = GetFilteredList(log.CombatData, 762, mainTarget, true);
+            foreach (AbstractBuffEvent invul in kcInvuls)
             {
-                if (invul.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (invul is BuffApplyEvent)
                 {
-                    end = log.FightData.ToFightSpace(invul.Time);
+                    end = invul.Time;
                     PhaseData prevPhase = phases.LastOrDefault(x => x.Start <= end || x.End <= end);
                     if (prevPhase != null)
                     {
@@ -247,17 +247,17 @@ namespace LuckParser.Models.Logic
             {
                 case (ushort)ParseEnum.TargetIDS.KeepConstruct:
 
-                    List<CombatItem> kcOrbCollect = GetFilteredList(log.CombatData, 35025, target, true);
+                    List<AbstractBuffEvent> kcOrbCollect = GetFilteredList(log.CombatData, 35025, target, true);
                     int kcOrbStart = 0 , kcOrbEnd = 0;
-                    foreach (CombatItem c in kcOrbCollect)
+                    foreach (AbstractBuffEvent c in kcOrbCollect)
                     {
-                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                        if (c is BuffApplyEvent)
                         {
-                            kcOrbStart = (int)log.FightData.ToFightSpace(c.Time);
+                            kcOrbStart = (int)c.Time;
                         }
                         else
                         {
-                            kcOrbEnd = (int)log.FightData.ToFightSpace(c.Time);
+                            kcOrbEnd = (int)c.Time;
                             replay.Actors.Add(new CircleActor(false, 0, 300, (kcOrbStart, kcOrbEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                             replay.Actors.Add(new CircleActor(true, kcOrbEnd, 300, (kcOrbStart, kcOrbEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                         }
@@ -351,7 +351,7 @@ namespace LuckParser.Models.Logic
                     {
                         if (phantasmsID.Contains(m.ID))
                         {
-                            int start = (int)log.FightData.ToFightSpace(m.FirstAware);
+                            int start = (int)log.FightData.ToFightSpace(m.FirstAwareLogTime);
                             Point3D pos = m.GetCombatReplayPositions(log).FirstOrDefault();
                             if (pos != null)
                             {
@@ -370,36 +370,36 @@ namespace LuckParser.Models.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // Bombs
-            List<CombatItem> xeraFury = GetFilteredList(log.CombatData, 35103, p, true);
+            List<AbstractBuffEvent> xeraFury = GetFilteredList(log.CombatData, 35103, p, true);
             int xeraFuryStart = 0;
-            foreach (CombatItem c in xeraFury)
+            foreach (AbstractBuffEvent c in xeraFury)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    xeraFuryStart = (int)(log.FightData.ToFightSpace(c.Time));
+                    xeraFuryStart = (int)c.Time;
                 }
                 else
                 {
-                    int xeraFuryEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int xeraFuryEnd = (int)c.Time;
                     replay.Actors.Add(new CircleActor(true, 0, 550, (xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.2)", new AgentConnector(p)));
                     replay.Actors.Add(new CircleActor(true, xeraFuryEnd, 550, (xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.4)", new AgentConnector(p)));
                 }
 
             }
             //fixated Statue
-            List<CombatItem> fixatedStatue = GetFilteredList(log.CombatData, 34912, p, true).Concat(GetFilteredList(log.CombatData, 34925, p, true)).ToList();
+            List<AbstractBuffEvent> fixatedStatue = GetFilteredList(log.CombatData, 34912, p, true).Concat(GetFilteredList(log.CombatData, 34925, p, true)).ToList();
             int fixationStatueStart = 0;
             Mob statue = null;
-            foreach (CombatItem c in fixatedStatue)
+            foreach (AbstractBuffEvent c in fixatedStatue)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    fixationStatueStart = (int)(log.FightData.ToFightSpace(c.Time));
-                    statue = TrashMobs.FirstOrDefault(x => x.Agent == c.SrcAgent);
+                    fixationStatueStart = (int)c.Time;
+                    statue = TrashMobs.FirstOrDefault(x => x.AgentItem == c.By);
                 }
                 else
                 {
-                    int fixationStatueEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int fixationStatueEnd = (int)c.Time;
                     if (statue != null)
                     {
                         replay.Actors.Add(new LineActor(0, (fixationStatueStart, fixationStatueEnd), "rgba(255, 0, 255, 0.5)", new AgentConnector(p), new AgentConnector(statue)));

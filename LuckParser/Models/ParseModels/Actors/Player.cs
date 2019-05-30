@@ -179,7 +179,7 @@ namespace LuckParser.Models.ParseModels
             // (x - 1) / x
             foreach (AbstractDamageEvent dl in dls)
             {
-                if (!dl.IsIndirectDamage)
+                if (!(dl is NonDirectDamageEvent))
                 {
                     foreach (var pair in targetsFinal)
                     {
@@ -379,15 +379,15 @@ namespace LuckParser.Models.ParseModels
             List<(long start, long end)> dead = new List<(long start, long end)>();
             List<(long start, long end)> down = new List<(long start, long end)>();
             List<(long start, long end)> dc = new List<(long start, long end)>();
-            log.CombatData.GetAgentStatus(FirstAware, LastAware, InstID, dead, down, dc, log.FightData.FightStart, log.FightData.FightEnd);
+            log.CombatData.GetAgentStatus(FirstAwareLogTime, LastAwareLogTime, InstID, dead, down, dc, log.FightData.FightStart, log.FightData.FightEnd);
             _defenses = new List<FinalDefenses>();
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
                 FinalDefenses final = new FinalDefenses();
                 _defenses.Add(final);
-                long start = log.FightData.ToLogSpace(phase.Start);
-                long end = log.FightData.ToLogSpace(phase.End);
-                List<AbstractDamageEvent> damageLogs = GetDamageTakenLogs(null, log, phase.Start, phase.End);
+                long start = phase.Start;
+                long end = phase.End;
+                List<AbstractDamageEvent> damageLogs = GetDamageTakenLogs(null, log, start, end);
                 //List<DamageLog> healingLogs = player.getHealingReceivedLogs(log, phase.getStart(), phase.getEnd());
 
                 final.DamageTaken = damageLogs.Sum(x => (long)x.Damage);
@@ -405,10 +405,7 @@ namespace LuckParser.Models.ParseModels
                     final.DamageInvulned += dl.Damage;
                 }
 
-                //
-                start = phase.Start;
-				end = phase.End;
-				
+                //		
                 final.DownCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DownId).Count(x => x.Actor == this && x.Time >= start && x.Time <= end);
                 final.DeadCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DeathId).Count(x => x.Actor == this && x.Time >= start && x.Time <= end);
                 final.DcCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DCId).Count(x => x.Actor == this && x.Time >= start && x.Time <= end);
@@ -753,12 +750,12 @@ namespace LuckParser.Models.ParseModels
             {
                 DeathRecap recap = new DeathRecap()
                 {
-                    DeathTime = (int)(log.FightData.ToFightSpace(dead.Time))
+                    DeathTime = (int)(log.FightData.ToFightSpace(dead.LogTime))
                 };
-                CombatItem downed = downs.LastOrDefault(x => x.Time <= dead.Time && x.Time >= lastTime);
+                CombatItem downed = downs.LastOrDefault(x => x.LogTime <= dead.LogTime && x.LogTime >= lastTime);
                 if (downed != null)
                 {
-                    List<AbstractDamageEvent> damageToDown = damageLogs.Where(x => x.Time < log.FightData.ToFightSpace(downed.Time) && x.Damage > 0 && x.Time > log.FightData.ToFightSpace(lastTime)).ToList();
+                    List<AbstractDamageEvent> damageToDown = damageLogs.Where(x => x.Time < log.FightData.ToFightSpace(downed.LogTime) && x.Damage > 0 && x.Time > log.FightData.ToFightSpace(lastTime)).ToList();
                     recap.ToDown = damageToDown.Count > 0 ? new List<DeathRecap.DeathRecapDamageItem>() : null;
                     int damage = 0;
                     for (int i = damageToDown.Count - 1; i >= 0; i--)
@@ -768,7 +765,7 @@ namespace LuckParser.Models.ParseModels
                         DeathRecap.DeathRecapDamageItem item = new DeathRecap.DeathRecapDamageItem()
                         {
                             Time = (int)dl.Time,
-                            IndirectDamage = dl.IsIndirectDamage,
+                            IndirectDamage = dl is NonDirectDamageEvent,
                             ID = dl.SkillId,
                             Damage = dl.Damage,
                             Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
@@ -780,7 +777,7 @@ namespace LuckParser.Models.ParseModels
                             break;
                         }
                     }
-                    List<AbstractDamageEvent> damageToKill = damageLogs.Where(x => x.Time > log.FightData.ToFightSpace(downed.Time) && x.Time < log.FightData.ToFightSpace(dead.Time) && x.Damage > 0 && x.Time > log.FightData.ToFightSpace(lastTime)).ToList();
+                    List<AbstractDamageEvent> damageToKill = damageLogs.Where(x => x.Time > log.FightData.ToFightSpace(downed.LogTime) && x.Time < log.FightData.ToFightSpace(dead.LogTime) && x.Damage > 0 && x.Time > log.FightData.ToFightSpace(lastTime)).ToList();
                     recap.ToKill = damageToKill.Count > 0 ? new List<DeathRecap.DeathRecapDamageItem>() : null;
                     for (int i = damageToKill.Count - 1; i >= 0; i--)
                     {
@@ -789,7 +786,7 @@ namespace LuckParser.Models.ParseModels
                         DeathRecap.DeathRecapDamageItem item = new DeathRecap.DeathRecapDamageItem()
                         {
                             Time = (int)dl.Time,
-                            IndirectDamage = dl.IsIndirectDamage,
+                            IndirectDamage = dl is NonDirectDamageEvent,
                             ID = dl.SkillId,
                             Damage = dl.Damage,
                             Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
@@ -800,7 +797,7 @@ namespace LuckParser.Models.ParseModels
                 else
                 {
                     recap.ToDown = null;
-                    List<AbstractDamageEvent> damageToKill = damageLogs.Where(x => x.Time < log.FightData.ToFightSpace(dead.Time) && x.Damage > 0 && x.Time > log.FightData.ToFightSpace(lastTime)).ToList();
+                    List<AbstractDamageEvent> damageToKill = damageLogs.Where(x => x.Time < log.FightData.ToFightSpace(dead.LogTime) && x.Damage > 0 && x.Time > log.FightData.ToFightSpace(lastTime)).ToList();
                     recap.ToKill = damageToKill.Count > 0 ? new List<DeathRecap.DeathRecapDamageItem>() : null;
                     int damage = 0;
                     for (int i = damageToKill.Count - 1; i >= 0; i--)
@@ -810,7 +807,7 @@ namespace LuckParser.Models.ParseModels
                         DeathRecap.DeathRecapDamageItem item = new DeathRecap.DeathRecapDamageItem()
                         {
                             Time = (int)dl.Time,
-                            IndirectDamage = dl.IsIndirectDamage,
+                            IndirectDamage = dl is NonDirectDamageEvent,
                             ID = dl.SkillId,
                             Damage = dl.Damage,
                             Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
@@ -823,7 +820,7 @@ namespace LuckParser.Models.ParseModels
                         }
                     }
                 }
-                lastTime = dead.Time;
+                lastTime = dead.LogTime;
                 res.Add(recap);
             }
         }
@@ -880,17 +877,13 @@ namespace LuckParser.Models.ParseModels
             long fightDuration = log.FightData.FightDuration;
             foreach (Boon consumable in consumableList)
             {
-                foreach (CombatItem c in log.CombatData.GetBoonData(consumable.ID))
+                foreach (AbstractBuffEvent c in log.CombatData.GetBoonData(consumable.ID))
                 {
-                    if (c.IsBuffRemove != ParseEnum.BuffRemove.None || (c.IsBuff != 18 && c.IsBuff != 1) || AgentItem.InstID != c.DstInstid)
+                    if (!(c is BuffApplyEvent) ||  AgentItem != c.To)
                     {
                         continue;
                     }
-                    long time = 0;
-                    if (c.IsBuff != 18)
-                    {
-                        time = log.FightData.ToFightSpace(c.Time);
-                    }
+                    long time = Math.Max(c.Time, 0);
                     if (time <= fightDuration)
                     {
                         Consumable existing = _consumeList.Find(x => x.Time == time && x.Buff.ID == consumable.ID);
@@ -993,7 +986,7 @@ namespace LuckParser.Models.ParseModels
             List<(long, long)> dead = CombatReplay.Deads;
             List<(long, long)> down = CombatReplay.Downs;
             List<(long, long)> dc = CombatReplay.DCs;
-            log.CombatData.GetAgentStatus(FirstAware, LastAware, InstID, dead, down, dc, log.FightData.FightStart, log.FightData.FightEnd);
+            log.CombatData.GetAgentStatus(FirstAwareLogTime, LastAwareLogTime, InstID, dead, down, dc, log.FightData.FightStart, log.FightData.FightEnd);
             CombatReplay.PollingRate(log.FightData.FightDuration, true);
         }
 

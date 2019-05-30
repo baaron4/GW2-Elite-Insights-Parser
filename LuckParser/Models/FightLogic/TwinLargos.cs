@@ -56,16 +56,16 @@ namespace LuckParser.Models.Logic
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> targetPhases = new List<PhaseData>();
-            List<CombatItem> states = log.CombatData.GetStatesData(target.InstID, ParseEnum.StateChange.EnterCombat, target.FirstAware, target.LastAware);
-            states.AddRange(GetFilteredList(log.CombatData, 762, target, true).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None));
-            states.AddRange(log.CombatData.GetStatesData(target.InstID, ParseEnum.StateChange.ChangeDead, target.FirstAware, target.LastAware));
-            states.Sort((x, y) => x.Time.CompareTo(y.Time));
+            List<CombatItem> states = log.CombatData.GetStatesData(target.InstID, ParseEnum.StateChange.EnterCombat, target.FirstAwareLogTime, target.LastAwareLogTime);
+            states.AddRange(GetFilteredList(log.CombatData, 762, target, true).Where(x => x is BuffApplyEvent));
+            states.AddRange(log.CombatData.GetStatesData(target.InstID, ParseEnum.StateChange.ChangeDead, target.FirstAwareLogTime, target.LastAwareLogTime));
+            states.Sort((x, y) => x.LogTime.CompareTo(y.LogTime));
             for (int i = 0; i < states.Count; i++)
             {
                 CombatItem state = states[i];
                 if (state.IsStateChange == ParseEnum.StateChange.EnterCombat)
                 {
-                    start = log.FightData.ToFightSpace(state.Time);
+                    start = log.FightData.ToFightSpace(state.LogTime);
                     if (i == states.Count - 1)
                     {
                         targetPhases.Add(new PhaseData(start, fightDuration));
@@ -73,7 +73,7 @@ namespace LuckParser.Models.Logic
                 }
                 else
                 {
-                    end = Math.Min(log.FightData.ToFightSpace(state.Time), fightDuration);
+                    end = Math.Min(log.FightData.ToFightSpace(state.LogTime), fightDuration);
                     targetPhases.Add(new PhaseData(start, end));
                     if (i == states.Count - 1 && targetPhases.Count < 3)
                     {
@@ -115,7 +115,7 @@ namespace LuckParser.Models.Logic
                             AbstractDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p1.End + 2000 && (pAgents.Contains(x.From) || pAgents.Contains(x.MasterFrom)) && x.Damage> 0);
                             if (hit != null)
                             {
-                                p2.OverrideStart(log.FightData.ToFightSpace(hit.Time));
+                                p2.OverrideStart(hit.Time);
                             }
                             else
                             {
@@ -135,7 +135,7 @@ namespace LuckParser.Models.Logic
                             AbstractDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p1.End + 2000 && (pAgents.Contains(x.From) || pAgents.Contains(x.MasterFrom)) && x.Damage > 0);
                             if (hit != null)
                             {
-                                p2.OverrideStart(log.FightData.ToFightSpace(hit.Time));
+                                p2.OverrideStart(hit.Time);
                             }
                             else
                             {
@@ -148,7 +148,7 @@ namespace LuckParser.Models.Logic
                             AbstractDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p2.End + 2000 && (pAgents.Contains(x.From) || pAgents.Contains(x.MasterFrom)) && x.Damage > 0);
                             if (hit != null)
                             {
-                                p3.OverrideStart(log.FightData.ToFightSpace(hit.Time));
+                                p3.OverrideStart(hit.Time);
                             }
                             else
                             {
@@ -166,7 +166,7 @@ namespace LuckParser.Models.Logic
                 AbstractDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= log.FightData.FightStart && (pAgents.Contains(x.From) || pAgents.Contains(x.MasterFrom)) && x.Damage > 0);
                 if (hit != null)
                 {
-                    p1.OverrideStart(log.FightData.ToFightSpace(hit.Time));
+                    p1.OverrideStart(hit.Time);
                 }
             } 
         }
@@ -276,21 +276,21 @@ namespace LuckParser.Models.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // Water "Poison Bomb"
-            List<CombatItem> waterToDrop = GetFilteredList(log.CombatData, 53097, p, true);
+            List<AbstractBuffEvent> waterToDrop = GetFilteredList(log.CombatData, 53097, p, true);
             int toDropStart = 0;
-            foreach (CombatItem c in waterToDrop)
+            foreach (AbstractBuffEvent c in waterToDrop)
             {
                 int timer = 5000;
                 int duration = 83000;
                 int debuffRadius = 100;
                 int radius = 500;
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    toDropStart = (int)(log.FightData.ToFightSpace(c.Time));
+                    toDropStart = (int)c.Time;
                 }
                 else
                 {
-                    int toDropEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int toDropEnd = (int)c.Time;
                     replay.Actors.Add(new CircleActor(false, 0, debuffRadius, (toDropStart, toDropEnd), "rgba(255, 100, 0, 0.4)", new AgentConnector(p)));
                     replay.Actors.Add(new CircleActor(true, toDropStart + timer, debuffRadius, (toDropStart, toDropEnd), "rgba(255, 100, 0, 0.4)", new AgentConnector(p)));
                     Point3D poisonNextPos = replay.Positions.FirstOrDefault(x => x.Time >= toDropEnd);
@@ -303,18 +303,18 @@ namespace LuckParser.Models.Logic
                 }
             }
             // Bubble (Aquatic Detainment)
-            List<CombatItem> bubble = GetFilteredList(log.CombatData, 51755, p, true);
+            List<AbstractBuffEvent> bubble = GetFilteredList(log.CombatData, 51755, p, true);
             int bubbleStart = 0;
-            foreach (CombatItem c in bubble)
+            foreach (AbstractBuffEvent c in bubble)
             {
                 int radius = 100;
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    bubbleStart = Math.Max((int)(log.FightData.ToFightSpace(c.Time)), 0);
+                    bubbleStart = Math.Max((int)c.Time, 0);
                 }
                 else
                 {
-                    int bubbleEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int bubbleEnd = (int)c.Time;
                     replay.Actors.Add(new CircleActor(true, 0, radius, (bubbleStart, bubbleEnd), "rgba(0, 200, 255, 0.3)", new AgentConnector(p)));
                 }
             }

@@ -32,28 +32,28 @@ namespace LuckParser.Models.ParseModels
         public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicLog>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs)
         {
             CombatData combatData = log.CombatData;
-            HashSet<ushort> playersIds = log.PlayerIDs;
-            foreach (CombatItem c in log.CombatData.GetBoonData(SkillId))
+            HashSet<AgentItem> playerAgents = log.PlayerAgents;
+            foreach (AbstractBuffEvent c in log.CombatData.GetBoonData(SkillId))
             {
                 DummyActor amp = null;
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None && Keep(c, log))
+                if (c is BuffApplyEvent /*&& Keep(c, log)*/)
                 {
-                    Target target = log.FightData.Logic.Targets.Find(x => x.InstID == c.DstInstid && x.FirstAware <= c.Time && x.LastAware >= c.Time);
+                    Target target = log.FightData.Logic.Targets.Find(x => x.AgentItem == c.To);
                     if (target != null)
                     {
                         amp = target;
                     }
                     else
                     {
-                        AgentItem a = log.AgentData.GetAgent(c.DstAgent, c.Time);
-                        if (playersIds.Contains(a.InstID))
+                        AgentItem a = c.To;
+                        if (playerAgents.Contains(a))
                         {
                             continue;
                         }
                         else if (a.MasterAgent != null)
                         {
                             AgentItem m = a.MasterAgent;
-                            if (playersIds.Contains(m.InstID))
+                            if (playerAgents.Contains(m))
                             {
                                 continue;
                             }
@@ -67,7 +67,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 if (amp != null)
                 {
-                    mechanicLogs[this].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), this, amp));
+                    mechanicLogs[this].Add(new MechanicLog(c.Time, this, amp));
                 }
             }
         }

@@ -4,13 +4,13 @@ namespace LuckParser.Parser
 {
     public class CombatItem
     {
-        public long Time { get; private set; }
+        public long LogTime { get; private set; }
         public ulong SrcAgent { get; private set; }
         public ulong DstAgent { get; private set; }
         public int Value { get; private set; }
-        public int BuffDmg { get; private set; }
+        public int BuffDmg { get; }
         public uint OverstackValue { get; }
-        public long SkillID { get; private set; }
+        public long SkillID { get; }
         public ushort SrcInstid { get; private set; }
         public ushort DstInstid { get; private set; }
         public ushort SrcMasterInstid { get; private set; }
@@ -36,7 +36,7 @@ namespace LuckParser.Parser
                ParseEnum.BuffRemove isBuffRemove, byte isNinety, byte isFifty, byte isMoving,
                ParseEnum.StateChange isStateChange, byte isFlanking, byte isShields, byte isOffcycle)
         {
-            Time = time;
+            LogTime = time;
             SrcAgent = srcAgent;
             DstAgent = dstAgent;
             Value = value;
@@ -63,12 +63,7 @@ namespace LuckParser.Parser
 
         public void OverrideTime(long time)
         {
-            Time = time;
-        }
-
-        public void OverrideSkillID(long skillID)
-        {
-            SkillID = skillID;
+            LogTime = time;
         }
 
         public void OverrideSrcValues(ulong agent, ushort instid)
@@ -100,11 +95,6 @@ namespace LuckParser.Parser
         public void OverrideValue(int value)
         {
             Value = value;
-        }
-
-        public void OverrideBuffDmg(int buffDmg)
-        {
-            BuffDmg = buffDmg;
         }
     }
 }

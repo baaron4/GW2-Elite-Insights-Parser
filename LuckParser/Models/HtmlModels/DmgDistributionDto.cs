@@ -26,7 +26,7 @@ namespace LuckParser.Models.HtmlModels
                 {
                     continue;
                 }
-                IsIndirectDamage = dl.IsIndirectDamage;
+                IsIndirectDamage = dl is NonDirectDamageEvent;
                 int curdmg = dl.Damage;
                 totaldamage += curdmg;
                 if (curdmg < mindamage) { mindamage = curdmg; }

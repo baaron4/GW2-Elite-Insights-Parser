@@ -55,7 +55,7 @@ namespace LuckParser.Models.Logic
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem dummyAgent = agentData.AddCustomAgent(combatData.First().Time, combatData.Last().Time, AgentItem.AgentType.NPC, "WorldVsWorld", "", TriggerID);
+            AgentItem dummyAgent = agentData.AddCustomAgent(combatData.First().LogTime, combatData.Last().LogTime, AgentItem.AgentType.NPC, "WorldVsWorld", "", TriggerID);
             Targets.Add(new Target(dummyAgent));
             Targets[0].Health = 1;
         }

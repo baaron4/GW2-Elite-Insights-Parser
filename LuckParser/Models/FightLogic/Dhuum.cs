@@ -131,10 +131,10 @@ namespace LuckParser.Models.Logic
             }
             else
             {
-                CombatItem invulDhuum = log.CombatData.GetBoonData(762).FirstOrDefault(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SrcInstid == mainTarget.InstID && x.Time > 115000 + log.FightData.FightStart);
+                AbstractBuffEvent invulDhuum = log.CombatData.GetBoonData(762).FirstOrDefault(x => x is BuffApplyEvent && x.To == mainTarget.AgentItem && x.Time > 115000);
                 if (invulDhuum != null)
                 {
-                    long end = log.FightData.ToFightSpace(invulDhuum.Time);
+                    long end = invulDhuum.Time;
                     phases.Add(new PhaseData(0, end));
                     ComputeFightPhases(mainTarget, phases, log, castLogs, fightDuration, end + 1);
                 }
@@ -270,10 +270,10 @@ namespace LuckParser.Models.Logic
                     {
                         if (_greenStart == 0)
                         {
-                            CombatItem greenTaken = log.CombatData.GetBoonData(46950).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None).FirstOrDefault();
+                            AbstractBuffEvent greenTaken = log.CombatData.GetBoonData(46950).Where(x => x is BuffApplyEvent).FirstOrDefault();
                             if (greenTaken != null)
                             {
-                                _greenStart = (int)log.FightData.ToFightSpace(greenTaken.Time) - 5000;
+                                _greenStart = (int)greenTaken.Time - 5000;
                             }
                             else
                             {
@@ -294,18 +294,18 @@ namespace LuckParser.Models.Logic
                             replay.Actors.Add(new CircleActor(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(mob)));
                         }
                     }
-                    List<CombatItem> stealths = GetFilteredList(log.CombatData, 13017, mob, true);
+                    List<AbstractBuffEvent> stealths = GetFilteredList(log.CombatData, 13017, mob, true);
                     int stealthStart = 0;
                     int stealthEnd = 0;
-                    foreach (CombatItem c in stealths)
+                    foreach (AbstractBuffEvent c in stealths)
                     {
-                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                        if (c is BuffApplyEvent)
                         {
-                            stealthStart = (int)(log.FightData.ToFightSpace(c.Time));
+                            stealthStart = (int)c.Time;
                         }
                         else
                         {
-                            stealthEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                            stealthEnd = (int)c.Time;
                             replay.Actors.Add(new CircleActor(true, 0, 180, (stealthStart, stealthEnd), "rgba(80, 80, 80, 0.3)", new AgentConnector(mob)));
                         }
                     }
@@ -320,59 +320,59 @@ namespace LuckParser.Models.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // spirit transform
-            List<CombatItem> spiritTransform = log.CombatData.GetBoonData(46950).Where(x => x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
+            List<AbstractBuffEvent> spiritTransform = log.CombatData.GetBoonData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
-            foreach (CombatItem c in spiritTransform)
+            foreach (AbstractBuffEvent c in spiritTransform)
             {
                 int duration = 15000;
-                if (mainTarget.HealthOverTime.FirstOrDefault(x => x.logTime > c.Time).hp < 1050)
+                if (mainTarget.HealthOverTime.FirstOrDefault(x => log.FightData.ToFightSpace(x.logTime) > c.Time).hp < 1050)
                 {
                     duration = 30000;
                 }
-                CombatItem removedBuff = log.CombatData.GetBoonData(48281).FirstOrDefault(x => x.SrcInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.All && x.Time > c.Time && x.Time < c.Time + duration);
-                int start = (int)(log.FightData.ToFightSpace(c.Time));
+                AbstractBuffEvent removedBuff = log.CombatData.GetBoonData(48281).FirstOrDefault(x => x.To == p.AgentItem && x is BuffRemoveAllEvent && x.Time > c.Time && x.Time < c.Time + duration);
+                int start = (int)c.Time;
                 int end = start + duration;
                 if (removedBuff != null)
                 {
-                    end = (int)(log.FightData.ToFightSpace(removedBuff.Time));
+                    end = (int)removedBuff.Time;
                 }
                 replay.Actors.Add(new CircleActor(true, 0, 100, (start, end), "rgba(0, 50, 200, 0.3)", new AgentConnector(p)));
                 replay.Actors.Add(new CircleActor(true, start + duration, 100, (start, end), "rgba(0, 50, 200, 0.5)", new AgentConnector(p)));
             }
             // bomb
-            List<CombatItem> bombDhuum = GetFilteredList(log.CombatData, 47646, p, true);
+            List<AbstractBuffEvent> bombDhuum = GetFilteredList(log.CombatData, 47646, p, true);
             int bombDhuumStart = 0;
-            foreach (CombatItem c in bombDhuum)
+            foreach (AbstractBuffEvent c in bombDhuum)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    bombDhuumStart = (int)(log.FightData.ToFightSpace(c.Time));
+                    bombDhuumStart = (int)c.Time;
                 }
                 else
                 {
-                    int bombDhuumEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int bombDhuumEnd = (int)c.Time;
                     replay.Actors.Add(new CircleActor(true, 0, 100, (bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.3)", new AgentConnector(p)));
                     replay.Actors.Add(new CircleActor(true, bombDhuumStart + 13000, 100, (bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.5)", new AgentConnector(p)));
                 }
             }
             // shackles connection
-            List<CombatItem> shackles = GetFilteredList(log.CombatData, 47335, p, true).Concat(GetFilteredList(log.CombatData, 48591, p, true)).ToList();
+            List<AbstractBuffEvent> shackles = GetFilteredList(log.CombatData, 47335, p, true).Concat(GetFilteredList(log.CombatData, 48591, p, true)).ToList();
             int shacklesStart = 0;
             Player shacklesTarget = null;
-            foreach (CombatItem c in shackles)
+            foreach (AbstractBuffEvent c in shackles)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    shacklesStart = (int)(log.FightData.ToFightSpace(c.Time));
-                    shacklesTarget = log.PlayerList.FirstOrDefault(x => x.Agent == c.SrcAgent);
+                    shacklesStart = (int)c.Time;
+                    shacklesTarget = log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By);
                 }
                 else
                 {
-                    int shacklesEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int shacklesEnd = (int)c.Time;
                     if (shacklesTarget != null)
                     {
                         replay.Actors.Add(new LineActor(0, (shacklesStart, shacklesEnd), "rgba(0, 255, 255, 0.5)", new AgentConnector(p), new AgentConnector(shacklesTarget)));
@@ -382,19 +382,19 @@ namespace LuckParser.Models.Logic
             // shackles damage (identical to the connection for now, not yet properly distinguishable from the pure connection, further investigation needed due to inconsistent behavior (triggering too early, not triggering the damaging skill though)
             // shackles start with buff 47335 applied from one player to the other, this is switched over to buff 48591 after mostly 2 seconds, sometimes later. This is switched to 48042 usually 4 seconds after initial application and the damaging skill 47164 starts to deal damage from that point on.
             // Before that point, 47164 is only logged when evaded/blocked, but doesn't deal damage. Further investigation needed.
-            List<CombatItem> shacklesDmg = GetFilteredList(log.CombatData, 48042, p, true);
+            List<AbstractBuffEvent> shacklesDmg = GetFilteredList(log.CombatData, 48042, p, true);
             int shacklesDmgStart = 0;
             Player shacklesDmgTarget = null;
-            foreach (CombatItem c in shacklesDmg)
+            foreach (AbstractBuffEvent c in shacklesDmg)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    shacklesDmgStart = (int)(log.FightData.ToFightSpace(c.Time));
-                    shacklesDmgTarget = log.PlayerList.FirstOrDefault(x => x.Agent == c.SrcAgent);
+                    shacklesDmgStart = (int)c.Time;
+                    shacklesDmgTarget = log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By);
                 }
                 else
                 {
-                    int shacklesDmgEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int shacklesDmgEnd = (int)c.Time;
                     if (shacklesDmgTarget != null)
                     {
                         replay.Actors.Add(new LineActor(0, (shacklesDmgStart, shacklesDmgEnd), "rgba(0, 255, 255, 0.5)", new AgentConnector(p), new AgentConnector(shacklesDmgTarget)));

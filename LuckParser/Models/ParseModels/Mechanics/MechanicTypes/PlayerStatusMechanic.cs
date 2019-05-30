@@ -30,20 +30,20 @@ namespace LuckParser.Models.ParseModels
                 switch (SkillId)
                 {
                     case SkillItem.DeathId:
-                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.ChangeDead, log.FightData.FightStart, log.FightData.FightEnd).Select(x => log.FightData.ToFightSpace(x.Time)).ToList();
+                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.ChangeDead, log.FightData.FightStart, log.FightData.FightEnd).Select(x => log.FightData.ToFightSpace(x.LogTime)).ToList();
                         break;
                     case SkillItem.DCId:
-                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.Despawn, log.FightData.FightStart, log.FightData.FightEnd).Select(x => log.FightData.ToFightSpace(x.Time)).ToList();
+                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.Despawn, log.FightData.FightStart, log.FightData.FightEnd).Select(x => log.FightData.ToFightSpace(x.LogTime)).ToList();
                         break;
                     case SkillItem.RespawnId:
-                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.Spawn, log.FightData.FightStart, log.FightData.FightEnd).Select(x => log.FightData.ToFightSpace(x.Time)).ToList();
+                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.Spawn, log.FightData.FightStart, log.FightData.FightEnd).Select(x => log.FightData.ToFightSpace(x.LogTime)).ToList();
                         break;
                     case SkillItem.AliveId:
-                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.ChangeUp, log.FightData.FightStart, log.FightData.FightEnd).Select(x => log.FightData.ToFightSpace(x.Time)).ToList();
+                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.ChangeUp, log.FightData.FightStart, log.FightData.FightEnd).Select(x => log.FightData.ToFightSpace(x.LogTime)).ToList();
                         break;
                     case SkillItem.DownId:
-                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.ChangeDown, log.FightData.FightStart, log.FightData.FightEnd).Select(x => log.FightData.ToFightSpace(x.Time)).ToList();
-                        List<long> downByVaporForm = combatData.GetBoonData(5620).Where(x => x.SrcInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.All).Select(x => log.FightData.ToFightSpace(x.Time)).ToList();
+                        cList = combatData.GetStatesData(p.InstID, ParseEnum.StateChange.ChangeDown, log.FightData.FightStart, log.FightData.FightEnd).Select(x => log.FightData.ToFightSpace(x.LogTime)).ToList();
+                        List<long> downByVaporForm = combatData.GetBoonData(5620).Where(x => x.To == p.AgentItem && x is BuffRemoveAllEvent).Select(x => x.Time).ToList();
                         foreach (long time in downByVaporForm)
                         {
                             cList.RemoveAll(x => Math.Abs(x - time) < 20);

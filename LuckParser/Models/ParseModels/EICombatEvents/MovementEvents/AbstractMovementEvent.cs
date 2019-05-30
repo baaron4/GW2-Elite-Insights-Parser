@@ -13,9 +13,9 @@ namespace LuckParser.Models.ParseModels
         private readonly ulong _dstAgent;
         private readonly long _value;
 
-        public AbstractMovementEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem.Time, offset)
+        public AbstractMovementEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem.LogTime, offset)
         {
-            AgentItem = agentData.GetAgentByInstID(evtcItem.SrcInstid, evtcItem.Time);
+            AgentItem = agentData.GetAgentByInstID(evtcItem.SrcInstid, evtcItem.LogTime);
             _dstAgent = evtcItem.DstAgent;
             _value = evtcItem.Value;
         }

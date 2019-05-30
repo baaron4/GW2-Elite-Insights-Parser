@@ -49,17 +49,17 @@ namespace LuckParser.Models.Logic
             bool sortCombatList = false;
             foreach (AgentItem riverOfSoul in riverOfSouls)
             {
-                CombatItem firstMovement = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Velocity && x.SrcInstid == riverOfSoul.InstID && x.Time <= riverOfSoul.LastAware);
+                CombatItem firstMovement = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Velocity && x.SrcInstid == riverOfSoul.InstID && x.LogTime <= riverOfSoul.LastAwareLogTime);
                 if (firstMovement != null)
                 {
                     // update start
-                    riverOfSoul.FirstAware = firstMovement.Time - 10;
+                    riverOfSoul.FirstAwareLogTime = firstMovement.LogTime - 10;
                     foreach (CombatItem c in combatData)
                     {
-                        if (c.SrcInstid == riverOfSoul.InstID && c.Time < riverOfSoul.FirstAware && (c.IsStateChange == ParseEnum.StateChange.Position || c.IsStateChange == ParseEnum.StateChange.Rotation))
+                        if (c.SrcInstid == riverOfSoul.InstID && c.LogTime < riverOfSoul.FirstAwareLogTime && (c.IsStateChange == ParseEnum.StateChange.Position || c.IsStateChange == ParseEnum.StateChange.Rotation))
                         {
                             sortCombatList = true;
-                            c.OverrideTime(riverOfSoul.FirstAware);
+                            c.OverrideTime(riverOfSoul.FirstAwareLogTime);
                         }
                     }
                 }
@@ -72,7 +72,7 @@ namespace LuckParser.Models.Logic
             // make sure the list is still sorted by time after overrides
             if (sortCombatList)
             {
-                combatData.Sort((x, y) => x.Time.CompareTo(y.Time));
+                combatData.Sort((x, y) => x.LogTime.CompareTo(y.LogTime));
             }
         }
 

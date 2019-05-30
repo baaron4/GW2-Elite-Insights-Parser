@@ -89,19 +89,19 @@ namespace LuckParser.Models.Logic
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
-            List<CombatItem> invulsTarget = GetFilteredList(evtcContainer.CombatData, 762, mainTarget, true);
+            List<AbstractBuffEvent> invulsTarget = GetFilteredList(evtcContainer.CombatData, 762, mainTarget, true);
             if (invulsTarget.Count == 10)
             {
-                CombatItem last = invulsTarget.Last();
-                if (last.IsBuffRemove != ParseEnum.BuffRemove.None)
+                AbstractBuffEvent last = invulsTarget.Last();
+                if (!(last is BuffApplyEvent))
                 {
                     HashSet<ushort> pIds = evtcContainer.PlayerIDs;
                     CombatItem lastPlayerExit = evtcContainer.CombatData.GetStates(ParseEnum.StateChange.ExitCombat).Where(x => pIds.Contains(x.SrcInstid)).LastOrDefault();
-                    CombatItem lastTargetExit = evtcContainer.CombatData.GetStatesData(mainTarget.InstID, ParseEnum.StateChange.ExitCombat, mainTarget.FirstAware, mainTarget.LastAware).LastOrDefault();
+                    CombatItem lastTargetExit = evtcContainer.CombatData.GetStatesData(mainTarget.InstID, ParseEnum.StateChange.ExitCombat, mainTarget.FirstAwareLogTime, mainTarget.LastAwareLogTime).LastOrDefault();
                     AbstractDamageEvent lastDamageTaken = evtcContainer.CombatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => (x.Damage > 0) && evtcContainer.PlayerAgents.Contains(x.From));
                     if (lastTargetExit != null && lastDamageTaken != null && lastPlayerExit != null)
                     {
-                        evtcContainer.FightData.SetSuccess(lastPlayerExit.Time > lastTargetExit.Time + 1000, lastDamageTaken.Time);
+                        evtcContainer.FightData.SetSuccess(lastPlayerExit.LogTime > lastTargetExit.LogTime + 1000, lastDamageTaken.Time);
                     }
                 }
             }

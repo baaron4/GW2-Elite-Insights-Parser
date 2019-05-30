@@ -34,16 +34,16 @@ namespace LuckParser.Models.Logic
 
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
-            List<CombatItem> green = log.CombatData.GetBoonData(47776).Where(x => x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
-            foreach (CombatItem c in green)
+            List<AbstractBuffEvent> green = log.CombatData.GetBoonData(47776).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            foreach (AbstractBuffEvent c in green)
             {
                 int duration = 45000;
-                CombatItem removedBuff = log.CombatData.GetBoonData(47776).FirstOrDefault(x => x.SrcInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.All && x.Time > c.Time && x.Time < c.Time + duration);
-                int start = (int)(log.FightData.ToFightSpace(c.Time));
+                AbstractBuffEvent removedBuff = log.CombatData.GetBoonData(47776).FirstOrDefault(x => x.To == p.AgentItem && x is BuffRemoveAllEvent && x.Time > c.Time && x.Time < c.Time + duration);
+                int start = (int)c.Time;
                 int end = start + duration;
                 if (removedBuff != null)
                 {
-                    end = (int)(log.FightData.ToFightSpace(removedBuff.Time));
+                    end = (int)removedBuff.Time;
                 }
                 replay.Actors.Add(new CircleActor(true, 0, 100, (start, end), "rgba(100, 200, 255, 0.25)", new AgentConnector(p)));
             }

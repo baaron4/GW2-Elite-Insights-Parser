@@ -10,7 +10,7 @@ namespace LuckParser.Models.ParseModels
     public class ElementalistHelper : BoonHelper
     {
 
-        public static void RemoveDualBuffs(Player p, Dictionary<ushort, List<CombatItem>> buffsPerDst)
+        public static void RemoveDualBuffs(List<AbstractBuffEvent> buffsPerDst)
         {
             HashSet<long> duals = new HashSet<long>
             {
@@ -19,9 +19,9 @@ namespace LuckParser.Models.ParseModels
                 AirDual,
                 EarthDual,
             };
-            foreach (CombatItem c in buffsPerDst[p.InstID].Where(x => x.Time <= p.LastAware && x.Time >= p.FirstAware && duals.Contains(x.SkillID)))
+            foreach (AbstractBuffEvent c in buffsPerDst.Where(x => duals.Contains(x.BuffID)))
             {
-                c.OverrideSkillID(NoBuff);
+                c.Invalidate();
             }
         }
     }

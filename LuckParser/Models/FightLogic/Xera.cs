@@ -11,7 +11,7 @@ namespace LuckParser.Models.Logic
     public class Xera : RaidLogic
     {
 
-        private long _specialSplit = 0;
+        private long _specialSplitLogTime = 0;
 
         public Xera(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
         {
@@ -65,15 +65,15 @@ namespace LuckParser.Models.Logic
                 return phases;
             }
             long end = 0;
-            CombatItem invulXera = log.CombatData.GetBoonData(762).Find(x => x.DstInstid == mainTarget.InstID) ?? log.CombatData.GetBoonData(34113).Find(x => x.DstInstid == mainTarget.InstID);
+            AbstractBuffEvent invulXera = log.CombatData.GetBoonData(762).Find(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent) ?? log.CombatData.GetBoonData(34113).Find(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent);
             if (invulXera != null)
             {
-                end = log.FightData.ToFightSpace(invulXera.Time);
+                end = invulXera.Time;
                 phases.Add(new PhaseData(start, end));
                 // split happened
-                if (_specialSplit > 0)
+                if (_specialSplitLogTime > 0)
                 {
-                    start = log.FightData.ToFightSpace(_specialSplit);
+                    start = log.FightData.ToFightSpace(_specialSplitLogTime);
                     //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
                     phases.Add(new PhaseData(start, fightDuration));
                 }
@@ -99,7 +99,7 @@ namespace LuckParser.Models.Logic
             CombatItem enterCombat = combatData.Find(x => x.SrcInstid == target.InstID && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
             if (enterCombat != null)
             {
-                fightData.OverrideStart(enterCombat.Time);
+                fightData.OverrideStart(enterCombat.LogTime);
             }
             // find split
             foreach (AgentItem NPC in agentData.GetAgentByType(AgentItem.AgentType.NPC))
@@ -107,15 +107,15 @@ namespace LuckParser.Models.Logic
                 if (NPC.ID == 16286)
                 {
                     target.Health = 24085950;
-                    CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position && x.SrcInstid == NPC.InstID && x.Time >= NPC.FirstAware + 500 && x.Time <= NPC.LastAware);
+                    CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position && x.SrcInstid == NPC.InstID && x.LogTime >= NPC.FirstAwareLogTime + 500 && x.LogTime <= NPC.LastAwareLogTime);
                     if (move != null)
                     {
-                        _specialSplit = move.Time;
+                        _specialSplitLogTime = move.LogTime;
                     } else
                     {
-                        _specialSplit = NPC.FirstAware;
+                        _specialSplitLogTime = NPC.FirstAwareLogTime;
                     }
-                    target.AgentItem.LastAware = NPC.LastAware;
+                    target.AgentItem.LastAwareLogTime = NPC.LastAwareLogTime;
                     // get unique id for the fusion
                     ushort instID = 0;
                     Random rnd = new Random();

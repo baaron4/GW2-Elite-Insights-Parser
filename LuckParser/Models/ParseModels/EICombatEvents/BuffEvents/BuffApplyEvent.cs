@@ -11,11 +11,17 @@ namespace LuckParser.Models.ParseModels
     {
         public BuffApplyEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, offset)
         {
-            Src = agentData.GetAgentByInstID(evtcItem.SrcMasterInstid > 0 ? evtcItem.SrcMasterInstid : evtcItem.SrcInstid, evtcItem.Time);
-            Dst = agentData.GetAgentByInstID(evtcItem.DstInstid, evtcItem.Time);
+            By = agentData.GetAgentByInstID(evtcItem.SrcMasterInstid > 0 ? evtcItem.SrcMasterInstid : evtcItem.SrcInstid, evtcItem.LogTime);
+            To = agentData.GetAgentByInstID(evtcItem.DstInstid, evtcItem.LogTime);
         }
 
-        public override bool IsBoonSimulatorCompliant()
+        public BuffApplyEvent(AgentItem by, AgentItem to, long time, int duration, long buffID) : base(duration, buffID, time)
+        {
+            By = by;
+            To = to;
+        }
+
+        public override bool IsBoonSimulatorCompliant(long fightEnd)
         {
             return BuffID != BoonHelper.NoBuff;
         }
@@ -26,7 +32,7 @@ namespace LuckParser.Models.ParseModels
 
         public override void UpdateSimulator(BoonSimulator simulator)
         {
-            simulator.Add(Value, Src, Time);
+            simulator.Add(Value, By, Time);
         }
     }
 }

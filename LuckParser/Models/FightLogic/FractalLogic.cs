@@ -65,9 +65,9 @@ namespace LuckParser.Models.Logic
             AbstractDamageEvent lastDamageTaken = evtcContainer.CombatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => (x.Damage > 0) && pAgents.Contains(x.From));
             if (lastDamageTaken != null)
             {
-                if (reward != null && lastDamageTaken.Time - reward.Time < 100)
+                if (reward != null && lastDamageTaken.Time - reward.LogTime < 100)
                 {
-                    evtcContainer.FightData.SetSuccess(true, Math.Min(lastDamageTaken.Time, reward.Time));
+                    evtcContainer.FightData.SetSuccess(true, Math.Min(lastDamageTaken.Time, reward.LogTime));
                 }
                 else
                 {

@@ -199,8 +199,8 @@ namespace LuckParser.Builders
                     HitboxWidth = target.HitboxWidth,
                     Damage1S = BuildTotal1SDamage(target),
                     Rotation = BuildRotation(target.GetCastLogs(_log, 0, _log.FightData.FightDuration)),
-                    FirstAware = (int)(_log.FightData.ToFightSpace(target.FirstAware)),
-                    LastAware = (int)(_log.FightData.ToFightSpace(target.LastAware)),
+                    FirstAware = (int)(_log.FightData.ToFightSpace(target.FirstAwareLogTime)),
+                    LastAware = (int)(_log.FightData.ToFightSpace(target.LastAwareLogTime)),
                     Minions = BuildMinions(target),
                     TotalDamageDist = BuildDamageDist(target, null),
                     TotalDamageTaken = BuildDamageTaken(target),
@@ -453,7 +453,8 @@ namespace LuckParser.Builders
                     continue;
                 }
                 SkillItem skill = skillList.Get(pair.Key);
-                if (pair.Value.First().IsIndirectDamage)
+                bool indirect = pair.Value.First() is NonDirectDamageEvent;
+                if (indirect)
                 {
                     if (!_buffDesc.ContainsKey("b" + pair.Key))
                     {
@@ -480,8 +481,8 @@ namespace LuckParser.Builders
                 {
                     continue;
                 }
-                string prefix = filteredList.First().IsIndirectDamage ? "b" : "s";
-                res.Add(new JsonDamageDist(filteredList, filteredList.First().IsIndirectDamage, pair.Key));
+                string prefix = indirect ? "b" : "s";
+                res.Add(new JsonDamageDist(filteredList, indirect, pair.Key));
             }
             return res;
         }

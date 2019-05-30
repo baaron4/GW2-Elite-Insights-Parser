@@ -107,7 +107,7 @@ namespace LuckParser.Models.Logic
             {
                 throw new Exceptions.TooShortException();
             }
-            fightData.OverrideStart(startCast.Time);
+            fightData.OverrideStart(startCast.LogTime);
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
@@ -137,7 +137,7 @@ namespace LuckParser.Models.Logic
                     case 2:
                     case 4:
                     case 6:
-                        List<long> pyresFirstAware = log.AgentData.GetAgentsByID((ushort)PyreGuardian).Where(x => phase.InInterval(log.FightData.ToFightSpace(x.FirstAware))).Select(x => log.FightData.ToFightSpace(x.FirstAware)).ToList();
+                        List<long> pyresFirstAware = log.AgentData.GetAgentsByID((ushort)PyreGuardian).Where(x => phase.InInterval(log.FightData.ToFightSpace(x.FirstAwareLogTime))).Select(x => log.FightData.ToFightSpace(x.FirstAwareLogTime)).ToList();
                         if (pyresFirstAware.Count > 0 && pyresFirstAware.Max() > phase.Start)
                         {
                             phase.OverrideStart(pyresFirstAware.Max());
@@ -519,14 +519,14 @@ namespace LuckParser.Models.Logic
             int wyvernPhaseTime = (int) (phases.Count > 4 ? phases[4].End + timeAfterPhase2 : int.MaxValue);
             int jumpingPuzzleTime = (int) (phases.Count > 5 ? phases[5].End + timeAfterWyvernPhase : int.MaxValue);
             int finalPhaseTime = int.MaxValue;
-            int startOffset = -(int)(phases.First().Start - log.FightData.ToFightSpace(log.CombatData.AllCombatItems.Min(x => x.Time)));
+            int startOffset = -(int)(phases.First().Start - log.FightData.ToFightSpace(log.CombatData.AllCombatItems.Min(x => x.LogTime)));
             if (phases.Count > 6)
             {
-                var lastPhase = phases[6];
+                PhaseData lastPhase = phases[6];
 
                 List<Point3D> qadimMovement = replay.Positions;
 
-                var lastMove = qadimMovement.FirstOrDefault(
+                Point3D lastMove = qadimMovement.FirstOrDefault(
                     pt =>
                     {
                         return Math.Abs(pt.X - qadimFinalX) < 5 && Math.Abs(pt.Y - qadimFinalY) < 5;
@@ -534,7 +534,7 @@ namespace LuckParser.Models.Logic
 
                 if (lastMove != null)
                 {
-                    finalPhaseTime = (int) log.FightData.ToFightSpace(lastMove.Time);
+                    finalPhaseTime = (int)lastMove.Time;
                 }
             }
 

@@ -34,11 +34,11 @@ namespace LuckParser.Models.ParseModels
 
             foreach (Player p in log.PlayerList)
             {
-                foreach (CombatItem c in log.CombatData.GetBoonData(SkillId))
+                foreach (AbstractBuffEvent c in log.CombatData.GetBoonData(SkillId))
                 {
-                    if (c.IsBuffRemove == ParseEnum.BuffRemove.Manual && p.InstID == c.SrcInstid && Keep(c, log))
+                    if (c is BuffRemoveManualEvent && p.AgentItem == c.To /*&& Keep(c, log)*/)
                     {
-                        mechanicLogs[this].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), this, p));
+                        mechanicLogs[this].Add(new MechanicLog(c.Time, this, p));
                     }
                 }
             }

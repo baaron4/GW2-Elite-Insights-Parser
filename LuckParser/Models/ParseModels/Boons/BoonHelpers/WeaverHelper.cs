@@ -34,10 +34,10 @@ namespace LuckParser.Models.ParseModels
             { _earthMajor, new HashSet<long> { EarthFire, EarthWater, EarthAir}},
         };
 
-        private static long TranslateWeaverAttunement(List<CombatItem> buffApplies)
+        private static long TranslateWeaverAttunement(List<AbstractBuffEvent> buffApplies)
         {
             // check if more than 3 ids are present
-            if (buffApplies.Select(x => x.SkillID).Distinct().Count() > 3)
+            if (buffApplies.Select(x => x.BuffID).Distinct().Count() > 3)
             {
                 throw new InvalidOperationException("Too much buff apply events in TranslateWeaverAttunement");
             }
@@ -50,19 +50,19 @@ namespace LuckParser.Models.ParseModels
             };
             HashSet<long> major = null;
             HashSet<long> minor = null;
-            foreach (CombatItem c in buffApplies)
+            foreach (BuffApplyEvent c in buffApplies)
             {
-                if (duals.Contains(c.SkillID))
+                if (duals.Contains(c.BuffID))
                 {
-                    return c.SkillID;
+                    return c.BuffID;
                 }
-                if (_majorsTranslation.ContainsKey(c.SkillID))
+                if (_majorsTranslation.ContainsKey(c.BuffID))
                 {
-                    major = _majorsTranslation[c.SkillID];
+                    major = _majorsTranslation[c.BuffID];
                 }
-                else if (_minorsTranslation.ContainsKey(c.SkillID))
+                else if (_minorsTranslation.ContainsKey(c.BuffID))
                 {
-                    minor = _minorsTranslation[c.SkillID];
+                    minor = _minorsTranslation[c.BuffID];
                 }
             }
             if (major == null || minor == null)
@@ -77,8 +77,9 @@ namespace LuckParser.Models.ParseModels
             return inter.First();
         }
 
-        public static void TransformWeaverAttunements(Player p, Dictionary<ushort, List<CombatItem>> buffsPerDst)
+        public static List<AbstractBuffEvent> TransformWeaverAttunements(List<AbstractBuffEvent> buffs, AgentItem a)
         {
+            List<AbstractBuffEvent> res = new List<AbstractBuffEvent>();
             HashSet<long> attunements = new HashSet<long>
             {
                 5585,
@@ -118,21 +119,20 @@ namespace LuckParser.Models.ParseModels
                 waterEarth,
                 airEarth,*/
             };
-            List<CombatItem> buffs = buffsPerDst[p.InstID].Where(x => x.Time <= p.LastAware && x.Time >= p.FirstAware).ToList();
             // first we get rid of standard attunements
-            List<CombatItem> attuns = buffs.Where(x => attunements.Contains(x.SkillID)).ToList();
-            foreach (CombatItem c in attuns)
+            List<AbstractBuffEvent> attuns = buffs.Where(x => attunements.Contains(x.BuffID)).ToList();
+            foreach (AbstractBuffEvent c in attuns)
             {
-                c.OverrideSkillID(NoBuff);
+                c.Invalidate();
             }
             // get all weaver attunements ids and group them by time
-            List<CombatItem> weaverAttuns = buffs.Where(x => weaverAttunements.Contains(x.SkillID)).ToList();
+            List<AbstractBuffEvent> weaverAttuns = buffs.Where(x => weaverAttunements.Contains(x.BuffID)).ToList();
             if (weaverAttuns.Count == 0)
             {
-                return;
+                return res;
             }
-            Dictionary<long, List<CombatItem>> groupByTime = new Dictionary<long, List<CombatItem>>();
-            foreach (CombatItem c in weaverAttuns)
+            Dictionary<long, List<AbstractBuffEvent>> groupByTime = new Dictionary<long, List<AbstractBuffEvent>>();
+            foreach (AbstractBuffEvent c in weaverAttuns)
             {
                 long key = groupByTime.Keys.FirstOrDefault(x => Math.Abs(x - c.Time) < 10);
                 if (key != 0)
@@ -141,56 +141,34 @@ namespace LuckParser.Models.ParseModels
                 }
                 else
                 {
-                    groupByTime[c.Time] = new List<CombatItem>
+                    groupByTime[c.Time] = new List<AbstractBuffEvent>
                             {
                                 c
                             };
                 }
             }
             long prevID = 0;
-            foreach (List<CombatItem> items in groupByTime.Values)
+            foreach (var pair in groupByTime)
             {
-                List<CombatItem> applies = items.Where(x => x.IsBuffRemove == Parser.ParseEnum.BuffRemove.None).ToList();
-                List<CombatItem> removals = items.Where(x => x.IsBuffRemove != Parser.ParseEnum.BuffRemove.None).ToList();
+                List<AbstractBuffEvent> applies = pair.Value.Where(x => x is BuffApplyEvent).ToList();
                 long curID = TranslateWeaverAttunement(applies);
+                foreach (AbstractBuffEvent c in pair.Value)
+                {
+                    c.Invalidate();
+                }
                 if (curID == 0)
                 {
                     continue;
                 }
-                for (int i = 0; i < applies.Count; i++)
+                res.Add(new BuffApplyEvent(a, a, pair.Key, int.MaxValue, curID));
+                if (prevID != 0)
                 {
-                    if (i == 0)
-                    {
-                        applies[i].OverrideSkillID(curID);
-                    }
-                    else
-                    {
-                        applies[i].OverrideSkillID(NoBuff);
-                    }
-                }
-                bool removeAll = false;
-                bool removeManual = false;
-                foreach (CombatItem c in removals)
-                {
-                    if (!removeAll && c.IsBuffRemove == Parser.ParseEnum.BuffRemove.All)
-                    {
-                        c.OverrideSkillID(prevID);
-                        c.OverrideValue(100);
-                        c.OverrideBuffDmg(100);
-                        removeAll = true;
-                    }
-                    else if (!removeManual && c.IsBuffRemove == Parser.ParseEnum.BuffRemove.Manual)
-                    {
-                        c.OverrideSkillID(prevID);
-                        removeManual = true;
-                    }
-                    else
-                    {
-                        c.OverrideSkillID(NoBuff);
-                    }
+                    res.Add(new BuffRemoveManualEvent(a, a, pair.Key, int.MaxValue, prevID));
+                    res.Add(new BuffRemoveAllEvent(a, a, pair.Key, int.MaxValue, prevID, int.MaxValue, 1));
                 }
                 prevID = curID;
             }
+            return res;
         }
     }
 }

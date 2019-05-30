@@ -141,17 +141,18 @@ namespace LuckParser.Models.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // Poison
-            List<CombatItem> poisonToDrop = GetFilteredList(log.CombatData, 34387, p, true);
+            List<AbstractBuffEvent> poisonToDrop = GetFilteredList(log.CombatData, 34387, p, true);
             int toDropStart = 0;
-            foreach (CombatItem c in poisonToDrop)
+            foreach (AbstractBuffEvent c in poisonToDrop)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    toDropStart = (int)(log.FightData.ToFightSpace(c.Time));
+                    toDropStart = (int)c.Time;
                 }
                 else
                 {
-                    int toDropEnd = (int)(log.FightData.ToFightSpace(c.Time)); replay.Actors.Add(new CircleActor(false, 0, 180, (toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)", new AgentConnector(p)));
+                    int toDropEnd = (int)c.Time;
+                    replay.Actors.Add(new CircleActor(false, 0, 180, (toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)", new AgentConnector(p)));
                     replay.Actors.Add(new CircleActor(true, toDropStart + 8000, 180, (toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)", new AgentConnector(p)));
                     Point3D poisonNextPos = replay.Positions.FirstOrDefault(x => x.Time >= toDropEnd);
                     Point3D poisonPrevPos = replay.Positions.LastOrDefault(x => x.Time <= toDropEnd);
@@ -162,32 +163,32 @@ namespace LuckParser.Models.Logic
                 }
             }
             // Transformation
-            List<CombatItem> slubTrans = GetFilteredList(log.CombatData, 34362, p, true);
+            List<AbstractBuffEvent> slubTrans = GetFilteredList(log.CombatData, 34362, p, true);
             int transfoStart = 0;
-            foreach (CombatItem c in slubTrans)
+            foreach (AbstractBuffEvent c in slubTrans)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    transfoStart = (int)(log.FightData.ToFightSpace(c.Time));
+                    transfoStart = (int)c.Time;
                 }
                 else
                 {
-                    int transfoEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int transfoEnd = (int)c.Time;
                     replay.Actors.Add(new CircleActor(true, 0, 180, (transfoStart, transfoEnd), "rgba(0, 80, 255, 0.3)", new AgentConnector(p)));
                 }
             }
             // fixated
-            List<CombatItem> fixatedSloth = GetFilteredList(log.CombatData, 34508, p, true);
+            List<AbstractBuffEvent> fixatedSloth = GetFilteredList(log.CombatData, 34508, p, true);
             int fixatedSlothStart = 0;
-            foreach (CombatItem c in fixatedSloth)
+            foreach (AbstractBuffEvent c in fixatedSloth)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    fixatedSlothStart = (int)(log.FightData.ToFightSpace(c.Time));
+                    fixatedSlothStart = (int)c.Time;
                 }
                 else
                 {
-                    int fixatedSlothEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int fixatedSlothEnd = (int)c.Time;
                     replay.Actors.Add(new CircleActor(true, 0, 120, (fixatedSlothStart, fixatedSlothEnd), "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
                 }
             }

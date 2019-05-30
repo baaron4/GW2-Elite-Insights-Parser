@@ -28,10 +28,10 @@ namespace LuckParser.Models.ParseModels
 
         private long GetState(ParsedLog log, long start, long end, ParseEnum.StateChange state)
         {
-            CombatItem status = log.CombatData.GetStatesData(InstID, state, Math.Max(log.FightData.ToLogSpace(start), FirstAware), Math.Min(log.FightData.ToLogSpace(end), LastAware)).LastOrDefault();
-            if (status != null && status.Time > 0)
+            CombatItem status = log.CombatData.GetStatesData(InstID, state, Math.Max(log.FightData.ToLogSpace(start), FirstAwareLogTime), Math.Min(log.FightData.ToLogSpace(end), LastAwareLogTime)).LastOrDefault();
+            if (status != null && status.LogTime > 0)
             {
-                return log.FightData.ToFightSpace(status.Time);
+                return log.FightData.ToFightSpace(status.LogTime);
             }
             return 0;
         }
@@ -85,8 +85,8 @@ namespace LuckParser.Models.ParseModels
             {
                 if (_damageTakenLogsBySrc.TryGetValue(target.AgentItem, out var list))
                 {
-                    long targetStart = log.FightData.ToFightSpace(target.FirstAware);
-                    long targetEnd = log.FightData.ToFightSpace(target.LastAware);
+                    long targetStart = log.FightData.ToFightSpace(target.FirstAwareLogTime);
+                    long targetEnd = log.FightData.ToFightSpace(target.LastAwareLogTime);
                     return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd).ToList();
                 }
                 else
@@ -163,9 +163,9 @@ namespace LuckParser.Models.ParseModels
             //
             BoonMap boonMap = new BoonMap();
             // Fill in Boon Map
-            foreach (CombatItem c in log.CombatData.GetBoonDataByDst(InstID, FirstAware, LastAware))
+            foreach (AbstractBuffEvent c in log.CombatData.GetBoonDataByDst(AgentItem))
             {
-                long boonId = c.SkillID;
+                long boonId = c.BuffID;
                 if (!boonMap.ContainsKey(boonId))
                 {
                     if (!log.Boons.BoonsByIds.ContainsKey(boonId))
@@ -174,44 +174,13 @@ namespace LuckParser.Models.ParseModels
                     }
                     boonMap.Add(log.Boons.BoonsByIds[boonId]);
                 }
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.Manual // don't check manuals
-                    || (c.IsBuffRemove == ParseEnum.BuffRemove.Single && c.IFF == ParseEnum.IFF.Unknown && c.DstInstid == 0) // weird single remove
-                    || (c.IsBuffRemove == ParseEnum.BuffRemove.Single && c.Value <= 50)
-                    || (c.IsBuffRemove == ParseEnum.BuffRemove.All && c.Value <= 50 && c.BuffDmg <= 50)) // don't take into account low value buff removals, with server delays it can mess up some stuff
+                if (!c.IsBoonSimulatorCompliant(log.FightData.FightEnd))
                 {
                     continue;
                 }
-                long time = log.FightData.ToFightSpace(c.Time);
-                List<BoonLog> loglist = boonMap[boonId];
-                if (c.IsStateChange == ParseEnum.StateChange.BuffInitial)
-                {
-                    ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
-                    loglist.Add(new BoonApplicationLog(time, log.AgentData.GetAgentByInstID(src, c.Time), c.Value));
-                }
-                else if (c.IsStateChange != ParseEnum.StateChange.BuffInitial)
-                {
-                    if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
-                    {
-                        ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
-                        if (c.IsOffcycle > 0)
-                        {
-                            if (src == 0)
-                            {
-                                src = log.Boons.TryFindSrc(AgentItem, time, c.Value, log, boonId).InstID;
-                            }
-                            loglist.Add(new BoonExtensionLog(time, c.Value, c.OverstackValue - c.Value, log.AgentData.GetAgentByInstID(src, c.Time)));
-                        }
-                        else
-                        {
-                            loglist.Add(new BoonApplicationLog(time, log.AgentData.GetAgentByInstID(src, c.Time), c.Value));
-                        }
-                    }
-                    else if (time < log.FightData.FightDuration - 50)
-                    {
-                        ushort src = c.DstMasterInstid > 0 ? c.DstMasterInstid : c.DstInstid;
-                        loglist.Add(new BoonRemovalLog(time, log.AgentData.GetAgentByInstID(src, c.Time), c.Value, c.IsBuffRemove));
-                    }
-                }
+                List<AbstractBuffEvent> loglist = boonMap[boonId];
+                c.TryFindSrc(log);
+                loglist.Add(c);
             }
             //boonMap.Sort();
             foreach (var pair in boonMap)
@@ -271,7 +240,7 @@ namespace LuckParser.Models.ParseModels
                 }
             }
             long cloakStart = 0;
-            foreach (long time in log.CombatData.GetBuffs(InstID, 40408, FirstAware, LastAware).Select(x => log.FightData.ToFightSpace(x.Time)))
+            foreach (long time in log.CombatData.GetBoonData(40408).Where(x => x.To == AgentItem && x is BuffApplyEvent).Select(x => x.Time))
             {
                 if (time - cloakStart > 10)
                 {
@@ -306,7 +275,7 @@ namespace LuckParser.Models.ParseModels
             foreach (Boon boon in TrackedBoons)
             {
                 long boonid = boon.ID;
-                if (toUse.TryGetValue(boonid, out List<BoonLog> logs) && logs.Count != 0)
+                if (toUse.TryGetValue(boonid, out List<AbstractBuffEvent> logs) && logs.Count != 0)
                 {
                     if (BoonPoints.ContainsKey(boonid))
                     {

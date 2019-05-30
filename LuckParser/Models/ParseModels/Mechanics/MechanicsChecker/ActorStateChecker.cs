@@ -22,11 +22,11 @@ namespace LuckParser.Models.ParseModels
         {
             if (_has)
             {
-                return log.CombatData.GetStatesData(item.SrcInstid, _compare, item.Time - 20, item.Time + 20).Count > 0;
+                return log.CombatData.GetStatesData(item.SrcInstid, _compare, item.LogTime - 20, item.LogTime + 20).Count > 0;
             }
             else
             {
-                return log.CombatData.GetStatesData(item.SrcInstid, _compare, item.Time - 20, item.Time + 20).Count == 0;
+                return log.CombatData.GetStatesData(item.SrcInstid, _compare, item.LogTime - 20, item.LogTime + 20).Count == 0;
             }
         }
     }

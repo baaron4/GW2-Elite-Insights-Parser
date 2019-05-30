@@ -220,28 +220,28 @@ namespace LuckParser.Models.Logic
 
         public override int IsCM(ParsedEvtcContainer evtcContainer)
         {
-            List<CombatItem> necrosis = evtcContainer.CombatData.GetBoonData(47414).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
+            List<AbstractBuffEvent> necrosis = evtcContainer.CombatData.GetBoonData(47414).Where(x => x is BuffApplyEvent).ToList();
             if (necrosis.Count == 0)
             {
                 return 0;
             }
             // split necrosis
-            Dictionary<ushort, List<CombatItem>> splitNecrosis = new Dictionary<ushort, List<CombatItem>>();
-            foreach (CombatItem c in necrosis)
+            Dictionary<AgentItem, List<AbstractBuffEvent>> splitNecrosis = new Dictionary<AgentItem, List<AbstractBuffEvent>>();
+            foreach (AbstractBuffEvent c in necrosis)
             {
-                ushort inst = c.DstInstid;
-                if (!splitNecrosis.ContainsKey(inst))
+                AgentItem tank = c.To;
+                if (!splitNecrosis.ContainsKey(tank))
                 {
-                    splitNecrosis.Add(inst, new List<CombatItem>());
+                    splitNecrosis.Add(tank, new List<AbstractBuffEvent>());
                 }
-                splitNecrosis[inst].Add(c);
+                splitNecrosis[tank].Add(c);
             }
-            List<CombatItem> longestNecrosis = splitNecrosis.Values.First(l => l.Count == splitNecrosis.Values.Max(x => x.Count));
+            List<AbstractBuffEvent> longestNecrosis = splitNecrosis.Values.First(l => l.Count == splitNecrosis.Values.Max(x => x.Count));
             long minDiff = long.MaxValue;
             for (int i = 0; i < longestNecrosis.Count - 1; i++)
             {
-                CombatItem cur = longestNecrosis[i];
-                CombatItem next = longestNecrosis[i + 1];
+                AbstractBuffEvent cur = longestNecrosis[i];
+                AbstractBuffEvent next = longestNecrosis[i + 1];
                 long timeDiff = next.Time - cur.Time;
                 if (timeDiff > 1000 && minDiff > timeDiff)
                 {

@@ -54,7 +54,7 @@ namespace LuckParser.Parser
             LegacyTarget = target;
         }
 
-        public AbstractActor FindActor(long time, ushort instid)
+        public AbstractActor FindActor(long logTime, ushort instid)
         {
             AbstractActor res = PlayerList.FirstOrDefault(x => x.InstID == instid);
             if (res == null)
@@ -64,20 +64,20 @@ namespace LuckParser.Parser
                     Dictionary<string, Minions> minionsDict = p.GetMinions(this);
                     foreach (Minions minions in minionsDict.Values)
                     {
-                        res = minions.FirstOrDefault(x => x.InstID == instid && x.FirstAware <= time && x.LastAware >= time);
+                        res = minions.FirstOrDefault(x => x.InstID == instid && x.FirstAwareLogTime <= logTime && x.LastAwareLogTime >= logTime);
                         if (res != null)
                         {
                             return res;
                         }
                     }
                 }
-                res = FightData.Logic.Targets.FirstOrDefault(x => x.InstID == instid && x.FirstAware <= time && x.LastAware >= time);
+                res = FightData.Logic.Targets.FirstOrDefault(x => x.InstID == instid && x.FirstAwareLogTime <= logTime && x.LastAwareLogTime >= logTime);
                 if (res == null)
                 {
-                    res = _auxMobs.FirstOrDefault(x => x.InstID == instid && x.FirstAware <= time && x.LastAware >= time);
+                    res = _auxMobs.FirstOrDefault(x => x.InstID == instid && x.FirstAwareLogTime <= logTime && x.LastAwareLogTime >= logTime);
                     if (res == null)
                     {
-                        _auxMobs.Add(new Mob(AgentData.GetAgentByInstID(instid, time)));
+                        _auxMobs.Add(new Mob(AgentData.GetAgentByInstID(instid, logTime)));
                         res = _auxMobs.Last();
                     }
                 }

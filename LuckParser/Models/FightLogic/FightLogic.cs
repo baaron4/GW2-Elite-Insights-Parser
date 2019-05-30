@@ -94,8 +94,8 @@ namespace LuckParser.Models.Logic
                 HashSet<ulong> agentValues = new HashSet<ulong>(agents.Select(x => x.Agent));
                 AgentItem newTargetAgent = new AgentItem(firstItem)
                 {
-                    FirstAware = agents.Min(x => x.FirstAware),
-                    LastAware = agents.Max(x => x.LastAware)
+                    FirstAwareLogTime = agents.Min(x => x.FirstAwareLogTime),
+                    LastAwareLogTime = agents.Max(x => x.LastAwareLogTime)
                 };
                 // get unique id for the fusion
                 ushort instID = 0;
@@ -144,7 +144,7 @@ namespace LuckParser.Models.Logic
         {
             foreach (Target target in Targets)
             {
-                if (target.Health == -1 && target.InstID == instid && target.FirstAware <= time && target.LastAware >= time)
+                if (target.Health == -1 && target.InstID == instid && target.FirstAwareLogTime <= time && target.LastAwareLogTime >= time)
                 {
                     target.Health = health;
                     break;
@@ -159,7 +159,7 @@ namespace LuckParser.Models.Logic
             {
                 foreach (Target tar in Targets)
                 {
-                    List<CombatItem> subList = maxHUs.Where(x => x.SrcInstid == tar.InstID && x.Time >= tar.FirstAware && x.Time <= tar.LastAware).ToList();
+                    List<CombatItem> subList = maxHUs.Where(x => x.SrcInstid == tar.InstID && x.LogTime >= tar.FirstAwareLogTime && x.LogTime <= tar.LastAwareLogTime).ToList();
                     if (subList.Count > 0)
                     {
                         tar.Health = subList.Max(x => (int)x.DstAgent);
@@ -172,7 +172,7 @@ namespace LuckParser.Models.Logic
         {
             foreach (Target target in Targets)
             {
-                if (target.InstID == instid && target.FirstAware <= time && target.LastAware >= time)
+                if (target.InstID == instid && target.FirstAwareLogTime <= time && target.LastAwareLogTime >= time)
                 {
                     target.HealthOverTime.Add((healthTime, health));
                     break;
@@ -185,13 +185,13 @@ namespace LuckParser.Models.Logic
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = new List<PhaseData>();
             long last = 0;
-            List<CombatItem> invuls = GetFilteredList(log.CombatData, skillID, mainTarget, beginWithStart);
+            List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, skillID, mainTarget, beginWithStart);
             for (int i = 0; i < invuls.Count; i++)
             {
-                CombatItem c = invuls[i];
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                AbstractBuffEvent c = invuls[i];
+                if (c is BuffApplyEvent)
                 {
-                    long end = log.FightData.ToFightSpace(c.Time);
+                    long end = c.Time;
                     phases.Add(new PhaseData(last, end));
                     /*if (i == invuls.Count - 1)
                     {
@@ -201,7 +201,7 @@ namespace LuckParser.Models.Logic
                 }
                 else
                 {
-                    long end = log.FightData.ToFightSpace(c.Time);
+                    long end = c.Time;
                     if (addSkipPhases)
                     {
                         phases.Add(new PhaseData(last, end));
@@ -242,7 +242,7 @@ namespace LuckParser.Models.Logic
         {
             foreach (Target target in Targets)
             {
-                if (ids.Contains(target.ID) && phase.InInterval(Math.Max(log.FightData.ToFightSpace(target.FirstAware),0)))
+                if (ids.Contains(target.ID) && phase.InInterval(Math.Max(log.FightData.ToFightSpace(target.FirstAwareLogTime),0)))
                 {
                     phase.Targets.Add(target);
                 }
@@ -288,11 +288,11 @@ namespace LuckParser.Models.Logic
                 {
                     throw new InvalidOperationException("Main target of the fight not found");
                 }
-                CombatItem killed = evtcContainer.CombatData.GetStatesData(target.InstID, ParseEnum.StateChange.ChangeDead, target.FirstAware, target.LastAware).LastOrDefault();
+                CombatItem killed = evtcContainer.CombatData.GetStatesData(target.InstID, ParseEnum.StateChange.ChangeDead, target.FirstAwareLogTime, target.LastAwareLogTime).LastOrDefault();
                 if (killed != null)
                 {
                     success++;
-                    maxTime = Math.Max(killed.Time, maxTime);
+                    maxTime = Math.Max(killed.LogTime, maxTime);
                 }
             }
             if ((all && success == idsToUse.Count) || (!all && success > 0))
@@ -311,23 +311,23 @@ namespace LuckParser.Models.Logic
         }
 
         //
-        protected static List<CombatItem> GetFilteredList(CombatData combatData, long skillID, AbstractMasterActor target, bool beginWithStart)
+        protected static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AbstractMasterActor target, bool beginWithStart)
         {
             bool needStart = beginWithStart;
-            List<CombatItem> main = combatData.GetBoonData(skillID).Where(x => ((x.DstInstid == target.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None) || (x.SrcInstid == target.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.Manual)) && x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
-            List<CombatItem> filtered = new List<CombatItem>();
+            List<AbstractBuffEvent> main = combatData.GetBoonData(buffID).Where(x => x.To == target.AgentItem && (x is BuffApplyEvent || x is BuffRemoveManualEvent)).ToList();
+            List<AbstractBuffEvent> filtered = new List<AbstractBuffEvent>();
             for (int i = 0; i < main.Count; i++)
             {
-                CombatItem c = main[i];
-                if (needStart && c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                AbstractBuffEvent c = main[i];
+                if (needStart && c is BuffApplyEvent)
                 {
                     needStart = false;
                     filtered.Add(c);
                 }
-                else if (!needStart && c.IsBuffRemove == ParseEnum.BuffRemove.Manual)
+                else if (!needStart && c is BuffRemoveManualEvent)
                 {
                     // consider only last remove event before another application
-                    if ((i == main.Count - 1) || (i < main.Count - 1 && main[i + 1].IsBuffRemove == ParseEnum.BuffRemove.None))
+                    if ((i == main.Count - 1) || (i < main.Count - 1 && main[i + 1] is BuffApplyEvent))
                     {
                         needStart = true;
                         filtered.Add(c);

@@ -11,7 +11,6 @@ namespace LuckParser.Models.ParseModels
     {
         public NonDirectDamageEvent(CombatItem evtcItem, AgentData agentData, BoonsContainer boons, long offset) : base(evtcItem, agentData, offset)
         {
-            IsIndirectDamage = true;
             IsCondi = false;
             if (boons.BoonsByIds.TryGetValue(evtcItem.SkillID, out Boon boon))
             {

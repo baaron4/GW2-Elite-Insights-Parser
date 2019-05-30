@@ -33,12 +33,12 @@ namespace LuckParser.Models.ParseModels
             HashSet<ushort> playersIds = log.PlayerIDs;
             foreach (Player p in log.PlayerList)
             {
-                foreach (CombatItem c in log.CombatData.GetBoonData(SkillId))
+                foreach (AbstractBuffEvent c in log.CombatData.GetBoonData(SkillId))
                 {
-                    if (c.IsBuffRemove == ParseEnum.BuffRemove.None && p.InstID == c.DstInstid && Keep(c, log))
+                    if (c is BuffApplyEvent && p.AgentItem == c.To /*&& Keep(c, log)*/)
                     {
-                        mechanicLogs[this].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), this, p));
-                        mechanicLogs[this].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), this, log.PlayerList.FirstOrDefault(x => x.InstID == c.SrcInstid)));
+                        mechanicLogs[this].Add(new MechanicLog(c.Time, this, p));
+                        mechanicLogs[this].Add(new MechanicLog(c.Time, this, log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By)));
                     }
 
                 }

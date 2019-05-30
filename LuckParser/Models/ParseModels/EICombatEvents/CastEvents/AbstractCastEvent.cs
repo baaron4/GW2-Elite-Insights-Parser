@@ -25,13 +25,13 @@ namespace LuckParser.Models.ParseModels
         // Swaps
         public int SwappedTo { get; protected set; }
 
-        public AbstractCastEvent(CombatItem startEvtcItem, AgentData agentData, long offset) : base(startEvtcItem.Time, offset)
+        public AbstractCastEvent(CombatItem startEvtcItem, AgentData agentData, long offset) : base(startEvtcItem.LogTime, offset)
         {
             SkillId = startEvtcItem.SkillID;
-            Caster = agentData.GetAgentByInstID(startEvtcItem.SrcInstid, startEvtcItem.Time);
+            Caster = agentData.GetAgentByInstID(startEvtcItem.SrcInstid, startEvtcItem.LogTime);
             UnderQuickness = startEvtcItem.IsActivation == ParseEnum.Activation.Quickness;
             ExpectedDuration = startEvtcItem.Value;
-            MasterCaster = startEvtcItem.SrcMasterInstid > 0 ? agentData.GetAgentByInstID(startEvtcItem.SrcMasterInstid, startEvtcItem.Time) : null;
+            MasterCaster = startEvtcItem.SrcMasterInstid > 0 ? agentData.GetAgentByInstID(startEvtcItem.SrcMasterInstid, startEvtcItem.LogTime) : null;
             if (SkillId == SkillItem.DodgeId)
             {
                 ExpectedDuration = 750;

@@ -68,33 +68,33 @@ namespace LuckParser.Models.Logic
                 return phases;
             }
             // Special buff cast check
-            CombatItem heatWave = log.CombatData.GetBoonData(34526).FirstOrDefault();
+            AbstractBuffEvent heatWave = log.CombatData.GetBoonData(34526).FirstOrDefault();
             if (heatWave != null)
             {
-                phases.Add(new PhaseData(0, log.FightData.ToFightSpace(heatWave.Time) - 1));
+                phases.Add(new PhaseData(0, heatWave.Time - 1));
                 AbstractDamageEvent downPour = log.CombatData.GetDamageData(mainTarget.AgentItem).Find(x => x.SkillId == 34554);
                 if (downPour != null)
                 {
-                    phases.Add(new PhaseData(log.FightData.ToFightSpace(heatWave.Time), log.FightData.ToFightSpace(downPour.Time) - 1));
+                    phases.Add(new PhaseData(heatWave.Time, downPour.Time - 1));
                     List<AbstractCastEvent> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
                     AbstractCastEvent abo = castLogs.Find(x => x.SkillId == 34427);
                     if (abo != null)
                     {
-                        phases.Add(new PhaseData(log.FightData.ToFightSpace(downPour.Time), abo.Time - 1));
-                        CombatItem invulRemove = log.CombatData.GetBoonDataByDst(mainTarget.InstID, log.FightData.ToLogSpace(abo.Time), log.FightData.ToLogSpace(abo.Time) + 10000).FirstOrDefault(x => x.SkillID == 757 && x.IsBuffRemove != ParseEnum.BuffRemove.None);
+                        phases.Add(new PhaseData(downPour.Time, abo.Time - 1));
+                        AbstractBuffEvent invulRemove = log.CombatData.GetBoonDataByDst(mainTarget.AgentItem).FirstOrDefault(x => x.Time >= abo.Time && x.Time <= abo.Time + 10000 && x.BuffID == 757 && !(x is BuffApplyEvent));
                         if (invulRemove != null)
                         {
-                            phases.Add(new PhaseData(log.FightData.ToFightSpace(invulRemove.Time), fightDuration));
+                            phases.Add(new PhaseData(invulRemove.Time, fightDuration));
                         }
                     }
                     else
                     {
-                        phases.Add(new PhaseData(log.FightData.ToFightSpace(downPour.Time), fightDuration));
+                        phases.Add(new PhaseData(downPour.Time, fightDuration));
                     }
                 }
                 else
                 {
-                    phases.Add(new PhaseData(log.FightData.ToFightSpace(heatWave.Time), fightDuration));
+                    phases.Add(new PhaseData(heatWave.Time, fightDuration));
                 }
             }
             else
@@ -154,7 +154,7 @@ namespace LuckParser.Models.Logic
             {
                 case (ushort)ParseEnum.TargetIDS.Matthias:
                     List<AbstractCastEvent> humanShield = cls.Where(x => x.SkillId == 34468).ToList();
-                    List<int> humanShieldRemoval = log.CombatData.GetBoonData(34518).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All).Select(x => (int)(log.FightData.ToFightSpace(x.Time))).Distinct().ToList();
+                    List<int> humanShieldRemoval = log.CombatData.GetBoonData(34518).Where(x => x is BuffRemoveAllEvent).Select(x => (int)x.Time).Distinct().ToList();
                     for (var i = 0; i < humanShield.Count; i++)
                     {
                         var shield = humanShield[i];
@@ -169,7 +169,7 @@ namespace LuckParser.Models.Logic
                         }
                     }
                     List<AbstractCastEvent> aboShield = cls.Where(x => x.SkillId == 34510).ToList();
-                    List<int> aboShieldRemoval = log.CombatData.GetBoonData(34376).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All).Select(x => (int)(log.FightData.ToFightSpace(x.Time))).Distinct().ToList();
+                    List<int> aboShieldRemoval = log.CombatData.GetBoonData(34376).Where(x => x is BuffRemoveAllEvent).Select(x => (int)x.Time).Distinct().ToList();
                     for (var i = 0; i < aboShield.Count; i++)
                     {
                         var shield = aboShield[i];
@@ -216,18 +216,18 @@ namespace LuckParser.Models.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // Corruption
-            List<CombatItem> corruptedMatthias = GetFilteredList(log.CombatData, 34416, p, true);
+            List<AbstractBuffEvent> corruptedMatthias = GetFilteredList(log.CombatData, 34416, p, true);
             corruptedMatthias.AddRange(GetFilteredList(log.CombatData, 34473, p, true));
             int corruptedMatthiasStart = 0;
-            foreach (CombatItem c in corruptedMatthias)
+            foreach (AbstractBuffEvent c in corruptedMatthias)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    corruptedMatthiasStart = (int)(log.FightData.ToFightSpace(c.Time));
+                    corruptedMatthiasStart = (int)c.Time;
                 }
                 else
                 {
-                    int corruptedMatthiasEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int corruptedMatthiasEnd = (int)c.Time;
                     replay.Actors.Add(new CircleActor(true, 0, 180, (corruptedMatthiasStart, corruptedMatthiasEnd), "rgba(255, 150, 0, 0.5)", new AgentConnector(p)));
                     Point3D wellNextPosition = replay.Positions.FirstOrDefault(x => x.Time >= corruptedMatthiasEnd);
                     Point3D wellPrevPosition = replay.Positions.LastOrDefault(x => x.Time <= corruptedMatthiasEnd);
@@ -239,17 +239,17 @@ namespace LuckParser.Models.Logic
                 }
             }
             // Well of profane
-            List<CombatItem> wellMatthias = GetFilteredList(log.CombatData, 34450, p, true);
+            List<AbstractBuffEvent> wellMatthias = GetFilteredList(log.CombatData, 34450, p, true);
             int wellMatthiasStart = 0;
-            foreach (CombatItem c in wellMatthias)
+            foreach (AbstractBuffEvent c in wellMatthias)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    wellMatthiasStart = (int)(log.FightData.ToFightSpace(c.Time));
+                    wellMatthiasStart = (int)c.Time;
                 }
                 else
                 {
-                    int wellMatthiasEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int wellMatthiasEnd = (int)c.Time;
                     replay.Actors.Add(new CircleActor(false, 0, 120, (wellMatthiasStart, wellMatthiasEnd), "rgba(150, 255, 80, 0.5)", new AgentConnector(p)));
                     replay.Actors.Add(new CircleActor(true, wellMatthiasStart + 9000, 120, (wellMatthiasStart, wellMatthiasEnd), "rgba(150, 255, 80, 0.5)", new AgentConnector(p)));
                     Point3D wellNextPosition = replay.Positions.FirstOrDefault(x => x.Time >= wellMatthiasEnd);
@@ -261,26 +261,26 @@ namespace LuckParser.Models.Logic
                 }
             }
             // Sacrifice
-            List<CombatItem> sacrificeMatthias = GetFilteredList(log.CombatData, 34442, p, true);
+            List<AbstractBuffEvent> sacrificeMatthias = GetFilteredList(log.CombatData, 34442, p, true);
             int sacrificeMatthiasStart = 0;
-            foreach (CombatItem c in sacrificeMatthias)
+            foreach (AbstractBuffEvent c in sacrificeMatthias)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    sacrificeMatthiasStart = (int)(log.FightData.ToFightSpace(c.Time));
+                    sacrificeMatthiasStart = (int)c.Time;
                 }
                 else
                 {
-                    int sacrificeMatthiasEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int sacrificeMatthiasEnd = (int)c.Time;
                     replay.Actors.Add(new CircleActor(true, 0, 120, (sacrificeMatthiasStart, sacrificeMatthiasEnd), "rgba(0, 150, 250, 0.2)", new AgentConnector(p)));
                     replay.Actors.Add(new CircleActor(true, sacrificeMatthiasStart + 10000, 120, (sacrificeMatthiasStart, sacrificeMatthiasEnd), "rgba(0, 150, 250, 0.35)", new AgentConnector(p)));
                 }
             }
             // Bombs
-            List<CombatItem> zealousBenediction = log.CombatData.GetBoonData(34511).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
-            foreach (CombatItem c in zealousBenediction)
+            List<AbstractBuffEvent> zealousBenediction = log.CombatData.GetBoonData(34511).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            foreach (AbstractBuffEvent c in zealousBenediction)
             {
-                int zealousStart = (int)(log.FightData.ToFightSpace(c.Time)) ;
+                int zealousStart = (int)c.Time ;
                 int zealousEnd = zealousStart + 5000;
                 replay.Actors.Add(new CircleActor(true, 0, 180, (zealousStart, zealousEnd), "rgba(200, 150, 0, 0.2)", new AgentConnector(p)));
                 replay.Actors.Add(new CircleActor(true, zealousEnd, 180, (zealousStart, zealousEnd), "rgba(200, 150, 0, 0.4)", new AgentConnector(p)));

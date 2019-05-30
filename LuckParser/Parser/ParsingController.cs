@@ -460,16 +460,16 @@ namespace LuckParser.Parser
                         if (agent.InstID == 0)
                         {
                             agent.InstID = c.SrcInstid;
-                            if (agent.FirstAware == 0)
+                            if (agent.FirstAwareLogTime == 0)
                             {
-                                agent.FirstAware = c.Time;
+                                agent.FirstAwareLogTime = c.LogTime;
                             }
-                            agent.LastAware = c.Time;
+                            agent.LastAwareLogTime = c.LogTime;
                             break;
                         }
                         else if (agent.InstID == c.SrcInstid)
                         {
-                            agent.LastAware = c.Time;
+                            agent.LastAwareLogTime = c.LogTime;
                             break;
                         }
                     }
@@ -480,14 +480,14 @@ namespace LuckParser.Parser
             {
                 if (c.SrcMasterInstid != 0)
                 {
-                    var master = _allAgentsList.Find(x => x.InstID == c.SrcMasterInstid && x.FirstAware <= c.Time && c.Time <= x.LastAware);
+                    var master = _allAgentsList.Find(x => x.InstID == c.SrcMasterInstid && x.FirstAwareLogTime <= c.LogTime && c.LogTime <= x.LastAwareLogTime);
                     if (master != null)
                     {
                         if (agentsLookup.TryGetValue(c.SrcAgent, out var minionList))
                         {
                             foreach (AgentItem minion in minionList)
                             {
-                                if (minion.FirstAware <= c.Time && c.Time <= minion.LastAware)
+                                if (minion.FirstAwareLogTime <= c.LogTime && c.LogTime <= minion.LastAwareLogTime)
                                 {
                                     minion.MasterAgent = master;
                                 }
@@ -496,7 +496,7 @@ namespace LuckParser.Parser
                     }
                 }
             }
-            _allAgentsList.RemoveAll(x => !(x.InstID != 0 && x.LastAware - x.FirstAware >= 0 && x.FirstAware != 0 && x.LastAware != long.MaxValue) && x.Type != AgentItem.AgentType.Player);
+            _allAgentsList.RemoveAll(x => !(x.InstID != 0 && x.LastAwareLogTime - x.FirstAwareLogTime >= 0 && x.FirstAwareLogTime != 0 && x.LastAwareLogTime != long.MaxValue) && x.Type != AgentItem.AgentType.Player);
             _agentData = new AgentData(_allAgentsList);
         }
         private void CompletePlayers()
@@ -506,7 +506,7 @@ namespace LuckParser.Parser
 
             foreach (AgentItem playerAgent in playerAgentList)
             {
-                if (playerAgent.InstID == 0 || playerAgent.FirstAware == 0 || playerAgent.LastAware == long.MaxValue)
+                if (playerAgent.InstID == 0 || playerAgent.FirstAwareLogTime == 0 || playerAgent.LastAwareLogTime == long.MaxValue)
                 {
                     CombatItem tst = _combatItems.Find(x => x.SrcAgent == playerAgent.Agent);
                     if (tst == null)
@@ -522,8 +522,8 @@ namespace LuckParser.Parser
                     {
                         playerAgent.InstID = tst.SrcInstid;
                     }
-                    playerAgent.FirstAware = _fightData.FightStart;
-                    playerAgent.LastAware = _fightData.FightEnd;
+                    playerAgent.FirstAwareLogTime = _fightData.FightStart;
+                    playerAgent.LastAwareLogTime = _fightData.FightEnd;
                 }
                 try
                 {
@@ -560,8 +560,8 @@ namespace LuckParser.Parser
                                 }
                                 p.AgentItem.InstID = instid;
                                 p.AgentItem.Agent = agent;
-                                p.AgentItem.FirstAware = Math.Min(p.AgentItem.FirstAware, player.AgentItem.FirstAware);
-                                p.AgentItem.LastAware = Math.Max(p.AgentItem.LastAware, player.AgentItem.LastAware);
+                                p.AgentItem.FirstAwareLogTime = Math.Min(p.AgentItem.FirstAwareLogTime, player.AgentItem.FirstAwareLogTime);
+                                p.AgentItem.LastAwareLogTime = Math.Max(p.AgentItem.LastAwareLogTime, player.AgentItem.LastAwareLogTime);
                                 _agentData.Refresh();
                                 break;
                             }
@@ -599,8 +599,8 @@ namespace LuckParser.Parser
             long start, end;
             if (_combatItems.Count > 0)
             {
-                start = _combatItems.Min(x => x.Time);
-                end = _combatItems.Max(x => x.Time);
+                start = _combatItems.Min(x => x.LogTime);
+                end = _combatItems.Max(x => x.LogTime);
             }
             else
             {
@@ -620,7 +620,7 @@ namespace LuckParser.Parser
                         if (_logData.PoV == "N/A")//Point of View
                         {
                             ulong povAgent = c.SrcAgent;
-                            _logData.SetPOV(_agentData.GetAgent(povAgent, c.Time).Name);
+                            _logData.SetPOV(_agentData.GetAgent(povAgent, c.LogTime).Name);
                         }
                         break;
                     case ParseEnum.StateChange.GWBuild:
@@ -633,21 +633,21 @@ namespace LuckParser.Parser
                         _logData.SetLogEnd(c.Value);
                         break;
                     case ParseEnum.StateChange.MaxHealthUpdate:
-                        _fightData.Logic.SetMaxHealth(c.SrcInstid, c.Time, (int)c.DstAgent);
+                        _fightData.Logic.SetMaxHealth(c.SrcInstid, c.LogTime, (int)c.DstAgent);
                         break;
                     case ParseEnum.StateChange.HealthUpdate:
                         //set health update
-                        _fightData.Logic.AddHealthUpdate(c.SrcInstid, c.Time, c.Time, (int)c.DstAgent);
+                        _fightData.Logic.AddHealthUpdate(c.SrcInstid, c.LogTime, c.LogTime, (int)c.DstAgent);
                         break;
                 }
             }
             if (_logData.LogStart == LogData.DefaultTimeValue)
             {
-                _logData.SetLogStart(_combatItems.First().Time);
+                _logData.SetLogStart(_combatItems.First().LogTime);
             }
             if (_logData.LogEnd == LogData.DefaultTimeValue)
             {
-                _logData.SetLogEnd(_combatItems.Last().Time);
+                _logData.SetLogEnd(_combatItems.Last().LogTime);
             }
             //players
             CompletePlayers();

@@ -13,8 +13,8 @@ namespace LuckParser.Models.ParseModels
         public AgentItem MasterAgent { get; set; }
         public ushort InstID { get; set; }
         public AgentType Type { get; }
-        public long FirstAware { get; set; }
-        public long LastAware { get; set; } = long.MaxValue;
+        public long FirstAwareLogTime { get; set; }
+        public long LastAwareLogTime { get; set; } = long.MaxValue;
         public readonly string Name;
         public readonly string Prof;
         public readonly uint Toughness;

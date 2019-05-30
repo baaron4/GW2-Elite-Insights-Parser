@@ -103,18 +103,18 @@ namespace LuckParser.Models.Logic
             switch (mob.ID)
             {
                 case (ushort)Jade:
-                    List<CombatItem> shield = GetFilteredList(log.CombatData, 38155, mob, true);
+                    List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, 38155, mob, true);
                     int shieldStart = 0;
                     int shieldRadius = 100;
-                    foreach (CombatItem c in shield)
+                    foreach (AbstractBuffEvent c in shield)
                     {
-                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                        if (c is BuffApplyEvent)
                         {
-                            shieldStart = (int)(log.FightData.ToFightSpace(c.Time));
+                            shieldStart = (int)c.Time;
                         }
                         else
                         {
-                            int shieldEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                            int shieldEnd = (int)c.Time;
                             replay.Actors.Add(new CircleActor(true, 0, shieldRadius, (shieldStart, shieldEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(mob)));
                         }
                     }

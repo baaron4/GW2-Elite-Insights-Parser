@@ -10,26 +10,24 @@ namespace LuckParser.Models.ParseModels
     public class BuffExtensionEvent : BuffApplyEvent
     {
         private readonly long _oldValue;
-        private readonly long _extension;
 
         public BuffExtensionEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, agentData, offset)
         {
-            Src = null;
-            _extension = evtcItem.Value;
+            By = null;
             _oldValue = evtcItem.OverstackValue - evtcItem.Value;
         }
 
         public override void TryFindSrc(ParsedLog log)
         {
-            if (Src == null)
+            if (By == null)
             {
-                Src = log.Boons.TryFindSrc(Dst, Time, _extension, log, BuffID);
+                By = log.Boons.TryFindSrc(To, Time, Value, log, BuffID);
             }
         }
 
         public override void UpdateSimulator(BoonSimulator simulator)
         {
-            simulator.Extend(Value, _oldValue, Src, Time);
+            simulator.Extend(Value, _oldValue, By, Time);
         }
     }
 }

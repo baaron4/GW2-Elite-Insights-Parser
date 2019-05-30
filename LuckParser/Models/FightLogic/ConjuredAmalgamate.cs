@@ -55,7 +55,7 @@ namespace LuckParser.Models.Logic
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem sword = agentData.AddCustomAgent(combatData.First().Time, combatData.Last().Time, AgentItem.AgentType.Player, "Conjured Sword\0:Conjured Sword\050", "Sword", 0);
+            AgentItem sword = agentData.AddCustomAgent(combatData.First().LogTime, combatData.Last().LogTime, AgentItem.AgentType.Player, "Conjured Sword\0:Conjured Sword\050", "Sword", 0);
             foreach(CombatItem c in combatData)
             {
                 if (c.SkillID == 52370 && c.IsStateChange == ParseEnum.StateChange.Normal && c.IsBuffRemove == ParseEnum.BuffRemove.None &&
@@ -84,17 +84,17 @@ namespace LuckParser.Models.Logic
                 case (ushort)ConjuredGreatsword:
                     break;
                 case (ushort)ConjuredShield:
-                    List<CombatItem> shield = GetFilteredList(log.CombatData, 53003, mob, true);
+                    List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, 53003, mob, true);
                     int shieldStart = 0;
-                    foreach (CombatItem c in shield)
+                    foreach (AbstractBuffEvent c in shield)
                     {
-                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                        if (c is BuffApplyEvent)
                         {
-                            shieldStart = (int)(log.FightData.ToFightSpace(c.Time));
+                            shieldStart = (int)c.Time;
                         }
                         else
                         {
-                            int shieldEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                            int shieldEnd = (int)c.Time;
                             int radius = 100;
                             replay.Actors.Add(new CircleActor(true, 0, radius, (shieldStart, shieldEnd), "rgba(0, 150, 255, 0.3)", new AgentConnector(mob)));
                         }
@@ -111,13 +111,13 @@ namespace LuckParser.Models.Logic
             List<AgentItem> attackTargets = new List<AgentItem>();
             foreach (CombatItem c in attackTargetsAgents)
             {
-                attackTargets.Add(log.AgentData.GetAgent(c.SrcAgent, c.Time));
+                attackTargets.Add(log.AgentData.GetAgent(c.SrcAgent, c.LogTime));
             }
             List<long> targetables = new List<long>();
             foreach (AgentItem attackTarget in attackTargets)
             {
                 var aux = log.CombatData.GetStates(ParseEnum.StateChange.Targetable).Where(x => x.SrcAgent == attackTarget.Agent).ToList();
-                targetables.AddRange(aux.Where(x => x.DstAgent == 1).Select(x => log.FightData.ToFightSpace(x.Time)));
+                targetables.AddRange(aux.Where(x => x.DstAgent == 1).Select(x => log.FightData.ToFightSpace(x.LogTime)));
             }
             return targetables;
         }
@@ -197,17 +197,17 @@ namespace LuckParser.Models.Logic
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.ConjuredAmalgamate:
-                    List<CombatItem> shield = GetFilteredList(log.CombatData, 53003, target, true);
+                    List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, 53003, target, true);
                     int shieldStart = 0;
-                    foreach (CombatItem c in shield)
+                    foreach (AbstractBuffEvent c in shield)
                     {
-                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                        if (c is BuffApplyEvent)
                         {
-                            shieldStart = (int)(log.FightData.ToFightSpace(c.Time));
+                            shieldStart = (int)c.Time;
                         }
                         else
                         {
-                            int shieldEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                            int shieldEnd = (int)c.Time;
                             int radius = 500;
                             replay.Actors.Add(new CircleActor(true, 0, radius, (shieldStart, shieldEnd), "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
                         }

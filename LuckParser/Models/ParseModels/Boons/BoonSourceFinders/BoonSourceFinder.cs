@@ -29,7 +29,7 @@ namespace LuckParser.Models.ParseModels
                 _extensionSkills = new List<AbstractCastEvent>();
                 foreach (Player p in log.PlayerList)
                 {
-                    _extensionSkills.AddRange(p.GetCastLogs(log, log.FightData.ToFightSpace(p.FirstAware), log.FightData.ToFightSpace(p.LastAware)).Where(x => ExtensionIDS.Contains(x.SkillId) && !x.Interrupted));
+                    _extensionSkills.AddRange(p.GetCastLogsActDur(log, 0, log.FightData.FightDuration).Where(x => ExtensionIDS.Contains(x.SkillId) && !x.Interrupted));
                 }
             }
             return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time <= time && time <= x.Time + x.ActualDuration + 10).ToList();
@@ -53,10 +53,10 @@ namespace LuckParser.Models.ParseModels
         {
             if (extension == ImbuedMelodies && log.PlayerListBySpec.TryGetValue("Tempest", out List<Player> tempests))
             {
-                HashSet<ushort> magAuraApplications = new HashSet<ushort>(log.CombatData.GetBoonData(5684).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && Math.Abs(x.Time - log.FightData.ToLogSpace(time)) < 50 /*&& x.SrcInstid != item.SrcInstId*/).Select(x => x.SrcInstid));
+                HashSet<AgentItem> magAuraApplications = new HashSet<AgentItem>(log.CombatData.GetBoonData(5684).Where(x => x is BuffApplyEvent && x.Time - time < 50 && x.By != item.Caster).Select(x => x.By));
                 foreach (Player tempest in tempests)
                 {
-                    if (magAuraApplications.Contains(tempest.InstID))
+                    if (magAuraApplications.Contains(tempest.AgentItem))
                     {
                         return true;
                     }

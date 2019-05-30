@@ -38,7 +38,7 @@ namespace LuckParser.Models.ParseModels
                 DummyActor amp = null;
                 if (true /*Keep(c, log)*/)
                 {
-                    Target target = log.FightData.Logic.Targets.Find(x => x.AgentItem == c.Caster && x.FirstAware <= c.Time && x.LastAware >= c.Time);
+                    Target target = log.FightData.Logic.Targets.Find(x => x.AgentItem == c.Caster && x.FirstAwareLogTime <= c.Time && x.LastAwareLogTime >= c.Time);
                     if (target != null)
                     {
                         amp = target;

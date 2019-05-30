@@ -107,17 +107,17 @@ namespace LuckParser.Models.Logic
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Samarog:
-                    List<CombatItem> brutalize = log.CombatData.GetBoonData(38226).Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.Manual).ToList();
+                    List<AbstractBuffEvent> brutalize = GetFilteredList(log.CombatData, 38226, target, true);
                     int brutStart = 0;
-                    foreach (CombatItem c in brutalize)
+                    foreach (AbstractBuffEvent c in brutalize)
                     {
-                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                        if (c is BuffApplyEvent)
                         {
-                            brutStart = (int)(log.FightData.ToFightSpace(c.Time));
+                            brutStart = (int)c.Time;
                         }
                         else
                         {
-                            int brutEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                            int brutEnd = (int)c.Time;
                             replay.Actors.Add(new CircleActor(true, 0, 120, (brutStart, brutEnd), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                         }
                     }
@@ -133,51 +133,52 @@ namespace LuckParser.Models.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // big bomb
-            List<CombatItem> bigbomb = log.CombatData.GetBoonData(37966).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
-            foreach (CombatItem c in bigbomb)
+            List<AbstractBuffEvent> bigbomb = log.CombatData.GetBoonData(37966).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
+            foreach (AbstractBuffEvent c in bigbomb)
             {
-                int bigStart = (int)(log.FightData.ToFightSpace(c.Time));
+                int bigStart = (int)c.Time;
                 int bigEnd = bigStart + 6000;
                 replay.Actors.Add(new CircleActor(true, 0, 300, (bigStart, bigEnd), "rgba(150, 80, 0, 0.2)", new AgentConnector(p)));
                 replay.Actors.Add(new CircleActor(true, bigEnd, 300, (bigStart, bigEnd), "rgba(150, 80, 0, 0.2)", new AgentConnector(p)));
             }
             // small bomb
-            List<CombatItem> smallbomb = log.CombatData.GetBoonData(38247).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
-            foreach (CombatItem c in smallbomb)
+            List<AbstractBuffEvent> smallbomb = log.CombatData.GetBoonData(38247).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
+            foreach (AbstractBuffEvent c in smallbomb)
             {
-                int smallStart = (int)(log.FightData.ToFightSpace(c.Time));
+                int smallStart = (int)c.Time;
                 int smallEnd = smallStart + 6000;
                 replay.Actors.Add(new CircleActor(true, 0, 80, (smallStart, smallEnd), "rgba(80, 150, 0, 0.3)", new AgentConnector(p)));
             }
             // fixated
-            List<CombatItem> fixatedSam = GetFilteredList(log.CombatData, 37868, p, true);
+            List<AbstractBuffEvent> fixatedSam = GetFilteredList(log.CombatData, 37868, p, true);
             int fixatedSamStart = 0;
-            foreach (CombatItem c in fixatedSam)
+            foreach (AbstractBuffEvent c in fixatedSam)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    fixatedSamStart = Math.Max((int)(log.FightData.ToFightSpace(c.Time)), 0);
+                    fixatedSamStart = Math.Max((int)c.Time, 0);
                 }
                 else
                 {
-                    int fixatedSamEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int fixatedSamEnd = (int)c.Time;
                     replay.Actors.Add(new CircleActor(true, 0, 80, (fixatedSamStart, fixatedSamEnd), "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
                 }
             }
             //fixated Ghuldem
-            List<CombatItem> fixatedGuldhem = GetFilteredList(log.CombatData, 38223, p, true);
+            List<AbstractBuffEvent> fixatedGuldhem = GetFilteredList(log.CombatData, 38223, p, true);
             int fixationGuldhemStart = 0;
             Target guldhem = null;
-            foreach (CombatItem c in fixatedGuldhem)
+            foreach (AbstractBuffEvent c in fixatedGuldhem)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    fixationGuldhemStart = (int)(log.FightData.ToFightSpace(c.Time));
-                    guldhem = Targets.FirstOrDefault(x => x.ID == (ushort)ParseEnum.TrashIDS.Guldhem && c.Time >= x.FirstAware && c.Time <= x.LastAware);
+                    fixationGuldhemStart = (int)c.Time;
+                    long logTime = log.FightData.ToLogSpace(c.Time);
+                    guldhem = Targets.FirstOrDefault(x => x.ID == (ushort)Guldhem && logTime >= x.FirstAwareLogTime && logTime <= x.LastAwareLogTime);
                 }
                 else
                 {
-                    int fixationGuldhemEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int fixationGuldhemEnd = (int)c.Time;
                     if (guldhem != null)
                     {
                         replay.Actors.Add(new LineActor(0, (fixationGuldhemStart, fixationGuldhemEnd), "rgba(255, 100, 0, 0.3)", new AgentConnector(p), new AgentConnector(guldhem)));
@@ -185,19 +186,20 @@ namespace LuckParser.Models.Logic
                 }
             }
             //fixated Rigom
-            List<CombatItem> fixatedRigom = GetFilteredList(log.CombatData, 37693, p, true);
+            List<AbstractBuffEvent> fixatedRigom = GetFilteredList(log.CombatData, 37693, p, true);
             int fixationRigomStart = 0;
             Target rigom = null;
-            foreach (CombatItem c in fixatedRigom)
+            foreach (AbstractBuffEvent c in fixatedRigom)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    fixationRigomStart = (int)(log.FightData.ToFightSpace(c.Time));
-                    rigom = Targets.FirstOrDefault(x => x.ID == (ushort)ParseEnum.TrashIDS.Rigom && c.Time >= x.FirstAware && c.Time <= x.LastAware);
+                    fixationRigomStart = (int)c.Time;
+                    long logTime = log.FightData.ToLogSpace(c.Time);
+                    rigom = Targets.FirstOrDefault(x => x.ID == (ushort)Rigom && logTime >= x.FirstAwareLogTime && logTime <= x.LastAwareLogTime);
                 }
                 else
                 {
-                    int fixationRigomEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int fixationRigomEnd = (int)c.Time;
                     if (rigom != null)
                     {
                         replay.Actors.Add(new LineActor(0, (fixationRigomStart, fixationRigomEnd), "rgba(255, 0, 0, 0.3)", new AgentConnector(p), new AgentConnector(rigom)));

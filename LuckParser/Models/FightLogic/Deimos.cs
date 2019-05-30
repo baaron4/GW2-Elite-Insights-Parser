@@ -10,7 +10,7 @@ namespace LuckParser.Models.Logic
     public class Deimos : RaidLogic
     {
 
-        private long _specialSplit = 0;
+        private long _specialSplitLogTime = 0;
 
         public Deimos(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
         {
@@ -108,19 +108,19 @@ namespace LuckParser.Models.Logic
             CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcInstid == target.InstID && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
             if (enterCombat != null)
             {
-                fightData.OverrideStart(enterCombat.Time);
+                fightData.OverrideStart(enterCombat.LogTime);
             }
             // Remove deimos despawn events as they are useless and mess with combat replay
-            combatData.RemoveAll(x => x.IsStateChange == ParseEnum.StateChange.Despawn && x.SrcInstid == target.InstID && x.Time <= target.LastAware && x.Time >= target.FirstAware);
+            combatData.RemoveAll(x => x.IsStateChange == ParseEnum.StateChange.Despawn && x.SrcInstid == target.InstID && x.LogTime <= target.LastAwareLogTime && x.LogTime >= target.FirstAwareLogTime);
             // Deimos gadgets
-            List<AgentItem> deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos") && x.LastAware > target.LastAware).ToList();
+            List<AgentItem> deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos") && x.LastAwareLogTime > target.LastAwareLogTime).ToList();
             CombatItem invulApp = combatData.FirstOrDefault(x => x.DstInstid == target.InstID && x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0 && x.SkillID == 762);
-            CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.Time > combatData.First().Time && x.DstAgent > 0);
+            CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.LogTime > combatData.First().LogTime && x.DstAgent > 0);
             if (invulApp != null && targetable != null)
             {
                 HashSet<ulong> gadgetAgents = new HashSet<ulong>();
-                long firstAware = targetable.Time;
-                AgentItem targetAgent = agentData.GetAgentByInstID(targetable.SrcInstid, targetable.Time);
+                long firstAware = targetable.LogTime;
+                AgentItem targetAgent = agentData.GetAgentByInstID(targetable.SrcInstid, targetable.LogTime);
                 if (targetAgent != GeneralHelper.UnknownAgent)
                 {
                     try
@@ -128,14 +128,14 @@ namespace LuckParser.Models.Logic
                         string[] names = targetAgent.Name.Split('-');
                         if (ushort.TryParse(names[2], out ushort masterInstid))
                         {
-                            CombatItem structDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && x.IFF == ParseEnum.IFF.Foe && x.DstInstid == masterInstid && x.IsStateChange == ParseEnum.StateChange.Normal && x.IsBuffRemove == ParseEnum.BuffRemove.None &&
+                            CombatItem structDeimosDamageEvent = combatData.FirstOrDefault(x => x.LogTime >= firstAware && x.IFF == ParseEnum.IFF.Foe && x.DstInstid == masterInstid && x.IsStateChange == ParseEnum.StateChange.Normal && x.IsBuffRemove == ParseEnum.BuffRemove.None &&
                                     ((x.IsBuff == 1 && x.BuffDmg >= 0 && x.Value == 0) ||
                                     (x.IsBuff == 0 && x.Value >= 0)));
                             if (structDeimosDamageEvent != null)
                             {
                                 gadgetAgents.Add(structDeimosDamageEvent.DstAgent);
                             }
-                            CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && (x.SkillID == 37980 || x.SkillID == 37982 || x.SkillID == 38046) && x.SrcAgent != 0 && x.SrcInstid != 0);
+                            CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.LogTime >= firstAware && (x.SkillID == 37980 || x.SkillID == 37982 || x.SkillID == 38046) && x.SrcAgent != 0 && x.SrcInstid != 0);
                             if (armDeimosDamageEvent != null)
                             {
                                 gadgetAgents.Add(armDeimosDamageEvent.SrcAgent);
@@ -147,17 +147,17 @@ namespace LuckParser.Models.Logic
                         // nothing to do
                     }
                 }
-                invulApp.OverrideValue((int)(firstAware - invulApp.Time));
-                _specialSplit = (firstAware >= target.LastAware ? firstAware : target.LastAware);
-                target.AgentItem.LastAware = combatData.Last().Time;
+                invulApp.OverrideValue((int)(firstAware - invulApp.LogTime));
+                _specialSplitLogTime = (firstAware >= target.LastAwareLogTime ? firstAware : target.LastAwareLogTime);
+                target.AgentItem.LastAwareLogTime = combatData.Last().LogTime;
                 SetUniqueID(target, gadgetAgents, agentData, combatData);
             }
             // legacy method
             else if (deimosGadgets.Count > 0)
             {
-                long firstAware = deimosGadgets.Max(x => x.FirstAware);
-                _specialSplit = (firstAware >= target.LastAware ? firstAware : target.LastAware);
-                target.AgentItem.LastAware = deimosGadgets.Max(x => x.LastAware);
+                long firstAware = deimosGadgets.Max(x => x.FirstAwareLogTime);
+                _specialSplitLogTime = (firstAware >= target.LastAwareLogTime ? firstAware : target.LastAwareLogTime);
+                target.AgentItem.LastAwareLogTime = deimosGadgets.Max(x => x.LastAwareLogTime);
                 HashSet<ulong> gadgetAgents = new HashSet<ulong>(deimosGadgets.Select(x => x.Agent));
                 SetUniqueID(target, gadgetAgents, agentData, combatData);
             }
@@ -180,12 +180,12 @@ namespace LuckParser.Models.Logic
                 return phases;
             }
             // Determined + additional data on inst change
-            CombatItem invulDei = log.CombatData.GetBoonData(762).Find(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && x.DstInstid == mainTarget.InstID);
+            AbstractBuffEvent invulDei = log.CombatData.GetBoonData(762).Find(x => x is BuffApplyEvent && x.To == mainTarget.AgentItem);
             if (invulDei != null)
             {
-                end = log.FightData.ToFightSpace(invulDei.Time);
+                end = invulDei.Time;
                 phases.Add(new PhaseData(start, end));
-                start = (_specialSplit > 0 ? log.FightData.ToFightSpace(_specialSplit) : fightDuration);
+                start = (_specialSplitLogTime > 0 ? log.FightData.ToFightSpace(_specialSplitLogTime) : fightDuration);
                 //mainTarget.AddCustomCastLog(end, -6, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
             }
             if (fightDuration - start > 5000 && start >= phases.Last().End)
@@ -203,7 +203,7 @@ namespace LuckParser.Models.Logic
                 if (tar.ID == (ushort)Thief || tar.ID == (ushort)Drunkard || tar.ID == (ushort)Gambler)
                 {
                     string name = (tar.ID == (ushort)Thief ? "Thief" : (tar.ID == (ushort)Drunkard ? "Drunkard" : (tar.ID == (ushort)Gambler ? "Gambler" : "")));
-                    PhaseData tarPhase = new PhaseData(log.FightData.ToFightSpace(tar.FirstAware) - 1000, log.FightData.ToFightSpace(tar.LastAware) + 1000);
+                    PhaseData tarPhase = new PhaseData(log.FightData.ToFightSpace(tar.FirstAwareLogTime) - 1000, log.FightData.ToFightSpace(tar.LastAwareLogTime) + 1000);
                     tarPhase.Targets.Add(tar);
                     tarPhase.OverrideTimes(log);
                     // override first then add Deimos so that it does not disturb the override process
@@ -296,7 +296,7 @@ namespace LuckParser.Models.Logic
         {
             foreach (Target target in Targets)
             {
-                if (target.InstID == instid && target.FirstAware <= time && target.LastAware >= time)
+                if (target.InstID == instid && target.FirstAwareLogTime <= time && target.LastAwareLogTime >= time)
                 {
                     // Additional check because the arm gives a health update of 100%
                     if (target.HealthOverTime.Count > 0 && target.HealthOverTime.Last().hp < 10000 && health > 9900)
@@ -350,18 +350,18 @@ namespace LuckParser.Models.Logic
                             }
                         }
                     }
-                    List<CombatItem> signets = GetFilteredList(log.CombatData, 38224, target, true);
+                    List<AbstractBuffEvent> signets = GetFilteredList(log.CombatData, 38224, target, true);
                     int sigStart = 0;
                     int sigEnd = 0;
-                    foreach (CombatItem signet in signets)
+                    foreach (AbstractBuffEvent signet in signets)
                     {
-                        if (signet.IsBuffRemove == ParseEnum.BuffRemove.None)
+                        if (signet is BuffApplyEvent)
                         {
-                            sigStart = (int)log.FightData.ToFightSpace(signet.Time);
+                            sigStart = (int)signet.Time;
                         }
                         else
                         {
-                            sigEnd = (int)log.FightData.ToFightSpace(signet.Time);
+                            sigEnd = (int)signet.Time;
                             replay.Actors.Add(new CircleActor(true, 0, 120, (sigStart, sigEnd), "rgba(0, 200, 200, 0.5)", new AgentConnector(target)));
                         }
                     }
@@ -379,17 +379,17 @@ namespace LuckParser.Models.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // teleport zone
-            List<CombatItem> tpDeimos = GetFilteredList(log.CombatData, 37730, p, true);
+            List<AbstractBuffEvent> tpDeimos = GetFilteredList(log.CombatData, 37730, p, true);
             int tpStart = 0;
-            foreach (CombatItem c in tpDeimos)
+            foreach (AbstractBuffEvent c in tpDeimos)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    tpStart = (int)(log.FightData.ToFightSpace(c.Time));
+                    tpStart = (int)c.Time;
                 }
                 else
                 {
-                    int tpEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int tpEnd = (int)c.Time;
                     replay.Actors.Add(new CircleActor(true, 0, 180, (tpStart, tpEnd), "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));
                     replay.Actors.Add(new CircleActor(true, tpEnd, 180, (tpStart, tpEnd), "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));
                 }

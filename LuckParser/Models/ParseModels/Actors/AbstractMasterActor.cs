@@ -234,6 +234,25 @@ namespace LuckParser.Models.ParseModels
 
         protected abstract void InitCombatReplay(ParsedLog log);
 
+        protected void TrimCombatReplay(ParsedLog log)
+        {
+            CombatItem despawnCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Despawn, FirstAwareLogTime, LastAwareLogTime).LastOrDefault();
+            CombatItem spawnCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Spawn, FirstAwareLogTime, LastAwareLogTime).LastOrDefault();
+            CombatItem deathCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.ChangeDead, FirstAwareLogTime, LastAwareLogTime).LastOrDefault();
+            if (deathCheck != null)
+            {
+                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAwareLogTime), log.FightData.ToFightSpace(deathCheck.LogTime));
+            }
+            else if (despawnCheck != null && (spawnCheck == null || spawnCheck.LogTime < despawnCheck.LogTime))
+            {
+                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAwareLogTime), log.FightData.ToFightSpace(despawnCheck.LogTime));
+            }
+            else
+            {
+                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAwareLogTime), log.FightData.ToFightSpace(AgentItem.LastAwareLogTime));
+            }
+        }
+
         public List<GenericActor> GetCombatReplayActors(ParsedLog log)
         {
             if (!log.CanCombatReplay || IsFakeActor)
@@ -343,7 +362,7 @@ namespace LuckParser.Models.ParseModels
             }
             foreach (KeyValuePair<string, Minions> pair in auxMinions)
             {
-                if (pair.Value.GetDamageLogs(null, log, log.FightData.ToFightSpace(FirstAware), log.FightData.ToFightSpace(LastAware)).Count > 0 || pair.Value.GetCastLogs(log, log.FightData.ToFightSpace(FirstAware), log.FightData.ToFightSpace(LastAware)).Count > 0)
+                if (pair.Value.GetDamageLogs(null, log, 0, log.FightData.FightDuration).Count > 0 || pair.Value.GetCastLogs(log,0, log.FightData.FightDuration).Count > 0)
                 {
                     _minions[pair.Key] = pair.Value;
                 }
@@ -355,7 +374,7 @@ namespace LuckParser.Models.ParseModels
             Dictionary<string, Minions> minionsList = GetMinions(log);
             foreach (Minions mins in minionsList.Values)
             {
-                DamageLogs.AddRange(mins.GetDamageLogs(null, log, log.FightData.ToFightSpace(FirstAware), log.FightData.ToFightSpace(LastAware)));
+                DamageLogs.AddRange(mins.GetDamageLogs(null, log, 0, log.FightData.FightDuration));
             }
             DamageLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
         }

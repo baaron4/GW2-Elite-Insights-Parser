@@ -112,12 +112,12 @@ namespace LuckParser.Models.ParseModels
             GenerationSimulation.RemoveAll(x => x.Duration <= 0);
         }
 
-        public void Simulate(List<BoonLog> logs, long fightDuration)
+        public void Simulate(List<AbstractBuffEvent> logs, long fightDuration)
         {
             long firstTimeValue = logs.Count > 0 ? Math.Min(logs.First().Time, 0) : 0;
             long timeCur = firstTimeValue;
             long timePrev = firstTimeValue;
-            foreach (BoonLog log in logs)
+            foreach (AbstractBuffEvent log in logs)
             {
                 timeCur = log.Time;
                 if (timeCur - timePrev < 0)
@@ -212,7 +212,6 @@ namespace LuckParser.Models.ParseModels
                     BoonStack.Clear();
                     break;
                 case ParseEnum.BuffRemove.Single:
-                case ParseEnum.BuffRemove.Manual:
                     for (int i = 0; i < BoonStack.Count; i++)
                     {
                         BoonStackItem stackItem = BoonStack[i];

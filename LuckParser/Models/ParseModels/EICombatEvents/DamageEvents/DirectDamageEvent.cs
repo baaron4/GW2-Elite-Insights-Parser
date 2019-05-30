@@ -13,7 +13,6 @@ namespace LuckParser.Models.ParseModels
         {
             Damage = evtcItem.Value;
             ParseEnum.PhysicalResult result = ParseEnum.GetPhysicalResult(evtcItem.Result);
-            IsIndirectDamage = false;
             IsCondi = false;
             IsAbsorb = result == ParseEnum.PhysicalResult.Absorb;
             IsBlind = result == ParseEnum.PhysicalResult.Blind;

@@ -54,7 +54,7 @@ namespace LuckParser.Models.Logic
                 CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcAgent == pov.SrcAgent && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
                 if (enterCombat != null)
                 {
-                    fightData.OverrideStart(enterCombat.Time);
+                    fightData.OverrideStart(enterCombat.LogTime);
                 }
             }
         }

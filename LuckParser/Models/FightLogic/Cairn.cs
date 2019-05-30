@@ -91,10 +91,10 @@ namespace LuckParser.Models.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // shared agony
-            List<CombatItem> agony = log.CombatData.GetBoonData(38049).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
-            foreach (CombatItem c in agony)
+            List<AbstractBuffEvent> agony = log.CombatData.GetBoonData(38049).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
+            foreach (AbstractBuffEvent c in agony)
             {
-                int agonyStart = (int)log.FightData.ToFightSpace(c.Time);
+                int agonyStart = (int)c.Time;
                 int agonyEnd = agonyStart + 62000;
                 replay.Actors.Add(new CircleActor(false, 0, 220, (agonyStart, agonyEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(p)));
             }

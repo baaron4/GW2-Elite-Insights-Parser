@@ -31,7 +31,7 @@ namespace LuckParser.Models.ParseModels
                     amp = new DummyActor(a);
                     regroupedMobs.Add(a.ID, amp);
                 }
-                mechanicLogs[this].Add(new MechanicLog(log.FightData.ToFightSpace(a.FirstAware), this, amp));
+                mechanicLogs[this].Add(new MechanicLog(log.FightData.ToFightSpace(a.FirstAwareLogTime), this, amp));
             }
         }
     }

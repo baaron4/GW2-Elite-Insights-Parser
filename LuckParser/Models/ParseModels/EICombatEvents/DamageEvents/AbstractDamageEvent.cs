@@ -23,7 +23,6 @@ namespace LuckParser.Models.ParseModels
         public bool IsFifty { get; }
         public bool IsMoving { get; }
         public bool IsFlanking { get; }
-        public bool IsIndirectDamage { get; protected set; }
         public bool IsCondi { get; protected set; }
         public bool IsHit { get; protected set; }
         public bool IsCrit { get; protected set; }
@@ -36,12 +35,12 @@ namespace LuckParser.Models.ParseModels
         public bool IsBlock { get; protected set; }
         public bool IsEvade { get; protected set; }
 
-        public AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem.Time, offset)
+        public AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem.LogTime, offset)
         {
-            From = agentData.GetAgentByInstID(evtcItem.SrcInstid, evtcItem.Time);
-            MasterFrom = evtcItem.SrcMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.SrcMasterInstid, evtcItem.Time) : null;
-            To = agentData.GetAgentByInstID(evtcItem.DstInstid, evtcItem.Time);
-            MasterTo = evtcItem.DstMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.DstMasterInstid, evtcItem.Time) : null;
+            From = agentData.GetAgentByInstID(evtcItem.SrcInstid, evtcItem.LogTime);
+            MasterFrom = evtcItem.SrcMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.SrcMasterInstid, evtcItem.LogTime) : null;
+            To = agentData.GetAgentByInstID(evtcItem.DstInstid, evtcItem.LogTime);
+            MasterTo = evtcItem.DstMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.DstMasterInstid, evtcItem.LogTime) : null;
             SkillId = evtcItem.SkillID;
             ShieldDamage = evtcItem.IsShields > 0 ? evtcItem.OverstackValue > 0 ? (int)evtcItem.OverstackValue : evtcItem.Value : 0;
             IsNinety = evtcItem.IsNinety > 0;

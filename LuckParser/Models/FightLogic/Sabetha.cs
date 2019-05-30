@@ -197,26 +197,27 @@ namespace LuckParser.Models.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // timed bombs
-            List<CombatItem> timedBombs = log.CombatData.GetBoonData(31485).Where(x => x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
-            foreach (CombatItem c in timedBombs)
+            List<AbstractBuffEvent> timedBombs = log.CombatData.GetBoonData(31485).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            foreach (AbstractBuffEvent c in timedBombs)
             {
-                int start = (int)(log.FightData.ToFightSpace(c.Time));
+                int start = (int)c.Time;
                 int end = start + 3000;
                 replay.Actors.Add(new CircleActor(false, 0, 280, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(p)));
                 replay.Actors.Add(new CircleActor(true, end, 280, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(p)));
             }
             // Sapper bombs
-            List<CombatItem> sapperBombs = GetFilteredList(log.CombatData, 31473, p, true);
+            List<AbstractBuffEvent> sapperBombs = GetFilteredList(log.CombatData, 31473, p, true);
             int sapperStart = 0;
-            foreach (CombatItem c in sapperBombs)
+            foreach (AbstractBuffEvent c in sapperBombs)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    sapperStart = (int)(log.FightData.ToFightSpace(c.Time));
+                    sapperStart = (int)c.Time;
                 }
                 else
                 {
-                    int sapperEnd = (int)(log.FightData.ToFightSpace(c.Time)); replay.Actors.Add(new CircleActor(false, 0, 180, (sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)", new AgentConnector(p)));
+                    int sapperEnd = (int)c.Time;
+                    replay.Actors.Add(new CircleActor(false, 0, 180, (sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)", new AgentConnector(p)));
                     replay.Actors.Add(new CircleActor(true, sapperStart + 5000, 180, (sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)", new AgentConnector(p)));
                 }
             }

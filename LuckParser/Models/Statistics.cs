@@ -53,9 +53,9 @@ namespace LuckParser.Models
             foreach (Player player in evtcContainer.PlayerList)
             {
                 PresentPersonalBuffs[player.InstID] = new HashSet<Boon>();
-                foreach (CombatItem item in evtcContainer.CombatData.GetBoonDataByDst(player.InstID, player.FirstAware, player.LastAware))
+                foreach (AbstractBuffEvent item in evtcContainer.CombatData.GetBoonDataByDst(player.AgentItem))
                 {
-                    if (item.DstInstid == player.InstID && item.IsBuffRemove == ParseEnum.BuffRemove.None && remainingBuffsByIds.TryGetValue(item.SkillID, out Boon boon))
+                    if (item is BuffApplyEvent && item.To == player.AgentItem && remainingBuffsByIds.TryGetValue(item.BuffID, out Boon boon))
                     {
                         PresentPersonalBuffs[player.InstID].Add(boon);
                     }
