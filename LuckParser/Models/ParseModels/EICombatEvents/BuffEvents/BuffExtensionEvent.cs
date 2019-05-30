@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class BuffExtensionEvent : AbstractBuffEvent
+    public class BuffExtensionEvent : BuffApplyEvent
     {
         private readonly long _oldValue;
         private readonly long _extension;
 
-        public BuffExtensionEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, offset)
+        public BuffExtensionEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, agentData, offset)
         {
-            Dst = agentData.GetAgentByInstID(evtcItem.DstInstid, evtcItem.Time);
             Src = null;
             _extension = evtcItem.Value;
             _oldValue = evtcItem.OverstackValue - evtcItem.Value;

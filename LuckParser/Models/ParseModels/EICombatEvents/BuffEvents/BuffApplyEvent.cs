@@ -15,6 +15,11 @@ namespace LuckParser.Models.ParseModels
             Dst = agentData.GetAgentByInstID(evtcItem.DstInstid, evtcItem.Time);
         }
 
+        public override bool IsBoonSimulatorCompliant()
+        {
+            return BuffID != BoonHelper.NoBuff;
+        }
+
         public override void TryFindSrc(ParsedLog log)
         {
         }
