@@ -9,7 +9,8 @@ namespace LuckParser.Models.ParseModels
         // Fields
         public readonly string BuildVersion;
         public ulong GW2Version { get; set; }
-        public string PoV { get; private set; } = "N/A";
+        public AgentItem PoV { get; private set; } = null;
+        public string PoVName { get; private set; } = "N/A";
         private readonly string _dateFormat = "yyyy-MM-dd HH:mm:ss zz";
         public string LogStart { get; private set; }
         public string LogEnd { get; private set; }
@@ -25,9 +26,10 @@ namespace LuckParser.Models.ParseModels
         }
         
         // Setters
-        public void SetPOV(string pov)
+        public void SetPOV(AgentItem pov)
         {
-            PoV = pov.Substring(0, pov.LastIndexOf('\0'));
+            PoV = pov;
+            PoVName = pov.Name.Substring(0, pov.Name.LastIndexOf('\0')).Split(':')[0].TrimEnd('\u0000');
         }
 
         private string GetDateTime(long unixSeconds)

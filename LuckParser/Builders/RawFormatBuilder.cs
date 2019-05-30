@@ -123,7 +123,7 @@ namespace LuckParser.Builders
             log.FightName = _log.FightData.Name;
             log.EliteInsightsVersion = Application.ProductVersion;
             log.ArcVersion = _log.LogData.BuildVersion;
-            log.RecordedBy = _log.LogData.PoV.Split(':')[0].TrimEnd('\u0000');
+            log.RecordedBy = _log.LogData.PoVName;
             log.TimeStart = _log.LogData.LogStart;
             log.TimeEnd = _log.LogData.LogEnd;
             log.Duration = durationString;

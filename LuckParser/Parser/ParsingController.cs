@@ -617,10 +617,10 @@ namespace LuckParser.Parser
                 switch (c.IsStateChange)
                 {
                     case ParseEnum.StateChange.PointOfView:
-                        if (_logData.PoV == "N/A")//Point of View
+                        if (_logData.PoV == null)//Point of View
                         {
                             ulong povAgent = c.SrcAgent;
-                            _logData.SetPOV(_agentData.GetAgent(povAgent, c.LogTime).Name);
+                            _logData.SetPOV(_agentData.GetAgent(povAgent, c.LogTime));
                         }
                         break;
                     case ParseEnum.StateChange.GWBuild:

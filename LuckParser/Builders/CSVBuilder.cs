@@ -78,7 +78,7 @@ namespace LuckParser.Builders
             WriteLine(new [] { "Elite Insights Version", Application.ProductVersion });
             WriteLine(new [] { "ARC Version", _log.LogData.BuildVersion});
             WriteLine(new [] { "Fight ID", _log.FightData.ID.ToString() });
-            WriteLine(new [] { "Recorded By", _log.LogData.PoV.Split(':')[0] });
+            WriteLine(new [] { "Recorded By", _log.LogData.PoVName });
             WriteLine(new [] { "Time Start", _log.LogData.LogStart });
             WriteLine(new [] { "Time End", _log.LogData.LogEnd });
             if (Properties.Settings.Default.UploadToDPSReports || Properties.Settings.Default.UploadToDPSReportsRH || Properties.Settings.Default.UploadToRaidar)

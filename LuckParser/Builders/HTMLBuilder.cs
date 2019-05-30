@@ -675,7 +675,7 @@ namespace LuckParser.Builders
             html = html.Replace("${evtcVersion}", _log.LogData.BuildVersion);
             html = html.Replace("${fightID}", _log.FightData.ID.ToString());
             html = html.Replace("${eiVersion}", Application.ProductVersion);
-            html = html.Replace("${recordedBy}", _log.LogData.PoV.Split(':')[0]);
+            html = html.Replace("${recordedBy}", _log.LogData.PoVName);
 
             string uploadString = "";
             if (Properties.Settings.Default.UploadToDPSReports)
