@@ -61,13 +61,13 @@ namespace LuckParser.Models.ParseModels
                 long end = long.MinValue;
                 foreach (Target target in Targets)
                 {
-                    long dead = target.LastAwareLogTime;
+                    long deadLogTime = target.LastAwareLogTime;
                     CombatItem died = deathEvents.FirstOrDefault(x => x.SrcInstid == target.InstID && x.LogTime >= target.FirstAwareLogTime && x.LogTime <= target.LastAwareLogTime);
                     if (died != null)
                     {
-                        dead = died.LogTime;
+                        deadLogTime = died.LogTime;
                     }
-                    end = Math.Max(end, log.FightData.ToFightSpace(dead));
+                    end = Math.Max(end, log.FightData.ToFightSpace(deadLogTime));
                 }
                 End = Math.Min(Math.Min(End, end), log.FightData.FightDuration);
             }

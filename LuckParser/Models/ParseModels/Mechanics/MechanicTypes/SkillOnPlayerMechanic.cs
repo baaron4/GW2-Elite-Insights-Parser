@@ -40,7 +40,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         continue;
                     }
-                    mechanicLogs[this].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), this, p));
+                    mechanicLogs[this].Add(new MechanicLog(c.Time, this, p));
                 }
             }
         }

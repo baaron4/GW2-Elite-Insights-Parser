@@ -45,7 +45,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         if (c.From == p.AgentItem || c.MasterFrom == p.AgentItem )
                         {
-                            mechanicLogs[this].Add(new MechanicLog(log.FightData.ToFightSpace(c.Time), this, p));
+                            mechanicLogs[this].Add(new MechanicLog(c.Time, this, p));
                         }
                     }
                 }
