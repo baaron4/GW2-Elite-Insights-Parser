@@ -9,7 +9,6 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class AbstractBuffEvent : AbstractCombatEvent
     {
-        public int Value { get; }
         public long BuffID { get; private set; }
         private long _originalBuffID;
         public AgentItem By { get; protected set; }
@@ -17,13 +16,11 @@ namespace LuckParser.Models.ParseModels
 
         public AbstractBuffEvent(CombatItem evtcItem, long offset) : base(evtcItem.LogTime, offset)
         {
-            Value = evtcItem.Value;
             BuffID = evtcItem.SkillID;
         }
 
-        public AbstractBuffEvent(int value, long buffID, long time) : base(time, 0)
+        public AbstractBuffEvent(long buffID, long time) : base(time, 0)
         {
-            Value = value;
             BuffID = buffID;
         }
 

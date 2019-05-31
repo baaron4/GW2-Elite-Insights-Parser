@@ -19,13 +19,13 @@ namespace LuckParser.Models.ParseModels
         {
             return BuffID != BoonHelper.NoBuff &&
                 !(_iff == ParseEnum.IFF.Unknown && To == GeneralHelper.UnknownAgent) && // weird single stack remove
-                !(Value <= 50) &&// low value single stack remove that can mess up with the simulator if server delay
+                !(RemovedDuration <= 50) &&// low value single stack remove that can mess up with the simulator if server delay
                  Time <= fightEnd - 50; // don't take into account removal that are close to the end of the fight
         }
 
         public override void UpdateSimulator(BoonSimulator simulator)
         {
-            simulator.Remove(By, Value, Time, ParseEnum.BuffRemove.Single);
+            simulator.Remove(By, RemovedDuration, Time, ParseEnum.BuffRemove.Single);
         }
     }
 }

@@ -21,13 +21,13 @@ namespace LuckParser.Models.ParseModels
         {
             if (By == null)
             {
-                By = log.Boons.TryFindSrc(To, Time, Value, log, BuffID);
+                By = log.Boons.TryFindSrc(To, Time, AppliedDuration, log, BuffID);
             }
         }
 
         public override void UpdateSimulator(BoonSimulator simulator)
         {
-            simulator.Extend(Value, _oldValue, By, Time);
+            simulator.Extend(AppliedDuration, _oldValue, By, Time);
         }
     }
 }
