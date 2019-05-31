@@ -879,11 +879,11 @@ namespace LuckParser.Models.ParseModels
             {
                 foreach (AbstractBuffEvent c in log.CombatData.GetBoonData(consumable.ID))
                 {
-                    if (!(c is BuffApplyEvent) ||  AgentItem != c.To)
+                    if (!(c is BuffApplyEvent ba) ||  AgentItem != ba.To)
                     {
                         continue;
                     }
-                    long time = Math.Max(c.Time, 0);
+                    long time = Math.Max(ba.Time, 0);
                     if (time <= fightDuration)
                     {
                         Consumable existing = _consumeList.Find(x => x.Time == time && x.Buff.ID == consumable.ID);
@@ -892,7 +892,7 @@ namespace LuckParser.Models.ParseModels
                             existing.Stack++;
                         } else
                         {
-                            _consumeList.Add(new Consumable(consumable, time, c.Value));
+                            _consumeList.Add(new Consumable(consumable, time, ba.AppliedDuration));
                         }
                     }
                 }
