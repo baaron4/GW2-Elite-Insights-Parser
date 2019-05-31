@@ -13,6 +13,9 @@ namespace LuckParser.Models.ParseModels
 
         public AbstractMetaDataEvent(CombatItem evtcItem, long offset) : base(evtcItem.LogTime, offset)
         {
+#if DEBUG
+            OriginalCombatEvent = evtcItem;
+#endif
             Data = evtcItem.SrcAgent;
         }
 

@@ -36,6 +36,9 @@ namespace LuckParser.Models.ParseModels
 
         public AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem.LogTime, offset)
         {
+#if DEBUG
+            OriginalCombatEvent = evtcItem;
+#endif
             From = agentData.GetAgentByInstID(evtcItem.SrcInstid, evtcItem.LogTime);
             MasterFrom = evtcItem.SrcMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.SrcMasterInstid, evtcItem.LogTime) : null;
             To = agentData.GetAgentByInstID(evtcItem.DstInstid, evtcItem.LogTime);

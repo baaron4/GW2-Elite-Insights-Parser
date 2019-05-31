@@ -14,6 +14,9 @@ namespace LuckParser.Models.ParseModels
         public AbstractStatusEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem.LogTime, offset)
         {
             Src = agentData.GetAgent(evtcItem.SrcAgent, evtcItem.LogTime);
+#if DEBUG
+            OriginalCombatEvent = evtcItem;
+#endif
         }
 
     }

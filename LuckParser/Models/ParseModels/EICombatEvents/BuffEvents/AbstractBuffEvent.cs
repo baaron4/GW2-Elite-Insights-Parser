@@ -16,6 +16,9 @@ namespace LuckParser.Models.ParseModels
 
         public AbstractBuffEvent(CombatItem evtcItem, long offset) : base(evtcItem.LogTime, offset)
         {
+#if DEBUG
+            OriginalCombatEvent = evtcItem;
+#endif
             BuffID = evtcItem.SkillID;
         }
 

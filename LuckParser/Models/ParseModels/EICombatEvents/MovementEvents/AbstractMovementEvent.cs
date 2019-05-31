@@ -18,6 +18,9 @@ namespace LuckParser.Models.ParseModels
             AgentItem = agentData.GetAgentByInstID(evtcItem.SrcInstid, evtcItem.LogTime);
             _dstAgent = evtcItem.DstAgent;
             _value = evtcItem.Value;
+#if DEBUG
+            OriginalCombatEvent = evtcItem;
+#endif
         }
 
         public (float x, float y, float z) Unpack()
