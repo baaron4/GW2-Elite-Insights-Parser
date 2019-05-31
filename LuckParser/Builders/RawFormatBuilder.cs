@@ -477,7 +477,7 @@ namespace LuckParser.Builders
                         _skillDesc["s" + pair.Key] = new JsonLog.SkillDesc(skill);
                     }
                 }
-                List<AbstractDamageEvent> filteredList = pair.Value.Where(x => !x.IsDowned).ToList();
+                List<AbstractDamageEvent> filteredList = pair.Value.Where(x => !x.HasDowned).ToList();
                 if (filteredList.Count == 0)
                 {
                     continue;

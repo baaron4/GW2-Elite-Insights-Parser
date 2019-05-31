@@ -27,12 +27,12 @@ namespace LuckParser.Models.ParseModels
         public bool IsCrit { get; protected set; }
         public bool IsGlance { get; protected set; }
         public bool IsBlind { get; protected set; }
-        public bool IsAbsorb { get; protected set; }
-        public bool IsInterrupt { get; protected set; }
-        public bool IsDowned { get; protected set; }
-        public bool IsKilled { get; protected set; }
-        public bool IsBlock { get; protected set; }
-        public bool IsEvade { get; protected set; }
+        public bool IsAbsorbed { get; protected set; }
+        public bool HasInterrupted { get; protected set; }
+        public bool HasDowned { get; protected set; }
+        public bool HasKilled { get; protected set; }
+        public bool IsBlocked { get; protected set; }
+        public bool IsEvaded { get; protected set; }
 
         public AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem.LogTime, offset)
         {

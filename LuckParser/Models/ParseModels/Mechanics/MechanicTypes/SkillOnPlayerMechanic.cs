@@ -32,7 +32,7 @@ namespace LuckParser.Models.ParseModels
             CombatData combatData = log.CombatData;
             foreach (Player p in log.PlayerList)
             {
-                List<AbstractDamageEvent> combatitems = combatData.GetDamageTakenData(p.AgentItem);
+                List<AbstractDamageEvent> combatitems = p.GetDamageTakenLogs(null, log, 0, log.FightData.FightDuration);
                 foreach (AbstractDamageEvent c in combatitems)
                 {
                     if (c.SkillId == SkillId && c.IsHit && Keep(c, log))

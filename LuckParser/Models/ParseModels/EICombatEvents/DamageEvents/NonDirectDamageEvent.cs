@@ -16,7 +16,7 @@ namespace LuckParser.Models.ParseModels
             Damage = evtcItem.BuffDmg;
             ParseEnum.ConditionResult result = ParseEnum.GetConditionResult(evtcItem.Result);
 
-            IsAbsorb = result == ParseEnum.ConditionResult.InvulByBuff ||
+            IsAbsorbed = result == ParseEnum.ConditionResult.InvulByBuff ||
                 result == ParseEnum.ConditionResult.InvulByPlayerSkill1 ||
                 result == ParseEnum.ConditionResult.InvulByPlayerSkill2 ||
                 result == ParseEnum.ConditionResult.InvulByPlayerSkill3;

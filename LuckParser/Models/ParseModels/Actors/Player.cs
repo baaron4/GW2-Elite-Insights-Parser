@@ -207,12 +207,12 @@ namespace LuckParser.Models.ParseModels
                             {
                                 targetFinal.Missed++;
                             }
-                            if (dl.IsInterrupt)
+                            if (dl.HasInterrupted)
                             {
                                 targetFinal.Interrupts++;
                             }
 
-                            if (dl.IsAbsorb)
+                            if (dl.IsAbsorbed)
                             {
                                 targetFinal.Invulned++;
                             }
@@ -243,12 +243,12 @@ namespace LuckParser.Models.ParseModels
                     {
                         final.Missed++;
                     }
-                    if (dl.IsInterrupt)
+                    if (dl.HasInterrupted)
                     {
                         final.Interrupts++;
                     }
 
-                    if (dl.IsAbsorb)
+                    if (dl.IsAbsorbed)
                     {
                         final.Invulned++;
                     }
@@ -392,14 +392,14 @@ namespace LuckParser.Models.ParseModels
 
                 final.DamageTaken = damageLogs.Sum(x => (long)x.Damage);
                 //final.allHealReceived = healingLogs.Sum(x => x.getDamage());
-                final.BlockedCount = damageLogs.Count(x => x.IsBlock);
+                final.BlockedCount = damageLogs.Count(x => x.IsBlocked);
                 final.InvulnedCount = 0;
                 final.DamageInvulned = 0;
-                final.EvadedCount = damageLogs.Count(x => x.IsEvade);
+                final.EvadedCount = damageLogs.Count(x => x.IsEvaded);
                 final.DodgeCount = GetCastLogs(log, 0, log.FightData.FightDuration).Count(x => x.SkillId == SkillItem.DodgeId);
                 final.DamageBarrier = damageLogs.Sum(x => x.ShieldDamage);
-                final.InterruptedCount = damageLogs.Count(x => x.IsInterrupt);
-                foreach (AbstractDamageEvent dl in damageLogs.Where(x => x.IsAbsorb))
+                final.InterruptedCount = damageLogs.Count(x => x.HasInterrupted);
+                foreach (AbstractDamageEvent dl in damageLogs.Where(x => x.IsAbsorbed))
                 {
                     final.InvulnedCount++;
                     final.DamageInvulned += dl.Damage;

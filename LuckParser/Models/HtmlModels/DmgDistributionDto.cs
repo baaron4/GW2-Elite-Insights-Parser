@@ -22,7 +22,7 @@ namespace LuckParser.Models.HtmlModels
             bool IsIndirectDamage = false;
             foreach (AbstractDamageEvent dl in entry.Value)
             {
-                if (dl.IsDowned)
+                if (dl.HasDowned)
                 {
                     continue;
                 }

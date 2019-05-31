@@ -13,16 +13,16 @@ namespace LuckParser.Models.ParseModels
         {
             Damage = evtcItem.Value;
             ParseEnum.PhysicalResult result = ParseEnum.GetPhysicalResult(evtcItem.Result);
-            IsAbsorb = result == ParseEnum.PhysicalResult.Absorb;
+            IsAbsorbed = result == ParseEnum.PhysicalResult.Absorb;
             IsBlind = result == ParseEnum.PhysicalResult.Blind;
-            IsBlock = result == ParseEnum.PhysicalResult.Block;
+            IsBlocked = result == ParseEnum.PhysicalResult.Block;
             IsCrit = result == ParseEnum.PhysicalResult.Crit;
-            IsDowned = result == ParseEnum.PhysicalResult.Downed;
-            IsEvade = result == ParseEnum.PhysicalResult.Evade;
+            HasDowned = result == ParseEnum.PhysicalResult.Downed;
+            IsEvaded = result == ParseEnum.PhysicalResult.Evade;
             IsGlance = result == ParseEnum.PhysicalResult.Glance;
             IsHit = result == ParseEnum.PhysicalResult.Normal || result == ParseEnum.PhysicalResult.Crit || result == ParseEnum.PhysicalResult.Glance || result == ParseEnum.PhysicalResult.KillingBlow; //Downed and Interrupt omitted for now due to double procing mechanics || result == ParseEnum.PhysicalResult.Downed || result == ParseEnum.PhysicalResult.Interrupt;
-            IsKilled = result == ParseEnum.PhysicalResult.KillingBlow;
-            IsInterrupt = result == ParseEnum.PhysicalResult.Interrupt;
+            HasKilled = result == ParseEnum.PhysicalResult.KillingBlow;
+            HasInterrupted = result == ParseEnum.PhysicalResult.Interrupt;
         }
 
         public override bool IsCondi(ParsedLog log)
