@@ -27,9 +27,22 @@ namespace LuckParser.Models.Logic
             new PlayerBoonApplyMechanic(34416, "Corruption", new MechanicPlotlySetting("circle","rgb(255,140,0)"), "Corruption","Corruption Application", "Corruption",0),
             new SkillOnPlayerMechanic(34473, "Corruption", new MechanicPlotlySetting("circle-open","rgb(255,140,0)"), "Corr. dmg","Hit by Corruption AoE", "Corruption dmg",0),
             new PlayerBoonApplyMechanic(34442, "Sacrifice", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "Sacrifice","Sacrifice (Breakbar)", "Sacrifice",0),
-            new PlayerBoonRemoveMechanic(34442, "Sacrifice", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CC.End","Sacrifice (Breakbar) ended", "Sacrifice End",0, new List<MechanicChecker>{ new CombatItemValueChecker(25, MechanicChecker.ValueCompare.G) }, Mechanic.TriggerRule.AND),
-            new PlayerBoonRemoveMechanic(34442, "Sacrificed", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC.Fail","Sacrifice time ran out", "Sacrificed",0, new List<MechanicChecker>{ new CombatItemValueChecker(25, MechanicChecker.ValueCompare.LEQ) }, Mechanic.TriggerRule.AND),
-            new PlayerBoonRemoveMechanic(34367, "Unbalanced", new MechanicPlotlySetting("square","rgb(200,140,255)"), "KD","Unbalanced (triggered Storm phase Debuff)", "Knockdown",0, new List<MechanicChecker>{ new CombatItemValueChecker(0, MechanicChecker.ValueCompare.G) }, Mechanic.TriggerRule.AND),
+            new PlayerBoonRemoveMechanic(34442, "Sacrifice", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CC.End","Sacrifice (Breakbar) ended", "Sacrifice End",0, new List<BoonRemoveMechanic.BoonRemoveChecker>{(br,log) => br.RemovedDuration > 25}, Mechanic.TriggerRule.AND),
+            new PlayerBoonRemoveMechanic(34442, "Sacrificed", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC.Fail","Sacrifice time ran out", "Sacrificed",0, new List<BoonRemoveMechanic.BoonRemoveChecker>{ (br,log) => br.RemovedDuration <= 25 }, Mechanic.TriggerRule.AND),
+            new PlayerBoonRemoveMechanic(34367, "Unbalanced", new MechanicPlotlySetting("square","rgb(200,140,255)"), "KD","Unbalanced (triggered Storm phase Debuff)", "Knockdown",0, new List<BoonRemoveMechanic.BoonRemoveChecker>{ (br,log) => br.RemovedDuration > 0, (br, log) => 
+            {
+                AbstractActor actor = log.FindActor(br.To);
+                Dictionary<long,BoonsGraphModel> bgms = actor.GetBoonGraphs(log);
+                // stability check
+                if (bgms.TryGetValue(1122, out var bgm))
+                {
+                    return !bgm.IsPresent(br.Time, 10);
+                }
+                else
+                {
+                    return true;
+                }
+            } }, Mechanic.TriggerRule.AND),
             //new Mechanic(34367, "Unbalanced", Mechanic.MechType.PlayerOnPlayer, ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting("square","rgb(0,140,0)"), "KD","Unbalanced (triggered Storm phase Debuff) only on successful interrupt", "Knockdown (interrupt)",0,(condition => condition.getCombatItem().Result == ParseEnum.Result.Interrupt)),
             //new Mechanic(34367, "Unbalanced", ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting("square","rgb(0,140,0)"), "KD","Unbalanced (triggered Storm phase Debuff) only on successful interrupt", "Knockdown (interrupt)",0,(condition => condition.getDLog().GetResult() == ParseEnum.Result.Interrupt)),
             //new Mechanic(34422, "Blood Fueled", ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting("square","rgb(255,0,0)"), "Ate Reflects(good)",0),//human //Applied at the same time as Backflip Shards since it is the buff applied by them, can be omitted imho
@@ -37,7 +50,7 @@ namespace LuckParser.Models.Logic
             new EnemyBoonApplyMechanic(34376, "Blood Shield", new MechanicPlotlySetting("octagon","rgb(255,0,0)"), "Bubble","Blood Shield (protective bubble)", "Bubble",0),//human
             new EnemyBoonApplyMechanic(34518, "Blood Shield", new MechanicPlotlySetting("octagon","rgb(255,0,0)"), "Bubble","Blood Shield (protective bubble)", "Bubble",0),//abom
             new PlayerBoonApplyMechanic(34511, "Zealous Benediction", new MechanicPlotlySetting("circle","rgb(255,200,0)"), "Bombs","Zealous Benediction (Expanding bombs)","Bomb",0),
-            new PlayerBoonApplyMechanic(26766, "Icy Patch", new MechanicPlotlySetting("circle-open","rgb(0,0,255)"), "Icy KD","Knockdown by Icy Patch", "Icy Patch KD",0, new List<MechanicChecker>{ new CombatItemValueChecker(10000, MechanicChecker.ValueCompare.EQ) }, Mechanic.TriggerRule.AND),
+            new PlayerBoonApplyMechanic(26766, "Icy Patch", new MechanicPlotlySetting("circle-open","rgb(0,0,255)"), "Icy KD","Knockdown by Icy Patch", "Icy Patch KD",0, new List<BoonApplyMechanic.BoonApplyChecker>{ (br,log) => br.AppliedDuration == 10000 }, Mechanic.TriggerRule.AND),
             new SkillOnPlayerMechanic(34413, "Surrender", new MechanicPlotlySetting("circle-open","rgb(0,0,0)"), "Spirit","Surrender (hit by walking Spirit)", "Spirit hit",0)
             });
             Extension = "matt";
