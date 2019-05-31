@@ -8,14 +8,14 @@ using System.Linq;
 namespace LuckParser.Models.ParseModels
 {
     
-    public class SkillOnPlayerMechanic : Mechanic
+    public class SkillOnPlayerMechanic : DamageMechanic
     {
 
-        public SkillOnPlayerMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<MechanicChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)
+        public SkillOnPlayerMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<DamageChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)
         {
         }
 
-        public SkillOnPlayerMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<MechanicChecker> conditions, TriggerRule rule) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, conditions, rule)
+        public SkillOnPlayerMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<DamageChecker> conditions, TriggerRule rule) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, conditions, rule)
         {
         }
 
@@ -35,11 +35,10 @@ namespace LuckParser.Models.ParseModels
                 List<AbstractDamageEvent> combatitems = combatData.GetDamageTakenData(p.AgentItem);
                 foreach (AbstractDamageEvent c in combatitems)
                 {
-                    if ( !(c.SkillId == SkillId) || !c.IsHit /*|| !Keep(c, log)*/)
+                    if (c.SkillId == SkillId && c.IsHit && Keep(c, log))
                     {
-                        continue;
+                        mechanicLogs[this].Add(new MechanicEvent(c.Time, this, p));
                     }
-                    mechanicLogs[this].Add(new MechanicEvent(c.Time, this, p));
                 }
             }
         }

@@ -8,10 +8,10 @@ using System.Linq;
 namespace LuckParser.Models.ParseModels
 {
     
-    public class PlayerCastMechanic : Mechanic
+    public class PlayerCastMechanic : CastMechanic
     {
 
-        public PlayerCastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<MechanicChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)
+        public PlayerCastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<CastChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)
         {
         }
 
@@ -23,7 +23,7 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        public PlayerCastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<MechanicChecker> conditions, TriggerRule rule) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, conditions, rule)
+        public PlayerCastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<CastChecker> conditions, TriggerRule rule) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, conditions, rule)
         {
         }
 
@@ -34,7 +34,7 @@ namespace LuckParser.Models.ParseModels
             {
                 foreach (AbstractCastEvent c in log.CombatData.GetCastDataById(SkillId))
                 {
-                    if (c.Caster == p.AgentItem /*&& Keep(c, log)*/)
+                    if (c.Caster == p.AgentItem && Keep(c, log))
                     {
                         mechanicLogs[this].Add(new MechanicEvent(c.Time, this, p));
 

@@ -8,14 +8,14 @@ using System.Linq;
 namespace LuckParser.Models.ParseModels
 {
 
-    public class PlayerBoonRemoveMechanic : Mechanic
+    public class PlayerBoonRemoveMechanic : BoonRemoveMechanic
     {
 
-        public PlayerBoonRemoveMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<MechanicChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)
+        public PlayerBoonRemoveMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<BoonRemoveChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)
         {
         }
 
-        public PlayerBoonRemoveMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<MechanicChecker> conditions, TriggerRule rule) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, conditions, rule)
+        public PlayerBoonRemoveMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<BoonRemoveChecker> conditions, TriggerRule rule) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, conditions, rule)
         {
         }
 
@@ -35,9 +35,9 @@ namespace LuckParser.Models.ParseModels
             {
                 foreach (AbstractBuffEvent c in log.CombatData.GetBoonData(SkillId))
                 {
-                    if (c is BuffRemoveManualEvent && p.AgentItem == c.To /*&& Keep(c, log)*/)
+                    if (c is BuffRemoveManualEvent rme && p.AgentItem == rme.To && Keep(rme, log))
                     {
-                        mechanicLogs[this].Add(new MechanicEvent(c.Time, this, p));
+                        mechanicLogs[this].Add(new MechanicEvent(rme.Time, this, p));
                     }
                 }
             }

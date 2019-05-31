@@ -8,14 +8,13 @@ using System.Linq;
 namespace LuckParser.Models.ParseModels
 {
 
-    public class EnemyBoonApplyMechanic : Mechanic
+    public class EnemyBoonApplyMechanic : BoonApplyMechanic
     {
-
-        public EnemyBoonApplyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<MechanicChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)
+        public EnemyBoonApplyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<BoonApplyChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)
         {
         }
 
-        public EnemyBoonApplyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<MechanicChecker> conditions, TriggerRule rule) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, conditions, rule)
+        public EnemyBoonApplyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<BoonApplyChecker> conditions, TriggerRule rule) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, conditions, rule)
         {
             IsEnemyMechanic = true;
         }
@@ -36,16 +35,16 @@ namespace LuckParser.Models.ParseModels
             foreach (AbstractBuffEvent c in log.CombatData.GetBoonData(SkillId))
             {
                 DummyActor amp = null;
-                if (c is BuffApplyEvent /*&& Keep(c, log)*/)
+                if (c is BuffApplyEvent ba && Keep(ba, log))
                 {
-                    Target target = log.FightData.Logic.Targets.Find(x => x.AgentItem == c.To);
+                    Target target = log.FightData.Logic.Targets.Find(x => x.AgentItem == ba.To);
                     if (target != null)
                     {
                         amp = target;
                     }
                     else
                     {
-                        AgentItem a = c.To;
+                        AgentItem a = ba.To;
                         if (playerAgents.Contains(a))
                         {
                             continue;

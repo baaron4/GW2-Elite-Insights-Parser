@@ -168,8 +168,6 @@
     <Compile Include="Models\ParseModels\EICombatEvents\StatusEvents\AliveEvent.cs" />
     <Compile Include="Models\ParseModels\EICombatEvents\StatusEvents\ExitCombatEvent.cs" />
     <Compile Include="Models\ParseModels\EICombatEvents\StatusEvents\EnterCombatEvent.cs" />
-    <Compile Include="Models\ParseModels\Mechanics\MechanicsChecker\ActorBuffChecker.cs" />
-    <Compile Include="Models\ParseModels\Mechanics\MechanicsChecker\ActorStateChecker.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonHelpers\ElementalistHelper.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonHelpers\BoonHelper.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonHelpers\WeaverHelper.cs" />
@@ -191,12 +189,13 @@
     <Compile Include="Models\ParseModels\DamageModifiers\GainComputers\GainComputerNonMultiplier.cs" />
     <Compile Include="Models\ParseModels\DamageModifiers\GainComputers\GainComputerByStack.cs" />
     <Compile Include="Models\ParseModels\DamageModifiers\GainComputers\GainComputerByPresence.cs" />
+    <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\DamageMechanic.cs" />
+    <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\BoonRemoveMechanic.cs" />
+    <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\BoonApplyMechanic.cs" />
+    <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\CastMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\EnemyCastMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\EnemyBoonRemoveMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\HitOnEnemyMechanic.cs" />
-    <Compile Include="Models\ParseModels\Mechanics\MechanicsChecker\CombatItemResultChecker.cs" />
-    <Compile Include="Models\ParseModels\Mechanics\MechanicsChecker\CombatItemValueChecker.cs" />
-    <Compile Include="Models\ParseModels\Mechanics\MechanicsChecker\MechanicChecker.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\PlayerBoonApplyMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\PlayerOnPlayerMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\PlayerBoonRemoveMechanic.cs" />

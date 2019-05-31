@@ -8,14 +8,14 @@ using System.Linq;
 namespace LuckParser.Models.ParseModels
 {
     
-    public class HitOnEnemyMechanic : Mechanic
+    public class HitOnEnemyMechanic : DamageMechanic
     {
 
-        public HitOnEnemyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<MechanicChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)
+        public HitOnEnemyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<DamageChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)
         {
         }
 
-        public HitOnEnemyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<MechanicChecker> conditions, TriggerRule rule) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, conditions, rule)
+        public HitOnEnemyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<DamageChecker> conditions, TriggerRule rule) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, conditions, rule)
         {
         }
 
@@ -36,17 +36,17 @@ namespace LuckParser.Models.ParseModels
                 List<AbstractDamageEvent> combatitems = combatData.GetDamageTakenData(a);
                 foreach (AbstractDamageEvent c in combatitems)
                 {
-                    if (c is NonDirectDamageEvent || !c.IsHit /*|| !Keep(c, log)*/ )
+                    if (c is DirectDamageEvent && c.IsHit && Keep(c, log) )
                     {
-                        continue;
-                    }
-                    foreach (Player p in log.PlayerList)
-                    {
-                        if (c.From == p.AgentItem || c.MasterFrom == p.AgentItem )
+                        foreach (Player p in log.PlayerList)
                         {
-                            mechanicLogs[this].Add(new MechanicEvent(c.Time, this, p));
+                            if (c.From == p.AgentItem || c.MasterFrom == p.AgentItem)
+                            {
+                                mechanicLogs[this].Add(new MechanicEvent(c.Time, this, p));
+                            }
                         }
                     }
+                    
                 }
             }
         }

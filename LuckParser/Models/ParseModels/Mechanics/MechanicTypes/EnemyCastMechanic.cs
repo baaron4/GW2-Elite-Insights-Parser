@@ -8,14 +8,14 @@ using System.Linq;
 namespace LuckParser.Models.ParseModels
 {
 
-    public class EnemyCastMechanic : Mechanic
+    public class EnemyCastMechanic : CastMechanic
     {
 
-        public EnemyCastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<MechanicChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)
+        public EnemyCastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<CastChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)
         {
         }
 
-        public EnemyCastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<MechanicChecker> conditions, TriggerRule rule) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, conditions, rule)
+        public EnemyCastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<CastChecker> conditions, TriggerRule rule) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, conditions, rule)
         {
             IsEnemyMechanic = true;
         }
@@ -36,7 +36,7 @@ namespace LuckParser.Models.ParseModels
             foreach (AbstractCastEvent c in log.CombatData.GetCastDataById(SkillId))
             {
                 DummyActor amp = null;
-                if (true /*Keep(c, log)*/)
+                if (Keep(c, log))
                 {
                     Target target = log.FightData.Logic.Targets.Find(x => x.AgentItem == c.Caster && x.FirstAwareLogTime <= c.Time && x.LastAwareLogTime >= c.Time);
                     if (target != null)

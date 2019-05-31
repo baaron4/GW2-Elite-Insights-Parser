@@ -43,28 +43,7 @@ namespace LuckParser.Models.ParseModels
     public abstract class Mechanic
     {
         public enum TriggerRule { OR, AND};
-        private readonly List<MechanicChecker> _triggerConditions = new List<MechanicChecker>();
-        private readonly TriggerRule _triggerRule = TriggerRule.AND;
-
-        protected bool Keep(CombatItem c, ParsedLog log)
-        {
-            if (_triggerConditions.Count > 0)
-            {
-                foreach (MechanicChecker checker in _triggerConditions)
-                {
-                    bool res = checker.Keep(c, log);
-                    if (_triggerRule == TriggerRule.AND && !res)
-                    {
-                        return false;
-                    }
-                    else if (_triggerRule == TriggerRule.OR && res)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return true;
-        }
+        protected readonly TriggerRule Rule = TriggerRule.AND;
 
         public long SkillId { get; }
 
@@ -85,9 +64,8 @@ namespace LuckParser.Models.ParseModels
         /// <param name="plotlySetting">html plot settings <seealso cref="MechanicPlotlySetting"/></param>
         /// <param name="shortName">name of the mechanic</param>
         /// <param name="internalCoolDown">grace period, in ms, during which getting hit by the mechanic does not count</param>
-        /// <param name="conditions">a list of special checks <seealso cref="MechanicChecker"/></param>
         /// <param name="rule">AND or OR rule on the special checks <seealso cref="TriggerRule"/></param>
-        protected Mechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<MechanicChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)
+        protected Mechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, rule)
         {
         }
 
@@ -101,9 +79,8 @@ namespace LuckParser.Models.ParseModels
         /// <param name="description">description of the mechanic</param>
         /// <param name="fullName">full name of the mechanic</param>
         /// <param name="internalCoolDown">grace period, in ms, during which getting hit by the mechanic does not count</param>
-        /// <param name="conditions">a list of special checks <seealso cref="MechanicChecker"/></param>
         /// <param name="rule">AND or OR rule on the special checks <seealso cref="TriggerRule"/></param>
-        protected Mechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<MechanicChecker> conditions, TriggerRule rule)
+        protected Mechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, TriggerRule rule)
         {
             InGameName = inGameName;
             SkillId = skillId;
@@ -113,8 +90,7 @@ namespace LuckParser.Models.ParseModels
             Description = description;
             InternalCooldown = internalCoolDown;
             ShowOnTable = true;
-            _triggerConditions.AddRange(conditions);
-            _triggerRule = rule;
+            Rule = rule;
         }
 
 
