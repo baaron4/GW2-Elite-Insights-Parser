@@ -31,8 +31,8 @@ namespace LuckParser.Models.Logic
             new SkillOnPlayerMechanic(31828, "Unstable Pylon", new MechanicPlotlySetting("hexagram-open","rgb(0,0,255)"), "Floor B","Unstable Pylon (Blue Floor dmg)", "Floor dmg",0),
             new SkillOnPlayerMechanic(31884, "Unstable Pylon", new MechanicPlotlySetting("hexagram-open","rgb(0,128,0)"), "Floor G","Unstable Pylon (Green Floor dmg)", "Floor dmg",0),
             new EnemyCastMechanic(31419, "Magic Storm", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Magic Storm (Breakbar)","Breakbar",0),
-            new EnemyCastMechanic(31419, "Magic Storm", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Magic Storm (Breakbar broken) ", "CCed",0,new List<MechanicChecker>{ new CombatItemValueChecker(8544, MechanicChecker.ValueCompare.LEQ) }, Mechanic.TriggerRule.AND),
-            new EnemyCastMechanic(31419, "Magic Storm", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Magic Storm (Breakbar failed) ", "CC Fail",0,new List<MechanicChecker>{ new CombatItemValueChecker(8544, MechanicChecker.ValueCompare.G) }, Mechanic.TriggerRule.AND),
+            new EnemyCastMechanic(31419, "Magic Storm", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Magic Storm (Breakbar broken) ", "CCed",0, new List<CastMechanic.CastChecker>{ (c, log) => (c.Interrupted || c.ActualDuration <= 8544)}, Mechanic.TriggerRule.AND),
+            new EnemyCastMechanic(31419, "Magic Storm", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Magic Storm (Breakbar failed) ", "CC Fail",0,new List<CastMechanic.CastChecker>{ (c, log) => (c.ReducedAnimation || c.FullAnimation || c.ActualDuration > 8544) }, Mechanic.TriggerRule.AND),
             });
             Extension = "vg";
             IconUrl = "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
