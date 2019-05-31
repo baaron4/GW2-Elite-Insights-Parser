@@ -24,7 +24,7 @@ namespace LuckParser.Models.Logic
             new EnemyCastMechanic(34887, "Summon Fragment Start", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Summon Fragment (Xera Breakbar)", "Breakbar",0),
             new EnemyCastMechanic(34887, "Summon Fragment End", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Summon Fragment (Failed CC)", "CC Fail",0,new List<CastMechanic.CastChecker>{ (ce,log) => (ce.ReducedAnimation || ce.FullAnimation || ce.ActualDuration > 11940) }, Mechanic.TriggerRule.AND),
             new EnemyCastMechanic(34887, "Summon Fragment End", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Summon Fragment (Breakbar broken)", "CCed",0,new List<CastMechanic.CastChecker>{ (ce, log) => (ce.Interrupted || ce.ActualDuration <= 11940) }, Mechanic.TriggerRule.AND),
-            new PlayerBoonApplyMechanic(34965, "Derangement", new MechanicPlotlySetting("square-open","rgb(200,140,255)"), "Stacks","Derangement (Stacking Debuff)", "Derangement",0), 
+            new PlayerBoonApplyMechanic(34965, "Derangement", new MechanicPlotlySetting("square-open","rgb(200,140,255)"), "Stacks","Derangement (Stacking Debuff)", "Derangement",0),
             new PlayerBoonApplyMechanic(35084, "Bending Chaos", new MechanicPlotlySetting("triangle-down-open","rgb(255,200,0)"), "Button1","Bending Chaos (Stood on 1st Button)", "Button 1",0),
             new PlayerBoonApplyMechanic(35162, "Shifting Chaos", new MechanicPlotlySetting("triangle-ne-open","rgb(255,200,0)"), "Button2","Bending Chaos (Stood on 2nd Button)", "Button 2",0),
             new PlayerBoonApplyMechanic(35032, "Twisting Chaos", new MechanicPlotlySetting("triangle-nw-open","rgb(255,200,0)"), "Button3","Bending Chaos (Stood on 3rd Button)", "Button 3",0),
@@ -111,7 +111,8 @@ namespace LuckParser.Models.Logic
                     if (move != null)
                     {
                         _specialSplitLogTime = move.LogTime;
-                    } else
+                    }
+                    else
                     {
                         _specialSplitLogTime = NPC.FirstAwareLogTime;
                     }
@@ -121,7 +122,7 @@ namespace LuckParser.Models.Logic
                     Random rnd = new Random();
                     while (agentData.InstIDValues.Contains(instID) || instID == 0)
                     {
-                        instID = (ushort)rnd.Next(ushort.MaxValue/2, ushort.MaxValue);
+                        instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
                     }
                     target.AgentItem.InstID = instID;
                     agentData.Refresh();
