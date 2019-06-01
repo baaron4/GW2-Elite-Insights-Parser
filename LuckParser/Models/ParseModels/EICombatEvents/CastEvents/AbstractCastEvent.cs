@@ -44,18 +44,5 @@ namespace LuckParser.Models.ParseModels
             Caster = caster;
             MasterCaster = null;
         }
-
-        public int GetSavedTime()
-        {
-            if (Interrupted)
-            {
-                return ActualDuration;
-            }
-            else if (ReducedAnimation && ActualDuration < ExpectedDuration)
-            {
-                return ExpectedDuration - ActualDuration;
-            }
-            return 0;
-        }
     }
 }
