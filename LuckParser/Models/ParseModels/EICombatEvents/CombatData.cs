@@ -23,26 +23,93 @@ namespace LuckParser.Models.ParseModels
         private readonly Dictionary<AgentItem, List<AbstractDamageEvent>> _damageTakenData;
         private readonly Dictionary<AgentItem, List<AbstractMovementEvent>> _movementData;
 
-        private void SpecialBoonParse(List<Player> players, List<AbstractBuffEvent> buffEvents)
+        private void SpecialBoonParse(List<Player> players)
         {
-            bool resort = false;
+            List<AbstractBuffEvent> toAdd = new List<AbstractBuffEvent>();
             foreach (Player p in players)
             {
                 if (p.Prof == "Weaver")
                 {
-                    List<AbstractBuffEvent> toAdd = WeaverHelper.TransformWeaverAttunements(buffEvents.Where(x => x.To == p.AgentItem).ToList(), p.AgentItem);
-                    resort = resort || toAdd.Count > 0;
-                    buffEvents.AddRange(toAdd);
+                    toAdd = WeaverHelper.TransformWeaverAttunements(GetBoonDataByDst(p.AgentItem), p.AgentItem);
                 }
                 if (p.Prof == "Elementalist" || p.Prof == "Tempest")
                 {
-                    ElementalistHelper.RemoveDualBuffs(buffEvents.Where(x => x.To == p.AgentItem).ToList());
+                    ElementalistHelper.RemoveDualBuffs(GetBoonDataByDst(p.AgentItem));
                 }
             }
-            if (resort)
+            HashSet<long> buffIDsToSort = new HashSet<long>();
+            HashSet<AgentItem> buffAgentsToSort = new HashSet<AgentItem>();
+            foreach (AbstractBuffEvent bf in toAdd)
             {
-                buffEvents.Sort((x, y) => x.Time.CompareTo(y.Time));
+                _boonDataByDst[bf.To].Add(bf);
+                buffAgentsToSort.Add(bf.To);
+                if (_boonData.TryGetValue(bf.BuffID, out var list))
+                {
+                    list.Add(bf);
+                }
+                else
+                {
+                    _boonData[bf.BuffID] = new List<AbstractBuffEvent>()
+                    {
+                        bf
+                    };
+                }
+                buffIDsToSort.Add(bf.BuffID);
             }
+            foreach (long buffID in buffIDsToSort)
+            {
+                _boonData[buffID].Sort((x, y) => x.Time.CompareTo(y.Time));
+            }
+            foreach (AgentItem a in buffAgentsToSort)
+            {
+                _boonDataByDst[a].Sort((x, y) => x.Time.CompareTo(y.Time));
+            }
+        }
+
+        private void SpecialCastParse(List<Player> players)
+        {
+            List<AnimatedCastEvent> toAdd = new List<AnimatedCastEvent>();
+            foreach (Player p in players)
+            {
+                if (p.Prof == "Mirage")
+                {
+                    toAdd = MirageHelper.TranslateMirageCloak(GetBoonData(40408));
+                    break;
+                }
+            }
+            HashSet<long> castIDsToSort = new HashSet<long>();
+            HashSet<AgentItem> castAgentsToSort = new HashSet<AgentItem>();
+            foreach (AnimatedCastEvent cast in toAdd)
+            {
+                _castData[cast.Caster].Add(cast);
+                castAgentsToSort.Add(cast.Caster);
+                if (_castDataById.TryGetValue(cast.SkillId, out var list))
+                {
+                    list.Add(cast);
+                }
+                else
+                {
+                    _castDataById[cast.SkillId] = new List<AbstractCastEvent>()
+                    {
+                        cast
+                    };
+                }
+                castIDsToSort.Add(cast.SkillId);
+            }
+            foreach (long buffID in castIDsToSort)
+            {
+                _castDataById[buffID].Sort((x, y) => x.Time.CompareTo(y.Time));
+            }
+            foreach (AgentItem a in castAgentsToSort)
+            {
+                _castData[a].Sort((x, y) => x.Time.CompareTo(y.Time));
+            }
+        }
+
+        private void ExtraEvents(List<Player> players)
+        {
+            SpecialBoonParse(players);
+            SpecialCastParse(players);
         }
 
         public CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, List<Player> players)
@@ -73,7 +140,6 @@ namespace LuckParser.Models.ParseModels
             buffCombatEvents.AddRange(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.BuffInitial));
             buffCombatEvents.Sort((x, y) => x.LogTime.CompareTo(y.LogTime));
             List<AbstractBuffEvent> buffEvents = EICombatEventFactory.CreateBuffEvents(buffCombatEvents, agentData, fightData.FightStartLogTime);
-            SpecialBoonParse(players, buffEvents);
             _boonDataByDst = buffEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             _boonData = buffEvents.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
             // damage events
@@ -88,6 +154,7 @@ namespace LuckParser.Models.ParseModels
             healing_received_data = allCombatItems.Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                             ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
                                                 (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
+            ExtraEvents(players);                                
         }
 
         public void UpdateDamageEvents(long end)

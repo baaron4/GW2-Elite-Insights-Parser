@@ -229,16 +229,6 @@ namespace LuckParser.Models.ParseModels
                     CastLogs.Add(wepSwap);
                 }
             }
-            long cloakStart = 0;
-            foreach (long time in log.CombatData.GetBoonData(40408).Where(x => x.To == AgentItem && x is BuffApplyEvent).Select(x => x.Time))
-            {
-                if (time - cloakStart > 10)
-                {
-                    AnimatedCastEvent dodgeLog = new AnimatedCastEvent(time, SkillItem.DodgeId, 50, AgentItem);
-                    CastLogs.Add(dodgeLog);
-                }
-                cloakStart = time;
-            }
             CastLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
         }
 
@@ -254,8 +244,8 @@ namespace LuckParser.Models.ParseModels
             BoonMap toUse = GetBoonMap(log);
             long dur = log.FightData.FightDuration;
             int fightDuration = (int)(dur) / 1000;
-            BoonsGraphModel boonPresenceGraph = new BoonsGraphModel(log.Boons.BoonsByIds[BoonHelper.NumberOfBoonsID]);
-            BoonsGraphModel condiPresenceGraph = new BoonsGraphModel(log.Boons.BoonsByIds[BoonHelper.NumberOfConditionsID]);
+            BoonsGraphModel boonPresenceGraph = new BoonsGraphModel(log.Boons.BoonsByIds[ProfHelper.NumberOfBoonsID]);
+            BoonsGraphModel condiPresenceGraph = new BoonsGraphModel(log.Boons.BoonsByIds[ProfHelper.NumberOfConditionsID]);
             HashSet<long> boonIds = new HashSet<long>(log.Boons.GetBoonList().Select(x => x.ID));
             HashSet<long> condiIds = new HashSet<long>(log.Boons.GetConditionList().Select(x => x.ID));
             InitBoonStatusData(log);
@@ -370,8 +360,8 @@ namespace LuckParser.Models.ParseModels
 
                 }
             }
-            BoonPoints[BoonHelper.NumberOfBoonsID] = boonPresenceGraph;
-            BoonPoints[BoonHelper.NumberOfConditionsID] = condiPresenceGraph;
+            BoonPoints[ProfHelper.NumberOfBoonsID] = boonPresenceGraph;
+            BoonPoints[ProfHelper.NumberOfConditionsID] = condiPresenceGraph;
         }
         //protected abstract void setHealingLogs(ParsedLog log);
         //protected abstract void setHealingReceivedLogs(ParsedLog log);

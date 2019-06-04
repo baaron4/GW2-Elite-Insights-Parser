@@ -204,8 +204,8 @@ namespace LuckParser.Builders
                     Minions = BuildMinions(target),
                     TotalDamageDist = BuildDamageDist(target, null),
                     TotalDamageTaken = BuildDamageTaken(target),
-                    BoonsStates = BuildBuffStates(target.GetBoonGraphs(_log)[BoonHelper.NumberOfBoonsID]),
-                    ConditionsStates = BuildBuffStates(target.GetBoonGraphs(_log)[BoonHelper.NumberOfConditionsID])
+                    BoonsStates = BuildBuffStates(target.GetBoonGraphs(_log)[ProfHelper.NumberOfBoonsID]),
+                    ConditionsStates = BuildBuffStates(target.GetBoonGraphs(_log)[ProfHelper.NumberOfConditionsID])
                 };
                 List<HealthUpdateEvent> hpUpdates = _log.CombatData.GetHealthUpdateEvents(target.AgentItem);
                 double finalTargetHealth = hpUpdates.Count > 0
@@ -258,8 +258,8 @@ namespace LuckParser.Builders
                     TotalDamageTaken = BuildDamageTaken(player),
                     DeathRecap = BuildDeathRecap(player.GetDeathRecaps(_log)),
                     Consumables = BuildConsumables(player),
-                    BoonsStates = BuildBuffStates(player.GetBoonGraphs(_log)[BoonHelper.NumberOfBoonsID]),
-                    ConditionsStates = BuildBuffStates(player.GetBoonGraphs(_log)[BoonHelper.NumberOfConditionsID]),
+                    BoonsStates = BuildBuffStates(player.GetBoonGraphs(_log)[ProfHelper.NumberOfBoonsID]),
+                    ConditionsStates = BuildBuffStates(player.GetBoonGraphs(_log)[ProfHelper.NumberOfConditionsID]),
                 });
             }
         }

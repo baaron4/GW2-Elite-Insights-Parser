@@ -29,10 +29,10 @@ namespace LuckParser.Models.ParseModels
 
         public void Invalidate()
         {
-            if (BuffID != BoonHelper.NoBuff)
+            if (BuffID != ProfHelper.NoBuff)
             {
                 _originalBuffID = BuffID;
-                BuffID = BoonHelper.NoBuff;
+                BuffID = ProfHelper.NoBuff;
             }
         }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models.ParseModels
 {
-    public abstract class BoonHelper
+    public abstract class ProfHelper
     {
 
         public const long NumberOfConditionsID = -3;

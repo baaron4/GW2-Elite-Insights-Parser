@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class ElementalistHelper : BoonHelper
+    public class ElementalistHelper : ProfHelper
     {
 
         public static void RemoveDualBuffs(List<AbstractBuffEvent> buffsPerDst)

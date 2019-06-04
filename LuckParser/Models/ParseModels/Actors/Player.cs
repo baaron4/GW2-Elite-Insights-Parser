@@ -396,7 +396,7 @@ namespace LuckParser.Models.ParseModels
                 final.InvulnedCount = 0;
                 final.DamageInvulned = 0;
                 final.EvadedCount = damageLogs.Count(x => x.IsEvaded);
-                final.DodgeCount = GetCastLogs(log, 0, log.FightData.FightDuration).Count(x => x.SkillId == SkillItem.DodgeId);
+                final.DodgeCount = GetCastLogs(log, start, end).Count(x => x.SkillId == SkillItem.DodgeId);
                 final.DamageBarrier = damageLogs.Sum(x => x.ShieldDamage);
                 final.InterruptedCount = damageLogs.Count(x => x.HasInterrupted);
                 foreach (AbstractDamageEvent dl in damageLogs.Where(x => x.IsAbsorbed))
