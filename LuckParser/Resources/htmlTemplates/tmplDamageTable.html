@@ -9,7 +9,8 @@
                 <th v-if="!wvw">Target DPS</th>
                 <th v-if="!wvw">Power</th>
                 <th v-if="!wvw">Condi</th>
-                <th>All DPS</th>
+                <th v-if="!wvw">All DPS</th>
+                <th v-else>All Damage</th>
                 <th>Power</th>
                 <th>Condi</th>
             </tr>
@@ -25,9 +26,12 @@
                 <td v-if="!wvw" :data-original-title="row.dps[0] + ' dmg'">{{row.dps[1]}}</td>
                 <td v-if="!wvw" :data-original-title="row.dps[2] + ' dmg'">{{row.dps[3]}}</td>
                 <td v-if="!wvw" :data-original-title="row.dps[4] + ' dmg'">{{row.dps[5]}}</td>
-                <td :data-original-title="row.dps[6] + ' dmg'">{{row.dps[7]}}</td>
-                <td :data-original-title="row.dps[8] + ' dmg'">{{row.dps[9]}}</td>
-                <td :data-original-title="row.dps[10] + ' dmg'">{{row.dps[11]}}</td>
+                <td v-if="!wvw" :data-original-title="row.dps[6] + ' dmg'">{{row.dps[7]}}</td>
+                <td v-else :data-original-title="row.dps[7] + ' dps'">{{row.dps[6]}}</td>
+                <td v-if="!wvw" :data-original-title="row.dps[8] + ' dmg'">{{row.dps[9]}}</td>
+                <td v-else :data-original-title="row.dps[9] + ' dps'">{{row.dps[8]}}</td>
+                <td v-if="!wvw" :data-original-title="row.dps[10] + ' dmg'">{{row.dps[11]}}</td>
+                <td v-else :data-original-title="row.dps[11] + ' dps'">{{row.dps[10]}}</td>
             </tr>
         </tbody>
         <tfoot>
@@ -39,9 +43,12 @@
                 <td v-if="!wvw" :data-original-title="sum.dps[0] + ' dmg'">{{sum.dps[1]}}</td>
                 <td v-if="!wvw" :data-original-title="sum.dps[2] + ' dmg'">{{sum.dps[3]}}</td>
                 <td v-if="!wvw" :data-original-title="sum.dps[4] + ' dmg'">{{sum.dps[5]}}</td>
-                <td :data-original-title="sum.dps[6] + ' dmg'">{{sum.dps[7]}}</td>
-                <td :data-original-title="sum.dps[8] + ' dmg'">{{sum.dps[9]}}</td>
-                <td :data-original-title="sum.dps[10] + ' dmg'">{{sum.dps[11]}}</td>
+                <td v-if="!wvw" :data-original-title="sum.dps[6] + ' dmg'">{{sum.dps[7]}}</td>
+                <td v-else :data-original-title="sum.dps[7] + ' dps'">{{sum.dps[6]}}</td>
+                <td v-if="!wvw" :data-original-title="sum.dps[8] + ' dmg'">{{sum.dps[9]}}</td>
+                <td v-else :data-original-title="sum.dps[9] + ' dps'">{{sum.dps[8]}}</td>
+                <td v-if="!wvw" :data-original-title="sum.dps[10] + ' dmg'">{{sum.dps[11]}}</td>
+                <td v-else :data-original-title="sum.dps[11] + ' dps'">{{sum.dps[10]}}</td>
             </tr>
         </tfoot>
     </table>
