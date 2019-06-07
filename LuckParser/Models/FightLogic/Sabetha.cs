@@ -15,7 +15,29 @@ namespace LuckParser.Models.Logic
             {
             new PlayerBoonApplyMechanic(34108, "Shell-Shocked", new MechanicPlotlySetting("circle-open","rgb(0,128,0)"), "Launched","Shell-Shocked (launched up to cannons)", "Shell-Shocked",0),
             new PlayerBoonApplyMechanic(31473, "Sapper Bomb", new MechanicPlotlySetting("circle","rgb(0,128,0)"), "Sap Bomb","Got a Sapper Bomb", "Sapper Bomb",0),
-            new PlayerBoonApplyMechanic(31485, "Time Bomb", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Timed Bomb","Got a Timed Bomb (Expanding circle)", "Timed Bomb",0),
+            new PlayerBoonApplyMechanic(31485, "Time Bomb", new MechanicPlotlySetting("circle","rgb(255,140,0)"), "Timed Bomb","Got a Timed Bomb (Expanding circle)", "Timed Bomb",0),
+            new PlayerBoonApplyMechanic(31324, "Time Bomb Hit", new MechanicPlotlySetting("circle-open","rgb(255,140,0)"), "Timed Bomb Hit","Got hit by Timed Bomb (Expanding circle)", "Timed Bomb Hit",0,
+                new List<BoonApplyMechanic.BoonApplyChecker>{ (ba, log) =>
+                {
+                    List<AbstractBuffEvent> timedBombRemoved = log.CombatData.GetBoonData(31485).Where(x => x.To == ba.To && x is BuffRemoveAllEvent && Math.Abs(ba.Time - x.Time) <= 50).ToList();
+                    if (timedBombRemoved.Count > 0)
+                    {
+                        return false;
+                    }
+                    return true;
+               }
+            }, Mechanic.TriggerRule.AND),
+            new PlayerBoonApplyMechanic(34152, "Time Bomb Hit", new MechanicPlotlySetting("circle-open","rgb(255,140,0)"), "Timed Bomb Hit","Got hit by Timed Bomb (Expanding circle)", "Timed Bomb Hit",0,
+                new List<BoonApplyMechanic.BoonApplyChecker>{ (ba, log) =>
+                {
+                    List<AbstractBuffEvent> timedBombRemoved = log.CombatData.GetBoonData(31485).Where(x => x.To == ba.To && x is BuffRemoveAllEvent && Math.Abs(ba.Time - x.Time) <= 50).ToList();
+                    if (timedBombRemoved.Count > 0)
+                    {
+                        return false;
+                    }
+                    return true;
+               }
+            }, Mechanic.TriggerRule.AND),
             new SkillOnPlayerMechanic(31332, "Firestorm", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Flamewall","Firestorm (killed by Flamewall)", "Flamewall",0),
             new SkillOnPlayerMechanic(31544, "Flak Shot", new MechanicPlotlySetting("hexagram-open","rgb(255,140,0)"), "Flak","Flak Shot (Fire Patches)", "Flak Shot",0),
             new SkillOnPlayerMechanic(31643, "Cannon Barrage", new MechanicPlotlySetting("circle","rgb(255,200,0)"), "Cannon","Cannon Barrage (stood in AoE)", "Cannon Shot",0),
@@ -54,7 +76,7 @@ namespace LuckParser.Models.Logic
             }
             // Invul check
             phases.AddRange(GetPhasesByInvul(log, 757, mainTarget, true, true));
-            string[] namesSab = new [] { "Phase 1", "Kernan", "Phase 2", "Knuckles", "Phase 3", "Karde", "Phase 4" };
+            string[] namesSab = new[] { "Phase 1", "Kernan", "Phase 2", "Knuckles", "Phase 3", "Karde", "Phase 4" };
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
@@ -68,7 +90,8 @@ namespace LuckParser.Models.Logic
                        (ushort) Karde,
                     };
                     AddTargetsToPhase(phase, ids, log);
-                } else
+                }
+                else
                 {
                     phase.Targets.Add(mainTarget);
                     Target addTarget;
@@ -152,7 +175,7 @@ namespace LuckParser.Models.Logic
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start);
                         if (facing != null)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 28, (firstConeStart, firstConeEnd), "rgba(255,200,0,0.3)",new AgentConnector(target)));
+                            replay.Actors.Add(new PieActor(true, 0, radius, facing, 28, (firstConeStart, firstConeEnd), "rgba(255,200,0,0.3)", new AgentConnector(target)));
                             replay.Actors.Add(new PieActor(true, 0, radius, facing, 54, (secondConeStart, secondConeEnd), "rgba(255,200,0,0.3)", new AgentConnector(target)));
                             replay.Actors.Add(new PieActor(true, 0, radius, facing, 81, (thirdConeStart, thirdConeEnd), "rgba(255,200,0,0.3)", new AgentConnector(target)));
                         }
