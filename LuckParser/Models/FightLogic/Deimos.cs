@@ -17,6 +17,7 @@ namespace LuckParser.Models.Logic
             MechanicList.AddRange(new List<Mechanic>
             {
             new SkillOnPlayerMechanic(37716, "Rapid Decay", new MechanicPlotlySetting("circle-open","rgb(0,0,0)"), "Oil","Rapid Decay (Black expanding oil)", "Black Oil",0),
+            new FirstHitSkillOnPlayerMechanic(37716, "Rapid Decay", new MechanicPlotlySetting("circle","rgb(0,0,0)"), "Oil Trigger","Rapid Decay Trigger (Black expanding oil)", "Black Oil Trigger",0),
             new EnemyCastStartMechanic(37846, "Off Balance", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "TP CC","Off Balance (Saul TP Breakbar)", "Saul TP Start",0),
             new EnemyCastEndMechanic(37846, "Off Balance", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "TP CC Fail","Failed Saul TP CC", "Failed CC (TP)",0, new List<MechanicChecker>{ new CombatItemValueChecker(2200, MechanicChecker.ValueCompare.GEQ) }, Mechanic.TriggerRule.AND),
             new EnemyCastEndMechanic(37846, "Off Balance", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "TP CCed","Saul TP CCed", "CCed (TP)",0, new List<MechanicChecker>{ new CombatItemValueChecker(2200, MechanicChecker.ValueCompare.L) }, Mechanic.TriggerRule.AND),
