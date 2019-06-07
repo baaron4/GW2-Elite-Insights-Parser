@@ -36,7 +36,7 @@ namespace LuckParser.Models.ParseModels
                 List<AbstractDamageEvent> combatitems = combatData.GetDamageTakenData(a);
                 foreach (AbstractDamageEvent c in combatitems)
                 {
-                    if (c is DirectDamageEvent && c.IsHit && Keep(c, log) )
+                    if (c is DirectDamageEvent && c.HasHit && Keep(c, log) )
                     {
                         foreach (Player p in log.PlayerList)
                         {

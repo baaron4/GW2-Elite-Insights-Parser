@@ -187,7 +187,7 @@ namespace LuckParser.Models.ParseModels
                         if (dl.To == target.AgentItem)
                         {
                             FinalStats targetFinal = pair.Value;
-                            if (dl.IsCrit)
+                            if (dl.HasCrit)
                             {
                                 targetFinal.CriticalRate++;
                                 targetFinal.CriticalDmg += dl.Damage;
@@ -198,7 +198,7 @@ namespace LuckParser.Models.ParseModels
                                 targetFinal.FlankingRate++;
                             }
 
-                            if (dl.IsGlance)
+                            if (dl.HasGlanced)
                             {
                                 targetFinal.GlanceRate++;
                             }
@@ -223,7 +223,7 @@ namespace LuckParser.Models.ParseModels
                             }
                         }
                     }
-                    if (dl.IsCrit)
+                    if (dl.HasCrit)
                     {
                         final.CriticalRate++;
                         final.CriticalDmg += dl.Damage;
@@ -234,7 +234,7 @@ namespace LuckParser.Models.ParseModels
                         final.FlankingRate++;
                     }
 
-                    if (dl.IsGlance)
+                    if (dl.HasGlanced)
                     {
                         final.GlanceRate++;
                     }

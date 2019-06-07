@@ -20,7 +20,7 @@ namespace LuckParser.Models.ParseModels
                 result == ParseEnum.ConditionResult.InvulByPlayerSkill1 ||
                 result == ParseEnum.ConditionResult.InvulByPlayerSkill2 ||
                 result == ParseEnum.ConditionResult.InvulByPlayerSkill3;
-            IsHit = result == ParseEnum.ConditionResult.ExpectedToHit;
+            HasHit = result == ParseEnum.ConditionResult.ExpectedToHit;
         }
 
         public override bool IsCondi(ParsedLog log)

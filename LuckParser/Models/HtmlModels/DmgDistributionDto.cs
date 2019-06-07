@@ -32,8 +32,8 @@ namespace LuckParser.Models.HtmlModels
                 if (curdmg < mindamage) { mindamage = curdmg; }
                 if (curdmg > maxdamage) { maxdamage = curdmg; }
                 hits++;
-                if (dl.IsCrit) crit++;
-                if (dl.IsGlance) glance++;
+                if (dl.HasCrit) crit++;
+                if (dl.HasGlanced) glance++;
                 if (dl.IsFlanking) flank++;
             }
             if (IsIndirectDamage)

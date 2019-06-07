@@ -16,11 +16,11 @@ namespace LuckParser.Models.ParseModels
             IsAbsorbed = result == ParseEnum.PhysicalResult.Absorb;
             IsBlind = result == ParseEnum.PhysicalResult.Blind;
             IsBlocked = result == ParseEnum.PhysicalResult.Block;
-            IsCrit = result == ParseEnum.PhysicalResult.Crit;
+            HasCrit = result == ParseEnum.PhysicalResult.Crit;
             HasDowned = result == ParseEnum.PhysicalResult.Downed;
             IsEvaded = result == ParseEnum.PhysicalResult.Evade;
-            IsGlance = result == ParseEnum.PhysicalResult.Glance;
-            IsHit = result == ParseEnum.PhysicalResult.Normal || result == ParseEnum.PhysicalResult.Crit || result == ParseEnum.PhysicalResult.Glance || result == ParseEnum.PhysicalResult.KillingBlow; //Downed and Interrupt omitted for now due to double procing mechanics || result == ParseEnum.PhysicalResult.Downed || result == ParseEnum.PhysicalResult.Interrupt;
+            HasGlanced = result == ParseEnum.PhysicalResult.Glance;
+            HasHit = result == ParseEnum.PhysicalResult.Normal || result == ParseEnum.PhysicalResult.Crit || result == ParseEnum.PhysicalResult.Glance || result == ParseEnum.PhysicalResult.KillingBlow; //Downed and Interrupt omitted for now due to double procing mechanics || result == ParseEnum.PhysicalResult.Downed || result == ParseEnum.PhysicalResult.Interrupt;
             HasKilled = result == ParseEnum.PhysicalResult.KillingBlow;
             HasInterrupted = result == ParseEnum.PhysicalResult.Interrupt;
         }

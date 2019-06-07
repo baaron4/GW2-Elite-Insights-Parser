@@ -35,7 +35,7 @@ namespace LuckParser.Models.ParseModels
                 List<AbstractDamageEvent> combatitems = p.GetDamageTakenLogs(null, log, 0, log.FightData.FightDuration);
                 foreach (AbstractDamageEvent c in combatitems)
                 {
-                    if (c.SkillId == SkillId && c.IsHit && Keep(c, log))
+                    if (c.SkillId == SkillId && c.HasHit && Keep(c, log))
                     {
                         mechanicLogs[this].Add(new MechanicEvent(c.Time, this, p));
                     }
