@@ -57,9 +57,6 @@ var compileCombatReplayUI = function () {
             toggleBackwards: function () {
                 this.backwards = animator.toggleBackwards();
             },
-            jumpTo: function(phaseStart) {
-                animator.updateTime(phaseStart * 1000);
-            },
             toggleAnimate: function () {
                 animator.toggleAnimate();
             },
