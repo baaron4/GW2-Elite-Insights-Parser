@@ -10,6 +10,14 @@
         <div @click="toggleBackwards();"
              class="btn btn-small" :class="{'active': backwards, 'btn-dark': !light, 'btn-light': light}">Backwards</div>
     </div>
+    <div>
+        <ul class="nav nav-pills d-flex flex-row justify-content-center">
+            <li class="nav-item" v-for="phase in phases"
+                :data-original-title="phase.duration / 1000.0 + ' seconds'">
+                <a class="nav-link" @click="jumpTo(phase.start)">{{phase.name}}</a>
+            </li>
+        </ul>
+    </div>
     <div class="d-flex justify-content-center slidecontainer">
         <input style="min-width: 400px;" @input="updateTime($event.target.value)" type="range" min="0"
                :max="maxTime" value="0" class="slider" id="timeRange">
