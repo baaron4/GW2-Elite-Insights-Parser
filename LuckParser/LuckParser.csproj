@@ -124,6 +124,7 @@
     <Compile Include="Models\ParseModels\DamageModifiers\GainComputers\GainComputerBySkill.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicsChecker\ActorBuffChecker.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicsChecker\ActorStateChecker.cs" />
+    <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\FirstHitSkillOnPlayerMechanic.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonHelpers\ElementalistHelper.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonHelpers\BoonHelper.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonHelpers\WeaverHelper.cs" />
