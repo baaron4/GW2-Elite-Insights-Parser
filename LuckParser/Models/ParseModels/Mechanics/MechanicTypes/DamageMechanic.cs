@@ -14,7 +14,7 @@ namespace LuckParser.Models.ParseModels
 
         private readonly List<DamageChecker> _triggerConditions = new List<DamageChecker>();
 
-        protected bool Keep(AbstractDamageEvent c, ParsedLog log)
+        protected virtual bool Keep(AbstractDamageEvent c, ParsedLog log)
         {
             if (_triggerConditions.Count > 0)
             {

@@ -173,7 +173,7 @@
     <Compile Include="Models\ParseModels\ProfHelpers\ProfHelper.cs" />
     <Compile Include="Models\ParseModels\ProfHelpers\MirageHelper.cs" />
     <Compile Include="Models\ParseModels\ProfHelpers\WeaverHelper.cs" />
-    <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\FirstHitSkillOnPlayerMechanic.cs" />
+    <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\DamageOnPlayerFirstHitMechanic.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\BackgroundActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\FacingRectangleActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\FacingActor.cs" />
@@ -205,7 +205,7 @@
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\PlayerCastMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\EnemyBoonApplyMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\SpawnMechanic.cs" />
-    <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\SkillOnPlayerMechanic.cs" />
+    <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\DamageOnPlayerMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\PlayerStatusMechanic.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\AbstractBoonSimulationItem.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemOverstack.cs" />
