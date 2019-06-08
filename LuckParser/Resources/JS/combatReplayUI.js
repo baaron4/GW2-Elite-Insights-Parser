@@ -48,6 +48,11 @@ var compileCombatReplayUI = function () {
                 maxTime: logData.crData.maxTime,
             };
         },
+        computed: {
+            phases: function() {
+                return logData.phases;
+            }
+        },
         methods: {
             toggleBackwards: function () {
                 this.backwards = animator.toggleBackwards();
