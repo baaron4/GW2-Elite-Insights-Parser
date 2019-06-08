@@ -198,7 +198,7 @@ namespace LuckParser.Models.Logic
                         }
                         int spellCenterDistance = 200; //hitbox radius
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 3000);
-                        Point3D targetPosition = replay.Positions.LastOrDefault(x => x.Time <= start + 3000);
+                        Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 3000);
                         if (facing != null && targetPosition != null)
                         {
                             Point3D position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z, targetPosition.Time);

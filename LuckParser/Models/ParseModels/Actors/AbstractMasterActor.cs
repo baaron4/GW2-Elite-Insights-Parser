@@ -214,13 +214,13 @@ namespace LuckParser.Models.ParseModels
             return CombatReplay.Times;
         }
 
-        public List<Point3D> GetCombatReplayPositions(ParsedLog log)
+        public List<Point3D> GetCombatReplayPolledPositions(ParsedLog log)
         {
             if (CombatReplay == null)
             {
                 InitCombatReplay(log);
             }
-            return CombatReplay.Positions;
+            return CombatReplay.PolledPositions;
         }
 
         public List<Point3D> GetCombatReplayActivePositions(ParsedLog log)

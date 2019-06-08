@@ -232,8 +232,8 @@ namespace LuckParser.Models.Logic
                 int start = (int)c.Time;
                 int duration = 10000;
                 int radius = 300;
-                Point3D shieldNextPos = replay.Positions.FirstOrDefault(x => x.Time >= start);
-                Point3D shieldPrevPos = replay.Positions.LastOrDefault(x => x.Time <= start);
+                Point3D shieldNextPos = replay.PolledPositions.FirstOrDefault(x => x.Time >= start);
+                Point3D shieldPrevPos = replay.PolledPositions.LastOrDefault(x => x.Time <= start);
                 if (shieldNextPos != null || shieldPrevPos != null)
                 {
                     replay.Actors.Add(new CircleActor(true, 0, radius, (start, start + duration), "rgba(255, 0, 255, 0.1)", new InterpolatedPositionConnector(shieldPrevPos, shieldNextPos, start)));

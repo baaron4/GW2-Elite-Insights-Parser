@@ -37,13 +37,13 @@ namespace LuckParser.Models.ParseModels
             {
                 Img = CombatReplay.Icon,
                 Type = "Mob",
-                Positions = new double[2 * CombatReplay.Positions.Count],
+                Positions = new double[2 * CombatReplay.PolledPositions.Count],
                 Start = CombatReplay.TimeOffsets.start,
                 End = CombatReplay.TimeOffsets.end,
                 ID = GetCombatReplayID(log)
             };
             int i = 0;
-            foreach (Point3D pos in CombatReplay.Positions)
+            foreach (Point3D pos in CombatReplay.PolledPositions)
             {
                 (double x, double y) = map.GetMapCoord(pos.X, pos.Y);
                 aux.Positions[i++] = x;

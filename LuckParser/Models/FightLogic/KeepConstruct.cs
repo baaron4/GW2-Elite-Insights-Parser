@@ -316,8 +316,8 @@ namespace LuckParser.Models.Logic
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
                         int skillCast = end - 1000;
-                        Point3D next = replay.Positions.FirstOrDefault(x => x.Time >= end);
-                        Point3D prev = replay.Positions.LastOrDefault(x => x.Time <= end);
+                        Point3D next = replay.PolledPositions.FirstOrDefault(x => x.Time >= end);
+                        Point3D prev = replay.PolledPositions.LastOrDefault(x => x.Time <= end);
                         if (prev != null || next != null)
                         {
                             replay.Actors.Add(new CircleActor(false, 0, 400, (start, skillCast), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, end)));
@@ -400,7 +400,7 @@ namespace LuckParser.Models.Logic
                         if (phantasmsID.Contains(m.ID))
                         {
                             int start = (int)log.FightData.ToFightSpace(m.FirstAwareLogTime);
-                            Point3D pos = m.GetCombatReplayPositions(log).FirstOrDefault();
+                            Point3D pos = m.GetCombatReplayPolledPositions(log).FirstOrDefault();
                             if (pos != null)
                             {
                                 replay.Actors.Add(new CircleActor(true, 0, 300, (start - 5000, start), "rgba(220, 50, 0, 0.5)", new PositionConnector(pos)));

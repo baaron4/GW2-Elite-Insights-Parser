@@ -212,7 +212,7 @@ namespace LuckParser.Models.Logic
                         int impactRadius = 40;
                         int spellCenterDistance = 300;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
-                        Point3D targetPosition = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
+                        Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && targetPosition != null)
                         {
                             Point3D position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z, targetPosition.Time);
@@ -274,7 +274,7 @@ namespace LuckParser.Models.Logic
                         int openingAngle = 70;
                         int fieldDuration = 10000;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
-                        Point3D pos = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
+                        Point3D pos = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && pos != null)
                         {
                             replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
@@ -324,7 +324,7 @@ namespace LuckParser.Models.Logic
                         int openingAngle = 60;
                         int fieldDuration = 10000;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
-                        Point3D pos = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
+                        Point3D pos = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && pos != null)
                         {
                             replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
@@ -374,7 +374,7 @@ namespace LuckParser.Models.Logic
                         int impactRadius = 500;
                         int spellCenterDistance = 270; //hitbox radius
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
-                        Point3D targetPosition = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
+                        Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && targetPosition != null)
                         {
                             Point3D position = new Point3D(targetPosition.X + facing.X * spellCenterDistance, targetPosition.Y + facing.Y * spellCenterDistance, targetPosition.Z, targetPosition.Time);

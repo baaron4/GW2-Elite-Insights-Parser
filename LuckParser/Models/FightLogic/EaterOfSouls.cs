@@ -67,7 +67,7 @@ namespace LuckParser.Models.Logic
                         int end = start + duration;
                         int radius = 900;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start);
-                        Point3D position = replay.Positions.LastOrDefault(x => x.Time <= start);
+                        Point3D position = replay.PolledPositions.LastOrDefault(x => x.Time <= start);
                         if (facing != null && position != null)
                         {
                             replay.Actors.Add(new PieActor(true, start+cascading, radius, facing, 60, (start, end), "rgba(220,255,0,0.5)", new PositionConnector(position)));

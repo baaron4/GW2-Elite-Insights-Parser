@@ -38,7 +38,7 @@ namespace LuckParser.Models
                 {
                     continue;
                 }
-                if (p.GetCombatReplayPositions(log).Count == 0)
+                if (p.GetCombatReplayPolledPositions(log).Count == 0)
                 {
                     continue;
                 }
@@ -50,7 +50,7 @@ namespace LuckParser.Models
             }
             foreach (Mob m in log.FightData.Logic.TrashMobs)
             {
-                if (m.GetCombatReplayPositions(log).Count == 0)
+                if (m.GetCombatReplayPolledPositions(log).Count == 0)
                 {
                     continue;
                 }
@@ -62,7 +62,7 @@ namespace LuckParser.Models
             }
             foreach (Target target in log.FightData.Logic.Targets)
             {
-                if (target.GetCombatReplayPositions(log).Count == 0)
+                if (target.GetCombatReplayPolledPositions(log).Count == 0)
                 {
                     continue;
                 }

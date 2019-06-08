@@ -330,9 +330,9 @@ namespace LuckParser.Models.ParseModels
                     {
                         InitCombatReplay(log);
                     }
-                    List<Point3D> positions = CombatReplay.Positions.Where(x => x.Time >= phase.Start && x.Time <= phase.End).ToList();
+                    List<Point3D> positions = CombatReplay.PolledPositions.Where(x => x.Time >= phase.Start && x.Time <= phase.End).ToList();
                     List<Point3D> stackCenterPositions = log.Statistics.GetStackCenterPositions(log);
-                    int offset = CombatReplay.Positions.Count(x => x.Time < phase.Start);
+                    int offset = CombatReplay.PolledPositions.Count(x => x.Time < phase.Start);
                     if (positions.Count > 1)
                     {
                         List<float> distances = new List<float>();
@@ -936,13 +936,13 @@ namespace LuckParser.Models.ParseModels
                 Img = CombatReplay.Icon,
                 Type = "Player",
                 ID = GetCombatReplayID(log),
-                Positions = new double[2 * CombatReplay.Positions.Count],
+                Positions = new double[2 * CombatReplay.PolledPositions.Count],
                 Dead = new long[2 * CombatReplay.Deads.Count],
                 Down = new long[2 * CombatReplay.Downs.Count],
                 Dc = new long[2 * CombatReplay.DCs.Count]
             };
             int i = 0;
-            foreach (Point3D pos in CombatReplay.Positions)
+            foreach (Point3D pos in CombatReplay.PolledPositions)
             {
                 (double x, double y) = map.GetMapCoord(pos.X, pos.Y);
                 aux.Positions[i++] = x;

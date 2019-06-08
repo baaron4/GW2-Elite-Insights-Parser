@@ -154,8 +154,8 @@ namespace LuckParser.Models.Logic
                     {
                         int start = (int)c.Time;
                         int end = start + 4000;
-                        Point3D next = replay.Positions.FirstOrDefault(x => x.Time >= start);
-                        Point3D prev = replay.Positions.LastOrDefault(x => x.Time <= start);
+                        Point3D next = replay.PolledPositions.FirstOrDefault(x => x.Time >= start);
+                        Point3D prev = replay.PolledPositions.LastOrDefault(x => x.Time <= start);
                         if (next != null || prev != null)
                         {
                             replay.Actors.Add(new CircleActor(false, 0, 380, (start, end), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, start)));
