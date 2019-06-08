@@ -13,11 +13,41 @@ namespace LuckParser.Models.Logic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new SkillOnPlayerMechanic(31875, "Spectral Impact", new MechanicPlotlySetting("hexagram","rgb(255,0,0)"), "Slam","Spectral Impact (KB Slam)", "Slam",4000),
+            new SkillOnPlayerMechanic(31875, "Spectral Impact", new MechanicPlotlySetting("hexagram","rgb(255,0,0)"), "Slam","Spectral Impact (KB Slam)", "Slam",4000, new List<DamageMechanic.DamageChecker>{
+                    (de, log) =>
+                    {
+                        AbstractActor actor = log.FindActor(de.To);
+                        Dictionary<long,BoonsGraphModel> bgms = actor.GetBoonGraphs(log);
+                        // stability check
+                        if (bgms.TryGetValue(1122, out var bgm))
+                        {
+                            return !bgm.IsPresent(de.Time, 10);
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                }, Mechanic.TriggerRule.AND ),
             new PlayerBoonApplyMechanic(31623, "Ghastly Prison", new MechanicPlotlySetting("circle","rgb(255,140,0)"), "Egg","Ghastly Prison (Egged)", "Egged",500),
             new PlayerBoonApplyMechanic(31498, "Spectral Darkness", new MechanicPlotlySetting("circle","rgb(0,0,255)"), "Orb Debuff","Spectral Darkness (Stood in Orb AoE)", "Orb Debuff",100),
             new EnemyBoonApplyMechanic(31722, "Spirited Fusion", new MechanicPlotlySetting("square","rgb(255,140,0)"), "Spirit Buff","Spirited Fusion (Consumed a Spirit)", "Ate Spirit",0),
-            new SkillOnPlayerMechanic(31720, "Kick", new MechanicPlotlySetting("triangle-right","rgb(255,0,255)"), "Kick","Kicked by small add", "Spirit Kick",0),
+            new SkillOnPlayerMechanic(31720, "Kick", new MechanicPlotlySetting("triangle-right","rgb(255,0,255)"), "Kick","Kicked by small add", "Spirit Kick",0, new List<DamageMechanic.DamageChecker>{
+                    (de, log) =>
+                    {
+                        AbstractActor actor = log.FindActor(de.To);
+                        Dictionary<long,BoonsGraphModel> bgms = actor.GetBoonGraphs(log);
+                        // stability check
+                        if (bgms.TryGetValue(1122, out var bgm))
+                        {
+                            return !bgm.IsPresent(de.Time, 10);
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                }, Mechanic.TriggerRule.AND),
             new PlayerBoonApplyMechanic(738, "Ghastly Rampage Black Goo Hit", new MechanicPlotlySetting("circle","rgb(0,0,0)"), "Black","Hit by Black Goo","Black Goo",3000, new List<BoonApplyMechanic.BoonApplyChecker>{ (ba,log) => ba.AppliedDuration == 10000 }, Mechanic.TriggerRule.AND),
             new EnemyCastMechanic(31834, "Ghastly Rampage", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Ghastly Rampage (Breakbar)", "Breakbar",0),
             new EnemyCastMechanic(31834, "Ghastly Rampage", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC End","Ghastly Rampage (Full duration)", "CC ran out",0,new List<CastMechanic.CastChecker>{ (ce,log) => (ce.ReducedAnimation || ce.FullAnimation || ce.ActualDuration > 21985) }, Mechanic.TriggerRule.AND),
@@ -50,11 +80,11 @@ namespace LuckParser.Models.Logic
                 return phases;
             }
             phases.AddRange(GetPhasesByInvul(log, 31877, mainTarget, true, true));
-            string[] namesGorse = new [] { "Phase 1", "Split 1", "Phase 2", "Split 2", "Phase 3" };
+            string[] namesGorse = new[] { "Phase 1", "Split 1", "Phase 2", "Split 2", "Phase 3" };
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                phase.Name = namesGorse[i - 1];              
+                phase.Name = namesGorse[i - 1];
                 if (i == 1 || i == 3 || i == 5)
                 {
                     phase.Targets.Add(mainTarget);
