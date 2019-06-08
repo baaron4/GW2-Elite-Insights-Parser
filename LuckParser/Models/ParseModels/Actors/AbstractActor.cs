@@ -364,8 +364,8 @@ namespace LuckParser.Models.ParseModels
             BoonMap toUse = GetBoonMap(log);
             long dur = log.FightData.FightDuration;
             int fightDuration = (int)(dur) / 1000;
-            BoonsGraphModel boonPresenceGraph = new BoonsGraphModel(log.Boons.BoonsByIds[Boon.NumberOfBoonsID]);
-            BoonsGraphModel condiPresenceGraph = new BoonsGraphModel(log.Boons.BoonsByIds[Boon.NumberOfConditionsID]);
+            BoonsGraphModel boonPresenceGraph = new BoonsGraphModel(log.Boons.BoonsByIds[BoonHelper.NumberOfBoonsID]);
+            BoonsGraphModel condiPresenceGraph = new BoonsGraphModel(log.Boons.BoonsByIds[BoonHelper.NumberOfConditionsID]);
             HashSet<long> boonIds = new HashSet<long>(log.Boons.GetBoonList().Select(x => x.ID));
             HashSet<long> condiIds = new HashSet<long>(log.Boons.GetCondiBoonList().Select(x => x.ID));
             InitBoonStatusData(log);
@@ -480,8 +480,8 @@ namespace LuckParser.Models.ParseModels
 
                 }
             }
-            BoonPoints[Boon.NumberOfBoonsID] = boonPresenceGraph;
-            BoonPoints[Boon.NumberOfConditionsID] = condiPresenceGraph;
+            BoonPoints[BoonHelper.NumberOfBoonsID] = boonPresenceGraph;
+            BoonPoints[BoonHelper.NumberOfConditionsID] = condiPresenceGraph;
         }
         //protected abstract void setHealingLogs(ParsedLog log);
         //protected abstract void setHealingReceivedLogs(ParsedLog log);

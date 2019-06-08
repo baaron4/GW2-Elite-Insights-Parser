@@ -32,6 +32,10 @@ namespace LuckParser.Models.ParseModels
                 {
                     WeaverHelper.TransformWeaverAttunements(p, buffsPerDst);
                 }
+                if (p.Prof == "Elementalist" || p.Prof == "Tempest")
+                {
+                    WeaverHelper.RemoveDualBuffs(p, buffsPerDst);
+                }
             }
         }
 
