@@ -52,20 +52,6 @@ namespace LuckParser.Builders
             _cr = Properties.Settings.Default.ParseCombatReplay && _log.CanCombatReplay;
         }
 
-        private static string FilterStringChars(string str)
-        {
-            string filtered = "";
-            string filter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ";
-            foreach (char c in str)
-            {
-                if (filter.Contains(c))
-                {
-                    filtered += c;
-                }
-            }
-            return filtered;
-        }
-
         private TargetChartDataDto BuildTargetGraphData(int phaseIndex, Target target)
         {
             PhaseData phase = _phases[phaseIndex];
@@ -1118,7 +1104,7 @@ namespace LuckParser.Builders
             logData.EncounterDuration = durationString;
             logData.Success = _log.FightData.Success;
             logData.Wvw = _log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
-            logData.FightName = FilterStringChars(_log.FightData.Name);
+            logData.FightName = _log.FightData.Name;
             logData.FightIcon = _log.FightData.Logic.IconUrl;
             logData.LightTheme = Properties.Settings.Default.LightTheme;
             logData.SingleGroup = _log.PlayerList.Where(x => !x.IsFakeActor).Select(x => x.Group).Distinct().Count() == 1;
