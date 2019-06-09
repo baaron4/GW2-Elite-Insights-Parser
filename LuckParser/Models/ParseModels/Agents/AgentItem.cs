@@ -113,7 +113,7 @@ namespace LuckParser.Models.ParseModels
         }
 
         /// <summary>
-        /// Checks if a buff is present on the actor that corresponds to 
+        /// Checks if a buff is present on the actor that corresponds to. Given buff id must be in the boon simulator
         /// </summary>
         /// <param name="log"></param>
         /// <param name="buffId"></param>
@@ -121,6 +121,10 @@ namespace LuckParser.Models.ParseModels
         /// <returns></returns>
         public bool HasBuff(ParsedLog log, long buffId, long time)
         {
+            if (!log.Boons.BoonsByIds.ContainsKey(buffId))
+            {
+                throw new InvalidOperationException("Buff id must be simulated");
+            }
             AbstractActor actor = log.FindActor(this);
             Dictionary<long, BoonsGraphModel> bgms = actor.GetBoonGraphs(log);
             if (bgms.TryGetValue(buffId, out var bgm))
