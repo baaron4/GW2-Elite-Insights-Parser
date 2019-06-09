@@ -42,10 +42,21 @@ namespace LuckParser.Models.ParseModels
             foreach (AbstractBuffEvent bf in toAdd)
             {
                 _boonDataByDst[bf.To].Add(bf);
-                buffAgentsToSort.Add(bf.To);
-                if (_boonData.TryGetValue(bf.BuffID, out var list))
+                if (_boonDataByDst.TryGetValue(bf.To, out var list1))
                 {
-                    list.Add(bf);
+                    list1.Add(bf);
+                }
+                else
+                {
+                    _boonDataByDst[bf.To] = new List<AbstractBuffEvent>()
+                    {
+                        bf
+                    };
+                }
+                buffAgentsToSort.Add(bf.To);
+                if (_boonData.TryGetValue(bf.BuffID, out var list2))
+                {
+                    list2.Add(bf);
                 }
                 else
                 {
@@ -81,11 +92,21 @@ namespace LuckParser.Models.ParseModels
             HashSet<AgentItem> castAgentsToSort = new HashSet<AgentItem>();
             foreach (AnimatedCastEvent cast in toAdd)
             {
-                _castData[cast.Caster].Add(cast);
-                castAgentsToSort.Add(cast.Caster);
-                if (_castDataById.TryGetValue(cast.SkillId, out var list))
+                if (_castData.TryGetValue(cast.Caster, out var list1))
                 {
-                    list.Add(cast);
+                    list1.Add(cast);
+                }
+                else
+                {
+                    _castData[cast.Caster] = new List<AnimatedCastEvent>()
+                    {
+                        cast
+                    };
+                }
+                castAgentsToSort.Add(cast.Caster);
+                if (_castDataById.TryGetValue(cast.SkillId, out var list2))
+                {
+                    list2.Add(cast);
                 }
                 else
                 {
@@ -154,7 +175,7 @@ namespace LuckParser.Models.ParseModels
             healing_received_data = allCombatItems.Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                             ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
                                                 (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
-            ExtraEvents(players);                                
+            ExtraEvents(players);
         }
 
         public void UpdateDamageEvents(long end)
