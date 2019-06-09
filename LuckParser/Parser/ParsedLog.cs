@@ -66,6 +66,11 @@ namespace LuckParser.Parser
             FightData.SetCM(CombatData, AgentData, FightData);
         }
 
+        /// <summary>
+        /// Find the corresponding actor, creates one otherwise
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
         public AbstractActor FindActor(AgentItem a)
         {
             AbstractActor res = PlayerList.FirstOrDefault(x => x.AgentItem == a);
@@ -86,11 +91,15 @@ namespace LuckParser.Parser
                 res = FightData.Logic.Targets.FirstOrDefault(x => x.AgentItem == a);
                 if (res == null)
                 {
-                    res = _auxMobs.FirstOrDefault(x => x.AgentItem == a);
+                    res = FightData.Logic.TrashMobs.FirstOrDefault(x => x.AgentItem == a);
                     if (res == null)
                     {
-                        _auxMobs.Add(new Mob(a));
-                        res = _auxMobs.Last();
+                        res = _auxMobs.FirstOrDefault(x => x.AgentItem == a);
+                        if (res == null)
+                        {
+                            _auxMobs.Add(new Mob(a));
+                            res = _auxMobs.Last();
+                        }
                     }
                 }
             }

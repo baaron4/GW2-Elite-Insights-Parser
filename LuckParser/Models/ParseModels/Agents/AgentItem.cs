@@ -111,5 +111,26 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
+
+        /// <summary>
+        /// Checks if a buff is present on the actor that corresponds to 
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="buffId"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public bool HasBuff(ParsedLog log, long buffId, long time)
+        {
+            AbstractActor actor = log.FindActor(this);
+            Dictionary<long, BoonsGraphModel> bgms = actor.GetBoonGraphs(log);
+            if (bgms.TryGetValue(buffId, out var bgm))
+            {
+                return bgm.IsPresent(time, 10);
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

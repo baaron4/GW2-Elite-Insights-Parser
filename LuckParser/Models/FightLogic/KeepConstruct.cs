@@ -24,58 +24,10 @@ namespace LuckParser.Models.Logic
             new DamageOnPlayerMechanic(35064, "Phantasmal Blades", new MechanicPlotlySetting("hexagram-open","rgb(255,0,255)"), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
             new DamageOnPlayerMechanic(35086, "Tower Drop", new MechanicPlotlySetting("circle","rgb(255,140,0)"), "Jump","Tower Drop (KC Jump)", "Tower Drop",0),
             new PlayerBoonApplyMechanic(35103, "Xera's Fury", new MechanicPlotlySetting("circle","rgb(200,140,0)"), "Bomb","Xera's Fury (Large Bombs) application", "Bombs",0),
-            new DamageOnPlayerMechanic(34914, "Good White Orb", new MechanicPlotlySetting("circle","rgb(200,200,200)"), "GW.Orb","Good White Orb", "Good White Orb",0, new List<DamageMechanic.DamageChecker> {(de,log) =>
-            {
-                AbstractActor actor = log.FindActor(de.To);
-                Dictionary<long,BoonsGraphModel> bgms = actor.GetBoonGraphs(log);
-                if (bgms.TryGetValue(35109, out var bgm))
-                {
-                    return bgm.IsPresent(de.Time, 10);
-                }
-                else
-                {
-                    return false;
-                }
-            }}, Mechanic.TriggerRule.AND),
-            new DamageOnPlayerMechanic(34972, "Good Red Orb", new MechanicPlotlySetting("circle","rgb(100,0,0)"), "GR.Orb","Good Red Orb", "Good Red Orb",0, new List<DamageMechanic.DamageChecker> {(de,log) =>
-            {
-                AbstractActor actor = log.FindActor(de.To);
-                Dictionary<long,BoonsGraphModel> bgms = actor.GetBoonGraphs(log);
-                if (bgms.TryGetValue(35091, out var bgm))
-                {
-                    return bgm.IsPresent(de.Time, 10);
-                }
-                else
-                {
-                    return false;
-                }
-            } }, Mechanic.TriggerRule.AND),
-            new DamageOnPlayerMechanic(34914, "Bad White Orb", new MechanicPlotlySetting("circle","rgb(100,100,100)"), "BW.Orb","Bad White Orb", "Bad White Orb",0, new List<DamageMechanic.DamageChecker> { (de,log) =>
-            {
-                AbstractActor actor = log.FindActor(de.To);
-                Dictionary<long,BoonsGraphModel> bgms = actor.GetBoonGraphs(log);
-                if (bgms.TryGetValue(35109, out var bgm))
-                {
-                    return !bgm.IsPresent(de.Time, 10);
-                }
-                else
-                {
-                    return true;
-                }
-            } }, Mechanic.TriggerRule.AND),
-            new DamageOnPlayerMechanic(34972, "Bad Red Orb", new MechanicPlotlySetting("circle","rgb(200,0,0)"), "BR.Orb","Bad Red Orb", "Bad Red Orb",0, new List<DamageMechanic.DamageChecker> { (de,log) =>
-            {
-                AbstractActor actor = log.FindActor(de.To);
-                Dictionary<long,BoonsGraphModel> bgms = actor.GetBoonGraphs(log);
-                if (bgms.TryGetValue(35091, out var bgm))
-                {
-                    return !bgm.IsPresent(de.Time, 10);
-                }
-                else
-                {
-                    return true;
-                }
-            }}, Mechanic.TriggerRule.AND),
+            new DamageOnPlayerMechanic(34914, "Good White Orb", new MechanicPlotlySetting("circle","rgb(200,200,200)"), "GW.Orb","Good White Orb", "Good White Orb",0, new List<DamageMechanic.DamageChecker> {(de,log) => de.To.HasBuff(log, 35109, de.Time)}, Mechanic.TriggerRule.AND),
+            new DamageOnPlayerMechanic(34972, "Good Red Orb", new MechanicPlotlySetting("circle","rgb(100,0,0)"), "GR.Orb","Good Red Orb", "Good Red Orb",0, new List<DamageMechanic.DamageChecker> {(de,log) => de.To.HasBuff(log, 35091, de.Time)}, Mechanic.TriggerRule.AND),
+            new DamageOnPlayerMechanic(34914, "Bad White Orb", new MechanicPlotlySetting("circle","rgb(100,100,100)"), "BW.Orb","Bad White Orb", "Bad White Orb",0, new List<DamageMechanic.DamageChecker> { (de,log) => !de.To.HasBuff(log, 35109, de.Time)}, Mechanic.TriggerRule.AND),
+            new DamageOnPlayerMechanic(34972, "Bad Red Orb", new MechanicPlotlySetting("circle","rgb(200,0,0)"), "BR.Orb","Bad Red Orb", "Bad Red Orb",0, new List<DamageMechanic.DamageChecker> { (de,log) => !de.To.HasBuff(log, 35091, de.Time)}, Mechanic.TriggerRule.AND),
             new HitOnEnemyMechanic(16261, "Core Hit", new MechanicPlotlySetting("star-open","rgb(255,140,0)"), "Core Hit","Core was Hit by Player", "Core Hit",1000)
             });
             Extension = "kc";
