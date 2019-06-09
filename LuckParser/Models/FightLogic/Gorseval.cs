@@ -50,8 +50,8 @@ namespace LuckParser.Models.Logic
                 }, Mechanic.TriggerRule.AND),
             new PlayerBoonApplyMechanic(738, "Ghastly Rampage Black Goo Hit", new MechanicPlotlySetting("circle","rgb(0,0,0)"), "Black","Hit by Black Goo","Black Goo",3000, new List<BoonApplyMechanic.BoonApplyChecker>{ (ba,log) => ba.AppliedDuration == 10000 }, Mechanic.TriggerRule.AND),
             new EnemyCastMechanic(31834, "Ghastly Rampage", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Ghastly Rampage (Breakbar)", "Breakbar",0),
-            new EnemyCastMechanic(31834, "Ghastly Rampage", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC End","Ghastly Rampage (Full duration)", "CC ran out",0,new List<CastMechanic.CastChecker>{ (ce,log) => (ce.ReducedAnimation || ce.FullAnimation || ce.ActualDuration > 21985) }, Mechanic.TriggerRule.AND),
-            new EnemyCastMechanic(31834, "Ghastly Rampage", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Ghastly Rampage (Breakbar broken)", "CCed",0,new List<CastMechanic.CastChecker>{ (ce, log) => (ce.Interrupted || ce.ActualDuration <= 21985) }, Mechanic.TriggerRule.AND),
+            new EnemyCastMechanic(31834, "Ghastly Rampage", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC End","Ghastly Rampage (Full duration)", "CC ran out",0,new List<CastMechanic.CastChecker>{ (ce,log) => ce.ActualDuration > 21985 }, Mechanic.TriggerRule.AND),
+            new EnemyCastMechanic(31834, "Ghastly Rampage", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Ghastly Rampage (Breakbar broken)", "CCed",0,new List<CastMechanic.CastChecker>{ (ce, log) => ce.ActualDuration <= 21985 }, Mechanic.TriggerRule.AND),
             });
             Extension = "gors";
             IconUrl = "https://wiki.guildwars2.com/images/d/d1/Mini_Gorseval_the_Multifarious.png";
