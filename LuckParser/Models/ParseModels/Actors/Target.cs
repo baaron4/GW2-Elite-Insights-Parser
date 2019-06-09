@@ -207,6 +207,7 @@ namespace LuckParser.Models.ParseModels
             }
             int totalTime = 0;
             double curHealth = 100.0;
+            List<HealthUpdateEvent> hpEvents = log.CombatData.GetHealthUpdateEvents(AgentItem);
             foreach (HealthUpdateEvent e in log.CombatData.GetHealthUpdateEvents(AgentItem))
             {
                 int time = (int)e.Time;
@@ -225,6 +226,7 @@ namespace LuckParser.Models.ParseModels
                 curHealth = e.HPPercent;
                 listFull[time] = curHealth;
             }
+            curHealth = hpEvents.Count > 0 ? hpEvents.Last().HPPercent : curHealth;
             // fill
             for (; totalTime <= phases[0].DurationInMS; totalTime++)
             {
