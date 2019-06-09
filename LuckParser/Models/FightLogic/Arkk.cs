@@ -102,7 +102,7 @@ namespace LuckParser.Models.Logic
                     }
                     ExitCombatEvent lastPlayerExit = playerExits.LastOrDefault();
                     ExitCombatEvent lastTargetExit = combatData.GetExitCombatEvents(mainTarget.AgentItem).LastOrDefault();
-                    AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => (x.Damage > 0) && playerAgents.Contains(x.From));
+                    AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
                     if (lastTargetExit != null && lastDamageTaken != null && lastPlayerExit != null)
                     {
                         fightData.SetSuccess(lastPlayerExit.Time > lastTargetExit.Time + 1000, fightData.ToLogSpace(lastDamageTaken.Time));

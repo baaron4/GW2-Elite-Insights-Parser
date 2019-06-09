@@ -56,7 +56,7 @@ namespace LuckParser.Models.Logic
                 throw new InvalidOperationException("Main target of the fight not found");
             }
             int combatExits = combatData.GetExitCombatEvents(mainTarget.AgentItem).Count;
-            AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => (x.Damage > 0) && playerAgents.Contains(x.From));
+            AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
             if (combatExits == 3 && lastDamageTaken != null)
             {
                 List<ExitCombatEvent> playerExits = new List<ExitCombatEvent>();
