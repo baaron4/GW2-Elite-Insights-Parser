@@ -20,18 +20,18 @@ namespace LuckParser.Models.ParseModels
 
         private static Dictionary<long, HashSet<long>> _minorsTranslation = new Dictionary<long, HashSet<long>>
         {
-            { _fireMinor, new HashSet<long> { WaterFire, AirFire, EarthFire}},
-            { _waterMinor, new HashSet<long> { FireWater, AirWater, EarthWater}},
-            { _airMinor, new HashSet<long> { FireAir, WaterAir, EarthAir}},
-            { _earthMinor, new HashSet<long> { FireEarth, WaterEarth, AirEarth}},
+            { _fireMinor, new HashSet<long> { WaterFire, AirFire, EarthFire, FireDual}},
+            { _waterMinor, new HashSet<long> { FireWater, AirWater, EarthWater, WaterDual}},
+            { _airMinor, new HashSet<long> { FireAir, WaterAir, EarthAir, AirDual}},
+            { _earthMinor, new HashSet<long> { FireEarth, WaterEarth, AirEarth, EarthDual}},
         };
 
         private static Dictionary<long, HashSet<long>> _majorsTranslation = new Dictionary<long, HashSet<long>>
         {
-            { _fireMajor, new HashSet<long> { FireWater, FireAir, FireEarth}},
-            { _waterMajor, new HashSet<long> { WaterFire, WaterAir, WaterEarth}},
-            { _airMajor, new HashSet<long> { AirFire, AirWater, AirEarth}},
-            { _earthMajor, new HashSet<long> { EarthFire, EarthWater, EarthAir}},
+            { _fireMajor, new HashSet<long> { FireWater, FireAir, FireEarth, FireDual}},
+            { _waterMajor, new HashSet<long> { WaterFire, WaterAir, WaterEarth, WaterDual}},
+            { _airMajor, new HashSet<long> { AirFire, AirWater, AirEarth, AirDual}},
+            { _earthMajor, new HashSet<long> { EarthFire, EarthWater, EarthAir, EarthDual}},
         };
 
         private static long TranslateWeaverAttunement(List<AbstractBuffEvent> buffApplies)
