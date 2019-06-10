@@ -17,6 +17,7 @@ namespace LuckParser.Models.ParseModels
             _initial = evtcItem.IsStateChange == ParseEnum.StateChange.BuffInitial;
             AppliedDuration = evtcItem.Value;
             By = agentData.GetAgentByInstID(evtcItem.SrcMasterInstid > 0 ? evtcItem.SrcMasterInstid : evtcItem.SrcInstid, evtcItem.LogTime);
+            ByMinion = evtcItem.SrcMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.SrcInstid, evtcItem.LogTime) : null;
             To = agentData.GetAgentByInstID(evtcItem.DstInstid, evtcItem.LogTime);
         }
 

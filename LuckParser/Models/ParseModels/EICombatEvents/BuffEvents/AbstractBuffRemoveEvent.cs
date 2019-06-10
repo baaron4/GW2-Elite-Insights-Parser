@@ -15,6 +15,7 @@ namespace LuckParser.Models.ParseModels
         {
             RemovedDuration = evtcItem.Value;
             By = agentData.GetAgentByInstID(evtcItem.DstMasterInstid > 0 ? evtcItem.DstMasterInstid : evtcItem.DstInstid, evtcItem.LogTime);
+            ByMinion = evtcItem.DstMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.DstInstid, evtcItem.LogTime) : null;
             To = agentData.GetAgentByInstID(evtcItem.SrcInstid, evtcItem.LogTime);
         }
 

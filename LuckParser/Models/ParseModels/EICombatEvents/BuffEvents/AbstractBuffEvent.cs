@@ -12,6 +12,7 @@ namespace LuckParser.Models.ParseModels
         public long BuffID { get; private set; }
         private long _originalBuffID;
         public AgentItem By { get; protected set; }
+        public AgentItem ByMinion { get; protected set; }
         public AgentItem To { get; protected set; }
 
         public AbstractBuffEvent(CombatItem evtcItem, long offset) : base(evtcItem.LogTime, offset)
