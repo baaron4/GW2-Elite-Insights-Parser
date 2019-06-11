@@ -205,7 +205,8 @@ namespace LuckParser.Builders
                     TotalDamageDist = BuildDamageDist(target, null),
                     TotalDamageTaken = BuildDamageTaken(target),
                     BoonsStates = BuildBuffStates(target.GetBoonGraphs(_log)[ProfHelper.NumberOfBoonsID]),
-                    ConditionsStates = BuildBuffStates(target.GetBoonGraphs(_log)[ProfHelper.NumberOfConditionsID])
+                    ConditionsStates = BuildBuffStates(target.GetBoonGraphs(_log)[ProfHelper.NumberOfConditionsID]),
+                    HealthPercents = _log.CombatData.GetHealthUpdateEvents(target.AgentItem).Select(x => new double[2] { x.Time, x.HPPercent }).ToList()
                 };
                 List<HealthUpdateEvent> hpUpdates = _log.CombatData.GetHealthUpdateEvents(target.AgentItem);
                 double finalTargetHealth = hpUpdates.Count > 0
