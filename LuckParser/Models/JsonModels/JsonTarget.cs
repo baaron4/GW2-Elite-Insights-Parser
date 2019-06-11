@@ -43,6 +43,12 @@ namespace LuckParser.Models.JsonModels
         /// </summary>
         public List<double> AvgConditions;
         /// <summary>
+        /// Array of double[2] that represents the health status of the target \n
+        /// Value[i][0] will be the time, value[i][1] will be health % \n
+        /// If i corresponds to the last element that means the health did not change for the remainder of the fight \n
+        /// </summary>
+        public List<double[]> HealthPercents;
+        /// <summary>
         /// List of buff status
         /// </summary>
         /// <seealso cref="JsonTargetBuffs"/>
