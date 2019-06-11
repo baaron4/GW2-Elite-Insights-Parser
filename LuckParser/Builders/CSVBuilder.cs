@@ -11,7 +11,7 @@ using LuckParser.Models;
 
 namespace LuckParser.Builders
 {
-    class CSVBuilder
+    public class CSVBuilder
     {
         readonly ParsedLog _log;
         readonly List<PhaseData> _phases;

@@ -53,6 +53,18 @@ namespace LuckParser.tst
             return sw.ToString();
         }
 
+        public static string CsvString(ParsedLog log)
+        {
+            MemoryStream ms = new MemoryStream();
+            StreamWriter sw = new StreamWriter(ms);
+            CSVBuilder builder = new CSVBuilder(sw, ",", log, null);
+
+            builder.CreateCSV();
+            sw.Close();
+
+            return sw.ToString();
+        }
+
         public static string HtmlString(ParsedLog log)
         {
             MemoryStream ms = new MemoryStream();
