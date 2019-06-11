@@ -58,7 +58,7 @@ namespace LuckParser.Builders
             return new TargetChartDataDto
             {
                 Total = target.Get1SDamageList(_log, phaseIndex, phase, null),
-                Health = target.Get1SHealthGraph(_log, _phases)[phaseIndex]
+                Health = target.Get1SHealthGraph(_log)[phaseIndex]
             };
         }
 
@@ -965,7 +965,7 @@ namespace LuckParser.Builders
                     phaseData.TargetsHealthForCR = new List<double[]>();
                     foreach (Target target in _log.FightData.Logic.Targets)
                     {
-                        phaseData.TargetsHealthForCR.Add(target.Get1SHealthGraph(_log, _phases)[0]);
+                        phaseData.TargetsHealthForCR.Add(target.Get1SHealthGraph(_log)[0]);
                     }
                 }
 
