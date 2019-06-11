@@ -37,13 +37,13 @@ namespace LuckParser.Models.ParseModels
             {
                 Img = CombatReplay.Icon,
                 Type = "Mob",
-                Positions = new double[2 * CombatReplay.Positions.Count],
+                Positions = new double[2 * CombatReplay.PolledPositions.Count],
                 Start = CombatReplay.TimeOffsets.start,
                 End = CombatReplay.TimeOffsets.end,
                 ID = GetCombatReplayID(log)
             };
             int i = 0;
-            foreach (Point3D pos in CombatReplay.Positions)
+            foreach (Point3D pos in CombatReplay.PolledPositions)
             {
                 (double x, double y) = map.GetMapCoord(pos.X, pos.Y);
                 aux.Positions[i++] = x;
@@ -66,21 +66,7 @@ namespace LuckParser.Models.ParseModels
             };
             SetMovements(log);
             CombatReplay.PollingRate(log.FightData.FightDuration, false);
-            CombatItem despawnCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Despawn, FirstAware, LastAware).LastOrDefault();
-            CombatItem spawnCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Spawn, FirstAware, LastAware).LastOrDefault();
-            CombatItem deathCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.ChangeDead, FirstAware, LastAware).LastOrDefault();
-            if (deathCheck != null)
-            {
-                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAware), log.FightData.ToFightSpace(deathCheck.Time));
-            }
-            else if (despawnCheck != null && (spawnCheck == null || spawnCheck.Time < despawnCheck.Time))
-            {
-                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAware), log.FightData.ToFightSpace(despawnCheck.Time));
-            }
-            else
-            {
-                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAware), log.FightData.ToFightSpace(AgentItem.LastAware));
-            }
+            TrimCombatReplay(log);
         }
     }
 }

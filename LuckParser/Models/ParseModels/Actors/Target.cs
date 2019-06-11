@@ -20,8 +20,22 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        public int Health { get; set; } = -1;
-        public List<(long logTime, int hp)> HealthOverTime { get; } = new List<(long logTime, int hp)>();
+        private int _health = -1;
+
+        public int GetHealth(CombatData combatData)
+        {
+            if (_health == -1)
+            {
+                List<MaxHealthUpdateEvent> maxHpUpdates = combatData.GetMaxHealthUpdateEvents(AgentItem);
+                _health = maxHpUpdates.Count > 0 ? maxHpUpdates.Max(x => x.MaxHealth) : 1;
+            }
+            return _health;
+        }
+
+        public void SetManualHealth(int health)
+        {
+            _health = health;
+        }
 
         /*public void AddCustomCastLog(long time, long skillID, int expDur, ParseEnum.Activation startActivation, int actDur, ParseEnum.Activation endActivation, ParsedLog log)
         {
@@ -193,9 +207,10 @@ namespace LuckParser.Models.ParseModels
             }
             int totalTime = 0;
             double curHealth = 100.0;
-            foreach ((long logTime, int hp) in HealthOverTime)
+            List<HealthUpdateEvent> hpEvents = log.CombatData.GetHealthUpdateEvents(AgentItem);
+            foreach (HealthUpdateEvent e in log.CombatData.GetHealthUpdateEvents(AgentItem))
             {
-                int time = (int)log.FightData.ToFightSpace(logTime);
+                int time = (int)e.Time;
                 if (time < 0)
                 {
                     continue;
@@ -208,9 +223,10 @@ namespace LuckParser.Models.ParseModels
                 {
                     listFull[totalTime] = curHealth;
                 }
-                curHealth = hp / 100.0;
+                curHealth = e.HPPercent;
                 listFull[time] = curHealth;
             }
+            curHealth = hpEvents.Count > 0 ? hpEvents.Last().HPPercent : curHealth;
             // fill
             for (; totalTime <= phases[0].DurationInMS; totalTime++)
             {
@@ -258,10 +274,10 @@ namespace LuckParser.Models.ParseModels
                 ID = GetCombatReplayID(log),
                 Start = CombatReplay.TimeOffsets.start,
                 End = CombatReplay.TimeOffsets.end,
-                Positions = new double[2 * CombatReplay.Positions.Count]
+                Positions = new double[2 * CombatReplay.PolledPositions.Count]
             };
             int i = 0;
-            foreach (Point3D pos in CombatReplay.Positions)
+            foreach (Point3D pos in CombatReplay.PolledPositions)
             {
                 (double x, double y) = map.GetMapCoord(pos.X, pos.Y);
                 aux.Positions[i++] = x;
@@ -283,21 +299,7 @@ namespace LuckParser.Models.ParseModels
             };
             SetMovements(log);
             CombatReplay.PollingRate(log.FightData.FightDuration, log.FightData.GetMainTargets(log).Contains(this));
-            CombatItem despawnCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Despawn, FirstAware, LastAware).LastOrDefault();
-            CombatItem spawnCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.Spawn, FirstAware, LastAware).LastOrDefault();
-            CombatItem deathCheck = log.CombatData.GetStatesData(InstID, ParseEnum.StateChange.ChangeDead, FirstAware, LastAware).LastOrDefault();
-            if (deathCheck != null)
-            {
-                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAware), log.FightData.ToFightSpace(deathCheck.Time));
-            }
-            else if (despawnCheck != null && (spawnCheck == null || spawnCheck.Time < despawnCheck.Time))
-            {
-                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAware), log.FightData.ToFightSpace(despawnCheck.Time));
-            }
-            else
-            {
-                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAware), log.FightData.ToFightSpace(AgentItem.LastAware));
-            }
+            TrimCombatReplay(log);
         }
 
         /*protected override void setHealingLogs(ParsedLog log)

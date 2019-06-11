@@ -37,9 +37,9 @@ namespace LuckParser.Models.ParseModels
             AgentItem agent = new AgentItem(agentValue, name, prof, ID, type, 0, 0, 0, 0, 20, 20)
             {
                 InstID = instID,
-                LastAware = end,
-                FirstAware = start,
-                MasterAgent = 0
+                LastAwareLogTime = end,
+                FirstAwareLogTime = start,
+                MasterAgent = null
             };
             _allAgentsList.Add(agent);
             Refresh();
@@ -52,13 +52,13 @@ namespace LuckParser.Models.ParseModels
             Refresh();
         }
 
-        public AgentItem GetAgent(ulong agentAddress, long time)
+        public AgentItem GetAgent(ulong agentAddress, long logTime)
         {
             if (agentAddress != 0)
             {
                 if (_allAgentsByAgent.TryGetValue(agentAddress, out List<AgentItem> aList))
                 {
-                    AgentItem a = aList.Find(x => x.FirstAware <= time && x.LastAware >= time);
+                    AgentItem a = aList.Find(x => x.FirstAwareLogTime <= logTime && x.LastAwareLogTime >= logTime);
                     if (a != null)
                     {
                         return a;
@@ -92,13 +92,13 @@ namespace LuckParser.Models.ParseModels
             return new List<AgentItem>();
         }
 
-        public AgentItem GetAgentByInstID(ushort instid, long time)
+        public AgentItem GetAgentByInstID(ushort instid, long logTime)
         {
             if (instid != 0)
             {
                 if (_allAgentsByInstID.TryGetValue(instid, out var list))
                 {
-                    AgentItem a = list.FirstOrDefault(x => x.FirstAware <= time && x.LastAware >= time);
+                    AgentItem a = list.FirstOrDefault(x => x.FirstAwareLogTime <= logTime && x.LastAwareLogTime >= logTime);
                     if (a != null)
                     {
                         return a;

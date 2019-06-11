@@ -7,9 +7,9 @@ namespace LuckParser.Models.ParseModels
     public class Minions : List<Minion>
     {
         public readonly int MinionID;
-        private List<DamageLog> _damageLogs;
-        private Dictionary<AgentItem, List<DamageLog>> _damageLogsByDst;
-        private List<CastLog> _castLogs;
+        private List<AbstractDamageEvent> _damageLogs;
+        private Dictionary<AgentItem, List<AbstractDamageEvent>> _damageLogsByDst;
+        private List<AbstractCastEvent> _castLogs;
         public string Character => Count > 0 ? this[0].Character : "";
 
         public Minions(int id)
@@ -17,16 +17,16 @@ namespace LuckParser.Models.ParseModels
             MinionID = id;
         }
 
-        public List<DamageLog> GetDamageLogs(AbstractActor target, ParsedLog log, long start, long end)
+        public List<AbstractDamageEvent> GetDamageLogs(AbstractActor target, ParsedLog log, long start, long end)
         {
             if (_damageLogs == null)
             {
-                _damageLogs = new List<DamageLog>();
+                _damageLogs = new List<AbstractDamageEvent>();
                 foreach (Minion minion in this)
                 {
                     _damageLogs.AddRange(minion.GetDamageLogs(null, log, 0, log.FightData.FightDuration));
                 }
-                _damageLogsByDst = _damageLogs.GroupBy(x => log.AgentData.GetAgentByInstID(x.DstInstId, log.FightData.ToLogSpace(x.Time))).ToDictionary(x => x.Key, x => x.ToList());
+                _damageLogsByDst = _damageLogs.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null && _damageLogsByDst.TryGetValue(target.AgentItem, out var list))
             {
@@ -45,11 +45,11 @@ namespace LuckParser.Models.ParseModels
             return res;
         }*/
 
-        public List<CastLog> GetCastLogs(ParsedLog log, long start, long end)
+        public List<AbstractCastEvent> GetCastLogs(ParsedLog log, long start, long end)
         {
             if (_castLogs == null)
             {
-                _castLogs = new List<CastLog>();
+                _castLogs = new List<AbstractCastEvent>();
                 foreach (Minion minion in this)
                 {
                     _castLogs.AddRange(minion.GetCastLogs(log, 0, log.FightData.FightDuration));

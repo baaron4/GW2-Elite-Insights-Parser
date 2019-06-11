@@ -10,11 +10,11 @@ namespace LuckParser.Models
     /// </summary>
     public class Statistics
     {
-        public Statistics(ParsedEvtcContainer evtcContainer)
+        public Statistics(CombatData combatData, AgentData agentData, FightData fightData, List<Player> players, BoonsContainer boons)
         {
-            HashSet<long> skillIDs = evtcContainer.CombatData.GetSkills();
+            HashSet<long> skillIDs = combatData.GetSkills();
             // Main boons
-            foreach (Boon boon in evtcContainer.Boons.GetBoonList())
+            foreach (Boon boon in boons.GetBoonList())
             {
                 if (skillIDs.Contains(boon.ID))
                 {
@@ -22,7 +22,7 @@ namespace LuckParser.Models
                 }
             }
             // Main Conditions
-            foreach (Boon boon in evtcContainer.Boons.GetCondiBoonList())
+            foreach (Boon boon in boons.GetConditionList())
             {
                 if (skillIDs.Contains(boon.ID))
                 {
@@ -31,7 +31,7 @@ namespace LuckParser.Models
             }
 
             // Important class specific boons
-            foreach (Boon boon in evtcContainer.Boons.GetOffensiveTableList())
+            foreach (Boon boon in boons.GetOffensiveTableList())
             {
                 if (skillIDs.Contains(boon.ID))
                 {
@@ -39,7 +39,7 @@ namespace LuckParser.Models
                 }
             }
 
-            foreach (Boon boon in evtcContainer.Boons.GetDefensiveTableList())
+            foreach (Boon boon in boons.GetDefensiveTableList())
             {
                 if (skillIDs.Contains(boon.ID))
                 {
@@ -49,13 +49,13 @@ namespace LuckParser.Models
             }
 
             // All class specific boons
-            Dictionary<long, Boon> remainingBuffsByIds = evtcContainer.Boons.GetRemainingBuffsList().GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
-            foreach (Player player in evtcContainer.PlayerList)
+            Dictionary<long, Boon> remainingBuffsByIds = boons.GetRemainingBuffsList().GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
+            foreach (Player player in players)
             {
                 PresentPersonalBuffs[player.InstID] = new HashSet<Boon>();
-                foreach (CombatItem item in evtcContainer.CombatData.GetBoonDataByDst(player.InstID, player.FirstAware, player.LastAware))
+                foreach (AbstractBuffEvent item in combatData.GetBoonDataByDst(player.AgentItem))
                 {
-                    if (item.DstInstid == player.InstID && item.IsBuffRemove == ParseEnum.BuffRemove.None && remainingBuffsByIds.TryGetValue(item.SkillID, out Boon boon))
+                    if (item is BuffApplyEvent && item.To == player.AgentItem && remainingBuffsByIds.TryGetValue(item.BuffID, out Boon boon))
                     {
                         PresentPersonalBuffs[player.InstID].Add(boon);
                     }

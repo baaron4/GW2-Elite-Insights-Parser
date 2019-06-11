@@ -13,16 +13,16 @@ namespace LuckParser.Models.Logic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new SkillOnPlayerMechanic(52173, "Pulverize", new MechanicPlotlySetting("square","rgb(255,140,0)"), "Arm Slam","Pulverize (Arm Slam)", "Arm Slam",0),
-            new SkillOnPlayerMechanic(52086, "Junk Absorption", new MechanicPlotlySetting("circle-open","rgb(150,0,150)"), "Balls","Junk Absorption (Purple Balls during collect)", "Purple Balls",0),
-            new SkillOnPlayerMechanic(52878, "Junk Fall", new MechanicPlotlySetting("circle-open","rgb(255,150,0)"), "Junk","Junk Fall (Falling Debris)", "Junk Fall",0),
-            new SkillOnPlayerMechanic(52120, "Junk Fall", new MechanicPlotlySetting("circle-open","rgb(255,150,0)"), "Junk","Junk Fall (Falling Debris)", "Junk Fall",0),
-            new SkillOnPlayerMechanic(52161, "Ruptured Ground", new MechanicPlotlySetting("square-open","rgb(0,255,255)"), "Ground","Ruptured Ground (Relics after Junk Wall)", "Ruptured Ground",0,new List<MechanicChecker>{ new CombatItemValueChecker(0, MechanicChecker.ValueCompare.G) }, Mechanic.TriggerRule.AND),
-            new SkillOnPlayerMechanic(52656, "Tremor", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Tremor","Tremor (Field adjacent to Arm Slam)", "Near Arm Slam",0,new List<MechanicChecker>{ new CombatItemValueChecker(0, MechanicChecker.ValueCompare.G) }, Mechanic.TriggerRule.AND),
-            new SkillOnPlayerMechanic(52150, "Junk Torrent", new MechanicPlotlySetting("square-open","rgb(255,0,0)"), "Wall","Junk Torrent (Moving Wall)", "Junk Torrent (Wall)",0,new List<MechanicChecker>{ new CombatItemValueChecker(0, MechanicChecker.ValueCompare.G) }, Mechanic.TriggerRule.AND),
-            new PlayerCastStartMechanic(52325, "Conjured Greatsword", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Sword","Conjured Greatsword (Special action sword)", "Sword",0),
-            new PlayerCastStartMechanic(52780, "Conjured Protection", new MechanicPlotlySetting("square","rgb(0,255,0)"), "Shield","Conjured Protection (Special action shield)", "Shield",0),
-            }); 
+            new DamageOnPlayerMechanic(52173, "Pulverize", new MechanicPlotlySetting("square","rgb(255,140,0)"), "Arm Slam","Pulverize (Arm Slam)", "Arm Slam",0),
+            new DamageOnPlayerMechanic(52086, "Junk Absorption", new MechanicPlotlySetting("circle-open","rgb(150,0,150)"), "Balls","Junk Absorption (Purple Balls during collect)", "Purple Balls",0),
+            new DamageOnPlayerMechanic(52878, "Junk Fall", new MechanicPlotlySetting("circle-open","rgb(255,150,0)"), "Junk","Junk Fall (Falling Debris)", "Junk Fall",0),
+            new DamageOnPlayerMechanic(52120, "Junk Fall", new MechanicPlotlySetting("circle-open","rgb(255,150,0)"), "Junk","Junk Fall (Falling Debris)", "Junk Fall",0),
+            new DamageOnPlayerMechanic(52161, "Ruptured Ground", new MechanicPlotlySetting("square-open","rgb(0,255,255)"), "Ground","Ruptured Ground (Relics after Junk Wall)", "Ruptured Ground",0,new List<DamageMechanic.DamageChecker>{ (de,log) => de.Damage > 0 }, Mechanic.TriggerRule.AND),
+            new DamageOnPlayerMechanic(52656, "Tremor", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Tremor","Tremor (Field adjacent to Arm Slam)", "Near Arm Slam",0,new List<DamageMechanic.DamageChecker>{ (de,log) => de.Damage > 0 }, Mechanic.TriggerRule.AND),
+            new DamageOnPlayerMechanic(52150, "Junk Torrent", new MechanicPlotlySetting("square-open","rgb(255,0,0)"), "Wall","Junk Torrent (Moving Wall)", "Junk Torrent (Wall)",0,new List<DamageMechanic.DamageChecker>{ (de,log) => de.Damage > 0 }, Mechanic.TriggerRule.AND),
+            new PlayerCastMechanic(52325, "Conjured Greatsword", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Sword","Conjured Greatsword (Special action sword)", "Sword",0),
+            new PlayerCastMechanic(52780, "Conjured Protection", new MechanicPlotlySetting("square","rgb(0,255,0)"), "Shield","Conjured Protection (Special action shield)", "Shield",0),
+            });
             Extension = "ca";
             IconUrl = "https://i.imgur.com/eLyIWd2.png";
         }
@@ -57,10 +57,10 @@ namespace LuckParser.Models.Logic
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem sword = agentData.AddCustomAgent(combatData.First().Time, combatData.Last().Time, AgentItem.AgentType.Player, "Conjured Sword\0:Conjured Sword\050", "Sword", 0);
-            foreach(CombatItem c in combatData)
+            AgentItem sword = agentData.AddCustomAgent(combatData.First().LogTime, combatData.Last().LogTime, AgentItem.AgentType.Player, "Conjured Sword\0:Conjured Sword\050", "Sword", 0);
+            foreach (CombatItem c in combatData)
             {
-                if (c.SkillID == 52370 && c.IsStateChange == ParseEnum.StateChange.Normal && c.IsBuffRemove == ParseEnum.BuffRemove.None &&
+                if (c.SkillID == 52370 && c.IsStateChange == ParseEnum.StateChange.None && c.IsBuffRemove == ParseEnum.BuffRemove.None &&
                                         ((c.IsBuff == 1 && c.BuffDmg >= 0 && c.Value == 0) ||
                                         (c.IsBuff == 0 && c.Value >= 0)) && c.DstInstid != 0 && c.IFF == ParseEnum.IFF.Foe)
                 {
@@ -86,17 +86,17 @@ namespace LuckParser.Models.Logic
                 case (ushort)ConjuredGreatsword:
                     break;
                 case (ushort)ConjuredShield:
-                    List<CombatItem> shield = GetFilteredList(log.CombatData, 53003, mob, true);
+                    List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, 53003, mob, true);
                     int shieldStart = 0;
-                    foreach (CombatItem c in shield)
+                    foreach (AbstractBuffEvent c in shield)
                     {
-                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                        if (c is BuffApplyEvent)
                         {
-                            shieldStart = (int)(log.FightData.ToFightSpace(c.Time));
+                            shieldStart = (int)c.Time;
                         }
                         else
                         {
-                            int shieldEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                            int shieldEnd = (int)c.Time;
                             int radius = 100;
                             replay.Actors.Add(new CircleActor(true, 0, radius, (shieldStart, shieldEnd), "rgba(0, 150, 255, 0.3)", new AgentConnector(mob)));
                         }
@@ -109,17 +109,17 @@ namespace LuckParser.Models.Logic
 
         private List<long> GetTargetableTimes(ParsedLog log, Target target)
         {
-            List<CombatItem> attackTargetsAgents = log.CombatData.GetStates(ParseEnum.StateChange.AttackTarget).Where(x => x.DstAgent == target.Agent).Take(2).ToList(); // 3rd one is weird
+            List<AttackTargetEvent> attackTargetsAgents = log.CombatData.GetAttackTargetEvents(target.AgentItem).Take(2).ToList(); // 3rd one is weird
             List<AgentItem> attackTargets = new List<AgentItem>();
-            foreach (CombatItem c in attackTargetsAgents)
+            foreach (AttackTargetEvent c in attackTargetsAgents)
             {
-                attackTargets.Add(log.AgentData.GetAgent(c.SrcAgent, c.Time));
+                attackTargets.Add(c.AttackTarget);
             }
             List<long> targetables = new List<long>();
             foreach (AgentItem attackTarget in attackTargets)
             {
-                var aux = log.CombatData.GetStates(ParseEnum.StateChange.Targetable).Where(x => x.SrcAgent == attackTarget.Agent).ToList();
-                targetables.AddRange(aux.Where(x => x.DstAgent == 1).Select(x => log.FightData.ToFightSpace(x.Time)));
+                var aux = log.CombatData.GetTargetableEvents(attackTarget);
+                targetables.AddRange(aux.Where(x => x.Targetable).Select(x => x.Time));
             }
             return targetables;
         }
@@ -194,22 +194,22 @@ namespace LuckParser.Models.Logic
 
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
 
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.ConjuredAmalgamate:
-                    List<CombatItem> shield = GetFilteredList(log.CombatData, 53003, target, true);
+                    List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, 53003, target, true);
                     int shieldStart = 0;
-                    foreach (CombatItem c in shield)
+                    foreach (AbstractBuffEvent c in shield)
                     {
-                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                        if (c is BuffApplyEvent)
                         {
-                            shieldStart = (int)(log.FightData.ToFightSpace(c.Time));
+                            shieldStart = (int)c.Time;
                         }
                         else
                         {
-                            int shieldEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                            int shieldEnd = (int)c.Time;
                             int radius = 500;
                             replay.Actors.Add(new CircleActor(true, 0, radius, (shieldStart, shieldEnd), "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
                         }
@@ -225,15 +225,15 @@ namespace LuckParser.Models.Logic
 
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
-            List<CastLog> cls = p.GetCastLogs(log, 0, log.FightData.FightDuration);
-            List<CastLog> shieldCast = cls.Where(x => x.SkillId == 52780).ToList();
-            foreach (CastLog c in shieldCast)
+            List<AbstractCastEvent> cls = p.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> shieldCast = cls.Where(x => x.SkillId == 52780).ToList();
+            foreach (AbstractCastEvent c in shieldCast)
             {
                 int start = (int)c.Time;
                 int duration = 10000;
                 int radius = 300;
-                Point3D shieldNextPos = replay.Positions.FirstOrDefault(x => x.Time >= start);
-                Point3D shieldPrevPos = replay.Positions.LastOrDefault(x => x.Time <= start);
+                Point3D shieldNextPos = replay.PolledPositions.FirstOrDefault(x => x.Time >= start);
+                Point3D shieldPrevPos = replay.PolledPositions.LastOrDefault(x => x.Time <= start);
                 if (shieldNextPos != null || shieldPrevPos != null)
                 {
                     replay.Actors.Add(new CircleActor(true, 0, radius, (start, start + duration), "rgba(255, 0, 255, 0.1)", new InterpolatedPositionConnector(shieldPrevPos, shieldNextPos, start)));
@@ -242,14 +242,14 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override int IsCM(ParsedEvtcContainer evtcContainer)
+        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.ConjuredAmalgamate);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
-            return evtcContainer.CombatData.GetBoonData(53075).Count > 0 ? 1 : 0;
+            return combatData.GetBoonData(53075).Count > 0 ? 1 : 0;
         }
     }
 }

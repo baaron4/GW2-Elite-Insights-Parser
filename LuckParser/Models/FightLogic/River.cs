@@ -13,7 +13,8 @@ namespace LuckParser.Models.Logic
         {
             MechanicList.AddRange( new List<Mechanic>
             {
-
+                new DamageOnPlayerMechanic(48272, "Bombshell", new MechanicPlotlySetting("circle","rgb(255,125,0)"),"Bomb Hit", "Hit by Hollowed Bomber Exlosion", "Hit by Bomb", 0 ),
+                new DamageOnPlayerMechanic(47258, "Timed Bomb", new MechanicPlotlySetting("square","rgb(255,125,0)"),"Stun Bomb", "Stunned by Mini Bomb", "Stun Bomb", 0, new List<DamageMechanic.DamageChecker>{(de, log) => !de.To.HasBuff(log, 1122, de.Time)}, Mechanic.TriggerRule.AND ),
             }
             );
             Extension = "river";
@@ -49,17 +50,17 @@ namespace LuckParser.Models.Logic
             bool sortCombatList = false;
             foreach (AgentItem riverOfSoul in riverOfSouls)
             {
-                CombatItem firstMovement = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Velocity && x.SrcInstid == riverOfSoul.InstID && x.Time <= riverOfSoul.LastAware);
+                CombatItem firstMovement = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Velocity && x.SrcInstid == riverOfSoul.InstID && x.LogTime <= riverOfSoul.LastAwareLogTime);
                 if (firstMovement != null)
                 {
                     // update start
-                    riverOfSoul.FirstAware = firstMovement.Time - 10;
+                    riverOfSoul.FirstAwareLogTime = firstMovement.LogTime - 10;
                     foreach (CombatItem c in combatData)
                     {
-                        if (c.SrcInstid == riverOfSoul.InstID && c.Time < riverOfSoul.FirstAware && (c.IsStateChange == ParseEnum.StateChange.Position || c.IsStateChange == ParseEnum.StateChange.Rotation))
+                        if (c.SrcInstid == riverOfSoul.InstID && c.LogTime < riverOfSoul.FirstAwareLogTime && (c.IsStateChange == ParseEnum.StateChange.Position || c.IsStateChange == ParseEnum.StateChange.Rotation))
                         {
                             sortCombatList = true;
-                            c.OverrideTime(riverOfSoul.FirstAware);
+                            c.OverrideTime(riverOfSoul.FirstAwareLogTime);
                         }
                     }
                 }
@@ -72,7 +73,7 @@ namespace LuckParser.Models.Logic
             // make sure the list is still sorted by time after overrides
             if (sortCombatList)
             {
-                combatData.Sort((x, y) => x.Time.CompareTo(y.Time));
+                combatData.Sort((x, y) => x.LogTime.CompareTo(y.LogTime));
             }
         }
 
@@ -93,8 +94,8 @@ namespace LuckParser.Models.Logic
             switch (mob.ID)
             {
                 case (ushort)HollowedBomber:
-                    List<CastLog> bomberman = mob.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 48272).ToList();
-                    foreach (CastLog bomb in bomberman)
+                    List<AbstractCastEvent> bomberman = mob.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 48272).ToList();
+                    foreach (AbstractCastEvent bomb in bomberman)
                     {
                         int startCast = (int)bomb.Time;
                         int endCast = startCast + bomb.ActualDuration;

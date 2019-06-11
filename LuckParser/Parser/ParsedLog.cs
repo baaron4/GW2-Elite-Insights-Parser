@@ -10,34 +10,50 @@ namespace LuckParser.Parser
 {
     public class ParsedLog
     {
-        private readonly ParsedEvtcContainer _container;
         private readonly List<Mob> _auxMobs = new List<Mob>();
 
-        public LogData LogData => _container.LogData;
-        public FightData FightData => _container.FightData;
-        public AgentData AgentData => _container.AgentData;
-        public SkillData SkillData => _container.SkillData;
-        public CombatData CombatData => _container.CombatData;
-        public List<Player> PlayerList => _container.PlayerList;
-        public HashSet<ushort> PlayerIDs => _container.PlayerIDs;
-        public Dictionary<string, List<Player>> PlayerListBySpec => _container.PlayerListBySpec;
-        public DamageModifiersContainer DamageModifiers => _container.DamageModifiers;
-        public BoonsContainer Boons => _container.Boons;
+        public LogData LogData { get; }
+        public FightData FightData { get; }
+        public AgentData AgentData { get; }
+        public SkillData SkillData { get; }
+        public CombatData CombatData { get; }
+        public List<Player> PlayerList { get; }
+        public HashSet<AgentItem> PlayerAgents { get; }
+        public bool IsBenchmarkMode => FightData.Logic.Mode == FightLogic.ParseMode.Golem;
+        public Dictionary<string, List<Player>> PlayerListBySpec { get; }
+        public DamageModifiersContainer DamageModifiers { get; }
+        public BoonsContainer Boons { get; }
         public bool CanCombatReplay => CombatData.HasMovementData && FightData.Logic.HasCombatReplayMap;
 
-
         public readonly MechanicData MechanicData;
-        public readonly BoonSourceFinder BoonSourceFinder;
-        public bool IsBenchmarkMode => FightData.Logic.Mode == FightLogic.ParseMode.Golem;
         public readonly Target LegacyTarget;
         public readonly Statistics Statistics;
 
-        public ParsedLog(LogData logData, FightData fightData, AgentData agentData, SkillData skillData, 
-                CombatData combatData, List<Player> playerList, Target target)
+        public ParsedLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData, 
+                List<CombatItem> combatItems, List<Player> playerList, Target target)
         {
-            _container = new ParsedEvtcContainer(logData, fightData, agentData, skillData, combatData, playerList);
+            FightData = fightData;
+            AgentData = agentData;
+            SkillData = skillData;
+            PlayerList = playerList;
             //
-            FightData.SetSuccess(_container);
+            PlayerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
+            PlayerAgents = new HashSet<AgentItem>(playerList.Select(x => x.AgentItem));
+            CombatData = new CombatData(combatItems, fightData, agentData, playerList);
+            LogData = new LogData(buildVersion, CombatData, combatItems);
+            //
+            UpdateFightData();
+            //
+            Boons = new BoonsContainer(LogData.GW2Version);
+            DamageModifiers = new DamageModifiersContainer(LogData.GW2Version);
+            MechanicData = FightData.Logic.GetMechanicData();
+            Statistics = new Statistics(CombatData, AgentData, FightData, PlayerList, Boons);
+            LegacyTarget = target;
+        }
+
+        private void UpdateFightData()
+        {
+            FightData.Logic.CheckSuccess(CombatData, AgentData, FightData, PlayerAgents);
             if (FightData.FightDuration <= 2200)
             {
                 throw new TooShortException();
@@ -46,18 +62,18 @@ namespace LuckParser.Parser
             {
                 throw new SkipException();
             }
-            CombatData.Update(FightData.FightEnd);
-            FightData.SetCM(_container);
-            //
-            BoonSourceFinder = Boon.GetBoonSourceFinder(logData.GW2Version, Boons);
-            MechanicData = FightData.Logic.GetMechanicData();
-            Statistics = new Statistics(_container);
-            LegacyTarget = target;
+            CombatData.UpdateDamageEvents(FightData.FightDuration);
+            FightData.SetCM(CombatData, AgentData, FightData);
         }
 
-        public AbstractActor FindActor(long time, ushort instid)
+        /// <summary>
+        /// Find the corresponding actor, creates one otherwise
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public AbstractActor FindActor(AgentItem a)
         {
-            AbstractActor res = PlayerList.FirstOrDefault(x => x.InstID == instid);
+            AbstractActor res = PlayerList.FirstOrDefault(x => x.AgentItem == a);
             if (res == null)
             {
                 foreach (Player p in PlayerList)
@@ -65,21 +81,25 @@ namespace LuckParser.Parser
                     Dictionary<string, Minions> minionsDict = p.GetMinions(this);
                     foreach (Minions minions in minionsDict.Values)
                     {
-                        res = minions.FirstOrDefault(x => x.InstID == instid && x.FirstAware <= time && x.LastAware >= time);
+                        res = minions.FirstOrDefault(x => x.AgentItem == a);
                         if (res != null)
                         {
                             return res;
                         }
                     }
                 }
-                res = FightData.Logic.Targets.FirstOrDefault(x => x.InstID == instid && x.FirstAware <= time && x.LastAware >= time);
+                res = FightData.Logic.Targets.FirstOrDefault(x => x.AgentItem == a);
                 if (res == null)
                 {
-                    res = _auxMobs.FirstOrDefault(x => x.InstID == instid && x.FirstAware <= time && x.LastAware >= time);
+                    res = FightData.Logic.TrashMobs.FirstOrDefault(x => x.AgentItem == a);
                     if (res == null)
                     {
-                        _auxMobs.Add(new Mob(AgentData.GetAgentByInstID(instid, time)));
-                        res = _auxMobs.Last();
+                        res = _auxMobs.FirstOrDefault(x => x.AgentItem == a);
+                        if (res == null)
+                        {
+                            _auxMobs.Add(new Mob(a));
+                            res = _auxMobs.Last();
+                        }
                     }
                 }
             }

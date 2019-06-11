@@ -9,7 +9,7 @@ namespace LuckParser.Models.ParseModels
 {
     public class BoonSourceFinder05032019 : BoonSourceFinder
     {
-        public BoonSourceFinder05032019(BoonsContainer boons) : base(boons)
+        public BoonSourceFinder05032019(HashSet<long> boonIds) : base(boonIds)
         {
             ExtensionIDS = new HashSet<long>()
             {

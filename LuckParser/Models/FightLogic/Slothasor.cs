@@ -13,20 +13,20 @@ namespace LuckParser.Models.Logic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new SkillOnPlayerMechanic(34479, "Tantrum", new MechanicPlotlySetting("circle-open","rgb(255,200,0)"), "Tantrum","Tantrum (Triple Circles after Ground slamming)", "Tantrum",5000), 
+            new DamageOnPlayerMechanic(34479, "Tantrum", new MechanicPlotlySetting("circle-open","rgb(255,200,0)"), "Tantrum","Tantrum (Triple Circles after Ground slamming)", "Tantrum",5000), 
             new PlayerBoonApplyMechanic(34387, "Volatile Poison", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Poison","Volatile Poison Application (Special Action Key)", "Poison (Action Key)",0),
-            new SkillOnPlayerMechanic(34481, "Volatile Poison", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Poison dmg","Stood in Volatile Poison", "Poison dmg",0),
-            new SkillOnPlayerMechanic(34516, "Halitosis", new MechanicPlotlySetting("triangle-right-open","rgb(255,140,0)"), "Breath","Halitosis (Flame Breath)", "Flame Breath",0),
-            new SkillOnPlayerMechanic(34482, "Spore Release", new MechanicPlotlySetting("pentagon","rgb(255,0,0)"), "Shake","Spore Release (Coconut Shake)", "Shake",0),
+            new DamageOnPlayerMechanic(34481, "Volatile Poison", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Poison dmg","Stood in Volatile Poison", "Poison dmg",0),
+            new DamageOnPlayerMechanic(34516, "Halitosis", new MechanicPlotlySetting("triangle-right-open","rgb(255,140,0)"), "Breath","Halitosis (Flame Breath)", "Flame Breath",0),
+            new DamageOnPlayerMechanic(34482, "Spore Release", new MechanicPlotlySetting("pentagon","rgb(255,0,0)"), "Shake","Spore Release (Coconut Shake)", "Shake",0),
             new PlayerBoonApplyMechanic(34362, "Magic Transformation", new MechanicPlotlySetting("hexagram","rgb(0,255,255)"), "Slub","Magic Transformation (Ate Magic Mushroom)", "Slub Transform",0), 
             //new Mechanic(34496, "Nauseated", ParseEnum.BossIDS.Slothasor, new MechanicPlotlySetting("diamond-tall-open","rgb(200,140,255)"), "Slub CD",0), //can be skipped imho, identical person and timestamp as Slub Transform
             new PlayerBoonApplyMechanic(34508, "Fixated", new MechanicPlotlySetting("star","rgb(255,0,255)"), "Fixate","Fixated by Slothasor", "Fixated",0),
-            new SkillOnPlayerMechanic(34565, "Toxic Cloud", new MechanicPlotlySetting("pentagon-open","rgb(0,128,0)"), "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0), 
-            new SkillOnPlayerMechanic(34537, "Toxic Cloud", new MechanicPlotlySetting("pentagon-open","rgb(0,128,0)"), "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0),
-            new PlayerBoonApplyMechanic(791, "Fear", new MechanicPlotlySetting("square-open","rgb(255,0,0)"), "Fear","Hit by fear after breakbar", "Feared",0, new List<MechanicChecker>{ new CombatItemValueChecker(8000, MechanicChecker.ValueCompare.EQ) }, Mechanic.TriggerRule.AND),
+            new DamageOnPlayerMechanic(34565, "Toxic Cloud", new MechanicPlotlySetting("pentagon-open","rgb(0,128,0)"), "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0), 
+            new DamageOnPlayerMechanic(34537, "Toxic Cloud", new MechanicPlotlySetting("pentagon-open","rgb(0,128,0)"), "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0),
+            new PlayerBoonApplyMechanic(791, "Fear", new MechanicPlotlySetting("square-open","rgb(255,0,0)"), "Fear","Hit by fear after breakbar", "Feared",0, new List<BoonApplyMechanic.BoonApplyChecker>{ (ba,log) => ba.AppliedDuration == 8000 }, Mechanic.TriggerRule.AND),
             new EnemyBoonApplyMechanic(34467, "Narcolepsy", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Narcolepsy (Breakbar)", "Breakbar",0),
-            new EnemyBoonRemoveMechanic(34467, "Narcolepsy", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Narcolepsy (Failed CC)", "CC Fail",0, new List<MechanicChecker>{ new CombatItemValueChecker(120000, MechanicChecker.ValueCompare.G) }, Mechanic.TriggerRule.AND),
-            new EnemyBoonRemoveMechanic(34467, "Narcolepsy", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Narcolepsy (Breakbar broken)", "CCed",0, new List<MechanicChecker>{ new CombatItemValueChecker(120000, MechanicChecker.ValueCompare.LEQ) }, Mechanic.TriggerRule.AND)
+            new EnemyBoonRemoveMechanic(34467, "Narcolepsy", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Narcolepsy (Failed CC)", "CC Fail",0, new List<BoonRemoveMechanic.BoonRemoveChecker>{ (br,log) => br.RemovedDuration > 120000 }, Mechanic.TriggerRule.AND),
+            new EnemyBoonRemoveMechanic(34467, "Narcolepsy", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Narcolepsy (Breakbar broken)", "CCed",0, new List<BoonRemoveMechanic.BoonRemoveChecker>{ (br,log) => br.RemovedDuration <= 120000 }, Mechanic.TriggerRule.AND)
             });
             Extension = "sloth";
             IconUrl = "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";
@@ -66,10 +66,10 @@ namespace LuckParser.Models.Logic
             {
                 return phases;
             }
-            List<CastLog> sleepy = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 34515).ToList();
+            List<AbstractCastEvent> sleepy = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 34515).ToList();
             long start = 0;
             int i = 1;
-            foreach (CastLog c in sleepy)
+            foreach (AbstractCastEvent c in sleepy)
             {
                 PhaseData phase = new PhaseData(start, Math.Min(c.Time, fightDuration)) {
                     Name = "Phase " + i++
@@ -90,17 +90,17 @@ namespace LuckParser.Models.Logic
 
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Slothasor:
-                    List<CastLog> sleepy = cls.Where(x => x.SkillId == 34515).ToList();
-                    foreach (CastLog c in sleepy)
+                    List<AbstractCastEvent> sleepy = cls.Where(x => x.SkillId == 34515).ToList();
+                    foreach (AbstractCastEvent c in sleepy)
                     {
                         replay.Actors.Add(new CircleActor(true, 0, 180, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
-                    List<CastLog> breath = cls.Where(x => x.SkillId == 34516).ToList();
-                    foreach (CastLog c in breath)
+                    List<AbstractCastEvent> breath = cls.Where(x => x.SkillId == 34516).ToList();
+                    foreach (AbstractCastEvent c in breath)
                     {
                         int start = (int)c.Time;
                         int preCastTime = 1000;
@@ -115,16 +115,16 @@ namespace LuckParser.Models.Logic
                             replay.Actors.Add(new PieActor(true, 0, range, direction, angle, (start + preCastTime, start + preCastTime + duration), "rgba(255,200,0,0.4)", new AgentConnector(target)));
                         }
                     }
-                    List<CastLog> tantrum = cls.Where(x => x.SkillId == 34547).ToList();
-                    foreach (CastLog c in tantrum)
+                    List<AbstractCastEvent> tantrum = cls.Where(x => x.SkillId == 34547).ToList();
+                    foreach (AbstractCastEvent c in tantrum)
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
                         replay.Actors.Add(new CircleActor(false, 0, 300, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                         replay.Actors.Add(new CircleActor(true, end, 300, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                     }
-                    List<CastLog> shakes = cls.Where(x => x.SkillId == 34482).ToList();
-                    foreach (CastLog c in shakes)
+                    List<AbstractCastEvent> shakes = cls.Where(x => x.SkillId == 34482).ToList();
+                    foreach (AbstractCastEvent c in shakes)
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
@@ -141,20 +141,21 @@ namespace LuckParser.Models.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // Poison
-            List<CombatItem> poisonToDrop = GetFilteredList(log.CombatData, 34387, p, true);
+            List<AbstractBuffEvent> poisonToDrop = GetFilteredList(log.CombatData, 34387, p, true);
             int toDropStart = 0;
-            foreach (CombatItem c in poisonToDrop)
+            foreach (AbstractBuffEvent c in poisonToDrop)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    toDropStart = (int)(log.FightData.ToFightSpace(c.Time));
+                    toDropStart = (int)c.Time;
                 }
                 else
                 {
-                    int toDropEnd = (int)(log.FightData.ToFightSpace(c.Time)); replay.Actors.Add(new CircleActor(false, 0, 180, (toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)", new AgentConnector(p)));
+                    int toDropEnd = (int)c.Time;
+                    replay.Actors.Add(new CircleActor(false, 0, 180, (toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)", new AgentConnector(p)));
                     replay.Actors.Add(new CircleActor(true, toDropStart + 8000, 180, (toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)", new AgentConnector(p)));
-                    Point3D poisonNextPos = replay.Positions.FirstOrDefault(x => x.Time >= toDropEnd);
-                    Point3D poisonPrevPos = replay.Positions.LastOrDefault(x => x.Time <= toDropEnd);
+                    Point3D poisonNextPos = replay.PolledPositions.FirstOrDefault(x => x.Time >= toDropEnd);
+                    Point3D poisonPrevPos = replay.PolledPositions.LastOrDefault(x => x.Time <= toDropEnd);
                     if (poisonNextPos != null || poisonPrevPos != null)
                     {
                         replay.Actors.Add(new CircleActor(true, toDropStart + 90000, 900, (toDropEnd, toDropEnd + 90000), "rgba(255, 0, 0, 0.3)", new InterpolatedPositionConnector(poisonPrevPos, poisonNextPos, toDropEnd), 180));
@@ -162,32 +163,32 @@ namespace LuckParser.Models.Logic
                 }
             }
             // Transformation
-            List<CombatItem> slubTrans = GetFilteredList(log.CombatData, 34362, p, true);
+            List<AbstractBuffEvent> slubTrans = GetFilteredList(log.CombatData, 34362, p, true);
             int transfoStart = 0;
-            foreach (CombatItem c in slubTrans)
+            foreach (AbstractBuffEvent c in slubTrans)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    transfoStart = (int)(log.FightData.ToFightSpace(c.Time));
+                    transfoStart = (int)c.Time;
                 }
                 else
                 {
-                    int transfoEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int transfoEnd = (int)c.Time;
                     replay.Actors.Add(new CircleActor(true, 0, 180, (transfoStart, transfoEnd), "rgba(0, 80, 255, 0.3)", new AgentConnector(p)));
                 }
             }
             // fixated
-            List<CombatItem> fixatedSloth = GetFilteredList(log.CombatData, 34508, p, true);
+            List<AbstractBuffEvent> fixatedSloth = GetFilteredList(log.CombatData, 34508, p, true);
             int fixatedSlothStart = 0;
-            foreach (CombatItem c in fixatedSloth)
+            foreach (AbstractBuffEvent c in fixatedSloth)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    fixatedSlothStart = (int)(log.FightData.ToFightSpace(c.Time));
+                    fixatedSlothStart = (int)c.Time;
                 }
                 else
                 {
-                    int fixatedSlothEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int fixatedSlothEnd = (int)c.Time;
                     replay.Actors.Add(new CircleActor(true, 0, 120, (fixatedSlothStart, fixatedSlothEnd), "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
                 }
             }

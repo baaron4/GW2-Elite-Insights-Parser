@@ -15,7 +15,7 @@ namespace LuckParser.Models.Logic
             MechanicList.AddRange(new List<Mechanic>
             {
             new PlayerBoonApplyMechanic(37695, "Flux Bomb", new MechanicPlotlySetting("circle","rgb(150,0,255)",10), "Flux","Flux Bomb application", "Flux Bomb",0),
-            new SkillOnPlayerMechanic(36393, "Flux Bomb", new MechanicPlotlySetting("circle-open","rgb(150,0,255)",10), "Flux dmg","Flux Bomb hit", "Flux Bomb dmg",0),
+            new DamageOnPlayerMechanic(36393, "Flux Bomb", new MechanicPlotlySetting("circle-open","rgb(150,0,255)",10), "Flux dmg","Flux Bomb hit", "Flux Bomb dmg",0),
             new SpawnMechanic(19684, "Fractal Vindicator", new MechanicPlotlySetting("star-diamond-open","rgb(0,0,0)",10), "Vindicator","Fractal Vindicator spawned", "Vindicator spawn",0),
             });
         }
@@ -52,7 +52,7 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void SetSuccess(ParsedEvtcContainer evtcContainer)
+        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             // check reward
             Target mainTarget = Targets.Find(x => x.ID == TriggerID);
@@ -60,22 +60,20 @@ namespace LuckParser.Models.Logic
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
-            HashSet<ushort> pIds = evtcContainer.PlayerIDs;
-            CombatItem reward = evtcContainer.CombatData.GetStates(ParseEnum.StateChange.Reward).LastOrDefault();
-            CombatItem lastDamageTaken = evtcContainer.CombatData.GetDamageTakenData(mainTarget.InstID, mainTarget.FirstAware, mainTarget.LastAware).LastOrDefault(x => (x.Value > 0 || x.BuffDmg > 0) && pIds.Contains(x.SrcInstid));
+            RewardEvent reward = combatData.GetRewardEvents().LastOrDefault();
+            AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
             if (lastDamageTaken != null)
             {
                 if (reward != null && lastDamageTaken.Time - reward.Time < 100)
                 {
-                    evtcContainer.FightData.Success = true;
-                    evtcContainer.FightData.FightEnd = Math.Min(lastDamageTaken.Time, reward.Time);
+                    fightData.SetSuccess(true, fightData.ToLogSpace(Math.Min(lastDamageTaken.Time, reward.Time)));
                 }
                 else
                 {
-                    SetSuccessByDeath(evtcContainer, true, TriggerID);
-                    if (evtcContainer.FightData.Success)
+                    SetSuccessByDeath(combatData, agentData, fightData, true, TriggerID);
+                    if (fightData.Success)
                     {
-                        evtcContainer.FightData.FightEnd = Math.Min(evtcContainer.FightData.FightEnd, lastDamageTaken.Time);
+                        fightData.SetSuccess(true, Math.Min(fightData.FightEndLogTime, fightData.ToLogSpace(lastDamageTaken.Time)));
                     }
                 }
             }

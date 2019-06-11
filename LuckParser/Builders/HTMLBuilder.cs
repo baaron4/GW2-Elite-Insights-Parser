@@ -52,20 +52,6 @@ namespace LuckParser.Builders
             _cr = Properties.Settings.Default.ParseCombatReplay && _log.CanCombatReplay;
         }
 
-        private static string FilterStringChars(string str)
-        {
-            string filtered = "";
-            string filter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ";
-            foreach (char c in str)
-            {
-                if (filter.Contains(c))
-                {
-                    filtered += c;
-                }
-            }
-            return filtered;
-        }
-
         private TargetChartDataDto BuildTargetGraphData(int phaseIndex, Target target)
         {
             PhaseData phase = _phases[phaseIndex];
@@ -338,9 +324,9 @@ namespace LuckParser.Builders
             List<object[]> list = new List<object[]>();
 
             PhaseData phase = _phases[phaseIndex];
-            List<CastLog> casting = p.GetCastLogsActDur(_log, phase.Start, phase.End);
+            List<AbstractCastEvent> casting = p.GetCastLogsActDur(_log, phase.Start, phase.End);
             SkillData skillList = _log.SkillData;
-            foreach (CastLog cl in casting)
+            foreach (AbstractCastEvent cl in casting)
             {
                 if (!_usedSkills.ContainsKey(cl.SkillId)) _usedSkills.Add(cl.SkillId, skillList.Get(cl.SkillId));
                 list.Add(ActorDetailsDto.GetSkillData(cl, phase.Start));
@@ -381,19 +367,19 @@ namespace LuckParser.Builders
             return res;
         }
 
-        private List<object[]> BuildDMGDistBodyData(List<CastLog> casting, List<DamageLog> damageLogs, long finalTotalDamage)
+        private List<object[]> BuildDMGDistBodyData(List<AbstractCastEvent> casting, List<AbstractDamageEvent> damageLogs, long finalTotalDamage)
         {
             List<object[]> list = new List<object[]>();
-            Dictionary<long, List<CastLog>> castLogsBySkill = casting.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
-            Dictionary<long, List<DamageLog>> damageLogsBySkill = damageLogs.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
+            Dictionary<long, List<AbstractCastEvent>> castLogsBySkill = casting.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
+            Dictionary<long, List<AbstractDamageEvent>> damageLogsBySkill = damageLogs.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             Dictionary<long, Boon> conditionsById = _statistics.PresentConditions.ToDictionary(x => x.ID);
             SkillData skillList = _log.SkillData;
-            foreach (KeyValuePair<long, List<DamageLog>> entry in damageLogsBySkill)
+            foreach (KeyValuePair<long, List<AbstractDamageEvent>> entry in damageLogsBySkill)
             {
                 list.Add(DmgDistributionDto.GetDMGDtoItem(entry, castLogsBySkill, skillList, _usedSkills, _usedBoons, _log.Boons));
             }
             // non damaging
-            foreach (KeyValuePair<long, List<CastLog>> entry in castLogsBySkill)
+            foreach (KeyValuePair<long, List<AbstractCastEvent>> entry in castLogsBySkill)
             {
                 if (damageLogsBySkill.ContainsKey(entry.Key)) continue;
 
@@ -401,10 +387,13 @@ namespace LuckParser.Builders
 
                 int casts = entry.Value.Count;
                 int timeswasted = 0, timessaved = 0;
-                foreach (CastLog cl in entry.Value)
+                foreach (AbstractCastEvent cl in entry.Value)
                 {
-                    if (cl.EndActivation == ParseEnum.Activation.CancelCancel) timeswasted += cl.ActualDuration;
-                    if (cl.EndActivation == ParseEnum.Activation.CancelFire && cl.ActualDuration < cl.ExpectedDuration)
+                    if (cl.Interrupted)
+                    {
+                        timeswasted += cl.ActualDuration;
+                    }
+                    else if (cl.ReducedAnimation && cl.ActualDuration < cl.ExpectedDuration)
                     {
                         timessaved += cl.ExpectedDuration - cl.ActualDuration;
                     }
@@ -421,8 +410,8 @@ namespace LuckParser.Builders
         {
             DmgDistributionDto dto = new DmgDistributionDto();
             PhaseData phase = _phases[phaseIndex];
-            List<CastLog> casting = p.GetCastLogs(_log, phase.Start, phase.End);
-            List<DamageLog> damageLogs = p.GetJustPlayerDamageLogs(target, _log, phase);
+            List<AbstractCastEvent> casting = p.GetCastLogs(_log, phase.Start, phase.End);
+            List<AbstractDamageEvent> damageLogs = p.GetJustPlayerDamageLogs(target, _log, phase);
             dto.TotalDamage = dps.Damage;
             dto.ContributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
             dto.Distribution = BuildDMGDistBodyData(casting, damageLogs, dto.ContributedDamage);
@@ -455,8 +444,8 @@ namespace LuckParser.Builders
         {
             DmgDistributionDto dto = new DmgDistributionDto();
             PhaseData phase = _phases[phaseIndex];
-            List<CastLog> casting = minions.GetCastLogs(_log, phase.Start, phase.End);
-            List<DamageLog> damageLogs = minions.GetDamageLogs(target, _log, phase.Start, phase.End);
+            List<AbstractCastEvent> casting = minions.GetCastLogs(_log, phase.Start, phase.End);
+            List<AbstractDamageEvent> damageLogs = minions.GetDamageLogs(target, _log, phase.Start, phase.End);
             dto.ContributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
             dto.TotalDamage = dps.Damage;
             dto.Distribution = BuildDMGDistBodyData(casting, damageLogs, dto.ContributedDamage);
@@ -494,8 +483,8 @@ namespace LuckParser.Builders
                 Distribution = new List<object[]>()
             };
             PhaseData phase = _phases[phaseIndex];
-            List<DamageLog> damageLogs = p.GetDamageTakenLogs(null, _log, phase.Start, phase.End);
-            Dictionary<long, List<DamageLog>> damageLogsBySkill = damageLogs.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
+            List<AbstractDamageEvent> damageLogs = p.GetDamageTakenLogs(null, _log, phase.Start, phase.End);
+            Dictionary<long, List<AbstractDamageEvent>> damageLogsBySkill = damageLogs.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             SkillData skillList = _log.SkillData;
             dto.ContributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.Damage) : 0;
             Dictionary<long, Boon> conditionsById = _statistics.PresentConditions.ToDictionary(x => x.ID);
@@ -610,7 +599,7 @@ namespace LuckParser.Builders
             List<MechanicChartDataDto> mechanicsChart = new List<MechanicChartDataDto>();
             foreach (Mechanic mech in _log.MechanicData.GetPresentMechanics(_log, 0))
             {
-                List<MechanicLog> mechanicLogs = _log.MechanicData.GetMechanicLogs(_log, mech);
+                List<MechanicEvent> mechanicLogs = _log.MechanicData.GetMechanicLogs(_log, mech);
                 MechanicChartDataDto dto = new MechanicChartDataDto
                 {
                     Color = mech.PlotlySetting.Color,
@@ -624,7 +613,7 @@ namespace LuckParser.Builders
             return mechanicsChart;
         }
 
-        private List<List<List<object>>> BuildMechanicGraphPointData(List<MechanicLog> mechanicLogs, bool enemyMechanic)
+        private List<List<List<object>>> BuildMechanicGraphPointData(List<MechanicEvent> mechanicLogs, bool enemyMechanic)
         {
             List<List<List<object>>> list = new List<List<List<object>>>();
             foreach (PhaseData phase in _phases)
@@ -672,7 +661,7 @@ namespace LuckParser.Builders
             html = html.Replace("${evtcVersion}", _log.LogData.BuildVersion);
             html = html.Replace("${fightID}", _log.FightData.ID.ToString());
             html = html.Replace("${eiVersion}", Application.ProductVersion);
-            html = html.Replace("${recordedBy}", _log.LogData.PoV.Split(':')[0]);
+            html = html.Replace("${recordedBy}", _log.LogData.PoVName);
 
             string uploadString = "";
             if (Properties.Settings.Default.UploadToDPSReports)
@@ -1115,7 +1104,7 @@ namespace LuckParser.Builders
             logData.EncounterDuration = durationString;
             logData.Success = _log.FightData.Success;
             logData.Wvw = _log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
-            logData.FightName = FilterStringChars(_log.FightData.Name);
+            logData.FightName = _log.FightData.Name;
             logData.FightIcon = _log.FightData.Logic.IconUrl;
             logData.LightTheme = Properties.Settings.Default.LightTheme;
             logData.SingleGroup = _log.PlayerList.Where(x => !x.IsFakeActor).Select(x => x.Group).Distinct().Count() == 1;

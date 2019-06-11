@@ -13,10 +13,11 @@ namespace LuckParser.Models.ParseModels
         public ushort ID { get; }
         private readonly bool _requirePhases;
         public readonly FightLogic Logic;
-        public long FightStart { get; set; }
-        public long FightEnd { get; set; } = long.MaxValue;
-        public long FightDuration => FightEnd - FightStart;
-        public bool Success { get; set; }
+        public long FightStartOffset { get; }
+        public long FightStartLogTime { get; private set; }
+        public long FightEndLogTime { get; private set; } = long.MaxValue;
+        public long FightDuration => FightEndLogTime - FightStartLogTime;
+        public bool Success { get; private set; }
         public string Name => Logic.GetFightName() + (_isCM == 1 ? " CM" : "") ;
         private int _isCM = -1;
         public bool IsCM
@@ -27,8 +28,11 @@ namespace LuckParser.Models.ParseModels
             }
         }
         // Constructors
-        public FightData(ushort id, AgentData agentData)
+        public FightData(ushort id, AgentData agentData, long start, long end)
         {
+            FightStartOffset = start;
+            FightStartLogTime = start;
+            FightEndLogTime = end;
             ID = id;
             _requirePhases = Properties.Settings.Default.ParsePhases;
             switch (ParseEnum.GetTargetIDS(id))
@@ -173,25 +177,32 @@ namespace LuckParser.Models.ParseModels
 
         public long ToFightSpace(long time)
         {
-            return time - FightStart;
+            return time - FightStartLogTime;
         }
 
         public long ToLogSpace(long time)
         {
-            return time + FightStart;
+            return time + FightStartLogTime;
         }
 
         // Setters
-        public void SetCM(ParsedEvtcContainer evtcContainer)
+        public void SetCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             if (_isCM == -1)
             {
-                _isCM = Logic.IsCM(evtcContainer);
+                _isCM = Logic.IsCM(combatData, agentData, fightData);
             }
         }
-        public void SetSuccess(ParsedEvtcContainer evtcContainer)
+
+        public void SetSuccess(bool success, long fightEndLogTime)
         {
-            Logic.SetSuccess(evtcContainer);
+            Success = success;
+            FightEndLogTime = fightEndLogTime;
+        }
+
+        public void OverrideStart(long fightStartLogTime)
+        {
+            FightStartLogTime = fightStartLogTime;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Models.ParseModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,21 +34,21 @@ namespace LuckParser.Models.JsonModels
             /// </summary>
             public bool Quickness;
 
-            public JsonSkill(ParseModels.CastLog cl)
+            public JsonSkill(AbstractCastEvent cl)
             {
                 int timeGained = 0;
-                if (cl.EndActivation == Parser.ParseEnum.Activation.CancelFire && cl.ActualDuration < cl.ExpectedDuration)
+                if (cl.ReducedAnimation && cl.ActualDuration < cl.ExpectedDuration)
                 {
                     timeGained = cl.ExpectedDuration - cl.ActualDuration;
                 }
-                else if (cl.EndActivation == Parser.ParseEnum.Activation.CancelCancel)
+                else if (cl.Interrupted)
                 {
                     timeGained = -cl.ActualDuration;
                 }
                 CastTime = (int)cl.Time;
                 Duration = cl.ActualDuration;
                 TimeGained = timeGained;
-                Quickness = cl.StartActivation == Parser.ParseEnum.Activation.Quickness;
+                Quickness = cl.UnderQuickness;
             }
         }
 

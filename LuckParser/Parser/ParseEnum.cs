@@ -42,7 +42,7 @@ namespace LuckParser.Parser
 
         // Result
         
-        public enum Result : byte
+        public enum PhysicalResult : byte
         {
             Normal      = 0,
             Crit        = 1,
@@ -58,17 +58,34 @@ namespace LuckParser.Parser
             Unknown
         };
 
-        public static Result GetResult(byte bt)
+        public static PhysicalResult GetPhysicalResult(byte bt)
         {
-            return bt < (byte)Result.Unknown
-                ? (Result)bt
-                : Result.Unknown;
+            return bt < (byte)PhysicalResult.Unknown
+                ? (PhysicalResult)bt
+                : PhysicalResult.Unknown;
+        }
+
+        public enum ConditionResult : byte
+        {
+            ExpectedToHit = 0,
+            InvulByBuff = 1,
+            InvulByPlayerSkill1 = 2,
+            InvulByPlayerSkill2 = 3,
+            InvulByPlayerSkill3 = 4,
+
+            Unknown
+        };
+        public static ConditionResult GetConditionResult(byte bt)
+        {
+            return bt < (byte)ConditionResult.Unknown
+                ? (ConditionResult)bt
+                : ConditionResult.Unknown;
         }
 
         // State Change    
         public enum StateChange : byte
         {
-            Normal          =  0,
+            None            =  0,
             EnterCombat     =  1,
             ExitCombat      =  2,
             ChangeUp        =  3,
@@ -82,7 +99,7 @@ namespace LuckParser.Parser
             WeaponSwap      = 11,
             MaxHealthUpdate = 12,
             PointOfView     = 13,
-            CBTSLanguage    = 14,
+            Language    = 14,
             GWBuild         = 15,
             ShardId         = 16,
             Reward          = 17,
@@ -363,11 +380,19 @@ namespace LuckParser.Parser
 
     }
 
-    static class ResultExtensions
+    static class PhysicalResultExtensions
     {
-        public static bool IsHit(this ParseEnum.Result result)
+        public static bool IsHit(this ParseEnum.PhysicalResult result)
         {
-            return result == ParseEnum.Result.Normal || result == ParseEnum.Result.Crit || result == ParseEnum.Result.Glance || result == ParseEnum.Result.KillingBlow; //Downed and Interrupt omitted for now due to double procing mechanics || result == ParseEnum.Result.Downed || result == ParseEnum.Result.Interrupt; 
+            return result == ParseEnum.PhysicalResult.Normal || result == ParseEnum.PhysicalResult.Crit || result == ParseEnum.PhysicalResult.Glance || result == ParseEnum.PhysicalResult.KillingBlow; //Downed and Interrupt omitted for now due to double procing mechanics || result == ParseEnum.Result.Downed || result == ParseEnum.Result.Interrupt; 
+        }
+    }
+
+    static class ConditionResultExtensions
+    {
+        public static bool IsHit(this ParseEnum.ConditionResult result)
+        {
+            return result == ParseEnum.ConditionResult.ExpectedToHit;
         }
     }
 
@@ -375,7 +400,7 @@ namespace LuckParser.Parser
     {
         public static bool IsSpawn(this ParseEnum.StateChange state)
         {
-            return state == ParseEnum.StateChange.Normal || state == ParseEnum.StateChange.Position || state == ParseEnum.StateChange.Velocity || state == ParseEnum.StateChange.Rotation || state == ParseEnum.StateChange.MaxHealthUpdate || state == ParseEnum.StateChange.Spawn || state == ParseEnum.StateChange.TeamChange;
+            return state == ParseEnum.StateChange.None || state == ParseEnum.StateChange.Position || state == ParseEnum.StateChange.Velocity || state == ParseEnum.StateChange.Rotation || state == ParseEnum.StateChange.MaxHealthUpdate || state == ParseEnum.StateChange.Spawn || state == ParseEnum.StateChange.TeamChange;
         }
     }
 

@@ -2,7 +2,7 @@
 
 namespace LuckParser.Models.ParseModels
 {
-    public class BoonMap : Dictionary<long, List<BoonLog>>
+    public class BoonMap : Dictionary<long, List<AbstractBuffEvent>>
     {
         // Constructors
         public BoonMap()
@@ -10,14 +10,14 @@ namespace LuckParser.Models.ParseModels
         }
         public BoonMap(Boon boon)
         {
-            this[boon.ID] = new List<BoonLog>();
+            this[boon.ID] = new List<AbstractBuffEvent>();
         }
 
         public BoonMap(IEnumerable<Boon> boons)
         {
             foreach (Boon boon in boons)
             {
-                this[boon.ID] = new List<BoonLog>();
+                this[boon.ID] = new List<AbstractBuffEvent>();
             }
         }
 
@@ -30,7 +30,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     continue;
                 }
-                this[boon.ID] = new List<BoonLog>();
+                this[boon.ID] = new List<AbstractBuffEvent>();
             }
         }
 
@@ -40,7 +40,7 @@ namespace LuckParser.Models.ParseModels
             {
                 return;
             }
-            this[boon.ID] = new List<BoonLog>();
+            this[boon.ID] = new List<AbstractBuffEvent>();
         }
 
         /*private int CompareApplicationType(BoonLog x, BoonLog y)

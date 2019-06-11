@@ -42,7 +42,7 @@ namespace LuckParser.Models.Logic
             foreach (CombatItem c in combatData)
             {
                 // redirect all attacks to the main golem
-                if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsStateChange == ParseEnum.StateChange.Normal && c.IFF == ParseEnum.IFF.Foe && c.IsActivation == ParseEnum.Activation.None && c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsStateChange == ParseEnum.StateChange.None && c.IFF == ParseEnum.IFF.Foe && c.IsActivation == ParseEnum.Activation.None && c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
                     c.OverrideDstValues(target.Agent, target.InstID);
                 }
@@ -54,27 +54,31 @@ namespace LuckParser.Models.Logic
                 CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcAgent == pov.SrcAgent && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
                 if (enterCombat != null)
                 {
-                    fightData.FightStart = enterCombat.Time;
+                    fightData.OverrideStart(enterCombat.LogTime);
                 }
             }
         }
 
-        public override void SetSuccess(ParsedEvtcContainer evtcContainer)
+        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             Target mainTarget = Targets.Find(x => x.ID == TriggerID);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
-            CombatItem lastDamageTaken = evtcContainer.CombatData.GetDamageTakenData(mainTarget.InstID, mainTarget.FirstAware, mainTarget.LastAware).LastOrDefault(x => x.Value > 0 || x.BuffDmg > 0);
+            AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => x.Damage > 0);
+            long fightEndLogTime = fightData.FightEndLogTime;
+            bool success = false;
             if (lastDamageTaken != null)
             {
-                evtcContainer.FightData.FightEnd = lastDamageTaken.Time;
+                fightEndLogTime = fightData.ToLogSpace(lastDamageTaken.Time);
             }
-            if (mainTarget.HealthOverTime.Count > 0)
+            List<HealthUpdateEvent> hpUpdates = combatData.GetHealthUpdateEvents(mainTarget.AgentItem);
+            if (hpUpdates.Count > 0)
             {
-                evtcContainer.FightData.Success = mainTarget.HealthOverTime.Last().hp < 200;
+                success = hpUpdates.Last().HPPercent < 2.00;
             }
+            fightData.SetSuccess(success, fightEndLogTime);
         }
 
         protected override HashSet<ushort> GetUniqueTargetIDs()

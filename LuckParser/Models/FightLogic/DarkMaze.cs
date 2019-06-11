@@ -16,9 +16,9 @@ namespace LuckParser.Models.Logic
             {
             new PlayerBoonApplyMechanic(791, "Fear", new MechanicPlotlySetting("star-square","rgb(0,0,0)"), "Feared","Feared by Eye Teleport Skill", "Feared",0),
             new PlayerBoonApplyMechanic(48779, "Light Carrier", new MechanicPlotlySetting("circle-open","rgb(200,200,0)"), "Light Orb","Light Carrier (picked up a light orb)", "Picked up orb",0),
-            new PlayerCastStartMechanic(47074, "Flare", new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Detonate","Flare (detonate light orb to incapacitate eye)", "Detonate orb",0),
-            new SkillOnPlayerMechanic(47518, "Piercing Shadow", new MechanicPlotlySetting("hexagram-open","rgb(0,0,255)"), "Spin","Piercing Shadow (damaging spin to all players in sight)", "Eye Spin",0),
-            new SkillOnPlayerMechanic(48150, "Deep Abyss", new MechanicPlotlySetting("triangle-right-open","rgb(255,0,0)"), "Beam","Deep Abyss (ticking eye beam)", "Eye Beam",0),
+            new PlayerCastMechanic(47074, "Flare", new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Detonate","Flare (detonate light orb to incapacitate eye)", "Detonate orb",0),
+            new DamageOnPlayerMechanic(47518, "Piercing Shadow", new MechanicPlotlySetting("hexagram-open","rgb(0,0,255)"), "Spin","Piercing Shadow (damaging spin to all players in sight)", "Eye Spin",0),
+            new DamageOnPlayerMechanic(48150, "Deep Abyss", new MechanicPlotlySetting("triangle-right-open","rgb(255,0,0)"), "Beam","Deep Abyss (ticking eye beam)", "Eye Beam",0),
             //47857 <- teleport + fear skill? 
             }
             );
@@ -77,7 +77,7 @@ namespace LuckParser.Models.Logic
             return phases;
         }
 
-        private void HPCheck(ParsedEvtcContainer evtcContainer)
+        private void HPCheck(CombatData combatData, AgentData agentData, FightData fightData)
         {
             Target eye1 = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.EyeOfFate);
             Target eye2 = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.EyeOfJudgement);
@@ -85,47 +85,48 @@ namespace LuckParser.Models.Logic
             {
                 throw new InvalidOperationException("Eyes not found");
             }
-            if (eye1.HealthOverTime.Count == 0 || eye2.HealthOverTime.Count == 0)
+            List<HealthUpdateEvent> eye1HPs = combatData.GetHealthUpdateEvents(eye1.AgentItem);
+            List<HealthUpdateEvent> eye2HPs = combatData.GetHealthUpdateEvents(eye2.AgentItem);
+            if (eye1HPs.Count == 0 || eye2HPs.Count == 0)
             {
                 return;
             }
-            long lastEye1Hp = eye1.HealthOverTime.LastOrDefault().hp;
-            long lastEye2Hp = eye2.HealthOverTime.LastOrDefault().hp;
-            long margin1 = Math.Min(80, lastEye1Hp);
-            long margin2 = Math.Min(80, lastEye2Hp);
+            double lastEye1Hp = eye1HPs.LastOrDefault().HPPercent;
+            double lastEye2Hp = eye2HPs.LastOrDefault().HPPercent;
+            double margin1 = Math.Min(0.80, lastEye1Hp);
+            double margin2 = Math.Min(0.80, lastEye2Hp);
             if (lastEye1Hp <= margin1 && lastEye2Hp <= margin2)
             {
-                evtcContainer.FightData.Success = true;
                 int lastIEye1;
-                for (lastIEye1 = eye1.HealthOverTime.Count - 1; lastIEye1 >= 0; lastIEye1--)
+                for (lastIEye1 = eye1HPs.Count - 1; lastIEye1 >= 0; lastIEye1--)
                 {
-                    if (eye1.HealthOverTime[lastIEye1].hp > margin1)
+                    if (eye1HPs[lastIEye1].HPPercent > margin1)
                     {
                         lastIEye1++;
                         break;
                     }
                 }
                 int lastIEye2;
-                for (lastIEye2 = eye2.HealthOverTime.Count - 1; lastIEye2 >= 0; lastIEye2--)
+                for (lastIEye2 = eye2HPs.Count - 1; lastIEye2 >= 0; lastIEye2--)
                 {
-                    if (eye2.HealthOverTime[lastIEye2].hp > margin2)
+                    if (eye2HPs[lastIEye2].HPPercent > margin2)
                     {
                         lastIEye2++;
                         break;
                     }
                 }
-                evtcContainer.FightData.FightEnd = Math.Max(eye1.HealthOverTime[lastIEye1].logTime, eye2.HealthOverTime[lastIEye2].logTime);
+                fightData.SetSuccess(true, fightData.ToLogSpace(Math.Max(eye1HPs[lastIEye1].Time, eye2HPs[lastIEye2].Time)));
             }
         }
 
-        public override void SetSuccess(ParsedEvtcContainer evtcContainer)
+        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             // First check using hp, best
-            HPCheck(evtcContainer);
+            HPCheck(combatData, agentData, fightData);
             // hp could be unreliable or missing, fall back (around 200 ms more)
-            if (!evtcContainer.FightData.Success)
+            if (!fightData.Success)
             {
-                SetSuccessByDeath(evtcContainer, false, (ushort)ParseEnum.TargetIDS.EyeOfFate, (ushort)ParseEnum.TargetIDS.EyeOfJudgement);
+                SetSuccessByDeath(combatData, agentData, fightData, false, (ushort)ParseEnum.TargetIDS.EyeOfFate, (ushort)ParseEnum.TargetIDS.EyeOfJudgement);
             }
         }
 

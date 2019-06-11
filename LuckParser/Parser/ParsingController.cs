@@ -21,7 +21,6 @@ namespace LuckParser.Parser
         private readonly GW2APIController _aPIController = new GW2APIController();
 
         //Main data storage after binary parse
-        private LogData _logData;
         private FightData _fightData;
         private AgentData _agentData;
         private readonly List<AgentItem> _allAgentsList = new List<AgentItem>();
@@ -30,6 +29,7 @@ namespace LuckParser.Parser
         private List<Player> _playerList = new List<Player>();
         private byte _revision;
         private ushort _id;
+        private string _buildVersion;
 
         public ParsingController()
         {
@@ -70,7 +70,7 @@ namespace LuckParser.Parser
             {
                 legacyTarget = new Target(GeneralHelper.UnknownAgent);
             }
-            return new ParsedLog(_logData, _fightData, _agentData, _skillData, new CombatData(_combatItems, _fightData, _playerList), _playerList, legacyTarget);
+            return new ParsedLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, legacyTarget);
         }
 
         private void ParseLog(GridRow row, Stream stream)
@@ -135,8 +135,7 @@ namespace LuckParser.Parser
             using (var reader = CreateReader(stream))
             {
                 // 12 bytes: arc build version
-                var buildVersion = ParseHelper.GetString(stream, 12);
-                _logData = new LogData(buildVersion);
+                _buildVersion = ParseHelper.GetString(stream, 12);
 
                 // 1 byte: skip
                 _revision = reader.ReadByte();
@@ -185,7 +184,7 @@ namespace LuckParser.Parser
                     // 68 bytes: name
                     string name = ParseHelper.GetString(stream, 68, false);
                     //Save
-                    string agentProf = GeneralHelper.GetAgentProfString(_logData.BuildVersion, _aPIController, prof, isElite);
+                    string agentProf = GeneralHelper.GetAgentProfString(_buildVersion, _aPIController, prof, isElite);
                     AgentItem.AgentType type;
                     ushort ID = 0;
                     switch (agentProf)
@@ -460,16 +459,16 @@ namespace LuckParser.Parser
                         if (agent.InstID == 0)
                         {
                             agent.InstID = c.SrcInstid;
-                            if (agent.FirstAware == 0)
+                            if (agent.FirstAwareLogTime == 0)
                             {
-                                agent.FirstAware = c.Time;
+                                agent.FirstAwareLogTime = c.LogTime;
                             }
-                            agent.LastAware = c.Time;
+                            agent.LastAwareLogTime = c.LogTime;
                             break;
                         }
                         else if (agent.InstID == c.SrcInstid)
                         {
-                            agent.LastAware = c.Time;
+                            agent.LastAwareLogTime = c.LogTime;
                             break;
                         }
                     }
@@ -480,23 +479,23 @@ namespace LuckParser.Parser
             {
                 if (c.SrcMasterInstid != 0)
                 {
-                    var master = _allAgentsList.Find(x => x.InstID == c.SrcMasterInstid && x.FirstAware <= c.Time && c.Time <= x.LastAware);
+                    var master = _allAgentsList.Find(x => x.InstID == c.SrcMasterInstid && x.FirstAwareLogTime <= c.LogTime && c.LogTime <= x.LastAwareLogTime);
                     if (master != null)
                     {
                         if (agentsLookup.TryGetValue(c.SrcAgent, out var minionList))
                         {
                             foreach (AgentItem minion in minionList)
                             {
-                                if (minion.FirstAware <= c.Time && c.Time <= minion.LastAware)
+                                if (minion.FirstAwareLogTime <= c.LogTime && c.LogTime <= minion.LastAwareLogTime)
                                 {
-                                    minion.MasterAgent = (master.Agent);
+                                    minion.MasterAgent = master;
                                 }
                             }
                         }
                     }
                 }
             }
-            _allAgentsList.RemoveAll(x => !(x.InstID != 0 && x.LastAware - x.FirstAware >= 0 && x.FirstAware != 0 && x.LastAware != long.MaxValue) && x.Type != AgentItem.AgentType.Player);
+            _allAgentsList.RemoveAll(x => !(x.InstID != 0 && x.LastAwareLogTime - x.FirstAwareLogTime >= 0 && x.FirstAwareLogTime != 0 && x.LastAwareLogTime != long.MaxValue) && x.Type != AgentItem.AgentType.Player);
             _agentData = new AgentData(_allAgentsList);
         }
         private void CompletePlayers()
@@ -506,7 +505,7 @@ namespace LuckParser.Parser
 
             foreach (AgentItem playerAgent in playerAgentList)
             {
-                if (playerAgent.InstID == 0 || playerAgent.FirstAware == 0 || playerAgent.LastAware == long.MaxValue)
+                if (playerAgent.InstID == 0 || playerAgent.FirstAwareLogTime == 0 || playerAgent.LastAwareLogTime == long.MaxValue)
                 {
                     CombatItem tst = _combatItems.Find(x => x.SrcAgent == playerAgent.Agent);
                     if (tst == null)
@@ -522,8 +521,8 @@ namespace LuckParser.Parser
                     {
                         playerAgent.InstID = tst.SrcInstid;
                     }
-                    playerAgent.FirstAware = _fightData.FightStart;
-                    playerAgent.LastAware = _fightData.FightEnd;
+                    playerAgent.FirstAwareLogTime = _fightData.FightStartLogTime;
+                    playerAgent.LastAwareLogTime = _fightData.FightEndLogTime;
                 }
                 try
                 {
@@ -560,8 +559,8 @@ namespace LuckParser.Parser
                                 }
                                 p.AgentItem.InstID = instid;
                                 p.AgentItem.Agent = agent;
-                                p.AgentItem.FirstAware = Math.Min(p.AgentItem.FirstAware, player.AgentItem.FirstAware);
-                                p.AgentItem.LastAware = Math.Max(p.AgentItem.LastAware, player.AgentItem.LastAware);
+                                p.AgentItem.FirstAwareLogTime = Math.Min(p.AgentItem.FirstAwareLogTime, player.AgentItem.FirstAwareLogTime);
+                                p.AgentItem.LastAwareLogTime = Math.Max(p.AgentItem.LastAwareLogTime, player.AgentItem.LastAwareLogTime);
                                 _agentData.Refresh();
                                 break;
                             }
@@ -596,58 +595,21 @@ namespace LuckParser.Parser
         /// </summary>
         private void FillMissingData()
         {
-            CompleteAgents();
-            _fightData = new FightData(_id, _agentData);
-            _fightData.Logic.ComputeFightTargets(_agentData, _fightData, _combatItems);
+            long start, end;
             if (_combatItems.Count > 0)
             {
-                _fightData.FightStart = _combatItems.Min(x => x.Time);
-                _fightData.FightEnd = _combatItems.Max(x => x.Time);
+                start = _combatItems.Min(x => x.LogTime);
+                end = _combatItems.Max(x => x.LogTime);
             }
             else
             {
                 throw new InvalidDataException("No combat events found");
             }
+            CompleteAgents();
+            _fightData = new FightData(_id, _agentData, start, end);
+            _fightData.Logic.ComputeFightTargets(_agentData, _fightData, _combatItems);
             // Dealing with special cases
             _fightData.Logic.SpecialParse(_fightData, _agentData, _combatItems);
-            // Grab values threw combat data
-            foreach (CombatItem c in _combatItems)
-            {
-                switch (c.IsStateChange)
-                {
-                    case ParseEnum.StateChange.PointOfView:
-                        if (_logData.PoV == "N/A")//Point of View
-                        {
-                            ulong povAgent = c.SrcAgent;
-                            _logData.SetPOV(_agentData.GetAgent(povAgent, c.Time).Name);
-                        }
-                        break;
-                    case ParseEnum.StateChange.GWBuild:
-                        _logData.GW2Version = c.SrcAgent;
-                        break;
-                    case ParseEnum.StateChange.LogStart:
-                        _logData.SetLogStart(c.Value);
-                        break;
-                    case ParseEnum.StateChange.LogEnd:
-                        _logData.SetLogEnd(c.Value);
-                        break;
-                    case ParseEnum.StateChange.MaxHealthUpdate:
-                        _fightData.Logic.SetMaxHealth(c.SrcInstid, c.Time, (int)c.DstAgent);
-                        break;
-                    case ParseEnum.StateChange.HealthUpdate:
-                        //set health update
-                        _fightData.Logic.AddHealthUpdate(c.SrcInstid, c.Time, c.Time, (int)c.DstAgent);
-                        break;
-                }
-            }
-            if (_logData.LogStart == LogData.DefaultTimeValue)
-            {
-                _logData.SetLogStart(_combatItems.First().Time);
-            }
-            if (_logData.LogEnd == LogData.DefaultTimeValue)
-            {
-                _logData.SetLogEnd(_combatItems.Last().Time);
-            }
             //players
             CompletePlayers();
             _playerList = _playerList.OrderBy(a => a.Group).ToList();

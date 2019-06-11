@@ -132,7 +132,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Swiftness", 719, BoonSource.Mixed, BoonType.Duration, 9, BoonNature.Boon, Logic.Queue, "https://wiki.guildwars2.com/images/a/af/Swiftness.png"),
                 new Boon("Retaliation", 873, BoonSource.Mixed, BoonType.Duration, 5, BoonNature.Boon, Logic.Queue, "https://wiki.guildwars2.com/images/5/53/Retaliation.png"),
                 new Boon("Resistance", 26980, BoonSource.Mixed, BoonType.Duration, 5, BoonNature.Boon, Logic.Queue, "https://wiki.guildwars2.com/images/4/4b/Resistance.png"),
-                new Boon("Number of Boons", BoonHelper.NumberOfBoonsID, BoonSource.Mixed, BoonType.Intensity, 0, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/44/Boon_Duration.png"),
+                new Boon("Number of Boons", ProfHelper.NumberOfBoonsID, BoonSource.Mixed, BoonType.Intensity, 0, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/44/Boon_Duration.png"),
         };
 
         private readonly static List<Boon> _conditions = new List<Boon>
@@ -144,14 +144,14 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Torment", 19426, BoonSource.Mixed, BoonType.Intensity, 1500, BoonNature.Condition, Logic.Override, "https://wiki.guildwars2.com/images/0/08/Torment.png"),
                 new Boon("Blind", 720, BoonSource.Mixed, BoonType.Duration, 9, BoonNature.Condition, Logic.Queue, "https://wiki.guildwars2.com/images/3/33/Blinded.png"),
                 new Boon("Chilled", 722, BoonSource.Mixed, BoonType.Duration, 5, BoonNature.Condition, Logic.Queue, "https://wiki.guildwars2.com/images/a/a6/Chilled.png"),
-                new Boon("Crippled", 721, BoonSource.Mixed, BoonType.Duration, 9, BoonNature.Condition, Logic.Queue, "https://wiki.guildwars2.com/images/f/fb/Crippled.png"),
-                new Boon("Fear", 791, BoonSource.Mixed, BoonType.Duration, 9, BoonNature.Condition, Logic.Queue, "https://wiki.guildwars2.com/images/e/e6/Fear.png"),
+                new Boon("Crippled", 721, BoonSource.Mixed, BoonType.Duration, 5, BoonNature.Condition, Logic.Queue, "https://wiki.guildwars2.com/images/f/fb/Crippled.png"),
+                new Boon("Fear", 791, BoonSource.Mixed, BoonType.Duration, 5, BoonNature.Condition, Logic.Queue, "https://wiki.guildwars2.com/images/e/e6/Fear.png"),
                 new Boon("Immobile", 727, BoonSource.Mixed, BoonType.Duration, 3, BoonNature.Condition, Logic.Queue, "https://wiki.guildwars2.com/images/3/32/Immobile.png"),
                 new Boon("Slow", 26766, BoonSource.Mixed, BoonType.Duration, 9, BoonNature.Condition, Logic.Queue, "https://wiki.guildwars2.com/images/f/f5/Slow.png"),
                 new Boon("Weakness", 742, BoonSource.Mixed, BoonType.Duration, 5, BoonNature.Condition, Logic.Queue, "https://wiki.guildwars2.com/images/f/f9/Weakness.png"),
                 new Boon("Taunt", 27705, BoonSource.Mixed, BoonType.Duration, 5, BoonNature.Condition, Logic.Queue, "https://wiki.guildwars2.com/images/c/cc/Taunt.png"),
                 new Boon("Vulnerability", 738, BoonSource.Mixed, BoonType.Intensity, 25, BoonNature.Condition, Logic.Override, "https://wiki.guildwars2.com/images/a/af/Vulnerability.png"),
-                new Boon("Number of Conditions", BoonHelper.NumberOfConditionsID, BoonSource.Mixed, BoonType.Intensity, 0, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/38/Condition_Duration.png"),
+                new Boon("Number of Conditions", ProfHelper.NumberOfConditionsID, BoonSource.Mixed, BoonType.Intensity, 0, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/38/Condition_Duration.png"),
         };
 
         private readonly static List<Boon> _commons = new List<Boon>
@@ -208,6 +208,7 @@ namespace LuckParser.Models.ParseModels
 
         private readonly static List<Boon> _fightSpecific = new List<Boon>
         {
+                new Boon("Timed Bomb", 31485, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/91/Time_Bomb.png" ),
                 new Boon("Unnatural Signet",38224, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png"),
                 new Boon("Compromised",35096, BoonSource.Enemy, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/48/Compromised.png"),
                 new Boon("Xera's Boon",35025, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/0/04/Xera%27s_Boon.png"),
@@ -784,15 +785,15 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public static BoonSourceFinder GetBoonSourceFinder(ulong version, BoonsContainer boons)
+        public static BoonSourceFinder GetBoonSourceFinder(ulong version, HashSet<long> boonIds)
         {
             if (version > 95112)
             {
-                return new BoonSourceFinder05032019(boons);
+                return new BoonSourceFinder05032019(boonIds);
             }
             else
             {
-                return new BoonSourceFinder11122018(boons);
+                return new BoonSourceFinder11122018(boonIds);
             }
         }
     }

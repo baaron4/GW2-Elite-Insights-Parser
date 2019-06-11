@@ -20,23 +20,23 @@ namespace LuckParser.Models.Logic
             _greenStart = 0;
             MechanicList.AddRange(new List<Mechanic>
             {
-            new SkillOnPlayerMechanic(48172, "Hateful Ephemera", new MechanicPlotlySetting("square","rgb(255,140,0)"), "Golem","Hateful Ephemera (Golem AoE dmg)", "Golem Dmg",0),
-            new SkillOnPlayerMechanic(48121, "Arcing Affliction", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Bomb dmg","Arcing Affliction (Bomb) hit", "Bomb dmg",0),
+            new DamageOnPlayerMechanic(48172, "Hateful Ephemera", new MechanicPlotlySetting("square","rgb(255,140,0)"), "Golem","Hateful Ephemera (Golem AoE dmg)", "Golem Dmg",0),
+            new DamageOnPlayerMechanic(48121, "Arcing Affliction", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Bomb dmg","Arcing Affliction (Bomb) hit", "Bomb dmg",0),
             new PlayerBoonApplyMechanic(47646, "Arcing Affliction", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Bomb","Arcing Affliction (Bomb) application", "Bomb",0),
             //new Mechanic(47476, "Residual Affliction", ParseEnum.BossIDS.Dhuum, new MechanicPlotlySetting("star-diamond","rgb(255,200,0)"), "Bomb",0), //not needed, imho, applied at the same time as Arcing Affliction
             new PlayerOnPlayerMechanic(47335, "Soul Shackle", new MechanicPlotlySetting("diamond","rgb(0,255,255)"), "Shackles","Soul Shackle (Tether) application", "Shackles",0),//  //also used for removal.
-            new SkillOnPlayerMechanic(47164, "Soul Shackle", new MechanicPlotlySetting("diamond-open","rgb(0,255,255)"), "Shackles dmg","Soul Shackle (Tether) dmg ticks", "Shackles Dmg",0,  new List<MechanicChecker>{ new CombatItemValueChecker(0, MechanicChecker.ValueCompare.G) }, Mechanic.TriggerRule.AND),
-            new SkillOnPlayerMechanic(47561, "Slash", new MechanicPlotlySetting("triangle","rgb(0,128,0)"), "Cone","Boon ripping Cone Attack", "Cone",0),
-            new SkillOnPlayerMechanic(48752, "Cull", new MechanicPlotlySetting("asterisk-open","rgb(0,255,255)"), "Crack","Cull (Fearing Fissures)", "Cracks",0),
-            new SkillOnPlayerMechanic(48760, "Putrid Bomb", new MechanicPlotlySetting("circle","rgb(0,128,0)"), "Mark","Necro Marks during Scythe attack", "Necro Marks",0),
-            new SkillOnPlayerMechanic(48398, "Cataclysmic Cycle", new MechanicPlotlySetting("circle-open","rgb(255,140,0)"), "Suck dmg","Damage when sucked to close to middle", "Suck dmg",0),
-            new SkillOnPlayerMechanic(48176, "Death Mark", new MechanicPlotlySetting("hexagon","rgb(255,140,0)"), "Dip","Lesser Death Mark hit (Dip into ground)", "Dip AoE",0),
-            new SkillOnPlayerMechanic(48210, "Greater Death Mark", new MechanicPlotlySetting("circle","rgb(255,140,0)"), "KB dmg","Knockback damage during Greater Deathmark (mid port)", "Knockback dmg",0),
+            new DamageOnPlayerMechanic(47164, "Soul Shackle", new MechanicPlotlySetting("diamond-open","rgb(0,255,255)"), "Shackles dmg","Soul Shackle (Tether) dmg ticks", "Shackles Dmg",0,  new List<DamageMechanic.DamageChecker>{ (de,log) => de.Damage > 0 }, Mechanic.TriggerRule.AND),
+            new DamageOnPlayerMechanic(47561, "Slash", new MechanicPlotlySetting("triangle","rgb(0,128,0)"), "Cone","Boon ripping Cone Attack", "Cone",0),
+            new DamageOnPlayerMechanic(48752, "Cull", new MechanicPlotlySetting("asterisk-open","rgb(0,255,255)"), "Crack","Cull (Fearing Fissures)", "Cracks",0),
+            new DamageOnPlayerMechanic(48760, "Putrid Bomb", new MechanicPlotlySetting("circle","rgb(0,128,0)"), "Mark","Necro Marks during Scythe attack", "Necro Marks",0),
+            new DamageOnPlayerMechanic(48398, "Cataclysmic Cycle", new MechanicPlotlySetting("circle-open","rgb(255,140,0)"), "Suck dmg","Damage when sucked to close to middle", "Suck dmg",0),
+            new DamageOnPlayerMechanic(48176, "Death Mark", new MechanicPlotlySetting("hexagon","rgb(255,140,0)"), "Dip","Lesser Death Mark hit (Dip into ground)", "Dip AoE",0),
+            new DamageOnPlayerMechanic(48210, "Greater Death Mark", new MechanicPlotlySetting("circle","rgb(255,140,0)"), "KB dmg","Knockback damage during Greater Deathmark (mid port)", "Knockback dmg",0),
           //  new Mechanic(48281, "Mortal Coil", ParseEnum.BossIDS.Dhuum, new MechanicPlotlySetting("circle","rgb(0,128,0)"), "Green Orbs",
             new PlayerBoonApplyMechanic(46950, "Fractured Spirit", new MechanicPlotlySetting("square","rgb(0,255,0)"), "Orb CD","Applied when taking green", "Green port",0),
             //new SkillOnPlayerMechanic(47076 , "Echo's Damage", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Echo","Damaged by Ender's Echo (pick up)", "Ender's Echo",5000),
             new PlayerBoonApplyMechanic(49125, "Echo's Pick up", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Echo PU","Picked up by Ender's Echo", "Ender's Pick up", 3000),
-            new PlayerBoonRemoveMechanic(49125, "Freed from Echo", new MechanicPlotlySetting("square","rgb(0,0,255)"), "F Echo","Freed from Ender's Echo", "Freed from Echo", 0, new List<MechanicChecker>{ new ActorStateChecker(ParseEnum.StateChange.ChangeDead, false) }, Mechanic.TriggerRule.AND)
+            new PlayerBoonRemoveMechanic(49125, "Freed from Echo", new MechanicPlotlySetting("square","rgb(0,0,255)"), "F Echo","Freed from Ender's Echo", "Freed from Echo", 0, new List<BoonRemoveMechanic.BoonRemoveChecker>{ (br,log) => log.CombatData.GetDeadEvents(br.To).Where(x => Math.Abs(x.Time - br.Time) <= 20).Count() == 0 }, Mechanic.TriggerRule.AND)
             });
             Extension = "dhuum";
             IconUrl = "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
@@ -51,14 +51,14 @@ namespace LuckParser.Models.Logic
                             (19072, 15484, 20992, 16508));
         }
 
-        private void ComputeFightPhases(Target mainTarget, List<PhaseData> phases, ParsedLog log, List<CastLog> castLogs, long fightDuration, long start)
+        private void ComputeFightPhases(Target mainTarget, List<PhaseData> phases, ParsedLog log, List<AbstractCastEvent> castLogs, long fightDuration, long start)
         {
-            CastLog shield = castLogs.Find(x => x.SkillId == 47396);
+            AbstractCastEvent shield = castLogs.Find(x => x.SkillId == 47396);
             if (shield != null)
             {
                 long end = shield.Time;
                 phases.Add(new PhaseData(start, end));
-                CastLog firstDamage = castLogs.FirstOrDefault(x => x.SkillId == 47304 && x.Time >= end);
+                AbstractCastEvent firstDamage = castLogs.FirstOrDefault(x => x.SkillId == 47304 && x.Time >= end);
                 if (firstDamage != null)
                 {
                     phases.Add(new PhaseData(firstDamage.Time, fightDuration));
@@ -72,9 +72,9 @@ namespace LuckParser.Models.Logic
 
         private List<PhaseData> GetInBetweenSoulSplits(ParsedLog log, Target dhuum, long mainStart, long mainEnd, bool hasRitual)
         {
-            List<CastLog> cls = dhuum.GetCastLogs(log, 0, log.FightData.FightDuration);
-            List<CastLog> cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
-            List<CastLog> gDeathmark = cls.Where(x => x.SkillId == 48210).ToList();
+            List<AbstractCastEvent> cls = dhuum.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
+            List<AbstractCastEvent> gDeathmark = cls.Where(x => x.SkillId == 48210).ToList();
             if (gDeathmark.Count < cataCycle.Count)
             {
                 return new List<PhaseData>();
@@ -83,9 +83,9 @@ namespace LuckParser.Models.Logic
             long start = mainStart;
             long end = 0;
             int i = 1;
-            foreach (CastLog cl in cataCycle)
+            foreach (AbstractCastEvent cl in cataCycle)
             {
-                CastLog clDeathmark = gDeathmark[i - 1];
+                AbstractCastEvent clDeathmark = gDeathmark[i - 1];
                 end = Math.Min(clDeathmark.Time, mainEnd);
                 phases.Add(new PhaseData(start, end)
                 {
@@ -120,8 +120,8 @@ namespace LuckParser.Models.Logic
                 return phases;
             }
             // Sometimes the preevent is not in the evtc
-            List<CastLog> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
-            List<CastLog> dhuumCast = mainTarget.GetCastLogs(log, 0, 20000);
+            List<AbstractCastEvent> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> dhuumCast = mainTarget.GetCastLogs(log, 0, 20000);
             string[] namesDh;
             if (dhuumCast.Count > 0)
             {
@@ -131,10 +131,10 @@ namespace LuckParser.Models.Logic
             }
             else
             {
-                CombatItem invulDhuum = log.CombatData.GetBoonData(762).FirstOrDefault(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SrcInstid == mainTarget.InstID && x.Time > 115000 + log.FightData.FightStart);
+                AbstractBuffEvent invulDhuum = log.CombatData.GetBoonData(762).FirstOrDefault(x => x is BuffApplyEvent && x.To == mainTarget.AgentItem && x.Time > 115000);
                 if (invulDhuum != null)
                 {
-                    long end = log.FightData.ToFightSpace(invulDhuum.Time);
+                    long end = invulDhuum.Time;
                     phases.Add(new PhaseData(0, end));
                     ComputeFightPhases(mainTarget, phases, log, castLogs, fightDuration, end + 1);
                 }
@@ -178,13 +178,13 @@ namespace LuckParser.Models.Logic
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
             // TODO: correct position
-            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Dhuum:
-                    List<CastLog> deathmark = cls.Where(x => x.SkillId == 48176).ToList();
-                    CastLog majorSplit = cls.Find(x => x.SkillId == 47396);
-                    foreach (CastLog c in deathmark)
+                    List<AbstractCastEvent> deathmark = cls.Where(x => x.SkillId == 48176).ToList();
+                    AbstractCastEvent majorSplit = cls.Find(x => x.SkillId == 47396);
+                    foreach (AbstractCastEvent c in deathmark)
                     {
                         int start = (int)c.Time;
                         int zoneActive = start + 1550;
@@ -198,7 +198,7 @@ namespace LuckParser.Models.Logic
                         }
                         int spellCenterDistance = 200; //hitbox radius
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 3000);
-                        Point3D targetPosition = replay.Positions.LastOrDefault(x => x.Time <= start + 3000);
+                        Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 3000);
                         if (facing != null && targetPosition != null)
                         {
                             Point3D position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z, targetPosition.Time);
@@ -209,16 +209,16 @@ namespace LuckParser.Models.Logic
 
                         }
                     }
-                    List<CastLog> cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
-                    foreach (CastLog c in cataCycle)
+                    List<AbstractCastEvent> cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
+                    foreach (AbstractCastEvent c in cataCycle)
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
                         replay.Actors.Add(new CircleActor(true, end, 300, (start, end), "rgba(255, 150, 0, 0.7)", new AgentConnector(target)));
                         replay.Actors.Add(new CircleActor(true, 0, 300, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
                     }
-                    List<CastLog> slash = cls.Where(x => x.SkillId == 47561).ToList();
-                    foreach (CastLog c in slash)
+                    List<AbstractCastEvent> slash = cls.Where(x => x.SkillId == 47561).ToList();
+                    foreach (AbstractCastEvent c in slash)
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
@@ -270,10 +270,10 @@ namespace LuckParser.Models.Logic
                     {
                         if (_greenStart == 0)
                         {
-                            CombatItem greenTaken = log.CombatData.GetBoonData(46950).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None).FirstOrDefault();
+                            AbstractBuffEvent greenTaken = log.CombatData.GetBoonData(46950).Where(x => x is BuffApplyEvent).FirstOrDefault();
                             if (greenTaken != null)
                             {
-                                _greenStart = (int)log.FightData.ToFightSpace(greenTaken.Time) - 5000;
+                                _greenStart = (int)greenTaken.Time - 5000;
                             }
                             else
                             {
@@ -294,18 +294,18 @@ namespace LuckParser.Models.Logic
                             replay.Actors.Add(new CircleActor(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(mob)));
                         }
                     }
-                    List<CombatItem> stealths = GetFilteredList(log.CombatData, 13017, mob, true);
+                    List<AbstractBuffEvent> stealths = GetFilteredList(log.CombatData, 13017, mob, true);
                     int stealthStart = 0;
                     int stealthEnd = 0;
-                    foreach (CombatItem c in stealths)
+                    foreach (AbstractBuffEvent c in stealths)
                     {
-                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                        if (c is BuffApplyEvent)
                         {
-                            stealthStart = (int)(log.FightData.ToFightSpace(c.Time));
+                            stealthStart = (int)c.Time;
                         }
                         else
                         {
-                            stealthEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                            stealthEnd = (int)c.Time;
                             replay.Actors.Add(new CircleActor(true, 0, 180, (stealthStart, stealthEnd), "rgba(80, 80, 80, 0.3)", new AgentConnector(mob)));
                         }
                     }
@@ -320,59 +320,60 @@ namespace LuckParser.Models.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // spirit transform
-            List<CombatItem> spiritTransform = log.CombatData.GetBoonData(46950).Where(x => x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
+            List<AbstractBuffEvent> spiritTransform = log.CombatData.GetBoonData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
-            foreach (CombatItem c in spiritTransform)
+            foreach (AbstractBuffEvent c in spiritTransform)
             {
                 int duration = 15000;
-                if (mainTarget.HealthOverTime.FirstOrDefault(x => x.logTime > c.Time).hp < 1050)
+                HealthUpdateEvent hpUpdate = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem).FirstOrDefault(x => x.Time > c.Time);
+                if (hpUpdate != null && hpUpdate.HPPercent < 10.50)
                 {
                     duration = 30000;
                 }
-                CombatItem removedBuff = log.CombatData.GetBoonData(48281).FirstOrDefault(x => x.SrcInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.All && x.Time > c.Time && x.Time < c.Time + duration);
-                int start = (int)(log.FightData.ToFightSpace(c.Time));
+                AbstractBuffEvent removedBuff = log.CombatData.GetBoonData(48281).FirstOrDefault(x => x.To == p.AgentItem && x is BuffRemoveAllEvent && x.Time > c.Time && x.Time < c.Time + duration);
+                int start = (int)c.Time;
                 int end = start + duration;
                 if (removedBuff != null)
                 {
-                    end = (int)(log.FightData.ToFightSpace(removedBuff.Time));
+                    end = (int)removedBuff.Time;
                 }
                 replay.Actors.Add(new CircleActor(true, 0, 100, (start, end), "rgba(0, 50, 200, 0.3)", new AgentConnector(p)));
                 replay.Actors.Add(new CircleActor(true, start + duration, 100, (start, end), "rgba(0, 50, 200, 0.5)", new AgentConnector(p)));
             }
             // bomb
-            List<CombatItem> bombDhuum = GetFilteredList(log.CombatData, 47646, p, true);
+            List<AbstractBuffEvent> bombDhuum = GetFilteredList(log.CombatData, 47646, p, true);
             int bombDhuumStart = 0;
-            foreach (CombatItem c in bombDhuum)
+            foreach (AbstractBuffEvent c in bombDhuum)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    bombDhuumStart = (int)(log.FightData.ToFightSpace(c.Time));
+                    bombDhuumStart = (int)c.Time;
                 }
                 else
                 {
-                    int bombDhuumEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int bombDhuumEnd = (int)c.Time;
                     replay.Actors.Add(new CircleActor(true, 0, 100, (bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.3)", new AgentConnector(p)));
                     replay.Actors.Add(new CircleActor(true, bombDhuumStart + 13000, 100, (bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.5)", new AgentConnector(p)));
                 }
             }
             // shackles connection
-            List<CombatItem> shackles = GetFilteredList(log.CombatData, 47335, p, true).Concat(GetFilteredList(log.CombatData, 48591, p, true)).ToList();
+            List<AbstractBuffEvent> shackles = GetFilteredList(log.CombatData, 47335, p, true).Concat(GetFilteredList(log.CombatData, 48591, p, true)).ToList();
             int shacklesStart = 0;
             Player shacklesTarget = null;
-            foreach (CombatItem c in shackles)
+            foreach (AbstractBuffEvent c in shackles)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    shacklesStart = (int)(log.FightData.ToFightSpace(c.Time));
-                    shacklesTarget = log.PlayerList.FirstOrDefault(x => x.Agent == c.SrcAgent);
+                    shacklesStart = (int)c.Time;
+                    shacklesTarget = log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By);
                 }
                 else
                 {
-                    int shacklesEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int shacklesEnd = (int)c.Time;
                     if (shacklesTarget != null)
                     {
                         replay.Actors.Add(new LineActor(0, (shacklesStart, shacklesEnd), "rgba(0, 255, 255, 0.5)", new AgentConnector(p), new AgentConnector(shacklesTarget)));
@@ -382,19 +383,19 @@ namespace LuckParser.Models.Logic
             // shackles damage (identical to the connection for now, not yet properly distinguishable from the pure connection, further investigation needed due to inconsistent behavior (triggering too early, not triggering the damaging skill though)
             // shackles start with buff 47335 applied from one player to the other, this is switched over to buff 48591 after mostly 2 seconds, sometimes later. This is switched to 48042 usually 4 seconds after initial application and the damaging skill 47164 starts to deal damage from that point on.
             // Before that point, 47164 is only logged when evaded/blocked, but doesn't deal damage. Further investigation needed.
-            List<CombatItem> shacklesDmg = GetFilteredList(log.CombatData, 48042, p, true);
+            List<AbstractBuffEvent> shacklesDmg = GetFilteredList(log.CombatData, 48042, p, true);
             int shacklesDmgStart = 0;
             Player shacklesDmgTarget = null;
-            foreach (CombatItem c in shacklesDmg)
+            foreach (AbstractBuffEvent c in shacklesDmg)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    shacklesDmgStart = (int)(log.FightData.ToFightSpace(c.Time));
-                    shacklesDmgTarget = log.PlayerList.FirstOrDefault(x => x.Agent == c.SrcAgent);
+                    shacklesDmgStart = (int)c.Time;
+                    shacklesDmgTarget = log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By);
                 }
                 else
                 {
-                    int shacklesDmgEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int shacklesDmgEnd = (int)c.Time;
                     if (shacklesDmgTarget != null)
                     {
                         replay.Actors.Add(new LineActor(0, (shacklesDmgStart, shacklesDmgEnd), "rgba(0, 255, 255, 0.5)", new AgentConnector(p), new AgentConnector(shacklesDmgTarget)));
@@ -403,15 +404,14 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override int IsCM(ParsedEvtcContainer evtcContainer)
+        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
-            OverrideMaxHealths(evtcContainer);
-            return (target.Health > 35e6) ? 1 : 0;
+            return (target.GetHealth(combatData) > 35e6) ? 1 : 0;
         }
     }
 }

@@ -14,9 +14,9 @@ namespace LuckParser.Models.Logic
             MechanicList.AddRange(new List<Mechanic>()
             {
             new PlayerBoonApplyMechanic(34108, "Shell-Shocked", new MechanicPlotlySetting("circle-open","rgb(0,128,0)"), "Launchd","Shell-Shocked (Launched from pad)", "Shell-Shocked",0),
-            new SkillOnPlayerMechanic(34448, "Overhead Smash", new MechanicPlotlySetting("triangle-left","rgb(200,140,0)"), "Smash","Overhead Smash (CC Attack Berg)", "CC Smash",0),
-            new SkillOnPlayerMechanic(34383, "Hail of Bullets", new MechanicPlotlySetting("triangle-right-open","rgb(255,0,0)"), "Zane Cone","Hail of Bullets (Zane Cone Shot)", "Hail of Bullets",0),
-            new SkillOnPlayerMechanic(34344, "Fiery Vortex", new MechanicPlotlySetting("circle-open","rgb(255,200,0)"), "Tornado","Fiery Vortex (Tornado)", "Tornado",250),
+            new DamageOnPlayerMechanic(34448, "Overhead Smash", new MechanicPlotlySetting("triangle-left","rgb(200,140,0)"), "Smash","Overhead Smash (CC Attack Berg)", "CC Smash",0),
+            new DamageOnPlayerMechanic(34383, "Hail of Bullets", new MechanicPlotlySetting("triangle-right-open","rgb(255,0,0)"), "Zane Cone","Hail of Bullets (Zane Cone Shot)", "Hail of Bullets",0),
+            new DamageOnPlayerMechanic(34344, "Fiery Vortex", new MechanicPlotlySetting("circle-open","rgb(255,200,0)"), "Tornado","Fiery Vortex (Tornado)", "Tornado",250),
             });
             Extension = "trio";
             IconUrl = "https://i.imgur.com/UZZQUdf.png";
@@ -44,15 +44,15 @@ namespace LuckParser.Models.Logic
         public void SetPhasePerTarget(Target target, List<PhaseData> phases, ParsedLog log)
         {
             long fightDuration = log.FightData.FightDuration;
-            CombatItem phaseStart = log.CombatData.GetStatesData(target.InstID, ParseEnum.StateChange.EnterCombat, target.FirstAware, target.LastAware).Where(x => x.SrcInstid == target.InstID).LastOrDefault();
+            EnterCombatEvent phaseStart = log.CombatData.GetEnterCombatEvents(target.AgentItem).LastOrDefault();
             if (phaseStart != null)
             {
-                long start = log.FightData.ToFightSpace(phaseStart.Time);
-                CombatItem phaseEnd = log.CombatData.GetStatesData(target.InstID, ParseEnum.StateChange.ChangeDead, target.FirstAware, target.LastAware).Where(x => x.SrcInstid == target.InstID).LastOrDefault();
+                long start = phaseStart.Time;
+                DeadEvent phaseEnd = log.CombatData.GetDeadEvents(target.AgentItem).LastOrDefault();
                 long end = fightDuration;
                 if (phaseEnd != null)
                 {
-                    end = log.FightData.ToFightSpace(phaseEnd.Time);
+                    end = phaseEnd.Time;
                 }
                 PhaseData phase = new PhaseData(start, Math.Min(end, log.FightData.FightDuration));
                 phase.Targets.Add(target);
@@ -132,14 +132,14 @@ namespace LuckParser.Models.Logic
 
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Berg:
                     break;
                 case (ushort)ParseEnum.TargetIDS.Zane:
-                    List<CastLog> bulletHail = cls.Where(x => x.SkillId == 34383).ToList();
-                    foreach (CastLog c in bulletHail)
+                    List<AbstractCastEvent> bulletHail = cls.Where(x => x.SkillId == 34383).ToList();
+                    foreach (AbstractCastEvent c in bulletHail)
                     {
                         int start = (int)c.Time;
                         int firstConeStart = start;

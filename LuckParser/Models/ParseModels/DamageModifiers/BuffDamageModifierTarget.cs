@@ -49,7 +49,7 @@ namespace LuckParser.Models.ParseModels
                     for (int i = 0; i < phases.Count; i++)
                     {
                         int totalDamage = GetTotalDamage(p, log, target, i);
-                        List<DamageLog> typedHits = GetDamageLogs(p, log, target, phases[i]);
+                        List<AbstractDamageEvent> typedHits = GetDamageLogs(p, log, target, phases[i]);
                         List<double> damages = typedHits.Select(x => ComputeGain(Tracker.GetStack(bgms, x.Time), x)).Where(x => x != -1.0).ToList();
                         extraDataList.Add(new DamageModifierData(damages.Count, typedHits.Count, damages.Sum(), totalDamage));
                     }

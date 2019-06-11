@@ -123,7 +123,7 @@ namespace LuckParser.Builders
             log.FightName = _log.FightData.Name;
             log.EliteInsightsVersion = Application.ProductVersion;
             log.ArcVersion = _log.LogData.BuildVersion;
-            log.RecordedBy = _log.LogData.PoV.Split(':')[0].TrimEnd('\u0000');
+            log.RecordedBy = _log.LogData.PoVName;
             log.TimeStart = _log.LogData.LogStart;
             log.TimeEnd = _log.LogData.LogEnd;
             log.Duration = durationString;
@@ -138,7 +138,7 @@ namespace LuckParser.Builders
         private void SetMechanics(JsonLog log)
         {
             MechanicData mechanicData = _log.MechanicData;
-            var mechanicLogs = new List<MechanicLog>();
+            var mechanicLogs = new List<MechanicEvent>();
             foreach (var mLog in mechanicData.GetAllMechanics(_log))
             {
                 mechanicLogs.AddRange(mLog);
@@ -147,7 +147,7 @@ namespace LuckParser.Builders
             {
                 log.Mechanics = new List<JsonMechanics>();
                 Dictionary<string, List<JsonMechanic>> dict = new Dictionary<string, List<JsonMechanic>>();
-                foreach (MechanicLog ml in mechanicLogs)
+                foreach (MechanicEvent ml in mechanicLogs)
                 {
                     JsonMechanic mech = new JsonMechanic
                     {
@@ -190,7 +190,7 @@ namespace LuckParser.Builders
                     Healing = target.Healing,
                     Concentration = target.Concentration,
                     Condition = target.Condition,
-                    TotalHealth = target.Health,
+                    TotalHealth = target.GetHealth(_log.CombatData),
                     AvgBoons = target.GetAverageBoons(_log),
                     AvgConditions = target.GetAverageConditions(_log),
                     DpsAll = target.GetDPSAll(_log).Select(x => new JsonDPS(x)).ToArray(),
@@ -199,19 +199,20 @@ namespace LuckParser.Builders
                     HitboxWidth = target.HitboxWidth,
                     Damage1S = BuildTotal1SDamage(target),
                     Rotation = BuildRotation(target.GetCastLogs(_log, 0, _log.FightData.FightDuration)),
-                    FirstAware = (int)(_log.FightData.ToFightSpace(target.FirstAware)),
-                    LastAware = (int)(_log.FightData.ToFightSpace(target.LastAware)),
+                    FirstAware = (int)(_log.FightData.ToFightSpace(target.FirstAwareLogTime)),
+                    LastAware = (int)(_log.FightData.ToFightSpace(target.LastAwareLogTime)),
                     Minions = BuildMinions(target),
                     TotalDamageDist = BuildDamageDist(target, null),
                     TotalDamageTaken = BuildDamageTaken(target),
-                    BoonsStates = BuildBuffStates(target.GetBoonGraphs(_log)[BoonHelper.NumberOfBoonsID]),
-                    ConditionsStates = BuildBuffStates(target.GetBoonGraphs(_log)[BoonHelper.NumberOfConditionsID])
+                    BoonsStates = BuildBuffStates(target.GetBoonGraphs(_log)[ProfHelper.NumberOfBoonsID]),
+                    ConditionsStates = BuildBuffStates(target.GetBoonGraphs(_log)[ProfHelper.NumberOfConditionsID])
                 };
-                int finalTargetHealth = target.HealthOverTime.Count > 0
-                    ? target.HealthOverTime.Last().hp
-                    : 10000;
-                jsTarget.HealthPercentBurned = 100.0 - finalTargetHealth * 0.01;
-                jsTarget.FinalHealth = (int)Math.Round(target.Health * (jsTarget.HealthPercentBurned * 0.01));
+                List<HealthUpdateEvent> hpUpdates = _log.CombatData.GetHealthUpdateEvents(target.AgentItem);
+                double finalTargetHealth = hpUpdates.Count > 0
+                    ? hpUpdates.Last().HPPercent
+                    : 100.0;
+                jsTarget.HealthPercentBurned = 100.0 - finalTargetHealth;
+                jsTarget.FinalHealth = (int)Math.Round(target.GetHealth(_log.CombatData) * (jsTarget.HealthPercentBurned * 0.01));
                 log.Targets.Add(jsTarget);
             }
         }
@@ -257,8 +258,8 @@ namespace LuckParser.Builders
                     TotalDamageTaken = BuildDamageTaken(player),
                     DeathRecap = BuildDeathRecap(player.GetDeathRecaps(_log)),
                     Consumables = BuildConsumables(player),
-                    BoonsStates = BuildBuffStates(player.GetBoonGraphs(_log)[BoonHelper.NumberOfBoonsID]),
-                    ConditionsStates = BuildBuffStates(player.GetBoonGraphs(_log)[BoonHelper.NumberOfConditionsID]),
+                    BoonsStates = BuildBuffStates(player.GetBoonGraphs(_log)[ProfHelper.NumberOfBoonsID]),
+                    ConditionsStates = BuildBuffStates(player.GetBoonGraphs(_log)[ProfHelper.NumberOfConditionsID]),
                 });
             }
         }
@@ -441,19 +442,20 @@ namespace LuckParser.Builders
             return res;
         }
 
-        private List<JsonDamageDist> BuildDamageDist(List<DamageLog> dls)
+        private List<JsonDamageDist> BuildDamageDist(List<AbstractDamageEvent> dls)
         {
             List<JsonDamageDist> res = new List<JsonDamageDist>();
-            Dictionary<long, List<DamageLog>> dict = dls.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
+            Dictionary<long, List<AbstractDamageEvent>> dict = dls.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             SkillData skillList = _log.SkillData;
-            foreach (KeyValuePair<long, List<DamageLog>> pair in dict)
+            foreach (KeyValuePair<long, List<AbstractDamageEvent>> pair in dict)
             {
                 if (pair.Value.Count == 0)
                 {
                     continue;
                 }
                 SkillItem skill = skillList.Get(pair.Key);
-                if (pair.Value.First().IsIndirectDamage)
+                bool indirect = pair.Value.First() is NonDirectDamageEvent;
+                if (indirect)
                 {
                     if (!_buffDesc.ContainsKey("b" + pair.Key))
                     {
@@ -475,13 +477,13 @@ namespace LuckParser.Builders
                         _skillDesc["s" + pair.Key] = new JsonLog.SkillDesc(skill);
                     }
                 }
-                List<DamageLog> filteredList = pair.Value.Where(x => x.Result != ParseEnum.Result.Downed).ToList();
+                List<AbstractDamageEvent> filteredList = pair.Value.Where(x => !x.HasDowned).ToList();
                 if (filteredList.Count == 0)
                 {
                     continue;
                 }
-                string prefix = filteredList.First().IsIndirectDamage ? "b" : "s";
-                res.Add(new JsonDamageDist(filteredList, filteredList.First().IsIndirectDamage, pair.Key));
+                string prefix = indirect ? "b" : "s";
+                res.Add(new JsonDamageDist(filteredList, indirect, pair.Key));
             }
             return res;
         }
@@ -503,11 +505,11 @@ namespace LuckParser.Builders
             return mins;
         }
 
-        private List<JsonRotation> BuildRotation(List<CastLog> cls)
+        private List<JsonRotation> BuildRotation(List<AbstractCastEvent> cls)
         {
             Dictionary<long, List<JsonSkill>> dict = new Dictionary<long, List<JsonSkill>>();
             SkillData skillList = _log.SkillData;
-            foreach (CastLog cl in cls)
+            foreach (AbstractCastEvent cl in cls)
             {
                 SkillItem skill = skillList.Get(cl.SkillId);
                 string skillName = skill.Name;

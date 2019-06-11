@@ -14,8 +14,8 @@ namespace LuckParser.Models.Logic
         {
             MechanicList.AddRange( new List<Mechanic>
             {
-            new SkillOnPlayerMechanic(48066, "King's Wrath", new MechanicPlotlySetting("triangle-left","rgb(0,100,255)"), "Cone Hit","King's Wrath (Auto Attack Cone Part)", "Cone Auto Attack",0),
-            new SkillOnPlayerMechanic(47531, "Numbing Breach", new MechanicPlotlySetting("asterisk-open","rgb(0,100,255)"), "Cracks","Numbing Breach (Ice Cracks in the Ground)", "Cracks",0),
+            new DamageOnPlayerMechanic(48066, "King's Wrath", new MechanicPlotlySetting("triangle-left","rgb(0,100,255)"), "Cone Hit","King's Wrath (Auto Attack Cone Part)", "Cone Auto Attack",0),
+            new DamageOnPlayerMechanic(47531, "Numbing Breach", new MechanicPlotlySetting("asterisk-open","rgb(0,100,255)"), "Cracks","Numbing Breach (Ice Cracks in the Ground)", "Cracks",0),
             new PlayerBoonApplyMechanic(47776, "Frozen Wind", new MechanicPlotlySetting("circle-open","rgb(0,255,0)"), "Green","Frozen Wind (Stood in Green)", "Green Stack",0),
             }
             );
@@ -34,16 +34,16 @@ namespace LuckParser.Models.Logic
 
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
-            List<CombatItem> green = log.CombatData.GetBoonData(47776).Where(x => x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
-            foreach (CombatItem c in green)
+            List<AbstractBuffEvent> green = log.CombatData.GetBoonData(47776).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            foreach (AbstractBuffEvent c in green)
             {
                 int duration = 45000;
-                CombatItem removedBuff = log.CombatData.GetBoonData(47776).FirstOrDefault(x => x.SrcInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.All && x.Time > c.Time && x.Time < c.Time + duration);
-                int start = (int)(log.FightData.ToFightSpace(c.Time));
+                AbstractBuffEvent removedBuff = log.CombatData.GetBoonData(47776).FirstOrDefault(x => x.To == p.AgentItem && x is BuffRemoveAllEvent && x.Time > c.Time && x.Time < c.Time + duration);
+                int start = (int)c.Time;
                 int end = start + duration;
                 if (removedBuff != null)
                 {
-                    end = (int)(log.FightData.ToFightSpace(removedBuff.Time));
+                    end = (int)removedBuff.Time;
                 }
                 replay.Actors.Add(new CircleActor(true, 0, 100, (start, end), "rgba(100, 200, 255, 0.25)", new AgentConnector(p)));
             }
@@ -51,12 +51,12 @@ namespace LuckParser.Models.Logic
 
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.BrokenKing:
-                    List<CastLog> Cone = cls.Where(x => x.SkillId == 48066).ToList();
-                    foreach (CastLog c in Cone)
+                    List<AbstractCastEvent> Cone = cls.Where(x => x.SkillId == 48066).ToList();
+                    foreach (AbstractCastEvent c in Cone)
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
@@ -78,9 +78,9 @@ namespace LuckParser.Models.Logic
         }
 
 
-        public override void SetSuccess(ParsedEvtcContainer evtcContainer)
+        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByDeath(evtcContainer, true, TriggerID);
+            SetSuccessByDeath(combatData, agentData, fightData, true, TriggerID);
         }
 
         public override string GetFightName() {

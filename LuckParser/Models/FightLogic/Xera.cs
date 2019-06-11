@@ -11,20 +11,20 @@ namespace LuckParser.Models.Logic
     public class Xera : RaidLogic
     {
 
-        private long _specialSplit = 0;
+        private long _specialSplitLogTime = 0;
 
         public Xera(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
 
-            new SkillOnPlayerMechanic(35128, "Temporal Shred", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Orb","Temporal Shred (Hit by Red Orb)", "Red Orb",0),
-            new SkillOnPlayerMechanic(34913, "Temporal Shred", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Orb Aoe","Temporal Shred (Stood in Orb Aoe)", "Orb AoE",0),
+            new DamageOnPlayerMechanic(35128, "Temporal Shred", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Orb","Temporal Shred (Hit by Red Orb)", "Red Orb",0),
+            new DamageOnPlayerMechanic(34913, "Temporal Shred", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Orb Aoe","Temporal Shred (Stood in Orb Aoe)", "Orb AoE",0),
             new PlayerBoonApplyMechanic(35168, "Bloodstone Protection", new MechanicPlotlySetting("hourglass-open","rgb(128,0,128)"), "In Bubble","Bloodstone Protection (Stood in Bubble)", "Inside Bubble",0),
-            new EnemyCastStartMechanic(34887, "Summon Fragment Start", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Summon Fragment (Xera Breakbar)", "Breakbar",0),
-            new EnemyCastEndMechanic(34887, "Summon Fragment End", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Summon Fragment (Failed CC)", "CC Fail",0,new List<MechanicChecker>{ new CombatItemValueChecker(11940, MechanicChecker.ValueCompare.G) }, Mechanic.TriggerRule.AND),
-            new EnemyCastEndMechanic(34887, "Summon Fragment End", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Summon Fragment (Breakbar broken)", "CCed",0,new List<MechanicChecker>{ new CombatItemValueChecker(11940, MechanicChecker.ValueCompare.LEQ) }, Mechanic.TriggerRule.AND),
-            new PlayerBoonApplyMechanic(34965, "Derangement", new MechanicPlotlySetting("square-open","rgb(200,140,255)"), "Stacks","Derangement (Stacking Debuff)", "Derangement",0), 
+            new EnemyCastMechanic(34887, "Summon Fragment Start", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Summon Fragment (Xera Breakbar)", "Breakbar",0),
+            new EnemyCastMechanic(34887, "Summon Fragment End", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Summon Fragment (Failed CC)", "CC Fail",0,new List<CastMechanic.CastChecker>{ (ce,log) => ce.ActualDuration > 11940 }, Mechanic.TriggerRule.AND),
+            new EnemyCastMechanic(34887, "Summon Fragment End", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Summon Fragment (Breakbar broken)", "CCed",0,new List<CastMechanic.CastChecker>{ (ce, log) => ce.ActualDuration <= 11940 }, Mechanic.TriggerRule.AND),
+            new PlayerBoonApplyMechanic(34965, "Derangement", new MechanicPlotlySetting("square-open","rgb(200,140,255)"), "Stacks","Derangement (Stacking Debuff)", "Derangement",0),
             new PlayerBoonApplyMechanic(35084, "Bending Chaos", new MechanicPlotlySetting("triangle-down-open","rgb(255,200,0)"), "Button1","Bending Chaos (Stood on 1st Button)", "Button 1",0),
             new PlayerBoonApplyMechanic(35162, "Shifting Chaos", new MechanicPlotlySetting("triangle-ne-open","rgb(255,200,0)"), "Button2","Bending Chaos (Stood on 2nd Button)", "Button 2",0),
             new PlayerBoonApplyMechanic(35032, "Twisting Chaos", new MechanicPlotlySetting("triangle-nw-open","rgb(255,200,0)"), "Button3","Bending Chaos (Stood on 3rd Button)", "Button 3",0),
@@ -65,15 +65,15 @@ namespace LuckParser.Models.Logic
                 return phases;
             }
             long end = 0;
-            CombatItem invulXera = log.CombatData.GetBoonData(762).Find(x => x.DstInstid == mainTarget.InstID) ?? log.CombatData.GetBoonData(34113).Find(x => x.DstInstid == mainTarget.InstID);
+            AbstractBuffEvent invulXera = log.CombatData.GetBoonData(762).Find(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent) ?? log.CombatData.GetBoonData(34113).Find(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent);
             if (invulXera != null)
             {
-                end = log.FightData.ToFightSpace(invulXera.Time);
+                end = invulXera.Time;
                 phases.Add(new PhaseData(start, end));
                 // split happened
-                if (_specialSplit > 0)
+                if (_specialSplitLogTime > 0)
                 {
-                    start = log.FightData.ToFightSpace(_specialSplit);
+                    start = log.FightData.ToFightSpace(_specialSplitLogTime);
                     //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
                     phases.Add(new PhaseData(start, fightDuration));
                 }
@@ -99,29 +99,30 @@ namespace LuckParser.Models.Logic
             CombatItem enterCombat = combatData.Find(x => x.SrcInstid == target.InstID && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
             if (enterCombat != null)
             {
-                fightData.FightStart = enterCombat.Time;
+                fightData.OverrideStart(enterCombat.LogTime);
             }
             // find split
             foreach (AgentItem NPC in agentData.GetAgentByType(AgentItem.AgentType.NPC))
             {
                 if (NPC.ID == 16286)
                 {
-                    target.Health = 24085950;
-                    CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position && x.SrcInstid == NPC.InstID && x.Time >= NPC.FirstAware + 500 && x.Time <= NPC.LastAware);
+                    target.SetManualHealth(24085950);
+                    CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position && x.SrcInstid == NPC.InstID && x.LogTime >= NPC.FirstAwareLogTime + 500 && x.LogTime <= NPC.LastAwareLogTime);
                     if (move != null)
                     {
-                        _specialSplit = move.Time;
-                    } else
-                    {
-                        _specialSplit = NPC.FirstAware;
+                        _specialSplitLogTime = move.LogTime;
                     }
-                    target.AgentItem.LastAware = NPC.LastAware;
+                    else
+                    {
+                        _specialSplitLogTime = NPC.FirstAwareLogTime;
+                    }
+                    target.AgentItem.LastAwareLogTime = NPC.LastAwareLogTime;
                     // get unique id for the fusion
                     ushort instID = 0;
                     Random rnd = new Random();
                     while (agentData.InstIDValues.Contains(instID) || instID == 0)
                     {
-                        instID = (ushort)rnd.Next(ushort.MaxValue/2, ushort.MaxValue);
+                        instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
                     }
                     target.AgentItem.InstID = instID;
                     agentData.Refresh();
@@ -162,12 +163,12 @@ namespace LuckParser.Models.Logic
 
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Xera:
-                    List<CastLog> summon = cls.Where(x => x.SkillId == 34887).ToList();
-                    foreach (CastLog c in summon)
+                    List<AbstractCastEvent> summon = cls.Where(x => x.SkillId == 34887).ToList();
+                    foreach (AbstractCastEvent c in summon)
                     {
                         replay.Actors.Add(new CircleActor(true, 0, 180, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }

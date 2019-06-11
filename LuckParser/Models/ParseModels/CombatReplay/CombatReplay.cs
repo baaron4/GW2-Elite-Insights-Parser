@@ -6,11 +6,12 @@ namespace LuckParser.Models.ParseModels
 {
     public class CombatReplay
     {
-        public List<Point3D> Positions { get; private set; } = new List<Point3D>();
+        public List<Point3D> Positions { get; } = new List<Point3D>();
+        public List<Point3D> PolledPositions { get; private set; } = new List<Point3D>();
         public List<Point3D> Velocities { get; private set; } = new List<Point3D>();
-        public List<int> Times => Positions.Select(x => (int)x.Time).ToList();
+        public List<int> Times => PolledPositions.Select(x => (int)x.Time).ToList();
         public List<Point3D> Rotations { get; } = new List<Point3D>();
-        public List<Point3D> PolledRotations { get; } = new List<Point3D>();
+        public List<Point3D> PolledRotations { get; private set; } = new List<Point3D>();
         private long _start = -1;
         private long _end = -1;
         public (long start, long end) TimeOffsets => (_start, _end);
@@ -26,7 +27,7 @@ namespace LuckParser.Models.ParseModels
 
         public void Trim(long start, long end)
         {
-            Positions.RemoveAll(x => x.Time < start || x.Time > end);
+            PolledPositions.RemoveAll(x => x.Time < start || x.Time > end);
             PolledRotations.RemoveAll(x => x.Time < start || x.Time > end);
             _start = Math.Max(start,1);
             _end = Math.Max(_start,end);
@@ -36,7 +37,7 @@ namespace LuckParser.Models.ParseModels
         {
             if (forceInterpolate && Positions.Count == 0)
             {
-                Positions.Add(new Point3D(short.MinValue, short.MinValue, 0, 0));
+                PolledPositions.Add(new Point3D(short.MinValue, short.MinValue, 0, 0));
                 Deads.Add((0, fightDuration));
             }
             if (Positions.Count == 0)
@@ -45,10 +46,8 @@ namespace LuckParser.Models.ParseModels
             }
             else if (Positions.Count == 1 && !forceInterpolate)
             {
-                Velocities = null;
                 return;
             }
-            List<Point3D> interpolatedPositions = new List<Point3D>();
             int tablePos = 0;
             Point3D currentVelocity = null;
             for (int i = (int)Math.Min(0, rate * ((Positions[0].Time / rate) - 1)); i < fightDuration; i += rate)
@@ -57,13 +56,13 @@ namespace LuckParser.Models.ParseModels
                 if (i <= pt.Time)
                 {
                     currentVelocity = null;
-                    interpolatedPositions.Add(new Point3D(pt.X, pt.Y, pt.Z, i));
+                    PolledPositions.Add(new Point3D(pt.X, pt.Y, pt.Z, i));
                 }
                 else
                 {
                     if (tablePos == Positions.Count - 1)
                     {
-                        interpolatedPositions.Add(new Point3D(pt.X, pt.Y, pt.Z, i));
+                        PolledPositions.Add(new Point3D(pt.X, pt.Y, pt.Z, i));
                     }
                     else
                     {
@@ -76,24 +75,24 @@ namespace LuckParser.Models.ParseModels
                         }
                         else
                         {
-                            Point3D last = interpolatedPositions.Last().Time > pt.Time ? interpolatedPositions.Last() : pt;
+                            Point3D last = PolledPositions.Last().Time > pt.Time ? PolledPositions.Last() : pt;
                             Point3D velocity = Velocities.Find(x => x.Time <= i && x.Time > last.Time);
                             currentVelocity = velocity ?? currentVelocity;
                             if (ptn.Time - pt.Time < 400)
                             {
                                 float ratio = (float)(i - pt.Time) / (ptn.Time - pt.Time);
-                                interpolatedPositions.Add(new Point3D(pt, ptn, ratio, i));
+                                PolledPositions.Add(new Point3D(pt, ptn, ratio, i));
                             }
                             else
                             {
                                 if (currentVelocity == null || (Math.Abs(currentVelocity.X) <= 1e-1 && Math.Abs(currentVelocity.Y) <= 1e-1))
                                 {
-                                    interpolatedPositions.Add(new Point3D(last.X, last.Y, last.Z, i));
+                                    PolledPositions.Add(new Point3D(last.X, last.Y, last.Z, i));
                                 }
                                 else
                                 {
                                     float ratio = (float)(i - last.Time) / (ptn.Time - last.Time);
-                                    interpolatedPositions.Add(new Point3D(last, ptn, ratio, i));
+                                    PolledPositions.Add(new Point3D(last, ptn, ratio, i));
                                 }
                             }
 
@@ -101,10 +100,15 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
             }
-            Positions = interpolatedPositions.Where(x => x.Time >= 0).ToList();
-            Velocities = null;
+            PolledPositions = PolledPositions.Where(x => x.Time >= 0).ToList();
         }
-
+        /// <summary>
+        /// The method exists only to have the same amount of rotation as positions, it's easier to do it here than
+        /// in javascript
+        /// </summary>
+        /// <param name="rate"></param>
+        /// <param name="fightDuration"></param>
+        /// <param name="forceInterpolate"></param>
         private void RotationPolling(int rate, long fightDuration, bool forceInterpolate)
         {
             if (Rotations.Count == 0)
@@ -145,6 +149,7 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
             }
+            PolledRotations = PolledRotations.Where(x => x.Time >= 0).ToList();
         }
 
         public void PollingRate(long fightDuration, bool forceInterpolate)
@@ -155,7 +160,7 @@ namespace LuckParser.Models.ParseModels
 
         public List<Point3D> GetActivePositions()
         {
-            List<Point3D> activePositions = new List<Point3D>(Positions);
+            List<Point3D> activePositions = new List<Point3D>(PolledPositions);
             for (var i = 0; i < activePositions.Count; i++)
             {
                 Point3D cur = activePositions[i];

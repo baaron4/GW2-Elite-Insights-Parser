@@ -14,29 +14,29 @@ namespace LuckParser.Models.Logic
             MechanicList.AddRange(new List<Mechanic>
             {
 
-            new SkillOnPlayerMechanic(37996, "Shockwave", new MechanicPlotlySetting("circle","rgb(0,0,255)"), "Shockwave","Shockwave from Spears", "Shockwave",0),
-            new SkillOnPlayerMechanic(38168, "Prisoner Sweep", new MechanicPlotlySetting("hexagon","rgb(0,0,255)"), "Sweep","Prisoner Sweep (horizontal)", "Sweep",0),
-            new SkillOnPlayerMechanic(37797, "Trampling Rush", new MechanicPlotlySetting("triangle-right","rgb(255,0,0)"), "Trample","Trampling Rush (hit by stampede towards home)", "Trampling Rush",0),
-            new SkillOnPlayerMechanic(38305, "Bludgeon", new MechanicPlotlySetting("triangle-down","rgb(0,0,255)"), "Slam","Bludgeon (vertical Slam)", "Slam",0),
+            new DamageOnPlayerMechanic(37996, "Shockwave", new MechanicPlotlySetting("circle","rgb(0,0,255)"), "Shockwave","Shockwave from Spears", "Shockwave",0),
+            new DamageOnPlayerMechanic(38168, "Prisoner Sweep", new MechanicPlotlySetting("hexagon","rgb(0,0,255)"), "Sweep","Prisoner Sweep (horizontal)", "Sweep",0),
+            new DamageOnPlayerMechanic(37797, "Trampling Rush", new MechanicPlotlySetting("triangle-right","rgb(255,0,0)"), "Trample","Trampling Rush (hit by stampede towards home)", "Trampling Rush",0),
+            new DamageOnPlayerMechanic(38305, "Bludgeon", new MechanicPlotlySetting("triangle-down","rgb(0,0,255)"), "Slam","Bludgeon (vertical Slam)", "Slam",0),
             new PlayerBoonApplyMechanic(37868, "Fixate: Samarog", new MechanicPlotlySetting("star","rgb(255,0,255)"), "Sam Fix","Fixated by Samarog", "Fixate: Samarog",0),
             new PlayerBoonApplyMechanic(38223, "Fixate: Guldhem", new MechanicPlotlySetting("star-open","rgb(255,100,0)"), "Ghuld Fix","Fixated by Guldhem", "Fixate: Guldhem",0),
             new PlayerBoonApplyMechanic(37693, "Fixate: Rigom", new MechanicPlotlySetting("star-open","rgb(255,0,0)"), "Rigom Fix","Fixated by Rigom", "Fixate: Rigom",0),
             new PlayerBoonApplyMechanic(37966, "Big Hug", new MechanicPlotlySetting("circle","rgb(0,128,0)"), "Big Green","Big Green (friends mechanic)", "Big Green",0), 
             new PlayerBoonApplyMechanic(38247, "Small Hug", new MechanicPlotlySetting("circle-open","rgb(0,128,0)"), "Small Green","Small Green (friends mechanic)", "Small Green",0),
-            new SkillOnPlayerMechanic(38180, "Spear Return", new MechanicPlotlySetting("triangle-left","rgb(255,0,0)"), "Spear Return","Hit by Spear Return", "Spear Return",0),
-            new SkillOnPlayerMechanic(38260, "Inevitable Betrayal", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Green Fail","Inevitable Betrayal (failed Green)", "Failed Green",0),
-            new SkillOnPlayerMechanic(37851, "Inevitable Betrayal", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Green Fail","Inevitable Betrayal (failed Green)", "Failed Green",0),
-            new SkillOnPlayerMechanic(37901, "Effigy Pulse", new MechanicPlotlySetting("triangle-down-open","rgb(255,0,0)"), "Spear Pulse","Effigy Pulse (Stood in Spear AoE)", "Spear Aoe",0),
-            new SkillOnPlayerMechanic(37816, "Spear Impact", new MechanicPlotlySetting("triangle-down","rgb(255,0,0)"), "Spear Spawn","Spear Impact (hit by spawning Spear)", "Spear Spawned",0),
+            new DamageOnPlayerMechanic(38180, "Spear Return", new MechanicPlotlySetting("triangle-left","rgb(255,0,0)"), "Spear Return","Hit by Spear Return", "Spear Return",0),
+            new DamageOnPlayerMechanic(38260, "Inevitable Betrayal", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Green Fail","Inevitable Betrayal (failed Green)", "Failed Green",0),
+            new DamageOnPlayerMechanic(37851, "Inevitable Betrayal", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Green Fail","Inevitable Betrayal (failed Green)", "Failed Green",0),
+            new DamageOnPlayerMechanic(37901, "Effigy Pulse", new MechanicPlotlySetting("triangle-down-open","rgb(255,0,0)"), "Spear Pulse","Effigy Pulse (Stood in Spear AoE)", "Spear Aoe",0),
+            new DamageOnPlayerMechanic(37816, "Spear Impact", new MechanicPlotlySetting("triangle-down","rgb(255,0,0)"), "Spear Spawn","Spear Impact (hit by spawning Spear)", "Spear Spawned",0),
             new PlayerBoonApplyMechanic(38199, "Brutalize", new MechanicPlotlySetting("diamond-tall","rgb(255,0,255)"),"Brutalize","Brutalize (jumped upon by Samarog->Breakbar)", "Brutalize",0),
-            new EnemyCastEndMechanic(38136, "Brutalize (Jump End)", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"),"CC","Brutalize (Breakbar)", "Breakbar",0),
-            new SkillOnPlayerMechanic(38013, "Brutalize", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Brutalize (Failed CC)", "CC Fail",0, new List<MechanicChecker>{ new CombatItemResultChecker(ParseEnum.Result.KillingBlow) }, Mechanic.TriggerRule.AND),
-            new EnemyCastEndMechanic(38013, "Brutalize", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CC End","Ended Brutalize", "CC Ended",0),
+            new EnemyCastMechanic(38136, "Brutalize (Jump End)", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"),"CC","Brutalize (Breakbar)", "Breakbar",0),
+            new DamageOnPlayerMechanic(38013, "Brutalize", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Brutalize (Failed CC)", "CC Fail",0, new List<DamageMechanic.DamageChecker>{ (de, log) => de.HasKilled }, Mechanic.TriggerRule.AND),
+            new EnemyCastMechanic(38013, "Brutalize", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CC End","Ended Brutalize", "CC Ended",0),
             //new PlayerBoonRemoveMechanic(38199, "Brutalize", ParseEnum.BossIDS.Samarog, new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Ended Brutalize (Breakbar broken)", "CCEnded",0),//(condition => condition.getCombatItem().IsBuffRemove == ParseEnum.BuffRemove.Manual)),
             //new Mechanic(38199, "Brutalize", Mechanic.MechType.EnemyBoonStrip, ParseEnum.BossIDS.Samarog, new MechanicPlotlySetting("diamond-tall","rgb(110,160,0)"), "CCed1","Ended Brutalize (Breakbar broken)", "CCed1",0),//(condition => condition.getCombatItem().IsBuffRemove == ParseEnum.BuffRemove.All)),
             new PlayerBoonApplyMechanic(37892, "Soul Swarm", new MechanicPlotlySetting("x-thin-open","rgb(0,255,255)"),"Wall","Soul Swarm (stood in or beyond Spear Wall)", "Spear Wall",0),
-            new SkillOnPlayerMechanic(38231, "Impaling Stab", new MechanicPlotlySetting("hourglass","rgb(0,0,255)"),"ShockWv Ctr","Impaling Stab (hit by Spears causing Shockwave)", "Shockwave Center",0),
-            new SkillOnPlayerMechanic(38314, "Anguished Bolt", new MechanicPlotlySetting("circle","rgb(255,140,0)"),"Stun","Anguished Bolt (AoE Stun Circle by Guldhem)", "Guldhem's Stun",0),
+            new DamageOnPlayerMechanic(38231, "Impaling Stab", new MechanicPlotlySetting("hourglass","rgb(0,0,255)"),"ShockWv Ctr","Impaling Stab (hit by Spears causing Shockwave)", "Shockwave Center",0),
+            new DamageOnPlayerMechanic(38314, "Anguished Bolt", new MechanicPlotlySetting("circle","rgb(255,140,0)"),"Stun","Anguished Bolt (AoE Stun Circle by Guldhem)", "Guldhem's Stun",0),
             
             //  new Mechanic(37816, "Brutalize", ParseEnum.BossIDS.Samarog, new MechanicPlotlySetting("star-square","rgb(255,0,0)"), "CC Target", casted without dmg odd
             });
@@ -103,21 +103,21 @@ namespace LuckParser.Models.Logic
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
             // TODO: facing information (shock wave)
-            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Samarog:
-                    List<CombatItem> brutalize = log.CombatData.GetBoonData(38226).Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.Manual).ToList();
+                    List<AbstractBuffEvent> brutalize = GetFilteredList(log.CombatData, 38226, target, true);
                     int brutStart = 0;
-                    foreach (CombatItem c in brutalize)
+                    foreach (AbstractBuffEvent c in brutalize)
                     {
-                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                        if (c is BuffApplyEvent)
                         {
-                            brutStart = (int)(log.FightData.ToFightSpace(c.Time));
+                            brutStart = (int)c.Time;
                         }
                         else
                         {
-                            int brutEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                            int brutEnd = (int)c.Time;
                             replay.Actors.Add(new CircleActor(true, 0, 120, (brutStart, brutEnd), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                         }
                     }
@@ -133,51 +133,52 @@ namespace LuckParser.Models.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // big bomb
-            List<CombatItem> bigbomb = log.CombatData.GetBoonData(37966).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
-            foreach (CombatItem c in bigbomb)
+            List<AbstractBuffEvent> bigbomb = log.CombatData.GetBoonData(37966).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
+            foreach (AbstractBuffEvent c in bigbomb)
             {
-                int bigStart = (int)(log.FightData.ToFightSpace(c.Time));
+                int bigStart = (int)c.Time;
                 int bigEnd = bigStart + 6000;
                 replay.Actors.Add(new CircleActor(true, 0, 300, (bigStart, bigEnd), "rgba(150, 80, 0, 0.2)", new AgentConnector(p)));
                 replay.Actors.Add(new CircleActor(true, bigEnd, 300, (bigStart, bigEnd), "rgba(150, 80, 0, 0.2)", new AgentConnector(p)));
             }
             // small bomb
-            List<CombatItem> smallbomb = log.CombatData.GetBoonData(38247).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
-            foreach (CombatItem c in smallbomb)
+            List<AbstractBuffEvent> smallbomb = log.CombatData.GetBoonData(38247).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
+            foreach (AbstractBuffEvent c in smallbomb)
             {
-                int smallStart = (int)(log.FightData.ToFightSpace(c.Time));
+                int smallStart = (int)c.Time;
                 int smallEnd = smallStart + 6000;
                 replay.Actors.Add(new CircleActor(true, 0, 80, (smallStart, smallEnd), "rgba(80, 150, 0, 0.3)", new AgentConnector(p)));
             }
             // fixated
-            List<CombatItem> fixatedSam = GetFilteredList(log.CombatData, 37868, p, true);
+            List<AbstractBuffEvent> fixatedSam = GetFilteredList(log.CombatData, 37868, p, true);
             int fixatedSamStart = 0;
-            foreach (CombatItem c in fixatedSam)
+            foreach (AbstractBuffEvent c in fixatedSam)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    fixatedSamStart = Math.Max((int)(log.FightData.ToFightSpace(c.Time)), 0);
+                    fixatedSamStart = Math.Max((int)c.Time, 0);
                 }
                 else
                 {
-                    int fixatedSamEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int fixatedSamEnd = (int)c.Time;
                     replay.Actors.Add(new CircleActor(true, 0, 80, (fixatedSamStart, fixatedSamEnd), "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
                 }
             }
             //fixated Ghuldem
-            List<CombatItem> fixatedGuldhem = GetFilteredList(log.CombatData, 38223, p, true);
+            List<AbstractBuffEvent> fixatedGuldhem = GetFilteredList(log.CombatData, 38223, p, true);
             int fixationGuldhemStart = 0;
             Target guldhem = null;
-            foreach (CombatItem c in fixatedGuldhem)
+            foreach (AbstractBuffEvent c in fixatedGuldhem)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    fixationGuldhemStart = (int)(log.FightData.ToFightSpace(c.Time));
-                    guldhem = Targets.FirstOrDefault(x => x.ID == (ushort)ParseEnum.TrashIDS.Guldhem && c.Time >= x.FirstAware && c.Time <= x.LastAware);
+                    fixationGuldhemStart = (int)c.Time;
+                    long logTime = log.FightData.ToLogSpace(c.Time);
+                    guldhem = Targets.FirstOrDefault(x => x.ID == (ushort)Guldhem && logTime >= x.FirstAwareLogTime && logTime <= x.LastAwareLogTime);
                 }
                 else
                 {
-                    int fixationGuldhemEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int fixationGuldhemEnd = (int)c.Time;
                     if (guldhem != null)
                     {
                         replay.Actors.Add(new LineActor(0, (fixationGuldhemStart, fixationGuldhemEnd), "rgba(255, 100, 0, 0.3)", new AgentConnector(p), new AgentConnector(guldhem)));
@@ -185,19 +186,20 @@ namespace LuckParser.Models.Logic
                 }
             }
             //fixated Rigom
-            List<CombatItem> fixatedRigom = GetFilteredList(log.CombatData, 37693, p, true);
+            List<AbstractBuffEvent> fixatedRigom = GetFilteredList(log.CombatData, 37693, p, true);
             int fixationRigomStart = 0;
             Target rigom = null;
-            foreach (CombatItem c in fixatedRigom)
+            foreach (AbstractBuffEvent c in fixatedRigom)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    fixationRigomStart = (int)(log.FightData.ToFightSpace(c.Time));
-                    rigom = Targets.FirstOrDefault(x => x.ID == (ushort)ParseEnum.TrashIDS.Rigom && c.Time >= x.FirstAware && c.Time <= x.LastAware);
+                    fixationRigomStart = (int)c.Time;
+                    long logTime = log.FightData.ToLogSpace(c.Time);
+                    rigom = Targets.FirstOrDefault(x => x.ID == (ushort)Rigom && logTime >= x.FirstAwareLogTime && logTime <= x.LastAwareLogTime);
                 }
                 else
                 {
-                    int fixationRigomEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int fixationRigomEnd = (int)c.Time;
                     if (rigom != null)
                     {
                         replay.Actors.Add(new LineActor(0, (fixationRigomStart, fixationRigomEnd), "rgba(255, 0, 0, 0.3)", new AgentConnector(p), new AgentConnector(rigom)));
@@ -206,15 +208,14 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override int IsCM(ParsedEvtcContainer evtcContainer)
+        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Samarog);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
-            OverrideMaxHealths(evtcContainer);
-            return (target.Health > 30e6) ? 1 : 0;
+            return (target.GetHealth(combatData) > 30e6) ? 1 : 0;
         }
     }
 }

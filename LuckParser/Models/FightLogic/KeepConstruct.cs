@@ -15,19 +15,19 @@ namespace LuckParser.Models.Logic
             {
             new PlayerBoonApplyMechanic(34912, "Fixate", new MechanicPlotlySetting("star","rgb(255,0,255)"), "Fixate","Fixated by Statue", "Fixated",0),
             new PlayerBoonApplyMechanic(34925, "Fixate", new MechanicPlotlySetting("star","rgb(255,0,255)"), "Fixate","Fixated by Statue", "Fixated",0),
-            new SkillOnPlayerMechanic(35077, "Hail of Fury", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Debris","Hail of Fury (Falling Debris)", "Debris",0),
+            new DamageOnPlayerMechanic(35077, "Hail of Fury", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Debris","Hail of Fury (Falling Debris)", "Debris",0),
             new EnemyBoonApplyMechanic(35096, "Compromised", new MechanicPlotlySetting("hexagon","rgb(0,0,255)"), "Rift#","Compromised (Pushed Orb through Rifts)", "Compromised",0),
             new EnemyBoonApplyMechanic(35119, "Magic Blast", new MechanicPlotlySetting("star","rgb(0,255,255)"), "M.B.#","Magic Blast (Orbs eaten by KC)", "Magic Blast",0),
             new SpawnMechanic(16227, "Insidious Projection", new MechanicPlotlySetting("bowtie","rgb(255,0,0)"), "Merge","Insidious Projection spawn (2 Statue merge)", "Merged Statues",0),
-            new SkillOnPlayerMechanic(35137, "Phantasmal Blades", new MechanicPlotlySetting("hexagram-open","rgb(255,0,255)"), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
-            new SkillOnPlayerMechanic(34971, "Phantasmal Blades", new MechanicPlotlySetting("hexagram-open","rgb(255,0,255)"), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
-            new SkillOnPlayerMechanic(35064, "Phantasmal Blades", new MechanicPlotlySetting("hexagram-open","rgb(255,0,255)"), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
-            new SkillOnPlayerMechanic(35086, "Tower Drop", new MechanicPlotlySetting("circle","rgb(255,140,0)"), "Jump","Tower Drop (KC Jump)", "Tower Drop",0),
+            new DamageOnPlayerMechanic(35137, "Phantasmal Blades", new MechanicPlotlySetting("hexagram-open","rgb(255,0,255)"), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
+            new DamageOnPlayerMechanic(34971, "Phantasmal Blades", new MechanicPlotlySetting("hexagram-open","rgb(255,0,255)"), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
+            new DamageOnPlayerMechanic(35064, "Phantasmal Blades", new MechanicPlotlySetting("hexagram-open","rgb(255,0,255)"), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
+            new DamageOnPlayerMechanic(35086, "Tower Drop", new MechanicPlotlySetting("circle","rgb(255,140,0)"), "Jump","Tower Drop (KC Jump)", "Tower Drop",0),
             new PlayerBoonApplyMechanic(35103, "Xera's Fury", new MechanicPlotlySetting("circle","rgb(200,140,0)"), "Bomb","Xera's Fury (Large Bombs) application", "Bombs",0),
-            new SkillOnPlayerMechanic(34914, "Good White Orb", new MechanicPlotlySetting("circle","rgb(200,200,200)"), "GW.Orb","Good White Orb", "Good White Orb",0, new List<MechanicChecker> { new ActorBuffChecker(35109, true, true) }, Mechanic.TriggerRule.AND),
-            new SkillOnPlayerMechanic(34972, "Good Red Orb", new MechanicPlotlySetting("circle","rgb(100,0,0)"), "GR.Orb","Good Red Orb", "Good Red Orb",0, new List<MechanicChecker> { new ActorBuffChecker(35091, true, true) }, Mechanic.TriggerRule.AND),
-            new SkillOnPlayerMechanic(34914, "Bad White Orb", new MechanicPlotlySetting("circle","rgb(100,100,100)"), "BW.Orb","Bad White Orb", "Bad White Orb",0, new List<MechanicChecker> { new ActorBuffChecker(35109, false, true) }, Mechanic.TriggerRule.AND),
-            new SkillOnPlayerMechanic(34972, "Bad Red Orb", new MechanicPlotlySetting("circle","rgb(200,0,0)"), "BR.Orb","Bad Red Orb", "Bad Red Orb",0, new List<MechanicChecker> { new ActorBuffChecker(35091, false, true) }, Mechanic.TriggerRule.AND),
+            new DamageOnPlayerMechanic(34914, "Good White Orb", new MechanicPlotlySetting("circle","rgb(200,200,200)"), "GW.Orb","Good White Orb", "Good White Orb",0, new List<DamageMechanic.DamageChecker> {(de,log) => de.To.HasBuff(log, 35109, de.Time)}, Mechanic.TriggerRule.AND),
+            new DamageOnPlayerMechanic(34972, "Good Red Orb", new MechanicPlotlySetting("circle","rgb(100,0,0)"), "GR.Orb","Good Red Orb", "Good Red Orb",0, new List<DamageMechanic.DamageChecker> {(de,log) => de.To.HasBuff(log, 35091, de.Time)}, Mechanic.TriggerRule.AND),
+            new DamageOnPlayerMechanic(34914, "Bad White Orb", new MechanicPlotlySetting("circle","rgb(100,100,100)"), "BW.Orb","Bad White Orb", "Bad White Orb",0, new List<DamageMechanic.DamageChecker> { (de,log) => !de.To.HasBuff(log, 35109, de.Time)}, Mechanic.TriggerRule.AND),
+            new DamageOnPlayerMechanic(34972, "Bad Red Orb", new MechanicPlotlySetting("circle","rgb(200,0,0)"), "BR.Orb","Bad Red Orb", "Bad Red Orb",0, new List<DamageMechanic.DamageChecker> { (de,log) => !de.To.HasBuff(log, 35091, de.Time)}, Mechanic.TriggerRule.AND),
             new HitOnEnemyMechanic(16261, "Core Hit", new MechanicPlotlySetting("star-open","rgb(255,140,0)"), "Core Hit","Core was Hit by Player", "Core Hit",1000)
             });
             Extension = "kc";
@@ -60,17 +60,17 @@ namespace LuckParser.Models.Logic
                 return phases;
             }
             // Main phases 35025
-            List<CombatItem> kcPhaseInvuls = GetFilteredList(log.CombatData, 35025, mainTarget, true);
-            foreach (CombatItem c in kcPhaseInvuls)
+            List<AbstractBuffEvent> kcPhaseInvuls = GetFilteredList(log.CombatData, 35025, mainTarget, true);
+            foreach (AbstractBuffEvent c in kcPhaseInvuls)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    end = log.FightData.ToFightSpace(c.Time);
+                    end = c.Time;
                     phases.Add(new PhaseData(start, end));
-                } 
+                }
                 else
                 {
-                    start = log.FightData.ToFightSpace(c.Time);
+                    start = c.Time;
                 }
             }
             if (fightDuration - start > 5000 && start >= phases.Last().End)
@@ -86,24 +86,24 @@ namespace LuckParser.Models.Logic
             }
             // add burn phases
             int offset = phases.Count;
-            List<CombatItem> orbItems = log.CombatData.GetBoonData(35096).Where(x => x.DstInstid == mainTarget.InstID).ToList();
+            List<AbstractBuffEvent> orbItems = log.CombatData.GetBoonData(35096).Where(x => x.To == mainTarget.AgentItem).ToList();
             // Get number of orbs and filter the list
             start = 0;
             int orbCount = 0;
             List<BoonsGraphModel.Segment> segments = new List<BoonsGraphModel.Segment>();
-            foreach (CombatItem c in orbItems)
+            foreach (AbstractBuffEvent c in orbItems)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
                     if (start == 0)
                     {
-                        start = log.FightData.ToFightSpace(c.Time);
+                        start = c.Time;
                     }
                     orbCount++;
                 }
                 else if (start != 0)
                 {
-                    segments.Add(new BoonsGraphModel.Segment(start, Math.Min(log.FightData.ToFightSpace(c.Time), fightDuration), orbCount));
+                    segments.Add(new BoonsGraphModel.Segment(start, Math.Min(c.Time, fightDuration), orbCount));
                     orbCount = 0;
                     start = 0;
                 }
@@ -122,12 +122,12 @@ namespace LuckParser.Models.Logic
             // pre burn phases
             int preBurnCount = 1;
             List<PhaseData> preBurnPhase = new List<PhaseData>();
-            List<CombatItem> kcInvuls = GetFilteredList(log.CombatData, 762, mainTarget, true);
-            foreach (CombatItem invul in kcInvuls)
+            List<AbstractBuffEvent> kcInvuls = GetFilteredList(log.CombatData, 762, mainTarget, true);
+            foreach (AbstractBuffEvent invul in kcInvuls)
             {
-                if (invul.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (invul is BuffApplyEvent)
                 {
-                    end = log.FightData.ToFightSpace(invul.Time);
+                    end = invul.Time;
                     PhaseData prevPhase = phases.LastOrDefault(x => x.Start <= end || x.End <= end);
                     if (prevPhase != null)
                     {
@@ -242,46 +242,46 @@ namespace LuckParser.Models.Logic
 
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.KeepConstruct:
 
-                    List<CombatItem> kcOrbCollect = GetFilteredList(log.CombatData, 35025, target, true);
-                    int kcOrbStart = 0 , kcOrbEnd = 0;
-                    foreach (CombatItem c in kcOrbCollect)
+                    List<AbstractBuffEvent> kcOrbCollect = GetFilteredList(log.CombatData, 35025, target, true);
+                    int kcOrbStart = 0, kcOrbEnd = 0;
+                    foreach (AbstractBuffEvent c in kcOrbCollect)
                     {
-                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                        if (c is BuffApplyEvent)
                         {
-                            kcOrbStart = (int)log.FightData.ToFightSpace(c.Time);
+                            kcOrbStart = (int)c.Time;
                         }
                         else
                         {
-                            kcOrbEnd = (int)log.FightData.ToFightSpace(c.Time);
+                            kcOrbEnd = (int)c.Time;
                             replay.Actors.Add(new CircleActor(false, 0, 300, (kcOrbStart, kcOrbEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                             replay.Actors.Add(new CircleActor(true, kcOrbEnd, 300, (kcOrbStart, kcOrbEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                         }
                     }
-                    List<CastLog> towerDrop = cls.Where(x => x.SkillId == 35086).ToList();
-                    foreach (CastLog c in towerDrop)
+                    List<AbstractCastEvent> towerDrop = cls.Where(x => x.SkillId == 35086).ToList();
+                    foreach (AbstractCastEvent c in towerDrop)
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
                         int skillCast = end - 1000;
-                        Point3D next = replay.Positions.FirstOrDefault(x => x.Time >= end);
-                        Point3D prev = replay.Positions.LastOrDefault(x => x.Time <= end);
+                        Point3D next = replay.PolledPositions.FirstOrDefault(x => x.Time >= end);
+                        Point3D prev = replay.PolledPositions.LastOrDefault(x => x.Time <= end);
                         if (prev != null || next != null)
                         {
                             replay.Actors.Add(new CircleActor(false, 0, 400, (start, skillCast), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, end)));
                             replay.Actors.Add(new CircleActor(true, skillCast, 400, (start, skillCast), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, end)));
                         }
                     }
-                    List<CastLog> blades1 = cls.Where(x => x.SkillId == 35064).ToList();
-                    List<CastLog> blades2 = cls.Where(x => x.SkillId == 35137).ToList();
-                    List<CastLog> blades3 = cls.Where(x => x.SkillId == 34971).ToList();
+                    List<AbstractCastEvent> blades1 = cls.Where(x => x.SkillId == 35064).ToList();
+                    List<AbstractCastEvent> blades2 = cls.Where(x => x.SkillId == 35137).ToList();
+                    List<AbstractCastEvent> blades3 = cls.Where(x => x.SkillId == 34971).ToList();
                     int bladeDelay = 150;
                     int duration = 1000;
-                    foreach (CastLog c in blades1)
+                    foreach (AbstractCastEvent c in blades1)
                     {
                         int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
                         int start = (int)c.Time + bladeDelay;
@@ -297,7 +297,7 @@ namespace LuckParser.Models.Logic
                             replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts longer
                         }
                     }
-                    foreach (CastLog c in blades2)
+                    foreach (AbstractCastEvent c in blades2)
                     {
                         int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
                         int start = (int)c.Time + bladeDelay;
@@ -315,7 +315,7 @@ namespace LuckParser.Models.Logic
                             replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts longer
                         }
                     }
-                    foreach (CastLog c in blades3)
+                    foreach (AbstractCastEvent c in blades3)
                     {
                         int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
                         int start = (int)c.Time + bladeDelay;
@@ -351,8 +351,8 @@ namespace LuckParser.Models.Logic
                     {
                         if (phantasmsID.Contains(m.ID))
                         {
-                            int start = (int)log.FightData.ToFightSpace(m.FirstAware);
-                            Point3D pos = m.GetCombatReplayPositions(log).FirstOrDefault();
+                            int start = (int)log.FightData.ToFightSpace(m.FirstAwareLogTime);
+                            Point3D pos = m.GetCombatReplayPolledPositions(log).FirstOrDefault();
                             if (pos != null)
                             {
                                 replay.Actors.Add(new CircleActor(true, 0, 300, (start - 5000, start), "rgba(220, 50, 0, 0.5)", new PositionConnector(pos)));
@@ -370,36 +370,36 @@ namespace LuckParser.Models.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // Bombs
-            List<CombatItem> xeraFury = GetFilteredList(log.CombatData, 35103, p, true);
+            List<AbstractBuffEvent> xeraFury = GetFilteredList(log.CombatData, 35103, p, true);
             int xeraFuryStart = 0;
-            foreach (CombatItem c in xeraFury)
+            foreach (AbstractBuffEvent c in xeraFury)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    xeraFuryStart = (int)(log.FightData.ToFightSpace(c.Time));
+                    xeraFuryStart = (int)c.Time;
                 }
                 else
                 {
-                    int xeraFuryEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int xeraFuryEnd = (int)c.Time;
                     replay.Actors.Add(new CircleActor(true, 0, 550, (xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.2)", new AgentConnector(p)));
                     replay.Actors.Add(new CircleActor(true, xeraFuryEnd, 550, (xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.4)", new AgentConnector(p)));
                 }
 
             }
             //fixated Statue
-            List<CombatItem> fixatedStatue = GetFilteredList(log.CombatData, 34912, p, true).Concat(GetFilteredList(log.CombatData, 34925, p, true)).ToList();
+            List<AbstractBuffEvent> fixatedStatue = GetFilteredList(log.CombatData, 34912, p, true).Concat(GetFilteredList(log.CombatData, 34925, p, true)).ToList();
             int fixationStatueStart = 0;
             Mob statue = null;
-            foreach (CombatItem c in fixatedStatue)
+            foreach (AbstractBuffEvent c in fixatedStatue)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    fixationStatueStart = (int)(log.FightData.ToFightSpace(c.Time));
-                    statue = TrashMobs.FirstOrDefault(x => x.Agent == c.SrcAgent);
+                    fixationStatueStart = (int)c.Time;
+                    statue = TrashMobs.FirstOrDefault(x => x.AgentItem == c.By);
                 }
                 else
                 {
-                    int fixationStatueEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int fixationStatueEnd = (int)c.Time;
                     if (statue != null)
                     {
                         replay.Actors.Add(new LineActor(0, (fixationStatueStart, fixationStatueEnd), "rgba(255, 0, 255, 0.5)", new AgentConnector(p), new AgentConnector(statue)));

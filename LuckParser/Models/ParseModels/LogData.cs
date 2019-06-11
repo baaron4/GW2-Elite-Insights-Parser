@@ -1,4 +1,7 @@
-﻿using System;
+﻿using LuckParser.Parser;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -7,27 +10,50 @@ namespace LuckParser.Models.ParseModels
         public static readonly string DefaultTimeValue = "MISSING";
 
         // Fields
-        public readonly string BuildVersion;
-        public ulong GW2Version { get; set; }
-        public string PoV { get; private set; } = "N/A";
+        public string BuildVersion { get; }
+        public ulong GW2Version { get; }
+        public AgentItem PoV { get; private set; } = null;
+        public string PoVName { get; private set; } = "N/A";
         private readonly string _dateFormat = "yyyy-MM-dd HH:mm:ss zz";
         public string LogStart { get; private set; }
         public string LogEnd { get; private set; }
-        // private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 
         // Constructors
-        public LogData(string buildVersion)
+        public LogData(string buildVersion, CombatData combatData, List<CombatItem> allCombatItems)
         {
             BuildVersion = buildVersion;
             LogStart = DefaultTimeValue;
             LogEnd = DefaultTimeValue;
-           // this.sdf.setTimeZone(TimeZone.getDefault());
+            uint unixStart = 0;
+            foreach (PointOfViewEvent povEvt in combatData.GetPointOfViewEvents())
+            {
+                SetPOV(povEvt.PoV);
+            }
+            foreach(BuildEvent buildEvt in combatData.GetBuildEvents())
+            {
+                GW2Version = buildEvt.Data;
+            }
+            foreach (LogStartEvent logStr in combatData.GetLogStartEvents())
+            {
+                SetLogStart(logStr.LocalUnixTimeStamp);
+                unixStart = logStr.LocalUnixTimeStamp;
+            }
+            foreach (LogEndEvent logEnd in combatData.GetLogEndEvents())
+            {
+                SetLogEnd(logEnd.LocalUnixTimeStamp);
+            }
+            if (LogEnd == DefaultTimeValue && LogStart != DefaultTimeValue)
+            {
+                long dur = allCombatItems.Max(x => x.LogTime) - allCombatItems.Min(x => x.LogTime) / 1000;
+                SetLogEnd(dur + unixStart);
+            }
         }
         
         // Setters
-        public void SetPOV(string pov)
+        private void SetPOV(AgentItem pov)
         {
-            PoV = pov.Substring(0, pov.LastIndexOf('\0'));
+            PoV = pov;
+            PoVName = pov.Name.Substring(0, pov.Name.LastIndexOf('\0')).Split(':')[0].TrimEnd('\u0000');
         }
 
         private string GetDateTime(long unixSeconds)
@@ -37,12 +63,12 @@ namespace LuckParser.Models.ParseModels
             return dtDateTime.ToString(_dateFormat);
         }
 
-        public void SetLogStart(long unixSeconds)
+        private void SetLogStart(long unixSeconds)
         {
             LogStart = GetDateTime(unixSeconds);
         }
 
-        public void SetLogEnd(long unixSeconds)
+        private void SetLogEnd(long unixSeconds)
         {
             LogEnd = GetDateTime(unixSeconds);
         }

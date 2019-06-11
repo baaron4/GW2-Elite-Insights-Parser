@@ -8,7 +8,7 @@
                     <div v-if="encounter.targets.length > 1" class="small" style="text-align:center;">
                         {{target.name}}
                     </div>
-                    <div class="progress" style="width: 100%; height: 10px;" :data-original-title="(target.hpLeft ? target.hpLeft / 100 : 0) + '% left'">
+                    <div class="progress" style="width: 100%; height: 10px;" :data-original-title="(target.hpLeft ? target.hpLeft : 0) + '% left'">
                         <div class="progress-bar bg-success" :style="{width: target.percent + '%'}" role="progressbar"
                             :aria-valuenow="target.percent" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>

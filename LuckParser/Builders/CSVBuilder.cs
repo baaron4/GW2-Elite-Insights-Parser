@@ -78,7 +78,7 @@ namespace LuckParser.Builders
             WriteLine(new [] { "Elite Insights Version", Application.ProductVersion });
             WriteLine(new [] { "ARC Version", _log.LogData.BuildVersion});
             WriteLine(new [] { "Fight ID", _log.FightData.ID.ToString() });
-            WriteLine(new [] { "Recorded By", _log.LogData.PoV.Split(':')[0] });
+            WriteLine(new [] { "Recorded By", _log.LogData.PoVName });
             WriteLine(new [] { "Time Start", _log.LogData.LogStart });
             WriteLine(new [] { "Time End", _log.LogData.LogEnd });
             if (Properties.Settings.Default.UploadToDPSReports || Properties.Settings.Default.UploadToDPSReportsRH || Properties.Settings.Default.UploadToRaidar)
@@ -95,10 +95,13 @@ namespace LuckParser.Builders
             //Boss card
             WriteLine(new [] { "Boss", fightName });
             WriteLine(new [] { "Success", _log.FightData.Success.ToString() });
-            WriteLine(new [] { "Total Boss Health", _log.LegacyTarget.Health.ToString() });
-            int finalBossHealth = _log.LegacyTarget.HealthOverTime.Count > 0 ? _log.LegacyTarget.HealthOverTime.Last().hp : 10000;
-            WriteLine(new [] { "Final Boss Health", (_log.LegacyTarget.Health * (100.0 - finalBossHealth * 0.01)).ToString() });
-            WriteLine(new [] { "Boss Health Burned %", (100.0 - finalBossHealth * 0.01).ToString() });
+            WriteLine(new [] { "Total Boss Health", _log.LegacyTarget.GetHealth(_log.CombatData).ToString() });
+            List<HealthUpdateEvent> hpUpdates = _log.CombatData.GetHealthUpdateEvents(_log.LegacyTarget.AgentItem);
+            double finalTargetHealth = hpUpdates.Count > 0
+                ? hpUpdates.Last().HPPercent
+                : 100.0;
+            WriteLine(new [] { "Final Boss Health", (_log.LegacyTarget.GetHealth(_log.CombatData) * (100.0 - finalTargetHealth)).ToString() });
+            WriteLine(new [] { "Boss Health Burned %", (100.0 - finalTargetHealth).ToString() });
             WriteLine(new [] { "Duration", durationString });
 
             //DPSStats
@@ -680,29 +683,29 @@ namespace LuckParser.Builders
         private void CreateMechList(int phaseIndex)
         {
             MechanicData mData = _log.MechanicData;
-            List<MechanicLog> mLogs = new List<MechanicLog>();
-            foreach (List<MechanicLog> mLs in mData.GetAllMechanics(_log))
+            List<MechanicEvent> mLogs = new List<MechanicEvent>();
+            foreach (List<MechanicEvent> mLs in mData.GetAllMechanics(_log))
             {
                 mLogs.AddRange(mLs);
             }
             mLogs = mLogs.OrderBy(x => x.Time).ToList();
             int count = 0;
             WriteCell("Time");
-            foreach (MechanicLog m in mLogs)
+            foreach (MechanicEvent m in mLogs)
             {
                 WriteCell((m.Time / 1000.0).ToString());
             }
             NewLine();
             count++;
             WriteCell("Player");
-            foreach (MechanicLog m in mLogs)
+            foreach (MechanicEvent m in mLogs)
             {
                 WriteCell(m.Actor.Character);
             }
             NewLine();
             count++;
             WriteCell("Mechanic");
-            foreach (MechanicLog m in mLogs)
+            foreach (MechanicEvent m in mLogs)
             {
                 WriteCell("\"" + m.Description + "\"");
             }

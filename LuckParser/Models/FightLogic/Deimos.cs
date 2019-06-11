@@ -10,27 +10,27 @@ namespace LuckParser.Models.Logic
     public class Deimos : RaidLogic
     {
 
-        private long _specialSplit = 0;
+        private long _specialSplitLogTime = 0;
 
         public Deimos(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new SkillOnPlayerMechanic(37716, "Rapid Decay", new MechanicPlotlySetting("circle-open","rgb(0,0,0)"), "Oil","Rapid Decay (Black expanding oil)", "Black Oil",0),
-            new FirstHitSkillOnPlayerMechanic(37716, "Rapid Decay", new MechanicPlotlySetting("circle","rgb(0,0,0)"), "Oil Trigger","Rapid Decay Trigger (Black expanding oil)", "Black Oil Trigger",0),
-            new EnemyCastStartMechanic(37846, "Off Balance", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "TP CC","Off Balance (Saul TP Breakbar)", "Saul TP Start",0),
-            new EnemyCastEndMechanic(37846, "Off Balance", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "TP CC Fail","Failed Saul TP CC", "Failed CC (TP)",0, new List<MechanicChecker>{ new CombatItemValueChecker(2200, MechanicChecker.ValueCompare.GEQ) }, Mechanic.TriggerRule.AND),
-            new EnemyCastEndMechanic(37846, "Off Balance", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "TP CCed","Saul TP CCed", "CCed (TP)",0, new List<MechanicChecker>{ new CombatItemValueChecker(2200, MechanicChecker.ValueCompare.L) }, Mechanic.TriggerRule.AND),
-            new EnemyCastStartMechanic(38272, "Boon Thief", new MechanicPlotlySetting("diamond-wide","rgb(0,160,150)"), "Thief CC","Boon Thief (Saul Breakbar)", "Boon Thief Start",0),
-            new EnemyCastEndMechanic(38272, "Boon Thief", new MechanicPlotlySetting("diamond-wide","rgb(255,0,0)"), "Thief CC Fail","Failed Boon Thief CC", "Failed CC (Thief)",0,new List<MechanicChecker>{ new CombatItemValueChecker(4400, MechanicChecker.ValueCompare.GEQ) }, Mechanic.TriggerRule.AND),
-            new EnemyCastEndMechanic(38272, "Boon Thief", new MechanicPlotlySetting("diamond-wide","rgb(0,160,0)"), "Thief CCed","Boon Thief CCed", "CCed (Thief)",0,new List<MechanicChecker>{ new CombatItemValueChecker(4400, MechanicChecker.ValueCompare.L) }, Mechanic.TriggerRule.AND),
-            new SkillOnPlayerMechanic(38208, "Annihilate", new MechanicPlotlySetting("hexagon","rgb(255,200,0)"), "Pizza","Annihilate (Cascading Pizza attack)", "Boss Smash",0),
-            new SkillOnPlayerMechanic(37929, "Annihilate", new MechanicPlotlySetting("hexagon","rgb(255,200,0)"), "Pizza","Annihilate (Cascading Pizza attack)", "Boss Smash",0),
-            new SkillOnPlayerMechanic(37980, "Demonic Shock Wave", new MechanicPlotlySetting("triangle-right-open","rgb(255,0,0)"), "10% RSmash","Knockback (right hand) in 10% Phase", "10% Right Smash",0),
-            new SkillOnPlayerMechanic(38046, "Demonic Shock Wave", new MechanicPlotlySetting("triangle-left-open","rgb(255,0,0)"), "10% LSmash","Knockback (left hand) in 10% Phase", "10% Left Smash",0),
-            new SkillOnPlayerMechanic(37982, "Demonic Shock Wave", new MechanicPlotlySetting("bowtie","rgb(255,0,0)"), "10% Double Smash","Knockback (both hands) in 10% Phase", "10% Double Smash",0),
+            new DamageOnPlayerMechanic(37716, "Rapid Decay", new MechanicPlotlySetting("circle-open","rgb(0,0,0)"), "Oil","Rapid Decay (Black expanding oil)", "Black Oil",0),
+            new DamageOnPlayerFirstHitMechanic(37716, "Rapid Decay", new MechanicPlotlySetting("circle","rgb(0,0,0)"), "Oil Trigger","Rapid Decay Trigger (Black expanding oil)", "Black Oil Trigger",0),
+            new EnemyCastMechanic(37846, "Off Balance", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "TP CC","Off Balance (Saul TP Breakbar)", "Saul TP Start",0),
+            new EnemyCastMechanic(37846, "Off Balance", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "TP CC Fail","Failed Saul TP CC", "Failed CC (TP)",0, new List<CastMechanic.CastChecker>{ (ce,log) => ce.ActualDuration >= 2200 }, Mechanic.TriggerRule.AND),
+            new EnemyCastMechanic(37846, "Off Balance", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "TP CCed","Saul TP CCed", "CCed (TP)",0, new List<CastMechanic.CastChecker>{ (ce, log) => ce.ActualDuration < 2200 }, Mechanic.TriggerRule.AND),
+            new EnemyCastMechanic(38272, "Boon Thief", new MechanicPlotlySetting("diamond-wide","rgb(0,160,150)"), "Thief CC","Boon Thief (Saul Breakbar)", "Boon Thief Start",0),
+            new EnemyCastMechanic(38272, "Boon Thief", new MechanicPlotlySetting("diamond-wide","rgb(255,0,0)"), "Thief CC Fail","Failed Boon Thief CC", "Failed CC (Thief)",0,new List<CastMechanic.CastChecker>{ (ce,log) => ce.ActualDuration >= 4400 }, Mechanic.TriggerRule.AND),
+            new EnemyCastMechanic(38272, "Boon Thief", new MechanicPlotlySetting("diamond-wide","rgb(0,160,0)"), "Thief CCed","Boon Thief CCed", "CCed (Thief)",0,new List<CastMechanic.CastChecker>{ (ce, log) => ce.ActualDuration < 4400 }, Mechanic.TriggerRule.AND),
+            new DamageOnPlayerMechanic(38208, "Annihilate", new MechanicPlotlySetting("hexagon","rgb(255,200,0)"), "Pizza","Annihilate (Cascading Pizza attack)", "Boss Smash",0),
+            new DamageOnPlayerMechanic(37929, "Annihilate", new MechanicPlotlySetting("hexagon","rgb(255,200,0)"), "Pizza","Annihilate (Cascading Pizza attack)", "Boss Smash",0),
+            new DamageOnPlayerMechanic(37980, "Demonic Shock Wave", new MechanicPlotlySetting("triangle-right-open","rgb(255,0,0)"), "10% RSmash","Knockback (right hand) in 10% Phase", "10% Right Smash",0),
+            new DamageOnPlayerMechanic(38046, "Demonic Shock Wave", new MechanicPlotlySetting("triangle-left-open","rgb(255,0,0)"), "10% LSmash","Knockback (left hand) in 10% Phase", "10% Left Smash",0),
+            new DamageOnPlayerMechanic(37982, "Demonic Shock Wave", new MechanicPlotlySetting("bowtie","rgb(255,0,0)"), "10% Double Smash","Knockback (both hands) in 10% Phase", "10% Double Smash",0),
             new PlayerBoonApplyMechanic(37733, "Tear Instability", new MechanicPlotlySetting("diamond","rgb(0,128,128)"), "Tear","Collected a Demonic Tear", "Tear",0),
-            new SkillOnPlayerMechanic(37613, "Mind Crush", new MechanicPlotlySetting("square","rgb(0,0,255)"), "Mind Crush","Hit by Mind Crush without Bubble Protection", "Mind Crush",0,new List<MechanicChecker>{ new CombatItemValueChecker(0, MechanicChecker.ValueCompare.G) }, Mechanic.TriggerRule.AND),
+            new DamageOnPlayerMechanic(37613, "Mind Crush", new MechanicPlotlySetting("square","rgb(0,0,255)"), "Mind Crush","Hit by Mind Crush without Bubble Protection", "Mind Crush",0,new List<DamageMechanic.DamageChecker>{ (de,log) => de.Damage > 0 }, Mechanic.TriggerRule.AND),
             new PlayerBoonApplyMechanic(38187, "Weak Minded", new MechanicPlotlySetting("square-open","rgb(200,140,255)"), "Weak Mind","Weak Minded (Debuff after Mind Crush)", "Weak Minded",0),
             new PlayerBoonApplyMechanic(37730, "Chosen by Eye of Janthir", new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Chosen by the Eye of Janthir", "Chosen (Green)",0),
             new PlayerBoonApplyMechanic(38169, "Teleported", new MechanicPlotlySetting("circle-open","rgb(0,255,0)"), "TP","Teleport to/from Demonic Realm", "Teleport",0),
@@ -109,19 +109,19 @@ namespace LuckParser.Models.Logic
             CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcInstid == target.InstID && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
             if (enterCombat != null)
             {
-                fightData.FightStart = enterCombat.Time;
+                fightData.OverrideStart(enterCombat.LogTime);
             }
             // Remove deimos despawn events as they are useless and mess with combat replay
-            combatData.RemoveAll(x => x.IsStateChange == ParseEnum.StateChange.Despawn && x.SrcInstid == target.InstID && x.Time <= target.LastAware && x.Time >= target.FirstAware);
+            combatData.RemoveAll(x => x.IsStateChange == ParseEnum.StateChange.Despawn && x.SrcInstid == target.InstID && x.LogTime <= target.LastAwareLogTime && x.LogTime >= target.FirstAwareLogTime);
             // Deimos gadgets
-            List<AgentItem> deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos") && x.LastAware > target.LastAware).ToList();
+            List<AgentItem> deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos") && x.LastAwareLogTime > target.LastAwareLogTime).ToList();
             CombatItem invulApp = combatData.FirstOrDefault(x => x.DstInstid == target.InstID && x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0 && x.SkillID == 762);
-            CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.Time > combatData.First().Time && x.DstAgent > 0);
+            CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.LogTime > combatData.First().LogTime && x.DstAgent > 0);
             if (invulApp != null && targetable != null)
             {
                 HashSet<ulong> gadgetAgents = new HashSet<ulong>();
-                long firstAware = targetable.Time;
-                AgentItem targetAgent = agentData.GetAgentByInstID(targetable.SrcInstid, targetable.Time);
+                long firstAware = targetable.LogTime;
+                AgentItem targetAgent = agentData.GetAgentByInstID(targetable.SrcInstid, targetable.LogTime);
                 if (targetAgent != GeneralHelper.UnknownAgent)
                 {
                     try
@@ -129,14 +129,14 @@ namespace LuckParser.Models.Logic
                         string[] names = targetAgent.Name.Split('-');
                         if (ushort.TryParse(names[2], out ushort masterInstid))
                         {
-                            CombatItem structDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && x.IFF == ParseEnum.IFF.Foe && x.DstInstid == masterInstid && x.IsStateChange == ParseEnum.StateChange.Normal && x.IsBuffRemove == ParseEnum.BuffRemove.None &&
+                            CombatItem structDeimosDamageEvent = combatData.FirstOrDefault(x => x.LogTime >= firstAware && x.IFF == ParseEnum.IFF.Foe && x.DstInstid == masterInstid && x.IsStateChange == ParseEnum.StateChange.None && x.IsBuffRemove == ParseEnum.BuffRemove.None &&
                                     ((x.IsBuff == 1 && x.BuffDmg >= 0 && x.Value == 0) ||
                                     (x.IsBuff == 0 && x.Value >= 0)));
                             if (structDeimosDamageEvent != null)
                             {
                                 gadgetAgents.Add(structDeimosDamageEvent.DstAgent);
                             }
-                            CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && (x.SkillID == 37980 || x.SkillID == 37982 || x.SkillID == 38046) && x.SrcAgent != 0 && x.SrcInstid != 0);
+                            CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.LogTime >= firstAware && (x.SkillID == 37980 || x.SkillID == 37982 || x.SkillID == 38046) && x.SrcAgent != 0 && x.SrcInstid != 0);
                             if (armDeimosDamageEvent != null)
                             {
                                 gadgetAgents.Add(armDeimosDamageEvent.SrcAgent);
@@ -148,17 +148,17 @@ namespace LuckParser.Models.Logic
                         // nothing to do
                     }
                 }
-                invulApp.OverrideValue((int)(firstAware - invulApp.Time));
-                _specialSplit = (firstAware >= target.LastAware ? firstAware : target.LastAware);
-                target.AgentItem.LastAware = combatData.Last().Time;
+                invulApp.OverrideValue((int)(firstAware - invulApp.LogTime));
+                _specialSplitLogTime = (firstAware >= target.LastAwareLogTime ? firstAware : target.LastAwareLogTime);
+                target.AgentItem.LastAwareLogTime = combatData.Last().LogTime;
                 SetUniqueID(target, gadgetAgents, agentData, combatData);
             }
             // legacy method
             else if (deimosGadgets.Count > 0)
             {
-                long firstAware = deimosGadgets.Max(x => x.FirstAware);
-                _specialSplit = (firstAware >= target.LastAware ? firstAware : target.LastAware);
-                target.AgentItem.LastAware = deimosGadgets.Max(x => x.LastAware);
+                long firstAware = deimosGadgets.Max(x => x.FirstAwareLogTime);
+                _specialSplitLogTime = (firstAware >= target.LastAwareLogTime ? firstAware : target.LastAwareLogTime);
+                target.AgentItem.LastAwareLogTime = deimosGadgets.Max(x => x.LastAwareLogTime);
                 HashSet<ulong> gadgetAgents = new HashSet<ulong>(deimosGadgets.Select(x => x.Agent));
                 SetUniqueID(target, gadgetAgents, agentData, combatData);
             }
@@ -181,12 +181,12 @@ namespace LuckParser.Models.Logic
                 return phases;
             }
             // Determined + additional data on inst change
-            CombatItem invulDei = log.CombatData.GetBoonData(762).Find(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && x.DstInstid == mainTarget.InstID);
+            AbstractBuffEvent invulDei = log.CombatData.GetBoonData(762).Find(x => x is BuffApplyEvent && x.To == mainTarget.AgentItem);
             if (invulDei != null)
             {
-                end = log.FightData.ToFightSpace(invulDei.Time);
+                end = invulDei.Time;
                 phases.Add(new PhaseData(start, end));
-                start = (_specialSplit > 0 ? log.FightData.ToFightSpace(_specialSplit) : fightDuration);
+                start = (_specialSplitLogTime > 0 ? log.FightData.ToFightSpace(_specialSplitLogTime) : fightDuration);
                 //mainTarget.AddCustomCastLog(end, -6, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
             }
             if (fightDuration - start > 5000 && start >= phases.Last().End)
@@ -204,7 +204,7 @@ namespace LuckParser.Models.Logic
                 if (tar.ID == (ushort)Thief || tar.ID == (ushort)Drunkard || tar.ID == (ushort)Gambler)
                 {
                     string name = (tar.ID == (ushort)Thief ? "Thief" : (tar.ID == (ushort)Drunkard ? "Drunkard" : (tar.ID == (ushort)Gambler ? "Gambler" : "")));
-                    PhaseData tarPhase = new PhaseData(log.FightData.ToFightSpace(tar.FirstAware) - 1000, log.FightData.ToFightSpace(tar.LastAware) + 1000);
+                    PhaseData tarPhase = new PhaseData(log.FightData.ToFightSpace(tar.FirstAwareLogTime) - 1000, log.FightData.ToFightSpace(tar.LastAwareLogTime) + 1000);
                     tarPhase.Targets.Add(tar);
                     tarPhase.OverrideTimes(log);
                     // override first then add Deimos so that it does not disturb the override process
@@ -293,31 +293,14 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override void AddHealthUpdate(ushort instid, long time, long healthTime, int health)
-        {
-            foreach (Target target in Targets)
-            {
-                if (target.InstID == instid && target.FirstAware <= time && target.LastAware >= time)
-                {
-                    // Additional check because the arm gives a health update of 100%
-                    if (target.HealthOverTime.Count > 0 && target.HealthOverTime.Last().hp < 10000 && health > 9900)
-                    {
-                        break;
-                    }
-                    target.HealthOverTime.Add((healthTime, health));
-                    break;
-                }
-            }
-        }
-
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
-            List<CastLog> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Deimos:
-                    List<CastLog> mindCrush = cls.Where(x => x.SkillId == 37613).ToList();
-                    foreach (CastLog c in mindCrush)
+                    List<AbstractCastEvent> mindCrush = cls.Where(x => x.SkillId == 37613).ToList();
+                    foreach (AbstractCastEvent c in mindCrush)
                     {
                         int start = (int)c.Time;
                         int end = start + 5000;
@@ -328,8 +311,8 @@ namespace LuckParser.Models.Logic
                             replay.Actors.Add(new CircleActor(true, 0, 180, (start, end), "rgba(0, 0, 255, 0.3)", new PositionConnector(new Point3D(-8421.818f, 3091.72949f, -9.818082e8f, 216))));
                         }
                     }
-                    List<CastLog> annihilate = cls.Where(x => (x.SkillId == 38208) || (x.SkillId == 37929)).ToList();
-                    foreach (CastLog c in annihilate)
+                    List<AbstractCastEvent> annihilate = cls.Where(x => (x.SkillId == 38208) || (x.SkillId == 37929)).ToList();
+                    foreach (AbstractCastEvent c in annihilate)
                     {
                         int start = (int)c.Time;
                         int delay = 1000;
@@ -351,18 +334,18 @@ namespace LuckParser.Models.Logic
                             }
                         }
                     }
-                    List<CombatItem> signets = GetFilteredList(log.CombatData, 38224, target, true);
+                    List<AbstractBuffEvent> signets = GetFilteredList(log.CombatData, 38224, target, true);
                     int sigStart = 0;
                     int sigEnd = 0;
-                    foreach (CombatItem signet in signets)
+                    foreach (AbstractBuffEvent signet in signets)
                     {
-                        if (signet.IsBuffRemove == ParseEnum.BuffRemove.None)
+                        if (signet is BuffApplyEvent)
                         {
-                            sigStart = (int)log.FightData.ToFightSpace(signet.Time);
+                            sigStart = (int)signet.Time;
                         }
                         else
                         {
-                            sigEnd = (int)log.FightData.ToFightSpace(signet.Time);
+                            sigEnd = (int)signet.Time;
                             replay.Actors.Add(new CircleActor(true, 0, 120, (sigStart, sigEnd), "rgba(0, 200, 200, 0.5)", new AgentConnector(target)));
                         }
                     }
@@ -380,32 +363,31 @@ namespace LuckParser.Models.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // teleport zone
-            List<CombatItem> tpDeimos = GetFilteredList(log.CombatData, 37730, p, true);
+            List<AbstractBuffEvent> tpDeimos = GetFilteredList(log.CombatData, 37730, p, true);
             int tpStart = 0;
-            foreach (CombatItem c in tpDeimos)
+            foreach (AbstractBuffEvent c in tpDeimos)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c is BuffApplyEvent)
                 {
-                    tpStart = (int)(log.FightData.ToFightSpace(c.Time));
+                    tpStart = (int)c.Time;
                 }
                 else
                 {
-                    int tpEnd = (int)(log.FightData.ToFightSpace(c.Time));
+                    int tpEnd = (int)c.Time;
                     replay.Actors.Add(new CircleActor(true, 0, 180, (tpStart, tpEnd), "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));
                     replay.Actors.Add(new CircleActor(true, tpEnd, 180, (tpStart, tpEnd), "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));
                 }
             }
         }
 
-        public override int IsCM(ParsedEvtcContainer evtcContainer)
+        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Deimos);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
-            OverrideMaxHealths(evtcContainer);
-            return (target.Health > 40e6) ? 1 : 0;
+            return (target.GetHealth(combatData) > 40e6) ? 1 : 0;
         }
     }
 }
