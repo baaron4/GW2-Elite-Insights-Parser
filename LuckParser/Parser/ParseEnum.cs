@@ -289,6 +289,9 @@ namespace LuckParser.Parser
             SmallKillerTornado = 21957,
             BigKillerTornado = 21987,
             // Peerless Qadim
+            Pylon1 = 21996,
+            Pylon2 = 21962,
+            EntropicDistortion = 21973,
             // Freezie
             FreeziesFrozenHeart = 21328,
             // Fractals

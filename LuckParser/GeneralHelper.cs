@@ -551,6 +551,9 @@ namespace LuckParser
                 case Enervator:
                 case SmallKillerTornado:
                 case BigKillerTornado:
+                case Pylon1:
+                case Pylon2:
+                case EntropicDistortion:
                     return "https://i.imgur.com/k79t7ZA.png";
                 case OrbSpider:
                     return "https://i.imgur.com/FB5VM9X.png";
