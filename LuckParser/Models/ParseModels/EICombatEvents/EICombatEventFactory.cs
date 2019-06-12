@@ -188,7 +188,7 @@ namespace LuckParser.Models.ParseModels
                         // missing end
                         if (startItem != null)
                         {
-                            res.Add(new AnimatedCastEvent(startItem, null, agentData, offset));
+                            res.Add(new AnimatedCastEvent(startItem, agentData, offset, c.LogTime));
                         }
                         startItem = c;
                     } else

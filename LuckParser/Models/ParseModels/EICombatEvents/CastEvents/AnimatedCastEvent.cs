@@ -11,21 +11,29 @@ namespace LuckParser.Models.ParseModels
     {
         public AnimatedCastEvent(CombatItem startItem, CombatItem endItem, AgentData agentData, long offset) : base(startItem, agentData, offset)
         {
-            if (endItem == null)
+            ActualDuration = endItem.Value;
+            Interrupted = endItem.IsActivation == ParseEnum.Activation.CancelCancel;
+            FullAnimation = endItem.IsActivation == ParseEnum.Activation.Reset;
+            ReducedAnimation = endItem.IsActivation == ParseEnum.Activation.CancelFire;
+            if (SkillId == SkillItem.DodgeId)
             {
-                ActualDuration = ExpectedDuration;
-            } else
+                ActualDuration = 750;
+            }
+        }
+
+        public AnimatedCastEvent(CombatItem startItem, AgentData agentData, long offset, long logEnd) : base(startItem, agentData, offset)
+        {
+            ActualDuration = ExpectedDuration;
+            if (ActualDuration + Time > logEnd - offset)
             {
-                ActualDuration = endItem.Value;
-                Interrupted = endItem.IsActivation == ParseEnum.Activation.CancelCancel;
-                FullAnimation = endItem.IsActivation == ParseEnum.Activation.Reset;
-                ReducedAnimation = endItem.IsActivation == ParseEnum.Activation.CancelFire;
+                ActualDuration = (int)(logEnd - offset - Time);
             }
             if (SkillId == SkillItem.DodgeId)
             {
                 ActualDuration = 750;
             }
         }
+        
 
         public AnimatedCastEvent(long time, long skillID, int duration, AgentItem caster) : base(time, skillID, caster)
         {
