@@ -42,7 +42,12 @@ namespace LuckParser.Models.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return 0;
+            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Sabir);
+            if (target == null)
+            {
+                throw new InvalidOperationException("Target for CM detection not found");
+            }
+            return (target.GetHealth(combatData) > 32e6) ? 1 : 0;
         }
     }
 }
