@@ -86,6 +86,10 @@ namespace LuckParser.Models.Logic
                     });
                 }
             }
+            foreach(PhaseData phase in mainPhases)
+            {
+                phase.Targets.Add(mainTarget);
+            }
             phases.AddRange(mainPhases);
             phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             return phases;
