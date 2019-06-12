@@ -21,7 +21,11 @@ namespace LuckParser.Models.Logic
 
         protected override CombatReplayMap GetCombatMapInternal()
         {
-            return null;
+            return new CombatReplayMap("https://wiki.guildwars2.com/images/5/52/The_Key_of_Ahdashim_map.jpg",
+                            (1920, 1664),
+                            (-21504, -21504, 24576, 24576),
+                            (-21504, -21504, 24576, 24576),
+                            (33530, 34050, 35450, 35970));
         }
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
