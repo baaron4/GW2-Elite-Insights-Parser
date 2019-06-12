@@ -197,6 +197,9 @@ namespace LuckParser.Models.ParseModels
             {
                 _weaponDescriptor = new WeaponDescriptor(_apiSkill);
             }
+#if DEBUG
+            Name += " (" + ID + ")";
+#endif
         }
 
         // Public Methods
