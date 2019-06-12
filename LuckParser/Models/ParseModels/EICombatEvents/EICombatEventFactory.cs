@@ -177,7 +177,7 @@ namespace LuckParser.Models.ParseModels
         public static List<AnimatedCastEvent> CreateCastEvents(List<CombatItem> castEvents, AgentData agentData, long offset)
         {
             List<AnimatedCastEvent> res = new List<AnimatedCastEvent>();
-            Dictionary<ulong, List<CombatItem>> castEventsBySrcAgent = castEvents.GroupBy(x => x.SrcAgent).ToDictionary(x => x.Key, x => x.ToList());
+            Dictionary<ushort, List<CombatItem>> castEventsBySrcAgent = castEvents.GroupBy(x => x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList());
             foreach (var pair in castEventsBySrcAgent)
             {
                 CombatItem startItem = null;
@@ -188,7 +188,7 @@ namespace LuckParser.Models.ParseModels
                         // missing end
                         if (startItem != null)
                         {
-                            res.Add(new AnimatedCastEvent(startItem, null, agentData, offset));
+                            res.Add(new AnimatedCastEvent(startItem, agentData, offset, c.LogTime));
                         }
                         startItem = c;
                     } else
