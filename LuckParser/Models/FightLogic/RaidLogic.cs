@@ -21,7 +21,8 @@ namespace LuckParser.Models.Logic
                 {
                     55821,
                     60685,
-                    914
+                    914,
+                    22797
                 };
             RewardEvent reward = combatData.GetRewardEvents().FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType));
             if (reward != null)
