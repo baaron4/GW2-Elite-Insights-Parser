@@ -27,7 +27,7 @@ namespace LuckParser.Models.ParseModels
         public override bool IsBoonSimulatorCompliant(long fightEnd)
         {
             return BuffID != ProfHelper.NoBuff &&
-                !(RemovedDuration <= 50 && _lastRemovedDuration <= 50) && // low value all stack remove that can mess up with the simulator if server delay
+                !(RemovedDuration <= 50 && RemovedDuration != 0 && _lastRemovedDuration <= 50 && _lastRemovedDuration != 0) && // low value all stack remove that can mess up with the simulator if server delay
                  Time <= fightEnd - 50; // don't take into account removal that are close to the end of the fight
         }
 
