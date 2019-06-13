@@ -46,6 +46,7 @@ namespace LuckParser.Models.ParseModels
             }
             else if (Positions.Count == 1 && !forceInterpolate)
             {
+                PolledPositions.Add(Positions[0]);
                 return;
             }
             int tablePos = 0;

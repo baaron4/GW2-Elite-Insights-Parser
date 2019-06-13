@@ -15,13 +15,14 @@ namespace LuckParser.Models.Logic
             Mode = ParseMode.Raid;
         }
 
-        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        public override void CheckSuccess(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             HashSet<int> raidRewardsTypes = new HashSet<int>
                 {
                     55821,
                     60685,
-                    914
+                    914,
+                    22797
                 };
             RewardEvent reward = combatData.GetRewardEvents().FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType));
             if (reward != null)

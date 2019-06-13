@@ -19,7 +19,7 @@ namespace LuckParser.Models.ParseModels
         {
             return BuffID != ProfHelper.NoBuff &&
                 !(_iff == ParseEnum.IFF.Unknown && By == GeneralHelper.UnknownAgent) && // weird single stack remove
-                !(RemovedDuration <= 50) &&// low value single stack remove that can mess up with the simulator if server delay
+                !(RemovedDuration <= 50 && RemovedDuration != 0) &&// low value single stack remove that can mess up with the simulator if server delay
                  Time <= fightEnd - 50; // don't take into account removal that are close to the end of the fight
         }
 
