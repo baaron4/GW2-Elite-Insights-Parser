@@ -14,6 +14,7 @@ namespace LuckParser.Models.Logic
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
+                new DamageOnPlayerMechanic(56202, "Dire Drafts", new MechanicPlotlySetting("circle","rgb(255,120,0)"), "B.Tornado", "Hit by big tornado", "Big Tornado Hit", 0),
             });
             // rotating cc 56403
             // interesting stuff 56372 (shock wave?) 56634 (big AoE?)
@@ -60,7 +61,7 @@ namespace LuckParser.Models.Logic
                 };
                 phase.Targets.Add(mainTarget);
                 phases.Add(phase);
-                AbstractCastEvent nextAttack = cls.FirstOrDefault(x => x.Time >= end + wW.ActualDuration && (x.SkillId == 56620 || x.SkillId == 56629));
+                AbstractCastEvent nextAttack = cls.FirstOrDefault(x => x.Time >= end + wW.ActualDuration && (x.SkillId == 56620 || x.SkillId == 56629 || x.SkillId == 56307));
                 if (nextAttack == null)
                 {
                     break;

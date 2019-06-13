@@ -14,7 +14,7 @@ namespace LuckParser.Models.Logic
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
-                new PlayerBoonApplyMechanic(56593, "Radiant Blindness", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "R.Blind", "Blindess applied if looking at Adina", "Radiant Blindness", 0)
+                new PlayerBoonApplyMechanic(56593, "Radiant Blindness", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "R.Blind", "Blindess applied if looking at Adina", "Radiant Blindness", 0)
             });
             Extension = "adina";
             IconUrl = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
