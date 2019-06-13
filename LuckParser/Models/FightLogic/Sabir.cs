@@ -15,8 +15,11 @@ namespace LuckParser.Models.Logic
             MechanicList.AddRange(new List<Mechanic>()
             {
             });
+            // rotating cc 56403
+            // interesting stuff 56372 (shock wave?) 56634 (big AoE?)
+            // regen cc 56349
             Extension = "sabir";
-            IconUrl = "";
+            IconUrl = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
@@ -31,10 +34,56 @@ namespace LuckParser.Models.Logic
             };
         }
 
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
+        {
+            List<PhaseData> phases = GetInitialPhase(log);
+            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Sabir);
+            if (mainTarget == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
+            phases[0].Targets.Add(mainTarget);
+            if (!requirePhases)
+            {
+                return phases;
+            }
+            List<AbstractCastEvent> cls = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> wallopingWinds = cls.Where(x => x.SkillId == 56094).ToList();
+            long start = 0, end = 0;
+            for (int i = 0; i < wallopingWinds.Count; i++)
+            {
+                AbstractCastEvent wW = wallopingWinds[i];
+                end = wW.Time;
+                PhaseData phase = new PhaseData(start, end)
+                {
+                    Name = "Phase " + (i + 1)
+                };
+                phase.Targets.Add(mainTarget);
+                phases.Add(phase);
+                AbstractCastEvent nextAttack = cls.FirstOrDefault(x => x.Time >= end + wW.ActualDuration && (x.SkillId == 56620 || x.SkillId == 56629));
+                if (nextAttack == null)
+                {
+                    break;
+                }
+                start = nextAttack.Time;
+                if (i == wallopingWinds.Count - 1)
+                {
+                    phase = new PhaseData(start, log.FightData.FightDuration)
+                    {
+                        Name = "Phase " + (i + 2)
+                    };
+                    phase.Targets.Add(mainTarget);
+                    phases.Add(phase);
+                }
+            }
+
+            return phases;
+        }
+
         protected override CombatReplayMap GetCombatMapInternal()
         {
-            return new CombatReplayMap("https://wiki.guildwars2.com/images/5/52/The_Key_of_Ahdashim_map.jpg",
-                            (1920, 1664),
+            return new CombatReplayMap("",
+                            (800, 800),
                             (-21504, -21504, 24576, 24576),
                             (-21504, -21504, 24576, 24576),
                             (33530, 34050, 35450, 35970));
