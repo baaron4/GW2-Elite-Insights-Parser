@@ -14,12 +14,24 @@ namespace LuckParser.Models.Logic
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
-                new PlayerBoonApplyMechanic(56593, "Radiant Blindness", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "R.Blind", "Blindess applied if looking at Adina", "Radiant Blindness", 0)
+                new PlayerBoonApplyMechanic(56040, "Blinding Radiance", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "R.Blind", "Blindess applied if looking at Adina", "Blinding Radiance", 0),
+                new DamageOnPlayerMechanic(56648, " Boulder Barrage", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Boulder", "Hit by boulder thrown during pillars", "Boulder Barrage", 0),
             });
             Extension = "adina";
             IconUrl = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
         }
 
+        public override void ComputeFightTargets(AgentData agentData, CombatData combatData)
+        {
+            base.ComputeFightTargets(agentData, combatData);
+            foreach (AgentItem hands in agentData.GetAgentByType(AgentItem.AgentType.Gadget))
+            {
+                if (combatData.GetAttackTargetEvents(hands).Count > 0)
+                {
+                    Targets.Add(new Target(hands));
+                }
+            }
+        }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
@@ -72,6 +84,17 @@ namespace LuckParser.Models.Logic
                     Name = "Phase " + i
                 });
                 PhaseData split = phases[i];
+                foreach (Target hand in Targets.Where(x => x.AgentItem != mainTarget.AgentItem))
+                {
+                    List<AgentItem> ats = log.CombatData.GetAttackTargetEvents(hand.AgentItem).Select(x => x.AttackTarget).ToList();
+                    foreach (AgentItem at in ats)
+                    {
+                        if (log.CombatData.GetTargetableEvents(at).Count(x => split.InInterval(x.Time) && x.Targetable) > 0)
+                        {
+                            split.Targets.Add(hand);
+                        }
+                    }
+                }
                 start = split.End;
                 if (i == phases.Count - 1 && start != log.FightData.FightDuration)
                 {
