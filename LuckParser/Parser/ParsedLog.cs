@@ -49,7 +49,7 @@ namespace LuckParser.Parser
             MechanicData = FightData.Logic.GetMechanicData();
             Statistics = new Statistics(CombatData, AgentData, FightData, PlayerList, Boons);
 
-            LegacyTarget = FightData.Logic.Targets.Find(x => x.ID == FightData.ID);
+            LegacyTarget = FightData.Logic.Targets.Find(x => x.ID == FightData.ID && x.AgentItem.Type == AgentItem.AgentType.NPC);
             if (LegacyTarget == null)
             {
                 LegacyTarget = new Target(GeneralHelper.UnknownAgent);
