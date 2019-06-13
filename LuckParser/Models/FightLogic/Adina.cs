@@ -16,7 +16,7 @@ namespace LuckParser.Models.Logic
             {
             });
             Extension = "adina";
-            IconUrl = "";
+            IconUrl = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
         }
 
 
@@ -35,12 +35,6 @@ namespace LuckParser.Models.Logic
             }
             List<AbstractCastEvent> quantumQuakes = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 56035).ToList();
             List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, 762, mainTarget, true);
-            // fail check
-            int quantumToInvulCounts = 2 * quantumQuakes.Count;
-            if (quantumToInvulCounts != invuls.Count && quantumToInvulCounts != invuls.Count + 1)
-            {
-                return phases;
-            }
             long start = 0, end = 0;
             for (int i = 0; i < invuls.Count; i++)
             {
@@ -98,8 +92,8 @@ namespace LuckParser.Models.Logic
 
         protected override CombatReplayMap GetCombatMapInternal()
         {
-            return new CombatReplayMap("https://wiki.guildwars2.com/images/5/52/The_Key_of_Ahdashim_map.jpg",
-                            (1920, 1664),
+            return new CombatReplayMap("",
+                            (800, 800),
                             (-21504, -21504, 24576, 24576),
                             (-21504, -21504, 24576, 24576),
                             (33530, 34050, 35450, 35970));

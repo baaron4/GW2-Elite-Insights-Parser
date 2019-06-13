@@ -17,10 +17,8 @@ facingIcon.onload = function () {
     animateCanvas(-1);
 };
 const bgImage = new Image();
-let bgLoaded = false;
 bgImage.onload = function () {
     animateCanvas(-1);
-    bgLoaded = true;
 };
 
 // https://stackoverflow.com/questions/11381673/detecting-a-mobile-browser
@@ -459,7 +457,7 @@ function animateCanvas(noRequest) {
         return;
     }
     let lastTime = animator.times[animator.times.length - 1];
-    if (noRequest > -1 && animator.animation !== null && bgLoaded) {
+    if (noRequest > -1 && animator.animation !== null) {
         let curTime = new Date().getTime();
         let timeOffset = curTime - animator.prevTime;
         animator.prevTime = curTime;
@@ -473,7 +471,7 @@ function animateCanvas(noRequest) {
         animator.updateTextInput();
     }
     animator.draw();
-    if (noRequest > -1 && animator.animation !== null && bgLoaded) {
+    if (noRequest > -1 && animator.animation !== null) {
         animator.animation = requestAnimationFrame(animateCanvas);
     }
 }
