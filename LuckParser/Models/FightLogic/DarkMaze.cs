@@ -77,7 +77,7 @@ namespace LuckParser.Models.Logic
             return phases;
         }
 
-        private void HPCheck(CombatData combatData, AgentData agentData, FightData fightData)
+        private void HPCheck(CombatData combatData, FightData fightData)
         {
             Target eye1 = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.EyeOfFate);
             Target eye2 = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.EyeOfJudgement);
@@ -119,14 +119,14 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        public override void CheckSuccess(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             // First check using hp, best
-            HPCheck(combatData, agentData, fightData);
+            HPCheck(combatData, fightData);
             // hp could be unreliable or missing, fall back (around 200 ms more)
             if (!fightData.Success)
             {
-                SetSuccessByDeath(combatData, agentData, fightData, false, (ushort)ParseEnum.TargetIDS.EyeOfFate, (ushort)ParseEnum.TargetIDS.EyeOfJudgement);
+                SetSuccessByDeath(combatData, fightData, false, (ushort)ParseEnum.TargetIDS.EyeOfFate, (ushort)ParseEnum.TargetIDS.EyeOfJudgement);
             }
         }
 

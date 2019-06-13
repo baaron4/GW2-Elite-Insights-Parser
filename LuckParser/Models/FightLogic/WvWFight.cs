@@ -48,7 +48,7 @@ namespace LuckParser.Models.Logic
             return phases;
         }
 
-        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        public override void CheckSuccess(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             fightData.SetSuccess(true, fightData.FightEndLogTime);
         }

@@ -232,7 +232,7 @@ namespace LuckParser.Models.Logic
             return -1;
         }
 
-        protected void SetSuccessByDeath(CombatData combatData, AgentData agentData, FightData fightData, bool all, ushort idFirst, params ushort[] ids)
+        protected void SetSuccessByDeath(CombatData combatData, FightData fightData, bool all, ushort idFirst, params ushort[] ids)
         {
             int success = 0;
             long maxTime = long.MinValue;
@@ -261,9 +261,9 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public virtual void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        public virtual void CheckSuccess(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByDeath(combatData, agentData, fightData, true, TriggerID);
+            SetSuccessByDeath(combatData, fightData, true, TriggerID);
         }
 
         public virtual void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
