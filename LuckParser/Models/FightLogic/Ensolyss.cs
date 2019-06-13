@@ -9,7 +9,7 @@ namespace LuckParser.Models.Logic
 {
     public class Ensolyss : FractalLogic
     {
-        public Ensolyss(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        public Ensolyss(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -48,7 +48,7 @@ namespace LuckParser.Models.Logic
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // Find target
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Ensolyss);
+            AgentItem target = agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.Ensolyss).FirstOrDefault();
             if (target == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");

@@ -9,7 +9,7 @@ namespace LuckParser.Models.Logic
 {
     public class Slothasor : RaidLogic
     {
-        public Slothasor(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        public Slothasor(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

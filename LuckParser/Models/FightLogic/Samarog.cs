@@ -9,7 +9,7 @@ namespace LuckParser.Models.Logic
 {
     public class Samarog : RaidLogic
     {
-        public Samarog(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        public Samarog(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

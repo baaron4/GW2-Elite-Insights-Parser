@@ -10,12 +10,12 @@ namespace LuckParser.Models.Logic
 {
     public abstract class RaidLogic : FightLogic
     {
-        protected RaidLogic(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        protected RaidLogic(ushort triggerID) : base(triggerID)
         {
             Mode = ParseMode.Raid;
         }
 
-        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        public override void CheckSuccess(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             HashSet<int> raidRewardsTypes = new HashSet<int>
                 {

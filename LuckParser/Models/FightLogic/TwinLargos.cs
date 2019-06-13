@@ -8,7 +8,7 @@ namespace LuckParser.Models.Logic
 {
     public class TwinLargos : RaidLogic
     {
-        public TwinLargos(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        public TwinLargos(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

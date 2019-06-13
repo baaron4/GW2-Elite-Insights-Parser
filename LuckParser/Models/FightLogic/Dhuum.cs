@@ -13,7 +13,7 @@ namespace LuckParser.Models.Logic
         private short _reapersSeen;
         private int _greenStart;
 
-        public Dhuum(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        public Dhuum(ushort triggerID) : base(triggerID)
         {
             _isBugged = false;
             _reapersSeen = -7;

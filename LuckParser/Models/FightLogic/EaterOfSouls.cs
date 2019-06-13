@@ -10,7 +10,7 @@ namespace LuckParser.Models.Logic
     public class EaterOfSouls : RaidLogic
     {
         // TODO - add CR icons/indicators (vomit, greens, etc) and some mechanics
-        public EaterOfSouls(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        public EaterOfSouls(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange( new List<Mechanic>
             {
@@ -135,9 +135,9 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        public override void CheckSuccess(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByDeath(combatData, agentData, fightData, true, TriggerID);
+            SetSuccessByDeath(combatData, fightData, true, TriggerID);
         }
 
         public override string GetFightName()

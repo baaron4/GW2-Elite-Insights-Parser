@@ -53,7 +53,8 @@ namespace LuckParser.Parser
 
         private void UpdateFightData()
         {
-            FightData.Logic.CheckSuccess(CombatData, AgentData, FightData, PlayerAgents);
+            FightData.Logic.ComputeFightTargets(AgentData, CombatData);
+            FightData.Logic.CheckSuccess(CombatData, FightData, PlayerAgents);
             if (FightData.FightDuration <= 2200)
             {
                 throw new TooShortException();

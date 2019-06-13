@@ -13,7 +13,7 @@ namespace LuckParser.Models.Logic
 
         private long _specialSplitLogTime = 0;
 
-        public Xera(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        public Xera(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -73,6 +73,7 @@ namespace LuckParser.Models.Logic
                 // split happened
                 if (_specialSplitLogTime > 0)
                 {
+                    mainTarget.SetManualHealth(24085950);
                     start = log.FightData.ToFightSpace(_specialSplitLogTime);
                     //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
                     phases.Add(new PhaseData(start, fightDuration));
@@ -90,7 +91,7 @@ namespace LuckParser.Models.Logic
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // find target
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Xera);
+            AgentItem target = agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.Xera).FirstOrDefault();
             if (target == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -106,7 +107,6 @@ namespace LuckParser.Models.Logic
             {
                 if (NPC.ID == 16286)
                 {
-                    target.SetManualHealth(24085950);
                     CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position && x.SrcInstid == NPC.InstID && x.LogTime >= NPC.FirstAwareLogTime + 500 && x.LogTime <= NPC.LastAwareLogTime);
                     if (move != null)
                     {
@@ -116,7 +116,7 @@ namespace LuckParser.Models.Logic
                     {
                         _specialSplitLogTime = NPC.FirstAwareLogTime;
                     }
-                    target.AgentItem.LastAwareLogTime = NPC.LastAwareLogTime;
+                    target.LastAwareLogTime = NPC.LastAwareLogTime;
                     // get unique id for the fusion
                     ushort instID = 0;
                     Random rnd = new Random();
@@ -124,7 +124,7 @@ namespace LuckParser.Models.Logic
                     {
                         instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
                     }
-                    target.AgentItem.InstID = instID;
+                    target.InstID = instID;
                     agentData.Refresh();
                     HashSet<ulong> agents = new HashSet<ulong>() { NPC.Agent, target.Agent };
                     // update combat data

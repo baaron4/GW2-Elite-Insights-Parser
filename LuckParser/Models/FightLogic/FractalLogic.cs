@@ -9,7 +9,7 @@ namespace LuckParser.Models.Logic
 {
     public abstract class FractalLogic : FightLogic
     {
-        protected FractalLogic(ushort triggerID, AgentData agentData) : base (triggerID, agentData)
+        protected FractalLogic(ushort triggerID) : base (triggerID)
         { 
             Mode = ParseMode.Fractal;
             MechanicList.AddRange(new List<Mechanic>
@@ -52,7 +52,7 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        public override void CheckSuccess(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             // check reward
             Target mainTarget = Targets.Find(x => x.ID == TriggerID);
@@ -70,7 +70,7 @@ namespace LuckParser.Models.Logic
                 }
                 else
                 {
-                    SetSuccessByDeath(combatData, agentData, fightData, true, TriggerID);
+                    SetSuccessByDeath(combatData, fightData, true, TriggerID);
                     if (fightData.Success)
                     {
                         fightData.SetSuccess(true, Math.Min(fightData.FightEndLogTime, fightData.ToLogSpace(lastDamageTaken.Time)));

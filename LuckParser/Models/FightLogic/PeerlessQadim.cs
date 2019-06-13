@@ -10,7 +10,7 @@ namespace LuckParser.Models.Logic
 {
     public class PeerlessQadim : RaidLogic
     {
-        public PeerlessQadim(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        public PeerlessQadim(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>()
             {

@@ -9,7 +9,7 @@ namespace LuckParser.Models.Logic
 {
     public class KeepConstruct : RaidLogic
     {
-        public KeepConstruct(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        public KeepConstruct(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

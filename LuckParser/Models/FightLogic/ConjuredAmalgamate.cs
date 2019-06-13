@@ -9,7 +9,7 @@ namespace LuckParser.Models.Logic
 {
     public class ConjuredAmalgamate : RaidLogic
     {
-        public ConjuredAmalgamate(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        public ConjuredAmalgamate(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

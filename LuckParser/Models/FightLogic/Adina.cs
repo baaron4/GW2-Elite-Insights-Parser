@@ -10,7 +10,7 @@ namespace LuckParser.Models.Logic
 {
     public class Adina : RaidLogic
     {
-        public Adina(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        public Adina(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>()
             {

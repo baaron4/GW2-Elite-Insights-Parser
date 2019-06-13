@@ -24,7 +24,7 @@ namespace LuckParser.Models.Logic
         public List<Target> Targets { get; } = new List<Target>();
         protected readonly ushort TriggerID;
 
-        protected FightLogic(ushort triggerID, AgentData agentData)
+        protected FightLogic(ushort triggerID)
         {
             TriggerID = triggerID;
             HasCombatReplayMap = GetCombatMap() != null;
@@ -37,13 +37,6 @@ namespace LuckParser.Models.Logic
                 new PlayerStatusMechanic(SkillItem.RespawnId, "Respawn", new MechanicPlotlySetting("cross","rgb(120,120,255)"), "Resp",0)
             };
             _basicMechanicsCount = MechanicList.Count;
-            List<ParseEnum.TrashIDS> ids = GetTrashMobsIDS();
-            List<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
-            foreach (AgentItem a in aList)
-            {
-                Mob mob = new Mob(a);
-                TrashMobs.Add(mob);
-            }
         }
 
         public MechanicData GetMechanicData()
@@ -86,10 +79,8 @@ namespace LuckParser.Models.Logic
         private void RegroupTargetsByID(ushort id, AgentData agentData, List<CombatItem> combatItems)
         {
             List<AgentItem> agents = agentData.GetAgentsByID(id);
-            List<Target> toRegroup = Targets.Where(x => x.ID == id).ToList();
-            if (agents.Count > 1 && toRegroup.Count > 1)
+            if (agents.Count > 1)
             {
-                Targets.RemoveAll(x => x.ID == id);
                 AgentItem firstItem = agents.First();
                 HashSet<ulong> agentValues = new HashSet<ulong>(agents.Select(x => x.Agent));
                 AgentItem newTargetAgent = new AgentItem(firstItem)
@@ -106,7 +97,6 @@ namespace LuckParser.Models.Logic
                 }
                 newTargetAgent.InstID = instID;
                 agentData.OverrideID(id, newTargetAgent);
-                Targets.Add(new Target(newTargetAgent));
                 foreach (CombatItem c in combatItems)
                 {
                     if (agentValues.Contains(c.SrcAgent))
@@ -123,7 +113,15 @@ namespace LuckParser.Models.Logic
 
         protected abstract HashSet<ushort> GetUniqueTargetIDs();
 
-        public void ComputeFightTargets(AgentData agentData, FightData fightData, List<CombatItem> combatItems)
+        public void ProcessFightTargets(AgentData agentData, FightData fightData, List<CombatItem> combatItems)
+        {
+            foreach (ushort id in GetUniqueTargetIDs())
+            {
+                RegroupTargetsByID(id, agentData, combatItems);
+            }
+        }
+
+        public virtual void ComputeFightTargets(AgentData agentData, CombatData combatData)
         {
             List<ushort> ids = GetFightTargetsIDs();
             foreach (ushort id in ids)
@@ -134,9 +132,12 @@ namespace LuckParser.Models.Logic
                     Targets.Add(new Target(agentItem));
                 }
             }
-            foreach (ushort id in GetUniqueTargetIDs())
+            List<ParseEnum.TrashIDS> ids2 = GetTrashMobsIDS();
+            List<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
+            foreach (AgentItem a in aList)
             {
-                RegroupTargetsByID(id, agentData, combatItems);
+                Mob mob = new Mob(a);
+                TrashMobs.Add(mob);
             }
         }
 
@@ -232,7 +233,7 @@ namespace LuckParser.Models.Logic
             return -1;
         }
 
-        protected void SetSuccessByDeath(CombatData combatData, AgentData agentData, FightData fightData, bool all, ushort idFirst, params ushort[] ids)
+        protected void SetSuccessByDeath(CombatData combatData, FightData fightData, bool all, ushort idFirst, params ushort[] ids)
         {
             int success = 0;
             long maxTime = long.MinValue;
@@ -261,9 +262,9 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public virtual void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        public virtual void CheckSuccess(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByDeath(combatData, agentData, fightData, true, TriggerID);
+            SetSuccessByDeath(combatData, fightData, true, TriggerID);
         }
 
         public virtual void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)

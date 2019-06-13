@@ -9,7 +9,7 @@ namespace LuckParser.Models.Logic
 {
     public class WvWFight : FightLogic
     {
-        public WvWFight(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        public WvWFight(ushort triggerID) : base(triggerID)
         {
             Extension = "wvw";
             Mode = ParseMode.WvW;
@@ -48,7 +48,7 @@ namespace LuckParser.Models.Logic
             return phases;
         }
 
-        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        public override void CheckSuccess(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             fightData.SetSuccess(true, fightData.FightEndLogTime);
         }

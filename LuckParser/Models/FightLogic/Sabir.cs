@@ -10,7 +10,7 @@ namespace LuckParser.Models.Logic
 {
     public class Sabir : RaidLogic
     {
-        public Sabir(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        public Sabir(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>()
             {

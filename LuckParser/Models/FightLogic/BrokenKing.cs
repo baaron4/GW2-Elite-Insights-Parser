@@ -10,7 +10,7 @@ namespace LuckParser.Models.Logic
     public class BrokenKing : RaidLogic
     {
         // TODO - add CR icons and some mechanics
-        public BrokenKing(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        public BrokenKing(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange( new List<Mechanic>
             {
@@ -78,9 +78,9 @@ namespace LuckParser.Models.Logic
         }
 
 
-        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        public override void CheckSuccess(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByDeath(combatData, agentData, fightData, true, TriggerID);
+            SetSuccessByDeath(combatData, fightData, true, TriggerID);
         }
 
         public override string GetFightName() {

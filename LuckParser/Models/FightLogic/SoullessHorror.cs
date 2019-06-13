@@ -9,7 +9,7 @@ namespace LuckParser.Models.Logic
 {
     public class SoullessHorror : RaidLogic
     {
-        public SoullessHorror(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        public SoullessHorror(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
