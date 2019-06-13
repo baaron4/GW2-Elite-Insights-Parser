@@ -9,7 +9,7 @@ namespace LuckParser.Models.Logic
 {
     public class River : RaidLogic
     {
-        public River(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        public River(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange( new List<Mechanic>
             {

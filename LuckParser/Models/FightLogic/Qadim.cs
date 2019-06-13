@@ -10,7 +10,7 @@ namespace LuckParser.Models.Logic
 {
     public class Qadim : RaidLogic
     {
-        public Qadim(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        public Qadim(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             { 
@@ -97,7 +97,7 @@ namespace LuckParser.Models.Logic
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // Find target
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Qadim);
+            AgentItem target = agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.Qadim).FirstOrDefault();
             if (target == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");

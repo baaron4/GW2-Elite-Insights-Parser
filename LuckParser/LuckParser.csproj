@@ -99,9 +99,12 @@
     <Compile Include="Builders\Helpers\CSVHelper.cs" />
     <Compile Include="GeneralHelper.cs" />
     <Compile Include="Controllers\FlashWindow.cs" />
+    <Compile Include="Models\FightLogic\PeerlessQadim.cs" />
+    <Compile Include="Models\FightLogic\Sabir.cs" />
     <Compile Include="Models\FightLogic\EaterOfSouls.cs" />
     <Compile Include="Models\FightLogic\DarkMaze.cs" />
     <Compile Include="Models\FightLogic\BrokenKing.cs" />
+    <Compile Include="Models\FightLogic\Adina.cs" />
     <Compile Include="Models\FightLogic\River.cs" />
     <Compile Include="Models\FightLogic\Escort.cs" />
     <Compile Include="Models\FightLogic\WvWFight.cs" />

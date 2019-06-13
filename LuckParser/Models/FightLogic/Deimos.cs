@@ -12,7 +12,7 @@ namespace LuckParser.Models.Logic
 
         private long _specialSplitLogTime = 0;
 
-        public Deimos(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        public Deimos(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -60,7 +60,7 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        private void SetUniqueID(Target target, HashSet<ulong> gadgetAgents, AgentData agentData, List<CombatItem> combatData)
+        private void SetUniqueID(AgentItem target, HashSet<ulong> gadgetAgents, AgentData agentData, List<CombatItem> combatData)
         {
             // get unique id for the fusion
             ushort instID = 0;
@@ -69,7 +69,7 @@ namespace LuckParser.Models.Logic
             {
                 instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
             }
-            target.AgentItem.InstID = instID;
+            target.InstID = instID;
             agentData.Refresh();
             HashSet<ulong> allAgents = new HashSet<ulong>(gadgetAgents)
             {
@@ -96,14 +96,10 @@ namespace LuckParser.Models.Logic
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // Find target
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Deimos);
+            AgentItem target = agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.Deimos).FirstOrDefault();
             if (target == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
-            }
-            if (!target.Character.Contains("Deimos"))
-            {
-                target.OverrideName("Deimos");
             }
             // enter combat
             CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcInstid == target.InstID && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
@@ -150,7 +146,7 @@ namespace LuckParser.Models.Logic
                 }
                 invulApp.OverrideValue((int)(firstAware - invulApp.LogTime));
                 _specialSplitLogTime = (firstAware >= target.LastAwareLogTime ? firstAware : target.LastAwareLogTime);
-                target.AgentItem.LastAwareLogTime = combatData.Last().LogTime;
+                target.LastAwareLogTime = combatData.Last().LogTime;
                 SetUniqueID(target, gadgetAgents, agentData, combatData);
             }
             // legacy method
@@ -158,7 +154,7 @@ namespace LuckParser.Models.Logic
             {
                 long firstAware = deimosGadgets.Max(x => x.FirstAwareLogTime);
                 _specialSplitLogTime = (firstAware >= target.LastAwareLogTime ? firstAware : target.LastAwareLogTime);
-                target.AgentItem.LastAwareLogTime = deimosGadgets.Max(x => x.LastAwareLogTime);
+                target.LastAwareLogTime = deimosGadgets.Max(x => x.LastAwareLogTime);
                 HashSet<ulong> gadgetAgents = new HashSet<ulong>(deimosGadgets.Select(x => x.Agent));
                 SetUniqueID(target, gadgetAgents, agentData, combatData);
             }

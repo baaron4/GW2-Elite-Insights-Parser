@@ -10,7 +10,7 @@ namespace LuckParser.Models.Logic
 {
     public abstract class RaidLogic : FightLogic
     {
-        protected RaidLogic(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        protected RaidLogic(ushort triggerID) : base(triggerID)
         {
             Mode = ParseMode.Raid;
         }
@@ -24,7 +24,8 @@ namespace LuckParser.Models.Logic
                     914,
                     22797
                 };
-            RewardEvent reward = combatData.GetRewardEvents().FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType));
+            List<RewardEvent> rewards = combatData.GetRewardEvents();
+            RewardEvent reward = rewards.FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType));
             if (reward != null)
             {
                 fightData.SetSuccess(true, fightData.ToLogSpace(reward.Time));

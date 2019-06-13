@@ -9,7 +9,7 @@ namespace LuckParser.Models.Logic
 {
     public class MAMA : FractalLogic
     {
-        public MAMA(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        public MAMA(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

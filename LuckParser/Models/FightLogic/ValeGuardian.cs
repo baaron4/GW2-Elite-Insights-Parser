@@ -9,7 +9,7 @@ namespace LuckParser.Models.Logic
 {
     public class ValeGuardian : RaidLogic
     {
-        public ValeGuardian(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        public ValeGuardian(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

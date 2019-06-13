@@ -51,7 +51,9 @@ namespace LuckParser.Models.ParseModels
             // Keep Construct
             {35048, "Magic Blast Charge" },
             // CA
-            {52325, "Conjured Greatsword" }
+            {52325, "Conjured Greatsword" },
+            // Sabir
+            {56349, "Regenerative Breakbar" }
         };
 
         readonly static Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
@@ -197,6 +199,9 @@ namespace LuckParser.Models.ParseModels
             {
                 _weaponDescriptor = new WeaponDescriptor(_apiSkill);
             }
+#if DEBUG
+            Name += " (" + ID + ")";
+#endif
         }
 
         // Public Methods

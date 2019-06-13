@@ -9,7 +9,7 @@ namespace LuckParser.Models.Logic
 {
     public abstract class FractalLogic : FightLogic
     {
-        protected FractalLogic(ushort triggerID, AgentData agentData) : base (triggerID, agentData)
+        protected FractalLogic(ushort triggerID) : base (triggerID)
         { 
             Mode = ParseMode.Fractal;
             MechanicList.AddRange(new List<Mechanic>

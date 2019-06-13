@@ -10,7 +10,7 @@ namespace LuckParser.Models.Logic
 {
     public class MursaatOverseer : RaidLogic
     {
-        public MursaatOverseer(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        public MursaatOverseer(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>()
             {

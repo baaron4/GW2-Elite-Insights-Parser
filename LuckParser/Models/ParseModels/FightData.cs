@@ -38,61 +38,61 @@ namespace LuckParser.Models.ParseModels
             switch (ParseEnum.GetTargetIDS(id))
             {
                 case ParseEnum.TargetIDS.ValeGuardian:
-                    Logic = new ValeGuardian(id, agentData);
+                    Logic = new ValeGuardian(id);
                     break;
                 case ParseEnum.TargetIDS.Gorseval:
-                    Logic = new Gorseval(id, agentData);
+                    Logic = new Gorseval(id);
                     break;
                 case ParseEnum.TargetIDS.Sabetha:
-                    Logic = new Sabetha(id, agentData);
+                    Logic = new Sabetha(id);
                     break;
                 case ParseEnum.TargetIDS.Slothasor:
-                    Logic = new Slothasor(id, agentData);
+                    Logic = new Slothasor(id);
                     break;
                 case ParseEnum.TargetIDS.Zane:
                 case ParseEnum.TargetIDS.Berg:
                 case ParseEnum.TargetIDS.Narella:
-                    Logic = new BanditTrio(id, agentData);
+                    Logic = new BanditTrio(id);
                     break;
                 case ParseEnum.TargetIDS.Matthias:
-                    Logic = new Matthias(id, agentData);
+                    Logic = new Matthias(id);
                     break;
                 /*case ParseEnum.TargetIDS.Escort:
                     Logic = new Escort(id, agentData);
                     break;*/
                 case ParseEnum.TargetIDS.KeepConstruct:
-                    Logic = new KeepConstruct(id, agentData);
+                    Logic = new KeepConstruct(id);
                     break;
                 case ParseEnum.TargetIDS.Xera:
-                    Logic = new Xera(id, agentData);
+                    Logic = new Xera(id);
                     break;
                 case ParseEnum.TargetIDS.Cairn:
-                    Logic = new Cairn(id, agentData);
+                    Logic = new Cairn(id);
                     break;
                 case ParseEnum.TargetIDS.MursaatOverseer:
-                    Logic = new MursaatOverseer(id, agentData);
+                    Logic = new MursaatOverseer(id);
                     break;
                 case ParseEnum.TargetIDS.Samarog:
-                    Logic = new Samarog(id, agentData);
+                    Logic = new Samarog(id);
                     break;
                 case ParseEnum.TargetIDS.Deimos:
-                    Logic = new Deimos(id, agentData);
+                    Logic = new Deimos(id);
                     break;
                 case ParseEnum.TargetIDS.SoullessHorror:
-                    Logic = new SoullessHorror(id, agentData);
+                    Logic = new SoullessHorror(id);
                     break;
                 case ParseEnum.TargetIDS.Desmina:
-                    Logic = new River(id, agentData);
+                    Logic = new River(id);
                     break;
                 case ParseEnum.TargetIDS.BrokenKing:
-                    Logic = new BrokenKing(id, agentData);
+                    Logic = new BrokenKing(id);
                     break;
                 case ParseEnum.TargetIDS.SoulEater:
-                    Logic = new EaterOfSouls(id, agentData);
+                    Logic = new EaterOfSouls(id);
                     break;
                 case ParseEnum.TargetIDS.EyeOfFate:
                 case ParseEnum.TargetIDS.EyeOfJudgement:
-                    Logic = new DarkMaze(id, agentData);
+                    Logic = new DarkMaze(id);
                     break;
                 case ParseEnum.TargetIDS.Dhuum:
                     // some eyes log are registered as Dhuum
@@ -100,55 +100,64 @@ namespace LuckParser.Models.ParseModels
                         agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.EyeOfJudgement).Count > 0)
                     {
                         ID = (ushort)ParseEnum.TargetIDS.EyeOfFate;
-                        Logic = new DarkMaze((ushort)ParseEnum.TargetIDS.EyeOfFate, agentData);
+                        Logic = new DarkMaze((ushort)ParseEnum.TargetIDS.EyeOfFate);
                         break;
                     }
-                    Logic = new Dhuum(id, agentData);
+                    Logic = new Dhuum(id);
                     break;
                 case ParseEnum.TargetIDS.ConjuredAmalgamate:
-                    Logic = new ConjuredAmalgamate(id, agentData);
+                    Logic = new ConjuredAmalgamate(id);
                     break;
                 case ParseEnum.TargetIDS.Kenut:
                 case ParseEnum.TargetIDS.Nikare:
-                    Logic = new TwinLargos(id, agentData);
+                    Logic = new TwinLargos(id);
                     break;
                 case ParseEnum.TargetIDS.Qadim:
-                    Logic = new Qadim(id, agentData);
+                    Logic = new Qadim(id);
                     break;
                 case ParseEnum.TargetIDS.Freezie:
-                    Logic = new Freezie(id, agentData);
+                    Logic = new Freezie(id);
+                    break;
+                case ParseEnum.TargetIDS.Adina:
+                    Logic = new Adina(id);
+                    break;
+                case ParseEnum.TargetIDS.Sabir:
+                    Logic = new Sabir(id);
+                    break;
+                case ParseEnum.TargetIDS.PeerlessQadim:
+                    Logic = new PeerlessQadim(id);
                     break;
                 case ParseEnum.TargetIDS.MAMA:
-                    Logic = new MAMA(id, agentData);
+                    Logic = new MAMA(id);
                     break;
                 case ParseEnum.TargetIDS.Siax:
-                    Logic = new Siax(id, agentData);
+                    Logic = new Siax(id);
                     break;
                 case ParseEnum.TargetIDS.Ensolyss:
-                    Logic = new Ensolyss(id, agentData);
+                    Logic = new Ensolyss(id);
                     break;
                 case ParseEnum.TargetIDS.Skorvald:
-                    Logic = new Skorvald(id, agentData);
+                    Logic = new Skorvald(id);
                     break;
                 case ParseEnum.TargetIDS.Artsariiv:
-                    Logic = new Artsariiv(id, agentData);
+                    Logic = new Artsariiv(id);
                     break;
                 case ParseEnum.TargetIDS.Arkk:
-                    Logic = new Arkk(id, agentData);
+                    Logic = new Arkk(id);
                     break;
                 case ParseEnum.TargetIDS.WorldVersusWorld:
-                    Logic = new WvWFight(id, agentData);
+                    Logic = new WvWFight(id);
                     break;
                 case ParseEnum.TargetIDS.MassiveGolem:
                 case ParseEnum.TargetIDS.AvgGolem:
                 case ParseEnum.TargetIDS.LGolem:
                 case ParseEnum.TargetIDS.MedGolem:
                 case ParseEnum.TargetIDS.StdGolem:
-                    Logic = new Golem(id, agentData);
+                    Logic = new Golem(id);
                     break;
                 default:
                     // Unknown
-                    Logic = new UnknownFightLogic(id, agentData);
+                    Logic = new UnknownFightLogic(id);
                     break;
             }
         }

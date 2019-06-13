@@ -8,7 +8,7 @@ namespace LuckParser.Models.Logic
 {
     public class Golem : FightLogic
     {
-        public Golem(ushort id, AgentData agentData) : base(id, agentData)
+        public Golem(ushort id) : base(id)
         {
             Mode = ParseMode.Golem;  
             switch (id)
@@ -38,7 +38,7 @@ namespace LuckParser.Models.Logic
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            Target target = Targets.Find(x => x.ID == TriggerID);
+            AgentItem target = agentData.GetAgentsByID(TriggerID).FirstOrDefault();
             foreach (CombatItem c in combatData)
             {
                 // redirect all attacks to the main golem

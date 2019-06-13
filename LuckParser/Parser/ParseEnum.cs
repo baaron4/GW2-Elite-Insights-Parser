@@ -281,6 +281,17 @@ namespace LuckParser.Parser
             WyvernMatriarch = 20997,
             WyvernPatriarch = 21183,
             Zommoros = 20961, //21118 is probably the start and end NPC, not the one during the battle
+            // Adina
+            // Sabir
+            ParalyzingWisp = 21955,
+            VoltaicWisp = 21975,
+            SmallJumpyTornado = 21961,
+            SmallKillerTornado = 21957,
+            BigKillerTornado = 21987,
+            // Peerless Qadim
+            Pylon1 = 21996,
+            Pylon2 = 21962,
+            EntropicDistortion = 21973,
             // Freezie
             FreeziesFrozenHeart = 21328,
             // Fractals
@@ -330,6 +341,7 @@ namespace LuckParser.Parser
         public enum TargetIDS : ushort
         {
             WorldVersusWorld        = 1,
+            // Raid
             ValeGuardian            = 15438,
             Gorseval                = 15429,
             Sabetha                 = 15375,
@@ -359,12 +371,17 @@ namespace LuckParser.Parser
             Kenut                   = 21089,
             Qadim                   = 20934,
             Freezie                 = 21333,
+            Adina                   = 22006,
+            Sabir                   = 21964,
+            PeerlessQadim           = 22000,
+            // Fract
             MAMA                    = 17021,
             Siax                    = 17028,
             Ensolyss                = 16948,
             Skorvald                = 17632,
             Artsariiv               = 17949,
             Arkk                    = 17759,
+            // Golems
             MassiveGolem            = 16202,
             AvgGolem                = 16177,
             LGolem                  = 19676,

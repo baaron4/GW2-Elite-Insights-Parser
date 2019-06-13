@@ -9,7 +9,7 @@ namespace LuckParser.Models.Logic
 {
     public class WvWFight : FightLogic
     {
-        public WvWFight(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        public WvWFight(ushort triggerID) : base(triggerID)
         {
             Extension = "wvw";
             Mode = ParseMode.WvW;

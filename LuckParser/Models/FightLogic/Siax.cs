@@ -9,7 +9,7 @@ namespace LuckParser.Models.Logic
 {
     public class Siax : FractalLogic
     {
-        public Siax(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        public Siax(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

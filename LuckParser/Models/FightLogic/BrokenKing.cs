@@ -10,7 +10,7 @@ namespace LuckParser.Models.Logic
     public class BrokenKing : RaidLogic
     {
         // TODO - add CR icons and some mechanics
-        public BrokenKing(ushort triggerID, AgentData agentData) : base(triggerID, agentData)
+        public BrokenKing(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange( new List<Mechanic>
             {

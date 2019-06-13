@@ -549,6 +549,11 @@ namespace LuckParser
                 case SurgingSoul:
                 //case MazeMinotaur:
                 case Enervator:
+                case SmallKillerTornado:
+                case BigKillerTornado:
+                case Pylon1:
+                case Pylon2:
+                case EntropicDistortion:
                     return "https://i.imgur.com/k79t7ZA.png";
                 case OrbSpider:
                     return "https://i.imgur.com/FB5VM9X.png";
@@ -566,6 +571,7 @@ namespace LuckParser
                 case GreenSpirit1:
                 case GreenSpirit2:
                 case BanditSapper:
+                case SmallJumpyTornado:
                     return "https://i.imgur.com/0koP4xB.png";
                 case FleshWurm:
                     return "https://i.imgur.com/o3vX9Zc.png";
