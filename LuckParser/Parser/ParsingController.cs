@@ -65,12 +65,7 @@ namespace LuckParser.Parser
                     ParseLog(row, fs);
                 }
             }
-            Target legacyTarget = _fightData.Logic.Targets.Find(x => x.ID == _fightData.ID);
-            if (legacyTarget == null)
-            {
-                legacyTarget = new Target(GeneralHelper.UnknownAgent);
-            }
-            return new ParsedLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, legacyTarget);
+            return new ParsedLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList);
         }
 
         private void ParseLog(GridRow row, Stream stream)
@@ -458,7 +453,7 @@ namespace LuckParser.Parser
                     {
                         if (agent.InstID == 0)
                         {
-                            agent.InstID = c.SrcInstid;
+                            agent.InstID = c.IsStateChange != ParseEnum.StateChange.None ? c.SrcInstid : (ushort)0;
                             if (agent.FirstAwareLogTime == 0)
                             {
                                 agent.FirstAwareLogTime = c.LogTime;
@@ -467,6 +462,28 @@ namespace LuckParser.Parser
                             break;
                         }
                         else if (agent.InstID == c.SrcInstid)
+                        {
+                            agent.LastAwareLogTime = c.LogTime;
+                            break;
+                        }
+                    }
+                }
+                // An attack target could appear slightly before its master, this properly updates the time if it happens
+                if (c.IsStateChange == ParseEnum.StateChange.AttackTarget && agentsLookup.TryGetValue(c.DstAgent, out agentList))
+                {
+                    foreach (AgentItem agent in agentList)
+                    {
+                        if (agent.InstID == 0)
+                        {
+                            agent.InstID = c.DstInstid;
+                            if (agent.FirstAwareLogTime == 0)
+                            {
+                                agent.FirstAwareLogTime = c.LogTime;
+                            }
+                            agent.LastAwareLogTime = c.LogTime;
+                            break;
+                        }
+                        else if (agent.InstID == c.DstInstid)
                         {
                             agent.LastAwareLogTime = c.LogTime;
                             break;

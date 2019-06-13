@@ -30,7 +30,7 @@ namespace LuckParser.Parser
         public readonly Statistics Statistics;
 
         public ParsedLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData, 
-                List<CombatItem> combatItems, List<Player> playerList, Target target)
+                List<CombatItem> combatItems, List<Player> playerList)
         {
             FightData = fightData;
             AgentData = agentData;
@@ -48,7 +48,12 @@ namespace LuckParser.Parser
             DamageModifiers = new DamageModifiersContainer(LogData.GW2Version);
             MechanicData = FightData.Logic.GetMechanicData();
             Statistics = new Statistics(CombatData, AgentData, FightData, PlayerList, Boons);
-            LegacyTarget = target;
+
+            LegacyTarget = FightData.Logic.Targets.Find(x => x.ID == FightData.ID);
+            if (LegacyTarget == null)
+            {
+                LegacyTarget = new Target(GeneralHelper.UnknownAgent);
+            }
         }
 
         private void UpdateFightData()
