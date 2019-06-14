@@ -35,6 +35,19 @@ namespace LuckParser.Models.Logic
                 List<long> attackOn = attackables.Where(x => x.DstAgent == 1 && x.LogTime >= first + 2000).Select(x => x.LogTime).ToList();
                 List<long> attackOff = attackables.Where(x => x.DstAgent == 0 && x.LogTime >= first + 2000).Select(x => x.LogTime).ToList();
                 List<CombatItem> posFacingHP = combatData.Where(x => x.SrcAgent == hand.Agent && x.LogTime >= hand.FirstAwareLogTime && hand.LastAwareLogTime >= x.LogTime && (x.IsStateChange == ParseEnum.StateChange.Position || x.IsStateChange == ParseEnum.StateChange.Rotation || x.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate)).ToList();
+                CombatItem pos = posFacingHP.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position);
+                ushort id = (ushort)HandOfErosion;
+                if (pos != null)
+                {
+                    byte[] xy = BitConverter.GetBytes(pos.DstAgent);
+                    float x = BitConverter.ToSingle(xy, 0);
+                    float y = BitConverter.ToSingle(xy, 4);
+                    if ((Math.Abs(x - 15570.5) < 10 && Math.Abs(y + 693.117) < 10) ||
+                            (Math.Abs(x - 14277.2) < 10 && Math.Abs(y + 2202.52) < 10))
+                    {
+                        id = (ushort)HandOfEruption;
+                    }
+                }
                 for (int i = 0; i < attackOn.Count; i++)
                 {
                     long start = attackOn[i];
@@ -43,7 +56,7 @@ namespace LuckParser.Models.Logic
                     {
                         end = attackOff[i];
                     }
-                    AgentItem extra = agentData.AddCustomAgent(start, end, AgentItem.AgentType.Gadget, hand.Name, hand.Prof, (ushort)HandOfErosion, hand.Toughness, hand.Healing, hand.Condition, hand.Concentration, hand.HitboxWidth, hand.HitboxHeight);
+                    AgentItem extra = agentData.AddCustomAgent(start, end, AgentItem.AgentType.Gadget, hand.Name, hand.Prof, id, hand.Toughness, hand.Healing, hand.Condition, hand.Concentration, hand.HitboxWidth, hand.HitboxHeight);
                     foreach (CombatItem c in combatData.Where(x => x.SrcAgent == hand.Agent &&x.LogTime >= extra.FirstAwareLogTime && x.LogTime <= extra.LastAwareLogTime))
                     {
                         c.OverrideSrcValues(extra.Agent, extra.InstID);
@@ -59,7 +72,7 @@ namespace LuckParser.Models.Logic
                         cExtra.OverrideSrcValues(extra.Agent, extra.InstID);
                         combatData.Add(cExtra);
                     }
-                }            
+                }
             }
             combatData.Sort((x, y) => x.LogTime.CompareTo(y.LogTime));
         }
