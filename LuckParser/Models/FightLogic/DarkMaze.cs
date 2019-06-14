@@ -17,8 +17,8 @@ namespace LuckParser.Models.Logic
             new PlayerBoonApplyMechanic(791, "Fear", new MechanicPlotlySetting("star-square","rgb(0,0,0)"), "Feared","Feared by Eye Teleport Skill", "Feared",0),
             new PlayerBoonApplyMechanic(48779, "Light Carrier", new MechanicPlotlySetting("circle-open","rgb(200,200,0)"), "Light Orb","Light Carrier (picked up a light orb)", "Picked up orb",0),
             new PlayerCastMechanic(47074, "Flare", new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Detonate","Flare (detonate light orb to incapacitate eye)", "Detonate orb",0),
-            new DamageOnPlayerMechanic(47518, "Piercing Shadow", new MechanicPlotlySetting("hexagram-open","rgb(0,0,255)"), "Spin","Piercing Shadow (damaging spin to all players in sight)", "Eye Spin",0),
-            new DamageOnPlayerMechanic(48150, "Deep Abyss", new MechanicPlotlySetting("triangle-right-open","rgb(255,0,0)"), "Beam","Deep Abyss (ticking eye beam)", "Eye Beam",0),
+            new HitOnPlayerMechanic(47518, "Piercing Shadow", new MechanicPlotlySetting("hexagram-open","rgb(0,0,255)"), "Spin","Piercing Shadow (damaging spin to all players in sight)", "Eye Spin",0),
+            new HitOnPlayerMechanic(48150, "Deep Abyss", new MechanicPlotlySetting("triangle-right-open","rgb(255,0,0)"), "Beam","Deep Abyss (ticking eye beam)", "Eye Beam",0),
             //47857 <- teleport + fear skill? 
             }
             );

@@ -14,11 +14,37 @@ namespace LuckParser.Models.Logic
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
-                new DamageOnPlayerMechanic(56202, "Dire Drafts", new MechanicPlotlySetting("circle","rgb(255,120,0)"), "B.Tornado", "Hit by big tornado", "Big Tornado Hit", 0),
+                new HitOnPlayerMechanic(56202, "Dire Drafts", new MechanicPlotlySetting("circle","rgb(255,120,0)"), "B.Tornado", "Hit by big tornado", "Big Tornado Hit", 0),
+                new SkillOnPlayerMechanic(56643, "Unbridled Tempest", new MechanicPlotlySetting("circle","rgb(255,0,150)"), "Shockwave", "Hit by Shockwave", "Shockwave Hit", 0, new List<SkillMechanic.SkillChecker>{(de, log) => de.HasDowned }, Mechanic.TriggerRule.AND),
+                new SkillOnPlayerMechanic(56372, "Fury of the Storm", new MechanicPlotlySetting("circle","rgb(200,150,0)"), "Arena AoE", "Hit by Arena wide AoE", "Arena AoE hit", 0, new List<SkillMechanic.SkillChecker>{(de, log) => de.HasDowned }, Mechanic.TriggerRule.AND),
+                new SkillOnPlayerMechanic(56403, "Electrical Repulsion", new MechanicPlotlySetting("circle","rgb(255,0,150)"), "Pushed", "Pushed by rotating breakbar", "Pushed", 0, new List<SkillMechanic.SkillChecker>{(de, log) => !de.To.HasBuff(log, 1122, de.Time) }, Mechanic.TriggerRule.AND), // Not 100% sure about this one
+                new EnemyCastMechanic(56349, "Regenerative Breakbar", new MechanicPlotlySetting("cross","rgb(255,150,0)"), "Reg.Breakbar","Regenerating Breakbar", "Regenerative Breakbar", 0),
+                new EnemyCastMechanic(56431, "Regenerative Breakbar Broken", new MechanicPlotlySetting("cross-open","rgb(255,150,0)"), "Reg.Breakbar Brkn", "Regenerative Breakbar Broken", "Regenerative Breakbar Broken", 0, new List<CastMechanic.CastChecker>{
+                    (ce, log) =>
+                    {
+                        AbstractCastEvent nCe = log.CombatData.GetCastData(ce.Caster).LastOrDefault(x => x.Time < ce.Time);
+                        if (nCe == null)
+                        {
+                            return false;
+                        }
+                        return nCe.SkillId != 56403;
+                    }
+                }, Mechanic.TriggerRule.AND),
+                new EnemyCastMechanic(56403, "Rotating Breakbar", new MechanicPlotlySetting("square","rgb(255,150,0)"), "Rot.Breakbar","Rotating Breakbar", "Rotating Breakbar", 0),
+                new EnemyCastMechanic(56431, "Rotating Breakbar Broken", new MechanicPlotlySetting("square-open","rgb(255,150,0)"), "Rot.Breakbar Brkn","Rotating Breakbar Broken", "Rotating Breakbar Broken", 0, new List<CastMechanic.CastChecker>{
+                    (ce, log) => 
+                    {
+                        AbstractCastEvent nCe = log.CombatData.GetCastData(ce.Caster).LastOrDefault(x => x.Time < ce.Time);
+                        if (nCe == null)
+                        {
+                            return false;
+                        }
+                        return nCe.SkillId == 56403;
+                    }
+                }, Mechanic.TriggerRule.AND),
             });
             // rotating cc 56403
-            // interesting stuff 56372 (shock wave?) 56634 (big AoE?)
-            // regen cc 56349
+            // interesting stuff 56372 (big AoE?)
             Extension = "sabir";
             IconUrl = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
         }
