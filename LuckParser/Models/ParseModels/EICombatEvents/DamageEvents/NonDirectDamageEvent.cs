@@ -25,7 +25,7 @@ namespace LuckParser.Models.ParseModels
 
         public override bool IsCondi(ParsedLog log)
         {
-            if (_isCondi == -1 && log.Boons.BoonsByIds.TryGetValue(Skill.ID, out Boon b))
+            if (_isCondi == -1 && log.Boons.BoonsByIds.TryGetValue(SkillId, out Boon b))
             {
                 _isCondi = b.Nature == Boon.BoonNature.Condition ? 1 : 0;
             }

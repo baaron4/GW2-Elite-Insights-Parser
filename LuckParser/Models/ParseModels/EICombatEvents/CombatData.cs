@@ -104,18 +104,18 @@ namespace LuckParser.Models.ParseModels
                     };
                 }
                 castAgentsToSort.Add(cast.Caster);
-                if (_castDataById.TryGetValue(cast.Skill.ID, out var list2))
+                if (_castDataById.TryGetValue(cast.SkillId, out var list2))
                 {
                     list2.Add(cast);
                 }
                 else
                 {
-                    _castDataById[cast.Skill.ID] = new List<AbstractCastEvent>()
+                    _castDataById[cast.SkillId] = new List<AbstractCastEvent>()
                     {
                         cast
                     };
                 }
-                castIDsToSort.Add(cast.Skill.ID);
+                castIDsToSort.Add(cast.SkillId);
             }
             foreach (long buffID in castIDsToSort)
             {
@@ -154,7 +154,7 @@ namespace LuckParser.Models.ParseModels
             _castData = castData.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
             List<AbstractCastEvent> allCastEvents = new List<AbstractCastEvent>(castData);
             allCastEvents.AddRange(wepSwaps);
-            _castDataById = allCastEvents.GroupBy(x => x.Skill.ID).ToDictionary(x => x.Key, x => x.ToList());
+            _castDataById = allCastEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             // buff remove event
             List<CombatItem> buffCombatEvents = allCombatItems.Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.IsBuff != 0).ToList();
             buffCombatEvents.AddRange(noStateActiBuffRem.Where(x => x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0));
