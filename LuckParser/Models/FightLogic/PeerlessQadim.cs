@@ -16,7 +16,7 @@ namespace LuckParser.Models.Logic
             {
             });
             Extension = "prlqadim";
-            IconUrl = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
+            IconUrl = "https://wiki.guildwars2.com/images/8/8b/Mini_Qadim_the_Peerless.png";
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()

@@ -171,12 +171,13 @@
     <Compile Include="Models\ParseModels\EICombatEvents\StatusEvents\AliveEvent.cs" />
     <Compile Include="Models\ParseModels\EICombatEvents\StatusEvents\ExitCombatEvent.cs" />
     <Compile Include="Models\ParseModels\EICombatEvents\StatusEvents\EnterCombatEvent.cs" />
+    <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\SkillOnPlayerMechanic.cs" />
     <Compile Include="Models\ParseModels\ProfHelpers\MesmerHelper.cs" />
     <Compile Include="Models\ParseModels\ProfHelpers\ElementalistHelper.cs" />
     <Compile Include="Models\ParseModels\ProfHelpers\ProfHelper.cs" />
     <Compile Include="Models\ParseModels\ProfHelpers\MirageHelper.cs" />
     <Compile Include="Models\ParseModels\ProfHelpers\WeaverHelper.cs" />
-    <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\DamageOnPlayerFirstHitMechanic.cs" />
+    <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\FirstHitOnPlayerMechanic.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\BackgroundActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\FacingRectangleActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\FacingActor.cs" />
@@ -195,7 +196,7 @@
     <Compile Include="Models\ParseModels\DamageModifiers\GainComputers\GainComputerNonMultiplier.cs" />
     <Compile Include="Models\ParseModels\DamageModifiers\GainComputers\GainComputerByStack.cs" />
     <Compile Include="Models\ParseModels\DamageModifiers\GainComputers\GainComputerByPresence.cs" />
-    <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\DamageMechanic.cs" />
+    <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\SkillMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\BoonRemoveMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\BoonApplyMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\CastMechanic.cs" />
@@ -208,7 +209,7 @@
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\PlayerCastMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\EnemyBoonApplyMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\SpawnMechanic.cs" />
-    <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\DamageOnPlayerMechanic.cs" />
+    <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\HitOnPlayerMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\PlayerStatusMechanic.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\AbstractBoonSimulationItem.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItems\BoonSimulationItemOverstack.cs" />

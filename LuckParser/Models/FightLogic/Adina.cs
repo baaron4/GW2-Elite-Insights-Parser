@@ -14,8 +14,9 @@ namespace LuckParser.Models.Logic
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
-                new PlayerBoonApplyMechanic(56040, "Blinding Radiance", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "R.Blind", "Blindess applied if looking at Adina", "Blinding Radiance", 0),
-                new DamageOnPlayerMechanic(56648, " Boulder Barrage", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Boulder", "Hit by boulder thrown during pillars", "Boulder Barrage", 0),
+                new PlayerBoonApplyMechanic(56593, "Radiant Blindness", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "R.Blind", "Blindess applied if looking at Adina", "Radiant Blindness", 0),
+                new PlayerBoonApplyMechanic(56586, "Eroding Curse", new MechanicPlotlySetting("cross","rgb(255,0,100)"), "Curse", "Stacking damage debuff from Hand of Erosion", "Eroding Curse", 0),
+                new HitOnPlayerMechanic(56648, " Boulder Barrage", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Boulder", "Hit by boulder thrown during pillars", "Boulder Barrage", 0),
             });
             Extension = "adina";
             IconUrl = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";

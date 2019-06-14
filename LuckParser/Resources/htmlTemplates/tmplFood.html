@@ -4,7 +4,8 @@
         <ul>
             <li v-for="initial in data.start">
                 {{initial.name}} <img class="icon" :alt="initial.name" :src="initial.icon">
-                {{initial.stack > 1 ? "("+initial.stack+")" : ""}}
+                {{initial.stack > 1 ? "("+initial.stack+")" : ""}} ({{initial.duration}}
+                seconds remaining)
             </li>
         </ul>
     </div>
