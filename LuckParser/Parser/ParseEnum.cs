@@ -235,8 +235,6 @@ namespace LuckParser.Parser
             SurgingSoul = 19474,
             Scythe = 19396,
             FleshWurm = 19464,
-
-
             // River
             Enervator = 19863,
             HollowedBomber = 19399,
@@ -244,17 +242,14 @@ namespace LuckParser.Parser
             SpiritHorde1 = 19461,
             SpiritHorde2 = 19400,
             SpiritHorde3 = 19692,
-
             // Statues of Darkness
             LightThieves = 19658,
             //MazeMinotaur = 5,
-
             // Statue of Death
             OrbSpider = 19801,
             GreenSpirit1 = 19587,
             GreenSpirit2 = 19571,
             // Skeletons are the same as Spirit hordes
-
             // Dhuum
             Messenger = 19807,
             Echo = 19628,
@@ -282,6 +277,8 @@ namespace LuckParser.Parser
             WyvernPatriarch = 21183,
             Zommoros = 20961, //21118 is probably the start and end NPC, not the one during the battle
             // Adina
+            HandOfErosion = 2,
+            HandOfEruption = 3,
             // Sabir
             ParalyzingWisp = 21955,
             VoltaicWisp = 21975,
