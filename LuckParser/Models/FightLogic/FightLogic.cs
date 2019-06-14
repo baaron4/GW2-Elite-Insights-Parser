@@ -113,7 +113,7 @@ namespace LuckParser.Models.Logic
 
         protected abstract HashSet<ushort> GetUniqueTargetIDs();
 
-        public void ProcessFightTargets(AgentData agentData, FightData fightData, List<CombatItem> combatItems)
+        public void RegroupFightTargets(AgentData agentData, FightData fightData, List<CombatItem> combatItems)
         {
             foreach (ushort id in GetUniqueTargetIDs())
             {
