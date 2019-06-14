@@ -10,7 +10,7 @@ namespace LuckParser.Models.ParseModels
     public abstract class AbstractBuffEvent : AbstractCombatEvent
     {
         public SkillItem BuffSkill { get; private set; }
-        public long BuffID => BuffID;
+        public long BuffID => BuffSkill.ID;
         private long _originalBuffID;
         public AgentItem By { get; protected set; }
         public AgentItem ByMinion { get; protected set; }
