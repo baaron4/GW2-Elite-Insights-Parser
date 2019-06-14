@@ -12,13 +12,13 @@ namespace LuckParser.Models.ParseModels
         private readonly int _removedStacks;
         private readonly int _lastRemovedDuration;
 
-        public BuffRemoveAllEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, agentData, offset)
+        public BuffRemoveAllEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, agentData, skillData, offset)
         {
             _lastRemovedDuration = evtcItem.BuffDmg;
             _removedStacks = evtcItem.Result;
         }
 
-        public BuffRemoveAllEvent(AgentItem by, AgentItem to, long time, int removedDuration, long buffID, int removedStacks, int lastRemovedDuration) : base(by, to, time, removedDuration, buffID)
+        public BuffRemoveAllEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill, int removedStacks, int lastRemovedDuration) : base(by, to, time, removedDuration, buffSkill)
         {
             _lastRemovedDuration = lastRemovedDuration;
             _removedStacks = removedStacks;

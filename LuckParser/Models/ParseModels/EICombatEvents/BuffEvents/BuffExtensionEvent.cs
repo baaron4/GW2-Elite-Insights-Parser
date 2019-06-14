@@ -11,7 +11,7 @@ namespace LuckParser.Models.ParseModels
     {
         private readonly long _oldValue;
 
-        public BuffExtensionEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, agentData, offset)
+        public BuffExtensionEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, agentData, skillData, offset)
         {
             By = null;
             _oldValue = evtcItem.OverstackValue - evtcItem.Value;

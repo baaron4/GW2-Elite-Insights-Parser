@@ -9,7 +9,7 @@ namespace LuckParser.Models.ParseModels
 {
     public class MirageHelper : MesmerHelper
     {
-        public static List<AnimatedCastEvent> TranslateMirageCloak(List<AbstractBuffEvent> buffs)
+        public static List<AnimatedCastEvent> TranslateMirageCloak(List<AbstractBuffEvent> buffs, SkillData skillData)
         {
             List<AnimatedCastEvent> res = new List<AnimatedCastEvent>();
             long cloakStart = 0;
@@ -17,7 +17,7 @@ namespace LuckParser.Models.ParseModels
             {
                 if (ba.Time - cloakStart > 10)
                 {
-                    AnimatedCastEvent dodgeLog = new AnimatedCastEvent(ba.Time, SkillItem.DodgeId, 50, ba.To);
+                    AnimatedCastEvent dodgeLog = new AnimatedCastEvent(ba.Time, skillData.Get(SkillItem.DodgeId), 50, ba.To);
                     res.Add(dodgeLog);
                     cloakStart = ba.Time;
                 }

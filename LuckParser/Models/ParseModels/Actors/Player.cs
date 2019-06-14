@@ -843,7 +843,6 @@ namespace LuckParser.Models.ParseModels
                 return;
             }
             string[] weapons = new string[8];//first 2 for first set next 2 for second set, second sets of 4 for underwater
-            SkillData skillList = log.SkillData;
             List<AbstractCastEvent> casting = GetCastLogs(log, 0, log.FightData.FightDuration);      
             int swapped = -1;
             long swappedTime = 0;
@@ -854,7 +853,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     continue;
                 }
-                SkillItem skill = skillList.Get(cl.SkillId);
+                SkillItem skill = cl.Skill;
                 // first iteration
                 if (swapped == -1)
                 {

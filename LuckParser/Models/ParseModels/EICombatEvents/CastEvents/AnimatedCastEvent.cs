@@ -9,33 +9,33 @@ namespace LuckParser.Models.ParseModels
 {
     public class AnimatedCastEvent : AbstractCastEvent
     {
-        public AnimatedCastEvent(CombatItem startItem, CombatItem endItem, AgentData agentData, long offset) : base(startItem, agentData, offset)
+        public AnimatedCastEvent(CombatItem startItem, CombatItem endItem, AgentData agentData, SkillData skillData, long offset) : base(startItem, agentData, skillData, offset)
         {
             ActualDuration = endItem.Value;
             Interrupted = endItem.IsActivation == ParseEnum.Activation.CancelCancel;
             FullAnimation = endItem.IsActivation == ParseEnum.Activation.Reset;
             ReducedAnimation = endItem.IsActivation == ParseEnum.Activation.CancelFire;
-            if (SkillId == SkillItem.DodgeId)
+            if (Skill.ID == SkillItem.DodgeId)
             {
                 ActualDuration = 750;
             }
         }
 
-        public AnimatedCastEvent(CombatItem startItem, AgentData agentData, long offset, long logEnd) : base(startItem, agentData, offset)
+        public AnimatedCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData, long offset, long logEnd) : base(startItem, agentData, skillData, offset)
         {
             ActualDuration = ExpectedDuration;
             if (ActualDuration + Time > logEnd - offset)
             {
                 ActualDuration = (int)(logEnd - offset - Time);
             }
-            if (SkillId == SkillItem.DodgeId)
+            if (Skill.ID == SkillItem.DodgeId)
             {
                 ActualDuration = 750;
             }
         }
         
 
-        public AnimatedCastEvent(long time, long skillID, int duration, AgentItem caster) : base(time, skillID, caster)
+        public AnimatedCastEvent(long time, SkillItem skill, int duration, AgentItem caster) : base(time, skill, caster)
         {
             ActualDuration = duration;
             ExpectedDuration = duration;
