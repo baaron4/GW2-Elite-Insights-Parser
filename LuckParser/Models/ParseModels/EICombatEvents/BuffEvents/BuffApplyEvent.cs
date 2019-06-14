@@ -12,7 +12,7 @@ namespace LuckParser.Models.ParseModels
         private readonly bool _initial;
         public int AppliedDuration { get; }
 
-        public BuffApplyEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, offset)
+        public BuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, skillData, offset)
         {
             _initial = evtcItem.IsStateChange == ParseEnum.StateChange.BuffInitial;
             if (_initial)
@@ -25,7 +25,7 @@ namespace LuckParser.Models.ParseModels
             To = agentData.GetAgentByInstID(evtcItem.DstInstid, evtcItem.LogTime);
         }
 
-        public BuffApplyEvent(AgentItem by, AgentItem to, long time, int duration, long buffID) : base(buffID, time)
+        public BuffApplyEvent(AgentItem by, AgentItem to, long time, int duration, SkillItem buffSkill) : base(buffSkill, time)
         {
             AppliedDuration = duration;
             By = by;

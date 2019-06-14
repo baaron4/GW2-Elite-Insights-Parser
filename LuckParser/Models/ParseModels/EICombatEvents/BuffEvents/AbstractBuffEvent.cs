@@ -9,31 +9,32 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class AbstractBuffEvent : AbstractCombatEvent
     {
-        public long BuffID { get; private set; }
+        public SkillItem BuffSkill { get; private set; }
+        public long BuffID => BuffSkill.ID;
         private long _originalBuffID;
         public AgentItem By { get; protected set; }
         public AgentItem ByMinion { get; protected set; }
         public AgentItem To { get; protected set; }
 
-        public AbstractBuffEvent(CombatItem evtcItem, long offset) : base(evtcItem.LogTime, offset)
+        public AbstractBuffEvent(CombatItem evtcItem, SkillData skillData, long offset) : base(evtcItem.LogTime, offset)
         {
 #if DEBUG
             OriginalCombatEvent = evtcItem;
 #endif
-            BuffID = evtcItem.SkillID;
+            BuffSkill = skillData.Get(evtcItem.SkillID);
         }
 
-        public AbstractBuffEvent(long buffID, long time) : base(time, 0)
+        public AbstractBuffEvent(SkillItem buffSkill, long time) : base(time, 0)
         {
-            BuffID = buffID;
+            BuffSkill = buffSkill;
         }
 
-        public void Invalidate()
+        public void Invalidate(SkillData skillData)
         {
             if (BuffID != ProfHelper.NoBuff)
             {
                 _originalBuffID = BuffID;
-                BuffID = ProfHelper.NoBuff;
+                BuffSkill = skillData.Get(ProfHelper.NoBuff);
             }
         }
 

@@ -77,7 +77,7 @@ namespace LuckParser.Models.ParseModels
             return inter.First();
         }
 
-        public static List<AbstractBuffEvent> TransformWeaverAttunements(List<AbstractBuffEvent> buffs, AgentItem a)
+        public static List<AbstractBuffEvent> TransformWeaverAttunements(List<AbstractBuffEvent> buffs, AgentItem a, SkillData skillData)
         {
             List<AbstractBuffEvent> res = new List<AbstractBuffEvent>();
             HashSet<long> attunements = new HashSet<long>
@@ -123,7 +123,7 @@ namespace LuckParser.Models.ParseModels
             List<AbstractBuffEvent> attuns = buffs.Where(x => attunements.Contains(x.BuffID)).ToList();
             foreach (AbstractBuffEvent c in attuns)
             {
-                c.Invalidate();
+                c.Invalidate(skillData);
             }
             // get all weaver attunements ids and group them by time
             List<AbstractBuffEvent> weaverAttuns = buffs.Where(x => weaverAttunements.Contains(x.BuffID)).ToList();
@@ -154,17 +154,17 @@ namespace LuckParser.Models.ParseModels
                 long curID = TranslateWeaverAttunement(applies);
                 foreach (AbstractBuffEvent c in pair.Value)
                 {
-                    c.Invalidate();
+                    c.Invalidate(skillData);
                 }
                 if (curID == 0)
                 {
                     continue;
                 }
-                res.Add(new BuffApplyEvent(a, a, pair.Key, int.MaxValue, curID));
+                res.Add(new BuffApplyEvent(a, a, pair.Key, int.MaxValue, skillData.Get(curID)));
                 if (prevID != 0)
                 {
-                    res.Add(new BuffRemoveManualEvent(a, a, pair.Key, int.MaxValue, prevID));
-                    res.Add(new BuffRemoveAllEvent(a, a, pair.Key, int.MaxValue, prevID, int.MaxValue, 1));
+                    res.Add(new BuffRemoveManualEvent(a, a, pair.Key, int.MaxValue, skillData.Get(prevID)));
+                    res.Add(new BuffRemoveAllEvent(a, a, pair.Key, int.MaxValue, skillData.Get(prevID), int.MaxValue, 1));
                 }
                 prevID = curID;
             }

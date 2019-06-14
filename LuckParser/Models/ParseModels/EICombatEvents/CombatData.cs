@@ -23,18 +23,18 @@ namespace LuckParser.Models.ParseModels
         private readonly Dictionary<AgentItem, List<AbstractDamageEvent>> _damageTakenData;
         private readonly Dictionary<AgentItem, List<AbstractMovementEvent>> _movementData;
 
-        private void SpecialBoonParse(List<Player> players)
+        private void SpecialBoonParse(List<Player> players, SkillData skillData)
         {
             List<AbstractBuffEvent> toAdd = new List<AbstractBuffEvent>();
             foreach (Player p in players)
             {
                 if (p.Prof == "Weaver")
                 {
-                    toAdd = WeaverHelper.TransformWeaverAttunements(GetBoonDataByDst(p.AgentItem), p.AgentItem);
+                    toAdd = WeaverHelper.TransformWeaverAttunements(GetBoonDataByDst(p.AgentItem), p.AgentItem, skillData);
                 }
                 if (p.Prof == "Elementalist" || p.Prof == "Tempest")
                 {
-                    ElementalistHelper.RemoveDualBuffs(GetBoonDataByDst(p.AgentItem));
+                    ElementalistHelper.RemoveDualBuffs(GetBoonDataByDst(p.AgentItem), skillData);
                 }
             }
             HashSet<long> buffIDsToSort = new HashSet<long>();
@@ -77,14 +77,14 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        private void SpecialCastParse(List<Player> players)
+        private void SpecialCastParse(List<Player> players, SkillData skillData)
         {
             List<AnimatedCastEvent> toAdd = new List<AnimatedCastEvent>();
             foreach (Player p in players)
             {
                 if (p.Prof == "Mirage")
                 {
-                    toAdd = MirageHelper.TranslateMirageCloak(GetBoonData(40408));
+                    toAdd = MirageHelper.TranslateMirageCloak(GetBoonData(40408), skillData);
                     break;
                 }
             }
@@ -127,13 +127,13 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        private void ExtraEvents(List<Player> players)
+        private void ExtraEvents(List<Player> players, SkillData skillData)
         {
-            SpecialBoonParse(players);
-            SpecialCastParse(players);
+            SpecialBoonParse(players, skillData);
+            SpecialCastParse(players, skillData);
         }
 
-        public CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, List<Player> players)
+        public CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players)
         {
             _skillIds = new HashSet<long>(allCombatItems.Select(x => x.SkillID));
             var noStateActiBuffRem = allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.None && x.IsActivation == ParseEnum.Activation.None && x.IsBuffRemove == ParseEnum.BuffRemove.None);
@@ -148,8 +148,8 @@ namespace LuckParser.Models.ParseModels
             // state change events
             EICombatEventFactory.CreateStateChangeEvents(allCombatItems, _metaDataEvents, _statusEvents, agentData, fightData.FightStartLogTime);
             // activation events
-            List<AnimatedCastEvent> castData = EICombatEventFactory.CreateCastEvents(allCombatItems.Where(x => x.IsActivation != ParseEnum.Activation.None).ToList(), agentData, fightData.FightStartLogTime);
-            List<WeaponSwapEvent> wepSwaps = EICombatEventFactory.CreateWeaponSwapEvents(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.WeaponSwap).ToList(), agentData, fightData.FightStartLogTime);
+            List<AnimatedCastEvent> castData = EICombatEventFactory.CreateCastEvents(allCombatItems.Where(x => x.IsActivation != ParseEnum.Activation.None).ToList(), agentData, skillData, fightData.FightStartLogTime);
+            List<WeaponSwapEvent> wepSwaps = EICombatEventFactory.CreateWeaponSwapEvents(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.WeaponSwap).ToList(), agentData, skillData, fightData.FightStartLogTime);
             _weaponSwapData = wepSwaps.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
             _castData = castData.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
             List<AbstractCastEvent> allCastEvents = new List<AbstractCastEvent>(castData);
@@ -160,11 +160,11 @@ namespace LuckParser.Models.ParseModels
             buffCombatEvents.AddRange(noStateActiBuffRem.Where(x => x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0));
             buffCombatEvents.AddRange(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.BuffInitial));
             buffCombatEvents.Sort((x, y) => x.LogTime.CompareTo(y.LogTime));
-            List<AbstractBuffEvent> buffEvents = EICombatEventFactory.CreateBuffEvents(buffCombatEvents, agentData, fightData.FightStartLogTime);
+            List<AbstractBuffEvent> buffEvents = EICombatEventFactory.CreateBuffEvents(buffCombatEvents, agentData, skillData, fightData.FightStartLogTime);
             _boonDataByDst = buffEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             _boonData = buffEvents.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
             // damage events
-            List<AbstractDamageEvent> damageData = EICombatEventFactory.CreateDamageEvents(noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0)).ToList(), agentData, fightData.FightStartLogTime);
+            List<AbstractDamageEvent> damageData = EICombatEventFactory.CreateDamageEvents(noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0)).ToList(), agentData, skillData, fightData.FightStartLogTime);
             _damageData = damageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             _damageTakenData = damageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
 
@@ -175,7 +175,7 @@ namespace LuckParser.Models.ParseModels
             healing_received_data = allCombatItems.Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                             ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
                                                 (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
-            ExtraEvents(players);
+            ExtraEvents(players, skillData);
         }
 
         public void UpdateDamageEvents(long end)

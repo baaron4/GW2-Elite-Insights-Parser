@@ -10,7 +10,7 @@ namespace LuckParser.Models.ParseModels
     public class BuffRemoveSingleEvent : AbstractBuffRemoveEvent
     {
         private readonly ParseEnum.IFF _iff;
-        public BuffRemoveSingleEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, agentData, offset)
+        public BuffRemoveSingleEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, agentData, skillData, offset)
         {
             _iff = evtcItem.IFF;
         }

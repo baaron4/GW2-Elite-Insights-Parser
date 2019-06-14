@@ -15,7 +15,7 @@ namespace LuckParser.Parser
         public LogData LogData { get; }
         public FightData FightData { get; }
         public AgentData AgentData { get; }
-        public SkillData SkillData { get; }
+        private readonly SkillData _skillData;
         public CombatData CombatData { get; }
         public List<Player> PlayerList { get; }
         public HashSet<AgentItem> PlayerAgents { get; }
@@ -34,12 +34,12 @@ namespace LuckParser.Parser
         {
             FightData = fightData;
             AgentData = agentData;
-            SkillData = skillData;
+            _skillData = skillData;
             PlayerList = playerList;
             //
             PlayerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
             PlayerAgents = new HashSet<AgentItem>(playerList.Select(x => x.AgentItem));
-            CombatData = new CombatData(combatItems, fightData, agentData, playerList);
+            CombatData = new CombatData(combatItems, FightData, AgentData, _skillData, playerList);
             LogData = new LogData(buildVersion, CombatData, combatItems);
             //
             UpdateFightData();

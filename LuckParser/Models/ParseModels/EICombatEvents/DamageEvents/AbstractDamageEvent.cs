@@ -14,7 +14,8 @@ namespace LuckParser.Models.ParseModels
         public AgentItem To { get; }
         public AgentItem MasterTo { get; }
 
-        public long SkillId { get; }
+        public SkillItem Skill { get; }
+        public long SkillId => Skill.ID;
         public ParseEnum.IFF IFF { get; }
 
         public int Damage { get; protected set; }
@@ -34,7 +35,7 @@ namespace LuckParser.Models.ParseModels
         public bool IsBlocked { get; protected set; }
         public bool IsEvaded { get; protected set; }
 
-        public AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem.LogTime, offset)
+        public AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem.LogTime, offset)
         {
 #if DEBUG
             OriginalCombatEvent = evtcItem;
@@ -43,7 +44,7 @@ namespace LuckParser.Models.ParseModels
             MasterFrom = evtcItem.SrcMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.SrcMasterInstid, evtcItem.LogTime) : null;
             To = agentData.GetAgentByInstID(evtcItem.DstInstid, evtcItem.LogTime);
             MasterTo = evtcItem.DstMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.DstMasterInstid, evtcItem.LogTime) : null;
-            SkillId = evtcItem.SkillID;
+            Skill = skillData.Get(evtcItem.SkillID);
             ShieldDamage = evtcItem.IsShields > 0 ? evtcItem.OverstackValue > 0 ? (int)evtcItem.OverstackValue : evtcItem.Value : 0;
             IsOverNinety = evtcItem.IsNinety > 0;
             AgainstUnderFifty = evtcItem.IsFifty > 0;

@@ -11,7 +11,7 @@ namespace LuckParser.Models.ParseModels
     {
         private int _isCondi = -1;
 
-        public NonDirectDamageEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, agentData, offset)
+        public NonDirectDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, agentData, skillData, offset)
         {
             Damage = evtcItem.BuffDmg;
             ParseEnum.ConditionResult result = ParseEnum.GetConditionResult(evtcItem.Result);
