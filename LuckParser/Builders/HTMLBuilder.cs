@@ -325,10 +325,9 @@ namespace LuckParser.Builders
 
             PhaseData phase = _phases[phaseIndex];
             List<AbstractCastEvent> casting = p.GetCastLogsActDur(_log, phase.Start, phase.End);
-            SkillData skillList = _log.SkillData;
             foreach (AbstractCastEvent cl in casting)
             {
-                if (!_usedSkills.ContainsKey(cl.SkillId)) _usedSkills.Add(cl.SkillId, skillList.Get(cl.SkillId));
+                if (!_usedSkills.ContainsKey(cl.SkillId)) _usedSkills.Add(cl.SkillId, cl.Skill);
                 list.Add(ActorDetailsDto.GetSkillData(cl, phase.Start));
             }
             return list;
@@ -370,20 +369,19 @@ namespace LuckParser.Builders
         private List<object[]> BuildDMGDistBodyData(List<AbstractCastEvent> casting, List<AbstractDamageEvent> damageLogs, long finalTotalDamage)
         {
             List<object[]> list = new List<object[]>();
-            Dictionary<long, List<AbstractCastEvent>> castLogsBySkill = casting.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
-            Dictionary<long, List<AbstractDamageEvent>> damageLogsBySkill = damageLogs.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
+            Dictionary<SkillItem, List<AbstractCastEvent>> castLogsBySkill = casting.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
+            Dictionary<SkillItem, List<AbstractDamageEvent>> damageLogsBySkill = damageLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
             Dictionary<long, Boon> conditionsById = _statistics.PresentConditions.ToDictionary(x => x.ID);
-            SkillData skillList = _log.SkillData;
-            foreach (KeyValuePair<long, List<AbstractDamageEvent>> entry in damageLogsBySkill)
+            foreach (KeyValuePair<SkillItem, List<AbstractDamageEvent>> entry in damageLogsBySkill)
             {
-                list.Add(DmgDistributionDto.GetDMGDtoItem(entry, castLogsBySkill, skillList, _usedSkills, _usedBoons, _log.Boons));
+                list.Add(DmgDistributionDto.GetDMGDtoItem(entry, castLogsBySkill, _usedSkills, _usedBoons, _log.Boons));
             }
             // non damaging
-            foreach (KeyValuePair<long, List<AbstractCastEvent>> entry in castLogsBySkill)
+            foreach (KeyValuePair<SkillItem, List<AbstractCastEvent>> entry in castLogsBySkill)
             {
                 if (damageLogsBySkill.ContainsKey(entry.Key)) continue;
 
-                if (!_usedSkills.ContainsKey(entry.Key)) _usedSkills.Add(entry.Key, skillList.Get(entry.Key));
+                if (!_usedSkills.ContainsKey(entry.Key.ID)) _usedSkills.Add(entry.Key.ID, entry.Key);
 
                 int casts = entry.Value.Count;
                 int timeswasted = 0, timessaved = 0;
@@ -484,13 +482,12 @@ namespace LuckParser.Builders
             };
             PhaseData phase = _phases[phaseIndex];
             List<AbstractDamageEvent> damageLogs = p.GetDamageTakenLogs(null, _log, phase.Start, phase.End);
-            Dictionary<long, List<AbstractDamageEvent>> damageLogsBySkill = damageLogs.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
-            SkillData skillList = _log.SkillData;
+            Dictionary<SkillItem, List<AbstractDamageEvent>> damageLogsBySkill = damageLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
             dto.ContributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.Damage) : 0;
             Dictionary<long, Boon> conditionsById = _statistics.PresentConditions.ToDictionary(x => x.ID);
             foreach (var entry in damageLogsBySkill)
             {
-                dto.Distribution.Add(DmgDistributionDto.GetDMGDtoItem(entry, null, skillList, _usedSkills, _usedBoons, _log.Boons));
+                dto.Distribution.Add(DmgDistributionDto.GetDMGDtoItem(entry, null, _usedSkills, _usedBoons, _log.Boons));
             }
             return dto;
         }

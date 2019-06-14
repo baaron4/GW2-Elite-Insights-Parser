@@ -21,7 +21,7 @@ namespace LuckParser.Models.ParseModels
         {
             if (By == null)
             {
-                By = log.Boons.TryFindSrc(To, Time, AppliedDuration, log, BuffSkill.ID);
+                By = log.Boons.TryFindSrc(To, Time, AppliedDuration, log, BuffID);
             }
         }
 

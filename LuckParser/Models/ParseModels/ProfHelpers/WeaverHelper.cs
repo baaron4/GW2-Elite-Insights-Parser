@@ -37,7 +37,7 @@ namespace LuckParser.Models.ParseModels
         private static long TranslateWeaverAttunement(List<AbstractBuffEvent> buffApplies)
         {
             // check if more than 3 ids are present
-            if (buffApplies.Select(x => x.BuffSkill).Distinct().Count() > 3)
+            if (buffApplies.Select(x => x.BuffID).Distinct().Count() > 3)
             {
                 throw new InvalidOperationException("Too much buff apply events in TranslateWeaverAttunement");
             }
@@ -52,17 +52,17 @@ namespace LuckParser.Models.ParseModels
             HashSet<long> minor = null;
             foreach (BuffApplyEvent c in buffApplies)
             {
-                if (duals.Contains(c.BuffSkill.ID))
+                if (duals.Contains(c.BuffID))
                 {
-                    return c.BuffSkill.ID;
+                    return c.BuffID;
                 }
-                if (_majorsTranslation.ContainsKey(c.BuffSkill.ID))
+                if (_majorsTranslation.ContainsKey(c.BuffID))
                 {
-                    major = _majorsTranslation[c.BuffSkill.ID];
+                    major = _majorsTranslation[c.BuffID];
                 }
-                else if (_minorsTranslation.ContainsKey(c.BuffSkill.ID))
+                else if (_minorsTranslation.ContainsKey(c.BuffID))
                 {
-                    minor = _minorsTranslation[c.BuffSkill.ID];
+                    minor = _minorsTranslation[c.BuffID];
                 }
             }
             if (major == null || minor == null)
@@ -120,13 +120,13 @@ namespace LuckParser.Models.ParseModels
                 airEarth,*/
             };
             // first we get rid of standard attunements
-            List<AbstractBuffEvent> attuns = buffs.Where(x => attunements.Contains(x.BuffSkill.ID)).ToList();
+            List<AbstractBuffEvent> attuns = buffs.Where(x => attunements.Contains(x.BuffID)).ToList();
             foreach (AbstractBuffEvent c in attuns)
             {
                 c.Invalidate(skillData);
             }
             // get all weaver attunements ids and group them by time
-            List<AbstractBuffEvent> weaverAttuns = buffs.Where(x => weaverAttunements.Contains(x.BuffSkill.ID)).ToList();
+            List<AbstractBuffEvent> weaverAttuns = buffs.Where(x => weaverAttunements.Contains(x.BuffID)).ToList();
             if (weaverAttuns.Count == 0)
             {
                 return res;

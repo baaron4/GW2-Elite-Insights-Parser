@@ -10,6 +10,7 @@ namespace LuckParser.Models.ParseModels
     public abstract class AbstractBuffEvent : AbstractCombatEvent
     {
         public SkillItem BuffSkill { get; private set; }
+        public long BuffID => BuffID;
         private long _originalBuffID;
         public AgentItem By { get; protected set; }
         public AgentItem ByMinion { get; protected set; }
@@ -30,9 +31,9 @@ namespace LuckParser.Models.ParseModels
 
         public void Invalidate(SkillData skillData)
         {
-            if (BuffSkill.ID != ProfHelper.NoBuff)
+            if (BuffID != ProfHelper.NoBuff)
             {
-                _originalBuffID = BuffSkill.ID;
+                _originalBuffID = BuffID;
                 BuffSkill = skillData.Get(ProfHelper.NoBuff);
             }
         }

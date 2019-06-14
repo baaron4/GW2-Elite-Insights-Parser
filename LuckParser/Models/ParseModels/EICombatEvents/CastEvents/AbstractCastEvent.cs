@@ -10,7 +10,8 @@ namespace LuckParser.Models.ParseModels
     public abstract class AbstractCastEvent : AbstractCombatEvent
     {
         // start item
-        public long SkillId { get; protected set; }
+        public SkillItem Skill { get; protected set; }
+        public long SkillId => Skill.ID;
         public AgentItem Caster { get; }
         public AgentItem MasterCaster { get; }
         public int ExpectedDuration { get; protected set; }
@@ -25,22 +26,18 @@ namespace LuckParser.Models.ParseModels
         // Swaps
         public int SwappedTo { get; protected set; }
 
-        public AbstractCastEvent(CombatItem startEvtcItem, AgentData agentData, long offset) : base(startEvtcItem.LogTime, offset)
+        public AbstractCastEvent(CombatItem startEvtcItem, AgentData agentData, SkillData skillData, long offset) : base(startEvtcItem.LogTime, offset)
         {
-            SkillId = startEvtcItem.SkillID;
+            Skill = skillData.Get(startEvtcItem.SkillID);
             Caster = agentData.GetAgentByInstID(startEvtcItem.SrcInstid, startEvtcItem.LogTime);
             UnderQuickness = startEvtcItem.IsActivation == ParseEnum.Activation.Quickness;
             ExpectedDuration = startEvtcItem.Value;
             MasterCaster = startEvtcItem.SrcMasterInstid > 0 ? agentData.GetAgentByInstID(startEvtcItem.SrcMasterInstid, startEvtcItem.LogTime) : null;
-            if (SkillId == SkillItem.DodgeId)
-            {
-                ExpectedDuration = 750;
-            }
         }
 
-        public AbstractCastEvent(long time, long skillID, AgentItem caster) : base(time, 0)
+        public AbstractCastEvent(long time, SkillItem skill, AgentItem caster) : base(time, 0)
         {
-            SkillId = skillID;
+            Skill = skill;
             Caster = caster;
             MasterCaster = null;
         }

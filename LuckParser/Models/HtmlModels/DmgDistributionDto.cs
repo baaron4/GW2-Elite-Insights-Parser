@@ -10,7 +10,7 @@ namespace LuckParser.Models.HtmlModels
         public long TotalDamage;      
         public List<object[]> Distribution;
 
-        public static object[] GetDMGDtoItem(KeyValuePair<long, List<AbstractDamageEvent>> entry, Dictionary<long, List<AbstractCastEvent>> castLogsBySkill, SkillData skillData, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons, BoonsContainer boons)
+        public static object[] GetDMGDtoItem(KeyValuePair<SkillItem, List<AbstractDamageEvent>> entry, Dictionary<SkillItem, List<AbstractCastEvent>> castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons, BoonsContainer boons)
         {
             int totaldamage = 0,
                     mindamage = int.MaxValue,
@@ -38,23 +38,23 @@ namespace LuckParser.Models.HtmlModels
             }
             if (IsIndirectDamage)
             {
-                if (!usedBoons.ContainsKey(entry.Key))
+                if (!usedBoons.ContainsKey(entry.Key.ID))
                 {
-                    if (boons.BoonsByIds.TryGetValue(entry.Key, out Boon buff))
+                    if (boons.BoonsByIds.TryGetValue(entry.Key.ID, out Boon buff))
                     {
                         usedBoons.Add(buff.ID, buff);
                     }
                     else
                     {
-                        SkillItem aux = skillData.Get(entry.Key);
-                        Boon auxBoon = new Boon(aux.Name, entry.Key, aux.Icon);
+                        SkillItem aux = entry.Key;
+                        Boon auxBoon = new Boon(aux.Name, entry.Key.ID, aux.Icon);
                         usedBoons.Add(auxBoon.ID, auxBoon);
                     }
                 }
             }
             else
             {
-                if (!usedSkills.ContainsKey(entry.Key)) usedSkills.Add(entry.Key, skillData.Get(entry.Key));
+                if (!usedSkills.ContainsKey(entry.Key.ID)) usedSkills.Add(entry.Key.ID, entry.Key);
             }
 
             int casts = 0, timeswasted = 0, timessaved = 0;
@@ -76,7 +76,7 @@ namespace LuckParser.Models.HtmlModels
             }
             object[] skillItem = {
                     IsIndirectDamage,
-                    entry.Key,
+                    entry.Key.ID,
                     totaldamage,
                     mindamage == int.MaxValue ? 0 : mindamage,
                     maxdamage == int.MinValue ? 0 : maxdamage,

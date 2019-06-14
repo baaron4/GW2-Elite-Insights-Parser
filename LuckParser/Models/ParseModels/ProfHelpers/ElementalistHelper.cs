@@ -19,7 +19,7 @@ namespace LuckParser.Models.ParseModels
                 AirDual,
                 EarthDual,
             };
-            foreach (AbstractBuffEvent c in buffsPerDst.Where(x => duals.Contains(x.BuffSkill.ID)))
+            foreach (AbstractBuffEvent c in buffsPerDst.Where(x => duals.Contains(x.BuffID)))
             {
                 c.Invalidate(skillData);
             }

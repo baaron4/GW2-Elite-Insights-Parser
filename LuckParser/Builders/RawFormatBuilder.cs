@@ -446,27 +446,26 @@ namespace LuckParser.Builders
         private List<JsonDamageDist> BuildDamageDist(List<AbstractDamageEvent> dls)
         {
             List<JsonDamageDist> res = new List<JsonDamageDist>();
-            Dictionary<long, List<AbstractDamageEvent>> dict = dls.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
-            SkillData skillList = _log.SkillData;
-            foreach (KeyValuePair<long, List<AbstractDamageEvent>> pair in dict)
+            Dictionary<SkillItem, List<AbstractDamageEvent>> dict = dls.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
+            foreach (KeyValuePair<SkillItem, List<AbstractDamageEvent>> pair in dict)
             {
                 if (pair.Value.Count == 0)
                 {
                     continue;
                 }
-                SkillItem skill = skillList.Get(pair.Key);
+                SkillItem skill = pair.Key;
                 bool indirect = pair.Value.First() is NonDirectDamageEvent;
                 if (indirect)
                 {
                     if (!_buffDesc.ContainsKey("b" + pair.Key))
                     {
-                        if (_log.Boons.BoonsByIds.TryGetValue(pair.Key, out Boon buff))
+                        if (_log.Boons.BoonsByIds.TryGetValue(pair.Key.ID, out Boon buff))
                         {
                             _buffDesc["b" + pair.Key] = new JsonLog.BuffDesc(buff);
                         }
                         else
                         {
-                            Boon auxBoon = new Boon(skill.Name, pair.Key, skill.Icon);
+                            Boon auxBoon = new Boon(skill.Name, pair.Key.ID, skill.Icon);
                             _buffDesc["b" + pair.Key] = new JsonLog.BuffDesc(auxBoon);
                         }
                     }
@@ -484,7 +483,7 @@ namespace LuckParser.Builders
                     continue;
                 }
                 string prefix = indirect ? "b" : "s";
-                res.Add(new JsonDamageDist(filteredList, indirect, pair.Key));
+                res.Add(new JsonDamageDist(filteredList, indirect, pair.Key.ID));
             }
             return res;
         }
@@ -509,10 +508,9 @@ namespace LuckParser.Builders
         private List<JsonRotation> BuildRotation(List<AbstractCastEvent> cls)
         {
             Dictionary<long, List<JsonSkill>> dict = new Dictionary<long, List<JsonSkill>>();
-            SkillData skillList = _log.SkillData;
             foreach (AbstractCastEvent cl in cls)
             {
-                SkillItem skill = skillList.Get(cl.SkillId);
+                SkillItem skill = cl.Skill;
                 string skillName = skill.Name;
                 if (!_skillDesc.ContainsKey("s" + cl.SkillId))
                 {

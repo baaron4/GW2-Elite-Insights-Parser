@@ -9,10 +9,10 @@ namespace LuckParser.Models.ParseModels
 {
     public class WeaponSwapEvent : AbstractCastEvent
     {
-        public WeaponSwapEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, agentData, offset)
+        public WeaponSwapEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, agentData, skillData, offset)
         {
             SwappedTo = (int)evtcItem.DstAgent;
-            SkillId = SkillItem.WeaponSwapId;
+            Skill = skillData.Get(SkillItem.WeaponSwapId);
             ExpectedDuration = 50;
             ActualDuration = 50;
         }

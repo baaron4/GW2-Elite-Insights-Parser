@@ -30,7 +30,7 @@ namespace LuckParser.Models.ParseModels
 
         public override bool IsBoonSimulatorCompliant(long fightEnd)
         {
-            return BuffSkill.ID != ProfHelper.NoBuff;
+            return BuffID != ProfHelper.NoBuff;
         }
 
         public override void TryFindSrc(ParsedLog log)

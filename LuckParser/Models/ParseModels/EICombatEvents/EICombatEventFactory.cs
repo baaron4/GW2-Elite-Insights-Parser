@@ -133,12 +133,12 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public static List<WeaponSwapEvent> CreateWeaponSwapEvents(List<CombatItem> swapEvents, AgentData agentData, long offset)
+        public static List<WeaponSwapEvent> CreateWeaponSwapEvents(List<CombatItem> swapEvents, AgentData agentData, SkillData skillData, long offset)
         {
             List<WeaponSwapEvent> res = new List<WeaponSwapEvent>();
             foreach (CombatItem swapEvent in swapEvents)
             {
-                res.Add(new WeaponSwapEvent(swapEvent, agentData, offset));
+                res.Add(new WeaponSwapEvent(swapEvent, agentData, skillData, offset));
             }
             return res;
         }
@@ -174,7 +174,7 @@ namespace LuckParser.Models.ParseModels
             return res;
         }
 
-        public static List<AnimatedCastEvent> CreateCastEvents(List<CombatItem> castEvents, AgentData agentData, long offset)
+        public static List<AnimatedCastEvent> CreateCastEvents(List<CombatItem> castEvents, AgentData agentData, SkillData skillData, long offset)
         {
             List<AnimatedCastEvent> res = new List<AnimatedCastEvent>();
             Dictionary<ulong, List<CombatItem>> castEventsBySrcAgent = castEvents.GroupBy(x => x.SrcAgent).ToDictionary(x => x.Key, x => x.ToList());
@@ -188,14 +188,14 @@ namespace LuckParser.Models.ParseModels
                         // missing end
                         if (startItem != null)
                         {
-                            res.Add(new AnimatedCastEvent(startItem, agentData, offset, c.LogTime));
+                            res.Add(new AnimatedCastEvent(startItem, agentData, skillData, offset, c.LogTime));
                         }
                         startItem = c;
                     } else
                     {
                         if (startItem != null && startItem.SkillID == c.SkillID)
                         {
-                            res.Add(new AnimatedCastEvent(startItem, c, agentData, offset));
+                            res.Add(new AnimatedCastEvent(startItem, c, agentData, skillData, offset));
                             startItem = null;
                         }
                     }
@@ -205,18 +205,18 @@ namespace LuckParser.Models.ParseModels
             return res;
         }
 
-        public static List<AbstractDamageEvent> CreateDamageEvents(List<CombatItem> damageEvents, AgentData agentData, long offset)
+        public static List<AbstractDamageEvent> CreateDamageEvents(List<CombatItem> damageEvents, AgentData agentData, SkillData skillData, long offset)
         {
             List<AbstractDamageEvent> res = new List<AbstractDamageEvent>();
             foreach (CombatItem c in damageEvents)
             {
                 if ((c.IsBuff != 0 && c.Value == 0))
                 {
-                    res.Add(new NonDirectDamageEvent(c, agentData, offset));
+                    res.Add(new NonDirectDamageEvent(c, agentData, skillData, offset));
                 }
                 else if (c.IsBuff == 0)
                 {
-                    res.Add(new DirectDamageEvent(c, agentData, offset));
+                    res.Add(new DirectDamageEvent(c, agentData, skillData, offset));
                 }
             }
             return res;

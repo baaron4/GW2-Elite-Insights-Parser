@@ -54,18 +54,18 @@ namespace LuckParser.Models.ParseModels
                     };
                 }
                 buffAgentsToSort.Add(bf.To);
-                if (_boonData.TryGetValue(bf.BuffSkill.ID, out var list2))
+                if (_boonData.TryGetValue(bf.BuffID, out var list2))
                 {
                     list2.Add(bf);
                 }
                 else
                 {
-                    _boonData[bf.BuffSkill.ID] = new List<AbstractBuffEvent>()
+                    _boonData[bf.BuffID] = new List<AbstractBuffEvent>()
                     {
                         bf
                     };
                 }
-                buffIDsToSort.Add(bf.BuffSkill.ID);
+                buffIDsToSort.Add(bf.BuffID);
             }
             foreach (long buffID in buffIDsToSort)
             {
@@ -77,14 +77,14 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        private void SpecialCastParse(List<Player> players)
+        private void SpecialCastParse(List<Player> players, SkillData skillData)
         {
             List<AnimatedCastEvent> toAdd = new List<AnimatedCastEvent>();
             foreach (Player p in players)
             {
                 if (p.Prof == "Mirage")
                 {
-                    toAdd = MirageHelper.TranslateMirageCloak(GetBoonData(40408));
+                    toAdd = MirageHelper.TranslateMirageCloak(GetBoonData(40408), skillData);
                     break;
                 }
             }
@@ -104,18 +104,18 @@ namespace LuckParser.Models.ParseModels
                     };
                 }
                 castAgentsToSort.Add(cast.Caster);
-                if (_castDataById.TryGetValue(cast.SkillId, out var list2))
+                if (_castDataById.TryGetValue(cast.Skill.ID, out var list2))
                 {
                     list2.Add(cast);
                 }
                 else
                 {
-                    _castDataById[cast.SkillId] = new List<AbstractCastEvent>()
+                    _castDataById[cast.Skill.ID] = new List<AbstractCastEvent>()
                     {
                         cast
                     };
                 }
-                castIDsToSort.Add(cast.SkillId);
+                castIDsToSort.Add(cast.Skill.ID);
             }
             foreach (long buffID in castIDsToSort)
             {
@@ -130,7 +130,7 @@ namespace LuckParser.Models.ParseModels
         private void ExtraEvents(List<Player> players, SkillData skillData)
         {
             SpecialBoonParse(players, skillData);
-            SpecialCastParse(players);
+            SpecialCastParse(players, skillData);
         }
 
         public CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players)
@@ -148,13 +148,13 @@ namespace LuckParser.Models.ParseModels
             // state change events
             EICombatEventFactory.CreateStateChangeEvents(allCombatItems, _metaDataEvents, _statusEvents, agentData, fightData.FightStartLogTime);
             // activation events
-            List<AnimatedCastEvent> castData = EICombatEventFactory.CreateCastEvents(allCombatItems.Where(x => x.IsActivation != ParseEnum.Activation.None).ToList(), agentData, fightData.FightStartLogTime);
-            List<WeaponSwapEvent> wepSwaps = EICombatEventFactory.CreateWeaponSwapEvents(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.WeaponSwap).ToList(), agentData, fightData.FightStartLogTime);
+            List<AnimatedCastEvent> castData = EICombatEventFactory.CreateCastEvents(allCombatItems.Where(x => x.IsActivation != ParseEnum.Activation.None).ToList(), agentData, skillData, fightData.FightStartLogTime);
+            List<WeaponSwapEvent> wepSwaps = EICombatEventFactory.CreateWeaponSwapEvents(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.WeaponSwap).ToList(), agentData, skillData, fightData.FightStartLogTime);
             _weaponSwapData = wepSwaps.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
             _castData = castData.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
             List<AbstractCastEvent> allCastEvents = new List<AbstractCastEvent>(castData);
             allCastEvents.AddRange(wepSwaps);
-            _castDataById = allCastEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
+            _castDataById = allCastEvents.GroupBy(x => x.Skill.ID).ToDictionary(x => x.Key, x => x.ToList());
             // buff remove event
             List<CombatItem> buffCombatEvents = allCombatItems.Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.IsBuff != 0).ToList();
             buffCombatEvents.AddRange(noStateActiBuffRem.Where(x => x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0));
@@ -162,9 +162,9 @@ namespace LuckParser.Models.ParseModels
             buffCombatEvents.Sort((x, y) => x.LogTime.CompareTo(y.LogTime));
             List<AbstractBuffEvent> buffEvents = EICombatEventFactory.CreateBuffEvents(buffCombatEvents, agentData, skillData, fightData.FightStartLogTime);
             _boonDataByDst = buffEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
-            _boonData = buffEvents.GroupBy(x => x.BuffSkill.ID).ToDictionary(x => x.Key, x => x.ToList());
+            _boonData = buffEvents.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
             // damage events
-            List<AbstractDamageEvent> damageData = EICombatEventFactory.CreateDamageEvents(noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0)).ToList(), agentData, fightData.FightStartLogTime);
+            List<AbstractDamageEvent> damageData = EICombatEventFactory.CreateDamageEvents(noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0)).ToList(), agentData, skillData, fightData.FightStartLogTime);
             _damageData = damageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             _damageTakenData = damageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
 
