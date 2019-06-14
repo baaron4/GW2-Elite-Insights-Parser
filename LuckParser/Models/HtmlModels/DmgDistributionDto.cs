@@ -1,6 +1,7 @@
 ﻿using LuckParser.Models.ParseModels;
 using LuckParser.Parser;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LuckParser.Models.HtmlModels
 {  
@@ -20,12 +21,8 @@ namespace LuckParser.Models.HtmlModels
                     flank = 0,
                     glance = 0;
             bool IsIndirectDamage = false;
-            foreach (AbstractDamageEvent dl in entry.Value)
+            foreach (AbstractDamageEvent dl in entry.Value.Where(x => !x.HasDowned))
             {
-                if (dl.HasDowned)
-                {
-                    continue;
-                }
                 IsIndirectDamage = dl is NonDirectDamageEvent;
                 int curdmg = dl.Damage;
                 totaldamage += curdmg;
