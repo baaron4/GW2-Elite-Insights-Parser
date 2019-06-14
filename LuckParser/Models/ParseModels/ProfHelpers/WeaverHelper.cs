@@ -37,7 +37,7 @@ namespace LuckParser.Models.ParseModels
         private static long TranslateWeaverAttunement(List<AbstractBuffEvent> buffApplies)
         {
             // check if more than 3 ids are present
-            if (buffApplies.Select(x => x.BuffID).Distinct().Count() > 3)
+            if (buffApplies.Select(x => x.BuffSkill).Distinct().Count() > 3)
             {
                 throw new InvalidOperationException("Too much buff apply events in TranslateWeaverAttunement");
             }
@@ -52,17 +52,17 @@ namespace LuckParser.Models.ParseModels
             HashSet<long> minor = null;
             foreach (BuffApplyEvent c in buffApplies)
             {
-                if (duals.Contains(c.BuffID))
+                if (duals.Contains(c.BuffSkill.ID))
                 {
-                    return c.BuffID;
+                    return c.BuffSkill.ID;
                 }
-                if (_majorsTranslation.ContainsKey(c.BuffID))
+                if (_majorsTranslation.ContainsKey(c.BuffSkill.ID))
                 {
-                    major = _majorsTranslation[c.BuffID];
+                    major = _majorsTranslation[c.BuffSkill.ID];
                 }
-                else if (_minorsTranslation.ContainsKey(c.BuffID))
+                else if (_minorsTranslation.ContainsKey(c.BuffSkill.ID))
                 {
-                    minor = _minorsTranslation[c.BuffID];
+                    minor = _minorsTranslation[c.BuffSkill.ID];
                 }
             }
             if (major == null || minor == null)
@@ -77,7 +77,7 @@ namespace LuckParser.Models.ParseModels
             return inter.First();
         }
 
-        public static List<AbstractBuffEvent> TransformWeaverAttunements(List<AbstractBuffEvent> buffs, AgentItem a)
+        public static List<AbstractBuffEvent> TransformWeaverAttunements(List<AbstractBuffEvent> buffs, AgentItem a, SkillData skillData)
         {
             List<AbstractBuffEvent> res = new List<AbstractBuffEvent>();
             HashSet<long> attunements = new HashSet<long>
@@ -120,13 +120,13 @@ namespace LuckParser.Models.ParseModels
                 airEarth,*/
             };
             // first we get rid of standard attunements
-            List<AbstractBuffEvent> attuns = buffs.Where(x => attunements.Contains(x.BuffID)).ToList();
+            List<AbstractBuffEvent> attuns = buffs.Where(x => attunements.Contains(x.BuffSkill.ID)).ToList();
             foreach (AbstractBuffEvent c in attuns)
             {
-                c.Invalidate();
+                c.Invalidate(skillData);
             }
             // get all weaver attunements ids and group them by time
-            List<AbstractBuffEvent> weaverAttuns = buffs.Where(x => weaverAttunements.Contains(x.BuffID)).ToList();
+            List<AbstractBuffEvent> weaverAttuns = buffs.Where(x => weaverAttunements.Contains(x.BuffSkill.ID)).ToList();
             if (weaverAttuns.Count == 0)
             {
                 return res;
@@ -154,17 +154,17 @@ namespace LuckParser.Models.ParseModels
                 long curID = TranslateWeaverAttunement(applies);
                 foreach (AbstractBuffEvent c in pair.Value)
                 {
-                    c.Invalidate();
+                    c.Invalidate(skillData);
                 }
                 if (curID == 0)
                 {
                     continue;
                 }
-                res.Add(new BuffApplyEvent(a, a, pair.Key, int.MaxValue, curID));
+                res.Add(new BuffApplyEvent(a, a, pair.Key, int.MaxValue, skillData.Get(curID)));
                 if (prevID != 0)
                 {
-                    res.Add(new BuffRemoveManualEvent(a, a, pair.Key, int.MaxValue, prevID));
-                    res.Add(new BuffRemoveAllEvent(a, a, pair.Key, int.MaxValue, prevID, int.MaxValue, 1));
+                    res.Add(new BuffRemoveManualEvent(a, a, pair.Key, int.MaxValue, skillData.Get(prevID)));
+                    res.Add(new BuffRemoveAllEvent(a, a, pair.Key, int.MaxValue, skillData.Get(prevID), int.MaxValue, 1));
                 }
                 prevID = curID;
             }

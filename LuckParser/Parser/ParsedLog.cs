@@ -39,7 +39,7 @@ namespace LuckParser.Parser
             //
             PlayerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
             PlayerAgents = new HashSet<AgentItem>(playerList.Select(x => x.AgentItem));
-            CombatData = new CombatData(combatItems, fightData, agentData, playerList);
+            CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList);
             LogData = new LogData(buildVersion, CombatData, combatItems);
             //
             UpdateFightData();

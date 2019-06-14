@@ -10,7 +10,7 @@ namespace LuckParser.Models.ParseModels
     public class ElementalistHelper : ProfHelper
     {
 
-        public static void RemoveDualBuffs(List<AbstractBuffEvent> buffsPerDst)
+        public static void RemoveDualBuffs(List<AbstractBuffEvent> buffsPerDst, SkillData skillData)
         {
             HashSet<long> duals = new HashSet<long>
             {
@@ -19,9 +19,9 @@ namespace LuckParser.Models.ParseModels
                 AirDual,
                 EarthDual,
             };
-            foreach (AbstractBuffEvent c in buffsPerDst.Where(x => duals.Contains(x.BuffID)))
+            foreach (AbstractBuffEvent c in buffsPerDst.Where(x => duals.Contains(x.BuffSkill.ID)))
             {
-                c.Invalidate();
+                c.Invalidate(skillData);
             }
         }
     }

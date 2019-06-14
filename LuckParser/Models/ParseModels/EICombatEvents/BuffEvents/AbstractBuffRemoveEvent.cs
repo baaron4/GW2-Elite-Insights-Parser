@@ -11,7 +11,7 @@ namespace LuckParser.Models.ParseModels
     {
         public int RemovedDuration { get; }
 
-        public AbstractBuffRemoveEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, offset)
+        public AbstractBuffRemoveEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, skillData, offset)
         {
             RemovedDuration = evtcItem.Value;
             By = agentData.GetAgentByInstID(evtcItem.DstMasterInstid > 0 ? evtcItem.DstMasterInstid : evtcItem.DstInstid, evtcItem.LogTime);
@@ -19,7 +19,7 @@ namespace LuckParser.Models.ParseModels
             To = agentData.GetAgentByInstID(evtcItem.SrcInstid, evtcItem.LogTime);
         }
 
-        public AbstractBuffRemoveEvent(AgentItem by, AgentItem to, long time, int removedDuration, long buffID) : base(buffID, time)
+        public AbstractBuffRemoveEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill) : base(buffSkill, time)
         {
             RemovedDuration = removedDuration;
             By = by;

@@ -155,7 +155,7 @@ namespace LuckParser.Models.ParseModels
             // Fill in Boon Map
             foreach (AbstractBuffEvent c in log.CombatData.GetBoonDataByDst(AgentItem))
             {
-                long boonId = c.BuffID;
+                long boonId = c.BuffSkill.ID;
                 if (!boonMap.ContainsKey(boonId))
                 {
                     if (!log.Boons.BoonsByIds.ContainsKey(boonId))

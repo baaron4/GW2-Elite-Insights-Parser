@@ -55,7 +55,7 @@ namespace LuckParser.Models
                 PresentPersonalBuffs[player.InstID] = new HashSet<Boon>();
                 foreach (AbstractBuffEvent item in combatData.GetBoonDataByDst(player.AgentItem))
                 {
-                    if (item is BuffApplyEvent && item.To == player.AgentItem && remainingBuffsByIds.TryGetValue(item.BuffID, out Boon boon))
+                    if (item is BuffApplyEvent && item.To == player.AgentItem && remainingBuffsByIds.TryGetValue(item.BuffSkill.ID, out Boon boon))
                     {
                         PresentPersonalBuffs[player.InstID].Add(boon);
                     }

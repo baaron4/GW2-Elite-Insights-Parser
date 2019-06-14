@@ -143,7 +143,7 @@ namespace LuckParser.Models.ParseModels
             return res;
         }
 
-        public static List<AbstractBuffEvent> CreateBuffEvents(List<CombatItem> buffEvents, AgentData agentData, long offset)
+        public static List<AbstractBuffEvent> CreateBuffEvents(List<CombatItem> buffEvents, AgentData agentData, SkillData skillData, long offset)
         {
             List<AbstractBuffEvent> res = new List<AbstractBuffEvent>();
             foreach (CombatItem c in buffEvents)
@@ -153,21 +153,21 @@ namespace LuckParser.Models.ParseModels
                     case ParseEnum.BuffRemove.None:
                         if (c.IsOffcycle > 0)
                         {
-                            res.Add(new BuffExtensionEvent(c, agentData, offset));
+                            res.Add(new BuffExtensionEvent(c, agentData, skillData, offset));
                         }
                         else
                         {
-                            res.Add(new BuffApplyEvent(c, agentData, offset));
+                            res.Add(new BuffApplyEvent(c, agentData, skillData, offset));
                         }
                         break;
                     case ParseEnum.BuffRemove.Single:
-                        res.Add(new BuffRemoveSingleEvent(c, agentData, offset));
+                        res.Add(new BuffRemoveSingleEvent(c, agentData, skillData, offset));
                         break;
                     case ParseEnum.BuffRemove.All:
-                        res.Add(new BuffRemoveAllEvent(c, agentData, offset));
+                        res.Add(new BuffRemoveAllEvent(c, agentData, skillData, offset));
                         break;
                     case ParseEnum.BuffRemove.Manual:
-                        res.Add(new BuffRemoveManualEvent(c, agentData, offset));
+                        res.Add(new BuffRemoveManualEvent(c, agentData, skillData, offset));
                         break;
                 }
             }
