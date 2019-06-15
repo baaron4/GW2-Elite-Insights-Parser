@@ -100,10 +100,6 @@ namespace LuckParser.Builders
             double hpLeft = hpUpdates.Count > 0
                 ? hpUpdates.Last().HPPercent
                 : 100.0;
-            if (_log.CombatData.GetDeadEvents(_log.LegacyTarget.AgentItem).Count > 0)
-            {
-                hpLeft = 0.0;
-            }
             WriteLine(new [] { "Final Boss Health", (_log.LegacyTarget.GetHealth(_log.CombatData) * hpLeft).ToString() });
             WriteLine(new [] { "Boss Health Burned %", (100.0 - hpLeft).ToString() });
             WriteLine(new [] { "Duration", durationString });

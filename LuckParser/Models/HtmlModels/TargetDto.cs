@@ -33,7 +33,7 @@ namespace LuckParser.Models.HtmlModels
             {
                 CombatReplayID = target.GetCombatReplayID(log);
             }
-            if (log.FightData.Success || log.CombatData.GetDeadEvents(target.AgentItem).Count > 0)
+            if (log.FightData.Success)
             {
                 HpLeft = 0;
             }
