@@ -148,71 +148,12 @@ namespace LuckParser
         /// <param name="e"></param>
         private void BgWorkerDoWork(object sender, DoWorkEventArgs e)
         {
-            System.Globalization.CultureInfo before = System.Threading.Thread.CurrentThread.CurrentCulture;
-            System.Threading.Thread.CurrentThread.CurrentCulture =
-                    new System.Globalization.CultureInfo("en-US");
             BackgroundWorker bg = sender as BackgroundWorker;
             GridRow rowData = e.Argument as GridRow;
-            UploadController up_controller = new UploadController();
             e.Result = rowData;
             _runningCount++;
             _anyRunning = true;
-            bg.ThrowIfCanceled(rowData);
-            try
-            {
-                FileInfo fInfo = new FileInfo(rowData.Location);
-                if (fInfo == null || !fInfo.Exists)
-                {
-                    bg.UpdateProgress(rowData, "File does not exist", 100);
-                    e.Cancel = true;
-                    throw new CancellationException(rowData);
-                }
-                bg.UpdateProgress(rowData, " Working...", 0);
-                
-                ParsingController parser = new ParsingController();
-
-                if (!GeneralHelper.HasFormat())
-                {
-                    throw new CancellationException(rowData, new InvalidDataException("No output format has been selected"));
-                }
-
-                if (GeneralHelper.IsSupportedFormat(fInfo.Name))
-                {
-                    //Process evtc here
-                    ParsedLog log = parser.ParseLog(rowData, fInfo.FullName);
-                    string[] uploadresult = up_controller.UploadOperation(rowData, fInfo);
-                    //Creating File              
-                    GeneralHelper.GenerateFiles(log, rowData, uploadresult, fInfo);
-                    bg.ThrowIfCanceled(rowData);
-                }
-                else
-                {
-                    bg.UpdateProgress(rowData, "Not EVTC", 100);
-                    e.Cancel = true;
-                    Console.Error.Write("Not EVTC");
-                    throw new CancellationException(rowData);
-                }
-
-            }
-            catch (SkipException s)
-            {
-                Console.Write(s.Message);
-                throw new CancellationException(rowData, s);
-            }
-            catch (TooShortException t)
-            {
-                Console.Write(t.Message);
-                throw new CancellationException(rowData, t);
-            }
-            catch (Exception ex) when (!System.Diagnostics.Debugger.IsAttached)
-            {
-                Console.Error.Write(ex.Message);
-                throw new CancellationException(rowData, ex);
-            }
-            finally
-            {
-                System.Threading.Thread.CurrentThread.CurrentCulture = before;
-            }
+            ProgramHelper.DoWork(rowData);
 
         }
 
@@ -474,7 +415,7 @@ namespace LuckParser
 
         private void LogFileWatcher_Created(object sender, FileSystemEventArgs e)
         {
-            if (GeneralHelper.IsSupportedFormat(e.FullPath))
+            if (ProgramHelper.IsSupportedFormat(e.FullPath))
             {
                 AddDelayed(e.FullPath);
             }
@@ -482,7 +423,7 @@ namespace LuckParser
 
         private void LogFileWatcher_Renamed(object sender, RenamedEventArgs e)
         {
-            if (GeneralHelper.IsTemporaryFormat(e.OldFullPath) && GeneralHelper.IsCompressedFormat(e.FullPath))
+            if (ProgramHelper.IsTemporaryFormat(e.OldFullPath) && ProgramHelper.IsCompressedFormat(e.FullPath))
             {
                 AddDelayed(e.FullPath);
             }

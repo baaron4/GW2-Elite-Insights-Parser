@@ -47,7 +47,7 @@ namespace LuckParser.Parser
             row.BgWorker.UpdateProgress(row, "10% - Reading Binary...", 10);
             using (var fs = new FileStream(evtc, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                if (GeneralHelper.IsCompressedFormat(evtc))
+                if (ProgramHelper.IsCompressedFormat(evtc))
                 {
                     using (var arch = new ZipArchive(fs, ZipArchiveMode.Read))
                     {
