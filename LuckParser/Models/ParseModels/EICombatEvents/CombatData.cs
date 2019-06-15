@@ -138,12 +138,10 @@ namespace LuckParser.Models.ParseModels
             _skillIds = new HashSet<long>(allCombatItems.Select(x => x.SkillID));
             var noStateActiBuffRem = allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.None && x.IsActivation == ParseEnum.Activation.None && x.IsBuffRemove == ParseEnum.BuffRemove.None);
             // movement events
-            _movementData = fightData.Logic.HasCombatReplayMap
-                ? EICombatEventFactory.CreateMovementEvents(allCombatItems.Where(x =>
-                        x.IsStateChange == ParseEnum.StateChange.Position ||
-                        x.IsStateChange == ParseEnum.StateChange.Velocity ||
-                        x.IsStateChange == ParseEnum.StateChange.Rotation).ToList(), agentData, fightData.FightStartLogTime)
-                : new Dictionary<AgentItem, List<AbstractMovementEvent>>();
+            _movementData = EICombatEventFactory.CreateMovementEvents(allCombatItems.Where(x =>
+                       x.IsStateChange == ParseEnum.StateChange.Position ||
+                       x.IsStateChange == ParseEnum.StateChange.Velocity ||
+                       x.IsStateChange == ParseEnum.StateChange.Rotation).ToList(), agentData, fightData.FightStartLogTime);
             HasMovementData = _movementData.Count > 1;
             // state change events
             EICombatEventFactory.CreateStateChangeEvents(allCombatItems, _metaDataEvents, _statusEvents, agentData, fightData.FightStartLogTime);
