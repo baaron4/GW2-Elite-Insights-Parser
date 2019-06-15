@@ -97,11 +97,15 @@ namespace LuckParser.Builders
             WriteLine(new [] { "Success", _log.FightData.Success.ToString() });
             WriteLine(new [] { "Total Boss Health", _log.LegacyTarget.GetHealth(_log.CombatData).ToString() });
             List<HealthUpdateEvent> hpUpdates = _log.CombatData.GetHealthUpdateEvents(_log.LegacyTarget.AgentItem);
-            double finalTargetHealth = hpUpdates.Count > 0
+            double hpLeft = hpUpdates.Count > 0
                 ? hpUpdates.Last().HPPercent
                 : 100.0;
-            WriteLine(new [] { "Final Boss Health", (_log.LegacyTarget.GetHealth(_log.CombatData) * (100.0 - finalTargetHealth)).ToString() });
-            WriteLine(new [] { "Boss Health Burned %", (100.0 - finalTargetHealth).ToString() });
+            if (_log.CombatData.GetDeadEvents(target.AgentItem).Count > 0)
+            {
+                hpLeft = 0.0;
+            }
+            WriteLine(new [] { "Final Boss Health", (_log.LegacyTarget.GetHealth(_log.CombatData) * hpLeft).ToString() });
+            WriteLine(new [] { "Boss Health Burned %", (100.0 - hpLeft).ToString() });
             WriteLine(new [] { "Duration", durationString });
 
             //DPSStats
