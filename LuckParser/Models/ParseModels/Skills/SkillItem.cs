@@ -56,7 +56,7 @@ namespace LuckParser.Models.ParseModels
             {56349, "Regenerative Breakbar" },
             // P.Qadim
             {56296, "Ruinous Nova Charge" },
-            //{56223, "Magma Bomb" },
+            //{56036, "Magma Bomb" },
             {56405, "Force of Retaliation Cast" },
             {56375, "Teleport Center" },
             {56446, "Eat Pylon" },

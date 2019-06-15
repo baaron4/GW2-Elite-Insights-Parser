@@ -42,7 +42,57 @@ namespace LuckParser.Models.Logic
             {
                 return phases;
             }
-            //var test = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).GroupBy(x => x.Skill.Name).ToDictionary(x => x.Key, x => x.ToList()) ;
+            List<long> phaseStarts = new List<long>();
+            List<long> phaseEnds = new List<long>();
+            //
+            List<AbstractBuffEvent> magmaDrops = log.CombatData.GetBoonData(56475).Where(x => x is BuffApplyEvent).ToList();
+            foreach (AbstractBuffEvent magmaDrop in magmaDrops)
+            {
+                if (phaseEnds.Count > 0)
+                {
+                    if (Math.Abs(phaseEnds.Last() - magmaDrop.Time) > 1000)
+                    {
+                        phaseEnds.Add(magmaDrop.Time);
+                    }
+                }
+                else
+                {
+                    phaseEnds.Add(magmaDrop.Time);
+                }
+            }
+            List<AbstractCastEvent> pushes = log.CombatData.GetCastDataById(56405);
+            if (pushes.Count > 0)
+            {
+                AbstractCastEvent push = pushes[0];
+                phaseStarts.Add(push.Time + push.ActualDuration);
+                foreach (long magmaDrop in phaseEnds)
+                {
+                    push = pushes.FirstOrDefault(x => x.Time >= magmaDrop);
+                    if (push == null)
+                    {
+                        break;
+                    }
+                    phaseStarts.Add(push.Time + push.ActualDuration);
+                }
+            }
+            // rush to pylon
+            phaseEnds.AddRange(log.CombatData.GetCastDataById(56616).Select(x => x.Time).ToList());
+            phaseEnds.Add(log.FightData.FightDuration);
+            // tp to middle after pylon destruction
+            phaseStarts.AddRange(log.CombatData.GetCastDataById(56375).Select(x => x.Time + x.ActualDuration));
+            if (phaseEnds.Count < phaseStarts.Count)
+            {
+                return phases;
+            }
+            for (int i = 0; i < phaseStarts.Count; i++)
+            {
+                PhaseData phase = new PhaseData(phaseStarts[i], phaseEnds[i])
+                {
+                    Name = "Phase " + (i + 1)
+                };
+                phase.Targets.Add(mainTarget);
+                phases.Add(phase);
+            }
             return phases;
         }
 
