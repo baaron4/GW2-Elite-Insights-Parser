@@ -29,6 +29,23 @@ namespace LuckParser.Models.Logic
             };
         }
 
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
+        {
+            List<PhaseData> phases = GetInitialPhase(log);
+            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.PeerlessQadim);
+            if (mainTarget == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
+            phases[0].Targets.Add(mainTarget);
+            if (!requirePhases)
+            {
+                return phases;
+            }
+            //var test = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).GroupBy(x => x.Skill.Name).ToDictionary(x => x.Key, x => x.ToList()) ;
+            return phases;
+        }
+
         protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("",
