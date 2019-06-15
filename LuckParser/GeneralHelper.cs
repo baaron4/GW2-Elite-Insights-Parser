@@ -10,6 +10,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 using LuckParser.Controllers;
+using System.IO;
+using LuckParser.Builders;
 
 namespace LuckParser
 {
@@ -26,6 +28,104 @@ namespace LuckParser
 
         public static UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
 
+        public static void GenerateFiles(ParsedLog log, GridRow rowData, string[] uploadresult, FileInfo fInfo)
+        {
+            rowData.BgWorker.ThrowIfCanceled(rowData);
+            rowData.BgWorker.UpdateProgress(rowData, "50% - Creating File(s)...", 50);
+            //save location
+            DirectoryInfo saveDirectory;
+            if (Properties.Settings.Default.SaveAtOut || Properties.Settings.Default.OutLocation == null)
+            {
+                //Default save directory
+                saveDirectory = fInfo.Directory;
+            }
+            else
+            {
+                //Customised save directory
+                saveDirectory = new DirectoryInfo(Properties.Settings.Default.OutLocation);
+            }
+
+            if (saveDirectory == null)
+            {
+                throw new CancellationException(rowData, new InvalidDataException("Save Directory not found"));
+            }
+
+            string result = log.FightData.Success ? "kill" : "fail";
+            string encounterLengthTerm = Properties.Settings.Default.AddDuration ? "_" + (log.FightData.FightDuration / 1000).ToString() + "s" : "";
+            string PoVClassTerm = Properties.Settings.Default.AddPoVProf ? "_" + log.LogData.PoV.Prof.ToLower() : "";
+            string fName = fInfo.Name.Split('.')[0];
+            fName = $"{fName}{PoVClassTerm}_{log.FightData.Logic.Extension}{encounterLengthTerm}_{result}";
+
+            rowData.BgWorker.ThrowIfCanceled(rowData);
+            if (Properties.Settings.Default.SaveOutHTML)
+            {
+                string outputFile = Path.Combine(
+                saveDirectory.FullName,
+                $"{fName}.html"
+                );
+                rowData.LogLocation = outputFile;
+                using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+                using (var sw = new StreamWriter(fs))
+                {
+                    var builder = new HTMLBuilder(log, uploadresult);
+                    builder.CreateHTML(sw, saveDirectory.FullName);
+                }
+            }
+            rowData.BgWorker.ThrowIfCanceled(rowData);
+            if (Properties.Settings.Default.SaveOutCSV)
+            {
+                string outputFile = Path.Combine(
+                    saveDirectory.FullName,
+                    $"{fName}.csv"
+                );
+                string splitString = "";
+                if (rowData.LogLocation != null) { splitString = ","; }
+                rowData.LogLocation += splitString + outputFile;
+                using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+                using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
+                {
+                    var builder = new CSVBuilder(sw, ",", log, uploadresult);
+                    builder.CreateCSV();
+                }
+            }
+            rowData.BgWorker.ThrowIfCanceled(rowData);
+            if (Properties.Settings.Default.SaveOutJSON)
+            {
+                string outputFile = Path.Combine(
+                    saveDirectory.FullName,
+                    $"{fName}.json"
+                );
+                string splitString = "";
+                if (rowData.LogLocation != null) { splitString = ","; }
+                rowData.LogLocation += splitString + saveDirectory.FullName;
+                using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+                using (var sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
+                {
+                    var builder = new RawFormatBuilder(log, uploadresult);
+                    builder.CreateJSON(sw);
+                }
+            }
+            rowData.BgWorker.ThrowIfCanceled(rowData);
+            if (Properties.Settings.Default.SaveOutXML)
+            {
+                string outputFile = Path.Combine(
+                    saveDirectory.FullName,
+                    $"{fName}.xml"
+                );
+                string splitString = "";
+                if (rowData.LogLocation != null) { splitString = ","; }
+                rowData.LogLocation += splitString + saveDirectory.FullName;
+                using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+                using (var sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
+                {
+                    var builder = new RawFormatBuilder(log, uploadresult);
+                    builder.CreateXML(sw);
+                }
+            }
+            rowData.BgWorker.ThrowIfCanceled(rowData);
+            rowData.BgWorker.UpdateProgress(rowData, $"100% - Complete_{log.FightData.Logic.Extension}_{result}", 100);
+        }
+
         /// <summary>
         /// Reports a status update for a log, updating the background worker and the related row with the new status
         /// </summary>
@@ -39,7 +139,7 @@ namespace LuckParser
             bg.ReportProgress(percent, row);
             if (row.Metadata.FromConsole)
             {
-                Console.WriteLine($"{row.Location}: {status}");
+                Console.WriteLine($"{row.Location}: {status}" + Environment.NewLine);
             }
         }
 

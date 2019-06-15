@@ -153,13 +153,11 @@ namespace LuckParser
                     new System.Globalization.CultureInfo("en-US");
             BackgroundWorker bg = sender as BackgroundWorker;
             GridRow rowData = e.Argument as GridRow;
-            UploadController up_controller = null;
+            UploadController up_controller = new UploadController();
             e.Result = rowData;
-
             _runningCount++;
             _anyRunning = true;
             bg.ThrowIfCanceled(rowData);
-
             try
             {
                 FileInfo fInfo = new FileInfo(rowData.Location);
@@ -169,11 +167,6 @@ namespace LuckParser
                     e.Cancel = true;
                     throw new CancellationException(rowData);
                 }
-                //Upload Process
-                Task<string> DREITask = null;
-                Task<string> DRRHTask = null;
-                Task<string> RaidarTask = null;
-                string[] uploadresult = new string[3] { "", "", "" };
                 bg.UpdateProgress(rowData, " Working...", 0);
                 
                 ParsingController parser = new ParsingController();
@@ -186,169 +179,11 @@ namespace LuckParser
                 if (GeneralHelper.IsSupportedFormat(fInfo.Name))
                 {
                     //Process evtc here
-                    bg.UpdateProgress(rowData, "10% - Reading Binary...", 10);
                     ParsedLog log = parser.ParseLog(rowData, fInfo.FullName);
+                    string[] uploadresult = up_controller.UploadOperation(rowData, fInfo);
+                    //Creating File              
+                    GeneralHelper.GenerateFiles(log, rowData, uploadresult, fInfo);
                     bg.ThrowIfCanceled(rowData);
-                    bg.UpdateProgress(rowData, "35% - Data parsed", 35);
-                    if (Properties.Settings.Default.UploadToDPSReports)
-                    {
-                        bg.UpdateProgress(rowData, " 40% - Uploading to DPSReports using EI...", 40);
-                        if (up_controller == null)
-                        {
-                            up_controller = new UploadController();
-                        }
-                        DREITask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsEI(fInfo));
-                        if (DREITask != null)
-                        {
-                            while (!DREITask.IsCompleted)
-                            {
-                                System.Threading.Thread.Sleep(100);
-                            }
-                            uploadresult[0] = DREITask.Result;
-                        }
-                        else
-                        {
-                            uploadresult[0] = "Failed to Define Upload Task";
-                        }
-                    }
-                    bg.ThrowIfCanceled(rowData);
-                    if (Properties.Settings.Default.UploadToDPSReportsRH)
-                    {
-                        bg.UpdateProgress(rowData, " 40% - Uploading to DPSReports using RH...", 40);
-                        if (up_controller == null)
-                        {
-                            up_controller = new UploadController();
-                        }
-                        DRRHTask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsRH(fInfo));
-                        if (DRRHTask != null)
-                        {
-                            while (!DRRHTask.IsCompleted)
-                            {
-                                System.Threading.Thread.Sleep(100);
-                            }
-                            uploadresult[1] = DRRHTask.Result;
-                        }
-                        else
-                        {
-                            uploadresult[1] = "Failed to Define Upload Task";
-                        }
-                    }
-                    bg.ThrowIfCanceled(rowData);
-                    if (Properties.Settings.Default.UploadToRaidar)
-                    {
-                        bg.UpdateProgress(rowData, " 40% - Uploading to Raidar...", 40);
-                        if (up_controller == null)
-                        {
-                            up_controller = new UploadController();
-                        }
-                        RaidarTask = Task.Factory.StartNew(() => up_controller.UploadRaidar(fInfo));
-                        if (RaidarTask != null)
-                        {
-                            while (!RaidarTask.IsCompleted)
-                            {
-                                System.Threading.Thread.Sleep(100);
-                            }
-                            uploadresult[2] = RaidarTask.Result;
-                        }
-                        else
-                        {
-                            uploadresult[2] = "Failed to Define Upload Task";
-                        }
-                    }
-                    bg.ThrowIfCanceled(rowData);
-                    //Creating File
-                    //save location
-                    DirectoryInfo saveDirectory;
-                    if (Properties.Settings.Default.SaveAtOut || Properties.Settings.Default.OutLocation == null)
-                    {
-                        //Default save directory
-                        saveDirectory = fInfo.Directory;
-                    }
-                    else
-                    {
-                        //Customised save directory
-                        saveDirectory = new DirectoryInfo(Properties.Settings.Default.OutLocation);
-                    }
-                    if (saveDirectory == null)
-                    {
-                        throw new CancellationException(rowData, new InvalidDataException("Invalid save directory"));
-                    }
-                    string result = log.FightData.Success ? "kill" : "fail";
-                    string encounterLengthTerm = Properties.Settings.Default.AddDuration ? "_" + (log.FightData.FightDuration / 1000).ToString() + "s" : "";
-                    string PoVClassTerm = Properties.Settings.Default.AddPoVProf ? "_" + log.LogData.PoV.Prof.ToLower() : "";
-                    
-                    bg.ThrowIfCanceled(rowData);
-                    bg.UpdateProgress(rowData, "85% - Statistics computed", 85);
-                    bg.ThrowIfCanceled(rowData);
-                    string fName = fInfo.Name.Split('.')[0];
-                    fName = $"{fName}{PoVClassTerm}_{log.FightData.Logic.Extension}{encounterLengthTerm}_{result}";
-                    bg.UpdateProgress(rowData, "90% - Creating File...", 90);
-                    bg.ThrowIfCanceled(rowData);
-                    if (Properties.Settings.Default.SaveOutHTML)
-                    {
-                        string outputFile = Path.Combine(
-                        saveDirectory.FullName,
-                        $"{fName}.html"
-                        );
-                        rowData.LogLocation = outputFile;
-                        using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
-                        using (var sw = new StreamWriter(fs))
-                        {
-                            var builder = new HTMLBuilder(log, uploadresult);
-                            builder.CreateHTML(sw, saveDirectory.FullName);
-                        }
-                    }
-                    if (Properties.Settings.Default.SaveOutCSV)
-                    {
-                        string outputFile = Path.Combine(
-                            saveDirectory.FullName,
-                            $"{fName}.csv"
-                        );
-                        string splitString = "";
-                        if (rowData.LogLocation != null) { splitString = ","; }
-                        rowData.LogLocation += splitString + outputFile;
-                        using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
-                        using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
-                        {
-                            var builder = new CSVBuilder(sw, ",", log, uploadresult);
-                            builder.CreateCSV();
-                        }
-                    }
-                    if (Properties.Settings.Default.SaveOutJSON)
-                    {
-                        string outputFile = Path.Combine(
-                            saveDirectory.FullName,
-                            $"{fName}.json"
-                        );
-                        string splitString = "";
-                        if (rowData.LogLocation != null) { splitString = ","; }
-                        rowData.LogLocation += splitString + saveDirectory.FullName;
-                        using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
-                        using (var sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
-                        {
-                            var builder = new RawFormatBuilder(log, uploadresult);
-                            builder.CreateJSON(sw);
-                        }
-                    }
-
-                    if (Properties.Settings.Default.SaveOutXML)
-                    {
-                        string outputFile = Path.Combine(
-                            saveDirectory.FullName,
-                            $"{fName}.xml"
-                        );
-                        string splitString = "";
-                        if (rowData.LogLocation != null) { splitString = ","; }
-                        rowData.LogLocation += splitString + saveDirectory.FullName;
-                        using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
-                        using (var sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
-                        {
-                            var builder = new RawFormatBuilder(log, uploadresult);
-                            builder.CreateXML(sw);
-                        }
-                    }
-
-                    bg.UpdateProgress(rowData, $"100% - Complete_{log.FightData.Logic.Extension}_{result}", 100);
                 }
                 else
                 {

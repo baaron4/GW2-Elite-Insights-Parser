@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,16 +14,16 @@ namespace LuckParser.Controllers
 {
     public class UploadController
     {
-        public string  UploadDPSReportsEI(FileInfo fi)
+        private string  UploadDPSReportsEI(FileInfo fi)
         {
             return UploadToDPSR(fi, "https://dps.report/uploadContent?generator=ei");
         }
-        public string UploadDPSReportsRH(FileInfo fi)
+        private string UploadDPSReportsRH(FileInfo fi)
         {
             return UploadToDPSR(fi, "https://dps.report/uploadContent?generator=rh");
            
         }
-        public string UploadRaidar(FileInfo fi)
+        private string UploadRaidar(FileInfo fi)
         {
             //string fileName = fi.Name;
             //byte[] fileContents = File.ReadAllBytes(fi.FullName);
@@ -63,9 +64,9 @@ namespace LuckParser.Controllers
             //}
             return "";
         }
-        public class DPSReportsResponseItem
+        private class DPSReportsResponseItem
         {
-            public string permalink;
+            public string Permalink { get; set; }
         }
         private string UploadToDPSR(FileInfo fi,string URI)
         {
@@ -97,8 +98,14 @@ namespace LuckParser.Controllers
                     int first = stringContents.IndexOf('{');
                     int length = stringContents.LastIndexOf('}') - first + 1;
                     string JSONFormat = stringContents.Substring(first, length);
-                    DPSReportsResponseItem item = JsonConvert.DeserializeObject<DPSReportsResponseItem>(JSONFormat);
-                    string logLink = item.permalink;
+                    DPSReportsResponseItem item = JsonConvert.DeserializeObject<DPSReportsResponseItem>(JSONFormat, new JsonSerializerSettings
+                    {
+                        ContractResolver = new DefaultContractResolver()
+                        {
+                            NamingStrategy = new CamelCaseNamingStrategy()
+                        }
+                    });
+                    string logLink = item.Permalink;
                     return logLink;
                 }
             }
@@ -108,6 +115,70 @@ namespace LuckParser.Controllers
                 // Console.WriteLine(ex.Message);
             }
             return "";
+        }
+
+        public string[] UploadOperation(GridRow row, FileInfo fInfo)
+        {
+            //Upload Process
+            Task<string> DREITask = null;
+            Task<string> DRRHTask = null;
+            Task<string> RaidarTask = null;
+            string[] uploadresult = new string[3] { "", "", "" };
+            if (Properties.Settings.Default.UploadToDPSReports)
+            {
+                row.BgWorker.UpdateProgress(row, " 40% - Uploading to DPSReports using EI...", 40);
+                DREITask = Task.Factory.StartNew(() => UploadDPSReportsEI(fInfo));
+                if (DREITask != null)
+                {
+                    while (!DREITask.IsCompleted)
+                    {
+                        System.Threading.Thread.Sleep(100);
+                    }
+                    uploadresult[0] = DREITask.Result;
+                }
+                else
+                {
+                    uploadresult[0] = "Failed to Define Upload Task";
+                }
+            }
+            row.BgWorker.ThrowIfCanceled(row);
+            if (Properties.Settings.Default.UploadToDPSReportsRH)
+            {
+                row.BgWorker.UpdateProgress(row, " 40% - Uploading to DPSReports using RH...", 40);
+                DRRHTask = Task.Factory.StartNew(() => UploadDPSReportsRH(fInfo));
+                if (DRRHTask != null)
+                {
+                    while (!DRRHTask.IsCompleted)
+                    {
+                        System.Threading.Thread.Sleep(100);
+                    }
+                    uploadresult[1] = DRRHTask.Result;
+                }
+                else
+                {
+                    uploadresult[1] = "Failed to Define Upload Task";
+                }
+            }
+            row.BgWorker.ThrowIfCanceled(row);
+            if (Properties.Settings.Default.UploadToRaidar)
+            {
+                row.BgWorker.UpdateProgress(row, " 40% - Uploading to Raidar...", 40);
+                RaidarTask = Task.Factory.StartNew(() => UploadRaidar(fInfo));
+                if (RaidarTask != null)
+                {
+                    while (!RaidarTask.IsCompleted)
+                    {
+                        System.Threading.Thread.Sleep(100);
+                    }
+                    uploadresult[2] = RaidarTask.Result;
+                }
+                else
+                {
+                    uploadresult[2] = "Failed to Define Upload Task";
+                }
+            }
+            row.BgWorker.ThrowIfCanceled(row);
+            return uploadresult;
         }
           
     }
