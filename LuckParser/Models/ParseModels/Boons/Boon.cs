@@ -258,6 +258,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Sapping Surge", 56118, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
                 new Boon("Chaos Corrosion", 56182, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
                 new Boon("Peerless Fixated", 56510, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
+                new Boon("Magma Drop", 56475, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
         };
 
         private readonly static List<Boon> _revenant = new List<Boon>
