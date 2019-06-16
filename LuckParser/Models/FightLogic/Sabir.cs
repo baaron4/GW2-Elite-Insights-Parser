@@ -26,7 +26,7 @@ namespace LuckParser.Models.Logic
             // rotating cc 56403
             // interesting stuff 56372 (big AoE?)
             Extension = "sabir";
-            IconUrl = "https://wiki.guildwars2.com/images/1/12/Cardinal_Sabir%27s_Token.png";
+            IconUrl = "https://wiki.guildwars2.com/images/f/fc/Mini_Air_Djinn.png";
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
@@ -89,9 +89,9 @@ namespace LuckParser.Models.Logic
 
         protected override CombatReplayMap GetCombatMapInternal()
         {
-            return new CombatReplayMap("",
-                            (800, 800),
-                            (-21504, -21504, 24576, 24576),
+            return new CombatReplayMap("https://i.imgur.com/zs9yPuG.png",
+                            (4365, 3972),
+                            (-14122, 142, - 9199, 4640),
                             (-21504, -21504, 24576, 24576),
                             (33530, 34050, 35450, 35970));
         }

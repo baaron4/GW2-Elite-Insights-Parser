@@ -21,7 +21,7 @@ namespace LuckParser.Models.Logic
                 new HitOnPlayerMechanic(56141, "Stalagmites", new MechanicPlotlySetting("x","rgb(255,0,0)"), "Stalagmites", "Stalagmites", "Stalagmites", 0),
             });
             Extension = "adina";
-            IconUrl = "https://wiki.guildwars2.com/images/2/28/Cardinal_Adina%27s_Token.png";
+            IconUrl = "https://wiki.guildwars2.com/images/a/a0/Mini_Earth_Djinn.png";
         }
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
@@ -162,9 +162,9 @@ namespace LuckParser.Models.Logic
 
         protected override CombatReplayMap GetCombatMapInternal()
         {
-            return new CombatReplayMap("",
-                            (800, 800),
-                            (-21504, -21504, 24576, 24576),
+            return new CombatReplayMap("https://i.imgur.com/3IBkNM6.png",
+                            (1436, 1659),
+                            (13840, -2698, 15971, -248),
                             (-21504, -21504, 24576, 24576),
                             (33530, 34050, 35450, 35970));
         }
