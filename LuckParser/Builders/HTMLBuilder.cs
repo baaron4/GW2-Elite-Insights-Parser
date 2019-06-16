@@ -49,7 +49,7 @@ namespace LuckParser.Builders
 
             _uploadLink = uploadString;
 
-            _cr = Properties.Settings.Default.ParseCombatReplay && _log.CanCombatReplay && log.FightData.Logic.Mode != FightLogic.ParseMode.WvW;
+            _cr = Properties.Settings.Default.ParseCombatReplay && _log.CanCombatReplay;
         }
 
         private TargetChartDataDto BuildTargetGraphData(int phaseIndex, Target target)
