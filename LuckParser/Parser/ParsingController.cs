@@ -44,9 +44,10 @@ namespace LuckParser.Parser
         /// <returns>the ParsedLog</returns>
         public ParsedLog ParseLog(GridRow row, string evtc)
         {
+            row.BgWorker.UpdateProgress(row, "10% - Reading Binary...", 10);
             using (var fs = new FileStream(evtc, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                if (GeneralHelper.IsCompressedFormat(evtc))
+                if (ProgramHelper.IsCompressedFormat(evtc))
                 {
                     using (var arch = new ZipArchive(fs, ZipArchiveMode.Read))
                     {
@@ -65,6 +66,8 @@ namespace LuckParser.Parser
                     ParseLog(row, fs);
                 }
             }
+            row.BgWorker.ThrowIfCanceled(row);
+            row.BgWorker.UpdateProgress(row, "40% - Data parsed", 40);
             return new ParsedLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList);
         }
 

@@ -21,7 +21,7 @@ namespace LuckParser.Models.ParseModels
             Refresh();
         }
 
-        public AgentItem AddCustomAgent(long start, long end, AgentItem.AgentType type, string name, string prof, ushort ID)
+        public AgentItem AddCustomAgent(long start, long end, AgentItem.AgentType type, string name, string prof, ushort ID, uint toughness = 0, uint healing = 0, uint condition = 0, uint concentration = 0, uint hitboxWidth = 0, uint hitboxHeight = 0)
         {
             Random rnd = new Random();
             ulong agentValue = 0;
@@ -34,7 +34,7 @@ namespace LuckParser.Models.ParseModels
             {
                 instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
             }
-            AgentItem agent = new AgentItem(agentValue, name, prof, ID, type, 0, 0, 0, 0, 20, 20)
+            AgentItem agent = new AgentItem(agentValue, name, prof, ID, type, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight)
             {
                 InstID = instID,
                 LastAwareLogTime = end,

@@ -247,9 +247,18 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Targeted", 34392, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
                 new Boon("Pillar Pandemonium", 56204, BoonSource.Enemy, BoonType.Intensity, 99, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
                 new Boon("Radiant Blindness", 56593, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
-                new Boon("Eroding Curse", 56586, BoonSource.Enemy, BoonType.Intensity, 99, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
+                new Boon("Diamond Palisade (Damage)", 56099, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
+                new Boon("Diamond Palisade", 56636, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
+                new Boon("Eroding Curse", 56440, BoonSource.Enemy, BoonType.Intensity, 99, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
                 new Boon("Ion Shield", 56100, BoonSource.Enemy, BoonType.Intensity, 99, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
                 new Boon("Violent Currents", 56123, BoonSource.Enemy, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
+                new Boon("Repulsion Field", 56172, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
+                new Boon("Erratic Energy", 56582, BoonSource.Enemy, BoonType.Intensity, 99, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
+                new Boon("Power Share", 56104, BoonSource.Enemy, BoonType.Intensity, 99, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
+                new Boon("Sapping Surge", 56118, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
+                new Boon("Chaos Corrosion", 56182, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
+                new Boon("Peerless Fixated", 56510, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
+                new Boon("Magma Drop", 56475, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
         };
 
         private readonly static List<Boon> _revenant = new List<Boon>
@@ -519,6 +528,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Lich Form",10631, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/ab/Lich_Form.png"),
                 new Boon("Death Shroud", 790, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/f/f5/Death_Shroud.png"),
                 new Boon("Reaper's Shroud", 29446, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/11/Reaper%27s_Shroud.png"),
+                new Boon("Sand Shade", 45079, BoonSource.Necromancer, BoonType.Intensity, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a4/Manifest_Sand_Shade.png"),
                 //signets
                 new Boon("Signet of Vampirism (Passive)",21761, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/73/Signet_of_Vampirism.png"),
                 new Boon("Signet of Vampirism (Active)",21765, BoonSource.Necromancer, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/73/Signet_of_Vampirism.png"),
@@ -535,6 +545,8 @@ namespace LuckParser.Models.ParseModels
                 //skills
                 new Boon("Spectral Walk",15083, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/33/Spectral_Walk.png"),
                 new Boon("Infusing Terror", 30129, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/db/Infusing_Terror.png"),
+                new Boon("Locust Swarm", 10567, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/77/Locust_Swarm.png"),
+                //new Boon("Sand Cascade", 43759, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/1e/Sand_Cascade.png"),
                 //traits
                 new Boon("Corrupter's Defense",30845, BoonSource.Necromancer, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/11/Corrupter%27s_Fervor.png"),
                 new Boon("Vampiric Aura", 30285, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/d/da/Vampiric_Presence.png"),
@@ -559,10 +571,12 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Mirror",10357, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b8/Mirror.png"),
                 new Boon("Echo",29664, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/ce/Echo.png"),
                 //new Boon("Illusion of Life",-1, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Normal, Logic.Override),
-                //new Boon("Time Block",30134, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff), What is this?
+                //new Boon("Time Block",30134, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8d/Deja_Vu.png"),
                 new Boon("Time Echo",29582, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8d/Deja_Vu.png"),
                 new Boon("Illusionary Counter",10278, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e5/Illusionary_Counter.png"),
                 new Boon("Time Anchored",30136, BoonSource.Mesmer, BoonType.Duration, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/db/Continuum_Split.png"),
+                new Boon("Illusionary Riposte",10279, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/91/Illusionary_Riposte.png"),
+                new Boon("Illusionary Leap",10353, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/18/Illusionary_Leap.png"),
                 //traits
                 new Boon("Fencer's Finesse", 30426 , BoonSource.Mesmer, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e7/Fencer%27s_Finesse.png"),
                 new Boon("Illusionary Defense",49099, BoonSource.Mesmer, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e0/Illusionary_Defense.png"),

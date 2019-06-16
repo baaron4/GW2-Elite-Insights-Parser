@@ -97,6 +97,7 @@
     <Compile Include="Builders\CSVBuilder.cs" />
     <Compile Include="Builders\RawFormatBuilder.cs" />
     <Compile Include="Builders\Helpers\CSVHelper.cs" />
+    <Compile Include="ProgramHelper.cs" />
     <Compile Include="GeneralHelper.cs" />
     <Compile Include="Controllers\FlashWindow.cs" />
     <Compile Include="Models\FightLogic\PeerlessQadim.cs" />

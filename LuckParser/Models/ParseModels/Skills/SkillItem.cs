@@ -53,7 +53,14 @@ namespace LuckParser.Models.ParseModels
             // CA
             {52325, "Conjured Greatsword" },
             // Sabir
-            {56349, "Regenerative Breakbar" }
+            {56349, "Regenerative Breakbar" },
+            // P.Qadim
+            {56296, "Ruinous Nova Charge" },
+            //{56036, "Magma Bomb" },
+            {56405, "Force of Retaliation Cast" },
+            {56375, "Teleport Center" },
+            {56446, "Eat Pylon" },
+            {56329, "Big Magma Drop" },
         };
 
         readonly static Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()

@@ -61,6 +61,34 @@ namespace LuckParser.Parser
             IsOffcycle = isOffcycle;
         }
 
+        public CombatItem(CombatItem c)
+        {
+            LogTime = c.LogTime;
+            SrcAgent = c.SrcAgent;
+            DstAgent = c.DstAgent;
+            Value = c.Value;
+            BuffDmg = c.BuffDmg;
+            OverstackValue = c.OverstackValue;
+            SkillID = c.SkillID;
+            SrcInstid = c.SrcInstid;
+            DstInstid = c.DstInstid;
+            SrcMasterInstid = c.SrcMasterInstid;
+            DstMasterInstid = c.DstMasterInstid;
+            IFF = c.IFF;
+            IsBuff = c.IsBuff;
+            Result = c.Result;
+            IsActivation = c.IsActivation;
+            IsBuffRemove = c.IsBuffRemove;
+            IsNinety = c.IsNinety;
+            IsFifty = c.IsFifty;
+            IsMoving = c.IsMoving;
+            IsStateChange = c.IsStateChange;
+            IsFlanking = c.IsFlanking;
+            IsShields = c.IsShields;
+            IsOffcycle = c.IsOffcycle;
+        }
+
+
         public void OverrideTime(long time)
         {
             LogTime = time;

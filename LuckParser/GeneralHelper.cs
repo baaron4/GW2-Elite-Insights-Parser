@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 using LuckParser.Controllers;
 
@@ -26,85 +25,7 @@ namespace LuckParser
 
         public static UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
 
-        /// <summary>
-        /// Reports a status update for a log, updating the background worker and the related row with the new status
-        /// </summary>
-        /// <param name="bg"></param>
-        /// <param name="row"></param>
-        /// <param name="status"></param>
-        /// <param name="percent"></param>
-        public static void UpdateProgress(this BackgroundWorker bg, GridRow row, string status, int percent)
-        {
-            row.Status = status;
-            bg.ReportProgress(percent, row);
-            if (row.Metadata.FromConsole)
-            {
-                Console.WriteLine($"{row.Location}: {status}");
-            }
-        }
-
-        public static bool HasFormat()
-        {
-            return Properties.Settings.Default.SaveOutCSV || Properties.Settings.Default.SaveOutHTML || Properties.Settings.Default.SaveOutXML || Properties.Settings.Default.SaveOutJSON;
-        }
-
-        /// <summary>
-        /// Throws a <see cref="CancellationException"/> if the background worker has been cancelled
-        /// </summary>
-        /// <param name="bg"></param>
-        /// <param name="row"></param>
-        /// <param name="cancelStatus"></param>
-        public static void ThrowIfCanceled(this BackgroundWorker bg, GridRow row, string cancelStatus = "Canceled")
-        {
-            if (bg.CancellationPending)
-            {
-                row.Status = cancelStatus;
-                throw new CancellationException(row);
-
-            }
-        }
-
-        private readonly static HashSet<string> _compressedFiles = new HashSet<string>()
-        {
-            ".zevtc",
-            ".evtc.zip",
-        };
-
-        private readonly static HashSet<string> _tmpFiles = new HashSet<string>()
-        {
-            ".tmp.zip"
-        };
-
-        private readonly static HashSet<string> _supportedFiles = new HashSet<string>(_compressedFiles)
-        {
-            ".evtc"
-        };
-
-        public static bool IsCompressedFormat(string fileName)
-        {
-            foreach (string format in _compressedFiles)
-            {
-                if (fileName.EndsWith(format, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public static bool IsTemporaryFormat(string fileName)
-        {
-            foreach (string format in _tmpFiles)
-            {
-                if (fileName.EndsWith(format, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public static void Add<T>(Dictionary<AgentItem, List<T>> dict, AgentItem key, T evt)
+        public static void Add<K, T>(Dictionary<K, List<T>> dict, K key, T evt)
         {
             if (dict.TryGetValue(key, out var list))
             {
@@ -117,18 +38,6 @@ namespace LuckParser
                     evt
                 };
             }
-        }
-
-        public static bool IsSupportedFormat(string fileName)
-        {
-            foreach (string format in _supportedFiles)
-            {
-                if (fileName.EndsWith(format, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-            }
-            return false;
         }
 
         public static string GetAgentProfString(string build, GW2APIController apiController, uint prof, uint elite)
@@ -420,6 +329,12 @@ namespace LuckParser
                     return "https://i.imgur.com/IfoHTHT.png";
                 case ParseEnum.TargetIDS.Freezie:
                     return "https://wiki.guildwars2.com/images/d/d9/Mini_Freezie.png";
+                case ParseEnum.TargetIDS.Adina:
+                    return "https://i.imgur.com/or3m1yb.png";
+                case ParseEnum.TargetIDS.Sabir:
+                    return "https://i.imgur.com/Q4WUXqw.png";
+                case ParseEnum.TargetIDS.PeerlessQadim:
+                    return "https://i.imgur.com/47uePpb.png";
                 case ParseEnum.TargetIDS.MAMA:
                     return "https://i.imgur.com/1h7HOII.png";
                 case ParseEnum.TargetIDS.Siax:
@@ -549,12 +464,20 @@ namespace LuckParser
                 case SurgingSoul:
                 //case MazeMinotaur:
                 case Enervator:
-                case SmallKillerTornado:
-                case BigKillerTornado:
+                case HandOfErosion:
+                case HandOfEruption:
+                    return "https://i.imgur.com/k79t7ZA.png";
+                case VoltaicWisp:
+                case ParalyzingWisp:
+                    return "https://i.imgur.com/YBl8Pqo.png";
                 case Pylon1:
                 case Pylon2:
+                    return "https://i.imgur.com/C1mvNGZ.png";
                 case EntropicDistortion:
-                    return "https://i.imgur.com/k79t7ZA.png";
+                    return "https://i.imgur.com/MIpP5pK.png";
+                case SmallKillerTornado:
+                case BigKillerTornado:
+                    return "https://i.imgur.com/WBJNgp7.png";
                 case OrbSpider:
                     return "https://i.imgur.com/FB5VM9X.png";
                 case Seekers:

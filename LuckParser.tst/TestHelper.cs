@@ -34,7 +34,7 @@ namespace LuckParser.tst
             {
                 throw new CancellationException(row, new FileNotFoundException("File does not exist", fInfo.FullName));
             }
-            if (!GeneralHelper.IsSupportedFormat(fInfo.Name))
+            if (!ProgramHelper.IsSupportedFormat(fInfo.Name))
             {
                 throw new CancellationException(row, new InvalidDataException("Not EVTC"));
             }

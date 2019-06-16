@@ -15,23 +15,78 @@ namespace LuckParser.Models.Logic
             MechanicList.AddRange(new List<Mechanic>()
             {
                 new PlayerBoonApplyMechanic(56593, "Radiant Blindness", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "R.Blind", "Blindess applied if looking at Adina", "Radiant Blindness", 0),
-                new PlayerBoonApplyMechanic(56586, "Eroding Curse", new MechanicPlotlySetting("cross","rgb(255,0,100)"), "Curse", "Stacking damage debuff from Hand of Erosion", "Eroding Curse", 0),
-                new HitOnPlayerMechanic(56648, " Boulder Barrage", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Boulder", "Hit by boulder thrown during pillars", "Boulder Barrage", 0),
+                new PlayerBoonApplyMechanic(56440, "Eroding Curse", new MechanicPlotlySetting("cross","rgb(255,0,100)"), "Curse", "Stacking damage debuff from Hand of Erosion", "Eroding Curse", 0),
+                new HitOnPlayerMechanic(56648, "Boulder Barrage", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Boulder", "Hit by boulder thrown during pillars", "Boulder Barrage", 0),
+                new HitOnPlayerMechanic(56390, "Perilous Pulse", new MechanicPlotlySetting("x","rgb(255,0,0)"), "Perilous Pulse", "Perilous Pulse", "Perilous Pulse", 0),
+                new HitOnPlayerMechanic(56141, "Stalagmites", new MechanicPlotlySetting("x","rgb(255,0,0)"), "Stalagmites", "Stalagmites", "Stalagmites", 0),
             });
             Extension = "adina";
-            IconUrl = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
+            IconUrl = "https://wiki.guildwars2.com/images/2/28/Cardinal_Adina%27s_Token.png";
         }
 
-        public override void ComputeFightTargets(AgentData agentData, CombatData combatData)
+        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            base.ComputeFightTargets(agentData, combatData);
-            foreach (AgentItem hands in agentData.GetAgentByType(AgentItem.AgentType.Gadget))
+            List<CombatItem> attackTargets = combatData.Where(x => x.IsStateChange == ParseEnum.StateChange.AttackTarget).ToList();
+            long first = combatData.Count > 0 ? combatData.First().LogTime : 0;
+            long final = combatData.Count > 0 ? combatData.Last().LogTime : 0;
+            foreach (CombatItem at in attackTargets)
             {
-                if (combatData.GetAttackTargetEvents(hands).Count > 0)
+                AgentItem hand = agentData.GetAgent(at.DstAgent, at.LogTime);
+                AgentItem atAgent = agentData.GetAgent(at.SrcAgent, at.LogTime);
+                List<CombatItem> attackables = combatData.Where(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.SrcAgent == atAgent.Agent && x.LogTime <= atAgent.LastAwareLogTime && x.LogTime >= atAgent.FirstAwareLogTime).ToList();
+                List<long> attackOn = attackables.Where(x => x.DstAgent == 1 && x.LogTime >= first + 2000).Select(x => x.LogTime).ToList();
+                List<long> attackOff = attackables.Where(x => x.DstAgent == 0 && x.LogTime >= first + 2000).Select(x => x.LogTime).ToList();
+                List<CombatItem> posFacingHP = combatData.Where(x => x.SrcAgent == hand.Agent && x.LogTime >= hand.FirstAwareLogTime && hand.LastAwareLogTime >= x.LogTime && (x.IsStateChange == ParseEnum.StateChange.Position || x.IsStateChange == ParseEnum.StateChange.Rotation || x.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate)).ToList();
+                CombatItem pos = posFacingHP.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position);
+                ushort id = (ushort)HandOfErosion;
+                if (pos != null)
                 {
-                    Targets.Add(new Target(hands));
+                    byte[] xy = BitConverter.GetBytes(pos.DstAgent);
+                    float x = BitConverter.ToSingle(xy, 0);
+                    float y = BitConverter.ToSingle(xy, 4);
+                    if ((Math.Abs(x - 15570.5) < 10 && Math.Abs(y + 693.117) < 10) ||
+                            (Math.Abs(x - 14277.2) < 10 && Math.Abs(y + 2202.52) < 10))
+                    {
+                        id = (ushort)HandOfEruption;
+                    }
+                }
+                for (int i = 0; i < attackOn.Count; i++)
+                {
+                    long start = attackOn[i];
+                    long end = final;
+                    if (i <= attackOff.Count - 1)
+                    {
+                        end = attackOff[i];
+                    }
+                    AgentItem extra = agentData.AddCustomAgent(start, end, AgentItem.AgentType.Gadget, hand.Name, hand.Prof, id, hand.Toughness, hand.Healing, hand.Condition, hand.Concentration, hand.HitboxWidth, hand.HitboxHeight);
+                    foreach (CombatItem c in combatData.Where(x => x.SrcAgent == hand.Agent &&x.LogTime >= extra.FirstAwareLogTime && x.LogTime <= extra.LastAwareLogTime))
+                    {
+                        c.OverrideSrcValues(extra.Agent, extra.InstID);
+                    }
+                    foreach (CombatItem c in combatData.Where(x => x.DstAgent == hand.Agent && x.LogTime >= extra.FirstAwareLogTime && x.LogTime <= extra.LastAwareLogTime))
+                    {
+                        c.OverrideDstValues(extra.Agent, extra.InstID);
+                    }
+                    foreach (CombatItem c in posFacingHP)
+                    {
+                        CombatItem cExtra = new CombatItem(c);
+                        cExtra.OverrideTime(extra.FirstAwareLogTime);
+                        cExtra.OverrideSrcValues(extra.Agent, extra.InstID);
+                        combatData.Add(cExtra);
+                    }
                 }
             }
+            combatData.Sort((x, y) => x.LogTime.CompareTo(y.LogTime));
+        }
+
+        protected override List<ushort> GetFightTargetsIDs()
+        {
+            return new List<ushort>()
+            {
+                (ushort)ParseEnum.TargetIDS.Adina,
+                (ushort)HandOfErosion,
+                (ushort)HandOfEruption
+            };
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
@@ -85,17 +140,7 @@ namespace LuckParser.Models.Logic
                     Name = "Phase " + i
                 });
                 PhaseData split = phases[i];
-                foreach (Target hand in Targets.Where(x => x.AgentItem != mainTarget.AgentItem))
-                {
-                    List<AgentItem> ats = log.CombatData.GetAttackTargetEvents(hand.AgentItem).Select(x => x.AttackTarget).ToList();
-                    foreach (AgentItem at in ats)
-                    {
-                        if (log.CombatData.GetTargetableEvents(at).Count(x => split.InInterval(x.Time) && x.Targetable) > 0)
-                        {
-                            split.Targets.Add(hand);
-                        }
-                    }
-                }
+                AddTargetsToPhase(split, new List<ushort> { (ushort)HandOfErosion, (ushort)HandOfEruption }, log);
                 start = split.End;
                 if (i == phases.Count - 1 && start != log.FightData.FightDuration)
                 {

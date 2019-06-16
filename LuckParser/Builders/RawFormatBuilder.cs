@@ -209,11 +209,11 @@ namespace LuckParser.Builders
                     HealthPercents = _log.CombatData.GetHealthUpdateEvents(target.AgentItem).Select(x => new double[2] { x.Time, x.HPPercent }).ToList()
                 };
                 List<HealthUpdateEvent> hpUpdates = _log.CombatData.GetHealthUpdateEvents(target.AgentItem);
-                double finalTargetHealth = hpUpdates.Count > 0
+                double hpLeft = hpUpdates.Count > 0
                     ? hpUpdates.Last().HPPercent
                     : 100.0;
-                jsTarget.HealthPercentBurned = 100.0 - finalTargetHealth;
-                jsTarget.FinalHealth = (int)Math.Round(target.GetHealth(_log.CombatData) * (jsTarget.HealthPercentBurned * 0.01));
+                jsTarget.HealthPercentBurned = 100.0 - hpLeft;
+                jsTarget.FinalHealth = (int)Math.Round(target.GetHealth(_log.CombatData) * hpLeft);
                 log.Targets.Add(jsTarget);
             }
         }

@@ -121,7 +121,7 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public virtual void ComputeFightTargets(AgentData agentData, CombatData combatData)
+        public void ComputeFightTargets(AgentData agentData, CombatData combatData)
         {
             List<ushort> ids = GetFightTargetsIDs();
             foreach (ushort id in ids)
