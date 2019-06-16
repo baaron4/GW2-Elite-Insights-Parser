@@ -26,7 +26,7 @@ namespace LuckParser.Models.Logic
             // rotating cc 56403
             // interesting stuff 56372 (big AoE?)
             Extension = "sabir";
-            IconUrl = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
+            IconUrl = "https://wiki.guildwars2.com/images/2/28/Cardinal_Adina%27s_Token.png";
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
