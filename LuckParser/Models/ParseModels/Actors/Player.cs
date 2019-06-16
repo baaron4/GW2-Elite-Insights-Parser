@@ -324,7 +324,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 final.AvgConditions = Math.Round(avgCondis / phase.DurationInMS, GeneralHelper.BoonDigit);
 
-                if (Properties.Settings.Default.ParseCombatReplay && log.CanCombatReplay)
+                if (log.CombatData.HasMovementData)
                 {
                     if (CombatReplay == null)
                     {
@@ -971,7 +971,7 @@ namespace LuckParser.Models.ParseModels
 
         protected override void InitCombatReplay(ParsedLog log)
         {
-            if (!log.CanCombatReplay || IsFakeActor)
+            if (!log.CombatData.HasMovementData || IsFakeActor)
             {
                 // no combat replay support on fight
                 return;

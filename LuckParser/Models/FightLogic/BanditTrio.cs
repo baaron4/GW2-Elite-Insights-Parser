@@ -19,7 +19,33 @@ namespace LuckParser.Models.Logic
             new HitOnPlayerMechanic(34344, "Fiery Vortex", new MechanicPlotlySetting("circle-open","rgb(255,200,0)"), "Tornado","Fiery Vortex (Tornado)", "Tornado",250),
             });
             Extension = "trio";
+            DeathCheckFallBack = false;
             IconUrl = "https://i.imgur.com/UZZQUdf.png";
+        }
+
+        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        {
+            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+            if (!fightData.Success)
+            {
+                Target narella = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Narella);
+                if (narella == null)
+                {
+                    throw new InvalidOperationException("Narella");
+                }
+                List<ExitCombatEvent> playerExits = new List<ExitCombatEvent>();
+                foreach (AgentItem a in playerAgents)
+                {
+                    playerExits.AddRange(combatData.GetExitCombatEvents(a));
+                }
+                ExitCombatEvent lastPlayerExit = playerExits.MaxBy(x => x.Time);
+                ExitCombatEvent lastTargetExit = combatData.GetExitCombatEvents(narella.AgentItem).LastOrDefault();
+                AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(narella.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
+                if (lastTargetExit != null && lastDamageTaken != null && lastPlayerExit != null)
+                {
+                    fightData.SetSuccess(lastPlayerExit.Time > lastTargetExit.Time + 1000, fightData.ToLogSpace(lastDamageTaken.Time));
+                }
+            }
         }
 
         protected override List<ushort> GetFightTargetsIDs()
@@ -63,6 +89,16 @@ namespace LuckParser.Models.Logic
         protected override HashSet<ushort> GetUniqueTargetIDs()
         {
             return new HashSet<ushort>
+            {
+                (ushort)ParseEnum.TargetIDS.Berg,
+                (ushort)ParseEnum.TargetIDS.Zane,
+                (ushort)ParseEnum.TargetIDS.Narella
+            };
+        }
+
+        protected override List<ushort> GetDeatchCheckIds()
+        {
+            return new List<ushort>
             {
                 (ushort)ParseEnum.TargetIDS.Berg,
                 (ushort)ParseEnum.TargetIDS.Zane,

@@ -257,7 +257,7 @@ namespace LuckParser.Models
         private void SetStackCenterPositions(ParsedLog log)
         {
             _stackCenterPositions = new List<Point3D>();
-            if (Properties.Settings.Default.ParseCombatReplay && log.CanCombatReplay)
+            if (log.CombatData.HasMovementData)
             {
                 List<List<Point3D>> GroupsPosList = new List<List<Point3D>>();
                 foreach (Player player in log.PlayerList)

@@ -16,7 +16,5 @@ namespace LuckParser.Models.ParseModels
         public readonly List<RewardEvent> RewardEvents = new List<RewardEvent>();
         public readonly List<ShardEvent> ShardEvents = new List<ShardEvent>();
         public readonly List<PointOfViewEvent> PointOfViewEvents = new List<PointOfViewEvent>();
-
-        private readonly Dictionary<Type, string> _typeToStringMap = new Dictionary<Type, string>();
     }
 }
