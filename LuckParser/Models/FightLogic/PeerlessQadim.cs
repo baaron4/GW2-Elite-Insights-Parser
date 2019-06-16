@@ -98,9 +98,9 @@ namespace LuckParser.Models.Logic
 
         protected override CombatReplayMap GetCombatMapInternal()
         {
-            return new CombatReplayMap("",
-                            (800, 800),
-                            (-21504, -21504, 24576, 24576),
+            return new CombatReplayMap("https://i.imgur.com/PgkZMYE.png",
+                            (6822, 6822),
+                            (-968, 7480, 4226, 12676),
                             (-21504, -21504, 24576, 24576),
                             (33530, 34050, 35450, 35970));
         }

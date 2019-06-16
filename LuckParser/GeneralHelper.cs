@@ -445,6 +445,8 @@ namespace LuckParser
                 case LavaElemental2:
                     return "https://i.imgur.com/mydwiYy.png";
                 case PyreGuardian:
+                case SmallKillerTornado:
+                case BigKillerTornado:
                     return "https://i.imgur.com/6zNPTUw.png";
                 case ReaperofFlesh:
                     return "https://i.imgur.com/Notctbt.png";
@@ -464,19 +466,20 @@ namespace LuckParser
                 case SurgingSoul:
                 //case MazeMinotaur:
                 case Enervator:
+                    return "https://i.imgur.com/k79t7ZA.png";
                 case HandOfErosion:
                 case HandOfEruption:
-                    return "https://i.imgur.com/k79t7ZA.png";
+                    return "https://i.imgur.com/reGQHhr.png"; 
                 case VoltaicWisp:
+                    return "https://i.imgur.com/C1mvNGZ.png"; 
                 case ParalyzingWisp:
                     return "https://i.imgur.com/YBl8Pqo.png";
                 case Pylon1:
                 case Pylon2:
-                    return "https://i.imgur.com/C1mvNGZ.png";
+                    return "https://i.imgur.com/b33vAEQ.png";
                 case EntropicDistortion:
                     return "https://i.imgur.com/MIpP5pK.png";
-                case SmallKillerTornado:
-                case BigKillerTornado:
+                case SmallJumpyTornado:
                     return "https://i.imgur.com/WBJNgp7.png";
                 case OrbSpider:
                     return "https://i.imgur.com/FB5VM9X.png";
@@ -494,7 +497,6 @@ namespace LuckParser
                 case GreenSpirit1:
                 case GreenSpirit2:
                 case BanditSapper:
-                case SmallJumpyTornado:
                     return "https://i.imgur.com/0koP4xB.png";
                 case FleshWurm:
                     return "https://i.imgur.com/o3vX9Zc.png";
