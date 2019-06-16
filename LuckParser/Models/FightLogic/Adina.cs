@@ -21,7 +21,7 @@ namespace LuckParser.Models.Logic
                 new HitOnPlayerMechanic(56141, "Stalagmites", new MechanicPlotlySetting("x","rgb(255,0,0)"), "Stalagmites", "Stalagmites", "Stalagmites", 0),
             });
             Extension = "adina";
-            IconUrl = "https://wiki.guildwars2.com/images/0/03/Mini_Djinn_Lamp.png";
+            IconUrl = "https://wiki.guildwars2.com/images/2/28/Cardinal_Adina%27s_Token.png";
         }
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)

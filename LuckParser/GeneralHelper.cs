@@ -329,6 +329,12 @@ namespace LuckParser
                     return "https://i.imgur.com/IfoHTHT.png";
                 case ParseEnum.TargetIDS.Freezie:
                     return "https://wiki.guildwars2.com/images/d/d9/Mini_Freezie.png";
+                case ParseEnum.TargetIDS.Adina:
+                    return "https://i.imgur.com/or3m1yb.png";
+                case ParseEnum.TargetIDS.Sabir:
+                    return "https://i.imgur.com/Q4WUXqw.png";
+                case ParseEnum.TargetIDS.PeerlessQadim:
+                    return "https://i.imgur.com/47uePpb.png";
                 case ParseEnum.TargetIDS.MAMA:
                     return "https://i.imgur.com/1h7HOII.png";
                 case ParseEnum.TargetIDS.Siax:
@@ -458,12 +464,20 @@ namespace LuckParser
                 case SurgingSoul:
                 //case MazeMinotaur:
                 case Enervator:
-                case SmallKillerTornado:
-                case BigKillerTornado:
+                case HandOfErosion:
+                case HandOfEruption:
+                    return "https://i.imgur.com/k79t7ZA.png";
+                case VoltaicWisp:
+                case ParalyzingWisp:
+                    return "https://i.imgur.com/YBl8Pqo.png";
                 case Pylon1:
                 case Pylon2:
+                    return "https://i.imgur.com/C1mvNGZ.png";
                 case EntropicDistortion:
-                    return "https://i.imgur.com/k79t7ZA.png";
+                    return "https://i.imgur.com/MIpP5pK.png";
+                case SmallKillerTornado:
+                case BigKillerTornado:
+                    return "https://i.imgur.com/WBJNgp7.png";
                 case OrbSpider:
                     return "https://i.imgur.com/FB5VM9X.png";
                 case Seekers:
