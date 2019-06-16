@@ -44,6 +44,37 @@ namespace LuckParser.Models.Logic
             };
         }
 
+        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        {
+            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+            if (!fightData.Success)
+            {
+                Target desmina = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Desmina);
+                if (desmina == null)
+                {
+                    throw new InvalidOperationException("Main target of the fight not found");
+                }
+                ExitCombatEvent ooc = combatData.GetExitCombatEvents(desmina.AgentItem).LastOrDefault();
+                if (ooc != null)
+                {
+                    DespawnEvent dspwn = combatData.GetDespawnEvents(desmina.AgentItem).LastOrDefault();
+                    if (dspwn == null)
+                    {
+                        long time = 0;
+                        foreach (Mob mob in TrashMobs.Where(x => x.ID == (ushort)SpiritHorde3))
+                        {
+                            dspwn = combatData.GetDespawnEvents(mob.AgentItem).LastOrDefault();
+                            if (dspwn != null)
+                            {
+                                time = Math.Max(dspwn.Time, time);
+                            }
+                        }
+                        fightData.SetSuccess(true, fightData.ToLogSpace(time));
+                    }
+                }
+            }
+        }
+
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // The walls spawn at the start of the encounter, we fix it by overriding their first aware to the first velocity change event
