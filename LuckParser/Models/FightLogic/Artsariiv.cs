@@ -48,7 +48,7 @@ namespace LuckParser.Models.Logic
             };
         }
 
-        public override void CheckSuccess(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
+        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             Target mainTarget = Targets.Find(x => x.ID == TriggerID);
             if (mainTarget == null)

@@ -119,14 +119,14 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        public override void CheckSuccess(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
+        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             // First check using hp, best
             HPCheck(combatData, fightData);
             // hp could be unreliable or missing, fall back (around 200 ms more)
             if (!fightData.Success)
             {
-                SetSuccessByDeath(combatData, fightData, false, (ushort)ParseEnum.TargetIDS.EyeOfFate, (ushort)ParseEnum.TargetIDS.EyeOfJudgement);
+                SetSuccessByDeath(combatData, fightData, playerAgents, false, CheckLastDamage, (ushort)ParseEnum.TargetIDS.EyeOfFate, (ushort)ParseEnum.TargetIDS.EyeOfJudgement);
             }
         }
 

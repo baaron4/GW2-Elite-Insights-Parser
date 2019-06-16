@@ -78,9 +78,9 @@ namespace LuckParser.Models.Logic
         }
 
 
-        public override void CheckSuccess(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
+        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByDeath(combatData, fightData, true, TriggerID);
+            SetSuccessByDeath(combatData, fightData, playerAgents, true, CheckLastDamage, TriggerID);
         }
 
         public override string GetFightName() {

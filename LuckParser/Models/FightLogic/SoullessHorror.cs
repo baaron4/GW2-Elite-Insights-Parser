@@ -31,6 +31,7 @@ namespace LuckParser.Models.Logic
 
             });
             Extension = "sh";
+            DeathCheckFallBack = false;
             IconUrl = "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
         }
 
@@ -54,6 +55,32 @@ namespace LuckParser.Models.Logic
             };
         }
 
+        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        {
+            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+            if (!fightData.Success)
+            {
+                AgentItem desmina = agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.Desmina).FirstOrDefault();
+                if (desmina != null)
+                {
+                    long time = fightData.ToFightSpace(desmina.FirstAwareLogTime);
+                    if (CheckLastDamage)
+                    {
+                        Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.SoullessHorror);
+                        if (target == null)
+                        {
+                            throw new InvalidOperationException("Main target of the fight not found");
+                        }
+                        AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
+                        if (lastDamageTaken != null)
+                        {
+                            time = Math.Min(lastDamageTaken.Time, time);
+                        }
+                    }
+                    fightData.SetSuccess(true, fightData.ToLogSpace(time));
+                }
+            }
+        }
 
         public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
         {

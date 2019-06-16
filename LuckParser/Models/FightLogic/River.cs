@@ -17,6 +17,7 @@ namespace LuckParser.Models.Logic
                 new HitOnPlayerMechanic(47258, "Timed Bomb", new MechanicPlotlySetting("square","rgb(255,125,0)"),"Stun Bomb", "Stunned by Mini Bomb", "Stun Bomb", 0, new List<SkillMechanic.SkillChecker>{(de, log) => !de.To.HasBuff(log, 1122, de.Time)}, Mechanic.TriggerRule.AND ),
             }
             );
+            DeathCheckFallBack = false;
             Extension = "river";
             IconUrl = "https://wiki.guildwars2.com/images/thumb/7/7b/Gold_River_of_Souls_Trophy.jpg/220px-Gold_River_of_Souls_Trophy.jpg";
         }
