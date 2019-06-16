@@ -64,7 +64,7 @@ namespace LuckParser.Models.Logic
                 {
                     playerExits.AddRange(combatData.GetExitCombatEvents(a));
                 }
-                ExitCombatEvent lastPlayerExit = playerExits.LastOrDefault();
+                ExitCombatEvent lastPlayerExit = playerExits.MaxBy(x => x.Time);
                 ExitCombatEvent lastTargetExit = combatData.GetExitCombatEvents(mainTarget.AgentItem).LastOrDefault();
                 fightData.SetSuccess(lastPlayerExit != null && lastTargetExit != null && lastPlayerExit.Time - lastTargetExit.Time > 1000 ? true : false, fightData.ToLogSpace(lastDamageTaken.Time));
             }
