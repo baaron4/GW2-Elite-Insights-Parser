@@ -1,4 +1,5 @@
-﻿using LuckParser.Parser;
+﻿using LuckParser.Models.Logic;
+using LuckParser.Parser;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -255,7 +256,7 @@ namespace LuckParser.Models.ParseModels
 
         public List<GenericActor> GetCombatReplayActors(ParsedLog log)
         {
-            if (!log.CanCombatReplay || IsFakeActor)
+            if (!log.CanCombatReplay || IsFakeActor || log.FightData.Logic.Mode == FightLogic.ParseMode.WvW)
             {
                 // no combat replay support on fight
                 return null;

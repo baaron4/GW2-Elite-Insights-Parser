@@ -16,6 +16,16 @@ namespace LuckParser.Models.Logic
             IconUrl = "https://wiki.guildwars2.com/images/3/35/WvW_Rank_up.png";
         }
 
+        // dummy map for CR functionalities
+        protected override CombatReplayMap GetCombatMapInternal()
+        {
+            return new CombatReplayMap("",
+                            (800, 800),
+                            (-50000, -50000, 50000, 50000),
+                            (0, 0, 0, 0),
+                            (0, 0, 0, 0));
+        }
+
         protected override HashSet<ushort> GetUniqueTargetIDs()
         {
             return new HashSet<ushort>();
