@@ -23,7 +23,7 @@ namespace LuckParser.Models.ParseModels
         private readonly Dictionary<AgentItem, List<AbstractDamageEvent>> _damageTakenData;
         private readonly Dictionary<AgentItem, List<AbstractMovementEvent>> _movementData;
 
-        private void SpecialBoonParse(List<Player> players, SkillData skillData)
+        private void SpecialBoonParse(List<Player> players, SkillData skillData, FightData fightData)
         {
             List<AbstractBuffEvent> toAdd = new List<AbstractBuffEvent>();
             foreach (Player p in players)
@@ -37,6 +37,7 @@ namespace LuckParser.Models.ParseModels
                     ElementalistHelper.RemoveDualBuffs(GetBoonDataByDst(p.AgentItem), skillData);
                 }
             }
+            toAdd.AddRange(fightData.Logic.CreateCustomBuffEvents(_boonDataByDst, _boonData));
             HashSet<long> buffIDsToSort = new HashSet<long>();
             HashSet<AgentItem> buffAgentsToSort = new HashSet<AgentItem>();
             foreach (AbstractBuffEvent bf in toAdd)
@@ -127,9 +128,9 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        private void ExtraEvents(List<Player> players, SkillData skillData)
+        private void ExtraEvents(List<Player> players, SkillData skillData, FightData fightData)
         {
-            SpecialBoonParse(players, skillData);
+            SpecialBoonParse(players, skillData, fightData);
             SpecialCastParse(players, skillData);
         }
 
@@ -173,7 +174,7 @@ namespace LuckParser.Models.ParseModels
             healing_received_data = allCombatItems.Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                             ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
                                                 (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
-            ExtraEvents(players, skillData);
+            ExtraEvents(players, skillData, fightData);
         }
 
         public void UpdateDamageEvents(long end)

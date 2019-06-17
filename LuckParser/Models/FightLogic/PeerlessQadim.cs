@@ -29,6 +29,29 @@ namespace LuckParser.Models.Logic
             };
         }
 
+        public override List<AbstractBuffEvent> CreateCustomBuffEvents(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById)
+        {
+            List<AbstractBuffEvent> res = new List<AbstractBuffEvent>();
+            if (buffsById.TryGetValue(56118, out var list))
+            {
+                Dictionary<AgentItem, List<AbstractBuffEvent>> sappingSurgeByDst = list.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+                foreach (var pair in sappingSurgeByDst.Where(x => x.Value.Exists(y => y is BuffRemoveSingleEvent)))
+                {
+                    List<AbstractBuffEvent> sglRemovals = pair.Value.Where(x => x is BuffRemoveSingleEvent).ToList();
+                    foreach (AbstractBuffEvent sglRemoval in sglRemovals)
+                    {
+                        AbstractBuffEvent ba = pair.Value.LastOrDefault(x => x is BuffApplyEvent && Math.Abs(x.Time - sglRemoval.Time) < 5);
+                        if (ba != null)
+                        {
+                            res.Add(new BuffRemoveAllEvent(sglRemoval.By, pair.Key, ba.Time - 1, int.MaxValue, ba.BuffSkill, 1, int.MaxValue));
+                            res.Add(new BuffRemoveManualEvent(sglRemoval.By, pair.Key, ba.Time -1, int.MaxValue, ba.BuffSkill));
+                        }
+                    }
+                }
+            }
+            return res;
+        }
+
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
@@ -103,6 +126,105 @@ namespace LuckParser.Models.Logic
                             (-968, 7480, 4226, 12676),
                             (-21504, -21504, 24576, 24576),
                             (33530, 34050, 35450, 35970));
+        }
+
+        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
+        {
+            int start = (int)replay.TimeOffsets.start;
+            int end = (int)replay.TimeOffsets.end;
+            switch (mob.ID)
+            {
+                case (ushort)EntropicDistortion:
+                    //sapping surge, red tether
+                    List<AbstractBuffEvent> sappingSurge = GetFilteredList(log.CombatData, 56118, mob, true);
+                    int surgeStart = 0;
+                    AbstractMasterActor source = null;
+                    foreach (AbstractBuffEvent c in sappingSurge)
+                    {
+                        if (c is BuffApplyEvent)
+                        {
+                            Target qadim = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.PeerlessQadim);
+                            surgeStart = (int)c.Time;
+                            source = (AbstractMasterActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By) ?? qadim;
+                        }
+                        else
+                        {
+                            int surgeEnd = (int)c.Time;
+                            if (source != null)
+                            {
+                                replay.Actors.Add(new LineActor(0, (surgeStart, surgeEnd), "rgba(255, 0, 0, 0.3)", new AgentConnector(mob), new AgentConnector(source)));
+                            }
+                        }
+                    }
+                    break;
+                case (ushort)Pylon1:
+                case (ushort)Pylon2:
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+
+            }
+        }
+
+        public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
+        {
+            // fixated
+            List<AbstractBuffEvent> fixated = GetFilteredList(log.CombatData, 56510, p, true);
+            int fixatedStart = 0;
+            foreach (AbstractBuffEvent c in fixated)
+            {
+                if (c is BuffApplyEvent)
+                {
+                    fixatedStart = Math.Max((int)c.Time, 0);
+                }
+                else
+                {
+                    int fixatedEnd = (int)c.Time;
+                    replay.Actors.Add(new CircleActor(true, 0, 120, (fixatedStart, fixatedEnd), "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
+                }
+            }
+            //sapping surge, bad red tether
+            List<AbstractBuffEvent> sappingSurge = GetFilteredList(log.CombatData, 56118, p, true);
+            int surgeStart = 0;
+            AbstractMasterActor source = null;
+            foreach (AbstractBuffEvent c in sappingSurge)
+            {
+                if (c is BuffApplyEvent)
+                {
+                    Target qadim = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.PeerlessQadim);
+                    surgeStart = (int)c.Time;
+                    source = (AbstractMasterActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By) ?? qadim;
+                }
+                else
+                {
+                    int surgeEnd = (int)c.Time;
+                    if (source != null)
+                    {
+                        replay.Actors.Add(new LineActor(0, (surgeStart, surgeEnd), "rgba(255, 0, 0, 0.4)", new AgentConnector(p), new AgentConnector(source)));
+                    }
+                }
+            }
+            // kinetic abundance, good (blue) tether
+            List<AbstractBuffEvent> kineticAbundance = GetFilteredList(log.CombatData, 56609, p, true);
+            int kinStart = 0;
+            AbstractMasterActor kinSource = null;
+            foreach (AbstractBuffEvent c in kineticAbundance)
+            {
+                if (c is BuffApplyEvent)
+                {
+                    kinStart = (int)c.Time;
+                    //kinSource = log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By);
+                    kinSource = (AbstractMasterActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By) ?? TrashMobs.FirstOrDefault(x => x.AgentItem == c.By);
+                }
+                else
+                {
+                    int kinEnd = (int)c.Time;
+                    if (kinSource != null)
+                    {
+                        replay.Actors.Add(new LineActor(0, (kinStart, kinEnd), "rgba(0, 0, 255, 0.4)", new AgentConnector(p), new AgentConnector(kinSource)));
+                    }
+                }
+            }
         }
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
