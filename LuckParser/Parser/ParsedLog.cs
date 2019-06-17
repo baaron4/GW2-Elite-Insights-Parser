@@ -26,7 +26,6 @@ namespace LuckParser.Parser
         public bool CanCombatReplay => CombatData.HasMovementData && FightData.Logic.HasCombatReplayMap;
 
         public readonly MechanicData MechanicData;
-        public readonly Target LegacyTarget;
         public readonly Statistics Statistics;
 
         public ParsedLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData, 
@@ -47,13 +46,7 @@ namespace LuckParser.Parser
             Boons = new BoonsContainer(LogData.GW2Version);
             DamageModifiers = new DamageModifiersContainer(LogData.GW2Version);
             MechanicData = FightData.Logic.GetMechanicData();
-            Statistics = new Statistics(CombatData, AgentData, FightData, PlayerList, Boons);
-
-            LegacyTarget = FightData.Logic.Targets.Find(x => x.ID == FightData.ID && x.AgentItem.Type == AgentItem.AgentType.NPC);
-            if (LegacyTarget == null)
-            {
-                LegacyTarget = new Target(GeneralHelper.UnknownAgent);
-            }
+            Statistics = new Statistics(CombatData, AgentData, FightData, PlayerList, Boons);      
         }
 
         private void UpdateFightData()
