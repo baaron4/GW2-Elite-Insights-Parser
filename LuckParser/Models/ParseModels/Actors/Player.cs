@@ -54,10 +54,14 @@ namespace LuckParser.Models.ParseModels
         }
         
         // Public methods
-        public int[] GetCleanses(ParsedLog log, int phaseIndex) {
+        public int[] GetCleansesNotSelf(ParsedLog log, int phaseIndex) {
             int[] cleanse = { 0, 0 };
             foreach (Player p in log.PlayerList)
             {
+                if (p == this)
+                {
+                    continue;
+                }
                 foreach(List<long> list in p.GetCondiCleanse(log,phaseIndex, AgentItem).Values)
                 {
                     cleanse[0] += list.Count;
@@ -66,6 +70,29 @@ namespace LuckParser.Models.ParseModels
             }
             return cleanse;
         }
+        public int[] GetCleansesSelf(ParsedLog log, int phaseIndex)
+        {
+            int[] cleanse = { 0, 0 };
+            foreach (List<long> list in GetCondiCleanse(log, phaseIndex, AgentItem).Values)
+            {
+                cleanse[0] += list.Count;
+                cleanse[1] += (int)list.Sum();
+            }
+            return cleanse;
+        }
+
+        public int[] GetBoonStrips(ParsedLog log, PhaseData phase)
+        {
+            int[] strips = { 0, 0 };
+            foreach (long id in log.Boons.BoonsByNature[Boon.BoonNature.Boon].Select(x => x.ID))
+            {
+                List<BuffRemoveAllEvent> bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End).Select(x => x as BuffRemoveAllEvent).ToList();
+                strips[0] += bevts.Count;
+                strips[1] += bevts.Sum(x => x.RemovedDuration);
+            }
+            return strips;
+        }
+
         public int[] GetReses(ParsedLog log, long start, long end)
         {
             List<AbstractCastEvent> cls = GetCastLogs(log, start, end);
@@ -445,13 +472,19 @@ namespace LuckParser.Models.ParseModels
                 PhaseData phase = phases[phaseIndex];
 
                 int[] resArray = GetReses(log, phase.Start, phase.End);
-                int[] cleanseArray = GetCleanses(log, phaseIndex);
+                int[] cleanseArray = GetCleansesNotSelf(log, phaseIndex);
+                int[] cleanseSelfArray = GetCleansesSelf(log, phaseIndex);
+                int[] boonStrips = GetBoonStrips(log, phase);
                 //List<DamageLog> healingLogs = player.getHealingLogs(log, phase.getStart(), phase.getEnd());
                 //final.allHeal = healingLogs.Sum(x => x.getDamage());
                 final.Resurrects = resArray[0];
                 final.ResurrectTime = resArray[1] / 1000.0;
                 final.CondiCleanse = cleanseArray[0];
                 final.CondiCleanseTime = cleanseArray[1] / 1000.0;
+                final.CondiCleanseSelf = cleanseSelfArray[0];
+                final.CondiCleanseTimeSelf = cleanseSelfArray[1] / 1000.0;
+                final.BoonStrips = cleanseSelfArray[0];
+                final.BoonStripsTime = cleanseSelfArray[1] / 1000.0;
             }
         }
 

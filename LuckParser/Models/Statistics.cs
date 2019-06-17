@@ -137,6 +137,10 @@ namespace LuckParser.Models
             public double ResurrectTime;
             public int CondiCleanse;
             public double CondiCleanseTime;
+            public int CondiCleanseSelf;
+            public double CondiCleanseTimeSelf;
+            public int BoonStrips;
+            public double BoonStripsTime;
         }
 
         public class FinalBuffs

@@ -363,7 +363,7 @@ namespace LuckParser.Builders
         {
             //generate supstats table
             WriteLine(new [] { "Sub Group", "Profession", "Name" ,
-                "Condi Cleanse","Condi Cleanse time","Resurrects","Time Resurecting" });
+                "Condi Cleanse","Condi Cleanse time", "Condi Cleanse Self","Condi Cleanse time self", "Boon Strips","Boon Strips time","Resurrects","Time Resurecting" });
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
@@ -373,8 +373,8 @@ namespace LuckParser.Builders
                 }
                 Statistics.FinalSupport support = player.GetSupport(_log, phaseIndex);
 
-                WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
-                support.CondiCleanse.ToString(),support.CondiCleanseTime.ToString(),support.Resurrects.ToString(),support.ResurrectTime.ToString() });
+                WriteLine(new[] { player.Group.ToString(), player.Prof, player.Character,
+                support.CondiCleanse.ToString(),support.CondiCleanseTime.ToString(), support.CondiCleanseSelf.ToString(), support.CondiCleanseTimeSelf.ToString(), support.BoonStrips.ToString(), support.BoonStripsTime.ToString(), support.Resurrects.ToString(),support.ResurrectTime.ToString() });
                 count++;
             }
             while (count < 15)//so each graph has equal spacing

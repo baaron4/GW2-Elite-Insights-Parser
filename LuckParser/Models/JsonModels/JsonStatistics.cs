@@ -293,13 +293,29 @@ namespace LuckParser.Models.JsonModels
             /// </summary>
             public double ResurrectTime;
             /// <summary>
-            /// Number of time a condition was removed
+            /// Number of time a condition was removed, self excluded
             /// </summary>
             public int CondiCleanse;
             /// <summary>
-            /// Total time of condition removed
+            /// Total time of condition removed, self excluded
             /// </summary>
             public double CondiCleanseTime;
+            /// <summary>
+            /// Number of time a condition was removed from self
+            /// </summary>
+            public int CondiCleanseSelf;
+            /// <summary>
+            /// Total time of condition removed from self
+            /// </summary>
+            public double CondiCleanseTimeSelf;
+            /// <summary>
+            /// Number of time a boon was removed
+            /// </summary>
+            public int BoonStrips;
+            /// <summary>
+            /// Total time of boons removed from self
+            /// </summary>
+            public double BoonStripsTime;
 
             public JsonSupport(Statistics.FinalSupport stats)
             {
@@ -307,6 +323,10 @@ namespace LuckParser.Models.JsonModels
                 ResurrectTime = stats.ResurrectTime;
                 CondiCleanse = stats.CondiCleanse;
                 CondiCleanseTime = stats.CondiCleanseTime;
+                CondiCleanseSelf = stats.CondiCleanseSelf;
+                CondiCleanseTimeSelf = stats.CondiCleanseTimeSelf;
+                BoonStrips = stats.BoonStrips;
+                BoonStripsTime = stats.BoonStripsTime;
             }
         }
     }

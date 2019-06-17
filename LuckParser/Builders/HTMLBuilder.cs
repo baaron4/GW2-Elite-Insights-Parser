@@ -1056,7 +1056,7 @@ namespace LuckParser.Builders
                     DmgStatsTargets = BuildDMGStatsTargetsData(i),
                     DmgStats = BuildDMGStatsData(i),
                     DefStats = BuildDefenseData(i),
-                    HealStats = BuildSupportData(i),
+                    SupportStats = BuildSupportData(i),
                     BoonStats = BuildBuffUptimeData(_statistics.PresentBoons, i),
                     OffBuffStats = BuildBuffUptimeData(_statistics.PresentOffbuffs, i),
                     DefBuffStats = BuildBuffUptimeData(_statistics.PresentDefbuffs, i),
