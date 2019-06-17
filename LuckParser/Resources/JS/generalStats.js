@@ -168,7 +168,7 @@ var compileGeneralStats = function () {
                 }
                 var rows = [];
                 var sums = [];
-                var total = [0, 0, 0, 0];
+                var total = [0, 0, 0, 0, 0, 0, 0, 0];
                 var groups = [];
                 var i;
                 for (i = 0; i < this.phase.supportStats.length; i++) {

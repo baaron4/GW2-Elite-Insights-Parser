@@ -86,7 +86,7 @@ namespace LuckParser.Models.ParseModels
             int[] strips = { 0, 0 };
             foreach (long id in log.Boons.BoonsByNature[Boon.BoonNature.Boon].Select(x => x.ID))
             {
-                List<BuffRemoveAllEvent> bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End).Select(x => x as BuffRemoveAllEvent).ToList();
+                List<BuffRemoveAllEvent> bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem).Select(x => x as BuffRemoveAllEvent).ToList();
                 strips[0] += bevts.Count;
                 strips[1] += bevts.Sum(x => x.RemovedDuration);
             }
@@ -483,8 +483,8 @@ namespace LuckParser.Models.ParseModels
                 final.CondiCleanseTime = cleanseArray[1] / 1000.0;
                 final.CondiCleanseSelf = cleanseSelfArray[0];
                 final.CondiCleanseTimeSelf = cleanseSelfArray[1] / 1000.0;
-                final.BoonStrips = cleanseSelfArray[0];
-                final.BoonStripsTime = cleanseSelfArray[1] / 1000.0;
+                final.BoonStrips = boonStrips[0];
+                final.BoonStripsTime = boonStrips[1] / 1000.0;
             }
         }
 
