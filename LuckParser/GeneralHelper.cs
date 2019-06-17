@@ -474,7 +474,6 @@ namespace LuckParser
                     return "https://i.imgur.com/C1mvNGZ.png"; 
                 case ParalyzingWisp:
                     return "https://i.imgur.com/YBl8Pqo.png";
-                case Pylon1:
                 case Pylon2:
                     return "https://i.imgur.com/b33vAEQ.png";
                 case EntropicDistortion:
@@ -497,6 +496,7 @@ namespace LuckParser
                 case GreenSpirit1:
                 case GreenSpirit2:
                 case BanditSapper:
+                case Pylon1:
                     return "https://i.imgur.com/0koP4xB.png";
                 case FleshWurm:
                     return "https://i.imgur.com/o3vX9Zc.png";
