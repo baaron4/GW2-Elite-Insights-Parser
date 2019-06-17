@@ -169,9 +169,9 @@ namespace LuckParser.Models.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // fixated
-            List<AbstractBuffEvent> fixatedSam = GetFilteredList(log.CombatData, 56510, p, true);
+            List<AbstractBuffEvent> fixated = GetFilteredList(log.CombatData, 56510, p, true);
             int fixatedStart = 0;
-            foreach (AbstractBuffEvent c in fixatedSam)
+            foreach (AbstractBuffEvent c in fixated)
             {
                 if (c is BuffApplyEvent)
                 {
