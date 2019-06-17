@@ -882,7 +882,11 @@ namespace LuckParser.Models.ParseModels
                     {
                         continue;
                     }
-                    long time = Math.Max(ba.Time, 0);
+                    long time = 0;
+                    if (!ba.Initial)
+                    {
+                        time = ba.Time;
+                    }
                     if (time <= fightDuration)
                     {
                         Consumable existing = _consumeList.Find(x => x.Time == time && x.Buff.ID == consumable.ID);
