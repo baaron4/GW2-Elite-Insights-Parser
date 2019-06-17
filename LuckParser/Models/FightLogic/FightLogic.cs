@@ -211,6 +211,11 @@ namespace LuckParser.Models.Logic
             phase.OverrideTimes(log);
         }
 
+        public virtual List<AbstractBuffEvent> CreateCustomBuffEvents(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById)
+        {
+            return new List<AbstractBuffEvent>();
+        }
+
         public virtual void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
         }
