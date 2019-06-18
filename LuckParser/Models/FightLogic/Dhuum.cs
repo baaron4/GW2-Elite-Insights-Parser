@@ -131,7 +131,7 @@ namespace LuckParser.Models.Logic
             }
             else
             {
-                AbstractBuffEvent invulDhuum = log.CombatData.GetBoonData(762).FirstOrDefault(x => x is BuffApplyEvent && x.To == mainTarget.AgentItem && x.Time > 115000);
+                AbstractBuffEvent invulDhuum = log.CombatData.GetBoonData(762).FirstOrDefault(x => x is BuffRemoveManualEvent && x.To == mainTarget.AgentItem && x.Time > 115000);
                 if (invulDhuum != null)
                 {
                     long end = invulDhuum.Time;
