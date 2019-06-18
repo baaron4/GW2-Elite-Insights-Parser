@@ -25,7 +25,8 @@ namespace LuckParser.Models.Logic
             {
                 Pylon1,
                 Pylon2,
-                EntropicDistortion
+                EntropicDistortion,
+                BigKillerTornado
             };
         }
 
@@ -128,6 +129,31 @@ namespace LuckParser.Models.Logic
                             (33530, 34050, 35450, 35970));
         }
 
+        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
+        {
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (target.ID)
+            {
+                case (ushort)ParseEnum.TargetIDS.PeerlessQadim:
+                    List<AbstractCastEvent> cataCycle = cls.Where(x => x.SkillId == 56329).ToList();
+
+                    foreach (AbstractCastEvent c in cataCycle)
+                    {
+                        int magmaRadius = 850;
+                        int start = (int)c.Time;
+                        int end = start + c.ActualDuration;
+                        Point3D pylonPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= end);
+                        replay.Actors.Add(new CircleActor(true, 0, magmaRadius, (start, end), "rgba(255, 220, 50, 0.15)", new PositionConnector(pylonPosition)));
+                        replay.Actors.Add(new CircleActor(true, end, magmaRadius, (start, end), "rgba(255, 220, 50, 0.25)", new PositionConnector(pylonPosition)));
+                        replay.Actors.Add(new CircleActor(true, 0, magmaRadius, (end, (int)log.FightData.FightDuration), "rgba(255, 220, 0, 0.5)", new PositionConnector(pylonPosition)));
+                    }
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
+
+        }
+
         public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
         {
             int start = (int)replay.TimeOffsets.start;
@@ -157,7 +183,11 @@ namespace LuckParser.Models.Logic
                         }
                     }
                     break;
+                case (ushort)BigKillerTornado:
+                    replay.Actors.Add(new CircleActor(true, 0, 450, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(mob)));
+                    break;
                 case (ushort)Pylon1:
+                    break;
                 case (ushort)Pylon2:
                     break;
                 default:
@@ -182,6 +212,33 @@ namespace LuckParser.Models.Logic
                     int fixatedEnd = (int)c.Time;
                     replay.Actors.Add(new CircleActor(true, 0, 120, (fixatedStart, fixatedEnd), "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
                 }
+            }
+            // Magma drop
+            List<AbstractBuffEvent> magmaDrop = GetFilteredList(log.CombatData, 56475, p, true);
+            int magmaDropStart = 0;
+            int magmaRadius = 420;
+            int magmaOffset = 4000;
+            foreach (AbstractBuffEvent c in magmaDrop)
+            {
+                if (c is BuffApplyEvent)
+                {
+                    magmaDropStart = (int)c.Time;
+                }
+                else
+                {
+                    int magmaDropEnd = (int)c.Time;
+                    replay.Actors.Add(new CircleActor(true, 0, magmaRadius, (magmaDropStart, magmaDropEnd), "rgba(255, 150, 0, 0.15)", new AgentConnector(p)));
+                    replay.Actors.Add(new CircleActor(true, magmaDropEnd, magmaRadius, (magmaDropStart, magmaDropEnd), "rgba(255, 150, 0, 0.25)", new AgentConnector(p)));
+                    Point3D magmaNextPos = replay.PolledPositions.FirstOrDefault(x => x.Time >= magmaDropEnd);
+                    Point3D magmaPrevPos = replay.PolledPositions.LastOrDefault(x => x.Time <= magmaDropEnd);
+                    if (magmaNextPos != null || magmaPrevPos != null)
+                    {
+                        replay.Actors.Add(new CircleActor(true, 0, magmaRadius, (magmaDropEnd, magmaDropEnd + magmaOffset), "rgba(255, 220, 50, 0.15)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
+                        replay.Actors.Add(new CircleActor(true, magmaDropEnd + magmaOffset, magmaRadius, (magmaDropEnd, magmaDropEnd + magmaOffset), "rgba(255, 220, 50, 0.25)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
+                        replay.Actors.Add(new CircleActor(true, 0, magmaRadius, (magmaDropEnd+magmaOffset, (int)log.FightData.FightDuration), "rgba(255, 220, 50, 0.5)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
+                    }
+                }
+
             }
             //sapping surge, bad red tether
             List<AbstractBuffEvent> sappingSurge = GetFilteredList(log.CombatData, 56118, p, true);

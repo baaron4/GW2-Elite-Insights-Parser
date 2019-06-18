@@ -96,6 +96,28 @@ namespace LuckParser.Models.Logic
                             (33530, 34050, 35450, 35970));
         }
 
+        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
+        {
+            int start = (int)replay.TimeOffsets.start;
+            int end = (int)replay.TimeOffsets.end;
+            switch (mob.ID)
+            {
+                case (ushort)BigKillerTornado:
+                    replay.Actors.Add(new CircleActor(true, 0, 420, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(mob)));
+                    break;
+                case (ushort)SmallKillerTornado:
+                    replay.Actors.Add(new CircleActor(true, 0, 120, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(mob)));
+                    break;
+                case (ushort)SmallJumpyTornado:
+                case (ushort)ParalyzingWisp:
+                case (ushort)VoltaicWisp:
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+
+            }
+        }
+
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Sabir);
