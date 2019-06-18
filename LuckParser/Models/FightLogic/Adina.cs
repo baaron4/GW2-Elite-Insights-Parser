@@ -102,7 +102,7 @@ namespace LuckParser.Models.Logic
             {
                 return phases;
             }
-            List<AbstractCastEvent> quantumQuakes = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 56035).ToList();
+            List<AbstractCastEvent> quantumQuakes = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 56035 || x.SkillId == 56381).ToList();
             List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, 762, mainTarget, true);
             long start = 0, end = 0;
             for (int i = 0; i < invuls.Count; i++)
