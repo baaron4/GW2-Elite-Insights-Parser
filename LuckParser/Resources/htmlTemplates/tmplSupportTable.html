@@ -6,7 +6,9 @@
                 <th></th>
                 <th class="text-left">Name</th>
                 <th>Account</th>
-                <th>Condi Cleanse</th>
+                <th>Condi Cleanse From Others</th>
+                <th>Condi Cleanse From Self</th>
+                <th>Boon Strips</th>
                 <th>Resurrects</th>
             </tr>
         </thead>
@@ -20,6 +22,8 @@
                 <td>{{row.player.acc}}</td>
                 <td :data-original-title="row.sup[1] + ' seconds'">{{row.sup[0]}}</td>
                 <td :data-original-title="row.sup[3] + ' seconds'">{{row.sup[2]}}</td>
+                <td :data-original-title="row.sup[5] + ' seconds'">{{row.sup[4]}}</td>
+                <td :data-original-title="row.sup[7] + ' seconds'">{{row.sup[6]}}</td>
             </tr>
         </tbody>
         <tfoot>
@@ -30,6 +34,8 @@
                 <td></td>
                 <td :data-original-title="round3(sum.sup[1]) + ' seconds'">{{sum.sup[0]}}</td>
                 <td :data-original-title="round3(sum.sup[3])  + ' seconds'">{{sum.sup[2]}}</td>
+                <td :data-original-title="round3(sum.sup[5])  + ' seconds'">{{sum.sup[4]}}</td>
+                <td :data-original-title="round3(sum.sup[7])  + ' seconds'">{{sum.sup[6]}}</td>
             </tr>
         </tfoot>
     </table>

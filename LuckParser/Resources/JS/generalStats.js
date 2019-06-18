@@ -168,11 +168,11 @@ var compileGeneralStats = function () {
                 }
                 var rows = [];
                 var sums = [];
-                var total = [0, 0, 0, 0];
+                var total = [0, 0, 0, 0, 0, 0, 0, 0];
                 var groups = [];
                 var i;
-                for (i = 0; i < this.phase.healStats.length; i++) {
-                    var sup = this.phase.healStats[i];
+                for (i = 0; i < this.phase.supportStats.length; i++) {
+                    var sup = this.phase.supportStats[i];
                     var player = logData.players[i];
                     if (player.isConjure) {
                         continue;
@@ -182,7 +182,7 @@ var compileGeneralStats = function () {
                         sup: sup
                     });
                     if (!groups[player.group]) {
-                        groups[player.group] = [0, 0, 0, 0];
+                        groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0];
                     }
                     for (var j = 0; j < sup.length; j++) {
                         total[j] += sup[j];

@@ -20,7 +20,7 @@ namespace LuckParser.Models.HtmlModels
         public List<List<List<object>>> DmgStatsTargets;
         public List<List<object>> DmgStats;
         public List<List<object>> DefStats;
-        public List<List<object>> HealStats;
+        public List<List<object>> SupportStats;
 
         public List<BoonData> BoonStats;
         public List<BoonData> BoonGenSelfStats;
@@ -161,6 +161,10 @@ namespace LuckParser.Models.HtmlModels
                 {
                     support.CondiCleanse,
                     support.CondiCleanseTime,
+                    support.CondiCleanseSelf,
+                    support.CondiCleanseTimeSelf,
+                    support.BoonStrips,
+                    support.BoonStripsTime,
                     support.Resurrects,
                     support.ResurrectTime
                 };

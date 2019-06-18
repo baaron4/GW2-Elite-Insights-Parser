@@ -9,16 +9,12 @@ namespace LuckParser.Models.ParseModels
 {
     public class BuffApplyEvent : AbstractBuffEvent
     {
-        private readonly bool _initial;
+        public bool Initial { get; }
         public int AppliedDuration { get; }
 
         public BuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, skillData, offset)
         {
-            _initial = evtcItem.IsStateChange == ParseEnum.StateChange.BuffInitial;
-            if (_initial)
-            {
-                Time = 0;
-            }
+            Initial = evtcItem.IsStateChange == ParseEnum.StateChange.BuffInitial;
             AppliedDuration = evtcItem.Value;
             By = agentData.GetAgentByInstID(evtcItem.SrcMasterInstid > 0 ? evtcItem.SrcMasterInstid : evtcItem.SrcInstid, evtcItem.LogTime);
             ByMinion = evtcItem.SrcMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.SrcInstid, evtcItem.LogTime) : null;

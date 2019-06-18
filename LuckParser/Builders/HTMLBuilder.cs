@@ -397,7 +397,7 @@ namespace LuckParser.Builders
                     }
                 }
 
-                object[] skillData = { 0, entry.Key, 0, -1, 0, casts,
+                object[] skillData = { 0, entry.Key.ID, 0, -1, 0, casts,
                     0, 0, 0, 0, timeswasted / 1000.0, -timessaved / 1000.0 };
                 list.Add(skillData);
             }
@@ -1056,7 +1056,7 @@ namespace LuckParser.Builders
                     DmgStatsTargets = BuildDMGStatsTargetsData(i),
                     DmgStats = BuildDMGStatsData(i),
                     DefStats = BuildDefenseData(i),
-                    HealStats = BuildSupportData(i),
+                    SupportStats = BuildSupportData(i),
                     BoonStats = BuildBuffUptimeData(_statistics.PresentBoons, i),
                     OffBuffStats = BuildBuffUptimeData(_statistics.PresentOffbuffs, i),
                     DefBuffStats = BuildBuffUptimeData(_statistics.PresentDefbuffs, i),

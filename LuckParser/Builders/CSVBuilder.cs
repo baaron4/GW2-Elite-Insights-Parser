@@ -15,6 +15,7 @@ namespace LuckParser.Builders
     {
         readonly ParsedLog _log;
         readonly List<PhaseData> _phases;
+        readonly Target _legacyTarget;
 
         readonly Statistics _statistics;
         readonly StreamWriter _sw;
@@ -32,6 +33,11 @@ namespace LuckParser.Builders
             _statistics = log.Statistics;
 
             _uploadResult = uploadresult;
+            _legacyTarget = log.FightData.Logic.Targets.Find(x => x.ID == log.FightData.ID);
+            if (_legacyTarget == null)
+            {
+                _legacyTarget = new Target(GeneralHelper.UnknownAgent);
+            }
         }
         private void WriteCell(string content)
         {
@@ -95,12 +101,12 @@ namespace LuckParser.Builders
             //Boss card
             WriteLine(new [] { "Boss", fightName });
             WriteLine(new [] { "Success", _log.FightData.Success.ToString() });
-            WriteLine(new [] { "Total Boss Health", _log.LegacyTarget.GetHealth(_log.CombatData).ToString() });
-            List<HealthUpdateEvent> hpUpdates = _log.CombatData.GetHealthUpdateEvents(_log.LegacyTarget.AgentItem);
+            WriteLine(new [] { "Total Boss Health", _legacyTarget.GetHealth(_log.CombatData).ToString() });
+            List<HealthUpdateEvent> hpUpdates = _log.CombatData.GetHealthUpdateEvents(_legacyTarget.AgentItem);
             double hpLeft = hpUpdates.Count > 0
                 ? hpUpdates.Last().HPPercent
                 : 100.0;
-            WriteLine(new [] { "Final Boss Health", (_log.LegacyTarget.GetHealth(_log.CombatData) * hpLeft).ToString() });
+            WriteLine(new [] { "Final Boss Health", (_legacyTarget.GetHealth(_log.CombatData) * hpLeft).ToString() });
             WriteLine(new [] { "Boss Health Burned %", (100.0 - hpLeft).ToString() });
             WriteLine(new [] { "Duration", durationString });
 
@@ -192,7 +198,7 @@ namespace LuckParser.Builders
             {
                 Statistics.FinalDPS dps = player.GetDPSAll(_log, phaseIndex);
                 Statistics.FinalDefenses defense = player.GetDefenses(_log, phaseIndex);
-                Statistics.FinalDPS dpsBoss = player.GetDPSTarget(_log, phaseIndex, _log.LegacyTarget);
+                Statistics.FinalDPS dpsBoss = player.GetDPSTarget(_log, phaseIndex, _legacyTarget);
                 string deathString = defense.DeadCount.ToString();
                 string deadthTooltip = "";
                 if (defense.DeadCount > 0)
@@ -250,8 +256,8 @@ namespace LuckParser.Builders
                     continue;
                 }
                 Statistics.FinalStatsAll stats = player.GetStatsAll(_log, phaseIndex);
-                Statistics.FinalStats statsBoss = player.GetStatsTarget(_log, phaseIndex, _log.LegacyTarget);
-                Dictionary<string, List<Statistics.DamageModifierData>> damageMods = player.GetDamageModifierData(_log, _log.LegacyTarget);
+                Statistics.FinalStats statsBoss = player.GetStatsTarget(_log, phaseIndex, _legacyTarget);
+                Dictionary<string, List<Statistics.DamageModifierData>> damageMods = player.GetDamageModifierData(_log, _legacyTarget);
                 Statistics.DamageModifierData scholar = new Statistics.DamageModifierData(0, 0, 0, 0);
                 Statistics.DamageModifierData moving = new Statistics.DamageModifierData(0, 0, 0, 0);
                 if (damageMods.TryGetValue("Scholar Rune", out var schoDict))
@@ -357,7 +363,7 @@ namespace LuckParser.Builders
         {
             //generate supstats table
             WriteLine(new [] { "Sub Group", "Profession", "Name" ,
-                "Condi Cleanse","Condi Cleanse time","Resurrects","Time Resurecting" });
+                "Condi Cleanse","Condi Cleanse time", "Condi Cleanse Self","Condi Cleanse time self", "Boon Strips","Boon Strips time","Resurrects","Time Resurecting" });
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
@@ -367,8 +373,8 @@ namespace LuckParser.Builders
                 }
                 Statistics.FinalSupport support = player.GetSupport(_log, phaseIndex);
 
-                WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
-                support.CondiCleanse.ToString(),support.CondiCleanseTime.ToString(),support.Resurrects.ToString(),support.ResurrectTime.ToString() });
+                WriteLine(new[] { player.Group.ToString(), player.Prof, player.Character,
+                support.CondiCleanse.ToString(),support.CondiCleanseTime.ToString(), support.CondiCleanseSelf.ToString(), support.CondiCleanseTimeSelf.ToString(), support.BoonStrips.ToString(), support.BoonStripsTime.ToString(), support.Resurrects.ToString(),support.ResurrectTime.ToString() });
                 count++;
             }
             while (count < 15)//so each graph has equal spacing
@@ -719,9 +725,9 @@ namespace LuckParser.Builders
         }
         private void CreateCondiUptime(int phaseIndex)
         {
-            Target boss = _log.LegacyTarget;
+            Target boss = _legacyTarget;
             long fightDuration = _phases[phaseIndex].DurationInMS;
-            Dictionary<long, Statistics.FinalTargetBuffs> conditions = _log.LegacyTarget.GetBuffs(_log, phaseIndex);
+            Dictionary<long, Statistics.FinalTargetBuffs> conditions = _legacyTarget.GetBuffs(_log, phaseIndex);
 
             WriteCell("Name");
             WriteCell("Avg");
@@ -733,7 +739,7 @@ namespace LuckParser.Builders
             NewLine();
             int count = 0;
             WriteCell(boss.Character);
-            WriteCell(Math.Round(_log.LegacyTarget.GetAverageConditions(_log, phaseIndex), 1).ToString());
+            WriteCell(Math.Round(_legacyTarget.GetAverageConditions(_log, phaseIndex), 1).ToString());
             foreach (Boon boon in _statistics.PresentConditions)
             {
                 if (conditions.TryGetValue(boon.ID, out var uptime))
@@ -762,8 +768,8 @@ namespace LuckParser.Builders
         }
         private void CreateBossBoonUptime(int phaseIndex)
         {
-            Target boss = _log.LegacyTarget;
-            Dictionary<long, Statistics.FinalTargetBuffs> conditions = _log.LegacyTarget.GetBuffs(_log, phaseIndex);
+            Target boss = _legacyTarget;
+            Dictionary<long, Statistics.FinalTargetBuffs> conditions = _legacyTarget.GetBuffs(_log, phaseIndex);
             WriteCell("Name");
             WriteCell("Avg");
             foreach (Boon boon in _statistics.PresentBoons)
@@ -802,7 +808,7 @@ namespace LuckParser.Builders
         }
         private void CreateCondiGen(int phaseIndex)
         {
-            Dictionary<long, Statistics.FinalTargetBuffs> conditions = _log.LegacyTarget.GetBuffs(_log, phaseIndex);
+            Dictionary<long, Statistics.FinalTargetBuffs> conditions = _legacyTarget.GetBuffs(_log, phaseIndex);
             //bool hasBoons = false;
             int count = 0;
             WriteCell("Name");
