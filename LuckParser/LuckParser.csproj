@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{6135677E-6C0E-42DE-925E-1995E52E5AC5}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>LuckParser</RootNamespace>
     <AssemblyName>GuildWars2EliteInsights</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
@@ -62,6 +62,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>App.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">

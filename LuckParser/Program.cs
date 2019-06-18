@@ -1,46 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace LuckParser
 {
     static class Program
     {
-        [DllImport("kernel32.dll")]
-        private static extern bool AllocConsole();
-        [DllImport("kernel32.dll")]
-        private static extern bool AttachConsole(int dwProcessId);
-        [DllImport("kernel32.dll")]
-        private static extern IntPtr GetStdHandle(StandardHandle nStdHandle);
-        [DllImport("kernel32.dll")]
-        private static extern FileType GetFileType(IntPtr handle);
-
-        private const int AttachParentProcess = -1;
-
-        private enum StandardHandle
-        {
-            Input =-10,
-            Output = -11,
-            Error = -12
-        }
-
-        private enum FileType : uint
-        {
-            Unknown = 0x0000,
-            Disk = 0x0001,
-            Char = 0x0002,
-            Pipe = 0x0003
-        }
-
-        private static bool IsRedirected(IntPtr handle)
-        {
-            FileType fileType = GetFileType(handle);
-
-            return (fileType == FileType.Disk) || (fileType == FileType.Pipe);
-        }
-
+        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+        static extern bool FreeConsole();
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -57,82 +25,58 @@ namespace LuckParser
             List<string> logFiles = new List<string>();
             bool uiMode = true;
             Application.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+            HashSet<string> argsSet = new HashSet<string>(args.ToList());
+            HashSet<int> usedIds = new HashSet<int>();
             if (args.Length > 0)
             {
                 uiMode = false;
-                int parserArgOffset = 0;
-
-                if (args.Contains("-h"))
+                if (argsSet.Contains("-h"))
                 {
-                    Console.WriteLine("GuildWars2EliteInsights.exe [arguments] [logs...]");
+                    Console.WriteLine("GuildWars2EliteInsights " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
                     Console.WriteLine("");
-                    Console.WriteLine("-c [config path] : use another config file");
-                    Console.WriteLine("-p : disable windows specific functions");
-                    Console.WriteLine("-ui : runs in the application with user interface");
-                    Console.WriteLine("-h : help");
+                    Console.WriteLine("-c [config path]         : uses specified config file");
+                    Console.WriteLine("-ui                      : runs the application with user interface");
+                    Console.WriteLine("-h                       : displays this screen");
+                    Console.WriteLine("-v                       : displays the version");
                     return 0;
                 }
 
-                if (args.Contains("-ui"))
+                if (argsSet.Contains("-v"))
                 {
-                    parserArgOffset += 1;
+                    Console.WriteLine("GuildWars2EliteInsights " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
+                    return 0;
+                }
+
+                if (argsSet.Contains("-ui"))
+                {
                     uiMode = true;
+                    usedIds.Add(Array.IndexOf(args, "-ui"));
                 }
 
-                if (args.Contains("-p"))
+                if (argsSet.Contains("-c"))
                 {
-                    parserArgOffset += 1;
-                }
-                else
-                {
-                    /*
-                     * Magic for windows:
-                     * - opens a console window if used from a non-console with command line options
-                     * - fixes output on windows cmd (other consoles tested behaved better)(otherwise no console output or piped file output)
-                     *
-                     * We need to do this, because the console output is lazy initialized
-                     * and if we are redirecting to a file or pipe we want to make sure Console.out points to the correct handle
-                     * and doesn't init with the console ignoring existing stdout
-                     */
-                    if (IsRedirected(GetStdHandle(StandardHandle.Output)))
+                    int id = Array.IndexOf(args, "-c");
+                    if (id == args.Length - 1 || args[id + 1].StartsWith("-"))
                     {
-                        var dummy = Console.Out;
-                    }
-
-                    if (!AttachConsole(AttachParentProcess))
-                    {
-                        AllocConsole();
-                    }
-
-                    AttachConsole(AttachParentProcess);
-                }
-
-                if (args.Contains("-c"))
-                {
-                    if (args.Length - parserArgOffset >= 2)
-                    {
-                        // Do not access settings before this, else this will not work
-                        int argPos = Array.IndexOf(args, "-c");
-
-                        CustomSettingsManager.ReadConfig(args[argPos + 1]);
-
-                        parserArgOffset += 2;
-                    }
-                    else
-                    {
-                        Console.WriteLine("More arguments required for option -c:");
-                        Console.WriteLine("GuildWars2EliteInsights.exe -c [config path] [logs]");
+                        Console.WriteLine("A path to a config file must be specified after -c");
                         return 0;
+                    } else
+                    {
+                        CustomSettingsManager.ReadConfig(args[id + 1]);
+                        usedIds.Add(id);
+                        usedIds.Add(id + 1);
                     }
                 }
 
-                for (int i = parserArgOffset; i < args.Length; i++)
+                for (int i = 0; i < args.Length; i++)
                 {
-                    logFiles.Add(args[i]);
+                    if (!usedIds.Contains(i))
+                        logFiles.Add(args[i]);
                 }
             }
             if (uiMode)
             {
+                FreeConsole();
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new MainForm(logFiles));
