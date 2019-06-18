@@ -67,13 +67,9 @@ namespace LuckParser.Models.ParseModels
         public int[] GetCleansesSelf(ParsedLog log, PhaseData phase)
         {
             int[] cleanse = { 0, 0 };
-            List<AbstractStatusEvent> downsAndDeads = new List<AbstractStatusEvent>();
-            downsAndDeads.AddRange(log.CombatData.GetDownEvents(AgentItem));
-            downsAndDeads.AddRange(log.CombatData.GetDeadEvents(AgentItem));
             foreach (long id in log.Boons.BoonsByNature[Boon.BoonNature.Condition].Select(x => x.ID))
             {
                 List<BuffRemoveAllEvent> bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && x.To == AgentItem).Select(x => x as BuffRemoveAllEvent).ToList();
-                bevts.RemoveAll(x => downsAndDeads.Exists(y => Math.Abs(y.Time - x.Time) < 5));
                 cleanse[0] += bevts.Count;
                 cleanse[1] += bevts.Sum(x => x.RemovedDuration);
             }
