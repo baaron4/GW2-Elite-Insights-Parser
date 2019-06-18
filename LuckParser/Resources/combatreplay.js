@@ -449,6 +449,39 @@ class Animator {
                 this.attachedActorData.get(this.reactiveDataStatus.selectedPlayerID).draw();
             }
         }
+        //ctx.globalCompositeOperation = "color-burn";
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        // draw scale
+        ctx.lineWidth = 3 * resolutionMultiplier;
+        ctx.strokeStyle = "red";
+        var pos = resolutionMultiplier * 70;
+        var width = resolutionMultiplier * 50;
+        var height = resolutionMultiplier * 6;
+        // main line
+        ctx.beginPath();
+        ctx.moveTo(pos, pos);
+        ctx.lineTo(pos + width, pos);
+        ctx.stroke();
+        ctx.lineWidth = resolutionMultiplier;
+        // right border
+        ctx.beginPath();
+        ctx.moveTo(pos - resolutionMultiplier, pos + height);
+        ctx.lineTo(pos - resolutionMultiplier, pos - height);
+        ctx.stroke();
+        // left border
+        ctx.beginPath();
+        ctx.moveTo(pos + width + resolutionMultiplier, pos + height);
+        ctx.lineTo(pos + width + resolutionMultiplier, pos - height);
+        ctx.stroke();
+        // text
+        var fontSize = 13 * resolutionMultiplier;
+        ctx.font = fontSize + "px Comic Sans MS";
+        ctx.fillStyle = "red";
+        ctx.textAlign = "center";
+        ctx.fillText((50 / (this.inch * this.scale)).toFixed(1) + " inches", resolutionMultiplier * 95, resolutionMultiplier * 60);
+        ctx.restore();
+        //ctx.globalCompositeOperation = 'normal';
     }
 }
 
