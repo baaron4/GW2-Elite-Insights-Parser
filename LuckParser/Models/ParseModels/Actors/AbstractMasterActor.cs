@@ -14,7 +14,6 @@ namespace LuckParser.Models.ParseModels
         // Boons
         private readonly List<BoonDistribution> _boonDistribution = new List<BoonDistribution>();
         private readonly List<Dictionary<long, long>> _buffPresence = new List<Dictionary<long, long>>();
-        private readonly List<Dictionary<AgentItem, Dictionary<long, List<long>>>> _condiCleanse = new List<Dictionary<AgentItem, Dictionary<long, List<long>>>>();
         // damage list
         private Dictionary<int, List<int>> _damageList1S = new Dictionary<int, List<int>>();
         private Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>> _selfDamageLogsPerPhasePerTarget = new Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>>();
@@ -105,20 +104,7 @@ namespace LuckParser.Models.ParseModels
             }
             return _buffPresence[phaseIndex];
         }
-
-        protected Dictionary<long, List<long>> GetCondiCleanse(ParsedLog log, int phaseIndex, AgentItem src)
-        {
-            if (BoonPoints == null)
-            {
-                SetBoonStatus(log);
-            }
-            if (_condiCleanse[phaseIndex].TryGetValue(src, out Dictionary<long, List<long>> dict))
-            {
-                return dict;
-            }
-            return new Dictionary<long, List<long>>();
-        }
-
+        
         public FinalDPS GetDPSAll(ParsedLog log, int phaseIndex)
         {
             if (_dpsAll == null)
@@ -304,7 +290,6 @@ namespace LuckParser.Models.ParseModels
             {
                 _boonDistribution.Add(new BoonDistribution());
                 _buffPresence.Add(new Dictionary<long, long>());
-                _condiCleanse.Add(new Dictionary<AgentItem, Dictionary<long, List<long>>>());
             }
         }
 
@@ -319,18 +304,6 @@ namespace LuckParser.Models.ParseModels
                 {
                     PhaseData phase = phases[i];
                     simul.SetBoonDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
-                }
-            }
-
-            if (updateCondiPresence)
-            {
-                foreach (BoonSimulationItemCleanse simul in simulator.CleanseSimulationResult)
-                {
-                    for (int i = 0; i < phases.Count; i++)
-                    {
-                        PhaseData phase = phases[i];
-                        simul.SetCleanseItem(_condiCleanse[i], phase.Start, phase.End, boonid, log);
-                    }
                 }
             }
         }

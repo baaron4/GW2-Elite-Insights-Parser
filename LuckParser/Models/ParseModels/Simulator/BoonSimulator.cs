@@ -75,7 +75,6 @@ namespace LuckParser.Models.ParseModels
         public readonly List<BoonSimulationItem> GenerationSimulation = new List<BoonSimulationItem>();
         public readonly List<BoonSimulationItemOverstack> OverstackSimulationResult = new List<BoonSimulationItemOverstack>();
         public readonly List<BoonSimulationItemWasted> WasteSimulationResult = new List<BoonSimulationItemWasted>();
-        public readonly List<BoonSimulationItemCleanse> CleanseSimulationResult = new List<BoonSimulationItemCleanse>();
         protected readonly int Capacity;
         private readonly ParsedLog _log;
         private readonly StackingLogic _logic;
@@ -199,13 +198,11 @@ namespace LuckParser.Models.ParseModels
                     foreach (BoonStackItem stackItem in BoonStack)
                     {
                         WasteSimulationResult.Add(new BoonSimulationItemWasted(stackItem.Src, stackItem.BoonDuration, start));
-                        CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, stackItem.BoonDuration, start));
                         if (stackItem.Extensions.Count > 0)
                         {
                             foreach ((AgentItem src, long value) in stackItem.Extensions)
                             {
                                 WasteSimulationResult.Add(new BoonSimulationItemWasted(src, value, start));
-                                CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, value, start));
                             }
                         }
                     }
@@ -218,13 +215,11 @@ namespace LuckParser.Models.ParseModels
                         if (Math.Abs(boonDuration - stackItem.TotalBoonDuration()) < 10)
                         {
                             WasteSimulationResult.Add(new BoonSimulationItemWasted(stackItem.Src, stackItem.BoonDuration, start));
-                            CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, stackItem.BoonDuration, start));
                             if (stackItem.Extensions.Count > 0)
                             {
                                 foreach ((AgentItem src, long value) in stackItem.Extensions)
                                 {
                                     WasteSimulationResult.Add(new BoonSimulationItemWasted(src, value, start));
-                                    CleanseSimulationResult.Add(new BoonSimulationItemCleanse(provokedBy, value, start));
                                 }
                             }
                             BoonStack.RemoveAt(i);

@@ -127,7 +127,7 @@ namespace LuckParser.Models.ParseModels
             {
                 SetCastLogs(log);
             }
-            return CastLogs.Where(x => x.Time + x.ActualDuration >= start && x.Time < end).ToList();
+            return CastLogs.Where(x => x.Time + x.ActualDuration > start && x.Time < end).ToList();
 
         }
         // privates

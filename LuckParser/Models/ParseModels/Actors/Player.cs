@@ -54,29 +54,28 @@ namespace LuckParser.Models.ParseModels
         }
         
         // Public methods
-        public int[] GetCleansesNotSelf(ParsedLog log, int phaseIndex) {
+        public int[] GetCleansesNotSelf(ParsedLog log, PhaseData phase) {
             int[] cleanse = { 0, 0 };
-            foreach (Player p in log.PlayerList)
+            foreach (long id in log.Boons.BoonsByNature[Boon.BoonNature.Condition].Select(x => x.ID))
             {
-                if (p == this)
-                {
-                    continue;
-                }
-                foreach(List<long> list in p.GetCondiCleanse(log,phaseIndex, AgentItem).Values)
-                {
-                    cleanse[0] += list.Count;
-                    cleanse[1] += (int)list.Sum();
-                }
+                List<BuffRemoveAllEvent> bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && log.PlayerAgents.Contains(x.To) && x.To != AgentItem).Select(x => x as BuffRemoveAllEvent).ToList();
+                cleanse[0] += bevts.Count;
+                cleanse[1] += bevts.Sum(x => x.RemovedDuration);
             }
             return cleanse;
         }
-        public int[] GetCleansesSelf(ParsedLog log, int phaseIndex)
+        public int[] GetCleansesSelf(ParsedLog log, PhaseData phase)
         {
             int[] cleanse = { 0, 0 };
-            foreach (List<long> list in GetCondiCleanse(log, phaseIndex, AgentItem).Values)
+            List<AbstractStatusEvent> downsAndDeads = new List<AbstractStatusEvent>();
+            downsAndDeads.AddRange(log.CombatData.GetDownEvents(AgentItem));
+            downsAndDeads.AddRange(log.CombatData.GetDeadEvents(AgentItem));
+            foreach (long id in log.Boons.BoonsByNature[Boon.BoonNature.Condition].Select(x => x.ID))
             {
-                cleanse[0] += list.Count;
-                cleanse[1] += (int)list.Sum();
+                List<BuffRemoveAllEvent> bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && x.To == AgentItem).Select(x => x as BuffRemoveAllEvent).ToList();
+                bevts.RemoveAll(x => downsAndDeads.Exists(y => Math.Abs(y.Time - x.Time) < 5));
+                cleanse[0] += bevts.Count;
+                cleanse[1] += bevts.Sum(x => x.RemovedDuration);
             }
             return cleanse;
         }
@@ -86,7 +85,7 @@ namespace LuckParser.Models.ParseModels
             int[] strips = { 0, 0 };
             foreach (long id in log.Boons.BoonsByNature[Boon.BoonNature.Boon].Select(x => x.ID))
             {
-                List<BuffRemoveAllEvent> bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && !log.PlayerAgents.Contains(x.To)).Select(x => x as BuffRemoveAllEvent).ToList();
+                List<BuffRemoveAllEvent> bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && !log.PlayerAgents.Contains(x.To) && !log.PlayerAgents.Contains(x.To.MasterAgent)).Select(x => x as BuffRemoveAllEvent).ToList();
                 strips[0] += bevts.Count;
                 strips[1] += bevts.Sum(x => x.RemovedDuration);
             }
@@ -472,8 +471,8 @@ namespace LuckParser.Models.ParseModels
                 PhaseData phase = phases[phaseIndex];
 
                 int[] resArray = GetReses(log, phase.Start, phase.End);
-                int[] cleanseArray = GetCleansesNotSelf(log, phaseIndex);
-                int[] cleanseSelfArray = GetCleansesSelf(log, phaseIndex);
+                int[] cleanseArray = GetCleansesNotSelf(log, phase);
+                int[] cleanseSelfArray = GetCleansesSelf(log, phase);
                 int[] boonStrips = GetBoonStrips(log, phase);
                 //List<DamageLog> healingLogs = player.getHealingLogs(log, phase.getStart(), phase.getEnd());
                 //final.allHeal = healingLogs.Sum(x => x.getDamage());
