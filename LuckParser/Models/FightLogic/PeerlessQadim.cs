@@ -145,7 +145,7 @@ namespace LuckParser.Models.Logic
                         Point3D pylonPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= end);
                         replay.Actors.Add(new CircleActor(true, 0, magmaRadius, (start, end), "rgba(255, 220, 50, 0.15)", new PositionConnector(pylonPosition)));
                         replay.Actors.Add(new CircleActor(true, end, magmaRadius, (start, end), "rgba(255, 220, 50, 0.25)", new PositionConnector(pylonPosition)));
-                        replay.Actors.Add(new CircleActor(true, 0, magmaRadius, (end, end + 10000000), "rgba(255, 220, 0, 0.5)", new PositionConnector(pylonPosition)));
+                        replay.Actors.Add(new CircleActor(true, 0, magmaRadius, (end, (int)log.FightData.FightDuration), "rgba(255, 220, 0, 0.5)", new PositionConnector(pylonPosition)));
                     }
                     break;
                 default:
@@ -235,7 +235,7 @@ namespace LuckParser.Models.Logic
                     {
                         replay.Actors.Add(new CircleActor(true, 0, magmaRadius, (magmaDropEnd, magmaDropEnd + magmaOffset), "rgba(255, 220, 50, 0.15)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
                         replay.Actors.Add(new CircleActor(true, magmaDropEnd + magmaOffset, magmaRadius, (magmaDropEnd, magmaDropEnd + magmaOffset), "rgba(255, 220, 50, 0.25)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
-                        replay.Actors.Add(new CircleActor(true, 0, magmaRadius, (magmaDropEnd+magmaOffset, magmaDropEnd + 10000000), "rgba(255, 220, 50, 0.5)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
+                        replay.Actors.Add(new CircleActor(true, 0, magmaRadius, (magmaDropEnd+magmaOffset, (int)log.FightData.FightDuration), "rgba(255, 220, 50, 0.5)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
                     }
                 }
 
