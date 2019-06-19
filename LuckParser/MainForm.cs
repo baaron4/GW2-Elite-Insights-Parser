@@ -199,7 +199,7 @@ namespace LuckParser
                     }
                 } else
                 {
-                    throw new InvalidDataException("Something terrible has happened");
+                    Console.WriteLine("Something terrible has happened");
                 }
             }
             else
