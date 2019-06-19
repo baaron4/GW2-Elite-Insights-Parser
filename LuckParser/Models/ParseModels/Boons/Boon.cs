@@ -84,6 +84,9 @@ namespace LuckParser.Models.ParseModels
         {
             Name = name;
             ID = id;
+#if DEBUG
+            Name += " (" + ID + ")";
+#endif
             Source = source;
             Type = type;
             Capacity = capacity;
