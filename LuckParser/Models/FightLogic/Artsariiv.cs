@@ -55,19 +55,7 @@ namespace LuckParser.Models.Logic
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
-            int combatExits = combatData.GetExitCombatEvents(mainTarget.AgentItem).Count;
-            AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
-            if (combatExits == 3 && lastDamageTaken != null)
-            {
-                List<ExitCombatEvent> playerExits = new List<ExitCombatEvent>();
-                foreach (AgentItem a in playerAgents)
-                {
-                    playerExits.AddRange(combatData.GetExitCombatEvents(a));
-                }
-                ExitCombatEvent lastPlayerExit = playerExits.MaxBy(x => x.Time);
-                ExitCombatEvent lastTargetExit = combatData.GetExitCombatEvents(mainTarget.AgentItem).LastOrDefault();
-                fightData.SetSuccess(lastPlayerExit != null && lastTargetExit != null && lastPlayerExit.Time - lastTargetExit.Time > 1000 ? true : false, fightData.ToLogSpace(lastDamageTaken.Time));
-            }
+            SetSuccessByBuffCount(combatData, agentData, fightData, playerAgents, mainTarget, 762, 4);
         }
     }
 }
