@@ -40,6 +40,11 @@ namespace LuckParser
             }
         }
 
+        public static bool HasLetters(string input)
+        {
+            return Regex.Match(input, @"[a-zA-Z]").Success;
+        }
+
         public static string GetAgentProfString(string build, GW2APIController apiController, uint prof, uint elite)
         {
             if (elite == 0xFFFFFFFF)
