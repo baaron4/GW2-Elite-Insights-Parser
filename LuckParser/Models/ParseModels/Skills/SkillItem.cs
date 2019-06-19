@@ -176,13 +176,12 @@ namespace LuckParser.Models.ParseModels
 
         private void CompleteItem()
         {
-            if (_apiSkill == null && _overrideNames.TryGetValue(ID, out string name))
+            if (_overrideNames.TryGetValue(ID, out string name))
             {
                 Name = name;
             }
             else if (_apiSkill != null)
             {
-                Name = _apiSkill.Name;
                 if (_apiSkill.Facts != null)
                 {
                     foreach (GW2APIFact fact in _apiSkill.Facts)
