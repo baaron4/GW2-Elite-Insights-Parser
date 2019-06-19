@@ -46,9 +46,18 @@ namespace LuckParser
                     WorkerReportsProgress = true
                 }
             };
-            row.Metadata.FromConsole = true;
-
-            ProgramHelper.DoWork(row);
+            try
+            {
+                ProgramHelper.DoWork(row);
+            }
+            catch (CancellationException ex)
+            {
+                Console.WriteLine(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Something terrible has happened");
+            }
             
         }
     }

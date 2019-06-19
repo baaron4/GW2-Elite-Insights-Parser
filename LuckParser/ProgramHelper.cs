@@ -28,10 +28,7 @@ namespace LuckParser
         {
             row.Status = status;
             bg.ReportProgress(percent, row);
-            if (row.Metadata.FromConsole)
-            {
-                Console.WriteLine($"{row.Location}: {status}" + Environment.NewLine);
-            }
+            Console.WriteLine($"{row.Location}: {status}" + Environment.NewLine);
         }
 
         private static bool HasFormat()
@@ -114,17 +111,17 @@ namespace LuckParser
                     new System.Globalization.CultureInfo("en-US");
             UploadController up_controller = new UploadController();
             FileInfo fInfo = new FileInfo(row.Location);
-            if (!fInfo.Exists)
-            {
-                throw new CancellationException(row, new FileNotFoundException("File does not exist", fInfo.FullName));
-            }
             try
             {
+                if (!fInfo.Exists)
+                {
+                    throw new FileNotFoundException("File " + fInfo.FullName + " does not exist");
+                }
                 ParsingController control = new ParsingController();
 
                 if (!HasFormat())
                 {
-                    throw new CancellationException(row, new InvalidDataException("No output format has been selected"));
+                    throw new InvalidDataException("No output format has been selected");
                 }
 
                 if (IsSupportedFormat(fInfo.Name))
@@ -138,23 +135,11 @@ namespace LuckParser
                 else
                 {
                     row.BgWorker.UpdateProgress(row, "Not EVTC", 100);
-                    Console.Error.Write("Not EVTC");
-                    throw new CancellationException(row, new InvalidDataException("Not EVTC"));
+                    throw new InvalidDataException("Not EVTC");
                 }
             }
-            catch (SkipException s)
+            catch (Exception ex)
             {
-                Console.Error.Write(s.Message);
-                throw new CancellationException(row, s);
-            }
-            catch (TooShortException t)
-            {
-                Console.Error.Write(t.Message);
-                throw new CancellationException(row, t);
-            }
-            catch (Exception ex) when (!System.Diagnostics.Debugger.IsAttached)
-            {
-                Console.Error.Write(ex.Message);
                 throw new CancellationException(row, ex);
             }
             finally
@@ -182,7 +167,7 @@ namespace LuckParser
 
             if (saveDirectory == null)
             {
-                throw new CancellationException(rowData, new InvalidDataException("Save Directory not found"));
+                throw new InvalidDataException("Save Directory not found");
             }
 
             string result = log.FightData.Success ? "kill" : "fail";

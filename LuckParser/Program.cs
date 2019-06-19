@@ -7,8 +7,10 @@ namespace LuckParser
 {
     static class Program
     {
+#if !DEBUG
         [System.Runtime.InteropServices.DllImport("kernel32.dll")]
         static extern bool FreeConsole();
+#endif
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -25,10 +27,11 @@ namespace LuckParser
             List<string> logFiles = new List<string>();
             bool uiMode = true;
             Application.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-            HashSet<string> argsSet = new HashSet<string>(args.ToList());
-            HashSet<int> usedIds = new HashSet<int>();
             if (args.Length > 0)
             {
+                List<string> argsList = args.ToList();
+                HashSet<string> argsSet = new HashSet<string>(argsList);
+                HashSet<int> usedIds = new HashSet<int>();
                 uiMode = false;
                 if (argsSet.Contains("-h"))
                 {
@@ -38,6 +41,7 @@ namespace LuckParser
                     Console.WriteLine("-ui                      : runs the application with user interface");
                     Console.WriteLine("-h                       : displays this screen");
                     Console.WriteLine("-v                       : displays the version");
+                    Console.WriteLine("-f                       : files to parse. Giving files without -f is deprecated");
                     return 0;
                 }
 
@@ -50,33 +54,52 @@ namespace LuckParser
                 if (argsSet.Contains("-ui"))
                 {
                     uiMode = true;
-                    usedIds.Add(Array.IndexOf(args, "-ui"));
+                    usedIds.Add(argsList.IndexOf("-ui"));
                 }
 
                 if (argsSet.Contains("-c"))
                 {
-                    int id = Array.IndexOf(args, "-c");
-                    if (id == args.Length - 1 || args[id + 1].StartsWith("-"))
+                    int id = argsList.IndexOf("-c");
+                    if (id == argsList.Count - 1 || argsList[id + 1].StartsWith("-"))
                     {
                         Console.WriteLine("A path to a config file must be specified after -c");
                         return 0;
                     } else
                     {
-                        CustomSettingsManager.ReadConfig(args[id + 1]);
+                        CustomSettingsManager.ReadConfig(argsList[id + 1]);
                         usedIds.Add(id);
                         usedIds.Add(id + 1);
                     }
                 }
 
-                for (int i = 0; i < args.Length; i++)
+                if (argsSet.Contains("-f"))
                 {
-                    if (!usedIds.Contains(i))
-                        logFiles.Add(args[i]);
+                    int id = argsList.IndexOf("-f");
+                    for (int i = id + 1; i < argsList.Count; i++)
+                    {
+                        string file = argsList[i];
+                        if (file.StartsWith("-"))
+                        {
+                            break;
+                        }
+                        logFiles.Add(file);
+                    }
                 }
+                else
+                {
+                    for (int i = 0; i < argsList.Count; i++)
+                    {
+                        if (!usedIds.Contains(i) && !argsList[i].StartsWith("-"))
+                            logFiles.Add(argsList[i]);
+                    }
+                }
+
             }
             if (uiMode)
             {
+#if !DEBUG
                 FreeConsole();
+#endif
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new MainForm(logFiles));

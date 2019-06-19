@@ -6,12 +6,12 @@ namespace LuckParser.Exceptions
     {
         public GridRow Row { get; }
 
-        public CancellationException(GridRow row)
+        public CancellationException(GridRow row) : base("Operation aborted")
         {
             Row = row;
         }
 
-        public CancellationException(GridRow row, Exception inner) : base("", inner)
+        public CancellationException(GridRow row, Exception inner) : base("Operation aborted", inner)
         {
             Row = row;
         }

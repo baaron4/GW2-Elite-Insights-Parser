@@ -97,7 +97,7 @@ namespace LuckParser
                 {
                     _logQueue.Enqueue(row);
                     row.Status = "Queued";
-                    row.Metadata.State = RowState.Pending;
+                    row.State = RowState.Pending;
                     dgvFiles.Invalidate();
                 }
                 else
@@ -109,7 +109,7 @@ namespace LuckParser
             else
             {
                 row.Status = "Waiting for a thread";
-                row.Metadata.State = RowState.Pending;
+                row.State = RowState.Pending;
                 row.Run();
             }
         }
@@ -185,30 +185,34 @@ namespace LuckParser
                     if (e.Error.InnerException != null)
                     {
                         row.Status = e.Error.InnerException.Message;
+                        Console.WriteLine(row.Status);
                     }
 
-                    if (row.Metadata.State == RowState.ClearOnComplete)
+                    if (row.State == RowState.ClearOnComplete)
                     {
                         gridRowBindingSource.Remove(row);
                     }
                     else
                     {
-                        row.Metadata.State = RowState.Ready;
+                        row.State = RowState.Ready;
                         row.ButtonText = "Parse";
                     }
+                } else
+                {
+                    throw new InvalidDataException("Something terrible has happened");
                 }
             }
             else
             {
                 row = (GridRow)e.Result;
-                if (row.Metadata.State == RowState.ClearOnComplete)
+                if (row.State == RowState.ClearOnComplete)
                 {
                     gridRowBindingSource.Remove(row);
                 }
                 else
                 {
                     row.ButtonText = "Open";
-                    row.Metadata.State = RowState.Complete;
+                    row.State = RowState.Complete;
                 }
             }
             dgvFiles.Invalidate();
@@ -254,9 +258,9 @@ namespace LuckParser
             //Cancel all workers
             foreach (GridRow row in gridRowBindingSource)
             {
-                if (row.Metadata.State == RowState.Pending)
+                if (row.State == RowState.Pending)
                 {
-                    row.Metadata.State = RowState.Ready;
+                    row.State = RowState.Ready;
                 }
 
                 if (row.BgWorker.IsBusy)
@@ -306,7 +310,7 @@ namespace LuckParser
                 if (row.BgWorker.IsBusy)
                 {
                     row.Cancel();
-                    row.Metadata.State = RowState.ClearOnComplete;
+                    row.State = RowState.ClearOnComplete;
                 }
                 else
                 {
@@ -347,7 +351,7 @@ namespace LuckParser
             {
                 GridRow row = (GridRow)gridRowBindingSource[e.RowIndex];
 
-                switch (row.Metadata.State)
+                switch (row.State)
                 {
                     case RowState.Ready:
                         QueueOrRunWorker(row);
