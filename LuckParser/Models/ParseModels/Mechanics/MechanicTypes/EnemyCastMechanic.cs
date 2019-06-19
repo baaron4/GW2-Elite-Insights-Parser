@@ -11,20 +11,20 @@ namespace LuckParser.Models.ParseModels
     public class EnemyCastMechanic : CastMechanic
     {
 
-        public EnemyCastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<CastChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)
+        public EnemyCastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, bool end, List<CastChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, end, conditions, rule)
         {
         }
 
-        public EnemyCastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<CastChecker> conditions, TriggerRule rule) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, conditions, rule)
+        public EnemyCastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, bool end, List<CastChecker> conditions, TriggerRule rule) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, end, conditions, rule)
         {
             IsEnemyMechanic = true;
         }
 
-        public EnemyCastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
+        public EnemyCastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, bool end) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, end)
         {
         }
 
-        public EnemyCastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+        public EnemyCastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, bool end) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, end)
         {
             IsEnemyMechanic = true;
         }
@@ -66,7 +66,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 if (amp != null)
                 {
-                    mechanicLogs[this].Add(new MechanicEvent(c.Time, this, amp));
+                    mechanicLogs[this].Add(new MechanicEvent(EndCast ? c.Time + c.ActualDuration : c.Time, this, amp));
                 }
             }
         }
