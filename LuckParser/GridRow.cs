@@ -11,15 +11,7 @@ namespace LuckParser
         Pending = 4,
         ClearOnComplete = 5
     }
-
-    public class RowData
-    {
-        /// <summary>
-        /// Whether we're running in the form, or via console
-        /// </summary>
-        public bool FromConsole { get; set; }
-        public RowState State { get; set; }
-    }
+    
 
     public class GridRow
     {
@@ -44,16 +36,16 @@ namespace LuckParser
         /// </summary>
         public BackgroundWorker BgWorker { get; set; }
         /// <summary>
-        /// Contains row state and other data
+        /// Row state
         /// </summary>
-        public RowData Metadata { get; set; } = new RowData();
+        public RowState State { get; set; }
 
         public GridRow(string location, string status)
         {
             Location = location;
             Status = status;
             ButtonText = "Parse";
-            Metadata.State = RowState.Ready;
+            State = RowState.Ready;
         }
 
         /// <summary>
@@ -62,7 +54,7 @@ namespace LuckParser
         public void Run()
         {
             ButtonText = "Cancel";
-            Metadata.State = RowState.Parsing;
+            State = RowState.Parsing;
             BgWorker.RunWorkerAsync(this);
         }
 
@@ -71,7 +63,7 @@ namespace LuckParser
         /// </summary>
         public void Cancel()
         {
-            Metadata.State = RowState.Cancelling;
+            State = RowState.Cancelling;
             BgWorker.CancelAsync();
         }
 

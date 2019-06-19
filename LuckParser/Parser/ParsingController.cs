@@ -53,7 +53,7 @@ namespace LuckParser.Parser
                     {
                         if (arch.Entries.Count != 1)
                         {
-                            throw new CancellationException(row, new InvalidDataException("Invalid Archive"));
+                            throw new InvalidDataException("Invalid Archive");
                         }
                         using (var data = arch.Entries[0].Open())
                         {
@@ -73,33 +73,22 @@ namespace LuckParser.Parser
 
         private void ParseLog(GridRow row, Stream stream)
         {
-#if !DEBUG
-            try
-            {
-#endif
-                row.BgWorker.ThrowIfCanceled(row);
-                row.BgWorker.UpdateProgress(row, "15% - Parsing fight data...", 15);
-                ParseFightData(stream);
-                row.BgWorker.ThrowIfCanceled(row);
-                row.BgWorker.UpdateProgress(row, "20% - Parsing agent data...", 20);
-                ParseAgentData(stream);
-                row.BgWorker.ThrowIfCanceled(row);
-                row.BgWorker.UpdateProgress(row, "25% - Parsing skill data...", 25);
-                ParseSkillData(stream);
-                row.BgWorker.ThrowIfCanceled(row);
-                row.BgWorker.UpdateProgress(row, "30% - Parsing combat list...", 30);
-                ParseCombatList(stream);
-                row.BgWorker.ThrowIfCanceled(row);
-                row.BgWorker.UpdateProgress(row, "35% - Pairing data...", 35);
-                FillMissingData();
-                row.BgWorker.ThrowIfCanceled(row);
-#if !DEBUG
-        }
-            catch (Exception ex) when (!(ex is CancellationException))
-            {
-                throw new CancellationException(row, ex);
-            }
-#endif
+            row.BgWorker.ThrowIfCanceled(row);
+            row.BgWorker.UpdateProgress(row, "15% - Parsing fight data...", 15);
+            ParseFightData(stream);
+            row.BgWorker.ThrowIfCanceled(row);
+            row.BgWorker.UpdateProgress(row, "20% - Parsing agent data...", 20);
+            ParseAgentData(stream);
+            row.BgWorker.ThrowIfCanceled(row);
+            row.BgWorker.UpdateProgress(row, "25% - Parsing skill data...", 25);
+            ParseSkillData(stream);
+            row.BgWorker.ThrowIfCanceled(row);
+            row.BgWorker.UpdateProgress(row, "30% - Parsing combat list...", 30);
+            ParseCombatList(stream);
+            row.BgWorker.ThrowIfCanceled(row);
+            row.BgWorker.UpdateProgress(row, "35% - Pairing data...", 35);
+            FillMissingData();
+            row.BgWorker.ThrowIfCanceled(row);
         }
 
         private BinaryReader CreateReader(Stream stream)

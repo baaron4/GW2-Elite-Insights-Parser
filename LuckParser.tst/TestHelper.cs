@@ -26,17 +26,16 @@ namespace LuckParser.tst
                     WorkerReportsProgress = true
                 }
             };
-            row.Metadata.FromConsole = true;
 
 
             FileInfo fInfo = new FileInfo(row.Location);
             if (!fInfo.Exists)
             {
-                throw new CancellationException(row, new FileNotFoundException("File does not exist", fInfo.FullName));
+                throw new FileNotFoundException("File does not exist", fInfo.FullName);
             }
             if (!ProgramHelper.IsSupportedFormat(fInfo.Name))
             {
-                throw new CancellationException(row, new InvalidDataException("Not EVTC"));
+                throw new InvalidDataException("Not EVTC");
             }
 
             return parser.ParseLog(row, fInfo.FullName);
