@@ -176,7 +176,7 @@ namespace LuckParser.Models.ParseModels
 
         private void CompleteItem()
         {
-            if (_overrideNames.TryGetValue(ID, out string name))
+            if (_apiSkill == null && _overrideNames.TryGetValue(ID, out string name))
             {
                 Name = name;
             }
