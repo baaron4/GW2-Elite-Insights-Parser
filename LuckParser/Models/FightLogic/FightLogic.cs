@@ -294,7 +294,7 @@ namespace LuckParser.Models.Logic
         protected static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AbstractMasterActor target, bool beginWithStart)
         {
             bool needStart = beginWithStart;
-            List<AbstractBuffEvent> main = combatData.GetBoonData(buffID).Where(x => x.To == target.AgentItem && (x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
+            List<AbstractBuffEvent> main = combatData.GetBoonData(buffID).Where(x => x.To == target.AgentItem && (x is BuffApplyEvent || x is BuffRemoveManualEvent)).ToList();
             List<AbstractBuffEvent> filtered = new List<AbstractBuffEvent>();
             for (int i = 0; i < main.Count; i++)
             {
@@ -304,7 +304,7 @@ namespace LuckParser.Models.Logic
                     needStart = false;
                     filtered.Add(c);
                 }
-                else if (!needStart && c is BuffRemoveAllEvent)
+                else if (!needStart && c is BuffRemoveManualEvent)
                 {
                     // consider only last remove event before another application
                     if ((i == main.Count - 1) || (i < main.Count - 1 && main[i + 1] is BuffApplyEvent))
