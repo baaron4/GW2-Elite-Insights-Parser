@@ -529,7 +529,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Lich Form",10631, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/ab/Lich_Form.png"),
                 new Boon("Death Shroud", 790, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/f/f5/Death_Shroud.png"),
                 new Boon("Reaper's Shroud", 29446, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/11/Reaper%27s_Shroud.png"),
-                new Boon("Sand Shade", 45079, BoonSource.Necromancer, BoonType.Intensity, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a4/Manifest_Sand_Shade.png"),
+                //new Boon("Sand Shade", 45079, BoonSource.Necromancer, BoonType.Intensity, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a4/Manifest_Sand_Shade.png"),
                 //signets
                 new Boon("Signet of Vampirism (Passive)",21761, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/73/Signet_of_Vampirism.png"),
                 new Boon("Signet of Vampirism (Active)",21765, BoonSource.Necromancer, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/73/Signet_of_Vampirism.png"),
