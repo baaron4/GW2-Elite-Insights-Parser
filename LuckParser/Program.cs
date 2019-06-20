@@ -59,9 +59,6 @@ namespace LuckParser
             Application.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             if (args.Length > 0)
             {
-                List<string> argsList = args.ToList();
-                HashSet<string> argsSet = new HashSet<string>(argsList);
-                HashSet<int> usedIds = new HashSet<int>();
                 uiMode = false;
                 int parserArgOffset = 0;
 
@@ -132,14 +129,6 @@ namespace LuckParser
                 for (int i = parserArgOffset; i < args.Length; i++)
                 {
                     logFiles.Add(args[i]);
-                }
-                else
-                {
-                    for (int i = 0; i < argsList.Count; i++)
-                    {
-                        if (!usedIds.Contains(i) && !argsList[i].StartsWith("-"))
-                            logFiles.Add(argsList[i]);
-                    }
                 }
 
             }
