@@ -130,6 +130,7 @@ namespace LuckParser
                 {
                     logFiles.Add(args[i]);
                 }
+
             }
             if (uiMode)
             {
