@@ -16,12 +16,12 @@ namespace LuckParser.Models.Logic
             new HitOnPlayerMechanic(31860, "Unstable Magic Spike", new MechanicPlotlySetting("circle","rgb(0,0,255)"), "Split TP","Unstable Magic Spike (Green Guard Teleport)","Green Guard TP",500),
             new HitOnPlayerMechanic(31392, "Unstable Magic Spike", new MechanicPlotlySetting("circle","rgb(0,0,255)"), "Boss TP","Unstable Magic Spike (Boss Teleport)", "Boss TP",500),
             new HitOnPlayerMechanic(31340, "Distributed Magic", new MechanicPlotlySetting("circle","rgb(0,128,0)"), "Green","Distributed Magic (Stood in Green)", "Green Team",0),
-            new EnemyCastMechanic(31340, "Distributed Magic", new MechanicPlotlySetting("circle-open","rgb(0,128,255)") , "Green Cast B","Distributed Magic (Green Field appeared in Blue Sector)", "Green in Blue",0),
+            new EnemyCastStartMechanic(31340, "Distributed Magic", new MechanicPlotlySetting("circle-open","rgb(0,128,255)") , "Green Cast B","Distributed Magic (Green Field appeared in Blue Sector)", "Green in Blue",0),
             new HitOnPlayerMechanic(31391, "Distributed Magic", new MechanicPlotlySetting("circle","rgb(0,128,0)"), "Green","Distributed Magic (Stood in Green)", "Green Team",0),
-            new EnemyCastMechanic(31391, "Distributed Magic", new MechanicPlotlySetting("circle-open","rgb(255,128,0)"), "Green Cast R","Distributed Magic (Green Field appeared in Red Sector)", "Green in Red",0),
+            new EnemyCastStartMechanic(31391, "Distributed Magic", new MechanicPlotlySetting("circle-open","rgb(255,128,0)"), "Green Cast R","Distributed Magic (Green Field appeared in Red Sector)", "Green in Red",0),
             new HitOnPlayerMechanic(31529, "Distributed Magic", new MechanicPlotlySetting("circle","rgb(0,128,0)"), "Green","Distributed Magic (Stood in Green)", "Green Team", 0),
             new HitOnPlayerMechanic(31750, "Distributed Magic", new MechanicPlotlySetting("circle","rgb(0,128,0)"), "Green","Distributed Magic (Stood in Green)", "Green Team",0),
-            new EnemyCastMechanic(31750, "Distributed Magic", new MechanicPlotlySetting("circle-open","rgb(0,255,0)"), "Green Cast G","Distributed Magic (Green Field appeared in Green Sector)", "Green in Green",0),
+            new EnemyCastStartMechanic(31750, "Distributed Magic", new MechanicPlotlySetting("circle-open","rgb(0,255,0)"), "Green Cast G","Distributed Magic (Green Field appeared in Green Sector)", "Green in Green",0),
             new HitOnPlayerMechanic(31886, "Magic Pulse", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Seeker","Magic Pulse (Hit by Seeker)", "Seeker",0),
             new PlayerBoonApplyMechanic(31695, "Pylon Attunement: Red", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Attune R","Pylon Attunement: Red", "Red Attuned",0),
             new PlayerBoonApplyMechanic(31317, "Pylon Attunement: Blue", new MechanicPlotlySetting("square","rgb(0,0,255)"), "Attune B","Pylon Attunement: Blue", "Blue Attuned",0),
@@ -30,9 +30,9 @@ namespace LuckParser.Models.Logic
             new HitOnPlayerMechanic(31539, "Unstable Pylon", new MechanicPlotlySetting("hexagram-open","rgb(255,0,0)"), "Floor R","Unstable Pylon (Red Floor dmg)", "Floor dmg",0),
             new HitOnPlayerMechanic(31828, "Unstable Pylon", new MechanicPlotlySetting("hexagram-open","rgb(0,0,255)"), "Floor B","Unstable Pylon (Blue Floor dmg)", "Floor dmg",0),
             new HitOnPlayerMechanic(31884, "Unstable Pylon", new MechanicPlotlySetting("hexagram-open","rgb(0,128,0)"), "Floor G","Unstable Pylon (Green Floor dmg)", "Floor dmg",0),
-            new EnemyCastMechanic(31419, "Magic Storm", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Magic Storm (Breakbar)","Breakbar",0),
-            new EnemyCastMechanic(31419, "Magic Storm", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Magic Storm (Breakbar broken) ", "CCed",0, new List<CastMechanic.CastChecker>{ (c, log) => c.ActualDuration <= 8544}, Mechanic.TriggerRule.AND),
-            new EnemyCastMechanic(31419, "Magic Storm", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Magic Storm (Breakbar failed) ", "CC Fail",0,new List<CastMechanic.CastChecker>{ (c, log) => c.ActualDuration > 8544 }, Mechanic.TriggerRule.AND),
+            new EnemyCastStartMechanic(31419, "Magic Storm", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Magic Storm (Breakbar)","Breakbar",0),
+            new EnemyCastEndMechanic(31419, "Magic Storm", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Magic Storm (Breakbar broken) ", "CCed",0, new List<CastMechanic.CastChecker>{ (c, log) => c.ActualDuration <= 8544}, Mechanic.TriggerRule.AND),
+            new EnemyCastEndMechanic(31419, "Magic Storm", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Magic Storm (Breakbar failed) ", "CC Fail",0,new List<CastMechanic.CastChecker>{ (c, log) => c.ActualDuration > 8544 }, Mechanic.TriggerRule.AND),
             });
             Extension = "vg";
             IconUrl = "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";

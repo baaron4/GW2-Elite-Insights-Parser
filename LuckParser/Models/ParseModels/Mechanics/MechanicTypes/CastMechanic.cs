@@ -13,7 +13,7 @@ namespace LuckParser.Models.ParseModels
         public delegate bool CastChecker(AbstractCastEvent ce, ParsedLog log);
 
         private readonly List<CastChecker> _triggerConditions = new List<CastChecker>();
-
+       
         protected bool Keep(AbstractCastEvent c, ParsedLog log)
         {
             if (_triggerConditions.Count > 0)
@@ -32,6 +32,11 @@ namespace LuckParser.Models.ParseModels
                 }
             }
             return true;
+        }
+
+        protected virtual long GetTime(AbstractCastEvent evt)
+        {
+            return evt.Time;
         }
 
         public CastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<CastChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)

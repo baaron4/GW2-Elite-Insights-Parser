@@ -97,6 +97,8 @@
     <Compile Include="Builders\CSVBuilder.cs" />
     <Compile Include="Builders\RawFormatBuilder.cs" />
     <Compile Include="Builders\Helpers\CSVHelper.cs" />
+    <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\EnemyCastEndMechanic.cs" />
+    <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\PlayerCastEndMechanic.cs" />
     <Compile Include="ProgramHelper.cs" />
     <Compile Include="GeneralHelper.cs" />
     <Compile Include="Controllers\FlashWindow.cs" />
@@ -201,13 +203,13 @@
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\BoonRemoveMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\BoonApplyMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\CastMechanic.cs" />
-    <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\EnemyCastMechanic.cs" />
+    <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\EnemyCastStartMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\EnemyBoonRemoveMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\HitOnEnemyMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\PlayerBoonApplyMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\PlayerOnPlayerMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\PlayerBoonRemoveMechanic.cs" />
-    <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\PlayerCastMechanic.cs" />
+    <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\PlayerCastStartMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\EnemyBoonApplyMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\SpawnMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\HitOnPlayerMechanic.cs" />

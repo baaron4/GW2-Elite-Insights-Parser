@@ -99,7 +99,7 @@ namespace LuckParser.Controllers
             fcreate.Close();
 
 
-            Console.WriteLine("Getting APi");
+            Console.WriteLine("Getting API");
             //Get list from API
             GetAPIClient();
 
@@ -215,7 +215,7 @@ namespace LuckParser.Controllers
             fcreate.Close();
 
 
-            Console.WriteLine("Getting APi");
+            Console.WriteLine("Getting API");
             //Get list from API
             GetAPIClient();
 
@@ -240,7 +240,7 @@ namespace LuckParser.Controllers
                     }
                     else
                     {
-                        Console.WriteLine("Fail to get response");//fail to retrieve
+                        Console.WriteLine("Failed to get response");//fail to retrieve
                         failedList.Add(id);
                     }
 
