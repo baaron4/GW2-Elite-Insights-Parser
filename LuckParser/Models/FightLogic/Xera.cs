@@ -49,7 +49,7 @@ namespace LuckParser.Models.Logic
                             (1920, 12160, 2944, 14464));
         }
 
-        public override List<AbstractBuffEvent> CreateCustomBuffEvents(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, FightData fightData, SkillData skillData)
+        public override List<AbstractBuffEvent> CreateCustomBuffEvents(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
         {
             Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Xera);
             if (mainTarget == null)
@@ -59,8 +59,8 @@ namespace LuckParser.Models.Logic
             List<AbstractBuffEvent> res = new List<AbstractBuffEvent>();
             if (_specialSplitLogTime != 0)
             {
-                res.Add(new BuffRemoveAllEvent(mainTarget.AgentItem, mainTarget.AgentItem, fightData.ToFightSpace(_specialSplitLogTime), int.MaxValue, skillData.Get(762), 1, int.MaxValue));
-                res.Add(new BuffRemoveManualEvent(mainTarget.AgentItem, mainTarget.AgentItem, fightData.ToFightSpace(_specialSplitLogTime), int.MaxValue, skillData.Get(762)));
+                res.Add(new BuffRemoveAllEvent(mainTarget.AgentItem, mainTarget.AgentItem, _specialSplitLogTime - offset, int.MaxValue, skillData.Get(762), 1, int.MaxValue));
+                res.Add(new BuffRemoveManualEvent(mainTarget.AgentItem, mainTarget.AgentItem, _specialSplitLogTime - offset, int.MaxValue, skillData.Get(762)));
             }
             return res;
         }

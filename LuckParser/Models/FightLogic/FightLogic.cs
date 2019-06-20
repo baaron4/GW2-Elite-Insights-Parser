@@ -211,7 +211,7 @@ namespace LuckParser.Models.Logic
             phase.OverrideTimes(log);
         }
 
-        public virtual List<AbstractBuffEvent> CreateCustomBuffEvents(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, FightData fightData, SkillData skillData)
+        public virtual List<AbstractBuffEvent> CreateCustomBuffEvents(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
         {
             return new List<AbstractBuffEvent>();
         }
