@@ -52,6 +52,30 @@ namespace LuckParser.Models.Logic
             };
         }
 
+        protected void SetSuccessByBuffCount(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents, Target target, long buffID, int count)
+        {
+            List<AbstractBuffEvent> invulsTarget = GetFilteredList(combatData, buffID, target, true);
+            if (invulsTarget.Count == count)
+            {
+                AbstractBuffEvent last = invulsTarget.Last();
+                if (!(last is BuffApplyEvent))
+                {
+                    List<ExitCombatEvent> playerExits = new List<ExitCombatEvent>();
+                    foreach (AgentItem a in playerAgents)
+                    {
+                        playerExits.AddRange(combatData.GetExitCombatEvents(a));
+                    }
+                    ExitCombatEvent lastPlayerExit = playerExits.MaxBy(x => x.Time);
+                    ExitCombatEvent lastTargetExit = combatData.GetExitCombatEvents(target.AgentItem).LastOrDefault();
+                    AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
+                    if (lastTargetExit != null && lastDamageTaken != null && lastPlayerExit != null)
+                    {
+                        fightData.SetSuccess(lastPlayerExit.Time > lastTargetExit.Time + 1000, fightData.ToLogSpace(lastDamageTaken.Time));
+                    }
+                }
+            }
+        }
+
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             // check reward
