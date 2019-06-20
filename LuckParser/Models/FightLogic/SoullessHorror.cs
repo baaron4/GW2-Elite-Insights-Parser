@@ -25,9 +25,9 @@ namespace LuckParser.Models.Logic
             new PlayerBoonApplyMechanic(47414, "Necrosis", new MechanicPlotlySetting("star-open","rgb(255,0,255)"), "Necrosis","Necrosis (Tanking Debuff)", "Necrosis Debuff",0),
             new HitOnPlayerMechanic(48327, "Corrupt the Living", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Spin","Corrupt the Living (Torment+Poisen Spin)", "Torment+Poisen Spin",0),
             new HitOnPlayerMechanic(47756, "Wurm Spit", new MechanicPlotlySetting("diamond-open","rgb(0,128,128)"), "Spit","Wurm Spit", "Wurm Spit",0),
-            new EnemyCastMechanic(48662, "Howling Death", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Howling Death (Breakbar)", "Breakbar",0, false),
-            new EnemyCastMechanic(48662, "Howling Death", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Howling Death (Breakbar) broken", "CCed",0, true, new List<CastMechanic.CastChecker>{ (ce, log) => ce.ActualDuration <= 6800 }, Mechanic.TriggerRule.AND),
-            new EnemyCastMechanic(48662, "Howling Death", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Howling Death (Breakbar failed) ", "CC Fail",0, true, new List<CastMechanic.CastChecker>{ (ce,log) => ce.ActualDuration > 6800 }, Mechanic.TriggerRule.AND),
+            new EnemyCastStartMechanic(48662, "Howling Death", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Howling Death (Breakbar)", "Breakbar",0),
+            new EnemyCastEndMechanic(48662, "Howling Death", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Howling Death (Breakbar) broken", "CCed",0, new List<CastMechanic.CastChecker>{ (ce, log) => ce.ActualDuration <= 6800 }, Mechanic.TriggerRule.AND),
+            new EnemyCastEndMechanic(48662, "Howling Death", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Howling Death (Breakbar failed) ", "CC Fail",0, new List<CastMechanic.CastChecker>{ (ce,log) => ce.ActualDuration > 6800 }, Mechanic.TriggerRule.AND),
 
             });
             Extension = "sh";
