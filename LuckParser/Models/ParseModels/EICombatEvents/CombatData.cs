@@ -37,7 +37,7 @@ namespace LuckParser.Models.ParseModels
                     ElementalistHelper.RemoveDualBuffs(GetBoonDataByDst(p.AgentItem), skillData);
                 }
             }
-            toAdd.AddRange(fightData.Logic.CreateCustomBuffEvents(_boonDataByDst, _boonData));
+            toAdd.AddRange(fightData.Logic.CreateCustomBuffEvents(_boonDataByDst, _boonData, fightData.FightStartLogTime, skillData));
             HashSet<long> buffIDsToSort = new HashSet<long>();
             HashSet<AgentItem> buffAgentsToSort = new HashSet<AgentItem>();
             foreach (AbstractBuffEvent bf in toAdd)
