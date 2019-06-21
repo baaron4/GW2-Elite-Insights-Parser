@@ -68,7 +68,8 @@ namespace LuckParser.Models.Logic
                 SolarBloom2,
                 PLINK,
                 DOC,
-                CHOP
+                CHOP,
+                ProjectionArkk
             };
         }
 

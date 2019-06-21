@@ -327,6 +327,7 @@ namespace LuckParser.Parser
             PLINK = 16325,
             DOC =16657,
             CHOP =16552,
+            ProjectionArkk = 17613,
             //
             Unknown
         };
