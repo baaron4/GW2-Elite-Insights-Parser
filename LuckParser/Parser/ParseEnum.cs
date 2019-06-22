@@ -289,6 +289,7 @@ namespace LuckParser.Parser
             Pylon1 = 21996,
             Pylon2 = 21962,
             EntropicDistortion = 21973,
+            EnergyOrb = 21946,
             // Freezie
             FreeziesFrozenHeart = 21328,
             // Fractals

@@ -39,7 +39,8 @@ namespace LuckParser.Models.Logic
                 Pylon1,
                 Pylon2,
                 EntropicDistortion,
-                BigKillerTornado
+                BigKillerTornado,
+                EnergyOrb,
             };
         }
 
@@ -202,6 +203,8 @@ namespace LuckParser.Models.Logic
                 case (ushort)Pylon1:
                     break;
                 case (ushort)Pylon2:
+                    break;
+                case (ushort)EnergyOrb:
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
