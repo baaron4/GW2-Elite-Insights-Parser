@@ -24,9 +24,10 @@ namespace LuckParser.Models.Logic
                 new HitOnPlayerMechanic(56180, "Residual Impact", new MechanicPlotlySetting("diamond","rgb(250,150,0)"), "Magma.F", "Hit by Magma Field", "Magma Field", 500),
                 new HitOnPlayerMechanic(56378, "Residual Impact", new MechanicPlotlySetting("diamond-open","rgb(250,150,0)"), "S.Magma.F", "Hit by Small Magma Field", "Small Magma Field", 500),
                 new HitOnPlayerMechanic(56616, "Battering Blitz", new MechanicPlotlySetting("square","rgb(250,150,0)"), "Rush.H", "Hit by Qadim Rush", "Qadim Rush", 500),
+                new HitOnPlayerMechanic(56332, "Caustic Chaos", new MechanicPlotlySetting("triangle","rgb(250,150,0)"), "A.Projectile.H", "Hit by Aimed Projectile", "Aimed Projectile", 0),
                 new HitByEnemyMechanic(56598, "Shower of Chaos", new MechanicPlotlySetting("circle","rgb(250,0,250)"), "Orb.D", "Pylon Orb not caught", "Shower of Chaos", 1000),
                 new PlayerBoonApplyMechanic(56510, "Fixated", new MechanicPlotlySetting("circle-open","rgb(150,0,250)"), "Fixated", "Fixated", "Fixated", 0),
-                new PlayerBoonApplyMechanic(56182, "Chaos Corrosion", new MechanicPlotlySetting("asterisk","rgb(150,0,250)"), "A.Projectile", "Hit by Aimed Projectile Explosion", "Aimed Projectile Explosion", 0),
+                new PlayerBoonApplyMechanic(56182, "Chaos Corrosion", new MechanicPlotlySetting("asterisk","rgb(150,0,250)"), "A.Projectile.E", "Hit by Aimed Projectile Explosion", "Aimed Projectile Explosion", 0),
                 new PlayerBoonApplyMechanic(56118, "Sapping Surge", new MechanicPlotlySetting("hexagon","rgb(250,0,50)"), "B.Tether", "25% damage reduction", "Bad Tether", 0),
             });
             Extension = "prlqadim";
