@@ -14,6 +14,19 @@ namespace LuckParser.Models.Logic
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
+                new HitOnPlayerMechanic(56541, "Pylon Debris Field", new MechanicPlotlySetting("circle","rgb(255,150,0)"), "P.Debris", "Hit by Pylon Debris", "Pylon Debris", 0),
+                new HitOnPlayerMechanic(56020, "Energized Affliction", new MechanicPlotlySetting("x-open","rgb(255,0,0)"), "E.Affliction", "Energized Affliction", "Energized Affliction", 0),
+                new HitOnPlayerMechanic(56134, "Force of Retaliation", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Pushed", "Pushed by Shockwave", "Shockwave Push", 0, new List<SkillMechanic.SkillChecker>{(de, log) => !de.To.HasBuff(log, 1122, de.Time) }, Mechanic.TriggerRule.AND),
+                new HitOnPlayerMechanic(56180, "Residual Impact", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Lightning.H", "Hit by Lightning", "Lightning Hit", 0),
+                new HitOnPlayerMechanic(56441, "Force of Havoc", new MechanicPlotlySetting("triangle","rgb(150,0,250)"), "P.Rectangle", "Hit by Purple Rectangle", "Purple Rectangle", 0),
+                new HitOnPlayerMechanic(56145, "Chaos Called", new MechanicPlotlySetting("square-open","rgb(150,0,250)"), "Pattern.H", "Hit by Energy on Pattern", "Pattern Energy Hit", 0),
+                new HitOnPlayerMechanic(56527, "Rain of Chaos", new MechanicPlotlySetting("diamond","rgb(150,0,250)"), "Orb.R", "Hit by Rain of Orbs", "Rain of Orbs", 4000),
+                //new HitOnPlayerMechanic(56254, "Exponential Repercussion", new MechanicPlotlySetting("diamond-open","rgb(150,0,250)"), "Shield.H", "Hit by Energy Shield", "Shield Hit", 0),// to check
+                new HitOnPlayerMechanic(56180, "Residual Impact", new MechanicPlotlySetting("diamond","rgb(250,150,0)"), "Magma.F", "Hit by Magma Field", "Magma Field", 500),
+                new HitByEnemyMechanic(56598, "Shower of Chaos", new MechanicPlotlySetting("circle","rgb(250,0,250)"), "Orb.D", "Pylon Orb not caught", "Shower of Chaos", 1000),
+                new PlayerBoonApplyMechanic(56510, "Fixated", new MechanicPlotlySetting("circle-open","rgb(150,0,250)"), "Fixated", "Fixated", "Fixated", 0),
+                new PlayerBoonApplyMechanic(56182, "Chaos Corrosion", new MechanicPlotlySetting("asterisk","rgb(150,0,250)"), "A.Projectile", "Hit by Aimed Projectile Explosion", "Aimed Projectile Explosion", 0),
+                new PlayerBoonApplyMechanic(56118, "Sapping Surge", new MechanicPlotlySetting("hexagon","rgb(250,0,50)"), "B.Tether", "25% damage reduction", "Bad Tether", 0),
             });
             Extension = "prlqadim";
             IconUrl = "https://wiki.guildwars2.com/images/8/8b/Mini_Qadim_the_Peerless.png";

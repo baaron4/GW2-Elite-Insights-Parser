@@ -99,6 +99,8 @@
     <Compile Include="Builders\Helpers\CSVHelper.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\EnemyCastEndMechanic.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\PlayerCastEndMechanic.cs" />
+    <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\HitByEnemyMechanic.cs" />
+    <Compile Include="Models\ParseModels\Mechanics\MechanicTypes\SkillByEnemyMechanic.cs" />
     <Compile Include="ProgramHelper.cs" />
     <Compile Include="GeneralHelper.cs" />
     <Compile Include="Controllers\FlashWindow.cs" />
