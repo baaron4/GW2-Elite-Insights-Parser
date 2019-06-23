@@ -68,7 +68,7 @@ namespace LuckParser.Models.Logic
 
         public virtual string GetFightName()
         {
-            Target target = Targets.Find(x => x.ID == TriggerID && x.AgentItem.Type == AgentItem.AgentType.NPC);
+            Target target = Targets.Find(x => x.ID == TriggerID);
             if (target == null)
             {
                 return "UNKNOWN";

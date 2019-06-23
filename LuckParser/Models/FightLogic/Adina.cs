@@ -162,6 +162,16 @@ namespace LuckParser.Models.Logic
             return phases;
         }
 
+        public override string GetFightName()
+        {
+            Target target = Targets.Find(x => x.ID == TriggerID && x.AgentItem.Type == AgentItem.AgentType.NPC);
+            if (target == null)
+            {
+                return "UNKNOWN";
+            }
+            return target.Character;
+        }
+
 
         protected override CombatReplayMap GetCombatMapInternal()
         {
