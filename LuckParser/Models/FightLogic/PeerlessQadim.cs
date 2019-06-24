@@ -14,21 +14,21 @@ namespace LuckParser.Models.Logic
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
-                new HitOnPlayerMechanic(56541, "Pylon Debris Field", new MechanicPlotlySetting("circle","rgb(255,150,0)"), "P.Magma", "Hit by Pylon Magma", "Pylon Magma", 0),
-                new HitOnPlayerMechanic(56020, "Energized Affliction", new MechanicPlotlySetting("x-open","rgb(255,0,0)"), "E.Affliction", "Energized Affliction", "Energized Affliction", 0),
-                new HitOnPlayerMechanic(56134, "Force of Retaliation", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Pushed", "Pushed by Shockwave", "Shockwave Push", 0, new List<SkillMechanic.SkillChecker>{(de, log) => !de.To.HasBuff(log, 1122, de.Time) }, Mechanic.TriggerRule.AND),
-                new HitOnPlayerMechanic(56441, "Force of Havoc", new MechanicPlotlySetting("triangle","rgb(150,0,250)"), "P.Rectangle", "Hit by Purple Rectangle", "Purple Rectangle", 0),
-                new HitOnPlayerMechanic(56145, "Chaos Called", new MechanicPlotlySetting("square-open","rgb(150,0,250)"), "Pattern.H", "Hit by Energy on Pattern", "Pattern Energy Hit", 0),
-                new HitOnPlayerMechanic(56527, "Rain of Chaos", new MechanicPlotlySetting("diamond","rgb(150,0,250)"), "Orb.R", "Hit by Rain of Orbs", "Rain of Orbs", 4000),
+                new HitOnPlayerMechanic(56541, "Pylon Debris Field", new MechanicPlotlySetting("circle-open-dot","rgb(255,150,0)"), "P.Magma", "Hit by Pylon Magma", "Pylon Magma", 0),
+                new HitOnPlayerMechanic(56020, "Energized Affliction", new MechanicPlotlySetting("circle-open","rgb(0,255,0)"), "E.Affliction", "Energized Affliction", "Energized Affliction", 0),
+                new HitOnPlayerMechanic(56134, "Force of Retaliation", new MechanicPlotlySetting("circle-open","rgb(0,0,0)"), "Pushed", "Pushed by Shockwave", "Shockwave Push", 0, new List<SkillMechanic.SkillChecker>{(de, log) => !de.To.HasBuff(log, 1122, de.Time) }, Mechanic.TriggerRule.AND),
+                new HitOnPlayerMechanic(56441, "Force of Havoc", new MechanicPlotlySetting("square-open","rgb(150,0,250)"), "P.Rectangle", "Hit by Purple Rectangle", "Purple Rectangle", 0),
+                new HitOnPlayerMechanic(56145, "Chaos Called", new MechanicPlotlySetting("circle-x-open","rgb(150,0,250)"), "Pattern.H", "Hit by Energy on Pattern", "Pattern Energy Hit", 0),
+                new HitOnPlayerMechanic(56527, "Rain of Chaos", new MechanicPlotlySetting("star-square","rgb(150,0,250)"), "Orb.R", "Hit by Rain of Orbs", "Rain of Orbs", 4000),
                 //new HitOnPlayerMechanic(56254, "Exponential Repercussion", new MechanicPlotlySetting("diamond-open","rgb(150,0,250)"), "Shield.H", "Hit by Energy Shield", "Shield Hit", 0),// to check
-                new HitOnPlayerMechanic(56180, "Residual Impact", new MechanicPlotlySetting("diamond","rgb(250,150,0)"), "Magma.F", "Hit by Magma Field", "Magma Field", 500),
-                new HitOnPlayerMechanic(56378, "Residual Impact", new MechanicPlotlySetting("diamond-open","rgb(250,150,0)"), "S.Magma.F", "Hit by Small Magma Field", "Small Magma Field", 500),
-                new HitOnPlayerMechanic(56616, "Battering Blitz", new MechanicPlotlySetting("square","rgb(250,150,0)"), "Rush.H", "Hit by Qadim Rush", "Qadim Rush", 500),
-                new HitOnPlayerMechanic(56332, "Caustic Chaos", new MechanicPlotlySetting("triangle","rgb(250,150,0)"), "A.Projectile.H", "Hit by Aimed Projectile", "Aimed Projectile", 0),
-                new HitByEnemyMechanic(56598, "Shower of Chaos", new MechanicPlotlySetting("circle","rgb(250,0,250)"), "Orb.D", "Pylon Orb not caught", "Shower of Chaos", 1000),
-                new PlayerBoonApplyMechanic(56510, "Fixated", new MechanicPlotlySetting("circle-open","rgb(150,0,250)"), "Fixated", "Fixated", "Fixated", 0),
-                new HitOnPlayerMechanic(56543, "Caustic Chaos", new MechanicPlotlySetting("asterisk","rgb(150,0,250)"), "A.Projectile.E", "Hit by Aimed Projectile Explosion", "Aimed Projectile Explosion", 0),
-                new PlayerBoonApplyMechanic(56118, "Sapping Surge", new MechanicPlotlySetting("hexagon","rgb(250,0,50)"), "B.Tether", "25% damage reduction", "Bad Tether", 0),
+                new HitOnPlayerMechanic(56180, "Residual Impact", new MechanicPlotlySetting("circle-open","rgb(250,150,0)"), "Magma.F", "Hit by Magma Field", "Magma Field", 500),
+                new HitOnPlayerMechanic(56378, "Residual Impact", new MechanicPlotlySetting("circle-open","rgb(250,150,0)",10), "S.Magma.F", "Hit by Small Magma Field", "Small Magma Field", 500),
+                new HitOnPlayerMechanic(56616, "Battering Blitz", new MechanicPlotlySetting("bowtie","rgb(250,150,0)"), "Rush.H", "Hit by Qadim Rush", "Qadim Rush", 500),
+                new HitOnPlayerMechanic(56332, "Caustic Chaos", new MechanicPlotlySetting("triangle-right","rgb(250,0,0)"), "A.Projectile.H", "Hit by Aimed Projectile", "Aimed Projectile", 0),
+                new HitByEnemyMechanic(56598, "Shower of Chaos", new MechanicPlotlySetting("circle","rgb(0,0,0)"), "Orb.D", "Pylon Orb not caught", "Shower of Chaos", 1000),
+                new PlayerBoonApplyMechanic(56510, "Fixated", new MechanicPlotlySetting("star","rgb(255,0,255)"), "Fixated", "Fixated", "Fixated", 0),
+                new HitOnPlayerMechanic(56543, "Caustic Chaos", new MechanicPlotlySetting("triangle-right-open","rgb(250,0,0)"), "A.Projectile.E", "Hit by Aimed Projectile Explosion", "Aimed Projectile Explosion", 0),
+                new PlayerBoonApplyMechanic(56118, "Sapping Surge", new MechanicPlotlySetting("y-down-open","rgb(250,0,50)"), "B.Tether", "25% damage reduction", "Bad Tether", 0),
             });
             Extension = "prlqadim";
             IconUrl = "https://wiki.guildwars2.com/images/8/8b/Mini_Qadim_the_Peerless.png";
