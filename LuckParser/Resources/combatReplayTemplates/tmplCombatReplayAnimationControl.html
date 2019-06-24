@@ -1,6 +1,9 @@
 <div class="d-flex flex-column flex-wrap">
     <p class="text-justify text-center">Double click on canvas to restore viewpoint</p>
-    <canvas :width="canvas.x + 'px'" :height="canvas.y + 'px'" id="replayCanvas" class="replay"></canvas>
+    <div :style="{'width': canvas.x + 'px', 'height': canvas.y + 'px', 'position': 'relative'}">
+        <canvas :width="canvas.x + 'px'" :height="canvas.y + 'px'" id="main-canvas" class="replay"></canvas>
+        <canvas :width="canvas.x + 'px'" :height="canvas.y + 'px'" id="bg-canvas" class="replay"></canvas>
+    </div>
     <div class="d-flex justify-content-center">
         <div @click="toggleAnimate();"
              class="btn btn-small" :class="{'btn-dark': !light, 'btn-light': light}" style="width: 50px;">{{animated ? "Pause" : "Play"}}</div>

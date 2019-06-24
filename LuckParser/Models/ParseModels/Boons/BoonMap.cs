@@ -43,7 +43,7 @@ namespace LuckParser.Models.ParseModels
             this[boon.ID] = new List<AbstractBuffEvent>();
         }
 
-        /*private int CompareApplicationType(BoonLog x, BoonLog y)
+        private int CompareApplicationType(AbstractBuffEvent x, AbstractBuffEvent y)
         {
             if (x.Time < y.Time)
             {
@@ -55,9 +55,9 @@ namespace LuckParser.Models.ParseModels
             }
             else
             {
-                if (x.GetType() == typeof(BoonRemovalLog))
+                if (x is BuffRemoveSingleEvent || x is BuffRemoveAllEvent)
                 {
-                    if (y.GetType() == typeof(BoonRemovalLog))
+                    if (y is BuffRemoveSingleEvent || x is BuffRemoveAllEvent)
                     {
                         return 0;
                     }
@@ -68,7 +68,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 else
                 {
-                    if (y.GetType() == typeof(BoonRemovalLog))
+                    if (y is BuffRemoveSingleEvent || x is BuffRemoveAllEvent)
                     {
                         return -1;
                     }
@@ -87,7 +87,7 @@ namespace LuckParser.Models.ParseModels
             {
                 pair.Value.Sort(CompareApplicationType);
             }
-        }*/
+        }
         
     }
 

@@ -16,10 +16,6 @@ const facingIcon = new Image();
 facingIcon.onload = function () {
     animateCanvas(-1);
 };
-const bgImage = new Image();
-bgImage.onload = function () {
-    animateCanvas(-1);
-};
 
 const resolutionMultiplier = window.devicePixelRatio;
 
@@ -27,6 +23,7 @@ var animator = null;
 
 class Animator {
     constructor(options, reactiveData) {
+        var _this = this;
         // status
         this.reactiveDataStatus = reactiveData;
         // time
@@ -46,27 +43,54 @@ class Animator {
         this.mechanicActorData = [];
         this.attachedActorData = new Map();
         this.backgroundActorData = [];
+        this.backgroundImages = [];
         // animation
+        this.needBGUpdate = false;
+        this.prevBGImage = null;
         this.animation = null;
         this.timeSlider = document.getElementById('timeRange');
         this.timeSliderDisplay = document.getElementById('timeRangeDisplay');
-        this.canvas = document.getElementById('replayCanvas');
-        this.canvas.style.width = this.canvas.width + "px";
-        this.canvas.style.height = this.canvas.height + "px";
-        this.canvas.width *= resolutionMultiplier;
-        this.canvas.height *= resolutionMultiplier;
-        this.ctx = this.canvas.getContext('2d');
-        this.ctx.imageSmoothingEnabled = true;
+        // main canvas
+        this.mainCanvas = document.getElementById('main-canvas');
+        this.mainCanvas.style.width = this.mainCanvas.width + "px";
+        this.mainCanvas.style.height = this.mainCanvas.height + "px";
+        this.mainCanvas.width *= resolutionMultiplier;
+        this.mainCanvas.height *= resolutionMultiplier;
+        this.mainContext = this.mainCanvas.getContext('2d');
+        this.mainContext.imageSmoothingEnabled = true;
+        // bg canvas
+        this.bgCanvas = document.getElementById('bg-canvas');
+        this.bgCanvas.style.width = this.bgCanvas.width + "px";
+        this.bgCanvas.style.height = this.bgCanvas.height + "px";
+        this.bgCanvas.width *= resolutionMultiplier;
+        this.bgCanvas.height *= resolutionMultiplier;
+        this.bgContext = this.bgCanvas.getContext('2d');
+        this.bgContext.imageSmoothingEnabled = true;
         // manipulation
-        this.lastX = this.canvas.width / 2;
-        this.lastY = this.canvas.height / 2;
+        this.lastX = this.mainCanvas.width / 2;
+        this.lastY = this.mainCanvas.height / 2;
         this.dragStart = null;
         this.dragged = false;
         this.scale = 1.0;
         if (options) {
             if (options.inch) this.inch = options.inch;
             if (options.pollingRate) this.pollingRate = options.pollingRate;
-            if (options.mapLink) bgImage.src = options.mapLink;
+            if (options.maps) {
+                for (var i = 0; i < options.maps.length; i++) {
+                    var mapData = options.maps[i];
+                    var image = new Image();
+                    image.onload = function () {
+                        _this.needBGUpdate = true;
+                        animateCanvas(-1);
+                    };
+                    image.src = mapData.link;
+                    this.backgroundImages.push({
+                        image: image,
+                        start: mapData.start,
+                        end: mapData.end
+                    });
+                }
+            }
             if (options.actors) this.initActors(options.actors);
             downIcon.src = "https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png";
             dcIcon.src = "https://wiki.guildwars2.com/images/f/f5/Talk_end_option_tango.png";
@@ -74,8 +98,9 @@ class Animator {
             facingIcon.src = "https://i.imgur.com/tZTmTRn.png";
         }
         //
-        this.trackTransforms();
-        this.ctx.scale(resolutionMultiplier, resolutionMultiplier);
+        this.trackTransforms(this.mainContext);
+        this.trackTransforms(this.bgContext);
+        this.mainContext.scale(resolutionMultiplier, resolutionMultiplier);
         this.initMouseEvents();
         this.initTouchEvents();
     }
@@ -221,8 +246,9 @@ class Animator {
 
     initMouseEvents() {
         var _this = this;
-        var canvas = this.canvas;
-        var ctx = this.ctx;
+        var canvas = this.mainCanvas;
+        var ctx = this.mainContext;
+        var bgCtx = this.bgContext;
 
         canvas.addEventListener('dblclick', function (evt) {
             _this.lastX = canvas.width / 2;
@@ -231,6 +257,9 @@ class Animator {
             _this.dragged = false;
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             ctx.scale(resolutionMultiplier, resolutionMultiplier);
+            bgCtx.setTransform(1, 0, 0, 1, 0, 0);
+            bgCtx.scale(resolutionMultiplier, resolutionMultiplier);
+            _this.needBGUpdate = true;
             if (_this.animation === null) {
                 animateCanvas(-1);
             }
@@ -250,6 +279,8 @@ class Animator {
             if (_this.dragStart) {
                 var pt = ctx.transformedPoint(_this.lastX, _this.lastY);
                 ctx.translate(pt.x - _this.dragStart.x, pt.y - _this.dragStart.y);
+                bgCtx.translate(pt.x - _this.dragStart.x, pt.y - _this.dragStart.y);
+                _this.needBGUpdate = true;
                 if (_this.animation === null) {
                     animateCanvas(-1);
                 }
@@ -265,9 +296,13 @@ class Animator {
             if (delta) {
                 var pt = ctx.transformedPoint(_this.lastX, _this.lastY);
                 ctx.translate(pt.x, pt.y);
+                bgCtx.translate(pt.x, pt.y);
                 var factor = Math.pow(1.1, delta);
                 ctx.scale(factor, factor);
                 ctx.translate(-pt.x, -pt.y);
+                bgCtx.scale(factor, factor);
+                bgCtx.translate(-pt.x, -pt.y);
+                _this.needBGUpdate = true;
                 if (_this.animation === null) {
                     animateCanvas(-1);
                 }
@@ -315,8 +350,7 @@ class Animator {
     }
 
     // https://codepen.io/anon/pen/KrExzG
-    trackTransforms() {
-        var ctx = this.ctx;
+    trackTransforms(ctx) {
         var svg = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
         var xform = svg.createSVGMatrix();
         ctx.getTransform = function () {
@@ -390,20 +424,83 @@ class Animator {
         };
     }
     // animation
-    draw() {
+    _getBackgroundImage() {
+        var time = this.reactiveDataStatus.time;
+        for (var i = 0; i < this.backgroundImages.length; i++) {
+            var imageData = this.backgroundImages[i];
+            if (imageData.start < 0 || imageData.end < 0 || (imageData.start <= time && imageData.end >= time)) {
+                return imageData.image;
+            }
+        }
+        return null;
+    }
+
+    _drawBGCanvas() {
+        var imgToDraw = this._getBackgroundImage();
+        if ((imgToDraw !== null && imgToDraw !== this.prevBGImage) || this.needBGUpdate) {
+            this.needBGUpdate = false;
+            this.prevBGImage = imgToDraw;
+            var ctx = this.bgContext;
+            var canvas = this.bgCanvas;
+            var p1 = ctx.transformedPoint(0, 0);
+            var p2 = ctx.transformedPoint(canvas.width, canvas.height);
+            ctx.clearRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
+
+            ctx.save();
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.restore();
+
+
+            ctx.drawImage(this._getBackgroundImage(), 0, 0, canvas.width / resolutionMultiplier, canvas.height / resolutionMultiplier);
+
+            //ctx.globalCompositeOperation = "color-burn";
+            ctx.save();
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            // draw scale
+            ctx.lineWidth = 3 * resolutionMultiplier;
+            ctx.strokeStyle = "red";
+            var pos = resolutionMultiplier * 70;
+            var width = resolutionMultiplier * 50;
+            var height = resolutionMultiplier * 6;
+            // main line
+            ctx.beginPath();
+            ctx.moveTo(pos, pos);
+            ctx.lineTo(pos + width, pos);
+            ctx.stroke();
+            ctx.lineWidth = resolutionMultiplier;
+            // right border
+            ctx.beginPath();
+            ctx.moveTo(pos - resolutionMultiplier, pos + height);
+            ctx.lineTo(pos - resolutionMultiplier, pos - height);
+            ctx.stroke();
+            // left border
+            ctx.beginPath();
+            ctx.moveTo(pos + width + resolutionMultiplier, pos + height);
+            ctx.lineTo(pos + width + resolutionMultiplier, pos - height);
+            ctx.stroke();
+            // text
+            var fontSize = 13 * resolutionMultiplier;
+            ctx.font = fontSize + "px Comic Sans MS";
+            ctx.fillStyle = "red";
+            ctx.textAlign = "center";
+            ctx.fillText((50 / (this.inch * this.scale)).toFixed(1) + " inches", resolutionMultiplier * 95, resolutionMultiplier * 60);
+            ctx.restore();
+            //ctx.globalCompositeOperation = 'normal';
+        }
+    }
+
+    _drawMainCanvas() {
         var _this = this;
-        var ctx = this.ctx;
-        var canvas = this.canvas;
+        var ctx = this.mainContext;
+        var canvas = this.mainCanvas;
         var p1 = ctx.transformedPoint(0, 0);
         var p2 = ctx.transformedPoint(canvas.width, canvas.height);
         ctx.clearRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
-
         ctx.save();
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.restore();
-        //
-        ctx.drawImage(bgImage, 0, 0, canvas.width / resolutionMultiplier, canvas.height / resolutionMultiplier);
         // Background items commonly overlap so they need to be drawn in the correct order by height
         // This is sorted in reverse order because the z axis is inverted
         animator.backgroundActorData.sort((x, y) => y.getHeight() - x.getHeight());
@@ -439,39 +536,12 @@ class Animator {
                 this.attachedActorData.get(this.reactiveDataStatus.selectedPlayerID).draw();
             }
         }
-        //ctx.globalCompositeOperation = "color-burn";
-        ctx.save();
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        // draw scale
-        ctx.lineWidth = 3 * resolutionMultiplier;
-        ctx.strokeStyle = "red";
-        var pos = resolutionMultiplier * 70;
-        var width = resolutionMultiplier * 50;
-        var height = resolutionMultiplier * 6;
-        // main line
-        ctx.beginPath();
-        ctx.moveTo(pos, pos);
-        ctx.lineTo(pos + width, pos);
-        ctx.stroke();
-        ctx.lineWidth = resolutionMultiplier;
-        // right border
-        ctx.beginPath();
-        ctx.moveTo(pos - resolutionMultiplier, pos + height);
-        ctx.lineTo(pos - resolutionMultiplier, pos - height);
-        ctx.stroke();
-        // left border
-        ctx.beginPath();
-        ctx.moveTo(pos + width + resolutionMultiplier, pos + height);
-        ctx.lineTo(pos + width + resolutionMultiplier, pos - height);
-        ctx.stroke();
-        // text
-        var fontSize = 13 * resolutionMultiplier;
-        ctx.font = fontSize + "px Comic Sans MS";
-        ctx.fillStyle = "red";
-        ctx.textAlign = "center";
-        ctx.fillText((50 / (this.inch * this.scale)).toFixed(1) + " inches", resolutionMultiplier * 95, resolutionMultiplier * 60);
-        ctx.restore();
-        //ctx.globalCompositeOperation = 'normal';
+    }
+
+    draw() {
+        //
+        this._drawBGCanvas();
+        this._drawMainCanvas();
     }
 }
 
@@ -601,7 +671,7 @@ class IconDrawable {
         }
         const fullSize = this.pixelSize / animator.scale;
         const halfSize = fullSize / 2;
-        animator.ctx.drawImage(this.img,
+        animator.mainContext.drawImage(this.img,
             pos.x - halfSize, pos.y - halfSize, fullSize, fullSize);
     }
 
@@ -623,7 +693,7 @@ class PlayerIconDrawable extends IconDrawable {
         if (pos === null) {
             return;
         }
-        var ctx = animator.ctx;
+        var ctx = animator.mainContext;
         const fullSize = this.pixelSize / animator.scale;
         const halfSize = fullSize / 2;
         if (!this.selected && this.group === animator.selectedGroup) {
@@ -777,7 +847,7 @@ class FacingMechanicDrawable extends MechanicDrawable {
         if (pos === null || rot === null) {
             return;
         }
-        var ctx = animator.ctx;
+        var ctx = animator.mainContext;
         const angle = rot * Math.PI / 180;
         ctx.save();
         ctx.translate(pos.x, pos.y);
@@ -803,7 +873,7 @@ class FacingRectangleMechanicDrawable extends FacingMechanicDrawable {
         if (pos === null || rot === null) {
             return;
         }
-        var ctx = animator.ctx;
+        var ctx = animator.mainContext;
         const angle = rot * Math.PI / 180;
         ctx.save();
         ctx.translate(pos.x, pos.y);
@@ -845,7 +915,7 @@ class CircleMechanicDrawable extends FormMechanicDrawable {
         if (pos === null) {
             return;
         }
-        var ctx = animator.ctx;
+        var ctx = animator.mainContext;
         ctx.beginPath();
         ctx.arc(pos.x, pos.y, this.getPercent() * (this.radius - this.minRadius) + this.minRadius, 0, 2 * Math.PI);
         if (this.fill) {
@@ -871,7 +941,7 @@ class DoughnutMechanicDrawable extends FormMechanicDrawable {
         if (pos === null) {
             return;
         }
-        var ctx = animator.ctx;
+        var ctx = animator.mainContext;
         const percent = this.getPercent();
         ctx.beginPath();
         ctx.arc(pos.x, pos.y, this.innerRadius + percent * (this.outerRadius - this.innerRadius), 2 * Math.PI, 0, false);
@@ -900,7 +970,7 @@ class RectangleMechanicDrawable extends FormMechanicDrawable {
         if (pos === null) {
             return;
         }
-        var ctx = animator.ctx;
+        var ctx = animator.mainContext;
         const percent = this.getPercent();
         ctx.beginPath();
         ctx.rect(pos.x - 0.5 * percent * this.width, pos.y - 0.5 * percent * this.height, percent * this.width, percent * this.height);
@@ -936,7 +1006,7 @@ class RotatedRectangleMechanicDrawable extends RectangleMechanicDrawable {
         if (pos === null) {
             return;
         }
-        var ctx = animator.ctx;
+        var ctx = animator.mainContext;
         const percent = this.getPercent();
         const spinPercent = this.getSpinPercent();
         const offset = {
@@ -976,7 +1046,7 @@ class PieMechanicDrawable extends FormMechanicDrawable {
         if (pos === null) {
             return;
         }
-        var ctx = animator.ctx;
+        var ctx = animator.mainContext;
         const percent = this.getPercent();
         ctx.beginPath();
         ctx.moveTo(pos.x, pos.y);
@@ -1029,7 +1099,7 @@ class LineMechanicDrawable extends FormMechanicDrawable {
         if (pos === null || target === null) {
             return;
         }
-        var ctx = animator.ctx;
+        var ctx = animator.mainContext;
         const percent = this.getPercent();
         ctx.beginPath();
         ctx.moveTo(pos.x, pos.y);
@@ -1082,7 +1152,7 @@ class MovingPlatformDrawable extends BackgroundDrawable {
         if (pos === null) {
             return;
         }
-        let ctx = animator.ctx;
+        let ctx = animator.mainContext;
         const rads = pos.angle;
         ctx.save();
         ctx.translate(pos.x, pos.y);

@@ -133,13 +133,13 @@ namespace LuckParser.Models
         public class FinalSupport
         {
             //public long allHeal;
-            public int Resurrects;
+            public long Resurrects;
             public double ResurrectTime;
-            public int CondiCleanse;
+            public long CondiCleanse;
             public double CondiCleanseTime;
-            public int CondiCleanseSelf;
+            public long CondiCleanseSelf;
             public double CondiCleanseTimeSelf;
-            public int BoonStrips;
+            public long BoonStrips;
             public double BoonStripsTime;
         }
 
