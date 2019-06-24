@@ -73,12 +73,12 @@ namespace LuckParser.Models.ParseModels
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
+                Maps.Last().End = phase.Start;
                 Maps.Add(new MapItem()
                 {
                     Link = urls[i - 1],
                     Start = phase.Start
                 });
-                Maps.Last().End = phase.Start;
             }
             Maps.Last().End = fightEnd;
             Maps.RemoveAll(x => x.End - x.Start <= 0);

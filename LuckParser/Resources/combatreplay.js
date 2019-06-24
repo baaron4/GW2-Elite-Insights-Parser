@@ -428,7 +428,7 @@ class Animator {
         var time = this.reactiveDataStatus.time;
         for (var i = 0; i < this.backgroundImages.length; i++) {
             var imageData = this.backgroundImages[i];
-            if (imageData.start < 0 || imageData.end < 0 || (imageData.start < time && imageData.end >= time)) {
+            if (imageData.start < 0 || imageData.end < 0 || (imageData.start <= time && imageData.end >= time)) {
                 return imageData.image;
             }
         }
