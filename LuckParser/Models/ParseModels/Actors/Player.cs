@@ -60,7 +60,7 @@ namespace LuckParser.Models.ParseModels
             {
                 List<BuffRemoveAllEvent> bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && log.PlayerAgents.Contains(x.To) && x.To != AgentItem).Select(x => x as BuffRemoveAllEvent).ToList();
                 cleanse[0] += bevts.Count;
-                cleanse[1] += bevts.Sum(x => x.RemovedDuration);
+                cleanse[1] += bevts.Sum(x => Math.Max(x.RemovedDuration, log.FightData.FightDuration));
             }
             return cleanse;
         }
@@ -71,7 +71,7 @@ namespace LuckParser.Models.ParseModels
             {
                 List<BuffRemoveAllEvent> bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && x.To == AgentItem).Select(x => x as BuffRemoveAllEvent).ToList();
                 cleanse[0] += bevts.Count;
-                cleanse[1] += bevts.Sum(x => x.RemovedDuration);
+                cleanse[1] += bevts.Sum(x => Math.Max(x.RemovedDuration, log.FightData.FightDuration));
             }
             return cleanse;
         }
@@ -83,7 +83,7 @@ namespace LuckParser.Models.ParseModels
             {
                 List<BuffRemoveAllEvent> bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && !log.PlayerAgents.Contains(x.To) && !log.PlayerAgents.Contains(x.To.MasterAgent)).Select(x => x as BuffRemoveAllEvent).ToList();
                 strips[0] += bevts.Count;
-                strips[1] += bevts.Sum(x => x.RemovedDuration);
+                strips[1] += bevts.Sum(x => Math.Max(x.RemovedDuration, log.FightData.FightDuration));
             }
             return strips;
         }
