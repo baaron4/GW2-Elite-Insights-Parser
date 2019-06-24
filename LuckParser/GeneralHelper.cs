@@ -404,6 +404,7 @@ namespace LuckParser
                 case InsidiousProjection:
                     return "https://i.imgur.com/9EdItBS.png";
                 case EnergyOrb:
+                    return "https://i.postimg.cc/NMNvyts0/Power-Ball.png";
                 case UnstableLeyRift:
                     return "https://i.imgur.com/YXM3igs.png";
                 case RadiantPhantasm:

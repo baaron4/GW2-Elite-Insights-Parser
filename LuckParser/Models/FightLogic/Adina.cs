@@ -14,14 +14,14 @@ namespace LuckParser.Models.Logic
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
-                new PlayerBoonApplyMechanic(56593, "Radiant Blindness", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "R.Blind", "Unremovable blindness", "Radiant Blindness", 0),
-                new PlayerBoonApplyMechanic(56440, "Eroding Curse", new MechanicPlotlySetting("cross","rgb(255,0,100)"), "Curse", "Stacking damage debuff from Hand of Erosion", "Eroding Curse", 0),
-                new HitOnPlayerMechanic(56648, "Boulder Barrage", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Boulder", "Hit by boulder thrown during pillars", "Boulder Barrage", 0),
-                new HitOnPlayerMechanic(56390, "Perilous Pulse", new MechanicPlotlySetting("x","rgb(255,0,0)"), "Perilous Pulse", "Perilous Pulse", "Perilous Pulse", 0),
-                new HitOnPlayerMechanic(56141, "Stalagmites", new MechanicPlotlySetting("hexagon","rgb(255,0,0)"), "Mines", "Hit by mines", "Mines", 0),
-                new HitOnPlayerMechanic(56114, "Diamond Palisade", new MechanicPlotlySetting("x","rgb(255,150,0)"), "Eye", "Looked at Eye", "Looked at Eye", 0),
-                new HitOnPlayerMechanic(56035, "Quantum Quake", new MechanicPlotlySetting("diamond","rgb(255,150,0)"), "S.Thrower", "Hit by rotating SandThrower", "SandThrower", 0),
-                new HitOnPlayerMechanic(56381, "Quantum Quake", new MechanicPlotlySetting("diamond","rgb(255,150,0)"), "S.Thrower", "Hit by rotating SandThrower", "SandThrower", 0),
+                new PlayerBoonApplyMechanic(56593, "Radiant Blindness", new MechanicPlotlySetting("circle","rgb(255,0,255)"), "R.Blind", "Unremovable blindness", "Radiant Blindness", 0),
+                new PlayerBoonApplyMechanic(56440, "Eroding Curse", new MechanicPlotlySetting("square","rgb(200,140,255)"), "Curse", "Stacking damage debuff from Hand of Erosion", "Eroding Curse", 0),
+                new HitOnPlayerMechanic(56648, "Boulder Barrage", new MechanicPlotlySetting("hexagon","rgb(255,0,0)"), "Boulder", "Hit by boulder thrown during pillars", "Boulder Barrage", 0),
+                new HitOnPlayerMechanic(56390, "Perilous Pulse", new MechanicPlotlySetting("triangle-right","rgb(255,150,0)"), "Perilous Pulse", "Perilous Pulse", "Perilous Pulse", 0),
+                new HitOnPlayerMechanic(56141, "Stalagmites", new MechanicPlotlySetting("pentagon","rgb(255,0,0)"), "Mines", "Hit by mines", "Mines", 0),
+                new HitOnPlayerMechanic(56114, "Diamond Palisade", new MechanicPlotlySetting("star-diamond","rgb(255,150,0)"), "Eye", "Looked at Eye", "Looked at Eye", 0),
+                new HitOnPlayerMechanic(56035, "Quantum Quake", new MechanicPlotlySetting("hourglass","rgb(120,100,0)"), "S.Thrower", "Hit by rotating SandThrower", "SandThrower", 0),
+                new HitOnPlayerMechanic(56381, "Quantum Quake", new MechanicPlotlySetting("hourglass","rgb(120,100,0)"), "S.Thrower", "Hit by rotating SandThrower", "SandThrower", 0),
             });
             Extension = "adina";
             IconUrl = "https://wiki.guildwars2.com/images/a/a0/Mini_Earth_Djinn.png";
