@@ -172,7 +172,7 @@ namespace LuckParser.Models.ParseModels
                 c.TryFindSrc(log);
                 loglist.Add(c);
             }
-            //boonMap.Sort();
+            boonMap.Sort();
             foreach (var pair in boonMap)
             {
                 TrackedBoons.Add(log.Boons.BoonsByIds[pair.Key]);
