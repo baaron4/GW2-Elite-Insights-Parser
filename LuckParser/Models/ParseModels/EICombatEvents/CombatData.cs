@@ -17,6 +17,7 @@ namespace LuckParser.Models.ParseModels
         private readonly Dictionary<long, List<AbstractBuffEvent>> _boonData;
         private readonly Dictionary<AgentItem, List<AbstractBuffEvent>> _boonDataByDst;
         private readonly Dictionary<AgentItem, List<AbstractDamageEvent>> _damageData;
+        private readonly Dictionary<long, List<AbstractDamageEvent>> _damageDataById;
         private readonly Dictionary<AgentItem, List<AnimatedCastEvent>> _castData;
         private readonly Dictionary<AgentItem, List<WeaponSwapEvent>> _weaponSwapData;
         private readonly Dictionary<long, List<AbstractCastEvent>> _castDataById;
@@ -166,6 +167,7 @@ namespace LuckParser.Models.ParseModels
             List<AbstractDamageEvent> damageData = EICombatEventFactory.CreateDamageEvents(noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0)).ToList(), agentData, skillData, fightData.FightStartLogTime);
             _damageData = damageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             _damageTakenData = damageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            _damageDataById = damageData.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
 
             /*healing_data = allCombatItems.Where(x => x.getDstInstid() != 0 && x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                          ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
@@ -381,6 +383,15 @@ namespace LuckParser.Models.ParseModels
         public List<AbstractDamageEvent> GetDamageData(AgentItem key)
         {
             if (_damageData.TryGetValue(key, out List<AbstractDamageEvent> res))
+            {
+                return res;
+            }
+            return new List<AbstractDamageEvent>(); ;
+        }
+
+        public List<AbstractDamageEvent> GetDamageDataById(long key)
+        {
+            if (_damageDataById.TryGetValue(key, out List<AbstractDamageEvent> res))
             {
                 return res;
             }

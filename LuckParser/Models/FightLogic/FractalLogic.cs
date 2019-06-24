@@ -54,6 +54,7 @@ namespace LuckParser.Models.Logic
 
         protected void SetSuccessByBuffCount(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents, Target target, long buffID, int count)
         {
+            long lastAware = fightData.ToFightSpace(target.LastAwareLogTime);
             List<AbstractBuffEvent> invulsTarget = GetFilteredList(combatData, buffID, target, true);
             if (invulsTarget.Count == count)
             {
@@ -65,12 +66,19 @@ namespace LuckParser.Models.Logic
                     {
                         playerExits.AddRange(combatData.GetExitCombatEvents(a));
                     }
-                    ExitCombatEvent lastPlayerExit = playerExits.MaxBy(x => x.Time);
+                    ExitCombatEvent lastPlayerExit = playerExits.Count >0 ? playerExits.MaxBy(x => x.Time) : null;
                     ExitCombatEvent lastTargetExit = combatData.GetExitCombatEvents(target.AgentItem).LastOrDefault();
                     AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
-                    if (lastTargetExit != null && lastDamageTaken != null && lastPlayerExit != null)
+                    if (lastTargetExit != null && lastDamageTaken != null)
                     {
-                        fightData.SetSuccess(lastPlayerExit.Time > lastTargetExit.Time + 1000, fightData.ToLogSpace(lastDamageTaken.Time));
+                        if (lastPlayerExit != null)
+                        {
+                            fightData.SetSuccess(lastPlayerExit.Time > lastTargetExit.Time + 1000, fightData.ToLogSpace(lastDamageTaken.Time));
+                        }
+                        else if (fightData.FightEndLogTime > target.LastAwareLogTime + 2000)
+                        {
+                            fightData.SetSuccess(true, fightData.ToLogSpace(lastDamageTaken.Time));
+                        }
                     }
                 }
             }

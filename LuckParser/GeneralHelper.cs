@@ -403,6 +403,7 @@ namespace LuckParser
                     return "https://i.imgur.com/qeYT1Bf.png";
                 case InsidiousProjection:
                     return "https://i.imgur.com/9EdItBS.png";
+                case EnergyOrb:
                 case UnstableLeyRift:
                     return "https://i.imgur.com/YXM3igs.png";
                 case RadiantPhantasm:
@@ -469,7 +470,7 @@ namespace LuckParser
                     return "https://i.imgur.com/k79t7ZA.png";
                 case HandOfErosion:
                 case HandOfEruption:
-                    return "https://i.imgur.com/reGQHhr.png"; 
+                    return "https://i.imgur.com/reGQHhr.png";
                 case VoltaicWisp:
                     return "https://i.imgur.com/C1mvNGZ.png"; 
                 case ParalyzingWisp:
@@ -496,6 +497,7 @@ namespace LuckParser
                 case GreenSpirit1:
                 case GreenSpirit2:
                 case BanditSapper:
+                case ProjectionArkk:
                 case Pylon1:
                     return "https://i.imgur.com/0koP4xB.png";
                 case FleshWurm:

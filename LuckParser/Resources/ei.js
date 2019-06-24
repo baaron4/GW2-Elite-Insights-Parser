@@ -1,8 +1,7 @@
 /*jshint esversion: 6 */
+var apiRenderServiceOkay = true;
 
-var mainComponent = null;
-
-window.onload = function () {
+var mainLoad = function () {
     // make some additional variables reactive
     var i;
     var simpleLogData = {
@@ -59,7 +58,7 @@ window.onload = function () {
         compileCombatReplay();
         compileCombatReplayUI();
     }
-    mainComponent = new Vue({
+    new Vue({
         el: "#content",
         data: {
             logdata: simpleLogData,
@@ -142,3 +141,20 @@ window.onload = function () {
         html: true
     });
 };
+
+window.onload = function () {
+    // trick from
+    var img = document.body.appendChild(document.createElement("img"));
+    img.onload = function () {
+        mainLoad();
+        document.body.removeChild(img);
+    };
+    img.onerror = function () {
+        apiRenderServiceOkay = false;
+        console.warn("Warning: GW2 Render service unavailable, switching to darthmaim-cdn");
+        console.warn("More info at https://dev.gw2treasures.com/services/icons");
+        mainLoad();
+        document.body.removeChild(img);
+    };
+    img.src = "https://render.guildwars2.com/file/2FA9DF9D6BC17839BBEA14723F1C53D645DDB5E1/102852.png";
+}
