@@ -15,13 +15,13 @@ namespace LuckParser.Models
         public int MaxTime;
         public float Inch;
         public int PollingRate;
-        public string MapLink;
+        public List<CombatReplayMap.MapItem> Maps;
 
         public CombatReplayDto(ParsedLog log)
         {
             CombatReplayMap map = log.FightData.Logic.GetCombatMap();
             Actors = GetCombatReplayActors(log, map);
-            MapLink = map.Link;
+            Maps = map.Maps;
             (int width, int height) = map.GetPixelMapSize();
             Sizes = new int[2] { width, height };
             Inch = map.GetInch();

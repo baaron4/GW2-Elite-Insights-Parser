@@ -159,6 +159,15 @@ namespace LuckParser.Models.Logic
             }
             phases.AddRange(mainPhases);
             phases.Sort((x, y) => x.Start.CompareTo(y.Start));
+            GetCombatMap().MatchMapsToPhases(new List<string> {
+                "https://i.imgur.com/3IBkNM6.png",
+                "https://i.imgur.com/iMrhTt6.png",
+                "https://i.imgur.com/zaZftSk.png",
+                "https://i.imgur.com/KkYdspd.png",
+                "https://i.imgur.com/wqgFO7Z.png",
+                "https://i.imgur.com/DroFhFc.png",
+                "https://i.imgur.com/QsEFkNO.png"
+            }, phases, log.FightData.FightDuration);
             return phases;
         }
 
