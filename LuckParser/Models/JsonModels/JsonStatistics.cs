@@ -287,7 +287,7 @@ namespace LuckParser.Models.JsonModels
             /// <summary>
             /// Number of time ressurected someone
             /// </summary>
-            public int Resurrects;
+            public long Resurrects;
             /// <summary>
             /// Time passed on ressurecting
             /// </summary>
@@ -295,7 +295,7 @@ namespace LuckParser.Models.JsonModels
             /// <summary>
             /// Number of time a condition was removed, self excluded
             /// </summary>
-            public int CondiCleanse;
+            public long CondiCleanse;
             /// <summary>
             /// Total time of condition removed, self excluded
             /// </summary>
@@ -303,7 +303,7 @@ namespace LuckParser.Models.JsonModels
             /// <summary>
             /// Number of time a condition was removed from self
             /// </summary>
-            public int CondiCleanseSelf;
+            public long CondiCleanseSelf;
             /// <summary>
             /// Total time of condition removed from self
             /// </summary>
@@ -311,7 +311,7 @@ namespace LuckParser.Models.JsonModels
             /// <summary>
             /// Number of time a boon was removed
             /// </summary>
-            public int BoonStrips;
+            public long BoonStrips;
             /// <summary>
             /// Total time of boons removed from self
             /// </summary>
