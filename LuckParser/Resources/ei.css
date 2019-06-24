@@ -509,3 +509,15 @@ th {
     border-top-right-radius: 0.25rem;
     border-bottom-right-radius: 0.25rem;
 }
+
+canvas {
+    position: absolute;
+}
+
+#main-canvas {
+    z-index: 2
+}
+
+#bg-canvas {
+    z-index: 1
+}
