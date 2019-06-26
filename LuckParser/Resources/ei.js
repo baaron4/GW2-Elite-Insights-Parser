@@ -144,7 +144,9 @@ var mainLoad = function () {
 
 window.onload = function () {
     // trick from
-    var img = document.body.appendChild(document.createElement("img"));
+    var img = document.createElement("img");
+    img.setAttribute("type", "hidden");
+    document.body.appendChild(img);
     img.onload = function () {
         mainLoad();
         document.body.removeChild(img);
