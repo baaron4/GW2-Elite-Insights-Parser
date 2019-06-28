@@ -32,8 +32,8 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 #if !DEBUG    
-[assembly: AssemblyVersion("2.14.2.0")]
+[assembly: AssemblyVersion("2.15.0.0")]
 #else
-[assembly: AssemblyVersion("2.14.*")]
+[assembly: AssemblyVersion("2.15.*")]
 #endif
 //[assembly: AssemblyFileVersion("1.8.10.34877")]
