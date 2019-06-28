@@ -145,7 +145,7 @@ var mainLoad = function () {
 window.onload = function () {
     // trick from
     var img = document.createElement("img");
-    img.setAttribute("type", "hidden");
+    img.style.display = "none";
     document.body.appendChild(img);
     img.onload = function () {
         mainLoad();
