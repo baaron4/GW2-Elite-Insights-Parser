@@ -101,6 +101,7 @@ class Animator {
         this.trackTransforms(this.mainContext);
         this.trackTransforms(this.bgContext);
         this.mainContext.scale(resolutionMultiplier, resolutionMultiplier);
+        this.bgContext.scale(resolutionMultiplier, resolutionMultiplier);
         this.initMouseEvents();
         this.initTouchEvents();
     }
