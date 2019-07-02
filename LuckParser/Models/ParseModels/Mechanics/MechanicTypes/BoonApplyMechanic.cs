@@ -12,31 +12,24 @@ namespace LuckParser.Models.ParseModels
     {
         public delegate bool BoonApplyChecker(BuffApplyEvent ba, ParsedLog log);
 
-        private readonly List<BoonApplyChecker> _triggerConditions = new List<BoonApplyChecker>();
+        private readonly BoonApplyChecker _triggerCondition = null;
 
         protected bool Keep(BuffApplyEvent c, ParsedLog log)
         {
-            if (_triggerConditions.Count > 0)
+            if (_triggerCondition != null)
             {
-                foreach (BoonApplyChecker checker in _triggerConditions)
-                {
-                    bool res = checker(c, log);
-                    if (!res)
-                    {
-                        return false;
-                    }
-                }
+                return _triggerCondition(c, log);
             }
             return true;
         }
 
-        public BoonApplyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<BoonApplyChecker> conditions) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions)
+        public BoonApplyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, BoonApplyChecker condition) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, condition)
         {
         }
 
-        public BoonApplyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<BoonApplyChecker> conditions) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+        public BoonApplyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, BoonApplyChecker condition) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
-            _triggerConditions = conditions;
+            _triggerCondition = condition;
         }
 
         public BoonApplyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)

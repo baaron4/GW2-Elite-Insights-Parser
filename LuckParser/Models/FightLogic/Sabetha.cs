@@ -17,7 +17,7 @@ namespace LuckParser.Models.Logic
             new PlayerBoonApplyMechanic(31473, "Sapper Bomb", new MechanicPlotlySetting("circle","rgb(0,128,0)"), "Sap Bomb","Got a Sapper Bomb", "Sapper Bomb",0),
             new PlayerBoonApplyMechanic(31485, "Time Bomb", new MechanicPlotlySetting("circle","rgb(255,140,0)"), "Timed Bomb","Got a Timed Bomb (Expanding circle)", "Timed Bomb",0),
             /*new PlayerBoonApplyMechanic(31324, "Time Bomb Hit", new MechanicPlotlySetting("circle-open","rgb(255,140,0)"), "Timed Bomb Hit","Got hit by Timed Bomb (Expanding circle)", "Timed Bomb Hit",0,
-                new List<BoonApplyMechanic.BoonApplyChecker>{ (ba, log) =>
+                (ba, log) =>
                 {
                     List<AbstractBuffEvent> timedBombRemoved = log.CombatData.GetBoonData(31485).Where(x => x.To == ba.To && x is BuffRemoveAllEvent && Math.Abs(ba.Time - x.Time) <= 50).ToList();
                     if (timedBombRemoved.Count > 0)
@@ -28,7 +28,7 @@ namespace LuckParser.Models.Logic
                }
             }),
             new PlayerBoonApplyMechanic(34152, "Time Bomb Hit", new MechanicPlotlySetting("circle-open","rgb(255,140,0)"), "Timed Bomb Hit","Got hit by Timed Bomb (Expanding circle)", "Timed Bomb Hit",0,
-                new List<BoonApplyMechanic.BoonApplyChecker>{ (ba, log) =>
+                (ba, log) =>
                 {
                     List<AbstractBuffEvent> timedBombRemoved = log.CombatData.GetBoonData(31485).Where(x => x.To == ba.To && x is BuffRemoveAllEvent && Math.Abs(ba.Time - x.Time) <= 50).ToList();
                     if (timedBombRemoved.Count > 0)
