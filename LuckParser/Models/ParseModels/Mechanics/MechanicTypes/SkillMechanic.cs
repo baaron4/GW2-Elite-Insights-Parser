@@ -12,31 +12,24 @@ namespace LuckParser.Models.ParseModels
     {
         public delegate bool SkillChecker(AbstractDamageEvent d, ParsedLog log);
 
-        private readonly List<SkillChecker> _triggerConditions = new List<SkillChecker>();
+        private readonly SkillChecker _triggerCondition = null;
 
         protected virtual bool Keep(AbstractDamageEvent c, ParsedLog log)
         {
-            if (_triggerConditions.Count > 0)
+            if (_triggerCondition != null)
             {
-                foreach (SkillChecker checker in _triggerConditions)
-                {
-                    bool res = checker(c, log);
-                    if (!res)
-                    {
-                        return false;
-                    }
-                }
+                return _triggerCondition(c, log);
             }
             return true;
         }
 
-        public SkillMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<SkillChecker> conditions) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions)
+        public SkillMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, SkillChecker condition) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, condition)
         {
         }
 
-        public SkillMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<SkillChecker> conditions) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+        public SkillMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, SkillChecker condition) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
-            _triggerConditions = conditions;
+            _triggerCondition = condition;
         }
 
         public SkillMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
