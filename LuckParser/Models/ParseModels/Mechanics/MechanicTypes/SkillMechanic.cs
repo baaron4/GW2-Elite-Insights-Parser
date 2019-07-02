@@ -21,24 +21,20 @@ namespace LuckParser.Models.ParseModels
                 foreach (SkillChecker checker in _triggerConditions)
                 {
                     bool res = checker(c, log);
-                    if (Rule == TriggerRule.AND && !res)
+                    if (!res)
                     {
                         return false;
-                    }
-                    else if (Rule == TriggerRule.OR && res)
-                    {
-                        return true;
                     }
                 }
             }
             return true;
         }
 
-        public SkillMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<SkillChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)
+        public SkillMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<SkillChecker> conditions) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions)
         {
         }
 
-        public SkillMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<SkillChecker> conditions, TriggerRule rule) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, rule)
+        public SkillMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<SkillChecker> conditions) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
             _triggerConditions = conditions;
         }

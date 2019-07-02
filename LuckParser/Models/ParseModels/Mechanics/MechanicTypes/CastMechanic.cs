@@ -21,13 +21,9 @@ namespace LuckParser.Models.ParseModels
                 foreach (CastChecker checker in _triggerConditions)
                 {
                     bool res = checker(c, log);
-                    if (Rule == TriggerRule.AND && !res)
+                    if (!res)
                     {
                         return false;
-                    }
-                    else if (Rule == TriggerRule.OR && res)
-                    {
-                        return true;
                     }
                 }
             }
@@ -39,11 +35,11 @@ namespace LuckParser.Models.ParseModels
             return evt.Time;
         }
 
-        public CastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<CastChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)
+        public CastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<CastChecker> conditions) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions)
         {
         }
 
-        public CastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<CastChecker> conditions, TriggerRule rule) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, rule)
+        public CastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<CastChecker> conditions) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
             _triggerConditions = conditions;
         }

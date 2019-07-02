@@ -14,10 +14,10 @@ namespace LuckParser.Models.Logic
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
-                new SkillOnPlayerMechanic(56202, "Dire Drafts", new MechanicPlotlySetting("circle","rgb(255,120,0)"), "B.Tornado", "Hit by big tornado", "Big Tornado Hit", 500, new List<SkillMechanic.SkillChecker>{(de, log) => de.HasDowned || de.HasKilled }, Mechanic.TriggerRule.AND),
-                new SkillOnPlayerMechanic(56643, "Unbridled Tempest", new MechanicPlotlySetting("hexagon","rgb(255,0,150)"), "Shockwave", "Hit by Shockwave", "Shockwave Hit", 0, new List<SkillMechanic.SkillChecker>{(de, log) => de.HasDowned || de.HasKilled }, Mechanic.TriggerRule.AND),
-                new SkillOnPlayerMechanic(56372, "Fury of the Storm", new MechanicPlotlySetting("circle","rgb(50,0,200)"), "Arena AoE", "Hit by Arena wide AoE", "Arena AoE hit", 0, new List<SkillMechanic.SkillChecker>{(de, log) => de.HasDowned || de.HasKilled }, Mechanic.TriggerRule.AND),
-                new HitOnPlayerMechanic(56055, "Dynamic Deterrent", new MechanicPlotlySetting("y-up-open","rgb(255,0,150)"), "Pushed", "Pushed by rotating breakbar", "Pushed", 0, new List<SkillMechanic.SkillChecker>{(de, log) => !de.To.HasBuff(log, 1122, de.Time) }, Mechanic.TriggerRule.AND),
+                new SkillOnPlayerMechanic(56202, "Dire Drafts", new MechanicPlotlySetting("circle","rgb(255,120,0)"), "B.Tornado", "Hit by big tornado", "Big Tornado Hit", 500, new List<SkillMechanic.SkillChecker>{(de, log) => de.HasDowned || de.HasKilled }),
+                new SkillOnPlayerMechanic(56643, "Unbridled Tempest", new MechanicPlotlySetting("hexagon","rgb(255,0,150)"), "Shockwave", "Hit by Shockwave", "Shockwave Hit", 0, new List<SkillMechanic.SkillChecker>{(de, log) => de.HasDowned || de.HasKilled }),
+                new SkillOnPlayerMechanic(56372, "Fury of the Storm", new MechanicPlotlySetting("circle","rgb(50,0,200)"), "Arena AoE", "Hit by Arena wide AoE", "Arena AoE hit", 0, new List<SkillMechanic.SkillChecker>{(de, log) => de.HasDowned || de.HasKilled }),
+                new HitOnPlayerMechanic(56055, "Dynamic Deterrent", new MechanicPlotlySetting("y-up-open","rgb(255,0,150)"), "Pushed", "Pushed by rotating breakbar", "Pushed", 0, new List<SkillMechanic.SkillChecker>{(de, log) => !de.To.HasBuff(log, 1122, de.Time) }),
                 new EnemyCastStartMechanic(56349, "Regenerative Breakbar", new MechanicPlotlySetting("diamond-wide","rgb(255,0,255)"), "Reg.Breakbar","Regenerating Breakbar", "Regenerative Breakbar", 0),
                 new EnemyBoonRemoveMechanic(56100, "Regenerative Breakbar Broken", new MechanicPlotlySetting("diamond-wide","rgb(0,160,150)"), "Reg.Breakbar Brkn", "Regenerative Breakbar Broken", "Regenerative Breakbar Broken", 2000),
                 new EnemyBoonApplyMechanic(56172, "Rotating Breakbar", new MechanicPlotlySetting("diamond-tall","rgb(255,0,255)"), "Rot.Breakbar","Rotating Breakbar", "Rotating Breakbar", 0),

@@ -23,10 +23,10 @@ namespace LuckParser.Models.Logic
             new HitOnPlayerMechanic(48172, "Hateful Ephemera", new MechanicPlotlySetting("square","rgb(255,140,0)"), "Golem","Hateful Ephemera (Golem AoE dmg)", "Golem Dmg",0),
             new HitOnPlayerMechanic(48121, "Arcing Affliction", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Bomb dmg","Arcing Affliction (Bomb) hit", "Bomb dmg",0),
             new PlayerBoonApplyMechanic(47646, "Arcing Affliction", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Bomb","Arcing Affliction (Bomb) application", "Bomb",0),
-            new PlayerBoonRemoveMechanic(47646, "Arcing Affliction", new MechanicPlotlySetting("diamond","rgb(255,0,0)"), "Bomb Trig","Arcing Affliction (Bomb) manualy triggered", "Bomb Triggered",0, new List<BoonRemoveMechanic.BoonRemoveChecker>{ (br, log) => br.RemovedDuration > 50 && !log.CombatData.GetDamageDataById(48210).Exists(x => Math.Abs(x.Time - br.Time) < 15 && x.To == br.To) && !br.To.HasBuff(log, 48281, br.Time) }, Mechanic.TriggerRule.AND),
+            new PlayerBoonRemoveMechanic(47646, "Arcing Affliction", new MechanicPlotlySetting("diamond","rgb(255,0,0)"), "Bomb Trig","Arcing Affliction (Bomb) manualy triggered", "Bomb Triggered",0, new List<BoonRemoveMechanic.BoonRemoveChecker>{ (br, log) => br.RemovedDuration > 50 && !log.CombatData.GetDamageDataById(48210).Exists(x => Math.Abs(x.Time - br.Time) < 15 && x.To == br.To) && !br.To.HasBuff(log, 48281, br.Time) }),
             //new Mechanic(47476, "Residual Affliction", ParseEnum.BossIDS.Dhuum, new MechanicPlotlySetting("star-diamond","rgb(255,200,0)"), "Bomb",0), //not needed, imho, applied at the same time as Arcing Affliction
             new PlayerOnPlayerMechanic(47335, "Soul Shackle", new MechanicPlotlySetting("diamond","rgb(0,255,255)"), "Shackles","Soul Shackle (Tether) application", "Shackles",0),//  //also used for removal.
-            new HitOnPlayerMechanic(47164, "Soul Shackle", new MechanicPlotlySetting("diamond-open","rgb(0,255,255)"), "Shackles dmg","Soul Shackle (Tether) dmg ticks", "Shackles Dmg",0,  new List<SkillMechanic.SkillChecker>{ (de,log) => de.Damage > 0 }, Mechanic.TriggerRule.AND),
+            new HitOnPlayerMechanic(47164, "Soul Shackle", new MechanicPlotlySetting("diamond-open","rgb(0,255,255)"), "Shackles dmg","Soul Shackle (Tether) dmg ticks", "Shackles Dmg",0,  new List<SkillMechanic.SkillChecker>{ (de,log) => de.Damage > 0 }),
             new HitOnPlayerMechanic(47561, "Slash", new MechanicPlotlySetting("triangle","rgb(0,128,0)"), "Cone","Boon ripping Cone Attack", "Cone",0),
             new HitOnPlayerMechanic(48752, "Cull", new MechanicPlotlySetting("asterisk-open","rgb(0,255,255)"), "Crack","Cull (Fearing Fissures)", "Cracks",0),
             new HitOnPlayerMechanic(48760, "Putrid Bomb", new MechanicPlotlySetting("circle","rgb(0,128,0)"), "Mark","Necro Marks during Scythe attack", "Necro Marks",0),
@@ -37,7 +37,7 @@ namespace LuckParser.Models.Logic
             new PlayerBoonApplyMechanic(46950, "Fractured Spirit", new MechanicPlotlySetting("square","rgb(0,255,0)"), "Orb CD","Applied when taking green", "Green port",0),
             //new SkillOnPlayerMechanic(47076 , "Echo's Damage", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Echo","Damaged by Ender's Echo (pick up)", "Ender's Echo",5000),
             new PlayerBoonApplyMechanic(49125, "Echo's Pick up", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Echo PU","Picked up by Ender's Echo", "Ender's Pick up", 3000),
-            new PlayerBoonRemoveMechanic(49125, "Freed from Echo", new MechanicPlotlySetting("square","rgb(0,0,255)"), "F Echo","Freed from Ender's Echo", "Freed from Echo", 0, new List<BoonRemoveMechanic.BoonRemoveChecker>{ (br,log) => log.CombatData.GetDeadEvents(br.To).Where(x => Math.Abs(x.Time - br.Time) <= 20).Count() == 0 }, Mechanic.TriggerRule.AND)
+            new PlayerBoonRemoveMechanic(49125, "Freed from Echo", new MechanicPlotlySetting("square","rgb(0,0,255)"), "F Echo","Freed from Ender's Echo", "Freed from Echo", 0, new List<BoonRemoveMechanic.BoonRemoveChecker>{ (br,log) => log.CombatData.GetDeadEvents(br.To).Where(x => Math.Abs(x.Time - br.Time) <= 20).Count() == 0 })
             });
             Extension = "dhuum";
             IconUrl = "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";

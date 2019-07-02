@@ -21,24 +21,20 @@ namespace LuckParser.Models.ParseModels
                 foreach (BoonRemoveChecker checker in _triggerConditions)
                 {
                     bool res = checker(c, log);
-                    if (Rule == TriggerRule.AND && !res)
+                    if (!res)
                     {
                         return false;
-                    }
-                    else if (Rule == TriggerRule.OR && res)
-                    {
-                        return true;
                     }
                 }
             }
             return true;
         }
 
-        public BoonRemoveMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<BoonRemoveChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)
+        public BoonRemoveMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<BoonRemoveChecker> conditions) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions)
         {
         }
 
-        public BoonRemoveMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<BoonRemoveChecker> conditions, TriggerRule rule) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, rule)
+        public BoonRemoveMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<BoonRemoveChecker> conditions) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
             _triggerConditions = conditions;
         }

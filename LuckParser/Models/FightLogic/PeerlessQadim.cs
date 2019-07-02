@@ -16,7 +16,7 @@ namespace LuckParser.Models.Logic
             {
                 new HitOnPlayerMechanic(56541, "Pylon Debris Field", new MechanicPlotlySetting("circle-open-dot","rgb(255,150,0)"), "P.Magma", "Hit by Pylon Magma", "Pylon Magma", 0),
                 new HitOnPlayerMechanic(56020, "Energized Affliction", new MechanicPlotlySetting("circle-open","rgb(0,255,0)"), "E.Affliction", "Energized Affliction", "Energized Affliction", 0),
-                new HitOnPlayerMechanic(56134, "Force of Retaliation", new MechanicPlotlySetting("circle-open","rgb(0,0,0)"), "Pushed", "Pushed by Shockwave", "Shockwave Push", 0, new List<SkillMechanic.SkillChecker>{(de, log) => !de.To.HasBuff(log, 1122, de.Time) }, Mechanic.TriggerRule.AND),
+                new HitOnPlayerMechanic(56134, "Force of Retaliation", new MechanicPlotlySetting("circle-open","rgb(0,0,0)"), "Pushed", "Pushed by Shockwave", "Shockwave Push", 0, new List<SkillMechanic.SkillChecker>{(de, log) => !de.To.HasBuff(log, 1122, de.Time) }),
                 new HitOnPlayerMechanic(56441, "Force of Havoc", new MechanicPlotlySetting("square-open","rgb(150,0,250)"), "P.Rectangle", "Hit by Purple Rectangle", "Purple Rectangle", 0),
                 new HitOnPlayerMechanic(56145, "Chaos Called", new MechanicPlotlySetting("circle-x-open","rgb(150,0,250)"), "Pattern.H", "Hit by Energy on Pattern", "Pattern Energy Hit", 0),
                 new HitOnPlayerMechanic(56527, "Rain of Chaos", new MechanicPlotlySetting("star-square","rgb(150,0,250)"), "Orb.R", "Hit by Rain of Orbs", "Rain of Orbs", 4000),
