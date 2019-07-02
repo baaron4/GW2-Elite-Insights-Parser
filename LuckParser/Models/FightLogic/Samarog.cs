@@ -14,8 +14,8 @@ namespace LuckParser.Models.Logic
             MechanicList.AddRange(new List<Mechanic>
             {
 
-            new HitOnPlayerMechanic(37996, "Shockwave", new MechanicPlotlySetting("circle","rgb(0,0,255)"), "Shockwave","Shockwave from Spears", "Shockwave",0),
-            new HitOnPlayerMechanic(38168, "Prisoner Sweep", new MechanicPlotlySetting("hexagon","rgb(0,0,255)"), "Sweep","Prisoner Sweep (horizontal)", "Sweep",0),
+            new HitOnPlayerMechanic(37996, "Shockwave", new MechanicPlotlySetting("circle","rgb(0,0,255)"), "Shockwave","Shockwave from Spears", "Shockwave",0,new List<SkillMechanic.SkillChecker>{(de, log) => !de.To.HasBuff(log, 1122, de.Time)}, Mechanic.TriggerRule.AND ),
+            new HitOnPlayerMechanic(38168, "Prisoner Sweep", new MechanicPlotlySetting("hexagon","rgb(0,0,255)"), "Sweep","Prisoner Sweep (horizontal)", "Sweep",0,new List<SkillMechanic.SkillChecker>{(de, log) => !de.To.HasBuff(log, 1122, de.Time)}, Mechanic.TriggerRule.AND ),
             new HitOnPlayerMechanic(37797, "Trampling Rush", new MechanicPlotlySetting("triangle-right","rgb(255,0,0)"), "Trample","Trampling Rush (hit by stampede towards home)", "Trampling Rush",0),
             new HitOnPlayerMechanic(38305, "Bludgeon", new MechanicPlotlySetting("triangle-down","rgb(0,0,255)"), "Slam","Bludgeon (vertical Slam)", "Slam",0),
             new PlayerBoonApplyMechanic(37868, "Fixate: Samarog", new MechanicPlotlySetting("star","rgb(255,0,255)"), "Sam Fix","Fixated by Samarog", "Fixate: Samarog",0),

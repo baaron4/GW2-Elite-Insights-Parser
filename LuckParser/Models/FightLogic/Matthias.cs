@@ -37,7 +37,7 @@ namespace LuckParser.Models.Logic
             new EnemyBoonApplyMechanic(34376, "Blood Shield", new MechanicPlotlySetting("octagon","rgb(255,0,0)"), "Bubble","Blood Shield (protective bubble)", "Bubble",0),//human
             new EnemyBoonApplyMechanic(34518, "Blood Shield", new MechanicPlotlySetting("octagon","rgb(255,0,0)"), "Bubble","Blood Shield (protective bubble)", "Bubble",0),//abom
             new PlayerBoonApplyMechanic(34511, "Zealous Benediction", new MechanicPlotlySetting("circle","rgb(255,200,0)"), "Bombs","Zealous Benediction (Expanding bombs)","Bomb",0),
-            new PlayerBoonApplyMechanic(26766, "Icy Patch", new MechanicPlotlySetting("circle-open","rgb(0,0,255)"), "Icy KD","Knockdown by Icy Patch", "Icy Patch KD",0, new List<BoonApplyMechanic.BoonApplyChecker>{ (br,log) => br.AppliedDuration == 10000 }, Mechanic.TriggerRule.AND),
+            new PlayerBoonApplyMechanic(26766, "Icy Patch", new MechanicPlotlySetting("circle-open","rgb(0,0,255)"), "Icy KD","Knockdown by Icy Patch", "Icy Patch KD",0, new List<BoonApplyMechanic.BoonApplyChecker>{ (br,log) => br.AppliedDuration == 10000, (de, log) => !de.To.HasBuff(log, 1122, de.Time)}, Mechanic.TriggerRule.AND),
             new HitOnPlayerMechanic(34413, "Surrender", new MechanicPlotlySetting("circle-open","rgb(0,0,0)"), "Spirit","Surrender (hit by walking Spirit)", "Spirit hit",0)
             });
             Extension = "matt";
