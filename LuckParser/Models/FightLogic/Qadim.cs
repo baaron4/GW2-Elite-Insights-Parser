@@ -10,6 +10,8 @@ namespace LuckParser.Models.Logic
 {
     public class Qadim : RaidLogic
     {
+        private int _startOffset = 0;
+
         public Qadim(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
@@ -103,11 +105,17 @@ namespace LuckParser.Models.Logic
                 throw new InvalidOperationException("Main target of the fight not found");
             }
             CombatItem startCast = combatData.FirstOrDefault(x => x.SkillID == 52496 && x.IsActivation.StartCasting());
-            if (startCast == null)
+            CombatItem sanityCheckCast = combatData.FirstOrDefault(x => (x.SkillID == 52528 || x.SkillID == 52333 || x.SkillID == 58814) && x.IsActivation.StartCasting());
+            if (startCast == null || sanityCheckCast == null)
             {
                 throw new Exceptions.TooShortException();
             }
-            fightData.OverrideStart(startCast.LogTime);
+            // sanity check
+            if (sanityCheckCast.LogTime - startCast.LogTime > 0)
+            {
+                _startOffset = -(int)(startCast.LogTime - fightData.FightStartLogTime);
+                fightData.OverrideStart(startCast.LogTime);
+            }
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
@@ -518,7 +526,6 @@ namespace LuckParser.Models.Logic
             int wyvernPhaseTime = (int) (phases.Count > 4 ? phases[4].End + timeAfterPhase2 : int.MaxValue);
             int jumpingPuzzleTime = (int) (phases.Count > 5 ? phases[5].End + timeAfterWyvernPhase : int.MaxValue);
             int finalPhaseTime = int.MaxValue;
-            int startOffset = -(int)(phases.First().Start - log.FightData.ToFightSpace(log.FightData.FightStartOffset));
             if (phases.Count > 6)
             {
                 PhaseData lastPhase = phases[6];
@@ -557,7 +564,7 @@ namespace LuckParser.Models.Logic
                 (
                     // Initial position, all platforms tightly packed
 
-                    startOffset, 0, new[]
+                    _startOffset, 0, new[]
                     {
                         (xLeftLeftLeft, yMid, zDefault, 0.0, 1.0),
                         (xLeftLeft, yUpUp, zDefault, Math.PI, 1.0),
@@ -575,7 +582,7 @@ namespace LuckParser.Models.Logic
                 ),
                 (
                     // Hydra phase, all platforms have a small gap between them
-                    startOffset, 12000, new[]
+                    _startOffset, 12000, new[]
                     {
                         (xGapsLeftLeftLeft, yMid, zDefault, 0.0, 1.0),
                         (xGapsLeftLeft, yGapsUpUp, zDefault, Math.PI, 1.0),
