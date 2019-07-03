@@ -37,7 +37,12 @@ namespace LuckParser.Models.Logic
             new HitOnPlayerMechanic(38060, "Energy Surge", new MechanicPlotlySetting("triangle-left","rgb(0,128,0)"), "Leap","Jump between green fields", "Leap",100),
             new HitOnPlayerMechanic(37631, "Orbital Sweep", new MechanicPlotlySetting("diamond-wide","rgb(255,0,255)"), "Sweep","Sword Spin (Knockback)", "Sweep",100),//short cooldown because of multihits. Would still like to register second hit at the end of spin though, thus only 0.1s
             new HitOnPlayerMechanic(37910, "Gravity Wave", new MechanicPlotlySetting("octagon","rgb(255,0,255)"), "Donut","Expanding Crystal Donut Wave (Knockback)", "Crystal Donut",0)
-
+            // Spatial Manipulation IDs correspond to the following: 1st green when starting the fight: 37629;
+            // Greens after Energy Surge/Orbital Sweep: 38302
+            //100% - 75%: 37611
+            // 75% - 50%: 38074
+            // 50% - 25%: 37673
+            // 25% -  0%: 37642
             });
             Extension = "cairn";
             IconUrl = "https://wiki.guildwars2.com/images/b/b8/Mini_Cairn_the_Indomitable.png";
