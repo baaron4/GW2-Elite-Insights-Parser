@@ -31,7 +31,7 @@ namespace LuckParser.Models.Logic
 
             });
             Extension = "sh";
-            DeathCheckFallBack = false;
+            GenericFallBackMethod = FallBackMethod.None;
             IconUrl = "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
         }
 
@@ -64,18 +64,15 @@ namespace LuckParser.Models.Logic
                 if (desmina != null)
                 {
                     long time = fightData.ToFightSpace(desmina.FirstAwareLogTime);
-                    if (CheckLastDamage)
+                    Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.SoullessHorror);
+                    if (target == null)
                     {
-                        Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.SoullessHorror);
-                        if (target == null)
-                        {
-                            throw new InvalidOperationException("Main target of the fight not found");
-                        }
-                        AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
-                        if (lastDamageTaken != null)
-                        {
-                            time = Math.Min(lastDamageTaken.Time, time);
-                        }
+                        throw new InvalidOperationException("Main target of the fight not found");
+                    }
+                    AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
+                    if (lastDamageTaken != null)
+                    {
+                        time = Math.Min(lastDamageTaken.Time, time);
                     }
                     fightData.SetSuccess(true, fightData.ToLogSpace(time));
                 }

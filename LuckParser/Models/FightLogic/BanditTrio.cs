@@ -19,7 +19,7 @@ namespace LuckParser.Models.Logic
             new HitOnPlayerMechanic(34344, "Fiery Vortex", new MechanicPlotlySetting("circle-open","rgb(255,200,0)"), "Tornado","Fiery Vortex (Tornado)", "Tornado",250),
             });
             Extension = "trio";
-            DeathCheckFallBack = false;
+            GenericFallBackMethod = FallBackMethod.None;
             IconUrl = "https://i.imgur.com/UZZQUdf.png";
         }
 
@@ -31,20 +31,9 @@ namespace LuckParser.Models.Logic
                 Target narella = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Narella);
                 if (narella == null)
                 {
-                    throw new InvalidOperationException("Narella");
+                    throw new InvalidOperationException("Narella missing");
                 }
-                List<ExitCombatEvent> playerExits = new List<ExitCombatEvent>();
-                foreach (AgentItem a in playerAgents)
-                {
-                    playerExits.AddRange(combatData.GetExitCombatEvents(a));
-                }
-                ExitCombatEvent lastPlayerExit = playerExits.MaxBy(x => x.Time);
-                ExitCombatEvent lastTargetExit = combatData.GetExitCombatEvents(narella.AgentItem).LastOrDefault();
-                AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(narella.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
-                if (lastTargetExit != null && lastDamageTaken != null && lastPlayerExit != null)
-                {
-                    fightData.SetSuccess(lastPlayerExit.Time > lastTargetExit.Time + 1000, fightData.ToLogSpace(lastDamageTaken.Time));
-                }
+                SetSuccessByCombatExit(narella, combatData, fightData, playerAgents);
             }
         }
 

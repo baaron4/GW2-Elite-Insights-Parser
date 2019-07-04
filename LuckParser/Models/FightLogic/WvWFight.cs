@@ -57,6 +57,7 @@ namespace LuckParser.Models.Logic
         {
             AgentItem dummyAgent = agentData.AddCustomAgent(combatData.First().LogTime, combatData.Last().LogTime, AgentItem.AgentType.NPC, "WorldVsWorld", "", TriggerID);
             Targets.Add(new Target(dummyAgent));
+            ComputeFightTargets(agentData, fightData, combatData);
         }
     }
 }

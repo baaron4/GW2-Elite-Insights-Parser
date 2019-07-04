@@ -24,6 +24,7 @@ namespace LuckParser.Models.Logic
             new PlayerCastStartMechanic(52780, "Conjured Protection", new MechanicPlotlySetting("square","rgb(0,255,0)"), "Shield","Conjured Protection (Special action shield)", "Shield",0),
             });
             Extension = "ca";
+            GenericFallBackMethod = FallBackMethod.AttackTarget;
             IconUrl = "https://i.imgur.com/eLyIWd2.png";
         }
 
@@ -57,6 +58,7 @@ namespace LuckParser.Models.Logic
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
+            ComputeFightTargets(agentData, fightData, combatData);
             AgentItem sword = agentData.AddCustomAgent(combatData.First().LogTime, combatData.Last().LogTime, AgentItem.AgentType.Player, "Conjured Sword\0:Conjured Sword\050", "Sword", 0);
             foreach (CombatItem c in combatData)
             {

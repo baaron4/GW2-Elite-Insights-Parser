@@ -61,25 +61,7 @@ namespace LuckParser.Models.Logic
                 AbstractBuffEvent last = invulsTarget.Last();
                 if (!(last is BuffApplyEvent))
                 {
-                    List<ExitCombatEvent> playerExits = new List<ExitCombatEvent>();
-                    foreach (AgentItem a in playerAgents)
-                    {
-                        playerExits.AddRange(combatData.GetExitCombatEvents(a));
-                    }
-                    ExitCombatEvent lastPlayerExit = playerExits.Count >0 ? playerExits.MaxBy(x => x.Time) : null;
-                    ExitCombatEvent lastTargetExit = combatData.GetExitCombatEvents(target.AgentItem).LastOrDefault();
-                    AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
-                    if (lastTargetExit != null && lastDamageTaken != null)
-                    {
-                        if (lastPlayerExit != null)
-                        {
-                            fightData.SetSuccess(lastPlayerExit.Time > lastTargetExit.Time + 1000, fightData.ToLogSpace(lastDamageTaken.Time));
-                        }
-                        else if (fightData.FightEndLogTime > target.LastAwareLogTime + 2000)
-                        {
-                            fightData.SetSuccess(true, fightData.ToLogSpace(lastDamageTaken.Time));
-                        }
-                    }
+                    SetSuccessByCombatExit(target, combatData, fightData, playerAgents);
                 }
             }
         }
@@ -102,7 +84,7 @@ namespace LuckParser.Models.Logic
                 }
                 else
                 {
-                    SetSuccessByDeath(combatData, fightData,playerAgents, true, false, TriggerID);
+                    SetSuccessByDeath(combatData, fightData,playerAgents, true, TriggerID);
                     if (fightData.Success)
                     {
                         fightData.SetSuccess(true, Math.Min(fightData.FightEndLogTime, fightData.ToLogSpace(lastDamageTaken.Time)));
