@@ -37,7 +37,7 @@ namespace LuckParser.Models.Logic
             new EnemyBoonApplyMechanic(38224, "Unnatural Signet", new MechanicPlotlySetting("square-open","rgb(0,255,255)"), "DMG Debuff","Double Damage Debuff on Deimos", "+100% Dmg Buff",0)
             });
             Extension = "dei";
-            GenericFallBackMethod = FallBackMethod.AttackTarget;
+            GenericFallBackMethod = FallBackMethod.None;
             IconUrl = "https://wiki.guildwars2.com/images/e/e0/Mini_Ragged_White_Mantle_Figurehead.png";
         }
 
@@ -90,6 +90,37 @@ namespace LuckParser.Models.Logic
                 if (allAgents.Contains(c.DstAgent))
                 {
                     c.OverrideDstValues(target.Agent, target.InstID);
+                }
+            }
+        }
+
+        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        {
+            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+            if (!fightData.Success)
+            {
+                Target target = Targets.Find(x => x.ID == TriggerID);
+                if (target == null)
+                {
+                    throw new InvalidOperationException("Target for success by combat exit not found");
+                }
+                List<AttackTargetEvent> attackTargets = combatData.GetAttackTargetEvents(target.AgentItem);
+                if (attackTargets.Count == 0)
+                {
+                    return;
+                }
+                AgentItem attackTarget = attackTargets.Last().AttackTarget;
+                List<ExitCombatEvent> playerExits = new List<ExitCombatEvent>();
+                foreach (AgentItem a in playerAgents)
+                {
+                    playerExits.AddRange(combatData.GetExitCombatEvents(a));
+                }
+                ExitCombatEvent lastPlayerExit = playerExits.Count > 0 ? playerExits.MaxBy(x => x.Time) : null;
+                TargetableEvent notAttackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => !x.Targetable);
+                AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
+                if (notAttackableEvent != null && lastDamageTaken != null && lastPlayerExit != null)
+                {
+                    fightData.SetSuccess(lastPlayerExit.Time > notAttackableEvent.Time + 1000, fightData.ToLogSpace(lastDamageTaken.Time));
                 }
             }
         }

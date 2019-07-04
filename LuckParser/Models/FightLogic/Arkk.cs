@@ -85,12 +85,7 @@ namespace LuckParser.Models.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            Target mainTarget = Targets.Find(x => x.ID == TriggerID);
-            if (mainTarget == null)
-            {
-                throw new InvalidOperationException("Main target of the fight not found");
-            }
-            SetSuccessByBuffCount(combatData, agentData, fightData, playerAgents, mainTarget, 762, 10);
+            SetSuccessByBuffCount(combatData, agentData, fightData, playerAgents, Targets.Find(x => x.ID == TriggerID), 762, 10);
         }
     }
 }

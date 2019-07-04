@@ -28,12 +28,7 @@ namespace LuckParser.Models.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                Target narella = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Narella);
-                if (narella == null)
-                {
-                    throw new InvalidOperationException("Narella missing");
-                }
-                SetSuccessByCombatExit(narella, combatData, fightData, playerAgents);
+                SetSuccessByCombatExit(Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Narella), combatData, fightData, playerAgents);
             }
         }
 

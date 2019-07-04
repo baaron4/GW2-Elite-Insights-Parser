@@ -301,35 +301,6 @@ namespace LuckParser.Models.Logic
             }
         }
 
-        protected void SetSuccessByAttackTarget(Target target, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
-        {
-            if (target == null)
-            {
-                throw new InvalidOperationException("Target for success by combat exit not found");
-            }
-            List<AttackTargetEvent> attackTargets = combatData.GetAttackTargetEvents(target.AgentItem);
-            if (attackTargets.Count == 0)
-            {
-                return;
-            }
-            AgentItem attackTarget = attackTargets.Last().AttackTarget;
-            List<ExitCombatEvent> playerExits = new List<ExitCombatEvent>();
-            foreach (AgentItem a in playerAgents)
-            {
-                playerExits.AddRange(combatData.GetExitCombatEvents(a));
-            }
-            ExitCombatEvent lastPlayerExit = playerExits.Count > 0 ? playerExits.MaxBy(x => x.Time) : null;
-            TargetableEvent notAttackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => !x.Targetable);
-            AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
-            if (notAttackableEvent != null && lastDamageTaken != null)
-            {
-                if (lastPlayerExit != null)
-                {
-                    fightData.SetSuccess(lastPlayerExit.Time > notAttackableEvent.Time + 1000, fightData.ToLogSpace(lastDamageTaken.Time));
-                }
-            }
-        }   
-
         public virtual void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             SetSuccessByDeath(combatData, fightData, playerAgents, true, TriggerID);
