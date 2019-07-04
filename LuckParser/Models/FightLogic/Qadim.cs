@@ -17,7 +17,7 @@ namespace LuckParser.Models.Logic
             MechanicList.AddRange(new List<Mechanic>
             { 
             new EnemyCastStartMechanic(51943, "Qadim CC", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "Qadim CC","Qadim CC", "Qadim CC",0),
-            new EnemyCastEndMechanic(51943, "Qadim CC", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "Qadim CCed","Quadim Breakbar broken", "Quadim CCed",0, (ce, log) => ce.ActualDuration < 6500),
+            new EnemyCastEndMechanic(51943, "Qadim CC", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "Qadim CCed","Qadim Breakbar broken", "Qadim CCed",0, (ce, log) => ce.ActualDuration < 6500),
             new EnemyCastStartMechanic(52265, "Riposte", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "Qadim CC Fail","Qadim Breakbar failed", "Quadim CC Fail",0),
             new HitOnPlayerMechanic(52265, "Riposte", new MechanicPlotlySetting("circle","rgb(255,0,255)"), "NoCC Attack", "Riposte (Attack if CC on Qadim failed)", "Riposte (No CC)", 0),
             new HitOnPlayerMechanic(52614, "Fiery Dance", new MechanicPlotlySetting("asterisk-open","rgb(255,100,0)"), "Fiery Dance", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
