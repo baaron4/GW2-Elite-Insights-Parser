@@ -12,35 +12,24 @@ namespace LuckParser.Models.ParseModels
     {
         public delegate bool BoonRemoveChecker(BuffRemoveManualEvent rme, ParsedLog log);
 
-        private readonly List<BoonRemoveChecker> _triggerConditions = new List<BoonRemoveChecker>();
+        private readonly BoonRemoveChecker _triggerCondition = null;
 
         protected bool Keep(BuffRemoveManualEvent c, ParsedLog log)
         {
-            if (_triggerConditions.Count > 0)
+            if (_triggerCondition != null)
             {
-                foreach (BoonRemoveChecker checker in _triggerConditions)
-                {
-                    bool res = checker(c, log);
-                    if (Rule == TriggerRule.AND && !res)
-                    {
-                        return false;
-                    }
-                    else if (Rule == TriggerRule.OR && res)
-                    {
-                        return true;
-                    }
-                }
+                return _triggerCondition(c, log);
             }
             return true;
         }
 
-        public BoonRemoveMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<BoonRemoveChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)
+        public BoonRemoveMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, BoonRemoveChecker condition) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, condition)
         {
         }
 
-        public BoonRemoveMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<BoonRemoveChecker> conditions, TriggerRule rule) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, rule)
+        public BoonRemoveMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, BoonRemoveChecker condition) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
-            _triggerConditions = conditions;
+            _triggerCondition = condition;
         }
 
         public BoonRemoveMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
