@@ -112,13 +112,6 @@ namespace LuckParser.Builders
 
         private void SetGeneral(JsonLog log)
         {
-            double fightDuration = _log.FightData.FightDuration / 1000.0;
-            var duration = TimeSpan.FromSeconds(fightDuration);
-            string durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s";
-            if (duration.ToString("hh") != "00")
-            {
-                durationString = duration.ToString("hh") + "h " + durationString;
-            }
             log.TriggerID = _log.FightData.ID;
             log.FightName = _log.FightData.Name;
             log.EliteInsightsVersion = Application.ProductVersion;
@@ -126,7 +119,7 @@ namespace LuckParser.Builders
             log.RecordedBy = _log.LogData.PoVName;
             log.TimeStart = _log.LogData.LogStart;
             log.TimeEnd = _log.LogData.LogEnd;
-            log.Duration = durationString;
+            log.Duration = _log.FightData.DurationString;
             log.Success = _log.FightData.Success;
             log.SkillMap = _skillDesc;
             log.BuffMap = _buffDesc;

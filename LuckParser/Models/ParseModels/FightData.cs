@@ -17,6 +17,18 @@ namespace LuckParser.Models.ParseModels
         public long FightStartLogTime { get; private set; }
         public long FightEndLogTime { get; private set; } = long.MaxValue;
         public long FightDuration => FightEndLogTime - FightStartLogTime;
+        public string DurationString {
+            get
+            {
+                var duration = TimeSpan.FromSeconds(FightDuration);
+                string durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s " + duration.Milliseconds + "ms";
+                if (duration.ToString("hh") != "00")
+                {
+                    durationString = duration.ToString("hh") + "h " + durationString;
+                }
+                return durationString;
+            }
+        }
         public bool Success { get; private set; }
         public string Name => Logic.GetFightName() + (_isCM == 1 ? " CM" : "") ;
         private int _isCM = -1;
