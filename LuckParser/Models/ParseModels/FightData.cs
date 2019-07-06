@@ -13,7 +13,6 @@ namespace LuckParser.Models.ParseModels
         public ushort ID { get; }
         private readonly bool _requirePhases;
         public readonly FightLogic Logic;
-        public long FightStartOffset { get; }
         public long FightStartLogTime { get; private set; }
         public long FightEndLogTime { get; private set; } = long.MaxValue;
         public long FightDuration => FightEndLogTime - FightStartLogTime;
@@ -42,7 +41,6 @@ namespace LuckParser.Models.ParseModels
         // Constructors
         public FightData(ushort id, AgentData agentData, long start, long end)
         {
-            FightStartOffset = start;
             FightStartLogTime = start;
             FightEndLogTime = end;
             ID = id;

@@ -10,13 +10,15 @@ namespace LuckParser.Models.Logic
 {
     public class Qadim : RaidLogic
     {
+        private int _startOffset = 0;
+
         public Qadim(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             { 
             new EnemyCastStartMechanic(51943, "Qadim CC", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "Qadim CC","Qadim CC", "Qadim CC",0),
-            new EnemyCastEndMechanic(51943, "Qadim CC", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "Qadim CCed","Quadim Breakbar broken", "Quadim CCed",0, new List<CastMechanic.CastChecker>{ (ce, log) => ce.ActualDuration < 6500 }, Mechanic.TriggerRule.AND),
-            new EnemyCastStartMechanic(52265, "Riposte", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "Qadim CC Fail","Qadim Breakbar failed", "Quadim CC Fail",0),
+            new EnemyCastEndMechanic(51943, "Qadim CC", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "Qadim CCed","Qadim Breakbar broken", "Qadim CCed",0, (ce, log) => ce.ActualDuration < 6500),
+            new EnemyCastStartMechanic(52265, "Riposte", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "Qadim CC Fail","Qadim Breakbar failed", "Qadim CC Fail",0),
             new HitOnPlayerMechanic(52265, "Riposte", new MechanicPlotlySetting("circle","rgb(255,0,255)"), "NoCC Attack", "Riposte (Attack if CC on Qadim failed)", "Riposte (No CC)", 0),
             new HitOnPlayerMechanic(52614, "Fiery Dance", new MechanicPlotlySetting("asterisk-open","rgb(255,100,0)"), "Fiery Dance", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
             new HitOnPlayerMechanic(52864, "Fiery Dance", new MechanicPlotlySetting("asterisk-open","rgb(255,100,0)"), "Fiery Dance", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
@@ -31,8 +33,8 @@ namespace LuckParser.Models.Logic
             new HitOnPlayerMechanic(52941, "Fiery Meteor", new MechanicPlotlySetting("circle-open","rgb(255,150,0)"), "Hydra Meteor","Fiery Meteor (Hydra)", "Hydra Meteor",0),
             new EnemyCastStartMechanic(52941, "Fiery Meteor", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "Hydra CC","Fiery Meteor (Hydra Breakbar)", "Hydra CC",0),
             //new Mechanic(718, "Fiery Meteor (Spawn)", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Qadim, new MechanicPlotlySetting("diamond-tall","rgb(150,0,0)"), "H.CC.Fail","Fiery Meteor Spawned (Hydra Breakbar)", "Hydra CC Fail",0,(condition =>  condition.CombatItem.IFF == ParseEnum.IFF.Foe)),
-            new EnemyCastEndMechanic(52941, "Fiery Meteor", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "Hydra CCed","Fiery Meteor (Hydra Breakbar broken)", "Hydra CCed",0,new List<CastMechanic.CastChecker>{ (ce, log) => ce.ActualDuration < 12364 }, Mechanic.TriggerRule.AND),
-            new EnemyCastEndMechanic(52941, "Fiery Meteor", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "Hydra CC Fail","Fiery Meteor (Hydra Breakbar not broken)", "Hydra CC Failed",0, new List<CastMechanic.CastChecker>{ (ce,log) => ce.ActualDuration >= 12364 }, Mechanic.TriggerRule.AND),
+            new EnemyCastEndMechanic(52941, "Fiery Meteor", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "Hydra CCed","Fiery Meteor (Hydra Breakbar broken)", "Hydra CCed",0,(ce, log) => ce.ActualDuration < 12364),
+            new EnemyCastEndMechanic(52941, "Fiery Meteor", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "Hydra CC Fail","Fiery Meteor (Hydra Breakbar not broken)", "Hydra CC Failed",0, (ce,log) => ce.ActualDuration >= 12364),
             new HitOnPlayerMechanic(53051, "Teleport", new MechanicPlotlySetting("circle","rgb(150,0,200)"), "Hydra KB","Teleport Knockback (Hydra)", "Hydra TP KB",0),
             new HitOnPlayerMechanic(52310, "Big Hit", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Mace","Big Hit (Mace Impact)", "Mace Impact",0),
             new HitOnPlayerMechanic(52587, "Inferno", new MechanicPlotlySetting("triangle-down-open","rgb(255,0,0)"), "Inferno","Inferno (Lava Pool drop  on long platform spokes)", "Inferno Pool",0),
@@ -41,14 +43,14 @@ namespace LuckParser.Models.Logic
             new HitOnPlayerMechanic(52726, "Fire Breath", new MechanicPlotlySetting("triangle-right-open","rgb(255,100,0)"), "Wyv Breath","Fire Breath (Wyvern)", "Fire Breath",0),
             new HitOnPlayerMechanic(52734, "Wing Buffet", new MechanicPlotlySetting("star-diamond-open","rgb(0,125,125)"), "Wyv Wing","Wing Buffet (Wyvern Launching Wing Storm)", "Wing Buffet",0),
             new EnemyCastStartMechanic(53132, "Patriarch CC", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "Wyv BB","Platform Destruction (Patriarch CC)", "Patriarch CC",0),
-            new EnemyCastEndMechanic(53132, "Patriarch CC", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "Wyv CCed","Platform Destruction (Patriarch Breakbar broken)", "Patriarch CCed",0, new List<CastMechanic.CastChecker>{ (ce, log) => ce.ActualDuration < 6500  }, Mechanic.TriggerRule.AND),
+            new EnemyCastEndMechanic(53132, "Patriarch CC", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "Wyv CCed","Platform Destruction (Patriarch Breakbar broken)", "Patriarch CCed",0, (ce, log) => ce.ActualDuration < 6500),
             new EnemyCastStartMechanic(51984, "Patriarch CC (Jump into air)", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "Wyv CC Fail","Platform Destruction (Patriarch Breakbar failed)", "Patriarch CC Fail",0),
             new HitOnPlayerMechanic(52330, "Seismic Stomp", new MechanicPlotlySetting("star-open","rgb(255,255,0)"), "Dest Stomp","Seismic Stomp (Destroyer Stomp)", "Seismic Stomp (Destroyer)",0),
             new HitOnPlayerMechanic(51923, "Shattered Earth", new MechanicPlotlySetting("hexagram-open","rgb(255,0,0)"), "Dest Slam","Shattered Earth (Destroyer Jump Slam)", "Jump Slam (Destroyer)",0),
             new HitOnPlayerMechanic(51759, "Wave of Force", new MechanicPlotlySetting("diamond-open","rgb(255,200,0)"), "Dest Pizza","Wave of Force (Destroyer Pizza)", "Destroyer Auto",0),
             new EnemyCastStartMechanic(52054, "Summon", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "Dest CC","Summon (Destroyer Breakbar)", "Destroyer CC",0),
-            new EnemyCastEndMechanic(52054, "Summon", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "Dest CCed","Summon (Destroyer Breakbar broken)", "Destroyer CCed",0, new List<CastMechanic.CastChecker>{ (ce, log) => ce.ActualDuration < 8332  }, Mechanic.TriggerRule.AND),
-            new EnemyCastEndMechanic(52054, "Summon", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "Dest CC Fail","Summon (Destroyer Breakbar failed)", "Destroyer CC Fail",0, new List<CastMechanic.CastChecker>{ (ce,log) => ce.ActualDuration >= 8332 }, Mechanic.TriggerRule.AND),
+            new EnemyCastEndMechanic(52054, "Summon", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "Dest CCed","Summon (Destroyer Breakbar broken)", "Destroyer CCed",0, (ce, log) => ce.ActualDuration < 8332),
+            new EnemyCastEndMechanic(52054, "Summon", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "Dest CC Fail","Summon (Destroyer Breakbar failed)", "Destroyer CC Fail",0, (ce,log) => ce.ActualDuration >= 8332),
             new SpawnMechanic(20944, "Summon (Spawn)", new MechanicPlotlySetting("diamond-tall","rgb(150,0,0)"), "Dest Spwn","Summon (Destroyer Trolls summoned)", "Destroyer Summoned",0),
             new HitOnPlayerMechanic(51879, "Body of Flame", new MechanicPlotlySetting("star-open","rgb(255,150,0)",10), "Pyre AoE","Body of Flame (Pyre Ground AoE (CM))", "Pyre Hitbox AoE",0),
             new HitOnPlayerMechanic(52461, "Sea of Flame", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Qadim Hitbox","Sea of Flame (Stood in Qadim Hitbox)", "Qadim Hitbox AoE",0),
@@ -103,11 +105,18 @@ namespace LuckParser.Models.Logic
                 throw new InvalidOperationException("Main target of the fight not found");
             }
             CombatItem startCast = combatData.FirstOrDefault(x => x.SkillID == 52496 && x.IsActivation.StartCasting());
-            if (startCast == null)
+            CombatItem sanityCheckCast = combatData.FirstOrDefault(x => (x.SkillID == 52528 || x.SkillID == 52333 || x.SkillID == 58814) && x.IsActivation.StartCasting());
+            if (startCast == null || sanityCheckCast == null)
             {
                 throw new Exceptions.TooShortException();
             }
-            fightData.OverrideStart(startCast.LogTime);
+            // sanity check
+            if (sanityCheckCast.LogTime - startCast.LogTime > 0)
+            {
+                _startOffset = -(int)(startCast.LogTime - fightData.FightStartLogTime);
+                fightData.OverrideStart(startCast.LogTime);
+            }
+            ComputeFightTargets(agentData, fightData, combatData);
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
@@ -518,7 +527,6 @@ namespace LuckParser.Models.Logic
             int wyvernPhaseTime = (int) (phases.Count > 4 ? phases[4].End + timeAfterPhase2 : int.MaxValue);
             int jumpingPuzzleTime = (int) (phases.Count > 5 ? phases[5].End + timeAfterWyvernPhase : int.MaxValue);
             int finalPhaseTime = int.MaxValue;
-            int startOffset = -(int)(phases.First().Start - log.FightData.ToFightSpace(log.FightData.FightStartOffset));
             if (phases.Count > 6)
             {
                 PhaseData lastPhase = phases[6];
@@ -557,7 +565,7 @@ namespace LuckParser.Models.Logic
                 (
                     // Initial position, all platforms tightly packed
 
-                    startOffset, 0, new[]
+                    _startOffset, 0, new[]
                     {
                         (xLeftLeftLeft, yMid, zDefault, 0.0, 1.0),
                         (xLeftLeft, yUpUp, zDefault, Math.PI, 1.0),
@@ -575,7 +583,7 @@ namespace LuckParser.Models.Logic
                 ),
                 (
                     // Hydra phase, all platforms have a small gap between them
-                    startOffset, 12000, new[]
+                    _startOffset, 12000, new[]
                     {
                         (xGapsLeftLeftLeft, yMid, zDefault, 0.0, 1.0),
                         (xGapsLeftLeft, yGapsUpUp, zDefault, Math.PI, 1.0),
