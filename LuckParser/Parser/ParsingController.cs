@@ -618,7 +618,6 @@ namespace LuckParser.Parser
             _fightData = new FightData(_id, _agentData, start, end);
             // Dealing with special cases
             _fightData.Logic.SpecialParse(_fightData, _agentData, _combatItems);
-            _fightData.Logic.ComputeFightTargets(_agentData, _fightData, _combatItems);
             //players
             CompletePlayers();
             _playerList = _playerList.OrderBy(a => a.Group).ToList();

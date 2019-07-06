@@ -24,6 +24,7 @@ namespace LuckParser.Models.Logic
             new PlayerCastStartMechanic(52780, "Conjured Protection", new MechanicPlotlySetting("square","rgb(0,255,0)"), "Shield","Conjured Protection (Special action shield)", "Shield",0),
             });
             Extension = "ca";
+            GenericFallBackMethod = FallBackMethod.None;
             IconUrl = "https://i.imgur.com/eLyIWd2.png";
         }
 
@@ -57,6 +58,7 @@ namespace LuckParser.Models.Logic
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
+            ComputeFightTargets(agentData, fightData, combatData);
             AgentItem sword = agentData.AddCustomAgent(combatData.First().LogTime, combatData.Last().LogTime, AgentItem.AgentType.Player, "Conjured Sword\0:Conjured Sword\050", "Sword", 0);
             foreach (CombatItem c in combatData)
             {
@@ -104,6 +106,37 @@ namespace LuckParser.Models.Logic
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
+        }
+
+        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        {
+            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+            if (!fightData.Success)
+            {
+                Target target = Targets.Find(x => x.ID == TriggerID);
+                if (target == null)
+                {
+                    throw new InvalidOperationException("Target for success by combat exit not found");
+                }
+                // needs to test this more
+                AgentItem npcAgentItem = agentData.GetAgentsByID(21291).FirstOrDefault();
+                if (npcAgentItem == null)
+                {
+                    return;
+                }
+                List<ExitCombatEvent> playerExits = new List<ExitCombatEvent>();
+                foreach (AgentItem a in playerAgents)
+                {
+                    playerExits.AddRange(combatData.GetExitCombatEvents(a));
+                }
+                ExitCombatEvent lastPlayerExit = playerExits.Count > 0 ? playerExits.MaxBy(x => x.Time) : null;
+                ExitCombatEvent lastTargetExit = combatData.GetExitCombatEvents(npcAgentItem).LastOrDefault();
+                AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
+                if (lastTargetExit != null && lastDamageTaken != null && lastPlayerExit != null)
+                {
+                    fightData.SetSuccess(lastPlayerExit.Time > lastTargetExit.Time + 1000, fightData.ToLogSpace(lastDamageTaken.Time));
+                }
             }
         }
 

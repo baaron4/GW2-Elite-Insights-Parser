@@ -37,6 +37,7 @@ namespace LuckParser.Models.Logic
             new EnemyBoonApplyMechanic(38224, "Unnatural Signet", new MechanicPlotlySetting("square-open","rgb(0,255,255)"), "DMG Debuff","Double Damage Debuff on Deimos", "+100% Dmg Buff",0)
             });
             Extension = "dei";
+            GenericFallBackMethod = FallBackMethod.None;
             IconUrl = "https://wiki.guildwars2.com/images/e/e0/Mini_Ragged_White_Mantle_Figurehead.png";
         }
 
@@ -93,22 +94,54 @@ namespace LuckParser.Models.Logic
             }
         }
 
+        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        {
+            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+            if (!fightData.Success)
+            {
+                Target target = Targets.Find(x => x.ID == TriggerID);
+                if (target == null)
+                {
+                    throw new InvalidOperationException("Target for success by combat exit not found");
+                }
+                List<AttackTargetEvent> attackTargets = combatData.GetAttackTargetEvents(target.AgentItem);
+                if (attackTargets.Count == 0)
+                {
+                    return;
+                }
+                AgentItem attackTarget = attackTargets.Last().AttackTarget;
+                List<ExitCombatEvent> playerExits = new List<ExitCombatEvent>();
+                foreach (AgentItem a in playerAgents)
+                {
+                    playerExits.AddRange(combatData.GetExitCombatEvents(a));
+                }
+                ExitCombatEvent lastPlayerExit = playerExits.Count > 0 ? playerExits.MaxBy(x => x.Time) : null;
+                TargetableEvent notAttackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => !x.Targetable);
+                AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
+                if (notAttackableEvent != null && lastDamageTaken != null && lastPlayerExit != null)
+                {
+                    fightData.SetSuccess(lastPlayerExit.Time > notAttackableEvent.Time + 1000, fightData.ToLogSpace(lastDamageTaken.Time));
+                }
+            }
+        }
+
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
+            ComputeFightTargets(agentData, fightData, combatData);
             // Find target
-            AgentItem target = agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.Deimos).FirstOrDefault();
+            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Deimos);
             if (target == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
             // enter combat
-            CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcInstid == target.InstID && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
+            CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcInstid == target.InstID && x.IsStateChange == ParseEnum.StateChange.EnterCombat && x.SrcInstid == target.InstID && x.LogTime <= target.LastAwareLogTime && x.LogTime >= target.FirstAwareLogTime);
             if (enterCombat != null)
             {
                 fightData.OverrideStart(enterCombat.LogTime);
             }
             // Remove deimos despawn events as they are useless and mess with combat replay
-            combatData.RemoveAll(x => x.IsStateChange == ParseEnum.StateChange.Despawn && x.SrcInstid == target.InstID && x.LogTime <= target.LastAwareLogTime && x.LogTime >= target.FirstAwareLogTime);
+            combatData.RemoveAll(x => x.IsStateChange == ParseEnum.StateChange.Despawn && x.SrcAgent == target.Agent);
             // Deimos gadgets
             List<AgentItem> deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos") && x.LastAwareLogTime > target.LastAwareLogTime).ToList();
             CombatItem invulApp = combatData.FirstOrDefault(x => x.DstInstid == target.InstID && x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0 && x.SkillID == 762);
@@ -146,17 +179,17 @@ namespace LuckParser.Models.Logic
                 }
                 invulApp.OverrideValue((int)(firstAware - invulApp.LogTime));
                 _specialSplitLogTime = (firstAware >= target.LastAwareLogTime ? firstAware : target.LastAwareLogTime);
-                target.LastAwareLogTime = combatData.Last().LogTime;
-                SetUniqueID(target, gadgetAgents, agentData, combatData);
+                target.AgentItem.LastAwareLogTime = combatData.Last().LogTime;
+                SetUniqueID(target.AgentItem, gadgetAgents, agentData, combatData);
             }
             // legacy method
             else if (deimosGadgets.Count > 0)
             {
                 long firstAware = deimosGadgets.Max(x => x.FirstAwareLogTime);
                 _specialSplitLogTime = (firstAware >= target.LastAwareLogTime ? firstAware : target.LastAwareLogTime);
-                target.LastAwareLogTime = deimosGadgets.Max(x => x.LastAwareLogTime);
+                target.AgentItem.LastAwareLogTime = deimosGadgets.Max(x => x.LastAwareLogTime);
                 HashSet<ulong> gadgetAgents = new HashSet<ulong>(deimosGadgets.Select(x => x.Agent));
-                SetUniqueID(target, gadgetAgents, agentData, combatData);
+                SetUniqueID(target.AgentItem, gadgetAgents, agentData, combatData);
             }
         }
 

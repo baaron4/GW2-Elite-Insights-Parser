@@ -80,6 +80,7 @@ namespace LuckParser.Models.Logic
                 }
             }
             combatData.Sort((x, y) => x.LogTime.CompareTo(y.LogTime));
+            ComputeFightTargets(agentData, fightData, combatData);
         }
 
         protected override List<ushort> GetFightTargetsIDs()

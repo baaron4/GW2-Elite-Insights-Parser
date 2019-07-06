@@ -59,6 +59,7 @@ namespace LuckParser.Models.Logic
             {
                 fightData.OverrideStart(invulLost.LogTime);
             }
+            ComputeFightTargets(agentData, fightData, combatData);
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()

@@ -113,7 +113,7 @@ namespace LuckParser.Models.Logic
 
         protected abstract HashSet<ushort> GetUniqueTargetIDs();
 
-        public void ComputeFightTargets(AgentData agentData, FightData fightData, List<CombatItem> combatItems)
+        protected void ComputeFightTargets(AgentData agentData, FightData fightData, List<CombatItem> combatItems)
         {
             foreach (ushort id in GetUniqueTargetIDs())
             {
@@ -234,17 +234,17 @@ namespace LuckParser.Models.Logic
             return -1;
         }
 
-        protected void SetSuccessByDeath(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, bool all, bool checkLastDamage, ushort idFirst, params ushort[] ids)
+        protected void SetSuccessByDeath(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, bool all, ushort idFirst, params ushort[] ids)
         {
             List<ushort> idsToUse = new List<ushort>
             {
                 idFirst
             };
             idsToUse.AddRange(ids);
-            SetSuccessByDeath(combatData, fightData, playerAgents, all, checkLastDamage, idsToUse);
+            SetSuccessByDeath(combatData, fightData, playerAgents, all, idsToUse);
         }
 
-        protected void SetSuccessByDeath(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, bool all, bool checkLastDamage, List<ushort> idsToUse)
+        protected void SetSuccessByDeath(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, bool all, List<ushort> idsToUse)
         {
             int success = 0;
             long maxTime = long.MinValue;
@@ -260,13 +260,10 @@ namespace LuckParser.Models.Logic
                 {
                     long time = killed.Time;
                     success++;
-                    if (checkLastDamage)
+                    AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
+                    if (lastDamageTaken != null)
                     {
-                        AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
-                        if (lastDamageTaken != null)
-                        {
-                            time = Math.Min(lastDamageTaken.Time, time);
-                        }
+                        time = Math.Min(lastDamageTaken.Time, time);
                     }
                     maxTime = Math.Max(time, maxTime);
                 }
@@ -277,13 +274,41 @@ namespace LuckParser.Models.Logic
             }
         }
 
+        protected void SetSuccessByCombatExit(Target target, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
+        {
+            if (target == null)
+            {
+                throw new InvalidOperationException("Target for success by combat exit not found");
+            }
+            List<ExitCombatEvent> playerExits = new List<ExitCombatEvent>();
+            foreach (AgentItem a in playerAgents)
+            {
+                playerExits.AddRange(combatData.GetExitCombatEvents(a));
+            }
+            ExitCombatEvent lastPlayerExit = playerExits.Count > 0 ? playerExits.MaxBy(x => x.Time) : null;
+            ExitCombatEvent lastTargetExit = combatData.GetExitCombatEvents(target.AgentItem).LastOrDefault();
+            AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
+            if (lastTargetExit != null && lastDamageTaken != null)
+            {
+                if (lastPlayerExit != null)
+                {
+                    fightData.SetSuccess(lastPlayerExit.Time > lastTargetExit.Time + 1000, fightData.ToLogSpace(lastDamageTaken.Time));
+                }
+                else if (fightData.FightEndLogTime > target.LastAwareLogTime + 2000)
+                {
+                    fightData.SetSuccess(true, fightData.ToLogSpace(lastDamageTaken.Time));
+                }
+            }
+        }
+
         public virtual void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByDeath(combatData, fightData, playerAgents, true, false, TriggerID);
+            SetSuccessByDeath(combatData, fightData, playerAgents, true, TriggerID);
         }
 
         public virtual void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
+            ComputeFightTargets(agentData, fightData, combatData);
         }
 
         //

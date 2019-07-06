@@ -158,6 +158,7 @@ namespace LuckParser.Models.Logic
                     break;
                 }
             }
+            ComputeFightTargets(agentData, fightData, combatData);
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
