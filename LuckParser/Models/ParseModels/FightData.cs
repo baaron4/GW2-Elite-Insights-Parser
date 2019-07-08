@@ -19,9 +19,9 @@ namespace LuckParser.Models.ParseModels
         public string DurationString {
             get
             {
-                var duration = TimeSpan.FromSeconds(FightDuration);
+                var duration = TimeSpan.FromMilliseconds(FightDuration);
                 string durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s " + duration.Milliseconds + "ms";
-                if (duration.ToString("hh") != "00")
+                if (duration.Hours > 0)
                 {
                     durationString = duration.ToString("hh") + "h " + durationString;
                 }
