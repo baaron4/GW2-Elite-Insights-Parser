@@ -21,6 +21,7 @@ namespace LuckParser.Models.ParseModels
                 result == ParseEnum.ConditionResult.InvulByPlayerSkill2 ||
                 result == ParseEnum.ConditionResult.InvulByPlayerSkill3;
             HasHit = result == ParseEnum.ConditionResult.ExpectedToHit;
+            ShieldDamage = evtcItem.IsShields > 0 ?  evtcItem.Value : 0 ;
         }
 
         public override bool IsCondi(ParsedLog log)
