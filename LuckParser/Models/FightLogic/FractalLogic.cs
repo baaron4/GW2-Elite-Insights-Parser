@@ -56,7 +56,7 @@ namespace LuckParser.Models.Logic
         {
             if (target == null)
             {
-                throw new InvalidOperationException("Target for success by buff count not found");
+                return;
             }
             long lastAware = fightData.ToFightSpace(target.LastAwareLogTime);
             List<AbstractBuffEvent> invulsTarget = GetFilteredList(combatData, buffID, target, true);
