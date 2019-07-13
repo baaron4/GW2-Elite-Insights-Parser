@@ -30,13 +30,12 @@ namespace LuckParser.Parser
             None   = 0,
             All    = 1,
             Single = 2,
-            Manual = 3,
-            Unknown
+            Manual = 3
         };
 
         public static BuffRemove GetBuffRemove(byte bt)
         {
-            return bt < (byte)BuffRemove.Unknown
+            return bt <= 3
                 ? (BuffRemove)bt
                 : BuffRemove.None;
         }
