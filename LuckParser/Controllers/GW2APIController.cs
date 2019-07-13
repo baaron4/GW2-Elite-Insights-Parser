@@ -1,5 +1,4 @@
-﻿using LuckParser.Models;
-using LuckParser.Models.ParseModels;
+﻿using LuckParser.Controllers.GW2API;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;

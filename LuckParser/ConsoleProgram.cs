@@ -1,14 +1,6 @@
-﻿using LuckParser.Builders;
-using LuckParser.Controllers;
-using LuckParser.Exceptions;
-using LuckParser.Models;
-using LuckParser.Parser;
-using LuckParser.Setting;
+﻿using LuckParser.Exceptions;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace LuckParser

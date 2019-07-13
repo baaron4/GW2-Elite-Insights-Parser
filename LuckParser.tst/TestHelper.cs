@@ -1,14 +1,11 @@
 ﻿using LuckParser.Builders;
-using LuckParser.Exceptions;
-using LuckParser.Models.JsonModels;
+using LuckParser.Builders.JsonModels;
 using LuckParser.Parser;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace LuckParser.tst
 {

@@ -1,13 +1,9 @@
 ﻿using LuckParser.Exceptions;
 using LuckParser.Parser;
-using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using static LuckParser.Parser.ParseEnum.TrashIDS;
 using LuckParser.Controllers;
 using System.IO;
 using System.Threading;

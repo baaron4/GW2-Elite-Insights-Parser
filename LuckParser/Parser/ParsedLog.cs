@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using LuckParser.Exceptions;
 using LuckParser.Models;
-using LuckParser.Models.Logic;
-using LuckParser.Models.ParseModels;
+using LuckParser.Logic;
+using LuckParser.EIData;
+using LuckParser.Parser.ParsedData;
 
 namespace LuckParser.Parser
 {

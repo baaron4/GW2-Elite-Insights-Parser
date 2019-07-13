@@ -1,4 +1,4 @@
-﻿namespace LuckParser.Controllers
+﻿namespace LuckParser.Controllers.GW2API
 {
     public class GW2APISpec
     {

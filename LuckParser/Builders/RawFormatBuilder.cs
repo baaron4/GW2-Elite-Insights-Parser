@@ -1,25 +1,23 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
-using LuckParser.Controllers;
 using LuckParser.Models;
 using LuckParser.Parser;
-using LuckParser.Models.JsonModels;
-using LuckParser.Models.ParseModels;
+using LuckParser.Builders.JsonModels;
 using Newtonsoft.Json;
-using LuckParser.Setting;
 using Newtonsoft.Json.Serialization;
-using static LuckParser.Models.JsonModels.JsonStatistics;
-using static LuckParser.Models.JsonModels.JsonPlayerBuffs;
-using static LuckParser.Models.JsonModels.JsonTargetBuffs;
-using static LuckParser.Models.JsonModels.JsonRotation;
-using static LuckParser.Models.JsonModels.JsonBuffDamageModifierData;
-using static LuckParser.Models.JsonModels.JsonMechanics;
+using static LuckParser.Builders.JsonModels.JsonStatistics;
+using static LuckParser.Builders.JsonModels.JsonPlayerBuffs;
+using static LuckParser.Builders.JsonModels.JsonTargetBuffs;
+using static LuckParser.Builders.JsonModels.JsonRotation;
+using static LuckParser.Builders.JsonModels.JsonBuffDamageModifierData;
+using static LuckParser.Builders.JsonModels.JsonMechanics;
+using LuckParser.EIData;
+using LuckParser.Parser.ParsedData.CombatEvents;
+using LuckParser.Parser.ParsedData;
 
 namespace LuckParser.Builders
 {

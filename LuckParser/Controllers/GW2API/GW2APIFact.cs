@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace LuckParser.Controllers
+namespace LuckParser.Controllers.GW2API
 {
     public class GW2APIFact
     {

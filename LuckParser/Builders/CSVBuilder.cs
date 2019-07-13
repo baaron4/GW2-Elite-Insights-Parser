@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using LuckParser.Parser;
-using LuckParser.Models.ParseModels;
-using LuckParser.Setting;
 using LuckParser.Models;
+using LuckParser.EIData;
+using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.Builders
 {

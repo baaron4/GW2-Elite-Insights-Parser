@@ -1,17 +1,14 @@
 using LuckParser.Controllers;
+using LuckParser.EIData;
 using LuckParser.Exceptions;
-using LuckParser.Models;
 //recommend CTRL+M+O to collapse all
-using LuckParser.Parser;
-using LuckParser.Models.Logic;
-using LuckParser.Models.ParseModels;
+using LuckParser.Logic;
+using LuckParser.Parser.ParsedData;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using LuckParser.Setting;
 
 //recommend CTRL+M+O to collapse all
 namespace LuckParser.Parser

@@ -1,6 +1,4 @@
-﻿using LuckParser.Parser;
-
-namespace LuckParser.Parser
+﻿namespace LuckParser.Parser
 {
     public class CombatItem
     {

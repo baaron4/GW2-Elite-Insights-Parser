@@ -3,14 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
-using LuckParser.Controllers;
-using LuckParser.Parser;
-using System.Text;
 using System.Threading.Tasks;
 using LuckParser.Exceptions;
-using LuckParser.Builders;
 using LuckParser.Setting;
-using LuckParser.Models;
 
 namespace LuckParser
 {

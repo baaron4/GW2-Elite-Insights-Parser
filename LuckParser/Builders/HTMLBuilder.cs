@@ -1,20 +1,18 @@
-﻿using LuckParser.Controllers;
-using LuckParser.Parser;
-using LuckParser.Models.HtmlModels;
-using LuckParser.Models.ParseModels;
+﻿using LuckParser.Parser;
+using LuckParser.Builders.HtmlModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using LuckParser.Setting;
 using LuckParser.Models;
 using Newtonsoft.Json.Serialization;
-using LuckParser.Models.Logic;
+using LuckParser.Logic;
+using LuckParser.EIData;
+using LuckParser.Parser.ParsedData.CombatEvents;
+using LuckParser.Parser.ParsedData;
 
 namespace LuckParser.Builders
 {
