@@ -19,7 +19,7 @@ namespace LuckParser.Models.ParseModels
         public ParseEnum.IFF IFF { get; }
 
         public int Damage { get; protected set; }
-        public int ShieldDamage { get; }
+        public int ShieldDamage { get; protected set; }
         public bool IsOverNinety { get; }
         public bool AgainstUnderFifty { get; }
         public bool IsMoving { get; }
@@ -45,7 +45,6 @@ namespace LuckParser.Models.ParseModels
             To = agentData.GetAgentByInstID(evtcItem.DstInstid, evtcItem.LogTime);
             MasterTo = evtcItem.DstMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.DstMasterInstid, evtcItem.LogTime) : null;
             Skill = skillData.Get(evtcItem.SkillID);
-            ShieldDamage = evtcItem.IsShields > 0 ? evtcItem.OverstackValue > 0 ? (int)evtcItem.OverstackValue : evtcItem.Value : 0;
             IsOverNinety = evtcItem.IsNinety > 0;
             AgainstUnderFifty = evtcItem.IsFifty > 0;
             IsMoving = evtcItem.IsMoving > 0;

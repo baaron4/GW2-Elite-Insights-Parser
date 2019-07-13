@@ -253,7 +253,7 @@ namespace LuckParser.Models.Logic
                 Target target = Targets.Find(x => x.ID == id);
                 if (target == null)
                 {
-                    throw new InvalidOperationException("Main target of the fight not found");
+                    return;
                 }
                 DeadEvent killed = combatData.GetDeadEvents(target.AgentItem).LastOrDefault();
                 if (killed != null)
@@ -278,7 +278,7 @@ namespace LuckParser.Models.Logic
         {
             if (target == null)
             {
-                throw new InvalidOperationException("Target for success by combat exit not found");
+                return;
             }
             List<ExitCombatEvent> playerExits = new List<ExitCombatEvent>();
             foreach (AgentItem a in playerAgents)
