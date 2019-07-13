@@ -72,14 +72,6 @@ namespace LuckParser.Builders
         //Creating CSV---------------------------------------------------------------------------------
         public void CreateCSV()
         {       
-            double fightDuration = (_log.FightData.FightDuration) / 1000.0;
-            TimeSpan duration = TimeSpan.FromSeconds(fightDuration);
-            string durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s";
-            if (duration.ToString("hh") != "00")
-            {
-                durationString = duration.ToString("hh") + "h " + durationString;
-            }
-            string fightName = _log.FightData.Name;
             //header
             WriteLine(new [] { "Elite Insights Version", Application.ProductVersion });
             WriteLine(new [] { "ARC Version", _log.LogData.BuildVersion});
@@ -99,7 +91,7 @@ namespace LuckParser.Builders
             NewLine();
             NewLine();
             //Boss card
-            WriteLine(new [] { "Boss", fightName });
+            WriteLine(new [] { "Boss", _log.FightData.Name });
             WriteLine(new [] { "Success", _log.FightData.Success.ToString() });
             WriteLine(new [] { "Total Boss Health", _legacyTarget.GetHealth(_log.CombatData).ToString() });
             List<HealthUpdateEvent> hpUpdates = _log.CombatData.GetHealthUpdateEvents(_legacyTarget.AgentItem);
@@ -108,7 +100,7 @@ namespace LuckParser.Builders
                 : 100.0;
             WriteLine(new [] { "Final Boss Health", (_legacyTarget.GetHealth(_log.CombatData) * hpLeft).ToString() });
             WriteLine(new [] { "Boss Health Burned %", (100.0 - hpLeft).ToString() });
-            WriteLine(new [] { "Duration", durationString });
+            WriteLine(new [] { "Duration", _log.FightData.DurationString });
 
             //DPSStats
             CreateDPSTable(0);

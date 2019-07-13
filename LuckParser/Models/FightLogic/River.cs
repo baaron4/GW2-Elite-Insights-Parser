@@ -14,10 +14,10 @@ namespace LuckParser.Models.Logic
             MechanicList.AddRange( new List<Mechanic>
             {
                 new HitOnPlayerMechanic(48272, "Bombshell", new MechanicPlotlySetting("circle","rgb(255,125,0)"),"Bomb Hit", "Hit by Hollowed Bomber Exlosion", "Hit by Bomb", 0 ),
-                new HitOnPlayerMechanic(47258, "Timed Bomb", new MechanicPlotlySetting("square","rgb(255,125,0)"),"Stun Bomb", "Stunned by Mini Bomb", "Stun Bomb", 0, new List<SkillMechanic.SkillChecker>{(de, log) => !de.To.HasBuff(log, 1122, de.Time)}, Mechanic.TriggerRule.AND ),
+                new HitOnPlayerMechanic(47258, "Timed Bomb", new MechanicPlotlySetting("square","rgb(255,125,0)"),"Stun Bomb", "Stunned by Mini Bomb", "Stun Bomb", 0, (de, log) => !de.To.HasBuff(log, 1122, de.Time)),
             }
             );
-            DeathCheckFallBack = false;
+            GenericFallBackMethod = FallBackMethod.None;
             Extension = "river";
             IconUrl = "https://wiki.guildwars2.com/images/thumb/7/7b/Gold_River_of_Souls_Trophy.jpg/220px-Gold_River_of_Souls_Trophy.jpg";
         }
@@ -107,6 +107,7 @@ namespace LuckParser.Models.Logic
             {
                 combatData.Sort((x, y) => x.LogTime.CompareTo(y.LogTime));
             }
+            ComputeFightTargets(agentData, fightData, combatData);
         }
 
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)

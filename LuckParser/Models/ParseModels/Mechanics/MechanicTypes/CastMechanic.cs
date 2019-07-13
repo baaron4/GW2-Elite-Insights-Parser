@@ -12,24 +12,13 @@ namespace LuckParser.Models.ParseModels
     {
         public delegate bool CastChecker(AbstractCastEvent ce, ParsedLog log);
 
-        private readonly List<CastChecker> _triggerConditions = new List<CastChecker>();
+        private readonly CastChecker _triggerCondition = null;
        
         protected bool Keep(AbstractCastEvent c, ParsedLog log)
         {
-            if (_triggerConditions.Count > 0)
+            if (_triggerCondition != null)
             {
-                foreach (CastChecker checker in _triggerConditions)
-                {
-                    bool res = checker(c, log);
-                    if (Rule == TriggerRule.AND && !res)
-                    {
-                        return false;
-                    }
-                    else if (Rule == TriggerRule.OR && res)
-                    {
-                        return true;
-                    }
-                }
+                return _triggerCondition(c, log);
             }
             return true;
         }
@@ -39,13 +28,13 @@ namespace LuckParser.Models.ParseModels
             return evt.Time;
         }
 
-        public CastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, List<CastChecker> conditions, TriggerRule rule) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, conditions, rule)
+        public CastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, CastChecker condition) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, condition)
         {
         }
 
-        public CastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, List<CastChecker> conditions, TriggerRule rule) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, rule)
+        public CastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, CastChecker condition) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
-            _triggerConditions = conditions;
+            _triggerCondition = condition;
         }
 
         public CastMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)

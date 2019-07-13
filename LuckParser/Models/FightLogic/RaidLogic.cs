@@ -10,8 +10,9 @@ namespace LuckParser.Models.Logic
 {
     public abstract class RaidLogic : FightLogic
     {
-        protected bool DeathCheckFallBack = true;
-        protected bool CheckLastDamage = true;
+        protected enum FallBackMethod { None, Death }
+
+        protected FallBackMethod GenericFallBackMethod = FallBackMethod.Death;
 
         protected RaidLogic(ushort triggerID) : base(triggerID)
         {
@@ -41,9 +42,9 @@ namespace LuckParser.Models.Logic
             {
                 fightData.SetSuccess(true, fightData.ToLogSpace(reward.Time));
             }
-            else if (DeathCheckFallBack)
+            else if (GenericFallBackMethod == FallBackMethod.Death)
             {
-                SetSuccessByDeath(combatData, fightData, playerAgents, true, CheckLastDamage, GetDeatchCheckIds());
+                SetSuccessByDeath(combatData, fightData, playerAgents, true, GetDeatchCheckIds());
             }
         }
 

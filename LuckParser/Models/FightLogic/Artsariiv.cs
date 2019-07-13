@@ -20,7 +20,7 @@ namespace LuckParser.Models.Logic
             new HitOnPlayerMechanic(39035, "Astral Surge", new MechanicPlotlySetting("circle-open","rgb(255,200,0)"), "Floor Circle","Different sized spiraling circles", "1000 Circles",0),
             new HitOnPlayerMechanic(39029, "Red Marble", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Marble","Red KD Marble after Jump", "Red Marble",0),
             new HitOnPlayerMechanic(39863, "Red Marble", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Marble","Red KD Marble after Jump", "Red Marble",0),
-            new PlayerBoonApplyMechanic(791, "Fear", new MechanicPlotlySetting("square-open","rgb(255,0,0)"), "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)" ,0, new List<BoonApplyMechanic.BoonApplyChecker>{ (ba, log) => ba.AppliedDuration == 3000 }, Mechanic.TriggerRule.AND), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
+            new PlayerBoonApplyMechanic(791, "Fear", new MechanicPlotlySetting("square-open","rgb(255,0,0)"), "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)" ,0, (ba, log) => ba.AppliedDuration == 3000), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
             new SpawnMechanic(17630, "Spark", new MechanicPlotlySetting("star","rgb(0,255,255)"),"Spark","Spawned a Spark (missed marble)", "Spark",0),
             });
             Extension = "arts";
@@ -50,12 +50,7 @@ namespace LuckParser.Models.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            Target mainTarget = Targets.Find(x => x.ID == TriggerID);
-            if (mainTarget == null)
-            {
-                throw new InvalidOperationException("Main target of the fight not found");
-            }
-            SetSuccessByBuffCount(combatData, agentData, fightData, playerAgents, mainTarget, 762, 4);
+            SetSuccessByBuffCount(combatData, agentData, fightData, playerAgents, Targets.Find(x => x.ID == TriggerID), 762, 4);
         }
     }
 }

@@ -1091,14 +1091,7 @@ namespace LuckParser.Builders
                 logData.Phases.Add(phaseDto);
             }
             //
-            double fightDuration = _log.FightData.FightDuration / 1000.0;
-            TimeSpan duration = TimeSpan.FromSeconds(fightDuration);
-            string durationString = duration.Minutes + "m " + duration.Seconds + "s " + duration.Milliseconds + "ms";
-            if (duration.Hours > 0)
-            {
-                durationString = duration.Hours + "h " + durationString;
-            }
-            logData.EncounterDuration = durationString;
+            logData.EncounterDuration = _log.FightData.DurationString;
             logData.Success = _log.FightData.Success;
             logData.Wvw = _log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
             logData.FightName = _log.FightData.Name;
