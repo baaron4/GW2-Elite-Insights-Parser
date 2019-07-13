@@ -13,13 +13,20 @@ namespace LuckParser.Models.Logic
             MechanicList.AddRange(new List<Mechanic>
             {
             // (ID, ingame name, Type, BossID, plotly marker, Table header name, ICD, Special condition) // long table hover name, graph legend name
-            new HitOnPlayerMechanic(38113, "Displacement", new MechanicPlotlySetting("circle","rgb(255,140,0)"), "Port","Orange Teleport Field", "Orange TP",0), 
-            new HitOnPlayerMechanic(37611, "Spatial Manipulation", new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Green Spatial Manipulation Field (lift)", "Green",0), 
-            new HitOnPlayerMechanic(37629, "Spatial Manipulation", new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Green Spatial Manipulation Field (lift)", "Green",0),
-            new HitOnPlayerMechanic(37642, "Spatial Manipulation", new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Green Spatial Manipulation Field (lift)", "Green",0),
-            new HitOnPlayerMechanic(37673, "Spatial Manipulation", new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Green Spatial Manipulation Field (lift)", "Green",0),
-            new HitOnPlayerMechanic(38074, "Spatial Manipulation", new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Green Spatial Manipulation Field (lift)", "Green",0),
-            new HitOnPlayerMechanic(38302, "Spatial Manipulation", new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Green Spatial Manipulation Field (lift)", "Green",0),
+            new HitOnPlayerMechanic(38113, "Displacement", new MechanicPlotlySetting("circle","rgb(255,140,0)"), "Port","Orange Teleport Field", "Orange TP",0),
+            new HitOnPlayerMechanic(37611, "Spatial Manipulation", new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Green Spatial Manipulation Field (lift)", "Green (lift)",0, new List<SkillMechanic.SkillChecker>{(de, log) => !de.To.HasBuff(log, 1122, de.Time)}, Mechanic.TriggerRule.AND ),
+            new HitOnPlayerMechanic(37629, "Spatial Manipulation", new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Green Spatial Manipulation Field (lift)", "Green (lift)",0, new List<SkillMechanic.SkillChecker>{(de, log) => !de.To.HasBuff(log, 1122, de.Time)}, Mechanic.TriggerRule.AND ),
+            new HitOnPlayerMechanic(37642, "Spatial Manipulation", new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Green Spatial Manipulation Field (lift)", "Green (lift)",0, new List<SkillMechanic.SkillChecker>{(de, log) => !de.To.HasBuff(log, 1122, de.Time)}, Mechanic.TriggerRule.AND ),
+            new HitOnPlayerMechanic(37673, "Spatial Manipulation", new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Green Spatial Manipulation Field (lift)", "Green (lift)",0, new List<SkillMechanic.SkillChecker>{(de, log) => !de.To.HasBuff(log, 1122, de.Time)}, Mechanic.TriggerRule.AND ),
+            new HitOnPlayerMechanic(38074, "Spatial Manipulation", new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Green Spatial Manipulation Field (lift)", "Green (lift)",0, new List<SkillMechanic.SkillChecker>{(de, log) => !de.To.HasBuff(log, 1122, de.Time)}, Mechanic.TriggerRule.AND ),
+            new HitOnPlayerMechanic(38302, "Spatial Manipulation", new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Green","Green Spatial Manipulation Field (lift)", "Green (lift)",0, new List<SkillMechanic.SkillChecker>{(de, log) => !de.To.HasBuff(log, 1122, de.Time)}, Mechanic.TriggerRule.AND ),
+            new HitOnPlayerMechanic(37611, "Spatial Manipulation", new MechanicPlotlySetting("circle-open","rgb(0,255,0)"), "Stab.Green","Green Spatial Manipulation Field while affected by stability", "Stabilized Green",0, new List<SkillMechanic.SkillChecker>{(de, log) => de.To.HasBuff(log, 1122, de.Time)}, Mechanic.TriggerRule.AND ),
+            new HitOnPlayerMechanic(37629, "Spatial Manipulation", new MechanicPlotlySetting("circle-open","rgb(0,255,0)"), "Stab.Green","Green Spatial Manipulation Field while affected by stability", "Stabilized Green",0, new List<SkillMechanic.SkillChecker>{(de, log) => de.To.HasBuff(log, 1122, de.Time)}, Mechanic.TriggerRule.AND ),
+            new HitOnPlayerMechanic(37642, "Spatial Manipulation", new MechanicPlotlySetting("circle-open","rgb(0,255,0)"), "Stab.Green","Green Spatial Manipulation Field while affected by stability", "Stabilized Green",0, new List<SkillMechanic.SkillChecker>{(de, log) => de.To.HasBuff(log, 1122, de.Time)}, Mechanic.TriggerRule.AND ),
+            new HitOnPlayerMechanic(37673, "Spatial Manipulation", new MechanicPlotlySetting("circle-open","rgb(0,255,0)"), "Stab.Green","Green Spatial Manipulation Field while affected by stability", "Stabilized Green",0, new List<SkillMechanic.SkillChecker>{(de, log) => de.To.HasBuff(log, 1122, de.Time)}, Mechanic.TriggerRule.AND ),
+            new HitOnPlayerMechanic(38074, "Spatial Manipulation", new MechanicPlotlySetting("circle-open","rgb(0,255,0)"), "Stab.Green","Green Spatial Manipulation Field while affected by stability", "Stabilized Green",0, new List<SkillMechanic.SkillChecker>{(de, log) => de.To.HasBuff(log, 1122, de.Time)}, Mechanic.TriggerRule.AND ),
+            new HitOnPlayerMechanic(38302, "Spatial Manipulation", new MechanicPlotlySetting("circle-open","rgb(0,255,0)"), "Stab.Green","Green Spatial Manipulation Field while affected by stability", "Stabilized Green",0, new List<SkillMechanic.SkillChecker>{(de, log) => de.To.HasBuff(log, 1122, de.Time)}, Mechanic.TriggerRule.AND ),
+            new HitOnPlayerMechanic(31875, "Spatial Manipulation", new MechanicPlotlySetting("hexagram","rgb(255,0,0)"), "Slam","Spectral Impact (KB Slam)", "Slam",4000, new List<SkillMechanic.SkillChecker>{(de, log) => !de.To.HasBuff(log, 1122, de.Time)}, Mechanic.TriggerRule.AND ),
             new HitOnPlayerMechanic(38313, "Meteor Swarm", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "KB","Knockback Crystals (tornado like)", "KB Crystal",1000),
             new PlayerBoonApplyMechanic(38049, "Shared Agony", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Agony","Shared Agony Debuff Application", "Shared Agony",0),//could flip
             new PlayerBoonApplyMechanic(38170, "Shared Agony", new MechanicPlotlySetting("star-triangle-up-open","rgb(255,150,0)"), "Agony 25","Shared Agony Damage (25% Player's HP)", "SA dmg 25%",0), // Seems to be a (invisible) debuff application for 1 second from the Agony carrier to the closest(?) person in the circle.
@@ -30,7 +37,12 @@ namespace LuckParser.Models.Logic
             new HitOnPlayerMechanic(38060, "Energy Surge", new MechanicPlotlySetting("triangle-left","rgb(0,128,0)"), "Leap","Jump between green fields", "Leap",100),
             new HitOnPlayerMechanic(37631, "Orbital Sweep", new MechanicPlotlySetting("diamond-wide","rgb(255,0,255)"), "Sweep","Sword Spin (Knockback)", "Sweep",100),//short cooldown because of multihits. Would still like to register second hit at the end of spin though, thus only 0.1s
             new HitOnPlayerMechanic(37910, "Gravity Wave", new MechanicPlotlySetting("octagon","rgb(255,0,255)"), "Donut","Expanding Crystal Donut Wave (Knockback)", "Crystal Donut",0)
-
+            // Spatial Manipulation IDs correspond to the following: 1st green when starting the fight: 37629;
+            // Greens after Energy Surge/Orbital Sweep: 38302
+            //100% - 75%: 37611
+            // 75% - 50%: 38074
+            // 50% - 25%: 37673
+            // 25% -  0%: 37642
             });
             Extension = "cairn";
             IconUrl = "https://wiki.guildwars2.com/images/b/b8/Mini_Cairn_the_Indomitable.png";
