@@ -6,7 +6,7 @@
 
         public PointOfViewEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, offset)
         {
-            PoV = agentData.GetAgent(Data, evtcItem.LogTime);
+            PoV = agentData.GetAgent(evtcItem.SrcAgent, evtcItem.LogTime);
         }
 
     }
