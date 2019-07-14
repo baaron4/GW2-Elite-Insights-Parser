@@ -182,13 +182,14 @@ namespace LuckParser.EIData
                 }
             }
             // add buff remove all for each dead events
-            foreach (DeadEvent dd in log.CombatData.GetDeadEvents(AgentItem))
+            // useless?
+            /*foreach (DeadEvent dd in log.CombatData.GetDeadEvents(AgentItem))
             {
                 foreach (var pair in boonMap)
                 {
                     pair.Value.Add(new BuffRemoveAllEvent(GeneralHelper.UnknownAgent, AgentItem, dd.Time, int.MaxValue, log.SkillData.Get(pair.Key), 1, int.MaxValue));
                 }
-            }
+            }*/
             boonMap.Sort();
             foreach (var pair in boonMap)
             {
