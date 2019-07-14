@@ -31,7 +31,7 @@ namespace LuckParser.Parser.ParsedData
             }
             foreach(BuildEvent buildEvt in combatData.GetBuildEvents())
             {
-                GW2Version = buildEvt.Data;
+                GW2Version = buildEvt.Build;
             }
             foreach (LogStartEvent logStr in combatData.GetLogStartEvents())
             {
