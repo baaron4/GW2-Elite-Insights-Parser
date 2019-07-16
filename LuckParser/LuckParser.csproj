@@ -1,18 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6135677E-6C0E-42DE-925E-1995E52E5AC5}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>LuckParser</RootNamespace>
     <AssemblyName>GuildWars2EliteInsights</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>C:\Users\Aaron Bradford\Desktop\TestBuild\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -27,36 +19,19 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\LuckParser.bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>
-    </DocumentationFile>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\LuckParser.bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>
-    </DocumentationFile>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <AssemblyTitle>EliteInsights</AssemblyTitle>
+    <Product>EliteInsights</Product>
+    <Copyright>Copyright ©  2018</Copyright>
+    <AssemblyVersion>2.15.1.0</AssemblyVersion>
+    <FileVersion>2.15.1.0</FileVersion>
+    <OutputPath>..\LuckParser.bin\$(Configuration)\</OutputPath>
+    <DocumentationFile />
+    <Deterministic>false</Deterministic>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
   <PropertyGroup>
-    <Win32Resource>
-    </Win32Resource>
+    <Win32Resource />
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Content\LI.ico</ApplicationIcon>
@@ -68,325 +43,54 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="System.IO.Compression" Version="4.*" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.*" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.*" />
+    <PackageReference Include="System.Net.Http" Version="4.*" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Builders\JsonModels\JsonBuffsUptime.cs" />
-    <Compile Include="Exceptions\InvalidPlayerException.cs" />
-    <Compile Include="Exceptions\TooShortException.cs" />
-    <Compile Include="Exceptions\SkipException.cs" />
-    <Compile Include="Exceptions\CancellationException.cs" />
-    <Compile Include="ConsoleProgram.cs" />
-    <Compile Include="Builders\HTMLBuilder.cs" />
-    <Compile Include="Builders\CSVBuilder.cs" />
-    <Compile Include="Builders\RawFormatBuilder.cs" />
-    <Compile Include="EIData\Mechanics\MechanicTypes\EnemyCastEndMechanic.cs" />
-    <Compile Include="EIData\Mechanics\MechanicTypes\PlayerCastEndMechanic.cs" />
-    <Compile Include="EIData\Mechanics\MechanicTypes\HitByEnemyMechanic.cs" />
-    <Compile Include="EIData\Mechanics\MechanicTypes\SkillByEnemyMechanic.cs" />
-    <Compile Include="ProgramHelper.cs" />
-    <Compile Include="GeneralHelper.cs" />
-    <Compile Include="FightLogic\PeerlessQadim.cs" />
-    <Compile Include="FightLogic\Sabir.cs" />
-    <Compile Include="FightLogic\EaterOfSouls.cs" />
-    <Compile Include="FightLogic\DarkMaze.cs" />
-    <Compile Include="FightLogic\BrokenKing.cs" />
-    <Compile Include="FightLogic\Adina.cs" />
-    <Compile Include="FightLogic\River.cs" />
-    <Compile Include="FightLogic\Escort.cs" />
-    <Compile Include="FightLogic\WvWFight.cs" />
-    <Compile Include="FightLogic\UnknownFightLogic.cs" />
-    <Compile Include="FightLogic\BanditTrio.cs" />
-    <Compile Include="FightLogic\Freezie.cs" />
-    <Compile Include="Builders\HtmlModels\CombatReplayDto.cs" />
-    <Compile Include="Builders\HtmlModels\DamageModData.cs" />
-    <Compile Include="Builders\HtmlModels\DamageModDto.cs" />
-    <Compile Include="Builders\JsonModels\JsonActor.cs" />
-    <Compile Include="Builders\JsonModels\JsonDeathRecap.cs" />
-    <Compile Include="Builders\JsonModels\JsonBuffDamageModifierData.cs" />
-    <Compile Include="Builders\JsonModels\JsonMechanics.cs" />
-    <Compile Include="Builders\JsonModels\JsonRotation.cs" />
-    <Compile Include="Builders\JsonModels\JsonStatistics.cs" />
-    <Compile Include="EIData\Boons\BoonsContainer.cs" />
-    <Compile Include="EIData\Boons\BoonSourceFinders\BoonSourceFinder11122018.cs" />
-    <Compile Include="EIData\Boons\BoonSourceFinders\BoonSourceFinder05032019.cs" />
-    <Compile Include="EIData\Boons\BoonSourceFinders\BoonSourceFinder.cs" />
-    <Compile Include="EIData\DamageModifiers\GainComputers\GainComputerBySkill.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\AbstractCombatEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\BuffEvents\BuffApplyEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\BuffEvents\BuffExtensionEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\BuffEvents\BuffRemoveSingleEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\BuffEvents\BuffRemoveAllEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\BuffEvents\BuffRemoveManualEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\BuffEvents\AbstractBuffRemoveEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\BuffEvents\AbstractBuffEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\CastEvents\WeaponSwapEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\CastEvents\AbstractCastEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\CastEvents\AnimatedCastEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\MetaEventsContainer.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\StatusEventsContainer.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\DamageEvents\NonDirectDamageEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\DamageEvents\DirectDamageEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\DamageEvents\AbstractDamageEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\CombatEventFactory.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\MechanicEvents\MechanicEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\MetaDataEvents\RewardEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\MetaDataEvents\MapIDEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\MetaDataEvents\BuildEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\MetaDataEvents\ShardEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\MetaDataEvents\LogDateEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\MetaDataEvents\LogEndEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\MetaDataEvents\LanguageEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\MetaDataEvents\LogStartEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\MetaDataEvents\AbstractMetaDataEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\MovementEvents\PositionEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\MovementEvents\VelocityEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\MovementEvents\RotationEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\MovementEvents\AbstractMovementEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\StatusEvents\AbstractStatusEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\StatusEvents\DeadEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\StatusEvents\AttackTargetEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\StatusEvents\GuildEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\StatusEvents\MaxHealthUpdateEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\StatusEvents\TargetableEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\StatusEvents\TeamChangeEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\MetaDataEvents\PointOfViewEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\StatusEvents\HealthUpdateEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\StatusEvents\SpawnEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\StatusEvents\DespawnEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\StatusEvents\DownEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\StatusEvents\AliveEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\StatusEvents\ExitCombatEvent.cs" />
-    <Compile Include="Parser\ParsedData\CombatEvents\StatusEvents\EnterCombatEvent.cs" />
-    <Compile Include="EIData\Mechanics\MechanicTypes\SkillOnPlayerMechanic.cs" />
-    <Compile Include="EIData\ProfHelpers\MesmerHelper.cs" />
-    <Compile Include="EIData\ProfHelpers\ElementalistHelper.cs" />
-    <Compile Include="EIData\ProfHelpers\ProfHelper.cs" />
-    <Compile Include="EIData\ProfHelpers\MirageHelper.cs" />
-    <Compile Include="EIData\ProfHelpers\WeaverHelper.cs" />
-    <Compile Include="EIData\Mechanics\MechanicTypes\FirstHitOnPlayerMechanic.cs" />
-    <Compile Include="EIData\CombatReplay\Actors\BackgroundActor.cs" />
-    <Compile Include="EIData\CombatReplay\Actors\FacingRectangleActor.cs" />
-    <Compile Include="EIData\CombatReplay\Actors\FacingActor.cs" />
-    <Compile Include="EIData\CombatReplay\Actors\GenericActor.cs" />
-    <Compile Include="EIData\CombatReplay\Actors\MovingPlatformActor.cs" />
-    <Compile Include="EIData\DamageModifiers\BuffDamageModifierTarget.cs" />
-    <Compile Include="EIData\DamageModifiers\BuffDamageModifier.cs" />
-    <Compile Include="EIData\DamageModifiers\BuffsTrackers\BuffsTrackerSingle.cs" />
-    <Compile Include="EIData\DamageModifiers\BuffsTrackers\BuffsTrackerMulti.cs" />
-    <Compile Include="EIData\DamageModifiers\BuffsTrackers\BuffsTracker.cs" />
-    <Compile Include="EIData\DamageModifiers\DamageLogDamageModifier.cs" />
-    <Compile Include="EIData\DamageModifiers\DamageModifiersContainer.cs" />
-    <Compile Include="EIData\DamageModifiers\DamageModifier.cs" />
-    <Compile Include="EIData\DamageModifiers\GainComputers\GainComputer.cs" />
-    <Compile Include="EIData\DamageModifiers\GainComputers\GainComputerByAbsence.cs" />
-    <Compile Include="EIData\DamageModifiers\GainComputers\GainComputerNonMultiplier.cs" />
-    <Compile Include="EIData\DamageModifiers\GainComputers\GainComputerByStack.cs" />
-    <Compile Include="EIData\DamageModifiers\GainComputers\GainComputerByPresence.cs" />
-    <Compile Include="EIData\Mechanics\MechanicTypes\SkillMechanic.cs" />
-    <Compile Include="EIData\Mechanics\MechanicTypes\BoonRemoveMechanic.cs" />
-    <Compile Include="EIData\Mechanics\MechanicTypes\BoonApplyMechanic.cs" />
-    <Compile Include="EIData\Mechanics\MechanicTypes\CastMechanic.cs" />
-    <Compile Include="EIData\Mechanics\MechanicTypes\EnemyCastStartMechanic.cs" />
-    <Compile Include="EIData\Mechanics\MechanicTypes\EnemyBoonRemoveMechanic.cs" />
-    <Compile Include="EIData\Mechanics\MechanicTypes\HitOnEnemyMechanic.cs" />
-    <Compile Include="EIData\Mechanics\MechanicTypes\PlayerBoonApplyMechanic.cs" />
-    <Compile Include="EIData\Mechanics\MechanicTypes\PlayerOnPlayerMechanic.cs" />
-    <Compile Include="EIData\Mechanics\MechanicTypes\PlayerBoonRemoveMechanic.cs" />
-    <Compile Include="EIData\Mechanics\MechanicTypes\PlayerCastStartMechanic.cs" />
-    <Compile Include="EIData\Mechanics\MechanicTypes\EnemyBoonApplyMechanic.cs" />
-    <Compile Include="EIData\Mechanics\MechanicTypes\SpawnMechanic.cs" />
-    <Compile Include="EIData\Mechanics\MechanicTypes\HitOnPlayerMechanic.cs" />
-    <Compile Include="EIData\Mechanics\MechanicTypes\PlayerStatusMechanic.cs" />
-    <Compile Include="EIData\Simulator\BoonSimulationItems\AbstractBoonSimulationItem.cs" />
-    <Compile Include="EIData\Simulator\BoonSimulationItems\BoonSimulationItemOverstack.cs" />
-    <Compile Include="EIData\Simulator\BoonSimulationItems\AbstractBoonSimulationItemWasted.cs" />
-    <Compile Include="Controllers\GW2APIController.cs" />
-    <Compile Include="Parser\ParsedData\Skills\WeaponDescriptor.cs" />
-    <Compile Include="EIData\Statistics.cs" />
-    <Compile Include="Parser\ParsedLog.cs" />
-    <Compile Include="Parser\ParseEnum.cs" />
-    <Compile Include="Parser\ParseHelper.cs" />
-    <Compile Include="Controllers\UploadController.cs" />
-    <Compile Include="Parser\ParsingController.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\Settings.cs" />
-    <Compile Include="Settings\CustomSettingsManager.cs" />
-    <Compile Include="GridRow.cs" />
-    <Compile Include="MainForm.cs">
+    <Compile Update="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Update="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="FightLogic\FightLogic.cs" />
-    <Compile Include="FightLogic\Qadim.cs" />
-    <Compile Include="FightLogic\TwinLargos.cs" />
-    <Compile Include="FightLogic\ConjuredAmalgamate.cs" />
-    <Compile Include="FightLogic\Dhuum.cs" />
-    <Compile Include="FightLogic\Ensolyss.cs" />
-    <Compile Include="FightLogic\Artsariiv.cs" />
-    <Compile Include="FightLogic\Arkk.cs" />
-    <Compile Include="FightLogic\FractalLogic.cs" />
-    <Compile Include="FightLogic\RaidLogic.cs" />
-    <Compile Include="FightLogic\Skorvald.cs" />
-    <Compile Include="FightLogic\Siax.cs" />
-    <Compile Include="FightLogic\MAMA.cs" />
-    <Compile Include="FightLogic\KeepConstruct.cs" />
-    <Compile Include="FightLogic\Cairn.cs" />
-    <Compile Include="FightLogic\Deimos.cs" />
-    <Compile Include="FightLogic\Golem.cs" />
-    <Compile Include="FightLogic\SoullessHorror.cs" />
-    <Compile Include="FightLogic\Samarog.cs" />
-    <Compile Include="FightLogic\MursaatOverseer.cs" />
-    <Compile Include="FightLogic\Xera.cs" />
-    <Compile Include="FightLogic\Matthias.cs" />
-    <Compile Include="FightLogic\Slothasor.cs" />
-    <Compile Include="FightLogic\Sabetha.cs" />
-    <Compile Include="FightLogic\Gorseval.cs" />
-    <Compile Include="FightLogic\ValeGuardian.cs" />
-    <Compile Include="Builders\HtmlModels\AreaLabelDto.cs" />
-    <Compile Include="Builders\HtmlModels\DeathRecapDto.cs" />
-    <Compile Include="Builders\HtmlModels\FoodDto.cs" />
-    <Compile Include="Builders\HtmlModels\DmgDistributionDto.cs" />
-    <Compile Include="Builders\HtmlModels\MechanicChartDataDto.cs" />
-    <Compile Include="Builders\HtmlModels\ChartDataDto.cs" />
-    <Compile Include="Builders\HtmlModels\PhaseChartDataDto.cs" />
-    <Compile Include="Builders\HtmlModels\BoonChartDataDto.cs" />
-    <Compile Include="Builders\HtmlModels\TargetChartDataDto.cs" />
-    <Compile Include="Builders\HtmlModels\PlayerChartDataDto.cs" />
-    <Compile Include="Builders\HtmlModels\EnemyDto.cs" />
-    <Compile Include="Builders\HtmlModels\MinionDto.cs" />
-    <Compile Include="Builders\HtmlModels\TargetDto.cs" />
-    <Compile Include="Builders\HtmlModels\SkillDto.cs" />
-    <Compile Include="Builders\HtmlModels\MechanicDto.cs" />
-    <Compile Include="Builders\HtmlModels\BoonDto.cs" />
-    <Compile Include="Builders\HtmlModels\BoonData.cs" />
-    <Compile Include="Builders\HtmlModels\PhaseDto.cs" />
-    <Compile Include="Builders\HtmlModels\LogDataDto.cs" />
-    <Compile Include="Builders\HtmlModels\ActorDetailsDto.cs" />
-    <Compile Include="Builders\HtmlModels\PlayerDto.cs" />
-    <Compile Include="Builders\JsonModels\JsonConsumable.cs" />
-    <Compile Include="Builders\JsonModels\JsonDamageDist.cs" />
-    <Compile Include="Builders\JsonModels\JsonLog.cs" />
-    <Compile Include="Builders\JsonModels\JsonMinions.cs" />
-    <Compile Include="Builders\JsonModels\JsonPlayer.cs" />
-    <Compile Include="Builders\JsonModels\JsonTargetBuffs.cs" />
-    <Compile Include="Builders\JsonModels\JsonTarget.cs" />
-    <Compile Include="Builders\JsonModels\JsonPhase.cs" />
-    <Compile Include="Builders\JsonModels\JsonBuffsGeneration.cs" />
-    <Compile Include="EIData\CombatReplay\Actors\FormActor.cs" />
-    <Compile Include="EIData\CombatReplay\Actors\Connector\AgentConnector.cs" />
-    <Compile Include="EIData\CombatReplay\Actors\Connector\Connector.cs" />
-    <Compile Include="EIData\CombatReplay\Actors\Connector\InterpolatedPositionConnector.cs" />
-    <Compile Include="EIData\CombatReplay\Actors\Connector\PositionConnector.cs" />
-    <Compile Include="EIData\CombatReplay\Actors\LineActor.cs" />
-    <Compile Include="EIData\CombatReplay\Actors\PieActor.cs" />
-    <Compile Include="EIData\CombatReplay\Actors\CircleActor.cs" />
-    <Compile Include="EIData\CombatReplay\Actors\DoughnutActor.cs" />
-    <Compile Include="EIData\CombatReplay\Actors\RotatedRectangleActor.cs" />
-    <Compile Include="EIData\CombatReplay\Actors\RectangleActor.cs" />
-    <Compile Include="EIData\CombatReplay\CombatReplay.cs" />
-    <Compile Include="EIData\CombatReplay\CombatReplayMap.cs" />
-    <Compile Include="EIData\Simulator\EffectStackingLogic\HealingLogic.cs" />
-    <Compile Include="EIData\Simulator\EffectStackingLogic\ForceOverrideLogic.cs" />
-    <Compile Include="EIData\Simulator\EffectStackingLogic\OverrideLogic.cs" />
-    <Compile Include="EIData\Simulator\EffectStackingLogic\QueueLogic.cs" />
-    <Compile Include="EIData\Simulator\EffectStackingLogic\StackingLogic.cs" />
-    <Compile Include="EIData\Mechanics\MechanicData.cs" />
-    <Compile Include="EIData\Actors\AbstractMasterActor.cs" />
-    <Compile Include="EIData\Actors\AbstractActor.cs" />
-    <Compile Include="EIData\Boons\BoonsGraphModel.cs" />
-    <Compile Include="EIData\Boons\BoonDistribution.cs" />
-    <Compile Include="EIData\Actors\DummyActor.cs" />
-    <Compile Include="EIData\Actors\Minion.cs" />
-    <Compile Include="EIData\Actors\Minions.cs" />
-    <Compile Include="EIData\PhaseData.cs" />
-    <Compile Include="EIData\Actors\Mob.cs" />
-    <Compile Include="EIData\CombatReplay\Point3D.cs" />
-    <Compile Include="EIData\Simulator\BoonSimulationItems\BoonSimulationItem.cs" />
-    <Compile Include="EIData\Actors\Target.cs" />
-    <Compile Include="Controllers\GW2API\GW2APISpec.cs" />
-    <Compile Include="Controllers\GW2API\GW2APIFact.cs" />
-    <Compile Include="Controllers\GW2API\GW2APISkill.cs" />
-    <Compile Include="EIData\Simulator\BoonSimulationItems\BoonSimulationItemDuration.cs" />
-    <Compile Include="EIData\Simulator\BoonSimulationItems\BoonSimulationItemIntensity.cs" />
-    <Compile Include="EIData\Simulator\BoonSimulationItems\BoonSimulationItemWasted.cs" />
-    <Compile Include="EIData\Simulator\BoonSimulator.cs" />
-    <Compile Include="Parser\ParsedData\Agents\AgentData.cs" />
-    <Compile Include="Parser\ParsedData\Agents\AgentItem.cs" />
-    <Compile Include="EIData\Boons\Boon.cs" />
-    <Compile Include="EIData\Boons\BoonMap.cs" />
-    <Compile Include="Parser\ParsedData\FightData.cs" />
-    <Compile Include="Parser\ParsedData\CombatData.cs" />
-    <Compile Include="Parser\CombatItem.cs" />
-    <Compile Include="EIData\Simulator\BoonSimulatorDuration.cs" />
-    <Compile Include="EIData\Simulator\BoonSimulatorIntensity.cs" />
-    <Compile Include="Parser\ParsedData\LogData.cs" />
-    <Compile Include="EIData\Mechanics\MechanicTypes\Mechanic.cs" />
-    <Compile Include="EIData\Actors\Player.cs" />
-    <Compile Include="Parser\ParsedData\Skills\SkillData.cs" />
-    <Compile Include="Parser\ParsedData\Skills\SkillItem.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings\SettingsForm.cs">
+    <Compile Update="Settings\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Settings\SettingsForm.Designer.cs">
+    <Compile Update="Settings\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Update="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
+    <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Settings\SettingsForm.resx">
+    <EmbeddedResource Update="Settings\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.manifest" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Properties\DataSources\GridRow.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <Compile Include="Properties\Settings.Designer.cs">
+    <Compile Update="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Dodge_Instructor.png" />
@@ -470,20 +174,4 @@
     <Content Include="Resources\TODO.txt" />
     <None Include="Resources\template.html" />
   </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
