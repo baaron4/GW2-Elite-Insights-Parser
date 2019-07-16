@@ -50,6 +50,7 @@
             this.chkOutputJson = new System.Windows.Forms.CheckBox();
             this.chkIndentJSON = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.chkAnonymous = new System.Windows.Forms.CheckBox();
             this.chkHtmlExternalScripts = new System.Windows.Forms.CheckBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -58,7 +59,6 @@
             this.chkAutoAdd = new System.Windows.Forms.CheckBox();
             this.chkB_SkipFailedTries = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.chkAnonymous = new System.Windows.Forms.CheckBox();
             this.chkAddDuration = new System.Windows.Forms.CheckBox();
             this.chkAddPoVProf = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -74,6 +74,7 @@
             this.chkIndentXML = new System.Windows.Forms.CheckBox();
             this.chkOutputXml = new System.Windows.Forms.CheckBox();
             this.panelJson = new System.Windows.Forms.Panel();
+            this.chkCompressRaw = new System.Windows.Forms.CheckBox();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.label2 = new System.Windows.Forms.Label();
@@ -304,6 +305,18 @@
             // 
             this.toolTip1.ToolTipTitle = "Setting description";
             // 
+            // chkAnonymous
+            // 
+            this.chkAnonymous.AutoSize = true;
+            this.chkAnonymous.Location = new System.Drawing.Point(228, 24);
+            this.chkAnonymous.Name = "chkAnonymous";
+            this.chkAnonymous.Size = new System.Drawing.Size(118, 17);
+            this.chkAnonymous.TabIndex = 20;
+            this.chkAnonymous.Text = "Anonymous Players";
+            this.toolTip1.SetToolTip(this.chkAnonymous, "Replaces Players\' account names and character names by generic names");
+            this.chkAnonymous.UseVisualStyleBackColor = true;
+            this.chkAnonymous.CheckedChanged += new System.EventHandler(this.ChkAnonymous_CheckedChanged);
+            // 
             // chkHtmlExternalScripts
             // 
             this.chkHtmlExternalScripts.AutoSize = true;
@@ -408,18 +421,6 @@
             this.groupBox3.TabIndex = 37;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Output";
-            // 
-            // checkAnonymous
-            // 
-            this.chkAnonymous.AutoSize = true;
-            this.chkAnonymous.Location = new System.Drawing.Point(228, 24);
-            this.chkAnonymous.Name = "checkAnonymous";
-            this.chkAnonymous.Size = new System.Drawing.Size(118, 17);
-            this.chkAnonymous.TabIndex = 20;
-            this.chkAnonymous.Text = "Anonymous Players";
-            this.toolTip1.SetToolTip(this.chkAnonymous, "Replaces Players\' account names and character names by generic names");
-            this.chkAnonymous.UseVisualStyleBackColor = true;
-            this.chkAnonymous.CheckedChanged += new System.EventHandler(this.ChkAnonymous_CheckedChanged);
             // 
             // chkAddDuration
             // 
@@ -535,6 +536,7 @@
             this.tabPage4.Controls.Add(this.chkOutputXml);
             this.tabPage4.Controls.Add(this.panelJson);
             this.tabPage4.Controls.Add(this.chkOutputJson);
+            this.tabPage4.Controls.Add(this.chkCompressRaw);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Size = new System.Drawing.Size(471, 251);
@@ -566,9 +568,9 @@
             this.chkOutputXml.AutoSize = true;
             this.chkOutputXml.Location = new System.Drawing.Point(147, 12);
             this.chkOutputXml.Name = "chkOutputXml";
-            this.chkOutputXml.Size = new System.Drawing.Size(127, 17);
+            this.chkOutputXml.Size = new System.Drawing.Size(97, 17);
             this.chkOutputXml.TabIndex = 46;
-            this.chkOutputXml.Text = "Output as XML (WIP)";
+            this.chkOutputXml.Text = "Output as XML";
             this.chkOutputXml.UseVisualStyleBackColor = true;
             this.chkOutputXml.CheckedChanged += new System.EventHandler(this.OutputXMLCheckedChanged);
             // 
@@ -579,6 +581,17 @@
             this.panelJson.Name = "panelJson";
             this.panelJson.Size = new System.Drawing.Size(127, 35);
             this.panelJson.TabIndex = 45;
+            // 
+            // chkCompressRaw
+            // 
+            this.chkCompressRaw.AutoSize = true;
+            this.chkCompressRaw.Location = new System.Drawing.Point(292, 12);
+            this.chkCompressRaw.Name = "chkCompressRaw";
+            this.chkCompressRaw.Size = new System.Drawing.Size(118, 17);
+            this.chkCompressRaw.TabIndex = 18;
+            this.chkCompressRaw.Text = "Compress Raw files";
+            this.chkCompressRaw.UseVisualStyleBackColor = true;
+            this.chkCompressRaw.CheckedChanged += new System.EventHandler(this.ChkCompressRaw_CheckedChanged);
             // 
             // tabPage5
             // 
@@ -726,6 +739,7 @@
         private System.Windows.Forms.CheckBox UploadRaidar_check;
         private System.Windows.Forms.CheckBox chkOutputJson;
         private System.Windows.Forms.CheckBox chkIndentJSON;
+        private System.Windows.Forms.CheckBox chkCompressRaw;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.CheckBox chkHtmlExternalScripts;
         private System.Windows.Forms.TabControl tabControl1;

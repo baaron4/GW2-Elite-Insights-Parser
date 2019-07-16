@@ -52,6 +52,7 @@ namespace LuckParser.Setting
             chkAutoAdd.Checked = Properties.Settings.Default.AutoAdd;
             chkAutoParse.Checked = Properties.Settings.Default.AutoParse;
             chkAddPoVProf.Checked = Properties.Settings.Default.AddPoVProf;
+            chkCompressRaw.Checked = Properties.Settings.Default.CompressRaw;
             chkAddDuration.Checked = Properties.Settings.Default.AddDuration;
             chkAnonymous.Checked = Properties.Settings.Default.Anonymous;
 
@@ -254,6 +255,10 @@ namespace LuckParser.Setting
         private void ChkAddPoVProf_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.AddPoVProf = chkAddPoVProf.Checked;
+        }
+        private void ChkCompressRaw_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.CompressRaw = chkCompressRaw.Checked;
         }
 
         private void ChkAddDuration_CheckedChanged(object sender, EventArgs e)

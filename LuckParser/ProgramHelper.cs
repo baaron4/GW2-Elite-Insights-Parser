@@ -8,6 +8,7 @@ using LuckParser.Controllers;
 using System.IO;
 using System.Threading;
 using LuckParser.Builders;
+using System.IO.Compression;
 
 namespace LuckParser
 {
@@ -144,6 +145,52 @@ namespace LuckParser
             }
         }
 
+        private static void CompressFile(string file)
+        {
+            FileInfo fi = new FileInfo(file);
+            bool success = false;
+            // https://stackoverflow.com/questions/11153542/how-to-compress-files
+            // Get the stream of the source file.
+            using (FileStream inFile = fi.OpenRead())
+            {
+                // Prevent compressing hidden and 
+                // already compressed files.
+                if ((File.GetAttributes(fi.FullName)
+                    & FileAttributes.Hidden)
+                    != FileAttributes.Hidden & fi.Extension != ".gz")
+                {
+                    // Create the compressed file.
+                    using (FileStream outFile =
+                                File.Create(fi.FullName + ".gz"))
+                    {
+                        using (GZipStream Compress =
+                            new GZipStream(outFile,
+                            CompressionMode.Compress))
+                        {
+                            // Copy the source file into 
+                            // the compression stream.
+                            inFile.CopyTo(Compress);
+
+                            Console.WriteLine("Compressed {0} from {1} to {2} bytes.",
+                                fi.Name, fi.Length.ToString(), outFile.Length.ToString());
+                            success = true;
+                        }
+                    }
+                }
+            }
+            if (success)
+            {
+                try
+                {
+                    File.Delete(file);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("File deletion failed:" + e.Message);
+                }
+            }
+        }
+
         private static void GenerateFiles(ParsedLog log, GridRow rowData, string[] uploadresult, FileInfo fInfo)
         {
             rowData.BgWorker.ThrowIfCanceled(rowData);
@@ -220,6 +267,10 @@ namespace LuckParser
                     var builder = new RawFormatBuilder(log, uploadresult);
                     builder.CreateJSON(sw);
                 }
+                if (Properties.Settings.Default.CompressRaw)
+                {
+                    CompressFile(outputFile);
+                }
             }
             rowData.BgWorker.ThrowIfCanceled(rowData);
             if (Properties.Settings.Default.SaveOutXML)
@@ -236,6 +287,10 @@ namespace LuckParser
                 {
                     var builder = new RawFormatBuilder(log, uploadresult);
                     builder.CreateXML(sw);
+                }
+                if (Properties.Settings.Default.CompressRaw)
+                {
+                    CompressFile(outputFile);
                 }
             }
             rowData.BgWorker.ThrowIfCanceled(rowData);
