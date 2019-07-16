@@ -112,6 +112,36 @@ namespace LuckParser.Builders.JsonModels
         /// <seealso cref="JsonBuffsUptime"/>
         public List<JsonBuffsGeneration> SquadBuffs;
         /// <summary>
+        /// List of buff status on uptimes + states on active time \n
+        /// Key is "'b' + id"
+        /// </summary>
+        /// <seealso cref="JsonBuffsUptime"/>
+        public List<JsonBuffsUptime> BuffUptimesActive;
+        /// <summary>
+        /// List of buff status on self generation on active time  \n
+        /// Key is "'b' + id"
+        /// </summary>
+        /// <seealso cref="JsonBuffsUptime"/>
+        public List<JsonBuffsGeneration> SelfBuffsActive;
+        /// <summary>
+        /// List of buff status on group generation on active time \n
+        /// Key is "'b' + id"
+        /// </summary>
+        /// <seealso cref="JsonBuffsUptime"/>
+        public List<JsonBuffsGeneration> GroupBuffsActive;
+        /// <summary>
+        /// List of buff status on off group generation on active time \n
+        /// Key is "'b' + id"
+        /// </summary>
+        /// <seealso cref="JsonBuffsUptime"/>
+        public List<JsonBuffsGeneration> OffGroupBuffsActive;
+        /// <summary>
+        /// List of buff status on squad generation on active time\n
+        /// Key is "'b' + id"
+        /// </summary>
+        /// <seealso cref="JsonBuffsUptime"/>
+        public List<JsonBuffsGeneration> SquadBuffsActive;
+        /// <summary>
         /// List of death recaps \n
         /// Length == number of death
         /// </summary>
