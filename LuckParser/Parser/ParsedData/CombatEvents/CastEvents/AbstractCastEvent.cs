@@ -16,9 +16,6 @@
         public bool ReducedAnimation { get; protected set; }
         public int ActualDuration { get; protected set; }
 
-        // Swaps
-        public int SwappedTo { get; protected set; }
-
         public AbstractCastEvent(CombatItem startEvtcItem, AgentData agentData, SkillData skillData, long offset) : base(startEvtcItem.LogTime, offset)
         {
             Skill = skillData.Get(startEvtcItem.SkillID);

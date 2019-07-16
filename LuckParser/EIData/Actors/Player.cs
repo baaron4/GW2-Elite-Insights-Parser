@@ -1026,7 +1026,12 @@ namespace LuckParser.EIData
             List<AbstractCastEvent> casting = GetCastLogs(log, 0, log.FightData.FightDuration);      
             int swapped = -1;
             long swappedTime = 0;
-            List<int> swaps = casting.Where(x => x.SkillId == SkillItem.WeaponSwapId).Select(x => x.ExpectedDuration).ToList();
+            List<int> swaps = casting.Where(x => x.SkillId == SkillItem.WeaponSwapId).Select(x => {
+                if (x is WeaponSwapEvent wse) {
+                    return wse.SwappedTo;
+                }
+                return -1;
+            }).ToList();
             foreach (AbstractCastEvent cl in casting)
             {
                 if (cl.ActualDuration == 0 && cl.SkillId != SkillItem.WeaponSwapId)
@@ -1039,11 +1044,11 @@ namespace LuckParser.EIData
                 {
                     swapped = skill.FindWeaponSlot(swaps);
                 }
-                if (!skill.EstimateWeapons(weapons, swapped, cl.Time > swappedTime) && cl.SkillId == SkillItem.WeaponSwapId)
+                if (!skill.EstimateWeapons(weapons, swapped, cl.Time > swappedTime) && cl is WeaponSwapEvent swe)
                 {
                     //wepswap  
-                    swapped = cl.SwappedTo;
-                    swappedTime = cl.Time;
+                    swapped = swe.SwappedTo;
+                    swappedTime = swe.Time;
                 }
             }
             _weaponsArray = weapons;
