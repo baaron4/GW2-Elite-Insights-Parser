@@ -89,6 +89,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Builders\JsonModels\JsonBuffsUptime.cs" />
     <Compile Include="Exceptions\InvalidPlayerException.cs" />
     <Compile Include="Exceptions\TooShortException.cs" />
     <Compile Include="Exceptions\SkipException.cs" />
@@ -295,7 +296,7 @@
     <Compile Include="Builders\JsonModels\JsonTargetBuffs.cs" />
     <Compile Include="Builders\JsonModels\JsonTarget.cs" />
     <Compile Include="Builders\JsonModels\JsonPhase.cs" />
-    <Compile Include="Builders\JsonModels\JsonBuffs.cs" />
+    <Compile Include="Builders\JsonModels\JsonBuffsGeneration.cs" />
     <Compile Include="EIData\CombatReplay\Actors\FormActor.cs" />
     <Compile Include="EIData\CombatReplay\Actors\Connector\AgentConnector.cs" />
     <Compile Include="EIData\CombatReplay\Actors\Connector\Connector.cs" />
