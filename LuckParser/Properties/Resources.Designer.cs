@@ -104,10 +104,13 @@ namespace LuckParser.Properties {
         ///facingIcon.onload = function () {
         ///    animateCanvas(-1);
         ///};
-        ///const bgImage = new Image();
-        ///let bgLoaded = false;
-        ///bgImage.onload = function () {
-        ///    animateCanva [rest of string was truncated]&quot;;.
+        ///
+        ///const resolutionMultiplier = window.devicePixelRatio;
+        ///
+        ///var animator = null;
+        ///
+        ///class Animator {
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string combatreplay_js {
             get {
@@ -119,19 +122,20 @@ namespace LuckParser.Properties {
         ///   Looks up a localized string similar to /*jshint esversion: 6 */
         ///
         ///var compileCombatReplay = function () {
-        ///    Vue.component(&quot;combat-replay-damage-stats-component&quot;, {
-        ///        props: [&quot;time&quot;, &quot;playerindex&quot;],
-        ///        template: `${tmplCombatReplayDamageTable}`,
-        ///        data: function () {
+        ///    var timeRefreshComponent = {
+        ///        props: [&quot;time&quot;],
+        ///        data: function() {
         ///            return {
-        ///                damageMode: 1
+        ///                refreshTime: 0
         ///            };
         ///        },
-        ///        created() {
-        ///            var i, cacheID;
-        ///            for (var j = 0; j &lt; this.targets.length; j++) {
-        ///                var activeTargets = [j];
-        ///                cacheID = [rest of string was truncated]&quot;;.
+        ///        computed: {
+        ///            timeToUse: function() {
+        ///                if (animator) {
+        ///                    var animated = animator.animation !== null;
+        ///                    if (animated) {
+        ///                        var speed = animator.speed;
+        ///                        if  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string combatReplayStatsJS {
             get {
@@ -149,14 +153,15 @@ namespace LuckParser.Properties {
         ///        data: function () {
         ///            return {
         ///                animationStatus: {
-        ///                   time: 0,
-        ///                   selectedPlayer: null,
-        ///                   selectedPlayerID: null
+        ///                    time: 0,
+        ///                    selectedPlayer: null,
+        ///                    selectedPlayerID: null,
+        ///                    animated: false
         ///                }
         ///            };
         ///        },
         ///        mounted() {
-        ///            animator = new Animator(logDat [rest of string was truncated]&quot;;.
+        ///  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string combatReplayStatsUI {
             get {
@@ -253,10 +258,9 @@ namespace LuckParser.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to /*jshint esversion: 6 */
+        ///var apiRenderServiceOkay = true;
         ///
-        ///var mainComponent = null;
-        ///
-        ///window.onload = function () {
+        ///var mainLoad = function () {
         ///    // make some additional variables reactive
         ///    var i;
         ///    var simpleLogData = {
@@ -270,7 +274,7 @@ namespace LuckParser.Properties {
         ///        var dur = phase.end - phase.start;
         ///        var floorDur = Math.floor(dur);
         ///        phase.needsLastPoint = dur &gt; floorDur + 1e-3;
-        ///        f [rest of string was truncated]&quot;;.
+        ///      [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ei_js {
             get {
@@ -615,13 +619,13 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column flex-wrap&quot;&gt;
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column justify-content-center flex-wrap&quot;&gt;
         ///    &lt;p class=&quot;text-justify text-center&quot;&gt;Double click on canvas to restore viewpoint&lt;/p&gt;
-        ///    &lt;canvas :width=&quot;canvas.x + &apos;px&apos;&quot; :height=&quot;canvas.y + &apos;px&apos;&quot; id=&quot;replayCanvas&quot; class=&quot;replay&quot;&gt;&lt;/canvas&gt;
-        ///    &lt;div class=&quot;d-flex justify-content-center&quot;&gt;
-        ///        &lt;div @click=&quot;toggleAnimate();&quot;
-        ///             class=&quot;btn btn-small&quot; :class=&quot;{&apos;btn-dark&apos;: !light, &apos;btn-light&apos;: light}&quot; style=&quot;width: 50px;&quot;&gt;{{animated ? &quot;Pause&quot; : &quot;Play&quot;}}&lt;/div&gt;
-        ///        &lt;div @click=&quot;restartAnimate(); [rest of string was truncated]&quot;;.
+        ///    &lt;div :style=&quot;{&apos;width&apos;: canvas.x + &apos;px&apos;, &apos;height&apos;: canvas.y + &apos;px&apos;, &apos;position&apos;: &apos;relative&apos;}&quot;&gt;
+        ///        &lt;canvas :width=&quot;canvas.x + &apos;px&apos;&quot; :height=&quot;canvas.y + &apos;px&apos;&quot; id=&quot;main-canvas&quot; class=&quot;replay&quot;&gt;&lt;/canvas&gt;
+        ///        &lt;canvas :width=&quot;canvas.x + &apos;px&apos;&quot; :height=&quot;canvas.y + &apos;px&apos;&quot; id=&quot;bg-canvas&quot; class=&quot;replay&quot;&gt;&lt;/canvas&gt;
+        ///    &lt;/div&gt;
+        ///    &lt;div class=&quot;d-flex justi [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayAnimationControl {
             get {
@@ -739,10 +743,10 @@ namespace LuckParser.Properties {
         ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column justify-content-center&quot; style=&quot;min-width: 200px;&quot;&gt;
         ///    &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mb-1&quot;&gt;
         ///        &lt;li class=&quot;nav-item&quot;&gt;
-        ///            &lt;a class=&quot;nav-link&quot; :class=&quot;{active: details}&quot; @click=&quot;details = !details&quot;&gt;Details Window &lt;img class=&quot;mb-1 icon&quot; src=&quot;https://wiki.guildwars2.com/images/4/40/Commander_tag_%28red%29.png&quot; data-original-title=&quot;Not properly optimized for now, high cpu cost.&quot; /&gt; &lt;/a&gt;
+        ///            &lt;a class=&quot;nav-link&quot; :class=&quot;{active: details}&quot; @click=&quot;details = !details&quot;&gt;Details Window &lt;img class=&quot;mb-1 icon&quot; src=&quot;https://wiki.guildwars2.com/images/4/40/Commander_tag_%28red%29.png&quot; data-original-title=&quot;Slight performance hit.&quot; /&gt; &lt;/a&gt;
         ///        &lt;/li&gt;
         ///    &lt;/ul&gt;
-        ///    &lt;ul class=&quot;nav  [rest of string was truncated]&quot;;.
+        ///    &lt;ul class=&quot;nav nav-pills d-flex flex-r [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayStatusData {
             get {
@@ -939,9 +943,8 @@ namespace LuckParser.Properties {
         ///                &lt;th v-if=&quot;!wvw&quot;&gt;Target DPS&lt;/th&gt;
         ///                &lt;th v-if=&quot;!wvw&quot;&gt;Power&lt;/th&gt;
         ///                &lt;th v-if=&quot;!wvw&quot;&gt;Condi&lt;/th&gt;
-        ///                &lt;th&gt;All DPS&lt;/th&gt;
-        ///                &lt;th&gt;Power&lt;/th&gt;
-        ///                &lt;th&gt;C [rest of string was truncated]&quot;;.
+        ///                &lt;th v-if=&quot;!wvw&quot;&gt;All DPS&lt;/th&gt;
+        ///                &lt;th v-else&gt;All Damage&lt;/th [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplDamageTable {
             get {
@@ -1043,15 +1046,15 @@ namespace LuckParser.Properties {
         ///        &lt;ul&gt;
         ///            &lt;li v-for=&quot;initial in data.start&quot;&gt;
         ///                {{initial.name}} &lt;img class=&quot;icon&quot; :alt=&quot;initial.name&quot; :src=&quot;initial.icon&quot;&gt;
-        ///                {{initial.stack &gt; 1 ? &quot;(&quot;+initial.stack+&quot;)&quot; : &quot;&quot;}}
+        ///                {{initial.stack &gt; 1 ? &quot;(&quot;+initial.stack+&quot;)&quot; : &quot;&quot;}} ({{initial.duration}}
+        ///                seconds remaining)
         ///            &lt;/li&gt;
         ///        &lt;/ul&gt;
         ///    &lt;/div&gt;
         ///    &lt;div v-if=&quot;data.refreshed.length&quot;&gt;
         ///        In phase consumable updates:
         ///        &lt;ul&gt;
-        ///            &lt;li v-for=&quot;refresh in data.refreshed&quot;&gt;
-        ///                {{re [rest of string was truncated]&quot;;.
+        ///            &lt;l [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplFood {
             get {
@@ -1288,12 +1291,13 @@ namespace LuckParser.Properties {
         ///                &lt;th&gt;&lt;/th&gt;
         ///                &lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
         ///                &lt;th&gt;Account&lt;/th&gt;
-        ///                &lt;th&gt;Condi Cleanse&lt;/th&gt;
+        ///                &lt;th&gt;Condi Cleanse on Others&lt;/th&gt;
+        ///                &lt;th&gt;Condi Cleanse on Self&lt;/th&gt;
+        ///                &lt;th&gt;Boon Strips&lt;/th&gt;
         ///                &lt;th&gt;Resurrects&lt;/th&gt;
         ///            &lt;/tr&gt;
         ///        &lt;/thead&gt;
-        ///        &lt;tbody&gt;
-        ///            &lt;tr v-for=&quot;row in tableData.rows&quot; :class=&quot;{active: row.player.id === playerindex} [rest of string was truncated]&quot;;.
+        ///        &lt;tbody [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplSupportTable {
             get {
