@@ -404,6 +404,7 @@ namespace LuckParser.EIData
                 new Boon("Battle Presence", 17046, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/2/27/Battle_Presence.png"),
                 //new Boon("Force of Will",29485, BoonSource.Guardian, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),//not sure if intensity
                 new Boon("Quickfire",45123, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d6/Quickfire.png"),
+                //new Boon("Symbolic Avenger",45123, BoonSource.Guardian, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e5/Symbolic_Avenger.png", 97950, ulong.MaxValue),
         };
 
         private readonly static List<Boon> _engineer = new List<Boon>
@@ -424,7 +425,7 @@ namespace LuckParser.EIData
                 //new Boon("Rampage",-1, BoonSource.Engineer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Normal, Logic.Override),
                 new Boon("Photon Forge",43708, BoonSource.Engineer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/dd/Engage_Photon_Forge.png"),
                 //Traits
-                new Boon("Laser's Edge",44414, BoonSource.Engineer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/5d/Laser%27s_Edge.png"),
+                new Boon("Laser's Edge",44414, BoonSource.Engineer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/5d/Laser%27s_Edge.png",0 , 97950),
                 new Boon("Afterburner",42210, BoonSource.Engineer, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/51/Solar_Focusing_Lens.png"),
                 new Boon("Iron Blooded",49065, BoonSource.Engineer, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/1e/Iron_Blooded.png"),
                 new Boon("Streamlined Kits",18687, BoonSource.Engineer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/cb/Streamlined_Kits.png"),
@@ -462,7 +463,8 @@ namespace LuckParser.EIData
                 new Boon("Storm Spirit", 50381, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/2/25/Storm_Spirit.png/30px-Storm_Spirit.png", 88541, ulong.MaxValue),
                 //skills
                 new Boon("Attack of Opportunity",12574, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/47/Moment_of_Clarity.png"),
-                new Boon("Call of the Wild",36781, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8d/Call_of_the_Wild.png"),
+                new Boon("Call of the Wild",36781, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8d/Call_of_the_Wild.png",0 , 97950),
+                //new Boon("Call of the Wild",36781, BoonSource.Ranger, BoonType.Intensity, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8d/Call_of_the_Wild.png",97950 , ulong.MaxValue),
                 new Boon("Strength of the Pack!",12554, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4b/%22Strength_of_the_Pack%21%22.png"),
                 new Boon("Sic 'Em!",33902, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png"),
                 new Boon("Sharpening Stones",12536, BoonSource.Ranger, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/af/Sharpening_Stone.png"),
