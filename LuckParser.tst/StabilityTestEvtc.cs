@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using LuckParser.Parser;
 using System.IO;
 using LuckParser.Exceptions;
@@ -11,7 +11,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace LuckParser.tst
 {
-    [TestClass]
+    [TestFixture]
     public class StabilityTestEvtc
     {
         private bool Loop(List<string> failed, List<string> messages,  string file)
@@ -92,7 +92,7 @@ namespace LuckParser.tst
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvtc()
         {
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "../../../EvtcLogs/StabilityTest";
@@ -112,7 +112,7 @@ namespace LuckParser.tst
             Assert.IsTrue(failed.Count == 0, "Check Crashes folder");
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvtcZip()
         {
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "../../../EvtcLogs/StabilityTest";
@@ -131,7 +131,7 @@ namespace LuckParser.tst
             Assert.IsTrue(failed.Count == 0, "Check Crashes folder");
         }
 
-        [TestMethod]
+        [Test]
         public void TestZevtc()
         {
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "../../../EvtcLogs/StabilityTest";
@@ -151,7 +151,7 @@ namespace LuckParser.tst
             Assert.IsTrue(failed.Count == 0, "Check Crashes folder");
         }
 
-        [TestMethod]
+        [Test]
         public void TestCrashed()
         {
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "../../../EvtcLogs/Crashes/Logs";

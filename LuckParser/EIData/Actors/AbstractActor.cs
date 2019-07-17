@@ -173,6 +173,23 @@ namespace LuckParser.EIData
                 c.TryFindSrc(log);
                 loglist.Add(c);
             }
+            // add buff remove all for each despawn events
+            foreach (DespawnEvent dsp in log.CombatData.GetDespawnEvents(AgentItem))
+            {
+                foreach (var pair in boonMap)
+                {
+                    pair.Value.Add(new BuffRemoveAllEvent(GeneralHelper.UnknownAgent, AgentItem, dsp.Time, int.MaxValue, log.SkillData.Get(pair.Key), 1, int.MaxValue));
+                }
+            }
+            // add buff remove all for each dead events
+            // useless?
+            /*foreach (DeadEvent dd in log.CombatData.GetDeadEvents(AgentItem))
+            {
+                foreach (var pair in boonMap)
+                {
+                    pair.Value.Add(new BuffRemoveAllEvent(GeneralHelper.UnknownAgent, AgentItem, dd.Time, int.MaxValue, log.SkillData.Get(pair.Key), 1, int.MaxValue));
+                }
+            }*/
             boonMap.Sort();
             foreach (var pair in boonMap)
             {
@@ -250,9 +267,6 @@ namespace LuckParser.EIData
             HashSet<long> boonIds = new HashSet<long>(log.Boons.GetBoonList().Select(x => x.ID));
             HashSet<long> condiIds = new HashSet<long>(log.Boons.GetConditionList().Select(x => x.ID));
             InitBoonStatusData(log);
-
-            DeadEvent death = log.CombatData.GetDeadEvents(AgentItem).LastOrDefault();
-            DespawnEvent dc = log.CombatData.GetDespawnEvents(AgentItem).LastOrDefault();
             foreach (Boon boon in TrackedBoons)
             {
                 long boonid = boon.ID;
@@ -264,18 +278,7 @@ namespace LuckParser.EIData
                     }
                     BoonSimulator simulator = boon.CreateSimulator(log);
                     simulator.Simulate(logs, dur);
-                    if (death != null && GetCastLogs(log, death.Time + 5000, dur).Count == 0)
-                    {
-                        simulator.Trim(death.Time);
-                    }
-                    else if (dc != null && GetCastLogs(log, dc.Time + 5000, dur).Count == 0)
-                    {
-                        simulator.Trim(dc.Time);
-                    }
-                    else
-                    {
-                        simulator.Trim(dur);
-                    }
+                    simulator.Trim(dur);
                     bool updateBoonPresence = boonIds.Contains(boonid);
                     bool updateCondiPresence = condiIds.Contains(boonid);
                     List<BoonsGraphModel.SegmentWithSources> graphSegments = new List<BoonsGraphModel.SegmentWithSources>();

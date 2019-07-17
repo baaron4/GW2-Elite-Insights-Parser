@@ -10,7 +10,8 @@ using LuckParser.Builders.JsonModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using static LuckParser.Builders.JsonModels.JsonStatistics;
-using static LuckParser.Builders.JsonModels.JsonPlayerBuffs;
+using static LuckParser.Builders.JsonModels.JsonBuffsUptime;
+using static LuckParser.Builders.JsonModels.JsonBuffsGeneration;
 using static LuckParser.Builders.JsonModels.JsonTargetBuffs;
 using static LuckParser.Builders.JsonModels.JsonRotation;
 using static LuckParser.Builders.JsonModels.JsonBuffDamageModifierData;
@@ -242,6 +243,11 @@ namespace LuckParser.Builders
                     GroupBuffs = BuildPlayerBuffGenerations(player.GetBuffs(_log, Statistics.BuffEnum.Group), player),
                     OffGroupBuffs = BuildPlayerBuffGenerations(player.GetBuffs(_log, Statistics.BuffEnum.OffGroup), player),
                     SquadBuffs = BuildPlayerBuffGenerations(player.GetBuffs(_log, Statistics.BuffEnum.Squad), player),
+                    BuffUptimesActive = BuildPlayerBuffUptimes(player.GetActiveBuffs(_log, Statistics.BuffEnum.Self), player),
+                    SelfBuffsActive = BuildPlayerBuffGenerations(player.GetActiveBuffs(_log, Statistics.BuffEnum.Self), player),
+                    GroupBuffsActive = BuildPlayerBuffGenerations(player.GetActiveBuffs(_log, Statistics.BuffEnum.Group), player),
+                    OffGroupBuffsActive = BuildPlayerBuffGenerations(player.GetActiveBuffs(_log, Statistics.BuffEnum.OffGroup), player),
+                    SquadBuffsActive = BuildPlayerBuffGenerations(player.GetActiveBuffs(_log, Statistics.BuffEnum.Squad), player),
                     DamageModifiers = BuildDamageModifiers(player.GetDamageModifierData(_log, null)),
                     DamageModifiersTarget = BuildDamageModifiersTarget(player),
                     Minions = BuildMinions(player),
@@ -590,9 +596,9 @@ namespace LuckParser.Builders
             return boons;
         }
 
-        private List<JsonPlayerBuffs> BuildPlayerBuffGenerations(List<Dictionary<long, Statistics.FinalBuffs>> statUptimes, Player player)
+        private List<JsonBuffsGeneration> BuildPlayerBuffGenerations(List<Dictionary<long, Statistics.FinalBuffs>> statUptimes, Player player)
         {
-            var uptimes = new List<JsonPlayerBuffs>();
+            var uptimes = new List<JsonBuffsGeneration>();
             int phases = _phases.Count;
             foreach (var pair in statUptimes[0])
             {
@@ -601,12 +607,12 @@ namespace LuckParser.Builders
                 {
                     _buffDesc["b" + pair.Key] = new JsonLog.BuffDesc(buff);
                 }
-                List<JsonPlayerBuffsData> data = new List<JsonPlayerBuffsData>();
+                List<JsonBuffsGenerationData> data = new List<JsonBuffsGenerationData>();
                 for (int i = 0; i < _phases.Count; i++)
                 {
-                    data.Add(new JsonPlayerBuffsData(statUptimes[i][pair.Key], true));
+                    data.Add(new JsonBuffsGenerationData(statUptimes[i][pair.Key]));
                 }
-                JsonPlayerBuffs jsonBuffs = new JsonPlayerBuffs()
+                JsonBuffsGeneration jsonBuffs = new JsonBuffsGeneration()
                 {
                     BuffData = data,
                     Id = pair.Key
@@ -619,9 +625,9 @@ namespace LuckParser.Builders
             return uptimes;
         }
 
-        private List<JsonPlayerBuffs> BuildPlayerBuffUptimes(List<Dictionary<long, Statistics.FinalBuffs>> statUptimes, Player player)
+        private List<JsonBuffsUptime> BuildPlayerBuffUptimes(List<Dictionary<long, Statistics.FinalBuffs>> statUptimes, Player player)
         {
-            var uptimes = new List<JsonPlayerBuffs>();
+            var uptimes = new List<JsonBuffsUptime>();
             int phases = _phases.Count;
             foreach (var pair in statUptimes[0])
             {
@@ -647,12 +653,12 @@ namespace LuckParser.Builders
                         }
                     }
                 }
-                List<JsonPlayerBuffsData> data = new List<JsonPlayerBuffsData>();
+                List<JsonBuffsUptimeData> data = new List<JsonBuffsUptimeData>();
                 for (int i = 0; i < _phases.Count; i++)
                 {
-                    data.Add(new JsonPlayerBuffsData(statUptimes[i][pair.Key], false));
+                    data.Add(new JsonBuffsUptimeData(statUptimes[i][pair.Key]));
                 }
-                JsonPlayerBuffs jsonBuffs = new JsonPlayerBuffs()
+                JsonBuffsUptime jsonBuffs = new JsonBuffsUptime()
                 {
                     States = BuildBuffStates(player.GetBoonGraphs(_log)[pair.Key]),
                     BuffData = data,

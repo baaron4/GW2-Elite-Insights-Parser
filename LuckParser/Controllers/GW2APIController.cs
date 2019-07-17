@@ -27,15 +27,15 @@ namespace LuckParser.Controllers
             return;
         }
 
-        private GW2APISkill GetGW2APISKill(string path)
+        private GW2APISkill GetGW2APISKillAsync(string path)
         {
             if (APIClient == null) { GetAPIClient(); }
             GW2APISkill skill = null;
             HttpResponseMessage response = APIClient.GetAsync(path).Result;
             if (response.IsSuccessStatusCode)
             {
-                
-                skill = response.Content.ReadAsAsync<GW2APISkill>().Result;
+
+                skill = JsonConvert.DeserializeObject<GW2APISkill>(response.Content.ReadAsStringAsync().Result);
             }
             else
             {//try again after a wait
@@ -43,7 +43,7 @@ namespace LuckParser.Controllers
                 response = APIClient.GetAsync(path).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    skill = response.Content.ReadAsAsync<GW2APISkill>().Result;
+                    skill = JsonConvert.DeserializeObject<GW2APISkill>(response.Content.ReadAsStringAsync().Result);
 
                 }
             }
@@ -109,7 +109,7 @@ namespace LuckParser.Controllers
             if (response.IsSuccessStatusCode)
             {
                 // Get Skill ID list
-                idArray = response.Content.ReadAsAsync<int[]>().Result;
+                idArray = JsonConvert.DeserializeObject<int[]>(response.Content.ReadAsStringAsync().Result);
                 
                 _listOfSkills.Items.AddRange(GetListGW2APISkills());
                 StreamWriter writer = new StreamWriter(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
@@ -192,7 +192,7 @@ namespace LuckParser.Controllers
             HttpResponseMessage response = APIClient.GetAsync(path).Result;
             if (response.IsSuccessStatusCode)
             {
-                spec = response.Content.ReadAsAsync<GW2APISpec>().Result;
+                spec = JsonConvert.DeserializeObject<GW2APISpec>(response.Content.ReadAsStringAsync().Result);
 
             }
             return spec;
@@ -225,7 +225,7 @@ namespace LuckParser.Controllers
             if (response.IsSuccessStatusCode)
             {
                 // Get Skill ID list
-                idArray = response.Content.ReadAsAsync<int[]>().Result;
+                idArray = JsonConvert.DeserializeObject<int[]>(response.Content.ReadAsStringAsync().Result);
 
                 foreach (int id in idArray)
                 {

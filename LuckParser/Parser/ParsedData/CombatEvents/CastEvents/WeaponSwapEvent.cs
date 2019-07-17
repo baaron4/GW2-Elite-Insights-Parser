@@ -2,6 +2,9 @@
 {
     public class WeaponSwapEvent : AbstractCastEvent
     {
+        // Swaps
+        public int SwappedTo { get; protected set; }
+
         public WeaponSwapEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, agentData, skillData, offset)
         {
             SwappedTo = (int)evtcItem.DstAgent;
