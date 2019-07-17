@@ -145,48 +145,20 @@ namespace LuckParser
             }
         }
 
-        private static void CompressFile(string file)
+        private static void CompressFile(string file, MemoryStream str)
         {
-            FileInfo fi = new FileInfo(file);
-            bool success = false;
-            // https://stackoverflow.com/questions/11153542/how-to-compress-files
-            // Get the stream of the source file.
-            using (FileStream inFile = fi.OpenRead())
+            // Create the compressed file.
+            byte[] data = str.ToArray();
+            using (FileStream outFile =
+                        File.Create(file + ".gz"))
             {
-                // Prevent compressing hidden and 
-                // already compressed files.
-                if ((File.GetAttributes(fi.FullName)
-                    & FileAttributes.Hidden)
-                    != FileAttributes.Hidden & fi.Extension != ".gz")
+                using (GZipStream Compress =
+                    new GZipStream(outFile,
+                    CompressionMode.Compress))
                 {
-                    // Create the compressed file.
-                    using (FileStream outFile =
-                                File.Create(fi.FullName + ".gz"))
-                    {
-                        using (GZipStream Compress =
-                            new GZipStream(outFile,
-                            CompressionMode.Compress))
-                        {
-                            // Copy the source file into 
-                            // the compression stream.
-                            inFile.CopyTo(Compress);
-
-                            Console.WriteLine("Compressed {0} from {1} to {2} bytes.",
-                                fi.Name, fi.Length.ToString(), outFile.Length.ToString());
-                            success = true;
-                        }
-                    }
-                }
-            }
-            if (success)
-            {
-                try
-                {
-                    File.Delete(file);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("File deletion failed:" + e.Message);
+                    // Copy the source file into 
+                    // the compression stream.
+                    Compress.Write(data, 0, data.Length);
                 }
             }
         }
@@ -261,15 +233,22 @@ namespace LuckParser
                 string splitString = "";
                 if (rowData.LogLocation != null) { splitString = ","; }
                 rowData.LogLocation += splitString + saveDirectory.FullName;
-                using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
-                using (var sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
+                Stream str;
+                if (Properties.Settings.Default.CompressRaw)
+                {
+                    str = new MemoryStream();
+                } else
+                {
+                    str = new FileStream(outputFile, FileMode.Create, FileAccess.Write);
+                }
+                using (var sw = new StreamWriter(str, GeneralHelper.NoBOMEncodingUTF8))
                 {
                     var builder = new RawFormatBuilder(log, uploadresult);
                     builder.CreateJSON(sw);
                 }
-                if (Properties.Settings.Default.CompressRaw)
+                if (str is MemoryStream msr)
                 {
-                    CompressFile(outputFile);
+                    CompressFile(outputFile, msr);
                 }
             }
             rowData.BgWorker.ThrowIfCanceled(rowData);
@@ -282,15 +261,23 @@ namespace LuckParser
                 string splitString = "";
                 if (rowData.LogLocation != null) { splitString = ","; }
                 rowData.LogLocation += splitString + saveDirectory.FullName;
-                using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
-                using (var sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
+                Stream str;
+                if (Properties.Settings.Default.CompressRaw)
+                {
+                    str = new MemoryStream();
+                }
+                else
+                {
+                    str = new FileStream(outputFile, FileMode.Create, FileAccess.Write);
+                }
+                using (var sw = new StreamWriter(str, GeneralHelper.NoBOMEncodingUTF8))
                 {
                     var builder = new RawFormatBuilder(log, uploadresult);
                     builder.CreateXML(sw);
                 }
-                if (Properties.Settings.Default.CompressRaw)
+                if (str is MemoryStream msr)
                 {
-                    CompressFile(outputFile);
+                    CompressFile(outputFile, msr);
                 }
             }
             rowData.BgWorker.ThrowIfCanceled(rowData);
