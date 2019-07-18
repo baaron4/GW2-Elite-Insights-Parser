@@ -404,7 +404,7 @@ namespace LuckParser.EIData
                 new Boon("Battle Presence", 17046, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/2/27/Battle_Presence.png"),
                 //new Boon("Force of Will",29485, BoonSource.Guardian, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),//not sure if intensity
                 new Boon("Quickfire",45123, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d6/Quickfire.png"),
-                //new Boon("Symbolic Avenger",45123, BoonSource.Guardian, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e5/Symbolic_Avenger.png", 97950, ulong.MaxValue),
+                new Boon("Symbolic Avenger",56890, BoonSource.Guardian, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e5/Symbolic_Avenger.png", 97950, ulong.MaxValue),
         };
 
         private readonly static List<Boon> _engineer = new List<Boon>
@@ -464,7 +464,7 @@ namespace LuckParser.EIData
                 //skills
                 new Boon("Attack of Opportunity",12574, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/47/Moment_of_Clarity.png"),
                 new Boon("Call of the Wild",36781, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8d/Call_of_the_Wild.png",0 , 97950),
-                //new Boon("Call of the Wild",36781, BoonSource.Ranger, BoonType.Intensity, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8d/Call_of_the_Wild.png",97950 , ulong.MaxValue),
+                new Boon("Call of the Wild",36781, BoonSource.Ranger, BoonType.Intensity, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8d/Call_of_the_Wild.png",97950 , ulong.MaxValue),
                 new Boon("Strength of the Pack!",12554, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4b/%22Strength_of_the_Pack%21%22.png"),
                 new Boon("Sic 'Em!",33902, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png"),
                 new Boon("Sharpening Stones",12536, BoonSource.Ranger, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/af/Sharpening_Stone.png"),
