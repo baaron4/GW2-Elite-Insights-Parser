@@ -363,6 +363,7 @@ namespace LuckParser.EIData
                 new Boon("Always Angry",34099, BoonSource.Warrior, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/63/Always_Angry.png", 0 , 96406),
                 new Boon("Full Counter",43949, BoonSource.Warrior, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/f/fb/Full_Counter.png"),
                 new Boon("Attacker's Insight",41963, BoonSource.Warrior, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/89/Attacker%27s_Insight.png"),
+                new Boon("Berserker's Power",42539, BoonSource.Warrior, BoonType.Intensity, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/6f/Berserker%27s_Power.png"),
         };
 
         private readonly static List<Boon> _guardian = new List<Boon>
@@ -375,6 +376,7 @@ namespace LuckParser.EIData
                 new Boon("Ashes of the Just",41957, BoonSource.Guardian, BoonType.Intensity, 25, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/6/6d/Epilogue-_Ashes_of_the_Just.png"),
                 new Boon("Eternal Oasis",44871, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/5/5f/Epilogue-_Eternal_Oasis.png"),
                 new Boon("Unbroken Lines",43194, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/d/d8/Epilogue-_Unbroken_Lines.png"),
+                new Boon("Shield of Wrath",9123, BoonSource.Guardian, BoonType.Intensity, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/bc/Shield_of_Wrath.png"),
                 //signets
                 new Boon("Signet of Resolve",9220, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/75/Signet_of_Resolve.png"),
                 new Boon("Signet of Resolve (Shared)", 46554, BoonSource.Guardian, BoonType.Intensity, 99, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/7/75/Signet_of_Resolve.png"),
