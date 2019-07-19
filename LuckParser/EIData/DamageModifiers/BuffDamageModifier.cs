@@ -45,7 +45,7 @@ namespace LuckParser.EIData
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             Dictionary<long, BoonsGraphModel> bgms = p.GetBoonGraphs(log);
-            if (!Tracker.Has(bgms))
+            if (!Tracker.Has(bgms) && GainComputer != ByAbsence)
             {
                 return;
             }
