@@ -50,16 +50,16 @@ namespace LuckParser.Builders.HtmlModels
         public List<BoonData> BoonGenActiveSquadStats;
 
         public List<BoonData> OffBuffActiveStats;
-        public List<BoonData> OffBuffActiveGenSelfStats;
-        public List<BoonData> OffBuffActiveGenGroupStats;
-        public List<BoonData> OffBuffActiveGenOGroupStats;
-        public List<BoonData> OffBuffActiveGenSquadStats;
+        public List<BoonData> OffBuffGenActiveSelfStats;
+        public List<BoonData> OffBuffGenActiveGroupStats;
+        public List<BoonData> OffBuffGenActiveOGroupStats;
+        public List<BoonData> OffBuffGenActiveSquadStats;
 
         public List<BoonData> DefBuffActiveStats;
-        public List<BoonData> DefBuffActiveGenSelfStats;
-        public List<BoonData> DefBuffActiveGenGroupStats;
-        public List<BoonData> DefBuffActiveGenOGroupStats;
-        public List<BoonData> DefBuffActiveGenSquadStats;
+        public List<BoonData> DefBuffGenActiveSelfStats;
+        public List<BoonData> DefBuffGenActiveGroupStats;
+        public List<BoonData> DefBuffGenActiveOGroupStats;
+        public List<BoonData> DefBuffGenActiveSquadStats;
 
         public List<BoonData> PersBuffActiveStats;
 
