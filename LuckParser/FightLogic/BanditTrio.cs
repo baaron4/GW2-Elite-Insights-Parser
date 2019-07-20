@@ -21,17 +21,16 @@ namespace LuckParser.Logic
             new HitOnPlayerMechanic(34344, "Fiery Vortex", new MechanicPlotlySetting("circle-open","rgb(255,200,0)"), "Tornado","Fiery Vortex (Tornado)", "Tornado",250),
             });
             Extension = "trio";
-            GenericFallBackMethod = FallBackMethod.None;
+            GenericFallBackMethod = FallBackMethod.CombatExit;
             IconUrl = "https://i.imgur.com/UZZQUdf.png";
         }
 
-        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        protected override List<ushort> GetSuccessCheckIds()
         {
-            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-            if (!fightData.Success)
+            return new List<ushort>
             {
-                SetSuccessByCombatExit(Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Narella), combatData, fightData, playerAgents);
-            }
+                (ushort)ParseEnum.TargetIDS.Narella
+            };
         }
 
         protected override List<ushort> GetFightTargetsIDs()

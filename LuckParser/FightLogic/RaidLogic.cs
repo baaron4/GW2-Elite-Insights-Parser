@@ -7,7 +7,7 @@ namespace LuckParser.Logic
 {
     public abstract class RaidLogic : FightLogic
     {
-        protected enum FallBackMethod { None, Death }
+        protected enum FallBackMethod { None, Death, CombatExit }
 
         protected FallBackMethod GenericFallBackMethod = FallBackMethod.Death;
 
@@ -16,7 +16,7 @@ namespace LuckParser.Logic
             Mode = ParseMode.Raid;
         }
 
-        protected virtual List<ushort> GetDeatchCheckIds()
+        protected virtual List<ushort> GetSuccessCheckIds()
         {
             return new List<ushort>
             {
@@ -34,14 +34,24 @@ namespace LuckParser.Logic
                     22797
                 };
             List<RewardEvent> rewards = combatData.GetRewardEvents();
-            RewardEvent reward = rewards.FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType));
+            RewardEvent reward = null; rewards.FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType));
             if (reward != null)
             {
                 fightData.SetSuccess(true, fightData.ToLogSpace(reward.Time));
             }
-            else if (GenericFallBackMethod == FallBackMethod.Death)
+            else
             {
-                SetSuccessByDeath(combatData, fightData, playerAgents, true, GetDeatchCheckIds());
+                switch(GenericFallBackMethod)
+                {
+                    case FallBackMethod.Death:
+                        SetSuccessByDeath(combatData, fightData, playerAgents, true, GetSuccessCheckIds());
+                        break;
+                    case FallBackMethod.CombatExit:
+                        SetSuccessByCombatExit(new HashSet<ushort>(GetSuccessCheckIds()), combatData, fightData, playerAgents);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 

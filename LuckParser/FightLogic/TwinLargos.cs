@@ -52,7 +52,7 @@ namespace LuckParser.Logic
             };
         }
 
-        protected override List<ushort> GetDeatchCheckIds()
+        protected override List<ushort> GetSuccessCheckIds()
         {
             return GetFightTargetsIDs();
         }
