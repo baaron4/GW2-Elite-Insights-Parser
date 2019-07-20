@@ -52,6 +52,11 @@ namespace LuckParser.Logic
             };
         }
 
+        protected override List<ushort> GetDeatchCheckIds()
+        {
+            return GetFightTargetsIDs();
+        }
+
         private List<PhaseData> GetTargetPhases(ParsedLog log, Target target, string[] names)
         {
             long start = 0;
