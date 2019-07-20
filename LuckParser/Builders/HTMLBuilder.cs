@@ -189,6 +189,18 @@ namespace LuckParser.Builders
             return list;
         }
 
+        private List<BoonData> BuildActiveBuffUptimeData(List<Boon> listToUse, int phaseIndex)
+        {
+            List<BoonData> list = new List<BoonData>();
+
+            foreach (Player player in _log.PlayerList)
+            {
+                double avg = 0.0;
+                list.Add(new BoonData(player.GetActiveBuffs(_log, phaseIndex, Statistics.BuffEnum.Self), listToUse, avg));
+            }
+            return list;
+        }
+
         private Dictionary<string, List<Boon>> BuildPersonalBoonData(Dictionary<string, List<long>> dict)
         {
             Dictionary<string, List<Boon>> boonsBySpec = new Dictionary<string, List<Boon>>();
@@ -262,10 +274,19 @@ namespace LuckParser.Builders
         private List<BoonData> BuildPersonalBuffUptimeData(Dictionary<string, List<Boon>> boonsBySpec, int phaseIndex)
         {
             List<BoonData> list = new List<BoonData>();
-            long fightDuration = _phases[phaseIndex].DurationInMS;
             foreach (Player player in _log.PlayerList)
             {
                 list.Add(new BoonData(player.Prof, boonsBySpec, player.GetBuffs(_log, phaseIndex, Statistics.BuffEnum.Self)));
+            }
+            return list;
+        }
+
+        private List<BoonData> BuildActivePersonalBuffUptimeData(Dictionary<string, List<Boon>> boonsBySpec, int phaseIndex)
+        {
+            List<BoonData> list = new List<BoonData>();
+            foreach (Player player in _log.PlayerList)
+            {
+                list.Add(new BoonData(player.Prof, boonsBySpec, player.GetActiveBuffs(_log, phaseIndex, Statistics.BuffEnum.Self)));
             }
             return list;
         }
@@ -309,6 +330,20 @@ namespace LuckParser.Builders
             }
             return list;
         }
+
+        private List<BoonData> BuildActiveBuffGenerationData(List<Boon> listToUse, int phaseIndex, Statistics.BuffEnum target)
+        {
+            List<BoonData> list = new List<BoonData>();
+
+            foreach (Player player in _log.PlayerList)
+            {
+                Dictionary<long, Statistics.FinalBuffs> uptimes;
+                uptimes = player.GetActiveBuffs(_log, phaseIndex, target);
+                list.Add(new BoonData(listToUse, uptimes));
+            }
+            return list;
+        }
+
 
         /// <summary>
         /// Creates the rotation tab for a given player
@@ -1055,6 +1090,7 @@ namespace LuckParser.Builders
                     DmgStats = BuildDMGStatsData(i),
                     DefStats = BuildDefenseData(i),
                     SupportStats = BuildSupportData(i),
+                    //
                     BoonStats = BuildBuffUptimeData(_statistics.PresentBoons, i),
                     OffBuffStats = BuildBuffUptimeData(_statistics.PresentOffbuffs, i),
                     DefBuffStats = BuildBuffUptimeData(_statistics.PresentDefbuffs, i),
@@ -1071,6 +1107,24 @@ namespace LuckParser.Builders
                     DefBuffGenGroupStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, Statistics.BuffEnum.Group),
                     DefBuffGenOGroupStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, Statistics.BuffEnum.OffGroup),
                     DefBuffGenSquadStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, Statistics.BuffEnum.Squad),
+                    //
+                    BoonActiveStats = BuildActiveBuffUptimeData(_statistics.PresentBoons, i),
+                    OffBuffActiveStats = BuildActiveBuffUptimeData(_statistics.PresentOffbuffs, i),
+                    DefBuffActiveStats = BuildActiveBuffUptimeData(_statistics.PresentDefbuffs, i),
+                    PersBuffActiveStats = BuildActivePersonalBuffUptimeData(persBuffDict, i),
+                    BoonGenActiveSelfStats = BuildActiveBuffGenerationData(_statistics.PresentBoons, i, Statistics.BuffEnum.Self),
+                    BoonGenActiveGroupStats = BuildActiveBuffGenerationData(_statistics.PresentBoons, i, Statistics.BuffEnum.Group),
+                    BoonGenActiveOGroupStats = BuildActiveBuffGenerationData(_statistics.PresentBoons, i, Statistics.BuffEnum.OffGroup),
+                    BoonGenActiveSquadStats = BuildActiveBuffGenerationData(_statistics.PresentBoons, i, Statistics.BuffEnum.Squad),
+                    OffBuffActiveGenSelfStats = BuildActiveBuffGenerationData(_statistics.PresentOffbuffs, i, Statistics.BuffEnum.Self),
+                    OffBuffActiveGenGroupStats = BuildActiveBuffGenerationData(_statistics.PresentOffbuffs, i, Statistics.BuffEnum.Group),
+                    OffBuffActiveGenOGroupStats = BuildActiveBuffGenerationData(_statistics.PresentOffbuffs, i, Statistics.BuffEnum.OffGroup),
+                    OffBuffActiveGenSquadStats = BuildActiveBuffGenerationData(_statistics.PresentOffbuffs, i, Statistics.BuffEnum.Squad),
+                    DefBuffActiveGenSelfStats = BuildActiveBuffGenerationData(_statistics.PresentDefbuffs, i, Statistics.BuffEnum.Self),
+                    DefBuffActiveGenGroupStats = BuildActiveBuffGenerationData(_statistics.PresentDefbuffs, i, Statistics.BuffEnum.Group),
+                    DefBuffActiveGenOGroupStats = BuildActiveBuffGenerationData(_statistics.PresentDefbuffs, i, Statistics.BuffEnum.OffGroup),
+                    DefBuffActiveGenSquadStats = BuildActiveBuffGenerationData(_statistics.PresentDefbuffs, i, Statistics.BuffEnum.Squad),
+                    //
                     DmgModifiersCommon = BuildDmgModifiersData(i, commonDamageModifiers),
                     DmgModifiersItem = BuildDmgModifiersData(i, itemDamageModifiers),
                     DmgModifiersPers = BuildPersonalDmgModifiersData(i, persDamageModDict),

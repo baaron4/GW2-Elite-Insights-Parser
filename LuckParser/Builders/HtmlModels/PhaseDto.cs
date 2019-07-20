@@ -21,7 +21,7 @@ namespace LuckParser.Builders.HtmlModels
         public List<List<object>> DmgStats;
         public List<List<object>> DefStats;
         public List<List<object>> SupportStats;
-
+        // all
         public List<BoonData> BoonStats;
         public List<BoonData> BoonGenSelfStats;
         public List<BoonData> BoonGenGroupStats;
@@ -41,6 +41,27 @@ namespace LuckParser.Builders.HtmlModels
         public List<BoonData> DefBuffGenSquadStats;
 
         public List<BoonData> PersBuffStats;
+
+        // active
+        public List<BoonData> BoonActiveStats;
+        public List<BoonData> BoonGenActiveSelfStats;
+        public List<BoonData> BoonGenActiveGroupStats;
+        public List<BoonData> BoonGenActiveOGroupStats;
+        public List<BoonData> BoonGenActiveSquadStats;
+
+        public List<BoonData> OffBuffActiveStats;
+        public List<BoonData> OffBuffActiveGenSelfStats;
+        public List<BoonData> OffBuffActiveGenGroupStats;
+        public List<BoonData> OffBuffActiveGenOGroupStats;
+        public List<BoonData> OffBuffActiveGenSquadStats;
+
+        public List<BoonData> DefBuffActiveStats;
+        public List<BoonData> DefBuffActiveGenSelfStats;
+        public List<BoonData> DefBuffActiveGenGroupStats;
+        public List<BoonData> DefBuffActiveGenOGroupStats;
+        public List<BoonData> DefBuffActiveGenSquadStats;
+
+        public List<BoonData> PersBuffActiveStats;
 
         public List<DamageModData> DmgModifiersCommon;
         public List<DamageModData> DmgModifiersItem;
