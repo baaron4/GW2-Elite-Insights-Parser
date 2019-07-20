@@ -342,6 +342,8 @@ namespace LuckParser.EIData
                     avgBoons += duration;
                 }
                 final.AvgBoons = Math.Round(avgBoons / phase.DurationInMS, GeneralHelper.BoonDigit);
+                long activeDuration = phase.GetPlayerActiveDuration(this, log);
+                final.AvgActiveBoons = activeDuration > 0 ? Math.Round(avgBoons / activeDuration, GeneralHelper.BoonDigit) : 0.0;
 
                 double avgCondis = 0;
                 foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => log.Boons.BoonsByIds[x.Key].Nature == Boon.BoonNature.Condition).Select(x => x.Value))
@@ -349,6 +351,7 @@ namespace LuckParser.EIData
                     avgCondis += duration;
                 }
                 final.AvgConditions = Math.Round(avgCondis / phase.DurationInMS, GeneralHelper.BoonDigit);
+                final.AvgActiveConditions = activeDuration > 0 ? Math.Round(avgCondis / activeDuration, GeneralHelper.BoonDigit) : 0.0;
 
                 if (log.CombatData.HasMovementData)
                 {

@@ -101,17 +101,17 @@
                 </div>
                 <general-layout-component :layout="layout" :phaseindex="activePhase">
                 </general-layout-component>
-				<div v-show="dataType === datatypes.personalBuffTable || (dataType <= datatypes.defensiveBuffTable && dataType>= datatypes.boonTable)" class="d-flex flex-row justify-content-center mt-2 mb-2">
-					<ul class="nav nav-pills d-flex flex-row justify-content-center">
-						<li class="nav-item">
-							<a class="nav-link" @click="buffMode = 0" :class="{active: buffMode === 0}">Phase duration</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" @click="buffMode = 1" data-original-title="Removed dead time and dc time" 
-										:class="{active: buffMode === 1 }">Phase active duration</a>
-						</li>
-					</ul>
-				</div>
+					<div v-if="dataType === datatypes.personalBuffTable || (dataType <= datatypes.defensiveBuffTable && dataType>= datatypes.boonTable)" :key="'buffMode'" class="d-flex flex-row justify-content-center mt-2 mb-2">
+						<ul class="nav nav-pills d-flex flex-row justify-content-center">
+							<li class="nav-item">
+								<a class="nav-link" @click="buffMode = 0" :class="{active: buffMode === 0}">Phase duration</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" @click="buffMode = 1" data-original-title="Removed dead time and dc time" 
+											:class="{active: buffMode === 1 }">Phase active duration</a>
+							</li>
+						</ul>
+					</div>
                 <keep-alive>
                     <damage-stats-component v-if="dataType === datatypes.damageTable" :key="'damage'" :phaseindex="activePhase"
                                             :playerindex="activePlayer" :activetargets="activePhaseTargets"></damage-stats-component>

@@ -175,7 +175,7 @@ namespace LuckParser.Builders
         {
             List<PhaseData> phases = _phases;
             List<BoonData> list = new List<BoonData>();
-            bool boonTable = listToUse.Select(x => x.ID).Contains(740);
+            bool boonTable = listToUse.Select(x => x.Nature).Contains(Boon.BoonNature.Boon);
 
             foreach (Player player in _log.PlayerList)
             {
@@ -192,10 +192,15 @@ namespace LuckParser.Builders
         private List<BoonData> BuildActiveBuffUptimeData(List<Boon> listToUse, int phaseIndex)
         {
             List<BoonData> list = new List<BoonData>();
+            bool boonTable = listToUse.Select(x => x.Nature).Contains(Boon.BoonNature.Boon);
 
             foreach (Player player in _log.PlayerList)
             {
                 double avg = 0.0;
+                if (boonTable)
+                {
+                    avg = player.GetStatsAll(_log, phaseIndex).AvgActiveBoons;
+                }
                 list.Add(new BoonData(player.GetActiveBuffs(_log, phaseIndex, Statistics.BuffEnum.Self), listToUse, avg));
             }
             return list;
