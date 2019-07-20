@@ -254,9 +254,17 @@ namespace LuckParser.Builders.JsonModels
             /// </summary>
             public double AvgBoons;
             /// <summary>
+            /// Average amount of boons over active time
+            /// </summary>
+            public double AvgActiveBoons;
+            /// <summary>
             /// Average amount of conditions
             /// </summary>
             public double AvgConditions;
+            /// <summary>
+            /// Average amount of conditions over active time
+            /// </summary>
+            public double AvgActiveConditions;
             /// <summary>
             /// Number of time a weapon swap happened
             /// </summary>
@@ -270,7 +278,9 @@ namespace LuckParser.Builders.JsonModels
                 TimeSaved = stats.TimeSaved;
                 StackDist = stats.StackDist;
                 AvgBoons = stats.AvgBoons;
+                AvgActiveBoons = stats.AvgActiveBoons;
                 AvgConditions = stats.AvgConditions;
+                AvgActiveConditions = stats.AvgActiveConditions;
                 SwapCount = stats.SwapCount;
             }
         }

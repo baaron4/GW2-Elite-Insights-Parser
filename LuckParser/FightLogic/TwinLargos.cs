@@ -52,13 +52,9 @@ namespace LuckParser.Logic
             };
         }
 
-        protected override List<ushort> GetDeatchCheckIds()
+        protected override List<ushort> GetSuccessCheckIds()
         {
-            return new List<ushort>
-            {
-                (ushort)ParseEnum.TargetIDS.Kenut,
-                (ushort)ParseEnum.TargetIDS.Nikare
-            };
+            return GetFightTargetsIDs();
         }
 
         private List<PhaseData> GetTargetPhases(ParsedLog log, Target target, string[] names)

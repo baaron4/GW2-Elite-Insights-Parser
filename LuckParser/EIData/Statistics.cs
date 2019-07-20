@@ -107,7 +107,9 @@ namespace LuckParser.Models
 
             // boons
             public double AvgBoons;
+            public double AvgActiveBoons;
             public double AvgConditions;
+            public double AvgActiveConditions;
 
             // Counts
             public int SwapCount;

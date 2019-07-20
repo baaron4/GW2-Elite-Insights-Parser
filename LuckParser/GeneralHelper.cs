@@ -499,6 +499,8 @@ namespace LuckParser
                 case GreenSpirit2:
                 case BanditSapper:
                 case ProjectionArkk:
+                case Prisoner1:
+                case Prisoner2:
                 case Pylon1:
                     return "https://i.imgur.com/0koP4xB.png";
                 case FleshWurm:

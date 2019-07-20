@@ -38,6 +38,7 @@ namespace LuckParser.Logic
             //Not sure what this (ID 350342,"Disruption") is. Looks like it is the pulsing "orb removal" from the orange circles on the 40% platform. Would fit the name although it's weird it can hit players. 
             });
             Extension = "xera";
+            GenericFallBackMethod = FallBackMethod.CombatExit;
             IconUrl = "https://wiki.guildwars2.com/images/4/4b/Mini_Xera.png";
         }
 

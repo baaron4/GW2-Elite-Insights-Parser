@@ -275,27 +275,40 @@ namespace LuckParser.Logic
             }
         }
 
-        protected void SetSuccessByCombatExit(Target target, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
+        protected void SetSuccessByCombatExit(HashSet<ushort> targetIds, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            if (target == null)
+            List<Target> targets = Targets.Where(x => targetIds.Contains(x.ID)).ToList();
+            SetSuccessByCombatExit(targets, combatData, fightData, playerAgents);
+        }
+
+        protected void SetSuccessByCombatExit(List<Target> targets, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
+        {
+            if (targets.Count == 0)
             {
                 return;
             }
             List<ExitCombatEvent> playerExits = new List<ExitCombatEvent>();
+            List<ExitCombatEvent> targetExits = new List<ExitCombatEvent>();
+            List<AbstractDamageEvent> lastTargetDamages = new List<AbstractDamageEvent>();
             foreach (AgentItem a in playerAgents)
             {
                 playerExits.AddRange(combatData.GetExitCombatEvents(a));
             }
+            foreach (Target t in targets)
+            {
+                targetExits.AddRange(combatData.GetExitCombatEvents(t.AgentItem));
+                lastTargetDamages.Add(combatData.GetDamageTakenData(t.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom))));
+            }
             ExitCombatEvent lastPlayerExit = playerExits.Count > 0 ? playerExits.MaxBy(x => x.Time) : null;
-            ExitCombatEvent lastTargetExit = combatData.GetExitCombatEvents(target.AgentItem).LastOrDefault();
-            AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
+            ExitCombatEvent lastTargetExit = targetExits.Count > 0 ? targetExits.MaxBy(x => x.Time) : null;
+            AbstractDamageEvent lastDamageTaken = lastTargetDamages.Count > 0 ? lastTargetDamages.MaxBy(x => x.Time) : null;
             if (lastTargetExit != null && lastDamageTaken != null)
             {
                 if (lastPlayerExit != null)
                 {
                     fightData.SetSuccess(lastPlayerExit.Time > lastTargetExit.Time + 1000, fightData.ToLogSpace(lastDamageTaken.Time));
                 }
-                else if (fightData.FightEndLogTime > target.LastAwareLogTime + 2000)
+                else if (fightData.FightEndLogTime > targets.Max(x => x.LastAwareLogTime) + 2000)
                 {
                     fightData.SetSuccess(true, fightData.ToLogSpace(lastDamageTaken.Time));
                 }
