@@ -101,6 +101,17 @@
                 </div>
                 <general-layout-component :layout="layout" :phaseindex="activePhase">
                 </general-layout-component>
+				<div v-show="dataType === datatypes.personalBuffTable || (dataType <= datatypes.defensiveBuffTable && dataType>= datatypes.boonTable)" class="d-flex flex-row justify-content-center mt-2 mb-2">
+					<ul class="nav nav-pills d-flex flex-row justify-content-center">
+						<li class="nav-item">
+							<a class="nav-link" @click="buffMode = 0" :class="{active: buffMode === 0}">Phase duration</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" @click="buffMode = 1" data-original-title="Removed dead time and dc time" 
+										:class="{active: buffMode === 1 }">Phase active duration</a>
+						</li>
+					</ul>
+				</div>
                 <keep-alive>
                     <damage-stats-component v-if="dataType === datatypes.damageTable" :key="'damage'" :phaseindex="activePhase"
                                             :playerindex="activePlayer" :activetargets="activePhaseTargets"></damage-stats-component>
@@ -116,9 +127,9 @@
                                            :phaseindex="activePhase" :playerindex="activePlayer" :light="light"></graph-stats-component>
                     <buff-stats-component v-if="dataType <= datatypes.defensiveBuffTable && dataType>= datatypes.boonTable"
                                           :key="'buffs'" :datatypes="datatypes" :datatype="dataType" :phaseindex="activePhase"
-                                          :playerindex="activePlayer"></buff-stats-component>
+                                          :playerindex="activePlayer" :active="buffMode"></buff-stats-component>
                     <personal-buff-table-component v-if="dataType === datatypes.personalBuffTable" :key="'persbuffs'"
-                                                   :phaseindex="activePhase" :persbuffs="logdata.persBuffs" :playerindex="activePlayer"></personal-buff-table-component>
+                                                   :phaseindex="activePhase" :playerindex="activePlayer" :active="buffMode"></personal-buff-table-component>
                     <mechanics-stats-component v-if="dataType === datatypes.mechanicTable" :key="'mechanics'"
                                                :phaseindex="activePhase" :playerindex="activePlayer"></mechanics-stats-component>
                     <target-stats-component v-if="dataType === datatypes.targetTab" :key="'targets'" :playerindex="activePlayer"
