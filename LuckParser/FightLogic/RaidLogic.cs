@@ -16,14 +16,6 @@ namespace LuckParser.Logic
             Mode = ParseMode.Raid;
         }
 
-        protected virtual List<ushort> GetDeatchCheckIds()
-        {
-            return new List<ushort>
-            {
-                TriggerID
-            };
-        }
-
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             HashSet<int> raidRewardsTypes = new HashSet<int>
@@ -41,7 +33,7 @@ namespace LuckParser.Logic
             }
             else if (GenericFallBackMethod == FallBackMethod.Death)
             {
-                SetSuccessByDeath(combatData, fightData, playerAgents, true, GetDeatchCheckIds());
+                SetSuccessByDeath(combatData, fightData, playerAgents, true, GetFightTargetsIDs());
             }
         }
 

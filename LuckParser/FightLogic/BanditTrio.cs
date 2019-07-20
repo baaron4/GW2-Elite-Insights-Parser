@@ -82,16 +82,6 @@ namespace LuckParser.Logic
             };
         }
 
-        protected override List<ushort> GetDeatchCheckIds()
-        {
-            return new List<ushort>
-            {
-                (ushort)ParseEnum.TargetIDS.Berg,
-                (ushort)ParseEnum.TargetIDS.Zane,
-                (ushort)ParseEnum.TargetIDS.Narella
-            };
-        }
-
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
