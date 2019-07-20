@@ -179,6 +179,8 @@ namespace LuckParser.Parser
             BanditSniper = 16065,
             NarellaTornado = 16092,
             OilSlick = 16096,
+            Prisoner1 = 16056,
+            Prisoner2 = 16103,
             // Matthias
             Spirit = 16105,
             Spirit2 = 16114,
