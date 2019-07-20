@@ -21,7 +21,7 @@ namespace LuckParser.Logic
             new HitOnPlayerMechanic(34344, "Fiery Vortex", new MechanicPlotlySetting("circle-open","rgb(255,200,0)"), "Tornado","Fiery Vortex (Tornado)", "Tornado",250),
             });
             Extension = "trio";
-            GenericFallBackMethod = FallBackMethod.CombatExit;
+            GenericFallBackMethod = FallBackMethod.None;
             IconUrl = "https://i.imgur.com/UZZQUdf.png";
         }
 
@@ -50,6 +50,24 @@ namespace LuckParser.Logic
                             (-2900, -12251, 2561, -7265),
                             (-12288, -27648, 12288, 27648),
                             (2688, 11906, 3712, 14210));
+        }
+
+        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        {
+            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+            if (!fightData.Success)
+            {
+                List<AgentItem> prisoners = agentData.GetAgentsByID((ushort)Prisoner2);
+                List<DeadEvent> prisonerDeaths = new List<DeadEvent>();
+                foreach(AgentItem prisoner in prisoners)
+                {
+                    prisonerDeaths.AddRange(combatData.GetDeadEvents(prisoner));
+                }
+                if (prisonerDeaths.Count == 0)
+                {
+                    SetSuccessByCombatExit(new HashSet<ushort>(GetSuccessCheckIds()), combatData, fightData, playerAgents);
+                }
+            }
         }
 
         public void SetPhasePerTarget(Target target, List<PhaseData> phases, ParsedLog log)
@@ -132,7 +150,9 @@ namespace LuckParser.Logic
                 BanditBombardier,
                 BanditSniper,
                 NarellaTornado,
-                OilSlick
+                OilSlick,
+                Prisoner1,
+                Prisoner2
             };
         }
 

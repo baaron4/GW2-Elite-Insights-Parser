@@ -34,7 +34,7 @@ namespace LuckParser.Logic
                     22797
                 };
             List<RewardEvent> rewards = combatData.GetRewardEvents();
-            RewardEvent reward = null; rewards.FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType));
+            RewardEvent reward = rewards.FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType));
             if (reward != null)
             {
                 fightData.SetSuccess(true, fightData.ToLogSpace(reward.Time));
