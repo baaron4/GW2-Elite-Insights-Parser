@@ -152,5 +152,10 @@ namespace LuckParser.Builders.JsonModels
         /// </summary>
         /// <seealso cref="JsonConsumable"/>
         public List<JsonConsumable> Consumables;
+        /// <summary>
+        /// List of time during which the player was active (not dead and not dc) \n
+        /// Length == number of phases
+        /// </summary>
+        public List<long> ActiveTimes;
     }
 }
