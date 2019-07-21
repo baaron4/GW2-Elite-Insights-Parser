@@ -97,12 +97,12 @@ namespace LuckParser.Logic
                     {
                         break;
                     }
-                    if (positions[1].X < -12000 || positions[1].X > -9250)
+                    if (positions[0].X < -12000 || positions[0].X > -9250)
                     {
                         replay.Actors.Add(new RectangleActor(true, 0, 240, 660, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(mob)));
                         break;
                     }
-                    else if (positions[1].Y < -525 || positions[1].Y > 2275)
+                    else if (positions[0].Y < -525 || positions[0].Y > 2275)
                     {
                         replay.Actors.Add(new RectangleActor(true, 0, 645, 238, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(mob)));
                         break;
