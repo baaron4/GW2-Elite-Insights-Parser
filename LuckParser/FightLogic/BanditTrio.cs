@@ -70,20 +70,6 @@ namespace LuckParser.Logic
             }
         }
 
-        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
-        {
-            ComputeFightTargets(agentData, fightData, combatData);
-            Target narella = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Narella);
-            if (narella != null)
-            {
-                CombatItem c = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.ExitCombat && x.SrcInstid == narella.InstID && x.LogTime <= narella.LastAwareLogTime && x.LogTime >= narella.FirstAwareLogTime);
-                if (c != null)
-                {
-                    combatData.Remove(c);
-                }
-            }
-        }
-
         public void SetPhasePerTarget(Target target, List<PhaseData> phases, ParsedLog log)
         {
             long fightDuration = log.FightData.FightDuration;
