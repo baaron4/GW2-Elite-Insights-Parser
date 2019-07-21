@@ -466,7 +466,7 @@ namespace LuckParser
                     return "https://i.imgur.com/INCGLIK.png";
                 case BanditBombardier:
                 case SurgingSoul:
-                //case MazeMinotaur:
+                case MazeMinotaur:
                 case Enervator:
                     return "https://i.imgur.com/k79t7ZA.png";
                 case HandOfErosion:
