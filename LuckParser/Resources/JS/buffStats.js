@@ -120,6 +120,8 @@ var compileBuffStats = function () {
                 if (this.cache.has(id)) {
                     return this.cache.get(id);
                 }
+				var active = this.active;
+				var activeTimes = this.phase.playerActiveTimes;
                 var getData = function (stats, genself, gengroup, genoffgr, gensquad) {
                     var uptimes = [],
                         gens = [],
@@ -159,6 +161,9 @@ var compileBuffStats = function () {
                             player: player,
                             data: gensquad[i]
                         });
+						if (active && activeTimes[i] < 1e-6) {
+							continue;
+						}
                         if (!gravg[player.group]) {
                             gravg[player.group] = [];
                             grcount[player.group] = 0;

@@ -258,6 +258,7 @@ namespace LuckParser.Builders
                     Consumables = BuildConsumables(player),
                     BoonsStates = BuildBuffStates(player.GetBoonGraphs(_log)[ProfHelper.NumberOfBoonsID]),
                     ConditionsStates = BuildBuffStates(player.GetBoonGraphs(_log)[ProfHelper.NumberOfConditionsID]),
+                    ActiveTimes = _phases.Select(x => x.GetPlayerActiveDuration(player, _log)).ToList(),
                 });
             }
         }

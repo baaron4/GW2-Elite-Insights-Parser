@@ -246,7 +246,7 @@ namespace LuckParser.Parser
             SpiritHorde3 = 19692,
             // Statues of Darkness
             LightThieves = 19658,
-            //MazeMinotaur = 5,
+            MazeMinotaur = 19402,
             // Statue of Death
             OrbSpider = 19801,
             GreenSpirit1 = 19587,

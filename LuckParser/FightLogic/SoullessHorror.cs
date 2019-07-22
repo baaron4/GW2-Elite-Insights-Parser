@@ -62,21 +62,15 @@ namespace LuckParser.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                AgentItem desmina = agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.Desmina).FirstOrDefault();
-                if (desmina != null)
+                Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.SoullessHorror);
+                if (mainTarget == null)
                 {
-                    long time = fightData.ToFightSpace(desmina.FirstAwareLogTime);
-                    Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.SoullessHorror);
-                    if (target == null)
-                    {
-                        throw new InvalidOperationException("Main target of the fight not found");
-                    }
-                    AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
-                    if (lastDamageTaken != null)
-                    {
-                        time = Math.Min(lastDamageTaken.Time, time);
-                    }
-                    fightData.SetSuccess(true, fightData.ToLogSpace(time));
+                    throw new InvalidOperationException("Main target of the fight not found");
+                }
+                AbstractBuffEvent buffOnDeath = combatData.GetBoonData(895).Where(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent).LastOrDefault();
+                if (buffOnDeath != null)
+                {
+                    fightData.SetSuccess(true, fightData.ToLogSpace(buffOnDeath.Time));
                 }
             }
         }
@@ -103,12 +97,12 @@ namespace LuckParser.Logic
                     {
                         break;
                     }
-                    if (positions[1].X < -12000 || positions[1].X > -9250)
+                    if (positions[0].X < -12000 || positions[0].X > -9250)
                     {
                         replay.Actors.Add(new RectangleActor(true, 0, 240, 660, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(mob)));
                         break;
                     }
-                    else if (positions[1].Y < -525 || positions[1].Y > 2275)
+                    else if (positions[0].Y < -525 || positions[0].Y > 2275)
                     {
                         replay.Actors.Add(new RectangleActor(true, 0, 645, 238, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(mob)));
                         break;

@@ -73,6 +73,7 @@ namespace LuckParser.Builders.HtmlModels
 
         public List<List<int[]>> MechanicStats;
         public List<List<int[]>> EnemyMechanicStats;
+        public List<long> PlayerActiveTimes;
 
         public List<double> MarkupLines;
         public List<AreaLabelDto> MarkupAreas;
@@ -87,6 +88,11 @@ namespace LuckParser.Builders.HtmlModels
             foreach (Target target in phaseData.Targets)
             {
                 Targets.Add(log.FightData.Logic.Targets.IndexOf(target));
+            }
+            PlayerActiveTimes = new List<long>();
+            foreach (Player p in log.PlayerList)
+            {
+                PlayerActiveTimes.Add(phaseData.GetPlayerActiveDuration(p, log));
             }
             // add phase markup
             MarkupLines = new List<double>();
