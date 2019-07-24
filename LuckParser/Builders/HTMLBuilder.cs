@@ -562,7 +562,7 @@ namespace LuckParser.Builders
                 foreach (Target mainTarget in _log.FightData.GetMainTargets(_log))
                 {
                     boonGraphData = mainTarget.GetBoonGraphs(_log);
-                    foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.Boon.Name == "Compromised" || x.Boon.Name == "Unnatural Signet" || x.Boon.Name == "Fractured - Enemy"))
+                    foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.Boon.Name == "Compromised" || x.Boon.Name == "Unnatural Signet" || x.Boon.Name == "Fractured - Enemy" || x.Boon.Name == "Erratic Energy"))
                     {
                         BoonChartDataDto graph = BuildBoonGraph(bgm, phase);
                         if (graph != null) list.Add(graph);
