@@ -122,7 +122,6 @@ namespace LuckParser.Logic
                 {
                     throw new InvalidOperationException("Target for success by combat exit not found");
                 }
-                // needs to test this more
                 AgentItem zommoros = agentData.GetAgentsByID(21118).LastOrDefault();
                 if (zommoros == null)
                 {
