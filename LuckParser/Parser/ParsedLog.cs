@@ -60,7 +60,6 @@ namespace LuckParser.Parser
             {
                 throw new SkipException();
             }
-            CombatData.UpdateDamageEvents(FightData.FightDuration);
             FightData.SetCM(CombatData, AgentData, FightData);
         }
 

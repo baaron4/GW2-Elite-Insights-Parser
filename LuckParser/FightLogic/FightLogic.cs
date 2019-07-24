@@ -208,9 +208,33 @@ namespace LuckParser.Logic
             phase.OverrideTimes(log);
         }
 
-        public virtual List<AbstractBuffEvent> CreateCustomBuffEvents(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
+        public virtual List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
         {
             return new List<AbstractBuffEvent>();
+        }
+
+        protected void NegateDamageAgainstBarrier(List<AgentItem> agentItems, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst)
+        {
+            List<AbstractDamageEvent> dmgEvts = new List<AbstractDamageEvent>();
+            foreach (AgentItem agentItem in agentItems)
+            {
+                if (damageByDst.TryGetValue(agentItem, out var list))
+                {
+                    dmgEvts.AddRange(list);
+                }
+            }
+            foreach (AbstractDamageEvent de in dmgEvts)
+            {
+                if (de.ShieldDamage > 0)
+                {
+                    de.NegateDamage();
+                }
+            }
+        }
+
+        public virtual List<AbstractDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst, Dictionary<long, List<AbstractDamageEvent>> damageById, long offset, SkillData skillData)
+        {
+            return new List<AbstractDamageEvent>();
         }
 
         public virtual void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)

@@ -11,6 +11,7 @@
         public long SkillId => Skill.ID;
         public ParseEnum.IFF IFF { get; }
 
+        private int _damage;
         public int Damage { get; protected set; }
         public int ShieldDamage { get; protected set; }
         public bool IsOverNinety { get; }
@@ -43,6 +44,12 @@
             IsMoving = evtcItem.IsMoving > 0;
             IsFlanking = evtcItem.IsFlanking > 0;
             IFF = evtcItem.IFF;
+        }
+
+        public void NegateDamage()
+        {
+            _damage = Damage;
+            Damage = 0;
         }
 
         public abstract bool IsCondi(ParsedLog log);

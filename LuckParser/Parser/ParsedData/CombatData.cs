@@ -38,12 +38,11 @@ namespace LuckParser.Parser.ParsedData
                     ElementalistHelper.RemoveDualBuffs(GetBoonDataByDst(p.AgentItem), skillData);
                 }
             }
-            toAdd.AddRange(fightData.Logic.CreateCustomBuffEvents(_boonDataByDst, _boonData, fightData.FightStartLogTime, skillData));
+            toAdd.AddRange(fightData.Logic.SpecialBuffEventProcess(_boonDataByDst, _boonData, fightData.FightStartLogTime, skillData));
             HashSet<long> buffIDsToSort = new HashSet<long>();
             HashSet<AgentItem> buffAgentsToSort = new HashSet<AgentItem>();
             foreach (AbstractBuffEvent bf in toAdd)
             {
-                _boonDataByDst[bf.To].Add(bf);
                 if (_boonDataByDst.TryGetValue(bf.To, out var list1))
                 {
                     list1.Add(bf);
@@ -79,6 +78,65 @@ namespace LuckParser.Parser.ParsedData
             }
         }
 
+        private void SpecialDamageParse(List<Player> players, SkillData skillData, FightData fightData)
+        {
+            List<AbstractDamageEvent> toAdd = new List<AbstractDamageEvent>();
+            toAdd.AddRange(fightData.Logic.SpecialDamageEventProcess(_damageData, _damageTakenData, _damageDataById, fightData.FightStartLogTime, skillData));
+            HashSet<long> idsToSort = new HashSet<long>();
+            HashSet<AgentItem> dstToSort = new HashSet<AgentItem>();
+            HashSet<AgentItem> srcToSort = new HashSet<AgentItem>();
+            foreach (AbstractDamageEvent de in toAdd)
+            {
+                if (_damageTakenData.TryGetValue(de.To, out var list1))
+                {
+                    list1.Add(de);
+                }
+                else
+                {
+                    _damageTakenData[de.To] = new List<AbstractDamageEvent>()
+                    {
+                        de
+                    };
+                }
+                dstToSort.Add(de.To);
+                if (_damageData.TryGetValue(de.From, out var list3))
+                {
+                    list1.Add(de);
+                }
+                else
+                {
+                    _damageData[de.From] = new List<AbstractDamageEvent>()
+                    {
+                        de
+                    };
+                }
+                srcToSort.Add(de.To);
+                if (_damageDataById.TryGetValue(de.SkillId, out var list2))
+                {
+                    list2.Add(de);
+                }
+                else
+                {
+                    _damageDataById[de.SkillId] = new List<AbstractDamageEvent>()
+                    {
+                        de
+                    };
+                }
+                idsToSort.Add(de.SkillId);
+            }
+            foreach (long buffID in idsToSort)
+            {
+                _damageDataById[buffID].Sort((x, y) => x.Time.CompareTo(y.Time));
+            }
+            foreach (AgentItem a in dstToSort)
+            {
+                _damageTakenData[a].Sort((x, y) => x.Time.CompareTo(y.Time));
+            }
+            foreach (AgentItem a in srcToSort)
+            {
+                _damageData[a].Sort((x, y) => x.Time.CompareTo(y.Time));
+            }
+        }
         private void SpecialCastParse(List<Player> players, SkillData skillData)
         {
             List<AnimatedCastEvent> toAdd = new List<AnimatedCastEvent>();
@@ -132,6 +190,7 @@ namespace LuckParser.Parser.ParsedData
         private void ExtraEvents(List<Player> players, SkillData skillData, FightData fightData)
         {
             SpecialBoonParse(players, skillData, fightData);
+            SpecialDamageParse(players, skillData, fightData);
             SpecialCastParse(players, skillData);
         }
 
@@ -177,24 +236,6 @@ namespace LuckParser.Parser.ParsedData
                                             ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
                                                 (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
             ExtraEvents(players, skillData, fightData);
-        }
-
-        public void UpdateDamageEvents(long end)
-        {
-            List<AbstractDamageEvent> damageData = _damageData.SelectMany(x => x.Value).ToList();
-            damageData.Sort((x, y) => x.Time.CompareTo(y.Time));
-            damageData.Reverse();
-            foreach (AbstractDamageEvent c in damageData)
-            {
-                if (c.Time <= end)
-                {
-                    break;
-                }
-                else if (c.Time <= end + 1000)
-                {
-                    c.OverrideTime(end);
-                }
-            }
         }
 
         // getters

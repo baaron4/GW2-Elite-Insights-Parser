@@ -11,10 +11,5 @@
         {
             Time = logTime - offset;
         }
-
-        public void OverrideTime(long time)
-        {
-            Time = time;
-        }
     }
 }
