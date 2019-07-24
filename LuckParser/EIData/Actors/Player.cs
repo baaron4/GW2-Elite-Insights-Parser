@@ -9,6 +9,7 @@ using System.Linq;
 using static LuckParser.Models.Statistics;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
+using static LuckParser.EIData.Boon;
 
 namespace LuckParser.EIData
 {
@@ -1059,7 +1060,7 @@ namespace LuckParser.EIData
         
         private void SetConsumablesList(ParsedLog log)
         {
-            List<Boon> consumableList = log.Boons.GetConsumableList();
+            List<Boon> consumableList = log.Boons.BoonsByNature[BoonNature.Consumable];
             _consumeList = new List<Consumable>();
             long fightDuration = log.FightData.FightDuration;
             foreach (Boon consumable in consumableList)
