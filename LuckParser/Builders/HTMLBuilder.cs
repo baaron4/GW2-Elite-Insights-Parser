@@ -84,8 +84,6 @@ namespace LuckParser.Builders
         private List<List<object>> BuildDPSData(int phaseIndex)
         {
             List<List<object>> list = new List<List<object>>(_log.PlayerList.Count);
-            PhaseData phase = _phases[phaseIndex];
-
             foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalDPS dpsAll = player.GetDPSAll(_log, phaseIndex);
@@ -116,7 +114,6 @@ namespace LuckParser.Builders
         private List<List<object>> BuildDMGStatsData(int phaseIndex)
         {
             List<List<object>> list = new List<List<object>>();
-            PhaseData phase = _phases[phaseIndex];
             foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalStatsAll stats = player.GetStatsAll(_log, phaseIndex);             
@@ -404,7 +401,7 @@ namespace LuckParser.Builders
             return res;
         }
 
-        private List<object[]> BuildDMGDistBodyData(List<AbstractCastEvent> casting, List<AbstractDamageEvent> damageLogs, long finalTotalDamage)
+        private List<object[]> BuildDMGDistBodyData(List<AbstractCastEvent> casting, List<AbstractDamageEvent> damageLogs)
         {
             List<object[]> list = new List<object[]>();
             Dictionary<SkillItem, List<AbstractCastEvent>> castLogsBySkill = casting.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
@@ -442,7 +439,7 @@ namespace LuckParser.Builders
             return list;
         }
 
-        private DmgDistributionDto _BuildDMGDistData(Statistics.FinalDPS dps, AbstractMasterActor p, Target target, int phaseIndex)
+        private DmgDistributionDto BuildDMGDistDataInternal(Statistics.FinalDPS dps, AbstractMasterActor p, Target target, int phaseIndex)
         {
             DmgDistributionDto dto = new DmgDistributionDto();
             PhaseData phase = _phases[phaseIndex];
@@ -450,7 +447,8 @@ namespace LuckParser.Builders
             List<AbstractDamageEvent> damageLogs = p.GetJustPlayerDamageLogs(target, _log, phase);
             dto.TotalDamage = dps.Damage;
             dto.ContributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
-            dto.Distribution = BuildDMGDistBodyData(casting, damageLogs, dto.ContributedDamage);
+            dto.ContributedShieldDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.ShieldDamage) : 0;
+            dto.Distribution = BuildDMGDistBodyData(casting, damageLogs);
 
             return dto;
         }
@@ -464,7 +462,7 @@ namespace LuckParser.Builders
         private DmgDistributionDto BuildPlayerDMGDistData(Player p, Target target, int phaseIndex)
         {
             Statistics.FinalDPS dps = p.GetDPSTarget(_log, phaseIndex, target);
-            return _BuildDMGDistData(dps, p, target, phaseIndex);
+            return BuildDMGDistDataInternal(dps, p, target, phaseIndex);
         }
 
         /// <summary>
@@ -473,18 +471,19 @@ namespace LuckParser.Builders
         private DmgDistributionDto BuildTargetDMGDistData(Target target, int phaseIndex)
         {
             Statistics.FinalDPS dps = target.GetDPSAll(_log, phaseIndex);
-            return _BuildDMGDistData(dps, target, null, phaseIndex);
+            return BuildDMGDistDataInternal(dps, target, null, phaseIndex);
         }
 
-        private DmgDistributionDto _BuildDMGDistDataMinions(Statistics.FinalDPS dps, AbstractMasterActor p, Minions minions, Target target, int phaseIndex)
+        private DmgDistributionDto BuildDMGDistDataMinionsInternal(Statistics.FinalDPS dps, Minions minions, Target target, int phaseIndex)
         {
             DmgDistributionDto dto = new DmgDistributionDto();
             PhaseData phase = _phases[phaseIndex];
             List<AbstractCastEvent> casting = minions.GetCastLogs(_log, phase.Start, phase.End);
             List<AbstractDamageEvent> damageLogs = minions.GetDamageLogs(target, _log, phase.Start, phase.End);
             dto.ContributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
+            dto.ContributedShieldDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.ShieldDamage) : 0;
             dto.TotalDamage = dps.Damage;
-            dto.Distribution = BuildDMGDistBodyData(casting, damageLogs, dto.ContributedDamage);
+            dto.Distribution = BuildDMGDistBodyData(casting, damageLogs);
             return dto;
         }
 
@@ -495,7 +494,7 @@ namespace LuckParser.Builders
         {
             Statistics.FinalDPS dps = p.GetDPSTarget(_log, phaseIndex, target);
 
-            return _BuildDMGDistDataMinions(dps, p, minions, target, phaseIndex);
+            return BuildDMGDistDataMinionsInternal(dps, minions, target, phaseIndex);
         }
 
         /// <summary>
@@ -504,7 +503,7 @@ namespace LuckParser.Builders
         private DmgDistributionDto BuildTargetMinionDMGDistData(Target target, Minions minions, int phaseIndex)
         {
             Statistics.FinalDPS dps = target.GetDPSAll(_log, phaseIndex);
-            return _BuildDMGDistDataMinions(dps, target, minions, null, phaseIndex);
+            return BuildDMGDistDataMinionsInternal(dps, minions, null, phaseIndex);
         }
 
         /// <summary>
@@ -660,7 +659,6 @@ namespace LuckParser.Builders
 
         private List<BoonData> BuildTargetCondiData(int phaseIndex, Target target)
         {
-            PhaseData phase = _phases[phaseIndex];
             Dictionary<long, Statistics.FinalTargetBuffs> conditions = target.GetBuffs(_log, phaseIndex);
             List<BoonData> list = new List<BoonData>();
 
@@ -673,17 +671,13 @@ namespace LuckParser.Builders
 
         private BoonData BuildTargetCondiUptimeData(int phaseIndex, Target target)
         {
-            PhaseData phase = _phases[phaseIndex];
             Dictionary<long, Statistics.FinalTargetBuffs> buffs = target.GetBuffs(_log, phaseIndex);
-            long fightDuration = phase.DurationInMS;
             return new BoonData(buffs, _statistics.PresentConditions, target.GetAverageConditions(_log, phaseIndex));
         }
 
         private BoonData BuildTargetBoonData(int phaseIndex, Target target)
         {
-            PhaseData phase = _phases[phaseIndex];
             Dictionary<long, Statistics.FinalTargetBuffs> buffs = target.GetBuffs(_log, phaseIndex);
-            long fightDuration = phase.DurationInMS;
             return new BoonData(buffs, _statistics.PresentBoons, target.GetAverageBoons(_log, phaseIndex));
         }
 

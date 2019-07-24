@@ -114,7 +114,7 @@ namespace LuckParser.Logic
 
         protected abstract HashSet<ushort> GetUniqueTargetIDs();
 
-        protected void ComputeFightTargets(AgentData agentData, FightData fightData, List<CombatItem> combatItems)
+        protected void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems)
         {
             foreach (ushort id in GetUniqueTargetIDs())
             {
@@ -354,7 +354,7 @@ namespace LuckParser.Logic
 
         public virtual void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            ComputeFightTargets(agentData, fightData, combatData);
+            ComputeFightTargets(agentData, combatData);
         }
 
         //

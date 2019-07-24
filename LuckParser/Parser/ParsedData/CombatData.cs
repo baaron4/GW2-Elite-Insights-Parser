@@ -78,7 +78,7 @@ namespace LuckParser.Parser.ParsedData
             }
         }
 
-        private void SpecialDamageParse(List<Player> players, SkillData skillData, FightData fightData)
+        private void SpecialDamageParse(SkillData skillData, FightData fightData)
         {
             List<AbstractDamageEvent> toAdd = new List<AbstractDamageEvent>();
             toAdd.AddRange(fightData.Logic.SpecialDamageEventProcess(_damageData, _damageTakenData, _damageDataById, fightData.FightStartLogTime, skillData));
@@ -190,7 +190,7 @@ namespace LuckParser.Parser.ParsedData
         private void ExtraEvents(List<Player> players, SkillData skillData, FightData fightData)
         {
             SpecialBoonParse(players, skillData, fightData);
-            SpecialDamageParse(players, skillData, fightData);
+            SpecialDamageParse(skillData, fightData);
             SpecialCastParse(players, skillData);
         }
 

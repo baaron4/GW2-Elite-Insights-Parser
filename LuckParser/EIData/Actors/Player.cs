@@ -193,7 +193,7 @@ namespace LuckParser.EIData
             return _statsTarget[target];
         }
 
-        private void FillFinalStats(ParsedLog log, List<AbstractDamageEvent> dls, FinalStats final, Dictionary<Target, FinalStats> targetsFinal)
+        private void FillFinalStats(List<AbstractDamageEvent> dls, FinalStats final, Dictionary<Target, FinalStats> targetsFinal)
         {
             HashSet<long> nonCritable = new HashSet<long>
                     {
@@ -307,7 +307,7 @@ namespace LuckParser.EIData
                     targetDict[target] = _statsTarget[target].Last();
                 }
                 FinalStatsAll final = new FinalStatsAll();
-                FillFinalStats(log, GetJustPlayerDamageLogs(null, log, phase), final, targetDict);
+                FillFinalStats(GetJustPlayerDamageLogs(null, log, phase), final, targetDict);
                 _statsAll.Add(final);
                 // If conjured sword, stop
                 if (IsFakeActor)

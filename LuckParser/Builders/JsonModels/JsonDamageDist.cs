@@ -38,6 +38,10 @@ namespace LuckParser.Builders.JsonModels
         /// </summary>
         public int Flank;
         /// <summary>
+        /// Damage done against barrier, not necessarily included in total damage
+        /// </summary>
+        public int ShieldDamage;
+        /// <summary>
         /// ID of the damaging skill
         /// </summary>
         /// <seealso cref="JsonLog.SkillMap"/>
@@ -57,6 +61,7 @@ namespace LuckParser.Builders.JsonModels
             Flank = indirectDamage ? 0: list.Count(x => x.IsFlanking);
             Crit = indirectDamage ? 0 : list.Count(x => x.HasCrit);
             Glance = indirectDamage ? 0 : list.Count(x => x.HasGlanced);
+            ShieldDamage = list.Sum(x => x.ShieldDamage);
             IndirectDamage = indirectDamage;
             Id = id;
         }
