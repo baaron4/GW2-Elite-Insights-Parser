@@ -123,22 +123,16 @@ namespace LuckParser.Logic
                     throw new InvalidOperationException("Target for success by combat exit not found");
                 }
                 // needs to test this more
-                AgentItem npcAgentItem = agentData.GetAgentsByID(21291).FirstOrDefault();
-                if (npcAgentItem == null)
+                AgentItem zommoros = agentData.GetAgentsByID(21118).LastOrDefault();
+                if (zommoros == null)
                 {
                     return;
                 }
-                List<ExitCombatEvent> playerExits = new List<ExitCombatEvent>();
-                foreach (AgentItem a in playerAgents)
-                {
-                    playerExits.AddRange(combatData.GetExitCombatEvents(a));
-                }
-                ExitCombatEvent lastPlayerExit = playerExits.Count > 0 ? playerExits.MaxBy(x => x.Time) : null;
-                ExitCombatEvent lastTargetExit = combatData.GetExitCombatEvents(npcAgentItem).LastOrDefault();
+                SpawnEvent npcSpawn = combatData.GetSpawnEvents(zommoros).LastOrDefault();
                 AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
-                if (lastTargetExit != null && lastDamageTaken != null && lastPlayerExit != null)
+                if (npcSpawn != null && lastDamageTaken != null)
                 {
-                    fightData.SetSuccess(lastPlayerExit.Time > lastTargetExit.Time + 1000, fightData.ToLogSpace(lastDamageTaken.Time));
+                    fightData.SetSuccess(true, fightData.ToLogSpace(lastDamageTaken.Time));
                 }
             }
         }
