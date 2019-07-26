@@ -68,10 +68,10 @@ namespace LuckParser.EIData
                     {
                         continue;
                     }
-                    _rect.topX = Math.Min((int)Math.Floor(pos.Min(x => x.X)) - 1000, _rect.topX);
-                    _rect.topY = Math.Min((int)Math.Floor(pos.Min(x => x.Y)) - 1000, _rect.topY);
-                    _rect.bottomX = Math.Max((int)Math.Floor(pos.Max(x => x.X)) + 1000, _rect.bottomX);
-                    _rect.bottomY = Math.Max((int)Math.Floor(pos.Max(x => x.Y)) + 1000, _rect.bottomY);
+                    _rect.topX = Math.Min((int)Math.Floor(pos.Min(x => x.X)) - 500, _rect.topX);
+                    _rect.topY = Math.Min((int)Math.Floor(pos.Min(x => x.Y)) - 500, _rect.topY);
+                    _rect.bottomX = Math.Max((int)Math.Floor(pos.Max(x => x.X)) + 500, _rect.bottomX);
+                    _rect.bottomY = Math.Max((int)Math.Floor(pos.Max(x => x.Y)) + 500, _rect.bottomY);
                 }
             }
         }
