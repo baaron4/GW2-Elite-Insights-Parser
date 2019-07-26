@@ -1,6 +1,6 @@
 <div class="d-flex flex-column justify-content-center flex-wrap">
     <p class="text-justify text-center">Double click on canvas to restore viewpoint</p>
-    <div class="d-flex flex-column justify-content-center align-items-center" :style="{'width': '100%', 'height': canvas.y + 'px', 'position': 'relative'}">
+    <div class="d-flex flex-column justify-content-center align-items-center" :style="{'width': '100%', 'min-width': canvas.x + 'px', 'height': canvas.y + 'px', 'position': 'relative'}">
         <canvas :width="canvas.x + 'px'" :height="canvas.y + 'px'" id="main-canvas" class="replay"></canvas>
         <canvas :width="canvas.x + 'px'" :height="canvas.y + 'px'" id="bg-canvas" class="replay"></canvas>
     </div>
