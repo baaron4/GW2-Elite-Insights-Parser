@@ -741,7 +741,6 @@ namespace LuckParser.Builders
                 return "";
             }
             string scriptContent = Properties.Resources.combatreplay_js;
-            CombatReplayMap map = _log.FightData.Logic.GetCombatMap();
             if (Properties.Settings.Default.HtmlExternalScripts && path != null)
             {
 #if DEBUG

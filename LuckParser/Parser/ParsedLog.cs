@@ -23,7 +23,7 @@ namespace LuckParser.Parser
         public Dictionary<string, List<Player>> PlayerListBySpec { get; }
         public DamageModifiersContainer DamageModifiers { get; }
         public BoonsContainer Boons { get; }
-        public bool CanCombatReplay => CombatData.HasMovementData && FightData.Logic.HasCombatReplayMap;
+        public bool CanCombatReplay => CombatData.HasMovementData;
 
         public readonly MechanicData MechanicData;
         public readonly Statistics Statistics;

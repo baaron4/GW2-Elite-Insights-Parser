@@ -16,7 +16,6 @@ namespace LuckParser.Logic
         private CombatReplayMap _map;
         protected readonly List<Mechanic> MechanicList; //Resurrects (start), Resurrect
         public ParseMode Mode { get; protected set; } = ParseMode.Unknown;
-        public bool HasCombatReplayMap { get; protected set; } = false;
         public string Extension { get; protected set; }
         public string IconUrl { get; protected set; }
         private readonly int _basicMechanicsCount;
@@ -28,7 +27,6 @@ namespace LuckParser.Logic
         protected FightLogic(ushort triggerID)
         {
             TriggerID = triggerID;
-            HasCombatReplayMap = GetCombatMap() != null;
             MechanicList = new List<Mechanic>() {
                 new PlayerStatusMechanic(SkillItem.DeathId, "Dead", new MechanicPlotlySetting("x","rgb(0,0,0)"), "Dead",0),
                 new PlayerStatusMechanic(SkillItem.DownId, "Downed", new MechanicPlotlySetting("cross","rgb(255,0,0)"), "Downed",0),
@@ -47,14 +45,15 @@ namespace LuckParser.Logic
 
         protected virtual CombatReplayMap GetCombatMapInternal()
         {
-            return null;
+            return new CombatReplayMap("", (800,800), (0,0,0,0), (0,0,0,0) , (0,0,0,0));
         }
 
-        public CombatReplayMap GetCombatMap()
+        public CombatReplayMap GetCombatMap(ParsedLog log)
         {
             if (_map == null)
             {
                 _map = GetCombatMapInternal();
+                _map.ComputeBoundingBox(log);
             }
             return _map;
         }

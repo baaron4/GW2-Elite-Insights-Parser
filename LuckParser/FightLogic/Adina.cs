@@ -161,7 +161,7 @@ namespace LuckParser.Logic
             }
             phases.AddRange(mainPhases);
             phases.Sort((x, y) => x.Start.CompareTo(y.Start));
-            GetCombatMap().MatchMapsToPhases(new List<string> {
+            GetCombatMap(log).MatchMapsToPhases(new List<string> {
                 "https://i.imgur.com/3IBkNM6.png",
                 "https://i.imgur.com/iMrhTt6.png",
                 "https://i.imgur.com/zaZftSk.png",
