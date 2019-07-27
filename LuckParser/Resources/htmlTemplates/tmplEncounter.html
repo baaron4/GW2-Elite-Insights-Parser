@@ -8,14 +8,15 @@
                     <div v-if="encounter.targets.length > 1" class="small" style="text-align:center;">
                         {{target.name}}
                     </div>
-                    <div class="progress" style="width: 100%; height: 10px;" :data-original-title="(target.hpLeft ? target.hpLeft : 0) + '% left'">
-                        <div class="progress-bar bg-success" :style="{width: target.percent + '%'}" role="progressbar"
-                            :aria-valuenow="target.percent" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div :style="{'background': getGradient(target.hpLeft ? target.hpLeft : 0), 'height': '10px', 'width': '100%', 'border-radius': '5px'}" :data-original-title="(target.hpLeft ? target.hpLeft : 0) + '% left'">
+
                     </div>
-                    <div class="small" style="text-align:center;">{{ target.health }} Health</div>
+                    <div class="small" style="text-align:center;">
+                        {{ target.health }} Health
+                    </div>
                 </div>
-                <div class="mb-2 text" :class="getResultClass(encounter.success)">
-                    Result: {{getResultText(encounter.success)}}
+                <div class="mb-2 text" :class="resultStatus.class">
+                    Result: {{resultStatus.text}}
                 </div>
                 <div class="mb-2">Duration: {{ encounter.duration }}</div>
             </div>
