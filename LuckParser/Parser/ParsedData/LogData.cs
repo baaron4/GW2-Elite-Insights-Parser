@@ -44,7 +44,7 @@ namespace LuckParser.Parser.ParsedData
             }
             if (LogEnd == DefaultTimeValue && LogStart != DefaultTimeValue)
             {
-                long dur = allCombatItems.Max(x => x.LogTime) - allCombatItems.Min(x => x.LogTime) / 1000;
+                long dur = (allCombatItems.Max(x => x.LogTime) - allCombatItems.Min(x => x.LogTime)) / 1000;
                 SetLogEnd(dur + unixStart);
             }
         }
