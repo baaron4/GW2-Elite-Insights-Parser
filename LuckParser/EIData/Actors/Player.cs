@@ -928,7 +928,7 @@ namespace LuckParser.EIData
             List<DeathRecap> res = _deathRecaps;
             List<DeadEvent> deads = log.CombatData.GetDeadEvents(AgentItem);
             List<DownEvent> downs = log.CombatData.GetDownEvents(AgentItem);
-            long lastTime = 0;
+            long lastDeathTime = 0;
             List<AbstractDamageEvent> damageLogs = GetDamageTakenLogs(null, log, 0, log.FightData.FightDuration);
             foreach (DeadEvent dead in deads)
             {
@@ -936,10 +936,10 @@ namespace LuckParser.EIData
                 {
                     DeathTime = (int)dead.Time
                 };
-                DownEvent downed = downs.LastOrDefault(x => x.Time <= dead.Time && x.Time >= lastTime);
+                DownEvent downed = downs.LastOrDefault(x => x.Time <= dead.Time && x.Time >= lastDeathTime);
                 if (downed != null)
                 {
-                    List<AbstractDamageEvent> damageToDown = damageLogs.Where(x => x.Time < downed.Time && x.Damage > 0 && x.Time > lastTime).ToList();
+                    List<AbstractDamageEvent> damageToDown = damageLogs.Where(x => x.Time <= downed.Time && (x.HasHit || x.HasDowned) && x.Time > lastDeathTime).ToList();
                     recap.ToDown = damageToDown.Count > 0 ? new List<DeathRecap.DeathRecapDamageItem>() : null;
                     int damage = 0;
                     for (int i = damageToDown.Count - 1; i >= 0; i--)
@@ -961,7 +961,7 @@ namespace LuckParser.EIData
                             break;
                         }
                     }
-                    List<AbstractDamageEvent> damageToKill = damageLogs.Where(x => x.Time > downed.Time && x.Time < dead.Time && x.Damage > 0 && x.Time > lastTime).ToList();
+                    List<AbstractDamageEvent> damageToKill = damageLogs.Where(x => x.Time > downed.Time && x.Time <= dead.Time && (x.HasHit || x.HasDowned) && x.Time > lastDeathTime).ToList();
                     recap.ToKill = damageToKill.Count > 0 ? new List<DeathRecap.DeathRecapDamageItem>() : null;
                     for (int i = damageToKill.Count - 1; i >= 0; i--)
                     {
@@ -981,7 +981,7 @@ namespace LuckParser.EIData
                 else
                 {
                     recap.ToDown = null;
-                    List<AbstractDamageEvent> damageToKill = damageLogs.Where(x => x.Time < dead.Time && x.Damage > 0 && x.Time > lastTime).ToList();
+                    List<AbstractDamageEvent> damageToKill = damageLogs.Where(x => x.Time < dead.Time && x.Damage > 0 && x.Time > lastDeathTime).ToList();
                     recap.ToKill = damageToKill.Count > 0 ? new List<DeathRecap.DeathRecapDamageItem>() : null;
                     int damage = 0;
                     for (int i = damageToKill.Count - 1; i >= 0; i--)
@@ -1004,7 +1004,7 @@ namespace LuckParser.EIData
                         }
                     }
                 }
-                lastTime = dead.Time;
+                lastDeathTime = dead.Time;
                 res.Add(recap);
             }
         }
