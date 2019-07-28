@@ -16,7 +16,6 @@ namespace LuckParser.Logic
         private CombatReplayMap _map;
         protected readonly List<Mechanic> MechanicList; //Resurrects (start), Resurrect
         public ParseMode Mode { get; protected set; } = ParseMode.Unknown;
-        public bool HasCombatReplayMap { get; protected set; } = false;
         public string Extension { get; protected set; }
         public string IconUrl { get; protected set; }
         private readonly int _basicMechanicsCount;
@@ -28,7 +27,6 @@ namespace LuckParser.Logic
         protected FightLogic(ushort triggerID)
         {
             TriggerID = triggerID;
-            HasCombatReplayMap = GetCombatMap() != null;
             MechanicList = new List<Mechanic>() {
                 new PlayerStatusMechanic(SkillItem.DeathId, "Dead", new MechanicPlotlySetting("x","rgb(0,0,0)"), "Dead",0),
                 new PlayerStatusMechanic(SkillItem.DownId, "Downed", new MechanicPlotlySetting("cross","rgb(255,0,0)"), "Downed",0),
@@ -47,14 +45,15 @@ namespace LuckParser.Logic
 
         protected virtual CombatReplayMap GetCombatMapInternal()
         {
-            return null;
+            return new CombatReplayMap("", (800,800), (0,0,0,0), (0,0,0,0) , (0,0,0,0));
         }
 
-        public CombatReplayMap GetCombatMap()
+        public CombatReplayMap GetCombatMap(ParsedLog log)
         {
             if (_map == null)
             {
                 _map = GetCombatMapInternal();
+                _map.ComputeBoundingBox(log);
             }
             return _map;
         }
@@ -114,7 +113,7 @@ namespace LuckParser.Logic
 
         protected abstract HashSet<ushort> GetUniqueTargetIDs();
 
-        protected void ComputeFightTargets(AgentData agentData, FightData fightData, List<CombatItem> combatItems)
+        protected void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems)
         {
             foreach (ushort id in GetUniqueTargetIDs())
             {
@@ -208,9 +207,33 @@ namespace LuckParser.Logic
             phase.OverrideTimes(log);
         }
 
-        public virtual List<AbstractBuffEvent> CreateCustomBuffEvents(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
+        public virtual List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
         {
             return new List<AbstractBuffEvent>();
+        }
+
+        protected void NegateDamageAgainstBarrier(List<AgentItem> agentItems, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst)
+        {
+            List<AbstractDamageEvent> dmgEvts = new List<AbstractDamageEvent>();
+            foreach (AgentItem agentItem in agentItems)
+            {
+                if (damageByDst.TryGetValue(agentItem, out var list))
+                {
+                    dmgEvts.AddRange(list);
+                }
+            }
+            foreach (AbstractDamageEvent de in dmgEvts)
+            {
+                if (de.ShieldDamage > 0)
+                {
+                    de.NegateDamage();
+                }
+            }
+        }
+
+        public virtual List<AbstractDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst, Dictionary<long, List<AbstractDamageEvent>> damageById, long offset, SkillData skillData)
+        {
+            return new List<AbstractDamageEvent>();
         }
 
         public virtual void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
@@ -330,7 +353,7 @@ namespace LuckParser.Logic
 
         public virtual void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            ComputeFightTargets(agentData, fightData, combatData);
+            ComputeFightTargets(agentData, combatData);
         }
 
         //

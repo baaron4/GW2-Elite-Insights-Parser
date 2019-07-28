@@ -109,7 +109,7 @@ namespace LuckParser.Logic
             {
                 combatData.Sort((x, y) => x.LogTime.CompareTo(y.LogTime));
             }
-            ComputeFightTargets(agentData, fightData, combatData);
+            ComputeFightTargets(agentData, combatData);
         }
 
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)

@@ -57,6 +57,12 @@ namespace LuckParser.Logic
             return GetFightTargetsIDs();
         }
 
+        public override List<AbstractDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst, Dictionary<long, List<AbstractDamageEvent>> damageById, long offset, SkillData skillData)
+        {
+            NegateDamageAgainstBarrier(Targets.Select(x => x.AgentItem).ToList(), damageByDst);
+            return new List<AbstractDamageEvent>();
+        }
+
         private List<PhaseData> GetTargetPhases(ParsedLog log, Target target, string[] names)
         {
             long start = 0;

@@ -3,6 +3,7 @@ using System.Linq;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
+using static LuckParser.EIData.Boon;
 
 namespace LuckParser.EIData
 {
@@ -264,8 +265,8 @@ namespace LuckParser.EIData
             int fightDuration = (int)(dur) / 1000;
             BoonsGraphModel boonPresenceGraph = new BoonsGraphModel(log.Boons.BoonsByIds[ProfHelper.NumberOfBoonsID]);
             BoonsGraphModel condiPresenceGraph = new BoonsGraphModel(log.Boons.BoonsByIds[ProfHelper.NumberOfConditionsID]);
-            HashSet<long> boonIds = new HashSet<long>(log.Boons.GetBoonList().Select(x => x.ID));
-            HashSet<long> condiIds = new HashSet<long>(log.Boons.GetConditionList().Select(x => x.ID));
+            HashSet<long> boonIds = new HashSet<long>(log.Boons.BoonsByNature[BoonNature.Boon].Select(x => x.ID));
+            HashSet<long> condiIds = new HashSet<long>(log.Boons.BoonsByNature[BoonNature.Condition].Select(x => x.ID));
             InitBoonStatusData(log);
             foreach (Boon boon in TrackedBoons)
             {

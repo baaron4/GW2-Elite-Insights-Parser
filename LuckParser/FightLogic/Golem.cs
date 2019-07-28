@@ -59,7 +59,7 @@ namespace LuckParser.Logic
                     fightData.OverrideStart(enterCombat.LogTime);
                 }
             }
-            ComputeFightTargets(agentData, fightData, combatData);
+            ComputeFightTargets(agentData, combatData);
         }
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)

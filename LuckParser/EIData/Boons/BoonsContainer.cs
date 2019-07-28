@@ -49,51 +49,7 @@ namespace LuckParser.EIData
             return _boonSourceFinder.TryFindSrc(dst, time, extension, log, buffID);
         }
 
-        // Conditions
-        public List<Boon> GetConditionList()
-        {
-            return BoonsByNature[BoonNature.Condition];
-        }
-        // Boons
-        public List<Boon> GetBoonList()
-        {
-            return BoonsByNature[BoonNature.Boon];
-        }
-        // Shareable buffs
-        public List<Boon> GetOffensiveTableList()
-        {
-            return BoonsByNature[BoonNature.OffensiveBuffTable];
-        }
-        public List<Boon> GetDefensiveTableList()
-        {
-            return BoonsByNature[BoonNature.DefensiveBuffTable];
-        }
-        // Consumables (Food and Utility)
-        public List<Boon> GetConsumableList()
-        {
-            return BoonsByNature[BoonNature.Consumable];
-        }
-        // Enemy
-        public List<Boon> GetEnemyBoonList()
-        {
-            return BoonsBySource[BoonSource.Enemy];
-        }
-        // All buffs
-        public List<Boon> GetAllBuffList()
-        {
-            List<Boon> res = new List<Boon>();
-            // correct order for the boon graph
-            res.AddRange(BoonsByNature[BoonNature.Boon]);
-            res.AddRange(BoonsByNature[BoonNature.DefensiveBuffTable]);
-            res.AddRange(BoonsByNature[BoonNature.OffensiveBuffTable]);
-            res.AddRange(BoonsByNature[BoonNature.GraphOnlyBuff]);
-            return res;
-        }
         // Non shareable buffs
-        public List<Boon> GetRemainingBuffsList()
-        {
-            return BoonsByNature[BoonNature.GraphOnlyBuff];
-        }
         private List<Boon> GetRemainingBuffsList(BoonSource source)
         {
             return BoonsBySource[source].Where(x => x.Nature == BoonNature.GraphOnlyBuff).ToList();

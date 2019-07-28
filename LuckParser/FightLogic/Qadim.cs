@@ -118,7 +118,7 @@ namespace LuckParser.Logic
                 _startOffset = -(int)(startCast.LogTime - fightData.FightStartLogTime);
                 fightData.OverrideStart(startCast.LogTime);
             }
-            ComputeFightTargets(agentData, fightData, combatData);
+            ComputeFightTargets(agentData, combatData);
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)

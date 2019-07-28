@@ -5,11 +5,15 @@ var compileHeader = function () {
         props: [],
         template: `${tmplEncounter}`,
         methods: {
-            getResultText: function (success) {
-                return success ? "Success" : "Failure";
-            },
-            getResultClass: function (success) {
-                return success ? ["text-success"] : ["text-warning"];
+            getGradient: function (percent) {
+                var template = 'linear-gradient(to right, $left$, $middle$, $right$)';
+                var greenPercent = "green " + (100 - percent) + "%";
+                var redPercent = "red " + (percent) + "%";
+                var middle = percent + "%";
+                template = template.replace('$right$', greenPercent);
+                template = template.replace('$left$', redPercent);
+                template = template.replace('$middle$', middle);
+                return template;
             }
         },
         computed: {
@@ -22,12 +26,14 @@ var compileHeader = function () {
 
                 var encounter = {
                     name: logData.fightName,
-                    success: logData.success,
                     icon: logData.fightIcon,
                     duration: logData.encounterDuration,
                     targets: targets
                 };
                 return encounter;
+            },
+            resultStatus: function () {
+                return logData.success ? {text:'Success', class: ["text-success"]} : { text: 'Failure', class: ["text-warning"] };
             }
         }
     });

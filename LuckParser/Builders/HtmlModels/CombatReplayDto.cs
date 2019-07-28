@@ -16,7 +16,7 @@ namespace LuckParser.Builders.HtmlModels
 
         public CombatReplayDto(ParsedLog log)
         {
-            CombatReplayMap map = log.FightData.Logic.GetCombatMap();
+            CombatReplayMap map = log.FightData.Logic.GetCombatMap(log);
             Actors = GetCombatReplayActors(log, map);
             Maps = map.Maps;
             (int width, int height) = map.GetPixelMapSize();
