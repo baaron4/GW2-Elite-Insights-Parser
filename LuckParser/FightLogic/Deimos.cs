@@ -293,7 +293,7 @@ namespace LuckParser.Logic
                 if (tar.ID == (ushort)Thief || tar.ID == (ushort)Drunkard || tar.ID == (ushort)Gambler)
                 {
                     string name = (tar.ID == (ushort)Thief ? "Thief" : (tar.ID == (ushort)Drunkard ? "Drunkard" : (tar.ID == (ushort)Gambler ? "Gambler" : "")));
-                    PhaseData tarPhase = new PhaseData(log.FightData.ToFightSpace(tar.FirstAwareLogTime) - 1000, log.FightData.ToFightSpace(tar.LastAwareLogTime) + 1000);
+                    PhaseData tarPhase = new PhaseData(log.FightData.ToFightSpace(tar.FirstAwareLogTime) - 1000, Math.Min(log.FightData.ToFightSpace(tar.LastAwareLogTime) + 1000, fightDuration));
                     tarPhase.Targets.Add(tar);
                     tarPhase.OverrideTimes(log);
                     // override first then add Deimos so that it does not disturb the override process
@@ -311,11 +311,11 @@ namespace LuckParser.Logic
                 AbstractBuffEvent signet = signets[i];
                 if (signet is BuffApplyEvent)
                 {
-                    sigStart = signet.Time + 1;
+                    sigStart = Math.Max(signet.Time + 1, 0);
                 }
                 else
                 {
-                    sigEnd = signet.Time - 1;
+                    sigEnd = Math.Min(signet.Time - 1, fightDuration);
                     PhaseData burstPhase = new PhaseData(sigStart, sigEnd)
                     {
                         Name = "Burst " + burstID++
