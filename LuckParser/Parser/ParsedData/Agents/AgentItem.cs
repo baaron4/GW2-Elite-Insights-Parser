@@ -9,7 +9,7 @@ namespace LuckParser.Parser.ParsedData
     public class AgentItem
     {
 
-        public enum AgentType { NPC, Gadget, Player }
+        public enum AgentType { NPC, Gadget, Player, EnemyPlayer }
 
         // Fields
         public ulong Agent { get; set; }
@@ -42,6 +42,16 @@ namespace LuckParser.Parser.ParsedData
             Concentration = concentration;
             HitboxWidth = hbWidth;
             HitboxHeight = hbHeight;
+            //
+            string[] splitStr = Name.Split('\0');
+            if (splitStr.Length < 2)
+            {
+                Type = AgentType.EnemyPlayer;
+            }
+            if (splitStr[1].Length == 0 || splitStr[2].Length == 0 || splitStr[0].Contains("-"))
+            {
+                Type = AgentType.EnemyPlayer;
+            }
         }
 
         public AgentItem(AgentItem other)

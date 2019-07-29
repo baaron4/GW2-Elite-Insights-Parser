@@ -22,7 +22,7 @@ namespace LuckParser.Parser
         private AgentData _agentData;
         private readonly List<AgentItem> _allAgentsList = new List<AgentItem>();
         private readonly SkillData _skillData = new SkillData();
-        private List<CombatItem> _combatItems = new List<CombatItem>();
+        private readonly List<CombatItem> _combatItems = new List<CombatItem>();
         private List<Player> _playerList = new List<Player>();
         private byte _revision;
         private ushort _id;
@@ -530,69 +530,55 @@ namespace LuckParser.Parser
                     playerAgent.FirstAwareLogTime = _fightData.FightStartLogTime;
                     playerAgent.LastAwareLogTime = _fightData.FightEndLogTime;
                 }
-                try
+                bool skip = false;
+                Player player = new Player(playerAgent, _fightData.Logic.Mode == FightLogic.ParseMode.Fractal);
+                foreach (Player p in _playerList)
                 {
-                    bool skip = false;
-                    Player player = new Player(playerAgent, _fightData.Logic.Mode == FightLogic.ParseMode.Fractal);
-                    foreach (Player p in _playerList)
+                    if (p.Account == player.Account)// same player
                     {
-                        if (p.Account == player.Account)// same player
+                        if (p.Character == player.Character) // same character, can be fused
                         {
-                            if (p.Character == player.Character) // same character, can be fused
+                            skip = true;
+                            Random rnd = new Random();
+                            ulong agent = 0;
+                            while (_agentData.AgentValues.Contains(agent) || agent == 0)
                             {
-                                skip = true;
-                                Random rnd = new Random();
-                                ulong agent = 0;
-                                while (_agentData.AgentValues.Contains(agent) || agent == 0)
-                                {
-                                    agent = (ulong)rnd.Next(Int32.MaxValue / 2, Int32.MaxValue);
-                                }
-                                ushort instid = 0;
-                                while (_agentData.InstIDValues.Contains(instid) || instid == 0)
-                                {
-                                    instid = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
-                                }
-                                foreach (CombatItem c in _combatItems)
-                                {
-                                    if (c.DstAgent == p.Agent || player.Agent == c.DstAgent)
-                                    {
-                                        c.OverrideDstValues(agent, instid);
-                                    }
-                                    if (c.SrcAgent == p.Agent || player.Agent == c.SrcAgent)
-                                    {
-                                        c.OverrideSrcValues(agent, instid);
-                                    }
-                                }
-                                p.AgentItem.InstID = instid;
-                                p.AgentItem.Agent = agent;
-                                p.AgentItem.FirstAwareLogTime = Math.Min(p.AgentItem.FirstAwareLogTime, player.AgentItem.FirstAwareLogTime);
-                                p.AgentItem.LastAwareLogTime = Math.Max(p.AgentItem.LastAwareLogTime, player.AgentItem.LastAwareLogTime);
-                                _agentData.Refresh();
-                                break;
+                                agent = (ulong)rnd.Next(Int32.MaxValue / 2, Int32.MaxValue);
                             }
-                            // different character in raid mode, discard it as it can't have any influence, otherwise add as a separate entity
-                            else if (_fightData.Logic.Mode == FightLogic.ParseMode.Raid)
+                            ushort instid = 0;
+                            while (_agentData.InstIDValues.Contains(instid) || instid == 0)
                             {
-                                skip = true;
-                                break;
+                                instid = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
                             }
+                            foreach (CombatItem c in _combatItems)
+                            {
+                                if (c.DstAgent == p.Agent || player.Agent == c.DstAgent)
+                                {
+                                    c.OverrideDstValues(agent, instid);
+                                }
+                                if (c.SrcAgent == p.Agent || player.Agent == c.SrcAgent)
+                                {
+                                    c.OverrideSrcValues(agent, instid);
+                                }
+                            }
+                            p.AgentItem.InstID = instid;
+                            p.AgentItem.Agent = agent;
+                            p.AgentItem.FirstAwareLogTime = Math.Min(p.AgentItem.FirstAwareLogTime, player.AgentItem.FirstAwareLogTime);
+                            p.AgentItem.LastAwareLogTime = Math.Max(p.AgentItem.LastAwareLogTime, player.AgentItem.LastAwareLogTime);
+                            _agentData.Refresh();
+                            break;
+                        }
+                        // different character in raid mode, discard it as it can't have any influence, otherwise add as a separate entity
+                        else if (_fightData.Logic.Mode == FightLogic.ParseMode.Raid)
+                        {
+                            skip = true;
+                            break;
                         }
                     }
-                    if (!skip)
-                    {
-                        _playerList.Add(player);
-                    }
-                } catch (InvalidPlayerException ex)
+                }
+                if (!skip)
                 {
-                    if (_fightData.Logic.Mode != FightLogic.ParseMode.WvW)
-                    {
-                        throw ex;
-                    }
-                    // the players are enemy
-                    /*if (!ex.Squadless)
-                    {
-                        _fightData.Logic.Targets.Add(new Target(playerAgent));
-                    }*/
+                    _playerList.Add(player);
                 }
             }
         }
