@@ -43,14 +43,19 @@ namespace LuckParser.Parser.ParsedData
             HitboxWidth = hbWidth;
             HitboxHeight = hbHeight;
             //
-            string[] splitStr = Name.Split('\0');
-            if (splitStr.Length < 2)
+            try
             {
-                Type = AgentType.EnemyPlayer;
-            }
-            if (splitStr[1].Length == 0 || splitStr[2].Length == 0 || splitStr[0].Contains("-"))
+                if (type == AgentType.Player)
+                {
+                    string[] splitStr = Name.Split('\0');
+                    if (splitStr.Length < 2 || (splitStr[1].Length == 0 || splitStr[2].Length == 0 || splitStr[0].Contains("-")))
+                    {
+                        Type = AgentType.EnemyPlayer;
+                    }
+                }
+            } catch (Exception)
             {
-                Type = AgentType.EnemyPlayer;
+
             }
         }
 

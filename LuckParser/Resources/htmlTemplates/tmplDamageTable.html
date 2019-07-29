@@ -24,15 +24,18 @@
                 </td>
                 <td class="text-left">{{row.player.name}}</td>
                 <td>{{row.player.acc}}</td>
-                <td :data-original-title="row.dps[0] + ' dmg'+ '<br>' + computeTotalContribution(0, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 0, row.dps,tableData.sums)">{{row.dps[1]}}</td>
-                <td :data-original-title="row.dps[2] + ' dmg'+ '<br>' + computeTotalContribution(2, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 2, row.dps,tableData.sums)">{{row.dps[3]}}</td>
-                <td :data-original-title="row.dps[4] + ' dmg'+ '<br>' + computeTotalContribution(4, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 4, row.dps,tableData.sums)">{{row.dps[5]}}</td>
+                <td v-if="!wvw" :data-original-title="row.dps[0] + ' dmg'+ '<br>' + computeTotalContribution(0, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 0, row.dps,tableData.sums)">{{row.dps[1]}}</td>
+                <td v-else :data-original-title="row.dps[1] + ' dps'+ '<br>' + computeTotalContribution(0, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 0, row.dps,tableData.sums)">{{row.dps[0]}}</td>
+                <td v-if="!wvw" :data-original-title="row.dps[2] + ' dmg'+ '<br>' + computeTotalContribution(2, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 2, row.dps,tableData.sums)">{{row.dps[3]}}</td>
+                <td v-else :data-original-title="row.dps[3] + ' dps'+ '<br>' + computeTotalContribution(2, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 2, row.dps,tableData.sums)">{{row.dps[2]}}</td>
+                <td v-if="!wvw" :data-original-title="row.dps[4] + ' dmg'+ '<br>' + computeTotalContribution(4, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 4, row.dps,tableData.sums)">{{row.dps[5]}}</td>
+                <td v-else :data-original-title="row.dps[5] + ' dps'+ '<br>' + computeTotalContribution(4, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 4, row.dps,tableData.sums)">{{row.dps[4]}}</td>
                 <td v-if="!wvw" :data-original-title="row.dps[6] + ' dmg'+ '<br>' + computeTotalContribution(6, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 6, row.dps,tableData.sums)">{{row.dps[7]}}</td>
-                <td v-else :data-original-title="row.dps[7] + ' dmg'+ '<br>' + computeTotalContribution(6, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 6, row.dps,tableData.sums)">{{row.dps[6]}}</td>
+                <td v-else :data-original-title="row.dps[7] + ' dps'+ '<br>' + computeTotalContribution(6, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 6, row.dps,tableData.sums)">{{row.dps[6]}}</td>
                 <td v-if="!wvw" :data-original-title="row.dps[8] + ' dmg'+ '<br>' + computeTotalContribution(8, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 8, row.dps,tableData.sums)">{{row.dps[9]}}</td>
-                <td v-else :data-original-title="row.dps[9] + ' dmg'+ '<br>' + computeTotalContribution(8, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 8, row.dps,tableData.sums)">{{row.dps[8]}}</td>
+                <td v-else :data-original-title="row.dps[9] + ' dps'+ '<br>' + computeTotalContribution(8, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 8, row.dps,tableData.sums)">{{row.dps[8]}}</td>
                 <td v-if="!wvw" :data-original-title="row.dps[10] + ' dmg'+ '<br>' + computeTotalContribution(10, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 10, row.dps,tableData.sums)">{{row.dps[11]}}</td>
-                <td v-else :data-original-title="row.dps[11] + ' dmg'+ '<br>' + computeTotalContribution(10, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 10, row.dps,tableData.sums)">{{row.dps[10]}}</td>
+                <td v-else :data-original-title="row.dps[11] + ' dps'+ '<br>' + computeTotalContribution(10, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 10, row.dps,tableData.sums)">{{row.dps[10]}}</td>
             </tr>
         </tbody>
         <tfoot>
@@ -41,9 +44,12 @@
                 <td></td>
                 <td class="text-left">{{sum.name}}</td>
                 <td></td>
-                <td :data-original-title="sum.dps[0] + ' dmg'">{{sum.dps[1]}}</td>
-                <td :data-original-title="sum.dps[2] + ' dmg'">{{sum.dps[3]}}</td>
-                <td :data-original-title="sum.dps[4] + ' dmg'">{{sum.dps[5]}}</td>
+                <td v-if="!wvw" :data-original-title="sum.dps[0] + ' dmg'">{{sum.dps[1]}}</td>
+                <td v-else :data-original-title="sum.dps[1] + ' dps'">{{sum.dps[0]}}</td>
+                <td v-if="!wvw" :data-original-title="sum.dps[2] + ' dmg'">{{sum.dps[3]}}</td>
+                <td v-else :data-original-title="sum.dps[3] + ' dps'">{{sum.dps[2]}}</td>
+                <td v-if="!wvw" :data-original-title="sum.dps[4] + ' dmg'">{{sum.dps[5]}}</td>
+                <td v-else :data-original-title="sum.dps[5] + ' dps'">{{sum.dps[4]}}</td>
                 <td v-if="!wvw" :data-original-title="sum.dps[6] + ' dmg'">{{sum.dps[7]}}</td>
                 <td v-else :data-original-title="sum.dps[7] + ' dps'">{{sum.dps[6]}}</td>
                 <td v-if="!wvw" :data-original-title="sum.dps[8] + ' dmg'">{{sum.dps[9]}}</td>

@@ -47,6 +47,10 @@ namespace LuckParser.Logic
             }*/
             return phases;
         }
+        public override string GetFightName()
+        {
+            return "World vs World";
+        }
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
@@ -55,9 +59,31 @@ namespace LuckParser.Logic
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem dummyAgent = agentData.AddCustomAgent(combatData.First().LogTime, combatData.Last().LogTime, AgentItem.AgentType.NPC, "WorldVsWorld", "", TriggerID);
-            Targets.Add(new Target(dummyAgent));
+            AgentItem dummyAgent = agentData.AddCustomAgent(combatData.First().LogTime, combatData.Last().LogTime, AgentItem.AgentType.NPC, "Enemy Players", "", TriggerID);
             ComputeFightTargets(agentData, combatData);
+            List<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.EnemyPlayer).ToList();
+            /*foreach (AgentItem a in aList)
+            {
+                TrashMobs.Add(new Mob(a));
+            }*/
+            Dictionary<ulong, AgentItem> enemyPlayerDicts = aList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList().First());
+            foreach (CombatItem c in combatData)
+            {
+                if (c.IsStateChange == ParseEnum.StateChange.None && 
+                    c.IsActivation == ParseEnum.Activation.None && 
+                    c.IsBuffRemove == ParseEnum.BuffRemove.None &&
+                    ((c.IsBuff != 0 && c.Value == 0) || (c.IsBuff == 0)))
+                {
+                    if (enemyPlayerDicts.TryGetValue(c.SrcAgent, out AgentItem src))
+                    {
+                        c.OverrideSrcValues(dummyAgent.Agent, dummyAgent.InstID);
+                    }
+                    if (enemyPlayerDicts.TryGetValue(c.DstAgent, out AgentItem dst))
+                    {
+                        c.OverrideDstValues(dummyAgent.Agent, dummyAgent.InstID);
+                    }
+                }
+            }
         }
     }
 }
