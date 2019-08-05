@@ -21,7 +21,7 @@ namespace LuckParser.Builders.HtmlModels
         public List<List<object>> DmgStats;
         public List<List<object>> DefStats;
         public List<List<object>> SupportStats;
-
+        // all
         public List<BoonData> BoonStats;
         public List<BoonData> BoonGenSelfStats;
         public List<BoonData> BoonGenGroupStats;
@@ -42,6 +42,27 @@ namespace LuckParser.Builders.HtmlModels
 
         public List<BoonData> PersBuffStats;
 
+        // active
+        public List<BoonData> BoonActiveStats;
+        public List<BoonData> BoonGenActiveSelfStats;
+        public List<BoonData> BoonGenActiveGroupStats;
+        public List<BoonData> BoonGenActiveOGroupStats;
+        public List<BoonData> BoonGenActiveSquadStats;
+
+        public List<BoonData> OffBuffActiveStats;
+        public List<BoonData> OffBuffGenActiveSelfStats;
+        public List<BoonData> OffBuffGenActiveGroupStats;
+        public List<BoonData> OffBuffGenActiveOGroupStats;
+        public List<BoonData> OffBuffGenActiveSquadStats;
+
+        public List<BoonData> DefBuffActiveStats;
+        public List<BoonData> DefBuffGenActiveSelfStats;
+        public List<BoonData> DefBuffGenActiveGroupStats;
+        public List<BoonData> DefBuffGenActiveOGroupStats;
+        public List<BoonData> DefBuffGenActiveSquadStats;
+
+        public List<BoonData> PersBuffActiveStats;
+
         public List<DamageModData> DmgModifiersCommon;
         public List<DamageModData> DmgModifiersItem;
         public List<DamageModData> DmgModifiersPers;
@@ -52,6 +73,7 @@ namespace LuckParser.Builders.HtmlModels
 
         public List<List<int[]>> MechanicStats;
         public List<List<int[]>> EnemyMechanicStats;
+        public List<long> PlayerActiveTimes;
 
         public List<double> MarkupLines;
         public List<AreaLabelDto> MarkupAreas;
@@ -66,6 +88,11 @@ namespace LuckParser.Builders.HtmlModels
             foreach (Target target in phaseData.Targets)
             {
                 Targets.Add(log.FightData.Logic.Targets.IndexOf(target));
+            }
+            PlayerActiveTimes = new List<long>();
+            foreach (Player p in log.PlayerList)
+            {
+                PlayerActiveTimes.Add(phaseData.GetPlayerActiveDuration(p, log));
             }
             // add phase markup
             MarkupLines = new List<double>();

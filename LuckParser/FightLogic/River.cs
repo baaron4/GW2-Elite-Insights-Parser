@@ -59,19 +59,19 @@ namespace LuckParser.Logic
                 ExitCombatEvent ooc = combatData.GetExitCombatEvents(desmina.AgentItem).LastOrDefault();
                 if (ooc != null)
                 {
-                    DespawnEvent dspwn = combatData.GetDespawnEvents(desmina.AgentItem).LastOrDefault();
-                    if (dspwn == null)
+                    long time = 0;
+                    foreach (Mob mob in TrashMobs.Where(x => x.ID == (ushort)SpiritHorde3))
                     {
-                        long time = 0;
-                        foreach (Mob mob in TrashMobs.Where(x => x.ID == (ushort)SpiritHorde3))
+                        DespawnEvent dspwnHorde = combatData.GetDespawnEvents(mob.AgentItem).LastOrDefault();
+                        if (dspwnHorde != null)
                         {
-                            dspwn = combatData.GetDespawnEvents(mob.AgentItem).LastOrDefault();
-                            if (dspwn != null)
-                            {
-                                time = Math.Max(dspwn.Time, time);
-                            }
+                            time = Math.Max(dspwnHorde.Time, time);
                         }
-                        fightData.SetSuccess(true, fightData.ToLogSpace(time));
+                    }
+                    DespawnEvent dspwn = combatData.GetDespawnEvents(desmina.AgentItem).LastOrDefault();
+                    if (time != 0 && dspwn != null && time <= fightData.ToFightSpace(desmina.LastAwareLogTime))
+                    {
+                        fightData.SetSuccess(true, fightData.FightEndLogTime);
                     }
                 }
             }
@@ -109,7 +109,7 @@ namespace LuckParser.Logic
             {
                 combatData.Sort((x, y) => x.LogTime.CompareTo(y.LogTime));
             }
-            ComputeFightTargets(agentData, fightData, combatData);
+            ComputeFightTargets(agentData, combatData);
         }
 
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)

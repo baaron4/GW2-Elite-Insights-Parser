@@ -8,7 +8,8 @@ namespace LuckParser.Builders.HtmlModels
 {
     public class DmgDistributionDto
     {     
-        public long ContributedDamage;     
+        public long ContributedDamage;
+        public long ContributedShieldDamage;
         public long TotalDamage;      
         public List<object[]> Distribution;
 
@@ -20,7 +21,8 @@ namespace LuckParser.Builders.HtmlModels
                     hits = 0,
                     crit = 0,
                     flank = 0,
-                    glance = 0;
+                    glance = 0,
+                    shieldDamage = 0;
             bool IsIndirectDamage = false;
             foreach (AbstractDamageEvent dl in entry.Value.Where(x => !x.HasDowned))
             {
@@ -33,6 +35,7 @@ namespace LuckParser.Builders.HtmlModels
                 if (dl.HasCrit) crit++;
                 if (dl.HasGlanced) glance++;
                 if (dl.IsFlanking) flank++;
+                shieldDamage += dl.ShieldDamage;
             }
             if (IsIndirectDamage)
             {
@@ -84,7 +87,8 @@ namespace LuckParser.Builders.HtmlModels
                     IsIndirectDamage ? 0 : flank,
                     IsIndirectDamage ? 0 : glance,
                     IsIndirectDamage ? 0 : timeswasted / 1000.0,
-                    IsIndirectDamage ? 0 : timessaved / 1000.0
+                    IsIndirectDamage ? 0 : timessaved / 1000.0,
+                    shieldDamage,
                 };
             return skillItem;
         }

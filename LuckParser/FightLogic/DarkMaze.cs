@@ -42,7 +42,7 @@ namespace LuckParser.Logic
             return new List<ParseEnum.TrashIDS>
             {
                 LightThieves,
-                //MazeMinotaur,
+                MazeMinotaur,
             };
         }
 

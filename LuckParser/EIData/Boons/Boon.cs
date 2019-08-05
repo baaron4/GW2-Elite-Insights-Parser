@@ -363,6 +363,7 @@ namespace LuckParser.EIData
                 new Boon("Always Angry",34099, BoonSource.Warrior, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/63/Always_Angry.png", 0 , 96406),
                 new Boon("Full Counter",43949, BoonSource.Warrior, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/f/fb/Full_Counter.png"),
                 new Boon("Attacker's Insight",41963, BoonSource.Warrior, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/89/Attacker%27s_Insight.png"),
+                new Boon("Berserker's Power",42539, BoonSource.Warrior, BoonType.Intensity, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/6f/Berserker%27s_Power.png"),
         };
 
         private readonly static List<Boon> _guardian = new List<Boon>
@@ -375,6 +376,7 @@ namespace LuckParser.EIData
                 new Boon("Ashes of the Just",41957, BoonSource.Guardian, BoonType.Intensity, 25, BoonNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/6/6d/Epilogue-_Ashes_of_the_Just.png"),
                 new Boon("Eternal Oasis",44871, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/5/5f/Epilogue-_Eternal_Oasis.png"),
                 new Boon("Unbroken Lines",43194, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/d/d8/Epilogue-_Unbroken_Lines.png"),
+                new Boon("Shield of Wrath",9123, BoonSource.Guardian, BoonType.Intensity, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/bc/Shield_of_Wrath.png"),
                 //signets
                 new Boon("Signet of Resolve",9220, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/75/Signet_of_Resolve.png"),
                 new Boon("Signet of Resolve (Shared)", 46554, BoonSource.Guardian, BoonType.Intensity, 99, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/7/75/Signet_of_Resolve.png"),
@@ -404,6 +406,7 @@ namespace LuckParser.EIData
                 new Boon("Battle Presence", 17046, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/2/27/Battle_Presence.png"),
                 //new Boon("Force of Will",29485, BoonSource.Guardian, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),//not sure if intensity
                 new Boon("Quickfire",45123, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d6/Quickfire.png"),
+                new Boon("Symbolic Avenger",56890, BoonSource.Guardian, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e5/Symbolic_Avenger.png", 97950, ulong.MaxValue),
         };
 
         private readonly static List<Boon> _engineer = new List<Boon>
@@ -424,7 +427,7 @@ namespace LuckParser.EIData
                 //new Boon("Rampage",-1, BoonSource.Engineer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Normal, Logic.Override),
                 new Boon("Photon Forge",43708, BoonSource.Engineer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/dd/Engage_Photon_Forge.png"),
                 //Traits
-                new Boon("Laser's Edge",44414, BoonSource.Engineer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/5d/Laser%27s_Edge.png"),
+                new Boon("Laser's Edge",44414, BoonSource.Engineer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/5d/Laser%27s_Edge.png",0 , 97950),
                 new Boon("Afterburner",42210, BoonSource.Engineer, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/51/Solar_Focusing_Lens.png"),
                 new Boon("Iron Blooded",49065, BoonSource.Engineer, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/1e/Iron_Blooded.png"),
                 new Boon("Streamlined Kits",18687, BoonSource.Engineer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/cb/Streamlined_Kits.png"),
@@ -462,7 +465,8 @@ namespace LuckParser.EIData
                 new Boon("Storm Spirit", 50381, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/2/25/Storm_Spirit.png/30px-Storm_Spirit.png", 88541, ulong.MaxValue),
                 //skills
                 new Boon("Attack of Opportunity",12574, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/47/Moment_of_Clarity.png"),
-                new Boon("Call of the Wild",36781, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8d/Call_of_the_Wild.png"),
+                new Boon("Call of the Wild",36781, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8d/Call_of_the_Wild.png",0 , 97950),
+                new Boon("Call of the Wild",36781, BoonSource.Ranger, BoonType.Intensity, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8d/Call_of_the_Wild.png",97950 , ulong.MaxValue),
                 new Boon("Strength of the Pack!",12554, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4b/%22Strength_of_the_Pack%21%22.png"),
                 new Boon("Sic 'Em!",33902, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png"),
                 new Boon("Sharpening Stones",12536, BoonSource.Ranger, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/af/Sharpening_Stone.png"),
@@ -504,12 +508,18 @@ namespace LuckParser.EIData
                 new Boon("Signet of Agility",13061, BoonSource.Thief, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/1d/Signet_of_Agility.png"),
                 new Boon("Signet of Shadows",13059, BoonSource.Thief, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/17/Signet_of_Shadows.png"),
                 //venoms // src is always the user, makes generation data useless
-                new Boon("Skelk Venom",21780, BoonSource.Thief, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/75/Skelk_Venom.png"),
-                new Boon("Ice Drake Venom",13095, BoonSource.Thief, BoonType.Intensity, 4, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/7b/Ice_Drake_Venom.png"),
-                new Boon("Devourer Venom", 13094, BoonSource.Thief, BoonType.Intensity, 2, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4d/Devourer_Venom.png"),
-                new Boon("Skale Venom", 13054, BoonSource.Thief, BoonType.Intensity, 4, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/14/Skale_Venom.png"),
-                new Boon("Spider Venom",13036, BoonSource.Thief, BoonType.Intensity, 6, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/39/Spider_Venom.png"),
-                new Boon("Basilisk Venom", 13133, BoonSource.Thief, BoonType.Intensity, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/3a/Basilisk_Venom.png"),
+                new Boon("Skelk Venom",21780, BoonSource.Thief, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/75/Skelk_Venom.png", 0, 97950),
+                new Boon("Ice Drake Venom",13095, BoonSource.Thief, BoonType.Intensity, 4, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/7b/Ice_Drake_Venom.png", 0, 97950),
+                new Boon("Devourer Venom", 13094, BoonSource.Thief, BoonType.Intensity, 2, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4d/Devourer_Venom.png", 0, 97950),
+                new Boon("Skale Venom", 13054, BoonSource.Thief, BoonType.Intensity, 4, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/14/Skale_Venom.png", 0, 97950),
+                new Boon("Spider Venom",13036, BoonSource.Thief, BoonType.Intensity, 6, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/39/Spider_Venom.png", 0, 97950),
+                new Boon("Basilisk Venom", 13133, BoonSource.Thief, BoonType.Intensity, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/3a/Basilisk_Venom.png", 0, 97950),
+                new Boon("Skelk Venom",21780, BoonSource.Thief, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/75/Skelk_Venom.png", 97950, ulong.MaxValue),
+                new Boon("Ice Drake Venom",13095, BoonSource.Thief, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/7b/Ice_Drake_Venom.png", 97950, ulong.MaxValue),
+                new Boon("Devourer Venom", 13094, BoonSource.Thief, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4d/Devourer_Venom.png", 97950, ulong.MaxValue),
+                new Boon("Skale Venom", 13054, BoonSource.Thief, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/14/Skale_Venom.png", 97950, ulong.MaxValue),
+                new Boon("Spider Venom",13036, BoonSource.Thief, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/39/Spider_Venom.png", 97950, ulong.MaxValue),
+                new Boon("Basilisk Venom", 13133, BoonSource.Thief, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/3a/Basilisk_Venom.png", 97950, ulong.MaxValue),
                 //physical
                 new Boon("Palm Strike",30423, BoonSource.Thief, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/1a/Palm_Strike.png"),
                 new Boon("Pulmonary Impact",30510, BoonSource.Thief, BoonType.Intensity, 2, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/1a/Palm_Strike.png"),

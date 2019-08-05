@@ -16,7 +16,6 @@ namespace LuckParser.Logic
         private CombatReplayMap _map;
         protected readonly List<Mechanic> MechanicList; //Resurrects (start), Resurrect
         public ParseMode Mode { get; protected set; } = ParseMode.Unknown;
-        public bool HasCombatReplayMap { get; protected set; } = false;
         public string Extension { get; protected set; }
         public string IconUrl { get; protected set; }
         private readonly int _basicMechanicsCount;
@@ -28,7 +27,6 @@ namespace LuckParser.Logic
         protected FightLogic(ushort triggerID)
         {
             TriggerID = triggerID;
-            HasCombatReplayMap = GetCombatMap() != null;
             MechanicList = new List<Mechanic>() {
                 new PlayerStatusMechanic(SkillItem.DeathId, "Dead", new MechanicPlotlySetting("x","rgb(0,0,0)"), "Dead",0),
                 new PlayerStatusMechanic(SkillItem.DownId, "Downed", new MechanicPlotlySetting("cross","rgb(255,0,0)"), "Downed",0),
@@ -47,14 +45,15 @@ namespace LuckParser.Logic
 
         protected virtual CombatReplayMap GetCombatMapInternal()
         {
-            return null;
+            return new CombatReplayMap("", (800,800), (0,0,0,0), (0,0,0,0) , (0,0,0,0));
         }
 
-        public CombatReplayMap GetCombatMap()
+        public CombatReplayMap GetCombatMap(ParsedLog log)
         {
             if (_map == null)
             {
                 _map = GetCombatMapInternal();
+                _map.ComputeBoundingBox(log);
             }
             return _map;
         }
@@ -114,7 +113,7 @@ namespace LuckParser.Logic
 
         protected abstract HashSet<ushort> GetUniqueTargetIDs();
 
-        protected void ComputeFightTargets(AgentData agentData, FightData fightData, List<CombatItem> combatItems)
+        protected void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems)
         {
             foreach (ushort id in GetUniqueTargetIDs())
             {
@@ -208,9 +207,33 @@ namespace LuckParser.Logic
             phase.OverrideTimes(log);
         }
 
-        public virtual List<AbstractBuffEvent> CreateCustomBuffEvents(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
+        public virtual List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
         {
             return new List<AbstractBuffEvent>();
+        }
+
+        protected void NegateDamageAgainstBarrier(List<AgentItem> agentItems, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst)
+        {
+            List<AbstractDamageEvent> dmgEvts = new List<AbstractDamageEvent>();
+            foreach (AgentItem agentItem in agentItems)
+            {
+                if (damageByDst.TryGetValue(agentItem, out var list))
+                {
+                    dmgEvts.AddRange(list);
+                }
+            }
+            foreach (AbstractDamageEvent de in dmgEvts)
+            {
+                if (de.ShieldDamage > 0)
+                {
+                    de.NegateDamage();
+                }
+            }
+        }
+
+        public virtual List<AbstractDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst, Dictionary<long, List<AbstractDamageEvent>> damageById, long offset, SkillData skillData)
+        {
+            return new List<AbstractDamageEvent>();
         }
 
         public virtual void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
@@ -275,27 +298,48 @@ namespace LuckParser.Logic
             }
         }
 
-        protected void SetSuccessByCombatExit(Target target, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
+        protected void SetSuccessByCombatExit(HashSet<ushort> targetIds, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            if (target == null)
+            List<Target> targets = Targets.Where(x => targetIds.Contains(x.ID)).ToList();
+            SetSuccessByCombatExit(targets, combatData, fightData, playerAgents);
+        }
+
+        protected void SetSuccessByCombatExit(List<Target> targets, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
+        {
+            if (targets.Count == 0)
             {
                 return;
             }
             List<ExitCombatEvent> playerExits = new List<ExitCombatEvent>();
+            List<ExitCombatEvent> targetExits = new List<ExitCombatEvent>();
+            List<AbstractDamageEvent> lastTargetDamages = new List<AbstractDamageEvent>();
             foreach (AgentItem a in playerAgents)
             {
                 playerExits.AddRange(combatData.GetExitCombatEvents(a));
             }
+            foreach (Target t in targets)
+            {
+                EnterCombatEvent enterCombat = combatData.GetEnterCombatEvents(t.AgentItem).LastOrDefault();
+                if (enterCombat != null)
+                {
+                    targetExits.AddRange(combatData.GetExitCombatEvents(t.AgentItem).Where(x => x.Time > enterCombat.Time));
+                }
+                else
+                {
+                    targetExits.AddRange(combatData.GetExitCombatEvents(t.AgentItem));
+                }
+                lastTargetDamages.Add(combatData.GetDamageTakenData(t.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom))));
+            }
             ExitCombatEvent lastPlayerExit = playerExits.Count > 0 ? playerExits.MaxBy(x => x.Time) : null;
-            ExitCombatEvent lastTargetExit = combatData.GetExitCombatEvents(target.AgentItem).LastOrDefault();
-            AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
+            ExitCombatEvent lastTargetExit = targetExits.Count > 0 ? targetExits.MaxBy(x => x.Time) : null;
+            AbstractDamageEvent lastDamageTaken = lastTargetDamages.Count > 0 ? lastTargetDamages.MaxBy(x => x.Time) : null;
             if (lastTargetExit != null && lastDamageTaken != null)
             {
                 if (lastPlayerExit != null)
                 {
                     fightData.SetSuccess(lastPlayerExit.Time > lastTargetExit.Time + 1000, fightData.ToLogSpace(lastDamageTaken.Time));
                 }
-                else if (fightData.FightEndLogTime > target.LastAwareLogTime + 2000)
+                else if (fightData.FightEndLogTime > targets.Max(x => x.LastAwareLogTime) + 2000)
                 {
                     fightData.SetSuccess(true, fightData.ToLogSpace(lastDamageTaken.Time));
                 }
@@ -309,7 +353,7 @@ namespace LuckParser.Logic
 
         public virtual void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            ComputeFightTargets(agentData, fightData, combatData);
+            ComputeFightTargets(agentData, combatData);
         }
 
         //

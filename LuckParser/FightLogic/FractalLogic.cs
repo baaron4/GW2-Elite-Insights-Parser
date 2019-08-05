@@ -59,14 +59,13 @@ namespace LuckParser.Logic
             {
                 return;
             }
-            long lastAware = fightData.ToFightSpace(target.LastAwareLogTime);
             List<AbstractBuffEvent> invulsTarget = GetFilteredList(combatData, buffID, target, true);
             if (invulsTarget.Count == count)
             {
                 AbstractBuffEvent last = invulsTarget.Last();
                 if (!(last is BuffApplyEvent))
                 {
-                    SetSuccessByCombatExit(target, combatData, fightData, playerAgents);
+                    SetSuccessByCombatExit(new List<Target> { target }, combatData, fightData, playerAgents);
                 }
             }
         }

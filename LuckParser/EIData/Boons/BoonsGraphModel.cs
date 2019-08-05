@@ -67,8 +67,9 @@ namespace LuckParser.EIData
 
         public int GetStackCount(long time)
         {
-            foreach (Segment seg in BoonChart)
+            for (int i = BoonChart.Count - 1; i >= 0; i--)
             {
+                Segment seg = BoonChart[i];
                 if (seg.Start <= time && time <= seg.End)
                 {
                     return seg.Value;
@@ -97,8 +98,9 @@ namespace LuckParser.EIData
             {
                 return new List<AgentItem>() { GeneralHelper.UnknownAgent };
             }
-            foreach (SegmentWithSources seg in _boonChartWithSource)
+            for (int i = BoonChart.Count - 1; i >= 0; i--)
             {
+                SegmentWithSources seg = _boonChartWithSource[i];
                 if (seg.Start <= time && time <= seg.End)
                 {
                     return seg.Sources;

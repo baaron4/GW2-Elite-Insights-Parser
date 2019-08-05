@@ -63,11 +63,11 @@ var mainLoad = function () {
         data: {
             logdata: simpleLogData,
             layout: layout,
-            wvw: !!logData.wvw,
             datatypes: DataTypes,
             light: typeof (window.theme) !== "undefined" ? (window.theme === 'yeti') : logData.lightTheme,
             mode: 0,
-            cr: !!logData.crData
+            cr: !!logData.crData,
+			buffMode: 0
         },
         methods: {
             switchTheme: function (state) {

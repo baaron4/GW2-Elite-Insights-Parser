@@ -15,6 +15,7 @@
                 <th class="text-left">Skill</th>
                 <th></th>
                 <th>Damage</th>
+                <th data-original-title="Damage against barrier. Not necessarily included in total damage">B.Damage</th>
                 <th>Min</th>
                 <th>Avg</th>
                 <th>Max</th>
@@ -36,6 +37,7 @@
                 </td>
                 <td>{{ round3(100*row[2]/dmgdist.contributedDamage) }}%</td>
                 <td :data-original-title="(row[2]/phaseDuration).toFixed(1) +' dps'">{{ row[2] }}</td>
+                <td :data-original-title="(row[12]/phaseDuration).toFixed(1) +' dps'">{{ row[12] }}</td>
                 <td>{{ Math.max(row[3],0) }}</td>
                 <td>{{ round(row[2]/row[6]) }}</td>
                 <td>{{ row[4] }}</td>
@@ -60,6 +62,7 @@
                 <td class="text-left">Total</td>
                 <td></td>
                 <td :data-original-title="Math.round((dmgdist.contributedDamage ? dmgdist.contributedDamage : 0)/phaseDuration) +' dps'">{{dmgdist.contributedDamage ? dmgdist.contributedDamage : 0}}</td>
+                <td :data-original-title="Math.round((dmgdist.contributedShieldDamage ? dmgdist.contributedShieldDamage : 0)/phaseDuration) +' dps'">{{dmgdist.contributedShieldDamage ? dmgdist.contributedShieldDamage : 0}}</td>
                 <td></td>
                 <td></td>
                 <td></td>

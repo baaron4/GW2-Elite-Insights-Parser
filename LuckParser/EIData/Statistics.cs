@@ -4,6 +4,7 @@ using LuckParser.EIData;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
+using static LuckParser.EIData.Boon;
 
 namespace LuckParser.Models
 {
@@ -16,7 +17,7 @@ namespace LuckParser.Models
         {
             HashSet<long> skillIDs = combatData.GetSkills();
             // Main boons
-            foreach (Boon boon in boons.GetBoonList())
+            foreach (Boon boon in boons.BoonsByNature[BoonNature.Boon])
             {
                 if (skillIDs.Contains(boon.ID))
                 {
@@ -24,7 +25,7 @@ namespace LuckParser.Models
                 }
             }
             // Main Conditions
-            foreach (Boon boon in boons.GetConditionList())
+            foreach (Boon boon in boons.BoonsByNature[BoonNature.Condition])
             {
                 if (skillIDs.Contains(boon.ID))
                 {
@@ -33,7 +34,7 @@ namespace LuckParser.Models
             }
 
             // Important class specific boons
-            foreach (Boon boon in boons.GetOffensiveTableList())
+            foreach (Boon boon in boons.BoonsByNature[BoonNature.OffensiveBuffTable])
             {
                 if (skillIDs.Contains(boon.ID))
                 {
@@ -41,7 +42,7 @@ namespace LuckParser.Models
                 }
             }
 
-            foreach (Boon boon in boons.GetDefensiveTableList())
+            foreach (Boon boon in boons.BoonsByNature[BoonNature.DefensiveBuffTable])
             {
                 if (skillIDs.Contains(boon.ID))
                 {
@@ -51,7 +52,7 @@ namespace LuckParser.Models
             }
 
             // All class specific boons
-            Dictionary<long, Boon> remainingBuffsByIds = boons.GetRemainingBuffsList().GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
+            Dictionary<long, Boon> remainingBuffsByIds = boons.BoonsByNature[BoonNature.GraphOnlyBuff].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
             foreach (Player player in players)
             {
                 PresentPersonalBuffs[player.InstID] = new HashSet<Boon>();
@@ -107,7 +108,9 @@ namespace LuckParser.Models
 
             // boons
             public double AvgBoons;
+            public double AvgActiveBoons;
             public double AvgConditions;
+            public double AvgActiveConditions;
 
             // Counts
             public int SwapCount;

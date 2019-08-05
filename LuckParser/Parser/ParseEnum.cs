@@ -179,6 +179,8 @@ namespace LuckParser.Parser
             BanditSniper = 16065,
             NarellaTornado = 16092,
             OilSlick = 16096,
+            Prisoner1 = 16056,
+            Prisoner2 = 16103,
             // Matthias
             Spirit = 16105,
             Spirit2 = 16114,
@@ -244,7 +246,7 @@ namespace LuckParser.Parser
             SpiritHorde3 = 19692,
             // Statues of Darkness
             LightThieves = 19658,
-            //MazeMinotaur = 5,
+            MazeMinotaur = 19402,
             // Statue of Death
             OrbSpider = 19801,
             GreenSpirit1 = 19587,

@@ -25,13 +25,12 @@ namespace LuckParser.Logic
             IconUrl = "https://i.imgur.com/UZZQUdf.png";
         }
 
-        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        protected override List<ushort> GetSuccessCheckIds()
         {
-            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-            if (!fightData.Success)
+            return new List<ushort>
             {
-                SetSuccessByCombatExit(Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Narella), combatData, fightData, playerAgents);
-            }
+                (ushort)ParseEnum.TargetIDS.Narella
+            };
         }
 
         protected override List<ushort> GetFightTargetsIDs()
@@ -51,6 +50,24 @@ namespace LuckParser.Logic
                             (-2900, -12251, 2561, -7265),
                             (-12288, -27648, 12288, 27648),
                             (2688, 11906, 3712, 14210));
+        }
+
+        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        {
+            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+            if (!fightData.Success)
+            {
+                List<AgentItem> prisoners = agentData.GetAgentsByID((ushort)Prisoner2);
+                List<DeadEvent> prisonerDeaths = new List<DeadEvent>();
+                foreach(AgentItem prisoner in prisoners)
+                {
+                    prisonerDeaths.AddRange(combatData.GetDeadEvents(prisoner));
+                }
+                if (prisonerDeaths.Count == 0)
+                {
+                    SetSuccessByCombatExit(new HashSet<ushort>(GetSuccessCheckIds()), combatData, fightData, playerAgents);
+                }
+            }
         }
 
         public void SetPhasePerTarget(Target target, List<PhaseData> phases, ParsedLog log)
@@ -75,16 +92,6 @@ namespace LuckParser.Logic
         protected override HashSet<ushort> GetUniqueTargetIDs()
         {
             return new HashSet<ushort>
-            {
-                (ushort)ParseEnum.TargetIDS.Berg,
-                (ushort)ParseEnum.TargetIDS.Zane,
-                (ushort)ParseEnum.TargetIDS.Narella
-            };
-        }
-
-        protected override List<ushort> GetDeatchCheckIds()
-        {
-            return new List<ushort>
             {
                 (ushort)ParseEnum.TargetIDS.Berg,
                 (ushort)ParseEnum.TargetIDS.Zane,
@@ -143,7 +150,9 @@ namespace LuckParser.Logic
                 BanditBombardier,
                 BanditSniper,
                 NarellaTornado,
-                OilSlick
+                OilSlick,
+                Prisoner1,
+                Prisoner2
             };
         }
 

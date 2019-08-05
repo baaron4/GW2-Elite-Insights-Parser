@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Parser;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,10 +16,10 @@ namespace LuckParser.EIData
         }
 
         public List<MapItem> Maps { get; } = new List<MapItem>();
-        private readonly (int width, int height) _size;
-        private readonly (int topX, int topY, int bottomX, int bottomY) _rect;
-        private readonly (int topX, int topY, int bottomX, int bottomY) _fullRect;
-        private readonly (int bottomX, int bottomY, int topX, int topY) _worldRect;
+        private (int width, int height) _size;
+        private (int topX, int topY, int bottomX, int bottomY) _rect;
+        private (int topX, int topY, int bottomX, int bottomY) _fullRect;
+        private (int bottomX, int bottomY, int topX, int topY) _worldRect;
 
         public CombatReplayMap(string link, (int width, int height) size, (int topX, int topY, int bottomX, int bottomY) rect, (int topX, int topY, int bottomX, int bottomY) fullRect, (int bottomX, int bottomY, int topX, int topY) worldRect)
         {
@@ -49,6 +50,29 @@ namespace LuckParser.EIData
             else
             {
                 return (pixelSize, pixelSize);
+            }
+        }
+
+        public void ComputeBoundingBox(ParsedLog log)
+        {
+            if (log.CanCombatReplay && _rect.topX == _rect.bottomX)
+            {
+                _rect.topX = int.MaxValue;
+                _rect.topY = int.MaxValue;
+                _rect.bottomX = int.MinValue;
+                _rect.bottomY = int.MinValue;
+                foreach (Player p in log.PlayerList)
+                {
+                    List<Point3D> pos = p.GetCombatReplayPolledPositions(log);
+                    if (pos.Count == 0)
+                    {
+                        continue;
+                    }
+                    _rect.topX = Math.Min((int)Math.Floor(pos.Min(x => x.X)) - 500, _rect.topX);
+                    _rect.topY = Math.Min((int)Math.Floor(pos.Min(x => x.Y)) - 500, _rect.topY);
+                    _rect.bottomX = Math.Max((int)Math.Floor(pos.Max(x => x.X)) + 500, _rect.bottomX);
+                    _rect.bottomY = Math.Max((int)Math.Floor(pos.Max(x => x.Y)) + 500, _rect.bottomY);
+                }
             }
         }
 

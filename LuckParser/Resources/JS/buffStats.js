@@ -2,7 +2,7 @@
 
 var compileBuffStats = function () {
     Vue.component("personal-buff-table-component", {
-        props: ['phaseindex', 'playerindex'],
+        props: ['phaseindex', 'playerindex', 'active'],
         template: `${tmplPersonalBuffTable}`,
         data: function () {
             return {
@@ -44,8 +44,9 @@ var compileBuffStats = function () {
                 return res;
             },
             data: function () {
-                if (this.cache.has(this.phaseindex)) {
-                    return this.cache.get(this.phaseindex);
+				var id = this.phaseindex + '-' + this.active;
+                if (this.cache.has(id)) {
+                    return this.cache.get(id);
                 }
                 var res = [];
                 for (var i = 0; i < this.orderedSpecs.length; i++) {
@@ -54,12 +55,12 @@ var compileBuffStats = function () {
                     for (var j = 0; j < spec.ids.length; j++) {
                         dataBySpec.push({
                             player: logData.players[spec.ids[j]],
-                            data: this.phase.persBuffStats[spec.ids[j]]
+                            data: this.active ? this.phase.persBuffActiveStats[spec.ids[j]] : this.phase.persBuffStats[spec.ids[j]]
                         });
                     }
                     res.push(dataBySpec);
                 }
-                this.cache.set(this.phaseindex, res);
+                this.cache.set(id, res);
                 return res;
             },
             buffs: function () {
@@ -78,7 +79,7 @@ var compileBuffStats = function () {
     });
 
     Vue.component("buff-stats-component", {
-        props: ['datatypes', 'datatype', 'phaseindex', 'playerindex'],
+        props: ['datatypes', 'datatype', 'phaseindex', 'playerindex', 'active'],
         template: `${tmplBuffStats}`,
         data: function () {
             return {
@@ -115,9 +116,12 @@ var compileBuffStats = function () {
                 return data;
             },
             buffData: function () {
-                if (this.cache.has(this.phaseindex)) {
-                    return this.cache.get(this.phaseindex);
+				var id = this.phaseindex + '-' + this.active;
+                if (this.cache.has(id)) {
+                    return this.cache.get(id);
                 }
+				var active = this.active;
+				var activeTimes = this.phase.playerActiveTimes;
                 var getData = function (stats, genself, gengroup, genoffgr, gensquad) {
                     var uptimes = [],
                         gens = [],
@@ -157,6 +161,9 @@ var compileBuffStats = function () {
                             player: player,
                             data: gensquad[i]
                         });
+						if (active && activeTimes[i] < 1e-6) {
+							continue;
+						}
                         if (!gravg[player.group]) {
                             gravg[player.group] = [];
                             grcount[player.group] = 0;
@@ -193,15 +200,27 @@ var compileBuffStats = function () {
                     });
                     return [uptimes, gens, gengr, genoff, gensq, avg];
                 };
-                var res = {
-                    boonsData: getData(this.phase.boonStats, this.phase.boonGenSelfStats,
-                        this.phase.boonGenGroupStats, this.phase.boonGenOGroupStats, this.phase.boonGenSquadStats),
-                    offsData: getData(this.phase.offBuffStats, this.phase.offBuffGenSelfStats,
-                        this.phase.offBuffGenGroupStats, this.phase.offBuffGenOGroupStats, this.phase.offBuffGenSquadStats),
-                    defsData: getData(this.phase.defBuffStats, this.phase.defBuffGenSelfStats,
-                        this.phase.defBuffGenGroupStats, this.phase.defBuffGenOGroupStats, this.phase.defBuffGenSquadStats)
-                };
-                this.cache.set(this.phaseindex, res);
+				var res;
+				if (this.active) {		
+					res = {
+						boonsData: getData(this.phase.boonActiveStats, this.phase.boonGenActiveSelfStats,
+							this.phase.boonGenActiveGroupStats, this.phase.boonGenActiveOGroupStats, this.phase.boonGenActiveSquadStats),
+						offsData: getData(this.phase.offBuffActiveStats, this.phase.offBuffGenActiveSelfStats,
+							this.phase.offBuffGenActiveGroupStats, this.phase.offBuffGenActiveOGroupStats, this.phase.offBuffGenActiveSquadStats),
+						defsData: getData(this.phase.defBuffActiveStats, this.phase.defBuffGenActiveSelfStats,
+							this.phase.defBuffGenActiveGroupStats, this.phase.defBuffGenActiveOGroupStats, this.phase.defBuffGenActiveSquadStats)
+					};
+				} else {		
+					res = {
+						boonsData: getData(this.phase.boonStats, this.phase.boonGenSelfStats,
+							this.phase.boonGenGroupStats, this.phase.boonGenOGroupStats, this.phase.boonGenSquadStats),
+						offsData: getData(this.phase.offBuffStats, this.phase.offBuffGenSelfStats,
+							this.phase.offBuffGenGroupStats, this.phase.offBuffGenOGroupStats, this.phase.offBuffGenSquadStats),
+						defsData: getData(this.phase.defBuffStats, this.phase.defBuffGenSelfStats,
+							this.phase.defBuffGenGroupStats, this.phase.defBuffGenOGroupStats, this.phase.defBuffGenSquadStats)
+					};
+				}
+                this.cache.set(id, res);
                 return res;
             }
         },

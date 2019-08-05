@@ -52,13 +52,15 @@ namespace LuckParser.Logic
             };
         }
 
-        protected override List<ushort> GetDeatchCheckIds()
+        protected override List<ushort> GetSuccessCheckIds()
         {
-            return new List<ushort>
-            {
-                (ushort)ParseEnum.TargetIDS.Kenut,
-                (ushort)ParseEnum.TargetIDS.Nikare
-            };
+            return GetFightTargetsIDs();
+        }
+
+        public override List<AbstractDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst, Dictionary<long, List<AbstractDamageEvent>> damageById, long offset, SkillData skillData)
+        {
+            NegateDamageAgainstBarrier(Targets.Select(x => x.AgentItem).ToList(), damageByDst);
+            return new List<AbstractDamageEvent>();
         }
 
         private List<PhaseData> GetTargetPhases(ParsedLog log, Target target, string[] names)

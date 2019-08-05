@@ -274,7 +274,7 @@ namespace LuckParser
             switch (ParseEnum.GetTargetIDS(id))
             {
                 case ParseEnum.TargetIDS.WorldVersusWorld:
-                    return "https://wiki.guildwars2.com/images/3/35/WvW_Rank_up.png";
+                    return "https://wiki.guildwars2.com/images/d/db/PvP_Server_Browser_%28map_icon%29.png";
                 case ParseEnum.TargetIDS.ValeGuardian:
                     return "https://i.imgur.com/MIpP5pK.png";
                 case ParseEnum.TargetIDS.Gorseval:
@@ -466,7 +466,7 @@ namespace LuckParser
                     return "https://i.imgur.com/INCGLIK.png";
                 case BanditBombardier:
                 case SurgingSoul:
-                //case MazeMinotaur:
+                case MazeMinotaur:
                 case Enervator:
                     return "https://i.imgur.com/k79t7ZA.png";
                 case HandOfErosion:
@@ -499,6 +499,8 @@ namespace LuckParser
                 case GreenSpirit2:
                 case BanditSapper:
                 case ProjectionArkk:
+                case Prisoner1:
+                case Prisoner2:
                 case Pylon1:
                     return "https://i.imgur.com/0koP4xB.png";
                 case FleshWurm:

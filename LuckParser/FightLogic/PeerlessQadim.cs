@@ -48,7 +48,7 @@ namespace LuckParser.Logic
             };
         }
 
-        public override List<AbstractBuffEvent> CreateCustomBuffEvents(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
+        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
         {
             List<AbstractBuffEvent> res = new List<AbstractBuffEvent>();
             if (buffsById.TryGetValue(56118, out var list))

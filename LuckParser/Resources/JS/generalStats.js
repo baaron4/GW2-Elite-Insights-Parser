@@ -4,6 +4,7 @@ var compileGeneralStats = function () {
     Vue.component("damage-stats-component", {
         props: ["activetargets", "playerindex", "phaseindex"],
         template: `${tmplDamageTable}`,
+        mixins: [roundingComponent],
         data: function () {
             return {
                 wvw: !!logData.wvw,
@@ -16,6 +17,20 @@ var compileGeneralStats = function () {
         updated() {
             updateTable("#dps-table");
         },
+		methods: {
+			computeTotalContribution: function(index, row, sums) {
+				return this.round2(row[index] * 100 / sums[sums.length -1].dps[index]) + '% of total';
+			},
+			computeGroupContribution: function(groupIndex, index, row, sums) {
+				var sumId = 0;
+				for (var sumId = 0; sumId < sums.length; sumId++) {
+					if (sums[sumId].name.includes(groupIndex)) {
+						break;
+					}
+				}
+				return this.round2(row[index] * 100 / sums[sumId].dps[index]) + '% of group';
+			}
+		},
         computed: {
             phase: function () {
                 return logData.phases[this.phaseindex];
@@ -217,8 +232,7 @@ var compileGeneralStats = function () {
         mixins: [roundingComponent],
         data: function () {
             return {
-                wvw: !!logData.wvw,
-                mode: logData.wvw ? 0 :1,
+                mode: 1,
                 cache: new Map(),
                 cacheTarget: new Map()
             };

@@ -38,6 +38,7 @@ namespace LuckParser.Logic
             //Not sure what this (ID 350342,"Disruption") is. Looks like it is the pulsing "orb removal" from the orange circles on the 40% platform. Would fit the name although it's weird it can hit players. 
             });
             Extension = "xera";
+            GenericFallBackMethod = FallBackMethod.CombatExit;
             IconUrl = "https://wiki.guildwars2.com/images/4/4b/Mini_Xera.png";
         }
 
@@ -50,7 +51,7 @@ namespace LuckParser.Logic
                             (1920, 12160, 2944, 14464));
         }
 
-        public override List<AbstractBuffEvent> CreateCustomBuffEvents(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
+        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
         {
             Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Xera);
             if (mainTarget == null)
@@ -159,7 +160,7 @@ namespace LuckParser.Logic
                     break;
                 }
             }
-            ComputeFightTargets(agentData, fightData, combatData);
+            ComputeFightTargets(agentData, combatData);
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
