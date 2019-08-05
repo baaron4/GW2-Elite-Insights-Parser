@@ -232,8 +232,7 @@ var compileGeneralStats = function () {
         mixins: [roundingComponent],
         data: function () {
             return {
-                wvw: !!logData.wvw,
-                mode: logData.wvw ? 0 :1,
+                mode: 1,
                 cache: new Map(),
                 cacheTarget: new Map()
             };
