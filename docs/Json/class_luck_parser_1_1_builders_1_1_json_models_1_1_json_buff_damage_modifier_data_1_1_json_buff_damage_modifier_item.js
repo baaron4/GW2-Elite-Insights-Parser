@@ -1,0 +1,8 @@
+var class_luck_parser_1_1_builders_1_1_json_models_1_1_json_buff_damage_modifier_data_1_1_json_buff_damage_modifier_item =
+[
+    [ "JsonBuffDamageModifierItem", "class_luck_parser_1_1_builders_1_1_json_models_1_1_json_buff_damage_modifier_data_1_1_json_buff_damage_modifier_item.html#a723ed0bedc2189965ac88f275db61a9f", null ],
+    [ "DamageGain", "class_luck_parser_1_1_builders_1_1_json_models_1_1_json_buff_damage_modifier_data_1_1_json_buff_damage_modifier_item.html#a04960281e8a1a47ce834f5eaa6fbfe6e", null ],
+    [ "HitCount", "class_luck_parser_1_1_builders_1_1_json_models_1_1_json_buff_damage_modifier_data_1_1_json_buff_damage_modifier_item.html#a6d8348aefad966d476afd5ce64a69abe", null ],
+    [ "TotalDamage", "class_luck_parser_1_1_builders_1_1_json_models_1_1_json_buff_damage_modifier_data_1_1_json_buff_damage_modifier_item.html#a4cb4fe7af1c17cddfb284840f3f98cfd", null ],
+    [ "TotalHitCount", "class_luck_parser_1_1_builders_1_1_json_models_1_1_json_buff_damage_modifier_data_1_1_json_buff_damage_modifier_item.html#a1dde78ef7766c80f7923167e5820bb00", null ]
+];
