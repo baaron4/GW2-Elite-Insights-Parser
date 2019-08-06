@@ -12,6 +12,26 @@ namespace LuckParser.Builders.JsonModels
         /// </summary>
         public string Name;
         /// <summary>
+        /// Total Damage done by minions \n
+        /// Length == # of phases
+        /// </summary>
+        public List<int> TotalDamage;
+        /// <summary>
+        /// Damage done by minions against targets \n
+        /// Length == # of targets and the length of each sub array is equal to # of phases
+        /// </summary>
+        public List<int>[] TotalTargetDamage;
+        /// <summary>
+        /// Total Shield Damage done by minions \n
+        /// Length == # of phases
+        /// </summary>
+        public List<int> TotalShieldDamage;
+        /// <summary>
+        /// Shield Damage done by minions against targets \n
+        /// Length == # of targets and the length of each sub array is equal to # of phases
+        /// </summary>
+        public List<int>[] TotalTargetShieldDamage;
+        /// <summary>
         /// Total Damage distribution array \n
         /// Length == # of phases
         /// </summary>

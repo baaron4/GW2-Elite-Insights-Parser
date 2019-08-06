@@ -492,12 +492,52 @@ namespace LuckParser.Builders
             List<JsonMinions> mins = new List<JsonMinions>();
             foreach (Minions minions in master.GetMinions(_log).Values)
             {
+                List<int> totalDamage = new List<int>();
+                List<int> totalShieldDamage = new List<int>();
+                List<int>[] totalTargetDamage = new List<int>[_log.FightData.Logic.Targets.Count];
+                List<int>[] totalTargetShieldDamage = new List<int>[_log.FightData.Logic.Targets.Count];
+                foreach (PhaseData phase in _phases)
+                {
+                    int tot = 0;
+                    int shdTot = 0;
+                    foreach(AbstractDamageEvent de in minions.GetDamageLogs(null, _log, phase.Start, phase.End))
+                    {
+                        tot += de.Damage;
+                        shdTot = de.ShieldDamage;
+                    }
+                    totalDamage.Add(tot);
+                    totalShieldDamage.Add(shdTot);
+                }
+                for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
+                {
+                    Target tar = _log.FightData.Logic.Targets[i];
+                    List<int> totalTarDamage = new List<int>();
+                    List<int> totalTarShieldDamage = new List<int>();
+                    foreach (PhaseData phase in _phases)
+                    {
+                        int tot = 0;
+                        int shdTot = 0;
+                        foreach (AbstractDamageEvent de in minions.GetDamageLogs(tar, _log, phase.Start, phase.End))
+                        {
+                            tot += de.Damage;
+                            shdTot = de.ShieldDamage;
+                        }
+                        totalTarDamage.Add(tot);
+                        totalTarShieldDamage.Add(shdTot);
+                    }
+                    totalTargetDamage[i] = totalTarDamage;
+                    totalTargetShieldDamage[i] = totalTarShieldDamage;
+                }
                 JsonMinions min = new JsonMinions()
                 {
                     Name = minions.Character,
                     Rotation = BuildRotation(minions.GetCastLogs(_log, 0, _log.FightData.FightDuration)),
                     TotalDamageDist = BuildDamageDist(minions, null),
                     TargetDamageDist = BuildDamageDist(minions),
+                    TotalDamage = totalDamage,
+                    TotalShieldDamage = totalShieldDamage,
+                    TotalTargetShieldDamage = totalTargetShieldDamage,
+                    TotalTargetDamage = totalTargetDamage,
                 };
                 mins.Add(min);
             }
