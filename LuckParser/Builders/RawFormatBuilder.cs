@@ -113,6 +113,7 @@ namespace LuckParser.Builders
         {
             log.TriggerID = _log.FightData.ID;
             log.FightName = _log.FightData.Name;
+            log.FightIcon = _log.FightData.Logic.IconUrl;
             log.EliteInsightsVersion = Application.ProductVersion;
             log.ArcVersion = _log.LogData.BuildVersion;
             log.RecordedBy = _log.LogData.PoVName;
