@@ -53,7 +53,7 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 ## JSON Documentation
 
-The Json documentation can be found [here](./Json/index.html)
+The Json documentation can be found [here](https://baaron4.github.io/GW2-Elite-Insights-Parser/Json/index.html)
 
 ## Contributors
 ### Developers
