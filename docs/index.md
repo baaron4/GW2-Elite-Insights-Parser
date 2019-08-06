@@ -51,6 +51,10 @@ GuildWars2EliteInsights.exe -p [logs]
 
 Note it may take some time for each file to parse and they will not be ready to open the moment they are created.
 
+## JSON Documentation
+
+The Json documentation can be found [here](./Json/index.html)
+
 ## Contributors
 ### Developers
 - baaron4
