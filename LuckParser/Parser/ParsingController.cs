@@ -502,6 +502,10 @@ namespace LuckParser.Parser
             }
             _allAgentsList.RemoveAll(x => !(x.InstID != 0 && x.LastAwareLogTime - x.FirstAwareLogTime >= 0 && x.FirstAwareLogTime != 0 && x.LastAwareLogTime != long.MaxValue) && (x.Type != AgentItem.AgentType.Player && x.Type != AgentItem.AgentType.EnemyPlayer));
             _agentData = new AgentData(_allAgentsList);
+            if (_agentData.GetAgentByType(AgentItem.AgentType.Player).Count == 0)
+            {
+                throw new InvalidDataException("Erroneous log, no player found");
+            }
         }
         private void CompletePlayers()
         {
