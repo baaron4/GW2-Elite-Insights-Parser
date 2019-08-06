@@ -297,6 +297,7 @@ namespace LuckParser.Controllers
 
         public string GetAgentProfString(uint prof, uint elite)
         {
+            // non player
             if (elite == 0xFFFFFFFF)
             {
                 if ((prof & 0xffff0000) == 0xffff0000)
@@ -308,6 +309,7 @@ namespace LuckParser.Controllers
                     return "NPC";
                 }
             }
+            // base profession
             else if (elite == 0)
             {
                 switch (prof)
@@ -332,44 +334,43 @@ namespace LuckParser.Controllers
                         return "Revenant";
                 }
             }
+            // old elite
+            else if (elite == 1)
+            {
+                switch (prof)
+                {
+                    case 1:
+                        return "Dragonhunter";
+                    case 2:
+                        return "Berserker";
+                    case 3:
+                        return "Scrapper";
+                    case 4:
+                        return "Druid";
+                    case 5:
+                        return "Daredevil";
+                    case 6:
+                        return "Tempest";
+                    case 7:
+                        return "Chronomancer";
+                    case 8:
+                        return "Reaper";
+                    case 9:
+                        return "Herald";
+                }
+
+            }
+            // new way
             else
             {
-                if (elite == 1)
+                GW2APISpec spec = GetSpec((int)elite);
+                if (spec.Elite)
                 {
-                    switch (prof + 9)
-                    {
-                        case 10:
-                            return "Dragonhunter";
-                        case 11:
-                            return "Berserker";
-                        case 12:
-                            return "Scrapper";
-                        case 13:
-                            return "Druid";
-                        case 14:
-                            return "Daredevil";
-                        case 15:
-                            return "Tempest";
-                        case 16:
-                            return "Chronomancer";
-                        case 17:
-                            return "Reaper";
-                        case 18:
-                            return "Herald";
-                    }
-
+                    return spec.Name;
                 }
                 else
                 {
-                    GW2APISpec spec = GetSpec((int)elite);
-                    if (spec.Elite)
-                    {
-                        return spec.Name;
-                    }
-                    else
-                    {
-                        return spec.Profession;
-                    }
+                    return spec.Profession;
                 }
             }
             throw new InvalidDataException("Unknown profession");
