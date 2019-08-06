@@ -168,7 +168,7 @@ namespace LuckParser.Parser
                     // 68 bytes: name
                     string name = ParseHelper.GetString(stream, 68, false);
                     //Save
-                    string agentProf = GeneralHelper.GetAgentProfString(_buildVersion, _aPIController, prof, isElite);
+                    string agentProf = _aPIController.GetAgentProfString(prof, isElite);
                     AgentItem.AgentType type;
                     ushort ID = 0;
                     switch (agentProf)
@@ -212,7 +212,6 @@ namespace LuckParser.Parser
         /// </summary>
         private void ParseSkillData(Stream stream)
         {
-            var apiController = new GW2APIController();
             using (var reader = CreateReader(stream))
             {
                 // 4 bytes: player count
@@ -226,7 +225,7 @@ namespace LuckParser.Parser
                     // 64 bytes: name
                     var name = ParseHelper.GetString(stream, 64);
                     //Save
-                    var skill = new SkillItem(skillId, name, apiController);
+                    var skill = new SkillItem(skillId, name, _aPIController);
                     _skillData.Add(skill);
                 }
             }
