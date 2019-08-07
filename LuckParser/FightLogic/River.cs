@@ -69,9 +69,9 @@ namespace LuckParser.Logic
                         }
                     }
                     DespawnEvent dspwn = combatData.GetDespawnEvents(desmina.AgentItem).LastOrDefault();
-                    if (time != 0 && dspwn != null && time <= fightData.ToFightSpace(desmina.LastAwareLogTime))
+                    if (time != 0 && dspwn == null && time <= fightData.ToFightSpace(desmina.LastAwareLogTime))
                     {
-                        fightData.SetSuccess(true, fightData.FightEndLogTime);
+                        fightData.SetSuccess(true, fightData.ToLogSpace(time));
                     }
                 }
             }
