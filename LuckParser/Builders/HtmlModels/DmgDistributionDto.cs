@@ -26,7 +26,7 @@ namespace LuckParser.Builders.HtmlModels
             bool IsIndirectDamage = false;
             foreach (AbstractDamageEvent dl in entry.Value.Where(x => !x.HasDowned))
             {
-                IsIndirectDamage = dl is NonDirectDamageEvent;
+                IsIndirectDamage = IsIndirectDamage || dl is NonDirectDamageEvent;
                 int curdmg = dl.Damage;
                 totaldamage += curdmg;
                 if (curdmg < mindamage) { mindamage = curdmg; }

@@ -462,7 +462,7 @@ namespace LuckParser.Builders
                     continue;
                 }
                 SkillItem skill = pair.Key;
-                bool indirect = pair.Value.First() is NonDirectDamageEvent;
+                bool indirect = pair.Value.Exists( x => x is NonDirectDamageEvent);
                 if (indirect)
                 {
                     if (!_buffDesc.ContainsKey("b" + pair.Key))
