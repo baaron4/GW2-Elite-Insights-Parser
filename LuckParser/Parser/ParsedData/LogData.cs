@@ -53,7 +53,13 @@ namespace LuckParser.Parser.ParsedData
         private void SetPOV(AgentItem pov)
         {
             PoV = pov;
-            PoVName = pov.Name.Substring(0, pov.Name.LastIndexOf('\0')).Split(':')[0].TrimEnd('\u0000');
+            try
+            {
+                PoVName = pov.Name.Substring(0, pov.Name.LastIndexOf('\0')).Split(':')[0].TrimEnd('\u0000');
+            } catch (Exception)
+            {
+                PoVName = pov.Name;
+            }
         }
 
         private string GetDateTime(long unixSeconds)

@@ -106,6 +106,10 @@ namespace LuckParser.Builders.JsonModels
         /// </summary>
         public string FightName;
         /// <summary>
+        /// The icon of the fight
+        /// </summary>
+        public string FightIcon;
+        /// <summary>
         /// The used arcdps version
         /// </summary>
         public string ArcVersion;
