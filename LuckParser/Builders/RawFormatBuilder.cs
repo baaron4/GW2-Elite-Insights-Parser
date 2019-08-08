@@ -199,12 +199,21 @@ namespace LuckParser.Builders
                     ConditionsStates = BuildBuffStates(target.GetBoonGraphs(_log)[ProfHelper.NumberOfConditionsID]),
                     HealthPercents = _log.CombatData.GetHealthUpdateEvents(target.AgentItem).Select(x => new double[2] { x.Time, x.HPPercent }).ToList()
                 };
-                List<HealthUpdateEvent> hpUpdates = _log.CombatData.GetHealthUpdateEvents(target.AgentItem);
-                double hpLeft = hpUpdates.Count > 0
-                    ? hpUpdates.Last().HPPercent
-                    : 100.0;
+                double hpLeft = 0.0;
+                if (_log.FightData.Success)
+                {
+                    hpLeft = 0;
+                }
+                else
+                {
+                    List<HealthUpdateEvent> hpUpdates = _log.CombatData.GetHealthUpdateEvents(target.AgentItem);
+                    if (hpUpdates.Count > 0)
+                    {
+                        hpLeft = hpUpdates.Last().HPPercent;
+                    }
+                }
                 jsTarget.HealthPercentBurned = 100.0 - hpLeft;
-                jsTarget.FinalHealth = (int)Math.Round(target.GetHealth(_log.CombatData) * hpLeft);
+                jsTarget.FinalHealth = (int)Math.Round(target.GetHealth(_log.CombatData) * hpLeft / 100.0);
                 log.Targets.Add(jsTarget);
             }
         }
