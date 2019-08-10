@@ -204,10 +204,10 @@ namespace LuckParser.Builders.JsonModels
             {
                 DirectDamageCount = stats.DirectDamageCount;
                 CritableDirectDamageCount = stats.CritableDirectDamageCount;
-                CriticalRate = stats.CriticalRate;
+                CriticalRate = stats.CriticalCount;
                 CriticalDmg = stats.CriticalDmg;
-                FlankingRate = stats.FlankingRate;
-                GlanceRate = stats.GlanceRate;
+                FlankingRate = stats.FlankingCount;
+                GlanceRate = stats.GlanceCount;
                 Missed = stats.Missed;
                 Interrupts = stats.Interrupts;
                 Invulned = stats.Invulned;
@@ -217,10 +217,10 @@ namespace LuckParser.Builders.JsonModels
             {
                 DirectDamageCount = stats.DirectDamageCount;
                 CritableDirectDamageCount = stats.CritableDirectDamageCount;
-                CriticalRate = stats.CriticalRate;
+                CriticalRate = stats.CriticalCount;
                 CriticalDmg = stats.CriticalDmg;
-                FlankingRate = stats.FlankingRate;
-                GlanceRate = stats.GlanceRate;
+                FlankingRate = stats.FlankingCount;
+                GlanceRate = stats.GlanceCount;
                 Missed = stats.Missed;
                 Interrupts = stats.Interrupts;
                 Invulned = stats.Invulned;
