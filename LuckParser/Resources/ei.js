@@ -11,6 +11,7 @@ var mainLoad = function () {
     };
     for (i = 0; i < logData.phases.length; i++) {
         var phase = logData.phases[i];
+        phase.durationS = phase.duration / 1000.0
         var times = [];
         var dur = phase.end - phase.start;
         var floorDur = Math.floor(dur);
