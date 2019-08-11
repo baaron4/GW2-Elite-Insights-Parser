@@ -133,7 +133,7 @@ namespace LuckParser.Logic
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-            if (!fightData.Success)
+            if (!fightData.Success && _specialSplitLogTime > 0)
             {
                 Target target = Targets.Find(x => x.ID == TriggerID);
                 if (target == null)
@@ -145,6 +145,7 @@ namespace LuckParser.Logic
                 {
                     return;
                 }
+                long specialSplitTime = fightData.ToFightSpace(_specialSplitLogTime);
                 AgentItem attackTarget = attackTargets.Last().AttackTarget;
                 List<ExitCombatEvent> playerExits = new List<ExitCombatEvent>();
                 foreach (AgentItem a in playerAgents)
@@ -152,7 +153,7 @@ namespace LuckParser.Logic
                     playerExits.AddRange(combatData.GetExitCombatEvents(a));
                 }
                 ExitCombatEvent lastPlayerExit = playerExits.Count > 0 ? playerExits.MaxBy(x => x.Time) : null;
-                TargetableEvent notAttackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => !x.Targetable);
+                TargetableEvent notAttackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => !x.Targetable && x.Time > specialSplitTime);
                 AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
                 if (notAttackableEvent != null && lastDamageTaken != null && lastPlayerExit != null)
                 {

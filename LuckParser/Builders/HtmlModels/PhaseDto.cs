@@ -154,12 +154,12 @@ namespace LuckParser.Builders.HtmlModels
                 {
                     stats.DirectDamageCount, // 0
                     stats.CritableDirectDamageCount, // 1
-                    stats.CriticalRate, // 2
+                    stats.CriticalCount, // 2
                     stats.CriticalDmg, // 3
 
-                    stats.FlankingRate, // 4
+                    stats.FlankingCount, // 4
 
-                    stats.GlanceRate, // 5
+                    stats.GlanceCount, // 5
 
                     stats.Missed,// 6
                     stats.Interrupts, // 7
@@ -173,11 +173,8 @@ namespace LuckParser.Builders.HtmlModels
             List<object> data = new List<object>
                 {
                     dpsAll.Damage,
-                    dpsAll.Dps,
                     dpsAll.PowerDamage,
-                    dpsAll.PowerDps,
                     dpsAll.CondiDamage,
-                    dpsAll.CondiDps
                 };
             return data;
         }

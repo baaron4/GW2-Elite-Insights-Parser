@@ -23,7 +23,7 @@
         <ul class="d-flex flex-row flew-wrap justify-content-center">
             <li class="btn btn-small" :class="{'active': backwards, 'btn-dark': !light, 'btn-light': light}"
                 v-for="phase in phases" @click="updateTime(phase.start * 1000)"
-                :data-original-title="phase.duration / 1000.0 + ' seconds'">
+                :data-original-title="phase.durationS + ' seconds'">
                 {{phase.name}}
             </li>
         </ul>

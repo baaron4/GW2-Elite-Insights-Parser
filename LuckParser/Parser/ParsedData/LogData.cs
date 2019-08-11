@@ -24,7 +24,8 @@ namespace LuckParser.Parser.ParsedData
             BuildVersion = buildVersion;
             LogStart = DefaultTimeValue;
             LogEnd = DefaultTimeValue;
-            uint unixStart = 0;
+            double unixStart = 0;
+            double unixEnd = 0;
             foreach (PointOfViewEvent povEvt in combatData.GetPointOfViewEvents())
             {
                 SetPOV(povEvt.PoV);
@@ -41,11 +42,19 @@ namespace LuckParser.Parser.ParsedData
             foreach (LogEndEvent logEnd in combatData.GetLogEndEvents())
             {
                 SetLogEnd(logEnd.LocalUnixTimeStamp);
+                unixEnd = logEnd.LocalUnixTimeStamp;
             }
+            // log end event is missing, log start is present
             if (LogEnd == DefaultTimeValue && LogStart != DefaultTimeValue)
             {
-                long dur = (allCombatItems.Max(x => x.LogTime) - allCombatItems.Min(x => x.LogTime)) / 1000;
+                double dur = Math.Round((allCombatItems.Max(x => x.LogTime) - allCombatItems.Min(x => x.LogTime)) / 1000.0, 3);
                 SetLogEnd(dur + unixStart);
+            }
+            // log start event is missing, log end is present
+            if (LogEnd != DefaultTimeValue && LogStart == DefaultTimeValue)
+            {
+                double dur = Math.Round((allCombatItems.Max(x => x.LogTime) - allCombatItems.Min(x => x.LogTime)) / 1000.0, 3);
+                SetLogStart(unixEnd - dur);
             }
         }
         
@@ -62,19 +71,19 @@ namespace LuckParser.Parser.ParsedData
             }
         }
 
-        private string GetDateTime(long unixSeconds)
+        private string GetDateTime(double unixSeconds)
         {
             DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             dtDateTime = dtDateTime.AddSeconds(unixSeconds).ToLocalTime();
             return dtDateTime.ToString(_dateFormat);
         }
 
-        private void SetLogStart(long unixSeconds)
+        private void SetLogStart(double unixSeconds)
         {
             LogStart = GetDateTime(unixSeconds);
         }
 
-        private void SetLogEnd(long unixSeconds)
+        private void SetLogEnd(double unixSeconds)
         {
             LogEnd = GetDateTime(unixSeconds);
         }
