@@ -258,6 +258,7 @@ namespace LuckParser.Parser
             Enforcer = 19681,
             Deathling = 19759,
             UnderworldReaper = 19831,
+            DhuumDesmina = 19481,
             // CA
             ConjuredGreatsword = 21255,
             ConjuredShield =  21170,

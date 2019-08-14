@@ -174,7 +174,8 @@ namespace LuckParser.Logic
                 Enforcer,
                 Messenger,
                 Deathling,
-                UnderworldReaper
+                UnderworldReaper,
+                DhuumDesmina
             };
         }
 
@@ -252,6 +253,8 @@ namespace LuckParser.Logic
             int end = (int)replay.TimeOffsets.end;
             switch (mob.ID)
             {
+                case (ushort)DhuumDesmina:
+                    break;
                 case (ushort)Echo:
                     replay.Actors.Add(new CircleActor(true, 0, 120, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(mob)));
                     break;

@@ -388,6 +388,8 @@ namespace LuckParser
                     return "https://wiki.guildwars2.com/images/9/9e/Mini_Freezie%27s_Heart.png";
                 case RiverOfSouls:
                     return "https://i.imgur.com/4pXEnaX.png";
+                case DhuumDesmina:
+                    return "https://i.imgur.com/jAiRplg.png";
             }
             return "https://i.imgur.com/HuJHqRZ.png";
         }
