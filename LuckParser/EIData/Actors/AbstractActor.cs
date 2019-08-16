@@ -12,11 +12,11 @@ namespace LuckParser.EIData
         // Damage
         protected List<AbstractDamageEvent> DamageLogs;
         protected Dictionary<AgentItem, List<AbstractDamageEvent>> DamageLogsByDst;
-        private Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>> _damageLogsPerPhasePerTarget = new Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>>();
+        private readonly Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>> _damageLogsPerPhasePerTarget = new Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>>();
         //protected List<DamageLog> HealingLogs = new List<DamageLog>();
         //protected List<DamageLog> HealingReceivedLogs = new List<DamageLog>();
         private List<AbstractDamageEvent> _damageTakenlogs;
-        protected Dictionary<AgentItem, List<AbstractDamageEvent>> _damageTakenLogsBySrc;
+        protected Dictionary<AgentItem, List<AbstractDamageEvent>> DamageTakenLogsBySrc;
         // Cast
         protected List<AbstractCastEvent> CastLogs;
         // Boons
@@ -71,11 +71,11 @@ namespace LuckParser.EIData
             {
                 _damageTakenlogs = new List<AbstractDamageEvent>();
                 SetDamageTakenLogs(log);
-                _damageTakenLogsBySrc = _damageTakenlogs.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+                DamageTakenLogsBySrc = _damageTakenlogs.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
             {
-                if (_damageTakenLogsBySrc.TryGetValue(target.AgentItem, out var list))
+                if (DamageTakenLogsBySrc.TryGetValue(target.AgentItem, out var list))
                 {
                     long targetStart = log.FightData.ToFightSpace(target.FirstAwareLogTime);
                     long targetEnd = log.FightData.ToFightSpace(target.LastAwareLogTime);

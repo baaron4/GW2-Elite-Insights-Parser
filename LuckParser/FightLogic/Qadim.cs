@@ -62,6 +62,7 @@ namespace LuckParser.Logic
             });
             Extension = "qadim";
             IconUrl = "https://wiki.guildwars2.com/images/f/f2/Mini_Qadim.png";
+            GenericFallBackMethod = FallBackMethod.CombatExit;
         }
 
         protected override CombatReplayMap GetCombatMapInternal()

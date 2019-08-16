@@ -216,18 +216,18 @@ namespace LuckParser.EIData
                             FinalStats targetFinal = pair.Value;
                             if (dl.HasCrit)
                             {
-                                targetFinal.CriticalRate++;
+                                targetFinal.CriticalCount++;
                                 targetFinal.CriticalDmg += dl.Damage;
                             }
 
                             if (dl.IsFlanking)
                             {
-                                targetFinal.FlankingRate++;
+                                targetFinal.FlankingCount++;
                             }
 
                             if (dl.HasGlanced)
                             {
-                                targetFinal.GlanceRate++;
+                                targetFinal.GlanceCount++;
                             }
 
                             if (dl.IsBlind)
@@ -252,18 +252,18 @@ namespace LuckParser.EIData
                     }
                     if (dl.HasCrit)
                     {
-                        final.CriticalRate++;
+                        final.CriticalCount++;
                         final.CriticalDmg += dl.Damage;
                     }
 
                     if (dl.IsFlanking)
                     {
-                        final.FlankingRate++;
+                        final.FlankingCount++;
                     }
 
                     if (dl.HasGlanced)
                     {
-                        final.GlanceRate++;
+                        final.GlanceCount++;
                     }
 
                     if (dl.IsBlind)

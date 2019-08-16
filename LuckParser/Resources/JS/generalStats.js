@@ -43,12 +43,12 @@ var compileGeneralStats = function () {
                 }
                 var rows = [];
                 var sums = [];
-                var total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                var total = [0, 0, 0, 0, 0, 0];
                 var groups = [];
                 var i, j;
                 for (i = 0; i < this.phase.dpsStats.length; i++) {
                     var dpsStat = this.phase.dpsStats[i];
-                    var dpsTargetStat = [0, 0, 0, 0, 0, 0];
+                    var dpsTargetStat = [0, 0, 0];
                     for (j = 0; j < this.activetargets.length; j++) {
                         var tar = this.phase.dpsStatsTargets[i][this.activetargets[j]];
                         for (var k = 0; k < dpsTargetStat.length; k++) {
@@ -57,7 +57,7 @@ var compileGeneralStats = function () {
                     }
                     var player = logData.players[i];
                     if (!groups[player.group]) {
-                        groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                        groups[player.group] = [0, 0, 0, 0, 0, 0];
                     }
                     var dps = dpsTargetStat.concat(dpsStat);
                     for (j = 0; j < dps.length; j++) {

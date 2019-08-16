@@ -328,7 +328,11 @@ namespace LuckParser.Logic
                 {
                     targetExits.AddRange(combatData.GetExitCombatEvents(t.AgentItem));
                 }
-                lastTargetDamages.Add(combatData.GetDamageTakenData(t.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom))));
+                AbstractDamageEvent lastDamage = combatData.GetDamageTakenData(t.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
+                if (lastDamage != null)
+                {
+                    lastTargetDamages.Add(lastDamage);
+                }
             }
             ExitCombatEvent lastPlayerExit = playerExits.Count > 0 ? playerExits.MaxBy(x => x.Time) : null;
             ExitCombatEvent lastTargetExit = targetExits.Count > 0 ? targetExits.MaxBy(x => x.Time) : null;

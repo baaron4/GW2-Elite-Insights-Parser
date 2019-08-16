@@ -88,10 +88,10 @@ namespace LuckParser.Models
         {
             public int DirectDamageCount;
             public int CritableDirectDamageCount;
-            public int CriticalRate;
+            public int CriticalCount;
             public int CriticalDmg;
-            public int FlankingRate;
-            public int GlanceRate;
+            public int FlankingCount;
+            public int GlanceCount;
             public int Missed;
             public int Interrupts;
             public int Invulned;
