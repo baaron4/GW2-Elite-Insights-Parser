@@ -19,7 +19,7 @@ namespace LuckParser
         public static int BoonDigit = 2;
         public static int TimeDigit = 3;
 
-        public static AgentItem UnknownAgent = new AgentItem(0, "UNKNOWN");
+        public static AgentItem UnknownAgent = new AgentItem();
         // use this for "null" in AbstractActor dictionaries
         public static Mob NullActor = new Mob(UnknownAgent);
 

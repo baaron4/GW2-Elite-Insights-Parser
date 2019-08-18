@@ -16,11 +16,11 @@ namespace LuckParser.Parser.ParsedData
         public readonly ushort ID;
         public AgentItem MasterAgent { get; set; }
         public ushort InstID { get; set; }
-        public AgentType Type { get; }
+        public AgentType Type { get; } = AgentType.NPC;
         public long FirstAwareLogTime { get; set; }
         public long LastAwareLogTime { get; set; } = long.MaxValue;
-        public readonly string Name;
-        public readonly string Prof;
+        public readonly string Name = "UNKNOWN";
+        public readonly string Prof = "UNKNOWN";
         public readonly uint Toughness;
         public readonly uint Healing;
         public readonly uint Condition;
@@ -53,7 +53,8 @@ namespace LuckParser.Parser.ParsedData
                         Type = AgentType.EnemyPlayer;
                     }
                 }
-            } catch (Exception)
+            }
+            catch (Exception)
             {
 
             }
@@ -76,10 +77,8 @@ namespace LuckParser.Parser.ParsedData
             MasterAgent = other.MasterAgent;
         }
 
-        public AgentItem(ulong agent, string name)
+        public AgentItem()
         {
-            Agent = agent;
-            Name = name;
         }
 
 
