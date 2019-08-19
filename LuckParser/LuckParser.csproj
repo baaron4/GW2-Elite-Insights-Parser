@@ -18,9 +18,9 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <AssemblyTitle>EliteInsights</AssemblyTitle>
+    <OutputPath>..\LuckParser.bin\$(Configuration)\</OutputPath>
     <Product>EliteInsights</Product>
     <Copyright>Copyright ©  2018</Copyright>
-    <OutputPath>..\LuckParser.bin\$(Configuration)\</OutputPath>
     <DocumentationFile />
     <Deterministic>false</Deterministic>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -43,7 +43,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <ErrorReport>prompt</ErrorReport>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>

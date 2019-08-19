@@ -32,6 +32,11 @@ namespace LuckParser.EIData
             return _health;
         }
 
+        public void OverrideName(string name)
+        {
+            Character = name;
+        }
+
         public void SetManualHealth(int health)
         {
             _health = health;

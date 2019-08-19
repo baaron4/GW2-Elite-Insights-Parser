@@ -246,6 +246,7 @@ namespace LuckParser.Logic
                 SetUniqueID(target.AgentItem, gadgetAgents, agentData, combatData);
             }
             target.AgentItem.LastAwareLogTime = combatData.Last().LogTime;
+            target.OverrideName("Deimos");
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
