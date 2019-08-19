@@ -25,7 +25,6 @@
     <Copyright>Copyright ©  2018</Copyright>
     <AssemblyVersion>2.15.1.0</AssemblyVersion>
     <FileVersion>2.15.1.0</FileVersion>
-    <OutputPath>..\LuckParser.bin\Debug\</OutputPath>
     <DocumentationFile />
     <Deterministic>false</Deterministic>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
