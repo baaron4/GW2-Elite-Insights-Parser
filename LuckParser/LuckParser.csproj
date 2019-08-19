@@ -15,15 +15,11 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <AssemblyTitle>EliteInsights</AssemblyTitle>
     <Product>EliteInsights</Product>
     <Copyright>Copyright ©  2018</Copyright>
-    <AssemblyVersion>2.15.1.0</AssemblyVersion>
-    <FileVersion>2.15.1.0</FileVersion>
     <OutputPath>..\LuckParser.bin\$(Configuration)\</OutputPath>
     <DocumentationFile />
     <Deterministic>false</Deterministic>
@@ -42,6 +38,14 @@
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <ErrorReport>prompt</ErrorReport>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
@@ -103,22 +107,22 @@
     <None Include="Resources\theme-slate.png" />
     <None Include="Resources\combatreplay.js" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayUI.html" />
-    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayDamageData.html" />
-    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayDamageTable.html" />
-    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayActorRotation.html" />
+    <None Include="Resources\combatReplayTemplates\tmplCombatReplayDamageData.html" />
+    <None Include="Resources\combatReplayTemplates\tmplCombatReplayDamageTable.html" />
+    <None Include="Resources\combatReplayTemplates\tmplCombatReplayActorRotation.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayRangeSelect.html" />
-    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayTargetsStats.html" />
-    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayPlayersStats.html" />
-    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayTargetStatus.html" />
-    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayTargetStats.html" />
-    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayPlayerStatus.html" />
-    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayActorBuffStats.html" />
-    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayPlayerStats.html" />
-    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayStatusData.html" />
+    <None Include="Resources\combatReplayTemplates\tmplCombatReplayTargetsStats.html" />
+    <None Include="Resources\combatReplayTemplates\tmplCombatReplayPlayersStats.html" />
+    <None Include="Resources\combatReplayTemplates\tmplCombatReplayTargetStatus.html" />
+    <None Include="Resources\combatReplayTemplates\tmplCombatReplayTargetStats.html" />
+    <None Include="Resources\combatReplayTemplates\tmplCombatReplayPlayerStatus.html" />
+    <None Include="Resources\combatReplayTemplates\tmplCombatReplayActorBuffStats.html" />
+    <None Include="Resources\combatReplayTemplates\tmplCombatReplayPlayerStats.html" />
+    <None Include="Resources\combatReplayTemplates\tmplCombatReplayStatusData.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayPlayerSelect.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayAnimationControl.html" />
-    <Content Include="Resources\ei.css" />
-    <Content Include="Resources\ei.js" />
+    <None Include="Resources\ei.css" />
+    <None Include="Resources\ei.js" />
     <None Include="Resources\htmlTemplates\tmplGeneralLayout.html" />
     <None Include="Resources\htmlTemplates\tmplBuffTable.html" />
     <None Include="Resources\htmlTemplates\tmplDamageDistTable.html" />
@@ -151,22 +155,22 @@
     <None Include="Resources\htmlTemplates\tmplDamageTable.html" />
     <None Include="Resources\htmlTemplates\tmplDamageModifierStats.html" />
     <None Include="Resources\htmlTemplates\tmplDamageModifierPersStats.html" />
-    <Content Include="Resources\htmlTemplates\tmplDamageTaken.html" />
-    <Content Include="Resources\htmlTemplates\tmplTargetData.html" />
-    <Content Include="Resources\JS\combatReplayUI.js" />
-    <Content Include="Resources\JS\combatReplayStats.js" />
-    <Content Include="Resources\JS\generalStats.js" />
-    <Content Include="Resources\JS\buffStats.js" />
-    <Content Include="Resources\JS\graphs.js" />
-    <Content Include="Resources\JS\damageModifierStats.js" />
-    <Content Include="Resources\JS\targetStats.js" />
-    <Content Include="Resources\JS\mechanics.js" />
-    <Content Include="Resources\JS\playerStats.js" />
-    <Content Include="Resources\JS\header.js" />
-    <Content Include="Resources\JS\layout.js" />
-    <Content Include="Resources\JS\commons.js" />
-    <Content Include="Resources\JS\global.js" />
-    <Content Include="Resources\TODO.txt" />
+    <None Include="Resources\htmlTemplates\tmplDamageTaken.html" />
+    <None Include="Resources\htmlTemplates\tmplTargetData.html" />
+    <None Include="Resources\JS\combatReplayUI.js" />
+    <None Include="Resources\JS\combatReplayStats.js" />
+    <None Include="Resources\JS\generalStats.js" />
+    <None Include="Resources\JS\buffStats.js" />
+    <None Include="Resources\JS\graphs.js" />
+    <None Include="Resources\JS\damageModifierStats.js" />
+    <None Include="Resources\JS\targetStats.js" />
+    <None Include="Resources\JS\mechanics.js" />
+    <None Include="Resources\JS\playerStats.js" />
+    <None Include="Resources\JS\header.js" />
+    <None Include="Resources\JS\layout.js" />
+    <None Include="Resources\JS\commons.js" />
+    <None Include="Resources\JS\global.js" />
+    <None Include="Resources\TODO.txt" />
     <None Include="Resources\template.html" />
   </ItemGroup>
 </Project>
