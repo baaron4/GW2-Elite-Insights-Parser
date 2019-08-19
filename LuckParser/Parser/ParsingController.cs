@@ -166,7 +166,7 @@ namespace LuckParser.Parser
                     // 2 bytes: hitbox height
                     uint hbHeight = (uint)2 * reader.ReadUInt16();
                     // 68 bytes: name
-                    string name = ParseHelper.GetString(stream, 68, false);
+                    string name = ParseHelper.GetString(stream, 68, true);
                     //Save
                     string agentProf = _aPIController.GetAgentProfString(prof, isElite);
                     AgentItem.AgentType type;
