@@ -89,7 +89,7 @@ var compileHeader = function () {
         },
         computed: {
             scoreExpl: function () {
-                return "Scores are relative to the squad. 10 means that that player had the highest stat in the squad. 8 means that that player had between 80% and 89% of the highest scored player's stat."
+                return "<span style='text-align:left;display: block;'>Scores are relative to the squad. 10 means that that player had the highest stat in the squad. 8 means that that player had between 80% and 89% of the highest scored player's stat.</span>"
             },
             groups: function () {
                 var aux = [];
