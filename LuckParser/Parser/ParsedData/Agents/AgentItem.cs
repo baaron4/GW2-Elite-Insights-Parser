@@ -82,6 +82,34 @@ namespace LuckParser.Parser.ParsedData
             Name = name;
         }
 
+        private void AddValueToStatusList(List<(long start, long end)> dead, List<(long start, long end)> down, List<(long start, long end)> dc, AbstractStatusEvent cur, AbstractStatusEvent next, long endTime, int index)
+        {
+            long cTime = cur.Time;
+            long nTime = next != null ? next.Time : endTime;
+            if (cur is DownEvent)
+            {
+                down.Add((cTime, nTime));
+            }
+            else if (cur is DeadEvent)
+            {
+                dead.Add((cTime, nTime));
+            }
+            else if (cur is DespawnEvent)
+            {
+                dc.Add((cTime, nTime));
+            }
+            else if (index == 0)
+            {
+                if (cur is SpawnEvent)
+                {
+                    dc.Add((0, cTime));
+                }
+                else if (cur is AliveEvent)
+                {
+                    dead.Add((0, cTime));
+                }
+            }
+        }
 
         public void GetAgentStatus(List<(long start, long end)> dead, List<(long start, long end)> down, List<(long start, long end)> dc, ParsedLog log)
         {
@@ -96,35 +124,13 @@ namespace LuckParser.Parser.ParsedData
             {
                 AbstractStatusEvent cur = status[i];
                 AbstractStatusEvent next = status[i + 1];
-                if (cur is DownEvent)
-                {
-                    down.Add((cur.Time, next.Time));
-                }
-                else if (cur is DeadEvent)
-                {
-                    dead.Add((cur.Time, next.Time));
-                }
-                else if (cur is DespawnEvent)
-                {
-                    dc.Add((cur.Time, next.Time));
-                }
+                AddValueToStatusList(dead, down, dc, cur, next, log.FightData.FightDuration, i);
             }
             // check last value
             if (status.Count > 0)
             {
                 AbstractStatusEvent cur = status.Last();
-                if (cur is DownEvent)
-                {
-                    down.Add((cur.Time, log.FightData.FightDuration));
-                }
-                else if (cur is DeadEvent)
-                {
-                    dead.Add((cur.Time, log.FightData.FightDuration));
-                }
-                else if (cur is DespawnEvent)
-                {
-                    dc.Add((cur.Time, log.FightData.FightDuration));
-                }
+                AddValueToStatusList(dead, down, dc, cur, null, log.FightData.FightDuration, status.Count - 1);
             }
         }
 
