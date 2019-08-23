@@ -37,8 +37,7 @@ namespace LuckParser.EIData
         {
             if (forceInterpolate && Positions.Count == 0)
             {
-                PolledPositions.Add(new Point3D(short.MinValue, short.MinValue, 0, 0));
-                Deads.Add((0, fightDuration));
+                Positions.Add(new Point3D(int.MinValue, int.MinValue, 0, 0));
             }
             if (Positions.Count == 0)
             {
