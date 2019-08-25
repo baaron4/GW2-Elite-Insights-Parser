@@ -8,13 +8,13 @@
                 <a class="nav-link" @click="mode = 1" :class="{active: mode === 1 }">Generation Self</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" @click="mode = 2" :class="{active: mode === 2 }">Generation Group</a>
+                <a class="nav-link" @click="mode = 2" :class="{active: mode === 2 }" data-original-title="Self excluded">Generation Group</a>
             </li>
             <li v-if="!singleGroup" class="nav-item">
-                <a class="nav-link" @click="mode = 3" :class="{active: mode === 3 }">Generation Off-Group</a>
+                <a class="nav-link" @click="mode = 3" :class="{active: mode === 3 }" data-original-title="Self excluded">Generation Off-Group</a>
             </li>
             <li v-if="!singleGroup" class="nav-item">
-                <a class="nav-link" @click="mode = 4" :class="{active: mode === 4 }">Generation Squad</a>
+                <a class="nav-link" @click="mode = 4" :class="{active: mode === 4 }" data-original-title="Self excluded">Generation Squad</a>
             </li>
         </ul>
     </div>
