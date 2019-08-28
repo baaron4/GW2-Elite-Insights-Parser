@@ -72,7 +72,7 @@ namespace LuckParser.EIData
                 _presentMechanics.Add(toAddAll);
                 foreach (KeyValuePair<Mechanic, List<MechanicEvent>> pair in _mechanicLogs)
                 {
-                    if (pair.Value.Count(x => phase.InInterval(x.Time)) > 0)
+                    if (pair.Value.Any(x => phase.InInterval(x.Time)))
                     {
                         toAddAll.Add(pair.Key);
                         if (pair.Key.IsEnemyMechanic)

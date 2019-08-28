@@ -34,7 +34,7 @@ namespace LuckParser.Logic
             });
             Extension = "sh";
             GenericFallBackMethod = FallBackMethod.None;
-            IconUrl = "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
+            Icon = "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()

@@ -88,18 +88,12 @@ namespace LuckParser.Parser.ParsedData
         private readonly GW2APISkill _apiSkill;
 
         // Constructor
+
         public SkillItem(long ID, string name)
         {
             this.ID = ID;
             Name = name.Replace("\0", "");
-            CompleteItem();
-        }
-
-        public SkillItem(long ID, string name, GW2APIController apiController)
-        {
-            this.ID = ID;
-            Name = name.Replace("\0", "");
-            _apiSkill = apiController.GetSkill(ID);
+            _apiSkill = GW2APIController.GetSkill(ID);
             CompleteItem();
         }
 

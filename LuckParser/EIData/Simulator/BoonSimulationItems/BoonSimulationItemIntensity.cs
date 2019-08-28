@@ -39,7 +39,7 @@ namespace LuckParser.EIData
             return _stacks.Count;
         }
 
-        public override void SetBoonDistributionItem(BoonDistribution distribs, long start, long end, long boonid, ParsedLog log)
+        public override void SetBoonDistributionItem(BoonDistributionDictionary distribs, long start, long end, long boonid, ParsedLog log)
         {
             foreach (BoonSimulationItemDuration item in _stacks)
             {

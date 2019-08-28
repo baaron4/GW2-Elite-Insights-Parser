@@ -4,30 +4,30 @@ namespace LuckParser.Builders.HtmlModels
 {
     public class LogDataDto
     {
-        public List<TargetDto> Targets = new List<TargetDto>();
-        public readonly List<PlayerDto> Players = new List<PlayerDto>();
-        public readonly List<EnemyDto> Enemies = new List<EnemyDto>();
-        public readonly List<PhaseDto> Phases = new List<PhaseDto>();
-        public readonly List<long> Boons = new List<long>();
-        public readonly List<long> OffBuffs = new List<long>();
-        public readonly List<long> DefBuffs = new List<long>();
-        public readonly List<long> DmgModifiersItem = new List<long>();
-        public readonly List<long> DmgModifiersCommon = new List<long>();
-        public readonly Dictionary<string, List<long>> DmgModifiersPers = new Dictionary<string, List<long>>();
-        public readonly Dictionary<string, List<long>> PersBuffs = new Dictionary<string, List<long>>();
-        public readonly List<long> Conditions = new List<long>();
-        public readonly Dictionary<string, SkillDto> SkillMap = new Dictionary<string, SkillDto>();
-        public readonly Dictionary<string, BoonDto> BuffMap = new Dictionary<string, BoonDto>();
-        public readonly Dictionary<string, DamageModDto> DamageModMap = new Dictionary<string, DamageModDto>();
-        public readonly List<MechanicDto> MechanicMap = new List<MechanicDto>();
-        public CombatReplayDto CrData = null;
-        public string EncounterDuration;
-        public bool Success;
-        public bool Wvw;
-        public string FightName;
-        public string FightIcon;
-        public bool LightTheme;
-        public bool NoMechanics;
-        public bool SingleGroup;
+        public List<TargetDto> Targets { get; set; } = new List<TargetDto>();
+        public List<PlayerDto> Players { get; } = new List<PlayerDto>();
+        public List<EnemyDto> Enemies { get; } = new List<EnemyDto>();
+        public List<PhaseDto> Phases { get; } = new List<PhaseDto>();
+        public List<long> Boons { get; } = new List<long>();
+        public List<long> OffBuffs { get; } = new List<long>();
+        public List<long> DefBuffs { get; } = new List<long>();
+        public List<long> DmgModifiersItem { get; } = new List<long>();
+        public List<long> DmgModifiersCommon { get; } = new List<long>();
+        public Dictionary<string, List<long>> DmgModifiersPers { get; } = new Dictionary<string, List<long>>();
+        public Dictionary<string, List<long>> PersBuffs { get; } = new Dictionary<string, List<long>>();
+        public List<long> Conditions { get; } = new List<long>();
+        public Dictionary<string, SkillDto> SkillMap { get; } = new Dictionary<string, SkillDto>();
+        public Dictionary<string, BoonDto> BuffMap { get; } = new Dictionary<string, BoonDto>();
+        public Dictionary<string, DamageModDto> DamageModMap { get; } = new Dictionary<string, DamageModDto>();
+        public List<MechanicDto> MechanicMap { get; set; } = new List<MechanicDto>();
+        public CombatReplayDto CrData { get; set; } = null;
+        public string EncounterDuration { get; set; }
+        public bool Success { get; set; }
+        public bool Wvw { get; set; }
+        public string FightName { get; set; }
+        public string FightIcon { get; set; }
+        public bool LightTheme { get; set; }
+        public bool NoMechanics { get; set; }
+        public bool SingleGroup { get; set; }
     }
 }

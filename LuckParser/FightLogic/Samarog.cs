@@ -43,7 +43,7 @@ namespace LuckParser.Logic
             //  new Mechanic(37816, "Brutalize", ParseEnum.BossIDS.Samarog, new MechanicPlotlySetting("star-square","rgb(255,0,0)"), "CC Target", casted without dmg odd
             });
             Extension = "sam";
-            IconUrl = "https://wiki.guildwars2.com/images/f/f0/Mini_Samarog.png";
+            Icon = "https://wiki.guildwars2.com/images/f/f0/Mini_Samarog.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()

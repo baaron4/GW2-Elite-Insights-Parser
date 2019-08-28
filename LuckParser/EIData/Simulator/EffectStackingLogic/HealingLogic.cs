@@ -10,7 +10,7 @@ namespace LuckParser.EIData
         private struct CompareHealing
         {
 
-            private uint GetHealing(BoonStackItem stack)
+            private static uint GetHealing(BoonStackItem stack)
             {
                 return stack.SeedSrc.Healing;
             }

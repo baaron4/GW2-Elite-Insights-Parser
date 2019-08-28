@@ -30,7 +30,7 @@ namespace LuckParser.Logic
             new EnemyBoonRemoveMechanic(34467, "Narcolepsy", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Narcolepsy (Breakbar broken)", "CCed",0, (br,log) => br.RemovedDuration <= 120000)
             });
             Extension = "sloth";
-            IconUrl = "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";
+            Icon = "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()

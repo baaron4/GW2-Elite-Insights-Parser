@@ -7,10 +7,10 @@ namespace LuckParser.Builders.HtmlModels
 {
     public class BoonChartDataDto
     {
-        public long Id;
-        public string Color;
-        public bool Visible;
-        public List<object[]> States;
+        public long Id { get; set; }
+        public string Color { get; set; }
+        public bool Visible { get; set; }
+        public List<object[]> States { get; set; }
 
         public BoonChartDataDto(BoonsGraphModel bgm, List<BoonsGraphModel.Segment> bChart, PhaseData phase)
         {

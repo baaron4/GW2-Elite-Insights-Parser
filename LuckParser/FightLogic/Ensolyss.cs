@@ -33,7 +33,7 @@ namespace LuckParser.Logic
             new HitOnPlayerMechanic(36926, "Tormenting Blast", new MechanicPlotlySetting("diamond","rgb(255,255,0)"), "Quarter","Tormenting Blast (Two Quarter Circle attacks)", "Quarter circle",0),
             });
             Extension = "ensol";
-            IconUrl = "https://wiki.guildwars2.com/images/5/57/Champion_Toxic_Hybrid.jpg";
+            Icon = "https://wiki.guildwars2.com/images/5/57/Champion_Toxic_Hybrid.jpg";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()

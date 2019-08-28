@@ -47,7 +47,7 @@ namespace LuckParser.Logic
             // 25% -  0%: 37642
             });
             Extension = "cairn";
-            IconUrl = "https://wiki.guildwars2.com/images/b/b8/Mini_Cairn_the_Indomitable.png";
+            Icon = "https://wiki.guildwars2.com/images/b/b8/Mini_Cairn_the_Indomitable.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()

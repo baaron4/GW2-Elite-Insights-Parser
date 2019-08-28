@@ -7,7 +7,7 @@ namespace LuckParser.Logic
         public UnknownFightLogic(ushort triggerID) : base(triggerID)
         {
             Extension = "boss";
-            IconUrl = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
+            Icon = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
         }
 
         protected override HashSet<ushort> GetUniqueTargetIDs()

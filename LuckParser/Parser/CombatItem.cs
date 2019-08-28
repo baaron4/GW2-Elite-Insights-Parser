@@ -16,7 +16,7 @@
         public ParseEnum.IFF IFF { get; }
         public byte IsBuff { get; }
         public byte Result { get; }
-        public ParseEnum.Activation IsActivation { get; }
+        public ParseEnum.EvtcActivation IsActivation { get; }
         public ParseEnum.BuffRemove IsBuffRemove { get; }
         public byte IsNinety { get; }
         public byte IsFifty { get; }
@@ -30,7 +30,7 @@
         public CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
                long skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid,
                ushort dstMasterInstid, ParseEnum.IFF iff, byte isBuff,
-               byte result, ParseEnum.Activation isActivation,
+               byte result, ParseEnum.EvtcActivation isActivation,
                ParseEnum.BuffRemove isBuffRemove, byte isNinety, byte isFifty, byte isMoving,
                ParseEnum.StateChange isStateChange, byte isFlanking, byte isShields, byte isOffcycle)
         {

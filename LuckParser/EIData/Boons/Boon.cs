@@ -812,6 +812,7 @@ namespace LuckParser.EIData
                 case Logic.Override:
                     logicToUse = new OverrideLogic();
                     break;
+                case Logic.Unknown:
                 default:
                     throw new InvalidOperationException("Cannot simulate unknown/custom buffs");
             }
@@ -819,6 +820,7 @@ namespace LuckParser.EIData
             {
                 case BoonType.Intensity: return new BoonSimulatorIntensity(Capacity, log, logicToUse);
                 case BoonType.Duration: return new BoonSimulatorDuration(Capacity, log, logicToUse);
+                case BoonType.Unknown:
                 default: throw new InvalidOperationException("Cannot simulate typeless boons");
             }
         }

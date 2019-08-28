@@ -47,7 +47,7 @@ namespace LuckParser.Builders.HtmlModels
                 }
             }
             Percent = Math.Round(100.0 - HpLeft, 2);
-            foreach (KeyValuePair<string, Minions> pair in target.GetMinions(log))
+            foreach (KeyValuePair<string, MinionsList> pair in target.GetMinions(log))
             {
                 Minions.Add(new MinionDto() { Id = pair.Value.MinionID, Name = pair.Key.TrimEnd(" \0".ToArray()) });
             }

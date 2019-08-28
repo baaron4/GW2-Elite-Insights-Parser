@@ -6,7 +6,7 @@ using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.EIData
 {
-    public class Minions : List<Minion>
+    public class MinionsList : List<Minion>
     {
         public readonly int MinionID;
         private List<AbstractDamageEvent> _damageLogs;
@@ -14,7 +14,7 @@ namespace LuckParser.EIData
         private List<AbstractCastEvent> _castLogs;
         public string Character => Count > 0 ? this[0].Character : "";
 
-        public Minions(int id)
+        public MinionsList(int id)
         {
             MinionID = id;
         }

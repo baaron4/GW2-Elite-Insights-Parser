@@ -5,9 +5,9 @@ namespace LuckParser.Builders.HtmlModels
 {
     public class DeathRecapDto
     {
-        public long Time;
-        public List<object[]> ToDown = null;
-        public List<object[]> ToKill = null;
+        public long Time { get; set; }
+        public List<object[]> ToDown { get; set; } = null;
+        public List<object[]> ToKill { get; set; } = null;
 
         public static List<object[]> BuildDeathRecapItemList(List<Statistics.DeathRecap.DeathRecapDamageItem> list)
         {

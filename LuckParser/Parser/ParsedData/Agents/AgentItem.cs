@@ -81,7 +81,7 @@ namespace LuckParser.Parser.ParsedData
         {
         }
 
-        private void AddValueToStatusList(List<(long start, long end)> dead, List<(long start, long end)> down, List<(long start, long end)> dc, AbstractStatusEvent cur, AbstractStatusEvent next, long endTime, int index)
+        private static void AddValueToStatusList(List<(long start, long end)> dead, List<(long start, long end)> down, List<(long start, long end)> dc, AbstractStatusEvent cur, AbstractStatusEvent next, long endTime, int index)
         {
             long cTime = cur.Time;
             long nTime = next != null ? next.Time : endTime;

@@ -39,7 +39,7 @@ namespace LuckParser.Logic
             });
             Extension = "xera";
             GenericFallBackMethod = FallBackMethod.CombatExit;
-            IconUrl = "https://wiki.guildwars2.com/images/4/4b/Mini_Xera.png";
+            Icon = "https://wiki.guildwars2.com/images/4/4b/Mini_Xera.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()

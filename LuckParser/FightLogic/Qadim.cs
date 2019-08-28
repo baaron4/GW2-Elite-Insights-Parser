@@ -61,7 +61,7 @@ namespace LuckParser.Logic
             new PlayerBoonApplyMechanic(52035, "Power of the Lamp", new MechanicPlotlySetting("triangle-up","rgb(100,150,255)",10), "Lamp","Power of the Lamp (Returned from the Lamp)", "Lamp Return",0),
             });
             Extension = "qadim";
-            IconUrl = "https://wiki.guildwars2.com/images/f/f2/Mini_Qadim.png";
+            Icon = "https://wiki.guildwars2.com/images/f/f2/Mini_Qadim.png";
             GenericFallBackMethod = FallBackMethod.CombatExit;
         }
 

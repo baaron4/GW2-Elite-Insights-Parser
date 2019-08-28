@@ -25,7 +25,7 @@ namespace LuckParser.Logic
             new EnemyCastEndMechanic(31834, "Ghastly Rampage", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Ghastly Rampage (Breakbar broken)", "CCed",0, (ce, log) => ce.ActualDuration <= 21985),
             });
             Extension = "gors";
-            IconUrl = "https://wiki.guildwars2.com/images/d/d1/Mini_Gorseval_the_Multifarious.png";
+            Icon = "https://wiki.guildwars2.com/images/d/d1/Mini_Gorseval_the_Multifarious.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()
@@ -128,11 +128,9 @@ namespace LuckParser.Logic
                             {
                                 break;
                             }
-                            List<string> patterns;
-                            switch (phaseIndex)
+                            List<string> patterns = phaseIndex switch
                             {
-                                case 1:
-                                    patterns = new List<string>
+                                1 => new List<string>
                             {
                                 "2+3+5",
                                 "2+3+4",
@@ -140,10 +138,8 @@ namespace LuckParser.Logic
                                 "1+2+5",
                                 "1+3+5",
                                 "Full"
-                            };
-                                    break;
-                                case 3:
-                                    patterns = new List<string>
+                            },
+                                3 => new List<string>
                             {
                                 "2+3+4",
                                 "1+4+5",
@@ -151,10 +147,8 @@ namespace LuckParser.Logic
                                 "1+2+5",
                                 "1+2+3",
                                 "Full"
-                            };
-                                    break;
-                                case 5:
-                                    patterns = new List<string>
+                            },
+                                5 => new List<string>
                             {
                                 "1+4+5",
                                 "1+2+5",
@@ -162,11 +156,9 @@ namespace LuckParser.Logic
                                 "3+4+5",
                                 "3+4+5",
                                 "Full"
+                            },
+                                _ => throw new Exception("how the fuck"),
                             };
-                                    break;
-                                default:
-                                    throw new Exception("how the fuck");
-                            }
                             start += 2200;
                             for (int i = 0; i < ticks; i++)
                             {

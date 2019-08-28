@@ -8,11 +8,11 @@ namespace LuckParser.Builders.HtmlModels
 {
     public class MechanicChartDataDto
     {
-        public string Symbol;
-        public int Size;
-        public string Color;
-        public List<List<List<object>>> Points;
-        public bool Visible;
+        public string Symbol { get; set; }
+        public int Size { get; set; }
+        public string Color { get; set; }
+        public List<List<List<object>>> Points { get; set; }
+        public bool Visible { get; set; }
 
         public static List<List<object>> GetMechanicChartPoints(List<MechanicEvent> mechanicLogs, PhaseData phase, ParsedLog log, bool enemyMechanic)
         {

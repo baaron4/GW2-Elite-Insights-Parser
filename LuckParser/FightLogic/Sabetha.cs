@@ -50,7 +50,7 @@ namespace LuckParser.Logic
             // Hit by Time Bomb could be implemented by checking if a person is affected by ID 31324 (1st Time Bomb) or 34152 (2nd Time Bomb, only below 50% boss HP) without being attributed a bomb (ID: 31485) 3000ms before (+-50ms). I think the actual heavy hit isn't logged because it may be percentage based. Nothing can be found in the logs.
             });
             Extension = "sab";
-            IconUrl = "https://wiki.guildwars2.com/images/5/54/Mini_Sabetha.png";
+            Icon = "https://wiki.guildwars2.com/images/5/54/Mini_Sabetha.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()

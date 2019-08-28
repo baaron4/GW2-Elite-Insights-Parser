@@ -5,7 +5,7 @@ namespace LuckParser.EIData
 {
     public class FacingActor : GenericActor
     {
-        protected List<int> Data = new List<int>();
+        protected List<int> Data { get; set; } = new List<int>();
 
         public FacingActor((int start, int end) lifespan, AgentConnector connector, List<Point3D> facings) : base(lifespan, connector)
         {
@@ -18,7 +18,7 @@ namespace LuckParser.EIData
         //
         protected class FacingSerializable : GenericActorSerializable
         {
-            public int[] FacingData;
+            public int[] FacingData { get; set; }
         }
 
         public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)

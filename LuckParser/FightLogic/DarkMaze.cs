@@ -25,7 +25,7 @@ namespace LuckParser.Logic
             }
             );
             Extension = "eyes";
-            IconUrl = "https://wiki.guildwars2.com/images/thumb/a/a7/Eye_of_Fate.jpg/188px-Eye_of_Fate.jpg";
+            Icon = "https://wiki.guildwars2.com/images/thumb/a/a7/Eye_of_Fate.jpg/188px-Eye_of_Fate.jpg";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()

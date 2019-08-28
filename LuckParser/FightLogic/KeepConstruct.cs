@@ -32,7 +32,7 @@ namespace LuckParser.Logic
             new HitOnEnemyMechanic(16261, "Core Hit", new MechanicPlotlySetting("star-open","rgb(255,140,0)"), "Core Hit","Core was Hit by Player", "Core Hit",1000)
             });
             Extension = "kc";
-            IconUrl = "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
+            Icon = "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()

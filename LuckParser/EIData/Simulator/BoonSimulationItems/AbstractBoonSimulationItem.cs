@@ -7,7 +7,7 @@ namespace LuckParser.EIData
     public abstract class AbstractBoonSimulationItem
     {
 
-        protected Dictionary<AgentItem, BoonDistributionItem> GetDistrib(BoonDistribution distribs, long boonid)
+        protected static Dictionary<AgentItem, BoonDistributionItem> GetDistrib(BoonDistributionDictionary distribs, long boonid)
         {
             if (!distribs.TryGetValue(boonid, out Dictionary<AgentItem, BoonDistributionItem> distrib))
             {
@@ -17,6 +17,6 @@ namespace LuckParser.EIData
             return distrib;
         }
 
-        public abstract void SetBoonDistributionItem(BoonDistribution distribs, long start, long end, long boonid, ParsedLog log);
+        public abstract void SetBoonDistributionItem(BoonDistributionDictionary distribs, long start, long end, long boonid, ParsedLog log);
     }
 }

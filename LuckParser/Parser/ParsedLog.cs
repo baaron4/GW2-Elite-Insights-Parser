@@ -25,8 +25,8 @@ namespace LuckParser.Parser
         public BoonsContainer Boons { get; }
         public bool CanCombatReplay => CombatData.HasMovementData;
 
-        public readonly MechanicData MechanicData;
-        public readonly Statistics Statistics;
+        public MechanicData MechanicData { get; }
+        public Statistics Statistics { get; }
 
         public ParsedLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData,
                 List<CombatItem> combatItems, List<Player> playerList)
@@ -75,8 +75,8 @@ namespace LuckParser.Parser
             {
                 foreach (Player p in PlayerList)
                 {
-                    Dictionary<string, Minions> minionsDict = p.GetMinions(this);
-                    foreach (Minions minions in minionsDict.Values)
+                    Dictionary<string, MinionsList> minionsDict = p.GetMinions(this);
+                    foreach (MinionsList minions in minionsDict.Values)
                     {
                         res = minions.FirstOrDefault(x => x.AgentItem == a);
                         if (res != null)

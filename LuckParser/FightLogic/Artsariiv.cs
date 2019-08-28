@@ -23,7 +23,7 @@ namespace LuckParser.Logic
             new SpawnMechanic(17630, "Spark", new MechanicPlotlySetting("star","rgb(0,255,255)"),"Spark","Spawned a Spark (missed marble)", "Spark",0),
             });
             Extension = "arts";
-            IconUrl = "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
+            Icon = "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()

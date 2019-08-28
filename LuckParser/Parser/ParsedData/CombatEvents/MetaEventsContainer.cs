@@ -4,13 +4,13 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
 {
     public class MetaEventsContainer
     {
-        public readonly List<BuildEvent> BuildEvents = new List<BuildEvent>();
-        public readonly List<LanguageEvent> LanguageEvents = new List<LanguageEvent>();
-        public readonly List<LogEndEvent> LogEndEvents = new List<LogEndEvent>();
-        public readonly List<LogStartEvent> LogStartEvents = new List<LogStartEvent>();
-        public readonly List<MapIDEvent> MapIDEvents = new List<MapIDEvent>();
-        public readonly List<RewardEvent> RewardEvents = new List<RewardEvent>();
-        public readonly List<ShardEvent> ShardEvents = new List<ShardEvent>();
-        public readonly List<PointOfViewEvent> PointOfViewEvents = new List<PointOfViewEvent>();
+        public List<BuildEvent> BuildEvents { get; } = new List<BuildEvent>();
+        public List<LanguageEvent> LanguageEvents { get; } = new List<LanguageEvent>();
+        public List<LogEndEvent> LogEndEvents { get; } = new List<LogEndEvent>();
+        public List<LogStartEvent> LogStartEvents { get; } = new List<LogStartEvent>();
+        public List<MapIDEvent> MapIDEvents { get; } = new List<MapIDEvent>();
+        public List<RewardEvent> RewardEvents { get; } = new List<RewardEvent>();
+        public List<ShardEvent> ShardEvents { get; } = new List<ShardEvent>();
+        public List<PointOfViewEvent> PointOfViewEvents { get; } = new List<PointOfViewEvent>();
     }
 }

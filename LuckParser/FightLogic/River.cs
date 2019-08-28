@@ -21,7 +21,7 @@ namespace LuckParser.Logic
             );
             GenericFallBackMethod = FallBackMethod.None;
             Extension = "river";
-            IconUrl = "https://wiki.guildwars2.com/images/thumb/7/7b/Gold_River_of_Souls_Trophy.jpg/220px-Gold_River_of_Souls_Trophy.jpg";
+            Icon = "https://wiki.guildwars2.com/images/thumb/7/7b/Gold_River_of_Souls_Trophy.jpg/220px-Gold_River_of_Souls_Trophy.jpg";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()

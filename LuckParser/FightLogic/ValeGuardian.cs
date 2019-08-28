@@ -36,7 +36,7 @@ namespace LuckParser.Logic
             new EnemyCastEndMechanic(31419, "Magic Storm", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Magic Storm (Breakbar failed) ", "CC Fail",0,(c, log) => c.ActualDuration > 8544),
             });
             Extension = "vg";
-            IconUrl = "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
+            Icon = "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()

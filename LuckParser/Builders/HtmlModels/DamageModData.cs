@@ -7,8 +7,8 @@ namespace LuckParser.Builders.HtmlModels
 {
     public class DamageModData
     {
-        public List<object[]> Data = new List<object[]>();
-        public List<List<object[]>> DataTarget = new List<List<object[]>>();
+        public List<object[]> Data { get; set; } = new List<object[]>();
+        public List<List<object[]>> DataTarget { get; set; } = new List<List<object[]>>();
 
         public DamageModData(Player player, ParsedLog log, List<DamageModifier> listToUse, int phaseIndex)
         {

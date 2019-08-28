@@ -31,7 +31,7 @@ namespace LuckParser.Logic
             new HitOnPlayerMechanic(51999, "Cyclone Burst", new MechanicPlotlySetting("y-up-open","rgb(255,150,0)"), "Y Field","Cyclone Burst (triangular rotating fields on Kenut)", "Cyclone Burst",0),
             });
             Extension = "twinlargos";
-            IconUrl = "https://i.imgur.com/6O5MT7v.png";
+            Icon = "https://i.imgur.com/6O5MT7v.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()

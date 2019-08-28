@@ -34,13 +34,11 @@ namespace LuckParser
 
         private static void ReadConfFile(string filename)
         {
-            using (var sr = new StreamReader(filename))
+            using var sr = new StreamReader(filename);
+            string line;
+            while ((line = sr.ReadLine()) != null)
             {
-                string line;
-                while ((line = sr.ReadLine()) != null)
-                {
-                    ProcessSettingsLine(line.Trim());
-                }
+                ProcessSettingsLine(line.Trim());
             }
         }
 

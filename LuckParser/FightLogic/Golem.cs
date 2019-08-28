@@ -17,23 +17,23 @@ namespace LuckParser.Logic
             {
                 case 16202:
                     Extension = "MassiveGolem";
-                    IconUrl = "https://wiki.guildwars2.com/images/3/33/Mini_Snuggles.png";
+                    Icon = "https://wiki.guildwars2.com/images/3/33/Mini_Snuggles.png";
                     break;
                 case 16177:
                     Extension = "AvgGolem";
-                    IconUrl = "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
+                    Icon = "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
                     break;
                 case 19676:
                     Extension = "LGolem";
-                    IconUrl = "https://wiki.guildwars2.com/images/4/47/Mini_Baron_von_Scrufflebutt.png";
+                    Icon = "https://wiki.guildwars2.com/images/4/47/Mini_Baron_von_Scrufflebutt.png";
                     break;
                 case 19645:
                     Extension = "MedGolem";
-                    IconUrl = "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
+                    Icon = "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
                     break;
                 case 16199:
                     Extension = "StdGolem";
-                    IconUrl = "https://wiki.guildwars2.com/images/8/8f/Mini_Professor_Mew.png";
+                    Icon = "https://wiki.guildwars2.com/images/8/8f/Mini_Professor_Mew.png";
                     break;
             }
         }
@@ -44,7 +44,7 @@ namespace LuckParser.Logic
             foreach (CombatItem c in combatData)
             {
                 // redirect all attacks to the main golem
-                if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsStateChange == ParseEnum.StateChange.None && c.IFF == ParseEnum.IFF.Foe && c.IsActivation == ParseEnum.Activation.None && c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsStateChange == ParseEnum.StateChange.None && c.IFF == ParseEnum.IFF.Foe && c.IsActivation == ParseEnum.EvtcActivation.None && c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
                     c.OverrideDstValues(target.Agent, target.InstID);
                 }

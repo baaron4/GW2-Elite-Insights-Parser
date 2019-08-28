@@ -193,7 +193,7 @@ namespace LuckParser.EIData
             return _statsTarget[target];
         }
 
-        private void FillFinalStats(List<AbstractDamageEvent> dls, FinalStats final, Dictionary<Target, FinalStats> targetsFinal)
+        private static void FillFinalStats(List<AbstractDamageEvent> dls, FinalStats final, Dictionary<Target, FinalStats> targetsFinal)
         {
             var nonCritable = new HashSet<long>
                     {
@@ -582,7 +582,7 @@ namespace LuckParser.EIData
                 PhaseData phase = phases[phaseIndex];
                 long phaseDuration = phase.DurationInMS;
 
-                var boonDistributions = new Dictionary<Player, BoonDistribution>();
+                var boonDistributions = new Dictionary<Player, BoonDistributionDictionary>();
                 foreach (Player p in playerList)
                 {
                     boonDistributions[p] = p.GetBoonDistribution(log, phaseIndex);
@@ -612,9 +612,9 @@ namespace LuckParser.EIData
                     double totalActiveExtended = 0;
                     bool hasGeneration = false;
                     int activePlayerCount = 0;
-                    foreach (KeyValuePair<Player, BoonDistribution> pair in boonDistributions)
+                    foreach (KeyValuePair<Player, BoonDistributionDictionary> pair in boonDistributions)
                     {
-                        BoonDistribution boons = pair.Value;
+                        BoonDistributionDictionary boons = pair.Value;
                         long playerActiveDuration = phase.GetPlayerActiveDuration(pair.Key, log);
                         if (boons.ContainsKey(boon.ID))
                         {
@@ -718,7 +718,7 @@ namespace LuckParser.EIData
 
                 PhaseData phase = phases[phaseIndex];
 
-                BoonDistribution selfBoons = GetBoonDistribution(log, phaseIndex);
+                BoonDistributionDictionary selfBoons = GetBoonDistribution(log, phaseIndex);
                 Dictionary<long, long> buffPresence = GetBuffPresence(log, phaseIndex);
 
                 long phaseDuration = phase.DurationInMS;

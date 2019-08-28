@@ -2,10 +2,10 @@
 
 namespace LuckParser.Parser
 {
-    public class ParseEnum
+    public static class ParseEnum
     {
         // Activation
-        public enum Activation : byte
+        public enum EvtcActivation : byte
         {
             None = 0,
             Normal = 1,
@@ -17,11 +17,11 @@ namespace LuckParser.Parser
             Unknown
         };
 
-        public static Activation GetActivation(byte bt)
+        public static EvtcActivation GetEvtcActivation(byte bt)
         {
-            return bt < (byte)Activation.Unknown
-                ? (Activation)bt
-                : Activation.Unknown;
+            return bt < (byte)EvtcActivation.Unknown
+                ? (EvtcActivation)bt
+                : EvtcActivation.Unknown;
         }
 
         // Buff remove
@@ -423,16 +423,16 @@ namespace LuckParser.Parser
         }
     }
 
-    static class ActivationExtensions
+    static class EvtcActivationExtensions
     {
-        public static bool StartCasting(this ParseEnum.Activation activation)
+        public static bool StartCasting(this ParseEnum.EvtcActivation activation)
         {
-            return activation == ParseEnum.Activation.Normal || activation == ParseEnum.Activation.Quickness;
+            return activation == ParseEnum.EvtcActivation.Normal || activation == ParseEnum.EvtcActivation.Quickness;
         }
 
-        public static bool NoInterruptEndCasting(this ParseEnum.Activation activation)
+        public static bool NoInterruptEndCasting(this ParseEnum.EvtcActivation activation)
         {
-            return activation == ParseEnum.Activation.CancelFire || activation == ParseEnum.Activation.Reset;
+            return activation == ParseEnum.EvtcActivation.CancelFire || activation == ParseEnum.EvtcActivation.Reset;
         }
     }
 }

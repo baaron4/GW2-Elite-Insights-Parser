@@ -28,7 +28,7 @@ namespace LuckParser.Logic
             });
             Extension = "ca";
             GenericFallBackMethod = FallBackMethod.None;
-            IconUrl = "https://i.imgur.com/eLyIWd2.png";
+            Icon = "https://i.imgur.com/eLyIWd2.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()

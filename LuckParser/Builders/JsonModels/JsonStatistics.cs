@@ -2,7 +2,7 @@
 
 namespace LuckParser.Builders.JsonModels
 {
-    public class JsonStatistics
+    public static class JsonStatistics
     {
         /// <summary>
         /// Defensive stats
@@ -12,59 +12,59 @@ namespace LuckParser.Builders.JsonModels
             /// <summary>
             /// Total damage taken
             /// </summary>
-            public long DamageTaken;
+            public long DamageTaken { get; set; }
             /// <summary>
             /// Number of blocks
             /// </summary>
-            public int BlockedCount;
+            public int BlockedCount { get; set; }
             /// <summary>
             /// Number of evades
             /// </summary>
-            public int EvadedCount;
+            public int EvadedCount { get; set; }
             /// <summary>
             /// Number of dodges
             /// </summary>
-            public int DodgeCount;
+            public int DodgeCount { get; set; }
             /// <summary>
             /// Number of time an incoming attack was negated by invul
             /// </summary>
-            public int InvulnedCount;
+            public int InvulnedCount { get; set; }
             /// <summary>
             /// Damage negated by invul
             /// </summary>
-            public int DamageInvulned;
+            public int DamageInvulned { get; set; }
             /// <summary>
             /// Damage done against barrier
             /// </summary>
-            public int DamageBarrier;
+            public int DamageBarrier { get; set; }
             /// <summary>
             /// Number of time interrupted
             /// </summary>
-            public int InterruptedCount;
+            public int InterruptedCount { get; set; }
             /// <summary>
             /// Number of time downed
             /// </summary>
-            public int DownCount;
+            public int DownCount { get; set; }
             /// <summary>
             /// Time passed in downstate
             /// </summary>
-            public int DownDuration;
+            public int DownDuration { get; set; }
             /// <summary>
             /// Number of time died
             /// </summary>
-            public int DeadCount;
+            public int DeadCount { get; set; }
             /// <summary>
             /// Time passed in dead state
             /// </summary>
-            public int DeadDuration;
+            public int DeadDuration { get; set; }
             /// <summary>
             /// Number of time disconnected
             /// </summary>
-            public int DcCount;
+            public int DcCount { get; set; }
             /// <summary>
             /// Time passed in disconnected state
             /// </summary>
-            public int DcDuration;
+            public int DcDuration { get; set; }
 
             public JsonDefenses(Statistics.FinalDefenses defenses)
             {
@@ -93,51 +93,51 @@ namespace LuckParser.Builders.JsonModels
             /// <summary>
             /// Total dps
             /// </summary>
-            public int Dps;
+            public int Dps { get; set; }
             /// <summary>
             /// Total damage
             /// </summary>
-            public int Damage;
+            public int Damage { get; set; }
             /// <summary>
             /// Total condi dps
             /// </summary>
-            public int CondiDps;
+            public int CondiDps { get; set; }
             /// <summary>
             /// Total condi damage
             /// </summary>
-            public int CondiDamage;
+            public int CondiDamage { get; set; }
             /// <summary>
             /// Total power dps
             /// </summary>
-            public int PowerDps;
+            public int PowerDps { get; set; }
             /// <summary>
             /// Total power damage
             /// </summary>
-            public int PowerDamage;
+            public int PowerDamage { get; set; }
             /// <summary>
             /// Total actor only dps
             /// </summary>
-            public int ActorDps;
+            public int ActorDps { get; set; }
             /// <summary>
             /// Total actor only damage
             /// </summary>
-            public int ActorDamage;
+            public int ActorDamage { get; set; }
             /// <summary>
             /// Total actor only condi dps
             /// </summary>
-            public int ActorCondiDps;
+            public int ActorCondiDps { get; set; }
             /// <summary>
             /// Total actor only condi damage
             /// </summary>
-            public int ActorCondiDamage;
+            public int ActorCondiDamage { get; set; }
             /// <summary>
             /// Total actor only power dps
             /// </summary>
-            public int ActorPowerDps;
+            public int ActorPowerDps { get; set; }
             /// <summary>
             /// Total actor only power damage
             /// </summary>
-            public int ActorPowerDamage;
+            public int ActorPowerDamage { get; set; }
 
             public JsonDPS(Statistics.FinalDPS stats)
             {
@@ -166,39 +166,39 @@ namespace LuckParser.Builders.JsonModels
             /// <summary>
             /// Number of direct damage hit
             /// </summary>
-            public int DirectDamageCount;
+            public int DirectDamageCount { get; set; }
             /// <summary>
             /// Number of critable hit
             /// </summary>
-            public int CritableDirectDamageCount;
+            public int CritableDirectDamageCount { get; set; }
             /// <summary>
             /// Number of crit
             /// </summary>
-            public int CriticalRate;
+            public int CriticalRate { get; set; }
             /// <summary>
             /// Total critical damage
             /// </summary>
-            public int CriticalDmg;
+            public int CriticalDmg { get; set; }
             /// <summary>
             /// Number of hits while flanking
             /// </summary>
-            public int FlankingRate;
+            public int FlankingRate { get; set; }
             /// <summary>
             /// Number of glanced hits
             /// </summary>
-            public int GlanceRate;
+            public int GlanceRate { get; set; }
             /// <summary>
             /// Number of missed hits
             /// </summary>
-            public int Missed;
+            public int Missed { get; set; }
             /// <summary>
             /// Number of hits that interrupted a skill
             /// </summary>
-            public int Interrupts;
+            public int Interrupts { get; set; }
             /// <summary>
             /// Number of hits against invulnerable targets
             /// </summary>
-            public int Invulned;
+            public int Invulned { get; set; }
 
             public JsonStats(Statistics.FinalStats stats)
             {
@@ -232,43 +232,43 @@ namespace LuckParser.Builders.JsonModels
             /// <summary>
             /// Number of time you interrupted your cast
             /// </summary>
-            public int Wasted;
+            public int Wasted { get; set; }
             /// <summary>
             /// Time wasted by interrupting your cast
             /// </summary>
-            public double TimeWasted;
+            public double TimeWasted { get; set; }
             /// <summary>
             /// Number of time you skipped an aftercast
             /// </summary>
-            public int Saved;
+            public int Saved { get; set; }
             /// <summary>
             /// Time saved while skipping aftercast
             /// </summary>
-            public double TimeSaved;
+            public double TimeSaved { get; set; }
             /// <summary>
             /// Distance to the epicenter of the squad
             /// </summary>
-            public double StackDist;
+            public double StackDist { get; set; }
             /// <summary>
             /// Average amount of boons
             /// </summary>
-            public double AvgBoons;
+            public double AvgBoons { get; set; }
             /// <summary>
             /// Average amount of boons over active time
             /// </summary>
-            public double AvgActiveBoons;
+            public double AvgActiveBoons { get; set; }
             /// <summary>
             /// Average amount of conditions
             /// </summary>
-            public double AvgConditions;
+            public double AvgConditions { get; set; }
             /// <summary>
             /// Average amount of conditions over active time
             /// </summary>
-            public double AvgActiveConditions;
+            public double AvgActiveConditions { get; set; }
             /// <summary>
             /// Number of time a weapon swap happened
             /// </summary>
-            public int SwapCount;
+            public int SwapCount { get; set; }
 
             public JsonStatsAll(Statistics.FinalStatsAll stats) : base(stats)
             {
@@ -293,35 +293,35 @@ namespace LuckParser.Builders.JsonModels
             /// <summary>
             /// Number of time ressurected someone
             /// </summary>
-            public long Resurrects;
+            public long Resurrects { get; set; }
             /// <summary>
             /// Time passed on ressurecting
             /// </summary>
-            public double ResurrectTime;
+            public double ResurrectTime { get; set; }
             /// <summary>
             /// Number of time a condition was removed, self excluded
             /// </summary>
-            public long CondiCleanse;
+            public long CondiCleanse { get; set; }
             /// <summary>
             /// Total time of condition removed, self excluded
             /// </summary>
-            public double CondiCleanseTime;
+            public double CondiCleanseTime { get; set; }
             /// <summary>
             /// Number of time a condition was removed from self
             /// </summary>
-            public long CondiCleanseSelf;
+            public long CondiCleanseSelf { get; set; }
             /// <summary>
             /// Total time of condition removed from self
             /// </summary>
-            public double CondiCleanseTimeSelf;
+            public double CondiCleanseTimeSelf { get; set; }
             /// <summary>
             /// Number of time a boon was removed
             /// </summary>
-            public long BoonStrips;
+            public long BoonStrips { get; set; }
             /// <summary>
             /// Total time of boons removed from self
             /// </summary>
-            public double BoonStripsTime;
+            public double BoonStripsTime { get; set; }
 
             public JsonSupport(Statistics.FinalSupport stats)
             {

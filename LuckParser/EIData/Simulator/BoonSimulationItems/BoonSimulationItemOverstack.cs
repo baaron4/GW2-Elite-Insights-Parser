@@ -11,7 +11,7 @@ namespace LuckParser.EIData
         {
         }
 
-        public override void SetBoonDistributionItem(BoonDistribution distribs, long start, long end, long boonid, ParsedLog log)
+        public override void SetBoonDistributionItem(BoonDistributionDictionary distribs, long start, long end, long boonid, ParsedLog log)
         {
             Dictionary<AgentItem, BoonDistributionItem> distrib = GetDistrib(distribs, boonid);
             AgentItem agent = Src;
