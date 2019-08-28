@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using LuckParser.Exceptions;
-using LuckParser.Models;
-using LuckParser.Logic;
 using LuckParser.EIData;
+using LuckParser.Exceptions;
+using LuckParser.Logic;
+using LuckParser.Models;
 using LuckParser.Parser.ParsedData;
 
 namespace LuckParser.Parser
@@ -28,7 +28,7 @@ namespace LuckParser.Parser
         public readonly MechanicData MechanicData;
         public readonly Statistics Statistics;
 
-        public ParsedLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData, 
+        public ParsedLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData,
                 List<CombatItem> combatItems, List<Player> playerList)
         {
             FightData = fightData;
@@ -46,7 +46,7 @@ namespace LuckParser.Parser
             Boons = new BoonsContainer(LogData.GW2Version);
             DamageModifiers = new DamageModifiersContainer(LogData.GW2Version);
             MechanicData = FightData.Logic.GetMechanicData();
-            Statistics = new Statistics(CombatData, AgentData, FightData, PlayerList, Boons);      
+            Statistics = new Statistics(CombatData, PlayerList, Boons);
         }
 
         private void UpdateFightData()

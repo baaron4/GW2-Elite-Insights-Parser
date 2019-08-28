@@ -4,7 +4,7 @@ namespace LuckParser.EIData
 {
     public class AgentConnector : Connector
     {
-        private AbstractMasterActor _agent;
+        private readonly AbstractMasterActor _agent;
 
         public AgentConnector(AbstractMasterActor agent)
         {

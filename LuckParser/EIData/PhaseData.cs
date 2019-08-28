@@ -1,8 +1,8 @@
-﻿using LuckParser.Parser;
-using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.EIData
 {
@@ -78,12 +78,13 @@ namespace LuckParser.EIData
 
         public long GetPlayerActiveDuration(Player p, ParsedLog log)
         {
-            List<(long start, long end)> dead = new List<(long start, long end)>();
-            List<(long start, long end)> down = new List<(long start, long end)>();
-            List<(long start, long end)> dc = new List<(long start, long end)>();
+            var dead = new List<(long start, long end)>();
+            var down = new List<(long start, long end)>();
+            var dc = new List<(long start, long end)>();
             p.AgentItem.GetAgentStatus(dead, down, dc, log);
-            return DurationInMS - 
-                dead.Sum(x => {
+            return DurationInMS -
+                dead.Sum(x =>
+                {
                     if (x.start <= End && x.end >= Start)
                     {
                         long s = Math.Max(x.start, Start);
@@ -92,7 +93,8 @@ namespace LuckParser.EIData
                     }
                     return 0;
                 }) -
-                dc.Sum(x => {
+                dc.Sum(x =>
+                {
                     if (x.start <= End && x.end >= Start)
                     {
                         long s = Math.Max(x.start, Start);

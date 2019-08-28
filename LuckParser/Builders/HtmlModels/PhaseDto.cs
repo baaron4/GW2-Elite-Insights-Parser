@@ -1,8 +1,8 @@
-﻿using LuckParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using LuckParser.EIData;
 using LuckParser.Models;
 using LuckParser.Parser;
-using System;
-using System.Collections.Generic;
 
 namespace LuckParser.Builders.HtmlModels
 {
@@ -78,7 +78,7 @@ namespace LuckParser.Builders.HtmlModels
         public List<double> MarkupLines;
         public List<AreaLabelDto> MarkupAreas;
         public List<int> SubPhases;
-        
+
         public PhaseDto(PhaseData phaseData, List<PhaseData> phases, ParsedLog log)
         {
             Name = phaseData.Name;
@@ -112,9 +112,17 @@ namespace LuckParser.Builders.HtmlModels
                 SubPhases.Add(j);
                 long start = curPhase.Start - phaseData.Start;
                 long end = curPhase.End - phaseData.Start;
-                if (curPhase.DrawStart) MarkupLines.Add(start / 1000.0);
-                if (curPhase.DrawEnd) MarkupLines.Add(end / 1000.0);
-                AreaLabelDto phaseArea = new AreaLabelDto
+                if (curPhase.DrawStart)
+                {
+                    MarkupLines.Add(start / 1000.0);
+                }
+
+                if (curPhase.DrawEnd)
+                {
+                    MarkupLines.Add(end / 1000.0);
+                }
+
+                var phaseArea = new AreaLabelDto
                 {
                     Start = start / 1000.0,
                     End = end / 1000.0,
@@ -123,8 +131,15 @@ namespace LuckParser.Builders.HtmlModels
                 };
                 MarkupAreas.Add(phaseArea);
             }
-            if (MarkupAreas.Count == 0) MarkupAreas = null;
-            if (MarkupLines.Count == 0) MarkupLines = null;
+            if (MarkupAreas.Count == 0)
+            {
+                MarkupAreas = null;
+            }
+
+            if (MarkupLines.Count == 0)
+            {
+                MarkupLines = null;
+            }
         }
 
 
@@ -150,7 +165,7 @@ namespace LuckParser.Builders.HtmlModels
 
         public static List<object> GetDMGTargetStatData(Statistics.FinalStats stats)
         {
-            List<object> data = new List<object>
+            var data = new List<object>
                 {
                     stats.DirectDamageCount, // 0
                     stats.CritableDirectDamageCount, // 1
@@ -170,7 +185,7 @@ namespace LuckParser.Builders.HtmlModels
 
         public static List<object> GetDPSStatData(Statistics.FinalDPS dpsAll)
         {
-            List<object> data = new List<object>
+            var data = new List<object>
                 {
                     dpsAll.Damage,
                     dpsAll.PowerDamage,
@@ -181,7 +196,7 @@ namespace LuckParser.Builders.HtmlModels
 
         public static List<object> GetSupportStatData(Statistics.FinalSupport support)
         {
-            List<object> data = new List<object>()
+            var data = new List<object>()
                 {
                     support.CondiCleanse,
                     support.CondiCleanseTime,
@@ -197,7 +212,7 @@ namespace LuckParser.Builders.HtmlModels
 
         public static List<object> GetDefenseStatData(Statistics.FinalDefenses defenses, PhaseData phase)
         {
-            List<object> data = new List<object>
+            var data = new List<object>
                 {
                     defenses.DamageTaken,
                     defenses.DamageBarrier,
@@ -210,7 +225,7 @@ namespace LuckParser.Builders.HtmlModels
 
             if (defenses.DownDuration > 0)
             {
-                TimeSpan downDuration = TimeSpan.FromMilliseconds(defenses.DownDuration);
+                var downDuration = TimeSpan.FromMilliseconds(defenses.DownDuration);
                 data.Add(defenses.DownCount);
                 data.Add(downDuration.TotalSeconds + " seconds downed, " + Math.Round((downDuration.TotalMilliseconds / phase.DurationInMS) * 100, 1) + "% Downed");
             }
@@ -222,7 +237,7 @@ namespace LuckParser.Builders.HtmlModels
 
             if (defenses.DeadDuration > 0)
             {
-                TimeSpan deathDuration = TimeSpan.FromMilliseconds(defenses.DeadDuration);
+                var deathDuration = TimeSpan.FromMilliseconds(defenses.DeadDuration);
                 data.Add(defenses.DeadCount);
                 data.Add(deathDuration.TotalSeconds + " seconds dead, " + (100.0 - Math.Round((deathDuration.TotalMilliseconds / phase.DurationInMS) * 100, 1)) + "% Alive");
             }

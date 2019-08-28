@@ -1,7 +1,7 @@
-﻿using LuckParser.Parser;
+﻿using System.Collections.Generic;
+using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
 
 namespace LuckParser.EIData
 {
@@ -27,7 +27,6 @@ namespace LuckParser.EIData
 
         public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs)
         {
-            CombatData combatData = log.CombatData;
             foreach (Player p in log.PlayerList)
             {
                 List<AbstractDamageEvent> combatitems = p.GetDamageTakenLogs(null, log, 0, log.FightData.FightDuration);

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Windows.Forms;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using LuckParser.Exceptions;
 using LuckParser.Setting;
 
@@ -11,7 +11,7 @@ namespace LuckParser
 {
     public partial class MainForm : Form
     {
-        private SettingsForm _settingsForm;
+        private readonly SettingsForm _settingsForm;
         private readonly List<string> _logsFiles;
         private int _runningCount;
         private bool _anyRunning;
@@ -26,7 +26,7 @@ namespace LuckParser
             btnCancel.Enabled = false;
             btnParse.Enabled = false;
             UpdateWatchDirectory();
-            _settingsForm = new SettingsForm(this);
+            _settingsForm = new SettingsForm();
             _settingsForm.SettingsClosedEvent += EnableSettingsWatcher;
             _settingsForm.WatchDirectoryUpdatedEvent += UpdateWatchDirectoryWatcher;
         }
@@ -52,7 +52,7 @@ namespace LuckParser
 
                 _logsFiles.Add(file);
 
-                GridRow gRow = new GridRow(file, "Ready to parse")
+                var gRow = new GridRow(file, "Ready to parse")
                 {
                     BgWorker = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true }
                 };
@@ -143,8 +143,7 @@ namespace LuckParser
         /// <param name="e"></param>
         private void BgWorkerDoWork(object sender, DoWorkEventArgs e)
         {
-            BackgroundWorker bg = sender as BackgroundWorker;
-            GridRow rowData = e.Argument as GridRow;
+            var rowData = e.Argument as GridRow;
             e.Result = rowData;
             _runningCount++;
             _anyRunning = true;
@@ -192,7 +191,8 @@ namespace LuckParser
                         row.State = RowState.Ready;
                         row.ButtonText = "Parse";
                     }
-                } else
+                }
+                else
                 {
                     Console.WriteLine("Something terrible has happened");
                 }
@@ -247,7 +247,7 @@ namespace LuckParser
         private void BtnCancelClick(object sender, EventArgs e)
         {
             //Clear queue so queued workers don't get started by any cancellations
-            HashSet<GridRow> rows = new HashSet<GridRow>(_logQueue);
+            var rows = new HashSet<GridRow>(_logQueue);
             _logQueue.Clear();
 
             //Cancel all workers
@@ -280,7 +280,7 @@ namespace LuckParser
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void BtnSettingsClick(object sender, EventArgs e)
-        {          
+        {
             _settingsForm.Show();
             btnSettings.Enabled = false;
         }
@@ -301,7 +301,7 @@ namespace LuckParser
 
             for (int i = gridRowBindingSource.Count - 1; i >= 0; i--)
             {
-                GridRow row = gridRowBindingSource[i] as GridRow;
+                var row = gridRowBindingSource[i] as GridRow;
                 if (row.BgWorker.IsBusy)
                 {
                     row.Cancel();
@@ -344,7 +344,7 @@ namespace LuckParser
         {
             if (e.ColumnIndex == 2)
             {
-                GridRow row = (GridRow)gridRowBindingSource[e.RowIndex];
+                var row = (GridRow)gridRowBindingSource[e.RowIndex];
 
                 switch (row.State)
                 {

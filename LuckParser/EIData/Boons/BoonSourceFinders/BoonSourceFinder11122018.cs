@@ -5,7 +5,7 @@ namespace LuckParser.EIData
     public class BoonSourceFinder11122018 : BoonSourceFinder
     {
 
-        public BoonSourceFinder11122018(HashSet<long> boonIds) : base(boonIds) 
+        public BoonSourceFinder11122018(HashSet<long> boonIds) : base(boonIds)
         {
             ExtensionIDS = new HashSet<long>()
             {

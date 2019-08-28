@@ -13,7 +13,7 @@ namespace LuckParser.Models
     /// </summary>
     public class Statistics
     {
-        public Statistics(CombatData combatData, AgentData agentData, FightData fightData, List<Player> players, BoonsContainer boons)
+        public Statistics(CombatData combatData, List<Player> players, BoonsContainer boons)
         {
             HashSet<long> skillIDs = combatData.GetSkills();
             // Main boons
@@ -52,7 +52,7 @@ namespace LuckParser.Models
             }
 
             // All class specific boons
-            Dictionary<long, Boon> remainingBuffsByIds = boons.BoonsByNature[BoonNature.GraphOnlyBuff].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
+            var remainingBuffsByIds = boons.BoonsByNature[BoonNature.GraphOnlyBuff].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
             foreach (Player player in players)
             {
                 PresentPersonalBuffs[player.InstID] = new HashSet<Boon>();
@@ -160,7 +160,7 @@ namespace LuckParser.Models
             public double Presence;
         }
 
-        public enum BuffEnum { Self, Group, OffGroup, Squad};
+        public enum BuffEnum { Self, Group, OffGroup, Squad };
 
         public class FinalTargetBuffs
         {
@@ -268,7 +268,7 @@ namespace LuckParser.Models
             _stackCenterPositions = new List<Point3D>();
             if (log.CombatData.HasMovementData)
             {
-                List<List<Point3D>> GroupsPosList = new List<List<Point3D>>();
+                var GroupsPosList = new List<List<Point3D>>();
                 foreach (Player player in log.PlayerList)
                 {
                     if (player.IsFakeActor)
@@ -298,9 +298,9 @@ namespace LuckParser.Models
                         }
 
                     }
-                    x = x / activePlayers;
-                    y = y / activePlayers;
-                    z = z / activePlayers;
+                    x /= activePlayers;
+                    y /= activePlayers;
+                    z /= activePlayers;
                     _stackCenterPositions.Add(new Point3D(x, y, z, GeneralHelper.PollingRate * time));
                 }
             }

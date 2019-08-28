@@ -1,10 +1,10 @@
-﻿using LuckParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using LuckParser.EIData;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic
@@ -62,13 +62,13 @@ namespace LuckParser.Logic
                 return phases;
             }
             List<AbstractCastEvent> cls = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration);
-            List<AbstractCastEvent> wallopingWinds = cls.Where(x => x.SkillId == 56094).ToList();
+            var wallopingWinds = cls.Where(x => x.SkillId == 56094).ToList();
             long start = 0, end = 0;
             for (int i = 0; i < wallopingWinds.Count; i++)
             {
                 AbstractCastEvent wW = wallopingWinds[i];
                 end = wW.Time;
-                PhaseData phase = new PhaseData(start, end)
+                var phase = new PhaseData(start, end)
                 {
                     Name = "Phase " + (i + 1)
                 };
@@ -98,7 +98,7 @@ namespace LuckParser.Logic
         {
             return new CombatReplayMap("https://i.imgur.com/zs9yPuG.png",
                             (4365, 3972),
-                            (-14122, 142, - 9199, 4640),
+                            (-14122, 142, -9199, 4640),
                             (-21504, -21504, 24576, 24576),
                             (33530, 34050, 35450, 35970));
         }

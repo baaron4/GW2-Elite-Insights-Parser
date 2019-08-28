@@ -1,8 +1,8 @@
-﻿using LuckParser.Parser;
+﻿using System.Collections.Generic;
+using System.Linq;
+using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace LuckParser.EIData
 {

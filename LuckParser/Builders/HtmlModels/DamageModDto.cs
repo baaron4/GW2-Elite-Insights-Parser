@@ -1,12 +1,12 @@
-﻿using LuckParser.EIData;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using LuckParser.EIData;
 
 namespace LuckParser.Builders.HtmlModels
 {
     public class DamageModDto
-    {    
-        public long Id;       
-        public string Name;       
+    {
+        public long Id;
+        public string Name;
         public string Icon;
         public string Tooltip;
         public bool NonMultiplier;

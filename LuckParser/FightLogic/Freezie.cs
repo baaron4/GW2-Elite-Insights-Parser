@@ -1,7 +1,7 @@
-﻿using LuckParser.EIData;
-using LuckParser.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using LuckParser.EIData;
+using LuckParser.Parser;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic
@@ -29,7 +29,7 @@ namespace LuckParser.Logic
                 return phases;
             }
             phases.AddRange(GetPhasesByInvul(log, 895, mainTarget, true, true));
-            string[] namesFreezie = new [] { "Phase 1", "Heal 1", "Phase 2", "Heal 2", "Phase 3", "Heal 3" };
+            string[] namesFreezie = new[] { "Phase 1", "Heal 1", "Phase 2", "Heal 2", "Phase 3", "Heal 3" };
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];

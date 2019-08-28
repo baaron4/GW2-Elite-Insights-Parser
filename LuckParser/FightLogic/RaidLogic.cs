@@ -1,7 +1,7 @@
-﻿using LuckParser.Parser.ParsedData;
-using LuckParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Parser.ParsedData;
+using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.Logic
 {
@@ -26,7 +26,7 @@ namespace LuckParser.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            HashSet<int> raidRewardsTypes = new HashSet<int>
+            var raidRewardsTypes = new HashSet<int>
                 {
                     55821,
                     60685,
@@ -41,7 +41,7 @@ namespace LuckParser.Logic
             }
             else
             {
-                switch(GenericFallBackMethod)
+                switch (GenericFallBackMethod)
                 {
                     case FallBackMethod.Death:
                         SetSuccessByDeath(combatData, fightData, playerAgents, true, GetSuccessCheckIds());

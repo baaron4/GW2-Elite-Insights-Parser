@@ -1,6 +1,6 @@
-﻿using LuckParser.Parser;
+﻿using System.Linq;
+using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
-using System.Linq;
 
 namespace LuckParser.EIData
 {
@@ -31,10 +31,10 @@ namespace LuckParser.EIData
             if (BoonStack.Count > 0 && timePassed > 0)
             {
                 _lastSrcRemove = (GeneralHelper.UnknownAgent, false);
-                   var toAdd = new BoonSimulationItemDuration(BoonStack[0]);
+                var toAdd = new BoonSimulationItemDuration(BoonStack[0]);
                 if (GenerationSimulation.Count > 0)
                 {
-                    var last = GenerationSimulation.Last();
+                    BoonSimulationItem last = GenerationSimulation.Last();
                     if (last.End > toAdd.Start)
                     {
                         last.SetEnd(toAdd.Start);
@@ -42,7 +42,7 @@ namespace LuckParser.EIData
                 }
                 GenerationSimulation.Add(toAdd);
                 long timeDiff = BoonStack[0].BoonDuration - timePassed;
-                long diff = 0;
+                long diff;
                 long leftOver = 0;
                 if (timeDiff < 0)
                 {

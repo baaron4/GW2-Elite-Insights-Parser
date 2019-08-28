@@ -1,18 +1,18 @@
-﻿using LuckParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.Builders.HtmlModels
 {
     public class ActorDetailsDto
     {
-         public List<DmgDistributionDto> DmgDistributions;
-         public List<List<DmgDistributionDto>> DmgDistributionsTargets;
-         public List<DmgDistributionDto> DmgDistributionsTaken;
-         public List<List<object[]>> Rotation;
-         public List<List<BoonChartDataDto>> BoonGraph;
-         public List<FoodDto> Food;
-         public List<ActorDetailsDto> Minions;
-         public List<DeathRecapDto> DeathRecap;
+        public List<DmgDistributionDto> DmgDistributions;
+        public List<List<DmgDistributionDto>> DmgDistributionsTargets;
+        public List<DmgDistributionDto> DmgDistributionsTaken;
+        public List<List<object[]>> Rotation;
+        public List<List<BoonChartDataDto>> BoonGraph;
+        public List<FoodDto> Food;
+        public List<ActorDetailsDto> Minions;
+        public List<DeathRecapDto> DeathRecap;
 
         // helpers
 
@@ -22,7 +22,7 @@ namespace LuckParser.Builders.HtmlModels
             double start = (cl.Time - phaseStart) / 1000.0;
             rotEntry[0] = start;
             rotEntry[1] = cl.SkillId;
-            rotEntry[2] = cl.ActualDuration  ;
+            rotEntry[2] = cl.ActualDuration;
             rotEntry[3] = EncodeEndActivation(cl);
             rotEntry[4] = cl.UnderQuickness ? 1 : 0;
             return rotEntry;

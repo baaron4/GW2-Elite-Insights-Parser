@@ -1,5 +1,5 @@
-﻿using LuckParser.EIData;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using LuckParser.EIData;
 
 namespace LuckParser.Builders.JsonModels
 {

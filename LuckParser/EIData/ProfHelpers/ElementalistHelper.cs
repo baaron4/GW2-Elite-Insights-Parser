@@ -1,7 +1,7 @@
-﻿using LuckParser.Parser.ParsedData;
-using LuckParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Parser.ParsedData;
+using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.EIData
 {
@@ -10,7 +10,7 @@ namespace LuckParser.EIData
 
         public static void RemoveDualBuffs(List<AbstractBuffEvent> buffsPerDst, SkillData skillData)
         {
-            HashSet<long> duals = new HashSet<long>
+            var duals = new HashSet<long>
             {
                 FireDual,
                 WaterDual,

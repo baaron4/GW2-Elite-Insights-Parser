@@ -1,5 +1,5 @@
-﻿using LuckParser.Parser;
-using System;
+﻿using System;
+using LuckParser.Parser;
 
 namespace LuckParser.EIData
 {
@@ -46,7 +46,7 @@ namespace LuckParser.EIData
 
         public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
-            PieSerializable aux = new PieSerializable
+            var aux = new PieSerializable
             {
                 Type = "Pie",
                 Radius = Radius,

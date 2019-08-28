@@ -1,6 +1,6 @@
-﻿using LuckParser.Parser;
+﻿using System.Collections.Generic;
+using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
-using System.Collections.Generic;
 
 namespace LuckParser.EIData
 {
@@ -9,7 +9,7 @@ namespace LuckParser.EIData
 
         protected Dictionary<AgentItem, BoonDistributionItem> GetDistrib(BoonDistribution distribs, long boonid)
         {
-            if (!distribs.TryGetValue(boonid, out var distrib))
+            if (!distribs.TryGetValue(boonid, out Dictionary<AgentItem, BoonDistributionItem> distrib))
             {
                 distrib = new Dictionary<AgentItem, BoonDistributionItem>();
                 distribs.Add(boonid, distrib);

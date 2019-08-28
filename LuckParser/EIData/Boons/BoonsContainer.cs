@@ -1,8 +1,8 @@
-﻿using LuckParser.Parser;
-using LuckParser.Parser.ParsedData;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData;
 using static LuckParser.EIData.Boon;
 
 namespace LuckParser.EIData
@@ -17,11 +17,11 @@ namespace LuckParser.EIData
         private readonly Dictionary<string, Boon> _boonsByName;
         public Dictionary<int, List<Boon>> BoonsByCapacity { get; }
 
-        private BoonSourceFinder _boonSourceFinder;
+        private readonly BoonSourceFinder _boonSourceFinder;
 
         public BoonsContainer(ulong build)
         {
-            List<Boon> currentBoons = new List<Boon>();
+            var currentBoons = new List<Boon>();
             foreach (List<Boon> boons in AllBoons)
             {
                 currentBoons.AddRange(boons.Where(x => x.MaxBuild > build && build >= x.MinBuild));

@@ -1,5 +1,5 @@
-﻿using LuckParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.Builders.JsonModels
 {

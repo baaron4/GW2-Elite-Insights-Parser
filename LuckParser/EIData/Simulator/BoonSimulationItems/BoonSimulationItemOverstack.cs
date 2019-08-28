@@ -1,6 +1,6 @@
-﻿using LuckParser.Parser;
+﻿using System.Collections.Generic;
+using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
-using System.Collections.Generic;
 
 namespace LuckParser.EIData
 {
@@ -15,7 +15,7 @@ namespace LuckParser.EIData
         {
             Dictionary<AgentItem, BoonDistributionItem> distrib = GetDistrib(distribs, boonid);
             AgentItem agent = Src;
-            if (distrib.TryGetValue(agent, out var toModify))
+            if (distrib.TryGetValue(agent, out BoonDistributionItem toModify))
             {
                 toModify.Overstack += GetValue(start, end);
                 distrib[agent] = toModify;

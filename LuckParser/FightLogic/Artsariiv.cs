@@ -1,7 +1,7 @@
-﻿using LuckParser.EIData;
+﻿using System.Collections.Generic;
+using LuckParser.EIData;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
-using System.Collections.Generic;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic
@@ -49,7 +49,7 @@ namespace LuckParser.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByBuffCount(combatData, agentData, fightData, playerAgents, Targets.Find(x => x.ID == TriggerID), 762, 4);
+            SetSuccessByBuffCount(combatData, fightData, playerAgents, Targets.Find(x => x.ID == TriggerID), 762, 4);
         }
     }
 }

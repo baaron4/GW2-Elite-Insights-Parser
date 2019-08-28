@@ -7,12 +7,12 @@ namespace LuckParser.Parser
         // Activation
         public enum Activation : byte
         {
-            None         = 0,
-            Normal       = 1,
-            Quickness    = 2,
-            CancelFire   = 3,
+            None = 0,
+            Normal = 1,
+            Quickness = 2,
+            CancelFire = 3,
             CancelCancel = 4,
-            Reset        = 5,
+            Reset = 5,
 
             Unknown
         };
@@ -27,8 +27,8 @@ namespace LuckParser.Parser
         // Buff remove
         public enum BuffRemove : byte
         {
-            None   = 0,
-            All    = 1,
+            None = 0,
+            All = 1,
             Single = 2,
             Manual = 3
         };
@@ -41,19 +41,19 @@ namespace LuckParser.Parser
         }
 
         // Result
-        
+
         public enum PhysicalResult : byte
         {
-            Normal      = 0,
-            Crit        = 1,
-            Glance      = 2,
-            Block       = 3,
-            Evade       = 4,
-            Interrupt   = 5,
-            Absorb      = 6,
-            Blind       = 7,
+            Normal = 0,
+            Crit = 1,
+            Glance = 2,
+            Block = 3,
+            Evade = 4,
+            Interrupt = 5,
+            Absorb = 6,
+            Blind = 7,
             KillingBlow = 8,
-            Downed      = 9,
+            Downed = 9,
 
             Unknown
         };
@@ -85,36 +85,36 @@ namespace LuckParser.Parser
         // State Change    
         public enum StateChange : byte
         {
-            None            =  0,
-            EnterCombat     =  1,
-            ExitCombat      =  2,
-            ChangeUp        =  3,
-            ChangeDead      =  4,
-            ChangeDown      =  5,
-            Spawn           =  6,
-            Despawn         =  7,
-            HealthUpdate    =  8,
-            LogStart        =  9,
-            LogEnd          = 10,
-            WeaponSwap      = 11,
+            None = 0,
+            EnterCombat = 1,
+            ExitCombat = 2,
+            ChangeUp = 3,
+            ChangeDead = 4,
+            ChangeDown = 5,
+            Spawn = 6,
+            Despawn = 7,
+            HealthUpdate = 8,
+            LogStart = 9,
+            LogEnd = 10,
+            WeaponSwap = 11,
             MaxHealthUpdate = 12,
-            PointOfView     = 13,
-            Language    = 14,
-            GWBuild         = 15,
-            ShardId         = 16,
-            Reward          = 17,
-            BuffInitial     = 18,
-            Position        = 19,
-            Velocity        = 20,
-            Rotation        = 21,
-            TeamChange      = 22,
-            AttackTarget    = 23,
-            Targetable      = 24,
-            MapID           = 25,
-            ReplInfo        = 26,
-            StackActive     = 27,
-            StackReset      = 28,
-            Guild           = 29,
+            PointOfView = 13,
+            Language = 14,
+            GWBuild = 15,
+            ShardId = 16,
+            Reward = 17,
+            BuffInitial = 18,
+            Position = 19,
+            Velocity = 20,
+            Rotation = 21,
+            TeamChange = 22,
+            AttackTarget = 23,
+            Targetable = 24,
+            MapID = 25,
+            ReplInfo = 26,
+            StackActive = 27,
+            StackReset = 28,
+            Guild = 29,
             Unknown
         };
 
@@ -129,8 +129,8 @@ namespace LuckParser.Parser
 
         public enum IFF : byte
         {
-            Friend  = 0,
-            Foe     = 1,
+            Friend = 0,
+            Foe = 1,
 
             Unknown
         };
@@ -261,7 +261,7 @@ namespace LuckParser.Parser
             DhuumDesmina = 19481,
             // CA
             ConjuredGreatsword = 21255,
-            ConjuredShield =  21170,
+            ConjuredShield = 21170,
             // Qadim
             LavaElemental1 = 21236,
             LavaElemental2 = 21078,
@@ -296,11 +296,11 @@ namespace LuckParser.Parser
             // Freezie
             FreeziesFrozenHeart = 21328,
             // Fractals
-            FractalVindicator = 19684, 
+            FractalVindicator = 19684,
             FractalAvenger = 15960,
             // MAMA
             GreenKnight = 16906,
-            RedKnight = 16974, 
+            RedKnight = 16974,
             BlueKnight = 16899,
             TwistedHorror = 17009,
             // Siax
@@ -317,7 +317,7 @@ namespace LuckParser.Parser
             SolarBloom = 17732,
             // Artsariiv
             TemporalAnomaly = 17870,
-            Spark = 17630, 
+            Spark = 17630,
             Artsariiv1 = 17811, // tiny adds
             Artsariiv2 = 17694, // small adds
             Artsariiv3 = 17937, // big adds
@@ -329,8 +329,8 @@ namespace LuckParser.Parser
             BrazenGladiator = 17730,
             BLIGHT = 16437,
             PLINK = 16325,
-            DOC =16657,
-            CHOP =16552,
+            DOC = 16657,
+            CHOP = 16552,
             ProjectionArkk = 17613,
             //
             Unknown
@@ -342,53 +342,53 @@ namespace LuckParser.Parser
 
         public enum TargetIDS : ushort
         {
-            WorldVersusWorld        = 1,
+            WorldVersusWorld = 1,
             // Raid
-            ValeGuardian            = 15438,
-            Gorseval                = 15429,
-            Sabetha                 = 15375,
-            Slothasor               = 16123,
-            Berg                    = 16088,
-            Zane                    = 16137,
-            Narella                 = 16125,
-            Matthias                = 16115,
-            Escort                  = 16253, // McLeod the Silent
-            KeepConstruct           = 16235,
-            Xera                    = 16246,
-            Cairn                   = 17194,
-            MursaatOverseer         = 17172,
-            Samarog                 = 17188,
-            Deimos                  = 17154,
-            SoullessHorror          = 19767,
-            Desmina                 = 19828,
-            BrokenKing              = 19691,
-            SoulEater               = 19536,
-            EyeOfJudgement          = 19651,
-            EyeOfFate               = 19844,
-            Dhuum                   = 19450,
-            ConjuredAmalgamate      = 43974,
-            CARightArm              = 10142,
-            CALeftArm               = 37464,
-            Nikare                  = 21105,
-            Kenut                   = 21089,
-            Qadim                   = 20934,
-            Freezie                 = 21333,
-            Adina                   = 22006,
-            Sabir                   = 21964,
-            PeerlessQadim           = 22000,
+            ValeGuardian = 15438,
+            Gorseval = 15429,
+            Sabetha = 15375,
+            Slothasor = 16123,
+            Berg = 16088,
+            Zane = 16137,
+            Narella = 16125,
+            Matthias = 16115,
+            Escort = 16253, // McLeod the Silent
+            KeepConstruct = 16235,
+            Xera = 16246,
+            Cairn = 17194,
+            MursaatOverseer = 17172,
+            Samarog = 17188,
+            Deimos = 17154,
+            SoullessHorror = 19767,
+            Desmina = 19828,
+            BrokenKing = 19691,
+            SoulEater = 19536,
+            EyeOfJudgement = 19651,
+            EyeOfFate = 19844,
+            Dhuum = 19450,
+            ConjuredAmalgamate = 43974,
+            CARightArm = 10142,
+            CALeftArm = 37464,
+            Nikare = 21105,
+            Kenut = 21089,
+            Qadim = 20934,
+            Freezie = 21333,
+            Adina = 22006,
+            Sabir = 21964,
+            PeerlessQadim = 22000,
             // Fract
-            MAMA                    = 17021,
-            Siax                    = 17028,
-            Ensolyss                = 16948,
-            Skorvald                = 17632,
-            Artsariiv               = 17949,
-            Arkk                    = 17759,
+            MAMA = 17021,
+            Siax = 17028,
+            Ensolyss = 16948,
+            Skorvald = 17632,
+            Artsariiv = 17949,
+            Arkk = 17759,
             // Golems
-            MassiveGolem            = 16202,
-            AvgGolem                = 16177,
-            LGolem                  = 19676,
-            MedGolem                = 19645,
-            StdGolem                = 16199,
+            MassiveGolem = 16202,
+            AvgGolem = 16177,
+            LGolem = 19676,
+            MedGolem = 19645,
+            StdGolem = 16199,
             //
             Unknown
         };

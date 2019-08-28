@@ -1,7 +1,7 @@
-﻿using LuckParser.EIData;
-using LuckParser.Parser;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using LuckParser.EIData;
+using LuckParser.Parser;
 
 namespace LuckParser.Builders.HtmlModels
 {
@@ -28,7 +28,7 @@ namespace LuckParser.Builders.HtmlModels
 
         private List<object> GetCombatReplayActors(ParsedLog log, CombatReplayMap map)
         {
-            List<object> actors = new List<object>();
+            var actors = new List<object>();
             foreach (Player p in log.PlayerList)
             {
                 if (p.IsFakeActor)

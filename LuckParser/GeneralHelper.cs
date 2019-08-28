@@ -1,14 +1,12 @@
-﻿using LuckParser.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using static LuckParser.Parser.ParseEnum.TrashIDS;
-using LuckParser.Controllers;
-using LuckParser.Controllers.GW2API;
-using LuckParser.Parser.ParsedData;
 using LuckParser.EIData;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData;
+using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser
 {
@@ -27,7 +25,7 @@ namespace LuckParser
 
         public static void Add<K, T>(Dictionary<K, List<T>> dict, K key, T evt)
         {
-            if (dict.TryGetValue(key, out var list))
+            if (dict.TryGetValue(key, out List<T> list))
             {
                 list.Add(evt);
             }
@@ -66,9 +64,17 @@ namespace LuckParser
 
         public static string FindPattern(string source, string regex)
         {
-            if (string.IsNullOrEmpty(source)) return null;
+            if (string.IsNullOrEmpty(source))
+            {
+                return null;
+            }
+
             Match match = Regex.Match(source, regex);
-            if (match.Success) return match.Groups[1].Value;
+            if (match.Success)
+            {
+                return match.Groups[1].Value;
+            }
+
             return null;
         }
 
@@ -309,7 +315,7 @@ namespace LuckParser
                     return "https://i.imgur.com/vHka0QN.png";
                 case ConjuredShield:
                     return "https://i.imgur.com/wUiI19S.png";
-                case GreaterMagmaElemental1:                  
+                case GreaterMagmaElemental1:
                 case GreaterMagmaElemental2:
                     return "https://i.imgur.com/sr146T6.png";
                 case LavaElemental1:
@@ -342,7 +348,7 @@ namespace LuckParser
                 case HandOfEruption:
                     return "https://i.imgur.com/reGQHhr.png";
                 case VoltaicWisp:
-                    return "https://i.imgur.com/C1mvNGZ.png"; 
+                    return "https://i.imgur.com/C1mvNGZ.png";
                 case ParalyzingWisp:
                     return "https://i.imgur.com/YBl8Pqo.png";
                 case Pylon2:

@@ -1,9 +1,9 @@
-﻿using LuckParser.EIData;
-using LuckParser.Parser;
-using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LuckParser.EIData;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.Builders.HtmlModels
 {
