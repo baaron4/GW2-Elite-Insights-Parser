@@ -8,10 +8,10 @@ namespace LuckParser.Builders.HtmlModels
 {
     public class DmgDistributionDto
     {
-        public long ContributedDamage;
-        public long ContributedShieldDamage;
-        public long TotalDamage;
-        public List<object[]> Distribution;
+        public long ContributedDamage { get; set; }
+        public long ContributedShieldDamage { get; set; }
+        public long TotalDamage { get; set; }
+        public List<object[]> Distribution { get; set; }
 
         public static object[] GetDMGDtoItem(KeyValuePair<SkillItem, List<AbstractDamageEvent>> entry, Dictionary<SkillItem, List<AbstractCastEvent>> castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons, BoonsContainer boons)
         {

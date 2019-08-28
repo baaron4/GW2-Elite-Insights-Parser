@@ -29,18 +29,18 @@ namespace LuckParser.EIData
         private DamageType _srcType { get; }
         private DamageSource _dmgSrc { get; }
         protected double GainPerStack { get; }
-        protected readonly GainComputer GainComputer;
+        protected GainComputer GainComputer { get; }
         public ulong MinBuild { get; } = ulong.MaxValue;
         public ulong MaxBuild { get; } = ulong.MinValue;
         public bool Multiplier => GainComputer.Multiplier;
         public ModifierSource Src { get; }
-        public string Url { get; protected set; }
+        public string Icon { get; protected set; }
         public string Name { get; protected set; }
         public string Tooltip { get; protected set; }
         public delegate bool DamageLogChecker(AbstractDamageEvent dl);
-        protected DamageLogChecker DLChecker;
+        protected DamageLogChecker DLChecker { get; set; }
 
-        protected DamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, GainComputer gainComputer, DamageLogChecker dlChecker, ulong minBuild, ulong maxBuild)
+        protected DamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string icon, GainComputer gainComputer, DamageLogChecker dlChecker, ulong minBuild, ulong maxBuild)
         {
             Tooltip = tooltip;
             Name = name;
@@ -49,7 +49,7 @@ namespace LuckParser.EIData
             _compareType = compareType;
             _srcType = srctype;
             Src = src;
-            Url = url;
+            Icon = icon;
             GainComputer = gainComputer;
             DLChecker = dlChecker;
             MaxBuild = maxBuild;
@@ -96,16 +96,13 @@ namespace LuckParser.EIData
         public int GetTotalDamage(Player p, ParsedLog log, Target t, int phaseIndex)
         {
             FinalDPS damageData = p.GetDPSTarget(log, phaseIndex, t);
-            switch (_compareType)
+            return _compareType switch
             {
-                case DamageType.All:
-                    return _dmgSrc == DamageSource.All ? damageData.Damage : damageData.ActorDamage;
-                case DamageType.Condition:
-                    return _dmgSrc == DamageSource.All ? damageData.CondiDamage : damageData.ActorCondiDamage;
-                case DamageType.Power:
-                    return _dmgSrc == DamageSource.All ? damageData.PowerDamage : damageData.ActorPowerDamage;
-            }
-            return 0;
+                DamageType.All => _dmgSrc == DamageSource.All ? damageData.Damage : damageData.ActorDamage,
+                DamageType.Condition => _dmgSrc == DamageSource.All ? damageData.CondiDamage : damageData.ActorCondiDamage,
+                DamageType.Power => _dmgSrc == DamageSource.All ? damageData.PowerDamage : damageData.ActorPowerDamage,
+                _ => 0,
+            };
         }
 
         public List<AbstractDamageEvent> GetDamageLogs(Player p, ParsedLog log, Target t, PhaseData phase)

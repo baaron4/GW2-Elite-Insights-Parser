@@ -3,18 +3,18 @@ using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.EIData
 {
-    public class BoonMap : Dictionary<long, List<AbstractBuffEvent>>
+    public class BoonMapDictionary : Dictionary<long, List<AbstractBuffEvent>>
     {
         // Constructors
-        public BoonMap()
+        public BoonMapDictionary()
         {
         }
-        public BoonMap(Boon boon)
+        public BoonMapDictionary(Boon boon)
         {
             this[boon.ID] = new List<AbstractBuffEvent>();
         }
 
-        public BoonMap(IEnumerable<Boon> boons)
+        public BoonMapDictionary(IEnumerable<Boon> boons)
         {
             foreach (Boon boon in boons)
             {

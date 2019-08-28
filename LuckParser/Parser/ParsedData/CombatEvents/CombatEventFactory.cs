@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace LuckParser.Parser.ParsedData.CombatEvents
 {
-    public class CombatEventFactory
+    public static class CombatEventFactory
     {
 
         public static Dictionary<AgentItem, List<AbstractMovementEvent>> CreateMovementEvents(List<CombatItem> movementEvents, AgentData agentData, long offset)

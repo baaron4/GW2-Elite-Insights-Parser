@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using LuckParser.Parser;
-using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.EIData

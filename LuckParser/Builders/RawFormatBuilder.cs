@@ -111,7 +111,7 @@ namespace LuckParser.Builders
         {
             log.TriggerID = _log.FightData.ID;
             log.FightName = _log.FightData.Name;
-            log.FightIcon = _log.FightData.Logic.IconUrl;
+            log.FightIcon = _log.FightData.Logic.Icon;
             log.EliteInsightsVersion = Application.ProductVersion;
             log.ArcVersion = _log.LogData.BuildVersion;
             log.RecordedBy = _log.LogData.PoVName;
@@ -319,7 +319,7 @@ namespace LuckParser.Builders
             return res;
         }
 
-        private List<JsonDeathRecap> BuildDeathRecap(List<Statistics.DeathRecap> recaps)
+        private static List<JsonDeathRecap> BuildDeathRecap(List<Statistics.DeathRecap> recaps)
         {
             if (recaps == null)
             {
@@ -384,7 +384,7 @@ namespace LuckParser.Builders
             return input.Count > 0 ? res : null;
         }
 
-        private List<int[]> BuildBuffStates(BoonsGraphModel bgm)
+        private static List<int[]> BuildBuffStates(BoonsGraphModel bgm)
         {
             if (bgm == null || bgm.BoonChart.Count == 0)
             {
@@ -405,7 +405,7 @@ namespace LuckParser.Builders
             return res;
         }
 
-        private List<JsonDamageDist>[][] BuildDamageDist(Minions p)
+        private List<JsonDamageDist>[][] BuildDamageDist(MinionsList p)
         {
             var res = new List<JsonDamageDist>[_log.FightData.Logic.Targets.Count][];
             for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
@@ -438,7 +438,7 @@ namespace LuckParser.Builders
             return res;
         }
 
-        private List<JsonDamageDist>[] BuildDamageDist(Minions p, Target target)
+        private List<JsonDamageDist>[] BuildDamageDist(MinionsList p, Target target)
         {
             var res = new List<JsonDamageDist>[_phases.Count];
             for (int i = 0; i < _phases.Count; i++)
@@ -497,7 +497,7 @@ namespace LuckParser.Builders
         private List<JsonMinions> BuildMinions(AbstractMasterActor master)
         {
             var mins = new List<JsonMinions>();
-            foreach (Minions minions in master.GetMinions(_log).Values)
+            foreach (MinionsList minions in master.GetMinions(_log).Values)
             {
                 var totalDamage = new List<int>();
                 var totalShieldDamage = new List<int>();

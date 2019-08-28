@@ -9,18 +9,18 @@ using Newtonsoft.Json.Serialization;
 
 namespace LuckParser.Controllers
 {
-    public class UploadController
+    public static class UploadController
     {
-        private string UploadDPSReportsEI(FileInfo fi)
+        private static string UploadDPSReportsEI(FileInfo fi)
         {
             return UploadToDPSR(fi, "https://dps.report/uploadContent?generator=ei");
         }
-        private string UploadDPSReportsRH(FileInfo fi)
+        private static string UploadDPSReportsRH(FileInfo fi)
         {
             return UploadToDPSR(fi, "https://dps.report/uploadContent?generator=rh");
 
         }
-        private string UploadRaidar(FileInfo fi)
+        private static string UploadRaidar(FileInfo fi)
         {
             //string fileName = fi.Name;
             //byte[] fileContents = File.ReadAllBytes(fi.FullName);
@@ -65,7 +65,7 @@ namespace LuckParser.Controllers
         {
             public string Permalink { get; set; }
         }
-        private string UploadToDPSR(FileInfo fi, string URI)
+        private static string UploadToDPSR(FileInfo fi, string URI)
         {
             string fileName = fi.Name;
             byte[] fileContents = File.ReadAllBytes(fi.FullName);
@@ -119,7 +119,7 @@ namespace LuckParser.Controllers
             return "";
         }
 
-        public string[] UploadOperation(GridRow row, FileInfo fInfo)
+        public static string[] UploadOperation(GridRow row, FileInfo fInfo)
         {
             //Upload Process
             Task<string> DREITask = null;
@@ -129,13 +129,9 @@ namespace LuckParser.Controllers
             if (Properties.Settings.Default.UploadToDPSReports)
             {
                 row.BgWorker.UpdateProgress(row, " 40% - Uploading to DPSReports using EI...", 40);
-                DREITask = Task.Factory.StartNew(() => UploadDPSReportsEI(fInfo));
+                DREITask = Task.Run(() => UploadDPSReportsEI(fInfo));
                 if (DREITask != null)
                 {
-                    while (!DREITask.IsCompleted)
-                    {
-                        System.Threading.Thread.Sleep(100);
-                    }
                     uploadresult[0] = DREITask.Result;
                 }
                 else
@@ -147,13 +143,9 @@ namespace LuckParser.Controllers
             if (Properties.Settings.Default.UploadToDPSReportsRH)
             {
                 row.BgWorker.UpdateProgress(row, " 40% - Uploading to DPSReports using RH...", 40);
-                DRRHTask = Task.Factory.StartNew(() => UploadDPSReportsRH(fInfo));
+                DRRHTask = Task.Run(() => UploadDPSReportsRH(fInfo));
                 if (DRRHTask != null)
                 {
-                    while (!DRRHTask.IsCompleted)
-                    {
-                        System.Threading.Thread.Sleep(100);
-                    }
                     uploadresult[1] = DRRHTask.Result;
                 }
                 else
@@ -165,13 +157,9 @@ namespace LuckParser.Controllers
             if (Properties.Settings.Default.UploadToRaidar)
             {
                 row.BgWorker.UpdateProgress(row, " 40% - Uploading to Raidar...", 40);
-                RaidarTask = Task.Factory.StartNew(() => UploadRaidar(fInfo));
+                RaidarTask = Task.Run(() => UploadRaidar(fInfo));
                 if (RaidarTask != null)
                 {
-                    while (!RaidarTask.IsCompleted)
-                    {
-                        System.Threading.Thread.Sleep(100);
-                    }
                     uploadresult[2] = RaidarTask.Result;
                 }
                 else

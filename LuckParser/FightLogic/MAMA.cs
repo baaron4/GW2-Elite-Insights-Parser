@@ -29,7 +29,7 @@ namespace LuckParser.Logic
 
             });
             Extension = "mama";
-            IconUrl = "http://dulfy.net/wp-content/uploads/2016/11/gw2-nightmare-fractal-teaser.jpg";
+            Icon = "http://dulfy.net/wp-content/uploads/2016/11/gw2-nightmare-fractal-teaser.jpg";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()

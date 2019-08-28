@@ -69,95 +69,95 @@ namespace LuckParser.Models
         public class FinalDPS
         {
             // Total
-            public int Dps;
-            public int Damage;
-            public int CondiDps;
-            public int CondiDamage;
-            public int PowerDps;
-            public int PowerDamage;
+            public int Dps { get; set; }
+            public int Damage { get; set; }
+            public int CondiDps { get; set; }
+            public int CondiDamage { get; set; }
+            public int PowerDps { get; set; }
+            public int PowerDamage { get; set; }
             // Actor only
-            public int ActorDps;
-            public int ActorDamage;
-            public int ActorCondiDps;
-            public int ActorCondiDamage;
-            public int ActorPowerDps;
-            public int ActorPowerDamage;
+            public int ActorDps { get; set; }
+            public int ActorDamage { get; set; }
+            public int ActorCondiDps { get; set; }
+            public int ActorCondiDamage { get; set; }
+            public int ActorPowerDps { get; set; }
+            public int ActorPowerDamage { get; set; }
         }
 
         public class FinalStats
         {
-            public int DirectDamageCount;
-            public int CritableDirectDamageCount;
-            public int CriticalCount;
-            public int CriticalDmg;
-            public int FlankingCount;
-            public int GlanceCount;
-            public int Missed;
-            public int Interrupts;
-            public int Invulned;
+            public int DirectDamageCount { get; set; }
+            public int CritableDirectDamageCount { get; set; }
+            public int CriticalCount { get; set; }
+            public int CriticalDmg { get; set; }
+            public int FlankingCount { get; set; }
+            public int GlanceCount { get; set; }
+            public int Missed { get; set; }
+            public int Interrupts { get; set; }
+            public int Invulned { get; set; }
         }
 
         public class FinalStatsAll : FinalStats
         {
             // Rates
-            public int Wasted;
-            public double TimeWasted;
-            public int Saved;
-            public double TimeSaved;
-            public double StackDist;
+            public int Wasted { get; set; }
+            public double TimeWasted { get; set; }
+            public int Saved { get; set; }
+            public double TimeSaved { get; set; }
+            public double StackDist { get; set; }
 
             // boons
-            public double AvgBoons;
-            public double AvgActiveBoons;
-            public double AvgConditions;
-            public double AvgActiveConditions;
+            public double AvgBoons { get; set; }
+            public double AvgActiveBoons { get; set; }
+            public double AvgConditions { get; set; }
+            public double AvgActiveConditions { get; set; }
 
             // Counts
-            public int SwapCount;
+            public int SwapCount { get; set; }
         }
 
         public class FinalDefenses
         {
             //public long allHealReceived;
-            public long DamageTaken;
-            public int BlockedCount;
-            public int EvadedCount;
-            public int DodgeCount;
-            public int InvulnedCount;
-            public int DamageInvulned;
-            public int DamageBarrier;
-            public int InterruptedCount;
-            public int DownCount;
-            public int DownDuration;
-            public int DeadCount;
-            public int DeadDuration;
-            public int DcCount;
-            public int DcDuration;
+            public long DamageTaken { get; set; }
+            public int BlockedCount { get; set; }
+            public int EvadedCount { get; set; }
+            public int DodgeCount { get; set; }
+            public int InvulnedCount { get; set; }
+            public int DamageInvulned { get; set; }
+            public int DamageBarrier { get; set; }
+            public int InterruptedCount { get; set; }
+            public int DownCount { get; set; }
+            public int DownDuration { get; set; }
+            public int DeadCount { get; set; }
+            public int DeadDuration { get; set; }
+            public int DcCount { get; set; }
+            public int DcDuration { get; set; }
         }
 
         public class FinalSupport
         {
             //public long allHeal;
-            public long Resurrects;
-            public double ResurrectTime;
-            public long CondiCleanse;
-            public double CondiCleanseTime;
-            public long CondiCleanseSelf;
-            public double CondiCleanseTimeSelf;
-            public long BoonStrips;
-            public double BoonStripsTime;
+            public long Resurrects { get; set; }
+            public double ResurrectTime { get; set; }
+            public long CondiCleanse { get; set; }
+            public double CondiCleanseTime { get; set; }
+            public long CondiCleanseSelf { get; set; }
+            public double CondiCleanseTimeSelf { get; set; }
+            public long BoonStrips { get; set; }
+            public double BoonStripsTime { get; set; }
         }
 
         public class FinalBuffs
         {
-            public double Uptime;
-            public double Generation;
-            public double Overstack;
-            public double Wasted;
-            public double UnknownExtended;
-            public double ByExtension;
-            public double Extended;
-            public double Presence;
+            public double Uptime { get; set; }
+            public double Generation { get; set; }
+            public double Overstack { get; set; }
+            public double Wasted { get; set; }
+            public double UnknownExtended { get; set; }
+            public double ByExtension { get; set; }
+            public double Extended { get; set; }
+            public double Presence { get; set; }
         }
 
         public enum BuffEnum { Self, Group, OffGroup, Squad };
@@ -185,14 +185,14 @@ namespace LuckParser.Models
                 }
             }
 
-            public double Uptime;
-            public double Presence;
-            public readonly Dictionary<Player, double> Generated;
-            public readonly Dictionary<Player, double> Overstacked;
-            public readonly Dictionary<Player, double> Wasted;
-            public readonly Dictionary<Player, double> UnknownExtension;
-            public readonly Dictionary<Player, double> Extension;
-            public readonly Dictionary<Player, double> Extended;
+            public double Uptime { get; set; }
+            public double Presence { get; set; }
+            public Dictionary<Player, double> Generated { get; }
+            public Dictionary<Player, double> Overstacked { get; }
+            public Dictionary<Player, double> Wasted { get; }
+            public Dictionary<Player, double> UnknownExtension { get; }
+            public Dictionary<Player, double> Extension { get; }
+            public Dictionary<Player, double> Extended { get; }
         }
 
         public class DamageModifierData
@@ -232,24 +232,24 @@ namespace LuckParser.Models
         {
             public class DeathRecapDamageItem
             {
-                public long ID;
-                public bool IndirectDamage;
-                public string Src;
-                public int Damage;
-                public int Time;
+                public long ID { get; set; }
+                public bool IndirectDamage { get; set; }
+                public string Src { get; set; }
+                public int Damage { get; set; }
+                public int Time { get; set; }
             }
 
-            public int DeathTime;
-            public List<DeathRecapDamageItem> ToDown;
-            public List<DeathRecapDamageItem> ToKill;
+            public int DeathTime { get; set; }
+            public List<DeathRecapDamageItem> ToDown { get; set; }
+            public List<DeathRecapDamageItem> ToKill { get; set; }
         }
 
         // present buff
-        public readonly List<Boon> PresentBoons = new List<Boon>();//Used only for Boon tables
-        public readonly List<Boon> PresentConditions = new List<Boon>();//Used only for Condition tables
-        public readonly List<Boon> PresentOffbuffs = new List<Boon>();//Used only for Off Buff tables
-        public readonly List<Boon> PresentDefbuffs = new List<Boon>();//Used only for Def Buff tables
-        public readonly Dictionary<ushort, HashSet<Boon>> PresentPersonalBuffs = new Dictionary<ushort, HashSet<Boon>>();
+        public List<Boon> PresentBoons { get; } = new List<Boon>();//Used only for Boon tables
+        public List<Boon> PresentConditions { get; } = new List<Boon>();//Used only for Condition tables
+        public List<Boon> PresentOffbuffs { get; } = new List<Boon>();//Used only for Off Buff tables
+        public List<Boon> PresentDefbuffs { get; } = new List<Boon>();//Used only for Def Buff tables
+        public Dictionary<ushort, HashSet<Boon>> PresentPersonalBuffs { get; } = new Dictionary<ushort, HashSet<Boon>>();
 
         //Positions for group
         private List<Point3D> _stackCenterPositions = null;

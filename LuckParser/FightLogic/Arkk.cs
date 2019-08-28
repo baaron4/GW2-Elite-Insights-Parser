@@ -45,7 +45,7 @@ namespace LuckParser.Logic
             new HitOnPlayerMechanic(35452, "Spinning Cut", new MechanicPlotlySetting("star-square-open","rgb(200,140,255)"), "Daze","Spinning Cut (3rd Gladiator Auto->Daze)", "Gladiator Daze",0), //
             });
             Extension = "arkk";
-            IconUrl = "https://wiki.guildwars2.com/images/5/5f/Arkk.jpg";
+            Icon = "https://wiki.guildwars2.com/images/5/5f/Arkk.jpg";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()

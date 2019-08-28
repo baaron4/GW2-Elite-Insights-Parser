@@ -25,7 +25,7 @@ namespace LuckParser.EIData
 
         public override bool Has(Dictionary<long, BoonsGraphModel> bgms)
         {
-            return bgms.Keys.Intersect(_ids).Count() > 0;
+            return bgms.Keys.Intersect(_ids).Any();
         }
     }
 }

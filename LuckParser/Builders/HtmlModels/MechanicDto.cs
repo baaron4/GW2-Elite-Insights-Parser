@@ -7,11 +7,11 @@ namespace LuckParser.Builders.HtmlModels
 {
     public class MechanicDto
     {
-        public string Name;
-        public string ShortName;
-        public string Description;
-        public bool EnemyMech;
-        public bool PlayerMech;
+        public string Name { get; set; }
+        public string ShortName { get; set; }
+        public string Description { get; set; }
+        public bool EnemyMech { get; set; }
+        public bool PlayerMech { get; set; }
 
         public static List<int[]> GetMechanicData(HashSet<Mechanic> presMech, ParsedLog log, DummyActor actor, PhaseData phase)
         {

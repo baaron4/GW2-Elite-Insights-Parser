@@ -12,13 +12,13 @@ namespace LuckParser.EIData
     {
         public bool IsFakeActor { get; protected set; }
         // Boons
-        private readonly List<BoonDistribution> _boonDistribution = new List<BoonDistribution>();
+        private readonly List<BoonDistributionDictionary> _boonDistribution = new List<BoonDistributionDictionary>();
         private readonly List<Dictionary<long, long>> _buffPresence = new List<Dictionary<long, long>>();
         // damage list
         private readonly Dictionary<int, List<int>> _damageList1S = new Dictionary<int, List<int>>();
         private readonly Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>> _selfDamageLogsPerPhasePerTarget = new Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>>();
         // Minions
-        private Dictionary<string, Minions> _minions;
+        private Dictionary<string, MinionsList> _minions;
         // Replay
         protected CombatReplay CombatReplay;
         // Statistics
@@ -29,7 +29,7 @@ namespace LuckParser.EIData
 
         }
 
-        public Dictionary<string, Minions> GetMinions(ParsedLog log)
+        public Dictionary<string, MinionsList> GetMinions(ParsedLog log)
         {
             if (_minions == null)
             {
@@ -87,7 +87,7 @@ namespace LuckParser.EIData
             return dmgList;
         }
 
-        public BoonDistribution GetBoonDistribution(ParsedLog log, int phaseIndex)
+        public BoonDistributionDictionary GetBoonDistribution(ParsedLog log, int phaseIndex)
         {
             if (BoonPoints == null)
             {
@@ -288,7 +288,7 @@ namespace LuckParser.EIData
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int i = 0; i < phases.Count; i++)
             {
-                _boonDistribution.Add(new BoonDistribution());
+                _boonDistribution.Add(new BoonDistributionDictionary());
                 _buffPresence.Add(new Dictionary<long, long>());
             }
         }
@@ -321,19 +321,19 @@ namespace LuckParser.EIData
 
         private void SetMinions(ParsedLog log)
         {
-            _minions = new Dictionary<string, Minions>();
+            _minions = new Dictionary<string, MinionsList>();
             var combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.MasterAgent == AgentItem).ToList();
-            var auxMinions = new Dictionary<string, Minions>();
+            var auxMinions = new Dictionary<string, MinionsList>();
             foreach (AgentItem agent in combatMinion)
             {
                 string id = agent.Name;
                 if (!auxMinions.ContainsKey(id))
                 {
-                    auxMinions[id] = new Minions(id.GetHashCode());
+                    auxMinions[id] = new MinionsList(id.GetHashCode());
                 }
                 auxMinions[id].Add(new Minion(agent));
             }
-            foreach (KeyValuePair<string, Minions> pair in auxMinions)
+            foreach (KeyValuePair<string, MinionsList> pair in auxMinions)
             {
                 if (pair.Value.GetDamageLogs(null, log, 0, log.FightData.FightDuration).Count > 0 || pair.Value.GetCastLogs(log, 0, log.FightData.FightDuration).Count > 0)
                 {
@@ -344,8 +344,8 @@ namespace LuckParser.EIData
         protected override void SetDamageLogs(ParsedLog log)
         {
             AddDamageLogs(log.CombatData.GetDamageData(AgentItem));
-            Dictionary<string, Minions> minionsList = GetMinions(log);
-            foreach (Minions mins in minionsList.Values)
+            Dictionary<string, MinionsList> minionsList = GetMinions(log);
+            foreach (MinionsList mins in minionsList.Values)
             {
                 DamageLogs.AddRange(mins.GetDamageLogs(null, log, 0, log.FightData.FightDuration));
             }

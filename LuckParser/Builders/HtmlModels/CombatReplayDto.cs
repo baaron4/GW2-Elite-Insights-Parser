@@ -7,12 +7,12 @@ namespace LuckParser.Builders.HtmlModels
 {
     public class CombatReplayDto
     {
-        public List<object> Actors;
-        public int[] Sizes;
-        public int MaxTime;
-        public float Inch;
-        public int PollingRate;
-        public List<CombatReplayMap.MapItem> Maps;
+        public List<object> Actors { get; set; }
+        public int[] Sizes { get; set; }
+        public int MaxTime { get; set; }
+        public float Inch { get; set; }
+        public int PollingRate { get; set; }
+        public List<CombatReplayMap.MapItem> Maps { get; set; }
 
         public CombatReplayDto(ParsedLog log)
         {

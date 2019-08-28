@@ -14,15 +14,15 @@ namespace LuckParser.Logic
         public enum ParseMode { Raid, Fractal, Golem, WvW, Unknown };
 
         private CombatReplayMap _map;
-        protected readonly List<Mechanic> MechanicList; //Resurrects (start), Resurrect
+        protected List<Mechanic> MechanicList { get; }//Resurrects (start), Resurrect
         public ParseMode Mode { get; protected set; } = ParseMode.Unknown;
         public string Extension { get; protected set; }
-        public string IconUrl { get; protected set; }
+        public string Icon { get; protected set; }
         private readonly int _basicMechanicsCount;
         public bool HasNoFightSpecificMechanics => MechanicList.Count == _basicMechanicsCount;
         public List<Mob> TrashMobs { get; } = new List<Mob>();
         public List<Target> Targets { get; } = new List<Target>();
-        protected readonly ushort TriggerID;
+        protected ushort TriggerID { get; }
 
         protected FightLogic(ushort triggerID)
         {
@@ -76,7 +76,7 @@ namespace LuckParser.Logic
             return target.Character;
         }
 
-        private void RegroupTargetsByID(ushort id, AgentData agentData, List<CombatItem> combatItems)
+        private static void RegroupTargetsByID(ushort id, AgentData agentData, List<CombatItem> combatItems)
         {
             List<AgentItem> agents = agentData.GetAgentsByID(id);
             if (agents.Count > 1)
@@ -137,7 +137,7 @@ namespace LuckParser.Logic
             }
         }
 
-        protected List<PhaseData> GetPhasesByInvul(ParsedLog log, long skillID, Target mainTarget, bool addSkipPhases, bool beginWithStart)
+        protected static List<PhaseData> GetPhasesByInvul(ParsedLog log, long skillID, Target mainTarget, bool addSkipPhases, bool beginWithStart)
         {
             long fightDuration = log.FightData.FightDuration;
             var phases = new List<PhaseData>();
@@ -174,7 +174,7 @@ namespace LuckParser.Logic
             return phases;
         }
 
-        protected List<PhaseData> GetInitialPhase(ParsedLog log)
+        protected static List<PhaseData> GetInitialPhase(ParsedLog log)
         {
             var phases = new List<PhaseData>();
             long fightDuration = log.FightData.FightDuration;
@@ -212,7 +212,7 @@ namespace LuckParser.Logic
             return new List<AbstractBuffEvent>();
         }
 
-        protected void NegateDamageAgainstBarrier(List<AgentItem> agentItems, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst)
+        protected static void NegateDamageAgainstBarrier(List<AgentItem> agentItems, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst)
         {
             var dmgEvts = new List<AbstractDamageEvent>();
             foreach (AgentItem agentItem in agentItems)
@@ -304,7 +304,7 @@ namespace LuckParser.Logic
             SetSuccessByCombatExit(targets, combatData, fightData, playerAgents);
         }
 
-        protected void SetSuccessByCombatExit(List<Target> targets, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
+        protected static void SetSuccessByCombatExit(List<Target> targets, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             if (targets.Count == 0)
             {

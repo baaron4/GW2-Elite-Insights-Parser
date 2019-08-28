@@ -27,7 +27,7 @@ namespace LuckParser.Logic
             // rotating cc 56403
             // interesting stuff 56372 (big AoE?)
             Extension = "sabir";
-            IconUrl = "https://wiki.guildwars2.com/images/f/fc/Mini_Air_Djinn.png";
+            Icon = "https://wiki.guildwars2.com/images/f/fc/Mini_Air_Djinn.png";
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()

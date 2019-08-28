@@ -48,7 +48,7 @@ namespace LuckParser.Builders.HtmlModels
             {
                 CombatReplayID = player.GetCombatReplayID(log);
             }
-            foreach (KeyValuePair<string, Minions> pair in player.GetMinions(log))
+            foreach (KeyValuePair<string, MinionsList> pair in player.GetMinions(log))
             {
                 Minions.Add(new MinionDto()
                 {
@@ -58,7 +58,7 @@ namespace LuckParser.Builders.HtmlModels
             }
         }
 
-        private void BuildWeaponSets(string[] weps, int offset, List<string> set1, List<string> set2)
+        private static void BuildWeaponSets(string[] weps, int offset, List<string> set1, List<string> set2)
         {
 
             for (int j = 0; j < 4; j++)

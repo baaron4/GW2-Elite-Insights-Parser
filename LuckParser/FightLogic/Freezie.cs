@@ -11,7 +11,7 @@ namespace LuckParser.Logic
         public Freezie(ushort triggerID) : base(triggerID)
         {
             Extension = "freezie";
-            IconUrl = "https://wiki.guildwars2.com/images/thumb/8/8b/Freezie.jpg/189px-Freezie.jpg";
+            Icon = "https://wiki.guildwars2.com/images/thumb/8/8b/Freezie.jpg/189px-Freezie.jpg";
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)

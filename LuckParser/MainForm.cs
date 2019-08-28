@@ -405,7 +405,7 @@ namespace LuckParser
         /// <param name="path"></param>
         private async void AddDelayed(string path)
         {
-            await Task.Delay(3000);
+            await Task.Delay(3000).ConfigureAwait(false);
             if (File.Exists(path))
             {
                 AddLogFiles(new string[] { path });

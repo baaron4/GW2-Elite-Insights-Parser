@@ -136,14 +136,16 @@ namespace LuckParser
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new MainForm(logFiles));
+                var form = new MainForm(logFiles);
+                Application.Run(form);
+                form.Dispose();
             }
             else
             {
                 if (logFiles.Count > 0)
                 {
                     // Use the application through console 
-                    new ConsoleProgram(logFiles);
+                    _ = new ConsoleProgram(logFiles);
                     return 0;
                 }
             }

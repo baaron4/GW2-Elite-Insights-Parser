@@ -22,7 +22,7 @@ namespace LuckParser.Logic
             });
             Extension = "trio";
             GenericFallBackMethod = FallBackMethod.None;
-            IconUrl = "https://i.imgur.com/UZZQUdf.png";
+            Icon = "https://i.imgur.com/UZZQUdf.png";
         }
 
         protected override List<ushort> GetSuccessCheckIds()
@@ -70,7 +70,7 @@ namespace LuckParser.Logic
             }
         }
 
-        public void SetPhasePerTarget(Target target, List<PhaseData> phases, ParsedLog log)
+        public static void SetPhasePerTarget(Target target, List<PhaseData> phases, ParsedLog log)
         {
             long fightDuration = log.FightData.FightDuration;
             EnterCombatEvent phaseStart = log.CombatData.GetEnterCombatEvents(target.AgentItem).LastOrDefault();

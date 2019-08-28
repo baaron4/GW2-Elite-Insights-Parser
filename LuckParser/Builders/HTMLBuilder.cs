@@ -484,7 +484,7 @@ namespace LuckParser.Builders
             return BuildDMGDistDataInternal(dps, target, null, phaseIndex);
         }
 
-        private DmgDistributionDto BuildDMGDistDataMinionsInternal(Statistics.FinalDPS dps, Minions minions, Target target, int phaseIndex)
+        private DmgDistributionDto BuildDMGDistDataMinionsInternal(Statistics.FinalDPS dps, MinionsList minions, Target target, int phaseIndex)
         {
             var dto = new DmgDistributionDto();
             PhaseData phase = _phases[phaseIndex];
@@ -500,7 +500,7 @@ namespace LuckParser.Builders
         /// <summary>
         /// Creates the damage distribution table for a given minion
         /// </summary>
-        private DmgDistributionDto BuildPlayerMinionDMGDistData(Player p, Minions minions, Target target, int phaseIndex)
+        private DmgDistributionDto BuildPlayerMinionDMGDistData(Player p, MinionsList minions, Target target, int phaseIndex)
         {
             Statistics.FinalDPS dps = p.GetDPSTarget(_log, phaseIndex, target);
 
@@ -510,7 +510,7 @@ namespace LuckParser.Builders
         /// <summary>
         /// Creates the damage distribution table for a given boss minion
         /// </summary>
-        private DmgDistributionDto BuildTargetMinionDMGDistData(Target target, Minions minions, int phaseIndex)
+        private DmgDistributionDto BuildTargetMinionDMGDistData(Target target, MinionsList minions, int phaseIndex)
         {
             Statistics.FinalDPS dps = target.GetDPSAll(_log, phaseIndex);
             return BuildDMGDistDataMinionsInternal(dps, minions, null, phaseIndex);
@@ -770,11 +770,9 @@ namespace LuckParser.Builders
                 string jsPath = Path.Combine(path, jsFileName);
                 try
                 {
-                    using (var fs = new FileStream(jsPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
-                    {
-                        scriptWriter.Write(scriptContent);
-                    }
+                    using var fs = new FileStream(jsPath, FileMode.Create, FileAccess.Write);
+                    using var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8);
+                    scriptWriter.Write(scriptContent);
                 }
                 catch (IOException)
                 {
@@ -788,7 +786,7 @@ namespace LuckParser.Builders
             }
         }
 
-        private string BuildTemplates(string script)
+        private static string BuildTemplates(string script)
         {
             string tmplScript = script;
             var templates = new Dictionary<string, string>()
@@ -839,7 +837,7 @@ namespace LuckParser.Builders
             return tmplScript;
         }
 
-        private string BuildCRTemplates(string script)
+        private static string BuildCRTemplates(string script)
         {
             string tmplScript = script;
             var CRtemplates = new Dictionary<string, string>()
@@ -881,11 +879,9 @@ namespace LuckParser.Builders
                 string cssPath = Path.Combine(path, cssFilename);
                 try
                 {
-                    using (var fs = new FileStream(cssPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
-                    {
-                        scriptWriter.Write(scriptContent);
-                    }
+                    using var fs = new FileStream(cssPath, FileMode.Create, FileAccess.Write);
+                    using var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8);
+                    scriptWriter.Write(scriptContent);
                 }
                 catch (IOException)
                 {
@@ -927,16 +923,14 @@ namespace LuckParser.Builders
 #if DEBUG
                 string scriptFilename = "EliteInsights-" + _scriptVersion + ".debug.js";
 #else
-                string scriptFilename = "EliteInsights-" + _scriptVersion +".js";
+                string scriptFilename = "EliteInsights-" + _scriptVersion + ".js";
 #endif
                 string scriptPath = Path.Combine(path, scriptFilename);
                 try
                 {
-                    using (var fs = new FileStream(scriptPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
-                    {
-                        scriptWriter.Write(scriptContent);
-                    }
+                    using var fs = new FileStream(scriptPath, FileMode.Create, FileAccess.Write);
+                    using var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8);
+                    scriptWriter.Write(scriptContent);
                 }
                 catch (IOException)
                 {
@@ -972,16 +966,14 @@ namespace LuckParser.Builders
 #if DEBUG
                 string scriptFilename = "EliteInsights-CRLink-" + _scriptVersion + ".debug.js";
 #else
-                string scriptFilename = "EliteInsights-CRLink-" + _scriptVersion +".js";
+                string scriptFilename = "EliteInsights-CRLink-" + _scriptVersion + ".js";
 #endif
                 string scriptPath = Path.Combine(path, scriptFilename);
                 try
                 {
-                    using (var fs = new FileStream(scriptPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
-                    {
-                        scriptWriter.Write(scriptContent);
-                    }
+                    using var fs = new FileStream(scriptPath, FileMode.Create, FileAccess.Write);
+                    using var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8);
+                    scriptWriter.Write(scriptContent);
                 }
                 catch (IOException)
                 {
@@ -1165,7 +1157,7 @@ namespace LuckParser.Builders
             logData.Success = _log.FightData.Success;
             logData.Wvw = _log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
             logData.FightName = _log.FightData.Name;
-            logData.FightIcon = _log.FightData.Logic.IconUrl;
+            logData.FightIcon = _log.FightData.Logic.Icon;
             logData.LightTheme = Properties.Settings.Default.LightTheme;
             logData.SingleGroup = _log.PlayerList.Where(x => !x.IsFakeActor).Select(x => x.Group).Distinct().Count() == 1;
             logData.NoMechanics = _log.FightData.Logic.HasNoFightSpecificMechanics;
@@ -1219,7 +1211,7 @@ namespace LuckParser.Builders
                 dto.DmgDistributionsTaken.Add(BuildDMGTakenDistData(player, i));
                 dto.BoonGraph.Add(BuildBoonGraphData(player, i));
             }
-            foreach (KeyValuePair<string, Minions> pair in player.GetMinions(_log))
+            foreach (KeyValuePair<string, MinionsList> pair in player.GetMinions(_log))
             {
                 dto.Minions.Add(BuildPlayerMinionsData(player, pair.Value));
             }
@@ -1227,7 +1219,7 @@ namespace LuckParser.Builders
             return dto;
         }
 
-        private ActorDetailsDto BuildPlayerMinionsData(Player player, Minions minion)
+        private ActorDetailsDto BuildPlayerMinionsData(Player player, MinionsList minion)
         {
             var dto = new ActorDetailsDto
             {
@@ -1275,14 +1267,14 @@ namespace LuckParser.Builders
             }
 
             dto.Minions = new List<ActorDetailsDto>();
-            foreach (KeyValuePair<string, Minions> pair in target.GetMinions(_log))
+            foreach (KeyValuePair<string, MinionsList> pair in target.GetMinions(_log))
             {
                 dto.Minions.Add(BuildTargetsMinionsData(target, pair.Value));
             }
             return dto;
         }
 
-        private ActorDetailsDto BuildTargetsMinionsData(Target target, Minions minion)
+        private ActorDetailsDto BuildTargetsMinionsData(Target target, MinionsList minion)
         {
             var dto = new ActorDetailsDto
             {
@@ -1302,7 +1294,7 @@ namespace LuckParser.Builders
             return dto;
         }
 
-        private string ToJson(object value)
+        private static string ToJson(object value)
         {
             var contractResolver = new DefaultContractResolver
             {

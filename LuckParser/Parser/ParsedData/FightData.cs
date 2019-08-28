@@ -11,7 +11,7 @@ namespace LuckParser.Parser.ParsedData
         private List<PhaseData> _phases = new List<PhaseData>();
         public ushort ID { get; }
         private readonly bool _requirePhases;
-        public readonly FightLogic Logic;
+        public FightLogic Logic { get; }
         public long FightStartLogTime { get; private set; }
         public long FightEndLogTime { get; private set; } = long.MaxValue;
         public long FightDuration => FightEndLogTime - FightStartLogTime;

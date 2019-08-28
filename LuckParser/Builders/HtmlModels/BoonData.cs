@@ -6,8 +6,8 @@ namespace LuckParser.Builders.HtmlModels
 {
     public class BoonData
     {
-        public double Avg;
-        public List<List<object>> Data = new List<List<object>>();
+        public double Avg { get; set; }
+        public List<List<object>> Data { get; set; } = new List<List<object>>();
 
         public BoonData(Dictionary<long, Statistics.FinalBuffs> boons, List<Boon> listToUse, double avg)
         {

@@ -1,13 +1,13 @@
-﻿using LuckParser.Exceptions;
-using LuckParser.Parser;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using LuckParser.Exceptions;
+using LuckParser.Parser;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using NUnit.Framework;
 
 namespace LuckParser.tst
 {
@@ -69,27 +69,23 @@ namespace LuckParser.tst
                 dict[evtcName] = messages[i];
             }
 
-            using (var fs = new FileStream(logName, FileMode.Create, FileAccess.Write))
+            using var fs = new FileStream(logName, FileMode.Create, FileAccess.Write);
+            using var sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8);
+            var contractResolver = new DefaultContractResolver
             {
-                using (var sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
-                {
-                    var contractResolver = new DefaultContractResolver
-                    {
-                        NamingStrategy = new CamelCaseNamingStrategy()
-                    };
+                NamingStrategy = new CamelCaseNamingStrategy()
+            };
 
-                    var serializer = new JsonSerializer
-                    {
-                        NullValueHandling = NullValueHandling.Ignore,
-                        ContractResolver = contractResolver
-                    };
-                    var writer = new JsonTextWriter(sw)
-                    {
-                        Formatting = Newtonsoft.Json.Formatting.Indented
-                    };
-                    serializer.Serialize(writer, dict);
-                }
-            }
+            var serializer = new JsonSerializer
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                ContractResolver = contractResolver
+            };
+            var writer = new JsonTextWriter(sw)
+            {
+                Formatting = Newtonsoft.Json.Formatting.Indented
+            };
+            serializer.Serialize(writer, dict);
         }
 
         [Test]

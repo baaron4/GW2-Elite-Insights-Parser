@@ -35,7 +35,7 @@ namespace LuckParser.Logic
             new HitOnPlayerMechanic(39133, "Wave of Mutilation", new MechanicPlotlySetting("triangle-sw","rgb(0,200,0)"), "KB Jump","Hit by KB Jump (player targeted)", "Knockback jump",0),
             });
             Extension = "skorv";
-            IconUrl = "https://wiki.guildwars2.com/images/c/c1/Skorvald_the_Shattered.jpg";
+            Icon = "https://wiki.guildwars2.com/images/c/c1/Skorvald_the_Shattered.jpg";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()

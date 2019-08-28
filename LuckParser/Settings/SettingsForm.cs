@@ -76,18 +76,16 @@ namespace LuckParser.Setting
 
         private void BtnFolderSelectClick(object sender, EventArgs e)
         {
-            using (var fbd = new FolderBrowserDialog())
+            using var fbd = new FolderBrowserDialog();
+            DialogResult result = fbd.ShowDialog();
+
+            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
             {
-                DialogResult result = fbd.ShowDialog();
+                //string[] files = Directory.GetFiles(fbd.SelectedPath);
 
-                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
-                {
-                    //string[] files = Directory.GetFiles(fbd.SelectedPath);
-
-                    // System.Windows.Forms.MessageBox.Show("Files found: " + files.Length.ToString(), "Message");
-                    txtCustomSaveLoc.Text = fbd.SelectedPath;
-                    Properties.Settings.Default.OutLocation = fbd.SelectedPath;
-                }
+                // System.Windows.Forms.MessageBox.Show("Files found: " + files.Length.ToString(), "Message");
+                txtCustomSaveLoc.Text = fbd.SelectedPath;
+                Properties.Settings.Default.OutLocation = fbd.SelectedPath;
             }
         }
 
@@ -99,16 +97,14 @@ namespace LuckParser.Setting
         private void ResetSkillListClick(object sender, EventArgs e)
         {
             //Update skill list
-            var tempcontroller = new GW2APIController();
-            tempcontroller.WriteSkillListToFile();
+            GW2APIController.WriteSkillListToFile();
             MessageBox.Show("Skill List has been redone");
         }
 
         private void ResetSpecListClick(object sender, EventArgs e)
         {
             //Update skill list
-            var tempcontroller = new GW2APIController();
-            tempcontroller.WriteSpecListToFile();
+            GW2APIController.WriteSpecListToFile();
             MessageBox.Show("Spec List has been redone");
         }
 
@@ -227,20 +223,20 @@ namespace LuckParser.Setting
                     path = null;
                 }
 
-                using (var fbd = new FolderBrowserDialog())
+                using var fbd = new FolderBrowserDialog
                 {
-                    fbd.ShowNewFolderButton = false;
-                    fbd.SelectedPath = path;
-                    DialogResult result = fbd.ShowDialog();
+                    ShowNewFolderButton = false,
+                    SelectedPath = path
+                };
+                DialogResult result = fbd.ShowDialog();
 
-                    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
-                    {
-                        Properties.Settings.Default.AutoAddPath = fbd.SelectedPath;
-                    }
-                    else
-                    {
-                        chkAutoAdd.Checked = false;
-                    }
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    Properties.Settings.Default.AutoAddPath = fbd.SelectedPath;
+                }
+                else
+                {
+                    chkAutoAdd.Checked = false;
                 }
             }
             Properties.Settings.Default.AutoAdd = chkAutoAdd.Checked;
@@ -269,33 +265,33 @@ namespace LuckParser.Setting
         private void SettingsDump_Click(object sender, EventArgs e)
         {
             string dump = CustomSettingsManager.DumpSettings();
-            using (var saveFile = new SaveFileDialog())
+            using var saveFile = new SaveFileDialog
             {
-                saveFile.Filter = "Conf file|*.conf";
-                saveFile.Title = "Save a Configuration file";
-                DialogResult result = saveFile.ShowDialog();
-                if (saveFile.FileName != "")
-                {
-                    var fs = (FileStream)saveFile.OpenFile();
-                    byte[] settings = new UTF8Encoding(true).GetBytes(dump);
-                    fs.Write(settings, 0, settings.Length);
-                    fs.Close();
-                }
+                Filter = "Conf file|*.conf",
+                Title = "Save a Configuration file"
+            };
+            DialogResult result = saveFile.ShowDialog();
+            if (saveFile.FileName.Length == 0)
+            {
+                var fs = (FileStream)saveFile.OpenFile();
+                byte[] settings = new UTF8Encoding(true).GetBytes(dump);
+                fs.Write(settings, 0, settings.Length);
+                fs.Close();
             }
         }
 
         private void SettingsLoad_Click(object sender, EventArgs e)
         {
-            using (var loadFile = new OpenFileDialog())
+            using var loadFile = new OpenFileDialog
             {
-                loadFile.Filter = "Conf file|*.conf";
-                loadFile.Title = "Load a Configuration file";
-                DialogResult result = loadFile.ShowDialog();
-                if (loadFile.FileName != "")
-                {
-                    CustomSettingsManager.ReadConfig(loadFile.FileName);
-                    SetValues();
-                }
+                Filter = "Conf file|*.conf",
+                Title = "Load a Configuration file"
+            };
+            DialogResult result = loadFile.ShowDialog();
+            if (loadFile.FileName.Length == 0)
+            {
+                CustomSettingsManager.ReadConfig(loadFile.FileName);
+                SetValues();
             }
         }
 

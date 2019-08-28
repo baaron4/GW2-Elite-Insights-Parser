@@ -42,7 +42,7 @@ namespace LuckParser.Logic
             new HitOnPlayerMechanic(34413, "Surrender", new MechanicPlotlySetting("circle-open","rgb(0,0,0)"), "Spirit","Surrender (hit by walking Spirit)", "Spirit hit",0)
             });
             Extension = "matt";
-            IconUrl = "https://wiki.guildwars2.com/images/5/5d/Mini_Matthias_Abomination.png";
+            Icon = "https://wiki.guildwars2.com/images/5/5d/Mini_Matthias_Abomination.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()

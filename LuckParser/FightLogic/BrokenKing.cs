@@ -21,7 +21,7 @@ namespace LuckParser.Logic
             }
             );
             Extension = "brokenking";
-            IconUrl = "https://wiki.guildwars2.com/images/3/37/Mini_Broken_King.png";
+            Icon = "https://wiki.guildwars2.com/images/3/37/Mini_Broken_King.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()

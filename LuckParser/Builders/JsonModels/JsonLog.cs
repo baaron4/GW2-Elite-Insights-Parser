@@ -69,7 +69,7 @@ namespace LuckParser.Builders.JsonModels
             public DamageModDesc(DamageModifier item)
             {
                 Name = item.Name;
-                Icon = item.Url;
+                Icon = item.Icon;
                 Description = item.Tooltip;
                 NonMultiplier = !item.Multiplier;
             }

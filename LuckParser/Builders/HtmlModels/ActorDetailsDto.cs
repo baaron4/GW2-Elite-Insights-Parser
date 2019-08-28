@@ -5,14 +5,14 @@ namespace LuckParser.Builders.HtmlModels
 {
     public class ActorDetailsDto
     {
-        public List<DmgDistributionDto> DmgDistributions;
-        public List<List<DmgDistributionDto>> DmgDistributionsTargets;
-        public List<DmgDistributionDto> DmgDistributionsTaken;
-        public List<List<object[]>> Rotation;
-        public List<List<BoonChartDataDto>> BoonGraph;
-        public List<FoodDto> Food;
-        public List<ActorDetailsDto> Minions;
-        public List<DeathRecapDto> DeathRecap;
+        public List<DmgDistributionDto> DmgDistributions { get; set; }
+        public List<List<DmgDistributionDto>> DmgDistributionsTargets { get; set; }
+        public List<DmgDistributionDto> DmgDistributionsTaken { get; set; }
+        public List<List<object[]>> Rotation { get; set; }
+        public List<List<BoonChartDataDto>> BoonGraph { get; set; }
+        public List<FoodDto> Food { get; set; }
+        public List<ActorDetailsDto> Minions { get; set; }
+        public List<DeathRecapDto> DeathRecap { get; set; }
 
         // helpers
 

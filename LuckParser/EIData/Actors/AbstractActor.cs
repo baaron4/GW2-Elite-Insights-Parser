@@ -150,10 +150,10 @@ namespace LuckParser.EIData
             }
         }
 
-        protected BoonMap GetBoonMap(ParsedLog log)
+        protected BoonMapDictionary GetBoonMap(ParsedLog log)
         {
             //
-            var boonMap = new BoonMap();
+            var boonMap = new BoonMapDictionary();
             // Fill in Boon Map
             foreach (AbstractBuffEvent c in log.CombatData.GetBoonDataByDst(AgentItem))
             {
@@ -260,7 +260,7 @@ namespace LuckParser.EIData
         protected void SetBoonStatus(ParsedLog log)
         {
             BoonPoints = new Dictionary<long, BoonsGraphModel>();
-            BoonMap toUse = GetBoonMap(log);
+            BoonMapDictionary toUse = GetBoonMap(log);
             long dur = log.FightData.FightDuration;
             int fightDuration = (int)(dur) / 1000;
             var boonPresenceGraph = new BoonsGraphModel(log.Boons.BoonsByIds[ProfHelper.NumberOfBoonsID]);

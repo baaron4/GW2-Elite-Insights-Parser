@@ -25,7 +25,7 @@ namespace LuckParser.Logic
                 new HitOnPlayerMechanic(56381, "Quantum Quake", new MechanicPlotlySetting("hourglass","rgb(120,100,0)"), "S.Thrower", "Hit by rotating SandThrower", "SandThrower", 0),
             });
             Extension = "adina";
-            IconUrl = "https://wiki.guildwars2.com/images/a/a0/Mini_Earth_Djinn.png";
+            Icon = "https://wiki.guildwars2.com/images/a/a0/Mini_Earth_Djinn.png";
         }
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
