@@ -5,7 +5,7 @@ namespace LuckParser.EIData
     // A dummy class that only serve as "stocking" purposes, trying to do anything with it will throw an exception
     public class DummyActor
     {
-        public readonly AgentItem AgentItem;
+        public AgentItem AgentItem { get; }
         public string Character { get; protected set; }
 
         public uint Toughness => AgentItem.Toughness;

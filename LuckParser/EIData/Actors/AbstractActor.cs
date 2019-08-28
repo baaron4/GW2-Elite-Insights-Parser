@@ -10,18 +10,18 @@ namespace LuckParser.EIData
     public abstract class AbstractActor : DummyActor
     {
         // Damage
-        protected List<AbstractDamageEvent> DamageLogs;
-        protected Dictionary<AgentItem, List<AbstractDamageEvent>> DamageLogsByDst;
-        private readonly Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>> _damageLogsPerPhasePerTarget = new Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>>();
+        protected List<AbstractDamageEvent> DamageLogs { get; set; }
+        protected Dictionary<AgentItem, List<AbstractDamageEvent>> DamageLogsByDst { get; set; }
+        private Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>> _damageLogsPerPhasePerTarget { get; } = new Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>>();
         //protected List<DamageLog> HealingLogs = new List<DamageLog>();
         //protected List<DamageLog> HealingReceivedLogs = new List<DamageLog>();
         private List<AbstractDamageEvent> _damageTakenlogs;
-        protected Dictionary<AgentItem, List<AbstractDamageEvent>> DamageTakenLogsBySrc;
+        protected Dictionary<AgentItem, List<AbstractDamageEvent>> DamageTakenLogsBySrc { get; set; }
         // Cast
-        protected List<AbstractCastEvent> CastLogs;
+        protected List<AbstractCastEvent> CastLogs { get; set; }
         // Boons
         public HashSet<Boon> TrackedBoons { get; } = new HashSet<Boon>();
-        protected Dictionary<long, BoonsGraphModel> BoonPoints;
+        protected Dictionary<long, BoonsGraphModel> BoonPoints { get; set; }
 
         protected AbstractActor(AgentItem agent) : base(agent)
         {

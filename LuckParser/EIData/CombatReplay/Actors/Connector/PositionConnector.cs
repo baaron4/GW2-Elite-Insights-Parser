@@ -4,7 +4,7 @@ namespace LuckParser.EIData
 {
     public class PositionConnector : Connector
     {
-        protected Point3D Position;
+        protected Point3D Position { get; set; }
 
         public PositionConnector()
         {

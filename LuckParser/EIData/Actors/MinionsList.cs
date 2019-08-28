@@ -8,7 +8,7 @@ namespace LuckParser.EIData
 {
     public class MinionsList : List<Minion>
     {
-        public readonly int MinionID;
+        public int MinionID { get; }
         private List<AbstractDamageEvent> _damageLogs;
         private Dictionary<AgentItem, List<AbstractDamageEvent>> _damageLogsByDst;
         private List<AbstractCastEvent> _castLogs;

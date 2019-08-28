@@ -9,75 +9,75 @@ namespace LuckParser.Builders.HtmlModels
 
     public class PhaseDto
     {
-        public string Name;
-        public long Duration;
-        public double Start;
-        public double End;
-        public List<int> Targets = new List<int>();
+        public string Name { get; set; }
+        public long Duration { get; set; }
+        public double Start { get; set; }
+        public double End { get; set; }
+        public List<int> Targets { get; set; } = new List<int>();
 
-        public List<List<object>> DpsStats;
-        public List<List<List<object>>> DpsStatsTargets;
-        public List<List<List<object>>> DmgStatsTargets;
-        public List<List<object>> DmgStats;
-        public List<List<object>> DefStats;
-        public List<List<object>> SupportStats;
+        public List<List<object>> DpsStats { get; set; }
+        public List<List<List<object>>> DpsStatsTargets { get; set; }
+        public List<List<List<object>>> DmgStatsTargets { get; set; }
+        public List<List<object>> DmgStats { get; set; }
+        public List<List<object>> DefStats { get; set; }
+        public List<List<object>> SupportStats { get; set; }
         // all
-        public List<BoonData> BoonStats;
-        public List<BoonData> BoonGenSelfStats;
-        public List<BoonData> BoonGenGroupStats;
-        public List<BoonData> BoonGenOGroupStats;
-        public List<BoonData> BoonGenSquadStats;
+        public List<BoonData> BoonStats { get; set; }
+        public List<BoonData> BoonGenSelfStats { get; set; }
+        public List<BoonData> BoonGenGroupStats { get; set; }
+        public List<BoonData> BoonGenOGroupStats { get; set; }
+        public List<BoonData> BoonGenSquadStats { get; set; }
 
-        public List<BoonData> OffBuffStats;
-        public List<BoonData> OffBuffGenSelfStats;
-        public List<BoonData> OffBuffGenGroupStats;
-        public List<BoonData> OffBuffGenOGroupStats;
-        public List<BoonData> OffBuffGenSquadStats;
+        public List<BoonData> OffBuffStats { get; set; }
+        public List<BoonData> OffBuffGenSelfStats { get; set; }
+        public List<BoonData> OffBuffGenGroupStats { get; set; }
+        public List<BoonData> OffBuffGenOGroupStats { get; set; }
+        public List<BoonData> OffBuffGenSquadStats { get; set; }
 
-        public List<BoonData> DefBuffStats;
-        public List<BoonData> DefBuffGenSelfStats;
-        public List<BoonData> DefBuffGenGroupStats;
-        public List<BoonData> DefBuffGenOGroupStats;
-        public List<BoonData> DefBuffGenSquadStats;
+        public List<BoonData> DefBuffStats { get; set; }
+        public List<BoonData> DefBuffGenSelfStats { get; set; }
+        public List<BoonData> DefBuffGenGroupStats { get; set; }
+        public List<BoonData> DefBuffGenOGroupStats { get; set; }
+        public List<BoonData> DefBuffGenSquadStats { get; set; }
 
-        public List<BoonData> PersBuffStats;
+        public List<BoonData> PersBuffStats { get; set; }
 
         // active
-        public List<BoonData> BoonActiveStats;
-        public List<BoonData> BoonGenActiveSelfStats;
-        public List<BoonData> BoonGenActiveGroupStats;
-        public List<BoonData> BoonGenActiveOGroupStats;
-        public List<BoonData> BoonGenActiveSquadStats;
+        public List<BoonData> BoonActiveStats { get; set; }
+        public List<BoonData> BoonGenActiveSelfStats { get; set; }
+        public List<BoonData> BoonGenActiveGroupStats { get; set; }
+        public List<BoonData> BoonGenActiveOGroupStats { get; set; }
+        public List<BoonData> BoonGenActiveSquadStats { get; set; }
 
-        public List<BoonData> OffBuffActiveStats;
-        public List<BoonData> OffBuffGenActiveSelfStats;
-        public List<BoonData> OffBuffGenActiveGroupStats;
-        public List<BoonData> OffBuffGenActiveOGroupStats;
-        public List<BoonData> OffBuffGenActiveSquadStats;
+        public List<BoonData> OffBuffActiveStats { get; set; }
+        public List<BoonData> OffBuffGenActiveSelfStats { get; set; }
+        public List<BoonData> OffBuffGenActiveGroupStats { get; set; }
+        public List<BoonData> OffBuffGenActiveOGroupStats { get; set; }
+        public List<BoonData> OffBuffGenActiveSquadStats { get; set; }
 
-        public List<BoonData> DefBuffActiveStats;
-        public List<BoonData> DefBuffGenActiveSelfStats;
-        public List<BoonData> DefBuffGenActiveGroupStats;
-        public List<BoonData> DefBuffGenActiveOGroupStats;
-        public List<BoonData> DefBuffGenActiveSquadStats;
+        public List<BoonData> DefBuffActiveStats { get; set; }
+        public List<BoonData> DefBuffGenActiveSelfStats { get; set; }
+        public List<BoonData> DefBuffGenActiveGroupStats { get; set; }
+        public List<BoonData> DefBuffGenActiveOGroupStats { get; set; }
+        public List<BoonData> DefBuffGenActiveSquadStats { get; set; }
 
-        public List<BoonData> PersBuffActiveStats;
+        public List<BoonData> PersBuffActiveStats { get; set; }
 
-        public List<DamageModData> DmgModifiersCommon;
-        public List<DamageModData> DmgModifiersItem;
-        public List<DamageModData> DmgModifiersPers;
+        public List<DamageModData> DmgModifiersCommon { get; set; }
+        public List<DamageModData> DmgModifiersItem { get; set; }
+        public List<DamageModData> DmgModifiersPers { get; set; }
 
-        public List<List<BoonData>> TargetsCondiStats;
-        public List<BoonData> TargetsCondiTotals;
-        public List<BoonData> TargetsBoonTotals;
+        public List<List<BoonData>> TargetsCondiStats { get; set; }
+        public List<BoonData> TargetsCondiTotals { get; set; }
+        public List<BoonData> TargetsBoonTotals { get; set; }
 
-        public List<List<int[]>> MechanicStats;
-        public List<List<int[]>> EnemyMechanicStats;
-        public List<long> PlayerActiveTimes;
+        public List<List<int[]>> MechanicStats { get; set; }
+        public List<List<int[]>> EnemyMechanicStats { get; set; }
+        public List<long> PlayerActiveTimes { get; set; }
 
-        public List<double> MarkupLines;
-        public List<AreaLabelDto> MarkupAreas;
-        public List<int> SubPhases;
+        public List<double> MarkupLines { get; set; }
+        public List<AreaLabelDto> MarkupAreas { get; set; }
+        public List<int> SubPhases { get; set; }
 
         public PhaseDto(PhaseData phaseData, List<PhaseData> phases, ParsedLog log)
         {

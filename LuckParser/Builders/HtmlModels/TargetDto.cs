@@ -9,17 +9,17 @@ namespace LuckParser.Builders.HtmlModels
 {
     public class TargetDto
     {
-        public string Name;
-        public string Icon;
-        public long Health;
-        public int CombatReplayID;
-        public long HbWidth;
-        public long HbHeight;
-        public uint Tough;
-        public readonly List<MinionDto> Minions = new List<MinionDto>();
-        public double Percent;
-        public double HpLeft;
-        public ActorDetailsDto Details;
+        public string Name { get; set; }
+        public string Icon { get; set; }
+        public long Health { get; set; }
+        public int CombatReplayID { get; set; }
+        public long HbWidth { get; set; }
+        public long HbHeight { get; set; }
+        public uint Tough { get; set; }
+        public List<MinionDto> Minions { get; } = new List<MinionDto>();
+        public double Percent { get; set; }
+        public double HpLeft { get; set; }
+        public ActorDetailsDto Details { get; set; }
 
         public TargetDto(Target target, ParsedLog log, bool cr, ActorDetailsDto details)
         {

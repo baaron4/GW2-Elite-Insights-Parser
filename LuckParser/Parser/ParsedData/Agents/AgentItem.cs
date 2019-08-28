@@ -13,20 +13,20 @@ namespace LuckParser.Parser.ParsedData
 
         // Fields
         public ulong Agent { get; set; }
-        public readonly ushort ID;
+        public ushort ID { get; }
         public AgentItem MasterAgent { get; set; }
         public ushort InstID { get; set; }
         public AgentType Type { get; } = AgentType.NPC;
         public long FirstAwareLogTime { get; set; }
         public long LastAwareLogTime { get; set; } = long.MaxValue;
-        public readonly string Name = "UNKNOWN";
-        public readonly string Prof = "UNKNOWN";
-        public readonly uint Toughness;
-        public readonly uint Healing;
-        public readonly uint Condition;
-        public readonly uint Concentration;
-        public readonly uint HitboxWidth;
-        public readonly uint HitboxHeight;
+        public string Name { get; } = "UNKNOWN";
+        public string Prof { get; } = "UNKNOWN";
+        public uint Toughness { get; }
+        public uint Healing { get; }
+        public uint Condition { get; }
+        public uint Concentration { get; }
+        public uint HitboxWidth { get; }
+        public uint HitboxHeight { get; }
 
         // Constructors
         public AgentItem(ulong agent, string name, string prof, ushort id, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight)
