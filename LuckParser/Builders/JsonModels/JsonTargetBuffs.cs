@@ -1,6 +1,6 @@
-﻿using LuckParser.EIData;
+﻿using System.Collections.Generic;
+using LuckParser.EIData;
 using LuckParser.Models;
-using System.Collections.Generic;
 
 namespace LuckParser.Builders.JsonModels
 {
@@ -50,8 +50,8 @@ namespace LuckParser.Builders.JsonModels
 
             private static Dictionary<string, double> ConvertKeys(Dictionary<Player, double> toConvert)
             {
-                Dictionary<string, double> res = new Dictionary<string, double>();
-                foreach (var pair in toConvert)
+                var res = new Dictionary<string, double>();
+                foreach (KeyValuePair<Player, double> pair in toConvert)
                 {
                     res[pair.Key.Character] = pair.Value;
                 }

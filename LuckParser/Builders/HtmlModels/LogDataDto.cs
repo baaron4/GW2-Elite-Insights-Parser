@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 
 namespace LuckParser.Builders.HtmlModels
-{   
+{
     public class LogDataDto
-    { 
+    {
         public List<TargetDto> Targets = new List<TargetDto>();
         public readonly List<PlayerDto> Players = new List<PlayerDto>();
         public readonly List<EnemyDto> Enemies = new List<EnemyDto>();
@@ -14,7 +14,7 @@ namespace LuckParser.Builders.HtmlModels
         public readonly List<long> DmgModifiersItem = new List<long>();
         public readonly List<long> DmgModifiersCommon = new List<long>();
         public readonly Dictionary<string, List<long>> DmgModifiersPers = new Dictionary<string, List<long>>();
-        public readonly Dictionary<string, List<long>> PersBuffs = new Dictionary<string, List<long>>();     
+        public readonly Dictionary<string, List<long>> PersBuffs = new Dictionary<string, List<long>>();
         public readonly List<long> Conditions = new List<long>();
         public readonly Dictionary<string, SkillDto> SkillMap = new Dictionary<string, SkillDto>();
         public readonly Dictionary<string, BoonDto> BuffMap = new Dictionary<string, BoonDto>();

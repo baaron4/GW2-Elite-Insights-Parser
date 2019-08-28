@@ -1,7 +1,7 @@
-﻿using LuckParser.EIData;
-using LuckParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using LuckParser.EIData;
+using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.Parser.ParsedData
 {
@@ -26,7 +26,7 @@ namespace LuckParser.Parser.ParsedData
 
         private void SpecialBoonParse(List<Player> players, SkillData skillData, FightData fightData)
         {
-            List<AbstractBuffEvent> toAdd = new List<AbstractBuffEvent>();
+            var toAdd = new List<AbstractBuffEvent>();
             foreach (Player p in players)
             {
                 if (p.Prof == "Weaver")
@@ -39,11 +39,11 @@ namespace LuckParser.Parser.ParsedData
                 }
             }
             toAdd.AddRange(fightData.Logic.SpecialBuffEventProcess(_boonDataByDst, _boonData, fightData.FightStartLogTime, skillData));
-            HashSet<long> buffIDsToSort = new HashSet<long>();
-            HashSet<AgentItem> buffAgentsToSort = new HashSet<AgentItem>();
+            var buffIDsToSort = new HashSet<long>();
+            var buffAgentsToSort = new HashSet<AgentItem>();
             foreach (AbstractBuffEvent bf in toAdd)
             {
-                if (_boonDataByDst.TryGetValue(bf.To, out var list1))
+                if (_boonDataByDst.TryGetValue(bf.To, out List<AbstractBuffEvent> list1))
                 {
                     list1.Add(bf);
                 }
@@ -55,7 +55,7 @@ namespace LuckParser.Parser.ParsedData
                     };
                 }
                 buffAgentsToSort.Add(bf.To);
-                if (_boonData.TryGetValue(bf.BuffID, out var list2))
+                if (_boonData.TryGetValue(bf.BuffID, out List<AbstractBuffEvent> list2))
                 {
                     list2.Add(bf);
                 }
@@ -80,14 +80,14 @@ namespace LuckParser.Parser.ParsedData
 
         private void SpecialDamageParse(SkillData skillData, FightData fightData)
         {
-            List<AbstractDamageEvent> toAdd = new List<AbstractDamageEvent>();
+            var toAdd = new List<AbstractDamageEvent>();
             toAdd.AddRange(fightData.Logic.SpecialDamageEventProcess(_damageData, _damageTakenData, _damageDataById, fightData.FightStartLogTime, skillData));
-            HashSet<long> idsToSort = new HashSet<long>();
-            HashSet<AgentItem> dstToSort = new HashSet<AgentItem>();
-            HashSet<AgentItem> srcToSort = new HashSet<AgentItem>();
+            var idsToSort = new HashSet<long>();
+            var dstToSort = new HashSet<AgentItem>();
+            var srcToSort = new HashSet<AgentItem>();
             foreach (AbstractDamageEvent de in toAdd)
             {
-                if (_damageTakenData.TryGetValue(de.To, out var list1))
+                if (_damageTakenData.TryGetValue(de.To, out List<AbstractDamageEvent> list1))
                 {
                     list1.Add(de);
                 }
@@ -99,7 +99,7 @@ namespace LuckParser.Parser.ParsedData
                     };
                 }
                 dstToSort.Add(de.To);
-                if (_damageData.TryGetValue(de.From, out var list3))
+                if (_damageData.TryGetValue(de.From, out List<AbstractDamageEvent> list3))
                 {
                     list1.Add(de);
                 }
@@ -111,7 +111,7 @@ namespace LuckParser.Parser.ParsedData
                     };
                 }
                 srcToSort.Add(de.To);
-                if (_damageDataById.TryGetValue(de.SkillId, out var list2))
+                if (_damageDataById.TryGetValue(de.SkillId, out List<AbstractDamageEvent> list2))
                 {
                     list2.Add(de);
                 }
@@ -139,7 +139,7 @@ namespace LuckParser.Parser.ParsedData
         }
         private void SpecialCastParse(List<Player> players, SkillData skillData)
         {
-            List<AnimatedCastEvent> toAdd = new List<AnimatedCastEvent>();
+            var toAdd = new List<AnimatedCastEvent>();
             foreach (Player p in players)
             {
                 if (p.Prof == "Mirage")
@@ -148,11 +148,11 @@ namespace LuckParser.Parser.ParsedData
                     break;
                 }
             }
-            HashSet<long> castIDsToSort = new HashSet<long>();
-            HashSet<AgentItem> castAgentsToSort = new HashSet<AgentItem>();
+            var castIDsToSort = new HashSet<long>();
+            var castAgentsToSort = new HashSet<AgentItem>();
             foreach (AnimatedCastEvent cast in toAdd)
             {
-                if (_castData.TryGetValue(cast.Caster, out var list1))
+                if (_castData.TryGetValue(cast.Caster, out List<AnimatedCastEvent> list1))
                 {
                     list1.Add(cast);
                 }
@@ -164,7 +164,7 @@ namespace LuckParser.Parser.ParsedData
                     };
                 }
                 castAgentsToSort.Add(cast.Caster);
-                if (_castDataById.TryGetValue(cast.SkillId, out var list2))
+                if (_castDataById.TryGetValue(cast.SkillId, out List<AbstractCastEvent> list2))
                 {
                     list2.Add(cast);
                 }
@@ -197,7 +197,7 @@ namespace LuckParser.Parser.ParsedData
         public CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players)
         {
             _skillIds = new HashSet<long>(allCombatItems.Select(x => x.SkillID));
-            var noStateActiBuffRem = allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.None && x.IsActivation == ParseEnum.Activation.None && x.IsBuffRemove == ParseEnum.BuffRemove.None);
+            IEnumerable<CombatItem> noStateActiBuffRem = allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.None && x.IsActivation == ParseEnum.Activation.None && x.IsBuffRemove == ParseEnum.BuffRemove.None);
             // movement events
             _movementData = CombatEventFactory.CreateMovementEvents(allCombatItems.Where(x =>
                        x.IsStateChange == ParseEnum.StateChange.Position ||
@@ -211,11 +211,11 @@ namespace LuckParser.Parser.ParsedData
             List<WeaponSwapEvent> wepSwaps = CombatEventFactory.CreateWeaponSwapEvents(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.WeaponSwap).ToList(), agentData, skillData, fightData.FightStartLogTime);
             _weaponSwapData = wepSwaps.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
             _castData = castData.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
-            List<AbstractCastEvent> allCastEvents = new List<AbstractCastEvent>(castData);
+            var allCastEvents = new List<AbstractCastEvent>(castData);
             allCastEvents.AddRange(wepSwaps);
             _castDataById = allCastEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             // buff remove event
-            List<CombatItem> buffCombatEvents = allCombatItems.Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.IsBuff != 0).ToList();
+            var buffCombatEvents = allCombatItems.Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.IsBuff != 0).ToList();
             buffCombatEvents.AddRange(noStateActiBuffRem.Where(x => x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0));
             buffCombatEvents.AddRange(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.BuffInitial));
             buffCombatEvents.Sort((x, y) => x.LogTime.CompareTo(y.LogTime));
@@ -247,7 +247,7 @@ namespace LuckParser.Parser.ParsedData
 
         public List<AliveEvent> GetAliveEvents(AgentItem key)
         {
-            if (_statusEvents.AliveEvents.TryGetValue(key, out var list))
+            if (_statusEvents.AliveEvents.TryGetValue(key, out List<AliveEvent> list))
             {
                 return list;
             }
@@ -256,7 +256,7 @@ namespace LuckParser.Parser.ParsedData
 
         public List<AttackTargetEvent> GetAttackTargetEvents(AgentItem key)
         {
-            if (_statusEvents.AttackTargetEvents.TryGetValue(key, out var list))
+            if (_statusEvents.AttackTargetEvents.TryGetValue(key, out List<AttackTargetEvent> list))
             {
                 return list;
             }
@@ -265,7 +265,7 @@ namespace LuckParser.Parser.ParsedData
 
         public List<DeadEvent> GetDeadEvents(AgentItem key)
         {
-            if (_statusEvents.DeadEvents.TryGetValue(key, out var list))
+            if (_statusEvents.DeadEvents.TryGetValue(key, out List<DeadEvent> list))
             {
                 return list;
             }
@@ -274,7 +274,7 @@ namespace LuckParser.Parser.ParsedData
 
         public List<DespawnEvent> GetDespawnEvents(AgentItem key)
         {
-            if (_statusEvents.DespawnEvents.TryGetValue(key, out var list))
+            if (_statusEvents.DespawnEvents.TryGetValue(key, out List<DespawnEvent> list))
             {
                 return list;
             }
@@ -283,7 +283,7 @@ namespace LuckParser.Parser.ParsedData
 
         public List<DownEvent> GetDownEvents(AgentItem key)
         {
-            if (_statusEvents.DownEvents.TryGetValue(key, out var list))
+            if (_statusEvents.DownEvents.TryGetValue(key, out List<DownEvent> list))
             {
                 return list;
             }
@@ -292,7 +292,7 @@ namespace LuckParser.Parser.ParsedData
 
         public List<EnterCombatEvent> GetEnterCombatEvents(AgentItem key)
         {
-            if (_statusEvents.EnterCombatEvents.TryGetValue(key, out var list))
+            if (_statusEvents.EnterCombatEvents.TryGetValue(key, out List<EnterCombatEvent> list))
             {
                 return list;
             }
@@ -301,7 +301,7 @@ namespace LuckParser.Parser.ParsedData
 
         public List<ExitCombatEvent> GetExitCombatEvents(AgentItem key)
         {
-            if (_statusEvents.ExitCombatEvents.TryGetValue(key, out var list))
+            if (_statusEvents.ExitCombatEvents.TryGetValue(key, out List<ExitCombatEvent> list))
             {
                 return list;
             }
@@ -310,7 +310,7 @@ namespace LuckParser.Parser.ParsedData
 
         public List<GuildEvent> GetGuildEvents(AgentItem key)
         {
-            if (_statusEvents.GuildEvents.TryGetValue(key, out var list))
+            if (_statusEvents.GuildEvents.TryGetValue(key, out List<GuildEvent> list))
             {
                 return list;
             }
@@ -319,7 +319,7 @@ namespace LuckParser.Parser.ParsedData
 
         public List<HealthUpdateEvent> GetHealthUpdateEvents(AgentItem key)
         {
-            if (_statusEvents.HealthUpdateEvents.TryGetValue(key, out var list))
+            if (_statusEvents.HealthUpdateEvents.TryGetValue(key, out List<HealthUpdateEvent> list))
             {
                 return list;
             }
@@ -328,7 +328,7 @@ namespace LuckParser.Parser.ParsedData
 
         public List<MaxHealthUpdateEvent> GetMaxHealthUpdateEvents(AgentItem key)
         {
-            if (_statusEvents.MaxHealthUpdateEvents.TryGetValue(key, out var list))
+            if (_statusEvents.MaxHealthUpdateEvents.TryGetValue(key, out List<MaxHealthUpdateEvent> list))
             {
                 return list;
             }
@@ -342,7 +342,7 @@ namespace LuckParser.Parser.ParsedData
 
         public List<SpawnEvent> GetSpawnEvents(AgentItem key)
         {
-            if (_statusEvents.SpawnEvents.TryGetValue(key, out var list))
+            if (_statusEvents.SpawnEvents.TryGetValue(key, out List<SpawnEvent> list))
             {
                 return list;
             }
@@ -351,7 +351,7 @@ namespace LuckParser.Parser.ParsedData
 
         public List<TargetableEvent> GetTargetableEvents(AgentItem key)
         {
-            if (_statusEvents.TargetableEvents.TryGetValue(key, out var list))
+            if (_statusEvents.TargetableEvents.TryGetValue(key, out List<TargetableEvent> list))
             {
                 return list;
             }
@@ -360,7 +360,7 @@ namespace LuckParser.Parser.ParsedData
 
         public List<TeamChangeEvent> GetTeamChangeEvents(AgentItem key)
         {
-            if (_statusEvents.TeamChangeEvents.TryGetValue(key, out var list))
+            if (_statusEvents.TeamChangeEvents.TryGetValue(key, out List<TeamChangeEvent> list))
             {
                 return list;
             }

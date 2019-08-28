@@ -1,7 +1,7 @@
-﻿using LuckParser.Parser;
+﻿using System.Collections.Generic;
+using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
 
 namespace LuckParser.EIData
 {
@@ -34,7 +34,7 @@ namespace LuckParser.EIData
                 List<AbstractDamageEvent> combatitems = combatData.GetDamageTakenData(a);
                 foreach (AbstractDamageEvent c in combatitems)
                 {
-                    if (c is DirectDamageEvent && c.HasHit && Keep(c, log) )
+                    if (c is DirectDamageEvent && c.HasHit && Keep(c, log))
                     {
                         foreach (Player p in log.PlayerList)
                         {
@@ -44,7 +44,7 @@ namespace LuckParser.EIData
                             }
                         }
                     }
-                    
+
                 }
             }
         }

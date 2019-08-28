@@ -1,5 +1,5 @@
-﻿using LuckParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.EIData
 {
@@ -84,12 +84,12 @@ namespace LuckParser.EIData
 
         public void Sort()
         {
-            foreach (var pair in this)
+            foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in this)
             {
                 pair.Value.Sort(CompareApplicationType);
             }
         }
-        
+
     }
 
 }

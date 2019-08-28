@@ -1,10 +1,10 @@
-﻿using LuckParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using LuckParser.EIData;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace LuckParser.Logic
 {
@@ -12,7 +12,7 @@ namespace LuckParser.Logic
     {
         public Golem(ushort id) : base(id)
         {
-            Mode = ParseMode.Golem;  
+            Mode = ParseMode.Golem;
             switch (id)
             {
                 case 16202:

@@ -1,16 +1,16 @@
-﻿using LuckParser.EIData;
+﻿using System.Collections.Generic;
+using System.Linq;
+using LuckParser.EIData;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace LuckParser.Builders.HtmlModels
 {
     public class DmgDistributionDto
-    {     
+    {
         public long ContributedDamage;
         public long ContributedShieldDamage;
-        public long TotalDamage;      
+        public long TotalDamage;
         public List<object[]> Distribution;
 
         public static object[] GetDMGDtoItem(KeyValuePair<SkillItem, List<AbstractDamageEvent>> entry, Dictionary<SkillItem, List<AbstractCastEvent>> castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons, BoonsContainer boons)
@@ -32,9 +32,21 @@ namespace LuckParser.Builders.HtmlModels
                 if (curdmg < mindamage) { mindamage = curdmg; }
                 if (curdmg > maxdamage) { maxdamage = curdmg; }
                 hits++;
-                if (dl.HasCrit) crit++;
-                if (dl.HasGlanced) glance++;
-                if (dl.IsFlanking) flank++;
+                if (dl.HasCrit)
+                {
+                    crit++;
+                }
+
+                if (dl.HasGlanced)
+                {
+                    glance++;
+                }
+
+                if (dl.IsFlanking)
+                {
+                    flank++;
+                }
+
                 shieldDamage += dl.ShieldDamage;
             }
             if (IsIndirectDamage)
@@ -48,14 +60,17 @@ namespace LuckParser.Builders.HtmlModels
                     else
                     {
                         SkillItem aux = entry.Key;
-                        Boon auxBoon = new Boon(aux.Name, entry.Key.ID, aux.Icon);
+                        var auxBoon = new Boon(aux.Name, entry.Key.ID, aux.Icon);
                         usedBoons.Add(auxBoon.ID, auxBoon);
                     }
                 }
             }
             else
             {
-                if (!usedSkills.ContainsKey(entry.Key.ID)) usedSkills.Add(entry.Key.ID, entry.Key);
+                if (!usedSkills.ContainsKey(entry.Key.ID))
+                {
+                    usedSkills.Add(entry.Key.ID, entry.Key);
+                }
             }
 
             int casts = 0, timeswasted = 0, timessaved = 0;

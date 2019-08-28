@@ -1,10 +1,10 @@
-﻿using LuckParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using LuckParser.EIData;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace LuckParser.Logic
 {
@@ -58,14 +58,14 @@ namespace LuckParser.Logic
                             (-27648, -9216, 27648, 12288),
                             (11774, 4480, 14078, 5376));
         }
-        
+
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Cairn:
-                    List<AbstractCastEvent> swordSweep = cls.Where(x => x.SkillId == 37631).ToList();
+                    var swordSweep = cls.Where(x => x.SkillId == 37631).ToList();
                     foreach (AbstractCastEvent c in swordSweep)
                     {
                         int start = (int)c.Time;
@@ -82,7 +82,7 @@ namespace LuckParser.Logic
                             replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, initialDirection, width / 2, 360, (start + preCastTime + initialHitDuration, start + preCastTime + initialHitDuration + sweepDuration), "rgba(150, 0, 180, 0.5)", new AgentConnector(target)));
                         }
                     }
-                    List<AbstractCastEvent> wave = cls.Where(x => x.SkillId == 37910).ToList();
+                    var wave = cls.Where(x => x.SkillId == 37910).ToList();
                     foreach (AbstractCastEvent c in wave)
                     {
                         int start = (int)c.Time;
@@ -93,8 +93,8 @@ namespace LuckParser.Logic
                         int thirdRadius = 1000;
                         int fourthRadius = 1300;
                         replay.Actors.Add(new DoughnutActor(true, 0, firstRadius, secondRadius, (start + preCastTime, start + preCastTime + duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
-                        replay.Actors.Add(new DoughnutActor(true, 0, secondRadius, thirdRadius, (start + preCastTime + 2*duration, start + preCastTime + 3*duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
-                        replay.Actors.Add(new DoughnutActor(true, 0, thirdRadius, fourthRadius, (start + preCastTime + 5*duration, start + preCastTime + 6*duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
+                        replay.Actors.Add(new DoughnutActor(true, 0, secondRadius, thirdRadius, (start + preCastTime + 2 * duration, start + preCastTime + 3 * duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
+                        replay.Actors.Add(new DoughnutActor(true, 0, thirdRadius, fourthRadius, (start + preCastTime + 5 * duration, start + preCastTime + 6 * duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
                     }
                     break;
                 default:
@@ -105,7 +105,7 @@ namespace LuckParser.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // shared agony
-            List<AbstractBuffEvent> agony = log.CombatData.GetBoonData(38049).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
+            var agony = log.CombatData.GetBoonData(38049).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
             foreach (AbstractBuffEvent c in agony)
             {
                 int agonyStart = (int)c.Time;
@@ -118,7 +118,7 @@ namespace LuckParser.Logic
         {
             return combatData.GetSkills().Contains(38098) ? 1 : 0;
         }
-        
+
         public override string GetFightName()
         {
             return "Cairn";

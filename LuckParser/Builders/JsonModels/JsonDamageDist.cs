@@ -1,6 +1,6 @@
-﻿using LuckParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.Builders.JsonModels
 {
@@ -58,7 +58,7 @@ namespace LuckParser.Builders.JsonModels
             TotalDamage = list.Sum(x => x.Damage);
             Min = list.Min(x => x.Damage);
             Max = list.Max(x => x.Damage);
-            Flank = indirectDamage ? 0: list.Count(x => x.IsFlanking);
+            Flank = indirectDamage ? 0 : list.Count(x => x.IsFlanking);
             Crit = indirectDamage ? 0 : list.Count(x => x.HasCrit);
             Glance = indirectDamage ? 0 : list.Count(x => x.HasGlanced);
             ShieldDamage = list.Sum(x => x.ShieldDamage);

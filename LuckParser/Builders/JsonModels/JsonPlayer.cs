@@ -4,7 +4,7 @@ using static LuckParser.Builders.JsonModels.JsonStatistics;
 namespace LuckParser.Builders.JsonModels
 {
     public class JsonPlayer : JsonActor
-    {      
+    {
         /// <summary>
         /// Account name of the player
         /// </summary>

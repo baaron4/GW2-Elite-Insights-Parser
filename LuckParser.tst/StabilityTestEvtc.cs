@@ -1,20 +1,20 @@
-﻿using System;
-using NUnit.Framework;
+﻿using LuckParser.Exceptions;
 using LuckParser.Parser;
-using System.IO;
-using LuckParser.Exceptions;
-using System.Reflection;
-using System.Collections.Generic;
-using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace LuckParser.tst
 {
     [TestFixture]
     public class StabilityTestEvtc
     {
-        private bool Loop(List<string> failed, List<string> messages,  string file)
+        private bool Loop(List<string> failed, List<string> messages, string file)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace LuckParser.tst
                 File.Delete(logName);
             }
 
-            Dictionary<string, string> dict = new Dictionary<string, string>();
+            var dict = new Dictionary<string, string>();
             for (int i = 0; i < failed.Count; i++)
             {
                 string evtcName = failed[i].Split('\\').Last();
@@ -69,11 +69,11 @@ namespace LuckParser.tst
                 dict[evtcName] = messages[i];
             }
 
-            using (FileStream fs = new FileStream(logName, FileMode.Create, FileAccess.Write))
+            using (var fs = new FileStream(logName, FileMode.Create, FileAccess.Write))
             {
-                using (StreamWriter sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
+                using (var sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
                 {
-                    DefaultContractResolver contractResolver = new DefaultContractResolver
+                    var contractResolver = new DefaultContractResolver
                     {
                         NamingStrategy = new CamelCaseNamingStrategy()
                     };
@@ -99,9 +99,9 @@ namespace LuckParser.tst
 
             Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
 
-            List<string> failed = new List<string>();
-            List<string> messages = new List<string>();
-            List<string> toCheck = Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories).ToList();
+            var failed = new List<string>();
+            var messages = new List<string>();
+            var toCheck = Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories).ToList();
             foreach (string file in toCheck)
             {
                 Loop(failed, messages, file);
@@ -118,9 +118,9 @@ namespace LuckParser.tst
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "../../../EvtcLogs/StabilityTest";
 
             Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
-            List<string> failed = new List<string>();
-            List<string> messages = new List<string>();
-            List<string> toCheck = Directory.EnumerateFiles(testLocation, "*.evtc.zip", SearchOption.AllDirectories).ToList();
+            var failed = new List<string>();
+            var messages = new List<string>();
+            var toCheck = Directory.EnumerateFiles(testLocation, "*.evtc.zip", SearchOption.AllDirectories).ToList();
             foreach (string file in toCheck)
             {
                 Loop(failed, messages, file);
@@ -138,9 +138,9 @@ namespace LuckParser.tst
 
             Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
 
-            List<string> failed = new List<string>();
-            List<string> messages = new List<string>();
-            List<string> toCheck = Directory.EnumerateFiles(testLocation, "*.zevtc", SearchOption.AllDirectories).ToList();
+            var failed = new List<string>();
+            var messages = new List<string>();
+            var toCheck = Directory.EnumerateFiles(testLocation, "*.zevtc", SearchOption.AllDirectories).ToList();
             foreach (string file in toCheck)
             {
                 Loop(failed, messages, file);
@@ -156,10 +156,10 @@ namespace LuckParser.tst
         {
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "../../../EvtcLogs/Crashes/Logs";
 
-            List<string> failed = new List<string>();
+            var failed = new List<string>();
             int failedCount = 0;
-            List<string> messages = new List<string>();
-            List<string> toCheck = Directory.EnumerateFiles(testLocation, "*.zevtc", SearchOption.AllDirectories).ToList();
+            var messages = new List<string>();
+            var toCheck = Directory.EnumerateFiles(testLocation, "*.zevtc", SearchOption.AllDirectories).ToList();
             foreach (string file in toCheck)
             {
                 if (Loop(failed, messages, file))

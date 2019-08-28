@@ -1,6 +1,6 @@
-﻿using LuckParser.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Models;
 
 namespace LuckParser.Builders.JsonModels
 {

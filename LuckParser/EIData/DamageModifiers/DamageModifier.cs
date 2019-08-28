@@ -1,16 +1,17 @@
-﻿using LuckParser.Parser;
-using LuckParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData.CombatEvents;
 using static LuckParser.Models.Statistics;
 
 namespace LuckParser.EIData
 {
     public abstract class DamageModifier
     {
-        public enum DamageType { All, Power, Condition};
+        public enum DamageType { All, Power, Condition };
         public enum DamageSource { All, NoPets };
-        public enum ModifierSource {
+        public enum ModifierSource
+        {
             CommonBuff,
             ItemBuff,
             Necromancer, Reaper, Scourge,
@@ -98,7 +99,7 @@ namespace LuckParser.EIData
             switch (_compareType)
             {
                 case DamageType.All:
-                    return _dmgSrc == DamageSource.All ? damageData.Damage  : damageData.ActorDamage;
+                    return _dmgSrc == DamageSource.All ? damageData.Damage : damageData.ActorDamage;
                 case DamageType.Condition:
                     return _dmgSrc == DamageSource.All ? damageData.CondiDamage : damageData.ActorCondiDamage;
                 case DamageType.Power:

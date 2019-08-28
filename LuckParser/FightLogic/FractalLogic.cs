@@ -1,17 +1,17 @@
-﻿using LuckParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using LuckParser.EIData;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace LuckParser.Logic
 {
     public abstract class FractalLogic : FightLogic
     {
-        protected FractalLogic(ushort triggerID) : base (triggerID)
-        { 
+        protected FractalLogic(ushort triggerID) : base(triggerID)
+        {
             Mode = ParseMode.Fractal;
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -53,7 +53,7 @@ namespace LuckParser.Logic
             };
         }
 
-        protected void SetSuccessByBuffCount(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents, Target target, long buffID, int count)
+        protected void SetSuccessByBuffCount(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, Target target, long buffID, int count)
         {
             if (target == null)
             {
@@ -88,7 +88,7 @@ namespace LuckParser.Logic
                 }
                 else
                 {
-                    SetSuccessByDeath(combatData, fightData,playerAgents, true, TriggerID);
+                    SetSuccessByDeath(combatData, fightData, playerAgents, true, TriggerID);
                     if (fightData.Success)
                     {
                         fightData.SetSuccess(true, Math.Min(fightData.FightEndLogTime, fightData.ToLogSpace(lastDamageTaken.Time)));

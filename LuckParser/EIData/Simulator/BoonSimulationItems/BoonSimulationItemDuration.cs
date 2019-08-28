@@ -1,8 +1,8 @@
 ﻿using System;
-using LuckParser.Parser;
 using System.Collections.Generic;
-using static LuckParser.EIData.BoonSimulator;
+using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
+using static LuckParser.EIData.BoonSimulator;
 
 namespace LuckParser.EIData
 {

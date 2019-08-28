@@ -23,7 +23,7 @@ namespace LuckParser.Parser.ParsedData
 
         public AgentItem AddCustomAgent(long start, long end, AgentItem.AgentType type, string name, string prof, ushort ID, uint toughness = 0, uint healing = 0, uint condition = 0, uint concentration = 0, uint hitboxWidth = 0, uint hitboxHeight = 0)
         {
-            Random rnd = new Random();
+            var rnd = new Random();
             ulong agentValue = 0;
             while (AgentValues.Contains(agentValue) || agentValue == 0)
             {
@@ -34,7 +34,7 @@ namespace LuckParser.Parser.ParsedData
             {
                 instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
             }
-            AgentItem agent = new AgentItem(agentValue, name, prof, ID, type, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight)
+            var agent = new AgentItem(agentValue, name, prof, ID, type, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight)
             {
                 InstID = instID,
                 LastAwareLogTime = end,
@@ -72,7 +72,7 @@ namespace LuckParser.Parser.ParsedData
         {
             if (id != 0)
             {
-                if (_allAgentsByID.TryGetValue(id, out var list))
+                if (_allAgentsByID.TryGetValue(id, out List<AgentItem> list))
                 {
                     return list;
                 }
@@ -84,7 +84,7 @@ namespace LuckParser.Parser.ParsedData
         {
             if (instid != 0)
             {
-                if (_allAgentsByInstID.TryGetValue(instid, out var list))
+                if (_allAgentsByInstID.TryGetValue(instid, out List<AgentItem> list))
                 {
                     return list;
                 }
@@ -96,7 +96,7 @@ namespace LuckParser.Parser.ParsedData
         {
             if (instid != 0)
             {
-                if (_allAgentsByInstID.TryGetValue(instid, out var list))
+                if (_allAgentsByInstID.TryGetValue(instid, out List<AgentItem> list))
                 {
                     AgentItem a = list.FirstOrDefault(x => x.FirstAwareLogTime <= logTime && x.LastAwareLogTime >= logTime);
                     if (a != null)
@@ -108,7 +108,7 @@ namespace LuckParser.Parser.ParsedData
             }
             return GeneralHelper.UnknownAgent;
         }
-        
+
         public void OverrideID(ushort ID, AgentItem agentItem)
         {
             _allAgentsList.RemoveAll(x => x.ID == ID);
@@ -122,12 +122,12 @@ namespace LuckParser.Parser.ParsedData
             _allAgentsByID = _allAgentsList.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
             _allAgentsByInstID = _allAgentsList.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
             _allAgentsByType = _allAgentsList.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
-            _allAgentsByName= _allAgentsList.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList());
+            _allAgentsByName = _allAgentsList.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList());
         }
-        
+
         public List<AgentItem> GetAgentByType(AgentItem.AgentType type)
         {
-            if (_allAgentsByType.TryGetValue(type, out var list))
+            if (_allAgentsByType.TryGetValue(type, out List<AgentItem> list))
             {
                 return list;
             }

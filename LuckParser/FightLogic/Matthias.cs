@@ -1,9 +1,9 @@
-﻿using LuckParser.EIData;
-using LuckParser.Parser;
-using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LuckParser.EIData;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData.CombatEvents;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic
@@ -102,7 +102,7 @@ namespace LuckParser.Logic
             {
                 phases.Add(new PhaseData(0, fightDuration));
             }
-            string[] namesMat = new [] { "Ice Phase", "Fire Phase", "Storm Phase", "Abomination Phase" };
+            string[] namesMat = new[] { "Ice Phase", "Fire Phase", "Storm Phase", "Abomination Phase" };
             for (int i = 1; i < phases.Count; i++)
             {
                 phases[i].Name = namesMat[i - 1];
@@ -128,7 +128,7 @@ namespace LuckParser.Logic
         {
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
-            switch(mob.ID)
+            switch (mob.ID)
             {
                 case (ushort)Storm:
                     replay.Actors.Add(new CircleActor(false, 0, 260, (start, end), "rgba(0, 80, 255, 0.5)", new AgentConnector(mob)));
@@ -154,11 +154,11 @@ namespace LuckParser.Logic
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Matthias:
-                    List<AbstractCastEvent> humanShield = cls.Where(x => x.SkillId == 34468).ToList();
-                    List<int> humanShieldRemoval = log.CombatData.GetBoonData(34518).Where(x => x is BuffRemoveAllEvent).Select(x => (int)x.Time).Distinct().ToList();
-                    for (var i = 0; i < humanShield.Count; i++)
+                    var humanShield = cls.Where(x => x.SkillId == 34468).ToList();
+                    var humanShieldRemoval = log.CombatData.GetBoonData(34518).Where(x => x is BuffRemoveAllEvent).Select(x => (int)x.Time).Distinct().ToList();
+                    for (int i = 0; i < humanShield.Count; i++)
                     {
-                        var shield = humanShield[i];
+                        AbstractCastEvent shield = humanShield[i];
                         if (i < humanShieldRemoval.Count)
                         {
                             int removal = humanShieldRemoval[i];
@@ -169,11 +169,11 @@ namespace LuckParser.Logic
                             replay.Actors.Add(new CircleActor(true, 0, 250, ((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
                         }
                     }
-                    List<AbstractCastEvent> aboShield = cls.Where(x => x.SkillId == 34510).ToList();
-                    List<int> aboShieldRemoval = log.CombatData.GetBoonData(34376).Where(x => x is BuffRemoveAllEvent).Select(x => (int)x.Time).Distinct().ToList();
-                    for (var i = 0; i < aboShield.Count; i++)
+                    var aboShield = cls.Where(x => x.SkillId == 34510).ToList();
+                    var aboShieldRemoval = log.CombatData.GetBoonData(34376).Where(x => x is BuffRemoveAllEvent).Select(x => (int)x.Time).Distinct().ToList();
+                    for (int i = 0; i < aboShield.Count; i++)
                     {
-                        var shield = aboShield[i];
+                        AbstractCastEvent shield = aboShield[i];
                         if (i < aboShieldRemoval.Count)
                         {
                             int removal = aboShieldRemoval[i];
@@ -184,7 +184,7 @@ namespace LuckParser.Logic
                             replay.Actors.Add(new CircleActor(true, 0, 250, ((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
                         }
                     }
-                    List<AbstractCastEvent> rageShards = cls.Where(x => x.SkillId == 34404 || x.SkillId == 34411).ToList();
+                    var rageShards = cls.Where(x => x.SkillId == 34404 || x.SkillId == 34411).ToList();
                     foreach (AbstractCastEvent c in rageShards)
                     {
                         int start = (int)c.Time;
@@ -192,14 +192,14 @@ namespace LuckParser.Logic
                         replay.Actors.Add(new CircleActor(false, 0, 300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                         replay.Actors.Add(new CircleActor(true, end, 300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     }
-                    List<AbstractCastEvent> hadouken = cls.Where(x => x.SkillId == 34371 || x.SkillId == 34380).ToList();
+                    var hadouken = cls.Where(x => x.SkillId == 34371 || x.SkillId == 34380).ToList();
                     foreach (AbstractCastEvent c in hadouken)
                     {
                         int start = (int)c.Time;
                         int preCastTime = 1000;
                         int duration = 750;
                         int width = 4000; int height = 130;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start+1000);
+                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null)
                         {
                             int direction = (int)(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI);
@@ -207,11 +207,11 @@ namespace LuckParser.Logic
                             replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, direction, width / 2, (start + preCastTime, start + preCastTime + duration), "rgba(255, 0, 0, 0.7)", new AgentConnector(target)));
                         }
                     }
-                        break;
+                    break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
-            
+
         }
 
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
@@ -278,15 +278,15 @@ namespace LuckParser.Logic
                 }
             }
             // Bombs
-            List<AbstractBuffEvent> zealousBenediction = log.CombatData.GetBoonData(34511).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            var zealousBenediction = log.CombatData.GetBoonData(34511).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent c in zealousBenediction)
             {
-                int zealousStart = (int)c.Time ;
+                int zealousStart = (int)c.Time;
                 int zealousEnd = zealousStart + 5000;
                 replay.Actors.Add(new CircleActor(true, 0, 180, (zealousStart, zealousEnd), "rgba(200, 150, 0, 0.2)", new AgentConnector(p)));
                 replay.Actors.Add(new CircleActor(true, zealousEnd, 180, (zealousStart, zealousEnd), "rgba(200, 150, 0, 0.4)", new AgentConnector(p)));
             }
         }
-       
+
     }
 }

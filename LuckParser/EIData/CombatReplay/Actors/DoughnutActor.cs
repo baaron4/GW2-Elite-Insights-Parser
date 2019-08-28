@@ -22,7 +22,7 @@ namespace LuckParser.EIData
 
         public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
-            DoughnutSerializable aux = new DoughnutSerializable
+            var aux = new DoughnutSerializable
             {
                 Type = "Doughnut",
                 OuterRadius = OuterRadius,

@@ -1,7 +1,7 @@
-﻿using LuckParser.Parser;
-using LuckParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData.CombatEvents;
 using static LuckParser.Models.Statistics;
 
 namespace LuckParser.EIData
@@ -80,14 +80,14 @@ namespace LuckParser.EIData
                 {
                     continue;
                 }
-                if (!dataTarget.TryGetValue(target, out var extra))
+                if (!dataTarget.TryGetValue(target, out Dictionary<string, List<DamageModifierData>> extra))
                 {
                     dataTarget[target] = new Dictionary<string, List<DamageModifierData>>();
                 }
                 Dictionary<string, List<DamageModifierData>> dict = dataTarget[target];
-                if (!dict.TryGetValue(Name, out var list))
+                if (!dict.TryGetValue(Name, out List<DamageModifierData> list))
                 {
-                    List<DamageModifierData> extraDataList = new List<DamageModifierData>();
+                    var extraDataList = new List<DamageModifierData>();
                     for (int i = 0; i < phases.Count; i++)
                     {
                         int totalDamage = GetTotalDamage(p, log, target, i);

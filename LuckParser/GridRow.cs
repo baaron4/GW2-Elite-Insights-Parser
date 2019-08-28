@@ -11,7 +11,7 @@ namespace LuckParser
         Pending = 4,
         ClearOnComplete = 5
     }
-    
+
 
     public class GridRow
     {
