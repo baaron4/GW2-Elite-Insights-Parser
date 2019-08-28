@@ -10,20 +10,20 @@ namespace LuckParser.Builders.JsonModels
         /// <summary>
         /// Number of stacks
         /// </summary>
-        public int Stack;
+        public int Stack { get; set; }
         /// <summary>
         /// Duration of the consumable
         /// </summary>
-        public int Duration;
+        public int Duration { get; set; }
         /// <summary>
         /// Time of application of the consumable
         /// </summary>
-        public long Time;
+        public long Time { get; set; }
         /// <summary>
         /// ID of the consumable
         /// </summary>
         /// <seealso cref="JsonLog.BuffMap"/>
-        public long Id;
+        public long Id { get; set; }
 
         public JsonConsumable(Statistics.Consumable food)
         {

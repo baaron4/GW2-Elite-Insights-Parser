@@ -21,6 +21,7 @@
     <Rule Id="CA1801" Action="Info" />
     <Rule Id="CA1812" Action="None" />
     <Rule Id="CA1819" Action="Hidden" />
+    <Rule Id="CA1710" Action="Info" />
   </Rules>
   <Rules AnalyzerId="Microsoft.NetCore.Analyzers" RuleNamespace="Microsoft.NetCore.Analyzers">
     <Rule Id="CA1303" Action="None" />

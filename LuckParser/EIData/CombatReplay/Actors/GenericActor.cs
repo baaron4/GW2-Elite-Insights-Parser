@@ -5,7 +5,7 @@ namespace LuckParser.EIData
     public abstract class GenericActor
     {
         public (int start, int end) Lifespan { get; }
-        protected Connector ConnectedTo;
+        protected Connector ConnectedTo { get; set; }
 
         protected GenericActor((int start, int end) lifespan, Connector connector)
         {

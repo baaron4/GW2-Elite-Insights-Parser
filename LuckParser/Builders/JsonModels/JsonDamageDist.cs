@@ -12,45 +12,45 @@ namespace LuckParser.Builders.JsonModels
         /// <summary>
         /// Total damage done
         /// </summary>
-        public int TotalDamage;
+        public int TotalDamage { get; set; }
         /// <summary>
         /// Minimum damage done
         /// </summary>
-        public int Min;
+        public int Min { get; set; }
         /// <summary>
         /// Maximum damage done
         /// </summary>
-        public int Max;
+        public int Max { get; set; }
         /// <summary>
         /// Number of hits
         /// </summary>
-        public int Hits;
+        public int Hits { get; set; }
         /// <summary>
         /// Number of crits
         /// </summary>
-        public int Crit;
+        public int Crit { get; set; }
         /// <summary>
         /// Number of glances
         /// </summary>
-        public int Glance;
+        public int Glance { get; set; }
         /// <summary>
         /// Number of flanks
         /// </summary>
-        public int Flank;
+        public int Flank { get; set; }
         /// <summary>
         /// Damage done against barrier, not necessarily included in total damage
         /// </summary>
-        public int ShieldDamage;
+        public int ShieldDamage { get; set; }
         /// <summary>
         /// ID of the damaging skill
         /// </summary>
         /// <seealso cref="JsonLog.SkillMap"/>
         /// <seealso cref="JsonLog.BuffMap"/>
-        public long Id;
+        public long Id { get; set; }
         /// <summary>
         /// True if indirect damage
         /// </summary>
-        public bool IndirectDamage;
+        public bool IndirectDamage { get; set; }
 
         public JsonDamageDist(List<AbstractDamageEvent> list, bool indirectDamage, long id)
         {

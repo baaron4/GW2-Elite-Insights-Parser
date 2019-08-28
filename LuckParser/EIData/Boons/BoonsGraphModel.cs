@@ -49,7 +49,7 @@ namespace LuckParser.EIData
             }
         }
 
-        public readonly Boon Boon;
+        public Boon Boon { get; }
         public List<Segment> BoonChart { get; private set; } = new List<Segment>();
         private readonly List<SegmentWithSources> _boonChartWithSource;
 

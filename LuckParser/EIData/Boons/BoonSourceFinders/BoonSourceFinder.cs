@@ -10,11 +10,11 @@ namespace LuckParser.EIData
     {
         private List<AbstractCastEvent> _extensionSkills = null;
         private readonly HashSet<long> _boonIds = null;
-        protected HashSet<long> ExtensionIDS = new HashSet<long>();
-        protected Dictionary<long, HashSet<long>> DurationToIDs = new Dictionary<long, HashSet<long>>();
+        protected HashSet<long> ExtensionIDS { get; set; } = new HashSet<long>();
+        protected Dictionary<long, HashSet<long>> DurationToIDs { get; set; } = new Dictionary<long, HashSet<long>>();
         // non trackable times
-        protected long EssenceOfSpeed;
-        protected long ImbuedMelodies;
+        protected long EssenceOfSpeed { get; set; }
+        protected long ImbuedMelodies { get; set; }
 
         protected BoonSourceFinder(HashSet<long> boonIds)
         {

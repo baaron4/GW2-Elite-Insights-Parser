@@ -11,25 +11,25 @@ namespace LuckParser.Builders.JsonModels
         /// <summary>
         /// Start time of the phase
         /// </summary>
-        public long Start;
+        public long Start { get; set; }
         /// <summary>
         /// End time of the phase
         /// </summary>
-        public long End;
+        public long End { get; set; }
         /// <summary>
         /// Name of the phase
         /// </summary>
-        public string Name;
+        public string Name { get; set; }
         /// <summary>
         /// Index of targets tracked during the phase
         /// </summary>
         /// <seealso cref="JsonLog.Targets"/>
-        public List<int> Targets;
+        public List<int> Targets { get; set; }
         /// <summary>
         /// Index of sub phases
         /// </summary>
         /// <seealso cref="JsonLog.Phases"/>
-        public List<int> SubPhases;
+        public List<int> SubPhases { get; set; }
 
         public JsonPhase(PhaseData phase)
         {

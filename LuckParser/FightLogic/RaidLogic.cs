@@ -9,7 +9,7 @@ namespace LuckParser.Logic
     {
         protected enum FallBackMethod { None, Death, CombatExit }
 
-        protected FallBackMethod GenericFallBackMethod = FallBackMethod.Death;
+        protected FallBackMethod GenericFallBackMethod { get; set; } = FallBackMethod.Death;
 
         protected RaidLogic(ushort triggerID) : base(triggerID)
         {

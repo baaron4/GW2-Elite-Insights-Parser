@@ -15,20 +15,20 @@ namespace LuckParser.Builders.JsonModels
             /// <summary>
             /// Time a which the event happened
             /// </summary>
-            public long Time;
+            public long Time { get; set; }
             /// <summary>
             /// The actor who was hit by the mechanic
             /// </summary>
-            public string Actor;
+            public string Actor { get; set; }
         }
 
         /// <summary>
         /// List of mechanics application
         /// </summary>
-        public List<JsonMechanic> MechanicsData;
+        public List<JsonMechanic> MechanicsData { get; set; }
         /// <summary>
         /// Name of the mechanic
         /// </summary>
-        public string Name;
+        public string Name { get; set; }
     }
 }

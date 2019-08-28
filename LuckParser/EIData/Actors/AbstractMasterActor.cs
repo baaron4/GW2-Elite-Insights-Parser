@@ -20,7 +20,7 @@ namespace LuckParser.EIData
         // Minions
         private Dictionary<string, MinionsList> _minions;
         // Replay
-        protected CombatReplay CombatReplay;
+        protected CombatReplay CombatReplay { get; set; }
         // Statistics
         private List<FinalDPS> _dpsAll;
 
