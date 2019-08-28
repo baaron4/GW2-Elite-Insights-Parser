@@ -23,7 +23,7 @@ namespace LuckParser.EIData
 
         public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
-            RectangleSerializable aux = new RectangleSerializable
+            var aux = new RectangleSerializable
             {
                 Type = "Rectangle",
                 Width = Width,

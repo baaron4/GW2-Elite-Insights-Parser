@@ -1,11 +1,11 @@
-﻿using LuckParser.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using static LuckParser.Parser.ParseEnum.TrashIDS;
-using LuckParser.Parser.ParsedData.CombatEvents;
-using LuckParser.Parser.ParsedData;
 using LuckParser.EIData;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData;
+using LuckParser.Parser.ParsedData.CombatEvents;
+using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic
 {
@@ -54,7 +54,7 @@ namespace LuckParser.Logic
                             (19072, 15484, 20992, 16508));
         }
 
-        private void ComputeFightPhases(Target mainTarget, List<PhaseData> phases, ParsedLog log, List<AbstractCastEvent> castLogs, long fightDuration, long start)
+        private void ComputeFightPhases(List<PhaseData> phases, List<AbstractCastEvent> castLogs, long fightDuration, long start)
         {
             AbstractCastEvent shield = castLogs.Find(x => x.SkillId == 47396);
             if (shield != null)
@@ -76,13 +76,13 @@ namespace LuckParser.Logic
         private List<PhaseData> GetInBetweenSoulSplits(ParsedLog log, Target dhuum, long mainStart, long mainEnd, bool hasRitual)
         {
             List<AbstractCastEvent> cls = dhuum.GetCastLogs(log, 0, log.FightData.FightDuration);
-            List<AbstractCastEvent> cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
-            List<AbstractCastEvent> gDeathmark = cls.Where(x => x.SkillId == 48210).ToList();
+            var cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
+            var gDeathmark = cls.Where(x => x.SkillId == 48210).ToList();
             if (gDeathmark.Count < cataCycle.Count)
             {
                 return new List<PhaseData>();
             }
-            List<PhaseData> phases = new List<PhaseData>();
+            var phases = new List<PhaseData>();
             long start = mainStart;
             long end = 0;
             int i = 1;
@@ -129,7 +129,7 @@ namespace LuckParser.Logic
             if (dhuumCast.Count > 0)
             {
                 namesDh = new[] { "Main Fight", "Ritual" };
-                ComputeFightPhases(mainTarget, phases, log, castLogs, fightDuration, 0);
+                ComputeFightPhases(phases, castLogs, fightDuration, 0);
                 _isBugged = true;
             }
             else
@@ -139,7 +139,7 @@ namespace LuckParser.Logic
                 {
                     long end = invulDhuum.Time;
                     phases.Add(new PhaseData(0, end));
-                    ComputeFightPhases(mainTarget, phases, log, castLogs, fightDuration, end + 1);
+                    ComputeFightPhases(phases, castLogs, fightDuration, end + 1);
                 }
                 else
                 {
@@ -186,7 +186,7 @@ namespace LuckParser.Logic
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Dhuum:
-                    List<AbstractCastEvent> deathmark = cls.Where(x => x.SkillId == 48176).ToList();
+                    var deathmark = cls.Where(x => x.SkillId == 48176).ToList();
                     AbstractCastEvent majorSplit = cls.Find(x => x.SkillId == 47396);
                     foreach (AbstractCastEvent c in deathmark)
                     {
@@ -205,7 +205,7 @@ namespace LuckParser.Logic
                         Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 3000);
                         if (facing != null && targetPosition != null)
                         {
-                            Point3D position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z, targetPosition.Time);
+                            var position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z, targetPosition.Time);
                             replay.Actors.Add(new CircleActor(true, zoneActive, radius, (start, zoneActive), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleActor(false, 0, radius, (start, zoneActive), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleActor(true, 0, radius, (zoneActive, zoneDeadly), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
@@ -213,7 +213,7 @@ namespace LuckParser.Logic
 
                         }
                     }
-                    List<AbstractCastEvent> cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
+                    var cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
                     foreach (AbstractCastEvent c in cataCycle)
                     {
                         int start = (int)c.Time;
@@ -221,7 +221,7 @@ namespace LuckParser.Logic
                         replay.Actors.Add(new CircleActor(true, end, 300, (start, end), "rgba(255, 150, 0, 0.7)", new AgentConnector(target)));
                         replay.Actors.Add(new CircleActor(true, 0, 300, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
                     }
-                    List<AbstractCastEvent> slash = cls.Where(x => x.SkillId == 47561).ToList();
+                    var slash = cls.Where(x => x.SkillId == 47561).ToList();
                     foreach (AbstractCastEvent c in slash)
                     {
                         int start = (int)c.Time;
@@ -288,7 +288,7 @@ namespace LuckParser.Logic
                         }
                         int multiplier = 210000;
                         int gStart = _greenStart + _reapersSeen * 30000;
-                        List<int> greens = new List<int>() {
+                        var greens = new List<int>() {
                             gStart,
                             gStart + multiplier,
                             gStart + 2 * multiplier
@@ -326,7 +326,7 @@ namespace LuckParser.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // spirit transform
-            List<AbstractBuffEvent> spiritTransform = log.CombatData.GetBoonData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            var spiritTransform = log.CombatData.GetBoonData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
             if (mainTarget == null)
             {
@@ -367,7 +367,7 @@ namespace LuckParser.Logic
                 }
             }
             // shackles connection
-            List<AbstractBuffEvent> shackles = GetFilteredList(log.CombatData, 47335, p, true).Concat(GetFilteredList(log.CombatData, 48591, p, true)).ToList();
+            var shackles = GetFilteredList(log.CombatData, 47335, p, true).Concat(GetFilteredList(log.CombatData, 48591, p, true)).ToList();
             int shacklesStart = 0;
             Player shacklesTarget = null;
             foreach (AbstractBuffEvent c in shackles)

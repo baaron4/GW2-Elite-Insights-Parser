@@ -1,8 +1,8 @@
-﻿using LuckParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using LuckParser.EIData;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
-using System;
-using System.Collections.Generic;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic

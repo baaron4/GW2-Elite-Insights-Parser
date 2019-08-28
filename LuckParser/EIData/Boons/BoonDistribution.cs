@@ -1,6 +1,6 @@
-﻿using LuckParser.Parser.ParsedData;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Parser.ParsedData;
 
 namespace LuckParser.EIData
 {

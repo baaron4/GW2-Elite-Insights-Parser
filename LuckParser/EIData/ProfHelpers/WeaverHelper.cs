@@ -1,8 +1,8 @@
-﻿using LuckParser.Parser.ParsedData;
-using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Parser.ParsedData;
+using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.EIData
 {
@@ -17,7 +17,7 @@ namespace LuckParser.EIData
         private const long _earthMajor = 43740;
         private const long _earthMinor = 44822;
 
-        private static Dictionary<long, HashSet<long>> _minorsTranslation = new Dictionary<long, HashSet<long>>
+        private static readonly Dictionary<long, HashSet<long>> _minorsTranslation = new Dictionary<long, HashSet<long>>
         {
             { _fireMinor, new HashSet<long> { WaterFire, AirFire, EarthFire, FireDual}},
             { _waterMinor, new HashSet<long> { FireWater, AirWater, EarthWater, WaterDual}},
@@ -25,7 +25,7 @@ namespace LuckParser.EIData
             { _earthMinor, new HashSet<long> { FireEarth, WaterEarth, AirEarth, EarthDual}},
         };
 
-        private static Dictionary<long, HashSet<long>> _majorsTranslation = new Dictionary<long, HashSet<long>>
+        private static readonly Dictionary<long, HashSet<long>> _majorsTranslation = new Dictionary<long, HashSet<long>>
         {
             { _fireMajor, new HashSet<long> { FireWater, FireAir, FireEarth, FireDual}},
             { _waterMajor, new HashSet<long> { WaterFire, WaterAir, WaterEarth, WaterDual}},
@@ -40,7 +40,7 @@ namespace LuckParser.EIData
             {
                 throw new InvalidOperationException("Too much buff apply events in TranslateWeaverAttunement");
             }
-            HashSet<long> duals = new HashSet<long>
+            var duals = new HashSet<long>
             {
                 FireDual,
                 WaterDual,
@@ -78,8 +78,8 @@ namespace LuckParser.EIData
 
         public static List<AbstractBuffEvent> TransformWeaverAttunements(List<AbstractBuffEvent> buffs, AgentItem a, SkillData skillData)
         {
-            List<AbstractBuffEvent> res = new List<AbstractBuffEvent>();
-            HashSet<long> attunements = new HashSet<long>
+            var res = new List<AbstractBuffEvent>();
+            var attunements = new HashSet<long>
             {
                 5585,
                 5586,
@@ -95,7 +95,7 @@ namespace LuckParser.EIData
             const long waterEarth = 42792;
             const long airEarth = 45683;*/
 
-            HashSet<long> weaverAttunements = new HashSet<long>
+            var weaverAttunements = new HashSet<long>
             {
                _fireMajor,
                 _fireMinor,
@@ -119,18 +119,18 @@ namespace LuckParser.EIData
                 airEarth,*/
             };
             // first we get rid of standard attunements
-            List<AbstractBuffEvent> attuns = buffs.Where(x => attunements.Contains(x.BuffID)).ToList();
+            var attuns = buffs.Where(x => attunements.Contains(x.BuffID)).ToList();
             foreach (AbstractBuffEvent c in attuns)
             {
                 c.Invalidate(skillData);
             }
             // get all weaver attunements ids and group them by time
-            List<AbstractBuffEvent> weaverAttuns = buffs.Where(x => weaverAttunements.Contains(x.BuffID)).ToList();
+            var weaverAttuns = buffs.Where(x => weaverAttunements.Contains(x.BuffID)).ToList();
             if (weaverAttuns.Count == 0)
             {
                 return res;
             }
-            Dictionary<long, List<AbstractBuffEvent>> groupByTime = new Dictionary<long, List<AbstractBuffEvent>>();
+            var groupByTime = new Dictionary<long, List<AbstractBuffEvent>>();
             foreach (AbstractBuffEvent c in weaverAttuns)
             {
                 long key = groupByTime.Keys.FirstOrDefault(x => Math.Abs(x - c.Time) < 10);
@@ -147,9 +147,9 @@ namespace LuckParser.EIData
                 }
             }
             long prevID = 0;
-            foreach (var pair in groupByTime)
+            foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in groupByTime)
             {
-                List<AbstractBuffEvent> applies = pair.Value.Where(x => x is BuffApplyEvent).ToList();
+                var applies = pair.Value.Where(x => x is BuffApplyEvent).ToList();
                 long curID = TranslateWeaverAttunement(applies);
                 foreach (AbstractBuffEvent c in pair.Value)
                 {

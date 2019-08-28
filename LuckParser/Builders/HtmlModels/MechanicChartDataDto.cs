@@ -1,26 +1,26 @@
-﻿using LuckParser.EIData;
+﻿using System.Collections.Generic;
+using System.Linq;
+using LuckParser.EIData;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace LuckParser.Builders.HtmlModels
 {
     public class MechanicChartDataDto
-    {       
-        public string Symbol;     
+    {
+        public string Symbol;
         public int Size;
-        public string Color;       
-        public List<List<List<object>>> Points;      
+        public string Color;
+        public List<List<List<object>>> Points;
         public bool Visible;
 
-        public static List<List<object>> GetMechanicChartPoints(List<MechanicEvent> mechanicLogs,PhaseData phase, ParsedLog log, bool enemyMechanic)
+        public static List<List<object>> GetMechanicChartPoints(List<MechanicEvent> mechanicLogs, PhaseData phase, ParsedLog log, bool enemyMechanic)
         {
-            List<List<object>> res = new List<List<object>>();
+            var res = new List<List<object>>();
             if (!enemyMechanic)
             {
-                Dictionary<DummyActor, int> playerIndex = new Dictionary<DummyActor, int>();
-                for (var p = 0; p < log.PlayerList.Count; p++)
+                var playerIndex = new Dictionary<DummyActor, int>();
+                for (int p = 0; p < log.PlayerList.Count; p++)
                 {
                     playerIndex.Add(log.PlayerList[p], p);
                     res.Add(new List<object>());
@@ -36,8 +36,8 @@ namespace LuckParser.Builders.HtmlModels
             }
             else
             {
-                Dictionary<DummyActor, int> targetIndex = new Dictionary<DummyActor, int>();
-                for (var p = 0; p < phase.Targets.Count; p++)
+                var targetIndex = new Dictionary<DummyActor, int>();
+                for (int p = 0; p < phase.Targets.Count; p++)
                 {
                     targetIndex.Add(phase.Targets[p], p);
                     res.Add(new List<object>());

@@ -14,9 +14,9 @@ namespace LuckParser.tst
 
         public static ParsedLog ParseLog(string location)
         {
-            ParsingController parser = new ParsingController();
+            var parser = new ParsingController();
 
-            GridRow row = new GridRow(location as string, "Ready to parse")
+            var row = new GridRow(location as string, "Ready to parse")
             {
                 BgWorker = new System.ComponentModel.BackgroundWorker()
                 {
@@ -25,7 +25,7 @@ namespace LuckParser.tst
             };
 
 
-            FileInfo fInfo = new FileInfo(row.Location);
+            var fInfo = new FileInfo(row.Location);
             if (!fInfo.Exists)
             {
                 throw new FileNotFoundException("File does not exist", fInfo.FullName);
@@ -40,9 +40,9 @@ namespace LuckParser.tst
 
         public static string JsonString(ParsedLog log)
         {
-            MemoryStream ms = new MemoryStream();
-            StreamWriter sw = new StreamWriter(ms, GeneralHelper.NoBOMEncodingUTF8);
-            RawFormatBuilder builder = new RawFormatBuilder(log, null);
+            var ms = new MemoryStream();
+            var sw = new StreamWriter(ms, GeneralHelper.NoBOMEncodingUTF8);
+            var builder = new RawFormatBuilder(log, null);
 
             builder.CreateJSON(sw);
             sw.Close();
@@ -52,9 +52,9 @@ namespace LuckParser.tst
 
         public static string CsvString(ParsedLog log)
         {
-            MemoryStream ms = new MemoryStream();
-            StreamWriter sw = new StreamWriter(ms);
-            CSVBuilder builder = new CSVBuilder(sw, ",", log, null);
+            var ms = new MemoryStream();
+            var sw = new StreamWriter(ms);
+            var builder = new CSVBuilder(sw, ",", log, null);
 
             builder.CreateCSV();
             sw.Close();
@@ -64,9 +64,9 @@ namespace LuckParser.tst
 
         public static string HtmlString(ParsedLog log)
         {
-            MemoryStream ms = new MemoryStream();
-            StreamWriter sw = new StreamWriter(ms, GeneralHelper.NoBOMEncodingUTF8);
-            HTMLBuilder builder = new HTMLBuilder(log, null);
+            var ms = new MemoryStream();
+            var sw = new StreamWriter(ms, GeneralHelper.NoBOMEncodingUTF8);
+            var builder = new HTMLBuilder(log, null);
 
             builder.CreateHTML(sw, null);
             sw.Close();
@@ -76,7 +76,7 @@ namespace LuckParser.tst
 
         public static JsonLog JsonLog(ParsedLog log)
         {
-            RawFormatBuilder builder = new RawFormatBuilder(log, null);
+            var builder = new RawFormatBuilder(log, null);
             return builder.CreateJsonLog();
         }
 
@@ -94,7 +94,7 @@ namespace LuckParser.tst
 
         public static StringBuilder CompareObjects(JObject source, JObject target)
         {
-            StringBuilder returnString = new StringBuilder();
+            var returnString = new StringBuilder();
             foreach (KeyValuePair<string, JToken> sourcePair in source)
             {
                 if (sourcePair.Value.Type == JTokenType.Object)
@@ -131,7 +131,7 @@ namespace LuckParser.tst
                 else
                 {
                     JToken expected = sourcePair.Value;
-                    var actual = target.SelectToken("['" + sourcePair.Key + "']");
+                    JToken actual = target.SelectToken("['" + sourcePair.Key + "']");
                     if (actual == null)
                     {
                         returnString.Append("Key " + sourcePair.Key
@@ -162,20 +162,20 @@ namespace LuckParser.tst
         public static StringBuilder CompareArrays(JArray source, JArray target, string arrayName = "")
         {
             var returnString = new StringBuilder();
-            for (var index = 0; index < source.Count; index++)
+            for (int index = 0; index < source.Count; index++)
             {
 
-                var expected = source[index];
+                JToken expected = source[index];
                 if (expected.Type == JTokenType.Object)
                 {
-                    var actual = (index >= target.Count) ? new JObject() : target[index];
+                    JToken actual = (index >= target.Count) ? new JObject() : target[index];
                     returnString.Append(CompareObjects(expected.ToObject<JObject>(),
                         actual.ToObject<JObject>()));
                 }
                 else
                 {
 
-                    var actual = (index >= target.Count) ? "" : target[index];
+                    JToken actual = (index >= target.Count) ? "" : target[index];
                     if (!JToken.DeepEquals(expected, actual))
                     {
                         if (String.IsNullOrEmpty(arrayName))

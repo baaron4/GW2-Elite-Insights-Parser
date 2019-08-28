@@ -1,7 +1,7 @@
-﻿using LuckParser.EIData;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LuckParser.EIData;
 
 namespace LuckParser.Builders.HtmlModels
 {

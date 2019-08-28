@@ -1,10 +1,10 @@
-﻿using LuckParser.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LuckParser.Parser.ParsedData.CombatEvents;
-using LuckParser.Parser.ParsedData;
 using LuckParser.EIData;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData;
+using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.Logic
 {
@@ -45,7 +45,7 @@ namespace LuckParser.Logic
 
         protected virtual CombatReplayMap GetCombatMapInternal()
         {
-            return new CombatReplayMap("", (800,800), (0,0,0,0), (0,0,0,0) , (0,0,0,0));
+            return new CombatReplayMap("", (800, 800), (0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0));
         }
 
         public CombatReplayMap GetCombatMap(ParsedLog log)
@@ -82,15 +82,15 @@ namespace LuckParser.Logic
             if (agents.Count > 1)
             {
                 AgentItem firstItem = agents.First();
-                HashSet<ulong> agentValues = new HashSet<ulong>(agents.Select(x => x.Agent));
-                AgentItem newTargetAgent = new AgentItem(firstItem)
+                var agentValues = new HashSet<ulong>(agents.Select(x => x.Agent));
+                var newTargetAgent = new AgentItem(firstItem)
                 {
                     FirstAwareLogTime = agents.Min(x => x.FirstAwareLogTime),
                     LastAwareLogTime = agents.Max(x => x.LastAwareLogTime)
                 };
                 // get unique id for the fusion
                 ushort instID = 0;
-                Random rnd = new Random();
+                var rnd = new Random();
                 while (agentData.InstIDValues.Contains(instID) || instID == 0)
                 {
                     instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
@@ -129,10 +129,10 @@ namespace LuckParser.Logic
                 }
             }
             List<ParseEnum.TrashIDS> ids2 = GetTrashMobsIDS();
-            List<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
+            var aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
             foreach (AgentItem a in aList)
             {
-                Mob mob = new Mob(a);
+                var mob = new Mob(a);
                 TrashMobs.Add(mob);
             }
         }
@@ -140,7 +140,7 @@ namespace LuckParser.Logic
         protected List<PhaseData> GetPhasesByInvul(ParsedLog log, long skillID, Target mainTarget, bool addSkipPhases, bool beginWithStart)
         {
             long fightDuration = log.FightData.FightDuration;
-            List<PhaseData> phases = new List<PhaseData>();
+            var phases = new List<PhaseData>();
             long last = 0;
             List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, skillID, mainTarget, beginWithStart);
             for (int i = 0; i < invuls.Count; i++)
@@ -176,7 +176,7 @@ namespace LuckParser.Logic
 
         protected List<PhaseData> GetInitialPhase(ParsedLog log)
         {
-            List<PhaseData> phases = new List<PhaseData>();
+            var phases = new List<PhaseData>();
             long fightDuration = log.FightData.FightDuration;
             phases.Add(new PhaseData(0, fightDuration));
             phases[0].Name = "Full Fight";
@@ -199,7 +199,7 @@ namespace LuckParser.Logic
         {
             foreach (Target target in Targets)
             {
-                if (ids.Contains(target.ID) && phase.InInterval(Math.Max(log.FightData.ToFightSpace(target.FirstAwareLogTime),0)))
+                if (ids.Contains(target.ID) && phase.InInterval(Math.Max(log.FightData.ToFightSpace(target.FirstAwareLogTime), 0)))
                 {
                     phase.Targets.Add(target);
                 }
@@ -214,10 +214,10 @@ namespace LuckParser.Logic
 
         protected void NegateDamageAgainstBarrier(List<AgentItem> agentItems, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst)
         {
-            List<AbstractDamageEvent> dmgEvts = new List<AbstractDamageEvent>();
+            var dmgEvts = new List<AbstractDamageEvent>();
             foreach (AgentItem agentItem in agentItems)
             {
-                if (damageByDst.TryGetValue(agentItem, out var list))
+                if (damageByDst.TryGetValue(agentItem, out List<AbstractDamageEvent> list))
                 {
                     dmgEvts.AddRange(list);
                 }
@@ -260,7 +260,7 @@ namespace LuckParser.Logic
 
         protected void SetSuccessByDeath(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, bool all, ushort idFirst, params ushort[] ids)
         {
-            List<ushort> idsToUse = new List<ushort>
+            var idsToUse = new List<ushort>
             {
                 idFirst
             };
@@ -300,7 +300,7 @@ namespace LuckParser.Logic
 
         protected void SetSuccessByCombatExit(HashSet<ushort> targetIds, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            List<Target> targets = Targets.Where(x => targetIds.Contains(x.ID)).ToList();
+            var targets = Targets.Where(x => targetIds.Contains(x.ID)).ToList();
             SetSuccessByCombatExit(targets, combatData, fightData, playerAgents);
         }
 
@@ -310,9 +310,9 @@ namespace LuckParser.Logic
             {
                 return;
             }
-            List<ExitCombatEvent> playerExits = new List<ExitCombatEvent>();
-            List<ExitCombatEvent> targetExits = new List<ExitCombatEvent>();
-            List<AbstractDamageEvent> lastTargetDamages = new List<AbstractDamageEvent>();
+            var playerExits = new List<ExitCombatEvent>();
+            var targetExits = new List<ExitCombatEvent>();
+            var lastTargetDamages = new List<AbstractDamageEvent>();
             foreach (AgentItem a in playerAgents)
             {
                 playerExits.AddRange(combatData.GetExitCombatEvents(a));
@@ -364,8 +364,8 @@ namespace LuckParser.Logic
         protected static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AbstractMasterActor target, bool beginWithStart)
         {
             bool needStart = beginWithStart;
-            List<AbstractBuffEvent> main = combatData.GetBoonData(buffID).Where(x => x.To == target.AgentItem && (x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
-            List<AbstractBuffEvent> filtered = new List<AbstractBuffEvent>();
+            var main = combatData.GetBoonData(buffID).Where(x => x.To == target.AgentItem && (x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
+            var filtered = new List<AbstractBuffEvent>();
             for (int i = 0; i < main.Count; i++)
             {
                 AbstractBuffEvent c = main[i];

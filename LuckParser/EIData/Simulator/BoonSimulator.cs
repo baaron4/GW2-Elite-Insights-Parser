@@ -1,9 +1,9 @@
-﻿using LuckParser.Parser;
-using LuckParser.Parser.ParsedData;
-using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData;
+using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.EIData
 {
@@ -184,7 +184,7 @@ namespace LuckParser.EIData
             }
         }
 
-        public void Remove(AgentItem provokedBy, long boonDuration, long start, ParseEnum.BuffRemove removeType)
+        public void Remove(long boonDuration, long start, ParseEnum.BuffRemove removeType)
         {
             if (GenerationSimulation.Count > 0)
             {

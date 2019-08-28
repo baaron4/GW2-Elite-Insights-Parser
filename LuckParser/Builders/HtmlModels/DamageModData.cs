@@ -1,7 +1,7 @@
-﻿using LuckParser.EIData;
+﻿using System.Collections.Generic;
+using LuckParser.EIData;
 using LuckParser.Models;
 using LuckParser.Parser;
-using System.Collections.Generic;
 
 namespace LuckParser.Builders.HtmlModels
 {
@@ -16,7 +16,7 @@ namespace LuckParser.Builders.HtmlModels
             List<PhaseData> phases = log.FightData.GetPhases(log);
             foreach (DamageModifier dMod in listToUse)
             {
-                if (dModData.TryGetValue(dMod.Name, out var list))
+                if (dModData.TryGetValue(dMod.Name, out List<Statistics.DamageModifierData> list))
                 {
                     Statistics.DamageModifierData data = list[phaseIndex];
                     Data.Add(new object[]
@@ -26,7 +26,8 @@ namespace LuckParser.Builders.HtmlModels
                         data.DamageGain,
                         dMod.Multiplier ? data.TotalDamage : -1
                     });
-                } else
+                }
+                else
                 {
                     Data.Add(new object[]
                     {
@@ -40,12 +41,12 @@ namespace LuckParser.Builders.HtmlModels
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
             foreach (Target target in phase.Targets)
             {
-                List<object[]> pTarget = new List<object[]>();
+                var pTarget = new List<object[]>();
                 DataTarget.Add(pTarget);
                 dModData = player.GetDamageModifierData(log, target);
                 foreach (DamageModifier dMod in listToUse)
                 {
-                    if (dModData.TryGetValue(dMod.Name, out var list))
+                    if (dModData.TryGetValue(dMod.Name, out List<Statistics.DamageModifierData> list))
                     {
                         Statistics.DamageModifierData data = list[phaseIndex];
                         pTarget.Add(new object[]

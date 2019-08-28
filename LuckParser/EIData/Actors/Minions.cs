@@ -1,8 +1,8 @@
-﻿using LuckParser.Parser;
+﻿using System.Collections.Generic;
+using System.Linq;
+using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace LuckParser.EIData
 {
@@ -30,7 +30,7 @@ namespace LuckParser.EIData
                 }
                 _damageLogsByDst = _damageLogs.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
-            if (target != null && _damageLogsByDst.TryGetValue(target.AgentItem, out var list))
+            if (target != null && _damageLogsByDst.TryGetValue(target.AgentItem, out List<AbstractDamageEvent> list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end).ToList();
             }

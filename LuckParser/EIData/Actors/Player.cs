@@ -1,15 +1,13 @@
-﻿using LuckParser.Logic;
-using LuckParser.Exceptions;
-using LuckParser.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
-
 using System.Globalization;
 using System.Linq;
-using static LuckParser.Models.Statistics;
+using LuckParser.Logic;
+using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
 using static LuckParser.EIData.Boon;
+using static LuckParser.Models.Statistics;
 
 namespace LuckParser.EIData
 {
@@ -18,12 +16,12 @@ namespace LuckParser.EIData
         // Fields
         public string Account { get; protected set; }
         public int Group { get; }
-       
+
         private List<Consumable> _consumeList;
         private List<DeathRecap> _deathRecaps;
         private Dictionary<string, List<DamageModifierData>> _damageModifiers;
         private HashSet<string> _presentDamageModifiers;
-        private Dictionary<Target, Dictionary<string, List<DamageModifierData>>> _damageModifiersTargets; 
+        private Dictionary<Target, Dictionary<string, List<DamageModifierData>>> _damageModifiersTargets;
         // statistics
         private Dictionary<Target, List<FinalDPS>> _dpsTarget;
         private Dictionary<Target, List<FinalStats>> _statsTarget;
@@ -57,13 +55,14 @@ namespace LuckParser.EIData
             Group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
             IsFakeActor = Account == "Conjured Sword";
         }
-        
+
         // Public methods
-        public long[] GetCleansesNotSelf(ParsedLog log, PhaseData phase) {
+        public long[] GetCleansesNotSelf(ParsedLog log, PhaseData phase)
+        {
             long[] cleanse = { 0, 0 };
             foreach (long id in log.Boons.BoonsByNature[Boon.BoonNature.Condition].Select(x => x.ID))
             {
-                List<BuffRemoveAllEvent> bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && log.PlayerAgents.Contains(x.To) && x.To != AgentItem).Select(x => x as BuffRemoveAllEvent).ToList();
+                var bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && log.PlayerAgents.Contains(x.To) && x.To != AgentItem).Select(x => x as BuffRemoveAllEvent).ToList();
                 cleanse[0] += bevts.Count;
                 cleanse[1] += bevts.Sum(x => Math.Max(x.RemovedDuration, log.FightData.FightDuration));
             }
@@ -74,7 +73,7 @@ namespace LuckParser.EIData
             long[] cleanse = { 0, 0 };
             foreach (long id in log.Boons.BoonsByNature[Boon.BoonNature.Condition].Select(x => x.ID))
             {
-                List<BuffRemoveAllEvent> bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && x.To == AgentItem).Select(x => x as BuffRemoveAllEvent).ToList();
+                var bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && x.To == AgentItem).Select(x => x as BuffRemoveAllEvent).ToList();
                 cleanse[0] += bevts.Count;
                 cleanse[1] += bevts.Sum(x => Math.Max(x.RemovedDuration, log.FightData.FightDuration));
             }
@@ -86,7 +85,7 @@ namespace LuckParser.EIData
             long[] strips = { 0, 0 };
             foreach (long id in log.Boons.BoonsByNature[Boon.BoonNature.Boon].Select(x => x.ID))
             {
-                List<BuffRemoveAllEvent> bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && !log.PlayerAgents.Contains(x.To) && !log.PlayerAgents.Contains(x.To.MasterAgent)).Select(x => x as BuffRemoveAllEvent).ToList();
+                var bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && !log.PlayerAgents.Contains(x.To) && !log.PlayerAgents.Contains(x.To.MasterAgent)).Select(x => x as BuffRemoveAllEvent).ToList();
                 strips[0] += bevts.Count;
                 strips[1] += bevts.Sum(x => Math.Max(x.RemovedDuration, log.FightData.FightDuration));
             }
@@ -97,7 +96,8 @@ namespace LuckParser.EIData
         {
             List<AbstractCastEvent> cls = GetCastLogs(log, start, end);
             long[] reses = { 0, 0 };
-            foreach (AbstractCastEvent cl in cls) {
+            foreach (AbstractCastEvent cl in cls)
+            {
                 if (cl.SkillId == SkillItem.ResurrectId)
                 {
                     reses[0]++;
@@ -195,7 +195,7 @@ namespace LuckParser.EIData
 
         private void FillFinalStats(List<AbstractDamageEvent> dls, FinalStats final, Dictionary<Target, FinalStats> targetsFinal)
         {
-            HashSet<long> nonCritable = new HashSet<long>
+            var nonCritable = new HashSet<long>
                     {
                         9292,
                         5492,
@@ -208,7 +208,7 @@ namespace LuckParser.EIData
             {
                 if (!(dl is NonDirectDamageEvent))
                 {
-                    foreach (var pair in targetsFinal)
+                    foreach (KeyValuePair<Target, FinalStats> pair in targetsFinal)
                     {
                         Target target = pair.Key;
                         if (dl.To == target.AgentItem)
@@ -296,7 +296,7 @@ namespace LuckParser.EIData
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
                 phaseIndex++;
-                Dictionary<Target, FinalStats> targetDict = new Dictionary<Target, FinalStats>();
+                var targetDict = new Dictionary<Target, FinalStats>();
                 foreach (Target target in log.FightData.Logic.Targets)
                 {
                     if (!_statsTarget.ContainsKey(target))
@@ -306,7 +306,7 @@ namespace LuckParser.EIData
                     _statsTarget[target].Add(new FinalStats());
                     targetDict[target] = _statsTarget[target].Last();
                 }
-                FinalStatsAll final = new FinalStatsAll();
+                var final = new FinalStatsAll();
                 FillFinalStats(GetJustPlayerDamageLogs(null, log, phase), final, targetDict);
                 _statsAll.Add(final);
                 // If conjured sword, stop
@@ -360,12 +360,12 @@ namespace LuckParser.EIData
                     {
                         InitCombatReplay(log);
                     }
-                    List<Point3D> positions = CombatReplay.PolledPositions.Where(x => x.Time >= phase.Start && x.Time <= phase.End).ToList();
+                    var positions = CombatReplay.PolledPositions.Where(x => x.Time >= phase.Start && x.Time <= phase.End).ToList();
                     List<Point3D> stackCenterPositions = log.Statistics.GetStackCenterPositions(log);
                     int offset = CombatReplay.PolledPositions.Count(x => x.Time < phase.Start);
                     if (positions.Count > 1)
                     {
-                        List<float> distances = new List<float>();
+                        var distances = new List<float>();
                         for (int time = 0; time < positions.Count; time++)
                         {
 
@@ -406,14 +406,14 @@ namespace LuckParser.EIData
 
         private void SetDefenses(ParsedLog log)
         {
-            List<(long start, long end)> dead = new List<(long start, long end)>();
-            List<(long start, long end)> down = new List<(long start, long end)>();
-            List<(long start, long end)> dc = new List<(long start, long end)>();
+            var dead = new List<(long start, long end)>();
+            var down = new List<(long start, long end)>();
+            var dc = new List<(long start, long end)>();
             AgentItem.GetAgentStatus(dead, down, dc, log);
             _defenses = new List<FinalDefenses>();
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
-                FinalDefenses final = new FinalDefenses();
+                var final = new FinalDefenses();
                 _defenses.Add(final);
                 long start = phase.Start;
                 long end = phase.End;
@@ -439,7 +439,7 @@ namespace LuckParser.EIData
                 final.DownCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DownId).Count(x => x.Actor == this && x.Time >= start && x.Time <= end);
                 final.DeadCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DeathId).Count(x => x.Actor == this && x.Time >= start && x.Time <= end);
                 final.DcCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DCId).Count(x => x.Actor == this && x.Time >= start && x.Time <= end);
-                
+
                 final.DownDuration = (int)down.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
                 final.DeadDuration = (int)dead.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
                 final.DcDuration = (int)dc.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
@@ -470,7 +470,7 @@ namespace LuckParser.EIData
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
-                FinalSupport final = new FinalSupport();
+                var final = new FinalSupport();
                 _support.Add(final);
                 PhaseData phase = phases[phaseIndex];
 
@@ -497,7 +497,7 @@ namespace LuckParser.EIData
             {
                 SetBuffs(log);
             }
-            switch(type)
+            switch (type)
             {
                 case BuffEnum.Group:
                     return _groupBuffs[phaseIndex];
@@ -573,8 +573,8 @@ namespace LuckParser.EIData
 
         private (List<Dictionary<long, FinalBuffs>>, List<Dictionary<long, FinalBuffs>>) GetBoonsForPlayers(List<Player> playerList, ParsedLog log)
         {
-            List<Dictionary<long, FinalBuffs>> uptimesByPhase = new List<Dictionary<long, FinalBuffs>>();
-            List<Dictionary<long, FinalBuffs>> uptimesActiveByPhase = new List<Dictionary<long, FinalBuffs>>();
+            var uptimesByPhase = new List<Dictionary<long, FinalBuffs>>();
+            var uptimesActiveByPhase = new List<Dictionary<long, FinalBuffs>>();
 
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
@@ -582,17 +582,17 @@ namespace LuckParser.EIData
                 PhaseData phase = phases[phaseIndex];
                 long phaseDuration = phase.DurationInMS;
 
-                Dictionary<Player, BoonDistribution> boonDistributions = new Dictionary<Player, BoonDistribution>();
+                var boonDistributions = new Dictionary<Player, BoonDistribution>();
                 foreach (Player p in playerList)
                 {
                     boonDistributions[p] = p.GetBoonDistribution(log, phaseIndex);
                 }
 
-                HashSet<Boon> boonsToTrack = new HashSet<Boon>(boonDistributions.SelectMany(x => x.Value).Select(x => log.Boons.BoonsByIds[x.Key]));
+                var boonsToTrack = new HashSet<Boon>(boonDistributions.SelectMany(x => x.Value).Select(x => log.Boons.BoonsByIds[x.Key]));
 
-                Dictionary<long, FinalBuffs> final =
+                var final =
                     new Dictionary<long, FinalBuffs>();
-                Dictionary<long, FinalBuffs> finalActive =
+                var finalActive =
                     new Dictionary<long, FinalBuffs>();
 
                 foreach (Boon boon in boonsToTrack)
@@ -612,7 +612,7 @@ namespace LuckParser.EIData
                     double totalActiveExtended = 0;
                     bool hasGeneration = false;
                     int activePlayerCount = 0;
-                    foreach (var pair in boonDistributions)
+                    foreach (KeyValuePair<Player, BoonDistribution> pair in boonDistributions)
                     {
                         BoonDistribution boons = pair.Value;
                         long playerActiveDuration = phase.GetPlayerActiveDuration(pair.Key, log);
@@ -653,8 +653,8 @@ namespace LuckParser.EIData
 
                     if (hasGeneration)
                     {
-                        FinalBuffs uptime = new FinalBuffs();
-                        FinalBuffs uptimeActive = new FinalBuffs();
+                        var uptime = new FinalBuffs();
+                        var uptimeActive = new FinalBuffs();
                         final[boon.ID] = uptime;
                         finalActive[boon.ID] = uptimeActive;
                         if (boon.Type == Boon.BoonType.Duration)
@@ -713,8 +713,8 @@ namespace LuckParser.EIData
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
-                Dictionary<long, FinalBuffs> final = new Dictionary<long, FinalBuffs>();
-                Dictionary<long, FinalBuffs> finalActive = new Dictionary<long, FinalBuffs>();
+                var final = new Dictionary<long, FinalBuffs>();
+                var finalActive = new Dictionary<long, FinalBuffs>();
 
                 PhaseData phase = phases[phaseIndex];
 
@@ -727,7 +727,7 @@ namespace LuckParser.EIData
                 {
                     if (selfBoons.ContainsKey(boon.ID))
                     {
-                        FinalBuffs uptime = new FinalBuffs
+                        var uptime = new FinalBuffs
                         {
                             Uptime = 0,
                             Generation = 0,
@@ -737,7 +737,7 @@ namespace LuckParser.EIData
                             ByExtension = 0,
                             Extended = 0
                         };
-                        FinalBuffs uptimeActive = new FinalBuffs
+                        var uptimeActive = new FinalBuffs
                         {
                             Uptime = 0,
                             Generation = 0,
@@ -838,7 +838,7 @@ namespace LuckParser.EIData
 
         public List<DeathRecap> GetDeathRecaps(ParsedLog log)
         {
-            if(_deathRecaps == null)
+            if (_deathRecaps == null)
             {
                 SetDeathRecaps(log);
             }
@@ -853,7 +853,7 @@ namespace LuckParser.EIData
         {
             if (_weaponsArray == null)
             {
-                EstimateWeapons( log);
+                EstimateWeapons(log);
             }
             return _weaponsArray;
         }
@@ -864,7 +864,7 @@ namespace LuckParser.EIData
             {
                 SetConsumablesList(log);
             }
-            return _consumeList.Where(x => x.Time >= start && x.Time <= end).ToList() ;
+            return _consumeList.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
         public Dictionary<string, List<DamageModifierData>> GetDamageModifierData(ParsedLog log, Target target)
@@ -875,7 +875,7 @@ namespace LuckParser.EIData
             }
             if (target != null)
             {
-                if (_damageModifiersTargets.TryGetValue(target, out var res))
+                if (_damageModifiersTargets.TryGetValue(target, out Dictionary<string, List<DamageModifierData>> res))
                 {
                     return res;
                 }
@@ -908,7 +908,7 @@ namespace LuckParser.EIData
             {
                 return;
             }
-            List<DamageModifier> damageMods = new List<DamageModifier>(log.DamageModifiers.DamageModifiersPerSource[DamageModifier.ModifierSource.ItemBuff]);
+            var damageMods = new List<DamageModifier>(log.DamageModifiers.DamageModifiersPerSource[DamageModifier.ModifierSource.ItemBuff]);
             damageMods.AddRange(log.DamageModifiers.DamageModifiersPerSource[DamageModifier.ModifierSource.CommonBuff]);
             damageMods.AddRange(log.DamageModifiers.GetModifiersPerProf(Prof));
             foreach (DamageModifier mod in damageMods)
@@ -932,21 +932,21 @@ namespace LuckParser.EIData
             List<AbstractDamageEvent> damageLogs = GetDamageTakenLogs(null, log, 0, log.FightData.FightDuration);
             foreach (DeadEvent dead in deads)
             {
-                DeathRecap recap = new DeathRecap()
+                var recap = new DeathRecap()
                 {
                     DeathTime = (int)dead.Time
                 };
                 DownEvent downed = downs.LastOrDefault(x => x.Time <= dead.Time && x.Time >= lastDeathTime);
                 if (downed != null)
                 {
-                    List<AbstractDamageEvent> damageToDown = damageLogs.Where(x => x.Time <= downed.Time && (x.HasHit || x.HasDowned) && x.Time > lastDeathTime).ToList();
+                    var damageToDown = damageLogs.Where(x => x.Time <= downed.Time && (x.HasHit || x.HasDowned) && x.Time > lastDeathTime).ToList();
                     recap.ToDown = damageToDown.Count > 0 ? new List<DeathRecap.DeathRecapDamageItem>() : null;
                     int damage = 0;
                     for (int i = damageToDown.Count - 1; i >= 0; i--)
                     {
                         AbstractDamageEvent dl = damageToDown[i];
                         AgentItem ag = dl.From;
-                        DeathRecap.DeathRecapDamageItem item = new DeathRecap.DeathRecapDamageItem()
+                        var item = new DeathRecap.DeathRecapDamageItem()
                         {
                             Time = (int)dl.Time,
                             IndirectDamage = dl is NonDirectDamageEvent,
@@ -961,13 +961,13 @@ namespace LuckParser.EIData
                             break;
                         }
                     }
-                    List<AbstractDamageEvent> damageToKill = damageLogs.Where(x => x.Time > downed.Time && x.Time <= dead.Time && (x.HasHit || x.HasDowned) && x.Time > lastDeathTime).ToList();
+                    var damageToKill = damageLogs.Where(x => x.Time > downed.Time && x.Time <= dead.Time && (x.HasHit || x.HasDowned) && x.Time > lastDeathTime).ToList();
                     recap.ToKill = damageToKill.Count > 0 ? new List<DeathRecap.DeathRecapDamageItem>() : null;
                     for (int i = damageToKill.Count - 1; i >= 0; i--)
                     {
                         AbstractDamageEvent dl = damageToKill[i];
                         AgentItem ag = dl.From;
-                        DeathRecap.DeathRecapDamageItem item = new DeathRecap.DeathRecapDamageItem()
+                        var item = new DeathRecap.DeathRecapDamageItem()
                         {
                             Time = (int)dl.Time,
                             IndirectDamage = dl is NonDirectDamageEvent,
@@ -981,14 +981,14 @@ namespace LuckParser.EIData
                 else
                 {
                     recap.ToDown = null;
-                    List<AbstractDamageEvent> damageToKill = damageLogs.Where(x => x.Time < dead.Time && x.Damage > 0 && x.Time > lastDeathTime).ToList();
+                    var damageToKill = damageLogs.Where(x => x.Time < dead.Time && x.Damage > 0 && x.Time > lastDeathTime).ToList();
                     recap.ToKill = damageToKill.Count > 0 ? new List<DeathRecap.DeathRecapDamageItem>() : null;
                     int damage = 0;
                     for (int i = damageToKill.Count - 1; i >= 0; i--)
                     {
                         AbstractDamageEvent dl = damageToKill[i];
                         AgentItem ag = dl.From;
-                        DeathRecap.DeathRecapDamageItem item = new DeathRecap.DeathRecapDamageItem()
+                        var item = new DeathRecap.DeathRecapDamageItem()
                         {
                             Time = (int)dl.Time,
                             IndirectDamage = dl is NonDirectDamageEvent,
@@ -1027,11 +1027,13 @@ namespace LuckParser.EIData
                 return;
             }
             string[] weapons = new string[8];//first 2 for first set next 2 for second set, second sets of 4 for underwater
-            List<AbstractCastEvent> casting = GetCastLogs(log, 0, log.FightData.FightDuration);      
+            List<AbstractCastEvent> casting = GetCastLogs(log, 0, log.FightData.FightDuration);
             int swapped = -1;
             long swappedTime = 0;
-            List<int> swaps = casting.Where(x => x.SkillId == SkillItem.WeaponSwapId).Select(x => {
-                if (x is WeaponSwapEvent wse) {
+            var swaps = casting.Where(x => x.SkillId == SkillItem.WeaponSwapId).Select(x =>
+            {
+                if (x is WeaponSwapEvent wse)
+                {
                     return wse.SwappedTo;
                 }
                 return -1;
@@ -1056,8 +1058,8 @@ namespace LuckParser.EIData
                 }
             }
             _weaponsArray = weapons;
-        }    
-        
+        }
+
         private void SetConsumablesList(ParsedLog log)
         {
             List<Boon> consumableList = log.Boons.BoonsByNature[BoonNature.Consumable];
@@ -1067,7 +1069,7 @@ namespace LuckParser.EIData
             {
                 foreach (AbstractBuffEvent c in log.CombatData.GetBoonData(consumable.ID))
                 {
-                    if (!(c is BuffApplyEvent ba) ||  AgentItem != ba.To)
+                    if (!(c is BuffApplyEvent ba) || AgentItem != ba.To)
                     {
                         continue;
                     }
@@ -1082,7 +1084,8 @@ namespace LuckParser.EIData
                         if (existing != null)
                         {
                             existing.Stack++;
-                        } else
+                        }
+                        else
                         {
                             _consumeList.Add(new Consumable(consumable, time, ba.AppliedDuration));
                         }
@@ -1122,7 +1125,7 @@ namespace LuckParser.EIData
             {
                 InitCombatReplay(log);
             }
-            PlayerSerializable aux = new PlayerSerializable
+            var aux = new PlayerSerializable
             {
                 Group = Group,
                 Img = CombatReplay.Icon,

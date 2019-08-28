@@ -1,5 +1,5 @@
-﻿using LuckParser.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using LuckParser.Models;
 
 namespace LuckParser.Builders.HtmlModels
 {
@@ -11,7 +11,7 @@ namespace LuckParser.Builders.HtmlModels
 
         public static List<object[]> BuildDeathRecapItemList(List<Statistics.DeathRecap.DeathRecapDamageItem> list)
         {
-            List<object[]> data = new List<object[]>();
+            var data = new List<object[]>();
             foreach (Statistics.DeathRecap.DeathRecapDamageItem item in list)
             {
                 data.Add(new object[]

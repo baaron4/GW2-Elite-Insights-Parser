@@ -1,13 +1,13 @@
-﻿using LuckParser.EIData;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using LuckParser.EIData;
 
 namespace LuckParser.Builders.HtmlModels
 {
     public class BoonDto
-    {    
-        public long Id;       
-        public string Name;       
-        public string Icon;       
+    {
+        public long Id;
+        public string Name;
+        public string Icon;
         public bool Stacking;
         public bool Consumable;
         public bool Enemy;

@@ -1,7 +1,7 @@
-﻿using LuckParser.Parser;
-using LuckParser.Parser.ParsedData;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData;
 using static LuckParser.EIData.BoonSimulator;
 
 namespace LuckParser.EIData

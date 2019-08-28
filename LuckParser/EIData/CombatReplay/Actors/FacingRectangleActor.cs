@@ -1,5 +1,5 @@
-﻿using LuckParser.Parser;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using LuckParser.Parser;
 
 namespace LuckParser.EIData
 {

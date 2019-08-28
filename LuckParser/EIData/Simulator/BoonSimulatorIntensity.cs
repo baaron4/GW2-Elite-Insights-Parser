@@ -1,14 +1,14 @@
-﻿using LuckParser.Parser;
-using LuckParser.Parser.ParsedData;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData;
 
 namespace LuckParser.EIData
 {
     public class BoonSimulatorIntensity : BoonSimulator
     {
-        private List<(AgentItem agent, bool extension)> _lastSrcRemoves = new List<(AgentItem agent, bool extension)>();
+        private readonly List<(AgentItem agent, bool extension)> _lastSrcRemoves = new List<(AgentItem agent, bool extension)>();
         // Constructor
         public BoonSimulatorIntensity(int capacity, ParsedLog log, StackingLogic logic) : base(capacity, log, logic)
         {
@@ -45,7 +45,7 @@ namespace LuckParser.EIData
             if (BoonStack.Count > 0 && timePassed > 0)
             {
                 _lastSrcRemoves.Clear();
-                   var toAdd = new BoonSimulationItemIntensity(BoonStack);
+                var toAdd = new BoonSimulationItemIntensity(BoonStack);
                 if (GenerationSimulation.Count > 0)
                 {
                     BoonSimulationItem last = GenerationSimulation.Last();

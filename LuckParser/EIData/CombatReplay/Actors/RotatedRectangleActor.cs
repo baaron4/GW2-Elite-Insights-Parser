@@ -11,11 +11,11 @@ namespace LuckParser.EIData
         // Rectangles with fixed rotation and no translation
         public RotatedRectangleActor(bool fill, int growing, int width, int height, int rotation, (int start, int end) lifespan, string color, Connector connector)
             : this(fill, growing, width, height, rotation, 0, 0, lifespan, color, connector) { }
-        
+
 
         // Rectangles with a fixed rotation and translation
 
-        public RotatedRectangleActor(bool fill, int growing, int width, int height, int rotation, int translation, (int start, int end) lifespan, string color, Connector connector) 
+        public RotatedRectangleActor(bool fill, int growing, int width, int height, int rotation, int translation, (int start, int end) lifespan, string color, Connector connector)
             : this(fill, growing, width, height, rotation, translation, 0, lifespan, color, connector) { }
 
         // Rectangles rotating over time
@@ -36,7 +36,7 @@ namespace LuckParser.EIData
 
         public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
-            RotatedRectangleSerializable aux = new RotatedRectangleSerializable
+            var aux = new RotatedRectangleSerializable
             {
                 Type = "RotatedRectangle",
                 Width = Width,

@@ -29,8 +29,8 @@ namespace LuckParser.EIData
         {
             PolledPositions.RemoveAll(x => x.Time < start || x.Time > end);
             PolledRotations.RemoveAll(x => x.Time < start || x.Time > end);
-            _start = Math.Max(start,1);
-            _end = Math.Max(_start,end);
+            _start = Math.Max(start, 1);
+            _end = Math.Max(_start, end);
         }
 
         private void PositionPolling(int rate, long fightDuration, bool forceInterpolate)
@@ -160,8 +160,8 @@ namespace LuckParser.EIData
 
         public List<Point3D> GetActivePositions()
         {
-            List<Point3D> activePositions = new List<Point3D>(PolledPositions);
-            for (var i = 0; i < activePositions.Count; i++)
+            var activePositions = new List<Point3D>(PolledPositions);
+            for (int i = 0; i < activePositions.Count; i++)
             {
                 Point3D cur = activePositions[i];
                 foreach ((long start, long end) in Deads)
@@ -178,7 +178,7 @@ namespace LuckParser.EIData
                         activePositions[i] = null;
                     }
                 }
-            }        
+            }
             return activePositions;
         }
     }

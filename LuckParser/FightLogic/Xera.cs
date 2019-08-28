@@ -1,10 +1,10 @@
-﻿using LuckParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using LuckParser.EIData;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic
@@ -58,7 +58,7 @@ namespace LuckParser.Logic
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
-            List<AbstractBuffEvent> res = new List<AbstractBuffEvent>();
+            var res = new List<AbstractBuffEvent>();
             if (_specialSplitLogTime != 0)
             {
                 res.Add(new BuffRemoveAllEvent(mainTarget.AgentItem, mainTarget.AgentItem, _specialSplitLogTime - offset, int.MaxValue, skillData.Get(762), 1, int.MaxValue));
@@ -137,14 +137,14 @@ namespace LuckParser.Logic
                     target.LastAwareLogTime = NPC.LastAwareLogTime;
                     // get unique id for the fusion
                     ushort instID = 0;
-                    Random rnd = new Random();
+                    var rnd = new Random();
                     while (agentData.InstIDValues.Contains(instID) || instID == 0)
                     {
                         instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
                     }
                     target.InstID = instID;
                     agentData.Refresh();
-                    HashSet<ulong> agents = new HashSet<ulong>() { NPC.Agent, target.Agent };
+                    var agents = new HashSet<ulong>() { NPC.Agent, target.Agent };
                     // update combat data
                     foreach (CombatItem c in combatData)
                     {
@@ -186,7 +186,7 @@ namespace LuckParser.Logic
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Xera:
-                    List<AbstractCastEvent> summon = cls.Where(x => x.SkillId == 34887).ToList();
+                    var summon = cls.Where(x => x.SkillId == 34887).ToList();
                     foreach (AbstractCastEvent c in summon)
                     {
                         replay.Actors.Add(new CircleActor(true, 0, 180, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));

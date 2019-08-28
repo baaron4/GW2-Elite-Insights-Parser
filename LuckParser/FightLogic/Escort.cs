@@ -1,5 +1,5 @@
-﻿using LuckParser.EIData;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using LuckParser.EIData;
 
 namespace LuckParser.Logic
 {
@@ -25,7 +25,8 @@ namespace LuckParser.Logic
                             (1920, 12160, 2944, 14464));
         }*/
 
-        public override string GetFightName() {
+        public override string GetFightName()
+        {
             return "Escort";
         }
     }

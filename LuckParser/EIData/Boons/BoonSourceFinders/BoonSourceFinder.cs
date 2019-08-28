@@ -1,8 +1,8 @@
-﻿using LuckParser.Parser;
+﻿using System.Collections.Generic;
+using System.Linq;
+using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace LuckParser.EIData
 {
@@ -52,7 +52,7 @@ namespace LuckParser.EIData
         {
             if (extension == ImbuedMelodies && log.PlayerListBySpec.TryGetValue("Tempest", out List<Player> tempests))
             {
-                HashSet<AgentItem> magAuraApplications = new HashSet<AgentItem>(log.CombatData.GetBoonData(5684).Where(x => x is BuffApplyEvent && x.Time - time < 50 && x.By != item.Caster).Select(x => x.By));
+                var magAuraApplications = new HashSet<AgentItem>(log.CombatData.GetBoonData(5684).Where(x => x is BuffApplyEvent && x.Time - time < 50 && x.By != item.Caster).Select(x => x.By));
                 foreach (Player tempest in tempests)
                 {
                     if (magAuraApplications.Contains(tempest.AgentItem))
@@ -76,8 +76,7 @@ namespace LuckParser.EIData
                 // unknown or self
                 return essenceOfSpeedCheck == 0 ? GeneralHelper.UnknownAgent : dst;
             }
-            HashSet<long> idsToCheck = new HashSet<long>();
-            if (DurationToIDs.TryGetValue(extension, out idsToCheck))
+            if (DurationToIDs.TryGetValue(extension, out HashSet<long> idsToCheck))
             {
                 List<AbstractCastEvent> cls = GetExtensionSkills(log, time, idsToCheck);
                 if (cls.Count == 1)

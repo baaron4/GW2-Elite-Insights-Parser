@@ -1,7 +1,7 @@
-﻿using LuckParser.EIData;
-using LuckParser.Parser;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using LuckParser.EIData;
+using LuckParser.Parser;
 
 namespace LuckParser.Builders.HtmlModels
 {
@@ -63,7 +63,7 @@ namespace LuckParser.Builders.HtmlModels
 
             for (int j = 0; j < 4; j++)
             {
-                var wep = weps[j + offset];
+                string wep = weps[j + offset];
                 if (wep != null)
                 {
                     if (wep != "2Hand")

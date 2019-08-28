@@ -1,15 +1,15 @@
-﻿using LuckParser.Parser;
-using LuckParser.Parser.ParsedData;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData;
 using static LuckParser.EIData.BoonSimulator;
 
 namespace LuckParser.EIData
 {
     public class BoonSimulationItemIntensity : BoonSimulationItem
     {
-        private List<BoonSimulationItemDuration> _stacks = new List<BoonSimulationItemDuration>();
-        private List<AgentItem> _sources;
+        private readonly List<BoonSimulationItemDuration> _stacks = new List<BoonSimulationItemDuration>();
+        private readonly List<AgentItem> _sources;
 
         public BoonSimulationItemIntensity(List<BoonStackItem> stacks) : base(stacks[0].Start, 0)
         {

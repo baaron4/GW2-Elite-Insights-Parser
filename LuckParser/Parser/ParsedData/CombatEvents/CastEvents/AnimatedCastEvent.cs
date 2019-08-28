@@ -26,7 +26,7 @@
                 ActualDuration = 750;
             }
         }
-        
+
 
         public AnimatedCastEvent(long time, SkillItem skill, int duration, AgentItem caster) : base(time, skill, caster)
         {

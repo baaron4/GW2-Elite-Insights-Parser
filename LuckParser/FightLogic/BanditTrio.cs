@@ -1,10 +1,10 @@
-﻿using LuckParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using LuckParser.EIData;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic
@@ -45,7 +45,7 @@ namespace LuckParser.Logic
 
         protected override CombatReplayMap GetCombatMapInternal()
         {
-            return new CombatReplayMap("https://i.imgur.com/cVuaOc5.png", 
+            return new CombatReplayMap("https://i.imgur.com/cVuaOc5.png",
                             (2494, 2277),
                             (-2900, -12251, 2561, -7265),
                             (-12288, -27648, 12288, 27648),
@@ -58,8 +58,8 @@ namespace LuckParser.Logic
             if (!fightData.Success)
             {
                 List<AgentItem> prisoners = agentData.GetAgentsByID((ushort)Prisoner2);
-                List<DeadEvent> prisonerDeaths = new List<DeadEvent>();
-                foreach(AgentItem prisoner in prisoners)
+                var prisonerDeaths = new List<DeadEvent>();
+                foreach (AgentItem prisoner in prisoners)
                 {
                     prisonerDeaths.AddRange(combatData.GetDeadEvents(prisoner));
                 }
@@ -83,7 +83,7 @@ namespace LuckParser.Logic
                 {
                     end = phaseEnd.Time;
                 }
-                PhaseData phase = new PhaseData(start, Math.Min(end, log.FightData.FightDuration));
+                var phase = new PhaseData(start, Math.Min(end, log.FightData.FightDuration));
                 phase.Targets.Add(target);
                 phases.Add(phase);
             }
@@ -169,7 +169,7 @@ namespace LuckParser.Logic
                 case (ushort)ParseEnum.TargetIDS.Berg:
                     break;
                 case (ushort)ParseEnum.TargetIDS.Zane:
-                    List<AbstractCastEvent> bulletHail = cls.Where(x => x.SkillId == 34383).ToList();
+                    var bulletHail = cls.Where(x => x.SkillId == 34383).ToList();
                     foreach (AbstractCastEvent c in bulletHail)
                     {
                         int start = (int)c.Time;
