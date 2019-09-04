@@ -8,7 +8,10 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
 
         public BuffExtensionEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, agentData, skillData, offset)
         {
-            By = null;
+            if (By == GeneralHelper.UnknownAgent)
+            {
+                By = null;
+            }
             _oldValue = evtcItem.OverstackValue - evtcItem.Value;
         }
 
