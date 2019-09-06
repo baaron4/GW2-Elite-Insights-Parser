@@ -74,7 +74,7 @@ namespace LuckParser.Controllers
             requestMessage.Headers.ExpectContinue = false;
 
             var multiPartContent = new MultipartFormDataContent("----MyGreatBoundary");
-            var byteArrayContent = new ByteArrayContent(fileContents);
+            using var byteArrayContent = new ByteArrayContent(fileContents);
             byteArrayContent.Headers.Add("Content-Type", "application/octet-stream");
             multiPartContent.Add(byteArrayContent, "file", fileName);
             //multiPartContent.Add(new StringContent("generator=ei"), "gen", "ei");
