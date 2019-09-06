@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -53,7 +53,12 @@ namespace LuckParser.Parser
                         }
                         using (Stream data = arch.Entries[0].Open())
                         {
-                            ParseLog(row, data);
+                            using (var ms = new MemoryStream())
+                            {
+                                data.CopyTo(ms);
+                                ms.Position = 0;
+                                ParseLog(row, ms);
+                            };
                         }
                     }
                 }
@@ -92,7 +97,7 @@ namespace LuckParser.Parser
             return new BinaryReader(stream, new System.Text.UTF8Encoding(), leaveOpen: true);
         }
 
-        private bool TryRead(Stream stream, byte[] data)
+        /*private bool TryRead(Stream stream, byte[] data)
         {
             int offset = 0;
             int count = data.Length;
@@ -107,7 +112,7 @@ namespace LuckParser.Parser
                 count -= bytesRead;
             }
             return true;
-        }
+        }*/
 
         //sub Parse methods
         /// <summary>
@@ -393,18 +398,10 @@ namespace LuckParser.Parser
         private void ParseCombatList(Stream stream)
         {
             // 64 bytes: each combat
-            byte[] data = new byte[64];
-            using (var ms = new MemoryStream(data, writable: false))
-            using (BinaryReader reader = CreateReader(ms))
+            using (BinaryReader reader = CreateReader(stream))
             {
-                while (true)
+                while (reader.BaseStream.Length != reader.BaseStream.Position)
                 {
-                    if (!TryRead(stream, data))
-                    {
-                        break;
-                    }
-
-                    ms.Seek(0, SeekOrigin.Begin);
                     CombatItem combatItem = _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader);
                     if (!IsValid(combatItem))
                     {
