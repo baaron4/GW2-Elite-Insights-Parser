@@ -45,10 +45,19 @@ namespace LuckParser.Parser
                 if (ProgramHelper.IsCompressedFormat(evtc))
                 {
                     using var arch = new ZipArchive(fs, ZipArchiveMode.Read);
-                    if (arch.Entries.Count != 1)
-                    {
-                        throw new InvalidDataException("Invalid Archive");
-                    }
+                        if (arch.Entries.Count != 1)
+                        {
+                            throw new InvalidDataException("Invalid Archive");
+                        }
+                        using (Stream data = arch.Entries[0].Open())
+                        {
+                            using (var ms = new MemoryStream())
+                            {
+                                data.CopyTo(ms);
+                                ms.Position = 0;
+                                ParseLog(row, ms);
+                            };
+                        }
                     using Stream data = arch.Entries[0].Open();
                     ParseLog(row, data);
                 }
@@ -87,7 +96,7 @@ namespace LuckParser.Parser
             return new BinaryReader(stream, new System.Text.UTF8Encoding(), leaveOpen: true);
         }
 
-        private static bool TryRead(Stream stream, byte[] data)
+        /*private bool TryRead(Stream stream, byte[] data)
         {
             int offset = 0;
             int count = data.Length;
@@ -102,7 +111,7 @@ namespace LuckParser.Parser
                 count -= bytesRead;
             }
             return true;
-        }
+        }*/
 
         //sub Parse methods
         /// <summary>
@@ -382,23 +391,15 @@ namespace LuckParser.Parser
         private void ParseCombatList(Stream stream)
         {
             // 64 bytes: each combat
-            byte[] data = new byte[64];
-            using var ms = new MemoryStream(data, writable: false);
-            using BinaryReader reader = CreateReader(ms);
-            while (true)
+            using (BinaryReader reader = CreateReader(stream))
             {
-                if (!TryRead(stream, data))
+                while (reader.BaseStream.Length != reader.BaseStream.Position)
                 {
-                    break;
-                }
-
-                ms.Seek(0, SeekOrigin.Begin);
-                CombatItem combatItem = _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader);
-                if (!IsValid(combatItem))
-                {
-                    continue;
-                }
-
+                    CombatItem combatItem = _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader);
+                    if (!IsValid(combatItem))
+                    {
+                        continue;
+                    }
                 _combatItems.Add(combatItem);
             }
         }
