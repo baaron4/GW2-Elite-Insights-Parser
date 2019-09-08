@@ -5,7 +5,7 @@ addons:
     classic: true
     channel: latest/beta
 sudo: required
-solution: GW2EI.sln
+solution: LuckParser.sln
 language: csharp
 mono: none
 script:
