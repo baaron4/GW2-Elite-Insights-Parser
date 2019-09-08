@@ -90,7 +90,7 @@ namespace LuckParser.EIData
                     }
                     return item.Caster;
                 }
-                else if (essenceOfSpeedCheck == 0)
+                else if (!cls.Any() && essenceOfSpeedCheck == 0)
                 {
                     if (CouldBeImbuedMelodies(dst, time, extension, log))
                     {
