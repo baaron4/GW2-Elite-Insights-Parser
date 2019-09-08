@@ -41,6 +41,7 @@ namespace LuckParser.EIData
             {
                 if (log.PlayerListBySpec.ContainsKey("Herald") || log.PlayerListBySpec.ContainsKey("Tempest"))
                 {
+                    // uncertain, needs to check more
                     return 0;
                 }
                 // if not herald or tempest in squad then can only be the trait
@@ -72,30 +73,35 @@ namespace LuckParser.EIData
                 return dst;
             }
             int essenceOfSpeedCheck = CouldBeEssenceOfSpeed(dst, extension, log);
+            // can only be the soulbeast
             if (essenceOfSpeedCheck == 1)
             {
-                // self
                 return dst;
             }
             if (DurationToIDs.TryGetValue(extension, out HashSet<long> idsToCheck))
             {
                 List<AbstractCastEvent> cls = GetExtensionSkills(log, time, idsToCheck);
+                // If only one cast item
                 if (cls.Count == 1)
                 {
                     AbstractCastEvent item = cls.First();
-                    // Imbued Melodies or essence of speed check
+                    // If uncertainty due to essence of speed or imbued melodies, return unknown
                     if (essenceOfSpeedCheck == 0 || CouldBeImbuedMelodies(item.Caster, time, extension, log))
                     {
                         return GeneralHelper.UnknownAgent;
                     }
+                    // otherwise the src is the caster
                     return item.Caster;
                 }
+                // If no cast item and uncertainty due to essence of speed
                 else if (!cls.Any() && essenceOfSpeedCheck == 0)
                 {
+                    // If uncertainty due to imbued melodies, return unknown
                     if (CouldBeImbuedMelodies(dst, time, extension, log))
                     {
                         return GeneralHelper.UnknownAgent;
                     }
+                    // otherwise return the soulbeast
                     return dst;
                 }
             }
