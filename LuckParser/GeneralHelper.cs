@@ -80,39 +80,68 @@ namespace LuckParser
 
         public static string GetProfIcon(string prof)
         {
-            return prof switch
+            switch (prof)
             {
-                "Warrior" => "https://wiki.guildwars2.com/images/4/43/Warrior_tango_icon_20px.png",
-                "Berserker" => "https://wiki.guildwars2.com/images/d/da/Berserker_tango_icon_20px.png",
-                "Spellbreaker" => "https://wiki.guildwars2.com/images/e/ed/Spellbreaker_tango_icon_20px.png",
-                "Guardian" => "https://wiki.guildwars2.com/images/8/8c/Guardian_tango_icon_20px.png",
-                "Dragonhunter" => "https://wiki.guildwars2.com/images/c/c9/Dragonhunter_tango_icon_20px.png",
-                "DragonHunter" => "https://wiki.guildwars2.com/images/c/c9/Dragonhunter_tango_icon_20px.png",
-                "Firebrand" => "https://wiki.guildwars2.com/images/0/02/Firebrand_tango_icon_20px.png",
-                "Revenant" => "https://wiki.guildwars2.com/images/b/b5/Revenant_tango_icon_20px.png",
-                "Herald" => "https://wiki.guildwars2.com/images/6/67/Herald_tango_icon_20px.png",
-                "Renegade" => "https://wiki.guildwars2.com/images/7/7c/Renegade_tango_icon_20px.png",
-                "Engineer" => "https://wiki.guildwars2.com/images/2/27/Engineer_tango_icon_20px.png",
-                "Scrapper" => "https://wiki.guildwars2.com/images/3/3a/Scrapper_tango_icon_200px.png",
-                "Holosmith" => "https://wiki.guildwars2.com/images/2/28/Holosmith_tango_icon_20px.png",
-                "Ranger" => "https://wiki.guildwars2.com/images/4/43/Ranger_tango_icon_20px.png",
-                "Druid" => "https://wiki.guildwars2.com/images/d/d2/Druid_tango_icon_20px.png",
-                "Soulbeast" => "https://wiki.guildwars2.com/images/7/7c/Soulbeast_tango_icon_20px.png",
-                "Thief" => "https://wiki.guildwars2.com/images/7/7a/Thief_tango_icon_20px.png",
-                "Daredevil" => "https://wiki.guildwars2.com/images/e/e1/Daredevil_tango_icon_20px.png",
-                "Deadeye" => "https://wiki.guildwars2.com/images/c/c9/Deadeye_tango_icon_20px.png",
-                "Elementalist" => "https://wiki.guildwars2.com/images/a/aa/Elementalist_tango_icon_20px.png",
-                "Tempest" => "https://wiki.guildwars2.com/images/4/4a/Tempest_tango_icon_20px.png",
-                "Weaver" => "https://wiki.guildwars2.com/images/f/fc/Weaver_tango_icon_20px.png",
-                "Mesmer" => "https://wiki.guildwars2.com/images/6/60/Mesmer_tango_icon_20px.png",
-                "Chronomancer" => "https://wiki.guildwars2.com/images/f/f4/Chronomancer_tango_icon_20px.png",
-                "Mirage" => "https://wiki.guildwars2.com/images/d/df/Mirage_tango_icon_20px.png",
-                "Necromancer" => "https://wiki.guildwars2.com/images/4/43/Necromancer_tango_icon_20px.png",
-                "Reaper" => "https://wiki.guildwars2.com/images/1/11/Reaper_tango_icon_20px.png",
-                "Scourge" => "https://wiki.guildwars2.com/images/0/06/Scourge_tango_icon_20px.png",
-                "Sword" => "https://wiki.guildwars2.com/images/0/07/Crimson_Antique_Blade.png",
-                _ => "",
-            };
+                case "Warrior":
+                    return "https://wiki.guildwars2.com/images/4/43/Warrior_tango_icon_20px.png";
+                case "Berserker":
+                    return "https://wiki.guildwars2.com/images/d/da/Berserker_tango_icon_20px.png";
+                case "Spellbreaker":
+                    return "https://wiki.guildwars2.com/images/e/ed/Spellbreaker_tango_icon_20px.png";
+                case "Guardian":
+                    return "https://wiki.guildwars2.com/images/8/8c/Guardian_tango_icon_20px.png";
+                case "Dragonhunter":
+                    return "https://wiki.guildwars2.com/images/c/c9/Dragonhunter_tango_icon_20px.png";
+                case "DragonHunter":
+                    return "https://wiki.guildwars2.com/images/c/c9/Dragonhunter_tango_icon_20px.png";
+                case "Firebrand":
+                    return "https://wiki.guildwars2.com/images/0/02/Firebrand_tango_icon_20px.png";
+                case "Revenant":
+                    return "https://wiki.guildwars2.com/images/b/b5/Revenant_tango_icon_20px.png";
+                case "Herald":
+                    return "https://wiki.guildwars2.com/images/6/67/Herald_tango_icon_20px.png";
+                case "Renegade":
+                    return "https://wiki.guildwars2.com/images/7/7c/Renegade_tango_icon_20px.png";
+                case "Engineer":
+                    return "https://wiki.guildwars2.com/images/2/27/Engineer_tango_icon_20px.png";
+                case "Scrapper":
+                    return "https://wiki.guildwars2.com/images/3/3a/Scrapper_tango_icon_200px.png";
+                case "Holosmith":
+                    return "https://wiki.guildwars2.com/images/2/28/Holosmith_tango_icon_20px.png";
+                case "Ranger":
+                    return "https://wiki.guildwars2.com/images/4/43/Ranger_tango_icon_20px.png";
+                case "Druid":
+                    return "https://wiki.guildwars2.com/images/d/d2/Druid_tango_icon_20px.png";
+                case "Soulbeast":
+                    return "https://wiki.guildwars2.com/images/7/7c/Soulbeast_tango_icon_20px.png";
+                case "Thief":
+                    return "https://wiki.guildwars2.com/images/7/7a/Thief_tango_icon_20px.png";
+                case "Daredevil":
+                    return "https://wiki.guildwars2.com/images/e/e1/Daredevil_tango_icon_20px.png";
+                case "Deadeye":
+                    return "https://wiki.guildwars2.com/images/c/c9/Deadeye_tango_icon_20px.png";
+                case "Elementalist":
+                    return "https://wiki.guildwars2.com/images/a/aa/Elementalist_tango_icon_20px.png";
+                case "Tempest":
+                    return "https://wiki.guildwars2.com/images/4/4a/Tempest_tango_icon_20px.png";
+                case "Weaver":
+                    return "https://wiki.guildwars2.com/images/f/fc/Weaver_tango_icon_20px.png";
+                case "Mesmer":
+                    return "https://wiki.guildwars2.com/images/6/60/Mesmer_tango_icon_20px.png";
+                case "Chronomancer":
+                    return "https://wiki.guildwars2.com/images/f/f4/Chronomancer_tango_icon_20px.png";
+                case "Mirage":
+                    return "https://wiki.guildwars2.com/images/d/df/Mirage_tango_icon_20px.png";
+                case "Necromancer":
+                    return "https://wiki.guildwars2.com/images/4/43/Necromancer_tango_icon_20px.png";
+                case "Reaper":
+                    return "https://wiki.guildwars2.com/images/1/11/Reaper_tango_icon_20px.png";
+                case "Scourge":
+                    return "https://wiki.guildwars2.com/images/0/06/Scourge_tango_icon_20px.png";
+                case "Sword":
+                    return "https://wiki.guildwars2.com/images/0/07/Crimson_Antique_Blade.png";
+            }
+            return "";
         }
 
         public static string GetNPCIcon(ushort id)
@@ -374,161 +403,199 @@ namespace LuckParser
 
         public static string GetLink(string name)
         {
-            return name switch
+            switch (name)
             {
-                "Question" => "https://wiki.guildwars2.com/images/d/de/Sword_slot.png",
-                "Sword" => "https://wiki.guildwars2.com/images/0/07/Crimson_Antique_Blade.png",
-                "Axe" => "https://wiki.guildwars2.com/images/d/d4/Crimson_Antique_Reaver.png",
-                "Dagger" => "https://wiki.guildwars2.com/images/6/65/Crimson_Antique_Razor.png",
-                "Mace" => "https://wiki.guildwars2.com/images/6/6d/Crimson_Antique_Flanged_Mace.png",
-                "Pistol" => "https://wiki.guildwars2.com/images/4/46/Crimson_Antique_Revolver.png",
-                "Scepter" => "https://wiki.guildwars2.com/images/e/e2/Crimson_Antique_Wand.png",
-                "Focus" => "https://wiki.guildwars2.com/images/8/87/Crimson_Antique_Artifact.png",
-                "Shield" => "https://wiki.guildwars2.com/images/b/b0/Crimson_Antique_Bastion.png",
-                "Torch" => "https://wiki.guildwars2.com/images/7/76/Crimson_Antique_Brazier.png",
-                "Warhorn" => "https://wiki.guildwars2.com/images/1/1c/Crimson_Antique_Herald.png",
-                "Greatsword" => "https://wiki.guildwars2.com/images/5/50/Crimson_Antique_Claymore.png",
-                "Hammer" => "https://wiki.guildwars2.com/images/3/38/Crimson_Antique_Warhammer.png",
-                "Longbow" => "https://wiki.guildwars2.com/images/f/f0/Crimson_Antique_Greatbow.png",
-                "Shortbow" => "https://wiki.guildwars2.com/images/1/17/Crimson_Antique_Short_Bow.png",
-                "Rifle" => "https://wiki.guildwars2.com/images/1/19/Crimson_Antique_Musket.png",
-                "Staff" => "https://wiki.guildwars2.com/images/5/5f/Crimson_Antique_Spire.png",
+                case "Question":
+                    return "https://wiki.guildwars2.com/images/d/de/Sword_slot.png";
+                case "Sword":
+                    return "https://wiki.guildwars2.com/images/0/07/Crimson_Antique_Blade.png";
+                case "Axe":
+                    return "https://wiki.guildwars2.com/images/d/d4/Crimson_Antique_Reaver.png";
+                case "Dagger":
+                    return "https://wiki.guildwars2.com/images/6/65/Crimson_Antique_Razor.png";
+                case "Mace":
+                    return "https://wiki.guildwars2.com/images/6/6d/Crimson_Antique_Flanged_Mace.png";
+                case "Pistol":
+                    return "https://wiki.guildwars2.com/images/4/46/Crimson_Antique_Revolver.png";
+                case "Scepter":
+                    return "https://wiki.guildwars2.com/images/e/e2/Crimson_Antique_Wand.png";
+                case "Focus":
+                    return "https://wiki.guildwars2.com/images/8/87/Crimson_Antique_Artifact.png";
+                case "Shield":
+                    return "https://wiki.guildwars2.com/images/b/b0/Crimson_Antique_Bastion.png";
+                case "Torch":
+                    return "https://wiki.guildwars2.com/images/7/76/Crimson_Antique_Brazier.png";
+                case "Warhorn":
+                    return "https://wiki.guildwars2.com/images/1/1c/Crimson_Antique_Herald.png";
+                case "Greatsword":
+                    return "https://wiki.guildwars2.com/images/5/50/Crimson_Antique_Claymore.png";
+                case "Hammer":
+                    return "https://wiki.guildwars2.com/images/3/38/Crimson_Antique_Warhammer.png";
+                case "Longbow":
+                    return "https://wiki.guildwars2.com/images/f/f0/Crimson_Antique_Greatbow.png";
+                case "Shortbow":
+                    return "https://wiki.guildwars2.com/images/1/17/Crimson_Antique_Short_Bow.png";
+                case "Rifle":
+                    return "https://wiki.guildwars2.com/images/1/19/Crimson_Antique_Musket.png";
+                case "Staff":
+                    return "https://wiki.guildwars2.com/images/5/5f/Crimson_Antique_Spire.png";
 
-                "Color-Warrior" => "rgb(255,209,102)",
-                "Color-Berserker" => "rgb(255,209,102)",
-                "Color-Spellbreaker" => "rgb(255,209,102)",
-                "Color-Guardian" => "rgb(114,193,217)",
-                "Color-Dragonhunter" => "rgb(114,193,217)",
-                "Color-Firebrand" => "rgb(114,193,217)",
-                "Color-Revenant" => "rgb(209,110,90)",
-                "Color-Herald" => "rgb(209,110,90)",
-                "Color-Renegade" => "rgb(209,110,90)",
-                "Color-Engineer" => "rgb(208,156,89)",
-                "Color-Scrapper" => "rgb(208,156,89)",
-                "Color-Holosmith" => "rgb(208,156,89)",
-                "Color-Ranger" => "rgb(140,220,130)",
-                "Color-Druid" => "rgb(140,220,130)",
-                "Color-Soulbeast" => "rgb(140,220,130)",
-                "Color-Thief" => "rgb(192,143,149)",
-                "Color-Daredevil" => "rgb(192,143,149)",
-                "Color-Deadeye" => "rgb(192,143,149)",
-                "Color-Elementalist" => "rgb(246,138,135)",
-                "Color-Tempest" => "rgb(246,138,135)",
-                "Color-Weaver" => "rgb(246,138,135)",
-                "Color-Mesmer" => "rgb(182,121,213)",
-                "Color-Chronomancer" => "rgb(182,121,213)",
-                "Color-Mirage" => "rgb(182,121,213)",
-                "Color-Necromancer" => "rgb(82,167,111)",
-                "Color-Reaper" => "rgb(82,167,111)",
-                "Color-Scourge" => "rgb(82,167,111)",
-                "Color-Boss" => "rgb(82,167,250)",
+                case "Color-Warrior": return "rgb(255,209,102)";
+                case "Color-Berserker": return "rgb(255,209,102)";
+                case "Color-Spellbreaker": return "rgb(255,209,102)";
+                case "Color-Guardian": return "rgb(114,193,217)";
+                case "Color-Dragonhunter": return "rgb(114,193,217)";
+                case "Color-Firebrand": return "rgb(114,193,217)";
+                case "Color-Revenant": return "rgb(209,110,90)";
+                case "Color-Herald": return "rgb(209,110,90)";
+                case "Color-Renegade": return "rgb(209,110,90)";
+                case "Color-Engineer": return "rgb(208,156,89)";
+                case "Color-Scrapper": return "rgb(208,156,89)";
+                case "Color-Holosmith": return "rgb(208,156,89)";
+                case "Color-Ranger": return "rgb(140,220,130)";
+                case "Color-Druid": return "rgb(140,220,130)";
+                case "Color-Soulbeast": return "rgb(140,220,130)";
+                case "Color-Thief": return "rgb(192,143,149)";
+                case "Color-Daredevil": return "rgb(192,143,149)";
+                case "Color-Deadeye": return "rgb(192,143,149)";
+                case "Color-Elementalist": return "rgb(246,138,135)";
+                case "Color-Tempest": return "rgb(246,138,135)";
+                case "Color-Weaver": return "rgb(246,138,135)";
+                case "Color-Mesmer": return "rgb(182,121,213)";
+                case "Color-Chronomancer": return "rgb(182,121,213)";
+                case "Color-Mirage": return "rgb(182,121,213)";
+                case "Color-Necromancer": return "rgb(82,167,111)";
+                case "Color-Reaper": return "rgb(82,167,111)";
+                case "Color-Scourge": return "rgb(82,167,111)";
+                case "Color-Boss": return "rgb(82,167,250)";
 
-                "Color-Warrior-NonBoss" => "rgb(125,109,66)",
-                "Color-Berserker-NonBoss" => "rgb(125,109,66)",
-                "Color-Spellbreaker-NonBoss" => "rgb(125,109,66)",
-                "Color-Guardian-NonBoss" => "rgb(62,101,113)",
-                "Color-Dragonhunter-NonBoss" => "rgb(62,101,113)",
-                "Color-Firebrand-NonBoss" => "rgb(62,101,113)",
-                "Color-Revenant-NonBoss" => "rgb(110,60,50)",
-                "Color-Herald-NonBoss" => "rgb(110,60,50)",
-                "Color-Renegade-NonBoss" => "rgb(110,60,50)",
-                "Color-Engineer-NonBoss" => "rgb(109,83,48)",
-                "Color-Scrapper-NonBoss" => "rgb(109,83,48)",
-                "Color-Holosmith-NonBoss" => "rgb(109,83,48)",
-                "Color-Ranger-NonBoss" => "rgb(75,115,70)",
-                "Color-Druid-NonBoss" => "rgb(75,115,70)",
-                "Color-Soulbeast-NonBoss" => "rgb(75,115,70)",
-                "Color-Thief-NonBoss" => "rgb(101,76,79)",
-                "Color-Daredevil-NonBoss" => "rgb(101,76,79)",
-                "Color-Deadeye-NonBoss" => "rgb(101,76,79)",
-                "Color-Elementalist-NonBoss" => "rgb(127,74,72)",
-                "Color-Tempest-NonBoss" => "rgb(127,74,72)",
-                "Color-Weaver-NonBoss" => "rgb(127,74,72)",
-                "Color-Mesmer-NonBoss" => "rgb(96,60,111)",
-                "Color-Chronomancer-NonBoss" => "rgb(96,60,111)",
-                "Color-Mirage-NonBoss" => "rgb(96,60,111)",
-                "Color-Necromancer-NonBoss" => "rgb(46,88,60)",
-                "Color-Reaper-NonBoss" => "rgb(46,88,60)",
-                "Color-Scourge-NonBoss" => "rgb(46,88,60)",
-                "Color-Boss-NonBoss" => "rgb(92,177,250)",
+                case "Color-Warrior-NonBoss": return "rgb(125,109,66)";
+                case "Color-Berserker-NonBoss": return "rgb(125,109,66)";
+                case "Color-Spellbreaker-NonBoss": return "rgb(125,109,66)";
+                case "Color-Guardian-NonBoss": return "rgb(62,101,113)";
+                case "Color-Dragonhunter-NonBoss": return "rgb(62,101,113)";
+                case "Color-Firebrand-NonBoss": return "rgb(62,101,113)";
+                case "Color-Revenant-NonBoss": return "rgb(110,60,50)";
+                case "Color-Herald-NonBoss": return "rgb(110,60,50)";
+                case "Color-Renegade-NonBoss": return "rgb(110,60,50)";
+                case "Color-Engineer-NonBoss": return "rgb(109,83,48)";
+                case "Color-Scrapper-NonBoss": return "rgb(109,83,48)";
+                case "Color-Holosmith-NonBoss": return "rgb(109,83,48)";
+                case "Color-Ranger-NonBoss": return "rgb(75,115,70)";
+                case "Color-Druid-NonBoss": return "rgb(75,115,70)";
+                case "Color-Soulbeast-NonBoss": return "rgb(75,115,70)";
+                case "Color-Thief-NonBoss": return "rgb(101,76,79)";
+                case "Color-Daredevil-NonBoss": return "rgb(101,76,79)";
+                case "Color-Deadeye-NonBoss": return "rgb(101,76,79)";
+                case "Color-Elementalist-NonBoss": return "rgb(127,74,72)";
+                case "Color-Tempest-NonBoss": return "rgb(127,74,72)";
+                case "Color-Weaver-NonBoss": return "rgb(127,74,72)";
+                case "Color-Mesmer-NonBoss": return "rgb(96,60,111)";
+                case "Color-Chronomancer-NonBoss": return "rgb(96,60,111)";
+                case "Color-Mirage-NonBoss": return "rgb(96,60,111)";
+                case "Color-Necromancer-NonBoss": return "rgb(46,88,60)";
+                case "Color-Reaper-NonBoss": return "rgb(46,88,60)";
+                case "Color-Scourge-NonBoss": return "rgb(46,88,60)";
+                case "Color-Boss-NonBoss": return "rgb(92,177,250)";
 
-                "Color-Warrior-Total" => "rgb(125,109,66)",
-                "Color-Berserker-Total" => "rgb(125,109,66)",
-                "Color-Spellbreaker-Total" => "rgb(125,109,66)",
-                "Color-Guardian-Total" => "rgb(62,101,113)",
-                "Color-Dragonhunter-Total" => "rgb(62,101,113)",
-                "Color-Firebrand-Total" => "rgb(62,101,113)",
-                "Color-Revenant-Total" => "rgb(110,60,50)",
-                "Color-Herald-Total" => "rgb(110,60,50)",
-                "Color-Renegade-Total" => "rgb(110,60,50)",
-                "Color-Engineer-Total" => "rgb(109,83,48)",
-                "Color-Scrapper-Total" => "rgb(109,83,48)",
-                "Color-Holosmith-Total" => "rgb(109,83,48)",
-                "Color-Ranger-Total" => "rgb(75,115,70)",
-                "Color-Druid-Total" => "rgb(75,115,70)",
-                "Color-Soulbeast-Total" => "rgb(75,115,70)",
-                "Color-Thief-Total" => "rgb(101,76,79)",
-                "Color-Daredevil-Total" => "rgb(101,76,79)",
-                "Color-Deadeye-Total" => "rgb(101,76,79)",
-                "Color-Elementalist-Total" => "rgb(127,74,72)",
-                "Color-Tempest-Total" => "rgb(127,74,72)",
-                "Color-Weaver-Total" => "rgb(127,74,72)",
-                "Color-Mesmer-Total" => "rgb(96,60,111)",
-                "Color-Chronomancer-Total" => "rgb(96,60,111)",
-                "Color-Mirage-Total" => "rgb(96,60,111)",
-                "Color-Necromancer-Total" => "rgb(46,88,60)",
-                "Color-Reaper-Total" => "rgb(46,88,60)",
-                "Color-Scourge-Total" => "rgb(46,88,60)",
-                "Color-Boss-Total" => "rgb(92,177,250)",
+                case "Color-Warrior-Total": return "rgb(125,109,66)";
+                case "Color-Berserker-Total": return "rgb(125,109,66)";
+                case "Color-Spellbreaker-Total": return "rgb(125,109,66)";
+                case "Color-Guardian-Total": return "rgb(62,101,113)";
+                case "Color-Dragonhunter-Total": return "rgb(62,101,113)";
+                case "Color-Firebrand-Total": return "rgb(62,101,113)";
+                case "Color-Revenant-Total": return "rgb(110,60,50)";
+                case "Color-Herald-Total": return "rgb(110,60,50)";
+                case "Color-Renegade-Total": return "rgb(110,60,50)";
+                case "Color-Engineer-Total": return "rgb(109,83,48)";
+                case "Color-Scrapper-Total": return "rgb(109,83,48)";
+                case "Color-Holosmith-Total": return "rgb(109,83,48)";
+                case "Color-Ranger-Total": return "rgb(75,115,70)";
+                case "Color-Druid-Total": return "rgb(75,115,70)";
+                case "Color-Soulbeast-Total": return "rgb(75,115,70)";
+                case "Color-Thief-Total": return "rgb(101,76,79)";
+                case "Color-Daredevil-Total": return "rgb(101,76,79)";
+                case "Color-Deadeye-Total": return "rgb(101,76,79)";
+                case "Color-Elementalist-Total": return "rgb(127,74,72)";
+                case "Color-Tempest-Total": return "rgb(127,74,72)";
+                case "Color-Weaver-Total": return "rgb(127,74,72)";
+                case "Color-Mesmer-Total": return "rgb(96,60,111)";
+                case "Color-Chronomancer-Total": return "rgb(96,60,111)";
+                case "Color-Mirage-Total": return "rgb(96,60,111)";
+                case "Color-Necromancer-Total": return "rgb(46,88,60)";
+                case "Color-Reaper-Total": return "rgb(46,88,60)";
+                case "Color-Scourge-Total": return "rgb(46,88,60)";
+                case "Color-Boss-Total": return "rgb(92,177,250)";
 
-                "Crit" => "https://wiki.guildwars2.com/images/9/95/Critical_Chance.png",
-                "Scholar" => "https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png",
-                "SwS" => "https://wiki.guildwars2.com/images/1/1c/Bowl_of_Seaweed_Salad.png",
-                "Downs" => "https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png",
-                "Resurrect" => "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png",
-                "Dead" => "https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png",
-                "Flank" => "https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png",
-                "Glance" => "https://wiki.guildwars2.com/images/f/f9/Weakness.png",
-                "Miss" => "https://wiki.guildwars2.com/images/3/33/Blinded.png",
-                "Interupts" => "https://wiki.guildwars2.com/images/7/79/Daze.png",
-                "Invuln" => "https://wiki.guildwars2.com/images/e/eb/Determined.png",
-                "Blinded" => "https://wiki.guildwars2.com/images/3/33/Blinded.png",
-                "Wasted" => "https://wiki.guildwars2.com/images/b/b3/Out_Of_Health_Potions.png",
-                "Saved" => "https://wiki.guildwars2.com/images/e/eb/Ready.png",
-                "Swap" => "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png",
-                "Blank" => "https://wiki.guildwars2.com/images/d/de/Sword_slot.png",
-                "Dodge" => "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png",
-                "Bandage" => "https://wiki.guildwars2.com/images/0/0c/Bandage.png",
-                "Stack" => "https://wiki.guildwars2.com/images/e/ef/Commander_arrow_marker.png",
+                case "Crit":
+                    return "https://wiki.guildwars2.com/images/9/95/Critical_Chance.png";
+                case "Scholar":
+                    return "https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png";
+                case "SwS":
+                    return "https://wiki.guildwars2.com/images/1/1c/Bowl_of_Seaweed_Salad.png";
+                case "Downs":
+                    return "https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png";
+                case "Resurrect":
+                    return "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png";
+                case "Dead":
+                    return "https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png";
+                case "Flank":
+                    return "https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png";
+                case "Glance":
+                    return "https://wiki.guildwars2.com/images/f/f9/Weakness.png";
+                case "Miss":
+                    return "https://wiki.guildwars2.com/images/3/33/Blinded.png";
+                case "Interupts":
+                    return "https://wiki.guildwars2.com/images/7/79/Daze.png";
+                case "Invuln":
+                    return "https://wiki.guildwars2.com/images/e/eb/Determined.png";
+                case "Blinded":
+                    return "https://wiki.guildwars2.com/images/3/33/Blinded.png";
+                case "Wasted":
+                    return "https://wiki.guildwars2.com/images/b/b3/Out_Of_Health_Potions.png";
+                case "Saved":
+                    return "https://wiki.guildwars2.com/images/e/eb/Ready.png";
+                case "Swap":
+                    return "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png";
+                case "Blank":
+                    return "https://wiki.guildwars2.com/images/d/de/Sword_slot.png";
+                case "Dodge":
+                    return "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png";
+                case "Bandage":
+                    return "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
+                case "Stack":
+                    return "https://wiki.guildwars2.com/images/e/ef/Commander_arrow_marker.png";
 
-                "Color-Aegis" => "rgb(102,255,255)",
-                "Color-Fury" => "rgb(255,153,0)",
-                "Color-Might" => "rgb(153,0,0)",
-                "Color-Protection" => "rgb(102,255,255)",
-                "Color-Quickness" => "rgb(255,0,255)",
-                "Color-Regeneration" => "rgb(0,204,0)",
-                "Color-Resistance" => "rgb(255, 153, 102)",
-                "Color-Retaliation" => "rgb(255, 51, 0)",
-                "Color-Stability" => "rgb(153, 102, 0)",
-                "Color-Swiftness" => "rgb(255,255,0)",
-                "Color-Vigor" => "rgb(102, 153, 0)",
+                case "Color-Aegis": return "rgb(102,255,255)";
+                case "Color-Fury": return "rgb(255,153,0)";
+                case "Color-Might": return "rgb(153,0,0)";
+                case "Color-Protection": return "rgb(102,255,255)";
+                case "Color-Quickness": return "rgb(255,0,255)";
+                case "Color-Regeneration": return "rgb(0,204,0)";
+                case "Color-Resistance": return "rgb(255, 153, 102)";
+                case "Color-Retaliation": return "rgb(255, 51, 0)";
+                case "Color-Stability": return "rgb(153, 102, 0)";
+                case "Color-Swiftness": return "rgb(255,255,0)";
+                case "Color-Vigor": return "rgb(102, 153, 0)";
 
-                "Color-Alacrity" => "rgb(0,102,255)",
-                "Color-Glyph of Empowerment" => "rgb(204, 153, 0)",
-                "Color-Grace of the Land" => "rgb(,,)",
-                "Color-Sun Spirit" => "rgb(255, 102, 0)",
-                "Color-Banner of Strength" => "rgb(153, 0, 0)",
-                "Color-Banner of Discipline" => "rgb(0, 51, 0)",
-                "Color-Spotter" => "rgb(0,255,0)",
-                "Color-Stone Spirit" => "rgb(204, 102, 0)",
-                "Color-Storm Spirit" => "rgb(102, 0, 102)",
-                "Color-Empower Allies" => "rgb(255, 153, 0)",
+                case "Color-Alacrity": return "rgb(0,102,255)";
+                case "Color-Glyph of Empowerment": return "rgb(204, 153, 0)";
+                case "Color-Grace of the Land": return "rgb(,,)";
+                case "Color-Sun Spirit": return "rgb(255, 102, 0)";
+                case "Color-Banner of Strength": return "rgb(153, 0, 0)";
+                case "Color-Banner of Discipline": return "rgb(0, 51, 0)";
+                case "Color-Spotter": return "rgb(0,255,0)";
+                case "Color-Stone Spirit": return "rgb(204, 102, 0)";
+                case "Color-Storm Spirit": return "rgb(102, 0, 102)";
+                case "Color-Empower Allies": return "rgb(255, 153, 0)";
 
-                "Condi" => "https://wiki.guildwars2.com/images/5/54/Condition_Damage.png",
-                "Healing" => "https://wiki.guildwars2.com/images/8/81/Healing_Power.png",
-                "Tough" => "https://wiki.guildwars2.com/images/1/12/Toughness.png",
-                _ => "",
-            };
+                case "Condi": return "https://wiki.guildwars2.com/images/5/54/Condition_Damage.png";
+                case "Healing": return "https://wiki.guildwars2.com/images/8/81/Healing_Power.png";
+                case "Tough": return "https://wiki.guildwars2.com/images/1/12/Toughness.png";
+                default:
+                    return "";
+            }
+
         }
     }
 }

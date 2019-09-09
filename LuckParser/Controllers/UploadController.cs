@@ -113,6 +113,7 @@ namespace LuckParser.Controllers
             }
             finally
             {
+                byteArrayContent.Dispose();
                 httpClient.Dispose();
                 requestMessage.Dispose();
             }

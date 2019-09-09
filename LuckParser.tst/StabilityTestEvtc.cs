@@ -69,23 +69,27 @@ namespace LuckParser.tst
                 dict[evtcName] = messages[i];
             }
 
-            using var fs = new FileStream(logName, FileMode.Create, FileAccess.Write);
-            using var sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8);
-            var contractResolver = new DefaultContractResolver
+            using (var fs = new FileStream(logName, FileMode.Create, FileAccess.Write))
             {
-                NamingStrategy = new CamelCaseNamingStrategy()
-            };
+                using (var sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
+                {
+                    var contractResolver = new DefaultContractResolver
+                    {
+                        NamingStrategy = new CamelCaseNamingStrategy()
+                    };
 
-            var serializer = new JsonSerializer
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = contractResolver
-            };
-            var writer = new JsonTextWriter(sw)
-            {
-                Formatting = Newtonsoft.Json.Formatting.Indented
-            };
-            serializer.Serialize(writer, dict);
+                    var serializer = new JsonSerializer
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        ContractResolver = contractResolver
+                    };
+                    var writer = new JsonTextWriter(sw)
+                    {
+                        Formatting = Newtonsoft.Json.Formatting.Indented
+                    };
+                    serializer.Serialize(writer, dict);
+                }
+            }
         }
 
         [Test]

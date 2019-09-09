@@ -770,9 +770,11 @@ namespace LuckParser.Builders
                 string jsPath = Path.Combine(path, jsFileName);
                 try
                 {
-                    using var fs = new FileStream(jsPath, FileMode.Create, FileAccess.Write);
-                    using var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8);
-                    scriptWriter.Write(scriptContent);
+                    using (var fs = new FileStream(jsPath, FileMode.Create, FileAccess.Write))
+                    using (var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
+                    {
+                        scriptWriter.Write(scriptContent);
+                    }
                 }
                 catch (IOException)
                 {
@@ -879,9 +881,11 @@ namespace LuckParser.Builders
                 string cssPath = Path.Combine(path, cssFilename);
                 try
                 {
-                    using var fs = new FileStream(cssPath, FileMode.Create, FileAccess.Write);
-                    using var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8);
-                    scriptWriter.Write(scriptContent);
+                    using (var fs = new FileStream(cssPath, FileMode.Create, FileAccess.Write))
+                    using (var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
+                    {
+                        scriptWriter.Write(scriptContent);
+                    }
                 }
                 catch (IOException)
                 {
@@ -928,9 +932,11 @@ namespace LuckParser.Builders
                 string scriptPath = Path.Combine(path, scriptFilename);
                 try
                 {
-                    using var fs = new FileStream(scriptPath, FileMode.Create, FileAccess.Write);
-                    using var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8);
-                    scriptWriter.Write(scriptContent);
+                    using (var fs = new FileStream(scriptPath, FileMode.Create, FileAccess.Write))
+                    using (var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
+                    {
+                        scriptWriter.Write(scriptContent);
+                    }
                 }
                 catch (IOException)
                 {
@@ -971,9 +977,11 @@ namespace LuckParser.Builders
                 string scriptPath = Path.Combine(path, scriptFilename);
                 try
                 {
-                    using var fs = new FileStream(scriptPath, FileMode.Create, FileAccess.Write);
-                    using var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8);
-                    scriptWriter.Write(scriptContent);
+                    using (var fs = new FileStream(scriptPath, FileMode.Create, FileAccess.Write))
+                    using (var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
+                    {
+                        scriptWriter.Write(scriptContent);
+                    }
                 }
                 catch (IOException)
                 {

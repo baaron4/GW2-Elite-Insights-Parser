@@ -76,16 +76,18 @@ namespace LuckParser.Setting
 
         private void BtnFolderSelectClick(object sender, EventArgs e)
         {
-            using var fbd = new FolderBrowserDialog();
-            DialogResult result = fbd.ShowDialog();
-
-            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+            using (var fbd = new FolderBrowserDialog())
             {
-                //string[] files = Directory.GetFiles(fbd.SelectedPath);
+                DialogResult result = fbd.ShowDialog();
 
-                // System.Windows.Forms.MessageBox.Show("Files found: " + files.Length.ToString(), "Message");
-                txtCustomSaveLoc.Text = fbd.SelectedPath;
-                Properties.Settings.Default.OutLocation = fbd.SelectedPath;
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    //string[] files = Directory.GetFiles(fbd.SelectedPath);
+
+                    // System.Windows.Forms.MessageBox.Show("Files found: " + files.Length.ToString(), "Message");
+                    txtCustomSaveLoc.Text = fbd.SelectedPath;
+                    Properties.Settings.Default.OutLocation = fbd.SelectedPath;
+                }
             }
         }
 
@@ -223,20 +225,20 @@ namespace LuckParser.Setting
                     path = null;
                 }
 
-                using var fbd = new FolderBrowserDialog
+                using (var fbd = new FolderBrowserDialog())
                 {
-                    ShowNewFolderButton = false,
-                    SelectedPath = path
-                };
-                DialogResult result = fbd.ShowDialog();
+                    fbd.ShowNewFolderButton = false;
+                    fbd.SelectedPath = path;
+                    DialogResult result = fbd.ShowDialog();
 
-                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
-                {
-                    Properties.Settings.Default.AutoAddPath = fbd.SelectedPath;
-                }
-                else
-                {
-                    chkAutoAdd.Checked = false;
+                    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                    {
+                        Properties.Settings.Default.AutoAddPath = fbd.SelectedPath;
+                    }
+                    else
+                    {
+                        chkAutoAdd.Checked = false;
+                    }
                 }
             }
             Properties.Settings.Default.AutoAdd = chkAutoAdd.Checked;
@@ -265,33 +267,33 @@ namespace LuckParser.Setting
         private void SettingsDump_Click(object sender, EventArgs e)
         {
             string dump = CustomSettingsManager.DumpSettings();
-            using var saveFile = new SaveFileDialog
+            using (var saveFile = new SaveFileDialog())
             {
-                Filter = "Conf file|*.conf",
-                Title = "Save a Configuration file"
-            };
-            DialogResult result = saveFile.ShowDialog();
-            if (saveFile.FileName.Length == 0)
-            {
-                var fs = (FileStream)saveFile.OpenFile();
-                byte[] settings = new UTF8Encoding(true).GetBytes(dump);
-                fs.Write(settings, 0, settings.Length);
-                fs.Close();
+                saveFile.Filter = "Conf file|*.conf";
+                saveFile.Title = "Save a Configuration file";
+                DialogResult result = saveFile.ShowDialog();
+                if (saveFile.FileName.Length > 0)
+                {
+                    var fs = (FileStream)saveFile.OpenFile();
+                    byte[] settings = new UTF8Encoding(true).GetBytes(dump);
+                    fs.Write(settings, 0, settings.Length);
+                    fs.Close();
+                }
             }
         }
 
         private void SettingsLoad_Click(object sender, EventArgs e)
         {
-            using var loadFile = new OpenFileDialog
+            using (var loadFile = new OpenFileDialog())
             {
-                Filter = "Conf file|*.conf",
-                Title = "Load a Configuration file"
-            };
-            DialogResult result = loadFile.ShowDialog();
-            if (loadFile.FileName.Length == 0)
-            {
-                CustomSettingsManager.ReadConfig(loadFile.FileName);
-                SetValues();
+                loadFile.Filter = "Conf file|*.conf";
+                loadFile.Title = "Load a Configuration file";
+                DialogResult result = loadFile.ShowDialog();
+                if (loadFile.FileName.Length > 0)
+                {
+                    CustomSettingsManager.ReadConfig(loadFile.FileName);
+                    SetValues();
+                }
             }
         }
 

@@ -137,17 +137,19 @@ namespace LuckParser.Controllers
                     if (new FileInfo(path).Length != 0)
                     {
                         Console.WriteLine("Reading Skilllist");
-                        using var reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-                        + "/Content/SkillList.json");
-                        var serializer = new JsonSerializer()
+                        using (var reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+                        + "/Content/SkillList.json"))
                         {
-                            ContractResolver = new DefaultContractResolver()
+                            var serializer = new JsonSerializer()
                             {
-                                NamingStrategy = new CamelCaseNamingStrategy()
-                            }
-                        };
-                        _listOfSkills.Items = (List<GW2APISkill>)serializer.Deserialize(reader, typeof(List<GW2APISkill>));
-                        reader.Close();
+                                ContractResolver = new DefaultContractResolver()
+                                {
+                                    NamingStrategy = new CamelCaseNamingStrategy()
+                                }
+                            };
+                            _listOfSkills.Items = (List<GW2APISkill>)serializer.Deserialize(reader, typeof(List<GW2APISkill>));
+                            reader.Close();
+                        }
                     }
                 }
                 if (_listOfSkills.Items.Count == 0)
@@ -266,17 +268,19 @@ namespace LuckParser.Controllers
                     if (new FileInfo(path).Length != 0)
                     {
                         Console.WriteLine("Reading SpecList");
-                        using var reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-                        + "/Content/SpecList.json");
-                        var serializer = new JsonSerializer()
+                        using (var reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+                        + "/Content/SpecList.json"))
                         {
-                            ContractResolver = new DefaultContractResolver()
+                            var serializer = new JsonSerializer()
                             {
-                                NamingStrategy = new CamelCaseNamingStrategy()
-                            }
-                        };
-                        _listofSpecs.Items = (List<GW2APISpec>)serializer.Deserialize(reader, typeof(List<GW2APISpec>));
-                        reader.Close();
+                                ContractResolver = new DefaultContractResolver()
+                                {
+                                    NamingStrategy = new CamelCaseNamingStrategy()
+                                }
+                            };
+                            _listofSpecs.Items = (List<GW2APISpec>)serializer.Deserialize(reader, typeof(List<GW2APISpec>));
+                            reader.Close();
+                        }
                     }
                 }
                 if (_listofSpecs.Items.Count == 0)//if nothing in file or fail write new file

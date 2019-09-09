@@ -44,7 +44,8 @@ namespace LuckParser.Parser
             {
                 if (ProgramHelper.IsCompressedFormat(evtc))
                 {
-                    using var arch = new ZipArchive(fs, ZipArchiveMode.Read);
+                    using (var arch = new ZipArchive(fs, ZipArchiveMode.Read))
+                    {
                         if (arch.Entries.Count != 1)
                         {
                             throw new InvalidDataException("Invalid Archive");
@@ -58,8 +59,7 @@ namespace LuckParser.Parser
                                 ParseLog(row, ms);
                             };
                         }
-                    using Stream data = arch.Entries[0].Open();
-                    ParseLog(row, data);
+                    }
                 }
                 else
                 {
@@ -119,17 +119,19 @@ namespace LuckParser.Parser
         /// </summary>
         private void ParseFightData(Stream stream)
         {
-            using BinaryReader reader = CreateReader(stream);
-            // 12 bytes: arc build version
-            _buildVersion = ParseHelper.GetString(stream, 12);
+            using (BinaryReader reader = CreateReader(stream))
+            {
+                // 12 bytes: arc build version
+                _buildVersion = ParseHelper.GetString(stream, 12);
 
-            // 1 byte: skip
-            _revision = reader.ReadByte();
+                // 1 byte: skip
+                _revision = reader.ReadByte();
 
-            // 2 bytes: fight instance ID
-            _id = reader.ReadUInt16();
-            // 1 byte: position
-            ParseHelper.SafeSkip(stream, 1);
+                // 2 bytes: fight instance ID
+                _id = reader.ReadUInt16();
+                // 1 byte: position
+                ParseHelper.SafeSkip(stream, 1);
+            }
         }
 
         /// <summary>
@@ -137,72 +139,73 @@ namespace LuckParser.Parser
         /// </summary>
         private void ParseAgentData(Stream stream)
         {
-            using BinaryReader reader = CreateReader(stream);
-            // 4 bytes: player count
-            int playerCount = reader.ReadInt32();
+            using (BinaryReader reader = CreateReader(stream))
+            {            // 4 bytes: player count
+                int playerCount = reader.ReadInt32();
 
-            // 96 bytes: each player
-            for (int i = 0; i < playerCount; i++)
-            {
-                // 8 bytes: agent
-                ulong agent = reader.ReadUInt64();
-
-                // 4 bytes: profession
-                uint prof = reader.ReadUInt32();
-
-                // 4 bytes: is_elite
-                uint isElite = reader.ReadUInt32();
-
-                // 2 bytes: toughness
-                uint toughness = reader.ReadUInt16();
-                // 2 bytes: healing
-                uint concentration = reader.ReadUInt16();
-                // 2 bytes: healing
-                uint healing = reader.ReadUInt16();
-                // 2 bytes: hitbox width
-                uint hbWidth = (uint)2 * reader.ReadUInt16();
-                // 2 bytes: condition
-                uint condition = reader.ReadUInt16();
-                // 2 bytes: hitbox height
-                uint hbHeight = (uint)2 * reader.ReadUInt16();
-                // 68 bytes: name
-                string name = ParseHelper.GetString(stream, 68, false);
-                //Save
-                string agentProf = GW2APIController.GetAgentProfString(prof, isElite);
-                AgentItem.AgentType type;
-                ushort ID = 0;
-                switch (agentProf)
+                // 96 bytes: each player
+                for (int i = 0; i < playerCount; i++)
                 {
-                    case "NPC":
-                        // NPC
-                        try
-                        {
-                            ID = ushort.Parse(prof.ToString().PadLeft(5, '0'));
-                        }
-                        catch (FormatException)
-                        {
-                            ID = 0;
-                        }
-                        type = AgentItem.AgentType.NPC;
-                        break;
-                    case "GDG":
-                        // Gadget
-                        try
-                        {
-                            ID = ushort.Parse((prof & 0x0000ffff).ToString().PadLeft(5, '0'));
-                        }
-                        catch (FormatException)
-                        {
-                            ID = 0;
-                        }
-                        type = AgentItem.AgentType.Gadget;
-                        break;
-                    default:
-                        // Player
-                        type = AgentItem.AgentType.Player;
-                        break;
+                    // 8 bytes: agent
+                    ulong agent = reader.ReadUInt64();
+
+                    // 4 bytes: profession
+                    uint prof = reader.ReadUInt32();
+
+                    // 4 bytes: is_elite
+                    uint isElite = reader.ReadUInt32();
+
+                    // 2 bytes: toughness
+                    uint toughness = reader.ReadUInt16();
+                    // 2 bytes: healing
+                    uint concentration = reader.ReadUInt16();
+                    // 2 bytes: healing
+                    uint healing = reader.ReadUInt16();
+                    // 2 bytes: hitbox width
+                    uint hbWidth = (uint)2 * reader.ReadUInt16();
+                    // 2 bytes: condition
+                    uint condition = reader.ReadUInt16();
+                    // 2 bytes: hitbox height
+                    uint hbHeight = (uint)2 * reader.ReadUInt16();
+                    // 68 bytes: name
+                    string name = ParseHelper.GetString(stream, 68, false);
+                    //Save
+                    string agentProf = GW2APIController.GetAgentProfString(prof, isElite);
+                    AgentItem.AgentType type;
+                    ushort ID = 0;
+                    switch (agentProf)
+                    {
+                        case "NPC":
+                            // NPC
+                            try
+                            {
+                                ID = ushort.Parse(prof.ToString().PadLeft(5, '0'));
+                            }
+                            catch (FormatException)
+                            {
+                                ID = 0;
+                            }
+                            type = AgentItem.AgentType.NPC;
+                            break;
+                        case "GDG":
+                            // Gadget
+                            try
+                            {
+                                ID = ushort.Parse((prof & 0x0000ffff).ToString().PadLeft(5, '0'));
+                            }
+                            catch (FormatException)
+                            {
+                                ID = 0;
+                            }
+                            type = AgentItem.AgentType.Gadget;
+                            break;
+                        default:
+                            // Player
+                            type = AgentItem.AgentType.Player;
+                            break;
+                    }
+                    _allAgentsList.Add(new AgentItem(agent, name, agentProf, ID, type, toughness, healing, condition, concentration, hbWidth, hbHeight));
                 }
-                _allAgentsList.Add(new AgentItem(agent, name, agentProf, ID, type, toughness, healing, condition, concentration, hbWidth, hbHeight));
             }
         }
 
@@ -211,20 +214,22 @@ namespace LuckParser.Parser
         /// </summary>
         private void ParseSkillData(Stream stream)
         {
-            using BinaryReader reader = CreateReader(stream);
-            // 4 bytes: player count
-            uint skillCount = reader.ReadUInt32();
-            //TempData["Debug"] += "Skill Count:" + skill_count.ToString();
-            // 68 bytes: each skill
-            for (int i = 0; i < skillCount; i++)
+            using (BinaryReader reader = CreateReader(stream))
             {
-                // 4 bytes: skill ID
-                int skillId = reader.ReadInt32();
-                // 64 bytes: name
-                string name = ParseHelper.GetString(stream, 64);
-                //Save
-                var skill = new SkillItem(skillId, name);
-                _skillData.Add(skill);
+                // 4 bytes: player count
+                uint skillCount = reader.ReadUInt32();
+                //TempData["Debug"] += "Skill Count:" + skill_count.ToString();
+                // 68 bytes: each skill
+                for (int i = 0; i < skillCount; i++)
+                {
+                    // 4 bytes: skill ID
+                    int skillId = reader.ReadInt32();
+                    // 64 bytes: name
+                    string name = ParseHelper.GetString(stream, 64);
+                    //Save
+                    var skill = new SkillItem(skillId, name);
+                    _skillData.Add(skill);
+                }
             }
         }
 
@@ -400,7 +405,8 @@ namespace LuckParser.Parser
                     {
                         continue;
                     }
-                _combatItems.Add(combatItem);
+                    _combatItems.Add(combatItem);
+                }
             }
         }
 

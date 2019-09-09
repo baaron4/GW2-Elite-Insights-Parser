@@ -128,9 +128,11 @@ namespace LuckParser.Logic
                             {
                                 break;
                             }
-                            List<string> patterns = phaseIndex switch
+                            List<string> patterns;
+                            switch (phaseIndex)
                             {
-                                1 => new List<string>
+                                case 1:
+                                    patterns = new List<string>
                             {
                                 "2+3+5",
                                 "2+3+4",
@@ -138,8 +140,10 @@ namespace LuckParser.Logic
                                 "1+2+5",
                                 "1+3+5",
                                 "Full"
-                            },
-                                3 => new List<string>
+                            };
+                                    break;
+                                case 3:
+                                    patterns = new List<string>
                             {
                                 "2+3+4",
                                 "1+4+5",
@@ -147,8 +151,10 @@ namespace LuckParser.Logic
                                 "1+2+5",
                                 "1+2+3",
                                 "Full"
-                            },
-                                5 => new List<string>
+                            };
+                                    break;
+                                case 5:
+                                    patterns = new List<string>
                             {
                                 "1+4+5",
                                 "1+2+5",
@@ -156,9 +162,11 @@ namespace LuckParser.Logic
                                 "3+4+5",
                                 "3+4+5",
                                 "Full"
-                            },
-                                _ => throw new Exception("how the fuck"),
                             };
+                                    break;
+                                default:
+                                    throw new Exception("how the fuck");
+                            }
                             start += 2200;
                             for (int i = 0; i < ticks; i++)
                             {

@@ -96,13 +96,16 @@ namespace LuckParser.EIData
         public int GetTotalDamage(Player p, ParsedLog log, Target t, int phaseIndex)
         {
             FinalDPS damageData = p.GetDPSTarget(log, phaseIndex, t);
-            return _compareType switch
+            switch (_compareType)
             {
-                DamageType.All => _dmgSrc == DamageSource.All ? damageData.Damage : damageData.ActorDamage,
-                DamageType.Condition => _dmgSrc == DamageSource.All ? damageData.CondiDamage : damageData.ActorCondiDamage,
-                DamageType.Power => _dmgSrc == DamageSource.All ? damageData.PowerDamage : damageData.ActorPowerDamage,
-                _ => 0,
-            };
+                case DamageType.All:
+                    return _dmgSrc == DamageSource.All ? damageData.Damage : damageData.ActorDamage;
+                case DamageType.Condition:
+                    return _dmgSrc == DamageSource.All ? damageData.CondiDamage : damageData.ActorCondiDamage;
+                case DamageType.Power:
+                    return _dmgSrc == DamageSource.All ? damageData.PowerDamage : damageData.ActorPowerDamage;
+            }
+            return 0;
         }
 
         public List<AbstractDamageEvent> GetDamageLogs(Player p, ParsedLog log, Target t, PhaseData phase)
