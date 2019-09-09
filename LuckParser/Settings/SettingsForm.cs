@@ -1,8 +1,8 @@
-﻿using LuckParser.Controllers;
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using LuckParser.Controllers;
 
 namespace LuckParser.Setting
 {
@@ -11,11 +11,11 @@ namespace LuckParser.Setting
         public event EventHandler SettingsClosedEvent;
         public event EventHandler WatchDirectoryUpdatedEvent;
 
-        public SettingsForm(MainForm mainForm)
+        public SettingsForm()
         {
             InitializeComponent();
         }
-        
+
         private void SettingsFormFormClosing(object sender, FormClosingEventArgs e)
         {
             Properties.Settings.Default.Save();
@@ -94,21 +94,19 @@ namespace LuckParser.Setting
         private void CustomSaveLocationTextChanged(object sender, EventArgs e)
         {
 
-        }    
+        }
 
         private void ResetSkillListClick(object sender, EventArgs e)
         {
             //Update skill list
-            GW2APIController tempcontroller = new GW2APIController();
-            tempcontroller.WriteSkillListToFile();
+            GW2APIController.WriteSkillListToFile();
             MessageBox.Show("Skill List has been redone");
         }
 
         private void ResetSpecListClick(object sender, EventArgs e)
         {
             //Update skill list
-            GW2APIController tempcontroller = new GW2APIController();
-            tempcontroller.WriteSpecListToFile();
+            GW2APIController.WriteSpecListToFile();
             MessageBox.Show("Spec List has been redone");
         }
 
@@ -274,9 +272,9 @@ namespace LuckParser.Setting
                 saveFile.Filter = "Conf file|*.conf";
                 saveFile.Title = "Save a Configuration file";
                 DialogResult result = saveFile.ShowDialog();
-                if (saveFile.FileName != "")
+                if (saveFile.FileName.Length > 0)
                 {
-                    FileStream fs = (FileStream)saveFile.OpenFile();
+                    var fs = (FileStream)saveFile.OpenFile();
                     byte[] settings = new UTF8Encoding(true).GetBytes(dump);
                     fs.Write(settings, 0, settings.Length);
                     fs.Close();
@@ -291,7 +289,7 @@ namespace LuckParser.Setting
                 loadFile.Filter = "Conf file|*.conf";
                 loadFile.Title = "Load a Configuration file";
                 DialogResult result = loadFile.ShowDialog();
-                if (loadFile.FileName != "")
+                if (loadFile.FileName.Length > 0)
                 {
                     CustomSettingsManager.ReadConfig(loadFile.FileName);
                     SetValues();

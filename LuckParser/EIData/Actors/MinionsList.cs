@@ -1,20 +1,20 @@
-﻿using LuckParser.Parser;
+﻿using System.Collections.Generic;
+using System.Linq;
+using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace LuckParser.EIData
 {
-    public class Minions : List<Minion>
+    public class MinionsList : List<Minion>
     {
-        public readonly int MinionID;
+        public int MinionID { get; }
         private List<AbstractDamageEvent> _damageLogs;
         private Dictionary<AgentItem, List<AbstractDamageEvent>> _damageLogsByDst;
         private List<AbstractCastEvent> _castLogs;
         public string Character => Count > 0 ? this[0].Character : "";
 
-        public Minions(int id)
+        public MinionsList(int id)
         {
             MinionID = id;
         }
@@ -30,7 +30,7 @@ namespace LuckParser.EIData
                 }
                 _damageLogsByDst = _damageLogs.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
-            if (target != null && _damageLogsByDst.TryGetValue(target.AgentItem, out var list))
+            if (target != null && _damageLogsByDst.TryGetValue(target.AgentItem, out List<AbstractDamageEvent> list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end).ToList();
             }

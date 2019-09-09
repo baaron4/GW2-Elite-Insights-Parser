@@ -4,7 +4,7 @@ namespace LuckParser.Parser.ParsedData
 {
     public class WeaponDescriptor
     {
-        public enum Hand { MainHand, TwoHand, OffHand, Dual}
+        public enum Hand { MainHand, TwoHand, OffHand, Dual }
 
         public bool IsLand { get; }
         public Hand WeaponSlot { get; }
@@ -22,7 +22,8 @@ namespace LuckParser.Parser.ParsedData
                 if (apiSkill.DualWield != null && apiSkill.DualWield != "None" && apiSkill.DualWield != "Nothing")
                 {
                     WeaponSlot = Hand.Dual;
-                } else if (apiSkill.WeaponType == "Greatsword" || apiSkill.WeaponType == "Staff" || apiSkill.WeaponType == "Rifle" || apiSkill.WeaponType == "Longbow" || apiSkill.WeaponType == "Shortbow" || apiSkill.WeaponType == "Hammer")
+                }
+                else if (apiSkill.WeaponType == "Greatsword" || apiSkill.WeaponType == "Staff" || apiSkill.WeaponType == "Rifle" || apiSkill.WeaponType == "Longbow" || apiSkill.WeaponType == "Shortbow" || apiSkill.WeaponType == "Hammer")
                 {
                     WeaponSlot = Hand.TwoHand;
                 }

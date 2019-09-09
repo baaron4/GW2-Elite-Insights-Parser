@@ -1,9 +1,9 @@
-﻿using LuckParser.Parser;
-using LuckParser.Parser.ParsedData;
-using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData;
+using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.EIData
 {
@@ -73,11 +73,11 @@ namespace LuckParser.EIData
         }
 
         // Fields
-        protected readonly List<BoonStackItem> BoonStack;
-        public readonly List<BoonSimulationItem> GenerationSimulation = new List<BoonSimulationItem>();
-        public readonly List<BoonSimulationItemOverstack> OverstackSimulationResult = new List<BoonSimulationItemOverstack>();
-        public readonly List<BoonSimulationItemWasted> WasteSimulationResult = new List<BoonSimulationItemWasted>();
-        protected readonly int Capacity;
+        protected List<BoonStackItem> BoonStack { get; }
+        public List<BoonSimulationItem> GenerationSimulation { get; } = new List<BoonSimulationItem>();
+        public List<BoonSimulationItemOverstack> OverstackSimulationResult { get; } = new List<BoonSimulationItemOverstack>();
+        public List<BoonSimulationItemWasted> WasteSimulationResult { get; } = new List<BoonSimulationItemWasted>();
+        protected int Capacity { get; }
         private readonly ParsedLog _log;
         private readonly StackingLogic _logic;
 
@@ -184,7 +184,7 @@ namespace LuckParser.EIData
             }
         }
 
-        public void Remove(AgentItem provokedBy, long boonDuration, long start, ParseEnum.BuffRemove removeType)
+        public void Remove(long boonDuration, long start, ParseEnum.BuffRemove removeType)
         {
             if (GenerationSimulation.Count > 0)
             {

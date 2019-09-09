@@ -1,17 +1,17 @@
-﻿using LuckParser.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using LuckParser.Models;
 
 namespace LuckParser.Builders.HtmlModels
 {
     public class DeathRecapDto
     {
-        public long Time;
-        public List<object[]> ToDown = null;
-        public List<object[]> ToKill = null;
+        public long Time { get; set; }
+        public List<object[]> ToDown { get; set; } = null;
+        public List<object[]> ToKill { get; set; } = null;
 
         public static List<object[]> BuildDeathRecapItemList(List<Statistics.DeathRecap.DeathRecapDamageItem> list)
         {
-            List<object[]> data = new List<object[]>();
+            var data = new List<object[]>();
             foreach (Statistics.DeathRecap.DeathRecapDamageItem item in list)
             {
                 data.Add(new object[]

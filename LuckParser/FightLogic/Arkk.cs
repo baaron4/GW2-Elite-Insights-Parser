@@ -1,7 +1,7 @@
+﻿using System.Collections.Generic;
 using LuckParser.EIData;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
-using System.Collections.Generic;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic
@@ -45,7 +45,7 @@ namespace LuckParser.Logic
             new HitOnPlayerMechanic(35452, "Spinning Cut", new MechanicPlotlySetting("star-square-open","rgb(200,140,255)"), "Daze","Spinning Cut (3rd Gladiator Auto->Daze)", "Gladiator Daze",0), //
             });
             Extension = "arkk";
-            IconUrl = "https://wiki.guildwars2.com/images/5/5f/Arkk.jpg";
+            Icon = "https://wiki.guildwars2.com/images/5/5f/Arkk.jpg";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()
@@ -84,7 +84,7 @@ namespace LuckParser.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByBuffCount(combatData, agentData, fightData, playerAgents, Targets.Find(x => x.ID == TriggerID), 762, 10);
+            SetSuccessByBuffCount(combatData, fightData, playerAgents, Targets.Find(x => x.ID == TriggerID), 762, 10);
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿using LuckParser.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using static LuckParser.Parser.ParseEnum.TrashIDS;
-using LuckParser.Parser.ParsedData;
 using LuckParser.EIData;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
+using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic
 {
@@ -34,7 +34,7 @@ namespace LuckParser.Logic
             });
             Extension = "sh";
             GenericFallBackMethod = FallBackMethod.None;
-            IconUrl = "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
+            Icon = "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()
@@ -129,12 +129,12 @@ namespace LuckParser.Logic
             {
                 return phases;
             }
-            List<AbstractCastEvent> howling = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 48662).ToList();
+            var howling = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 48662).ToList();
             long start = 0;
             int i = 1;
             foreach (AbstractCastEvent c in howling)
             {
-                PhaseData phase = new PhaseData(start, Math.Min(c.Time, fightDuration))
+                var phase = new PhaseData(start, Math.Min(c.Time, fightDuration))
                 {
                     Name = "Pre-Breakbar " + i++
                 };
@@ -144,7 +144,7 @@ namespace LuckParser.Logic
             }
             if (fightDuration - start > 3000)
             {
-                PhaseData lastPhase = new PhaseData(start, fightDuration)
+                var lastPhase = new PhaseData(start, fightDuration)
                 {
                     Name = "Final"
                 };
@@ -161,7 +161,7 @@ namespace LuckParser.Logic
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.SoullessHorror:
-                    List<AbstractCastEvent> howling = cls.Where(x => x.SkillId == 48662).ToList();
+                    var howling = cls.Where(x => x.SkillId == 48662).ToList();
                     foreach (AbstractCastEvent c in howling)
                     {
                         int start = (int)c.Time;
@@ -169,7 +169,7 @@ namespace LuckParser.Logic
                         replay.Actors.Add(new CircleActor(true, start + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                         replay.Actors.Add(new CircleActor(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
-                    List<AbstractCastEvent> vortex = cls.Where(x => x.SkillId == 47327).ToList();
+                    var vortex = cls.Where(x => x.SkillId == 47327).ToList();
                     foreach (AbstractCastEvent c in vortex)
                     {
                         int start = (int)c.Time;
@@ -183,7 +183,7 @@ namespace LuckParser.Logic
                             replay.Actors.Add(new DoughnutActor(true, 0, 380, 760, (end, end + 1000), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, start)));
                         }
                     }
-                    List<AbstractCastEvent> deathBloom = cls.Where(x => x.SkillId == 48500).ToList();
+                    var deathBloom = cls.Where(x => x.SkillId == 48500).ToList();
                     foreach (AbstractCastEvent c in deathBloom)
                     {
                         int start = (int)c.Time;
@@ -195,12 +195,12 @@ namespace LuckParser.Logic
                         }
                         for (int i = 0; i < 8; i++)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + (i * 360 / 8), 360 / 12,(start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)));
+                            replay.Actors.Add(new PieActor(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + (i * 360 / 8), 360 / 12, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)));
                         }
 
                     }
-                    List<AbstractCastEvent> quad1 = cls.Where(x => x.SkillId == 48363).ToList();
-                    List<AbstractCastEvent> quad2 = cls.Where(x => x.SkillId == 47915).ToList();
+                    var quad1 = cls.Where(x => x.SkillId == 48363).ToList();
+                    var quad2 = cls.Where(x => x.SkillId == 47915).ToList();
                     foreach (AbstractCastEvent c in quad1)
                     {
                         int start = (int)c.Time;
@@ -212,7 +212,7 @@ namespace LuckParser.Logic
                         }
                         for (int i = 0; i < 4; i++)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + (i * 360 / 4), 360 / 12,(start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)));
+                            replay.Actors.Add(new PieActor(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + (i * 360 / 4), 360 / 12, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)));
                         }
 
                     }
@@ -235,18 +235,18 @@ namespace LuckParser.Logic
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
-            
+
         }
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            List<AbstractBuffEvent> necrosis = combatData.GetBoonData(47414).Where(x => x is BuffApplyEvent).ToList();
+            var necrosis = combatData.GetBoonData(47414).Where(x => x is BuffApplyEvent).ToList();
             if (necrosis.Count == 0)
             {
                 return 0;
             }
             // split necrosis
-            Dictionary<AgentItem, List<AbstractBuffEvent>> splitNecrosis = new Dictionary<AgentItem, List<AbstractBuffEvent>>();
+            var splitNecrosis = new Dictionary<AgentItem, List<AbstractBuffEvent>>();
             foreach (AbstractBuffEvent c in necrosis)
             {
                 AgentItem tank = c.To;

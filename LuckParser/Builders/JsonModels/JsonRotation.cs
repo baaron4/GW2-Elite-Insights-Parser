@@ -1,5 +1,5 @@
-﻿using LuckParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.Builders.JsonModels
 {
@@ -16,19 +16,19 @@ namespace LuckParser.Builders.JsonModels
             /// <summary>
             /// Time at which the skill was cast
             /// </summary>
-            public int CastTime;
+            public int CastTime { get; set; }
             /// <summary>
             /// Duration of the animation
             /// </summary>
-            public int Duration;
+            public int Duration { get; set; }
             /// <summary>
             /// Gained time from the animation, could be negative, which means time was lost
             /// </summary>
-            public int TimeGained;
+            public int TimeGained { get; set; }
             /// <summary>
             /// Animation started while under quickness
             /// </summary>
-            public bool Quickness;
+            public bool Quickness { get; set; }
 
             public JsonSkill(AbstractCastEvent cl)
             {
@@ -52,11 +52,11 @@ namespace LuckParser.Builders.JsonModels
         /// ID of the skill
         /// </summary>
         /// <seealso cref="JsonLog.SkillMap"/>
-        public long Id;
+        public long Id { get; set; }
         /// <summary>
         /// List of casted skills
         /// </summary>
         /// <seealso cref="JsonSkill"/>
-        public List<JsonSkill> Skills;
+        public List<JsonSkill> Skills { get; set; }
     }
 }

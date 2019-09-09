@@ -1,7 +1,7 @@
-﻿using LuckParser.Parser;
-using LuckParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.EIData
 {
@@ -16,7 +16,7 @@ namespace LuckParser.EIData
 
         public MechanicData(List<Mechanic> fightMechanics)
         {
-            foreach(Mechanic m in fightMechanics)
+            foreach (Mechanic m in fightMechanics)
             {
                 _mechanicLogs.Add(m, new List<MechanicEvent>());
             }
@@ -24,14 +24,14 @@ namespace LuckParser.EIData
 
         private void CheckMechanics(ParsedLog log)
         {
-            Dictionary<ushort, DummyActor> regroupedMobs = new Dictionary<ushort, DummyActor>();
+            var regroupedMobs = new Dictionary<ushort, DummyActor>();
             foreach (Mechanic mech in _mechanicLogs.Keys)
             {
                 mech.CheckMechanic(log, _mechanicLogs, regroupedMobs);
             }
             // regroup same mechanics with diff ids
-            Dictionary<string, Mechanic> altNames = new Dictionary<string, Mechanic>();
-            List<Mechanic> toRemove = new List<Mechanic>();
+            var altNames = new Dictionary<string, Mechanic>();
+            var toRemove = new List<Mechanic>();
             foreach (Mechanic mech in _mechanicLogs.Keys)
             {
                 if (altNames.ContainsKey(mech.ShortName))
@@ -64,30 +64,31 @@ namespace LuckParser.EIData
             // ready present mechanics
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
-                HashSet<Mechanic> toAddPlayer = new HashSet<Mechanic>();
-                HashSet<Mechanic> toAddEnemy = new HashSet<Mechanic>();
-                HashSet<Mechanic> toAddAll = new HashSet<Mechanic>();
+                var toAddPlayer = new HashSet<Mechanic>();
+                var toAddEnemy = new HashSet<Mechanic>();
+                var toAddAll = new HashSet<Mechanic>();
                 _presentOnPlayerMechanics.Add(toAddPlayer);
                 _presentOnEnemyMechanics.Add(toAddEnemy);
                 _presentMechanics.Add(toAddAll);
                 foreach (KeyValuePair<Mechanic, List<MechanicEvent>> pair in _mechanicLogs)
                 {
-                    if (pair.Value.Count(x => phase.InInterval(x.Time)) > 0)
+                    if (pair.Value.Any(x => phase.InInterval(x.Time)))
                     {
                         toAddAll.Add(pair.Key);
                         if (pair.Key.IsEnemyMechanic)
                         {
                             toAddEnemy.Add(pair.Key);
-                        } else if (pair.Key.ShowOnTable)
+                        }
+                        else if (pair.Key.ShowOnTable)
                         {
                             toAddPlayer.Add(pair.Key);
                         }
                     }
                 }
                 // ready enemy list
-                List<DummyActor> toAdd = new List<DummyActor>();
+                var toAdd = new List<DummyActor>();
                 _enemyList.Add(toAdd);
-                foreach(Mechanic m in _mechanicLogs.Keys.Where(x=> x.IsEnemyMechanic))
+                foreach (Mechanic m in _mechanicLogs.Keys.Where(x => x.IsEnemyMechanic))
                 {
                     foreach (DummyActor p in _mechanicLogs[m].Where(x => phase.InInterval(x.Time)).Select(x => x.Actor).Distinct())
                     {
@@ -98,7 +99,7 @@ namespace LuckParser.EIData
                     }
                 }
             }
-            List<Mechanic> emptyMechanic = _mechanicLogs.Where(pair => pair.Value.Count == 0).Select(pair => pair.Key).ToList();
+            var emptyMechanic = _mechanicLogs.Where(pair => pair.Value.Count == 0).Select(pair => pair.Key).ToList();
             foreach (Mechanic m in emptyMechanic)
             {
                 _mechanicLogs.Remove(m);
@@ -114,7 +115,7 @@ namespace LuckParser.EIData
         public List<MechanicEvent> GetMechanicLogs(ParsedLog log, Mechanic mech)
         {
             ProcessMechanics(log);
-            if (_mechanicLogs.TryGetValue(mech, out var list))
+            if (_mechanicLogs.TryGetValue(mech, out List<MechanicEvent> list))
             {
                 return list;
             }
@@ -125,7 +126,7 @@ namespace LuckParser.EIData
         {
             ProcessMechanics(log);
             Mechanic mech = _mechanicLogs.Keys.FirstOrDefault(x => x.SkillId == id);
-            if ( mech != null)
+            if (mech != null)
             {
                 return _mechanicLogs[mech];
             }

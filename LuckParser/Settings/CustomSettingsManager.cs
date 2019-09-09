@@ -8,7 +8,7 @@ namespace LuckParser
     {
         public static void ReadConfig(string filename)
         {
-            FileInfo f = new FileInfo(filename);
+            var f = new FileInfo(filename);
             if (!f.Exists)
             {
                 Console.WriteLine("Warning: settings file \"" + filename + "\" not found");
@@ -34,7 +34,7 @@ namespace LuckParser
 
         private static void ReadConfFile(string filename)
         {
-            using (StreamReader sr = new StreamReader(filename))
+            using (var sr = new StreamReader(filename))
             {
                 string line;
                 while ((line = sr.ReadLine()) != null)
@@ -56,7 +56,11 @@ namespace LuckParser
 
         private static void ProcessSettingsLine(string line)
         {
-            if (line.StartsWith("#")) return; // commented out line
+            if (line.StartsWith("#"))
+            {
+                return; // commented out line
+            }
+
             int equalsPos = line.IndexOf("=");
             if (equalsPos <= 0)
             {
@@ -94,7 +98,8 @@ namespace LuckParser
             else if (type == typeof(String))
             {
                 Properties.Settings.Default[name] = value;
-            } else
+            }
+            else
             {
                 Console.WriteLine("Warning: Setting \"" + name + "\" of type \"" + type.Name + "\" cannot be processed.");
             }

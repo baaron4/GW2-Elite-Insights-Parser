@@ -1,8 +1,9 @@
-﻿using LuckParser.Parser;
-using LuckParser.Parser.ParsedData;
-using LuckParser.Parser.ParsedData.CombatEvents;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData;
+using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.EIData
 {
@@ -10,11 +11,11 @@ namespace LuckParser.EIData
     {
         private List<AbstractCastEvent> _extensionSkills = null;
         private readonly HashSet<long> _boonIds = null;
-        protected HashSet<long> ExtensionIDS = new HashSet<long>();
-        protected Dictionary<long, HashSet<long>> DurationToIDs = new Dictionary<long, HashSet<long>>();
+        protected HashSet<long> ExtensionIDS { get; set; } = new HashSet<long>();
+        protected Dictionary<long, HashSet<long>> DurationToIDs { get; set; } = new Dictionary<long, HashSet<long>>();
         // non trackable times
-        protected long EssenceOfSpeed;
-        protected long ImbuedMelodies;
+        protected long EssenceOfSpeed { get; set; }
+        protected long ImbuedMelodies { get; set; }
 
         protected BoonSourceFinder(HashSet<long> boonIds)
         {
@@ -31,7 +32,7 @@ namespace LuckParser.EIData
                     _extensionSkills.AddRange(p.GetCastLogsActDur(log, 0, log.FightData.FightDuration).Where(x => ExtensionIDS.Contains(x.SkillId) && !x.Interrupted));
                 }
             }
-            return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time <= time && time <= x.Time + x.ActualDuration + 10).ToList();
+            return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time - 10 <= time && time <= x.Time + x.ActualDuration + 10).ToList();
         }
         // Spec specific checks
         private int CouldBeEssenceOfSpeed(AgentItem dst, long extension, ParsedLog log)
@@ -40,6 +41,7 @@ namespace LuckParser.EIData
             {
                 if (log.PlayerListBySpec.ContainsKey("Herald") || log.PlayerListBySpec.ContainsKey("Tempest"))
                 {
+                    // uncertain, needs to check more
                     return 0;
                 }
                 // if not herald or tempest in squad then can only be the trait
@@ -48,11 +50,11 @@ namespace LuckParser.EIData
             return -1;
         }
 
-        private bool CouldBeImbuedMelodies(AbstractCastEvent item, long time, long extension, ParsedLog log)
+        private bool CouldBeImbuedMelodies(AgentItem agent, long time, long extension, ParsedLog log)
         {
             if (extension == ImbuedMelodies && log.PlayerListBySpec.TryGetValue("Tempest", out List<Player> tempests))
             {
-                HashSet<AgentItem> magAuraApplications = new HashSet<AgentItem>(log.CombatData.GetBoonData(5684).Where(x => x is BuffApplyEvent && x.Time - time < 50 && x.By != item.Caster).Select(x => x.By));
+                var magAuraApplications = new HashSet<AgentItem>(log.CombatData.GetBoonData(5684).Where(x => x is BuffApplyEvent && Math.Abs(x.Time - time) < 10 && x.By != agent).Select(x => x.By));
                 foreach (Player tempest in tempests)
                 {
                     if (magAuraApplications.Contains(tempest.AgentItem))
@@ -71,24 +73,36 @@ namespace LuckParser.EIData
                 return dst;
             }
             int essenceOfSpeedCheck = CouldBeEssenceOfSpeed(dst, extension, log);
-            if (essenceOfSpeedCheck != -1)
+            // can only be the soulbeast
+            if (essenceOfSpeedCheck == 1)
             {
-                // unknown or self
-                return essenceOfSpeedCheck == 0 ? GeneralHelper.UnknownAgent : dst;
+                return dst;
             }
-            HashSet<long> idsToCheck = new HashSet<long>();
-            if (DurationToIDs.TryGetValue(extension, out idsToCheck))
+            if (DurationToIDs.TryGetValue(extension, out HashSet<long> idsToCheck))
             {
                 List<AbstractCastEvent> cls = GetExtensionSkills(log, time, idsToCheck);
+                // If only one cast item
                 if (cls.Count == 1)
                 {
                     AbstractCastEvent item = cls.First();
-                    // Imbued Melodies check
-                    if (CouldBeImbuedMelodies(item, time, extension, log))
+                    // If uncertainty due to essence of speed or imbued melodies, return unknown
+                    if (essenceOfSpeedCheck == 0 || CouldBeImbuedMelodies(item.Caster, time, extension, log))
                     {
                         return GeneralHelper.UnknownAgent;
                     }
+                    // otherwise the src is the caster
                     return item.Caster;
+                }
+                // If no cast item and uncertainty due to essence of speed
+                else if (!cls.Any() && essenceOfSpeedCheck == 0)
+                {
+                    // If uncertainty due to imbued melodies, return unknown
+                    if (CouldBeImbuedMelodies(dst, time, extension, log))
+                    {
+                        return GeneralHelper.UnknownAgent;
+                    }
+                    // otherwise return the soulbeast
+                    return dst;
                 }
             }
             return GeneralHelper.UnknownAgent;

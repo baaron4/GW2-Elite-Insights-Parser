@@ -1,7 +1,7 @@
-﻿using LuckParser.Parser;
-using LuckParser.Parser.ParsedData;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData;
 using static LuckParser.EIData.BoonSimulator;
 
 namespace LuckParser.EIData
@@ -22,7 +22,7 @@ namespace LuckParser.EIData
             BoonStackItem first = stacks[0];
             stacks.RemoveAt(0);
             BoonStackItem minItem = stacks.MinBy(x => x.TotalBoonDuration());
-            if (minItem.TotalBoonDuration() >= stackItem.TotalBoonDuration())
+            if (minItem.TotalBoonDuration() > stackItem.TotalBoonDuration() + 10)
             {
                 stacks.Insert(0, first);
                 return false;

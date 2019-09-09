@@ -1,6 +1,6 @@
-﻿using LuckParser.Parser.ParsedData;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Parser.ParsedData;
 
 namespace LuckParser.EIData
 {
@@ -24,7 +24,7 @@ namespace LuckParser.EIData
         }
     }
 
-    public class BoonDistribution : Dictionary<long, Dictionary<AgentItem, BoonDistributionItem>>
+    public class BoonDistributionDictionary : Dictionary<long, Dictionary<AgentItem, BoonDistributionItem>>
     {
         public bool HasSrc(long boonid, AgentItem src)
         {

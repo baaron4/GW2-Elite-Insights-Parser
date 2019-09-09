@@ -1,15 +1,15 @@
-﻿using LuckParser.Parser;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using LuckParser.Parser;
 
 namespace LuckParser.EIData
 {
     public class FacingActor : GenericActor
     {
-        protected List<int> Data = new List<int>();
+        protected List<int> Data { get; set; } = new List<int>();
 
         public FacingActor((int start, int end) lifespan, AgentConnector connector, List<Point3D> facings) : base(lifespan, connector)
         {
-            foreach(Point3D facing in facings)
+            foreach (Point3D facing in facings)
             {
                 Data.Add(-Point3D.GetRotationFromFacing(facing));
             }
@@ -18,12 +18,12 @@ namespace LuckParser.EIData
         //
         protected class FacingSerializable : GenericActorSerializable
         {
-            public int[] FacingData;
+            public int[] FacingData { get; set; }
         }
 
         public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
-            FacingSerializable aux = new FacingSerializable
+            var aux = new FacingSerializable
             {
                 Type = "Facing",
                 Start = Lifespan.start,
@@ -32,7 +32,7 @@ namespace LuckParser.EIData
                 FacingData = new int[Data.Count]
             };
             int i = 0;
-            foreach(int angle in Data)
+            foreach (int angle in Data)
             {
                 aux.FacingData[i++] = angle;
             }

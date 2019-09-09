@@ -7,7 +7,7 @@ namespace LuckParser.EIData
     {
         // Constructors
         public Mob(AgentItem agent) : base(agent)
-        {        
+        {
         }
 
         //setters
@@ -29,7 +29,7 @@ namespace LuckParser.EIData
             {
                 InitCombatReplay(log);
             }
-            MobSerializable aux = new MobSerializable
+            var aux = new MobSerializable
             {
                 Img = CombatReplay.Icon,
                 Type = "Mob",

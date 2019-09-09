@@ -21,7 +21,7 @@ namespace LuckParser
 
         private enum StandardHandle
         {
-            Input =-10,
+            Input = -10,
             Output = -11,
             Error = -12
         }
@@ -54,7 +54,7 @@ namespace LuckParser
                 Properties.Settings.Default.Outdated = false;
             }
 
-            List<string> logFiles = new List<string>();
+            var logFiles = new List<string>();
             bool uiMode = true;
             Application.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             if (args.Length > 0)
@@ -96,7 +96,7 @@ namespace LuckParser
                      */
                     if (IsRedirected(GetStdHandle(StandardHandle.Output)))
                     {
-                        var dummy = Console.Out;
+                        _ = Console.Out;
                     }
 
                     if (!AttachConsole(AttachParentProcess))
@@ -136,14 +136,16 @@ namespace LuckParser
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new MainForm(logFiles));
+                var form = new MainForm(logFiles);
+                Application.Run(form);
+                form.Dispose();
             }
             else
             {
                 if (logFiles.Count > 0)
                 {
                     // Use the application through console 
-                    new ConsoleProgram(logFiles);
+                    _ = new ConsoleProgram(logFiles);
                     return 0;
                 }
             }

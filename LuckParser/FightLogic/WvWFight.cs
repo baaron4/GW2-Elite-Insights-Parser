@@ -1,9 +1,9 @@
-using LuckParser.EIData;
-using LuckParser.Parser;
-using LuckParser.Parser.ParsedData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LuckParser.EIData;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData;
 
 namespace LuckParser.Logic
 {
@@ -13,7 +13,7 @@ namespace LuckParser.Logic
         {
             Extension = "wvw";
             Mode = ParseMode.WvW;
-            IconUrl = "https://wiki.guildwars2.com/images/3/35/WvW_Rank_up.png";
+            Icon = "https://wiki.guildwars2.com/images/3/35/WvW_Rank_up.png";
         }
 
         protected override HashSet<ushort> GetUniqueTargetIDs()
@@ -61,16 +61,16 @@ namespace LuckParser.Logic
         {
             AgentItem dummyAgent = agentData.AddCustomAgent(combatData.First().LogTime, combatData.Last().LogTime, AgentItem.AgentType.NPC, "Enemy Players", "", TriggerID);
             ComputeFightTargets(agentData, combatData);
-            List<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.EnemyPlayer).ToList();
+            var aList = agentData.GetAgentByType(AgentItem.AgentType.EnemyPlayer).ToList();
             /*foreach (AgentItem a in aList)
             {
                 TrashMobs.Add(new Mob(a));
             }*/
-            Dictionary<ulong, AgentItem> enemyPlayerDicts = aList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList().First());
+            var enemyPlayerDicts = aList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList().First());
             foreach (CombatItem c in combatData)
             {
-                if (c.IsStateChange == ParseEnum.StateChange.None && 
-                    c.IsActivation == ParseEnum.Activation.None && 
+                if (c.IsStateChange == ParseEnum.StateChange.None &&
+                    c.IsActivation == ParseEnum.EvtcActivation.None &&
                     c.IsBuffRemove == ParseEnum.BuffRemove.None &&
                     ((c.IsBuff != 0 && c.Value == 0) || (c.IsBuff == 0)))
                 {

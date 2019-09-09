@@ -1,9 +1,9 @@
-﻿using LuckParser.EIData;
-using LuckParser.Parser;
-using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LuckParser.EIData;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData.CombatEvents;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic
@@ -32,7 +32,7 @@ namespace LuckParser.Logic
             new HitOnEnemyMechanic(16261, "Core Hit", new MechanicPlotlySetting("star-open","rgb(255,140,0)"), "Core Hit","Core was Hit by Player", "Core Hit",1000)
             });
             Extension = "kc";
-            IconUrl = "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
+            Icon = "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()
@@ -87,11 +87,11 @@ namespace LuckParser.Logic
             }
             // add burn phases
             int offset = phases.Count;
-            List<AbstractBuffEvent> orbItems = log.CombatData.GetBoonData(35096).Where(x => x.To == mainTarget.AgentItem).ToList();
+            var orbItems = log.CombatData.GetBoonData(35096).Where(x => x.To == mainTarget.AgentItem).ToList();
             // Get number of orbs and filter the list
             start = 0;
             int orbCount = 0;
-            List<BoonsGraphModel.Segment> segments = new List<BoonsGraphModel.Segment>();
+            var segments = new List<BoonsGraphModel.Segment>();
             foreach (AbstractBuffEvent c in orbItems)
             {
                 if (c is BuffApplyEvent)
@@ -110,7 +110,7 @@ namespace LuckParser.Logic
                 }
             }
             int burnCount = 1;
-            foreach (var seg in segments)
+            foreach (BoonsGraphModel.Segment seg in segments)
             {
                 var phase = new PhaseData(seg.Start, seg.End)
                 {
@@ -122,7 +122,7 @@ namespace LuckParser.Logic
             phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             // pre burn phases
             int preBurnCount = 1;
-            List<PhaseData> preBurnPhase = new List<PhaseData>();
+            var preBurnPhase = new List<PhaseData>();
             List<AbstractBuffEvent> kcInvuls = GetFilteredList(log.CombatData, 762, mainTarget, true);
             foreach (AbstractBuffEvent invul in kcInvuls)
             {
@@ -150,7 +150,7 @@ namespace LuckParser.Logic
             // add leftover phases
             PhaseData cur = null;
             int leftOverCount = 1;
-            List<PhaseData> leftOverPhases = new List<PhaseData>();
+            var leftOverPhases = new List<PhaseData>();
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
@@ -164,7 +164,7 @@ namespace LuckParser.Logic
                     {
                         if (cur.End >= phase.End + 5000 && (i == phases.Count - 1 || phases[i + 1].Name.Contains("%")))
                         {
-                            PhaseData leftOverPhase = new PhaseData(phase.End + 1, cur.End)
+                            var leftOverPhase = new PhaseData(phase.End + 1, cur.End)
                             {
                                 Name = "Leftover " + leftOverCount++,
                             };
@@ -263,7 +263,7 @@ namespace LuckParser.Logic
                             replay.Actors.Add(new CircleActor(true, kcOrbEnd, 300, (kcOrbStart, kcOrbEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                         }
                     }
-                    List<AbstractCastEvent> towerDrop = cls.Where(x => x.SkillId == 35086).ToList();
+                    var towerDrop = cls.Where(x => x.SkillId == 35086).ToList();
                     foreach (AbstractCastEvent c in towerDrop)
                     {
                         int start = (int)c.Time;
@@ -277,9 +277,9 @@ namespace LuckParser.Logic
                             replay.Actors.Add(new CircleActor(true, skillCast, 400, (start, skillCast), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, end)));
                         }
                     }
-                    List<AbstractCastEvent> blades1 = cls.Where(x => x.SkillId == 35064).ToList();
-                    List<AbstractCastEvent> blades2 = cls.Where(x => x.SkillId == 35137).ToList();
-                    List<AbstractCastEvent> blades3 = cls.Where(x => x.SkillId == 34971).ToList();
+                    var blades1 = cls.Where(x => x.SkillId == 35064).ToList();
+                    var blades2 = cls.Where(x => x.SkillId == 35137).ToList();
+                    var blades3 = cls.Where(x => x.SkillId == 34971).ToList();
                     int bladeDelay = 150;
                     int duration = 1000;
                     foreach (AbstractCastEvent c in blades1)
@@ -337,7 +337,7 @@ namespace LuckParser.Logic
                         }
                     }
                     // phantasms locations
-                    HashSet<ushort> phantasmsID = new HashSet<ushort>
+                    var phantasmsID = new HashSet<ushort>
                     {
                         (ushort)Jessica,
                         (ushort)Olson,
@@ -388,7 +388,7 @@ namespace LuckParser.Logic
 
             }
             //fixated Statue
-            List<AbstractBuffEvent> fixatedStatue = GetFilteredList(log.CombatData, 34912, p, true).Concat(GetFilteredList(log.CombatData, 34925, p, true)).ToList();
+            var fixatedStatue = GetFilteredList(log.CombatData, 34912, p, true).Concat(GetFilteredList(log.CombatData, 34925, p, true)).ToList();
             int fixationStatueStart = 0;
             Mob statue = null;
             foreach (AbstractBuffEvent c in fixatedStatue)

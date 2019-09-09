@@ -1,8 +1,8 @@
-﻿using LuckParser.EIData;
-using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LuckParser.EIData;
+using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.Parser.ParsedData
 {
@@ -13,20 +13,20 @@ namespace LuckParser.Parser.ParsedData
 
         // Fields
         public ulong Agent { get; set; }
-        public readonly ushort ID;
+        public ushort ID { get; }
         public AgentItem MasterAgent { get; set; }
         public ushort InstID { get; set; }
         public AgentType Type { get; } = AgentType.NPC;
         public long FirstAwareLogTime { get; set; }
         public long LastAwareLogTime { get; set; } = long.MaxValue;
-        public readonly string Name = "UNKNOWN";
-        public readonly string Prof = "UNKNOWN";
-        public readonly uint Toughness;
-        public readonly uint Healing;
-        public readonly uint Condition;
-        public readonly uint Concentration;
-        public readonly uint HitboxWidth;
-        public readonly uint HitboxHeight;
+        public string Name { get; } = "UNKNOWN";
+        public string Prof { get; } = "UNKNOWN";
+        public uint Toughness { get; }
+        public uint Healing { get; }
+        public uint Condition { get; }
+        public uint Concentration { get; }
+        public uint HitboxWidth { get; }
+        public uint HitboxHeight { get; }
 
         // Constructors
         public AgentItem(ulong agent, string name, string prof, ushort id, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight)
@@ -81,7 +81,7 @@ namespace LuckParser.Parser.ParsedData
         {
         }
 
-        private void AddValueToStatusList(List<(long start, long end)> dead, List<(long start, long end)> down, List<(long start, long end)> dc, AbstractStatusEvent cur, AbstractStatusEvent next, long endTime, int index)
+        private static void AddValueToStatusList(List<(long start, long end)> dead, List<(long start, long end)> down, List<(long start, long end)> dc, AbstractStatusEvent cur, AbstractStatusEvent next, long endTime, int index)
         {
             long cTime = cur.Time;
             long nTime = next != null ? next.Time : endTime;
@@ -112,14 +112,14 @@ namespace LuckParser.Parser.ParsedData
 
         public void GetAgentStatus(List<(long start, long end)> dead, List<(long start, long end)> down, List<(long start, long end)> dc, ParsedLog log)
         {
-            List<AbstractStatusEvent> status = new List<AbstractStatusEvent>();
+            var status = new List<AbstractStatusEvent>();
             status.AddRange(log.CombatData.GetDownEvents(this));
             status.AddRange(log.CombatData.GetAliveEvents(this));
             status.AddRange(log.CombatData.GetDeadEvents(this));
             status.AddRange(log.CombatData.GetSpawnEvents(this));
             status.AddRange(log.CombatData.GetDespawnEvents(this));
             status = status.OrderBy(x => x.Time).ToList();
-            for (var i = 0; i < status.Count - 1; i++)
+            for (int i = 0; i < status.Count - 1; i++)
             {
                 AbstractStatusEvent cur = status[i];
                 AbstractStatusEvent next = status[i + 1];
@@ -148,7 +148,7 @@ namespace LuckParser.Parser.ParsedData
             }
             AbstractActor actor = log.FindActor(this);
             Dictionary<long, BoonsGraphModel> bgms = actor.GetBoonGraphs(log);
-            if (bgms.TryGetValue(buffId, out var bgm))
+            if (bgms.TryGetValue(buffId, out BoonsGraphModel bgm))
             {
                 return bgm.IsPresent(time, 10);
             }

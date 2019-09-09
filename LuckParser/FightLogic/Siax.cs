@@ -1,6 +1,6 @@
-﻿using LuckParser.EIData;
+﻿using System.Collections.Generic;
+using LuckParser.EIData;
 using LuckParser.Parser;
-using System.Collections.Generic;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic
@@ -23,7 +23,7 @@ namespace LuckParser.Logic
             new PlayerBoonApplyMechanic(36998, "Fixated", new MechanicPlotlySetting("star-open","rgb(200,0,200)"), "Fixate", "Fixated by Volatile Hallucination", "Fixated",0),
             });
             Extension = "siax";
-            IconUrl = "https://wiki.guildwars2.com/images/d/dc/Siax_the_Corrupted.jpg";
+            Icon = "https://wiki.guildwars2.com/images/d/dc/Siax_the_Corrupted.jpg";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()

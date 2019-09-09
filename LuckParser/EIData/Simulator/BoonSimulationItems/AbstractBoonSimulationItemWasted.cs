@@ -4,10 +4,9 @@ namespace LuckParser.EIData
 {
     public abstract class AbstractBoonSimulationItemWasted : AbstractBoonSimulationItem
     {
-        protected readonly AgentItem Src;
+        protected AgentItem Src { get; }
         private readonly long _waste;
-        protected readonly long Time;
-
+        protected long Time { get; }
         protected AbstractBoonSimulationItemWasted(AgentItem src, long waste, long time)
         {
             Src = src;

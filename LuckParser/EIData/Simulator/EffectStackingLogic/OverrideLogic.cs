@@ -19,7 +19,7 @@ namespace LuckParser.EIData
                 return false;
             }
             BoonStackItem stack = stacks[0];
-            if (stack.TotalBoonDuration() < stackItem.TotalBoonDuration())
+            if (stack.TotalBoonDuration() <= stackItem.TotalBoonDuration() + 10)
             {
                 wastes.Add(new BoonSimulationItemWasted(stack.Src, stack.BoonDuration, stack.Start));
                 if (stack.Extensions.Count > 0)

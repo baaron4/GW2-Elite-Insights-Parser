@@ -1,9 +1,9 @@
-﻿using LuckParser.EIData;
-using LuckParser.Parser;
-using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LuckParser.EIData;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData.CombatEvents;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic
@@ -25,7 +25,7 @@ namespace LuckParser.Logic
             new EnemyCastEndMechanic(31834, "Ghastly Rampage", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Ghastly Rampage (Breakbar broken)", "CCed",0, (ce, log) => ce.ActualDuration <= 21985),
             });
             Extension = "gors";
-            IconUrl = "https://wiki.guildwars2.com/images/d/d1/Mini_Gorseval_the_Multifarious.png";
+            Icon = "https://wiki.guildwars2.com/images/d/d1/Mini_Gorseval_the_Multifarious.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()
@@ -62,7 +62,7 @@ namespace LuckParser.Logic
                 }
                 else
                 {
-                    List<ushort> ids = new List<ushort>
+                    var ids = new List<ushort>
                     {
                        (ushort) ChargedSoul
                     };
@@ -96,7 +96,7 @@ namespace LuckParser.Logic
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Gorseval:
-                    List<AbstractCastEvent> blooms = cls.Where(x => x.SkillId == 31616).ToList();
+                    var blooms = cls.Where(x => x.SkillId == 31616).ToList();
                     foreach (AbstractCastEvent c in blooms)
                     {
                         int start = (int)c.Time;
@@ -107,7 +107,7 @@ namespace LuckParser.Logic
                     List<PhaseData> phases = log.FightData.GetPhases(log);
                     if (phases.Count > 1)
                     {
-                        List<AbstractCastEvent> rampage = cls.Where(x => x.SkillId == 31834).ToList();
+                        var rampage = cls.Where(x => x.SkillId == 31834).ToList();
                         Point3D pos = replay.PolledPositions.First();
                         foreach (AbstractCastEvent c in rampage)
                         {
@@ -210,13 +210,13 @@ namespace LuckParser.Logic
                             }
                         }
                     }
-                    List<AbstractCastEvent> slam = cls.Where(x => x.SkillId == 31875).ToList();
+                    var slam = cls.Where(x => x.SkillId == 31875).ToList();
                     foreach (AbstractCastEvent c in slam)
                     {
                         int start = (int)c.Time;
                         int impactPoint = 1185;
                         int impactTime = start + impactPoint;
-                        int end = (int)Math.Min(start + c.ActualDuration, impactTime);
+                        int end = Math.Min(start + c.ActualDuration, impactTime);
                         int radius = 320;
                         replay.Actors.Add(new CircleActor(true, 0, radius, (start, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
                         replay.Actors.Add(new CircleActor(true, 0, radius, (impactTime - 10, impactTime + 100), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));
@@ -237,7 +237,7 @@ namespace LuckParser.Logic
                     }
                     break;
                 case (ushort)ChargedSoul:
-                    (int, int) lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
+                    var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
                     replay.Actors.Add(new CircleActor(false, 0, 220, lifespan, "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
                     break;
                 default:

@@ -10,18 +10,18 @@ namespace LuckParser.EIData
     public abstract class AbstractActor : DummyActor
     {
         // Damage
-        protected List<AbstractDamageEvent> DamageLogs;
-        protected Dictionary<AgentItem, List<AbstractDamageEvent>> DamageLogsByDst;
-        private readonly Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>> _damageLogsPerPhasePerTarget = new Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>>();
+        protected List<AbstractDamageEvent> DamageLogs { get; set; }
+        protected Dictionary<AgentItem, List<AbstractDamageEvent>> DamageLogsByDst { get; set; }
+        private Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>> _damageLogsPerPhasePerTarget { get; } = new Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>>();
         //protected List<DamageLog> HealingLogs = new List<DamageLog>();
         //protected List<DamageLog> HealingReceivedLogs = new List<DamageLog>();
         private List<AbstractDamageEvent> _damageTakenlogs;
-        protected Dictionary<AgentItem, List<AbstractDamageEvent>> DamageTakenLogsBySrc;
+        protected Dictionary<AgentItem, List<AbstractDamageEvent>> DamageTakenLogsBySrc { get; set; }
         // Cast
-        protected List<AbstractCastEvent> CastLogs;
+        protected List<AbstractCastEvent> CastLogs { get; set; }
         // Boons
         public HashSet<Boon> TrackedBoons { get; } = new HashSet<Boon>();
-        protected Dictionary<long, BoonsGraphModel> BoonPoints;
+        protected Dictionary<long, BoonsGraphModel> BoonPoints { get; set; }
 
         protected AbstractActor(AgentItem agent) : base(agent)
         {
@@ -38,7 +38,7 @@ namespace LuckParser.EIData
             }
             if (target != null)
             {
-                if (DamageLogsByDst.TryGetValue(target.AgentItem, out var list))
+                if (DamageLogsByDst.TryGetValue(target.AgentItem, out List<AbstractDamageEvent> list))
                 {
                     return list.Where(x => x.Time >= start && x.Time <= end).ToList();
                 }
@@ -47,7 +47,7 @@ namespace LuckParser.EIData
                     return new List<AbstractDamageEvent>();
                 }
             }
-            return DamageLogs.Where( x => x.Time >= start && x.Time <= end).ToList();
+            return DamageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
         public List<AbstractDamageEvent> GetDamageLogs(AbstractActor target, ParsedLog log, PhaseData phase)
@@ -75,7 +75,7 @@ namespace LuckParser.EIData
             }
             if (target != null)
             {
-                if (DamageTakenLogsBySrc.TryGetValue(target.AgentItem, out var list))
+                if (DamageTakenLogsBySrc.TryGetValue(target.AgentItem, out List<AbstractDamageEvent> list))
                 {
                     long targetStart = log.FightData.ToFightSpace(target.FirstAwareLogTime);
                     long targetEnd = log.FightData.ToFightSpace(target.LastAwareLogTime);
@@ -140,7 +140,7 @@ namespace LuckParser.EIData
 
         protected static void Add<T>(Dictionary<T, long> dictionary, T key, long value)
         {
-            if (dictionary.TryGetValue(key, out var existing))
+            if (dictionary.TryGetValue(key, out long existing))
             {
                 dictionary[key] = existing + value;
             }
@@ -150,10 +150,10 @@ namespace LuckParser.EIData
             }
         }
 
-        protected BoonMap GetBoonMap(ParsedLog log)
+        protected BoonMapDictionary GetBoonMap(ParsedLog log)
         {
             //
-            BoonMap boonMap = new BoonMap();
+            var boonMap = new BoonMapDictionary();
             // Fill in Boon Map
             foreach (AbstractBuffEvent c in log.CombatData.GetBoonDataByDst(AgentItem))
             {
@@ -177,7 +177,7 @@ namespace LuckParser.EIData
             // add buff remove all for each despawn events
             foreach (DespawnEvent dsp in log.CombatData.GetDespawnEvents(AgentItem))
             {
-                foreach (var pair in boonMap)
+                foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in boonMap)
                 {
                     pair.Value.Add(new BuffRemoveAllEvent(GeneralHelper.UnknownAgent, AgentItem, dsp.Time, int.MaxValue, log.SkillData.Get(pair.Key), 1, int.MaxValue));
                 }
@@ -192,7 +192,7 @@ namespace LuckParser.EIData
                 }
             }*/
             boonMap.Sort();
-            foreach (var pair in boonMap)
+            foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in boonMap)
             {
                 TrackedBoons.Add(log.Boons.BoonsByIds[pair.Key]);
             }
@@ -260,13 +260,13 @@ namespace LuckParser.EIData
         protected void SetBoonStatus(ParsedLog log)
         {
             BoonPoints = new Dictionary<long, BoonsGraphModel>();
-            BoonMap toUse = GetBoonMap(log);
+            BoonMapDictionary toUse = GetBoonMap(log);
             long dur = log.FightData.FightDuration;
             int fightDuration = (int)(dur) / 1000;
-            BoonsGraphModel boonPresenceGraph = new BoonsGraphModel(log.Boons.BoonsByIds[ProfHelper.NumberOfBoonsID]);
-            BoonsGraphModel condiPresenceGraph = new BoonsGraphModel(log.Boons.BoonsByIds[ProfHelper.NumberOfConditionsID]);
-            HashSet<long> boonIds = new HashSet<long>(log.Boons.BoonsByNature[BoonNature.Boon].Select(x => x.ID));
-            HashSet<long> condiIds = new HashSet<long>(log.Boons.BoonsByNature[BoonNature.Condition].Select(x => x.ID));
+            var boonPresenceGraph = new BoonsGraphModel(log.Boons.BoonsByIds[ProfHelper.NumberOfBoonsID]);
+            var condiPresenceGraph = new BoonsGraphModel(log.Boons.BoonsByIds[ProfHelper.NumberOfConditionsID]);
+            var boonIds = new HashSet<long>(log.Boons.BoonsByNature[BoonNature.Boon].Select(x => x.ID));
+            var condiIds = new HashSet<long>(log.Boons.BoonsByNature[BoonNature.Condition].Select(x => x.ID));
             InitBoonStatusData(log);
             foreach (Boon boon in TrackedBoons)
             {
@@ -282,7 +282,7 @@ namespace LuckParser.EIData
                     simulator.Trim(dur);
                     bool updateBoonPresence = boonIds.Contains(boonid);
                     bool updateCondiPresence = condiIds.Contains(boonid);
-                    List<BoonsGraphModel.SegmentWithSources> graphSegments = new List<BoonsGraphModel.SegmentWithSources>();
+                    var graphSegments = new List<BoonsGraphModel.SegmentWithSources>();
                     foreach (BoonSimulationItem simul in simulator.GenerationSimulation)
                     {
                         SetBoonStatusGenerationData(log, simul, boonid);

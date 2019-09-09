@@ -28,7 +28,7 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
 
         public override void UpdateSimulator(BoonSimulator simulator)
         {
-            simulator.Remove(By, RemovedDuration, Time, ParseEnum.BuffRemove.All);
+            simulator.Remove(RemovedDuration, Time, ParseEnum.BuffRemove.All);
         }
     }
 }

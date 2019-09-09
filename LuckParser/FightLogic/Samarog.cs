@@ -1,10 +1,10 @@
-﻿using LuckParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using LuckParser.EIData;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic
@@ -23,7 +23,7 @@ namespace LuckParser.Logic
             new PlayerBoonApplyMechanic(37868, "Fixate: Samarog", new MechanicPlotlySetting("star","rgb(255,0,255)"), "Sam Fix","Fixated by Samarog", "Fixate: Samarog",0),
             new PlayerBoonApplyMechanic(38223, "Fixate: Guldhem", new MechanicPlotlySetting("star-open","rgb(255,100,0)"), "Ghuld Fix","Fixated by Guldhem", "Fixate: Guldhem",0),
             new PlayerBoonApplyMechanic(37693, "Fixate: Rigom", new MechanicPlotlySetting("star-open","rgb(255,0,0)"), "Rigom Fix","Fixated by Rigom", "Fixate: Rigom",0),
-            new PlayerBoonApplyMechanic(37966, "Big Hug", new MechanicPlotlySetting("circle","rgb(0,128,0)"), "Big Green","Big Green (friends mechanic)", "Big Green",0), 
+            new PlayerBoonApplyMechanic(37966, "Big Hug", new MechanicPlotlySetting("circle","rgb(0,128,0)"), "Big Green","Big Green (friends mechanic)", "Big Green",0),
             new PlayerBoonApplyMechanic(38247, "Small Hug", new MechanicPlotlySetting("circle-open","rgb(0,128,0)"), "Small Green","Small Green (friends mechanic)", "Small Green",0),
             new HitOnPlayerMechanic(38180, "Spear Return", new MechanicPlotlySetting("triangle-left","rgb(255,0,0)"), "Spear Return","Hit by Spear Return", "Spear Return",0),
             new HitOnPlayerMechanic(38260, "Inevitable Betrayal", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Green Fail","Inevitable Betrayal (failed Green)", "Failed Green",0),
@@ -43,7 +43,7 @@ namespace LuckParser.Logic
             //  new Mechanic(37816, "Brutalize", ParseEnum.BossIDS.Samarog, new MechanicPlotlySetting("star-square","rgb(255,0,0)"), "CC Target", casted without dmg odd
             });
             Extension = "sam";
-            IconUrl = "https://wiki.guildwars2.com/images/f/f0/Mini_Samarog.png";
+            Icon = "https://wiki.guildwars2.com/images/f/f0/Mini_Samarog.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()
@@ -70,20 +70,21 @@ namespace LuckParser.Logic
             }
             // Determined check
             phases.AddRange(GetPhasesByInvul(log, 762, mainTarget, true, true));
-            string[] namesSam = new [] { "Phase 1", "Split 1", "Phase 2", "Split 2", "Phase 3" };
+            string[] namesSam = new[] { "Phase 1", "Split 1", "Phase 2", "Split 2", "Phase 3" };
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
                 phase.Name = namesSam[i - 1];
                 if (i == 2 || i == 4)
                 {
-                    List<ushort> ids = new List<ushort>
+                    var ids = new List<ushort>
                     {
                        (ushort) Rigom,
                        (ushort) Guldhem
                     };
                     AddTargetsToPhase(phase, ids, log);
-                } else
+                }
+                else
                 {
                     phase.Targets.Add(mainTarget);
                 }
@@ -100,12 +101,11 @@ namespace LuckParser.Logic
                 (ushort)Guldhem,
             };
         }
-        
+
 
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
             // TODO: facing information (shock wave)
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Samarog:
@@ -135,7 +135,7 @@ namespace LuckParser.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // big bomb
-            List<AbstractBuffEvent> bigbomb = log.CombatData.GetBoonData(37966).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
+            var bigbomb = log.CombatData.GetBoonData(37966).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
             foreach (AbstractBuffEvent c in bigbomb)
             {
                 int bigStart = (int)c.Time;
@@ -144,7 +144,7 @@ namespace LuckParser.Logic
                 replay.Actors.Add(new CircleActor(true, bigEnd, 300, (bigStart, bigEnd), "rgba(150, 80, 0, 0.2)", new AgentConnector(p)));
             }
             // small bomb
-            List<AbstractBuffEvent> smallbomb = log.CombatData.GetBoonData(38247).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
+            var smallbomb = log.CombatData.GetBoonData(38247).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
             foreach (AbstractBuffEvent c in smallbomb)
             {
                 int smallStart = (int)c.Time;

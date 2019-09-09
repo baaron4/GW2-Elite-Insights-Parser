@@ -1,8 +1,8 @@
 ﻿using System;
-using LuckParser.Parser;
 using System.Collections.Generic;
-using static LuckParser.EIData.BoonSimulator;
+using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
+using static LuckParser.EIData.BoonSimulator;
 
 namespace LuckParser.EIData
 {
@@ -34,7 +34,7 @@ namespace LuckParser.EIData
             return new List<AgentItem>() { _src };
         }
 
-        public override void SetBoonDistributionItem(BoonDistribution distribs, long start, long end, long boonid, ParsedLog log)
+        public override void SetBoonDistributionItem(BoonDistributionDictionary distribs, long start, long end, long boonid, ParsedLog log)
         {
             Dictionary<AgentItem, BoonDistributionItem> distrib = GetDistrib(distribs, boonid);
             long cDur = GetClampedDuration(start, end);

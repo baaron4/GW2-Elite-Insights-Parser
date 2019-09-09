@@ -1,6 +1,6 @@
-﻿using LuckParser.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Models;
 
 namespace LuckParser.Builders.JsonModels
 {
@@ -19,23 +19,23 @@ namespace LuckParser.Builders.JsonModels
             /// </summary>
             /// <seealso cref="JsonLog.SkillMap"/>
             /// <seealso cref="JsonLog.BuffMap"/>
-            public long Id;
+            public long Id { get; set; }
             /// <summary>
             /// True if the damage was indirect
             /// </summary>
-            public bool IndirectDamage;
+            public bool IndirectDamage { get; set; }
             /// <summary>
             /// Source of the damage
             /// </summary>
-            public string Src;
+            public string Src { get; set; }
             /// <summary>
             /// Damage done
             /// </summary>
-            public int Damage;
+            public int Damage { get; set; }
             /// <summary>
             /// Time value
             /// </summary>
-            public int Time;
+            public int Time { get; set; }
 
             public JsonDeathRecapDamageItem(Statistics.DeathRecap.DeathRecapDamageItem item)
             {
@@ -50,15 +50,15 @@ namespace LuckParser.Builders.JsonModels
         /// <summary>
         /// Time of death
         /// </summary>
-        public int DeathTime;
+        public int DeathTime { get; set; }
         /// <summary>
         /// List of damaging events to put into downstate
         /// </summary>
-        public List<JsonDeathRecapDamageItem> ToDown;
+        public List<JsonDeathRecapDamageItem> ToDown { get; set; }
         /// <summary>
         /// List of damaging events to put into deadstate
         /// </summary>
-        public List<JsonDeathRecapDamageItem> ToKill;
+        public List<JsonDeathRecapDamageItem> ToKill { get; set; }
 
         public JsonDeathRecap(Statistics.DeathRecap recap)
         {

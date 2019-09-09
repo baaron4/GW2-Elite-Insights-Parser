@@ -1,11 +1,11 @@
-﻿using LuckParser.EIData;
-using LuckParser.Parser;
-using LuckParser.Parser.ParsedData;
-using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using LuckParser.EIData;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData;
+using LuckParser.Parser.ParsedData.CombatEvents;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic
@@ -17,7 +17,7 @@ namespace LuckParser.Logic
         public Qadim(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
-            { 
+            {
             new EnemyCastStartMechanic(51943, "Qadim CC", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "Qadim CC","Qadim CC", "Qadim CC",0),
             new EnemyCastEndMechanic(51943, "Qadim CC", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "Qadim CCed","Qadim Breakbar broken", "Qadim CCed",0, (ce, log) => ce.ActualDuration < 6500),
             new EnemyCastStartMechanic(52265, "Riposte", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "Qadim CC Fail","Qadim Breakbar failed", "Qadim CC Fail",0),
@@ -61,7 +61,7 @@ namespace LuckParser.Logic
             new PlayerBoonApplyMechanic(52035, "Power of the Lamp", new MechanicPlotlySetting("triangle-up","rgb(100,150,255)",10), "Lamp","Power of the Lamp (Returned from the Lamp)", "Lamp Return",0),
             });
             Extension = "qadim";
-            IconUrl = "https://wiki.guildwars2.com/images/f/f2/Mini_Qadim.png";
+            Icon = "https://wiki.guildwars2.com/images/f/f2/Mini_Qadim.png";
             GenericFallBackMethod = FallBackMethod.CombatExit;
         }
 
@@ -149,7 +149,7 @@ namespace LuckParser.Logic
                     case 2:
                     case 4:
                     case 6:
-                        List<long> pyresFirstAware = log.AgentData.GetAgentsByID((ushort)PyreGuardian).Where(x => phase.InInterval(log.FightData.ToFightSpace(x.FirstAwareLogTime))).Select(x => log.FightData.ToFightSpace(x.FirstAwareLogTime)).ToList();
+                        var pyresFirstAware = log.AgentData.GetAgentsByID((ushort)PyreGuardian).Where(x => phase.InInterval(log.FightData.ToFightSpace(x.FirstAwareLogTime))).Select(x => log.FightData.ToFightSpace(x.FirstAwareLogTime)).ToList();
                         if (pyresFirstAware.Count > 0 && pyresFirstAware.Max() > phase.Start)
                         {
                             phase.OverrideStart(pyresFirstAware.Max());
@@ -157,7 +157,7 @@ namespace LuckParser.Logic
                         phase.Targets.Add(qadim);
                         break;
                     default:
-                        List<ushort> ids = new List<ushort>
+                        var ids = new List<ushort>
                         {
                            (ushort) WyvernMatriarch,
                            (ushort) WyvernPatriarch,
@@ -200,21 +200,21 @@ namespace LuckParser.Logic
                 case (ushort)ParseEnum.TargetIDS.Qadim:
                     //CC
                     AddPlatformsToCombatReplay(target, log, replay);
-                    List<AbstractCastEvent> breakbar = cls.Where(x => x.SkillId == 51943).ToList();
+                    var breakbar = cls.Where(x => x.SkillId == 51943).ToList();
                     foreach (AbstractCastEvent c in breakbar)
                     {
                         int radius = ccRadius;
                         replay.Actors.Add(new CircleActor(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Riposte
-                    List<AbstractCastEvent> riposte = cls.Where(x => x.SkillId == 52265).ToList();
+                    var riposte = cls.Where(x => x.SkillId == 52265).ToList();
                     foreach (AbstractCastEvent c in riposte)
                     {
                         int radius = 2200;
                         replay.Actors.Add(new CircleActor(true, 0, radius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     }
                     //Big Hit
-                    List<AbstractCastEvent> maceShockwave = cls.Where(x => x.SkillId == 52310).ToList();
+                    var maceShockwave = cls.Where(x => x.SkillId == 52310).ToList();
                     foreach (AbstractCastEvent c in maceShockwave)
                     {
                         int start = (int)c.Time;
@@ -227,7 +227,7 @@ namespace LuckParser.Logic
                         Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && targetPosition != null)
                         {
-                            Point3D position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z, targetPosition.Time);
+                            var position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z, targetPosition.Time);
                             replay.Actors.Add(new CircleActor(true, 0, impactRadius, (start, start + delay), "rgba(255, 100, 0, 0.2)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleActor(true, 0, impactRadius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.7)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleActor(false, start + delay + duration, radius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.7)", new PositionConnector(position)));
@@ -236,13 +236,13 @@ namespace LuckParser.Logic
                     break;
                 case (ushort)AncientInvokedHydra:
                     //CC
-                    List<AbstractCastEvent> fieryMeteor = cls.Where(x => x.SkillId == 52941).ToList();
+                    var fieryMeteor = cls.Where(x => x.SkillId == 52941).ToList();
                     foreach (AbstractCastEvent c in fieryMeteor)
                     {
                         int radius = ccRadius;
                         replay.Actors.Add(new CircleActor(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
-                    List<AbstractCastEvent> eleBreath = cls.Where(x => x.SkillId == 52520).ToList();
+                    var eleBreath = cls.Where(x => x.SkillId == 52520).ToList();
                     foreach (AbstractCastEvent c in eleBreath)
                     {
                         int start = (int)c.Time;
@@ -259,7 +259,7 @@ namespace LuckParser.Logic
                     break;
                 case (ushort)WyvernMatriarch:
                     //Wing Buffet
-                    List<AbstractCastEvent> wingBuffet = cls.Where(x => x.SkillId == 52734).ToList();
+                    var wingBuffet = cls.Where(x => x.SkillId == 52734).ToList();
                     foreach (AbstractCastEvent c in wingBuffet)
                     {
                         int start = (int)c.Time;
@@ -276,7 +276,7 @@ namespace LuckParser.Logic
                         }
                     }
                     //Breath
-                    List<AbstractCastEvent> matBreath = cls.Where(x => x.SkillId == 52726).ToList();
+                    var matBreath = cls.Where(x => x.SkillId == 52726).ToList();
                     foreach (AbstractCastEvent c in matBreath)
                     {
                         int start = (int)c.Time;
@@ -294,7 +294,7 @@ namespace LuckParser.Logic
                         }
                     }
                     //Tail Swipe
-                    List<AbstractCastEvent> matSwipe = cls.Where(x => x.SkillId == 52705).ToList();
+                    var matSwipe = cls.Where(x => x.SkillId == 52705).ToList();
                     foreach (AbstractCastEvent c in matSwipe)
                     {
                         int start = (int)c.Time;
@@ -319,14 +319,14 @@ namespace LuckParser.Logic
                     break;
                 case (ushort)WyvernPatriarch:
                     //CC
-                    List<AbstractCastEvent> patCC = cls.Where(x => x.SkillId == 53132).ToList();
+                    var patCC = cls.Where(x => x.SkillId == 53132).ToList();
                     foreach (AbstractCastEvent c in patCC)
                     {
                         int radius = ccRadius;
                         replay.Actors.Add(new CircleActor(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Breath
-                    List<AbstractCastEvent> patBreath = cls.Where(x => x.SkillId == 52726).ToList();
+                    var patBreath = cls.Where(x => x.SkillId == 52726).ToList();
                     foreach (AbstractCastEvent c in patBreath)
                     {
                         int start = (int)c.Time;
@@ -344,7 +344,7 @@ namespace LuckParser.Logic
                         }
                     }
                     //Tail Swipe
-                    List<AbstractCastEvent> patSwipe = cls.Where(x => x.SkillId == 52705).ToList();
+                    var patSwipe = cls.Where(x => x.SkillId == 52705).ToList();
                     foreach (AbstractCastEvent c in patSwipe)
                     {
                         int start = (int)c.Time;
@@ -367,7 +367,7 @@ namespace LuckParser.Logic
                     }
                     break;
                 case (ushort)ApocalypseBringer:
-                    List<AbstractCastEvent> jumpShockwave = cls.Where(x => x.SkillId == 51923).ToList();
+                    var jumpShockwave = cls.Where(x => x.SkillId == 51923).ToList();
                     foreach (AbstractCastEvent c in jumpShockwave)
                     {
                         int start = (int)c.Time;
@@ -376,7 +376,7 @@ namespace LuckParser.Logic
                         int maxRadius = 2000;
                         replay.Actors.Add(new CircleActor(false, start + delay + duration, maxRadius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.5)", new AgentConnector(target)));
                     }
-                    List<AbstractCastEvent> stompShockwave = cls.Where(x => x.SkillId == 52330).ToList();
+                    var stompShockwave = cls.Where(x => x.SkillId == 52330).ToList();
                     foreach (AbstractCastEvent c in stompShockwave)
                     {
                         int start = (int)c.Time;
@@ -389,21 +389,21 @@ namespace LuckParser.Logic
                         Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && targetPosition != null)
                         {
-                            Point3D position = new Point3D(targetPosition.X + facing.X * spellCenterDistance, targetPosition.Y + facing.Y * spellCenterDistance, targetPosition.Z, targetPosition.Time);
+                            var position = new Point3D(targetPosition.X + facing.X * spellCenterDistance, targetPosition.Y + facing.Y * spellCenterDistance, targetPosition.Z, targetPosition.Time);
                             replay.Actors.Add(new CircleActor(true, 0, impactRadius, (start, start + delay), "rgba(255, 100, 0, 0.1)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleActor(true, 0, impactRadius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.5)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleActor(false, start + delay + duration, maxRadius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.5)", new PositionConnector(position)));
                         }
                     }
                     //CC
-                    List<AbstractCastEvent> summon = cls.Where(x => x.SkillId == 52054).ToList();
+                    var summon = cls.Where(x => x.SkillId == 52054).ToList();
                     foreach (AbstractCastEvent c in summon)
                     {
                         int radius = ccRadius;
                         replay.Actors.Add(new CircleActor(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Pizza
-                    List<AbstractCastEvent> forceWave = cls.Where(x => x.SkillId == 51759).ToList();
+                    var forceWave = cls.Where(x => x.SkillId == 51759).ToList();
                     foreach (AbstractCastEvent c in forceWave)
                     {
                         int start = (int)c.Time;
@@ -443,7 +443,7 @@ namespace LuckParser.Logic
         private void AddPlatformsToCombatReplay(Target target, ParsedLog log, CombatReplay replay)
         {
             // We later use the target to find out the timing of the last move
-            Debug.Assert(target.ID == (int) ParseEnum.TargetIDS.Qadim);
+            Debug.Assert(target.ID == (int)ParseEnum.TargetIDS.Qadim);
 
             // These values were all calculated by hand.
             // It would be way nicer to calculate them here, but we don't have a nice vector library
@@ -522,13 +522,13 @@ namespace LuckParser.Logic
             const int lastPhasePreparationDuration = 13000;
 
             // If phase data is not calculated, only the first layout is used
-            var phases = log.FightData.GetPhases(log);
+            List<PhaseData> phases = log.FightData.GetPhases(log);
 
-            int qadimPhase1Time = (int) (phases.Count > 1 ? phases[1].End : int.MaxValue);
-            int destroyerPhaseTime = (int) (phases.Count > 2 ? phases[2].End : int.MaxValue);
-            int qadimPhase2Time = (int) (phases.Count > 3 ? phases[3].End : int.MaxValue);
-            int wyvernPhaseTime = (int) (phases.Count > 4 ? phases[4].End + timeAfterPhase2 : int.MaxValue);
-            int jumpingPuzzleTime = (int) (phases.Count > 5 ? phases[5].End + timeAfterWyvernPhase : int.MaxValue);
+            int qadimPhase1Time = (int)(phases.Count > 1 ? phases[1].End : int.MaxValue);
+            int destroyerPhaseTime = (int)(phases.Count > 2 ? phases[2].End : int.MaxValue);
+            int qadimPhase2Time = (int)(phases.Count > 3 ? phases[3].End : int.MaxValue);
+            int wyvernPhaseTime = (int)(phases.Count > 4 ? phases[4].End + timeAfterPhase2 : int.MaxValue);
+            int jumpingPuzzleTime = (int)(phases.Count > 5 ? phases[5].End + timeAfterWyvernPhase : int.MaxValue);
             int finalPhaseTime = int.MaxValue;
             if (phases.Count > 6)
             {
@@ -554,7 +554,7 @@ namespace LuckParser.Logic
 
             // The following monstrosity is needed to avoid the final platform rotating all the way back
             int finalPlatformHalfRotationCount =
-                (int) Math.Round((Math.PI + jumpingPuzzleDuration / 1000.0 * jumpingPuzzleRotationRate) / Math.PI,
+                (int)Math.Round((Math.PI + jumpingPuzzleDuration / 1000.0 * jumpingPuzzleRotationRate) / Math.PI,
                     MidpointRounding.AwayFromZero);
             double finalPlatformRotation = Math.PI * finalPlatformHalfRotationCount;
 
@@ -816,14 +816,14 @@ namespace LuckParser.Logic
 
             // Add movement "keyframes" on a movement end and on the start of the next one.
             // This approach requires one extra movement at the start for initial positions (should be of duration 0)
-            for (var i = 0; i < movements.Length; i++)
+            for (int i = 0; i < movements.Length; i++)
             {
-                var movement = movements[i];
-                var positions = movement.platforms;
+                (int start, int duration, (int x, int y, int z, double angle, double opacity)[] platforms) movement = movements[i];
+                (int x, int y, int z, double angle, double opacity)[] positions = movement.platforms;
 
-                for (var platformIndex = 0; platformIndex < platformCount; platformIndex++)
+                for (int platformIndex = 0; platformIndex < platformCount; platformIndex++)
                 {
-                    var platform = platforms[platformIndex];
+                    MovingPlatformActor platform = platforms[platformIndex];
                     (int x, int y, int z, double angle, double opacity) = positions[platformIndex];
 
                     // Add a keyframe for movement end.

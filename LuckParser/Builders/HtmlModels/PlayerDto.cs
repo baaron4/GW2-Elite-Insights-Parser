@@ -1,32 +1,32 @@
-﻿using LuckParser.EIData;
-using LuckParser.Parser;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using LuckParser.EIData;
+using LuckParser.Parser;
 
 namespace LuckParser.Builders.HtmlModels
 {
 
     public class PlayerDto
     {
-        public int Group;
-        public int CombatReplayID;
-        public string Name;
-        public string Acc;
-        public string Profession;
-        public uint Condi;
-        public uint Conc;
-        public uint Heal;
-        public uint Tough;
-        public readonly List<MinionDto> Minions = new List<MinionDto>();
-        public readonly List<string> L1Set = new List<string>();
-        public readonly List<string> L2Set = new List<string>();
-        public readonly List<string> A1Set = new List<string>();
-        public readonly List<string> A2Set = new List<string>();
-        public string ColTarget;
-        public string ColCleave;
-        public string ColTotal;
-        public bool IsConjure;
-        public ActorDetailsDto Details;
+        public int Group { get; set; }
+        public int CombatReplayID { get; set; }
+        public string Name { get; set; }
+        public string Acc { get; set; }
+        public string Profession { get; set; }
+        public uint Condi { get; set; }
+        public uint Conc { get; set; }
+        public uint Heal { get; set; }
+        public uint Tough { get; set; }
+        public List<MinionDto> Minions { get; } = new List<MinionDto>();
+        public List<string> L1Set { get; } = new List<string>();
+        public List<string> L2Set { get; } = new List<string>();
+        public List<string> A1Set { get; } = new List<string>();
+        public List<string> A2Set { get; } = new List<string>();
+        public string ColTarget { get; set; }
+        public string ColCleave { get; set; }
+        public string ColTotal { get; set; }
+        public bool IsConjure { get; set; }
+        public ActorDetailsDto Details { get; set; }
 
         public PlayerDto(Player player, ParsedLog log, bool cr, ActorDetailsDto details)
         {
@@ -48,7 +48,7 @@ namespace LuckParser.Builders.HtmlModels
             {
                 CombatReplayID = player.GetCombatReplayID(log);
             }
-            foreach (KeyValuePair<string, Minions> pair in player.GetMinions(log))
+            foreach (KeyValuePair<string, MinionsList> pair in player.GetMinions(log))
             {
                 Minions.Add(new MinionDto()
                 {
@@ -58,12 +58,12 @@ namespace LuckParser.Builders.HtmlModels
             }
         }
 
-        private void BuildWeaponSets(string[] weps, int offset, List<string> set1, List<string> set2)
+        private static void BuildWeaponSets(string[] weps, int offset, List<string> set1, List<string> set2)
         {
 
             for (int j = 0; j < 4; j++)
             {
-                var wep = weps[j + offset];
+                string wep = weps[j + offset];
                 if (wep != null)
                 {
                     if (wep != "2Hand")

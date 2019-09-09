@@ -1,5 +1,5 @@
-﻿using LuckParser.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using LuckParser.Models;
 
 namespace LuckParser.Builders.JsonModels
 {
@@ -16,27 +16,27 @@ namespace LuckParser.Builders.JsonModels
             /// <summary>
             /// Generation done
             /// </summary>
-            public double Generation;
+            public double Generation { get; set; }
             /// <summary>
             /// Generation with overstack
             /// </summary>
-            public double Overstack;
+            public double Overstack { get; set; }
             /// <summary>
             /// Wasted generation
             /// </summary>
-            public double Wasted;
+            public double Wasted { get; set; }
             /// <summary>
             /// Extension from unknown source
             /// </summary>
-            public double UnknownExtended;
+            public double UnknownExtended { get; set; }
             /// <summary>
             /// Generation done by extension
             /// </summary>
-            public double ByExtension;
+            public double ByExtension { get; set; }
             /// <summary>
             /// Buff extended 
             /// </summary>
-            public double Extended;
+            public double Extended { get; set; }
 
             public JsonBuffsGenerationData(Statistics.FinalBuffs stats)
             {
@@ -54,12 +54,12 @@ namespace LuckParser.Builders.JsonModels
         /// ID of the buff
         /// </summary>
         /// <seealso cref="JsonLog.BuffMap"/>
-        public long Id;
+        public long Id { get; set; }
         /// <summary>
         /// Array of buff data \n
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonPlayerBuffsData"/>
-        public List<JsonBuffsGenerationData> BuffData;
+        public List<JsonBuffsGenerationData> BuffData { get; set; }
     }
 }

@@ -1,7 +1,7 @@
-﻿using LuckParser.Parser;
-using LuckParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData.CombatEvents;
 using static LuckParser.Models.Statistics;
 
 namespace LuckParser.EIData
@@ -9,11 +9,11 @@ namespace LuckParser.EIData
     public class DamageLogDamageModifier : DamageModifier
     {
 
-        public DamageLogDamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, DamageLogChecker checker, GainComputer gainComputer, ulong minBuild, ulong maxBuild) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer, checker, minBuild, maxBuild)
+        public DamageLogDamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string icon, DamageLogChecker checker, GainComputer gainComputer, ulong minBuild, ulong maxBuild) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, icon, gainComputer, checker, minBuild, maxBuild)
         {
         }
 
-        public DamageLogDamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, DamageLogChecker checker, GainComputer gainComputer) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer, checker, ulong.MinValue, ulong.MaxValue)
+        public DamageLogDamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string icon, DamageLogChecker checker, GainComputer gainComputer) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, icon, gainComputer, checker, ulong.MinValue, ulong.MaxValue)
         {
         }
 
@@ -27,19 +27,19 @@ namespace LuckParser.EIData
             }
             foreach (Target target in log.FightData.Logic.Targets)
             {
-                if (!dataTarget.TryGetValue(target, out var extra))
+                if (!dataTarget.TryGetValue(target, out Dictionary<string, List<DamageModifierData>> extra))
                 {
                     dataTarget[target] = new Dictionary<string, List<DamageModifierData>>();
                 }
                 Dictionary<string, List<DamageModifierData>> dict = dataTarget[target];
-                if (!dict.TryGetValue(Name, out var list))
+                if (!dict.TryGetValue(Name, out List<DamageModifierData> list))
                 {
-                    List<DamageModifierData> extraDataList = new List<DamageModifierData>();
+                    var extraDataList = new List<DamageModifierData>();
                     for (int i = 0; i < phases.Count; i++)
                     {
                         int totalDamage = GetTotalDamage(p, log, target, i);
                         List<AbstractDamageEvent> typeHits = GetDamageLogs(p, log, target, phases[i]);
-                        List<AbstractDamageEvent> effect = typeHits.Where(x => DLChecker(x)).ToList();
+                        var effect = typeHits.Where(x => DLChecker(x)).ToList();
                         extraDataList.Add(new DamageModifierData(effect.Count, typeHits.Count, gain * effect.Sum(x => x.Damage), totalDamage));
                     }
                     dict[Name] = extraDataList;
@@ -50,7 +50,7 @@ namespace LuckParser.EIData
             {
                 int totalDamage = GetTotalDamage(p, log, null, i);
                 List<AbstractDamageEvent> typeHits = GetDamageLogs(p, log, null, phases[i]);
-                List<AbstractDamageEvent> effect = typeHits.Where(x => DLChecker(x)).ToList();
+                var effect = typeHits.Where(x => DLChecker(x)).ToList();
                 data[Name].Add(new DamageModifierData(effect.Count, typeHits.Count, gain * effect.Sum(x => x.Damage), totalDamage));
             }
         }

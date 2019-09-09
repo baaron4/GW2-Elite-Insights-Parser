@@ -1,10 +1,10 @@
-﻿using LuckParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using LuckParser.EIData;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic
@@ -14,7 +14,7 @@ namespace LuckParser.Logic
         // TODO - add CR icons and some mechanics
         public DarkMaze(ushort triggerID) : base(triggerID)
         {
-            MechanicList.AddRange( new List<Mechanic>
+            MechanicList.AddRange(new List<Mechanic>
             {
             new PlayerBoonApplyMechanic(791, "Fear", new MechanicPlotlySetting("star-square","rgb(0,0,0)"), "Feared","Feared by Eye Teleport Skill", "Feared",0),
             new PlayerBoonApplyMechanic(48779, "Light Carrier", new MechanicPlotlySetting("circle-open","rgb(200,200,0)"), "Light Orb","Light Carrier (picked up a light orb)", "Picked up orb",0),
@@ -25,7 +25,7 @@ namespace LuckParser.Logic
             }
             );
             Extension = "eyes";
-            IconUrl = "https://wiki.guildwars2.com/images/thumb/a/a7/Eye_of_Fate.jpg/188px-Eye_of_Fate.jpg";
+            Icon = "https://wiki.guildwars2.com/images/thumb/a/a7/Eye_of_Fate.jpg/188px-Eye_of_Fate.jpg";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()
@@ -132,7 +132,8 @@ namespace LuckParser.Logic
             }
         }
 
-        public override string GetFightName() {
+        public override string GetFightName()
+        {
             return "Statue of Darkness";
         }
     }

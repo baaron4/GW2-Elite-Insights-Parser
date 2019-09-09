@@ -1,10 +1,10 @@
-﻿using LuckParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using LuckParser.EIData;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace LuckParser.Logic
 {
@@ -13,7 +13,7 @@ namespace LuckParser.Logic
         // TODO - add CR icons and some mechanics
         public BrokenKing(ushort triggerID) : base(triggerID)
         {
-            MechanicList.AddRange( new List<Mechanic>
+            MechanicList.AddRange(new List<Mechanic>
             {
             new HitOnPlayerMechanic(48066, "King's Wrath", new MechanicPlotlySetting("triangle-left","rgb(0,100,255)"), "Cone Hit","King's Wrath (Auto Attack Cone Part)", "Cone Auto Attack",0),
             new HitOnPlayerMechanic(47531, "Numbing Breach", new MechanicPlotlySetting("asterisk-open","rgb(0,100,255)"), "Cracks","Numbing Breach (Ice Cracks in the Ground)", "Cracks",0),
@@ -21,7 +21,7 @@ namespace LuckParser.Logic
             }
             );
             Extension = "brokenking";
-            IconUrl = "https://wiki.guildwars2.com/images/3/37/Mini_Broken_King.png";
+            Icon = "https://wiki.guildwars2.com/images/3/37/Mini_Broken_King.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()
@@ -35,7 +35,7 @@ namespace LuckParser.Logic
 
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
-            List<AbstractBuffEvent> green = log.CombatData.GetBoonData(47776).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            var green = log.CombatData.GetBoonData(47776).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent c in green)
             {
                 int duration = 45000;
@@ -56,20 +56,20 @@ namespace LuckParser.Logic
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.BrokenKing:
-                    List<AbstractCastEvent> Cone = cls.Where(x => x.SkillId == 48066).ToList();
+                    var Cone = cls.Where(x => x.SkillId == 48066).ToList();
                     foreach (AbstractCastEvent c in Cone)
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
                         int range = 450;
                         int angle = 100;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start+1000);
+                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing == null)
                         {
                             continue;
                         }
-                            replay.Actors.Add(new PieActor(true, 0, range, facing, angle, (start, end), "rgba(0,100,255,0.2)", new AgentConnector(target)));
-                            replay.Actors.Add(new PieActor(true, 0, range, facing, angle, (start+1900, end), "rgba(0,100,255,0.3)", new AgentConnector(target)));
+                        replay.Actors.Add(new PieActor(true, 0, range, facing, angle, (start, end), "rgba(0,100,255,0.2)", new AgentConnector(target)));
+                        replay.Actors.Add(new PieActor(true, 0, range, facing, angle, (start + 1900, end), "rgba(0,100,255,0.3)", new AgentConnector(target)));
                     }
                     break;
                 default:
@@ -84,7 +84,8 @@ namespace LuckParser.Logic
             SetSuccessByDeath(combatData, fightData, playerAgents, true, TriggerID);
         }
 
-        public override string GetFightName() {
+        public override string GetFightName()
+        {
             return "Statue of Ice";
         }
     }

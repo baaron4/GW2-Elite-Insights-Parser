@@ -1,27 +1,27 @@
-﻿using LuckParser.EIData;
+﻿using System.Collections.Generic;
+using System.Linq;
+using LuckParser.EIData;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
-using System.Linq;
 namespace LuckParser.Builders.HtmlModels
 {
     public class MechanicDto
-    {       
-        public string Name;       
-        public string ShortName;        
-        public string Description;       
-        public bool EnemyMech;       
-        public bool PlayerMech;
+    {
+        public string Name { get; set; }
+        public string ShortName { get; set; }
+        public string Description { get; set; }
+        public bool EnemyMech { get; set; }
+        public bool PlayerMech { get; set; }
 
         public static List<int[]> GetMechanicData(HashSet<Mechanic> presMech, ParsedLog log, DummyActor actor, PhaseData phase)
         {
-            List<int[]> res = new List<int[]>();
+            var res = new List<int[]>();
 
             foreach (Mechanic mech in presMech)
             {
                 long timeFilter = 0;
                 int filterCount = 0;
-                List<MechanicEvent> mls = log.MechanicData.GetMechanicLogs(log, mech).Where(x => x.Actor.InstID == actor.InstID && phase.InInterval(x.Time)).ToList();
+                var mls = log.MechanicData.GetMechanicLogs(log, mech).Where(x => x.Actor.InstID == actor.InstID && phase.InInterval(x.Time)).ToList();
                 int count = mls.Count;
                 foreach (MechanicEvent ml in mls)
                 {
@@ -41,7 +41,7 @@ namespace LuckParser.Builders.HtmlModels
         {
             foreach (Mechanic mech in mechs)
             {
-                MechanicDto dto = new MechanicDto
+                var dto = new MechanicDto
                 {
                     Name = mech.FullName,
                     ShortName = mech.ShortName,

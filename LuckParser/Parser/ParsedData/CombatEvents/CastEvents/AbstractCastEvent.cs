@@ -20,7 +20,7 @@
         {
             Skill = skillData.Get(startEvtcItem.SkillID);
             Caster = agentData.GetAgentByInstID(startEvtcItem.SrcInstid, startEvtcItem.LogTime);
-            UnderQuickness = startEvtcItem.IsActivation == ParseEnum.Activation.Quickness;
+            UnderQuickness = startEvtcItem.IsActivation == ParseEnum.EvtcActivation.Quickness;
             ExpectedDuration = startEvtcItem.Value;
             MasterCaster = startEvtcItem.SrcMasterInstid > 0 ? agentData.GetAgentByInstID(startEvtcItem.SrcMasterInstid, startEvtcItem.LogTime) : null;
         }

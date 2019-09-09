@@ -1,15 +1,15 @@
-﻿using LuckParser.EIData;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using LuckParser.EIData;
 
 namespace LuckParser.Builders.HtmlModels
 {
     public class DamageModDto
-    {    
-        public long Id;       
-        public string Name;       
-        public string Icon;
-        public string Tooltip;
-        public bool NonMultiplier;
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+        public string Icon { get; set; }
+        public string Tooltip { get; set; }
+        public bool NonMultiplier { get; set; }
 
         public static void AssembleDamageModifiers(ICollection<DamageModifier> damageMods, Dictionary<string, DamageModDto> dict)
         {
@@ -20,7 +20,7 @@ namespace LuckParser.Builders.HtmlModels
                 {
                     Id = id,
                     Name = mod.Name,
-                    Icon = mod.Url,
+                    Icon = mod.Icon,
                     Tooltip = mod.Tooltip,
                     NonMultiplier = !mod.Multiplier
                 };

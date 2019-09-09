@@ -1,10 +1,10 @@
-﻿using LuckParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using LuckParser.EIData;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic
@@ -33,7 +33,7 @@ namespace LuckParser.Logic
                 new PlayerBoonApplyMechanic(56118, "Sapping Surge", new MechanicPlotlySetting("y-down-open","rgb(250,0,50)"), "B.Tether", "25% damage reduction", "Bad Tether", 0),
             });
             Extension = "prlqadim";
-            IconUrl = "https://wiki.guildwars2.com/images/8/8b/Mini_Qadim_the_Peerless.png";
+            Icon = "https://wiki.guildwars2.com/images/8/8b/Mini_Qadim_the_Peerless.png";
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
@@ -50,20 +50,20 @@ namespace LuckParser.Logic
 
         public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
         {
-            List<AbstractBuffEvent> res = new List<AbstractBuffEvent>();
-            if (buffsById.TryGetValue(56118, out var list))
+            var res = new List<AbstractBuffEvent>();
+            if (buffsById.TryGetValue(56118, out List<AbstractBuffEvent> list))
             {
-                Dictionary<AgentItem, List<AbstractBuffEvent>> sappingSurgeByDst = list.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
-                foreach (var pair in sappingSurgeByDst.Where(x => x.Value.Exists(y => y is BuffRemoveSingleEvent)))
+                var sappingSurgeByDst = list.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+                foreach (KeyValuePair<AgentItem, List<AbstractBuffEvent>> pair in sappingSurgeByDst.Where(x => x.Value.Exists(y => y is BuffRemoveSingleEvent)))
                 {
-                    List<AbstractBuffEvent> sglRemovals = pair.Value.Where(x => x is BuffRemoveSingleEvent).ToList();
+                    var sglRemovals = pair.Value.Where(x => x is BuffRemoveSingleEvent).ToList();
                     foreach (AbstractBuffEvent sglRemoval in sglRemovals)
                     {
                         AbstractBuffEvent ba = pair.Value.LastOrDefault(x => x is BuffApplyEvent && Math.Abs(x.Time - sglRemoval.Time) < 5);
                         if (ba != null)
                         {
                             res.Add(new BuffRemoveAllEvent(sglRemoval.By, pair.Key, ba.Time - 1, int.MaxValue, ba.BuffSkill, 1, int.MaxValue));
-                            res.Add(new BuffRemoveManualEvent(sglRemoval.By, pair.Key, ba.Time -1, int.MaxValue, ba.BuffSkill));
+                            res.Add(new BuffRemoveManualEvent(sglRemoval.By, pair.Key, ba.Time - 1, int.MaxValue, ba.BuffSkill));
                         }
                     }
                 }
@@ -84,10 +84,10 @@ namespace LuckParser.Logic
             {
                 return phases;
             }
-            List<long> phaseStarts = new List<long>();
-            List<long> phaseEnds = new List<long>();
+            var phaseStarts = new List<long>();
+            var phaseEnds = new List<long>();
             //
-            List<AbstractBuffEvent> magmaDrops = log.CombatData.GetBoonData(56475).Where(x => x is BuffApplyEvent).ToList();
+            var magmaDrops = log.CombatData.GetBoonData(56475).Where(x => x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent magmaDrop in magmaDrops)
             {
                 if (phaseEnds.Count > 0)
@@ -128,7 +128,7 @@ namespace LuckParser.Logic
             }
             for (int i = 0; i < phaseStarts.Count; i++)
             {
-                PhaseData phase = new PhaseData(phaseStarts[i], phaseEnds[i])
+                var phase = new PhaseData(phaseStarts[i], phaseEnds[i])
                 {
                     Name = "Phase " + (i + 1)
                 };
@@ -153,7 +153,7 @@ namespace LuckParser.Logic
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.PeerlessQadim:
-                    List<AbstractCastEvent> cataCycle = cls.Where(x => x.SkillId == 56329).ToList();
+                    var cataCycle = cls.Where(x => x.SkillId == 56329).ToList();
 
                     foreach (AbstractCastEvent c in cataCycle)
                     {
@@ -255,7 +255,7 @@ namespace LuckParser.Logic
                     {
                         replay.Actors.Add(new CircleActor(true, 0, magmaRadius, (magmaDropEnd, magmaDropEnd + magmaOffset), "rgba(255, 220, 50, 0.15)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
                         replay.Actors.Add(new CircleActor(true, magmaDropEnd + magmaOffset, magmaRadius, (magmaDropEnd, magmaDropEnd + magmaOffset), "rgba(255, 220, 50, 0.25)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
-                        replay.Actors.Add(new CircleActor(true, 0, magmaRadius, (magmaDropEnd+magmaOffset, (int)log.FightData.FightDuration), "rgba(255, 220, 50, 0.5)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
+                        replay.Actors.Add(new CircleActor(true, 0, magmaRadius, (magmaDropEnd + magmaOffset, (int)log.FightData.FightDuration), "rgba(255, 220, 50, 0.5)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
                     }
                 }
 

@@ -1,7 +1,7 @@
-﻿using LuckParser.Exceptions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using LuckParser.Exceptions;
 
 namespace LuckParser
 {
@@ -18,11 +18,11 @@ namespace LuckParser
             }
             else
             {
-                List<Task> tasks = new List<Task>();
+                var tasks = new List<Task>();
 
                 foreach (string file in logFiles)
                 {
-                    tasks.Add(Task.Factory.StartNew(ParseLog, file));
+                    tasks.Add(Task.Run(() => ParseLog(file)));
                 }
 
                 Task.WaitAll(tasks.ToArray());
@@ -31,7 +31,7 @@ namespace LuckParser
 
         private void ParseLog(object logFile)
         {
-            GridRow row = new GridRow(logFile as string, "Ready to parse")
+            var row = new GridRow(logFile as string, "Ready to parse")
             {
                 BgWorker = new System.ComponentModel.BackgroundWorker()
                 {
@@ -50,7 +50,7 @@ namespace LuckParser
             {
                 Console.WriteLine("Something terrible has happened");
             }
-            
+
         }
     }
 }

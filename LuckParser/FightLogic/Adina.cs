@@ -1,10 +1,10 @@
-﻿using LuckParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using LuckParser.EIData;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic
@@ -25,22 +25,22 @@ namespace LuckParser.Logic
                 new HitOnPlayerMechanic(56381, "Quantum Quake", new MechanicPlotlySetting("hourglass","rgb(120,100,0)"), "S.Thrower", "Hit by rotating SandThrower", "SandThrower", 0),
             });
             Extension = "adina";
-            IconUrl = "https://wiki.guildwars2.com/images/a/a0/Mini_Earth_Djinn.png";
+            Icon = "https://wiki.guildwars2.com/images/a/a0/Mini_Earth_Djinn.png";
         }
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            List<CombatItem> attackTargets = combatData.Where(x => x.IsStateChange == ParseEnum.StateChange.AttackTarget).ToList();
+            var attackTargets = combatData.Where(x => x.IsStateChange == ParseEnum.StateChange.AttackTarget).ToList();
             long first = combatData.Count > 0 ? combatData.First().LogTime : 0;
             long final = combatData.Count > 0 ? combatData.Last().LogTime : 0;
             foreach (CombatItem at in attackTargets)
             {
                 AgentItem hand = agentData.GetAgent(at.DstAgent, at.LogTime);
                 AgentItem atAgent = agentData.GetAgent(at.SrcAgent, at.LogTime);
-                List<CombatItem> attackables = combatData.Where(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.SrcAgent == atAgent.Agent && x.LogTime <= atAgent.LastAwareLogTime && x.LogTime >= atAgent.FirstAwareLogTime).ToList();
-                List<long> attackOn = attackables.Where(x => x.DstAgent == 1 && x.LogTime >= first + 2000).Select(x => x.LogTime).ToList();
-                List<long> attackOff = attackables.Where(x => x.DstAgent == 0 && x.LogTime >= first + 2000).Select(x => x.LogTime).ToList();
-                List<CombatItem> posFacingHP = combatData.Where(x => x.SrcAgent == hand.Agent && x.LogTime >= hand.FirstAwareLogTime && hand.LastAwareLogTime >= x.LogTime && (x.IsStateChange == ParseEnum.StateChange.Position || x.IsStateChange == ParseEnum.StateChange.Rotation || x.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate)).ToList();
+                var attackables = combatData.Where(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.SrcAgent == atAgent.Agent && x.LogTime <= atAgent.LastAwareLogTime && x.LogTime >= atAgent.FirstAwareLogTime).ToList();
+                var attackOn = attackables.Where(x => x.DstAgent == 1 && x.LogTime >= first + 2000).Select(x => x.LogTime).ToList();
+                var attackOff = attackables.Where(x => x.DstAgent == 0 && x.LogTime >= first + 2000).Select(x => x.LogTime).ToList();
+                var posFacingHP = combatData.Where(x => x.SrcAgent == hand.Agent && x.LogTime >= hand.FirstAwareLogTime && hand.LastAwareLogTime >= x.LogTime && (x.IsStateChange == ParseEnum.StateChange.Position || x.IsStateChange == ParseEnum.StateChange.Rotation || x.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate)).ToList();
                 CombatItem pos = posFacingHP.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position);
                 ushort id = (ushort)HandOfErosion;
                 if (pos != null)
@@ -63,7 +63,7 @@ namespace LuckParser.Logic
                         end = attackOff[i];
                     }
                     AgentItem extra = agentData.AddCustomAgent(start, end, AgentItem.AgentType.Gadget, hand.Name, hand.Prof, id, hand.Toughness, hand.Healing, hand.Condition, hand.Concentration, hand.HitboxWidth, hand.HitboxHeight);
-                    foreach (CombatItem c in combatData.Where(x => x.SrcAgent == hand.Agent &&x.LogTime >= extra.FirstAwareLogTime && x.LogTime <= extra.LastAwareLogTime))
+                    foreach (CombatItem c in combatData.Where(x => x.SrcAgent == hand.Agent && x.LogTime >= extra.FirstAwareLogTime && x.LogTime <= extra.LastAwareLogTime))
                     {
                         c.OverrideSrcValues(extra.Agent, extra.InstID);
                     }
@@ -73,7 +73,7 @@ namespace LuckParser.Logic
                     }
                     foreach (CombatItem c in posFacingHP)
                     {
-                        CombatItem cExtra = new CombatItem(c);
+                        var cExtra = new CombatItem(c);
                         cExtra.OverrideTime(extra.FirstAwareLogTime);
                         cExtra.OverrideSrcValues(extra.Agent, extra.InstID);
                         combatData.Add(cExtra);
@@ -107,7 +107,7 @@ namespace LuckParser.Logic
             {
                 return phases;
             }
-            List<AbstractCastEvent> quantumQuakes = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 56035 || x.SkillId == 56381).ToList();
+            var quantumQuakes = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 56035 || x.SkillId == 56381).ToList();
             List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, 762, mainTarget, true);
             long start = 0, end = 0;
             for (int i = 0; i < invuls.Count; i++)
@@ -133,7 +133,7 @@ namespace LuckParser.Logic
                     });
                 }
             }
-            List<PhaseData> mainPhases = new List<PhaseData>();
+            var mainPhases = new List<PhaseData>();
             start = 0;
             end = 0;
             for (int i = 1; i < phases.Count; i++)
@@ -155,7 +155,7 @@ namespace LuckParser.Logic
                     });
                 }
             }
-            foreach(PhaseData phase in mainPhases)
+            foreach (PhaseData phase in mainPhases)
             {
                 phase.Targets.Add(mainTarget);
             }

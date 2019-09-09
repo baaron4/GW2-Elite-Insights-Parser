@@ -1,10 +1,10 @@
-﻿using LuckParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using LuckParser.EIData;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic
@@ -28,7 +28,7 @@ namespace LuckParser.Logic
             });
             Extension = "ca";
             GenericFallBackMethod = FallBackMethod.None;
-            IconUrl = "https://i.imgur.com/eLyIWd2.png";
+            Icon = "https://i.imgur.com/eLyIWd2.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()
@@ -138,16 +138,16 @@ namespace LuckParser.Logic
 
         private List<long> GetTargetableTimes(ParsedLog log, Target target)
         {
-            List<AttackTargetEvent> attackTargetsAgents = log.CombatData.GetAttackTargetEvents(target.AgentItem).Take(2).ToList(); // 3rd one is weird
-            List<AgentItem> attackTargets = new List<AgentItem>();
+            var attackTargetsAgents = log.CombatData.GetAttackTargetEvents(target.AgentItem).Take(2).ToList(); // 3rd one is weird
+            var attackTargets = new List<AgentItem>();
             foreach (AttackTargetEvent c in attackTargetsAgents)
             {
                 attackTargets.Add(c.AttackTarget);
             }
-            List<long> targetables = new List<long>();
+            var targetables = new List<long>();
             foreach (AgentItem attackTarget in attackTargets)
             {
-                var aux = log.CombatData.GetTargetableEvents(attackTarget);
+                List<TargetableEvent> aux = log.CombatData.GetTargetableEvents(attackTarget);
                 targetables.AddRange(aux.Where(x => x.Targetable).Select(x => x.Time));
             }
             return targetables;
@@ -253,7 +253,7 @@ namespace LuckParser.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             List<AbstractCastEvent> cls = p.GetCastLogs(log, 0, log.FightData.FightDuration);
-            List<AbstractCastEvent> shieldCast = cls.Where(x => x.SkillId == 52780).ToList();
+            var shieldCast = cls.Where(x => x.SkillId == 52780).ToList();
             foreach (AbstractCastEvent c in shieldCast)
             {
                 int start = (int)c.Time;

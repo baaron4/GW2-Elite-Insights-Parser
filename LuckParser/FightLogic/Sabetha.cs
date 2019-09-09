@@ -1,9 +1,9 @@
-﻿using LuckParser.EIData;
-using LuckParser.Parser;
-using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LuckParser.EIData;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData.CombatEvents;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic
@@ -50,7 +50,7 @@ namespace LuckParser.Logic
             // Hit by Time Bomb could be implemented by checking if a person is affected by ID 31324 (1st Time Bomb) or 34152 (2nd Time Bomb, only below 50% boss HP) without being attributed a bomb (ID: 31485) 3000ms before (+-50ms). I think the actual heavy hit isn't logged because it may be percentage based. Nothing can be found in the logs.
             });
             Extension = "sab";
-            IconUrl = "https://wiki.guildwars2.com/images/5/54/Mini_Sabetha.png";
+            Icon = "https://wiki.guildwars2.com/images/5/54/Mini_Sabetha.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()
@@ -84,7 +84,7 @@ namespace LuckParser.Logic
                 phase.Name = namesSab[i - 1];
                 if (i == 2 || i == 4 || i == 6)
                 {
-                    List<ushort> ids = new List<ushort>
+                    var ids = new List<ushort>
                     {
                        (ushort) Kernan,
                        (ushort) Knuckles,
@@ -145,7 +145,7 @@ namespace LuckParser.Logic
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Sabetha:
-                    List<AbstractCastEvent> flameWall = cls.Where(x => x.SkillId == 31332).ToList();
+                    var flameWall = cls.Where(x => x.SkillId == 31332).ToList();
                     foreach (AbstractCastEvent c in flameWall)
                     {
                         int start = (int)c.Time;
@@ -162,7 +162,7 @@ namespace LuckParser.Logic
                     }
                     break;
                 case (ushort)Kernan:
-                    List<AbstractCastEvent> bulletHail = cls.Where(x => x.SkillId == 31721).ToList();
+                    var bulletHail = cls.Where(x => x.SkillId == 31721).ToList();
                     foreach (AbstractCastEvent c in bulletHail)
                     {
                         int start = (int)c.Time;
@@ -183,14 +183,14 @@ namespace LuckParser.Logic
                     }
                     break;
                 case (ushort)Knuckles:
-                    List<AbstractCastEvent> breakbar = cls.Where(x => x.SkillId == 31763).ToList();
+                    var breakbar = cls.Where(x => x.SkillId == 31763).ToList();
                     foreach (AbstractCastEvent c in breakbar)
                     {
                         replay.Actors.Add(new CircleActor(true, 0, 180, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 case (ushort)Karde:
-                    List<AbstractCastEvent> flameBlast = cls.Where(x => x.SkillId == 31761).ToList();
+                    var flameBlast = cls.Where(x => x.SkillId == 31761).ToList();
                     foreach (AbstractCastEvent c in flameBlast)
                     {
                         int start = (int)c.Time;
@@ -221,7 +221,7 @@ namespace LuckParser.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // timed bombs
-            List<AbstractBuffEvent> timedBombs = log.CombatData.GetBoonData(31485).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            var timedBombs = log.CombatData.GetBoonData(31485).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent c in timedBombs)
             {
                 int start = (int)c.Time;

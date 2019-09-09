@@ -1,7 +1,7 @@
-﻿using LuckParser.Parser;
-using LuckParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData.CombatEvents;
 using static LuckParser.Models.Statistics;
 
 namespace LuckParser.EIData
@@ -21,41 +21,41 @@ namespace LuckParser.EIData
             return gain > 0.0 ? 1.0 : -1.0;
         }
 
-        public BuffDamageModifierTarget(long id, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, DamageLogChecker dlChecker = null) : base(id, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, url, dlChecker)
+        public BuffDamageModifierTarget(long id, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string icon, DamageLogChecker dlChecker = null) : base(id, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, icon, dlChecker)
         {
         }
 
-        public BuffDamageModifierTarget(long id, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, ulong minBuild, ulong maxBuild, DamageLogChecker dlChecker = null) : base(id, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, url, minBuild, maxBuild, dlChecker)
+        public BuffDamageModifierTarget(long id, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string icon, ulong minBuild, ulong maxBuild, DamageLogChecker dlChecker = null) : base(id, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, icon, minBuild, maxBuild, dlChecker)
         {
         }
 
-        public BuffDamageModifierTarget(long[] ids, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, DamageLogChecker dlChecker = null) : base(ids, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, url, dlChecker)
+        public BuffDamageModifierTarget(long[] ids, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string icon, DamageLogChecker dlChecker = null) : base(ids, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, icon, dlChecker)
         {
         }
 
-        public BuffDamageModifierTarget(long[] ids, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, ulong minBuild, ulong maxBuild, DamageLogChecker dlChecker = null) : base(ids, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, url, minBuild, maxBuild, dlChecker)
+        public BuffDamageModifierTarget(long[] ids, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string icon, ulong minBuild, ulong maxBuild, DamageLogChecker dlChecker = null) : base(ids, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, icon, minBuild, maxBuild, dlChecker)
         {
         }
 
-        public BuffDamageModifierTarget(long id, long playerId, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, GainComputer gainComputerPlayer, string url, DamageLogChecker dlChecker = null) : this(id, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, url, dlChecker)
+        public BuffDamageModifierTarget(long id, long playerId, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, GainComputer gainComputerPlayer, string icon, DamageLogChecker dlChecker = null) : this(id, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, icon, dlChecker)
         {
             _trackerPlayer = new BuffsTrackerSingle(playerId);
             _gainComputerPlayer = gainComputerPlayer;
         }
 
-        public BuffDamageModifierTarget(long id, long[] playerIds, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, GainComputer gainComputerPlayer, string url, ulong minBuild, ulong maxBuild, DamageLogChecker dlChecker = null) : this(id, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, url, minBuild, maxBuild, dlChecker)
+        public BuffDamageModifierTarget(long id, long[] playerIds, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, GainComputer gainComputerPlayer, string icon, ulong minBuild, ulong maxBuild, DamageLogChecker dlChecker = null) : this(id, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, icon, minBuild, maxBuild, dlChecker)
         {
             _trackerPlayer = new BuffsTrackerMulti(new List<long>(playerIds));
             _gainComputerPlayer = gainComputerPlayer;
         }
 
-        public BuffDamageModifierTarget(long[] ids, long playerId, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, GainComputer gainComputerPlayer, string url, DamageLogChecker dlChecker = null) : this(ids, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, url, dlChecker)
+        public BuffDamageModifierTarget(long[] ids, long playerId, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, GainComputer gainComputerPlayer, string icon, DamageLogChecker dlChecker = null) : this(ids, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, icon, dlChecker)
         {
             _trackerPlayer = new BuffsTrackerSingle(playerId);
             _gainComputerPlayer = gainComputerPlayer;
         }
 
-        public BuffDamageModifierTarget(long[] ids, long[] playerIds, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, GainComputer gainComputerPlayer, string url, ulong minBuild, ulong maxBuild, DamageLogChecker dlChecker = null) : this(ids, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, url, minBuild, maxBuild, dlChecker)
+        public BuffDamageModifierTarget(long[] ids, long[] playerIds, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, GainComputer gainComputerPlayer, string icon, ulong minBuild, ulong maxBuild, DamageLogChecker dlChecker = null) : this(ids, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, icon, minBuild, maxBuild, dlChecker)
         {
             _trackerPlayer = new BuffsTrackerMulti(new List<long>(playerIds));
             _gainComputerPlayer = gainComputerPlayer;
@@ -80,14 +80,14 @@ namespace LuckParser.EIData
                 {
                     continue;
                 }
-                if (!dataTarget.TryGetValue(target, out var extra))
+                if (!dataTarget.TryGetValue(target, out Dictionary<string, List<DamageModifierData>> extra))
                 {
                     dataTarget[target] = new Dictionary<string, List<DamageModifierData>>();
                 }
                 Dictionary<string, List<DamageModifierData>> dict = dataTarget[target];
-                if (!dict.TryGetValue(Name, out var list))
+                if (!dict.TryGetValue(Name, out List<DamageModifierData> list))
                 {
-                    List<DamageModifierData> extraDataList = new List<DamageModifierData>();
+                    var extraDataList = new List<DamageModifierData>();
                     for (int i = 0; i < phases.Count; i++)
                     {
                         int totalDamage = GetTotalDamage(p, log, target, i);

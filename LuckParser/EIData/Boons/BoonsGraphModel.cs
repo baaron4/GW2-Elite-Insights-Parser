@@ -1,7 +1,7 @@
-﻿using LuckParser.Parser.ParsedData;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Parser.ParsedData;
 
 namespace LuckParser.EIData
 {
@@ -49,7 +49,7 @@ namespace LuckParser.EIData
             }
         }
 
-        public readonly Boon Boon;
+        public Boon Boon { get; }
         public List<Segment> BoonChart { get; private set; } = new List<Segment>();
         private readonly List<SegmentWithSources> _boonChartWithSource;
 
@@ -111,7 +111,7 @@ namespace LuckParser.EIData
 
         private void FuseFromSegmentsWithSource()
         {
-            List<Segment> newChart = new List<Segment>();
+            var newChart = new List<Segment>();
             Segment last = null;
             foreach (Segment seg in _boonChartWithSource)
             {
@@ -142,7 +142,7 @@ namespace LuckParser.EIData
 
         public void FuseSegments()
         {
-            List<Segment> newChart = new List<Segment>();
+            var newChart = new List<Segment>();
             Segment last = null;
             foreach (Segment seg in BoonChart)
             {

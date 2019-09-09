@@ -9,7 +9,7 @@ namespace LuckParser.EIData
         public delegate bool CastChecker(AbstractCastEvent ce, ParsedLog log);
 
         private readonly CastChecker _triggerCondition = null;
-       
+
         protected bool Keep(AbstractCastEvent c, ParsedLog log)
         {
             if (_triggerCondition != null)

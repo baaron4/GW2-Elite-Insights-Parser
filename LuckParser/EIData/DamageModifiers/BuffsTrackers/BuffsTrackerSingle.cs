@@ -13,7 +13,7 @@ namespace LuckParser.EIData
 
         public override int GetStack(Dictionary<long, BoonsGraphModel> bgms, long time)
         {
-            if (bgms.TryGetValue(_id, out var bgm))
+            if (bgms.TryGetValue(_id, out BoonsGraphModel bgm))
             {
                 return bgm.GetStackCount(time);
             }

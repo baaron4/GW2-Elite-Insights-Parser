@@ -1,10 +1,10 @@
-﻿using LuckParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using LuckParser.EIData;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace LuckParser.Logic
 {
@@ -29,9 +29,9 @@ namespace LuckParser.Logic
             new PlayerBoonApplyMechanic(52211, "Aquatic Aura Kenut", new MechanicPlotlySetting("square-open","rgb(0,255,255)"), "Ken Aura","Increasing Damage Debuff on Kenut's Last Platform", "Kenut Aura Debuff",0),
             new PlayerBoonApplyMechanic(52929, "Aquatic Aura Nikare", new MechanicPlotlySetting("diamond-open","rgb(0,255,255)"), "Nik Aura","Increasing Damage Debuff on Nikare's Last Platform", "Nikare Aura Debuff",0),
             new HitOnPlayerMechanic(51999, "Cyclone Burst", new MechanicPlotlySetting("y-up-open","rgb(255,150,0)"), "Y Field","Cyclone Burst (triangular rotating fields on Kenut)", "Cyclone Burst",0),
-            }); 
+            });
             Extension = "twinlargos";
-            IconUrl = "https://i.imgur.com/6O5MT7v.png";
+            Icon = "https://i.imgur.com/6O5MT7v.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()
@@ -68,8 +68,8 @@ namespace LuckParser.Logic
             long start = 0;
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
-            List<PhaseData> targetPhases = new List<PhaseData>();
-            List<AbstractCombatEvent> states = new List<AbstractCombatEvent>();
+            var targetPhases = new List<PhaseData>();
+            var states = new List<AbstractCombatEvent>();
             states.AddRange(log.CombatData.GetEnterCombatEvents(target.AgentItem));
             states.AddRange(GetFilteredList(log.CombatData, 762, target, true).Where(x => x is BuffApplyEvent));
             states.AddRange(log.CombatData.GetDeadEvents(target.AgentItem));
@@ -98,7 +98,7 @@ namespace LuckParser.Logic
             for (int i = 0; i < targetPhases.Count; i++)
             {
                 PhaseData phase = targetPhases[i];
-                phase.Name = names[i];          
+                phase.Name = names[i];
                 phase.Targets.Add(target);
             }
             return targetPhases;
@@ -126,7 +126,7 @@ namespace LuckParser.Logic
                         // P1 and P2 merged
                         if (p1.Start == p2.Start)
                         {
-                            AbstractDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p1.End + 5000 && (pAgents.Contains(x.From) || pAgents.Contains(x.MasterFrom)) && x.Damage> 0 && x is DirectDamageEvent);
+                            AbstractDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p1.End + 5000 && (pAgents.Contains(x.From) || pAgents.Contains(x.MasterFrom)) && x.Damage > 0 && x is DirectDamageEvent);
                             if (hit != null)
                             {
                                 p2.OverrideStart(hit.Time);
@@ -182,7 +182,7 @@ namespace LuckParser.Logic
                 {
                     p1.OverrideStart(hit.Time);
                 }
-            } 
+            }
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
@@ -210,7 +210,7 @@ namespace LuckParser.Logic
             {
                 List<PhaseData> kenPhases = GetTargetPhases(log, kenut, new string[] { "Kenut P1", "Kenut P2", "Kenut P3" });
                 FallBackPhases(kenut, kenPhases, log, false);
-                phases.AddRange(kenPhases);           
+                phases.AddRange(kenPhases);
             }
             phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             return phases;
@@ -223,13 +223,13 @@ namespace LuckParser.Logic
             {
                 case (ushort)ParseEnum.TargetIDS.Nikare:
                     //CC
-                    List<AbstractCastEvent> barrageN = cls.Where(x => x.SkillId == 51977).ToList();
+                    var barrageN = cls.Where(x => x.SkillId == 51977).ToList();
                     foreach (AbstractCastEvent c in barrageN)
                     {
                         replay.Actors.Add(new CircleActor(true, 0, 250, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Platform wipe (CM only)
-                    List<AbstractCastEvent> aquaticDomainN = cls.Where(x => x.SkillId == 52374).ToList();
+                    var aquaticDomainN = cls.Where(x => x.SkillId == 52374).ToList();
                     foreach (AbstractCastEvent c in aquaticDomainN)
                     {
                         int start = (int)c.Time;
@@ -241,13 +241,13 @@ namespace LuckParser.Logic
                     break;
                 case (ushort)ParseEnum.TargetIDS.Kenut:
                     //CC
-                    List<AbstractCastEvent> barrageK = cls.Where(x => x.SkillId == 51977).ToList();
+                    var barrageK = cls.Where(x => x.SkillId == 51977).ToList();
                     foreach (AbstractCastEvent c in barrageK)
                     {
                         replay.Actors.Add(new CircleActor(true, 0, 250, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Platform wipe (CM only)
-                    List<AbstractCastEvent> aquaticDomainK = cls.Where(x => x.SkillId == 52374).ToList();
+                    var aquaticDomainK = cls.Where(x => x.SkillId == 52374).ToList();
                     foreach (AbstractCastEvent c in aquaticDomainK)
                     {
                         int start = (int)c.Time;
@@ -256,7 +256,7 @@ namespace LuckParser.Logic
                         int radius = 800;
                         replay.Actors.Add(new CircleActor(true, end, radius, (start, end), "rgba(255, 255, 0, 0.3)", new AgentConnector(target)));
                     }
-                    List<AbstractCastEvent> shockwave = cls.Where(x => x.SkillId == 53018).ToList();
+                    var shockwave = cls.Where(x => x.SkillId == 53018).ToList();
                     foreach (AbstractCastEvent c in shockwave)
                     {
                         int start = (int)c.Time;
@@ -265,7 +265,7 @@ namespace LuckParser.Logic
                         int radius = 1200;
                         replay.Actors.Add(new CircleActor(false, start + delay + duration, radius, (start + delay, start + delay + duration), "rgba(100, 200, 255, 0.5)", new AgentConnector(target)));
                     }
-                    List<AbstractCastEvent> boonSteal = cls.Where(x => x.SkillId == 51965).ToList();
+                    var boonSteal = cls.Where(x => x.SkillId == 51965).ToList();
                     foreach (AbstractCastEvent c in boonSteal)
                     {
                         int start = (int)c.Time;

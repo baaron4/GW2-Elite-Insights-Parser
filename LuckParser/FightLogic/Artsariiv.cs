@@ -1,7 +1,7 @@
-﻿using LuckParser.EIData;
+﻿using System.Collections.Generic;
+using LuckParser.EIData;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
-using System.Collections.Generic;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic
@@ -23,7 +23,7 @@ namespace LuckParser.Logic
             new SpawnMechanic(17630, "Spark", new MechanicPlotlySetting("star","rgb(0,255,255)"),"Spark","Spawned a Spark (missed marble)", "Spark",0),
             });
             Extension = "arts";
-            IconUrl = "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
+            Icon = "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()
@@ -49,7 +49,7 @@ namespace LuckParser.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByBuffCount(combatData, agentData, fightData, playerAgents, Targets.Find(x => x.ID == TriggerID), 762, 4);
+            SetSuccessByBuffCount(combatData, fightData, playerAgents, Targets.Find(x => x.ID == TriggerID), 762, 4);
         }
     }
 }

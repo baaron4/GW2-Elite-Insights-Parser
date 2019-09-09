@@ -1,10 +1,10 @@
-﻿using LuckParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using LuckParser.EIData;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic
@@ -14,14 +14,14 @@ namespace LuckParser.Logic
         // TODO - add CR icons/indicators (vomit, greens, etc) and some mechanics
         public EaterOfSouls(ushort triggerID) : base(triggerID)
         {
-            MechanicList.AddRange( new List<Mechanic>
+            MechanicList.AddRange(new List<Mechanic>
             {
             new HitOnPlayerMechanic(47303, "Hungering Miasma", new MechanicPlotlySetting("triangle-left-open","rgb(100,255,0)"), "Vomit","Hungering Miasma (Vomit Goo)", "Vomit Dmg",0),
             new PlayerBoonApplyMechanic(46950, "Fractured Spirit", new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Orb CD","Applied when taking green", "Green port",0),
             }
             );
             Extension = "souleater";
-            IconUrl = "https://wiki.guildwars2.com/images/thumb/2/24/Eater_of_Souls_%28Hall_of_Chains%29.jpg/194px-Eater_of_Souls_%28Hall_of_Chains%29.jpg";
+            Icon = "https://wiki.guildwars2.com/images/thumb/2/24/Eater_of_Souls_%28Hall_of_Chains%29.jpg/194px-Eater_of_Souls_%28Hall_of_Chains%29.jpg";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()
@@ -52,7 +52,7 @@ namespace LuckParser.Logic
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.SoulEater:
-                    List<AbstractCastEvent> breakbar = cls.Where(x => x.SkillId == 48007).ToList();
+                    var breakbar = cls.Where(x => x.SkillId == 48007).ToList();
                     foreach (AbstractCastEvent c in breakbar)
                     {
                         int start = (int)c.Time;
@@ -60,22 +60,22 @@ namespace LuckParser.Logic
                         replay.Actors.Add(new CircleActor(true, start + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                         replay.Actors.Add(new CircleActor(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
-                    List<AbstractCastEvent> vomit = cls.Where(x => x.SkillId == 47303).ToList();
+                    var vomit = cls.Where(x => x.SkillId == 47303).ToList();
                     foreach (AbstractCastEvent c in vomit)
                     {
-                        int start = (int)c.Time+2100;
+                        int start = (int)c.Time + 2100;
                         int cascading = 1500;
-                        int duration = 15000+cascading;
+                        int duration = 15000 + cascading;
                         int end = start + duration;
                         int radius = 900;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start);
                         Point3D position = replay.PolledPositions.LastOrDefault(x => x.Time <= start);
                         if (facing != null && position != null)
                         {
-                            replay.Actors.Add(new PieActor(true, start+cascading, radius, facing, 60, (start, end), "rgba(220,255,0,0.5)", new PositionConnector(position)));
+                            replay.Actors.Add(new PieActor(true, start + cascading, radius, facing, 60, (start, end), "rgba(220,255,0,0.5)", new PositionConnector(position)));
                         }
                     }
-                    List<AbstractCastEvent> pseudoDeath = cls.Where(x => x.SkillId == 47440).ToList();
+                    var pseudoDeath = cls.Where(x => x.SkillId == 47440).ToList();
                     foreach (AbstractCastEvent c in pseudoDeath)
                     {
                         int start = (int)c.Time;
@@ -100,10 +100,10 @@ namespace LuckParser.Logic
                 case (ushort)GreenSpirit1:
                 case (ushort)GreenSpirit2:
                     List<AbstractCastEvent> cls = mob.GetCastLogs(log, 0, log.FightData.FightDuration);
-                    List<AbstractCastEvent> green = cls.Where(x => x.SkillId == 47153).ToList();
+                    var green = cls.Where(x => x.SkillId == 47153).ToList();
                     foreach (AbstractCastEvent c in green)
                     {
-                        int gstart = (int)c.Time+667;
+                        int gstart = (int)c.Time + 667;
                         int gend = gstart + 5000;
                         replay.Actors.Add(new CircleActor(true, 0, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(mob)));
                         replay.Actors.Add(new CircleActor(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(mob)));
@@ -121,7 +121,7 @@ namespace LuckParser.Logic
 
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
-            List<AbstractBuffEvent> spiritTransform = log.CombatData.GetBoonData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            var spiritTransform = log.CombatData.GetBoonData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent c in spiritTransform)
             {
                 int duration = 30000;

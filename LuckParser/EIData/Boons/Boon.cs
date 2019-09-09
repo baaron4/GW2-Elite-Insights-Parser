@@ -1,7 +1,7 @@
-﻿using LuckParser.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Parser;
 
 namespace LuckParser.EIData
 {
@@ -118,7 +118,7 @@ namespace LuckParser.EIData
             _logic = Logic.Unknown;
         }
 
-        private readonly static List<Boon> _boons = new List<Boon>
+        private static readonly List<Boon> _boons = new List<Boon>
         {
                 new Boon("Might", 740, BoonSource.Mixed, BoonType.Intensity, 25, BoonNature.Boon, Logic.Override, "https://wiki.guildwars2.com/images/7/7c/Might.png"),
                 new Boon("Fury", 725, BoonSource.Mixed, BoonType.Duration, 9, BoonNature.Boon, Logic.Queue, "https://wiki.guildwars2.com/images/4/46/Fury.png"),//or 3m and 30s
@@ -135,8 +135,8 @@ namespace LuckParser.EIData
                 new Boon("Number of Boons", ProfHelper.NumberOfBoonsID, BoonSource.Mixed, BoonType.Intensity, 0, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/44/Boon_Duration.png"),
         };
 
-        private readonly static List<Boon> _conditions = new List<Boon>
-        { 
+        private static readonly List<Boon> _conditions = new List<Boon>
+        {
                 new Boon("Bleeding", 736, BoonSource.Mixed, BoonType.Intensity, 1500, BoonNature.Condition, Logic.Override, "https://wiki.guildwars2.com/images/3/33/Bleeding.png"),
                 new Boon("Burning", 737, BoonSource.Mixed, BoonType.Intensity, 1500, BoonNature.Condition, Logic.Override, "https://wiki.guildwars2.com/images/4/45/Burning.png"),
                 new Boon("Confusion", 861, BoonSource.Mixed, BoonType.Intensity, 1500, BoonNature.Condition, Logic.Override, "https://wiki.guildwars2.com/images/e/e6/Confusion.png"),
@@ -154,10 +154,10 @@ namespace LuckParser.EIData
                 new Boon("Number of Conditions", ProfHelper.NumberOfConditionsID, BoonSource.Mixed, BoonType.Intensity, 0, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/38/Condition_Duration.png"),
         };
 
-        private readonly static List<Boon> _commons = new List<Boon>
+        private static readonly List<Boon> _commons = new List<Boon>
         {
                 new Boon("Stealth", 13017, BoonSource.Mixed, BoonType.Duration, 5, BoonNature.GraphOnlyBuff, Logic.Queue, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
-                new Boon("Revealed", 890, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/db/Revealed.png"),
+                new Boon("Revealed", 890, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.ForceOverride, "https://wiki.guildwars2.com/images/d/db/Revealed.png"),
                 new Boon("Superspeed", 5974, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.ForceOverride,"https://wiki.guildwars2.com/images/1/1a/Super_Speed.png"),
                 new Boon("Determined (762)", 762, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Boon("Determined (788)", 788, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
@@ -169,7 +169,7 @@ namespace LuckParser.EIData
                 new Boon("Invulnerability (801)", 801, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Boon("Stun", 872, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.ForceOverride, "https://wiki.guildwars2.com/images/9/97/Stun.png"),
                 new Boon("Daze", 833, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.ForceOverride, "https://wiki.guildwars2.com/images/7/79/Daze.png"),
-                new Boon("Exposed", 48209, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/f/f4/Exposed_%28effect%29.png"),
+                new Boon("Exposed", 48209, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.ForceOverride,"https://wiki.guildwars2.com/images/f/f4/Exposed_%28effect%29.png"),
                 //Auras
                 new Boon("Chaos Aura", 10332, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/1/1b/Chaos_Armor.png"),
                 new Boon("Fire Aura", 5677, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/1/18/Fire_Shield.png"),
@@ -192,7 +192,7 @@ namespace LuckParser.EIData
                 new Boon("Rigorous Certainty", 33652, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.DefensiveBuffTable, Logic.ForceOverride,"https://wiki.guildwars2.com/images/6/60/Desert_Carapace.png"),
         };
 
-        private readonly static List<Boon> _gear = new List<Boon>
+        private static readonly List<Boon> _gear = new List<Boon>
         {
                 new Boon("Sigil of Concentration", 33719, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b3/Superior_Sigil_of_Concentration.png",0 , 93543),
                 new Boon("Superior Rune of the Monk", 53285, BoonSource.Mixed, BoonType.Intensity, 10, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/18/Superior_Rune_of_the_Monk.png", 93543, ulong.MaxValue),
@@ -206,7 +206,7 @@ namespace LuckParser.EIData
                 new Boon("Sigil of the Stars", 46953, BoonSource.Mixed, BoonType.Intensity, 25, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/dc/Superior_Sigil_of_the_Stars.png"),
         };
 
-        private readonly static List<Boon> _fightSpecific = new List<Boon>
+        private static readonly List<Boon> _fightSpecific = new List<Boon>
         {
                 new Boon("Timed Bomb", 31485, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/91/Time_Bomb.png" ),
                 new Boon("Unnatural Signet",38224, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png"),
@@ -271,7 +271,7 @@ namespace LuckParser.EIData
                 new Boon("Unbridled Chaos", 56467, BoonSource.Enemy, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/7/74/Unbridled_Chaos.png"),
         };
 
-        private readonly static List<Boon> _revenant = new List<Boon>
+        private static readonly List<Boon> _revenant = new List<Boon>
         {         
                 //skills
                 new Boon("Crystal Hibernation", 28262, BoonSource.Revenant, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/4/4a/Crystal_Hibernation.png"),
@@ -325,7 +325,7 @@ namespace LuckParser.EIData
                 new Boon("Improved Kalla's Fervor",45614, BoonSource.Revenant, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/9e/Kalla%27s_Fervor.png"),
         };
 
-        private readonly static List<Boon> _warrior = new List<Boon>
+        private static readonly List<Boon> _warrior = new List<Boon>
         {
                 new Boon("Berserk",29502, BoonSource.Warrior, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/4/44/Berserk.png"),
             //skills
@@ -366,7 +366,7 @@ namespace LuckParser.EIData
                 new Boon("Berserker's Power",42539, BoonSource.Warrior, BoonType.Intensity, 3, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/6f/Berserker%27s_Power.png"),
         };
 
-        private readonly static List<Boon> _guardian = new List<Boon>
+        private static readonly List<Boon> _guardian = new List<Boon>
         {        
                 //skills
                 new Boon("Zealot's Flame", 9103, BoonSource.Guardian, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/7a/Zealot%27s_Flame.png"),
@@ -409,7 +409,7 @@ namespace LuckParser.EIData
                 new Boon("Symbolic Avenger",56890, BoonSource.Guardian, BoonType.Intensity, 5, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e5/Symbolic_Avenger.png", 97950, ulong.MaxValue),
         };
 
-        private readonly static List<Boon> _engineer = new List<Boon>
+        private static readonly List<Boon> _engineer = new List<Boon>
         {       //skills
                 new Boon("Static Shield",6055, BoonSource.Engineer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/90/Static_Shield.png"),
                 new Boon("Absorb",6056, BoonSource.Engineer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8a/Absorb.png"),
@@ -439,7 +439,7 @@ namespace LuckParser.EIData
 
         };
 
-        private readonly static List<Boon> _ranger = new List<Boon>
+        private static readonly List<Boon> _ranger = new List<Boon>
         {
 
                 new Boon("Celestial Avatar", 31508, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/59/Celestial_Avatar.png"),
@@ -498,7 +498,7 @@ namespace LuckParser.EIData
                 new Boon("Twice as Vicious",45600, BoonSource.Ranger, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/0/00/Twice_as_Vicious.png"),
         };
 
-        private readonly static List<Boon> _thief = new List<Boon>
+        private static readonly List<Boon> _thief = new List<Boon>
         {
                 //signets
                 new Boon("Signet of Malice",13049, BoonSource.Thief, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/ae/Signet_of_Malice.png"),
@@ -541,7 +541,7 @@ namespace LuckParser.EIData
 
         };
 
-        private readonly static List<Boon> _necromancer = new List<Boon>
+        private static readonly List<Boon> _necromancer = new List<Boon>
         {
             
                 //forms
@@ -574,7 +574,7 @@ namespace LuckParser.EIData
                 new Boon("Soul Barbs",53489, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/bd/Soul_Barbs.png"),
         };
 
-        private readonly static List<Boon> _mesmer = new List<Boon>
+        private static readonly List<Boon> _mesmer = new List<Boon>
         {
             
                 //signets
@@ -604,7 +604,7 @@ namespace LuckParser.EIData
                 new Boon("Mirage Cloak",40408, BoonSource.Mesmer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a5/Mirage_Cloak_%28effect%29.png"),
         };
 
-        private readonly static List<Boon> _elementalist = new List<Boon>
+        private static readonly List<Boon> _elementalist = new List<Boon>
         {
             
                 //signets
@@ -674,7 +674,7 @@ namespace LuckParser.EIData
                 new Boon("Elements of Rage",42416, BoonSource.Elementalist, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a2/Elements_of_Rage.png"),
         };
 
-        private readonly static List<Boon> _consumables = new List<Boon>
+        private static readonly List<Boon> _consumables = new List<Boon>
         {
 
                 new Boon("Malnourished",46587, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/6/67/Malnourished.png"),
@@ -754,13 +754,13 @@ namespace LuckParser.EIData
                 new Boon("Powerful Potion of Ice Brood Slaying",9861, BoonSource.Item, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/0/0d/Powerful_Potion_of_Ice_Brood_Slaying.png"),
                 // new Boon("Hylek Maintenance Oil",9968, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"), when wiki says "same stats" its literally the same buff
                 // Fractals 
-                new Boon("Fractal Mobility", 33024, BoonSource.Mixed, BoonType.Intensity, 5, BoonNature.Consumable, Logic.ForceOverride,"https://wiki.guildwars2.com/images/thumb/2/22/Mist_Mobility_Potion.png/40px-Mist_Mobility_Potion.png"),
-                new Boon("Fractal Defensive", 32134, BoonSource.Mixed, BoonType.Intensity, 5, BoonNature.Consumable, Logic.ForceOverride,"https://wiki.guildwars2.com/images/thumb/e/e6/Mist_Defensive_Potion.png/40px-Mist_Defensive_Potion.png"),
-                new Boon("Fractal Offensive", 32473, BoonSource.Mixed, BoonType.Intensity, 5, BoonNature.Consumable, Logic.ForceOverride,"https://wiki.guildwars2.com/images/thumb/8/8d/Mist_Offensive_Potion.png/40px-Mist_Offensive_Potion.png"),
+                new Boon("Fractal Mobility", 33024, BoonSource.Mixed, BoonType.Intensity, 5, BoonNature.Consumable, Logic.Override,"https://wiki.guildwars2.com/images/thumb/2/22/Mist_Mobility_Potion.png/40px-Mist_Mobility_Potion.png"),
+                new Boon("Fractal Defensive", 32134, BoonSource.Mixed, BoonType.Intensity, 5, BoonNature.Consumable, Logic.Override,"https://wiki.guildwars2.com/images/thumb/e/e6/Mist_Defensive_Potion.png/40px-Mist_Defensive_Potion.png"),
+                new Boon("Fractal Offensive", 32473, BoonSource.Mixed, BoonType.Intensity, 5, BoonNature.Consumable, Logic.Override,"https://wiki.guildwars2.com/images/thumb/8/8d/Mist_Offensive_Potion.png/40px-Mist_Offensive_Potion.png"),
         };
 
         public static List<List<Boon>> AllBoons = new List<List<Boon>>()
-            {   
+            {
                 _boons,
                 _conditions,
                 _commons,
@@ -778,14 +778,14 @@ namespace LuckParser.EIData
                 _elementalist
         };
 
-        private readonly static Dictionary<string, List<Boon>> _allBoonsByName = AllBoons.SelectMany(x => x).GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList());
+        private static readonly Dictionary<string, List<Boon>> _allBoonsByName = AllBoons.SelectMany(x => x).GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList());
 
         // For damage modifiers
         public static Boon GetBoonByName(string name, ulong build)
         {
-            if (_allBoonsByName.TryGetValue(name, out var list))
+            if (_allBoonsByName.TryGetValue(name, out List<Boon> list))
             {
-                List<Boon> subList = list.Where(x => x.MaxBuild >= build).ToList();
+                var subList = list.Where(x => x.MaxBuild >= build).ToList();
                 if (subList.Count != 1)
                 {
                     throw new InvalidOperationException("No boon with correct build");
@@ -812,6 +812,7 @@ namespace LuckParser.EIData
                 case Logic.Override:
                     logicToUse = new OverrideLogic();
                     break;
+                case Logic.Unknown:
                 default:
                     throw new InvalidOperationException("Cannot simulate unknown/custom buffs");
             }
@@ -819,6 +820,7 @@ namespace LuckParser.EIData
             {
                 case BoonType.Intensity: return new BoonSimulatorIntensity(Capacity, log, logicToUse);
                 case BoonType.Duration: return new BoonSimulatorDuration(Capacity, log, logicToUse);
+                case BoonType.Unknown:
                 default: throw new InvalidOperationException("Cannot simulate typeless boons");
             }
         }

@@ -1,8 +1,8 @@
-﻿using LuckParser.Controllers;
-using LuckParser.Controllers.GW2API;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Controllers;
+using LuckParser.Controllers.GW2API;
 
 namespace LuckParser.Parser.ParsedData
 {
@@ -18,12 +18,12 @@ namespace LuckParser.Parser.ParsedData
         public const long AliveId = -6;
         public const long RespawnId = -7;
 
-        private const int _firstLandSet = 4;
-        private const int _secondLandSet = 5;
-        private const int _firstWaterSet = 0;
-        private const int _secondWaterSet = 1;
+        private const int FirstLandSet = 4;
+        private const int SecondLandSet = 5;
+        private const int FirstWaterSet = 0;
+        private const int SecondWaterSet = 1;
 
-        readonly static Dictionary<long, string> _overrideNames = new Dictionary<long, string>()
+        static readonly Dictionary<long, string> _overrideNames = new Dictionary<long, string>()
         {
             {ResurrectId, "Resurrect"},
             {BandageId, "Bandage" },
@@ -64,7 +64,7 @@ namespace LuckParser.Parser.ParsedData
             {56329, "Big Magma Drop" },
         };
 
-        readonly static Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
+        static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
         {
             {ResurrectId, "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png"},
             {BandageId, "https://wiki.guildwars2.com/images/0/0c/Bandage.png"},
@@ -76,7 +76,7 @@ namespace LuckParser.Parser.ParsedData
             {31686, "https://wiki.guildwars2.com/images/4/4b/Overload_Air.png" },
         };
 
-        private const string _defaultIcon = "https://render.guildwars2.com/file/1D55D34FB4EE20B1962E315245E40CA5E1042D0E/62248.png";
+        private const string DefaultIcon = "https://render.guildwars2.com/file/1D55D34FB4EE20B1962E315245E40CA5E1042D0E/62248.png";
 
         // Fields
         public long ID { get; private set; }
@@ -85,27 +85,21 @@ namespace LuckParser.Parser.ParsedData
         public string Name { get; private set; }
         public string Icon { get; private set; }
         private WeaponDescriptor _weaponDescriptor;
-        private GW2APISkill _apiSkill;
+        private readonly GW2APISkill _apiSkill;
 
         // Constructor
+
         public SkillItem(long ID, string name)
         {
             this.ID = ID;
             Name = name.Replace("\0", "");
-            CompleteItem();
-        }
-
-        public SkillItem(long ID, string name, GW2APIController apiController)
-        {
-            this.ID = ID;
-            Name = name.Replace("\0", "");
-            _apiSkill = apiController.GetSkill(ID);
+            _apiSkill = GW2APIController.GetSkill(ID);
             CompleteItem();
         }
 
         public static bool IsWeaponSet(int swapped)
         {
-            return swapped == _firstLandSet || swapped == _secondLandSet || swapped == _firstWaterSet || swapped == _secondWaterSet;
+            return swapped == FirstLandSet || swapped == SecondLandSet || swapped == FirstWaterSet || swapped == SecondWaterSet;
         }
 
         public int FindWeaponSlot(List<int> swaps)
@@ -118,25 +112,25 @@ namespace LuckParser.Parser.ParsedData
                 if (_weaponDescriptor.IsLand)
                 {
                     // if the first swap is not a land set that means the next time we get to a land set was the first set to begin with
-                    if (firstSwap != _firstLandSet && firstSwap != _secondLandSet)
+                    if (firstSwap != FirstLandSet && firstSwap != SecondLandSet)
                     {
-                        swapped = swaps.Exists(x => x == _firstLandSet || x == _secondLandSet) ? swaps.First(x => x == _firstLandSet || x == _secondLandSet) : _firstLandSet;
+                        swapped = swaps.Exists(x => x == FirstLandSet || x == SecondLandSet) ? swaps.First(x => x == FirstLandSet || x == SecondLandSet) : FirstLandSet;
                     }
                     else
                     {
-                        swapped = firstSwap == _firstLandSet ? _secondLandSet : _firstLandSet;
+                        swapped = firstSwap == FirstLandSet ? SecondLandSet : FirstLandSet;
                     }
                 }
                 else
                 {
                     // if the first swap is not a water set that means the next time we get to a water set was the first set to begin with
-                    if (firstSwap != _firstWaterSet && firstSwap != _secondWaterSet)
+                    if (firstSwap != FirstWaterSet && firstSwap != SecondWaterSet)
                     {
-                        swapped = swaps.Exists(x => x == _firstWaterSet || x == _firstWaterSet) ? swaps.First(x => x == _firstWaterSet || x == _secondWaterSet) : _firstWaterSet;
+                        swapped = swaps.Exists(x => x == FirstWaterSet || x == FirstWaterSet) ? swaps.First(x => x == FirstWaterSet || x == SecondWaterSet) : FirstWaterSet;
                     }
                     else
                     {
-                        swapped = firstSwap == _firstWaterSet ? _secondWaterSet : _firstWaterSet;
+                        swapped = firstSwap == FirstWaterSet ? SecondWaterSet : FirstWaterSet;
                     }
                 }
             }
@@ -149,8 +143,8 @@ namespace LuckParser.Parser.ParsedData
             {
                 throw new InvalidOperationException("Invalid count in weapons array");
             }
-            int id = swapped == _firstLandSet ? 0 : swapped == _secondLandSet ? 2 : swapped == _firstWaterSet ? 4 : swapped == _secondWaterSet ? 6 : -1;
-            if (_weaponDescriptor == null || id == - 1 || !swapCheck)
+            int id = swapped == FirstLandSet ? 0 : swapped == SecondLandSet ? 2 : swapped == FirstWaterSet ? 4 : swapped == SecondWaterSet ? 6 : -1;
+            if (_weaponDescriptor == null || id == -1 || !swapCheck)
             {
                 return false;
             }
@@ -201,7 +195,7 @@ namespace LuckParser.Parser.ParsedData
             }
             else
             {
-                Icon = _apiSkill != null ? _apiSkill.Icon : _defaultIcon;
+                Icon = _apiSkill != null ? _apiSkill.Icon : DefaultIcon;
             }
             if (_apiSkill != null && _apiSkill.Type == "Weapon" && _apiSkill.WeaponType != "None" && _apiSkill.Professions.Length > 0 && (_apiSkill.Categories == null || (_apiSkill.Categories.Length == 1 && (_apiSkill.Categories[0] == "Phantasm" || _apiSkill.Categories[0] == "DualWield"))))
             {

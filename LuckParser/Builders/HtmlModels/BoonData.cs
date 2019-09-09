@@ -1,23 +1,23 @@
-﻿using LuckParser.EIData;
+﻿using System.Collections.Generic;
+using LuckParser.EIData;
 using LuckParser.Models;
-using System.Collections.Generic;
 
 namespace LuckParser.Builders.HtmlModels
 {
     public class BoonData
     {
-        public double Avg;       
-        public List<List<object>> Data = new List<List<object>>();
+        public double Avg { get; set; }
+        public List<List<object>> Data { get; set; } = new List<List<object>>();
 
         public BoonData(Dictionary<long, Statistics.FinalBuffs> boons, List<Boon> listToUse, double avg)
         {
             Avg = avg;
             foreach (Boon boon in listToUse)
             {
-                List<object> boonVals = new List<object>();
+                var boonVals = new List<object>();
                 Data.Add(boonVals);
 
-                if (boons.TryGetValue(boon.ID, out var uptime))
+                if (boons.TryGetValue(boon.ID, out Statistics.FinalBuffs uptime))
                 {
                     boonVals.Add(uptime.Uptime);
                     if (boon.Type == Boon.BoonType.Intensity && uptime.Presence > 0)
@@ -33,10 +33,10 @@ namespace LuckParser.Builders.HtmlModels
             Avg = avg;
             foreach (Boon boon in listToUse)
             {
-                List<object> boonVals = new List<object>();
+                var boonVals = new List<object>();
                 Data.Add(boonVals);
 
-                if (boons.TryGetValue(boon.ID, out var uptime))
+                if (boons.TryGetValue(boon.ID, out Statistics.FinalTargetBuffs uptime))
                 {
                     boonVals.Add(uptime.Uptime);
                     if (boon.Type == Boon.BoonType.Intensity && uptime.Presence > 0)
@@ -51,8 +51,8 @@ namespace LuckParser.Builders.HtmlModels
         {
             foreach (Boon boon in listToUse)
             {
-                List<object> boonData = new List<object>();
-                if (boons.TryGetValue(boon.ID, out var toUse))
+                var boonData = new List<object>();
+                if (boons.TryGetValue(boon.ID, out Statistics.FinalTargetBuffs toUse))
                 {
                     boonData.Add(toUse.Generated[player]);
                     boonData.Add(toUse.Overstacked[player]);
@@ -69,7 +69,7 @@ namespace LuckParser.Builders.HtmlModels
         {
             foreach (Boon boon in listToUse)
             {
-                if (uptimes.TryGetValue(boon.ID, out var uptime))
+                if (uptimes.TryGetValue(boon.ID, out Statistics.FinalBuffs uptime))
                 {
                     Data.Add(new List<object>()
                         {
@@ -100,9 +100,9 @@ namespace LuckParser.Builders.HtmlModels
         {
             foreach (Boon boon in boonsBySpec[prof])
             {
-                List<object> boonVals = new List<object>();
+                var boonVals = new List<object>();
                 Data.Add(boonVals);
-                if (boons.TryGetValue(boon.ID, out var uptime))
+                if (boons.TryGetValue(boon.ID, out Statistics.FinalBuffs uptime))
                 {
                     boonVals.Add(uptime.Uptime);
                     if (boon.Type == Boon.BoonType.Intensity && uptime.Presence > 0)

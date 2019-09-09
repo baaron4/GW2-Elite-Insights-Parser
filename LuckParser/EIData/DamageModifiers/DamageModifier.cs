@@ -1,16 +1,17 @@
-﻿using LuckParser.Parser;
-using LuckParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData.CombatEvents;
 using static LuckParser.Models.Statistics;
 
 namespace LuckParser.EIData
 {
     public abstract class DamageModifier
     {
-        public enum DamageType { All, Power, Condition};
+        public enum DamageType { All, Power, Condition };
         public enum DamageSource { All, NoPets };
-        public enum ModifierSource {
+        public enum ModifierSource
+        {
             CommonBuff,
             ItemBuff,
             Necromancer, Reaper, Scourge,
@@ -28,18 +29,18 @@ namespace LuckParser.EIData
         private DamageType _srcType { get; }
         private DamageSource _dmgSrc { get; }
         protected double GainPerStack { get; }
-        protected readonly GainComputer GainComputer;
+        protected GainComputer GainComputer { get; }
         public ulong MinBuild { get; } = ulong.MaxValue;
         public ulong MaxBuild { get; } = ulong.MinValue;
         public bool Multiplier => GainComputer.Multiplier;
         public ModifierSource Src { get; }
-        public string Url { get; protected set; }
+        public string Icon { get; protected set; }
         public string Name { get; protected set; }
         public string Tooltip { get; protected set; }
         public delegate bool DamageLogChecker(AbstractDamageEvent dl);
-        protected DamageLogChecker DLChecker;
+        protected DamageLogChecker DLChecker { get; set; }
 
-        protected DamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, GainComputer gainComputer, DamageLogChecker dlChecker, ulong minBuild, ulong maxBuild)
+        protected DamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string icon, GainComputer gainComputer, DamageLogChecker dlChecker, ulong minBuild, ulong maxBuild)
         {
             Tooltip = tooltip;
             Name = name;
@@ -48,7 +49,7 @@ namespace LuckParser.EIData
             _compareType = compareType;
             _srcType = srctype;
             Src = src;
-            Url = url;
+            Icon = icon;
             GainComputer = gainComputer;
             DLChecker = dlChecker;
             MaxBuild = maxBuild;
@@ -98,7 +99,7 @@ namespace LuckParser.EIData
             switch (_compareType)
             {
                 case DamageType.All:
-                    return _dmgSrc == DamageSource.All ? damageData.Damage  : damageData.ActorDamage;
+                    return _dmgSrc == DamageSource.All ? damageData.Damage : damageData.ActorDamage;
                 case DamageType.Condition:
                     return _dmgSrc == DamageSource.All ? damageData.CondiDamage : damageData.ActorCondiDamage;
                 case DamageType.Power:

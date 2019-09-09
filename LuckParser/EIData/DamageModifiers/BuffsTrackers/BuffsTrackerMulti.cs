@@ -7,7 +7,7 @@ namespace LuckParser.EIData
     public class BuffsTrackerMulti : BuffsTracker
     {
         private readonly HashSet<long> _ids;
-        
+
         public BuffsTrackerMulti(List<long> buffsIds)
         {
             _ids = new HashSet<long>(buffsIds);
@@ -25,7 +25,7 @@ namespace LuckParser.EIData
 
         public override bool Has(Dictionary<long, BoonsGraphModel> bgms)
         {
-            return bgms.Keys.Intersect(_ids).Count() > 0;
+            return bgms.Keys.Intersect(_ids).Any();
         }
     }
 }

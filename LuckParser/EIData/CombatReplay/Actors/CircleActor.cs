@@ -27,7 +27,7 @@ namespace LuckParser.EIData
 
         public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
-            CircleSerializable aux = new CircleSerializable
+            var aux = new CircleSerializable
             {
                 Type = "Circle",
                 Radius = Radius,

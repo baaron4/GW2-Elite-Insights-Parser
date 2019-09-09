@@ -1,10 +1,10 @@
-﻿using LuckParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using LuckParser.EIData;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic
@@ -26,7 +26,7 @@ namespace LuckParser.Logic
             //new Mechanic(38184, "Enemy Tile", ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting("square-open","rgb(255,200,0)"), "Floor","Enemy Tile damage", "Tile dmg",0) //Fixed damage (3500), not trackable
             });
             Extension = "mo";
-            IconUrl = "https://wiki.guildwars2.com/images/c/c8/Mini_Mursaat_Overseer.png";
+            Icon = "https://wiki.guildwars2.com/images/c/c8/Mini_Mursaat_Overseer.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()
@@ -61,7 +61,7 @@ namespace LuckParser.Logic
             {
                 return phases;
             }
-            List<int> limit = new List<int>()
+            var limit = new List<int>()
             {
                 75,
                 50,
@@ -78,7 +78,7 @@ namespace LuckParser.Logic
                 {
                     break;
                 }
-                PhaseData phase = new PhaseData(start, Math.Min(evt.Time, fightDuration))
+                var phase = new PhaseData(start, Math.Min(evt.Time, fightDuration))
                 {
                     Name = (25 + limit[i]) + "% - " + limit[i] + "%"
                 };
@@ -88,7 +88,7 @@ namespace LuckParser.Logic
             }
             if (i < 4)
             {
-                PhaseData lastPhase = new PhaseData(start, fightDuration)
+                var lastPhase = new PhaseData(start, fightDuration)
                 {
                     Name = (25 + limit[i]) + "% -" + limit[i] + "%"
                 };
@@ -120,7 +120,7 @@ namespace LuckParser.Logic
                             replay.Actors.Add(new CircleActor(true, 0, shieldRadius, (shieldStart, shieldEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(mob)));
                         }
                     }
-                    List<AbstractCastEvent> explosion = cls.Where(x => x.SkillId == 37788).ToList();
+                    var explosion = cls.Where(x => x.SkillId == 37788).ToList();
                     foreach (AbstractCastEvent c in explosion)
                     {
                         int start = (int)c.Time;
@@ -128,7 +128,7 @@ namespace LuckParser.Logic
                         int duration = 100;
                         int radius = 1200;
                         replay.Actors.Add(new CircleActor(true, 0, radius, (start, start + precast + duration), "rgba(255, 0, 0, 0.05)", new AgentConnector(mob)));
-                        replay.Actors.Add(new CircleActor(true, 0, radius, (start + precast -10, start + precast + duration), "rgba(255, 0, 0, 0.25)", new AgentConnector(mob)));
+                        replay.Actors.Add(new CircleActor(true, 0, radius, (start + precast - 10, start + precast + duration), "rgba(255, 0, 0, 0.25)", new AgentConnector(mob)));
                     }
                     break;
                 default:

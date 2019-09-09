@@ -4,11 +4,11 @@ namespace LuckParser.Builders.HtmlModels
 {
     public class FoodDto
     {
-        public double Time;
-        public double Duration;
-        public long Id;
-        public int Stack;
-        public bool Dimished;
+        public double Time { get; set; }
+        public double Duration { get; set; }
+        public long Id { get; set; }
+        public int Stack { get; set; }
+        public bool Dimished { get; set; }
 
         public FoodDto(Statistics.Consumable consume)
         {

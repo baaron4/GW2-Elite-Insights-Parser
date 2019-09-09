@@ -1,9 +1,9 @@
-﻿using LuckParser.EIData;
-using LuckParser.Parser;
-using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LuckParser.EIData;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData.CombatEvents;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic
@@ -36,7 +36,7 @@ namespace LuckParser.Logic
             new EnemyCastEndMechanic(31419, "Magic Storm", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Magic Storm (Breakbar failed) ", "CC Fail",0,(c, log) => c.ActualDuration > 8544),
             });
             Extension = "vg";
-            IconUrl = "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
+            Icon = "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()
@@ -81,7 +81,7 @@ namespace LuckParser.Logic
                 phase.Name = namesVG[i - 1];
                 if (i == 2 || i == 4)
                 {
-                    List<ushort> ids = new List<ushort>
+                    var ids = new List<ushort>
                     {
                        (ushort) BlueGuardian,
                        (ushort) GreenGuardian,
@@ -110,7 +110,7 @@ namespace LuckParser.Logic
             switch (mob.ID)
             {
                 case (ushort)Seekers:
-                    (int, int) lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
+                    var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
                     replay.Actors.Add(new CircleActor(false, 0, 180, lifespan, "rgba(255, 0, 0, 0.5)", new AgentConnector(mob)));
                     break;
                 default:
@@ -121,11 +121,11 @@ namespace LuckParser.Logic
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
-            (int, int) lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
+            var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.ValeGuardian:
-                    List<AbstractCastEvent> magicStorms = cls.Where(x => x.SkillId == 31419).ToList();
+                    var magicStorms = cls.Where(x => x.SkillId == 31419).ToList();
                     foreach (AbstractCastEvent c in magicStorms)
                     {
                         int start = (int)c.Time;
@@ -136,7 +136,7 @@ namespace LuckParser.Logic
                     int distributedMagicDuration = 6700;
                     int arenaRadius = 1600;
                     int impactDuration = 110;
-                    List<AbstractCastEvent> distributedMagicGreen = cls.Where(x => x.SkillId == 31750).ToList();
+                    var distributedMagicGreen = cls.Where(x => x.SkillId == 31750).ToList();
                     foreach (AbstractCastEvent c in distributedMagicGreen)
                     {
                         int start = (int)c.Time;
@@ -145,7 +145,7 @@ namespace LuckParser.Logic
                         replay.Actors.Add(new PieActor(true, 0, arenaRadius, 151, 120, (end, end + impactDuration), "rgba(0,255,0,0.3)", new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f, 0))));
                         replay.Actors.Add(new CircleActor(true, 0, 180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(new Point3D(-5449.0f, -20219.0f, 0.0f, 0))));
                     }
-                    List<AbstractCastEvent> distributedMagicBlue = cls.Where(x => x.SkillId == 31340).ToList();
+                    var distributedMagicBlue = cls.Where(x => x.SkillId == 31340).ToList();
                     foreach (AbstractCastEvent c in distributedMagicBlue)
                     {
                         int start = (int)c.Time;
@@ -154,7 +154,7 @@ namespace LuckParser.Logic
                         replay.Actors.Add(new PieActor(true, 0, arenaRadius, 31, 120, (end, end + impactDuration), "rgba(0,255,0,0.3)", new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f, 0))));
                         replay.Actors.Add(new CircleActor(true, 0, 180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(new Point3D(-4063.0f, -20195.0f, 0.0f, 0))));
                     }
-                    List<AbstractCastEvent> distributedMagicRed = cls.Where(x => x.SkillId == 31391).ToList();
+                    var distributedMagicRed = cls.Where(x => x.SkillId == 31391).ToList();
                     foreach (AbstractCastEvent c in distributedMagicRed)
                     {
                         int start = (int)c.Time;

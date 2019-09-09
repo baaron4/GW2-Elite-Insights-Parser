@@ -1,9 +1,9 @@
-﻿using LuckParser.Parser;
-using LuckParser.Parser.ParsedData;
-using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Parser;
+using LuckParser.Parser.ParsedData;
+using LuckParser.Parser.ParsedData.CombatEvents;
 using static LuckParser.Models.Statistics;
 
 namespace LuckParser.EIData
@@ -136,8 +136,8 @@ namespace LuckParser.EIData
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
-                BoonDistribution boonDistribution = GetBoonDistribution(log, phaseIndex);
-                Dictionary<long, FinalTargetBuffs> rates = new Dictionary<long, FinalTargetBuffs>();
+                BoonDistributionDictionary boonDistribution = GetBoonDistribution(log, phaseIndex);
+                var rates = new Dictionary<long, FinalTargetBuffs>();
                 _buffs.Add(rates);
                 Dictionary<long, long> buffPresence = GetBuffPresence(log, phaseIndex);
 
@@ -148,7 +148,7 @@ namespace LuckParser.EIData
                 {
                     if (boonDistribution.ContainsKey(boon.ID))
                     {
-                        FinalTargetBuffs buff = new FinalTargetBuffs(log.PlayerList);
+                        var buff = new FinalTargetBuffs(log.PlayerList);
                         rates[boon.ID] = buff;
                         if (boon.Type == Boon.BoonType.Duration)
                         {
@@ -202,7 +202,7 @@ namespace LuckParser.EIData
             {
                 List<PhaseData> phases = log.FightData.GetPhases(log);
                 // fill the graph, full precision
-                List<double> listFull = new List<double>();
+                var listFull = new List<double>();
                 for (int i = 0; i <= phases[0].DurationInMS; i++)
                 {
                     listFull.Add(100.0);
@@ -252,10 +252,10 @@ namespace LuckParser.EIData
                     }
                     _healthUpdates.Add(hps);
                 }
-            }    
+            }
             return _healthUpdates;
         }
-        
+
 
         //
         private class TargetSerializable : AbstractMasterActorSerializable
@@ -270,7 +270,7 @@ namespace LuckParser.EIData
             {
                 InitCombatReplay(log);
             }
-            TargetSerializable aux = new TargetSerializable
+            var aux = new TargetSerializable
             {
                 Img = CombatReplay.Icon,
                 Type = "Target",

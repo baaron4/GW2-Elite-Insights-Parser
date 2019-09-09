@@ -1,7 +1,7 @@
-﻿using LuckParser.EIData;
-using LuckParser.Logic;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using LuckParser.EIData;
+using LuckParser.Logic;
 
 namespace LuckParser.Parser.ParsedData
 {
@@ -11,11 +11,12 @@ namespace LuckParser.Parser.ParsedData
         private List<PhaseData> _phases = new List<PhaseData>();
         public ushort ID { get; }
         private readonly bool _requirePhases;
-        public readonly FightLogic Logic;
+        public FightLogic Logic { get; }
         public long FightStartLogTime { get; private set; }
         public long FightEndLogTime { get; private set; } = long.MaxValue;
         public long FightDuration => FightEndLogTime - FightStartLogTime;
-        public string DurationString {
+        public string DurationString
+        {
             get
             {
                 var duration = TimeSpan.FromMilliseconds(FightDuration);
@@ -28,15 +29,9 @@ namespace LuckParser.Parser.ParsedData
             }
         }
         public bool Success { get; private set; }
-        public string Name => Logic.GetFightName() + (_isCM == 1 ? " CM" : "") ;
+        public string Name => Logic.GetFightName() + (_isCM == 1 ? " CM" : "");
         private int _isCM = -1;
-        public bool IsCM
-        {
-            get
-            {
-                return _isCM == 1;
-            }
-        }
+        public bool IsCM => _isCM == 1;
         // Constructors
         public FightData(ushort id, AgentData agentData, long start, long end)
         {
@@ -187,7 +182,6 @@ namespace LuckParser.Parser.ParsedData
         {
             if (_phases.Count == 0)
             {
-                long fightDuration = log.FightData.FightDuration;
                 _phases = log.FightData.Logic.GetPhases(log, _requirePhases);
             }
             return _phases[0].Targets;

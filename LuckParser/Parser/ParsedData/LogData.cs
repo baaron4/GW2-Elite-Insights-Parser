@@ -1,7 +1,7 @@
-﻿using LuckParser.Parser.ParsedData.CombatEvents;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.Parser.ParsedData
 {
@@ -30,7 +30,7 @@ namespace LuckParser.Parser.ParsedData
             {
                 SetPOV(povEvt.PoV);
             }
-            foreach(BuildEvent buildEvt in combatData.GetBuildEvents())
+            foreach (BuildEvent buildEvt in combatData.GetBuildEvents())
             {
                 GW2Version = buildEvt.Build;
             }
@@ -57,7 +57,7 @@ namespace LuckParser.Parser.ParsedData
                 SetLogStart(unixEnd - dur);
             }
         }
-        
+
         // Setters
         private void SetPOV(AgentItem pov)
         {
@@ -65,7 +65,8 @@ namespace LuckParser.Parser.ParsedData
             try
             {
                 PoVName = pov.Name.Substring(0, pov.Name.LastIndexOf('\0')).Split(':')[0].TrimEnd('\u0000');
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 PoVName = pov.Name;
             }
@@ -73,7 +74,7 @@ namespace LuckParser.Parser.ParsedData
 
         private string GetDateTime(double unixSeconds)
         {
-            DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            var dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             dtDateTime = dtDateTime.AddSeconds(unixSeconds).ToLocalTime();
             return dtDateTime.ToString(_dateFormat);
         }

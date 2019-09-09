@@ -3,12 +3,12 @@ using System.Linq;
 
 namespace LuckParser.Parser.ParsedData.CombatEvents
 {
-    public class CombatEventFactory
+    public static class CombatEventFactory
     {
 
         public static Dictionary<AgentItem, List<AbstractMovementEvent>> CreateMovementEvents(List<CombatItem> movementEvents, AgentData agentData, long offset)
         {
-            Dictionary<AgentItem, List<AbstractMovementEvent>> res = new Dictionary<AgentItem, List<AbstractMovementEvent>>();
+            var res = new Dictionary<AgentItem, List<AbstractMovementEvent>>();
             foreach (CombatItem c in movementEvents)
             {
                 AbstractMovementEvent evt = null;
@@ -28,10 +28,11 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
                 }
                 if (evt != null)
                 {
-                    if (res.TryGetValue(evt.AgentItem, out var list))
+                    if (res.TryGetValue(evt.AgentItem, out List<AbstractMovementEvent> list))
                     {
                         list.Add(evt);
-                    } else
+                    }
+                    else
                     {
                         res[evt.AgentItem] = new List<AbstractMovementEvent>()
                         {
@@ -43,42 +44,42 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
             return res;
         }
 
-        public static void CreateStateChangeEvents(List<CombatItem> stateChangeEvents, MetaEventsContainer metaDataEvents, StatusEventsContainer statusEvents, AgentData agentData, long offset) 
+        public static void CreateStateChangeEvents(List<CombatItem> stateChangeEvents, MetaEventsContainer metaDataEvents, StatusEventsContainer statusEvents, AgentData agentData, long offset)
         {
             foreach (CombatItem c in stateChangeEvents)
             {
                 switch (c.IsStateChange)
                 {
                     case ParseEnum.StateChange.EnterCombat:
-                        EnterCombatEvent enterCombatEvt = new EnterCombatEvent(c, agentData, offset);
+                        var enterCombatEvt = new EnterCombatEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.EnterCombatEvents, enterCombatEvt.Src, enterCombatEvt);
                         break;
                     case ParseEnum.StateChange.ExitCombat:
-                        ExitCombatEvent exitCombatEvt = new ExitCombatEvent(c, agentData, offset);
+                        var exitCombatEvt = new ExitCombatEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.ExitCombatEvents, exitCombatEvt.Src, exitCombatEvt);
                         break;
                     case ParseEnum.StateChange.ChangeUp:
-                        AliveEvent aliveEvt = new AliveEvent(c, agentData, offset);
+                        var aliveEvt = new AliveEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.AliveEvents, aliveEvt.Src, aliveEvt);
                         break;
                     case ParseEnum.StateChange.ChangeDead:
-                        DeadEvent deadEvt = new DeadEvent(c, agentData, offset);
+                        var deadEvt = new DeadEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.DeadEvents, deadEvt.Src, deadEvt);
                         break;
                     case ParseEnum.StateChange.ChangeDown:
-                        DownEvent downEvt = new DownEvent(c, agentData, offset);
+                        var downEvt = new DownEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.DownEvents, downEvt.Src, downEvt);
                         break;
                     case ParseEnum.StateChange.Spawn:
-                        SpawnEvent spawnEvt = new SpawnEvent(c, agentData, offset);
+                        var spawnEvt = new SpawnEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.SpawnEvents, spawnEvt.Src, spawnEvt);
                         break;
                     case ParseEnum.StateChange.Despawn:
-                        DespawnEvent despawnEvt = new DespawnEvent(c, agentData, offset);
+                        var despawnEvt = new DespawnEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.DespawnEvents, despawnEvt.Src, despawnEvt);
                         break;
                     case ParseEnum.StateChange.HealthUpdate:
-                        HealthUpdateEvent healthEvt = new HealthUpdateEvent(c, agentData, offset);
+                        var healthEvt = new HealthUpdateEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.HealthUpdateEvents, healthEvt.Src, healthEvt);
                         break;
                     case ParseEnum.StateChange.LogStart:
@@ -88,7 +89,7 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
                         metaDataEvents.LogEndEvents.Add(new LogEndEvent(c, offset));
                         break;
                     case ParseEnum.StateChange.MaxHealthUpdate:
-                        MaxHealthUpdateEvent maxHealthEvt = new MaxHealthUpdateEvent(c, agentData, offset);
+                        var maxHealthEvt = new MaxHealthUpdateEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.MaxHealthUpdateEvents, maxHealthEvt.Src, maxHealthEvt);
                         break;
                     case ParseEnum.StateChange.PointOfView:
@@ -107,22 +108,22 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
                         metaDataEvents.RewardEvents.Add(new RewardEvent(c, offset));
                         break;
                     case ParseEnum.StateChange.TeamChange:
-                        TeamChangeEvent tcEvt = new TeamChangeEvent(c, agentData, offset);
+                        var tcEvt = new TeamChangeEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.TeamChangeEvents, tcEvt.Src, tcEvt);
                         break;
                     case ParseEnum.StateChange.AttackTarget:
-                        AttackTargetEvent aTEvt = new AttackTargetEvent(c, agentData, offset);
+                        var aTEvt = new AttackTargetEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.AttackTargetEvents, aTEvt.Src, aTEvt);
                         break;
                     case ParseEnum.StateChange.Targetable:
-                        TargetableEvent tarEvt = new TargetableEvent(c, agentData, offset);
+                        var tarEvt = new TargetableEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.TargetableEvents, tarEvt.Src, tarEvt);
                         break;
                     case ParseEnum.StateChange.MapID:
                         metaDataEvents.MapIDEvents.Add(new MapIDEvent(c, offset));
                         break;
                     case ParseEnum.StateChange.Guild:
-                        GuildEvent gEvt = new GuildEvent(c, agentData, offset);
+                        var gEvt = new GuildEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.GuildEvents, gEvt.Src, gEvt);
                         break;
                 }
@@ -131,7 +132,7 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
 
         public static List<WeaponSwapEvent> CreateWeaponSwapEvents(List<CombatItem> swapEvents, AgentData agentData, SkillData skillData, long offset)
         {
-            List<WeaponSwapEvent> res = new List<WeaponSwapEvent>();
+            var res = new List<WeaponSwapEvent>();
             foreach (CombatItem swapEvent in swapEvents)
             {
                 res.Add(new WeaponSwapEvent(swapEvent, agentData, skillData, offset));
@@ -141,7 +142,7 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
 
         public static List<AbstractBuffEvent> CreateBuffEvents(List<CombatItem> buffEvents, AgentData agentData, SkillData skillData, long offset)
         {
-            List<AbstractBuffEvent> res = new List<AbstractBuffEvent>();
+            var res = new List<AbstractBuffEvent>();
             foreach (CombatItem c in buffEvents)
             {
                 switch (c.IsBuffRemove)
@@ -172,9 +173,9 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
 
         public static List<AnimatedCastEvent> CreateCastEvents(List<CombatItem> castEvents, AgentData agentData, SkillData skillData, long offset)
         {
-            List<AnimatedCastEvent> res = new List<AnimatedCastEvent>();
-            Dictionary<ulong, List<CombatItem>> castEventsBySrcAgent = castEvents.GroupBy(x => x.SrcAgent).ToDictionary(x => x.Key, x => x.ToList());
-            foreach (var pair in castEventsBySrcAgent)
+            var res = new List<AnimatedCastEvent>();
+            var castEventsBySrcAgent = castEvents.GroupBy(x => x.SrcAgent).ToDictionary(x => x.Key, x => x.ToList());
+            foreach (KeyValuePair<ulong, List<CombatItem>> pair in castEventsBySrcAgent)
             {
                 CombatItem startItem = null;
                 foreach (CombatItem c in pair.Value)
@@ -187,7 +188,8 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
                             res.Add(new AnimatedCastEvent(startItem, agentData, skillData, offset, c.LogTime));
                         }
                         startItem = c;
-                    } else
+                    }
+                    else
                     {
                         if (startItem != null && startItem.SkillID == c.SkillID)
                         {
@@ -203,7 +205,7 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
 
         public static List<AbstractDamageEvent> CreateDamageEvents(List<CombatItem> damageEvents, AgentData agentData, SkillData skillData, long offset)
         {
-            List<AbstractDamageEvent> res = new List<AbstractDamageEvent>();
+            var res = new List<AbstractDamageEvent>();
             foreach (CombatItem c in damageEvents)
             {
                 if ((c.IsBuff != 0 && c.Value == 0))

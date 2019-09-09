@@ -6,7 +6,7 @@
         public bool Filled { get; }
         public string Color { get; }
         public int Growing { get; }
-        
+
         protected FormActor(bool fill, int growing, (int start, int end) lifespan, string color, Connector connector) : base(lifespan, connector)
         {
             Color = color;
@@ -20,6 +20,6 @@
             public int Growing { get; set; }
             public string Color { get; set; }
         }
-        
+
     }
 }

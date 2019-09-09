@@ -4,19 +4,19 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
 {
     public class StatusEventsContainer
     {
-        public readonly Dictionary<AgentItem, List<AliveEvent>> AliveEvents = new Dictionary<AgentItem, List<AliveEvent>>();
-        public readonly Dictionary<AgentItem, List<AttackTargetEvent>> AttackTargetEvents = new Dictionary<AgentItem, List<AttackTargetEvent>>();
-        public readonly Dictionary<AgentItem, List<DeadEvent>> DeadEvents = new Dictionary<AgentItem, List<DeadEvent>>();
-        public readonly Dictionary<AgentItem, List<DespawnEvent>> DespawnEvents = new Dictionary<AgentItem, List<DespawnEvent>>();
-        public readonly Dictionary<AgentItem, List<DownEvent>> DownEvents = new Dictionary<AgentItem, List<DownEvent>>();
-        public readonly Dictionary<AgentItem, List<EnterCombatEvent>> EnterCombatEvents = new Dictionary<AgentItem, List<EnterCombatEvent>>();
-        public readonly Dictionary<AgentItem, List<ExitCombatEvent>> ExitCombatEvents = new Dictionary<AgentItem, List<ExitCombatEvent>>();
-        public readonly Dictionary<AgentItem, List<GuildEvent>> GuildEvents = new Dictionary<AgentItem, List<GuildEvent>>();
-        public readonly Dictionary<AgentItem, List<HealthUpdateEvent>> HealthUpdateEvents = new Dictionary<AgentItem, List<HealthUpdateEvent>>();
-        public readonly Dictionary<AgentItem, List<MaxHealthUpdateEvent>> MaxHealthUpdateEvents = new Dictionary<AgentItem, List<MaxHealthUpdateEvent>>();
-        public readonly Dictionary<AgentItem, List<SpawnEvent>> SpawnEvents = new Dictionary<AgentItem, List<SpawnEvent>>();
-        public readonly Dictionary<AgentItem, List<TargetableEvent>> TargetableEvents = new Dictionary<AgentItem, List<TargetableEvent>>();
-        public readonly Dictionary<AgentItem, List<TeamChangeEvent>> TeamChangeEvents = new Dictionary<AgentItem, List<TeamChangeEvent>>();
+        public Dictionary<AgentItem, List<AliveEvent>> AliveEvents { get; } = new Dictionary<AgentItem, List<AliveEvent>>();
+        public Dictionary<AgentItem, List<AttackTargetEvent>> AttackTargetEvents { get; } = new Dictionary<AgentItem, List<AttackTargetEvent>>();
+        public Dictionary<AgentItem, List<DeadEvent>> DeadEvents { get; } = new Dictionary<AgentItem, List<DeadEvent>>();
+        public Dictionary<AgentItem, List<DespawnEvent>> DespawnEvents { get; } = new Dictionary<AgentItem, List<DespawnEvent>>();
+        public Dictionary<AgentItem, List<DownEvent>> DownEvents { get; } = new Dictionary<AgentItem, List<DownEvent>>();
+        public Dictionary<AgentItem, List<EnterCombatEvent>> EnterCombatEvents { get; } = new Dictionary<AgentItem, List<EnterCombatEvent>>();
+        public Dictionary<AgentItem, List<ExitCombatEvent>> ExitCombatEvents { get; } = new Dictionary<AgentItem, List<ExitCombatEvent>>();
+        public Dictionary<AgentItem, List<GuildEvent>> GuildEvents { get; } = new Dictionary<AgentItem, List<GuildEvent>>();
+        public Dictionary<AgentItem, List<HealthUpdateEvent>> HealthUpdateEvents { get; } = new Dictionary<AgentItem, List<HealthUpdateEvent>>();
+        public Dictionary<AgentItem, List<MaxHealthUpdateEvent>> MaxHealthUpdateEvents { get; } = new Dictionary<AgentItem, List<MaxHealthUpdateEvent>>();
+        public Dictionary<AgentItem, List<SpawnEvent>> SpawnEvents { get; } = new Dictionary<AgentItem, List<SpawnEvent>>();
+        public Dictionary<AgentItem, List<TargetableEvent>> TargetableEvents { get; } = new Dictionary<AgentItem, List<TargetableEvent>>();
+        public Dictionary<AgentItem, List<TeamChangeEvent>> TeamChangeEvents { get; } = new Dictionary<AgentItem, List<TeamChangeEvent>>();
 
     }
 }

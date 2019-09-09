@@ -1,5 +1,5 @@
-﻿using LuckParser.EIData;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using LuckParser.EIData;
 
 namespace LuckParser.Logic
 {
@@ -13,7 +13,7 @@ namespace LuckParser.Logic
             }
             );
             Extension = "escort";
-            IconUrl = "https://wiki.guildwars2.com/images/b/b5/Mini_McLeod_the_Silent.png";
+            Icon = "https://wiki.guildwars2.com/images/b/b5/Mini_McLeod_the_Silent.png";
         }
 
         /*protected override CombatReplayMap GetCombatMapInternal()
@@ -25,7 +25,8 @@ namespace LuckParser.Logic
                             (1920, 12160, 2944, 14464));
         }*/
 
-        public override string GetFightName() {
+        public override string GetFightName()
+        {
             return "Escort";
         }
     }
