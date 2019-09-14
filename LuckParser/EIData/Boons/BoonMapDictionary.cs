@@ -56,28 +56,7 @@ namespace LuckParser.EIData
             }
             else
             {
-                if (x is BuffRemoveSingleEvent || x is BuffRemoveAllEvent)
-                {
-                    if (y is BuffRemoveSingleEvent || y is BuffRemoveAllEvent)
-                    {
-                        return 0;
-                    }
-                    else
-                    {
-                        return 1;
-                    }
-                }
-                else
-                {
-                    if (y is BuffRemoveSingleEvent || y is BuffRemoveAllEvent)
-                    {
-                        return -1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                }
+                return x.CompareTo(y);
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using LuckParser.EIData;
+﻿using System;
+using LuckParser.EIData;
 
 namespace LuckParser.Parser.ParsedData.CombatEvents
 {
@@ -19,6 +20,10 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
 
         public override void UpdateSimulator(BoonSimulator simulator)
         {
+        }
+        public override int CompareTo(AbstractBuffEvent abe)
+        {
+            throw new InvalidOperationException("Manual removes can't be sorted");
         }
     }
 }

@@ -36,5 +36,14 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
         {
             simulator.Add(AppliedDuration, By, Time);
         }
+
+        public override int CompareTo(AbstractBuffEvent abe)
+        {
+            if (abe is BuffApplyEvent && !(abe is BuffExtensionEvent))
+            {
+                return 0;
+            }
+            return -1;
+        }
     }
 }

@@ -22,5 +22,17 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
         {
             simulator.Remove(RemovedDuration, Time, ParseEnum.BuffRemove.Single);
         }
+        public override int CompareTo(AbstractBuffEvent abe)
+        {
+            if (abe is BuffRemoveSingleEvent)
+            {
+                return 0;
+            }
+            if (abe is BuffRemoveAllEvent)
+            {
+                return -1;
+            }
+            return 1;
+        }
     }
 }

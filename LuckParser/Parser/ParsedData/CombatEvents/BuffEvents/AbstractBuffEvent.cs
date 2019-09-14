@@ -38,5 +38,7 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
         public abstract void TryFindSrc(ParsedLog log);
 
         public abstract bool IsBoonSimulatorCompliant(long fightEnd);
+
+        public abstract int CompareTo(AbstractBuffEvent abe);
     }
 }
