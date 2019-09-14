@@ -58,7 +58,7 @@ namespace LuckParser.EIData
             {
                 if (x is BuffRemoveSingleEvent || x is BuffRemoveAllEvent)
                 {
-                    if (y is BuffRemoveSingleEvent || x is BuffRemoveAllEvent)
+                    if (y is BuffRemoveSingleEvent || y is BuffRemoveAllEvent)
                     {
                         return 0;
                     }
@@ -69,7 +69,7 @@ namespace LuckParser.EIData
                 }
                 else
                 {
-                    if (y is BuffRemoveSingleEvent || x is BuffRemoveAllEvent)
+                    if (y is BuffRemoveSingleEvent || y is BuffRemoveAllEvent)
                     {
                         return -1;
                     }
