@@ -32,7 +32,7 @@ namespace LuckParser.EIData
                     _extensionSkills.AddRange(p.GetCastLogsActDur(log, 0, log.FightData.FightDuration).Where(x => ExtensionIDS.Contains(x.SkillId) && !x.Interrupted));
                 }
             }
-            return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time - 10 <= time && time <= x.Time + x.ActualDuration + 10).ToList();
+            return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time <= time && time <= x.Time + x.ActualDuration + 10).ToList();
         }
         // Spec specific checks
         private int CouldBeEssenceOfSpeed(AgentItem dst, long extension, ParsedLog log)
