@@ -148,7 +148,7 @@ namespace LuckParser.Logic
                 AbstractBuffEvent c = invuls[i];
                 if (c is BuffApplyEvent)
                 {
-                    long end = c.Time;
+                    long end = Math.Min(c.Time, fightDuration);
                     phases.Add(new PhaseData(last, end));
                     /*if (i == invuls.Count - 1)
                     {
@@ -158,7 +158,7 @@ namespace LuckParser.Logic
                 }
                 else
                 {
-                    long end = c.Time;
+                    long end = Math.Min(c.Time, fightDuration);
                     if (addSkipPhases)
                     {
                         phases.Add(new PhaseData(last, end));
