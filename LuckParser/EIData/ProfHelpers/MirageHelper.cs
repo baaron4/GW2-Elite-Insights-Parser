@@ -15,7 +15,7 @@ namespace LuckParser.EIData
             {
                 if (ba.Time - cloakStart > 10)
                 {
-                    var dodgeLog = new AnimatedCastEvent(ba.Time, skillData.Get(SkillItem.DodgeId), 50, ba.To);
+                    var dodgeLog = new AnimatedCastEvent(ba.Time, skillData.Get(SkillItem.MirageCloakDodgeId), 50, ba.To.MasterAgent ?? ba.To);
                     res.Add(dodgeLog);
                     cloakStart = ba.Time;
                 }

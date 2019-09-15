@@ -9,6 +9,7 @@ namespace LuckParser.Parser.ParsedData
     public class SkillItem
     {
         public const long DodgeId = 65001;
+        public const long MirageCloakDodgeId = 65002;
         public const long ResurrectId = 1066;
         public const long BandageId = 1175;
         public const long WeaponSwapId = -2;
@@ -28,6 +29,7 @@ namespace LuckParser.Parser.ParsedData
             {ResurrectId, "Resurrect"},
             {BandageId, "Bandage" },
             {DodgeId, "Dodge" },
+            {MirageCloakDodgeId, "Mirage Cloak" },
             {WeaponSwapId, "Weapon Swap" },
             // Gorseval
             {31834,"Ghastly Rampage" },
@@ -69,6 +71,7 @@ namespace LuckParser.Parser.ParsedData
             {ResurrectId, "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png"},
             {BandageId, "https://wiki.guildwars2.com/images/0/0c/Bandage.png"},
             {DodgeId, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png"},
+            {MirageCloakDodgeId, "https://wiki.guildwars2.com/images/a/a5/Mirage_Cloak_%28effect%29.png"},
             {WeaponSwapId, "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png"},
             {49112, "https://wiki.guildwars2.com/images/e/e7/Throw_Magnetic_Bomb.png"},
             {49063, "https://wiki.guildwars2.com/images/3/3d/Detonate_Plasma.png"},
