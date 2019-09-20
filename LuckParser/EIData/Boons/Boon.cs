@@ -156,7 +156,9 @@ namespace LuckParser.EIData
 
         private static readonly List<Boon> _commons = new List<Boon>
         {
+                new Boon("Downed", 770, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/dd/Downed.png"),
                 new Boon("Stealth", 13017, BoonSource.Mixed, BoonType.Duration, 5, BoonNature.GraphOnlyBuff, Logic.Queue, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
+                new Boon("Hide in Shadows", 10269, BoonSource.Mixed, BoonType.Duration, 5, BoonNature.GraphOnlyBuff, Logic.Queue, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
                 new Boon("Revealed", 890, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.ForceOverride, "https://wiki.guildwars2.com/images/d/db/Revealed.png"),
                 new Boon("Superspeed", 5974, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.ForceOverride,"https://wiki.guildwars2.com/images/1/1a/Super_Speed.png"),
                 new Boon("Determined (762)", 762, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
@@ -757,6 +759,11 @@ namespace LuckParser.EIData
                 new Boon("Fractal Mobility", 33024, BoonSource.Mixed, BoonType.Intensity, 5, BoonNature.Consumable, Logic.Override,"https://wiki.guildwars2.com/images/thumb/2/22/Mist_Mobility_Potion.png/40px-Mist_Mobility_Potion.png"),
                 new Boon("Fractal Defensive", 32134, BoonSource.Mixed, BoonType.Intensity, 5, BoonNature.Consumable, Logic.Override,"https://wiki.guildwars2.com/images/thumb/e/e6/Mist_Defensive_Potion.png/40px-Mist_Defensive_Potion.png"),
                 new Boon("Fractal Offensive", 32473, BoonSource.Mixed, BoonType.Intensity, 5, BoonNature.Consumable, Logic.Override,"https://wiki.guildwars2.com/images/thumb/8/8d/Mist_Offensive_Potion.png/40px-Mist_Offensive_Potion.png"),
+                // Ascended Food
+                new Boon("Cilantro Lime Sous-Vide Steak", 57244, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override,"https://wiki.guildwars2.com/images/6/65/Cilantro_Lime_Sous-Vide_Steak.png"),
+                new Boon("Peppercorn and Veggie Flatbread", 57382, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override,"https://wiki.guildwars2.com/images/9/9d/Peppercorn_and_Veggie_Flatbread.png"),
+                new Boon("Bowl of Fruit Salad with Mint Garnish", 57100, BoonSource.Mixed, BoonType.Duration, 1, BoonNature.Consumable, Logic.Override,"https://wiki.guildwars2.com/images/4/47/Bowl_of_Fruit_Salad_with_Mint_Garnish.png"),
+
         };
 
         public static List<List<Boon>> AllBoons = new List<List<Boon>>()
