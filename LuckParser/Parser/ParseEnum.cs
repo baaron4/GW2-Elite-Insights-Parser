@@ -376,6 +376,8 @@ namespace LuckParser.Parser
             Adina = 22006,
             Sabir = 21964,
             PeerlessQadim = 22000,
+            // Strike Missions
+            IcebroodConstruct = 22154,
             // Fract
             MAMA = 17021,
             Siax = 17028,

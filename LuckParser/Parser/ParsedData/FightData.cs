@@ -131,6 +131,9 @@ namespace LuckParser.Parser.ParsedData
                 case ParseEnum.TargetIDS.PeerlessQadim:
                     Logic = new PeerlessQadim(id);
                     break;
+                case ParseEnum.TargetIDS.IcebroodConstruct:
+                    Logic = new IcebroodConstruct(id);
+                    break;
                 case ParseEnum.TargetIDS.MAMA:
                     Logic = new MAMA(id);
                     break;
