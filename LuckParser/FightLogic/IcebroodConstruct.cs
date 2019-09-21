@@ -11,7 +11,15 @@ namespace LuckParser.Logic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-
+                new HitOnPlayerMechanic(57832, "Deadly Ice Shock Wave",new MechanicPlotlySetting("square","rgb(255,0,0)"),"D.IceWave","Deadly Ice Shock Wave", "Deadly Shock Wave", 0),
+                new HitOnPlayerMechanic(57516, "Ice Arm Swing",new MechanicPlotlySetting("triangle","rgb(255,150,0)"),"A.Swing","Ice Arm Swing", "Ice Arm Swing", 0),
+                new HitOnPlayerMechanic(57948, "Ice Shock Wave",new MechanicPlotlySetting("square","rgb(255,150,0)"),"ShockWave","Ice Shock Wave", "Ice Shock Wave", 0),
+                new HitOnPlayerMechanic(57472, "Ice Shock Wave",new MechanicPlotlySetting("square","rgb(255,150,0)"),"ShockWave","Ice Shock Wave", "Ice Shock Wave", 0),
+                new HitOnPlayerMechanic(57779, "Ice Shock Wave",new MechanicPlotlySetting("square","rgb(255,150,0)"),"ShockWave","Ice Shock Wave", "Ice Shock Wave", 0),
+                new HitOnPlayerMechanic(57690, "Ice Shatter",new MechanicPlotlySetting("triangle-open","rgb(255,0,150)"),"Ice Orbs","Rotating Ice Orbs", "Ice Orbs", 50),
+                new HitOnPlayerMechanic(57663, "Ice Crystal",new MechanicPlotlySetting("circle-open","rgb(255,150,0)"),"I.Crystal","Ice Crystal", "Ice Crystal", 50),
+                new HitOnPlayerMechanic(57463, "Ice Flail",new MechanicPlotlySetting("square","rgb(255,0,150)"),"I.Flail","Ice Flail", "Ice Flail", 50),
+                new HitOnPlayerMechanic(57463, "Ice Flail",new MechanicPlotlySetting("square","rgb(255,150,150)"),"I.Flail","Ice Flail", "Ice Flail", 50),
             }
             );
             Extension = "icebrood";
