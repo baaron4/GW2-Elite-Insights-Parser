@@ -211,7 +211,7 @@ namespace LuckParser
                 case ParseEnum.TargetIDS.PeerlessQadim:
                     return "https://i.imgur.com/47uePpb.png";
                 case ParseEnum.TargetIDS.IcebroodConstruct:
-                    return "https://wiki.guildwars2.com/images/thumb/e/e2/Icebrood_Construct.jpg/320px-Icebrood_Construct.jpg";
+                    return "https://i.imgur.com/dpaZFa5.png";
                 case ParseEnum.TargetIDS.MAMA:
                     return "https://i.imgur.com/1h7HOII.png";
                 case ParseEnum.TargetIDS.Siax:
