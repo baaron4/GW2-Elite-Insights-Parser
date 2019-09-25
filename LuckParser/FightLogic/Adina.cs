@@ -35,8 +35,8 @@ namespace LuckParser.Logic
             long final = combatData.Count > 0 ? combatData.Last().LogTime : 0;
             foreach (CombatItem at in attackTargets)
             {
-                AgentItem hand = agentData.GetAgent(at.DstAgent, at.LogTime);
-                AgentItem atAgent = agentData.GetAgent(at.SrcAgent, at.LogTime);
+                AgentItem hand = agentData.GetAgent(at.DstAgent);
+                AgentItem atAgent = agentData.GetAgent(at.SrcAgent);
                 var attackables = combatData.Where(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.SrcAgent == atAgent.Agent && x.LogTime <= atAgent.LastAwareLogTime && x.LogTime >= atAgent.FirstAwareLogTime).ToList();
                 var attackOn = attackables.Where(x => x.DstAgent == 1 && x.LogTime >= first + 2000).Select(x => x.LogTime).ToList();
                 var attackOff = attackables.Where(x => x.DstAgent == 0 && x.LogTime >= first + 2000).Select(x => x.LogTime).ToList();

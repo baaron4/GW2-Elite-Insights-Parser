@@ -6,8 +6,8 @@
 
         public AttackTargetEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, agentData, offset)
         {
-            AttackTarget = agentData.GetAgent(evtcItem.SrcAgent, evtcItem.LogTime);
-            Src = agentData.GetAgent(evtcItem.DstAgent, evtcItem.LogTime);
+            AttackTarget = Src;
+            Src = agentData.GetAgent(evtcItem.DstAgent);
         }
 
     }

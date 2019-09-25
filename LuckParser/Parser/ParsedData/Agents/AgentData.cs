@@ -7,7 +7,7 @@ namespace LuckParser.Parser.ParsedData
     public class AgentData
     {
         private readonly List<AgentItem> _allAgentsList;
-        private Dictionary<ulong, List<AgentItem>> _allAgentsByAgent;
+        private Dictionary<ulong, AgentItem> _allAgentsByAgent;
         private Dictionary<ushort, List<AgentItem>> _allAgentsByInstID;
         private Dictionary<ushort, List<AgentItem>> _allAgentsByID;
         private Dictionary<AgentItem.AgentType, List<AgentItem>> _allAgentsByType;
@@ -46,23 +46,13 @@ namespace LuckParser.Parser.ParsedData
             return agent;
         }
 
-        public void RemoveAgent(AgentItem agent)
-        {
-            _allAgentsList.Remove(agent);
-            Refresh();
-        }
-
-        public AgentItem GetAgent(ulong agentAddress, long logTime)
+        public AgentItem GetAgent(ulong agentAddress)
         {
             if (agentAddress != 0)
             {
-                if (_allAgentsByAgent.TryGetValue(agentAddress, out List<AgentItem> aList))
+                if (_allAgentsByAgent.TryGetValue(agentAddress, out AgentItem a))
                 {
-                    AgentItem a = aList.Find(x => x.FirstAwareLogTime <= logTime && x.LastAwareLogTime >= logTime);
-                    if (a != null)
-                    {
-                        return a;
-                    }
+                    return a;
                 }
             }
             return GeneralHelper.UnknownAgent;
@@ -73,18 +63,6 @@ namespace LuckParser.Parser.ParsedData
             if (id != 0)
             {
                 if (_allAgentsByID.TryGetValue(id, out List<AgentItem> list))
-                {
-                    return list;
-                }
-            }
-            return new List<AgentItem>();
-        }
-
-        public List<AgentItem> GetAgentByInstID(ushort instid)
-        {
-            if (instid != 0)
-            {
-                if (_allAgentsByInstID.TryGetValue(instid, out List<AgentItem> list))
                 {
                     return list;
                 }
@@ -118,7 +96,7 @@ namespace LuckParser.Parser.ParsedData
 
         public void Refresh()
         {
-            _allAgentsByAgent = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
+            _allAgentsByAgent = _allAgentsList.ToDictionary(x => x.Agent);
             _allAgentsByID = _allAgentsList.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
             _allAgentsByInstID = _allAgentsList.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
             _allAgentsByType = _allAgentsList.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
