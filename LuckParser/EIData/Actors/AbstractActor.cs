@@ -179,7 +179,7 @@ namespace LuckParser.EIData
             {
                 foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in boonMap)
                 {
-                    pair.Value.Add(new BuffRemoveAllEvent(GeneralHelper.UnknownAgent, AgentItem, dsp.Time, int.MaxValue, log.SkillData.Get(pair.Key), 1, int.MaxValue));
+                    pair.Value.Add(new BuffRemoveAllEvent(GeneralHelper.UnknownAgent, AgentItem, dsp.Time, int.MaxValue, log.SkillData.Get(pair.Key), BuffRemoveAllEvent.FullRemoval, int.MaxValue));
                 }
             }
             // add buff remove all for each dead events

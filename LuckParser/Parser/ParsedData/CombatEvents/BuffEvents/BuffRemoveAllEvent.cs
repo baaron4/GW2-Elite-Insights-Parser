@@ -4,6 +4,8 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
 {
     public class BuffRemoveAllEvent : AbstractBuffRemoveEvent
     {
+        public const int FullRemoval = int.MaxValue;
+
         private readonly int _removedStacks;
         private readonly int _lastRemovedDuration;
 
