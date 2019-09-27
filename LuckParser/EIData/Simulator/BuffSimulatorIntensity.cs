@@ -14,11 +14,11 @@ namespace LuckParser.EIData
         {
         }
 
-        public override void Extend(long extension, long oldValue, AgentItem src, long start)
+        public override void Extend(long extension, long oldValue, AgentItem src, long time)
         {
-            if ((BoonStack.Count > 0 && oldValue > 0) || BoonStack.Count == Capacity)
+            if ((BuffStack.Count > 0 && oldValue > 0) || BuffStack.Count == Capacity)
             {
-                BuffStackItem minItem = BoonStack.MinBy(x => Math.Abs(x.TotalBoonDuration() - oldValue));
+                BuffStackItem minItem = BuffStack.MinBy(x => Math.Abs(x.TotalBoonDuration() - oldValue));
                 if (minItem != null)
                 {
                     minItem.Extend(extension, src);
@@ -28,12 +28,12 @@ namespace LuckParser.EIData
             {
                 if (_lastSrcRemoves.Count > 0)
                 {
-                    Add(oldValue + extension, src, _lastSrcRemoves.First().agent, start, false, _lastSrcRemoves.First().extension);
+                    Add(oldValue + extension, src, _lastSrcRemoves.First().agent, time, false, _lastSrcRemoves.First().extension);
                     _lastSrcRemoves.RemoveAt(0);
                 }
                 else
                 {
-                    Add(oldValue + extension, src, start);
+                    Add(oldValue + extension, src, time);
                 }
             }
         }
@@ -42,35 +42,30 @@ namespace LuckParser.EIData
 
         protected override void Update(long timePassed)
         {
-            if (BoonStack.Count > 0)
+            if (BuffStack.Count > 0)
             {
                 if (timePassed > 0)
                 {
                     _lastSrcRemoves.Clear();
                 }
-                var toAdd = new BuffSimulationItemIntensity(BoonStack);
-                if (GenerationSimulation.Count > 0)
-                {
-                    BuffSimulationItem last = GenerationSimulation.Last();
-                    if (last.End > toAdd.Start)
-                    {
-                        last.SetEnd(toAdd.Start);
-                    }
-                }
+                var toAdd = new BuffSimulationItemIntensity(BuffStack);
                 GenerationSimulation.Add(toAdd);
-                long diff = Math.Min(BoonStack.Min(x => x.BoonDuration), timePassed);
+                long diff = Math.Min(BuffStack.Min(x => x.Duration), timePassed);
                 long leftOver = timePassed - diff;
-                // Subtract from each
-                for (int i = BoonStack.Count - 1; i >= 0; i--)
+                if (toAdd.End > toAdd.Start + diff)
                 {
-                    var item = new BuffStackItem(BoonStack[i], diff, diff);
-                    BoonStack[i] = item;
-                    if (item.BoonDuration == 0)
+                    toAdd.OverrideEnd(toAdd.Start + diff);
+                }
+                // Subtract from each
+                for (int i = BuffStack.Count - 1; i >= 0; i--)
+                {
+                    BuffStack[i].Shift(diff, diff);
+                    if (BuffStack[i].Duration == 0)
                     {
-                        _lastSrcRemoves.Add((item.SeedSrc, item.IsExtension));
+                        _lastSrcRemoves.Add((BuffStack[i].SeedSrc, BuffStack[i].IsExtension));
                     }
                 }
-                BoonStack.RemoveAll(x => x.BoonDuration == 0);
+                BuffStack.RemoveAll(x => x.Duration == 0);
                 if (leftOver > 0)
                 {
                     Update(leftOver);

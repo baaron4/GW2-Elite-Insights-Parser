@@ -33,7 +33,7 @@ namespace LuckParser.EIData
             return new BuffsGraphModel.SegmentWithSources(Start, End, GetStack(), GetSources().ToArray());
         }
 
-        public abstract void SetEnd(long end);
+        public abstract void OverrideEnd(long end);
 
         public abstract List<AgentItem> GetSources();
 

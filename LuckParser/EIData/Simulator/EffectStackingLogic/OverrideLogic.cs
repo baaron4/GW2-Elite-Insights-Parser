@@ -21,7 +21,7 @@ namespace LuckParser.EIData
             BuffStackItem stack = stacks[0];
             if (stack.TotalBoonDuration() <= stackItem.TotalBoonDuration() + 10)
             {
-                wastes.Add(new BuffSimulationItemWasted(stack.Src, stack.BoonDuration, stack.Start));
+                wastes.Add(new BuffSimulationItemWasted(stack.Src, stack.Duration, stack.Start));
                 if (stack.Extensions.Count > 0)
                 {
                     foreach ((AgentItem src, long value) in stack.Extensions)

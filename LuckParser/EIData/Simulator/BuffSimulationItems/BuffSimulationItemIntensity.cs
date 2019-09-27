@@ -25,11 +25,11 @@ namespace LuckParser.EIData
             }
         }
 
-        public override void SetEnd(long end)
+        public override void OverrideEnd(long end)
         {
             foreach (BuffSimulationItemDuration stack in _stacks)
             {
-                stack.SetEnd(end);
+                stack.OverrideEnd(end);
             }
             Duration = _stacks.Max(x => x.Duration);
         }

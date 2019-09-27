@@ -27,7 +27,7 @@ namespace LuckParser.EIData
                 stacks.Insert(0, first);
                 return false;
             }
-            wastes.Add(new BuffSimulationItemWasted(minItem.Src, minItem.BoonDuration, minItem.Start));
+            wastes.Add(new BuffSimulationItemWasted(minItem.Src, minItem.Duration, minItem.Start));
             if (minItem.Extensions.Count > 0)
             {
                 foreach ((AgentItem src, long value) in minItem.Extensions)
