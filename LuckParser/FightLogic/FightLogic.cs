@@ -284,7 +284,7 @@ namespace LuckParser.Logic
                 {
                     long time = killed.Time;
                     success++;
-                    AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
+                    AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.From.Master)));
                     if (lastDamageTaken != null)
                     {
                         time = Math.Min(lastDamageTaken.Time, time);
@@ -328,7 +328,7 @@ namespace LuckParser.Logic
                 {
                     targetExits.AddRange(combatData.GetExitCombatEvents(t.AgentItem));
                 }
-                AbstractDamageEvent lastDamage = combatData.GetDamageTakenData(t.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
+                AbstractDamageEvent lastDamage = combatData.GetDamageTakenData(t.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.From.Master)));
                 if (lastDamage != null)
                 {
                     lastTargetDamages.Add(lastDamage);

@@ -3,9 +3,7 @@
     public abstract class AbstractDamageEvent : AbstractCombatEvent
     {
         public AgentItem From { get; }
-        public AgentItem MasterFrom { get; }
         public AgentItem To { get; }
-        public AgentItem MasterTo { get; }
 
         public SkillItem Skill { get; }
         public long SkillId => Skill.ID;
@@ -34,10 +32,8 @@
 #if DEBUG
             OriginalCombatEvent = evtcItem;
 #endif
-            From = agentData.GetAgentByInstID(evtcItem.SrcInstid, evtcItem.LogTime);
-            MasterFrom = evtcItem.SrcMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.SrcMasterInstid, evtcItem.LogTime) : null;
-            To = agentData.GetAgentByInstID(evtcItem.DstInstid, evtcItem.LogTime);
-            MasterTo = evtcItem.DstMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.DstMasterInstid, evtcItem.LogTime) : null;
+            From = agentData.GetAgent(evtcItem.SrcAgent);
+            To = agentData.GetAgent(evtcItem.DstAgent);
             Skill = skillData.Get(evtcItem.SkillID);
             IsOverNinety = evtcItem.IsNinety > 0;
             AgainstUnderFifty = evtcItem.IsFifty > 0;

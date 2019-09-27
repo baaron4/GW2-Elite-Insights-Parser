@@ -6,7 +6,6 @@
         public SkillItem Skill { get; protected set; }
         public long SkillId => Skill.ID;
         public AgentItem Caster { get; }
-        public AgentItem MasterCaster { get; }
         public int ExpectedDuration { get; protected set; }
         public bool UnderQuickness { get; protected set; }
 
@@ -19,17 +18,15 @@
         public AbstractCastEvent(CombatItem startEvtcItem, AgentData agentData, SkillData skillData, long offset) : base(startEvtcItem.LogTime, offset)
         {
             Skill = skillData.Get(startEvtcItem.SkillID);
-            Caster = agentData.GetAgentByInstID(startEvtcItem.SrcInstid, startEvtcItem.LogTime);
+            Caster = agentData.GetAgent(startEvtcItem.SrcAgent);
             UnderQuickness = startEvtcItem.IsActivation == ParseEnum.EvtcActivation.Quickness;
             ExpectedDuration = startEvtcItem.Value;
-            MasterCaster = startEvtcItem.SrcMasterInstid > 0 ? agentData.GetAgentByInstID(startEvtcItem.SrcMasterInstid, startEvtcItem.LogTime) : null;
         }
 
         public AbstractCastEvent(long time, SkillItem skill, AgentItem caster) : base(time, 0)
         {
             Skill = skill;
             Caster = caster;
-            MasterCaster = null;
         }
     }
 }

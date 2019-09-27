@@ -11,7 +11,7 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
 
         public AbstractMovementEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem.LogTime, offset)
         {
-            AgentItem = agentData.GetAgentByInstID(evtcItem.SrcInstid, evtcItem.LogTime);
+            AgentItem = agentData.GetAgent(evtcItem.SrcAgent);
             _dstAgent = evtcItem.DstAgent;
             _value = evtcItem.Value;
 #if DEBUG
