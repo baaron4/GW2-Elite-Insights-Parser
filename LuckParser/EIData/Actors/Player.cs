@@ -817,7 +817,7 @@ namespace LuckParser.EIData
 
             // Boons applied to player's group
             var otherPlayersInGroup = log.PlayerList
-                .Where(p => p.Group == Group && InstID != p.InstID)
+                .Where(p => p.Group == Group && Agent != p.Agent)
                 .ToList();
             (_groupBuffs, _groupActiveBuffs) = GetBoonsForPlayers(otherPlayersInGroup, log);
 
@@ -826,7 +826,7 @@ namespace LuckParser.EIData
             (_offGroupBuffs, _offGroupActiveBuffs) = GetBoonsForPlayers(offGroupPlayers, log);
 
             // Boons applied to squad
-            var otherPlayers = log.PlayerList.Where(p => p.InstID != InstID).ToList();
+            var otherPlayers = log.PlayerList.Where(p => p.Agent != Agent).ToList();
             (_squadBuffs, _squadActiveBuffs) = GetBoonsForPlayers(otherPlayers, log);
         }
 
