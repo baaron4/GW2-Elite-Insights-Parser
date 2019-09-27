@@ -10,7 +10,7 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
             _iff = evtcItem.IFF;
         }
 
-        public override bool IsBoonSimulatorCompliant(long fightEnd)
+        public override bool IsBuffSimulatorCompliant(long fightEnd)
         {
             return BuffID != ProfHelper.NoBuff &&
                 !(_iff == ParseEnum.IFF.Unknown && By == GeneralHelper.UnknownAgent) && // weird single stack remove

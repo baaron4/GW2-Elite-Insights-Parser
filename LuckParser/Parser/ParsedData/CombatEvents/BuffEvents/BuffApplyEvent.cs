@@ -23,7 +23,7 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
             To = to;
         }
 
-        public override bool IsBoonSimulatorCompliant(long fightEnd)
+        public override bool IsBuffSimulatorCompliant(long fightEnd)
         {
             return BuffID != ProfHelper.NoBuff;
         }

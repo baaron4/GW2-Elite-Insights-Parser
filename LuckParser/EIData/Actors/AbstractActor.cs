@@ -166,7 +166,7 @@ namespace LuckParser.EIData
                     }
                     boonMap.Add(log.Buffs.BuffsByIds[boonId]);
                 }
-                if (!c.IsBoonSimulatorCompliant(log.FightData.FightDuration))
+                if (!c.IsBuffSimulatorCompliant(log.FightData.FightDuration))
                 {
                     continue;
                 }
