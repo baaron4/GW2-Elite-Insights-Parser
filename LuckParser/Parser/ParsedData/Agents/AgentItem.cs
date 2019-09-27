@@ -14,7 +14,7 @@ namespace LuckParser.Parser.ParsedData
         // Fields
         public ulong Agent { get; set; }
         public ushort ID { get; }
-        public AgentItem MasterAgent { get; set; }
+        public AgentItem Master { get; set; }
         public ushort InstID { get; set; }
         public AgentType Type { get; } = AgentType.NPC;
         public long FirstAwareLogTime { get; set; }
@@ -74,7 +74,7 @@ namespace LuckParser.Parser.ParsedData
             HitboxWidth = other.HitboxWidth;
             HitboxHeight = other.HitboxHeight;
             InstID = other.InstID;
-            MasterAgent = other.MasterAgent;
+            Master = other.Master;
         }
 
         public AgentItem()

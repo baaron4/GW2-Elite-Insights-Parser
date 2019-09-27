@@ -47,9 +47,9 @@ namespace LuckParser.EIData
                         {
                             continue;
                         }
-                        else if (a.MasterAgent != null)
+                        else if (a.Master != null)
                         {
-                            AgentItem m = a.MasterAgent;
+                            AgentItem m = a.Master;
                             if (playerAgents.Contains(m))
                             {
                                 continue;
