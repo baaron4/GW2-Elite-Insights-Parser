@@ -13,7 +13,7 @@ namespace LuckParser.EIData
             _ids = new HashSet<long>(buffsIds);
         }
 
-        public override int GetStack(Dictionary<long, BoonsGraphModel> bgms, long time)
+        public override int GetStack(Dictionary<long, BuffsGraphModel> bgms, long time)
         {
             int stack = 0;
             foreach (long key in bgms.Keys.Intersect(_ids))
@@ -23,7 +23,7 @@ namespace LuckParser.EIData
             return stack;
         }
 
-        public override bool Has(Dictionary<long, BoonsGraphModel> bgms)
+        public override bool Has(Dictionary<long, BuffsGraphModel> bgms)
         {
             return bgms.Keys.Intersect(_ids).Any();
         }

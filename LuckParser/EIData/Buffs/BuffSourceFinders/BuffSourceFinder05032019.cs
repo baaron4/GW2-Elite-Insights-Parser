@@ -2,10 +2,9 @@
 
 namespace LuckParser.EIData
 {
-    public class BoonSourceFinder11122018 : BoonSourceFinder
+    public class BuffSourceFinder05032019 : BuffSourceFinder
     {
-
-        public BoonSourceFinder11122018(HashSet<long> boonIds) : base(boonIds)
+        public BuffSourceFinder05032019(HashSet<long> boonIds) : base(boonIds)
         {
             ExtensionIDS = new HashSet<long>()
             {
@@ -15,13 +14,11 @@ namespace LuckParser.EIData
             };
             DurationToIDs = new Dictionary<long, HashSet<long>>
             {
-                {5000, new HashSet<long> { 10236 } }, // SoI
-                {3000, new HashSet<long> { 51696 } }, // Treated TN
-                {2000, new HashSet<long> { 51696 , 29453 } }, // TN, SandSquall
+                {3000, new HashSet<long> { 51696 , 10236 , 29453 } }, // SoI, Treated TN, SandSquall
+                {2000, new HashSet<long> { 51696 } }, // TN
             };
             EssenceOfSpeed = 2000;
             ImbuedMelodies = 2000;
         }
-
     }
 }

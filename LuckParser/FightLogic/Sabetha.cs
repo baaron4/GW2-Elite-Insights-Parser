@@ -14,9 +14,9 @@ namespace LuckParser.Logic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new PlayerBoonApplyMechanic(34108, "Shell-Shocked", new MechanicPlotlySetting("circle-open","rgb(0,128,0)"), "Launched","Shell-Shocked (launched up to cannons)", "Shell-Shocked",0),
-            new PlayerBoonApplyMechanic(31473, "Sapper Bomb", new MechanicPlotlySetting("circle","rgb(0,128,0)"), "Sap Bomb","Got a Sapper Bomb", "Sapper Bomb",0),
-            new PlayerBoonApplyMechanic(31485, "Time Bomb", new MechanicPlotlySetting("circle","rgb(255,140,0)"), "Timed Bomb","Got a Timed Bomb (Expanding circle)", "Timed Bomb",0),
+            new PlayerBuffApplyMechanic(34108, "Shell-Shocked", new MechanicPlotlySetting("circle-open","rgb(0,128,0)"), "Launched","Shell-Shocked (launched up to cannons)", "Shell-Shocked",0),
+            new PlayerBuffApplyMechanic(31473, "Sapper Bomb", new MechanicPlotlySetting("circle","rgb(0,128,0)"), "Sap Bomb","Got a Sapper Bomb", "Sapper Bomb",0),
+            new PlayerBuffApplyMechanic(31485, "Time Bomb", new MechanicPlotlySetting("circle","rgb(255,140,0)"), "Timed Bomb","Got a Timed Bomb (Expanding circle)", "Timed Bomb",0),
             /*new PlayerBoonApplyMechanic(31324, "Time Bomb Hit", new MechanicPlotlySetting("circle-open","rgb(255,140,0)"), "Timed Bomb Hit","Got hit by Timed Bomb (Expanding circle)", "Timed Bomb Hit",0,
                 (ba, log) =>
                 {

@@ -3,45 +3,45 @@ using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.EIData
 {
-    public class BoonMapDictionary : Dictionary<long, List<AbstractBuffEvent>>
+    public class BuffMapDictionary : Dictionary<long, List<AbstractBuffEvent>>
     {
         // Constructors
-        public BoonMapDictionary()
+        public BuffMapDictionary()
         {
         }
-        public BoonMapDictionary(Boon boon)
+        public BuffMapDictionary(Buff buff)
         {
-            this[boon.ID] = new List<AbstractBuffEvent>();
+            this[buff.ID] = new List<AbstractBuffEvent>();
         }
 
-        public BoonMapDictionary(IEnumerable<Boon> boons)
+        public BuffMapDictionary(IEnumerable<Buff> buffs)
         {
-            foreach (Boon boon in boons)
+            foreach (Buff boon in buffs)
             {
                 this[boon.ID] = new List<AbstractBuffEvent>();
             }
         }
 
 
-        public void Add(IEnumerable<Boon> boons)
+        public void Add(IEnumerable<Buff> buffs)
         {
-            foreach (Boon boon in boons)
+            foreach (Buff buff in buffs)
             {
-                if (ContainsKey(boon.ID))
+                if (ContainsKey(buff.ID))
                 {
                     continue;
                 }
-                this[boon.ID] = new List<AbstractBuffEvent>();
+                this[buff.ID] = new List<AbstractBuffEvent>();
             }
         }
 
-        public void Add(Boon boon)
+        public void Add(Buff buff)
         {
-            if (ContainsKey(boon.ID))
+            if (ContainsKey(buff.ID))
             {
                 return;
             }
-            this[boon.ID] = new List<AbstractBuffEvent>();
+            this[buff.ID] = new List<AbstractBuffEvent>();
         }
 
         private int CompareApplicationType(AbstractBuffEvent x, AbstractBuffEvent y)

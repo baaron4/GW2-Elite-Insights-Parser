@@ -4,13 +4,13 @@ using LuckParser.Parser.ParsedData;
 
 namespace LuckParser.EIData
 {
-    public abstract class BoonSimulationItem : AbstractBoonSimulationItem
+    public abstract class BuffSimulationItem : AbstractBuffSimulationItem
     {
         public long Duration { get; protected set; }
         public long Start { get; protected set; }
         public long End => Start + Duration;
 
-        protected BoonSimulationItem(long start, long duration)
+        protected BuffSimulationItem(long start, long duration)
         {
             Start = start;
             Duration = duration;
@@ -28,9 +28,9 @@ namespace LuckParser.EIData
             return 0;
         }
 
-        public BoonsGraphModel.SegmentWithSources ToSegment()
+        public BuffsGraphModel.SegmentWithSources ToSegment()
         {
-            return new BoonsGraphModel.SegmentWithSources(Start, End, GetStack(), GetSources().ToArray());
+            return new BuffsGraphModel.SegmentWithSources(Start, End, GetStack(), GetSources().ToArray());
         }
 
         public abstract void SetEnd(long end);

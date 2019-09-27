@@ -4,7 +4,7 @@ using LuckParser.Parser.ParsedData;
 
 namespace LuckParser.EIData
 {
-    public class BoonDistributionItem
+    public class BuffDistributionItem
     {
         public long Value { get; set; }
         public long Overstack { get; set; }
@@ -13,7 +13,7 @@ namespace LuckParser.EIData
         public long Extension { get; set; }
         public long Extended { get; set; }
 
-        public BoonDistributionItem(long value, long overstack, long waste, long unknownExtension, long extension, long extended)
+        public BuffDistributionItem(long value, long overstack, long waste, long unknownExtension, long extension, long extended)
         {
             Value = value;
             Overstack = overstack;
@@ -24,7 +24,7 @@ namespace LuckParser.EIData
         }
     }
 
-    public class BoonDistributionDictionary : Dictionary<long, Dictionary<AgentItem, BoonDistributionItem>>
+    public class BuffDistributionDictionary : Dictionary<long, Dictionary<AgentItem, BuffDistributionItem>>
     {
         public bool HasSrc(long boonid, AgentItem src)
         {

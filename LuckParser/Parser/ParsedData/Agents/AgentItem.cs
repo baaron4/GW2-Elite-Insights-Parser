@@ -142,13 +142,13 @@ namespace LuckParser.Parser.ParsedData
         /// <returns></returns>
         public bool HasBuff(ParsedLog log, long buffId, long time)
         {
-            if (!log.Boons.BoonsByIds.ContainsKey(buffId))
+            if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
             {
                 throw new InvalidOperationException("Buff id must be simulated");
             }
             AbstractActor actor = log.FindActor(this);
-            Dictionary<long, BoonsGraphModel> bgms = actor.GetBoonGraphs(log);
-            if (bgms.TryGetValue(buffId, out BoonsGraphModel bgm))
+            Dictionary<long, BuffsGraphModel> bgms = actor.GetBoonGraphs(log);
+            if (bgms.TryGetValue(buffId, out BuffsGraphModel bgm))
             {
                 return bgm.IsPresent(time, 10);
             }

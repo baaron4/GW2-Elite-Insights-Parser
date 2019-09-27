@@ -58,7 +58,7 @@ namespace LuckParser.Logic
             new HitOnPlayerMechanic(52461, "Sea of Flame", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Qadim Hitbox","Sea of Flame (Stood in Qadim Hitbox)", "Qadim Hitbox AoE",0),
             new HitOnPlayerMechanic(52221, "Claw", new MechanicPlotlySetting("triangle-left-open","rgb(0,150,150)",10), "Claw","Claw (Reaper of Flesh attack)", "Reaper Claw",0),
             new HitOnPlayerMechanic(52281, "Swap", new MechanicPlotlySetting("circle-cross-open","rgb(170,0,170)"), "Port","Swap (Ported from below Legendary Creature to Qadim)", "Port to Qadim",0),
-            new PlayerBoonApplyMechanic(52035, "Power of the Lamp", new MechanicPlotlySetting("triangle-up","rgb(100,150,255)",10), "Lamp","Power of the Lamp (Returned from the Lamp)", "Lamp Return",0),
+            new PlayerBuffApplyMechanic(52035, "Power of the Lamp", new MechanicPlotlySetting("triangle-up","rgb(100,150,255)",10), "Lamp","Power of the Lamp (Returned from the Lamp)", "Lamp Return",0),
             });
             Extension = "qadim";
             Icon = "https://wiki.guildwars2.com/images/f/f2/Mini_Qadim.png";

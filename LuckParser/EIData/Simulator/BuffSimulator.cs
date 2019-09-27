@@ -7,10 +7,10 @@ using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.EIData
 {
-    public abstract class BoonSimulator
+    public abstract class BuffSimulator
     {
 
-        public class BoonStackItem
+        public class BuffStackItem
         {
             public long Start { get; private set; }
             public long BoonDuration { get; private set; }
@@ -20,7 +20,7 @@ namespace LuckParser.EIData
 
             public List<(AgentItem src, long value)> Extensions { get; } = new List<(AgentItem src, long value)>();
 
-            public BoonStackItem(long start, long boonDuration, AgentItem src, AgentItem seedSrc, bool isExtension)
+            public BuffStackItem(long start, long boonDuration, AgentItem src, AgentItem seedSrc, bool isExtension)
             {
                 Start = start;
                 SeedSrc = seedSrc;
@@ -29,7 +29,7 @@ namespace LuckParser.EIData
                 IsExtension = isExtension;
             }
 
-            public BoonStackItem(long start, long boonDuration, AgentItem src)
+            public BuffStackItem(long start, long boonDuration, AgentItem src)
             {
                 Start = start;
                 SeedSrc = src;
@@ -38,7 +38,7 @@ namespace LuckParser.EIData
                 IsExtension = false;
             }
 
-            public BoonStackItem(BoonStackItem other, long startShift, long durationShift)
+            public BuffStackItem(BuffStackItem other, long startShift, long durationShift)
             {
                 Start = other.Start + startShift;
                 BoonDuration = other.BoonDuration - durationShift;
@@ -73,19 +73,19 @@ namespace LuckParser.EIData
         }
 
         // Fields
-        protected List<BoonStackItem> BoonStack { get; }
-        public List<BoonSimulationItem> GenerationSimulation { get; } = new List<BoonSimulationItem>();
-        public List<BoonSimulationItemOverstack> OverstackSimulationResult { get; } = new List<BoonSimulationItemOverstack>();
-        public List<BoonSimulationItemWasted> WasteSimulationResult { get; } = new List<BoonSimulationItemWasted>();
+        protected List<BuffStackItem> BoonStack { get; }
+        public List<BuffSimulationItem> GenerationSimulation { get; } = new List<BuffSimulationItem>();
+        public List<BuffSimulationItemOverstack> OverstackSimulationResult { get; } = new List<BuffSimulationItemOverstack>();
+        public List<BuffSimulationItemWasted> WasteSimulationResult { get; } = new List<BuffSimulationItemWasted>();
         protected int Capacity { get; }
         private readonly ParsedLog _log;
         private readonly StackingLogic _logic;
 
         // Constructor
-        protected BoonSimulator(int capacity, ParsedLog log, StackingLogic logic)
+        protected BuffSimulator(int capacity, ParsedLog log, StackingLogic logic)
         {
             Capacity = capacity;
-            BoonStack = new List<BoonStackItem>(capacity);
+            BoonStack = new List<BuffStackItem>(capacity);
             _log = log;
             _logic = logic;
         }
@@ -100,7 +100,7 @@ namespace LuckParser.EIData
         {
             for (int i = GenerationSimulation.Count - 1; i >= 0; i--)
             {
-                BoonSimulationItem data = GenerationSimulation[i];
+                BuffSimulationItem data = GenerationSimulation[i];
                 if (data.End > fightDuration)
                 {
                     data.SetEnd(fightDuration);
@@ -138,7 +138,7 @@ namespace LuckParser.EIData
 
         public void Add(long boonDuration, AgentItem src, long start)
         {
-            var toAdd = new BoonStackItem(start, boonDuration, src);
+            var toAdd = new BuffStackItem(start, boonDuration, src);
             // Find empty slot
             if (BoonStack.Count < Capacity)
             {
@@ -151,14 +151,14 @@ namespace LuckParser.EIData
                 bool found = _logic.StackEffect(_log, toAdd, BoonStack, WasteSimulationResult);
                 if (!found)
                 {
-                    OverstackSimulationResult.Add(new BoonSimulationItemOverstack(src, boonDuration, start));
+                    OverstackSimulationResult.Add(new BuffSimulationItemOverstack(src, boonDuration, start));
                 }
             }
         }
 
         protected void Add(long boonDuration, AgentItem srcinstid, AgentItem seedSrc, long start, bool atFirst, bool isExtension)
         {
-            var toAdd = new BoonStackItem(start, boonDuration, srcinstid, seedSrc, isExtension);
+            var toAdd = new BuffStackItem(start, boonDuration, srcinstid, seedSrc, isExtension);
             // Find empty slot
             if (BoonStack.Count < Capacity)
             {
@@ -179,7 +179,7 @@ namespace LuckParser.EIData
                 bool found = _logic.StackEffect(_log, toAdd, BoonStack, WasteSimulationResult);
                 if (!found)
                 {
-                    OverstackSimulationResult.Add(new BoonSimulationItemOverstack(srcinstid, boonDuration, start));
+                    OverstackSimulationResult.Add(new BuffSimulationItemOverstack(srcinstid, boonDuration, start));
                 }
             }
         }
@@ -188,7 +188,7 @@ namespace LuckParser.EIData
         {
             if (GenerationSimulation.Count > 0)
             {
-                BoonSimulationItem last = GenerationSimulation.Last();
+                BuffSimulationItem last = GenerationSimulation.Last();
                 if (last.End > start)
                 {
                     last.SetEnd(start);
@@ -197,14 +197,14 @@ namespace LuckParser.EIData
             switch (removeType)
             {
                 case ParseEnum.BuffRemove.All:
-                    foreach (BoonStackItem stackItem in BoonStack)
+                    foreach (BuffStackItem stackItem in BoonStack)
                     {
-                        WasteSimulationResult.Add(new BoonSimulationItemWasted(stackItem.Src, stackItem.BoonDuration, start));
+                        WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.BoonDuration, start));
                         if (stackItem.Extensions.Count > 0)
                         {
                             foreach ((AgentItem src, long value) in stackItem.Extensions)
                             {
-                                WasteSimulationResult.Add(new BoonSimulationItemWasted(src, value, start));
+                                WasteSimulationResult.Add(new BuffSimulationItemWasted(src, value, start));
                             }
                         }
                     }
@@ -213,15 +213,15 @@ namespace LuckParser.EIData
                 case ParseEnum.BuffRemove.Single:
                     for (int i = 0; i < BoonStack.Count; i++)
                     {
-                        BoonStackItem stackItem = BoonStack[i];
+                        BuffStackItem stackItem = BoonStack[i];
                         if (Math.Abs(boonDuration - stackItem.TotalBoonDuration()) < 10)
                         {
-                            WasteSimulationResult.Add(new BoonSimulationItemWasted(stackItem.Src, stackItem.BoonDuration, start));
+                            WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.BoonDuration, start));
                             if (stackItem.Extensions.Count > 0)
                             {
                                 foreach ((AgentItem src, long value) in stackItem.Extensions)
                                 {
-                                    WasteSimulationResult.Add(new BoonSimulationItemWasted(src, value, start));
+                                    WasteSimulationResult.Add(new BuffSimulationItemWasted(src, value, start));
                                 }
                             }
                             BoonStack.RemoveAt(i);

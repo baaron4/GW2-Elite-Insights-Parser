@@ -21,9 +21,9 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
 
         public override bool IsCondi(ParsedLog log)
         {
-            if (_isCondi == -1 && log.Boons.BoonsByIds.TryGetValue(SkillId, out Boon b))
+            if (_isCondi == -1 && log.Buffs.BuffsByIds.TryGetValue(SkillId, out Buff b))
             {
-                _isCondi = b.Nature == Boon.BoonNature.Condition ? 1 : 0;
+                _isCondi = b.Nature == Buff.BuffNature.Condition ? 1 : 0;
             }
             return _isCondi == 1;
         }

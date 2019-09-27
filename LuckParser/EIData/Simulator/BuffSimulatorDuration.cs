@@ -4,11 +4,11 @@ using LuckParser.Parser.ParsedData;
 
 namespace LuckParser.EIData
 {
-    public class BoonSimulatorDuration : BoonSimulator
+    public class BuffSimulatorDuration : BuffSimulator
     {
         private (AgentItem agent, bool extension) _lastSrcRemove = (GeneralHelper.UnknownAgent, false);
         // Constructor
-        public BoonSimulatorDuration(int capacity, ParsedLog log, StackingLogic logic) : base(capacity, log, logic)
+        public BuffSimulatorDuration(int capacity, ParsedLog log, StackingLogic logic) : base(capacity, log, logic)
         {
         }
 
@@ -34,10 +34,10 @@ namespace LuckParser.EIData
                 {
                     _lastSrcRemove = (GeneralHelper.UnknownAgent, false);
                 }
-                var toAdd = new BoonSimulationItemDuration(BoonStack[0]);
+                var toAdd = new BuffSimulationItemDuration(BoonStack[0]);
                 if (GenerationSimulation.Count > 0)
                 {
-                    BoonSimulationItem last = GenerationSimulation.Last();
+                    BuffSimulationItem last = GenerationSimulation.Last();
                     if (last.End > toAdd.Start)
                     {
                         last.SetEnd(toAdd.Start);
@@ -56,10 +56,10 @@ namespace LuckParser.EIData
                 {
                     diff = timePassed;
                 }
-                BoonStack[0] = new BoonStackItem(BoonStack[0], diff, diff);
+                BoonStack[0] = new BuffStackItem(BoonStack[0], diff, diff);
                 for (int i = 1; i < BoonStack.Count; i++)
                 {
-                    BoonStack[i] = new BoonStackItem(BoonStack[i], diff, 0);
+                    BoonStack[i] = new BuffStackItem(BoonStack[i], diff, 0);
                 }
                 if (BoonStack[0].BoonDuration == 0)
                 {

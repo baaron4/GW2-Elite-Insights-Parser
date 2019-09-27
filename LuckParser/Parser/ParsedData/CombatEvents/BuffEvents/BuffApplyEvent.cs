@@ -32,7 +32,7 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
         {
         }
 
-        public override void UpdateSimulator(BoonSimulator simulator)
+        public override void UpdateSimulator(BuffSimulator simulator)
         {
             simulator.Add(AppliedDuration, By, Time);
         }

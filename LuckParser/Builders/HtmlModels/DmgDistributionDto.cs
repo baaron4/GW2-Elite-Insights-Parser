@@ -13,7 +13,7 @@ namespace LuckParser.Builders.HtmlModels
         public long TotalDamage { get; set; }
         public List<object[]> Distribution { get; set; }
 
-        public static object[] GetDMGDtoItem(KeyValuePair<SkillItem, List<AbstractDamageEvent>> entry, Dictionary<SkillItem, List<AbstractCastEvent>> castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons, BoonsContainer boons)
+        public static object[] GetDMGDtoItem(KeyValuePair<SkillItem, List<AbstractDamageEvent>> entry, Dictionary<SkillItem, List<AbstractCastEvent>> castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons)
         {
             int totaldamage = 0,
                     mindamage = int.MaxValue,
@@ -53,14 +53,14 @@ namespace LuckParser.Builders.HtmlModels
             {
                 if (!usedBoons.ContainsKey(entry.Key.ID))
                 {
-                    if (boons.BoonsByIds.TryGetValue(entry.Key.ID, out Boon buff))
+                    if (boons.BuffsByIds.TryGetValue(entry.Key.ID, out Buff buff))
                     {
                         usedBoons.Add(buff.ID, buff);
                     }
                     else
                     {
                         SkillItem aux = entry.Key;
-                        var auxBoon = new Boon(aux.Name, entry.Key.ID, aux.Icon);
+                        var auxBoon = new Buff(aux.Name, entry.Key.ID, aux.Icon);
                         usedBoons.Add(auxBoon.ID, auxBoon);
                     }
                 }

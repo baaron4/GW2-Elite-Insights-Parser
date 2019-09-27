@@ -19,11 +19,11 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
         {
             if (By == null)
             {
-                By = log.Boons.TryFindSrc(To, Time, AppliedDuration, log, BuffID);
+                By = log.Buffs.TryFindSrc(To, Time, AppliedDuration, log, BuffID);
             }
         }
 
-        public override void UpdateSimulator(BoonSimulator simulator)
+        public override void UpdateSimulator(BuffSimulator simulator)
         {
             simulator.Extend(AppliedDuration, _oldValue, By, Time);
         }

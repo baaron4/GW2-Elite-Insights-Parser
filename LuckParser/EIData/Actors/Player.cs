@@ -6,7 +6,7 @@ using LuckParser.Logic;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using static LuckParser.EIData.Boon;
+using static LuckParser.EIData.Buff;
 using static LuckParser.Models.Statistics;
 
 namespace LuckParser.EIData
@@ -60,7 +60,7 @@ namespace LuckParser.EIData
         public long[] GetCleansesNotSelf(ParsedLog log, PhaseData phase)
         {
             long[] cleanse = { 0, 0 };
-            foreach (long id in log.Boons.BoonsByNature[Boon.BoonNature.Condition].Select(x => x.ID))
+            foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Condition].Select(x => x.ID))
             {
                 var bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && log.PlayerAgents.Contains(x.To) && x.To != AgentItem).Select(x => x as BuffRemoveAllEvent).ToList();
                 cleanse[0] += bevts.Count;
@@ -71,7 +71,7 @@ namespace LuckParser.EIData
         public long[] GetCleansesSelf(ParsedLog log, PhaseData phase)
         {
             long[] cleanse = { 0, 0 };
-            foreach (long id in log.Boons.BoonsByNature[Boon.BoonNature.Condition].Select(x => x.ID))
+            foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Condition].Select(x => x.ID))
             {
                 var bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && x.To == AgentItem).Select(x => x as BuffRemoveAllEvent).ToList();
                 cleanse[0] += bevts.Count;
@@ -83,7 +83,7 @@ namespace LuckParser.EIData
         public long[] GetBoonStrips(ParsedLog log, PhaseData phase)
         {
             long[] strips = { 0, 0 };
-            foreach (long id in log.Boons.BoonsByNature[Boon.BoonNature.Boon].Select(x => x.ID))
+            foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Boon].Select(x => x.ID))
             {
                 var bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && !log.PlayerAgents.Contains(x.To) && !log.PlayerAgents.Contains(x.To.Master)).Select(x => x as BuffRemoveAllEvent).ToList();
                 strips[0] += bevts.Count;
@@ -338,7 +338,7 @@ namespace LuckParser.EIData
                 final.TimeWasted = Math.Round(final.TimeWasted / 1000.0, GeneralHelper.TimeDigit);
 
                 double avgBoons = 0;
-                foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => log.Boons.BoonsByIds[x.Key].Nature == Boon.BoonNature.Boon).Select(x => x.Value))
+                foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == Buff.BuffNature.Boon).Select(x => x.Value))
                 {
                     avgBoons += duration;
                 }
@@ -347,7 +347,7 @@ namespace LuckParser.EIData
                 final.AvgActiveBoons = activeDuration > 0 ? Math.Round(avgBoons / activeDuration, GeneralHelper.BoonDigit) : 0.0;
 
                 double avgCondis = 0;
-                foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => log.Boons.BoonsByIds[x.Key].Nature == Boon.BoonNature.Condition).Select(x => x.Value))
+                foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == Buff.BuffNature.Condition).Select(x => x.Value))
                 {
                     avgCondis += duration;
                 }
@@ -582,20 +582,20 @@ namespace LuckParser.EIData
                 PhaseData phase = phases[phaseIndex];
                 long phaseDuration = phase.DurationInMS;
 
-                var boonDistributions = new Dictionary<Player, BoonDistributionDictionary>();
+                var boonDistributions = new Dictionary<Player, BuffDistributionDictionary>();
                 foreach (Player p in playerList)
                 {
                     boonDistributions[p] = p.GetBoonDistribution(log, phaseIndex);
                 }
 
-                var boonsToTrack = new HashSet<Boon>(boonDistributions.SelectMany(x => x.Value).Select(x => log.Boons.BoonsByIds[x.Key]));
+                var boonsToTrack = new HashSet<Buff>(boonDistributions.SelectMany(x => x.Value).Select(x => log.Buffs.BuffsByIds[x.Key]));
 
                 var final =
                     new Dictionary<long, FinalBuffs>();
                 var finalActive =
                     new Dictionary<long, FinalBuffs>();
 
-                foreach (Boon boon in boonsToTrack)
+                foreach (Buff boon in boonsToTrack)
                 {
                     double totalGeneration = 0;
                     double totalOverstack = 0;
@@ -612,9 +612,9 @@ namespace LuckParser.EIData
                     double totalActiveExtended = 0;
                     bool hasGeneration = false;
                     int activePlayerCount = 0;
-                    foreach (KeyValuePair<Player, BoonDistributionDictionary> pair in boonDistributions)
+                    foreach (KeyValuePair<Player, BuffDistributionDictionary> pair in boonDistributions)
                     {
-                        BoonDistributionDictionary boons = pair.Value;
+                        BuffDistributionDictionary boons = pair.Value;
                         long playerActiveDuration = phase.GetPlayerActiveDuration(pair.Key, log);
                         if (boons.ContainsKey(boon.ID))
                         {
@@ -657,7 +657,7 @@ namespace LuckParser.EIData
                         var uptimeActive = new FinalBuffs();
                         final[boon.ID] = uptime;
                         finalActive[boon.ID] = uptimeActive;
-                        if (boon.Type == Boon.BoonType.Duration)
+                        if (boon.Type == Buff.BuffType.Duration)
                         {
                             uptime.Generation = Math.Round(100.0 * totalGeneration / playerList.Count, GeneralHelper.BoonDigit);
                             uptime.Overstack = Math.Round(100.0 * (totalOverstack + totalGeneration) / playerList.Count, GeneralHelper.BoonDigit);
@@ -676,7 +676,7 @@ namespace LuckParser.EIData
                                 uptimeActive.Extended = Math.Round(100.0 * (totalActiveExtended) / activePlayerCount, GeneralHelper.BoonDigit);
                             }
                         }
-                        else if (boon.Type == Boon.BoonType.Intensity)
+                        else if (boon.Type == Buff.BuffType.Intensity)
                         {
                             uptime.Generation = Math.Round(totalGeneration / playerList.Count, GeneralHelper.BoonDigit);
                             uptime.Overstack = Math.Round((totalOverstack + totalGeneration) / playerList.Count, GeneralHelper.BoonDigit);
@@ -718,12 +718,12 @@ namespace LuckParser.EIData
 
                 PhaseData phase = phases[phaseIndex];
 
-                BoonDistributionDictionary selfBoons = GetBoonDistribution(log, phaseIndex);
+                BuffDistributionDictionary selfBoons = GetBoonDistribution(log, phaseIndex);
                 Dictionary<long, long> buffPresence = GetBuffPresence(log, phaseIndex);
 
                 long phaseDuration = phase.DurationInMS;
                 long playerActiveDuration = phase.GetPlayerActiveDuration(this, log);
-                foreach (Boon boon in TrackedBoons)
+                foreach (Buff boon in TrackedBoons)
                 {
                     if (selfBoons.ContainsKey(boon.ID))
                     {
@@ -756,7 +756,7 @@ namespace LuckParser.EIData
                         double unknownExtensionValue = selfBoons.GetUnknownExtension(boon.ID, AgentItem);
                         double extensionValue = selfBoons.GetExtension(boon.ID, AgentItem);
                         double extendedValue = selfBoons.GetExtended(boon.ID, AgentItem);
-                        if (boon.Type == Boon.BoonType.Duration)
+                        if (boon.Type == Buff.BuffType.Duration)
                         {
                             uptime.Uptime = Math.Round(100.0 * uptimeValue / phaseDuration, GeneralHelper.BoonDigit);
                             uptime.Generation = Math.Round(100.0 * generationValue / phaseDuration, GeneralHelper.BoonDigit);
@@ -777,7 +777,7 @@ namespace LuckParser.EIData
                                 uptimeActive.Extended = Math.Round(100.0 * extendedValue / playerActiveDuration, GeneralHelper.BoonDigit);
                             }
                         }
-                        else if (boon.Type == Boon.BoonType.Intensity)
+                        else if (boon.Type == Buff.BuffType.Intensity)
                         {
                             uptime.Uptime = Math.Round(uptimeValue / phaseDuration, GeneralHelper.BoonDigit);
                             uptime.Generation = Math.Round(generationValue / phaseDuration, GeneralHelper.BoonDigit);
@@ -1062,10 +1062,10 @@ namespace LuckParser.EIData
 
         private void SetConsumablesList(ParsedLog log)
         {
-            List<Boon> consumableList = log.Boons.BoonsByNature[BoonNature.Consumable];
+            List<Buff> consumableList = log.Buffs.BuffsByNature[BuffNature.Consumable];
             _consumeList = new List<Consumable>();
             long fightDuration = log.FightData.FightDuration;
-            foreach (Boon consumable in consumableList)
+            foreach (Buff consumable in consumableList)
             {
                 foreach (AbstractBuffEvent c in log.CombatData.GetBoonData(consumable.ID))
                 {

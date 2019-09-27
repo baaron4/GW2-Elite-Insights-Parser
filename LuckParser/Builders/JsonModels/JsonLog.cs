@@ -40,11 +40,11 @@ namespace LuckParser.Builders.JsonModels
         /// </summary>
         public class BuffDesc
         {
-            public BuffDesc(Boon item)
+            public BuffDesc(Buff item)
             {
                 Name = item.Name;
                 Icon = item.Link;
-                Stacking = item.Type == Boon.BoonType.Intensity;
+                Stacking = item.Type == Buff.BuffType.Intensity;
             }
 
             /// <summary>

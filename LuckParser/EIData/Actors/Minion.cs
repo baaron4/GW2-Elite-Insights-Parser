@@ -15,11 +15,11 @@ namespace LuckParser.EIData
             AddDamageLogs(log.CombatData.GetDamageData(AgentItem));
         }
 
-        protected override void SetBoonStatusCleanseWasteData(ParsedLog log, BoonSimulator simulator, long boonid, bool updateCondiPresence)
+        protected override void SetBoonStatusCleanseWasteData(ParsedLog log, BuffSimulator simulator, long boonid, bool updateCondiPresence)
         {
         }
 
-        protected override void SetBoonStatusGenerationData(ParsedLog log, BoonSimulationItem simul, long boonid)
+        protected override void SetBoonStatusGenerationData(ParsedLog log, BuffSimulationItem simul, long boonid)
         {
         }
 

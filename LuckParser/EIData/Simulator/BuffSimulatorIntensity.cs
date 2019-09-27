@@ -6,11 +6,11 @@ using LuckParser.Parser.ParsedData;
 
 namespace LuckParser.EIData
 {
-    public class BoonSimulatorIntensity : BoonSimulator
+    public class BuffSimulatorIntensity : BuffSimulator
     {
         private readonly List<(AgentItem agent, bool extension)> _lastSrcRemoves = new List<(AgentItem agent, bool extension)>();
         // Constructor
-        public BoonSimulatorIntensity(int capacity, ParsedLog log, StackingLogic logic) : base(capacity, log, logic)
+        public BuffSimulatorIntensity(int capacity, ParsedLog log, StackingLogic logic) : base(capacity, log, logic)
         {
         }
 
@@ -18,7 +18,7 @@ namespace LuckParser.EIData
         {
             if ((BoonStack.Count > 0 && oldValue > 0) || BoonStack.Count == Capacity)
             {
-                BoonStackItem minItem = BoonStack.MinBy(x => Math.Abs(x.TotalBoonDuration() - oldValue));
+                BuffStackItem minItem = BoonStack.MinBy(x => Math.Abs(x.TotalBoonDuration() - oldValue));
                 if (minItem != null)
                 {
                     minItem.Extend(extension, src);
@@ -48,10 +48,10 @@ namespace LuckParser.EIData
                 {
                     _lastSrcRemoves.Clear();
                 }
-                var toAdd = new BoonSimulationItemIntensity(BoonStack);
+                var toAdd = new BuffSimulationItemIntensity(BoonStack);
                 if (GenerationSimulation.Count > 0)
                 {
-                    BoonSimulationItem last = GenerationSimulation.Last();
+                    BuffSimulationItem last = GenerationSimulation.Last();
                     if (last.End > toAdd.Start)
                     {
                         last.SetEnd(toAdd.Start);
@@ -63,7 +63,7 @@ namespace LuckParser.EIData
                 // Subtract from each
                 for (int i = BoonStack.Count - 1; i >= 0; i--)
                 {
-                    var item = new BoonStackItem(BoonStack[i], diff, diff);
+                    var item = new BuffStackItem(BoonStack[i], diff, diff);
                     BoonStack[i] = item;
                     if (item.BoonDuration == 0)
                     {
