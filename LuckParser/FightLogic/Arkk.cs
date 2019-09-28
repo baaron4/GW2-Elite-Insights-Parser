@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using LuckParser.EIData;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
+using LuckParser.Parser.ParsedData.CombatEvents;
 using static LuckParser.Parser.ParseEnum.TrashIDS;
 
 namespace LuckParser.Logic
@@ -84,7 +86,22 @@ namespace LuckParser.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByBuffCount(combatData, fightData, playerAgents, Targets.Find(x => x.ID == TriggerID), 762, 10);
+            Target target = Targets.Find(x => x.ID == TriggerID);
+            SetSuccessByBuffCount(combatData, fightData, playerAgents, target, 762, 10);
+            // missing buff apply events fallback, some phases will be missing
+            // removes should be present
+            if (!fightData.Success)
+            {
+                if (target == null)
+                {
+                    return;
+                }
+                var invulsRemoveTarget = combatData.GetBoonData(762).OfType<BuffRemoveAllEvent>().Where(x => x.To == target.AgentItem).ToList();
+                if (invulsRemoveTarget.Count == 5)
+                {
+                    SetSuccessByCombatExit(new List<Target> { target }, combatData, fightData, playerAgents);
+                }
+            }
         }
     }
 }
