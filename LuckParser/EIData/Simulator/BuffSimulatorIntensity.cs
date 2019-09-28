@@ -42,12 +42,9 @@ namespace LuckParser.EIData
 
         protected override void Update(long timePassed)
         {
-            if (BuffStack.Count > 0)
+            if (BuffStack.Count > 0 && timePassed > 0)
             {
-                if (timePassed > 0)
-                {
-                    _lastSrcRemoves.Clear();
-                }
+                _lastSrcRemoves.Clear();
                 var toAdd = new BuffSimulationItemIntensity(BuffStack);
                 GenerationSimulation.Add(toAdd);
                 long diff = Math.Min(BuffStack.Min(x => x.Duration), timePassed);
@@ -66,10 +63,7 @@ namespace LuckParser.EIData
                     }
                 }
                 BuffStack.RemoveAll(x => x.Duration == 0);
-                if (leftOver > 0)
-                {
-                    Update(leftOver);
-                }
+                Update(leftOver);
             }
         }
     }
