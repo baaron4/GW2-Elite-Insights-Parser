@@ -182,14 +182,6 @@ namespace LuckParser.EIData
 
         public void Remove(long duration, long time, ParseEnum.BuffRemove removeType)
         {
-            if (GenerationSimulation.Count > 0)
-            {
-                BuffSimulationItem last = GenerationSimulation.Last();
-                if (last.End > time)
-                {
-                    last.OverrideEnd(time);
-                }
-            }
             switch (removeType)
             {
                 case ParseEnum.BuffRemove.All:
