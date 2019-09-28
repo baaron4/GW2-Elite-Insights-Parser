@@ -18,7 +18,30 @@ namespace LuckParser.Logic
             new PlayerBuffApplyMechanic(34925, "Fixate", new MechanicPlotlySetting("star","rgb(255,0,255)"), "Fixate","Fixated by Statue", "Fixated",0),
             new HitOnPlayerMechanic(35077, "Hail of Fury", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Debris","Hail of Fury (Falling Debris)", "Debris",0),
             new EnemyBuffApplyMechanic(35096, "Compromised", new MechanicPlotlySetting("hexagon","rgb(0,0,255)"), "Rift#","Compromised (Pushed Orb through Rifts)", "Compromised",0),
-            new EnemyBuffApplyMechanic(35119, "Magic Blast", new MechanicPlotlySetting("star","rgb(0,255,255)"), "M.B.#","Magic Blast (Orbs eaten by KC)", "Magic Blast",0),
+            new EnemyBuffApplyMechanic(35119, "Magic Blast", new MechanicPlotlySetting("star","rgb(0,255,255)"), "M.B.# 33%","Magic Blast (Orbs eaten by KC) at 33%", "Magic Blast 33%",0, (de, log) => {
+                var phases = log.FightData.GetPhases(log).Where(x => x.Name.Contains("%")).ToList();
+                if (phases.Count < 2)
+                {
+                    // no 33% magic blast
+                    return false;
+                }
+                return de.Time >= phases[1].End;
+            }),
+            new EnemyBuffApplyMechanic(35119, "Magic Blast", new MechanicPlotlySetting("star","rgb(0,255,255)"), "M.B.# 66%","Magic Blast (Orbs eaten by KC) at 66%", "Magic Blast 66%",0, (de, log) => {
+                var phases = log.FightData.GetPhases(log).Where(x => x.Name.Contains("%")).ToList();
+                if (phases.Count < 1)
+                {
+                    // no 66% magic blast
+                    return false;
+                }
+                var condition = de.Time >= phases[0].End;
+                if (phases.Count > 1)
+                {
+                    // must be before 66%-33% phase if it exists
+                    condition = condition && de.Time <= phases[1].Start;
+                }
+                return condition;
+            }),
             new SpawnMechanic(16227, "Insidious Projection", new MechanicPlotlySetting("bowtie","rgb(255,0,0)"), "Merge","Insidious Projection spawn (2 Statue merge)", "Merged Statues",0),
             new HitOnPlayerMechanic(35137, "Phantasmal Blades", new MechanicPlotlySetting("hexagram-open","rgb(255,0,255)"), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
             new HitOnPlayerMechanic(34971, "Phantasmal Blades", new MechanicPlotlySetting("hexagram-open","rgb(255,0,255)"), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
