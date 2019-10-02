@@ -29,9 +29,6 @@
 
         public AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem.LogTime, offset)
         {
-#if DEBUG
-            OriginalCombatEvent = evtcItem;
-#endif
             From = agentData.GetAgent(evtcItem.SrcAgent);
             To = agentData.GetAgent(evtcItem.DstAgent);
             Skill = skillData.Get(evtcItem.SkillID);

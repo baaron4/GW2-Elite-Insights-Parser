@@ -13,9 +13,6 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
 
         public AbstractBuffEvent(CombatItem evtcItem, SkillData skillData, long offset) : base(evtcItem.LogTime, offset)
         {
-#if DEBUG
-            OriginalCombatEvent = evtcItem;
-#endif
             BuffSkill = skillData.Get(evtcItem.SkillID);
         }
 

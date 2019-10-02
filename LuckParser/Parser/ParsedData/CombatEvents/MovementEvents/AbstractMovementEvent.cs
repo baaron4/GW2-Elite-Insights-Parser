@@ -14,9 +14,6 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
             AgentItem = agentData.GetAgent(evtcItem.SrcAgent);
             _dstAgent = evtcItem.DstAgent;
             _value = evtcItem.Value;
-#if DEBUG
-            OriginalCombatEvent = evtcItem;
-#endif
         }
 
         public (float x, float y, float z) Unpack()
