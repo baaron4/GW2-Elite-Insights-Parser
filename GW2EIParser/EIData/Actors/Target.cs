@@ -135,7 +135,7 @@ namespace GW2EIParser.EIData
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
-                BuffDistributionDictionary boonDistribution = GetBoonDistribution(log, phaseIndex);
+                BuffDistribution boonDistribution = GetBoonDistribution(log, phaseIndex);
                 var rates = new Dictionary<long, FinalTargetBuffs>();
                 _buffs.Add(rates);
                 Dictionary<long, long> buffPresence = GetBuffPresence(log, phaseIndex);

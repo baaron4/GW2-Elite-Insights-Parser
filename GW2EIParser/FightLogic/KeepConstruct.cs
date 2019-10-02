@@ -115,7 +115,7 @@ namespace GW2EIParser.Logic
             // Get number of orbs and filter the list
             start = 0;
             int orbCount = 0;
-            var segments = new List<BuffsGraphModel.Segment>();
+            var segments = new List<BuffSegment>();
             foreach (AbstractBuffEvent c in orbItems)
             {
                 if (c is BuffApplyEvent)
@@ -128,13 +128,13 @@ namespace GW2EIParser.Logic
                 }
                 else if (start != 0)
                 {
-                    segments.Add(new BuffsGraphModel.Segment(start, Math.Min(c.Time, fightDuration), orbCount));
+                    segments.Add(new BuffSegment(start, Math.Min(c.Time, fightDuration), orbCount));
                     orbCount = 0;
                     start = 0;
                 }
             }
             int burnCount = 1;
-            foreach (BuffsGraphModel.Segment seg in segments)
+            foreach (BuffSegment seg in segments)
             {
                 var phase = new PhaseData(seg.Start, seg.End)
                 {

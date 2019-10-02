@@ -38,7 +38,7 @@ namespace GW2EIParser.EIData
             return _stacks.Count;
         }
 
-        public override void SetBoonDistributionItem(BuffDistributionDictionary distribs, long start, long end, long boonid, ParsedLog log)
+        public override void SetBoonDistributionItem(BuffDistribution distribs, long start, long end, long boonid, ParsedLog log)
         {
             foreach (BuffSimulationItemDuration item in _stacks)
             {

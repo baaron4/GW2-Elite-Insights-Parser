@@ -11,7 +11,7 @@ namespace GW2EIParser.EIData
     {
         public bool IsFakeActor { get; protected set; }
         // Boons
-        private readonly List<BuffDistributionDictionary> _boonDistribution = new List<BuffDistributionDictionary>();
+        private readonly List<BuffDistribution> _boonDistribution = new List<BuffDistribution>();
         private readonly List<Dictionary<long, long>> _buffPresence = new List<Dictionary<long, long>>();
         // damage list
         private readonly Dictionary<int, List<int>> _damageList1S = new Dictionary<int, List<int>>();
@@ -86,7 +86,7 @@ namespace GW2EIParser.EIData
             return dmgList;
         }
 
-        public BuffDistributionDictionary GetBoonDistribution(ParsedLog log, int phaseIndex)
+        public BuffDistribution GetBoonDistribution(ParsedLog log, int phaseIndex)
         {
             if (BoonPoints == null)
             {
@@ -287,7 +287,7 @@ namespace GW2EIParser.EIData
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int i = 0; i < phases.Count; i++)
             {
-                _boonDistribution.Add(new BuffDistributionDictionary());
+                _boonDistribution.Add(new BuffDistribution());
                 _buffPresence.Add(new Dictionary<long, long>());
             }
         }

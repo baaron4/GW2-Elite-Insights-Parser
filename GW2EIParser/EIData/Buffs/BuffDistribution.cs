@@ -24,7 +24,7 @@ namespace GW2EIParser.EIData
         }
     }
 
-    public class BuffDistributionDictionary : Dictionary<long, Dictionary<AgentItem, BuffDistributionItem>>
+    public class BuffDistribution : Dictionary<long, Dictionary<AgentItem, BuffDistributionItem>>
     {
         public bool HasSrc(long boonid, AgentItem src)
         {

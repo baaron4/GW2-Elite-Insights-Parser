@@ -10,7 +10,7 @@ namespace GW2EIParser.EIData
         {
         }
 
-        public override void SetBoonDistributionItem(BuffDistributionDictionary distribs, long start, long end, long boonid, ParsedLog log)
+        public override void SetBoonDistributionItem(BuffDistribution distribs, long start, long end, long boonid, ParsedLog log)
         {
             Dictionary<AgentItem, BuffDistributionItem> distrib = GetDistrib(distribs, boonid);
             AgentItem agent = Src;

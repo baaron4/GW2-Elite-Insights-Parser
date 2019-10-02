@@ -581,7 +581,7 @@ namespace GW2EIParser.EIData
                 PhaseData phase = phases[phaseIndex];
                 long phaseDuration = phase.DurationInMS;
 
-                var boonDistributions = new Dictionary<Player, BuffDistributionDictionary>();
+                var boonDistributions = new Dictionary<Player, BuffDistribution>();
                 foreach (Player p in playerList)
                 {
                     boonDistributions[p] = p.GetBoonDistribution(log, phaseIndex);
@@ -611,9 +611,9 @@ namespace GW2EIParser.EIData
                     double totalActiveExtended = 0;
                     bool hasGeneration = false;
                     int activePlayerCount = 0;
-                    foreach (KeyValuePair<Player, BuffDistributionDictionary> pair in boonDistributions)
+                    foreach (KeyValuePair<Player, BuffDistribution> pair in boonDistributions)
                     {
-                        BuffDistributionDictionary boons = pair.Value;
+                        BuffDistribution boons = pair.Value;
                         long playerActiveDuration = phase.GetPlayerActiveDuration(pair.Key, log);
                         if (boons.ContainsKey(boon.ID))
                         {
@@ -717,7 +717,7 @@ namespace GW2EIParser.EIData
 
                 PhaseData phase = phases[phaseIndex];
 
-                BuffDistributionDictionary selfBoons = GetBoonDistribution(log, phaseIndex);
+                BuffDistribution selfBoons = GetBoonDistribution(log, phaseIndex);
                 Dictionary<long, long> buffPresence = GetBuffPresence(log, phaseIndex);
 
                 long phaseDuration = phase.DurationInMS;

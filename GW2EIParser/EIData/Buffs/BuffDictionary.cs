@@ -3,18 +3,18 @@ using GW2EIParser.Parser.ParsedData.CombatEvents;
 
 namespace GW2EIParser.EIData
 {
-    public class BuffMapDictionary : Dictionary<long, List<AbstractBuffEvent>>
+    public class BuffDictionary : Dictionary<long, List<AbstractBuffEvent>>
     {
         // Constructors
-        public BuffMapDictionary()
+        public BuffDictionary()
         {
         }
-        public BuffMapDictionary(Buff buff)
+        public BuffDictionary(Buff buff)
         {
             this[buff.ID] = new List<AbstractBuffEvent>();
         }
 
-        public BuffMapDictionary(IEnumerable<Buff> buffs)
+        public BuffDictionary(IEnumerable<Buff> buffs)
         {
             foreach (Buff boon in buffs)
             {
