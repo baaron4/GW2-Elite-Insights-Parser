@@ -429,7 +429,33 @@ namespace LuckParser.Parser
             }
             return true;
         }
+        private static void UpdateAgentData(AgentItem ag, long logTime, ushort instid, bool canSetInstid)
+        {
+            if (ag.InstID == 0)
+            {
+                ag.InstID = canSetInstid ? instid : (ushort)0;
+            }
+            if (ag.FirstAwareLogTime == 0)
+            {
+                ag.FirstAwareLogTime = logTime;
+            }
+            ag.LastAwareLogTime = logTime;
+        }
 
+        private static void FindAgentMaster(long logTime, ushort masterInstid, ulong minionAgent, Dictionary<ulong, AgentItem> agLUT, List<AgentItem> allAgs)
+        {
+            AgentItem master = allAgs.Find(x => x.InstID == masterInstid && x.FirstAwareLogTime <= logTime && logTime <= x.LastAwareLogTime);
+            if (master != null)
+            {
+                if (agLUT.TryGetValue(minionAgent, out AgentItem minion))
+                {
+                    if (minion.FirstAwareLogTime <= logTime && logTime <= minion.LastAwareLogTime)
+                    {
+                        minion.Master = master;
+                    }
+                }
+            }
+        }
         private void CompleteAgents()
         {
             var agentsLookup = _allAgentsList.ToDictionary(x => x.Agent);
@@ -438,38 +464,16 @@ namespace LuckParser.Parser
             {
                 if (agentsLookup.TryGetValue(c.SrcAgent, out AgentItem agent))
                 {
-                    if (agent.InstID == 0)
-                    {
-                        agent.InstID = c.IsStateChange == ParseEnum.StateChange.None ? c.SrcInstid : (ushort)0;
-                        if (agent.FirstAwareLogTime == 0)
-                        {
-                            agent.FirstAwareLogTime = c.LogTime;
-                        }
-                        agent.LastAwareLogTime = c.LogTime;
-                    }
-                    else if (agent.InstID == c.SrcInstid)
-                    {
-                        agent.LastAwareLogTime = c.LogTime;
-                    }
+                    UpdateAgentData(agent, c.LogTime, c.SrcInstid, c.IsStateChange == ParseEnum.StateChange.None);
+                }
+                if (agentsLookup.TryGetValue(c.DstAgent, out agent))
+                {
+                    UpdateAgentData(agent, c.LogTime, c.DstInstid, c.IsStateChange == ParseEnum.StateChange.None);
                 }
                 // An attack target could appear slightly before its master, this properly updates the time if it happens
                 if (c.IsStateChange == ParseEnum.StateChange.AttackTarget && agentsLookup.TryGetValue(c.DstAgent, out agent))
                 {
-                    if (agent.InstID == 0)
-                    {
-                        agent.InstID = c.DstInstid;
-                        if (agent.FirstAwareLogTime == 0)
-                        {
-                            agent.FirstAwareLogTime = c.LogTime;
-                        }
-                        agent.LastAwareLogTime = c.LogTime;
-                        break;
-                    }
-                    else if (agent.InstID == c.DstInstid)
-                    {
-                        agent.LastAwareLogTime = c.LogTime;
-                        break;
-                    }
+                    UpdateAgentData(agent, c.LogTime, c.DstInstid, true);
                 }
             }
 
@@ -477,17 +481,11 @@ namespace LuckParser.Parser
             {
                 if (c.SrcMasterInstid != 0)
                 {
-                    AgentItem master = _allAgentsList.Find(x => x.InstID == c.SrcMasterInstid && x.FirstAwareLogTime <= c.LogTime && c.LogTime <= x.LastAwareLogTime);
-                    if (master != null)
-                    {
-                        if (agentsLookup.TryGetValue(c.SrcAgent, out AgentItem minion))
-                        {
-                            if (minion.FirstAwareLogTime <= c.LogTime && c.LogTime <= minion.LastAwareLogTime)
-                            {
-                                minion.MasterAgent = master;
-                            }
-                        }
-                    }
+                    FindAgentMaster(c.LogTime, c.SrcMasterInstid, c.SrcAgent, agentsLookup, _allAgentsList);
+                }
+                if (c.DstMasterInstid != 0)
+                {
+                    FindAgentMaster(c.LogTime, c.DstMasterInstid, c.DstAgent, agentsLookup, _allAgentsList);
                 }
             }
             _allAgentsList.RemoveAll(x => !(x.InstID != 0 && x.LastAwareLogTime - x.FirstAwareLogTime >= 0 && x.FirstAwareLogTime != 0 && x.LastAwareLogTime != long.MaxValue) && (x.Type != AgentItem.AgentType.Player && x.Type != AgentItem.AgentType.EnemyPlayer));

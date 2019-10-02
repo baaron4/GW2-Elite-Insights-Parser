@@ -2,34 +2,34 @@
 using System.Linq;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
-using static LuckParser.EIData.BoonSimulator;
+using static LuckParser.EIData.BuffSimulator;
 
 namespace LuckParser.EIData
 {
-    public class BoonSimulationItemIntensity : BoonSimulationItem
+    public class BuffSimulationItemIntensity : BuffSimulationItem
     {
-        private readonly List<BoonSimulationItemDuration> _stacks = new List<BoonSimulationItemDuration>();
+        private readonly List<BuffSimulationItemDuration> _stacks = new List<BuffSimulationItemDuration>();
         private readonly List<AgentItem> _sources;
 
-        public BoonSimulationItemIntensity(List<BoonStackItem> stacks) : base(stacks[0].Start, 0)
+        public BuffSimulationItemIntensity(List<BuffStackItem> stacks) : base(stacks[0].Start, 0)
         {
-            foreach (BoonStackItem stack in stacks)
+            foreach (BuffStackItem stack in stacks)
             {
-                _stacks.Add(new BoonSimulationItemDuration(stack));
+                _stacks.Add(new BuffSimulationItemDuration(stack));
             }
             Duration = _stacks.Max(x => x.Duration);
             _sources = new List<AgentItem>();
-            foreach (BoonSimulationItemDuration item in _stacks)
+            foreach (BuffSimulationItemDuration item in _stacks)
             {
                 _sources.AddRange(item.GetSources());
             }
         }
 
-        public override void SetEnd(long end)
+        public override void OverrideEnd(long end)
         {
-            foreach (BoonSimulationItemDuration stack in _stacks)
+            foreach (BuffSimulationItemDuration stack in _stacks)
             {
-                stack.SetEnd(end);
+                stack.OverrideEnd(end);
             }
             Duration = _stacks.Max(x => x.Duration);
         }
@@ -39,9 +39,9 @@ namespace LuckParser.EIData
             return _stacks.Count;
         }
 
-        public override void SetBoonDistributionItem(BoonDistributionDictionary distribs, long start, long end, long boonid, ParsedLog log)
+        public override void SetBoonDistributionItem(BuffDistributionDictionary distribs, long start, long end, long boonid, ParsedLog log)
         {
-            foreach (BoonSimulationItemDuration item in _stacks)
+            foreach (BuffSimulationItemDuration item in _stacks)
             {
                 item.SetBoonDistributionItem(distribs, start, end, boonid, log);
             }

@@ -11,9 +11,13 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
         {
             Initial = evtcItem.IsStateChange == ParseEnum.StateChange.BuffInitial;
             AppliedDuration = evtcItem.Value;
-            By = agentData.GetAgentByInstID(evtcItem.SrcMasterInstid > 0 ? evtcItem.SrcMasterInstid : evtcItem.SrcInstid, evtcItem.LogTime);
-            ByMinion = evtcItem.SrcMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.SrcInstid, evtcItem.LogTime) : null;
-            To = agentData.GetAgentByInstID(evtcItem.DstInstid, evtcItem.LogTime);
+            By = agentData.GetAgent(evtcItem.SrcAgent);
+            if (By.Master != null)
+            {
+                ByMinion = By;
+                By = By.Master;
+            }
+            To = agentData.GetAgent(evtcItem.DstAgent);
         }
 
         public BuffApplyEvent(AgentItem by, AgentItem to, long time, int duration, SkillItem buffSkill) : base(buffSkill, time)
@@ -23,7 +27,7 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
             To = to;
         }
 
-        public override bool IsBoonSimulatorCompliant(long fightEnd)
+        public override bool IsBuffSimulatorCompliant(long fightEnd)
         {
             return BuffID != ProfHelper.NoBuff;
         }
@@ -32,7 +36,7 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
         {
         }
 
-        public override void UpdateSimulator(BoonSimulator simulator)
+        public override void UpdateSimulator(BuffSimulator simulator)
         {
             simulator.Add(AppliedDuration, By, Time);
         }

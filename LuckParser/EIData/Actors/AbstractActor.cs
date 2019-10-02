@@ -3,7 +3,7 @@ using System.Linq;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using static LuckParser.EIData.Boon;
+using static LuckParser.EIData.Buff;
 
 namespace LuckParser.EIData
 {
@@ -20,8 +20,8 @@ namespace LuckParser.EIData
         // Cast
         protected List<AbstractCastEvent> CastLogs { get; set; }
         // Boons
-        public HashSet<Boon> TrackedBoons { get; } = new HashSet<Boon>();
-        protected Dictionary<long, BoonsGraphModel> BoonPoints { get; set; }
+        public HashSet<Buff> TrackedBoons { get; } = new HashSet<Buff>();
+        protected Dictionary<long, BuffsGraphModel> BoonPoints { get; set; }
 
         protected AbstractActor(AgentItem agent) : base(agent)
         {
@@ -89,7 +89,7 @@ namespace LuckParser.EIData
             return _damageTakenlogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public Dictionary<long, BoonsGraphModel> GetBoonGraphs(ParsedLog log)
+        public Dictionary<long, BuffsGraphModel> GetBoonGraphs(ParsedLog log)
         {
             if (BoonPoints == null)
             {
@@ -150,23 +150,23 @@ namespace LuckParser.EIData
             }
         }
 
-        protected BoonMapDictionary GetBoonMap(ParsedLog log)
+        protected BuffMapDictionary GetBoonMap(ParsedLog log)
         {
             //
-            var boonMap = new BoonMapDictionary();
+            var boonMap = new BuffMapDictionary();
             // Fill in Boon Map
             foreach (AbstractBuffEvent c in log.CombatData.GetBoonDataByDst(AgentItem))
             {
                 long boonId = c.BuffID;
                 if (!boonMap.ContainsKey(boonId))
                 {
-                    if (!log.Boons.BoonsByIds.ContainsKey(boonId))
+                    if (!log.Buffs.BuffsByIds.ContainsKey(boonId))
                     {
                         continue;
                     }
-                    boonMap.Add(log.Boons.BoonsByIds[boonId]);
+                    boonMap.Add(log.Buffs.BuffsByIds[boonId]);
                 }
-                if (!c.IsBoonSimulatorCompliant(log.FightData.FightDuration))
+                if (!c.IsBuffSimulatorCompliant(log.FightData.FightDuration))
                 {
                     continue;
                 }
@@ -179,7 +179,7 @@ namespace LuckParser.EIData
             {
                 foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in boonMap)
                 {
-                    pair.Value.Add(new BuffRemoveAllEvent(GeneralHelper.UnknownAgent, AgentItem, dsp.Time, int.MaxValue, log.SkillData.Get(pair.Key), 1, int.MaxValue));
+                    pair.Value.Add(new BuffRemoveAllEvent(GeneralHelper.UnknownAgent, AgentItem, dsp.Time, int.MaxValue, log.SkillData.Get(pair.Key), BuffRemoveAllEvent.FullRemoval, int.MaxValue));
                 }
             }
             // add buff remove all for each dead events
@@ -194,7 +194,7 @@ namespace LuckParser.EIData
             boonMap.Sort();
             foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in boonMap)
             {
-                TrackedBoons.Add(log.Boons.BoonsByIds[pair.Key]);
+                TrackedBoons.Add(log.Buffs.BuffsByIds[pair.Key]);
             }
             return boonMap;
         }
@@ -253,22 +253,22 @@ namespace LuckParser.EIData
 
 
         protected abstract void SetDamageLogs(ParsedLog log);
-        protected abstract void SetBoonStatusCleanseWasteData(ParsedLog log, BoonSimulator simulator, long boonid, bool updateCondiPresence);
-        protected abstract void SetBoonStatusGenerationData(ParsedLog log, BoonSimulationItem simul, long boonid);
+        protected abstract void SetBoonStatusCleanseWasteData(ParsedLog log, BuffSimulator simulator, long boonid, bool updateCondiPresence);
+        protected abstract void SetBoonStatusGenerationData(ParsedLog log, BuffSimulationItem simul, long boonid);
         protected abstract void InitBoonStatusData(ParsedLog log);
 
         protected void SetBoonStatus(ParsedLog log)
         {
-            BoonPoints = new Dictionary<long, BoonsGraphModel>();
-            BoonMapDictionary toUse = GetBoonMap(log);
+            BoonPoints = new Dictionary<long, BuffsGraphModel>();
+            BuffMapDictionary toUse = GetBoonMap(log);
             long dur = log.FightData.FightDuration;
             int fightDuration = (int)(dur) / 1000;
-            var boonPresenceGraph = new BoonsGraphModel(log.Boons.BoonsByIds[ProfHelper.NumberOfBoonsID]);
-            var condiPresenceGraph = new BoonsGraphModel(log.Boons.BoonsByIds[ProfHelper.NumberOfConditionsID]);
-            var boonIds = new HashSet<long>(log.Boons.BoonsByNature[BoonNature.Boon].Select(x => x.ID));
-            var condiIds = new HashSet<long>(log.Boons.BoonsByNature[BoonNature.Condition].Select(x => x.ID));
+            var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[ProfHelper.NumberOfBoonsID]);
+            var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[ProfHelper.NumberOfConditionsID]);
+            var boonIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Boon].Select(x => x.ID));
+            var condiIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Condition].Select(x => x.ID));
             InitBoonStatusData(log);
-            foreach (Boon boon in TrackedBoons)
+            foreach (Buff boon in TrackedBoons)
             {
                 long boonid = boon.ID;
                 if (toUse.TryGetValue(boonid, out List<AbstractBuffEvent> logs) && logs.Count != 0)
@@ -277,54 +277,54 @@ namespace LuckParser.EIData
                     {
                         continue;
                     }
-                    BoonSimulator simulator = boon.CreateSimulator(log);
+                    BuffSimulator simulator = boon.CreateSimulator(log);
                     simulator.Simulate(logs, dur);
                     simulator.Trim(dur);
                     bool updateBoonPresence = boonIds.Contains(boonid);
                     bool updateCondiPresence = condiIds.Contains(boonid);
-                    var graphSegments = new List<BoonsGraphModel.SegmentWithSources>();
-                    foreach (BoonSimulationItem simul in simulator.GenerationSimulation)
+                    var graphSegments = new List<BuffsGraphModel.SegmentWithSources>();
+                    foreach (BuffSimulationItem simul in simulator.GenerationSimulation)
                     {
                         SetBoonStatusGenerationData(log, simul, boonid);
-                        BoonsGraphModel.SegmentWithSources segment = simul.ToSegment();
+                        BuffsGraphModel.SegmentWithSources segment = simul.ToSegment();
                         if (graphSegments.Count == 0)
                         {
-                            graphSegments.Add(new BoonsGraphModel.SegmentWithSources(0, segment.Start, 0, GeneralHelper.UnknownAgent));
+                            graphSegments.Add(new BuffsGraphModel.SegmentWithSources(0, segment.Start, 0, GeneralHelper.UnknownAgent));
                         }
                         else if (graphSegments.Last().End != segment.Start)
                         {
-                            graphSegments.Add(new BoonsGraphModel.SegmentWithSources(graphSegments.Last().End, segment.Start, 0, GeneralHelper.UnknownAgent));
+                            graphSegments.Add(new BuffsGraphModel.SegmentWithSources(graphSegments.Last().End, segment.Start, 0, GeneralHelper.UnknownAgent));
                         }
                         graphSegments.Add(segment);
                     }
                     SetBoonStatusCleanseWasteData(log, simulator, boonid, updateCondiPresence);
                     if (graphSegments.Count > 0)
                     {
-                        graphSegments.Add(new BoonsGraphModel.SegmentWithSources(graphSegments.Last().End, dur, 0, GeneralHelper.UnknownAgent));
+                        graphSegments.Add(new BuffsGraphModel.SegmentWithSources(graphSegments.Last().End, dur, 0, GeneralHelper.UnknownAgent));
                     }
                     else
                     {
-                        graphSegments.Add(new BoonsGraphModel.SegmentWithSources(0, dur, 0, GeneralHelper.UnknownAgent));
+                        graphSegments.Add(new BuffsGraphModel.SegmentWithSources(0, dur, 0, GeneralHelper.UnknownAgent));
                     }
-                    BoonPoints[boonid] = new BoonsGraphModel(boon, graphSegments);
+                    BoonPoints[boonid] = new BuffsGraphModel(boon, graphSegments);
                     if (updateBoonPresence || updateCondiPresence)
                     {
-                        List<BoonsGraphModel.Segment> segmentsToFill = updateBoonPresence ? boonPresenceGraph.BoonChart : condiPresenceGraph.BoonChart;
+                        List<BuffsGraphModel.Segment> segmentsToFill = updateBoonPresence ? boonPresenceGraph.BuffChart : condiPresenceGraph.BuffChart;
                         bool firstPass = segmentsToFill.Count == 0;
-                        foreach (BoonsGraphModel.Segment seg in BoonPoints[boonid].BoonChart)
+                        foreach (BuffsGraphModel.Segment seg in BoonPoints[boonid].BuffChart)
                         {
                             long start = seg.Start;
                             long end = seg.End;
                             int value = seg.Value > 0 ? 1 : 0;
                             if (firstPass)
                             {
-                                segmentsToFill.Add(new BoonsGraphModel.Segment(start, end, value));
+                                segmentsToFill.Add(new BuffsGraphModel.Segment(start, end, value));
                             }
                             else
                             {
                                 for (int i = 0; i < segmentsToFill.Count; i++)
                                 {
-                                    BoonsGraphModel.Segment curSeg = segmentsToFill[i];
+                                    BuffsGraphModel.Segment curSeg = segmentsToFill[i];
                                     long curEnd = curSeg.End;
                                     long curStart = curSeg.Start;
                                     int curVal = curSeg.Value;
@@ -339,14 +339,14 @@ namespace LuckParser.EIData
                                     if (end <= curEnd)
                                     {
                                         curSeg.End = start;
-                                        segmentsToFill.Insert(i + 1, new BoonsGraphModel.Segment(start, end, curVal + value));
-                                        segmentsToFill.Insert(i + 2, new BoonsGraphModel.Segment(end, curEnd, curVal));
+                                        segmentsToFill.Insert(i + 1, new BuffsGraphModel.Segment(start, end, curVal + value));
+                                        segmentsToFill.Insert(i + 2, new BuffsGraphModel.Segment(end, curEnd, curVal));
                                         break;
                                     }
                                     else
                                     {
                                         curSeg.End = start;
-                                        segmentsToFill.Insert(i + 1, new BoonsGraphModel.Segment(start, curEnd, curVal + value));
+                                        segmentsToFill.Insert(i + 1, new BuffsGraphModel.Segment(start, curEnd, curVal + value));
                                         start = curEnd;
                                         i++;
                                     }

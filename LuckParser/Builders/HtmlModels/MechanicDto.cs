@@ -21,7 +21,7 @@ namespace LuckParser.Builders.HtmlModels
             {
                 long timeFilter = 0;
                 int filterCount = 0;
-                var mls = log.MechanicData.GetMechanicLogs(log, mech).Where(x => x.Actor.InstID == actor.InstID && phase.InInterval(x.Time)).ToList();
+                var mls = log.MechanicData.GetMechanicLogs(log, mech).Where(x => x.Actor.Agent == actor.Agent && phase.InInterval(x.Time)).ToList();
                 int count = mls.Count;
                 foreach (MechanicEvent ml in mls)
                 {

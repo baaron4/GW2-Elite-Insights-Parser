@@ -2,24 +2,24 @@
 using System.Collections.Generic;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
-using static LuckParser.EIData.BoonSimulator;
+using static LuckParser.EIData.BuffSimulator;
 
 namespace LuckParser.EIData
 {
-    public class BoonSimulationItemDuration : BoonSimulationItem
+    public class BuffSimulationItemDuration : BuffSimulationItem
     {
         private readonly AgentItem _src;
         private readonly AgentItem _seedSrc;
         private readonly bool _isExtension;
 
-        public BoonSimulationItemDuration(BoonStackItem other) : base(other.Start, other.BoonDuration)
+        public BuffSimulationItemDuration(BuffStackItem other) : base(other.Start, other.Duration)
         {
             _src = other.Src;
             _seedSrc = other.SeedSrc;
             _isExtension = other.IsExtension;
         }
 
-        public override void SetEnd(long end)
+        public override void OverrideEnd(long end)
         {
             Duration = Math.Min(Math.Max(end - Start, 0), Duration);
         }
@@ -34,20 +34,20 @@ namespace LuckParser.EIData
             return new List<AgentItem>() { _src };
         }
 
-        public override void SetBoonDistributionItem(BoonDistributionDictionary distribs, long start, long end, long boonid, ParsedLog log)
+        public override void SetBoonDistributionItem(BuffDistributionDictionary distribs, long start, long end, long boonid, ParsedLog log)
         {
-            Dictionary<AgentItem, BoonDistributionItem> distrib = GetDistrib(distribs, boonid);
+            Dictionary<AgentItem, BuffDistributionItem> distrib = GetDistrib(distribs, boonid);
             long cDur = GetClampedDuration(start, end);
             AgentItem agent = _src;
             AgentItem seedAgent = _seedSrc;
-            if (distrib.TryGetValue(agent, out BoonDistributionItem toModify))
+            if (distrib.TryGetValue(agent, out BuffDistributionItem toModify))
             {
                 toModify.Value += cDur;
                 distrib[agent] = toModify;
             }
             else
             {
-                distrib.Add(agent, new BoonDistributionItem(
+                distrib.Add(agent, new BuffDistributionItem(
                     cDur,
                     0, 0, 0, 0, 0));
             }
@@ -60,7 +60,7 @@ namespace LuckParser.EIData
                 }
                 else
                 {
-                    distrib.Add(agent, new BoonDistributionItem(
+                    distrib.Add(agent, new BuffDistributionItem(
                         0,
                         0, 0, 0, cDur, 0));
                 }
@@ -74,7 +74,7 @@ namespace LuckParser.EIData
                 }
                 else
                 {
-                    distrib.Add(seedAgent, new BoonDistributionItem(
+                    distrib.Add(seedAgent, new BuffDistributionItem(
                         0,
                         0, 0, 0, 0, cDur));
                 }
@@ -88,7 +88,7 @@ namespace LuckParser.EIData
                 }
                 else
                 {
-                    distrib.Add(seedAgent, new BoonDistributionItem(
+                    distrib.Add(seedAgent, new BuffDistributionItem(
                         0,
                         0, 0, cDur, 0, 0));
                 }

@@ -7,7 +7,7 @@ using LuckParser.Parser.ParsedData.CombatEvents;
 
 namespace LuckParser.EIData
 {
-    public abstract class BoonSourceFinder
+    public abstract class BuffSourceFinder
     {
         private List<AbstractCastEvent> _extensionSkills = null;
         private readonly HashSet<long> _boonIds = null;
@@ -17,7 +17,7 @@ namespace LuckParser.EIData
         protected long EssenceOfSpeed { get; set; }
         protected long ImbuedMelodies { get; set; }
 
-        protected BoonSourceFinder(HashSet<long> boonIds)
+        protected BuffSourceFinder(HashSet<long> boonIds)
         {
             _boonIds = boonIds;
         }

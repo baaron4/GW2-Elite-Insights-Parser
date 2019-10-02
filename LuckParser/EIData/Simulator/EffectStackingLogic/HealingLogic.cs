@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using LuckParser.Parser;
-using static LuckParser.EIData.BoonSimulator;
+using static LuckParser.EIData.BuffSimulator;
 
 namespace LuckParser.EIData
 {
@@ -10,18 +10,18 @@ namespace LuckParser.EIData
         private struct CompareHealing
         {
 
-            private static uint GetHealing(BoonStackItem stack)
+            private static uint GetHealing(BuffStackItem stack)
             {
                 return stack.SeedSrc.Healing;
             }
 
-            public int Compare(BoonStackItem x, BoonStackItem y)
+            public int Compare(BuffStackItem x, BuffStackItem y)
             {
                 return -GetHealing(x).CompareTo(GetHealing(y));
             }
         }
 
-        public override void Sort(ParsedLog log, List<BoonStackItem> stacks)
+        public override void Sort(ParsedLog log, List<BuffStackItem> stacks)
         {
             var comparator = new CompareHealing();
             stacks.Sort(comparator.Compare);

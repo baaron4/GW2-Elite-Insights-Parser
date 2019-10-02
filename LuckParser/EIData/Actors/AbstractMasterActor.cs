@@ -12,7 +12,7 @@ namespace LuckParser.EIData
     {
         public bool IsFakeActor { get; protected set; }
         // Boons
-        private readonly List<BoonDistributionDictionary> _boonDistribution = new List<BoonDistributionDictionary>();
+        private readonly List<BuffDistributionDictionary> _boonDistribution = new List<BuffDistributionDictionary>();
         private readonly List<Dictionary<long, long>> _buffPresence = new List<Dictionary<long, long>>();
         // damage list
         private readonly Dictionary<int, List<int>> _damageList1S = new Dictionary<int, List<int>>();
@@ -87,7 +87,7 @@ namespace LuckParser.EIData
             return dmgList;
         }
 
-        public BoonDistributionDictionary GetBoonDistribution(ParsedLog log, int phaseIndex)
+        public BuffDistributionDictionary GetBoonDistribution(ParsedLog log, int phaseIndex)
         {
             if (BoonPoints == null)
             {
@@ -288,17 +288,17 @@ namespace LuckParser.EIData
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int i = 0; i < phases.Count; i++)
             {
-                _boonDistribution.Add(new BoonDistributionDictionary());
+                _boonDistribution.Add(new BuffDistributionDictionary());
                 _buffPresence.Add(new Dictionary<long, long>());
             }
         }
 
-        protected override void SetBoonStatusCleanseWasteData(ParsedLog log, BoonSimulator simulator, long boonid, bool updateCondiPresence)
+        protected override void SetBoonStatusCleanseWasteData(ParsedLog log, BuffSimulator simulator, long boonid, bool updateCondiPresence)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
-            var extraSimulations = new List<AbstractBoonSimulationItem>(simulator.OverstackSimulationResult);
+            var extraSimulations = new List<AbstractBuffSimulationItem>(simulator.OverstackSimulationResult);
             extraSimulations.AddRange(simulator.WasteSimulationResult);
-            foreach (AbstractBoonSimulationItem simul in extraSimulations)
+            foreach (AbstractBuffSimulationItem simul in extraSimulations)
             {
                 for (int i = 0; i < phases.Count; i++)
                 {
@@ -308,7 +308,7 @@ namespace LuckParser.EIData
             }
         }
 
-        protected override void SetBoonStatusGenerationData(ParsedLog log, BoonSimulationItem simul, long boonid)
+        protected override void SetBoonStatusGenerationData(ParsedLog log, BuffSimulationItem simul, long boonid)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int i = 0; i < phases.Count; i++)
@@ -322,7 +322,7 @@ namespace LuckParser.EIData
         private void SetMinions(ParsedLog log)
         {
             _minions = new Dictionary<string, MinionsList>();
-            var combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.MasterAgent == AgentItem).ToList();
+            var combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.Master == AgentItem).ToList();
             var auxMinions = new Dictionary<string, MinionsList>();
             foreach (AgentItem agent in combatMinion)
             {

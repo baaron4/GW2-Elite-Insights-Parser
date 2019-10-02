@@ -65,7 +65,7 @@ namespace LuckParser.EIData
         public override void ComputeDamageModifier(Dictionary<string, List<DamageModifierData>> data, Dictionary<Target, Dictionary<string, List<DamageModifierData>>> dataTarget, Player p, ParsedLog log)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
-            Dictionary<long, BoonsGraphModel> bgmsP = p.GetBoonGraphs(log);
+            Dictionary<long, BuffsGraphModel> bgmsP = p.GetBoonGraphs(log);
             if (_trackerPlayer != null)
             {
                 if (!_trackerPlayer.Has(bgmsP) && _gainComputerPlayer != ByAbsence)
@@ -75,7 +75,7 @@ namespace LuckParser.EIData
             }
             foreach (Target target in log.FightData.Logic.Targets)
             {
-                Dictionary<long, BoonsGraphModel> bgms = target.GetBoonGraphs(log);
+                Dictionary<long, BuffsGraphModel> bgms = target.GetBoonGraphs(log);
                 if (!Tracker.Has(bgms) && GainComputer != ByAbsence)
                 {
                     continue;

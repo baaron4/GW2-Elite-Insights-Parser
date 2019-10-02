@@ -4,7 +4,7 @@ using LuckParser.EIData;
 using LuckParser.Parser;
 using LuckParser.Parser.ParsedData;
 using LuckParser.Parser.ParsedData.CombatEvents;
-using static LuckParser.EIData.Boon;
+using static LuckParser.EIData.Buff;
 
 namespace LuckParser.Models
 {
@@ -13,11 +13,11 @@ namespace LuckParser.Models
     /// </summary>
     public class Statistics
     {
-        public Statistics(CombatData combatData, List<Player> players, BoonsContainer boons)
+        public Statistics(CombatData combatData, List<Player> players, BuffsContainer boons)
         {
             HashSet<long> skillIDs = combatData.GetSkills();
             // Main boons
-            foreach (Boon boon in boons.BoonsByNature[BoonNature.Boon])
+            foreach (Buff boon in boons.BuffsByNature[BuffNature.Boon])
             {
                 if (skillIDs.Contains(boon.ID))
                 {
@@ -25,7 +25,7 @@ namespace LuckParser.Models
                 }
             }
             // Main Conditions
-            foreach (Boon boon in boons.BoonsByNature[BoonNature.Condition])
+            foreach (Buff boon in boons.BuffsByNature[BuffNature.Condition])
             {
                 if (skillIDs.Contains(boon.ID))
                 {
@@ -34,7 +34,7 @@ namespace LuckParser.Models
             }
 
             // Important class specific boons
-            foreach (Boon boon in boons.BoonsByNature[BoonNature.OffensiveBuffTable])
+            foreach (Buff boon in boons.BuffsByNature[BuffNature.OffensiveBuffTable])
             {
                 if (skillIDs.Contains(boon.ID))
                 {
@@ -42,7 +42,7 @@ namespace LuckParser.Models
                 }
             }
 
-            foreach (Boon boon in boons.BoonsByNature[BoonNature.DefensiveBuffTable])
+            foreach (Buff boon in boons.BuffsByNature[BuffNature.DefensiveBuffTable])
             {
                 if (skillIDs.Contains(boon.ID))
                 {
@@ -52,13 +52,13 @@ namespace LuckParser.Models
             }
 
             // All class specific boons
-            var remainingBuffsByIds = boons.BoonsByNature[BoonNature.GraphOnlyBuff].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
+            var remainingBuffsByIds = boons.BuffsByNature[BuffNature.GraphOnlyBuff].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
             foreach (Player player in players)
             {
-                PresentPersonalBuffs[player.InstID] = new HashSet<Boon>();
+                PresentPersonalBuffs[player.InstID] = new HashSet<Buff>();
                 foreach (AbstractBuffEvent item in combatData.GetBoonDataByDst(player.AgentItem))
                 {
-                    if (item is BuffApplyEvent && item.To == player.AgentItem && remainingBuffsByIds.TryGetValue(item.BuffID, out Boon boon))
+                    if (item is BuffApplyEvent && item.To == player.AgentItem && remainingBuffsByIds.TryGetValue(item.BuffID, out Buff boon))
                     {
                         PresentPersonalBuffs[player.InstID].Add(boon);
                     }
@@ -214,12 +214,12 @@ namespace LuckParser.Models
 
         public class Consumable
         {
-            public Boon Buff { get; }
+            public Buff Buff { get; }
             public long Time { get; }
             public int Duration { get; }
             public int Stack { get; set; }
 
-            public Consumable(Boon item, long time, int duration)
+            public Consumable(Buff item, long time, int duration)
             {
                 Buff = item;
                 Time = time;
@@ -245,11 +245,11 @@ namespace LuckParser.Models
         }
 
         // present buff
-        public List<Boon> PresentBoons { get; } = new List<Boon>();//Used only for Boon tables
-        public List<Boon> PresentConditions { get; } = new List<Boon>();//Used only for Condition tables
-        public List<Boon> PresentOffbuffs { get; } = new List<Boon>();//Used only for Off Buff tables
-        public List<Boon> PresentDefbuffs { get; } = new List<Boon>();//Used only for Def Buff tables
-        public Dictionary<ushort, HashSet<Boon>> PresentPersonalBuffs { get; } = new Dictionary<ushort, HashSet<Boon>>();
+        public List<Buff> PresentBoons { get; } = new List<Buff>();//Used only for Boon tables
+        public List<Buff> PresentConditions { get; } = new List<Buff>();//Used only for Condition tables
+        public List<Buff> PresentOffbuffs { get; } = new List<Buff>();//Used only for Off Buff tables
+        public List<Buff> PresentDefbuffs { get; } = new List<Buff>();//Used only for Def Buff tables
+        public Dictionary<ushort, HashSet<Buff>> PresentPersonalBuffs { get; } = new Dictionary<ushort, HashSet<Buff>>();
 
         //Positions for group
         private List<Point3D> _stackCenterPositions = null;

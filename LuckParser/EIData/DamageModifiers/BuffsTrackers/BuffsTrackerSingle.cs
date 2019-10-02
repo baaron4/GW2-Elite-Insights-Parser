@@ -11,16 +11,16 @@ namespace LuckParser.EIData
             _id = id;
         }
 
-        public override int GetStack(Dictionary<long, BoonsGraphModel> bgms, long time)
+        public override int GetStack(Dictionary<long, BuffsGraphModel> bgms, long time)
         {
-            if (bgms.TryGetValue(_id, out BoonsGraphModel bgm))
+            if (bgms.TryGetValue(_id, out BuffsGraphModel bgm))
             {
                 return bgm.GetStackCount(time);
             }
             return 0;
         }
 
-        public override bool Has(Dictionary<long, BoonsGraphModel> bgms)
+        public override bool Has(Dictionary<long, BuffsGraphModel> bgms)
         {
             return bgms.ContainsKey(_id);
         }

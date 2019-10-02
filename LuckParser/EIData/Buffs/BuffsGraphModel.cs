@@ -5,7 +5,7 @@ using LuckParser.Parser.ParsedData;
 
 namespace LuckParser.EIData
 {
-    public class BoonsGraphModel
+    public class BuffsGraphModel
     {
 
         public class Segment
@@ -49,27 +49,27 @@ namespace LuckParser.EIData
             }
         }
 
-        public Boon Boon { get; }
-        public List<Segment> BoonChart { get; private set; } = new List<Segment>();
-        private readonly List<SegmentWithSources> _boonChartWithSource;
+        public Buff Buff { get; }
+        public List<Segment> BuffChart { get; private set; } = new List<Segment>();
+        private readonly List<SegmentWithSources> _buffChartWithSource;
 
         // Constructor
-        public BoonsGraphModel(Boon boon)
+        public BuffsGraphModel(Buff buff)
         {
-            Boon = boon;
+            Buff = buff;
         }
-        public BoonsGraphModel(Boon boon, List<SegmentWithSources> boonChartWithSource)
+        public BuffsGraphModel(Buff buff, List<SegmentWithSources> buffChartWithSource)
         {
-            Boon = boon;
-            _boonChartWithSource = boonChartWithSource;
+            Buff = buff;
+            _buffChartWithSource = buffChartWithSource;
             FuseFromSegmentsWithSource();
         }
 
         public int GetStackCount(long time)
         {
-            for (int i = BoonChart.Count - 1; i >= 0; i--)
+            for (int i = BuffChart.Count - 1; i >= 0; i--)
             {
-                Segment seg = BoonChart[i];
+                Segment seg = BuffChart[i];
                 if (seg.Start <= time && time <= seg.End)
                 {
                     return seg.Value;
@@ -82,7 +82,7 @@ namespace LuckParser.EIData
         public bool IsPresent(long time, long window)
         {
             int count = 0;
-            foreach (Segment seg in BoonChart)
+            foreach (Segment seg in BuffChart)
             {
                 if (seg.Intersect(time - window, time + window))
                 {
@@ -94,13 +94,13 @@ namespace LuckParser.EIData
 
         public List<AgentItem> GetSources(long time)
         {
-            if (_boonChartWithSource == null)
+            if (_buffChartWithSource == null)
             {
                 return new List<AgentItem>() { GeneralHelper.UnknownAgent };
             }
-            for (int i = BoonChart.Count - 1; i >= 0; i--)
+            for (int i = BuffChart.Count - 1; i >= 0; i--)
             {
-                SegmentWithSources seg = _boonChartWithSource[i];
+                SegmentWithSources seg = _buffChartWithSource[i];
                 if (seg.Start <= time && time <= seg.End)
                 {
                     return seg.Sources;
@@ -113,7 +113,7 @@ namespace LuckParser.EIData
         {
             var newChart = new List<Segment>();
             Segment last = null;
-            foreach (Segment seg in _boonChartWithSource)
+            foreach (Segment seg in _buffChartWithSource)
             {
                 if (seg.Start == seg.End)
                 {
@@ -137,14 +137,14 @@ namespace LuckParser.EIData
                     }
                 }
             }
-            BoonChart = newChart;
+            BuffChart = newChart;
         }
 
         public void FuseSegments()
         {
             var newChart = new List<Segment>();
             Segment last = null;
-            foreach (Segment seg in BoonChart)
+            foreach (Segment seg in BuffChart)
             {
                 if (seg.Start == seg.End)
                 {
@@ -168,7 +168,7 @@ namespace LuckParser.EIData
                     }
                 }
             }
-            BoonChart = newChart;
+            BuffChart = newChart;
         }
 
     }

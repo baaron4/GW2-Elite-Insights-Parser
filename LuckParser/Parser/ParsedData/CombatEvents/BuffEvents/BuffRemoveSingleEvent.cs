@@ -10,7 +10,7 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
             _iff = evtcItem.IFF;
         }
 
-        public override bool IsBoonSimulatorCompliant(long fightEnd)
+        public override bool IsBuffSimulatorCompliant(long fightEnd)
         {
             return BuffID != ProfHelper.NoBuff &&
                 !(_iff == ParseEnum.IFF.Unknown && By == GeneralHelper.UnknownAgent) && // weird single stack remove
@@ -18,7 +18,7 @@ namespace LuckParser.Parser.ParsedData.CombatEvents
                  Time <= fightEnd - 50; // don't take into account removal that are close to the end of the fight
         }
 
-        public override void UpdateSimulator(BoonSimulator simulator)
+        public override void UpdateSimulator(BuffSimulator simulator)
         {
             simulator.Remove(RemovedDuration, Time, ParseEnum.BuffRemove.Single);
         }

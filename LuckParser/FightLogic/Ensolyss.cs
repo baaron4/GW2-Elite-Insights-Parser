@@ -55,7 +55,7 @@ namespace LuckParser.Logic
                 throw new InvalidOperationException("Main target of the fight not found");
             }
             // enter combat
-            CombatItem invulLost = combatData.FirstOrDefault(x => x.DstInstid == target.InstID && x.IsStateChange == ParseEnum.StateChange.None && x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SkillID == 762);
+            CombatItem invulLost = combatData.FirstOrDefault(x => x.DstAgent == target.Agent && x.IsStateChange == ParseEnum.StateChange.None && x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SkillID == 762);
             if (invulLost != null && invulLost.LogTime - fightData.FightStartLogTime < 5000)
             {
                 fightData.OverrideStart(invulLost.LogTime);

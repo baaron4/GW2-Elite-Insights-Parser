@@ -38,7 +38,7 @@ namespace LuckParser.EIData
                     {
                         foreach (Player p in log.PlayerList)
                         {
-                            if (c.From == p.AgentItem || c.MasterFrom == p.AgentItem)
+                            if (c.From == p.AgentItem || c.From.Master == p.AgentItem)
                             {
                                 mechanicLogs[this].Add(new MechanicEvent(c.Time, this, p));
                             }
