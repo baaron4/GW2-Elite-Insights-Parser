@@ -28,7 +28,7 @@ namespace GW2EIParser.EIData
         {
             foreach (Player p in log.PlayerList)
             {
-                foreach (AbstractBuffEvent c in log.CombatData.GetBoonData(SkillId))
+                foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(SkillId))
                 {
                     if (c is BuffRemoveManualEvent rme && p.AgentItem == rme.To && Keep(rme, log))
                     {

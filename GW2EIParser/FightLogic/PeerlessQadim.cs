@@ -87,7 +87,7 @@ namespace GW2EIParser.Logic
             var phaseStarts = new List<long>();
             var phaseEnds = new List<long>();
             //
-            var magmaDrops = log.CombatData.GetBoonData(56475).Where(x => x is BuffApplyEvent).ToList();
+            var magmaDrops = log.CombatData.GetBuffData(56475).Where(x => x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent magmaDrop in magmaDrops)
             {
                 if (phaseEnds.Count > 0)

@@ -294,7 +294,7 @@ namespace GW2EIParser.Logic
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }
-            return combatData.GetBoonData(53075).Count > 0 ? 1 : 0;
+            return combatData.GetBuffData(53075).Count > 0 ? 1 : 0;
         }
     }
 }

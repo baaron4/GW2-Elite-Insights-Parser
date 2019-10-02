@@ -111,7 +111,7 @@ namespace GW2EIParser.Logic
             }
             // add burn phases
             int offset = phases.Count;
-            var orbItems = log.CombatData.GetBoonData(35096).Where(x => x.To == mainTarget.AgentItem).ToList();
+            var orbItems = log.CombatData.GetBuffData(35096).Where(x => x.To == mainTarget.AgentItem).ToList();
             // Get number of orbs and filter the list
             start = 0;
             int orbCount = 0;

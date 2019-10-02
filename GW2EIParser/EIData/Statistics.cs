@@ -55,7 +55,7 @@ namespace GW2EIParser.Models
             foreach (Player player in players)
             {
                 PresentPersonalBuffs[player.InstID] = new HashSet<Buff>();
-                foreach (AbstractBuffEvent item in combatData.GetBoonDataByDst(player.AgentItem))
+                foreach (AbstractBuffEvent item in combatData.GetBuffDataByDst(player.AgentItem))
                 {
                     if (item is BuffApplyEvent && item.To == player.AgentItem && remainingBuffsByIds.TryGetValue(item.BuffID, out Buff boon))
                     {

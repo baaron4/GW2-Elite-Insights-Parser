@@ -121,11 +121,11 @@ namespace GW2EIParser.Logic
 
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
-            var spiritTransform = log.CombatData.GetBoonData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            var spiritTransform = log.CombatData.GetBuffData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent c in spiritTransform)
             {
                 int duration = 30000;
-                AbstractBuffEvent removedBuff = log.CombatData.GetBoonData(48583).FirstOrDefault(x => x.To == p.AgentItem && x is BuffRemoveAllEvent && x.Time > c.Time && x.Time < c.Time + duration);
+                AbstractBuffEvent removedBuff = log.CombatData.GetBuffData(48583).FirstOrDefault(x => x.To == p.AgentItem && x is BuffRemoveAllEvent && x.Time > c.Time && x.Time < c.Time + duration);
                 int start = (int)c.Time;
                 int end = start + duration;
                 if (removedBuff != null)

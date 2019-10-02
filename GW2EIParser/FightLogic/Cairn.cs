@@ -105,7 +105,7 @@ namespace GW2EIParser.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // shared agony
-            var agony = log.CombatData.GetBoonData(38049).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
+            var agony = log.CombatData.GetBuffData(38049).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
             foreach (AbstractBuffEvent c in agony)
             {
                 int agonyStart = (int)c.Time;

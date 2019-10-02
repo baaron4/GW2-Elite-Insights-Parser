@@ -364,7 +364,7 @@ namespace GW2EIParser.Logic
         protected static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AbstractMasterActor target, bool beginWithStart)
         {
             bool needStart = beginWithStart;
-            var main = combatData.GetBoonData(buffID).Where(x => x.To == target.AgentItem && (x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
+            var main = combatData.GetBuffData(buffID).Where(x => x.To == target.AgentItem && (x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
             var filtered = new List<AbstractBuffEvent>();
             for (int i = 0; i < main.Count; i++)
             {

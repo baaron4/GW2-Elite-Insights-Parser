@@ -266,7 +266,7 @@ namespace GW2EIParser.Logic
                 return phases;
             }
             // Determined + additional data on inst change
-            AbstractBuffEvent invulDei = log.CombatData.GetBoonData(762).Find(x => x is BuffApplyEvent && x.To == mainTarget.AgentItem);
+            AbstractBuffEvent invulDei = log.CombatData.GetBuffData(762).Find(x => x is BuffApplyEvent && x.To == mainTarget.AgentItem);
             if (invulDei != null)
             {
                 end = invulDei.Time;

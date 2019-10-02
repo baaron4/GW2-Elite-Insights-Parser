@@ -96,7 +96,7 @@ namespace GW2EIParser.Logic
                 {
                     return;
                 }
-                var invulsRemoveTarget = combatData.GetBoonData(762).OfType<BuffRemoveAllEvent>().Where(x => x.To == target.AgentItem).ToList();
+                var invulsRemoveTarget = combatData.GetBuffData(762).OfType<BuffRemoveAllEvent>().Where(x => x.To == target.AgentItem).ToList();
                 if (invulsRemoveTarget.Count == 5)
                 {
                     SetSuccessByCombatExit(new List<Target> { target }, combatData, fightData, playerAgents);

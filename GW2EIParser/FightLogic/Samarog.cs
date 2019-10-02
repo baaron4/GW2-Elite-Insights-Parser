@@ -135,7 +135,7 @@ namespace GW2EIParser.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // big bomb
-            var bigbomb = log.CombatData.GetBoonData(37966).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
+            var bigbomb = log.CombatData.GetBuffData(37966).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
             foreach (AbstractBuffEvent c in bigbomb)
             {
                 int bigStart = (int)c.Time;
@@ -144,7 +144,7 @@ namespace GW2EIParser.Logic
                 replay.Actors.Add(new CircleActor(true, bigEnd, 300, (bigStart, bigEnd), "rgba(150, 80, 0, 0.2)", new AgentConnector(p)));
             }
             // small bomb
-            var smallbomb = log.CombatData.GetBoonData(38247).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
+            var smallbomb = log.CombatData.GetBuffData(38247).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
             foreach (AbstractBuffEvent c in smallbomb)
             {
                 int smallStart = (int)c.Time;

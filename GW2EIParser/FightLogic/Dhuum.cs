@@ -134,7 +134,7 @@ namespace GW2EIParser.Logic
             }
             else
             {
-                AbstractBuffEvent invulDhuum = log.CombatData.GetBoonData(762).FirstOrDefault(x => x is BuffRemoveManualEvent && x.To == mainTarget.AgentItem && x.Time > 115000);
+                AbstractBuffEvent invulDhuum = log.CombatData.GetBuffData(762).FirstOrDefault(x => x is BuffRemoveManualEvent && x.To == mainTarget.AgentItem && x.Time > 115000);
                 if (invulDhuum != null)
                 {
                     long end = invulDhuum.Time;
@@ -276,7 +276,7 @@ namespace GW2EIParser.Logic
                     {
                         if (_greenStart == 0)
                         {
-                            AbstractBuffEvent greenTaken = log.CombatData.GetBoonData(46950).Where(x => x is BuffApplyEvent).FirstOrDefault();
+                            AbstractBuffEvent greenTaken = log.CombatData.GetBuffData(46950).Where(x => x is BuffApplyEvent).FirstOrDefault();
                             if (greenTaken != null)
                             {
                                 _greenStart = (int)greenTaken.Time - 5000;
@@ -326,7 +326,7 @@ namespace GW2EIParser.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // spirit transform
-            var spiritTransform = log.CombatData.GetBoonData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            var spiritTransform = log.CombatData.GetBuffData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
             if (mainTarget == null)
             {
@@ -340,7 +340,7 @@ namespace GW2EIParser.Logic
                 {
                     duration = 30000;
                 }
-                AbstractBuffEvent removedBuff = log.CombatData.GetBoonData(48281).FirstOrDefault(x => x.To == p.AgentItem && x is BuffRemoveAllEvent && x.Time > c.Time && x.Time < c.Time + duration);
+                AbstractBuffEvent removedBuff = log.CombatData.GetBuffData(48281).FirstOrDefault(x => x.To == p.AgentItem && x is BuffRemoveAllEvent && x.Time > c.Time && x.Time < c.Time + duration);
                 int start = (int)c.Time;
                 int end = start + duration;
                 if (removedBuff != null)

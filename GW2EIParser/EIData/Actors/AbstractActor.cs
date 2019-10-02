@@ -155,7 +155,7 @@ namespace GW2EIParser.EIData
             //
             var boonMap = new BuffMapDictionary();
             // Fill in Boon Map
-            foreach (AbstractBuffEvent c in log.CombatData.GetBoonDataByDst(AgentItem))
+            foreach (AbstractBuffEvent c in log.CombatData.GetBuffDataByDst(AgentItem))
             {
                 long boonId = c.BuffID;
                 if (!boonMap.ContainsKey(boonId))

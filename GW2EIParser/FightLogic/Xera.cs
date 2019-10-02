@@ -83,7 +83,7 @@ namespace GW2EIParser.Logic
                 return phases;
             }
             long end = 0;
-            AbstractBuffEvent invulXera = log.CombatData.GetBoonData(762).Find(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent) ?? log.CombatData.GetBoonData(34113).Find(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent);
+            AbstractBuffEvent invulXera = log.CombatData.GetBuffData(762).Find(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent) ?? log.CombatData.GetBuffData(34113).Find(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent);
             if (invulXera != null)
             {
                 end = invulXera.Time;

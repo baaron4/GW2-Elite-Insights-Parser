@@ -53,7 +53,7 @@ namespace GW2EIParser.EIData
         {
             if (extension == ImbuedMelodies && log.PlayerListBySpec.TryGetValue("Tempest", out List<Player> tempests))
             {
-                var magAuraApplications = new HashSet<AgentItem>(log.CombatData.GetBoonData(5684).Where(x => x is BuffApplyEvent && Math.Abs(x.Time - time) < 10 && x.By != agent).Select(x => x.By));
+                var magAuraApplications = new HashSet<AgentItem>(log.CombatData.GetBuffData(5684).Where(x => x is BuffApplyEvent && Math.Abs(x.Time - time) < 10 && x.By != agent).Select(x => x.By));
                 foreach (Player tempest in tempests)
                 {
                     if (magAuraApplications.Contains(tempest.AgentItem))

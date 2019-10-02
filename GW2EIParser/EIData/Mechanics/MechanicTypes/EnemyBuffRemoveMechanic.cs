@@ -30,7 +30,7 @@ namespace GW2EIParser.EIData
         {
             CombatData combatData = log.CombatData;
             HashSet<AgentItem> playerAgents = log.PlayerAgents;
-            foreach (AbstractBuffEvent c in log.CombatData.GetBoonData(SkillId))
+            foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(SkillId))
             {
                 DummyActor amp = null;
                 if (c is BuffRemoveManualEvent rme && Keep(rme, log))

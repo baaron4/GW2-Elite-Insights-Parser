@@ -61,7 +61,7 @@ namespace GW2EIParser.EIData
             long[] cleanse = { 0, 0 };
             foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Condition].Select(x => x.ID))
             {
-                var bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && log.PlayerAgents.Contains(x.To) && x.To != AgentItem).Select(x => x as BuffRemoveAllEvent).ToList();
+                var bevts = log.CombatData.GetBuffData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && log.PlayerAgents.Contains(x.To) && x.To != AgentItem).Select(x => x as BuffRemoveAllEvent).ToList();
                 cleanse[0] += bevts.Count;
                 cleanse[1] += bevts.Sum(x => Math.Max(x.RemovedDuration, log.FightData.FightDuration));
             }
@@ -72,7 +72,7 @@ namespace GW2EIParser.EIData
             long[] cleanse = { 0, 0 };
             foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Condition].Select(x => x.ID))
             {
-                var bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && x.To == AgentItem).Select(x => x as BuffRemoveAllEvent).ToList();
+                var bevts = log.CombatData.GetBuffData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && x.To == AgentItem).Select(x => x as BuffRemoveAllEvent).ToList();
                 cleanse[0] += bevts.Count;
                 cleanse[1] += bevts.Sum(x => Math.Max(x.RemovedDuration, log.FightData.FightDuration));
             }
@@ -84,7 +84,7 @@ namespace GW2EIParser.EIData
             long[] strips = { 0, 0 };
             foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Boon].Select(x => x.ID))
             {
-                var bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && !log.PlayerAgents.Contains(x.To) && !log.PlayerAgents.Contains(x.To.Master)).Select(x => x as BuffRemoveAllEvent).ToList();
+                var bevts = log.CombatData.GetBuffData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && !log.PlayerAgents.Contains(x.To) && !log.PlayerAgents.Contains(x.To.Master)).Select(x => x as BuffRemoveAllEvent).ToList();
                 strips[0] += bevts.Count;
                 strips[1] += bevts.Sum(x => Math.Max(x.RemovedDuration, log.FightData.FightDuration));
             }
@@ -1066,7 +1066,7 @@ namespace GW2EIParser.EIData
             long fightDuration = log.FightData.FightDuration;
             foreach (Buff consumable in consumableList)
             {
-                foreach (AbstractBuffEvent c in log.CombatData.GetBoonData(consumable.ID))
+                foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(consumable.ID))
                 {
                     if (!(c is BuffApplyEvent ba) || AgentItem != ba.To)
                     {

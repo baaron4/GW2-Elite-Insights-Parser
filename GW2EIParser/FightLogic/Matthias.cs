@@ -70,7 +70,7 @@ namespace GW2EIParser.Logic
                 return phases;
             }
             // Special buff cast check
-            AbstractBuffEvent heatWave = log.CombatData.GetBoonData(34526).FirstOrDefault();
+            AbstractBuffEvent heatWave = log.CombatData.GetBuffData(34526).FirstOrDefault();
             if (heatWave != null)
             {
                 phases.Add(new PhaseData(0, heatWave.Time - 1));
@@ -83,7 +83,7 @@ namespace GW2EIParser.Logic
                     if (abo != null)
                     {
                         phases.Add(new PhaseData(downPour.Time, abo.Time - 1));
-                        AbstractBuffEvent invulRemove = log.CombatData.GetBoonDataByDst(mainTarget.AgentItem).FirstOrDefault(x => x.Time >= abo.Time && x.Time <= abo.Time + 10000 && x.BuffID == 757 && !(x is BuffApplyEvent));
+                        AbstractBuffEvent invulRemove = log.CombatData.GetBuffDataByDst(mainTarget.AgentItem).FirstOrDefault(x => x.Time >= abo.Time && x.Time <= abo.Time + 10000 && x.BuffID == 757 && !(x is BuffApplyEvent));
                         if (invulRemove != null)
                         {
                             phases.Add(new PhaseData(invulRemove.Time, fightDuration));
@@ -156,7 +156,7 @@ namespace GW2EIParser.Logic
             {
                 case (ushort)ParseEnum.TargetIDS.Matthias:
                     var humanShield = cls.Where(x => x.SkillId == 34468).ToList();
-                    var humanShieldRemoval = log.CombatData.GetBoonData(34518).Where(x => x is BuffRemoveAllEvent).Select(x => (int)x.Time).Distinct().ToList();
+                    var humanShieldRemoval = log.CombatData.GetBuffData(34518).Where(x => x is BuffRemoveAllEvent).Select(x => (int)x.Time).Distinct().ToList();
                     for (int i = 0; i < humanShield.Count; i++)
                     {
                         AbstractCastEvent shield = humanShield[i];
@@ -171,7 +171,7 @@ namespace GW2EIParser.Logic
                         }
                     }
                     var aboShield = cls.Where(x => x.SkillId == 34510).ToList();
-                    var aboShieldRemoval = log.CombatData.GetBoonData(34376).Where(x => x is BuffRemoveAllEvent).Select(x => (int)x.Time).Distinct().ToList();
+                    var aboShieldRemoval = log.CombatData.GetBuffData(34376).Where(x => x is BuffRemoveAllEvent).Select(x => (int)x.Time).Distinct().ToList();
                     for (int i = 0; i < aboShield.Count; i++)
                     {
                         AbstractCastEvent shield = aboShield[i];
@@ -279,7 +279,7 @@ namespace GW2EIParser.Logic
                 }
             }
             // Bombs
-            var zealousBenediction = log.CombatData.GetBoonData(34511).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            var zealousBenediction = log.CombatData.GetBuffData(34511).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent c in zealousBenediction)
             {
                 int zealousStart = (int)c.Time;
