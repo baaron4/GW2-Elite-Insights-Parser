@@ -206,10 +206,10 @@ namespace GW2EIParser.Logic
                         if (facing != null && targetPosition != null)
                         {
                             var position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z, targetPosition.Time);
-                            replay.Actors.Add(new CircleActor(true, zoneActive, radius, (start, zoneActive), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
-                            replay.Actors.Add(new CircleActor(false, 0, radius, (start, zoneActive), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
-                            replay.Actors.Add(new CircleActor(true, 0, radius, (zoneActive, zoneDeadly), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
-                            replay.Actors.Add(new CircleActor(true, 0, radius, (zoneDeadly, zoneEnd), "rgba(255, 100, 0, 0.5)", new PositionConnector(position)));
+                            replay.Decorations.Add(new CircleDecoration(true, zoneActive, radius, (start, zoneActive), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
+                            replay.Decorations.Add(new CircleDecoration(false, 0, radius, (start, zoneActive), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (zoneActive, zoneDeadly), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (zoneDeadly, zoneEnd), "rgba(255, 100, 0, 0.5)", new PositionConnector(position)));
 
                         }
                     }
@@ -218,8 +218,8 @@ namespace GW2EIParser.Logic
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
-                        replay.Actors.Add(new CircleActor(true, end, 300, (start, end), "rgba(255, 150, 0, 0.7)", new AgentConnector(target)));
-                        replay.Actors.Add(new CircleActor(true, 0, 300, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, end, 300, (start, end), "rgba(255, 150, 0, 0.7)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
                     }
                     var slash = cls.Where(x => x.SkillId == 47561).ToList();
                     foreach (AbstractCastEvent c in slash)
@@ -231,14 +231,14 @@ namespace GW2EIParser.Logic
                         {
                             continue;
                         }
-                        replay.Actors.Add(new PieActor(false, 0, 850, facing, 60, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
+                        replay.Decorations.Add(new PieDecoration(false, 0, 850, facing, 60, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
                     }
 
                     if (majorSplit != null)
                     {
                         int start = (int)majorSplit.Time;
                         int end = (int)log.FightData.FightDuration;
-                        replay.Actors.Add(new CircleActor(true, 0, 320, (start, end), "rgba(0, 180, 255, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 320, (start, end), "rgba(0, 180, 255, 0.2)", new AgentConnector(target)));
                     }
                     break;
                 default:
@@ -256,12 +256,12 @@ namespace GW2EIParser.Logic
                 case (ushort)DhuumDesmina:
                     break;
                 case (ushort)Echo:
-                    replay.Actors.Add(new CircleActor(true, 0, 120, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(mob)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 120, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(mob)));
                     break;
                 case (ushort)Enforcer:
                     break;
                 case (ushort)Messenger:
-                    replay.Actors.Add(new CircleActor(true, 0, 180, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(mob)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(mob)));
                     break;
                 case (ushort)Deathling:
                     break;
@@ -296,8 +296,8 @@ namespace GW2EIParser.Logic
                         foreach (int gstart in greens)
                         {
                             int gend = gstart + 5000;
-                            replay.Actors.Add(new CircleActor(true, 0, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(mob)));
-                            replay.Actors.Add(new CircleActor(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(mob)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(mob)));
+                            replay.Decorations.Add(new CircleDecoration(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(mob)));
                         }
                     }
                     List<AbstractBuffEvent> stealths = GetFilteredList(log.CombatData, 13017, mob, true);
@@ -312,7 +312,7 @@ namespace GW2EIParser.Logic
                         else
                         {
                             stealthEnd = (int)c.Time;
-                            replay.Actors.Add(new CircleActor(true, 0, 180, (stealthStart, stealthEnd), "rgba(80, 80, 80, 0.3)", new AgentConnector(mob)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 180, (stealthStart, stealthEnd), "rgba(80, 80, 80, 0.3)", new AgentConnector(mob)));
                         }
                     }
                     _reapersSeen++;
@@ -347,8 +347,8 @@ namespace GW2EIParser.Logic
                 {
                     end = (int)removedBuff.Time;
                 }
-                replay.Actors.Add(new CircleActor(true, 0, 100, (start, end), "rgba(0, 50, 200, 0.3)", new AgentConnector(p)));
-                replay.Actors.Add(new CircleActor(true, start + duration, 100, (start, end), "rgba(0, 50, 200, 0.5)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, 100, (start, end), "rgba(0, 50, 200, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, start + duration, 100, (start, end), "rgba(0, 50, 200, 0.5)", new AgentConnector(p)));
             }
             // bomb
             List<AbstractBuffEvent> bombDhuum = GetFilteredList(log.CombatData, 47646, p, true);
@@ -362,8 +362,8 @@ namespace GW2EIParser.Logic
                 else
                 {
                     int bombDhuumEnd = (int)c.Time;
-                    replay.Actors.Add(new CircleActor(true, 0, 100, (bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.3)", new AgentConnector(p)));
-                    replay.Actors.Add(new CircleActor(true, bombDhuumStart + 13000, 100, (bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.5)", new AgentConnector(p)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 100, (bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.3)", new AgentConnector(p)));
+                    replay.Decorations.Add(new CircleDecoration(true, bombDhuumStart + 13000, 100, (bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.5)", new AgentConnector(p)));
                 }
             }
             // shackles connection
@@ -382,7 +382,7 @@ namespace GW2EIParser.Logic
                     int shacklesEnd = (int)c.Time;
                     if (shacklesTarget != null)
                     {
-                        replay.Actors.Add(new LineActor(0, (shacklesStart, shacklesEnd), "rgba(0, 255, 255, 0.5)", new AgentConnector(p), new AgentConnector(shacklesTarget)));
+                        replay.Decorations.Add(new LineDecoration(0, (shacklesStart, shacklesEnd), "rgba(0, 255, 255, 0.5)", new AgentConnector(p), new AgentConnector(shacklesTarget)));
                     }
                 }
             }
@@ -404,7 +404,7 @@ namespace GW2EIParser.Logic
                     int shacklesDmgEnd = (int)c.Time;
                     if (shacklesDmgTarget != null)
                     {
-                        replay.Actors.Add(new LineActor(0, (shacklesDmgStart, shacklesDmgEnd), "rgba(0, 255, 255, 0.5)", new AgentConnector(p), new AgentConnector(shacklesDmgTarget)));
+                        replay.Decorations.Add(new LineDecoration(0, (shacklesDmgStart, shacklesDmgEnd), "rgba(0, 255, 255, 0.5)", new AgentConnector(p), new AgentConnector(shacklesDmgTarget)));
                     }
                 }
             }

@@ -77,9 +77,9 @@ namespace GW2EIParser.Logic
                         if (facing != null)
                         {
                             int initialDirection = (int)(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI);
-                            replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, initialDirection, width / 2, (start, start + preCastTime), "rgba(200, 0, 255, 0.1)", new AgentConnector(target)));
-                            replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, initialDirection, width / 2, (start + preCastTime, start + preCastTime + initialHitDuration), "rgba(150, 0, 180, 0.5)", new AgentConnector(target)));
-                            replay.Actors.Add(new RotatedRectangleActor(true, 0, width, height, initialDirection, width / 2, 360, (start + preCastTime + initialHitDuration, start + preCastTime + initialHitDuration + sweepDuration), "rgba(150, 0, 180, 0.5)", new AgentConnector(target)));
+                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, initialDirection, width / 2, (start, start + preCastTime), "rgba(200, 0, 255, 0.1)", new AgentConnector(target)));
+                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, initialDirection, width / 2, (start + preCastTime, start + preCastTime + initialHitDuration), "rgba(150, 0, 180, 0.5)", new AgentConnector(target)));
+                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, initialDirection, width / 2, 360, (start + preCastTime + initialHitDuration, start + preCastTime + initialHitDuration + sweepDuration), "rgba(150, 0, 180, 0.5)", new AgentConnector(target)));
                         }
                     }
                     var wave = cls.Where(x => x.SkillId == 37910).ToList();
@@ -92,9 +92,9 @@ namespace GW2EIParser.Logic
                         int secondRadius = 700;
                         int thirdRadius = 1000;
                         int fourthRadius = 1300;
-                        replay.Actors.Add(new DoughnutActor(true, 0, firstRadius, secondRadius, (start + preCastTime, start + preCastTime + duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
-                        replay.Actors.Add(new DoughnutActor(true, 0, secondRadius, thirdRadius, (start + preCastTime + 2 * duration, start + preCastTime + 3 * duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
-                        replay.Actors.Add(new DoughnutActor(true, 0, thirdRadius, fourthRadius, (start + preCastTime + 5 * duration, start + preCastTime + 6 * duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new DoughnutDecoration(true, 0, firstRadius, secondRadius, (start + preCastTime, start + preCastTime + duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new DoughnutDecoration(true, 0, secondRadius, thirdRadius, (start + preCastTime + 2 * duration, start + preCastTime + 3 * duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new DoughnutDecoration(true, 0, thirdRadius, fourthRadius, (start + preCastTime + 5 * duration, start + preCastTime + 6 * duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
                     }
                     break;
                 default:
@@ -110,7 +110,7 @@ namespace GW2EIParser.Logic
             {
                 int agonyStart = (int)c.Time;
                 int agonyEnd = agonyStart + 62000;
-                replay.Actors.Add(new CircleActor(false, 0, 220, (agonyStart, agonyEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(false, 0, 220, (agonyStart, agonyEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(p)));
             }
         }
 

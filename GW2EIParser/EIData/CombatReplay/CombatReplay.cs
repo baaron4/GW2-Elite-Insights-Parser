@@ -23,7 +23,7 @@ namespace GW2EIParser.EIData
         public string Icon { get; set; }
         // actors
         public bool NoActors { get; set; } = true;
-        public List<GenericActor> Actors { get; } = new List<GenericActor>();
+        public List<GenericDecoration> Decorations { get; } = new List<GenericDecoration>();
 
         public void Trim(long start, long end)
         {

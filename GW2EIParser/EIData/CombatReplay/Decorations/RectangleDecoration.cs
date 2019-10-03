@@ -2,12 +2,12 @@
 
 namespace GW2EIParser.EIData
 {
-    public class RectangleActor : FormActor
+    public class RectangleDecoration : FormDecoration
     {
         public int Height { get; }
         public int Width { get; }
 
-        public RectangleActor(bool fill, int growing, int width, int height, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, lifespan, color, connector)
+        public RectangleDecoration(bool fill, int growing, int width, int height, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, lifespan, color, connector)
         {
             Height = height;
             Width = width;
@@ -21,7 +21,7 @@ namespace GW2EIParser.EIData
             public int Width { get; set; }
         }
 
-        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
+        public override GenericDecorationSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
             var aux = new RectangleSerializable
             {

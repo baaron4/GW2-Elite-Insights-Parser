@@ -2,17 +2,17 @@
 
 namespace GW2EIParser.EIData
 {
-    public class CircleActor : FormActor
+    public class CircleDecoration : FormDecoration
     {
         public int Radius { get; }
         public int MinRadius { get; }
 
-        public CircleActor(bool fill, int growing, int radius, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, lifespan, color, connector)
+        public CircleDecoration(bool fill, int growing, int radius, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, lifespan, color, connector)
         {
             Radius = radius;
         }
 
-        public CircleActor(bool fill, int growing, int radius, (int start, int end) lifespan, string color, Connector connector, int minRadius) : base(fill, growing, lifespan, color, connector)
+        public CircleDecoration(bool fill, int growing, int radius, (int start, int end) lifespan, string color, Connector connector, int minRadius) : base(fill, growing, lifespan, color, connector)
         {
             Radius = radius;
             MinRadius = minRadius;
@@ -25,7 +25,7 @@ namespace GW2EIParser.EIData
             public int MinRadius { get; set; }
         }
 
-        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
+        public override GenericDecorationSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
             var aux = new CircleSerializable
             {

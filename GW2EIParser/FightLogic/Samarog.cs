@@ -120,7 +120,7 @@ namespace GW2EIParser.Logic
                         else
                         {
                             int brutEnd = (int)c.Time;
-                            replay.Actors.Add(new CircleActor(true, 0, 120, (brutStart, brutEnd), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 120, (brutStart, brutEnd), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                         }
                     }
                     break;
@@ -140,8 +140,8 @@ namespace GW2EIParser.Logic
             {
                 int bigStart = (int)c.Time;
                 int bigEnd = bigStart + 6000;
-                replay.Actors.Add(new CircleActor(true, 0, 300, (bigStart, bigEnd), "rgba(150, 80, 0, 0.2)", new AgentConnector(p)));
-                replay.Actors.Add(new CircleActor(true, bigEnd, 300, (bigStart, bigEnd), "rgba(150, 80, 0, 0.2)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, 300, (bigStart, bigEnd), "rgba(150, 80, 0, 0.2)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, bigEnd, 300, (bigStart, bigEnd), "rgba(150, 80, 0, 0.2)", new AgentConnector(p)));
             }
             // small bomb
             var smallbomb = log.CombatData.GetBuffData(38247).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
@@ -149,7 +149,7 @@ namespace GW2EIParser.Logic
             {
                 int smallStart = (int)c.Time;
                 int smallEnd = smallStart + 6000;
-                replay.Actors.Add(new CircleActor(true, 0, 80, (smallStart, smallEnd), "rgba(80, 150, 0, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, 80, (smallStart, smallEnd), "rgba(80, 150, 0, 0.3)", new AgentConnector(p)));
             }
             // fixated
             List<AbstractBuffEvent> fixatedSam = GetFilteredList(log.CombatData, 37868, p, true);
@@ -163,7 +163,7 @@ namespace GW2EIParser.Logic
                 else
                 {
                     int fixatedSamEnd = (int)c.Time;
-                    replay.Actors.Add(new CircleActor(true, 0, 80, (fixatedSamStart, fixatedSamEnd), "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 80, (fixatedSamStart, fixatedSamEnd), "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
                 }
             }
             //fixated Ghuldem
@@ -183,7 +183,7 @@ namespace GW2EIParser.Logic
                     int fixationGuldhemEnd = (int)c.Time;
                     if (guldhem != null)
                     {
-                        replay.Actors.Add(new LineActor(0, (fixationGuldhemStart, fixationGuldhemEnd), "rgba(255, 100, 0, 0.3)", new AgentConnector(p), new AgentConnector(guldhem)));
+                        replay.Decorations.Add(new LineDecoration(0, (fixationGuldhemStart, fixationGuldhemEnd), "rgba(255, 100, 0, 0.3)", new AgentConnector(p), new AgentConnector(guldhem)));
                     }
                 }
             }
@@ -204,7 +204,7 @@ namespace GW2EIParser.Logic
                     int fixationRigomEnd = (int)c.Time;
                     if (rigom != null)
                     {
-                        replay.Actors.Add(new LineActor(0, (fixationRigomStart, fixationRigomEnd), "rgba(255, 0, 0, 0.3)", new AgentConnector(p), new AgentConnector(rigom)));
+                        replay.Decorations.Add(new LineDecoration(0, (fixationRigomStart, fixationRigomEnd), "rgba(255, 0, 0, 0.3)", new AgentConnector(p), new AgentConnector(rigom)));
                     }
                 }
             }

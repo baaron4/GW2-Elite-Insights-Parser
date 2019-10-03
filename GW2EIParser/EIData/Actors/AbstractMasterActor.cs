@@ -239,7 +239,7 @@ namespace GW2EIParser.EIData
             }
         }
 
-        public List<GenericActor> GetCombatReplayActors(ParsedLog log)
+        public List<GenericDecoration> GetCombatReplayActors(ParsedLog log)
         {
             if (!log.CanCombatReplay || IsFakeActor)
             {
@@ -255,7 +255,7 @@ namespace GW2EIParser.EIData
                 CombatReplay.NoActors = false;
                 InitAdditionalCombatReplayData(log);
             }
-            return CombatReplay.Actors;
+            return CombatReplay.Decorations;
         }
 
         public List<AbstractDamageEvent> GetJustPlayerDamageLogs(AbstractActor target, ParsedLog log, PhaseData phase)

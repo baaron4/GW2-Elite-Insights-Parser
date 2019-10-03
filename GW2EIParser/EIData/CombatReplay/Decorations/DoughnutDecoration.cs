@@ -2,12 +2,12 @@
 
 namespace GW2EIParser.EIData
 {
-    public class DoughnutActor : FormActor
+    public class DoughnutDecoration : FormDecoration
     {
         public int OuterRadius { get; }
         public int InnerRadius { get; }
 
-        public DoughnutActor(bool fill, int growing, int innerRadius, int outerRadius, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, lifespan, color, connector)
+        public DoughnutDecoration(bool fill, int growing, int innerRadius, int outerRadius, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, lifespan, color, connector)
         {
             InnerRadius = innerRadius;
             OuterRadius = outerRadius;
@@ -20,7 +20,7 @@ namespace GW2EIParser.EIData
             public int OuterRadius { get; set; }
         }
 
-        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
+        public override GenericDecorationSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
             var aux = new DoughnutSerializable
             {

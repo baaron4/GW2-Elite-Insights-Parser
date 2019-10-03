@@ -2,18 +2,18 @@
 
 namespace GW2EIParser.EIData
 {
-    public abstract class GenericActor
+    public abstract class GenericDecoration
     {
         public (int start, int end) Lifespan { get; }
         protected Connector ConnectedTo { get; set; }
 
-        protected GenericActor((int start, int end) lifespan, Connector connector)
+        protected GenericDecoration((int start, int end) lifespan, Connector connector)
         {
             Lifespan = lifespan;
             ConnectedTo = connector;
         }
         //
-        public class GenericActorSerializable
+        public class GenericDecorationSerializable
         {
             public string Type { get; set; }
             public long Start { get; set; }
@@ -21,7 +21,7 @@ namespace GW2EIParser.EIData
             public object ConnectedTo { get; set; }
         }
 
-        public abstract GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log);
+        public abstract GenericDecorationSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log);
 
     }
 }

@@ -40,7 +40,7 @@ namespace GW2EIParser.Builders.HtmlModels
                     continue;
                 }
                 actors.Add(p.GetCombatReplayJSON(map, log));
-                foreach (GenericActor a in p.GetCombatReplayActors(log))
+                foreach (GenericDecoration a in p.GetCombatReplayActors(log))
                 {
                     actors.Add(a.GetCombatReplayJSON(map, log));
                 }
@@ -52,7 +52,7 @@ namespace GW2EIParser.Builders.HtmlModels
                     continue;
                 }
                 actors.Add(m.GetCombatReplayJSON(map, log));
-                foreach (GenericActor a in m.GetCombatReplayActors(log))
+                foreach (GenericDecoration a in m.GetCombatReplayActors(log))
                 {
                     actors.Add(a.GetCombatReplayJSON(map, log));
                 }
@@ -64,7 +64,7 @@ namespace GW2EIParser.Builders.HtmlModels
                     continue;
                 }
                 actors.Add(target.GetCombatReplayJSON(map, log));
-                foreach (GenericActor a in target.GetCombatReplayActors(log))
+                foreach (GenericDecoration a in target.GetCombatReplayActors(log))
                 {
                     actors.Add(a.GetCombatReplayJSON(map, log));
                 }

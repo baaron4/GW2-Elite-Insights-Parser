@@ -3,11 +3,11 @@ using GW2EIParser.Parser.ParsedData;
 
 namespace GW2EIParser.EIData
 {
-    public class FacingActor : GenericActor
+    public class FacingDecoration : GenericDecoration
     {
         protected List<int> Data { get; set; } = new List<int>();
 
-        public FacingActor((int start, int end) lifespan, AgentConnector connector, List<Point3D> facings) : base(lifespan, connector)
+        public FacingDecoration((int start, int end) lifespan, AgentConnector connector, List<Point3D> facings) : base(lifespan, connector)
         {
             foreach (Point3D facing in facings)
             {
@@ -16,12 +16,12 @@ namespace GW2EIParser.EIData
         }
 
         //
-        protected class FacingSerializable : GenericActorSerializable
+        protected class FacingSerializable : GenericDecorationSerializable
         {
             public int[] FacingData { get; set; }
         }
 
-        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
+        public override GenericDecorationSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
             var aux = new FacingSerializable
             {

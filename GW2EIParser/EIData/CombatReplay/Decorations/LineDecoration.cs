@@ -2,12 +2,12 @@
 
 namespace GW2EIParser.EIData
 {
-    public class LineActor : FormActor
+    public class LineDecoration : FormDecoration
     {
         public Connector ConnectedFrom { get; }
         public int Width { get; }
 
-        public LineActor(int growing, (int start, int end) lifespan, string color, Connector connector, Connector targetConnector) : base(false, growing, lifespan, color, connector)
+        public LineDecoration(int growing, (int start, int end) lifespan, string color, Connector connector, Connector targetConnector) : base(false, growing, lifespan, color, connector)
         {
             ConnectedFrom = targetConnector;
         }
@@ -17,7 +17,7 @@ namespace GW2EIParser.EIData
             public object ConnectedFrom { get; set; }
         }
 
-        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
+        public override GenericDecorationSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
             var aux = new LineSerializable
             {

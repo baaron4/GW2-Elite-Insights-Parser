@@ -189,7 +189,7 @@ namespace GW2EIParser.Logic
                     var summon = cls.Where(x => x.SkillId == 34887).ToList();
                     foreach (AbstractCastEvent c in summon)
                     {
-                        replay.Actors.Add(new CircleActor(true, 0, 180, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 180, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 default:

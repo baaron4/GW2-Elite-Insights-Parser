@@ -204,14 +204,14 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in breakbar)
                     {
                         int radius = ccRadius;
-                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Riposte
                     var riposte = cls.Where(x => x.SkillId == 52265).ToList();
                     foreach (AbstractCastEvent c in riposte)
                     {
                         int radius = 2200;
-                        replay.Actors.Add(new CircleActor(true, 0, radius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     }
                     //Big Hit
                     var maceShockwave = cls.Where(x => x.SkillId == 52310).ToList();
@@ -228,9 +228,9 @@ namespace GW2EIParser.Logic
                         if (facing != null && targetPosition != null)
                         {
                             var position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z, targetPosition.Time);
-                            replay.Actors.Add(new CircleActor(true, 0, impactRadius, (start, start + delay), "rgba(255, 100, 0, 0.2)", new PositionConnector(position)));
-                            replay.Actors.Add(new CircleActor(true, 0, impactRadius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.7)", new PositionConnector(position)));
-                            replay.Actors.Add(new CircleActor(false, start + delay + duration, radius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.7)", new PositionConnector(position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, impactRadius, (start, start + delay), "rgba(255, 100, 0, 0.2)", new PositionConnector(position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, impactRadius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.7)", new PositionConnector(position)));
+                            replay.Decorations.Add(new CircleDecoration(false, start + delay + duration, radius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.7)", new PositionConnector(position)));
                         }
                     }
                     break;
@@ -240,7 +240,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in fieryMeteor)
                     {
                         int radius = ccRadius;
-                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     var eleBreath = cls.Where(x => x.SkillId == 52520).ToList();
                     foreach (AbstractCastEvent c in eleBreath)
@@ -253,7 +253,7 @@ namespace GW2EIParser.Logic
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, (start + delay, start + delay + duration), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
+                            replay.Decorations.Add(new PieDecoration(true, 0, radius, facing, openingAngle, (start + delay, start + delay + duration), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
                         }
                     }
                     break;
@@ -271,8 +271,8 @@ namespace GW2EIParser.Logic
                         if (facing != null)
                         {
                             int rotation = Point3D.GetRotationFromFacing(facing);
-                            replay.Actors.Add(new RotatedRectangleActor(true, 0, range, span, rotation, range / 2, (start, start + preCast), "rgba(0,100,255,0.2)", new AgentConnector(target)));
-                            replay.Actors.Add(new RotatedRectangleActor(true, 0, range, span, rotation, range / 2, (start + preCast, start + duration), "rgba(0,100,255,0.5)", new AgentConnector(target)));
+                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, range, span, rotation, range / 2, (start, start + preCast), "rgba(0,100,255,0.2)", new AgentConnector(target)));
+                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, range, span, rotation, range / 2, (start + preCast, start + duration), "rgba(0,100,255,0.5)", new AgentConnector(target)));
                         }
                     }
                     //Breath
@@ -289,8 +289,8 @@ namespace GW2EIParser.Logic
                         Point3D pos = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && pos != null)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, (start + delay + duration, start + delay + fieldDuration), "rgba(255, 50, 0, 0.3)", new PositionConnector(pos)));
+                            replay.Decorations.Add(new PieDecoration(true, 0, radius, facing, openingAngle, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
+                            replay.Decorations.Add(new PieDecoration(true, 0, radius, facing, openingAngle, (start + delay + duration, start + delay + fieldDuration), "rgba(255, 50, 0, 0.3)", new PositionConnector(pos)));
                         }
                     }
                     //Tail Swipe
@@ -310,8 +310,8 @@ namespace GW2EIParser.Logic
                             for (int i = 0; i < coneAmount; i++)
                             {
                                 int rotation = Point3D.GetRotationFromFacing(facing);
-                                replay.Actors.Add(new PieActor(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(target)));
-                                replay.Actors.Add(new PieActor(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
+                                replay.Decorations.Add(new PieDecoration(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(target)));
+                                replay.Decorations.Add(new PieDecoration(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
 
                             }
                         }
@@ -323,7 +323,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in patCC)
                     {
                         int radius = ccRadius;
-                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Breath
                     var patBreath = cls.Where(x => x.SkillId == 52726).ToList();
@@ -339,8 +339,8 @@ namespace GW2EIParser.Logic
                         Point3D pos = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && pos != null)
                         {
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
-                            replay.Actors.Add(new PieActor(true, 0, radius, facing, openingAngle, (start + delay + duration, start + delay + fieldDuration), "rgba(255, 50, 0, 0.3)", new PositionConnector(pos)));
+                            replay.Decorations.Add(new PieDecoration(true, 0, radius, facing, openingAngle, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
+                            replay.Decorations.Add(new PieDecoration(true, 0, radius, facing, openingAngle, (start + delay + duration, start + delay + fieldDuration), "rgba(255, 50, 0, 0.3)", new PositionConnector(pos)));
                         }
                     }
                     //Tail Swipe
@@ -360,8 +360,8 @@ namespace GW2EIParser.Logic
                             for (int i = 0; i < coneAmount; i++)
                             {
                                 int rotation = Point3D.GetRotationFromFacing(facing);
-                                replay.Actors.Add(new PieActor(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(target)));
-                                replay.Actors.Add(new PieActor(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
+                                replay.Decorations.Add(new PieDecoration(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(target)));
+                                replay.Decorations.Add(new PieDecoration(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
                             }
                         }
                     }
@@ -374,7 +374,7 @@ namespace GW2EIParser.Logic
                         int delay = 1800;
                         int duration = 3000;
                         int maxRadius = 2000;
-                        replay.Actors.Add(new CircleActor(false, start + delay + duration, maxRadius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.5)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(false, start + delay + duration, maxRadius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.5)", new AgentConnector(target)));
                     }
                     var stompShockwave = cls.Where(x => x.SkillId == 52330).ToList();
                     foreach (AbstractCastEvent c in stompShockwave)
@@ -390,9 +390,9 @@ namespace GW2EIParser.Logic
                         if (facing != null && targetPosition != null)
                         {
                             var position = new Point3D(targetPosition.X + facing.X * spellCenterDistance, targetPosition.Y + facing.Y * spellCenterDistance, targetPosition.Z, targetPosition.Time);
-                            replay.Actors.Add(new CircleActor(true, 0, impactRadius, (start, start + delay), "rgba(255, 100, 0, 0.1)", new PositionConnector(position)));
-                            replay.Actors.Add(new CircleActor(true, 0, impactRadius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.5)", new PositionConnector(position)));
-                            replay.Actors.Add(new CircleActor(false, start + delay + duration, maxRadius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.5)", new PositionConnector(position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, impactRadius, (start, start + delay), "rgba(255, 100, 0, 0.1)", new PositionConnector(position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, impactRadius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.5)", new PositionConnector(position)));
+                            replay.Decorations.Add(new CircleDecoration(false, start + delay + duration, maxRadius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.5)", new PositionConnector(position)));
                         }
                     }
                     //CC
@@ -400,7 +400,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in summon)
                     {
                         int radius = ccRadius;
-                        replay.Actors.Add(new CircleActor(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Pizza
                     var forceWave = cls.Where(x => x.SkillId == 51759).ToList();
@@ -419,8 +419,8 @@ namespace GW2EIParser.Logic
                             for (int i = 0; i < coneAmount; i++)
                             {
                                 int rotation = Point3D.GetRotationFromFacing(facing);
-                                replay.Actors.Add(new PieActor(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(target)));
-                                replay.Actors.Add(new PieActor(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
+                                replay.Decorations.Add(new PieDecoration(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(target)));
+                                replay.Decorations.Add(new PieDecoration(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
                             }
                         }
                     }
@@ -807,11 +807,11 @@ namespace GW2EIParser.Logic
             // All platforms have to have positions in all phases
             Debug.Assert(movements.All(x => x.platforms.Length == platformCount));
 
-            var platforms = new MovingPlatformActor[platformCount];
+            var platforms = new MovingPlatformDecoration[platformCount];
             for (int i = 0; i < platformCount; i++)
             {
-                platforms[i] = new MovingPlatformActor(platformImageUrl, 245, 245, (int.MinValue, int.MaxValue));
-                replay.Actors.Add(platforms[i]);
+                platforms[i] = new MovingPlatformDecoration(platformImageUrl, 245, 245, (int.MinValue, int.MaxValue));
+                replay.Decorations.Add(platforms[i]);
             }
 
             // Add movement "keyframes" on a movement end and on the start of the next one.
@@ -823,7 +823,7 @@ namespace GW2EIParser.Logic
 
                 for (int platformIndex = 0; platformIndex < platformCount; platformIndex++)
                 {
-                    MovingPlatformActor platform = platforms[platformIndex];
+                    MovingPlatformDecoration platform = platforms[platformIndex];
                     (int x, int y, int z, double angle, double opacity) = positions[platformIndex];
 
                     // Add a keyframe for movement end.

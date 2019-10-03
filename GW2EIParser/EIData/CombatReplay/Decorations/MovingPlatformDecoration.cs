@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace GW2EIParser.EIData
 {
-    public class MovingPlatformActor : BackgroundActor
+    public class MovingPlatformDecoration : BackgroundActor
     {
         protected string Image { get; }
         protected int Width { get; }
@@ -15,7 +15,7 @@ namespace GW2EIParser.EIData
         protected List<(double x, double y, double z, double angle, double opacity, int time)> Positions { get; } =
             new List<(double x, double y, double z, double angle, double opacity, int time)>();
 
-        public MovingPlatformActor(string image, int width, int height, (int start, int end) lifespan) : base(lifespan)
+        public MovingPlatformDecoration(string image, int width, int height, (int start, int end) lifespan) : base(lifespan)
         {
             Image = image;
             Width = width;
@@ -73,7 +73,7 @@ namespace GW2EIParser.EIData
             Positions.Add((x, y, z, angle, opacity, time));
         }
 
-        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
+        public override GenericDecorationSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
             (double x, double y, double z, double angle, double opacity, int time)[] positions = Positions.OrderBy(x => x.time).Select(pos =>
             {

@@ -103,7 +103,7 @@ namespace GW2EIParser.Logic
                         {
                             int shieldEnd = (int)c.Time;
                             int radius = 100;
-                            replay.Actors.Add(new CircleActor(true, 0, radius, (shieldStart, shieldEnd), "rgba(0, 150, 255, 0.3)", new AgentConnector(mob)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (shieldStart, shieldEnd), "rgba(0, 150, 255, 0.3)", new AgentConnector(mob)));
                         }
                     }
                     break;
@@ -256,7 +256,7 @@ namespace GW2EIParser.Logic
                         {
                             int shieldEnd = (int)c.Time;
                             int radius = 500;
-                            replay.Actors.Add(new CircleActor(true, 0, radius, (shieldStart, shieldEnd), "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (shieldStart, shieldEnd), "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
                         }
                     }
                     break;
@@ -281,8 +281,8 @@ namespace GW2EIParser.Logic
                 Point3D shieldPrevPos = replay.PolledPositions.LastOrDefault(x => x.Time <= start);
                 if (shieldNextPos != null || shieldPrevPos != null)
                 {
-                    replay.Actors.Add(new CircleActor(true, 0, radius, (start, start + duration), "rgba(255, 0, 255, 0.1)", new InterpolatedPositionConnector(shieldPrevPos, shieldNextPos, start)));
-                    replay.Actors.Add(new CircleActor(false, 0, radius, (start, start + duration), "rgba(255, 0, 255, 0.3)", new InterpolatedPositionConnector(shieldPrevPos, shieldNextPos, start)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, start + duration), "rgba(255, 0, 255, 0.1)", new InterpolatedPositionConnector(shieldPrevPos, shieldNextPos, start)));
+                    replay.Decorations.Add(new CircleDecoration(false, 0, radius, (start, start + duration), "rgba(255, 0, 255, 0.3)", new InterpolatedPositionConnector(shieldPrevPos, shieldNextPos, start)));
                 }
             }
         }

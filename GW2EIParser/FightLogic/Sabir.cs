@@ -110,10 +110,10 @@ namespace GW2EIParser.Logic
             switch (mob.ID)
             {
                 case (ushort)BigKillerTornado:
-                    replay.Actors.Add(new CircleActor(true, 0, 420, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(mob)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 420, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(mob)));
                     break;
                 case (ushort)SmallKillerTornado:
-                    replay.Actors.Add(new CircleActor(true, 0, 120, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(mob)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 120, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(mob)));
                     break;
                 case (ushort)SmallJumpyTornado:
                 case (ushort)ParalyzingWisp:

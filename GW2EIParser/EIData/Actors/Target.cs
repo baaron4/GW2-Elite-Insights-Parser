@@ -191,7 +191,7 @@ namespace GW2EIParser.EIData
             log.FightData.Logic.ComputeTargetCombatReplayActors(this, log, CombatReplay);
             if (CombatReplay.Rotations.Any())
             {
-                CombatReplay.Actors.Add(new FacingActor(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
+                CombatReplay.Decorations.Add(new FacingDecoration(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
             }
         }
 

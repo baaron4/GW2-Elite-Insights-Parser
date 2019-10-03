@@ -2,25 +2,25 @@
 
 namespace GW2EIParser.EIData
 {
-    public class RotatedRectangleActor : RectangleActor
+    public class RotatedRectangleDecoration : RectangleDecoration
     {
         public int Rotation { get; } // initial rotation angle
         public int RadialTranslation { get; } // translation of the triangle center in the direction of the current rotation
         public int SpinAngle { get; } // rotation the rectangle is supposed to go through over the course of its lifespan, 0 for no rotation
 
         // Rectangles with fixed rotation and no translation
-        public RotatedRectangleActor(bool fill, int growing, int width, int height, int rotation, (int start, int end) lifespan, string color, Connector connector)
+        public RotatedRectangleDecoration(bool fill, int growing, int width, int height, int rotation, (int start, int end) lifespan, string color, Connector connector)
             : this(fill, growing, width, height, rotation, 0, 0, lifespan, color, connector) { }
 
 
         // Rectangles with a fixed rotation and translation
 
-        public RotatedRectangleActor(bool fill, int growing, int width, int height, int rotation, int translation, (int start, int end) lifespan, string color, Connector connector)
+        public RotatedRectangleDecoration(bool fill, int growing, int width, int height, int rotation, int translation, (int start, int end) lifespan, string color, Connector connector)
             : this(fill, growing, width, height, rotation, translation, 0, lifespan, color, connector) { }
 
         // Rectangles rotating over time
 
-        public RotatedRectangleActor(bool fill, int growing, int width, int height, int rotation, int translation, int spinAngle, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, width, height, lifespan, color, connector)
+        public RotatedRectangleDecoration(bool fill, int growing, int width, int height, int rotation, int translation, int spinAngle, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, width, height, lifespan, color, connector)
         {
             Rotation = rotation;
             RadialTranslation = translation;
@@ -34,7 +34,7 @@ namespace GW2EIParser.EIData
             public int SpinAngle { get; set; }
         }
 
-        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
+        public override GenericDecorationSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
             var aux = new RotatedRectangleSerializable
             {

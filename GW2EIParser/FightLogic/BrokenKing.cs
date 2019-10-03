@@ -46,7 +46,7 @@ namespace GW2EIParser.Logic
                 {
                     end = (int)removedBuff.Time;
                 }
-                replay.Actors.Add(new CircleActor(true, 0, 100, (start, end), "rgba(100, 200, 255, 0.25)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, 100, (start, end), "rgba(100, 200, 255, 0.25)", new AgentConnector(p)));
             }
         }
 
@@ -68,8 +68,8 @@ namespace GW2EIParser.Logic
                         {
                             continue;
                         }
-                        replay.Actors.Add(new PieActor(true, 0, range, facing, angle, (start, end), "rgba(0,100,255,0.2)", new AgentConnector(target)));
-                        replay.Actors.Add(new PieActor(true, 0, range, facing, angle, (start + 1900, end), "rgba(0,100,255,0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new PieDecoration(true, 0, range, facing, angle, (start, end), "rgba(0,100,255,0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new PieDecoration(true, 0, range, facing, angle, (start + 1900, end), "rgba(0,100,255,0.3)", new AgentConnector(target)));
                     }
                     break;
                 default:
