@@ -249,6 +249,8 @@ namespace GW2EIParser.EIData
                 // Dhuum
                 new Buff("Spirit Transfrom", 48281, BuffSource.Enemy, BuffType.Intensity, 30, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/4/48/Compromised.png"),
                 new Buff("Fractured Spirit", 46950, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/c/c3/Fractured_Spirit.png"),
+                new Buff("Residual Affliction", 47476, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/1/12/Residual_Affliction.png"),
+                new Buff("Arcing Affliction", 47646, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/f/f0/Arcing_Affliction.png"),
                 // Adina
                 new Buff("Pillar Pandemonium", 56204, BuffSource.Enemy, BuffType.Intensity, 99, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
                 new Buff("Radiant Blindness", 56593, BuffSource.Enemy, BuffType.Duration, 25, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
