@@ -558,7 +558,7 @@ namespace GW2EIParser.Builders
         {
             var list = new List<BoonChartDataDto>();
             PhaseData phase = _phases[phaseIndex];
-            var boonGraphData = p.GetBoonGraphs(_log).ToDictionary(x => x.Key, x => x.Value);
+            var boonGraphData = p.GetBuffGraphs(_log).ToDictionary(x => x.Key, x => x.Value);
             BuildBoonGraphData(list, _statistics.PresentBoons, boonGraphData, phase);
             BuildBoonGraphData(list, _statistics.PresentConditions, boonGraphData, phase);
             BuildBoonGraphData(list, _statistics.PresentOffbuffs, boonGraphData, phase);
@@ -575,7 +575,7 @@ namespace GW2EIParser.Builders
             {
                 foreach (Target mainTarget in _log.FightData.GetMainTargets(_log))
                 {
-                    boonGraphData = mainTarget.GetBoonGraphs(_log);
+                    boonGraphData = mainTarget.GetBuffGraphs(_log);
                     foreach (BuffsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.Buff.Name == "Compromised" || x.Buff.Name == "Unnatural Signet" || x.Buff.Name == "Fractured - Enemy" || x.Buff.Name == "Erratic Energy"))
                     {
                         BoonChartDataDto graph = BuildBoonGraph(bgm, phase);

@@ -44,7 +44,7 @@ namespace GW2EIParser.EIData
         public override void ComputeDamageModifier(Dictionary<string, List<DamageModifierData>> data, Dictionary<Target, Dictionary<string, List<DamageModifierData>>> dataTarget, Player p, ParsedLog log)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
-            Dictionary<long, BuffsGraphModel> bgms = p.GetBoonGraphs(log);
+            Dictionary<long, BuffsGraphModel> bgms = p.GetBuffGraphs(log);
             if (!Tracker.Has(bgms) && GainComputer != ByAbsence)
             {
                 return;

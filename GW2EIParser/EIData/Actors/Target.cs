@@ -143,7 +143,7 @@ namespace GW2EIParser.EIData
                 PhaseData phase = phases[phaseIndex];
                 long fightDuration = phase.DurationInMS;
 
-                foreach (Buff boon in TrackedBoons)
+                foreach (Buff boon in TrackedBuffs)
                 {
                     if (boonDistribution.ContainsKey(boon.ID))
                     {

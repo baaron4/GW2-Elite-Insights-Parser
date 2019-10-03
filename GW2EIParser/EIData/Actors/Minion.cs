@@ -14,15 +14,15 @@ namespace GW2EIParser.EIData
             AddDamageLogs(log.CombatData.GetDamageData(AgentItem));
         }
 
-        protected override void SetBoonStatusCleanseWasteData(ParsedLog log, BuffSimulator simulator, long boonid, bool updateCondiPresence)
+        protected override void SetBuffStatusCleanseWasteData(ParsedLog log, BuffSimulator simulator, long boonid, bool updateCondiPresence)
         {
         }
 
-        protected override void SetBoonStatusGenerationData(ParsedLog log, BuffSimulationItem simul, long boonid)
+        protected override void SetBuffStatusGenerationData(ParsedLog log, BuffSimulationItem simul, long boonid)
         {
         }
 
-        protected override void InitBoonStatusData(ParsedLog log)
+        protected override void InitBuffStatusData(ParsedLog log)
         {
         }
 

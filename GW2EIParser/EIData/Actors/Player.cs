@@ -722,7 +722,7 @@ namespace GW2EIParser.EIData
 
                 long phaseDuration = phase.DurationInMS;
                 long playerActiveDuration = phase.GetPlayerActiveDuration(this, log);
-                foreach (Buff boon in TrackedBoons)
+                foreach (Buff boon in TrackedBuffs)
                 {
                     if (selfBoons.ContainsKey(boon.ID))
                     {

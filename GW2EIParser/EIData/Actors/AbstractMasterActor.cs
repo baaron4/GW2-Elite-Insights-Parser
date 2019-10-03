@@ -88,18 +88,18 @@ namespace GW2EIParser.EIData
 
         public BuffDistribution GetBoonDistribution(ParsedLog log, int phaseIndex)
         {
-            if (BoonPoints == null)
+            if (BuffPoints == null)
             {
-                SetBoonStatus(log);
+                SetBuffStatus(log);
             }
             return _boonDistribution[phaseIndex];
         }
 
         public Dictionary<long, long> GetBuffPresence(ParsedLog log, int phaseIndex)
         {
-            if (BoonPoints == null)
+            if (BuffPoints == null)
             {
-                SetBoonStatus(log);
+                SetBuffStatus(log);
             }
             return _buffPresence[phaseIndex];
         }
@@ -282,7 +282,7 @@ namespace GW2EIParser.EIData
             }
         }
 
-        protected override void InitBoonStatusData(ParsedLog log)
+        protected override void InitBuffStatusData(ParsedLog log)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int i = 0; i < phases.Count; i++)
@@ -292,7 +292,7 @@ namespace GW2EIParser.EIData
             }
         }
 
-        protected override void SetBoonStatusCleanseWasteData(ParsedLog log, BuffSimulator simulator, long boonid, bool updateCondiPresence)
+        protected override void SetBuffStatusCleanseWasteData(ParsedLog log, BuffSimulator simulator, long boonid, bool updateCondiPresence)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             var extraSimulations = new List<AbstractBuffSimulationItem>(simulator.OverstackSimulationResult);
@@ -307,7 +307,7 @@ namespace GW2EIParser.EIData
             }
         }
 
-        protected override void SetBoonStatusGenerationData(ParsedLog log, BuffSimulationItem simul, long boonid)
+        protected override void SetBuffStatusGenerationData(ParsedLog log, BuffSimulationItem simul, long boonid)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int i = 0; i < phases.Count; i++)
