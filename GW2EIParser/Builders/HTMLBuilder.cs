@@ -530,6 +530,7 @@ namespace GW2EIParser.Builders
             List<AbstractDamageEvent> damageLogs = p.GetDamageTakenLogs(null, _log, phase.Start, phase.End);
             var damageLogsBySkill = damageLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
             dto.ContributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.Damage) : 0;
+            dto.ContributedShieldDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.ShieldDamage) : 0;
             var conditionsById = _statistics.PresentConditions.ToDictionary(x => x.ID);
             foreach (KeyValuePair<SkillItem, List<AbstractDamageEvent>> entry in damageLogsBySkill)
             {
