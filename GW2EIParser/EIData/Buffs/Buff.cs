@@ -822,14 +822,15 @@ namespace GW2EIParser.EIData
 
         public static BuffSourceFinder GetBuffSourceFinder(ulong version, HashSet<long> boonIds)
         {
+            if (version > 99526)
+            {
+                return new BuffSourceFinder01102019(boonIds);
+            }
             if (version > 95112)
             {
                 return new BuffSourceFinder05032019(boonIds);
             }
-            else
-            {
-                return new BuffSourceFinder11122018(boonIds);
-            }
+            return new BuffSourceFinder11122018(boonIds);
         }
     }
 }
