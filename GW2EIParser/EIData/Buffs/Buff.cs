@@ -357,6 +357,7 @@ namespace GW2EIParser.EIData
                 new Buff("Defiant Stance",21816, BuffSource.Warrior, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/db/Defiant_Stance.png"),
                 new Buff("Rampage",14484, BuffSource.Warrior, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e4/Rampage.png"),
                 //traits
+                new Buff("Soldier's Focus", 58102, BuffSource.Warrior, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/thumb/4/4c/Empower_Allies.png/20px-Empower_Allies.png", 99526, ulong.MaxValue),
                 new Buff("Empower Allies", 14222, BuffSource.Warrior, BuffType.Duration, 1, BuffNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/4/4c/Empower_Allies.png/20px-Empower_Allies.png"),
                 new Buff("Peak Performance",46853, BuffSource.Warrior, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/98/Peak_Performance.png"),
                 new Buff("Furious Surge", 30204, BuffSource.Warrior, BuffType.Intensity, 25, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/65/Furious.png"),
@@ -431,7 +432,7 @@ namespace GW2EIParser.EIData
                 new Buff("Photon Forge",43708, BuffSource.Engineer, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/dd/Engage_Photon_Forge.png"),
                 //Traits
                 new Buff("Laser's Edge",44414, BuffSource.Engineer, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/5d/Laser%27s_Edge.png",0 , 97950),
-                new Buff("Afterburner",42210, BuffSource.Engineer, BuffType.Intensity, 5, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/51/Solar_Focusing_Lens.png"),
+                new Buff("Afterburner",42210, BuffSource.Engineer, BuffType.Intensity, 25, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/51/Solar_Focusing_Lens.png"),
                 new Buff("Iron Blooded",49065, BuffSource.Engineer, BuffType.Intensity, 25, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/1e/Iron_Blooded.png"),
                 new Buff("Streamlined Kits",18687, BuffSource.Engineer, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/cb/Streamlined_Kits.png"),
                 new Buff("Kinetic Charge",45781, BuffSource.Engineer, BuffType.Intensity, 5, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e0/Kinetic_Battery.png"),
@@ -570,7 +571,9 @@ namespace GW2EIParser.EIData
                 new Buff("Locust Swarm", 10567, BuffSource.Necromancer, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/77/Locust_Swarm.png"),
                 //new Boon("Sand Cascade", 43759, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/1e/Sand_Cascade.png"),
                 //traits
-                new Buff("Corrupter's Defense",30845, BuffSource.Necromancer, BuffType.Intensity, 10, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/11/Corrupter%27s_Fervor.png"),
+                new Buff("Corrupter's Defense",30845, BuffSource.Necromancer, BuffType.Intensity, 10, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/11/Corrupter%27s_Fervor.png", 0, 99526),
+                new Buff("Death's Carapace",30845, BuffSource.Necromancer, BuffType.Intensity, 30, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/58/Death%27s_Carapace.png", 99526, ulong.MaxValue),
+                new Buff("Flesh of the Master",13810, BuffSource.Necromancer, BuffType.Intensity, 25, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e9/Flesh_of_the_Master.png", 0, 99526),
                 new Buff("Vampiric Aura", 30285, BuffSource.Necromancer, BuffType.Duration, 1, BuffNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/d/da/Vampiric_Presence.png"),
                 new Buff("Last Rites",29726, BuffSource.Necromancer, BuffType.Duration, 1, BuffNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/1/1a/Last_Rites_%28effect%29.png"),
                 new Buff("Sadistic Searing",43626, BuffSource.Necromancer, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/dd/Sadistic_Searing.png"),
@@ -670,7 +673,8 @@ namespace GW2EIParser.EIData
                 new Buff("Grinding Stones",51658, BuffSource.Elementalist, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/3d/Grinding_Stones.png"),
                 new Buff("Static Charge",31487, BuffSource.Elementalist, BuffType.Duration, 1, BuffNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/4/4b/Overload_Air.png"),
                 //traits
-                new Buff("Harmonious Conduit",31353, BuffSource.Elementalist, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b3/Harmonious_Conduit.png"),
+                new Buff("Harmonious Conduit",31353, BuffSource.Elementalist, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b3/Harmonious_Conduit.png", 0, 99526),
+                new Buff("Transcendent Tempest",31353, BuffSource.Elementalist, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/ac/Transcendent_Tempest_%28effect%29.png", 99526, ulong.MaxValue),
                 new Buff("Fresh Air",34241, BuffSource.Elementalist, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d8/Fresh_Air.png"),
                 new Buff("Soothing Mist", 5587, BuffSource.Elementalist, BuffType.Duration, 1, BuffNature.DefensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/f/f7/Soothing_Mist.png"),
                 new Buff("Weaver's Prowess",42061, BuffSource.Elementalist, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/75/Weaver%27s_Prowess.png"),
