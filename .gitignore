@@ -264,11 +264,11 @@ __pycache__/
 .vscode
 
 # Stability test logs
-/LuckParser.tst/EvtcLogs/StabilityTest/**/*.evtc
-/LuckParser.tst/EvtcLogs/StabilityTest/**/*.zevtc
-/LuckParser.tst/EvtcLogs/StabilityTest/**/*.evtc.zip
-/LuckParser.tst/EvtcLogs/StabilityTest/**/Link
-/LuckParser.tst/EvtcLogs/**/*.json
-/LuckParser.tst/EvtcLogs/Crashes/**/*.evtc.zip
-/LuckParser.tst/EvtcLogs/Crashes/**/*.zevtc
-/LuckParser.tst/EvtcLogs/Crashes/**/*.evtc
+/GW2EIParser.tst/EvtcLogs/StabilityTest/**/*.evtc
+/GW2EIParser.tst/EvtcLogs/StabilityTest/**/*.zevtc
+/GW2EIParser.tst/EvtcLogs/StabilityTest/**/*.evtc.zip
+/GW2EIParser.tst/EvtcLogs/StabilityTest/**/Link
+/GW2EIParser.tst/EvtcLogs/**/*.json
+/GW2EIParser.tst/EvtcLogs/Crashes/**/*.evtc.zip
+/GW2EIParser.tst/EvtcLogs/Crashes/**/*.zevtc
+/GW2EIParser.tst/EvtcLogs/Crashes/**/*.evtc
