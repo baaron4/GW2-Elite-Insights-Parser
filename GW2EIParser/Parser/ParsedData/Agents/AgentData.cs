@@ -96,7 +96,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public void Refresh()
         {
-            _allAgentsByAgent = _allAgentsList.ToDictionary(x => x.Agent);
+            _allAgentsByAgent = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList().First());
             _allAgentsByID = _allAgentsList.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
             _allAgentsByInstID = _allAgentsList.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
             _allAgentsByType = _allAgentsList.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
