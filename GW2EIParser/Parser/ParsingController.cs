@@ -429,11 +429,15 @@ namespace GW2EIParser.Parser
             }
             return true;
         }
-        private static void UpdateAgentData(AgentItem ag, long logTime, ushort instid, bool canSetInstid)
+        private static void UpdateAgentData(AgentItem ag, long logTime, ushort instid, bool canSetInstid, bool canSetTime)
         {
             if (ag.InstID == 0)
             {
-                ag.InstID = canSetInstid ? instid : (ushort)0;
+                ag.InstID = canSetInstid ? instid : (ushort) 0;
+            }
+            if (!canSetTime)
+            {
+                return;
             }
             if (ag.FirstAwareLogTime == 0)
             {
@@ -458,22 +462,23 @@ namespace GW2EIParser.Parser
         }
         private void CompleteAgents()
         {
-            var agentsLookup = _allAgentsList.ToDictionary(x => x.Agent);
+            var agentsLookup = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList().First());
+            //var agentsLookup = _allAgentsList.ToDictionary(x => x.Agent);
             // Set Agent instid, firstAware and lastAware
             foreach (CombatItem c in _combatItems)
             {
                 if (agentsLookup.TryGetValue(c.SrcAgent, out AgentItem agent))
                 {
-                    UpdateAgentData(agent, c.LogTime, c.SrcInstid, c.IsStateChange == ParseEnum.StateChange.None);
+                    UpdateAgentData(agent, c.LogTime, c.SrcInstid, c.IsStateChange == ParseEnum.StateChange.None, true);
                 }
                 if (agentsLookup.TryGetValue(c.DstAgent, out agent))
                 {
-                    UpdateAgentData(agent, c.LogTime, c.DstInstid, c.IsStateChange == ParseEnum.StateChange.None);
+                    UpdateAgentData(agent, c.LogTime, c.DstInstid, c.IsStateChange == ParseEnum.StateChange.None, c.IsStateChange == ParseEnum.StateChange.None);
                 }
                 // An attack target could appear slightly before its master, this properly updates the time if it happens
                 if (c.IsStateChange == ParseEnum.StateChange.AttackTarget && agentsLookup.TryGetValue(c.DstAgent, out agent))
                 {
-                    UpdateAgentData(agent, c.LogTime, c.DstInstid, true);
+                    UpdateAgentData(agent, c.LogTime, c.DstInstid, true, true);
                 }
             }
 
