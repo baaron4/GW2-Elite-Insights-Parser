@@ -463,7 +463,6 @@ namespace GW2EIParser.Parser
         private void CompleteAgents()
         {
             var agentsLookup = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList().First());
-            var test = _allAgentsList.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList());
             //var agentsLookup = _allAgentsList.ToDictionary(x => x.Agent);
             // Set Agent instid, firstAware and lastAware
             foreach (CombatItem c in _combatItems)
