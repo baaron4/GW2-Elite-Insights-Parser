@@ -429,12 +429,8 @@ namespace GW2EIParser.Parser
             }
             return true;
         }
-        private static void UpdateAgentData(AgentItem ag, long logTime, ushort instid, bool canSet)
+        private static void UpdateAgentData(AgentItem ag, long logTime, ushort instid)
         {
-            if (!canSet)
-            {
-                return;
-            }
             if (ag.InstID == 0)
             {
                 ag.InstID = instid;
@@ -467,18 +463,19 @@ namespace GW2EIParser.Parser
             // Set Agent instid, firstAware and lastAware
             foreach (CombatItem c in _combatItems)
             {
-                if (agentsLookup.TryGetValue(c.SrcAgent, out AgentItem agent))
+                if (c.IsStateChange.SrcIsAgent())
                 {
-                    UpdateAgentData(agent, c.LogTime, c.SrcInstid, c.IsStateChange == ParseEnum.StateChange.None);
+                    if (agentsLookup.TryGetValue(c.SrcAgent, out AgentItem agent))
+                    {
+                        UpdateAgentData(agent, c.LogTime, c.SrcInstid);
+                    }
                 }
-                if (agentsLookup.TryGetValue(c.DstAgent, out agent))
+                if (c.IsStateChange.DstIsAgent())
                 {
-                    UpdateAgentData(agent, c.LogTime, c.DstInstid, c.IsStateChange == ParseEnum.StateChange.None);
-                }
-                // An attack target could appear slightly before its master, this properly updates the time if it happens
-                if (c.IsStateChange == ParseEnum.StateChange.AttackTarget && agentsLookup.TryGetValue(c.DstAgent, out agent))
-                {
-                    UpdateAgentData(agent, c.LogTime, c.DstInstid, true);
+                    if (agentsLookup.TryGetValue(c.DstAgent, out AgentItem agent))
+                    {
+                        UpdateAgentData(agent, c.LogTime, c.DstInstid);
+                    }
                 }
             }
 
@@ -493,7 +490,7 @@ namespace GW2EIParser.Parser
                     FindAgentMaster(c.LogTime, c.DstMasterInstid, c.DstAgent, agentsLookup, _allAgentsList);
                 }
             }
-            //_allAgentsList.RemoveAll(x => !(x.InstID != 0 && x.LastAwareLogTime - x.FirstAwareLogTime >= 0 && x.FirstAwareLogTime != 0 && x.LastAwareLogTime != long.MaxValue) && (x.Type != AgentItem.AgentType.Player && x.Type != AgentItem.AgentType.EnemyPlayer));
+            _allAgentsList.RemoveAll(x => !(x.InstID != 0 && x.LastAwareLogTime - x.FirstAwareLogTime >= 0 && x.FirstAwareLogTime != 0 && x.LastAwareLogTime != long.MaxValue) && (x.Type != AgentItem.AgentType.Player && x.Type != AgentItem.AgentType.EnemyPlayer));
             _agentData = new AgentData(_allAgentsList);
             if (_agentData.GetAgentByType(AgentItem.AgentType.Player).Count == 0)
             {
