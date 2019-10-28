@@ -48,15 +48,16 @@
 .boon-container {
     position: relative;
     text-align: center;
-    height: 20px;
+    height: 18px;
+    margin-right: 0.05em;
 }
 
 .boon-number {
     position: absolute;
     pointer-events: none;
-    font-size: 0.65em;
-    left: 15%;
-    top: 45%;
+    font-size: 0.5em;
+    left: 20%;
+    top: 65%;
     text-shadow: -2px -2px 3px #000000, -2px 2px 3px #000000, 2px -2px 3px #000000, 0px 2px 3px #000000, 0px -2px 3px #000000, 2px 0px 3px #000000, -2px 0px 3px #000000, 2px 2px 3px #000000;
     font-weight: bold;
     color: #fff;
@@ -232,6 +233,11 @@ table {
 
 tr.condi td {
     background-color: rgba(255, 0, 0, 0.25);
+}
+
+img.icon-s {
+    width: 16px;
+    height: 16px;
 }
 
 img.icon {

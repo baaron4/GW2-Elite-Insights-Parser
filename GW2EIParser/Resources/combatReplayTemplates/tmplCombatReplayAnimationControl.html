@@ -1,4 +1,4 @@
-<div class="d-flex flex-column justify-content-center flex-wrap">
+<div class="d-flex flex-column justify-content-center flex-wrap" :style="{'width': Math.max(canvas.x, canvas.y) + 'px'}">
     <p class="text-justify text-center">Double click on canvas to restore viewpoint</p>
     <div class="d-flex flex-column justify-content-center align-items-center" :style="{'width': '100%', 'min-width': canvas.x + 'px', 'height': canvas.y + 'px', 'position': 'relative'}">
         <canvas :width="canvas.x + 'px'" :height="canvas.y + 'px'" id="main-canvas" class="replay"></canvas>
@@ -20,7 +20,7 @@
                @input="updateInputTime($event.target.value);">
     </div>
     <div>
-        <ul class="d-flex flex-row flew-wrap justify-content-center">
+        <ul class="d-flex flex-row flex-wrap justify-content-center">
             <li class="btn btn-small" :class="{'active': backwards, 'btn-dark': !light, 'btn-light': light}"
                 v-for="phase in phases" @click="updateTime(phase.start * 1000)"
                 :data-original-title="phase.durationS + ' seconds'">
