@@ -1,0 +1,45 @@
+<div class="d-flex flex-row flex-wrap justify-content-center">
+    <ul class="nav nav-pills d-flex flex-row justify-content-center mb-1 w-100">
+        <li class="nav-item">
+            <a class="nav-link" :class="{active: showMechanics}" @click="showMechanics = !showMechanics">Mechanics List</a>
+        </li>
+    </ul>
+    <div v-if="showMechanics" id="combat-replay-mechanics-list-container" class="d-flex d-flex-row justify-content-center w-100">
+        <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th class="text-left combat-replay-mechanics-list-header position-relative">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Filter Mechanics">
+                            Mechanic <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu p-2 font-weight-normal">
+                            <li v-for="(mechanic, index) in mechanicsList" :key="index">
+                                <input :id="'crml-mechanic-' + index" type="checkbox" v-model="mechanic.included" />
+                                <label :for="'crml-mechanic-' + index">{{mechanic.shortName}}</label>
+                            </li>
+                        </ul>
+                    </th>
+                    <th class="text-left combat-replay-mechanics-list-header position-relative">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Filter Actors">
+                            Actor <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu p-2 font-weight-normal">
+                            <li v-for="(actor, index) in actorsList" :key="index">
+                                <input :id="'crml-actor-' + index" type="checkbox" v-model="actor.included" />
+                                <label :for="'crml-actor-' + index">{{actor.name}}</label>
+                            </li>
+                        </ul>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="event in filteredMechanicEvents" class="combat-replay-mechanics-list-row" @click="selectMechanic(event)">
+                    <td>{{(event.time / 1000).toFixed(2)}}s</td>
+                    <td class="text-left" :title="event.mechanic.name">{{event.mechanic.shortName}}</td>
+                    <td class="text-left">{{event.actor.name}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

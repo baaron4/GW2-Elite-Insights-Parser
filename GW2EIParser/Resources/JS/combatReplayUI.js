@@ -144,4 +144,110 @@ var compileCombatReplayUI = function () {
             }
         }
     });
+
+    Vue.component("combat-replay-mechanics-list-component", {
+        props: ["light"],
+        template: `${tmplCombatReplayMechanicsList}`,
+        data: function () {
+            var mechanicEvents = [];
+            for (var mechI = 0; mechI < graphData.mechanics.length; mechI++) {
+                var graphMechData = graphData.mechanics[mechI];
+                var logMechData = logData.mechanicMap[mechI];
+                var pointsArray = graphMechData.points[0];
+                if (!logMechData.enemyMech) {
+                    for (var playerI = 0; playerI < pointsArray.length; playerI++) {
+                        var points = pointsArray[playerI];
+                        for (var i = 0; i < points.length; i++) {
+                            var time = points[i]; // when mechanic occured in seconds
+                            var actor = logData.players[playerI];
+                            mechanicEvents.push({
+                                time: time * 1000,
+                                actor: actor,
+                                mechanic: logMechData,
+                            });
+                        }
+                    }
+                } else {
+                    // Indexing here is janky, could be improved
+                    if (graphMechData.points[0].length === 0) {
+                        continue;
+                    }
+                    var points = graphMechData.points[0][0];
+                    if (points.length === 0 && graphMechData.points[0][1]) {
+                        points = graphMechData.points[0][1];
+                    }
+                    for (var i = 0; i < points.length; i++) {
+                        var time = points[i][0]; // when mechanic occured in seconds
+                        var actorName = points[i][1] || logData.fightName;
+                        mechanicEvents.push({
+                            time: time * 1000,
+                            actor: {name: actorName, enemy: true},
+                            mechanic: logMechData,
+                        });
+                    }
+                }
+            }
+
+            mechanicEvents.sort(function(a, b) {
+                return a.time - b.time;
+            });
+
+            var actors = {};
+            var mechanics = {};
+            for (var i = 0; i < mechanicEvents.length; i++) {
+                var event = mechanicEvents[i];
+                var mechName = event.mechanic.name;
+                var actorName = event.actor.name;
+                if (!mechanics[mechName]) {
+                    mechanics[mechName] = Object.assign({}, event.mechanic, {included: true});
+                }
+                if (!actors[actorName]) {
+                    actors[actorName] = Object.assign({}, event.actor, {included: true});
+                }
+            }
+
+            var actorsList = Object.values(actors); // could be sorted for more clarity
+            actorsList.sort(function(a, b) {
+                if (a.enemy !== b.enemy) {
+                    // Sort enemies before players
+                    return a.enemy ? -1 : 1;
+                }
+                return a.name.localeCompare(b.name);
+            });
+
+            var mechanicsList = Object.values(mechanics);
+            mechanicsList.sort(function(a, b) {
+                return a.shortName.localeCompare(b.shortName);
+            });
+
+            return {
+                showMechanics: false,
+                mechanicEvents: mechanicEvents,
+                actors: actors,
+                actorsList: actorsList,
+                mechanics: mechanics,
+                mechanicsList: mechanicsList,
+            };
+        },
+        methods: {
+            selectMechanic: function (mechanic) {
+                animator.updateTime(mechanic.time);
+            },
+        },
+        computed: {
+            filteredMechanicEvents: function() {
+                return this.mechanicEvents.filter(function (event) {
+                    var actor = this.actors[event.actor.name];
+                    var mechanic = this.mechanics[event.mechanic.name];
+                    if (actor && !actor.included) {
+                        return false;
+                    }
+                    if (mechanic && !mechanic.included) {
+                        return false;
+                    }
+                    return true;
+                }.bind(this))
+            },
+        },
+    });
 };

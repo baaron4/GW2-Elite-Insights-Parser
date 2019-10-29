@@ -527,3 +527,16 @@ canvas {
 #bg-canvas {
     z-index: 1
 }
+
+#combat-replay-mechanics-list-container {
+    max-height: 800px;
+    overflow-y: scroll;
+}
+
+.combat-replay-mechanics-list-row {
+    cursor: pointer;
+}
+
+.combat-replay-mechanics-list-header > a:hover {
+    text-decoration: none;
+}

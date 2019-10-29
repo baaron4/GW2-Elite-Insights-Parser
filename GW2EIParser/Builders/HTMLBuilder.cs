@@ -859,6 +859,7 @@ namespace GW2EIParser.Builders
                     {"${tmplCombatReplayPlayerSelect}", Properties.Resources.tmplCombatReplayPlayerSelect },
                     {"${tmplCombatReplayRangeSelect}", Properties.Resources.tmplCombatReplayRangeSelect },
                     {"${tmplCombatReplayAnimationControl}", Properties.Resources.tmplCombatReplayAnimationControl },
+                    {"${tmplCombatReplayMechanicsList}", Properties.Resources.tmplCombatReplayMechanicsList },
                 };
             foreach (KeyValuePair<string, string> entry in CRtemplates)
             {
