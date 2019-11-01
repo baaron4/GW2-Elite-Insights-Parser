@@ -150,40 +150,54 @@ var compileCombatReplayUI = function () {
         template: `${tmplCombatReplayMechanicsList}`,
         data: function () {
             var mechanicEvents = [];
+            var phase = logData.phases[0];
+            var phaseTargets = phase.targets;
             for (var mechI = 0; mechI < graphData.mechanics.length; mechI++) {
                 var graphMechData = graphData.mechanics[mechI];
                 var logMechData = logData.mechanicMap[mechI];
+                var mechData = {name: logMechData.name, shortName: logMechData.shortName};
                 var pointsArray = graphMechData.points[0];
+                // players
                 if (!logMechData.enemyMech) {
                     for (var playerI = 0; playerI < pointsArray.length; playerI++) {
                         var points = pointsArray[playerI];
+                        var player = logData.players[playerI];
                         for (var i = 0; i < points.length; i++) {
                             var time = points[i]; // when mechanic occured in seconds
-                            var actor = logData.players[playerI];
                             mechanicEvents.push({
                                 time: time * 1000,
-                                actor: actor,
-                                mechanic: logMechData,
+                                actor: {name: player.name, enemy: false, id: player.combatReplayID},
+                                mechanic: mechData,
                             });
                         }
                     }
                 } else {
-                    // Indexing here is janky, could be improved
-                    if (graphMechData.points[0].length === 0) {
-                        continue;
-                    }
-                    var points = graphMechData.points[0][0];
-                    if (points.length === 0 && graphMechData.points[0][1]) {
-                        points = graphMechData.points[0][1];
-                    }
-                    for (var i = 0; i < points.length; i++) {
-                        var time = points[i][0]; // when mechanic occured in seconds
-                        var actorName = points[i][1] || logData.fightName;
-                        mechanicEvents.push({
-                            time: time * 1000,
-                            actor: {name: actorName, enemy: true},
-                            mechanic: logMechData,
-                        });
+                    // enemy
+                    for (var targetI = 0; targetI < pointsArray.length; targetI++) {
+                        var points = pointsArray[targetI];
+                        var tarId = phaseTargets[targetI];
+                        // target tracked in phase
+                        if (tarId >= 0) {
+                            var target = logData.targets[tarId];
+                            for (var i = 0; i < points.length; i++) {
+                                var time = points[i]; // when mechanic occured in seconds
+                                mechanicEvents.push({
+                                    time: time * 1000,
+                                    actor: {name: target.name, enemy: true, id: -1}, // target selection not supported
+                                    mechanic: mechData,
+                                });
+                            }
+                        } else {
+                            // target not tracked in phase
+                            for (var i = 0; i < points.length; i++) {
+                                var time = points[i][0]; // when mechanic occured in seconds
+                                mechanicEvents.push({
+                                    time: time * 1000,
+                                    actor: {name: points[i][1], enemy: true, id: -1},
+                                    mechanic: mechData,
+                                });
+                            }
+                        }
                     }
                 }
             }
