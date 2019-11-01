@@ -136,6 +136,7 @@
     <Content Include="Resources\combatReplayTemplates\tmplCombatReplayActorBuffStats.html" />
     <Content Include="Resources\combatReplayTemplates\tmplCombatReplayPlayerStats.html" />
     <Content Include="Resources\combatReplayTemplates\tmplCombatReplayStatusData.html" />
+    <Content Include="Resources\combatReplayTemplates\tmplCombatReplayMechanicsList.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayPlayerSelect.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayAnimationControl.html" />
     <Content Include="Resources\ei.css" />

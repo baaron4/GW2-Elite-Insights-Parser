@@ -585,12 +585,12 @@ namespace GW2EIParser.Properties {
         ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column justify-content-end&quot; :style=&quot;{&apos;height&apos;: enemy ? &apos;80px&apos; : &apos;100px&apos;}&quot;&gt;
         ///    &lt;div v-if=&quot;data.enemies.length &gt; 0&quot; class=&quot;d-flex&quot;&gt;
         ///        &lt;div v-for=&quot;enemy in data.enemies&quot; class=&quot;boon-container&quot;&gt;
-        ///            &lt;img :src=&quot;enemy.buff.icon&quot; :title=&quot;enemy.buff.name&quot; :alt=&quot;enemy.buff.name&quot; class=&quot;icon&quot; /&gt;
+        ///            &lt;img :src=&quot;enemy.buff.icon&quot; :title=&quot;enemy.buff.name&quot; :alt=&quot;enemy.buff.name&quot; class=&quot;icon-s&quot; /&gt;
         ///            &lt;div v-if=&quot;enemy.state &gt; 1&quot; class=&quot;boon-number&quot;&gt;{{enemy.state}}&lt;/div&gt;
         ///        &lt;/div&gt;
         ///    &lt;/div&gt;
         ///    &lt;div v-if=&quot;data.others.length &gt; 0&quot; class=&quot;d-flex&quot;&gt;
-        ///        &lt;div v- [rest of string was truncated]&quot;;.
+        ///        &lt;div  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayActorBuffStats {
             get {
@@ -617,11 +617,11 @@ namespace GW2EIParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column justify-content-center flex-wrap&quot;&gt;
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column justify-content-center flex-wrap&quot; :style=&quot;{&apos;width&apos;: Math.max(canvas.x, canvas.y) + &apos;px&apos;}&quot;&gt;
         ///    &lt;p class=&quot;text-justify text-center&quot;&gt;Double click on canvas to restore viewpoint&lt;/p&gt;
         ///    &lt;div class=&quot;d-flex flex-column justify-content-center align-items-center&quot; :style=&quot;{&apos;width&apos;: &apos;100%&apos;, &apos;min-width&apos;: canvas.x + &apos;px&apos;, &apos;height&apos;: canvas.y + &apos;px&apos;, &apos;position&apos;: &apos;relative&apos;}&quot;&gt;
         ///        &lt;canvas :width=&quot;canvas.x + &apos;px&apos;&quot; :height=&quot;canvas.y + &apos;px&apos;&quot; id=&quot;main-canvas&quot; class=&quot;replay&quot;&gt;&lt;/canvas&gt;
-        ///        &lt;canvas :width=&quot;canvas.x + &apos;px&apos;&quot; :height=&quot;canvas.y [rest of string was truncated]&quot;;.
+        ///   [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayAnimationControl {
             get {
@@ -657,6 +657,22 @@ namespace GW2EIParser.Properties {
         internal static string tmplCombatReplayDamageTable {
             get {
                 return ResourceManager.GetString("tmplCombatReplayDamageTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-row flex-wrap justify-content-center&quot;&gt;
+        ///    &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mb-1 w-100&quot;&gt;
+        ///        &lt;li class=&quot;nav-item&quot;&gt;
+        ///            &lt;a class=&quot;nav-link&quot; :class=&quot;{active: showMechanics}&quot; @click=&quot;showMechanics = !showMechanics&quot;&gt;Mechanics List&lt;/a&gt;
+        ///        &lt;/li&gt;
+        ///    &lt;/ul&gt;
+        ///    &lt;div v-if=&quot;showMechanics&quot; id=&quot;combat-replay-mechanics-list-container&quot; class=&quot;d-flex d-flex-row justify-content-center w-100&quot;&gt;
+        ///        &lt;table class=&quot;table table-sm table-striped ta [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplCombatReplayMechanicsList {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayMechanicsList", resourceCulture);
             }
         }
         
