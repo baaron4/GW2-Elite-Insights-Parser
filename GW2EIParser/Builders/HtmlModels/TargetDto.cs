@@ -21,7 +21,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public double HpLeft { get; set; }
         public ActorDetailsDto Details { get; set; }
 
-        public TargetDto(Target target, ParsedLog log, bool cr, ActorDetailsDto details)
+        public TargetDto(NPC target, ParsedLog log, bool cr, ActorDetailsDto details)
         {
             Name = target.Character;
             Icon = GeneralHelper.GetNPCIcon(target.ID);
@@ -47,9 +47,9 @@ namespace GW2EIParser.Builders.HtmlModels
                 }
             }
             Percent = Math.Round(100.0 - HpLeft, 2);
-            foreach (KeyValuePair<string, MinionsList> pair in target.GetMinions(log))
+            foreach (KeyValuePair<long, Minions> pair in target.GetMinions(log))
             {
-                Minions.Add(new MinionDto() { Id = pair.Value.MinionID, Name = pair.Key.TrimEnd(" \0".ToArray()) });
+                Minions.Add(new MinionDto() { Id = pair.Key, Name = pair.Value.Character });
             }
         }
     }

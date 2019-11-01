@@ -23,9 +23,9 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             }
         }
 
-        public override void UpdateSimulator(BuffSimulator simulator)
+        public override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            simulator.Extend(AppliedDuration, _oldValue, By, Time);
+            simulator.Extend(AppliedDuration, _oldValue, By, Time, BuffInstance);
         }
 
         public override int CompareTo(AbstractBuffEvent abe)

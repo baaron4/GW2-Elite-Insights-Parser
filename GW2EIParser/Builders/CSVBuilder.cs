@@ -15,7 +15,7 @@ namespace GW2EIParser.Builders
     {
         private readonly ParsedLog _log;
         private readonly List<PhaseData> _phases;
-        private readonly Target _legacyTarget;
+        private readonly NPC _legacyTarget;
         private readonly Statistics _statistics;
         private readonly StreamWriter _sw;
         private readonly string _delimiter;
@@ -34,7 +34,7 @@ namespace GW2EIParser.Builders
             _legacyTarget = log.FightData.Logic.Targets.Find(x => x.ID == log.FightData.ID);
             if (_legacyTarget == null)
             {
-                _legacyTarget = new Target(GeneralHelper.UnknownAgent);
+                _legacyTarget = new NPC(GeneralHelper.UnknownAgent);
             }
         }
         private void WriteCell(string content)
@@ -706,7 +706,7 @@ namespace GW2EIParser.Builders
         }
         private void CreateCondiUptime(int phaseIndex)
         {
-            Target boss = _legacyTarget;
+            NPC boss = _legacyTarget;
             Dictionary<long, Statistics.FinalTargetBuffs> conditions = _legacyTarget.GetBuffs(_log, phaseIndex);
 
             WriteCell("Name");
@@ -748,7 +748,7 @@ namespace GW2EIParser.Builders
         }
         private void CreateBossBoonUptime(int phaseIndex)
         {
-            Target boss = _legacyTarget;
+            NPC boss = _legacyTarget;
             Dictionary<long, Statistics.FinalTargetBuffs> conditions = _legacyTarget.GetBuffs(_log, phaseIndex);
             WriteCell("Name");
             WriteCell("Avg");

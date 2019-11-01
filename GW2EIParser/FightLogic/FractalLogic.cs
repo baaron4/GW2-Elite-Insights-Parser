@@ -24,7 +24,7 @@ namespace GW2EIParser.Logic
         {
             // generic method for fractals
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == TriggerID);
+            NPC mainTarget = Targets.Find(x => x.ID == TriggerID);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -52,7 +52,7 @@ namespace GW2EIParser.Logic
             };
         }
 
-        protected static void SetSuccessByBuffCount(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, Target target, long buffID, int count)
+        protected static void SetSuccessByBuffCount(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, NPC target, long buffID, int count)
         {
             if (target == null)
             {
@@ -64,7 +64,7 @@ namespace GW2EIParser.Logic
                 AbstractBuffEvent last = invulsTarget.Last();
                 if (!(last is BuffApplyEvent))
                 {
-                    SetSuccessByCombatExit(new List<Target> { target }, combatData, fightData, playerAgents);
+                    SetSuccessByCombatExit(new List<NPC> { target }, combatData, fightData, playerAgents);
                 }
             }
         }
@@ -72,7 +72,7 @@ namespace GW2EIParser.Logic
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             // check reward
-            Target mainTarget = Targets.Find(x => x.ID == TriggerID);
+            NPC mainTarget = Targets.Find(x => x.ID == TriggerID);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");

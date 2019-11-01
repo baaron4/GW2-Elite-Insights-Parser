@@ -169,7 +169,7 @@ namespace GW2EIParser.Builders
         private void SetTargets(JsonLog log)
         {
             log.Targets = new List<JsonTarget>();
-            foreach (Target target in _log.FightData.Logic.Targets)
+            foreach (NPC target in _log.FightData.Logic.Targets)
             {
                 var jsTarget = new JsonTarget
                 {
@@ -269,7 +269,7 @@ namespace GW2EIParser.Builders
             }
         }
 
-        private List<int>[] BuildTotal1SDamage(AbstractMasterActor p)
+        private List<int>[] BuildTotal1SDamage(AbstractSingleActor p)
         {
             var list = new List<int>[_phases.Count];
             for (int i = 0; i < _phases.Count; i++)
@@ -284,7 +284,7 @@ namespace GW2EIParser.Builders
             var tarList = new List<int>[_log.FightData.Logic.Targets.Count][];
             for (int j = 0; j < _log.FightData.Logic.Targets.Count; j++)
             {
-                Target target = _log.FightData.Logic.Targets[j];
+                NPC target = _log.FightData.Logic.Targets[j];
                 var list = new List<int>[_phases.Count];
                 for (int i = 0; i < _phases.Count; i++)
                 {
@@ -299,7 +299,7 @@ namespace GW2EIParser.Builders
         {
             var res = new JsonDPS[_log.FightData.Logic.Targets.Count][];
             int i = 0;
-            foreach (Target tar in _log.FightData.Logic.Targets)
+            foreach (NPC tar in _log.FightData.Logic.Targets)
             {
                 res[i++] = p.GetDPSTarget(_log, tar).Select(x => new JsonDPS(x)).ToArray();
             }
@@ -310,7 +310,7 @@ namespace GW2EIParser.Builders
         {
             var res = new JsonStats[_log.FightData.Logic.Targets.Count][];
             int i = 0;
-            foreach (Target tar in _log.FightData.Logic.Targets)
+            foreach (NPC tar in _log.FightData.Logic.Targets)
             {
                 res[i++] = p.GetStatsTarget(_log, tar).Select(x => new JsonStats(x)).ToArray();
             }
@@ -361,7 +361,7 @@ namespace GW2EIParser.Builders
             var res = new List<JsonBuffDamageModifierData>[_log.FightData.Logic.Targets.Count];
             for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
             {
-                Target tar = _log.FightData.Logic.Targets[i];
+                NPC tar = _log.FightData.Logic.Targets[i];
                 res[i] = BuildDamageModifiers(p.GetDamageModifierData(_log, tar));
             }
             return res;
@@ -392,29 +392,29 @@ namespace GW2EIParser.Builders
             return res.Count > 0 ? res : null;
         }
 
-        private List<JsonDamageDist>[][] BuildDamageDist(AbstractMasterActor p)
+        private List<JsonDamageDist>[][] BuildDamageDist(AbstractSingleActor p)
         {
             var res = new List<JsonDamageDist>[_log.FightData.Logic.Targets.Count][];
             for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
             {
-                Target target = _log.FightData.Logic.Targets[i];
+                NPC target = _log.FightData.Logic.Targets[i];
                 res[i] = BuildDamageDist(p, target);
             }
             return res;
         }
 
-        private List<JsonDamageDist>[][] BuildDamageDist(MinionsList p)
+        private List<JsonDamageDist>[][] BuildDamageDist(Minions p)
         {
             var res = new List<JsonDamageDist>[_log.FightData.Logic.Targets.Count][];
             for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
             {
-                Target target = _log.FightData.Logic.Targets[i];
+                NPC target = _log.FightData.Logic.Targets[i];
                 res[i] = BuildDamageDist(p, target);
             }
             return res;
         }
 
-        private List<JsonDamageDist>[] BuildDamageDist(AbstractMasterActor p, Target target)
+        private List<JsonDamageDist>[] BuildDamageDist(AbstractSingleActor p, NPC target)
         {
             var res = new List<JsonDamageDist>[_phases.Count];
             for (int i = 0; i < _phases.Count; i++)
@@ -425,7 +425,7 @@ namespace GW2EIParser.Builders
             return res;
         }
 
-        private List<JsonDamageDist>[] BuildDamageTaken(AbstractMasterActor p)
+        private List<JsonDamageDist>[] BuildDamageTaken(AbstractSingleActor p)
         {
             var res = new List<JsonDamageDist>[_phases.Count];
             for (int i = 0; i < _phases.Count; i++)
@@ -436,13 +436,13 @@ namespace GW2EIParser.Builders
             return res;
         }
 
-        private List<JsonDamageDist>[] BuildDamageDist(MinionsList p, Target target)
+        private List<JsonDamageDist>[] BuildDamageDist(Minions p, NPC target)
         {
             var res = new List<JsonDamageDist>[_phases.Count];
             for (int i = 0; i < _phases.Count; i++)
             {
                 PhaseData phase = _phases[i];
-                res[i] = BuildDamageDist(p.GetDamageLogs(target, _log, phase.Start, phase.End));
+                res[i] = BuildDamageDist(p.GetDamageLogs(target, _log, phase));
             }
             return res;
         }
@@ -492,10 +492,10 @@ namespace GW2EIParser.Builders
             return res;
         }
 
-        private List<JsonMinions> BuildMinions(AbstractMasterActor master)
+        private List<JsonMinions> BuildMinions(AbstractSingleActor master)
         {
             var mins = new List<JsonMinions>();
-            foreach (MinionsList minions in master.GetMinions(_log).Values)
+            foreach (Minions minions in master.GetMinions(_log).Values)
             {
                 var totalDamage = new List<int>();
                 var totalShieldDamage = new List<int>();
@@ -505,7 +505,7 @@ namespace GW2EIParser.Builders
                 {
                     int tot = 0;
                     int shdTot = 0;
-                    foreach (AbstractDamageEvent de in minions.GetDamageLogs(null, _log, phase.Start, phase.End))
+                    foreach (AbstractDamageEvent de in minions.GetDamageLogs(null, _log, phase))
                     {
                         tot += de.Damage;
                         shdTot = de.ShieldDamage;
@@ -515,14 +515,14 @@ namespace GW2EIParser.Builders
                 }
                 for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
                 {
-                    Target tar = _log.FightData.Logic.Targets[i];
+                    NPC tar = _log.FightData.Logic.Targets[i];
                     var totalTarDamage = new List<int>();
                     var totalTarShieldDamage = new List<int>();
                     foreach (PhaseData phase in _phases)
                     {
                         int tot = 0;
                         int shdTot = 0;
-                        foreach (AbstractDamageEvent de in minions.GetDamageLogs(tar, _log, phase.Start, phase.End))
+                        foreach (AbstractDamageEvent de in minions.GetDamageLogs(tar, _log, phase))
                         {
                             tot += de.Damage;
                             shdTot = de.ShieldDamage;
@@ -592,7 +592,7 @@ namespace GW2EIParser.Builders
             foreach (PhaseData phase in _phases)
             {
                 var phaseJson = new JsonPhase(phase);
-                foreach (Target tar in phase.Targets)
+                foreach (NPC tar in phase.Targets)
                 {
                     phaseJson.Targets.Add(_log.FightData.Logic.Targets.IndexOf(tar));
                 }
@@ -614,7 +614,7 @@ namespace GW2EIParser.Builders
             }
         }
 
-        private List<JsonTargetBuffs> BuildTargetBuffs(List<Dictionary<long, Statistics.FinalTargetBuffs>> statBoons, Target target)
+        private List<JsonTargetBuffs> BuildTargetBuffs(List<Dictionary<long, Statistics.FinalTargetBuffs>> statBoons, NPC target)
         {
             var boons = new List<JsonTargetBuffs>();
 
@@ -685,7 +685,7 @@ namespace GW2EIParser.Builders
                 }
                 if (buff.Nature == Buff.BuffNature.GraphOnlyBuff && buff.Source == Buff.ProfToEnum(player.Prof))
                 {
-                    if (player.GetBoonDistribution(_log, 0).GetUptime(pair.Key) > 0)
+                    if (player.GetBuffDistribution(_log, 0).GetUptime(pair.Key) > 0)
                     {
                         if (_personalBuffs.TryGetValue(player.Prof, out HashSet<long> list) && !list.Contains(pair.Key))
                         {

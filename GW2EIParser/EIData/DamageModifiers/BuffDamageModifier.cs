@@ -41,7 +41,7 @@ namespace GW2EIParser.EIData
             return gain > 0.0 ? gain * dl.Damage : -1.0;
         }
 
-        public override void ComputeDamageModifier(Dictionary<string, List<DamageModifierData>> data, Dictionary<Target, Dictionary<string, List<DamageModifierData>>> dataTarget, Player p, ParsedLog log)
+        public override void ComputeDamageModifier(Dictionary<string, List<DamageModifierData>> data, Dictionary<NPC, Dictionary<string, List<DamageModifierData>>> dataTarget, Player p, ParsedLog log)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             Dictionary<long, BuffsGraphModel> bgms = p.GetBuffGraphs(log);
@@ -49,7 +49,7 @@ namespace GW2EIParser.EIData
             {
                 return;
             }
-            foreach (Target target in log.FightData.Logic.Targets)
+            foreach (NPC target in log.FightData.Logic.Targets)
             {
                 if (!dataTarget.TryGetValue(target, out Dictionary<string, List<DamageModifierData>> extra))
                 {

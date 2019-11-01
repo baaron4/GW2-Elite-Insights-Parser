@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser.ParsedData;
 
@@ -48,12 +47,12 @@ namespace GW2EIParser.Builders.HtmlModels
             {
                 CombatReplayID = player.GetCombatReplayID(log);
             }
-            foreach (KeyValuePair<string, MinionsList> pair in player.GetMinions(log))
+            foreach (KeyValuePair<long, Minions> pair in player.GetMinions(log))
             {
                 Minions.Add(new MinionDto()
                 {
-                    Id = pair.Value.MinionID,
-                    Name = pair.Key.TrimEnd(" \0".ToArray())
+                    Id = pair.Key,
+                    Name = pair.Value.Character
                 });
             }
         }

@@ -126,7 +126,7 @@ class Animator {
                 case "Target":
                     this.targetData.set(actor.id, new EnemyIconDrawable(actor.start, actor.end, actor.img, 30, actor.positions));
                     break;
-                case "Mob":
+                case "NPC":
                     this.trashMobData.set(actor.id, new EnemyIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions));
                     break;
                 case "Circle":

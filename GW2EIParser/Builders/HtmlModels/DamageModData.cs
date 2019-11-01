@@ -39,7 +39,7 @@ namespace GW2EIParser.Builders.HtmlModels
                 }
             }
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
-            foreach (Target target in phase.Targets)
+            foreach (NPC target in phase.Targets)
             {
                 var pTarget = new List<object[]>();
                 DataTarget.Add(pTarget);

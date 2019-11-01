@@ -93,7 +93,7 @@ namespace GW2EIParser.EIData
             }
         }
 
-        public int GetTotalDamage(Player p, ParsedLog log, Target t, int phaseIndex)
+        public int GetTotalDamage(Player p, ParsedLog log, NPC t, int phaseIndex)
         {
             FinalDPS damageData = p.GetDPSTarget(log, phaseIndex, t);
             switch (_compareType)
@@ -108,7 +108,7 @@ namespace GW2EIParser.EIData
             return 0;
         }
 
-        public List<AbstractDamageEvent> GetDamageLogs(Player p, ParsedLog log, Target t, PhaseData phase)
+        public List<AbstractDamageEvent> GetDamageLogs(Player p, ParsedLog log, NPC t, PhaseData phase)
         {
             switch (_srcType)
             {
@@ -122,7 +122,7 @@ namespace GW2EIParser.EIData
             }
         }
 
-        public abstract void ComputeDamageModifier(Dictionary<string, List<DamageModifierData>> data, Dictionary<Target, Dictionary<string, List<DamageModifierData>>> dataTarget, Player p, ParsedLog log);
+        public abstract void ComputeDamageModifier(Dictionary<string, List<DamageModifierData>> data, Dictionary<NPC, Dictionary<string, List<DamageModifierData>>> dataTarget, Player p, ParsedLog log);
 
         protected static GainComputer ByPresence = new GainComputerByPresence();
         protected static GainComputer ByPresenceNonMulti = new GainComputerNonMultiplier();

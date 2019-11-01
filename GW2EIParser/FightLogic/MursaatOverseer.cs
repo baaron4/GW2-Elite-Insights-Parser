@@ -51,7 +51,7 @@ namespace GW2EIParser.Logic
         {
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.MursaatOverseer);
+            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.MursaatOverseer);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -99,13 +99,13 @@ namespace GW2EIParser.Logic
         }
 
 
-        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = mob.GetCastLogs(log, 0, log.FightData.FightDuration);
-            switch (mob.ID)
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (target.ID)
             {
                 case (ushort)Jade:
-                    List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, 38155, mob, true);
+                    List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, 38155, target, true);
                     int shieldStart = 0;
                     int shieldRadius = 100;
                     foreach (AbstractBuffEvent c in shield)
@@ -117,7 +117,7 @@ namespace GW2EIParser.Logic
                         else
                         {
                             int shieldEnd = (int)c.Time;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, shieldRadius, (shieldStart, shieldEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(mob)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, shieldRadius, (shieldStart, shieldEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
                         }
                     }
                     var explosion = cls.Where(x => x.SkillId == 37788).ToList();
@@ -127,18 +127,18 @@ namespace GW2EIParser.Logic
                         int precast = 1350;
                         int duration = 100;
                         int radius = 1200;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, start + precast + duration), "rgba(255, 0, 0, 0.05)", new AgentConnector(mob)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start + precast - 10, start + precast + duration), "rgba(255, 0, 0, 0.25)", new AgentConnector(mob)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, start + precast + duration), "rgba(255, 0, 0, 0.05)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start + precast - 10, start + precast + duration), "rgba(255, 0, 0, 0.25)", new AgentConnector(target)));
                     }
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
             }
         }
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.MursaatOverseer);
+            NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.MursaatOverseer);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");

@@ -62,7 +62,7 @@ namespace GW2EIParser.EIData
         }
 
 
-        public override void ComputeDamageModifier(Dictionary<string, List<DamageModifierData>> data, Dictionary<Target, Dictionary<string, List<DamageModifierData>>> dataTarget, Player p, ParsedLog log)
+        public override void ComputeDamageModifier(Dictionary<string, List<DamageModifierData>> data, Dictionary<NPC, Dictionary<string, List<DamageModifierData>>> dataTarget, Player p, ParsedLog log)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             Dictionary<long, BuffsGraphModel> bgmsP = p.GetBuffGraphs(log);
@@ -73,7 +73,7 @@ namespace GW2EIParser.EIData
                     return;
                 }
             }
-            foreach (Target target in log.FightData.Logic.Targets)
+            foreach (NPC target in log.FightData.Logic.Targets)
             {
                 Dictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
                 if (!Tracker.Has(bgms) && GainComputer != ByAbsence)

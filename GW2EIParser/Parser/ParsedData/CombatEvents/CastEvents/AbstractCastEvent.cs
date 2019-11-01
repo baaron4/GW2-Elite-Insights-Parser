@@ -19,7 +19,7 @@
         {
             Skill = skillData.Get(startEvtcItem.SkillID);
             Caster = agentData.GetAgent(startEvtcItem.SrcAgent);
-            UnderQuickness = startEvtcItem.IsActivation == ParseEnum.EvtcActivation.Quickness;
+            UnderQuickness = startEvtcItem.IsActivation == ParseEnum.Activation.Quickness;
             ExpectedDuration = startEvtcItem.Value;
         }
 

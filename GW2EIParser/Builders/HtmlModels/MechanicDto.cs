@@ -13,7 +13,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public bool EnemyMech { get; set; }
         public bool PlayerMech { get; set; }
 
-        public static List<int[]> GetMechanicData(HashSet<Mechanic> presMech, ParsedLog log, DummyActor actor, PhaseData phase)
+        public static List<int[]> GetMechanicData(HashSet<Mechanic> presMech, ParsedLog log, AbstractActor actor, PhaseData phase)
         {
             var res = new List<int[]>();
 

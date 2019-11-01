@@ -5,7 +5,7 @@ namespace GW2EIParser.Parser
     public static class ParseEnum
     {
         // Activation
-        public enum EvtcActivation : byte
+        public enum Activation : byte
         {
             None = 0,
             Normal = 1,
@@ -17,11 +17,11 @@ namespace GW2EIParser.Parser
             Unknown
         };
 
-        public static EvtcActivation GetEvtcActivation(byte bt)
+        public static Activation GetActivation(byte bt)
         {
-            return bt < (byte)EvtcActivation.Unknown
-                ? (EvtcActivation)bt
-                : EvtcActivation.Unknown;
+            return bt < (byte)Activation.Unknown
+                ? (Activation)bt
+                : Activation.Unknown;
         }
 
         // Buff remove
@@ -438,16 +438,16 @@ namespace GW2EIParser.Parser
         }
     }
 
-    internal static class EvtcActivationExtensions
+    internal static class ActivationExtensions
     {
-        public static bool StartCasting(this ParseEnum.EvtcActivation activation)
+        public static bool StartCasting(this ParseEnum.Activation activation)
         {
-            return activation == ParseEnum.EvtcActivation.Normal || activation == ParseEnum.EvtcActivation.Quickness;
+            return activation == ParseEnum.Activation.Normal || activation == ParseEnum.Activation.Quickness;
         }
 
-        public static bool NoInterruptEndCasting(this ParseEnum.EvtcActivation activation)
+        public static bool NoInterruptEndCasting(this ParseEnum.Activation activation)
         {
-            return activation == ParseEnum.EvtcActivation.CancelFire || activation == ParseEnum.EvtcActivation.Reset;
+            return activation == ParseEnum.Activation.CancelFire || activation == ParseEnum.Activation.Reset;
         }
     }
 }

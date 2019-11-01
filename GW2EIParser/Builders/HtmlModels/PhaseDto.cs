@@ -85,7 +85,7 @@ namespace GW2EIParser.Builders.HtmlModels
             Duration = phaseData.DurationInMS;
             Start = phaseData.Start / 1000.0;
             End = phaseData.End / 1000.0;
-            foreach (Target target in phaseData.Targets)
+            foreach (NPC target in phaseData.Targets)
             {
                 Targets.Add(log.FightData.Logic.Targets.IndexOf(target));
             }

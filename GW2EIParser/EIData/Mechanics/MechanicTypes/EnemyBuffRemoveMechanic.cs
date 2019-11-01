@@ -26,40 +26,19 @@ namespace GW2EIParser.EIData
             IsEnemyMechanic = true;
         }
 
-        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs)
+        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<ushort, AbstractActor> regroupedMobs)
         {
             CombatData combatData = log.CombatData;
             HashSet<AgentItem> playerAgents = log.PlayerAgents;
             foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(SkillId))
             {
-                DummyActor amp = null;
+                AbstractActor amp = null;
                 if (c is BuffRemoveManualEvent rme && Keep(rme, log))
                 {
-                    Target target = log.FightData.Logic.Targets.Find(x => x.AgentItem == rme.To);
-                    if (target != null)
+                    if (!regroupedMobs.TryGetValue(rme.To.ID, out amp))
                     {
-                        amp = target;
-                    }
-                    else
-                    {
-                        AgentItem a = rme.To;
-                        if (playerAgents.Contains(a))
-                        {
-                            continue;
-                        }
-                        else if (a.Master != null)
-                        {
-                            AgentItem m = a.Master;
-                            if (playerAgents.Contains(m))
-                            {
-                                continue;
-                            }
-                        }
-                        if (!regroupedMobs.TryGetValue(a.ID, out amp))
-                        {
-                            amp = new DummyActor(a);
-                            regroupedMobs.Add(a.ID, amp);
-                        }
+                        amp = log.FindActor(rme.To, false);
+                        regroupedMobs.Add(amp.ID, amp);
                     }
                 }
                 if (amp != null)

@@ -128,7 +128,7 @@ namespace GW2EIParser.Logic
             // If changing phase detection, combat replay platform timings may have to be updated.
 
             List<PhaseData> phases = GetInitialPhase(log);
-            Target qadim = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Qadim);
+            NPC qadim = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Qadim);
             if (qadim == null)
             {
                 throw new InvalidOperationException("Qadim not found");
@@ -191,7 +191,7 @@ namespace GW2EIParser.Logic
             };
         }
 
-        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             int ccRadius = 200;
@@ -426,13 +426,13 @@ namespace GW2EIParser.Logic
                     }
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
             }
         }
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Qadim);
+            NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Qadim);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");
@@ -440,7 +440,7 @@ namespace GW2EIParser.Logic
             return (target.GetHealth(combatData) > 21e6) ? 1 : 0;
         }
 
-        private void AddPlatformsToCombatReplay(Target target, ParsedLog log, CombatReplay replay)
+        private void AddPlatformsToCombatReplay(NPC target, ParsedLog log, CombatReplay replay)
         {
             // We later use the target to find out the timing of the last move
             Debug.Assert(target.ID == (int)ParseEnum.TargetIDS.Qadim);

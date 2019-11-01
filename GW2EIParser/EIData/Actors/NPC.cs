@@ -7,14 +7,14 @@ using static GW2EIParser.Models.Statistics;
 
 namespace GW2EIParser.EIData
 {
-    public class Target : AbstractMasterActor
+    public class NPC : AbstractSingleActor
     {
 
         private List<double> _avgConditions;
         private List<double> _avgBoons;
         private List<Dictionary<long, FinalTargetBuffs>> _buffs;
         // Constructors
-        public Target(AgentItem agent) : base(agent)
+        public NPC(AgentItem agent) : base(agent)
         {
         }
 
@@ -135,7 +135,7 @@ namespace GW2EIParser.EIData
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
-                BuffDistribution boonDistribution = GetBoonDistribution(log, phaseIndex);
+                BuffDistribution boonDistribution = GetBuffDistribution(log, phaseIndex);
                 var rates = new Dictionary<long, FinalTargetBuffs>();
                 _buffs.Add(rates);
                 Dictionary<long, long> buffPresence = GetBuffPresence(log, phaseIndex);
@@ -188,8 +188,8 @@ namespace GW2EIParser.EIData
 
         protected override void InitAdditionalCombatReplayData(ParsedLog log)
         {
-            log.FightData.Logic.ComputeTargetCombatReplayActors(this, log, CombatReplay);
-            if (CombatReplay.Rotations.Any())
+            log.FightData.Logic.ComputeNPCCombatReplayActors(this, log, CombatReplay);
+            if (CombatReplay.Rotations.Any() && log.FightData.Logic.Targets.Contains(this))
             {
                 CombatReplay.Decorations.Add(new FacingDecoration(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
             }
@@ -271,19 +271,18 @@ namespace GW2EIParser.EIData
             }
             var aux = new TargetSerializable
             {
-                Img = CombatReplay.Icon,
+                Img = Icon,
                 Type = "Target",
                 ID = GetCombatReplayID(log),
                 Start = CombatReplay.TimeOffsets.start,
                 End = CombatReplay.TimeOffsets.end,
-                Positions = new double[2 * CombatReplay.PolledPositions.Count]
+                Positions = new List<double>()
             };
-            int i = 0;
             foreach (Point3D pos in CombatReplay.PolledPositions)
             {
                 (double x, double y) = map.GetMapCoord(pos.X, pos.Y);
-                aux.Positions[i++] = x;
-                aux.Positions[i++] = y;
+                aux.Positions.Add(x);
+                aux.Positions.Add(y);
             }
             return aux;
         }
@@ -295,23 +294,10 @@ namespace GW2EIParser.EIData
                 // no combat replay support on fight
                 return;
             }
-            CombatReplay = new CombatReplay
-            {
-                Icon = GeneralHelper.GetNPCIcon(ID)
-            };
+            CombatReplay = new CombatReplay();
             SetMovements(log);
             CombatReplay.PollingRate(log.FightData.FightDuration, log.FightData.GetMainTargets(log).Contains(this));
             TrimCombatReplay(log);
         }
-
-        /*protected override void setHealingLogs(ParsedLog log)
-        {
-            // nothing to do
-        }
-
-        protected override void setHealingReceivedLogs(ParsedLog log)
-        {
-            // nothing to do
-        }*/
     }
 }

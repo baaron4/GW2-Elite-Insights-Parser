@@ -8,7 +8,7 @@
         public int Value { get; private set; }
         public int BuffDmg { get; }
         public uint OverstackValue { get; }
-        public long SkillID { get; }
+        public long SkillID { get; private set; }
         public ushort SrcInstid { get; private set; }
         public ushort DstInstid { get; private set; }
         public ushort SrcMasterInstid { get; private set; }
@@ -16,7 +16,7 @@
         public ParseEnum.IFF IFF { get; }
         public byte IsBuff { get; }
         public byte Result { get; }
-        public ParseEnum.EvtcActivation IsActivation { get; }
+        public ParseEnum.Activation IsActivation { get; }
         public ParseEnum.BuffRemove IsBuffRemove { get; }
         public byte IsNinety { get; }
         public byte IsFifty { get; }
@@ -26,13 +26,15 @@
         public byte IsShields { get; }
         public byte IsOffcycle { get; }
 
+        public uint Pad { get; }
+
         // Constructor
         public CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
                long skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid,
                ushort dstMasterInstid, ParseEnum.IFF iff, byte isBuff,
-               byte result, ParseEnum.EvtcActivation isActivation,
+               byte result, ParseEnum.Activation isActivation,
                ParseEnum.BuffRemove isBuffRemove, byte isNinety, byte isFifty, byte isMoving,
-               ParseEnum.StateChange isStateChange, byte isFlanking, byte isShields, byte isOffcycle)
+               ParseEnum.StateChange isStateChange, byte isFlanking, byte isShields, byte isOffcycle, uint pad)
         {
             LogTime = time;
             SrcAgent = srcAgent;
@@ -57,6 +59,7 @@
             IsFlanking = isFlanking;
             IsShields = isShields;
             IsOffcycle = isOffcycle;
+            Pad = pad;
         }
 
         public CombatItem(CombatItem c)
@@ -84,6 +87,7 @@
             IsFlanking = c.IsFlanking;
             IsShields = c.IsShields;
             IsOffcycle = c.IsOffcycle;
+            Pad = c.Pad;
         }
 
 
@@ -96,6 +100,11 @@
         {
             SrcInstid = instid;
             SrcAgent = agent;
+        }
+
+        public void OverrideSkillID(long skillID)
+        {
+            SkillID = skillID;
         }
 
         public void OverrideSrcValues(ulong agent, ushort instid, ushort masterInstid)
@@ -124,3 +133,4 @@
         }
     }
 }
+

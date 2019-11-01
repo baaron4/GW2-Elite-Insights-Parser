@@ -10,7 +10,7 @@ namespace GW2EIParser.EIData
         {
         }
 
-        public override void Extend(long extension, long oldValue, AgentItem src, long time)
+        public override void Extend(long extension, long oldValue, AgentItem src, long start, uint stackID)
         {
             if ((BuffStack.Count > 0 && oldValue > 0) || BuffStack.Count == Capacity)
             {
@@ -18,7 +18,7 @@ namespace GW2EIParser.EIData
             }
             else
             {
-                Add(oldValue + extension, src, _lastSrcRemove.agent, time, true, _lastSrcRemove.extension);
+                Add(oldValue + extension, src, _lastSrcRemove.agent, start, true, _lastSrcRemove.extension);
             }
         }
 

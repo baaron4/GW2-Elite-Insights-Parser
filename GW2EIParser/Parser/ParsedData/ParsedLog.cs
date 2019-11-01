@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Exceptions;
@@ -9,8 +10,6 @@ namespace GW2EIParser.Parser.ParsedData
 {
     public class ParsedLog
     {
-        private readonly List<Mob> _auxMobs = new List<Mob>();
-
         public LogData LogData { get; }
         public FightData FightData { get; }
         public AgentData AgentData { get; }
@@ -26,6 +25,9 @@ namespace GW2EIParser.Parser.ParsedData
 
         public MechanicData MechanicData { get; }
         public Statistics Statistics { get; }
+
+
+        private Dictionary<AgentItem, AbstractSingleActor> _agentToActorDictionary;
 
         public ParsedLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData,
                 List<CombatItem> combatItems, List<Player> playerList)
@@ -62,44 +64,64 @@ namespace GW2EIParser.Parser.ParsedData
             FightData.SetCM(CombatData, AgentData, FightData);
         }
 
+        private void AddToDictionary(AbstractSingleActor actor)
+        {
+            _agentToActorDictionary[actor.AgentItem] = actor;
+            foreach (Minions minions in actor.GetMinions(this).Values)
+            {
+                foreach (NPC npc in minions.MinionList)
+                {
+                    AddToDictionary(npc);
+                }
+            }
+        }
+
+        private void InitActorDictionaries()
+        {
+            if (_agentToActorDictionary == null)
+            {
+                _agentToActorDictionary = new Dictionary<AgentItem, AbstractSingleActor>();
+                foreach (Player p in PlayerList)
+                {
+                    AddToDictionary(p);
+                }
+                foreach (NPC npc in FightData.Logic.Targets)
+                {
+                    AddToDictionary(npc);
+                }
+
+                foreach (NPC npc in FightData.Logic.TrashMobs)
+                {
+                    AddToDictionary(npc);
+                }
+            }
+        }
+
         /// <summary>
         /// Find the corresponding actor, creates one otherwise
         /// </summary>
         /// <param name="a"></param>
         /// <returns></returns>
-        public AbstractActor FindActor(AgentItem a)
+        public AbstractSingleActor FindActor(AgentItem a, bool searchPlayers)
         {
-            AbstractActor res = PlayerList.FirstOrDefault(x => x.AgentItem == a);
-            if (res == null)
+            if (a == null || a == GeneralHelper.UnknownAgent || a.Type == AgentItem.AgentType.EnemyPlayer || (!searchPlayers && a.Type == AgentItem.AgentType.Player))
             {
-                foreach (Player p in PlayerList)
+                return null;
+            }
+            InitActorDictionaries();
+            if (!_agentToActorDictionary.TryGetValue(a, out AbstractSingleActor actor))
+            {
+                throw new InvalidOperationException("Requested actor with id " + a.ID + " and name " + a.Name + " is missing");
+            }
+            if (a.Master != null)
+            {
+                AgentItem master = a.Master;
+                if (master.Type == AgentItem.AgentType.EnemyPlayer || (!searchPlayers && master.Type == AgentItem.AgentType.Player))
                 {
-                    Dictionary<string, MinionsList> minionsDict = p.GetMinions(this);
-                    foreach (MinionsList minions in minionsDict.Values)
-                    {
-                        res = minions.FirstOrDefault(x => x.AgentItem == a);
-                        if (res != null)
-                        {
-                            return res;
-                        }
-                    }
-                }
-                res = FightData.Logic.Targets.FirstOrDefault(x => x.AgentItem == a);
-                if (res == null)
-                {
-                    res = FightData.Logic.TrashMobs.FirstOrDefault(x => x.AgentItem == a);
-                    if (res == null)
-                    {
-                        res = _auxMobs.FirstOrDefault(x => x.AgentItem == a);
-                        if (res == null)
-                        {
-                            _auxMobs.Add(new Mob(a));
-                            res = _auxMobs.Last();
-                        }
-                    }
+                    return null;
                 }
             }
-            return res;
+            return actor;
         }
     }
 }

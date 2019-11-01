@@ -5,6 +5,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
     public class BuffRemoveSingleEvent : AbstractBuffRemoveEvent
     {
         private readonly ParseEnum.IFF _iff;
+        public uint BuffInstance { get; protected set; }
         public BuffRemoveSingleEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, agentData, skillData, offset)
         {
             _iff = evtcItem.IFF;
@@ -18,9 +19,9 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                  Time <= fightEnd - 50; // don't take into account removal that are close to the end of the fight
         }
 
-        public override void UpdateSimulator(BuffSimulator simulator)
+        public override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            simulator.Remove(RemovedDuration, Time, ParseEnum.BuffRemove.Single);
+            simulator.Remove(By, RemovedDuration, 1, Time, ParseEnum.BuffRemove.Single, BuffInstance);
         }
         public override int CompareTo(AbstractBuffEvent abe)
         {

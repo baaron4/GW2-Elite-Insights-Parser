@@ -63,7 +63,7 @@ namespace GW2EIParser.Logic
             return new List<AbstractDamageEvent>();
         }
 
-        private List<PhaseData> GetTargetPhases(ParsedLog log, Target target, string[] names)
+        private List<PhaseData> GetTargetPhases(ParsedLog log, NPC target, string[] names)
         {
             long start = 0;
             long end = 0;
@@ -113,7 +113,7 @@ namespace GW2EIParser.Logic
             };
         }
 
-        private void FallBackPhases(Target target, List<PhaseData> phases, ParsedLog log, bool firstPhaseAt0)
+        private void FallBackPhases(NPC target, List<PhaseData> phases, ParsedLog log, bool firstPhaseAt0)
         {
             HashSet<AgentItem> pAgents = log.PlayerAgents;
             // clean Nikare related bugs
@@ -188,13 +188,13 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            Target nikare = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Nikare);
+            NPC nikare = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Nikare);
             if (nikare == null)
             {
                 throw new InvalidOperationException("Nikare not found");
             }
             phases[0].Targets.Add(nikare);
-            Target kenut = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Kenut);
+            NPC kenut = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Kenut);
             if (kenut != null)
             {
                 phases[0].Targets.Add(kenut);
@@ -216,7 +216,7 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
@@ -283,7 +283,7 @@ namespace GW2EIParser.Logic
                     }
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
             }
         }
 
@@ -341,7 +341,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Nikare);
+            NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Nikare);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");

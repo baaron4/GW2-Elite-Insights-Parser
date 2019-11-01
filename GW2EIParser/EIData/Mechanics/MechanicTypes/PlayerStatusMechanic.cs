@@ -19,7 +19,7 @@ namespace GW2EIParser.EIData
             ShowOnTable = false;
         }
 
-        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs)
+        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<ushort, AbstractActor> regroupedMobs)
         {
             CombatData combatData = log.CombatData;
             foreach (Player p in log.PlayerList)

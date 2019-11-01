@@ -9,11 +9,13 @@ namespace GW2EIParser.Parser.ParsedData
     public class AgentItem
     {
 
+        private static ulong AgentCount = 0;
         public enum AgentType { NPC, Gadget, Player, EnemyPlayer }
 
         // Fields
         public ulong Agent { get; set; }
         public ushort ID { get; }
+        public string UniqueID { get; }
         public AgentItem Master { get; set; }
         public ushort InstID { get; set; }
         public AgentType Type { get; } = AgentType.NPC;
@@ -31,6 +33,7 @@ namespace GW2EIParser.Parser.ParsedData
         // Constructors
         public AgentItem(ulong agent, string name, string prof, ushort id, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight)
         {
+            UniqueID = "ag" + AgentCount++;
             Agent = agent;
             Name = name;
             Prof = prof;
@@ -146,7 +149,7 @@ namespace GW2EIParser.Parser.ParsedData
             {
                 throw new InvalidOperationException("Buff id must be simulated");
             }
-            AbstractActor actor = log.FindActor(this);
+            AbstractSingleActor actor = log.FindActor(this, true);
             Dictionary<long, BuffsGraphModel> bgms = actor.GetBuffGraphs(log);
             if (bgms.TryGetValue(buffId, out BuffsGraphModel bgm))
             {

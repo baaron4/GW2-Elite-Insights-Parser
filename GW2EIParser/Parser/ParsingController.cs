@@ -278,7 +278,7 @@ namespace GW2EIParser.Parser
             byte result = reader.ReadByte();
 
             // 1 byte: is_activation
-            ParseEnum.EvtcActivation isActivation = ParseEnum.GetEvtcActivation(reader.ReadByte());
+            ParseEnum.Activation isActivation = ParseEnum.GetActivation(reader.ReadByte());
 
             // 1 byte: is_buffremove
             ParseEnum.BuffRemove isBuffRemove = ParseEnum.GetBuffRemove(reader.ReadByte());
@@ -309,7 +309,7 @@ namespace GW2EIParser.Parser
             // Add combat
             return new CombatItem(time, srcAgent, dstAgent, value, buffDmg, overstackValue, skillId,
                 srcInstid, dstInstid, srcMasterInstid, 0, iff, buff, result, isActivation, isBuffRemove,
-                isNinety, isFifty, isMoving, isStateChange, isFlanking, isShields, isOffcycle);
+                isNinety, isFifty, isMoving, isStateChange, isFlanking, isShields, isOffcycle, 0);
         }
 
         private static CombatItem ReadCombatItemRev1(BinaryReader reader)
@@ -356,7 +356,7 @@ namespace GW2EIParser.Parser
             byte result = reader.ReadByte();
 
             // 1 byte: is_activation
-            ParseEnum.EvtcActivation isActivation = ParseEnum.GetEvtcActivation(reader.ReadByte());
+            ParseEnum.Activation isActivation = ParseEnum.GetActivation(reader.ReadByte());
 
             // 1 byte: is_buffremove
             ParseEnum.BuffRemove isBuffRemove = ParseEnum.GetBuffRemove(reader.ReadByte());
@@ -380,14 +380,14 @@ namespace GW2EIParser.Parser
             byte isShields = reader.ReadByte();
             // 1 byte: is_flanking
             byte isOffcycle = reader.ReadByte();
-            // 5 bytes: offcycle (?) + garbage
-            ParseHelper.SafeSkip(reader.BaseStream, 4);
+            // 4 bytes: pad
+            uint pad = reader.ReadUInt32();
 
             //save
             // Add combat
             return new CombatItem(time, srcAgent, dstAgent, value, buffDmg, overstackValue, skillId,
                 srcInstid, dstInstid, srcMasterInstid, dstmasterInstid, iff, buff, result, isActivation, isBuffRemove,
-                isNinety, isFifty, isMoving, isStateChange, isFlanking, isShields, isOffcycle);
+                isNinety, isFifty, isMoving, isStateChange, isFlanking, isShields, isOffcycle, pad);
         }
 
         /// <summary>

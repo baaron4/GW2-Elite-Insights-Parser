@@ -181,7 +181,7 @@ namespace GW2EIParser.Parser.ParsedData
             return _phases;
         }
 
-        public List<Target> GetMainTargets(ParsedLog log)
+        public List<NPC> GetMainTargets(ParsedLog log)
         {
             if (_phases.Count == 0)
             {

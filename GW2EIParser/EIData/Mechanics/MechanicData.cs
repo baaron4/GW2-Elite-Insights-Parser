@@ -12,7 +12,7 @@ namespace GW2EIParser.EIData
         private List<HashSet<Mechanic>> _presentOnPlayerMechanics;
         private List<HashSet<Mechanic>> _presentOnEnemyMechanics;
         private List<HashSet<Mechanic>> _presentMechanics;
-        private List<List<DummyActor>> _enemyList;
+        private List<List<AbstractActor>> _enemyList;
 
         public MechanicData(List<Mechanic> fightMechanics)
         {
@@ -24,7 +24,7 @@ namespace GW2EIParser.EIData
 
         private void CheckMechanics(ParsedLog log)
         {
-            var regroupedMobs = new Dictionary<ushort, DummyActor>();
+            var regroupedMobs = new Dictionary<ushort, AbstractActor>();
             foreach (Mechanic mech in _mechanicLogs.Keys)
             {
                 mech.CheckMechanic(log, _mechanicLogs, regroupedMobs);
@@ -60,7 +60,7 @@ namespace GW2EIParser.EIData
             _presentOnPlayerMechanics = new List<HashSet<Mechanic>>();
             _presentOnEnemyMechanics = new List<HashSet<Mechanic>>();
             _presentMechanics = new List<HashSet<Mechanic>>();
-            _enemyList = new List<List<DummyActor>>();
+            _enemyList = new List<List<AbstractActor>>();
             // ready present mechanics
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
@@ -86,11 +86,11 @@ namespace GW2EIParser.EIData
                     }
                 }
                 // ready enemy list
-                var toAdd = new List<DummyActor>();
+                var toAdd = new List<AbstractActor>();
                 _enemyList.Add(toAdd);
                 foreach (Mechanic m in _mechanicLogs.Keys.Where(x => x.IsEnemyMechanic))
                 {
-                    foreach (DummyActor p in _mechanicLogs[m].Where(x => phase.InInterval(x.Time)).Select(x => x.Actor).Distinct())
+                    foreach (AbstractActor p in _mechanicLogs[m].Where(x => phase.InInterval(x.Time)).Select(x => x.Actor).Distinct())
                     {
                         if (toAdd.FirstOrDefault(x => x.InstID == p.InstID) == null)
                         {
@@ -149,7 +149,7 @@ namespace GW2EIParser.EIData
             return _presentMechanics[phaseIndex];
         }
 
-        public List<DummyActor> GetEnemyList(ParsedLog log, int phaseIndex)
+        public List<AbstractActor> GetEnemyList(ParsedLog log, int phaseIndex)
         {
             ProcessMechanics(log);
             return _enemyList[phaseIndex];

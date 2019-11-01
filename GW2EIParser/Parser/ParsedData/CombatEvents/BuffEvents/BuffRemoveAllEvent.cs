@@ -6,19 +6,19 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
     {
         public const int FullRemoval = int.MaxValue;
 
-        private readonly int _removedStacks;
+        public int RemovedStacks { get; }
         private readonly int _lastRemovedDuration;
 
         public BuffRemoveAllEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, agentData, skillData, offset)
         {
             _lastRemovedDuration = evtcItem.BuffDmg;
-            _removedStacks = evtcItem.Result;
+            RemovedStacks = evtcItem.Result;
         }
 
         public BuffRemoveAllEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill, int removedStacks, int lastRemovedDuration) : base(by, to, time, removedDuration, buffSkill)
         {
             _lastRemovedDuration = lastRemovedDuration;
-            _removedStacks = removedStacks;
+            RemovedStacks = removedStacks;
         }
 
         public override bool IsBuffSimulatorCompliant(long fightEnd)
@@ -28,9 +28,9 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                  Time <= fightEnd - 50; // don't take into account removal that are close to the end of the fight
         }
 
-        public override void UpdateSimulator(BuffSimulator simulator)
+        public override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            simulator.Remove(RemovedDuration, Time, ParseEnum.BuffRemove.All);
+            simulator.Remove(By, RemovedDuration, RemovedStacks, Time, ParseEnum.BuffRemove.All, 0);
         }
 
         public override int CompareTo(AbstractBuffEvent abe)

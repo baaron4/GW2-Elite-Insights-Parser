@@ -18,7 +18,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             return false; // don't consider manual remove events
         }
 
-        public override void UpdateSimulator(BuffSimulator simulator)
+        public override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
         }
         public override int CompareTo(AbstractBuffEvent abe)

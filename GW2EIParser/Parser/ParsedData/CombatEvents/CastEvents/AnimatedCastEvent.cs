@@ -5,9 +5,9 @@
         public AnimatedCastEvent(CombatItem startItem, CombatItem endItem, AgentData agentData, SkillData skillData, long offset) : base(startItem, agentData, skillData, offset)
         {
             ActualDuration = endItem.Value;
-            Interrupted = endItem.IsActivation == ParseEnum.EvtcActivation.CancelCancel;
-            FullAnimation = endItem.IsActivation == ParseEnum.EvtcActivation.Reset;
-            ReducedAnimation = endItem.IsActivation == ParseEnum.EvtcActivation.CancelFire;
+            Interrupted = endItem.IsActivation == ParseEnum.Activation.CancelCancel;
+            FullAnimation = endItem.IsActivation == ParseEnum.Activation.Reset;
+            ReducedAnimation = endItem.IsActivation == ParseEnum.Activation.CancelFire;
             if (Skill.ID == SkillItem.DodgeId)
             {
                 ActualDuration = 750;

@@ -17,7 +17,7 @@ namespace GW2EIParser.EIData
         public bool DrawStart { get; set; } = true;
         public bool DrawEnd { get; set; } = true;
         public bool DrawArea { get; set; } = true;
-        public List<Target> Targets { get; } = new List<Target>();
+        public List<NPC> Targets { get; } = new List<NPC>();
 
         public PhaseData(long start, long end)
         {
@@ -59,7 +59,7 @@ namespace GW2EIParser.EIData
             {
                 Start = Math.Max(Start, log.FightData.ToFightSpace(Targets.Min(x => x.FirstAwareLogTime)));
                 long end = long.MinValue;
-                foreach (Target target in Targets)
+                foreach (NPC target in Targets)
                 {
                     long deadTime = log.FightData.ToFightSpace(target.LastAwareLogTime);
                     DeadEvent died = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();

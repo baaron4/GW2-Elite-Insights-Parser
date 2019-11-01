@@ -10,7 +10,7 @@ using static GW2EIParser.Models.Statistics;
 
 namespace GW2EIParser.EIData
 {
-    public class Player : AbstractMasterActor
+    public class Player : AbstractSingleActor
     {
         // Fields
         public string Account { get; protected set; }
@@ -20,10 +20,10 @@ namespace GW2EIParser.EIData
         private List<DeathRecap> _deathRecaps;
         private Dictionary<string, List<DamageModifierData>> _damageModifiers;
         private HashSet<string> _presentDamageModifiers;
-        private Dictionary<Target, Dictionary<string, List<DamageModifierData>>> _damageModifiersTargets;
+        private Dictionary<NPC, Dictionary<string, List<DamageModifierData>>> _damageModifiersTargets;
         // statistics
-        private Dictionary<Target, List<FinalDPS>> _dpsTarget;
-        private Dictionary<Target, List<FinalStats>> _statsTarget;
+        private Dictionary<NPC, List<FinalDPS>> _dpsTarget;
+        private Dictionary<NPC, List<FinalStats>> _statsTarget;
         private List<FinalStatsAll> _statsAll;
         private List<FinalDefenses> _defenses;
         private List<FinalSupport> _support;
@@ -106,12 +106,12 @@ namespace GW2EIParser.EIData
             return reses;
         }
 
-        public FinalDPS GetDPSTarget(ParsedLog log, int phaseIndex, Target target)
+        public FinalDPS GetDPSTarget(ParsedLog log, int phaseIndex, NPC target)
         {
             if (_dpsTarget == null)
             {
-                _dpsTarget = new Dictionary<Target, List<FinalDPS>>();
-                foreach (Target tar in log.FightData.Logic.Targets)
+                _dpsTarget = new Dictionary<NPC, List<FinalDPS>>();
+                foreach (NPC tar in log.FightData.Logic.Targets)
                 {
                     _dpsTarget[tar] = new List<FinalDPS>();
                     foreach (PhaseData phase in log.FightData.GetPhases(log))
@@ -127,12 +127,12 @@ namespace GW2EIParser.EIData
             return _dpsTarget[target][phaseIndex];
         }
 
-        public List<FinalDPS> GetDPSTarget(ParsedLog log, Target target)
+        public List<FinalDPS> GetDPSTarget(ParsedLog log, NPC target)
         {
             if (_dpsTarget == null)
             {
-                _dpsTarget = new Dictionary<Target, List<FinalDPS>>();
-                foreach (Target tar in log.FightData.Logic.Targets)
+                _dpsTarget = new Dictionary<NPC, List<FinalDPS>>();
+                foreach (NPC tar in log.FightData.Logic.Targets)
                 {
                     _dpsTarget[tar] = new List<FinalDPS>();
                     foreach (PhaseData phase in log.FightData.GetPhases(log))
@@ -157,7 +157,7 @@ namespace GW2EIParser.EIData
             return _statsAll[phaseIndex];
         }
 
-        public FinalStats GetStatsTarget(ParsedLog log, int phaseIndex, Target target)
+        public FinalStats GetStatsTarget(ParsedLog log, int phaseIndex, NPC target)
         {
             if (_statsTarget == null)
             {
@@ -179,7 +179,7 @@ namespace GW2EIParser.EIData
             return _statsAll;
         }
 
-        public List<FinalStats> GetStatsTarget(ParsedLog log, Target target)
+        public List<FinalStats> GetStatsTarget(ParsedLog log, NPC target)
         {
             if (_statsTarget == null)
             {
@@ -192,7 +192,7 @@ namespace GW2EIParser.EIData
             return _statsTarget[target];
         }
 
-        private static void FillFinalStats(List<AbstractDamageEvent> dls, FinalStats final, Dictionary<Target, FinalStats> targetsFinal)
+        private static void FillFinalStats(List<AbstractDamageEvent> dls, FinalStats final, Dictionary<NPC, FinalStats> targetsFinal)
         {
             var nonCritable = new HashSet<long>
                     {
@@ -207,9 +207,9 @@ namespace GW2EIParser.EIData
             {
                 if (!(dl is NonDirectDamageEvent))
                 {
-                    foreach (KeyValuePair<Target, FinalStats> pair in targetsFinal)
+                    foreach (KeyValuePair<NPC, FinalStats> pair in targetsFinal)
                     {
-                        Target target = pair.Key;
+                        NPC target = pair.Key;
                         if (dl.To == target.AgentItem)
                         {
                             FinalStats targetFinal = pair.Value;
@@ -291,12 +291,12 @@ namespace GW2EIParser.EIData
         {
             int phaseIndex = -1;
             _statsAll = new List<FinalStatsAll>();
-            _statsTarget = new Dictionary<Target, List<FinalStats>>();
+            _statsTarget = new Dictionary<NPC, List<FinalStats>>();
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
                 phaseIndex++;
-                var targetDict = new Dictionary<Target, FinalStats>();
-                foreach (Target target in log.FightData.Logic.Targets)
+                var targetDict = new Dictionary<NPC, FinalStats>();
+                foreach (NPC target in log.FightData.Logic.Targets)
                 {
                     if (!_statsTarget.ContainsKey(target))
                     {
@@ -584,7 +584,7 @@ namespace GW2EIParser.EIData
                 var boonDistributions = new Dictionary<Player, BuffDistribution>();
                 foreach (Player p in playerList)
                 {
-                    boonDistributions[p] = p.GetBoonDistribution(log, phaseIndex);
+                    boonDistributions[p] = p.GetBuffDistribution(log, phaseIndex);
                 }
 
                 var boonsToTrack = new HashSet<Buff>(boonDistributions.SelectMany(x => x.Value).Select(x => log.Buffs.BuffsByIds[x.Key]));
@@ -717,7 +717,7 @@ namespace GW2EIParser.EIData
 
                 PhaseData phase = phases[phaseIndex];
 
-                BuffDistribution selfBoons = GetBoonDistribution(log, phaseIndex);
+                BuffDistribution selfBoons = GetBuffDistribution(log, phaseIndex);
                 Dictionary<long, long> buffPresence = GetBuffPresence(log, phaseIndex);
 
                 long phaseDuration = phase.DurationInMS;
@@ -866,7 +866,7 @@ namespace GW2EIParser.EIData
             return _consumeList.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public Dictionary<string, List<DamageModifierData>> GetDamageModifierData(ParsedLog log, Target target)
+        public Dictionary<string, List<DamageModifierData>> GetDamageModifierData(ParsedLog log, NPC target)
         {
             if (_damageModifiers == null)
             {
@@ -900,7 +900,7 @@ namespace GW2EIParser.EIData
         private void SetDamageModifiersData(ParsedLog log)
         {
             _damageModifiers = new Dictionary<string, List<DamageModifierData>>();
-            _damageModifiersTargets = new Dictionary<Target, Dictionary<string, List<DamageModifierData>>>();
+            _damageModifiersTargets = new Dictionary<NPC, Dictionary<string, List<DamageModifierData>>>();
             _presentDamageModifiers = new HashSet<string>();
             // If conjured sword or WvW, stop
             if (IsFakeActor || log.FightData.Logic.Mode == FightLogic.ParseMode.WvW)
@@ -915,7 +915,7 @@ namespace GW2EIParser.EIData
                 mod.ComputeDamageModifier(_damageModifiers, _damageModifiersTargets, this, log);
             }
             _presentDamageModifiers.UnionWith(_damageModifiers.Keys);
-            foreach (Target tar in _damageModifiersTargets.Keys)
+            foreach (NPC tar in _damageModifiersTargets.Keys)
             {
                 _presentDamageModifiers.UnionWith(_damageModifiersTargets[tar].Keys);
             }
@@ -1113,9 +1113,9 @@ namespace GW2EIParser.EIData
         private class PlayerSerializable : AbstractMasterActorSerializable
         {
             public int Group { get; set; }
-            public long[] Dead { get; set; }
-            public long[] Down { get; set; }
-            public long[] Dc { get; set; }
+            public List<long> Dead { get; set; }
+            public List<long> Down { get; set; }
+            public List<long> Dc { get; set; }
         }
 
         public override AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
@@ -1124,41 +1124,38 @@ namespace GW2EIParser.EIData
             {
                 InitCombatReplay(log);
             }
+            (List<(long start, long end)> deads, List<(long start, long end)> downs, List<(long start, long end)> dcs) = GetStatus(log);
             var aux = new PlayerSerializable
             {
                 Group = Group,
-                Img = CombatReplay.Icon,
+                Img = Icon,
                 Type = "Player",
                 ID = GetCombatReplayID(log),
-                Positions = new double[2 * CombatReplay.PolledPositions.Count],
-                Dead = new long[2 * CombatReplay.Deads.Count],
-                Down = new long[2 * CombatReplay.Downs.Count],
-                Dc = new long[2 * CombatReplay.DCs.Count]
+                Positions = new List<double>(),
+                Dead = new List<long>(),
+                Down = new List<long>(),
+                Dc = new List<long>()
             };
-            int i = 0;
             foreach (Point3D pos in CombatReplay.PolledPositions)
             {
                 (double x, double y) = map.GetMapCoord(pos.X, pos.Y);
-                aux.Positions[i++] = x;
-                aux.Positions[i++] = y;
+                aux.Positions.Add(x);
+                aux.Positions.Add(y);
             }
-            i = 0;
-            foreach ((long start, long end) in CombatReplay.Deads)
+            foreach ((long start, long end) in deads)
             {
-                aux.Dead[i++] = start;
-                aux.Dead[i++] = end;
+                aux.Dead.Add(start);
+                aux.Dead.Add(end);
             }
-            i = 0;
-            foreach ((long start, long end) in CombatReplay.Downs)
+            foreach ((long start, long end) in downs)
             {
-                aux.Down[i++] = start;
-                aux.Down[i++] = end;
+                aux.Down.Add(start);
+                aux.Down.Add(end);
             }
-            i = 0;
-            foreach ((long start, long end) in CombatReplay.DCs)
+            foreach ((long start, long end) in dcs)
             {
-                aux.Dc[i++] = start;
-                aux.Dc[i++] = end;
+                aux.Dc.Add(start);
+                aux.Dc.Add(end);
             }
 
             return aux;
@@ -1171,50 +1168,9 @@ namespace GW2EIParser.EIData
                 // no combat replay support on fight
                 return;
             }
-            CombatReplay = new CombatReplay
-            {
-                Icon = GeneralHelper.GetProfIcon(Prof)
-            };
+            CombatReplay = new CombatReplay();
             SetMovements(log);
-            // Down and deads
-            List<(long, long)> dead = CombatReplay.Deads;
-            List<(long, long)> down = CombatReplay.Downs;
-            List<(long, long)> dc = CombatReplay.DCs;
-            AgentItem.GetAgentStatus(dead, down, dc, log);
             CombatReplay.PollingRate(log.FightData.FightDuration, true);
         }
-
-
-        /*protected override void setHealingLogs(ParsedLog log)
-        {
-            long time_start = log.getBossData().getFirstAware();
-            foreach (CombatItem c in log.getHealingData())
-            {
-                if (agent.InstID == c.getSrcInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())//selecting player or minion as caster
-                {
-                    long time = c.getTime() - time_start;
-                    addHealingLog(time, c);
-                }
-            }
-            Dictionary<string, Minions> min_list = getMinions(log);
-            foreach (Minions mins in min_list.Values)
-            {
-                healing_logs.AddRange(mins.getHealingLogs(log, 0, log.getBossData().getAwareDuration()));
-            }
-            healing_logs.Sort((x, y) => x.getTime() < y.getTime() ? -1 : 1);
-        }
-
-        protected override void setHealingReceivedLogs(ParsedLog log)
-        {
-            long time_start = log.getBossData().getFirstAware();
-            foreach (CombatItem c in log.getHealingReceivedData())
-            {
-                if (agent.InstID == c.getDstInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())
-                {//selecting player as target
-                    long time = c.getTime() - time_start;
-                    addHealingReceivedLog(time, c);
-                }
-            }
-        }*/
     }
 }

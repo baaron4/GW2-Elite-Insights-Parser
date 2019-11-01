@@ -49,7 +49,7 @@ namespace GW2EIParser.Builders
             _cr = Properties.Settings.Default.ParseCombatReplay && _log.CanCombatReplay;
         }
 
-        private TargetChartDataDto BuildTargetGraphData(int phaseIndex, Target target)
+        private TargetChartDataDto BuildTargetGraphData(int phaseIndex, NPC target)
         {
             PhaseData phase = _phases[phaseIndex];
             return new TargetChartDataDto
@@ -71,7 +71,7 @@ namespace GW2EIParser.Builders
                     Total = p.Get1SDamageList(_log, phaseIndex, phase, null),
                     Targets = new List<List<int>>()
                 };
-                foreach (Target target in phase.Targets)
+                foreach (NPC target in phase.Targets)
                 {
                     pChar.Targets.Add(p.Get1SDamageList(_log, phaseIndex, phase, target));
                 }
@@ -100,7 +100,7 @@ namespace GW2EIParser.Builders
             {
                 var playerData = new List<List<object>>();
 
-                foreach (Target target in phase.Targets)
+                foreach (NPC target in phase.Targets)
                 {
                     var tar = new List<object>();
                     playerData.Add(PhaseDto.GetDPSStatData(player.GetDPSTarget(_log, phaseIndex, target)));
@@ -130,7 +130,7 @@ namespace GW2EIParser.Builders
             foreach (Player player in _log.PlayerList)
             {
                 var playerData = new List<List<object>>();
-                foreach (Target target in phase.Targets)
+                foreach (NPC target in phase.Targets)
                 {
                     Statistics.FinalStats statsTarget = player.GetStatsTarget(_log, phaseIndex, target);
                     playerData.Add(PhaseDto.GetDMGTargetStatData(statsTarget));
@@ -448,7 +448,7 @@ namespace GW2EIParser.Builders
             return list;
         }
 
-        private DmgDistributionDto BuildDMGDistDataInternal(Statistics.FinalDPS dps, AbstractMasterActor p, Target target, int phaseIndex)
+        private DmgDistributionDto BuildDMGDistDataInternal(Statistics.FinalDPS dps, AbstractSingleActor p, NPC target, int phaseIndex)
         {
             var dto = new DmgDistributionDto();
             PhaseData phase = _phases[phaseIndex];
@@ -468,7 +468,7 @@ namespace GW2EIParser.Builders
         /// <param name="sw"></param>
         /// <param name="p"></param>
         /// <param name="phaseIndex"></param>
-        private DmgDistributionDto BuildPlayerDMGDistData(Player p, Target target, int phaseIndex)
+        private DmgDistributionDto BuildPlayerDMGDistData(Player p, NPC target, int phaseIndex)
         {
             Statistics.FinalDPS dps = p.GetDPSTarget(_log, phaseIndex, target);
             return BuildDMGDistDataInternal(dps, p, target, phaseIndex);
@@ -477,18 +477,18 @@ namespace GW2EIParser.Builders
         /// <summary>
         /// Creates the damage distribution table for a target
         /// </summary>
-        private DmgDistributionDto BuildTargetDMGDistData(Target target, int phaseIndex)
+        private DmgDistributionDto BuildTargetDMGDistData(NPC target, int phaseIndex)
         {
             Statistics.FinalDPS dps = target.GetDPSAll(_log, phaseIndex);
             return BuildDMGDistDataInternal(dps, target, null, phaseIndex);
         }
 
-        private DmgDistributionDto BuildDMGDistDataMinionsInternal(Statistics.FinalDPS dps, MinionsList minions, Target target, int phaseIndex)
+        private DmgDistributionDto BuildDMGDistDataMinionsInternal(Statistics.FinalDPS dps, Minions minions, NPC target, int phaseIndex)
         {
             var dto = new DmgDistributionDto();
             PhaseData phase = _phases[phaseIndex];
             List<AbstractCastEvent> casting = minions.GetCastLogs(_log, phase.Start, phase.End);
-            List<AbstractDamageEvent> damageLogs = minions.GetDamageLogs(target, _log, phase.Start, phase.End);
+            List<AbstractDamageEvent> damageLogs = minions.GetDamageLogs(target, _log, phase);
             dto.ContributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
             dto.ContributedShieldDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.ShieldDamage) : 0;
             dto.TotalDamage = dps.Damage;
@@ -499,7 +499,7 @@ namespace GW2EIParser.Builders
         /// <summary>
         /// Creates the damage distribution table for a given minion
         /// </summary>
-        private DmgDistributionDto BuildPlayerMinionDMGDistData(Player p, MinionsList minions, Target target, int phaseIndex)
+        private DmgDistributionDto BuildPlayerMinionDMGDistData(Player p, Minions minions, NPC target, int phaseIndex)
         {
             Statistics.FinalDPS dps = p.GetDPSTarget(_log, phaseIndex, target);
 
@@ -509,7 +509,7 @@ namespace GW2EIParser.Builders
         /// <summary>
         /// Creates the damage distribution table for a given boss minion
         /// </summary>
-        private DmgDistributionDto BuildTargetMinionDMGDistData(Target target, MinionsList minions, int phaseIndex)
+        private DmgDistributionDto BuildTargetMinionDMGDistData(NPC target, Minions minions, int phaseIndex)
         {
             Statistics.FinalDPS dps = target.GetDPSAll(_log, phaseIndex);
             return BuildDMGDistDataMinionsInternal(dps, minions, null, phaseIndex);
@@ -520,7 +520,7 @@ namespace GW2EIParser.Builders
         /// </summary>
         /// <param name="p"></param>
         /// <param name="phaseIndex"></param>
-        private DmgDistributionDto BuildDMGTakenDistData(AbstractMasterActor p, int phaseIndex)
+        private DmgDistributionDto BuildDMGTakenDistData(AbstractSingleActor p, int phaseIndex)
         {
             var dto = new DmgDistributionDto
             {
@@ -555,7 +555,7 @@ namespace GW2EIParser.Builders
             }
         }
 
-        private List<BoonChartDataDto> BuildBoonGraphData(AbstractMasterActor p, int phaseIndex)
+        private List<BoonChartDataDto> BuildBoonGraphData(AbstractSingleActor p, int phaseIndex)
         {
             var list = new List<BoonChartDataDto>();
             PhaseData phase = _phases[phaseIndex];
@@ -574,7 +574,7 @@ namespace GW2EIParser.Builders
             }
             if (p.GetType() == typeof(Player))
             {
-                foreach (Target mainTarget in _log.FightData.GetMainTargets(_log))
+                foreach (NPC mainTarget in _log.FightData.GetMainTargets(_log))
                 {
                     boonGraphData = mainTarget.GetBuffGraphs(_log);
                     foreach (BuffsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.Buff.Name == "Compromised" || x.Buff.Name == "Unnatural Signet" || x.Buff.Name == "Fractured - Enemy" || x.Buff.Name == "Erratic Energy"))
@@ -640,7 +640,7 @@ namespace GW2EIParser.Builders
             var list = new List<List<int[]>>();
             HashSet<Mechanic> presMech = _log.MechanicData.GetPresentEnemyMechs(_log, 0);
             PhaseData phase = _phases[phaseIndex];
-            foreach (DummyActor enemy in _log.MechanicData.GetEnemyList(_log, 0))
+            foreach (AbstractActor enemy in _log.MechanicData.GetEnemyList(_log, 0))
             {
                 list.Add(MechanicDto.GetMechanicData(presMech, _log, enemy, phase));
             }
@@ -676,7 +676,7 @@ namespace GW2EIParser.Builders
             return list;
         }
 
-        private List<BoonData> BuildTargetCondiData(int phaseIndex, Target target)
+        private List<BoonData> BuildTargetCondiData(int phaseIndex, NPC target)
         {
             Dictionary<long, Statistics.FinalTargetBuffs> conditions = target.GetBuffs(_log, phaseIndex);
             var list = new List<BoonData>();
@@ -688,13 +688,13 @@ namespace GW2EIParser.Builders
             return list;
         }
 
-        private BoonData BuildTargetCondiUptimeData(int phaseIndex, Target target)
+        private BoonData BuildTargetCondiUptimeData(int phaseIndex, NPC target)
         {
             Dictionary<long, Statistics.FinalTargetBuffs> buffs = target.GetBuffs(_log, phaseIndex);
             return new BoonData(buffs, _statistics.PresentConditions, target.GetAverageConditions(_log, phaseIndex));
         }
 
-        private BoonData BuildTargetBoonData(int phaseIndex, Target target)
+        private BoonData BuildTargetBoonData(int phaseIndex, NPC target)
         {
             Dictionary<long, Statistics.FinalTargetBuffs> buffs = target.GetBuffs(_log, phaseIndex);
             return new BoonData(buffs, _statistics.PresentBoons, target.GetAverageBoons(_log, phaseIndex));
@@ -1004,14 +1004,14 @@ namespace GW2EIParser.Builders
                 {
                     Players = BuildPlayerGraphData(i)
                 };
-                foreach (Target target in _phases[i].Targets)
+                foreach (NPC target in _phases[i].Targets)
                 {
                     phaseData.Targets.Add(BuildTargetGraphData(i, target));
                 }
                 if (i == 0)
                 {
                     phaseData.TargetsHealthForCR = new List<double[]>();
-                    foreach (Target target in _log.FightData.Logic.Targets)
+                    foreach (NPC target in _log.FightData.Logic.Targets)
                     {
                         phaseData.TargetsHealthForCR.Add(target.Get1SHealthGraph(_log)[0]);
                     }
@@ -1036,12 +1036,12 @@ namespace GW2EIParser.Builders
                 logData.Players.Add(new PlayerDto(player, _log, _cr, BuildPlayerData(player)));
             }
 
-            foreach (DummyActor enemy in _log.MechanicData.GetEnemyList(_log, 0))
+            foreach (AbstractActor enemy in _log.MechanicData.GetEnemyList(_log, 0))
             {
                 logData.Enemies.Add(new EnemyDto() { Name = enemy.Character });
             }
 
-            foreach (Target target in _log.FightData.Logic.Targets)
+            foreach (NPC target in _log.FightData.Logic.Targets)
             {
                 var targetDto = new TargetDto(target, _log, _cr, BuildTargetData(target));
 
@@ -1152,7 +1152,7 @@ namespace GW2EIParser.Builders
                     MechanicStats = BuildPlayerMechanicData(i),
                     EnemyMechanicStats = BuildEnemyMechanicData(i)
                 };
-                foreach (Target target in phaseData.Targets)
+                foreach (NPC target in phaseData.Targets)
                 {
                     phaseDto.TargetsCondiStats.Add(BuildTargetCondiData(i, target));
                     phaseDto.TargetsCondiTotals.Add(BuildTargetCondiUptimeData(i, target));
@@ -1177,7 +1177,7 @@ namespace GW2EIParser.Builders
             return ToJson(logData);
         }
 
-        private bool HasBoons(int phaseIndex, Target target)
+        private bool HasBoons(int phaseIndex, NPC target)
         {
             Dictionary<long, Statistics.FinalTargetBuffs> conditions = target.GetBuffs(_log, phaseIndex);
             foreach (Buff boon in _statistics.PresentBoons)
@@ -1211,7 +1211,7 @@ namespace GW2EIParser.Builders
                 dto.Rotation.Add(BuildRotationData(player, i));
                 dto.DmgDistributions.Add(BuildPlayerDMGDistData(player, null, i));
                 var dmgTargetsDto = new List<DmgDistributionDto>();
-                foreach (Target target in _phases[i].Targets)
+                foreach (NPC target in _phases[i].Targets)
                 {
                     dmgTargetsDto.Add(BuildPlayerDMGDistData(player, target, i));
                 }
@@ -1219,7 +1219,7 @@ namespace GW2EIParser.Builders
                 dto.DmgDistributionsTaken.Add(BuildDMGTakenDistData(player, i));
                 dto.BoonGraph.Add(BuildBoonGraphData(player, i));
             }
-            foreach (KeyValuePair<string, MinionsList> pair in player.GetMinions(_log))
+            foreach (KeyValuePair<long, Minions> pair in player.GetMinions(_log))
             {
                 dto.Minions.Add(BuildPlayerMinionsData(player, pair.Value));
             }
@@ -1227,7 +1227,7 @@ namespace GW2EIParser.Builders
             return dto;
         }
 
-        private ActorDetailsDto BuildPlayerMinionsData(Player player, MinionsList minion)
+        private ActorDetailsDto BuildPlayerMinionsData(Player player, Minions minion)
         {
             var dto = new ActorDetailsDto
             {
@@ -1237,7 +1237,7 @@ namespace GW2EIParser.Builders
             for (int i = 0; i < _phases.Count; i++)
             {
                 var dmgTargetsDto = new List<DmgDistributionDto>();
-                foreach (Target target in _phases[i].Targets)
+                foreach (NPC target in _phases[i].Targets)
                 {
                     dmgTargetsDto.Add(BuildPlayerMinionDMGDistData(player, minion, target, i));
                 }
@@ -1247,7 +1247,7 @@ namespace GW2EIParser.Builders
             return dto;
         }
 
-        private ActorDetailsDto BuildTargetData(Target target)
+        private ActorDetailsDto BuildTargetData(NPC target)
         {
             var dto = new ActorDetailsDto
             {
@@ -1275,14 +1275,14 @@ namespace GW2EIParser.Builders
             }
 
             dto.Minions = new List<ActorDetailsDto>();
-            foreach (KeyValuePair<string, MinionsList> pair in target.GetMinions(_log))
+            foreach (KeyValuePair<long, Minions> pair in target.GetMinions(_log))
             {
                 dto.Minions.Add(BuildTargetsMinionsData(target, pair.Value));
             }
             return dto;
         }
 
-        private ActorDetailsDto BuildTargetsMinionsData(Target target, MinionsList minion)
+        private ActorDetailsDto BuildTargetsMinionsData(NPC target, Minions minion)
         {
             var dto = new ActorDetailsDto
             {
