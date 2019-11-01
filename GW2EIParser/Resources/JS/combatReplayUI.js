@@ -146,7 +146,7 @@ var compileCombatReplayUI = function () {
     });
 
     Vue.component("combat-replay-mechanics-list-component", {
-        props: ["light"],
+        props: ['selectedplayerid'],
         template: `${tmplCombatReplayMechanicsList}`,
         data: function () {
             var mechanicEvents = [];
