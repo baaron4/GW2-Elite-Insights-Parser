@@ -134,8 +134,6 @@ namespace GW2EIParser.EIData
                 long[] cleanseArray = GetCleansesNotSelf(log, phase);
                 long[] cleanseSelfArray = GetCleansesSelf(log, phase);
                 long[] boonStrips = GetBoonStrips(log, phase);
-                //List<DamageLog> healingLogs = player.getHealingLogs(log, phase.getStart(), phase.getEnd());
-                //final.allHeal = healingLogs.Sum(x => x.getDamage());
                 final.Resurrects = resArray[0];
                 final.ResurrectTime = resArray[1] / 1000.0;
                 final.CondiCleanse = cleanseArray[0];

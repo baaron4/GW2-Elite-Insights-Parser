@@ -26,7 +26,7 @@ namespace GW2EIParser.Models
         public int DcCount { get; set; }
         public int DcDuration { get; set; }
 
-        public FinalDefenses(ParsedLog log, PhaseData phase, AbstractSingleActor actor)
+        public FinalDefenses(ParsedLog log, PhaseData phase, AbstractSingleActor actor, AbstractSingleActor from)
         {
             var dead = new List<(long start, long end)>();
             var down = new List<(long start, long end)>();
@@ -34,7 +34,7 @@ namespace GW2EIParser.Models
             actor.AgentItem.GetAgentStatus(dead, down, dc, log);
             long start = phase.Start;
             long end = phase.End;
-            List<AbstractDamageEvent> damageLogs = actor.GetDamageTakenLogs(null, log, start, end);
+            List<AbstractDamageEvent> damageLogs = actor.GetDamageTakenLogs(from, log, start, end);
 
             DamageTaken = damageLogs.Sum(x => (long)x.Damage);
             BlockedCount = damageLogs.Count(x => x.IsBlocked);

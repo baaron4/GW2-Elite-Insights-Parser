@@ -545,7 +545,7 @@ namespace GW2EIParser.EIData
                 _defenses = new List<FinalDefenses>();
                 foreach (PhaseData phase in log.FightData.GetPhases(log))
                 {
-                    _defenses.Add(new FinalDefenses(log, phase, this));
+                    _defenses.Add(new FinalDefenses(log, phase, this, null));
                 }
             }
             return _defenses;
