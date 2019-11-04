@@ -103,6 +103,13 @@ namespace GW2EIParser.Setting
             MessageBox.Show("Skill List has been redone");
         }
 
+        private void ResetTraitListClick(object sender, EventArgs e)
+        {
+            //Update skill list
+            GW2APIController.WriteTraitListToFile();
+            MessageBox.Show("Trait List has been redone");
+        }
+
         private void ResetSpecListClick(object sender, EventArgs e)
         {
             //Update skill list
