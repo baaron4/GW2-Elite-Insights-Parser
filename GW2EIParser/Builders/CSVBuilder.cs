@@ -179,9 +179,9 @@ namespace GW2EIParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalDPS dps = player.GetDPSAll(_log, phaseIndex);
-                Statistics.FinalDefenses defense = player.GetDefenses(_log, phaseIndex);
-                Statistics.FinalDPS dpsBoss = player.GetDPSTarget(_log, phaseIndex, _legacyTarget);
+                FinalDPS dps = player.GetDPSAll(_log, phaseIndex);
+                FinalDefenses defense = player.GetDefenses(_log, phaseIndex);
+                FinalDPS dpsBoss = player.GetDPSTarget(_log, phaseIndex, _legacyTarget);
                 string deathString = defense.DeadCount.ToString();
                 string deadthTooltip = "";
                 if (defense.DeadCount > 0)
@@ -330,7 +330,7 @@ namespace GW2EIParser.Builders
                 {
                     continue;
                 }
-                Statistics.FinalDefenses defenses = player.GetDefenses(_log, phaseIndex);
+                FinalDefenses defenses = player.GetDefenses(_log, phaseIndex);
 
                 WriteLine(new[] { player.Group.ToString(), player.Prof, player.Character,
                 defenses.DamageTaken.ToString(),defenses.DamageBarrier.ToString(),defenses.BlockedCount.ToString(),defenses.InvulnedCount.ToString(),defenses.EvadedCount.ToString(),defenses.DodgeCount.ToString() });

@@ -85,7 +85,7 @@ namespace GW2EIParser.Builders
             var list = new List<List<object>>(_log.PlayerList.Count);
             foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalDPS dpsAll = player.GetDPSAll(_log, phaseIndex);
+                FinalDPS dpsAll = player.GetDPSAll(_log, phaseIndex);
                 list.Add(PhaseDto.GetDPSStatData(dpsAll));
             }
             return list;
@@ -148,7 +148,7 @@ namespace GW2EIParser.Builders
 
             foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalDefenses defenses = player.GetDefenses(_log, phaseIndex);
+                FinalDefenses defenses = player.GetDefenses(_log, phaseIndex);
                 list.Add(PhaseDto.GetDefenseStatData(defenses, phase));
             }
 
@@ -448,7 +448,7 @@ namespace GW2EIParser.Builders
             return list;
         }
 
-        private DmgDistributionDto BuildDMGDistDataInternal(Statistics.FinalDPS dps, AbstractSingleActor p, NPC target, int phaseIndex)
+        private DmgDistributionDto BuildDMGDistDataInternal(FinalDPS dps, AbstractSingleActor p, NPC target, int phaseIndex)
         {
             var dto = new DmgDistributionDto();
             PhaseData phase = _phases[phaseIndex];
@@ -470,7 +470,7 @@ namespace GW2EIParser.Builders
         /// <param name="phaseIndex"></param>
         private DmgDistributionDto BuildPlayerDMGDistData(Player p, NPC target, int phaseIndex)
         {
-            Statistics.FinalDPS dps = p.GetDPSTarget(_log, phaseIndex, target);
+            FinalDPS dps = p.GetDPSTarget(_log, phaseIndex, target);
             return BuildDMGDistDataInternal(dps, p, target, phaseIndex);
         }
 
@@ -479,11 +479,11 @@ namespace GW2EIParser.Builders
         /// </summary>
         private DmgDistributionDto BuildTargetDMGDistData(NPC target, int phaseIndex)
         {
-            Statistics.FinalDPS dps = target.GetDPSAll(_log, phaseIndex);
+            FinalDPS dps = target.GetDPSAll(_log, phaseIndex);
             return BuildDMGDistDataInternal(dps, target, null, phaseIndex);
         }
 
-        private DmgDistributionDto BuildDMGDistDataMinionsInternal(Statistics.FinalDPS dps, Minions minions, NPC target, int phaseIndex)
+        private DmgDistributionDto BuildDMGDistDataMinionsInternal(FinalDPS dps, Minions minions, NPC target, int phaseIndex)
         {
             var dto = new DmgDistributionDto();
             PhaseData phase = _phases[phaseIndex];
@@ -501,7 +501,7 @@ namespace GW2EIParser.Builders
         /// </summary>
         private DmgDistributionDto BuildPlayerMinionDMGDistData(Player p, Minions minions, NPC target, int phaseIndex)
         {
-            Statistics.FinalDPS dps = p.GetDPSTarget(_log, phaseIndex, target);
+            FinalDPS dps = p.GetDPSTarget(_log, phaseIndex, target);
 
             return BuildDMGDistDataMinionsInternal(dps, minions, target, phaseIndex);
         }
@@ -511,7 +511,7 @@ namespace GW2EIParser.Builders
         /// </summary>
         private DmgDistributionDto BuildTargetMinionDMGDistData(NPC target, Minions minions, int phaseIndex)
         {
-            Statistics.FinalDPS dps = target.GetDPSAll(_log, phaseIndex);
+            FinalDPS dps = target.GetDPSAll(_log, phaseIndex);
             return BuildDMGDistDataMinionsInternal(dps, minions, null, phaseIndex);
         }
 

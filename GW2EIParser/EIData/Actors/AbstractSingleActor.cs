@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIParser.Models;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 using static GW2EIParser.EIData.Buff;
-using static GW2EIParser.Models.Statistics;
 
 namespace GW2EIParser.EIData
 {
@@ -30,6 +30,8 @@ namespace GW2EIParser.EIData
         public string Icon { get; }
         // Statistics
         private List<FinalDPS> _dpsAll;
+        private Dictionary<AbstractSingleActor, List<FinalDPS>> _dpsTarget;
+        private List<FinalDefenses> _defenses;
 
         protected AbstractSingleActor(AgentItem agent) : base(agent)
         {
@@ -481,19 +483,11 @@ namespace GW2EIParser.EIData
         }
         public abstract AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log);
 
-        // Stats
+        // DPS Stats
 
         public FinalDPS GetDPSAll(ParsedLog log, int phaseIndex)
         {
-            if (_dpsAll == null)
-            {
-                _dpsAll = new List<FinalDPS>();
-                foreach (PhaseData phase in log.FightData.GetPhases(log))
-                {
-                    _dpsAll.Add(GetFinalDPS(log, phase, null));
-                }
-            }
-            return _dpsAll[phaseIndex];
+            return GetDPSAll(log)[phaseIndex];
         }
 
         public List<FinalDPS> GetDPSAll(ParsedLog log)
@@ -503,71 +497,57 @@ namespace GW2EIParser.EIData
                 _dpsAll = new List<FinalDPS>();
                 foreach (PhaseData phase in log.FightData.GetPhases(log))
                 {
-                    _dpsAll.Add(GetFinalDPS(log, phase, null));
+                    _dpsAll.Add(new FinalDPS(log, phase, this, null));
                 }
             }
             return _dpsAll;
         }
 
-        protected FinalDPS GetFinalDPS(ParsedLog log, PhaseData phase, NPC target)
+        public FinalDPS GetDPSTarget(ParsedLog log, int phaseIndex, AbstractSingleActor target)
         {
-            double phaseDuration = (phase.DurationInMS) / 1000.0;
-            int damage;
-            double dps = 0.0;
-            var final = new FinalDPS();
-            //DPS
-            damage = GetDamageLogs(target, log, phase).Sum(x => x.Damage);
+            return GetDPSTarget(log,target)[phaseIndex];
+        }
 
-            if (phaseDuration > 0)
+        public List<FinalDPS> GetDPSTarget(ParsedLog log, AbstractSingleActor target)
+        {
+            if (target == null)
             {
-                dps = damage / phaseDuration;
+                return GetDPSAll(log);
             }
-            final.Dps = (int)Math.Round(dps);
-            final.Damage = damage;
-            //Condi DPS
-            damage = GetDamageLogs(target, log, phase).Sum(x => x.IsCondi(log) ? x.Damage : 0);
+            if (_dpsTarget == null)
+            {
+                _dpsTarget = new Dictionary<AbstractSingleActor, List<FinalDPS>>();
+            }
+            if (_dpsTarget.TryGetValue(target, out List<FinalDPS> list))
+            {
+                return list;
+            }
+            _dpsTarget[target] = new List<FinalDPS>();
+            foreach (PhaseData phase in log.FightData.GetPhases(log))
+            {
+                _dpsTarget[target].Add(new FinalDPS(log, phase, this, target));
+            }
+            return _dpsTarget[target];
+        }
 
-            if (phaseDuration > 0)
-            {
-                dps = damage / phaseDuration;
-            }
-            final.CondiDps = (int)Math.Round(dps);
-            final.CondiDamage = damage;
-            //Power DPS
-            damage = final.Damage - final.CondiDamage;
-            if (phaseDuration > 0)
-            {
-                dps = damage / phaseDuration;
-            }
-            final.PowerDps = (int)Math.Round(dps);
-            final.PowerDamage = damage;
-            // Actor DPS
-            damage = GetJustPlayerDamageLogs(target, log, phase).Sum(x => x.Damage);
+        // Defense Stats
 
-            if (phaseDuration > 0)
-            {
-                dps = damage / phaseDuration;
-            }
-            final.ActorDps = (int)Math.Round(dps);
-            final.ActorDamage = damage;
-            //Actor Condi DPS
-            damage = GetJustPlayerDamageLogs(target, log, phase).Sum(x => x.IsCondi(log) ? x.Damage : 0);
+        public FinalDefenses GetDefenses(ParsedLog log, int phaseIndex)
+        {
+            return GetDefenses(log)[phaseIndex];
+        }
 
-            if (phaseDuration > 0)
+        public List<FinalDefenses> GetDefenses(ParsedLog log)
+        {
+            if (_defenses == null)
             {
-                dps = damage / phaseDuration;
+                _defenses = new List<FinalDefenses>();
+                foreach (PhaseData phase in log.FightData.GetPhases(log))
+                {
+                    _defenses.Add(new FinalDefenses(log, phase, this));
+                }
             }
-            final.ActorCondiDps = (int)Math.Round(dps);
-            final.ActorCondiDamage = damage;
-            //Actor Power DPS
-            damage = final.ActorDamage - final.ActorCondiDamage;
-            if (phaseDuration > 0)
-            {
-                dps = damage / phaseDuration;
-            }
-            final.ActorPowerDps = (int)Math.Round(dps);
-            final.ActorPowerDamage = damage;
-            return final;
+            return _defenses;
         }
 
 

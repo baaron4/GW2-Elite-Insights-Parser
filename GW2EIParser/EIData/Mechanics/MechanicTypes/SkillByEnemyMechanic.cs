@@ -24,13 +24,11 @@ namespace GW2EIParser.EIData
         {
         }
 
-        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<ushort, AbstractActor> regroupedMobs)
+        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<ushort, AbstractSingleActor> regroupedMobs)
         {
-            CombatData combatData = log.CombatData;
-            HashSet<AgentItem> playerAgents = log.PlayerAgents;
             foreach (AbstractDamageEvent c in log.CombatData.GetDamageDataById(SkillId))
             {
-                AbstractActor amp = null;
+                AbstractSingleActor amp = null;
                 if (Keep(c, log))
                 {
                     if (!regroupedMobs.TryGetValue(c.From.ID, out amp))

@@ -26,11 +26,11 @@ namespace GW2EIParser.EIData
             IsEnemyMechanic = true;
         }
 
-        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<ushort, AbstractActor> regroupedMobs)
+        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<ushort, AbstractSingleActor> regroupedMobs)
         {
             foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(SkillId))
             {
-                AbstractActor amp = null;
+                AbstractSingleActor amp = null;
                 if (c is BuffRemoveManualEvent rme && Keep(rme, log))
                 {
                     if (!regroupedMobs.TryGetValue(rme.To.ID, out amp))

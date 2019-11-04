@@ -22,10 +22,8 @@ namespace GW2EIParser.EIData
         private HashSet<string> _presentDamageModifiers;
         private Dictionary<NPC, Dictionary<string, List<DamageModifierData>>> _damageModifiersTargets;
         // statistics
-        private Dictionary<NPC, List<FinalDPS>> _dpsTarget;
         private Dictionary<NPC, List<FinalStats>> _statsTarget;
         private List<FinalStatsAll> _statsAll;
-        private List<FinalDefenses> _defenses;
         private List<FinalSupport> _support;
         private List<Dictionary<long, FinalBuffs>> _selfBuffs;
         private List<Dictionary<long, FinalBuffs>> _groupBuffs;
@@ -56,7 +54,7 @@ namespace GW2EIParser.EIData
         }
 
         // Public methods
-        public long[] GetCleansesNotSelf(ParsedLog log, PhaseData phase)
+        private long[] GetCleansesNotSelf(ParsedLog log, PhaseData phase)
         {
             long[] cleanse = { 0, 0 };
             foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Condition].Select(x => x.ID))
@@ -67,7 +65,7 @@ namespace GW2EIParser.EIData
             }
             return cleanse;
         }
-        public long[] GetCleansesSelf(ParsedLog log, PhaseData phase)
+        private long[] GetCleansesSelf(ParsedLog log, PhaseData phase)
         {
             long[] cleanse = { 0, 0 };
             foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Condition].Select(x => x.ID))
@@ -79,7 +77,7 @@ namespace GW2EIParser.EIData
             return cleanse;
         }
 
-        public long[] GetBoonStrips(ParsedLog log, PhaseData phase)
+        private long[] GetBoonStrips(ParsedLog log, PhaseData phase)
         {
             long[] strips = { 0, 0 };
             foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Boon].Select(x => x.ID))
@@ -104,48 +102,6 @@ namespace GW2EIParser.EIData
                 }
             }
             return reses;
-        }
-
-        public FinalDPS GetDPSTarget(ParsedLog log, int phaseIndex, NPC target)
-        {
-            if (_dpsTarget == null)
-            {
-                _dpsTarget = new Dictionary<NPC, List<FinalDPS>>();
-                foreach (NPC tar in log.FightData.Logic.Targets)
-                {
-                    _dpsTarget[tar] = new List<FinalDPS>();
-                    foreach (PhaseData phase in log.FightData.GetPhases(log))
-                    {
-                        _dpsTarget[tar].Add(GetFinalDPS(log, phase, tar));
-                    }
-                }
-            }
-            if (target == null)
-            {
-                return GetDPSAll(log, phaseIndex);
-            }
-            return _dpsTarget[target][phaseIndex];
-        }
-
-        public List<FinalDPS> GetDPSTarget(ParsedLog log, NPC target)
-        {
-            if (_dpsTarget == null)
-            {
-                _dpsTarget = new Dictionary<NPC, List<FinalDPS>>();
-                foreach (NPC tar in log.FightData.Logic.Targets)
-                {
-                    _dpsTarget[tar] = new List<FinalDPS>();
-                    foreach (PhaseData phase in log.FightData.GetPhases(log))
-                    {
-                        _dpsTarget[tar].Add(GetFinalDPS(log, phase, tar));
-                    }
-                }
-            }
-            if (target == null)
-            {
-                return GetDPSAll(log);
-            }
-            return _dpsTarget[target];
         }
 
         public FinalStatsAll GetStatsAll(ParsedLog log, int phaseIndex)
@@ -382,66 +338,6 @@ namespace GW2EIParser.EIData
                         final.StackDist = -1;
                     }
                 }
-            }
-        }
-
-        public FinalDefenses GetDefenses(ParsedLog log, int phaseIndex)
-        {
-            if (_defenses == null)
-            {
-                SetDefenses(log);
-            }
-            return _defenses[phaseIndex];
-        }
-
-        public List<FinalDefenses> GetDefenses(ParsedLog log)
-        {
-            if (_defenses == null)
-            {
-                SetDefenses(log);
-            }
-            return _defenses;
-        }
-
-        private void SetDefenses(ParsedLog log)
-        {
-            var dead = new List<(long start, long end)>();
-            var down = new List<(long start, long end)>();
-            var dc = new List<(long start, long end)>();
-            AgentItem.GetAgentStatus(dead, down, dc, log);
-            _defenses = new List<FinalDefenses>();
-            foreach (PhaseData phase in log.FightData.GetPhases(log))
-            {
-                var final = new FinalDefenses();
-                _defenses.Add(final);
-                long start = phase.Start;
-                long end = phase.End;
-                List<AbstractDamageEvent> damageLogs = GetDamageTakenLogs(null, log, start, end);
-                //List<DamageLog> healingLogs = player.getHealingReceivedLogs(log, phase.getStart(), phase.getEnd());
-
-                final.DamageTaken = damageLogs.Sum(x => (long)x.Damage);
-                //final.allHealReceived = healingLogs.Sum(x => x.getDamage());
-                final.BlockedCount = damageLogs.Count(x => x.IsBlocked);
-                final.InvulnedCount = 0;
-                final.DamageInvulned = 0;
-                final.EvadedCount = damageLogs.Count(x => x.IsEvaded);
-                final.DodgeCount = GetCastLogs(log, start, end).Count(x => x.SkillId == SkillItem.DodgeId || x.SkillId == SkillItem.MirageCloakDodgeId);
-                final.DamageBarrier = damageLogs.Sum(x => x.ShieldDamage);
-                final.InterruptedCount = damageLogs.Count(x => x.HasInterrupted);
-                foreach (AbstractDamageEvent dl in damageLogs.Where(x => x.IsAbsorbed))
-                {
-                    final.InvulnedCount++;
-                    final.DamageInvulned += dl.Damage;
-                }
-
-                //		
-                final.DownCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DownId).Count(x => x.Actor == this && x.Time >= start && x.Time <= end);
-                final.DeadCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DeathId).Count(x => x.Actor == this && x.Time >= start && x.Time <= end);
-                final.DcCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DCId).Count(x => x.Actor == this && x.Time >= start && x.Time <= end);
-
-                final.DownDuration = (int)down.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
-                final.DeadDuration = (int)dead.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
-                final.DcDuration = (int)dc.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
             }
         }
 

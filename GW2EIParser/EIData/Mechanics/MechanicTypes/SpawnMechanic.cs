@@ -18,12 +18,12 @@ namespace GW2EIParser.EIData
             IsEnemyMechanic = true;
         }
 
-        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<ushort, AbstractActor> regroupedMobs)
+        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<ushort, AbstractSingleActor> regroupedMobs)
         {
             CombatData combatData = log.CombatData;
             foreach (AgentItem a in log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.ID == SkillId))
             {
-                if (!regroupedMobs.TryGetValue(a.ID, out AbstractActor amp))
+                if (!regroupedMobs.TryGetValue(a.ID, out AbstractSingleActor amp))
                 {
                     amp = log.FindActor(a, false);
                     regroupedMobs.Add(amp.ID, amp);

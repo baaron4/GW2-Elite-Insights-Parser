@@ -24,7 +24,7 @@ namespace GW2EIParser.EIData
 
         private void CheckMechanics(ParsedLog log)
         {
-            var regroupedMobs = new Dictionary<ushort, AbstractActor>();
+            var regroupedMobs = new Dictionary<ushort, AbstractSingleActor>();
             foreach (Mechanic mech in _mechanicLogs.Keys)
             {
                 mech.CheckMechanic(log, _mechanicLogs, regroupedMobs);

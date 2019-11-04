@@ -88,7 +88,7 @@ namespace GW2EIParser.EIData
             ShowOnTable = true;
         }
 
-        public abstract void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<ushort, AbstractActor> regroupedMobs);
+        public abstract void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<ushort, AbstractSingleActor> regroupedMobs);
 
     }
 }

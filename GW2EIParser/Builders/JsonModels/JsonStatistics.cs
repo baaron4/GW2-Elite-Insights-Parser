@@ -66,7 +66,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public int DcDuration { get; set; }
 
-            public JsonDefenses(Statistics.FinalDefenses defenses)
+            public JsonDefenses(FinalDefenses defenses)
             {
                 DamageTaken = defenses.DamageTaken;
                 BlockedCount = defenses.BlockedCount;
@@ -139,7 +139,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public int ActorPowerDamage { get; set; }
 
-            public JsonDPS(Statistics.FinalDPS stats)
+            public JsonDPS(FinalDPS stats)
             {
                 Dps = stats.Dps;
                 Damage = stats.Damage;

@@ -8,7 +8,7 @@ using static GW2EIParser.EIData.Buff;
 namespace GW2EIParser.Models
 {
     /// <summary>
-    /// Passes statistical information about dps logs
+    /// Passes statistical information
     /// </summary>
     public class Statistics
     {
@@ -65,24 +65,6 @@ namespace GW2EIParser.Models
             }
         }
 
-        public class FinalDPS
-        {
-            // Total
-            public int Dps { get; set; }
-            public int Damage { get; set; }
-            public int CondiDps { get; set; }
-            public int CondiDamage { get; set; }
-            public int PowerDps { get; set; }
-            public int PowerDamage { get; set; }
-            // Actor only
-            public int ActorDps { get; set; }
-            public int ActorDamage { get; set; }
-            public int ActorCondiDps { get; set; }
-            public int ActorCondiDamage { get; set; }
-            public int ActorPowerDps { get; set; }
-            public int ActorPowerDamage { get; set; }
-        }
-
         public class FinalStats
         {
             public int DirectDamageCount { get; set; }
@@ -113,25 +95,6 @@ namespace GW2EIParser.Models
 
             // Counts
             public int SwapCount { get; set; }
-        }
-
-        public class FinalDefenses
-        {
-            //public long allHealReceived;
-            public long DamageTaken { get; set; }
-            public int BlockedCount { get; set; }
-            public int EvadedCount { get; set; }
-            public int DodgeCount { get; set; }
-            public int InvulnedCount { get; set; }
-            public int DamageInvulned { get; set; }
-            public int DamageBarrier { get; set; }
-            public int InterruptedCount { get; set; }
-            public int DownCount { get; set; }
-            public int DownDuration { get; set; }
-            public int DeadCount { get; set; }
-            public int DeadDuration { get; set; }
-            public int DcCount { get; set; }
-            public int DcDuration { get; set; }
         }
 
         public class FinalSupport

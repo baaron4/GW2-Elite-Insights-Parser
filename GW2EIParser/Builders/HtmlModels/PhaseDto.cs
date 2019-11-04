@@ -183,7 +183,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return data;
         }
 
-        public static List<object> GetDPSStatData(Statistics.FinalDPS dpsAll)
+        public static List<object> GetDPSStatData(FinalDPS dpsAll)
         {
             var data = new List<object>
                 {
@@ -210,7 +210,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return data;
         }
 
-        public static List<object> GetDefenseStatData(Statistics.FinalDefenses defenses, PhaseData phase)
+        public static List<object> GetDefenseStatData(FinalDefenses defenses, PhaseData phase)
         {
             var data = new List<object>
                 {
