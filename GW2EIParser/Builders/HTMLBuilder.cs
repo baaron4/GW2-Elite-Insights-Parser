@@ -691,13 +691,13 @@ namespace GW2EIParser.Builders
         private BoonData BuildTargetCondiUptimeData(int phaseIndex, NPC target)
         {
             Dictionary<long, Statistics.FinalTargetBuffs> buffs = target.GetBuffs(_log, phaseIndex);
-            return new BoonData(buffs, _statistics.PresentConditions, target.GetAverageConditions(_log, phaseIndex));
+            return new BoonData(buffs, _statistics.PresentConditions, target.GetStatsAll(_log, phaseIndex).AvgConditions);
         }
 
         private BoonData BuildTargetBoonData(int phaseIndex, NPC target)
         {
             Dictionary<long, Statistics.FinalTargetBuffs> buffs = target.GetBuffs(_log, phaseIndex);
-            return new BoonData(buffs, _statistics.PresentBoons, target.GetAverageBoons(_log, phaseIndex));
+            return new BoonData(buffs, _statistics.PresentBoons, target.GetStatsAll(_log, phaseIndex).AvgBoons);
         }
 
         private string ReplaceVariables(string html)

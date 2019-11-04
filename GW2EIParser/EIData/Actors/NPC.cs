@@ -9,9 +9,6 @@ namespace GW2EIParser.EIData
 {
     public class NPC : AbstractSingleActor
     {
-
-        private List<double> _avgConditions;
-        private List<double> _avgBoons;
         private List<Dictionary<long, FinalTargetBuffs>> _buffs;
         // Constructors
         public NPC(AgentItem agent) : base(agent)
@@ -49,67 +46,6 @@ namespace GW2EIParser.EIData
             }
             CastLogs.Add(new CastLog(time, skillID, expDur, startActivation, actDur, endActivation, Agent, InstID));
         }*/
-
-        private void SetAvgBoonsConditions(ParsedLog log)
-        {
-            _avgBoons = new List<double>();
-            _avgConditions = new List<double>();
-            for (int phaseIndex = 0; phaseIndex < log.FightData.GetPhases(log).Count; phaseIndex++)
-            {
-                PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
-                double avgBoon = 0;
-                foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == Buff.BuffNature.Boon).Select(x => x.Value))
-                {
-                    avgBoon += duration;
-                }
-                avgBoon /= phase.DurationInMS;
-                _avgBoons.Add(Math.Round(avgBoon, GeneralHelper.BoonDigit));
-
-                double avgCondi = 0;
-                foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == Buff.BuffNature.Condition).Select(x => x.Value))
-                {
-                    avgCondi += duration;
-                }
-                avgCondi /= phase.DurationInMS;
-                _avgConditions.Add(Math.Round(avgCondi, GeneralHelper.BoonDigit));
-            }
-        }
-
-        public double GetAverageBoons(ParsedLog log, int phaseIndex)
-        {
-            if (_avgBoons == null)
-            {
-                SetAvgBoonsConditions(log);
-            }
-            return _avgBoons[phaseIndex];
-        }
-
-        public List<double> GetAverageBoons(ParsedLog log)
-        {
-            if (_avgBoons == null)
-            {
-                SetAvgBoonsConditions(log);
-            }
-            return _avgBoons;
-        }
-
-        public double GetAverageConditions(ParsedLog log, int phaseIndex)
-        {
-            if (_avgConditions == null)
-            {
-                SetAvgBoonsConditions(log);
-            }
-            return _avgConditions[phaseIndex];
-        }
-
-        public List<double> GetAverageConditions(ParsedLog log)
-        {
-            if (_avgConditions == null)
-            {
-                SetAvgBoonsConditions(log);
-            }
-            return _avgConditions;
-        }
 
         public Dictionary<long, FinalTargetBuffs> GetBuffs(ParsedLog log, int phaseIndex)
         {

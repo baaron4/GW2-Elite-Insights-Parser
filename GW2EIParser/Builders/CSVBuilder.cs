@@ -719,7 +719,7 @@ namespace GW2EIParser.Builders
             NewLine();
             int count = 0;
             WriteCell(boss.Character);
-            WriteCell(Math.Round(_legacyTarget.GetAverageConditions(_log, phaseIndex), 1).ToString());
+            WriteCell(Math.Round(_legacyTarget.GetStatsAll(_log, phaseIndex).AvgConditions, 1).ToString());
             foreach (Buff boon in _statistics.PresentConditions)
             {
                 if (conditions.TryGetValue(boon.ID, out Statistics.FinalTargetBuffs uptime))
