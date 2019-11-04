@@ -36,10 +36,12 @@ namespace GW2EIParser.EIData
         private static long TranslateWeaverAttunement(List<AbstractBuffEvent> buffApplies)
         {
             // check if more than 3 ids are present
-            if (buffApplies.Select(x => x.BuffID).Distinct().Count() > 3)
+            // Seems to happen when the attunement bug happens
+            // removed the throw
+            /*if (buffApplies.Select(x => x.BuffID).Distinct().Count() > 3)
             {
                 throw new InvalidOperationException("Too much buff apply events in TranslateWeaverAttunement");
-            }
+            }*/
             var duals = new HashSet<long>
             {
                 FireDual,
