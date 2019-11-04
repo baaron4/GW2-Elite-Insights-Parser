@@ -2,9 +2,9 @@
 
 namespace GW2EIParser.EIData
 {
-    public abstract class BackgroundActor : GenericDecoration
+    public abstract class BackgroundDecoration : GenericDecoration
     {
-        public BackgroundActor((int start, int end) lifespan) : base(lifespan, null)
+        public BackgroundDecoration((int start, int end) lifespan) : base(lifespan, null)
         {
         }
 

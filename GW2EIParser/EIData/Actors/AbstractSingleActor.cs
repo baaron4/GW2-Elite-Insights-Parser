@@ -22,7 +22,7 @@ namespace GW2EIParser.EIData
         //status
         private List<(long start, long end)> _deads;
         private List<(long start, long end)> _downs;
-        private List<(long start, long end)> _dCs;
+        private List<(long start, long end)> _dcs;
         // Minions
         private Dictionary<long, Minions> _minions;
         // Replay
@@ -44,10 +44,10 @@ namespace GW2EIParser.EIData
             {
                 _deads = new List<(long start, long end)>();
                 _downs = new List<(long start, long end)>();
-                _dCs = new List<(long start, long end)>();
-                AgentItem.GetAgentStatus(_deads, _downs, _dCs, log);
+                _dcs = new List<(long start, long end)>();
+                AgentItem.GetAgentStatus(_deads, _downs, _dcs, log);
             }
-            return (_deads, _downs, _dCs);
+            return (_deads, _downs, _dcs);
         }
 
         // Minions

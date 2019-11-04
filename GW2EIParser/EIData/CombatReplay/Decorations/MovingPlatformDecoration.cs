@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace GW2EIParser.EIData
 {
-    public class MovingPlatformDecoration : BackgroundActor
+    public class MovingPlatformDecoration : BackgroundDecoration
     {
         protected string Image { get; }
         protected int Width { get; }
