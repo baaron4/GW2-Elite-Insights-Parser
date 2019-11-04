@@ -32,6 +32,8 @@ namespace GW2EIParser.EIData
         private List<FinalDPS> _dpsAll;
         private Dictionary<AbstractSingleActor, List<FinalDPS>> _dpsTarget;
         private List<FinalDefenses> _defenses;
+        private Dictionary<AbstractSingleActor, List<FinalStats>> _statsTarget;
+        private List<FinalStatsAll> _statsAll;
 
         protected AbstractSingleActor(AgentItem agent) : base(agent)
         {
@@ -426,7 +428,6 @@ namespace GW2EIParser.EIData
             return CombatReplay.Decorations;
         }
 
-        // cast logs
         // Cast logs
         public override List<AbstractCastEvent> GetCastLogs(ParsedLog log, long start, long end)
         {
@@ -548,6 +549,58 @@ namespace GW2EIParser.EIData
                 }
             }
             return _defenses;
+        }
+
+        // Gameplay Stats
+
+
+        public FinalStatsAll GetStatsAll(ParsedLog log, int phaseIndex)
+        {
+            return GetStatsAll(log)[phaseIndex];
+        }
+
+        public FinalStats GetStatsTarget(ParsedLog log, int phaseIndex, AbstractSingleActor target)
+        {
+            if (target == null)
+            {
+                return GetStatsAll(log, phaseIndex);
+            }
+            return GetStatsTarget(log, target)[phaseIndex];
+        }
+
+        public List<FinalStatsAll> GetStatsAll(ParsedLog log)
+        {
+            if (_statsAll == null)
+            {
+                _statsAll = new List<FinalStatsAll>();
+                foreach (PhaseData phase in log.FightData.GetPhases(log))
+                {
+                    _statsAll.Add(new FinalStatsAll(log, phase, this));
+                }
+            }
+            return _statsAll;
+        }
+
+        public List<FinalStats> GetStatsTarget(ParsedLog log, AbstractSingleActor target)
+        {
+            if (target == null)
+            {
+                return new List<FinalStats>(GetStatsAll(log));
+            }
+            if (_statsTarget == null)
+            {
+                _statsTarget = new Dictionary<AbstractSingleActor, List<FinalStats>>();
+            }
+            if (_statsTarget.TryGetValue(target, out List<FinalStats> list))
+            {
+                return list;
+            }
+            _statsTarget[target] = new List<FinalStats>();
+            foreach (PhaseData phase in log.FightData.GetPhases(log))
+            {
+                _statsTarget[target].Add(new FinalStats(log, phase, this, target));
+            }
+            return _statsTarget[target];
         }
 
 

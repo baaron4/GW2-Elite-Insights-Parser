@@ -264,7 +264,7 @@ namespace GW2EIParser.Builders
                     Consumables = BuildConsumables(player),
                     BoonsStates = BuildBuffStates(player.GetBuffGraphs(_log)[ProfHelper.NumberOfBoonsID]),
                     ConditionsStates = BuildBuffStates(player.GetBuffGraphs(_log)[ProfHelper.NumberOfConditionsID]),
-                    ActiveTimes = _phases.Select(x => x.GetPlayerActiveDuration(player, _log)).ToList(),
+                    ActiveTimes = _phases.Select(x => x.GetActorActiveDuration(player, _log)).ToList(),
                 });
             }
         }

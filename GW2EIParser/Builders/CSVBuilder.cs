@@ -238,8 +238,8 @@ namespace GW2EIParser.Builders
                 {
                     continue;
                 }
-                Statistics.FinalStatsAll stats = player.GetStatsAll(_log, phaseIndex);
-                Statistics.FinalStats statsBoss = player.GetStatsTarget(_log, phaseIndex, _legacyTarget);
+                FinalStatsAll stats = player.GetStatsAll(_log, phaseIndex);
+                FinalStats statsBoss = player.GetStatsTarget(_log, phaseIndex, _legacyTarget);
                 Dictionary<string, List<Statistics.DamageModifierData>> damageMods = player.GetDamageModifierData(_log, _legacyTarget);
                 var scholar = new Statistics.DamageModifierData(0, 0, 0, 0);
                 var moving = new Statistics.DamageModifierData(0, 0, 0, 0);
@@ -288,7 +288,7 @@ namespace GW2EIParser.Builders
                 {
                     continue;
                 }
-                Statistics.FinalStatsAll stats = player.GetStatsAll(_log, phaseIndex);
+                FinalStatsAll stats = player.GetStatsAll(_log, phaseIndex);
                 Dictionary<string, List<Statistics.DamageModifierData>> damageMods = player.GetDamageModifierData(_log, null);
                 var scholar = new Statistics.DamageModifierData(0, 0, 0, 0);
                 var moving = new Statistics.DamageModifierData(0, 0, 0, 0);

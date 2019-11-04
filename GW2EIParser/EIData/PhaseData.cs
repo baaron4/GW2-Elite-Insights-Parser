@@ -76,7 +76,7 @@ namespace GW2EIParser.EIData
             DurationInS = (End - Start) / 1000;
         }
 
-        public long GetPlayerActiveDuration(Player p, ParsedLog log)
+        public long GetActorActiveDuration(AbstractSingleActor p, ParsedLog log)
         {
             var dead = new List<(long start, long end)>();
             var down = new List<(long start, long end)>();

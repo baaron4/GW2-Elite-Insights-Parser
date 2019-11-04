@@ -92,7 +92,7 @@ namespace GW2EIParser.Builders.HtmlModels
             PlayerActiveTimes = new List<long>();
             foreach (Player p in log.PlayerList)
             {
-                PlayerActiveTimes.Add(phaseData.GetPlayerActiveDuration(p, log));
+                PlayerActiveTimes.Add(phaseData.GetActorActiveDuration(p, log));
             }
             // add phase markup
             MarkupLines = new List<double>();
@@ -145,7 +145,7 @@ namespace GW2EIParser.Builders.HtmlModels
 
         // helper methods
 
-        public static List<object> GetDMGStatData(Statistics.FinalStatsAll stats)
+        public static List<object> GetDMGStatData(FinalStatsAll stats)
         {
             List<object> data = GetDMGTargetStatData(stats);
             data.AddRange(new List<object>
@@ -163,7 +163,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return data;
         }
 
-        public static List<object> GetDMGTargetStatData(Statistics.FinalStats stats)
+        public static List<object> GetDMGTargetStatData(FinalStats stats)
         {
             var data = new List<object>
                 {

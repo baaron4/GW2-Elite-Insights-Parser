@@ -200,7 +200,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public int Invulned { get; set; }
 
-            public JsonStats(Statistics.FinalStats stats)
+            public JsonStats(FinalStats stats)
             {
                 DirectDamageCount = stats.DirectDamageCount;
                 CritableDirectDamageCount = stats.CritableDirectDamageCount;
@@ -213,7 +213,7 @@ namespace GW2EIParser.Builders.JsonModels
                 Invulned = stats.Invulned;
             }
 
-            public JsonStats(Statistics.FinalStatsAll stats)
+            public JsonStats(FinalStatsAll stats)
             {
                 DirectDamageCount = stats.DirectDamageCount;
                 CritableDirectDamageCount = stats.CritableDirectDamageCount;
@@ -270,7 +270,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public int SwapCount { get; set; }
 
-            public JsonStatsAll(Statistics.FinalStatsAll stats) : base(stats)
+            public JsonStatsAll(FinalStatsAll stats) : base(stats)
             {
                 Wasted = stats.Wasted;
                 TimeWasted = stats.TimeWasted;

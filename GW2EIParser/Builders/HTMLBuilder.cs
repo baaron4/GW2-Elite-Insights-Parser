@@ -115,7 +115,7 @@ namespace GW2EIParser.Builders
             var list = new List<List<object>>();
             foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalStatsAll stats = player.GetStatsAll(_log, phaseIndex);
+                FinalStatsAll stats = player.GetStatsAll(_log, phaseIndex);
                 list.Add(PhaseDto.GetDMGStatData(stats));
             }
             return list;
@@ -132,7 +132,7 @@ namespace GW2EIParser.Builders
                 var playerData = new List<List<object>>();
                 foreach (NPC target in phase.Targets)
                 {
-                    Statistics.FinalStats statsTarget = player.GetStatsTarget(_log, phaseIndex, target);
+                    FinalStats statsTarget = player.GetStatsTarget(_log, phaseIndex, target);
                     playerData.Add(PhaseDto.GetDMGTargetStatData(statsTarget));
                 }
                 list.Add(playerData);

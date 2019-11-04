@@ -65,38 +65,6 @@ namespace GW2EIParser.Models
             }
         }
 
-        public class FinalStats
-        {
-            public int DirectDamageCount { get; set; }
-            public int CritableDirectDamageCount { get; set; }
-            public int CriticalCount { get; set; }
-            public int CriticalDmg { get; set; }
-            public int FlankingCount { get; set; }
-            public int GlanceCount { get; set; }
-            public int Missed { get; set; }
-            public int Interrupts { get; set; }
-            public int Invulned { get; set; }
-        }
-
-        public class FinalStatsAll : FinalStats
-        {
-            // Rates
-            public int Wasted { get; set; }
-            public double TimeWasted { get; set; }
-            public int Saved { get; set; }
-            public double TimeSaved { get; set; }
-            public double StackDist { get; set; }
-
-            // boons
-            public double AvgBoons { get; set; }
-            public double AvgActiveBoons { get; set; }
-            public double AvgConditions { get; set; }
-            public double AvgActiveConditions { get; set; }
-
-            // Counts
-            public int SwapCount { get; set; }
-        }
-
         public class FinalSupport
         {
             //public long allHeal;
