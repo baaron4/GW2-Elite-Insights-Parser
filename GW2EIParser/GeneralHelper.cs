@@ -398,6 +398,8 @@ namespace GW2EIParser
                     return "https://i.imgur.com/4pXEnaX.png";
                 case DhuumDesmina:
                     return "https://i.imgur.com/jAiRplg.png";
+                case CastleFountain:
+                    return "https://i.imgur.com/xV0OPWL.png";
             }
             return "https://i.imgur.com/HuJHqRZ.png";
         }
