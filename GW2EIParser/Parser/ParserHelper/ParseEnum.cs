@@ -345,7 +345,7 @@ namespace GW2EIParser.Parser
         public enum TargetIDS : ushort
         {
             WorldVersusWorld = 1,
-            TwistedCastle = 2,
+            TwistedCastle = 4,
             // Raid
             ValeGuardian = 15438,
             Gorseval = 15429,
