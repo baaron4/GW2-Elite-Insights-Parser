@@ -115,7 +115,7 @@ var compileLayout = function () {
     buffs.layout = buffLayout;
     layout.addTab(buffs);
     // damage modifiers
-    if (logData.targetless || !logData.wvw) {
+    if (!logData.targetless && !logData.wvw) {
         var damageModifiers = new Tab("Damage Modifiers", {
             dataType: DataTypes.dmgModifiersTable
         });
@@ -134,7 +134,7 @@ var compileLayout = function () {
     });
     layout.addTab(graphs);
     // targets
-    if (logData.targetless || !logData.wvw) {
+    if (!logData.targetless && !logData.wvw) {
         var targets = new Tab("Targets Summary", {
             dataType: DataTypes.targetTab
         });

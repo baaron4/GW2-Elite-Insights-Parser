@@ -35,6 +35,7 @@ var compileCombatReplay = function () {
         template: `${tmplCombatReplayDamageTable}`,
         data: function () {
             return {
+                targetless: logData.targetless,
                 damageMode: 1
             };
         },
@@ -488,6 +489,7 @@ var compileCombatReplay = function () {
         props: ["time", "selectedplayer", "selectedplayerid"],
         data: function() {
             return {
+                targetless: logData.targetless,
                 details: false,
                 mode: 0
             };
