@@ -211,6 +211,7 @@ namespace GW2EIParser.EIData
         {
                 new Buff("Spatial Distortion", 34918, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/7a/Bloodstone_Blessed.png" ),
                 new Buff("Madness", 35006, BuffSource.Enemy, BuffType.Intensity, 99, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/ee/Madness.png" ),
+                new Buff("Still Waters", 35106, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/5c/Still_Waters_%28effect%29.png" ),
                 new Buff("Chaotic Haze", 34963, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/48/Lava_Font.png" ),
                 new Buff("Timed Bomb", 31485, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/91/Time_Bomb.png" ),
                 new Buff("Unnatural Signet",38224, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png"),
@@ -361,6 +362,7 @@ namespace GW2EIParser.EIData
                 new Buff("Rampage",14484, BuffSource.Warrior, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e4/Rampage.png"),
                 //traits
                 new Buff("Soldier's Focus", 58102, BuffSource.Warrior, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/thumb/4/4c/Empower_Allies.png/20px-Empower_Allies.png", 99526, ulong.MaxValue),
+                new Buff("Brave Stride", 43063, BuffSource.Warrior, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b8/Death_from_Above.png"),
                 new Buff("Empower Allies", 14222, BuffSource.Warrior, BuffType.Duration, 1, BuffNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/thumb/4/4c/Empower_Allies.png/20px-Empower_Allies.png"),
                 new Buff("Peak Performance",46853, BuffSource.Warrior, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/98/Peak_Performance.png"),
                 new Buff("Furious Surge", 30204, BuffSource.Warrior, BuffType.Intensity, 25, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/65/Furious.png"),
