@@ -108,13 +108,13 @@ namespace GW2EIParser.Logic
             {
                 foreach (AbstractBuffEvent bfe in list)
                 {
-                    if (bfe is BuffApplyEvent)
+                    if (bfe is BuffApplyEvent ba)
                     {
                         AbstractBuffEvent removal = list.FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > bfe.Time && x.Time < bfe.Time + 30000);
                         if (removal == null)
                         {
-                            res.Add(new BuffRemoveAllEvent(GeneralHelper.UnknownAgent, target.AgentItem, bfe.Time + 10000, 0, skillData.Get(38224), 0, 0));
-                            res.Add(new BuffRemoveManualEvent(GeneralHelper.UnknownAgent, target.AgentItem, bfe.Time + 10000, 0, skillData.Get(38224)));
+                            res.Add(new BuffRemoveAllEvent(GeneralHelper.UnknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224), 1, 0));
+                            res.Add(new BuffRemoveManualEvent(GeneralHelper.UnknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224)));
                         }
                     }
                     else if (bfe is BuffRemoveAllEvent)
@@ -122,7 +122,7 @@ namespace GW2EIParser.Logic
                         AbstractBuffEvent apply = list.FirstOrDefault(x => x is BuffApplyEvent && x.Time < bfe.Time && x.Time > bfe.Time - 30000);
                         if (apply == null)
                         {
-                            res.Add(new BuffApplyEvent(GeneralHelper.UnknownAgent, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(38224)));
+                            res.Add(new BuffApplyEvent(GeneralHelper.UnknownAgent, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(38224), uint.MaxValue, true));
                         }
                     }
                 }

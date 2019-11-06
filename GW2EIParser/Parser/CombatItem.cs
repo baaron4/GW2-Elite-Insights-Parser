@@ -102,11 +102,6 @@
             SrcAgent = agent;
         }
 
-        public void OverrideSkillID(long skillID)
-        {
-            SkillID = skillID;
-        }
-
         public void OverrideSrcValues(ulong agent, ushort instid, ushort masterInstid)
         {
             SrcInstid = instid;

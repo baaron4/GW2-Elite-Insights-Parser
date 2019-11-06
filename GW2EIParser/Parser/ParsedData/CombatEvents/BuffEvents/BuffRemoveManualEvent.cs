@@ -13,7 +13,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         {
         }
 
-        public override bool IsBuffSimulatorCompliant(long fightEnd)
+        public override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
         {
             return false; // don't consider manual remove events
         }

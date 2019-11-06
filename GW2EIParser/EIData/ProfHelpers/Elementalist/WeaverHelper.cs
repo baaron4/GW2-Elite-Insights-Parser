@@ -8,32 +8,32 @@ namespace GW2EIParser.EIData
 {
     public class WeaverHelper : ElementalistHelper
     {
-        private const long _fireMajor = 40926;
-        private const long _fireMinor = 42811;
-        private const long _waterMajor = 43236;
-        private const long _waterMinor = 43370;
-        private const long _airMajor = 41692;
-        private const long _airMinor = 43229;
-        private const long _earthMajor = 43740;
-        private const long _earthMinor = 44822;
+        private const long FireMajor = 40926;
+        private const long FireMinor = 42811;
+        private const long WaterMajor = 43236;
+        private const long WaterMinor = 43370;
+        private const long AirMajor = 41692;
+        private const long AirMinor = 43229;
+        private const long EarthMajor = 43740;
+        private const long EarthMinor = 44822;
 
         private static readonly Dictionary<long, HashSet<long>> _minorsTranslation = new Dictionary<long, HashSet<long>>
         {
-            { _fireMinor, new HashSet<long> { WaterFire, AirFire, EarthFire, FireDual}},
-            { _waterMinor, new HashSet<long> { FireWater, AirWater, EarthWater, WaterDual}},
-            { _airMinor, new HashSet<long> { FireAir, WaterAir, EarthAir, AirDual}},
-            { _earthMinor, new HashSet<long> { FireEarth, WaterEarth, AirEarth, EarthDual}},
+            { FireMinor, new HashSet<long> { WaterFire, AirFire, EarthFire, FireDual}},
+            { WaterMinor, new HashSet<long> { FireWater, AirWater, EarthWater, WaterDual}},
+            { AirMinor, new HashSet<long> { FireAir, WaterAir, EarthAir, AirDual}},
+            { EarthMinor, new HashSet<long> { FireEarth, WaterEarth, AirEarth, EarthDual}},
         };
 
         private static readonly Dictionary<long, HashSet<long>> _majorsTranslation = new Dictionary<long, HashSet<long>>
         {
-            { _fireMajor, new HashSet<long> { FireWater, FireAir, FireEarth, FireDual}},
-            { _waterMajor, new HashSet<long> { WaterFire, WaterAir, WaterEarth, WaterDual}},
-            { _airMajor, new HashSet<long> { AirFire, AirWater, AirEarth, AirDual}},
-            { _earthMajor, new HashSet<long> { EarthFire, EarthWater, EarthAir, EarthDual}},
+            { FireMajor, new HashSet<long> { FireWater, FireAir, FireEarth, FireDual}},
+            { WaterMajor, new HashSet<long> { WaterFire, WaterAir, WaterEarth, WaterDual}},
+            { AirMajor, new HashSet<long> { AirFire, AirWater, AirEarth, AirDual}},
+            { EarthMajor, new HashSet<long> { EarthFire, EarthWater, EarthAir, EarthDual}},
         };
 
-        private static long TranslateWeaverAttunement(List<AbstractBuffEvent> buffApplies)
+        private static long TranslateWeaverAttunement(List<BuffApplyEvent> buffApplies)
         {
             // check if more than 3 ids are present
             if (buffApplies.Select(x => x.BuffID).Distinct().Count() > 3)
@@ -97,14 +97,14 @@ namespace GW2EIParser.EIData
 
             var weaverAttunements = new HashSet<long>
             {
-               _fireMajor,
-                _fireMinor,
-                _waterMajor,
-                _waterMinor,
-                _airMajor,
-                _airMinor,
-                _earthMajor,
-                _earthMinor,
+               FireMajor,
+                FireMinor,
+                WaterMajor,
+                WaterMinor,
+                AirMajor,
+                AirMinor,
+                EarthMajor,
+                EarthMinor,
 
                 FireDual,
                 WaterDual,
@@ -149,8 +149,9 @@ namespace GW2EIParser.EIData
             long prevID = 0;
             foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in groupByTime)
             {
-                var applies = pair.Value.Where(x => x is BuffApplyEvent).ToList();
+                var applies = pair.Value.OfType<BuffApplyEvent>().ToList();
                 long curID = TranslateWeaverAttunement(applies);
+                uint curInstanceID = applies.First().BuffInstance;
                 foreach (AbstractBuffEvent c in pair.Value)
                 {
                     c.Invalidate(skillData);
@@ -159,7 +160,7 @@ namespace GW2EIParser.EIData
                 {
                     continue;
                 }
-                res.Add(new BuffApplyEvent(a, a, pair.Key, int.MaxValue, skillData.Get(curID)));
+                res.Add(new BuffApplyEvent(a, a, pair.Key, int.MaxValue, skillData.Get(curID), curInstanceID, true));
                 if (prevID != 0)
                 {
                     res.Add(new BuffRemoveManualEvent(a, a, pair.Key, int.MaxValue, skillData.Get(prevID)));

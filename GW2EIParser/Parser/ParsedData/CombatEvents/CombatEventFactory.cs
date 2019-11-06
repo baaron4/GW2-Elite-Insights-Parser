@@ -143,28 +143,40 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public static List<AbstractBuffEvent> CreateBuffEvents(List<CombatItem> buffEvents, AgentData agentData, SkillData skillData, long offset)
         {
             var res = new List<AbstractBuffEvent>();
+            var dict = new Dictionary<uint, SkillItem>();
             foreach (CombatItem c in buffEvents)
             {
-                switch (c.IsBuffRemove)
+                switch (c.IsStateChange)
                 {
-                    case ParseEnum.BuffRemove.None:
-                        if (c.IsOffcycle > 0)
+                    case ParseEnum.StateChange.StackActive:
+                        res.Add(new BuffStackActiveEvent(c, agentData, skillData, offset));
+                        break;
+                    case ParseEnum.StateChange.StackReset:
+                        res.Add(new BuffStackResetEvent(c, agentData, skillData, offset));
+                        break;
+                    default:
+                        switch (c.IsBuffRemove)
                         {
-                            res.Add(new BuffExtensionEvent(c, agentData, skillData, offset));
+                            case ParseEnum.BuffRemove.None:
+                                if (c.IsOffcycle > 0)
+                                {
+                                    res.Add(new BuffExtensionEvent(c, agentData, skillData, offset));
+                                }
+                                else
+                                {
+                                    res.Add(new BuffApplyEvent(c, agentData, skillData, offset));
+                                }
+                                break;
+                            case ParseEnum.BuffRemove.Single:
+                                res.Add(new BuffRemoveSingleEvent(c, agentData, skillData, offset));
+                                break;
+                            case ParseEnum.BuffRemove.All:
+                                res.Add(new BuffRemoveAllEvent(c, agentData, skillData, offset));
+                                break;
+                            case ParseEnum.BuffRemove.Manual:
+                                res.Add(new BuffRemoveManualEvent(c, agentData, skillData, offset));
+                                break;
                         }
-                        else
-                        {
-                            res.Add(new BuffApplyEvent(c, agentData, skillData, offset));
-                        }
-                        break;
-                    case ParseEnum.BuffRemove.Single:
-                        res.Add(new BuffRemoveSingleEvent(c, agentData, skillData, offset));
-                        break;
-                    case ParseEnum.BuffRemove.All:
-                        res.Add(new BuffRemoveAllEvent(c, agentData, skillData, offset));
-                        break;
-                    case ParseEnum.BuffRemove.Manual:
-                        res.Add(new BuffRemoveManualEvent(c, agentData, skillData, offset));
                         break;
                 }
             }

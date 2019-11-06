@@ -34,7 +34,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public abstract void TryFindSrc(ParsedLog log);
 
-        public abstract bool IsBuffSimulatorCompliant(long fightEnd);
+        public abstract bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs);
 
         public abstract int CompareTo(AbstractBuffEvent abe);
     }
