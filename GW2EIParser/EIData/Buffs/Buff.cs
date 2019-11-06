@@ -212,6 +212,7 @@ namespace GW2EIParser.EIData
                 new Buff("Spatial Distortion", 34918, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/7a/Bloodstone_Blessed.png" ),
                 new Buff("Madness", 35006, BuffSource.Enemy, BuffType.Intensity, 99, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/ee/Madness.png" ),
                 new Buff("Still Waters", 35106, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/5c/Still_Waters_%28effect%29.png" ),
+                //new Buff("Soothing Waters", 35106, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8f/Soothing_Waters.png" ),
                 new Buff("Chaotic Haze", 34963, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/48/Lava_Font.png" ),
                 new Buff("Timed Bomb", 31485, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/91/Time_Bomb.png" ),
                 new Buff("Unnatural Signet",38224, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png"),
