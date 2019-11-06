@@ -203,6 +203,8 @@ namespace GW2EIParser.Parser
             RadiantPhantasm = 16259,
             CrimsonPhantasm = 16257,
             RetrieverProjection = 16249,
+            // Twisted Castle
+            HauntingStatue = 16247,
             // Xera
             ChargedBloodstone = 8267,
             BloodstoneFragment = 40724,
@@ -343,6 +345,7 @@ namespace GW2EIParser.Parser
         public enum TargetIDS : ushort
         {
             WorldVersusWorld = 1,
+            TwistedCastle = 2,
             // Raid
             ValeGuardian = 15438,
             Gorseval = 15429,
