@@ -22,6 +22,8 @@ namespace GW2EIParser.Logic
         public bool HasNoFightSpecificMechanics => MechanicList.Count == _basicMechanicsCount;
         public List<Mob> TrashMobs { get; } = new List<Mob>();
         public List<Target> Targets { get; } = new List<Target>();
+
+        public bool Targetless { get; protected set; } = false;
         protected ushort TriggerID { get; }
 
         protected FightLogic(ushort triggerID)

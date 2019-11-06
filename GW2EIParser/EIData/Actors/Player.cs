@@ -902,8 +902,8 @@ namespace GW2EIParser.EIData
             _damageModifiers = new Dictionary<string, List<DamageModifierData>>();
             _damageModifiersTargets = new Dictionary<Target, Dictionary<string, List<DamageModifierData>>>();
             _presentDamageModifiers = new HashSet<string>();
-            // If conjured sword or WvW, stop
-            if (IsFakeActor || log.FightData.Logic.Mode == FightLogic.ParseMode.WvW)
+            // If conjured sword, targetless or WvW, stop
+            if (IsFakeActor || log.FightData.Logic.Targetless || log.FightData.Logic.Mode == FightLogic.ParseMode.WvW)
             {
                 return;
             }
