@@ -24,6 +24,8 @@ namespace GW2EIParser.Parser.ParsedData
         private readonly Dictionary<AgentItem, List<AbstractDamageEvent>> _damageTakenData;
         private readonly Dictionary<AgentItem, List<AbstractMovementEvent>> _movementData;
 
+        public bool HasStackIDs { get; } = false;
+
         private void SpecialBuffParse(List<Player> players, SkillData skillData, FightData fightData)
         {
             var toAdd = new List<AbstractBuffEvent>();

@@ -790,31 +790,41 @@ namespace GW2EIParser.EIData
                 _elementalist
         };
 
-        public BuffSimulator CreateSimulator(ParsedLog log)
+        public AbstractBuffSimulator CreateSimulator(ParsedLog log)
         {
-            StackingLogic logicToUse;
-            switch (_logic)
+            if (!log.CombatData.HasStackIDs)
             {
-                case Logic.Queue:
-                    logicToUse = new QueueLogic();
-                    break;
-                case Logic.HealingPower:
-                    logicToUse = new HealingLogic();
-                    break;
-                case Logic.ForceOverride:
-                    logicToUse = new ForceOverrideLogic();
-                    break;
-                case Logic.Override:
-                    logicToUse = new OverrideLogic();
-                    break;
-                case Logic.Unknown:
-                default:
-                    throw new InvalidOperationException("Cannot simulate unknown/custom buffs");
+                StackingLogic logicToUse;
+                switch (_logic)
+                {
+                    case Logic.Queue:
+                        logicToUse = new QueueLogic();
+                        break;
+                    case Logic.HealingPower:
+                        logicToUse = new HealingLogic();
+                        break;
+                    case Logic.ForceOverride:
+                        logicToUse = new ForceOverrideLogic();
+                        break;
+                    case Logic.Override:
+                        logicToUse = new OverrideLogic();
+                        break;
+                    case Logic.Unknown:
+                    default:
+                        throw new InvalidOperationException("Cannot simulate unknown/custom buffs");
+                }
+                switch (Type)
+                {
+                    case BuffType.Intensity: return new BuffSimulatorIntensity(Capacity, log, logicToUse);
+                    case BuffType.Duration: return new BuffSimulatorDuration(Capacity, log, logicToUse);
+                    case BuffType.Unknown:
+                    default: throw new InvalidOperationException("Cannot simulate typeless boons");
+                }
             }
             switch (Type)
             {
-                case BuffType.Intensity: return new BuffSimulatorIntensity(Capacity, log, logicToUse);
-                case BuffType.Duration: return new BuffSimulatorDuration(Capacity, log, logicToUse);
+                case BuffType.Intensity: return new BuffSimulatorIDIntensity(log);
+                case BuffType.Duration: return new BuffSimulatorIDDuration(log);
                 case BuffType.Unknown:
                 default: throw new InvalidOperationException("Cannot simulate typeless boons");
             }

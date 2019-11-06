@@ -224,7 +224,7 @@ namespace GW2EIParser.EIData
                     {
                         continue;
                     }
-                    BuffSimulator simulator = buff.CreateSimulator(log);
+                    AbstractBuffSimulator simulator = buff.CreateSimulator(log);
                     simulator.Simulate(logs, dur);
                     simulator.Trim(dur);
                     bool updateBoonPresence = boonIds.Contains(boonid);
@@ -326,7 +326,7 @@ namespace GW2EIParser.EIData
             }
         }
 
-        private void SetBuffStatusCleanseWasteData(ParsedLog log, BuffSimulator simulator, long boonid, bool updateCondiPresence)
+        private void SetBuffStatusCleanseWasteData(ParsedLog log, AbstractBuffSimulator simulator, long boonid, bool updateCondiPresence)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             var extraSimulations = new List<AbstractBuffSimulationItem>(simulator.OverstackSimulationResult);
