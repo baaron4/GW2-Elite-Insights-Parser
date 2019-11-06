@@ -200,11 +200,11 @@ var compilePlayerTab = function () {
                 var res = this.data;
                 var data = this.computeDPSRelatedData();
                 this.data[this.playerOffset].y = data[0];
-                var offset = 1;
                 if (!logData.targetless) {            
-                    this.data[this.playerOffset + offset++].y = data[1];
-                    this.data[this.playerOffset + offset++].y = data[2];
+                    this.data[this.playerOffset + 1].y = data[1];
+                    this.data[this.playerOffset + 2].y = data[2];
                 }
+                var offset = 3;
                 for (var i = this.playerOffset - this.graph.targets.length; i < this.playerOffset; i++) {
                     this.data[i].y = data[offset++];
                 }
