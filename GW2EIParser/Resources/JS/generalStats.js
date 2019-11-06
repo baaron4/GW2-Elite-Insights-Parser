@@ -7,7 +7,7 @@ var compileGeneralStats = function () {
         mixins: [roundingComponent],
         data: function () {
             return {
-                noTarget: logData.targetless,
+                targetless: logData.targetless,
                 showDamage: logData.wvw,
                 cacheTarget: new Map()
             };
@@ -233,7 +233,7 @@ var compileGeneralStats = function () {
         mixins: [roundingComponent],
         data: function () {
             return {
-                noTarget: logData.targetless,
+                targetless: logData.targetless,
                 mode: logData.targetless ? 0 : 1,
                 cache: new Map(),
                 cacheTarget: new Map()
