@@ -400,6 +400,8 @@ namespace GW2EIParser
                     return "https://i.imgur.com/jAiRplg.png";
                 case CastleFountain:
                     return "https://i.imgur.com/xV0OPWL.png";
+                case HauntingStatue:
+                    return "https://i.imgur.com/7IQDyuK.png";
             }
             return "https://i.imgur.com/HuJHqRZ.png";
         }
