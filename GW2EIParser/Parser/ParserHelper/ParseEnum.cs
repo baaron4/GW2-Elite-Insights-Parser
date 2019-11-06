@@ -205,6 +205,7 @@ namespace GW2EIParser.Parser
             RetrieverProjection = 16249,
             // Twisted Castle
             HauntingStatue = 16247,
+            CastleFountain = 32951,
             // Xera
             ChargedBloodstone = 8267,
             BloodstoneFragment = 40724,

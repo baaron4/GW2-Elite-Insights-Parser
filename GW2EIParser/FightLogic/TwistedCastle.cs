@@ -14,6 +14,7 @@ namespace GW2EIParser.Logic
             MechanicList.AddRange(new List<Mechanic>
             {
                 new PlayerBuffApplyMechanic(34918, "Spatial Distortion", new MechanicPlotlySetting("circle","rgb(255,0,255)"), "Statue TP", "Teleported by Statue", "Statue Teleport", 500),
+                new PlayerBuffApplyMechanic(35106, "Still Waters", new MechanicPlotlySetting("triangle","rgb(255,0,255)"), "Still Waters", "Used a fountain", "Still Waters", 0),
                 new PlayerBuffApplyMechanic(35006, "Madness", new MechanicPlotlySetting("square","rgb(200,140,255)"), "Madness", "Stacking debuff", "Madness", 0),
                 new PlayerBuffApplyMechanic(34963, "Chaotic Haze", new MechanicPlotlySetting("hexagon","rgb(255,0,0)"), "Chaotic Haze", "Damaging Debuff from bombardement", "Chaotic Haze", 500),
             }
@@ -43,7 +44,8 @@ namespace GW2EIParser.Logic
         {
             return new List<ParseEnum.TrashIDS>
             {
-               ParseEnum.TrashIDS.HauntingStatue
+               ParseEnum.TrashIDS.HauntingStatue,
+               ParseEnum.TrashIDS.CastleFountain
             };
         }
 
@@ -57,6 +59,8 @@ namespace GW2EIParser.Logic
                     {
                         replay.Decorations.Add(new FacingDecoration(lifespan, new AgentConnector(mob), replay.PolledRotations));
                     }
+                    break;
+                case (ushort)ParseEnum.TrashIDS.CastleFountain:
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
