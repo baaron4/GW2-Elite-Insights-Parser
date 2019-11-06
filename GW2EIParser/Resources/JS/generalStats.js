@@ -13,7 +13,7 @@ var compileGeneralStats = function () {
             };
         },
         mounted() {
-            initTable("#dps-table", 4, "desc");
+            initTable("#dps-table", logData.targetless ? 7 : 4, "desc");
         },
         updated() {
             updateTable("#dps-table");
