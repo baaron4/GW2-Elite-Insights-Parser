@@ -439,10 +439,12 @@ var compileCombatReplay = function () {
                 for (var i = 0; i < logData.targets.length; i++) {
                     var target = logData.targets[i];
                     var crTarget = animator.targetData.get(target.combatReplayID);
-                    res.push({
-                        start: crTarget.start,
-                        end: crTarget.end
-                    });
+                    if (crTarget) {                   
+                        res.push({
+                            start: crTarget.start,
+                            end: crTarget.end
+                        });
+                    }
                 }
                 return res;
             },
