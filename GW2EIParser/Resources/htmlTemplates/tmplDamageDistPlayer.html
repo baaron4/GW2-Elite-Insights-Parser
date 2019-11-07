@@ -9,7 +9,7 @@
             </li>
         </ul>
     </div>
-    <div v-if="!noTarget" class="d-flex flex-row justify-content-center mt-1 mb-1">
+    <div v-if="!targetless" class="d-flex flex-row justify-content-center mt-1 mb-1">
         <ul class="nav nav-pills">
             <li class="nav-item">
                 <a class="nav-link" @click="targetmode = 1" :class="{active: targetmode}">Target</a>
