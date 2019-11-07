@@ -10,7 +10,7 @@ var compilePlayerTab = function () {
         data: function () {
             return {
                 distmode: -1,
-                noTarget: logData.targetless,
+                targetless: logData.targetless,
                 targetmode: logData.targetless ? 0 : 1,
                 cacheTarget: new Map()
             };
