@@ -6,7 +6,7 @@ var compileGraphs = function () {
         template: `${tmplGraphStats}`,
         data: function () {
             return {
-                noTarget: logData.targetless,
+                targetless: logData.targetless,
                 mode: logData.targetless ? 0 : 1,
             };
         },
