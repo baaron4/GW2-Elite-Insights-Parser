@@ -13,7 +13,7 @@
                 <th></th>
                 <th class="text-left">Name</th>
                 <th>All</th>
-                <th v-for="col in tableData.cols">
+                <th v-if="!targetless" v-for="col in tableData.cols">
                     {{col.name}}
                 </th>
             </tr>
@@ -25,7 +25,7 @@
                 </td>
                 <td class="text-left">{{row.player.name}}</td>
                 <td style="min-width:80px">{{Math.round(row.dps[2*tableData.cols.length+(damageMode === 1 ? 1 : 0)])}}</td>
-                <td v-for="(col, id) in tableData.cols" style="min-width:80px">
+                <td v-if="!targetless" v-for="(col, id) in tableData.cols" style="min-width:80px">
                     {{Math.round(row.dps[2*id +(damageMode === 1 ? 1 : 0)])}}
                 </td>
             </tr>
@@ -35,7 +35,7 @@
                 <td></td>
                 <td class="text-left">{{sum.name}}</td>
                 <td style="min-width:80px">{{Math.round(sum.dps[2*tableData.cols.length+(damageMode === 1 ? 1 : 0)])}}</td>
-                <td v-for="(col, id) in tableData.cols" style="min-width:80px">
+                <td v-if="!targetless" v-for="(col, id) in tableData.cols" style="min-width:80px">
                     {{Math.round(sum.dps[2*id +(damageMode === 1 ? 1 : 0)])}}
                 </td>
             </tr>

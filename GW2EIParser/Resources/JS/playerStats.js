@@ -10,7 +10,8 @@ var compilePlayerTab = function () {
         data: function () {
             return {
                 distmode: -1,
-                targetmode: 1,
+                targetless: logData.targetless,
+                targetmode: logData.targetless ? 0 : 1,
                 cacheTarget: new Map()
             };
         },
@@ -136,6 +137,7 @@ var compilePlayerTab = function () {
                 hoverinfo: 'name+y+x',
                 name: 'Total DPS'
             });
+            if (!logData.targetless) {        
                 this.data.push({
                     x: this.phase.times,
                     y: [],
@@ -160,6 +162,7 @@ var compilePlayerTab = function () {
                     hoverinfo: 'name+y+x',
                     name: 'Cleave DPS'
                 });
+            }
             this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc');
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
         },
@@ -197,8 +200,10 @@ var compilePlayerTab = function () {
                 var res = this.data;
                 var data = this.computeDPSRelatedData();
                 this.data[this.playerOffset].y = data[0];
-                this.data[this.playerOffset + 1].y = data[1];
-                this.data[this.playerOffset + 2].y = data[2];
+                if (!logData.targetless) {            
+                    this.data[this.playerOffset + 1].y = data[1];
+                    this.data[this.playerOffset + 2].y = data[2];
+                }
                 var offset = 3;
                 for (var i = this.playerOffset - this.graph.targets.length; i < this.playerOffset; i++) {
                     this.data[i].y = data[offset++];

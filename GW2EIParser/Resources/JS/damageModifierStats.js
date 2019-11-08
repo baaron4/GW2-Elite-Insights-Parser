@@ -7,8 +7,7 @@ var compileDamageModifiers = function () {
         template: `${tmplDamageModifierStats}`,
         data: function () {
             return {
-                wvw: !!logData.wvw,
-                mode: logData.wvw ? 0 : 1,
+                mode: 1,
                 displayMode: logData.dmgModifiersItem.length > 0 ? 0 : logData.dmgModifiersCommon.length > 0 ? 1 : 2
             };
         },

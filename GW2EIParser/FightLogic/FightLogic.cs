@@ -22,6 +22,8 @@ namespace GW2EIParser.Logic
         public bool HasNoFightSpecificMechanics => MechanicList.Count == _basicMechanicsCount;
         public List<Mob> TrashMobs { get; } = new List<Mob>();
         public List<Target> Targets { get; } = new List<Target>();
+
+        public bool Targetless { get; protected set; } = false;
         protected ushort TriggerID { get; }
 
         protected FightLogic(ushort triggerID)
@@ -130,6 +132,7 @@ namespace GW2EIParser.Logic
             }
             List<ParseEnum.TrashIDS> ids2 = GetTrashMobsIDS();
             var aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
+            aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
             foreach (AgentItem a in aList)
             {
                 var mob = new Mob(a);

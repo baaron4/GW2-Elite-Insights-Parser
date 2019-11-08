@@ -7,12 +7,13 @@ var compileGeneralStats = function () {
         mixins: [roundingComponent],
         data: function () {
             return {
-                wvw: !!logData.wvw,
+                targetless: logData.targetless,
+                showDamage: logData.wvw,
                 cacheTarget: new Map()
             };
         },
         mounted() {
-            initTable("#dps-table", 4, "desc");
+            initTable("#dps-table", logData.targetless ? 7 : 4, "desc");
         },
         updated() {
             updateTable("#dps-table");
@@ -232,7 +233,8 @@ var compileGeneralStats = function () {
         mixins: [roundingComponent],
         data: function () {
             return {
-                mode: 1,
+                targetless: logData.targetless,
+                mode: logData.targetless ? 0 : 1,
                 cache: new Map(),
                 cacheTarget: new Map()
             };
