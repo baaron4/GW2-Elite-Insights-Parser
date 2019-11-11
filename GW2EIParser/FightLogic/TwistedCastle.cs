@@ -51,21 +51,21 @@ namespace GW2EIParser.Logic
             };
         }
 
-        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC npc, ParsedLog log, CombatReplay replay)
         {
-            switch (mob.ID)
+            switch (npc.ID)
             {
                 case (ushort)ParseEnum.TrashIDS.HauntingStatue:
                     var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
                     if (replay.Rotations.Any())
                     {
-                        replay.Decorations.Add(new FacingDecoration(lifespan, new AgentConnector(mob), replay.PolledRotations));
+                        replay.Decorations.Add(new FacingDecoration(lifespan, new AgentConnector(npc), replay.PolledRotations));
                     }
                     break;
                 case (ushort)ParseEnum.TrashIDS.CastleFountain:
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
             }
         }
 
