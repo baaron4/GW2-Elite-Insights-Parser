@@ -27,18 +27,18 @@ namespace GW2EIParser.Logic
             Icon = "https://i.imgur.com/xpQnu35.png";
         }
 
-        /*protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
-            return new CombatReplayMap("https://i.imgur.com/RZbs21b.png",
-                            (1099, 1114),
-                            (-5467, 8069, -2282, 11297),
+            return new CombatReplayMap("https://i.imgur.com/2RkzdmL.png",
+                            (1353, 1748),
+                            (-8718, -4421, 899, 7043),
                             (-12288, -27648, 12288, 27648),
                             (1920, 12160, 2944, 14464));
-        }*/
+        }
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem dummyAgent = agentData.AddCustomAgent(combatData.First().LogTime, combatData.Last().LogTime, AgentItem.AgentType.NPC, "Twisted Castle", "", TriggerID);
+            agentData.AddCustomAgent(combatData.First().LogTime, combatData.Last().LogTime, AgentItem.AgentType.NPC, "Twisted Castle", "", TriggerID);
             ComputeFightTargets(agentData, combatData);
         }
 
