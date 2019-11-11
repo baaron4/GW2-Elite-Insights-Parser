@@ -8,7 +8,7 @@
         <li class="nav-item">
             <a class="nav-link" :class="{active: mode === 0}" @click="mode = 0">Players</a>
         </li>
-        <li class="nav-item">
+        <li v-if="!targetless" class="nav-item">
             <a class="nav-link" :class="{active: mode === 1}" @click="mode = 1">Targets</a>
         </li>
     </ul>

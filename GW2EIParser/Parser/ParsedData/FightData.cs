@@ -163,8 +163,16 @@ namespace GW2EIParser.Parser.ParsedData
                     Logic = new Golem(id);
                     break;
                 default:
-                    // Unknown
-                    Logic = new UnknownFightLogic(id);
+                    switch(ParseEnum.GetTrashIDS(id))
+                    {
+                        case ParseEnum.TrashIDS.HauntingStatue:
+                            Logic = new TwistedCastle((ushort)ParseEnum.TargetIDS.TwistedCastle);
+                            break;
+                        default:
+                            // Unknown
+                            Logic = new UnknownFightLogic(id);
+                            break;
+                    }
                     break;
             }
         }

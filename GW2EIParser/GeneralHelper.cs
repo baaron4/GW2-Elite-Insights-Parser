@@ -251,6 +251,8 @@ namespace GW2EIParser
                     return "https://wiki.guildwars2.com/images/3/33/Mini_Snuggles.png";
                 case ParseEnum.TargetIDS.MedGolem:
                     return "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
+                case ParseEnum.TargetIDS.TwistedCastle:
+                    return "https://i.imgur.com/ZBm5Uga.png";
             }
             switch (ParseEnum.GetTrashIDS(id))
             {
@@ -415,6 +417,10 @@ namespace GW2EIParser
                     return "https://i.imgur.com/4pXEnaX.png";
                 case DhuumDesmina:
                     return "https://i.imgur.com/jAiRplg.png";
+                case CastleFountain:
+                    return "https://i.imgur.com/xV0OPWL.png";
+                case HauntingStatue:
+                    return "https://i.imgur.com/7IQDyuK.png";
             }
             return "https://i.imgur.com/HuJHqRZ.png";
         }

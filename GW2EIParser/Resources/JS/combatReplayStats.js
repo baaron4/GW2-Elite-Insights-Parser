@@ -35,6 +35,7 @@ var compileCombatReplay = function () {
         template: `${tmplCombatReplayDamageTable}`,
         data: function () {
             return {
+                targetless: logData.targetless,
                 damageMode: 1
             };
         },
@@ -439,10 +440,12 @@ var compileCombatReplay = function () {
                 for (var i = 0; i < logData.targets.length; i++) {
                     var target = logData.targets[i];
                     var crTarget = animator.targetData.get(target.combatReplayID);
-                    res.push({
-                        start: crTarget.start,
-                        end: crTarget.end
-                    });
+                    if (crTarget) {                   
+                        res.push({
+                            start: crTarget.start,
+                            end: crTarget.end
+                        });
+                    }
                 }
                 return res;
             },
@@ -486,6 +489,7 @@ var compileCombatReplay = function () {
         props: ["time", "selectedplayer", "selectedplayerid"],
         data: function() {
             return {
+                targetless: logData.targetless,
                 details: false,
                 mode: 0
             };

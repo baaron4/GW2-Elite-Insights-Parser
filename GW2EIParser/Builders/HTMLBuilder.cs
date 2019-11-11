@@ -859,6 +859,7 @@ namespace GW2EIParser.Builders
                     {"${tmplCombatReplayPlayerSelect}", Properties.Resources.tmplCombatReplayPlayerSelect },
                     {"${tmplCombatReplayRangeSelect}", Properties.Resources.tmplCombatReplayRangeSelect },
                     {"${tmplCombatReplayAnimationControl}", Properties.Resources.tmplCombatReplayAnimationControl },
+                    {"${tmplCombatReplayMechanicsList}", Properties.Resources.tmplCombatReplayMechanicsList },
                 };
             foreach (KeyValuePair<string, string> entry in CRtemplates)
             {
@@ -1164,6 +1165,7 @@ namespace GW2EIParser.Builders
             logData.EncounterDuration = _log.FightData.DurationString;
             logData.Success = _log.FightData.Success;
             logData.Wvw = _log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
+            logData.Targetless = _log.FightData.Logic.Targetless;
             logData.FightName = _log.FightData.Name;
             logData.FightIcon = _log.FightData.Logic.Icon;
             logData.LightTheme = Properties.Settings.Default.LightTheme;
