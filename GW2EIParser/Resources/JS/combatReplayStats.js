@@ -510,18 +510,23 @@ var compileCombatReplay = function () {
                 var logMechData = logData.mechanicMap[mechI];
                 var mechData = { name: logMechData.name, shortName: logMechData.shortName };
                 var pointsArray = graphMechData.points[0];
+                var icd = logMechData.icd;
                 // players
                 if (!logMechData.enemyMech) {
                     for (var playerI = 0; playerI < pointsArray.length; playerI++) {
+                        var lastTime = -1000000;
                         var points = pointsArray[playerI];
                         var player = logData.players[playerI];
                         for (var i = 0; i < points.length; i++) {
-                            var time = points[i]; // when mechanic occured in seconds
-                            mechanicEvents.push({
-                                time: time * 1000,
-                                actor: { name: player.name, enemy: false, id: player.combatReplayID },
-                                mechanic: mechData,
-                            });
+                            var time = points[i] * 1000; // when mechanic occured in seconds
+                            if (icd === 0 || (time - lastTime > icd)) {
+                                mechanicEvents.push({
+                                    time: time,
+                                    actor: { name: player.name, enemy: false, id: player.combatReplayID },
+                                    mechanic: mechData,
+                                });
+                            }
+                            lastTime = time;
                         }
                     }
                 } else {

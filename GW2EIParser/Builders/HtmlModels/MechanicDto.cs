@@ -8,6 +8,8 @@ namespace GW2EIParser.Builders.HtmlModels
     public class MechanicDto
     {
         public string Name { get; set; }
+
+        public int Icd { get; set; }
         public string ShortName { get; set; }
         public string Description { get; set; }
         public bool EnemyMech { get; set; }
@@ -47,7 +49,8 @@ namespace GW2EIParser.Builders.HtmlModels
                     ShortName = mech.ShortName,
                     Description = mech.Description,
                     PlayerMech = mech.ShowOnTable && !mech.IsEnemyMechanic,
-                    EnemyMech = mech.IsEnemyMechanic
+                    EnemyMech = mech.IsEnemyMechanic,
+                    Icd = mech.InternalCooldown
                 };
                 mechsDtos.Add(dto);
             }
