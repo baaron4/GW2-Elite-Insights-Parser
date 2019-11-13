@@ -11,11 +11,15 @@
         <li v-if="!targetless" class="nav-item">
             <a class="nav-link" :class="{active: mode === 1}" @click="mode = 1">Targets</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" :class="{active: mode === 2}" @click="mode = 2">Mechanics</a>
+        </li>
     </ul>
     <div class="squad-details" v-if="details">
         <keep-alive>
             <combat-replay-players-stats-component v-if="mode === 0" :key="'players-cr-details'" :time="time" :selectedplayer="selectedplayer" :selectedplayerid="selectedplayerid"></combat-replay-players-stats-component>
-            <combat-replay-targets-stats-component v-if="mode === 1" :key="'targets-cr-details'" :time="time"></combat-replay-targets-stats-component>      
+            <combat-replay-targets-stats-component v-if="mode === 1" :key="'targets-cr-details'" :time="time"></combat-replay-targets-stats-component>
+            <combat-replay-mechanics-list-component v-if="mode === 2" :key="'mechanics-cr-details'" :selectedplayerid="selectedplayerid"></combat-replay-mechanics-list-component>
         </keep-alive>
     </div>
 </div>
