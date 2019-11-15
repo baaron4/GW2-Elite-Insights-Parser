@@ -328,14 +328,14 @@ namespace GW2EIParser.EIData
         private void SetBuffStatusCleanseWasteData(ParsedLog log, AbstractBuffSimulator simulator, long boonid, bool updateCondiPresence)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
-            var extraSimulations = new List<AbstractBuffSimulationItem>(simulator.OverstackSimulationResult);
+            var extraSimulations = new List<AbstractSimulationItem>(simulator.OverstackSimulationResult);
             extraSimulations.AddRange(simulator.WasteSimulationResult);
-            foreach (AbstractBuffSimulationItem simul in extraSimulations)
+            foreach (AbstractSimulationItem simul in extraSimulations)
             {
                 for (int i = 0; i < phases.Count; i++)
                 {
                     PhaseData phase = phases[i];
-                    simul.SetBoonDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
+                    simul.SetBuffDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
                 }
             }
         }
@@ -347,7 +347,7 @@ namespace GW2EIParser.EIData
             {
                 PhaseData phase = phases[i];
                 Add(_buffPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
-                simul.SetBoonDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
+                simul.SetBuffDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
             }
         }
         //

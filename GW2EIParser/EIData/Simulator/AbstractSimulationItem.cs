@@ -3,7 +3,7 @@ using GW2EIParser.Parser.ParsedData;
 
 namespace GW2EIParser.EIData
 {
-    public abstract class AbstractBuffSimulationItem
+    public abstract class AbstractSimulationItem
     {
 
         protected static Dictionary<AgentItem, BuffDistributionItem> GetDistrib(BuffDistribution distribs, long boonid)
@@ -16,6 +16,6 @@ namespace GW2EIParser.EIData
             return distrib;
         }
 
-        public abstract void SetBoonDistributionItem(BuffDistribution distribs, long start, long end, long boonid, ParsedLog log);
+        public abstract void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long boonid, ParsedLog log);
     }
 }

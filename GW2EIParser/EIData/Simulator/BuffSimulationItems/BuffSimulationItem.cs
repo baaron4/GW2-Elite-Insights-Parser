@@ -4,7 +4,7 @@ using GW2EIParser.Parser.ParsedData;
 
 namespace GW2EIParser.EIData
 {
-    public abstract class BuffSimulationItem : AbstractBuffSimulationItem
+    public abstract class BuffSimulationItem : AbstractSimulationItem
     {
         public long Duration { get; protected set; }
         public long Start { get; protected set; }
