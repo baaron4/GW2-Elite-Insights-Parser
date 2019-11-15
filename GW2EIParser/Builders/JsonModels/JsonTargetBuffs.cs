@@ -58,7 +58,7 @@ namespace GW2EIParser.Builders.JsonModels
                 return res;
             }
 
-            public JsonTargetBuffsData(Statistics.FinalTargetBuffs stats)
+            public JsonTargetBuffsData(GeneralStatistics.FinalTargetBuffs stats)
             {
                 Uptime = stats.Uptime;
                 Presence = stats.Presence;

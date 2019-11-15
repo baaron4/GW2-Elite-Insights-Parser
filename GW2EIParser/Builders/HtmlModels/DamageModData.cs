@@ -12,13 +12,13 @@ namespace GW2EIParser.Builders.HtmlModels
 
         public DamageModData(Player player, ParsedLog log, List<DamageModifier> listToUse, int phaseIndex)
         {
-            Dictionary<string, List<Statistics.DamageModifierData>> dModData = player.GetDamageModifierData(log, null);
+            Dictionary<string, List<GeneralStatistics.DamageModifierData>> dModData = player.GetDamageModifierData(log, null);
             List<PhaseData> phases = log.FightData.GetPhases(log);
             foreach (DamageModifier dMod in listToUse)
             {
-                if (dModData.TryGetValue(dMod.Name, out List<Statistics.DamageModifierData> list))
+                if (dModData.TryGetValue(dMod.Name, out List<GeneralStatistics.DamageModifierData> list))
                 {
-                    Statistics.DamageModifierData data = list[phaseIndex];
+                    GeneralStatistics.DamageModifierData data = list[phaseIndex];
                     Data.Add(new object[]
                     {
                         data.HitCount,
@@ -46,9 +46,9 @@ namespace GW2EIParser.Builders.HtmlModels
                 dModData = player.GetDamageModifierData(log, target);
                 foreach (DamageModifier dMod in listToUse)
                 {
-                    if (dModData.TryGetValue(dMod.Name, out List<Statistics.DamageModifierData> list))
+                    if (dModData.TryGetValue(dMod.Name, out List<GeneralStatistics.DamageModifierData> list))
                     {
-                        Statistics.DamageModifierData data = list[phaseIndex];
+                        GeneralStatistics.DamageModifierData data = list[phaseIndex];
                         pTarget.Add(new object[]
                         {
                             data.HitCount,

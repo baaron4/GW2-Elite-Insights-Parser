@@ -24,7 +24,7 @@ namespace GW2EIParser.Parser.ParsedData
         public bool CanCombatReplay => CombatData.HasMovementData;
 
         public MechanicData MechanicData { get; }
-        public Statistics Statistics { get; }
+        public GeneralStatistics Statistics { get; }
 
 
         private Dictionary<AgentItem, AbstractSingleActor> _agentToActorDictionary;
@@ -47,7 +47,7 @@ namespace GW2EIParser.Parser.ParsedData
             Buffs = new BuffsContainer(LogData.GW2Version);
             DamageModifiers = new DamageModifiersContainer(LogData.GW2Version);
             MechanicData = FightData.Logic.GetMechanicData();
-            Statistics = new Statistics(CombatData, PlayerList, Buffs);
+            Statistics = new GeneralStatistics(CombatData, PlayerList, Buffs);
         }
 
         private void UpdateFightData()

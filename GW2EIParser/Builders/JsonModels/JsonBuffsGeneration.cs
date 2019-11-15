@@ -38,7 +38,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public double Extended { get; set; }
 
-            public JsonBuffsGenerationData(Statistics.FinalBuffs stats)
+            public JsonBuffsGenerationData(GeneralStatistics.FinalBuffs stats)
             {
                 Generation = stats.Generation;
                 Overstack = stats.Overstack;

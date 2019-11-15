@@ -9,7 +9,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public double Avg { get; set; }
         public List<List<object>> Data { get; set; } = new List<List<object>>();
 
-        public BoonData(Dictionary<long, Statistics.FinalBuffs> boons, List<Buff> listToUse, double avg)
+        public BoonData(Dictionary<long, GeneralStatistics.FinalBuffs> boons, List<Buff> listToUse, double avg)
         {
             Avg = avg;
             foreach (Buff boon in listToUse)
@@ -17,7 +17,7 @@ namespace GW2EIParser.Builders.HtmlModels
                 var boonVals = new List<object>();
                 Data.Add(boonVals);
 
-                if (boons.TryGetValue(boon.ID, out Statistics.FinalBuffs uptime))
+                if (boons.TryGetValue(boon.ID, out GeneralStatistics.FinalBuffs uptime))
                 {
                     boonVals.Add(uptime.Uptime);
                     if (boon.Type == Buff.BuffType.Intensity && uptime.Presence > 0)
@@ -28,7 +28,7 @@ namespace GW2EIParser.Builders.HtmlModels
             }
         }
 
-        public BoonData(Dictionary<long, Statistics.FinalTargetBuffs> boons, List<Buff> listToUse, double avg)
+        public BoonData(Dictionary<long, GeneralStatistics.FinalTargetBuffs> boons, List<Buff> listToUse, double avg)
         {
             Avg = avg;
             foreach (Buff boon in listToUse)
@@ -36,7 +36,7 @@ namespace GW2EIParser.Builders.HtmlModels
                 var boonVals = new List<object>();
                 Data.Add(boonVals);
 
-                if (boons.TryGetValue(boon.ID, out Statistics.FinalTargetBuffs uptime))
+                if (boons.TryGetValue(boon.ID, out GeneralStatistics.FinalTargetBuffs uptime))
                 {
                     boonVals.Add(uptime.Uptime);
                     if (boon.Type == Buff.BuffType.Intensity && uptime.Presence > 0)
@@ -47,12 +47,12 @@ namespace GW2EIParser.Builders.HtmlModels
             }
         }
 
-        public BoonData(Dictionary<long, Statistics.FinalTargetBuffs> boons, List<Buff> listToUse, Player player)
+        public BoonData(Dictionary<long, GeneralStatistics.FinalTargetBuffs> boons, List<Buff> listToUse, Player player)
         {
             foreach (Buff boon in listToUse)
             {
                 var boonData = new List<object>();
-                if (boons.TryGetValue(boon.ID, out Statistics.FinalTargetBuffs toUse))
+                if (boons.TryGetValue(boon.ID, out GeneralStatistics.FinalTargetBuffs toUse))
                 {
                     boonData.Add(toUse.Generated[player]);
                     boonData.Add(toUse.Overstacked[player]);
@@ -65,11 +65,11 @@ namespace GW2EIParser.Builders.HtmlModels
             }
         }
 
-        public BoonData(List<Buff> listToUse, Dictionary<long, Statistics.FinalBuffs> uptimes)
+        public BoonData(List<Buff> listToUse, Dictionary<long, GeneralStatistics.FinalBuffs> uptimes)
         {
             foreach (Buff boon in listToUse)
             {
-                if (uptimes.TryGetValue(boon.ID, out Statistics.FinalBuffs uptime))
+                if (uptimes.TryGetValue(boon.ID, out GeneralStatistics.FinalBuffs uptime))
                 {
                     Data.Add(new List<object>()
                         {
@@ -96,13 +96,13 @@ namespace GW2EIParser.Builders.HtmlModels
             }
         }
 
-        public BoonData(string prof, Dictionary<string, List<Buff>> boonsBySpec, Dictionary<long, Statistics.FinalBuffs> boons)
+        public BoonData(string prof, Dictionary<string, List<Buff>> boonsBySpec, Dictionary<long, GeneralStatistics.FinalBuffs> boons)
         {
             foreach (Buff boon in boonsBySpec[prof])
             {
                 var boonVals = new List<object>();
                 Data.Add(boonVals);
-                if (boons.TryGetValue(boon.ID, out Statistics.FinalBuffs uptime))
+                if (boons.TryGetValue(boon.ID, out GeneralStatistics.FinalBuffs uptime))
                 {
                     boonVals.Add(uptime.Uptime);
                     if (boon.Type == Buff.BuffType.Intensity && uptime.Presence > 0)

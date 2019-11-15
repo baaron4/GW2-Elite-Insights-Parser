@@ -10,7 +10,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public int Stack { get; set; }
         public bool Dimished { get; set; }
 
-        public FoodDto(Statistics.Consumable consume)
+        public FoodDto(GeneralStatistics.Consumable consume)
         {
             Time = consume.Time / 1000.0;
             Duration = consume.Duration / 1000.0;

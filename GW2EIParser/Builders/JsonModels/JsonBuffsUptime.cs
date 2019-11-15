@@ -22,7 +22,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public double Presence { get; set; }
 
-            public JsonBuffsUptimeData(Statistics.FinalBuffs stats)
+            public JsonBuffsUptimeData(GeneralStatistics.FinalBuffs stats)
             {
                 Uptime = stats.Uptime;
                 Presence = stats.Presence;

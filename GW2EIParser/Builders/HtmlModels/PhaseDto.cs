@@ -194,7 +194,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return data;
         }
 
-        public static List<object> GetSupportStatData(Statistics.FinalSupport support)
+        public static List<object> GetSupportStatData(GeneralStatistics.FinalSupport support)
         {
             var data = new List<object>()
                 {

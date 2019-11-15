@@ -10,9 +10,9 @@ namespace GW2EIParser.Models
     /// <summary>
     /// Passes statistical information
     /// </summary>
-    public class Statistics
+    public class GeneralStatistics
     {
-        public Statistics(CombatData combatData, List<Player> players, BuffsContainer boons)
+        public GeneralStatistics(CombatData combatData, List<Player> players, BuffsContainer boons)
         {
             HashSet<long> skillIDs = combatData.GetSkills();
             // Main boons

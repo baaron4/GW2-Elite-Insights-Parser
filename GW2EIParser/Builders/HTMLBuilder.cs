@@ -26,7 +26,7 @@ namespace GW2EIParser.Builders
 
         private readonly string[] _uploadLink;
 
-        private readonly Statistics _statistics;
+        private readonly GeneralStatistics _statistics;
         private readonly Dictionary<long, Buff> _usedBoons = new Dictionary<long, Buff>();
         private readonly HashSet<DamageModifier> _usedDamageMods = new HashSet<DamageModifier>();
         private readonly Dictionary<long, SkillItem> _usedSkills = new Dictionary<long, SkillItem>();
@@ -161,7 +161,7 @@ namespace GW2EIParser.Builders
 
             foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalSupport support = player.GetSupport(_log, phaseIndex);
+                GeneralStatistics.FinalSupport support = player.GetSupport(_log, phaseIndex);
                 list.Add(PhaseDto.GetSupportStatData(support));
             }
             return list;
@@ -180,7 +180,7 @@ namespace GW2EIParser.Builders
                 {
                     avg = player.GetStatsAll(_log, phaseIndex).AvgBoons;
                 }
-                list.Add(new BoonData(player.GetBuffs(_log, phaseIndex, Statistics.BuffEnum.Self), listToUse, avg));
+                list.Add(new BoonData(player.GetBuffs(_log, phaseIndex, GeneralStatistics.BuffEnum.Self), listToUse, avg));
             }
             return list;
         }
@@ -197,7 +197,7 @@ namespace GW2EIParser.Builders
                 {
                     avg = player.GetStatsAll(_log, phaseIndex).AvgActiveBoons;
                 }
-                list.Add(new BoonData(player.GetActiveBuffs(_log, phaseIndex, Statistics.BuffEnum.Self), listToUse, avg));
+                list.Add(new BoonData(player.GetActiveBuffs(_log, phaseIndex, GeneralStatistics.BuffEnum.Self), listToUse, avg));
             }
             return list;
         }
@@ -215,10 +215,10 @@ namespace GW2EIParser.Builders
                 {
                     for (int i = 0; i < _phases.Count; i++)
                     {
-                        Dictionary<long, Statistics.FinalBuffs> boons = player.GetBuffs(_log, i, Statistics.BuffEnum.Self);
+                        Dictionary<long, GeneralStatistics.FinalBuffs> boons = player.GetBuffs(_log, i, GeneralStatistics.BuffEnum.Self);
                         foreach (Buff boon in _statistics.PresentPersonalBuffs[player.InstID])
                         {
-                            if (boons.TryGetValue(boon.ID, out Statistics.FinalBuffs uptime))
+                            if (boons.TryGetValue(boon.ID, out GeneralStatistics.FinalBuffs uptime))
                             {
                                 if (uptime.Uptime > 0 && specBoonIds.Contains(boon.ID))
                                 {
@@ -277,7 +277,7 @@ namespace GW2EIParser.Builders
             var list = new List<BoonData>();
             foreach (Player player in _log.PlayerList)
             {
-                list.Add(new BoonData(player.Prof, boonsBySpec, player.GetBuffs(_log, phaseIndex, Statistics.BuffEnum.Self)));
+                list.Add(new BoonData(player.Prof, boonsBySpec, player.GetBuffs(_log, phaseIndex, GeneralStatistics.BuffEnum.Self)));
             }
             return list;
         }
@@ -287,7 +287,7 @@ namespace GW2EIParser.Builders
             var list = new List<BoonData>();
             foreach (Player player in _log.PlayerList)
             {
-                list.Add(new BoonData(player.Prof, boonsBySpec, player.GetActiveBuffs(_log, phaseIndex, Statistics.BuffEnum.Self)));
+                list.Add(new BoonData(player.Prof, boonsBySpec, player.GetActiveBuffs(_log, phaseIndex, GeneralStatistics.BuffEnum.Self)));
             }
             return list;
         }
@@ -319,26 +319,26 @@ namespace GW2EIParser.Builders
         /// <param name="listToUse"></param>
         /// <param name="tableId"></param>
         /// <param name="phaseIndex"></param>
-        private List<BoonData> BuildBuffGenerationData(List<Buff> listToUse, int phaseIndex, Statistics.BuffEnum target)
+        private List<BoonData> BuildBuffGenerationData(List<Buff> listToUse, int phaseIndex, GeneralStatistics.BuffEnum target)
         {
             var list = new List<BoonData>();
 
             foreach (Player player in _log.PlayerList)
             {
-                Dictionary<long, Statistics.FinalBuffs> uptimes;
+                Dictionary<long, GeneralStatistics.FinalBuffs> uptimes;
                 uptimes = player.GetBuffs(_log, phaseIndex, target);
                 list.Add(new BoonData(listToUse, uptimes));
             }
             return list;
         }
 
-        private List<BoonData> BuildActiveBuffGenerationData(List<Buff> listToUse, int phaseIndex, Statistics.BuffEnum target)
+        private List<BoonData> BuildActiveBuffGenerationData(List<Buff> listToUse, int phaseIndex, GeneralStatistics.BuffEnum target)
         {
             var list = new List<BoonData>();
 
             foreach (Player player in _log.PlayerList)
             {
-                Dictionary<long, Statistics.FinalBuffs> uptimes;
+                Dictionary<long, GeneralStatistics.FinalBuffs> uptimes;
                 uptimes = player.GetActiveBuffs(_log, phaseIndex, target);
                 list.Add(new BoonData(listToUse, uptimes));
             }
@@ -379,12 +379,12 @@ namespace GW2EIParser.Builders
         private List<DeathRecapDto> BuildDeathRecap(Player p)
         {
             var res = new List<DeathRecapDto>();
-            List<Statistics.DeathRecap> recaps = p.GetDeathRecaps(_log);
+            List<GeneralStatistics.DeathRecap> recaps = p.GetDeathRecaps(_log);
             if (recaps == null)
             {
                 return null;
             }
-            foreach (Statistics.DeathRecap deathRecap in recaps)
+            foreach (GeneralStatistics.DeathRecap deathRecap in recaps)
             {
                 var recap = new DeathRecapDto()
                 {
@@ -606,9 +606,9 @@ namespace GW2EIParser.Builders
         private List<FoodDto> BuildPlayerFoodData(Player p)
         {
             var list = new List<FoodDto>();
-            List<Statistics.Consumable> consume = p.GetConsumablesList(_log, 0, _log.FightData.FightDuration);
+            List<GeneralStatistics.Consumable> consume = p.GetConsumablesList(_log, 0, _log.FightData.FightDuration);
 
-            foreach (Statistics.Consumable entry in consume)
+            foreach (GeneralStatistics.Consumable entry in consume)
             {
                 _usedBoons[entry.Buff.ID] = entry.Buff;
                 list.Add(new FoodDto(entry));
@@ -678,7 +678,7 @@ namespace GW2EIParser.Builders
 
         private List<BoonData> BuildTargetCondiData(int phaseIndex, NPC target)
         {
-            Dictionary<long, Statistics.FinalTargetBuffs> conditions = target.GetBuffs(_log, phaseIndex);
+            Dictionary<long, GeneralStatistics.FinalTargetBuffs> conditions = target.GetBuffs(_log, phaseIndex);
             var list = new List<BoonData>();
 
             foreach (Player player in _log.PlayerList)
@@ -690,13 +690,13 @@ namespace GW2EIParser.Builders
 
         private BoonData BuildTargetCondiUptimeData(int phaseIndex, NPC target)
         {
-            Dictionary<long, Statistics.FinalTargetBuffs> buffs = target.GetBuffs(_log, phaseIndex);
+            Dictionary<long, GeneralStatistics.FinalTargetBuffs> buffs = target.GetBuffs(_log, phaseIndex);
             return new BoonData(buffs, _statistics.PresentConditions, target.GetStatsAll(_log, phaseIndex).AvgConditions);
         }
 
         private BoonData BuildTargetBoonData(int phaseIndex, NPC target)
         {
-            Dictionary<long, Statistics.FinalTargetBuffs> buffs = target.GetBuffs(_log, phaseIndex);
+            Dictionary<long, GeneralStatistics.FinalTargetBuffs> buffs = target.GetBuffs(_log, phaseIndex);
             return new BoonData(buffs, _statistics.PresentBoons, target.GetStatsAll(_log, phaseIndex).AvgBoons);
         }
 
@@ -1114,35 +1114,35 @@ namespace GW2EIParser.Builders
                     OffBuffStats = BuildBuffUptimeData(_statistics.PresentOffbuffs, i),
                     DefBuffStats = BuildBuffUptimeData(_statistics.PresentDefbuffs, i),
                     PersBuffStats = BuildPersonalBuffUptimeData(persBuffDict, i),
-                    BoonGenSelfStats = BuildBuffGenerationData(_statistics.PresentBoons, i, Statistics.BuffEnum.Self),
-                    BoonGenGroupStats = BuildBuffGenerationData(_statistics.PresentBoons, i, Statistics.BuffEnum.Group),
-                    BoonGenOGroupStats = BuildBuffGenerationData(_statistics.PresentBoons, i, Statistics.BuffEnum.OffGroup),
-                    BoonGenSquadStats = BuildBuffGenerationData(_statistics.PresentBoons, i, Statistics.BuffEnum.Squad),
-                    OffBuffGenSelfStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, Statistics.BuffEnum.Self),
-                    OffBuffGenGroupStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, Statistics.BuffEnum.Group),
-                    OffBuffGenOGroupStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, Statistics.BuffEnum.OffGroup),
-                    OffBuffGenSquadStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, Statistics.BuffEnum.Squad),
-                    DefBuffGenSelfStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, Statistics.BuffEnum.Self),
-                    DefBuffGenGroupStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, Statistics.BuffEnum.Group),
-                    DefBuffGenOGroupStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, Statistics.BuffEnum.OffGroup),
-                    DefBuffGenSquadStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, Statistics.BuffEnum.Squad),
+                    BoonGenSelfStats = BuildBuffGenerationData(_statistics.PresentBoons, i, GeneralStatistics.BuffEnum.Self),
+                    BoonGenGroupStats = BuildBuffGenerationData(_statistics.PresentBoons, i, GeneralStatistics.BuffEnum.Group),
+                    BoonGenOGroupStats = BuildBuffGenerationData(_statistics.PresentBoons, i, GeneralStatistics.BuffEnum.OffGroup),
+                    BoonGenSquadStats = BuildBuffGenerationData(_statistics.PresentBoons, i, GeneralStatistics.BuffEnum.Squad),
+                    OffBuffGenSelfStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, GeneralStatistics.BuffEnum.Self),
+                    OffBuffGenGroupStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, GeneralStatistics.BuffEnum.Group),
+                    OffBuffGenOGroupStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, GeneralStatistics.BuffEnum.OffGroup),
+                    OffBuffGenSquadStats = BuildBuffGenerationData(_statistics.PresentOffbuffs, i, GeneralStatistics.BuffEnum.Squad),
+                    DefBuffGenSelfStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, GeneralStatistics.BuffEnum.Self),
+                    DefBuffGenGroupStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, GeneralStatistics.BuffEnum.Group),
+                    DefBuffGenOGroupStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, GeneralStatistics.BuffEnum.OffGroup),
+                    DefBuffGenSquadStats = BuildBuffGenerationData(_statistics.PresentDefbuffs, i, GeneralStatistics.BuffEnum.Squad),
                     //
                     BoonActiveStats = BuildActiveBuffUptimeData(_statistics.PresentBoons, i),
                     OffBuffActiveStats = BuildActiveBuffUptimeData(_statistics.PresentOffbuffs, i),
                     DefBuffActiveStats = BuildActiveBuffUptimeData(_statistics.PresentDefbuffs, i),
                     PersBuffActiveStats = BuildActivePersonalBuffUptimeData(persBuffDict, i),
-                    BoonGenActiveSelfStats = BuildActiveBuffGenerationData(_statistics.PresentBoons, i, Statistics.BuffEnum.Self),
-                    BoonGenActiveGroupStats = BuildActiveBuffGenerationData(_statistics.PresentBoons, i, Statistics.BuffEnum.Group),
-                    BoonGenActiveOGroupStats = BuildActiveBuffGenerationData(_statistics.PresentBoons, i, Statistics.BuffEnum.OffGroup),
-                    BoonGenActiveSquadStats = BuildActiveBuffGenerationData(_statistics.PresentBoons, i, Statistics.BuffEnum.Squad),
-                    OffBuffGenActiveSelfStats = BuildActiveBuffGenerationData(_statistics.PresentOffbuffs, i, Statistics.BuffEnum.Self),
-                    OffBuffGenActiveGroupStats = BuildActiveBuffGenerationData(_statistics.PresentOffbuffs, i, Statistics.BuffEnum.Group),
-                    OffBuffGenActiveOGroupStats = BuildActiveBuffGenerationData(_statistics.PresentOffbuffs, i, Statistics.BuffEnum.OffGroup),
-                    OffBuffGenActiveSquadStats = BuildActiveBuffGenerationData(_statistics.PresentOffbuffs, i, Statistics.BuffEnum.Squad),
-                    DefBuffGenActiveSelfStats = BuildActiveBuffGenerationData(_statistics.PresentDefbuffs, i, Statistics.BuffEnum.Self),
-                    DefBuffGenActiveGroupStats = BuildActiveBuffGenerationData(_statistics.PresentDefbuffs, i, Statistics.BuffEnum.Group),
-                    DefBuffGenActiveOGroupStats = BuildActiveBuffGenerationData(_statistics.PresentDefbuffs, i, Statistics.BuffEnum.OffGroup),
-                    DefBuffGenActiveSquadStats = BuildActiveBuffGenerationData(_statistics.PresentDefbuffs, i, Statistics.BuffEnum.Squad),
+                    BoonGenActiveSelfStats = BuildActiveBuffGenerationData(_statistics.PresentBoons, i, GeneralStatistics.BuffEnum.Self),
+                    BoonGenActiveGroupStats = BuildActiveBuffGenerationData(_statistics.PresentBoons, i, GeneralStatistics.BuffEnum.Group),
+                    BoonGenActiveOGroupStats = BuildActiveBuffGenerationData(_statistics.PresentBoons, i, GeneralStatistics.BuffEnum.OffGroup),
+                    BoonGenActiveSquadStats = BuildActiveBuffGenerationData(_statistics.PresentBoons, i, GeneralStatistics.BuffEnum.Squad),
+                    OffBuffGenActiveSelfStats = BuildActiveBuffGenerationData(_statistics.PresentOffbuffs, i, GeneralStatistics.BuffEnum.Self),
+                    OffBuffGenActiveGroupStats = BuildActiveBuffGenerationData(_statistics.PresentOffbuffs, i, GeneralStatistics.BuffEnum.Group),
+                    OffBuffGenActiveOGroupStats = BuildActiveBuffGenerationData(_statistics.PresentOffbuffs, i, GeneralStatistics.BuffEnum.OffGroup),
+                    OffBuffGenActiveSquadStats = BuildActiveBuffGenerationData(_statistics.PresentOffbuffs, i, GeneralStatistics.BuffEnum.Squad),
+                    DefBuffGenActiveSelfStats = BuildActiveBuffGenerationData(_statistics.PresentDefbuffs, i, GeneralStatistics.BuffEnum.Self),
+                    DefBuffGenActiveGroupStats = BuildActiveBuffGenerationData(_statistics.PresentDefbuffs, i, GeneralStatistics.BuffEnum.Group),
+                    DefBuffGenActiveOGroupStats = BuildActiveBuffGenerationData(_statistics.PresentDefbuffs, i, GeneralStatistics.BuffEnum.OffGroup),
+                    DefBuffGenActiveSquadStats = BuildActiveBuffGenerationData(_statistics.PresentDefbuffs, i, GeneralStatistics.BuffEnum.Squad),
                     //
                     DmgModifiersCommon = BuildDmgModifiersData(i, commonDamageModifiers),
                     DmgModifiersItem = BuildDmgModifiersData(i, itemDamageModifiers),
@@ -1181,10 +1181,10 @@ namespace GW2EIParser.Builders
 
         private bool HasBoons(int phaseIndex, NPC target)
         {
-            Dictionary<long, Statistics.FinalTargetBuffs> conditions = target.GetBuffs(_log, phaseIndex);
+            Dictionary<long, GeneralStatistics.FinalTargetBuffs> conditions = target.GetBuffs(_log, phaseIndex);
             foreach (Buff boon in _statistics.PresentBoons)
             {
-                if (conditions.TryGetValue(boon.ID, out Statistics.FinalTargetBuffs uptime))
+                if (conditions.TryGetValue(boon.ID, out GeneralStatistics.FinalTargetBuffs uptime))
                 {
                     if (uptime.Uptime > 0.0)
                     {

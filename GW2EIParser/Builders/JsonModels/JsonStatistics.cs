@@ -323,7 +323,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public double BoonStripsTime { get; set; }
 
-            public JsonSupport(Statistics.FinalSupport stats)
+            public JsonSupport(GeneralStatistics.FinalSupport stats)
             {
                 Resurrects = stats.Resurrects;
                 ResurrectTime = stats.ResurrectTime;
