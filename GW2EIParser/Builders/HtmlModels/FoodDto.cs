@@ -1,4 +1,4 @@
-﻿using GW2EIParser.Models;
+﻿using GW2EIParser.EIData;
 
 namespace GW2EIParser.Builders.HtmlModels
 {
@@ -10,7 +10,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public int Stack { get; set; }
         public bool Dimished { get; set; }
 
-        public FoodDto(GeneralStatistics.Consumable consume)
+        public FoodDto(Player.Consumable consume)
         {
             Time = consume.Time / 1000.0;
             Duration = consume.Duration / 1000.0;

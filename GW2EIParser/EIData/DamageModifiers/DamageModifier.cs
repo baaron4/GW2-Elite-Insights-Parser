@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using GW2EIParser.Models;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Models.GeneralStatistics;
+using static GW2EIParser.EIData.Player;
 
 namespace GW2EIParser.EIData
 {

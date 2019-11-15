@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using GW2EIParser.EIData;
-using GW2EIParser.Models;
 using GW2EIParser.Parser.ParsedData;
 
 namespace GW2EIParser.Builders.HtmlModels

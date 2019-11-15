@@ -6,7 +6,6 @@ using System.Windows.Forms;
 using System.Xml;
 using GW2EIParser.Builders.JsonModels;
 using GW2EIParser.EIData;
-using GW2EIParser.Models;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 using Newtonsoft.Json;
@@ -317,21 +316,21 @@ namespace GW2EIParser.Builders
             return res;
         }
 
-        private static List<JsonDeathRecap> BuildDeathRecap(List<GeneralStatistics.DeathRecap> recaps)
+        private static List<JsonDeathRecap> BuildDeathRecap(List<Player.DeathRecap> recaps)
         {
             if (recaps == null)
             {
                 return null;
             }
             var res = new List<JsonDeathRecap>();
-            foreach (GeneralStatistics.DeathRecap recap in recaps)
+            foreach (Player.DeathRecap recap in recaps)
             {
                 res.Add(new JsonDeathRecap(recap));
             }
             return res;
         }
 
-        private List<JsonBuffDamageModifierData> BuildDamageModifiers(Dictionary<string, List<GeneralStatistics.DamageModifierData>> extra)
+        private List<JsonBuffDamageModifierData> BuildDamageModifiers(Dictionary<string, List<Player.DamageModifierData>> extra)
         {
             var dict = new Dictionary<int, List<JsonBuffDamageModifierItem>>();
             foreach (string key in extra.Keys)
@@ -369,9 +368,9 @@ namespace GW2EIParser.Builders
 
         private List<JsonConsumable> BuildConsumables(Player player)
         {
-            List<GeneralStatistics.Consumable> input = player.GetConsumablesList(_log, 0, _log.FightData.FightDuration);
+            List<Player.Consumable> input = player.GetConsumablesList(_log, 0, _log.FightData.FightDuration);
             var res = new List<JsonConsumable>();
-            foreach (GeneralStatistics.Consumable food in input)
+            foreach (Player.Consumable food in input)
             {
                 if (!_buffDesc.ContainsKey("b" + food.Buff.ID))
                 {

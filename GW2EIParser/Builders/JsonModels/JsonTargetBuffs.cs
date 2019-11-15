@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using GW2EIParser.EIData;
-using GW2EIParser.Models;
 
 namespace GW2EIParser.Builders.JsonModels
 {

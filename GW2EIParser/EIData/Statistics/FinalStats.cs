@@ -6,7 +6,7 @@ using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 using static GW2EIParser.EIData.Buff;
 
-namespace GW2EIParser.Models
+namespace GW2EIParser.EIData
 {
     public class FinalStats
     {

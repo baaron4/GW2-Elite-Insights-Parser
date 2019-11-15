@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using GW2EIParser.Builders.HtmlModels;
 using GW2EIParser.EIData;
 using GW2EIParser.Logic;
-using GW2EIParser.Models;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 using Newtonsoft.Json;
@@ -379,12 +378,12 @@ namespace GW2EIParser.Builders
         private List<DeathRecapDto> BuildDeathRecap(Player p)
         {
             var res = new List<DeathRecapDto>();
-            List<GeneralStatistics.DeathRecap> recaps = p.GetDeathRecaps(_log);
+            List<Player.DeathRecap> recaps = p.GetDeathRecaps(_log);
             if (recaps == null)
             {
                 return null;
             }
-            foreach (GeneralStatistics.DeathRecap deathRecap in recaps)
+            foreach (Player.DeathRecap deathRecap in recaps)
             {
                 var recap = new DeathRecapDto()
                 {
@@ -606,9 +605,9 @@ namespace GW2EIParser.Builders
         private List<FoodDto> BuildPlayerFoodData(Player p)
         {
             var list = new List<FoodDto>();
-            List<GeneralStatistics.Consumable> consume = p.GetConsumablesList(_log, 0, _log.FightData.FightDuration);
+            List<Player.Consumable> consume = p.GetConsumablesList(_log, 0, _log.FightData.FightDuration);
 
-            foreach (GeneralStatistics.Consumable entry in consume)
+            foreach (Player.Consumable entry in consume)
             {
                 _usedBoons[entry.Buff.ID] = entry.Buff;
                 list.Add(new FoodDto(entry));

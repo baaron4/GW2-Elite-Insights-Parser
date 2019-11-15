@@ -4,7 +4,6 @@ using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Exceptions;
 using GW2EIParser.Logic;
-using GW2EIParser.Models;
 
 namespace GW2EIParser.Parser.ParsedData
 {
