@@ -47,23 +47,26 @@ namespace GW2EIParser.Builders.JsonModels
             public Dictionary<string, double> Extended { get; set; }
 
 
-            private static Dictionary<string, double> ConvertKeys(Dictionary<Player, double> toConvert)
+            private static Dictionary<string, double> ConvertKeys(Dictionary<AbstractSingleActor, double> toConvert)
             {
                 var res = new Dictionary<string, double>();
-                foreach (KeyValuePair<Player, double> pair in toConvert)
+                foreach (KeyValuePair<AbstractSingleActor, double> pair in toConvert)
                 {
                     res[pair.Key.Character] = pair.Value;
                 }
                 return res;
             }
 
-            public JsonTargetBuffsData(GeneralStatistics.FinalBuffsDictionary stats)
+            public JsonTargetBuffsData(FinalNPCBuffs npcBuff, FinalBuffsDictionary buffsDictionary)
             {
-                Uptime = stats.Uptime;
-                Presence = stats.Presence;
-                Generated = ConvertKeys(stats.Generated);
-                Overstacked = ConvertKeys(stats.Overstacked);
-                Wasted = ConvertKeys(stats.Wasted);
+                Uptime = npcBuff.Uptime;
+                Presence = npcBuff.Presence;
+                Generated = ConvertKeys(buffsDictionary.Generated);
+                Overstacked = ConvertKeys(buffsDictionary.Overstacked);
+                Wasted = ConvertKeys(buffsDictionary.Wasted);
+                UnknownExtended = ConvertKeys(buffsDictionary.UnknownExtension);
+                ByExtension = ConvertKeys(buffsDictionary.Extension);
+                Extended = ConvertKeys(buffsDictionary.Extended);
             }
         }
 

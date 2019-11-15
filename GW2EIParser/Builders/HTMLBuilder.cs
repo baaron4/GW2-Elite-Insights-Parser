@@ -677,7 +677,7 @@ namespace GW2EIParser.Builders
 
         private List<BuffData> BuildTargetCondiData(int phaseIndex, NPC target)
         {
-            Dictionary<long, GeneralStatistics.FinalBuffsDictionary> conditions = target.GetBuffs(_log, phaseIndex);
+            Dictionary<long, FinalBuffsDictionary> conditions = target.GetBuffsDictionary(_log, phaseIndex);
             var list = new List<BuffData>();
 
             foreach (Player player in _log.PlayerList)
@@ -689,13 +689,13 @@ namespace GW2EIParser.Builders
 
         private BuffData BuildTargetCondiUptimeData(int phaseIndex, NPC target)
         {
-            Dictionary<long, GeneralStatistics.FinalBuffsDictionary> buffs = target.GetBuffs(_log, phaseIndex);
+            Dictionary<long, FinalNPCBuffs> buffs = target.GetBuffs(_log, phaseIndex);
             return new BuffData(buffs, _statistics.PresentConditions, target.GetStatsAll(_log, phaseIndex).AvgConditions);
         }
 
         private BuffData BuildTargetBoonData(int phaseIndex, NPC target)
         {
-            Dictionary<long, GeneralStatistics.FinalBuffsDictionary> buffs = target.GetBuffs(_log, phaseIndex);
+            Dictionary<long, FinalNPCBuffs> buffs = target.GetBuffs(_log, phaseIndex);
             return new BuffData(buffs, _statistics.PresentBoons, target.GetStatsAll(_log, phaseIndex).AvgBoons);
         }
 
@@ -1180,10 +1180,10 @@ namespace GW2EIParser.Builders
 
         private bool HasBoons(int phaseIndex, NPC target)
         {
-            Dictionary<long, GeneralStatistics.FinalBuffsDictionary> conditions = target.GetBuffs(_log, phaseIndex);
+            Dictionary<long, FinalNPCBuffs> conditions = target.GetBuffs(_log, phaseIndex);
             foreach (Buff boon in _statistics.PresentBoons)
             {
-                if (conditions.TryGetValue(boon.ID, out GeneralStatistics.FinalBuffsDictionary uptime))
+                if (conditions.TryGetValue(boon.ID, out FinalNPCBuffs uptime))
                 {
                     if (uptime.Uptime > 0.0)
                     {

@@ -9,7 +9,7 @@ namespace GW2EIParser.EIData
 {
     public class NPC : AbstractSingleActor
     {
-        private List<Dictionary<long, FinalBuffsDictionary>> _buffs;
+        private List<Dictionary<long, FinalNPCBuffs>> _buffs;
         // Constructors
         public NPC(AgentItem agent) : base(agent)
         {
@@ -47,7 +47,7 @@ namespace GW2EIParser.EIData
             CastLogs.Add(new CastLog(time, skillID, expDur, startActivation, actDur, endActivation, Agent, InstID));
         }*/
 
-        public Dictionary<long, FinalBuffsDictionary> GetBuffs(ParsedLog log, int phaseIndex)
+        public Dictionary<long, FinalNPCBuffs> GetBuffs(ParsedLog log, int phaseIndex)
         {
             if (_buffs == null)
             {
@@ -56,7 +56,7 @@ namespace GW2EIParser.EIData
             return _buffs[phaseIndex];
         }
 
-        public List<Dictionary<long, FinalBuffsDictionary>> GetBuffs(ParsedLog log)
+        public List<Dictionary<long, FinalNPCBuffs>> GetBuffs(ParsedLog log)
         {
             if (_buffs == null)
             {
@@ -67,56 +67,23 @@ namespace GW2EIParser.EIData
 
         private void SetBuffs(ParsedLog log)
         {
-            _buffs = new List<Dictionary<long, FinalBuffsDictionary>>();
+            _buffs = new List<Dictionary<long, FinalNPCBuffs>>();
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
-                BuffDistribution boonDistribution = GetBuffDistribution(log, phaseIndex);
-                var rates = new Dictionary<long, FinalBuffsDictionary>();
+                BuffDistribution buffDistribution = GetBuffDistribution(log, phaseIndex);
+                var rates = new Dictionary<long, FinalNPCBuffs>();
                 _buffs.Add(rates);
                 Dictionary<long, long> buffPresence = GetBuffPresence(log, phaseIndex);
 
                 PhaseData phase = phases[phaseIndex];
-                long fightDuration = phase.DurationInMS;
+                long phaseDuration = phase.DurationInMS;
 
-                foreach (Buff boon in TrackedBuffs)
+                foreach (Buff buff in TrackedBuffs)
                 {
-                    if (boonDistribution.ContainsKey(boon.ID))
+                    if (buffDistribution.ContainsKey(buff.ID))
                     {
-                        var buff = new FinalBuffsDictionary(log.PlayerList);
-                        rates[boon.ID] = buff;
-                        if (boon.Type == Buff.BuffType.Duration)
-                        {
-                            buff.Uptime = Math.Round(100.0 * boonDistribution.GetUptime(boon.ID) / fightDuration, GeneralHelper.BoonDigit);
-                            foreach (Player p in log.PlayerList)
-                            {
-                                long gen = boonDistribution.GetGeneration(boon.ID, p.AgentItem);
-                                buff.Generated[p] = Math.Round(100.0 * gen / fightDuration, GeneralHelper.BoonDigit);
-                                buff.Overstacked[p] = Math.Round(100.0 * (boonDistribution.GetOverstack(boon.ID, p.AgentItem) + gen) / fightDuration, GeneralHelper.BoonDigit);
-                                buff.Wasted[p] = Math.Round(100.0 * boonDistribution.GetWaste(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
-                                buff.UnknownExtension[p] = Math.Round(100.0 * boonDistribution.GetUnknownExtension(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
-                                buff.Extension[p] = Math.Round(100.0 * boonDistribution.GetExtension(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
-                                buff.Extended[p] = Math.Round(100.0 * boonDistribution.GetExtended(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
-                            }
-                        }
-                        else if (boon.Type == Buff.BuffType.Intensity)
-                        {
-                            buff.Uptime = Math.Round((double)boonDistribution.GetUptime(boon.ID) / fightDuration, GeneralHelper.BoonDigit);
-                            foreach (Player p in log.PlayerList)
-                            {
-                                long gen = boonDistribution.GetGeneration(boon.ID, p.AgentItem);
-                                buff.Generated[p] = Math.Round((double)gen / fightDuration, GeneralHelper.BoonDigit);
-                                buff.Overstacked[p] = Math.Round((double)(boonDistribution.GetOverstack(boon.ID, p.AgentItem) + gen) / fightDuration, GeneralHelper.BoonDigit);
-                                buff.Wasted[p] = Math.Round((double)boonDistribution.GetWaste(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
-                                buff.UnknownExtension[p] = Math.Round((double)boonDistribution.GetUnknownExtension(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
-                                buff.Extension[p] = Math.Round((double)boonDistribution.GetExtension(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
-                                buff.Extended[p] = Math.Round((double)boonDistribution.GetExtended(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
-                            }
-                            if (buffPresence.TryGetValue(boon.ID, out long presenceValueBoon))
-                            {
-                                buff.Presence = Math.Round(100.0 * presenceValueBoon / fightDuration, GeneralHelper.BoonDigit);
-                            }
-                        }
+                        rates[buff.ID] = new FinalNPCBuffs(buff, buffDistribution, buffPresence, phaseDuration);
                     }
                 }
             }

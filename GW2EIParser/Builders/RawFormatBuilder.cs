@@ -17,6 +17,7 @@ using static GW2EIParser.Builders.JsonModels.JsonMechanics;
 using static GW2EIParser.Builders.JsonModels.JsonRotation;
 using static GW2EIParser.Builders.JsonModels.JsonStatistics;
 using static GW2EIParser.Builders.JsonModels.JsonTargetBuffs;
+using static GW2EIParser.EIData.GeneralStatistics;
 
 namespace GW2EIParser.Builders
 {
@@ -182,7 +183,7 @@ namespace GW2EIParser.Builders
                     AvgBoons = target.GetStatsAll(_log).Select(x => x.AvgBoons).ToList(),
                     AvgConditions = target.GetStatsAll(_log).Select(x => x.AvgConditions).ToList(),
                     DpsAll = target.GetDPSAll(_log).Select(x => new JsonDPS(x)).ToArray(),
-                    Buffs = BuildTargetBuffs(target.GetBuffs(_log), target),
+                    Buffs = BuildTargetBuffs(target.GetBuffs(_log), target.GetBuffsDictionary(_log), target),
                     HitboxHeight = target.HitboxHeight,
                     HitboxWidth = target.HitboxWidth,
                     Damage1S = BuildTotal1SDamage(target),
@@ -613,11 +614,11 @@ namespace GW2EIParser.Builders
             }
         }
 
-        private List<JsonTargetBuffs> BuildTargetBuffs(List<Dictionary<long, GeneralStatistics.FinalBuffsDictionary>> statBoons, NPC target)
+        private List<JsonTargetBuffs> BuildTargetBuffs(List<Dictionary<long, FinalNPCBuffs>> npcBuffs, List<Dictionary<long, FinalBuffsDictionary>> npcBuffsDictionary, NPC target)
         {
             var boons = new List<JsonTargetBuffs>();
 
-            foreach (KeyValuePair<long, GeneralStatistics.FinalBuffsDictionary> pair in statBoons[0])
+            foreach (KeyValuePair<long, FinalNPCBuffs> pair in npcBuffs[0])
             {
                 if (!_buffDesc.ContainsKey("b" + pair.Key))
                 {
@@ -626,7 +627,7 @@ namespace GW2EIParser.Builders
                 var data = new List<JsonTargetBuffsData>();
                 for (int i = 0; i < _phases.Count; i++)
                 {
-                    var value = new JsonTargetBuffsData(statBoons[i][pair.Key]);
+                    var value = new JsonTargetBuffsData(npcBuffs[i][pair.Key], npcBuffsDictionary[i][pair.Key]);
                     data.Add(value);
                 }
                 var jsonBuffs = new JsonTargetBuffs()

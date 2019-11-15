@@ -91,39 +91,6 @@ namespace GW2EIParser.EIData
 
         public enum BuffEnum { Self, Group, OffGroup, Squad };
 
-        public class FinalBuffsDictionary
-        {
-            public FinalBuffsDictionary(List<Player> plist)
-            {
-                Uptime = 0;
-                Presence = 0;
-                Generated = new Dictionary<Player, double>();
-                Overstacked = new Dictionary<Player, double>();
-                Wasted = new Dictionary<Player, double>();
-                UnknownExtension = new Dictionary<Player, double>();
-                Extension = new Dictionary<Player, double>();
-                Extended = new Dictionary<Player, double>();
-                foreach (Player p in plist)
-                {
-                    Generated.Add(p, 0);
-                    Overstacked.Add(p, 0);
-                    Wasted.Add(p, 0);
-                    UnknownExtension.Add(p, 0);
-                    Extension.Add(p, 0);
-                    Extended.Add(p, 0);
-                }
-            }
-
-            public double Uptime { get; set; }
-            public double Presence { get; set; }
-            public Dictionary<Player, double> Generated { get; }
-            public Dictionary<Player, double> Overstacked { get; }
-            public Dictionary<Player, double> Wasted { get; }
-            public Dictionary<Player, double> UnknownExtension { get; }
-            public Dictionary<Player, double> Extension { get; }
-            public Dictionary<Player, double> Extended { get; }
-        }
-
 
         // present buff
         public List<Buff> PresentBoons { get; } = new List<Buff>();//Used only for Boon tables

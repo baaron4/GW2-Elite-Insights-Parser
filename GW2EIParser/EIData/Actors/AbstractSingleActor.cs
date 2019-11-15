@@ -15,6 +15,8 @@ namespace GW2EIParser.EIData
         protected Dictionary<long, BuffsGraphModel> BuffPoints { get; set; }
         private readonly List<BuffDistribution> _boonDistribution = new List<BuffDistribution>();
         private readonly List<Dictionary<long, long>> _buffPresence = new List<Dictionary<long, long>>();
+        private List<Dictionary<long, FinalBuffsDictionary>> _buffsDictionary;
+        private List<Dictionary<long, FinalBuffsDictionary>> _buffsActiveDictionary;
         // damage list
         private readonly Dictionary<int, List<int>> _damageList1S = new Dictionary<int, List<int>>();
         private readonly Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>> _selfDamageLogsPerPhasePerTarget = new Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>>();
@@ -350,6 +352,53 @@ namespace GW2EIParser.EIData
                 simul.SetBuffDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
             }
         }
+
+
+        public Dictionary<long, FinalBuffsDictionary> GetBuffsDictionary(ParsedLog log, int phaseIndex)
+        {
+            if (_buffsDictionary == null)
+            {
+                SetBuffsDictionary(log);
+            }
+            return _buffsDictionary[phaseIndex];
+        }
+
+        public List<Dictionary<long, FinalBuffsDictionary>> GetBuffsDictionary(ParsedLog log)
+        {
+            if (_buffsDictionary == null)
+            {
+                SetBuffsDictionary(log);
+            }
+            return _buffsDictionary;
+        }
+
+        private void SetBuffsDictionary(ParsedLog log)
+        {
+            _buffsDictionary = new List<Dictionary<long, FinalBuffsDictionary>>();
+            _buffsActiveDictionary = new List<Dictionary<long, FinalBuffsDictionary>>();
+            List<PhaseData> phases = log.FightData.GetPhases(log);
+            for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+            {
+                BuffDistribution buffDistribution = GetBuffDistribution(log, phaseIndex);
+                var rates = new Dictionary<long, FinalBuffsDictionary>();
+                var ratesActive = new Dictionary<long, FinalBuffsDictionary>();
+                _buffsDictionary.Add(rates);
+                _buffsActiveDictionary.Add(ratesActive);
+
+                PhaseData phase = phases[phaseIndex];
+                long phaseDuration = phase.DurationInMS;
+                long activePhaseDuration = phase.GetActorActiveDuration(this, log);
+
+                foreach (Buff buff in TrackedBuffs)
+                {
+                    if (buffDistribution.ContainsKey(buff.ID))
+                    {
+                        (rates[buff.ID], ratesActive[buff.ID]) = FinalBuffsDictionary.GetFinalBuffsDictionary(log, buff, buffDistribution, phaseDuration, activePhaseDuration);
+                    }
+                }
+            }
+        }
+
         //
         protected void SetMovements(ParsedLog log)
         {

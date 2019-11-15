@@ -27,7 +27,7 @@ namespace GW2EIParser.Builders.HtmlModels
             }
         }
 
-        public BuffData(Dictionary<long, GeneralStatistics.FinalBuffsDictionary> boons, List<Buff> listToUse, double avg)
+        public BuffData(Dictionary<long, FinalNPCBuffs> boons, List<Buff> listToUse, double avg)
         {
             Avg = avg;
             foreach (Buff boon in listToUse)
@@ -35,7 +35,7 @@ namespace GW2EIParser.Builders.HtmlModels
                 var boonVals = new List<object>();
                 Data.Add(boonVals);
 
-                if (boons.TryGetValue(boon.ID, out GeneralStatistics.FinalBuffsDictionary uptime))
+                if (boons.TryGetValue(boon.ID, out FinalNPCBuffs uptime))
                 {
                     boonVals.Add(uptime.Uptime);
                     if (boon.Type == Buff.BuffType.Intensity && uptime.Presence > 0)
@@ -46,19 +46,30 @@ namespace GW2EIParser.Builders.HtmlModels
             }
         }
 
-        public BuffData(Dictionary<long, GeneralStatistics.FinalBuffsDictionary> boons, List<Buff> listToUse, Player player)
+        public BuffData(Dictionary<long, FinalBuffsDictionary> boons, List<Buff> listToUse, Player player)
         {
             foreach (Buff boon in listToUse)
             {
                 var boonData = new List<object>();
-                if (boons.TryGetValue(boon.ID, out GeneralStatistics.FinalBuffsDictionary toUse))
+                if (boons.TryGetValue(boon.ID, out FinalBuffsDictionary toUse))
                 {
-                    boonData.Add(toUse.Generated[player]);
-                    boonData.Add(toUse.Overstacked[player]);
-                    boonData.Add(toUse.Wasted[player]);
-                    boonData.Add(toUse.UnknownExtension[player]);
-                    boonData.Add(toUse.Extension[player]);
-                    boonData.Add(toUse.Extended[player]);
+                    if (toUse.Generated.ContainsKey(player))
+                    {
+                        boonData.Add(toUse.Generated[player]);
+                        boonData.Add(toUse.Overstacked[player]);
+                        boonData.Add(toUse.Wasted[player]);
+                        boonData.Add(toUse.UnknownExtension[player]);
+                        boonData.Add(toUse.Extension[player]);
+                        boonData.Add(toUse.Extended[player]);
+                    } else
+                    {
+                        boonData.Add(0);
+                        boonData.Add(0);
+                        boonData.Add(0);
+                        boonData.Add(0);
+                        boonData.Add(0);
+                        boonData.Add(0);
+                    }
                 }
                 Data.Add(boonData);
             }
