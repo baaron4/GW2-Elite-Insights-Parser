@@ -427,6 +427,28 @@ namespace GW2EIParser.EIData
             return CombatReplay.Decorations;
         }
 
+
+        public int GetCombatReplayID(ParsedLog log)
+        {
+            if (CombatReplay == null)
+            {
+                InitCombatReplay(log);
+            }
+            return AgentItem.UniqueID.GetHashCode();
+        }
+        protected abstract void InitAdditionalCombatReplayData(ParsedLog log);
+
+        public abstract class AbstractMasterActorSerializable
+        {
+            public string Img { get; set; }
+            public string Type { get; set; }
+            public int ID { get; set; }
+            public List<double> Positions { get; set; }
+        }
+        public abstract AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log);
+
+
+
         // Cast logs
         public override List<AbstractCastEvent> GetCastLogs(ParsedLog log, long start, long end)
         {
@@ -462,26 +484,6 @@ namespace GW2EIParser.EIData
             }
             CastLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
         }
-
-
-        public int GetCombatReplayID(ParsedLog log)
-        {
-            if (CombatReplay == null)
-            {
-                InitCombatReplay(log);
-            }
-            return AgentItem.UniqueID.GetHashCode();
-        }
-        protected abstract void InitAdditionalCombatReplayData(ParsedLog log);
-
-        public abstract class AbstractMasterActorSerializable
-        {
-            public string Img { get; set; }
-            public string Type { get; set; }
-            public int ID { get; set; }
-            public List<double> Positions { get; set; }
-        }
-        public abstract AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log);
 
         // DPS Stats
 
