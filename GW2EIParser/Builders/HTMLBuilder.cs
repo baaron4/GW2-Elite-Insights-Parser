@@ -166,10 +166,10 @@ namespace GW2EIParser.Builders
             return list;
         }
 
-        private List<BoonData> BuildBuffUptimeData(List<Buff> listToUse, int phaseIndex)
+        private List<BuffData> BuildBuffUptimeData(List<Buff> listToUse, int phaseIndex)
         {
             List<PhaseData> phases = _phases;
-            var list = new List<BoonData>();
+            var list = new List<BuffData>();
             bool boonTable = listToUse.Select(x => x.Nature).Contains(Buff.BuffNature.Boon);
 
             foreach (Player player in _log.PlayerList)
@@ -179,14 +179,14 @@ namespace GW2EIParser.Builders
                 {
                     avg = player.GetStatsAll(_log, phaseIndex).AvgBoons;
                 }
-                list.Add(new BoonData(player.GetBuffs(_log, phaseIndex, GeneralStatistics.BuffEnum.Self), listToUse, avg));
+                list.Add(new BuffData(player.GetBuffs(_log, phaseIndex, GeneralStatistics.BuffEnum.Self), listToUse, avg));
             }
             return list;
         }
 
-        private List<BoonData> BuildActiveBuffUptimeData(List<Buff> listToUse, int phaseIndex)
+        private List<BuffData> BuildActiveBuffUptimeData(List<Buff> listToUse, int phaseIndex)
         {
-            var list = new List<BoonData>();
+            var list = new List<BuffData>();
             bool boonTable = listToUse.Select(x => x.Nature).Contains(Buff.BuffNature.Boon);
 
             foreach (Player player in _log.PlayerList)
@@ -196,7 +196,7 @@ namespace GW2EIParser.Builders
                 {
                     avg = player.GetStatsAll(_log, phaseIndex).AvgActiveBoons;
                 }
-                list.Add(new BoonData(player.GetActiveBuffs(_log, phaseIndex, GeneralStatistics.BuffEnum.Self), listToUse, avg));
+                list.Add(new BuffData(player.GetActiveBuffs(_log, phaseIndex, GeneralStatistics.BuffEnum.Self), listToUse, avg));
             }
             return list;
         }
@@ -271,22 +271,22 @@ namespace GW2EIParser.Builders
             return damageModBySpecs;
         }
 
-        private List<BoonData> BuildPersonalBuffUptimeData(Dictionary<string, List<Buff>> boonsBySpec, int phaseIndex)
+        private List<BuffData> BuildPersonalBuffUptimeData(Dictionary<string, List<Buff>> boonsBySpec, int phaseIndex)
         {
-            var list = new List<BoonData>();
+            var list = new List<BuffData>();
             foreach (Player player in _log.PlayerList)
             {
-                list.Add(new BoonData(player.Prof, boonsBySpec, player.GetBuffs(_log, phaseIndex, GeneralStatistics.BuffEnum.Self)));
+                list.Add(new BuffData(player.Prof, boonsBySpec, player.GetBuffs(_log, phaseIndex, GeneralStatistics.BuffEnum.Self)));
             }
             return list;
         }
 
-        private List<BoonData> BuildActivePersonalBuffUptimeData(Dictionary<string, List<Buff>> boonsBySpec, int phaseIndex)
+        private List<BuffData> BuildActivePersonalBuffUptimeData(Dictionary<string, List<Buff>> boonsBySpec, int phaseIndex)
         {
-            var list = new List<BoonData>();
+            var list = new List<BuffData>();
             foreach (Player player in _log.PlayerList)
             {
-                list.Add(new BoonData(player.Prof, boonsBySpec, player.GetActiveBuffs(_log, phaseIndex, GeneralStatistics.BuffEnum.Self)));
+                list.Add(new BuffData(player.Prof, boonsBySpec, player.GetActiveBuffs(_log, phaseIndex, GeneralStatistics.BuffEnum.Self)));
             }
             return list;
         }
@@ -318,28 +318,28 @@ namespace GW2EIParser.Builders
         /// <param name="listToUse"></param>
         /// <param name="tableId"></param>
         /// <param name="phaseIndex"></param>
-        private List<BoonData> BuildBuffGenerationData(List<Buff> listToUse, int phaseIndex, GeneralStatistics.BuffEnum target)
+        private List<BuffData> BuildBuffGenerationData(List<Buff> listToUse, int phaseIndex, GeneralStatistics.BuffEnum target)
         {
-            var list = new List<BoonData>();
+            var list = new List<BuffData>();
 
             foreach (Player player in _log.PlayerList)
             {
                 Dictionary<long, GeneralStatistics.FinalBuffs> uptimes;
                 uptimes = player.GetBuffs(_log, phaseIndex, target);
-                list.Add(new BoonData(listToUse, uptimes));
+                list.Add(new BuffData(listToUse, uptimes));
             }
             return list;
         }
 
-        private List<BoonData> BuildActiveBuffGenerationData(List<Buff> listToUse, int phaseIndex, GeneralStatistics.BuffEnum target)
+        private List<BuffData> BuildActiveBuffGenerationData(List<Buff> listToUse, int phaseIndex, GeneralStatistics.BuffEnum target)
         {
-            var list = new List<BoonData>();
+            var list = new List<BuffData>();
 
             foreach (Player player in _log.PlayerList)
             {
                 Dictionary<long, GeneralStatistics.FinalBuffs> uptimes;
                 uptimes = player.GetActiveBuffs(_log, phaseIndex, target);
-                list.Add(new BoonData(listToUse, uptimes));
+                list.Add(new BuffData(listToUse, uptimes));
             }
             return list;
         }
@@ -538,13 +538,13 @@ namespace GW2EIParser.Builders
             return dto;
         }
 
-        private void BuildBoonGraphData(List<BoonChartDataDto> list, List<Buff> listToUse, Dictionary<long, BuffsGraphModel> boonGraphData, PhaseData phase)
+        private void BuildBoonGraphData(List<BuffChartDataDto> list, List<Buff> listToUse, Dictionary<long, BuffsGraphModel> boonGraphData, PhaseData phase)
         {
             foreach (Buff buff in listToUse)
             {
                 if (boonGraphData.TryGetValue(buff.ID, out BuffsGraphModel bgm))
                 {
-                    BoonChartDataDto graph = BuildBoonGraph(bgm, phase);
+                    BuffChartDataDto graph = BuildBoonGraph(bgm, phase);
                     if (graph != null)
                     {
                         list.Add(graph);
@@ -554,9 +554,9 @@ namespace GW2EIParser.Builders
             }
         }
 
-        private List<BoonChartDataDto> BuildBoonGraphData(AbstractSingleActor p, int phaseIndex)
+        private List<BuffChartDataDto> BuildBoonGraphData(AbstractSingleActor p, int phaseIndex)
         {
-            var list = new List<BoonChartDataDto>();
+            var list = new List<BuffChartDataDto>();
             PhaseData phase = _phases[phaseIndex];
             var boonGraphData = p.GetBuffGraphs(_log).ToDictionary(x => x.Key, x => x.Value);
             BuildBoonGraphData(list, _statistics.PresentBoons, boonGraphData, phase);
@@ -565,7 +565,7 @@ namespace GW2EIParser.Builders
             BuildBoonGraphData(list, _statistics.PresentDefbuffs, boonGraphData, phase);
             foreach (BuffsGraphModel bgm in boonGraphData.Values)
             {
-                BoonChartDataDto graph = BuildBoonGraph(bgm, phase);
+                BuffChartDataDto graph = BuildBoonGraph(bgm, phase);
                 if (graph != null)
                 {
                     list.Add(graph);
@@ -578,7 +578,7 @@ namespace GW2EIParser.Builders
                     boonGraphData = mainTarget.GetBuffGraphs(_log);
                     foreach (BuffsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.Buff.Name == "Compromised" || x.Buff.Name == "Unnatural Signet" || x.Buff.Name == "Fractured - Enemy" || x.Buff.Name == "Erratic Energy"))
                     {
-                        BoonChartDataDto graph = BuildBoonGraph(bgm, phase);
+                        BuffChartDataDto graph = BuildBoonGraph(bgm, phase);
                         if (graph != null)
                         {
                             list.Add(graph);
@@ -590,7 +590,7 @@ namespace GW2EIParser.Builders
             return list;
         }
 
-        private BoonChartDataDto BuildBoonGraph(BuffsGraphModel bgm, PhaseData phase)
+        private BuffChartDataDto BuildBoonGraph(BuffsGraphModel bgm, PhaseData phase)
         {
             var bChart = bgm.BuffChart.Where(x => x.End >= phase.Start && x.Start <= phase.End
             ).ToList();
@@ -599,7 +599,7 @@ namespace GW2EIParser.Builders
                 return null;
             }
             _usedBoons[bgm.Buff.ID] = bgm.Buff;
-            return new BoonChartDataDto(bgm, bChart, phase);
+            return new BuffChartDataDto(bgm, bChart, phase);
         }
 
         private List<FoodDto> BuildPlayerFoodData(Player p)
@@ -675,28 +675,28 @@ namespace GW2EIParser.Builders
             return list;
         }
 
-        private List<BoonData> BuildTargetCondiData(int phaseIndex, NPC target)
+        private List<BuffData> BuildTargetCondiData(int phaseIndex, NPC target)
         {
-            Dictionary<long, GeneralStatistics.FinalTargetBuffs> conditions = target.GetBuffs(_log, phaseIndex);
-            var list = new List<BoonData>();
+            Dictionary<long, GeneralStatistics.FinalBuffsDictionary> conditions = target.GetBuffs(_log, phaseIndex);
+            var list = new List<BuffData>();
 
             foreach (Player player in _log.PlayerList)
             {
-                list.Add(new BoonData(conditions, _statistics.PresentConditions, player));
+                list.Add(new BuffData(conditions, _statistics.PresentConditions, player));
             }
             return list;
         }
 
-        private BoonData BuildTargetCondiUptimeData(int phaseIndex, NPC target)
+        private BuffData BuildTargetCondiUptimeData(int phaseIndex, NPC target)
         {
-            Dictionary<long, GeneralStatistics.FinalTargetBuffs> buffs = target.GetBuffs(_log, phaseIndex);
-            return new BoonData(buffs, _statistics.PresentConditions, target.GetStatsAll(_log, phaseIndex).AvgConditions);
+            Dictionary<long, GeneralStatistics.FinalBuffsDictionary> buffs = target.GetBuffs(_log, phaseIndex);
+            return new BuffData(buffs, _statistics.PresentConditions, target.GetStatsAll(_log, phaseIndex).AvgConditions);
         }
 
-        private BoonData BuildTargetBoonData(int phaseIndex, NPC target)
+        private BuffData BuildTargetBoonData(int phaseIndex, NPC target)
         {
-            Dictionary<long, GeneralStatistics.FinalTargetBuffs> buffs = target.GetBuffs(_log, phaseIndex);
-            return new BoonData(buffs, _statistics.PresentBoons, target.GetStatsAll(_log, phaseIndex).AvgBoons);
+            Dictionary<long, GeneralStatistics.FinalBuffsDictionary> buffs = target.GetBuffs(_log, phaseIndex);
+            return new BuffData(buffs, _statistics.PresentBoons, target.GetStatsAll(_log, phaseIndex).AvgBoons);
         }
 
         private string ReplaceVariables(string html)
@@ -1146,9 +1146,9 @@ namespace GW2EIParser.Builders
                     DmgModifiersCommon = BuildDmgModifiersData(i, commonDamageModifiers),
                     DmgModifiersItem = BuildDmgModifiersData(i, itemDamageModifiers),
                     DmgModifiersPers = BuildPersonalDmgModifiersData(i, persDamageModDict),
-                    TargetsCondiStats = new List<List<BoonData>>(),
-                    TargetsCondiTotals = new List<BoonData>(),
-                    TargetsBoonTotals = new List<BoonData>(),
+                    TargetsCondiStats = new List<List<BuffData>>(),
+                    TargetsCondiTotals = new List<BuffData>(),
+                    TargetsBoonTotals = new List<BuffData>(),
                     MechanicStats = BuildPlayerMechanicData(i),
                     EnemyMechanicStats = BuildEnemyMechanicData(i)
                 };
@@ -1173,17 +1173,17 @@ namespace GW2EIParser.Builders
             //
             SkillDto.AssembleSkills(_usedSkills.Values, logData.SkillMap);
             DamageModDto.AssembleDamageModifiers(_usedDamageMods, logData.DamageModMap);
-            BoonDto.AssembleBoons(_usedBoons.Values, logData.BuffMap);
+            BuffDto.AssembleBoons(_usedBoons.Values, logData.BuffMap);
             MechanicDto.BuildMechanics(_log.MechanicData.GetPresentMechanics(_log, 0), logData.MechanicMap);
             return ToJson(logData);
         }
 
         private bool HasBoons(int phaseIndex, NPC target)
         {
-            Dictionary<long, GeneralStatistics.FinalTargetBuffs> conditions = target.GetBuffs(_log, phaseIndex);
+            Dictionary<long, GeneralStatistics.FinalBuffsDictionary> conditions = target.GetBuffs(_log, phaseIndex);
             foreach (Buff boon in _statistics.PresentBoons)
             {
-                if (conditions.TryGetValue(boon.ID, out GeneralStatistics.FinalTargetBuffs uptime))
+                if (conditions.TryGetValue(boon.ID, out GeneralStatistics.FinalBuffsDictionary uptime))
                 {
                     if (uptime.Uptime > 0.0)
                     {
@@ -1201,7 +1201,7 @@ namespace GW2EIParser.Builders
                 DmgDistributions = new List<DmgDistributionDto>(),
                 DmgDistributionsTargets = new List<List<DmgDistributionDto>>(),
                 DmgDistributionsTaken = new List<DmgDistributionDto>(),
-                BoonGraph = new List<List<BoonChartDataDto>>(),
+                BoonGraph = new List<List<BuffChartDataDto>>(),
                 Rotation = new List<List<object[]>>(),
                 Food = BuildPlayerFoodData(player),
                 Minions = new List<ActorDetailsDto>(),
@@ -1254,7 +1254,7 @@ namespace GW2EIParser.Builders
             {
                 DmgDistributions = new List<DmgDistributionDto>(),
                 DmgDistributionsTaken = new List<DmgDistributionDto>(),
-                BoonGraph = new List<List<BoonChartDataDto>>(),
+                BoonGraph = new List<List<BuffChartDataDto>>(),
                 Rotation = new List<List<object[]>>()
             };
             for (int i = 0; i < _phases.Count; i++)
@@ -1271,7 +1271,7 @@ namespace GW2EIParser.Builders
                     dto.DmgDistributions.Add(new DmgDistributionDto());
                     dto.DmgDistributionsTaken.Add(new DmgDistributionDto());
                     dto.Rotation.Add(new List<object[]>());
-                    dto.BoonGraph.Add(new List<BoonChartDataDto>());
+                    dto.BoonGraph.Add(new List<BuffChartDataDto>());
                 }
             }
 

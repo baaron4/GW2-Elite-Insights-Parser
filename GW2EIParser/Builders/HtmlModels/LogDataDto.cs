@@ -17,7 +17,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public Dictionary<string, List<long>> PersBuffs { get; } = new Dictionary<string, List<long>>();
         public List<long> Conditions { get; } = new List<long>();
         public Dictionary<string, SkillDto> SkillMap { get; } = new Dictionary<string, SkillDto>();
-        public Dictionary<string, BoonDto> BuffMap { get; } = new Dictionary<string, BoonDto>();
+        public Dictionary<string, BuffDto> BuffMap { get; } = new Dictionary<string, BuffDto>();
         public Dictionary<string, DamageModDto> DamageModMap { get; } = new Dictionary<string, DamageModDto>();
         public List<MechanicDto> MechanicMap { get; set; } = new List<MechanicDto>();
         public CombatReplayDto CrData { get; set; } = null;

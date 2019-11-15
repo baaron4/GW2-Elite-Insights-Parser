@@ -9,7 +9,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public List<List<DmgDistributionDto>> DmgDistributionsTargets { get; set; }
         public List<DmgDistributionDto> DmgDistributionsTaken { get; set; }
         public List<List<object[]>> Rotation { get; set; }
-        public List<List<BoonChartDataDto>> BoonGraph { get; set; }
+        public List<List<BuffChartDataDto>> BoonGraph { get; set; }
         public List<FoodDto> Food { get; set; }
         public List<ActorDetailsDto> Minions { get; set; }
         public List<DeathRecapDto> DeathRecap { get; set; }

@@ -613,11 +613,11 @@ namespace GW2EIParser.Builders
             }
         }
 
-        private List<JsonTargetBuffs> BuildTargetBuffs(List<Dictionary<long, GeneralStatistics.FinalTargetBuffs>> statBoons, NPC target)
+        private List<JsonTargetBuffs> BuildTargetBuffs(List<Dictionary<long, GeneralStatistics.FinalBuffsDictionary>> statBoons, NPC target)
         {
             var boons = new List<JsonTargetBuffs>();
 
-            foreach (KeyValuePair<long, GeneralStatistics.FinalTargetBuffs> pair in statBoons[0])
+            foreach (KeyValuePair<long, GeneralStatistics.FinalBuffsDictionary> pair in statBoons[0])
             {
                 if (!_buffDesc.ContainsKey("b" + pair.Key))
                 {

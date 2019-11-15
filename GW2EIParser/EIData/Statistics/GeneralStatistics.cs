@@ -91,9 +91,9 @@ namespace GW2EIParser.EIData
 
         public enum BuffEnum { Self, Group, OffGroup, Squad };
 
-        public class FinalTargetBuffs
+        public class FinalBuffsDictionary
         {
-            public FinalTargetBuffs(List<Player> plist)
+            public FinalBuffsDictionary(List<Player> plist)
             {
                 Uptime = 0;
                 Presence = 0;

@@ -36,5 +36,6 @@
     <Rule Id="CA1307" Action="None" />
     <Rule Id="CA2000" Action="Info" />
     <Rule Id="CA2008" Action="Info" />
+    <Rule Id="CA2237" Action="None" />
   </Rules>
 </RuleSet>

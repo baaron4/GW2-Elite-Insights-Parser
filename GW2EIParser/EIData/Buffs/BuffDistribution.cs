@@ -31,6 +31,20 @@ namespace GW2EIParser.EIData
             return ContainsKey(boonid) && this[boonid].ContainsKey(src);
         }
 
+        public List<AbstractSingleActor> GetSrcs(long boonid, ParsedLog log)
+        {
+            if (!ContainsKey(boonid))
+            {
+                return new List<AbstractSingleActor>();
+            }
+            var actors = new List<AbstractSingleActor>();
+            foreach (AgentItem agent in this[boonid].Keys)
+            {
+                actors.Add(log.FindActor(agent, true));
+            }
+            return actors;
+        } 
+
         public long GetUptime(long boonid)
         {
             if (!ContainsKey(boonid))

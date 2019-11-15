@@ -5,14 +5,14 @@ using GW2EIParser.EIData;
 
 namespace GW2EIParser.Builders.HtmlModels
 {
-    public class BoonChartDataDto
+    public class BuffChartDataDto
     {
         public long Id { get; set; }
         public string Color { get; set; }
         public bool Visible { get; set; }
         public List<object[]> States { get; set; }
 
-        public BoonChartDataDto(BuffsGraphModel bgm, List<BuffSegment> bChart, PhaseData phase)
+        public BuffChartDataDto(BuffsGraphModel bgm, List<BuffSegment> bChart, PhaseData phase)
         {
             Id = bgm.Buff.ID;
             Visible = (bgm.Buff.Name == "Might" || bgm.Buff.Name == "Quickness" || bgm.Buff.Name == "Vulnerability");

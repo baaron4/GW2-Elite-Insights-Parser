@@ -9,7 +9,7 @@ namespace GW2EIParser.EIData
 {
     public class NPC : AbstractSingleActor
     {
-        private List<Dictionary<long, FinalTargetBuffs>> _buffs;
+        private List<Dictionary<long, FinalBuffsDictionary>> _buffs;
         // Constructors
         public NPC(AgentItem agent) : base(agent)
         {
@@ -47,7 +47,7 @@ namespace GW2EIParser.EIData
             CastLogs.Add(new CastLog(time, skillID, expDur, startActivation, actDur, endActivation, Agent, InstID));
         }*/
 
-        public Dictionary<long, FinalTargetBuffs> GetBuffs(ParsedLog log, int phaseIndex)
+        public Dictionary<long, FinalBuffsDictionary> GetBuffs(ParsedLog log, int phaseIndex)
         {
             if (_buffs == null)
             {
@@ -56,7 +56,7 @@ namespace GW2EIParser.EIData
             return _buffs[phaseIndex];
         }
 
-        public List<Dictionary<long, FinalTargetBuffs>> GetBuffs(ParsedLog log)
+        public List<Dictionary<long, FinalBuffsDictionary>> GetBuffs(ParsedLog log)
         {
             if (_buffs == null)
             {
@@ -67,12 +67,12 @@ namespace GW2EIParser.EIData
 
         private void SetBuffs(ParsedLog log)
         {
-            _buffs = new List<Dictionary<long, FinalTargetBuffs>>();
+            _buffs = new List<Dictionary<long, FinalBuffsDictionary>>();
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
                 BuffDistribution boonDistribution = GetBuffDistribution(log, phaseIndex);
-                var rates = new Dictionary<long, FinalTargetBuffs>();
+                var rates = new Dictionary<long, FinalBuffsDictionary>();
                 _buffs.Add(rates);
                 Dictionary<long, long> buffPresence = GetBuffPresence(log, phaseIndex);
 
@@ -83,7 +83,7 @@ namespace GW2EIParser.EIData
                 {
                     if (boonDistribution.ContainsKey(boon.ID))
                     {
-                        var buff = new FinalTargetBuffs(log.PlayerList);
+                        var buff = new FinalBuffsDictionary(log.PlayerList);
                         rates[boon.ID] = buff;
                         if (boon.Type == Buff.BuffType.Duration)
                         {

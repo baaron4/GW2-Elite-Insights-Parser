@@ -3,12 +3,12 @@ using GW2EIParser.EIData;
 
 namespace GW2EIParser.Builders.HtmlModels
 {
-    public class BoonData
+    public class BuffData
     {
         public double Avg { get; set; }
         public List<List<object>> Data { get; set; } = new List<List<object>>();
 
-        public BoonData(Dictionary<long, GeneralStatistics.FinalBuffs> boons, List<Buff> listToUse, double avg)
+        public BuffData(Dictionary<long, GeneralStatistics.FinalBuffs> boons, List<Buff> listToUse, double avg)
         {
             Avg = avg;
             foreach (Buff boon in listToUse)
@@ -27,7 +27,7 @@ namespace GW2EIParser.Builders.HtmlModels
             }
         }
 
-        public BoonData(Dictionary<long, GeneralStatistics.FinalTargetBuffs> boons, List<Buff> listToUse, double avg)
+        public BuffData(Dictionary<long, GeneralStatistics.FinalBuffsDictionary> boons, List<Buff> listToUse, double avg)
         {
             Avg = avg;
             foreach (Buff boon in listToUse)
@@ -35,7 +35,7 @@ namespace GW2EIParser.Builders.HtmlModels
                 var boonVals = new List<object>();
                 Data.Add(boonVals);
 
-                if (boons.TryGetValue(boon.ID, out GeneralStatistics.FinalTargetBuffs uptime))
+                if (boons.TryGetValue(boon.ID, out GeneralStatistics.FinalBuffsDictionary uptime))
                 {
                     boonVals.Add(uptime.Uptime);
                     if (boon.Type == Buff.BuffType.Intensity && uptime.Presence > 0)
@@ -46,12 +46,12 @@ namespace GW2EIParser.Builders.HtmlModels
             }
         }
 
-        public BoonData(Dictionary<long, GeneralStatistics.FinalTargetBuffs> boons, List<Buff> listToUse, Player player)
+        public BuffData(Dictionary<long, GeneralStatistics.FinalBuffsDictionary> boons, List<Buff> listToUse, Player player)
         {
             foreach (Buff boon in listToUse)
             {
                 var boonData = new List<object>();
-                if (boons.TryGetValue(boon.ID, out GeneralStatistics.FinalTargetBuffs toUse))
+                if (boons.TryGetValue(boon.ID, out GeneralStatistics.FinalBuffsDictionary toUse))
                 {
                     boonData.Add(toUse.Generated[player]);
                     boonData.Add(toUse.Overstacked[player]);
@@ -64,7 +64,7 @@ namespace GW2EIParser.Builders.HtmlModels
             }
         }
 
-        public BoonData(List<Buff> listToUse, Dictionary<long, GeneralStatistics.FinalBuffs> uptimes)
+        public BuffData(List<Buff> listToUse, Dictionary<long, GeneralStatistics.FinalBuffs> uptimes)
         {
             foreach (Buff boon in listToUse)
             {
@@ -95,7 +95,7 @@ namespace GW2EIParser.Builders.HtmlModels
             }
         }
 
-        public BoonData(string prof, Dictionary<string, List<Buff>> boonsBySpec, Dictionary<long, GeneralStatistics.FinalBuffs> boons)
+        public BuffData(string prof, Dictionary<string, List<Buff>> boonsBySpec, Dictionary<long, GeneralStatistics.FinalBuffs> boons)
         {
             foreach (Buff boon in boonsBySpec[prof])
             {

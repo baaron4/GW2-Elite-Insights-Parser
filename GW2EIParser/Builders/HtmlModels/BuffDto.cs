@@ -3,7 +3,7 @@ using GW2EIParser.EIData;
 
 namespace GW2EIParser.Builders.HtmlModels
 {
-    public class BoonDto
+    public class BuffDto
     {
         public long Id { get; set; }
         public string Name { get; set; }
@@ -12,11 +12,11 @@ namespace GW2EIParser.Builders.HtmlModels
         public bool Consumable { get; set; }
         public bool Enemy { get; set; }
 
-        public static void AssembleBoons(ICollection<Buff> boons, Dictionary<string, BoonDto> dict)
+        public static void AssembleBoons(ICollection<Buff> boons, Dictionary<string, BuffDto> dict)
         {
             foreach (Buff boon in boons)
             {
-                dict["b" + boon.ID] = new BoonDto()
+                dict["b" + boon.ID] = new BuffDto()
                 {
                     Id = boon.ID,
                     Name = boon.Name,
