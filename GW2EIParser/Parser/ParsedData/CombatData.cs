@@ -15,6 +15,7 @@ namespace GW2EIParser.Parser.ParsedData
         private readonly MetaEventsContainer _metaDataEvents = new MetaEventsContainer();
         private readonly HashSet<long> _skillIds;
         private readonly Dictionary<long, List<AbstractBuffEvent>> _buffData;
+        private readonly Dictionary<long, List<BuffRemoveAllEvent>> _buffRemoveAllData;
         private readonly Dictionary<AgentItem, List<AbstractBuffEvent>> _buffDataByDst;
         private readonly Dictionary<AgentItem, List<AbstractDamageEvent>> _damageData;
         private readonly Dictionary<long, List<AbstractDamageEvent>> _damageDataById;
@@ -238,6 +239,7 @@ namespace GW2EIParser.Parser.ParsedData
                                             ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
                                                 (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
             ExtraEvents(players, skillData, fightData);
+            _buffRemoveAllData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());
         }
 
         // getters
@@ -411,6 +413,15 @@ namespace GW2EIParser.Parser.ParsedData
                 return res;
             }
             return new List<AbstractBuffEvent>(); ;
+        }
+
+        public List<BuffRemoveAllEvent> GetBuffRemoveAllData(long key)
+        {
+            if (_buffRemoveAllData.TryGetValue(key, out List<BuffRemoveAllEvent> res))
+            {
+                return res;
+            }
+            return new List<BuffRemoveAllEvent>(); ;
         }
 
         public List<AbstractBuffEvent> GetBuffDataByDst(AgentItem key)

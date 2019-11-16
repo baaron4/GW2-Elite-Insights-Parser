@@ -134,7 +134,7 @@ namespace GW2EIParser.Logic
             {
                 case (ushort)ParseEnum.TargetIDS.Matthias:
                     var humanShield = cls.Where(x => x.SkillId == 34468).ToList();
-                    var humanShieldRemoval = log.CombatData.GetBuffData(34518).Where(x => x is BuffRemoveAllEvent).Select(x => (int)x.Time).Distinct().ToList();
+                    var humanShieldRemoval = log.CombatData.GetBuffRemoveAllData(34518).Select(x => (int)x.Time).Distinct().ToList();
                     for (int i = 0; i < humanShield.Count; i++)
                     {
                         AbstractCastEvent shield = humanShield[i];
@@ -149,7 +149,7 @@ namespace GW2EIParser.Logic
                         }
                     }
                     var aboShield = cls.Where(x => x.SkillId == 34510).ToList();
-                    var aboShieldRemoval = log.CombatData.GetBuffData(34376).Where(x => x is BuffRemoveAllEvent).Select(x => (int)x.Time).Distinct().ToList();
+                    var aboShieldRemoval = log.CombatData.GetBuffRemoveAllData(34376).Select(x => (int)x.Time).Distinct().ToList();
                     for (int i = 0; i < aboShield.Count; i++)
                     {
                         AbstractCastEvent shield = aboShield[i];
