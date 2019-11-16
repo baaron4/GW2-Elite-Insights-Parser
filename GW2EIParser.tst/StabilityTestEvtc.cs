@@ -85,7 +85,7 @@ namespace GW2EIParser.tst
                     };
                     var writer = new JsonTextWriter(sw)
                     {
-                        Formatting = Newtonsoft.Json.Formatting.Indented
+                        Formatting = Formatting.Indented
                     };
                     serializer.Serialize(writer, dict);
                 }

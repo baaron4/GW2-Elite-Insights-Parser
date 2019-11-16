@@ -82,7 +82,7 @@ namespace GW2EIParser.Controllers
         }
         public static List<int> WriteSkillListToFile()
         {
-            FileStream fcreate = File.Open(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+            FileStream fcreate = File.Open(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/SkillList.json", FileMode.Create);
 
             fcreate.Close();
@@ -99,12 +99,12 @@ namespace GW2EIParser.Controllers
             {
                 // Get Skill ID list           
                 _listOfSkills.Items.AddRange(GetListGW2APISkills());
-                var writer = new StreamWriter(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+                var writer = new StreamWriter(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/SkillList.json");
                 var serializer = new JsonSerializer
                 {
                     NullValueHandling = NullValueHandling.Ignore,
-                    Formatting = Newtonsoft.Json.Formatting.None,
+                    Formatting = Formatting.None,
                     DefaultValueHandling = DefaultValueHandling.Ignore,
                     ContractResolver = GeneralHelper.ContractResolver
                 };
@@ -119,14 +119,14 @@ namespace GW2EIParser.Controllers
 
             if (_listOfSkills.Items.Count == 0)
             {
-                string path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+                string path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
                 + "/Content/SkillList.json";
                 if (File.Exists(path))
                 {
                     if (new FileInfo(path).Length != 0)
                     {
                         Console.WriteLine("Reading Skilllist");
-                        using (var reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+                        using (var reader = new StreamReader(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
                         + "/Content/SkillList.json"))
                         {
                             var serializer = new JsonSerializer()
@@ -184,7 +184,7 @@ namespace GW2EIParser.Controllers
         }
         public static List<int> WriteSpecListToFile()
         {
-            FileStream fcreate = File.Open(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+            FileStream fcreate = File.Open(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/SpecList.json", FileMode.Create);
 
             fcreate.Close();
@@ -220,13 +220,13 @@ namespace GW2EIParser.Controllers
                     }
 
                 }
-                var writer = new StreamWriter(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+                var writer = new StreamWriter(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/SpecList.json");
 
                 var serializer = new JsonSerializer
                 {
                     NullValueHandling = NullValueHandling.Ignore,
-                    Formatting = Newtonsoft.Json.Formatting.None,
+                    Formatting = Formatting.None,
                     ContractResolver = GeneralHelper.ContractResolver
                 };
                 serializer.Serialize(writer, _listofSpecs.Items);
@@ -241,14 +241,14 @@ namespace GW2EIParser.Controllers
 
             if (_listofSpecs.Items.Count == 0)
             {
-                string path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+                string path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
                 + "/Content/SpecList.json";
                 if (File.Exists(path))
                 {
                     if (new FileInfo(path).Length != 0)
                     {
                         Console.WriteLine("Reading SpecList");
-                        using (var reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+                        using (var reader = new StreamReader(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
                         + "/Content/SpecList.json"))
                         {
                             var serializer = new JsonSerializer()
@@ -406,7 +406,7 @@ namespace GW2EIParser.Controllers
         }
         public static List<int> WriteTraitListToFile()
         {
-            FileStream fcreate = File.Open(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+            FileStream fcreate = File.Open(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/TraitList.json", FileMode.Create);
 
             fcreate.Close();
@@ -423,12 +423,12 @@ namespace GW2EIParser.Controllers
             {
                 // Get Skill ID list           
                 _listOfTraits.Items.AddRange(GetListGW2APITraits());
-                var writer = new StreamWriter(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+                var writer = new StreamWriter(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/TraitList.json");
                 var serializer = new JsonSerializer
                 {
                     NullValueHandling = NullValueHandling.Ignore,
-                    Formatting = Newtonsoft.Json.Formatting.None,
+                    Formatting = Formatting.None,
                     DefaultValueHandling = DefaultValueHandling.Ignore,
                     ContractResolver = GeneralHelper.ContractResolver
                 };
@@ -443,14 +443,14 @@ namespace GW2EIParser.Controllers
 
             if (_listOfTraits.Items.Count == 0)
             {
-                string path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+                string path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
                 + "/Content/TraitList.json";
                 if (File.Exists(path))
                 {
                     if (new FileInfo(path).Length != 0)
                     {
                         Console.WriteLine("Reading Traitlist");
-                        using (var reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+                        using (var reader = new StreamReader(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
                         + "/Content/TraitList.json"))
                         {
                             var serializer = new JsonSerializer()
