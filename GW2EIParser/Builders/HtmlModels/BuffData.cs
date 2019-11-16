@@ -8,7 +8,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public double Avg { get; set; }
         public List<List<object>> Data { get; set; } = new List<List<object>>();
 
-        public BuffData(Dictionary<long, GeneralStatistics.FinalBuffs> boons, List<Buff> listToUse, double avg)
+        public BuffData(Dictionary<long, FinalPlayerBuffs> boons, List<Buff> listToUse, double avg)
         {
             Avg = avg;
             foreach (Buff boon in listToUse)
@@ -16,7 +16,7 @@ namespace GW2EIParser.Builders.HtmlModels
                 var boonVals = new List<object>();
                 Data.Add(boonVals);
 
-                if (boons.TryGetValue(boon.ID, out GeneralStatistics.FinalBuffs uptime))
+                if (boons.TryGetValue(boon.ID, out FinalPlayerBuffs uptime))
                 {
                     boonVals.Add(uptime.Uptime);
                     if (boon.Type == Buff.BuffType.Intensity && uptime.Presence > 0)
@@ -75,11 +75,11 @@ namespace GW2EIParser.Builders.HtmlModels
             }
         }
 
-        public BuffData(List<Buff> listToUse, Dictionary<long, GeneralStatistics.FinalBuffs> uptimes)
+        public BuffData(List<Buff> listToUse, Dictionary<long, FinalPlayerBuffs> uptimes)
         {
             foreach (Buff boon in listToUse)
             {
-                if (uptimes.TryGetValue(boon.ID, out GeneralStatistics.FinalBuffs uptime))
+                if (uptimes.TryGetValue(boon.ID, out FinalPlayerBuffs uptime))
                 {
                     Data.Add(new List<object>()
                         {
@@ -106,13 +106,13 @@ namespace GW2EIParser.Builders.HtmlModels
             }
         }
 
-        public BuffData(string prof, Dictionary<string, List<Buff>> boonsBySpec, Dictionary<long, GeneralStatistics.FinalBuffs> boons)
+        public BuffData(string prof, Dictionary<string, List<Buff>> boonsBySpec, Dictionary<long, FinalPlayerBuffs> boons)
         {
             foreach (Buff boon in boonsBySpec[prof])
             {
                 var boonVals = new List<object>();
                 Data.Add(boonVals);
-                if (boons.TryGetValue(boon.ID, out GeneralStatistics.FinalBuffs uptime))
+                if (boons.TryGetValue(boon.ID, out FinalPlayerBuffs uptime))
                 {
                     boonVals.Add(uptime.Uptime);
                     if (boon.Type == Buff.BuffType.Intensity && uptime.Presence > 0)

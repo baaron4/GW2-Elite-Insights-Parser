@@ -11,8 +11,8 @@ using GW2EIParser.Parser.ParsedData.CombatEvents;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using static GW2EIParser.Builders.JsonModels.JsonBuffDamageModifierData;
-using static GW2EIParser.Builders.JsonModels.JsonBuffsGeneration;
-using static GW2EIParser.Builders.JsonModels.JsonBuffsUptime;
+using static GW2EIParser.Builders.JsonModels.JsonPlayerBuffsGeneration;
+using static GW2EIParser.Builders.JsonModels.JsonPlayerBuffsUptime;
 using static GW2EIParser.Builders.JsonModels.JsonMechanics;
 using static GW2EIParser.Builders.JsonModels.JsonRotation;
 using static GW2EIParser.Builders.JsonModels.JsonStatistics;
@@ -642,10 +642,10 @@ namespace GW2EIParser.Builders
             return boons;
         }
 
-        private List<JsonBuffsGeneration> BuildPlayerBuffGenerations(List<Dictionary<long, GeneralStatistics.FinalBuffs>> statUptimes)
+        private List<JsonPlayerBuffsGeneration> BuildPlayerBuffGenerations(List<Dictionary<long, FinalPlayerBuffs>> statUptimes)
         {
-            var uptimes = new List<JsonBuffsGeneration>();
-            foreach (KeyValuePair<long, GeneralStatistics.FinalBuffs> pair in statUptimes[0])
+            var uptimes = new List<JsonPlayerBuffsGeneration>();
+            foreach (KeyValuePair<long, FinalPlayerBuffs> pair in statUptimes[0])
             {
                 Buff buff = _log.Buffs.BuffsByIds[pair.Key];
                 if (!_buffDesc.ContainsKey("b" + pair.Key))
@@ -657,7 +657,7 @@ namespace GW2EIParser.Builders
                 {
                     data.Add(new JsonBuffsGenerationData(statUptimes[i][pair.Key]));
                 }
-                var jsonBuffs = new JsonBuffsGeneration()
+                var jsonBuffs = new JsonPlayerBuffsGeneration()
                 {
                     BuffData = data,
                     Id = pair.Key
@@ -673,10 +673,10 @@ namespace GW2EIParser.Builders
             return uptimes;
         }
 
-        private List<JsonBuffsUptime> BuildPlayerBuffUptimes(List<Dictionary<long, GeneralStatistics.FinalBuffs>> statUptimes, Player player)
+        private List<JsonPlayerBuffsUptime> BuildPlayerBuffUptimes(List<Dictionary<long, FinalPlayerBuffs>> statUptimes, Player player)
         {
-            var uptimes = new List<JsonBuffsUptime>();
-            foreach (KeyValuePair<long, GeneralStatistics.FinalBuffs> pair in statUptimes[0])
+            var uptimes = new List<JsonPlayerBuffsUptime>();
+            foreach (KeyValuePair<long, FinalPlayerBuffs> pair in statUptimes[0])
             {
                 Buff buff = _log.Buffs.BuffsByIds[pair.Key];
                 if (!_buffDesc.ContainsKey("b" + pair.Key))
@@ -700,12 +700,12 @@ namespace GW2EIParser.Builders
                         }
                     }
                 }
-                var data = new List<JsonBuffsUptimeData>();
+                var data = new List<JsonPlayerBuffsUptimeData>();
                 for (int i = 0; i < _phases.Count; i++)
                 {
-                    data.Add(new JsonBuffsUptimeData(statUptimes[i][pair.Key]));
+                    data.Add(new JsonPlayerBuffsUptimeData(statUptimes[i][pair.Key]));
                 }
-                var jsonBuffs = new JsonBuffsUptime()
+                var jsonBuffs = new JsonPlayerBuffsUptime()
                 {
                     States = BuildBuffStates(player.GetBuffGraphs(_log)[pair.Key]),
                     BuffData = data,

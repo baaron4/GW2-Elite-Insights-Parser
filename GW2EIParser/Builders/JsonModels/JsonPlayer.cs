@@ -85,62 +85,62 @@ namespace GW2EIParser.Builders.JsonModels
         /// List of buff status on uptimes + states \n
         /// Key is "'b' + id"
         /// </summary>
-        /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsUptime> BuffUptimes { get; set; }
+        /// <seealso cref="JsonPlayerBuffsUptime"/>
+        public List<JsonPlayerBuffsUptime> BuffUptimes { get; set; }
         /// <summary>
         /// List of buff status on self generation  \n
         /// Key is "'b' + id"
         /// </summary>
-        /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsGeneration> SelfBuffs { get; set; }
+        /// <seealso cref="JsonPlayerBuffsUptime"/>
+        public List<JsonPlayerBuffsGeneration> SelfBuffs { get; set; }
         /// <summary>
         /// List of buff status on group generation \n
         /// Key is "'b' + id"
         /// </summary>
-        /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsGeneration> GroupBuffs { get; set; }
+        /// <seealso cref="JsonPlayerBuffsUptime"/>
+        public List<JsonPlayerBuffsGeneration> GroupBuffs { get; set; }
         /// <summary>
         /// List of buff status on off group generation \n
         /// Key is "'b' + id"
         /// </summary>
-        /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsGeneration> OffGroupBuffs { get; set; }
+        /// <seealso cref="JsonPlayerBuffsUptime"/>
+        public List<JsonPlayerBuffsGeneration> OffGroupBuffs { get; set; }
         /// <summary>
         /// List of buff status on squad generation \n
         /// Key is "'b' + id"
         /// </summary>
-        /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsGeneration> SquadBuffs { get; set; }
+        /// <seealso cref="JsonPlayerBuffsUptime"/>
+        public List<JsonPlayerBuffsGeneration> SquadBuffs { get; set; }
         /// <summary>
         /// List of buff status on uptimes + states on active time \n
         /// Key is "'b' + id"
         /// </summary>
-        /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsUptime> BuffUptimesActive { get; set; }
+        /// <seealso cref="JsonPlayerBuffsUptime"/>
+        public List<JsonPlayerBuffsUptime> BuffUptimesActive { get; set; }
         /// <summary>
         /// List of buff status on self generation on active time  \n
         /// Key is "'b' + id"
         /// </summary>
-        /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsGeneration> SelfBuffsActive { get; set; }
+        /// <seealso cref="JsonPlayerBuffsUptime"/>
+        public List<JsonPlayerBuffsGeneration> SelfBuffsActive { get; set; }
         /// <summary>
         /// List of buff status on group generation on active time \n
         /// Key is "'b' + id"
         /// </summary>
-        /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsGeneration> GroupBuffsActive { get; set; }
+        /// <seealso cref="JsonPlayerBuffsUptime"/>
+        public List<JsonPlayerBuffsGeneration> GroupBuffsActive { get; set; }
         /// <summary>
         /// List of buff status on off group generation on active time \n
         /// Key is "'b' + id"
         /// </summary>
-        /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsGeneration> OffGroupBuffsActive { get; set; }
+        /// <seealso cref="JsonPlayerBuffsUptime"/>
+        public List<JsonPlayerBuffsGeneration> OffGroupBuffsActive { get; set; }
         /// <summary>
         /// List of buff status on squad generation on active time\n
         /// Key is "'b' + id"
         /// </summary>
-        /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsGeneration> SquadBuffsActive { get; set; }
+        /// <seealso cref="JsonPlayerBuffsUptime"/>
+        public List<JsonPlayerBuffsGeneration> SquadBuffsActive { get; set; }
         /// <summary>
         /// List of death recaps \n
         /// Length == number of death

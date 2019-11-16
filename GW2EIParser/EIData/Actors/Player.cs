@@ -74,14 +74,14 @@ namespace GW2EIParser.EIData
         private Dictionary<NPC, Dictionary<string, List<DamageModifierData>>> _damageModifiersTargets;
         // statistics
         private List<FinalPlayerSupport> _playerSupport;
-        private List<Dictionary<long, FinalBuffs>> _selfBuffs;
-        private List<Dictionary<long, FinalBuffs>> _groupBuffs;
-        private List<Dictionary<long, FinalBuffs>> _offGroupBuffs;
-        private List<Dictionary<long, FinalBuffs>> _squadBuffs;
-        private List<Dictionary<long, FinalBuffs>> _selfActiveBuffs;
-        private List<Dictionary<long, FinalBuffs>> _groupActiveBuffs;
-        private List<Dictionary<long, FinalBuffs>> _offGroupActiveBuffs;
-        private List<Dictionary<long, FinalBuffs>> _squadActiveBuffs;
+        private List<Dictionary<long, FinalPlayerBuffs>> _selfBuffs;
+        private List<Dictionary<long, FinalPlayerBuffs>> _groupBuffs;
+        private List<Dictionary<long, FinalPlayerBuffs>> _offGroupBuffs;
+        private List<Dictionary<long, FinalPlayerBuffs>> _squadBuffs;
+        private List<Dictionary<long, FinalPlayerBuffs>> _selfActiveBuffs;
+        private List<Dictionary<long, FinalPlayerBuffs>> _groupActiveBuffs;
+        private List<Dictionary<long, FinalPlayerBuffs>> _offGroupActiveBuffs;
+        private List<Dictionary<long, FinalPlayerBuffs>> _squadActiveBuffs;
         //weaponslist
         private string[] _weaponsArray;
 
@@ -166,7 +166,7 @@ namespace GW2EIParser.EIData
             return _playerSupport;
         }
 
-        public Dictionary<long, FinalBuffs> GetBuffs(ParsedLog log, int phaseIndex, BuffEnum type)
+        public Dictionary<long, FinalPlayerBuffs> GetBuffs(ParsedLog log, int phaseIndex, BuffEnum type)
         {
             if (_selfBuffs == null)
             {
@@ -186,7 +186,7 @@ namespace GW2EIParser.EIData
             }
         }
 
-        public List<Dictionary<long, FinalBuffs>> GetBuffs(ParsedLog log, BuffEnum type)
+        public List<Dictionary<long, FinalPlayerBuffs>> GetBuffs(ParsedLog log, BuffEnum type)
         {
             if (_selfBuffs == null)
             {
@@ -206,7 +206,7 @@ namespace GW2EIParser.EIData
             }
         }
 
-        public Dictionary<long, FinalBuffs> GetActiveBuffs(ParsedLog log, int phaseIndex, BuffEnum type)
+        public Dictionary<long, FinalPlayerBuffs> GetActiveBuffs(ParsedLog log, int phaseIndex, BuffEnum type)
         {
             if (_selfActiveBuffs == null)
             {
@@ -226,7 +226,7 @@ namespace GW2EIParser.EIData
             }
         }
 
-        public List<Dictionary<long, FinalBuffs>> GetActiveBuffs(ParsedLog log, BuffEnum type)
+        public List<Dictionary<long, FinalPlayerBuffs>> GetActiveBuffs(ParsedLog log, BuffEnum type)
         {
             if (_selfActiveBuffs == null)
             {
@@ -246,10 +246,10 @@ namespace GW2EIParser.EIData
             }
         }
 
-        private (List<Dictionary<long, FinalBuffs>>, List<Dictionary<long, FinalBuffs>>) GetBoonsForPlayers(List<Player> playerList, ParsedLog log)
+        private (List<Dictionary<long, FinalPlayerBuffs>>, List<Dictionary<long, FinalPlayerBuffs>>) GetBoonsForPlayers(List<Player> playerList, ParsedLog log)
         {
-            var uptimesByPhase = new List<Dictionary<long, FinalBuffs>>();
-            var uptimesActiveByPhase = new List<Dictionary<long, FinalBuffs>>();
+            var uptimesByPhase = new List<Dictionary<long, FinalPlayerBuffs>>();
+            var uptimesActiveByPhase = new List<Dictionary<long, FinalPlayerBuffs>>();
 
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
@@ -266,9 +266,9 @@ namespace GW2EIParser.EIData
                 var boonsToTrack = new HashSet<Buff>(boonDistributions.SelectMany(x => x.Value).Select(x => log.Buffs.BuffsByIds[x.Key]));
 
                 var final =
-                    new Dictionary<long, FinalBuffs>();
+                    new Dictionary<long, FinalPlayerBuffs>();
                 var finalActive =
-                    new Dictionary<long, FinalBuffs>();
+                    new Dictionary<long, FinalPlayerBuffs>();
 
                 foreach (Buff boon in boonsToTrack)
                 {
@@ -328,8 +328,8 @@ namespace GW2EIParser.EIData
 
                     if (hasGeneration)
                     {
-                        var uptime = new FinalBuffs();
-                        var uptimeActive = new FinalBuffs();
+                        var uptime = new FinalPlayerBuffs();
+                        var uptimeActive = new FinalPlayerBuffs();
                         final[boon.ID] = uptime;
                         finalActive[boon.ID] = uptimeActive;
                         if (boon.Type == BuffType.Duration)
@@ -383,13 +383,13 @@ namespace GW2EIParser.EIData
         private void SetBuffs(ParsedLog log)
         {
             // Boons applied to self
-            _selfBuffs = new List<Dictionary<long, FinalBuffs>>();
-            _selfActiveBuffs = new List<Dictionary<long, FinalBuffs>>();
+            _selfBuffs = new List<Dictionary<long, FinalPlayerBuffs>>();
+            _selfActiveBuffs = new List<Dictionary<long, FinalPlayerBuffs>>();
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
-                var final = new Dictionary<long, FinalBuffs>();
-                var finalActive = new Dictionary<long, FinalBuffs>();
+                var final = new Dictionary<long, FinalPlayerBuffs>();
+                var finalActive = new Dictionary<long, FinalPlayerBuffs>();
 
                 PhaseData phase = phases[phaseIndex];
 
@@ -402,7 +402,7 @@ namespace GW2EIParser.EIData
                 {
                     if (selfBoons.ContainsKey(boon.ID))
                     {
-                        var uptime = new FinalBuffs
+                        var uptime = new FinalPlayerBuffs
                         {
                             Uptime = 0,
                             Generation = 0,
@@ -412,7 +412,7 @@ namespace GW2EIParser.EIData
                             ByExtension = 0,
                             Extended = 0
                         };
-                        var uptimeActive = new FinalBuffs
+                        var uptimeActive = new FinalPlayerBuffs
                         {
                             Uptime = 0,
                             Generation = 0,

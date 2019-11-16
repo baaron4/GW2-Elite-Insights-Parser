@@ -6,7 +6,7 @@ namespace GW2EIParser.Builders.JsonModels
     /// <summary>
     /// Class representing buffs generation by player actors
     /// </summary>
-    public class JsonBuffsGeneration
+    public class JsonPlayerBuffsGeneration
     {
         /// <summary>
         /// Player buffs generation item
@@ -38,7 +38,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public double Extended { get; set; }
 
-            public JsonBuffsGenerationData(GeneralStatistics.FinalBuffs stats)
+            public JsonBuffsGenerationData(FinalPlayerBuffs stats)
             {
                 Generation = stats.Generation;
                 Overstack = stats.Overstack;

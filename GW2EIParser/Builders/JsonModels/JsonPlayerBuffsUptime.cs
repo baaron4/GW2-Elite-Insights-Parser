@@ -6,12 +6,12 @@ namespace GW2EIParser.Builders.JsonModels
     /// <summary>
     /// Class representing buffs on player actors
     /// </summary>
-    public class JsonBuffsUptime
+    public class JsonPlayerBuffsUptime
     {
         /// <summary>
         /// Player buffs item
         /// </summary>
-        public class JsonBuffsUptimeData
+        public class JsonPlayerBuffsUptimeData
         {
             /// <summary>
             /// Uptime of the buff
@@ -22,7 +22,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public double Presence { get; set; }
 
-            public JsonBuffsUptimeData(GeneralStatistics.FinalBuffs stats)
+            public JsonPlayerBuffsUptimeData(FinalPlayerBuffs stats)
             {
                 Uptime = stats.Uptime;
                 Presence = stats.Presence;
@@ -39,8 +39,8 @@ namespace GW2EIParser.Builders.JsonModels
         /// Array of buff data \n
         /// Length == # of phases
         /// </summary>
-        /// <seealso cref="JsonBuffsUptimeData"/>
-        public List<JsonBuffsUptimeData> BuffData { get; set; }
+        /// <seealso cref="JsonPlayerBuffsUptimeData"/>
+        public List<JsonPlayerBuffsUptimeData> BuffData { get; set; }
         /// <summary>
         /// Array of int[2] that represents the number of the given buff status \n
         /// Value[i][0] will be the time, value[i][1] will be the number of the buff present from value[i][0] to value[i+1][0] \n

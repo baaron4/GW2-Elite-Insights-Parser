@@ -384,13 +384,13 @@ namespace GW2EIParser.Builders
                 {
                     continue;
                 }
-                Dictionary<long, GeneralStatistics.FinalBuffs> uptimes = player.GetBuffs(_log, phaseIndex, GeneralStatistics.BuffEnum.Self);
+                Dictionary<long, FinalPlayerBuffs> uptimes = player.GetBuffs(_log, phaseIndex, BuffEnum.Self);
 
                 WriteCell(player.Character);
                 WriteCell(player.GetGameplayStats(_log, phaseIndex).AvgBoons.ToString());
                 foreach (Buff boon in listToUse)
                 {
-                    if (uptimes.TryGetValue(boon.ID, out GeneralStatistics.FinalBuffs value))
+                    if (uptimes.TryGetValue(boon.ID, out FinalPlayerBuffs value))
                     {
                         if (boon.Type == Buff.BuffType.Duration)
                         {
@@ -434,14 +434,14 @@ namespace GW2EIParser.Builders
                 {
                     continue;
                 }
-                Dictionary<long, GeneralStatistics.FinalBuffs> uptimes = player.GetBuffs(_log, phaseIndex, GeneralStatistics.BuffEnum.Self);
+                Dictionary<long, FinalPlayerBuffs> uptimes = player.GetBuffs(_log, phaseIndex, BuffEnum.Self);
 
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
                 {
                     string rate = "0";
                     string overstack = "0";
-                    if (uptimes.TryGetValue(boon.ID, out GeneralStatistics.FinalBuffs uptime))
+                    if (uptimes.TryGetValue(boon.ID, out FinalPlayerBuffs uptime))
                     {
                         if (uptime.Generation > 0 || uptime.Overstack > 0)
                         {
@@ -487,14 +487,14 @@ namespace GW2EIParser.Builders
                 {
                     continue;
                 }
-                Dictionary<long, GeneralStatistics.FinalBuffs> boons = player.GetBuffs(_log, phaseIndex, GeneralStatistics.BuffEnum.Group);
+                Dictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(_log, phaseIndex, BuffEnum.Group);
 
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
                 {
                     string rate = "0";
                     string overstack = "0";
-                    if (boons.TryGetValue(boon.ID, out GeneralStatistics.FinalBuffs uptime))
+                    if (boons.TryGetValue(boon.ID, out FinalPlayerBuffs uptime))
                     {
                         if (uptime.Generation > 0 || uptime.Overstack > 0)
                         {
@@ -541,14 +541,14 @@ namespace GW2EIParser.Builders
                 {
                     continue;
                 }
-                Dictionary<long, GeneralStatistics.FinalBuffs> boons = player.GetBuffs(_log, phaseIndex, GeneralStatistics.BuffEnum.OffGroup);
+                Dictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(_log, phaseIndex, BuffEnum.OffGroup);
 
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
                 {
                     string rate = "0";
                     string overstack = "0";
-                    if (boons.TryGetValue(boon.ID, out GeneralStatistics.FinalBuffs uptime))
+                    if (boons.TryGetValue(boon.ID, out FinalPlayerBuffs uptime))
                     {
                         if (uptime.Generation > 0 || uptime.Overstack > 0)
                         {
@@ -595,13 +595,13 @@ namespace GW2EIParser.Builders
                 {
                     continue;
                 }
-                Dictionary<long, GeneralStatistics.FinalBuffs> boons = player.GetBuffs(_log, phaseIndex, GeneralStatistics.BuffEnum.Squad);
+                Dictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(_log, phaseIndex, BuffEnum.Squad);
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
                 {
                     string rate = "0";
                     string overstack = "0";
-                    if (boons.TryGetValue(boon.ID, out GeneralStatistics.FinalBuffs uptime))
+                    if (boons.TryGetValue(boon.ID, out FinalPlayerBuffs uptime))
                     {
                         if (uptime.Generation > 0 || uptime.Overstack > 0)
                         {

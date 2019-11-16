@@ -64,20 +64,6 @@ namespace GW2EIParser.EIData
             }
         }
 
-        public class FinalBuffs
-        {
-            public double Uptime { get; set; }
-            public double Generation { get; set; }
-            public double Overstack { get; set; }
-            public double Wasted { get; set; }
-            public double UnknownExtended { get; set; }
-            public double ByExtension { get; set; }
-            public double Extended { get; set; }
-            public double Presence { get; set; }
-        }
-
-        public enum BuffEnum { Self, Group, OffGroup, Squad };
-
 
         // present buff
         public List<Buff> PresentBoons { get; } = new List<Buff>();//Used only for Boon tables
