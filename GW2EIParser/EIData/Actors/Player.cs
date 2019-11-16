@@ -78,7 +78,7 @@ namespace GW2EIParser.EIData
         private List<Dictionary<long, FinalPlayerBuffs>> _groupBuffs;
         private List<Dictionary<long, FinalPlayerBuffs>> _offGroupBuffs;
         private List<Dictionary<long, FinalPlayerBuffs>> _squadBuffs;
-        private List<Dictionary<long, FinalPlayerBuffs>> _selfActiveBuffs;
+        private List<Dictionary<long, FinalPlayerBuffs>> _selfBuffsActive;
         private List<Dictionary<long, FinalPlayerBuffs>> _groupActiveBuffs;
         private List<Dictionary<long, FinalPlayerBuffs>> _offGroupActiveBuffs;
         private List<Dictionary<long, FinalPlayerBuffs>> _squadActiveBuffs;
@@ -208,7 +208,7 @@ namespace GW2EIParser.EIData
 
         public Dictionary<long, FinalPlayerBuffs> GetActiveBuffs(ParsedLog log, int phaseIndex, BuffEnum type)
         {
-            if (_selfActiveBuffs == null)
+            if (_selfBuffsActive == null)
             {
                 SetBuffs(log);
             }
@@ -222,13 +222,13 @@ namespace GW2EIParser.EIData
                     return _squadActiveBuffs[phaseIndex];
                 case BuffEnum.Self:
                 default:
-                    return _selfActiveBuffs[phaseIndex];
+                    return _selfBuffsActive[phaseIndex];
             }
         }
 
         public List<Dictionary<long, FinalPlayerBuffs>> GetActiveBuffs(ParsedLog log, BuffEnum type)
         {
-            if (_selfActiveBuffs == null)
+            if (_selfBuffsActive == null)
             {
                 SetBuffs(log);
             }
@@ -242,267 +242,31 @@ namespace GW2EIParser.EIData
                     return _squadActiveBuffs;
                 case BuffEnum.Self:
                 default:
-                    return _selfActiveBuffs;
+                    return _selfBuffsActive;
             }
         }
 
-        private (List<Dictionary<long, FinalPlayerBuffs>>, List<Dictionary<long, FinalPlayerBuffs>>) GetBoonsForPlayers(List<Player> playerList, ParsedLog log)
-        {
-            var uptimesByPhase = new List<Dictionary<long, FinalPlayerBuffs>>();
-            var uptimesActiveByPhase = new List<Dictionary<long, FinalPlayerBuffs>>();
 
-            List<PhaseData> phases = log.FightData.GetPhases(log);
-            for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
-            {
-                PhaseData phase = phases[phaseIndex];
-                long phaseDuration = phase.DurationInMS;
-
-                var boonDistributions = new Dictionary<Player, BuffDistribution>();
-                foreach (Player p in playerList)
-                {
-                    boonDistributions[p] = p.GetBuffDistribution(log, phaseIndex);
-                }
-
-                var boonsToTrack = new HashSet<Buff>(boonDistributions.SelectMany(x => x.Value).Select(x => log.Buffs.BuffsByIds[x.Key]));
-
-                var final =
-                    new Dictionary<long, FinalPlayerBuffs>();
-                var finalActive =
-                    new Dictionary<long, FinalPlayerBuffs>();
-
-                foreach (Buff boon in boonsToTrack)
-                {
-                    double totalGeneration = 0;
-                    double totalOverstack = 0;
-                    double totalWasted = 0;
-                    double totalUnknownExtension = 0;
-                    double totalExtension = 0;
-                    double totalExtended = 0;
-                    //
-                    double totalActiveGeneration = 0;
-                    double totalActiveOverstack = 0;
-                    double totalActiveWasted = 0;
-                    double totalActiveUnknownExtension = 0;
-                    double totalActiveExtension = 0;
-                    double totalActiveExtended = 0;
-                    bool hasGeneration = false;
-                    int activePlayerCount = 0;
-                    foreach (KeyValuePair<Player, BuffDistribution> pair in boonDistributions)
-                    {
-                        BuffDistribution boons = pair.Value;
-                        long playerActiveDuration = phase.GetActorActiveDuration(pair.Key, log);
-                        if (boons.ContainsKey(boon.ID))
-                        {
-                            hasGeneration = hasGeneration || boons.HasSrc(boon.ID, AgentItem);
-                            double generation = boons.GetGeneration(boon.ID, AgentItem);
-                            double overstack = boons.GetOverstack(boon.ID, AgentItem);
-                            double wasted = boons.GetWaste(boon.ID, AgentItem);
-                            double unknownExtension = boons.GetUnknownExtension(boon.ID, AgentItem);
-                            double extension = boons.GetExtension(boon.ID, AgentItem);
-                            double extended = boons.GetExtended(boon.ID, AgentItem);
-
-                            totalGeneration += generation;
-                            totalOverstack += overstack;
-                            totalWasted += wasted;
-                            totalUnknownExtension += unknownExtension;
-                            totalExtension += extension;
-                            totalExtended += extended;
-                            if (playerActiveDuration > 0)
-                            {
-                                activePlayerCount++;
-                                totalActiveGeneration += generation / playerActiveDuration;
-                                totalActiveOverstack += overstack / playerActiveDuration;
-                                totalActiveWasted += wasted / playerActiveDuration;
-                                totalActiveUnknownExtension += unknownExtension / playerActiveDuration;
-                                totalActiveExtension += extension / playerActiveDuration;
-                                totalActiveExtended += extended / playerActiveDuration;
-                            }
-                        }
-                    }
-                    totalGeneration /= phaseDuration;
-                    totalOverstack /= phaseDuration;
-                    totalWasted /= phaseDuration;
-                    totalUnknownExtension /= phaseDuration;
-                    totalExtension /= phaseDuration;
-                    totalExtended /= phaseDuration;
-
-                    if (hasGeneration)
-                    {
-                        var uptime = new FinalPlayerBuffs();
-                        var uptimeActive = new FinalPlayerBuffs();
-                        final[boon.ID] = uptime;
-                        finalActive[boon.ID] = uptimeActive;
-                        if (boon.Type == BuffType.Duration)
-                        {
-                            uptime.Generation = Math.Round(100.0 * totalGeneration / playerList.Count, GeneralHelper.BoonDigit);
-                            uptime.Overstack = Math.Round(100.0 * (totalOverstack + totalGeneration) / playerList.Count, GeneralHelper.BoonDigit);
-                            uptime.Wasted = Math.Round(100.0 * (totalWasted) / playerList.Count, GeneralHelper.BoonDigit);
-                            uptime.UnknownExtended = Math.Round(100.0 * (totalUnknownExtension) / playerList.Count, GeneralHelper.BoonDigit);
-                            uptime.ByExtension = Math.Round(100.0 * (totalExtension) / playerList.Count, GeneralHelper.BoonDigit);
-                            uptime.Extended = Math.Round(100.0 * (totalExtended) / playerList.Count, GeneralHelper.BoonDigit);
-                            //
-                            if (activePlayerCount > 0)
-                            {
-                                uptimeActive.Generation = Math.Round(100.0 * totalActiveGeneration / activePlayerCount, GeneralHelper.BoonDigit);
-                                uptimeActive.Overstack = Math.Round(100.0 * (totalActiveOverstack + totalActiveGeneration) / activePlayerCount, GeneralHelper.BoonDigit);
-                                uptimeActive.Wasted = Math.Round(100.0 * (totalActiveWasted) / activePlayerCount, GeneralHelper.BoonDigit);
-                                uptimeActive.UnknownExtended = Math.Round(100.0 * (totalActiveUnknownExtension) / activePlayerCount, GeneralHelper.BoonDigit);
-                                uptimeActive.ByExtension = Math.Round(100.0 * (totalActiveExtension) / activePlayerCount, GeneralHelper.BoonDigit);
-                                uptimeActive.Extended = Math.Round(100.0 * (totalActiveExtended) / activePlayerCount, GeneralHelper.BoonDigit);
-                            }
-                        }
-                        else if (boon.Type == BuffType.Intensity)
-                        {
-                            uptime.Generation = Math.Round(totalGeneration / playerList.Count, GeneralHelper.BoonDigit);
-                            uptime.Overstack = Math.Round((totalOverstack + totalGeneration) / playerList.Count, GeneralHelper.BoonDigit);
-                            uptime.Wasted = Math.Round((totalWasted) / playerList.Count, GeneralHelper.BoonDigit);
-                            uptime.UnknownExtended = Math.Round((totalUnknownExtension) / playerList.Count, GeneralHelper.BoonDigit);
-                            uptime.ByExtension = Math.Round((totalExtension) / playerList.Count, GeneralHelper.BoonDigit);
-                            uptime.Extended = Math.Round((totalExtended) / playerList.Count, GeneralHelper.BoonDigit);
-                            //
-                            if (activePlayerCount > 0)
-                            {
-                                uptimeActive.Generation = Math.Round(totalActiveGeneration / activePlayerCount, GeneralHelper.BoonDigit);
-                                uptimeActive.Overstack = Math.Round((totalActiveOverstack + totalActiveGeneration) / activePlayerCount, GeneralHelper.BoonDigit);
-                                uptimeActive.Wasted = Math.Round((totalActiveWasted) / activePlayerCount, GeneralHelper.BoonDigit);
-                                uptimeActive.UnknownExtended = Math.Round((totalActiveUnknownExtension) / activePlayerCount, GeneralHelper.BoonDigit);
-                                uptimeActive.ByExtension = Math.Round((totalActiveExtension) / activePlayerCount, GeneralHelper.BoonDigit);
-                                uptimeActive.Extended = Math.Round((totalActiveExtended) / activePlayerCount, GeneralHelper.BoonDigit);
-                            }
-                        }
-                    }
-                }
-
-                uptimesByPhase.Add(final);
-                uptimesActiveByPhase.Add(finalActive);
-            }
-
-            return (uptimesByPhase, uptimesActiveByPhase);
-        }
 
         private void SetBuffs(ParsedLog log)
         {
             // Boons applied to self
-            _selfBuffs = new List<Dictionary<long, FinalPlayerBuffs>>();
-            _selfActiveBuffs = new List<Dictionary<long, FinalPlayerBuffs>>();
-            List<PhaseData> phases = log.FightData.GetPhases(log);
-            for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
-            {
-                var final = new Dictionary<long, FinalPlayerBuffs>();
-                var finalActive = new Dictionary<long, FinalPlayerBuffs>();
 
-                PhaseData phase = phases[phaseIndex];
-
-                BuffDistribution selfBoons = GetBuffDistribution(log, phaseIndex);
-                Dictionary<long, long> buffPresence = GetBuffPresence(log, phaseIndex);
-
-                long phaseDuration = phase.DurationInMS;
-                long playerActiveDuration = phase.GetActorActiveDuration(this, log);
-                foreach (Buff boon in TrackedBuffs)
-                {
-                    if (selfBoons.ContainsKey(boon.ID))
-                    {
-                        var uptime = new FinalPlayerBuffs
-                        {
-                            Uptime = 0,
-                            Generation = 0,
-                            Overstack = 0,
-                            Wasted = 0,
-                            UnknownExtended = 0,
-                            ByExtension = 0,
-                            Extended = 0
-                        };
-                        var uptimeActive = new FinalPlayerBuffs
-                        {
-                            Uptime = 0,
-                            Generation = 0,
-                            Overstack = 0,
-                            Wasted = 0,
-                            UnknownExtended = 0,
-                            ByExtension = 0,
-                            Extended = 0
-                        };
-                        final[boon.ID] = uptime;
-                        finalActive[boon.ID] = uptimeActive;
-                        double generationValue = selfBoons.GetGeneration(boon.ID, AgentItem);
-                        double uptimeValue = selfBoons.GetUptime(boon.ID);
-                        double overstackValue = selfBoons.GetOverstack(boon.ID, AgentItem);
-                        double wasteValue = selfBoons.GetWaste(boon.ID, AgentItem);
-                        double unknownExtensionValue = selfBoons.GetUnknownExtension(boon.ID, AgentItem);
-                        double extensionValue = selfBoons.GetExtension(boon.ID, AgentItem);
-                        double extendedValue = selfBoons.GetExtended(boon.ID, AgentItem);
-                        if (boon.Type == BuffType.Duration)
-                        {
-                            uptime.Uptime = Math.Round(100.0 * uptimeValue / phaseDuration, GeneralHelper.BoonDigit);
-                            uptime.Generation = Math.Round(100.0 * generationValue / phaseDuration, GeneralHelper.BoonDigit);
-                            uptime.Overstack = Math.Round(100.0 * (overstackValue + generationValue) / phaseDuration, GeneralHelper.BoonDigit);
-                            uptime.Wasted = Math.Round(100.0 * wasteValue / phaseDuration, GeneralHelper.BoonDigit);
-                            uptime.UnknownExtended = Math.Round(100.0 * unknownExtensionValue / phaseDuration, GeneralHelper.BoonDigit);
-                            uptime.ByExtension = Math.Round(100.0 * extensionValue / phaseDuration, GeneralHelper.BoonDigit);
-                            uptime.Extended = Math.Round(100.0 * extendedValue / phaseDuration, GeneralHelper.BoonDigit);
-                            //
-                            if (playerActiveDuration > 0)
-                            {
-                                uptimeActive.Uptime = Math.Round(100.0 * uptimeValue / playerActiveDuration, GeneralHelper.BoonDigit);
-                                uptimeActive.Generation = Math.Round(100.0 * generationValue / playerActiveDuration, GeneralHelper.BoonDigit);
-                                uptimeActive.Overstack = Math.Round(100.0 * (overstackValue + generationValue) / playerActiveDuration, GeneralHelper.BoonDigit);
-                                uptimeActive.Wasted = Math.Round(100.0 * wasteValue / playerActiveDuration, GeneralHelper.BoonDigit);
-                                uptimeActive.UnknownExtended = Math.Round(100.0 * unknownExtensionValue / playerActiveDuration, GeneralHelper.BoonDigit);
-                                uptimeActive.ByExtension = Math.Round(100.0 * extensionValue / playerActiveDuration, GeneralHelper.BoonDigit);
-                                uptimeActive.Extended = Math.Round(100.0 * extendedValue / playerActiveDuration, GeneralHelper.BoonDigit);
-                            }
-                        }
-                        else if (boon.Type == BuffType.Intensity)
-                        {
-                            uptime.Uptime = Math.Round(uptimeValue / phaseDuration, GeneralHelper.BoonDigit);
-                            uptime.Generation = Math.Round(generationValue / phaseDuration, GeneralHelper.BoonDigit);
-                            uptime.Overstack = Math.Round((overstackValue + generationValue) / phaseDuration, GeneralHelper.BoonDigit);
-                            uptime.Wasted = Math.Round(wasteValue / phaseDuration, GeneralHelper.BoonDigit);
-                            uptime.UnknownExtended = Math.Round(unknownExtensionValue / phaseDuration, GeneralHelper.BoonDigit);
-                            uptime.ByExtension = Math.Round(extensionValue / phaseDuration, GeneralHelper.BoonDigit);
-                            uptime.Extended = Math.Round(extendedValue / phaseDuration, GeneralHelper.BoonDigit);
-                            //
-                            if (playerActiveDuration > 0)
-                            {
-                                uptimeActive.Uptime = Math.Round(uptimeValue / playerActiveDuration, GeneralHelper.BoonDigit);
-                                uptimeActive.Generation = Math.Round(generationValue / playerActiveDuration, GeneralHelper.BoonDigit);
-                                uptimeActive.Overstack = Math.Round((overstackValue + generationValue) / playerActiveDuration, GeneralHelper.BoonDigit);
-                                uptimeActive.Wasted = Math.Round(wasteValue / playerActiveDuration, GeneralHelper.BoonDigit);
-                                uptimeActive.UnknownExtended = Math.Round(unknownExtensionValue / playerActiveDuration, GeneralHelper.BoonDigit);
-                                uptimeActive.ByExtension = Math.Round(extensionValue / playerActiveDuration, GeneralHelper.BoonDigit);
-                                uptimeActive.Extended = Math.Round(extendedValue / playerActiveDuration, GeneralHelper.BoonDigit);
-                            }
-                            //
-                            if (buffPresence.TryGetValue(boon.ID, out long presenceValueBoon))
-                            {
-                                uptime.Presence = Math.Round(100.0 * presenceValueBoon / phaseDuration, GeneralHelper.BoonDigit);
-                                //
-                                if (playerActiveDuration > 0)
-                                {
-                                    uptimeActive.Presence = Math.Round(100.0 * presenceValueBoon / playerActiveDuration, GeneralHelper.BoonDigit);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                _selfBuffs.Add(final);
-                _selfActiveBuffs.Add(finalActive);
-            }
+            (_selfBuffs, _selfBuffsActive) = FinalPlayerBuffs.GetBuffsForSelf(log, this);
 
             // Boons applied to player's group
             var otherPlayersInGroup = log.PlayerList
                 .Where(p => p.Group == Group && Agent != p.Agent)
                 .ToList();
-            (_groupBuffs, _groupActiveBuffs) = GetBoonsForPlayers(otherPlayersInGroup, log);
+            (_groupBuffs, _groupActiveBuffs) = FinalPlayerBuffs.GetBuffsForPlayers(otherPlayersInGroup, log, AgentItem);
 
             // Boons applied to other groups
             var offGroupPlayers = log.PlayerList.Where(p => p.Group != Group).ToList();
-            (_offGroupBuffs, _offGroupActiveBuffs) = GetBoonsForPlayers(offGroupPlayers, log);
+            (_offGroupBuffs, _offGroupActiveBuffs) = FinalPlayerBuffs.GetBuffsForPlayers(offGroupPlayers, log, AgentItem);
 
             // Boons applied to squad
             var otherPlayers = log.PlayerList.Where(p => p.Agent != Agent).ToList();
-            (_squadBuffs, _squadActiveBuffs) = GetBoonsForPlayers(otherPlayers, log);
+            (_squadBuffs, _squadActiveBuffs) = FinalPlayerBuffs.GetBuffsForPlayers(otherPlayers, log, AgentItem);
         }
 
         internal void Anonymize(int index)
