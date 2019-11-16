@@ -8,7 +8,7 @@ using static GW2EIParser.EIData.Buff;
 
 namespace GW2EIParser.EIData
 {
-    public class FinalStatsAll : FinalStats
+    public class FinalGameplayStatsAll : FinalGameplayStats
     {
         // Rates
         public int Wasted { get; set; }
@@ -26,7 +26,7 @@ namespace GW2EIParser.EIData
         // Counts
         public int SwapCount { get; set; }
 
-        public FinalStatsAll(ParsedLog log, PhaseData phase, AbstractSingleActor actor) : base(log, phase, actor, null)
+        public FinalGameplayStatsAll(ParsedLog log, PhaseData phase, AbstractSingleActor actor) : base(log, phase, actor, null)
         {
             // If fake actor, stop
             if (actor.IsFakeActor)
@@ -60,7 +60,7 @@ namespace GW2EIParser.EIData
 
 
             double avgBoons = 0;
-            foreach (long duration in actor.GetBuffPresence(log, phaseIndex).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == Buff.BuffNature.Boon).Select(x => x.Value))
+            foreach (long duration in actor.GetBuffPresence(log, phaseIndex).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == BuffNature.Boon).Select(x => x.Value))
             {
                 avgBoons += duration;
             }
@@ -69,7 +69,7 @@ namespace GW2EIParser.EIData
             AvgActiveBoons = activeDuration > 0 ? Math.Round(avgBoons / activeDuration, GeneralHelper.BoonDigit) : 0.0;
 
             double avgCondis = 0;
-            foreach (long duration in actor.GetBuffPresence(log, phaseIndex).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == Buff.BuffNature.Condition).Select(x => x.Value))
+            foreach (long duration in actor.GetBuffPresence(log, phaseIndex).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == BuffNature.Condition).Select(x => x.Value))
             {
                 avgCondis += duration;
             }

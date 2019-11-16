@@ -15,11 +15,11 @@ namespace GW2EIParser.EIData
 
         public FinalNPCBuffs(Buff buff, BuffDistribution buffDistribution, Dictionary<long, long> buffPresence, long phaseDuration)
         {
-            if (buff.Type == Buff.BuffType.Duration)
+            if (buff.Type == BuffType.Duration)
             {
                 Uptime = Math.Round(100.0 * buffDistribution.GetUptime(buff.ID) / phaseDuration, GeneralHelper.BoonDigit);
             }
-            else if (buff.Type == Buff.BuffType.Intensity)
+            else if (buff.Type == BuffType.Intensity)
             {
                 Uptime = Math.Round((double)buffDistribution.GetUptime(buff.ID) / phaseDuration, GeneralHelper.BoonDigit);
                 if (buffPresence.TryGetValue(buff.ID, out long presenceValueBoon))

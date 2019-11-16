@@ -144,7 +144,7 @@ namespace GW2EIParser.Builders.HtmlModels
 
         // helper methods
 
-        public static List<object> GetDMGStatData(FinalStatsAll stats)
+        public static List<object> GetDMGStatData(FinalGameplayStatsAll stats)
         {
             List<object> data = GetDMGTargetStatData(stats);
             data.AddRange(new List<object>
@@ -162,7 +162,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return data;
         }
 
-        public static List<object> GetDMGTargetStatData(FinalStats stats)
+        public static List<object> GetDMGTargetStatData(FinalGameplayStats stats)
         {
             var data = new List<object>
                 {
@@ -193,7 +193,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return data;
         }
 
-        public static List<object> GetSupportStatData(GeneralStatistics.FinalSupport support)
+        public static List<object> GetSupportStatData(FinalPlayerSupport support)
         {
             var data = new List<object>()
                 {
@@ -209,7 +209,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return data;
         }
 
-        public static List<object> GetDefenseStatData(FinalDefenses defenses, PhaseData phase)
+        public static List<object> GetDefenseStatData(FinalDefensesAll defenses, PhaseData phase)
         {
             var data = new List<object>
                 {

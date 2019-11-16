@@ -50,26 +50,26 @@ namespace GW2EIParser.Builders.JsonModels
         /// Stats against all  \n
         /// Length == # of phases
         /// </summary>
-        /// <seealso cref="JsonStatsAll"/>
-        public JsonStatsAll[] StatsAll { get; set; }
+        /// <seealso cref="JsonGameplayStatsAll"/>
+        public JsonGameplayStatsAll[] StatsAll { get; set; }
         /// <summary>
         /// Stats against targets  \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
         /// </summary>
-        /// <seealso cref="JsonStats"/>
-        public JsonStats[][] StatsTargets { get; set; }
+        /// <seealso cref="JsonGameplayStats"/>
+        public JsonGameplayStats[][] StatsTargets { get; set; }
         /// <summary>
         /// Defensive stats \n
         /// Length == # of phases
         /// </summary>
-        /// <seealso cref="JsonDefenses"/>
-        public JsonDefenses[] Defenses { get; set; }
+        /// <seealso cref="JsonDefensesAll"/>
+        public JsonDefensesAll[] Defenses { get; set; }
         /// <summary>
         /// Support stats \n
         /// Length == # of phases
         /// </summary>
-        /// <seealso cref="JsonSupport"/>
-        public JsonSupport[] Support { get; set; }
+        /// <seealso cref="JsonPlayerSupport"/>
+        public JsonPlayerSupport[] Support { get; set; }
         /// <summary>
         /// Damage modifiers against all
         /// </summary>

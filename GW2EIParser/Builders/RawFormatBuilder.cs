@@ -180,8 +180,8 @@ namespace GW2EIParser.Builders
                     Concentration = target.Concentration,
                     Condition = target.Condition,
                     TotalHealth = target.GetHealth(_log.CombatData),
-                    AvgBoons = target.GetStatsAll(_log).Select(x => x.AvgBoons).ToList(),
-                    AvgConditions = target.GetStatsAll(_log).Select(x => x.AvgConditions).ToList(),
+                    AvgBoons = target.GetGameplayStats(_log).Select(x => x.AvgBoons).ToList(),
+                    AvgConditions = target.GetGameplayStats(_log).Select(x => x.AvgConditions).ToList(),
                     DpsAll = target.GetDPSAll(_log).Select(x => new JsonDPS(x)).ToArray(),
                     Buffs = BuildTargetBuffs(target.GetBuffs(_log), target.GetBuffsDictionary(_log), target),
                     HitboxHeight = target.HitboxHeight,
@@ -239,21 +239,21 @@ namespace GW2EIParser.Builders
                     TargetDamage1S = BuildTarget1SDamage(player),
                     DpsAll = player.GetDPSAll(_log).Select(x => new JsonDPS(x)).ToArray(),
                     DpsTargets = BuildDPSTarget(player),
-                    StatsAll = player.GetStatsAll(_log).Select(x => new JsonStatsAll(x)).ToArray(),
+                    StatsAll = player.GetGameplayStats(_log).Select(x => new JsonGameplayStatsAll(x)).ToArray(),
                     StatsTargets = BuildStatsTarget(player),
-                    Defenses = player.GetDefenses(_log).Select(x => new JsonDefenses(x)).ToArray(),
+                    Defenses = player.GetDefenses(_log).Select(x => new JsonDefensesAll(x)).ToArray(),
                     Rotation = BuildRotation(player.GetCastLogs(_log, 0, _log.FightData.FightDuration)),
-                    Support = player.GetSupport(_log).Select(x => new JsonSupport(x)).ToArray(),
-                    BuffUptimes = BuildPlayerBuffUptimes(player.GetBuffs(_log, GeneralStatistics.BuffEnum.Self), player),
-                    SelfBuffs = BuildPlayerBuffGenerations(player.GetBuffs(_log, GeneralStatistics.BuffEnum.Self)),
-                    GroupBuffs = BuildPlayerBuffGenerations(player.GetBuffs(_log, GeneralStatistics.BuffEnum.Group)),
-                    OffGroupBuffs = BuildPlayerBuffGenerations(player.GetBuffs(_log, GeneralStatistics.BuffEnum.OffGroup)),
-                    SquadBuffs = BuildPlayerBuffGenerations(player.GetBuffs(_log, GeneralStatistics.BuffEnum.Squad)),
-                    BuffUptimesActive = BuildPlayerBuffUptimes(player.GetActiveBuffs(_log, GeneralStatistics.BuffEnum.Self), player),
-                    SelfBuffsActive = BuildPlayerBuffGenerations(player.GetActiveBuffs(_log, GeneralStatistics.BuffEnum.Self)),
-                    GroupBuffsActive = BuildPlayerBuffGenerations(player.GetActiveBuffs(_log, GeneralStatistics.BuffEnum.Group)),
-                    OffGroupBuffsActive = BuildPlayerBuffGenerations(player.GetActiveBuffs(_log, GeneralStatistics.BuffEnum.OffGroup)),
-                    SquadBuffsActive = BuildPlayerBuffGenerations(player.GetActiveBuffs(_log, GeneralStatistics.BuffEnum.Squad)),
+                    Support = player.GetPlayerSupport(_log).Select(x => new JsonPlayerSupport(x)).ToArray(),
+                    BuffUptimes = BuildPlayerBuffUptimes(player.GetBuffs(_log, BuffEnum.Self), player),
+                    SelfBuffs = BuildPlayerBuffGenerations(player.GetBuffs(_log, BuffEnum.Self)),
+                    GroupBuffs = BuildPlayerBuffGenerations(player.GetBuffs(_log, BuffEnum.Group)),
+                    OffGroupBuffs = BuildPlayerBuffGenerations(player.GetBuffs(_log, BuffEnum.OffGroup)),
+                    SquadBuffs = BuildPlayerBuffGenerations(player.GetBuffs(_log, BuffEnum.Squad)),
+                    BuffUptimesActive = BuildPlayerBuffUptimes(player.GetActiveBuffs(_log, BuffEnum.Self), player),
+                    SelfBuffsActive = BuildPlayerBuffGenerations(player.GetActiveBuffs(_log, BuffEnum.Self)),
+                    GroupBuffsActive = BuildPlayerBuffGenerations(player.GetActiveBuffs(_log, BuffEnum.Group)),
+                    OffGroupBuffsActive = BuildPlayerBuffGenerations(player.GetActiveBuffs(_log, BuffEnum.OffGroup)),
+                    SquadBuffsActive = BuildPlayerBuffGenerations(player.GetActiveBuffs(_log, BuffEnum.Squad)),
                     DamageModifiers = BuildDamageModifiers(player.GetDamageModifierData(_log, null)),
                     DamageModifiersTarget = BuildDamageModifiersTarget(player),
                     Minions = BuildMinions(player),
@@ -306,13 +306,13 @@ namespace GW2EIParser.Builders
             return res;
         }
 
-        private JsonStats[][] BuildStatsTarget(Player p)
+        private JsonGameplayStats[][] BuildStatsTarget(Player p)
         {
-            var res = new JsonStats[_log.FightData.Logic.Targets.Count][];
+            var res = new JsonGameplayStats[_log.FightData.Logic.Targets.Count][];
             int i = 0;
             foreach (NPC tar in _log.FightData.Logic.Targets)
             {
-                res[i++] = p.GetStatsTarget(_log, tar).Select(x => new JsonStats(x)).ToArray();
+                res[i++] = p.GetGameplayStats(_log, tar).Select(x => new JsonGameplayStats(x)).ToArray();
             }
             return res;
         }

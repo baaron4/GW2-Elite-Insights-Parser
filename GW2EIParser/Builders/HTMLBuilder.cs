@@ -114,7 +114,7 @@ namespace GW2EIParser.Builders
             var list = new List<List<object>>();
             foreach (Player player in _log.PlayerList)
             {
-                FinalStatsAll stats = player.GetStatsAll(_log, phaseIndex);
+                FinalGameplayStatsAll stats = player.GetGameplayStats(_log, phaseIndex);
                 list.Add(PhaseDto.GetDMGStatData(stats));
             }
             return list;
@@ -131,7 +131,7 @@ namespace GW2EIParser.Builders
                 var playerData = new List<List<object>>();
                 foreach (NPC target in phase.Targets)
                 {
-                    FinalStats statsTarget = player.GetStatsTarget(_log, phaseIndex, target);
+                    FinalGameplayStats statsTarget = player.GetGameplayStats(_log, phaseIndex, target);
                     playerData.Add(PhaseDto.GetDMGTargetStatData(statsTarget));
                 }
                 list.Add(playerData);
@@ -147,7 +147,7 @@ namespace GW2EIParser.Builders
 
             foreach (Player player in _log.PlayerList)
             {
-                FinalDefenses defenses = player.GetDefenses(_log, phaseIndex);
+                FinalDefensesAll defenses = player.GetDefenses(_log, phaseIndex);
                 list.Add(PhaseDto.GetDefenseStatData(defenses, phase));
             }
 
@@ -160,7 +160,7 @@ namespace GW2EIParser.Builders
 
             foreach (Player player in _log.PlayerList)
             {
-                GeneralStatistics.FinalSupport support = player.GetSupport(_log, phaseIndex);
+                FinalPlayerSupport support = player.GetPlayerSupport(_log, phaseIndex);
                 list.Add(PhaseDto.GetSupportStatData(support));
             }
             return list;
@@ -177,7 +177,7 @@ namespace GW2EIParser.Builders
                 double avg = 0.0;
                 if (boonTable)
                 {
-                    avg = player.GetStatsAll(_log, phaseIndex).AvgBoons;
+                    avg = player.GetGameplayStats(_log, phaseIndex).AvgBoons;
                 }
                 list.Add(new BuffData(player.GetBuffs(_log, phaseIndex, GeneralStatistics.BuffEnum.Self), listToUse, avg));
             }
@@ -194,7 +194,7 @@ namespace GW2EIParser.Builders
                 double avg = 0.0;
                 if (boonTable)
                 {
-                    avg = player.GetStatsAll(_log, phaseIndex).AvgActiveBoons;
+                    avg = player.GetGameplayStats(_log, phaseIndex).AvgActiveBoons;
                 }
                 list.Add(new BuffData(player.GetActiveBuffs(_log, phaseIndex, GeneralStatistics.BuffEnum.Self), listToUse, avg));
             }
@@ -690,13 +690,13 @@ namespace GW2EIParser.Builders
         private BuffData BuildTargetCondiUptimeData(int phaseIndex, NPC target)
         {
             Dictionary<long, FinalNPCBuffs> buffs = target.GetBuffs(_log, phaseIndex);
-            return new BuffData(buffs, _statistics.PresentConditions, target.GetStatsAll(_log, phaseIndex).AvgConditions);
+            return new BuffData(buffs, _statistics.PresentConditions, target.GetGameplayStats(_log, phaseIndex).AvgConditions);
         }
 
         private BuffData BuildTargetBoonData(int phaseIndex, NPC target)
         {
             Dictionary<long, FinalNPCBuffs> buffs = target.GetBuffs(_log, phaseIndex);
-            return new BuffData(buffs, _statistics.PresentBoons, target.GetStatsAll(_log, phaseIndex).AvgBoons);
+            return new BuffData(buffs, _statistics.PresentBoons, target.GetGameplayStats(_log, phaseIndex).AvgBoons);
         }
 
         private string ReplaceVariables(string html)

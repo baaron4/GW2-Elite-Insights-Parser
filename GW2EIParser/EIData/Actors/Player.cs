@@ -62,6 +62,7 @@ namespace GW2EIParser.EIData
             public List<DeathRecapDamageItem> ToKill { get; set; }
         }
 
+
         // Fields
         public string Account { get; protected set; }
         public int Group { get; }
@@ -72,7 +73,7 @@ namespace GW2EIParser.EIData
         private HashSet<string> _presentDamageModifiers;
         private Dictionary<NPC, Dictionary<string, List<DamageModifierData>>> _damageModifiersTargets;
         // statistics
-        private List<FinalSupport> _support;
+        private List<FinalPlayerSupport> _playerSupport;
         private List<Dictionary<long, FinalBuffs>> _selfBuffs;
         private List<Dictionary<long, FinalBuffs>> _groupBuffs;
         private List<Dictionary<long, FinalBuffs>> _offGroupBuffs;
@@ -102,97 +103,67 @@ namespace GW2EIParser.EIData
         }
 
         // Public methods
-        private long[] GetCleansesNotSelf(ParsedLog log, PhaseData phase)
+
+        public FinalPlayerSupport GetPlayerSupport(ParsedLog log, int phaseIndex)
         {
-            long[] cleanse = { 0, 0 };
-            foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Condition].Select(x => x.ID))
-            {
-                var bevts = log.CombatData.GetBuffData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && log.PlayerAgents.Contains(x.To) && x.To != AgentItem).Select(x => x as BuffRemoveAllEvent).ToList();
-                cleanse[0] += bevts.Count;
-                cleanse[1] += bevts.Sum(x => Math.Max(x.RemovedDuration, log.FightData.FightDuration));
-            }
-            return cleanse;
-        }
-        private long[] GetCleansesSelf(ParsedLog log, PhaseData phase)
-        {
-            long[] cleanse = { 0, 0 };
-            foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Condition].Select(x => x.ID))
-            {
-                var bevts = log.CombatData.GetBuffData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && x.To == AgentItem).Select(x => x as BuffRemoveAllEvent).ToList();
-                cleanse[0] += bevts.Count;
-                cleanse[1] += bevts.Sum(x => Math.Max(x.RemovedDuration, log.FightData.FightDuration));
-            }
-            return cleanse;
+            return GetPlayerSupport(log)[phaseIndex];
         }
 
-        private long[] GetBoonStrips(ParsedLog log, PhaseData phase)
+        public List<FinalPlayerSupport> GetPlayerSupport(ParsedLog log)
         {
-            long[] strips = { 0, 0 };
-            foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Boon].Select(x => x.ID))
+            if (_playerSupport == null)
             {
-                var bevts = log.CombatData.GetBuffData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && !log.PlayerAgents.Contains(x.To) && !log.PlayerAgents.Contains(x.To.Master)).Select(x => x as BuffRemoveAllEvent).ToList();
-                strips[0] += bevts.Count;
-                strips[1] += bevts.Sum(x => Math.Max(x.RemovedDuration, log.FightData.FightDuration));
-            }
-            return strips;
-        }
-
-        public long[] GetReses(ParsedLog log, long start, long end)
-        {
-            List<AbstractCastEvent> cls = GetCastLogs(log, start, end);
-            long[] reses = { 0, 0 };
-            foreach (AbstractCastEvent cl in cls)
-            {
-                if (cl.SkillId == SkillItem.ResurrectId)
+                _playerSupport = new List<FinalPlayerSupport>();
+                List<PhaseData> phases = log.FightData.GetPhases(log);
+                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
                 {
-                    reses[0]++;
-                    reses[1] += cl.ActualDuration;
+                    var playerSup = new FinalPlayerSupport();
+                    _playerSupport.Add(playerSup);
+                    FinalSupportAll totals = GetSupport(log, phaseIndex);
+                    playerSup.Resurrects = totals.Resurrects;
+                    playerSup.ResurrectTime = totals.ResurrectTime;
+                    FinalSupport self = GetSupport(log, this, phaseIndex);
+                    foreach (Buff buff in log.Buffs.BuffsByNature[BuffNature.Boon])
+                    {
+                        // add everything from total
+                        if (totals.Removals.TryGetValue(buff.ID, out (long count, double time) item))
+                        {
+                            playerSup.BoonStrips += item.count;
+                            playerSup.BoonStripsTime += item.time;
+                        }
+                        // remove everything from self
+                        if (self.Removals.TryGetValue(buff.ID, out item))
+                        {
+                            playerSup.BoonStrips -= item.count;
+                            playerSup.BoonStripsTime -= item.time;
+                        }
+                    }
+                    foreach (Buff buff in log.Buffs.BuffsByNature[BuffNature.Boon])
+                    {
+                        // add everything from self
+                        if (self.Removals.TryGetValue(buff.ID, out (long count, double time) item))
+                        {
+                            playerSup.CondiCleanseSelf += item.count;
+                            playerSup.CondiCleanseTimeSelf += item.time;
+                        }
+                        foreach (Player p in log.PlayerList)
+                        {
+                            if (p == this)
+                            {
+                                continue;
+                            }
+                            FinalSupport other = GetSupport(log, p, phaseIndex);
+                            // Add everything from other
+                            if (other.Removals.TryGetValue(buff.ID, out item))
+                            {
+                                playerSup.CondiCleanse += item.count;
+                                playerSup.CondiCleanseTime += item.time;
+                            }
+                        }
+                    }
                 }
             }
-            return reses;
-        }
-
-        public FinalSupport GetSupport(ParsedLog log, int phaseIndex)
-        {
-            if (_support == null)
-            {
-                SetSupport(log);
-            }
-            return _support[phaseIndex];
-        }
-
-        public List<FinalSupport> GetSupport(ParsedLog log)
-        {
-            if (_support == null)
-            {
-                SetSupport(log);
-            }
-            return _support;
-        }
-
-        private void SetSupport(ParsedLog log)
-        {
-            _support = new List<FinalSupport>();
-            List<PhaseData> phases = log.FightData.GetPhases(log);
-            for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
-            {
-                var final = new FinalSupport();
-                _support.Add(final);
-                PhaseData phase = phases[phaseIndex];
-
-                long[] resArray = GetReses(log, phase.Start, phase.End);
-                long[] cleanseArray = GetCleansesNotSelf(log, phase);
-                long[] cleanseSelfArray = GetCleansesSelf(log, phase);
-                long[] boonStrips = GetBoonStrips(log, phase);
-                final.Resurrects = resArray[0];
-                final.ResurrectTime = resArray[1] / 1000.0;
-                final.CondiCleanse = cleanseArray[0];
-                final.CondiCleanseTime = cleanseArray[1] / 1000.0;
-                final.CondiCleanseSelf = cleanseSelfArray[0];
-                final.CondiCleanseTimeSelf = cleanseSelfArray[1] / 1000.0;
-                final.BoonStrips = boonStrips[0];
-                final.BoonStripsTime = boonStrips[1] / 1000.0;
-            }
+            return _playerSupport;
         }
 
         public Dictionary<long, FinalBuffs> GetBuffs(ParsedLog log, int phaseIndex, BuffEnum type)
@@ -361,7 +332,7 @@ namespace GW2EIParser.EIData
                         var uptimeActive = new FinalBuffs();
                         final[boon.ID] = uptime;
                         finalActive[boon.ID] = uptimeActive;
-                        if (boon.Type == Buff.BuffType.Duration)
+                        if (boon.Type == BuffType.Duration)
                         {
                             uptime.Generation = Math.Round(100.0 * totalGeneration / playerList.Count, GeneralHelper.BoonDigit);
                             uptime.Overstack = Math.Round(100.0 * (totalOverstack + totalGeneration) / playerList.Count, GeneralHelper.BoonDigit);
@@ -380,7 +351,7 @@ namespace GW2EIParser.EIData
                                 uptimeActive.Extended = Math.Round(100.0 * (totalActiveExtended) / activePlayerCount, GeneralHelper.BoonDigit);
                             }
                         }
-                        else if (boon.Type == Buff.BuffType.Intensity)
+                        else if (boon.Type == BuffType.Intensity)
                         {
                             uptime.Generation = Math.Round(totalGeneration / playerList.Count, GeneralHelper.BoonDigit);
                             uptime.Overstack = Math.Round((totalOverstack + totalGeneration) / playerList.Count, GeneralHelper.BoonDigit);
@@ -460,7 +431,7 @@ namespace GW2EIParser.EIData
                         double unknownExtensionValue = selfBoons.GetUnknownExtension(boon.ID, AgentItem);
                         double extensionValue = selfBoons.GetExtension(boon.ID, AgentItem);
                         double extendedValue = selfBoons.GetExtended(boon.ID, AgentItem);
-                        if (boon.Type == Buff.BuffType.Duration)
+                        if (boon.Type == BuffType.Duration)
                         {
                             uptime.Uptime = Math.Round(100.0 * uptimeValue / phaseDuration, GeneralHelper.BoonDigit);
                             uptime.Generation = Math.Round(100.0 * generationValue / phaseDuration, GeneralHelper.BoonDigit);
@@ -481,7 +452,7 @@ namespace GW2EIParser.EIData
                                 uptimeActive.Extended = Math.Round(100.0 * extendedValue / playerActiveDuration, GeneralHelper.BoonDigit);
                             }
                         }
-                        else if (boon.Type == Buff.BuffType.Intensity)
+                        else if (boon.Type == BuffType.Intensity)
                         {
                             uptime.Uptime = Math.Round(uptimeValue / phaseDuration, GeneralHelper.BoonDigit);
                             uptime.Generation = Math.Round(generationValue / phaseDuration, GeneralHelper.BoonDigit);

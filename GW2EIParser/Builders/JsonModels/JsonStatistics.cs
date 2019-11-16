@@ -7,7 +7,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// Defensive stats
         /// </summary>
-        public class JsonDefenses
+        public class JsonDefensesAll
         {
             /// <summary>
             /// Total damage taken
@@ -66,7 +66,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public int DcDuration { get; set; }
 
-            public JsonDefenses(FinalDefenses defenses)
+            public JsonDefensesAll(FinalDefensesAll defenses)
             {
                 DamageTaken = defenses.DamageTaken;
                 BlockedCount = defenses.BlockedCount;
@@ -161,7 +161,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// Gameplay stats
         /// </summary>
-        public class JsonStats
+        public class JsonGameplayStats
         {
             /// <summary>
             /// Number of direct damage hit
@@ -200,7 +200,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public int Invulned { get; set; }
 
-            public JsonStats(FinalStats stats)
+            public JsonGameplayStats(FinalGameplayStats stats)
             {
                 DirectDamageCount = stats.DirectDamageCount;
                 CritableDirectDamageCount = stats.CritableDirectDamageCount;
@@ -213,7 +213,7 @@ namespace GW2EIParser.Builders.JsonModels
                 Invulned = stats.Invulned;
             }
 
-            public JsonStats(FinalStatsAll stats)
+            public JsonGameplayStats(FinalGameplayStatsAll stats)
             {
                 DirectDamageCount = stats.DirectDamageCount;
                 CritableDirectDamageCount = stats.CritableDirectDamageCount;
@@ -227,7 +227,7 @@ namespace GW2EIParser.Builders.JsonModels
             }
         }
 
-        public class JsonStatsAll : JsonStats
+        public class JsonGameplayStatsAll : JsonGameplayStats
         {
             /// <summary>
             /// Number of time you interrupted your cast
@@ -270,7 +270,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public int SwapCount { get; set; }
 
-            public JsonStatsAll(FinalStatsAll stats) : base(stats)
+            public JsonGameplayStatsAll(FinalGameplayStatsAll stats) : base(stats)
             {
                 Wasted = stats.Wasted;
                 TimeWasted = stats.TimeWasted;
@@ -288,7 +288,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// Support stats
         /// </summary>
-        public class JsonSupport
+        public class JsonPlayerSupport
         {
             /// <summary>
             /// Number of time ressurected someone
@@ -323,7 +323,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public double BoonStripsTime { get; set; }
 
-            public JsonSupport(GeneralStatistics.FinalSupport stats)
+            public JsonPlayerSupport(FinalPlayerSupport stats)
             {
                 Resurrects = stats.Resurrects;
                 ResurrectTime = stats.ResurrectTime;

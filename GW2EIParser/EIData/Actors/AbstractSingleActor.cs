@@ -32,9 +32,12 @@ namespace GW2EIParser.EIData
         // Statistics
         private List<FinalDPS> _dpsAll;
         private Dictionary<AbstractSingleActor, List<FinalDPS>> _dpsTarget;
-        private List<FinalDefenses> _defenses;
-        private Dictionary<AbstractSingleActor, List<FinalStats>> _statsTarget;
-        private List<FinalStatsAll> _statsAll;
+        private List<FinalDefensesAll> _defenses;
+        private Dictionary<AbstractSingleActor, List<FinalDefenses>> _defensesTarget;
+        private Dictionary<AbstractSingleActor, List<FinalGameplayStats>> _statsTarget;
+        private List<FinalGameplayStatsAll> _statsAll;
+        private List<FinalSupportAll> _supportAll;
+        private Dictionary<AbstractSingleActor, List<FinalSupport>> _supportTarget;
 
         protected AbstractSingleActor(AgentItem agent) : base(agent)
         {
@@ -583,74 +586,150 @@ namespace GW2EIParser.EIData
 
         // Defense Stats
 
-        public FinalDefenses GetDefenses(ParsedLog log, int phaseIndex)
+        public FinalDefensesAll GetDefenses(ParsedLog log, int phaseIndex)
         {
             return GetDefenses(log)[phaseIndex];
         }
 
-        public List<FinalDefenses> GetDefenses(ParsedLog log)
+        public List<FinalDefensesAll> GetDefenses(ParsedLog log)
         {
             if (_defenses == null)
             {
-                _defenses = new List<FinalDefenses>();
+                _defenses = new List<FinalDefensesAll>();
                 foreach (PhaseData phase in log.FightData.GetPhases(log))
                 {
-                    _defenses.Add(new FinalDefenses(log, phase, this, null));
+                    _defenses.Add(new FinalDefensesAll(log, phase, this));
                 }
             }
             return _defenses;
         }
 
+        public FinalDefenses GetDefenses(ParsedLog log, AbstractSingleActor target, int phaseIndex)
+        {
+            return GetDefenses(log, target)[phaseIndex];
+        }
+
+        public List<FinalDefenses> GetDefenses(ParsedLog log, AbstractSingleActor target)
+        {
+            if (_defensesTarget == null)
+            {
+                return new List<FinalDefenses>(GetDefenses(log));
+            }
+            if (_defensesTarget == null)
+            {
+                _defensesTarget = new Dictionary<AbstractSingleActor, List<FinalDefenses>>();
+            }
+            if (_defensesTarget.TryGetValue(target, out List<FinalDefenses> list))
+            {
+                return list;
+            }
+            _defensesTarget[target] = new List<FinalDefenses>();
+            foreach (PhaseData phase in log.FightData.GetPhases(log))
+            {
+                _defensesTarget[target].Add(new FinalDefenses(log, phase, this, target));
+            }
+            return _defensesTarget[target];
+        }
+
         // Gameplay Stats
 
 
-        public FinalStatsAll GetStatsAll(ParsedLog log, int phaseIndex)
+        public FinalGameplayStatsAll GetGameplayStats(ParsedLog log, int phaseIndex)
         {
-            return GetStatsAll(log)[phaseIndex];
+            return GetGameplayStats(log)[phaseIndex];
         }
 
-        public FinalStats GetStatsTarget(ParsedLog log, int phaseIndex, AbstractSingleActor target)
+        public FinalGameplayStats GetGameplayStats(ParsedLog log, int phaseIndex, AbstractSingleActor target)
         {
             if (target == null)
             {
-                return GetStatsAll(log, phaseIndex);
+                return GetGameplayStats(log, phaseIndex);
             }
-            return GetStatsTarget(log, target)[phaseIndex];
+            return GetGameplayStats(log, target)[phaseIndex];
         }
 
-        public List<FinalStatsAll> GetStatsAll(ParsedLog log)
+        public List<FinalGameplayStatsAll> GetGameplayStats(ParsedLog log)
         {
             if (_statsAll == null)
             {
-                _statsAll = new List<FinalStatsAll>();
+                _statsAll = new List<FinalGameplayStatsAll>();
                 foreach (PhaseData phase in log.FightData.GetPhases(log))
                 {
-                    _statsAll.Add(new FinalStatsAll(log, phase, this));
+                    _statsAll.Add(new FinalGameplayStatsAll(log, phase, this));
                 }
             }
             return _statsAll;
         }
 
-        public List<FinalStats> GetStatsTarget(ParsedLog log, AbstractSingleActor target)
+        public List<FinalGameplayStats> GetGameplayStats(ParsedLog log, AbstractSingleActor target)
         {
             if (target == null)
             {
-                return new List<FinalStats>(GetStatsAll(log));
+                return new List<FinalGameplayStats>(GetGameplayStats(log));
             }
             if (_statsTarget == null)
             {
-                _statsTarget = new Dictionary<AbstractSingleActor, List<FinalStats>>();
+                _statsTarget = new Dictionary<AbstractSingleActor, List<FinalGameplayStats>>();
             }
-            if (_statsTarget.TryGetValue(target, out List<FinalStats> list))
+            if (_statsTarget.TryGetValue(target, out List<FinalGameplayStats> list))
             {
                 return list;
             }
-            _statsTarget[target] = new List<FinalStats>();
+            _statsTarget[target] = new List<FinalGameplayStats>();
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
-                _statsTarget[target].Add(new FinalStats(log, phase, this, target));
+                _statsTarget[target].Add(new FinalGameplayStats(log, phase, this, target));
             }
             return _statsTarget[target];
+        }
+
+        // Support stats
+        public FinalSupportAll GetSupport(ParsedLog log, int phaseIndex)
+        {
+            return GetSupport(log)[phaseIndex];
+        }
+
+        public List<FinalSupportAll> GetSupport(ParsedLog log)
+        {
+            if (_supportAll == null)
+            {
+                _supportAll = new List<FinalSupportAll>();
+                List<PhaseData> phases = log.FightData.GetPhases(log);
+                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+                {
+                    PhaseData phase = phases[phaseIndex];
+                    var final = new FinalSupportAll(log, phase, this);
+                    _supportAll.Add(final);
+                }
+            }
+            return _supportAll;
+        }
+
+        public FinalSupport GetSupport(ParsedLog log, AbstractSingleActor target, int phaseIndex)
+        {
+            return GetSupport(log, target)[phaseIndex];
+        }
+
+        public List<FinalSupport> GetSupport(ParsedLog log, AbstractSingleActor target)
+        {
+            if (target == null)
+            {
+                return new List<FinalSupport>(GetSupport(log));
+            }
+            if (_supportTarget == null)
+            {
+                _supportTarget = new Dictionary<AbstractSingleActor, List<FinalSupport>>();
+            }
+            if (_supportTarget.TryGetValue(target, out List<FinalSupport> list))
+            {
+                return list;
+            }
+            _supportTarget[target] = new List<FinalSupport>();
+            foreach (PhaseData phase in log.FightData.GetPhases(log))
+            {
+                _supportTarget[target].Add(new FinalSupport(log, phase, this, target));
+            }
+            return _supportTarget[target];
         }
 
 

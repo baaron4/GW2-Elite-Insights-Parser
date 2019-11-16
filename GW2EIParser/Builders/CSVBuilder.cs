@@ -179,7 +179,7 @@ namespace GW2EIParser.Builders
             foreach (Player player in _log.PlayerList)
             {
                 FinalDPS dps = player.GetDPSAll(_log, phaseIndex);
-                FinalDefenses defense = player.GetDefenses(_log, phaseIndex);
+                FinalDefensesAll defense = player.GetDefenses(_log, phaseIndex);
                 FinalDPS dpsBoss = player.GetDPSTarget(_log, phaseIndex, _legacyTarget);
                 string deathString = defense.DeadCount.ToString();
                 string deadthTooltip = "";
@@ -237,8 +237,8 @@ namespace GW2EIParser.Builders
                 {
                     continue;
                 }
-                FinalStatsAll stats = player.GetStatsAll(_log, phaseIndex);
-                FinalStats statsBoss = player.GetStatsTarget(_log, phaseIndex, _legacyTarget);
+                FinalGameplayStatsAll stats = player.GetGameplayStats(_log, phaseIndex);
+                FinalGameplayStats statsBoss = player.GetGameplayStats(_log, phaseIndex, _legacyTarget);
                 Dictionary<string, List<Player.DamageModifierData>> damageMods = player.GetDamageModifierData(_log, _legacyTarget);
                 var scholar = new Player.DamageModifierData(0, 0, 0, 0);
                 var moving = new Player.DamageModifierData(0, 0, 0, 0);
@@ -287,7 +287,7 @@ namespace GW2EIParser.Builders
                 {
                     continue;
                 }
-                FinalStatsAll stats = player.GetStatsAll(_log, phaseIndex);
+                FinalGameplayStatsAll stats = player.GetGameplayStats(_log, phaseIndex);
                 Dictionary<string, List<Player.DamageModifierData>> damageMods = player.GetDamageModifierData(_log, null);
                 var scholar = new Player.DamageModifierData(0, 0, 0, 0);
                 var moving = new Player.DamageModifierData(0, 0, 0, 0);
@@ -353,7 +353,7 @@ namespace GW2EIParser.Builders
                 {
                     continue;
                 }
-                GeneralStatistics.FinalSupport support = player.GetSupport(_log, phaseIndex);
+                FinalPlayerSupport support = player.GetPlayerSupport(_log, phaseIndex);
 
                 WriteLine(new[] { player.Group.ToString(), player.Prof, player.Character,
                 support.CondiCleanse.ToString(),support.CondiCleanseTime.ToString(), support.CondiCleanseSelf.ToString(), support.CondiCleanseTimeSelf.ToString(), support.BoonStrips.ToString(), support.BoonStripsTime.ToString(), support.Resurrects.ToString(),support.ResurrectTime.ToString() });
@@ -387,7 +387,7 @@ namespace GW2EIParser.Builders
                 Dictionary<long, GeneralStatistics.FinalBuffs> uptimes = player.GetBuffs(_log, phaseIndex, GeneralStatistics.BuffEnum.Self);
 
                 WriteCell(player.Character);
-                WriteCell(player.GetStatsAll(_log, phaseIndex).AvgBoons.ToString());
+                WriteCell(player.GetGameplayStats(_log, phaseIndex).AvgBoons.ToString());
                 foreach (Buff boon in listToUse)
                 {
                     if (uptimes.TryGetValue(boon.ID, out GeneralStatistics.FinalBuffs value))
@@ -718,7 +718,7 @@ namespace GW2EIParser.Builders
             NewLine();
             int count = 0;
             WriteCell(boss.Character);
-            WriteCell(Math.Round(_legacyTarget.GetStatsAll(_log, phaseIndex).AvgConditions, 1).ToString());
+            WriteCell(Math.Round(_legacyTarget.GetGameplayStats(_log, phaseIndex).AvgConditions, 1).ToString());
             foreach (Buff boon in _statistics.PresentConditions)
             {
                 if (conditions.TryGetValue(boon.ID, out FinalNPCBuffs uptime))

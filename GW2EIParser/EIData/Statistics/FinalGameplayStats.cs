@@ -8,7 +8,7 @@ using static GW2EIParser.EIData.Buff;
 
 namespace GW2EIParser.EIData
 {
-    public class FinalStats
+    public class FinalGameplayStats
     {
         public int DirectDamageCount { get; set; }
         public int CritableDirectDamageCount { get; set; }
@@ -21,7 +21,7 @@ namespace GW2EIParser.EIData
         public int Invulned { get; set; }
 
 
-        public FinalStats(ParsedLog log, PhaseData phase, AbstractSingleActor actor, AbstractSingleActor target)
+        public FinalGameplayStats(ParsedLog log, PhaseData phase, AbstractSingleActor actor, AbstractSingleActor target)
         {
             List<AbstractDamageEvent> dls = actor.GetJustPlayerDamageLogs(target, log, phase);
             foreach (AbstractDamageEvent dl in dls)

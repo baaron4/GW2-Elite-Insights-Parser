@@ -64,19 +64,6 @@ namespace GW2EIParser.EIData
             }
         }
 
-        public class FinalSupport
-        {
-            //public long allHeal;
-            public long Resurrects { get; set; }
-            public double ResurrectTime { get; set; }
-            public long CondiCleanse { get; set; }
-            public double CondiCleanseTime { get; set; }
-            public long CondiCleanseSelf { get; set; }
-            public double CondiCleanseTimeSelf { get; set; }
-            public long BoonStrips { get; set; }
-            public double BoonStripsTime { get; set; }
-        }
-
         public class FinalBuffs
         {
             public double Uptime { get; set; }
