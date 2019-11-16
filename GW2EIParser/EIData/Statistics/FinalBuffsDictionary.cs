@@ -33,7 +33,7 @@ namespace GW2EIParser.EIData
                 double extended = buffDistribution.GetExtended(buff.ID, actor.AgentItem);
 
 
-                if (buff.Type == Buff.BuffType.Duration)
+                if (buff.Type == BuffType.Duration)
                 {
                     generated *= 100.0;
                     overstacked *= 100.0;
