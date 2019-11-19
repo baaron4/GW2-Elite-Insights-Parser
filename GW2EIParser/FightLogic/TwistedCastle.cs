@@ -31,7 +31,7 @@ namespace GW2EIParser.Logic
         {
             return new CombatReplayMap("https://i.imgur.com/2RkzdmL.png",
                             (1353, 1748),
-                            (-8718, -4421, 899, 7043),
+                            (-8058, -4321, 819, 7143),
                             (-12288, -27648, 12288, 27648),
                             (1920, 12160, 2944, 14464));
         }
