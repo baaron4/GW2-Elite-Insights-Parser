@@ -87,7 +87,6 @@ namespace GW2EIParser.Logic
             };
             lastPhase.Targets.Add(mainTarget);
             phases.Add(lastPhase);
-            phases.RemoveAll(x => x.DurationInMS <= 1000);
             return phases;
         }
 

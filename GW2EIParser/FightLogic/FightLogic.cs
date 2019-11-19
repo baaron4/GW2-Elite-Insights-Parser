@@ -170,7 +170,7 @@ namespace GW2EIParser.Logic
                     last = end;
                 }
             }
-            if (fightDuration - last > 5000)
+            if (fightDuration - last > GeneralHelper.PhaseTimeLimit)
             {
                 phases.Add(new PhaseData(last, fightDuration));
             }

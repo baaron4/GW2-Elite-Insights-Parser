@@ -281,7 +281,7 @@ namespace GW2EIParser.Logic
                 phases.Add(new PhaseData(start, end));
                 start = specialTime;
             }
-            if (fightDuration - start > 5000 && start >= phases.Last().End)
+            if (fightDuration - start > GeneralHelper.PhaseTimeLimit && start >= phases.Last().End)
             {
                 phases.Add(new PhaseData(start, fightDuration));
             }
@@ -328,7 +328,6 @@ namespace GW2EIParser.Logic
                 }
             }
             phases.Sort((x, y) => x.Start.CompareTo(y.Start));
-            phases.RemoveAll(x => x.Targets.Count == 0);
             return phases;
         }
 

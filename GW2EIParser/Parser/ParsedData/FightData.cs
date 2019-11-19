@@ -184,8 +184,9 @@ namespace GW2EIParser.Parser.ParsedData
             {
                 long fightDuration = log.FightData.FightDuration;
                 _phases = log.FightData.Logic.GetPhases(log, _requirePhases);
+                _phases.RemoveAll(x => x.Targets.Count == 0);
+                _phases.RemoveAll(x => x.DurationInMS < GeneralHelper.PhaseTimeLimit);
             }
-            _phases.RemoveAll(x => x.DurationInMS <= 1000);
             return _phases;
         }
 
