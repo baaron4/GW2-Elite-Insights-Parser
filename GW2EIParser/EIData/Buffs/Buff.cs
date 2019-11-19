@@ -458,7 +458,8 @@ namespace GW2EIParser.EIData
                 new Buff("Signet of Renewal",41147, BuffSource.Ranger, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/11/Signet_of_Renewal.png"),
                 new Buff("Signet of Stone (Passive)",12627, BuffSource.Ranger, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/63/Signet_of_Stone.png"),
                 new Buff("Signet of the Hunt (Passive)",12626, BuffSource.Ranger, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/df/Signet_of_the_Hunt.png"),
-                new Buff("Signet of the Wild",12636, BuffSource.Ranger, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/23/Signet_of_the_Wild.png"),
+                new Buff("Signet of the Wild",12518, BuffSource.Ranger, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/23/Signet_of_the_Wild.png"),
+                new Buff("Signet of the Wild (Pet)",12636, BuffSource.Ranger, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/23/Signet_of_the_Wild.png"),
                 new Buff("Signet of Stone (Active)",12543, BuffSource.Ranger, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/63/Signet_of_Stone.png"),
                 new Buff("Signet of the Hunt (Active)",12541, BuffSource.Ranger, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/df/Signet_of_the_Hunt.png"),
                 //spirits
