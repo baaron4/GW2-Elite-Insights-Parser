@@ -68,6 +68,13 @@ namespace GW2EIParser.Parser.ParsedData
                     Logic = new KeepConstruct(id);
                     break;
                 case ParseEnum.TargetIDS.Xera:
+                    // some TC logs are registered as Xera
+                    if (agentData.GetAgentsByID((ushort)ParseEnum.TrashIDS.HauntingStatue).Count > 0)
+                    {
+                        ID = (ushort)ParseEnum.TargetIDS.TwistedCastle;
+                        Logic = new TwistedCastle(ID);
+                        break;
+                    }
                     Logic = new Xera(id);
                     break;
                 case ParseEnum.TargetIDS.Cairn:
@@ -99,12 +106,12 @@ namespace GW2EIParser.Parser.ParsedData
                     Logic = new DarkMaze(id);
                     break;
                 case ParseEnum.TargetIDS.Dhuum:
-                    // some eyes log are registered as Dhuum
+                    // some eyes logs are registered as Dhuum
                     if (agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.EyeOfFate).Count > 0 ||
                         agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.EyeOfJudgement).Count > 0)
                     {
                         ID = (ushort)ParseEnum.TargetIDS.EyeOfFate;
-                        Logic = new DarkMaze((ushort)ParseEnum.TargetIDS.EyeOfFate);
+                        Logic = new DarkMaze(ID);
                         break;
                     }
                     Logic = new Dhuum(id);
