@@ -139,7 +139,7 @@ namespace GW2EIParser.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByDeath(combatData, fightData, playerAgents, true, TriggerID);
+            SetSuccessByDeath(combatData, fightData, playerAgents, true, (ushort)ParseEnum.TargetIDS.SoulEater);
         }
 
         public override string GetFightName()

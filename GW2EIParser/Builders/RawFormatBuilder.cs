@@ -107,7 +107,7 @@ namespace GW2EIParser.Builders
 
         private void SetGeneral(JsonLog log)
         {
-            log.TriggerID = _log.FightData.ID;
+            log.TriggerID = _log.FightData.TriggerID;
             log.FightName = _log.FightData.Name;
             log.FightIcon = _log.FightData.Logic.Icon;
             log.EliteInsightsVersion = Application.ProductVersion;

@@ -98,7 +98,7 @@ namespace GW2EIParser.Logic
 
         public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
         {
-            Target target = Targets.Find(x => x.ID == TriggerID);
+            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Deimos);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for success by combat exit not found");
@@ -135,7 +135,7 @@ namespace GW2EIParser.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success && _specialSplitLogTime > 0)
             {
-                Target target = Targets.Find(x => x.ID == TriggerID);
+                Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Deimos);
                 if (target == null)
                 {
                     throw new InvalidOperationException("Target for success by combat exit not found");

@@ -49,7 +49,7 @@ namespace GW2EIParser.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByBuffCount(combatData, fightData, playerAgents, Targets.Find(x => x.ID == TriggerID), 762, 4);
+            SetSuccessByBuffCount(combatData, fightData, playerAgents, Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Artsariiv), 762, 4);
         }
     }
 }

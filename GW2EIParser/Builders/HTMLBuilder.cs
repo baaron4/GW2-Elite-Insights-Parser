@@ -707,7 +707,7 @@ namespace GW2EIParser.Builders
             html = html.Replace("${encounterStart}", _log.LogData.LogStart);
             html = html.Replace("${encounterEnd}", _log.LogData.LogEnd);
             html = html.Replace("${evtcVersion}", _log.LogData.BuildVersion);
-            html = html.Replace("${fightID}", _log.FightData.ID.ToString());
+            html = html.Replace("${fightID}", _log.FightData.TriggerID.ToString());
             html = html.Replace("${eiVersion}", Application.ProductVersion);
             html = html.Replace("${recordedBy}", _log.LogData.PoVName);
 

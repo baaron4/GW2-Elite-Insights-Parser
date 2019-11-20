@@ -86,7 +86,7 @@ namespace GW2EIParser.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            Target target = Targets.Find(x => x.ID == TriggerID);
+            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Arkk);
             SetSuccessByBuffCount(combatData, fightData, playerAgents, target, 762, 10);
             // missing buff apply events fallback, some phases will be missing
             // removes should be present

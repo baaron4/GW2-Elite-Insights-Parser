@@ -24,11 +24,11 @@ namespace GW2EIParser.Logic
         public List<Target> Targets { get; } = new List<Target>();
 
         public bool Targetless { get; protected set; } = false;
-        protected ushort TriggerID { get; }
+        protected ushort GenericTriggerID { get; }
 
         protected FightLogic(ushort triggerID)
         {
-            TriggerID = triggerID;
+            GenericTriggerID = triggerID;
             MechanicList = new List<Mechanic>() {
                 new PlayerStatusMechanic(SkillItem.DeathId, "Dead", new MechanicPlotlySetting("x","rgb(0,0,0)"), "Dead",0),
                 new PlayerStatusMechanic(SkillItem.DownId, "Downed", new MechanicPlotlySetting("cross","rgb(255,0,0)"), "Downed",0),
@@ -38,6 +38,12 @@ namespace GW2EIParser.Logic
                 new PlayerStatusMechanic(SkillItem.RespawnId, "Respawn", new MechanicPlotlySetting("cross","rgb(120,120,255)"), "Resp",0)
             };
             _basicMechanicsCount = MechanicList.Count;
+        }
+
+        // Only used for CSV files
+        public Target GetLegacyTarget()
+        {
+            return Targets.Find(x => x.ID == GenericTriggerID);
         }
 
         public MechanicData GetMechanicData()
@@ -64,13 +70,13 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>
             {
-                TriggerID
+                GenericTriggerID
             };
         }
 
         public virtual string GetFightName()
         {
-            Target target = Targets.Find(x => x.ID == TriggerID);
+            Target target = Targets.Find(x => x.ID == GenericTriggerID);
             if (target == null)
             {
                 return "UNKNOWN";
@@ -189,7 +195,7 @@ namespace GW2EIParser.Logic
         public virtual List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == TriggerID);
+            Target mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -355,7 +361,7 @@ namespace GW2EIParser.Logic
 
         public virtual void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByDeath(combatData, fightData, playerAgents, true, TriggerID);
+            SetSuccessByDeath(combatData, fightData, playerAgents, true, GenericTriggerID);
         }
 
         public virtual void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)

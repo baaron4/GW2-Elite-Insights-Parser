@@ -175,7 +175,7 @@ namespace GW2EIParser.Logic
 
         public override string GetFightName()
         {
-            Target target = Targets.Find(x => x.ID == TriggerID && x.AgentItem.Type == AgentItem.AgentType.NPC);
+            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Adina && x.AgentItem.Type == AgentItem.AgentType.NPC);
             if (target == null)
             {
                 return "UNKNOWN";

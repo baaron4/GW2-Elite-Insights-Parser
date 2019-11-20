@@ -9,7 +9,7 @@ namespace GW2EIParser.Parser.ParsedData
     {
         // Fields
         private List<PhaseData> _phases = new List<PhaseData>();
-        public ushort ID { get; }
+        public ushort TriggerID { get; }
         private readonly bool _requirePhases;
         public FightLogic Logic { get; }
         public long FightStartLogTime { get; private set; }
@@ -37,7 +37,7 @@ namespace GW2EIParser.Parser.ParsedData
         {
             FightStartLogTime = start;
             FightEndLogTime = end;
-            ID = id;
+            TriggerID = id;
             _requirePhases = Properties.Settings.Default.ParsePhases;
             switch (ParseEnum.GetTargetIDS(id))
             {
@@ -71,8 +71,7 @@ namespace GW2EIParser.Parser.ParsedData
                     // some TC logs are registered as Xera
                     if (agentData.GetAgentsByID((ushort)ParseEnum.TrashIDS.HauntingStatue).Count > 0)
                     {
-                        ID = (ushort)ParseEnum.TargetIDS.TwistedCastle;
-                        Logic = new TwistedCastle(ID);
+                        Logic = new TwistedCastle((ushort)ParseEnum.TargetIDS.TwistedCastle);
                         break;
                     }
                     Logic = new Xera(id);
@@ -110,8 +109,8 @@ namespace GW2EIParser.Parser.ParsedData
                     if (agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.EyeOfFate).Count > 0 ||
                         agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.EyeOfJudgement).Count > 0)
                     {
-                        ID = (ushort)ParseEnum.TargetIDS.EyeOfFate;
-                        Logic = new DarkMaze(ID);
+                        TriggerID = (ushort)ParseEnum.TargetIDS.EyeOfFate;
+                        Logic = new DarkMaze(TriggerID);
                         break;
                     }
                     Logic = new Dhuum(id);
