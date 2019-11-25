@@ -41,7 +41,7 @@ namespace GW2EIParser.Logic
         }
 
         // Only used for CSV files
-        public Target GetLegacyTarget()
+        public NPC GetLegacyTarget()
         {
             return Targets.Find(x => x.ID == GenericTriggerID);
         }
