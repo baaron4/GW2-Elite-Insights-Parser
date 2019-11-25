@@ -9,10 +9,10 @@ namespace GW2EIParser.Builders.HtmlModels
         public List<object[]> ToDown { get; set; } = null;
         public List<object[]> ToKill { get; set; } = null;
 
-        public static List<object[]> BuildDeathRecapItemList(List<Player.DeathRecap.DeathRecapDamageItem> list)
+        public static List<object[]> BuildDeathRecapItemList(List<DeathRecap.DeathRecapDamageItem> list)
         {
             var data = new List<object[]>();
-            foreach (Player.DeathRecap.DeathRecapDamageItem item in list)
+            foreach (DeathRecap.DeathRecapDamageItem item in list)
             {
                 data.Add(new object[]
                 {

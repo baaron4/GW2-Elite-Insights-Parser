@@ -2,7 +2,6 @@
 using System.Linq;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.EIData.Player;
 
 namespace GW2EIParser.EIData
 {
@@ -122,7 +121,7 @@ namespace GW2EIParser.EIData
             }
         }
 
-        public abstract void ComputeDamageModifier(Dictionary<string, List<DamageModifierData>> data, Dictionary<NPC, Dictionary<string, List<DamageModifierData>>> dataTarget, Player p, ParsedLog log);
+        public abstract void ComputeDamageModifier(Dictionary<string, List<DamageModifierStat>> data, Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>> dataTarget, Player p, ParsedLog log);
 
         protected static GainComputer ByPresence = new GainComputerByPresence();
         protected static GainComputer ByPresenceNonMulti = new GainComputerNonMultiplier();

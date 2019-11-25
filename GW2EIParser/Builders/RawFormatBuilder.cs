@@ -17,7 +17,6 @@ using static GW2EIParser.Builders.JsonModels.JsonMechanics;
 using static GW2EIParser.Builders.JsonModels.JsonRotation;
 using static GW2EIParser.Builders.JsonModels.JsonStatistics;
 using static GW2EIParser.Builders.JsonModels.JsonTargetBuffs;
-using static GW2EIParser.EIData.GeneralStatistics;
 
 namespace GW2EIParser.Builders
 {
@@ -254,7 +253,7 @@ namespace GW2EIParser.Builders
                     GroupBuffsActive = BuildPlayerBuffGenerations(player.GetActiveBuffs(_log, BuffEnum.Group)),
                     OffGroupBuffsActive = BuildPlayerBuffGenerations(player.GetActiveBuffs(_log, BuffEnum.OffGroup)),
                     SquadBuffsActive = BuildPlayerBuffGenerations(player.GetActiveBuffs(_log, BuffEnum.Squad)),
-                    DamageModifiers = BuildDamageModifiers(player.GetDamageModifierData(_log, null)),
+                    DamageModifiers = BuildDamageModifiers(player.GetDamageModifierStats(_log, null)),
                     DamageModifiersTarget = BuildDamageModifiersTarget(player),
                     Minions = BuildMinions(player),
                     TotalDamageDist = BuildDamageDist(player, null),
@@ -317,21 +316,21 @@ namespace GW2EIParser.Builders
             return res;
         }
 
-        private static List<JsonDeathRecap> BuildDeathRecap(List<Player.DeathRecap> recaps)
+        private static List<JsonDeathRecap> BuildDeathRecap(List<DeathRecap> recaps)
         {
             if (recaps == null)
             {
                 return null;
             }
             var res = new List<JsonDeathRecap>();
-            foreach (Player.DeathRecap recap in recaps)
+            foreach (DeathRecap recap in recaps)
             {
                 res.Add(new JsonDeathRecap(recap));
             }
             return res;
         }
 
-        private List<JsonBuffDamageModifierData> BuildDamageModifiers(Dictionary<string, List<Player.DamageModifierData>> extra)
+        private List<JsonBuffDamageModifierData> BuildDamageModifiers(Dictionary<string, List<DamageModifierStat>> extra)
         {
             var dict = new Dictionary<int, List<JsonBuffDamageModifierItem>>();
             foreach (string key in extra.Keys)
@@ -362,16 +361,16 @@ namespace GW2EIParser.Builders
             for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
             {
                 NPC tar = _log.FightData.Logic.Targets[i];
-                res[i] = BuildDamageModifiers(p.GetDamageModifierData(_log, tar));
+                res[i] = BuildDamageModifiers(p.GetDamageModifierStats(_log, tar));
             }
             return res;
         }
 
         private List<JsonConsumable> BuildConsumables(Player player)
         {
-            List<Player.Consumable> input = player.GetConsumablesList(_log, 0, _log.FightData.FightDuration);
+            List<Consumable> input = player.GetConsumablesList(_log, 0, _log.FightData.FightDuration);
             var res = new List<JsonConsumable>();
-            foreach (Player.Consumable food in input)
+            foreach (Consumable food in input)
             {
                 if (!_buffDesc.ContainsKey("b" + food.Buff.ID))
                 {

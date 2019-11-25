@@ -378,12 +378,12 @@ namespace GW2EIParser.Builders
         private List<DeathRecapDto> BuildDeathRecap(Player p)
         {
             var res = new List<DeathRecapDto>();
-            List<Player.DeathRecap> recaps = p.GetDeathRecaps(_log);
+            List<DeathRecap> recaps = p.GetDeathRecaps(_log);
             if (recaps == null)
             {
                 return null;
             }
-            foreach (Player.DeathRecap deathRecap in recaps)
+            foreach (DeathRecap deathRecap in recaps)
             {
                 var recap = new DeathRecapDto()
                 {
@@ -605,9 +605,9 @@ namespace GW2EIParser.Builders
         private List<FoodDto> BuildPlayerFoodData(Player p)
         {
             var list = new List<FoodDto>();
-            List<Player.Consumable> consume = p.GetConsumablesList(_log, 0, _log.FightData.FightDuration);
+            List<Consumable> consume = p.GetConsumablesList(_log, 0, _log.FightData.FightDuration);
 
-            foreach (Player.Consumable entry in consume)
+            foreach (Consumable entry in consume)
             {
                 _usedBoons[entry.Buff.ID] = entry.Buff;
                 list.Add(new FoodDto(entry));

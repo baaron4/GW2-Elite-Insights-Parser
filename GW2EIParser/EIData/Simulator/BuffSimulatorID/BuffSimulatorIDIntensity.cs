@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 
 namespace GW2EIParser.EIData

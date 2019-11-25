@@ -6,72 +6,20 @@ using GW2EIParser.Logic;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 using static GW2EIParser.EIData.Buff;
-using static GW2EIParser.EIData.GeneralStatistics;
 
 namespace GW2EIParser.EIData
 {
     public class Player : AbstractSingleActor
     {
-
-        public class DamageModifierData
-        {
-            public int HitCount { get; }
-            public int TotalHitCount { get; }
-            public double DamageGain { get; }
-            public int TotalDamage { get; }
-
-            public DamageModifierData(int hitCount, int totalHitCount, double damageGain, int totalDamage)
-            {
-                HitCount = hitCount;
-                TotalHitCount = totalHitCount;
-                DamageGain = damageGain;
-                TotalDamage = totalDamage;
-            }
-        }
-
-
-        public class Consumable
-        {
-            public Buff Buff { get; }
-            public long Time { get; }
-            public int Duration { get; }
-            public int Stack { get; set; }
-
-            public Consumable(Buff item, long time, int duration)
-            {
-                Buff = item;
-                Time = time;
-                Duration = duration;
-                Stack = 1;
-            }
-        }
-
-        public class DeathRecap
-        {
-            public class DeathRecapDamageItem
-            {
-                public long ID { get; set; }
-                public bool IndirectDamage { get; set; }
-                public string Src { get; set; }
-                public int Damage { get; set; }
-                public int Time { get; set; }
-            }
-
-            public int DeathTime { get; set; }
-            public List<DeathRecapDamageItem> ToDown { get; set; }
-            public List<DeathRecapDamageItem> ToKill { get; set; }
-        }
-
-
         // Fields
         public string Account { get; protected set; }
         public int Group { get; }
 
         private List<Consumable> _consumeList;
         private List<DeathRecap> _deathRecaps;
-        private Dictionary<string, List<DamageModifierData>> _damageModifiers;
+        private Dictionary<string, List<DamageModifierStat>> _damageModifiers;
         private HashSet<string> _presentDamageModifiers;
-        private Dictionary<NPC, Dictionary<string, List<DamageModifierData>>> _damageModifiersTargets;
+        private Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>> _damageModifiersTargets;
         // statistics
         private List<FinalPlayerSupport> _playerSupport;
         private List<Dictionary<long, FinalPlayerBuffs>> _selfBuffs;
@@ -246,8 +194,6 @@ namespace GW2EIParser.EIData
             }
         }
 
-
-
         private void SetBuffs(ParsedLog log)
         {
             // Boons applied to self
@@ -306,7 +252,7 @@ namespace GW2EIParser.EIData
             return _consumeList.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public Dictionary<string, List<DamageModifierData>> GetDamageModifierData(ParsedLog log, NPC target)
+        public Dictionary<string, List<DamageModifierStat>> GetDamageModifierStats(ParsedLog log, NPC target)
         {
             if (_damageModifiers == null)
             {
@@ -314,13 +260,13 @@ namespace GW2EIParser.EIData
             }
             if (target != null)
             {
-                if (_damageModifiersTargets.TryGetValue(target, out Dictionary<string, List<DamageModifierData>> res))
+                if (_damageModifiersTargets.TryGetValue(target, out Dictionary<string, List<DamageModifierStat>> res))
                 {
                     return res;
                 }
                 else
                 {
-                    return new Dictionary<string, List<DamageModifierData>>();
+                    return new Dictionary<string, List<DamageModifierStat>>();
                 }
             }
             return _damageModifiers;
@@ -339,8 +285,8 @@ namespace GW2EIParser.EIData
 
         private void SetDamageModifiersData(ParsedLog log)
         {
-            _damageModifiers = new Dictionary<string, List<DamageModifierData>>();
-            _damageModifiersTargets = new Dictionary<NPC, Dictionary<string, List<DamageModifierData>>>();
+            _damageModifiers = new Dictionary<string, List<DamageModifierStat>>();
+            _damageModifiersTargets = new Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>>();
             _presentDamageModifiers = new HashSet<string>();
             // If conjured sword, targetless or WvW, stop
             if (IsFakeActor || log.FightData.Logic.Targetless || log.FightData.Logic.Mode == FightLogic.ParseMode.WvW)
@@ -371,80 +317,8 @@ namespace GW2EIParser.EIData
             List<AbstractDamageEvent> damageLogs = GetDamageTakenLogs(null, log, 0, log.FightData.FightDuration);
             foreach (DeadEvent dead in deads)
             {
-                var recap = new DeathRecap()
-                {
-                    DeathTime = (int)dead.Time
-                };
-                DownEvent downed = downs.LastOrDefault(x => x.Time <= dead.Time && x.Time >= lastDeathTime);
-                if (downed != null)
-                {
-                    var damageToDown = damageLogs.Where(x => x.Time <= downed.Time && (x.HasHit || x.HasDowned) && x.Time > lastDeathTime).ToList();
-                    recap.ToDown = damageToDown.Count > 0 ? new List<DeathRecap.DeathRecapDamageItem>() : null;
-                    int damage = 0;
-                    for (int i = damageToDown.Count - 1; i >= 0; i--)
-                    {
-                        AbstractDamageEvent dl = damageToDown[i];
-                        AgentItem ag = dl.From;
-                        var item = new DeathRecap.DeathRecapDamageItem()
-                        {
-                            Time = (int)dl.Time,
-                            IndirectDamage = dl is NonDirectDamageEvent,
-                            ID = dl.SkillId,
-                            Damage = dl.Damage,
-                            Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
-                        };
-                        damage += dl.Damage;
-                        recap.ToDown.Add(item);
-                        if (damage > 20000)
-                        {
-                            break;
-                        }
-                    }
-                    var damageToKill = damageLogs.Where(x => x.Time > downed.Time && x.Time <= dead.Time && (x.HasHit || x.HasDowned) && x.Time > lastDeathTime).ToList();
-                    recap.ToKill = damageToKill.Count > 0 ? new List<DeathRecap.DeathRecapDamageItem>() : null;
-                    for (int i = damageToKill.Count - 1; i >= 0; i--)
-                    {
-                        AbstractDamageEvent dl = damageToKill[i];
-                        AgentItem ag = dl.From;
-                        var item = new DeathRecap.DeathRecapDamageItem()
-                        {
-                            Time = (int)dl.Time,
-                            IndirectDamage = dl is NonDirectDamageEvent,
-                            ID = dl.SkillId,
-                            Damage = dl.Damage,
-                            Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
-                        };
-                        recap.ToKill.Add(item);
-                    }
-                }
-                else
-                {
-                    recap.ToDown = null;
-                    var damageToKill = damageLogs.Where(x => x.Time < dead.Time && x.Damage > 0 && x.Time > lastDeathTime).ToList();
-                    recap.ToKill = damageToKill.Count > 0 ? new List<DeathRecap.DeathRecapDamageItem>() : null;
-                    int damage = 0;
-                    for (int i = damageToKill.Count - 1; i >= 0; i--)
-                    {
-                        AbstractDamageEvent dl = damageToKill[i];
-                        AgentItem ag = dl.From;
-                        var item = new DeathRecap.DeathRecapDamageItem()
-                        {
-                            Time = (int)dl.Time,
-                            IndirectDamage = dl is NonDirectDamageEvent,
-                            ID = dl.SkillId,
-                            Damage = dl.Damage,
-                            Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
-                        };
-                        damage += dl.Damage;
-                        recap.ToKill.Add(item);
-                        if (damage > 20000)
-                        {
-                            break;
-                        }
-                    }
-                }
+                res.Add(new DeathRecap(damageLogs, dead, downs, lastDeathTime));
                 lastDeathTime = dead.Time;
-                res.Add(recap);
             }
         }
 

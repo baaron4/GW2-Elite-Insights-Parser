@@ -28,7 +28,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public int TotalDamage { get; set; }
 
-            public JsonBuffDamageModifierItem(Player.DamageModifierData extraData)
+            public JsonBuffDamageModifierItem(DamageModifierStat extraData)
             {
                 HitCount = extraData.HitCount;
                 TotalHitCount = extraData.TotalHitCount;

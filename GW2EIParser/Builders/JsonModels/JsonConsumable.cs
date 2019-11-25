@@ -25,7 +25,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <seealso cref="JsonLog.BuffMap"/>
         public long Id { get; set; }
 
-        public JsonConsumable(Player.Consumable food)
+        public JsonConsumable(Consumable food)
         {
             Stack = food.Stack;
             Duration = food.Duration;
