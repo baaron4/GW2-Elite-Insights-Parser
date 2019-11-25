@@ -40,7 +40,7 @@ namespace GW2EIParser.Logic
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem target = agentData.GetAgentsByID(TriggerID).FirstOrDefault();
+            AgentItem target = agentData.GetAgentsByID(GenericTriggerID).FirstOrDefault();
             foreach (CombatItem c in combatData)
             {
                 // redirect all attacks to the main golem
@@ -64,7 +64,7 @@ namespace GW2EIParser.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            NPC mainTarget = Targets.Find(x => x.ID == TriggerID);
+            NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -88,7 +88,7 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<ushort>
             {
-                TriggerID
+                GenericTriggerID
             };
         }
     }

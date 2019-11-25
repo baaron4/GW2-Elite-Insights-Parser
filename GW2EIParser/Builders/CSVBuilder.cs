@@ -30,7 +30,7 @@ namespace GW2EIParser.Builders
             _statistics = log.Statistics;
 
             _uploadResult = uploadresult;
-            _legacyTarget = log.FightData.Logic.Targets.Find(x => x.ID == log.FightData.ID);
+            _legacyTarget = log.FightData.Logic.GetLegacyTarget();
             if (_legacyTarget == null)
             {
                 _legacyTarget = new NPC(GeneralHelper.UnknownAgent);
@@ -65,7 +65,7 @@ namespace GW2EIParser.Builders
             //header
             WriteLine(new[] { "Elite Insights Version", Application.ProductVersion });
             WriteLine(new[] { "ARC Version", _log.LogData.BuildVersion });
-            WriteLine(new[] { "Fight ID", _log.FightData.ID.ToString() });
+            WriteLine(new[] { "Fight ID", _log.FightData.TriggerID.ToString() });
             WriteLine(new[] { "Recorded By", _log.LogData.PoVName });
             WriteLine(new[] { "Time Start", _log.LogData.LogStart });
             WriteLine(new[] { "Time End", _log.LogData.LogEnd });

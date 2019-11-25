@@ -1,10 +1,5 @@
 <div class="d-flex flex-row flex-wrap justify-content-center">
-    <ul class="nav nav-pills d-flex flex-row justify-content-center mb-1 w-100">
-        <li class="nav-item">
-            <a class="nav-link" :class="{active: showMechanics}" @click="showMechanics = !showMechanics">Mechanics List</a>
-        </li>
-    </ul>
-    <div v-if="showMechanics" id="combat-replay-mechanics-list-container" class="d-flex d-flex-row justify-content-center w-100">
+    <div id="combat-replay-mechanics-list-container" class="d-flex d-flex-row justify-content-center w-100">
         <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%">
             <thead>
                 <tr>

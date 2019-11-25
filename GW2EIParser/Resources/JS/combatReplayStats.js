@@ -495,4 +495,130 @@ var compileCombatReplay = function () {
             };
         }
     });
+
+
+
+    Vue.component("combat-replay-mechanics-list-component", {
+        props: ['selectedplayerid'],
+        template: `${tmplCombatReplayMechanicsList}`,
+        data: function () {
+            var mechanicEvents = [];
+            var phase = logData.phases[0];
+            var phaseTargets = phase.targets;
+            for (var mechI = 0; mechI < graphData.mechanics.length; mechI++) {
+                var graphMechData = graphData.mechanics[mechI];
+                var logMechData = logData.mechanicMap[mechI];
+                var mechData = { name: logMechData.name, shortName: logMechData.shortName };
+                var pointsArray = graphMechData.points[0];
+                var icd = logMechData.icd;
+                // players
+                if (!logMechData.enemyMech) {
+                    for (var playerI = 0; playerI < pointsArray.length; playerI++) {
+                        var lastTime = -1000000;
+                        var points = pointsArray[playerI];
+                        var player = logData.players[playerI];
+                        for (var i = 0; i < points.length; i++) {
+                            var time = points[i] * 1000; // when mechanic occured in seconds
+                            if (icd === 0 || (time - lastTime > icd)) {
+                                mechanicEvents.push({
+                                    time: time,
+                                    actor: { name: player.name, enemy: false, id: player.combatReplayID },
+                                    mechanic: mechData,
+                                });
+                            }
+                            lastTime = time;
+                        }
+                    }
+                } else {
+                    // enemy
+                    for (var targetI = 0; targetI < pointsArray.length; targetI++) {
+                        var points = pointsArray[targetI];
+                        var tarId = phaseTargets[targetI];
+                        // target tracked in phase
+                        if (tarId >= 0) {
+                            var target = logData.targets[tarId];
+                            for (var i = 0; i < points.length; i++) {
+                                var time = points[i]; // when mechanic occured in seconds
+                                mechanicEvents.push({
+                                    time: time * 1000,
+                                    actor: { name: target.name, enemy: true, id: -1 }, // target selection not supported
+                                    mechanic: mechData,
+                                });
+                            }
+                        } else {
+                            // target not tracked in phase
+                            for (var i = 0; i < points.length; i++) {
+                                var time = points[i][0]; // when mechanic occured in seconds
+                                mechanicEvents.push({
+                                    time: time * 1000,
+                                    actor: { name: points[i][1], enemy: true, id: -1 },
+                                    mechanic: mechData,
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+            mechanicEvents.sort(function (a, b) {
+                return a.time - b.time;
+            });
+
+            var actors = {};
+            var mechanics = {};
+            for (var i = 0; i < mechanicEvents.length; i++) {
+                var event = mechanicEvents[i];
+                var mechName = event.mechanic.name;
+                var actorName = event.actor.name;
+                if (!mechanics[mechName]) {
+                    mechanics[mechName] = Object.assign({}, event.mechanic, { included: true });
+                }
+                if (!actors[actorName]) {
+                    actors[actorName] = Object.assign({}, event.actor, { included: true });
+                }
+            }
+
+            var actorsList = Object.values(actors); // could be sorted for more clarity
+            actorsList.sort(function (a, b) {
+                if (a.enemy !== b.enemy) {
+                    // Sort enemies before players
+                    return a.enemy ? -1 : 1;
+                }
+                return a.name.localeCompare(b.name);
+            });
+
+            var mechanicsList = Object.values(mechanics);
+            mechanicsList.sort(function (a, b) {
+                return a.shortName.localeCompare(b.shortName);
+            });
+
+            return {
+                mechanicEvents: mechanicEvents,
+                actors: actors,
+                actorsList: actorsList,
+                mechanics: mechanics,
+                mechanicsList: mechanicsList,
+            };
+        },
+        methods: {
+            selectMechanic: function (mechanic) {
+                animator.updateTime(mechanic.time);
+            },
+        },
+        computed: {
+            filteredMechanicEvents: function () {
+                return this.mechanicEvents.filter(function (event) {
+                    var actor = this.actors[event.actor.name];
+                    var mechanic = this.mechanics[event.mechanic.name];
+                    if (actor && !actor.included) {
+                        return false;
+                    }
+                    if (mechanic && !mechanic.included) {
+                        return false;
+                    }
+                    return true;
+                }.bind(this))
+            },
+        },
+    });
 };

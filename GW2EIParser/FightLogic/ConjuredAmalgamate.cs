@@ -137,7 +137,7 @@ namespace GW2EIParser.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                NPC target = Targets.Find(x => x.ID == TriggerID);
+                NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.ConjuredAmalgamate);
                 NPC leftArm = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.CALeftArm);
                 NPC rightArm = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.CARightArm);
                 if (target == null)
@@ -205,7 +205,6 @@ namespace GW2EIParser.Logic
                 return phases;
             }
             phases.AddRange(GetPhasesByInvul(log, 52255, ca, true, false));
-            phases.RemoveAll(x => x.DurationInMS < 1000);
             for (int i = 1; i < phases.Count; i++)
             {
                 string name;

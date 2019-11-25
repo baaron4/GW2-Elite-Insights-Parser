@@ -98,7 +98,7 @@ namespace GW2EIParser.Logic
 
         public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
         {
-            NPC target = Targets.Find(x => x.ID == TriggerID);
+            NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Deimos);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for success by combat exit not found");
@@ -135,7 +135,7 @@ namespace GW2EIParser.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success && _specialSplitLogTime > 0)
             {
-                NPC target = Targets.Find(x => x.ID == TriggerID);
+                NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Deimos);
                 if (target == null)
                 {
                     throw new InvalidOperationException("Target for success by combat exit not found");
@@ -281,7 +281,7 @@ namespace GW2EIParser.Logic
                 phases.Add(new PhaseData(start, end));
                 start = specialTime;
             }
-            if (fightDuration - start > 5000 && start >= phases.Last().End)
+            if (fightDuration - start > GeneralHelper.PhaseTimeLimit && start >= phases.Last().End)
             {
                 phases.Add(new PhaseData(start, fightDuration));
             }
@@ -328,7 +328,6 @@ namespace GW2EIParser.Logic
                 }
             }
             phases.Sort((x, y) => x.Start.CompareTo(y.Start));
-            phases.RemoveAll(x => x.Targets.Count == 0);
             return phases;
         }
 

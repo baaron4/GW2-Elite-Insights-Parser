@@ -20,7 +20,7 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>
             {
-                TriggerID
+                GenericTriggerID
             };
         }
 
@@ -59,7 +59,7 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<ushort>
             {
-                TriggerID
+                GenericTriggerID
             };
         }
     }

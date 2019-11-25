@@ -98,7 +98,7 @@ namespace GW2EIParser.Logic
                     start = c.Time;
                 }
             }
-            if (fightDuration - start > 5000 && start >= phases.Last().End)
+            if (fightDuration - start > GeneralHelper.PhaseTimeLimit && start >= phases.Last().End)
             {
                 phases.Add(new PhaseData(start, fightDuration));
                 start = fightDuration;
@@ -157,7 +157,7 @@ namespace GW2EIParser.Logic
                     if (prevPhase != null)
                     {
                         start = (prevPhase.End >= end ? prevPhase.Start : prevPhase.End) + 1;
-                        if (end - start > 5000)
+                        if (end - start > 1000)
                         {
                             var phase = new PhaseData(start, end)
                             {

@@ -24,7 +24,7 @@ namespace GW2EIParser.Logic
         {
             // generic method for fractals
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == TriggerID);
+            NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -35,7 +35,6 @@ namespace GW2EIParser.Logic
                 return phases;
             }
             phases.AddRange(GetPhasesByInvul(log, 762, mainTarget, false, true));
-            phases.RemoveAll(x => x.DurationInMS < 1000);
             for (int i = 1; i < phases.Count; i++)
             {
                 phases[i].Name = "Phase " + i;
@@ -48,7 +47,7 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<ushort>
             {
-                TriggerID
+                GenericTriggerID
             };
         }
 
@@ -72,7 +71,7 @@ namespace GW2EIParser.Logic
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             // check reward
-            NPC mainTarget = Targets.Find(x => x.ID == TriggerID);
+            NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -87,7 +86,7 @@ namespace GW2EIParser.Logic
                 }
                 else
                 {
-                    SetSuccessByDeath(combatData, fightData, playerAgents, true, TriggerID);
+                    SetSuccessByDeath(combatData, fightData, playerAgents, true, GenericTriggerID);
                     if (fightData.Success)
                     {
                         fightData.SetSuccess(true, Math.Min(fightData.FightEndLogTime, fightData.ToLogSpace(lastDamageTaken.Time)));

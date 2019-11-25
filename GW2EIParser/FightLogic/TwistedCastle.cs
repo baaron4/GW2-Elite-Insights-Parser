@@ -31,14 +31,14 @@ namespace GW2EIParser.Logic
         {
             return new CombatReplayMap("https://i.imgur.com/2RkzdmL.png",
                             (1353, 1748),
-                            (-8718, -4421, 899, 7043),
+                            (-8058, -4321, 819, 7143),
                             (-12288, -27648, 12288, 27648),
                             (1920, 12160, 2944, 14464));
         }
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            agentData.AddCustomAgent(combatData.First().LogTime, combatData.Last().LogTime, AgentItem.AgentType.NPC, "Twisted Castle", "", TriggerID);
+            agentData.AddCustomAgent(combatData.First().LogTime, combatData.Last().LogTime, AgentItem.AgentType.NPC, "Twisted Castle", "", (ushort)ParseEnum.TargetIDS.TwistedCastle);
             ComputeFightTargets(agentData, combatData);
         }
 

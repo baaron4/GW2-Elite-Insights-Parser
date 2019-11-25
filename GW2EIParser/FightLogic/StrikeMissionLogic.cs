@@ -27,7 +27,7 @@ namespace GW2EIParser.Logic
             }
             else
             {
-                SetSuccessByDeath(combatData, fightData, playerAgents, true, TriggerID);
+                SetSuccessByDeath(combatData, fightData, playerAgents, true, GenericTriggerID);
             }
         }
 
@@ -35,7 +35,7 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<ushort>
             {
-                TriggerID
+                GenericTriggerID
             };
         }
     }

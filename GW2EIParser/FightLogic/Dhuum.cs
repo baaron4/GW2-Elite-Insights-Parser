@@ -104,7 +104,6 @@ namespace GW2EIParser.Logic
             {
                 phase.Targets.Add(dhuum);
             }
-            phases.RemoveAll(x => x.DurationInMS <= 2200);
             return phases;
         }
 

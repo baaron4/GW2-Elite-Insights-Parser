@@ -68,6 +68,7 @@ The Json documentation can be found [here](https://baaron4.github.io/GW2-Elite-I
 - Sejsel
 - Flomix
 - Stonos
+- Hobinjk
 
 ### Other stuffs
 - Linus (arena maps/ icons for combat replay)

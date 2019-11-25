@@ -9,7 +9,7 @@ namespace GW2EIParser.Parser.ParsedData
     {
         // Fields
         private List<PhaseData> _phases = new List<PhaseData>();
-        public ushort ID { get; }
+        public ushort TriggerID { get; }
         private readonly bool _requirePhases;
         public FightLogic Logic { get; }
         public long FightStartLogTime { get; private set; }
@@ -37,7 +37,7 @@ namespace GW2EIParser.Parser.ParsedData
         {
             FightStartLogTime = start;
             FightEndLogTime = end;
-            ID = id;
+            TriggerID = id;
             _requirePhases = Properties.Settings.Default.ParsePhases;
             switch (ParseEnum.GetTargetIDS(id))
             {
@@ -68,6 +68,12 @@ namespace GW2EIParser.Parser.ParsedData
                     Logic = new KeepConstruct(id);
                     break;
                 case ParseEnum.TargetIDS.Xera:
+                    // some TC logs are registered as Xera
+                    if (agentData.GetAgentsByID((ushort)ParseEnum.TrashIDS.HauntingStatue).Count > 0)
+                    {
+                        Logic = new TwistedCastle((ushort)ParseEnum.TargetIDS.TwistedCastle);
+                        break;
+                    }
                     Logic = new Xera(id);
                     break;
                 case ParseEnum.TargetIDS.Cairn:
@@ -99,12 +105,12 @@ namespace GW2EIParser.Parser.ParsedData
                     Logic = new DarkMaze(id);
                     break;
                 case ParseEnum.TargetIDS.Dhuum:
-                    // some eyes log are registered as Dhuum
+                    // some eyes logs are registered as Dhuum
                     if (agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.EyeOfFate).Count > 0 ||
                         agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.EyeOfJudgement).Count > 0)
                     {
-                        ID = (ushort)ParseEnum.TargetIDS.EyeOfFate;
-                        Logic = new DarkMaze((ushort)ParseEnum.TargetIDS.EyeOfFate);
+                        TriggerID = (ushort)ParseEnum.TargetIDS.EyeOfFate;
+                        Logic = new DarkMaze(TriggerID);
                         break;
                     }
                     Logic = new Dhuum(id);
@@ -184,8 +190,9 @@ namespace GW2EIParser.Parser.ParsedData
             {
                 long fightDuration = log.FightData.FightDuration;
                 _phases = log.FightData.Logic.GetPhases(log, _requirePhases);
+                _phases.RemoveAll(x => x.Targets.Count == 0);
+                _phases.RemoveAll(x => x.DurationInMS < GeneralHelper.PhaseTimeLimit);
             }
-            _phases.RemoveAll(x => x.DurationInMS <= 1000);
             return _phases;
         }
 

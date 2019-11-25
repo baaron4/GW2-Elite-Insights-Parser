@@ -20,6 +20,8 @@ namespace GW2EIParser
 
         public static readonly long ServerDelayConstant = 10;
 
+        public static int PhaseTimeLimit = 1000;
+
         public static AgentItem UnknownAgent = new AgentItem();
         // use this for "null" in AbstractActor dictionaries
         public static NPC NullActor = new NPC(UnknownAgent);
