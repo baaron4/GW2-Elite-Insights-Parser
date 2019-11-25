@@ -14,28 +14,9 @@ namespace GW2EIParser.EIData
         }
         //
 
-
-        protected class RectangleSerializable : FormSerializable
-        {
-            public int Height { get; set; }
-            public int Width { get; set; }
-        }
-
         public override GenericDecorationSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
-            var aux = new RectangleSerializable
-            {
-                Type = "Rectangle",
-                Width = Width,
-                Height = Height,
-                Fill = Filled,
-                Color = Color,
-                Growing = Growing,
-                Start = Lifespan.start,
-                End = Lifespan.end,
-                ConnectedTo = ConnectedTo.GetConnectedTo(map, log)
-            };
-            return aux;
+            return new RectangleDecorationSerializable(log, this, map);
         }
     }
 }

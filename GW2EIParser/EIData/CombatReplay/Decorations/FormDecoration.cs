@@ -13,13 +13,6 @@
             Filled = fill;
             Growing = growing;
         }
-        //
-        protected class FormSerializable : GenericDecorationSerializable
-        {
-            public bool Fill { get; set; }
-            public int Growing { get; set; }
-            public string Color { get; set; }
-        }
 
     }
 }

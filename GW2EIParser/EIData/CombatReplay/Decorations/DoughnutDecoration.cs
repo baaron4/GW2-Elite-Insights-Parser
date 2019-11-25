@@ -14,27 +14,9 @@ namespace GW2EIParser.EIData
         }
         //
 
-        private class DoughnutSerializable : FormSerializable
-        {
-            public int InnerRadius { get; set; }
-            public int OuterRadius { get; set; }
-        }
-
         public override GenericDecorationSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
-            var aux = new DoughnutSerializable
-            {
-                Type = "Doughnut",
-                OuterRadius = OuterRadius,
-                InnerRadius = InnerRadius,
-                Fill = Filled,
-                Color = Color,
-                Growing = Growing,
-                Start = Lifespan.start,
-                End = Lifespan.end,
-                ConnectedTo = ConnectedTo.GetConnectedTo(map, log)
-            };
-            return aux;
+            return new DoughnutDecorationSerializable(log, this, map);
         }
 
     }

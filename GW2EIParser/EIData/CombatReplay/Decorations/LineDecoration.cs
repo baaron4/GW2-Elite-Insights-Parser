@@ -12,25 +12,9 @@ namespace GW2EIParser.EIData
             ConnectedFrom = targetConnector;
         }
 
-        private class LineSerializable : FormSerializable
-        {
-            public object ConnectedFrom { get; set; }
-        }
-
         public override GenericDecorationSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
-            var aux = new LineSerializable
-            {
-                Type = "Line",
-                Fill = Filled,
-                Color = Color,
-                Growing = Growing,
-                Start = Lifespan.start,
-                End = Lifespan.end,
-                ConnectedTo = ConnectedTo.GetConnectedTo(map, log),
-                ConnectedFrom = ConnectedFrom.GetConnectedTo(map, log)
-            };
-            return aux;
+            return new LineDecorationSerializable(log, this, map);
         }
     }
 }
