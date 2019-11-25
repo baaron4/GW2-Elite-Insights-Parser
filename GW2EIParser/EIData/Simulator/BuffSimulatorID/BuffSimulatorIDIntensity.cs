@@ -19,7 +19,7 @@ namespace GW2EIParser.EIData
 
         public override void Add(long duration, AgentItem src, long start, uint stackID, bool addedActive, uint overstackDuration)
         {
-            var toAdd = new BuffStackItem(start, duration, src, ++ID, stackID);
+            var toAdd = new BuffStackItem(start, duration, src, stackID);
             BuffStack.Add(toAdd);
             //AddedSimulationResult.Add(new BuffCreationItem(src, duration, start, toAdd.ID));
             if (overstackDuration > 0)

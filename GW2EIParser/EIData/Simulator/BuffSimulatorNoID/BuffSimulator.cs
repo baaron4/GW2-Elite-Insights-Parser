@@ -8,6 +8,7 @@ namespace GW2EIParser.EIData
     {
         protected int Capacity { get; }
         private readonly StackingLogic _logic;
+        protected long ID { get; set; } = 0;
 
         // Constructor
         protected BuffSimulator(int capacity, ParsedLog log, StackingLogic logic) : base(log)

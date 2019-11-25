@@ -17,41 +17,28 @@ namespace GW2EIParser.EIData
             public AgentItem SeedSrc { get; }
             public bool IsExtension { get; private set; }
 
-            public long ID { get; }
-
             public long StackID { get; protected set; } = 0;
 
             public List<(AgentItem src, long value)> Extensions { get; } = new List<(AgentItem src, long value)>();
 
-            public BuffStackItem(long start, long boonDuration, AgentItem src, AgentItem seedSrc, long id, bool isExtension)
+            public BuffStackItem(long start, long boonDuration, AgentItem src, AgentItem seedSrc, long stackID, bool isExtension)
             {
                 Start = start;
                 SeedSrc = seedSrc;
                 Duration = boonDuration;
                 Src = src;
                 IsExtension = isExtension;
-                ID = id;
-            }
-
-            public BuffStackItem(long start, long boonDuration, AgentItem src, long id)
-            {
-                ID = id;
-                Start = start;
-                SeedSrc = src;
-                Duration = boonDuration;
-                Src = src;
-                IsExtension = false;
-            }
-
-            public BuffStackItem(long start, long boonDuration, AgentItem src, long id, long stackID)
-            {
-                ID = id;
-                Start = start;
-                SeedSrc = src;
-                Duration = boonDuration;
-                Src = src;
-                IsExtension = false;
                 StackID = stackID;
+            }
+
+            public BuffStackItem(long start, long boonDuration, AgentItem src, long stackID)
+            {
+                StackID = stackID;
+                Start = start;
+                SeedSrc = src;
+                Duration = boonDuration;
+                Src = src;
+                IsExtension = false;
             }
 
             public void Shift(long startShift, long durationShift)
@@ -83,8 +70,6 @@ namespace GW2EIParser.EIData
                 Extensions.Add((src, value));
             }
         }
-
-        protected long ID { get; set; } = 0;
         // Fields
         protected List<BuffStackItem> BuffStack { get; set; }
         public List<BuffSimulationItem> GenerationSimulation { get; } = new List<BuffSimulationItem>();
