@@ -424,55 +424,14 @@ namespace GW2EIParser.EIData
         }
 
         //
-        private class PlayerSerializable : AbstractMasterActorSerializable
-        {
-            public int Group { get; set; }
-            public List<long> Dead { get; set; }
-            public List<long> Down { get; set; }
-            public List<long> Dc { get; set; }
-        }
 
-        public override AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
+        public override AbstractSingleActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
             if (CombatReplay == null)
             {
                 InitCombatReplay(log);
             }
-            (List<(long start, long end)> deads, List<(long start, long end)> downs, List<(long start, long end)> dcs) = GetStatus(log);
-            var aux = new PlayerSerializable
-            {
-                Group = Group,
-                Img = Icon,
-                Type = "Player",
-                ID = GetCombatReplayID(log),
-                Positions = new List<double>(),
-                Dead = new List<long>(),
-                Down = new List<long>(),
-                Dc = new List<long>()
-            };
-            foreach (Point3D pos in CombatReplay.PolledPositions)
-            {
-                (double x, double y) = map.GetMapCoord(pos.X, pos.Y);
-                aux.Positions.Add(x);
-                aux.Positions.Add(y);
-            }
-            foreach ((long start, long end) in deads)
-            {
-                aux.Dead.Add(start);
-                aux.Dead.Add(end);
-            }
-            foreach ((long start, long end) in downs)
-            {
-                aux.Down.Add(start);
-                aux.Down.Add(end);
-            }
-            foreach ((long start, long end) in dcs)
-            {
-                aux.Dc.Add(start);
-                aux.Dc.Add(end);
-            }
-
-            return aux;
+            return new PlayerSerializable(this, log, map, CombatReplay);
         }
 
         protected override void InitCombatReplay(ParsedLog log)

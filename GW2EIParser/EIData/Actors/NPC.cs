@@ -158,34 +158,14 @@ namespace GW2EIParser.EIData
 
 
         //
-        private class TargetSerializable : AbstractMasterActorSerializable
-        {
-            public long Start { get; set; }
-            public long End { get; set; }
-        }
 
-        public override AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
+        public override AbstractSingleActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
             if (CombatReplay == null)
             {
                 InitCombatReplay(log);
             }
-            var aux = new TargetSerializable
-            {
-                Img = Icon,
-                Type = "Target",
-                ID = GetCombatReplayID(log),
-                Start = CombatReplay.TimeOffsets.start,
-                End = CombatReplay.TimeOffsets.end,
-                Positions = new List<double>()
-            };
-            foreach (Point3D pos in CombatReplay.PolledPositions)
-            {
-                (double x, double y) = map.GetMapCoord(pos.X, pos.Y);
-                aux.Positions.Add(x);
-                aux.Positions.Add(y);
-            }
-            return aux;
+            return new NPCSerializable(this, log, map, CombatReplay);
         }
 
         protected override void InitCombatReplay(ParsedLog log)

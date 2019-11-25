@@ -489,16 +489,7 @@ namespace GW2EIParser.EIData
         }
         protected abstract void InitAdditionalCombatReplayData(ParsedLog log);
 
-        public abstract class AbstractMasterActorSerializable
-        {
-            public string Img { get; set; }
-            public string Type { get; set; }
-            public int ID { get; set; }
-            public List<double> Positions { get; set; }
-        }
-        public abstract AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log);
-
-
+        public abstract AbstractSingleActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log);
 
         // Cast logs
         public override List<AbstractCastEvent> GetCastLogs(ParsedLog log, long start, long end)
