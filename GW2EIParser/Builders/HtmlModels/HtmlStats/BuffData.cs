@@ -27,7 +27,7 @@ namespace GW2EIParser.Builders.HtmlModels
             }
         }
 
-        public BuffData(Dictionary<long, FinalNPCBuffs> boons, List<Buff> listToUse, double avg)
+        public BuffData(Dictionary<long, FinalBuffs> boons, List<Buff> listToUse, double avg)
         {
             Avg = avg;
             foreach (Buff boon in listToUse)
@@ -35,7 +35,7 @@ namespace GW2EIParser.Builders.HtmlModels
                 var boonVals = new List<object>();
                 Data.Add(boonVals);
 
-                if (boons.TryGetValue(boon.ID, out FinalNPCBuffs uptime))
+                if (boons.TryGetValue(boon.ID, out FinalBuffs uptime))
                 {
                     boonVals.Add(uptime.Uptime);
                     if (boon.Type == Buff.BuffType.Intensity && uptime.Presence > 0)

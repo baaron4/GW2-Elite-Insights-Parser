@@ -379,7 +379,7 @@ namespace GW2EIParser.Builders
         {
             var res = new List<DeathRecapDto>();
             List<DeathRecap> recaps = p.GetDeathRecaps(_log);
-            if (recaps == null)
+            if (!recaps.Any())
             {
                 return null;
             }

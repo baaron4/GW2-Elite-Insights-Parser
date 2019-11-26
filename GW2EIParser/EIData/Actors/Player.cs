@@ -227,10 +227,6 @@ namespace GW2EIParser.EIData
             {
                 SetDeathRecaps(log);
             }
-            if (_deathRecaps.Count == 0)
-            {
-                return null;
-            }
             return _deathRecaps;
         }
 
