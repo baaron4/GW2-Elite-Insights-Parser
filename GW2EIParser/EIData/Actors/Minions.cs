@@ -8,10 +8,12 @@ namespace GW2EIParser.EIData
     public class Minions : AbstractActor
     {
         public List<NPC> MinionList { get; }
+        public AbstractSingleActor Master { get; }
 
-        public Minions(NPC firstMinion) : base(firstMinion.AgentItem)
+        public Minions(AbstractSingleActor master, NPC firstMinion) : base(firstMinion.AgentItem)
         {
             MinionList = new List<NPC> { firstMinion };
+            Master = master;
         }
 
         public void AddMinion(NPC minion)

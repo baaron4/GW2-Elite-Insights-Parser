@@ -74,7 +74,7 @@ namespace GW2EIParser.EIData
                     }
                     else
                     {
-                        auxMinions[id] = new Minions(new NPC(agent));
+                        auxMinions[id] = new Minions(this, new NPC(agent));
                     }
                 }
                 foreach (KeyValuePair<long, Minions> pair in auxMinions)
