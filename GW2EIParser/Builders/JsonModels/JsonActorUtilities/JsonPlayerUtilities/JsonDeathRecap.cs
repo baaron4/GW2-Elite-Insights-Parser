@@ -19,23 +19,23 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             /// <seealso cref="JsonLog.SkillMap"/>
             /// <seealso cref="JsonLog.BuffMap"/>
-            public long Id { get; set; }
+            public long Id { get; }
             /// <summary>
             /// True if the damage was indirect
             /// </summary>
-            public bool IndirectDamage { get; set; }
+            public bool IndirectDamage { get; }
             /// <summary>
             /// Source of the damage
             /// </summary>
-            public string Src { get; set; }
+            public string Src { get; }
             /// <summary>
             /// Damage done
             /// </summary>
-            public int Damage { get; set; }
+            public int Damage { get; }
             /// <summary>
             /// Time value
             /// </summary>
-            public int Time { get; set; }
+            public int Time { get; }
 
             public JsonDeathRecapDamageItem(DeathRecap.DeathRecapDamageItem item)
             {
@@ -50,15 +50,15 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// Time of death
         /// </summary>
-        public int DeathTime { get; set; }
+        public int DeathTime { get; }
         /// <summary>
         /// List of damaging events to put into downstate
         /// </summary>
-        public List<JsonDeathRecapDamageItem> ToDown { get; set; }
+        public List<JsonDeathRecapDamageItem> ToDown { get; }
         /// <summary>
         /// List of damaging events to put into deadstate
         /// </summary>
-        public List<JsonDeathRecapDamageItem> ToKill { get; set; }
+        public List<JsonDeathRecapDamageItem> ToKill { get; }
 
         public JsonDeathRecap(DeathRecap recap)
         {
