@@ -9,6 +9,11 @@ namespace GW2EIParser.EIData
         public double Uptime { get; set; }
         public double Presence { get; set; }
 
+        protected FinalNPCBuffs()
+        {
+
+        }
+
         public FinalNPCBuffs(Buff buff, BuffDistribution buffDistribution, Dictionary<long, long> buffPresence, long phaseDuration)
         {
             if (buff.Type == BuffType.Duration)

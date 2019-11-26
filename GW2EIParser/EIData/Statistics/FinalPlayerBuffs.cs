@@ -8,16 +8,14 @@ namespace GW2EIParser.EIData
 {
 
     public enum BuffEnum { Self, Group, OffGroup, Squad };
-    public class FinalPlayerBuffs
+    public class FinalPlayerBuffs : FinalNPCBuffs
     {
-        public double Uptime { get; set; }
         public double Generation { get; set; }
         public double Overstack { get; set; }
         public double Wasted { get; set; }
         public double UnknownExtended { get; set; }
         public double ByExtension { get; set; }
         public double Extended { get; set; }
-        public double Presence { get; set; }
 
         public static (List<Dictionary<long, FinalPlayerBuffs>>, List<Dictionary<long, FinalPlayerBuffs>>) GetBuffsForPlayers(List<Player> playerList, ParsedLog log, AgentItem agentItem)
         {
