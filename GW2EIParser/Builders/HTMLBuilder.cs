@@ -689,13 +689,13 @@ namespace GW2EIParser.Builders
 
         private BuffData BuildTargetCondiUptimeData(int phaseIndex, NPC target)
         {
-            Dictionary<long, FinalNPCBuffs> buffs = target.GetBuffs(_log, phaseIndex);
+            Dictionary<long, FinalBuffs> buffs = target.GetBuffs(_log, phaseIndex);
             return new BuffData(buffs, _statistics.PresentConditions, target.GetGameplayStats(_log, phaseIndex).AvgConditions);
         }
 
         private BuffData BuildTargetBoonData(int phaseIndex, NPC target)
         {
-            Dictionary<long, FinalNPCBuffs> buffs = target.GetBuffs(_log, phaseIndex);
+            Dictionary<long, FinalBuffs> buffs = target.GetBuffs(_log, phaseIndex);
             return new BuffData(buffs, _statistics.PresentBoons, target.GetGameplayStats(_log, phaseIndex).AvgBoons);
         }
 
@@ -1180,10 +1180,10 @@ namespace GW2EIParser.Builders
 
         private bool HasBoons(int phaseIndex, NPC target)
         {
-            Dictionary<long, FinalNPCBuffs> conditions = target.GetBuffs(_log, phaseIndex);
+            Dictionary<long, FinalBuffs> conditions = target.GetBuffs(_log, phaseIndex);
             foreach (Buff boon in _statistics.PresentBoons)
             {
-                if (conditions.TryGetValue(boon.ID, out FinalNPCBuffs uptime))
+                if (conditions.TryGetValue(boon.ID, out FinalBuffs uptime))
                 {
                     if (uptime.Uptime > 0.0)
                     {

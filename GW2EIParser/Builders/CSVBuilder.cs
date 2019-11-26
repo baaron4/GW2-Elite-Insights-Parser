@@ -706,7 +706,7 @@ namespace GW2EIParser.Builders
         private void CreateCondiUptime(int phaseIndex)
         {
             NPC boss = _legacyTarget;
-            Dictionary<long, FinalNPCBuffs> conditions = _legacyTarget.GetBuffs(_log, phaseIndex);
+            Dictionary<long, FinalBuffs> conditions = _legacyTarget.GetBuffs(_log, phaseIndex);
 
             WriteCell("Name");
             WriteCell("Avg");
@@ -721,7 +721,7 @@ namespace GW2EIParser.Builders
             WriteCell(Math.Round(_legacyTarget.GetGameplayStats(_log, phaseIndex).AvgConditions, 1).ToString());
             foreach (Buff boon in _statistics.PresentConditions)
             {
-                if (conditions.TryGetValue(boon.ID, out FinalNPCBuffs uptime))
+                if (conditions.TryGetValue(boon.ID, out FinalBuffs uptime))
                 {
                     if (boon.Type == Buff.BuffType.Duration)
                     {
@@ -748,7 +748,7 @@ namespace GW2EIParser.Builders
         private void CreateBossBoonUptime(int phaseIndex)
         {
             NPC boss = _legacyTarget;
-            Dictionary<long, FinalNPCBuffs> conditions = _legacyTarget.GetBuffs(_log, phaseIndex);
+            Dictionary<long, FinalBuffs> conditions = _legacyTarget.GetBuffs(_log, phaseIndex);
             WriteCell("Name");
             WriteCell("Avg");
             foreach (Buff boon in _statistics.PresentBoons)
@@ -761,7 +761,7 @@ namespace GW2EIParser.Builders
             WriteCell(boss.Character);
             foreach (Buff boon in _statistics.PresentBoons)
             {
-                if (conditions.TryGetValue(boon.ID, out FinalNPCBuffs uptime))
+                if (conditions.TryGetValue(boon.ID, out FinalBuffs uptime))
                 {
                     if (boon.Type == Buff.BuffType.Duration)
                     {

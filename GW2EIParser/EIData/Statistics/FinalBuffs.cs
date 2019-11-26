@@ -4,17 +4,17 @@ using static GW2EIParser.EIData.Buff;
 
 namespace GW2EIParser.EIData
 {
-    public class FinalNPCBuffs
+    public class FinalBuffs
     {
         public double Uptime { get; set; }
         public double Presence { get; set; }
 
-        protected FinalNPCBuffs()
+        protected FinalBuffs()
         {
 
         }
 
-        public FinalNPCBuffs(Buff buff, BuffDistribution buffDistribution, Dictionary<long, long> buffPresence, long phaseDuration)
+        public FinalBuffs(Buff buff, BuffDistribution buffDistribution, Dictionary<long, long> buffPresence, long phaseDuration)
         {
             if (buff.Type == BuffType.Duration)
             {

@@ -7,7 +7,7 @@ namespace GW2EIParser.EIData
 {
     public class NPC : AbstractSingleActor
     {
-        private List<Dictionary<long, FinalNPCBuffs>> _buffs;
+        private List<Dictionary<long, FinalBuffs>> _buffs;
         // Constructors
         public NPC(AgentItem agent) : base(agent)
         {
@@ -45,7 +45,7 @@ namespace GW2EIParser.EIData
             CastLogs.Add(new CastLog(time, skillID, expDur, startActivation, actDur, endActivation, Agent, InstID));
         }*/
 
-        public Dictionary<long, FinalNPCBuffs> GetBuffs(ParsedLog log, int phaseIndex)
+        public Dictionary<long, FinalBuffs> GetBuffs(ParsedLog log, int phaseIndex)
         {
             if (_buffs == null)
             {
@@ -54,7 +54,7 @@ namespace GW2EIParser.EIData
             return _buffs[phaseIndex];
         }
 
-        public List<Dictionary<long, FinalNPCBuffs>> GetBuffs(ParsedLog log)
+        public List<Dictionary<long, FinalBuffs>> GetBuffs(ParsedLog log)
         {
             if (_buffs == null)
             {
@@ -65,12 +65,12 @@ namespace GW2EIParser.EIData
 
         private void SetBuffs(ParsedLog log)
         {
-            _buffs = new List<Dictionary<long, FinalNPCBuffs>>();
+            _buffs = new List<Dictionary<long, FinalBuffs>>();
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
                 BuffDistribution buffDistribution = GetBuffDistribution(log, phaseIndex);
-                var rates = new Dictionary<long, FinalNPCBuffs>();
+                var rates = new Dictionary<long, FinalBuffs>();
                 _buffs.Add(rates);
                 Dictionary<long, long> buffPresence = GetBuffPresence(log, phaseIndex);
 
@@ -81,7 +81,7 @@ namespace GW2EIParser.EIData
                 {
                     if (buffDistribution.ContainsKey(buff.ID))
                     {
-                        rates[buff.ID] = new FinalNPCBuffs(buff, buffDistribution, buffPresence, phaseDuration);
+                        rates[buff.ID] = new FinalBuffs(buff, buffDistribution, buffPresence, phaseDuration);
                     }
                 }
             }

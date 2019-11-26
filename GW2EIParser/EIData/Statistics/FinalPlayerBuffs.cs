@@ -8,7 +8,7 @@ namespace GW2EIParser.EIData
 {
 
     public enum BuffEnum { Self, Group, OffGroup, Squad };
-    public class FinalPlayerBuffs : FinalNPCBuffs
+    public class FinalPlayerBuffs : FinalBuffs
     {
         public double Generation { get; set; }
         public double Overstack { get; set; }
