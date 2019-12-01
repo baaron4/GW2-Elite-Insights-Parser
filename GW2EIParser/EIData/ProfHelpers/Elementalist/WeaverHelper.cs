@@ -153,7 +153,6 @@ namespace GW2EIParser.EIData
             {
                 var applies = pair.Value.OfType<BuffApplyEvent>().ToList();
                 long curID = TranslateWeaverAttunement(applies);
-                uint curInstanceID = applies.First().BuffInstance;
                 foreach (AbstractBuffEvent c in pair.Value)
                 {
                     c.Invalidate(skillData);
@@ -162,6 +161,7 @@ namespace GW2EIParser.EIData
                 {
                     continue;
                 }
+                uint curInstanceID = applies.First().BuffInstance;
                 res.Add(new BuffApplyEvent(a, a, pair.Key, int.MaxValue, skillData.Get(curID), curInstanceID, true));
                 if (prevID != 0)
                 {
