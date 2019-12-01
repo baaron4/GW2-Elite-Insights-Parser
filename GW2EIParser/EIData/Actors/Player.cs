@@ -310,7 +310,7 @@ namespace GW2EIParser.EIData
             List<DeadEvent> deads = log.CombatData.GetDeadEvents(AgentItem);
             List<DownEvent> downs = log.CombatData.GetDownEvents(AgentItem);
             long lastDeathTime = 0;
-            List<AbstractDamageEvent> damageLogs = GetDamageTakenLogs(null, log, 0, log.FightData.FightDuration);
+            List<AbstractDamageEvent> damageLogs = GetDamageTakenLogs(null, log, 0, log.FightData.FightEnd);
             foreach (DeadEvent dead in deads)
             {
                 res.Add(new DeathRecap(damageLogs, dead, downs, lastDeathTime));
@@ -336,7 +336,7 @@ namespace GW2EIParser.EIData
                 return;
             }
             string[] weapons = new string[8];//first 2 for first set next 2 for second set, second sets of 4 for underwater
-            List<AbstractCastEvent> casting = GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> casting = GetCastLogs(log, 0, log.FightData.FightEnd);
             int swapped = -1;
             long swappedTime = 0;
             var swaps = casting.Where(x => x.SkillId == SkillItem.WeaponSwapId).Select(x =>
@@ -373,7 +373,7 @@ namespace GW2EIParser.EIData
         {
             List<Buff> consumableList = log.Buffs.BuffsByNature[BuffNature.Consumable];
             _consumeList = new List<Consumable>();
-            long fightDuration = log.FightData.FightDuration;
+            long fightDuration = log.FightData.FightEnd;
             foreach (Buff consumable in consumableList)
             {
                 foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(consumable.ID))
@@ -439,7 +439,7 @@ namespace GW2EIParser.EIData
             }
             CombatReplay = new CombatReplay();
             SetMovements(log);
-            CombatReplay.PollingRate(log.FightData.FightDuration, true);
+            CombatReplay.PollingRate(log.FightData.FightEnd, true);
         }
     }
 }

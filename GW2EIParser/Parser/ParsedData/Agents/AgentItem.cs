@@ -19,8 +19,8 @@ namespace GW2EIParser.Parser.ParsedData
         public AgentItem Master { get; set; }
         public ushort InstID { get; set; }
         public AgentType Type { get; protected set; } = AgentType.NPC;
-        public long FirstAwareLogTime { get; set; }
-        public long LastAwareLogTime { get; set; } = long.MaxValue;
+        public long FirstAware { get; set; }
+        public long LastAware { get; set; } = long.MaxValue;
         public string Name { get; } = "UNKNOWN";
         public string Prof { get; } = "UNKNOWN";
         public uint Toughness { get; }
@@ -131,13 +131,13 @@ namespace GW2EIParser.Parser.ParsedData
             {
                 AbstractStatusEvent cur = status[i];
                 AbstractStatusEvent next = status[i + 1];
-                AddValueToStatusList(dead, down, dc, cur, next, log.FightData.FightDuration, i);
+                AddValueToStatusList(dead, down, dc, cur, next, log.FightData.FightEnd, i);
             }
             // check last value
             if (status.Count > 0)
             {
                 AbstractStatusEvent cur = status.Last();
-                AddValueToStatusList(dead, down, dc, cur, null, log.FightData.FightDuration, status.Count - 1);
+                AddValueToStatusList(dead, down, dc, cur, null, log.FightData.FightEnd, status.Count - 1);
             }
         }
 

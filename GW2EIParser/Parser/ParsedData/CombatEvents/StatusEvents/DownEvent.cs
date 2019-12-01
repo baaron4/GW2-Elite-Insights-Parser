@@ -2,7 +2,7 @@
 {
     public class DownEvent : AbstractStatusEvent
     {
-        public DownEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, agentData, offset)
+        public DownEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
 
         }

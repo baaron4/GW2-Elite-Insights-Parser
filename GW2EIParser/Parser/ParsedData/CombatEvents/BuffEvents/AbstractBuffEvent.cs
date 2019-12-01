@@ -11,12 +11,12 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public AgentItem ByMinion { get; protected set; }
         public AgentItem To { get; protected set; }
 
-        public AbstractBuffEvent(CombatItem evtcItem, SkillData skillData, long offset) : base(evtcItem.LogTime, offset)
+        public AbstractBuffEvent(CombatItem evtcItem, SkillData skillData) : base(evtcItem.Time)
         {
             BuffSkill = skillData.Get(evtcItem.SkillID);
         }
 
-        public AbstractBuffEvent(SkillItem buffSkill, long time) : base(time, 0)
+        public AbstractBuffEvent(SkillItem buffSkill, long time) : base(time)
         {
             BuffSkill = buffSkill;
         }

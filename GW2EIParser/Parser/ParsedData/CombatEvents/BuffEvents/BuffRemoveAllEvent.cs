@@ -9,7 +9,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public int RemovedStacks { get; }
         private readonly int _lastRemovedDuration;
 
-        public BuffRemoveAllEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, agentData, skillData, offset)
+        public BuffRemoveAllEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
             _lastRemovedDuration = evtcItem.BuffDmg;
             RemovedStacks = evtcItem.Result;

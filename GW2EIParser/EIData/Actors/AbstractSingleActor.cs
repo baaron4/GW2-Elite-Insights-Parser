@@ -79,7 +79,7 @@ namespace GW2EIParser.EIData
                 }
                 foreach (KeyValuePair<long, Minions> pair in auxMinions)
                 {
-                    if (pair.Value.GetDamageLogs(null, log, 0, log.FightData.FightDuration).Count > 0 || pair.Value.GetCastLogs(log, 0, log.FightData.FightDuration).Count > 0)
+                    if (pair.Value.GetDamageLogs(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastLogs(log, 0, log.FightData.FightEnd).Count > 0)
                     {
                         _minions[pair.Key] = pair.Value;
                     }
@@ -182,7 +182,7 @@ namespace GW2EIParser.EIData
                     }
                     buffMapMap.Add(log.Buffs.BuffsByIds[boonId]);
                 }
-                if (!c.IsBuffSimulatorCompliant(log.FightData.FightDuration, log.CombatData.HasStackIDs))
+                if (!c.IsBuffSimulatorCompliant(log.FightData.FightEnd, log.CombatData.HasStackIDs))
                 {
                     continue;
                 }
@@ -211,7 +211,7 @@ namespace GW2EIParser.EIData
         {
             BuffPoints = new Dictionary<long, BuffsGraphModel>();
             BuffDictionary toUse = GetBuffMap(log);
-            long dur = log.FightData.FightDuration;
+            long dur = log.FightData.FightEnd;
             int fightDuration = (int)(dur) / 1000;
             var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[ProfHelper.NumberOfBoonsID]);
             var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[ProfHelper.NumberOfConditionsID]);
@@ -447,15 +447,15 @@ namespace GW2EIParser.EIData
             DeadEvent deathCheck = log.CombatData.GetDeadEvents(AgentItem).LastOrDefault();
             if (deathCheck != null)
             {
-                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAwareLogTime), deathCheck.Time);
+                CombatReplay.Trim(AgentItem.FirstAware, deathCheck.Time);
             }
             else if (despawnCheck != null && (spawnCheck == null || spawnCheck.Time < despawnCheck.Time))
             {
-                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAwareLogTime), despawnCheck.Time);
+                CombatReplay.Trim(AgentItem.FirstAware, despawnCheck.Time);
             }
             else
             {
-                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAwareLogTime), log.FightData.ToFightSpace(AgentItem.LastAwareLogTime));
+                CombatReplay.Trim(AgentItem.FirstAware, AgentItem.LastAware);
             }
         }
 
@@ -733,7 +733,7 @@ namespace GW2EIParser.EIData
                 Dictionary<long, Minions> minionsList = GetMinions(log);
                 foreach (Minions mins in minionsList.Values)
                 {
-                    DamageLogs.AddRange(mins.GetDamageLogs(null, log, 0, log.FightData.FightDuration));
+                    DamageLogs.AddRange(mins.GetDamageLogs(null, log, 0, log.FightData.FightEnd));
                 }
                 DamageLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
                 DamageLogsByDst = DamageLogs.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
@@ -755,8 +755,8 @@ namespace GW2EIParser.EIData
             }
             if (target != null && DamageTakenLogsBySrc.TryGetValue(target.AgentItem, out List<AbstractDamageEvent> list))
             {
-                long targetStart = log.FightData.ToFightSpace(target.FirstAwareLogTime);
-                long targetEnd = log.FightData.ToFightSpace(target.LastAwareLogTime);
+                long targetStart = target.FirstAware;
+                long targetEnd = target.LastAware;
                 return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd).ToList();
             }
             return DamageTakenlogs.Where(x => x.Time >= start && x.Time <= end).ToList();

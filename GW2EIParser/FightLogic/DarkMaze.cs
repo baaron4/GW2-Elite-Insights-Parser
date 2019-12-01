@@ -117,7 +117,7 @@ namespace GW2EIParser.Logic
                         break;
                     }
                 }
-                fightData.SetSuccess(true, fightData.ToLogSpace(Math.Max(eye1HPs[lastIEye1].Time, eye2HPs[lastIEye2].Time)));
+                fightData.SetSuccess(true, Math.Max(eye1HPs[lastIEye1].Time, eye2HPs[lastIEye2].Time));
             }
         }
 

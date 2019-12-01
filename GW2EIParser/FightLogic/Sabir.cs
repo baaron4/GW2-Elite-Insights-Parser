@@ -42,7 +42,7 @@ namespace GW2EIParser.Logic
             };
         }
 
-        public override List<AbstractDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst, Dictionary<long, List<AbstractDamageEvent>> damageById, long offset, SkillData skillData)
+        public override List<AbstractDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst, Dictionary<long, List<AbstractDamageEvent>> damageById, SkillData skillData)
         {
             NegateDamageAgainstBarrier(Targets.Select(x => x.AgentItem).ToList(), damageByDst);
             return new List<AbstractDamageEvent>();
@@ -61,7 +61,7 @@ namespace GW2EIParser.Logic
             {
                 return phases;
             }
-            List<AbstractCastEvent> cls = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
             var wallopingWinds = cls.Where(x => x.SkillId == 56094).ToList();
             long start = 0, end = 0;
             for (int i = 0; i < wallopingWinds.Count; i++)
@@ -82,7 +82,7 @@ namespace GW2EIParser.Logic
                 start = nextAttack.Time;
                 if (i == wallopingWinds.Count - 1)
                 {
-                    phase = new PhaseData(start, log.FightData.FightDuration)
+                    phase = new PhaseData(start, log.FightData.FightEnd)
                     {
                         Name = "Phase " + (i + 2)
                     };

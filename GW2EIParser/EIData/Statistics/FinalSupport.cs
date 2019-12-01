@@ -24,7 +24,7 @@ namespace GW2EIParser.EIData
                     if (phase.InInterval(brae.Time) && brae.By == actor.AgentItem && brae.To == to.AgentItem)
                     {
                         item.count++;
-                        item.time += Math.Min(brae.RemovedDuration, log.FightData.FightDuration);
+                        item.time += Math.Min(brae.RemovedDuration, log.FightData.FightEnd);
                     }
                 }
             }
@@ -44,7 +44,7 @@ namespace GW2EIParser.EIData
                     if (phase.InInterval(brae.Time) && brae.By == actor.AgentItem)
                     {
                         item.count++;
-                        item.time = Math.Max(item.time + brae.RemovedDuration, log.FightData.FightDuration);
+                        item.time = Math.Max(item.time + brae.RemovedDuration, log.FightData.FightEnd);
                     }
                 }
             }

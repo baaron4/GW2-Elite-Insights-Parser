@@ -82,14 +82,14 @@ namespace GW2EIParser.Logic
             {
                 if (reward != null && lastDamageTaken.Time - reward.Time < 100)
                 {
-                    fightData.SetSuccess(true, fightData.ToLogSpace(Math.Min(lastDamageTaken.Time, reward.Time)));
+                    fightData.SetSuccess(true, Math.Min(lastDamageTaken.Time, reward.Time));
                 }
                 else
                 {
                     SetSuccessByDeath(combatData, fightData, playerAgents, true, GenericTriggerID);
                     if (fightData.Success)
                     {
-                        fightData.SetSuccess(true, Math.Min(fightData.FightEndLogTime, fightData.ToLogSpace(lastDamageTaken.Time)));
+                        fightData.SetSuccess(true, Math.Min(fightData.FightEnd, lastDamageTaken.Time));
                     }
                 }
             }

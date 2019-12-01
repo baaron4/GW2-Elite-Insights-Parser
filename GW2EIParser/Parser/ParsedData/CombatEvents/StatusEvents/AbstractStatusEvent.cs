@@ -4,7 +4,7 @@
     {
         public AgentItem Src { get; protected set; }
 
-        public AbstractStatusEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem.LogTime, offset)
+        public AbstractStatusEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem.Time)
         {
             Src = agentData.GetAgent(evtcItem.SrcAgent);
         }

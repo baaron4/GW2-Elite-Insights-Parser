@@ -194,7 +194,7 @@ namespace GW2EIParser.Builders.JsonModels
             OffGroupBuffsActive = GetPlayerBuffGenerations(player.GetActiveBuffs(log, BuffEnum.OffGroup), log, buffDesc);
             SquadBuffsActive = GetPlayerBuffGenerations(player.GetActiveBuffs(log, BuffEnum.Squad), log, buffDesc);
             //
-            List<Consumable> consumables = player.GetConsumablesList(log, 0, log.FightData.FightDuration);
+            List<Consumable> consumables = player.GetConsumablesList(log, 0, log.FightData.FightEnd);
             if (consumables.Any())
             {
                 Consumables = new List<JsonConsumable>();

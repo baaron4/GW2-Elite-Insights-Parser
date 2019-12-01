@@ -605,7 +605,7 @@ namespace GW2EIParser.Builders
         private List<FoodDto> BuildPlayerFoodData(Player p)
         {
             var list = new List<FoodDto>();
-            List<Consumable> consume = p.GetConsumablesList(_log, 0, _log.FightData.FightDuration);
+            List<Consumable> consume = p.GetConsumablesList(_log, 0, _log.FightData.FightEnd);
 
             foreach (Consumable entry in consume)
             {

@@ -6,7 +6,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
     {
         private int _isCondi = -1;
 
-        public NonDirectDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, agentData, skillData, offset)
+        public NonDirectDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
             Damage = evtcItem.BuffDmg;
             ParseEnum.ConditionResult result = ParseEnum.GetConditionResult(evtcItem.Result);

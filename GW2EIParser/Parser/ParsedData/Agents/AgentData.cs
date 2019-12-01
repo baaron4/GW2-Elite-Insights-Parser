@@ -38,8 +38,8 @@ namespace GW2EIParser.Parser.ParsedData
             var agent = new AgentItem(agentValue, name, prof, ID, type, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight)
             {
                 InstID = instID,
-                LastAwareLogTime = end,
-                FirstAwareLogTime = start,
+                LastAware = end,
+                FirstAware = start,
                 Master = null
             };
             _allAgentsList.Add(agent);
@@ -89,7 +89,7 @@ namespace GW2EIParser.Parser.ParsedData
             {
                 if (_allAgentsByInstID.TryGetValue(instid, out List<AgentItem> list))
                 {
-                    AgentItem a = list.FirstOrDefault(x => x.FirstAwareLogTime <= logTime && x.LastAwareLogTime >= logTime);
+                    AgentItem a = list.FirstOrDefault(x => x.FirstAware <= logTime && x.LastAware >= logTime);
                     if (a != null)
                     {
                         return a;

@@ -2,7 +2,7 @@
 {
     public class DeadEvent : AbstractStatusEvent
     {
-        public DeadEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, agentData, offset)
+        public DeadEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
 
         }

@@ -48,7 +48,7 @@ namespace GW2EIParser.Logic
             };
         }
 
-        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
+        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
         {
             var res = new List<AbstractBuffEvent>();
             if (buffsById.TryGetValue(56118, out List<AbstractBuffEvent> list))
@@ -119,7 +119,7 @@ namespace GW2EIParser.Logic
             }
             // rush to pylon
             phaseEnds.AddRange(log.CombatData.GetCastDataById(56616).Select(x => x.Time).ToList());
-            phaseEnds.Add(log.FightData.FightDuration);
+            phaseEnds.Add(log.FightData.FightEnd);
             // tp to middle after pylon destruction
             phaseStarts.AddRange(log.CombatData.GetCastDataById(56375).Select(x => x.Time + x.ActualDuration));
             if (phaseEnds.Count < phaseStarts.Count)
@@ -149,7 +149,7 @@ namespace GW2EIParser.Logic
 
         public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
@@ -165,7 +165,7 @@ namespace GW2EIParser.Logic
                         Point3D pylonPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= end);
                         replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (start, end), "rgba(255, 220, 50, 0.15)", new PositionConnector(pylonPosition)));
                         replay.Decorations.Add(new CircleDecoration(true, end, magmaRadius, (start, end), "rgba(255, 220, 50, 0.25)", new PositionConnector(pylonPosition)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (end, (int)log.FightData.FightDuration), "rgba(255, 220, 0, 0.5)", new PositionConnector(pylonPosition)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (end, (int)log.FightData.FightEnd), "rgba(255, 220, 0, 0.5)", new PositionConnector(pylonPosition)));
                     }
                     break;
                 case (ushort)EntropicDistortion:
@@ -245,7 +245,7 @@ namespace GW2EIParser.Logic
                     {
                         replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (magmaDropEnd, magmaDropEnd + magmaOffset), "rgba(255, 220, 50, 0.15)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
                         replay.Decorations.Add(new CircleDecoration(true, magmaDropEnd + magmaOffset, magmaRadius, (magmaDropEnd, magmaDropEnd + magmaOffset), "rgba(255, 220, 50, 0.25)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (magmaDropEnd + magmaOffset, (int)log.FightData.FightDuration), "rgba(255, 220, 50, 0.5)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (magmaDropEnd + magmaOffset, (int)log.FightData.FightEnd), "rgba(255, 220, 50, 0.5)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
                     }
                 }
 

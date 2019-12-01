@@ -23,7 +23,7 @@ namespace GW2EIParser.Logic
             RewardEvent reward = rewards.FirstOrDefault(x => strikeRewardIDs.Contains(x.RewardID));
             if (reward != null)
             {
-                fightData.SetSuccess(true, fightData.ToLogSpace(reward.Time));
+                fightData.SetSuccess(true, reward.Time);
             }
             else
             {

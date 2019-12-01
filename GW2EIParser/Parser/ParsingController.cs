@@ -411,9 +411,9 @@ namespace GW2EIParser.Parser
                     {
                         if (_logStartTime == 0)
                         {
-                            _logStartTime = combatItem.LogTime;
+                            _logStartTime = combatItem.Time;
                         }
-                        _logEndTime = combatItem.LogTime;
+                        _logEndTime = combatItem.Time;
                     }
                     _combatItems.Add(combatItem);
                 }
@@ -445,21 +445,21 @@ namespace GW2EIParser.Parser
             {
                 ag.InstID = instid;
             }
-            if (ag.FirstAwareLogTime == 0)
+            if (ag.FirstAware == 0)
             {
-                ag.FirstAwareLogTime = logTime;
+                ag.FirstAware = logTime;
             }
-            ag.LastAwareLogTime = logTime;
+            ag.LastAware = logTime;
         }
 
         private static void FindAgentMaster(long logTime, ushort masterInstid, ulong minionAgent, Dictionary<ulong, AgentItem> agLUT, List<AgentItem> allAgs)
         {
-            AgentItem master = allAgs.Find(x => x.InstID == masterInstid && x.FirstAwareLogTime <= logTime && logTime <= x.LastAwareLogTime);
+            AgentItem master = allAgs.Find(x => x.InstID == masterInstid && x.FirstAware <= logTime && logTime <= x.LastAware);
             if (master != null)
             {
                 if (agLUT.TryGetValue(minionAgent, out AgentItem minion))
                 {
-                    if (minion.FirstAwareLogTime <= logTime && logTime <= minion.LastAwareLogTime)
+                    if (minion.FirstAware <= logTime && logTime <= minion.LastAware)
                     {
                         minion.Master = master;
                     }
@@ -477,14 +477,14 @@ namespace GW2EIParser.Parser
                 {
                     if (agentsLookup.TryGetValue(c.SrcAgent, out AgentItem agent))
                     {
-                        UpdateAgentData(agent, c.LogTime, c.SrcInstid);
+                        UpdateAgentData(agent, c.Time, c.SrcInstid);
                     }
                 }
                 if (c.IsStateChange.DstIsAgent())
                 {
                     if (agentsLookup.TryGetValue(c.DstAgent, out AgentItem agent))
                     {
-                        UpdateAgentData(agent, c.LogTime, c.DstInstid);
+                        UpdateAgentData(agent, c.Time, c.DstInstid);
                     }
                 }
             }
@@ -493,14 +493,14 @@ namespace GW2EIParser.Parser
             {
                 if (c.SrcMasterInstid != 0)
                 {
-                    FindAgentMaster(c.LogTime, c.SrcMasterInstid, c.SrcAgent, agentsLookup, _allAgentsList);
+                    FindAgentMaster(c.Time, c.SrcMasterInstid, c.SrcAgent, agentsLookup, _allAgentsList);
                 }
                 if (c.DstMasterInstid != 0)
                 {
-                    FindAgentMaster(c.LogTime, c.DstMasterInstid, c.DstAgent, agentsLookup, _allAgentsList);
+                    FindAgentMaster(c.Time, c.DstMasterInstid, c.DstAgent, agentsLookup, _allAgentsList);
                 }
             }
-            _allAgentsList.RemoveAll(x => !(x.InstID != 0 && x.LastAwareLogTime - x.FirstAwareLogTime >= 0 && x.FirstAwareLogTime != 0 && x.LastAwareLogTime != long.MaxValue) && (x.Type != AgentItem.AgentType.Player && x.Type != AgentItem.AgentType.EnemyPlayer));
+            _allAgentsList.RemoveAll(x => !(x.InstID != 0 && x.LastAware - x.FirstAware >= 0 && x.FirstAware != 0 && x.LastAware != long.MaxValue) && (x.Type != AgentItem.AgentType.Player && x.Type != AgentItem.AgentType.EnemyPlayer));
             _agentData = new AgentData(_allAgentsList);
             if (_agentData.GetAgentByType(AgentItem.AgentType.Player).Count == 0)
             {
@@ -514,7 +514,7 @@ namespace GW2EIParser.Parser
 
             foreach (AgentItem playerAgent in playerAgentList)
             {
-                if (playerAgent.InstID == 0 || playerAgent.FirstAwareLogTime == 0 || playerAgent.LastAwareLogTime == long.MaxValue)
+                if (playerAgent.InstID == 0 || playerAgent.FirstAware == 0 || playerAgent.LastAware == long.MaxValue)
                 {
                     CombatItem tst = _combatItems.Find(x => x.SrcAgent == playerAgent.Agent);
                     if (tst == null)
@@ -530,8 +530,8 @@ namespace GW2EIParser.Parser
                     {
                         playerAgent.InstID = tst.SrcInstid;
                     }
-                    playerAgent.FirstAwareLogTime = _fightData.FightStartLogTime;
-                    playerAgent.LastAwareLogTime = _fightData.FightEndLogTime;
+                    playerAgent.FirstAware = _logStartTime;
+                    playerAgent.LastAware = _logEndTime;
                 }
                 bool skip = false;
                 var player = new Player(playerAgent, _fightData.Logic.Mode == FightLogic.ParseMode.Fractal);
@@ -566,8 +566,8 @@ namespace GW2EIParser.Parser
                             }
                             p.AgentItem.InstID = instid;
                             p.AgentItem.Agent = agent;
-                            p.AgentItem.FirstAwareLogTime = Math.Min(p.AgentItem.FirstAwareLogTime, player.AgentItem.FirstAwareLogTime);
-                            p.AgentItem.LastAwareLogTime = Math.Max(p.AgentItem.LastAwareLogTime, player.AgentItem.LastAwareLogTime);
+                            p.AgentItem.FirstAware = Math.Min(p.AgentItem.FirstAware, player.AgentItem.FirstAware);
+                            p.AgentItem.LastAware = Math.Max(p.AgentItem.LastAware, player.AgentItem.LastAware);
                             _agentData.Refresh();
                             break;
                         }
@@ -596,12 +596,6 @@ namespace GW2EIParser.Parser
             }
             CompleteAgents();
             _fightData = new FightData(_id, _agentData, _logStartTime, _logEndTime);
-            // Dealing with special cases + targets
-            _fightData.Logic.EIEvtcParse(_fightData, _agentData, _combatItems);
-            if (!_fightData.Logic.Targets.Any())
-            {
-                throw new InvalidDataException("No Targets found in log");
-            }
             //players
             CompletePlayers();
             _playerList = _playerList.OrderBy(a => a.Group).ToList();
@@ -611,6 +605,27 @@ namespace GW2EIParser.Parser
                 {
                     _playerList[i].Anonymize(i + 1);
                 }
+            }
+            //
+            long offset = _fightData.Logic.GetFightOffset(_fightData, _agentData, _combatItems);
+            // apply offset to everything
+            foreach (CombatItem c in _combatItems)
+            {
+                if (c.IsStateChange.HasTime())
+                {
+                    c.OverrideTime(c.Time - offset);
+                }
+            }
+            foreach(AgentItem a in _allAgentsList)
+            {
+                a.FirstAware -= offset;
+                a.LastAware -= offset;
+            }
+            // Dealing with special cases + targets
+            _fightData.Logic.EIEvtcParse(_fightData, _agentData, _combatItems);
+            if (!_fightData.Logic.Targets.Any())
+            {
+                throw new InvalidDataException("No Targets found in log");
             }
         }
     }

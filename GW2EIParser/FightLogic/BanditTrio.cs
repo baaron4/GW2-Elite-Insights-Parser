@@ -72,7 +72,7 @@ namespace GW2EIParser.Logic
 
         public static void SetPhasePerTarget(NPC target, List<PhaseData> phases, ParsedLog log)
         {
-            long fightDuration = log.FightData.FightDuration;
+            long fightDuration = log.FightData.FightEnd;
             EnterCombatEvent phaseStart = log.CombatData.GetEnterCombatEvents(target.AgentItem).LastOrDefault();
             if (phaseStart != null)
             {
@@ -83,7 +83,7 @@ namespace GW2EIParser.Logic
                 {
                     end = phaseEnd.Time;
                 }
-                var phase = new PhaseData(start, Math.Min(end, log.FightData.FightDuration));
+                var phase = new PhaseData(start, Math.Min(end, log.FightData.FightEnd));
                 phase.Targets.Add(target);
                 phases.Add(phase);
             }
@@ -163,7 +163,7 @@ namespace GW2EIParser.Logic
 
         public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Berg:

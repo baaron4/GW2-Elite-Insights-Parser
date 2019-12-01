@@ -31,16 +31,16 @@ namespace GW2EIParser.Logic
         public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             var attackTargets = combatData.Where(x => x.IsStateChange == ParseEnum.StateChange.AttackTarget).ToList();
-            long first = combatData.Count > 0 ? combatData.First().LogTime : 0;
-            long final = combatData.Count > 0 ? combatData.Last().LogTime : 0;
+            long first = combatData.Count > 0 ? combatData.First().Time : 0;
+            long final = combatData.Count > 0 ? combatData.Last().Time : 0;
             foreach (CombatItem at in attackTargets)
             {
                 AgentItem hand = agentData.GetAgent(at.DstAgent);
                 AgentItem atAgent = agentData.GetAgent(at.SrcAgent);
-                var attackables = combatData.Where(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.SrcAgent == atAgent.Agent && x.LogTime <= atAgent.LastAwareLogTime && x.LogTime >= atAgent.FirstAwareLogTime).ToList();
-                var attackOn = attackables.Where(x => x.DstAgent == 1 && x.LogTime >= first + 2000).Select(x => x.LogTime).ToList();
-                var attackOff = attackables.Where(x => x.DstAgent == 0 && x.LogTime >= first + 2000).Select(x => x.LogTime).ToList();
-                var posFacingHP = combatData.Where(x => x.SrcAgent == hand.Agent && x.LogTime >= hand.FirstAwareLogTime && hand.LastAwareLogTime >= x.LogTime && (x.IsStateChange == ParseEnum.StateChange.Position || x.IsStateChange == ParseEnum.StateChange.Rotation || x.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate)).ToList();
+                var attackables = combatData.Where(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.SrcAgent == atAgent.Agent && x.Time <= atAgent.LastAware && x.Time >= atAgent.FirstAware).ToList();
+                var attackOn = attackables.Where(x => x.DstAgent == 1 && x.Time >= first + 2000).Select(x => x.Time).ToList();
+                var attackOff = attackables.Where(x => x.DstAgent == 0 && x.Time >= first + 2000).Select(x => x.Time).ToList();
+                var posFacingHP = combatData.Where(x => x.SrcAgent == hand.Agent && x.Time >= hand.FirstAware && hand.LastAware >= x.Time && (x.IsStateChange == ParseEnum.StateChange.Position || x.IsStateChange == ParseEnum.StateChange.Rotation || x.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate)).ToList();
                 CombatItem pos = posFacingHP.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position);
                 ushort id = (ushort)HandOfErosion;
                 if (pos != null)
@@ -65,7 +65,7 @@ namespace GW2EIParser.Logic
                     AgentItem extra = agentData.AddCustomAgent(start, end, AgentItem.AgentType.NPC, hand.Name, hand.Prof, id, hand.Toughness, hand.Healing, hand.Condition, hand.Concentration, hand.HitboxWidth, hand.HitboxHeight);
                     foreach (CombatItem c in combatData)
                     {
-                        if (c.LogTime >= extra.FirstAwareLogTime && c.LogTime <= extra.LastAwareLogTime)
+                        if (c.Time >= extra.FirstAware && c.Time <= extra.LastAware)
                         {
                             if (c.IsStateChange.SrcIsAgent() && c.SrcAgent == hand.Agent)
                             {
@@ -80,13 +80,13 @@ namespace GW2EIParser.Logic
                     foreach (CombatItem c in posFacingHP)
                     {
                         var cExtra = new CombatItem(c);
-                        cExtra.OverrideTime(extra.FirstAwareLogTime);
+                        cExtra.OverrideTime(extra.FirstAware);
                         cExtra.OverrideSrcValues(extra.Agent, extra.InstID);
                         combatData.Add(cExtra);
                     }
                 }
             }
-            combatData.Sort((x, y) => x.LogTime.CompareTo(y.LogTime));
+            combatData.Sort((x, y) => x.Time.CompareTo(y.Time));
             ComputeFightTargets(agentData, combatData);
         }
 
@@ -113,7 +113,7 @@ namespace GW2EIParser.Logic
             {
                 return phases;
             }
-            var quantumQuakes = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 56035 || x.SkillId == 56381).ToList();
+            var quantumQuakes = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == 56035 || x.SkillId == 56381).ToList();
             List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, 762, mainTarget, true);
             long start = 0, end = 0;
             for (int i = 0; i < invuls.Count; i++)
@@ -124,7 +124,7 @@ namespace GW2EIParser.Logic
                     start = be.Time;
                     if (i == invuls.Count - 1)
                     {
-                        phases.Add(new PhaseData(start, log.FightData.FightDuration)
+                        phases.Add(new PhaseData(start, log.FightData.FightEnd)
                         {
                             Name = "Split " + (i / 2 + 1)
                         });
@@ -153,9 +153,9 @@ namespace GW2EIParser.Logic
                 PhaseData split = phases[i];
                 AddTargetsToPhase(split, new List<ushort> { (ushort)HandOfErosion, (ushort)HandOfEruption }, log);
                 start = split.End;
-                if (i == phases.Count - 1 && start != log.FightData.FightDuration)
+                if (i == phases.Count - 1 && start != log.FightData.FightEnd)
                 {
-                    mainPhases.Add(new PhaseData(start, log.FightData.FightDuration)
+                    mainPhases.Add(new PhaseData(start, log.FightData.FightEnd)
                     {
                         Name = "Phase " + (i + 1)
                     });
@@ -175,7 +175,7 @@ namespace GW2EIParser.Logic
                 "https://i.imgur.com/wqgFO7Z.png",
                 "https://i.imgur.com/DroFhFc.png",
                 "https://i.imgur.com/QsEFkNO.png"
-            }, phases, log.FightData.FightDuration);
+            }, phases, log.FightData.FightEnd);
             return phases;
         }
 

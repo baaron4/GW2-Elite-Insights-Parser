@@ -2,7 +2,7 @@
 {
     public class CombatItem
     {
-        public long LogTime { get; private set; }
+        public long Time { get; private set; }
         public ulong SrcAgent { get; private set; }
         public ulong DstAgent { get; private set; }
         public int Value { get; private set; }
@@ -36,7 +36,7 @@
                ParseEnum.BuffRemove isBuffRemove, byte isNinety, byte isFifty, byte isMoving,
                ParseEnum.StateChange isStateChange, byte isFlanking, byte isShields, byte isOffcycle, uint pad)
         {
-            LogTime = time;
+            this.Time = time;
             SrcAgent = srcAgent;
             DstAgent = dstAgent;
             Value = value;
@@ -64,7 +64,7 @@
 
         public CombatItem(CombatItem c)
         {
-            LogTime = c.LogTime;
+            Time = c.Time;
             SrcAgent = c.SrcAgent;
             DstAgent = c.DstAgent;
             Value = c.Value;
@@ -93,7 +93,7 @@
 
         public void OverrideTime(long time)
         {
-            LogTime = time;
+            this.Time = time;
         }
 
         public void OverrideSrcValues(ulong agent, ushort instid)

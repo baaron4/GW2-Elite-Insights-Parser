@@ -5,7 +5,7 @@
         // Swaps
         public int SwappedTo { get; protected set; }
 
-        public WeaponSwapEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, agentData, skillData, offset)
+        public WeaponSwapEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
             SwappedTo = (int)evtcItem.DstAgent;
             Skill = skillData.Get(SkillItem.WeaponSwapId);

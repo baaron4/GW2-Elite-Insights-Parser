@@ -2,7 +2,7 @@
 {
     public class SpawnEvent : AbstractStatusEvent
     {
-        public SpawnEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, agentData, offset)
+        public SpawnEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
 
         }

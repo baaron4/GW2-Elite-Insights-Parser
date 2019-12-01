@@ -4,7 +4,7 @@
     {
         public double HPPercent { get; }
 
-        public HealthUpdateEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, agentData, offset)
+        public HealthUpdateEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
             HPPercent = evtcItem.DstAgent / 100.0;
         }

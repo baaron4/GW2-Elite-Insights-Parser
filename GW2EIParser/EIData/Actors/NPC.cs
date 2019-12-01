@@ -177,7 +177,7 @@ namespace GW2EIParser.EIData
             }
             CombatReplay = new CombatReplay();
             SetMovements(log);
-            CombatReplay.PollingRate(log.FightData.FightDuration, log.FightData.GetMainTargets(log).Contains(this));
+            CombatReplay.PollingRate(log.FightData.FightEnd, log.FightData.GetMainTargets(log).Contains(this));
             TrimCombatReplay(log);
         }
     }

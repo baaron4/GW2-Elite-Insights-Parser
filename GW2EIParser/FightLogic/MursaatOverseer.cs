@@ -49,7 +49,7 @@ namespace GW2EIParser.Logic
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
-            long fightDuration = log.FightData.FightDuration;
+            long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
             NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.MursaatOverseer);
             if (mainTarget == null)
@@ -101,7 +101,7 @@ namespace GW2EIParser.Logic
 
         public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (ushort)Jade:

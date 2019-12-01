@@ -6,7 +6,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
     {
         private readonly ParseEnum.IFF _iff;
         public uint BuffInstance { get; protected set; }
-        public BuffRemoveSingleEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, agentData, skillData, offset)
+        public BuffRemoveSingleEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
             _iff = evtcItem.IFF;
             BuffInstance = evtcItem.Pad;

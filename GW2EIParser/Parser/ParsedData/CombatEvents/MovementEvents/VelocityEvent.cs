@@ -5,7 +5,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
     public class VelocityEvent : AbstractMovementEvent
     {
 
-        public VelocityEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, agentData, offset)
+        public VelocityEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
         }
 

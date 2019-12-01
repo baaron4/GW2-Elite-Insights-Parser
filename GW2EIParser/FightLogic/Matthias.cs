@@ -57,7 +57,7 @@ namespace GW2EIParser.Logic
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
-            long fightDuration = log.FightData.FightDuration;
+            long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
             NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Matthias);
             if (mainTarget == null)
@@ -78,7 +78,7 @@ namespace GW2EIParser.Logic
                 if (downPour != null)
                 {
                     phases.Add(new PhaseData(heatWave.Time, downPour.Time - 1));
-                    List<AbstractCastEvent> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration);
+                    List<AbstractCastEvent> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
                     AbstractCastEvent abo = castLogs.Find(x => x.SkillId == 34427);
                     if (abo != null)
                     {
@@ -127,7 +127,7 @@ namespace GW2EIParser.Logic
 
         public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
@@ -145,7 +145,7 @@ namespace GW2EIParser.Logic
                         }
                         else
                         {
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, (int)log.FightData.FightEnd), "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
                         }
                     }
                     var aboShield = cls.Where(x => x.SkillId == 34510).ToList();
@@ -160,7 +160,7 @@ namespace GW2EIParser.Logic
                         }
                         else
                         {
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, (int)log.FightData.FightEnd), "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
                         }
                     }
                     var rageShards = cls.Where(x => x.SkillId == 34404 || x.SkillId == 34411).ToList();

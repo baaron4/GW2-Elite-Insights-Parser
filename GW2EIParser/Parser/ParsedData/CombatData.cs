@@ -42,7 +42,7 @@ namespace GW2EIParser.Parser.ParsedData
                     ElementalistHelper.RemoveDualBuffs(GetBuffDataByDst(p.AgentItem), skillData);
                 }
             }
-            toAdd.AddRange(fightData.Logic.SpecialBuffEventProcess(_buffDataByDst, _buffData, fightData.FightStartLogTime, skillData));
+            toAdd.AddRange(fightData.Logic.SpecialBuffEventProcess(_buffDataByDst, _buffData, skillData));
             var buffIDsToSort = new HashSet<long>();
             var buffAgentsToSort = new HashSet<AgentItem>();
             foreach (AbstractBuffEvent bf in toAdd)
@@ -85,7 +85,7 @@ namespace GW2EIParser.Parser.ParsedData
         private void SpecialDamageParse(SkillData skillData, FightData fightData)
         {
             var toAdd = new List<AbstractDamageEvent>();
-            toAdd.AddRange(fightData.Logic.SpecialDamageEventProcess(_damageData, _damageTakenData, _damageDataById, fightData.FightStartLogTime, skillData));
+            toAdd.AddRange(fightData.Logic.SpecialDamageEventProcess(_damageData, _damageTakenData, _damageDataById, skillData));
             var idsToSort = new HashSet<long>();
             var dstToSort = new HashSet<AgentItem>();
             var srcToSort = new HashSet<AgentItem>();
@@ -206,13 +206,13 @@ namespace GW2EIParser.Parser.ParsedData
             _movementData = CombatEventFactory.CreateMovementEvents(allCombatItems.Where(x =>
                        x.IsStateChange == ParseEnum.StateChange.Position ||
                        x.IsStateChange == ParseEnum.StateChange.Velocity ||
-                       x.IsStateChange == ParseEnum.StateChange.Rotation).ToList(), agentData, fightData.FightStartLogTime);
+                       x.IsStateChange == ParseEnum.StateChange.Rotation).ToList(), agentData);
             HasMovementData = _movementData.Count > 1;
             // state change events
-            CombatEventFactory.CreateStateChangeEvents(allCombatItems, _metaDataEvents, _statusEvents, _rewardEvents, agentData, fightData.FightStartLogTime);
+            CombatEventFactory.CreateStateChangeEvents(allCombatItems, _metaDataEvents, _statusEvents, _rewardEvents, agentData);
             // activation events
-            List<AnimatedCastEvent> castData = CombatEventFactory.CreateCastEvents(allCombatItems.Where(x => x.IsActivation != ParseEnum.Activation.None).ToList(), agentData, skillData, fightData.FightStartLogTime);
-            List<WeaponSwapEvent> wepSwaps = CombatEventFactory.CreateWeaponSwapEvents(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.WeaponSwap).ToList(), agentData, skillData, fightData.FightStartLogTime);
+            List<AnimatedCastEvent> castData = CombatEventFactory.CreateCastEvents(allCombatItems.Where(x => x.IsActivation != ParseEnum.Activation.None).ToList(), agentData, skillData);
+            List<WeaponSwapEvent> wepSwaps = CombatEventFactory.CreateWeaponSwapEvents(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.WeaponSwap).ToList(), agentData, skillData);
             _weaponSwapData = wepSwaps.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
             _castData = castData.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
             var allCastEvents = new List<AbstractCastEvent>(castData);
@@ -222,12 +222,12 @@ namespace GW2EIParser.Parser.ParsedData
             var buffCombatEvents = allCombatItems.Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.IsBuff != 0).ToList();
             buffCombatEvents.AddRange(noStateActiBuffRem.Where(x => x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0));
             buffCombatEvents.AddRange(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.BuffInitial));
-            buffCombatEvents.Sort((x, y) => x.LogTime.CompareTo(y.LogTime));
-            List<AbstractBuffEvent> buffEvents = CombatEventFactory.CreateBuffEvents(buffCombatEvents, agentData, skillData, fightData.FightStartLogTime);
+            buffCombatEvents.Sort((x, y) => x.Time.CompareTo(y.Time));
+            List<AbstractBuffEvent> buffEvents = CombatEventFactory.CreateBuffEvents(buffCombatEvents, agentData, skillData);
             _buffDataByDst = buffEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             _buffData = buffEvents.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
             // damage events
-            List<AbstractDamageEvent> damageData = CombatEventFactory.CreateDamageEvents(noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0)).ToList(), agentData, skillData, fightData.FightStartLogTime);
+            List<AbstractDamageEvent> damageData = CombatEventFactory.CreateDamageEvents(noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0)).ToList(), agentData, skillData);
             _damageData = damageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             _damageTakenData = damageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             _damageDataById = damageData.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());

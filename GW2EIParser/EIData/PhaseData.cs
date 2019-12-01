@@ -57,11 +57,11 @@ namespace GW2EIParser.EIData
         {
             if (Targets.Count > 0)
             {
-                Start = Math.Max(Start, log.FightData.ToFightSpace(Targets.Min(x => x.FirstAwareLogTime)));
+                Start = Math.Max(Start, Targets.Min(x => x.FirstAware));
                 long end = long.MinValue;
                 foreach (NPC target in Targets)
                 {
-                    long deadTime = log.FightData.ToFightSpace(target.LastAwareLogTime);
+                    long deadTime = target.LastAware;
                     DeadEvent died = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();
                     if (died != null)
                     {
@@ -69,7 +69,7 @@ namespace GW2EIParser.EIData
                     }
                     end = Math.Max(end, deadTime);
                 }
-                End = Math.Min(Math.Min(End, end), log.FightData.FightDuration);
+                End = Math.Min(Math.Min(End, end), log.FightData.FightEnd);
             }
             DurationInM = (End - Start) / 60000;
             DurationInMS = (End - Start);

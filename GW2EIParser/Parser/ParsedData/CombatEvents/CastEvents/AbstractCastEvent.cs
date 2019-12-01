@@ -15,7 +15,7 @@
         public bool ReducedAnimation { get; protected set; }
         public int ActualDuration { get; protected set; }
 
-        public AbstractCastEvent(CombatItem startEvtcItem, AgentData agentData, SkillData skillData, long offset) : base(startEvtcItem.LogTime, offset)
+        public AbstractCastEvent(CombatItem startEvtcItem, AgentData agentData, SkillData skillData) : base(startEvtcItem.Time)
         {
             Skill = skillData.Get(startEvtcItem.SkillID);
             Caster = agentData.GetAgent(startEvtcItem.SrcAgent);
@@ -23,7 +23,7 @@
             ExpectedDuration = startEvtcItem.Value;
         }
 
-        public AbstractCastEvent(long time, SkillItem skill, AgentItem caster) : base(time, 0)
+        public AbstractCastEvent(long time, SkillItem skill, AgentItem caster) : base(time)
         {
             Skill = skill;
             Caster = caster;

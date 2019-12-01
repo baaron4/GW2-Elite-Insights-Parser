@@ -28,7 +28,7 @@ namespace GW2EIParser.EIData
                     amp = log.FindActor(a, false);
                     regroupedMobs.Add(amp.ID, amp);
                 }
-                mechanicLogs[this].Add(new MechanicEvent(log.FightData.ToFightSpace(a.FirstAwareLogTime), this, amp));
+                mechanicLogs[this].Add(new MechanicEvent(a.FirstAware, this, amp));
             }
         }
     }

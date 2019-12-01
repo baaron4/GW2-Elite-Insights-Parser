@@ -57,7 +57,7 @@ namespace GW2EIParser.Logic
             return GetFightTargetsIDs();
         }
 
-        public override List<AbstractDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst, Dictionary<long, List<AbstractDamageEvent>> damageById, long offset, SkillData skillData)
+        public override List<AbstractDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst, Dictionary<long, List<AbstractDamageEvent>> damageById, SkillData skillData)
         {
             NegateDamageAgainstBarrier(Targets.Select(x => x.AgentItem).ToList(), damageByDst);
             return new List<AbstractDamageEvent>();
@@ -67,7 +67,7 @@ namespace GW2EIParser.Logic
         {
             long start = 0;
             long end = 0;
-            long fightDuration = log.FightData.FightDuration;
+            long fightDuration = log.FightData.FightEnd;
             var targetPhases = new List<PhaseData>();
             var states = new List<AbstractTimeCombatEvent>();
             states.AddRange(log.CombatData.GetEnterCombatEvents(target.AgentItem));
@@ -218,7 +218,7 @@ namespace GW2EIParser.Logic
 
         public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Nikare:

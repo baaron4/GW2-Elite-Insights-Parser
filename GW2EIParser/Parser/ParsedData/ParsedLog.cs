@@ -52,7 +52,7 @@ namespace GW2EIParser.Parser.ParsedData
         private void UpdateFightData()
         {
             FightData.Logic.CheckSuccess(CombatData, AgentData, FightData, PlayerAgents);
-            if (FightData.FightDuration <= 2200)
+            if (FightData.FightEnd <= 2200)
             {
                 throw new TooShortException();
             }

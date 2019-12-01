@@ -4,7 +4,7 @@
     {
         public bool Targetable { get; }
 
-        public TargetableEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, agentData, offset)
+        public TargetableEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
             Targetable = evtcItem.DstAgent == 1;
         }

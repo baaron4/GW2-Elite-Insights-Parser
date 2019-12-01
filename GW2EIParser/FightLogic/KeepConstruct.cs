@@ -72,7 +72,7 @@ namespace GW2EIParser.Logic
         {
             long start = 0;
             long end = 0;
-            long fightDuration = log.FightData.FightDuration;
+            long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
             NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.KeepConstruct);
             if (mainTarget == null)
@@ -227,7 +227,7 @@ namespace GW2EIParser.Logic
 
         public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
@@ -338,7 +338,7 @@ namespace GW2EIParser.Logic
                     {
                         if (phantasmsID.Contains(m.ID))
                         {
-                            start = (int)log.FightData.ToFightSpace(m.FirstAwareLogTime);
+                            start = (int)m.FirstAware;
                             Point3D pos = m.GetCombatReplayPolledPositions(log).FirstOrDefault();
                             if (pos != null)
                             {

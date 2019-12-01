@@ -54,12 +54,12 @@ namespace GW2EIParser.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            fightData.SetSuccess(true, fightData.FightEndLogTime);
+            fightData.SetSuccess(true, fightData.FightEnd);
         }
 
         public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem dummyAgent = agentData.AddCustomAgent(combatData.First().LogTime, combatData.Last().LogTime, AgentItem.AgentType.NPC, "Enemy Players", "", (ushort)ParseEnum.TargetIDS.WorldVersusWorld);
+            AgentItem dummyAgent = agentData.AddCustomAgent(combatData.First().Time, combatData.Last().Time, AgentItem.AgentType.NPC, "Enemy Players", "", (ushort)ParseEnum.TargetIDS.WorldVersusWorld);
             ComputeFightTargets(agentData, combatData);
             var aList = agentData.GetAgentByType(AgentItem.AgentType.EnemyPlayer).ToList();
             /*foreach (AgentItem a in aList)

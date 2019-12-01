@@ -5,7 +5,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
     public class BuffStackActiveEvent : AbstractBuffStackEvent
     {
 
-        public BuffStackActiveEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, agentData, skillData, offset)
+        public BuffStackActiveEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
             BuffInstance = (uint)evtcItem.DstAgent;
         }

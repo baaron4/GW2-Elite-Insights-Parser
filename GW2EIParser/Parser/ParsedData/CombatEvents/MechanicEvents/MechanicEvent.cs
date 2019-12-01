@@ -12,7 +12,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public string InGameName => _mechanic.InGameName;
         public bool Enemy => _mechanic.IsEnemyMechanic;
 
-        public MechanicEvent(long time, Mechanic mech, AbstractSingleActor actor) : base(time, 0)
+        public MechanicEvent(long time, Mechanic mech, AbstractSingleActor actor) : base(time)
         {
             Actor = actor;
             _mechanic = mech;

@@ -79,7 +79,7 @@ namespace GW2EIParser.Logic
             }
             agentData.Refresh();
             ComputeFightTargets(agentData, combatData);
-            AgentItem sword = agentData.AddCustomAgent(combatData.First().LogTime, combatData.Last().LogTime, AgentItem.AgentType.Player, "Conjured Sword\0:Conjured Sword\050", "Sword", 0);
+            AgentItem sword = agentData.AddCustomAgent(fightData.FightOffset, fightData.FightOffset + fightData.FightEnd, AgentItem.AgentType.Player, "Conjured Sword\0:Conjured Sword\050", "Sword", 0);
             foreach (CombatItem c in combatData)
             {
                 if (c.SkillID == 52370 && c.IsStateChange == ParseEnum.StateChange.None && c.IsBuffRemove == ParseEnum.BuffRemove.None &&
@@ -186,7 +186,7 @@ namespace GW2EIParser.Logic
                 }
                 if (npcSpawn != null && lastDamageTaken != null)
                 {
-                    fightData.SetSuccess(true, fightData.ToLogSpace(lastDamageTaken.Time));
+                    fightData.SetSuccess(true, lastDamageTaken.Time);
                 }
             }
         }
@@ -277,7 +277,7 @@ namespace GW2EIParser.Logic
 
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = p.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = p.GetCastLogs(log, 0, log.FightData.FightEnd);
             var shieldCast = cls.Where(x => x.SkillId == 52780).ToList();
             foreach (AbstractCastEvent c in shieldCast)
             {

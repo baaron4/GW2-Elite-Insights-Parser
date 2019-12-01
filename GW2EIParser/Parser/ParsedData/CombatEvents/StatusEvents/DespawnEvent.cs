@@ -2,7 +2,7 @@
 {
     public class DespawnEvent : AbstractStatusEvent
     {
-        public DespawnEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, agentData, offset)
+        public DespawnEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
 
         }

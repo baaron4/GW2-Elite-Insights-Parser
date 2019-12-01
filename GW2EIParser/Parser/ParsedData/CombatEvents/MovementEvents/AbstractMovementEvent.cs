@@ -9,7 +9,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         private readonly ulong _dstAgent;
         private readonly long _value;
 
-        public AbstractMovementEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem.LogTime, offset)
+        public AbstractMovementEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem.Time)
         {
             AgentItem = agentData.GetAgent(evtcItem.SrcAgent);
             _dstAgent = evtcItem.DstAgent;

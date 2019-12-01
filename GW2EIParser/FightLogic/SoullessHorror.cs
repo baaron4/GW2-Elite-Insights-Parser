@@ -70,14 +70,14 @@ namespace GW2EIParser.Logic
                 AbstractBuffEvent buffOnDeath = combatData.GetBuffData(895).Where(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent).LastOrDefault();
                 if (buffOnDeath != null)
                 {
-                    fightData.SetSuccess(true, fightData.ToLogSpace(buffOnDeath.Time));
+                    fightData.SetSuccess(true, buffOnDeath.Time);
                 }
             }
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
-            long fightDuration = log.FightData.FightDuration;
+            long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
             NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.SoullessHorror);
             if (mainTarget == null)
@@ -89,7 +89,7 @@ namespace GW2EIParser.Logic
             {
                 return phases;
             }
-            var howling = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 48662).ToList();
+            var howling = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == 48662).ToList();
             long start = 0;
             int i = 1;
             foreach (AbstractCastEvent c in howling)
@@ -116,7 +116,7 @@ namespace GW2EIParser.Logic
 
         public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)

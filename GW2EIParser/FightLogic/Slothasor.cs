@@ -56,7 +56,7 @@ namespace GW2EIParser.Logic
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
-            long fightDuration = log.FightData.FightDuration;
+            long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
             NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Slothasor);
             if (mainTarget == null)
@@ -68,7 +68,7 @@ namespace GW2EIParser.Logic
             {
                 return phases;
             }
-            var sleepy = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 34515).ToList();
+            var sleepy = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == 34515).ToList();
             long start = 0;
             int i = 1;
             foreach (AbstractCastEvent c in sleepy)
@@ -92,7 +92,7 @@ namespace GW2EIParser.Logic
 
         public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Slothasor:

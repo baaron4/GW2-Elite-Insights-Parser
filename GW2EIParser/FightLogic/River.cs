@@ -69,9 +69,9 @@ namespace GW2EIParser.Logic
                         }
                     }
                     DespawnEvent dspwn = combatData.GetDespawnEvents(desmina.AgentItem).LastOrDefault();
-                    if (time != 0 && dspwn == null && time <= fightData.ToFightSpace(desmina.LastAwareLogTime))
+                    if (time != 0 && dspwn == null && time <= desmina.LastAware)
                     {
-                        fightData.SetSuccess(true, fightData.ToLogSpace(time));
+                        fightData.SetSuccess(true, time);
                     }
                 }
             }
@@ -88,13 +88,13 @@ namespace GW2EIParser.Logic
                 if (firstMovement != null)
                 {
                     // update start
-                    riverOfSoul.FirstAwareLogTime = firstMovement.LogTime - 10;
+                    riverOfSoul.FirstAware = firstMovement.Time - 10;
                     foreach (CombatItem c in combatData)
                     {
                         if (c.SrcAgent == riverOfSoul.Agent && (c.IsStateChange == ParseEnum.StateChange.Position || c.IsStateChange == ParseEnum.StateChange.Rotation))
                         {
                             sortCombatList = true;
-                            c.OverrideTime(riverOfSoul.FirstAwareLogTime);
+                            c.OverrideTime(riverOfSoul.FirstAware);
                         }
                     }
                 }
@@ -102,7 +102,7 @@ namespace GW2EIParser.Logic
             // make sure the list is still sorted by time after overrides
             if (sortCombatList)
             {
-                combatData.Sort((x, y) => x.LogTime.CompareTo(y.LogTime));
+                combatData.Sort((x, y) => x.Time.CompareTo(y.Time));
             }
             ComputeFightTargets(agentData, combatData);
         }
@@ -124,7 +124,7 @@ namespace GW2EIParser.Logic
             switch (target.ID)
             {
                 case (ushort)HollowedBomber:
-                    var bomberman = target.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 48272).ToList();
+                    var bomberman = target.GetCastLogs(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == 48272).ToList();
                     foreach (AbstractCastEvent bomb in bomberman)
                     {
                         int startCast = (int)bomb.Time;

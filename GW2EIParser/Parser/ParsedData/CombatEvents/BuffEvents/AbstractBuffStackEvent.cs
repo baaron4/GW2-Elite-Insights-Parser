@@ -4,7 +4,7 @@
     {
         protected uint BuffInstance { get; set; }
 
-        protected AbstractBuffStackEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, skillData, offset)
+        protected AbstractBuffStackEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, skillData)
         {
             To = agentData.GetAgent(evtcItem.SrcAgent);
         }

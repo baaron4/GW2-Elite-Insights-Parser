@@ -99,7 +99,7 @@ namespace GW2EIParser.Logic
             };
         }
 
-        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // Find target
             AgentItem target = agentData.GetNPCsByID((ushort)ParseEnum.TargetIDS.Qadim).FirstOrDefault();
@@ -114,12 +114,12 @@ namespace GW2EIParser.Logic
                 throw new Exceptions.TooShortException();
             }
             // sanity check
-            if (sanityCheckCast.LogTime - startCast.LogTime > 0)
+            if (sanityCheckCast.Time - startCast.Time > 0)
             {
-                _startOffset = -(int)(startCast.LogTime - fightData.FightStartLogTime);
-                fightData.OverrideStart(startCast.LogTime);
+                _startOffset = -(int)startCast.Time;
+                fightData.OverrideOffset(startCast.Time);
             }
-            ComputeFightTargets(agentData, combatData);
+            return fightData.FightOffset;
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
@@ -149,7 +149,7 @@ namespace GW2EIParser.Logic
                     case 2:
                     case 4:
                     case 6:
-                        var pyresFirstAware = log.AgentData.GetNPCsByID((ushort)PyreGuardian).Where(x => phase.InInterval(log.FightData.ToFightSpace(x.FirstAwareLogTime))).Select(x => log.FightData.ToFightSpace(x.FirstAwareLogTime)).ToList();
+                        var pyresFirstAware = log.AgentData.GetNPCsByID((ushort)PyreGuardian).Where(x => phase.InInterval(x.FirstAware)).Select(x => x.FirstAware).ToList();
                         if (pyresFirstAware.Count > 0 && pyresFirstAware.Max() > phase.Start)
                         {
                             phase.OverrideStart(pyresFirstAware.Max());
@@ -193,7 +193,7 @@ namespace GW2EIParser.Logic
 
         public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             int ccRadius = 200;
             switch (target.ID)
             {

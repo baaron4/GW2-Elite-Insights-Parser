@@ -16,8 +16,8 @@ namespace GW2EIParser.EIData
         public ushort InstID => AgentItem.InstID;
         public string Prof => AgentItem.Prof;
         public ulong Agent => AgentItem.Agent;
-        public long LastAwareLogTime => AgentItem.LastAwareLogTime;
-        public long FirstAwareLogTime => AgentItem.FirstAwareLogTime;
+        public long LastAware => AgentItem.LastAware;
+        public long FirstAware => AgentItem.FirstAware;
         public ushort ID => AgentItem.ID;
         public uint HitboxHeight => AgentItem.HitboxHeight;
         public uint HitboxWidth => AgentItem.HitboxWidth;

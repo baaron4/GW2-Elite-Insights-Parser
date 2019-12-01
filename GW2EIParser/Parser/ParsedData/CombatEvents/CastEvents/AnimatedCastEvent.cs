@@ -2,7 +2,7 @@
 {
     public class AnimatedCastEvent : AbstractCastEvent
     {
-        public AnimatedCastEvent(CombatItem startItem, CombatItem endItem, AgentData agentData, SkillData skillData, long offset) : base(startItem, agentData, skillData, offset)
+        public AnimatedCastEvent(CombatItem startItem, CombatItem endItem, AgentData agentData, SkillData skillData) : base(startItem, agentData, skillData)
         {
             ActualDuration = endItem.Value;
             Interrupted = endItem.IsActivation == ParseEnum.Activation.CancelCancel;
@@ -14,12 +14,12 @@
             }
         }
 
-        public AnimatedCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData, long offset, long logEnd) : base(startItem, agentData, skillData, offset)
+        public AnimatedCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData, long logEnd) : base(startItem, agentData, skillData)
         {
             ActualDuration = ExpectedDuration;
-            if (ActualDuration + Time > logEnd - offset)
+            if (ActualDuration + Time > logEnd)
             {
-                ActualDuration = (int)(logEnd - offset - Time);
+                ActualDuration = (int)(logEnd - Time);
             }
             if (Skill.ID == SkillItem.DodgeId)
             {

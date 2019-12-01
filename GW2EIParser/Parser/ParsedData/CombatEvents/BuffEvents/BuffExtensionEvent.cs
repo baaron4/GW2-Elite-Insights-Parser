@@ -6,7 +6,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
     {
         private readonly long _oldValue;
 
-        public BuffExtensionEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, agentData, skillData, offset)
+        public BuffExtensionEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
             if (By == GeneralHelper.UnknownAgent)
             {

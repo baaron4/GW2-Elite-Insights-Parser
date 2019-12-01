@@ -37,7 +37,7 @@ namespace GW2EIParser.Logic
             RewardEvent reward = rewards.FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType));
             if (reward != null)
             {
-                fightData.SetSuccess(true, fightData.ToLogSpace(reward.Time));
+                fightData.SetSuccess(true, reward.Time);
             }
             else
             {

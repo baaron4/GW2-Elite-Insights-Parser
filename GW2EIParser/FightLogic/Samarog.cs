@@ -175,8 +175,8 @@ namespace GW2EIParser.Logic
                 if (c is BuffApplyEvent)
                 {
                     fixationGuldhemStart = (int)c.Time;
-                    long logTime = log.FightData.ToLogSpace(c.Time);
-                    guldhem = Targets.FirstOrDefault(x => x.ID == (ushort)Guldhem && logTime >= x.FirstAwareLogTime && logTime <= x.LastAwareLogTime);
+                    long logTime = c.Time;
+                    guldhem = Targets.FirstOrDefault(x => x.ID == (ushort)Guldhem && logTime >= x.FirstAware && logTime <= x.LastAware);
                 }
                 else
                 {
@@ -196,8 +196,8 @@ namespace GW2EIParser.Logic
                 if (c is BuffApplyEvent)
                 {
                     fixationRigomStart = (int)c.Time;
-                    long logTime = log.FightData.ToLogSpace(c.Time);
-                    rigom = Targets.FirstOrDefault(x => x.ID == (ushort)Rigom && logTime >= x.FirstAwareLogTime && logTime <= x.LastAwareLogTime);
+                    long logTime = c.Time;
+                    rigom = Targets.FirstOrDefault(x => x.ID == (ushort)Rigom && logTime >= x.FirstAware && logTime <= x.LastAware);
                 }
                 else
                 {

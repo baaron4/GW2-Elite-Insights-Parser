@@ -28,7 +28,7 @@ namespace GW2EIParser.EIData
                 DamageLogs = new List<AbstractDamageEvent>();
                 foreach (NPC minion in MinionList)
                 {
-                    DamageLogs.AddRange(minion.GetDamageLogs(null, log, 0, log.FightData.FightDuration));
+                    DamageLogs.AddRange(minion.GetDamageLogs(null, log, 0, log.FightData.FightEnd));
                 }
                 DamageLogsByDst = DamageLogs.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
@@ -56,7 +56,7 @@ namespace GW2EIParser.EIData
                 DamageTakenlogs = new List<AbstractDamageEvent>();
                 foreach (NPC minion in MinionList)
                 {
-                    DamageTakenlogs.AddRange(minion.GetDamageTakenLogs(null, log, 0, log.FightData.FightDuration));
+                    DamageTakenlogs.AddRange(minion.GetDamageTakenLogs(null, log, 0, log.FightData.FightEnd));
                 }
                 DamageTakenLogsBySrc = DamageTakenlogs.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
@@ -74,7 +74,7 @@ namespace GW2EIParser.EIData
                 CastLogs = new List<AbstractCastEvent>();
                 foreach (NPC minion in MinionList)
                 {
-                    CastLogs.AddRange(minion.GetCastLogs(log, 0, log.FightData.FightDuration));
+                    CastLogs.AddRange(minion.GetCastLogs(log, 0, log.FightData.FightEnd));
                 }
                 CastLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
             }
@@ -88,7 +88,7 @@ namespace GW2EIParser.EIData
                 CastLogs = new List<AbstractCastEvent>();
                 foreach (NPC minion in MinionList)
                 {
-                    CastLogs.AddRange(minion.GetCastLogs(log, 0, log.FightData.FightDuration));
+                    CastLogs.AddRange(minion.GetCastLogs(log, 0, log.FightData.FightEnd));
                 }
                 CastLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
             }

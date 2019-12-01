@@ -75,7 +75,7 @@ namespace GW2EIParser.Logic
 
         private List<PhaseData> GetInBetweenSoulSplits(ParsedLog log, NPC dhuum, long mainStart, long mainEnd, bool hasRitual)
         {
-            List<AbstractCastEvent> cls = dhuum.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = dhuum.GetCastLogs(log, 0, log.FightData.FightEnd);
             var cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
             var gDeathmark = cls.Where(x => x.SkillId == 48210).ToList();
             if (gDeathmark.Count < cataCycle.Count)
@@ -109,7 +109,7 @@ namespace GW2EIParser.Logic
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
-            long fightDuration = log.FightData.FightDuration;
+            long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
             NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
             if (mainTarget == null)
@@ -122,7 +122,7 @@ namespace GW2EIParser.Logic
                 return phases;
             }
             // Sometimes the preevent is not in the evtc
-            List<AbstractCastEvent> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
             List<AbstractCastEvent> dhuumCast = mainTarget.GetCastLogs(log, 0, 20000);
             string[] namesDh;
             if (dhuumCast.Count > 0)
@@ -181,7 +181,7 @@ namespace GW2EIParser.Logic
         public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
             // TODO: correct position
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
@@ -238,7 +238,7 @@ namespace GW2EIParser.Logic
                     if (majorSplit != null)
                     {
                         start = (int)majorSplit.Time;
-                        end = (int)log.FightData.FightDuration;
+                        end = (int)log.FightData.FightEnd;
                         replay.Decorations.Add(new CircleDecoration(true, 0, 320, (start, end), "rgba(0, 180, 255, 0.2)", new AgentConnector(target)));
                     }
                     break;
