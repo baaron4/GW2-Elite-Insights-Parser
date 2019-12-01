@@ -15,6 +15,7 @@ namespace GW2EIParser.EIData
             Img = actor.Icon;
             ID = actor.GetCombatReplayID(log);
             Positions = new List<double>();
+            Type = type;
             foreach (Point3D pos in replay.PolledPositions)
             {
                 (double x, double y) = map.GetMapCoord(pos.X, pos.Y);
