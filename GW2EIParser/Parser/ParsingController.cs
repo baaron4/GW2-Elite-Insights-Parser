@@ -24,6 +24,8 @@ namespace GW2EIParser.Parser
         private List<Player> _playerList = new List<Player>();
         private byte _revision;
         private ushort _id;
+        private long _logStartTime = 0;
+        private long _logEndTime = 0;
         private string _buildVersion;
 
         public ParsingController()
@@ -68,7 +70,7 @@ namespace GW2EIParser.Parser
             }
             row.BgWorker.ThrowIfCanceled(row);
             row.BgWorker.UpdateProgress(row, "40% - Data parsed", 40);
-            return new ParsedLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList);
+            return new ParsedLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _logEndTime - _logStartTime);
         }
 
         private void ParseLog(GridRow row, Stream stream)
@@ -405,6 +407,14 @@ namespace GW2EIParser.Parser
                     {
                         continue;
                     }
+                    if (combatItem.IsStateChange.HasTime())
+                    {
+                        if (_logStartTime == 0)
+                        {
+                            _logStartTime = combatItem.LogTime;
+                        }
+                        _logEndTime = combatItem.LogTime;
+                    }
                     _combatItems.Add(combatItem);
                 }
             }
@@ -580,18 +590,12 @@ namespace GW2EIParser.Parser
         /// </summary>
         private void FillMissingData()
         {
-            long start, end;
-            if (_combatItems.Count > 0)
-            {
-                start = _combatItems.Min(x => x.LogTime);
-                end = _combatItems.Max(x => x.LogTime);
-            }
-            else
+            if (!_combatItems.Any())
             {
                 throw new InvalidDataException("No combat events found");
             }
             CompleteAgents();
-            _fightData = new FightData(_id, _agentData, start, end);
+            _fightData = new FightData(_id, _agentData, _logStartTime, _logEndTime);
             // Dealing with special cases + targets
             _fightData.Logic.EIEvtcParse(_fightData, _agentData, _combatItems);
             if (!_fightData.Logic.Targets.Any())
