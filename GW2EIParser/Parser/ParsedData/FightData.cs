@@ -35,7 +35,7 @@ namespace GW2EIParser.Parser.ParsedData
         public FightData(ushort id, AgentData agentData, long start, long end)
         {
             FightOffset = start;
-            FightEnd = end;
+            FightEnd = end - start;
             TriggerID = id;
             _requirePhases = Properties.Settings.Default.ParsePhases;
             switch (ParseEnum.GetTargetIDS(id))

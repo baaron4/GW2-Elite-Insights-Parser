@@ -103,14 +103,16 @@ namespace GW2EIParser.Parser.ParsedData
         /// <returns></returns>
         public AbstractSingleActor FindActor(AgentItem a, bool searchPlayers)
         {
-            if (a == null || a == GeneralHelper.UnknownAgent || a.Type == AgentItem.AgentType.EnemyPlayer || (!searchPlayers && a.Type == AgentItem.AgentType.Player))
+            if (a == null || (!searchPlayers && a.Type == AgentItem.AgentType.Player))
             {
                 return null;
             }
             InitActorDictionaries();
             if (!_agentToActorDictionary.TryGetValue(a, out AbstractSingleActor actor))
             {
-                throw new InvalidOperationException("Requested actor with id " + a.ID + " and name " + a.Name + " is missing");
+                actor = new NPC(a);
+                _agentToActorDictionary[a] = actor;
+                //throw new InvalidOperationException("Requested actor with id " + a.ID + " and name " + a.Name + " is missing");
             }
             if (a.Master != null)
             {

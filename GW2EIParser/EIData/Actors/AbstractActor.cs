@@ -50,7 +50,7 @@ namespace GW2EIParser.EIData
             }
             if (!targetDict.TryGetValue(target ?? GeneralHelper.NullActor, out List<AbstractDamageEvent> dls))
             {
-                dls = GetDamageLogs(target, log, phase);
+                dls = GetDamageLogs(target, log, phase.Start, phase.End);
                 targetDict[target ?? GeneralHelper.NullActor] = dls;
             }
             return dls;

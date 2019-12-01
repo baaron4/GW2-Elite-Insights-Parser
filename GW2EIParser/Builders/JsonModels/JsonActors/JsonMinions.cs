@@ -126,7 +126,7 @@ namespace GW2EIParser.Builders.JsonModels
                     TargetDamageDist[i] = new List<JsonDamageDist>[phases.Count];
                     for (int j = 0; j < phases.Count; j++)
                     {
-                        PhaseData phase = phases[i];
+                        PhaseData phase = phases[j];
                         TargetDamageDist[i][j] = JsonDamageDist.BuildJsonDamageDistList(minions.GetDamageLogs(target, log, phase).Where(x => !x.HasDowned).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
                     }
                 }
