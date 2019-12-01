@@ -4,7 +4,7 @@
     {
         public ulong Build { get; }
 
-        public BuildEvent(CombatItem evtcItem, long offset) : base(evtcItem, offset)
+        public BuildEvent(CombatItem evtcItem) : base(evtcItem)
         {
             Build = evtcItem.SrcAgent;
         }

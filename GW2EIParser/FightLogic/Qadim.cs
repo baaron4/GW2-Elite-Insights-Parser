@@ -99,10 +99,10 @@ namespace GW2EIParser.Logic
             };
         }
 
-        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // Find target
-            AgentItem target = agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.Qadim).FirstOrDefault();
+            AgentItem target = agentData.GetNPCsByID((ushort)ParseEnum.TargetIDS.Qadim).FirstOrDefault();
             if (target == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -149,7 +149,7 @@ namespace GW2EIParser.Logic
                     case 2:
                     case 4:
                     case 6:
-                        var pyresFirstAware = log.AgentData.GetAgentsByID((ushort)PyreGuardian).Where(x => phase.InInterval(log.FightData.ToFightSpace(x.FirstAwareLogTime))).Select(x => log.FightData.ToFightSpace(x.FirstAwareLogTime)).ToList();
+                        var pyresFirstAware = log.AgentData.GetNPCsByID((ushort)PyreGuardian).Where(x => phase.InInterval(log.FightData.ToFightSpace(x.FirstAwareLogTime))).Select(x => log.FightData.ToFightSpace(x.FirstAwareLogTime)).ToList();
                         if (pyresFirstAware.Count > 0 && pyresFirstAware.Max() > phase.Start)
                         {
                             phase.OverrideStart(pyresFirstAware.Max());

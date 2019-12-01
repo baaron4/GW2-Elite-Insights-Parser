@@ -2,7 +2,7 @@
 
 namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
-    public class MechanicEvent : AbstractCombatEvent
+    public class MechanicEvent : AbstractTimeCombatEvent
     {
         private readonly Mechanic _mechanic;
         public AbstractSingleActor Actor { get; }

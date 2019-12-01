@@ -19,7 +19,7 @@ namespace GW2EIParser.Parser.ParsedData
         public string LogEnd { get; private set; }
 
         // Constructors
-        public LogData(string buildVersion, CombatData combatData, List<CombatItem> allCombatItems)
+        public LogData(string buildVersion, CombatData combatData, long evtcLogDuration)
         {
             BuildVersion = buildVersion;
             LogStart = DefaultTimeValue;
@@ -47,13 +47,13 @@ namespace GW2EIParser.Parser.ParsedData
             // log end event is missing, log start is present
             if (LogEnd == DefaultTimeValue && LogStart != DefaultTimeValue)
             {
-                double dur = Math.Round((allCombatItems.Max(x => x.LogTime) - allCombatItems.Min(x => x.LogTime)) / 1000.0, 3);
+                double dur = Math.Round(evtcLogDuration / 1000.0, 3);
                 SetLogEnd(dur + unixStart);
             }
             // log start event is missing, log end is present
             if (LogEnd != DefaultTimeValue && LogStart == DefaultTimeValue)
             {
-                double dur = Math.Round((allCombatItems.Max(x => x.LogTime) - allCombatItems.Min(x => x.LogTime)) / 1000.0, 3);
+                double dur = Math.Round(evtcLogDuration / 1000.0, 3);
                 SetLogStart(unixEnd - dur);
             }
         }

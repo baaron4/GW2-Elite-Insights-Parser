@@ -2,12 +2,15 @@
 
 namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
-    public class GuildEvent : AbstractStatusEvent
+    public class GuildEvent : AbstractMetaDataEvent
     {
+        public AgentItem Src { get; protected set; }
+
         public byte[] Guid { get; }
 
-        public GuildEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, agentData, offset)
+        public GuildEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem)
         {
+            Src = agentData.GetAgent(evtcItem.SrcAgent);
             Guid = new byte[16];
             byte[] first8 = BitConverter.GetBytes(evtcItem.DstAgent);
             byte[] mid4 = BitConverter.GetBytes(evtcItem.Value);

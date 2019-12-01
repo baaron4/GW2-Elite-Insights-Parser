@@ -29,7 +29,7 @@ namespace GW2EIParser.Parser.ParsedData
         private Dictionary<AgentItem, AbstractSingleActor> _agentToActorDictionary;
 
         public ParsedLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData,
-                List<CombatItem> combatItems, List<Player> playerList)
+                List<CombatItem> combatItems, List<Player> playerList, long evtcLogDuration)
         {
             FightData = fightData;
             AgentData = agentData;
@@ -39,7 +39,7 @@ namespace GW2EIParser.Parser.ParsedData
             PlayerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
             PlayerAgents = new HashSet<AgentItem>(playerList.Select(x => x.AgentItem));
             CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList);
-            LogData = new LogData(buildVersion, CombatData, combatItems);
+            LogData = new LogData(buildVersion, CombatData, evtcLogDuration);
             //
             UpdateFightData();
             //

@@ -38,9 +38,9 @@ namespace GW2EIParser.Logic
             }
         }
 
-        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem target = agentData.GetAgentsByID(GenericTriggerID).FirstOrDefault();
+            AgentItem target = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault();
             foreach (CombatItem c in combatData)
             {
                 // redirect all attacks to the main golem

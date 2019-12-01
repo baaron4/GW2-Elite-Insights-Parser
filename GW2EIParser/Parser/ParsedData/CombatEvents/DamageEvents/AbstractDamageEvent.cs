@@ -1,6 +1,6 @@
 ﻿namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
-    public abstract class AbstractDamageEvent : AbstractCombatEvent
+    public abstract class AbstractDamageEvent : AbstractTimeCombatEvent
     {
         public AgentItem From { get; }
         public AgentItem To { get; }

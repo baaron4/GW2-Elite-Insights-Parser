@@ -2,7 +2,7 @@
 
 namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
-    public abstract class AbstractBuffEvent : AbstractCombatEvent
+    public abstract class AbstractBuffEvent : AbstractTimeCombatEvent
     {
         public SkillItem BuffSkill { get; private set; }
         public long BuffID => BuffSkill.ID;

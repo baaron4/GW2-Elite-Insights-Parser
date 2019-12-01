@@ -24,6 +24,7 @@ namespace GW2EIParser.Parser.ParsedData
         private readonly Dictionary<long, List<AbstractCastEvent>> _castDataById;
         private readonly Dictionary<AgentItem, List<AbstractDamageEvent>> _damageTakenData;
         private readonly Dictionary<AgentItem, List<AbstractMovementEvent>> _movementData;
+        private readonly List<RewardEvent> _rewardEvents = new List<RewardEvent>();
 
         public bool HasStackIDs { get; } = false;
 
@@ -208,7 +209,7 @@ namespace GW2EIParser.Parser.ParsedData
                        x.IsStateChange == ParseEnum.StateChange.Rotation).ToList(), agentData, fightData.FightStartLogTime);
             HasMovementData = _movementData.Count > 1;
             // state change events
-            CombatEventFactory.CreateStateChangeEvents(allCombatItems, _metaDataEvents, _statusEvents, agentData, fightData.FightStartLogTime);
+            CombatEventFactory.CreateStateChangeEvents(allCombatItems, _metaDataEvents, _statusEvents, _rewardEvents, agentData, fightData.FightStartLogTime);
             // activation events
             List<AnimatedCastEvent> castData = CombatEventFactory.CreateCastEvents(allCombatItems.Where(x => x.IsActivation != ParseEnum.Activation.None).ToList(), agentData, skillData, fightData.FightStartLogTime);
             List<WeaponSwapEvent> wepSwaps = CombatEventFactory.CreateWeaponSwapEvents(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.WeaponSwap).ToList(), agentData, skillData, fightData.FightStartLogTime);
@@ -314,7 +315,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public List<GuildEvent> GetGuildEvents(AgentItem key)
         {
-            if (_statusEvents.GuildEvents.TryGetValue(key, out List<GuildEvent> list))
+            if (_metaDataEvents.GuildEvents.TryGetValue(key, out List<GuildEvent> list))
             {
                 return list;
             }
@@ -398,7 +399,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public List<RewardEvent> GetRewardEvents()
         {
-            return _metaDataEvents.RewardEvents;
+            return _rewardEvents;
         }
 
         public List<ShardEvent> GetShardEvents()

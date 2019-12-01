@@ -18,7 +18,7 @@ namespace GW2EIParser.Parser.ParsedData
         public string UniqueID { get; }
         public AgentItem Master { get; set; }
         public ushort InstID { get; set; }
-        public AgentType Type { get; } = AgentType.NPC;
+        public AgentType Type { get; protected set; } = AgentType.NPC;
         public long FirstAwareLogTime { get; set; }
         public long LastAwareLogTime { get; set; } = long.MaxValue;
         public string Name { get; } = "UNKNOWN";
@@ -82,6 +82,11 @@ namespace GW2EIParser.Parser.ParsedData
 
         public AgentItem()
         {
+        }
+
+        public void OverrideType(AgentType type)
+        {
+            Type = type;
         }
 
         private static void AddValueToStatusList(List<(long start, long end)> dead, List<(long start, long end)> down, List<(long start, long end)> dc, AbstractStatusEvent cur, AbstractStatusEvent next, long endTime, int index)

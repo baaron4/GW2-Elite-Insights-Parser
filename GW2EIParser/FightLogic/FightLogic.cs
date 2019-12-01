@@ -86,7 +86,7 @@ namespace GW2EIParser.Logic
 
         private static void RegroupTargetsByID(ushort id, AgentData agentData, List<CombatItem> combatItems)
         {
-            List<AgentItem> agents = agentData.GetAgentsByID(id);
+            List<AgentItem> agents = agentData.GetNPCsByID(id);
             if (agents.Count > 1)
             {
                 AgentItem firstItem = agents.First();
@@ -107,11 +107,11 @@ namespace GW2EIParser.Logic
                 agentData.OverrideID(id, newTargetAgent);
                 foreach (CombatItem c in combatItems)
                 {
-                    if (agentValues.Contains(c.SrcAgent))
+                    if (agentValues.Contains(c.SrcAgent) && c.IsStateChange.SrcIsAgent())
                     {
                         c.OverrideSrcValues(newTargetAgent.Agent, newTargetAgent.InstID);
                     }
-                    if (agentValues.Contains(c.DstAgent))
+                    if (agentValues.Contains(c.DstAgent) && c.IsStateChange.DstIsAgent())
                     {
                         c.OverrideDstValues(newTargetAgent.Agent, newTargetAgent.InstID);
                     }
@@ -121,7 +121,7 @@ namespace GW2EIParser.Logic
 
         protected abstract HashSet<ushort> GetUniqueTargetIDs();
 
-        protected void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems)
+        protected virtual void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems)
         {
             foreach (ushort id in GetUniqueTargetIDs())
             {
@@ -130,15 +130,28 @@ namespace GW2EIParser.Logic
             List<ushort> ids = GetFightTargetsIDs();
             foreach (ushort id in ids)
             {
-                List<AgentItem> agents = agentData.GetAgentsByID(id);
+                List<AgentItem> agents = agentData.GetNPCsByID(id);
                 foreach (AgentItem agentItem in agents)
                 {
                     Targets.Add(new NPC(agentItem));
                 }
+                // Trigger ID is not 
+                if (!Targets.Any())
+                {
+                    agents = agentData.GetGadgetsByID(id);
+                    foreach (AgentItem agentItem in agents)
+                    {
+                        Targets.Add(new Target(agentItem));
+                    }
+                    if (!Targets.Any())
+                    {
+                        throw new InvalidOperationException("No Targets found in log");
+                    }
+                }
             }
             List<ParseEnum.TrashIDS> ids2 = GetTrashMobsIDS();
             var aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
-            aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
+            //aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
             foreach (AgentItem a in aList)
             {
                 var mob = new NPC(a);
@@ -360,7 +373,7 @@ namespace GW2EIParser.Logic
             SetSuccessByDeath(combatData, fightData, playerAgents, true, GenericTriggerID);
         }
 
-        public virtual void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        public virtual void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             ComputeFightTargets(agentData, combatData);
         }

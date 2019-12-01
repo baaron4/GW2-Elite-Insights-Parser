@@ -44,7 +44,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             return res;
         }
 
-        public static void CreateStateChangeEvents(List<CombatItem> stateChangeEvents, MetaEventsContainer metaDataEvents, StatusEventsContainer statusEvents, AgentData agentData, long offset)
+        public static void CreateStateChangeEvents(List<CombatItem> stateChangeEvents, MetaEventsContainer metaDataEvents, StatusEventsContainer statusEvents, List<RewardEvent> rewardEvents, AgentData agentData, long offset)
         {
             foreach (CombatItem c in stateChangeEvents)
             {
@@ -83,29 +83,29 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                         GeneralHelper.Add(statusEvents.HealthUpdateEvents, healthEvt.Src, healthEvt);
                         break;
                     case ParseEnum.StateChange.LogStart:
-                        metaDataEvents.LogStartEvents.Add(new LogStartEvent(c, offset));
+                        metaDataEvents.LogStartEvents.Add(new LogStartEvent(c));
                         break;
                     case ParseEnum.StateChange.LogEnd:
-                        metaDataEvents.LogEndEvents.Add(new LogEndEvent(c, offset));
+                        metaDataEvents.LogEndEvents.Add(new LogEndEvent(c));
                         break;
                     case ParseEnum.StateChange.MaxHealthUpdate:
                         var maxHealthEvt = new MaxHealthUpdateEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.MaxHealthUpdateEvents, maxHealthEvt.Src, maxHealthEvt);
                         break;
                     case ParseEnum.StateChange.PointOfView:
-                        metaDataEvents.PointOfViewEvents.Add(new PointOfViewEvent(c, agentData, offset));
+                        metaDataEvents.PointOfViewEvents.Add(new PointOfViewEvent(c, agentData));
                         break;
                     case ParseEnum.StateChange.Language:
-                        metaDataEvents.LanguageEvents.Add(new LanguageEvent(c, offset));
+                        metaDataEvents.LanguageEvents.Add(new LanguageEvent(c));
                         break;
                     case ParseEnum.StateChange.GWBuild:
-                        metaDataEvents.BuildEvents.Add(new BuildEvent(c, offset));
+                        metaDataEvents.BuildEvents.Add(new BuildEvent(c));
                         break;
                     case ParseEnum.StateChange.ShardId:
-                        metaDataEvents.ShardEvents.Add(new ShardEvent(c, offset));
+                        metaDataEvents.ShardEvents.Add(new ShardEvent(c));
                         break;
                     case ParseEnum.StateChange.Reward:
-                        metaDataEvents.RewardEvents.Add(new RewardEvent(c, offset));
+                        rewardEvents.Add(new RewardEvent(c, offset));
                         break;
                     case ParseEnum.StateChange.TeamChange:
                         var tcEvt = new TeamChangeEvent(c, agentData, offset);
@@ -120,11 +120,11 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                         GeneralHelper.Add(statusEvents.TargetableEvents, tarEvt.Src, tarEvt);
                         break;
                     case ParseEnum.StateChange.MapID:
-                        metaDataEvents.MapIDEvents.Add(new MapIDEvent(c, offset));
+                        metaDataEvents.MapIDEvents.Add(new MapIDEvent(c));
                         break;
                     case ParseEnum.StateChange.Guild:
-                        var gEvt = new GuildEvent(c, agentData, offset);
-                        GeneralHelper.Add(statusEvents.GuildEvents, gEvt.Src, gEvt);
+                        var gEvt = new GuildEvent(c, agentData);
+                        GeneralHelper.Add(metaDataEvents.GuildEvents, gEvt.Src, gEvt);
                         break;
                 }
             }

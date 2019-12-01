@@ -28,7 +28,7 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/a/a0/Mini_Earth_Djinn.png";
         }
 
-        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             var attackTargets = combatData.Where(x => x.IsStateChange == ParseEnum.StateChange.AttackTarget).ToList();
             long first = combatData.Count > 0 ? combatData.First().LogTime : 0;
@@ -62,14 +62,20 @@ namespace GW2EIParser.Logic
                     {
                         end = attackOff[i];
                     }
-                    AgentItem extra = agentData.AddCustomAgent(start, end, AgentItem.AgentType.Gadget, hand.Name, hand.Prof, id, hand.Toughness, hand.Healing, hand.Condition, hand.Concentration, hand.HitboxWidth, hand.HitboxHeight);
-                    foreach (CombatItem c in combatData.Where(x => x.SrcAgent == hand.Agent && x.LogTime >= extra.FirstAwareLogTime && x.LogTime <= extra.LastAwareLogTime))
+                    AgentItem extra = agentData.AddCustomAgent(start, end, AgentItem.AgentType.NPC, hand.Name, hand.Prof, id, hand.Toughness, hand.Healing, hand.Condition, hand.Concentration, hand.HitboxWidth, hand.HitboxHeight);
+                    foreach (CombatItem c in combatData)
                     {
-                        c.OverrideSrcValues(extra.Agent, extra.InstID);
-                    }
-                    foreach (CombatItem c in combatData.Where(x => x.DstAgent == hand.Agent && x.LogTime >= extra.FirstAwareLogTime && x.LogTime <= extra.LastAwareLogTime))
-                    {
-                        c.OverrideDstValues(extra.Agent, extra.InstID);
+                        if (c.LogTime >= extra.FirstAwareLogTime && c.LogTime <= extra.LastAwareLogTime)
+                        {
+                            if (c.IsStateChange.SrcIsAgent() && c.SrcAgent == hand.Agent)
+                            {
+                                c.OverrideSrcValues(extra.Agent, extra.InstID);
+                            }
+                            if (c.IsStateChange.DstIsAgent() && c.DstAgent == hand.Agent)
+                            {
+                                c.OverrideDstValues(extra.Agent, extra.InstID);
+                            }
+                        }
                     }
                     foreach (CombatItem c in posFacingHP)
                     {
@@ -97,7 +103,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Adina && x.AgentItem.Type == AgentItem.AgentType.NPC);
+            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Adina);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -173,17 +179,6 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        public override string GetFightName()
-        {
-            NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Adina && x.AgentItem.Type == AgentItem.AgentType.NPC);
-            if (target == null)
-            {
-                return "UNKNOWN";
-            }
-            return target.Character;
-        }
-
-
         protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/3IBkNM6.png",
@@ -195,7 +190,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Adina && x.AgentItem.Type == AgentItem.AgentType.NPC);
+            NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Adina);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");

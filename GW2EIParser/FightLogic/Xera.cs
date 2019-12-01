@@ -106,10 +106,10 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // find target
-            AgentItem target = agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.Xera).FirstOrDefault();
+            AgentItem target = agentData.GetNPCsByID((ushort)ParseEnum.TargetIDS.Xera).FirstOrDefault();
             if (target == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -148,11 +148,11 @@ namespace GW2EIParser.Logic
                     // update combat data
                     foreach (CombatItem c in combatData)
                     {
-                        if (agents.Contains(c.SrcAgent))
+                        if (agents.Contains(c.SrcAgent) && c.IsStateChange.SrcIsAgent())
                         {
                             c.OverrideSrcValues(target.Agent, target.InstID);
                         }
-                        if (agents.Contains(c.DstAgent))
+                        if (agents.Contains(c.DstAgent) && c.IsStateChange.DstIsAgent())
                         {
                             c.OverrideDstValues(target.Agent, target.InstID);
                         }
