@@ -84,12 +84,12 @@ namespace GW2EIParser.Logic
                 {
                     continue;
                 }
-                if (allAgents.Contains(c.SrcAgent))
+                if (allAgents.Contains(c.SrcAgent) && c.IsStateChange.SrcIsAgent())
                 {
                     c.OverrideSrcValues(target.Agent, target.InstID);
 
                 }
-                if (allAgents.Contains(c.DstAgent))
+                if (allAgents.Contains(c.DstAgent) && c.IsStateChange.DstIsAgent())
                 {
                     c.OverrideDstValues(target.Agent, target.InstID);
                 }

@@ -148,11 +148,11 @@ namespace GW2EIParser.Logic
                     // update combat data
                     foreach (CombatItem c in combatData)
                     {
-                        if (agents.Contains(c.SrcAgent))
+                        if (agents.Contains(c.SrcAgent) && c.IsStateChange.SrcIsAgent())
                         {
                             c.OverrideSrcValues(target.Agent, target.InstID);
                         }
-                        if (agents.Contains(c.DstAgent))
+                        if (agents.Contains(c.DstAgent) && c.IsStateChange.DstIsAgent())
                         {
                             c.OverrideDstValues(target.Agent, target.InstID);
                         }

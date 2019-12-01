@@ -63,13 +63,19 @@ namespace GW2EIParser.Logic
                         end = attackOff[i];
                     }
                     AgentItem extra = agentData.AddCustomAgent(start, end, AgentItem.AgentType.Gadget, hand.Name, hand.Prof, id, hand.Toughness, hand.Healing, hand.Condition, hand.Concentration, hand.HitboxWidth, hand.HitboxHeight);
-                    foreach (CombatItem c in combatData.Where(x => x.SrcAgent == hand.Agent && x.LogTime >= extra.FirstAwareLogTime && x.LogTime <= extra.LastAwareLogTime))
+                    foreach (CombatItem c in combatData)
                     {
-                        c.OverrideSrcValues(extra.Agent, extra.InstID);
-                    }
-                    foreach (CombatItem c in combatData.Where(x => x.DstAgent == hand.Agent && x.LogTime >= extra.FirstAwareLogTime && x.LogTime <= extra.LastAwareLogTime))
-                    {
-                        c.OverrideDstValues(extra.Agent, extra.InstID);
+                        if (c.LogTime >= extra.FirstAwareLogTime && c.LogTime <= extra.LastAwareLogTime)
+                        {
+                            if (c.IsStateChange.SrcIsAgent() && c.SrcAgent == hand.Agent)
+                            {
+                                c.OverrideSrcValues(extra.Agent, extra.InstID);
+                            }
+                            if (c.IsStateChange.DstIsAgent() && c.DstAgent == hand.Agent)
+                            {
+                                c.OverrideDstValues(extra.Agent, extra.InstID);
+                            }
+                        }
                     }
                     foreach (CombatItem c in posFacingHP)
                     {

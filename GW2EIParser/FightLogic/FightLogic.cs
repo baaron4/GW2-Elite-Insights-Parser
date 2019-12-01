@@ -107,11 +107,11 @@ namespace GW2EIParser.Logic
                 agentData.OverrideID(id, newTargetAgent);
                 foreach (CombatItem c in combatItems)
                 {
-                    if (agentValues.Contains(c.SrcAgent))
+                    if (agentValues.Contains(c.SrcAgent) && c.IsStateChange.SrcIsAgent())
                     {
                         c.OverrideSrcValues(newTargetAgent.Agent, newTargetAgent.InstID);
                     }
-                    if (agentValues.Contains(c.DstAgent))
+                    if (agentValues.Contains(c.DstAgent) && c.IsStateChange.DstIsAgent())
                     {
                         c.OverrideDstValues(newTargetAgent.Agent, newTargetAgent.InstID);
                     }

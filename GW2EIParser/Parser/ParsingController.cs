@@ -427,7 +427,7 @@ namespace GW2EIParser.Parser
             {
                 return false;
             }
-            return true;
+            return combatItem.IsStateChange != ParseEnum.StateChange.Unknown;
         }
         private static void UpdateAgentData(AgentItem ag, long logTime, ushort instid)
         {
@@ -545,11 +545,11 @@ namespace GW2EIParser.Parser
                             }
                             foreach (CombatItem c in _combatItems)
                             {
-                                if (c.DstAgent == p.Agent || player.Agent == c.DstAgent)
+                                if ((c.DstAgent == p.Agent || player.Agent == c.DstAgent) && c.IsStateChange.DstIsAgent())
                                 {
                                     c.OverrideDstValues(agent, instid);
                                 }
-                                if (c.SrcAgent == p.Agent || player.Agent == c.SrcAgent)
+                                if ((c.SrcAgent == p.Agent || player.Agent == c.SrcAgent) && c.IsStateChange.SrcIsAgent())
                                 {
                                     c.OverrideSrcValues(agent, instid);
                                 }
