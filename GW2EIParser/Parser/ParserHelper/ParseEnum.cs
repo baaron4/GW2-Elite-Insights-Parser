@@ -462,7 +462,8 @@ namespace GW2EIParser.Parser
                 || state == ParseEnum.StateChange.Position || state == ParseEnum.StateChange.Velocity 
                 || state == ParseEnum.StateChange.Rotation || state == ParseEnum.StateChange.TeamChange 
                 || state == ParseEnum.StateChange.AttackTarget || state == ParseEnum.StateChange.Targetable 
-                || state == ParseEnum.StateChange.StackActive || state == ParseEnum.StateChange.StackReset;
+                || state == ParseEnum.StateChange.StackActive || state == ParseEnum.StateChange.StackReset
+                || state == ParseEnum.StateChange.Reward;
         }
     }
 
