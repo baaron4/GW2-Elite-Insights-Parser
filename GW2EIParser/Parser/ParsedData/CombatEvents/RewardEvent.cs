@@ -1,6 +1,6 @@
 ﻿namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
-    public class RewardEvent : AbstractCombatEvent
+    public class RewardEvent : AbstractTimeCombatEvent
     {
         public ulong RewardID { get; }
         public int RewardType { get; }

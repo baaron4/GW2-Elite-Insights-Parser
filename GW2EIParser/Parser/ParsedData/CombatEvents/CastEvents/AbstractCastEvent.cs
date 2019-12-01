@@ -1,6 +1,6 @@
 ﻿namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
-    public abstract class AbstractCastEvent : AbstractCombatEvent
+    public abstract class AbstractCastEvent : AbstractTimeCombatEvent
     {
         // start item
         public SkillItem Skill { get; protected set; }

@@ -1,10 +1,10 @@
 ﻿namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
-    public abstract class AbstractCombatEvent
+    public abstract class AbstractTimeCombatEvent
     {
         public long Time { get; protected set; }
 
-        protected AbstractCombatEvent(long logTime, long offset)
+        protected AbstractTimeCombatEvent(long logTime, long offset)
         {
             Time = logTime - offset;
         }

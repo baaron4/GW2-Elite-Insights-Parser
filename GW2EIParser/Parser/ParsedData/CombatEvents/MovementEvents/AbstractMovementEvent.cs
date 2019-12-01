@@ -3,7 +3,7 @@ using GW2EIParser.EIData;
 
 namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
-    public abstract class AbstractMovementEvent : AbstractCombatEvent
+    public abstract class AbstractMovementEvent : AbstractTimeCombatEvent
     {
         public AgentItem AgentItem { get; }
         private readonly ulong _dstAgent;

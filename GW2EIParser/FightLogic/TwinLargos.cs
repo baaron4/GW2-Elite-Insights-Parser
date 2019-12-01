@@ -69,14 +69,14 @@ namespace GW2EIParser.Logic
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             var targetPhases = new List<PhaseData>();
-            var states = new List<AbstractCombatEvent>();
+            var states = new List<AbstractTimeCombatEvent>();
             states.AddRange(log.CombatData.GetEnterCombatEvents(target.AgentItem));
             states.AddRange(GetFilteredList(log.CombatData, 762, target, true).Where(x => x is BuffApplyEvent));
             states.AddRange(log.CombatData.GetDeadEvents(target.AgentItem));
             states.Sort((x, y) => x.Time.CompareTo(y.Time));
             for (int i = 0; i < states.Count; i++)
             {
-                AbstractCombatEvent state = states[i];
+                AbstractTimeCombatEvent state = states[i];
                 if (state is EnterCombatEvent)
                 {
                     start = state.Time;
