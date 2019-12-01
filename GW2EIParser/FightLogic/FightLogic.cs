@@ -377,7 +377,7 @@ namespace GW2EIParser.Logic
             SetSuccessByDeath(combatData, fightData, playerAgents, true, GenericTriggerID);
         }
 
-        public virtual void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        public virtual void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             ComputeFightTargets(agentData, combatData);
         }

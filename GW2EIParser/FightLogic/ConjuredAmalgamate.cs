@@ -59,7 +59,7 @@ namespace GW2EIParser.Logic
             };
         }
 
-        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // make those into npcs
             List<AgentItem> cas = agentData.GetGadgetsByID((ushort)ParseEnum.TargetIDS.ConjuredAmalgamate);

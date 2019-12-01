@@ -77,7 +77,7 @@ namespace GW2EIParser.Logic
             }
         }
 
-        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // The walls spawn at the start of the encounter, we fix it by overriding their first aware to the first velocity change event
             List<AgentItem> riverOfSouls = agentData.GetNPCsByID((ushort)RiverOfSouls);

@@ -36,7 +36,7 @@ namespace GW2EIParser.Logic
                             (1920, 12160, 2944, 14464));
         }
 
-        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             agentData.AddCustomAgent(combatData.First().LogTime, combatData.Last().LogTime, AgentItem.AgentType.NPC, "Twisted Castle", "", (ushort)ParseEnum.TargetIDS.TwistedCastle);
             ComputeFightTargets(agentData, combatData);

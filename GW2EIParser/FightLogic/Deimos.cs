@@ -199,7 +199,7 @@ namespace GW2EIParser.Logic
             return firstAware;
         }
 
-        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             ComputeFightTargets(agentData, combatData);
             // Find target

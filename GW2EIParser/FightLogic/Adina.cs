@@ -28,7 +28,7 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/a/a0/Mini_Earth_Djinn.png";
         }
 
-        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             var attackTargets = combatData.Where(x => x.IsStateChange == ParseEnum.StateChange.AttackTarget).ToList();
             long first = combatData.Count > 0 ? combatData.First().LogTime : 0;

@@ -592,11 +592,11 @@ namespace GW2EIParser.Parser
             }
             CompleteAgents();
             _fightData = new FightData(_id, _agentData, start, end);
-            // Dealing with special cases
-            _fightData.Logic.SpecialParse(_fightData, _agentData, _combatItems);
+            // Dealing with special cases + targets
+            _fightData.Logic.EIEvtcParse(_fightData, _agentData, _combatItems);
             if (!_fightData.Logic.Targets.Any())
             {
-                throw new InvalidOperationException("No Targets found in log");
+                throw new InvalidDataException("No Targets found in log");
             }
             //players
             CompletePlayers();

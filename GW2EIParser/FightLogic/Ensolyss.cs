@@ -46,7 +46,7 @@ namespace GW2EIParser.Logic
         }
 
 
-        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // Find target
             AgentItem target = agentData.GetNPCsByID((ushort)ParseEnum.TargetIDS.Ensolyss).FirstOrDefault();

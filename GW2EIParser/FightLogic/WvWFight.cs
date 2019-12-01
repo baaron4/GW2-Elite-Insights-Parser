@@ -57,7 +57,7 @@ namespace GW2EIParser.Logic
             fightData.SetSuccess(true, fightData.FightEndLogTime);
         }
 
-        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             AgentItem dummyAgent = agentData.AddCustomAgent(combatData.First().LogTime, combatData.Last().LogTime, AgentItem.AgentType.NPC, "Enemy Players", "", (ushort)ParseEnum.TargetIDS.WorldVersusWorld);
             ComputeFightTargets(agentData, combatData);

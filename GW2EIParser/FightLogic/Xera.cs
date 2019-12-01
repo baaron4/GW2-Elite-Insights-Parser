@@ -106,7 +106,7 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // find target
             AgentItem target = agentData.GetNPCsByID((ushort)ParseEnum.TargetIDS.Xera).FirstOrDefault();
