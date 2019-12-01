@@ -4,7 +4,7 @@
     {
         public int MapID { get; }
 
-        public MapIDEvent(CombatItem evtcItem, long offset) : base(evtcItem, offset)
+        public MapIDEvent(CombatItem evtcItem) : base(evtcItem)
         {
             MapID = (int)evtcItem.SrcAgent;
         }

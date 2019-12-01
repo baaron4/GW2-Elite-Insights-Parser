@@ -1,8 +1,8 @@
 ﻿namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
-    public abstract class AbstractMetaDataEvent : AbstractCombatEvent
+    public abstract class AbstractMetaDataEvent
     {
-        public AbstractMetaDataEvent(CombatItem evtcItem, long offset) : base(evtcItem.LogTime, offset)
+        public AbstractMetaDataEvent(CombatItem evtcItem)
         {
         }
 
