@@ -123,8 +123,8 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                         metaDataEvents.MapIDEvents.Add(new MapIDEvent(c));
                         break;
                     case ParseEnum.StateChange.Guild:
-                        var gEvt = new GuildEvent(c, agentData, offset);
-                        GeneralHelper.Add(statusEvents.GuildEvents, gEvt.Src, gEvt);
+                        var gEvt = new GuildEvent(c, agentData);
+                        GeneralHelper.Add(metaDataEvents.GuildEvents, gEvt.Src, gEvt);
                         break;
                 }
             }

@@ -11,5 +11,6 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public List<MapIDEvent> MapIDEvents { get; } = new List<MapIDEvent>();
         public List<ShardEvent> ShardEvents { get; } = new List<ShardEvent>();
         public List<PointOfViewEvent> PointOfViewEvents { get; } = new List<PointOfViewEvent>();
+        public Dictionary<AgentItem, List<GuildEvent>> GuildEvents { get; } = new Dictionary<AgentItem, List<GuildEvent>>();
     }
 }

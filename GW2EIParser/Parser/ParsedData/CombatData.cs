@@ -311,7 +311,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public List<GuildEvent> GetGuildEvents(AgentItem key)
         {
-            if (_statusEvents.GuildEvents.TryGetValue(key, out List<GuildEvent> list))
+            if (_metaDataEvents.GuildEvents.TryGetValue(key, out List<GuildEvent> list))
             {
                 return list;
             }
