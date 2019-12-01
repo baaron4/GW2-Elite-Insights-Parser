@@ -135,19 +135,6 @@ namespace GW2EIParser.Logic
                 {
                     Targets.Add(new NPC(agentItem));
                 }
-                // Trigger ID is not 
-                if (!Targets.Any())
-                {
-                    agents = agentData.GetGadgetsByID(id);
-                    foreach (AgentItem agentItem in agents)
-                    {
-                        Targets.Add(new Target(agentItem));
-                    }
-                    if (!Targets.Any())
-                    {
-                        throw new InvalidOperationException("No Targets found in log");
-                    }
-                }
             }
             List<ParseEnum.TrashIDS> ids2 = GetTrashMobsIDS();
             var aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();

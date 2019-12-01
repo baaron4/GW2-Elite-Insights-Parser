@@ -30,11 +30,11 @@ namespace GW2EIParser.Logic
                 agentItem = agentData.GetGadgetsByID(id).FirstOrDefault();
                 if (agentItem != null)
                 {
-                    Targets.Add(new Target(agentItem));
+                    Targets.Add(new NPC(agentItem));
                 }
             } else
             {
-                Targets.Add(new Target(agentItem));
+                Targets.Add(new NPC(agentItem));
             }
         }
     }
