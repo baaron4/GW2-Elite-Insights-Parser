@@ -594,6 +594,10 @@ namespace GW2EIParser.Parser
             _fightData = new FightData(_id, _agentData, start, end);
             // Dealing with special cases
             _fightData.Logic.SpecialParse(_fightData, _agentData, _combatItems);
+            if (!_fightData.Logic.Targets.Any())
+            {
+                throw new InvalidOperationException("No Targets found in log");
+            }
             //players
             CompletePlayers();
             _playerList = _playerList.OrderBy(a => a.Group).ToList();

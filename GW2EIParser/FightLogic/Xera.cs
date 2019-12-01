@@ -109,7 +109,7 @@ namespace GW2EIParser.Logic
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // find target
-            AgentItem target = agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.Xera).FirstOrDefault();
+            AgentItem target = agentData.GetNPCsByID((ushort)ParseEnum.TargetIDS.Xera).FirstOrDefault();
             if (target == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");

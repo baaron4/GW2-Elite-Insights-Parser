@@ -205,7 +205,7 @@ namespace GW2EIParser.Parser
             RetrieverProjection = 16249,
             // Twisted Castle
             HauntingStatue = 16247,
-            CastleFountain = 32951,
+            //CastleFountain = 32951,
             // Xera
             ChargedBloodstone = 8267,
             BloodstoneFragment = 40724,
@@ -370,9 +370,9 @@ namespace GW2EIParser.Parser
             EyeOfJudgement = 19651,
             EyeOfFate = 19844,
             Dhuum = 19450,
-            ConjuredAmalgamate = 43974,
-            CARightArm = 10142,
-            CALeftArm = 37464,
+            ConjuredAmalgamate = 43974, // Gadget
+            CARightArm = 10142, // Gadget
+            CALeftArm = 37464, // Gadget
             Nikare = 21105,
             Kenut = 21089,
             Qadim = 20934,

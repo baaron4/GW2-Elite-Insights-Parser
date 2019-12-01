@@ -49,7 +49,7 @@ namespace GW2EIParser.Logic
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // Find target
-            AgentItem target = agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.Ensolyss).FirstOrDefault();
+            AgentItem target = agentData.GetNPCsByID((ushort)ParseEnum.TargetIDS.Ensolyss).FirstOrDefault();
             if (target == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");

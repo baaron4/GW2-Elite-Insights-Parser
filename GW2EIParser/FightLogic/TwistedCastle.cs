@@ -47,7 +47,7 @@ namespace GW2EIParser.Logic
             return new List<ParseEnum.TrashIDS>
             {
                ParseEnum.TrashIDS.HauntingStatue,
-               ParseEnum.TrashIDS.CastleFountain
+               //ParseEnum.TrashIDS.CastleFountain
             };
         }
 
@@ -62,8 +62,8 @@ namespace GW2EIParser.Logic
                         replay.Decorations.Add(new FacingDecoration(lifespan, new AgentConnector(mob), replay.PolledRotations));
                     }
                     break;
-                case (ushort)ParseEnum.TrashIDS.CastleFountain:
-                    break;
+                //case (ushort)ParseEnum.TrashIDS.CastleFountain:
+                //    break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }

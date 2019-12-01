@@ -57,7 +57,7 @@ namespace GW2EIParser.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                List<AgentItem> prisoners = agentData.GetAgentsByID((ushort)Prisoner2);
+                List<AgentItem> prisoners = agentData.GetNPCsByID((ushort)Prisoner2);
                 var prisonerDeaths = new List<DeadEvent>();
                 foreach (AgentItem prisoner in prisoners)
                 {

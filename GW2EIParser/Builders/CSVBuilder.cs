@@ -34,7 +34,7 @@ namespace GW2EIParser.Builders
             _legacyTarget = log.FightData.Logic.GetLegacyTarget();
             if (_legacyTarget == null)
             {
-                _legacyTarget = new Target(GeneralHelper.UnknownAgent);
+                throw new InvalidOperationException("No Targets found for csv");
             }
         }
         private void WriteCell(string content)

@@ -61,6 +61,23 @@ namespace GW2EIParser.Logic
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
+            // make those into npcs
+            List<AgentItem> cas = agentData.GetGadgetsByID((ushort)ParseEnum.TargetIDS.ConjuredAmalgamate);
+            List<AgentItem> leftArms = agentData.GetGadgetsByID((ushort)ParseEnum.TargetIDS.CALeftArm);
+            List<AgentItem> rightArms = agentData.GetGadgetsByID((ushort)ParseEnum.TargetIDS.CARightArm);
+            foreach (AgentItem ca in cas)
+            {
+                ca.OverrideType(AgentItem.AgentType.NPC);
+            }
+            foreach (AgentItem leftArm in leftArms)
+            {
+                leftArm.OverrideType(AgentItem.AgentType.NPC);
+            }
+            foreach (AgentItem rightArm in rightArms)
+            {
+                rightArm.OverrideType(AgentItem.AgentType.NPC);
+            }
+            agentData.Refresh();
             ComputeFightTargets(agentData, combatData);
             AgentItem sword = agentData.AddCustomAgent(combatData.First().LogTime, combatData.Last().LogTime, AgentItem.AgentType.Player, "Conjured Sword\0:Conjured Sword\050", "Sword", 0);
             foreach (CombatItem c in combatData)
@@ -124,7 +141,7 @@ namespace GW2EIParser.Logic
                 {
                     throw new InvalidOperationException("Target for success by combat exit not found");
                 }
-                AgentItem zommoros = agentData.GetAgentsByID(21118).LastOrDefault();
+                AgentItem zommoros = agentData.GetNPCsByID(21118).LastOrDefault();
                 if (zommoros == null)
                 {
                     return;

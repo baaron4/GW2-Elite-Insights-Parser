@@ -86,7 +86,7 @@ namespace GW2EIParser.Logic
 
         private static void RegroupTargetsByID(ushort id, AgentData agentData, List<CombatItem> combatItems)
         {
-            List<AgentItem> agents = agentData.GetAgentsByID(id);
+            List<AgentItem> agents = agentData.GetNPCsByID(id);
             if (agents.Count > 1)
             {
                 AgentItem firstItem = agents.First();
@@ -121,7 +121,7 @@ namespace GW2EIParser.Logic
 
         protected abstract HashSet<ushort> GetUniqueTargetIDs();
 
-        protected void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems)
+        protected virtual void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems)
         {
             foreach (ushort id in GetUniqueTargetIDs())
             {
@@ -130,15 +130,28 @@ namespace GW2EIParser.Logic
             List<ushort> ids = GetFightTargetsIDs();
             foreach (ushort id in ids)
             {
-                List<AgentItem> agents = agentData.GetAgentsByID(id);
+                List<AgentItem> agents = agentData.GetNPCsByID(id);
                 foreach (AgentItem agentItem in agents)
                 {
                     Targets.Add(new Target(agentItem));
                 }
+                // Trigger ID is not 
+                if (!Targets.Any())
+                {
+                    agents = agentData.GetGadgetsByID(id);
+                    foreach (AgentItem agentItem in agents)
+                    {
+                        Targets.Add(new Target(agentItem));
+                    }
+                    if (!Targets.Any())
+                    {
+                        throw new InvalidOperationException("No Targets found in log");
+                    }
+                }
             }
             List<ParseEnum.TrashIDS> ids2 = GetTrashMobsIDS();
             var aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
-            aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
+            //aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
             foreach (AgentItem a in aList)
             {
                 var mob = new Mob(a);
