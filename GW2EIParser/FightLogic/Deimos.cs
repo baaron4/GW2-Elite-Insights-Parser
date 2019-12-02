@@ -257,7 +257,7 @@ namespace GW2EIParser.Logic
                 _specialSplit = (firstAware >= target.LastAware ? firstAware : target.LastAware);
                 SetUniqueID(target.AgentItem, gadgetAgents, agentData, combatData);
             }
-            target.AgentItem.LastAware = combatData.Last().Time;
+            target.AgentItem.LastAware = fightData.FightEnd;
             target.OverrideName("Deimos");
         }
 

@@ -13,6 +13,7 @@ namespace GW2EIParser.Parser.ParsedData
         private readonly bool _requirePhases;
         public FightLogic Logic { get; }
         public long FightOffset { get; private set; }
+        public long FightStart { get; } = 0;
         public long FightEnd { get; private set; } = long.MaxValue;
         public string DurationString
         {
