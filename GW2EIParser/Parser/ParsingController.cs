@@ -75,7 +75,7 @@ namespace GW2EIParser.Parser
                 }
             }
             row.BgWorker.ThrowIfCanceled(row);
-            row.BgWorker.UpdateProgress(row, "40% - Data parsed", 40);
+            row.BgWorker.UpdateProgress(row, "45% - Data parsed", 45);
             return new ParsedLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _logEndTime - _logStartTime, _skipFails);
         }
 
@@ -94,8 +94,11 @@ namespace GW2EIParser.Parser
             row.BgWorker.UpdateProgress(row, "30% - Parsing combat list...", 30);
             ParseCombatList(stream);
             row.BgWorker.ThrowIfCanceled(row);
-            row.BgWorker.UpdateProgress(row, "35% - Pairing data...", 35);
-            FillMissingData();
+            row.BgWorker.UpdateProgress(row, "35% - Linking agents to combat list...", 35);
+            CompleteAgents();
+            row.BgWorker.ThrowIfCanceled(row);
+            row.BgWorker.UpdateProgress(row, "40% - Preparing data for log generation...", 40);
+            PreProcessEvtcData();
             row.BgWorker.ThrowIfCanceled(row);
         }
 
@@ -424,6 +427,10 @@ namespace GW2EIParser.Parser
                     _combatItems.Add(combatItem);
                 }
             }
+            if (!_combatItems.Any())
+            {
+                throw new InvalidDataException("No combat events found");
+            }
         }
 
         /// <summary>
@@ -590,21 +597,6 @@ namespace GW2EIParser.Parser
                     _playerList.Add(player);
                 }
             }
-        }
-        /// <summary>
-        /// Parses all the data again and link related stuff to each other
-        /// </summary>
-        private void FillMissingData()
-        {
-            if (!_combatItems.Any())
-            {
-                throw new InvalidDataException("No combat events found");
-            }
-            CompleteAgents();
-            _fightData = new FightData(_id, _agentData, _logStartTime, _logEndTime, _parsePhases);
-            //players
-            CompletePlayers();
-            _playerList = _playerList.OrderBy(a => a.Group).ToList();
             if (_anonymous)
             {
                 for (int i = 0; i < _playerList.Count; i++)
@@ -612,7 +604,12 @@ namespace GW2EIParser.Parser
                     _playerList[i].Anonymize(i + 1);
                 }
             }
-            //
+            _playerList = _playerList.OrderBy(a => a.Group).ToList();
+        }
+
+        private void OffsetEvtcData()
+        {
+
             long offset = _fightData.Logic.GetFightOffset(_fightData, _agentData, _combatItems);
             // apply offset to everything
             foreach (CombatItem c in _combatItems)
@@ -622,12 +619,21 @@ namespace GW2EIParser.Parser
                     c.OverrideTime(c.Time - offset);
                 }
             }
-            foreach(AgentItem a in _allAgentsList)
+            foreach (AgentItem a in _allAgentsList)
             {
                 a.FirstAware -= offset;
                 a.LastAware -= offset;
             }
-            // Dealing with special cases + targets
+        }
+
+        /// <summary>
+        /// Pre process evtc data for EI
+        /// </summary>
+        private void PreProcessEvtcData()
+        {
+            _fightData = new FightData(_id, _agentData, _logStartTime, _logEndTime, _parsePhases);
+            CompletePlayers();
+            OffsetEvtcData();
             _fightData.Logic.EIEvtcParse(_fightData, _agentData, _combatItems);
             if (!_fightData.Logic.Targets.Any())
             {

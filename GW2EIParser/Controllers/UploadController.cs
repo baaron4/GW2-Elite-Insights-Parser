@@ -129,7 +129,7 @@ namespace GW2EIParser.Controllers
             string[] uploadresult = new string[3] { "", "", "" };
             if (Properties.Settings.Default.UploadToDPSReports)
             {
-                row.BgWorker.UpdateProgress(row, " 40% - Uploading to DPSReports using EI...", 40);
+                row.BgWorker.UpdateProgress(row, " 45% - Uploading to DPSReports using EI...", 45);
                 DREITask = Task.Run(() => UploadDPSReportsEI(fInfo));
                 if (DREITask != null)
                 {
@@ -143,7 +143,7 @@ namespace GW2EIParser.Controllers
             row.BgWorker.ThrowIfCanceled(row);
             if (Properties.Settings.Default.UploadToDPSReportsRH)
             {
-                row.BgWorker.UpdateProgress(row, " 40% - Uploading to DPSReports using RH...", 40);
+                row.BgWorker.UpdateProgress(row, " 45% - Uploading to DPSReports using RH...", 45);
                 DRRHTask = Task.Run(() => UploadDPSReportsRH(fInfo));
                 if (DRRHTask != null)
                 {
@@ -157,7 +157,7 @@ namespace GW2EIParser.Controllers
             row.BgWorker.ThrowIfCanceled(row);
             if (Properties.Settings.Default.UploadToRaidar)
             {
-                row.BgWorker.UpdateProgress(row, " 40% - Uploading to Raidar...", 40);
+                row.BgWorker.UpdateProgress(row, " 45% - Uploading to Raidar...", 45);
                 RaidarTask = Task.Run(() => UploadRaidar(fInfo));
                 if (RaidarTask != null)
                 {
