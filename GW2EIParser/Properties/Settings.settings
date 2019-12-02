@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="LuckParser.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="GW2EIParser.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="SaveAtOut" Type="System.Boolean" Scope="User">
@@ -12,9 +12,6 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="SaveOutCSV" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="ShowEstimates" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="ParseOneAtATime" Type="System.Boolean" Scope="User">
