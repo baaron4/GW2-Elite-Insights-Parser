@@ -28,7 +28,7 @@ namespace GW2EIParser.Parser.ParsedData
         public Statistics Statistics { get; }
 
         public ParsedLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData,
-                List<CombatItem> combatItems, List<Player> playerList, long evtcLogDuration)
+                List<CombatItem> combatItems, List<Player> playerList, long evtcLogDuration, bool skipFail)
         {
             FightData = fightData;
             AgentData = agentData;
@@ -40,7 +40,7 @@ namespace GW2EIParser.Parser.ParsedData
             CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList);
             LogData = new LogData(buildVersion, CombatData, evtcLogDuration);
             //
-            UpdateFightData();
+            UpdateFightData(skipFail);
             //
             Buffs = new BuffsContainer(LogData.GW2Version);
             DamageModifiers = new DamageModifiersContainer(LogData.GW2Version);
@@ -48,14 +48,14 @@ namespace GW2EIParser.Parser.ParsedData
             Statistics = new Statistics(CombatData, PlayerList, Buffs);
         }
 
-        private void UpdateFightData()
+        private void UpdateFightData(bool skipFail)
         {
             FightData.Logic.CheckSuccess(CombatData, AgentData, FightData, PlayerAgents);
             if (FightData.FightDuration <= 2200)
             {
                 throw new TooShortException();
             }
-            if (Properties.Settings.Default.SkipFailedTries && !FightData.Success)
+            if (skipFail && !FightData.Success)
             {
                 throw new SkipException();
             }

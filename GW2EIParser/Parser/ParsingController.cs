@@ -27,9 +27,15 @@ namespace GW2EIParser.Parser
         private long _logStartTime = 0;
         private long _logEndTime = 0;
         private string _buildVersion;
+        private readonly bool _anonymous;
+        private readonly bool _skipFails;
+        private readonly bool _parsePhases;
 
-        public ParsingController()
+        public ParsingController(bool anonymousPlayers, bool skipFails, bool parsePhases)
         {
+            _anonymous = anonymousPlayers;
+            _skipFails = skipFails;
+            _parsePhases = parsePhases;
         }
 
         //Main Parse method------------------------------------------------------------------------------------------------------------------------------------------------
@@ -70,7 +76,7 @@ namespace GW2EIParser.Parser
             }
             row.BgWorker.ThrowIfCanceled(row);
             row.BgWorker.UpdateProgress(row, "40% - Data parsed", 40);
-            return new ParsedLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _logEndTime - _logStartTime);
+            return new ParsedLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _logEndTime - _logStartTime, _skipFails);
         }
 
         private void ParseLog(GridRow row, Stream stream)
@@ -595,7 +601,7 @@ namespace GW2EIParser.Parser
                 throw new InvalidDataException("No combat events found");
             }
             CompleteAgents();
-            _fightData = new FightData(_id, _agentData, _logStartTime, _logEndTime);
+            _fightData = new FightData(_id, _agentData, _logStartTime, _logEndTime, _parsePhases);
             // Dealing with special cases + targets
             _fightData.Logic.EIEvtcParse(_fightData, _agentData, _combatItems);
             if (!_fightData.Logic.Targets.Any())
@@ -605,7 +611,7 @@ namespace GW2EIParser.Parser
             //players
             CompletePlayers();
             _playerList = _playerList.OrderBy(a => a.Group).ToList();
-            if (Properties.Settings.Default.Anonymous)
+            if (_anonymous)
             {
                 for (int i = 0; i < _playerList.Count; i++)
                 {

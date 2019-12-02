@@ -33,12 +33,12 @@ namespace GW2EIParser.Builders
         private readonly Dictionary<string, JsonLog.DamageModDesc> _damageModDesc = new Dictionary<string, JsonLog.DamageModDesc>();
         private readonly Dictionary<string, HashSet<long>> _personalBuffs = new Dictionary<string, HashSet<long>>();
 
-        public RawFormatBuilder(ParsedLog log, string[] UploadString)
+        public RawFormatBuilder(ParsedLog log, string[] uploadString)
         {
             _log = log;
             _phases = log.FightData.GetPhases(log);
 
-            _uploadLink = UploadString;
+            _uploadLink = uploadString ?? new string[] { "", "", "" };
         }
 
         public JsonLog CreateJsonLog()
@@ -54,7 +54,7 @@ namespace GW2EIParser.Builders
             return log;
         }
 
-        public void CreateJSON(StreamWriter sw)
+        public void CreateJSON(StreamWriter sw, bool indent)
         {
             JsonLog log = CreateJsonLog();
             var contractResolver = new DefaultContractResolver
@@ -69,13 +69,13 @@ namespace GW2EIParser.Builders
             };
             var writer = new JsonTextWriter(sw)
             {
-                Formatting = Properties.Settings.Default.IndentJSON ? Newtonsoft.Json.Formatting.Indented : Newtonsoft.Json.Formatting.None
+                Formatting = indent ? Newtonsoft.Json.Formatting.Indented : Newtonsoft.Json.Formatting.None
             };
             serializer.Serialize(writer, log);
             writer.Close();
         }
 
-        public void CreateXML(StreamWriter sw)
+        public void CreateXML(StreamWriter sw, bool indent)
         {
 
             JsonLog log = CreateJsonLog();
@@ -98,7 +98,7 @@ namespace GW2EIParser.Builders
             XmlDocument xml = JsonConvert.DeserializeXmlNode(json);
             var xmlTextWriter = new XmlTextWriter(sw)
             {
-                Formatting = Properties.Settings.Default.IndentXML ? System.Xml.Formatting.Indented : System.Xml.Formatting.None
+                Formatting = indent ? System.Xml.Formatting.Indented : System.Xml.Formatting.None
             };
 
             xml.WriteTo(xmlTextWriter);
