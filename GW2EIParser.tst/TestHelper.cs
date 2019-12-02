@@ -15,7 +15,7 @@ namespace GW2EIParser.tst
 
         public static ParsedLog ParseLog(string location)
         {
-            var parser = new ParsingController();
+            var parser = new ParsingController(true, false, true);
 
             var row = new GridRow(location as string, "Ready to parse")
             {
@@ -45,7 +45,7 @@ namespace GW2EIParser.tst
             var sw = new StreamWriter(ms, GeneralHelper.NoBOMEncodingUTF8);
             var builder = new RawFormatBuilder(log, null);
 
-            builder.CreateJSON(sw);
+            builder.CreateJSON(sw, false);
             sw.Close();
 
             return Encoding.UTF8.GetString(ms.ToArray());
@@ -67,7 +67,7 @@ namespace GW2EIParser.tst
         {
             var ms = new MemoryStream();
             var sw = new StreamWriter(ms, GeneralHelper.NoBOMEncodingUTF8);
-            var builder = new HTMLBuilder(log, null);
+            var builder = new HTMLBuilder(log, null, true, false, false);
 
             builder.CreateHTML(sw, null);
             sw.Close();

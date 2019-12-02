@@ -29,7 +29,7 @@ namespace GW2EIParser.Builders
 
             _statistics = log.Statistics;
 
-            _uploadResult = uploadresult;
+            _uploadResult = uploadresult ?? new string[] { "", "", "" };
             _legacyTarget = log.FightData.Logic.GetLegacyTarget();
             if (_legacyTarget == null)
             {
@@ -69,7 +69,7 @@ namespace GW2EIParser.Builders
             WriteLine(new[] { "Recorded By", _log.LogData.PoVName });
             WriteLine(new[] { "Time Start", _log.LogData.LogStart });
             WriteLine(new[] { "Time End", _log.LogData.LogEnd });
-            if (Properties.Settings.Default.UploadToDPSReports || Properties.Settings.Default.UploadToDPSReportsRH || Properties.Settings.Default.UploadToRaidar)
+            if (_uploadResult.Any(x => x != null && x.Length > 0))
             {
                 WriteLine(new[] { "Links", _uploadResult[0], _uploadResult[1], _uploadResult[2] });
             }

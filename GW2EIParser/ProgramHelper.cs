@@ -114,7 +114,7 @@ namespace GW2EIParser
                 {
                     throw new FileNotFoundException("File " + fInfo.FullName + " does not exist");
                 }
-                var control = new ParsingController();
+                var control = new ParsingController(Properties.Settings.Default.Anonymous, Properties.Settings.Default.SkipFailedTries, Properties.Settings.Default.ParsePhases);
 
                 if (!HasFormat())
                 {
@@ -202,7 +202,7 @@ namespace GW2EIParser
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs))
                 {
-                    var builder = new HTMLBuilder(log, uploadresult);
+                    var builder = new HTMLBuilder(log, uploadresult, Properties.Settings.Default.ParseCombatReplay, Properties.Settings.Default.LightTheme, Properties.Settings.Default.HtmlExternalScripts);
                     builder.CreateHTML(sw, saveDirectory.FullName);
                 }
             }
@@ -245,7 +245,7 @@ namespace GW2EIParser
                 using (var sw = new StreamWriter(str, GeneralHelper.NoBOMEncodingUTF8))
                 {
                     var builder = new RawFormatBuilder(log, uploadresult);
-                    builder.CreateJSON(sw);
+                    builder.CreateJSON(sw, Properties.Settings.Default.IndentJSON);
                 }
                 if (str is MemoryStream msr)
                 {
@@ -274,7 +274,7 @@ namespace GW2EIParser
                 using (var sw = new StreamWriter(str, GeneralHelper.NoBOMEncodingUTF8))
                 {
                     var builder = new RawFormatBuilder(log, uploadresult);
-                    builder.CreateXML(sw);
+                    builder.CreateXML(sw, Properties.Settings.Default.IndentXML);
                 }
                 if (str is MemoryStream msr)
                 {

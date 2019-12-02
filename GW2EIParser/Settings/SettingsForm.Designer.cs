@@ -41,7 +41,6 @@
             this.btnResetSpecList = new System.Windows.Forms.Button();
             this.chkOutputHtml = new System.Windows.Forms.CheckBox();
             this.chkOutputCsv = new System.Windows.Forms.CheckBox();
-            this.chkShowEstimates = new System.Windows.Forms.CheckBox();
             this.chkPhaseParsing = new System.Windows.Forms.CheckBox();
             this.chkOneAtATime = new System.Windows.Forms.CheckBox();
             this.chkCombatReplay = new System.Windows.Forms.CheckBox();
@@ -206,19 +205,6 @@
             this.chkOutputCsv.Text = "Output as CSV";
             this.chkOutputCsv.UseVisualStyleBackColor = true;
             this.chkOutputCsv.CheckedChanged += new System.EventHandler(this.OutputCsvCheckedChanged);
-            // 
-            // chkShowEstimates
-            // 
-            this.chkShowEstimates.AutoSize = true;
-            this.chkShowEstimates.Checked = true;
-            this.chkShowEstimates.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkShowEstimates.Location = new System.Drawing.Point(12, 36);
-            this.chkShowEstimates.Name = "chkShowEstimates";
-            this.chkShowEstimates.Size = new System.Drawing.Size(153, 17);
-            this.chkShowEstimates.TabIndex = 28;
-            this.chkShowEstimates.Text = "Show Estimates Tab (WIP)";
-            this.chkShowEstimates.UseVisualStyleBackColor = true;
-            this.chkShowEstimates.CheckedChanged += new System.EventHandler(this.ShowEstimatesCheckedChanged);
             // 
             // chkPhaseParsing
             // 
@@ -492,7 +478,6 @@
             // panelHtml
             // 
             this.panelHtml.Controls.Add(this.panelTheme);
-            this.panelHtml.Controls.Add(this.chkShowEstimates);
             this.panelHtml.Controls.Add(this.chkHtmlExternalScripts);
             this.panelHtml.Location = new System.Drawing.Point(0, 36);
             this.panelHtml.Name = "panelHtml";
@@ -754,7 +739,6 @@
         private System.Windows.Forms.Button btnResetSpecList;
         private System.Windows.Forms.CheckBox chkOutputHtml;
         private System.Windows.Forms.CheckBox chkOutputCsv;
-        private System.Windows.Forms.CheckBox chkShowEstimates;
         private System.Windows.Forms.CheckBox chkPhaseParsing;
         private System.Windows.Forms.CheckBox chkOneAtATime;
         private System.Windows.Forms.CheckBox chkCombatReplay;

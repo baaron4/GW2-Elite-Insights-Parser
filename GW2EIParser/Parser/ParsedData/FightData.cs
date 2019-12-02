@@ -32,12 +32,12 @@ namespace GW2EIParser.Parser.ParsedData
         private int _isCM = -1;
         public bool IsCM => _isCM == 1;
         // Constructors
-        public FightData(ushort id, AgentData agentData, long start, long end)
+        public FightData(ushort id, AgentData agentData, long start, long end, bool parsePhases)
         {
             FightOffset = start;
             FightEnd = end - start;
             TriggerID = id;
-            _requirePhases = Properties.Settings.Default.ParsePhases;
+            _requirePhases = parsePhases;
             switch (ParseEnum.GetTargetIDS(id))
             {
                 case ParseEnum.TargetIDS.ValeGuardian:

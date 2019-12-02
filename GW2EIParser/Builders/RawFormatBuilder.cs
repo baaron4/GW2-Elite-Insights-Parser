@@ -30,7 +30,7 @@ namespace GW2EIParser.Builders
             JsonLog = new JsonLog(log, uploadLinks);
         }
 
-        public void CreateJSON(StreamWriter sw)
+        public void CreateJSON(StreamWriter sw, bool indent)
         {
             var contractResolver = new DefaultContractResolver
             {
@@ -44,13 +44,13 @@ namespace GW2EIParser.Builders
             };
             var writer = new JsonTextWriter(sw)
             {
-                Formatting = Properties.Settings.Default.IndentJSON ? Newtonsoft.Json.Formatting.Indented : Newtonsoft.Json.Formatting.None
+                Formatting = indent ? Newtonsoft.Json.Formatting.Indented : Newtonsoft.Json.Formatting.None
             };
             serializer.Serialize(writer, JsonLog);
             writer.Close();
         }
 
-        public void CreateXML(StreamWriter sw)
+        public void CreateXML(StreamWriter sw, bool indent)
         {
             var contractResolver = new DefaultContractResolver
             {
@@ -70,7 +70,7 @@ namespace GW2EIParser.Builders
             XmlDocument xml = JsonConvert.DeserializeXmlNode(json);
             var xmlTextWriter = new XmlTextWriter(sw)
             {
-                Formatting = Properties.Settings.Default.IndentXML ? System.Xml.Formatting.Indented : System.Xml.Formatting.None
+                Formatting = indent ? System.Xml.Formatting.Indented : System.Xml.Formatting.None
             };
 
             xml.WriteTo(xmlTextWriter);

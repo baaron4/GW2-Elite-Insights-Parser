@@ -22,6 +22,8 @@ namespace GW2EIParser.Builders
         private readonly ParsedLog _log;
         private readonly List<PhaseData> _phases;
         private readonly bool _cr;
+        private readonly bool _light;
+        private readonly bool _externalScripts;
 
         private readonly string[] _uploadLink;
 
@@ -30,7 +32,7 @@ namespace GW2EIParser.Builders
         private readonly HashSet<DamageModifier> _usedDamageMods = new HashSet<DamageModifier>();
         private readonly Dictionary<long, SkillItem> _usedSkills = new Dictionary<long, SkillItem>();
 
-        public HTMLBuilder(ParsedLog log, string[] uploadString)
+        public HTMLBuilder(ParsedLog log, string[] uploadString, bool parseCR, bool lightTheme, bool externalScript)
         {
             Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             _scriptVersion = version.Major + "." + version.Minor;
@@ -43,9 +45,11 @@ namespace GW2EIParser.Builders
 
             _statistics = log.Statistics;
 
-            _uploadLink = uploadString;
+            _uploadLink = uploadString?? new string[] { "", "", "" };
 
-            _cr = Properties.Settings.Default.ParseCombatReplay && _log.CanCombatReplay;
+            _cr = parseCR && _log.CanCombatReplay;
+            _light = lightTheme;
+            _externalScripts = externalScript;
         }
 
         private TargetChartDataDto BuildTargetGraphData(int phaseIndex, NPC target)
@@ -701,7 +705,7 @@ namespace GW2EIParser.Builders
 
         private string ReplaceVariables(string html)
         {
-            html = html.Replace("${bootstrapTheme}", !Properties.Settings.Default.LightTheme ? "slate" : "yeti");
+            html = html.Replace("${bootstrapTheme}", !_light ? "slate" : "yeti");
 
             html = html.Replace("${encounterStart}", _log.LogData.LogStart);
             html = html.Replace("${encounterEnd}", _log.LogData.LogEnd);
@@ -711,15 +715,15 @@ namespace GW2EIParser.Builders
             html = html.Replace("${recordedBy}", _log.LogData.PoVName);
 
             string uploadString = "";
-            if (Properties.Settings.Default.UploadToDPSReports)
+            if (_uploadLink[0] != null && _uploadLink[0].Length > 0)
             {
                 uploadString += "<p>DPS Reports Link (EI): <a href=\"" + _uploadLink[0] + "\">" + _uploadLink[0] + "</a></p>";
             }
-            if (Properties.Settings.Default.UploadToDPSReportsRH)
+            if (_uploadLink[1] != null && _uploadLink[1].Length > 0)
             {
                 uploadString += "<p>DPS Reports Link (RH): <a href=\"" + _uploadLink[1] + "\">" + _uploadLink[1] + "</a></p>";
             }
-            if (Properties.Settings.Default.UploadToRaidar)
+            if (_uploadLink[2] != null && _uploadLink[2].Length > 0)
             {
                 uploadString += "<p>Raidar Link: <a href=\"" + _uploadLink[2] + "\">" + _uploadLink[2] + "</a></p>";
             }
@@ -759,7 +763,7 @@ namespace GW2EIParser.Builders
                 return "";
             }
             string scriptContent = Properties.Resources.combatreplay_js;
-            if (Properties.Settings.Default.HtmlExternalScripts && path != null)
+            if (_externalScripts && path != null)
             {
 #if DEBUG
                 string jsFileName = "EliteInsights-CR-" + _scriptVersion + ".debug.js";
@@ -871,7 +875,7 @@ namespace GW2EIParser.Builders
         {
             string scriptContent = Properties.Resources.ei_css;
 
-            if (Properties.Settings.Default.HtmlExternalScripts && path != null)
+            if (_externalScripts && path != null)
             {
 #if DEBUG
                 string cssFilename = "EliteInsights-" + _scriptVersion + ".debug.css";
@@ -922,7 +926,7 @@ namespace GW2EIParser.Builders
             }
             scriptContent = BuildTemplates(scriptContent);
 
-            if (Properties.Settings.Default.HtmlExternalScripts && path != null)
+            if (_externalScripts && path != null)
             {
 #if DEBUG
                 string scriptFilename = "EliteInsights-" + _scriptVersion + ".debug.js";
@@ -967,7 +971,7 @@ namespace GW2EIParser.Builders
             }
             scriptContent = BuildCRTemplates(scriptContent);
 
-            if (Properties.Settings.Default.HtmlExternalScripts && path != null)
+            if (_externalScripts && path != null)
             {
 #if DEBUG
                 string scriptFilename = "EliteInsights-CRLink-" + _scriptVersion + ".debug.js";
@@ -1167,7 +1171,7 @@ namespace GW2EIParser.Builders
             logData.Targetless = _log.FightData.Logic.Targetless;
             logData.FightName = _log.FightData.Name;
             logData.FightIcon = _log.FightData.Logic.Icon;
-            logData.LightTheme = Properties.Settings.Default.LightTheme;
+            logData.LightTheme = _light;
             logData.SingleGroup = _log.PlayerList.Where(x => !x.IsFakeActor).Select(x => x.Group).Distinct().Count() == 1;
             logData.NoMechanics = _log.FightData.Logic.HasNoFightSpecificMechanics;
             //
