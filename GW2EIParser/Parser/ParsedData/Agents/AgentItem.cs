@@ -65,6 +65,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public AgentItem(AgentItem other)
         {
+            UniqueID = "ag" + AgentCount++;
             Agent = other.Agent;
             Name = other.Name;
             Prof = other.Prof;
