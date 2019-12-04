@@ -4,7 +4,7 @@ namespace GW2EIParser.EIData
 {
     public abstract class BackgroundDecoration : GenericDecoration
     {
-        public BackgroundDecoration((int start, int end) lifespan) : base(lifespan, null)
+        public BackgroundDecoration((int start, int end) lifespan) : base(lifespan)
         {
         }
    

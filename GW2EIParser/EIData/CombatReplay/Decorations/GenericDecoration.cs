@@ -5,12 +5,10 @@ namespace GW2EIParser.EIData
     public abstract class GenericDecoration
     {
         public (int start, int end) Lifespan { get; }
-        public Connector ConnectedTo { get; }
 
-        protected GenericDecoration((int start, int end) lifespan, Connector connector)
+        protected GenericDecoration((int start, int end) lifespan)
         {
             Lifespan = lifespan;
-            ConnectedTo = connector;
         }
         //
 

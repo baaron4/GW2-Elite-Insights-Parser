@@ -3,7 +3,7 @@ using GW2EIParser.Parser.ParsedData;
 
 namespace GW2EIParser.EIData
 {
-    public class FacingDecoration : GenericDecoration
+    public class FacingDecoration : GenericAttachedDecoration
     {
         public List<int> Angles { get; } = new List<int>();
 

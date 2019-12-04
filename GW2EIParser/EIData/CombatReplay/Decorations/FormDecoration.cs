@@ -1,6 +1,6 @@
 ﻿namespace GW2EIParser.EIData
 {
-    public abstract class FormDecoration : GenericDecoration
+    public abstract class FormDecoration : GenericAttachedDecoration
     {
 
         public bool Filled { get; }
