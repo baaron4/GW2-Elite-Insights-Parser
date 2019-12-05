@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
@@ -32,7 +31,8 @@ namespace GW2EIParser.Logic
                 {
                     Targets.Add(new NPC(agentItem));
                 }
-            } else
+            }
+            else
             {
                 Targets.Add(new NPC(agentItem));
             }

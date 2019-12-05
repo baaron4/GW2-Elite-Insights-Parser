@@ -2,9 +2,9 @@
 using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser.ParsedData;
-using static GW2EIParser.Builders.JsonModels.JsonStatistics;
 using static GW2EIParser.Builders.JsonModels.JsonBuffsUptime;
 using static GW2EIParser.Builders.JsonModels.JsonPlayerBuffsGeneration;
+using static GW2EIParser.Builders.JsonModels.JsonStatistics;
 
 namespace GW2EIParser.Builders.JsonModels
 {

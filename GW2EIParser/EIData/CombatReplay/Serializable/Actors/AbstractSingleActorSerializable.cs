@@ -7,7 +7,7 @@ namespace GW2EIParser.EIData
     {
         public string Img { get; }
         public string Type { get; }
-        public int ID { get;}
+        public int ID { get; }
         public List<double> Positions { get; }
 
         protected AbstractSingleActorSerializable(AbstractSingleActor actor, ParsedLog log, CombatReplayMap map, CombatReplay replay, string type)

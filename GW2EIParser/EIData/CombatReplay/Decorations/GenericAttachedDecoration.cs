@@ -1,6 +1,4 @@
-﻿using GW2EIParser.Parser.ParsedData;
-
-namespace GW2EIParser.EIData
+﻿namespace GW2EIParser.EIData
 {
     public abstract class GenericAttachedDecoration : GenericDecoration
     {

@@ -7,7 +7,7 @@ namespace GW2EIParser.EIData
 {
     public class FinalSupport
     {
-        public Dictionary<long,  (long count, double time)> Removals { get; } = new Dictionary<long, (long count, double time)>();
+        public Dictionary<long, (long count, double time)> Removals { get; } = new Dictionary<long, (long count, double time)>();
 
 
         public FinalSupport(ParsedLog log, PhaseData phase, AbstractSingleActor actor, AbstractSingleActor to)

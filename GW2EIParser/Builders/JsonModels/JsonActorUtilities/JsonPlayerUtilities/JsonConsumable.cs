@@ -23,7 +23,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// ID of the consumable
         /// </summary>
         /// <seealso cref="JsonLog.BuffMap"/>
-        public long Id { get;}
+        public long Id { get; }
 
         public JsonConsumable(Consumable food)
         {

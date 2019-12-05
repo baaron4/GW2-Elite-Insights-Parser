@@ -61,7 +61,8 @@ namespace GW2EIParser.Builders.HtmlModels
                         boonData.Add(toUse.UnknownExtension[player]);
                         boonData.Add(toUse.Extension[player]);
                         boonData.Add(toUse.Extended[player]);
-                    } else
+                    }
+                    else
                     {
                         boonData.Add(0);
                         boonData.Add(0);

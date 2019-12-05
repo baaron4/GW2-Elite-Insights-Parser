@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using GW2EIParser.Parser.ParsedData;
 using Newtonsoft.Json;
@@ -45,7 +44,7 @@ namespace GW2EIParser.EIData
         }
 
 
-        public string Image { get;}
+        public string Image { get; }
         public int Height { get; }
         public int Width { get; }
 

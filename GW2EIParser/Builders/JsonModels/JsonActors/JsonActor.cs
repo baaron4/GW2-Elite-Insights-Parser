@@ -2,7 +2,6 @@
 using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser.ParsedData;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
 using static GW2EIParser.Builders.JsonModels.JsonStatistics;
 
 namespace GW2EIParser.Builders.JsonModels
@@ -104,7 +103,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// Value[i][0] will be the time, value[i][1] will be the number of boons present from value[i][0] to value[i+1][0] \n
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight
         /// </summary>
-        public List<int[]> BoonsStates { get;}
+        public List<int[]> BoonsStates { get; }
 
 
         protected JsonActor(AbstractSingleActor actor, ParsedLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)

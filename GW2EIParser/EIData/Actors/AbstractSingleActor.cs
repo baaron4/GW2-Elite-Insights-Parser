@@ -549,7 +549,7 @@ namespace GW2EIParser.EIData
 
         public FinalDPS GetDPSTarget(ParsedLog log, int phaseIndex, AbstractSingleActor target)
         {
-            return GetDPSTarget(log,target)[phaseIndex];
+            return GetDPSTarget(log, target)[phaseIndex];
         }
 
         public List<FinalDPS> GetDPSTarget(ParsedLog log, AbstractSingleActor target)

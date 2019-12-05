@@ -43,7 +43,7 @@ namespace GW2EIParser.EIData
                 actors.Add(log.FindActor(agent, true));
             }
             return actors;
-        } 
+        }
 
         public long GetUptime(long boonid)
         {

@@ -210,7 +210,7 @@ namespace GW2EIParser.Logic
                 if (enterCombat != null)
                 {
                     offset = Math.Max(offset, enterCombat.Time);
-                   
+
                 }
             }
             fightData.OverrideOffset(offset);

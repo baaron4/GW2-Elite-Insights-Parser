@@ -45,7 +45,7 @@ namespace GW2EIParser.Builders
 
             _statistics = log.Statistics;
 
-            _uploadLink = uploadString?? new string[] { "", "", "" };
+            _uploadLink = uploadString ?? new string[] { "", "", "" };
 
             _cr = parseCR && _log.CanCombatReplay;
             _light = lightTheme;

@@ -45,7 +45,7 @@ namespace GW2EIParser.Builders.JsonModels
             MechanicsData = data;
         }
 
-        public static List<JsonMechanics>  GetJsonMechanicsList(List<MechanicEvent> mechanicLogs)
+        public static List<JsonMechanics> GetJsonMechanicsList(List<MechanicEvent> mechanicLogs)
         {
             var mechanics = new List<JsonMechanics>();
             var dict = new Dictionary<string, List<JsonMechanic>>();

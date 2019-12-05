@@ -7,7 +7,7 @@
         public AbstractBuffRemoveEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, skillData)
         {
             RemovedDuration = evtcItem.Value;
-            By = agentData.GetAgent(evtcItem.DstAgent); 
+            By = agentData.GetAgent(evtcItem.DstAgent);
             if (By.Master != null)
             {
                 ByMinion = By;

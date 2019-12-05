@@ -7,7 +7,7 @@ namespace GW2EIParser.EIData
         public BackgroundDecoration((int start, int end) lifespan) : base(lifespan)
         {
         }
-   
+
         public abstract override GenericDecorationSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log);
     }
 }

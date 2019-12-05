@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using GW2EIParser.Parser.ParsedData;
-using Newtonsoft.Json;
 
 namespace GW2EIParser.EIData
 {

@@ -433,16 +433,16 @@ namespace GW2EIParser.Parser
     {
         public static bool SrcIsAgent(this ParseEnum.StateChange state)
         {
-            return state == ParseEnum.StateChange.None || state == ParseEnum.StateChange.EnterCombat 
-                || state == ParseEnum.StateChange.ExitCombat || state == ParseEnum.StateChange.ChangeUp 
-                || state == ParseEnum.StateChange.ChangeDead || state == ParseEnum.StateChange.ChangeDown 
-                || state == ParseEnum.StateChange.Spawn || state == ParseEnum.StateChange.Despawn 
-                || state == ParseEnum.StateChange.HealthUpdate || state == ParseEnum.StateChange.WeaponSwap 
-                || state == ParseEnum.StateChange.MaxHealthUpdate || state == ParseEnum.StateChange.PointOfView 
-                || state == ParseEnum.StateChange.BuffInitial || state == ParseEnum.StateChange.Position 
-                || state == ParseEnum.StateChange.Velocity || state == ParseEnum.StateChange.Rotation 
-                || state == ParseEnum.StateChange.TeamChange || state == ParseEnum.StateChange.AttackTarget 
-                || state == ParseEnum.StateChange.Targetable || state == ParseEnum.StateChange.StackActive 
+            return state == ParseEnum.StateChange.None || state == ParseEnum.StateChange.EnterCombat
+                || state == ParseEnum.StateChange.ExitCombat || state == ParseEnum.StateChange.ChangeUp
+                || state == ParseEnum.StateChange.ChangeDead || state == ParseEnum.StateChange.ChangeDown
+                || state == ParseEnum.StateChange.Spawn || state == ParseEnum.StateChange.Despawn
+                || state == ParseEnum.StateChange.HealthUpdate || state == ParseEnum.StateChange.WeaponSwap
+                || state == ParseEnum.StateChange.MaxHealthUpdate || state == ParseEnum.StateChange.PointOfView
+                || state == ParseEnum.StateChange.BuffInitial || state == ParseEnum.StateChange.Position
+                || state == ParseEnum.StateChange.Velocity || state == ParseEnum.StateChange.Rotation
+                || state == ParseEnum.StateChange.TeamChange || state == ParseEnum.StateChange.AttackTarget
+                || state == ParseEnum.StateChange.Targetable || state == ParseEnum.StateChange.StackActive
                 || state == ParseEnum.StateChange.StackReset;
         }
 
@@ -453,15 +453,15 @@ namespace GW2EIParser.Parser
 
         public static bool HasTime(this ParseEnum.StateChange state)
         {
-            return state == ParseEnum.StateChange.None || state == ParseEnum.StateChange.EnterCombat 
-                || state == ParseEnum.StateChange.ExitCombat || state == ParseEnum.StateChange.ChangeUp 
-                || state == ParseEnum.StateChange.ChangeDead || state == ParseEnum.StateChange.ChangeDown 
-                || state == ParseEnum.StateChange.Spawn || state == ParseEnum.StateChange.Despawn 
-                || state == ParseEnum.StateChange.HealthUpdate || state == ParseEnum.StateChange.WeaponSwap 
-                || state == ParseEnum.StateChange.MaxHealthUpdate  || state == ParseEnum.StateChange.BuffInitial 
-                || state == ParseEnum.StateChange.Position || state == ParseEnum.StateChange.Velocity 
-                || state == ParseEnum.StateChange.Rotation || state == ParseEnum.StateChange.TeamChange 
-                || state == ParseEnum.StateChange.AttackTarget || state == ParseEnum.StateChange.Targetable 
+            return state == ParseEnum.StateChange.None || state == ParseEnum.StateChange.EnterCombat
+                || state == ParseEnum.StateChange.ExitCombat || state == ParseEnum.StateChange.ChangeUp
+                || state == ParseEnum.StateChange.ChangeDead || state == ParseEnum.StateChange.ChangeDown
+                || state == ParseEnum.StateChange.Spawn || state == ParseEnum.StateChange.Despawn
+                || state == ParseEnum.StateChange.HealthUpdate || state == ParseEnum.StateChange.WeaponSwap
+                || state == ParseEnum.StateChange.MaxHealthUpdate || state == ParseEnum.StateChange.BuffInitial
+                || state == ParseEnum.StateChange.Position || state == ParseEnum.StateChange.Velocity
+                || state == ParseEnum.StateChange.Rotation || state == ParseEnum.StateChange.TeamChange
+                || state == ParseEnum.StateChange.AttackTarget || state == ParseEnum.StateChange.Targetable
                 || state == ParseEnum.StateChange.StackActive || state == ParseEnum.StateChange.StackReset
                 || state == ParseEnum.StateChange.Reward;
         }

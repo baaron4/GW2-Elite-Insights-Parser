@@ -169,7 +169,7 @@ namespace GW2EIParser.Parser.ParsedData
                     Logic = new Golem(id);
                     break;
                 default:
-                    switch(ParseEnum.GetTrashIDS(id))
+                    switch (ParseEnum.GetTrashIDS(id))
                     {
                         case ParseEnum.TrashIDS.HauntingStatue:
                             Logic = new TwistedCastle((ushort)ParseEnum.TargetIDS.TwistedCastle);
