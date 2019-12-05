@@ -224,64 +224,66 @@ namespace GW2EIParser
                 }
             }
             rowData.BgWorker.ThrowIfCanceled(rowData);
-            if (Properties.Settings.Default.SaveOutJSON)
+            if (Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML)
             {
-                string outputFile = Path.Combine(
-                    saveDirectory.FullName,
-                    $"{fName}.json"
-                );
-                string splitString = "";
-                if (rowData.LogLocation != null) { splitString = ","; }
-                rowData.LogLocation += splitString + saveDirectory.FullName;
-                Stream str;
-                if (Properties.Settings.Default.CompressRaw)
+                var builder = new RawFormatBuilder(log, uploadresult);
+                if (Properties.Settings.Default.SaveOutJSON)
                 {
-                    str = new MemoryStream();
+                    string outputFile = Path.Combine(
+                        saveDirectory.FullName,
+                        $"{fName}.json"
+                    );
+                    string splitString = "";
+                    if (rowData.LogLocation != null) { splitString = ","; }
+                    rowData.LogLocation += splitString + saveDirectory.FullName;
+                    Stream str;
+                    if (Properties.Settings.Default.CompressRaw)
+                    {
+                        str = new MemoryStream();
+                    }
+                    else
+                    {
+                        str = new FileStream(outputFile, FileMode.Create, FileAccess.Write);
+                    }
+                    using (var sw = new StreamWriter(str, GeneralHelper.NoBOMEncodingUTF8))
+                    {
+                        builder.CreateJSON(sw, Properties.Settings.Default.IndentJSON);
+                    }
+                    if (str is MemoryStream msr)
+                    {
+                        CompressFile(outputFile, msr);
+                    }
                 }
-                else
+                rowData.BgWorker.ThrowIfCanceled(rowData);
+                if (Properties.Settings.Default.SaveOutXML)
                 {
-                    str = new FileStream(outputFile, FileMode.Create, FileAccess.Write);
+                    string outputFile = Path.Combine(
+                        saveDirectory.FullName,
+                        $"{fName}.xml"
+                    );
+                    string splitString = "";
+                    if (rowData.LogLocation != null) { splitString = ","; }
+                    rowData.LogLocation += splitString + saveDirectory.FullName;
+                    Stream str;
+                    if (Properties.Settings.Default.CompressRaw)
+                    {
+                        str = new MemoryStream();
+                    }
+                    else
+                    {
+                        str = new FileStream(outputFile, FileMode.Create, FileAccess.Write);
+                    }
+                    using (var sw = new StreamWriter(str, GeneralHelper.NoBOMEncodingUTF8))
+                    {
+                        builder.CreateXML(sw, Properties.Settings.Default.IndentXML);
+                    }
+                    if (str is MemoryStream msr)
+                    {
+                        CompressFile(outputFile, msr);
+                    }
                 }
-                using (var sw = new StreamWriter(str, GeneralHelper.NoBOMEncodingUTF8))
-                {
-                    var builder = new RawFormatBuilder(log, uploadresult);
-                    builder.CreateJSON(sw, Properties.Settings.Default.IndentJSON);
-                }
-                if (str is MemoryStream msr)
-                {
-                    CompressFile(outputFile, msr);
-                }
+                rowData.BgWorker.ThrowIfCanceled(rowData);
             }
-            rowData.BgWorker.ThrowIfCanceled(rowData);
-            if (Properties.Settings.Default.SaveOutXML)
-            {
-                string outputFile = Path.Combine(
-                    saveDirectory.FullName,
-                    $"{fName}.xml"
-                );
-                string splitString = "";
-                if (rowData.LogLocation != null) { splitString = ","; }
-                rowData.LogLocation += splitString + saveDirectory.FullName;
-                Stream str;
-                if (Properties.Settings.Default.CompressRaw)
-                {
-                    str = new MemoryStream();
-                }
-                else
-                {
-                    str = new FileStream(outputFile, FileMode.Create, FileAccess.Write);
-                }
-                using (var sw = new StreamWriter(str, GeneralHelper.NoBOMEncodingUTF8))
-                {
-                    var builder = new RawFormatBuilder(log, uploadresult);
-                    builder.CreateXML(sw, Properties.Settings.Default.IndentXML);
-                }
-                if (str is MemoryStream msr)
-                {
-                    CompressFile(outputFile, msr);
-                }
-            }
-            rowData.BgWorker.ThrowIfCanceled(rowData);
             rowData.BgWorker.UpdateProgress(rowData, $"100% - Complete_{log.FightData.Logic.Extension}_{result}", 100);
         }
 
