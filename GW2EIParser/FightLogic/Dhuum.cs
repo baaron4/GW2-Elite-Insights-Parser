@@ -56,20 +56,20 @@ namespace GW2EIParser.Logic
 
         private void ComputeFightPhases(List<PhaseData> phases, List<AbstractCastEvent> castLogs, long fightDuration, long start)
         {
+            if (start > 0)
+            {
+                phases.Add(new PhaseData(start, fightDuration, "Dhuum Fight"));
+            }
             AbstractCastEvent shield = castLogs.Find(x => x.SkillId == 47396);
             if (shield != null)
             {
                 long end = shield.Time;
-                phases.Add(new PhaseData(start, end));
+                phases.Add(new PhaseData(start, end, "Main Fight"));
                 AbstractCastEvent firstDamage = castLogs.FirstOrDefault(x => x.SkillId == 47304 && x.Time >= end);
                 if (firstDamage != null)
                 {
-                    phases.Add(new PhaseData(firstDamage.Time, fightDuration));
+                    phases.Add(new PhaseData(firstDamage.Time, fightDuration, "Ritual" ));
                 }
-            }
-            else
-            {
-                phases.Add(new PhaseData(start, fightDuration));
             }
         }
 
@@ -90,20 +90,10 @@ namespace GW2EIParser.Logic
             {
                 AbstractCastEvent clDeathmark = gDeathmark[i - 1];
                 end = Math.Min(clDeathmark.Time, mainEnd);
-                phases.Add(new PhaseData(start, end)
-                {
-                    Name = "Pre-Soulsplit " + i++
-                });
+                phases.Add(new PhaseData(start, end, "Pre-Soulsplit " + i++));
                 start = cl.Time + cl.ActualDuration;
             }
-            phases.Add(new PhaseData(start, mainEnd)
-            {
-                Name = hasRitual ? "Pre-Ritual" : "Pre-Wipe"
-            });
-            foreach (PhaseData phase in phases)
-            {
-                phase.Targets.Add(dhuum);
-            }
+            phases.Add(new PhaseData(start, mainEnd, hasRitual ? "Pre-Ritual" : "Pre-Wipe"));
             return phases;
         }
 
@@ -111,57 +101,47 @@ namespace GW2EIParser.Logic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
-            if (mainTarget == null)
+            NPC dhuum = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
+            if (dhuum == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].Targets.Add(dhuum);
             if (!requirePhases)
             {
                 return phases;
             }
             // Sometimes the preevent is not in the evtc
-            List<AbstractCastEvent> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
-            List<AbstractCastEvent> dhuumCast = mainTarget.GetCastLogs(log, 0, 20000);
-            string[] namesDh;
+            List<AbstractCastEvent> castLogs = dhuum.GetCastLogs(log, 0, log.FightData.FightEnd);
+            List<AbstractCastEvent> dhuumCast = dhuum.GetCastLogs(log, 0, 20000);
             if (dhuumCast.Count > 0)
             {
-                namesDh = new[] { "Main Fight", "Ritual" };
+                // full fight does not contain the pre event
                 ComputeFightPhases(phases, castLogs, fightDuration, 0);
                 _isBugged = true;
             }
             else
             {
-                AbstractBuffEvent invulDhuum = log.CombatData.GetBuffData(762).FirstOrDefault(x => x is BuffRemoveManualEvent && x.To == mainTarget.AgentItem && x.Time > 115000);
+                // full fight contains the pre event
+                AbstractBuffEvent invulDhuum = log.CombatData.GetBuffData(762).FirstOrDefault(x => x is BuffRemoveManualEvent && x.To == dhuum.AgentItem && x.Time > 115000);
                 if (invulDhuum != null)
                 {
                     long end = invulDhuum.Time;
-                    phases.Add(new PhaseData(0, end));
+                    phases.Add(new PhaseData(0, end, "Pre Event"));
                     ComputeFightPhases(phases, castLogs, fightDuration, end + 1);
                 }
-                else
-                {
-                    phases.Add(new PhaseData(0, fightDuration));
-                }
-                namesDh = new[] { "Roleplay", "Main Fight", "Ritual" };
+            }
+            bool hasRitual = phases.Last().Name == "Ritual";
+            PhaseData mainFightPhase = phases.Find(x => x.Name == "Main Fight");
+            if (mainFightPhase != null)
+            {
+                phases.AddRange(GetInBetweenSoulSplits(log, dhuum, mainFightPhase.Start, mainFightPhase.End, hasRitual));
             }
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].Name = namesDh[i - 1];
-                phases[i].Targets.Add(mainTarget);
+                phases[i].Targets.Add(dhuum);
             }
-            bool hasRitual = phases.Last().Name == "Ritual";
-            if (dhuumCast.Count > 0 && phases.Count > 1)
-            {
-                phases.AddRange(GetInBetweenSoulSplits(log, mainTarget, phases[1].Start, phases[1].End, hasRitual));
-                phases.Sort((x, y) => x.Start.CompareTo(y.Start));
-            }
-            else if (phases.Count > 2)
-            {
-                phases.AddRange(GetInBetweenSoulSplits(log, mainTarget, phases[2].Start, phases[2].End, hasRitual));
-                phases.Sort((x, y) => x.Start.CompareTo(y.Start));
-            }
+            phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             return phases;
         }
 
