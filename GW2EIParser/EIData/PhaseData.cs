@@ -28,6 +28,11 @@ namespace GW2EIParser.EIData
             DurationInS = (End - Start) / 1000;
         }
 
+        public PhaseData(long start, long end, string name) : this(start, end)
+        {
+            Name = name;
+        }
+
         public bool InInterval(long time)
         {
             return Start <= time && time <= End;

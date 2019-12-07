@@ -187,8 +187,7 @@ namespace GW2EIParser.Logic
         {
             var phases = new List<PhaseData>();
             long fightDuration = log.FightData.FightEnd;
-            phases.Add(new PhaseData(0, fightDuration));
-            phases[0].Name = "Full Fight";
+            phases.Add(new PhaseData(0, fightDuration, "Full Fight"));
             return phases;
         }
 

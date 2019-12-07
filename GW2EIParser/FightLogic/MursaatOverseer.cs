@@ -78,20 +78,14 @@ namespace GW2EIParser.Logic
                 {
                     break;
                 }
-                var phase = new PhaseData(start, Math.Min(evt.Time, fightDuration))
-                {
-                    Name = (25 + limit[i]) + "% - " + limit[i] + "%"
-                };
+                var phase = new PhaseData(start, Math.Min(evt.Time, fightDuration), (25 + limit[i]) + "% - " + limit[i] + "%");
                 phase.Targets.Add(mainTarget);
                 phases.Add(phase);
                 start = evt.Time;
             }
             if (i < 4)
             {
-                var lastPhase = new PhaseData(start, fightDuration)
-                {
-                    Name = (25 + limit[i]) + "% -" + limit[i] + "%"
-                };
+                var lastPhase = new PhaseData(start, fightDuration, (25 + limit[i]) + "% -" + limit[i] + "%");
                 lastPhase.Targets.Add(mainTarget);
                 phases.Add(lastPhase);
             }

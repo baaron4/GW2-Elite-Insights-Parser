@@ -308,12 +308,11 @@ namespace GW2EIParser.Logic
                 if (tar.ID == (ushort)Thief || tar.ID == (ushort)Drunkard || tar.ID == (ushort)Gambler)
                 {
                     string name = (tar.ID == (ushort)Thief ? "Thief" : (tar.ID == (ushort)Drunkard ? "Drunkard" : (tar.ID == (ushort)Gambler ? "Gambler" : "")));
-                    var tarPhase = new PhaseData(tar.FirstAware - 1000, Math.Min(tar.LastAware + 1000, fightDuration));
+                    var tarPhase = new PhaseData(tar.FirstAware - 1000, Math.Min(tar.LastAware + 1000, fightDuration), name);
                     tarPhase.Targets.Add(tar);
                     tarPhase.OverrideTimes(log);
                     // override first then add Deimos so that it does not disturb the override process
                     tarPhase.Targets.Add(mainTarget);
-                    tarPhase.Name = name;
                     phases.Add(tarPhase);
                 }
             }
@@ -331,10 +330,7 @@ namespace GW2EIParser.Logic
                 else
                 {
                     sigEnd = Math.Min(signet.Time - 1, fightDuration);
-                    var burstPhase = new PhaseData(sigStart, sigEnd)
-                    {
-                        Name = "Burst " + burstID++
-                    };
+                    var burstPhase = new PhaseData(sigStart, sigEnd, "Burst " + burstID++);
                     burstPhase.Targets.Add(mainTarget);
                     phases.Add(burstPhase);
                 }

@@ -128,10 +128,7 @@ namespace GW2EIParser.Logic
             }
             for (int i = 0; i < phaseStarts.Count; i++)
             {
-                var phase = new PhaseData(phaseStarts[i], phaseEnds[i])
-                {
-                    Name = "Phase " + (i + 1)
-                };
+                var phase = new PhaseData(phaseStarts[i], phaseEnds[i], "Phase " + (i + 1));
                 phase.Targets.Add(mainTarget);
                 phases.Add(phase);
             }

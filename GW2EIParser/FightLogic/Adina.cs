@@ -124,19 +124,13 @@ namespace GW2EIParser.Logic
                     start = be.Time;
                     if (i == invuls.Count - 1)
                     {
-                        phases.Add(new PhaseData(start, log.FightData.FightEnd)
-                        {
-                            Name = "Split " + (i / 2 + 1)
-                        });
+                        phases.Add(new PhaseData(start, log.FightData.FightEnd, "Split " + (i / 2 + 1)));
                     }
                 }
                 else
                 {
                     end = be.Time;
-                    phases.Add(new PhaseData(start, end)
-                    {
-                        Name = "Split " + (i / 2 + 1)
-                    });
+                    phases.Add(new PhaseData(start, end, "Split " + (i / 2 + 1)));
                 }
             }
             var mainPhases = new List<PhaseData>();
@@ -146,19 +140,13 @@ namespace GW2EIParser.Logic
             {
                 AbstractCastEvent qQ = quantumQuakes[i - 1];
                 end = qQ.Time;
-                mainPhases.Add(new PhaseData(start, end)
-                {
-                    Name = "Phase " + i
-                });
+                mainPhases.Add(new PhaseData(start, end, "Phase " + i ));
                 PhaseData split = phases[i];
                 AddTargetsToPhase(split, new List<ushort> { (ushort)HandOfErosion, (ushort)HandOfEruption }, log);
                 start = split.End;
                 if (i == phases.Count - 1 && start != log.FightData.FightEnd)
                 {
-                    mainPhases.Add(new PhaseData(start, log.FightData.FightEnd)
-                    {
-                        Name = "Phase " + (i + 1)
-                    });
+                    mainPhases.Add(new PhaseData(start, log.FightData.FightEnd, "Phase " + (i + 1)));
                 }
             }
             foreach (PhaseData phase in mainPhases)

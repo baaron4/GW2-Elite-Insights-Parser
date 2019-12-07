@@ -136,10 +136,7 @@ namespace GW2EIParser.Logic
             int burnCount = 1;
             foreach (BuffSegment seg in segments)
             {
-                var phase = new PhaseData(seg.Start, seg.End)
-                {
-                    Name = "Burn " + burnCount++ + " (" + seg.Value + " orbs)",
-                };
+                var phase = new PhaseData(seg.Start, seg.End, "Burn " + burnCount++ + " (" + seg.Value + " orbs)");
                 phase.Targets.Add(mainTarget);
                 phases.Add(phase);
             }
@@ -159,10 +156,7 @@ namespace GW2EIParser.Logic
                         start = (prevPhase.End >= end ? prevPhase.Start : prevPhase.End) + 1;
                         if (end - start > 1000)
                         {
-                            var phase = new PhaseData(start, end)
-                            {
-                                Name = "Pre-Burn " + preBurnCount++,
-                            };
+                            var phase = new PhaseData(start, end, "Pre-Burn " + preBurnCount++);
                             phase.Targets.Add(mainTarget);
                             preBurnPhase.Add(phase);
                         }
@@ -188,10 +182,7 @@ namespace GW2EIParser.Logic
                     {
                         if (cur.End >= phase.End + 5000 && (i == phases.Count - 1 || phases[i + 1].Name.Contains("%")))
                         {
-                            var leftOverPhase = new PhaseData(phase.End + 1, cur.End)
-                            {
-                                Name = "Leftover " + leftOverCount++,
-                            };
+                            var leftOverPhase = new PhaseData(phase.End + 1, cur.End, "Leftover " + leftOverCount++);
                             leftOverPhase.Targets.Add(mainTarget);
                             leftOverPhases.Add(leftOverPhase);
                         }

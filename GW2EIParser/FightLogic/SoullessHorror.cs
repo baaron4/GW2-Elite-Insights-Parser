@@ -94,20 +94,14 @@ namespace GW2EIParser.Logic
             int i = 1;
             foreach (AbstractCastEvent c in howling)
             {
-                var phase = new PhaseData(start, Math.Min(c.Time, fightDuration))
-                {
-                    Name = "Pre-Breakbar " + i++
-                };
+                var phase = new PhaseData(start, Math.Min(c.Time, fightDuration), "Pre-Breakbar " + i++);
                 phase.Targets.Add(mainTarget);
                 start = c.Time + c.ActualDuration;
                 phases.Add(phase);
             }
             if (fightDuration - start > 3000)
             {
-                var lastPhase = new PhaseData(start, fightDuration)
-                {
-                    Name = "Final"
-                };
+                var lastPhase = new PhaseData(start, fightDuration, "Final");
                 lastPhase.Targets.Add(mainTarget);
                 phases.Add(lastPhase);
             }

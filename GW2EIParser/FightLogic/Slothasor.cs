@@ -73,18 +73,12 @@ namespace GW2EIParser.Logic
             int i = 1;
             foreach (AbstractCastEvent c in sleepy)
             {
-                var phase = new PhaseData(start, Math.Min(c.Time, fightDuration))
-                {
-                    Name = "Phase " + i++
-                };
+                var phase = new PhaseData(start, Math.Min(c.Time, fightDuration), "Phase " + i++);
                 phase.Targets.Add(mainTarget);
                 start = c.Time + c.ActualDuration;
                 phases.Add(phase);
             }
-            var lastPhase = new PhaseData(start, fightDuration)
-            {
-                Name = "Phase " + i++
-            };
+            var lastPhase = new PhaseData(start, fightDuration, "Phase " + i++);
             lastPhase.Targets.Add(mainTarget);
             phases.Add(lastPhase);
             return phases;
