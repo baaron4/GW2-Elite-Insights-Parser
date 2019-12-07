@@ -71,25 +71,25 @@ namespace GW2EIParser.EIData
                     playerSup.Resurrects = totals.Resurrects;
                     playerSup.ResurrectTime = totals.ResurrectTime;
                     FinalSupport self = GetSupport(log, this, phaseIndex);
-                    foreach (Buff buff in log.Buffs.BuffsByNature[BuffNature.Boon])
+                    foreach (Buff boon in log.Buffs.BuffsByNature[BuffNature.Boon])
                     {
                         // add everything from total
-                        if (totals.Removals.TryGetValue(buff.ID, out (long count, double time) item))
+                        if (totals.Removals.TryGetValue(boon.ID, out (long count, double time) item))
                         {
                             playerSup.BoonStrips += item.count;
                             playerSup.BoonStripsTime += item.time;
                         }
                         // remove everything from self
-                        if (self.Removals.TryGetValue(buff.ID, out item))
+                        if (self.Removals.TryGetValue(boon.ID, out item))
                         {
                             playerSup.BoonStrips -= item.count;
                             playerSup.BoonStripsTime -= item.time;
                         }
                     }
-                    foreach (Buff buff in log.Buffs.BuffsByNature[BuffNature.Boon])
+                    foreach (Buff condition in log.Buffs.BuffsByNature[BuffNature.Condition])
                     {
                         // add everything from self
-                        if (self.Removals.TryGetValue(buff.ID, out (long count, double time) item))
+                        if (self.Removals.TryGetValue(condition.ID, out (long count, double time) item))
                         {
                             playerSup.CondiCleanseSelf += item.count;
                             playerSup.CondiCleanseTimeSelf += item.time;
@@ -102,7 +102,7 @@ namespace GW2EIParser.EIData
                             }
                             FinalSupport other = GetSupport(log, p, phaseIndex);
                             // Add everything from other
-                            if (other.Removals.TryGetValue(buff.ID, out item))
+                            if (other.Removals.TryGetValue(condition.ID, out item))
                             {
                                 playerSup.CondiCleanse += item.count;
                                 playerSup.CondiCleanseTime += item.time;
