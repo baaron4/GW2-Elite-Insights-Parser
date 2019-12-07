@@ -113,13 +113,9 @@ namespace GW2EIParser.Parser.ParsedData
                 _agentToActorDictionary[a] = actor;
                 //throw new InvalidOperationException("Requested actor with id " + a.ID + " and name " + a.Name + " is missing");
             }
-            if (a.Master != null)
+            if (a.Master != null && !searchPlayers && a.Master.Type == AgentItem.AgentType.Player)
             {
-                AgentItem master = a.Master;
-                if (master.Type == AgentItem.AgentType.EnemyPlayer || (!searchPlayers && master.Type == AgentItem.AgentType.Player))
-                {
-                    return null;
-                }
+                return null;
             }
             return actor;
         }
