@@ -296,6 +296,8 @@ namespace GW2EIParser.Parser
             Pylon2 = 21962,
             EntropicDistortion = 21973,
             EnergyOrb = 21946,
+            // Fraenir
+            IcebroodElemental = 22576,
             // Freezie
             FreeziesFrozenHeart = 21328,
             // Fractals
@@ -382,6 +384,8 @@ namespace GW2EIParser.Parser
             PeerlessQadim = 22000,
             // Strike Missions
             IcebroodConstruct = 22154,
+            FraenirOfJormag = 22492,
+            IcebroodConstructFraenir = 22436,
             // Fract
             MAMA = 17021,
             Siax = 17028,

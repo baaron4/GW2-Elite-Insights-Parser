@@ -230,7 +230,10 @@ namespace GW2EIParser
                 case ParseEnum.TargetIDS.PeerlessQadim:
                     return "https://i.imgur.com/47uePpb.png";
                 case ParseEnum.TargetIDS.IcebroodConstruct:
+                case ParseEnum.TargetIDS.IcebroodConstructFraenir:
                     return "https://i.imgur.com/dpaZFa5.png";
+                case ParseEnum.TargetIDS.FraenirOfJormag:
+                    return "https://i.imgur.com/MxudnKp.png";
                 case ParseEnum.TargetIDS.MAMA:
                     return "https://i.imgur.com/1h7HOII.png";
                 case ParseEnum.TargetIDS.Siax:
