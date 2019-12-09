@@ -17,7 +17,7 @@ namespace GW2EIParser.Logic
                 new HitOnPlayerMechanic(58811, "Icequake", new MechanicPlotlySetting("hexagram","rgb(255,0,0)"), "Icequake","Icequake", "Icequake",4000, (de, log) => !de.To.HasBuff(log, 1122, de.Time)),
                 new HitOnPlayerMechanic(58740, "Ice Shock Wave", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Ice Shock Wave","Ice Shock Wave", "Ice Shock Wave",4000, (de, log) => !de.To.HasBuff(log, 1122, de.Time)),
                 new PlayerBuffApplyMechanic(58376, "Frozen", new MechanicPlotlySetting("circle","rgb(0,0,255)"), "Frozen","Frozen", "Frozen",500),
-                new PlayerBuffRemoveMechanic(58376, "Frozen", new MechanicPlotlySetting("circle-open","rgb(0,0,255)"), "Unfrozen","Unfrozen", "Unfrozen",500),
+                new PlayerBuffRemoveMechanic(58376, "Unfrozen", new MechanicPlotlySetting("circle-open","rgb(0,0,255)"), "Unfrozen","Unfrozen", "Unfrozen",500),
                 new PlayerBuffApplyMechanic(58276, "Snowblind", new MechanicPlotlySetting("square","rgb(0,0,255)"), "Snowblind","Snowblind", "Snowblind",500),
             }
             );
