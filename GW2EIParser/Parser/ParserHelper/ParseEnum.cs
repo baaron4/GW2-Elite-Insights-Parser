@@ -384,6 +384,9 @@ namespace GW2EIParser.Parser
             PeerlessQadim = 22000,
             // Strike Missions
             IcebroodConstruct = 22154,
+            VoiceOfTheFallen = 22343,
+            ClawOfTheFallen = 22481,
+            VoiceAndClaw = 22315,
             FraenirOfJormag = 22492,
             IcebroodConstructFraenir = 22436,
             // Fract

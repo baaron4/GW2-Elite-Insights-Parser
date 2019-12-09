@@ -232,6 +232,12 @@ namespace GW2EIParser
                 case ParseEnum.TargetIDS.IcebroodConstruct:
                 case ParseEnum.TargetIDS.IcebroodConstructFraenir:
                     return "https://i.imgur.com/dpaZFa5.png";
+                case ParseEnum.TargetIDS.ClawOfTheFallen:
+                    return "https://i.imgur.com/HF85QpV.png";
+                case ParseEnum.TargetIDS.VoiceOfTheFallen:
+                    return "https://i.imgur.com/BdTGXMU.png";
+                case ParseEnum.TargetIDS.VoiceAndClaw:
+                    return "https://i.imgur.com/V1rJBnq.png";
                 case ParseEnum.TargetIDS.FraenirOfJormag:
                     return "https://i.imgur.com/MxudnKp.png";
                 case ParseEnum.TargetIDS.MAMA:

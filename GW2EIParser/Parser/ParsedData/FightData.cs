@@ -145,7 +145,11 @@ namespace GW2EIParser.Parser.ParsedData
                 case ParseEnum.TargetIDS.FraenirOfJormag:
                     Logic = new FraenirOfJormag(id);
                     break;
-                    //
+                case ParseEnum.TargetIDS.VoiceOfTheFallen:
+                case ParseEnum.TargetIDS.ClawOfTheFallen:
+                    Logic = new SuperKodanBrothers(id);
+                    break;
+                //
                 case ParseEnum.TargetIDS.MAMA:
                     Logic = new MAMA(id);
                     break;

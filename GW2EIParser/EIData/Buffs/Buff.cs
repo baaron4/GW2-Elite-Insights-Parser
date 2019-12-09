@@ -209,6 +209,8 @@ namespace GW2EIParser.EIData
 
         private static readonly List<Buff> _fightSpecific = new List<Buff>
         {
+                // Voice and Claw            
+                new Buff("Enraged", 58619, BuffSource.Enemy, BuffType.Intensity, 5, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 // Fraenir of Jormag
                 new Buff("Frozen", 58376, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/7a/Bloodstone_Blessed.png" ),
                 new Buff("Snowblind", 58276, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/7a/Bloodstone_Blessed.png" ),
