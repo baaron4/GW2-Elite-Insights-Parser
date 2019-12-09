@@ -298,6 +298,12 @@ namespace GW2EIParser.Parser
             EnergyOrb = 21946,
             // Fraenir
             IcebroodElemental = 22576,
+            // Boneskinner
+            PrioryExplorer = 22561,
+            PrioryScholar = 22448,
+            VigilRecruit = 22389,
+            VigilTactician = 22420,
+            AberrantWisp = 22538,
             // Freezie
             FreeziesFrozenHeart = 21328,
             // Fractals
@@ -389,6 +395,7 @@ namespace GW2EIParser.Parser
             VoiceAndClaw = 22315,
             FraenirOfJormag = 22492,
             IcebroodConstructFraenir = 22436,
+            Boneskinner = 22521,
             // Fract
             MAMA = 17021,
             Siax = 17028,

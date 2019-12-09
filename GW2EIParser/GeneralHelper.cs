@@ -240,6 +240,8 @@ namespace GW2EIParser
                     return "https://i.imgur.com/V1rJBnq.png";
                 case ParseEnum.TargetIDS.FraenirOfJormag:
                     return "https://i.imgur.com/MxudnKp.png";
+                case ParseEnum.TargetIDS.Boneskinner:
+                    return "https://i.imgur.com/7HPdKDQ.png";
                 case ParseEnum.TargetIDS.MAMA:
                     return "https://i.imgur.com/1h7HOII.png";
                 case ParseEnum.TargetIDS.Siax:
@@ -406,6 +408,10 @@ namespace GW2EIParser
                 case GreenSpirit2:
                 case BanditSapper:
                 case ProjectionArkk:
+                case PrioryExplorer:
+                case PrioryScholar:
+                case VigilRecruit:
+                case VigilTactician:
                 case Prisoner1:
                 case Prisoner2:
                 case Pylon1:
