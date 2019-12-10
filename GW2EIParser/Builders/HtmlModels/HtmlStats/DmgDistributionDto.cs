@@ -80,13 +80,15 @@ namespace GW2EIParser.Builders.HtmlModels
                 casts = clList.Count;
                 foreach (AbstractCastEvent cl in clList)
                 {
-                    if (cl.Interrupted)
+                    switch (cl.Status)
                     {
-                        timeswasted += cl.SavedDuration;
-                    }
-                    else if (cl.ReducedAnimation)
-                    {
-                        timessaved += cl.SavedDuration;
+                        case AbstractCastEvent.AnimationStatus.INTERRUPTED:
+                            timeswasted += cl.SavedDuration;
+                            break;
+
+                        case AbstractCastEvent.AnimationStatus.REDUCED:
+                            timessaved += cl.SavedDuration;
+                            break;
                     }
                 }
             }
