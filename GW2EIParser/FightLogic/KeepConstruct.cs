@@ -244,7 +244,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in towerDrop)
                     {
                         start = (int)c.Time;
-                        end = start + c.Duration;
+                        end = start + c.ActualDuration;
                         int skillCast = end - 1000;
                         Point3D next = replay.PolledPositions.FirstOrDefault(x => x.Time >= end);
                         Point3D prev = replay.PolledPositions.LastOrDefault(x => x.Time <= end);
@@ -261,7 +261,7 @@ namespace GW2EIParser.Logic
                     int duration = 1000;
                     foreach (AbstractCastEvent c in blades1)
                     {
-                        int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.Duration - 1150) / 1000.0), 9));
+                        int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
                         start = (int)c.Time + bladeDelay;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time < start + 1000);
                         if (facing == null)
@@ -277,7 +277,7 @@ namespace GW2EIParser.Logic
                     }
                     foreach (AbstractCastEvent c in blades2)
                     {
-                        int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.Duration - 1150) / 1000.0), 9));
+                        int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
                         start = (int)c.Time + bladeDelay;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time < start + 1000);
                         if (facing == null)
@@ -295,7 +295,7 @@ namespace GW2EIParser.Logic
                     }
                     foreach (AbstractCastEvent c in blades3)
                     {
-                        int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.Duration - 1150) / 1000.0), 9));
+                        int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
                         start = (int)c.Time + bladeDelay;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time < start + 1000);
                         if (facing == null)

@@ -92,7 +92,7 @@ namespace GW2EIParser.EIData
                 }
                 CastLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
             }
-            return CastLogs.Where(x => x.Time >= start && x.Time + x.Duration <= end).ToList();
+            return CastLogs.Where(x => x.Time >= start && x.Time + x.ActualDuration <= end).ToList();
         }
     }
 }

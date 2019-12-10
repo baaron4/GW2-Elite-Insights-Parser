@@ -28,8 +28,8 @@ namespace GW2EIParser.Logic
             new HitOnPlayerMechanic(48327, "Corrupt the Living", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Spin","Corrupt the Living (Torment+Poisen Spin)", "Torment+Poisen Spin",0),
             new HitOnPlayerMechanic(47756, "Wurm Spit", new MechanicPlotlySetting("diamond-open","rgb(0,128,128)"), "Spit","Wurm Spit", "Wurm Spit",0),
             new EnemyCastStartMechanic(48662, "Howling Death", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Howling Death (Breakbar)", "Breakbar",0),
-            new EnemyCastEndMechanic(48662, "Howling Death", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Howling Death (Breakbar) broken", "CCed",0, (ce, log) => ce.Duration <= 6800),
-            new EnemyCastEndMechanic(48662, "Howling Death", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Howling Death (Breakbar failed) ", "CC Fail",0, (ce,log) => ce.Duration > 6800),
+            new EnemyCastEndMechanic(48662, "Howling Death", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Howling Death (Breakbar) broken", "CCed",0, (ce, log) => ce.ActualDuration <= 6800),
+            new EnemyCastEndMechanic(48662, "Howling Death", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Howling Death (Breakbar failed) ", "CC Fail",0, (ce,log) => ce.ActualDuration > 6800),
 
             });
             Extension = "sh";
@@ -96,7 +96,7 @@ namespace GW2EIParser.Logic
             {
                 var phase = new PhaseData(start, Math.Min(c.Time, fightDuration), "Pre-Breakbar " + i++);
                 phase.Targets.Add(mainTarget);
-                start = c.Time + c.Duration;
+                start = c.Time + c.ActualDuration;
                 phases.Add(phase);
             }
             if (fightDuration - start > 3000)
@@ -120,7 +120,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in howling)
                     {
                         start = (int)c.Time;
-                        end = start + c.Duration;
+                        end = start + c.ActualDuration;
                         replay.Decorations.Add(new CircleDecoration(true, start + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
@@ -142,7 +142,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in deathBloom)
                     {
                         start = (int)c.Time;
-                        end = start + c.Duration;
+                        end = start + c.ActualDuration;
                         Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
                         if (facing == null)
                         {
@@ -159,7 +159,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in quad1)
                     {
                         start = (int)c.Time;
-                        end = start + c.Duration;
+                        end = start + c.ActualDuration;
                         Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
                         if (facing == null)
                         {
@@ -174,7 +174,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in quad2)
                     {
                         start = (int)c.Time;
-                        end = start + c.Duration;
+                        end = start + c.ActualDuration;
                         Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
                         if (facing == null)
                         {

@@ -22,7 +22,7 @@ namespace GW2EIParser.Builders.HtmlModels
             double start = (cl.Time - phaseStart) / 1000.0;
             rotEntry[0] = start;
             rotEntry[1] = cl.SkillId;
-            rotEntry[2] = cl.Duration;
+            rotEntry[2] = cl.ActualDuration;
             rotEntry[3] = EncodeEndActivation(cl);
             rotEntry[4] = cl.UnderQuickness ? 1 : 0;
             return rotEntry;

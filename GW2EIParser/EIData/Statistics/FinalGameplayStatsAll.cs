@@ -38,14 +38,14 @@ namespace GW2EIParser.EIData
                 if (cl.Interrupted)
                 {
                     Wasted++;
-                    TimeWasted += cl.Duration;
+                    TimeWasted += cl.ActualDuration;
                 }
                 if (cl.ReducedAnimation)
                 {
-                    if (cl.Duration < cl.ExpectedDuration)
+                    if (cl.ActualDuration < cl.ExpectedDuration)
                     {
                         Saved++;
-                        TimeSaved += cl.ExpectedDuration - cl.Duration;
+                        TimeSaved += cl.ExpectedDuration - cl.ActualDuration;
                     }
                 }
                 if (cl.SkillId == SkillItem.WeaponSwapId)

@@ -167,7 +167,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in rageShards)
                     {
                         start = (int)c.Time;
-                        end = start + c.Duration;
+                        end = start + c.ActualDuration;
                         replay.Decorations.Add(new CircleDecoration(false, 0, 300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, end, 300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     }

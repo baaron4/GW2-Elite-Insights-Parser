@@ -345,7 +345,7 @@ namespace GW2EIParser.EIData
             }).ToList();
             foreach (AbstractCastEvent cl in casting)
             {
-                if (cl.Duration == 0 && cl.SkillId != SkillItem.WeaponSwapId)
+                if (cl.ActualDuration == 0 && cl.SkillId != SkillItem.WeaponSwapId)
                 {
                     continue;
                 }

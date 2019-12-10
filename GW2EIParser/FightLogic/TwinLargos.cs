@@ -226,14 +226,14 @@ namespace GW2EIParser.Logic
                     var barrageN = cls.Where(x => x.SkillId == 51977).ToList();
                     foreach (AbstractCastEvent c in barrageN)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)c.Time, (int)c.Time + c.Duration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Platform wipe (CM only)
                     var aquaticDomainN = cls.Where(x => x.SkillId == 52374).ToList();
                     foreach (AbstractCastEvent c in aquaticDomainN)
                     {
                         int start = (int)c.Time;
-                        int duration = c.Duration;
+                        int duration = c.ActualDuration;
                         int end = start + duration;
                         int radius = 800;
                         replay.Decorations.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(255, 255, 0, 0.3)", new AgentConnector(target)));
@@ -244,14 +244,14 @@ namespace GW2EIParser.Logic
                     var barrageK = cls.Where(x => x.SkillId == 51977).ToList();
                     foreach (AbstractCastEvent c in barrageK)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)c.Time, (int)c.Time + c.Duration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Platform wipe (CM only)
                     var aquaticDomainK = cls.Where(x => x.SkillId == 52374).ToList();
                     foreach (AbstractCastEvent c in aquaticDomainK)
                     {
                         int start = (int)c.Time;
-                        int duration = c.Duration;
+                        int duration = c.ActualDuration;
                         int end = start + duration;
                         int radius = 800;
                         replay.Decorations.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(255, 255, 0, 0.3)", new AgentConnector(target)));

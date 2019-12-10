@@ -46,8 +46,8 @@ namespace GW2EIParser.Logic
             new HitOnPlayerMechanic(31761, "Flame Blast", new MechanicPlotlySetting("triangle-left-open","rgb(255,200,0)"), "Karde Flame","Flame Blast (Karde's Flamethrower)", "Flamethrower (Karde)",0),
             new HitOnPlayerMechanic(31408, "Kick", new MechanicPlotlySetting("triangle-right","rgb(255,0,255)"), "Kick","Kicked by Bandit", "Bandit Kick",0, (de, log) => !de.To.HasBuff(log, 1122, de.Time)),
             new EnemyCastStartMechanic(31763, "Platform Quake", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Platform Quake (Breakbar)","Breakbar",0),
-            new EnemyCastEndMechanic(31763, "Platform Quake", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Platform Quake (Breakbar broken) ", "CCed",0, (ce, log) => ce.Duration <= 4400),
-            new EnemyCastEndMechanic(31763, "Platform Quake", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Platform Quake (Breakbar failed) ", "CC Fail",0, (ce,log) =>  ce.Duration > 4400),
+            new EnemyCastEndMechanic(31763, "Platform Quake", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Platform Quake (Breakbar broken) ", "CCed",0, (ce, log) => ce.ActualDuration <= 4400),
+            new EnemyCastEndMechanic(31763, "Platform Quake", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Platform Quake (Breakbar failed) ", "CC Fail",0, (ce,log) =>  ce.ActualDuration > 4400),
             // Hit by Time Bomb could be implemented by checking if a person is affected by ID 31324 (1st Time Bomb) or 34152 (2nd Time Bomb, only below 50% boss HP) without being attributed a bomb (ID: 31485) 3000ms before (+-50ms). I think the actual heavy hit isn't logged because it may be percentage based. Nothing can be found in the logs.
             });
             Extension = "sab";
@@ -187,7 +187,7 @@ namespace GW2EIParser.Logic
                     var breakbar = cls.Where(x => x.SkillId == 31763).ToList();
                     foreach (AbstractCastEvent c in breakbar)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 180, ((int)c.Time, (int)c.Time + c.Duration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 180, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 case (ushort)Karde:

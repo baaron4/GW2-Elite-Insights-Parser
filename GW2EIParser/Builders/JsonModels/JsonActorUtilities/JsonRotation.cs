@@ -35,16 +35,16 @@ namespace GW2EIParser.Builders.JsonModels
             public JsonSkill(AbstractCastEvent cl)
             {
                 int timeGained = 0;
-                if (cl.ReducedAnimation && cl.Duration < cl.ExpectedDuration)
+                if (cl.ReducedAnimation && cl.ActualDuration < cl.ExpectedDuration)
                 {
-                    timeGained = cl.ExpectedDuration - cl.Duration;
+                    timeGained = cl.ExpectedDuration - cl.ActualDuration;
                 }
                 else if (cl.Interrupted)
                 {
-                    timeGained = -cl.Duration;
+                    timeGained = -cl.ActualDuration;
                 }
                 CastTime = (int)cl.Time;
-                Duration = cl.Duration;
+                Duration = cl.ActualDuration;
                 TimeGained = timeGained;
                 Quickness = cl.UnderQuickness;
             }

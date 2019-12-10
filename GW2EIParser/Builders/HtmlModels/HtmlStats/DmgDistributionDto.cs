@@ -82,11 +82,11 @@ namespace GW2EIParser.Builders.HtmlModels
                 {
                     if (cl.Interrupted)
                     {
-                        timeswasted += cl.Duration;
+                        timeswasted += cl.ActualDuration;
                     }
-                    else if (cl.ReducedAnimation && cl.Duration < cl.ExpectedDuration)
+                    else if (cl.ReducedAnimation && cl.ActualDuration < cl.ExpectedDuration)
                     {
-                        timessaved += cl.ExpectedDuration - cl.Duration;
+                        timessaved += cl.ExpectedDuration - cl.ActualDuration;
                     }
                 }
             }
