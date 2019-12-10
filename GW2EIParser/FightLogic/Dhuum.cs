@@ -91,7 +91,7 @@ namespace GW2EIParser.Logic
                 AbstractCastEvent clDeathmark = gDeathmark[i - 1];
                 end = Math.Min(clDeathmark.Time, mainEnd);
                 phases.Add(new PhaseData(start, end, "Pre-Soulsplit " + i++));
-                start = cl.Time + cl.ActualDuration;
+                start = cl.Time + cl.Duration;
             }
             phases.Add(new PhaseData(start, mainEnd, hasRitual ? "Pre-Ritual" : "Pre-Wipe"));
             return phases;
@@ -198,7 +198,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in cataCycle)
                     {
                         start = (int)c.Time;
-                        end = start + c.ActualDuration;
+                        end = start + c.Duration;
                         replay.Decorations.Add(new CircleDecoration(true, end, 300, (start, end), "rgba(255, 150, 0, 0.7)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
                     }
@@ -206,7 +206,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in slash)
                     {
                         start = (int)c.Time;
-                        end = start + c.ActualDuration;
+                        end = start + c.Duration;
                         Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
                         if (facing == null)
                         {

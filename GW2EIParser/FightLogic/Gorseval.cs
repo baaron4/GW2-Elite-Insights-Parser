@@ -22,8 +22,8 @@ namespace GW2EIParser.Logic
             new HitOnPlayerMechanic(31720, "Kick", new MechanicPlotlySetting("triangle-right","rgb(255,0,255)"), "Kick","Kicked by small add", "Spirit Kick",0, (de, log) => !de.To.HasBuff(log, 1122, de.Time)),
             new PlayerBuffApplyMechanic(738, "Ghastly Rampage Black Goo Hit", new MechanicPlotlySetting("circle","rgb(0,0,0)"), "Black","Hit by Black Goo","Black Goo",3000, (ba,log) => ba.AppliedDuration == 10000),
             new EnemyCastStartMechanic(31834, "Ghastly Rampage", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Ghastly Rampage (Breakbar)", "Breakbar",0),
-            new EnemyCastEndMechanic(31834, "Ghastly Rampage", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC End","Ghastly Rampage (Full duration)", "CC ran out",0, (ce,log) => ce.ActualDuration > 21985),
-            new EnemyCastEndMechanic(31834, "Ghastly Rampage", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Ghastly Rampage (Breakbar broken)", "CCed",0, (ce, log) => ce.ActualDuration <= 21985),
+            new EnemyCastEndMechanic(31834, "Ghastly Rampage", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC End","Ghastly Rampage (Full duration)", "CC ran out",0, (ce,log) => ce.Duration > 21985),
+            new EnemyCastEndMechanic(31834, "Ghastly Rampage", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Ghastly Rampage (Breakbar broken)", "CCed",0, (ce, log) => ce.Duration <= 21985),
             });
             Extension = "gors";
             Icon = "https://wiki.guildwars2.com/images/d/d1/Mini_Gorseval_the_Multifarious.png";
@@ -101,7 +101,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in blooms)
                     {
                         int start = (int)c.Time;
-                        int end = start + c.ActualDuration;
+                        int end = start + c.Duration;
                         replay.Decorations.Add(new CircleDecoration(true, c.ExpectedDuration + start, 600, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(false, 0, 600, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
                     }
@@ -113,10 +113,10 @@ namespace GW2EIParser.Logic
                         foreach (AbstractCastEvent c in rampage)
                         {
                             int start = (int)c.Time;
-                            int end = start + c.ActualDuration;
+                            int end = start + c.Duration;
                             replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 125, 255, 0.3)", new AgentConnector(target)));
                             // or spawn -> 3 secs -> explosion -> 0.5 secs -> fade -> 0.5  secs-> next
-                            int ticks = (int)Math.Min(Math.Ceiling(c.ActualDuration / 4000.0), 6);
+                            int ticks = (int)Math.Min(Math.Ceiling(c.Duration / 4000.0), 6);
                             int phaseIndex;
                             for (phaseIndex = 1; phaseIndex < phases.Count; phaseIndex++)
                             {
@@ -217,7 +217,7 @@ namespace GW2EIParser.Logic
                         int start = (int)c.Time;
                         int impactPoint = 1185;
                         int impactTime = start + impactPoint;
-                        int end = Math.Min(start + c.ActualDuration, impactTime);
+                        int end = Math.Min(start + c.Duration, impactTime);
                         int radius = 320;
                         replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, radius, (impactTime - 10, impactTime + 100), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));

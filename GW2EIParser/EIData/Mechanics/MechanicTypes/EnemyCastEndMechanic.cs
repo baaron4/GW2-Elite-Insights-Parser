@@ -7,7 +7,7 @@ namespace GW2EIParser.EIData
     {
         protected override long GetTime(AbstractCastEvent evt)
         {
-            return evt.Time + evt.ActualDuration;
+            return evt.Time + evt.Duration;
         }
 
         public EnemyCastEndMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, CastChecker condition) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, condition)

@@ -34,16 +34,16 @@ namespace GW2EIParser.Logic
             new PlayerBuffApplyMechanic(39268, "Cosmic Meteor", new MechanicPlotlySetting("circle-open","rgb(0,255,0)"), "Green","Temporal Realignment (Green) application", "Green",0),
             new PlayerBuffApplyMechanic(791, "Fear", new MechanicPlotlySetting("square-open","rgb(255,0,0)"), "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)",0, (ba, log) => ba.AppliedDuration == 3000), // //not triggered under stab, still get blinded/damaged, seperate tracking desired?
             new EnemyCastStartMechanic(39645, "Breakbar Start", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "Breakbar","Start Breakbar", "CC",0),
-            new EnemyCastEndMechanic(39645, "Breakbar End", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC.Fail","Breakbar (Failed CC)", "CC Fail",0, (ce,log) => ce.ActualDuration > 9668),
-            new EnemyCastEndMechanic(39645, "Breakbar End", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Breakbar broken", "CCed",0, (ce, log) => ce.ActualDuration < 9668),
+            new EnemyCastEndMechanic(39645, "Breakbar End", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC.Fail","Breakbar (Failed CC)", "CC Fail",0, (ce,log) => ce.Duration > 9668),
+            new EnemyCastEndMechanic(39645, "Breakbar End", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Breakbar broken", "CCed",0, (ce, log) => ce.Duration < 9668),
             new HitOnPlayerMechanic(34748, "Overhead Smash", new MechanicPlotlySetting("triangle-left-open","rgb(200,0,0)"), "A.Smsh","Overhead Smash (Arcdiviner)", "Smash (Add)",0),
             new HitOnPlayerMechanic(39674, "Rolling Chaos", new MechanicPlotlySetting("circle","rgb(255,50,50)"), "KD Marble","Rolling Chaos (Arrow marble)", "KD Marble",0),
             new HitOnPlayerMechanic(39298, "Solar Stomp", new MechanicPlotlySetting("triangle-up","rgb(200,0,200)"), "Stomp","Solar Stomp (Evading Stomp)", "Evading Jump",0),
             new EnemyCastStartMechanic(39021, "Cosmic Streaks", new MechanicPlotlySetting("diamond-open","rgb(255,0,100)"), "DDR Beam","Triple Death Ray Cast (last phase)", "Death Ray Cast",0),
             new HitOnPlayerMechanic(35940, "Whirling Devastation", new MechanicPlotlySetting("star-diamond-open","rgb(180,0,100)"), "Whirl","Whirling Devastation (Gladiator Spin)", "Gladiator Spin",300),
             new EnemyCastStartMechanic(35761, "Pull Charge", new MechanicPlotlySetting("bowtie","rgb(0,160,150)"), "Pull","Pull Charge (Gladiator Pull)", "Gladiator Pull",0), //
-            new EnemyCastEndMechanic(35761, "Pull Charge", new MechanicPlotlySetting("bowtie","rgb(255,0,0)"), "Pull CC Fail","Pull Charge CC failed", "CC fail (Gladiator)",0, (ce,log) => ce.ActualDuration > 3200), //
-            new EnemyCastEndMechanic(35761, "Pull Charge", new MechanicPlotlySetting("bowtie","rgb(0,160,0)"), "Pull CCed","Pull Charge CCed", "CCed (Gladiator)",0, (ce, log) => ce.ActualDuration < 3200), //
+            new EnemyCastEndMechanic(35761, "Pull Charge", new MechanicPlotlySetting("bowtie","rgb(255,0,0)"), "Pull CC Fail","Pull Charge CC failed", "CC fail (Gladiator)",0, (ce,log) => ce.Duration > 3200), //
+            new EnemyCastEndMechanic(35761, "Pull Charge", new MechanicPlotlySetting("bowtie","rgb(0,160,0)"), "Pull CCed","Pull Charge CCed", "CCed (Gladiator)",0, (ce, log) => ce.Duration < 3200), //
             new HitOnPlayerMechanic(35452, "Spinning Cut", new MechanicPlotlySetting("star-square-open","rgb(200,140,255)"), "Daze","Spinning Cut (3rd Gladiator Auto->Daze)", "Gladiator Daze",0), //
             });
             Extension = "arkk";

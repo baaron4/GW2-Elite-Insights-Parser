@@ -57,7 +57,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in breakbar)
                     {
                         start = (int)c.Time;
-                        end = start + c.ActualDuration;
+                        end = start + c.Duration;
                         replay.Decorations.Add(new CircleDecoration(true, start + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
@@ -81,7 +81,7 @@ namespace GW2EIParser.Logic
                     {
                         start = (int)c.Time;
                         //int duration = 900;
-                        end = start + c.ActualDuration; //duration;
+                        end = start + c.Duration; //duration;
                         //replay.Actors.Add(new CircleActor(true, 0, 180, (start, end), "rgba(255, 150, 255, 0.35)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, end, 180, (start, end), "rgba(255, 180, 220, 0.7)", new AgentConnector(target)));
                     }

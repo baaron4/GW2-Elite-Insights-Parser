@@ -436,11 +436,11 @@ namespace GW2EIParser.Builders
                 {
                     if (cl.Interrupted)
                     {
-                        timeswasted += cl.ActualDuration;
+                        timeswasted += cl.Duration;
                     }
-                    else if (cl.ReducedAnimation && cl.ActualDuration < cl.ExpectedDuration)
+                    else if (cl.ReducedAnimation && cl.Duration < cl.ExpectedDuration)
                     {
-                        timessaved += cl.ExpectedDuration - cl.ActualDuration;
+                        timessaved += cl.ExpectedDuration - cl.Duration;
                     }
                 }
 

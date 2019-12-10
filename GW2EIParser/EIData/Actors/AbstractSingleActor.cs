@@ -507,7 +507,7 @@ namespace GW2EIParser.EIData
             {
                 SetCastLogs(log);
             }
-            return CastLogs.Where(x => x.Time >= start && x.Time + x.ActualDuration <= end).ToList();
+            return CastLogs.Where(x => x.Time >= start && x.Time + x.Duration <= end).ToList();
 
         }
         protected void SetCastLogs(ParsedLog log)

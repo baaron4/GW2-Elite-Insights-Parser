@@ -71,7 +71,7 @@ namespace GW2EIParser.Logic
                 var phase = new PhaseData(start, end, "Phase " + (i + 1));
                 phase.Targets.Add(mainTarget);
                 phases.Add(phase);
-                AbstractCastEvent nextAttack = cls.FirstOrDefault(x => x.Time >= end + wW.ActualDuration && (x.SkillId == 56620 || x.SkillId == 56629 || x.SkillId == 56307));
+                AbstractCastEvent nextAttack = cls.FirstOrDefault(x => x.Time >= end + wW.Duration && (x.SkillId == 56620 || x.SkillId == 56629 || x.SkillId == 56307));
                 if (nextAttack == null)
                 {
                     break;

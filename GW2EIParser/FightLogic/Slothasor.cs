@@ -75,7 +75,7 @@ namespace GW2EIParser.Logic
             {
                 var phase = new PhaseData(start, Math.Min(c.Time, fightDuration), "Phase " + i++);
                 phase.Targets.Add(mainTarget);
-                start = c.Time + c.ActualDuration;
+                start = c.Time + c.Duration;
                 phases.Add(phase);
             }
             var lastPhase = new PhaseData(start, fightDuration, "Phase " + i++);
@@ -93,7 +93,7 @@ namespace GW2EIParser.Logic
                     var sleepy = cls.Where(x => x.SkillId == 34515).ToList();
                     foreach (AbstractCastEvent c in sleepy)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 180, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 180, ((int)c.Time, (int)c.Time + c.Duration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     var breath = cls.Where(x => x.SkillId == 34516).ToList();
                     foreach (AbstractCastEvent c in breath)
@@ -115,7 +115,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in tantrum)
                     {
                         int start = (int)c.Time;
-                        int end = start + c.ActualDuration;
+                        int end = start + c.Duration;
                         replay.Decorations.Add(new CircleDecoration(false, 0, 300, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, end, 300, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                     }
@@ -123,7 +123,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in shakes)
                     {
                         int start = (int)c.Time;
-                        int end = start + c.ActualDuration;
+                        int end = start + c.Duration;
                         replay.Decorations.Add(new CircleDecoration(false, 0, 700, (start, end), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, end, 700, (start, end), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));
                     }

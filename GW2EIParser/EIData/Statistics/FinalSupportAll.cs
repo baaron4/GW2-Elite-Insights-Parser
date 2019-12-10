@@ -19,7 +19,7 @@ namespace GW2EIParser.EIData
                 if (cl.SkillId == SkillItem.ResurrectId)
                 {
                     reses[0]++;
-                    reses[1] += cl.ActualDuration;
+                    reses[1] += cl.Duration;
                 }
             }
             return reses;

@@ -59,7 +59,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in Cone)
                     {
                         int start = (int)c.Time;
-                        int end = start + c.ActualDuration;
+                        int end = start + c.Duration;
                         int range = 450;
                         int angle = 100;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);

@@ -10,7 +10,7 @@
             SwappedTo = (int)evtcItem.DstAgent;
             Skill = skillData.Get(SkillItem.WeaponSwapId);
             ExpectedDuration = 50;
-            ActualDuration = 50;
+            Duration = 50;
         }
     }
 }
