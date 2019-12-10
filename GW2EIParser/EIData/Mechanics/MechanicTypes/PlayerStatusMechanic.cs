@@ -48,7 +48,7 @@ namespace GW2EIParser.EIData
                         }
                         break;
                     case SkillItem.ResurrectId:
-                        cList = log.CombatData.GetCastData(p.AgentItem).Where(x => x.SkillId == SkillItem.ResurrectId).Select(x => x.Time).ToList();
+                        cList = log.CombatData.GetAnimatedCastData(p.AgentItem).Where(x => x.SkillId == SkillItem.ResurrectId).Select(x => x.Time).ToList();
                         break;
                 }
                 foreach (long time in cList)
