@@ -13,6 +13,7 @@
         public bool Interrupted { get; protected set; }
         public bool FullAnimation { get; protected set; }
         public bool ReducedAnimation { get; protected set; }
+        public int SavedDuration { get; protected set; }
         public int ActualDuration { get; protected set; }
 
         public AbstractCastEvent(CombatItem startEvtcItem, AgentData agentData, SkillData skillData) : base(startEvtcItem.Time)

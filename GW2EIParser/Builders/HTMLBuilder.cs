@@ -434,18 +434,18 @@ namespace GW2EIParser.Builders
                 int timeswasted = 0, timessaved = 0;
                 foreach (AbstractCastEvent cl in entry.Value)
                 {
-                    if (cl.Interrupted)
+                    if (cl.SavedDuration < 0)
                     {
-                        timeswasted += cl.ActualDuration;
-                    }
-                    else if (cl.ReducedAnimation && cl.ActualDuration < cl.ExpectedDuration)
+                        timeswasted += cl.SavedDuration;
+                    } 
+                    else
                     {
-                        timessaved += cl.ExpectedDuration - cl.ActualDuration;
+                        timessaved += cl.SavedDuration;
                     }
                 }
 
                 object[] skillData = { false, entry.Key.ID, 0, -1, 0, casts,
-                    0, 0, 0, 0, timeswasted / 1000.0, timessaved / 1000.0, 0 };
+                    0, 0, 0, 0, -timeswasted / 1000.0, timessaved / 1000.0, 0 };
                 list.Add(skillData);
             }
             return list;

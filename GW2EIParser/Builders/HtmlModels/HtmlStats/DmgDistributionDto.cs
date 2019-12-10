@@ -82,11 +82,11 @@ namespace GW2EIParser.Builders.HtmlModels
                 {
                     if (cl.Interrupted)
                     {
-                        timeswasted += cl.ActualDuration;
+                        timeswasted += cl.SavedDuration;
                     }
-                    else if (cl.ReducedAnimation && cl.ActualDuration < cl.ExpectedDuration)
+                    else if (cl.ReducedAnimation)
                     {
-                        timessaved += cl.ExpectedDuration - cl.ActualDuration;
+                        timessaved += cl.SavedDuration;
                     }
                 }
             }
@@ -101,7 +101,7 @@ namespace GW2EIParser.Builders.HtmlModels
                     IsIndirectDamage ? 0 : crit,
                     IsIndirectDamage ? 0 : flank,
                     IsIndirectDamage ? 0 : glance,
-                    IsIndirectDamage ? 0 : timeswasted / 1000.0,
+                    IsIndirectDamage ? 0 : -timeswasted / 1000.0,
                     IsIndirectDamage ? 0 : timessaved / 1000.0,
                     shieldDamage,
                 };

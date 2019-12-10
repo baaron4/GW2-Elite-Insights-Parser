@@ -38,15 +38,12 @@ namespace GW2EIParser.EIData
                 if (cl.Interrupted)
                 {
                     Wasted++;
-                    TimeWasted += cl.ActualDuration;
+                    TimeWasted += cl.SavedDuration;
                 }
                 if (cl.ReducedAnimation)
                 {
-                    if (cl.ActualDuration < cl.ExpectedDuration)
-                    {
-                        Saved++;
-                        TimeSaved += cl.ExpectedDuration - cl.ActualDuration;
-                    }
+                    Saved++;
+                    TimeSaved += cl.SavedDuration;
                 }
                 if (cl.SkillId == SkillItem.WeaponSwapId)
                 {
@@ -54,7 +51,7 @@ namespace GW2EIParser.EIData
                 }
             }
             TimeSaved = Math.Round(TimeSaved / 1000.0, GeneralHelper.TimeDigit);
-            TimeWasted = Math.Round(TimeWasted / 1000.0, GeneralHelper.TimeDigit);
+            TimeWasted = -Math.Round(TimeWasted / 1000.0, GeneralHelper.TimeDigit);
 
 
 
