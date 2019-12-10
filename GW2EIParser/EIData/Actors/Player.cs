@@ -339,13 +339,9 @@ namespace GW2EIParser.EIData
             List<AbstractCastEvent> casting = GetCastLogs(log, 0, log.FightData.FightEnd);
             int swapped = -1;
             long swappedTime = 0;
-            var swaps = casting.Where(x => x.SkillId == SkillItem.WeaponSwapId).Select(x =>
+            var swaps = casting.OfType<WeaponSwapEvent>().Select(x =>
             {
-                if (x is WeaponSwapEvent wse)
-                {
-                    return wse.SwappedTo;
-                }
-                return -1;
+                return x.SwappedTo;
             }).ToList();
             foreach (AbstractCastEvent cl in casting)
             {
