@@ -88,7 +88,7 @@ namespace GW2EIParser.Logic
                 if (firstMovement != null)
                 {
                     // update start
-                    riverOfSoul.FirstAware = firstMovement.Time - 10;
+                    riverOfSoul.FirstAware = firstMovement.Time - GeneralHelper.ServerDelayConstant;
                     foreach (CombatItem c in combatData)
                     {
                         if (c.SrcAgent == riverOfSoul.Agent && (c.IsStateChange == ParseEnum.StateChange.Position || c.IsStateChange == ParseEnum.StateChange.Rotation))

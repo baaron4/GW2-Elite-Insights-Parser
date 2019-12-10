@@ -515,7 +515,7 @@ namespace GW2EIParser.EIData
             CastLogs = new List<AbstractCastEvent>(log.CombatData.GetAnimatedCastData(AgentItem));
             foreach (WeaponSwapEvent wepSwap in log.CombatData.GetWeaponSwapData(AgentItem))
             {
-                if (CastLogs.Count > 0 && (wepSwap.Time - CastLogs.Last().Time) < 10 && CastLogs.Last().SkillId == SkillItem.WeaponSwapId)
+                if (CastLogs.Count > 0 && (wepSwap.Time - CastLogs.Last().Time) < GeneralHelper.ServerDelayConstant && CastLogs.Last().SkillId == SkillItem.WeaponSwapId)
                 {
                     CastLogs[CastLogs.Count - 1] = wepSwap;
                 }
