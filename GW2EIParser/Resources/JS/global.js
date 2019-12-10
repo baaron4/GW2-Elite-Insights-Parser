@@ -191,7 +191,7 @@ function computeRotationData(rotationData, images, data) {
                 width: '5',
                 line: {
                     color: [],
-                    width: '2'
+                    width: '0.5'
                 }
             },
             showlegend: false
@@ -202,7 +202,7 @@ function computeRotationData(rotationData, images, data) {
             var skillId = item[1];
             var duration = item[2];
             var endType = item[3];
-            var quick = item[4];
+            //var quick = item[4];
             var skill = findSkill(false, skillId);
             var aa = false;
             var icon;
@@ -243,7 +243,7 @@ function computeRotationData(rotationData, images, data) {
             rotaTrace.text.push(name + ' at ' + x + 's for ' + duration + 'ms');
             rotaTrace.width.push(aa ? 0.5 : 1.0);
             rotaTrace.marker.color.push(fillColor);
-            rotaTrace.marker.line.color.push(quick ? 'rgb(220,40,220)' : 'rgb(20,20,20)');
+            rotaTrace.marker.line.color.push('rgb(125,125,125)');
         }
         data.push(rotaTrace);
         return 1;

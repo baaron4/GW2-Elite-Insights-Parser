@@ -9,7 +9,6 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         private AnimatedCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData) : base(startItem, agentData, skillData)
         {
-            UnderQuickness = startItem.IsActivation == ParseEnum.Activation.Quickness;
             ExpectedDuration = startItem.BuffDmg > 0 ? startItem.BuffDmg : startItem.Value;
             //_effectHappenedDuration = startItem.Value;
         }

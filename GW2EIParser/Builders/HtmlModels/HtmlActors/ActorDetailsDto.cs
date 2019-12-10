@@ -24,7 +24,6 @@ namespace GW2EIParser.Builders.HtmlModels
             rotEntry[1] = cl.SkillId;
             rotEntry[2] = cl.ActualDuration;
             rotEntry[3] = (int) cl.Status;
-            rotEntry[4] = cl.UnderQuickness ? 1 : 0;
             return rotEntry;
         }
     }

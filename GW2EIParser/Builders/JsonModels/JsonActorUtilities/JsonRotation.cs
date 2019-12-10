@@ -27,17 +27,12 @@ namespace GW2EIParser.Builders.JsonModels
             /// Gained time from the animation, could be negative, which means time was lost
             /// </summary>
             public int TimeGained { get; }
-            /// <summary>
-            /// Animation started while under quickness
-            /// </summary>
-            public bool Quickness { get; }
 
             public JsonSkill(AbstractCastEvent cl)
             {
                 CastTime = (int)cl.Time;
                 Duration = cl.ActualDuration;
                 TimeGained = cl.SavedDuration;
-                Quickness = cl.UnderQuickness;
             }
         }
 

@@ -10,8 +10,6 @@
         public long SkillId => Skill.ID;
         public AgentItem Caster { get; }
 
-        public bool UnderQuickness { get; protected set; }
-
         public AnimationStatus Status { get; protected set; } = AnimationStatus.UNKNOWN;
         public int SavedDuration { get; protected set; }
 
