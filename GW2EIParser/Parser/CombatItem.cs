@@ -2,13 +2,13 @@
 {
     public class CombatItem
     {
-        public long LogTime { get; private set; }
+        public long Time { get; private set; }
         public ulong SrcAgent { get; private set; }
         public ulong DstAgent { get; private set; }
         public int Value { get; private set; }
         public int BuffDmg { get; }
         public uint OverstackValue { get; }
-        public long SkillID { get; }
+        public long SkillID { get; private set; }
         public ushort SrcInstid { get; private set; }
         public ushort DstInstid { get; private set; }
         public ushort SrcMasterInstid { get; private set; }
@@ -16,7 +16,7 @@
         public ParseEnum.IFF IFF { get; }
         public byte IsBuff { get; }
         public byte Result { get; }
-        public ParseEnum.EvtcActivation IsActivation { get; }
+        public ParseEnum.Activation IsActivation { get; }
         public ParseEnum.BuffRemove IsBuffRemove { get; }
         public byte IsNinety { get; }
         public byte IsFifty { get; }
@@ -26,15 +26,17 @@
         public byte IsShields { get; }
         public byte IsOffcycle { get; }
 
+        public uint Pad { get; }
+
         // Constructor
         public CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
                long skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid,
                ushort dstMasterInstid, ParseEnum.IFF iff, byte isBuff,
-               byte result, ParseEnum.EvtcActivation isActivation,
+               byte result, ParseEnum.Activation isActivation,
                ParseEnum.BuffRemove isBuffRemove, byte isNinety, byte isFifty, byte isMoving,
-               ParseEnum.StateChange isStateChange, byte isFlanking, byte isShields, byte isOffcycle)
+               ParseEnum.StateChange isStateChange, byte isFlanking, byte isShields, byte isOffcycle, uint pad)
         {
-            LogTime = time;
+            this.Time = time;
             SrcAgent = srcAgent;
             DstAgent = dstAgent;
             Value = value;
@@ -57,11 +59,12 @@
             IsFlanking = isFlanking;
             IsShields = isShields;
             IsOffcycle = isOffcycle;
+            Pad = pad;
         }
 
         public CombatItem(CombatItem c)
         {
-            LogTime = c.LogTime;
+            Time = c.Time;
             SrcAgent = c.SrcAgent;
             DstAgent = c.DstAgent;
             Value = c.Value;
@@ -84,12 +87,13 @@
             IsFlanking = c.IsFlanking;
             IsShields = c.IsShields;
             IsOffcycle = c.IsOffcycle;
+            Pad = c.Pad;
         }
 
 
         public void OverrideTime(long time)
         {
-            LogTime = time;
+            this.Time = time;
         }
 
         public void OverrideSrcValues(ulong agent, ushort instid)

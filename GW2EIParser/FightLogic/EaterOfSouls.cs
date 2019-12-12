@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
@@ -46,27 +45,29 @@ namespace GW2EIParser.Logic
             };
         }
 
-        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
+            int start = (int)replay.TimeOffsets.start;
+            int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.SoulEater:
                     var breakbar = cls.Where(x => x.SkillId == 48007).ToList();
                     foreach (AbstractCastEvent c in breakbar)
                     {
-                        int start = (int)c.Time;
-                        int end = start + c.ActualDuration;
+                        start = (int)c.Time;
+                        end = start + c.ActualDuration;
                         replay.Decorations.Add(new CircleDecoration(true, start + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     var vomit = cls.Where(x => x.SkillId == 47303).ToList();
                     foreach (AbstractCastEvent c in vomit)
                     {
-                        int start = (int)c.Time + 2100;
+                        start = (int)c.Time + 2100;
                         int cascading = 1500;
                         int duration = 15000 + cascading;
-                        int end = start + duration;
+                        end = start + duration;
                         int radius = 900;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start);
                         Point3D position = replay.PolledPositions.LastOrDefault(x => x.Time <= start);
@@ -78,35 +79,22 @@ namespace GW2EIParser.Logic
                     var pseudoDeath = cls.Where(x => x.SkillId == 47440).ToList();
                     foreach (AbstractCastEvent c in pseudoDeath)
                     {
-                        int start = (int)c.Time;
+                        start = (int)c.Time;
                         //int duration = 900;
-                        int end = start + c.ActualDuration; //duration;
+                        end = start + c.ActualDuration; //duration;
                         //replay.Actors.Add(new CircleActor(true, 0, 180, (start, end), "rgba(255, 150, 255, 0.35)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, end, 180, (start, end), "rgba(255, 180, 220, 0.7)", new AgentConnector(target)));
                     }
                     break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-
-        }
-
-        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
-        {
-            int start = (int)replay.TimeOffsets.start;
-            int end = (int)replay.TimeOffsets.end;
-            switch (mob.ID)
-            {
                 case (ushort)GreenSpirit1:
                 case (ushort)GreenSpirit2:
-                    List<AbstractCastEvent> cls = mob.GetCastLogs(log, 0, log.FightData.FightDuration);
                     var green = cls.Where(x => x.SkillId == 47153).ToList();
                     foreach (AbstractCastEvent c in green)
                     {
                         int gstart = (int)c.Time + 667;
                         int gend = gstart + 5000;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(mob)));
-                        replay.Decorations.Add(new CircleDecoration(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(mob)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(target)));
                     }
                     break;
                 case (ushort)SpiritHorde1:
@@ -115,8 +103,9 @@ namespace GW2EIParser.Logic
                 case (ushort)OrbSpider:
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
             }
+
         }
 
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
@@ -125,7 +114,7 @@ namespace GW2EIParser.Logic
             foreach (AbstractBuffEvent c in spiritTransform)
             {
                 int duration = 30000;
-                AbstractBuffEvent removedBuff = log.CombatData.GetBuffData(48583).FirstOrDefault(x => x.To == p.AgentItem && x is BuffRemoveAllEvent && x.Time > c.Time && x.Time < c.Time + duration);
+                AbstractBuffEvent removedBuff = log.CombatData.GetBuffRemoveAllData(48583).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
                 int start = (int)c.Time;
                 int end = start + duration;
                 if (removedBuff != null)

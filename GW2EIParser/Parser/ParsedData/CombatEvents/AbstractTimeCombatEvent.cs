@@ -4,9 +4,9 @@
     {
         public long Time { get; protected set; }
 
-        protected AbstractTimeCombatEvent(long logTime, long offset)
+        protected AbstractTimeCombatEvent(long time)
         {
-            Time = logTime - offset;
+            Time = time;
         }
     }
 }

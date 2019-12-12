@@ -17,7 +17,7 @@ namespace GW2EIParser.EIData
         public bool DrawStart { get; set; } = true;
         public bool DrawEnd { get; set; } = true;
         public bool DrawArea { get; set; } = true;
-        public List<Target> Targets { get; } = new List<Target>();
+        public List<NPC> Targets { get; } = new List<NPC>();
 
         public PhaseData(long start, long end)
         {
@@ -26,6 +26,11 @@ namespace GW2EIParser.EIData
             DurationInM = (End - Start) / 60000;
             DurationInMS = (End - Start);
             DurationInS = (End - Start) / 1000;
+        }
+
+        public PhaseData(long start, long end, string name) : this(start, end)
+        {
+            Name = name;
         }
 
         public bool InInterval(long time)
@@ -57,11 +62,11 @@ namespace GW2EIParser.EIData
         {
             if (Targets.Count > 0)
             {
-                Start = Math.Max(Start, log.FightData.ToFightSpace(Targets.Min(x => x.FirstAwareLogTime)));
+                Start = Math.Max(Start, Targets.Min(x => x.FirstAware));
                 long end = long.MinValue;
-                foreach (Target target in Targets)
+                foreach (NPC target in Targets)
                 {
-                    long deadTime = log.FightData.ToFightSpace(target.LastAwareLogTime);
+                    long deadTime = target.LastAware;
                     DeadEvent died = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();
                     if (died != null)
                     {
@@ -69,14 +74,14 @@ namespace GW2EIParser.EIData
                     }
                     end = Math.Max(end, deadTime);
                 }
-                End = Math.Min(Math.Min(End, end), log.FightData.FightDuration);
+                End = Math.Min(Math.Min(End, end), log.FightData.FightEnd);
             }
             DurationInM = (End - Start) / 60000;
             DurationInMS = (End - Start);
             DurationInS = (End - Start) / 1000;
         }
 
-        public long GetPlayerActiveDuration(Player p, ParsedLog log)
+        public long GetActorActiveDuration(AbstractSingleActor p, ParsedLog log)
         {
             var dead = new List<(long start, long end)>();
             var down = new List<(long start, long end)>();

@@ -86,7 +86,7 @@ namespace GW2EIParser.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Arkk);
+            NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Arkk);
             SetSuccessByBuffCount(combatData, fightData, playerAgents, target, 762, 10);
             // missing buff apply events fallback, some phases will be missing
             // removes should be present
@@ -99,7 +99,7 @@ namespace GW2EIParser.Logic
                 var invulsRemoveTarget = combatData.GetBuffData(762).OfType<BuffRemoveAllEvent>().Where(x => x.To == target.AgentItem).ToList();
                 if (invulsRemoveTarget.Count == 5)
                 {
-                    SetSuccessByCombatExit(new List<Target> { target }, combatData, fightData, playerAgents);
+                    SetSuccessByCombatExit(new List<NPC> { target }, combatData, fightData, playerAgents);
                 }
             }
         }

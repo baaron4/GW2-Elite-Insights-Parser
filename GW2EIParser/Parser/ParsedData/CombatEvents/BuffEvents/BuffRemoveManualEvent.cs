@@ -5,7 +5,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
     public class BuffRemoveManualEvent : AbstractBuffRemoveEvent
     {
-        public BuffRemoveManualEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, agentData, skillData, offset)
+        public BuffRemoveManualEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
         }
 
@@ -13,12 +13,12 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         {
         }
 
-        public override bool IsBuffSimulatorCompliant(long fightEnd)
+        public override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
         {
             return false; // don't consider manual remove events
         }
 
-        public override void UpdateSimulator(BuffSimulator simulator)
+        public override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
         }
         public override int CompareTo(AbstractBuffEvent abe)

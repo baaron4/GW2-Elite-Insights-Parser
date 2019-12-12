@@ -27,7 +27,7 @@
         public bool IsBlocked { get; protected set; }
         public bool IsEvaded { get; protected set; }
 
-        public AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem.LogTime, offset)
+        public AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem.Time)
         {
             From = agentData.GetAgent(evtcItem.SrcAgent);
             To = agentData.GetAgent(evtcItem.DstAgent);

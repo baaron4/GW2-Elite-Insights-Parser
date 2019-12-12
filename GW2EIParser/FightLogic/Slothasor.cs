@@ -56,9 +56,9 @@ namespace GW2EIParser.Logic
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
-            long fightDuration = log.FightData.FightDuration;
+            long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Slothasor);
+            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Slothasor);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -68,31 +68,25 @@ namespace GW2EIParser.Logic
             {
                 return phases;
             }
-            var sleepy = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 34515).ToList();
+            var sleepy = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == 34515).ToList();
             long start = 0;
             int i = 1;
             foreach (AbstractCastEvent c in sleepy)
             {
-                var phase = new PhaseData(start, Math.Min(c.Time, fightDuration))
-                {
-                    Name = "Phase " + i++
-                };
+                var phase = new PhaseData(start, Math.Min(c.Time, fightDuration), "Phase " + i++);
                 phase.Targets.Add(mainTarget);
                 start = c.Time + c.ActualDuration;
                 phases.Add(phase);
             }
-            var lastPhase = new PhaseData(start, fightDuration)
-            {
-                Name = "Phase " + i++
-            };
+            var lastPhase = new PhaseData(start, fightDuration, "Phase " + i++);
             lastPhase.Targets.Add(mainTarget);
             phases.Add(lastPhase);
             return phases;
         }
 
-        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Slothasor:
@@ -135,7 +129,7 @@ namespace GW2EIParser.Logic
                     }
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
             }
 
         }

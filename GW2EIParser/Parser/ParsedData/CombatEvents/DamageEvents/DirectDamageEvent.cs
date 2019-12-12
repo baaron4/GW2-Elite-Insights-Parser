@@ -2,7 +2,7 @@
 {
     public class DirectDamageEvent : AbstractDamageEvent
     {
-        public DirectDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, agentData, skillData, offset)
+        public DirectDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
             Damage = evtcItem.Value;
             ParseEnum.PhysicalResult result = ParseEnum.GetPhysicalResult(evtcItem.Result);

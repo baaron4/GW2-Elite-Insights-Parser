@@ -78,7 +78,7 @@ namespace GW2EIParser.tst
         public static JsonLog JsonLog(ParsedLog log)
         {
             var builder = new RawFormatBuilder(log, null);
-            return builder.CreateJsonLog();
+            return builder.JsonLog;
         }
 
         ///////////////////////////////////////

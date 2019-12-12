@@ -2,7 +2,6 @@
 using System.Linq;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Models.Statistics;
 
 namespace GW2EIParser.EIData
 {
@@ -17,7 +16,7 @@ namespace GW2EIParser.EIData
         {
         }
 
-        public override void ComputeDamageModifier(Dictionary<string, List<DamageModifierData>> data, Dictionary<Target, Dictionary<string, List<DamageModifierData>>> dataTarget, Player p, ParsedLog log)
+        public override void ComputeDamageModifier(Dictionary<string, List<DamageModifierStat>> data, Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>> dataTarget, Player p, ParsedLog log)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             double gain = GainComputer.ComputeGain(GainPerStack, 1);
@@ -25,33 +24,33 @@ namespace GW2EIParser.EIData
             {
                 return;
             }
-            foreach (Target target in log.FightData.Logic.Targets)
+            foreach (NPC target in log.FightData.Logic.Targets)
             {
-                if (!dataTarget.TryGetValue(target, out Dictionary<string, List<DamageModifierData>> extra))
+                if (!dataTarget.TryGetValue(target, out Dictionary<string, List<DamageModifierStat>> extra))
                 {
-                    dataTarget[target] = new Dictionary<string, List<DamageModifierData>>();
+                    dataTarget[target] = new Dictionary<string, List<DamageModifierStat>>();
                 }
-                Dictionary<string, List<DamageModifierData>> dict = dataTarget[target];
-                if (!dict.TryGetValue(Name, out List<DamageModifierData> list))
+                Dictionary<string, List<DamageModifierStat>> dict = dataTarget[target];
+                if (!dict.TryGetValue(Name, out List<DamageModifierStat> list))
                 {
-                    var extraDataList = new List<DamageModifierData>();
+                    var extraDataList = new List<DamageModifierStat>();
                     for (int i = 0; i < phases.Count; i++)
                     {
                         int totalDamage = GetTotalDamage(p, log, target, i);
                         List<AbstractDamageEvent> typeHits = GetDamageLogs(p, log, target, phases[i]);
                         var effect = typeHits.Where(x => DLChecker(x)).ToList();
-                        extraDataList.Add(new DamageModifierData(effect.Count, typeHits.Count, gain * effect.Sum(x => x.Damage), totalDamage));
+                        extraDataList.Add(new DamageModifierStat(effect.Count, typeHits.Count, gain * effect.Sum(x => x.Damage), totalDamage));
                     }
                     dict[Name] = extraDataList;
                 }
             }
-            data[Name] = new List<DamageModifierData>();
+            data[Name] = new List<DamageModifierStat>();
             for (int i = 0; i < phases.Count; i++)
             {
                 int totalDamage = GetTotalDamage(p, log, null, i);
                 List<AbstractDamageEvent> typeHits = GetDamageLogs(p, log, null, phases[i]);
                 var effect = typeHits.Where(x => DLChecker(x)).ToList();
-                data[Name].Add(new DamageModifierData(effect.Count, typeHits.Count, gain * effect.Sum(x => x.Damage), totalDamage));
+                data[Name].Add(new DamageModifierStat(effect.Count, typeHits.Count, gain * effect.Sum(x => x.Damage), totalDamage));
             }
         }
     }

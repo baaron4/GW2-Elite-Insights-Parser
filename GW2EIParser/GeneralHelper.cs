@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
+using Newtonsoft.Json.Serialization;
 using static GW2EIParser.Parser.ParseEnum.TrashIDS;
 
 namespace GW2EIParser
@@ -14,16 +15,22 @@ namespace GW2EIParser
     {
         public static int PollingRate = 150;
 
-        public static int BoonDigit = 2;
-        public static int TimeDigit = 3;
+        public static readonly int BoonDigit = 3;
+        public static readonly int TimeDigit = 3;
+
+        public static readonly long ServerDelayConstant = 10;
 
         public static int PhaseTimeLimit = 1000;
 
         public static AgentItem UnknownAgent = new AgentItem();
         // use this for "null" in AbstractActor dictionaries
-        public static Mob NullActor = new Mob(UnknownAgent);
+        public static NPC NullActor = new NPC(UnknownAgent);
 
         public static UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
+        public static readonly DefaultContractResolver ContractResolver = new DefaultContractResolver
+        {
+            NamingStrategy = new CamelCaseNamingStrategy()
+        };
 
         public static void Add<K, T>(Dictionary<K, List<T>> dict, K key, T evt)
         {
@@ -78,6 +85,16 @@ namespace GW2EIParser
             }
 
             return null;
+        }
+
+        public static string GetIcon(AbstractSingleActor actor)
+        {
+            string res = GetProfIcon(actor.Prof);
+            if (res.Length == 0)
+            {
+                res = GetNPCIcon(actor.ID);
+            }
+            return res;
         }
 
         public static string GetProfIcon(string prof)

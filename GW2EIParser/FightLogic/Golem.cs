@@ -38,17 +38,8 @@ namespace GW2EIParser.Logic
             }
         }
 
-        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem target = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault();
-            foreach (CombatItem c in combatData)
-            {
-                // redirect all attacks to the main golem
-                if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsStateChange == ParseEnum.StateChange.None && c.IFF == ParseEnum.IFF.Foe && c.IsActivation == ParseEnum.EvtcActivation.None && c.IsBuffRemove == ParseEnum.BuffRemove.None)
-                {
-                    c.OverrideDstValues(target.Agent, target.InstID);
-                }
-            }
             CombatItem pov = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.PointOfView);
             if (pov != null)
             {
@@ -56,7 +47,21 @@ namespace GW2EIParser.Logic
                 CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcAgent == pov.SrcAgent && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
                 if (enterCombat != null)
                 {
-                    fightData.OverrideStart(enterCombat.LogTime);
+                    fightData.OverrideOffset(enterCombat.Time);
+                }
+            }
+            return fightData.FightOffset;
+        }
+
+        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            AgentItem target = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault();
+            foreach (CombatItem c in combatData)
+            {
+                // redirect all attacks to the main golem
+                if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsStateChange == ParseEnum.StateChange.None && c.IFF == ParseEnum.IFF.Foe && c.IsActivation == ParseEnum.Activation.None && c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                {
+                    c.OverrideDstValues(target.Agent, target.InstID);
                 }
             }
             ComputeFightTargets(agentData, combatData);
@@ -64,17 +69,17 @@ namespace GW2EIParser.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            Target mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
+            NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
             AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => x.Damage > 0);
-            long fightEndLogTime = fightData.FightEndLogTime;
+            long fightEndLogTime = fightData.FightEnd;
             bool success = false;
             if (lastDamageTaken != null)
             {
-                fightEndLogTime = fightData.ToLogSpace(lastDamageTaken.Time);
+                fightEndLogTime = lastDamageTaken.Time;
             }
             List<HealthUpdateEvent> hpUpdates = combatData.GetHealthUpdateEvents(mainTarget.AgentItem);
             if (hpUpdates.Count > 0)

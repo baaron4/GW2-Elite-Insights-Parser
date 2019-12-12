@@ -24,7 +24,7 @@ namespace GW2EIParser.EIData
         {
         }
 
-        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs)
+        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<ushort, AbstractSingleActor> regroupedMobs)
         {
             CombatData combatData = log.CombatData;
             IEnumerable<AgentItem> agents = log.AgentData.GetNPCsByID((ushort)SkillId);

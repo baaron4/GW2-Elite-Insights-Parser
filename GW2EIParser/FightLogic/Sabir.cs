@@ -42,7 +42,7 @@ namespace GW2EIParser.Logic
             };
         }
 
-        public override List<AbstractDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst, Dictionary<long, List<AbstractDamageEvent>> damageById, long offset, SkillData skillData)
+        public override List<AbstractDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst, Dictionary<long, List<AbstractDamageEvent>> damageById, SkillData skillData)
         {
             NegateDamageAgainstBarrier(Targets.Select(x => x.AgentItem).ToList(), damageByDst);
             return new List<AbstractDamageEvent>();
@@ -51,7 +51,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Sabir);
+            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Sabir);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -61,17 +61,14 @@ namespace GW2EIParser.Logic
             {
                 return phases;
             }
-            List<AbstractCastEvent> cls = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
             var wallopingWinds = cls.Where(x => x.SkillId == 56094).ToList();
             long start = 0, end = 0;
             for (int i = 0; i < wallopingWinds.Count; i++)
             {
                 AbstractCastEvent wW = wallopingWinds[i];
                 end = wW.Time;
-                var phase = new PhaseData(start, end)
-                {
-                    Name = "Phase " + (i + 1)
-                };
+                var phase = new PhaseData(start, end, "Phase " + (i + 1));
                 phase.Targets.Add(mainTarget);
                 phases.Add(phase);
                 AbstractCastEvent nextAttack = cls.FirstOrDefault(x => x.Time >= end + wW.ActualDuration && (x.SkillId == 56620 || x.SkillId == 56629 || x.SkillId == 56307));
@@ -82,10 +79,7 @@ namespace GW2EIParser.Logic
                 start = nextAttack.Time;
                 if (i == wallopingWinds.Count - 1)
                 {
-                    phase = new PhaseData(start, log.FightData.FightDuration)
-                    {
-                        Name = "Phase " + (i + 2)
-                    };
+                    phase = new PhaseData(start, log.FightData.FightEnd, "Phase " + (i + 2));
                     phase.Targets.Add(mainTarget);
                     phases.Add(phase);
                 }
@@ -103,31 +97,31 @@ namespace GW2EIParser.Logic
                             (33530, 34050, 35450, 35970));
         }
 
-        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
-            switch (mob.ID)
+            switch (target.ID)
             {
                 case (ushort)BigKillerTornado:
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 420, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(mob)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 420, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                     break;
                 case (ushort)SmallKillerTornado:
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 120, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(mob)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 120, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                     break;
                 case (ushort)SmallJumpyTornado:
                 case (ushort)ParalyzingWisp:
                 case (ushort)VoltaicWisp:
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
 
             }
         }
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Sabir);
+            NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Sabir);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");

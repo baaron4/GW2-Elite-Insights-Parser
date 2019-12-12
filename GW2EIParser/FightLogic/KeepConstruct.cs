@@ -72,9 +72,9 @@ namespace GW2EIParser.Logic
         {
             long start = 0;
             long end = 0;
-            long fightDuration = log.FightData.FightDuration;
+            long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.KeepConstruct);
+            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.KeepConstruct);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -136,10 +136,7 @@ namespace GW2EIParser.Logic
             int burnCount = 1;
             foreach (BuffSegment seg in segments)
             {
-                var phase = new PhaseData(seg.Start, seg.End)
-                {
-                    Name = "Burn " + burnCount++ + " (" + seg.Value + " orbs)",
-                };
+                var phase = new PhaseData(seg.Start, seg.End, "Burn " + burnCount++ + " (" + seg.Value + " orbs)");
                 phase.Targets.Add(mainTarget);
                 phases.Add(phase);
             }
@@ -159,10 +156,7 @@ namespace GW2EIParser.Logic
                         start = (prevPhase.End >= end ? prevPhase.Start : prevPhase.End) + 1;
                         if (end - start > 1000)
                         {
-                            var phase = new PhaseData(start, end)
-                            {
-                                Name = "Pre-Burn " + preBurnCount++,
-                            };
+                            var phase = new PhaseData(start, end, "Pre-Burn " + preBurnCount++);
                             phase.Targets.Add(mainTarget);
                             preBurnPhase.Add(phase);
                         }
@@ -188,10 +182,7 @@ namespace GW2EIParser.Logic
                     {
                         if (cur.End >= phase.End + 5000 && (i == phases.Count - 1 || phases[i + 1].Name.Contains("%")))
                         {
-                            var leftOverPhase = new PhaseData(phase.End + 1, cur.End)
-                            {
-                                Name = "Leftover " + leftOverCount++,
-                            };
+                            var leftOverPhase = new PhaseData(phase.End + 1, cur.End, "Leftover " + leftOverCount++);
                             leftOverPhase.Targets.Add(mainTarget);
                             leftOverPhases.Add(leftOverPhase);
                         }
@@ -225,49 +216,11 @@ namespace GW2EIParser.Logic
             };
         }
 
-        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
-            switch (mob.ID)
-            {
-                case (ushort)Core:
-                    break;
-                case (ushort)Jessica:
-                case (ushort)Olson:
-                case (ushort)Engul:
-                case (ushort)Faerla:
-                case (ushort)Caulle:
-                case (ushort)Henley:
-                case (ushort)Galletta:
-                case (ushort)Ianim:
-                    Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.KeepConstruct);
-                    if (mainTarget == null)
-                    {
-                        throw new InvalidOperationException("Main target of the fight not found");
-                    }
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 600, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(mob)));
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 400, (start, end), "rgba(0, 125, 255, 0.5)", new AgentConnector(mob)));
-                    break;
-                case (ushort)GreenPhantasm:
-                    int lifetime = 8000;
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 210, (start, start + lifetime), "rgba(0,255,0,0.2)", new AgentConnector(mob)));
-                    replay.Decorations.Add(new CircleDecoration(true, start + lifetime, 210, (start, start + lifetime), "rgba(0,255,0,0.3)", new AgentConnector(mob)));
-                    break;
-                case (ushort)RetrieverProjection:
-                case (ushort)InsidiousProjection:
-                case (ushort)UnstableLeyRift:
-                case (ushort)RadiantPhantasm:
-                case (ushort)CrimsonPhantasm:
-                    break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-        }
-
-        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
-        {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.KeepConstruct:
@@ -290,8 +243,8 @@ namespace GW2EIParser.Logic
                     var towerDrop = cls.Where(x => x.SkillId == 35086).ToList();
                     foreach (AbstractCastEvent c in towerDrop)
                     {
-                        int start = (int)c.Time;
-                        int end = start + c.ActualDuration;
+                        start = (int)c.Time;
+                        end = start + c.ActualDuration;
                         int skillCast = end - 1000;
                         Point3D next = replay.PolledPositions.FirstOrDefault(x => x.Time >= end);
                         Point3D prev = replay.PolledPositions.LastOrDefault(x => x.Time <= end);
@@ -309,7 +262,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in blades1)
                     {
                         int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
-                        int start = (int)c.Time + bladeDelay;
+                        start = (int)c.Time + bladeDelay;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time < start + 1000);
                         if (facing == null)
                         {
@@ -325,7 +278,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in blades2)
                     {
                         int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
-                        int start = (int)c.Time + bladeDelay;
+                        start = (int)c.Time + bladeDelay;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time < start + 1000);
                         if (facing == null)
                         {
@@ -343,7 +296,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in blades3)
                     {
                         int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
-                        int start = (int)c.Time + bladeDelay;
+                        start = (int)c.Time + bladeDelay;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time < start + 1000);
                         if (facing == null)
                         {
@@ -372,11 +325,11 @@ namespace GW2EIParser.Logic
                         (ushort)Galletta,
                         (ushort)Ianim,
                     };
-                    foreach (Mob m in TrashMobs)
+                    foreach (NPC m in TrashMobs)
                     {
                         if (phantasmsID.Contains(m.ID))
                         {
-                            int start = (int)log.FightData.ToFightSpace(m.FirstAwareLogTime);
+                            start = (int)m.FirstAware;
                             Point3D pos = m.GetCombatReplayPolledPositions(log).FirstOrDefault();
                             if (pos != null)
                             {
@@ -386,8 +339,38 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
+
+                case (ushort)Core:
+                    break;
+                case (ushort)Jessica:
+                case (ushort)Olson:
+                case (ushort)Engul:
+                case (ushort)Faerla:
+                case (ushort)Caulle:
+                case (ushort)Henley:
+                case (ushort)Galletta:
+                case (ushort)Ianim:
+                    NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.KeepConstruct);
+                    if (mainTarget == null)
+                    {
+                        throw new InvalidOperationException("Main target of the fight not found");
+                    }
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 600, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 400, (start, end), "rgba(0, 125, 255, 0.5)", new AgentConnector(target)));
+                    break;
+                case (ushort)GreenPhantasm:
+                    int lifetime = 8000;
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 210, (start, start + lifetime), "rgba(0,255,0,0.2)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(true, start + lifetime, 210, (start, start + lifetime), "rgba(0,255,0,0.3)", new AgentConnector(target)));
+                    break;
+                case (ushort)RetrieverProjection:
+                case (ushort)InsidiousProjection:
+                case (ushort)UnstableLeyRift:
+                case (ushort)RadiantPhantasm:
+                case (ushort)CrimsonPhantasm:
+                    break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
             }
 
         }
@@ -414,7 +397,7 @@ namespace GW2EIParser.Logic
             //fixated Statue
             var fixatedStatue = GetFilteredList(log.CombatData, 34912, p, true).Concat(GetFilteredList(log.CombatData, 34925, p, true)).ToList();
             int fixationStatueStart = 0;
-            Mob statue = null;
+            NPC statue = null;
             foreach (AbstractBuffEvent c in fixatedStatue)
             {
                 if (c is BuffApplyEvent)

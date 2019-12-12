@@ -27,31 +27,9 @@ namespace GW2EIParser.EIData
             SpinAngle = spinAngle;
         }
 
-        private class RotatedRectangleSerializable : RectangleSerializable
-        {
-            public int Rotation { get; set; }
-            public int RadialTranslation { get; set; }
-            public int SpinAngle { get; set; }
-        }
-
         public override GenericDecorationSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
-            var aux = new RotatedRectangleSerializable
-            {
-                Type = "RotatedRectangle",
-                Width = Width,
-                Height = Height,
-                Rotation = Rotation,
-                RadialTranslation = RadialTranslation,
-                SpinAngle = SpinAngle,
-                Fill = Filled,
-                Color = Color,
-                Growing = Growing,
-                Start = Lifespan.start,
-                End = Lifespan.end,
-                ConnectedTo = ConnectedTo.GetConnectedTo(map, log)
-            };
-            return aux;
+            return new RotatedRectangleDecorationSerializable(log, this, map);
         }
     }
 }

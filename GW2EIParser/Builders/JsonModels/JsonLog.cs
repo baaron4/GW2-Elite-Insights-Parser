@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser.ParsedData;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
+using static GW2EIParser.Builders.JsonModels.JsonMechanics;
 
 namespace GW2EIParser.Builders.JsonModels
 {
@@ -24,15 +28,15 @@ namespace GW2EIParser.Builders.JsonModels
             /// <summary>
             /// Name of the skill
             /// </summary>
-            public string Name { get; set; }
+            public string Name { get; }
             /// <summary>
             /// If the skill is an auto attack
             /// </summary>
-            public bool AutoAttack { get; set; }
+            public bool AutoAttack { get; }
             /// <summary>
             /// Icon of the skill
             /// </summary>
-            public string Icon { get; set; }
+            public string Icon { get; }
         }
 
         /// <summary>
@@ -50,15 +54,15 @@ namespace GW2EIParser.Builders.JsonModels
             /// <summary>
             /// Name of the buff
             /// </summary>
-            public string Name { get; set; }
+            public string Name { get; }
             /// <summary>
             /// Icon of the buff
             /// </summary>
-            public string Icon { get; set; }
+            public string Icon { get; }
             /// <summary>
             /// True if the buff is stacking
             /// </summary>
-            public bool Stacking { get; set; }
+            public bool Stacking { get; }
         }
 
         /// <summary>
@@ -77,106 +81,140 @@ namespace GW2EIParser.Builders.JsonModels
             /// <summary>
             /// Name of the damage modifier
             /// </summary>
-            public string Name { get; set; }
+            public string Name { get; }
             /// <summary>
             /// Icon of the damage modifier
             /// </summary>
-            public string Icon { get; set; }
+            public string Icon { get; }
             /// <summary>
             /// Description of the damage modifier
             /// </summary>
-            public string Description { get; set; }
+            public string Description { get; }
             /// <summary>
             /// False if the modifier is multiplicative \n
-            /// If true then the correspond <see cref="JsonBuffDamageModifierData.JsonBuffDamageModifierItem.DamageGain"/> are damage done under the effect. One will have to deduce the gain manualy depending on your gear.
+            /// If true then the correspond <see cref="JsonDamageModifierData.JsonDamageModifierItem.DamageGain"/> are damage done under the effect. One will have to deduce the gain manualy depending on your gear.
             /// </summary>
-            public bool NonMultiplier { get; set; }
+            public bool NonMultiplier { get; }
         }
 
         /// <summary>
         /// The used EI version
         /// </summary>
-        public string EliteInsightsVersion { get; set; }
+        public string EliteInsightsVersion { get; }
         /// <summary>
         /// The id with which the log has been triggered
         /// </summary>
-        public int TriggerID { get; set; }
+        public int TriggerID { get; }
         /// <summary>
         /// The name of the fight
         /// </summary>
-        public string FightName { get; set; }
+        public string FightName { get; }
         /// <summary>
         /// The icon of the fight
         /// </summary>
-        public string FightIcon { get; set; }
+        public string FightIcon { get; }
         /// <summary>
         /// The used arcdps version
         /// </summary>
-        public string ArcVersion { get; set; }
+        public string ArcVersion { get; }
         /// <summary>
         /// The player who recorded the fight
         /// </summary>
-        public string RecordedBy { get; set; }
+        public string RecordedBy { get; }
         /// <summary>
         /// The time at which the fight started in "yyyy-mm-dd hh:mm:ss zz" format \n
         /// The value will be <see cref="LogData.DefaultTimeValue"/> if the event does not exist
         /// </summary>
-        public string TimeStart { get; set; }
+        public string TimeStart { get; }
         /// <summary>
         /// The time at which the fight ended in "yyyy-mm-dd hh:mm:ss zz" format \n
         /// The value will be <see cref="LogData.DefaultTimeValue"/> if the event does not exist
         /// </summary>
-        public string TimeEnd { get; set; }
+        public string TimeEnd { get; }
         /// <summary>
         /// The duration of the fight in "xh xm xs xms" format
         /// </summary>
-        public string Duration { get; set; }
+        public string Duration { get; }
         /// <summary>
         /// The success status of the fight
         /// </summary>
-        public bool Success { get; set; }
+        public bool Success { get; }
         /// <summary>
         /// The list of targets
         /// </summary>
-        /// <seealso cref="JsonTarget"/>
-        public List<JsonTarget> Targets { get; set; }
+        /// <seealso cref="JsonNPC"/>
+        public List<JsonNPC> Targets { get; }
         /// <summary>
         /// The list of players
         /// </summary>
         /// <seealso cref="JsonPlayer"/>
-        public List<JsonPlayer> Players { get; set; }
+        public List<JsonPlayer> Players { get; }
         /// <summary>
         /// The list of phases
         /// </summary>
         /// <seealso cref="JsonPhase"/>
-        public List<JsonPhase> Phases { get; set; }
+        public List<JsonPhase> Phases { get; }
         /// <summary>
         /// List of mechanics
         /// </summary>
         /// <seealso cref="JsonMechanics"/>
-        public List<JsonMechanics> Mechanics { get; set; }
+        public List<JsonMechanics> Mechanics { get; }
         /// <summary>
         /// Upload links to dps.reports/raidar
         /// </summary>
-        public string[] UploadLinks { get; set; }
+        public string[] UploadLinks { get; }
         /// <summary>
         /// Dictionary of skills' description, the key is in "'s' + id" format
         /// </summary>
         /// <seealso cref="SkillDesc"/>
-        public Dictionary<string, SkillDesc> SkillMap { get; set; }
+        public Dictionary<string, SkillDesc> SkillMap { get; } = new Dictionary<string, SkillDesc>();
         /// <summary>
         /// Dictionary of buffs' description, the key is in "'b' + id" format
         /// </summary>
         /// <seealso cref="BuffDesc"/>
-        public Dictionary<string, BuffDesc> BuffMap { get; set; }
+        public Dictionary<string, BuffDesc> BuffMap { get; } = new Dictionary<string, BuffDesc>();
         /// <summary>
         /// Dictionary of damage modifiers' description, the key is in "'d' + id" format
         /// </summary>
         /// <seealso cref="DamageModDesc"/>
-        public Dictionary<string, DamageModDesc> DamageModMap { get; set; }
+        public Dictionary<string, DamageModDesc> DamageModMap { get; } = new Dictionary<string, DamageModDesc>();
         /// <summary>
         /// Dictionary of personal buffs. The key is the profession, the value is a list of buff ids
         /// </summary>
-        public Dictionary<string, HashSet<long>> PersonalBuffs { get; set; }
+        public Dictionary<string, HashSet<long>> PersonalBuffs { get; } = new Dictionary<string, HashSet<long>>();
+
+        public JsonLog(ParsedLog log, string[] uploadLinks)
+        {
+            //
+            TriggerID = log.FightData.TriggerID;
+            FightName = log.FightData.Name;
+            FightIcon = log.FightData.Logic.Icon;
+            EliteInsightsVersion = Application.ProductVersion;
+            ArcVersion = log.LogData.BuildVersion;
+            RecordedBy = log.LogData.PoVName;
+            TimeStart = log.LogData.LogStart;
+            TimeEnd = log.LogData.LogEnd;
+            Duration = log.FightData.DurationString;
+            Success = log.FightData.Success;
+            UploadLinks = uploadLinks;
+            //
+            MechanicData mechanicData = log.MechanicData;
+            var mechanicLogs = new List<MechanicEvent>();
+            foreach (List<MechanicEvent> mLog in mechanicData.GetAllMechanics(log))
+            {
+                mechanicLogs.AddRange(mLog);
+            }
+            if (mechanicLogs.Any())
+            {
+                Mechanics = GetJsonMechanicsList(mechanicLogs);
+            }
+            //
+            Phases = log.FightData.GetPhases(log).Select(x => new JsonPhase(x, log)).ToList();
+            //
+            Targets = log.FightData.Logic.Targets.Select(x => new JsonNPC(x, log, SkillMap, BuffMap)).ToList();
+            //
+            Players = log.PlayerList.Select(x => new JsonPlayer(x, log, SkillMap, BuffMap, DamageModMap, PersonalBuffs)).ToList();
+        }
+
     }
 }

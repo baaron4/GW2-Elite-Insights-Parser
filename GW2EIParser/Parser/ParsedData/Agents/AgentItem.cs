@@ -9,16 +9,18 @@ namespace GW2EIParser.Parser.ParsedData
     public class AgentItem
     {
 
+        private static ulong AgentCount = 0;
         public enum AgentType { NPC, Gadget, Player, EnemyPlayer }
 
         // Fields
         public ulong Agent { get; set; }
         public ushort ID { get; }
+        public string UniqueID { get; }
         public AgentItem Master { get; set; }
         public ushort InstID { get; set; }
         public AgentType Type { get; protected set; } = AgentType.NPC;
-        public long FirstAwareLogTime { get; set; }
-        public long LastAwareLogTime { get; set; } = long.MaxValue;
+        public long FirstAware { get; set; }
+        public long LastAware { get; set; } = long.MaxValue;
         public string Name { get; } = "UNKNOWN";
         public string Prof { get; } = "UNKNOWN";
         public uint Toughness { get; }
@@ -31,6 +33,7 @@ namespace GW2EIParser.Parser.ParsedData
         // Constructors
         public AgentItem(ulong agent, string name, string prof, ushort id, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight)
         {
+            UniqueID = "ag" + AgentCount++;
             Agent = agent;
             Name = name;
             Prof = prof;
@@ -62,6 +65,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public AgentItem(AgentItem other)
         {
+            UniqueID = "ag" + AgentCount++;
             Agent = other.Agent;
             Name = other.Name;
             Prof = other.Prof;
@@ -128,13 +132,13 @@ namespace GW2EIParser.Parser.ParsedData
             {
                 AbstractStatusEvent cur = status[i];
                 AbstractStatusEvent next = status[i + 1];
-                AddValueToStatusList(dead, down, dc, cur, next, log.FightData.FightDuration, i);
+                AddValueToStatusList(dead, down, dc, cur, next, log.FightData.FightEnd, i);
             }
             // check last value
             if (status.Count > 0)
             {
                 AbstractStatusEvent cur = status.Last();
-                AddValueToStatusList(dead, down, dc, cur, null, log.FightData.FightDuration, status.Count - 1);
+                AddValueToStatusList(dead, down, dc, cur, null, log.FightData.FightEnd, status.Count - 1);
             }
         }
 
@@ -151,7 +155,7 @@ namespace GW2EIParser.Parser.ParsedData
             {
                 throw new InvalidOperationException("Buff id must be simulated");
             }
-            AbstractActor actor = log.FindActor(this);
+            AbstractSingleActor actor = log.FindActor(this, true);
             Dictionary<long, BuffsGraphModel> bgms = actor.GetBuffGraphs(log);
             if (bgms.TryGetValue(buffId, out BuffsGraphModel bgm))
             {

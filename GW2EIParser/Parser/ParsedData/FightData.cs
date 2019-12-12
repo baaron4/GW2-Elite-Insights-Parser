@@ -12,14 +12,14 @@ namespace GW2EIParser.Parser.ParsedData
         public ushort TriggerID { get; }
         private readonly bool _requirePhases;
         public FightLogic Logic { get; }
-        public long FightStartLogTime { get; private set; }
-        public long FightEndLogTime { get; private set; } = long.MaxValue;
-        public long FightDuration => FightEndLogTime - FightStartLogTime;
+        public long FightOffset { get; private set; }
+        public long FightStart { get; } = 0;
+        public long FightEnd { get; private set; } = long.MaxValue;
         public string DurationString
         {
             get
             {
-                var duration = TimeSpan.FromMilliseconds(FightDuration);
+                var duration = TimeSpan.FromMilliseconds(FightEnd);
                 string durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s " + duration.Milliseconds + "ms";
                 if (duration.Hours > 0)
                 {
@@ -35,8 +35,8 @@ namespace GW2EIParser.Parser.ParsedData
         // Constructors
         public FightData(ushort id, AgentData agentData, long start, long end, bool parsePhases)
         {
-            FightStartLogTime = start;
-            FightEndLogTime = end;
+            FightOffset = start;
+            FightEnd = end - start;
             TriggerID = id;
             _requirePhases = parsePhases;
             switch (ParseEnum.GetTargetIDS(id))
@@ -169,7 +169,7 @@ namespace GW2EIParser.Parser.ParsedData
                     Logic = new Golem(id);
                     break;
                 default:
-                    switch(ParseEnum.GetTrashIDS(id))
+                    switch (ParseEnum.GetTrashIDS(id))
                     {
                         case ParseEnum.TrashIDS.HauntingStatue:
                             Logic = new TwistedCastle((ushort)ParseEnum.TargetIDS.TwistedCastle);
@@ -188,7 +188,6 @@ namespace GW2EIParser.Parser.ParsedData
 
             if (_phases.Count == 0)
             {
-                long fightDuration = log.FightData.FightDuration;
                 _phases = log.FightData.Logic.GetPhases(log, _requirePhases);
                 _phases.RemoveAll(x => x.Targets.Count == 0);
                 _phases.RemoveAll(x => x.DurationInMS < GeneralHelper.PhaseTimeLimit);
@@ -196,23 +195,13 @@ namespace GW2EIParser.Parser.ParsedData
             return _phases;
         }
 
-        public List<Target> GetMainTargets(ParsedLog log)
+        public List<NPC> GetMainTargets(ParsedLog log)
         {
             if (_phases.Count == 0)
             {
                 _phases = log.FightData.Logic.GetPhases(log, _requirePhases);
             }
             return _phases[0].Targets;
-        }
-
-        public long ToFightSpace(long time)
-        {
-            return time - FightStartLogTime;
-        }
-
-        public long ToLogSpace(long time)
-        {
-            return time + FightStartLogTime;
         }
 
         // Setters
@@ -224,15 +213,16 @@ namespace GW2EIParser.Parser.ParsedData
             }
         }
 
-        public void SetSuccess(bool success, long fightEndLogTime)
+        public void SetSuccess(bool success, long fightEnd)
         {
             Success = success;
-            FightEndLogTime = fightEndLogTime;
+            FightEnd = fightEnd;
         }
 
-        public void OverrideStart(long fightStartLogTime)
+        public void OverrideOffset(long offset)
         {
-            FightStartLogTime = fightStartLogTime;
+            FightEnd += FightOffset - offset;
+            FightOffset = offset;
         }
     }
 }

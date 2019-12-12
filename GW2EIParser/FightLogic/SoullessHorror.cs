@@ -62,7 +62,7 @@ namespace GW2EIParser.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.SoullessHorror);
+                NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.SoullessHorror);
                 if (mainTarget == null)
                 {
                     throw new InvalidOperationException("Main target of the fight not found");
@@ -70,19 +70,125 @@ namespace GW2EIParser.Logic
                 AbstractBuffEvent buffOnDeath = combatData.GetBuffData(895).Where(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent).LastOrDefault();
                 if (buffOnDeath != null)
                 {
-                    fightData.SetSuccess(true, fightData.ToLogSpace(buffOnDeath.Time));
+                    fightData.SetSuccess(true, buffOnDeath.Time);
                 }
             }
         }
 
-        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
+            long fightDuration = log.FightData.FightEnd;
+            List<PhaseData> phases = GetInitialPhase(log);
+            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.SoullessHorror);
+            if (mainTarget == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
+            phases[0].Targets.Add(mainTarget);
+            if (!requirePhases)
+            {
+                return phases;
+            }
+            var howling = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == 48662).ToList();
+            long start = 0;
+            int i = 1;
+            foreach (AbstractCastEvent c in howling)
+            {
+                var phase = new PhaseData(start, Math.Min(c.Time, fightDuration), "Pre-Breakbar " + i++);
+                phase.Targets.Add(mainTarget);
+                start = c.Time + c.ActualDuration;
+                phases.Add(phase);
+            }
+            if (fightDuration - start > 3000)
+            {
+                var lastPhase = new PhaseData(start, fightDuration, "Final");
+                lastPhase.Targets.Add(mainTarget);
+                phases.Add(lastPhase);
+            }
+            return phases;
+        }
+
+        public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
+        {
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
-            switch (mob.ID)
+            switch (target.ID)
             {
+                case (ushort)ParseEnum.TargetIDS.SoullessHorror:
+                    var howling = cls.Where(x => x.SkillId == 48662).ToList();
+                    foreach (AbstractCastEvent c in howling)
+                    {
+                        start = (int)c.Time;
+                        end = start + c.ActualDuration;
+                        replay.Decorations.Add(new CircleDecoration(true, start + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                    }
+                    var vortex = cls.Where(x => x.SkillId == 47327).ToList();
+                    foreach (AbstractCastEvent c in vortex)
+                    {
+                        start = (int)c.Time;
+                        end = start + 4000;
+                        Point3D next = replay.PolledPositions.FirstOrDefault(x => x.Time >= start);
+                        Point3D prev = replay.PolledPositions.LastOrDefault(x => x.Time <= start);
+                        if (next != null || prev != null)
+                        {
+                            replay.Decorations.Add(new CircleDecoration(false, 0, 380, (start, end), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, start)));
+                            replay.Decorations.Add(new CircleDecoration(true, end, 380, (start, end), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, start)));
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 380, 760, (end, end + 1000), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, start)));
+                        }
+                    }
+                    var deathBloom = cls.Where(x => x.SkillId == 48500).ToList();
+                    foreach (AbstractCastEvent c in deathBloom)
+                    {
+                        start = (int)c.Time;
+                        end = start + c.ActualDuration;
+                        Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                        if (facing == null)
+                        {
+                            continue;
+                        }
+                        for (int i = 0; i < 8; i++)
+                        {
+                            replay.Decorations.Add(new PieDecoration(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + (i * 360 / 8), 360 / 12, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)));
+                        }
+
+                    }
+                    var quad1 = cls.Where(x => x.SkillId == 48363).ToList();
+                    var quad2 = cls.Where(x => x.SkillId == 47915).ToList();
+                    foreach (AbstractCastEvent c in quad1)
+                    {
+                        start = (int)c.Time;
+                        end = start + c.ActualDuration;
+                        Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                        if (facing == null)
+                        {
+                            continue;
+                        }
+                        for (int i = 0; i < 4; i++)
+                        {
+                            replay.Decorations.Add(new PieDecoration(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + (i * 360 / 4), 360 / 12, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)));
+                        }
+
+                    }
+                    foreach (AbstractCastEvent c in quad2)
+                    {
+                        start = (int)c.Time;
+                        end = start + c.ActualDuration;
+                        Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                        if (facing == null)
+                        {
+                            continue;
+                        }
+                        for (int i = 0; i < 4; i++)
+                        {
+                            replay.Decorations.Add(new PieDecoration(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + 45 + (i * 360 / 4), 360 / 12, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)));
+                        }
+
+                    }
+                    break;
                 case (ushort)Scythe:
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 80, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(mob)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 80, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     break;
                 case (ushort)TormentedDead:
                     if (replay.Positions.Count == 0)
@@ -99,140 +205,19 @@ namespace GW2EIParser.Logic
                     }
                     if (positions[0].X < -12000 || positions[0].X > -9250)
                     {
-                        replay.Decorations.Add(new RectangleDecoration(true, 0, 240, 660, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(mob)));
+                        replay.Decorations.Add(new RectangleDecoration(true, 0, 240, 660, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(target)));
                         break;
                     }
                     else if (positions[0].Y < -525 || positions[0].Y > 2275)
                     {
-                        replay.Decorations.Add(new RectangleDecoration(true, 0, 645, 238, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(mob)));
+                        replay.Decorations.Add(new RectangleDecoration(true, 0, 645, 238, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(target)));
                         break;
                     }
                     break;
                 case (ushort)FleshWurm:
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-        }
-
-        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
-        {
-            long fightDuration = log.FightData.FightDuration;
-            List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.SoullessHorror);
-            if (mainTarget == null)
-            {
-                throw new InvalidOperationException("Main target of the fight not found");
-            }
-            phases[0].Targets.Add(mainTarget);
-            if (!requirePhases)
-            {
-                return phases;
-            }
-            var howling = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 48662).ToList();
-            long start = 0;
-            int i = 1;
-            foreach (AbstractCastEvent c in howling)
-            {
-                var phase = new PhaseData(start, Math.Min(c.Time, fightDuration))
-                {
-                    Name = "Pre-Breakbar " + i++
-                };
-                phase.Targets.Add(mainTarget);
-                start = c.Time + c.ActualDuration;
-                phases.Add(phase);
-            }
-            if (fightDuration - start > 3000)
-            {
-                var lastPhase = new PhaseData(start, fightDuration)
-                {
-                    Name = "Final"
-                };
-                lastPhase.Targets.Add(mainTarget);
-                phases.Add(lastPhase);
-            }
-            return phases;
-        }
-
-        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
-        {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
-            switch (target.ID)
-            {
-                case (ushort)ParseEnum.TargetIDS.SoullessHorror:
-                    var howling = cls.Where(x => x.SkillId == 48662).ToList();
-                    foreach (AbstractCastEvent c in howling)
-                    {
-                        int start = (int)c.Time;
-                        int end = start + c.ActualDuration;
-                        replay.Decorations.Add(new CircleDecoration(true, start + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
-                    }
-                    var vortex = cls.Where(x => x.SkillId == 47327).ToList();
-                    foreach (AbstractCastEvent c in vortex)
-                    {
-                        int start = (int)c.Time;
-                        int end = start + 4000;
-                        Point3D next = replay.PolledPositions.FirstOrDefault(x => x.Time >= start);
-                        Point3D prev = replay.PolledPositions.LastOrDefault(x => x.Time <= start);
-                        if (next != null || prev != null)
-                        {
-                            replay.Decorations.Add(new CircleDecoration(false, 0, 380, (start, end), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, start)));
-                            replay.Decorations.Add(new CircleDecoration(true, end, 380, (start, end), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, start)));
-                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 380, 760, (end, end + 1000), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, start)));
-                        }
-                    }
-                    var deathBloom = cls.Where(x => x.SkillId == 48500).ToList();
-                    foreach (AbstractCastEvent c in deathBloom)
-                    {
-                        int start = (int)c.Time;
-                        int end = start + c.ActualDuration;
-                        Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
-                        if (facing == null)
-                        {
-                            continue;
-                        }
-                        for (int i = 0; i < 8; i++)
-                        {
-                            replay.Decorations.Add(new PieDecoration(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + (i * 360 / 8), 360 / 12, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)));
-                        }
-
-                    }
-                    var quad1 = cls.Where(x => x.SkillId == 48363).ToList();
-                    var quad2 = cls.Where(x => x.SkillId == 47915).ToList();
-                    foreach (AbstractCastEvent c in quad1)
-                    {
-                        int start = (int)c.Time;
-                        int end = start + c.ActualDuration;
-                        Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
-                        if (facing == null)
-                        {
-                            continue;
-                        }
-                        for (int i = 0; i < 4; i++)
-                        {
-                            replay.Decorations.Add(new PieDecoration(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + (i * 360 / 4), 360 / 12, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)));
-                        }
-
-                    }
-                    foreach (AbstractCastEvent c in quad2)
-                    {
-                        int start = (int)c.Time;
-                        int end = start + c.ActualDuration;
-                        Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
-                        if (facing == null)
-                        {
-                            continue;
-                        }
-                        for (int i = 0; i < 4; i++)
-                        {
-                            replay.Decorations.Add(new PieDecoration(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + 45 + (i * 360 / 4), 360 / 12, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)));
-                        }
-
-                    }
                     break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
 
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
@@ -39,7 +38,7 @@ namespace GW2EIParser.Logic
             foreach (AbstractBuffEvent c in green)
             {
                 int duration = 45000;
-                AbstractBuffEvent removedBuff = log.CombatData.GetBuffData(47776).FirstOrDefault(x => x.To == p.AgentItem && x is BuffRemoveAllEvent && x.Time > c.Time && x.Time < c.Time + duration);
+                AbstractBuffEvent removedBuff = log.CombatData.GetBuffRemoveAllData(47776).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
                 int start = (int)c.Time;
                 int end = start + duration;
                 if (removedBuff != null)
@@ -50,9 +49,9 @@ namespace GW2EIParser.Logic
             }
         }
 
-        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.BrokenKing:
@@ -73,7 +72,7 @@ namespace GW2EIParser.Logic
                     }
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
             }
 
         }

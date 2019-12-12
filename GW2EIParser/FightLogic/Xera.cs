@@ -12,7 +12,7 @@ namespace GW2EIParser.Logic
     public class Xera : RaidLogic
     {
 
-        private long _specialSplitLogTime = 0;
+        private long _specialSplit = 0;
 
         public Xera(ushort triggerID) : base(triggerID)
         {
@@ -51,18 +51,18 @@ namespace GW2EIParser.Logic
                             (1920, 12160, 2944, 14464));
         }
 
-        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
+        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
         {
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Xera);
+            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Xera);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
             var res = new List<AbstractBuffEvent>();
-            if (_specialSplitLogTime != 0)
+            if (_specialSplit != 0)
             {
-                res.Add(new BuffRemoveAllEvent(mainTarget.AgentItem, mainTarget.AgentItem, _specialSplitLogTime - offset, int.MaxValue, skillData.Get(762), 1, int.MaxValue));
-                res.Add(new BuffRemoveManualEvent(mainTarget.AgentItem, mainTarget.AgentItem, _specialSplitLogTime - offset, int.MaxValue, skillData.Get(762)));
+                res.Add(new BuffRemoveAllEvent(mainTarget.AgentItem, mainTarget.AgentItem, _specialSplit, int.MaxValue, skillData.Get(762), 1, int.MaxValue));
+                res.Add(new BuffRemoveManualEvent(mainTarget.AgentItem, mainTarget.AgentItem, _specialSplit, int.MaxValue, skillData.Get(762)));
             }
             return res;
         }
@@ -70,9 +70,9 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             long start = 0;
-            long fightDuration = log.FightData.FightDuration;
+            long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Xera);
+            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Xera);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -89,10 +89,10 @@ namespace GW2EIParser.Logic
                 end = invulXera.Time;
                 phases.Add(new PhaseData(start, end));
                 // split happened
-                if (_specialSplitLogTime > 0)
+                if (_specialSplit > 0)
                 {
                     mainTarget.SetManualHealth(24085950);
-                    start = log.FightData.ToFightSpace(_specialSplitLogTime);
+                    start = _specialSplit;
                     //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
                     phases.Add(new PhaseData(start, fightDuration));
                 }
@@ -106,9 +106,8 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            // find target
             AgentItem target = agentData.GetNPCsByID((ushort)ParseEnum.TargetIDS.Xera).FirstOrDefault();
             if (target == null)
             {
@@ -118,23 +117,34 @@ namespace GW2EIParser.Logic
             CombatItem enterCombat = combatData.Find(x => x.SrcAgent == target.Agent && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
             if (enterCombat != null)
             {
-                fightData.OverrideStart(enterCombat.LogTime);
+                fightData.OverrideOffset(enterCombat.Time);
+            }
+            return fightData.FightOffset;
+        }
+
+        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            // find target
+            AgentItem target = agentData.GetNPCsByID((ushort)ParseEnum.TargetIDS.Xera).FirstOrDefault();
+            if (target == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
             }
             // find split
             foreach (AgentItem NPC in agentData.GetAgentByType(AgentItem.AgentType.NPC))
             {
                 if (NPC.ID == 16286)
                 {
-                    CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position && x.SrcAgent == NPC.Agent && x.LogTime >= NPC.FirstAwareLogTime + 500);
+                    CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position && x.SrcAgent == NPC.Agent && x.Time >= NPC.FirstAware + 500);
                     if (move != null)
                     {
-                        _specialSplitLogTime = move.LogTime;
+                        _specialSplit = move.Time;
                     }
                     else
                     {
-                        _specialSplitLogTime = NPC.FirstAwareLogTime;
+                        _specialSplit = NPC.FirstAware;
                     }
-                    target.LastAwareLogTime = NPC.LastAwareLogTime;
+                    target.LastAware = NPC.LastAware;
                     // get unique id for the fusion
                     ushort instID = 0;
                     var rnd = new Random();
@@ -180,9 +190,9 @@ namespace GW2EIParser.Logic
             };
         }
 
-        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Xera:
@@ -193,7 +203,7 @@ namespace GW2EIParser.Logic
                     }
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
             }
         }
     }

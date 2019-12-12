@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using GW2EIParser.EIData;
-using GW2EIParser.Models;
 using GW2EIParser.Parser.ParsedData;
 
 namespace GW2EIParser.Builders.HtmlModels
@@ -22,54 +21,54 @@ namespace GW2EIParser.Builders.HtmlModels
         public List<List<object>> DefStats { get; set; }
         public List<List<object>> SupportStats { get; set; }
         // all
-        public List<BoonData> BoonStats { get; set; }
-        public List<BoonData> BoonGenSelfStats { get; set; }
-        public List<BoonData> BoonGenGroupStats { get; set; }
-        public List<BoonData> BoonGenOGroupStats { get; set; }
-        public List<BoonData> BoonGenSquadStats { get; set; }
+        public List<BuffData> BoonStats { get; set; }
+        public List<BuffData> BoonGenSelfStats { get; set; }
+        public List<BuffData> BoonGenGroupStats { get; set; }
+        public List<BuffData> BoonGenOGroupStats { get; set; }
+        public List<BuffData> BoonGenSquadStats { get; set; }
 
-        public List<BoonData> OffBuffStats { get; set; }
-        public List<BoonData> OffBuffGenSelfStats { get; set; }
-        public List<BoonData> OffBuffGenGroupStats { get; set; }
-        public List<BoonData> OffBuffGenOGroupStats { get; set; }
-        public List<BoonData> OffBuffGenSquadStats { get; set; }
+        public List<BuffData> OffBuffStats { get; set; }
+        public List<BuffData> OffBuffGenSelfStats { get; set; }
+        public List<BuffData> OffBuffGenGroupStats { get; set; }
+        public List<BuffData> OffBuffGenOGroupStats { get; set; }
+        public List<BuffData> OffBuffGenSquadStats { get; set; }
 
-        public List<BoonData> DefBuffStats { get; set; }
-        public List<BoonData> DefBuffGenSelfStats { get; set; }
-        public List<BoonData> DefBuffGenGroupStats { get; set; }
-        public List<BoonData> DefBuffGenOGroupStats { get; set; }
-        public List<BoonData> DefBuffGenSquadStats { get; set; }
+        public List<BuffData> DefBuffStats { get; set; }
+        public List<BuffData> DefBuffGenSelfStats { get; set; }
+        public List<BuffData> DefBuffGenGroupStats { get; set; }
+        public List<BuffData> DefBuffGenOGroupStats { get; set; }
+        public List<BuffData> DefBuffGenSquadStats { get; set; }
 
-        public List<BoonData> PersBuffStats { get; set; }
+        public List<BuffData> PersBuffStats { get; set; }
 
         // active
-        public List<BoonData> BoonActiveStats { get; set; }
-        public List<BoonData> BoonGenActiveSelfStats { get; set; }
-        public List<BoonData> BoonGenActiveGroupStats { get; set; }
-        public List<BoonData> BoonGenActiveOGroupStats { get; set; }
-        public List<BoonData> BoonGenActiveSquadStats { get; set; }
+        public List<BuffData> BoonActiveStats { get; set; }
+        public List<BuffData> BoonGenActiveSelfStats { get; set; }
+        public List<BuffData> BoonGenActiveGroupStats { get; set; }
+        public List<BuffData> BoonGenActiveOGroupStats { get; set; }
+        public List<BuffData> BoonGenActiveSquadStats { get; set; }
 
-        public List<BoonData> OffBuffActiveStats { get; set; }
-        public List<BoonData> OffBuffGenActiveSelfStats { get; set; }
-        public List<BoonData> OffBuffGenActiveGroupStats { get; set; }
-        public List<BoonData> OffBuffGenActiveOGroupStats { get; set; }
-        public List<BoonData> OffBuffGenActiveSquadStats { get; set; }
+        public List<BuffData> OffBuffActiveStats { get; set; }
+        public List<BuffData> OffBuffGenActiveSelfStats { get; set; }
+        public List<BuffData> OffBuffGenActiveGroupStats { get; set; }
+        public List<BuffData> OffBuffGenActiveOGroupStats { get; set; }
+        public List<BuffData> OffBuffGenActiveSquadStats { get; set; }
 
-        public List<BoonData> DefBuffActiveStats { get; set; }
-        public List<BoonData> DefBuffGenActiveSelfStats { get; set; }
-        public List<BoonData> DefBuffGenActiveGroupStats { get; set; }
-        public List<BoonData> DefBuffGenActiveOGroupStats { get; set; }
-        public List<BoonData> DefBuffGenActiveSquadStats { get; set; }
+        public List<BuffData> DefBuffActiveStats { get; set; }
+        public List<BuffData> DefBuffGenActiveSelfStats { get; set; }
+        public List<BuffData> DefBuffGenActiveGroupStats { get; set; }
+        public List<BuffData> DefBuffGenActiveOGroupStats { get; set; }
+        public List<BuffData> DefBuffGenActiveSquadStats { get; set; }
 
-        public List<BoonData> PersBuffActiveStats { get; set; }
+        public List<BuffData> PersBuffActiveStats { get; set; }
 
         public List<DamageModData> DmgModifiersCommon { get; set; }
         public List<DamageModData> DmgModifiersItem { get; set; }
         public List<DamageModData> DmgModifiersPers { get; set; }
 
-        public List<List<BoonData>> TargetsCondiStats { get; set; }
-        public List<BoonData> TargetsCondiTotals { get; set; }
-        public List<BoonData> TargetsBoonTotals { get; set; }
+        public List<List<BuffData>> TargetsCondiStats { get; set; }
+        public List<BuffData> TargetsCondiTotals { get; set; }
+        public List<BuffData> TargetsBoonTotals { get; set; }
 
         public List<List<int[]>> MechanicStats { get; set; }
         public List<List<int[]>> EnemyMechanicStats { get; set; }
@@ -85,14 +84,14 @@ namespace GW2EIParser.Builders.HtmlModels
             Duration = phaseData.DurationInMS;
             Start = phaseData.Start / 1000.0;
             End = phaseData.End / 1000.0;
-            foreach (Target target in phaseData.Targets)
+            foreach (NPC target in phaseData.Targets)
             {
                 Targets.Add(log.FightData.Logic.Targets.IndexOf(target));
             }
             PlayerActiveTimes = new List<long>();
             foreach (Player p in log.PlayerList)
             {
-                PlayerActiveTimes.Add(phaseData.GetPlayerActiveDuration(p, log));
+                PlayerActiveTimes.Add(phaseData.GetActorActiveDuration(p, log));
             }
             // add phase markup
             MarkupLines = new List<double>();
@@ -145,7 +144,7 @@ namespace GW2EIParser.Builders.HtmlModels
 
         // helper methods
 
-        public static List<object> GetDMGStatData(Statistics.FinalStatsAll stats)
+        public static List<object> GetDMGStatData(FinalGameplayStatsAll stats)
         {
             List<object> data = GetDMGTargetStatData(stats);
             data.AddRange(new List<object>
@@ -163,7 +162,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return data;
         }
 
-        public static List<object> GetDMGTargetStatData(Statistics.FinalStats stats)
+        public static List<object> GetDMGTargetStatData(FinalGameplayStats stats)
         {
             var data = new List<object>
                 {
@@ -183,7 +182,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return data;
         }
 
-        public static List<object> GetDPSStatData(Statistics.FinalDPS dpsAll)
+        public static List<object> GetDPSStatData(FinalDPS dpsAll)
         {
             var data = new List<object>
                 {
@@ -194,7 +193,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return data;
         }
 
-        public static List<object> GetSupportStatData(Statistics.FinalSupport support)
+        public static List<object> GetSupportStatData(FinalPlayerSupport support)
         {
             var data = new List<object>()
                 {
@@ -210,7 +209,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return data;
         }
 
-        public static List<object> GetDefenseStatData(Statistics.FinalDefenses defenses, PhaseData phase)
+        public static List<object> GetDefenseStatData(FinalDefensesAll defenses, PhaseData phase)
         {
             var data = new List<object>
                 {

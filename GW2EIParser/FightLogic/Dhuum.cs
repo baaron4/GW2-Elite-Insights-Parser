@@ -56,26 +56,26 @@ namespace GW2EIParser.Logic
 
         private void ComputeFightPhases(List<PhaseData> phases, List<AbstractCastEvent> castLogs, long fightDuration, long start)
         {
+            if (start > 0)
+            {
+                phases.Add(new PhaseData(start, fightDuration, "Dhuum Fight"));
+            }
             AbstractCastEvent shield = castLogs.Find(x => x.SkillId == 47396);
             if (shield != null)
             {
                 long end = shield.Time;
-                phases.Add(new PhaseData(start, end));
+                phases.Add(new PhaseData(start, end, "Main Fight"));
                 AbstractCastEvent firstDamage = castLogs.FirstOrDefault(x => x.SkillId == 47304 && x.Time >= end);
                 if (firstDamage != null)
                 {
-                    phases.Add(new PhaseData(firstDamage.Time, fightDuration));
+                    phases.Add(new PhaseData(firstDamage.Time, fightDuration, "Ritual" ));
                 }
-            }
-            else
-            {
-                phases.Add(new PhaseData(start, fightDuration));
             }
         }
 
-        private List<PhaseData> GetInBetweenSoulSplits(ParsedLog log, Target dhuum, long mainStart, long mainEnd, bool hasRitual)
+        private List<PhaseData> GetInBetweenSoulSplits(ParsedLog log, NPC dhuum, long mainStart, long mainEnd, bool hasRitual)
         {
-            List<AbstractCastEvent> cls = dhuum.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = dhuum.GetCastLogs(log, 0, log.FightData.FightEnd);
             var cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
             var gDeathmark = cls.Where(x => x.SkillId == 48210).ToList();
             if (gDeathmark.Count < cataCycle.Count)
@@ -90,78 +90,58 @@ namespace GW2EIParser.Logic
             {
                 AbstractCastEvent clDeathmark = gDeathmark[i - 1];
                 end = Math.Min(clDeathmark.Time, mainEnd);
-                phases.Add(new PhaseData(start, end)
-                {
-                    Name = "Pre-Soulsplit " + i++
-                });
+                phases.Add(new PhaseData(start, end, "Pre-Soulsplit " + i++));
                 start = cl.Time + cl.ActualDuration;
             }
-            phases.Add(new PhaseData(start, mainEnd)
-            {
-                Name = hasRitual ? "Pre-Ritual" : "Pre-Wipe"
-            });
-            foreach (PhaseData phase in phases)
-            {
-                phase.Targets.Add(dhuum);
-            }
+            phases.Add(new PhaseData(start, mainEnd, hasRitual ? "Pre-Ritual" : "Pre-Wipe"));
             return phases;
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
-            long fightDuration = log.FightData.FightDuration;
+            long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
-            if (mainTarget == null)
+            NPC dhuum = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
+            if (dhuum == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].Targets.Add(dhuum);
             if (!requirePhases)
             {
                 return phases;
             }
             // Sometimes the preevent is not in the evtc
-            List<AbstractCastEvent> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration);
-            List<AbstractCastEvent> dhuumCast = mainTarget.GetCastLogs(log, 0, 20000);
-            string[] namesDh;
+            List<AbstractCastEvent> castLogs = dhuum.GetCastLogs(log, 0, log.FightData.FightEnd);
+            List<AbstractCastEvent> dhuumCast = dhuum.GetCastLogs(log, 0, 20000);
             if (dhuumCast.Count > 0)
             {
-                namesDh = new[] { "Main Fight", "Ritual" };
+                // full fight does not contain the pre event
                 ComputeFightPhases(phases, castLogs, fightDuration, 0);
                 _isBugged = true;
             }
             else
             {
-                AbstractBuffEvent invulDhuum = log.CombatData.GetBuffData(762).FirstOrDefault(x => x is BuffRemoveManualEvent && x.To == mainTarget.AgentItem && x.Time > 115000);
+                // full fight contains the pre event
+                AbstractBuffEvent invulDhuum = log.CombatData.GetBuffData(762).FirstOrDefault(x => x is BuffRemoveManualEvent && x.To == dhuum.AgentItem && x.Time > 115000);
                 if (invulDhuum != null)
                 {
                     long end = invulDhuum.Time;
-                    phases.Add(new PhaseData(0, end));
+                    phases.Add(new PhaseData(0, end, "Pre Event"));
                     ComputeFightPhases(phases, castLogs, fightDuration, end + 1);
                 }
-                else
-                {
-                    phases.Add(new PhaseData(0, fightDuration));
-                }
-                namesDh = new[] { "Roleplay", "Main Fight", "Ritual" };
+            }
+            bool hasRitual = phases.Last().Name == "Ritual";
+            PhaseData mainFightPhase = phases.Find(x => x.Name == "Main Fight");
+            if (mainFightPhase != null)
+            {
+                phases.AddRange(GetInBetweenSoulSplits(log, dhuum, mainFightPhase.Start, mainFightPhase.End, hasRitual));
             }
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].Name = namesDh[i - 1];
-                phases[i].Targets.Add(mainTarget);
+                phases[i].Targets.Add(dhuum);
             }
-            bool hasRitual = phases.Last().Name == "Ritual";
-            if (dhuumCast.Count > 0 && phases.Count > 1)
-            {
-                phases.AddRange(GetInBetweenSoulSplits(log, mainTarget, phases[1].Start, phases[1].End, hasRitual));
-                phases.Sort((x, y) => x.Start.CompareTo(y.Start));
-            }
-            else if (phases.Count > 2)
-            {
-                phases.AddRange(GetInBetweenSoulSplits(log, mainTarget, phases[2].Start, phases[2].End, hasRitual));
-                phases.Sort((x, y) => x.Start.CompareTo(y.Start));
-            }
+            phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             return phases;
         }
 
@@ -178,10 +158,12 @@ namespace GW2EIParser.Logic
             };
         }
 
-        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
             // TODO: correct position
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
+            int start = (int)replay.TimeOffsets.start;
+            int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Dhuum:
@@ -189,7 +171,7 @@ namespace GW2EIParser.Logic
                     AbstractCastEvent majorSplit = cls.Find(x => x.SkillId == 47396);
                     foreach (AbstractCastEvent c in deathmark)
                     {
-                        int start = (int)c.Time;
+                        start = (int)c.Time;
                         int zoneActive = start + 1550;
                         int zoneDeadly = zoneActive + 6000; //point where the zone becomes impossible to walk through unscathed
                         int zoneEnd = zoneActive + 120000;
@@ -215,16 +197,16 @@ namespace GW2EIParser.Logic
                     var cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
                     foreach (AbstractCastEvent c in cataCycle)
                     {
-                        int start = (int)c.Time;
-                        int end = start + c.ActualDuration;
+                        start = (int)c.Time;
+                        end = start + c.ActualDuration;
                         replay.Decorations.Add(new CircleDecoration(true, end, 300, (start, end), "rgba(255, 150, 0, 0.7)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
                     }
                     var slash = cls.Where(x => x.SkillId == 47561).ToList();
                     foreach (AbstractCastEvent c in slash)
                     {
-                        int start = (int)c.Time;
-                        int end = start + c.ActualDuration;
+                        start = (int)c.Time;
+                        end = start + c.ActualDuration;
                         Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
                         if (facing == null)
                         {
@@ -235,32 +217,20 @@ namespace GW2EIParser.Logic
 
                     if (majorSplit != null)
                     {
-                        int start = (int)majorSplit.Time;
-                        int end = (int)log.FightData.FightDuration;
+                        start = (int)majorSplit.Time;
+                        end = (int)log.FightData.FightEnd;
                         replay.Decorations.Add(new CircleDecoration(true, 0, 320, (start, end), "rgba(0, 180, 255, 0.2)", new AgentConnector(target)));
                     }
                     break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-
-        }
-
-        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
-        {
-            int start = (int)replay.TimeOffsets.start;
-            int end = (int)replay.TimeOffsets.end;
-            switch (mob.ID)
-            {
                 case (ushort)DhuumDesmina:
                     break;
                 case (ushort)Echo:
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 120, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(mob)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 120, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     break;
                 case (ushort)Enforcer:
                     break;
                 case (ushort)Messenger:
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(mob)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
                     break;
                 case (ushort)Deathling:
                     break;
@@ -295,11 +265,11 @@ namespace GW2EIParser.Logic
                         foreach (int gstart in greens)
                         {
                             int gend = gstart + 5000;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(mob)));
-                            replay.Decorations.Add(new CircleDecoration(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(mob)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(target)));
+                            replay.Decorations.Add(new CircleDecoration(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(target)));
                         }
                     }
-                    List<AbstractBuffEvent> stealths = GetFilteredList(log.CombatData, 13017, mob, true);
+                    List<AbstractBuffEvent> stealths = GetFilteredList(log.CombatData, 13017, target, true);
                     int stealthStart = 0;
                     int stealthEnd = 0;
                     foreach (AbstractBuffEvent c in stealths)
@@ -311,22 +281,22 @@ namespace GW2EIParser.Logic
                         else
                         {
                             stealthEnd = (int)c.Time;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 180, (stealthStart, stealthEnd), "rgba(80, 80, 80, 0.3)", new AgentConnector(mob)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 180, (stealthStart, stealthEnd), "rgba(80, 80, 80, 0.3)", new AgentConnector(target)));
                         }
                     }
                     _reapersSeen++;
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-
+                    break;
             }
+
         }
 
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // spirit transform
             var spiritTransform = log.CombatData.GetBuffData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
+            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -339,7 +309,7 @@ namespace GW2EIParser.Logic
                 {
                     duration = 30000;
                 }
-                AbstractBuffEvent removedBuff = log.CombatData.GetBuffData(48281).FirstOrDefault(x => x.To == p.AgentItem && x is BuffRemoveAllEvent && x.Time > c.Time && x.Time < c.Time + duration);
+                AbstractBuffEvent removedBuff = log.CombatData.GetBuffRemoveAllData(48281).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
                 int start = (int)c.Time;
                 int end = start + duration;
                 if (removedBuff != null)
@@ -411,7 +381,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
+            NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");

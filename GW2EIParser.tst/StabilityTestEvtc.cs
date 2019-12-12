@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using GW2EIParser.Exceptions;
-using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -86,7 +85,7 @@ namespace GW2EIParser.tst
                     };
                     var writer = new JsonTextWriter(sw)
                     {
-                        Formatting = Newtonsoft.Json.Formatting.Indented
+                        Formatting = Formatting.Indented
                     };
                     serializer.Serialize(writer, dict);
                 }

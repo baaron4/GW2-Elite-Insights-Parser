@@ -1,6 +1,6 @@
 ﻿namespace GW2EIParser.EIData
 {
-    public abstract class FormDecoration : GenericDecoration
+    public abstract class FormDecoration : GenericAttachedDecoration
     {
 
         public bool Filled { get; }
@@ -12,13 +12,6 @@
             Color = color;
             Filled = fill;
             Growing = growing;
-        }
-        //
-        protected class FormSerializable : GenericDecorationSerializable
-        {
-            public bool Fill { get; set; }
-            public int Growing { get; set; }
-            public string Color { get; set; }
         }
 
     }

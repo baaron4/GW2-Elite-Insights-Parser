@@ -70,9 +70,9 @@ namespace GW2EIParser.Logic
             }
         }
 
-        public static void SetPhasePerTarget(Target target, List<PhaseData> phases, ParsedLog log)
+        public static void SetPhasePerTarget(NPC target, List<PhaseData> phases, ParsedLog log)
         {
-            long fightDuration = log.FightData.FightDuration;
+            long fightDuration = log.FightData.FightEnd;
             EnterCombatEvent phaseStart = log.CombatData.GetEnterCombatEvents(target.AgentItem).LastOrDefault();
             if (phaseStart != null)
             {
@@ -83,7 +83,7 @@ namespace GW2EIParser.Logic
                 {
                     end = phaseEnd.Time;
                 }
-                var phase = new PhaseData(start, Math.Min(end, log.FightData.FightDuration));
+                var phase = new PhaseData(start, Math.Min(end, log.FightData.FightEnd));
                 phase.Targets.Add(target);
                 phases.Add(phase);
             }
@@ -102,17 +102,17 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            Target berg = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Berg);
+            NPC berg = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Berg);
             if (berg == null)
             {
                 throw new InvalidOperationException("Berg not found");
             }
-            Target zane = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Zane);
+            NPC zane = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Zane);
             if (zane == null)
             {
                 throw new InvalidOperationException("Zane");
             }
-            Target narella = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Narella);
+            NPC narella = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Narella);
             if (narella == null)
             {
                 throw new InvalidOperationException("Narella");
@@ -122,7 +122,7 @@ namespace GW2EIParser.Logic
             {
                 return phases;
             }
-            foreach (Target target in Targets)
+            foreach (NPC target in Targets)
             {
                 SetPhasePerTarget(target, phases, log);
             }
@@ -161,9 +161,9 @@ namespace GW2EIParser.Logic
             return "Bandit Trio";
         }
 
-        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.TargetIDS.Berg:
@@ -193,7 +193,7 @@ namespace GW2EIParser.Logic
                 case (ushort)ParseEnum.TargetIDS.Narella:
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
             }
         }
     }

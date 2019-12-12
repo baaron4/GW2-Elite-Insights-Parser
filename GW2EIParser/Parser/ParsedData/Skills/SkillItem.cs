@@ -77,6 +77,15 @@ namespace GW2EIParser.Parser.ParsedData
             {31686, "https://wiki.guildwars2.com/images/4/4b/Overload_Air.png" },
         };
 
+        private HashSet<long> _nonCritable = new HashSet<long>
+                    {
+                        9292,
+                        5492,
+                        13014,
+                        30770,
+                        52370
+                    };
+
         private const string DefaultIcon = "https://render.guildwars2.com/file/1D55D34FB4EE20B1962E315245E40CA5E1042D0E/62248.png";
 
         // Fields
@@ -85,6 +94,7 @@ namespace GW2EIParser.Parser.ParsedData
         public bool AA => _apiSkill?.Slot == "Weapon_1" || _apiSkill?.Slot == "Downed_1";
         public string Name { get; private set; }
         public string Icon { get; private set; }
+        public bool CanCrit => _nonCritable.Contains(ID);
         private WeaponDescriptor _weaponDescriptor;
         private readonly GW2APISkill _apiSkill;
 
@@ -198,7 +208,7 @@ namespace GW2EIParser.Parser.ParsedData
             {
                 Icon = _apiSkill != null ? _apiSkill.Icon : DefaultIcon;
             }
-            if (_apiSkill != null && _apiSkill.Type == "Weapon" && _apiSkill.WeaponType != "None" && _apiSkill.Professions.Length > 0 && (_apiSkill.Categories == null || (_apiSkill.Categories.Length == 1 && (_apiSkill.Categories[0] == "Phantasm" || _apiSkill.Categories[0] == "DualWield"))))
+            if (_apiSkill != null && _apiSkill.Type == "Weapon" && _apiSkill.WeaponType != "None" && _apiSkill.Professions.Count > 0 && (_apiSkill.Categories == null || (_apiSkill.Categories.Count == 1 && (_apiSkill.Categories[0] == "Phantasm" || _apiSkill.Categories[0] == "DualWield"))))
             {
                 _weaponDescriptor = new WeaponDescriptor(_apiSkill);
             }

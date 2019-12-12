@@ -8,7 +8,6 @@ namespace GW2EIParser.Parser.ParsedData
         // Fields
         private readonly Dictionary<long, SkillItem> _skills = new Dictionary<long, SkillItem>();
 
-
         // Public Methods
 
         public SkillItem Get(long ID)

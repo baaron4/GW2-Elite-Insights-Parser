@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIParser.Parser.ParsedData;
-using static GW2EIParser.EIData.BuffSimulator;
+using static GW2EIParser.EIData.AbstractBuffSimulator;
 
 namespace GW2EIParser.EIData
 {
@@ -38,11 +38,11 @@ namespace GW2EIParser.EIData
             return _stacks.Count;
         }
 
-        public override void SetBoonDistributionItem(BuffDistribution distribs, long start, long end, long boonid, ParsedLog log)
+        public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long boonid, ParsedLog log)
         {
             foreach (BuffSimulationItemDuration item in _stacks)
             {
-                item.SetBoonDistributionItem(distribs, start, end, boonid, log);
+                item.SetBuffDistributionItem(distribs, start, end, boonid, log);
             }
         }
 

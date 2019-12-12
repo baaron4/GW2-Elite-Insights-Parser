@@ -38,28 +38,9 @@ namespace GW2EIParser.EIData
 
         //
 
-        protected class PieSerializable : CircleSerializable
-        {
-            public int Direction { get; set; }
-            public int OpeningAngle { get; set; }
-        }
-
         public override GenericDecorationSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
-            var aux = new PieSerializable
-            {
-                Type = "Pie",
-                Radius = Radius,
-                Direction = Direction,
-                OpeningAngle = OpeningAngle,
-                Fill = Filled,
-                Color = Color,
-                Growing = Growing,
-                Start = Lifespan.start,
-                End = Lifespan.end,
-                ConnectedTo = ConnectedTo.GetConnectedTo(map, log)
-            };
-            return aux;
+            return new PieDecorationSerializable(log, this, map);
         }
     }
 }

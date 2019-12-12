@@ -58,7 +58,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Samarog);
+            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Samarog);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -103,7 +103,7 @@ namespace GW2EIParser.Logic
         }
 
 
-        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
             // TODO: facing information (shock wave)
             switch (target.ID)
@@ -128,7 +128,7 @@ namespace GW2EIParser.Logic
                 case (ushort)Guldhem:
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
             }
         }
 
@@ -169,14 +169,14 @@ namespace GW2EIParser.Logic
             //fixated Ghuldem
             List<AbstractBuffEvent> fixatedGuldhem = GetFilteredList(log.CombatData, 38223, p, true);
             int fixationGuldhemStart = 0;
-            Target guldhem = null;
+            NPC guldhem = null;
             foreach (AbstractBuffEvent c in fixatedGuldhem)
             {
                 if (c is BuffApplyEvent)
                 {
                     fixationGuldhemStart = (int)c.Time;
-                    long logTime = log.FightData.ToLogSpace(c.Time);
-                    guldhem = Targets.FirstOrDefault(x => x.ID == (ushort)Guldhem && logTime >= x.FirstAwareLogTime && logTime <= x.LastAwareLogTime);
+                    long logTime = c.Time;
+                    guldhem = Targets.FirstOrDefault(x => x.ID == (ushort)Guldhem && logTime >= x.FirstAware && logTime <= x.LastAware);
                 }
                 else
                 {
@@ -190,14 +190,14 @@ namespace GW2EIParser.Logic
             //fixated Rigom
             List<AbstractBuffEvent> fixatedRigom = GetFilteredList(log.CombatData, 37693, p, true);
             int fixationRigomStart = 0;
-            Target rigom = null;
+            NPC rigom = null;
             foreach (AbstractBuffEvent c in fixatedRigom)
             {
                 if (c is BuffApplyEvent)
                 {
                     fixationRigomStart = (int)c.Time;
-                    long logTime = log.FightData.ToLogSpace(c.Time);
-                    rigom = Targets.FirstOrDefault(x => x.ID == (ushort)Rigom && logTime >= x.FirstAwareLogTime && logTime <= x.LastAwareLogTime);
+                    long logTime = c.Time;
+                    rigom = Targets.FirstOrDefault(x => x.ID == (ushort)Rigom && logTime >= x.FirstAware && logTime <= x.LastAware);
                 }
                 else
                 {
@@ -212,7 +212,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Samarog);
+            NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Samarog);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");

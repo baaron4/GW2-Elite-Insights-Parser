@@ -5,7 +5,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
     public class PositionEvent : AbstractMovementEvent
     {
 
-        public PositionEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, agentData, offset)
+        public PositionEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
         }
 

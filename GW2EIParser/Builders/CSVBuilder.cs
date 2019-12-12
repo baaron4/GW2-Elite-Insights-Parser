@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using GW2EIParser.EIData;
-using GW2EIParser.Models;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 
@@ -15,8 +14,8 @@ namespace GW2EIParser.Builders
     {
         private readonly ParsedLog _log;
         private readonly List<PhaseData> _phases;
-        private readonly Target _legacyTarget;
-        private readonly Statistics _statistics;
+        private readonly NPC _legacyTarget;
+        private readonly GeneralStatistics _statistics;
         private readonly StreamWriter _sw;
         private readonly string _delimiter;
         private readonly string[] _uploadResult;
@@ -179,9 +178,9 @@ namespace GW2EIParser.Builders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalDPS dps = player.GetDPSAll(_log, phaseIndex);
-                Statistics.FinalDefenses defense = player.GetDefenses(_log, phaseIndex);
-                Statistics.FinalDPS dpsBoss = player.GetDPSTarget(_log, phaseIndex, _legacyTarget);
+                FinalDPS dps = player.GetDPSAll(_log, phaseIndex);
+                FinalDefensesAll defense = player.GetDefenses(_log, phaseIndex);
+                FinalDPS dpsBoss = player.GetDPSTarget(_log, phaseIndex, _legacyTarget);
                 string deathString = defense.DeadCount.ToString();
                 string deadthTooltip = "";
                 if (defense.DeadCount > 0)
@@ -238,16 +237,16 @@ namespace GW2EIParser.Builders
                 {
                     continue;
                 }
-                Statistics.FinalStatsAll stats = player.GetStatsAll(_log, phaseIndex);
-                Statistics.FinalStats statsBoss = player.GetStatsTarget(_log, phaseIndex, _legacyTarget);
-                Dictionary<string, List<Statistics.DamageModifierData>> damageMods = player.GetDamageModifierData(_log, _legacyTarget);
-                var scholar = new Statistics.DamageModifierData(0, 0, 0, 0);
-                var moving = new Statistics.DamageModifierData(0, 0, 0, 0);
-                if (damageMods.TryGetValue("Scholar Rune", out List<Statistics.DamageModifierData> schoDict))
+                FinalGameplayStatsAll stats = player.GetGameplayStats(_log, phaseIndex);
+                FinalGameplayStats statsBoss = player.GetGameplayStats(_log, phaseIndex, _legacyTarget);
+                Dictionary<string, List<DamageModifierStat>> damageMods = player.GetDamageModifierStats(_log, _legacyTarget);
+                var scholar = new DamageModifierStat(0, 0, 0, 0);
+                var moving = new DamageModifierStat(0, 0, 0, 0);
+                if (damageMods.TryGetValue("Scholar Rune", out List<DamageModifierStat> schoDict))
                 {
                     scholar = schoDict[phaseIndex];
                 }
-                if (damageMods.TryGetValue("Moving Bonus", out List<Statistics.DamageModifierData> moveDict))
+                if (damageMods.TryGetValue("Moving Bonus", out List<DamageModifierStat> moveDict))
                 {
                     moving = moveDict[phaseIndex];
                 }
@@ -288,15 +287,15 @@ namespace GW2EIParser.Builders
                 {
                     continue;
                 }
-                Statistics.FinalStatsAll stats = player.GetStatsAll(_log, phaseIndex);
-                Dictionary<string, List<Statistics.DamageModifierData>> damageMods = player.GetDamageModifierData(_log, null);
-                var scholar = new Statistics.DamageModifierData(0, 0, 0, 0);
-                var moving = new Statistics.DamageModifierData(0, 0, 0, 0);
-                if (damageMods.TryGetValue("Scholar Rune", out List<Statistics.DamageModifierData> schoDict))
+                FinalGameplayStatsAll stats = player.GetGameplayStats(_log, phaseIndex);
+                Dictionary<string, List<DamageModifierStat>> damageMods = player.GetDamageModifierStats(_log, null);
+                var scholar = new DamageModifierStat(0, 0, 0, 0);
+                var moving = new DamageModifierStat(0, 0, 0, 0);
+                if (damageMods.TryGetValue("Scholar Rune", out List<DamageModifierStat> schoDict))
                 {
                     scholar = schoDict[phaseIndex];
                 }
-                if (damageMods.TryGetValue("Moving Bonus", out List<Statistics.DamageModifierData> moveDict))
+                if (damageMods.TryGetValue("Moving Bonus", out List<DamageModifierStat> moveDict))
                 {
                     moving = moveDict[phaseIndex];
                 }
@@ -330,7 +329,7 @@ namespace GW2EIParser.Builders
                 {
                     continue;
                 }
-                Statistics.FinalDefenses defenses = player.GetDefenses(_log, phaseIndex);
+                FinalDefenses defenses = player.GetDefenses(_log, phaseIndex);
 
                 WriteLine(new[] { player.Group.ToString(), player.Prof, player.Character,
                 defenses.DamageTaken.ToString(),defenses.DamageBarrier.ToString(),defenses.BlockedCount.ToString(),defenses.InvulnedCount.ToString(),defenses.EvadedCount.ToString(),defenses.DodgeCount.ToString() });
@@ -354,7 +353,7 @@ namespace GW2EIParser.Builders
                 {
                     continue;
                 }
-                Statistics.FinalSupport support = player.GetSupport(_log, phaseIndex);
+                FinalPlayerSupport support = player.GetPlayerSupport(_log, phaseIndex);
 
                 WriteLine(new[] { player.Group.ToString(), player.Prof, player.Character,
                 support.CondiCleanse.ToString(),support.CondiCleanseTime.ToString(), support.CondiCleanseSelf.ToString(), support.CondiCleanseTimeSelf.ToString(), support.BoonStrips.ToString(), support.BoonStripsTime.ToString(), support.Resurrects.ToString(),support.ResurrectTime.ToString() });
@@ -385,13 +384,13 @@ namespace GW2EIParser.Builders
                 {
                     continue;
                 }
-                Dictionary<long, Statistics.FinalBuffs> uptimes = player.GetBuffs(_log, phaseIndex, Statistics.BuffEnum.Self);
+                Dictionary<long, FinalPlayerBuffs> uptimes = player.GetBuffs(_log, phaseIndex, BuffEnum.Self);
 
                 WriteCell(player.Character);
-                WriteCell(player.GetStatsAll(_log, phaseIndex).AvgBoons.ToString());
+                WriteCell(player.GetGameplayStats(_log, phaseIndex).AvgBoons.ToString());
                 foreach (Buff boon in listToUse)
                 {
-                    if (uptimes.TryGetValue(boon.ID, out Statistics.FinalBuffs value))
+                    if (uptimes.TryGetValue(boon.ID, out FinalPlayerBuffs value))
                     {
                         if (boon.Type == Buff.BuffType.Duration)
                         {
@@ -435,14 +434,14 @@ namespace GW2EIParser.Builders
                 {
                     continue;
                 }
-                Dictionary<long, Statistics.FinalBuffs> uptimes = player.GetBuffs(_log, phaseIndex, Statistics.BuffEnum.Self);
+                Dictionary<long, FinalPlayerBuffs> uptimes = player.GetBuffs(_log, phaseIndex, BuffEnum.Self);
 
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
                 {
                     string rate = "0";
                     string overstack = "0";
-                    if (uptimes.TryGetValue(boon.ID, out Statistics.FinalBuffs uptime))
+                    if (uptimes.TryGetValue(boon.ID, out FinalPlayerBuffs uptime))
                     {
                         if (uptime.Generation > 0 || uptime.Overstack > 0)
                         {
@@ -488,14 +487,14 @@ namespace GW2EIParser.Builders
                 {
                     continue;
                 }
-                Dictionary<long, Statistics.FinalBuffs> boons = player.GetBuffs(_log, phaseIndex, Statistics.BuffEnum.Group);
+                Dictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(_log, phaseIndex, BuffEnum.Group);
 
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
                 {
                     string rate = "0";
                     string overstack = "0";
-                    if (boons.TryGetValue(boon.ID, out Statistics.FinalBuffs uptime))
+                    if (boons.TryGetValue(boon.ID, out FinalPlayerBuffs uptime))
                     {
                         if (uptime.Generation > 0 || uptime.Overstack > 0)
                         {
@@ -542,14 +541,14 @@ namespace GW2EIParser.Builders
                 {
                     continue;
                 }
-                Dictionary<long, Statistics.FinalBuffs> boons = player.GetBuffs(_log, phaseIndex, Statistics.BuffEnum.OffGroup);
+                Dictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(_log, phaseIndex, BuffEnum.OffGroup);
 
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
                 {
                     string rate = "0";
                     string overstack = "0";
-                    if (boons.TryGetValue(boon.ID, out Statistics.FinalBuffs uptime))
+                    if (boons.TryGetValue(boon.ID, out FinalPlayerBuffs uptime))
                     {
                         if (uptime.Generation > 0 || uptime.Overstack > 0)
                         {
@@ -596,13 +595,13 @@ namespace GW2EIParser.Builders
                 {
                     continue;
                 }
-                Dictionary<long, Statistics.FinalBuffs> boons = player.GetBuffs(_log, phaseIndex, Statistics.BuffEnum.Squad);
+                Dictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(_log, phaseIndex, BuffEnum.Squad);
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
                 {
                     string rate = "0";
                     string overstack = "0";
-                    if (boons.TryGetValue(boon.ID, out Statistics.FinalBuffs uptime))
+                    if (boons.TryGetValue(boon.ID, out FinalPlayerBuffs uptime))
                     {
                         if (uptime.Generation > 0 || uptime.Overstack > 0)
                         {
@@ -706,8 +705,8 @@ namespace GW2EIParser.Builders
         }
         private void CreateCondiUptime(int phaseIndex)
         {
-            Target boss = _legacyTarget;
-            Dictionary<long, Statistics.FinalTargetBuffs> conditions = _legacyTarget.GetBuffs(_log, phaseIndex);
+            NPC boss = _legacyTarget;
+            Dictionary<long, FinalBuffs> conditions = _legacyTarget.GetBuffs(_log, phaseIndex);
 
             WriteCell("Name");
             WriteCell("Avg");
@@ -719,10 +718,10 @@ namespace GW2EIParser.Builders
             NewLine();
             int count = 0;
             WriteCell(boss.Character);
-            WriteCell(Math.Round(_legacyTarget.GetAverageConditions(_log, phaseIndex), 1).ToString());
+            WriteCell(Math.Round(_legacyTarget.GetGameplayStats(_log, phaseIndex).AvgConditions, 1).ToString());
             foreach (Buff boon in _statistics.PresentConditions)
             {
-                if (conditions.TryGetValue(boon.ID, out Statistics.FinalTargetBuffs uptime))
+                if (conditions.TryGetValue(boon.ID, out FinalBuffs uptime))
                 {
                     if (boon.Type == Buff.BuffType.Duration)
                     {
@@ -748,8 +747,8 @@ namespace GW2EIParser.Builders
         }
         private void CreateBossBoonUptime(int phaseIndex)
         {
-            Target boss = _legacyTarget;
-            Dictionary<long, Statistics.FinalTargetBuffs> conditions = _legacyTarget.GetBuffs(_log, phaseIndex);
+            NPC boss = _legacyTarget;
+            Dictionary<long, FinalBuffs> conditions = _legacyTarget.GetBuffs(_log, phaseIndex);
             WriteCell("Name");
             WriteCell("Avg");
             foreach (Buff boon in _statistics.PresentBoons)
@@ -762,7 +761,7 @@ namespace GW2EIParser.Builders
             WriteCell(boss.Character);
             foreach (Buff boon in _statistics.PresentBoons)
             {
-                if (conditions.TryGetValue(boon.ID, out Statistics.FinalTargetBuffs uptime))
+                if (conditions.TryGetValue(boon.ID, out FinalBuffs uptime))
                 {
                     if (boon.Type == Buff.BuffType.Duration)
                     {
@@ -788,7 +787,7 @@ namespace GW2EIParser.Builders
         }
         private void CreateCondiGen(int phaseIndex)
         {
-            Dictionary<long, Statistics.FinalTargetBuffs> conditions = _legacyTarget.GetBuffs(_log, phaseIndex);
+            Dictionary<long, FinalBuffsDictionary> conditions = _legacyTarget.GetBuffsDictionary(_log, phaseIndex);
             //bool hasBoons = false;
             int count = 0;
             WriteCell("Name");
@@ -807,7 +806,7 @@ namespace GW2EIParser.Builders
                 WriteCell(player.Character);
                 foreach (Buff boon in _statistics.PresentConditions)
                 {
-                    if (conditions.TryGetValue(boon.ID, out Statistics.FinalTargetBuffs uptime))
+                    if (conditions.TryGetValue(boon.ID, out FinalBuffsDictionary uptime) && uptime.Generated.ContainsKey(player))
                     {
                         if (boon.Type == Buff.BuffType.Duration)
                         {

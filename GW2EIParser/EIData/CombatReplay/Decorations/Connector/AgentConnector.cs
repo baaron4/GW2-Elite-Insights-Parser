@@ -4,9 +4,9 @@ namespace GW2EIParser.EIData
 {
     public class AgentConnector : Connector
     {
-        private readonly AbstractMasterActor _agent;
+        private readonly AbstractSingleActor _agent;
 
-        public AgentConnector(AbstractMasterActor agent)
+        public AgentConnector(AbstractSingleActor agent)
         {
             _agent = agent;
         }

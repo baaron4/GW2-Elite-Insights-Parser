@@ -51,7 +51,7 @@ namespace GW2EIParser.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                Target desmina = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Desmina);
+                NPC desmina = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Desmina);
                 if (desmina == null)
                 {
                     throw new InvalidOperationException("Main target of the fight not found");
@@ -60,7 +60,7 @@ namespace GW2EIParser.Logic
                 if (ooc != null)
                 {
                     long time = 0;
-                    foreach (Mob mob in TrashMobs.Where(x => x.ID == (ushort)SpiritHorde3))
+                    foreach (NPC mob in TrashMobs.Where(x => x.ID == (ushort)SpiritHorde3))
                     {
                         DespawnEvent dspwnHorde = combatData.GetDespawnEvents(mob.AgentItem).LastOrDefault();
                         if (dspwnHorde != null)
@@ -69,9 +69,9 @@ namespace GW2EIParser.Logic
                         }
                     }
                     DespawnEvent dspwn = combatData.GetDespawnEvents(desmina.AgentItem).LastOrDefault();
-                    if (time != 0 && dspwn == null && time <= fightData.ToFightSpace(desmina.LastAwareLogTime))
+                    if (time != 0 && dspwn == null && time <= desmina.LastAware)
                     {
-                        fightData.SetSuccess(true, fightData.ToLogSpace(time));
+                        fightData.SetSuccess(true, time);
                     }
                 }
             }
@@ -88,13 +88,13 @@ namespace GW2EIParser.Logic
                 if (firstMovement != null)
                 {
                     // update start
-                    riverOfSoul.FirstAwareLogTime = firstMovement.LogTime - 10;
+                    riverOfSoul.FirstAware = firstMovement.Time - 10;
                     foreach (CombatItem c in combatData)
                     {
                         if (c.SrcAgent == riverOfSoul.Agent && (c.IsStateChange == ParseEnum.StateChange.Position || c.IsStateChange == ParseEnum.StateChange.Rotation))
                         {
                             sortCombatList = true;
-                            c.OverrideTime(riverOfSoul.FirstAwareLogTime);
+                            c.OverrideTime(riverOfSoul.FirstAware);
                         }
                     }
                 }
@@ -102,7 +102,7 @@ namespace GW2EIParser.Logic
             // make sure the list is still sorted by time after overrides
             if (sortCombatList)
             {
-                combatData.Sort((x, y) => x.LogTime.CompareTo(y.LogTime));
+                combatData.Sort((x, y) => x.Time.CompareTo(y.Time));
             }
             ComputeFightTargets(agentData, combatData);
         }
@@ -112,32 +112,32 @@ namespace GW2EIParser.Logic
             // TODO bombs dual following circle actor (one growing, other static) + dual static circle actor (one growing with min radius the final radius of the previous, other static). Missing buff id
         }
 
-        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
-            Target desmina = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Desmina);
+            NPC desmina = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Desmina);
             if (desmina == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
-            switch (mob.ID)
+            switch (target.ID)
             {
                 case (ushort)HollowedBomber:
-                    var bomberman = mob.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 48272).ToList();
+                    var bomberman = target.GetCastLogs(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == 48272).ToList();
                     foreach (AbstractCastEvent bomb in bomberman)
                     {
                         int startCast = (int)bomb.Time;
                         int endCast = startCast + bomb.ActualDuration;
                         int expectedEnd = Math.Max(startCast + bomb.ExpectedDuration, endCast);
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(mob)));
-                        replay.Decorations.Add(new CircleDecoration(true, expectedEnd, 480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(mob)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, expectedEnd, 480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(target)));
                     }
                     break;
                 case (ushort)RiverOfSouls:
                     if (replay.Rotations.Count > 0)
                     {
-                        replay.Decorations.Add(new FacingRectangleDecoration((start, end), new AgentConnector(mob), replay.PolledRotations, 160, 390, "rgba(255,100,0,0.5)"));
+                        replay.Decorations.Add(new FacingRectangleDecoration((start, end), new AgentConnector(target), replay.PolledRotations, 160, 390, "rgba(255,100,0,0.5)"));
                     }
                     break;
                 case (ushort)Enervator:
@@ -147,7 +147,7 @@ namespace GW2EIParser.Logic
                 case (ushort)SpiritHorde3:
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
             }
 
         }

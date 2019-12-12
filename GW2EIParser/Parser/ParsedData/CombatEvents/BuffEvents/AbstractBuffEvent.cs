@@ -11,12 +11,12 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public AgentItem ByMinion { get; protected set; }
         public AgentItem To { get; protected set; }
 
-        public AbstractBuffEvent(CombatItem evtcItem, SkillData skillData, long offset) : base(evtcItem.LogTime, offset)
+        public AbstractBuffEvent(CombatItem evtcItem, SkillData skillData) : base(evtcItem.Time)
         {
             BuffSkill = skillData.Get(evtcItem.SkillID);
         }
 
-        public AbstractBuffEvent(SkillItem buffSkill, long time) : base(time, 0)
+        public AbstractBuffEvent(SkillItem buffSkill, long time) : base(time)
         {
             BuffSkill = buffSkill;
         }
@@ -30,11 +30,11 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             }
         }
 
-        public abstract void UpdateSimulator(BuffSimulator simulator);
+        public abstract void UpdateSimulator(AbstractBuffSimulator simulator);
 
         public abstract void TryFindSrc(ParsedLog log);
 
-        public abstract bool IsBuffSimulatorCompliant(long fightEnd);
+        public abstract bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs);
 
         public abstract int CompareTo(AbstractBuffEvent abe);
     }

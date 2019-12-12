@@ -19,27 +19,10 @@ namespace GW2EIParser.EIData
         }
 
         //
-        protected class CircleSerializable : FormSerializable
-        {
-            public int Radius { get; set; }
-            public int MinRadius { get; set; }
-        }
 
         public override GenericDecorationSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
-            var aux = new CircleSerializable
-            {
-                Type = "Circle",
-                Radius = Radius,
-                MinRadius = MinRadius,
-                Fill = Filled,
-                Color = Color,
-                Growing = Growing,
-                Start = Lifespan.start,
-                End = Lifespan.end,
-                ConnectedTo = ConnectedTo.GetConnectedTo(map, log)
-            };
-            return aux;
+            return new CircleDecorationSerializable(log, this, map);
         }
     }
 }

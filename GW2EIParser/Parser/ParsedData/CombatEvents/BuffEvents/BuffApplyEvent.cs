@@ -7,7 +7,11 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public bool Initial { get; }
         public int AppliedDuration { get; }
 
-        public BuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, skillData, offset)
+        private uint _overstackDuration;
+        public uint BuffInstance { get; }
+        private readonly bool _addedActive;
+
+        public BuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, skillData)
         {
             Initial = evtcItem.IsStateChange == ParseEnum.StateChange.BuffInitial;
             AppliedDuration = evtcItem.Value;
@@ -18,16 +22,26 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                 By = By.Master;
             }
             To = agentData.GetAgent(evtcItem.DstAgent);
+            BuffInstance = evtcItem.Pad;
+            _addedActive = evtcItem.IsShields > 0;
+            _overstackDuration = evtcItem.OverstackValue;
         }
 
-        public BuffApplyEvent(AgentItem by, AgentItem to, long time, int duration, SkillItem buffSkill) : base(buffSkill, time)
+        public BuffApplyEvent(AgentItem by, AgentItem to, long time, int duration, SkillItem buffSkill, uint id, bool addedActive) : base(buffSkill, time)
         {
             AppliedDuration = duration;
             By = by;
+            if (By.Master != null)
+            {
+                ByMinion = By;
+                By = By.Master;
+            }
             To = to;
+            BuffInstance = id;
+            _addedActive = addedActive;
         }
 
-        public override bool IsBuffSimulatorCompliant(long fightEnd)
+        public override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
         {
             return BuffID != ProfHelper.NoBuff;
         }
@@ -36,9 +50,9 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         {
         }
 
-        public override void UpdateSimulator(BuffSimulator simulator)
+        public override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            simulator.Add(AppliedDuration, By, Time);
+            simulator.Add(AppliedDuration, By, Time, BuffInstance, _addedActive, _overstackDuration);
         }
 
         public override int CompareTo(AbstractBuffEvent abe)

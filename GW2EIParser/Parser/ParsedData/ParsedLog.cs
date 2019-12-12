@@ -3,14 +3,11 @@ using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Exceptions;
 using GW2EIParser.Logic;
-using GW2EIParser.Models;
 
 namespace GW2EIParser.Parser.ParsedData
 {
     public class ParsedLog
     {
-        private readonly List<Mob> _auxMobs = new List<Mob>();
-
         public LogData LogData { get; }
         public FightData FightData { get; }
         public AgentData AgentData { get; }
@@ -25,7 +22,10 @@ namespace GW2EIParser.Parser.ParsedData
         public bool CanCombatReplay => CombatData.HasMovementData;
 
         public MechanicData MechanicData { get; }
-        public Statistics Statistics { get; }
+        public GeneralStatistics Statistics { get; }
+
+
+        private Dictionary<AgentItem, AbstractSingleActor> _agentToActorDictionary;
 
         public ParsedLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData,
                 List<CombatItem> combatItems, List<Player> playerList, long evtcLogDuration, bool skipFail)
@@ -45,13 +45,13 @@ namespace GW2EIParser.Parser.ParsedData
             Buffs = new BuffsContainer(LogData.GW2Version);
             DamageModifiers = new DamageModifiersContainer(LogData.GW2Version);
             MechanicData = FightData.Logic.GetMechanicData();
-            Statistics = new Statistics(CombatData, PlayerList, Buffs);
+            Statistics = new GeneralStatistics(CombatData, PlayerList, Buffs);
         }
 
         private void UpdateFightData(bool skipFail)
         {
             FightData.Logic.CheckSuccess(CombatData, AgentData, FightData, PlayerAgents);
-            if (FightData.FightDuration <= 2200)
+            if (FightData.FightEnd <= 2200)
             {
                 throw new TooShortException();
             }
@@ -62,44 +62,62 @@ namespace GW2EIParser.Parser.ParsedData
             FightData.SetCM(CombatData, AgentData, FightData);
         }
 
+        private void AddToDictionary(AbstractSingleActor actor)
+        {
+            _agentToActorDictionary[actor.AgentItem] = actor;
+            foreach (Minions minions in actor.GetMinions(this).Values)
+            {
+                foreach (NPC npc in minions.MinionList)
+                {
+                    AddToDictionary(npc);
+                }
+            }
+        }
+
+        private void InitActorDictionaries()
+        {
+            if (_agentToActorDictionary == null)
+            {
+                _agentToActorDictionary = new Dictionary<AgentItem, AbstractSingleActor>();
+                foreach (Player p in PlayerList)
+                {
+                    AddToDictionary(p);
+                }
+                foreach (NPC npc in FightData.Logic.Targets)
+                {
+                    AddToDictionary(npc);
+                }
+
+                foreach (NPC npc in FightData.Logic.TrashMobs)
+                {
+                    AddToDictionary(npc);
+                }
+            }
+        }
+
         /// <summary>
         /// Find the corresponding actor, creates one otherwise
         /// </summary>
         /// <param name="a"></param>
         /// <returns></returns>
-        public AbstractActor FindActor(AgentItem a)
+        public AbstractSingleActor FindActor(AgentItem a, bool searchPlayers)
         {
-            AbstractActor res = PlayerList.FirstOrDefault(x => x.AgentItem == a);
-            if (res == null)
+            if (a == null || (!searchPlayers && a.Type == AgentItem.AgentType.Player))
             {
-                foreach (Player p in PlayerList)
-                {
-                    Dictionary<string, MinionsList> minionsDict = p.GetMinions(this);
-                    foreach (MinionsList minions in minionsDict.Values)
-                    {
-                        res = minions.FirstOrDefault(x => x.AgentItem == a);
-                        if (res != null)
-                        {
-                            return res;
-                        }
-                    }
-                }
-                res = FightData.Logic.Targets.FirstOrDefault(x => x.AgentItem == a);
-                if (res == null)
-                {
-                    res = FightData.Logic.TrashMobs.FirstOrDefault(x => x.AgentItem == a);
-                    if (res == null)
-                    {
-                        res = _auxMobs.FirstOrDefault(x => x.AgentItem == a);
-                        if (res == null)
-                        {
-                            _auxMobs.Add(new Mob(a));
-                            res = _auxMobs.Last();
-                        }
-                    }
-                }
+                return null;
             }
-            return res;
+            InitActorDictionaries();
+            if (!_agentToActorDictionary.TryGetValue(a, out AbstractSingleActor actor))
+            {
+                actor = new NPC(a);
+                _agentToActorDictionary[a] = actor;
+                //throw new InvalidOperationException("Requested actor with id " + a.ID + " and name " + a.Name + " is missing");
+            }
+            if (a.Master != null && !searchPlayers && a.Master.Type == AgentItem.AgentType.Player)
+            {
+                return null;
+            }
+            return actor;
         }
     }
 }

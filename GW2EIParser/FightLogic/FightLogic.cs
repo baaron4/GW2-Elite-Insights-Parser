@@ -20,8 +20,8 @@ namespace GW2EIParser.Logic
         public string Icon { get; protected set; }
         private readonly int _basicMechanicsCount;
         public bool HasNoFightSpecificMechanics => MechanicList.Count == _basicMechanicsCount;
-        public List<Mob> TrashMobs { get; } = new List<Mob>();
-        public List<Target> Targets { get; } = new List<Target>();
+        public List<NPC> TrashMobs { get; } = new List<NPC>();
+        public List<NPC> Targets { get; } = new List<NPC>();
 
         public bool Targetless { get; protected set; } = false;
         protected ushort GenericTriggerID { get; }
@@ -41,7 +41,7 @@ namespace GW2EIParser.Logic
         }
 
         // Only used for CSV files
-        public Target GetLegacyTarget()
+        public NPC GetLegacyTarget()
         {
             return Targets.Find(x => x.ID == GenericTriggerID);
         }
@@ -76,7 +76,7 @@ namespace GW2EIParser.Logic
 
         public virtual string GetFightName()
         {
-            Target target = Targets.Find(x => x.ID == GenericTriggerID);
+            NPC target = Targets.Find(x => x.ID == GenericTriggerID);
             if (target == null)
             {
                 return "UNKNOWN";
@@ -93,8 +93,8 @@ namespace GW2EIParser.Logic
                 var agentValues = new HashSet<ulong>(agents.Select(x => x.Agent));
                 var newTargetAgent = new AgentItem(firstItem)
                 {
-                    FirstAwareLogTime = agents.Min(x => x.FirstAwareLogTime),
-                    LastAwareLogTime = agents.Max(x => x.LastAwareLogTime)
+                    FirstAware = agents.Min(x => x.FirstAware),
+                    LastAware = agents.Max(x => x.LastAware)
                 };
                 // get unique id for the fusion
                 ushort instID = 0;
@@ -133,7 +133,7 @@ namespace GW2EIParser.Logic
                 List<AgentItem> agents = agentData.GetNPCsByID(id);
                 foreach (AgentItem agentItem in agents)
                 {
-                    Targets.Add(new Target(agentItem));
+                    Targets.Add(new NPC(agentItem));
                 }
             }
             List<ParseEnum.TrashIDS> ids2 = GetTrashMobsIDS();
@@ -141,14 +141,14 @@ namespace GW2EIParser.Logic
             //aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
             foreach (AgentItem a in aList)
             {
-                var mob = new Mob(a);
+                var mob = new NPC(a);
                 TrashMobs.Add(mob);
             }
         }
 
-        protected static List<PhaseData> GetPhasesByInvul(ParsedLog log, long skillID, Target mainTarget, bool addSkipPhases, bool beginWithStart)
+        protected static List<PhaseData> GetPhasesByInvul(ParsedLog log, long skillID, NPC mainTarget, bool addSkipPhases, bool beginWithStart)
         {
-            long fightDuration = log.FightData.FightDuration;
+            long fightDuration = log.FightData.FightEnd;
             var phases = new List<PhaseData>();
             long last = 0;
             List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, skillID, mainTarget, beginWithStart);
@@ -186,16 +186,15 @@ namespace GW2EIParser.Logic
         protected static List<PhaseData> GetInitialPhase(ParsedLog log)
         {
             var phases = new List<PhaseData>();
-            long fightDuration = log.FightData.FightDuration;
-            phases.Add(new PhaseData(0, fightDuration));
-            phases[0].Name = "Full Fight";
+            long fightDuration = log.FightData.FightEnd;
+            phases.Add(new PhaseData(0, fightDuration, "Full Fight"));
             return phases;
         }
 
         public virtual List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
+            NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -206,9 +205,9 @@ namespace GW2EIParser.Logic
 
         protected void AddTargetsToPhase(PhaseData phase, List<ushort> ids, ParsedLog log)
         {
-            foreach (Target target in Targets)
+            foreach (NPC target in Targets)
             {
-                if (ids.Contains(target.ID) && phase.InInterval(Math.Max(log.FightData.ToFightSpace(target.FirstAwareLogTime), 0)))
+                if (ids.Contains(target.ID) && phase.InInterval(Math.Max(target.FirstAware, 0)))
                 {
                     phase.Targets.Add(target);
                 }
@@ -216,7 +215,7 @@ namespace GW2EIParser.Logic
             phase.OverrideTimes(log);
         }
 
-        public virtual List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
+        public virtual List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
         {
             return new List<AbstractBuffEvent>();
         }
@@ -240,7 +239,7 @@ namespace GW2EIParser.Logic
             }
         }
 
-        public virtual List<AbstractDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst, Dictionary<long, List<AbstractDamageEvent>> damageById, long offset, SkillData skillData)
+        public virtual List<AbstractDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst, Dictionary<long, List<AbstractDamageEvent>> damageById, SkillData skillData)
         {
             return new List<AbstractDamageEvent>();
         }
@@ -249,11 +248,7 @@ namespace GW2EIParser.Logic
         {
         }
 
-        public virtual void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
-        {
-        }
-
-        public virtual void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
+        public virtual void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
         }
 
@@ -283,7 +278,7 @@ namespace GW2EIParser.Logic
             long maxTime = long.MinValue;
             foreach (ushort id in idsToUse)
             {
-                Target target = Targets.Find(x => x.ID == id);
+                NPC target = Targets.Find(x => x.ID == id);
                 if (target == null)
                 {
                     return;
@@ -303,7 +298,7 @@ namespace GW2EIParser.Logic
             }
             if ((all && success == idsToUse.Count) || (!all && success > 0))
             {
-                fightData.SetSuccess(true, fightData.ToLogSpace(maxTime));
+                fightData.SetSuccess(true, maxTime);
             }
         }
 
@@ -313,7 +308,7 @@ namespace GW2EIParser.Logic
             SetSuccessByCombatExit(targets, combatData, fightData, playerAgents);
         }
 
-        protected static void SetSuccessByCombatExit(List<Target> targets, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
+        protected static void SetSuccessByCombatExit(List<NPC> targets, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             if (targets.Count == 0)
             {
@@ -326,7 +321,7 @@ namespace GW2EIParser.Logic
             {
                 playerExits.AddRange(combatData.GetExitCombatEvents(a));
             }
-            foreach (Target t in targets)
+            foreach (NPC t in targets)
             {
                 EnterCombatEvent enterCombat = combatData.GetEnterCombatEvents(t.AgentItem).LastOrDefault();
                 if (enterCombat != null)
@@ -350,11 +345,11 @@ namespace GW2EIParser.Logic
             {
                 if (lastPlayerExit != null)
                 {
-                    fightData.SetSuccess(lastPlayerExit.Time > lastTargetExit.Time + 1000, fightData.ToLogSpace(lastDamageTaken.Time));
+                    fightData.SetSuccess(lastPlayerExit.Time > lastTargetExit.Time + 1000, lastDamageTaken.Time);
                 }
-                else if (fightData.FightEndLogTime > targets.Max(x => x.LastAwareLogTime) + 2000)
+                else if (fightData.FightEnd > targets.Max(x => x.LastAware) + 2000)
                 {
-                    fightData.SetSuccess(true, fightData.ToLogSpace(lastDamageTaken.Time));
+                    fightData.SetSuccess(true, lastDamageTaken.Time);
                 }
             }
         }
@@ -364,13 +359,18 @@ namespace GW2EIParser.Logic
             SetSuccessByDeath(combatData, fightData, playerAgents, true, GenericTriggerID);
         }
 
+        public virtual long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            return fightData.FightOffset;
+        }
+
         public virtual void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             ComputeFightTargets(agentData, combatData);
         }
 
         //
-        protected static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AbstractMasterActor target, bool beginWithStart)
+        protected static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AbstractSingleActor target, bool beginWithStart)
         {
             bool needStart = beginWithStart;
             var main = combatData.GetBuffData(buffID).Where(x => x.To == target.AgentItem && (x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();

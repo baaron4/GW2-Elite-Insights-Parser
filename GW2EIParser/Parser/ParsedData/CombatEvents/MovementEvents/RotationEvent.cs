@@ -5,7 +5,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
     public class RotationEvent : AbstractMovementEvent
     {
 
-        public RotationEvent(CombatItem evtcItem, AgentData agentData, long offset) : base(evtcItem, agentData, offset)
+        public RotationEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
         }
 

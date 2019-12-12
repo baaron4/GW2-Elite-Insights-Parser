@@ -5,7 +5,7 @@ namespace GW2EIParser.Parser
     public static class ParseEnum
     {
         // Activation
-        public enum EvtcActivation : byte
+        public enum Activation : byte
         {
             None = 0,
             Normal = 1,
@@ -17,11 +17,11 @@ namespace GW2EIParser.Parser
             Unknown
         };
 
-        public static EvtcActivation GetEvtcActivation(byte bt)
+        public static Activation GetActivation(byte bt)
         {
-            return bt < (byte)EvtcActivation.Unknown
-                ? (EvtcActivation)bt
-                : EvtcActivation.Unknown;
+            return bt < (byte)Activation.Unknown
+                ? (Activation)bt
+                : Activation.Unknown;
         }
 
         // Buff remove
@@ -433,16 +433,16 @@ namespace GW2EIParser.Parser
     {
         public static bool SrcIsAgent(this ParseEnum.StateChange state)
         {
-            return state == ParseEnum.StateChange.None || state == ParseEnum.StateChange.EnterCombat 
-                || state == ParseEnum.StateChange.ExitCombat || state == ParseEnum.StateChange.ChangeUp 
-                || state == ParseEnum.StateChange.ChangeDead || state == ParseEnum.StateChange.ChangeDown 
-                || state == ParseEnum.StateChange.Spawn || state == ParseEnum.StateChange.Despawn 
-                || state == ParseEnum.StateChange.HealthUpdate || state == ParseEnum.StateChange.WeaponSwap 
-                || state == ParseEnum.StateChange.MaxHealthUpdate || state == ParseEnum.StateChange.PointOfView 
-                || state == ParseEnum.StateChange.BuffInitial || state == ParseEnum.StateChange.Position 
-                || state == ParseEnum.StateChange.Velocity || state == ParseEnum.StateChange.Rotation 
-                || state == ParseEnum.StateChange.TeamChange || state == ParseEnum.StateChange.AttackTarget 
-                || state == ParseEnum.StateChange.Targetable || state == ParseEnum.StateChange.StackActive 
+            return state == ParseEnum.StateChange.None || state == ParseEnum.StateChange.EnterCombat
+                || state == ParseEnum.StateChange.ExitCombat || state == ParseEnum.StateChange.ChangeUp
+                || state == ParseEnum.StateChange.ChangeDead || state == ParseEnum.StateChange.ChangeDown
+                || state == ParseEnum.StateChange.Spawn || state == ParseEnum.StateChange.Despawn
+                || state == ParseEnum.StateChange.HealthUpdate || state == ParseEnum.StateChange.WeaponSwap
+                || state == ParseEnum.StateChange.MaxHealthUpdate || state == ParseEnum.StateChange.PointOfView
+                || state == ParseEnum.StateChange.BuffInitial || state == ParseEnum.StateChange.Position
+                || state == ParseEnum.StateChange.Velocity || state == ParseEnum.StateChange.Rotation
+                || state == ParseEnum.StateChange.TeamChange || state == ParseEnum.StateChange.AttackTarget
+                || state == ParseEnum.StateChange.Targetable || state == ParseEnum.StateChange.StackActive
                 || state == ParseEnum.StateChange.StackReset;
         }
 
@@ -453,30 +453,30 @@ namespace GW2EIParser.Parser
 
         public static bool HasTime(this ParseEnum.StateChange state)
         {
-            return state == ParseEnum.StateChange.None || state == ParseEnum.StateChange.EnterCombat 
-                || state == ParseEnum.StateChange.ExitCombat || state == ParseEnum.StateChange.ChangeUp 
-                || state == ParseEnum.StateChange.ChangeDead || state == ParseEnum.StateChange.ChangeDown 
-                || state == ParseEnum.StateChange.Spawn || state == ParseEnum.StateChange.Despawn 
-                || state == ParseEnum.StateChange.HealthUpdate || state == ParseEnum.StateChange.WeaponSwap 
-                || state == ParseEnum.StateChange.MaxHealthUpdate  || state == ParseEnum.StateChange.BuffInitial 
-                || state == ParseEnum.StateChange.Position || state == ParseEnum.StateChange.Velocity 
-                || state == ParseEnum.StateChange.Rotation || state == ParseEnum.StateChange.TeamChange 
-                || state == ParseEnum.StateChange.AttackTarget || state == ParseEnum.StateChange.Targetable 
+            return state == ParseEnum.StateChange.None || state == ParseEnum.StateChange.EnterCombat
+                || state == ParseEnum.StateChange.ExitCombat || state == ParseEnum.StateChange.ChangeUp
+                || state == ParseEnum.StateChange.ChangeDead || state == ParseEnum.StateChange.ChangeDown
+                || state == ParseEnum.StateChange.Spawn || state == ParseEnum.StateChange.Despawn
+                || state == ParseEnum.StateChange.HealthUpdate || state == ParseEnum.StateChange.WeaponSwap
+                || state == ParseEnum.StateChange.MaxHealthUpdate || state == ParseEnum.StateChange.BuffInitial
+                || state == ParseEnum.StateChange.Position || state == ParseEnum.StateChange.Velocity
+                || state == ParseEnum.StateChange.Rotation || state == ParseEnum.StateChange.TeamChange
+                || state == ParseEnum.StateChange.AttackTarget || state == ParseEnum.StateChange.Targetable
                 || state == ParseEnum.StateChange.StackActive || state == ParseEnum.StateChange.StackReset
                 || state == ParseEnum.StateChange.Reward;
         }
     }
 
-    internal static class EvtcActivationExtensions
+    internal static class ActivationExtensions
     {
-        public static bool StartCasting(this ParseEnum.EvtcActivation activation)
+        public static bool StartCasting(this ParseEnum.Activation activation)
         {
-            return activation == ParseEnum.EvtcActivation.Normal || activation == ParseEnum.EvtcActivation.Quickness;
+            return activation == ParseEnum.Activation.Normal || activation == ParseEnum.Activation.Quickness;
         }
 
-        public static bool NoInterruptEndCasting(this ParseEnum.EvtcActivation activation)
+        public static bool NoInterruptEndCasting(this ParseEnum.Activation activation)
         {
-            return activation == ParseEnum.EvtcActivation.CancelFire || activation == ParseEnum.EvtcActivation.Reset;
+            return activation == ParseEnum.Activation.CancelFire || activation == ParseEnum.Activation.Reset;
         }
     }
 }
