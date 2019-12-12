@@ -116,7 +116,7 @@ namespace GW2EIParser.Logic
             // sanity check
             if (sanityCheckCast.Time - startCast.Time > 0)
             {
-                _startOffset = -(int)startCast.Time;
+                _startOffset = -(int)(startCast.Time - fightData.FightOffset);
                 fightData.OverrideOffset(startCast.Time);
             }
             return fightData.FightOffset;
