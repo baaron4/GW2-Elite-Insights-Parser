@@ -2,7 +2,7 @@
 
 namespace GW2EIParser.EIData
 {
-    public class FacingDecorationSerializable : GenericDecorationSerializable
+    public class FacingDecorationSerializable : GenericAttachedDecorationSerializable
     {
         public int[] FacingData { get; }
 

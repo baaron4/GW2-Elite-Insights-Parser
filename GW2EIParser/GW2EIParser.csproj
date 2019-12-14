@@ -191,7 +191,4 @@
     <Content Include="Resources\TODO.txt" />
     <None Include="Resources\template.html" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Builders\JsonModels\JsonActorUtilities\JsonNPCUtilities\" />
-  </ItemGroup>
 </Project>

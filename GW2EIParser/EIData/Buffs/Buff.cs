@@ -209,28 +209,41 @@ namespace GW2EIParser.EIData
 
         private static readonly List<Buff> _fightSpecific = new List<Buff>
         {
+                // Voice and Claw            
+                new Buff("Enraged", 58619, BuffSource.Enemy, BuffType.Intensity, 5, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                // Fraenir of Jormag
+                new Buff("Frozen", 58376, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/7a/Bloodstone_Blessed.png" ),
+                new Buff("Snowblind", 58276, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/7a/Bloodstone_Blessed.png" ),
+                // Twisted Castle
                 new Buff("Spatial Distortion", 34918, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/7a/Bloodstone_Blessed.png" ),
                 new Buff("Madness", 35006, BuffSource.Enemy, BuffType.Intensity, 99, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/ee/Madness.png" ),
                 new Buff("Still Waters", 35106, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/5c/Still_Waters_%28effect%29.png" ),
                 new Buff("Soothing Waters", 34955, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8f/Soothing_Waters.png" ),
                 new Buff("Chaotic Haze", 34963, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/48/Lava_Font.png" ),
                 new Buff("Timed Bomb", 31485, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/91/Time_Bomb.png" ),
+                // Deimos
                 new Buff("Unnatural Signet",38224, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png"),
                 new Buff("Compromised",35096, BuffSource.Enemy, BuffType.Intensity, 5, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/48/Compromised.png"),
+                // KC
                 new Buff("Xera's Boon",35025, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/0/04/Xera%27s_Boon.png"),
                 new Buff("Xera's Fury",35103, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/dd/Xera%27s_Fury.png"),
                 new Buff("Statue Fixated",34912, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/dd/Xera%27s_Fury.png"),
                 new Buff("Crimson Attunement (Orb)",35091, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/3e/Crimson_Attunement.png"),
                 new Buff("Radiant Attunement (Orb)",35109, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/68/Radiant_Attunement.png"),
                 new Buff("Magic Blast",35119, BuffSource.Enemy, BuffType.Intensity, 35, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a9/Magic_Blast_Intensity.png"),
+                // Gorseval
                 new Buff("Spirited Fusion",31722, BuffSource.Enemy, BuffType.Intensity, 500, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/eb/Spirited_Fusion.png"),
+                // Matthias
                 new Buff("Blood Shield Abo",34376, BuffSource.Enemy, BuffType.Intensity, 18, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
                 new Buff("Blood Shield",34518, BuffSource.Enemy, BuffType.Intensity, 18, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
                 new Buff("Blood Fueled",34422, BuffSource.Enemy, BuffType.Intensity, 20, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Buff("Blood Fueled Abo",34428, BuffSource.Enemy, BuffType.Intensity, 20, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                // Qadim
                 new Buff("Flame Armor",52568, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Buff("Fiery Surge",52588, BuffSource.Enemy, BuffType.Intensity, 99, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                // Soulless Horror
                 new Buff("Necrosis",47414, BuffSource.Enemy, BuffType.Intensity, 99, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/47/Ichor.png"),
+                // CA
                 new Buff("Fractured - Enemy",53030, BuffSource.Enemy, BuffType.Intensity, 10, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Buff("Fractured - Allied",52213, BuffSource.Enemy, BuffType.Intensity, 10, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Buff("Conjured Protection",52973 , BuffSource.Enemy, BuffType.Intensity, 25, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
@@ -241,14 +254,18 @@ namespace GW2EIParser.EIData
                 new Buff("Augmented Power",52074  , BuffSource.Enemy, BuffType.Intensity, 10, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Buff("CA Invul",52255 , BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Buff("Arm Up",52430 , BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                // Twin Largos
                 new Buff("Aquatic Detainment",52931 , BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Buff("Aquatic Aura (Kenut)",52211 , BuffSource.Enemy, BuffType.Intensity, 80, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Buff("Aquatic Aura (Nikare)",52929 , BuffSource.Enemy, BuffType.Intensity, 80, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Buff("Waterlogged",51935 , BuffSource.Enemy, BuffType.Intensity, 10, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Buff("Protective Shadow", 31877, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/8/87/Protective_Shadow.png"),
+                // Slothasor
                 new Buff("Narcolepsy", 34467, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                // VG
                 new Buff("Blue Pylon Power", 31413, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/6/6e/Blue_Pylon_Power.png"),
                 new Buff("Unbreakable", 34979, BuffSource.Enemy, BuffType.Intensity, 2, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/5/56/Xera%27s_Embrace.png"),
+                // Trio
                 new Buff("Not the Bees!", 34434, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/0/08/Throw_Jar.png"),
                 new Buff("Targeted", 34392, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
                 // Dhuum

@@ -207,10 +207,12 @@ namespace GW2EIParser.Properties {
         ///        template: `${tmplDamageModifierStats}`,
         ///        data: function () {
         ///            return {
-        ///                wvw: !!logData.wvw,
-        ///                mode: logData.wvw ? 0 : 1,
+        ///                mode: 1,
         ///                displayMode: logData.dmgModifiersItem.length &gt; 0 ? 0 : logData.dmgModifiersCommon.length &gt; 0 ? 1 : 2
-        ///            }; [rest of string was truncated]&quot;;.
+        ///            };
+        ///        },
+        ///        computed: {
+        ///            phase: f [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string damageModifierStatsJS {
             get {
@@ -292,14 +294,13 @@ namespace GW2EIParser.Properties {
         ///        mixins: [roundingComponent],
         ///        data: function () {
         ///            return {
-        ///                wvw: !!logData.wvw,
+        ///                targetless: logData.targetless,
+        ///                showDamage: logData.wvw,
         ///                cacheTarget: new Map()
         ///            };
         ///        },
         ///        mounted() {
-        ///            initTable(&quot;#dps-table&quot;, 4, &quot;desc&quot;);
-        ///        },
-        ///        updated [rest of string was truncated]&quot;;.
+        ///            initTable( [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string generalStatsJS {
             get {
@@ -341,17 +342,15 @@ namespace GW2EIParser.Properties {
         ///        template: `${tmplGraphStats}`,
         ///        data: function () {
         ///            return {
-        ///                mode: 1
+        ///                targetless: logData.targetless,
+        ///                mode: logData.targetless ? 0 : 1,
         ///            };
         ///        },
         ///        computed: {
         ///            phases: function() {
         ///                return logData.phases;
         ///            }
-        ///        }
-        ///    });
-        ///    Vue.component(&quot;dps-graph-component&quot;, {
-        ///        prop [rest of string was truncated]&quot;;.
+        ///  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string graphsJS {
             get {
@@ -447,13 +446,11 @@ namespace GW2EIParser.Properties {
         ///        data: function () {
         ///            return {
         ///                distmode: -1,
-        ///                targetmode: 1,
+        ///                targetless: logData.targetless,
+        ///                targetmode: logData.targetless ? 0 : 1,
         ///                cacheTarget: new Map()
         ///            };
-        ///        },
-        ///        computed: {
-        ///            phase: function() {
-        ///         [rest of string was truncated]&quot;;.
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string playerStatsJS {
             get {
@@ -662,13 +659,13 @@ namespace GW2EIParser.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-row flex-wrap justify-content-center&quot;&gt;
-        ///    &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mb-1 w-100&quot;&gt;
-        ///        &lt;li class=&quot;nav-item&quot;&gt;
-        ///            &lt;a class=&quot;nav-link&quot; :class=&quot;{active: showMechanics}&quot; @click=&quot;showMechanics = !showMechanics&quot;&gt;Mechanics List&lt;/a&gt;
-        ///        &lt;/li&gt;
-        ///    &lt;/ul&gt;
-        ///    &lt;div v-if=&quot;showMechanics&quot; id=&quot;combat-replay-mechanics-list-container&quot; class=&quot;d-flex d-flex-row justify-content-center w-100&quot;&gt;
-        ///        &lt;table class=&quot;table table-sm table-striped ta [rest of string was truncated]&quot;;.
+        ///    &lt;div id=&quot;combat-replay-mechanics-list-container&quot; class=&quot;d-flex d-flex-row justify-content-center w-100&quot;&gt;
+        ///        &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
+        ///            &lt;thead&gt;
+        ///                &lt;tr&gt;
+        ///                    &lt;th&gt;Time&lt;/th&gt;
+        ///                    &lt;th class=&quot;text-left combat-replay-mechanics-list-header position-relative&quot;&gt;
+        ///                        &lt;a href=&quot;#&quot; class=&quot;dropdown-toggle&quot; data-to [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayMechanicsList {
             get {
@@ -838,7 +835,7 @@ namespace GW2EIParser.Properties {
         ///            &lt;/li&gt;
         ///        &lt;/ul&gt;
         ///    &lt;/div&gt;
-        ///    &lt;div class=&quot;d-flex flex-row justify-cont [rest of string was truncated]&quot;;.
+        ///    &lt;div v-if=&quot;!targetless&quot; class=&quot;d-flex fl [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplDamageDistPlayer {
             get {
@@ -952,12 +949,10 @@ namespace GW2EIParser.Properties {
         ///                &lt;th&gt;&lt;/th&gt;
         ///                &lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
         ///                &lt;th&gt;Account&lt;/th&gt;
-        ///                &lt;th v-if=&quot;!wvw&quot;&gt;Target DPS&lt;/th&gt;
-        ///                &lt;th v-else&gt;Target Damage&lt;/th&gt;
-        ///                &lt;th&gt;Power&lt;/th&gt;
-        ///                &lt;th&gt;Condi&lt;/th&gt;
-        ///                &lt;th v-if=&quot;!wvw&quot;&gt;All DPS&lt;/th&gt;
-        ///                &lt;t [rest of string was truncated]&quot;;.
+        ///                &lt;th v-show=&quot;!targetless&quot; v-if=&quot;!showDamage&quot;&gt;Target DPS&lt;/th&gt;
+        ///                &lt;th v-show=&quot;!targetless&quot; v-else&gt;Target Damage&lt;/th&gt;
+        ///                &lt;th v-show=&quot;!targetless&quot;&gt;Power&lt;/th&gt;
+        ///                &lt;th v-show [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplDamageTable {
             get {
@@ -1077,7 +1072,7 @@ namespace GW2EIParser.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;div&gt;
-        ///    &lt;div class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;
+        ///    &lt;div v-if=&quot;!targetless&quot; class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;
         ///        &lt;ul class=&quot;nav nav-pills&quot;&gt;
         ///            &lt;li class=&quot;nav-item&quot;&gt;
         ///                &lt;a class=&quot;nav-link&quot; @click=&quot;mode = 1&quot; :class=&quot;{active: mode}&quot;&gt;Target&lt;/a&gt;
@@ -1087,7 +1082,7 @@ namespace GW2EIParser.Properties {
         ///            &lt;/li&gt;
         ///        &lt;/ul&gt;
         ///    &lt;/div&gt;
-        ///    &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100% [rest of string was truncated]&quot;;.
+        ///    &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspac [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplGameplayTable {
             get {
@@ -1116,7 +1111,7 @@ namespace GW2EIParser.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;div&gt;
-        ///    &lt;div&gt;
+        ///    &lt;div v-if=&quot;!targetless&quot;&gt;
         ///        &lt;ul class=&quot;nav nav-tabs&quot;&gt;
         ///            &lt;li&gt;
         ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 0}&quot; @click=&quot;mode = 0&quot;&gt;Total&lt;/a&gt;
@@ -1129,8 +1124,7 @@ namespace GW2EIParser.Properties {
         ///            &lt;/li&gt;
         ///        &lt;/ul&gt;
         ///    &lt;/div&gt;
-        ///    &lt;keep-alive&gt;
-        ///        &lt;dps-gra [rest of string was truncated]&quot;;.
+        ///    &lt;keep-alive [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplGraphStats {
             get {
