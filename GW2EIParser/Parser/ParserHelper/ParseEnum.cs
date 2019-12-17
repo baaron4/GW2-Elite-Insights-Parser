@@ -296,6 +296,14 @@ namespace GW2EIParser.Parser
             Pylon2 = 21962,
             EntropicDistortion = 21973,
             EnergyOrb = 21946,
+            // Fraenir
+            IcebroodElemental = 22576,
+            // Boneskinner
+            PrioryExplorer = 22561,
+            PrioryScholar = 22448,
+            VigilRecruit = 22389,
+            VigilTactician = 22420,
+            AberrantWisp = 22538,
             // Freezie
             FreeziesFrozenHeart = 21328,
             // Fractals
@@ -382,6 +390,12 @@ namespace GW2EIParser.Parser
             PeerlessQadim = 22000,
             // Strike Missions
             IcebroodConstruct = 22154,
+            VoiceOfTheFallen = 22343,
+            ClawOfTheFallen = 22481,
+            VoiceAndClaw = 22315,
+            FraenirOfJormag = 22492,
+            IcebroodConstructFraenir = 22436,
+            Boneskinner = 22521,
             // Fract
             MAMA = 17021,
             Siax = 17028,

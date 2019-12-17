@@ -230,7 +230,18 @@ namespace GW2EIParser
                 case ParseEnum.TargetIDS.PeerlessQadim:
                     return "https://i.imgur.com/47uePpb.png";
                 case ParseEnum.TargetIDS.IcebroodConstruct:
+                case ParseEnum.TargetIDS.IcebroodConstructFraenir:
                     return "https://i.imgur.com/dpaZFa5.png";
+                case ParseEnum.TargetIDS.ClawOfTheFallen:
+                    return "https://i.imgur.com/HF85QpV.png";
+                case ParseEnum.TargetIDS.VoiceOfTheFallen:
+                    return "https://i.imgur.com/BdTGXMU.png";
+                case ParseEnum.TargetIDS.VoiceAndClaw:
+                    return "https://i.imgur.com/V1rJBnq.png";
+                case ParseEnum.TargetIDS.FraenirOfJormag:
+                    return "https://i.imgur.com/MxudnKp.png";
+                case ParseEnum.TargetIDS.Boneskinner:
+                    return "https://i.imgur.com/7HPdKDQ.png";
                 case ParseEnum.TargetIDS.MAMA:
                     return "https://i.imgur.com/1h7HOII.png";
                 case ParseEnum.TargetIDS.Siax:
@@ -397,6 +408,10 @@ namespace GW2EIParser
                 case GreenSpirit2:
                 case BanditSapper:
                 case ProjectionArkk:
+                case PrioryExplorer:
+                case PrioryScholar:
+                case VigilRecruit:
+                case VigilTactician:
                 case Prisoner1:
                 case Prisoner2:
                 case Pylon1:

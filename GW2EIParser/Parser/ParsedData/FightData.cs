@@ -41,6 +41,7 @@ namespace GW2EIParser.Parser.ParsedData
             _requirePhases = parsePhases;
             switch (ParseEnum.GetTargetIDS(id))
             {
+                //
                 case ParseEnum.TargetIDS.ValeGuardian:
                     Logic = new ValeGuardian(id);
                     break;
@@ -137,9 +138,21 @@ namespace GW2EIParser.Parser.ParsedData
                 case ParseEnum.TargetIDS.PeerlessQadim:
                     Logic = new PeerlessQadim(id);
                     break;
+                    //
                 case ParseEnum.TargetIDS.IcebroodConstruct:
                     Logic = new IcebroodConstruct(id);
                     break;
+                case ParseEnum.TargetIDS.FraenirOfJormag:
+                    Logic = new FraenirOfJormag(id);
+                    break;
+                case ParseEnum.TargetIDS.VoiceOfTheFallen:
+                case ParseEnum.TargetIDS.ClawOfTheFallen:
+                    Logic = new SuperKodanBrothers(id);
+                    break;
+                case ParseEnum.TargetIDS.Boneskinner:
+                    Logic = new Boneskinner(id);
+                    break;
+                //
                 case ParseEnum.TargetIDS.MAMA:
                     Logic = new MAMA(id);
                     break;
@@ -158,9 +171,11 @@ namespace GW2EIParser.Parser.ParsedData
                 case ParseEnum.TargetIDS.Arkk:
                     Logic = new Arkk(id);
                     break;
+                    //
                 case ParseEnum.TargetIDS.WorldVersusWorld:
                     Logic = new WvWFight(id);
                     break;
+                    //
                 case ParseEnum.TargetIDS.MassiveGolem:
                 case ParseEnum.TargetIDS.AvgGolem:
                 case ParseEnum.TargetIDS.LGolem:
@@ -168,6 +183,7 @@ namespace GW2EIParser.Parser.ParsedData
                 case ParseEnum.TargetIDS.StdGolem:
                     Logic = new Golem(id);
                     break;
+                    //
                 default:
                     switch (ParseEnum.GetTrashIDS(id))
                     {

@@ -7,7 +7,7 @@ namespace GW2EIParser.EIData
         public long Start { get; }
         public long End { get; }
 
-        public NPCSerializable(NPC npc, ParsedLog log, CombatReplayMap map, CombatReplay replay) : base(npc, log, map, replay, log.FightData.Logic.Targets.Contains(npc) ? "Target" : "NPC")
+        public NPCSerializable(NPC npc, ParsedLog log, CombatReplayMap map, CombatReplay replay) : base(npc, log, map, replay, log.FightData.Logic.Targets.Contains(npc) ? "Target" : "Mob")
         {
             Start = replay.TimeOffsets.start;
             End = replay.TimeOffsets.end;
