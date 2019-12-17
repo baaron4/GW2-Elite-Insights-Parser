@@ -135,7 +135,7 @@ namespace GW2EIParser.EIData
             var groupByTime = new Dictionary<long, List<AbstractBuffEvent>>();
             foreach (AbstractBuffEvent c in weaverAttuns)
             {
-                long key = groupByTime.Keys.FirstOrDefault(x => Math.Abs(x - c.Time) < 10);
+                long key = groupByTime.Keys.FirstOrDefault(x => Math.Abs(x - c.Time) < GeneralHelper.ServerDelayConstant);
                 if (key != 0)
                 {
                     groupByTime[key].Add(c);

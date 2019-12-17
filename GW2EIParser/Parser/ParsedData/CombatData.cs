@@ -19,7 +19,7 @@ namespace GW2EIParser.Parser.ParsedData
         private readonly Dictionary<AgentItem, List<AbstractBuffEvent>> _buffDataByDst;
         private readonly Dictionary<AgentItem, List<AbstractDamageEvent>> _damageData;
         private readonly Dictionary<long, List<AbstractDamageEvent>> _damageDataById;
-        private readonly Dictionary<AgentItem, List<AnimatedCastEvent>> _castData;
+        private readonly Dictionary<AgentItem, List<AnimatedCastEvent>> _animatedCastData;
         private readonly Dictionary<AgentItem, List<WeaponSwapEvent>> _weaponSwapData;
         private readonly Dictionary<long, List<AbstractCastEvent>> _castDataById;
         private readonly Dictionary<AgentItem, List<AbstractDamageEvent>> _damageTakenData;
@@ -156,13 +156,13 @@ namespace GW2EIParser.Parser.ParsedData
             var castAgentsToSort = new HashSet<AgentItem>();
             foreach (AnimatedCastEvent cast in toAdd)
             {
-                if (_castData.TryGetValue(cast.Caster, out List<AnimatedCastEvent> list1))
+                if (_animatedCastData.TryGetValue(cast.Caster, out List<AnimatedCastEvent> list1))
                 {
                     list1.Add(cast);
                 }
                 else
                 {
-                    _castData[cast.Caster] = new List<AnimatedCastEvent>()
+                    _animatedCastData[cast.Caster] = new List<AnimatedCastEvent>()
                     {
                         cast
                     };
@@ -187,7 +187,7 @@ namespace GW2EIParser.Parser.ParsedData
             }
             foreach (AgentItem a in castAgentsToSort)
             {
-                _castData[a].Sort((x, y) => x.Time.CompareTo(y.Time));
+                _animatedCastData[a].Sort((x, y) => x.Time.CompareTo(y.Time));
             }
         }
 
@@ -211,11 +211,11 @@ namespace GW2EIParser.Parser.ParsedData
             // state change events
             CombatEventFactory.CreateStateChangeEvents(allCombatItems, _metaDataEvents, _statusEvents, _rewardEvents, agentData);
             // activation events
-            List<AnimatedCastEvent> castData = CombatEventFactory.CreateCastEvents(allCombatItems.Where(x => x.IsActivation != ParseEnum.Activation.None).ToList(), agentData, skillData);
+            List<AnimatedCastEvent> animatedCastData = CombatEventFactory.CreateCastEvents(allCombatItems.Where(x => x.IsActivation != ParseEnum.Activation.None).ToList(), agentData, skillData);
             List<WeaponSwapEvent> wepSwaps = CombatEventFactory.CreateWeaponSwapEvents(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.WeaponSwap).ToList(), agentData, skillData);
             _weaponSwapData = wepSwaps.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
-            _castData = castData.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
-            var allCastEvents = new List<AbstractCastEvent>(castData);
+            _animatedCastData = animatedCastData.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
+            var allCastEvents = new List<AbstractCastEvent>(animatedCastData);
             allCastEvents.AddRange(wepSwaps);
             _castDataById = allCastEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             // buff remove event
@@ -453,9 +453,9 @@ namespace GW2EIParser.Parser.ParsedData
             return new List<AbstractDamageEvent>(); ;
         }
 
-        public List<AnimatedCastEvent> GetCastData(AgentItem key)
+        public List<AnimatedCastEvent> GetAnimatedCastData(AgentItem key)
         {
-            if (_castData.TryGetValue(key, out List<AnimatedCastEvent> res))
+            if (_animatedCastData.TryGetValue(key, out List<AnimatedCastEvent> res))
             {
                 return res;
             }

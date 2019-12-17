@@ -35,18 +35,16 @@ namespace GW2EIParser.EIData
             int phaseIndex = log.FightData.GetPhases(log).IndexOf(phase);
             foreach (AbstractCastEvent cl in actor.GetCastLogs(log, phase.Start, phase.End))
             {
-                if (cl.Interrupted)
+                switch (cl.Status)
                 {
-                    Wasted++;
-                    TimeWasted += cl.ActualDuration;
-                }
-                if (cl.ReducedAnimation)
-                {
-                    if (cl.ActualDuration < cl.ExpectedDuration)
-                    {
+                    case AbstractCastEvent.AnimationStatus.INTERRUPTED:
+                        Wasted++;
+                        TimeWasted += cl.SavedDuration;
+                        break;
+                    case AbstractCastEvent.AnimationStatus.REDUCED:
                         Saved++;
-                        TimeSaved += cl.ExpectedDuration - cl.ActualDuration;
-                    }
+                        TimeSaved += cl.SavedDuration;
+                        break;
                 }
                 if (cl.SkillId == SkillItem.WeaponSwapId)
                 {
@@ -54,7 +52,7 @@ namespace GW2EIParser.EIData
                 }
             }
             TimeSaved = Math.Round(TimeSaved / 1000.0, GeneralHelper.TimeDigit);
-            TimeWasted = Math.Round(TimeWasted / 1000.0, GeneralHelper.TimeDigit);
+            TimeWasted = -Math.Round(TimeWasted / 1000.0, GeneralHelper.TimeDigit);
 
 
 

@@ -21,7 +21,7 @@ namespace GW2EIParser.EIData
             BuffStackItem first = stacks[0];
             stacks.RemoveAt(0);
             BuffStackItem minItem = stacks.MinBy(x => x.TotalBoonDuration());
-            if (minItem.TotalBoonDuration() > stackItem.TotalBoonDuration() + 10)
+            if (minItem.TotalBoonDuration() > stackItem.TotalBoonDuration() + GeneralHelper.ServerDelayConstant)
             {
                 stacks.Insert(0, first);
                 return false;

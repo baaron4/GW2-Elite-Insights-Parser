@@ -159,7 +159,7 @@ namespace GW2EIParser.Parser.ParsedData
             Dictionary<long, BuffsGraphModel> bgms = actor.GetBuffGraphs(log);
             if (bgms.TryGetValue(buffId, out BuffsGraphModel bgm))
             {
-                return bgm.IsPresent(time, 10);
+                return bgm.IsPresent(time, GeneralHelper.ServerDelayConstant);
             }
             else
             {

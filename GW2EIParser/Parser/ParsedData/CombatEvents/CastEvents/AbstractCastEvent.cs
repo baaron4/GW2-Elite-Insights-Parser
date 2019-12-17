@@ -2,25 +2,26 @@
 {
     public abstract class AbstractCastEvent : AbstractTimeCombatEvent
     {
+
+        public enum AnimationStatus { UNKNOWN, REDUCED, INTERRUPTED, FULL};
+
         // start item
         public SkillItem Skill { get; protected set; }
         public long SkillId => Skill.ID;
         public AgentItem Caster { get; }
-        public int ExpectedDuration { get; protected set; }
-        public bool UnderQuickness { get; protected set; }
 
-        // end item
-        public bool Interrupted { get; protected set; }
-        public bool FullAnimation { get; protected set; }
-        public bool ReducedAnimation { get; protected set; }
+        public AnimationStatus Status { get; protected set; } = AnimationStatus.UNKNOWN;
+        public int SavedDuration { get; protected set; }
+
+
+        public int ExpectedDuration { get; protected set; }
+
         public int ActualDuration { get; protected set; }
 
-        public AbstractCastEvent(CombatItem startEvtcItem, AgentData agentData, SkillData skillData) : base(startEvtcItem.Time)
+        public AbstractCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData) : base(startItem.Time)
         {
-            Skill = skillData.Get(startEvtcItem.SkillID);
-            Caster = agentData.GetAgent(startEvtcItem.SrcAgent);
-            UnderQuickness = startEvtcItem.IsActivation == ParseEnum.Activation.Quickness;
-            ExpectedDuration = startEvtcItem.Value;
+            Skill = skillData.Get(startItem.SkillID);
+            Caster = agentData.GetAgent(startItem.SrcAgent);
         }
 
         public AbstractCastEvent(long time, SkillItem skill, AgentItem caster) : base(time)

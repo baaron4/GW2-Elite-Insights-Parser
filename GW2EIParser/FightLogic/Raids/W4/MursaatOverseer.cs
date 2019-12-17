@@ -122,7 +122,7 @@ namespace GW2EIParser.Logic
                         int duration = 100;
                         int radius = 1200;
                         replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, start + precast + duration), "rgba(255, 0, 0, 0.05)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start + precast - 10, start + precast + duration), "rgba(255, 0, 0, 0.25)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start + precast, start + precast + duration), "rgba(255, 0, 0, 0.25)", new AgentConnector(target)));
                     }
                     break;
                 default:

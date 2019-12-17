@@ -80,13 +80,15 @@ namespace GW2EIParser.Builders.HtmlModels
                 casts = clList.Count;
                 foreach (AbstractCastEvent cl in clList)
                 {
-                    if (cl.Interrupted)
+                    switch (cl.Status)
                     {
-                        timeswasted += cl.ActualDuration;
-                    }
-                    else if (cl.ReducedAnimation && cl.ActualDuration < cl.ExpectedDuration)
-                    {
-                        timessaved += cl.ExpectedDuration - cl.ActualDuration;
+                        case AbstractCastEvent.AnimationStatus.INTERRUPTED:
+                            timeswasted += cl.SavedDuration;
+                            break;
+
+                        case AbstractCastEvent.AnimationStatus.REDUCED:
+                            timessaved += cl.SavedDuration;
+                            break;
                     }
                 }
             }
@@ -101,7 +103,7 @@ namespace GW2EIParser.Builders.HtmlModels
                     IsIndirectDamage ? 0 : crit,
                     IsIndirectDamage ? 0 : flank,
                     IsIndirectDamage ? 0 : glance,
-                    IsIndirectDamage ? 0 : timeswasted / 1000.0,
+                    IsIndirectDamage ? 0 : -timeswasted / 1000.0,
                     IsIndirectDamage ? 0 : timessaved / 1000.0,
                     shieldDamage,
                 };
