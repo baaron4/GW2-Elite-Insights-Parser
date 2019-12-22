@@ -32,7 +32,7 @@ namespace GW2EIParser.Builders
         private readonly HashSet<DamageModifier> _usedDamageMods = new HashSet<DamageModifier>();
         private readonly Dictionary<long, SkillItem> _usedSkills = new Dictionary<long, SkillItem>();
 
-        public HTMLBuilder(ParsedLog log, string[] uploadString, bool parseCR, bool lightTheme, bool externalScript)
+        public HTMLBuilder(ParsedLog log, string[] uploadString, bool lightTheme, bool externalScript)
         {
             Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             _scriptVersion = version.Major + "." + version.Minor;
@@ -47,7 +47,7 @@ namespace GW2EIParser.Builders
 
             _uploadLink = uploadString ?? new string[] { "", "", "" };
 
-            _cr = parseCR && _log.CanCombatReplay;
+            _cr = _log.CanCombatReplay;
             _light = lightTheme;
             _externalScripts = externalScript;
         }
