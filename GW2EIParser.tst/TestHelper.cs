@@ -21,7 +21,7 @@ namespace GW2EIParser.tst
                 ParseCombatReplay = true;
                 ParsePhases = true;
                 AnonymousPlayer = true;
-                ComputeDamageMods = true;
+                ComputeDamageModifiers = true;
                 RawTimelineArrays = true;
             }
         }

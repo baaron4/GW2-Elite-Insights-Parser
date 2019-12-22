@@ -285,7 +285,7 @@ namespace GW2EIParser.EIData
             _damageModifiersTargets = new Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>>();
             _presentDamageModifiers = new HashSet<string>();
             // If conjured sword, targetless or WvW, stop
-            if (!log.ParserSettings.ComputeDamageMods || IsFakeActor || log.FightData.Logic.Targetless || log.FightData.Logic.Mode == FightLogic.ParseMode.WvW)
+            if (!log.ParserSettings.ComputeDamageModifiers || IsFakeActor || log.FightData.Logic.Targetless || log.FightData.Logic.Mode == FightLogic.ParseMode.WvW)
             {
                 return;
             }

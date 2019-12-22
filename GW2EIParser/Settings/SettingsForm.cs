@@ -54,7 +54,7 @@ namespace GW2EIParser.Setting
             chkCompressRaw.Checked = Properties.Settings.Default.CompressRaw;
             chkAddDuration.Checked = Properties.Settings.Default.AddDuration;
             chkAnonymous.Checked = Properties.Settings.Default.Anonymous;
-            chkDamageMods.Checked = Properties.Settings.Default.ComputeDamageMods;
+            chkDamageMods.Checked = Properties.Settings.Default.ComputeDamageModifiers;
             chkRawTimelineArrays.Checked = Properties.Settings.Default.RawTimelineArrays;
 
             chkHtmlExternalScripts.Checked = Properties.Settings.Default.HtmlExternalScripts;
@@ -310,7 +310,7 @@ namespace GW2EIParser.Setting
 
         private void ChkComputeDamageMods_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.ComputeDamageMods = chkDamageMods.Checked;
+            Properties.Settings.Default.ComputeDamageModifiers = chkDamageMods.Checked;
         }
 
         private void ChkRawTimelineArrays_CheckedChanged(object sender, EventArgs e)

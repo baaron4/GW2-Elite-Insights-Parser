@@ -326,15 +326,15 @@ namespace GW2EIParser.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ComputeDamageMods
+        public bool ComputeDamageModifiers
         {
             get
             {
-                return ((bool)(this["ComputeDamageMods"]));
+                return ((bool)(this["ComputeDamageModifiers"]));
             }
             set
             {
-                this["ComputeDamageMods"] = value;
+                this["ComputeDamageModifiers"] = value;
             }
         }
 
@@ -345,11 +345,11 @@ namespace GW2EIParser.Properties {
         {
             get
             {
-                return ((bool)(this["AddTimelineArrays"]));
+                return ((bool)(this["RawTimelineArrays"]));
             }
             set
             {
-                this["AddTimelineArrays"] = value;
+                this["RawTimelineArrays"] = value;
             }
         }
     }
