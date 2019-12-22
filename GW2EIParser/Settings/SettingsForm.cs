@@ -54,12 +54,15 @@ namespace GW2EIParser.Setting
             chkCompressRaw.Checked = Properties.Settings.Default.CompressRaw;
             chkAddDuration.Checked = Properties.Settings.Default.AddDuration;
             chkAnonymous.Checked = Properties.Settings.Default.Anonymous;
+            chkDamageMods.Checked = Properties.Settings.Default.ComputeDamageMods;
+            chkTimelineArrays.Checked = Properties.Settings.Default.AddTimelineArrays;
 
             chkHtmlExternalScripts.Checked = Properties.Settings.Default.HtmlExternalScripts;
 
             panelHtml.Enabled = Properties.Settings.Default.SaveOutHTML;
             panelJson.Enabled = Properties.Settings.Default.SaveOutJSON;
             panelXML.Enabled = Properties.Settings.Default.SaveOutXML;
+            groupRawSettings.Enabled = Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML;
         }
 
         private void SettingsFormLoad(object sender, EventArgs e)
@@ -165,12 +168,14 @@ namespace GW2EIParser.Setting
         {
             Properties.Settings.Default.SaveOutJSON = chkOutputJson.Checked;
             panelJson.Enabled = Properties.Settings.Default.SaveOutJSON;
+            groupRawSettings.Enabled = Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML;
         }
 
         private void OutputXMLCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SaveOutXML = chkOutputXml.Checked;
             panelXML.Enabled = Properties.Settings.Default.SaveOutXML;
+            groupRawSettings.Enabled = Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML;
         }
 
         private void ChkIndentJSONCheckedChanged(object sender, EventArgs e)
@@ -301,6 +306,16 @@ namespace GW2EIParser.Setting
         private void ChkAnonymous_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.Anonymous = chkAnonymous.Checked;
+        }
+
+        private void ChkComputeDamageMods_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.ComputeDamageMods = chkDamageMods.Checked;
+        }
+
+        private void ChkTimelineArrays_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.AddTimelineArrays = chkTimelineArrays.Checked;
         }
     }
 }
