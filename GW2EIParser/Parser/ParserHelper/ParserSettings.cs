@@ -20,7 +20,7 @@ namespace GW2EIParser.Parser
             ParsePhases = Properties.Settings.Default.ParsePhases;
             ParseCombatReplay = Properties.Settings.Default.ParseCombatReplay;
             ComputeDamageMods = Properties.Settings.Default.ComputeDamageMods;
-            RawTimelineArrays = Properties.Settings.Default.AddTimelineArrays;
+            RawTimelineArrays = Properties.Settings.Default.RawTimelineArrays;
         }
     }
 }

@@ -52,7 +52,7 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.chkAnonymous = new System.Windows.Forms.CheckBox();
             this.chkDamageMods = new System.Windows.Forms.CheckBox();
-            this.chkTimelineArrays = new System.Windows.Forms.CheckBox();
+            this.chkRawTimelineArrays = new System.Windows.Forms.CheckBox();
             this.chkHtmlExternalScripts = new System.Windows.Forms.CheckBox();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabGeneral = new System.Windows.Forms.TabPage();
@@ -332,16 +332,16 @@
             this.chkDamageMods.UseVisualStyleBackColor = true;
             this.chkDamageMods.CheckedChanged += new System.EventHandler(this.ChkComputeDamageMods_CheckedChanged);
             // 
-            // chkTimelineArrays
+            // chkRawTimelineArrays
             // 
-            this.chkTimelineArrays.AutoSize = true;
-            this.chkTimelineArrays.Location = new System.Drawing.Point(6, 45);
-            this.chkTimelineArrays.Name = "chkTimelineArrays";
-            this.chkTimelineArrays.Size = new System.Drawing.Size(119, 17);
-            this.chkTimelineArrays.TabIndex = 20;
-            this.chkTimelineArrays.Text = "Add Timeline Arrays";
-            this.chkTimelineArrays.UseVisualStyleBackColor = true;
-            this.chkTimelineArrays.CheckedChanged += new System.EventHandler(this.ChkTimelineArrays_CheckedChanged);
+            this.chkRawTimelineArrays.AutoSize = true;
+            this.chkRawTimelineArrays.Location = new System.Drawing.Point(6, 45);
+            this.chkRawTimelineArrays.Name = "chkRawTimelineArrays";
+            this.chkRawTimelineArrays.Size = new System.Drawing.Size(119, 17);
+            this.chkRawTimelineArrays.TabIndex = 20;
+            this.chkRawTimelineArrays.Text = "Add Timeline Arrays";
+            this.chkRawTimelineArrays.UseVisualStyleBackColor = true;
+            this.chkRawTimelineArrays.CheckedChanged += new System.EventHandler(this.ChkRawTimelineArrays_CheckedChanged);
             // 
             // chkHtmlExternalScripts
             // 
@@ -610,7 +610,7 @@
             // 
             // groupRawSettings
             // 
-            this.groupRawSettings.Controls.Add(this.chkTimelineArrays);
+            this.groupRawSettings.Controls.Add(this.chkRawTimelineArrays);
             this.groupRawSettings.Controls.Add(this.chkCompressRaw);
             this.groupRawSettings.Location = new System.Drawing.Point(17, 87);
             this.groupRawSettings.Name = "groupRawSettings";
@@ -825,6 +825,6 @@
         private System.Windows.Forms.Button loadButton;
         private System.Windows.Forms.CheckBox chkAnonymous;
         private System.Windows.Forms.CheckBox chkDamageMods;
-        private System.Windows.Forms.CheckBox chkTimelineArrays;
+        private System.Windows.Forms.CheckBox chkRawTimelineArrays;
     }
 }

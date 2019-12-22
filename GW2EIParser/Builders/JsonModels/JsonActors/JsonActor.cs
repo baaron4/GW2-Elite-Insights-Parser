@@ -134,17 +134,23 @@ namespace GW2EIParser.Builders.JsonModels
                 Rotation = JsonRotation.BuildJsonRotationList(skillByID, skillDesc);
             }
             //
-            Damage1S = new List<int>[phases.Count];
-            for (int i = 0; i < phases.Count; i++)
+            if (log.ParserSettings.RawTimelineArrays)
             {
-                Damage1S[i] = actor.Get1SDamageList(log, i, phases[i], null);
+                Damage1S = new List<int>[phases.Count];
+                for (int i = 0; i < phases.Count; i++)
+                {
+                    Damage1S[i] = actor.Get1SDamageList(log, i, phases[i], null);
+                }
             }
             //
             TotalDamageDist = BuildDamageDistData(actor, null, phases, log, skillDesc, buffDesc);
             TotalDamageTaken = BuildDamageTakenDistData(actor, null, phases, log, skillDesc, buffDesc);
             //
-            BoonsStates = JsonBuffsUptime.GetBuffStates(actor.GetBuffGraphs(log)[ProfHelper.NumberOfBoonsID]);
-            ConditionsStates = JsonBuffsUptime.GetBuffStates(actor.GetBuffGraphs(log)[ProfHelper.NumberOfConditionsID]);
+            if (log.ParserSettings.RawTimelineArrays)
+            {
+                BoonsStates = JsonBuffsUptime.GetBuffStates(actor.GetBuffGraphs(log)[ProfHelper.NumberOfBoonsID]);
+                ConditionsStates = JsonBuffsUptime.GetBuffStates(actor.GetBuffGraphs(log)[ProfHelper.NumberOfConditionsID]);
+            }
             //
         }
 

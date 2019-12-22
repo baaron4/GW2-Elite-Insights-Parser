@@ -98,7 +98,10 @@ namespace GW2EIParser.Builders.JsonModels
             {
                 buffDesc["b" + buffID] = new JsonLog.BuffDesc(log.Buffs.BuffsByIds[buffID]);
             }
-            States = GetBuffStates(actor.GetBuffGraphs(log)[buffID]);
+            if (log.ParserSettings.RawTimelineArrays)
+            {
+                States = GetBuffStates(actor.GetBuffGraphs(log)[buffID]);
+            }
         }
 
 
