@@ -11,6 +11,7 @@ namespace GW2EIParser.Parser
         public bool ParsePhases { get; protected set; }
         public bool ParseCombatReplay { get; protected set; }
         public bool ComputeDamageMods { get; protected set; }
+        public bool RawTimelineArrays { get; protected set; }
 
         public ParserSettings()
         {
@@ -18,6 +19,8 @@ namespace GW2EIParser.Parser
             SkipFailedTries = Properties.Settings.Default.SkipFailedTries;
             ParsePhases = Properties.Settings.Default.ParsePhases;
             ParseCombatReplay = Properties.Settings.Default.ParseCombatReplay;
+            ComputeDamageMods = Properties.Settings.Default.ComputeDamageMods;
+            RawTimelineArrays = Properties.Settings.Default.AddTimelineArrays;
         }
     }
 }
