@@ -322,5 +322,35 @@ namespace GW2EIParser.Properties {
                 this["CompressRaw"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ComputeDamageModifiers
+        {
+            get
+            {
+                return ((bool)(this["ComputeDamageModifiers"]));
+            }
+            set
+            {
+                this["ComputeDamageModifiers"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool RawTimelineArrays
+        {
+            get
+            {
+                return ((bool)(this["RawTimelineArrays"]));
+            }
+            set
+            {
+                this["RawTimelineArrays"] = value;
+            }
+        }
     }
 }

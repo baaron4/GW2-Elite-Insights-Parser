@@ -53,7 +53,10 @@ namespace GW2EIParser.Builders.JsonModels
             Id = npc.ID;
             TotalHealth = npc.GetHealth(log.CombatData);
             List<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(npc.AgentItem);
-            HealthPercents = log.CombatData.GetHealthUpdateEvents(npc.AgentItem).Select(x => new double[2] { x.Time, x.HPPercent }).ToList();
+            if (log.ParserSettings.RawTimelineArrays)
+            {
+                HealthPercents = hpUpdates.Select(x => new double[2] { x.Time, x.HPPercent }).ToList();
+            }
             FirstAware = (int)npc.FirstAware;
             LastAware = (int)npc.LastAware;
             double hpLeft = 0.0;

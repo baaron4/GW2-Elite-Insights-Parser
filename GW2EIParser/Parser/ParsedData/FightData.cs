@@ -10,7 +10,6 @@ namespace GW2EIParser.Parser.ParsedData
         // Fields
         private List<PhaseData> _phases = new List<PhaseData>();
         public ushort TriggerID { get; }
-        private readonly bool _requirePhases;
         public FightLogic Logic { get; }
         public long FightOffset { get; private set; }
         public long FightStart { get; } = 0;
@@ -33,12 +32,11 @@ namespace GW2EIParser.Parser.ParsedData
         private int _isCM = -1;
         public bool IsCM => _isCM == 1;
         // Constructors
-        public FightData(ushort id, AgentData agentData, long start, long end, bool parsePhases)
+        public FightData(ushort id, AgentData agentData, long start, long end)
         {
             FightOffset = start;
             FightEnd = end - start;
             TriggerID = id;
-            _requirePhases = parsePhases;
             switch (ParseEnum.GetTargetIDS(id))
             {
                 //
@@ -204,7 +202,7 @@ namespace GW2EIParser.Parser.ParsedData
 
             if (_phases.Count == 0)
             {
-                _phases = log.FightData.Logic.GetPhases(log, _requirePhases);
+                _phases = log.FightData.Logic.GetPhases(log, log.ParserSettings.ParsePhases);
                 _phases.RemoveAll(x => x.Targets.Count == 0);
                 _phases.RemoveAll(x => x.DurationInMS < GeneralHelper.PhaseTimeLimit);
             }
@@ -215,7 +213,7 @@ namespace GW2EIParser.Parser.ParsedData
         {
             if (_phases.Count == 0)
             {
-                _phases = log.FightData.Logic.GetPhases(log, _requirePhases);
+                _phases = log.FightData.Logic.GetPhases(log, log.ParserSettings.ParsePhases);
             }
             return _phases[0].Targets;
         }

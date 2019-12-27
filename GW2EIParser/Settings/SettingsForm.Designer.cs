@@ -51,6 +51,8 @@
             this.chkIndentJSON = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.chkAnonymous = new System.Windows.Forms.CheckBox();
+            this.chkDamageMods = new System.Windows.Forms.CheckBox();
+            this.chkRawTimelineArrays = new System.Windows.Forms.CheckBox();
             this.chkHtmlExternalScripts = new System.Windows.Forms.CheckBox();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabGeneral = new System.Windows.Forms.TabPage();
@@ -74,6 +76,7 @@
             this.chkIndentXML = new System.Windows.Forms.CheckBox();
             this.chkOutputXml = new System.Windows.Forms.CheckBox();
             this.panelJson = new System.Windows.Forms.Panel();
+            this.groupRawSettings = new System.Windows.Forms.GroupBox();
             this.chkCompressRaw = new System.Windows.Forms.CheckBox();
             this.tabUpload = new System.Windows.Forms.TabPage();
             this.tabAPI = new System.Windows.Forms.TabPage();
@@ -96,6 +99,7 @@
             this.tabRaw.SuspendLayout();
             this.panelXML.SuspendLayout();
             this.panelJson.SuspendLayout();
+            this.groupRawSettings.SuspendLayout();
             this.tabUpload.SuspendLayout();
             this.tabAPI.SuspendLayout();
             this.SuspendLayout();
@@ -315,6 +319,30 @@
             this.chkAnonymous.UseVisualStyleBackColor = true;
             this.chkAnonymous.CheckedChanged += new System.EventHandler(this.ChkAnonymous_CheckedChanged);
             // 
+            // chkDamageMods
+            // 
+            this.chkDamageMods.AutoSize = true;
+            this.chkDamageMods.Checked = true;
+            this.chkDamageMods.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkDamageMods.Location = new System.Drawing.Point(6, 65);
+            this.chkDamageMods.Name = "chkDamageMods";
+            this.chkDamageMods.Size = new System.Drawing.Size(156, 17);
+            this.chkDamageMods.TabIndex = 20;
+            this.chkDamageMods.Text = "Compute Damage Modifiers";
+            this.chkDamageMods.UseVisualStyleBackColor = true;
+            this.chkDamageMods.CheckedChanged += new System.EventHandler(this.ChkComputeDamageMods_CheckedChanged);
+            // 
+            // chkRawTimelineArrays
+            // 
+            this.chkRawTimelineArrays.AutoSize = true;
+            this.chkRawTimelineArrays.Location = new System.Drawing.Point(6, 45);
+            this.chkRawTimelineArrays.Name = "chkRawTimelineArrays";
+            this.chkRawTimelineArrays.Size = new System.Drawing.Size(119, 17);
+            this.chkRawTimelineArrays.TabIndex = 20;
+            this.chkRawTimelineArrays.Text = "Add Timeline Arrays";
+            this.chkRawTimelineArrays.UseVisualStyleBackColor = true;
+            this.chkRawTimelineArrays.CheckedChanged += new System.EventHandler(this.ChkRawTimelineArrays_CheckedChanged);
+            // 
             // chkHtmlExternalScripts
             // 
             this.chkHtmlExternalScripts.AutoSize = true;
@@ -326,7 +354,7 @@
             this.chkHtmlExternalScripts.UseVisualStyleBackColor = true;
             this.chkHtmlExternalScripts.CheckedChanged += new System.EventHandler(this.ChkHtmlExternalScripts_CheckedChanged);
             // 
-            // tabControl1
+            // tabControl
             // 
             this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
@@ -340,12 +368,12 @@
             this.tabControl.HotTrack = true;
             this.tabControl.Location = new System.Drawing.Point(12, 12);
             this.tabControl.Multiline = true;
-            this.tabControl.Name = "tabControl1";
+            this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(479, 277);
             this.tabControl.TabIndex = 47;
             // 
-            // tabPage1
+            // tabGeneral
             // 
             this.tabGeneral.Controls.Add(this.boxParsing);
             this.tabGeneral.Controls.Add(this.groupOutput);
@@ -358,7 +386,7 @@
             this.tabGeneral.Text = "General";
             this.tabGeneral.UseVisualStyleBackColor = true;
             // 
-            // groupBox1
+            // boxParsing
             // 
             this.boxParsing.Controls.Add(this.chkOneAtATime);
             this.boxParsing.Controls.Add(this.chkAutoParse);
@@ -446,6 +474,7 @@
             // 
             this.groupEncounter.Controls.Add(this.chkPhaseParsing);
             this.groupEncounter.Controls.Add(this.chkCombatReplay);
+            this.groupEncounter.Controls.Add(this.chkDamageMods);
             this.groupEncounter.Location = new System.Drawing.Point(12, 18);
             this.groupEncounter.Name = "groupEncounter";
             this.groupEncounter.Size = new System.Drawing.Size(216, 108);
@@ -517,7 +546,7 @@
             this.radioThemeDark.UseVisualStyleBackColor = true;
             this.radioThemeDark.CheckedChanged += new System.EventHandler(this.RadioThemeDark_CheckedChanged);
             // 
-            // tabPatabCSVge3
+            // tabCSV
             // 
             this.tabCSV.Controls.Add(this.chkOutputCsv);
             this.tabCSV.Location = new System.Drawing.Point(4, 22);
@@ -533,7 +562,7 @@
             this.tabRaw.Controls.Add(this.chkOutputXml);
             this.tabRaw.Controls.Add(this.panelJson);
             this.tabRaw.Controls.Add(this.chkOutputJson);
-            this.tabRaw.Controls.Add(this.chkCompressRaw);
+            this.tabRaw.Controls.Add(this.groupRawSettings);
             this.tabRaw.Location = new System.Drawing.Point(4, 22);
             this.tabRaw.Name = "tabRaw";
             this.tabRaw.Size = new System.Drawing.Size(471, 251);
@@ -579,10 +608,21 @@
             this.panelJson.Size = new System.Drawing.Size(127, 35);
             this.panelJson.TabIndex = 45;
             // 
+            // groupRawSettings
+            // 
+            this.groupRawSettings.Controls.Add(this.chkRawTimelineArrays);
+            this.groupRawSettings.Controls.Add(this.chkCompressRaw);
+            this.groupRawSettings.Location = new System.Drawing.Point(17, 87);
+            this.groupRawSettings.Name = "groupRawSettings";
+            this.groupRawSettings.Size = new System.Drawing.Size(150, 68);
+            this.groupRawSettings.TabIndex = 45;
+            this.groupRawSettings.TabStop = false;
+            this.groupRawSettings.Text = "Raw Format Settings";
+            // 
             // chkCompressRaw
             // 
             this.chkCompressRaw.AutoSize = true;
-            this.chkCompressRaw.Location = new System.Drawing.Point(292, 12);
+            this.chkCompressRaw.Location = new System.Drawing.Point(6, 22);
             this.chkCompressRaw.Name = "chkCompressRaw";
             this.chkCompressRaw.Size = new System.Drawing.Size(118, 17);
             this.chkCompressRaw.TabIndex = 18;
@@ -590,7 +630,7 @@
             this.chkCompressRaw.UseVisualStyleBackColor = true;
             this.chkCompressRaw.CheckedChanged += new System.EventHandler(this.ChkCompressRaw_CheckedChanged);
             // 
-            // tabPage5
+            // tabUpload
             // 
             this.tabUpload.Controls.Add(this.UploadDPSReports_checkbox);
             this.tabUpload.Controls.Add(this.UploadDRRH_check);
@@ -602,7 +642,7 @@
             this.tabUpload.Text = "Upload";
             this.tabUpload.UseVisualStyleBackColor = true;
             // 
-            // tabPage6
+            // tabAPI
             // 
             this.tabAPI.Controls.Add(this.resetSkillLabel);
             this.tabAPI.Controls.Add(this.resetTraitLabel);
@@ -718,6 +758,8 @@
             this.panelXML.PerformLayout();
             this.panelJson.ResumeLayout(false);
             this.panelJson.PerformLayout();
+            this.groupRawSettings.ResumeLayout(false);
+            this.groupRawSettings.PerformLayout();
             this.tabUpload.ResumeLayout(false);
             this.tabUpload.PerformLayout();
             this.tabAPI.ResumeLayout(false);
@@ -776,10 +818,13 @@
         private System.Windows.Forms.Panel panelJson;
         private System.Windows.Forms.CheckBox chkOutputXml;
         private System.Windows.Forms.Panel panelXML;
+        private System.Windows.Forms.GroupBox groupRawSettings;
         private System.Windows.Forms.CheckBox chkIndentXML;
         private System.Windows.Forms.GroupBox boxParsing;
         private System.Windows.Forms.Button dumpButton;
         private System.Windows.Forms.Button loadButton;
         private System.Windows.Forms.CheckBox chkAnonymous;
+        private System.Windows.Forms.CheckBox chkDamageMods;
+        private System.Windows.Forms.CheckBox chkRawTimelineArrays;
     }
 }

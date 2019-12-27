@@ -27,15 +27,11 @@ namespace GW2EIParser.Parser
         private long _logStartTime = 0;
         private long _logEndTime = 0;
         private string _buildVersion;
-        private readonly bool _anonymous;
-        private readonly bool _skipFails;
-        private readonly bool _parsePhases;
+        private readonly ParserSettings _parserSettings;
 
-        public ParsingController(bool anonymousPlayers, bool skipFails, bool parsePhases)
+        public ParsingController(ParserSettings parserSettings)
         {
-            _anonymous = anonymousPlayers;
-            _skipFails = skipFails;
-            _parsePhases = parsePhases;
+            _parserSettings = parserSettings;
         }
 
         //Main Parse method------------------------------------------------------------------------------------------------------------------------------------------------
@@ -76,7 +72,7 @@ namespace GW2EIParser.Parser
             }
             row.BgWorker.ThrowIfCanceled(row);
             row.BgWorker.UpdateProgress(row, "45% - Data parsed", 45);
-            return new ParsedLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _logEndTime - _logStartTime, _skipFails);
+            return new ParsedLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _logEndTime - _logStartTime, _parserSettings);
         }
 
         private void ParseLog(GridRow row, Stream stream)
@@ -597,7 +593,7 @@ namespace GW2EIParser.Parser
                     _playerList.Add(player);
                 }
             }
-            if (_anonymous)
+            if (_parserSettings.AnonymousPlayer)
             {
                 for (int i = 0; i < _playerList.Count; i++)
                 {
@@ -631,7 +627,7 @@ namespace GW2EIParser.Parser
         /// </summary>
         private void PreProcessEvtcData()
         {
-            _fightData = new FightData(_id, _agentData, _logStartTime, _logEndTime, _parsePhases);
+            _fightData = new FightData(_id, _agentData, _logStartTime, _logEndTime);
             CompletePlayers();
             OffsetEvtcData();
             _fightData.Logic.EIEvtcParse(_fightData, _agentData, _combatItems);

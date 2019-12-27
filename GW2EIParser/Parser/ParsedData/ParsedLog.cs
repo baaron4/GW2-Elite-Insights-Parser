@@ -19,7 +19,8 @@ namespace GW2EIParser.Parser.ParsedData
         public Dictionary<string, List<Player>> PlayerListBySpec { get; }
         public DamageModifiersContainer DamageModifiers { get; }
         public BuffsContainer Buffs { get; }
-        public bool CanCombatReplay => CombatData.HasMovementData;
+        public ParserSettings ParserSettings { get; }
+        public bool CanCombatReplay => ParserSettings.ParseCombatReplay && CombatData.HasMovementData;
 
         public MechanicData MechanicData { get; }
         public GeneralStatistics Statistics { get; }
@@ -28,19 +29,20 @@ namespace GW2EIParser.Parser.ParsedData
         private Dictionary<AgentItem, AbstractSingleActor> _agentToActorDictionary;
 
         public ParsedLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData,
-                List<CombatItem> combatItems, List<Player> playerList, long evtcLogDuration, bool skipFail)
+                List<CombatItem> combatItems, List<Player> playerList, long evtcLogDuration, ParserSettings parserSettings)
         {
             FightData = fightData;
             AgentData = agentData;
             SkillData = skillData;
             PlayerList = playerList;
+            ParserSettings = parserSettings;
             //
             PlayerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
             PlayerAgents = new HashSet<AgentItem>(playerList.Select(x => x.AgentItem));
             CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList);
             LogData = new LogData(buildVersion, CombatData, evtcLogDuration);
             //
-            UpdateFightData(skipFail);
+            UpdateFightData();
             //
             Buffs = new BuffsContainer(LogData.GW2Version);
             DamageModifiers = new DamageModifiersContainer(LogData.GW2Version);
@@ -48,14 +50,14 @@ namespace GW2EIParser.Parser.ParsedData
             Statistics = new GeneralStatistics(CombatData, PlayerList, Buffs);
         }
 
-        private void UpdateFightData(bool skipFail)
+        private void UpdateFightData()
         {
             FightData.Logic.CheckSuccess(CombatData, AgentData, FightData, PlayerAgents);
             if (FightData.FightEnd <= 2200)
             {
                 throw new TooShortException();
             }
-            if (skipFail && !FightData.Success)
+            if (ParserSettings.SkipFailedTries && !FightData.Success)
             {
                 throw new SkipException();
             }

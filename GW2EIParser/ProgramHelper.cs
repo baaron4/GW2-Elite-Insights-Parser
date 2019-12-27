@@ -114,7 +114,7 @@ namespace GW2EIParser
                 {
                     throw new FileNotFoundException("File " + fInfo.FullName + " does not exist");
                 }
-                var control = new ParsingController(Properties.Settings.Default.Anonymous, Properties.Settings.Default.SkipFailedTries, Properties.Settings.Default.ParsePhases);
+                var control = new ParsingController(new ParserSettings());
 
                 if (!HasFormat())
                 {
@@ -202,7 +202,7 @@ namespace GW2EIParser
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs))
                 {
-                    var builder = new HTMLBuilder(log, uploadresult, Properties.Settings.Default.ParseCombatReplay, Properties.Settings.Default.LightTheme, Properties.Settings.Default.HtmlExternalScripts);
+                    var builder = new HTMLBuilder(log, uploadresult, Properties.Settings.Default.LightTheme, Properties.Settings.Default.HtmlExternalScripts);
                     builder.CreateHTML(sw, saveDirectory.FullName);
                 }
             }

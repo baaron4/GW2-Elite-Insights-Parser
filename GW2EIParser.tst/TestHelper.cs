@@ -13,9 +13,22 @@ namespace GW2EIParser.tst
     public class TestHelper
     {
 
+        private class TestParserSettings : ParserSettings
+        {
+            public TestParserSettings()
+            {
+                SkipFailedTries = false;
+                ParseCombatReplay = true;
+                ParsePhases = true;
+                AnonymousPlayer = true;
+                ComputeDamageModifiers = true;
+                RawTimelineArrays = true;
+            }
+        }
+
         public static ParsedLog ParseLog(string location)
         {
-            var parser = new ParsingController(true, false, true);
+            var parser = new ParsingController(new TestParserSettings());
 
             var row = new GridRow(location as string, "Ready to parse")
             {
@@ -67,7 +80,7 @@ namespace GW2EIParser.tst
         {
             var ms = new MemoryStream();
             var sw = new StreamWriter(ms, GeneralHelper.NoBOMEncodingUTF8);
-            var builder = new HTMLBuilder(log, null, true, false, false);
+            var builder = new HTMLBuilder(log, null, false, false);
 
             builder.CreateHTML(sw, null);
             sw.Close();
