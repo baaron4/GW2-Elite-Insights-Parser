@@ -115,6 +115,10 @@ namespace GW2EIParser.Parser
             StackActive = 27,
             StackReset = 28,
             Guild = 29,
+            BuffInfo = 30,
+            BuffFormula = 31,
+            SkillInfo = 32,
+            SkillTiming = 33,
             Unknown
         };
 
@@ -123,6 +127,29 @@ namespace GW2EIParser.Parser
             return bt < (byte)StateChange.Unknown
                 ? (StateChange)bt
                 : StateChange.Unknown;
+        }
+
+        public enum Attribute : byte
+        {
+            None = 0,
+            Power = 1,
+            Precision = 2,
+            Toughness = 3,
+            Vitality = 4,
+            Ferocity = 5,
+            Healing = 6,
+            Condition = 7,
+            Concentration = 8,
+            Expertise = 9,
+            Armor = 10,
+            Agony = 11,
+            StatInc = 12,
+            FaltInc = 13,
+            PhysInc = 14,
+            CondInc = 15,
+            Physrec = 16,
+            CondRec = 17,
+            AttackSpeed = 18
         }
 
         // Friend of for
