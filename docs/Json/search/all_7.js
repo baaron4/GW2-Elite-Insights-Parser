@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['healing',['Healing',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a7b68ac4ffc1102eb3f714757e9e48e6f',1,'LuckParser::Builders::JsonModels::JsonActor']]],
-  ['healthpercentburned',['HealthPercentBurned',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_target.html#a1733ea6165d78ac5c380b0105e5e3bde',1,'LuckParser::Builders::JsonModels::JsonTarget']]],
-  ['healthpercents',['HealthPercents',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_target.html#a62a6b28af3a111572c029a3e5a4f76ec',1,'LuckParser::Builders::JsonModels::JsonTarget']]],
-  ['hitboxheight',['HitboxHeight',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#ab438939d5f9d6ebed1ffba2058e661bd',1,'LuckParser::Builders::JsonModels::JsonActor']]],
-  ['hitboxwidth',['HitboxWidth',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a69007cda49add8b52d2a028505ffbf87',1,'LuckParser::Builders::JsonModels::JsonActor']]],
-  ['hitcount',['HitCount',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_buff_damage_modifier_data_1_1_json_buff_damage_modifier_item.html#a6d8348aefad966d476afd5ce64a69abe',1,'LuckParser::Builders::JsonModels::JsonBuffDamageModifierData::JsonBuffDamageModifierItem']]],
-  ['hits',['Hits',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_damage_dist.html#a8d4370ae7e69455dece0ae8f6d50a7d9',1,'LuckParser::Builders::JsonModels::JsonDamageDist']]]
+  ['healing_87',['Healing',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#aae207e1e5bcd0ac91157acd93e72a662',1,'GW2EIParser::Builders::JsonModels::JsonActor']]],
+  ['healthpercentburned_88',['HealthPercentBurned',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_n_p_c.html#a320e031b98365ca8461cedc7406ff6d4',1,'GW2EIParser::Builders::JsonModels::JsonNPC']]],
+  ['healthpercents_89',['HealthPercents',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_n_p_c.html#a3545f6c64e8d5171912acb0942be5f96',1,'GW2EIParser::Builders::JsonModels::JsonNPC']]],
+  ['hitboxheight_90',['HitboxHeight',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a0caf8b3a39d145177d046e135002d9d1',1,'GW2EIParser::Builders::JsonModels::JsonActor']]],
+  ['hitboxwidth_91',['HitboxWidth',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a38e3e2a7cf04126848759759550d7c8e',1,'GW2EIParser::Builders::JsonModels::JsonActor']]],
+  ['hitcount_92',['HitCount',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_modifier_data_1_1_json_damage_modifier_item.html#a4ae038168de94326f1e410f4e59ddb49',1,'GW2EIParser::Builders::JsonModels::JsonDamageModifierData::JsonDamageModifierItem']]],
+  ['hits_93',['Hits',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_dist.html#af6987f60ee1a5801d652246d9985990d',1,'GW2EIParser::Builders::JsonModels::JsonDamageDist']]]
 ];

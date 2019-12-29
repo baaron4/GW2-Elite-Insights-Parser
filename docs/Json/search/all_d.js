@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['offgroupbuffs',['OffGroupBuffs',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a60cb6b9214d0b6cd70c613e53bd35282',1,'LuckParser::Builders::JsonModels::JsonPlayer']]],
-  ['offgroupbuffsactive',['OffGroupBuffsActive',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a6a39d506e7e69081f84e4da994364e62',1,'LuckParser::Builders::JsonModels::JsonPlayer']]],
-  ['overstack',['Overstack',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_buffs_generation_1_1_json_buffs_generation_data.html#a6d34b1050f983f47b9fdcbf01fefaeed',1,'LuckParser::Builders::JsonModels::JsonBuffsGeneration::JsonBuffsGenerationData']]],
-  ['overstacked',['Overstacked',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_target_buffs_1_1_json_target_buffs_data.html#a3ef2d293d9a1fbeb990cb62d6a5b18fd',1,'LuckParser::Builders::JsonModels::JsonTargetBuffs::JsonTargetBuffsData']]]
+  ['offgroupbuffs_135',['OffGroupBuffs',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a650c5a87672690c4e1b984f507e587f9',1,'GW2EIParser::Builders::JsonModels::JsonPlayer']]],
+  ['offgroupbuffsactive_136',['OffGroupBuffsActive',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a586d0ba9dae2bdd8c5d32a77766bd7d7',1,'GW2EIParser::Builders::JsonModels::JsonPlayer']]],
+  ['overstack_137',['Overstack',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#aa3e0981f128d5084828facb70fb46228',1,'GW2EIParser::Builders::JsonModels::JsonPlayerBuffsGeneration::JsonBuffsGenerationData']]],
+  ['overstacked_138',['Overstacked',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_buffs_uptime_1_1_json_buffs_uptime_data.html#a95d831f10046eba8baacb81659dd8659',1,'GW2EIParser::Builders::JsonModels::JsonBuffsUptime::JsonBuffsUptimeData']]]
 ];

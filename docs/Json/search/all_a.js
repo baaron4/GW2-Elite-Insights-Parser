@@ -1,7 +1,4 @@
 var searchData=
 [
-  ['builders',['Builders',['../namespace_luck_parser_1_1_builders.html',1,'LuckParser']]],
-  ['jsonmodels',['JsonModels',['../namespace_luck_parser_1_1_builders_1_1_json_models.html',1,'LuckParser::Builders']]],
-  ['lastaware',['LastAware',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_target.html#ac5f60ca5c4b6b94b83c96025e525ea3c',1,'LuckParser::Builders::JsonModels::JsonTarget']]],
-  ['luckparser',['LuckParser',['../namespace_luck_parser.html',1,'']]]
+  ['lastaware_126',['LastAware',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_n_p_c.html#a9dc0fa272116d87f5b5e7e7ad6104224',1,'GW2EIParser::Builders::JsonModels::JsonNPC']]]
 ];

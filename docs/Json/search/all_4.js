@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['eliteinsightsversion',['EliteInsightsVersion',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_log.html#aff5ffb9f44b28429d9fefef180b404a5',1,'LuckParser::Builders::JsonModels::JsonLog']]],
-  ['end',['End',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_phase.html#a470733e0d493f462eba58eec8598310d',1,'LuckParser::Builders::JsonModels::JsonPhase']]],
-  ['evadedcount',['EvadedCount',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_defenses.html#a24613cb296f82b2982fab4ae07fd0d48',1,'LuckParser::Builders::JsonModels::JsonStatistics::JsonDefenses']]],
-  ['extended',['Extended',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_buffs_generation_1_1_json_buffs_generation_data.html#ade7c3f23a7d9a67e8b64d74f13c76aaf',1,'LuckParser.Builders.JsonModels.JsonBuffsGeneration.JsonBuffsGenerationData.Extended()'],['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_target_buffs_1_1_json_target_buffs_data.html#ab3a5df46e65428207c41888552242a12',1,'LuckParser.Builders.JsonModels.JsonTargetBuffs.JsonTargetBuffsData.Extended()']]]
+  ['eliteinsightsversion_67',['EliteInsightsVersion',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#ab785e04a283c4685eb2b1f50e8807803',1,'GW2EIParser::Builders::JsonModels::JsonLog']]],
+  ['end_68',['End',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_phase.html#a4b39561709f9457b44fe0ded92c8fc62',1,'GW2EIParser::Builders::JsonModels::JsonPhase']]],
+  ['evadedcount_69',['EvadedCount',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_defenses_all.html#a31b168daa7d46f33d0127a4347e20d03',1,'GW2EIParser::Builders::JsonModels::JsonStatistics::JsonDefensesAll']]],
+  ['extended_70',['Extended',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_buffs_uptime_1_1_json_buffs_uptime_data.html#a43d67f92e7f253c7ddd77a5086cddfde',1,'GW2EIParser.Builders.JsonModels.JsonBuffsUptime.JsonBuffsUptimeData.Extended()'],['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#a9b29bdbcbed002ad5533edc0d6ea9d5b',1,'GW2EIParser.Builders.JsonModels.JsonPlayerBuffsGeneration.JsonBuffsGenerationData.Extended()']]]
 ];

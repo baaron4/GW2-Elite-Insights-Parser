@@ -1,4 +1,4 @@
 var namespaces_dup =
 [
-    [ "LuckParser", "namespace_luck_parser.html", "namespace_luck_parser" ]
+    [ "GW2EIParser", "namespace_g_w2_e_i_parser.html", "namespace_g_w2_e_i_parser" ]
 ];
