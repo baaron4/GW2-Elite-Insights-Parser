@@ -169,7 +169,7 @@ namespace GW2EIParser.EIData
         protected BuffDictionary GetBuffMap(ParsedLog log)
         {
             //
-            var buffMapMap = new BuffDictionary();
+            var buffMap = new BuffDictionary();
             // Fill in Boon Map
 #if DEBUG
             var test = log.CombatData.GetBuffDataByDst(AgentItem).Where(x => !log.Buffs.BuffsByIds.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
@@ -177,36 +177,36 @@ namespace GW2EIParser.EIData
             foreach (AbstractBuffEvent c in log.CombatData.GetBuffDataByDst(AgentItem))
             {
                 long boonId = c.BuffID;
-                if (!buffMapMap.ContainsKey(boonId))
+                if (!buffMap.ContainsKey(boonId))
                 {
                     if (!log.Buffs.BuffsByIds.ContainsKey(boonId))
                     {
                         continue;
                     }
-                    buffMapMap.Add(log.Buffs.BuffsByIds[boonId]);
+                    buffMap.Add(log.Buffs.BuffsByIds[boonId]);
                 }
                 if (!c.IsBuffSimulatorCompliant(log.FightData.FightEnd, log.CombatData.HasStackIDs))
                 {
                     continue;
                 }
-                List<AbstractBuffEvent> loglist = buffMapMap[boonId];
+                List<AbstractBuffEvent> loglist = buffMap[boonId];
                 c.TryFindSrc(log);
                 loglist.Add(c);
             }
             // add buff remove all for each despawn events
             foreach (DespawnEvent dsp in log.CombatData.GetDespawnEvents(AgentItem))
             {
-                foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in buffMapMap)
+                foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in buffMap)
                 {
                     pair.Value.Add(new BuffRemoveAllEvent(GeneralHelper.UnknownAgent, AgentItem, dsp.Time, int.MaxValue, log.SkillData.Get(pair.Key), BuffRemoveAllEvent.FullRemoval, int.MaxValue));
                 }
             }
-            buffMapMap.Sort();
-            foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in buffMapMap)
+            buffMap.Sort();
+            foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in buffMap)
             {
                 TrackedBuffs.Add(log.Buffs.BuffsByIds[pair.Key]);
             }
-            return buffMapMap;
+            return buffMap;
         }
 
 

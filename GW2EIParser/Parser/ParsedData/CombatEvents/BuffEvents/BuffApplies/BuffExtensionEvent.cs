@@ -2,9 +2,10 @@
 
 namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
-    public class BuffExtensionEvent : BuffApplyEvent
+    public class BuffExtensionEvent : AbstractBuffApplyEvent
     {
         private readonly long _oldValue;
+        private readonly long _durationChange;
 
         public BuffExtensionEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
@@ -13,19 +14,20 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                 By = null;
             }
             _oldValue = evtcItem.OverstackValue - evtcItem.Value;
+            _durationChange = evtcItem.Value;
         }
 
         public override void TryFindSrc(ParsedLog log)
         {
             if (By == null)
             {
-                By = log.Buffs.TryFindSrc(To, Time, AppliedDuration, log, BuffID);
+                By = log.Buffs.TryFindSrc(To, Time, _durationChange, log, BuffID);
             }
         }
 
         public override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            simulator.Extend(AppliedDuration, _oldValue, By, Time, BuffInstance);
+            simulator.Extend(_durationChange, _oldValue, By, Time, BuffInstance);
         }
 
         public override int CompareTo(AbstractBuffEvent abe)
